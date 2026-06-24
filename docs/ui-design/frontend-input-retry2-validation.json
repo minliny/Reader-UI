@@ -1,0 +1,47 @@
+{
+  "generatedAt": "2026-06-20T03:07:08.573Z",
+  "results": [
+    {
+      "name": "bookshelf",
+      "html": "docs/ui-design/02-主标签页/书架/frontend-input/preview.html",
+      "out": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/书架/frontend-input/verify/retry2-preview.png",
+      "failed": [],
+      "result": {
+        "title": "书架封面模式组件预览",
+        "bodyWidth": 853,
+        "bodyHeight": 1844,
+        "frame": {
+          "width": 853,
+          "height": 1844
+        },
+        "requiredTextPresent": true,
+        "imageCount": 9,
+        "missingImages": 0,
+        "cssLinks": [
+          "./components.css"
+        ]
+      }
+    },
+    {
+      "name": "reader-control",
+      "html": "docs/ui-design/04-阅读链路/阅读控制层/frontend-input/preview.html",
+      "out": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读控制层/frontend-input/verify/retry2-preview.png",
+      "failed": [],
+      "result": {
+        "title": "阅读控制层组件预览",
+        "bodyWidth": 841,
+        "bodyHeight": 1870,
+        "frame": {
+          "width": 841,
+          "height": 1870
+        },
+        "requiredTextPresent": true,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": [
+          "./components.css"
+        ]
+      }
+    }
+  ]
+}

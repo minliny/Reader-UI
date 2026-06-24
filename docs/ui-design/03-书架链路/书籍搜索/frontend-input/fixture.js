@@ -1,0 +1,96 @@
+window.BOOK_SEARCH_FIXTURE = {
+  status: {
+    time: "10:30",
+    battery: "82%"
+  },
+  topBar: {
+    title: "书籍搜索"
+  },
+  search: {
+    query: "",
+    placeholder: "搜索书名、作者、关键词",
+    clearLabel: "清空搜索"
+  },
+  scopes: [
+    { label: "本地", type: "local", active: false },
+    { label: "网络", type: "network", active: false },
+    { label: "全局", type: "global", active: false },
+    { label: "分组", type: "group", active: true }
+  ],
+  groupPanel: {
+    title: "选择分组",
+    copy: "按自定义分组或导入来源限定搜索范围",
+    manageLabel: "管理分组",
+    groups: [
+      { label: "玄幻书源", active: true },
+      { label: "本地导入", active: false },
+      { label: "起点导入", active: false },
+      { label: "晋江导入", active: false },
+      { label: "自定义规则", active: false },
+      { label: "RSS 书单", active: false },
+      { label: "测试书源", active: false }
+    ]
+  },
+  history: {
+    title: "搜索历史",
+    clearLabel: "清空",
+    items: ["长夜余火", "三体", "刘慈欣", "修真", "历史", "诡秘之主", "明朝那些事儿", "Android", "山海经", "远瞳", "雨夜"]
+  },
+  results: [
+    {
+      title: "长夜余火",
+      author: "爱潜水的乌贼",
+      source: "起点中文网",
+      latest: "第 32 章 雨夜",
+      meta: "玄幻书源 · 最近更新 10:30",
+      cover: "../../../02-主标签页/书架/bookshelf-cover-assets/long-night.png",
+      inBookshelf: true
+    },
+    {
+      title: "三体",
+      author: "刘慈欣",
+      source: "本地导入",
+      latest: "黑暗森林",
+      meta: "本地 · 已导入",
+      cover: "../../../02-主标签页/书架/bookshelf-cover-assets/three-body.png",
+      inBookshelf: false
+    },
+    {
+      title: "诡秘之主",
+      author: "爱潜水的乌贼",
+      source: "测试书源",
+      latest: "第 1 卷 小丑",
+      meta: "网络 · 可加入书架",
+      cover: "../../../02-主标签页/书架/bookshelf-cover-assets/mystery-lord.png",
+      inBookshelf: false
+    }
+  ],
+  feedback: {
+    loading: {
+      title: "正在加载",
+      copy: "正在搜索当前范围，请稍候",
+      primaryAction: ""
+    },
+    empty: {
+      title: "没有找到相关书籍",
+      copy: "可以换个关键词，或切换到网络范围继续搜索。",
+      primaryAction: "清空关键词"
+    },
+    error: {
+      title: "加载失败，请重试",
+      copy: "搜索服务暂时不可用，当前筛选和关键词已保留。",
+      primaryAction: "重试"
+    },
+    offline: {
+      title: "网络不可用，请稍后重试",
+      copy: "本地搜索仍可使用，网络书源暂时无法刷新。",
+      primaryAction: "只搜本地"
+    },
+    permission: {
+      title: "需要本地文件访问权限",
+      copy: "仅在搜索本地导入文件时需要授权，授权后可继续搜索。",
+      primaryAction: "去授权"
+    }
+  },
+  primaryAction: "搜索"
+};

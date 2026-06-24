@@ -1,0 +1,87 @@
+window.BOOK_ACTION_SHEET_FIXTURE = {
+  status: {
+    time: "9:41"
+  },
+  backdrop: {
+    title: "书架",
+    groups: [
+      { label: "全部", active: true },
+      { label: "长篇追读", active: false },
+      { label: "资料", active: false },
+      { label: "未分组", active: false }
+    ],
+    books: [
+      {
+        title: "深空信号",
+        author: "林间",
+        chapter: "第三章 回声",
+        progress: 42,
+        coverLabel: "深空信号",
+        coverTone: "blue",
+        selected: true
+      },
+      {
+        title: "纸上群山",
+        author: "南溪",
+        chapter: "第一章 雨线",
+        progress: 16,
+        coverLabel: "纸上群山",
+        coverTone: "brown",
+        selected: false
+      },
+      {
+        title: "雨线手记",
+        author: "苏叶",
+        chapter: "第二章 归档",
+        progress: 63,
+        coverLabel: "雨线手记",
+        coverTone: "green",
+        selected: false
+      }
+    ]
+  },
+  selectedBook: {
+    title: "深空信号",
+    author: "林间",
+    chapter: "第三章 回声",
+    progress: 42,
+    coverLabel: "深空信号",
+    coverTone: "blue"
+  },
+  actions: [
+    {
+      type: "edit",
+      title: "修改",
+      copy: "进入书籍详情，修改分组、来源、缓存等配置",
+      tone: "normal"
+    },
+    {
+      type: "delete",
+      title: "删除",
+      copy: "从书架移除，不会删除本地文件或网络来源",
+      tone: "danger"
+    }
+  ],
+  confirm: {
+    title: "删除书架记录？",
+    copy: "从书架移除，不会删除本地文件或网络来源",
+    cancelLabel: "取消",
+    confirmLabel: "确认移除",
+    loadingLabel: "移除中"
+  },
+  sheet: {
+    closeHint: "删除需二次确认，确认页不属于默认操作底表"
+  },
+  feedback: {
+    loading: {
+      title: "正在加载",
+      copy: "正在移除书架记录，请勿重复点击确认移除。"
+    },
+    error: {
+      title: "操作失败，请重试",
+      copy: "移除书架失败，已保留当前书架、筛选条件和这本书的上下文。",
+      primaryAction: "重试",
+      secondaryAction: "取消"
+    }
+  }
+};

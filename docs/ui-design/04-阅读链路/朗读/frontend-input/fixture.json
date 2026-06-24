@@ -1,0 +1,88 @@
+{
+  "status": {
+    "left": "长夜余火 · 第 32 章",
+    "time": "10:30"
+  },
+  "topControl": {
+    "bookTitle": "长夜余火",
+    "sourceLine": "起点中文网 · 第 32 章",
+    "sourceActionLabel": "换源"
+  },
+  "readingText": [
+    "雨，下了一整夜。",
+    "城市像是被泼了一盆凉水，街灯昏黄，水面反着光，连呼吸都带着潮气。",
+    "他站在巷口，手里攥着那封信。纸已经被雨水润湿，边角微微卷起，字迹却依旧清晰。",
+    "“等你回来。”",
+    "没有署名，只有短短四个字。",
+    "他笑了笑，笑得很轻，像是自言自语。然后转身，沿着雨声走进夜里。"
+  ],
+  "panel": {
+    "title": "朗读",
+    "subtitle": "第 32 章 雨夜",
+    "settingsLabel": "朗读设置 >",
+    "previousLabel": "上一句",
+    "nextLabel": "下一句",
+    "startLabel": "开始",
+    "pauseLabel": "暂停",
+    "continueLabel": "继续",
+    "stopLabel": "停止朗读"
+  },
+  "currentSentence": {
+    "text": "雨，下了一整夜。",
+    "label": "当前句",
+    "progressLabel": "第 1 / 48 句"
+  },
+  "controls": {
+    "speed": { "label": "语速", "value": "1.0x" },
+    "voice": { "label": "声音", "value": "清晰女声" },
+    "range": { "label": "范围", "value": "当前章节" },
+    "timer": { "label": "定时关闭", "value": "15 分钟" }
+  },
+  "voices": [
+    { "label": "清晰女声", "meta": "系统 TTS · 当前", "active": true },
+    { "label": "沉稳男声", "meta": "系统 TTS", "active": false },
+    { "label": "自然童声", "meta": "系统 TTS", "active": false }
+  ],
+  "speedOptions": [
+    { "label": "0.8x", "value": 0.8, "active": false },
+    { "label": "1.0x", "value": 1, "active": true },
+    { "label": "1.2x", "value": 1.2, "active": false },
+    { "label": "1.5x", "value": 1.5, "active": false }
+  ],
+  "runningCapsule": {
+    "title": "正在朗读",
+    "pausedTitle": "朗读已暂停",
+    "sentence": "雨，下了一整夜。",
+    "actionLabel": "暂停",
+    "continueLabel": "继续",
+    "settingsLabel": "设置"
+  },
+  "feedback": {
+    "error": {
+      "title": "加载失败，请重试",
+      "copy": "系统 TTS 暂不可用，已保留当前阅读位置。",
+      "primaryAction": "重试"
+    },
+    "offline": {
+      "title": "网络不可用，请稍后重试",
+      "copy": "本地系统声音仍可使用，在线声音暂不可用。",
+      "primaryAction": "知道了"
+    }
+  },
+  "moduleNav": [
+    { "label": "目录", "type": "directory", "active": false },
+    { "label": "朗读", "type": "tts", "active": true },
+    { "label": "界面", "type": "appearance", "active": false },
+    { "label": "设置", "type": "settings", "active": false }
+  ],
+  "brightness": {
+    "title": "亮度",
+    "value": 56,
+    "autoLabel": "A",
+    "modeLabel": "系统"
+  },
+  "bottomReadout": {
+    "progress": "38%",
+    "chapter": "第 32/128 章"
+  }
+}

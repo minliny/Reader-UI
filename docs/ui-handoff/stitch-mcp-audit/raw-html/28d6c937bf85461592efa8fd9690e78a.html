@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#abd0a8",
+                    "surface-variant": "#eae1da",
+                    "surface": "#fff8f4",
+                    "secondary-fixed": "#ffdbcc",
+                    "secondary-fixed-dim": "#f2baa2",
+                    "inverse-primary": "#a1cce8",
+                    "on-primary-fixed-variant": "#1e4b62",
+                    "on-primary-container": "#fcfcff",
+                    "surface-container-highest": "#eae1da",
+                    "surface-container-lowest": "#ffffff",
+                    "on-tertiary-fixed-variant": "#2e4e30",
+                    "on-background": "#1f1b17",
+                    "primary": "#366179",
+                    "on-error": "#ffffff",
+                    "inverse-surface": "#34302b",
+                    "tertiary": "#436443",
+                    "on-tertiary-fixed": "#022108",
+                    "outline-variant": "#c1c7cd",
+                    "on-tertiary-container": "#f7fff2",
+                    "secondary-container": "#fec5ad",
+                    "on-secondary-container": "#79503c",
+                    "on-secondary-fixed": "#301305",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "outline": "#72787d",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#39637b",
+                    "primary-container": "#507a92",
+                    "on-primary-fixed": "#001e2c",
+                    "surface-container": "#f5ece6",
+                    "background": "#fff8f4",
+                    "surface-bright": "#fff8f4",
+                    "on-secondary-fixed-variant": "#643d2b",
+                    "surface-dim": "#e1d8d2",
+                    "on-surface-variant": "#41484c",
+                    "surface-container-low": "#fbf2eb",
+                    "error-container": "#ffdad6",
+                    "primary-fixed": "#c4e7ff",
+                    "on-error-container": "#93000a",
+                    "inverse-on-surface": "#f8efe8",
+                    "on-surface": "#1f1b17",
+                    "tertiary-container": "#5b7d5a",
+                    "on-tertiary": "#ffffff",
+                    "primary-fixed-dim": "#a1cce8",
+                    "tertiary-fixed": "#c7ecc3",
+                    "surface-container-high": "#efe7e0",
+                    "secondary": "#7f5441"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "lg": "48px",
+                    "max-content-width": "720px",
+                    "sm": "12px",
+                    "touch-target": "48px",
+                    "base": "4px",
+                    "sidebar-width": "320px",
+                    "xs": "8px",
+                    "xl": "80px",
+                    "md": "24px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter", "Noto Serif SC", "serif"],
+                    "label-md": ["Inter", "sans-serif"],
+                    "headline-lg-mobile": ["Inter", "sans-serif"],
+                    "body-lg": ["Inter", "serif"],
+                    "display-lg": ["Inter", "sans-serif"],
+                    "headline-md": ["Inter", "sans-serif"],
+                    "headline-lg": ["Inter", "sans-serif"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .handoff-border { border: 1px dashed #D8CFBE; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #fff8f4; color: #1f1b17; overflow: hidden; }
+        .reading-canvas { max-width: 720px; margin: 0 auto; height: 100vh; padding-top: 100px; padding-bottom: 450px; overflow-y: auto; }
+        .reading-canvas::-webkit-scrollbar { width: 4px; }
+        .reading-canvas::-webkit-scrollbar-thumb { background: #D8CFBE; border-radius: 2px; }
+    </style>
+</head>
+<body class="font-body-md text-body-md selection:bg-secondary-container">
+<!-- Top App Bar Section -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface border-b border-outline-variant handoff-border">
+<div class="flex justify-between items-center px-sm h-touch-target">
+<div class="flex items-center">
+<button class="p-xs hover:bg-surface-variant transition-colors rounded-full">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<span class="ml-xs font-bold font-headline-md text-primary">深空信号</span>
+</div>
+<div class="flex items-center gap-xs">
+<button class="p-xs hover:bg-surface-variant transition-colors rounded-full"><span class="material-symbols-outlined">refresh</span></button>
+<button class="p-xs hover:bg-surface-variant transition-colors rounded-full"><span class="material-symbols-outlined">swap_horiz</span></button>
+<button class="p-xs hover:bg-surface-variant transition-colors rounded-full"><span class="material-symbols-outlined">more_vert</span></button>
+</div>
+</div>
+<div class="px-md pb-xs flex items-center justify-between">
+<span class="text-on-surface-variant font-label-md text-label-md">第一章：阿长与《山海经》</span>
+<span class="px-3 py-1 rounded-full border border-outline text-label-md text-outline">本地书籍</span>
+</div>
+</header>
+<!-- Reading Content Area -->
+<main class="reading-canvas px-md handoff-border">
+<article class="space-y-md text-on-surface">
+<p>阿长是我小时候家里的一个保姆。我并不太清楚她的真名，只记得大人们都叫她阿长。她是个极普通的人，却在我的童年里刻下了极深的印记。</p>
+<p>在那段沉闷的岁月里，深空信号似乎总是在夜半时分最为清晰。这不是指那些来自外星的电波，而是内心深处某种渴望知识与未知的回响。每当我在昏黄的油灯下翻开破旧的书页，阿长总会走进来，轻声叮嘱我早点休息。</p>
+<p>她送我的那本《山海经》，是我人生中第一本真正意义上的奇书。那些奇形怪状的神兽，那些光怪陆离的山川，在那一刻，仿佛真的通过某种跨越时空的信号，连接到了我的梦境之中。</p>
+<p>所谓深空信号，或许就是这种对世界最初的好奇。即便身处荒僻的村落，即便周围都是生活的琐碎，书籍依然能像天线一样，捕捉到那来自遥远文明的微弱脉冲。</p>
+<p>我依然记得她描述那些传说时的神情，带着一种敬畏，也带着一种朴素的温情。这些故事在我的生命里扎了根，化作了我后来探索更广阔世界的动力源泉。</p>
+</article>
+</main>
+<!-- Unified Bottom Control Stack (Fixed at Bottom) -->
+<div class="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-surface shadow-2xl transition-transform duration-300">
+<!-- 1. Interface Settings Panel (Interface/Appearance) -->
+<section class="border-t border-outline-variant px-md py-md space-y-md handoff-border">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface">界面</h3>
+<span class="text-outline font-label-md text-label-md">个性化排版</span>
+</div>
+<!-- Integrated Brightness Control -->
+<div class="space-y-sm">
+<div class="flex items-center gap-md handoff-border p-xs rounded-lg">
+<span class="material-symbols-outlined text-outline">light_mode</span>
+<div class="flex-1 h-1.5 bg-surface-container-highest rounded-full relative cursor-pointer group">
+<div class="absolute left-0 top-0 h-full w-2/3 bg-primary rounded-full"></div>
+<div class="absolute left-2/3 top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 bg-on-primary border-4 border-primary rounded-full shadow-sm"></div>
+</div>
+<span class="material-symbols-outlined text-outline">brightness_high</span>
+</div>
+<div class="flex items-center justify-between px-xs">
+<span class="text-on-surface-variant text-label-md">跟随系统亮度</span>
+<div class="w-10 h-5 bg-primary-container/20 rounded-full relative border border-outline-variant">
+<div class="absolute right-1 top-1 w-3 h-3 bg-primary rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Layout Controls Grid -->
+<div class="grid grid-cols-2 gap-md">
+<!-- Font Size -->
+<div class="flex items-center justify-between bg-surface-container rounded-xl p-xs handoff-border">
+<button class="w-10 h-10 flex items-center justify-center text-outline"><span class="material-symbols-outlined" style="font-size: 18px;">text_fields</span></button>
+<span class="font-bold text-on-surface">18</span>
+<button class="w-10 h-10 flex items-center justify-center text-on-surface"><span class="material-symbols-outlined" style="font-size: 24px;">text_fields</span></button>
+</div>
+<!-- Line Height (3 Horizontal Lines) -->
+<div class="flex items-center justify-around bg-surface-container rounded-xl p-xs handoff-border">
+<button class="p-1 flex flex-col gap-0.5"><div class="w-5 h-[2px] bg-outline"></div><div class="w-5 h-[2px] bg-outline"></div><div class="w-5 h-[2px] bg-outline"></div></button>
+<button class="p-1 bg-primary-container rounded flex flex-col gap-1"><div class="w-5 h-[2px] bg-primary"></div><div class="w-5 h-[2px] bg-primary"></div><div class="w-5 h-[2px] bg-primary"></div></button>
+<button class="p-1 flex flex-col gap-1.5"><div class="w-5 h-[2px] bg-outline"></div><div class="w-5 h-[2px] bg-outline"></div><div class="w-5 h-[2px] bg-outline"></div></button>
+</div>
+</div>
+<!-- Page Margin (3 Vertical Lines) & Font Selection -->
+<div class="flex items-center justify-between gap-md">
+<!-- Page Margin -->
+<div class="flex-1 flex items-center justify-around bg-surface-container rounded-xl p-xs handoff-border">
+<button class="p-1 flex items-center gap-0.5"><div class="h-5 w-[2px] bg-outline"></div><div class="h-5 w-[2px] bg-outline"></div><div class="h-5 w-[2px] bg-outline"></div></button>
+<button class="p-1 flex items-center gap-1"><div class="h-5 w-[2px] bg-outline"></div><div class="h-5 w-[2px] bg-outline"></div><div class="h-5 w-[2px] bg-outline"></div></button>
+<button class="p-1 bg-primary-container rounded flex items-center gap-1.5"><div class="h-5 w-[2px] bg-primary"></div><div class="h-5 w-[2px] bg-primary"></div><div class="h-5 w-[2px] bg-primary"></div></button>
+</div>
+<!-- Font Family -->
+<div class="flex-1 flex items-center justify-center bg-surface-container rounded-xl h-[48px] px-md handoff-border">
+<span class="text-on-surface font-label-md">思源宋体</span>
+<span class="material-symbols-outlined ml-auto text-outline">expand_more</span>
+</div>
+</div>
+<!-- Paragraph Spacing (3 Horizontal Lines) -->
+<div class="flex items-center justify-between gap-md">
+<span class="text-on-surface-variant text-label-md w-16">段落间距</span>
+<div class="flex-1 flex items-center justify-around bg-surface-container rounded-xl p-xs handoff-border">
+<button class="p-1 flex flex-col gap-0.5"><div class="w-5 h-[1px] bg-outline"></div><div class="w-5 h-[1px] bg-outline"></div><div class="w-5 h-[1px] bg-outline"></div></button>
+<button class="p-1 bg-primary-container rounded flex flex-col gap-1.5"><div class="w-5 h-[1px] bg-primary"></div><div class="w-5 h-[1px] bg-primary"></div><div class="w-5 h-[1px] bg-primary"></div></button>
+<button class="p-1 flex flex-col gap-2.5"><div class="w-5 h-[1px] bg-outline"></div><div class="w-5 h-[1px] bg-outline"></div><div class="w-5 h-[1px] bg-outline"></div></button>
+</div>
+</div>
+<!-- Background Themes -->
+<div class="flex justify-between items-center px-xs pt-xs">
+<div class="w-10 h-10 rounded-full border-2 border-primary bg-[#fff8f4] flex items-center justify-center"><span class="material-symbols-outlined text-primary text-sm">check</span></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-[#F1E5C9]"></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-[#E8F0E8]"></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-[#E5E9F0]"></div>
+<div class="w-10 h-10 rounded-full border border-outline-variant bg-[#1f1b17]"></div>
+</div>
+</section>
+<!-- 2. Bottom Control Stack Base -->
+<div class="bg-surface border-t border-outline-variant">
+<!-- Row 1: Quick Actions -->
+<div class="grid grid-cols-4 px-md py-md border-b border-outline-variant handoff-border">
+<button class="flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-on-surface-variant group-active:text-primary">search</span>
+<span class="text-label-md font-label-md">搜索</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-on-surface-variant group-active:text-primary">auto_stories</span>
+<span class="text-label-md font-label-md">自动翻页</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-on-surface-variant group-active:text-primary">find_replace</span>
+<span class="text-label-md font-label-md">内容替换</span>
+</button>
+<button class="flex flex-col items-center gap-1 group">
+<span class="material-symbols-outlined text-on-surface-variant group-active:text-primary">dark_mode</span>
+<span class="text-label-md font-label-md">夜间模式</span>
+</button>
+</div>
+<!-- Row 2: Chapter Jump -->
+<div class="px-md py-sm flex items-center gap-4 border-b border-outline-variant handoff-border">
+<button class="p-2 text-on-surface-variant"><span class="material-symbols-outlined">skip_previous</span></button>
+<div class="flex-1 relative flex items-center h-8">
+<div class="w-full h-1 bg-surface-container-highest rounded-full"></div>
+<div class="absolute h-1 bg-primary rounded-full" style="width: 45%;"></div>
+<div class="absolute w-4 h-4 bg-surface rounded-full shadow-md border border-primary" style="left: 45%; transform: translateX(-50%);"></div>
+</div>
+<button class="p-2 text-on-surface-variant"><span class="material-symbols-outlined">skip_next</span></button>
+</div>
+<!-- Row 3: Bottom Function Row (Main Navigation) -->
+<nav class="flex justify-around items-center h-16 w-full px-md pb-safe handoff-border">
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 w-16">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">目录</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 w-16">
+<span class="material-symbols-outlined">volume_up</span>
+<span class="font-label-md text-label-md">朗读</span>
+</button>
+<button class="flex flex-col items-center justify-center text-primary gap-1 w-16">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">text_format</span>
+<span class="font-label-md text-label-md">界面</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant gap-1 w-16">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">设置</span>
+</button>
+</nav>
+</div>
+</div>
+<script>
+    // Logic for slider micro-interactions
+    document.querySelectorAll('.bg-surface-container-highest').forEach(slider => {
+        slider.addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percentage = Math.round((x / rect.width) * 100);
+            const progressBar = this.querySelector('.bg-primary');
+            const thumb = this.nextElementSibling ? null : this.querySelector('.w-5'); 
+            // In the brightness slider, the thumb is a child. In progress, it might be different.
+            if (progressBar) progressBar.style.width = percentage + '%';
+            if (thumb) thumb.style.left = percentage + '%';
+        });
+    });
+</script>
+</body></html>

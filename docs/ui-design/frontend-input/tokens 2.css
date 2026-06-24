@@ -1,0 +1,21 @@
+:root {
+  --reader-ds-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --reader-ds-font-serif: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+  --reader-ds-color-paper: #fbf6ee;
+  --reader-ds-color-paper-bright: #fff8f1;
+  --reader-ds-color-surface: rgba(255, 255, 255, 0.88);
+  --reader-ds-color-surface-soft: rgba(255, 252, 248, 0.72);
+  --reader-ds-color-ink: #17130f;
+  --reader-ds-color-muted: #756f69;
+  --reader-ds-color-border: rgba(180, 166, 151, 0.42);
+  --reader-ds-color-primary: #2379a4;
+  --reader-ds-color-primary-dark: #176996;
+  --reader-ds-color-accent: #f48b13;
+  --reader-ds-radius-sheet: 26px;
+  --reader-ds-radius-panel: 20px;
+  --reader-ds-radius-card: 16px;
+  --reader-ds-radius-control: 999px;
+  --reader-ds-shadow-elevated: 0 18px 46px rgba(89, 70, 50, 0.16);
+  --reader-ds-shadow-soft: 0 8px 26px rgba(89, 70, 50, 0.1);
+  --reader-ds-state-focus: 0 0 0 4px rgba(35, 121, 164, 0.22);
+}

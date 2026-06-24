@@ -1,0 +1,37 @@
+<section data-component="BookSearchPage">
+  <div data-slot="StatusBar">BookSearchStatusBar</div>
+  <div data-slot="TopBar">BookSearchTopBar</div>
+  <div data-slot="SearchBox">SearchBar</div>
+  <div data-slot="ScopeTabs">SearchScopeTabs</div>
+  <div data-slot="GroupPanel">SearchGroupPanel</div>
+  <div data-slot="HistoryPanel">SearchHistoryPanel</div>
+  <div data-slot="ResultList">SearchResultList</div>
+  <div data-slot="PrimaryAction">PrimaryActionButton</div>
+</section>
+
+<section data-component="SearchBar">
+  <div data-prop="placeholder">搜索书名、作者、关键词</div>
+  <div data-prop="clearLabel">清空搜索</div>
+</section>
+
+<section data-component="SearchScopeTabs">
+  <div data-prop="items">本地、网络、全局、分组</div>
+  <div data-state="active">分组</div>
+</section>
+
+<section data-component="SearchGroupPanel">
+  <div data-prop="title">选择分组</div>
+  <div data-prop="copy">按自定义分组或导入来源限定搜索范围</div>
+  <div data-prop="manageLabel">管理分组</div>
+  <div data-prop="groups">玄幻书源、本地导入、起点导入、晋江导入、自定义规则、RSS 书单、测试书源</div>
+</section>
+
+<section data-component="SearchResultItem">
+  <div data-prop="title">长夜余火</div>
+  <div data-prop="author">爱潜水的乌贼</div>
+  <div data-prop="source">起点中文网</div>
+  <div data-prop="latest">第 32 章 雨夜</div>
+  <div data-action="openDetail">详情</div>
+  <div data-action="addToBookshelf">加入书架</div>
+  <div data-action="read">阅读</div>
+</section>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=836, initial-scale=1">
+  <title>同步与备份前端输入件</title>
+  <link rel="stylesheet" href="./components.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../shared-settings-kit/kit.js"></script>
+  <script src="./fixture.js"></script>
+  <script src="./render.js"></script>
+  <script>
+    window.SyncBackupInput.renderSyncBackup(
+      document.getElementById("app"),
+      window.SYNC_BACKUP_FIXTURE
+    );
+  </script>
+</body>
+</html>

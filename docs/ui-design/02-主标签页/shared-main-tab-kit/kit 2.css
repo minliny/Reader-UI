@@ -1,0 +1,72 @@
+.mt-app-frame {
+  position: relative;
+  width: var(--mt-frame-width);
+  height: var(--mt-frame-height);
+  overflow: hidden;
+}
+
+.mt-content-region {
+  display: contents;
+}
+
+.mt-state-host {
+  display: none;
+}
+
+.mt-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mt-icon-button {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+}
+
+.mt-main-nav-item {
+  position: relative;
+  min-width: 0;
+}
+
+.mt-main-nav-icon-shell {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 18px;
+  color: currentColor;
+  background: transparent;
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.mt-main-nav-icon {
+  width: 35px;
+  height: 35px;
+}
+
+.mt-main-nav-label {
+  color: currentColor;
+  transition: color 160ms ease;
+}
+
+.mt-main-nav-item.is-active {
+  color: var(--reader-ds-color-primary-dark);
+}
+
+.mt-main-nav-item.is-active .mt-main-nav-icon-shell {
+  color: var(--reader-ds-color-surface);
+  background: var(--reader-ds-color-primary-dark);
+}
+
+.mt-main-nav-item.is-active .mt-main-nav-label {
+  color: var(--reader-ds-color-primary-dark);
+}
+
+.mt-state-workbench {
+  font-family: var(--reader-ds-font-sans);
+}

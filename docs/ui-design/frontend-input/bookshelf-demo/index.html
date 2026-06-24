@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>书架页 Demo</title>
+  <link rel="stylesheet" href="../../02-主标签页/书架/frontend-input/components.css">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="demo-shell">
+    <section class="demo-preview" aria-label="书架页预览">
+      <div class="demo-device-host" id="device-host">
+        <div class="demo-device-scale" id="device-scale">
+          <div id="bookshelf-demo-root"></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="demo-panel" aria-label="书架页状态切换">
+      <header class="demo-panel-header">
+        <p class="demo-kicker">Bookshelf MainTabShell</p>
+        <h1>书架页 Demo</h1>
+        <p>复用当前书架输入件、MainTabShell、书籍卡片、分组胶囊、状态宿主和底部四栏导航。</p>
+      </header>
+
+      <section class="demo-section">
+        <h2>状态</h2>
+        <div class="demo-segmented" role="tablist" aria-label="书架状态">
+          <button type="button" class="is-active" data-state="default" role="tab" aria-selected="true">默认</button>
+          <button type="button" data-state="filtering" role="tab" aria-selected="false">追更</button>
+          <button type="button" data-state="loading" role="tab" aria-selected="false">加载</button>
+          <button type="button" data-state="empty" role="tab" aria-selected="false">空态</button>
+        </div>
+      </section>
+
+      <section class="demo-section">
+        <h2>框架</h2>
+        <dl class="demo-metrics">
+          <div><dt>Shell</dt><dd>MainTabShell</dd></div>
+          <div><dt>Slot</dt><dd>appFrame / statusBar / appTopBar / contentRegion / mainNav / stateHost</dd></div>
+          <div><dt>导航</dt><dd>书架 / 发现 / RSS / 设置</dd></div>
+          <div><dt>来源</dt><dd>fixture + render.js + shared-main-tab-kit</dd></div>
+        </dl>
+      </section>
+
+      <section class="demo-section">
+        <h2>组件</h2>
+        <ul class="demo-list">
+          <li>分组胶囊、继续阅读卡、最近更新卡</li>
+          <li>书籍封面卡、进度条、排序筛选入口</li>
+          <li>顶部搜索/更多按钮、底部主导航按钮</li>
+          <li>加载、筛选、空书架三类状态矩阵输入</li>
+        </ul>
+      </section>
+    </aside>
+  </main>
+
+  <script src="../../02-主标签页/shared-main-tab-kit/kit.js"></script>
+  <script src="../../02-主标签页/书架/frontend-input/fixture.js"></script>
+  <script src="../../02-主标签页/书架/frontend-input/render.js"></script>
+  <script src="./demo.js"></script>
+</body>
+</html>

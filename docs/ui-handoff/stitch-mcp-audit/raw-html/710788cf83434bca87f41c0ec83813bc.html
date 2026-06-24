@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reader - 朗读控制</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary": "#ffffff",
+                "background": "#fff8f4",
+                "outline": "#72787d",
+                "on-secondary-container": "#79503c",
+                "inverse-on-surface": "#f8efe8",
+                "surface-container-low": "#fbf2eb",
+                "primary": "#366179",
+                "on-tertiary-fixed-variant": "#2e4e30",
+                "on-primary-fixed": "#001e2c",
+                "surface-dim": "#e1d8d2",
+                "tertiary-container": "#5b7d5a",
+                "secondary": "#7f5441",
+                "primary-fixed": "#c4e7ff",
+                "on-tertiary": "#ffffff",
+                "on-secondary-fixed": "#301305",
+                "surface-container-highest": "#eae1da",
+                "inverse-surface": "#34302b",
+                "surface-container-high": "#efe7e0",
+                "outline-variant": "#c1c7cd",
+                "surface-variant": "#eae1da",
+                "surface-container-lowest": "#ffffff",
+                "surface-tint": "#39637b",
+                "surface-container": "#f5ece6",
+                "surface": "#fff8f4",
+                "on-primary-container": "#fcfcff",
+                "on-tertiary-container": "#f7fff2",
+                "secondary-container": "#fec5ad",
+                "on-surface": "#1f1b17",
+                "on-primary-fixed-variant": "#1e4b62",
+                "primary-fixed-dim": "#a1cce8",
+                "error": "#ba1a1a",
+                "tertiary-fixed": "#c7ecc3",
+                "secondary-fixed": "#ffdbcc",
+                "primary-container": "#507a92",
+                "on-error": "#ffffff",
+                "tertiary": "#436443",
+                "surface-bright": "#fff8f4",
+                "on-background": "#1f1b17",
+                "on-secondary": "#ffffff",
+                "on-secondary-fixed-variant": "#643d2b",
+                "tertiary-fixed-dim": "#abd0a8",
+                "on-tertiary-fixed": "#022108",
+                "error-container": "#ffdad6",
+                "inverse-primary": "#a1cce8",
+                "secondary-fixed-dim": "#f2baa2",
+                "on-surface-variant": "#41484c",
+                "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "xs": "8px",
+                "md": "24px",
+                "lg": "48px",
+                "max-content-width": "720px",
+                "xl": "80px",
+                "touch-target": "48px",
+                "sm": "12px",
+                "base": "4px",
+                "sidebar-width": "320px"
+            },
+            "fontFamily": {
+                "body-md": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-lg-mobile": ["Inter"],
+                "headline-lg": ["Inter"],
+                "display-lg": ["Inter"],
+                "headline-md": ["Inter"],
+                "body-lg": ["Inter"]
+            },
+            "fontSize": {
+                "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .handoff-border {
+            border: 1px dashed rgba(54, 97, 121, 0.4);
+            position: relative;
+        }
+        .handoff-label {
+            position: absolute;
+            top: -12px;
+            right: 4px;
+            font-size: 10px;
+            background: #366179;
+            color: white;
+            padding: 0 4px;
+            border-radius: 2px;
+            z-index: 60;
+            pointer-events: none;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D8CFBE;
+            border-radius: 2px;
+        }
+        .paper-texture {
+            background-color: #fff8f4;
+            background-image: radial-gradient(#D8CFBE 0.5px, transparent 0.5px);
+            background-size: 24px 24px;
+            background-position: 0 0;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md overflow-hidden">
+<!-- Top Navigation Container -->
+<header class="fixed top-0 left-0 w-full z-50 bg-surface border-b border-outline-variant handoff-border">
+<span class="handoff-label">Top Bar Shell</span>
+<div class="flex justify-between items-center h-touch-target px-sm">
+<div class="flex items-center gap-xs">
+<button class="w-touch-target h-touch-target flex items-center justify-center hover:bg-surface-variant rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">arrow_back</span>
+</button>
+<span class="font-headline-md text-[20px] font-bold text-primary">深空信号</span>
+</div>
+<div class="flex items-center gap-xs">
+<button class="w-touch-target h-touch-target flex items-center justify-center hover:bg-surface-variant rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">refresh</span>
+</button>
+<button class="w-touch-target h-touch-target flex items-center justify-center hover:bg-surface-variant rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">swap_horiz</span>
+</button>
+<button class="w-touch-target h-touch-target flex items-center justify-center hover:bg-surface-variant rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">more_vert</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-sm px-md pb-xs">
+<h2 class="font-label-md text-label-md text-on-surface-variant truncate">第一章：阿长与《山海经》</h2>
+<span class="px-3 py-1 rounded-full border border-outline text-label-md text-outline">本地书籍</span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-[96px] pb-[440px] px-md h-screen overflow-y-auto paper-texture handoff-border">
+<span class="handoff-label">Reading Canvas</span>
+<article class="max-w-max-content-width mx-auto space-y-md text-justify text-on-surface/90">
+<p class="font-body-lg text-body-lg">长妈妈，已经说过，是一个女工，没有正式的姓名。在我的家乡，这种女工统称为“长妈妈”，但我所认识的长妈妈，确乎有些不同。</p>
+<p class="font-body-lg text-body-lg">她的姓名，已经记不真切了。但在我的记忆中，她是一个极其高大，又极其和蔼的人。她常常带我去逛那条充满了神秘感的小巷，给我讲那些听也听不完的故事。在那时，我还是一个不识字的孩子，对于她所描述的《山海经》，充满了无限的遐想。</p>
+<p class="font-body-lg text-body-lg">“长妈妈，你见过那些人面马身的怪物吗？”我仰着头问她。</p>
+<p class="font-body-lg text-body-lg">她笑了，眼角的皱纹里藏着智慧：“孩子，那些都在书里呢。等你识了字，我就送你一套，你自己去看个真切。”</p>
+<p class="font-body-lg text-body-lg">后来，我的生命中确实出现了一套《山海经》，那是我一生中最初的，也是最珍贵的礼物。那些奇怪的插图，虽然简陋，却为我打开了一个广袤而奇幻的世界。而长妈妈的身影，也永远地和那些奇禽异兽叠印在了一起。</p>
+</article>
+</main>
+<!-- Bottom Controls & Playback Panel -->
+<div class="fixed bottom-0 left-0 w-full z-50 flex flex-col">
+<!-- Expanded Playback UI (Floating Panel Style) -->
+<div class="mx-md mb-xs bg-surface-container-high rounded-xl shadow-lg border border-outline-variant p-md animate-in slide-in-from-bottom-4 duration-300 handoff-border">
+<span class="handoff-label">Playback Overlay</span>
+<!-- Group 1: Status -->
+<div class="flex justify-between items-center mb-md handoff-border">
+<span class="handoff-label">Status Group</span>
+<div class="flex flex-col gap-base">
+<div class="flex items-center gap-sm">
+<div class="w-xs h-md bg-primary rounded-full"></div>
+<span class="font-headline-md text-headline-md text-on-surface">朗读</span>
+<span class="ml-xs text-[12px] text-primary bg-primary-container/20 px-xs py-0.5 rounded">正在播放</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+<span class="text-label-md font-label-md">第一章：阿长与《山海经》</span>
+</div>
+</div>
+</div>
+<!-- Group 2: Control -->
+<div class="flex justify-center items-center gap-lg py-sm mb-md handoff-border">
+<span class="handoff-label">Control Group</span>
+<button class="w-[64px] h-[64px] flex items-center justify-center bg-primary text-on-primary rounded-full shadow-md active:scale-95 transition-transform ml-12">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">pause</span>
+</button>
+<button class="w-touch-target h-touch-target flex items-center justify-center hover:bg-surface-variant rounded-full text-on-surface-variant">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">stop</span>
+</button>
+</div>
+<!-- Group 3: Progress -->
+<div class="space-y-base mb-md handoff-border">
+<span class="handoff-label">Progress Group</span>
+<div class="flex items-center gap-md">
+<div class="relative flex-1 h-base bg-outline-variant rounded-full">
+<div class="absolute left-0 top-0 h-full w-[28%] bg-primary rounded-full"></div>
+<div class="absolute left-[28%] top-1/2 -translate-y-1/2 w-3 h-3 bg-primary border-2 border-surface rounded-full shadow-sm"></div>
+</div>
+<span class="text-label-md font-label-md text-on-surface-variant/70 min-w-[85px] text-right">12:45 / 45:20</span>
+</div>
+</div>
+<!-- Group 4: Parameters -->
+<div class="space-y-sm pt-xs border-t border-outline-variant/30 handoff-border">
+<span class="handoff-label">Parameter Group</span>
+<!-- Speed Slider -->
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">speed</span>
+<div class="relative flex-1 h-base bg-outline-variant rounded-full overflow-hidden">
+<div class="absolute left-0 top-0 h-full w-[40%] bg-primary"></div>
+</div>
+<span class="text-label-md font-label-md w-10">1.0x</span>
+</div>
+<!-- Volume Slider -->
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant">volume_up</span>
+<div class="relative flex-1 h-base bg-outline-variant rounded-full overflow-hidden">
+<div class="absolute left-0 top-0 h-full w-[65%] bg-primary"></div>
+</div>
+<span class="text-label-md font-label-md w-10">65%</span>
+</div>
+<!-- Function Buttons -->
+<div class="flex gap-sm pt-sm">
+<button class="flex-1 py-sm px-md rounded-lg border border-outline-variant text-label-md font-label-md flex items-center justify-between hover:bg-surface-variant transition-colors">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]">timer</span>
+<div class="flex flex-col items-start leading-tight">
+<span class="text-on-surface-variant text-[12px]">定时关闭</span>
+<span class="text-primary">30分钟后</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/40">chevron_right</span>
+</button>
+<button class="flex-1 py-sm px-md rounded-lg border border-outline-variant text-label-md font-label-md flex items-center justify-between hover:bg-surface-variant transition-colors">
+<div class="flex items-center gap-xs">
+<span class="material-symbols-outlined text-[20px]">record_voice_over</span>
+<div class="flex flex-col items-start leading-tight">
+<span class="text-on-surface-variant text-[12px]">朗读音色</span>
+<span class="text-primary">磁性男声</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/40">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Bottom Control Stack -->
+<div class="bg-surface border-t border-outline-variant rounded-t-xl px-md pb-safe pt-xs handoff-border">
+<span class="handoff-label">Bottom Control Stack</span>
+<!-- Row 1: Quick Action Row -->
+<div class="flex justify-between items-center h-touch-target px-sm opacity-60 mb-1 handoff-border">
+<span class="handoff-label">Quick Action Row</span>
+<button class="flex flex-col items-center gap-0 w-12"><span class="material-symbols-outlined text-[20px]">search</span><span class="text-[10px]">搜索</span></button>
+<button class="flex flex-col items-center gap-0 w-12"><span class="material-symbols-outlined text-[20px]">auto_stories</span><span class="text-[10px]">自动翻页</span></button>
+<button class="flex flex-col items-center gap-0 w-12"><span class="material-symbols-outlined text-[20px]">find_replace</span><span class="text-[10px]">内容替换</span></button>
+<button class="flex flex-col items-center gap-0 w-12"><span class="material-symbols-outlined text-[20px]">dark_mode</span><span class="text-[10px]">夜间模式</span></button>
+</div>
+<!-- Row 2: Chapter Jump Row -->
+<div class="flex items-center gap-md py-xs px-sm mb-1 handoff-border">
+<span class="handoff-label">Chapter Jump Row</span>
+<button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant hover:bg-surface-variant rounded-full"><span class="material-symbols-outlined">skip_previous</span></button>
+<div class="relative flex-1 h-base bg-outline-variant rounded-full">
+<div class="absolute left-0 top-0 h-full w-[25%] bg-primary rounded-full"></div>
+<div class="absolute left-[25%] top-1/2 -translate-y-1/2 w-3 h-3 bg-primary border-2 border-surface rounded-full shadow-sm"></div>
+</div>
+<button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant hover:bg-surface-variant rounded-full"><span class="material-symbols-outlined">skip_next</span></button>
+</div>
+<!-- Row 3: Bottom Function Row (Navigation) -->
+<nav class="flex justify-between items-center h-[64px] handoff-border">
+<span class="handoff-label">Bottom Function Row</span>
+<div class="flex-1 flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">menu_book</span>
+<span class="font-label-md text-label-md">目录</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center text-primary font-bold transition-all relative">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">record_voice_over</span>
+<span class="font-label-md text-label-md">朗读</span>
+<div class="absolute bottom-1 w-1 h-1 bg-primary rounded-full"></div>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">format_size</span>
+<span class="font-label-md text-label-md">界面</span>
+</div>
+<div class="flex-1 flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">设置</span>
+</div>
+</nav>
+</div>
+</div>
+<script>
+    // Micro-interactions for playback control
+    const pauseBtn = document.querySelector('.bg-primary.rounded-full');
+    let isPlaying = true;
+    
+    pauseBtn.addEventListener('click', () => {
+        isPlaying = !isPlaying;
+        const icon = pauseBtn.querySelector('.material-symbols-outlined');
+        icon.textContent = isPlaying ? 'pause' : 'play_arrow';
+        
+        // Visual feedback
+        pauseBtn.style.transform = 'scale(0.9)';
+        setTimeout(() => pauseBtn.style.transform = 'scale(1)', 100);
+    });
+
+    // Scroll effect
+    const mainContent = document.querySelector('main');
+    mainContent.addEventListener('scroll', () => {
+        const opacity = Math.min(mainContent.scrollTop / 200, 1);
+    });
+</script>
+</body></html>

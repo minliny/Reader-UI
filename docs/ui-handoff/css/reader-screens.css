@@ -1,0 +1,33 @@
+.reader-app-shell { position: relative; width: 390px; min-height: 844px; margin: 0 auto; background: var(--reader-paper-bg); color: var(--reader-body-text); font-family: Inter, system-ui, sans-serif; overflow: hidden; }
+.reader-main-tab-bar { position: fixed; left: 50%; bottom: 0; z-index: 40; width: 390px; height: 68px; display: grid; grid-template-columns: repeat(5, 1fr); transform: translateX(-50%); background: var(--reader-bottom-bar-bg); border-top: 1px solid var(--reader-control-border); }
+.reader-main-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: var(--reader-control-ink); font-size: 12px; border: 0; background: transparent; }
+.reader-main-tab-active { color: var(--reader-primary); }
+.reader-page-header { height: 56px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: var(--reader-control-ink); background: var(--reader-soft-top-bg); border-bottom: 1px solid var(--reader-control-border); }
+.reader-page-title { margin: 0; font-size: 20px; line-height: 26px; font-weight: 700; color: var(--reader-control-ink); }
+.reader-screen-content { padding: 16px 16px 88px; display: grid; gap: 14px; }
+.reader-section { display: grid; gap: 10px; }
+.reader-section-title { margin: 0; font-size: 15px; font-weight: 700; color: var(--reader-control-ink); }
+.reader-card { border: 1px solid var(--reader-control-border); border-radius: 16px; background: var(--reader-floating-control-bg); box-shadow: var(--reader-control-shadow); color: var(--reader-control-ink); }
+.reader-card-pad { padding: 14px; }
+.reader-book-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.reader-book-card { display: grid; gap: 8px; min-width: 0; }
+.reader-book-cover { aspect-ratio: 3 / 4; border-radius: 10px; background: linear-gradient(145deg, var(--reader-primary), var(--reader-floating-control-bg-alt)); border: 1px solid var(--reader-control-border); box-shadow: var(--reader-control-shadow); }
+.reader-book-title { overflow: hidden; color: var(--reader-control-ink); font-size: 14px; font-weight: 700; line-height: 18px; text-overflow: ellipsis; white-space: nowrap; }
+.reader-book-meta, .reader-book-progress { color: color-mix(in srgb, var(--reader-body-text) 76%, transparent); font-size: 12px; line-height: 16px; }
+.reader-search-box { height: 44px; display: flex; align-items: center; gap: 8px; padding: 0 12px; border: 1px solid var(--reader-control-border); border-radius: 999px; background: var(--reader-quick-button-bg); color: var(--reader-control-ink); }
+.reader-search-result-item, .reader-source-item, .reader-rss-item { display: grid; gap: 4px; padding: 12px; border: 1px solid var(--reader-control-border); border-radius: 14px; background: var(--reader-floating-control-bg); color: var(--reader-control-ink); }
+.reader-book-detail { display: grid; gap: 14px; }
+.reader-book-detail-header { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: start; }
+.reader-source-list { display: grid; gap: 10px; }
+.reader-settings-page { display: grid; gap: 10px; }
+.reader-settings-row { min-height: 48px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border: 1px solid var(--reader-control-border); border-radius: 14px; background: var(--reader-floating-control-bg); color: var(--reader-control-ink); }
+.reader-state-page { min-height: 640px; display: grid; place-content: center; gap: 12px; padding: 32px; text-align: center; color: var(--reader-control-ink); }
+.reader-state-title { margin: 0; font-size: 20px; font-weight: 700; }
+.reader-state-message { margin: 0; color: var(--reader-body-text); font-size: 14px; line-height: 20px; }
+.reader-primary-action, .reader-secondary-action { min-height: 40px; border-radius: 999px; padding: 0 16px; font-weight: 700; border: 1px solid var(--reader-control-border); }
+.reader-primary-action { background: var(--reader-primary); color: #fff; border-color: transparent; }
+.reader-secondary-action { background: transparent; color: var(--reader-control-ink); }
+.reader-webdav-card { display: grid; gap: 8px; padding: 14px; border: 1px solid var(--reader-control-border); border-radius: 16px; background: var(--reader-floating-control-bg); }
+.reader-status-chip { display: inline-flex; align-items: center; width: fit-content; min-height: 24px; padding: 0 10px; border-radius: 999px; border: 1px solid var(--reader-primary); color: var(--reader-primary); font-size: 12px; }
+.reader-form { display: grid; gap: 10px; }
+.reader-bottom-actions { display: flex; gap: 8px; align-items: center; }

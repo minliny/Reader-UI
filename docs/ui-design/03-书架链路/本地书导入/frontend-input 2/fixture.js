@@ -1,0 +1,94 @@
+window.LOCAL_IMPORT_FIXTURE = {
+  status: {
+    time: "10:30",
+    battery: "82%"
+  },
+  topBar: {
+    title: "导入本地书",
+    backLabel: "返回"
+  },
+  intro: {
+    title: "选择本地书籍",
+    copy: "通过 Android 系统文件选择器导入文件，不会扫描整个存储。",
+    formats: ["TXT", "EPUB", "可多选"],
+    primaryAction: "选择文件"
+  },
+  permission: {
+    title: "只访问你选择的文件",
+    copy: "导入通过系统文件选择器授权完成。应用不会扫描全盘，也不需要“管理所有文件”权限。",
+    footnote: "取消选择会直接返回书架，不作为错误处理"
+  },
+  supportedFormats: [
+    { label: "TXT", copy: "纯文本小说、章节文本", tone: "blue" },
+    { label: "EPUB", copy: "标准 EPUB 电子书", tone: "green" }
+  ],
+  flow: [
+    { step: "1", label: "选择文件" },
+    { step: "2", label: "解析书籍" },
+    { step: "3", label: "加入书架" }
+  ],
+  reminder: {
+    title: "导入后可在书架中继续阅读",
+    copy: "重复文件会提示跳过；不支持或解析失败的文件会在结果页展示原因。"
+  },
+  importing: {
+    title: "正在导入",
+    copy: "正在解析文件，请稍候",
+    currentFile: "正在解析：星海旧章.epub",
+    progress: 58
+  },
+  resultSummary: {
+    successTitle: "导入完成",
+    successCopy: "已将选中的书籍加入书架",
+    partialTitle: "部分文件导入失败",
+    partialCopy: "可以查看失败原因后重新选择",
+    failedTitle: "导入失败",
+    failedCopy: "未能导入选中的文件",
+    counts: [
+      { label: "已导入", value: 2, tone: "success" },
+      { label: "跳过", value: 1, tone: "skip" },
+      { label: "失败", value: 2, tone: "failed" }
+    ]
+  },
+  results: [
+    {
+      fileName: "星海旧章.epub",
+      status: "已导入",
+      reason: "",
+      tone: "success"
+    },
+    {
+      fileName: "雨线手记.txt",
+      status: "已导入",
+      reason: "",
+      tone: "success"
+    },
+    {
+      fileName: "纸上群山.txt",
+      status: "已存在，已跳过",
+      reason: "书架中已有同名本地书。",
+      tone: "skip"
+    },
+    {
+      fileName: "图片合集.zip",
+      status: "格式不支持",
+      reason: "请选择 TXT 或 EPUB 文件后重新导入。",
+      tone: "failed"
+    },
+    {
+      fileName: "旧城残卷.epub",
+      status: "解析失败",
+      reason: "文件结构不完整，可以更换文件后重新选择。",
+      tone: "failed"
+    }
+  ],
+  actions: {
+    chooseAgain: "重新选择",
+    done: "完成",
+    backToBookshelf: "返回书架"
+  },
+  cancelState: {
+    title: "已取消选择",
+    copy: "取消系统文件选择器会返回进入前书架状态，不展示错误页。"
+  }
+};

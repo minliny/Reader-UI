@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=390, user-scalable=no" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#f5ece6",
+                        "tertiary-container": "#5b7d5a",
+                        "on-secondary": "#ffffff",
+                        "inverse-on-surface": "#f8efe8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-container": "#79503c",
+                        "outline": "#72787d",
+                        "on-primary-fixed-variant": "#1e4b62",
+                        "primary-fixed-dim": "#a1cce8",
+                        "secondary-container": "#fec5ad",
+                        "on-error-container": "#93000a",
+                        "primary-fixed": "#c4e7ff",
+                        "tertiary-fixed": "#c7ecc3",
+                        "on-surface-variant": "#41484c",
+                        "primary": "#366179",
+                        "on-tertiary-fixed": "#022108",
+                        "background": "#fff8f4",
+                        "on-tertiary-container": "#f7fff2",
+                        "outline-variant": "#c1c7cd",
+                        "surface-bright": "#fff8f4",
+                        "on-primary-fixed": "#001e2c",
+                        "surface-tint": "#39637b",
+                        "on-primary-container": "#fcfcff",
+                        "tertiary": "#436443",
+                        "on-surface": "#1f1b17",
+                        "inverse-primary": "#a1cce8",
+                        "on-secondary-fixed": "#301305",
+                        "secondary-fixed": "#ffdbcc",
+                        "error-container": "#ffdad6",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#e1d8d2",
+                        "secondary-fixed-dim": "#f2baa2",
+                        "primary-container": "#507a92",
+                        "surface": "#fff8f4",
+                        "secondary": "#7f5441",
+                        "surface-container-high": "#efe7e0",
+                        "inverse-surface": "#34302b",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed-variant": "#643d2b",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#fbf2eb",
+                        "tertiary-fixed-dim": "#abd0a8",
+                        "surface-variant": "#eae1da",
+                        "surface-container-highest": "#eae1da",
+                        "on-tertiary-fixed-variant": "#2e4e30",
+                        "on-background": "#1f1b17",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "80px",
+                        "sm": "12px",
+                        "sidebar-width": "320px",
+                        "md": "24px",
+                        "lg": "48px",
+                        "base": "4px",
+                        "touch-target": "48px",
+                        "max-content-width": "720px",
+                        "xs": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fdf6ec;
+            width: 390px;
+            height: 844px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            color: #1f1b17;
+        }
+        .handoff-box {
+            border: 1px dashed #d8cfbe;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            user-select: none;
+        }
+        .brightness-track {
+            background: #d8cfbe;
+            width: 4px;
+            border-radius: 2px;
+            position: relative;
+        }
+        .brightness-handle {
+            background: #366179;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            position: absolute;
+            left: -4px;
+            bottom: 60%;
+        }
+    </style>
+</head>
+<body class="bg-[#fdf6ec]">
+<!-- Global Mask for Control State -->
+<div class="absolute inset-0 bg-black/5 pointer-events-none z-[5]"></div>
+<!-- Reading Content Area -->
+<div class="absolute inset-0 pt-32 px-6 overflow-y-auto pb-64 handoff-box">
+<h1 class="text-[28px] font-bold mb-8">深空信号</h1>
+<div class="space-y-6 text-[#2c2c2c] text-[18px] leading-relaxed text-justify">
+<p>通讯台的指示灯已经闪烁了三个标准时。在这片被称为“寂静航线”的星域里，通常除了背景辐射的白噪音，什么也听不到。艾伦揉了揉干涩的眼睛，盯着那个代表未知频段的跳动波形。</p>
+<p>“这不是随机的脉冲星信号，”领航员索菲亚走到他身后，指着屏幕边缘的傅里叶变换图谱，“看这里的周期性间断，它有明显的结构，像是一种原始的二进制。”</p>
+<p>空间站外，恒星的光芒被一层稀薄的星云物质过滤，呈现出一种黯淡的铁锈红。船舱内的维生系统发出平缓的嗡嗡声，与屏幕上跳动的波形形成了一种奇异的共振。艾伦将接收增益调到最大，一段夹杂着大量杂音的尖锐音频突然在主控室里回荡开来。</p>
+<p>那声音起初像是冰层断裂的脆响，随后逐渐演变成一种低沉的、仿佛是在水下敲击金属的节奏。每敲击三次，就会有一次长达十秒的绝对静默。</p>
+<p>“三短，一长静默……”索菲亚的脸色变了，“在旧地球时代的航海通讯里，这是……”</p>
+<p>“求救信号。”艾伦打断了她，手指在控制台的触控板上快速滑过，试图锁定信号源的坐标。“但问题是，这个波段是我们在五十年前就已经淘汰的军用加密频道。而且，坐标指向的是——”</p>
+<p>他咽了一口唾沫，看着屏幕上解析出的星图坐标。</p>
+<p>“指向的是我们母星系的方向。可那里，在四十年前的大坍缩中，就已经什么都不剩了。”</p>
+</div>
+</div>
+<!-- Top Navigation Container -->
+<nav class="absolute top-0 left-0 w-full z-50">
+<!-- Row 1: Header -->
+<div class="flex items-center justify-between h-[56px] px-4 bg-surface handoff-box border-b border-outline-variant/20">
+<div class="w-10">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="arrow_back">arrow_back</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-on-surface flex-1 text-center">深空信号</h1>
+<div class="flex items-center gap-4 w-fit">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="refresh">refresh</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="swap_horiz">swap_horiz</span>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="more_vert">more_vert</span>
+</div>
+</div>
+<!-- Row 2: Meta Row -->
+<div class="flex items-center justify-between h-[48px] px-4 bg-surface-container-low handoff-box border-b border-outline-variant/20">
+<span class="text-body-md text-on-surface-variant">第一章：阿长与《山海经》</span>
+<div class="border border-outline px-3 py-1 rounded-full text-[12px] text-outline font-medium">本地书籍</div>
+</div>
+</nav>
+<!-- Left Floating Brightness Bar -->
+<div class="absolute left-[12px] top-1/2 -translate-y-1/2 w-10 h-64 bg-surface-container shadow-lg rounded-full flex flex-col items-center py-4 gap-4 handoff-box z-50">
+<span class="material-symbols-outlined text-primary" data-icon="brightness_auto">brightness_auto</span>
+<div class="brightness-track flex-1">
+<div class="brightness-handle"></div>
+</div>
+<div class="cursor-pointer text-primary opacity-60">
+<svg fill="currentColor" height="20" viewbox="0 0 24 24" width="20">
+<path d="M8.59 16.59L13.17 12 8.59 7.41L10 6l6 6-6 6-1.41-1.41z"></path>
+</svg>
+</div>
+</div>
+<!-- Floating Quick Actions -->
+<div class="absolute bottom-[138px] left-0 w-full flex justify-center gap-[20px] px-4 handoff-box z-50">
+<div class="w-12 h-12 rounded-full bg-surface-container-high shadow-md flex items-center justify-center cursor-pointer transition-transform active:scale-90 handoff-box">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="search">search</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container-high shadow-md flex items-center justify-center cursor-pointer transition-transform active:scale-90 handoff-box">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="auto_mode">auto_mode</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container-high shadow-md flex items-center justify-center cursor-pointer transition-transform active:scale-90 handoff-box">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="swap_horiz">swap_horiz</span>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container-high shadow-md flex items-center justify-center cursor-pointer transition-transform active:scale-90 handoff-box">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="dark_mode">dark_mode</span>
+</div>
+</div>
+<!-- Floating Page Control -->
+<div class="absolute left-1/2 -translate-x-1/2 w-[342px] h-[52px] bg-surface-container shadow-md rounded-full flex items-center gap-4 handoff-box z-50 px-6 bottom-[78px]">
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="chevron_left">chevron_left</span>
+<div class="flex-1 flex flex-col gap-1">
+<div class="h-1 w-full bg-outline-variant/30 rounded-full relative">
+<div class="absolute left-0 top-0 h-full w-1/4 bg-primary rounded-full"></div>
+<div class="absolute left-1/4 top-1/2 -translate-y-1/2 w-4 h-4 bg-primary border-2 border-surface rounded-full shadow-sm cursor-pointer"></div>
+</div>
+</div>
+<span class="material-symbols-outlined text-primary cursor-pointer" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Reader Control Bottom Bar -->
+<footer class="fixed bottom-0 left-0 w-full h-[68px] bg-surface-container-highest flex items-center justify-around handoff-box z-50" style="height: 68px;">
+<div class="flex flex-col items-center gap-1 cursor-pointer px-4 py-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="menu_book">menu_book</span>
+<span class="text-label-md font-label-md text-on-surface-variant">目录</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer px-4 py-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="record_voice_over">record_voice_over</span>
+<span class="text-label-md font-label-md text-on-surface-variant">朗读</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer px-4 py-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="tune">tune</span>
+<span class="text-label-md font-label-md text-on-surface-variant">界面</span>
+</div>
+<div class="flex flex-col items-center gap-1 cursor-pointer px-4 py-2">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md text-on-surface-variant">设置</span>
+</div>
+</footer>
+<script>
+    // Micro-interactions
+    document.querySelectorAll('.material-symbols-outlined, .cursor-pointer').forEach(el => {
+        el.addEventListener('touchstart', function() {
+            this.style.opacity = '0.5';
+        });
+        el.addEventListener('touchend', function() {
+            this.style.opacity = '1';
+        });
+    });
+</script>
+</body></html>

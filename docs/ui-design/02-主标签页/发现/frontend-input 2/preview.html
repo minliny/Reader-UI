@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>发现首页前端输入件</title>
+    <link rel="stylesheet" href="./components.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../../shared-main-tab-kit/kit.js"></script>
+    <script src="./fixture.js"></script>
+    <script src="./render.js"></script>
+    <script>
+      window.DiscoveryHomeInput.renderDiscoveryHome(
+        document.getElementById("app"),
+        window.DISCOVERY_HOME_FIXTURE
+      );
+    </script>
+  </body>
+</html>

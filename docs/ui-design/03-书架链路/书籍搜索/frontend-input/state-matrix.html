@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1180, initial-scale=1">
+  <title>书籍搜索状态矩阵</title>
+  <link rel="stylesheet" href="./components.css">
+  <link rel="stylesheet" href="../../shared-library-kit/kit.css">
+</head>
+<body>
+  <div id="book-search-state-matrix"></div>
+  <script src="./fixture.js"></script>
+  <script src="../../../frontend-input/asset-library/icons.js"></script>
+  <script src="../../shared-library-kit/kit.js"></script>
+  <script src="./render.js"></script>
+  <script>
+    BookSearchInput.renderBookSearchStateMatrix(
+      document.getElementById("book-search-state-matrix"),
+      window.BOOK_SEARCH_FIXTURE
+    );
+  </script>
+</body>
+</html>

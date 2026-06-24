@@ -1,0 +1,174 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#436443",
+                        "surface-dim": "#e1d8d2",
+                        "surface-container-highest": "#eae1da",
+                        "inverse-on-surface": "#f8efe8",
+                        "tertiary-fixed": "#c7ecc3",
+                        "surface-variant": "#eae1da",
+                        "secondary": "#7f5441",
+                        "on-primary-fixed": "#001e2c",
+                        "on-tertiary-fixed-variant": "#2e4e30",
+                        "secondary-fixed-dim": "#f2baa2",
+                        "on-primary-container": "#fcfcff",
+                        "on-primary-fixed-variant": "#1e4b62",
+                        "primary": "#366179",
+                        "primary-container": "#507a92",
+                        "surface-container-low": "#fbf2eb",
+                        "on-secondary-fixed-variant": "#643d2b",
+                        "primary-fixed": "#c4e7ff",
+                        "tertiary-container": "#5b7d5a",
+                        "secondary-container": "#fec5ad",
+                        "secondary-fixed": "#ffdbcc",
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#efe7e0",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#a1cce8",
+                        "on-tertiary-container": "#f7fff2",
+                        "surface-tint": "#39637b",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1f1b17",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#a1cce8",
+                        "on-surface": "#1f1b17",
+                        "inverse-surface": "#34302b",
+                        "outline-variant": "#c1c7cd",
+                        "background": "#fff8f4",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#fff8f4",
+                        "outline": "#72787d",
+                        "on-secondary-container": "#79503c",
+                        "surface-bright": "#fff8f4",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "surface-container": "#f5ece6",
+                        "on-surface-variant": "#41484c",
+                        "tertiary-fixed-dim": "#abd0a8",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#022108",
+                        "on-secondary-fixed": "#301305"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "8px",
+                        "xl": "80px",
+                        "max-content-width": "720px",
+                        "md": "24px",
+                        "touch-target": "48px",
+                        "lg": "48px",
+                        "base": "4px",
+                        "sm": "12px",
+                        "sidebar-width": "320px"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #F8F5ED; /* Warm paper background from spec */
+            color: #2A2622; /* Ink text from spec */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="flex flex-col min-h-screen">
+<!-- Top AppBar -->
+<header class="sticky top-0 z-10 bg-[#F8F5ED] border-b border-[#D8CFBE] px-4 h-14 flex items-center justify-between">
+<div class="flex items-center gap-4 overflow-x-auto no-scrollbar flex-1">
+<a class="border-b-2 border-[#537D96] pb-1 px-1" href="#">
+<span class="text-sm font-bold text-[#1F1B17]">全部</span>
+</a>
+<!-- Group tabs placeholder -->
+<a class="pb-1 px-1" href="#">
+<span class="text-sm font-medium text-[#4A433C]">默认</span>
+</a>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-touch-target h-touch-target flex items-center justify-center text-[#2A2622]" data-icon="search">
+<span class="material-symbols-outlined">search</span>
+</button>
+<button class="w-touch-target h-touch-target flex items-center justify-center text-[#2A2622]" data-icon="more_vert">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content: Empty State -->
+<main class="flex-1 flex flex-col items-center justify-center px-md py-xl">
+<div class="max-w-[360px] w-full flex flex-col items-center text-center gap-6">
+<!-- Empty State Illustration Placeholder -->
+<div class="w-64 h-64 bg-surface-container rounded-xl flex items-center justify-center mb-4 overflow-hidden shadow-sm border border-[#D8CFBE]">
+<div class="w-full h-full bg-cover bg-center" data-alt="A minimalist digital illustration for an empty e-reader library. The scene depicts a single wooden bookshelf with a warm, soft lamp glow in a cozy room at dusk. The art style is clean and modern, using an ink-and-paper aesthetic with soft indigo and terracotta tones. The mood is peaceful and expectant, inviting the user to fill the space with knowledge." style="background-image: url(&quot;https://lh3.googleusercontent.com/aida-public/AB6AXuC18i-qzw-kvIPxhnzwsYFgZA4lr0QfeT5Nr-YT-f9Y0I4-fo8asKuM-G_ORxnWdXj1Nh4ZrGG6wpOmTj6tvR8GuURMVftZR4-9B3DJgLtaU--JRxBG_fZAQWIXd9Qxl6vs3Ou3bnVsjqbNH6QU3xZCYWfk0yIoTAWqoFjMXnhKmIHaQ8SpBlghSj6WEE0ZwcsEJfCjLlLfJDriehdyf5WqFPFZFKb2paYZxXsKWUOpTMnFr2uYxCaedS0D1RnjonIEvCpS76SXwBUo&quot;);"></div>
+</div>
+<div class="space-y-3">
+<h2 class="text-headline-md text-on-surface">书架还是空的</h2>
+<p class="text-body-md text-on-surface-variant px-2">
+                    你可以通过发现搜索书籍，或在设置中的书源管理导入书源。
+                </p>
+</div>
+<div class="flex flex-col gap-3 w-full mt-4">
+<button class="bg-[#537D96] text-white h-12 rounded-lg font-bold flex items-center justify-center shadow-sm active:bg-[#456A80] transition-colors">
+<span class="truncate">去发现</span>
+</button>
+<button class="bg-surface-container-high text-[#2A2622] h-12 rounded-lg font-bold flex items-center justify-center border border-[#D8CFBE] active:bg-surface-container-highest transition-colors">
+<span class="truncate">导入书源</span>
+</button>
+<button class="bg-surface-container-high text-[#2A2622] h-12 rounded-lg font-bold flex items-center justify-center border border-[#D8CFBE] active:bg-surface-container-highest transition-colors">
+<span class="truncate">导入本地书</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation -->
+<nav class="sticky bottom-0 bg-[#FCFAF5] border-t border-[#D8CFBE] pb-safe">
+<div class="flex h-16 w-full items-stretch">
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-primary" href="#">
+<div class="h-6 flex items-center" data-icon="auto_stories" data-weight="fill">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+</div>
+<span class="text-xs font-bold leading-none">书架</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-[#657681]" href="#">
+<div class="h-6 flex items-center" data-icon="explore">
+<span class="material-symbols-outlined">explore</span>
+</div>
+<span class="text-xs font-medium leading-none">发现</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-[#657681]" href="#">
+<div class="h-6 flex items-center" data-icon="rss_feed">
+<span class="material-symbols-outlined">rss_feed</span>
+</div>
+<span class="text-xs font-medium leading-none">RSS</span>
+</a>
+<a class="flex flex-1 flex-col items-center justify-center gap-1 text-[#657681]" href="#">
+<div class="h-6 flex items-center" data-icon="settings">
+<span class="material-symbols-outlined">settings</span>
+</div>
+<span class="text-xs font-medium leading-none">设置</span>
+</a>
+</div>
+</nav>
+</body></html>

@@ -1,0 +1,179 @@
+@import "../tokens.css";
+
+:root {
+  --rsk-paper: var(--reader-ds-color-paper);
+  --rsk-paper-bright: var(--reader-ds-color-paper-bright);
+  --rsk-surface: var(--reader-ds-color-surface);
+  --rsk-ink: var(--reader-ds-color-ink);
+  --rsk-muted: var(--reader-ds-color-muted);
+  --rsk-border: var(--reader-ds-color-border);
+  --rsk-primary: var(--reader-ds-color-primary);
+  --rsk-primary-dark: var(--reader-ds-color-primary-dark);
+  --rsk-shadow: var(--reader-ds-shadow-elevated);
+  --rsk-shadow-soft: var(--reader-ds-shadow-soft);
+  --rsk-sans: var(--reader-ds-font-sans);
+  --rsk-serif: var(--reader-ds-font-serif);
+}
+
+.rsk-phone,
+.rsk-reader-frame,
+.rsk-flow-frame,
+.rsk-phone *,
+.rsk-reader-frame *,
+.rsk-flow-frame * {
+  box-sizing: border-box;
+}
+
+.rsk-phone,
+.rsk-reader-frame {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 4%, rgba(255, 255, 255, 0.92), transparent 32%),
+    radial-gradient(circle at 86% 2%, rgba(255, 255, 255, 0.78), transparent 28%),
+    linear-gradient(180deg, #fcf8f2 0%, #f9f0e6 100%);
+  color: var(--rsk-ink);
+  font-family: var(--rsk-sans);
+}
+
+.rsk-status-bar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  color: var(--rsk-ink);
+  font-family: var(--rsk-sans);
+}
+
+.rsk-system-icons {
+  display: flex;
+  align-items: center;
+}
+
+.rsk-signal {
+  background: currentColor;
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+
+.rsk-wifi {
+  background: currentColor;
+  clip-path: polygon(50% 100%, 0 18%, 17% 0, 83% 0, 100% 18%);
+}
+
+.rsk-battery {
+  position: relative;
+  background: currentColor;
+}
+
+.rsk-battery::before {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+
+.rsk-app-top-bar,
+.rsk-back-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rsk-app-top-bar h1,
+.rsk-back-top-bar h1 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+.rsk-back-top-bar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+
+.rsk-top-actions {
+  display: flex;
+  align-items: center;
+}
+
+.rsk-icon-button,
+.rsk-back-top-bar button {
+  display: grid;
+  place-items: center;
+}
+
+.rsk-icon,
+.rsk-nav-icon {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.rsk-content-region,
+.rsk-settings-content {
+  min-width: 0;
+}
+
+.rsk-main-nav {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.rsk-main-nav-item {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.rsk-main-nav-icon-shell {
+  display: grid;
+  place-items: center;
+}
+
+.rsk-bottom-action-host,
+.rsk-sheet-host,
+.rsk-dialog-host,
+.rsk-state-host,
+.rsk-toast-host,
+.rsk-settings-state-host,
+.rsk-reader-state-host {
+  display: contents;
+}
+
+.rsk-reader-frame {
+  background: linear-gradient(180deg, #fff9f2 0%, #fbf1e7 72%, #f6ebdf 100%);
+  font-family: var(--rsk-serif);
+}
+
+.rsk-reading-surface {
+  position: absolute;
+  inset: 0;
+}
+
+.rsk-reader-overlay-host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.rsk-reader-overlay-host button,
+.rsk-bottom-sheet-host,
+.rsk-reader-module-nav {
+  pointer-events: auto;
+}
+
+.rsk-bottom-sheet-host {
+  position: absolute;
+}
+
+.rsk-reader-module-nav {
+  display: grid;
+}
+
+.rsk-flow-frame {
+  position: relative;
+  display: grid;
+  overflow: hidden;
+  color: var(--rsk-ink);
+  font-family: var(--rsk-sans);
+}

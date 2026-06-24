@@ -1,0 +1,90 @@
+(function attachReaderAssetIcons(window) {
+  function withClass(svg, className) {
+    return svg.replace('class="asset-icon"', `class="${String(className || "asset-icon").replace(/"/g, "")}"`);
+  }
+
+  const icons = {
+    add: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M24 9v30"></path><path d="M9 24h30"></path></svg>',
+    appearance: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M8 35 18 12h2l10 23"></path><path d="M12 27h14"></path><path d="M31 35V20"></path><path d="M31 20c7 0 9 3 9 7v8"></path></svg>',
+    assist: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="13" r="6"></circle><path d="M12 42c1-10 6-15 12-15s11 5 12 15"></path></svg>',
+    "auto-page": '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"></circle><path d="M22 16v16l12-8-12-8Z" fill="currentColor" stroke="none"></path><path d="M9 24h4M35 24h4M24 9v4M24 35v4"></path></svg>',
+    back: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M29 10 15 24l14 14"></path><path d="M16 24h27"></path></svg>',
+    badge: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M11 10h26v28l-13-7-13 7V10Z"></path><path d="m19 23 3 3 7-8"></path></svg>',
+    battery: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="13" y="7" width="22" height="34" rx="4"></rect><path d="M20 4h8"></path><path d="m27 16-7 10h8l-7 10"></path></svg>',
+    bell: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M14 21a10 10 0 0 1 20 0v8l4 7H10l4-7v-8Z"></path><path d="M20 39a4 4 0 0 0 8 0"></path></svg>',
+    book: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M12 10c5 0 9 1.5 12 5v25c-3-3.5-7-5-12-5V10Z"></path><path d="M36 10c-5 0-9 1.5-12 5v25c3-3.5 7-5 12-5V10Z"></path></svg>',
+    "book-open": '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M8 11h13c4 0 7 2 9 5v25c-2-3-5-5-9-5H8V11Z"></path><path d="M40 11H27c-4 0-7 2-9 5v25c2-3 5-5 9-5h13V11Z"></path></svg>',
+    bookmark: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M14 7h20v34l-10-7-10 7V7Z"></path></svg>',
+    bookshelf: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M12 10c5 0 9 1.5 12 5v25c-3-3.5-7-5-12-5V10Z" fill="currentColor" stroke="none"></path><path d="M36 10c-5 0-9 1.5-12 5v25c3-3.5 7-5 12-5V10Z" fill="currentColor" stroke="none"></path></svg>',
+    bug: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M18 15a6 6 0 0 1 12 0v4H18v-4Z"></path><rect x="15" y="19" width="18" height="20" rx="8"></rect><path d="M8 25h7M33 25h7M9 37l7-5M39 37l-7-5M12 12l5 5M36 12l-5 5"></path></svg>',
+    check: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18"></circle><path d="m15 24 6 6 13-15"></path></svg>',
+    chevron: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="m18 10 13 14-13 14"></path></svg>',
+    clear: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="currentColor" stroke="none"></circle><path d="m17 17 14 14M31 17 17 31" stroke="#fff" stroke-width="4"></path></svg>',
+    clock: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"></circle><path d="M24 14v11h9"></path></svg>',
+    close: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M11 11 37 37"></path><path d="M37 11 11 37"></path></svg>',
+    cloud: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M17 37h19a8 8 0 0 0 0-16 13 13 0 0 0-25 4 6 6 0 0 0 6 12Z"></path><path d="M24 19v13M18 27l6 6 6-6"></path></svg>',
+    columns: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="10" y="9" width="10" height="30"></rect><rect x="28" y="9" width="10" height="30"></rect></svg>',
+    database: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M10 15c0-4 6-7 14-7s14 3 14 7-6 7-14 7-14-3-14-7Z"></path><path d="M10 15v18c0 4 6 7 14 7s14-3 14-7V15"></path><path d="M10 24c0 4 6 7 14 7s14-3 14-7"></path></svg>',
+    directory: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M13 12h22"></path><path d="M13 24h22"></path><path d="M13 36h22"></path><path d="M7 12h.01M7 24h.01M7 36h.01"></path></svg>',
+    discover: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"></circle><path d="m30 17-4 12-8 4 4-12 8-4Z"></path></svg>',
+    download: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M17 37h19a8 8 0 0 0 0-16 13 13 0 0 0-25 4 6 6 0 0 0 6 12Z"></path><path d="M24 18v15M18 27l6 6 6-6"></path></svg>',
+    edit: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M10 38h8L38 18l-8-8-20 20v8Z"></path><path d="m27 13 8 8"></path></svg>',
+    eyeOff: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M7 24s6-12 17-12 17 12 17 12-6 12-17 12S7 24 7 24Z"></path><circle cx="24" cy="24" r="6"></circle><path d="M8 8 40 40"></path></svg>',
+    file: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M14 7h14l8 8v26H14V7Z"></path><path d="M28 7v9h8"></path></svg>',
+    folder: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M7 16h14l4 5h16v19H7V16Z"></path><path d="M7 21h34"></path></svg>',
+    gear: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"></circle><path d="M24 5v6M24 37v6M7.5 14.5l5.2 3M35.3 30.5l5.2 3M7.5 33.5l5.2-3M35.3 17.5l5.2-3M5 24h6M37 24h6"></path></svg>',
+    gesture: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M19 25V12a4 4 0 0 1 8 0v13"></path><path d="M27 22a4 4 0 0 1 8 0v8"></path><path d="M19 22a4 4 0 0 0-8 0v5c0 9 5 15 14 15h4c6 0 10-4 10-10v-6"></path></svg>',
+    globe: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"></circle><path d="M7 24h34"></path><path d="M24 7c5 5 7 11 7 17s-2 12-7 17"></path><path d="M24 7c-5 5-7 11-7 17s2 12 7 17"></path></svg>',
+    grid: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="9" y="9" width="11" height="11"></rect><rect x="28" y="9" width="11" height="11"></rect><rect x="9" y="28" width="11" height="11"></rect><rect x="28" y="28" width="11" height="11"></rect></svg>',
+    home: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M8 24 24 10l16 14"></path><path d="M13 22v18h22V22"></path><path d="M20 40V28h8v12"></path></svg>',
+    image: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="8" y="10" width="32" height="28" rx="4"></rect><circle cx="18" cy="19" r="3"></circle><path d="M12 34 22 24l6 6 4-4 6 8"></path></svg>',
+    info: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"></circle><path d="M24 21v12M24 14h.01"></path></svg>',
+    link: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M19 29a8 8 0 0 1 0-11l5-5a8 8 0 0 1 11 11l-3 3"></path><path d="M29 19a8 8 0 0 1 0 11l-5 5a8 8 0 0 1-11-11l3-3"></path></svg>',
+    list: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M17 12h24"></path><path d="M17 24h24"></path><path d="M17 36h24"></path><path d="M8 12h.01M8 24h.01M8 36h.01"></path></svg>',
+    log: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M12 7h24v34H12V7Z"></path><path d="M18 17h12M18 25h12M18 33h8"></path></svg>',
+    mail: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="9" y="12" width="30" height="24" rx="4"></rect><path d="m11 15 13 11 13-11"></path></svg>',
+    message: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M9 11h30v22H18l-9 7V11Z"></path></svg>',
+    monitor: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="7" y="10" width="34" height="24" rx="3"></rect><path d="M18 41h12M24 34v7"></path></svg>',
+    more: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="10" r="2.9" fill="currentColor" stroke="none"></circle><circle cx="24" cy="24" r="2.9" fill="currentColor" stroke="none"></circle><circle cx="24" cy="38" r="2.9" fill="currentColor" stroke="none"></circle></svg>',
+    motion: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16" stroke-dasharray="2 7"></circle><path d="M24 12v24"></path><path d="M14 24h20"></path></svg>',
+    offline: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M8 16c10-9 22-9 32 0"></path><path d="M15 24c6-5 12-5 18 0"></path><path d="M21 32c2-2 4-2 6 0"></path><path d="M9 39 39 9"></path></svg>',
+    palette: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M24 7a17 17 0 0 0 0 34h4a4 4 0 0 0 2-7 3 3 0 0 1 2-5h2A13 13 0 0 0 24 7Z"></path><circle cx="17" cy="19" r="2" fill="currentColor" stroke="none"></circle><circle cx="24" cy="16" r="2" fill="currentColor" stroke="none"></circle><circle cx="31" cy="20" r="2" fill="currentColor" stroke="none"></circle></svg>',
+    pause: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M16 12v24M32 12v24"></path></svg>',
+    people: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="19" cy="17" r="7"></circle><path d="M7 40c1-9 5-14 12-14s11 5 12 14"></path><circle cx="33" cy="20" r="5"></circle><path d="M31 30c5 1 8 4 9 10"></path></svg>',
+    phone: '<svg class="asset-icon" viewBox="0 0 48 48"><rect x="15" y="6" width="18" height="36" rx="4"></rect><path d="M22 36h4"></path></svg>',
+    play: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M18 12v24l20-12-20-12Z" fill="currentColor" stroke="none"></path></svg>',
+    progress: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M24 7a17 17 0 1 0 17 17H24V7Z"></path><path d="M29 8v11h11"></path></svg>',
+    refresh: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M37 17a15 15 0 1 0 1 15"></path><path d="M37 8v9h-9"></path></svg>',
+    replace: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M33 8h7v7"></path><path d="M8 22v-4a10 10 0 0 1 10-10h20"></path><path d="M15 40H8v-7"></path><path d="M40 26v4a10 10 0 0 1-10 10H10"></path></svg>',
+    rss: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M10 30a8 8 0 0 1 8 8"></path><path d="M10 20a18 18 0 0 1 18 18"></path><path d="M10 10a28 28 0 0 1 28 28"></path><circle cx="13" cy="35" r="2" fill="currentColor" stroke="none"></circle></svg>',
+    search: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="21" cy="21" r="13"></circle><path d="M31 31 42 42"></path></svg>',
+    settings: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"></circle><path d="M24 5v6M24 37v6M7.5 14.5l5.2 3M35.3 30.5l5.2 3M7.5 33.5l5.2-3M35.3 17.5l5.2-3M5 24h6M37 24h6"></path></svg>',
+    shield: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M24 6 39 12v12c0 10-6 16-15 19C15 40 9 34 9 24V12l15-6Z"></path><path d="m18 24 5 5 9-12"></path></svg>',
+    sort: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M8 13h22"></path><path d="M8 24h16"></path><path d="M8 35h10"></path><path d="M34 12v22"></path><path d="m27 28 7 7 7-7"></path></svg>',
+    source: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M11 16h22l-6-6"></path><path d="M37 32H15l6 6"></path><path d="M33 10l6 6-6 6"></path><path d="M15 38l-6-6 6-6"></path></svg>',
+    "source-stack": '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M10 15h28v20H10V15Z"></path><path d="M14 11h20"></path><path d="M14 39h20"></path><path d="M18 24h12"></path></svg>',
+    sparkle: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M24 5l4 13 13 4-13 4-4 13-4-13-13-4 13-4 4-13Z" fill="currentColor" stroke="none"></path></svg>',
+    storage: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M10 15c0-4 6-7 14-7s14 3 14 7-6 7-14 7-14-3-14-7Z"></path><path d="M10 15v18c0 4 6 7 14 7s14-3 14-7V15"></path><path d="M10 24c0 4 6 7 14 7s14-3 14-7"></path></svg>',
+    sun: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="8"></circle><path d="M24 4v7M24 37v7M4 24h7M37 24h7M9.8 9.8l5 5M33.2 33.2l5 5M38.2 9.8l-5 5M14.8 33.2l-5 5"></path></svg>',
+    sync: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M33 8h7v7"></path><path d="M8 22v-4a10 10 0 0 1 10-10h20"></path><path d="M15 40H8v-7"></path><path d="M40 26v4a10 10 0 0 1-10 10H10"></path></svg>',
+    text: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M13 11h22"></path><path d="M18 11v26"></path><path d="M30 11v26"></path><path d="M11 37h12"></path><path d="M25 37h12"></path></svg>',
+    top: '<svg class="asset-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="17"></circle><path d="M24 34V15"></path><path d="m16 23 8-8 8 8"></path></svg>',
+    trash: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M10 13h28"></path><path d="M18 13V8h12v5"></path><path d="M14 13l2 28h16l2-28"></path><path d="M21 21v12M27 21v12"></path></svg>',
+    tts: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M12 26v-4"></path><path d="M18 34V14"></path><path d="M24 39V9"></path><path d="M30 34V14"></path><path d="M36 26v-4"></path></svg>',
+    typo: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M13 34 22 12h2l9 22"></path><path d="M17 27h12"></path><path d="M35 14v20"></path></svg>',
+    upload: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M17 37h19a8 8 0 0 0 0-16 13 13 0 0 0-25 4 6 6 0 0 0 6 12Z"></path><path d="M24 33V18M18 24l6-6 6 6"></path></svg>',
+    volume: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M9 20h8l11-9v26l-11-9H9v-8Z"></path><path d="M34 18a9 9 0 0 1 0 12"></path><path d="M39 12a17 17 0 0 1 0 24"></path></svg>',
+    warning: '<svg class="asset-icon" viewBox="0 0 48 48"><path d="M24 7 43 40H5L24 7Z"></path><path d="M24 18v11"></path><path d="M24 35h.01"></path></svg>'
+  };
+
+  window.ReaderAssetIcons = {
+    icons,
+    names: Object.keys(icons).sort(),
+    renderIcon(name, className) {
+      return withClass(icons[name] || icons.warning, className);
+    },
+    has(name) {
+      return Boolean(icons[name]);
+    }
+  };
+})(window);

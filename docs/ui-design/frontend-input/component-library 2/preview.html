@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1180, initial-scale=1">
+  <title>Reader 公共组件库</title>
+  <link rel="stylesheet" href="./library.css">
+</head>
+<body>
+  <div id="reader-component-library"></div>
+  <script src="./fixture.js"></script>
+  <script src="./render.js"></script>
+  <script>
+    window.ReaderComponentLibrary.renderComponentLibrary(
+      document.getElementById("reader-component-library"),
+      window.READER_COMPONENT_LIBRARY_FIXTURE
+    );
+  </script>
+</body>
+</html>

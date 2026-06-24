@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>导入本地书籍 - Reader</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#643d2b",
+                        "on-secondary-fixed": "#301305",
+                        "tertiary-fixed-dim": "#abd0a8",
+                        "surface-container": "#f5ece6",
+                        "on-secondary-container": "#79503c",
+                        "secondary-fixed-dim": "#f2baa2",
+                        "surface-dim": "#e1d8d2",
+                        "surface": "#fff8f4",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#1f1b17",
+                        "surface-variant": "#eae1da",
+                        "tertiary-fixed": "#c7ecc3",
+                        "inverse-on-surface": "#f8efe8",
+                        "surface-container-low": "#fbf2eb",
+                        "surface-bright": "#fff8f4",
+                        "error": "#ba1a1a",
+                        "outline": "#72787d",
+                        "primary-container": "#507a92",
+                        "on-error": "#ffffff",
+                        "on-background": "#1f1b17",
+                        "tertiary-container": "#5b7d5a",
+                        "secondary": "#7f5441",
+                        "on-tertiary-fixed-variant": "#2e4e30",
+                        "inverse-primary": "#a1cce8",
+                        "background": "#fff8f4",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed": "#001e2c",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#436443",
+                        "surface-container-highest": "#eae1da",
+                        "surface-container-high": "#efe7e0",
+                        "secondary-fixed": "#ffdbcc",
+                        "secondary-container": "#fec5ad",
+                        "surface-tint": "#39637b",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed-dim": "#a1cce8",
+                        "primary-fixed": "#c4e7ff",
+                        "primary": "#366179",
+                        "on-tertiary-fixed": "#022108",
+                        "on-surface-variant": "#41484c",
+                        "error-container": "#ffdad6",
+                        "on-primary-container": "#fcfcff",
+                        "outline-variant": "#c1c7cd",
+                        "on-tertiary-container": "#f7fff2",
+                        "on-primary-fixed-variant": "#1e4b62",
+                        "inverse-surface": "#34302b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "max-content-width": "720px",
+                        "base": "4px",
+                        "touch-target": "48px",
+                        "sidebar-width": "320px",
+                        "md": "24px",
+                        "sm": "12px",
+                        "lg": "48px",
+                        "xs": "8px",
+                        "xl": "80px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<!-- Following JSON: type: small_center_aligned, headline: 导入本地书籍 -->
+<header class="bg-surface w-full top-0 sticky border-b border-outline-variant flex justify-between items-center px-sm h-touch-target z-40"><button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant transition-colors duration-200 active:opacity-70 hover:bg-surface-variant rounded-full">
+<span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface flex-1 text-center truncate">导入本地书籍</h1>
+<button class="w-touch-target h-touch-target flex items-center justify-center text-on-surface-variant transition-colors duration-200 active:opacity-70 hover:bg-surface-variant rounded-full">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button></header>
+<!-- Main Canvas -->
+<main class="flex-1 w-full max-w-[720px] mx-auto px-md py-sm mb-xl">
+<!-- Selection Summary / Info Section -->
+<div class="mb-md flex justify-between items-center bg-surface-container-low p-sm rounded-xl border border-outline-variant/30">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-primary" data-icon="folder_open">folder_open</span>
+<span class="font-label-md text-label-md">/内部存储/下载/电子书</span>
+</div>
+<button class="flex items-center gap-xs px-sm py-1.5 bg-secondary-container/50 text-on-secondary-container rounded-full font-label-md text-label-md active:scale-95 transition-all">
+<span class="material-symbols-outlined text-[18px]" data-icon="sync">sync</span>
+<span>扫描</span>
+</button>
+</div>
+<!-- File List -->
+<div class="space-y-sm">
+<!-- List Item: TXT -->
+<label class="flex items-center p-sm bg-surface-container-lowest border border-outline-variant/50 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-lg h-lg bg-surface-variant rounded-lg flex items-center justify-center mr-sm">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-lg text-body-lg text-on-surface truncate">三体全集.txt</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">2.4 MB · 2023-11-12</p>
+</div>
+<div class="ml-sm">
+<input checked="" class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary bg-surface transition-all text-[#537d96] focus:ring-[#537d96]" type="checkbox">
+</div>
+</label>
+<!-- List Item: EPUB -->
+<label class="flex items-center p-sm bg-surface-container-lowest border border-outline-variant/50 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-lg h-lg bg-surface-variant rounded-lg flex items-center justify-center mr-sm">
+<span class="material-symbols-outlined text-tertiary" data-icon="menu_book">menu_book</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-lg text-body-lg text-on-surface truncate">百年孤独 (精装版).epub</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">856 KB · 2023-12-05</p>
+</div>
+<div class="ml-sm">
+<input checked="" class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary bg-surface transition-all text-[#537d96] focus:ring-[#537d96]" type="checkbox">
+</div>
+</label>
+<!-- List Item: PDF -->
+<label class="flex items-center p-sm bg-surface-container-lowest border border-outline-variant/50 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-lg h-lg bg-surface-variant rounded-lg flex items-center justify-center mr-sm">
+<span class="material-symbols-outlined text-secondary" data-icon="picture_as_pdf">picture_as_pdf</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-lg text-body-lg text-on-surface truncate">Effective Java 中文版.pdf</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">12.1 MB · 2024-01-20</p>
+</div>
+<div class="ml-sm">
+<input class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary bg-surface transition-all text-[#537d96] focus:ring-[#537d96]" type="checkbox">
+</div>
+</label>
+<!-- List Item: TXT -->
+<label class="flex items-center p-sm bg-surface-container-lowest border border-outline-variant/50 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-lg h-lg bg-surface-variant rounded-lg flex items-center justify-center mr-sm">
+<span class="material-symbols-outlined text-primary" data-icon="description">description</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-lg text-body-lg text-on-surface truncate">月亮与六便士.txt</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">412 KB · 2023-10-15</p>
+</div>
+<div class="ml-sm">
+<input checked="" class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary bg-surface transition-all text-[#537d96] focus:ring-[#537d96]" type="checkbox">
+</div>
+</label>
+<!-- List Item: EPUB -->
+<label class="flex items-center p-sm bg-surface-container-lowest border border-outline-variant/50 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors group">
+<div class="w-lg h-lg bg-surface-variant rounded-lg flex items-center justify-center mr-sm">
+<span class="material-symbols-outlined text-tertiary" data-icon="menu_book">menu_book</span>
+</div>
+<div class="flex-1 min-w-0">
+<p class="font-body-lg text-body-lg text-on-surface truncate">Designing Data-Intensive Applications.epub</p>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">4.2 MB · 2024-02-01</p>
+</div>
+<div class="ml-sm">
+<input class="w-6 h-6 rounded-md border-outline text-primary focus:ring-primary bg-surface transition-all text-[#537d96] focus:ring-[#537d96]" type="checkbox">
+</div>
+</label>
+</div>
+<!-- Visual Anchor: Empty state representation (Not active but stylized for depth) -->
+<div class="mt-lg border-t border-dashed border-outline-variant pt-lg text-center">
+<div class="mx-auto w-16 h-16 bg-surface-container-high rounded-full flex items-center justify-center mb-sm">
+<span class="material-symbols-outlined text-on-surface-variant opacity-40 text-4xl" data-icon="inventory_2">inventory_2</span>
+</div>
+<p class="text-on-surface-variant opacity-60 font-label-md text-label-md">支持 TXT, EPUB, PDF 格式</p>
+</div>
+</main>
+<!-- Bottom Action Bar -->
+<footer class="fixed bottom-0 w-full bg-surface-container-low border-t border-outline-variant px-md py-md flex gap-md items-center z-50">
+<button class="flex-1 h-touch-target flex items-center justify-center rounded-full border border-outline text-on-surface-variant font-label-md text-label-md active:bg-surface-variant transition-colors">
+            取消
+        </button>
+<button class="flex-[2] h-touch-target flex items-center justify-center rounded-full bg-primary text-on-primary font-label-md text-label-md shadow-sm active:scale-95 transition-all">
+            导入 (3)
+        </button>
+</footer>
+<!-- Stylized Background Element -->
+</body></html>

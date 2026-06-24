@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <style>
+      .bg{fill:#f9f4ea}
+      .panel{fill:#fffdf8;stroke:#ded4c6;stroke-width:2}
+      .soft{fill:#faf7f1;stroke:#ded4c6;stroke-width:1.5}
+      .blue{fill:#4f7f96}
+      .blueStroke{stroke:#4f7f96;stroke-width:3;fill:none}
+      .text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#2b2722}
+      .muted{fill:#6f6358}
+      .small{font-size:22px}
+      .mid{font-size:28px;font-weight:600}
+      .title{font-size:34px;font-weight:700}
+      .tiny{font-size:18px}
+      .arrow{stroke:#4f7f96;stroke-width:3;fill:none;marker-end:url(#arrow)}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 Z" fill="#4f7f96"/>
+    </marker>
+  </defs>
+
+  <rect class="bg" width="1200" height="900"/>
+  <text x="50" y="58" class="text title">阅读控制层 UI 模块规划</text>
+  <text x="50" y="94" class="text small muted">核心规则：四主按钮只切换左侧主内容区；右侧亮度条常驻；完整管理页不属于控制层本体。</text>
+
+  <rect x="50" y="125" rx="28" ry="28" width="1100" height="650" class="panel"/>
+  <text x="90" y="175" class="text mid">阅读控制层本体</text>
+
+  <rect x="90" y="205" rx="18" ry="18" width="1020" height="86" class="soft"/>
+  <text x="125" y="255" class="text mid">顶部阅读上下文栏</text>
+  <text x="390" y="255" class="text small muted">返回 / 书名 / 来源与章节 / 换源 / 更多</text>
+
+  <rect x="90" y="325" rx="26" ry="26" width="1020" height="410" class="soft"/>
+  <text x="125" y="370" class="text mid">底部控制层</text>
+
+  <rect x="125" y="405" rx="20" ry="20" width="730" height="210" fill="#fffdf8" stroke="#ded4c6" stroke-width="1.5"/>
+  <text x="155" y="445" class="text mid">左侧主内容区</text>
+  <text x="155" y="482" class="text small muted">默认：搜索 / 自动翻页 / 替换 + 章节进度</text>
+  <text x="155" y="520" class="text small muted">点击四主按钮后：只替换这里</text>
+
+  <rect x="155" y="545" rx="16" ry="16" width="150" height="46" fill="#edf3f5" stroke="#c6d8df"/>
+  <text x="190" y="576" class="text small">目录</text>
+  <rect x="320" y="545" rx="16" ry="16" width="150" height="46" fill="#edf3f5" stroke="#c6d8df"/>
+  <text x="355" y="576" class="text small">朗读</text>
+  <rect x="485" y="545" rx="16" ry="16" width="150" height="46" fill="#edf3f5" stroke="#c6d8df"/>
+  <text x="520" y="576" class="text small">界面</text>
+  <rect x="650" y="545" rx="16" ry="16" width="150" height="46" fill="#edf3f5" stroke="#c6d8df"/>
+  <text x="685" y="576" class="text small">设置</text>
+
+  <rect x="125" y="640" rx="18" ry="18" width="730" height="62" fill="#fffdf8" stroke="#ded4c6" stroke-width="1.5"/>
+  <text x="155" y="680" class="text mid">底部四主按钮：目录 / 朗读 / 界面 / 设置</text>
+
+  <rect x="890" y="405" rx="22" ry="22" width="170" height="297" fill="#fffdf8" stroke="#ded4c6" stroke-width="1.5"/>
+  <text x="935" y="450" class="text mid">亮度</text>
+  <line x1="975" y1="485" x2="975" y2="625" stroke="#ded4c6" stroke-width="8" stroke-linecap="round"/>
+  <line x1="975" y1="560" x2="975" y2="625" stroke="#4f7f96" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="975" cy="560" r="17" fill="#fffdf8" stroke="#4f7f96" stroke-width="4"/>
+  <text x="952" y="675" class="text small">系统</text>
+
+  <path class="arrow" d="M230 615 C230 790 170 790 170 830"/>
+  <path class="arrow" d="M395 615 C395 790 360 790 360 830"/>
+  <path class="arrow" d="M560 615 C560 790 565 790 565 830"/>
+  <path class="arrow" d="M725 615 C725 790 760 790 760 830"/>
+
+  <rect x="55" y="820" rx="16" ry="16" width="220" height="52" class="soft"/>
+  <text x="85" y="854" class="text small">目录快捷模块</text>
+  <rect x="285" y="820" rx="16" ry="16" width="220" height="52" class="soft"/>
+  <text x="315" y="854" class="text small">朗读快捷模块</text>
+  <rect x="515" y="820" rx="16" ry="16" width="220" height="52" class="soft"/>
+  <text x="545" y="854" class="text small">界面快捷模块</text>
+  <rect x="745" y="820" rx="16" ry="16" width="220" height="52" class="soft"/>
+  <text x="775" y="854" class="text small">设置快捷模块</text>
+
+  <rect x="940" y="790" rx="18" ry="18" width="210" height="82" fill="#fff7ec" stroke="#b5846e" stroke-width="1.5"/>
+  <text x="968" y="825" class="text small">完整管理页</text>
+  <text x="968" y="855" class="text tiny muted">通过“更多/完整设置”进入</text>
+</svg>

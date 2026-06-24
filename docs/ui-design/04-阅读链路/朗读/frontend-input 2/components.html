@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>朗读组件拆分</title>
+    <link rel="stylesheet" href="./components.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="./fixture.js"></script>
+    <script src="./render.js"></script>
+    <script>
+      window.ReadingAloudInput.renderReadingAloudStateMatrix(
+        document.getElementById("app"),
+        window.READING_ALOUD_FIXTURE
+      );
+    </script>
+  </body>
+</html>

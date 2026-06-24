@@ -1,0 +1,8 @@
+@import "../../shared-settings-kit/kit.css";
+
+html,
+body,
+.sk-page-frame {
+  width: 836px;
+  min-height: 1881px;
+}

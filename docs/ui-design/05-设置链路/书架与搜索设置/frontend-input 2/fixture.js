@@ -1,0 +1,80 @@
+window.BOOKSHELF_SEARCH_SETTINGS_FIXTURE = {
+  topBar: {
+    title: "书架与搜索",
+    backLabel: "返回"
+  },
+  bookshelf: {
+    title: "书架",
+    rows: [
+      { type: "segment", icon: "grid", title: "默认展示", value: "封面", options: ["封面", "列表"] },
+      { type: "stepper", icon: "columns", title: "封面列数", value: "3列", minLabel: "-", maxLabel: "+" },
+      { type: "select", icon: "folder", title: "默认分组", value: "全部", options: ["全部", "长篇追读", "资料", "未分组"] },
+      { type: "switch", icon: "badge", title: "显示更新标记", meta: "在书籍封面上显示更新标记", enabled: true }
+    ],
+    preview: {
+      coverTitle: "封面模式预览",
+      listTitle: "列表模式预览",
+      books: [
+        {
+          title: "长夜余火",
+          meta: "第 32 章",
+          update: "10:30 更新",
+          badge: "1",
+          cover: "../../../02-主标签页/书架/bookshelf-cover-assets/long-night.png"
+        },
+        {
+          title: "大国科技",
+          meta: "未读",
+          update: "昨天",
+          badge: "1",
+          cover: "../../../02-主标签页/书架/bookshelf-cover-assets/android-notes.png"
+        },
+        {
+          title: "星海征途",
+          meta: "第 128 章",
+          update: "05-18 更新",
+          badge: "1",
+          cover: "../../../02-主标签页/书架/bookshelf-cover-assets/three-body.png"
+        }
+      ]
+    }
+  },
+  search: {
+    title: "搜索",
+    rows: [
+      { type: "select", icon: "search", title: "搜索范围", value: "全局", options: ["当前分组", "书架", "全局"] },
+      { type: "select", icon: "sort", title: "结果排序", value: "相关度", options: ["相关度", "最近阅读", "最近更新"] },
+      { type: "switch", icon: "people", title: "合并同名同作者", meta: "搜索结果合并相同书名和作者的作品", enabled: true },
+      { type: "switch", icon: "clock", title: "搜索历史", meta: "记录搜索关键词以便快速访问", enabled: true },
+      { type: "select", icon: "list", title: "搜索历史数量", meta: "设置保存的搜索历史条数上限", value: "20条", options: ["10条", "20条", "50条"] }
+    ],
+    danger: {
+      title: "清空搜索历史",
+      confirmTitle: "清空搜索历史？",
+      copy: "清空后无法恢复，已保存的搜索关键词会被移除。",
+      cancelLabel: "取消",
+      confirmLabel: "确认清空"
+    }
+  },
+  toast: {
+    success: "保存成功",
+    error: "操作失败，请重试",
+    permission: "需要存储权限"
+  },
+  feedback: {
+    loading: {
+      title: "正在加载",
+      copy: "正在读取书架与搜索设置，请稍候。"
+    },
+    error: {
+      title: "加载失败，请重试",
+      copy: "设置读取失败，已保留本地已知配置。",
+      primaryAction: "重试"
+    },
+    permission: {
+      title: "需要权限",
+      copy: "保存搜索历史需要本地存储权限，授权后才能继续。",
+      primaryAction: "去设置"
+    }
+  }
+};

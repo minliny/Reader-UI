@@ -1,0 +1,61 @@
+window.CACHE_MANAGEMENT_FIXTURE = {
+  pageClass: "cm-page-frame",
+  stateClass: "cm-state-workbench",
+  topBar: {
+    title: "缓存管理",
+    backLabel: "返回"
+  },
+  storage: {
+    title: "缓存占用",
+    value: "1.28 GB",
+    percent: "62%",
+    copy: "正在计算各类缓存占用，分类结果会在下方同步更新。"
+  },
+  sections: [
+    {
+      title: "缓存分类",
+      rows: [
+        { type: "link", icon: "clock", title: "总缓存", meta: "所有缓存数据占用的存储空间", value: "1.28 GB" },
+        { type: "link", icon: "book", title: "书籍缓存", meta: "章节内容、目录等阅读数据", value: "892 MB" },
+        { type: "link", icon: "image", title: "封面缓存", meta: "书籍封面图片缓存", value: "126 MB" },
+        { type: "link", icon: "search", title: "搜索缓存", meta: "搜索记录、索引和结果缓存", value: "84 MB" },
+        { type: "link", icon: "source", title: "RSS 缓存", meta: "订阅内容、图片和附件缓存", value: "178 MB" }
+      ]
+    },
+    {
+      title: "缓存策略",
+      rows: [
+        { type: "switch", icon: "storage", title: "优先读取缓存", meta: "优先使用本地缓存提升阅读速度", enabled: true },
+        { type: "switch", icon: "download", title: "自动缓存后续章节", meta: "预读并缓存后续章节以便离线阅读", enabled: true },
+        { type: "select", icon: "list", title: "缓存范围", meta: "设置预读并缓存的章节数量", value: "5 章" },
+        { type: "select", icon: "folder", title: "下载与缓存位置", meta: "选择下载和缓存文件的存储位置", value: "内部存储" }
+      ]
+    }
+  ],
+  actions: [
+    { tone: "danger", icon: "trash", title: "清理缓存", meta: "删除所有缓存数据，释放存储空间" }
+  ],
+  confirm: {
+    title: "确认清理缓存？",
+    copy: "清理后会删除章节、封面、搜索和 RSS 缓存，不会删除书架记录。",
+    cancelLabel: "取消",
+    confirmLabel: "确认清理"
+  },
+  empty: {
+    title: "暂无缓存",
+    copy: "当前没有可清理的缓存数据。",
+    primaryAction: "重新计算"
+  },
+  toast: {
+    success: "已清理",
+    error: "操作失败，请重试"
+  },
+  states: [
+    { key: "default", title: "缓存管理默认态", desc: "缓存占用、缓存分类、缓存策略和清理入口可见。" },
+    { key: "loading", title: "正在计算态", desc: "计算缓存占用时保留骨架和清理入口。" },
+    { key: "empty", title: "无缓存态", desc: "无缓存时说明原因并提供重新计算。" },
+    { key: "confirm", title: "确认清理态", desc: "清理缓存必须说明影响范围并二次确认。" },
+    { key: "error", title: "清理失败态", desc: "失败保留上下文和可恢复反馈。" }
+  ],
+  stateSummary: "用于核对缓存占用、分类扫描、无缓存、确认清理和错误状态。"
+};

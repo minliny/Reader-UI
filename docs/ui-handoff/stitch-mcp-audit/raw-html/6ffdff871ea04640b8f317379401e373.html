@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Bookshelf - Reader</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-tint": "#39637b", "on-secondary-container": "#79503c", "on-primary-fixed-variant": "#1e4b62", surface: "#fff8f4", secondary: "#7f5441", "on-tertiary-container": "#f7fff2", "on-surface-variant": "#41484c", primary: "#366179", "surface-container-highest": "#eae1da", "primary-fixed": "#c4e7ff", "primary-fixed-dim": "#a1cce8", "secondary-fixed-dim": "#f2baa2", "inverse-on-surface": "#f8efe8", "primary-container": "#507a92", tertiary: "#436443", "on-primary-fixed": "#001e2c", "surface-variant": "#eae1da", "on-background": "#1f1b17", "outline-variant": "#c1c7cd", "on-primary": "#ffffff", "on-tertiary-fixed": "#022108", "inverse-surface": "#34302b", "on-primary-container": "#fcfcff", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "on-surface": "#1f1b17", "on-tertiary-fixed-variant": "#2e4e30", "surface-container-high": "#efe7e0", error: "#ba1a1a", "on-secondary-fixed-variant": "#643d2b", "error-container": "#ffdad6", "on-secondary-fixed": "#301305", "tertiary-fixed-dim": "#abd0a8", "surface-container-low": "#fbf2eb", "surface-container": "#f5ece6", "inverse-primary": "#a1cce8", outline: "#72787d", "secondary-container": "#fec5ad", "tertiary-fixed": "#c7ecc3", "secondary-fixed": "#ffdbcc", "surface-dim": "#e1d8d2", "surface-bright": "#fff8f4", "tertiary-container": "#5b7d5a", background: "#fff8f4", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "on-error": "#ffffff"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {base: "4px", lg: "48px", "max-content-width": "720px", xl: "80px", md: "24px", sm: "12px", gutter: "24px", xs: "8px", "touch-target": "48px", "sidebar-width": "320px"}, fontFamily: {"body-md": ["Inter"], "headline-lg-mobile": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-md": ["Inter"]}, fontSize: {"body-md": ["16px", {lineHeight: "26px", fontWeight: "400"}], "headline-lg-mobile": ["28px", {lineHeight: "36px", fontWeight: "600"}], "display-lg": ["40px", {lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700"}], "body-lg": ["18px", {lineHeight: "30px", fontWeight: "400"}], "headline-md": ["24px", {lineHeight: "32px", fontWeight: "600"}], "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600"}], "label-md": ["14px", {lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "500"}]}}}};</script>
+<style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Header & Tabs Area -->
+<header class="sticky top-0 w-full z-40 bg-surface shadow-sm">
+<div class="max-w-max-content-width mx-auto w-full flex flex-col">
+<!-- Main App Bar -->
+<div class="flex justify-between items-center px-4 py-3">
+<span class="font-headline-md text-headline-md font-semibold text-primary">阅读</span>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors hover:bg-surface-container-low p-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">search</span>
+</button>
+<button class="hover:text-primary transition-colors hover:bg-surface-container-low p-1 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Scrollable Group Tabs -->
+<div class="overflow-x-auto no-scrollbar relative">
+<div class="flex items-center gap-6 px-4 pb-0 font-label-md text-label-md whitespace-nowrap min-w-max">
+<button class="text-primary border-b-2 border-primary pb-2 px-1">全部</button>
+<button class="text-on-surface-variant hover:text-on-surface pb-2 px-1 transition-colors">默认</button>
+<button class="text-on-surface-variant hover:text-on-surface pb-2 px-1 transition-colors">本地书</button>
+<button class="text-on-surface-variant hover:text-on-surface pb-2 px-1 transition-colors">哲学</button>
+</div>
+<!-- Subtle border bottom spanning full width -->
+<div class="absolute bottom-0 w-full h-[1px] bg-surface-variant -z-10"></div>
+</div>
+</div>
+</header>
+<!-- Main Content: Cover Grid -->
+<main class="flex-grow w-full max-w-max-content-width mx-auto px-4 py-6 pb-24 md:pb-12">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-8">
+<!-- Book Item 1 -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative aspect-[2/3] w-full rounded-DEFAULT overflow-hidden shadow-[0_4px_16px_rgba(44,44,44,0.08)] mb-3 bg-surface-container transition-transform duration-300 group-hover:-translate-y-1">
+<img alt="Book cover" class="w-full h-full object-cover" data-alt="A minimalist digital illustration serving as a book cover. Deep, rich indigo background with a single, perfectly geometric pale gold sphere floating in the center. The style is highly polished, clean, and modern, reflecting a sense of cosmic quietude and deep contemplation. High contrast, sharp edges, light mode aesthetic compatibility." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC337ljMAAjC5FngAGY1MH5mLnigor5ttanEN3oJ8UTA8LMwCGHbwI646Wr9Psbw6jQruE-90z-o4bbHZrlzBSvZEWuFkL_g8oVw9Cvwh-AV-tkJCwPfJbpkttN-_aSWqIMHXEc2prlP2ovpIw1hqA4FgoZ0vRKld_krzks8HjnUiKU5kSAMG81_mKa1NUMf3JDqnctFc5-YmCS8OtYNgt6ko6B7SzSKlfTlGD3uMjrRZ9ZCkcJ6VUucCJvz1KcKs6FV4FIxt5X6Gbn">
+<!-- Subtle inner shadow for tactile feel -->
+<div class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] rounded-DEFAULT pointer-events-none"></div>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-on-surface line-clamp-2 leading-snug mb-2 group-hover:text-primary transition-colors">三体：地球往事</h3>
+<div class="flex items-center gap-3 mt-auto">
+<div class="flex-grow h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[65%]"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant shrink-0 whitespace-nowrap">已读 65%</span>
+</div>
+</article>
+<!-- Book Item 2 -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative aspect-[2/3] w-full rounded-DEFAULT overflow-hidden shadow-[0_4px_16px_rgba(44,44,44,0.08)] mb-3 bg-surface-container transition-transform duration-300 group-hover:-translate-y-1">
+<img alt="Book cover" class="w-full h-full object-cover" data-alt="Abstract typographic book cover design. A vast, off-white textured paper background dominates the canvas. In the lower right quadrant, striking, sharp black serif typography is slightly offset. A single, delicate line of deep red cuts across the top third. The overall mood is intellectual, stark, and deeply minimalist." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_iU2dSKOKDrA_d_2IuP3zjBVUQe0Pfo6MLQ2438yuAIgAnzip_Zui1GIFATMjCppQCvsWBcHLIRoPW-hc5cnOOntcvIsxwgy8_8wYxQLrpEzebAAN7iDuxx2m2J5TM3FrMUmgyi1hUpZyA1W4oLyyZy7ziHOL2w0exMovSWFbVbVGP1wJX-WsAmbnqkCbJv5RQNLxzfcvlJ21zyQBrHBnS6D9ot6ZGRaClSKvAdCUx0sWbXMpmSJEa627TwHb_fMDUPKfdYC4exo2">
+<div class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] rounded-DEFAULT pointer-events-none"></div>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-on-surface line-clamp-2 leading-snug mb-2 group-hover:text-primary transition-colors">沉思录</h3>
+<div class="flex items-center gap-3 mt-auto">
+<div class="flex-grow h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[12%]"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant shrink-0 whitespace-nowrap">已读 12%</span>
+</div>
+</article>
+<!-- Book Item 3 -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative aspect-[2/3] w-full rounded-DEFAULT overflow-hidden shadow-[0_4px_16px_rgba(44,44,44,0.08)] mb-3 bg-surface-container transition-transform duration-300 group-hover:-translate-y-1">
+<img alt="Book cover" class="w-full h-full object-cover grayscale opacity-90" data-alt="Minimalist architectural photography as a book cover. Extreme close-up of a smooth, brutalist concrete curved wall interacting with sharp, angular shadows cast by bright, diffuse sunlight. The color palette is restricted to soft greys and warm, paper-like off-whites. The image evokes a sense of structure, silence, and order." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDIihD0pKFvC6zGH_-FYygCL_gTCT7Ehu8AV7TXVj3IfgwCFz1YFjjFG3yOtRlZ4CIEHY0aUunXZm84O-UOftOqpuqH9YjyHWqo29FR0dSgA3-kFVWNBjtlJ8oqTTYQAkaXMVrrTuzWYnYySvYBCnuaMFW8lzOlW8akolMslJsT4jsOJlhYxa-4a1_QuL8kQi4HgLGedzzpvkt4Bay_HUU4uefUliwpZqGz22DOa8UDNwpC_8uJZ4Ea60QyJ70Krtv5LKQRV5M6Qrig">
+<div class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] rounded-DEFAULT pointer-events-none"></div>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-on-surface line-clamp-2 leading-snug mb-2 group-hover:text-primary transition-colors">设计心理学</h3>
+<div class="flex items-center gap-3 mt-auto">
+<div class="flex-grow h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[100%]"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant shrink-0 whitespace-nowrap">已读完</span>
+</div>
+</article>
+<!-- Book Item 4 -->
+<article class="flex flex-col group cursor-pointer">
+<div class="relative aspect-[2/3] w-full rounded-DEFAULT overflow-hidden shadow-[0_4px_16px_rgba(44,44,44,0.08)] mb-3 bg-surface-container transition-transform duration-300 group-hover:-translate-y-1">
+<img alt="Book cover" class="w-full h-full object-cover" data-alt="A serene landscape depicted through abstract color blocking. Muted earth tones: olive green, sandy beige, and a soft, desaturated teal sky. The shapes are sweeping and organic, lacking any fine detail. The texture resembles fine-grain watercolor paper. The mood is calming, vast, and quietly atmospheric." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjz5JUDT9O8wvQpqvCoTIhB3t72FmeR_cSaSblUfjBzaPyXel5KnyustjUJ-_C-9sHPbia_lBsdUGQGcr_LaJNiN8cTDY4N0v-db5UiF-0GyLmx3o4O8tPWQrBSdfZhKbEADNEXrZsWM7khHQ0KT7F95v_MRv0nO1EaWW2-e4t4t2uPq8xgRXwIOTDf3-wYiDHxA3uFPXS30EEc2aELRiOOLRe1GDU6_qz6NQ9oUaNCRRMGfx0t0GYahMKZGFzzQTFZ1XQrhS_1tVD">
+<div class="absolute inset-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)] rounded-DEFAULT pointer-events-none"></div>
+</div>
+<h3 class="font-body-md text-body-md font-medium text-on-surface line-clamp-2 leading-snug mb-2 group-hover:text-primary transition-colors">瓦尔登湖</h3>
+<div class="flex items-center gap-3 mt-auto">
+<div class="flex-grow h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full w-[0%]"></div>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant shrink-0 whitespace-nowrap">未读</span>
+</div>
+</article>
+</div>
+</main>
+<!-- Bottom Navigation Bar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface shadow-[0_-4px_16px_rgba(27,28,28,0.06)]">
+<!-- Active Tab: 书架 -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1 scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-md text-label-md mt-1">书架</span>
+</button>
+<!-- Inactive Tab: 发现 -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">explore</span>
+<span class="font-label-md text-label-md mt-1">发现</span>
+</button>
+<!-- Inactive Tab: RSS -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">rss_feed</span>
+<span class="font-label-md text-label-md mt-1">RSS</span>
+</button>
+<!-- Inactive Tab: 设置 -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md mt-1">设置</span>
+</button>
+</nav>
+</body></html>

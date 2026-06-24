@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=390, user-scalable=no" />
+    <title>阅读页控制层基础状态 V2 - 本地 normalized</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/reader-design-tokens.css" />
+    <link rel="stylesheet" href="../css/reader-components.css" />
+    <link rel="stylesheet" href="../css/reader-control-layer.css" />
+    <link rel="stylesheet" href="../css/reader-handoff-boundary.css" />
+  </head>
+  <body>
+    <main class="reader-page" data-screen-id="beca4c724346445d8d55eef996450f95" data-screen-name="阅读页控制层基础状态 V2 - 布局精修版">
+      <section class="reader-content-layer handoff-boundary" aria-label="阅读正文">
+        <h1 class="reader-content-title">深空信号</h1>
+        <article class="reader-content-body">
+          <p>通讯台的指示灯已经闪烁了三个标准时。在这片被称为“寂静航线”的星域里，通常除了背景辐射的白噪音，什么也听不到。艾伦揉了揉干涩的眼睛，盯着那个代表未知频段的跳动波形。</p>
+          <p>“这不是随机的脉冲星信号，”领航员索菲亚走到他身后，指着屏幕边缘的傅里叶变换图谱，“看这里的周期性间断，它有明显的结构，像是一种原始的二进制。”</p>
+          <p>空间站外，恒星的光芒被一层稀薄的星云物质过滤，呈现出一种黯淡的铁锈红。船舱内的维生系统发出平缓的嗡嗡声，与屏幕上跳动的波形形成了一种奇异的共振。艾伦将接收增益调到最大，一段夹杂着大量杂音的尖锐音频突然在主控室里回荡开来。</p>
+          <p>那声音起初像是冰层断裂的脆响，随后逐渐演变成一种低沉的、仿佛是在水下敲击金属的节奏。每敲击三次，就会有一次长达十秒的绝对静默。</p>
+          <p>“三短，一长静默……”索菲亚的脸色变了，“在旧地球时代的航海通讯里，这是……”</p>
+          <p>“求救信号。”艾伦打断了她，手指在控制台的触控板上快速滑过，试图锁定信号源的坐标。“但问题是，这个波段是我们在五十年前就已经淘汰的军用加密频道。而且，坐标指向的是——”</p>
+          <p>他咽了一口唾沫，看着屏幕上解析出的星图坐标。</p>
+          <p>“指向的是我们母星系的方向。可那里，在四十年前的大坍缩中，就已经什么都不剩了。”</p>
+        </article>
+      </section>
+
+      <nav class="reader-top-area handoff-boundary" aria-label="阅读页顶部信息">
+        <div class="reader-top-bar">
+          <div class="reader-top-leading">
+            <button class="reader-icon-button reader-top-icon" aria-label="返回">
+              <span class="material-symbols-outlined" data-icon="arrow_back">arrow_back</span>
+            </button>
+          </div>
+          <h1 class="reader-top-title">深空信号</h1>
+          <div class="reader-top-actions">
+            <button class="reader-icon-button reader-top-icon" aria-label="刷新">
+              <span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+            </button>
+            <button class="reader-icon-button reader-top-icon" aria-label="换源">
+              <span class="material-symbols-outlined" data-icon="swap_horiz">swap_horiz</span>
+            </button>
+            <button class="reader-icon-button reader-top-icon" aria-label="更多">
+              <span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+            </button>
+          </div>
+        </div>
+        <div class="reader-meta-row">
+          <span>第一章：阿长与《山海经》</span>
+          <span class="reader-source-chip">本地书籍</span>
+        </div>
+      </nav>
+
+      <aside class="reader-floating-brightness handoff-boundary" aria-label="亮度控制">
+        <span class="material-symbols-outlined reader-brightness-icon" data-icon="brightness_auto">brightness_auto</span>
+        <div class="reader-brightness-track" aria-hidden="true">
+          <div class="reader-brightness-fill"></div>
+          <div class="reader-brightness-thumb"></div>
+        </div>
+        <span class="material-symbols-outlined reader-brightness-arrow" data-icon="chevron_right">chevron_right</span>
+      </aside>
+
+      <div class="reader-floating-quick-actions handoff-boundary" aria-label="快捷功能">
+        <button class="reader-quick-circle-button" aria-label="搜索">
+          <span class="material-symbols-outlined reader-quick-circle-icon" data-icon="search">search</span>
+        </button>
+        <button class="reader-quick-circle-button" aria-label="自动翻页">
+          <span class="material-symbols-outlined reader-quick-circle-icon" data-icon="auto_mode">auto_mode</span>
+        </button>
+        <button class="reader-quick-circle-button" aria-label="内容替换">
+          <span class="material-symbols-outlined reader-quick-circle-icon" data-icon="swap_horiz">swap_horiz</span>
+        </button>
+        <button class="reader-quick-circle-button" aria-label="夜间模式">
+          <span class="material-symbols-outlined reader-quick-circle-icon" data-icon="dark_mode">dark_mode</span>
+        </button>
+      </div>
+
+      <section class="reader-floating-page-control handoff-boundary" aria-label="本章内翻页控制">
+        <button class="reader-icon-button reader-control-icon" aria-label="本章内上一页">
+          <span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+        </button>
+        <div class="reader-page-progress-track" aria-label="本章内阅读进度 25%">
+          <div class="reader-page-progress-fill"></div>
+          <div class="reader-page-progress-thumb"></div>
+        </div>
+        <button class="reader-icon-button reader-control-icon" aria-label="本章内下一页">
+          <span class="material-symbols-outlined" data-icon="chevron_right">chevron_right</span>
+        </button>
+      </section>
+
+      <footer class="reader-control-bottom-bar handoff-boundary" aria-label="阅读控制底栏">
+        <button class="reader-icon-button reader-control-bottom-item" aria-label="目录">
+          <span class="material-symbols-outlined reader-control-bottom-icon" data-icon="menu_book">menu_book</span>
+          <span class="reader-control-bottom-label">目录</span>
+        </button>
+        <button class="reader-icon-button reader-control-bottom-item" aria-label="朗读">
+          <span class="material-symbols-outlined reader-control-bottom-icon" data-icon="record_voice_over">record_voice_over</span>
+          <span class="reader-control-bottom-label">朗读</span>
+        </button>
+        <button class="reader-icon-button reader-control-bottom-item" aria-label="界面">
+          <span class="material-symbols-outlined reader-control-bottom-icon" data-icon="tune">tune</span>
+          <span class="reader-control-bottom-label">界面</span>
+        </button>
+        <button class="reader-icon-button reader-control-bottom-item" aria-label="设置">
+          <span class="material-symbols-outlined reader-control-bottom-icon" data-icon="settings">settings</span>
+          <span class="reader-control-bottom-label">设置</span>
+        </button>
+      </footer>
+    </main>
+  </body>
+</html>

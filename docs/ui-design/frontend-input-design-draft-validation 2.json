@@ -1,0 +1,3844 @@
+{
+  "generatedAt": "2026-06-20T14:18:45.404Z",
+  "manifest": "docs/ui-design/frontend-input/manifest.json",
+  "passed": true,
+  "results": [
+    {
+      "name": "component-library",
+      "html": "docs/ui-design/frontend-input/component-library/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/frontend-input/component-library/verify/component-library-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "Reader 公共组件库",
+        "bodyWidth": 1180,
+        "bodyHeight": 10224,
+        "frame": {
+          "width": 1180,
+          "height": 10224
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ComponentLibraryShell",
+        "pageRole": "component-library",
+        "slots": [
+          "foundations",
+          "appShell",
+          "basicControls",
+          "cardsRows",
+          "sheetsPanels",
+          "states"
+        ],
+        "stateModel": {
+          "type": "component-library"
+        },
+        "stateCardCount": 0,
+        "imageCount": 10,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 49
+      }
+    },
+    {
+      "name": "shared-shell-kit",
+      "html": "docs/ui-design/frontend-input/shared-shell-kit/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/frontend-input/shared-shell-kit/verify/shared-shell-kit-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "共享 Shell Kit（Shared Shell Kit）",
+        "bodyWidth": 1216,
+        "bodyHeight": 1572,
+        "frame": {
+          "width": 1180,
+          "height": 1572
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ComponentLibraryShell",
+        "pageRole": "component-library",
+        "slots": [
+          "foundations",
+          "appShell",
+          "basicControls",
+          "cardsRows",
+          "sheetsPanels",
+          "states"
+        ],
+        "stateModel": {
+          "type": "component-library"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 5
+      }
+    },
+    {
+      "name": "asset-library",
+      "html": "docs/ui-design/frontend-input/asset-library/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/frontend-input/asset-library/verify/asset-library-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "Reader 素材库",
+        "bodyWidth": 1180,
+        "bodyHeight": 9103,
+        "frame": {
+          "width": 1180,
+          "height": 9103
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "AssetLibraryShell",
+        "pageRole": "asset-library",
+        "slots": [
+          "foundations",
+          "screenAssets",
+          "iconAssets",
+          "bookCoverAssets",
+          "missingSupplements",
+          "usageRules"
+        ],
+        "stateModel": {
+          "type": "asset-library"
+        },
+        "stateCardCount": 0,
+        "imageCount": 36,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 71
+      }
+    },
+    {
+      "name": "frontend-demo-draft",
+      "html": "docs/ui-design/frontend-input/frontend-demo-draft/index.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/frontend-input/frontend-demo-draft/verify/frontend-demo-draft.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "前端 Demo 设计稿（Frontend Demo Draft）",
+        "bodyWidth": 1440,
+        "bodyHeight": 3976,
+        "frame": {
+          "width": 1440,
+          "height": 3976
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ComponentLibraryShell",
+        "pageRole": "component-library",
+        "slots": [
+          "foundations",
+          "appShell",
+          "basicControls",
+          "cardsRows",
+          "sheetsPanels",
+          "states"
+        ],
+        "stateModel": {
+          "type": "component-library"
+        },
+        "stateCardCount": 0,
+        "imageCount": 14,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 6
+      }
+    },
+    {
+      "name": "bookshelf-preview",
+      "html": "docs/ui-design/02-主标签页/书架/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/书架/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书架封面模式组件预览",
+        "bodyWidth": 853,
+        "bodyHeight": 1844,
+        "frame": {
+          "width": 853,
+          "height": 1844
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 9,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 1,
+            "statusBar": 1,
+            "appTopBar": 1,
+            "contentRegion": 1,
+            "mainNav": 1,
+            "stateHost": 1
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "bookshelf-state-matrix",
+      "html": "docs/ui-design/02-主标签页/书架/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/书架/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书架封面模式状态矩阵",
+        "bodyWidth": 940,
+        "bodyHeight": 2239,
+        "frame": {
+          "width": 940,
+          "height": 2239
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 18,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 4,
+            "statusBar": 4,
+            "appTopBar": 4,
+            "contentRegion": 4,
+            "mainNav": 4,
+            "stateHost": 5
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "bookshelf-empty-preview",
+      "html": "docs/ui-design/03-书架链路/书架空状态/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书架空状态/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书架空状态组件预览",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "bookshelf-empty-state-matrix",
+      "html": "docs/ui-design/03-书架链路/书架空状态/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书架空状态/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书架空状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3349,
+        "frame": {
+          "width": 1180,
+          "height": 3349
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 6
+        },
+        "stateCardCount": 6,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 6,
+            "backTopBar": 6,
+            "contentRegion": 6,
+            "bottomActionHost": 6,
+            "sheetHost": 6,
+            "dialogHost": 6,
+            "stateHost": 7
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "book-search-preview",
+      "html": "docs/ui-design/03-书架链路/书籍搜索/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍搜索/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍搜索组件预览",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "book-search-state-matrix",
+      "html": "docs/ui-design/03-书架链路/书籍搜索/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍搜索/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍搜索状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4523,
+        "frame": {
+          "width": 1180,
+          "height": 4523
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 7
+        },
+        "stateCardCount": 7,
+        "imageCount": 3,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 7,
+            "backTopBar": 7,
+            "contentRegion": 7,
+            "bottomActionHost": 7,
+            "sheetHost": 7,
+            "dialogHost": 7,
+            "stateHost": 8
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "discovery-home-preview",
+      "html": "docs/ui-design/02-主标签页/发现/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/发现/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "发现首页前端输入件",
+        "bodyWidth": 831,
+        "bodyHeight": 1893,
+        "frame": {
+          "width": 831,
+          "height": 1893
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 5,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 1,
+            "statusBar": 1,
+            "appTopBar": 1,
+            "contentRegion": 1,
+            "mainNav": 1,
+            "stateHost": 1
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "discovery-home-state-matrix",
+      "html": "docs/ui-design/02-主标签页/发现/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/发现/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "发现首页状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3580,
+        "frame": {
+          "width": 1180,
+          "height": 3580
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 6
+        },
+        "stateCardCount": 6,
+        "imageCount": 13,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 6,
+            "statusBar": 6,
+            "appTopBar": 6,
+            "contentRegion": 6,
+            "mainNav": 6,
+            "stateHost": 7
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "rss-home-preview",
+      "html": "docs/ui-design/02-主标签页/RSS/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/RSS/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "RSS 首页前端输入件",
+        "bodyWidth": 866,
+        "bodyHeight": 1815,
+        "frame": {
+          "width": 866,
+          "height": 1815
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 4,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 1,
+            "statusBar": 1,
+            "appTopBar": 1,
+            "contentRegion": 1,
+            "mainNav": 1,
+            "stateHost": 1
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "rss-home-state-matrix",
+      "html": "docs/ui-design/02-主标签页/RSS/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/RSS/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "RSS 首页状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3460,
+        "frame": {
+          "width": 1180,
+          "height": 3460
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 4,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 5,
+            "statusBar": 5,
+            "appTopBar": 5,
+            "contentRegion": 5,
+            "mainNav": 5,
+            "stateHost": 6
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "book-detail-preview",
+      "html": "docs/ui-design/03-书架链路/书籍详情/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍详情/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍详情前端输入件",
+        "bodyWidth": 834,
+        "bodyHeight": 1886,
+        "frame": {
+          "width": 834,
+          "height": 1886
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 1,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 20
+      }
+    },
+    {
+      "name": "book-detail-state-matrix",
+      "html": "docs/ui-design/03-书架链路/书籍详情/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍详情/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍详情状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4714,
+        "frame": {
+          "width": 1180,
+          "height": 4714
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 7
+        },
+        "stateCardCount": 7,
+        "imageCount": 7,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 7,
+            "backTopBar": 7,
+            "contentRegion": 7,
+            "bottomActionHost": 7,
+            "sheetHost": 7,
+            "dialogHost": 7,
+            "stateHost": 8
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "book-directory-preview",
+      "html": "docs/ui-design/03-书架链路/书籍目录/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍目录/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍目录前端输入件",
+        "bodyWidth": 834,
+        "bodyHeight": 1886,
+        "frame": {
+          "width": 834,
+          "height": 1886
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 20
+      }
+    },
+    {
+      "name": "book-directory-state-matrix",
+      "html": "docs/ui-design/03-书架链路/书籍目录/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍目录/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍目录状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3000,
+        "frame": {
+          "width": 1180,
+          "height": 3000
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 4,
+            "backTopBar": 4,
+            "contentRegion": 4,
+            "bottomActionHost": 4,
+            "sheetHost": 4,
+            "dialogHost": 4,
+            "stateHost": 5
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "sort-filter-preview",
+      "html": "docs/ui-design/03-书架链路/排序与筛选/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/排序与筛选/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "排序与筛选前端输入件",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 3,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "sort-filter-state-matrix",
+      "html": "docs/ui-design/03-书架链路/排序与筛选/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/排序与筛选/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "排序与筛选状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3000,
+        "frame": {
+          "width": 1180,
+          "height": 3000
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 12,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 4,
+            "backTopBar": 4,
+            "contentRegion": 4,
+            "bottomActionHost": 4,
+            "sheetHost": 4,
+            "dialogHost": 4,
+            "stateHost": 5
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "book-action-sheet-preview",
+      "html": "docs/ui-design/03-书架链路/书籍操作底表/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍操作底表/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍操作底表前端输入件",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "book-action-sheet-state-matrix",
+      "html": "docs/ui-design/03-书架链路/书籍操作底表/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/书籍操作底表/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书籍操作底表状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3000,
+        "frame": {
+          "width": 1180,
+          "height": 3000
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 4,
+            "backTopBar": 4,
+            "contentRegion": 4,
+            "bottomActionHost": 4,
+            "sheetHost": 4,
+            "dialogHost": 4,
+            "stateHost": 5
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "group-management-preview",
+      "html": "docs/ui-design/03-书架链路/分组管理/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/分组管理/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "分组管理前端输入件",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 4
+      }
+    },
+    {
+      "name": "group-management-state-matrix",
+      "html": "docs/ui-design/03-书架链路/分组管理/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/分组管理/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "分组管理状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4593,
+        "frame": {
+          "width": 1180,
+          "height": 4593
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 7
+        },
+        "stateCardCount": 7,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 7,
+            "backTopBar": 7,
+            "contentRegion": 7,
+            "bottomActionHost": 7,
+            "sheetHost": 7,
+            "dialogHost": 7,
+            "stateHost": 8
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "local-import-preview",
+      "html": "docs/ui-design/03-书架链路/本地书导入/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/本地书导入/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "本地书导入前端输入件",
+        "bodyWidth": 853,
+        "bodyHeight": 1844,
+        "frame": {
+          "width": 853,
+          "height": 1844
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 1,
+            "backTopBar": 1,
+            "contentRegion": 1,
+            "bottomActionHost": 1,
+            "sheetHost": 1,
+            "dialogHost": 1,
+            "stateHost": 1
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "local-import-state-matrix",
+      "html": "docs/ui-design/03-书架链路/本地书导入/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/03-书架链路/本地书导入/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "本地书导入状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3900,
+        "frame": {
+          "width": 1180,
+          "height": 3900
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "LibraryShell",
+        "pageRole": "library-stack",
+        "slots": [
+          "stackFrame",
+          "backTopBar",
+          "contentRegion",
+          "bottomActionHost",
+          "sheetHost",
+          "dialogHost",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 6
+        },
+        "stateCardCount": 6,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "stackFrame": 6,
+            "backTopBar": 6,
+            "contentRegion": 6,
+            "bottomActionHost": 6,
+            "sheetHost": 6,
+            "dialogHost": 6,
+            "stateHost": 7
+          }
+        },
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "settings-home-preview",
+      "html": "docs/ui-design/02-主标签页/设置/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/设置/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "设置首页组件预览",
+        "bodyWidth": 852,
+        "bodyHeight": 1846,
+        "frame": {
+          "width": 852,
+          "height": 1846
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 1,
+            "statusBar": 1,
+            "appTopBar": 1,
+            "contentRegion": 1,
+            "mainNav": 1,
+            "stateHost": 1
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "settings-home-state-matrix",
+      "html": "docs/ui-design/02-主标签页/设置/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/02-主标签页/设置/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "设置首页状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 2241,
+        "frame": {
+          "width": 1180,
+          "height": 2241
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "MainTabShell",
+        "pageRole": "main-tab-root",
+        "slots": [
+          "appFrame",
+          "statusBar",
+          "appTopBar",
+          "contentRegion",
+          "mainNav",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": {
+          "slotCounts": {
+            "appFrame": 4,
+            "statusBar": 4,
+            "appTopBar": 4,
+            "contentRegion": 4,
+            "mainNav": 4,
+            "stateHost": 5
+          },
+          "navs": [
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            },
+            {
+              "itemCount": 4,
+              "labels": [
+                "书架",
+                "发现",
+                "RSS",
+                "设置"
+              ],
+              "types": [
+                "bookshelf",
+                "discover",
+                "rss",
+                "settings"
+              ],
+              "activeCount": 1,
+              "iconShellCount": 4
+            }
+          ]
+        },
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reader-control-preview",
+      "html": "docs/ui-design/04-阅读链路/阅读控制层/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读控制层/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读控制层组件预览",
+        "bodyWidth": 841,
+        "bodyHeight": 1870,
+        "frame": {
+          "width": 841,
+          "height": 1870
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reader-control-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/阅读控制层/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读控制层/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读控制层状态矩阵",
+        "bodyWidth": 928,
+        "bodyHeight": 3322,
+        "frame": {
+          "width": 928,
+          "height": 3322
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 5,
+            "readingSurface": 5,
+            "readerOverlayHost": 5,
+            "readerModuleNav": 5,
+            "bottomSheetHost": 5,
+            "readerStateHost": 5
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reading-toc-bookmark-preview",
+      "html": "docs/ui-design/04-阅读链路/目录与书签/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/目录与书签/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "目录与书签前端输入件",
+        "bodyWidth": 841,
+        "bodyHeight": 1870,
+        "frame": {
+          "width": 841,
+          "height": 1870
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 10
+      }
+    },
+    {
+      "name": "reading-toc-bookmark-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/目录与书签/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/目录与书签/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "目录与书签状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4593,
+        "frame": {
+          "width": 1180,
+          "height": 4593
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 7
+        },
+        "stateCardCount": 7,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 7,
+            "readingSurface": 7,
+            "readerOverlayHost": 7,
+            "readerModuleNav": 7,
+            "bottomSheetHost": 7,
+            "readerStateHost": 7
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reading-appearance-preview",
+      "html": "docs/ui-design/04-阅读链路/阅读外观/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读外观/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读外观前端输入件",
+        "bodyWidth": 841,
+        "bodyHeight": 1870,
+        "frame": {
+          "width": 841,
+          "height": 1870
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 2,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 4
+      }
+    },
+    {
+      "name": "reading-appearance-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/阅读外观/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读外观/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读外观状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3600,
+        "frame": {
+          "width": 1180,
+          "height": 3600
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 6
+        },
+        "stateCardCount": 6,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 6,
+            "readingSurface": 6,
+            "readerOverlayHost": 6,
+            "readerModuleNav": 12,
+            "bottomSheetHost": 6,
+            "readerStateHost": 6
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reading-aloud-preview",
+      "html": "docs/ui-design/04-阅读链路/朗读/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/朗读/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "朗读前端输入件",
+        "bodyWidth": 841,
+        "bodyHeight": 1870,
+        "frame": {
+          "width": 841,
+          "height": 1870
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 2,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 4
+      }
+    },
+    {
+      "name": "reading-aloud-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/朗读/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/朗读/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "朗读状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 2500,
+        "frame": {
+          "width": 1180,
+          "height": 2500
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 4,
+            "readingSurface": 4,
+            "readerOverlayHost": 4,
+            "readerModuleNav": 8,
+            "bottomSheetHost": 4,
+            "readerStateHost": 4
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reading-settings-preview",
+      "html": "docs/ui-design/04-阅读链路/阅读设置/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读设置/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读设置前端输入件",
+        "bodyWidth": 834,
+        "bodyHeight": 1886,
+        "frame": {
+          "width": 834,
+          "height": 1886
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 4
+      }
+    },
+    {
+      "name": "reading-settings-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/阅读设置/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读设置/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读设置状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3600,
+        "frame": {
+          "width": 1180,
+          "height": 3600
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 4,
+            "readingSurface": 4,
+            "readerOverlayHost": 4,
+            "readerModuleNav": 4,
+            "bottomSheetHost": 4,
+            "readerStateHost": 4
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "auto-page-preview",
+      "html": "docs/ui-design/04-阅读链路/自动翻页/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/自动翻页/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "自动翻页前端输入件",
+        "bodyWidth": 840,
+        "bodyHeight": 1871,
+        "frame": {
+          "width": 840,
+          "height": 1871
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 3
+      }
+    },
+    {
+      "name": "auto-page-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/自动翻页/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/自动翻页/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "自动翻页状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 2920,
+        "frame": {
+          "width": 1180,
+          "height": 2920
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 4,
+            "readingSurface": 4,
+            "readerOverlayHost": 4,
+            "readerModuleNav": 4,
+            "bottomSheetHost": 4,
+            "readerStateHost": 4
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "content-search-preview",
+      "html": "docs/ui-design/04-阅读链路/内容搜索/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/内容搜索/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "内容搜索前端输入件",
+        "bodyWidth": 840,
+        "bodyHeight": 1873,
+        "frame": {
+          "width": 840,
+          "height": 1873
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 4
+      }
+    },
+    {
+      "name": "content-search-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/内容搜索/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/内容搜索/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "内容搜索状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3927,
+        "frame": {
+          "width": 1180,
+          "height": 3927
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 5,
+            "readingSurface": 5,
+            "readerOverlayHost": 5,
+            "readerModuleNav": 5,
+            "bottomSheetHost": 5,
+            "readerStateHost": 5
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "content-replacement-preview",
+      "html": "docs/ui-design/04-阅读链路/内容替换/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/内容替换/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "内容替换前端输入件",
+        "bodyWidth": 853,
+        "bodyHeight": 1843,
+        "frame": {
+          "width": 853,
+          "height": 1843
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 3
+      }
+    },
+    {
+      "name": "content-replacement-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/内容替换/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/内容替换/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "内容替换状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3762,
+        "frame": {
+          "width": 1180,
+          "height": 3762
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 5,
+            "readingSurface": 5,
+            "readerOverlayHost": 5,
+            "readerModuleNav": 5,
+            "bottomSheetHost": 5,
+            "readerStateHost": 5
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "reading-entry-preview",
+      "html": "docs/ui-design/04-阅读链路/阅读入口/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读入口/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读入口前端输入件",
+        "bodyWidth": 835,
+        "bodyHeight": 1884,
+        "frame": {
+          "width": 835,
+          "height": 1884
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 2
+      }
+    },
+    {
+      "name": "reading-entry-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/阅读入口/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/阅读入口/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "阅读入口状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 2534,
+        "frame": {
+          "width": 1180,
+          "height": 2534
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 4,
+            "readingSurface": 4,
+            "readerOverlayHost": 4,
+            "readerModuleNav": 4,
+            "bottomSheetHost": 4,
+            "readerStateHost": 4
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "immersive-reading-preview",
+      "html": "docs/ui-design/04-阅读链路/沉浸阅读/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/沉浸阅读/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "沉浸阅读前端输入件",
+        "bodyWidth": 835,
+        "bodyHeight": 1884,
+        "frame": {
+          "width": 835,
+          "height": 1884
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 1,
+            "readingSurface": 1,
+            "readerOverlayHost": 1,
+            "readerModuleNav": 1,
+            "bottomSheetHost": 1,
+            "readerStateHost": 1
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": 3
+      }
+    },
+    {
+      "name": "immersive-reading-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/沉浸阅读/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/沉浸阅读/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "沉浸阅读状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 2534,
+        "frame": {
+          "width": 1180,
+          "height": 2534
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "ReaderShell",
+        "pageRole": "reader-flow",
+        "slots": [
+          "readerFrame",
+          "readingSurface",
+          "readerOverlayHost",
+          "readerModuleNav",
+          "bottomSheetHost",
+          "readerStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 4
+        },
+        "stateCardCount": 4,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "readerFrame": 4,
+            "readingSurface": 4,
+            "readerOverlayHost": 4,
+            "readerModuleNav": 4,
+            "bottomSheetHost": 4,
+            "readerStateHost": 4
+          }
+        },
+        "flowShellDom": null,
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "source-switch-preview",
+      "html": "docs/ui-design/04-阅读链路/换源/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/换源/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "换源前端输入件",
+        "bodyWidth": 1690,
+        "bodyHeight": 931,
+        "frame": {
+          "width": 1690,
+          "height": 931
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "FlowShell",
+        "pageRole": "landscape-flow",
+        "slots": [
+          "flowFrame",
+          "stepRegion",
+          "comparisonRegion",
+          "resultRegion",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "flowFrame": 1,
+            "stepRegion": 1,
+            "comparisonRegion": 1,
+            "resultRegion": 1,
+            "stateHost": 1
+          }
+        },
+        "settingsShellDom": null,
+        "expectedDomCount": 10
+      }
+    },
+    {
+      "name": "source-switch-state-matrix",
+      "html": "docs/ui-design/04-阅读链路/换源/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/04-阅读链路/换源/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "换源状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 3550,
+        "frame": {
+          "width": 1180,
+          "height": 3550
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "FlowShell",
+        "pageRole": "landscape-flow",
+        "slots": [
+          "flowFrame",
+          "stepRegion",
+          "comparisonRegion",
+          "resultRegion",
+          "stateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 6
+        },
+        "stateCardCount": 6,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 2,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "flowFrame": 6,
+            "stepRegion": 6,
+            "comparisonRegion": 6,
+            "resultRegion": 6,
+            "stateHost": 6
+          }
+        },
+        "settingsShellDom": null,
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "general-settings-preview",
+      "html": "docs/ui-design/05-设置链路/App通用设置/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/App通用设置/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "App 通用设置前端输入件",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 8
+      }
+    },
+    {
+      "name": "general-settings-state-matrix",
+      "html": "docs/ui-design/05-设置链路/App通用设置/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/App通用设置/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "App 通用设置状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4075,
+        "frame": {
+          "width": 1180,
+          "height": 4075
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 5,
+            "backTopBar": 5,
+            "settingsContent": 5,
+            "settingSection": 5,
+            "toastHost": 5,
+            "dialogHost": 5,
+            "settingsStateHost": 5
+          }
+        },
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "bookshelf-search-settings-preview",
+      "html": "docs/ui-design/05-设置链路/书架与搜索设置/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/书架与搜索设置/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书架与搜索设置前端输入件",
+        "bodyWidth": 833,
+        "bodyHeight": 1888,
+        "frame": {
+          "width": 833,
+          "height": 1888
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 6,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 9
+      }
+    },
+    {
+      "name": "bookshelf-search-settings-state-matrix",
+      "html": "docs/ui-design/05-设置链路/书架与搜索设置/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/书架与搜索设置/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书架与搜索设置状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4300,
+        "frame": {
+          "width": 1180,
+          "height": 4300
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 6
+        },
+        "stateCardCount": 6,
+        "imageCount": 30,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 6,
+            "backTopBar": 6,
+            "settingsContent": 6,
+            "settingSection": 6,
+            "toastHost": 6,
+            "dialogHost": 6,
+            "settingsStateHost": 6
+          }
+        },
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "privacy-permissions-preview",
+      "html": "docs/ui-design/05-设置链路/隐私与权限/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/隐私与权限/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "隐私与权限前端输入件",
+        "bodyWidth": 836,
+        "bodyHeight": 1881,
+        "frame": {
+          "width": 836,
+          "height": 1881
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 9
+      }
+    },
+    {
+      "name": "privacy-permissions-state-matrix",
+      "html": "docs/ui-design/05-设置链路/隐私与权限/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/隐私与权限/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "隐私与权限状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4200,
+        "frame": {
+          "width": 1180,
+          "height": 4200
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 5,
+            "backTopBar": 5,
+            "settingsContent": 5,
+            "settingSection": 5,
+            "toastHost": 5,
+            "dialogHost": 5,
+            "settingsStateHost": 5
+          }
+        },
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "cache-management-preview",
+      "html": "docs/ui-design/05-设置链路/缓存管理/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/缓存管理/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "缓存管理前端输入件",
+        "bodyWidth": 835,
+        "bodyHeight": 1884,
+        "frame": {
+          "width": 835,
+          "height": 1884
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 9
+      }
+    },
+    {
+      "name": "cache-management-state-matrix",
+      "html": "docs/ui-design/05-设置链路/缓存管理/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/缓存管理/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "缓存管理状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4200,
+        "frame": {
+          "width": 1180,
+          "height": 4200
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 5,
+            "backTopBar": 5,
+            "settingsContent": 5,
+            "settingSection": 5,
+            "toastHost": 5,
+            "dialogHost": 5,
+            "settingsStateHost": 5
+          }
+        },
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "about-feedback-preview",
+      "html": "docs/ui-design/05-设置链路/关于与反馈/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/关于与反馈/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "关于与反馈前端输入件",
+        "bodyWidth": 836,
+        "bodyHeight": 1881,
+        "frame": {
+          "width": 836,
+          "height": 1881
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 8
+      }
+    },
+    {
+      "name": "about-feedback-state-matrix",
+      "html": "docs/ui-design/05-设置链路/关于与反馈/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/关于与反馈/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "关于与反馈状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 4200,
+        "frame": {
+          "width": 1180,
+          "height": 4200
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 5
+        },
+        "stateCardCount": 5,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 5,
+            "backTopBar": 5,
+            "settingsContent": 5,
+            "settingSection": 5,
+            "toastHost": 5,
+            "dialogHost": 5,
+            "settingsStateHost": 5
+          }
+        },
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "sync-backup-preview",
+      "html": "docs/ui-design/05-设置链路/同步与备份/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/同步与备份/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "同步与备份前端输入件",
+        "bodyWidth": 836,
+        "bodyHeight": 1881,
+        "frame": {
+          "width": 836,
+          "height": 1881
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 10
+      }
+    },
+    {
+      "name": "sync-backup-state-matrix",
+      "html": "docs/ui-design/05-设置链路/同步与备份/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/同步与备份/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "同步与备份状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 5382,
+        "frame": {
+          "width": 1180,
+          "height": 5382
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 7
+        },
+        "stateCardCount": 7,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 7,
+            "backTopBar": 7,
+            "settingsContent": 7,
+            "settingSection": 7,
+            "toastHost": 7,
+            "dialogHost": 7,
+            "settingsStateHost": 7
+          }
+        },
+        "expectedDomCount": null
+      }
+    },
+    {
+      "name": "source-management-preview",
+      "html": "docs/ui-design/05-设置链路/书源管理/frontend-input/preview.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/书源管理/frontend-input/verify/design-draft-preview.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书源管理前端输入件",
+        "bodyWidth": 836,
+        "bodyHeight": 1881,
+        "frame": {
+          "width": 836,
+          "height": 1881
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "preview"
+        },
+        "stateCardCount": 0,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 1,
+            "backTopBar": 1,
+            "settingsContent": 1,
+            "settingSection": 1,
+            "toastHost": 1,
+            "dialogHost": 1,
+            "settingsStateHost": 1
+          }
+        },
+        "expectedDomCount": 4
+      }
+    },
+    {
+      "name": "source-management-state-matrix",
+      "html": "docs/ui-design/05-设置链路/书源管理/frontend-input/state-matrix.html",
+      "screenshot": "/Users/minliny/Documents/Reader for Android/docs/ui-design/05-设置链路/书源管理/frontend-input/verify/design-draft-state-matrix.png",
+      "passed": true,
+      "failures": [],
+      "failedRequests": [],
+      "consoleErrors": [],
+      "actual": {
+        "title": "书源管理状态矩阵",
+        "bodyWidth": 1180,
+        "bodyHeight": 5382,
+        "frame": {
+          "width": 1180,
+          "height": 5382
+        },
+        "requiredTextPresent": true,
+        "rendererLoaded": true,
+        "shellName": "SettingsShell",
+        "pageRole": "settings-stack",
+        "slots": [
+          "settingsFrame",
+          "backTopBar",
+          "settingsContent",
+          "settingSection",
+          "toastHost",
+          "dialogHost",
+          "settingsStateHost"
+        ],
+        "stateModel": {
+          "type": "state-matrix",
+          "expectedStateCards": 8
+        },
+        "stateCardCount": 8,
+        "imageCount": 0,
+        "missingImages": 0,
+        "cssLinks": 1,
+        "mainTabDom": null,
+        "libraryShellDom": null,
+        "readerShellDom": null,
+        "flowShellDom": null,
+        "settingsShellDom": {
+          "usesKit": true,
+          "slotCounts": {
+            "settingsFrame": 8,
+            "backTopBar": 8,
+            "settingsContent": 8,
+            "settingSection": 8,
+            "toastHost": 8,
+            "dialogHost": 8,
+            "settingsStateHost": 8
+          }
+        },
+        "expectedDomCount": null
+      }
+    }
+  ]
+}

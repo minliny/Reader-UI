@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=853, initial-scale=1">
+  <title>书架封面模式组件预览</title>
+  <link rel="stylesheet" href="./components.css">
+</head>
+<body>
+  <main class="bs-phone-frame" aria-label="书架封面模式组件预览">
+    <header class="bs-status-bar" aria-label="系统状态栏">
+      <div>10:30</div>
+      <div class="bs-system-icons" aria-hidden="true">
+        <span class="bs-wifi"></span>
+        <span class="bs-signal"></span>
+        <span class="bs-battery"></span>
+        <span>82%</span>
+      </div>
+    </header>
+
+    <section class="bs-app-top-bar" aria-label="顶部栏">
+      <h1 class="bs-app-title">书架</h1>
+      <div class="bs-top-actions">
+        <button aria-label="搜索">
+          <svg class="bs-icon" viewBox="0 0 48 48"><circle cx="21" cy="21" r="13"></circle><path d="M31 31 42 42"></path></svg>
+        </button>
+        <button aria-label="更多">
+          <svg class="bs-icon" viewBox="0 0 48 48"><circle cx="24" cy="10" r="2.8" fill="currentColor" stroke="none"></circle><circle cx="24" cy="24" r="2.8" fill="currentColor" stroke="none"></circle><circle cx="24" cy="38" r="2.8" fill="currentColor" stroke="none"></circle></svg>
+        </button>
+      </div>
+    </section>
+
+    <nav class="bs-chip-group" aria-label="书架分组">
+      <button class="bs-chip is-active">全部</button>
+      <button class="bs-chip">默认</button>
+      <button class="bs-chip">本地书</button>
+      <button class="bs-chip">追更</button>
+    </nav>
+
+    <section class="bs-summary-row" aria-label="顶部信息模块">
+      <article class="bs-summary-card bs-continue-card">
+        <h3 class="bs-card-title">继续阅读</h3>
+        <div class="bs-continue-body">
+          <img class="bs-continue-cover" src="../bookshelf-cover-assets/long-night.png" alt="长夜余火封面">
+          <div class="bs-continue-info">
+            <h4 class="bs-continue-title">长夜余火</h4>
+            <p class="bs-meta">爱潜水的乌贼</p>
+            <p class="bs-chapter">第 32 章 雨夜</p>
+            <div class="bs-read-line">
+              <span class="bs-percent">38%</span>
+              <span class="bs-progress" style="--value: 38%"><span></span></span>
+            </div>
+          </div>
+        </div>
+        <button class="bs-read-button">阅读</button>
+      </article>
+
+      <article class="bs-summary-card bs-recent-card">
+        <div class="bs-recent-head">
+          <h3 class="bs-card-title">最近更新</h3>
+          <span class="bs-recent-count">2 <svg class="bs-icon-sm" viewBox="0 0 48 48"><path d="m18 9 15 15-15 15"></path></svg></span>
+        </div>
+        <div class="bs-update-item">
+          <img class="bs-update-cover" src="../bookshelf-cover-assets/mystery-lord.png" alt="诡秘之主封面">
+          <div>
+            <p class="bs-update-title">诡秘之主</p>
+            <p class="bs-chapter">第 1426 章</p>
+          </div>
+          <span class="bs-dot" aria-hidden="true"></span>
+        </div>
+        <div class="bs-update-item">
+          <img class="bs-update-cover" src="../bookshelf-cover-assets/bright-moon.png" alt="明朝那些事儿封面">
+          <div>
+            <p class="bs-update-title">明朝那些事儿</p>
+            <p class="bs-chapter">第 218 章</p>
+          </div>
+          <span class="bs-dot" aria-hidden="true"></span>
+        </div>
+      </article>
+    </section>
+
+    <section class="bs-section-head" aria-label="我的书架工具栏">
+      <h2 class="bs-section-title">我的书架</h2>
+      <div class="bs-section-tools">
+        <span class="bs-mode-label">封面</span>
+        <button aria-label="排序筛选">
+          <svg class="bs-icon-sm" viewBox="0 0 48 48"><path d="M8 13h22"></path><path d="M8 24h16"></path><path d="M8 35h10"></path><path d="M34 12v22"></path><path d="m27 28 7 7 7-7"></path></svg>
+        </button>
+        <button aria-label="书架设置">
+          <svg class="bs-icon-sm" viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"></circle><path d="M24 5v6M24 37v6M7.5 14.5l5.2 3M35.3 30.5l5.2 3M7.5 33.5l5.2-3M35.3 17.5l5.2-3M5 24h6M37 24h6"></path></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="bs-book-grid" aria-label="封面网格">
+      <article class="bs-book-card">
+        <img class="bs-book-cover" src="../bookshelf-cover-assets/long-night.png" alt="长夜余火封面">
+        <h3 class="bs-book-title">长夜余火</h3>
+        <p class="bs-book-meta">爱潜水的乌贼</p>
+        <p class="bs-book-meta">第 32 章 雨夜</p>
+        <div class="bs-book-progress" style="--value: 32%"><span></span></div>
+      </article>
+      <article class="bs-book-card">
+        <img class="bs-book-cover" src="../bookshelf-cover-assets/bright-moon.png" alt="明朝那些事儿封面">
+        <h3 class="bs-book-title">明朝那些事儿</h3>
+        <p class="bs-book-meta">当年明月</p>
+        <p class="bs-book-meta">第 218 章</p>
+        <div class="bs-book-progress" style="--value: 58%"><span></span></div>
+      </article>
+      <article class="bs-book-card">
+        <img class="bs-book-cover" src="../bookshelf-cover-assets/three-body.png" alt="三体封面">
+        <h3 class="bs-book-title">三体</h3>
+        <p class="bs-book-meta">刘慈欣</p>
+        <p class="bs-book-meta">65%</p>
+        <div class="bs-book-progress" style="--value: 65%"><span></span></div>
+      </article>
+      <article class="bs-book-card">
+        <img class="bs-book-cover" src="../bookshelf-cover-assets/renjian-cihua.png" alt="人间词话封面">
+        <h3 class="bs-book-title">人间词话</h3>
+        <p class="bs-book-meta">王国维</p>
+        <p class="bs-book-meta">已读完</p>
+        <div class="bs-book-progress" style="--value: 100%"><span></span></div>
+      </article>
+      <article class="bs-book-card">
+        <img class="bs-book-cover" src="../bookshelf-cover-assets/mystery-lord.png" alt="诡秘之主封面">
+        <h3 class="bs-book-title">诡秘之主</h3>
+        <p class="bs-book-meta">爱潜水的乌贼</p>
+        <p class="bs-book-meta">第 1426 章</p>
+        <div class="bs-book-progress" style="--value: 58%"><span></span></div>
+      </article>
+      <article class="bs-book-card">
+        <img class="bs-book-cover" src="../bookshelf-cover-assets/android-notes.png" alt="Android 札记封面">
+        <h3 class="bs-book-title">Android 札记</h3>
+        <p class="bs-book-meta">本地文档</p>
+        <p class="bs-book-meta">Compose 动画</p>
+        <div class="bs-book-progress" style="--value: 100%"><span></span></div>
+      </article>
+    </section>
+
+    <nav class="bs-bottom-nav" aria-label="公共主导航">
+      <button class="bs-nav-item is-active" aria-current="page">
+        <svg class="bs-icon bs-nav-icon" viewBox="0 0 48 48"><path d="M12 10c5 0 9 1.5 12 5v25c-3-3.5-7-5-12-5V10Z" fill="currentColor" stroke="none"></path><path d="M36 10c-5 0-9 1.5-12 5v25c3-3.5 7-5 12-5V10Z" fill="currentColor" stroke="none"></path></svg>
+        <span>书架</span>
+      </button>
+      <button class="bs-nav-item">
+        <svg class="bs-icon bs-nav-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"></circle><path d="m30 17-4 12-8 4 4-12 8-4Z"></path></svg>
+        <span>发现</span>
+      </button>
+      <button class="bs-nav-item">
+        <svg class="bs-icon bs-nav-icon" viewBox="0 0 48 48"><path d="M10 30a8 8 0 0 1 8 8"></path><path d="M10 20a18 18 0 0 1 18 18"></path><path d="M10 10a28 28 0 0 1 28 28"></path><circle cx="13" cy="35" r="2" fill="currentColor" stroke="none"></circle></svg>
+        <span>RSS</span>
+      </button>
+      <button class="bs-nav-item">
+        <svg class="bs-icon bs-nav-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"></circle><path d="M24 5v6M24 37v6M7.5 14.5l5.2 3M35.3 30.5l5.2 3M7.5 33.5l5.2-3M35.3 17.5l5.2-3M5 24h6M37 24h6"></path></svg>
+        <span>设置</span>
+      </button>
+    </nav>
+  </main>
+</body>
+</html>

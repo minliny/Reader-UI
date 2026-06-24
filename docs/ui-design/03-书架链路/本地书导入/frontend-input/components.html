@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>本地书导入组件拆分</title>
+    <link rel="stylesheet" href="../../shared-library-kit/kit.css">
+    <link rel="stylesheet" href="./components.css">
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="../../../frontend-input/asset-library/icons.js"></script>
+    <script src="../../shared-library-kit/kit.js"></script>
+    <script src="./fixture.js"></script>
+    <script src="./render.js"></script>
+    <script>
+      window.LocalImportInput.renderLocalImportStateMatrix(
+        document.getElementById("app"),
+        window.LOCAL_IMPORT_FIXTURE
+      );
+    </script>
+  </body>
+</html>

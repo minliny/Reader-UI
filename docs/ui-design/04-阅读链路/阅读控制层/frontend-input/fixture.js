@@ -1,0 +1,47 @@
+window.READER_CONTROL_FIXTURE = {
+  status: {
+    left: "长夜余火 · 第 32 章",
+    time: "10:30"
+  },
+  topControl: {
+    bookTitle: "长夜余火",
+    sourceLine: "起点中文网 · 第 32 章",
+    sourceActionLabel: "换源"
+  },
+  readingText: [
+    "雨，下了一整夜。",
+    "城市像是被泼了一盆凉水，街灯昏黄，水面反着光，连呼吸都带着潮气。",
+    "他站在巷口，手里攥着那封信。纸已经被雨水润湿，边角微微卷起，字迹却依旧清晰。",
+    "“等你回来。”",
+    "没有署名，只有短短四个字。",
+    "他笑了笑，笑得很轻，像是自言自语。然后转身，沿着雨声走进夜里。"
+  ],
+  quickActions: [
+    { label: "搜索", type: "search" },
+    { label: "自动翻页", type: "auto-page" },
+    { label: "替换", type: "replace" }
+  ],
+  chapterProgress: {
+    title: "第 32 章 雨夜",
+    progressLabel: "本章 38%",
+    progress: 42,
+    previousLabel: "上一章",
+    nextLabel: "下一章"
+  },
+  moduleNav: [
+    { label: "目录", type: "directory" },
+    { label: "朗读", type: "tts" },
+    { label: "界面", type: "appearance" },
+    { label: "设置", type: "settings" }
+  ],
+  brightness: {
+    title: "亮度",
+    modeLabel: "系统",
+    autoLabel: "A",
+    value: 56
+  },
+  bottomReadout: {
+    progress: "38%",
+    chapter: "第 32 /128 章"
+  }
+};

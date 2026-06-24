@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=853, initial-scale=1">
+  <title>书架封面模式</title>
+  <style>
+    :root {
+      --paper: #fbf6ee;
+      --paper-soft: #f6efe7;
+      --card: rgba(255, 255, 255, 0.88);
+      --ink: #17130f;
+      --muted: #756f69;
+      --faint: #e8ded2;
+      --blue: #1f719b;
+      --blue-dark: #1a668f;
+      --orange: #f48b13;
+      --shadow: 0 18px 42px rgba(92, 72, 52, 0.12);
+      --serif: "Songti SC", "STSong", "Noto Serif CJK SC", "Source Han Serif SC", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 853px;
+      min-height: 1844px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    body {
+      font-family: var(--serif);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      padding: 0;
+    }
+
+    .phone {
+      position: relative;
+      width: 853px;
+      height: 1844px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 2%, rgba(255, 255, 255, 0.95), transparent 34%),
+        radial-gradient(circle at 86% 6%, rgba(255, 255, 255, 0.88), transparent 26%),
+        linear-gradient(180deg, #fcf8f2 0%, #fbf4ec 46%, #f8f1e8 100%);
+    }
+
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 78px;
+      padding: 27px 38px 0 40px;
+      font-family: var(--sans);
+      font-size: 26px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .system-icons {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .wifi {
+      width: 29px;
+      height: 23px;
+      background: #000;
+      clip-path: polygon(50% 100%, 0 16%, 15% 0, 85% 0, 100% 16%);
+      border-radius: 12px 12px 3px 3px;
+    }
+
+    .signal {
+      width: 26px;
+      height: 24px;
+      background: #000;
+      clip-path: polygon(100% 0, 100% 100%, 0 100%);
+    }
+
+    .battery {
+      position: relative;
+      width: 14px;
+      height: 25px;
+      margin: 0 2px 0 3px;
+      background: #000;
+      border-radius: 3px;
+    }
+
+    .battery::before {
+      content: "";
+      position: absolute;
+      top: -4px;
+      left: 4px;
+      width: 6px;
+      height: 4px;
+      border-radius: 2px 2px 0 0;
+      background: #000;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 26px 35px 0 38px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 53px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 45px;
+      padding-top: 5px;
+    }
+
+    .icon {
+      display: block;
+      width: 42px;
+      height: 42px;
+      stroke: currentColor;
+      stroke-width: 4.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .icon-sm {
+      display: block;
+      width: 36px;
+      height: 36px;
+      stroke: currentColor;
+      stroke-width: 4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .chips {
+      display: flex;
+      gap: 20px;
+      padding: 38px 0 0 34px;
+    }
+
+    .chip {
+      height: 55px;
+      min-width: 127px;
+      padding: 0 34px;
+      border-radius: 28px;
+      background: rgba(245, 239, 231, 0.86);
+      color: #29231d;
+      font-size: 28px;
+      font-weight: 500;
+      line-height: 55px;
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    }
+
+    .chip.active {
+      min-width: 140px;
+      color: #fff;
+      background: linear-gradient(135deg, #2d83ad, #176996);
+      box-shadow: 0 9px 18px rgba(31, 113, 155, 0.24);
+    }
+
+    .summary-row {
+      display: grid;
+      grid-template-columns: 438px 324px;
+      gap: 21px;
+      padding: 40px 36px 0 33px;
+    }
+
+    .summary-card {
+      min-height: 357px;
+      border-radius: 25px;
+      background: var(--card);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .continue {
+      padding: 27px 25px 26px;
+    }
+
+    .card-title {
+      margin: 0;
+      color: #19140f;
+      font-size: 27px;
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .continue-body {
+      display: grid;
+      grid-template-columns: 143px 1fr;
+      gap: 28px;
+      padding-top: 24px;
+    }
+
+    .continue-cover {
+      width: 143px;
+      height: 238px;
+      border-radius: 9px;
+      object-fit: cover;
+      box-shadow: 0 8px 14px rgba(30, 24, 18, 0.16);
+    }
+
+    .continue-info {
+      min-width: 0;
+      padding-top: 13px;
+    }
+
+    .continue-title {
+      margin: 0 0 17px;
+      font-size: 31px;
+      font-weight: 500;
+      line-height: 1.08;
+    }
+
+    .meta,
+    .chapter {
+      margin: 0;
+      color: #746d66;
+      font-size: 20px;
+      line-height: 1.7;
+      letter-spacing: 0;
+    }
+
+    .read-line {
+      display: grid;
+      grid-template-columns: 105px 1fr;
+      gap: 20px;
+      align-items: center;
+      margin-top: 46px;
+    }
+
+    .percent {
+      color: #706a64;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .progress {
+      position: relative;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--faint);
+      overflow: hidden;
+    }
+
+    .progress > span {
+      display: block;
+      width: var(--value);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--blue-dark));
+    }
+
+    .read-btn {
+      position: absolute;
+      right: 24px;
+      bottom: 33px;
+      width: 94px;
+      height: 57px;
+      border-radius: 20px;
+      color: #fff;
+      background: linear-gradient(135deg, #2f7fa7, #176996);
+      font-size: 25px;
+      font-weight: 500;
+      line-height: 57px;
+      text-align: center;
+      box-shadow: 0 8px 15px rgba(31, 113, 155, 0.22);
+    }
+
+    .recent {
+      padding: 27px 25px 26px;
+    }
+
+    .recent-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .recent-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--orange);
+      font-size: 25px;
+      line-height: 1;
+    }
+
+    .recent-count svg {
+      color: #8e8a84;
+      width: 32px;
+      height: 32px;
+      stroke-width: 4.2;
+    }
+
+    .update-item {
+      display: grid;
+      grid-template-columns: 74px 1fr 11px;
+      gap: 20px;
+      align-items: center;
+      margin-bottom: 29px;
+    }
+
+    .update-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .update-item img {
+      width: 74px;
+      height: 114px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 5px 11px rgba(30, 24, 18, 0.13);
+    }
+
+    .update-title {
+      margin: 0 0 10px;
+      color: #25201b;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.12;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 39px 39px 0 43px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 33px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    .section-tools {
+      display: flex;
+      align-items: center;
+      gap: 31px;
+      color: #8b877f;
+    }
+
+    .mode-label {
+      color: var(--blue);
+      font-size: 25px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 236px);
+      gap: 26px 30px;
+      padding: 31px 36px 138px;
+    }
+
+    .book-card {
+      min-height: 481px;
+      padding: 24px 26px 20px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 12px 30px rgba(95, 74, 54, 0.11);
+    }
+
+    .book-cover {
+      display: block;
+      width: 182px;
+      height: 275px;
+      border-radius: 8px;
+      object-fit: cover;
+      box-shadow: 0 10px 18px rgba(36, 27, 18, 0.14);
+    }
+
+    .book-title {
+      margin: 26px 0 9px;
+      color: #17130f;
+      font-size: 27px;
+      font-weight: 500;
+      line-height: 1.16;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .book-meta {
+      margin: 0;
+      color: #706962;
+      font-size: 21px;
+      line-height: 1.46;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .book-progress-label {
+      margin-top: 19px;
+      color: #706962;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .book-progress {
+      margin-top: 12px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--faint);
+      overflow: hidden;
+    }
+
+    .book-progress > span {
+      display: block;
+      width: var(--value);
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #1f719b, #176996);
+    }
+
+    .bottom-nav {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      bottom: 14px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      height: 92px;
+      padding: 10px 0 8px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 15px 34px rgba(86, 67, 49, 0.16);
+      backdrop-filter: blur(14px);
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      color: #77736e;
+      font-size: 21px;
+      line-height: 1;
+    }
+
+    .nav-item.active {
+      color: var(--blue);
+    }
+
+    .nav-icon {
+      width: 36px;
+      height: 36px;
+      stroke-width: 3.8;
+    }
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="书架封面模式">
+    <header class="status-bar" aria-label="系统状态栏">
+      <div>10:30</div>
+      <div class="system-icons" aria-hidden="true">
+        <span class="wifi"></span>
+        <span class="signal"></span>
+        <span class="battery"></span>
+        <span>82%</span>
+      </div>
+    </header>
+
+    <section class="top-bar" aria-label="顶部栏">
+      <h1>书架</h1>
+      <div class="top-actions">
+        <button aria-label="搜索">
+          <svg class="icon" viewBox="0 0 48 48"><circle cx="21" cy="21" r="13"></circle><path d="M31 31 42 42"></path></svg>
+        </button>
+        <button aria-label="更多">
+          <svg class="icon" viewBox="0 0 48 48"><circle cx="24" cy="10" r="2.8" fill="currentColor" stroke="none"></circle><circle cx="24" cy="24" r="2.8" fill="currentColor" stroke="none"></circle><circle cx="24" cy="38" r="2.8" fill="currentColor" stroke="none"></circle></svg>
+        </button>
+      </div>
+    </section>
+
+    <nav class="chips" aria-label="书架分组">
+      <button class="chip active">全部</button>
+      <button class="chip">默认</button>
+      <button class="chip">本地书</button>
+      <button class="chip">追更</button>
+    </nav>
+
+    <section class="summary-row" aria-label="顶部信息模块">
+      <article class="summary-card continue">
+        <h3 class="card-title">继续阅读</h3>
+        <div class="continue-body">
+          <img class="continue-cover" src="bookshelf-cover-assets/long-night.png" alt="长夜余火封面">
+          <div class="continue-info">
+            <h4 class="continue-title">长夜余火</h4>
+            <p class="meta">爱潜水的乌贼</p>
+            <p class="chapter">第 32 章 雨夜</p>
+            <div class="read-line">
+              <span class="percent">38%</span>
+              <span class="progress" style="--value: 38%"><span></span></span>
+            </div>
+          </div>
+        </div>
+        <button class="read-btn">阅读</button>
+      </article>
+
+      <article class="summary-card recent">
+        <div class="recent-head">
+          <h3 class="card-title">最近更新</h3>
+          <span class="recent-count">2 <svg class="icon-sm" viewBox="0 0 48 48"><path d="m18 9 15 15-15 15"></path></svg></span>
+        </div>
+        <div class="update-item">
+          <img src="bookshelf-cover-assets/mystery-lord.png" alt="诡秘之主封面">
+          <div>
+            <p class="update-title">诡秘之主</p>
+            <p class="chapter">第 1426 章</p>
+          </div>
+          <span class="dot" aria-hidden="true"></span>
+        </div>
+        <div class="update-item">
+          <img src="bookshelf-cover-assets/bright-moon.png" alt="明朝那些事儿封面">
+          <div>
+            <p class="update-title">明朝那些事儿</p>
+            <p class="chapter">第 218 章</p>
+          </div>
+          <span class="dot" aria-hidden="true"></span>
+        </div>
+      </article>
+    </section>
+
+    <section class="section-head" aria-label="我的书架工具栏">
+      <h2>我的书架</h2>
+      <div class="section-tools">
+        <span class="mode-label">封面</span>
+        <button aria-label="排序筛选">
+          <svg class="icon-sm" viewBox="0 0 48 48"><path d="M8 13h22"></path><path d="M8 24h16"></path><path d="M8 35h10"></path><path d="M34 12v22"></path><path d="m27 28 7 7 7-7"></path></svg>
+        </button>
+        <button aria-label="书架设置">
+          <svg class="icon-sm" viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"></circle><path d="M24 5v6M24 37v6M7.5 14.5l5.2 3M35.3 30.5l5.2 3M7.5 33.5l5.2-3M35.3 17.5l5.2-3M5 24h6M37 24h6"></path></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="book-grid" aria-label="封面网格">
+      <article class="book-card">
+        <img class="book-cover" src="bookshelf-cover-assets/long-night.png" alt="长夜余火封面">
+        <h3 class="book-title">长夜余火</h3>
+        <p class="book-meta">爱潜水的乌贼</p>
+        <p class="book-meta">第 32 章 雨夜</p>
+        <div class="book-progress" style="--value: 32%"><span></span></div>
+      </article>
+
+      <article class="book-card">
+        <img class="book-cover" src="bookshelf-cover-assets/bright-moon.png" alt="明朝那些事儿封面">
+        <h3 class="book-title">明朝那些事儿</h3>
+        <p class="book-meta">当年明月</p>
+        <p class="book-meta">第 218 章</p>
+        <div class="book-progress" style="--value: 58%"><span></span></div>
+      </article>
+
+      <article class="book-card">
+        <img class="book-cover" src="bookshelf-cover-assets/three-body.png" alt="三体封面">
+        <h3 class="book-title">三体</h3>
+        <p class="book-meta">刘慈欣</p>
+        <p class="book-progress-label">65%</p>
+        <div class="book-progress" style="--value: 65%"><span></span></div>
+      </article>
+
+      <article class="book-card">
+        <img class="book-cover" src="bookshelf-cover-assets/renjian-cihua.png" alt="人间词话封面">
+        <h3 class="book-title">人间词话</h3>
+        <p class="book-meta">王国维</p>
+        <p class="book-meta">已读完</p>
+        <div class="book-progress" style="--value: 100%"><span></span></div>
+      </article>
+
+      <article class="book-card">
+        <img class="book-cover" src="bookshelf-cover-assets/mystery-lord.png" alt="诡秘之主封面">
+        <h3 class="book-title">诡秘之主</h3>
+        <p class="book-meta">爱潜水的乌贼</p>
+        <p class="book-meta">第 1426 章</p>
+        <div class="book-progress" style="--value: 58%"><span></span></div>
+      </article>
+
+      <article class="book-card">
+        <img class="book-cover" src="bookshelf-cover-assets/android-notes.png" alt="Android 札记封面">
+        <h3 class="book-title">Android 札记</h3>
+        <p class="book-meta">本地文档</p>
+        <p class="book-meta">Compose 动画</p>
+        <div class="book-progress" style="--value: 100%"><span></span></div>
+      </article>
+    </section>
+
+    <nav class="bottom-nav" aria-label="底部主导航">
+      <button class="nav-item active" aria-current="page">
+        <svg class="icon nav-icon" viewBox="0 0 48 48"><path d="M12 10c5 0 9 1.5 12 5v25c-3-3.5-7-5-12-5V10Z" fill="currentColor" stroke="none"></path><path d="M36 10c-5 0-9 1.5-12 5v25c3-3.5 7-5 12-5V10Z" fill="currentColor" stroke="none"></path></svg>
+        <span>书架</span>
+      </button>
+      <button class="nav-item">
+        <svg class="icon nav-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"></circle><path d="m30 17-4 12-8 4 4-12 8-4Z"></path></svg>
+        <span>发现</span>
+      </button>
+      <button class="nav-item">
+        <svg class="icon nav-icon" viewBox="0 0 48 48"><path d="M10 30a8 8 0 0 1 8 8"></path><path d="M10 20a18 18 0 0 1 18 18"></path><path d="M10 10a28 28 0 0 1 28 28"></path><circle cx="13" cy="35" r="2" fill="currentColor" stroke="none"></circle></svg>
+        <span>RSS</span>
+      </button>
+      <button class="nav-item">
+        <svg class="icon nav-icon" viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"></circle><path d="M24 5v6M24 37v6M7.5 14.5l5.2 3M35.3 30.5l5.2 3M7.5 33.5l5.2-3M35.3 17.5l5.2-3M5 24h6M37 24h6"></path></svg>
+        <span>设置</span>
+      </button>
+    </nav>
+  </main>
+</body>
+</html>

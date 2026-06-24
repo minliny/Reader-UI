@@ -1,0 +1,154 @@
+<!DOCTYPE html><html class="light" lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#2c2c2c", // Ink Black
+                    "background": "#fff8f4", // Warm Paper
+                    "primary": "#366179",    // Seal Blue (updated to theme)
+                    "surface": "#fff8f4",
+                    "outline-variant": "#e5e0dc",
+                    "on-surface-variant": "#72787d",
+                    "error": "#ba1a1a",
+                    "error-container": "#ffdad6",
+                    "surface-container": "#f5ece6"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "sm": "12px",
+                    "xs": "8px",
+                    "touch-target": "48px",
+                    "max-content-width": "720px"
+            },
+            "fontFamily": {
+                    "body": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            font-size: 22px;
+        }
+        body {
+            background-color: #fff8f4;
+            color: #2c2c2c;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Vertical List Borders */
+        .group-item:not(:last-child) {
+            border-bottom: 1px solid #e5e0dc;
+        }
+    </style>
+</head>
+<body class="font-body text-on-surface bg-background min-h-screen">
+<!-- Header -->
+<header class="fixed top-0 left-0 right-0 z-10 bg-surface border-b border-outline-variant h-14 flex items-center justify-between px-4">
+<button class="w-10 h-10 flex items-center justify-start active:opacity-60 transition-opacity">
+<span class="material-symbols-outlined text-primary">arrow_back_ios</span>
+</button>
+<h1 class="text-lg font-semibold">分组管理</h1>
+<button class="w-10 h-10 flex items-center justify-end active:opacity-60 transition-opacity">
+<span class="material-symbols-outlined text-primary">add</span>
+</button>
+</header>
+<!-- Main List Content -->
+<main class="pt-14 pb-20 max-w-max-content-width mx-auto">
+<!-- List Section -->
+<div class="bg-surface">
+<!-- Fixed Groups -->
+<div class="group-item flex items-center h-16 px-4 gap-4">
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">drag_indicator</span>
+<div class="flex-1 flex items-center justify-between">
+<span class="font-medium">全部</span>
+<div class="flex items-center gap-2">
+<span class="text-sm text-on-surface-variant">1248 本</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-60 text-sm">lock</span>
+</div>
+</div>
+</div>
+<div class="group-item flex items-center h-16 px-4 gap-4">
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">drag_indicator</span>
+<div class="flex-1 flex items-center justify-between">
+<span class="font-medium">默认分组</span>
+<div class="flex items-center gap-2">
+<span class="text-sm text-on-surface-variant">86 本</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-60 text-sm">lock</span>
+</div>
+</div>
+</div>
+<div class="group-item flex items-center h-16 px-4 gap-4">
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">drag_indicator</span>
+<div class="flex-1 flex items-center justify-between">
+<span class="font-medium">本地书</span>
+<div class="flex items-center gap-2">
+<span class="text-sm text-on-surface-variant">42 本</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-60">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Custom Groups -->
+<div class="group-item flex items-center h-16 px-4 gap-4 bg-primary/5">
+<span class="material-symbols-outlined text-primary">drag_indicator</span>
+<div class="flex-1 flex items-center justify-between">
+<span class="font-medium">玄幻</span>
+<div class="flex items-center gap-2">
+<span class="text-sm text-on-surface-variant">128 本</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-60">chevron_right</span>
+</div>
+</div>
+</div>
+<div class="group-item flex items-center h-16 px-4 gap-4">
+<span class="material-symbols-outlined text-on-surface-variant opacity-40">drag_indicator</span>
+<div class="flex-1 flex items-center justify-between">
+<span class="font-medium">待读</span>
+<div class="flex items-center gap-2">
+<span class="text-sm text-on-surface-variant">15 本</span>
+<span class="material-symbols-outlined text-on-surface-variant opacity-60">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Delete Confirmation Modal Overlay -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6">
+<!-- Confirmation Dialog -->
+<div class="w-full max-w-[300px] bg-surface rounded-2xl overflow-hidden shadow-xl">
+<div class="p-6 text-center">
+<!-- Icon Warning -->
+<div class="mb-4 flex justify-center">
+<div class="w-12 h-12 rounded-full bg-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+</div>
+<h2 class="text-lg font-bold mb-2">删除分组</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed px-2">
+                删除分组后，分组内书籍不会被删除，将移动到“默认分组”。
+            </p>
+</div>
+<!-- Actions -->
+<div class="flex border-t border-outline-variant">
+<button class="flex-1 h-12 font-medium text-on-surface-variant active:bg-on-surface-variant/5 transition-colors border-r border-outline-variant">
+                取消
+            </button>
+<button class="flex-1 h-12 font-semibold text-error active:bg-error-container/20 transition-colors">
+                删除
+            </button>
+</div>
+</div>
+</div>
+<!-- Sorting State Bottom Bar (Hidden) -->
+<div class="hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant px-4 py-3 flex gap-3">
+<button class="flex-1 h-12 rounded-lg border border-outline-variant font-medium text-on-surface-variant active:bg-black/5">取消</button>
+<button class="flex-1 h-12 rounded-lg bg-primary text-white font-medium active:opacity-90">保存</button>
+</div>
+</body></html>

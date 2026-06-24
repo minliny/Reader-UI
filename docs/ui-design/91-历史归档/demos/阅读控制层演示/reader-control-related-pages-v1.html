@@ -1,0 +1,1238 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>阅读控制层直接相关页面 · 手机版</title>
+  <style>
+    :root {
+      --reader-paper: #f8f1e7;
+      --surface-primary: #fffcf7;
+      --surface-secondary: #fffcf8;
+      --surface-icon: #f4f2ed;
+      --surface-pill: #faf6ef;
+      --text-primary: #11100e;
+      --text-secondary: #585149;
+      --text-muted: #756c62;
+      --icon-primary: #0d0d0c;
+      --border-outer: #d5c8b8;
+      --border-inner: #e5dacb;
+      --track-inactive: #ded8ce;
+      --accent-blue: #087ead;
+      --font-reader: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+      --font-ui: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #282725;
+      color: #ece8e1;
+      font-family: var(--font-ui);
+    }
+
+    .workspace {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 250px minmax(410px, 1fr) 310px;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .rail,
+    .reference {
+      min-height: 0;
+      border: 1px solid #45423e;
+      background: #302f2c;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .rail {
+      overflow: auto;
+    }
+
+    .rail h1,
+    .reference h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .group-title {
+      margin: 18px 0 8px;
+      color: #a9a39a;
+      font-size: 12px;
+    }
+
+    .state-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .state-button {
+      width: 100%;
+      min-height: 38px;
+      border: 1px solid #4c4944;
+      border-radius: 6px;
+      background: #383632;
+      color: #e6e1d9;
+      padding: 8px 10px;
+      text-align: left;
+      font: 13px/1.35 var(--font-ui);
+      cursor: pointer;
+    }
+
+    .state-button[aria-selected="true"] {
+      border-color: #5e9eb9;
+      background: #263d47;
+      color: #fff;
+    }
+
+    .stage {
+      min-width: 0;
+      display: grid;
+      place-items: center;
+    }
+
+    .phone {
+      position: relative;
+      width: min(390px, 100%);
+      aspect-ratio: 390 / 884;
+      overflow: hidden;
+      color: var(--text-primary);
+      container-type: size;
+      container-name: reader;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,.62), transparent 32%),
+        radial-gradient(circle at 72% 76%, rgba(232,216,190,.3), transparent 38%),
+        var(--reader-paper);
+      box-shadow: 0 24px 64px rgba(0,0,0,.44);
+    }
+
+    .status {
+      position: absolute;
+      z-index: 2;
+      top: 2.04%;
+      left: 5.64%;
+      right: 5.64%;
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-secondary);
+      font: 400 clamp(12px,3.59cqw,14px)/1.43 var(--font-ui);
+    }
+
+    .topbar {
+      position: absolute;
+      z-index: 5;
+      top: 4.86%;
+      left: 3.33%;
+      right: 3.33%;
+      height: 6.67%;
+      display: grid;
+      grid-template-columns: 12.7fr 65.8fr 13.6fr 7.9fr;
+      align-items: center;
+      padding: 0 4.67%;
+      border: 1px solid var(--border-outer);
+      border-radius: min(3.59cqw,14px);
+      background: var(--surface-primary);
+      box-shadow: 0 7px 19px rgba(78,59,39,.16);
+    }
+
+    .icon {
+      display: block;
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: var(--icon-primary);
+      stroke-width: 2.25;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .back { width: 28px; height: 28px; stroke-width: 2.4; }
+    .dots { width: 25px; height: 25px; fill: var(--icon-primary); stroke: none; }
+
+    .book-title {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .book-title strong {
+      font-size: clamp(18px,5.13cqw,20px);
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .book-title span,
+    .source-label {
+      font-size: clamp(12px,3.33cqw,13px);
+      line-height: 1.38;
+      white-space: nowrap;
+    }
+
+    .source-action {
+      display: grid;
+      place-items: center;
+      gap: 1px;
+    }
+
+    .reader {
+      position: absolute;
+      z-index: 1;
+      top: 14.25%;
+      bottom: 4%;
+      left: 8.72%;
+      right: 8.72%;
+      overflow: hidden;
+      color: var(--text-primary);
+      font: 400 clamp(17px,4.62cqw,19px)/2 var(--font-reader);
+    }
+
+    .reader p {
+      margin: 0 0 .95em;
+      text-indent: 2em;
+    }
+
+    .control {
+      position: absolute;
+      z-index: 10;
+      display: grid;
+      grid-template-rows: minmax(0,1fr);
+      left: 1.28%;
+      right: 1.28%;
+      bottom: 1.13%;
+      height: 39.14%;
+      padding: 9.55% 2.63% 4.21%;
+      border: 1px solid var(--border-outer);
+      border-radius: min(4.62cqw,18px);
+      background: var(--surface-primary);
+      box-shadow: 0 -5px 27px rgba(78,59,39,.13);
+      font-family: var(--font-ui);
+    }
+
+    .handle {
+      position: absolute;
+      top: 3.09%;
+      left: 45%;
+      width: 10%;
+      height: 1.12%;
+      border-radius: 999px;
+      background: #b9b0a4;
+    }
+
+    .control-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 79.94fr 2.78fr 17.28fr;
+    }
+
+    .left-column {
+      grid-column: 1;
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: minmax(0,1fr) 3.14% 25.79%;
+    }
+
+    .module {
+      min-height: 0;
+      overflow: hidden;
+      border: 1px solid var(--border-inner);
+      border-radius: min(3.08cqw,12px);
+      background: var(--surface-secondary);
+    }
+
+    .module-body {
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
+      scrollbar-width: none;
+      overscroll-behavior: contain;
+    }
+
+    .control .module-body {
+      padding-bottom: 4px;
+    }
+
+    .quick-module {
+      overflow: hidden;
+      padding-bottom: 0 !important;
+    }
+
+    .toolbar {
+      grid-row: 3;
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      align-items: center;
+      padding: 4% 2.3% 3%;
+    }
+
+    .tool {
+      display: grid;
+      justify-items: center;
+      gap: 6px;
+      color: var(--text-primary);
+      font-size: clamp(12px,3.33cqw,14px);
+    }
+
+    .icon-slot {
+      width: min(42px,51%);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+      background: var(--surface-icon);
+    }
+
+    .icon-slot svg { width: 64%; height: 64%; }
+
+    .tool.active { color: var(--accent-blue); }
+    .tool.active .icon-slot {
+      background: #e4f0f5;
+      border-color: #b9d7e3;
+    }
+    .tool.active svg { stroke: var(--accent-blue); }
+
+    .brightness {
+      grid-column: 3;
+      display: grid;
+      grid-template-rows: 8.52fr 13.88fr 43.53fr 13.88fr 9.15fr;
+      align-items: center;
+      justify-items: center;
+      padding: min(2.56cqw,10px) 0 min(2.82cqw,11px);
+      border: 1px solid var(--border-inner);
+      border-radius: min(3.08cqw,12px);
+      background: var(--surface-secondary);
+      font-size: clamp(13px,3.59cqw,14px);
+      line-height: 1.43;
+    }
+
+    .brightness strong { font-weight: 500; }
+    .brightness > .icon {
+      width: min(40.3%,27px);
+      height: auto;
+      aspect-ratio: 1;
+    }
+
+    .v-slider {
+      position: relative;
+      width: 29.85%;
+      height: 83%;
+    }
+
+    .v-slider::before,
+    .v-slider::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: 5.97%;
+      min-width: 3px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+    }
+
+    .v-slider::before {
+      inset-block: 0;
+      background: var(--track-inactive);
+    }
+
+    .v-slider::after {
+      bottom: 0;
+      height: 52.6%;
+      background: var(--accent-blue);
+    }
+
+    .v-thumb {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      bottom: calc(52.6% - 14.925%);
+      width: 100%;
+      aspect-ratio: 1;
+      transform: translateX(-50%);
+      border: max(3px,1.28cqw) solid var(--surface-secondary);
+      border-radius: 50%;
+      background: var(--accent-blue);
+      box-shadow: 0 2px 7px rgba(0,0,0,.16);
+    }
+
+    .system-a {
+      width: 58.21%;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-inner);
+      border-radius: 50%;
+      background: var(--surface-pill);
+      font-size: clamp(20px,5.64cqw,22px);
+      line-height: 1.27;
+    }
+
+    .brightness.system .v-slider { opacity: .45; }
+    .brightness.system .system-a {
+      color: var(--accent-blue);
+      border-color: #b9d7e3;
+      background: #e4f0f5;
+    }
+
+    .module-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 12px 8px;
+    }
+
+    .module-head h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .module-head p {
+      margin: 3px 0 0;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .text-link {
+      color: var(--text-secondary);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(var(--count,2),1fr);
+      gap: 6px;
+      padding: 0 12px 8px;
+    }
+
+    .segment,
+    .pill {
+      min-height: 28px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-inner);
+      border-radius: 999px;
+      background: var(--surface-pill);
+      font-size: 12px;
+    }
+
+    .segment.active,
+    .pill.active {
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+      background: #edf5f8;
+    }
+
+    .list {
+      margin: 0 10px 10px;
+      overflow: hidden;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+    }
+
+    .row {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-inner);
+      font-size: 13px;
+    }
+
+    .row:last-child { border-bottom: 0; }
+    .row.current { background: #faf4ea; }
+    .row small { color: var(--text-secondary); }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 8px;
+      padding: 0 10px 10px;
+    }
+
+    .quick-card {
+      min-height: 48px;
+      display: grid;
+      grid-template-columns: 26px 1fr;
+      gap: 7px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+      background: var(--surface-pill);
+      font-size: 12px;
+    }
+
+    .quick-card strong { display: block; font-size: 13px; }
+    .quick-card span { color: var(--text-secondary); }
+
+    .play-row {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      align-items: center;
+      justify-items: center;
+      padding: 0 12px 10px;
+    }
+
+    .play-main {
+      width: 48px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      color: white;
+      font-size: 22px;
+    }
+
+    .directory-module {
+      display: grid;
+      grid-template-rows: auto auto auto minmax(0,1fr);
+    }
+
+    .directory-module .list {
+      min-height: 0;
+      display: grid;
+      grid-auto-rows: minmax(0,1fr);
+      margin-bottom: 0;
+    }
+
+    .directory-module .row {
+      min-height: 0;
+      padding-block: 5px;
+      font-size: 12px;
+    }
+
+    .directory-module .optional-tall {
+      display: none;
+    }
+
+    .tts-module {
+      display: grid;
+      grid-template-rows: auto minmax(48px,.65fr) minmax(76px,.9fr) minmax(0,1.5fr);
+    }
+
+    .tts-module > .row {
+      min-height: 0;
+      margin-bottom: 0 !important;
+    }
+
+    .tts-module .play-row {
+      padding-block: 6px;
+    }
+
+    .tts-module .play-main {
+      width: 54px;
+    }
+
+    .tts-module .quick-grid {
+      min-height: 0;
+      grid-template-rows: repeat(2,1fr);
+      padding-top: 4px;
+    }
+
+    .tts-module .quick-card {
+      min-height: 0;
+      padding: 10px;
+    }
+
+    .appearance-list,
+    .settings-list {
+      display: grid;
+      gap: 0;
+      padding: 0 12px 8px;
+    }
+
+    .setting-line {
+      min-height: 40px;
+      display: grid;
+      grid-template-columns: 75px 1fr;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid var(--border-inner);
+      font-size: 13px;
+    }
+
+    .setting-line:first-child { border-top: 0; }
+
+    .appearance-module {
+      display: grid;
+      grid-template-rows: auto minmax(0,1fr);
+    }
+
+    .appearance-module .appearance-list {
+      min-height: 0;
+      grid-template-rows: .95fr .95fr .8fr 1.45fr .8fr .9fr;
+    }
+
+    .appearance-module .setting-line {
+      min-height: 0;
+    }
+
+    .settings-module {
+      display: grid;
+      grid-template-rows: auto minmax(0,1fr);
+    }
+
+    .adaptive-settings {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto repeat(2,1fr) auto repeat(4,1fr);
+      padding: 0 12px 6px;
+    }
+
+    .adaptive-settings .setting-line {
+      min-height: 0;
+    }
+
+    .settings-group {
+      align-self: end;
+      padding: 6px 0 3px;
+      color: var(--text-muted);
+      font-size: 11px;
+      line-height: 1;
+    }
+
+    .settings-value {
+      display: none;
+      justify-self: end;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .theme-swatches {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 6px;
+    }
+
+    .theme-option {
+      min-width: 0;
+      display: grid;
+      justify-items: center;
+      gap: 3px;
+      color: var(--text-secondary);
+      font-size: 10px;
+      line-height: 1.1;
+    }
+
+    .swatch {
+      width: 100%;
+      height: 28px;
+      border: 1px solid var(--border-inner);
+      border-radius: 7px;
+    }
+
+    .preview-text {
+      color: var(--text-secondary);
+      text-align: right;
+      font-family: var(--font-reader);
+      font-size: 13px;
+    }
+
+    .switch {
+      width: 34px;
+      height: 20px;
+      padding: 2px;
+      border-radius: 999px;
+      background: #d4cec4;
+    }
+
+    .switch::after {
+      content: "";
+      display: block;
+      width: 16px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .switch.on {
+      background: var(--accent-blue);
+    }
+
+    .switch.on::after {
+      margin-left: 14px;
+    }
+
+    .progress-panel {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: 28fr 24fr 48fr;
+      gap: min(2.05cqw,8px);
+    }
+
+    .default-quick {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      align-items: center;
+      padding: 3% 2%;
+    }
+
+    .default-action {
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+      font-size: 13px;
+    }
+
+    .chapter-card {
+      display: grid;
+      align-content: center;
+      padding: 10px 12px;
+    }
+
+    .chapter-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chapter-top strong { font-size: 17px; }
+    .chapter-actions { display: flex; gap: 6px; }
+
+    .chapter-nav {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chapter-nav .pill:first-child { justify-self: start; min-width: 62px; }
+    .chapter-nav .pill:last-child { justify-self: end; min-width: 62px; }
+    .chapter-nav strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .progress-card {
+      display: grid;
+      align-content: center;
+      padding: 10px 12px;
+    }
+
+    .progress-title,
+    .progress-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .progress-title strong {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .progress-title span,
+    .progress-meta {
+      color: var(--text-secondary);
+      font-size: 11px;
+    }
+
+    .progress-meta { margin-top: 3px; }
+
+    .h-slider {
+      position: relative;
+      height: 20px;
+      margin-top: 7px;
+    }
+
+    .h-slider::before,
+    .h-slider::after {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 0;
+      height: 4px;
+      border-radius: 999px;
+    }
+
+    .h-slider::before { right: 0; background: var(--track-inactive); }
+    .h-slider::after { width: var(--progress,38%); background: var(--accent-blue); }
+
+    .h-thumb {
+      position: absolute;
+      top: 0;
+      left: calc(var(--progress,38%) - 9px);
+      width: 20px;
+      aspect-ratio: 1;
+      border: 4px solid var(--surface-secondary);
+      border-radius: 50%;
+      background: var(--accent-blue);
+      box-shadow: 0 0 0 1px #91bfd1;
+    }
+
+    .drag-tip {
+      position: absolute;
+      left: calc(var(--progress,62%) - 32px);
+      bottom: 23px;
+      min-width: 64px;
+      padding: 5px 7px;
+      border: 1px solid var(--border-inner);
+      border-radius: 7px;
+      background: var(--surface-primary);
+      box-shadow: 0 4px 12px rgba(78,59,39,.14);
+      text-align: center;
+      font-size: 11px;
+    }
+
+    .mask {
+      position: absolute;
+      z-index: 7;
+      inset: 0;
+      background: rgba(30,25,20,.28);
+    }
+
+    .overlay-top {
+      position: absolute;
+      z-index: 12;
+      top: 4.86%;
+      left: 3.33%;
+      right: 3.33%;
+      min-height: 8%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border: 1px solid var(--border-outer);
+      border-radius: min(3.59cqw,14px);
+      background: var(--surface-primary);
+      box-shadow: 0 7px 19px rgba(78,59,39,.16);
+      font-family: var(--font-ui);
+    }
+
+    .overlay-top h2 { margin: 0; font-size: 19px; }
+    .overlay-top p { margin: 2px 0 0; color: var(--text-secondary); font-size: 12px; }
+
+    .overlay-panel {
+      position: absolute;
+      z-index: 12;
+      left: 1.28%;
+      right: 1.28%;
+      bottom: 1.13%;
+      max-height: 64%;
+      overflow: hidden;
+      border: 1px solid var(--border-outer);
+      border-radius: min(4.62cqw,18px);
+      background: var(--surface-primary);
+      box-shadow: 0 -5px 27px rgba(78,59,39,.13);
+      font-family: var(--font-ui);
+    }
+
+    .overlay-scroll {
+      max-height: min(53vh, 59cqh);
+      overflow: auto;
+      padding: 30px 12px 12px;
+    }
+
+    .search-input {
+      flex: 1;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+      background: var(--surface-secondary);
+      font-size: 16px;
+    }
+
+    .result-card {
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+      background: var(--surface-secondary);
+    }
+
+    .result-card strong { font-size: 14px; }
+    .result-card p { margin: 6px 0 0; color: var(--text-secondary); font-size: 12px; line-height: 1.65; }
+
+    .range-block {
+      margin: 8px 0;
+      padding: 12px;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+      background: var(--surface-secondary);
+    }
+
+    .range-block h3 { margin: 0 0 8px; font-size: 15px; }
+
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .command {
+      min-height: 42px;
+      border: 1px solid var(--border-inner);
+      border-radius: 10px;
+      background: var(--surface-pill);
+      color: var(--text-primary);
+      font: 14px var(--font-ui);
+    }
+
+    .command.primary {
+      border-color: var(--accent-blue);
+      background: var(--accent-blue);
+      color: white;
+    }
+
+    .source-row {
+      min-height: 58px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--border-inner);
+    }
+
+    .source-row:last-child { border-bottom: 0; }
+    .source-row strong { font-size: 14px; }
+    .source-row p { margin: 3px 0 0; color: var(--text-secondary); font-size: 11px; }
+
+    .popup {
+      position: absolute;
+      z-index: 13;
+      top: 11.4%;
+      right: 3.4%;
+      width: 43%;
+      overflow: hidden;
+      border: 1px solid var(--border-outer);
+      border-radius: 12px;
+      background: var(--surface-primary);
+      box-shadow: 0 10px 28px rgba(78,59,39,.18);
+      font-family: var(--font-ui);
+    }
+
+    .popup .row { min-height: 48px; justify-content: flex-start; }
+
+    .capsule {
+      position: absolute;
+      z-index: 12;
+      right: 3.5%;
+      bottom: 4%;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border: 1px solid var(--border-outer);
+      border-radius: 999px;
+      background: var(--surface-primary);
+      box-shadow: 0 8px 24px rgba(78,59,39,.18);
+      font: 13px var(--font-ui);
+    }
+
+    .reference {
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .reference-meta {
+      color: #bdb6ac;
+      font-size: 12px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+
+    .reference img {
+      width: 100%;
+      min-height: 0;
+      max-height: calc(100vh - 130px);
+      object-fit: contain;
+      object-position: top center;
+      border: 1px solid #4b4843;
+      background: #201f1d;
+    }
+
+    @media (max-width: 1000px) {
+      .workspace {
+        grid-template-columns: 210px 1fr;
+      }
+      .reference { display: none; }
+    }
+
+    @media (max-width: 680px) {
+      .workspace {
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+      .rail { max-height: 220px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="workspace">
+    <aside class="rail">
+      <h1>阅读控制层相关页面 · 手机版</h1>
+      <div id="stateNav"></div>
+    </aside>
+
+    <section class="stage">
+      <div class="phone" id="phone"></div>
+    </section>
+
+    <aside class="reference">
+      <h2 id="referenceTitle">参考 UI</h2>
+      <div class="reference-meta" id="referenceMeta"></div>
+      <img id="referenceImage" alt="当前状态参考 UI 图片" />
+    </aside>
+  </main>
+
+  <script>
+    const ICONS = {
+      back: `<svg class="icon back" aria-hidden="true" viewBox="0 0 24 24"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>`,
+      search: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4.5-4.5"/></svg>`,
+      auto: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M18.5 8.5A7.5 7.5 0 1 0 18 16"/><path d="M18.5 4.5v4h-4"/><path d="M10 8.5v7l5.5-3.5Z" fill="currentColor" stroke="none"/></svg>`,
+      replace: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m17 3 4 4-4 4"/><path d="M4 10V9a4 4 0 0 1 4-4h13"/><path d="m7 21-4-4 4-4"/><path d="M20 14v1a4 4 0 0 1-4 4H3"/></svg>`,
+      directory: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1.4" fill="currentColor" stroke="none"/><circle cx="4" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="4" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg>`,
+      voice: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 10v4M9 7v10M13 4v16M17 8v8M21 11v2"/></svg>`,
+      settings: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 2 20 7v10l-8 5-8-5V7Z"/><circle cx="12" cy="12" r="3"/></svg>`,
+      sun: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>`,
+      more: `<svg class="dots" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>`,
+      source: `<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M16 3h5v5M4 7h4c4 0 5 10 9 10h4M21 16v5h-5M4 17h4c1.6 0 2.8-1.6 4-3.6M15 7.8c.7-.5 1.3-.8 2-.8h4"/></svg>`
+    };
+
+    const states = [
+      { group:"控制层骨架", id:"default", label:"默认控制层", ref:"../../04-阅读链路/阅读控制层/图片/03-当前视觉基线.png", note:"唯一视觉与几何基底" },
+      { group:"四主按钮快捷区", id:"directory", label:"目录快捷区", ref:"../../04-阅读链路/目录与书签/图片/06-目录快捷模块高度对齐版.png", note:"只保留内容参考，HTML 按 04-2 骨架实现" },
+      { group:"四主按钮快捷区", id:"tts", label:"朗读快捷区", ref:"../../04-阅读链路/朗读/图片/04-朗读快捷模块高度对齐版.png", note:"只保留内容参考" },
+      { group:"四主按钮快捷区", id:"appearance", label:"界面快捷区", ref:"../../04-阅读链路/阅读外观/图片/02-界面快捷模块旧版.png", note:"只保留内容参考" },
+      { group:"四主按钮快捷区", id:"settings", label:"设置快捷区", ref:"../../04-阅读链路/阅读设置/图片/03-设置快捷模块高度对齐版.png", note:"只保留内容参考" },
+      { group:"控制层内部状态", id:"brightness", label:"跟随系统亮度", ref:"../../04-阅读链路/阅读控制层/图片/09-亮度系统模式状态.png", note:"只改变右侧亮度栏" },
+      { group:"控制层内部状态", id:"progress", label:"章节进度拖动", ref:"../../04-阅读链路/阅读控制层/图片/10-章节进度控制.png", note:"只改变章节进度区" },
+      { group:"阅读覆盖层", id:"search", label:"内容搜索覆盖层", ref:"../../04-阅读链路/内容搜索/图片/01-内容搜索覆盖层.png", note:"默认控制层收起" },
+      { group:"阅读覆盖层", id:"auto", label:"自动翻页设置", ref:"../../04-阅读链路/自动翻页/图片/01-自动翻页设置覆盖层.png", note:"默认控制层收起" },
+      { group:"阅读覆盖层", id:"replace", label:"内容替换覆盖层", ref:"../../04-阅读链路/内容替换/图片/01-内容替换快捷覆盖层.png", note:"默认控制层收起" },
+      { group:"阅读覆盖层", id:"source", label:"换源列表", ref:"../../04-阅读链路/换源/图片/02-来源列表.png", note:"换源与检测共用外框" },
+      { group:"轻量浮层", id:"more", label:"顶部更多菜单", ref:"../../04-阅读链路/阅读控制层/图片/06-顶部更多菜单当前采用版.png", note:"锚定顶部三点按钮" },
+      { group:"轻量浮层", id:"autoRunning", label:"自动翻页运行胶囊", ref:"../../04-阅读链路/自动翻页/图片/02-自动翻页运行胶囊.png", note:"不显示完整控制层" },
+      { group:"轻量浮层", id:"ttsRunning", label:"朗读运行胶囊", ref:"../../04-阅读链路/朗读/图片/07-朗读运行胶囊当前采用版.png", note:"不显示段落信息" }
+    ];
+
+    let currentState = "default";
+
+    function basePage(extra = "") {
+      return `
+        <div class="status"><span>长夜余火 · 第 32 章</span><span>10:30</span></div>
+        <section class="topbar">
+          ${ICONS.back}
+          <div class="book-title"><strong>长夜余火</strong><span>起点中文网 · 第 32 章</span></div>
+          <div class="source-action">${ICONS.source}<span class="source-label">换源</span></div>
+          ${ICONS.more}
+        </section>
+        <article class="reader">
+          <p>雨，下了一整夜。</p>
+          <p>城市像是被泼了一盆凉水，街灯昏黄，水面反着光，连呼吸都带着潮气。</p>
+          <p>他站在巷口，手里攥着那封信。纸已经被雨水润湿，边角微微卷起，字迹却依旧清晰。</p>
+          <p>“等你回来。”</p>
+          <p>没有署名，只有短短四个字。</p>
+          <p>他笑了笑，笑得很轻，像是自言自语。</p>
+        </article>
+        ${extra}`;
+    }
+
+    function toolbar(active = "") {
+      const tools = [
+        ["directory","目录",ICONS.directory],
+        ["tts","朗读",ICONS.voice],
+        ["appearance","界面","<span style='font:22px var(--font-ui)'>Aa</span>"],
+        ["settings","设置",ICONS.settings]
+      ];
+      return `<div class="module toolbar">${tools.map(([id,label,icon]) =>
+        `<div class="tool ${active===id?"active":""}"><div class="icon-slot">${icon}</div><span>${label}</span></div>`
+      ).join("")}</div>`;
+    }
+
+    function brightness(system = false) {
+      return `<aside class="brightness ${system?"system":""}">
+        <strong>亮度</strong>${ICONS.sun}
+        <div class="v-slider"><span class="v-thumb"></span></div>
+        <div class="system-a">A</div><span>系统</span>
+      </aside>`;
+    }
+
+    function defaultModule(progressDrag = false) {
+      return `<div class="progress-panel">
+        <div class="module default-quick">
+          ${[["搜索",ICONS.search],["自动翻页",ICONS.auto],["替换",ICONS.replace]].map(([label,icon]) =>
+            `<div class="default-action"><div class="icon-slot">${icon}</div><span>${label}</span></div>`
+          ).join("")}
+        </div>
+        <div class="module chapter-card">
+          <div class="chapter-nav"><span class="pill">上一章</span><strong>第 32 章 雨夜</strong><span class="pill">下一章</span></div>
+        </div>
+        <div class="module progress-card">
+          <div class="progress-title"><strong>章节进度</strong><span>${progressDrag?"本章 62%":"本章 38%"}</span></div>
+          <div class="h-slider" style="--progress:${progressDrag?"62%":"38%"}"><span class="h-thumb"></span>${progressDrag?`<span class="drag-tip">本章 62%</span>`:""}</div>
+          <div class="progress-meta"><span>第 32 / 128 章</span><span>全书 38%</span></div>
+        </div>
+      </div>`;
+    }
+
+    function directoryModule() {
+      return `<div class="module module-body quick-module directory-module">
+        <div class="module-head"><div><h2>目录</h2><p>第 32 / 128 章 · 阅读 38%</p></div><span class="text-link">完整目录 ›</span></div>
+        <div class="segmented"><span class="segment active">目录</span><span class="segment">书签</span></div>
+        <div class="row" style="margin:0 10px 7px;border:1px solid var(--border-inner);border-radius:999px"><span>当前卷：雨城</span><small style="color:var(--accent-blue)">回到当前</small></div>
+        <div class="list"><div class="row optional-short"><span>第 29 章 风声</span><small></small></div><div class="row optional-medium"><span>第 30 章 暗巷</span><small>缓存</small></div><div class="row"><span>第 31 章 旧信</span><small>缓存</small></div><div class="row current"><span>第 32 章 雨夜</span><small style="color:var(--accent-blue)">当前阅读</small></div><div class="row"><span>第 33 章 巷口</span><small>缓存</small></div><div class="row"><span>第 34 章 回声</span><small>书签 1</small></div><div class="row"><span>第 35 章 归途</span><small></small></div><div class="row optional-tall"><span>第 36 章 晨雾</span><small>缓存</small></div></div>
+      </div>`;
+    }
+
+    function ttsModule() {
+      return `<div class="module module-body quick-module tts-module">
+        <div class="module-head"><div><h2>朗读</h2><p>当前章节 · 第 32 章 雨夜</p></div><span class="text-link">朗读设置 ›</span></div>
+        <div class="row" style="margin:0 10px 8px;border:1px solid var(--border-inner);border-radius:9px"><span>雨，下了一整夜。</span><small>当前句</small></div>
+        <div class="play-row"><span>上一句</span><div class="play-main">▶</div><span>下一句</span></div>
+        <div class="quick-grid"><div class="quick-card"><span>◔</span><div><strong>语速</strong><span>1.0x</span></div></div><div class="quick-card"><span>◉</span><div><strong>音色</strong><span>系统女声</span></div></div><div class="quick-card"><span>▣</span><div><strong>范围</strong><span>当前章节</span></div></div><div class="quick-card"><span>◷</span><div><strong>定时</strong><span>不启用</span></div></div></div>
+      </div>`;
+    }
+
+    function appearanceModule() {
+      return `<div class="module module-body quick-module appearance-module">
+        <div class="module-head"><div><h2>界面</h2><p>阅读外观</p></div><span class="text-link">更多外观 ›</span></div>
+        <div class="appearance-list">
+          <div class="setting-line"><strong>字号</strong><div class="segmented" style="padding:0;--count:3"><span class="segment">−</span><span class="segment active">18</span><span class="segment">＋</span></div></div>
+          <div class="setting-line"><strong>行距</strong><div class="segmented" style="padding:0;--count:3"><span class="segment">紧凑</span><span class="segment active">标准</span><span class="segment">舒展</span></div></div>
+          <div class="setting-line"><strong>字体</strong><span style="text-align:right">默认 ›</span></div>
+          <div class="setting-line"><strong>主题</strong><div class="theme-swatches"><span class="theme-option"><span class="swatch" style="background:#f6ead8;border-color:var(--accent-blue)"></span><span>米色</span></span><span class="theme-option"><span class="swatch" style="background:#fff"></span><span>白色</span></span><span class="theme-option"><span class="swatch" style="background:#e6ead7"></span><span>护眼</span></span><span class="theme-option"><span class="swatch" style="background:#333"></span><span>夜间</span></span></div></div>
+          <div class="setting-line"><strong>翻页动画</strong><span style="text-align:right">覆盖 ›</span></div>
+          <div class="setting-line"><strong>预览</strong><span class="preview-text">雨，下了一整夜。</span></div>
+        </div>
+      </div>`;
+    }
+
+    function settingsModule() {
+      return `<div class="module module-body quick-module settings-module">
+        <div class="module-head"><div><h2>设置</h2><p>阅读快捷设置</p></div><span class="text-link">完整设置 ›</span></div>
+        <div class="adaptive-settings">
+          <div class="settings-group">屏幕显示</div>
+          <div class="setting-line"><strong>屏幕方向</strong><div class="segmented wide-choice" style="padding:0;--count:3"><span class="segment active">跟随</span><span class="segment">竖屏</span><span class="segment">横屏</span></div><span class="settings-value">跟随系统 ›</span></div>
+          <div class="setting-line"><strong>屏幕超时</strong><div class="segmented wide-choice" style="padding:0;--count:3"><span class="segment">系统</span><span class="segment active">5 分钟</span><span class="segment">常亮</span></div><span class="settings-value">5 分钟 ›</span></div>
+          <div class="settings-group">阅读操作</div>
+          <div class="setting-line"><strong>隐藏状态栏</strong><span class="switch"></span></div>
+          <div class="setting-line"><strong>音量键翻页</strong><span class="switch"></span></div>
+          <div class="setting-line"><strong>单手翻页</strong><span class="switch"></span></div>
+          <div class="setting-line"><strong>显示进度信息</strong><span class="switch on"></span></div>
+        </div>
+      </div>`;
+    }
+
+    function controlState(module, active = "", system = false) {
+      return basePage(`<section class="control"><span class="handle"></span><div class="control-grid"><div class="left-column">${module}<div></div>${toolbar(active)}</div>${brightness(system)}</div></section>`);
+    }
+
+    function overlayTop(title, subtitle, search = false) {
+      return `<section class="overlay-top">${ICONS.back}${search?`<div class="search-input">${ICONS.search}<span>雨夜</span></div>`:`<div><h2>${title}</h2><p>${subtitle}</p></div>`}</section>`;
+    }
+
+    function searchOverlay() {
+      return basePage(`<div class="mask"></div>${overlayTop("","",true)}<section class="overlay-panel"><span class="handle"></span><div class="overlay-scroll"><div class="module-head"><div><h2>本书内容搜索</h2><p>长夜余火</p></div><span class="text-link">18 处</span></div><div class="segmented" style="--count:4"><span class="segment">全部</span><span class="segment">章节名</span><span class="segment active">正文</span><span class="segment">书签</span></div><div class="result-card"><strong>第 32 章 雨夜</strong><p>雨夜的风格外冷，仿佛能把人骨头里的热意都吹散。</p></div><div class="result-card"><strong>第 48 章 巷口</strong><p>远处的灯影在雨夜里微微摇晃。</p></div></div></section>`);
+    }
+
+    function autoOverlay() {
+      return basePage(`<div class="mask"></div>${overlayTop("自动翻页","长夜余火 · 第 32 章")}<section class="overlay-panel"><span class="handle"></span><div class="overlay-scroll"><div class="range-block"><h3>翻页速度 <small style="float:right;color:var(--accent-blue)">每 8 秒一页</small></h3><div class="h-slider" style="--progress:43%"><span class="h-thumb"></span></div></div><div class="range-block"><h3>翻页模式</h3><div class="segmented" style="padding:0;--count:3"><span class="segment">滚动</span><span class="segment active">翻页</span><span class="segment">仿真翻页</span></div></div><div class="list"><div class="row"><span>屏幕常亮</span><span class="switch on"></span></div><div class="row"><span>到章末停止</span><span class="switch"></span></div><div class="row"><span>音量键调速</span><span class="switch"></span></div></div><div class="action-row"><button class="command">取消</button><button class="command primary">开始自动翻页</button></div></div></section>`);
+    }
+
+    function replaceOverlay() {
+      return basePage(`<div class="mask"></div>${overlayTop("内容替换","长夜余火")}<section class="overlay-panel"><span class="handle"></span><div class="overlay-scroll"><div class="module-head"><div><h2>当前书规则</h2></div><span class="text-link">全部规则 ›</span></div><div class="list"><div class="row"><span><strong>启用内容替换</strong><br><small>仅影响当前阅读显示</small></span><span class="switch on"></span></div><div class="row"><span>屏蔽广告段落</span><span class="switch on"></span></div><div class="row"><span>统一标点空格</span><span class="switch on"></span></div><div class="row"><span>替换错别字</span><span class="switch"></span></div></div><div class="result-card"><strong>替换预览</strong><p>原文：水面反着光<br>显示：水面映着光</p></div><div class="action-row"><button class="command">临时关闭</button><button class="command primary">新增规则</button></div></div></section>`);
+    }
+
+    function sourceOverlay() {
+      return basePage(`<div class="mask"></div><section class="overlay-panel" style="max-height:66%"><span class="handle"></span><div class="overlay-scroll"><div class="module-head"><div><h2>换源</h2><p>长夜余火 · 当前第 32 章</p></div><span class="text-link">关闭</span></div><div class="result-card"><strong>起点中文网</strong><p>当前使用 · 第 32 / 128 章 · 阅读 38%</p></div><p style="color:var(--text-secondary);font-size:13px">可用来源</p><div class="list"><div class="source-row"><div><strong>笔趣阁备用源</strong><p>需检查 · 420ms</p></div><button class="command">检查</button></div><div class="source-row"><div><strong>阅读书源 1</strong><p>可读 · 310ms</p></div><button class="command">切换</button></div><div class="source-row"><div><strong>书海镜像</strong><p>目录不同 · 580ms</p></div><button class="command">检查</button></div></div><div class="action-row"><button class="command">取消</button><button class="command primary">刷新来源</button></div></div></section>`);
+    }
+
+    function moreMenu() {
+      return basePage(`<div class="mask" style="background:rgba(30,25,20,.16)"></div><section class="popup"><div class="row">${ICONS.auto}<span>刷新本章</span></div><div class="row">${ICONS.auto}<span>刷新目录</span></div><div class="row"><span>▧</span><span>打开来源页</span></div><div class="row"><span>↗</span><span>复制本章链接</span></div><div class="row"><span>⇩</span><span>书籍缓存</span></div><div class="row"><span>ⓘ</span><span>调试信息</span></div></section>`);
+    }
+
+    function capsule(type) {
+      return basePage(`<section class="capsule">${type==="tts"?"◀　▶　▶":"Ⅱ"}<strong>${type==="tts"?"朗读中":"自动翻页"}</strong><span>${type==="tts"?"系统女声":"8 秒/页"}</span><span>×</span></section>`);
+    }
+
+    function renderState(id) {
+      currentState = id;
+      const phone = document.getElementById("phone");
+      if (id === "default") phone.innerHTML = controlState(defaultModule());
+      if (id === "directory") phone.innerHTML = controlState(directoryModule(),"directory");
+      if (id === "tts") phone.innerHTML = controlState(ttsModule(),"tts");
+      if (id === "appearance") phone.innerHTML = controlState(appearanceModule(),"appearance");
+      if (id === "settings") phone.innerHTML = controlState(settingsModule(),"settings");
+      if (id === "brightness") phone.innerHTML = controlState(defaultModule(),"",true);
+      if (id === "progress") phone.innerHTML = controlState(defaultModule(true));
+      if (id === "search") phone.innerHTML = searchOverlay();
+      if (id === "auto") phone.innerHTML = autoOverlay();
+      if (id === "replace") phone.innerHTML = replaceOverlay();
+      if (id === "source") phone.innerHTML = sourceOverlay();
+      if (id === "more") phone.innerHTML = moreMenu();
+      if (id === "autoRunning") phone.innerHTML = capsule("auto");
+      if (id === "ttsRunning") phone.innerHTML = capsule("tts");
+      phone.querySelectorAll("button").forEach(button => {
+        if (!button.hasAttribute("aria-label")) {
+          button.setAttribute("aria-label", button.textContent.trim());
+        }
+      });
+
+      const state = states.find(item => item.id === id);
+      document.getElementById("referenceTitle").textContent = state.label;
+      document.getElementById("referenceMeta").textContent = `${state.note}｜${state.ref.replace("docs/ui-design/91-历史归档/drafts/旧全局草稿目录/","docs/ui-design/91-历史归档/drafts/旧全局草稿目录/")}`;
+      document.getElementById("referenceImage").src = state.ref;
+      document.querySelectorAll(".state-button").forEach(button => {
+        button.setAttribute("aria-selected", button.dataset.state === id ? "true" : "false");
+      });
+    }
+
+    function buildNav() {
+      const nav = document.getElementById("stateNav");
+      let group = "";
+      states.forEach(state => {
+        if (state.group !== group) {
+          group = state.group;
+          const title = document.createElement("div");
+          title.className = "group-title";
+          title.textContent = group;
+          nav.appendChild(title);
+          const list = document.createElement("div");
+          list.className = "state-list";
+          list.dataset.group = group;
+          nav.appendChild(list);
+        }
+        const lists = nav.querySelectorAll(".state-list");
+        const list = lists[lists.length - 1];
+        const button = document.createElement("button");
+        button.className = "state-button";
+        button.dataset.state = state.id;
+        button.textContent = state.label;
+        button.setAttribute("aria-label", `预览${state.label}`);
+        button.addEventListener("click", () => renderState(state.id));
+        list.appendChild(button);
+      });
+    }
+
+    buildNav();
+    renderState(currentState);
+  </script>
+</body>
+</html>
