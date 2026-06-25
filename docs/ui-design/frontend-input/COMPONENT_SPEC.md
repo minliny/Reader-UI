@@ -20,7 +20,7 @@
 - `frontend-input/FRONTEND_MAPPING_GUIDE.md`：本地输入件到 Android Compose 前端实现的映射指南。
 - `frontend-input/HTML_FILE_REQUIREMENTS.md`：本地 HTML 文件角色、准入要求和相关文档写法。
 - `frontend-input/PAGE_FRAMEWORK_ARCHITECTURE.md`：后续统一页面框架、shell 分类、迁移顺序和完成标准。
-- `frontend-input/PAGE_FRAMEWORK_AUDIT.md`：当前 29 页逐页 shell 使用状态和迁移批次。
+- `frontend-input/PAGE_FRAMEWORK_AUDIT.md`：当前 30 页逐页 shell 使用状态和迁移批次。
 
 ## 交付标准
 
@@ -45,7 +45,7 @@
 - 设置链路使用 `SettingsShell`；7 个设置二级页已通过 `SettingsPageKit` 输出并通过 DOM slot 校验。
 - 新增或重构页面必须声明 `shellName`、`pageRole`、`slots` 和 `stateModel`。
 - 8 个书架链路页面已迁入 `LibraryPageKit`，必须持续通过真实 DOM slot 校验。
-- 9 个阅读链路页面已迁入 `ReaderShellKit`，`换源` 已迁入 `ReaderShellKit.renderFlowShell(...)`，必须持续通过真实 DOM slot 校验。
+- 10 个阅读链路页面已迁入 `ReaderShellKit`，`换源` 已迁入 `ReaderShellKit.renderFlowShell(...)`，必须持续通过真实 DOM slot 校验。
 
 ## 工程接入建议
 

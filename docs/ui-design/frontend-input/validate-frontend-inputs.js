@@ -1603,7 +1603,14 @@ async function validateFrontendDemoInteractions(page, failures) {
     { route: "toc-bookmarks", label: "目录", module: "directory", compactControlMin: 6, maxListRowHeight: 38 },
     { route: "tts", label: "朗读", module: "tts", compactControlMin: 7, maxListRowHeight: 0 },
     { route: "reader-appearance", label: "阅读主题", module: "appearance", compactControlMin: 13, maxListRowHeight: 0 },
-    { route: "reader-settings", label: "设置", module: "settings", compactControlMin: 6, maxListRowHeight: 0 }
+    {
+      route: "reader-settings",
+      label: "设置",
+      module: "settings",
+      compactControlMin: 6,
+      maxListRowHeight: 0,
+      modulePanelIncludes: ["自动翻页", "点击翻页方式", "音量键翻页", "屏幕常亮", "自动缓存后续章节"]
+    }
   ];
   for (const expected of moduleExpectations) {
     await page.click(`.fd-active-screen .fd-reader-module[data-route="${expected.route}"]`);
@@ -1615,7 +1622,10 @@ async function validateFrontendDemoInteractions(page, failures) {
     assertSameReaderGeometry(await readerSurfaceGeometry(), immersiveGeometry, `${expected.route} module navigation`);
     const moduleStructure = await activeStructure();
     assert(moduleStructure.modulePanelInSheet, `${expected.route} did not render module panel inside bottom sheet`, failures);
-    assert(moduleStructure.modulePanelText.includes(expected.label), `${expected.route} module panel did not render ${expected.label}`, failures);
+    const expectedModuleText = expected.modulePanelIncludes || [expected.label];
+    expectedModuleText.forEach((text) => {
+      assert(moduleStructure.modulePanelText.includes(text), `${expected.route} module panel did not render ${text}`, failures);
+    });
     assert(!moduleStructure.defaultQuickActionsVisible, `${expected.route} should replace default quick actions with module panel`, failures);
     assert(moduleStructure.activeModuleCount === 1, `${expected.route} active module count is not stable`, failures);
     assert(moduleStructure.moduleCompactControlCount >= expected.compactControlMin, `${expected.route} module panel does not expose enough compact controls`, failures);
@@ -1628,6 +1638,9 @@ async function validateFrontendDemoInteractions(page, failures) {
       assert(bookmarkSegmentState.modulePanelText.includes("书签"), "bookmark segment did not replace directory quick panel content", failures);
       assert((await snapshot()).route === "toc-bookmarks", "bookmark segment should stay inside toc-bookmarks route", failures);
       await page.click('.fd-active-screen [data-reader-toc-mode="directory"]');
+    }
+    if (expected.route === "reader-settings") {
+      assert(!moduleStructure.modulePanelText.includes("更多阅读设置"), "reader-settings quick panel should not render 更多阅读设置 shortcut", failures);
     }
     const activeModule = await page.evaluate(() => document.querySelector(".fd-reader-module.is-active")?.getAttribute("data-module") || "");
     assert(activeModule === expected.module, `${expected.route} did not keep ${expected.module} module active`, failures);

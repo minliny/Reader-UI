@@ -50,7 +50,6 @@ interface BookmarkRowInput {
 - `moreOpen`
 - `tabChange`
 - `searchChange`
-- `openFullDirectory`
 - `openChapter`
 - `openBookmark`
 - `moreAction`

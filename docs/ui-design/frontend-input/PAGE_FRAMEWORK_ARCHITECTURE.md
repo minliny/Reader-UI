@@ -6,7 +6,7 @@
 
 ## 当前判断
 
-当前 29 个页面已经统一了交付格式，并按各自页面类型进入统一 shell 运行层。
+当前 30 个页面已经统一了交付格式，并按各自页面类型进入统一 shell 运行层。
 
 已统一的部分：
 - 每页都有 `frontend-input/` 输入包、fixture、renderer、preview、state matrix、README、组件规格和 manifest 校验目标。
@@ -15,12 +15,12 @@
 - 中心化共享框架包已经建立：`frontend-input/shared-shell-kit/kit.js` 输出 `MainTabShell`、`LibraryShell`、`ReaderShell`、`SettingsShell`、`FlowShell` 五类页面框架。
 
 仍需注意的部分：
-- 阅读链路 9 页已经接入中心化 `ReaderShellKit`；后续只需要真实前端映射，不再保留独立阅读器 frame。
+- 阅读链路 10 页已经接入中心化 `ReaderShellKit`；后续只需要真实前端映射，不再保留独立阅读器 frame。
 - 横向 `换源` 已接入中心化 `FlowShell`，保持横屏流程，不塞进普通竖屏 `ReaderShell`。
 - 设置链路 7 页已经共用 `SettingsPageKit`，都输出 `sk-page-frame`；`App通用设置` 和 `书架与搜索设置` 作为薄适配器保留页面外观 class。
 - 主标签页 4 页已经共用 `MainTabPageKit`，都输出 `mt-app-frame`、固定四按钮 `MainNav` 和真实 DOM slots。
 - 书架链路 8 页已经共用 `LibraryPageKit`。
-- 当前 `shared-shell-kit` 预览、`frontend-demo-draft`、阅读链路 9 页和 `换源` 已经直接消费中心化 shell。
+- 当前 `shared-shell-kit` 预览、根目录 `frontend-demo/`、阅读链路 10 页和 `换源` 已经直接消费中心化 shell。
 
 因此，当前产物已经具备统一页面框架的本地代码入口；剩余工作集中在真实前端映射。
 
@@ -123,6 +123,7 @@
 - `04-阅读链路/自动翻页`
 - `04-阅读链路/内容搜索`
 - `04-阅读链路/内容替换`
+- `04-阅读链路/阅读入口`
 - `04-阅读链路/沉浸阅读`
 
 固定结构：
@@ -210,7 +211,7 @@
 | --- | ---: | --- | --- |
 | 主标签页 | 4 | 4 页已使用 `MainTabPageKit`，并通过 DOM slot 与主导航结构校验 | 保持 MainTabShell，后续真实前端映射 |
 | 书架链路 | 8 | 8 页已使用 `LibraryPageKit`，并通过 DOM slot 校验 | 保持 LibraryShell，后续真实前端映射 |
-| 阅读链路 | 9 | `shared-shell-kit` 已提供 `ReaderShell`；阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读 9 页已迁移并通过 DOM slot 校验 | 保持 ReaderShell，后续真实前端映射 |
+| 阅读链路 | 10 | `shared-shell-kit` 已提供 `ReaderShell`；阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、阅读入口、沉浸阅读 10 页已迁移并通过 DOM slot 校验 | 保持 ReaderShell，后续真实前端映射 |
 | 设置链路 | 7 | 7 页已使用 `SettingsPageKit`，并通过 DOM slot 校验 | 保持 SettingsShell，后续真实前端映射 |
 | 横向流程 | 1 | `shared-shell-kit` 已提供 `FlowShell`，`换源` 已通过 `ReaderShellKit.renderFlowShell(...)` 输出真实 DOM slots | 保持 FlowShell，后续真实前端映射 |
 
@@ -235,16 +236,16 @@
 
 5. 抽 ReaderShell 和 FlowShell
    - 已在 `frontend-input/shared-shell-kit/kit.js` 建立 `ReaderShell` 和 `FlowShell`。
-   - 已在 `frontend-demo-draft` 验证阅读控制层与换源的 shell/slot 结构。
-   - 已迁移旧 `04-阅读链路/阅读控制层`、`目录与书签`、`阅读外观`、`朗读`、`阅读设置`、`自动翻页`、`内容搜索`、`内容替换`、`沉浸阅读` 到 `ReaderShellKit.renderReaderShell(...)`。
-   - 阅读链路 9 页已完成 ReaderShell 归一。
+   - 已在根目录 `frontend-demo/` 验证阅读控制层与换源的 shell/slot 结构。
+   - 已迁移旧 `04-阅读链路/阅读控制层`、`目录与书签`、`阅读外观`、`朗读`、`阅读设置`、`自动翻页`、`内容搜索`、`内容替换`、`阅读入口`、`沉浸阅读` 到 `ReaderShellKit.renderReaderShell(...)`。
+   - 阅读链路 10 页已完成 ReaderShell 归一。
    - 已迁移旧 `04-阅读链路/换源` 到 `ReaderShellKit.renderFlowShell(...)`。
 
 6. 增强验证脚本
    - 校验每页 `shellName` 是否存在。
    - 已对 `MainTabShell`、8 个 `LibraryPageKit` 页面、10 个 `ReaderShellKit` 页面和 1 个 `FlowShell` 页面校验 shell 必备 slot 是否在 DOM 中存在。
    - 校验同一 shell 下 frame class、导航 class 和 state host class 不漂移。
-   - 已校验 `design-tokens.json` 与 `tokens.css` 的 70 个 token、manifest inventory、29 个组件参考页 smoke 和 `frontend-demo-draft` 返回/视口/键盘/底表/弹窗交互。
+   - 已校验 `design-tokens.json` 与 `tokens.css` 的 70 个 token、manifest inventory、30 个组件参考页 smoke 和 `frontend-demo/` 返回/视口/键盘/底表/弹窗交互。
 
 ## 完成标准
 

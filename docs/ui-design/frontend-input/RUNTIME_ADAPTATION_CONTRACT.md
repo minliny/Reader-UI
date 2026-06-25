@@ -2,7 +2,7 @@
 
 本文定义 Reader 前端设计稿在不同窗口、屏幕比例、安全区、键盘、文字缩放和覆盖层组合下的规划规则。它服务于 HTML 输入件、Android Compose 实现，以及后续 HarmonyOS / iOS 映射，不服务于单张截图复刻。
 
-当前本地 demo 的执行层差距见 `ADAPTIVE_CONSTRAINT_AUDIT.md`。本文是目标契约，不代表 `frontend-demo-draft` 已经完成横屏、折叠屏、平板和多视口自动切换。
+当前本地 demo 的执行层差距见 `ADAPTIVE_CONSTRAINT_AUDIT.md`。本文是目标契约，不把单次 `frontend-demo/` 截图等同于横屏、折叠屏、平板和多视口自动切换的完整实现。
 
 ## 适用范围（Scope）
 
@@ -43,7 +43,7 @@
 
 ## 运行时 Class 契约（Runtime Class Contract）
 
-`frontend-demo-draft` 和真实实现都必须把窗口判断拆成宽度等级、高度等级和方向，不能只依赖单个 `@media` 条件。当前 HTML demo 的根节点已经落地以下输出，Compose / 其他端映射时使用同名语义即可，不需要沿用 DOM 属性名。
+`frontend-demo/` 和真实实现都必须把窗口判断拆成宽度等级、高度等级和方向，不能只依赖单个 `@media` 条件。当前 HTML demo 的根节点已经落地以下输出，Compose / 其他端映射时使用同名语义即可，不需要沿用 DOM 属性名。
 
 | 输出（Output） | 当前取值（Current Values） | 规则（Rule） |
 |---|---|---|

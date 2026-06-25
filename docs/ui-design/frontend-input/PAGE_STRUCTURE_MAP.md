@@ -83,7 +83,7 @@ AppFrame
 - `ReaderOverlayHost` 浮在正文上方，承载顶部阅读栏、亮度栏、快捷操作。
 - `BottomSheetHost` 浮在 overlay 内，用于目录、外观、朗读、设置、搜索、替换等面板。
 - `ReaderModuleNav` 是阅读模块导航固定层，不能挤压正文布局，也不能改变按钮位置来表达 active；重复点击当前 active 模块必须关闭模块面板并回到默认阅读控制层。
-- 当前 demo 的模块面板细节以运行态为准：目录行只显示章节名；朗读开始按钮只显示图标且不展示示例正文；界面主题色块为无图标纯色块；界面参数以两列组展示字号、行距、段距、字距；阅读设置开关和值项在模块内即时切换。
+- 当前 demo 的模块面板细节以运行态为准：目录行以章节名为主，右侧保留下载和书签状态图标；朗读开始按钮只显示图标且不展示示例正文；界面主题色块为无图标纯色块；界面参数以两列组展示字号、行距、段距、字距；阅读设置开关和值项在模块内即时切换。
 - `ReaderStateHost` 可以表达打开失败、离线、加载，但必须保留回到来源或继续缓存入口。
 
 ### 设置页层级（SettingsShell Layering）
@@ -357,7 +357,7 @@ SettingsFrame
 | 目录与书签（TOC and Bookmarks） | ReaderShell。 | 目录/书签分段、搜索、当前卷、章节列表、书签列表、更多菜单。 | 面板内容滚动；打开章节回到阅读正文。 |
 | 阅读外观（Reading Appearance） | ReaderShell。 | 字号、行距、段距、字距、无图标纯色主题、字体。 | 设置面板覆盖正文；控制项即时作用于 ReadingSurface，预览不替代正文状态。 |
 | 朗读（Read Aloud） | ReaderShell。 | 朗读状态、图标播放控制、语速、声音、定时、朗读范围。 | 朗读面板覆盖正文；不展示示例正文；运行态不重建阅读页。 |
-| 阅读设置（Reading Settings） | ReaderShell。 | 即时开关、循环值、更多阅读设置入口。 | 阅读设置属于 ReaderShell，不进入 SettingsShell；当前模块内设置不改变正文布局。 |
+| 阅读设置（Reading Settings） | ReaderShell。 | 自动翻页、点击翻页方式、音量键翻页、翻页动画、横屏锁定、屏幕常亮、页脚进度、触摸反馈、自动缓存后续章节。 | 阅读设置属于 ReaderShell，不进入 SettingsShell；当前模块内设置不改变正文布局，不展示更多阅读设置入口。 |
 | 自动翻页（Auto Page） | ReaderShell。 | 速度、模式、选项、开始/暂停/继续/停止。 | 自动翻页控制覆盖正文；运行后回到沉浸阅读。 |
 | 内容搜索（Content Search） | ReaderShell。 | 搜索输入、过滤、结果列表、上一条/下一条。 | 搜索结果滚动；打开结果定位正文。 |
 | 内容替换（Content Replacement） | ReaderShell。 | 替换总开关、规则列表、规则编辑、测试、保存。 | 规则编辑覆盖正文；保存后影响正文渲染。 |
@@ -385,7 +385,7 @@ SettingsFrame
 - `preview.html` 是默认页面状态，不是宣传图或静态排版参考。
 - `state-matrix.html` 是同一页面的状态集合，不是多张无关联截图。
 - `components.html` 是页面拆分参考，不替代页面 shell。
-- `frontend-demo-draft` 只能用于串联验证，不是正式页面结构来源。
+- 根目录 `frontend-demo/` 只能用于串联验证和顶层设计图同步；正式页面结构仍必须回到 manifest、shell、slot、state、event 和组件来源。
 - 任何页面结构结论必须能回到 shell、slot、state、event 和组件来源。
 
 ## 结构验收（Structure Acceptance）

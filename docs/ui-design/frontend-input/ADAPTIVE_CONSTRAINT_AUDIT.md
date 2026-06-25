@@ -1,12 +1,12 @@
 # 自适应约束审计（Adaptive Constraint Audit）
 
-本文审计当前 `frontend-demo-draft`、`shared-shell-kit` 和页面规划文档中的 UI/组件/框架结构约束。结论以当前本地 demo、CSS、验证脚本和截图证据为准，不以单张 UI 截图为准。
+本文审计当前根目录 `frontend-demo/`、`shared-shell-kit` 和页面规划文档中的 UI/组件/框架结构约束。结论以当前本地 demo、CSS、验证脚本和截图证据为准，不以单张 UI 截图为准。
 
 ## 结论（Conclusion）
 
 当前自适应约束问题已经闭合到可验证状态：demo 有 runtime viewport class、运行态尺寸变量、12 目标 adaptive 验收矩阵、5 目标 text-stress 验收矩阵、短高 ReaderShell 避让、键盘 reduced-height、MainTab tablet 侧向导航、ReaderShell 横屏/平板右侧控制区、FlowShell 横屏/平板三段式流程，以及 LibraryShell / SettingsShell 宽屏 frame 验收。
 
-仍需避免过度宣称：这次闭合的是 `frontend-demo-draft` 的 Shell 级自适应结构、压力视口和代表性文本压力，不等同于真实设备端像素级回归、所有 30 页每个组件的最终视觉 diff，或 Android Compose 运行时已经完成同等实现。
+仍需避免过度宣称：这次闭合的是根目录 `frontend-demo/` 的 Shell 级自适应结构、压力视口和代表性文本压力，不等同于真实设备端像素级回归、所有 30 页每个组件的最终视觉 diff，或 Android Compose 运行时已经完成同等实现。
 
 ## 复核结果（Review Result）
 
@@ -14,15 +14,15 @@
 |---|---|---|
 | 问题描述准确性 | 修复前准确；当前核心问题已关闭。 | 旧状态确实是 390px 手机画布居中；当前 regular 运行态已按 viewport class 改变 frame 和 Shell 结构。 |
 | 解决方案合理性 | 合理，且已执行到代码和验证层。 | 先建立 runtime class / 尺寸变量，再补 Shell 策略、宽屏视觉和脚本矩阵，避免只写文档或只靠截图判断。 |
-| 当前可宣称能力 | 可以宣称 demo 具备 Shell 级自适应约束和代表性压力验收。 | 全量 `validate-frontend-inputs.js` 通过；`frontend-demo-draft.failures: []`；adaptive 12 项、text-stress 5 项。 |
+| 当前可宣称能力 | 可以宣称 demo 具备 Shell 级自适应约束和代表性压力验收。 | 全量 `validate-frontend-inputs.js` 通过；`frontendDemoSplitContract.failures: []`；adaptive 12 项、text-stress 5 项。 |
 | 当前不可宣称能力 | 不能宣称真实 Android Compose、真实设备和所有页面像素级视觉 diff 已完成。 | 当前证据来自本地 HTML demo、Playwright DOM 几何和截图；未运行 Android 设备端。 |
 
 ## 完整解决方案（Complete Closure）
 
 | 层级（Layer） | 已落地方案（Implemented Solution） | 证据（Evidence） |
 |---|---|---|
-| Runtime 分类层 | demo 根节点写入 `data-width-class`、`data-height-class`、`data-orientation`、`data-viewport-class`、视口宽高和 CSS runtime 变量。 | `frontend-demo-draft/render.js`；adaptive 矩阵断言 viewport class。 |
-| 画布分层 | 保留 `390x844` 为标准捕获基线；regular 运行态使用 `--fd-runtime-phone-width`、`--fd-runtime-phone-height`、`--fd-runtime-flow-width`。 | `frontend-demo-draft/styles.css`；320、390、430、600、840、844x390 视口均无横向溢出。 |
+| Runtime 分类层 | demo 根节点写入 `data-width-class`、`data-height-class`、`data-orientation`、`data-viewport-class`、视口宽高和 CSS runtime 变量。 | `frontend-demo/render-runtime.js`；adaptive 矩阵断言 viewport class。 |
+| 画布分层 | 保留 `390x844` 为标准捕获基线；regular 运行态使用 `--fd-runtime-phone-width`、`--fd-runtime-phone-height`、`--fd-runtime-flow-width`。 | `frontend-demo/styles.css` 和 `frontend-demo/styles/*.css`；320、390、430、600、840、844x390 视口均无横向溢出。 |
 | Shell 宽屏策略 | `MainTabShell` 在 tablet 展示左侧 rail；`LibraryShell` / `SettingsShell` 使用 760px 宽屏 frame；`ReaderShell` 横屏/平板改为正文 + 右侧控制区；`FlowShell` 横屏/平板展示阅读连续区 + 候选窗 + 确认区三段。 | 12 项 adaptive 截图与 DOM 几何断言。 |
 | 短高/键盘压力 | ReaderShell compact landscape 使用横向控制区；Book Search compact landscape 使用 150px reduced-height keyboard，输入目标和提交动作在键盘上方。 | `reader-compact-landscape`、`keyboard-reduced-height` 断言和截图。 |
 | 文本压力 | MainTab、Library、Reader、Flow、Settings 五类代表性 Shell 注入长中文、长英文和大字体。 | `textStressMatrix` 五项 `outsideCount: 0`、`bodyWidth: 390`。 |
@@ -48,15 +48,15 @@
 
 | 项目（Item） | 状态（Status） | 文件（Files） |
 |---|---|---|
-| viewport-class runtime | 已完成。 | `frontend-demo-draft/render.js` |
-| regular 运行态尺寸变量 | 已完成。 | `frontend-demo-draft/styles.css` |
-| MainTab tablet rail | 已完成并脚本验证。 | `frontend-demo-draft/styles.css`、`validate-frontend-inputs.js` |
-| ReaderShell 横屏/平板右侧控制区 | 已完成并脚本验证。 | `frontend-demo-draft/styles.css`、adaptive 截图 |
-| FlowShell 横屏/平板三段式 | 已完成并脚本验证。 | `frontend-demo-draft/render.js`、`frontend-demo-draft/styles.css`、adaptive 截图 |
-| Library / Settings 宽屏 frame | 已完成并脚本验证。 | `frontend-demo-draft/styles.css`、adaptive 截图 |
+| viewport-class runtime | 已完成。 | `frontend-demo/render-runtime.js` |
+| regular 运行态尺寸变量 | 已完成。 | `frontend-demo/styles.css`、`frontend-demo/styles/*.css` |
+| MainTab tablet rail | 已完成并脚本验证。 | `frontend-demo/styles/*.css`、`validate-frontend-inputs.js` |
+| ReaderShell 横屏/平板右侧控制区 | 已完成并脚本验证。 | `frontend-demo/styles/*.css`、adaptive 截图 |
+| FlowShell 横屏/平板三段式 | 已完成并脚本验证。 | `frontend-demo/render-runtime.js`、`frontend-demo/styles/*.css`、adaptive 截图 |
+| Library / Settings 宽屏 frame | 已完成并脚本验证。 | `frontend-demo/styles/*.css`、adaptive 截图 |
 | 键盘 reduced-height | 已完成并脚本验证。 | `keyboard-reduced-height` 中键盘高度 150px，输入和固定动作在键盘上方。 |
 | 代表性文本压力验收 | 已完成并脚本验证。 | `textStressMatrix` 5 项全部 `outsideCount: 0`。 |
-| 全量验证 | 已通过。 | `frontend-input-design-draft-validation.json` 顶层 `passed: true`，`frontend-demo-draft.failures: []`。 |
+| 全量验证 | 已通过。 | `frontend-input-design-draft-validation.json` 顶层 `passed: true`，`frontendDemoSplitContract.failures: []`。 |
 
 ## 当前可以成立的声明（Supported Statements）
 
@@ -67,7 +67,7 @@
 - 当前 FlowShell 在 compact landscape 和 tablet 下展示阅读连续区、候选窗、确认区三段式流程。
 - 当前 LibraryShell / SettingsShell 在 tablet 下使用 760px 宽屏 frame。
 - 当前 text-stress 验收覆盖 5 个代表性 Shell 目标，长中文、长英文和大字体压力均无横向溢出。
-- 当前全量 `validate-frontend-inputs.js` 通过，`frontend-demo-draft` smoke 失败数组为空。
+- 当前全量 `validate-frontend-inputs.js` 通过，`frontendDemoSplitContract` smoke 失败数组为空。
 
 ## 仍不可过度宣称（Unsupported Overclaims）
 

@@ -7,7 +7,7 @@
 ## 分支范围（Branch Scope）
 
 - 目标：把本地 UI 设计图整理为可验证的 `frontend-input` 前端设计稿输入件。
-- 范围：30 个页面输入包、100 个本地 HTML、公共组件库、公共素材库、共享 shell kit、前端 demo 设计稿、manifest 校验、框架审计文档，以及面向 Android Compose 的输入状态预览和覆盖守卫。
+- 范围：30 个页面输入包、公共组件库、公共素材库、共享 shell kit、根目录 `frontend-demo/`、30 张本地 demo 同步设计图、manifest 校验、框架审计文档，以及面向 Android Compose 的输入状态预览和覆盖守卫。
 - 非范围：真实业务数据接入、线上产品逻辑、完整交互动效实现、端到端 UI 自动化。
 
 ## 核心入口（Primary Entry Points）
@@ -22,9 +22,10 @@
 | 详版页面规划（Detailed Page Planning） | `docs/ui-design/frontend-input/FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md` | 30 个正式页面的详版字段矩阵，覆盖结构与覆盖、入口返回、上下文事件、适配文本、组件和验收，并由验证脚本守住。 |
 | 工作流闭合规划（Workflow Closure Planning） | `docs/ui-design/frontend-input/WORKFLOW_CLOSURE_PLANNING.md` | 补充当前 demo 审计结论、8 个真正缺失页面 / 状态的页面级工作量规划；只包含数据恢复和数据调测。 |
 | 共享 Shell Kit（Shared Shell Kit） | `docs/ui-design/frontend-input/shared-shell-kit/` | 输出 `MainTabShell`、`LibraryShell`、`ReaderShell`、`SettingsShell`、`FlowShell` 的公共 slot 结构。 |
-| 公共素材库（Asset Library） | `docs/ui-design/frontend-input/asset-library/` | UI 设计图、封面素材和 79 个统一语义图标 token。 |
+| 公共素材库（Asset Library） | `docs/ui-design/frontend-input/asset-library/` | UI 设计图、封面素材和统一语义图标 token。 |
 | 公共组件库（Component Library） | `docs/ui-design/frontend-input/component-library/` | 组件、状态、底表、卡片、行和交互规则的可视化入口。 |
-| 前端 Demo 设计稿（Frontend Demo Draft） | `docs/ui-design/frontend-input/frontend-demo-draft/` | 使用统一 shell 拼出的前端开发参考稿。 |
+| 前端 Demo 设计稿（Frontend Demo） | `frontend-demo/` | 当前本地 demo 和 30 张顶层 `UI设计图.png` 的视觉源头。 |
+| 本地 Demo 设计图同步表（Local Demo Design Asset Map） | `docs/ui-design/frontend-input/LOCAL_DEMO_DESIGN_ASSET_MAP.md` | 记录页面、demo route、操作态和输出设计图的对应关系。 |
 | 书架页 Demo（Bookshelf Page Demo） | `docs/ui-design/frontend-input/bookshelf-demo/index.html` | 复用书架输入件、MainTabShell、书籍组件和状态切换的人工审视页，不进入正式 manifest。 |
 | 事件回调映射（Event Callback Mapping） | `docs/ui-design/frontend-input/EVENT_CALLBACK_MAPPING.md` | 将 30 个页面、281 个事件 `Event` union 映射到稳定 Compose 回调名。 |
 | Compose 状态预览（Compose State Previews） | `app/src/main/kotlin/com/reader/android/ui/preview/`、`app/src/main/kotlin/com/reader/android/ui/reader/source/SourceSwitchFlowScreen.kt` | 主标签页、书源管理链路、设置二级页（App 通用设置、书架与搜索设置、隐私与权限、缓存管理、关于与反馈、同步与备份、书源管理、WebDAV、备份、进度同步、远程书籍）、阅读控制层、沉浸阅读、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、书架空状态/搜索/详情/目录/排序筛选/书籍操作底表/分组管理/本地书导入链路，以及 FlowShell 换源横向流程的 Android Compose preview 状态。 |
@@ -170,7 +171,7 @@ JAVA_HOME=/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home \
 
 ## 人工审计建议（Manual Review Order）
 
-1. 先看 `frontend-demo-draft/index.html`，判断整体前端设计稿是否符合开发输入预期。
+1. 先看 `frontend-demo/index.html`，判断整体前端设计稿是否符合开发输入预期。
 2. 再看 `shared-shell-kit/preview.html`，确认五类 shell 的 slot 结构。
 3. 按 `PAGE_FRAMEWORK_AUDIT.md` 逐页抽查 preview 和 state matrix。
 4. 再看 `FRONTEND_MAPPING_GUIDE.md`，确认输入件到 Android Compose 的文件映射、导航差异和实现优先级。

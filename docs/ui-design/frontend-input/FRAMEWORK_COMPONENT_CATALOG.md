@@ -4,37 +4,38 @@
 
 ## 当前结论（Current Conclusion）
 
-- 前端输入件（Frontend Inputs）：当前 manifest 有 62 个验证目标，包括 29 个页面的 `preview.html` 和 `state-matrix.html`、1 个公共组件库预览、1 个共享 Shell Kit 预览、1 个公共素材库预览，以及 1 个前端 Demo 设计稿预览。
-- 本地 HTML（Local HTML）：当前共有 96 个本地 HTML；其中 93 个位于 `frontend-input` 范围（87 个正式页面 HTML、2 个历史临时预览页、4 个公共库/示例 HTML），另有 3 个早期独立复刻页；`preview 2.html` 和早期独立复刻页不作为正式输入件。
+- 前端输入件（Frontend Inputs）：当前 manifest 有 64 个验证目标，包括 30 个页面的 `preview.html` 和 `state-matrix.html`、1 个公共组件库预览、1 个共享 Shell Kit 预览、1 个公共素材库预览，以及 1 个前端 Demo 设计稿预览。
+- 本地 Demo 视觉源（Local Demo Visual Source）：根目录 `frontend-demo/` 是当前顶层 `UI设计图.png` 的唯一视觉源头，页面到 route 的关系见 `LOCAL_DEMO_DESIGN_ASSET_MAP.md`；`frontend-demo-draft` 只作历史参考。
+- 本地 HTML（Local HTML）：正式输入范围以 manifest 和 HTML 库存守卫为准；`preview 2.html`、旧 `frontend-demo-draft` 和早期独立复刻页不作为新设计图或正式输入件来源。
 - 已有共享 kit（Implemented Shared Kits）：主标签页框架（MainTabShell）、书架链路框架（LibraryShell）、设置页框架（SettingsShell）、阅读器框架（ReaderShell）、横向流程框架（FlowShell）和中心化共享 Shell Kit（Shared Shell Kit）已经可用。
-- 已完成共享 kit（Completed Shared Kits）：阅读器框架（ReaderShell）9 页已接入中心化 `ReaderShellKit`；横向流程框架（FlowShell）1 页已接入中心化 `ReaderShellKit.renderFlowShell(...)`。
+- 已完成共享 kit（Completed Shared Kits）：阅读器框架（ReaderShell）10 页已接入中心化 `ReaderShellKit`；横向流程框架（FlowShell）1 页已接入中心化 `ReaderShellKit.renderFlowShell(...)`。
 - 设计 token 状态（Design Token Status）：`design-tokens.json` 已定义 70 个 token，`tokens.css` 已落地颜色、基础间距、frame、安全区、shell 尺寸、z-index、文本范围、字号、圆角、阴影和 focus 变量，并由 HTML 验证脚本和 Compose token 单测守卫。
-- 组件库状态（Component Library Status）：公共组件库已经覆盖当前 29 个页面需要的基础控件、书籍组件、阅读组件、设置组件、底表面板和状态组件；49 个组件卡和 fixture/manifest/report 同步由 `FrontendInputComponentLibraryInventoryTest` 守卫，核心语义名已由 `ReaderSharedComponentsStructureTest` 追溯到 Compose 实现锚点。
-- 素材库状态（Asset Library Status）：公共素材库已经登记 29 张 UI 设计图、6 张书籍封面和 79 个统一图标 token，并由 `FrontendInputAssetLibraryInventoryTest` 守住 fixture、图标注册表、manifest 和验证报告同步。
+- 组件库状态（Component Library Status）：公共组件库已经覆盖当前 30 个页面需要的基础控件、书籍组件、阅读组件、设置组件、底表面板和状态组件；49 个组件卡和 fixture/manifest/report 同步由 `FrontendInputComponentLibraryInventoryTest` 守卫，核心语义名已由 `ReaderSharedComponentsStructureTest` 追溯到 Compose 实现锚点。
+- 素材库状态（Asset Library Status）：公共素材库已经登记 30 张 UI 设计图、6 张书籍封面和统一图标 token，并由 `FrontendInputAssetLibraryInventoryTest` 守住 fixture、图标注册表、manifest 和验证报告同步。
 
 ## 输入件规模（Input Scale）
 
 | 中文名称（English Name） | 数量（Count） | 说明（Notes） |
 |---|---:|---|
-| 页面输入包（Page Input Packages） | 29 | 每页包含 `fixture.json`、`fixture.js`、`render.js`、`README.md`、`COMPONENT_SPEC.md`。 |
-| 页面预览页（Preview Pages） | 29 | 每页一个正式 `preview.html`。 |
-| 状态矩阵页（State Matrix Pages） | 29 | 每页一个正式 `state-matrix.html`。 |
-| 组件拆分页（Component Reference Pages） | 29 | 每页一个 `components.html`，作为拆分和审计参考。 |
+| 页面输入包（Page Input Packages） | 30 | 每页包含 `fixture.json`、`fixture.js`、`render.js`、`README.md`、`COMPONENT_SPEC.md`。 |
+| 页面预览页（Preview Pages） | 30 | 每页一个正式 `preview.html`。 |
+| 状态矩阵页（State Matrix Pages） | 30 | 每页一个正式 `state-matrix.html`。 |
+| 组件拆分页（Component Reference Pages） | 30 | 每页一个 `components.html`，作为拆分和审计参考。 |
 | 公共组件库页（Component Library Page） | 1 | `frontend-input/component-library/preview.html`。 |
 | 公共素材库页（Asset Library Page） | 1 | `frontend-input/asset-library/preview.html`。 |
-| manifest 验证目标（Manifest Targets） | 62 | 29 个预览、29 个状态矩阵、1 个组件库预览、1 个共享 Shell Kit 预览、1 个素材库预览、1 个前端 Demo 设计稿预览。 |
+| manifest 验证目标（Manifest Targets） | 64 | 30 个预览、30 个状态矩阵、1 个组件库预览、1 个共享 Shell Kit 预览、1 个素材库预览、1 个前端 Demo 设计稿预览。 |
 | 历史临时预览（Legacy Preview Candidates） | 2 | `preview 2.html` 不进入 manifest。 |
-| 历史独立复刻页（Legacy Standalone Reproduction Pages） | 3 | `bookshelf-cover-mode.html`、`frontend-demo/index.html`、`reader-control-layer.html` 仅作历史参考。 |
+| 历史独立复刻页（Legacy Standalone Reproduction Pages） | 3 | `bookshelf-cover-mode.html`、`docs/ui-design/02-主标签页/书架/frontend-demo/index.html`、`reader-control-layer.html` 仅作历史参考；根目录 `frontend-demo/index.html` 是当前本地 demo。 |
 
 ## 页面框架总览（Page Shell Overview）
 
 | 中文名称（English Name） | manifest 目标（Manifest Targets） | 覆盖页面（Covered Pages） | 固定槽位（Fixed Slots） | 当前状态（Current Status） |
 |---|---:|---|---|---|
 | 公共素材库框架（AssetLibraryShell） | 1 | 公共素材库（Asset Library） | `foundations`、`screenAssets`、`iconAssets`、`bookCoverAssets`、`missingSupplements`、`usageRules` | 已完成输入件（Input Completed） |
-| 公共组件库框架（ComponentLibraryShell） | 3 | 公共组件库、共享 Shell Kit、前端 Demo 设计稿（Component Library, Shared Shell Kit, Frontend Demo Draft） | `foundations`、`appShell`、`basicControls`、`cardsRows`、`sheetsPanels`、`states` | 已完成输入件（Input Completed） |
+| 公共组件库框架（ComponentLibraryShell） | 3 | 公共组件库、共享 Shell Kit、前端 Demo（Component Library, Shared Shell Kit, Frontend Demo） | `foundations`、`appShell`、`basicControls`、`cardsRows`、`sheetsPanels`、`states` | 已完成输入件（Input Completed） |
 | 主标签页框架（MainTabShell） | 8 | 书架、发现、RSS、设置（Bookshelf, Discover, RSS, Settings） | `appFrame`、`statusBar`、`appTopBar`、`contentRegion`、`mainNav`、`stateHost` | 已完成共享 kit（Shared Kit Implemented） |
 | 书架链路框架（LibraryShell） | 16 | 书架空状态、书籍搜索、书籍详情、书籍目录、排序与筛选、书籍操作底表、分组管理、本地书导入（Library empty, book search, book detail, directory, sort/filter, action sheet, group management, local import） | `stackFrame`、`backTopBar`、`contentRegion`、`bottomActionHost`、`sheetHost`、`dialogHost`、`stateHost` | 已完成共享 kit（Shared Kit Implemented） |
-| 阅读器框架（ReaderShell） | 18 | 阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读（Reader controls, TOC/bookmarks, appearance, TTS, settings, auto page, in-book search, replacement, immersive reading） | `readerFrame`、`readingSurface`、`readerOverlayHost`、`readerModuleNav`、`bottomSheetHost`、`readerStateHost` | 9 页已接入中心化 kit（9 Pages In Shared Kit） |
+| 阅读器框架（ReaderShell） | 20 | 阅读入口、阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读（Reading entry, reader controls, TOC/bookmarks, appearance, TTS, settings, auto page, in-book search, replacement, immersive reading） | `readerFrame`、`readingSurface`、`readerOverlayHost`、`readerModuleNav`、`bottomSheetHost`、`readerStateHost` | 10 页已接入中心化 kit（10 Pages In Shared Kit） |
 | 横向流程框架（FlowShell） | 2 | 换源（Source switching） | `flowFrame`、`stepRegion`、`comparisonRegion`、`resultRegion`、`stateHost` | 已接入中心化 FlowShell，且 StateHost 非空守卫（Central FlowShell With Non-empty StateHost Guard） |
 | 设置页框架（SettingsShell） | 14 | App 通用设置、书架与搜索设置、隐私与权限、缓存管理、关于与反馈、同步与备份、书源管理（General settings, bookshelf/search settings, privacy/permissions, cache, about/feedback, sync/backup, source management） | `settingsFrame`、`backTopBar`、`settingsContent`、`settingSection`、`toastHost`、`dialogHost`、`settingsStateHost` | 已完成共享 kit 第一版（Shared Kit First Version Implemented） |
 
@@ -45,7 +46,7 @@
 | 主标签页共享 kit（MainTab Shared Kit） | `docs/ui-design/02-主标签页/shared-main-tab-kit/kit.js`、`kit.css` | 输出手机画布、状态栏、顶部栏、内容 slot、底部四栏导航、状态矩阵外壳。 | 已使用（In Use） |
 | 书架链路共享 kit（Library Shared Kit） | `docs/ui-design/03-书架链路/shared-library-kit/kit.js`、`kit.css` | 输出书架栈画布、返回顶栏、内容区、底部操作宿主、底表宿主、弹窗宿主和状态宿主。 | 已覆盖 8 个书架链路页面（In Use Across 8 Pages） |
 | 设置页共享 kit（Settings Shared Kit） | `docs/ui-design/05-设置链路/shared-settings-kit/kit.js`、`kit.css` | 输出设置页返回顶栏、设置内容、分组、底表、弹窗、toast 和状态矩阵。 | 已使用（In Use） |
-| 中心化共享 Shell Kit（Shared Shell Kit） | `docs/ui-design/frontend-input/shared-shell-kit/kit.js`、`kit.css` | 输出 MainTabShell、LibraryShell、ReaderShell、SettingsShell、FlowShell 的公共槽位结构。 | ReaderShell 9 页和 FlowShell 1 页已使用（In Use For 9 Reader Pages and 1 Flow Page） |
+| 中心化共享 Shell Kit（Shared Shell Kit） | `docs/ui-design/frontend-input/shared-shell-kit/kit.js`、`kit.css` | 输出 MainTabShell、LibraryShell、ReaderShell、SettingsShell、FlowShell 的公共槽位结构。 | ReaderShell 10 页和 FlowShell 1 页已使用（In Use For 10 Reader Pages and 1 Flow Page） |
 | 公共组件库（Component Library） | `docs/ui-design/frontend-input/component-library/render.js`、`library.css`、`fixture.json` | 展示和约束跨页面组件、状态、底表、卡片、行和交互规则。 | 已使用并由库存守卫校验（In Use and Inventory Guarded） |
 | 公共素材库（Asset Library） | `docs/ui-design/frontend-input/asset-library/icons.js`、`render.js`、`fixture.json`、`asset-library.css` | 登记 UI 设计图、封面资源、图标 token 和补齐图标。 | 已使用（In Use） |
 | 全局设计 token（Global Design Tokens） | `docs/ui-design/frontend-input/design-tokens.json`、`tokens.css` | 机器可读 token 契约，以及颜色、字体、间距、字号、圆角、阴影、focus 和跨页面基础变量。 | 已使用并由脚本/单测守卫（In Use and Guarded） |
@@ -59,7 +60,7 @@
 | 公共素材库（Asset Library） | UI 设计图、封面素材、图标 token（UI design screens, cover assets, icon tokens） | 公共素材库框架（AssetLibraryShell） | 已完成可视化预览和 manifest 目标。 |
 | 主标签页（Main Tabs） | 书架、发现、RSS、设置（Bookshelf, Discover, RSS, Settings） | 主标签页框架（MainTabShell） | 已由 `MainTabPageKit` 输出统一骨架。 |
 | 书架链路（Library Flow） | 书架空状态、书籍搜索、书籍详情、书籍目录、排序与筛选、书籍操作底表、分组管理、本地书导入（Library empty, book search, book detail, directory, sort/filter, action sheet, group management, local import） | 书架链路框架（LibraryShell） | 8 个页面均已使用 `LibraryPageKit`。 |
-| 阅读链路（Reader Flow） | 阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读（Reader controls, TOC/bookmarks, appearance, TTS, settings, auto page, in-book search, replacement, immersive reading） | 阅读器框架（ReaderShell） | 9 页已通过 `ReaderShellKit` 输出统一 `ReaderShell` 槽位。 |
+| 阅读链路（Reader Flow） | 阅读入口、阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读（Reading entry, reader controls, TOC/bookmarks, appearance, TTS, settings, auto page, in-book search, replacement, immersive reading） | 阅读器框架（ReaderShell） | 10 页已通过 `ReaderShellKit` 输出统一 `ReaderShell` 槽位。 |
 | 横向流程（Landscape Flow） | 换源（Source switching） | 横向流程框架（FlowShell） | 已通过 `ReaderShellKit.renderFlowShell(...)` 输出统一 `FlowShell` 槽位。 |
 | 设置链路（Settings Flow） | App 通用设置、书架与搜索设置、隐私与权限、缓存管理、关于与反馈、同步与备份、书源管理（General settings, bookshelf/search settings, privacy/permissions, cache, about/feedback, sync/backup, source management） | 设置页框架（SettingsShell） | 已由 `SettingsPageKit` 输出统一骨架。 |
 
@@ -91,11 +92,11 @@
 | 状态栏（StatusBar） | 主标签页框架（MainTabShell） | 已在 `MainTabPageKit` 中实现。 |
 | 顶部栏（AppTopBar） | 主标签页框架（MainTabShell） | 已在 `MainTabPageKit` 中实现。 |
 | 返回顶栏（BackTopBar） | 书架链路框架、设置页框架（LibraryShell, SettingsShell） | 设置页和书架链路已实现。 |
-| 内容区（ContentRegion / SettingsContent） | 各页面框架（All Shells） | MainTab、Library、Settings、ReaderShell 9 页和 FlowShell 已统一。 |
+| 内容区（ContentRegion / SettingsContent） | 各页面框架（All Shells） | MainTab、Library、Settings、ReaderShell 10 页和 FlowShell 已统一。 |
 | 公共主导航（MainNav / MainNavItem） | 主标签页框架（MainTabShell） | 已实现并固定四项。 |
 | 底部操作宿主（BottomActionHost） | 书架链路框架（LibraryShell） | 已由 `LibraryPageKit` 输出。 |
-| 弹层宿主（SheetHost / DialogHost / BottomSheetHost） | 书架链路、阅读器、设置页（LibraryShell, ReaderShell, SettingsShell） | 书架、设置和 ReaderShell 9 页已实现。 |
-| 状态容器（StateHost / ReaderStateHost / SettingsStateHost） | 各页面框架（All Shells） | MainTab、Library、Settings、ReaderShell 9 页和 FlowShell 已统一。 |
+| 弹层宿主（SheetHost / DialogHost / BottomSheetHost） | 书架链路、阅读器、设置页（LibraryShell, ReaderShell, SettingsShell） | 书架、设置和 ReaderShell 10 页已实现。 |
+| 状态容器（StateHost / ReaderStateHost / SettingsStateHost） | 各页面框架（All Shells） | MainTab、Library、Settings、ReaderShell 10 页和 FlowShell 已统一。 |
 
 ## 业务组件（Product Components）
 
@@ -132,14 +133,14 @@
 
 | 中文名称（English Name） | 复用范围（Reuse Scope） | 当前状态（Current Status） |
 |---|---|---|
-| 阅读正文区域（ReadingSurface） | 阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读。 | 9 页已进入 ReaderShell。 |
+| 阅读正文区域（ReadingSurface） | 阅读入口、阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读。 | 10 页已进入 ReaderShell。 |
 | 阅读段落（ReadingParagraph） | 沉浸阅读正文。 | 已定义（Defined） |
 | 阅读顶部栏（ReaderTopBar） | 阅读控制层和模块面板。 | 已进入 ReaderShell。 |
 | 阅读模块导航（ReaderModuleNav） | 目录、朗读、界面、设置四模块。 | 已进入 ReaderShell，按钮交互规则已固定。 |
 | 快捷操作（QuickAction） | 搜索、自动翻页、替换等阅读快捷入口。 | 已定义（Defined） |
-| 阅读快捷控制窗（ReaderQuickWindow） | 目录、朗读、界面、设置、搜索、自动翻页、替换、换源的短窗口。 | 已规划，待 demo 按新模型重构。 |
-| 底栏拖拽手柄（BottomSheetDragHandle） | 底部控制层顶部小横条，点击或上拉展开完整控制页。 | 已规划，待 demo 按新模型重构。 |
-| 阅读完整控制页（ReaderFullControlSheet） | 由底栏上拉展开的目录、朗读、外观、设置、搜索、自动翻页、替换完整页。 | 已规划，待 demo 按新模型重构。 |
+| 阅读快捷控制窗（ReaderQuickWindow） | 目录、朗读、界面、设置、搜索、自动翻页、替换、换源的短窗口。 | 已按根目录 `frontend-demo/` 作为本地样式基准，控件以实际页面为准。 |
+| 底栏拖拽手柄（BottomSheetDragHandle） | 底部控制层顶部小横条，点击或上拉展开完整控制页。 | 已作为快捷窗和完整页的统一入口约束。 |
+| 阅读完整控制页（ReaderFullControlSheet） | 由底栏上拉展开的目录、朗读、外观、设置、搜索、自动翻页、替换完整页。 | 已按 demo 结构建立边界，后续实现不得在快捷窗重复完整页入口。 |
 | 阅读面板（ReaderPanel） | 阅读快捷控制窗和完整控制页宿主。 | 已进入 ReaderShell。 |
 | 目录面板（TocPanel） | 目录与书签。 | 已进入 ReaderShell。 |
 | 书签行（BookmarkRow） | 阅读目录与书签。 | 已定义（Defined） |

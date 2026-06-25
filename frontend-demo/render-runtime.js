@@ -1739,7 +1739,6 @@
             <button type="button" data-reader-setting-toggle="hapticFeedback"><i>${icon("gesture", "fd-small-icon")}</i><strong>触摸反馈</strong><span class="fd-reader-switch ${settings.hapticFeedback ? "is-on" : ""}" aria-hidden="true"></span></button>
             <button type="button" data-reader-setting-toggle="cacheNext"><i>${icon("download", "fd-small-icon")}</i><strong>自动缓存后续章节</strong><span class="fd-reader-switch ${settings.cacheNext ? "is-on" : ""}" aria-hidden="true"></span></button>
           </div>
-          <button class="fd-reader-inline-entry" type="button" data-route="reader-settings">${icon("settings", "fd-small-icon")}更多阅读设置<span>${chevron()}</span></button>
         </section>`;
     }
     return "";

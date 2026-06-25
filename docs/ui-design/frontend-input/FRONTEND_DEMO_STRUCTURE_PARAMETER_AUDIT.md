@@ -1,6 +1,6 @@
 # 前端 Demo 参数与项目结构审计（Frontend Demo Parameter and Structure Audit）
 
-本文审计当前本地 `frontend-demo-draft`、`shared-shell-kit`、`asset-library`、`component-library`、`manifest` 和规划文档。目标是判断全局 UI / 组件 / 框架参数是否存在重复、冗余、错误命名，以及当前项目结构是否适合作为后续前端输入件。
+本文审计当前根目录 `frontend-demo/`、`shared-shell-kit`、`asset-library`、`component-library`、`manifest` 和规划文档。目标是判断全局 UI / 组件 / 框架参数是否存在重复、冗余、错误命名，以及当前项目结构是否适合作为后续前端输入件。
 
 ## 审计结论（Audit Conclusion）
 
@@ -19,11 +19,11 @@
 
 | 项目（Item） | 当前数量 / 现象（Current Evidence） | 说明（Notes） |
 |---|---:|---|
-| `frontend-demo-draft/render.js` | 8 行 | 仅保留 runtime bootstrap。 |
-| `frontend-demo-draft/render-runtime.js` | 5087 行 | 主渲染 runtime，后续内部组件化对象。 |
-| `frontend-demo-draft/route-contract.js` | 176 行 | route 元数据和发现 / RSS / 设置深层闭合契约。 |
-| `frontend-demo-draft/styles.css` | 9 行 | 仅保留 token 和分层 CSS import。 |
-| `frontend-demo-draft/styles/*.css` | 7 个文件 | 按原级联顺序拆分为 foundation / shell / main-library / reader / settings-source / flow-adaptive / responsive。 |
+| `frontend-demo/render.js` | 8 行 | 仅保留 runtime bootstrap。 |
+| `frontend-demo/render-runtime.js` | 5231 行 | 主渲染 runtime，后续内部组件化对象。 |
+| `frontend-demo/route-contract.js` | 176 行 | route 元数据和发现 / RSS / 设置深层闭合契约。 |
+| `frontend-demo/styles.css` | 9 行 | 仅保留 token 和分层 CSS import。 |
+| `frontend-demo/styles/*.css` | 7 个文件 | 按原级联顺序拆分为 foundation / shell / main-library / reader / settings-source / flow-adaptive / responsive。 |
 | CSS `px` 值 | 2065 次，135 个唯一值 | 不是全部错误，但说明大量尺寸仍是局部散值。 |
 | CSS media query | 2 个 | 仅覆盖局部 demo / source-switch，不是完整自适应体系。 |
 | CSS 自定义属性定义 | 130 个，未发现重复定义冲突 | 覆盖 `tokens.css`、demo CSS、shell kit CSS、asset CSS；命名冲突不是主问题，主问题是 token 覆盖范围不足。 |
@@ -91,37 +91,24 @@
 ### 建议目标结构（Suggested Target Structure）
 
 ```text
-docs/ui-design/frontend-input/
-├─ tokens.css
-├─ design-tokens.json
-├─ manifest.json
-├─ contracts.d.ts
+frontend-demo/
 ├─ shared-shell-kit/
 ├─ asset-library/
-├─ component-library/
-├─ frontend-demo-draft/
-│  ├─ index.html
-│  ├─ fixture.js
-│  ├─ render.js
-│  ├─ render-runtime.js
-│  ├─ route-contract.js
-│  ├─ styles.css
-│  ├─ pages/
-│  │  ├─ main-tabs.js
-│  │  ├─ library.js
-│  │  ├─ reader.js
-│  │  ├─ settings.js
-│  │  └─ source-management.js
-│  ├─ styles/
-│  │  ├─ 00-foundation.css
-│  │  ├─ 01-shell-layout.css
-│  │  ├─ 02-main-library.css
-│  │  ├─ 03-reader.css
-│  │  ├─ 04-settings-source.css
-│  │  ├─ 05-flow-adaptive.css
-│  │  └─ 06-responsive.css
-│  └─ README.md
-└─ audits/
+├─ index.html
+├─ fixture.js
+├─ render.js
+├─ render-runtime.js
+├─ route-contract.js
+├─ styles.css
+├─ styles/
+│  ├─ 00-foundation.css
+│  ├─ 01-shell-layout.css
+│  ├─ 02-main-library.css
+│  ├─ 03-reader.css
+│  ├─ 04-settings-source.css
+│  ├─ 05-flow-adaptive.css
+│  └─ 06-responsive.css
+└─ README.md
 ```
 
 说明：
@@ -129,7 +116,7 @@ docs/ui-design/frontend-input/
 - `shared-shell-kit` 只放 shell renderer 和 shell CSS。
 - `asset-library` 只放图标、位图、素材说明。
 - `component-library` 只放可复用组件规格和预览。
-- `frontend-demo-draft` 只做可互动 demo；页面数据进入 `fixture.js`，页面模板按 workflow 拆分。
+- `frontend-demo/` 只做可互动 demo 和顶层设计图同步；页面数据进入 `fixture.js`，route 契约进入 `route-contract.js`，视觉以当前 demo route 截图为准。
 - ` 2` 副本已删除；后续不得重新把同名 Finder 副本提交为正式输入件。
 
 ## 优先处理顺序（Recommended Fix Order）
@@ -145,7 +132,7 @@ docs/ui-design/frontend-input/
 
 - 不能说所有参数已经全局统一。
 - 不能说 `render-runtime.js` 内部已经完成长期组件化。
-- 不能说当前 `frontend-demo-draft` 可以直接作为长期工程结构。
+- 不能说当前 `frontend-demo/` 可以直接作为长期工程结构。
 - 不能说 `manifest`、`contracts`、planning docs 与当前 demo 完全一致。
 
 当前可以宣称的是：

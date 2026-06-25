@@ -1,9 +1,9 @@
 @import "./tokens.css";
 
-@import "./styles/00-foundation.css?v=demo-canonical-sync-v1-20260625";
-@import "./styles/01-shell-layout.css?v=demo-canonical-sync-v1-20260625";
-@import "./styles/02-main-library.css?v=demo-canonical-sync-v1-20260625";
-@import "./styles/03-reader.css?v=demo-canonical-sync-v1-20260625";
-@import "./styles/04-settings-source.css?v=demo-canonical-sync-v1-20260625";
-@import "./styles/05-flow-adaptive.css?v=demo-canonical-sync-v1-20260625";
-@import "./styles/06-responsive.css?v=demo-canonical-sync-v1-20260625";
+@import "./styles/00-foundation.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/01-shell-layout.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/02-main-library.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/03-reader.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/04-settings-source.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/05-flow-adaptive.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/06-responsive.css?v=reader-settings-no-more-v1-20260625";

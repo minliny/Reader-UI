@@ -1,12 +1,13 @@
 # 页面关系总图（Page Relationship Map）
 
-本文从框架、组件、状态和事件四个层面重新梳理 29 个正式前端输入页面之间的关系。它只描述页面前端架构和交互逻辑，不处理单张 UI 图的视觉细节。
+本文从框架、组件、状态和事件四个层面重新梳理 30 个正式前端输入页面之间的关系。它只描述页面前端架构和交互逻辑，不处理单张 UI 图的视觉细节；单张图的视觉来源以根目录 `frontend-demo/` 同步生成的顶层 `UI设计图.png` 为准。
 
 ## 信息来源（Source of Truth）
 
 | 来源（Source） | 作用（Purpose） |
 |---|---|
-| `manifest.json` | 锁定 29 个正式页面、62 个正式验证目标、页面 shell、pageRole、slots 和状态矩阵目标。 |
+| `manifest.json` | 锁定 30 个正式页面、64 个正式验证目标、页面 shell、pageRole、slots 和状态矩阵目标。 |
+| `LOCAL_DEMO_DESIGN_ASSET_MAP.md` | 锁定本地 demo route 到顶层 `UI设计图.png` 的生成映射，避免继续使用 `frontend-demo-draft` 作为视觉源头。 |
 | `contracts.d.ts` | 锁定每个页面的 Fixture、State union 和 Event union。 |
 | `EVENT_CALLBACK_MAPPING.md` | 锁定 Event 到 Compose 回调名的映射，禁止泛化成无语义 `onClick`。 |
 | `PAGE_FRAMEWORK_ARCHITECTURE.md` | 锁定 MainTabShell、LibraryShell、ReaderShell、SettingsShell、FlowShell 的结构边界。 |
@@ -26,7 +27,7 @@ flowchart TD
 
   Bookshelf --> BookSearch["书籍搜索（Book Search）"]
   Bookshelf --> BookDetail["书籍详情（Book Detail）"]
-  Bookshelf --> Immersive["沉浸阅读（Immersive Reading）"]
+  Bookshelf --> ReadingEntry["阅读入口（Reading Entry）"]
   Bookshelf --> SortFilter["排序与筛选（Sort and Filter）"]
   Bookshelf --> BookshelfSettings["书架与搜索设置（Bookshelf and Search Settings）"]
   Bookshelf --> GroupManagement["分组管理（Group Management）"]
@@ -36,11 +37,12 @@ flowchart TD
   Discover --> BookDetail
   Discover --> SourceManagement["书源管理（Source Management）"]
   RSS --> BookDetail
-  RSS --> Immersive
+  RSS --> ReadingEntry
 
   BookSearch --> BookDetail
   BookDetail --> BookDirectory["书籍目录（Book Directory）"]
-  BookDetail --> Immersive
+  BookDetail --> ReadingEntry
+  ReadingEntry --> Immersive["沉浸阅读（Immersive Reading）"]
   BookDetail -. "操作列表 / 确认弹窗" .-> BookActionControls["书籍操作组件（Book Action Controls）"]
   BookDetail --> SourceSheet["来源底表（Source Sheet）"]
 
@@ -70,7 +72,7 @@ flowchart TD
 |---|---|---|---|
 | 主入口层（Main Entry Layer） | 书架、发现、RSS、设置 | MainTabShell | 四个根 tab，承载应用主导航，负责进入业务链路。 |
 | 书架链路层（Library Flow Layer） | 书架空状态、书籍搜索、书籍详情、书籍目录、排序与筛选、分组管理、本地书导入 | LibraryShell | 围绕书籍、书架、目录、导入和分组展开的二级栈；单书操作作为书架管理/书籍详情内的组件或弹层，不形成独立页面。 |
-| 阅读链路层（Reader Flow Layer） | 沉浸阅读、阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换 | ReaderShell | 围绕当前书籍、章节、进度和阅读上下文展开的全屏阅读域。 |
+| 阅读链路层（Reader Flow Layer） | 阅读入口、沉浸阅读、阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换 | ReaderShell | 围绕当前书籍、章节、进度和阅读上下文展开的全屏阅读域。 |
 | 流程层（Flow Layer） | 换源 | FlowShell | 从阅读中进入的可用书源列表，展示来源名称、延迟 / 状态和最新章节；点击书源行直接切换并保留当前阅读上下文，不进入主导航。 |
 | 设置链路层（Settings Flow Layer） | App 通用设置、书架与搜索设置、隐私与权限、缓存管理、关于与反馈、同步与备份、书源管理 | SettingsShell | 从设置首页或业务入口进入的设置栈，承载选项、权限、缓存、备份和书源管理。 |
 
@@ -110,12 +112,13 @@ flowchart TD
 
 | 页面（Page） | 进入来源（Entry From） | 主要事件（Primary Events） | 后续流向（Next Relationship） |
 |---|---|---|---|
-| 沉浸阅读（Immersive Reading） | 书架继续阅读、封面点击、详情开始阅读、章节跳转、缓存继续 | `tapPrevious`、`tapCenter`、`tapNext`、`retry`、`continueCached`、`backToSource` | 中心点击打开阅读控制层；左右点击翻页；打开/失败/离线状态归入 ReaderStateHost，不形成独立页面。 |
+| 阅读入口（Reading Entry） | 书架继续阅读、封面点击、详情开始阅读、章节跳转、缓存继续 | `openReader`、`retry`、`continueCached`、`backToSource` | 承接打开阅读的加载、失败和恢复状态；完成后进入沉浸阅读，保留 ReaderContext。 |
+| 沉浸阅读（Immersive Reading） | 阅读入口完成、已缓存章节继续阅读 | `tapPrevious`、`tapCenter`、`tapNext`、`retry`、`continueCached`、`backToSource` | 中心点击打开阅读控制层；左右点击翻页；打开/失败/离线状态归入 ReaderStateHost，不形成独立页面。 |
 | 阅读控制层（Reader Control Layer） | 沉浸阅读中心点击、阅读模块返回 | `sourceChange`、`quickAction`、`chapterChange`、`progressChange`、`moduleChange`、`bottomSheetDrag`、`brightnessChange`、`dismissControlLayer` | 目录/朗读/界面/设置先打开快捷控制窗；底栏顶部小横条点击或上拉展开为完整控制页；换源先打开阅读内快捷窗，完整来源对照进入 FlowShell；正文中部点击隐藏控制层回沉浸阅读。 |
-| 目录与书签（TOC and Bookmarks） | 阅读控制层目录模块 | `tabChange`、`openFullDirectory`、`openChapter`、`openBookmark`、`moduleChange`、`brightnessChange` | 当前 demo 的目录行只显示章节名；打开章节直接回沉浸阅读并定位章节；书签 tab 可显示书签摘要；模块切换仍留在 ReaderShell。 |
+| 目录与书签（TOC and Bookmarks） | 阅读控制层目录模块 | `tabChange`、`openChapter`、`openBookmark`、`moduleChange`、`brightnessChange` | 当前 demo 的目录行以章节名为主，右侧显示下载/书签状态图标；快捷窗不展示完整目录按钮；打开章节直接回沉浸阅读并定位章节；模块切换仍留在 ReaderShell。 |
 | 阅读外观（Reading Appearance） | 阅读控制层界面模块 | `fontSizeDecrease`、`fontSizeIncrease`、`lineHeightChange`、`paragraphGapChange`、`letterSpacingChange`、`themeChange`、`fontChange`、`moduleChange` | 当前 demo 使用纯色主题色块，色块内不放图标；字号、行距、段距、字距以两列参数组即时改变 ReadingSurface；不离开 ReaderShell。 |
-| 朗读（Read Aloud） | 阅读控制层朗读模块 | `startReadAloud`、`pauseReadAloud`、`previousSentence`、`nextSentence`、`speedChange`、`voiceChange`、`timerChange`、`rangeChange`、`openReadAloudSettings` | 当前 demo 不展示示例正文；中间开始/暂停按钮只显示图标；语速、音色、范围、定时可在模块内循环切换；设置入口进入阅读设置子页。 |
-| 阅读设置（Reading Settings） | 阅读控制层设置模块、朗读设置入口 | `toggleSetting`、`cycleTapMode`、`openMoreReaderSettings` | 当前 demo 使用自动翻页、音量键翻页、横屏锁定、屏幕常亮开关，以及点击翻页方式循环值；只影响阅读行为和阅读控件状态，不进入 SettingsShell。 |
+| 朗读（Read Aloud） | 阅读控制层朗读模块 | `startReadAloud`、`pauseReadAloud`、`previousSentence`、`nextSentence`、`speedChange`、`voiceChange`、`timerChange`、`rangeChange` | 当前 demo 不展示示例正文；中间开始/暂停按钮只显示图标；语速、音色、范围、定时可在模块内循环切换。 |
+| 阅读设置（Reading Settings） | 阅读控制层设置模块 | `toggleSetting`、`cycleTapMode`、`cyclePageAnimation` | 当前 demo 使用自动翻页、点击翻页方式、音量键翻页、翻页动画、横屏锁定、屏幕常亮、页脚进度、触摸反馈、自动缓存后续章节；只影响阅读行为和阅读控件状态，不进入 SettingsShell，也不展示更多阅读设置入口。 |
 | 自动翻页（Auto Page） | 阅读控制层快捷操作 | `speedChange`、`modeChange`、`toggleOption`、`startAutoPage`、`pauseAutoPage`、`continueAutoPage`、`stopAutoPage` | 启停自动翻页并返回沉浸阅读或保留控制层。 |
 | 内容搜索（Content Search） | 阅读控制层快捷操作 | `queryChange`、`clear`、`filterChange`、`previousResult`、`nextResult`、`openResult`、`retry` | 打开结果定位到当前书籍正文，不离开 ReaderShell。 |
 | 内容替换（Content Replacement） | 阅读控制层快捷操作 | `toggleReplacement`、`toggleRule`、`openRule`、`addRule`、`patternChange`、`replacementChange`、`testReplacement`、`saveRule`、`temporaryClose` | 保存替换规则并影响当前阅读正文渲染，不进入设置链路。 |
@@ -135,10 +138,10 @@ flowchart TD
 
 | 交互内容（Interaction） | 快捷控制窗必须包含（Quick Window Must Include） | 完整控制页承担（Full Page Owns） | 展开方式（Expansion） |
 |---|---|---|---|
-| 目录与书签（TOC and Bookmarks） | 当前章节附近 6-8 行；目录行只显示章节名；书签 tab 显示标题和位置。 | 完整目录、书签列表、目录搜索、章节定位和更多菜单。 | 底栏小横条上拉。 |
+| 目录与书签（TOC and Bookmarks） | 当前章节附近 6-8 行；目录行以章节名为主，右侧显示下载和书签状态图标；书签 tab 显示标题和位置。 | 完整目录、书签列表、目录搜索、章节定位和更多菜单。 | 底栏小横条上拉。 |
 | 朗读（Read Aloud） | 开始/暂停图标按钮、上一句/下一句、语速、声音、范围、定时；不展示示例正文。 | 声音管理、朗读引擎、后台朗读、定时策略和高级设置。 | 底栏小横条上拉。 |
 | 阅读外观（Reading Appearance） | 纯色主题色块、字号、行距、段距、字距、字体，并即时预览正文；主题色块内不放图标。 | 自定义主题、字体管理、页边距、翻页动画和完整排版设置。 | 底栏小横条上拉。 |
-| 阅读设置（Reading Settings） | 自动翻页、点击翻页方式、屏幕常亮、音量键翻页、横屏锁定。 | 分组设置、预设应用、恢复默认和更多阅读行为配置。 | 底栏小横条上拉。 |
+| 阅读设置（Reading Settings） | 自动翻页、点击翻页方式、音量键翻页、翻页动画、横屏锁定、屏幕常亮、页脚进度、触摸反馈、自动缓存后续章节。 | 设置项分组、预设应用、恢复默认和快捷窗同源的阅读行为控件扩展。 | 底栏小横条上拉。 |
 | 内容搜索（Content Search） | 当前书内输入框、上一条/下一条、少量结果预览。 | 全量结果列表、筛选范围、键盘避让和结果定位。 | 底栏小横条上拉。 |
 | 自动翻页（Auto Page） | 速度、模式、开始/暂停。 | 运行状态、退出路径、模式详情、停止策略和高级选项。 | 底栏小横条上拉。 |
 | 内容替换（Content Replacement） | 总开关、最近规则、当前命中数、新增入口。 | 规则编辑、测试结果、生效范围和持久化保存。 | 底栏小横条上拉。 |

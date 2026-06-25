@@ -6,7 +6,7 @@
 
 命名格式（Naming Format）：后续新增或重写的文档条目统一使用 `中文名称（English Name）`。本地 HTML 文件角色和文档准入规则以 `HTML_FILE_REQUIREMENTS.md` 为准。UI 图、封面和图标 token 以 `asset-library/ASSET_LIBRARY.md` 和 `asset-library/icons.js` 为统一素材库来源。
 
-页面框架本地来源（Local page shell source）：`docs/ui-design/frontend-input/shared-shell-kit/kit.js`。前端 demo 入口（Frontend demo entry）：`docs/ui-design/frontend-input/frontend-demo-draft/index.html`。
+页面框架本地来源（Local page shell source）：`docs/ui-design/frontend-input/shared-shell-kit/kit.js`。前端 demo 入口（Frontend demo entry）：`frontend-demo/index.html`；顶层 `UI设计图.png` 由该本地 demo 生成，`frontend-demo-draft` 只作历史参考。
 
 本文档只基于本地资料（local sources）整理，不依赖当前 Figma 文件状态：
 
@@ -34,7 +34,7 @@
 | --- | --- | --- | --- | --- |
 | 主标签页框架 | MainTabShell | 书架、发现、RSS、设置（Bookshelf, Discover, RSS, Settings） | 手机画布、状态栏、顶部栏、内容区、底部四栏导航、状态容器（App frame, status bar, top bar, content region, bottom navigation, state host） | 当前 Tab、页面标题、搜索入口、列表/卡片内容、状态内容（active tab, title, search entry, page content, state content） |
 | 书架链路框架 | LibraryShell | 书架空状态、书籍搜索、书籍详情、书籍目录、排序筛选、书籍操作底表、分组管理、本地书导入（library empty, book search, book detail, directory, sort/filter, action sheet, group management, local import） | 返回顶栏、内容区、底部操作区、底表宿主、弹窗宿主、状态容器（back top bar, content region, bottom action host, sheet host, dialog host, state host） | 书籍上下文、搜索控件、章节列表、分组列表、导入流程、底表内容（book context, search controls, chapter list, group list, import flow, sheet content） |
-| 阅读器框架 | ReaderShell | 阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读（reader controls, TOC/bookmarks, appearance, TTS, settings, auto page, in-book search, replacement, immersive reading） | 阅读正文底层、阅读覆盖层、模块导航、底表宿主、阅读状态容器（reading surface, overlay host, module navigation, bottom sheet host, reader state host） | 当前模块面板、正文内容、搜索/替换/自动翻页业务内容（module panel, reading text, search/replacement/auto-page content） |
+| 阅读器框架 | ReaderShell | 阅读入口、阅读控制层、目录与书签、阅读外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读（reading entry, reader controls, TOC/bookmarks, appearance, TTS, settings, auto page, in-book search, replacement, immersive reading） | 阅读正文底层、阅读覆盖层、模块导航、底表宿主、阅读状态容器（reading surface, overlay host, module navigation, bottom sheet host, reader state host） | 当前模块面板、正文内容、搜索/替换/自动翻页业务内容（module panel, reading text, search/replacement/auto-page content） |
 | 设置页框架 | SettingsShell | App 通用设置、书架与搜索设置、隐私与权限、缓存管理、关于与反馈、同步与备份、书源管理（general settings, bookshelf/search settings, privacy/permissions, cache, about/feedback, sync/backup, source management） | 返回顶栏、设置内容区、设置分组、提示宿主、弹窗宿主、状态容器（back top bar, settings content, setting sections, toast host, dialog host, state host） | 设置组、权限状态、缓存数据、备份记录、书源列表（setting groups, permission state, cache data, backup records, source list） |
 | 横向流程框架 | FlowShell | 换源（source switching） | 横向画布、步骤区、对照区、结果区、状态区（landscape frame, step region, comparison region, result region, state host） | 来源候选、检测状态、切换结果（source candidates, detection state, switch result） |
 
@@ -256,7 +256,7 @@
 | P1 | 稳定主标签页框架 | Stabilize MainTabShell | 四个主 Tab 使用同一底部导航和内容 slot。 |
 | P1 | 稳定设置页框架 | Stabilize SettingsShell | 七个设置页使用同一 SettingsShell。 |
 | P2 | 抽书架链路框架 | Extract LibraryShell | 书籍详情、目录、操作底表先共享 book context、SheetHost、DialogHost。 |
-| P2 | 抽阅读器框架 | Extract ReaderShell | `shared-shell-kit` 已建立 ReaderShell，旧阅读控制层、目录与书签、外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读 9 页已迁移。 |
+| P2 | 抽阅读器框架 | Extract ReaderShell | `shared-shell-kit` 已建立 ReaderShell，阅读入口、阅读控制层、目录与书签、外观、朗读、阅读设置、自动翻页、内容搜索、内容替换、沉浸阅读 10 页已迁移。 |
 | P3 | 固化图标库 | Stabilize icon library | 所有页面引用语义图标，不保留不可复用 inline icon。 |
 | P3 | 固化横向换源 | Stabilize FlowShell | `shared-shell-kit` 已建立 FlowShell，换源页面已迁入中心化 FlowShell；不得塞进普通竖屏 ReaderShell。 |
 

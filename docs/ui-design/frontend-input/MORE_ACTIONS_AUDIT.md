@@ -60,6 +60,6 @@
 ## Demo 落地（Demo Implementation）
 
 - `shared-shell-kit/kit.js`：`BackTopBar` 默认不生成尾部三点。
-- `frontend-demo-draft/render.js`：书架主 TAB 顶栏更多打开书架级菜单；发现/RSS/设置只反馈保留入口。
-- `frontend-demo-draft/render.js`：本地书导入、书籍目录、排序筛选、书籍操作底表、分组管理、设置二级页不显示顶栏更多。
-- `frontend-demo-draft/render.js`：阅读控制层顶部更多打开锚定菜单。
+- `frontend-demo/render-runtime.js`：书架主 TAB 顶栏更多打开书架级菜单；发现/RSS/设置只反馈保留入口。
+- `frontend-demo/render-runtime.js`：本地书导入、书籍目录、排序筛选、书籍操作底表、分组管理、设置二级页不显示顶栏更多。
+- `frontend-demo/render-runtime.js`：阅读控制层顶部更多打开锚定菜单。

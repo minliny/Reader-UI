@@ -33,4 +33,4 @@
 - `docs/ui-design/02-主标签页/发现/文字稿.md`
 - `docs/ui-design/02-主标签页/RSS/文字稿.md`
 - `docs/ui-design/02-主标签页/设置/文字稿.md`
-- `docs/ui-design/frontend-input/frontend-demo-draft/render.js`
+- `frontend-demo/render-runtime.js`

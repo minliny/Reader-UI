@@ -1,6 +1,6 @@
 # 首批页面规划卡（First Page Planning Cards）
 
-本文按 `FRONTEND_PLANNING_REQUIREMENTS_TEMPLATE.md` 的单页规划卡模板，先补齐 4 张代表页：书架、书籍搜索、阅读控制层、换源。它们分别覆盖 `MainTabShell`、`LibraryShell`、`ReaderShell` 和 `FlowShell`，用于校准后续 29 页的规划口径。
+本文按 `FRONTEND_PLANNING_REQUIREMENTS_TEMPLATE.md` 的单页规划卡模板，先补齐 4 张代表页：书架、书籍搜索、阅读控制层、换源。它们分别覆盖 `MainTabShell`、`LibraryShell`、`ReaderShell` 和 `FlowShell`，用于校准后续 30 页的规划口径。
 
 ## 书架（Bookshelf）
 
@@ -139,9 +139,9 @@
 
 1. 主标签页（Main Tabs）：发现、RSS、设置首页。
 2. 书架链路（Library Flow）：书籍详情、目录、排序筛选、操作底表、分组、本地导入。
-3. 阅读链路（Reader Flow）：沉浸阅读、目录与书签、外观、朗读、设置、自动翻页、内容搜索、内容替换。
+3. 阅读链路（Reader Flow）：阅读入口、沉浸阅读、目录与书签、外观、朗读、设置、自动翻页、内容搜索、内容替换。
 4. 设置链路（Settings Flow）：App 通用设置、书架与搜索设置、隐私权限、缓存、关于反馈、同步备份、书源管理。
 
 推广时不得复制视觉块；只能复制 Shell、slot、覆盖、上下文、状态事件和验收规则。
 
-29 个正式页面的推广结果见 `FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md`。本文继续作为四个 Shell 代表页的单页填写样板保留。
+30 个正式页面的推广结果见 `FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md`。本文继续作为四个 Shell 代表页的单页填写样板保留。

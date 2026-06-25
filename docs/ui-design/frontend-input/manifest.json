@@ -1,6 +1,6 @@
 {
   "name": "reader-android-frontend-inputs",
-  "version": "2026-06-20-design-draft",
+  "version": "2026-06-25-local-demo-sync",
   "shared": {
     "designTokens": "docs/ui-design/frontend-input/design-tokens.json",
     "tokens": "docs/ui-design/frontend-input/tokens.css",

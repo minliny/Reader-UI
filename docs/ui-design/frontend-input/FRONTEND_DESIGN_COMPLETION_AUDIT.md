@@ -1,6 +1,6 @@
 # 应用前端设计稿完成度审计（Application Frontend Design Completion Audit）
 
-本文按规划需求和 `FRONTEND_DESIGN_SPEC_TEMPLATE.md` 的 17 类规范审计当前 29 个 UI 设计页。审计目标是区分“规划文档层是否闭合”和“真实实现是否完成”。规划需求口径见 `FRONTEND_PLANNING_REQUIREMENTS.md`、`FRONTEND_PLANNING_REQUIREMENTS_TEMPLATE.md` 和 `FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`。
+本文按规划需求和 `FRONTEND_DESIGN_SPEC_TEMPLATE.md` 的 17 类规范审计当前 30 个 UI 设计页。审计目标是区分“规划文档层是否闭合”和“真实实现是否完成”。视觉口径以根目录 `frontend-demo/` 同步生成的顶层 `UI设计图.png` 和 `LOCAL_DEMO_DESIGN_ASSET_MAP.md` 为准；规划需求口径见 `FRONTEND_PLANNING_REQUIREMENTS.md`、`FRONTEND_PLANNING_REQUIREMENTS_TEMPLATE.md` 和 `FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`。
 
 ## 审计口径（Audit Rule）
 
@@ -16,11 +16,11 @@
 | 规范类别（Spec Category） | 当前状态（Current Status） | 本地依据（Local Evidence） | 缺口（Gap） |
 |---|---|---|---|
 | 规划需求（Planning Requirements） | 已闭合（Closed） | `FRONTEND_PLANNING_REQUIREMENTS.md`、`FRONTEND_PLANNING_REQUIREMENTS_TEMPLATE.md`、`FRONTEND_PAGE_PLANNING_CARDS.md`、`FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md`、`FRONTEND_FIRST_PAGE_PLANNING_CARDS.md`、`FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`。 | 后续是真实状态接入、动效代码和设备级验收，不再是规划需求缺口。 |
-| 设计稿输入总规范（Frontend Input Spec） | 已闭合（Closed） | `COMPONENT_SPEC.md`、`manifest.json`、29 个输入包、`FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`。 | 实现侧仍需接入真实业务数据。 |
+| 设计稿输入总规范（Frontend Input Spec） | 已闭合（Closed） | `COMPONENT_SPEC.md`、`manifest.json`、30 个输入包、`LOCAL_DEMO_DESIGN_ASSET_MAP.md`、`FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`。 | 实现侧仍需接入真实业务数据。 |
 | 页面框架结构规范（Page Shell Structure Spec） | 已闭合（Closed） | `PAGE_STRUCTURE_MAP.md`、`PAGE_FRAMEWORK_ARCHITECTURE.md`、shared shell kit、可执行规划契约。 | 实现侧新增尺寸必须回填 token 或页面契约。 |
-| 页面结构清单（Page Structure Inventory） | 已闭合（Closed） | `PAGE_STRUCTURE_MAP.md` 已逐页列核心结构，`FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md` 已补齐 29 页详版字段。 | 实现侧需转成更多脚本或 UI test。 |
+| 页面结构清单（Page Structure Inventory） | 已闭合（Closed） | `PAGE_STRUCTURE_MAP.md` 已逐页列核心结构，`FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md` 已补齐 30 页详版字段。 | 实现侧需转成更多脚本或 UI test。 |
 | 组件结构规范（Component Structure Spec） | 已闭合（Closed） | `component-library/COMPONENT_LIBRARY.md`、`FRAMEWORK_COMPONENT_CATALOG.md`、`FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`。 | 实现侧需补完整组件代码和状态矩阵。 |
-| 组件覆盖关系矩阵（Overlay Matrix） | 已闭合（Closed） | `PAGE_STRUCTURE_MAP.md` 覆盖矩阵、`FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`、`frontend-demo-draft` 首批交互验证。 | 实现侧需扩展全部真实运行态组合。 |
+| 组件覆盖关系矩阵（Overlay Matrix） | 已闭合（Closed） | `PAGE_STRUCTURE_MAP.md` 覆盖矩阵、`FRONTEND_EXECUTABLE_PLANNING_CONTRACT.md`、`frontend-demo/` 首批交互验证。 | 实现侧需扩展全部真实运行态组合。 |
 | 几何与排版 Token（Geometry and Typography Tokens） | 已闭合到规划层（Planning Closed） | `design-tokens.json` 定义 70 个 token，`tokens.css` 已含关键 runtime token，可执行规划契约补齐几何基线。 | 实现侧需继续把新增散值回填 token，并跑极端字体缩放。 |
 | 页面关系图（Page Relationship Map） | 已闭合（Closed） | `PAGE_RELATIONSHIP_MAP.md`、`FRONTEND_DETAILED_PAGE_PLANNING_CARDS.md`。 | 实现侧需接入真实 Navigation。 |
 | 导航栈规则（Navigation Stack Rules） | 已闭合（Closed） | `PAGE_RELATIONSHIP_MAP.md` 已补导航栈和状态替换规则，demo 已验证首批入栈 / 返回。 | 实现侧需接入真实返回栈。 |
@@ -36,7 +36,7 @@
 
 ## 逐页应用范围（Per Page Application Scope）
 
-下表把 29 个正式页面按完整规范模板套入第一版审计。`结构基础` 表示页面已归入 shell 和 slots；`待补重点` 现在表示实现与验证侧还需要闭合的内容，不再表示这些页面缺少 P0/P1/P2 或详版规划字段。
+下表把 30 个正式页面按完整规范模板套入第一版审计。`结构基础` 表示页面已归入 shell 和 slots；`待补重点` 现在表示实现与验证侧还需要闭合的内容，不再表示这些页面缺少 P0/P1/P2 或详版规划字段。
 
 | 页面（Page） | Shell | 结构基础（Structure Base） | 待补重点（Next Required Work） |
 |---|---|---|---|
@@ -52,12 +52,13 @@
 | 书籍操作底表（Book Action Sheet） | LibraryShell | 已有底表和危险操作事件。 | Sheet/Dialog 层级验证；删除影响范围文案和焦点顺序。 |
 | 分组管理（Group Management） | LibraryShell | 已有分组事件和 dialog host。 | 拖拽/排序动效；命名输入键盘避让；删除后的书籍去向。 |
 | 本地书导入（Local Import） | LibraryShell | 已有导入流程状态和事件。 | 系统文件选择器边界；进度/结果列表优先级；失败恢复路径。 |
+| 阅读入口（Reading Entry） | ReaderShell | 已有从书架、详情、目录进入阅读的打开流程和状态。 | ReaderContext 初始化；打开加载、失败恢复和继续阅读状态要保持同一视觉结构。 |
 | 沉浸阅读（Immersive Reading） | ReaderShell | 已有 ReadingSurface、点击事件、状态，并承载打开 / 失败 / 离线状态。 | 点击热区几何；文字缩放；页脚信息显示范围；ReaderContext 初始化与加载失败恢复。 |
 | 阅读控制层（Reader Control Layer） | ReaderShell | 已有阅读覆盖层和四模块 active 规则。 | 控制层出现/隐藏动效；底部面板高度；亮度栏几何。 |
 | 目录与书签（TOC and Bookmarks） | ReaderShell | 已有目录/书签状态和事件。 | 面板内滚动范围；章节打开后正文定位；更多菜单层级。 |
 | 阅读外观（Reading Appearance） | ReaderShell | 当前 demo 已有无图标纯色主题、字号、行距、段距、字距、字体即时控制。 | Typography token；主题和排版即时预览；完整页保存/重置不作为当前快捷窗验收项。 |
 | 朗读（Read Aloud） | ReaderShell | 当前 demo 已有朗读状态、图标播放控制、语速/声音/范围/定时循环。 | 运行态悬浮反馈；语速/声音控件范围；后台状态；快捷窗不展示示例正文。 |
-| 阅读设置（Reading Settings） | ReaderShell | 当前 demo 已有阅读设置开关、循环值和更多设置入口。 | 与 SettingsShell 的边界；设置项文字范围；模块内即时反馈。 |
+| 阅读设置（Reading Settings） | ReaderShell | 当前 demo 已有自动翻页、点击翻页方式、音量键翻页、翻页动画、横屏锁定、屏幕常亮、页脚进度、触摸反馈和自动缓存后续章节。 | 与 SettingsShell 的边界；设置项文字范围；模块内即时反馈；不展示更多阅读设置入口。 |
 | 自动翻页（Auto Page） | ReaderShell | 已有运行/暂停状态和事件。 | 自动翻页运行态覆盖规则；速度控件几何；停止路径。 |
 | 内容搜索（Content Search） | ReaderShell | 已有搜索状态和事件。 | 键盘避让；结果定位上下文；上一条/下一条按钮可达。 |
 | 内容替换（Content Replacement） | ReaderShell | 已有规则编辑和保存事件。 | 输入字段范围；测试反馈；临时关闭和保存区别。 |
@@ -72,7 +73,7 @@
 
 ## 优先闭合顺序（Closure Order）
 
-1. 内容优先级实现验收：按 `FRONTEND_PAGE_PLANNING_CARDS.md` 校验 29 页 P0/P1/P2 的 HTML/Compose 实现。
+1. 内容优先级实现验收：按 `FRONTEND_PAGE_PLANNING_CARDS.md` 校验 30 页 P0/P1/P2 的 HTML/Compose 实现。
 2. 导航栈和上下文实现：把 BookContext、ReaderContext、LibraryContext、SettingsContext、SourceContext 落到真实状态、回调和返回恢复。
 3. 响应式、安全区和键盘深化：按 `ADAPTIVE_CONSTRAINT_AUDIT.md` 先补 viewport-class、orientation、foldable / tablet 约束，再覆盖搜索、替换、命名、权限等输入场景。
 4. 动效和无障碍：补 pressed/focused/disabled、底表/弹窗/阅读覆盖层动效、焦点顺序、点击区域和对比度。

@@ -2,9 +2,9 @@
 
 本文用于在把 UI 设计图转成前端设计稿之前，先把页面规划需求梳理清楚。它不是视觉验收表，也不是单页截图说明，而是开工前必须填写的结构化规划模板。
 
-如果要看当前 29 个页面的对应规划内容，不看本文模板，直接看：
+如果要看当前 30 个页面的对应规划内容，不看本文模板，直接看：
 
-- `FRONTEND_PAGE_PLANNING_CARDS.md`：29 个正式页面的页面对应内容。
+- `FRONTEND_PAGE_PLANNING_CARDS.md`：30 个正式页面的页面对应内容。
 - `FRONTEND_FIRST_PAGE_PLANNING_CARDS.md`：书架、书籍搜索、阅读控制层、换源 4 个代表页详版规划卡。
 - `FRONTEND_PLANNING_REQUIREMENTS.md`：当前项目整体规划需求和批次要求。
 
