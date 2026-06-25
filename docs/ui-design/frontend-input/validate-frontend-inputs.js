@@ -152,15 +152,59 @@ function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, "utf8"));
 }
 
-function resolveAndroidRepoRoot(repoRoot) {
-  const composeProbe = "app/src/main/kotlin/com/reader/android/ui/theme/ReaderColors.kt";
-  const candidates = [
+function uniqueExistingCandidates(candidates) {
+  const seen = new Set();
+  return candidates
+    .filter(Boolean)
+    .map((candidate) => path.resolve(candidate))
+    .filter((candidate) => {
+      if (seen.has(candidate)) return false;
+      seen.add(candidate);
+      return fs.existsSync(candidate);
+    });
+}
+
+function resolveComposeSourceStatus(repoRoot, composeSources) {
+  const entries = Object.entries(composeSources || {});
+  const candidates = uniqueExistingCandidates([
     process.env.READER_ANDROID_ROOT,
     path.join(repoRoot, "..", "Reader for Android"),
     "/Users/minliny/Documents/Reader for Android",
     repoRoot
-  ].filter(Boolean);
-  return candidates.find((candidate) => fs.existsSync(path.join(candidate, composeProbe))) || repoRoot;
+  ]);
+  const candidateStatuses = candidates.map((root) => {
+    const sources = entries.map(([sourceName, relativePath]) => {
+      const absolutePath = path.join(root, relativePath);
+      return {
+        sourceName,
+        relativePath,
+        exists: fs.existsSync(absolutePath)
+      };
+    });
+    return {
+      root,
+      sources,
+      foundCount: sources.filter((source) => source.exists).length
+    };
+  });
+  const selected = candidateStatuses.find((candidate) => candidate.foundCount > 0) ||
+    candidateStatuses[0] || { root: repoRoot, sources: [], foundCount: 0 };
+  const missing = selected.sources.filter((source) => !source.exists);
+  const mode = selected.foundCount > 0 ? "validated" : "skipped";
+  const reason = mode === "skipped"
+    ? "Compose token source files are not part of this UI repo snapshot; set READER_TOKEN_CONTRACT_REQUIRE_COMPOSE=1 to require host-app source validation."
+    : "";
+  return {
+    mode,
+    reason,
+    root: selected.root,
+    found: selected.sources.filter((source) => source.exists),
+    missing,
+    candidates: candidateStatuses.map((candidate) => ({
+      root: candidate.root,
+      foundCount: candidate.foundCount
+    }))
+  };
 }
 
 function walkFiles(dir, fileName, results = []) {
@@ -222,7 +266,6 @@ function normalizeTokenValue(value) {
 
 function validateDesignTokenContract(repoRoot, manifest) {
   const failures = [];
-  const androidRepoRoot = resolveAndroidRepoRoot(repoRoot);
   const contractPath = path.join(repoRoot, manifest.shared && manifest.shared.designTokens ? manifest.shared.designTokens : "");
   assert(fs.existsSync(contractPath), "manifest.shared.designTokens does not point to an existing file", failures);
   if (!fs.existsSync(contractPath)) {
@@ -253,13 +296,16 @@ function validateDesignTokenContract(repoRoot, manifest) {
     }
   }
 
-  for (const [sourceName, relativePath] of Object.entries(contract.composeSources || {})) {
-    const composeSourcePath = path.join(androidRepoRoot, relativePath);
-    assert(
-      fs.existsSync(composeSourcePath),
-      `compose token source ${sourceName} missing at ${relativePath} under ${androidRepoRoot}`,
-      failures
-    );
+  const composeSourceStatus = resolveComposeSourceStatus(repoRoot, contract.composeSources || {});
+  const requireComposeSources = process.env.READER_TOKEN_CONTRACT_REQUIRE_COMPOSE === "1";
+  if (requireComposeSources || composeSourceStatus.mode === "validated") {
+    for (const source of composeSourceStatus.missing) {
+      assert(
+        false,
+        `compose token source ${source.sourceName} missing at ${source.relativePath} under ${composeSourceStatus.root}`,
+        failures
+      );
+    }
   }
 
   const runtimeCriticalCssVars = contract.runtimeCriticalCssVars || [];
@@ -278,9 +324,133 @@ function validateDesignTokenContract(repoRoot, manifest) {
     failures,
     contract: path.relative(repoRoot, contractPath).split(path.sep).join("/"),
     cssSource: contract.cssSource,
-    composeSourceRoot: androidRepoRoot,
+    composeSourceRoot: composeSourceStatus.root,
+    composeSourceStatus: Object.assign({ required: requireComposeSources }, composeSourceStatus),
     tokenCount: tokenEntries.length,
     runtimeCriticalCssVars
+  };
+}
+
+function walkTextFiles(dir, results = []) {
+  if (!fs.existsSync(dir)) return results;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const absolutePath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkTextFiles(absolutePath, results);
+    } else if (/\.(md|html|css)$/.test(entry.name)) {
+      results.push(absolutePath);
+    }
+  }
+  return results;
+}
+
+function walkAllFiles(dir, results = []) {
+  if (!fs.existsSync(dir)) return results;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const absolutePath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      walkAllFiles(absolutePath, results);
+    } else {
+      results.push(absolutePath);
+    }
+  }
+  return results;
+}
+
+function walkAllEntries(dir, results = []) {
+  if (!fs.existsSync(dir)) return results;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const absolutePath = path.join(dir, entry.name);
+    results.push(absolutePath);
+    if (entry.isDirectory()) {
+      walkAllEntries(absolutePath, results);
+    }
+  }
+  return results;
+}
+
+function buttonLabelsFromMainNav(source) {
+  const labels = [];
+  const navRegex = /<nav class="reader-main-tab-bar handoff-boundary" aria-label="主导航">([\s\S]*?)<\/nav>/g;
+  let navMatch;
+  while ((navMatch = navRegex.exec(source)) !== null) {
+    const navSource = navMatch[1];
+    const ariaLabels = Array.from(navSource.matchAll(/aria-label="([^"]+)"/g)).map((match) => match[1]);
+    if (ariaLabels.length > 0) {
+      labels.push(ariaLabels);
+      continue;
+    }
+    labels.push(Array.from(navSource.matchAll(/<button[^>]*>([^<]+)<\/button>/g)).map((match) => match[1]));
+  }
+  return labels;
+}
+
+function validateCurrentNavigationContract(repoRoot) {
+  const failures = [];
+  const expectedMainNav = "书架 / 发现 / RSS / 设置";
+  const forbiddenPhrases = [
+    "书架 / 发现 / 书源 / 我的",
+    "底部五项：书架、搜索、发现、书源、设置",
+    "只显示书架 / 发现 / 书源 / 我的",
+    "| 主 Tab | `mine`",
+    "grid-template-columns: repeat(5, 1fr);"
+  ];
+  const scanRoots = [
+    path.join(repoRoot, "docs/cross-platform-ui"),
+    path.join(repoRoot, "docs/ui-handoff")
+  ];
+  const files = scanRoots.flatMap((scanRoot) => walkTextFiles(scanRoot))
+    .filter((filePath) => !filePath.includes(`${path.sep}compose${path.sep}`))
+    .filter((filePath) => !filePath.includes(`${path.sep}stitch-mcp-audit${path.sep}`))
+    .filter((filePath) => !filePath.includes(" 2"));
+
+  for (const filePath of files) {
+    const relativePath = path.relative(repoRoot, filePath).split(path.sep).join("/");
+    const source = fs.readFileSync(filePath, "utf8");
+    for (const phrase of forbiddenPhrases) {
+      if (source.includes(phrase)) {
+        failures.push(`${relativePath} contains stale navigation phrase: ${phrase}`);
+      }
+    }
+    if (relativePath.startsWith("docs/ui-handoff/normalized-html/") || relativePath === "docs/ui-handoff/components/app-bottom-nav.html") {
+      for (const labels of buttonLabelsFromMainNav(source)) {
+        const actualMainNav = labels.join(" / ");
+        assert(
+          actualMainNav === expectedMainNav,
+          `${relativePath} main nav ${actualMainNav} !== ${expectedMainNav}`,
+          failures
+        );
+      }
+    }
+  }
+
+  return {
+    passed: failures.length === 0,
+    failures,
+    expectedMainNav,
+    checkedFileCount: files.length
+  };
+}
+
+function validateProjectStructureContract(repoRoot) {
+  const failures = [];
+  const scanRoots = [
+    path.join(repoRoot, "docs/ui-design"),
+    path.join(repoRoot, "docs/ui-handoff")
+  ];
+  const duplicateEntries = scanRoots.flatMap((scanRoot) => walkAllEntries(scanRoot))
+    .map((entryPath) => path.relative(repoRoot, entryPath).split(path.sep).join("/"))
+    .filter((relativePath) => /(^|\/)[^/]* 2($|[./])/.test(relativePath))
+    .sort();
+
+  for (const duplicateEntry of duplicateEntries) {
+    failures.push(`duplicate Finder-style copy remains in current input tree: ${duplicateEntry}`);
+  }
+
+  return {
+    passed: failures.length === 0,
+    failures,
+    duplicateEntryCount: duplicateEntries.length
   };
 }
 
@@ -1907,10 +2077,15 @@ async function validateFrontendDemoAdaptiveMatrix(page, htmlPath, initialViewpor
 
     if (target.wideFlow) {
       const wide = actual.wideVisual || {};
+      const avoidance = actual.readerAvoidance || {};
       assert(Boolean(wide.flowReader && wide.flowReader.visible), `${prefix} missing wide Flow reader continuity segment`, failures);
       assert(Boolean(wide.flowWindow && wide.flowWindow.visible), `${prefix} missing wide Flow candidate segment`, failures);
       assert(Boolean(wide.flowResult && wide.flowResult.visible), `${prefix} missing wide Flow result segment`, failures);
       assert(Boolean(wide.flowResultPanel && wide.flowResultPanel.visible), `${prefix} missing wide Flow result confirmation panel`, failures);
+      assert(Boolean(avoidance.top && avoidance.sheet && avoidance.nav), `${prefix} missing wide Flow reader control geometry`, failures);
+      assert(!avoidance.topOverlapsSheet, `${prefix} wide Flow reader top bar overlaps bottom sheet`, failures);
+      assert(!avoidance.topOverlapsNav, `${prefix} wide Flow reader top bar overlaps module navigation`, failures);
+      assert(!avoidance.actionsOverlapChapter, `${prefix} wide Flow reader quick actions overlap chapter controls`, failures);
       if (wide.flowReader && wide.flowWindow && wide.flowResult) {
         assert(wide.flowReader.right <= wide.flowWindow.left - 6, `${prefix} Flow reader segment overlaps candidate window`, failures);
         assert(wide.flowWindow.right <= wide.flowResult.left - 6, `${prefix} Flow candidate window overlaps result panel`, failures);
@@ -2565,6 +2740,8 @@ async function main() {
   const tokenContract = validateDesignTokenContract(repoRoot, manifest);
   const manifestInventory = validateManifestInventory(repoRoot, manifest);
   const planningDocumentation = validatePlanningDocumentation(repoRoot);
+  const navigationContract = validateCurrentNavigationContract(repoRoot);
+  const projectStructureContract = validateProjectStructureContract(repoRoot);
   const { chromium } = loadPlaywright();
 
   const browser = await chromium.launch({ headless: true });
@@ -2598,11 +2775,15 @@ async function main() {
       tokenContract.passed &&
       manifestInventory.passed &&
       planningDocumentation.passed &&
+      navigationContract.passed &&
+      projectStructureContract.passed &&
       results.every((result) => result.passed) &&
       componentReferenceSmoke.passed,
     tokenContract,
     manifestInventory,
     planningDocumentation,
+    navigationContract,
+    projectStructureContract,
     componentReferenceSmoke,
     results
   };

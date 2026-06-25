@@ -33,5 +33,8 @@ Run validation:
 
 ```sh
 cd "/Users/minliny/Documents/Reader UI"
-READER_ANDROID_ROOT="/Users/minliny/Documents/Reader for Android" node docs/ui-design/frontend-input/validate-frontend-inputs.js
+node docs/ui-design/frontend-input/validate-frontend-inputs.js
 ```
+
+The UI validation is self-contained for HTML/CSS tokens. Set `READER_TOKEN_CONTRACT_REQUIRE_COMPOSE=1`
+with `READER_ANDROID_ROOT` only when the host Android repo still exposes the Compose token source files.
