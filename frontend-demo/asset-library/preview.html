@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reader 素材库</title>
+    <link rel="stylesheet" href="./asset-library.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./fixture.js"></script>
+    <script src="./icons.js"></script>
+    <script src="./render.js"></script>
+    <script>
+      window.ReaderAssetLibrary.renderInto(
+        document.getElementById("root"),
+        window.ReaderAssetLibraryFixture
+      );
+    </script>
+  </body>
+</html>

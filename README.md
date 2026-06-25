@@ -21,13 +21,13 @@ Not migrated:
 Run the local UI demo from this directory:
 
 ```sh
-cd "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input"
-python3 -m http.server 5173 --bind 127.0.0.1
+cd "/Users/minliny/Documents/Reader UI"
+python3 -m http.server 4177 --bind 127.0.0.1
 ```
 
 Then open:
 
-`http://127.0.0.1:5173/frontend-demo-draft/index.html`
+`http://127.0.0.1:4177/frontend-demo/`
 
 Run validation:
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-24T06:33:06.999Z",
+  "generatedAt": "2026-06-25T13:15:57.332Z",
   "manifest": "docs/ui-design/frontend-input/manifest.json",
   "passed": true,
   "tokenContract": {
@@ -8,6 +8,50 @@
     "contract": "docs/ui-design/frontend-input/design-tokens.json",
     "cssSource": "docs/ui-design/frontend-input/tokens.css",
     "composeSourceRoot": "/Users/minliny/Documents/Reader for Android",
+    "composeSourceStatus": {
+      "required": false,
+      "mode": "skipped",
+      "reason": "Compose token source files are not part of this UI repo snapshot; set READER_TOKEN_CONTRACT_REQUIRE_COMPOSE=1 to require host-app source validation.",
+      "root": "/Users/minliny/Documents/Reader for Android",
+      "found": [],
+      "missing": [
+        {
+          "sourceName": "colors",
+          "relativePath": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderColors.kt",
+          "exists": false
+        },
+        {
+          "sourceName": "spacing",
+          "relativePath": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderSpacing.kt",
+          "exists": false
+        },
+        {
+          "sourceName": "typography",
+          "relativePath": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderTypography.kt",
+          "exists": false
+        },
+        {
+          "sourceName": "shapes",
+          "relativePath": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderShapes.kt",
+          "exists": false
+        },
+        {
+          "sourceName": "elevation",
+          "relativePath": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderElevation.kt",
+          "exists": false
+        }
+      ],
+      "candidates": [
+        {
+          "root": "/Users/minliny/Documents/Reader for Android",
+          "foundCount": 0
+        },
+        {
+          "root": "/Users/minliny/Documents/Reader UI",
+          "foundCount": 0
+        }
+      ]
+    },
     "tokenCount": 70,
     "runtimeCriticalCssVars": [
       "--reader-ds-color-paper",
@@ -50,6 +94,43 @@
       "adaptationTextComponentsAcceptance": 30
     },
     "requiredDetailedFieldCount": 13
+  },
+  "navigationContract": {
+    "passed": true,
+    "failures": [],
+    "expectedMainNav": "书架 / 发现 / RSS / 设置",
+    "checkedFileCount": 114
+  },
+  "projectStructureContract": {
+    "passed": true,
+    "failures": [],
+    "duplicateEntryCount": 0
+  },
+  "deepRouteClosureContract": {
+    "passed": true,
+    "failures": [],
+    "moduleCount": 3,
+    "checkedDemoRouteCount": 15,
+    "checkedManifestTargetCount": 20,
+    "checkedHandoffPageCount": 21,
+    "checkedRouteManifestMapCount": 20,
+    "checkedHandoffRouteMapCount": 21
+  },
+  "frontendDemoSplitContract": {
+    "passed": true,
+    "failures": [],
+    "renderEntryLines": 9,
+    "styleEntryLines": 10,
+    "styleChunkCount": 7,
+    "styleChunks": [
+      "00-foundation.css",
+      "01-shell-layout.css",
+      "02-main-library.css",
+      "03-reader.css",
+      "04-settings-source.css",
+      "05-flow-adaptive.css",
+      "06-responsive.css"
+    ]
   },
   "componentReferenceSmoke": {
     "expectedCount": 30,
@@ -681,9 +762,9 @@
       }
     },
     {
-      "name": "frontend-demo-draft",
-      "html": "docs/ui-design/frontend-input/frontend-demo-draft/index.html",
-      "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/frontend-demo-draft.png",
+      "name": "frontend-demo",
+      "html": "frontend-demo/index.html",
+      "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/frontend-demo.png",
       "passed": true,
       "failures": [],
       "failedRequests": [],
@@ -754,8 +835,8 @@
             },
             "readerAvoidance": null,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-compact-portrait.png",
-              "bytes": 110359,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-compact-portrait.png",
+              "bytes": 112024,
               "dimensions": {
                 "width": 320,
                 "height": 568
@@ -827,8 +908,8 @@
             },
             "readerAvoidance": null,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-standard-portrait.png",
-              "bytes": 228494,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-standard-portrait.png",
+              "bytes": 228482,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -959,7 +1040,7 @@
               "railInsideSheet": true
             },
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-large-phone-portrait.png",
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-large-phone-portrait.png",
               "bytes": 152391,
               "dimensions": {
                 "width": 430,
@@ -1093,44 +1174,44 @@
               "rail": {
                 "top": 182,
                 "right": 290,
-                "bottom": 280,
+                "bottom": 310,
                 "left": 260,
                 "width": 30,
-                "height": 98,
+                "height": 128,
                 "display": "grid",
                 "visible": true
               },
               "actions": {
                 "top": 182,
                 "right": 252,
-                "bottom": 235,
+                "bottom": 226,
                 "left": 36,
                 "width": 216,
-                "height": 53,
+                "height": 44,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 213,
+                "top": 250,
                 "right": 252,
-                "bottom": 280,
+                "bottom": 310,
                 "left": 36,
                 "width": 216,
-                "height": 67,
+                "height": 60,
                 "display": "grid",
                 "visible": true
               },
               "topOverlapsSheet": false,
               "topOverlapsNav": false,
               "topOverlapsRail": false,
-              "actionsOverlapChapter": true,
+              "actionsOverlapChapter": false,
               "sheetInsideFrame": true,
               "navInsideFrame": true,
               "railInsideSheet": true
             },
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-compact-landscape.png",
-              "bytes": 114015,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-compact-landscape.png",
+              "bytes": 106546,
               "dimensions": {
                 "width": 844,
                 "height": 390
@@ -1264,7 +1345,7 @@
               "railInsideSheet": true
             },
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-reader-compact-landscape.png",
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-reader-compact-landscape.png",
               "bytes": 100133,
               "dimensions": {
                 "width": 844,
@@ -1361,7 +1442,7 @@
               "actionAboveKeyboard": true,
               "targetActionOverlap": false,
               "visualEvidence": {
-                "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-keyboard-reduced-height-keyboard.png",
+                "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-keyboard-reduced-height-keyboard.png",
                 "bytes": 45326,
                 "dimensions": {
                   "width": 844,
@@ -1370,7 +1451,7 @@
               }
             },
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-keyboard-reduced-height.png",
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-keyboard-reduced-height.png",
               "bytes": 44312,
               "dimensions": {
                 "width": 844,
@@ -1430,10 +1511,10 @@
               "phoneContent": {
                 "top": 141,
                 "right": 579,
-                "bottom": 645,
+                "bottom": 703,
                 "left": 21,
                 "width": 558,
-                "height": 504,
+                "height": 562,
                 "display": "grid",
                 "visible": true
               },
@@ -1444,8 +1525,8 @@
             },
             "readerAvoidance": null,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-expanded-width.png",
-              "bytes": 67865,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-expanded-width.png",
+              "bytes": 72713,
               "dimensions": {
                 "width": 600,
                 "height": 960
@@ -1579,7 +1660,7 @@
               "railInsideSheet": true
             },
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-tablet-expanded.png",
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-tablet-expanded.png",
               "bytes": 217548,
               "dimensions": {
                 "width": 840,
@@ -1654,8 +1735,8 @@
             },
             "readerAvoidance": null,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-main-tab-tablet-expanded.png",
-              "bytes": 458792,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-main-tab-tablet-expanded.png",
+              "bytes": 458771,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -1719,7 +1800,7 @@
             },
             "readerAvoidance": null,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-library-tablet-expanded.png",
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-library-tablet-expanded.png",
               "bytes": 108957,
               "dimensions": {
                 "width": 840,
@@ -1784,8 +1865,8 @@
             },
             "readerAvoidance": null,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-settings-shell-tablet-expanded.png",
-              "bytes": 98185,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-settings-shell-tablet-expanded.png",
+              "bytes": 98274,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -1888,10 +1969,10 @@
               "top": {
                 "top": 65,
                 "right": 325,
-                "bottom": 119,
+                "bottom": 151,
                 "left": 81,
                 "width": 244,
-                "height": 54,
+                "height": 86,
                 "display": "grid",
                 "visible": true
               },
@@ -1918,44 +1999,44 @@
               "rail": {
                 "top": 762,
                 "right": 328,
-                "bottom": 854,
+                "bottom": 914,
                 "left": 290,
                 "width": 38,
-                "height": 92,
+                "height": 152,
                 "display": "grid",
                 "visible": true
               },
               "actions": {
                 "top": 762,
                 "right": 276,
-                "bottom": 840,
+                "bottom": 806,
                 "left": 78,
                 "width": 198,
-                "height": 78,
+                "height": 44,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 766,
+                "top": 854,
                 "right": 276,
-                "bottom": 854,
+                "bottom": 914,
                 "left": 78,
                 "width": 198,
-                "height": 88,
+                "height": 60,
                 "display": "grid",
                 "visible": true
               },
               "topOverlapsSheet": false,
               "topOverlapsNav": false,
               "topOverlapsRail": false,
-              "actionsOverlapChapter": true,
+              "actionsOverlapChapter": false,
               "sheetInsideFrame": true,
               "navInsideFrame": true,
               "railInsideSheet": true
             },
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/adaptive/frontend-demo-draft-adaptive-flow-tablet-expanded.png",
-              "bytes": 225630,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-flow-tablet-expanded.png",
+              "bytes": 220063,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -1997,8 +2078,8 @@
             "outside": [],
             "visibleStressCount": 17,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/text-stress/frontend-demo-draft-text-stress-main-tab-text-scale.png",
-              "bytes": 231622,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-main-tab-text-scale.png",
+              "bytes": 242259,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2038,7 +2119,7 @@
             "outside": [],
             "visibleStressCount": 2,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/text-stress/frontend-demo-draft-text-stress-library-text-scale.png",
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-library-text-scale.png",
               "bytes": 93403,
               "dimensions": {
                 "width": 390,
@@ -2079,8 +2160,8 @@
             "outside": [],
             "visibleStressCount": 13,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/text-stress/frontend-demo-draft-text-stress-reader-text-scale.png",
-              "bytes": 150064,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-reader-text-scale.png",
+              "bytes": 155913,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2120,8 +2201,8 @@
             "outside": [],
             "visibleStressCount": 35,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/text-stress/frontend-demo-draft-text-stress-flow-text-scale.png",
-              "bytes": 126724,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-flow-text-scale.png",
+              "bytes": 143635,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2159,10 +2240,10 @@
             },
             "outsideCount": 0,
             "outside": [],
-            "visibleStressCount": 16,
+            "visibleStressCount": 18,
             "visualEvidence": {
-              "screenshot": "/Users/minliny/Documents/Reader UI/docs/ui-design/frontend-input/frontend-demo-draft/verify/text-stress/frontend-demo-draft-text-stress-settings-text-scale.png",
-              "bytes": 65069,
+              "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-settings-text-scale.png",
+              "bytes": 118241,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2172,7 +2253,7 @@
         }
       ],
       "actual": {
-        "title": "前端 Demo 设计稿（Frontend Demo Draft）",
+        "title": "阅读器 App",
         "bodyWidth": 1440,
         "bodyHeight": 4200,
         "frame": {

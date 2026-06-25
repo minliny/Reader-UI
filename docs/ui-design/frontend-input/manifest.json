@@ -133,9 +133,9 @@
       }
     },
     {
-      "name": "frontend-demo-draft",
-      "html": "docs/ui-design/frontend-input/frontend-demo-draft/index.html",
-      "screenshot": "docs/ui-design/frontend-input/frontend-demo-draft/verify/frontend-demo-draft.png",
+      "name": "frontend-demo",
+      "html": "frontend-demo/index.html",
+      "screenshot": "frontend-demo/verify/frontend-demo.png",
       "viewport": {
         "width": 1440,
         "height": 4200

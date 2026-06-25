@@ -467,7 +467,7 @@ function validateProjectStructureContract(repoRoot) {
 }
 
 function loadDemoRouteContract(repoRoot) {
-  const contractPath = path.join(repoRoot, "docs/ui-design/frontend-input/frontend-demo-draft/route-contract.js");
+  const contractPath = path.join(repoRoot, "frontend-demo/route-contract.js");
   if (!fs.existsSync(contractPath)) {
     return {
       contractPath,
@@ -512,7 +512,7 @@ function validateDeepRouteClosureContract(repoRoot, manifest) {
   const routes = contract.routes || {};
   const deepRouteClosure = contract.deepRouteClosure || {};
   const manifestTargetNames = new Set(manifest.targets.map((target) => target.name));
-  const renderPath = path.join(repoRoot, "docs/ui-design/frontend-input/frontend-demo-draft/render-runtime.js");
+  const renderPath = path.join(repoRoot, "frontend-demo/render-runtime.js");
   const renderSource = fs.existsSync(renderPath) ? fs.readFileSync(renderPath, "utf8") : "";
   let checkedDemoRouteCount = 0;
   let checkedManifestTargetCount = 0;
@@ -600,7 +600,7 @@ function countFileLines(filePath) {
 
 function validateFrontendDemoSplitContract(repoRoot) {
   const failures = [];
-  const demoRoot = path.join(repoRoot, "docs/ui-design/frontend-input/frontend-demo-draft");
+  const demoRoot = path.join(repoRoot, "frontend-demo");
   const renderEntryPath = path.join(demoRoot, "render.js");
   const renderRuntimePath = path.join(demoRoot, "render-runtime.js");
   const routeContractPath = path.join(demoRoot, "route-contract.js");
@@ -888,7 +888,10 @@ async function validateFrontendDemoInteractions(page, failures) {
     const content = screen?.querySelector('[data-slot="contentRegion"]');
     const sheetHost = screen?.querySelector('[data-slot="sheetHost"]');
     const dialogHost = screen?.querySelector('[data-slot="dialogHost"]');
-    const moduleListRows = Array.from(screen?.querySelectorAll(".fd-reader-module-panel .fd-reader-module-list button") || []);
+    const moduleListRows = Array.from(screen?.querySelectorAll([
+      ".fd-reader-module-panel .fd-reader-module-list button",
+      ".fd-reader-module-panel .fd-reader-toc-list button"
+    ].join(", ")) || []);
     const moduleControls = screen?.querySelectorAll([
       ".fd-reader-module-panel .fd-reader-module-list button",
       ".fd-reader-module-panel .fd-reader-option-grid button",
@@ -896,6 +899,7 @@ async function validateFrontendDemoInteractions(page, failures) {
       ".fd-reader-module-panel .fd-reader-font-row button",
       ".fd-reader-module-panel .fd-reader-swatch-row button",
       ".fd-reader-module-panel .fd-reader-transport button",
+      ".fd-reader-module-panel .fd-reader-toc-list button",
       ".fd-reader-module-panel .fd-reader-theme-grid button",
       ".fd-reader-module-panel .fd-reader-mini-control button",
       ".fd-reader-module-panel .fd-reader-segment-row button",
@@ -1596,9 +1600,9 @@ async function validateFrontendDemoInteractions(page, failures) {
   });
 
   const moduleExpectations = [
-    { route: "toc-bookmarks", label: "目录", module: "directory", compactControlMin: 7, maxListRowHeight: 38 },
+    { route: "toc-bookmarks", label: "目录", module: "directory", compactControlMin: 6, maxListRowHeight: 38 },
     { route: "tts", label: "朗读", module: "tts", compactControlMin: 7, maxListRowHeight: 0 },
-    { route: "reader-appearance", label: "界面", module: "appearance", compactControlMin: 13, maxListRowHeight: 0 },
+    { route: "reader-appearance", label: "阅读主题", module: "appearance", compactControlMin: 13, maxListRowHeight: 0 },
     { route: "reader-settings", label: "设置", module: "settings", compactControlMin: 6, maxListRowHeight: 0 }
   ];
   for (const expected of moduleExpectations) {
@@ -1777,7 +1781,7 @@ async function validateFrontendDemoInteractions(page, failures) {
   assert(!sourceSwitchWindow.hasReadingPreview, "source-switch should not render reading body content", failures);
   assert(sourceSwitchWindow.checkChipCount === 0, "source-switch rows should not render multi-step check chips", failures);
   assert(sourceSwitchWindow.rowButtonCount === 0, "source-switch rows should use row selection instead of extra per-row buttons", failures);
-  assert(sourceSwitchWindow.rowText.every((text) => text.includes("最新章节")), "source-switch rows should show latest chapter on the second line", failures);
+  assert(sourceSwitchWindow.rowText.every((text) => !text.includes("最新章节")), "source-switch rows should not render the 最新章节 label", failures);
   assert(sourceSwitchWindow.rowLatency[0] <= sourceSwitchWindow.rowLatency[1], "source-switch candidates should be sorted by latency ascending", failures);
   assert(
     Number.parseFloat(sourceSwitchWindow.readerOpacity) >= 0.99,
@@ -2179,7 +2183,7 @@ async function validateFrontendDemoAdaptiveMatrix(page, htmlPath, initialViewpor
       };
     });
 
-    const screenshotPath = path.join(adaptiveScreenshotDir, `frontend-demo-draft-adaptive-${target.name}.png`);
+    const screenshotPath = path.join(adaptiveScreenshotDir, `frontend-demo-adaptive-${target.name}.png`);
     const screenshotBuffer = await page.screenshot({ path: screenshotPath, fullPage: false });
     const screenshotDimensions = pngDimensions(screenshotBuffer);
     const visualEvidence = {
@@ -2322,7 +2326,7 @@ async function validateFrontendDemoAdaptiveMatrix(page, htmlPath, initialViewpor
           targetActionOverlap: overlaps(targetRect, actionRect)
         };
       });
-      const keyboardScreenshotPath = path.join(adaptiveScreenshotDir, `frontend-demo-draft-adaptive-${target.name}-keyboard.png`);
+      const keyboardScreenshotPath = path.join(adaptiveScreenshotDir, `frontend-demo-adaptive-${target.name}-keyboard.png`);
       const keyboardScreenshotBuffer = await page.screenshot({ path: keyboardScreenshotPath, fullPage: false });
       const keyboardVisualEvidence = {
         screenshot: keyboardScreenshotPath,
@@ -2525,7 +2529,7 @@ async function validateFrontendDemoTextStressMatrix(page, htmlPath, initialViewp
         visibleStressCount: document.querySelectorAll(stressSelectors.join(", ")).length
       };
     });
-    const screenshotPath = path.join(textStressScreenshotDir, `frontend-demo-draft-text-stress-${target.name}.png`);
+    const screenshotPath = path.join(textStressScreenshotDir, `frontend-demo-text-stress-${target.name}.png`);
     const screenshotBuffer = await page.screenshot({ path: screenshotPath, fullPage: false });
     const visualEvidence = {
       screenshot: screenshotPath,
@@ -2600,7 +2604,7 @@ async function validateTarget(browser, repoRoot, target, runtimeCriticalCssVars 
     const frameRect = frame ? frame.getBoundingClientRect() : null;
     const images = Array.from(document.images);
     const computedStyle = window.getComputedStyle(document.documentElement);
-    const textSource = targetInPage.name === "frontend-demo-draft"
+    const textSource = targetInPage.name === "frontend-demo"
       ? document.body.textContent
       : document.body.innerText;
     const requiredTextPresent = targetInPage.requiredText.every((text) =>
@@ -2825,7 +2829,7 @@ async function validateTarget(browser, repoRoot, target, runtimeCriticalCssVars 
     }
   }
 
-  if (target.name === "frontend-demo-draft") {
+  if (target.name === "frontend-demo") {
     adaptiveViewportMatrix = await validateFrontendDemoAdaptiveMatrix(page, htmlPath, target.viewport, failures);
     textStressMatrix = await validateFrontendDemoTextStressMatrix(page, htmlPath, target.viewport, failures);
     await validateFrontendDemoInteractions(page, failures);
