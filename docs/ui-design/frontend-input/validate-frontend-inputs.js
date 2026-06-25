@@ -393,11 +393,22 @@ function validateCurrentNavigationContract(repoRoot) {
     "底部五项：书架、搜索、发现、书源、设置",
     "只显示书架 / 发现 / 书源 / 我的",
     "| 主 Tab | `mine`",
+    "设置：P1",
+    "发现：暂缓",
+    "RSS：暂缓",
+    "发现和 RSS 暂缓",
+    "设置属于 P1",
+    "暂缓，不计入当前",
+    "不进入当前 P0",
+    "当前唯一 P0",
+    "本地书导入已降为 P1",
     "grid-template-columns: repeat(5, 1fr);"
   ];
   const scanRoots = [
     path.join(repoRoot, "docs/cross-platform-ui"),
-    path.join(repoRoot, "docs/ui-handoff")
+    path.join(repoRoot, "docs/ui-handoff"),
+    path.join(repoRoot, "docs/ui-design", "00-总览"),
+    path.join(repoRoot, "docs/ui-design", "书架主Tab页面规划")
   ];
   const files = scanRoots.flatMap((scanRoot) => walkTextFiles(scanRoot))
     .filter((filePath) => !filePath.includes(`${path.sep}compose${path.sep}`))
