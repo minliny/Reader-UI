@@ -29,8 +29,8 @@
 
 .fd-source-phone-flow .fd-source-window-close {
   position: static;
-  width: 36px;
-  height: 36px;
+  width: 24px;
+  height: 24px;
   border-radius: var(--fd-radius-md);
   background: rgba(238, 230, 219, 0.42);
 }
@@ -220,16 +220,16 @@
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-source-control-continuity .fd-reader-chapter-control-row,
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-source-control-continuity .fd-reader-chapter-control-row {
-  grid-template-columns: 34px minmax(32px, 1fr) 34px;
-  min-height: 36px;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  min-height: 30px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-source-control-continuity .fd-reader-chapter-step,
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-source-control-continuity .fd-reader-chapter-step {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  min-height: 34px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-source-control-continuity .fd-reader-module-nav,

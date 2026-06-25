@@ -216,8 +216,8 @@
   position: relative;
   isolation: isolate;
   z-index: 0;
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 20px;
   display: grid;
   place-items: center;
   border: 0;
@@ -233,7 +233,7 @@
 .fd-brightness-auto-toggle::before {
   content: "";
   position: absolute;
-  inset: 6px 4px;
+  inset: 0 2px;
   z-index: -1;
   border: 1px solid rgba(180, 166, 151, 0.34);
   border-radius: var(--fd-radius-circle);

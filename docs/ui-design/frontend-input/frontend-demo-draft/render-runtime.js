@@ -1521,8 +1521,8 @@
         <section class="fd-reader-module-panel fd-reader-toc-panel" data-dev-region="ReaderModulePanel" aria-label="目录与书签">
           <div class="fd-reader-toc-list fd-reader-module-list">
             <nav class="fd-reader-toc-switch-row" aria-label="目录书签切换">
-              <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">目录</button>
-              <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">书签</button>
+              <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">${icon("directory", "fd-small-icon")}<span>目录</span></button>
+              <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">${icon("bookmark", "fd-small-icon")}<span>书签</span></button>
             </nav>
             ${listHtml}
             <button class="fd-reader-toc-row fd-reader-toc-expand-row" type="button" data-route="reader-full-directory">
@@ -1681,8 +1681,8 @@
     return `
       <section class="fd-reader-full-section fd-reader-full-directory" aria-label="完整目录">
         <nav class="fd-reader-full-toc-switch-row" aria-label="目录书签切换">
-          <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">目录</button>
-          <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">书签</button>
+          <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">${icon("directory", "fd-small-icon")}<span>目录</span></button>
+          <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">${icon("bookmark", "fd-small-icon")}<span>书签</span></button>
         </nav>
         <div class="fd-reader-full-toc-list">
           ${visibleItems.map((chapter) => {
@@ -3590,8 +3590,7 @@
     const isCurrent = item.state === "当前";
     const isSelected = selectedSource ? item.source === selectedSource : isCurrent;
     const canSwitch = !isCurrent && item.state !== "落后" && item.state !== "失效";
-    const latestChapter = item.latestChapter || item.chapter || "最新章节";
-    const latestChapterLabel = latestChapter.includes("最新章节") ? latestChapter : `最新章节 ${latestChapter}`;
+    const latestChapterLabel = item.latestChapter || item.chapter || item.latest || "章节同步";
     const speedLabel = /\d/.test(item.speed || "") ? item.speed : (item.speed || "未知");
     return `
       <article class="fd-source-candidate-row${isCurrent ? " is-current" : ""}${isSelected ? " is-selected" : ""}${canSwitch ? " is-switchable" : " is-muted"}" data-source-index="${index}" data-source-name="${esc(item.source)}" tabindex="0" role="button" aria-label="选择 ${esc(item.source)}">
@@ -3650,7 +3649,7 @@
         <section class="fd-source-switch-result" aria-label="换源确认">
           <span>${icon("check", "fd-small-icon")}</span>
           <strong>${esc(selected.source || "优书网")}</strong>
-          <small>${esc(selected.state || "当前")} · ${esc(selected.latency || "")} · ${esc(selected.latest || "最新章节同步")}</small>
+          <small>${esc(selected.state || "当前")} · ${esc(selected.latency || "")} · ${esc(selected.latest || "章节同步")}</small>
           <p>确认后保持当前阅读位置，仅替换正文来源与章节解析结果。</p>
           <button type="button" data-route="reader" data-route-replace>确认换源</button>
         </section>`,

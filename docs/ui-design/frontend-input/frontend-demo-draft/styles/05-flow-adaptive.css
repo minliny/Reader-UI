@@ -788,8 +788,8 @@
 .fd-source-window-close {
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: var(--fd-radius-md);
   background: #f0e9e2;
 }

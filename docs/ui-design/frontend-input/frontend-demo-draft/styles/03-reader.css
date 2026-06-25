@@ -15,13 +15,13 @@
 }
 
 .fd-reader-appearance-row {
-  min-height: 44px;
+  min-height: 32px;
   width: 100%;
   box-sizing: border-box;
   display: grid;
-  grid-template-columns: 20px minmax(44px, 0.72fr) auto;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 7px;
+  gap: 9px;
   padding: 0 9px;
   color: #332c25;
 }
@@ -42,17 +42,13 @@
 }
 
 .fd-reader-appearance-row strong {
-  min-width: 0;
-  display: -webkit-box;
   overflow: hidden;
   color: #332c25;
   font-size: 11px;
   line-height: 1.12;
   font-weight: 500;
-  overflow-wrap: anywhere;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  white-space: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .fd-reader-theme-palette,
@@ -64,13 +60,13 @@
 
 .fd-reader-theme-palette {
   display: grid;
-  grid-template-columns: repeat(4, 32px);
-  gap: 4px;
+  grid-template-columns: repeat(4, 22px);
+  gap: 5px;
 }
 
 .fd-reader-theme-palette button {
-  width: 32px;
-  height: 32px;
+  width: 22px;
+  height: 21px;
   display: grid;
   place-items: center;
   border-radius: var(--fd-radius-sm);
@@ -82,8 +78,8 @@
 }
 
 .fd-reader-theme-palette span {
-  width: 22px;
-  height: 22px;
+  width: 18px;
+  height: 18px;
   display: block;
   border: 1px solid rgba(91, 80, 70, 0.12);
   border-radius: var(--fd-radius-sm);
@@ -96,9 +92,9 @@
 }
 
 .fd-reader-stepper {
-  height: 42px;
+  height: 24px;
   display: grid;
-  grid-template-columns: 40px 40px 40px;
+  grid-template-columns: 28px 33px 28px;
   align-items: center;
   overflow: hidden;
   border-radius: var(--fd-radius-md);
@@ -123,7 +119,7 @@
 }
 
 .fd-reader-font-choice {
-  height: 32px;
+  height: 24px;
   display: grid;
   grid-template-columns: repeat(3, 42px);
   overflow: hidden;
@@ -149,7 +145,7 @@
 }
 
 .fd-reader-custom-links {
-  height: 32px;
+  height: 24px;
   display: grid;
   grid-template-columns: repeat(2, 47px);
   gap: 5px;
@@ -702,8 +698,8 @@
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-chapter-control-row {
-  grid-template-columns: 34px minmax(0, 1fr) 34px;
-  min-height: 36px;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  min-height: 34px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-chapter-row strong {
@@ -711,10 +707,10 @@
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-chapter-step {
-  width: 34px;
-  height: 34px;
-  min-width: 34px;
-  min-height: 34px;
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-progress-row {
@@ -1264,6 +1260,11 @@
 .fd-reader-full-toc-switch-row button {
   min-width: 0;
   min-height: 30px;
+  display: grid;
+  grid-template-columns: 12px auto;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
   overflow: hidden;
   border: 0;
   border-radius: var(--fd-radius-md);
@@ -1274,6 +1275,12 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   box-shadow: none;
+}
+
+.fd-reader-full-toc-switch-row button .fd-small-icon {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2;
 }
 
 .fd-reader-full-toc-switch-row button.is-active {
