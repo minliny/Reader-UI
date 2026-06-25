@@ -52,6 +52,9 @@ Manifest 目标（Manifest Target）：`frontend-demo-draft`
 ## 前端拆分规则（Frontend Split Rules）
 
 - 先实现五个页面框架（Page Shells），再迁移旧 29 页到对应 slot。
+- `render.js` 只作为同步 bootstrap，主渲染实现放在 `render-runtime.js`。
+- `route-contract.js` 是 demo route 与发现 / RSS / 设置深层闭合清单的唯一契约源。
+- `styles.css` 只作为 CSS 入口，页面和模块样式放在 `styles/*.css` 分层文件。
 - 页面外壳必须通过 `ReaderShellKit.render*Shell(...)` 输出，不在页面 renderer 里重写顶栏、底栏和宿主节点。
 - 书封图片是内容资源；UI 控件、导航、弹层和状态必须用组件实现。
 - 阅读控制层四个模块按钮选中态只改变背景、图标颜色和文字颜色，不改变尺寸、间距或相对位置。
@@ -59,6 +62,5 @@ Manifest 目标（Manifest Target）：`frontend-demo-draft`
 
 ## 后续动作（Next Actions）
 
-1. 继续补滚动、最后一项可达、极端文本和真实焦点顺序验证。
-2. 把现有 29 个页面 renderer 逐步收敛为五个 shell 的薄适配器。
-3. 把 demo 中已验证的返回、键盘、底表和弹窗规则迁移到真实 Compose 导航和 ViewModel 状态。
+1. 继续把 `render-runtime.js` 内部页面模板按 `main-tabs / library / reader / settings / source-management` 做组件级拆分。
+2. 把 demo 中已验证的返回、键盘、底表和弹窗规则迁移到真实平台导航和状态层。

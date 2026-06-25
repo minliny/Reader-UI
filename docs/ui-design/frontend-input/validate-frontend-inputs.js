@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const vm = require("vm");
 
 function loadPlaywright() {
   try {
@@ -462,6 +463,136 @@ function validateProjectStructureContract(repoRoot) {
     passed: failures.length === 0,
     failures,
     duplicateEntryCount: duplicateEntries.length
+  };
+}
+
+function loadDemoRouteContract(repoRoot) {
+  const contractPath = path.join(repoRoot, "docs/ui-design/frontend-input/frontend-demo-draft/route-contract.js");
+  if (!fs.existsSync(contractPath)) {
+    return {
+      contractPath,
+      contract: null,
+      error: "route-contract.js does not exist"
+    };
+  }
+  const sandbox = { window: {} };
+  try {
+    vm.runInNewContext(fs.readFileSync(contractPath, "utf8"), sandbox, { filename: contractPath });
+  } catch (error) {
+    return {
+      contractPath,
+      contract: null,
+      error: error.message
+    };
+  }
+  return {
+    contractPath,
+    contract: sandbox.window.ReaderFrontendDemoDraftRouteContract || null,
+    error: ""
+  };
+}
+
+function validateDeepRouteClosureContract(repoRoot, manifest) {
+  const failures = [];
+  const { contractPath, contract, error } = loadDemoRouteContract(repoRoot);
+  const relativeContractPath = path.relative(repoRoot, contractPath).split(path.sep).join("/");
+  assert(!error, `${relativeContractPath} failed to load: ${error}`, failures);
+  assert(Boolean(contract), `${relativeContractPath} does not expose ReaderFrontendDemoDraftRouteContract`, failures);
+  if (!contract) {
+    return {
+      passed: false,
+      failures,
+      moduleCount: 0,
+      checkedDemoRouteCount: 0,
+      checkedManifestTargetCount: 0,
+      checkedHandoffPageCount: 0
+    };
+  }
+
+  const routes = contract.routes || {};
+  const deepRouteClosure = contract.deepRouteClosure || {};
+  const manifestTargetNames = new Set(manifest.targets.map((target) => target.name));
+  const renderPath = path.join(repoRoot, "docs/ui-design/frontend-input/frontend-demo-draft/render-runtime.js");
+  const renderSource = fs.existsSync(renderPath) ? fs.readFileSync(renderPath, "utf8") : "";
+  let checkedDemoRouteCount = 0;
+  let checkedManifestTargetCount = 0;
+  let checkedHandoffPageCount = 0;
+
+  for (const [moduleName, moduleContract] of Object.entries(deepRouteClosure)) {
+    const demoRoutes = moduleContract.demoRoutes || [];
+    const manifestTargets = moduleContract.manifestTargets || [];
+    const handoffPages = moduleContract.handoffPages || [];
+
+    assert(demoRoutes.length > 0, `${moduleName} deep route closure has no demo routes`, failures);
+    assert(manifestTargets.length > 0, `${moduleName} deep route closure has no manifest targets`, failures);
+    assert(handoffPages.length > 0, `${moduleName} deep route closure has no handoff pages`, failures);
+
+    for (const route of demoRoutes) {
+      checkedDemoRouteCount += 1;
+      assert(Boolean(routes[route]), `${moduleName} demo route ${route} is missing from route-contract.js`, failures);
+      assert(renderSource.includes(`case "${route}"`), `${moduleName} demo route ${route} is not handled by renderRoute`, failures);
+    }
+
+    for (const targetName of manifestTargets) {
+      checkedManifestTargetCount += 1;
+      assert(manifestTargetNames.has(targetName), `${moduleName} manifest target ${targetName} is missing`, failures);
+    }
+
+    for (const handoffPage of handoffPages) {
+      checkedHandoffPageCount += 1;
+      const handoffPath = path.join(repoRoot, "docs/ui-handoff/normalized-html", handoffPage);
+      assert(fs.existsSync(handoffPath), `${moduleName} handoff page ${handoffPage} is missing`, failures);
+    }
+  }
+
+  return {
+    passed: failures.length === 0,
+    failures,
+    moduleCount: Object.keys(deepRouteClosure).length,
+    checkedDemoRouteCount,
+    checkedManifestTargetCount,
+    checkedHandoffPageCount
+  };
+}
+
+function countFileLines(filePath) {
+  if (!fs.existsSync(filePath)) return 0;
+  const source = fs.readFileSync(filePath, "utf8");
+  return source.length === 0 ? 0 : source.split("\n").length;
+}
+
+function validateFrontendDemoSplitContract(repoRoot) {
+  const failures = [];
+  const demoRoot = path.join(repoRoot, "docs/ui-design/frontend-input/frontend-demo-draft");
+  const renderEntryPath = path.join(demoRoot, "render.js");
+  const renderRuntimePath = path.join(demoRoot, "render-runtime.js");
+  const routeContractPath = path.join(demoRoot, "route-contract.js");
+  const styleEntryPath = path.join(demoRoot, "styles.css");
+  const styleChunkDir = path.join(demoRoot, "styles");
+  const renderEntryLines = countFileLines(renderEntryPath);
+  const styleEntryLines = countFileLines(styleEntryPath);
+  const styleEntrySource = fs.existsSync(styleEntryPath) ? fs.readFileSync(styleEntryPath, "utf8") : "";
+  const styleChunks = fs.existsSync(styleChunkDir)
+    ? fs.readdirSync(styleChunkDir).filter((file) => /^\d+-.*\.css$/.test(file)).sort()
+    : [];
+
+  assert(fs.existsSync(renderEntryPath), "frontend demo render.js entry does not exist", failures);
+  assert(fs.existsSync(renderRuntimePath), "frontend demo render-runtime.js does not exist", failures);
+  assert(fs.existsSync(routeContractPath), "frontend demo route-contract.js does not exist", failures);
+  assert(renderEntryLines > 0 && renderEntryLines <= 24, `frontend demo render.js entry has ${renderEntryLines} lines; expected <= 24`, failures);
+  assert(styleEntryLines > 0 && styleEntryLines <= 24, `frontend demo styles.css entry has ${styleEntryLines} lines; expected <= 24`, failures);
+  assert(styleChunks.length >= 5, `frontend demo style chunk count ${styleChunks.length} < 5`, failures);
+  for (const chunk of styleChunks) {
+    assert(styleEntrySource.includes(`./styles/${chunk}`), `styles.css does not import ${chunk}`, failures);
+  }
+
+  return {
+    passed: failures.length === 0,
+    failures,
+    renderEntryLines,
+    styleEntryLines,
+    styleChunkCount: styleChunks.length,
+    styleChunks
   };
 }
 
@@ -2753,6 +2884,8 @@ async function main() {
   const planningDocumentation = validatePlanningDocumentation(repoRoot);
   const navigationContract = validateCurrentNavigationContract(repoRoot);
   const projectStructureContract = validateProjectStructureContract(repoRoot);
+  const deepRouteClosureContract = validateDeepRouteClosureContract(repoRoot, manifest);
+  const frontendDemoSplitContract = validateFrontendDemoSplitContract(repoRoot);
   const { chromium } = loadPlaywright();
 
   const browser = await chromium.launch({ headless: true });
@@ -2788,6 +2921,8 @@ async function main() {
       planningDocumentation.passed &&
       navigationContract.passed &&
       projectStructureContract.passed &&
+      deepRouteClosureContract.passed &&
+      frontendDemoSplitContract.passed &&
       results.every((result) => result.passed) &&
       componentReferenceSmoke.passed,
     tokenContract,
@@ -2795,6 +2930,8 @@ async function main() {
     planningDocumentation,
     navigationContract,
     projectStructureContract,
+    deepRouteClosureContract,
+    frontendDemoSplitContract,
     componentReferenceSmoke,
     results
   };
