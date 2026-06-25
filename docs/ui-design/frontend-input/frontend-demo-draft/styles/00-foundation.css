@@ -986,8 +986,9 @@ button:focus-visible {
 
 .fd-chip-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
-  overflow-x: auto;
+  overflow-x: visible;
   overflow-y: hidden;
   min-height: 34px;
   scrollbar-width: none;
@@ -999,12 +1000,12 @@ button:focus-visible {
 }
 
 .fd-chip-row button {
-  flex: 0 0 auto;
-  min-width: 64px;
+  flex: 0 1 auto;
+  min-width: 56px;
   max-width: 132px;
   min-height: 34px;
   overflow: hidden;
-  padding: 0 15px;
+  padding: 0 12px;
   border-radius: var(--fd-radius-pill);
   background: rgba(238, 232, 223, 0.9);
   color: #2b251f;
@@ -1056,14 +1057,16 @@ button:focus-visible {
 }
 
 .fd-continue-card strong {
-  display: block;
+  display: -webkit-box;
   overflow: hidden;
   margin-top: 6px;
   font-family: var(--fd-serif);
   font-size: 20px;
   line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 
 .fd-continue-card h2 {
@@ -1074,14 +1077,16 @@ button:focus-visible {
 }
 
 .fd-continue-author {
-  display: block;
+  display: -webkit-box;
   overflow: hidden;
   margin-top: 5px;
   color: var(--fd-muted);
   font-size: 14px;
   line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 
 .fd-book-card span,
@@ -1237,12 +1242,14 @@ button:focus-visible {
 
 .fd-book-card strong {
   overflow: hidden;
+  overflow-wrap: anywhere;
   font-family: var(--fd-serif);
   font-size: 15px;
   line-height: 1.22;
   display: -webkit-box;
   -webkit-line-clamp: var(--reader-ds-text-book-title-lines);
   -webkit-box-orient: vertical;
+  white-space: normal;
 }
 
 .fd-book-grid.is-list-view .fd-book-card strong {

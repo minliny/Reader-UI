@@ -11,13 +11,13 @@
 | 模块 | Demo route | Manifest target | Handoff normalized HTML |
 | --- | ---: | ---: | ---: |
 | 发现 | 1 | 2 | 1 |
-| RSS | 1 | 2 | 5 |
-| 设置 | 8 | 16 | 15 |
+| RSS | 5 | 2 | 5 |
+| 设置 | 9 | 16 | 15 |
 
 ## 契约来源
 
 - `frontend-demo-draft/route-contract.js`：定义 `routes` 与 `deepRouteClosure`。
-- `validate-frontend-inputs.js`：读取 `deepRouteClosure`，校验 demo route、manifest target 和 handoff 页面是否齐全。
+- `validate-frontend-inputs.js`：读取 `deepRouteClosure`，校验 demo route、manifest target、handoff 页面以及 manifest / handoff 到可渲染 route 的映射是否齐全。
 - `manifest.json`：继续作为 preview / state-matrix 目标清单。
 
 ## 验收口径
@@ -31,4 +31,4 @@ navigationContract.passed = true
 projectStructureContract.duplicateEntryCount = 0
 ```
 
-这意味着发现 / RSS / 设置的深层页面缺失、demo route 缺失、handoff 页面缺失，都会直接导致验证失败。
+这意味着发现 / RSS / 设置的深层页面缺失、demo route 缺失、handoff 页面缺失，或 handoff / manifest 映射到不可渲染 route，都会直接导致验证失败。

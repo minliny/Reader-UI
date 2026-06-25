@@ -20,15 +20,15 @@
 | 项目（Item） | 当前数量 / 现象（Current Evidence） | 说明（Notes） |
 |---|---:|---|
 | `frontend-demo-draft/render.js` | 8 行 | 仅保留 runtime bootstrap。 |
-| `frontend-demo-draft/render-runtime.js` | 4950 行 | 主渲染 runtime，后续内部组件化对象。 |
-| `frontend-demo-draft/route-contract.js` | 127 行 | route 元数据和发现 / RSS / 设置深层闭合契约。 |
+| `frontend-demo-draft/render-runtime.js` | 5087 行 | 主渲染 runtime，后续内部组件化对象。 |
+| `frontend-demo-draft/route-contract.js` | 176 行 | route 元数据和发现 / RSS / 设置深层闭合契约。 |
 | `frontend-demo-draft/styles.css` | 9 行 | 仅保留 token 和分层 CSS import。 |
 | `frontend-demo-draft/styles/*.css` | 7 个文件 | 按原级联顺序拆分为 foundation / shell / main-library / reader / settings-source / flow-adaptive / responsive。 |
 | CSS `px` 值 | 2065 次，135 个唯一值 | 不是全部错误，但说明大量尺寸仍是局部散值。 |
 | CSS media query | 2 个 | 仅覆盖局部 demo / source-switch，不是完整自适应体系。 |
 | CSS 自定义属性定义 | 130 个，未发现重复定义冲突 | 覆盖 `tokens.css`、demo CSS、shell kit CSS、asset CSS；命名冲突不是主问题，主问题是 token 覆盖范围不足。 |
 | ` 2` 副本 | 0 个已跟踪文件 | 499 个旧副本文件已删除，正式输入件只保留无 ` 2` 路径。 |
-| route 数量 | 55 个 | demo 已超过原 30 页范围，包含书源管理子流程、同步恢复流程和阅读展开态。 |
+| route 数量 | 60 个 | demo 已超过原 30 页范围，包含 RSS 深层状态、缓存管理、书源管理子流程、同步恢复流程和阅读展开态。 |
 | 重复 route 标题 | 2 组 | `sync-backup` / `webdav-config` 同为“同步与备份”；`source-rule-edit` / `source-edit-debug` 同为“规则编辑”。 |
 
 ## 参数审计（Parameter Audit）
@@ -67,13 +67,13 @@
 | `source-edit-debug` | 标题与 `source-rule-edit` 重复，语义像规则编辑又像调测。 | 拆为 `source-rule-debug-entry` 或删除并合并到 `source-debug`。 |
 | `source-detect` | 当前实现更像检测结果页，但 route key 使用动作名，容易和“点击检测”动作混淆。 | 若是结果页：`source-detection-result`；若是动作：不应作为 route。 |
 | `settings-general` 中“恢复默认” | 用户多次要求避免多余复杂操作；恢复默认是否仍需要全局存在未重新确认。 | 先标记为待审，不作为默认 P0。 |
-| `CacheManagement` | 当前 demo 的 App 通用设置已有“缓存清理”行，但正式 manifest / contracts / planning docs 仍保留独立缓存管理页。 | 若最新口径确认删除独立页，应从正式页面、manifest、contracts、planning docs 中移除独立页面，保留 App 通用设置里的缓存清理行。 |
+| `CacheManagement` | 已按正式 manifest / contracts / planning docs 保留独立缓存管理页；设置首页进入 `cache-management`，页面覆盖缓存占用、缓存分类、策略和清理确认。 | 保留独立页；App 通用设置里的“缓存清理”只作为快捷危险操作，不替代完整缓存管理页。 |
 
 ## 文档与 Demo 不一致（Documentation vs Demo Drift）
 
 | 漂移项（Drift Item） | 当前证据（Evidence） | 应处理方式（Fix Direction） |
 |---|---|---|
-| 独立缓存管理页 | `manifest.json`、`contracts.d.ts`、`EVENT_CALLBACK_MAPPING.md`、`PAGE_RELATIONSHIP_MAP.md`、`FRONTEND_PAGE_PLANNING_CARDS.md` 仍保留 `cache-management` / `CacheManagement`；校验脚本当前也仍按 30 个正式页面检查。 | 先确认正式页面集是否从 30 页降为 29 页；若降级，需同步更新 manifest、contracts、validation 和 Compose 覆盖守卫，再把缓存清理归入 `settings-general` 一行。 |
+| 独立缓存管理页 | `manifest.json`、`contracts.d.ts`、`EVENT_CALLBACK_MAPPING.md`、`PAGE_RELATIONSHIP_MAP.md`、`FRONTEND_PAGE_PLANNING_CARDS.md` 均保留 `cache-management` / `CacheManagement`；demo 已补 `cache-management` route 和 SettingsShell 页面。 | 已按 30 个正式页面口径闭合；后续只需把缓存数据继续从 runtime 迁入 fixture。 |
 | 同步与备份的备份记录 | 当前 `sync-backup` demo 配置已经改为 WebDAV 配置、本地恢复、远程恢复和恢复范围；但通用 `settingsRecordsHtml` helper 仍保留“备份记录”模板，manifest / planning docs 仍写备份记录或 `BackupRecordRow`。 | 按当前 demo 口径改为 WebDAV 配置在前，本地恢复 / 远程恢复两个入口，点击后弹出备份数据选择；若保留历史记录组件，应标为历史/归档而不是 P0 页面结构。 |
 | 隐私与权限的协议入口 | 多份规划仍写“协议入口”；用户已明确个人开源项目不需要法律协议。 | 删除用户协议/隐私协议口径；保留权限、隐私开关、清理数据、开源说明。 |
 | 主 Tab 更多入口旧逻辑 | `render-runtime.js` 仍保留 Discover / RSS / Settings 更多入口反馈文案，但当前主 Tab 顶栏已不显示这些按钮。 | 删除不可达旧文案或迁入历史注释，避免后续误恢复。 |
@@ -134,7 +134,7 @@ docs/ui-design/frontend-input/
 
 ## 优先处理顺序（Recommended Fix Order）
 
-1. **修正过期页面口径（Remove Stale Page Model）**：清理独立缓存管理页、同步备份记录模型、协议入口等过期规划；缓存页若从正式页面集中移除，必须同步更新 manifest、contracts、validation 和 Compose 覆盖守卫。
+1. **修正过期页面口径（Remove Stale Page Model）**：同步备份记录模型、协议入口等过期规划继续按 demo 口径清理；缓存管理页已保留为独立正式页面，不再作为待确认删除项。
 2. **修正 route 命名（Normalize Routes）**：处理 `reader-full-*`、`webdav-config`、`source-edit-debug`、`source-detect`。
 3. **继续拆分 runtime 内部（Split Runtime Internals）**：按 `main-tabs / library / reader / settings / source-management` 拆 `render-runtime.js`。
 4. **语义化 CSS chunks（Semantic CSS Chunks）**：在现有 7 个 chunk 基础上继续按 `tokens / shell / components / page` 归并散落 px。

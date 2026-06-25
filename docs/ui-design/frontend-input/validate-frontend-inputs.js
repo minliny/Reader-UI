@@ -517,15 +517,21 @@ function validateDeepRouteClosureContract(repoRoot, manifest) {
   let checkedDemoRouteCount = 0;
   let checkedManifestTargetCount = 0;
   let checkedHandoffPageCount = 0;
+  let checkedRouteManifestMapCount = 0;
+  let checkedHandoffRouteMapCount = 0;
 
   for (const [moduleName, moduleContract] of Object.entries(deepRouteClosure)) {
     const demoRoutes = moduleContract.demoRoutes || [];
     const manifestTargets = moduleContract.manifestTargets || [];
     const handoffPages = moduleContract.handoffPages || [];
+    const routeManifestTargets = moduleContract.routeManifestTargets || {};
+    const handoffRouteMap = moduleContract.handoffRouteMap || {};
 
     assert(demoRoutes.length > 0, `${moduleName} deep route closure has no demo routes`, failures);
     assert(manifestTargets.length > 0, `${moduleName} deep route closure has no manifest targets`, failures);
     assert(handoffPages.length > 0, `${moduleName} deep route closure has no handoff pages`, failures);
+    assert(Object.keys(routeManifestTargets).length > 0, `${moduleName} deep route closure has no routeManifestTargets`, failures);
+    assert(Object.keys(handoffRouteMap).length > 0, `${moduleName} deep route closure has no handoffRouteMap`, failures);
 
     for (const route of demoRoutes) {
       checkedDemoRouteCount += 1;
@@ -543,6 +549,35 @@ function validateDeepRouteClosureContract(repoRoot, manifest) {
       const handoffPath = path.join(repoRoot, "docs/ui-handoff/normalized-html", handoffPage);
       assert(fs.existsSync(handoffPath), `${moduleName} handoff page ${handoffPage} is missing`, failures);
     }
+
+    const mappedManifestTargets = new Set();
+    for (const [route, targetNames] of Object.entries(routeManifestTargets)) {
+      assert(Array.isArray(targetNames) && targetNames.length > 0, `${moduleName} routeManifestTargets.${route} has no targets`, failures);
+      assert(Boolean(routes[route]), `${moduleName} routeManifestTargets route ${route} is missing from route-contract.js`, failures);
+      assert(renderSource.includes(`case "${route}"`), `${moduleName} routeManifestTargets route ${route} is not handled by renderRoute`, failures);
+      for (const targetName of targetNames || []) {
+        checkedRouteManifestMapCount += 1;
+        mappedManifestTargets.add(targetName);
+        assert(manifestTargets.includes(targetName), `${moduleName} routeManifestTargets.${route} target ${targetName} is not listed in manifestTargets`, failures);
+        assert(manifestTargetNames.has(targetName), `${moduleName} routeManifestTargets.${route} target ${targetName} is missing from manifest`, failures);
+      }
+    }
+    for (const targetName of manifestTargets) {
+      assert(mappedManifestTargets.has(targetName), `${moduleName} manifest target ${targetName} is not mapped to a demo route`, failures);
+    }
+
+    for (const handoffPage of handoffPages) {
+      const mappedRoute = handoffRouteMap[handoffPage];
+      checkedHandoffRouteMapCount += 1;
+      assert(Boolean(mappedRoute), `${moduleName} handoff page ${handoffPage} is not mapped to a demo route`, failures);
+      if (mappedRoute) {
+        assert(Boolean(routes[mappedRoute]), `${moduleName} handoff page ${handoffPage} maps to missing route ${mappedRoute}`, failures);
+        assert(renderSource.includes(`case "${mappedRoute}"`), `${moduleName} handoff page ${handoffPage} maps to route ${mappedRoute} that is not handled by renderRoute`, failures);
+      }
+    }
+    for (const handoffPage of Object.keys(handoffRouteMap)) {
+      assert(handoffPages.includes(handoffPage), `${moduleName} handoffRouteMap includes ${handoffPage} that is not listed in handoffPages`, failures);
+    }
   }
 
   return {
@@ -551,7 +586,9 @@ function validateDeepRouteClosureContract(repoRoot, manifest) {
     moduleCount: Object.keys(deepRouteClosure).length,
     checkedDemoRouteCount,
     checkedManifestTargetCount,
-    checkedHandoffPageCount
+    checkedHandoffPageCount,
+    checkedRouteManifestMapCount,
+    checkedHandoffRouteMapCount
   };
 }
 
@@ -1916,6 +1953,7 @@ async function validateFrontendDemoInteractions(page, failures) {
     { route: "settings-general", texts: ["通用设置", "基础偏好", "App主题", "启动时打开", "自动检查更新", "崩溃日志", "恢复默认"], sections: ["基础偏好", "行为与反馈"], optionDropdownMin: 1, dialogTriggerMin: 1 },
     { route: "bookshelf-search-settings", texts: ["书架与搜索", "默认展示", "封面列数", "封面模式预览", "搜索范围", "结果排序", "搜索历史", "清空搜索历史"], sections: ["书架", "搜索"], optionDropdownMin: 1, dialogTriggerMin: 1 },
     { route: "privacy-permissions", texts: ["文件访问", "通知权限", "网络访问说明", "去设置", "隐私开关", "清除隐私数据"], sections: ["系统权限", "隐私设置", "数据与说明"], dialogTriggerMin: 1 },
+    { route: "cache-management", texts: ["缓存管理", "缓存占用", "正在计算", "缓存分类", "书籍缓存", "封面缓存", "搜索缓存", "RSS 缓存", "清理缓存"], sections: ["缓存分类", "缓存策略", "清理缓存"], metricMin: 4, optionDropdownMin: 1, dialogTriggerMin: 2 },
     { route: "about-feedback", texts: ["当前版本", "个人开源", "检查更新", "问题反馈", "功能建议", "源码仓库", "开源许可", "导出诊断日志"], sections: ["项目与版本", "反馈与支持", "开源与贡献"], metricMin: 4, dialogTriggerMin: 3 },
     { route: "sync-backup", texts: ["同步与备份", "服务器地址", "测试 WebDAV", "保存配置", "WebDAV · 2026-06-23 08:00", "本地 · 2026-06-23 10:30", "恢复范围"], sections: ["WebDAV 配置", "恢复数据", "恢复范围"], dialogTriggerMin: 1, restoreRowsMin: 4 },
     { route: "source-management", texts: ["书源管理", "搜索书源名称或域名", "全部分组", "起点中文网", "启用", "异常", "批量管理", "新增书源"], sourceRowsMin: 8 }

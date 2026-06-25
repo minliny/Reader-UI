@@ -829,6 +829,17 @@
   white-space: nowrap;
 }
 
+.fd-ranking-row strong,
+.fd-feed-row strong,
+.fd-ranking-row small,
+.fd-feed-row small {
+  display: -webkit-box;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+}
+
 .fd-reading-surface {
   position: absolute;
   inset: 0;
@@ -1284,22 +1295,26 @@
 }
 
 .fd-reader-top strong {
-  display: block;
+  display: -webkit-box;
   min-width: 0;
   overflow: hidden;
   font-size: 16px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 
 .fd-reader-top small {
-  display: block;
+  display: -webkit-box;
   min-width: 0;
   overflow: hidden;
   color: var(--fd-muted);
   font-size: 12px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
 }
 
 .fd-reader-top button {

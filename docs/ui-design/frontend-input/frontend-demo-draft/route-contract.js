@@ -3,6 +3,10 @@
     bookshelf: { title: "书架（Bookshelf）", shell: "MainTabShell" },
     discover: { title: "发现（Discover）", shell: "MainTabShell" },
     rss: { title: "RSS", shell: "MainTabShell" },
+    "rss-detail": { title: "RSS 详情（RSS Detail）", shell: "MainTabShell" },
+    "rss-subscription-management": { title: "RSS 订阅管理（RSS Subscription Management）", shell: "MainTabShell" },
+    "rss-empty": { title: "RSS 空状态（RSS Empty）", shell: "MainTabShell" },
+    "rss-error": { title: "RSS 错误状态（RSS Error）", shell: "MainTabShell" },
     settings: { title: "设置首页（Settings Home）", shell: "MainTabShell" },
     "book-search": { title: "书籍搜索（Book Search）", shell: "LibraryShell" },
     "book-detail": { title: "书籍详情（Book Detail）", shell: "LibraryShell" },
@@ -32,6 +36,7 @@
     "bookshelf-search-settings": { title: "书架与搜索设置（Bookshelf and Search Settings）", shell: "SettingsShell" },
     "privacy-permissions": { title: "隐私与权限（Privacy and Permissions）", shell: "SettingsShell" },
     "about-feedback": { title: "关于与反馈（About and Feedback）", shell: "SettingsShell" },
+    "cache-management": { title: "缓存管理（Cache Management）", shell: "SettingsShell" },
     "sync-backup": { title: "同步与备份（Sync and Backup）", shell: "SettingsShell" },
     "webdav-config": { title: "同步与备份（Sync and Backup）", shell: "SettingsShell" },
     "restore-confirm": { title: "恢复确认（Restore Confirm）", shell: "SettingsShell" },
@@ -62,13 +67,29 @@
       label: "发现",
       demoRoutes: ["discover"],
       manifestTargets: ["discovery-home-preview", "discovery-home-state-matrix"],
-      handoffPages: ["discover-home.html"]
+      routeManifestTargets: {
+        discover: ["discovery-home-preview", "discovery-home-state-matrix"]
+      },
+      handoffPages: ["discover-home.html"],
+      handoffRouteMap: {
+        "discover-home.html": "discover"
+      }
     },
     rss: {
       label: "RSS",
-      demoRoutes: ["rss"],
+      demoRoutes: ["rss", "rss-detail", "rss-subscription-management", "rss-empty", "rss-error"],
       manifestTargets: ["rss-home-preview", "rss-home-state-matrix"],
-      handoffPages: ["rss-list.html", "rss-detail.html", "rss-subscription-management.html", "rss-empty.html", "rss-error.html"]
+      routeManifestTargets: {
+        rss: ["rss-home-preview", "rss-home-state-matrix"]
+      },
+      handoffPages: ["rss-list.html", "rss-detail.html", "rss-subscription-management.html", "rss-empty.html", "rss-error.html"],
+      handoffRouteMap: {
+        "rss-list.html": "rss",
+        "rss-detail.html": "rss-detail",
+        "rss-subscription-management.html": "rss-subscription-management",
+        "rss-empty.html": "rss-empty",
+        "rss-error.html": "rss-error"
+      }
     },
     settings: {
       label: "设置",
@@ -78,6 +99,7 @@
         "bookshelf-search-settings",
         "privacy-permissions",
         "about-feedback",
+        "cache-management",
         "sync-backup",
         "webdav-config",
         "source-management"
@@ -100,6 +122,16 @@
         "source-management-preview",
         "source-management-state-matrix"
       ],
+      routeManifestTargets: {
+        settings: ["settings-home-preview", "settings-home-state-matrix"],
+        "settings-general": ["general-settings-preview", "general-settings-state-matrix"],
+        "bookshelf-search-settings": ["bookshelf-search-settings-preview", "bookshelf-search-settings-state-matrix"],
+        "privacy-permissions": ["privacy-permissions-preview", "privacy-permissions-state-matrix"],
+        "cache-management": ["cache-management-preview", "cache-management-state-matrix"],
+        "about-feedback": ["about-feedback-preview", "about-feedback-state-matrix"],
+        "sync-backup": ["sync-backup-preview", "sync-backup-state-matrix"],
+        "source-management": ["source-management-preview", "source-management-state-matrix"]
+      },
       handoffPages: [
         "global-settings.html",
         "backup-settings.html",
@@ -116,7 +148,24 @@
         "reading-settings-entry.html",
         "about-version.html",
         "permission-required.html"
-      ]
+      ],
+      handoffRouteMap: {
+        "global-settings.html": "settings",
+        "backup-settings.html": "sync-backup",
+        "sync-settings-entry.html": "sync-backup",
+        "webdav-config.html": "webdav-config",
+        "source-settings-entry.html": "source-management",
+        "source-management-list.html": "source-management",
+        "source-add.html": "source-import-options",
+        "source-import.html": "source-import-preview",
+        "source-detail.html": "source-detail",
+        "source-edit.html": "source-rule-edit",
+        "source-test-result.html": "source-detect",
+        "source-disabled-error.html": "source-management",
+        "reading-settings-entry.html": "reader-settings",
+        "about-version.html": "about-feedback",
+        "permission-required.html": "privacy-permissions"
+      }
     }
   };
 

@@ -296,9 +296,9 @@
 
   function mainTabRss(data, appState) {
     const entries = data.mainTabs.rss || [
-      { title: "长夜余火更新到第 33 章", meta: "优书网 · 2 分钟前", route: "immersive-reading" },
-      { title: "书源维护公告", meta: "RSS 订阅 · 未读", route: "source-management" },
-      { title: "本地导入文件已完成解析", meta: "系统通知 · 12 分钟前", route: "book-detail" }
+      { title: "长夜余火更新到第 33 章", meta: "优书网 · 2 分钟前", route: "rss-detail" },
+      { title: "书源维护公告", meta: "RSS 订阅 · 未读", route: "rss-detail" },
+      { title: "本地导入文件已完成解析", meta: "系统通知 · 12 分钟前", route: "rss-detail" }
     ];
 
     return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
@@ -311,6 +311,12 @@
         <button class="fd-search-entry" type="button" data-route="book-search">
           ${icon("search", "fd-small-icon")}<span>搜索订阅、书名或来源</span>
         </button>
+        <nav class="fd-chip-row" aria-label="RSS 状态入口">
+          <button class="is-active" type="button" data-route="rss">未读</button>
+          <button type="button" data-route="rss-subscription-management">订阅源</button>
+          <button type="button" data-route="rss-empty">空状态</button>
+          <button type="button" data-route="rss-error">错误态</button>
+        </nav>
         <section class="fd-ranking-list">
           <h2>订阅更新</h2>
           ${entries.map((item, index) => `
@@ -325,11 +331,87 @@
     }));
   }
 
+  function rssShellScreen(data, title, contentHtml, appState) {
+    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
+      data,
+      title,
+      activeType: "rss",
+      actions: [],
+      ariaLabel: title,
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function rssDetailScreen(data, appState) {
+    return rssShellScreen(data, "RSS 详情", `
+      <article class="fd-book-summary-card fd-rss-detail-card">
+        <span>GitHub Releases · 今天 10:18 · 6 条未读</span>
+        <h2>Legado 更新记录</h2>
+        <p>本条目汇总最近的阅读体验修复、订阅源解析改进和缓存策略调整。</p>
+        <p>新版对订阅刷新、正文提取和书源错误提示做了细化，失败状态会保留来源和重试入口。</p>
+        <p>当前 demo 保留 RSS 详情、订阅管理、空状态和错误态，用于平台实现对齐。</p>
+      </article>
+      <section class="fd-setting-section">
+        <h2>条目操作</h2>
+        <article class="fd-setting-row" role="button" tabindex="0" data-route="rss">
+          <span>${icon("bookmark", "fd-small-icon")}</span>
+          <strong>标记已读<small>回到 RSS 列表后同步未读数量</small></strong>
+          ${icon("chevron", "fd-small-icon")}
+        </article>
+        <article class="fd-setting-row" role="button" tabindex="0" data-route="rss-subscription-management">
+          <span>${icon("rss", "fd-small-icon")}</span>
+          <strong>管理订阅源<small>调整刷新、分组和启用状态</small></strong>
+          ${icon("chevron", "fd-small-icon")}
+        </article>
+      </section>`, appState);
+  }
+
+  function rssSubscriptionManagementScreen(data, appState) {
+    const subscriptions = [
+      ["GitHub Releases", "开源项目 · 6 条未读", "已启用"],
+      ["阅读器版本讨论", "社区 · 12 条未读", "已启用"],
+      ["书源维护公告", "维护 · 2 条未读", "已启用"],
+      ["本地系统通知", "系统 · 无未读", "暂停"]
+    ];
+    return rssShellScreen(data, "RSS 订阅管理", `
+      <section class="fd-setting-section">
+        <h2>订阅源</h2>
+        ${subscriptions.map(([title, meta, status]) => `
+          <article class="fd-setting-row" role="button" tabindex="0" data-route="rss-detail">
+            <span>${icon("rss", "fd-small-icon")}</span>
+            <strong>${esc(title)}<small>${esc(meta)}</small></strong>
+            <em class="fd-settings-badge is-${status === "暂停" ? "warn" : "good"}">${esc(status)}</em>
+          </article>
+        `).join("")}
+      </section>
+      <section class="fd-setting-section">
+        <h2>刷新策略</h2>
+        <article class="fd-setting-row"><span>${icon("refresh", "fd-small-icon")}</span><strong>自动刷新<small>Wi-Fi 下每 30 分钟刷新一次</small></strong>${settingsSwitch(true)}</article>
+        <article class="fd-setting-row"><span>${icon("bell", "fd-small-icon")}</span><strong>未读提醒<small>只提醒重点订阅源</small></strong>${settingsSwitch(true)}</article>
+      </section>`, appState);
+  }
+
+  function rssStateScreen(data, route, appState) {
+    const isError = route === "rss-error";
+    return rssShellScreen(data, isError ? "RSS 错误" : "RSS 空状态", `
+      <section class="fd-search-state ${isError ? "is-error" : "is-empty"}">
+        <span>${icon(isError ? "warning" : "rss", "fd-medium-icon")}</span>
+        <h2>${isError ? "订阅刷新失败" : "暂无未读订阅"}</h2>
+        <p>${isError ? "网络连接超时，部分订阅源暂时无法刷新。保留已缓存内容，可以稍后重试。" : "当前订阅源没有新的未读条目。你可以管理订阅源或手动刷新。日常空状态仍保留 RSS 主导航上下文。"}</p>
+        <div class="fd-action-row">
+          <button type="button" data-route="rss">${isError ? "重试刷新" : "返回 RSS"}</button>
+          <button type="button" data-route="rss-subscription-management">订阅管理</button>
+        </div>
+      </section>`, appState);
+  }
+
   function mainTabSettings(data, appState) {
     const rows = [
       { icon: "settings", title: "App 通用设置", meta: "主题、网络、基础行为", route: "settings-general" },
       { icon: "bookshelf", title: "书架与搜索设置", meta: "布局、列数、搜索历史", route: "bookshelf-search-settings" },
       { icon: "shield", title: "隐私与权限", meta: "本地书、通知、剪贴板", route: "privacy-permissions" },
+      { icon: "storage", title: "缓存管理", meta: "占用、分类、清理策略", route: "cache-management" },
       { icon: "source", title: "书源管理", meta: "启用、检测、日志", route: "source-management" },
       { icon: "sync", title: "同步与备份", meta: "本地恢复、远程恢复", route: "sync-backup" },
       { icon: "info", title: "关于与反馈", meta: "版本、反馈、开源", route: "about-feedback" }
@@ -2264,6 +2346,53 @@
         actions: [{ tone: "danger", icon: "trash", title: "清除隐私数据", meta: "清除所有隐私相关数据与记录", overlay: "dialog" }],
         confirm: { title: "清除隐私数据？", copy: "清除后将移除搜索历史、阅读痕迹和本地隐私记录。", confirmLabel: "确认清除" }
       },
+      "cache-management": {
+        title: "缓存管理",
+        metrics: [
+          { icon: "storage", label: "缓存占用", value: "1.28 GB" },
+          { icon: "clock", label: "计算状态", value: "正在计算" },
+          { icon: "book", label: "书籍缓存", value: "860 MB" },
+          { icon: "rss", label: "RSS 缓存", value: "96 MB" }
+        ],
+        storage: {
+          title: "缓存占用",
+          value: "1.28 GB",
+          percent: "68%",
+          copy: "正在计算各分类缓存，结果会按书籍缓存、封面缓存、搜索缓存和 RSS 缓存展示。"
+        },
+        sections: [
+          {
+            title: "缓存分类",
+            rows: [
+              { type: "link", icon: "book", title: "书籍缓存", meta: "已缓存章节、阅读正文和目录索引", value: "860 MB" },
+              { type: "link", icon: "image", title: "封面缓存", meta: "书架封面、发现推荐和详情页图片", value: "210 MB" },
+              { type: "link", icon: "search", title: "搜索缓存", meta: "最近搜索结果和书源查询缓存", value: "114 MB" },
+              { type: "link", icon: "rss", title: "RSS 缓存", meta: "订阅条目摘要、正文提取和未读状态", value: "96 MB" }
+            ]
+          },
+          {
+            title: "缓存策略",
+            rows: [
+              { type: "switch", icon: "download", title: "自动缓存后续章节", meta: "阅读时预取后续章节，离线仍可继续", enabled: true },
+              { type: "switch", icon: "image", title: "保留封面缓存", meta: "清理时默认保留最近访问封面", enabled: true },
+              { type: "select", icon: "clock", title: "自动清理周期", meta: "控制搜索缓存和 RSS 缓存的保留时间", value: "30 天", options: ["7 天", "30 天", "90 天"] }
+            ]
+          },
+          {
+            title: "清理缓存",
+            rows: [
+              { type: "danger", tone: "danger", icon: "trash", title: "清理缓存", meta: "清除章节、封面、搜索和 RSS 临时缓存，不删除书籍与阅读进度", actionLabel: "清理", overlay: "dialog:cache-cleanup" }
+            ]
+          }
+        ],
+        actions: [
+          { icon: "refresh", title: "重新计算缓存占用", meta: "刷新缓存分类和占用数据", overlay: "dialog:cache-recalculate" }
+        ],
+        confirms: {
+          "cache-cleanup": { title: "清理缓存？", copy: "将清除书籍缓存、封面缓存、搜索缓存和 RSS 缓存，不会删除书籍与阅读进度。", confirmLabel: "确认清理" },
+          "cache-recalculate": { title: "重新计算缓存占用？", copy: "将扫描本地缓存目录并更新当前分类数据。", confirmLabel: "开始计算" }
+        }
+      },
       "about-feedback": {
         title: "关于与反馈",
         metrics: [
@@ -3570,6 +3699,13 @@
         return mainTabDiscover(data, appState);
       case "rss":
         return mainTabRss(data, appState);
+      case "rss-detail":
+        return rssDetailScreen(data, appState);
+      case "rss-subscription-management":
+        return rssSubscriptionManagementScreen(data, appState);
+      case "rss-empty":
+      case "rss-error":
+        return rssStateScreen(data, route, appState);
       case "settings":
         return mainTabSettings(data, appState);
       case "book-search":
@@ -3643,6 +3779,7 @@
       case "settings-general":
       case "bookshelf-search-settings":
       case "privacy-permissions":
+      case "cache-management":
       case "about-feedback":
       case "sync-backup":
         return settingsScreen(data, route, appState);
