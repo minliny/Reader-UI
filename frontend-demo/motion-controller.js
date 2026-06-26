@@ -24,6 +24,10 @@
     "reader.control.handle.press": 80,
     "reader.control.handle.drag": 0,
     "reader.control.handle.release": 120,
+    "reader.control.dock.longPress": 320,
+    "reader.control.dock.drag": 0,
+    "reader.control.dock.release": 120,
+    "reader.control.dock.rebound": 120,
     "reader.module.switch": 160,
     "reader.page.turn.next/prev": 220,
     "viewport.orientation.reshape": 240
@@ -428,6 +432,34 @@
       interrupt: ["routeChange", "orientationPrepare"],
       finalState: "controlLayerResolvedToSingleRouteState",
       reducedMotion: "Resolve expand, collapse, or snap-back immediately without panel travel."
+    },
+    "reader.control.dock.longPress": {
+      from: ["fixedWidthDock", "handlePressed"],
+      to: ["dockDragArmed"],
+      interrupt: ["pointerCancel", "routeChange", "orientationPrepare", "viewportClassChange"],
+      finalState: "dockDragReadyWithinBounds",
+      reducedMotion: "Arm dock movement without scale or halo animation."
+    },
+    "reader.control.dock.drag": {
+      from: ["dockDragArmed", "dockOffset.previous"],
+      to: ["dockOffset.previewClamped"],
+      interrupt: ["pointerCancel", "routeChange", "orientationPrepare", "viewportClassChange"],
+      finalState: "dockPreviewOffsetWithinMovableSpace",
+      reducedMotion: "Update clamped dock offset directly while keeping dock dimensions fixed."
+    },
+    "reader.control.dock.release": {
+      from: ["dockDragging", "dockOffset.previewClamped"],
+      to: ["dockOffset.committed"],
+      interrupt: ["routeChange", "orientationPrepare", "viewportClassChange"],
+      finalState: "dockOffsetSavedForViewportClass",
+      reducedMotion: "Commit the legal dock offset immediately without snap movement."
+    },
+    "reader.control.dock.rebound": {
+      from: ["dockOffset.saved", "bounds.changed"],
+      to: ["dockOffset.clamped"],
+      interrupt: ["routeChange", "orientationPrepare"],
+      finalState: "dockOffsetLegalInCurrentBounds",
+      reducedMotion: "Clamp dock offset to the current movable space immediately."
     },
     "reader.session.autoPage.start": {
       from: ["controlLayerVisible", "session.inactiveOrTts"],

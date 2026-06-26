@@ -61,6 +61,10 @@ const requiredRuntimeMotionIds = [
   "reader.module.switch",
   "viewport.orientation.reshape",
   "reader.entry.coverToImmersive",
+  "reader.control.dock.longPress",
+  "reader.control.dock.drag",
+  "reader.control.dock.release",
+  "reader.control.dock.rebound",
   "reader.session.tts.start",
   "reader.session.autoPage.start"
 ];
@@ -87,6 +91,10 @@ const detailedMotionIds = [
   "reader.control.handle.press",
   "reader.control.handle.drag",
   "reader.control.handle.release",
+  "reader.control.dock.longPress",
+  "reader.control.dock.drag",
+  "reader.control.dock.release",
+  "reader.control.dock.rebound",
   "reader.control.hide",
   "reader.session.autoPage.start",
   "reader.session.tts.start",
@@ -254,6 +262,21 @@ const checks = [
       runtime.includes("reader.control.handle.release") &&
       motionTokens.includes("[data-motion-control-handle-panel]"),
     detail: "reader control grabbers expose press/drag/release states, route commit semantics, and tokenized snap CSS"
+  },
+  {
+    id: "motion.reader-control-dock.state-adapter",
+    passed: runtime.includes("attachReaderControlDockMotionState") &&
+      runtime.includes("data-motion-control-dock-state") &&
+      runtime.includes("reader.control.dock.longPress") &&
+      runtime.includes("reader.control.dock.drag") &&
+      runtime.includes("reader.control.dock.release") &&
+      runtime.includes("reader.control.dock.rebound") &&
+      runtime.includes("readerControlDockBounds") &&
+      runtime.includes("clearReaderControlDockState") &&
+      runtime.includes("function clamp(value, min, max)") &&
+      runtime.includes("data-motion-control-dock-result") &&
+      motionTokens.includes("[data-motion-control-dock-role]"),
+    detail: "wide reader control dock exposes long-press/drag/release/rebound states, bounds clamp, viewport-keyed offsets, and tokenized transform CSS"
   },
   {
     id: "motion.selector.bindings",

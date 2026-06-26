@@ -118,6 +118,10 @@
     return esc(stylesheetRelativeAsset((data.covers || {})[coverKey] || ""));
   }
 
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
   function viewportClassSnapshot() {
     const visualViewport = window.visualViewport;
     const width = Math.max(
@@ -6100,6 +6104,212 @@
     });
   }
 
+  const movableDockViewportClasses = new Set(["expanded-width", "tablet-expanded", "compact-landscape"]);
+
+  function readerControlDockViewportClass(screenHost) {
+    return screenHost?.closest?.(".fd-demo")?.getAttribute("data-viewport-class") || "";
+  }
+
+  function readerControlDockOffsetKey(screenHost) {
+    return readerControlDockViewportClass(screenHost) || "default";
+  }
+
+  function zeroDockOffset() {
+    return { x: 0, y: 0 };
+  }
+
+  function normalizeDockOffset(offset) {
+    const x = Number(offset?.x);
+    const y = Number(offset?.y);
+    return {
+      x: Number.isFinite(x) ? Math.round(x) : 0,
+      y: Number.isFinite(y) ? Math.round(y) : 0
+    };
+  }
+
+  function readerControlDockElements(screenHost) {
+    const frame = screenHost?.querySelector?.(".fd-reader-frame") || null;
+    const sheet = screenHost?.querySelector?.(".fd-reader-sheet:not(.fd-reader-sheet-empty)") || null;
+    const nav = screenHost?.querySelector?.(".fd-reader-module-nav:not(.fd-reader-module-nav-empty)") || null;
+    return { frame, sheet, nav };
+  }
+
+  function readerControlDockMovable(screenHost) {
+    const viewportClass = readerControlDockViewportClass(screenHost);
+    const { frame, sheet, nav } = readerControlDockElements(screenHost);
+    return Boolean(frame && sheet && nav && movableDockViewportClasses.has(viewportClass));
+  }
+
+  function readerControlDockGroupRect(elements) {
+    const rects = [elements.sheet, elements.nav]
+      .filter(Boolean)
+      .map((element) => element.getBoundingClientRect());
+    if (!rects.length) return null;
+    const left = Math.min(...rects.map((rect) => rect.left));
+    const top = Math.min(...rects.map((rect) => rect.top));
+    const right = Math.max(...rects.map((rect) => rect.right));
+    const bottom = Math.max(...rects.map((rect) => rect.bottom));
+    return {
+      left,
+      top,
+      right,
+      bottom,
+      width: right - left,
+      height: bottom - top
+    };
+  }
+
+  function readerControlDockBounds(screenHost, offset) {
+    const elements = readerControlDockElements(screenHost);
+    if (!elements.frame || !elements.sheet || !elements.nav) return null;
+    const frameRect = elements.frame.getBoundingClientRect();
+    const groupRect = readerControlDockGroupRect(elements);
+    if (!groupRect) return null;
+    const current = normalizeDockOffset(offset);
+    const margin = 16;
+    const baseLeft = groupRect.left - current.x;
+    const baseTop = groupRect.top - current.y;
+    const minX = Math.round(frameRect.left + margin - baseLeft);
+    const maxX = Math.round(frameRect.right - margin - (baseLeft + groupRect.width));
+    const minY = Math.round(frameRect.top + margin - baseTop);
+    const maxY = Math.round(frameRect.bottom - margin - (baseTop + groupRect.height));
+    return {
+      minX: Math.min(minX, maxX),
+      maxX: Math.max(minX, maxX),
+      minY: Math.min(minY, maxY),
+      maxY: Math.max(minY, maxY),
+      margin,
+      frameWidth: Math.round(frameRect.width),
+      frameHeight: Math.round(frameRect.height),
+      dockWidth: Math.round(groupRect.width),
+      dockHeight: Math.round(groupRect.height)
+    };
+  }
+
+  function clampDockOffset(offset, bounds) {
+    const current = normalizeDockOffset(offset);
+    if (!bounds) return current;
+    return {
+      x: Math.round(clamp(current.x, bounds.minX, bounds.maxX)),
+      y: Math.round(clamp(current.y, bounds.minY, bounds.maxY))
+    };
+  }
+
+  function dockBoundsString(bounds) {
+    if (!bounds) return "";
+    return `x:${bounds.minX}..${bounds.maxX};y:${bounds.minY}..${bounds.maxY};margin:${bounds.margin}`;
+  }
+
+  function setReaderControlDockState(screenHost, appState, state, options) {
+    const root = screenHost?.closest?.(".fd-demo") || null;
+    const elements = readerControlDockElements(screenHost);
+    const viewportClass = readerControlDockViewportClass(screenHost);
+    const key = readerControlDockOffsetKey(screenHost);
+    if (!elements.frame || !elements.sheet || !elements.nav || !movableDockViewportClasses.has(viewportClass)) {
+      return null;
+    }
+
+    const offsets = appState.readerDockOffsets || {};
+    appState.readerDockOffsets = offsets;
+    const requested = normalizeDockOffset(options?.offset || offsets[key] || zeroDockOffset());
+    const bounds = readerControlDockBounds(screenHost, requested);
+    const offset = clampDockOffset(requested, bounds);
+    if (options?.commit) {
+      offsets[key] = offset;
+    }
+
+    const motionId = options?.motionId || (
+      state === "armed" ? "reader.control.dock.longPress" :
+        state === "dragging" ? "reader.control.dock.drag" :
+          state === "rebound" ? "reader.control.dock.rebound" :
+            "reader.control.dock.release"
+    );
+
+    elements.frame.style.setProperty("--reader-control-dock-x", `${offset.x}px`);
+    elements.frame.style.setProperty("--reader-control-dock-y", `${offset.y}px`);
+    elements.frame.setAttribute("data-motion-control-dock", "true");
+    elements.frame.setAttribute("data-motion-control-dock-state", state);
+    elements.frame.setAttribute("data-motion-control-dock-id", motionId);
+    elements.frame.setAttribute("data-motion-control-dock-viewport", viewportClass);
+    elements.frame.setAttribute("data-motion-control-dock-x", String(offset.x));
+    elements.frame.setAttribute("data-motion-control-dock-y", String(offset.y));
+    elements.frame.setAttribute("data-motion-control-dock-bounds", dockBoundsString(bounds));
+    elements.frame.setAttribute("data-motion-control-dock-clamped", requested.x === offset.x && requested.y === offset.y ? "false" : "true");
+
+    [elements.sheet, elements.nav].forEach((element) => {
+      element.setAttribute("data-motion-control-dock-role", element === elements.sheet ? "sheet" : "nav");
+      element.setAttribute("data-motion-control-dock-state", state);
+      element.setAttribute("data-motion-control-dock-id", motionId);
+      element.setAttribute("data-motion-control-dock-viewport", viewportClass);
+    });
+    root?.setAttribute("data-motion-control-dock-last-id", motionId);
+    return { offset, bounds, requested, key, clamped: requested.x !== offset.x || requested.y !== offset.y };
+  }
+
+  function clearReaderControlDockState(screenHost) {
+    const elements = readerControlDockElements(screenHost);
+    const root = screenHost?.closest?.(".fd-demo") || null;
+    if (elements.frame) {
+      elements.frame.style.removeProperty("--reader-control-dock-x");
+      elements.frame.style.removeProperty("--reader-control-dock-y");
+      [
+        "data-motion-control-dock",
+        "data-motion-control-dock-state",
+        "data-motion-control-dock-id",
+        "data-motion-control-dock-viewport",
+        "data-motion-control-dock-x",
+        "data-motion-control-dock-y",
+        "data-motion-control-dock-bounds",
+        "data-motion-control-dock-clamped"
+      ].forEach((attribute) => elements.frame.removeAttribute(attribute));
+    }
+    [elements.sheet, elements.nav].forEach((element) => {
+      if (!element) return;
+      [
+        "data-motion-control-dock-role",
+        "data-motion-control-dock-state",
+        "data-motion-control-dock-id",
+        "data-motion-control-dock-viewport"
+      ].forEach((attribute) => element.removeAttribute(attribute));
+    });
+    root?.removeAttribute("data-motion-control-dock-last-id");
+  }
+
+  function applyReaderControlDockClamp(screenHost, appState, motionController) {
+    if (!readerControlDockMovable(screenHost)) {
+      clearReaderControlDockState(screenHost);
+      return null;
+    }
+    const key = readerControlDockOffsetKey(screenHost);
+    const current = normalizeDockOffset(appState.readerDockOffsets?.[key] || zeroDockOffset());
+    const result = setReaderControlDockState(screenHost, appState, "settled", {
+      offset: current,
+      commit: true,
+      motionId: "reader.control.dock.release"
+    });
+    if (result?.clamped) {
+      setReaderControlDockState(screenHost, appState, "rebound", {
+        offset: result.offset,
+        commit: true,
+        motionId: "reader.control.dock.rebound"
+      });
+      motionController?.start({
+        id: "reader.control.dock.rebound",
+        action: "dock-rebound",
+        from: `${current.x},${current.y}`,
+        to: `${result.offset.x},${result.offset.y}`
+      });
+    }
+    return result;
+  }
+
+  function attachReaderControlDockMotionState(screenHost, appState, motionController) {
+    const root = screenHost?.closest?.(".fd-demo") || null;
+    root?.setAttribute("data-motion-control-dock-sync", readerControlDockMovable(screenHost) ? "movable" : "static");
+    const result = applyReaderControlDockClamp(screenHost, appState, motionController);
+    root?.setAttribute("data-motion-control-dock-result", result ? `${result.offset.x},${result.offset.y}` : "none");
+  }
+
   function sourceCandidateRow(item, index, selectedSource) {
     const isCurrent = item.state === "当前";
     const isSelected = selectedSource ? item.source === selectedSource : isCurrent;
@@ -6532,6 +6742,7 @@
       readerReplacementRules: {},
       readerAutoPageSession: false,
       readerAutoPageCountdown: 8,
+      readerDockOffsets: {},
       readerTextSelectionOpen: false,
       readerSelectedText: "雨，下了一整夜。",
       readerSettingsExpandedOption: "",
@@ -6690,6 +6901,7 @@
       }
       viewportSnapshot = nextSnapshot;
       adjustReaderDropdownPlacement(screenHost);
+      attachReaderControlDockMotionState(screenHost, appState, motionController);
     };
     const syncMotionPreference = () => {
       applyMotionPreference(root, motionMediaQuery);
@@ -6787,6 +6999,12 @@
       attachDropdownMotionState(screenHost, appState, motionController);
       attachReaderEntryMotionState(screenHost, appState);
       attachReaderControlHandleMotionState(screenHost);
+      attachReaderControlDockMotionState(screenHost, appState, motionController);
+      window.requestAnimationFrame(() => {
+        if (screenHost.isConnected) {
+          attachReaderControlDockMotionState(screenHost, appState, motionController);
+        }
+      });
       attachMotionPressState(screenHost, motionController);
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
       if (renderedTurnDirection) {
@@ -7000,7 +7218,6 @@
   }
 
   function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController) {
-    const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const dialogFocusableSelector = [
       "button:not([disabled])",
@@ -7910,9 +8127,15 @@
     });
 
     screenHost.querySelectorAll(".fd-reader-grabber[data-route], .fd-reader-full-grabber[data-route]").forEach((button) => {
+      let startX = 0;
       let startY = 0;
       let dragStarted = false;
       let dragMotionStarted = false;
+      let dockDragActive = false;
+      let dockDragMotionStarted = false;
+      let dockLongPressTimer = null;
+      let dockDragStartOffset = zeroDockOffset();
+      let lastDeltaX = 0;
       let suppressNextClick = false;
       let activePointerId = null;
       let lastDeltaY = 0;
@@ -7926,6 +8149,71 @@
         to: routeForButton(deltaY),
         target: button
       });
+      const dockCanDrag = () => button.classList.contains("fd-reader-grabber") && readerControlDockMovable(screenHost);
+      const clearDockLongPress = () => {
+        if (dockLongPressTimer) {
+          window.clearTimeout(dockLongPressTimer);
+          dockLongPressTimer = null;
+        }
+      };
+      const dockMotionInput = (motionId, action, offset) => ({
+        id: motionId,
+        action,
+        from: currentRoute(),
+        to: currentRoute(),
+        target: button,
+        dockOffset: `${offset.x},${offset.y}`,
+        viewportClass: readerControlDockViewportClass(screenHost)
+      });
+      const startDockDrag = () => {
+        if (activePointerId == null || !dockCanDrag()) return;
+        const key = readerControlDockOffsetKey(screenHost);
+        dockDragStartOffset = normalizeDockOffset(appState.readerDockOffsets?.[key] || zeroDockOffset());
+        dockDragActive = true;
+        dragStarted = true;
+        suppressNextClick = true;
+        setReaderControlDockState(screenHost, appState, "armed", {
+          offset: dockDragStartOffset,
+          motionId: "reader.control.dock.longPress"
+        });
+        if (motionController) {
+          motionController.start(dockMotionInput("reader.control.dock.longPress", "dock-long-press", dockDragStartOffset));
+        }
+      };
+      const updateDockDrag = (deltaX, deltaY) => {
+        if (!dockDragActive) return;
+        const nextOffset = {
+          x: dockDragStartOffset.x + deltaX,
+          y: dockDragStartOffset.y + deltaY
+        };
+        const result = setReaderControlDockState(screenHost, appState, "dragging", {
+          offset: nextOffset,
+          motionId: "reader.control.dock.drag"
+        });
+        if (!dockDragMotionStarted && motionController) {
+          motionController.start(dockMotionInput("reader.control.dock.drag", "dock-drag", result?.offset || normalizeDockOffset(nextOffset)));
+          dockDragMotionStarted = true;
+        }
+      };
+      const finishDockDrag = (deltaX, deltaY, cancelled) => {
+        const nextOffset = cancelled
+          ? dockDragStartOffset
+          : {
+            x: dockDragStartOffset.x + deltaX,
+            y: dockDragStartOffset.y + deltaY
+          };
+        const result = setReaderControlDockState(screenHost, appState, cancelled ? "rebound" : "settled", {
+          offset: nextOffset,
+          commit: true,
+          motionId: cancelled ? "reader.control.dock.rebound" : "reader.control.dock.release"
+        });
+        if (motionController) {
+          const motionId = cancelled ? "reader.control.dock.rebound" : "reader.control.dock.release";
+          motionController.start(dockMotionInput(motionId, cancelled ? "dock-cancel" : "dock-release", result?.offset || normalizeDockOffset(nextOffset)));
+        }
+        dockDragActive = false;
+        dockDragMotionStarted = false;
+      };
       const commitHandleRoute = (source, deltaY) => {
         const route = routeForButton(deltaY);
         if (!route) return;
@@ -7955,16 +8243,22 @@
         }
       };
       const cleanupGlobalHandleRelease = () => {
+        clearDockLongPress();
         window.removeEventListener("pointerup", onWindowPointerUp, true);
         window.removeEventListener("pointercancel", onWindowPointerCancel, true);
         window.removeEventListener("mouseup", onWindowMouseUp, true);
       };
-      const finishHandleGesture = (deltaY, source) => {
+      const finishHandleGesture = (deltaX, deltaY, source) => {
         if (activePointerId == null) return;
         const pointerId = activePointerId;
         activePointerId = null;
         cleanupGlobalHandleRelease();
         button.releasePointerCapture?.(pointerId);
+        if (dockDragActive) {
+          suppressNextClick = true;
+          finishDockDrag(deltaX, deltaY, false);
+          return;
+        }
         if (dragStarted) {
           suppressNextClick = true;
           if (readerControlHandleShouldCommit(deltaY, readerControlHandleAction(button, deltaY))) {
@@ -7978,27 +8272,39 @@
       };
       function onWindowPointerUp(event) {
         if (activePointerId !== event.pointerId) return;
-        finishHandleGesture(event.clientY - startY, "drag");
+        finishHandleGesture(event.clientX - startX, event.clientY - startY, "drag");
       }
       function onWindowPointerCancel(event) {
         if (activePointerId !== event.pointerId) return;
         activePointerId = null;
         cleanupGlobalHandleRelease();
         suppressNextClick = true;
-        snapBack();
+        if (dockDragActive) {
+          finishDockDrag(lastDeltaX, lastDeltaY, true);
+        } else {
+          snapBack();
+        }
       }
       function onWindowMouseUp(event) {
         if (activePointerId == null) return;
-        finishHandleGesture(Number.isFinite(event.clientY) ? event.clientY - startY : lastDeltaY, "drag");
+        finishHandleGesture(
+          Number.isFinite(event.clientX) ? event.clientX - startX : lastDeltaX,
+          Number.isFinite(event.clientY) ? event.clientY - startY : lastDeltaY,
+          "drag"
+        );
       }
 
       button.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
         activePointerId = event.pointerId;
+        startX = event.clientX;
         startY = event.clientY;
+        lastDeltaX = 0;
         lastDeltaY = 0;
         dragStarted = false;
         dragMotionStarted = false;
+        dockDragActive = false;
+        dockDragMotionStarted = false;
         suppressNextClick = false;
         button.setPointerCapture?.(event.pointerId);
         window.addEventListener("pointerup", onWindowPointerUp, true);
@@ -8008,13 +8314,25 @@
         if (motionController) {
           motionController.start(handleMotionInput("reader.control.handle.press", "handle-press", 0));
         }
+        if (dockCanDrag()) {
+          clearDockLongPress();
+          dockLongPressTimer = window.setTimeout(startDockDrag, 320);
+        }
       });
 
       button.addEventListener("pointermove", (event) => {
         if (activePointerId !== event.pointerId) return;
+        const deltaX = event.clientX - startX;
         const deltaY = event.clientY - startY;
+        lastDeltaX = deltaX;
         lastDeltaY = deltaY;
+        if (dockDragActive) {
+          event.preventDefault();
+          updateDockDrag(deltaX, deltaY);
+          return;
+        }
         if (!dragStarted && Math.abs(deltaY) < 4) return;
+        clearDockLongPress();
         dragStarted = true;
         suppressNextClick = true;
         event.preventDefault();
@@ -8030,7 +8348,7 @@
 
       button.addEventListener("pointerup", (event) => {
         if (activePointerId !== event.pointerId) return;
-        finishHandleGesture(event.clientY - startY, "drag");
+        finishHandleGesture(event.clientX - startX, event.clientY - startY, "drag");
       });
 
       button.addEventListener("pointercancel", (event) => {

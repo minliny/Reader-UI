@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T15:07:29.916Z",
+  "generatedAt": "2026-06-26T15:32:04.122Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v7-20260626, render=reader-handle-motion-v1-20260626, runtime=reader-handle-motion-v1-20260626"
+      "detail": "motion=motion-controller-v9-20260626, render=reader-dock-motion-v7-20260626, runtime=reader-dock-motion-v7-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.session.tts.start, reader.session.autoPage.start"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start"
     },
     {
       "id": "motion.contract.executable-registry",
@@ -40,17 +40,17 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "65/65 Motion IDs resolved; incomplete=0"
+      "detail": "69/69 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "65/65 runtime/selector Motion IDs expose state machines"
+      "detail": "69/69 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
       "passed": true,
-      "detail": "40/40 detailed Motion IDs use exact state machines"
+      "detail": "44/44 detailed Motion IDs use exact state machines"
     },
     {
       "id": "motion.tab.state-adapter",
@@ -78,6 +78,11 @@
       "detail": "reader control grabbers expose press/drag/release states, route commit semantics, and tokenized snap CSS"
     },
     {
+      "id": "motion.reader-control-dock.state-adapter",
+      "passed": true,
+      "detail": "wide reader control dock exposes long-press/drag/release/rebound states, bounds clamp, viewport-keyed offsets, and tokenized transform CSS"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "71 bind calls, 59 unique Motion IDs"
@@ -94,9 +99,9 @@
     }
   ],
   "summary": {
-    "passed": 18,
+    "passed": 19,
     "failed": 0,
-    "total": 18
+    "total": 19
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -172,6 +177,10 @@
       "overlay.sheet.enter/exit",
       "overlay.sheet.exit",
       "reader.chapter.jump",
+      "reader.control.dock.drag",
+      "reader.control.dock.longPress",
+      "reader.control.dock.rebound",
+      "reader.control.dock.release",
       "reader.control.handle.press",
       "reader.control.handle.release",
       "reader.control.hide",
@@ -230,6 +239,10 @@
       "reader.control.handle.press",
       "reader.control.handle.drag",
       "reader.control.handle.release",
+      "reader.control.dock.longPress",
+      "reader.control.dock.drag",
+      "reader.control.dock.release",
+      "reader.control.dock.rebound",
       "reader.control.hide",
       "reader.session.autoPage.start",
       "reader.session.tts.start",
@@ -249,7 +262,7 @@
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 40,
+    "detailedMotionIdCount": 44,
     "missingDetailedStateMachines": []
   }
 }

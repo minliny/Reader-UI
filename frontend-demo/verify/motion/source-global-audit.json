@@ -112,8 +112,8 @@
     "dropdownMotionController": "trigger/menu/option state adapter implemented; collapse persistence, A-to-B media evidence, and resize/orientation reposition evidence still missing",
     "coverToImmersiveSharedTransition": "source/target state adapter and cover snapshot implemented; detail/chapter coverage and media evidence still missing",
     "readerControlHandleDrag": "press/drag/release adapter implemented for control and full-page grabbers; media evidence and real-device long-path drag proof still missing",
-    "readerGrabberLongPressDrag": "wide dock long-press drag still missing",
-    "readerControlDockBoundsAndPersistence": "missing",
+    "readerGrabberLongPressDrag": "implemented first pass for wide fixed-width dock; media, real-device touch, and fold proof still missing",
+    "readerControlDockBoundsAndPersistence": "implemented first pass with frame/group bounds, viewport-class saved offsets, and resize clamp/rebound; fold pane and safe-area device proof still missing",
     "readerSessionStartTransaction": "implemented for TTS and auto-page",
     "readerSessionCapsuleEnterExitTickVoicePulse": "missing visual animation",
     "capsuleRunPauseMorph": "missing",
@@ -157,9 +157,9 @@
       "requiredOwner": "reader entry motion"
     },
     {
-      "family": "reader.control.handle",
-      "source": ".fd-reader-grabber, .fd-reader-full-grabber",
-      "currentState": "Click expands/collapses panels; no long-press drag, bounds clamp, or dock persistence.",
+      "family": "reader.control.dock",
+      "source": ".fd-reader-grabber in fixed-width reader layouts",
+      "currentState": "Wide fixed-width dock now exposes long-press, drag, release, and rebound state, moves the sheet + module nav dock by transform, persists offset by viewport class, clamps against ReaderFrame/group bounds, and clears transforms outside movable layouts; media, real-device touch, fold-pane, and rotation interruption evidence remain missing.",
       "requiredOwner": "reader control dock motion"
     },
     {

@@ -149,7 +149,7 @@ Android Compose：
 - 翻页不能绑定到 navigation route；它只是 reader state。
 - 动画必须由单一 UI state/reducer 驱动，避免多个 `Animatable` 在打断时各自收尾。
 - 控制层小横条拖动使用手势 anchor；拖动中只更新临时 offset，释放后再写入 route/state。
-- 宽屏 control dock 拖动只在 fixed-width dock 布局启用；bounds 以当前 Reader pane、window insets、top bar 和 dock group size 计算，不能跨 hinge。
+- 宽屏 control dock 拖动只在 fixed-width dock 布局启用；demo 第一版使用 `.fd-reader-grabber` 长按进入 `reader.control.dock.longPress`，移动同一组 bottom sheet + module nav dock，bounds 以当前 Reader pane、window insets、top bar 和 dock group size 计算，不能跨 hinge。
 - 自动翻页和朗读共用一个 `activeSession` 状态，不能出现双胶囊；启动会话使用 replace/handoff，不新增 navigation entry。
 - 胶囊暂停/继续按钮只更新 `activeSession.playing`，不能打开控制层或写 navigation。
 - 控制层打开时需要把 active session 映射到唯一运行空间；不要同时暴露沉浸胶囊和控制层运行主控。
@@ -169,7 +169,7 @@ iOS SwiftUI：
 - 控制层显隐时，阅读正文 surface 必须保持挂载。
 - 封面 shared element 只作为上下文锚点；不能把封面拉伸成正文纸面。
 - 小横条用 `DragGesture` 临时状态，释放后再决定展开或收回。
-- 宽屏 dock 长按拖动需要单独的 saved offset，按 size class 分开保存；resize 后先 clamp 再绘制。
+- 宽屏 dock 长按拖动需要单独的 saved offset，按 size class / viewport class 分开保存；resize 后先 clamp 再绘制，越界使用 `reader.control.dock.rebound`。
 - 除非 Shell 契约变更，否则不要把阅读模块面板当作无关导航目的地。
 - 异步回调写入 UI 前必须检查当前 route/context，避免打断后旧结果覆盖新页面。
 - 折叠屏/大屏根据 size class 和 scene size 重排，不修改 navigation path。
@@ -201,7 +201,7 @@ Web demo：
 - 下拉栏需要统一 CSS class/token 和 open state；当前阅读/朗读 dropdown、设置 option dropdown、发现 sort popover、书源/书架菜单不能继续各自裸写动画。
 - route/state 更新和 CSS animation class 需要统一清理，避免打断后残留 class。
 - 小横条如果补拖拽，需要 pointer capture 和 release 阈值，不能只靠 click route。
-- 宽屏 control dock 拖动需要计算 `ReaderFrame` bounds、dock group rect、safe area、top bar bottom 和 fold pane；移动用 transform/offset，不能改宽高。
+- 宽屏 control dock 拖动需要计算 `ReaderFrame` bounds、dock group rect、safe area、top bar bottom 和 fold pane；移动用 transform/offset，不能改宽高。Demo 已有第一版 frame/group bounds、viewport-class offset 和 resize clamp，平台仍需补原生 gesture、fold pane 和设备证据。
 - 用 `data-orientation`、`data-viewport-class` 和 `visualViewport` 覆盖折叠屏展开、折叠、横屏紧凑和整屏旋转重排。
 - 旋转期间清理 pressed/dragging/animation class，旋转后重新计算 overlay/capsule/dock 锚点。
 - dev mode 中保留 route/state 名称，方便平台实现者把视觉证据和契约对应起来。
@@ -262,7 +262,7 @@ Web demo：
 - 148 个唯一 `data-*` 交互入口已映射到 `Motion ID -> demo route -> platform component -> evidence` 总表；没有未归类的产品交互入口。
 - Demo 已接入统一 `dropdown.*` state adapter，覆盖下拉触发器、菜单和选项的 `data-motion-dropdown-*` 状态、press-id 和 token CSS；关闭保留动画、打开 A 切 B、reposition 和录屏证据仍需补齐。
 - Demo 已接入封面进入沉浸阅读 state adapter，覆盖 `data-motion-entry-*` source/target 状态、封面 snapshot、普通阅读按钮 fallback 和 reduced-motion；详情/章节入口与录屏证据仍需补齐。
-- Demo 已接入控制层小横条 state adapter，覆盖 `.fd-reader-grabber` / `.fd-reader-full-grabber` 的 `data-motion-control-handle-*` 状态、press/drag/release、阈值 snap/expand/collapse、full 页收回和 reduced-motion；真实设备录屏、目录 full 页上拉 promote 和宽屏 dock 长按移动仍需补齐。
+- Demo 已接入控制层小横条 state adapter，覆盖 `.fd-reader-grabber` / `.fd-reader-full-grabber` 的 `data-motion-control-handle-*` 状态、press/drag/release、阈值 snap/expand/collapse、full 页收回和 reduced-motion；宽屏 dock 长按移动也已接入 `reader.control.dock.longPress/drag/release/rebound` 第一版 adapter、bounds clamp、viewport-class offset 和 resize rebound；真实设备录屏、折叠屏 hinge/pane、目录 full 页上拉 promote 仍需补齐。
 - Demo 已定义打断动画状态机，并验证连续点击、返回、关闭、loading 完成和拖动开始。
 - Demo 已有折叠屏/大屏 reshape capture，覆盖展开、折叠、横屏紧凑和阅读分页映射。
 - Demo 已有整屏旋转 capture，覆盖普通页面、沉浸阅读、控制层打开、运行胶囊、控制层运行空间、宽屏 dock clamp 和 overlay 重锚定。
