@@ -35,6 +35,10 @@
   overflow: hidden;
 }
 
+.fd-reader-mode-quick .fd-reader-sheet {
+  --reader-quick-bottom: 12px;
+}
+
 .fd-reader-grabber {
   position: absolute;
   top: 9px;
@@ -781,8 +785,7 @@
   gap: 7px;
 }
 
-.fd-reader-module-panel.fd-reader-quick-no-header {
-  bottom: 12px;
+.fd-reader-quick-no-header {
   grid-template-rows: 68px 40px 32px;
   align-content: center;
   gap: 8px;
