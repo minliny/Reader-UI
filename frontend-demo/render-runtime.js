@@ -3022,17 +3022,171 @@
     const isPlaying = isTts ? ttsPlaying : autoPlaying;
     const autoCountdown = Math.max(1, Math.min(99, Number(appState?.readerAutoPageCountdown || 8)));
     const leading = isTts
-      ? icon("tts", "fd-small-icon")
-      : `<span class="fd-ir-countdown-dot" aria-label="自动翻页倒计时 ${esc(autoCountdown)} 秒">${esc(autoCountdown)}</span>`;
+      ? `<span class="fd-ir-voice-icon" data-reader-capsule-voice aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
+      : `<span class="fd-ir-countdown-dot" data-reader-capsule-countdown="${esc(autoCountdown)}" aria-label="自动翻页倒计时 ${esc(autoCountdown)} 秒">${esc(autoCountdown)}</span>`;
     const control = isTts
-      ? `<button type="button" data-reader-tts-action="toggle" aria-label="${ttsPlaying ? "暂停朗读" : "继续朗读"}">${icon(ttsPlaying ? "pause" : "play", "fd-small-icon")}</button>`
-      : `<button type="button" data-reader-setting-toggle="autoPage" aria-label="${autoPlaying ? "暂停自动翻页" : "继续自动翻页"}">${icon(autoPlaying ? "pause" : "play", "fd-small-icon")}</button>`;
+      ? `<button type="button" data-reader-capsule-control data-reader-tts-action="toggle" aria-label="${ttsPlaying ? "暂停朗读" : "继续朗读"}">${icon(ttsPlaying ? "pause" : "play", "fd-small-icon")}</button>`
+      : `<button type="button" data-reader-capsule-control data-reader-setting-toggle="autoPage" aria-label="${autoPlaying ? "暂停自动翻页" : "继续自动翻页"}">${icon(autoPlaying ? "pause" : "play", "fd-small-icon")}</button>`;
     return `
       <span class="fd-ir-status-capsule" data-reader-immersive-status data-reader-immersive-status-type="${esc(activeType)}" data-reader-immersive-status-playing="${isPlaying ? "true" : "false"}">
         ${leading}
-        <b>${esc(label)}</b>
+        <b data-reader-capsule-label>${esc(label)}</b>
         <span class="fd-ir-status-controls">${control}</span>
       </span>`;
+  }
+
+  function readerSessionCapsuleSnapshot(appState) {
+    const ttsSession = Boolean(appState?.readerTtsSession || appState?.readerTts?.playing);
+    const ttsPlaying = Boolean(appState?.readerTts?.playing);
+    const autoSession = Boolean(appState?.readerAutoPageSession || appState?.readerSettings?.autoPage);
+    const autoPlaying = Boolean(appState?.readerSettings?.autoPage);
+    if (!ttsSession && !autoSession) return null;
+    const type = ttsSession ? "tts" : "autoPage";
+    const countdown = Math.max(1, Math.min(99, Number(appState?.readerAutoPageCountdown || 8)));
+    return {
+      type,
+      playing: type === "tts" ? ttsPlaying : autoPlaying,
+      countdown: type === "autoPage" ? countdown : 0
+    };
+  }
+
+  function readerSessionCapsuleSnapshotKey(snapshot) {
+    if (!snapshot) return "inactive";
+    return `${snapshot.type}:${snapshot.playing ? "playing" : "paused"}:${snapshot.countdown}`;
+  }
+
+  function readerSessionCapsuleMotionMeta(previous, next) {
+    if (!next) {
+      return { id: "reader.session.capsule.exit", state: "exiting", action: "capsule-exit" };
+    }
+    if (!previous) {
+      return { id: "reader.session.capsule.enter", state: "entering", action: "capsule-enter" };
+    }
+    if (previous.type !== next.type) {
+      return { id: "reader.session.capsule.switch", state: "switching", action: "capsule-switch" };
+    }
+    if (previous.playing !== next.playing) {
+      return { id: "reader.session.capsule.control.press/toggle", state: "control-toggle", action: "capsule-control-toggle" };
+    }
+    if (next.type === "autoPage" && previous.countdown !== next.countdown) {
+      return { id: "reader.session.capsule.countdownTick", state: "countdown-tick", action: "capsule-countdown-tick" };
+    }
+    if (next.type === "tts" && next.playing) {
+      return { id: "reader.session.capsule.voiceIcon.active", state: "voice-active", action: "capsule-voice-active" };
+    }
+    return { id: "reader.session.capsule.update", state: "updated", action: "capsule-update" };
+  }
+
+  function attachReaderSessionCapsuleMotionState(screenHost, appState, motionController) {
+    const root = screenHost?.closest?.(".fd-demo") || null;
+    const footer = screenHost?.querySelector?.("[data-reader-footer-status]") || null;
+    const capsule = screenHost?.querySelector?.("[data-reader-immersive-status]") || null;
+    const previous = appState.readerSessionCapsuleSnapshot || null;
+    const next = readerSessionCapsuleSnapshot(appState);
+    const meta = readerSessionCapsuleMotionMeta(previous, next);
+
+    root?.setAttribute("data-motion-session-capsule-state", next ? meta.state : "hidden");
+    root?.setAttribute("data-motion-session-capsule-id", meta.id);
+    root?.setAttribute("data-motion-session-capsule-active", next ? "true" : "false");
+    if (!capsule || !next) {
+      if (!next) {
+        appState.readerSessionCapsuleSnapshot = null;
+      }
+      return;
+    }
+
+    const snapshotChanged = readerSessionCapsuleSnapshotKey(previous) !== readerSessionCapsuleSnapshotKey(next);
+    capsule.setAttribute("data-motion-session-capsule", "true");
+    capsule.setAttribute("data-motion-session-capsule-state", meta.state);
+    capsule.setAttribute("data-motion-session-capsule-id", meta.id);
+    capsule.setAttribute("data-motion-id", meta.id);
+    capsule.setAttribute("data-motion-phase", meta.state);
+    capsule.setAttribute("data-motion-session-capsule-type", next.type);
+    capsule.setAttribute("data-motion-session-capsule-playing", next.playing ? "true" : "false");
+    capsule.setAttribute("data-motion-session-capsule-countdown", String(next.countdown));
+    capsule.setAttribute("data-motion-session-capsule-key", readerSessionCapsuleSnapshotKey(next));
+    if (footer) {
+      footer.setAttribute("data-motion-session-capsule-anchor", "footer-status");
+      footer.setAttribute("data-motion-session-capsule-id", meta.id);
+    }
+
+    const countdown = capsule.querySelector("[data-reader-capsule-countdown]");
+    if (countdown) {
+      countdown.setAttribute("data-motion-session-capsule-role", "countdown");
+      countdown.setAttribute("data-motion-session-capsule-state", meta.id === "reader.session.capsule.countdownTick" ? "ticking" : "settled");
+      countdown.setAttribute("data-motion-session-capsule-id", meta.id === "reader.session.capsule.countdownTick" ? meta.id : "reader.session.capsule.update");
+      countdown.setAttribute("data-motion-id", countdown.getAttribute("data-motion-session-capsule-id"));
+      countdown.setAttribute("data-motion-state", countdown.getAttribute("data-motion-session-capsule-state"));
+    }
+
+    const voice = capsule.querySelector("[data-reader-capsule-voice]");
+    if (voice) {
+      voice.setAttribute("data-motion-session-capsule-role", "voice");
+      voice.setAttribute("data-motion-session-capsule-state", next.playing ? "active" : "paused");
+      voice.setAttribute("data-motion-session-capsule-id", next.playing ? "reader.session.capsule.voiceIcon.active" : "reader.session.capsule.update");
+      voice.setAttribute("data-motion-id", voice.getAttribute("data-motion-session-capsule-id"));
+      voice.setAttribute("data-motion-state", voice.getAttribute("data-motion-session-capsule-state"));
+    }
+
+    const control = capsule.querySelector("[data-reader-capsule-control]");
+    if (control) {
+      control.setAttribute("data-motion-session-capsule-role", "control");
+      control.setAttribute("data-motion-session-capsule-state", next.playing ? "playing" : "paused");
+      control.setAttribute("data-motion-session-capsule-id", "reader.session.capsule.control.press/toggle");
+      control.setAttribute("data-motion-id", "reader.session.capsule.control.press/toggle");
+      control.setAttribute("data-motion-state", control.getAttribute("data-motion-session-capsule-state"));
+      control.setAttribute("data-motion-press-id", "reader.session.capsule.control.press/toggle");
+    }
+
+    const label = capsule.querySelector("[data-reader-capsule-label]");
+    if (label) {
+      label.setAttribute("data-motion-session-capsule-role", "label");
+      label.setAttribute("data-motion-session-capsule-state", meta.state);
+      label.setAttribute("data-motion-session-capsule-id", meta.id === "reader.session.capsule.switch" ? meta.id : "reader.session.capsule.update");
+      label.setAttribute("data-motion-id", label.getAttribute("data-motion-session-capsule-id"));
+      label.setAttribute("data-motion-state", label.getAttribute("data-motion-session-capsule-state"));
+    }
+
+    if (motionController && snapshotChanged) {
+      motionController.start({
+        id: meta.id,
+        action: meta.action,
+        from: previous ? readerSessionCapsuleSnapshotKey(previous) : "inactive",
+        to: readerSessionCapsuleSnapshotKey(next)
+      });
+    }
+    appState.readerSessionCapsuleSnapshot = next;
+  }
+
+  function clearReaderSessionCapsuleTimer(appState) {
+    if (appState?.readerSessionCapsuleTimer) {
+      window.clearTimeout(appState.readerSessionCapsuleTimer);
+      appState.readerSessionCapsuleTimer = null;
+    }
+  }
+
+  function scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute) {
+    clearReaderSessionCapsuleTimer(appState);
+    const capsule = screenHost?.querySelector?.("[data-reader-immersive-status]") || null;
+    const snapshot = readerSessionCapsuleSnapshot(appState);
+    if (!capsule || !snapshot || snapshot.type !== "autoPage" || !snapshot.playing) {
+      return;
+    }
+    appState.readerSessionCapsuleTimer = window.setTimeout(() => {
+      appState.readerSessionCapsuleTimer = null;
+      const currentCountdown = Math.max(1, Math.min(99, Number(appState.readerAutoPageCountdown || 8)));
+      if (currentCountdown > 1) {
+        appState.readerAutoPageCountdown = currentCountdown - 1;
+      } else {
+        const pages = readerPages(data, appState);
+        const pageCount = pages.length;
+        const currentIndex = Number.isFinite(Number(appState.readerPageIndex)) ? Number(appState.readerPageIndex) : 0;
+        appState.readerPageIndex = clamp(currentIndex + 1, 0, Math.max(0, pageCount - 1));
+        appState.readerTurnDirection = "next";
+        appState.readerAutoPageCountdown = 8;
+      }
+      renderCurrentRoute();
+    }, 1000);
   }
 
   function readerTapZones(data, appState) {
@@ -5262,6 +5416,10 @@
     bind("[data-reader-tts-action]", "reader.session.capsule.control.press/toggle");
     bind("[data-reader-tts-cycle]", "reader.session.capsule.update");
     bind("[data-reader-immersive-status], [data-reader-immersive-status-playing], [data-reader-immersive-status-type]", "reader.session.capsule.enter/update/exit");
+    bind("[data-reader-capsule-control]", "reader.session.capsule.control.press/toggle");
+    bind("[data-reader-capsule-countdown]", "reader.session.capsule.countdownTick");
+    bind("[data-reader-capsule-voice]", "reader.session.capsule.voiceIcon.active");
+    bind("[data-reader-capsule-label]", "reader.session.capsule.update");
     bind("[data-reader-more-action]", "dropdown.option.select");
     bind("[data-reader-more-close]", "dropdown.menu.collapse");
     bind("[data-reader-selection-layer]", "selection.range.show");
@@ -6738,6 +6896,8 @@
       readerTts: Object.assign({}, readerTtsConfig(data).defaults),
       readerTtsSession: false,
       readerTtsExpandedOption: "",
+      readerSessionCapsuleSnapshot: null,
+      readerSessionCapsuleTimer: null,
       readerSettings: Object.assign({}, readerControlSettingsConfig(data).defaults),
       readerReplacementRules: {},
       readerAutoPageSession: false,
@@ -6923,6 +7083,7 @@
     }
     syncMotionPreference();
     target.__readerAdaptiveViewportCleanup = () => {
+      clearReaderSessionCapsuleTimer(appState);
       if (motionController) {
         motionController.destroy();
       }
@@ -7000,6 +7161,7 @@
       attachReaderEntryMotionState(screenHost, appState);
       attachReaderControlHandleMotionState(screenHost);
       attachReaderControlDockMotionState(screenHost, appState, motionController);
+      attachReaderSessionCapsuleMotionState(screenHost, appState, motionController);
       window.requestAnimationFrame(() => {
         if (screenHost.isConnected) {
           attachReaderControlDockMotionState(screenHost, appState, motionController);
@@ -7007,6 +7169,7 @@
       });
       attachMotionPressState(screenHost, motionController);
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
+      scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute);
       if (renderedTurnDirection) {
         const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
         const clearTurnClass = () => {

@@ -55,10 +55,10 @@
   },
   "selectorCoverage": {
     "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
-    "dataAttributeCount": 160,
-    "bindCallCount": 71,
-    "motionIdCount": 59,
-    "directMappedDataAttributeCount": 138,
+    "dataAttributeCount": 164,
+    "bindCallCount": 75,
+    "motionIdCount": 61,
+    "directMappedDataAttributeCount": 142,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -115,8 +115,8 @@
     "readerGrabberLongPressDrag": "implemented first pass for wide fixed-width dock; media, real-device touch, and fold proof still missing",
     "readerControlDockBoundsAndPersistence": "implemented first pass with frame/group bounds, viewport-class saved offsets, and resize clamp/rebound; fold pane and safe-area device proof still missing",
     "readerSessionStartTransaction": "implemented for TTS and auto-page",
-    "readerSessionCapsuleEnterExitTickVoicePulse": "missing visual animation",
-    "capsuleRunPauseMorph": "missing",
+    "readerSessionCapsuleEnterExitTickVoicePulse": "implemented first pass with capsule state adapter, tokenized enter/update/switch/tick/voice CSS, and local auto-page countdown updates; media and stop/exit interruption proof still missing",
+    "capsuleRunPauseMorph": "implemented first pass for local play/pause button state; full control-space morph still missing",
     "orientationPrepareReshapeSettleLifecycle": "controller reshape transaction implemented; prepare/freeze/settle visuals missing"
   },
   "componentFamilies": [
@@ -165,7 +165,7 @@
     {
       "family": "reader.session.capsule",
       "source": "data-reader-immersive-status, data-reader-tts-action, data-reader-setting-toggle=autoPage",
-      "currentState": "TTS and auto-page session start transactions plus capsule rendering exist; capsule enter/exit/tick/voice/run-pause animations are missing.",
+      "currentState": "TTS and auto-page session start transactions now drive a first-pass immersive capsule adapter with data-motion-session-capsule-* states, enter/update/switch/exit IDs, local countdown tick scheduling, control button press/toggle state, and TTS voice active pulse; media, stop/exit interruption, reduced-motion capture, and control-space morph proof remain missing.",
       "requiredOwner": "reader session motion"
     },
     {

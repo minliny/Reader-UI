@@ -85,6 +85,12 @@
   --fd-motion-effective-handle-snap: var(--reader-motion-duration-handle-snap);
   --fd-motion-effective-handle-pull-y: var(--reader-motion-distance-handle-pull-y);
   --fd-motion-effective-dock-release: var(--reader-motion-duration-handle-snap);
+  --fd-motion-effective-capsule-enter: var(--reader-motion-duration-capsule-enter);
+  --fd-motion-effective-capsule-control: var(--reader-motion-duration-capsule-control);
+  --fd-motion-effective-capsule-tick: var(--reader-motion-duration-capsule-tick);
+  --fd-motion-effective-voice-pulse: var(--reader-motion-duration-voice-pulse);
+  --fd-motion-effective-capsule-y: var(--reader-motion-distance-capsule-y);
+  --fd-motion-effective-capsule-tick-y: var(--reader-motion-distance-capsule-tick-y);
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
   --fd-motion-effective-overlay: var(--reader-motion-duration-base);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
@@ -111,9 +117,19 @@
   --fd-motion-effective-handle-snap: var(--reader-motion-duration-instant);
   --fd-motion-effective-handle-pull-y: 0px;
   --fd-motion-effective-dock-release: var(--reader-motion-duration-instant);
+  --fd-motion-effective-capsule-enter: var(--reader-motion-duration-instant);
+  --fd-motion-effective-capsule-control: var(--reader-motion-duration-instant);
+  --fd-motion-effective-capsule-tick: var(--reader-motion-duration-instant);
+  --fd-motion-effective-voice-pulse: var(--reader-motion-duration-instant);
+  --fd-motion-effective-capsule-y: 0px;
+  --fd-motion-effective-capsule-tick-y: 0px;
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
+}
+
+.fd-demo[data-motion-reduced="true"] :where([data-reader-capsule-voice])[data-motion-session-capsule-state="active"] {
+  animation: none;
 }
 
 .fd-demo :where(button, [role="button"], [data-route], [data-route-back]) {
@@ -159,6 +175,49 @@
 
 .fd-demo :where(.fd-reader-module-nav)[data-motion-control-dock-role="nav"] {
   transform: translate(var(--reader-control-dock-x, 0px), var(--reader-control-dock-y, 0px));
+}
+
+.fd-demo :where(.fd-ir-status-capsule)[data-motion-session-capsule] {
+  transform-origin: center;
+  transition:
+    opacity var(--fd-motion-effective-capsule-enter) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-capsule-enter) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard);
+  will-change: transform, opacity;
+}
+
+.fd-demo :where(.fd-ir-status-capsule)[data-motion-session-capsule-state="entering"] {
+  animation: fd-reader-session-capsule-enter var(--fd-motion-effective-capsule-enter) var(--reader-motion-easing-enter) both;
+}
+
+.fd-demo :where(.fd-ir-status-capsule)[data-motion-session-capsule-state="switching"] {
+  animation: fd-reader-session-capsule-switch var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard) both;
+}
+
+.fd-demo :where([data-reader-capsule-label], [data-reader-capsule-voice], [data-reader-capsule-countdown]) {
+  transition:
+    opacity var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where([data-reader-capsule-countdown])[data-motion-session-capsule-state="ticking"] {
+  animation: fd-reader-session-capsule-tick var(--fd-motion-effective-capsule-tick) var(--reader-motion-easing-standard) both;
+}
+
+.fd-demo :where([data-reader-capsule-control]) {
+  transition:
+    background-color var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where([data-reader-capsule-control]):where(:active, .is-motion-pressed) {
+  transform: scale(var(--reader-motion-scale-capsule-control-press));
+}
+
+.fd-demo :where([data-reader-capsule-voice])[data-motion-session-capsule-state="active"] {
+  animation: fd-reader-session-voice-pulse var(--fd-motion-effective-voice-pulse) var(--reader-motion-easing-standard) infinite;
 }
 
 .fd-demo :where(.fd-reader-full-page-panel)[data-motion-control-handle-panel] {
@@ -414,6 +473,50 @@
   transform: translateY(-4px) scale(1.02);
 }
 
+@keyframes fd-reader-session-capsule-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fd-motion-effective-capsule-y)) scale(var(--reader-motion-scale-capsule-enter));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fd-reader-session-capsule-switch {
+  0% {
+    opacity: 0.72;
+    transform: scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fd-reader-session-capsule-tick {
+  0% {
+    opacity: 0;
+    transform: translateY(var(--fd-motion-effective-capsule-tick-y));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fd-reader-session-voice-pulse {
+  0%, 100% {
+    opacity: 0.82;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(var(--reader-motion-scale-voice-pulse));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fd-demo {
     --fd-motion-effective-tab-press: var(--reader-motion-duration-instant);
@@ -436,9 +539,19 @@
     --fd-motion-effective-handle-snap: var(--reader-motion-duration-instant);
     --fd-motion-effective-handle-pull-y: 0px;
     --fd-motion-effective-dock-release: var(--reader-motion-duration-instant);
+    --fd-motion-effective-capsule-enter: var(--reader-motion-duration-instant);
+    --fd-motion-effective-capsule-control: var(--reader-motion-duration-instant);
+    --fd-motion-effective-capsule-tick: var(--reader-motion-duration-instant);
+    --fd-motion-effective-voice-pulse: var(--reader-motion-duration-instant);
+    --fd-motion-effective-capsule-y: 0px;
+    --fd-motion-effective-capsule-tick-y: 0px;
     --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
+  }
+
+  .fd-demo :where([data-reader-capsule-voice])[data-motion-session-capsule-state="active"] {
+    animation: none;
   }
 }
 

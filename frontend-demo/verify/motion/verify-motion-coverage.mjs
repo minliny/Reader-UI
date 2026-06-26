@@ -66,7 +66,14 @@ const requiredRuntimeMotionIds = [
   "reader.control.dock.release",
   "reader.control.dock.rebound",
   "reader.session.tts.start",
-  "reader.session.autoPage.start"
+  "reader.session.autoPage.start",
+  "reader.session.capsule.enter",
+  "reader.session.capsule.update",
+  "reader.session.capsule.control.press/toggle",
+  "reader.session.capsule.countdownTick",
+  "reader.session.capsule.voiceIcon.active",
+  "reader.session.capsule.switch",
+  "reader.session.capsule.exit"
 ];
 const detailedMotionIds = [
   "app.firstOpen.enter",
@@ -277,6 +284,25 @@ const checks = [
       runtime.includes("data-motion-control-dock-result") &&
       motionTokens.includes("[data-motion-control-dock-role]"),
     detail: "wide reader control dock exposes long-press/drag/release/rebound states, bounds clamp, viewport-keyed offsets, and tokenized transform CSS"
+  },
+  {
+    id: "motion.reader-session-capsule.state-adapter",
+    passed: runtime.includes("attachReaderSessionCapsuleMotionState") &&
+      runtime.includes("readerSessionCapsuleSnapshot") &&
+      runtime.includes("scheduleReaderSessionCapsuleTick") &&
+      runtime.includes("data-motion-session-capsule-state") &&
+      runtime.includes('capsule.setAttribute("data-motion-id", meta.id)') &&
+      runtime.includes("data-reader-capsule-countdown") &&
+      runtime.includes("data-reader-capsule-voice") &&
+      runtime.includes("data-reader-capsule-control") &&
+      runtime.includes('control.setAttribute("data-motion-id", "reader.session.capsule.control.press/toggle")') &&
+      runtime.includes("reader.session.capsule.countdownTick") &&
+      runtime.includes("reader.session.capsule.voiceIcon.active") &&
+      runtime.includes("reader.session.capsule.switch") &&
+      motionTokens.includes("[data-motion-session-capsule]") &&
+      motionTokens.includes("fd-reader-session-capsule-tick") &&
+      motionTokens.includes("fd-reader-session-voice-pulse"),
+    detail: "immersive auto-page/TTS capsule exposes enter/update/switch/tick/control/voice states, local countdown updates, and tokenized micro-motion CSS"
   },
   {
     id: "motion.selector.bindings",

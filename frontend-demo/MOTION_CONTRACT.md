@@ -327,7 +327,7 @@
 - 148 个唯一 `data-*` 交互入口都需要映射到某个 Motion ID、demo route、平台组件和验证方式；不能只按业务页面口头归类。
 - 同一 TAB 栏必须分别覆盖按钮按下、单按钮选中、A -> B 切换、重复点击当前 active 的行为。
 - 所有下拉栏/锚定菜单必须覆盖触发器按下、展开、收起、选项按下、选项选中、打开 A 后切到 B、外部点击关闭、返回关闭、resize/orientation 重定位和 reduced-motion 降级。
-- 首次打开应用、运行胶囊与控制层运行中空间停靠、控制胶囊按钮运行/暂停、倒计时数字变化和朗读语音图标活动提示必须有可复现路径；控制层小横条按压/拖动/释放和宽屏 fixed dock 长按移动已接入第一版 demo adapter，但仍需真实设备、折叠屏和录屏证据。
+- 首次打开应用、运行胶囊与控制层运行中空间停靠必须有可复现路径；控制层小横条按压/拖动/释放、宽屏 fixed dock 长按移动、运行胶囊进入/更新/切换、控制胶囊按钮运行/暂停、倒计时数字变化和朗读语音图标活动提示已接入第一版 demo adapter，但仍需真实设备、折叠屏和录屏证据。
 - 自动翻页和朗读启动必须覆盖“控制层/完整页 -> 沉浸阅读 -> 运行胶囊”的完整路径，并验证两者互斥切换。
 - 阅读控制层、模块切换、换源窗口、底表、键盘和弹窗都在 portrait、tablet-expanded、compact-landscape 视口下检查过。
 - 打断动画覆盖返回、关闭 overlay、切 Tab、切 route、loading 完成、拖动开始和连续点击模块。
@@ -343,9 +343,9 @@
 - 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 已接入实现层 `data-motion-dropdown-*` 状态、trigger/menu/option adapter、`dropdown.option.press` press-id 和 token 化展开/选项点击 CSS。关闭保留动画、打开 A 后切 B、resize/orientation reposition 和录屏证据仍缺。
 - 宽屏控制层长按拖动已接入第一版 demo adapter：宽屏 `.fd-reader-grabber` 长按后进入 `reader.control.dock.longPress`，拖动时更新 dock group transform，释放提交 viewport class offset，resize 后 clamp/rebound，窄屏清理 transform；真实设备、折叠屏 hinge/pane 和录屏证据仍缺。
 - 封面进入沉浸阅读已接入 `data-motion-entry-*` source/target 状态、封面 snapshot 层、普通按钮 fallback 和 token 化淡入；详情/章节入口覆盖、连续点击打断和录屏证据仍缺。
-- 自动翻页/朗读运行胶囊目前有状态和静态 UI，但还没有 token 化的进入、更新、切换、退出动画和录屏证据。
+- 自动翻页/朗读运行胶囊已接入第一版实现层 adapter：启动会话后 route replace 回 `immersive-reading`，胶囊写入 `data-motion-session-capsule-*` 状态，支持 enter/update/switch/exit、倒计时 tick、play/pause 局部按钮和 TTS voice icon active；录屏、停止/退出打断和平台测试证据仍缺。
 - 控制层小横条已接入 `data-motion-control-handle-*` source/panel 状态、press/drag/release 精确状态机、drag preview、release snap/expand/collapse、full 页收回和 reduced-motion；真实设备长路径拖动、目录 full 页上拉 promote 和录屏证据仍缺。
-- 首次打开应用、运行胶囊与控制层运行中空间停靠、控制胶囊按钮运行/暂停、倒计时数字替换和朗读图标活动提示目前只有规划，demo 还没有统一实现和录屏证据；宽屏 control dock 长按拖动已有第一版实现，但还缺真实设备、折叠屏和录屏证据。
+- 首次打开应用、运行胶囊与控制层运行中空间停靠目前只有规划，demo 还没有统一实现和录屏证据；控制胶囊按钮运行/暂停、倒计时数字替换和朗读图标活动提示已有第一版实现层 adapter，但还缺真实设备和录屏证据；宽屏 control dock 长按拖动已有第一版实现，但还缺真实设备、折叠屏和录屏证据。
 - 当前弹窗背景还没有独立命名的 fade token。
 - 阅读控制层显隐还需要单独做一次视觉 pass；当前 route-state 行为已经存在，但进入/退出动效没有完全 token 化。
 - 换源窗口需要在 portrait 和 compact landscape 下补 capture 证据，明确进入/退出表现。
@@ -358,5 +358,5 @@
 
 1. 按 `MOTION_SELECTOR_MATRIX.md` 回填 evidence，优先录制通用组件族、键盘、底表、弹窗、翻页和 loading。
 2. 按 `MOTION_IMPLEMENTATION_GAP_AUDIT.md` 继续补 P0 缺口，优先深化通用组件族状态机。
-3. 继续实现运行胶囊、控制层运行中空间、控制胶囊内部微动效和整屏旋转；宽屏 dock 已有第一版 adapter，下一步补录屏和折叠屏验证。
+3. 继续实现首次打开、控制层运行中空间和整屏旋转；运行胶囊、控制胶囊内部微动效和宽屏 dock 已有第一版 adapter，下一步补录屏、停止/退出打断和折叠屏验证。
 4. 从 canonical `frontend-demo/` 路径录制或截图核心动效状态。

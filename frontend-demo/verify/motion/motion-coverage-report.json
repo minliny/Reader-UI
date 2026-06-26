@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T15:32:04.122Z",
+  "generatedAt": "2026-06-26T15:47:38.636Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v9-20260626, render=reader-dock-motion-v7-20260626, runtime=reader-dock-motion-v7-20260626"
+      "detail": "motion=motion-controller-v10-20260626, render=reader-session-capsule-v2-20260626, runtime=reader-session-capsule-v2-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit"
     },
     {
       "id": "motion.contract.executable-registry",
@@ -40,12 +40,12 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "69/69 Motion IDs resolved; incomplete=0"
+      "detail": "74/74 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "69/69 runtime/selector Motion IDs expose state machines"
+      "detail": "74/74 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
@@ -83,14 +83,19 @@
       "detail": "wide reader control dock exposes long-press/drag/release/rebound states, bounds clamp, viewport-keyed offsets, and tokenized transform CSS"
     },
     {
+      "id": "motion.reader-session-capsule.state-adapter",
+      "passed": true,
+      "detail": "immersive auto-page/TTS capsule exposes enter/update/switch/tick/control/voice states, local countdown updates, and tokenized micro-motion CSS"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "71 bind calls, 59 unique Motion IDs"
+      "detail": "75 bind calls, 61 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "138/160 data-* directly mapped"
+      "detail": "142/164 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -99,9 +104,9 @@
     }
   ],
   "summary": {
-    "passed": 19,
+    "passed": 20,
     "failed": 0,
-    "total": 19
+    "total": 20
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -110,8 +115,8 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 160,
-    "directMappedDataAttributeCount": 138,
+    "dataAttributeCount": 164,
+    "directMappedDataAttributeCount": 142,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -136,8 +141,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 71,
-    "motionIdCount": 59
+    "bindCallCount": 75,
+    "motionIdCount": 61
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
@@ -191,8 +196,13 @@
       "reader.quick.promote",
       "reader.session.autoPage.start",
       "reader.session.capsule.control.press/toggle",
+      "reader.session.capsule.countdownTick",
+      "reader.session.capsule.enter",
       "reader.session.capsule.enter/update/exit",
+      "reader.session.capsule.exit",
+      "reader.session.capsule.switch",
       "reader.session.capsule.update",
+      "reader.session.capsule.voiceIcon.active",
       "reader.session.tts.start",
       "reader.sourceSwitch.open/close",
       "search.state.replace",
