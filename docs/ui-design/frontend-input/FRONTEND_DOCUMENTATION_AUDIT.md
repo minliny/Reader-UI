@@ -100,7 +100,7 @@
 |---|---|---|
 | `shared-shell-kit/README.md` | 既有文档 | 共享 Shell Kit 定位和输出框架。 |
 | `frontend-demo/` | 当前入口 | 当前本地 demo 和顶层 `UI设计图.png` 的视觉源。 |
-| `frontend-demo-draft/README.md` | 历史参考 | 旧前端 demo draft 定位文档，不作为新视觉源头。 |
+| `frontend-demo/README.md` | 当前文档 | 当前本地 demo 的入口、route 和验证说明。 |
 
 ## 页面输入包文档（Page Package Documentation）
 

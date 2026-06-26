@@ -5,7 +5,7 @@
 ## 使用目标（Usage Goal）
 
 - 设计输入件（Design Inputs）：以 `manifest.json`、`contracts.d.ts`、共享 shell kit、页面 `fixture.json`、页面 `COMPONENT_SPEC.md`、顶层 `UI设计图.png` 和 `LOCAL_DEMO_DESIGN_ASSET_MAP.md` 为准。
-- 本地视觉来源（Local Visual Source）：顶层 `UI设计图.png` 必须由根目录 `frontend-demo/` 的当前页面状态生成；`frontend-demo-draft` 只保留历史参考，不作为新设计图或视觉审计源头。
+- 本地视觉来源（Local Visual Source）：顶层 `UI设计图.png` 必须由根目录 `frontend-demo/` 的当前页面状态生成；旧候选稿只保留为历史参考，不作为新设计图或视觉审计源头。
 - Android 实现（Android Implementation）：以 `app/src/main/kotlin/com/reader/android/ui/` 下的 Compose 结构为落点。
 - 映射边界（Mapping Boundary）：把 fixture/state/event 转成 Kotlin UI state、Composable 参数和事件回调；不要把 HTML class 名当作 Android 类名强行搬运。
 - 验收方式（Acceptance Method）：同一页面先对齐 shell、导航、slot、状态矩阵和核心文案，再做动效和业务数据接入。

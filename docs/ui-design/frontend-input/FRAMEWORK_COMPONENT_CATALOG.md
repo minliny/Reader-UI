@@ -5,8 +5,8 @@
 ## 当前结论（Current Conclusion）
 
 - 前端输入件（Frontend Inputs）：当前 manifest 有 64 个验证目标，包括 30 个页面的 `preview.html` 和 `state-matrix.html`、1 个公共组件库预览、1 个共享 Shell Kit 预览、1 个公共素材库预览，以及 1 个前端 Demo 设计稿预览。
-- 本地 Demo 视觉源（Local Demo Visual Source）：根目录 `frontend-demo/` 是当前顶层 `UI设计图.png` 的唯一视觉源头，页面到 route 的关系见 `LOCAL_DEMO_DESIGN_ASSET_MAP.md`；`frontend-demo-draft` 只作历史参考。
-- 本地 HTML（Local HTML）：正式输入范围以 manifest 和 HTML 库存守卫为准；`preview 2.html`、旧 `frontend-demo-draft` 和早期独立复刻页不作为新设计图或正式输入件来源。
+- 本地 Demo 视觉源（Local Demo Visual Source）：根目录 `frontend-demo/` 是当前顶层 `UI设计图.png` 的唯一视觉源头，页面到 route 的关系见 `LOCAL_DEMO_DESIGN_ASSET_MAP.md`。
+- 本地 HTML（Local HTML）：正式输入范围以 manifest 和 HTML 库存守卫为准；`preview 2.html`、旧候选 demo 和早期独立复刻页不作为新设计图或正式输入件来源。
 - 已有共享 kit（Implemented Shared Kits）：主标签页框架（MainTabShell）、书架链路框架（LibraryShell）、设置页框架（SettingsShell）、阅读器框架（ReaderShell）、横向流程框架（FlowShell）和中心化共享 Shell Kit（Shared Shell Kit）已经可用。
 - 已完成共享 kit（Completed Shared Kits）：阅读器框架（ReaderShell）10 页已接入中心化 `ReaderShellKit`；横向流程框架（FlowShell）1 页已接入中心化 `ReaderShellKit.renderFlowShell(...)`。
 - 设计 token 状态（Design Token Status）：`design-tokens.json` 已定义 70 个 token，`tokens.css` 已落地颜色、基础间距、frame、安全区、shell 尺寸、z-index、文本范围、字号、圆角、阴影和 focus 变量，并由 HTML 验证脚本和 Compose token 单测守卫。

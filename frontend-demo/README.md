@@ -45,6 +45,10 @@
 
 这些交互由当前 `frontend-demo/` renderer 覆盖；当前验证页面结构和关键覆盖关系，不代表真实业务数据、完整导航实现或端到端设备测试已经完成。
 
+## 动效规划（Motion Planning）
+
+当前 demo 的动效规划由六份文档组成：`MOTION_CONTRACT.md` 定义跨端共享的 motion token、状态迁移和验收边界；`MOTION_EFFECTS.md` 描述每个场景的实际动画效果、方向、时序和禁用项；`MOTION_SELECTOR_MATRIX.md` 映射 148 个唯一 `data-*` 入口到 Motion ID、demo route、平台组件和证据位置；`MOTION_INTERACTION_COMPONENT_AUDIT.md` 审计当前交互组件族是否被统一 Motion ID 纳管；`MOTION_IMPLEMENTATION_GAP_AUDIT.md` 追踪从规划稿到可执行规格之间的缺口；`../docs/ui-handoff/MOTION_PLATFORM_MAPPING.md` 说明平台应用如何用原生 SwiftUI / Compose / ArkUI 实现，不直接复用 Web CSS 或 DOM 行为。
+
 ## 图标来源（Icon Source）
 
 所有设计稿图标通过 `./asset-library/icons.js` 的 `ReaderAssetIcons.renderIcon(id, className)` 渲染。新稿内不新增一次性 SVG。
@@ -64,3 +68,4 @@
 
 1. 继续把 `render-runtime.js` 内部页面模板按 `main-tabs / library / reader / settings / source-management` 做组件级拆分。
 2. 把 demo 中已验证的返回、键盘、底表和弹窗规则迁移到真实平台导航和状态层。
+3. 按 `MOTION_SELECTOR_MATRIX.md` 录制 motion 证据，并继续深化 TAB、dropdown、Reader entry、控制层和运行胶囊状态机。

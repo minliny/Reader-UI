@@ -8,7 +8,7 @@
 - 文件说明文案（Artifact Documentation Text）：HTML 标题、组件拆分页标题、README、组件规格、审计文档和路线图应使用 `中文名称（English Name）`。
 - 文件名（File Name）：保持 `preview.html`、`state-matrix.html`、`components.html` 稳定，不为了双语格式重命名文件。
 - 前端输入件（Frontend Input）：只认 manifest 管理的预览、状态矩阵、组件库预览、共享 Shell Kit、素材库预览和根目录 `frontend-demo/index.html`；历史临时 HTML 不作为输入件。
-- 视觉源头（Visual Source）：顶层 `UI设计图.png` 由根目录 `frontend-demo/` 的当前 route 截图生成，映射关系见 `LOCAL_DEMO_DESIGN_ASSET_MAP.md`；`frontend-demo-draft` 不再作为新视觉来源。
+- 视觉源头（Visual Source）：顶层 `UI设计图.png` 由根目录 `frontend-demo/` 的当前 route 截图生成，映射关系见 `LOCAL_DEMO_DESIGN_ASSET_MAP.md`。
 
 ## 当前本地 HTML 清单（Current Local HTML Inventory）
 

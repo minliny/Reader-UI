@@ -3,27 +3,24 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reader 可互动初版 Demo</title>
-  <link rel="stylesheet" href="../shared-shell-kit/kit.css">
-  <link rel="stylesheet" href="../frontend-demo-draft/styles.css">
-  <link rel="stylesheet" href="./styles.css">
+  <title>Reader Demo</title>
+  <link rel="stylesheet" href="../../../../frontend-demo/shared-shell-kit/kit.css">
+  <link rel="stylesheet" href="../../../../frontend-demo/styles.css">
 </head>
 <body>
-  <main class="rid-page" data-shell="InteractiveDemoShell">
-    <header class="rid-page-header">
-      <div>
-        <p>Reader Android</p>
-        <h1>可互动初版 Demo</h1>
-      </div>
-      <span id="rid-demo-status">初始化中</span>
-    </header>
-    <section id="rid-demo-root" class="rid-demo-root" aria-label="Reader 可互动初版 Demo"></section>
-  </main>
+  <div id="rid-demo-root"></div>
 
-  <script src="../asset-library/icons.js"></script>
-  <script src="../shared-shell-kit/kit.js"></script>
-  <script src="../frontend-demo-draft/fixture.js"></script>
-  <script src="../frontend-demo-draft/render.js"></script>
-  <script src="./demo.js"></script>
+  <script src="../../../../frontend-demo/asset-library/icons.js"></script>
+  <script src="../../../../frontend-demo/shared-shell-kit/kit.js"></script>
+  <script src="../../../../frontend-demo/fixture.js"></script>
+  <script src="../../../../frontend-demo/route-contract.js"></script>
+  <script src="../../../../frontend-demo/motion-controller.js"></script>
+  <script src="../../../../frontend-demo/render.js"></script>
+  <script>
+    window.ReaderFrontendDemoDraft.render(
+      document.getElementById("rid-demo-root"),
+      window.READER_FRONTEND_DEMO_DRAFT_FIXTURE
+    );
+  </script>
 </body>
 </html>

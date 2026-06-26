@@ -515,8 +515,8 @@
 
 .fd-filter-panel {
   display: grid;
-  gap: 14px;
-  padding: 16px;
+  gap: 10px;
+  padding: 14px;
 }
 
 .fd-batch-summary {
@@ -567,6 +567,22 @@
   overflow-y: hidden;
 }
 
+.fd-filter-panel .fd-chip-row,
+.fd-filter-panel .fd-chip-wrap {
+  flex-wrap: wrap;
+  gap: 7px;
+  overflow: visible;
+}
+
+.fd-filter-panel .fd-chip-row button {
+  flex: 0 0 auto;
+  min-width: 52px;
+  min-height: 32px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .fd-sheet-context {
   display: grid;
   grid-template-columns: 54px minmax(0, 1fr);
@@ -607,6 +623,16 @@
 .fd-import-card small {
   color: var(--fd-muted);
   font-size: 12px;
+}
+
+.fd-import-card.is-import-entry small {
+  display: -webkit-box;
+  overflow: hidden;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .fd-management-list {
@@ -765,7 +791,9 @@
   background: rgba(255, 250, 244, 0.97);
   box-shadow: var(--fd-shadow);
   transform: translateY(100%);
-  transition: transform 160ms ease, visibility 160ms ease;
+  transition:
+    transform var(--reader-motion-duration-base) var(--reader-motion-easing-standard),
+    visibility var(--reader-motion-duration-base) var(--reader-motion-easing-standard);
 }
 
 .fd-library-phone.has-sheet .fd-demo-sheet,
@@ -1104,7 +1132,7 @@
 }
 
 .fd-settings-content {
-  gap: 12px;
+  gap: var(--fd-settings-content-gap);
 }
 
 .fd-restore-content {
@@ -1217,6 +1245,68 @@
   font-size: 13px;
 }
 
+.fd-restore-scope-card {
+  gap: 10px;
+}
+
+.fd-restore-scope-list {
+  display: grid;
+  gap: 8px;
+}
+
+.fd-restore-scope-list button {
+  min-width: 0;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid rgba(180, 166, 151, 0.32);
+  border-radius: var(--fd-radius-md);
+  background: rgba(255, 252, 248, 0.68);
+  color: var(--fd-ink);
+  text-align: left;
+  box-shadow: none;
+}
+
+.fd-restore-scope-list button.is-selected {
+  border-color: rgba(19, 82, 118, 0.42);
+  background: rgba(19, 82, 118, 0.07);
+}
+
+.fd-restore-scope-list button > svg {
+  width: 24px;
+  height: 24px;
+  padding: 5px;
+  border-radius: var(--fd-radius-circle);
+  background: rgba(35, 121, 164, 0.09);
+  color: var(--fd-primary);
+}
+
+.fd-restore-scope-list span,
+.fd-restore-scope-list strong,
+.fd-restore-scope-list small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-restore-scope-list strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.fd-restore-scope-list small {
+  display: block;
+  margin-top: 2px;
+  color: var(--fd-muted);
+  font-size: 10px;
+  line-height: 1.25;
+}
+
 .fd-restore-progress-meter {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 42px;
@@ -1321,7 +1411,7 @@
 .fd-settings-metric-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: var(--fd-settings-card-gap);
 }
 
 .fd-settings-metric-grid article,
@@ -1331,18 +1421,18 @@
 .fd-settings-subpanel,
 .fd-settings-action-list button,
 .fd-settings-search-box {
-  border: 1px solid rgba(180, 166, 151, 0.38);
-  border-radius: var(--fd-radius-md);
+  border: var(--fd-settings-card-border);
+  border-radius: var(--fd-settings-card-radius);
   background: var(--fd-surface);
-  box-shadow: 0 5px 14px rgba(92, 71, 50, 0.05);
+  box-shadow: var(--fd-settings-card-shadow);
 }
 
 .fd-settings-metric-grid article {
-  min-height: 56px;
+  min-height: var(--fd-settings-metric-row-height);
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr);
+  grid-template-columns: var(--fd-settings-metric-icon-col) minmax(0, 1fr);
   align-items: center;
-  gap: 8px;
+  gap: var(--fd-settings-card-gap);
   padding: 8px 10px;
 }
 
@@ -1360,5 +1450,5 @@
 }
 
 .fd-settings-metric-grid strong {
-  font-size: 15px;
+  font-size: var(--fd-settings-metric-value-size);
 }

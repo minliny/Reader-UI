@@ -21,6 +21,41 @@
     return icon("chevron", className || "fd-inline-chevron");
   }
 
+  function attrHtml(attrs) {
+    return Object.entries(attrs || {})
+      .filter(([, value]) => value !== false && value != null)
+      .map(([key, value]) => value === true ? ` ${key}` : ` ${key}="${esc(value)}"`)
+      .join("");
+  }
+
+  function filterDisclosure(config) {
+    const open = Boolean(config.open);
+    const summary = config.summary || "全部";
+    const toggleAttr = config.toggleAttr || "data-filter-toggle";
+    const groups = (config.groups || []).map((group) => `
+        <article>
+          <strong>${esc(group.title)}</strong>
+          <div>
+            ${(group.options || []).map((option) => `
+              <button class="${option.active ? "is-active" : ""}" type="button"${option.route ? ` data-route="${esc(option.route)}"` : ""}${attrHtml(option.attrs)}>
+                ${option.icon ? icon(option.icon, "fd-small-icon") : ""}
+                <span>${esc(option.label)}</span>
+              </button>`).join("")}
+          </div>
+        </article>`).join("");
+    return `
+      <section class="fd-filter-control ${config.className || ""}${config.applyRoute ? " has-apply" : ""}${open ? " is-open" : ""}" aria-label="${esc(config.ariaLabel || config.label || "筛选")}">
+        <button class="fd-filter-trigger" type="button" ${toggleAttr} aria-expanded="${open ? "true" : "false"}">
+          ${icon("filter", "fd-small-icon")}
+          <span>${esc(config.label || "筛选")}</span>
+          <em>${esc(summary)}</em>
+          ${icon("chevron", "fd-small-icon fd-filter-chevron")}
+        </button>
+        ${config.applyRoute ? `<button class="fd-filter-apply" type="button" data-route="${esc(config.applyRoute)}" data-filter-close>${icon("check", "fd-small-icon")}${esc(config.applyLabel || "应用")}</button>` : ""}
+        ${open ? `<section class="fd-filter-menu">${groups}</section>` : ""}
+      </section>`;
+  }
+
   function chapterIsCurrent(chapter) {
     return Boolean(chapter && (chapter.current || chapter.state === "当前"));
   }
@@ -217,8 +252,7 @@
     const items = [
       { icon: "check", title: "批量管理", meta: "选择多本书后移动或删除", route: "book-batch-management" },
       { icon: "people", title: "分组管理", meta: "编辑书架分组与归属", route: "group-management" },
-      { icon: "book-open", title: "本地书导入", meta: "导入本地文件到书架", route: "local-import" },
-      { icon: "sort", title: "排序与筛选", meta: "调整当前书架内容顺序", route: "sort-filter" }
+      { icon: "book-open", title: "本地书导入", meta: "导入本地文件到书架", route: "local-import" }
     ];
     return `
       <section class="fd-bookshelf-more-layer" data-bookshelf-more-layer aria-hidden="true" aria-label="书架更多操作">
@@ -235,9 +269,119 @@
       </section>`;
   }
 
+  function bookshelfSortFilterState(appState) {
+    return {
+      group: appState?.bookshelfGroup || "全部",
+      sort: appState?.bookshelfSort || "最近更新",
+      filter: appState?.bookshelfFilter || "全部",
+      open: Boolean(appState?.bookshelfFilterOpen)
+    };
+  }
+
+  function bookshelfFilterPopover(appState, disabled) {
+    const state = bookshelfSortFilterState(appState);
+    if (disabled || !state.open) {
+      return "";
+    }
+    const groupOptions = ["全部", "默认", "本地书", "追更"];
+    const sortOptions = ["最近更新", "阅读进度", "书名", "作者"];
+    const filterOptions = ["全部", "未读", "已完结", "更新失败"];
+    return `
+          <section class="fd-bookshelf-filter-popover" aria-label="书架排序与筛选选项">
+            <article>
+              <strong>分组</strong>
+              <div>
+                ${groupOptions.map((item) => `<button class="${item === state.group ? "is-active" : ""}" type="button" data-bookshelf-group-option="${esc(item)}"${item === state.group ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
+              </div>
+            </article>
+            <article>
+              <strong>排序</strong>
+              <div>
+                ${sortOptions.map((item) => `<button class="${item === state.sort ? "is-active" : ""}" type="button" data-bookshelf-sort-option="${esc(item)}"${item === state.sort ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
+              </div>
+            </article>
+            <article>
+              <strong>筛选</strong>
+              <div>
+                ${filterOptions.map((item) => `<button class="${item === state.filter ? "is-active" : ""}" type="button" data-bookshelf-filter-option="${esc(item)}"${item === state.filter ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
+              </div>
+            </article>
+          </section>`;
+  }
+
+  function bookshelfBookGroup(book, index) {
+    const title = String(book?.title || "");
+    const author = String(book?.author || "");
+    if (/本地|离线|导入|文档/.test(author)) {
+      return "本地书";
+    }
+    if (index < 4 || /书源|同步/.test(author) || /灯塔与雾/.test(title)) {
+      return "追更";
+    }
+    return "默认";
+  }
+
+  function bookshelfBookMatchesGroup(book, index, group) {
+    return group === "全部" || bookshelfBookGroup(book, index) === group;
+  }
+
+  function bookshelfBookMatchesFilter(book, index, filter) {
+    const progress = Number.parseInt(String(book.progress || "0").replace("%", ""), 10) || 0;
+    const title = String(book.title || "");
+    const author = String(book.author || "");
+    if (filter === "未读") {
+      return progress < 20;
+    }
+    if (filter === "已完结") {
+      return /三体|人间词话/.test(title);
+    }
+    if (filter === "更新失败") {
+      return /长标题测试|书源同步/.test(title) || /书源同步/.test(author);
+    }
+    return true;
+  }
+
+  function bookshelfSortedBooks(books, appState) {
+    const state = bookshelfSortFilterState(appState);
+    const normalized = (books || [])
+      .map((book, index) => ({ book, index }))
+      .filter(({ book, index }) => bookshelfBookMatchesGroup(book, index, state.group))
+      .filter(({ book, index }) => bookshelfBookMatchesFilter(book, index, state.filter));
+    if (state.sort === "阅读进度") {
+      normalized.sort((left, right) => {
+        const leftProgress = Number.parseInt(String(left.book.progress || "0").replace("%", ""), 10) || 0;
+        const rightProgress = Number.parseInt(String(right.book.progress || "0").replace("%", ""), 10) || 0;
+        return rightProgress - leftProgress || left.index - right.index;
+      });
+    } else if (state.sort === "书名") {
+      normalized.sort((left, right) => String(left.book.title || "").localeCompare(String(right.book.title || ""), "zh-Hans") || left.index - right.index);
+    } else if (state.sort === "作者") {
+      normalized.sort((left, right) => String(left.book.author || "").localeCompare(String(right.book.author || ""), "zh-Hans") || left.index - right.index);
+    }
+    return normalized.map(({ book }) => book);
+  }
+
+  function bookshelfSectionHeader(bookshelfView, disabled, appState) {
+    const state = bookshelfSortFilterState(appState);
+    const filterActive = state.open || state.group !== "全部" || state.sort !== "最近更新" || state.filter !== "全部";
+    return `
+          <section class="fd-section-head fd-bookshelf-section-head">
+            <div>
+              <h2>我的书架</h2>
+            </div>
+            <span class="fd-bookshelf-view-actions">
+              <button class="${bookshelfView === "cover" ? "is-active" : ""}" type="button" aria-label="封面视图" data-bookshelf-view-button="cover" aria-pressed="${bookshelfView === "cover" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("grid", "fd-small-icon")}</button>
+              <button class="${bookshelfView === "list" ? "is-active" : ""}" type="button" aria-label="列表视图" data-bookshelf-view-button="list" aria-pressed="${bookshelfView === "list" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("list", "fd-small-icon")}</button>
+              <button class="${filterActive ? "is-active" : ""}" type="button" aria-label="书架筛选：${esc(state.group)}，${esc(state.sort)}，${esc(state.filter)}" data-bookshelf-filter-toggle aria-expanded="${state.open ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("filter", "fd-small-icon")}</button>
+              <button type="button" aria-label="书架显示设置" data-route="bookshelf-search-settings" data-settings-scope="bookshelf-display">${icon("gear", "fd-small-icon")}</button>
+            </span>
+          </section>`;
+  }
+
   function mainTabBookshelf(data, appState) {
     const first = data.mainTabs.books[0];
     const bookshelfView = appState?.bookshelfView === "list" ? "list" : "cover";
+    const visibleBooks = bookshelfSortedBooks(data.mainTabs.books, appState);
     return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
       data,
       title: "书架",
@@ -245,9 +389,6 @@
       actions: ["search", "more"],
       ariaLabel: "书架",
       contentHtml: `
-        <nav class="fd-chip-row" aria-label="书架分组">
-          ${["全部", "默认", "本地书", "追更"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
-        </nav>
         <section class="fd-continue-card">
           <button class="fd-continue-cover-button" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(first.title)}" data-book-author="${esc(first.author)}" data-book-chapter="${esc(first.chapter)}" data-cover-src="${cover(data, first.coverKey)}" aria-label="打开 ${esc(first.title)}">
             <img src="${cover(data, first.coverKey)}" alt="${esc(first.title)}封面">
@@ -259,18 +400,12 @@
           </div>
           <button class="fd-continue-action-button" type="button" data-route="immersive-reading">阅读</button>
         </section>
-        <section class="fd-section-head">
-          <div>
-            <h2>我的书架</h2>
-          </div>
-          <span>
-            <button class="${bookshelfView === "cover" ? "is-active" : ""}" type="button" aria-label="封面视图" data-bookshelf-view-button="cover" aria-pressed="${bookshelfView === "cover" ? "true" : "false"}">${icon("grid", "fd-small-icon")}</button>
-            <button class="${bookshelfView === "list" ? "is-active" : ""}" type="button" aria-label="列表视图" data-bookshelf-view-button="list" aria-pressed="${bookshelfView === "list" ? "true" : "false"}">${icon("list", "fd-small-icon")}</button>
-            <button type="button" aria-label="书架显示设置" data-route="bookshelf-search-settings" data-settings-scope="bookshelf-display">${icon("gear", "fd-small-icon")}</button>
-          </span>
-        </section>
-        <section class="fd-book-grid ${bookshelfView === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${bookshelfView}" aria-label="${bookshelfView === "list" ? "书籍列表" : "书籍封面网格"}">
-          ${data.mainTabs.books.map((book) => bookCard(data, book)).join("")}
+        <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
+          ${bookshelfSectionHeader(bookshelfView, false, appState)}
+          ${bookshelfFilterPopover(appState, false)}
+          <section class="fd-book-grid ${bookshelfView === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${bookshelfView}" aria-label="${bookshelfView === "list" ? "书籍列表" : "书籍封面网格"}">
+            ${visibleBooks.map((book) => bookCard(data, book)).join("")}
+          </section>
         </section>`,
       stateHostHtml: `
         <p class="fd-nav-feedback">当前 Tab：书架</p>
@@ -284,141 +419,1508 @@
     return message ? `<p class="fd-nav-feedback" data-main-tab-feedback>${esc(message)}</p>` : "";
   }
 
-  function mainTabDiscover(data, appState) {
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
+  function discoverContext(route, appState) {
+    const entryRouteMap = {
+      "discover-entry-ranking": "排行榜",
+      "discover-entry-bestseller": "畅销",
+      "discover-entry-category": "分类",
+      "discover-entry-finished": "完本",
+      "discover-entry-latest": "最新",
+      "discover-entry-new": "新书",
+      "discover-entry-booklist": "书单"
+    };
+    const filterRouteMap = {
+      "discover-filter-keyword": "关键词",
+      "discover-filter-male": "男频",
+      "discover-filter-female": "女频"
+    };
+    const sortRouteMap = {
+      "discover-sort-popularity": "人气",
+      "discover-sort-update": "更新",
+      "discover-sort-collection": "收藏",
+      "discover-sort-finished": "完本",
+      "discover-sort-words": "字数"
+    };
+    const switched = route === "discover-switched-source";
+    const source = switched
+      ? { name: "起点导入", meta: "正版 · 已启用发现 · 180ms", status: "已启用发现", speed: "180ms" }
+      : { name: "优书网", meta: "默认分组 · 已启用发现 · 120ms", status: "已启用发现", speed: "120ms" };
+    const entries = switched ? ["畅销", "分类", "新书", "完本"] : ["排行榜", "分类", "完本", "最新", "书单"];
+    const routedEntry = entryRouteMap[route];
+    const routedFilter = filterRouteMap[route];
+    const stateEntry = appState?.discoverEntry;
+    const activeEntry = routedEntry && entries.includes(routedEntry)
+      ? routedEntry
+      : stateEntry && entries.includes(stateEntry)
+        ? stateEntry
+        : entries[0];
+    const activeFilter = routedFilter || appState?.discoverFilter || "男频";
+    const sort = sortRouteMap[route] || appState?.discoverSort || (switched ? "更新" : "人气");
+    const sortOpen = route === "discover-sort" || Boolean(appState?.discoverSortOpen);
+    const totalByRoute = {
+      "discover-entry-category": 32,
+      "discover-entry-finished": 21,
+      "discover-entry-latest": 27,
+      "discover-entry-booklist": 14,
+      "discover-filter-keyword": 9,
+      "discover-filter-female": 16,
+      "discover-sort-update": 25,
+      "discover-sort-collection": 19,
+      "discover-sort-finished": 21,
+      "discover-sort-words": 23
+    };
+    const totalBySort = {
+      "更新": 25,
+      "收藏": 19,
+      "完本": 21,
+      "字数": 23
+    };
+    return {
+      route,
+      source,
+      entries,
+      activeEntry,
+      activeFilter,
+      total: switched ? 24 : route === "discover-page-two" ? 38 : totalByRoute[route] || totalBySort[sort] || 18,
+      sort,
+      sortOpen
+    };
+  }
+
+  function discoverEntryRoute(item) {
+    return {
+      "排行榜": "discover-entry-ranking",
+      "畅销": "discover-entry-bestseller",
+      "分类": "discover-entry-category",
+      "完本": "discover-entry-finished",
+      "最新": "discover-entry-latest",
+      "新书": "discover-entry-new",
+      "书单": "discover-entry-booklist"
+    }[item] || "discover";
+  }
+
+  function discoverFilterRoute(item) {
+    return {
+      "关键词": "discover-filter-keyword",
+      "男频": "discover-filter-male",
+      "女频": "discover-filter-female"
+    }[item] || "discover";
+  }
+
+  function discoverSortRoute(item) {
+    return {
+      "人气": "discover-sort-popularity",
+      "更新": "discover-sort-update",
+      "收藏": "discover-sort-collection",
+      "完本": "discover-sort-finished",
+      "字数": "discover-sort-words"
+    }[item] || "discover";
+  }
+
+  function discoverBooks(data, route) {
+    const switched = route === "discover-switched-source";
+    const base = switched
+      ? [
+          ["诡秘之主", "爱潜水的乌贼", "奇幻 · 完本", "最新：番外已整理", "克莱恩在迷雾中醒来，新的线索沿着塔罗会延伸。", "mysteryLord", true],
+          ["纸上城市", "默认分组", "都市 · 连载", "最新：第 18 章", "城市被写在纸页上，所有路口都藏着旧书源的暗号。", "renjian", false],
+          ["灯塔与雾", "书源同步", "悬疑 · 连载", "最新：第 51 章", "雾气吞没海岸线，灯塔的记录仍在夜里闪烁。", "brightMoon", false],
+          ["群星之间", "本地导入", "科幻 · 连载", "最新：第 12 章", "星舰穿过静默航道，旧文明的坐标重新亮起。", "threeBody", true]
+        ]
+      : [
+          ["长夜余火", "爱潜水的乌贼", "科幻 · 连载", "最新：第 32 章 雨夜", "雨声在窗外连成一片，旧世界的线索在夜里慢慢浮出。", "longNight", true],
+          ["诡秘之主", "爱潜水的乌贼", "奇幻 · 完本", "最新：番外已整理", "蒸汽、塔罗与旧日秘密交织，适合继续追读。", "mysteryLord", true],
+          ["三体", "刘慈欣", "科幻 · 完本", "最新：三部曲合集", "文明在宇宙暗处相互凝视，微小选择带来巨大回声。", "threeBody", false],
+          ["明朝那些事儿", "当年明月", "历史 · 完本", "最新：全集校对", "用更轻松的方式重新翻开明朝人物与权力线索。", "brightMoon", false],
+          ["纸上城市", "默认分组", "都市 · 连载", "最新：第 12 章", "纸页边缘折起，城市的名字开始变化。", "renjian", false]
+        ];
+    const extra = route === "discover-page-two" || route === "discover-infinite-loading"
+      ? [["旧日回响", "离线书库", "奇幻 · 连载", "最新：第 18 章", "旧日钟声从废墟里传回，缓存章节仍可打开。", "longNight", false]]
+      : [];
+    return base.concat(extra);
+  }
+
+  function discoverSourceBar(ctx, expanded, route) {
+    const target = expanded ? "discover" : "discover-control";
+    return `
+      <button class="fd-discover-source-bar${expanded ? " is-expanded" : ""}" type="button" data-route="${esc(target)}" aria-expanded="${expanded ? "true" : "false"}">
+        <span>${icon("source-stack", "fd-small-icon")}</span>
+        <strong>${esc(ctx.source.name)}<small>${esc(ctx.source.meta)}</small></strong>
+        ${icon("chevron", "fd-small-icon fd-discover-source-chevron")}
+      </button>`;
+  }
+
+  function discoverEntryChips(ctx) {
+    return `<nav class="fd-discover-entry-row" aria-label="发现入口">
+      ${ctx.entries.map((item) => {
+        const active = item === ctx.activeEntry;
+        return `<button class="${active ? "is-active" : ""}" type="button" data-route="${esc(discoverEntryRoute(item))}" data-discover-entry="${esc(item)}"${active ? ' aria-current="page"' : ""}>${esc(item)}</button>`;
+      }).join("")}
+    </nav>`;
+  }
+
+  function discoverFilterBar(ctx, appState) {
+    const filters = ["关键词", "男频", "女频"];
+    const sorts = ["人气", "更新", "收藏", "完本", "字数"];
+    return filterDisclosure({
+      className: "fd-discover-filter-control",
+      label: "筛选",
+      ariaLabel: "发现筛选与排序",
+      summary: `${ctx.activeFilter} · ${ctx.sort}`,
+      toggleAttr: "data-discover-filter-toggle",
+      open: Boolean(appState?.discoverFilterOpen) || ctx.sortOpen,
+      applyRoute: "discover-refreshing",
+      groups: [
+        {
+          title: "范围",
+          options: filters.map((item) => ({
+            label: item,
+            icon: item === "关键词" ? "search" : "",
+            active: ctx.activeFilter === item,
+            route: discoverFilterRoute(item),
+            attrs: { "data-discover-filter": item }
+          }))
+        },
+        {
+          title: "排序",
+          options: sorts.map((item) => ({
+            label: item,
+            active: ctx.sort === item,
+            attrs: { "data-discover-sort-option": item }
+          }))
+        }
+      ]
+    });
+  }
+
+  function discoverResultHeader(ctx) {
+    return `
+      <header class="fd-discover-list-head">
+        <h2>${esc(ctx.activeEntry)}</h2>
+      </header>`;
+  }
+
+  function discoverBookRows(data, route, faded) {
+    return `
+      <section class="fd-discover-book-list${faded ? " is-muted" : ""}" aria-label="发现结果列表">
+        ${discoverBooks(data, route).map(([title, author, kind, latest, intro, coverKey, inShelf]) => `
+          <article class="fd-discover-book-row" role="button" tabindex="0" data-route="book-detail">
+            <img src="${cover(data, coverKey)}" alt="${esc(title)}封面">
+            <span class="fd-discover-shelf-dot${inShelf ? " is-in-shelf" : ""}" title="${inShelf ? "已在书架" : "未在书架"}"></span>
+            <div>
+              <h3>${esc(title)}</h3>
+              <small>${esc(author)} · ${esc(kind)}</small>
+              <em>${esc(latest)}</em>
+              <p>${esc(intro)}</p>
+            </div>
+          </article>`).join("")}
+      </section>`;
+  }
+
+  function discoverSkeletonList() {
+    return `<section class="fd-discover-skeleton-list" aria-label="发现结果加载中">
+      ${Array.from({ length: 4 }).map(() => `
+        <article>
+          <i></i>
+          <span><b></b><b></b><b></b><b></b></span>
+        </article>`).join("")}
+    </section>`;
+  }
+
+  function discoverControlPanel(ctx, mode) {
+    const sourceItems = [
+      ["优书网", "默认 · 120ms", "good"],
+      ["起点导入", mode === "switching" ? "正在解析入口" : "正版 · 180ms", mode === "switching" ? "loading" : "good"],
+      ["轻小说文库", "需登录", "warn"],
+      ["本地聚合源", "维护中", "muted"]
+    ];
+    const entryError = mode === "entry-error";
+    return `
+      <section class="fd-discover-control-panel${mode ? ` is-${esc(mode)}` : ""}" aria-label="发现控制层">
+        <section>
+          <h2>当前书源</h2>
+          <div class="fd-discover-source-options">
+            ${sourceItems.map(([name, meta, tone]) => `
+              <button class="${name === ctx.source.name ? "is-active" : ""} is-${esc(tone)}" type="button" data-route="${name === "起点导入" ? "discover-switching-source" : "discover-control"}">
+                <strong>${esc(name)}</strong><small>${esc(meta)}</small>
+              </button>`).join("")}
+          </div>
+        </section>
+        <section>
+          <h2>发现入口</h2>
+          ${entryError ? `
+            <article class="fd-discover-inline-error">
+              ${icon("warning", "fd-small-icon")}
+              <span><strong>入口解析失败</strong><small>当前书源的 exploreUrl 返回异常。</small></span>
+              <button type="button" data-route="discover-control">重试</button>
+              <button type="button" data-route="discover-rule-test">编辑源</button>
+            </article>` : `
+            <div class="fd-discover-control-chips">
+              ${ctx.entries.map((item) => {
+                const active = item === ctx.activeEntry;
+                return `<button class="${active ? "is-active" : ""}" type="button" data-route="${esc(discoverEntryRoute(item))}" data-discover-entry="${esc(item)}"${active ? ' aria-current="page"' : ""}>${esc(item)}</button>`;
+              }).join("")}
+            </div>`}
+        </section>
+        <section>
+          <h2>筛选与排序</h2>
+          <div class="fd-discover-control-filters">
+            <label>${icon("search", "fd-small-icon")}<span>关键词</span></label>
+            <button class="${ctx.activeFilter === "男频" ? "is-active" : ""}" type="button" data-route="${esc(discoverFilterRoute("男频"))}" data-discover-filter="男频">男频</button>
+            <button class="${ctx.activeFilter === "女频" ? "is-active" : ""}" type="button" data-route="${esc(discoverFilterRoute("女频"))}" data-discover-filter="女频">女频</button>
+            <button type="button" data-route="discover-sort">排序：${esc(ctx.sort)}${icon("chevron", "fd-small-icon")}</button>
+            <button type="button" data-route="discover" data-discover-reset>重置</button>
+            <button class="fd-discover-apply-button is-primary" type="button" data-route="discover">${icon("check", "fd-small-icon")}应用</button>
+          </div>
+        </section>
+        <section>
+          <h2>源操作</h2>
+          <div class="fd-discover-action-grid">
+            <button type="button" data-route="discover-switching-source">${icon("refresh", "fd-small-icon")}刷新入口</button>
+            <button type="button" data-route="discover-cache-confirm">${icon("trash", "fd-small-icon")}清缓存</button>
+            <button type="button" data-route="discover-source-login">${icon("shield", "fd-small-icon")}登录</button>
+            <button type="button" data-route="discover-rule-test">${icon("edit", "fd-small-icon")}编辑源</button>
+            <button type="button" data-route="discover-source-bulk">${icon("source", "fd-small-icon")}管理发现源</button>
+          </div>
+        </section>
+      </section>`;
+  }
+
+  function discoverSortDropdown(ctx) {
+    return `
+      <section class="fd-discover-sort-popover" aria-label="排序方式">
+        <h2>排序方式</h2>
+        ${["人气", "更新", "收藏", "完本", "字数"].map((item) => `<button class="${item === ctx.sort ? "is-active" : ""}" type="button" data-discover-sort-option="${esc(item)}"${item === ctx.sort ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
+      </section>`;
+  }
+
+  function discoverBackTop() {
+    return `<button class="fd-discover-back-top" type="button" data-route="discover">${icon("top", "fd-small-icon")}回到顶部</button>`;
+  }
+
+  function discoverDialogHtml() {
+    return `
+      <section class="fd-discover-dialog-backdrop" aria-hidden="true"></section>
+      <section class="fd-discover-confirm-dialog" role="dialog" aria-modal="true" aria-label="清除发现缓存">
+        <h2>清除发现缓存？</h2>
+        <p>将清除优书网的发现入口缓存，不影响书架和阅读进度。</p>
+        <div>
+          <button type="button" data-route="discover-control">取消</button>
+          <button type="button" data-route="discover-cache-toast">确认清除</button>
+        </div>
+      </section>`;
+  }
+
+  function discoverMainContent(data, route, appState) {
+    const ctx = discoverContext(route, appState);
+    const expanded = ["discover-control", "discover-cache-confirm", "discover-switching-source", "discover-entry-error"].includes(route);
+    const loading = route === "discover-loading";
+    const refreshing = route === "discover-refreshing" || route === "discover-login-return";
+    const infinite = route === "discover-infinite-loading";
+    const pageTwo = route === "discover-page-two";
+    const noResults = route === "discover-no-results";
+    const muted = route === "discover-switching-source" || route === "discover-entry-error";
+    if (route === "discover-empty") {
+      return `
+        <section class="fd-discover-empty-state">
+          ${icon("source-stack", "fd-empty-icon")}
+          <h2>当前没有启用发现的书源</h2>
+          <p>启用发现后，可以在这里浏览书源提供的排行榜、分类和书单。</p>
+          <div><button type="button" data-route="source-management">去书源管理</button><button type="button" data-route="source-import-options">导入书源</button></div>
+        </section>`;
+    }
+    if (route === "discover-error") {
+      return `
+        ${discoverSourceBar(Object.assign({}, ctx, { source: { name: "优书网", meta: "排行榜 · 解析失败" } }), false, route)}
+        <section class="fd-discover-error-card">
+          ${icon("warning", "fd-medium-icon")}
+          <h2>发现入口解析失败</h2>
+          <p>当前入口返回异常，已保留上一批缓存结果。你可以重试、刷新入口、编辑源或切换书源。</p>
+          <div><button type="button" data-route="discover-refreshing">重试</button><button type="button" data-route="discover-control">切换书源</button><button type="button" data-route="discover-rule-test">编辑源</button></div>
+        </section>
+        ${discoverBookRows(data, "discover", true)}`;
+    }
+    return `
+      ${route === "discover-cache-toast" ? `<section class="fd-discover-toast">已清除优书网发现缓存</section>` : ""}
+      ${discoverSourceBar(ctx, expanded, route)}
+      ${expanded ? discoverControlPanel(ctx, route === "discover-switching-source" ? "switching" : route === "discover-entry-error" ? "entry-error" : "") : ""}
+      ${expanded ? "" : `${discoverEntryChips(ctx)}${discoverFilterBar(ctx, appState)}`}
+      ${refreshing ? `<section class="fd-discover-refresh-line"><i></i><span>${route === "discover-login-return" ? "登录成功，正在刷新当前发现入口" : "正在刷新当前列表"}</span></section>` : ""}
+      ${noResults ? `
+        <section class="fd-discover-no-results">
+          ${icon("search", "fd-empty-icon")}
+          <h2>当前条件没有发现结果</h2>
+          <p>可以重置筛选、切换入口，或刷新当前书源。</p>
+          <div><button type="button" data-route="discover" data-discover-reset>重置筛选</button><button type="button" data-route="discover-control">切换入口</button><button type="button" data-route="discover-refreshing">刷新</button></div>
+        </section>` : `
+        ${discoverResultHeader(ctx)}
+        ${loading ? discoverSkeletonList() : discoverBookRows(data, route, muted)}
+        ${infinite ? `<section class="fd-discover-bottom-loading"><i></i></section>` : ""}
+        ${pageTwo ? discoverBackTop() : ""}`}
+      ${route === "discover-cache-confirm" ? discoverDialogHtml() : ""}`;
+  }
+
+  function mainTabDiscover(data, appState, route) {
+    const currentRoute = route || "discover";
+    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone fd-discover-phone"), {
       data,
       title: "发现",
       activeType: "discover",
-      actions: [],
+      actions: ["refresh"],
       ariaLabel: "发现",
-      contentHtml: `
-        <button class="fd-search-entry" type="button" data-route="book-search">${icon("search", "fd-small-icon")}<span>搜索书名、作者或书源</span></button>
-        <section class="fd-source-summary">
-          <div>${icon("source-stack", "fd-medium-icon")}<strong>书源广场</strong><span>128 个可用 · 12 个更新</span></div>
-          <button type="button" data-route="source-management">管理</button>
-        </section>
-        <section class="fd-ranking-list">
-          <h2>今日推荐</h2>
-          ${data.mainTabs.discovery.map((item) => `
-            <article class="fd-ranking-row" role="button" tabindex="0" data-route="book-detail">
-              <em>${esc(item.rank)}</em>
-              <img src="${cover(data, item.coverKey)}" alt="${esc(item.title)}封面">
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-              ${icon("chevron", "fd-small-icon")}
-            </article>
-          `).join("")}
-        </section>`,
+      contentClass: "fd-phone-content fd-discover-content",
+      contentHtml: discoverMainContent(data, currentRoute, appState),
       stateHostHtml: mainTabFeedbackHtml(appState)
     }));
   }
 
-  function mainTabRss(data, appState) {
-    const entries = data.mainTabs.rss || [
-      { title: "长夜余火更新到第 33 章", meta: "优书网 · 2 分钟前", route: "rss-detail" },
-      { title: "书源维护公告", meta: "RSS 订阅 · 未读", route: "rss-detail" },
-      { title: "本地导入文件已完成解析", meta: "系统通知 · 12 分钟前", route: "rss-detail" }
-    ];
+  function discoverSourceLoginScreen(data) {
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-discover-subpage-phone"), {
+      data,
+      title: "书源登录",
+      ariaLabel: "书源登录",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml: `
+        <section class="fd-discover-subpage fd-discover-login-page">
+          <article class="fd-discover-subpage-head">
+            <span>${icon("shield", "fd-medium-icon")}</span>
+            <div>
+              <h2>轻小说文库</h2>
+              <p>该书源的发现入口需要登录态，登录后返回当前入口并刷新列表。</p>
+            </div>
+          </article>
+          <section class="fd-discover-login-card">
+            <article><span><strong>登录状态</strong><small>未登录 · 最近检测 10:32</small></span>${sourceBadge({ status: "需登录", tone: "warn" })}</article>
+            <article><span><strong>适用范围</strong><small>发现入口、详情页、目录页</small></span>${sourceBadge({ status: "当前源", tone: "good" })}</article>
+            <article><span><strong>Cookie 保存</strong><small>仅保存在本机书源配置中</small></span>${sourceSwitch(true, "Cookie 保存")}</article>
+          </section>
+          <section class="fd-discover-login-actions">
+            <button class="is-primary" type="button" data-route="discover-login-return">${icon("globe", "fd-small-icon")}打开网页登录</button>
+            <button type="button" data-route="discover-login-return">${icon("check", "fd-small-icon")}保存登录信息</button>
+            <button type="button" data-route="discover-control">${icon("refresh", "fd-small-icon")}重新检测</button>
+          </section>
+          <p class="fd-discover-subpage-note">返回发现页后，当前书源和当前入口保持不变，只刷新内容列表。</p>
+        </section>`,
+      bottomActionHtml: `
+        <div class="fd-fixed-action-row">
+          <button type="button" data-route="discover-control">${icon("source-stack", "fd-small-icon")}返回控制层</button>
+          <button type="button" data-route="discover-login-return">${icon("refresh", "fd-small-icon")}完成刷新</button>
+        </div>`
+    }));
+  }
 
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
+  function discoverRuleTestScreen(data) {
+    const fields = [
+      ["exploreUrl", "@js: 首页入口 + 分类入口"],
+      ["bookList", ".result-list li"],
+      ["name", ".book-title@text"],
+      ["author", ".author@text"],
+      ["kind", ".tag@text"],
+      ["intro", ".intro@text"],
+      ["lastChapter", ".last@text"],
+      ["coverUrl", "img@src"],
+      ["bookUrl", "a@href"]
+    ];
+    return sourceShell(data, "发现规则测试", `
+      <section class="fd-discover-subpage fd-discover-rule-page">
+        <article class="fd-discover-subpage-head has-badge">
+          <span>${icon("code", "fd-medium-icon")}</span>
+          <div>
+            <h2>优书网</h2>
+            <p>正在编辑：发现规则</p>
+          </div>
+          ${sourceBadge({ status: "已启用发现", tone: "good" })}
+        </article>
+        <nav class="fd-source-module-tabs" aria-label="书源规则模块">
+          ${["基本", "搜索", "详情", "目录", "正文", "发现", "高级"].map((item) => `<button class="${item === "发现" ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
+        </nav>
+        <section class="fd-discover-rule-fields" aria-label="发现规则字段">
+          ${fields.map(([label, value]) => `
+            <label>
+              <span>${esc(label)}</span>
+              <strong>${esc(value)}</strong>
+            </label>`).join("")}
+        </section>
+        <section class="fd-discover-rule-test-box">
+          <h2>测试输入</h2>
+          <label><span>入口 URL</span><strong>https://example.com/rank/allvisit_1.html</strong></label>
+          <label><span>HTML 片段</span><strong>&lt;li class="book"&gt;长夜余火&lt;/li&gt;</strong></label>
+          <button type="button">${icon("play", "fd-small-icon")}测试入口</button>
+        </section>
+        <section class="fd-discover-rule-result">
+          <h2>测试结果</h2>
+          <article><strong>生成 5 个入口</strong><small>排行榜、分类、完本、最新、书单</small></article>
+          <article><strong>解析到 18 本书</strong><small>首条：长夜余火 · 爱潜水的乌贼</small></article>
+        </section>
+      </section>`, {
+        phoneClass: "fd-discover-subpage-phone",
+        trailingHtml: `<button type="button" data-route="discover-control">完成</button>`,
+        bottomActionHtml: sourceBottomActions([
+          { label: "测试入口", icon: "play" },
+          { label: "保存", icon: "check", route: "discover-control" }
+        ], "is-fixed")
+      });
+  }
+
+  function discoverSourceBulkScreen(data) {
+    const sources = [
+      ["优书网", "默认分组 · 120ms · 已启用发现", "good", true],
+      ["起点导入", "正版 · 180ms · 已启用发现", "good", true],
+      ["轻小说文库", "需登录 · 发现可用", "warn", true],
+      ["本地聚合源", "维护中 · 暂停发现", "muted", false],
+      ["失效示例源", "解析失败 · exploreUrl 异常", "warn", false]
+    ];
+    return sourceShell(data, "发现源管理", `
+      <section class="fd-discover-subpage fd-discover-source-bulk-page">
+        <article class="fd-discover-subpage-head">
+          <span>${icon("source-stack", "fd-medium-icon")}</span>
+          <div>
+            <h2>发现源管理</h2>
+            <p>选择启用发现的书源，批量启用、禁用或刷新入口。</p>
+          </div>
+        </article>
+        <div class="fd-source-batch-top">
+          <button type="button" data-route="discover-control">取消</button>
+          <strong>已选 3 个</strong>
+          <button type="button">全选</button>
+        </div>
+        <label class="fd-source-search">${icon("search", "fd-small-icon")}<span>搜索书源名称或分组</span></label>
+        <nav class="fd-source-chip-row" aria-label="发现源筛选">
+          ${["已启用发现", "有发现未启用", "需登录", "异常"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
+        </nav>
+        <section class="fd-discover-source-bulk-list" aria-label="发现源列表">
+          ${sources.map(([name, meta, tone, checked]) => `
+            <article class="${checked ? "is-selected" : ""}">
+              <button class="fd-source-check${checked ? " is-checked" : ""}" type="button" aria-label="${esc(name)}${checked ? "已选择" : "未选择"}">${checked ? icon("check", "fd-small-icon") : ""}</button>
+              <span><strong>${esc(name)}</strong><small>${esc(meta)}</small></span>
+              ${sourceBadge({ status: tone === "warn" ? "需处理" : tone === "good" ? "可用" : "暂停", tone })}
+            </article>`).join("")}
+        </section>
+      </section>`, {
+        phoneClass: "fd-discover-subpage-phone",
+        trailingHtml: `<button type="button" data-route="discover-control">完成</button>`,
+        bottomActionHtml: sourceBottomActions([
+          { label: "启用", icon: "check" },
+          { label: "禁用", icon: "clear" },
+          { label: "刷新", icon: "refresh" }
+        ], "is-fixed")
+      });
+  }
+
+  function rssSourcesData() {
+    return [
+      { name: "GitHub Releases", group: "开源项目", unread: 6, latest: "10:18", status: "正常", tone: "good", enabled: true, categories: 3, articleStyle: "列表", rule: "默认 RSS", login: false, singleUrl: false },
+      { name: "阅读器版本讨论", group: "社区", unread: 12, latest: "09:42", status: "有更新", tone: "good", enabled: true, categories: 4, articleStyle: "图文", rule: "自定义列表", login: false, singleUrl: false },
+      { name: "书源维护公告", group: "维护", unread: 2, latest: "昨天", status: "需登录", tone: "warn", enabled: true, categories: 2, articleStyle: "紧凑", rule: "正文规则", login: true, singleUrl: false },
+      { name: "本地系统通知", group: "系统", unread: 0, latest: "周二", status: "暂停", tone: "muted", enabled: false, categories: 1, articleStyle: "列表", rule: "单 URL", login: false, singleUrl: true }
+    ];
+  }
+
+  function rssArticlesData() {
+    return [
+      { title: "Reader UI 前端输入件更新说明", source: "GitHub Releases", time: "10:18", group: "开源项目", desc: "新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。", unread: true, starred: true },
+      { title: "订阅源规则解析失败排查", source: "书源维护公告", time: "09:52", group: "维护", desc: "部分订阅源返回 HTML 而不是 XML，已建议检查 Cookie、登录态和正文提取规则。", unread: true, starred: false },
+      { title: "Legado 订阅源配置经验整理", source: "阅读器版本讨论", time: "昨天", group: "社区", desc: "社区整理了单 URL 源、分类入口、文章样式和 WebView 正文处理的常见配置方式。", unread: true, starred: false },
+      { title: "本地导入完成解析", source: "本地系统通知", time: "周二", group: "系统", desc: "本地 OPML 导入完成，4 个订阅源已启用，1 个订阅源需要补全图标。", unread: false, starred: false },
+      { title: "阅读器路线图讨论摘要", source: "阅读器版本讨论", time: "周一", group: "社区", desc: "围绕 RSS 收藏、源分组、正文阅读和同步备份的交互关系做了讨论。", unread: false, starred: true }
+    ];
+  }
+
+  function rssRuleSubsData() {
+    return [
+      { name: "社区 RSS 源订阅", type: "RSS 源", url: "https://example.com/rss-source.json", update: "自动更新" },
+      { name: "默认书源订阅", type: "书源", url: "https://example.com/book-source.json", update: "手动" },
+      { name: "替换规则同步", type: "替换规则", url: "https://example.com/replace-rule.json", update: "自动更新" }
+    ];
+  }
+
+  function rssImportEntriesData() {
+    return [
+      { name: "社区 RSS 源合集", meta: "新增 · 12 个源", checked: true, tone: "good" },
+      { name: "GitHub Releases", meta: "已有 · 保留本地名称", checked: false, tone: "muted" },
+      { name: "书源维护公告", meta: "更新 · 规则版本更高", checked: true, tone: "warn" }
+    ];
+  }
+
+  function rssRecordsData() {
+    return [
+      ["Reader UI 前端输入件更新说明", "今天 10:26 · GitHub Releases"],
+      ["订阅源规则解析失败排查", "今天 09:58 · 书源维护公告"],
+      ["Legado 订阅源配置经验整理", "昨天 22:10 · 阅读器版本讨论"]
+    ];
+  }
+
+  function rssCategoryTabs() {
+    return [
+      { label: "全部", route: "rss-source-feed", title: "GitHub Releases", meta: "默认 RSS 解析 · 18 条" },
+      { label: "Releases", route: "rss-source-category-releases", title: "Releases", meta: "版本发布 · 8 条" },
+      { label: "Issues", route: "rss-source-category-issues", title: "Issues", meta: "问题讨论 · 6 条" },
+      { label: "Discussions", route: "rss-source-category-discussions", title: "Discussions", meta: "社区讨论 · 4 条" }
+    ];
+  }
+
+  function rssCategoryForRoute(route) {
+    return rssCategoryTabs().find((item) => item.route === route) || rssCategoryTabs()[0];
+  }
+
+  function rssModeTitle(route) {
+    if (route === "rss-all") return "全部条目";
+    if (route === "rss-starred") return "收藏";
+    if (route === "rss-source-feed" || route.startsWith("rss-source-category-")) return rssCategoryForRoute(route).title;
+    return "未读";
+  }
+
+  function rssSubpageTitle(route) {
+    if (route === "rss-refreshing") return "刷新订阅";
+    return rssModeTitle(route);
+  }
+
+  function rssFilteredArticles(route) {
+    const articles = rssArticlesData();
+    if (route === "rss-all") return articles;
+    if (route === "rss-starred") return articles.filter((item) => item.starred);
+    if (route === "rss-source-feed" || route.startsWith("rss-source-category-")) return articles.filter((item) => item.source === "GitHub Releases");
+    return articles.filter((item) => item.unread);
+  }
+
+  function rssBadge(label, tone) {
+    if (!label) return "";
+    return `<em class="fd-rss-badge is-${esc(tone || "muted")}" title="${esc(label)}" aria-label="${esc(label)}"><i aria-hidden="true"></i></em>`;
+  }
+
+  function rssModeNav(currentRoute) {
+    return `
+        <nav class="fd-rss-mode-row" aria-label="RSS 状态入口">
+          ${[
+            ["源列表", "rss"],
+            ["全部", "rss-all"],
+            ["收藏", "rss-starred"],
+            ["规则订阅", "rss-rule-subscription"]
+          ].map(([label, target]) => `<button class="${currentRoute === target ? "is-active" : ""}" type="button" data-route="${esc(target)}">${esc(label)}</button>`).join("")}
+        </nav>`;
+  }
+
+  function rssSummaryCard(sources, unreadCount) {
+    return `
+        <article class="fd-rss-summary-card">
+          <span>${icon("rss", "fd-medium-icon")}</span>
+          <div>
+            <strong>订阅中心</strong>
+            <small>${esc(sources.filter((item) => item.enabled).length)} 个启用源 · ${esc(unreadCount)} 条未读 · 最近刷新 10:18</small>
+          </div>
+          <button type="button" data-route="rss-refreshing">${icon("refresh", "fd-small-icon")}刷新</button>
+        </article>`;
+  }
+
+  function rssTopBar(sources) {
+    const enabledCount = (sources || []).filter((item) => item.enabled).length;
+    return `
+      <section class="rsk-app-top-bar fd-top-bar fd-rss-top-bar" data-slot="appTopBar" aria-label="RSS 顶部栏">
+        <h1>RSS</h1>
+        <div class="fd-rss-top-actions">
+          <button class="fd-rss-refresh-pill" type="button" data-route="rss-refreshing" aria-label="刷新当前订阅">
+            <i></i>
+            <span class="fd-rss-refresh-text">
+              <span class="fd-rss-refresh-enabled">${esc(enabledCount)} 个启用源</span>
+              <span class="fd-rss-refresh-update">· 10:18 更新</span>
+            </span>
+            ${icon("refresh", "fd-small-icon")}
+          </button>
+          <button class="fd-rss-manage-pill" type="button" data-route="rss-subscription-management" aria-label="进入订阅管理">
+            ${icon("list", "fd-small-icon")}
+            <span>管理</span>
+          </button>
+        </div>
+      </section>`;
+  }
+
+  function rssSearchEntry() {
+    return `
+        <button class="fd-search-entry fd-rss-search" type="button" data-route="rss-search">
+          ${icon("search", "fd-small-icon")}<span>搜索订阅源、文章标题或分组</span>
+        </button>`;
+  }
+
+  function rssArticleRows(articles) {
+    return articles.map((item) => `
+              <article class="fd-rss-article-row${item.unread ? " is-unread" : ""}" role="button" tabindex="0" data-route="rss-detail">
+                <i></i>
+                <span>
+                  <strong>${esc(item.title)}</strong>
+                  <small>${esc(item.source)} · ${esc(item.time)} · ${esc(item.group)}</small>
+                  <p>${esc(item.desc)}</p>
+                </span>
+                ${item.starred ? icon("bookmark", "fd-small-icon") : icon("chevron", "fd-small-icon")}
+              </article>
+            `).join("");
+  }
+
+  function rssArticleSection(title, articles, actionRoute, actionLabel, actionIcon) {
+    return `
+        <section class="fd-rss-article-section">
+          <header>
+            <h2>${esc(title)}</h2>
+            <button type="button" data-route="${esc(actionRoute || "rss-subscription-management")}">${icon(actionIcon || "source-stack", "fd-small-icon")}${esc(actionLabel || "管理源")}</button>
+          </header>
+          <section class="fd-rss-article-list" aria-label="${esc(title)}">
+            ${rssArticleRows(articles)}
+          </section>
+        </section>`;
+  }
+
+  function rssSourceRows(sources) {
+    return sources.map((source, index) => `
+          <article class="${source.enabled ? "" : "is-disabled"}" data-route="rss-source-feed" role="button" tabindex="0">
+            <span>${icon(source.enabled ? "rss" : "offline", "fd-small-icon")}</span>
+            <div>
+              <strong>${esc(source.name)}</strong>
+              <small>${esc(source.group)} · ${esc(source.categories)} 个入口 · ${esc(source.articleStyle)} · ${esc(source.rule)}</small>
+            </div>
+            <b>${source.unread ? esc(source.unread) : "0"}</b>
+            ${rssBadge(source.status, source.tone)}
+          </article>
+        `).join("");
+  }
+
+  function rssSourceOverview(sources, appState) {
+    const filters = ["全部", "开源项目", "社区", "需登录", "暂停"];
+    const activeFilter = appState?.rssGroupFilter || "全部";
+    return `
+        <section class="fd-rss-source-overview">
+          <header>
+            <h2>订阅源</h2>
+            <span>
+              <button type="button" data-route="rss-source-import">${icon("upload", "fd-small-icon")}导入</button>
+              <button type="button" data-route="rss-source-edit">${icon("add", "fd-small-icon")}新建</button>
+            </span>
+          </header>
+          ${filterDisclosure({
+            className: "fd-rss-filter-control",
+            label: "筛选",
+            ariaLabel: "RSS 订阅源筛选",
+            summary: activeFilter,
+            toggleAttr: "data-rss-group-filter-toggle",
+            open: Boolean(appState?.rssGroupFilterOpen),
+            groups: [{
+              title: "分组与状态",
+              options: filters.map((item) => ({
+                label: item,
+                active: activeFilter === item,
+                attrs: { "data-rss-group-filter": item }
+              }))
+            }]
+          })}
+          <section class="fd-rss-source-overview-list" aria-label="订阅源列表">
+            ${rssSourceRows(sources)}
+          </section>
+        </section>`;
+  }
+
+  function rssSourceStrip(sources, currentRoute) {
+    return `
+        <section class="fd-rss-source-strip" aria-label="订阅源快捷入口">
+          ${sources.map((source, index) => `
+            <button class="${(currentRoute === "rss" || currentRoute === "rss-source-feed") && index === 0 ? "is-active" : ""}" type="button" data-route="rss-source-feed">
+              <span>${icon(source.enabled ? "rss" : "offline", "fd-small-icon")}</span>
+              <strong>${esc(source.name)}</strong>
+              <small>${esc(source.group)} · ${source.unread ? `${esc(source.unread)} 未读` : "无未读"}</small>
+            </button>
+          `).join("")}
+        </section>`;
+  }
+
+  function rssHomeContent(sources, unreadCount, refreshing, appState) {
+    return `
+        ${rssSearchEntry()}
+        ${rssModeNav("rss")}
+        ${refreshing ? `<section class="fd-rss-refresh-line"><i></i><span>正在刷新启用订阅源和分类入口</span></section>` : ""}
+        ${rssSourceOverview(sources, appState)}
+        ${rssArticleSection("最近未读", rssFilteredArticles("rss").slice(0, 3), "rss-all", "查看全部", "list")}`;
+  }
+
+  function rssArticleHubContent(currentRoute, sources, unreadCount, refreshing) {
+    const articles = rssFilteredArticles(currentRoute);
+    return `
+        ${rssSearchEntry()}
+        ${rssModeNav(currentRoute)}
+        ${rssSourceStrip(sources, currentRoute)}
+        ${refreshing ? `<section class="fd-rss-refresh-line"><i></i><span>正在刷新启用订阅源</span></section>` : ""}
+        ${rssArticleSection(rssModeTitle(currentRoute), articles, "rss-subscription-management", "管理源", "source-stack")}`;
+  }
+
+  function rssSourceFeedContent(sources, currentRoute, appState) {
+    const source = sources[0];
+    const category = rssCategoryForRoute(currentRoute || "rss-source-feed");
+    const articles = rssFilteredArticles(currentRoute || "rss-source-feed");
+    return `
+        <article class="fd-rss-source-hero">
+          <span>${icon("rss", "fd-medium-icon")}</span>
+          <div>
+            <strong>${esc(source.name)}</strong>
+            <small>${esc(source.group)} · ${esc(category.meta)} · ${esc(source.rule)} · ${esc(source.latest)}</small>
+          </div>
+          ${rssBadge(source.status, source.tone)}
+        </article>
+        <section class="fd-rss-source-toolbar">
+          <button type="button" data-route="rss-refreshing">${icon("refresh", "fd-small-icon")}刷新</button>
+          <button type="button" data-route="rss-source-edit">${icon("edit", "fd-small-icon")}编辑源</button>
+          <button type="button" data-route="rss-read-record">${icon("clock", "fd-small-icon")}记录</button>
+          <button type="button" data-route="rss-source-debug">${icon("bug", "fd-small-icon")}调试</button>
+        </section>
+        ${filterDisclosure({
+          className: "fd-rss-filter-control fd-rss-category-filter-control",
+          label: "分类",
+          ariaLabel: "RSS 分类入口",
+          summary: category.label,
+          toggleAttr: "data-rss-category-filter-toggle",
+          open: Boolean(appState?.rssCategoryFilterOpen),
+          groups: [{
+            title: "分类入口",
+            options: rssCategoryTabs().map((item) => ({
+              label: item.label,
+              active: item.route === category.route,
+              route: item.route,
+              attrs: { "data-rss-category-filter": item.label }
+            }))
+          }]
+        })}
+        ${rssArticleSection(category.title, articles, "rss-source-actions", "源操作", "more")}
+        <section class="fd-rss-bottom-loading"><i></i><span>继续下滑加载下一页</span></section>`;
+  }
+
+  function mainTabRss(data, appState, route) {
+    const currentRoute = route || "rss";
+    const sources = rssSourcesData();
+    const unreadCount = rssArticlesData().filter((item) => item.unread).length;
+    const refreshing = currentRoute === "rss-refreshing";
+    const contentHtml = currentRoute === "rss" || currentRoute === "rss-refreshing"
+      ? rssHomeContent(sources, unreadCount, refreshing, appState)
+      : currentRoute === "rss-source-feed" || currentRoute.startsWith("rss-source-category-")
+        ? rssSourceFeedContent(sources, currentRoute, appState)
+        : rssArticleHubContent(currentRoute, sources, unreadCount, refreshing);
+
+    if (currentRoute !== "rss") {
+      return rssLibraryScreen(data, rssSubpageTitle(currentRoute), contentHtml, "", appState);
+    }
+
+    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone fd-rss-phone"), {
       data,
       title: "RSS",
       activeType: "rss",
       actions: [],
+      topBarHtml: rssTopBar(sources),
       ariaLabel: "RSS",
-      contentHtml: `
-        <button class="fd-search-entry" type="button" data-route="book-search">
-          ${icon("search", "fd-small-icon")}<span>搜索订阅、书名或来源</span>
-        </button>
-        <nav class="fd-chip-row" aria-label="RSS 状态入口">
-          <button class="is-active" type="button" data-route="rss">未读</button>
-          <button type="button" data-route="rss-subscription-management">订阅源</button>
-          <button type="button" data-route="rss-empty">空状态</button>
-          <button type="button" data-route="rss-error">错误态</button>
-        </nav>
-        <section class="fd-ranking-list">
-          <h2>订阅更新</h2>
-          ${entries.map((item, index) => `
-            <article class="fd-feed-row" role="button" tabindex="0" data-route="${esc(item.route)}">
-              <em>${index + 1}</em>
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-              ${icon("chevron", "fd-small-icon")}
-            </article>
-          `).join("")}
-        </section>`,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function rssShellScreen(data, title, contentHtml, appState) {
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
-      data,
-      title,
-      activeType: "rss",
-      actions: [],
-      ariaLabel: title,
       contentHtml,
       stateHostHtml: mainTabFeedbackHtml(appState)
     }));
   }
 
+  function rssShellScreen(data, title, contentHtml, appState) {
+    return rssLibraryScreen(data, title, contentHtml, "", appState);
+  }
+
+  function rssLibraryScreen(data, title, contentHtml, bottomActionHtml, appState, trailingHtml) {
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
+      data,
+      title,
+      ariaLabel: title,
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      trailingHtml,
+      contentHtml,
+      bottomActionHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
   function rssDetailScreen(data, appState) {
-    return rssShellScreen(data, "RSS 详情", `
-      <article class="fd-book-summary-card fd-rss-detail-card">
-        <span>GitHub Releases · 今天 10:18 · 6 条未读</span>
-        <h2>Legado 更新记录</h2>
-        <p>本条目汇总最近的阅读体验修复、订阅源解析改进和缓存策略调整。</p>
-        <p>新版对订阅刷新、正文提取和书源错误提示做了细化，失败状态会保留来源和重试入口。</p>
-        <p>当前 demo 保留 RSS 详情、订阅管理、空状态和错误态，用于平台实现对齐。</p>
-      </article>
-      <section class="fd-setting-section">
-        <h2>条目操作</h2>
-        <article class="fd-setting-row" role="button" tabindex="0" data-route="rss">
-          <span>${icon("bookmark", "fd-small-icon")}</span>
-          <strong>标记已读<small>回到 RSS 列表后同步未读数量</small></strong>
-          ${icon("chevron", "fd-small-icon")}
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
+      data,
+      title: "RSS 阅读",
+      ariaLabel: "RSS 阅读",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      trailingHtml: `
+        <span class="fd-rss-reader-top-actions">
+          <button type="button" data-route="rss-starred" aria-label="收藏">${icon("bookmark", "fd-small-icon")}</button>
+          <button type="button" data-route="rss-original" aria-label="打开原文">${icon("link", "fd-small-icon")}</button>
+        </span>`,
+      contentHtml: `
+        <article class="fd-rss-reader-page">
+          <header class="fd-rss-reader-source">
+            <span>${icon("rss", "fd-small-icon")}</span>
+            <div>
+              <strong>GitHub Releases</strong>
+              <small>今天 10:18 · 开源项目 · 已解析正文</small>
+            </div>
+            <button type="button" data-route="rss-source-feed">查看源</button>
+          </header>
+          <section class="fd-rss-reader-title">
+            <h1>Reader UI 前端输入件更新说明</h1>
+            <p>本条目汇总最近的阅读体验修复、发现页状态补充和 RSS 页面结构调整。</p>
+          </section>
+          <nav class="fd-rss-reader-inline-actions" aria-label="RSS 阅读操作">
+            <button type="button" data-route="rss">${icon("check", "fd-small-icon")}已读</button>
+            <button type="button" data-route="rss-starred">${icon("bookmark", "fd-small-icon")}收藏</button>
+            <button type="button" data-route="rss-subscription-management">${icon("source-stack", "fd-small-icon")}源设置</button>
+          </nav>
+          <section class="fd-rss-reader-body">
+            <p>RSS 页面现在以订阅源为一级对象，同时保留常规阅读器里的未读、全部、收藏和刷新工作流。主页负责快速浏览条目，阅读页则专注正文、原文和源相关操作。</p>
+            <p>如果订阅源提供正文规则，文章应直接进入当前阅读页；如果源只提供链接，则在阅读页保留原文入口，并用 WebView 或外部浏览器作为兜底。</p>
+            <p>后续实现里，已读状态应在进入阅读页时自动写入，收藏和源设置需要回到订阅源维度同步，不应该散落在主 Tab 的临时按钮里。</p>
+          </section>
+          <footer class="fd-rss-original-card">
+            <span>${icon("link", "fd-small-icon")}</span>
+            <div>
+              <strong>原文链接</strong>
+              <small>github.com/minliny/Reader-UI/releases/latest</small>
+            </div>
+            <button type="button" data-route="rss-original">打开</button>
+          </footer>
+        </article>`,
+      bottomActionHtml: `
+        <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+          <button type="button" data-route="rss">返回列表</button>
+          <button type="button" data-route="rss-original">打开原文</button>
+        </div>`,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function rssOriginalScreen(data, appState) {
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
+      data,
+      title: "原文页面",
+      ariaLabel: "RSS 原文页面",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      trailingHtml: `<button type="button" data-route="rss-detail">阅读正文</button>`,
+      contentHtml: `
+        <section class="fd-rss-original-preview">
+          <header>
+            <span>${icon("link", "fd-small-icon")}</span>
+            <div>
+              <strong>github.com/minliny/Reader-UI/releases/latest</strong>
+              <small>来自 GitHub Releases · 已保留 RSS 阅读上下文</small>
+            </div>
+          </header>
+          <article class="fd-rss-web-preview">
+            <h2>Reader UI 前端输入件更新说明</h2>
+            <p>这里展示原文网页入口的预览状态。实际 APP 中应打开内置 WebView，并保留返回 RSS 阅读页、复制链接、分享和用浏览器打开。</p>
+            <div><i></i><i></i><i></i></div>
+          </article>
+        </section>`,
+      bottomActionHtml: `
+        <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+          <button type="button" data-route="rss-detail">返回正文</button>
+          <button type="button" data-route="rss-original-browser">浏览器打开</button>
+        </div>`,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function rssSourceActionsScreen(data, appState) {
+    const source = rssSourcesData()[0];
+    return rssLibraryScreen(data, "源操作", `
+      <section class="fd-rss-action-source-card">
+        <span>${icon("rss", "fd-medium-icon")}</span>
+        <div>
+          <strong>${esc(source.name)}</strong>
+          <small>${esc(source.group)} · ${esc(source.categories)} 个入口 · ${esc(source.rule)}</small>
+        </div>
+        ${rssBadge(source.status, source.tone)}
+      </section>
+      <section class="fd-rss-action-grid">
+        ${[
+          ["刷新入口", "refresh", "rss-refreshing"],
+          ["编辑源", "edit", "rss-source-edit"],
+          ["规则调试", "bug", "rss-source-debug"],
+          ["阅读记录", "clock", "rss-read-record"],
+          ["源变量", "code", "rss-source-vars"],
+          ["登录", "shield", "rss-source-login"],
+          ["置顶", "top", "rss-source-pin"],
+          ["禁用", "offline", "rss-source-disable"]
+        ].map(([label, itemIcon, target]) => `<button type="button" data-route="${esc(target)}">${icon(itemIcon, "fd-small-icon")}<span>${esc(label)}</span></button>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-feed">返回源</button>
+        <button type="button" data-route="rss-subscription-management">管理全部</button>
+      </div>`, appState);
+  }
+
+  function rssSourceEditScreen(data, appState) {
+    const fields = [
+      ["基础", "源名称", "GitHub Releases"],
+      ["基础", "源地址", "https://github.com/minliny/Reader-UI/releases.atom"],
+      ["基础", "分组", "开源项目"],
+      ["基础", "分类 URL", "Releases::/releases.atom && Issues::/issues.atom"],
+      ["请求", "请求头", "User-Agent: Reader UI"],
+      ["请求", "并发率", "2/1000"],
+      ["列表", "文章列表", "默认 RSS 解析"],
+      ["列表", "下一页", "PAGE"],
+      ["列表", "标题 / 时间 / 链接", "title / pubDate / link"],
+      ["WebView", "正文规则", "content:encoded || article"],
+      ["WebView", "注入 JS / CSS", "图片宽度、夜间样式、跳转拦截"],
+      ["WebView", "白名单 / 黑名单", "过滤广告资源"]
+    ];
+    return rssLibraryScreen(data, "RSS 源编辑", `
+      <section class="fd-rss-edit-tabs" aria-label="源编辑分组">
+        ${["基础", "请求", "列表", "WebView"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
+      </section>
+      <section class="fd-rss-edit-list" aria-label="RSS 源编辑字段">
+        ${fields.map(([group, label, value]) => `
+          <article>
+            <small>${esc(group)}</small>
+            <strong>${esc(label)}</strong>
+            <p>${esc(value)}</p>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-debug">调试规则</button>
+        <button type="button" data-route="rss-subscription-management">保存</button>
+      </div>`, appState, `<button type="button" data-route="rss-source-debug">调试</button>`);
+  }
+
+  function rssSourceDebugScreen(data, appState) {
+    return rssLibraryScreen(data, "规则调试", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("bug", "fd-small-icon")}</span>
+          <div><strong>GitHub Releases</strong><small>列表解析 · 正文解析 · WebView 拦截</small></div>
+        </header>
+        <article><strong>1. 获取分类入口</strong><p>Releases / Issues / Discussions 已解析，缓存命中 3 项。</p></article>
+        <article><strong>2. 获取文章列表</strong><p>默认 RSS 解析命中 18 条，下一页规则 PAGE 可用。</p></article>
+        <article><strong>3. 正文规则测试</strong><p>content:encoded 命中正文，图片资源通过白名单。</p></article>
+        <article class="is-warn"><strong>4. 跳转拦截</strong><p>外链将保留在原文 WebView，legado/yuedu 协议进入导入流程。</p></article>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-edit">编辑规则</button>
+        <button type="button" data-route="rss-source-actions">完成</button>
+      </div>`, appState);
+  }
+
+  function rssConfirmScreen(data, config, appState) {
+    return rssLibraryScreen(data, config.title, `
+      <section class="fd-rss-confirm-card">
+        <span>${icon(config.icon || "warning", "fd-medium-icon")}</span>
+        <h2>${esc(config.heading)}</h2>
+        <p>${esc(config.copy)}</p>
+        ${config.detail ? `<small>${esc(config.detail)}</small>` : ""}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="${esc(config.cancelRoute || "rss-source-actions")}">${esc(config.cancelLabel || "取消")}</button>
+        <button type="button" data-route="${esc(config.confirmRoute || "rss-subscription-management")}">${esc(config.confirmLabel || "确认")}</button>
+      </div>`, appState);
+  }
+
+  function rssSourceVarsScreen(data, appState) {
+    const variables = [
+      ["请求变量", "{{page}}", "当前分页，从 1 开始递增，用于列表和下一页规则。"],
+      ["请求变量", "{{sourceUrl}}", "当前订阅源地址，调试和跳转拦截时可引用。"],
+      ["登录变量", "{{cookie}}", "网页登录后写入，刷新订阅源和打开原文时共用。"],
+      ["登录变量", "{{token}}", "从登录页脚本提取，过期后进入登录子页面刷新。"],
+      ["设备变量", "{{userAgent}}", "Reader UI WebView UA，必要时覆盖为移动端 UA。"]
+    ];
+    return rssLibraryScreen(data, "源变量", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("code", "fd-small-icon")}</span>
+          <div><strong>GitHub Releases</strong><small>变量作用于请求头、分类 URL、正文规则和 WebView 注入脚本</small></div>
+        </header>
+      </section>
+      <section class="fd-rss-edit-list" aria-label="RSS 源变量">
+        ${variables.map(([group, name, desc]) => `
+          <article>
+            <small>${esc(group)}</small>
+            <strong>${esc(name)}</strong>
+            <p>${esc(desc)}</p>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-debug">测试变量</button>
+        <button type="button" data-route="rss-source-actions">完成</button>
+      </div>`, appState, `<button type="button" data-route="rss-source-edit">编辑</button>`);
+  }
+
+  function rssSourceLoginScreen(data, appState) {
+    return rssLibraryScreen(data, "源登录", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("shield", "fd-small-icon")}</span>
+          <div><strong>书源维护公告</strong><small>网页登录 · Cookie 保存 · 登录态检测</small></div>
+        </header>
+        <article><strong>登录地址</strong><p>https://example.com/login?from=rss</p></article>
+        <article><strong>Cookie 状态</strong><p>reader_session=•••••• · 2 天后过期 · 已关联当前订阅源</p></article>
+        <article><strong>检测方式</strong><p>刷新前请求个人中心，401/403 时提示重新登录。</p></article>
+      </section>
+      <section class="fd-rss-action-grid fd-rss-action-grid-compact">
+        ${[
+          ["网页登录", "globe", "rss-source-login-web"],
+          ["提取 Cookie", "copy", "rss-source-login-cookie"],
+          ["测试登录态", "refresh", "rss-source-debug"],
+          ["清除登录", "trash", "rss-source-login-clear"]
+        ].map(([label, itemIcon, target]) => `<button type="button" data-route="${esc(target)}">${icon(itemIcon, "fd-small-icon")}<span>${esc(label)}</span></button>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-actions">返回操作</button>
+        <button type="button" data-route="rss-source-actions">完成</button>
+      </div>`, appState);
+  }
+
+  function rssSourceLoginWebScreen(data, appState) {
+    return rssLibraryScreen(data, "网页登录", `
+      <section class="fd-rss-original-preview">
+        <header>
+          <span>${icon("shield", "fd-small-icon")}</span>
+          <div>
+            <strong>example.com/login</strong>
+            <small>来自书源维护公告 · 登录完成后回写 Cookie</small>
+          </div>
+        </header>
+        <article class="fd-rss-web-preview">
+          <h2>登录页面预览</h2>
+          <p>实际应用中这里打开内置 WebView。登录成功后提取 Cookie、Token 和登录检测结果，返回源登录页。</p>
+          <div><i></i><i></i><i></i></div>
         </article>
-        <article class="fd-setting-row" role="button" tabindex="0" data-route="rss-subscription-management">
-          <span>${icon("rss", "fd-small-icon")}</span>
-          <strong>管理订阅源<small>调整刷新、分组和启用状态</small></strong>
-          ${icon("chevron", "fd-small-icon")}
-        </article>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-login">返回登录</button>
+        <button type="button" data-route="rss-source-login-cookie">登录完成</button>
+      </div>`, appState);
+  }
+
+  function rssSourceLoginCookieScreen(data, appState) {
+    return rssLibraryScreen(data, "Cookie 提取", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("copy", "fd-small-icon")}</span>
+          <div><strong>已提取登录凭据</strong><small>只作用于当前 RSS 源，不覆盖其他订阅源</small></div>
+        </header>
+        <article><strong>Cookie</strong><p>reader_session=••••••; expires=2026-06-28; path=/</p></article>
+        <article><strong>Token</strong><p>从 localStorage.reader_token 提取，刷新源时自动附加。</p></article>
+        <article><strong>检测结果</strong><p>个人中心返回 200，下一次刷新不会进入登录错误状态。</p></article>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-login">返回</button>
+        <button type="button" data-route="rss-source-actions">保存凭据</button>
+      </div>`, appState);
+  }
+
+  function rssSourceGroupEditScreen(data, appState) {
+    const fields = [
+      ["分组名称", "开源项目"],
+      ["默认展开", "开启"],
+      ["排序规则", "未读优先，其次最近更新"],
+      ["适用订阅源", "GitHub Releases、社区 RSS 源合集"]
+    ];
+    return rssLibraryScreen(data, "编辑 RSS 分组", `
+      <section class="fd-rss-edit-list" aria-label="RSS 分组编辑字段">
+        ${fields.map(([label, value]) => `
+          <article>
+            <small>分组配置</small>
+            <strong>${esc(label)}</strong>
+            <p>${esc(value)}</p>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-groups">取消</button>
+        <button type="button" data-route="rss-source-groups">保存</button>
+      </div>`, appState);
+  }
+
+  function rssSourceGroupsScreen(data, appState) {
+    const groups = [
+      ["开源项目", "2 个订阅源 · 默认展开", true],
+      ["社区", "1 个订阅源 · 有 12 条未读", true],
+      ["维护", "1 个订阅源 · 需要登录", true],
+      ["系统", "1 个订阅源 · 已暂停", false]
+    ];
+    return rssLibraryScreen(data, "RSS 分组", `
+      <section class="fd-rss-record-list fd-rss-management-list" aria-label="RSS 分组列表">
+        ${groups.map(([name, meta, enabled]) => `
+          <article>
+            <span>${icon("folder", "fd-small-icon")}</span>
+            <strong>${esc(name)}<small>${esc(meta)}</small></strong>
+            ${enabled ? settingsSwitch(true) : settingsSwitch(false)}
+          </article>`).join("")}
+      </section>
+      <section class="fd-rss-rule-sub-actions">
+        <button type="button" data-route="rss-source-group-edit">${icon("add", "fd-small-icon")}新增分组</button>
+        <button type="button" data-route="rss-source-group-edit">${icon("edit", "fd-small-icon")}重命名</button>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-subscription-management">取消</button>
+        <button type="button" data-route="rss-subscription-management">保存</button>
+      </div>`, appState);
+  }
+
+  function rssSourceBatchScreen(data, appState) {
+    const sources = rssSourcesData();
+    return rssLibraryScreen(data, "批量管理", `
+      <section class="fd-rss-manage-batch-row fd-rss-batch-summary">
+        <strong>已选 2 个订阅源</strong>
+        <button type="button">反选</button>
+        <button type="button">全选</button>
+      </section>
+      <section class="fd-rss-source-list fd-rss-batch-list" aria-label="批量选择订阅源">
+        ${sources.map((source, index) => `
+          <article class="${source.enabled ? "" : "is-disabled"}" role="button" tabindex="0">
+            <span>${icon(index < 2 ? "check" : "rss", "fd-small-icon")}</span>
+            <strong>${esc(source.name)}<small>${esc(source.group)} · ${esc(source.status)} · ${source.unread ? `${esc(source.unread)} 条未读` : "无未读"}</small></strong>
+            ${rssBadge(source.enabled ? "启用" : "暂停", source.enabled ? "good" : "muted")}
+          </article>
+        `).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-export">导出</button>
+        <button type="button" data-route="rss-source-batch-disable">禁用</button>
+      </div>`, appState, `<button type="button" data-route="rss-subscription-management">完成</button>`);
+  }
+
+  function rssSourceExportScreen(data, appState) {
+    return rssLibraryScreen(data, "导出订阅源", `
+      <section class="fd-rss-import-panel">
+        <label>${icon("download", "fd-small-icon")}<span>reader-rss-sources-20260626.json</span></label>
+        <nav aria-label="导出范围">
+          ${["已选源", "启用源", "包含登录配置", "包含分组"].map((item, index) => `<button class="${index !== 2 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
+        </nav>
+      </section>
+      <section class="fd-rss-import-list" aria-label="导出预览">
+        ${["GitHub Releases", "阅读器版本讨论"].map((name) => `
+          <article class="is-selected">
+            <span>${icon("check", "fd-small-icon")}</span>
+            <strong>${esc(name)}<small>JSON · 保留分组、启用状态和解析规则</small></strong>
+            <button type="button" data-route="rss-source-export-detail">预览</button>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-batch">返回</button>
+        <button type="button" data-route="rss-source-export-result">导出</button>
+      </div>`, appState);
+  }
+
+  function rssSourceExportDetailScreen(data, appState) {
+    return rssLibraryScreen(data, "导出预览", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("download", "fd-small-icon")}</span>
+          <div><strong>GitHub Releases</strong><small>导出项预览 · 不包含 Cookie</small></div>
+        </header>
+        <article><strong>基础字段</strong><p>名称、源地址、分组、启用状态、分类入口。</p></article>
+        <article><strong>解析规则</strong><p>列表、下一页、正文、WebView 注入脚本和资源过滤规则。</p></article>
+        <article><strong>安全字段</strong><p>登录 Cookie、Token 和本地账号信息不参与导出。</p></article>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-export">返回</button>
+        <button type="button" data-route="rss-source-export-result">导出此源</button>
+      </div>`, appState);
+  }
+
+  function rssSourceImportScreen(data, appState) {
+    const imports = rssImportEntriesData();
+    return rssLibraryScreen(data, "导入订阅源", `
+      <section class="fd-rss-import-panel">
+        <label>${icon("link", "fd-small-icon")}<span>https://example.com/rss-source.json</span></label>
+        <nav aria-label="导入选项">
+          ${["保留名称", "保留分组", "保留启用状态", "加入分组"].map((item, index) => `<button class="${index < 3 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
+        </nav>
+      </section>
+      <section class="fd-rss-import-list" aria-label="导入预览">
+        ${imports.map((item) => `
+          <article class="${item.checked ? "is-selected" : ""}" role="button" tabindex="0" data-route="rss-source-import-detail">
+            <span>${item.checked ? icon("check", "fd-small-icon") : icon("rss", "fd-small-icon")}</span>
+            <strong>${esc(item.name)}<small>${esc(item.meta)}</small></strong>
+            <button type="button" data-route="rss-source-import-detail">${item.checked ? "详情" : "查看"}</button>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-subscription-management">取消</button>
+        <button type="button" data-route="rss-source-import-result">导入 2 个</button>
+      </div>`, appState);
+  }
+
+  function rssSourceImportDetailScreen(data, appState) {
+    return rssLibraryScreen(data, "导入详情", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("upload", "fd-small-icon")}</span>
+          <div><strong>书源维护公告</strong><small>更新 · 规则版本更高 · 需登录</small></div>
+        </header>
+        <article><strong>变更摘要</strong><p>正文规则从 content:encoded 改为 article.content，新增登录检测 URL。</p></article>
+        <article><strong>冲突处理</strong><p>保留本地名称和分组，覆盖规则、请求头和分类入口。</p></article>
+        <article class="is-warn"><strong>登录态</strong><p>不导入 Cookie。更新后需要在源登录页重新授权。</p></article>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-source-import">返回</button>
+        <button type="button" data-route="rss-source-import">加入导入</button>
+      </div>`, appState);
+  }
+
+  function rssFavoriteGroupEditScreen(data, appState) {
+    return rssLibraryScreen(data, "编辑收藏分组", `
+      <section class="fd-rss-edit-list" aria-label="收藏分组编辑字段">
+        ${[
+          ["分组名称", "默认分组"],
+          ["首页显示", "开启"],
+          ["排序方式", "最近收藏优先"],
+          ["包含条目", "Reader UI 前端输入件更新说明、阅读器路线图讨论摘要"]
+        ].map(([label, value]) => `
+          <article>
+            <small>收藏分组</small>
+            <strong>${esc(label)}</strong>
+            <p>${esc(value)}</p>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-favorite-groups">取消</button>
+        <button type="button" data-route="rss-favorite-groups">保存</button>
+      </div>`, appState);
+  }
+
+  function rssFavoritesScreen(data, appState) {
+    const favorites = rssArticlesData().filter((item) => item.starred);
+    const groups = ["默认分组", "开源项目", "社区"];
+    const activeGroup = appState?.rssFavoriteFilter || "默认分组";
+    return rssShellScreen(data, "RSS 收藏", `
+      ${rssModeNav("rss-starred")}
+      ${filterDisclosure({
+        className: "fd-rss-filter-control fd-rss-favorite-filter-control",
+        label: "分组",
+        ariaLabel: "RSS 收藏分组",
+        summary: activeGroup,
+        toggleAttr: "data-rss-favorite-filter-toggle",
+        open: Boolean(appState?.rssFavoriteFilterOpen),
+        groups: [{
+          title: "收藏分组",
+          options: groups.map((item) => ({
+            label: item,
+            active: activeGroup === item,
+            attrs: { "data-rss-favorite-filter": item }
+          }))
+        }]
+      })}
+      ${rssArticleSection(activeGroup, favorites, "rss-favorite-groups", "管理分组", "edit")}
+      <section class="fd-rss-favorite-actions">
+        <button type="button" data-route="rss-favorite-groups">${icon("edit", "fd-small-icon")}编辑分组</button>
+        <button type="button" data-route="rss-favorite-clear">${icon("trash", "fd-small-icon")}清空当前分组</button>
+      </section>`, appState);
+  }
+
+  function rssFavoriteGroupsScreen(data, appState) {
+    const groups = [
+      ["默认分组", "2 条收藏 · 首页显示", true],
+      ["开源项目", "1 条收藏 · 自动归类", true],
+      ["社区", "1 条收藏 · 手动归类", false]
+    ];
+    return rssLibraryScreen(data, "收藏分组", `
+      <section class="fd-rss-record-list fd-rss-management-list" aria-label="收藏分组列表">
+        ${groups.map(([name, meta, pinned]) => `
+          <article>
+            <span>${icon("bookmark", "fd-small-icon")}</span>
+            <strong>${esc(name)}<small>${esc(meta)}</small></strong>
+            ${pinned ? rssBadge("显示", "good") : rssBadge("隐藏", "muted")}
+          </article>`).join("")}
+      </section>
+      <section class="fd-rss-rule-sub-actions">
+        <button type="button" data-route="rss-favorite-group-edit">${icon("add", "fd-small-icon")}新增分组</button>
+        <button type="button" data-route="rss-favorite-group-edit">${icon("edit", "fd-small-icon")}排序</button>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-starred">取消</button>
+        <button type="button" data-route="rss-starred">保存</button>
+      </div>`, appState);
+  }
+
+  function rssReadRecordScreen(data, appState) {
+    const records = rssRecordsData();
+    return rssLibraryScreen(data, "阅读记录", `
+      <section class="fd-rss-record-list">
+        ${records.map(([title, meta]) => `
+          <article role="button" tabindex="0" data-route="rss-detail">
+            <span>${icon("clock", "fd-small-icon")}</span>
+            <strong>${esc(title)}<small>${esc(meta)}</small></strong>
+            ${icon("chevron", "fd-small-icon")}
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss">返回列表</button>
+        <button type="button" data-route="rss-record-clear">清空记录</button>
+      </div>`, appState);
+  }
+
+  function rssRuleSubscriptionScreen(data, appState) {
+    return rssShellScreen(data, "规则订阅", `
+      ${rssModeNav("rss-rule-subscription")}
+      <section class="fd-rss-rule-sub-list" aria-label="规则订阅列表">
+        ${rssRuleSubsData().map((item) => `
+          <article role="button" tabindex="0" data-route="rss-rule-subscription-detail">
+            <span>${icon(item.type === "RSS 源" ? "rss" : item.type === "书源" ? "source-stack" : "replace", "fd-small-icon")}</span>
+            <strong>${esc(item.name)}<small>${esc(item.type)} · ${esc(item.url)}</small></strong>
+            <em>${esc(item.update)}</em>
+          </article>`).join("")}
+      </section>
+      <section class="fd-rss-rule-sub-actions">
+        <button type="button" data-route="rss-rule-subscription-detail">${icon("upload", "fd-small-icon")}打开订阅</button>
+        <button type="button" data-route="rss-rule-subscription-edit">${icon("add", "fd-small-icon")}新增</button>
+      </section>`, appState);
+  }
+
+  function rssRuleSubscriptionDetailScreen(data, appState) {
+    return rssLibraryScreen(data, "订阅详情", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("sync", "fd-small-icon")}</span>
+          <div><strong>社区 RSS 源订阅</strong><small>RSS 源 · 自动更新 · 上次同步 10:18</small></div>
+        </header>
+        <article><strong>订阅地址</strong><p>https://example.com/rss-source.json</p></article>
+        <article><strong>更新策略</strong><p>Wi-Fi 下自动更新；保留本地启用状态、分组和登录态。</p></article>
+        <article><strong>最近变更</strong><p>新增 2 个源，更新 1 个正文规则，跳过 1 个本地冲突。</p></article>
+      </section>
+      <section class="fd-rss-import-list" aria-label="订阅变更">
+        ${rssImportEntriesData().map((item) => `
+          <article class="${item.checked ? "is-selected" : ""}">
+            <span>${icon(item.checked ? "check" : "rss", "fd-small-icon")}</span>
+            <strong>${esc(item.name)}<small>${esc(item.meta)}</small></strong>
+            ${rssBadge(item.tone === "warn" ? "更新" : item.tone === "good" ? "新增" : "跳过", item.tone)}
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-rule-subscription-edit">编辑</button>
+        <button type="button" data-route="rss-rule-subscription-apply">应用更新</button>
+      </div>`, appState);
+  }
+
+  function rssRuleSubscriptionEditScreen(data, appState) {
+    const fields = [
+      ["基础", "订阅名称", "社区 RSS 源订阅"],
+      ["基础", "订阅类型", "RSS 源"],
+      ["基础", "订阅地址", "https://example.com/rss-source.json"],
+      ["同步", "自动更新", "Wi-Fi 下自动"],
+      ["同步", "冲突策略", "保留本地名称、分组、启用状态"],
+      ["安全", "登录配置", "不覆盖 Cookie 和账号信息"]
+    ];
+    return rssLibraryScreen(data, "编辑规则订阅", `
+      <section class="fd-rss-edit-list" aria-label="规则订阅编辑字段">
+        ${fields.map(([group, label, value]) => `
+          <article>
+            <small>${esc(group)}</small>
+            <strong>${esc(label)}</strong>
+            <p>${esc(value)}</p>
+          </article>`).join("")}
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-rule-subscription-test">测试订阅</button>
+        <button type="button" data-route="rss-rule-subscription">保存</button>
+      </div>`, appState);
+  }
+
+  function rssRuleSubscriptionTestScreen(data, appState) {
+    return rssLibraryScreen(data, "测试规则订阅", `
+      <section class="fd-rss-debug-panel">
+        <header>
+          <span>${icon("bug", "fd-small-icon")}</span>
+          <div><strong>社区 RSS 源订阅</strong><small>请求订阅地址 · 校验结构 · 生成导入预览</small></div>
+        </header>
+        <article><strong>1. 请求订阅地址</strong><p>https://example.com/rss-source.json 返回 200，内容类型 application/json。</p></article>
+        <article><strong>2. 解析订阅内容</strong><p>12 个 RSS 源、2 个更新项、1 个本地冲突。</p></article>
+        <article><strong>3. 冲突策略</strong><p>保留本地名称、分组、启用状态，不覆盖登录凭据。</p></article>
+      </section>`, `
+      <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
+        <button type="button" data-route="rss-rule-subscription-edit">返回编辑</button>
+        <button type="button" data-route="rss-rule-subscription-detail">查看结果</button>
+      </div>`, appState);
+  }
+
+  function rssSearchScreen(data, appState) {
+    const articles = rssArticlesData();
+    return rssShellScreen(data, "RSS 搜索", `
+      <section class="fd-rss-search-panel">
+        <label>${icon("search", "fd-small-icon")}<span>搜索订阅源、文章标题或分组</span></label>
+        <nav aria-label="RSS 搜索范围">
+          ${["全部", "订阅源", "文章", "分组"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
+        </nav>
+      </section>
+      <section class="fd-rss-article-section">
+        <header>
+          <h2>搜索结果</h2>
+          <button type="button" data-route="rss-subscription-management">${icon("source-stack", "fd-small-icon")}管理源</button>
+        </header>
+        <section class="fd-rss-article-list" aria-label="RSS 搜索结果">
+          ${articles.slice(0, 3).map((item) => `
+            <article class="fd-rss-article-row${item.unread ? " is-unread" : ""}" role="button" tabindex="0" data-route="rss-detail">
+              <i></i>
+              <span>
+                <strong>${esc(item.title)}</strong>
+                <small>${esc(item.source)} · ${esc(item.time)} · ${esc(item.group)}</small>
+                <p>${esc(item.desc)}</p>
+              </span>
+              ${icon("chevron", "fd-small-icon")}
+            </article>
+          `).join("")}
+        </section>
       </section>`, appState);
   }
 
   function rssSubscriptionManagementScreen(data, appState) {
-    const subscriptions = [
-      ["GitHub Releases", "开源项目 · 6 条未读", "已启用"],
-      ["阅读器版本讨论", "社区 · 12 条未读", "已启用"],
-      ["书源维护公告", "维护 · 2 条未读", "已启用"],
-      ["本地系统通知", "系统 · 无未读", "暂停"]
-    ];
-    return rssShellScreen(data, "RSS 订阅管理", `
-      <section class="fd-setting-section">
-        <h2>订阅源</h2>
-        ${subscriptions.map(([title, meta, status]) => `
-          <article class="fd-setting-row" role="button" tabindex="0" data-route="rss-detail">
-            <span>${icon("rss", "fd-small-icon")}</span>
-            <strong>${esc(title)}<small>${esc(meta)}</small></strong>
-            <em class="fd-settings-badge is-${status === "暂停" ? "warn" : "good"}">${esc(status)}</em>
+    const subscriptions = rssSourcesData();
+    const filters = ["全部", "已启用", "需登录", "无分组", "暂停"];
+    const activeFilter = appState?.rssManageFilter || "全部";
+    return rssLibraryScreen(data, "RSS 订阅管理", `
+      <section class="fd-rss-manage-actions">
+        <button type="button" data-route="rss-source-edit">${icon("add", "fd-small-icon")}新建</button>
+        <button type="button" data-route="rss-source-import">${icon("upload", "fd-small-icon")}导入</button>
+        <button type="button" data-route="rss-rule-subscription">${icon("sync", "fd-small-icon")}规则订阅</button>
+        <button type="button" data-route="rss-source-groups">${icon("folder", "fd-small-icon")}分组</button>
+      </section>
+      ${filterDisclosure({
+        className: "fd-rss-filter-control fd-rss-manage-filter-control",
+        label: "筛选",
+        ariaLabel: "RSS 订阅管理筛选",
+        summary: activeFilter,
+        toggleAttr: "data-rss-manage-filter-toggle",
+        open: Boolean(appState?.rssManageFilterOpen),
+        groups: [{
+          title: "订阅源状态",
+          options: filters.map((item) => ({
+            label: item,
+            active: activeFilter === item,
+            attrs: { "data-rss-manage-filter": item }
+          }))
+        }]
+      })}
+      <section class="fd-rss-source-list" aria-label="RSS 订阅源列表">
+        ${subscriptions.map((source) => `
+          <article class="${source.enabled ? "" : "is-disabled"}" role="button" tabindex="0" data-route="rss-source-feed">
+            <span>${icon(source.enabled ? "rss" : "offline", "fd-small-icon")}</span>
+            <strong>${esc(source.name)}<small>${esc(source.group)} · ${source.unread ? `${esc(source.unread)} 条未读` : "无未读"} · ${esc(source.latest)} · ${esc(source.articleStyle)}</small></strong>
+            ${rssBadge(source.status, source.tone)}
+            <button type="button" data-route="rss-source-actions" aria-label="${esc(source.name)}更多操作">${icon("more", "fd-small-icon")}</button>
           </article>
         `).join("")}
       </section>
-      <section class="fd-setting-section">
-        <h2>刷新策略</h2>
-        <article class="fd-setting-row"><span>${icon("refresh", "fd-small-icon")}</span><strong>自动刷新<small>Wi-Fi 下每 30 分钟刷新一次</small></strong>${settingsSwitch(true)}</article>
-        <article class="fd-setting-row"><span>${icon("bell", "fd-small-icon")}</span><strong>未读提醒<small>只提醒重点订阅源</small></strong>${settingsSwitch(true)}</article>
-      </section>`, appState);
+      <section class="fd-rss-manage-batch-row">
+        <strong>已选 2 个</strong>
+        <button type="button" data-route="rss-source-batch">批量</button>
+        <button type="button" data-route="rss-source-batch-disable">禁用</button>
+        <button type="button" data-route="rss-source-export">导出</button>
+      </section>
+      <section class="fd-rss-source-settings">
+        <h2>刷新与提醒</h2>
+        <article><span>${icon("refresh", "fd-small-icon")}</span><strong>自动刷新<small>Wi-Fi 下每 30 分钟刷新一次</small></strong>${settingsSwitch(true)}</article>
+        <article><span>${icon("bell", "fd-small-icon")}</span><strong>未读提醒<small>只提醒重点订阅源</small></strong>${settingsSwitch(true)}</article>
+      </section>`, "", appState);
   }
 
   function rssStateScreen(data, route, appState) {
     const isError = route === "rss-error";
     return rssShellScreen(data, isError ? "RSS 错误" : "RSS 空状态", `
-      <section class="fd-search-state ${isError ? "is-error" : "is-empty"}">
+      <section class="fd-search-state fd-rss-state-card ${isError ? "is-error" : "is-empty"}">
         <span>${icon(isError ? "warning" : "rss", "fd-medium-icon")}</span>
         <h2>${isError ? "订阅刷新失败" : "暂无未读订阅"}</h2>
-        <p>${isError ? "网络连接超时，部分订阅源暂时无法刷新。保留已缓存内容，可以稍后重试。" : "当前订阅源没有新的未读条目。你可以管理订阅源或手动刷新。日常空状态仍保留 RSS 主导航上下文。"}</p>
+        <p>${isError ? "2 个订阅源刷新失败，已保留最近缓存条目。可以稍后重试、查看错误源，或进入订阅源管理修复登录态和规则。" : "当前订阅源没有新的未读条目。你可以查看全部、管理订阅源或手动刷新。日常空状态仍保留 RSS 主导航上下文。"}</p>
+        ${isError ? `<section class="fd-rss-error-list"><article><strong>书源维护公告</strong><small>登录态失效 · 需要重新登录</small></article><article><strong>本地系统通知</strong><small>源已暂停 · 不参与自动刷新</small></article></section>` : ""}
         <div class="fd-action-row">
-          <button type="button" data-route="rss">${isError ? "重试刷新" : "返回 RSS"}</button>
+          <button type="button" data-route="${isError ? "rss-refreshing" : "rss-all"}">${isError ? "重试刷新" : "查看全部"}</button>
           <button type="button" data-route="rss-subscription-management">订阅管理</button>
         </div>
       </section>`, appState);
@@ -426,13 +1928,11 @@
 
   function mainTabSettings(data, appState) {
     const rows = [
-      { icon: "settings", title: "App 通用设置", meta: "主题、网络、基础行为", route: "settings-general" },
-      { icon: "bookshelf", title: "书架与搜索设置", meta: "布局、列数、搜索历史", route: "bookshelf-search-settings" },
-      { icon: "shield", title: "隐私与权限", meta: "本地书、通知、剪贴板", route: "privacy-permissions" },
-      { icon: "storage", title: "缓存管理", meta: "占用、分类、清理策略", route: "cache-management" },
-      { icon: "source", title: "书源管理", meta: "启用、检测、日志", route: "source-management" },
-      { icon: "sync", title: "同步与备份", meta: "本地恢复、远程恢复", route: "sync-backup" },
-      { icon: "info", title: "关于与反馈", meta: "版本、反馈、开源", route: "about-feedback" }
+      { icon: "gear", title: "通用设置", route: "settings-general" },
+      { icon: "bookshelf", title: "书架与搜索设置", route: "bookshelf-search-settings" },
+      { icon: "source-stack", title: "书源管理", route: "source-management" },
+      { icon: "sync", title: "同步与备份", route: "sync-backup" },
+      { icon: "info", title: "关于与反馈", route: "about-feedback" }
     ];
 
     return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
@@ -447,8 +1947,8 @@
           ${rows.map((row) => `
             <article class="fd-setting-row" role="button" tabindex="0" data-route="${esc(row.route)}">
               <span>${icon(row.icon, "fd-small-icon")}</span>
-              <strong>${esc(row.title)}<small>${esc(row.meta)}</small></strong>
-              ${icon("chevron", "fd-small-icon")}
+              <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
+              <em class="fd-settings-row-side is-icon">${icon("chevron", "fd-small-icon")}</em>
             </article>
           `).join("")}
         </section>`,
@@ -653,19 +2153,38 @@
       data,
       title: "书架",
       activeType: "bookshelf",
-      actions: [],
+      actions: ["search", "more"],
       ariaLabel: "书架空状态",
       contentHtml: `
-        <section class="fd-empty-state" data-slot="stateHost">
-          ${icon("bookshelf", "fd-empty-icon")}
-          <h2>书架还是空的</h2>
-          <p>空状态只替换内容区，不替换 MainTabShell、顶部栏或底部四栏导航。</p>
-          <div>
-            <button type="button" data-route="book-search">搜索书籍</button>
-            <button type="button" data-route="local-import">导入本地书</button>
-            <button type="button" data-route="discover">去发现</button>
-          </div>
-        </section>`
+        <section class="fd-bookshelf-shelf-section is-empty" aria-label="我的书架">
+          ${bookshelfSectionHeader("cover", true, null)}
+          <section class="fd-bookshelf-empty-state" data-slot="bookshelfEmpty" aria-label="书架空状态">
+            <div class="fd-bookshelf-empty-visual" aria-hidden="true">
+              <span>${icon("bookshelf", "fd-medium-icon")}</span>
+              <i></i>
+              <i></i>
+            </div>
+            <h2>书架还是空的</h2>
+            <p>添加网络书籍或导入本地文件后，会在这里显示继续阅读和书架内容。</p>
+            <div class="fd-bookshelf-empty-actions">
+              <button class="is-primary" type="button" data-route="book-search">
+                ${icon("search", "fd-small-icon")}
+                <span><strong>搜索书籍</strong><small>按书名、作者或关键词查找</small></span>
+              </button>
+              <button type="button" data-route="local-import">
+                ${icon("folder", "fd-small-icon")}
+                <span><strong>导入本地书</strong><small>添加本机文件到书架</small></span>
+              </button>
+            </div>
+            <section class="fd-bookshelf-empty-hints" aria-label="可选入口">
+              <button type="button" data-route="discover">${icon("sparkle", "fd-small-icon")}去发现</button>
+              <button type="button" data-route="bookshelf-search-settings">${icon("gear", "fd-small-icon")}书架设置</button>
+            </section>
+          </section>
+        </section>`,
+      stateHostHtml: `
+        <p class="fd-nav-feedback">当前 Tab：书架</p>
+        ${bookshelfMoreLayer()}`
     }));
   }
 
@@ -710,33 +2229,11 @@
     }));
   }
 
-  function sortFilterScreen(data) {
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data,
-      title: "排序与筛选",
-      ariaLabel: "排序与筛选",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-filter-panel">
-          <h2>排序</h2>
-          <nav class="fd-chip-row" aria-label="排序方式">
-            ${["最近更新", "阅读进度", "书名", "作者"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
-          </nav>
-        </section>
-        <section class="fd-filter-panel">
-          <h2>筛选</h2>
-          <nav class="fd-chip-row fd-chip-wrap" aria-label="筛选范围">
-            ${["全部", "追更", "本地书", "未读", "已完结", "更新失败"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
-          </nav>
-          <p>应用后回写书架的分组、排序和筛选上下文，列表末项仍需滚到主导航上方。</p>
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button" data-route-back>应用</button>
-          <button type="button" data-route-back>重置</button>
-        </div>`
-    }));
+  function sortFilterScreen(data, appState) {
+    const filterState = Object.assign({}, appState, {
+      bookshelfFilterOpen: appState?.bookshelfFilterOpen !== false
+    });
+    return mainTabBookshelf(data, filterState);
   }
 
   function bookBatchManagementScreen(data) {
@@ -838,7 +2335,7 @@
       contentHtml: `
         <section class="fd-import-card is-import-entry">
           ${icon("folder", "fd-medium-icon")}
-          <span><strong>选择本地书文件</strong><small>从系统文件选择器返回后，在本页完成识别、分组和导入确认。</small></span>
+          <span><strong>选择本地书文件</strong><small>选择后识别分组并确认导入</small></span>
           <button type="button">选择</button>
         </section>
         <section class="fd-management-list is-import-options">
@@ -968,6 +2465,9 @@
   function initialRouteStackFor(route) {
     if (["bookshelf", "discover", "rss", "settings"].includes(route)) {
       return [route];
+    }
+    if (route.startsWith("rss-")) {
+      return ["rss", route];
     }
     if (routes[route]?.shell === "SettingsShell") {
       return ["settings", route];
@@ -2032,7 +3532,6 @@
     const chapterState = currentReaderChapter(data, appState);
     const chapterProgress = readerChapterProgressValue(data, appState);
     const chapterTitle = chapterState.chapter.title || chapter.title || "第 32 章 雨夜";
-    const chapterNumber = readerChapterNumber(chapterTitle, chapterState.index + 1);
     const totalChapterCount = readerTotalChapterCount(data, chapterState.count);
     return `
       <div class="fd-reader-control-main" data-dev-region="BottomControlPanel">
@@ -2050,11 +3549,11 @@
             <button class="fd-reader-chapter-step" type="button" data-reader-chapter-action="next" aria-label="${esc(chapter.nextLabel || "下一章")}" aria-disabled="${chapterState.index >= chapterState.count - 1 ? "true" : "false"}">${icon("chevron", "fd-small-icon")}<span class="fd-sr-only">${esc(chapter.nextLabel || "下一章")}</span></button>
           </div>
           <div class="fd-reader-progress-row">
-            <small class="fd-reader-book-progress">书籍进度 ${esc(chapterProgress)}% · 第 ${esc(chapterNumber)} / ${esc(totalChapterCount)} 章</small>
+            <small class="fd-reader-book-progress" title="书籍进度 ${esc(chapterProgress)}%" aria-label="书籍进度 ${esc(chapterProgress)}%">${esc(chapterProgress)}%</small>
             <button class="fd-reader-progress" type="button" style="--progress:${esc(pct(`${chapterProgress}%`))}" data-reader-chapter-progress aria-label="调整书籍进度" aria-valuemin="${esc(chapterProgressConfig.min)}" aria-valuemax="${esc(chapterProgressConfig.max)}" aria-valuenow="${esc(chapterProgress)}">
               <i><b></b></i>
             </button>
-            <span class="fd-reader-total-chapters">共 ${esc(totalChapterCount)} 章</span>
+            <span class="fd-reader-total-chapters" title="总章节 ${esc(totalChapterCount)} 章" aria-label="总章节 ${esc(totalChapterCount)} 章">共 ${esc(totalChapterCount)} 章</span>
           </div>
         </section>
       </div>`;
@@ -2326,13 +3825,6 @@
   }
 
   function settingsPageFor(route, data) {
-    const previewBooks = (data.mainTabs.books || []).slice(0, 3).map((book) => ({
-      title: book.title,
-      meta: book.chapter,
-      update: book.progress,
-      badge: "1",
-      cover: cover(data, book.coverKey)
-    }));
     const pages = {
       "settings-general": {
         title: "通用设置",
@@ -2348,19 +3840,30 @@
           {
             title: "行为与反馈",
             rows: [
-              { type: "switch", icon: "refresh", title: "自动检查更新", meta: "有新版本时自动检查并提示", enabled: true },
-              { type: "switch", icon: "top", title: "点击当前底栏回顶部", meta: "再次点击当前底栏按钮时回到页面顶部", enabled: true },
-              { type: "switch", icon: "motion", title: "减少动态效果", meta: "降低动画效果以提升流畅度", enabled: true },
-              { type: "switch", icon: "bug", title: "崩溃日志", meta: "仅保存本地诊断日志，便于排查问题", enabled: true, status: "已开启", statusTone: "good" },
-              { type: "select", icon: "play", title: "动画效果", meta: "设置界面内的动画播放效果强度", value: "标准", options: ["减少", "标准", "增强"] },
-              { type: "danger", tone: "danger", icon: "trash", title: "缓存清理", meta: "当前缓存 1.28 GB", actionLabel: "清理", overlay: "dialog:cache-clear" }
+              { type: "switch", icon: "refresh", title: "自动检查更新", enabled: true },
+              { type: "switch", icon: "top", title: "点击当前底栏回顶部", enabled: true },
+              { type: "switch", icon: "motion", title: "减少动态效果", enabled: true },
+              { type: "switch", icon: "bug", title: "崩溃日志", enabled: true, status: "已开启", statusTone: "good" },
+              { type: "select", icon: "play", title: "动画效果", value: "标准", options: ["减少", "标准", "增强"] },
+              { type: "cache-cleanup", icon: "trash", title: "缓存清理", actionLabel: "清理缓存", overlay: "dialog:cache-clear" }
+            ]
+          },
+          {
+            title: "系统权限",
+            rows: [
+              { type: "link", icon: "folder", title: "文件访问", status: "已授权", statusTone: "good", actionLabel: "去设置", overlay: "dialog:file-access-permission" },
+              { type: "link", icon: "bell", title: "通知权限", status: "未授权", statusTone: "warn", actionLabel: "去设置", overlay: "dialog:notification-permission" },
+              { type: "link", icon: "battery", title: "电池优化", status: "受系统管理", statusTone: "info", actionLabel: "去设置", overlay: "dialog:battery-permission" }
             ]
           }
         ],
-        actions: [{ tone: "danger", icon: "refresh", title: "恢复默认", meta: "恢复通用设置默认值", overlay: "dialog" }],
+        actions: [{ tone: "danger", icon: "refresh", title: "恢复默认", overlay: "dialog" }],
         confirm: { title: "恢复通用设置？", copy: "恢复后将重置 App 主题、语言、启动页面和行为偏好。", confirmLabel: "确认恢复" },
         confirms: {
-          "cache-clear": { title: "清理缓存？", copy: "将清除封面、章节和临时文件缓存，不会删除书籍与阅读进度。", confirmLabel: "确认清理" }
+          "cache-clear": { title: "清理缓存？", copy: "将清除封面、章节和临时文件缓存，不会删除书籍与阅读进度。", confirmLabel: "确认清理", resultToast: "已清理 1.28 GB 缓存" },
+          "file-access-permission": { title: "打开文件访问设置？", copy: "将跳转到系统设置中的文件访问权限，用于管理本地文件和媒体访问。", confirmLabel: "去设置" },
+          "notification-permission": { title: "打开通知权限设置？", copy: "将跳转到系统设置中的通知权限，用于开启或关闭阅读提醒。", confirmLabel: "去设置" },
+          "battery-permission": { title: "打开电池优化设置？", copy: "将跳转到系统设置中的电池优化页面，用于管理后台运行策略。", confirmLabel: "去设置" }
         }
       },
       "bookshelf-search-settings": {
@@ -2372,9 +3875,8 @@
               { type: "segment", icon: "grid", title: "默认展示", value: "封面", options: ["封面", "列表"] },
               { type: "stepper", icon: "columns", title: "封面列数", value: "3列", minLabel: "-", maxLabel: "+" },
               { type: "select", icon: "folder", title: "默认分组", value: "全部", options: ["全部", "长篇追读", "资料", "未分组"] },
-              { type: "switch", icon: "badge", title: "显示更新标记", meta: "在书籍封面上显示更新标记", enabled: true }
-            ],
-            preview: { books: previewBooks }
+              { type: "switch", icon: "badge", title: "显示更新标记", enabled: true }
+            ]
           },
           {
             title: "排序与筛选",
@@ -2389,135 +3891,28 @@
             rows: [
               { type: "select", icon: "search", title: "搜索范围", value: "全局", options: ["当前分组", "书架", "全局"] },
               { type: "select", icon: "sort", title: "结果排序", value: "相关度", options: ["相关度", "最近阅读", "最近更新"] },
-              { type: "switch", icon: "people", title: "合并同名同作者", meta: "搜索结果合并相同书名和作者的作品", enabled: true },
-              { type: "switch", icon: "clock", title: "搜索历史", meta: "记录搜索关键词以便快速访问", enabled: true },
-              { type: "select", icon: "list", title: "搜索历史数量", meta: "设置保存的搜索历史条数上限", value: "20条", options: ["10条", "20条", "50条"] }
+              { type: "switch", icon: "people", title: "合并同名同作者", enabled: true },
+              { type: "switch", icon: "clock", title: "搜索历史", enabled: true },
+              { type: "select", icon: "list", title: "搜索历史数量", value: "20条", options: ["10条", "20条", "50条"] }
             ]
           }
         ],
-        actions: [{ tone: "danger", icon: "trash", title: "清空搜索历史", meta: "清除本机保存的搜索记录", overlay: "dialog" }],
+        actions: [{ tone: "danger", icon: "trash", title: "清空搜索历史", overlay: "dialog" }],
         confirm: { title: "清空搜索历史？", copy: "清空后无法恢复，已保存的搜索关键词会被移除。", confirmLabel: "确认清空" }
-      },
-      "privacy-permissions": {
-        title: "隐私与权限",
-        sections: [
-          {
-            title: "系统权限",
-            rows: [
-              { type: "link", icon: "folder", title: "文件访问", meta: "访问设备上的文件和媒体内容", status: "已授权", statusTone: "good", value: "已允许" },
-              { type: "link", icon: "bell", title: "通知权限", meta: "接收系统通知和消息提醒", status: "未授权", statusTone: "warn", actionLabel: "去设置" },
-              { type: "link", icon: "battery", title: "电池优化", meta: "后台运行与电池使用受系统管理", value: "受系统管理" }
-            ]
-          },
-          {
-            title: "隐私设置",
-            rows: [
-              { type: "switch", icon: "eyeOff", title: "隐私开关", meta: "不记录最近阅读与搜索历史", enabled: false },
-              { type: "switch", icon: "clock", title: "保存搜索历史", meta: "记录搜索关键词以便快速访问", enabled: true },
-              { type: "switch", icon: "bug", title: "发送崩溃日志", meta: "仅在你主动确认后发送", enabled: false }
-            ]
-          },
-          {
-            title: "数据与说明",
-            rows: [
-              { type: "link", icon: "info", title: "网络访问说明", meta: "说明网络访问用途和可用边界" },
-              { type: "link", icon: "file", title: "本地数据说明", meta: "了解本地数据的存储与使用" },
-              { type: "link", icon: "shield", title: "隐私说明", meta: "查看隐私政策与相关条款" }
-            ]
-          }
-        ],
-        actions: [{ tone: "danger", icon: "trash", title: "清除隐私数据", meta: "清除所有隐私相关数据与记录", overlay: "dialog" }],
-        confirm: { title: "清除隐私数据？", copy: "清除后将移除搜索历史、阅读痕迹和本地隐私记录。", confirmLabel: "确认清除" }
-      },
-      "cache-management": {
-        title: "缓存管理",
-        metrics: [
-          { icon: "storage", label: "缓存占用", value: "1.28 GB" },
-          { icon: "clock", label: "计算状态", value: "正在计算" },
-          { icon: "book", label: "书籍缓存", value: "860 MB" },
-          { icon: "rss", label: "RSS 缓存", value: "96 MB" }
-        ],
-        storage: {
-          title: "缓存占用",
-          value: "1.28 GB",
-          percent: "68%",
-          copy: "正在计算各分类缓存，结果会按书籍缓存、封面缓存、搜索缓存和 RSS 缓存展示。"
-        },
-        sections: [
-          {
-            title: "缓存分类",
-            rows: [
-              { type: "link", icon: "book", title: "书籍缓存", meta: "已缓存章节、阅读正文和目录索引", value: "860 MB" },
-              { type: "link", icon: "image", title: "封面缓存", meta: "书架封面、发现推荐和详情页图片", value: "210 MB" },
-              { type: "link", icon: "search", title: "搜索缓存", meta: "最近搜索结果和书源查询缓存", value: "114 MB" },
-              { type: "link", icon: "rss", title: "RSS 缓存", meta: "订阅条目摘要、正文提取和未读状态", value: "96 MB" }
-            ]
-          },
-          {
-            title: "缓存策略",
-            rows: [
-              { type: "switch", icon: "download", title: "自动缓存后续章节", meta: "阅读时预取后续章节，离线仍可继续", enabled: true },
-              { type: "switch", icon: "image", title: "保留封面缓存", meta: "清理时默认保留最近访问封面", enabled: true },
-              { type: "select", icon: "clock", title: "自动清理周期", meta: "控制搜索缓存和 RSS 缓存的保留时间", value: "30 天", options: ["7 天", "30 天", "90 天"] }
-            ]
-          },
-          {
-            title: "清理缓存",
-            rows: [
-              { type: "danger", tone: "danger", icon: "trash", title: "清理缓存", meta: "清除章节、封面、搜索和 RSS 临时缓存，不删除书籍与阅读进度", actionLabel: "清理", overlay: "dialog:cache-cleanup" }
-            ]
-          }
-        ],
-        actions: [
-          { icon: "refresh", title: "重新计算缓存占用", meta: "刷新缓存分类和占用数据", overlay: "dialog:cache-recalculate" }
-        ],
-        confirms: {
-          "cache-cleanup": { title: "清理缓存？", copy: "将清除书籍缓存、封面缓存、搜索缓存和 RSS 缓存，不会删除书籍与阅读进度。", confirmLabel: "确认清理" },
-          "cache-recalculate": { title: "重新计算缓存占用？", copy: "将扫描本地缓存目录并更新当前分类数据。", confirmLabel: "开始计算" }
-        }
       },
       "about-feedback": {
         title: "关于与反馈",
-        metrics: [
-          { icon: "book", label: "当前版本", value: "Reader 1.0.0" },
-          { icon: "code", label: "项目类型", value: "个人开源" },
-          { icon: "check", label: "更新状态", value: "已是最新" },
-          { icon: "file", label: "许可证", value: "开源许可" }
-        ],
         sections: [
           {
-            title: "项目与版本",
+            title: "项目信息",
             rows: [
-              { type: "link", icon: "info", title: "项目说明", meta: "个人作品与本地阅读器 demo 说明", value: "本地项目" },
-              { type: "link", icon: "refresh", title: "检查更新", meta: "检查本地或远程发布版本", value: "已是最新" },
-              { type: "link", icon: "file", title: "更新日志", meta: "查看最近版本变化和修复记录" }
-            ]
-          },
-          {
-            title: "反馈与支持",
-            rows: [
-              { type: "link", icon: "bug", title: "问题反馈", meta: "提交复现步骤、截图和日志片段", overlay: "dialog:feedback" },
-              { type: "link", icon: "message", title: "功能建议", meta: "记录阅读、书架、书源等改进想法", overlay: "dialog:suggestion" },
-              { type: "link", icon: "info", title: "使用帮助", meta: "查看常见操作和本地 demo 说明" }
-            ]
-          },
-          {
-            title: "开源与贡献",
-            rows: [
-              { type: "link", icon: "code", title: "源码仓库", meta: "查看项目代码、Issue 和提交记录" },
-              { type: "link", icon: "link", title: "开源许可", meta: "查看项目使用的开源许可证和第三方依赖" },
-              { type: "link", icon: "mail", title: "参与贡献", meta: "提交问题、建议或 Pull Request" }
+              { type: "link", icon: "refresh", title: "检查更新", value: "已是最新" },
+              { type: "link", icon: "code", title: "源码仓库" },
+              { type: "link", icon: "link", title: "开源许可" },
+              { type: "link", icon: "mail", title: "参与贡献" }
             ]
           }
-        ],
-        actions: [
-          { icon: "log", title: "导出诊断日志", meta: "导出运行日志、设备信息和最近错误，不包含书籍正文", overlay: "dialog:diagnostic" }
-        ],
-        confirms: {
-          feedback: { title: "打开问题反馈？", copy: "反馈内容应包含问题现象、复现步骤、页面路径和必要截图。", confirmLabel: "继续反馈" },
-          suggestion: { title: "记录功能建议？", copy: "建议会按阅读、书架、书源、设置等模块归类，便于后续排期。", confirmLabel: "继续记录" },
-          diagnostic: { title: "导出诊断日志？", copy: "导出的日志只包含运行状态、错误信息和设备环境，不包含书籍正文。", confirmLabel: "确认导出" }
-        }
+        ]
       },
       "sync-backup": {
         title: "同步与备份",
@@ -2526,36 +3921,31 @@
             title: "WebDAV 配置",
             layout: "webdav-form",
             rows: [
-              { type: "input", inputType: "url", icon: "link", title: "服务器地址", meta: "WebDAV 服务地址", value: "https://dav.example.com/reader/backup", placeholder: "https://example.com/dav" },
-              { type: "input", inputType: "text", icon: "people", title: "账号", meta: "用于连接远程备份空间", value: "reader@example.com", placeholder: "请输入账号" },
-              { type: "input", inputType: "password", icon: "shield", title: "密码", meta: "本地加密保存", value: "reader-demo-password", placeholder: "请输入密码" },
-              { type: "input", inputType: "text", icon: "folder", title: "同步目录", meta: "远程备份数据所在目录", value: "/ReaderBackup/ReaderAndroid", placeholder: "/ReaderBackup" }
+              { type: "input", inputType: "url", icon: "link", title: "服务器地址", value: "https://dav.example.com/reader/backup", placeholder: "https://example.com/dav" },
+              { type: "input", inputType: "text", icon: "people", title: "账号", value: "reader@example.com", placeholder: "请输入账号" },
+              { type: "input", inputType: "password", icon: "shield", title: "密码", value: "reader-demo-password", placeholder: "请输入密码" },
+              { type: "input", inputType: "text", icon: "folder", title: "同步目录", value: "/ReaderBackup/ReaderAndroid", placeholder: "/ReaderBackup" }
             ],
             actions: [
-              { icon: "refresh", title: "测试 WebDAV", meta: "验证当前连接信息是否可用", overlay: "dialog:webdav-test" },
-              { icon: "check", title: "保存配置", meta: "保存后远程恢复使用此配置", overlay: "dialog:webdav-save" }
+              { icon: "refresh", title: "测试网络连通性", overlay: "dialog:webdav-test" },
+              { icon: "check", title: "保存配置", overlay: "dialog:webdav-save" }
             ]
           },
           {
             title: "恢复数据",
-            rows: [
-              { type: "link", icon: "cloud", title: "WebDAV · 2026-06-23 08:00", meta: "完整备份 · 12.8 MB · 书架、进度、设置", value: "选择", route: "restore-confirm", restoreRecord: "WebDAV · 2026-06-23 08:00 · 完整备份" },
-              { type: "link", icon: "cloud", title: "WebDAV · 2026-06-21 22:30", meta: "书架与设置 · 8.6 MB · 远程备份", value: "选择", route: "restore-confirm", restoreRecord: "WebDAV · 2026-06-21 22:30 · 书架与设置" },
-              { type: "link", icon: "folder", title: "本地 · 2026-06-23 10:30", meta: "完整备份 · 12.8 MB · 本机文件", value: "选择", route: "restore-confirm", restoreRecord: "本地 · 2026-06-23 10:30 · 完整备份" },
-              { type: "link", icon: "folder", title: "本地 · 2026-06-20 09:40", meta: "阅读进度 · 2.4 MB · 本机文件", value: "选择", route: "restore-confirm", restoreRecord: "本地 · 2026-06-20 09:40 · 阅读进度" }
-            ]
-          },
-          {
-            title: "恢复范围",
-            rows: [
-              { type: "switch", icon: "bookshelf", title: "书架与分组", meta: "恢复书架书籍、分组和排序", enabled: true },
-              { type: "switch", icon: "clock", title: "阅读进度", meta: "恢复章节位置和阅读进度", enabled: true },
-              { type: "switch", icon: "settings", title: "阅读与 App 设置", meta: "恢复主题、排版和通用设置", enabled: true }
+            layout: "backup-list",
+            backups: [
+              { group: "最近备份", icon: "cloud", source: "WebDAV", title: "自动备份", time: "2026-06-23 08:00", type: "完整备份", size: "12.8 MB", device: "Mac mini · 自动同步", includes: "书架、进度、设置、书源", badge: "最新", tone: "good", scopes: ["bookshelf", "progress", "settings", "sources"], restoreRecord: "WebDAV · 2026-06-23 08:00 · 完整备份" },
+              { group: "最近备份", icon: "folder", source: "本地", title: "手动备份", time: "2026-06-23 10:30", type: "完整备份", size: "12.8 MB", device: "本机文件", includes: "书架、进度、设置、书源", badge: "本机", tone: "info", scopes: ["bookshelf", "progress", "settings", "sources"], restoreRecord: "本地 · 2026-06-23 10:30 · 完整备份" },
+              { group: "历史备份", icon: "cloud", source: "WebDAV", title: "夜间备份", time: "2026-06-21 22:30", type: "书架与设置", size: "8.6 MB", device: "远程备份", includes: "书架、分组、设置", badge: "局部", tone: "warn", scopes: ["bookshelf", "settings"], restoreRecord: "WebDAV · 2026-06-21 22:30 · 书架与设置" },
+              { group: "历史备份", icon: "cloud", source: "WebDAV", title: "周备份", time: "2026-06-16 02:00", type: "完整备份", size: "12.1 MB", device: "远程备份", includes: "书架、进度、设置、书源", badge: "历史", tone: "muted", scopes: ["bookshelf", "progress", "settings", "sources"], restoreRecord: "WebDAV · 2026-06-16 02:00 · 完整备份" },
+              { group: "历史备份", icon: "folder", source: "本地", title: "阅读进度快照", time: "2026-06-20 09:40", type: "阅读进度", size: "2.4 MB", device: "本机文件", includes: "阅读进度", badge: "进度", tone: "muted", scopes: ["progress"], restoreRecord: "本地 · 2026-06-20 09:40 · 阅读进度" },
+              { group: "历史备份", icon: "cloud", source: "WebDAV", title: "迁移前备份", time: "2026-06-12 18:10", type: "书源配置", size: "1.6 MB", device: "远程备份", includes: "书源、分组", badge: "配置", tone: "muted", scopes: ["sources"], restoreRecord: "WebDAV · 2026-06-12 18:10 · 书源配置" }
             ]
           }
         ],
         confirms: {
-          "webdav-test": { title: "测试 WebDAV 连接？", copy: "将使用当前服务器地址和账号发起一次连接验证。", confirmLabel: "开始测试" },
+          "webdav-test": { title: "测试网络连通性？", copy: "将使用当前服务器地址和账号发起一次连接验证。", confirmLabel: "开始测试" },
           "webdav-save": { title: "保存 WebDAV 配置？", copy: "保存后，远程恢复会从该 WebDAV 目录读取备份数据。", confirmLabel: "保存" }
         }
       },
@@ -2566,27 +3956,19 @@
             title: "连接信息",
             layout: "webdav-form",
             rows: [
-              { type: "input", inputType: "url", icon: "link", title: "服务器地址", meta: "WebDAV 服务地址", value: "https://dav.example.com/reader/backup", placeholder: "https://example.com/dav" },
-              { type: "input", inputType: "text", icon: "people", title: "账号", meta: "用于连接远程备份空间", value: "reader@example.com", placeholder: "请输入账号" },
-              { type: "input", inputType: "password", icon: "shield", title: "密码", meta: "本地加密保存", value: "reader-demo-password", placeholder: "请输入密码" },
-              { type: "input", inputType: "text", icon: "folder", title: "同步目录", meta: "远程备份数据所在目录", value: "/ReaderBackup/ReaderAndroid", placeholder: "/ReaderBackup" }
+              { type: "input", inputType: "url", icon: "link", title: "服务器地址", value: "https://dav.example.com/reader/backup", placeholder: "https://example.com/dav" },
+              { type: "input", inputType: "text", icon: "people", title: "账号", value: "reader@example.com", placeholder: "请输入账号" },
+              { type: "input", inputType: "password", icon: "shield", title: "密码", value: "reader-demo-password", placeholder: "请输入密码" },
+              { type: "input", inputType: "text", icon: "folder", title: "同步目录", value: "/ReaderBackup/ReaderAndroid", placeholder: "/ReaderBackup" }
             ],
             actions: [
-              { icon: "refresh", title: "测试 WebDAV", meta: "验证当前连接信息是否可用", overlay: "dialog:webdav-test" },
-              { icon: "check", title: "保存配置", meta: "保存后远程恢复使用此配置", overlay: "dialog:webdav-save" }
-            ]
-          },
-          {
-            title: "恢复范围",
-            rows: [
-              { type: "switch", icon: "bookshelf", title: "书架与分组", meta: "恢复书架书籍、分组和排序", enabled: true },
-              { type: "switch", icon: "clock", title: "阅读进度", meta: "恢复章节位置和阅读进度", enabled: true },
-              { type: "switch", icon: "settings", title: "阅读与 App 设置", meta: "恢复主题、排版和通用设置", enabled: true }
+              { icon: "refresh", title: "测试网络连通性", overlay: "dialog:webdav-test" },
+              { icon: "check", title: "保存配置", overlay: "dialog:webdav-save" }
             ]
           }
         ],
         confirms: {
-          "webdav-test": { title: "测试 WebDAV 连接？", copy: "将使用当前服务器地址和账号发起一次连接验证。", confirmLabel: "开始测试" },
+          "webdav-test": { title: "测试网络连通性？", copy: "将使用当前服务器地址和账号发起一次连接验证。", confirmLabel: "开始测试" },
           "webdav-save": { title: "保存 WebDAV 配置？", copy: "保存后，远程恢复会从该 WebDAV 目录读取备份数据。", confirmLabel: "保存" }
         }
       },
@@ -2616,11 +3998,11 @@
           {
             title: "批量操作",
             rows: [
-              { type: "link", icon: "refresh", title: "检测", meta: "检测全部启用书源的可用状态", actionLabel: "开始检测" },
-              { type: "link", icon: "info", title: "详情", meta: "查看书源状态、分组和检测入口" },
-              { type: "link", icon: "edit", title: "编辑", meta: "进入书源详情后可编辑规则配置", overlay: "edit" },
-              { type: "link", icon: "log", title: "错误日志", meta: "查看最近一次检测失败原因", overlay: "log" },
-              { type: "switch", icon: "source", title: "启用开关", meta: "控制选中书源是否参与搜索与换源", enabled: true, overlay: "dialog" }
+              { type: "action", icon: "refresh", title: "检测", actionLabel: "开始检测" },
+              { type: "action", icon: "info", title: "详情", actionLabel: "查看", route: "source-detail" },
+              { type: "action", icon: "edit", title: "编辑", actionLabel: "编辑", overlay: "edit" },
+              { type: "action", icon: "log", title: "错误日志", actionLabel: "查看", overlay: "log" },
+              { type: "switch", icon: "source", title: "启用开关", enabled: true, overlay: "dialog" }
             ]
           }
         ],
@@ -2643,7 +4025,7 @@
 
   function settingsBadge(label, tone) {
     if (!label) return "";
-    return `<em class="fd-settings-badge is-${esc(tone || "muted")}">${esc(label)}</em>`;
+    return `<span class="fd-settings-badge is-${esc(tone || "muted")}" title="${esc(label)}" aria-label="${esc(label)}"><i aria-hidden="true"></i></span>`;
   }
 
   function settingsSwitch(enabled) {
@@ -2672,9 +4054,21 @@
     const stepper = row.type === "stepper" ? settingsStepper(row) : "";
     const toggle = row.type === "switch" ? settingsSwitch(row.enabled) : "";
     const value = row.value && !selector && !stepper ? `<strong class="fd-settings-value">${esc(row.value)}</strong>` : "";
-    const action = row.actionLabel ? `<button class="fd-settings-row-action" type="button">${esc(row.actionLabel)}</button>` : "";
-    const chevron = row.options || ["link", "select", "danger"].includes(row.type) ? icon("chevron", "fd-small-icon") : "";
+    const actionOverlay = row.type === "cache-cleanup" && row.overlay ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
+    const action = row.actionLabel ? `<button class="fd-settings-row-action" type="button"${actionOverlay}>${esc(row.actionLabel)}</button>` : "";
+    const chevron = row.options || ["link", "select", "danger"].includes(row.type) ? `<span class="fd-settings-trailing-icon">${icon("chevron", "fd-small-icon")}</span>` : "";
     return `${status}${selector}${stepper}${value}${action}${toggle}${chevron}`;
+  }
+
+  function settingsRowSideKind(row) {
+    if (row.type === "switch") return "switch";
+    if (row.type === "stepper") return "stepper";
+    if (row.status && row.actionLabel) return "rich";
+    if (row.type === "cache-cleanup" || row.actionLabel) return "action";
+    if (row.status) return "status";
+    if (row.value || row.options) return "value";
+    if (row.route || row.overlay || row.type === "link" || row.type === "select" || row.type === "danger") return "icon";
+    return "compact";
   }
 
   function settingsOptionKey(route, title) {
@@ -2699,15 +4093,41 @@
     }
     const key = row.options ? settingsOptionKey(route, row.title) : "";
     const optionOpen = row.options && appState?.settingsExpandedOption === key;
-    const overlayAttr = row.overlay ? ` data-settings-overlay="${esc(row.overlay)}"` : row.options ? ` data-settings-option-key="${esc(key)}"` : row.route ? ` data-route="${esc(row.route)}"` : "";
+    const overlayAttr = row.overlay && row.type !== "cache-cleanup" ? ` data-settings-overlay="${esc(row.overlay)}"` : row.options ? ` data-settings-option-key="${esc(key)}"` : row.route ? ` data-route="${esc(row.route)}"` : "";
     const restoreRecordAttr = row.restoreRecord ? ` data-restore-record="${esc(row.restoreRecord)}"` : "";
     return `
       <article class="fd-setting-row${row.type ? ` is-${esc(row.type)}` : ""}${row.tone === "danger" ? " is-danger" : ""}${optionOpen ? " is-option-open" : ""}"${overlayAttr}${restoreRecordAttr} role="${overlayAttr ? "button" : "group"}" tabindex="${overlayAttr ? "0" : "-1"}">
         <span>${icon(row.icon || "settings", "fd-small-icon")}</span>
         <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
-        <em>${settingsRowSide(row)}</em>
+        <em class="fd-settings-row-side is-${settingsRowSideKind(row)}">${settingsRowSide(row)}</em>
         ${settingsOptionDropdownHtml(row, route, appState)}
       </article>`;
+  }
+
+  function settingsBackupListHtml(section) {
+    const backups = section.backups || [];
+    let currentGroup = "";
+    return `
+      <div class="fd-settings-backup-list" aria-label="${esc(section.title)}备份列表">
+        ${section.summary ? `<p>${esc(section.summary)}</p>` : ""}
+        ${backups.map((backup) => {
+          const groupLabel = backup.group && backup.group !== currentGroup ? backup.group : "";
+          if (groupLabel) currentGroup = backup.group;
+          const scopes = (backup.scopes || []).join(",");
+          const backupContent = backup.content || backup.includes || backup.type || "";
+          return `
+            ${groupLabel ? `<h3>${esc(groupLabel)}</h3>` : ""}
+            <article class="fd-settings-backup-card" role="button" tabindex="0" data-route="restore-confirm" data-restore-record="${esc(backup.restoreRecord || `${backup.source} · ${backup.time} · ${backup.type}`)}" data-restore-scopes="${esc(scopes)}">
+              <span>${icon(backup.icon || "cloud", "fd-small-icon")}</span>
+              <strong>
+                ${esc(backup.source || "")}
+                <small>${esc(backup.time || "")}</small>
+                <small>${esc(backupContent)}</small>
+              </strong>
+              <em>${chevron("fd-small-icon")}</em>
+            </article>`;
+        }).join("")}
+      </div>`;
   }
 
   function settingsInputRowHtml(row) {
@@ -2720,29 +4140,15 @@
       </label>`;
   }
 
-  function settingsBookPreview(preview) {
-    if (!preview) return "";
-    const books = preview.books || [];
-    return `
-      <section class="fd-settings-bookshelf-preview" aria-label="书架布局预览">
-        <div>
-          <h3>${esc(preview.coverTitle || "封面模式预览")}</h3>
-          <div>${books.map((book) => `<span><img src="${esc(book.cover)}" alt="${esc(book.title)}封面"><i>${esc(book.badge || "")}</i><strong>${esc(book.title)}</strong></span>`).join("")}</div>
-        </div>
-        <div>
-          <h3>${esc(preview.listTitle || "列表模式预览")}</h3>
-          ${books.map((book) => `<article><img src="${esc(book.cover)}" alt="${esc(book.title)}封面"><span><strong>${esc(book.title)}</strong><small>${esc(book.meta)}</small></span><em>${esc(book.update)}</em></article>`).join("")}
-        </div>
-      </section>`;
-  }
-
   function settingsSectionHtml(section, route, appState) {
+    const sectionBody = section.layout === "backup-list"
+      ? settingsBackupListHtml(section)
+      : (section.rows || []).map((row) => settingsRowHtml(row, route, appState)).join("");
     return `
       <section class="fd-setting-section${section.layout ? ` is-${esc(section.layout)}` : ""}" data-slot="settingSection">
         <h2>${esc(section.title)}</h2>
-        ${section.rows.map((row) => settingsRowHtml(row, route, appState)).join("")}
+        ${sectionBody}
         ${settingsSectionActionsHtml(section.actions)}
-        ${settingsBookPreview(section.preview)}
       </section>`;
   }
 
@@ -2815,10 +4221,10 @@
         <h2>书源列表</h2>
         ${sources.map((item) => `
           <article class="fd-settings-source-row">
-            ${icon("source", "fd-small-icon")}
+            ${icon("source-stack", "fd-small-icon")}
             <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-            ${settingsBadge(item.status, item.tone)}
-            ${settingsSwitch(item.enabled)}
+            <em class="fd-settings-source-state">${settingsBadge(item.status, item.tone)}</em>
+            <span class="fd-settings-source-toggle-state">${settingsSwitch(item.enabled)}</span>
           </article>`).join("")}
       </section>`;
   }
@@ -2853,13 +4259,14 @@
     const overlayKey = String(overlay || "").startsWith("dialog:") ? String(overlay).slice("dialog:".length) : "";
     const confirm = overlayKey && page.confirms ? page.confirms[overlayKey] || {} : page.confirm || {};
     if (!confirm.title) return "";
+    const confirmResult = confirm.resultToast ? ` data-settings-confirm-result="${esc(confirm.resultToast)}"` : "";
     return `
       <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false">
         <h2>${esc(confirm.title)}</h2>
         <p>${esc(confirm.copy)}</p>
         <div>
           <button type="button" data-close-settings-overlay>${esc(confirm.cancelLabel || "取消")}</button>
-          <button type="button" data-close-settings-overlay>${esc(confirm.confirmLabel || "确认")}</button>
+          <button type="button" data-close-settings-overlay${confirmResult}>${esc(confirm.confirmLabel || "确认")}</button>
         </div>
       </section>`;
   }
@@ -2878,6 +4285,7 @@
       });
     });
     const overlay = appState?.settingsOverlay || "";
+    const toastMessage = appState?.settingsToast || page.toast || "";
     const frameState = overlay === "sheet" ? " has-sheet" : overlay.startsWith("dialog") ? " has-dialog" : "";
     const contentHtml = `
       ${settingsMetricsHtml(page.metrics)}
@@ -2901,7 +4309,7 @@
       dialogHostClass: "fd-dialog-host",
       stateHostClass: "fd-settings-state-host",
       contentHtml,
-      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : "",
+      toastHtml: toastMessage ? `<section class="fd-settings-toast">${esc(toastMessage)}</section>` : "",
       dialogHtml: `${overlay === "sheet" ? settingsOptionSheetHtml(page) : ""}${overlay.startsWith("dialog") ? settingsDialogHtml(page, overlay) : ""}`
     }));
   }
@@ -2951,12 +4359,76 @@
       </section>`;
   }
 
+  const restoreScopeCatalog = [
+    { key: "bookshelf", icon: "bookshelf", title: "书架与分组", meta: "恢复书架书籍、分组和排序", impact: "128 本书 · 12 个分组" },
+    { key: "progress", icon: "clock", title: "阅读进度", meta: "恢复章节位置和阅读进度", impact: "96 条阅读进度" },
+    { key: "settings", icon: "settings", title: "阅读与 App 设置", meta: "恢复主题、排版和通用设置", impact: "主题、排版、通用设置" },
+    { key: "sources", icon: "source", title: "书源配置", meta: "恢复书源、分组和启用状态", impact: "12 个书源 · 4 个分组" }
+  ];
+
+  function restoreDefaultScopeKeys() {
+    return restoreScopeCatalog.map((item) => item.key);
+  }
+
+  function restoreAvailableScopeKeys(appState) {
+    const keys = Array.isArray(appState?.restoreAvailableScopes) && appState.restoreAvailableScopes.length
+      ? appState.restoreAvailableScopes
+      : restoreDefaultScopeKeys();
+    return keys.filter((key) => restoreScopeCatalog.some((item) => item.key === key));
+  }
+
+  function restoreSelectedScopeKeys(appState) {
+    const available = restoreAvailableScopeKeys(appState);
+    const selected = Array.isArray(appState?.restoreSelectedScopes) && appState.restoreSelectedScopes.length
+      ? appState.restoreSelectedScopes
+      : available;
+    return selected.filter((key) => available.includes(key));
+  }
+
+  function restoreScopeLabel(keys) {
+    const selected = keys.length ? keys : restoreDefaultScopeKeys();
+    return restoreScopeCatalog
+      .filter((item) => selected.includes(item.key))
+      .map((item) => item.title)
+      .join("、");
+  }
+
+  function restoreScopeImpact(keys) {
+    const selected = keys.length ? keys : restoreDefaultScopeKeys();
+    const impacts = restoreScopeCatalog
+      .filter((item) => selected.includes(item.key))
+      .map((item) => item.impact);
+    return impacts.length > 2 ? `${impacts.slice(0, 2).join(" · ")} 等 ${impacts.length} 项` : impacts.join(" · ");
+  }
+
+  function restoreScopeChoiceList(appState) {
+    const available = restoreAvailableScopeKeys(appState);
+    const selected = restoreSelectedScopeKeys(appState);
+    return `
+      <section class="fd-restore-card fd-restore-scope-card">
+        <h2>选择恢复范围</h2>
+        <p>只显示当前备份包含的数据类型。至少保留一项，开始恢复前可在这里调整。</p>
+        <div class="fd-restore-scope-list" aria-label="恢复范围">
+          ${restoreScopeCatalog.filter((item) => available.includes(item.key)).map((item) => {
+            const isSelected = selected.includes(item.key);
+            return `
+              <button class="${isSelected ? "is-selected" : ""}" type="button" data-restore-scope="${esc(item.key)}" aria-pressed="${isSelected ? "true" : "false"}">
+                ${icon(item.icon, "fd-small-icon")}
+                <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
+                ${settingsSwitch(isSelected)}
+              </button>`;
+          }).join("")}
+        </div>
+      </section>`;
+  }
+
   function restoreFlowScreen(data, route, appState) {
     const restoreRecord = appState?.selectedRestoreRecord || "WebDAV · 2026-06-23 08:00 · 完整备份";
+    const selectedScopes = restoreSelectedScopeKeys(appState);
     const scopeRows = [
       ["备份来源", restoreRecord],
-      ["恢复范围", "书架与分组、阅读进度、阅读与 App 设置"],
-      ["预计影响", "128 本书 · 12 个分组 · 3 项设置"],
+      ["恢复范围", restoreScopeLabel(selectedScopes)],
+      ["预计影响", restoreScopeImpact(selectedScopes)],
       ["可回退点", "恢复前自动生成本地快照"]
     ];
     const pages = {
@@ -2969,6 +4441,7 @@
             <p>将使用选中的备份覆盖本机同类数据。恢复前会创建本地快照，取消不会改变当前数据。</p>
             <div class="fd-restore-summary-grid">${restoreSummaryRows(scopeRows)}</div>
           </section>
+          ${restoreScopeChoiceList(appState)}
           <section class="fd-restore-warning">
             ${icon("warning", "fd-small-icon")}
             <span><strong>覆盖提醒</strong><small>冲突项会在恢复过程中单独确认，不会静默覆盖。</small></span>
@@ -3079,7 +4552,8 @@
 
   function sourceShell(data, title, contentHtml, options) {
     const trailingHtml = options?.trailingHtml;
-    return shellKit().renderSettingsShell(Object.assign(phoneShellClasses("fd-settings-phone fd-source-demo-phone"), {
+    const extraPhoneClass = options?.phoneClass ? ` ${options.phoneClass}` : "";
+    return shellKit().renderSettingsShell(Object.assign(phoneShellClasses(`fd-settings-phone fd-source-demo-phone${extraPhoneClass}`), {
       data,
       title,
       ariaLabel: title,
@@ -3115,23 +4589,49 @@
   }
 
   function sourceBadge(item) {
-    return `<em class="fd-source-badge is-${esc(item.tone || "muted")}"><i></i>${esc(item.status || "")}</em>`;
+    const status = item.status || "";
+    if (!status) return "";
+    return `<em class="fd-source-badge is-${esc(item.tone || "muted")}" title="${esc(status)}" aria-label="${esc(status)}"><i aria-hidden="true"></i></em>`;
   }
 
   function sourceSwitch(enabled, title) {
     return `<button class="fd-source-switch${enabled ? " is-on" : ""}" type="button" data-source-switch="${esc(title || "")}" aria-label="${esc(title || "书源")}${enabled ? "已启用，点击禁用" : "已禁用，点击启用"}" aria-pressed="${enabled ? "true" : "false"}"><i></i></button>`;
   }
 
-  function sourceSearchAndFilters() {
+  function sourceSearchAndFilters(appState) {
+    const statusFilters = ["全部", "已启用", "异常", "未检测", "自定义"];
+    const groupFilters = ["全部分组", "玄幻书源", "起点导入", "测试书源"];
+    const activeStatus = appState?.sourceStatusFilter || "全部";
+    const activeGroup = appState?.sourceGroupFilter || "全部分组";
     return `
       <label class="fd-source-search">${icon("search", "fd-small-icon")}<span>搜索书源名称或域名</span></label>
       <p class="fd-source-stat-line">12 个书源 · 8 个启用 · 4 个异常 · 10:30 检测</p>
-      <nav class="fd-source-chip-row" aria-label="书源状态筛选">
-        ${["全部", "已启用", "异常", "未检测", "自定义"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
-      </nav>
-      <nav class="fd-source-chip-row is-group" aria-label="书源分组筛选">
-        ${["全部分组", "玄幻书源", "起点导入", "测试书源"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button" data-route="${index === 0 ? "source-groups" : "source-management"}">${esc(item)}</button>`).join("")}
-      </nav>`;
+      ${filterDisclosure({
+        className: "fd-source-filter-control",
+        label: "筛选",
+        ariaLabel: "书源筛选",
+        summary: `${activeStatus} · ${activeGroup}`,
+        toggleAttr: "data-source-filter-toggle",
+        open: Boolean(appState?.sourceFilterOpen),
+        groups: [
+          {
+            title: "状态",
+            options: statusFilters.map((item) => ({
+              label: item,
+              active: activeStatus === item,
+              attrs: { "data-source-status-filter": item }
+            }))
+          },
+          {
+            title: "分组",
+            options: groupFilters.map((item, index) => ({
+              label: item,
+              active: activeGroup === item,
+              attrs: { "data-source-group-filter": item }
+            }))
+          }
+        ]
+      })}`;
   }
 
   function sourceRow(item, mode) {
@@ -3141,9 +4641,9 @@
       <article class="fd-source-row${selected ? " is-selected" : ""}"${isBatch ? "" : ' role="button" tabindex="0" data-route="source-detail"'}>
         ${isBatch ? `<button class="fd-source-check${selected ? " is-checked" : ""}" type="button" aria-label="${esc(item.title)}${selected ? "已选择" : "未选择"}">${selected ? icon("check", "fd-small-icon") : ""}</button>` : ""}
         <span class="fd-source-row-main"><strong>${esc(item.title)}</strong><small>${esc(item.domain)} · ${esc(item.group)}</small></span>
-        ${sourceBadge(item)}
-        ${sourceSwitch(item.enabled, item.title)}
-        ${isBatch ? "" : `<button class="fd-source-row-test" type="button" data-route="source-detect" aria-label="检测 ${esc(item.title)}">${icon("activity", "fd-small-icon")}</button>`}
+        <em class="fd-source-row-state">${sourceBadge(item)}</em>
+        ${isBatch ? "" : `<button class="fd-source-row-test" type="button" data-route="source-detect" aria-label="检测 ${esc(item.title)}">检测</button>`}
+        <span class="fd-source-row-toggle">${sourceSwitch(item.enabled, item.title)}</span>
       </article>`;
   }
 
@@ -3166,7 +4666,7 @@
             <button type="button" data-route="source-batch">校验所选</button>
             <button type="button" data-route="source-logs">错误日志</button>
           </nav>` : ""}
-        ${sourceSearchAndFilters()}
+        ${sourceSearchAndFilters(appState)}
         ${sourceList(sourceItems, "home", appState)}
       </section>`;
   }
@@ -3229,7 +4729,7 @@
     return sourceShell(data, "已选 3 个", `
       <section class="fd-source-home fd-source-batch">
         <div class="fd-source-batch-top"><button type="button" data-route="source-management">取消</button><strong>已选 3 个</strong><button type="button">全选</button></div>
-        ${sourceSearchAndFilters()}
+        ${sourceSearchAndFilters(appState)}
         ${sourceList(sourceItems, "batch", appState)}
       </section>`, {
         bottomActionHtml: sourceBottomActions([
@@ -3600,7 +5100,7 @@
     return sourceShell(data, "已选 3 个", `
       <section class="fd-source-home fd-source-batch fd-source-dialog-backdrop">
         <div class="fd-source-batch-top"><button type="button" data-route="source-batch">取消</button><strong>已选 3 个</strong><button type="button">全选</button></div>
-        ${sourceSearchAndFilters()}
+        ${sourceSearchAndFilters(appState)}
         ${sourceList(sourceItems, "batch", appState)}
       </section>`, {
         bottomActionHtml: sourceBottomActions([
@@ -3666,6 +5166,143 @@
         return;
       }
       dropdown.style.setProperty("--reader-dropdown-max-height", `${normalizedDropdownHeight(dropdown, spaceBelow - 6)}px`);
+    });
+  }
+
+  function motionReducedOverride() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const value = params.get("motionReduced") || params.get("reducedMotion");
+      if (!value) return null;
+      if (["1", "true", "reduce", "reduced"].includes(value)) return true;
+      if (["0", "false", "no-preference", "off"].includes(value)) return false;
+    } catch (error) {
+      return null;
+    }
+    return null;
+  }
+
+  function applyMotionPreference(root, mediaQuery) {
+    if (!root) return;
+    const override = motionReducedOverride();
+    const reduced = override == null ? Boolean(mediaQuery && mediaQuery.matches) : override;
+    root.setAttribute("data-motion-reduced", reduced ? "true" : "false");
+    root.setAttribute("data-motion-reduced-source", override == null ? "system" : "query");
+  }
+
+  function applyMotionSelectorBindings(root) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const bind = (selector, motionId) => {
+      root.querySelectorAll(selector).forEach((element) => {
+        element.setAttribute("data-motion-id", motionId);
+      });
+    };
+
+    bind("[data-route]", "app.route.push");
+    bind("[data-route-back], [data-demo-back]", "app.route.pop");
+    bind(".fd-main-tab-phone .fd-main-nav-item", "tab.item.switch");
+    bind("[data-bookshelf-view-button], [data-book-grid], [data-bookshelf-view]", "bookshelf.view.switch");
+    bind("[data-bookshelf-filter-toggle]", "dropdown.trigger.press");
+    bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option]", "dropdown.option.select");
+    bind("[data-book-card]", "card.press/select/route");
+    bind("[data-book-cover]", "reader.entry.coverToImmersive");
+    bind("[data-close-book-focus], [data-book-focus-layer], [data-focus-cover], [data-focus-title], [data-focus-meta]", "card.select");
+    bind("[data-bookshelf-more-layer]", "dropdown.menu.expand/collapse");
+    bind("[data-close-bookshelf-more]", "dropdown.menu.collapse");
+    bind("[data-open-keyboard]", "input.focus");
+    bind("[data-close-keyboard]", "input.blur");
+    bind("[data-keyboard-host]", "overlay.keyboard.enter/exit");
+    bind("[data-keyboard-input]", "input.focus/blur");
+    bind("[data-open-sheet]", "overlay.sheet.enter");
+    bind("[data-close-sheet]", "overlay.sheet.exit");
+    bind("[data-demo-sheet]", "overlay.sheet.enter/exit");
+    bind("[data-open-dialog]", "overlay.dialog.enter");
+    bind("[data-close-dialog]", "overlay.dialog.exit");
+    bind("[data-demo-dialog]", "overlay.dialog.enter/exit");
+    bind("[data-discover-entry]", "chip.item.select");
+    bind("[data-discover-filter], [data-rss-group-filter], [data-rss-manage-filter], [data-rss-category-filter], [data-rss-favorite-filter], [data-source-status-filter], [data-source-group-filter]", "filter.item.toggle");
+    bind("[data-discover-reset], [data-filter-close]", "filter.apply.commit");
+    bind("[data-filter-toggle], [data-bookshelf-filter-toggle], [data-discover-filter-toggle], [data-discover-sort-toggle], [data-rss-group-filter-toggle], [data-rss-manage-filter-toggle], [data-rss-category-filter-toggle], [data-rss-favorite-filter-toggle], [data-source-filter-toggle], [data-source-menu-toggle], [data-reader-more-toggle], [data-settings-option-key], [data-reader-setting-option-key], [data-reader-tts-option-key]", "dropdown.trigger.press");
+    bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option], [data-discover-sort-option], [data-settings-option-choice], [data-settings-option-value], [data-reader-setting-option], [data-reader-tts-option]", "dropdown.option.select");
+    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer]", "dropdown.menu.expand/collapse");
+    bind("[data-settings-overlay]", "overlay.dialog.enter/exit");
+    bind("[data-close-settings-overlay]", "overlay.dialog.exit");
+    bind("[data-settings-confirm-result], [data-main-tab-feedback]", "feedback.toast.enter/update/exit");
+    bind("[data-search-submit], [data-primary-search-submit]", "input.submit");
+    bind("[data-search-reset]", "input.clear");
+    bind("[data-search-state]", "search.state.replace");
+    bind("[data-add-search-shelf], [data-top-action], [data-book-action]", "button.activate");
+    bind("[data-reader-setting-toggle], [data-source-switch], [data-restore-scope], [data-reader-brightness-auto], [data-reader-replace-rule]", "toggle.switch");
+    bind("[data-reader-brightness-track], [data-reader-chapter-progress]", "slider.drag.start/update/release");
+    bind("[data-reader-typography-action], [data-reader-page-space-action]", "stepper.press/value.change");
+    bind("[data-reader-typography-set], [data-reader-page-space-set], [data-reader-theme], [data-reader-theme-pair], [data-reader-theme-scheme], [data-reader-toc-mode]", "segment.item.switch");
+    bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value], [data-reader-tts-value], [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
+    bind("[data-reader-page-action]", "reader.page.turn.next/prev");
+    bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
+    bind("[data-reader-dismiss]", "reader.control.hide");
+    bind("[data-reader-exit]", "app.route.pop");
+    bind("[data-reader-loading]", "state.loading.inline");
+    bind("[data-reader-tts-action]", "reader.session.capsule.control.press/toggle");
+    bind("[data-reader-tts-cycle]", "reader.session.capsule.update");
+    bind("[data-reader-immersive-status], [data-reader-immersive-status-playing], [data-reader-immersive-status-type]", "reader.session.capsule.enter/update/exit");
+    bind("[data-reader-more-action]", "dropdown.option.select");
+    bind("[data-reader-more-close]", "dropdown.menu.collapse");
+    bind("[data-reader-selection-layer]", "selection.range.show");
+    bind("[data-reader-selection-action]", "selection.toolbar.action");
+    bind("[data-reader-selection-close]", "selection.toolbar.exit");
+    bind("[data-quick-action]", "reader.quick.promote");
+    bind("[data-source-name]", "listRow.select");
+    bind("[data-source-switch-window]", "reader.sourceSwitch.open/close");
+    bind("[data-restore-record]", "card.route");
+    bind("[data-restore-scopes], [data-settings-scope], [data-source-index]", "state.content.replace");
+    bind("[data-width-class], [data-height-class], [data-orientation], [data-viewport-class], [data-viewport-width], [data-viewport-height]", "viewport.orientation.reshape");
+    bind("[data-demo-mode-option], [data-demo-mode]", "segment.item.switch");
+    bind("[data-capture-mode], [data-capture-route]", "tooling.mode.switch");
+
+    root.querySelectorAll("[role='button']").forEach((element) => {
+      if (!element.hasAttribute("data-motion-id")) {
+        element.setAttribute("data-motion-id", "listRow.press");
+      }
+    });
+  }
+
+  function attachMotionPressState(root, motionController) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const pressables = root.querySelectorAll("button, [role='button'], [data-route], [data-route-back], [data-motion-id]");
+    pressables.forEach((element) => {
+      if (element.__readerMotionPressBound) return;
+      element.__readerMotionPressBound = true;
+      const isDisabled = () => element.disabled || element.getAttribute("aria-disabled") === "true";
+      const setPressed = (pressed) => {
+        if (isDisabled()) return;
+        element.classList.toggle("is-motion-pressed", pressed);
+        if (pressed) {
+          element.setAttribute("data-motion-pressed", "true");
+        } else {
+          element.removeAttribute("data-motion-pressed");
+        }
+      };
+      element.addEventListener("pointerdown", (event) => {
+        if (event.button && event.button !== 0) return;
+        if (motionController) {
+          const motionId = element.getAttribute("data-motion-id") || "button.press";
+          motionController.start({
+            id: motionId.includes("press") ? motionId : `${motionId}.press`,
+            action: "press",
+            target: element
+          });
+        }
+        setPressed(true);
+      });
+      ["pointerup", "pointercancel", "pointerleave", "blur"].forEach((eventName) => {
+        element.addEventListener(eventName, () => setPressed(false));
+      });
+      element.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          setPressed(true);
+        }
+      });
+      element.addEventListener("keyup", () => setPressed(false));
     });
   }
 
@@ -3778,13 +5415,208 @@
       case "bookshelf":
         return mainTabBookshelf(data, appState);
       case "discover":
-        return mainTabDiscover(data, appState);
+      case "discover-control":
+      case "discover-sort":
+      case "discover-entry-ranking":
+      case "discover-entry-bestseller":
+      case "discover-entry-category":
+      case "discover-entry-finished":
+      case "discover-entry-latest":
+      case "discover-entry-new":
+      case "discover-entry-booklist":
+      case "discover-filter-keyword":
+      case "discover-filter-male":
+      case "discover-filter-female":
+      case "discover-sort-popularity":
+      case "discover-sort-update":
+      case "discover-sort-collection":
+      case "discover-sort-finished":
+      case "discover-sort-words":
+      case "discover-no-results":
+      case "discover-loading":
+      case "discover-refreshing":
+      case "discover-infinite-loading":
+      case "discover-page-two":
+      case "discover-cache-confirm":
+      case "discover-cache-toast":
+      case "discover-login-return":
+      case "discover-switching-source":
+      case "discover-switched-source":
+      case "discover-entry-error":
+      case "discover-empty":
+      case "discover-error":
+        return mainTabDiscover(data, appState, route);
+      case "discover-source-login":
+        return discoverSourceLoginScreen(data);
+      case "discover-rule-test":
+        return discoverRuleTestScreen(data);
+      case "discover-source-bulk":
+        return discoverSourceBulkScreen(data);
       case "rss":
-        return mainTabRss(data, appState);
+      case "rss-all":
+      case "rss-source-feed":
+      case "rss-source-category-releases":
+      case "rss-source-category-issues":
+      case "rss-source-category-discussions":
+      case "rss-refreshing":
+        return mainTabRss(data, appState, route);
+      case "rss-starred":
+        return rssFavoritesScreen(data, appState);
       case "rss-detail":
         return rssDetailScreen(data, appState);
+      case "rss-original":
+        return rssOriginalScreen(data, appState);
+      case "rss-original-browser":
+        return rssConfirmScreen(data, {
+          title: "系统浏览器",
+          icon: "globe",
+          heading: "已准备打开原文链接",
+          copy: "实际应用中这里会调用系统浏览器打开 github.com/minliny/Reader-UI/releases/latest，同时保留当前 RSS 阅读上下文。",
+          cancelLabel: "返回原文页",
+          cancelRoute: "rss-original",
+          confirmRoute: "rss-detail",
+          confirmLabel: "回到正文"
+        }, appState);
+      case "rss-search":
+        return rssSearchScreen(data, appState);
       case "rss-subscription-management":
         return rssSubscriptionManagementScreen(data, appState);
+      case "rss-source-actions":
+        return rssSourceActionsScreen(data, appState);
+      case "rss-source-edit":
+        return rssSourceEditScreen(data, appState);
+      case "rss-source-debug":
+        return rssSourceDebugScreen(data, appState);
+      case "rss-source-vars":
+        return rssSourceVarsScreen(data, appState);
+      case "rss-source-login":
+        return rssSourceLoginScreen(data, appState);
+      case "rss-source-login-web":
+        return rssSourceLoginWebScreen(data, appState);
+      case "rss-source-login-cookie":
+        return rssSourceLoginCookieScreen(data, appState);
+      case "rss-source-login-clear":
+        return rssConfirmScreen(data, {
+          title: "清除登录",
+          icon: "trash",
+          heading: "清除当前源登录信息？",
+          copy: "清除后该 RSS 源下次刷新会重新进入登录流程，不影响其他订阅源和已缓存文章。",
+          cancelRoute: "rss-source-login",
+          confirmRoute: "rss-source-actions",
+          confirmLabel: "确认清除"
+        }, appState);
+      case "rss-source-groups":
+        return rssSourceGroupsScreen(data, appState);
+      case "rss-source-group-edit":
+        return rssSourceGroupEditScreen(data, appState);
+      case "rss-source-batch":
+        return rssSourceBatchScreen(data, appState);
+      case "rss-source-export":
+        return rssSourceExportScreen(data, appState);
+      case "rss-source-export-detail":
+        return rssSourceExportDetailScreen(data, appState);
+      case "rss-source-export-result":
+        return rssConfirmScreen(data, {
+          title: "导出完成",
+          icon: "check",
+          heading: "已生成导出文件",
+          copy: "reader-rss-sources-20260626.json 已生成，包含已选订阅源、分组、启用状态和规则配置。",
+          detail: "登录 Cookie 和账号凭据没有写入导出文件。",
+          cancelLabel: "返回导出",
+          cancelRoute: "rss-source-export",
+          confirmRoute: "rss-subscription-management",
+          confirmLabel: "完成"
+        }, appState);
+      case "rss-source-pin":
+        return rssConfirmScreen(data, {
+          title: "置顶订阅源",
+          icon: "top",
+          heading: "置顶 GitHub Releases？",
+          copy: "置顶后该订阅源会显示在源列表和快捷入口最前面，不影响刷新规则和分组。",
+          detail: "适合高频阅读的发布源、公告源或需要优先查看的订阅源。",
+          confirmRoute: "rss-source-feed",
+          confirmLabel: "确认置顶"
+        }, appState);
+      case "rss-source-disable":
+        return rssConfirmScreen(data, {
+          title: "禁用订阅源",
+          icon: "offline",
+          heading: "禁用已选订阅源？",
+          copy: "禁用后不会参与自动刷新、未读提醒和 RSS 首页统计，已缓存条目和阅读记录会保留。",
+          detail: "可以在订阅管理页重新启用。",
+          confirmRoute: "rss-subscription-management",
+          confirmLabel: "确认禁用"
+        }, appState);
+      case "rss-source-batch-disable":
+        return rssConfirmScreen(data, {
+          title: "批量禁用",
+          icon: "offline",
+          heading: "禁用已选 2 个订阅源？",
+          copy: "禁用后这些订阅源不会参与自动刷新、未读提醒和首页统计，已缓存条目和阅读记录会保留。",
+          cancelRoute: "rss-source-batch",
+          confirmRoute: "rss-subscription-management",
+          confirmLabel: "确认禁用"
+        }, appState);
+      case "rss-source-import":
+        return rssSourceImportScreen(data, appState);
+      case "rss-source-import-detail":
+        return rssSourceImportDetailScreen(data, appState);
+      case "rss-source-import-result":
+        return rssConfirmScreen(data, {
+          title: "导入完成",
+          icon: "check",
+          heading: "已导入 2 个订阅源",
+          copy: "新增源已加入 RSS 订阅管理，冲突源保留本地名称、分组和启用状态。",
+          detail: "需要登录的源不会自动导入 Cookie。",
+          cancelLabel: "继续导入",
+          cancelRoute: "rss-source-import",
+          confirmRoute: "rss-subscription-management",
+          confirmLabel: "完成"
+        }, appState);
+      case "rss-read-record":
+        return rssReadRecordScreen(data, appState);
+      case "rss-record-clear":
+        return rssConfirmScreen(data, {
+          title: "清空阅读记录",
+          icon: "trash",
+          heading: "清空 RSS 阅读记录？",
+          copy: "只会清除 RSS 阅读历史，不会删除收藏、订阅源、未读状态或正文缓存。",
+          cancelRoute: "rss-read-record",
+          confirmRoute: "rss-read-record",
+          confirmLabel: "确认清空"
+        }, appState);
+      case "rss-rule-subscription":
+        return rssRuleSubscriptionScreen(data, appState);
+      case "rss-rule-subscription-detail":
+        return rssRuleSubscriptionDetailScreen(data, appState);
+      case "rss-rule-subscription-edit":
+        return rssRuleSubscriptionEditScreen(data, appState);
+      case "rss-rule-subscription-test":
+        return rssRuleSubscriptionTestScreen(data, appState);
+      case "rss-rule-subscription-apply":
+        return rssConfirmScreen(data, {
+          title: "应用订阅更新",
+          icon: "sync",
+          heading: "应用社区 RSS 源订阅更新？",
+          copy: "将新增 2 个源、更新 1 个规则，并跳过 1 个本地冲突。登录凭据不会被覆盖。",
+          cancelRoute: "rss-rule-subscription-detail",
+          confirmRoute: "rss-source-import",
+          confirmLabel: "进入导入预览"
+        }, appState);
+      case "rss-favorite-groups":
+        return rssFavoriteGroupsScreen(data, appState);
+      case "rss-favorite-group-edit":
+        return rssFavoriteGroupEditScreen(data, appState);
+      case "rss-favorite-clear":
+        return rssConfirmScreen(data, {
+          title: "清空收藏分组",
+          icon: "trash",
+          heading: "清空默认分组收藏？",
+          copy: "仅移除当前收藏分组里的条目，文章本身和订阅源不会删除。",
+          cancelRoute: "rss-starred",
+          confirmRoute: "rss-starred",
+          confirmLabel: "确认清空"
+        }, appState);
       case "rss-empty":
       case "rss-error":
         return rssStateScreen(data, route, appState);
@@ -3801,7 +5633,7 @@
       case "book-batch-management":
         return bookBatchManagementScreen(data);
       case "sort-filter":
-        return sortFilterScreen(data);
+        return sortFilterScreen(data, appState);
       case "group-management":
         return groupManagementScreen(data);
       case "local-import":
@@ -3860,8 +5692,6 @@
         return sourceDeleteConfirmScreen(data, appState);
       case "settings-general":
       case "bookshelf-search-settings":
-      case "privacy-permissions":
-      case "cache-management":
       case "about-feedback":
       case "sync-backup":
         return settingsScreen(data, route, appState);
@@ -3911,11 +5741,29 @@
       readerTextSelectionOpen: false,
       readerSelectedText: "雨，下了一整夜。",
       readerSettingsExpandedOption: "",
+      discoverEntry: "",
+      discoverFilter: "男频",
+      discoverSort: "",
+      discoverFilterOpen: false,
+      discoverSortOpen: false,
+      rssGroupFilter: "全部",
+      rssGroupFilterOpen: false,
+      rssManageFilter: "全部",
+      rssManageFilterOpen: false,
+      rssCategoryFilterOpen: false,
+      rssFavoriteFilter: "默认分组",
+      rssFavoriteFilterOpen: false,
       sourceSwitchSelectedSource: "",
       sourceMenuOpen: false,
+      sourceStatusFilter: "全部",
+      sourceGroupFilter: "全部分组",
+      sourceFilterOpen: false,
       sourceEnabled: {},
+      restoreAvailableScopes: restoreDefaultScopeKeys(),
+      restoreSelectedScopes: restoreDefaultScopeKeys(),
       settingsOverlay: "",
       settingsExpandedOption: "",
+      settingsToast: "",
       settingsValues: {},
       mainTabFeedback: ""
     };
@@ -4019,22 +5867,69 @@
     const routeStack = ["bookshelf"];
     const appState = initialAppState(data);
     let pendingRouteTimer = null;
-    applyViewportClass(root);
+    let hasRenderedInitialRoute = false;
+    const motionController = window.ReaderMotionController
+      ? window.ReaderMotionController.create({ root })
+      : null;
+    let viewportSnapshot = applyViewportClass(root);
     if (target.__readerAdaptiveViewportCleanup) {
       target.__readerAdaptiveViewportCleanup();
     }
+    const motionMediaQuery = typeof window.matchMedia === "function"
+      ? window.matchMedia("(prefers-reduced-motion: reduce)")
+      : null;
     const handleViewportChange = () => {
-      applyViewportClass(root);
+      const previousSnapshot = viewportSnapshot;
+      const nextSnapshot = applyViewportClass(root);
+      if (
+        motionController &&
+        previousSnapshot &&
+        nextSnapshot &&
+        (previousSnapshot.orientation !== nextSnapshot.orientation || previousSnapshot.viewportClass !== nextSnapshot.viewportClass)
+      ) {
+        motionController.start({
+          id: "viewport.orientation.reshape",
+          action: "reshape",
+          from: previousSnapshot.viewportClass,
+          to: nextSnapshot.viewportClass
+        });
+      }
+      viewportSnapshot = nextSnapshot;
       adjustReaderDropdownPlacement(screenHost);
     };
+    const syncMotionPreference = () => {
+      applyMotionPreference(root, motionMediaQuery);
+      if (motionController) {
+        motionController.setReducedMotion(root.getAttribute("data-motion-reduced") === "true");
+      }
+    };
+    const handleMotionPreferenceChange = syncMotionPreference;
     window.addEventListener("resize", handleViewportChange);
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleViewportChange);
     }
+    if (motionMediaQuery) {
+      if (typeof motionMediaQuery.addEventListener === "function") {
+        motionMediaQuery.addEventListener("change", handleMotionPreferenceChange);
+      } else if (typeof motionMediaQuery.addListener === "function") {
+        motionMediaQuery.addListener(handleMotionPreferenceChange);
+      }
+    }
+    syncMotionPreference();
     target.__readerAdaptiveViewportCleanup = () => {
+      if (motionController) {
+        motionController.destroy();
+      }
       window.removeEventListener("resize", handleViewportChange);
       if (window.visualViewport) {
         window.visualViewport.removeEventListener("resize", handleViewportChange);
+      }
+      if (motionMediaQuery) {
+        if (typeof motionMediaQuery.removeEventListener === "function") {
+          motionMediaQuery.removeEventListener("change", handleMotionPreferenceChange);
+        } else if (typeof motionMediaQuery.removeListener === "function") {
+          motionMediaQuery.removeListener(handleMotionPreferenceChange);
+        }
       }
     };
 
@@ -4088,7 +5983,9 @@
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         updateRouteInfo(route);
       }
-      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute);
+      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
+      applyMotionSelectorBindings(screenHost);
+      attachMotionPressState(screenHost, motionController);
       adjustReaderDropdownPlacement(screenHost);
       if (renderedTurnDirection) {
         const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
@@ -4109,7 +6006,7 @@
       renderActiveRoute(routeStack[routeStack.length - 1]);
     };
 
-    const goTo = (route, shouldPush) => {
+    const goTo = (route, shouldPush, motionInput) => {
       if (!routes[route]) {
         return;
       }
@@ -4121,12 +6018,28 @@
       if (shouldPush && previous !== route) {
         routeStack.push(route);
       }
+      if (motionController) {
+        const routeAction = hasRenderedInitialRoute ? (shouldPush ? "push" : "replace") : "firstOpen";
+        motionController.start(motionInput || {
+          id: routeAction === "firstOpen"
+            ? "app.firstOpen.enter"
+            : routeAction === "push"
+              ? "app.route.push.forward"
+              : "app.route.replace",
+          action: routeAction,
+          from: previous,
+          to: route
+        });
+      }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
+      appState.settingsToast = "";
       appState.mainTabFeedback = "";
       appState.readerMoreOpen = false;
+      appState.discoverSortOpen = false;
       if (shouldLoadReaderTransition(previous, route)) {
         renderActiveRoute(route, { loading: true });
+        hasRenderedInitialRoute = true;
         pendingRouteTimer = window.setTimeout(() => {
           pendingRouteTimer = null;
           renderActiveRoute(route);
@@ -4134,6 +6047,7 @@
         return;
       }
       renderActiveRoute(route);
+      hasRenderedInitialRoute = true;
     };
 
     const goTab = (route) => {
@@ -4146,13 +6060,25 @@
       }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
+      appState.settingsToast = "";
       appState.mainTabFeedback = "";
       appState.readerMoreOpen = false;
+      appState.discoverSortOpen = false;
+      const previous = routeStack[routeStack.length - 1];
+      if (motionController) {
+        motionController.start({
+          id: previous === route ? "tab.item.press" : "tab.item.switch",
+          action: previous === route ? "press" : "switch",
+          from: previous,
+          to: route
+        });
+      }
       routeStack.splice(0, routeStack.length, route);
       renderActiveRoute(route);
+      hasRenderedInitialRoute = true;
     };
 
-    const replaceTopRoute = (route) => {
+    const replaceTopRoute = (route, motionInput) => {
       if (!routes[route]) {
         return;
       }
@@ -4160,16 +6086,28 @@
         window.clearTimeout(pendingRouteTimer);
         pendingRouteTimer = null;
       }
+      const previous = routeStack[routeStack.length - 1] || "";
       if (routeStack.length === 0) {
         routeStack.push(route);
       } else {
         routeStack[routeStack.length - 1] = route;
       }
+      if (motionController) {
+        motionController.start(motionInput || {
+          id: "app.route.replace",
+          action: "replace",
+          from: previous,
+          to: route
+        });
+      }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
+      appState.settingsToast = "";
       appState.mainTabFeedback = "";
       appState.readerMoreOpen = false;
+      appState.discoverSortOpen = false;
       renderActiveRoute(route);
+      hasRenderedInitialRoute = true;
     };
 
     const exitReader = () => {
@@ -4177,15 +6115,32 @@
         window.clearTimeout(pendingRouteTimer);
         pendingRouteTimer = null;
       }
+      const fromRoute = routeStack[routeStack.length - 1] || "reader";
       while (routeStack.length > 1 && isReaderStateRoute(routeStack[routeStack.length - 1])) {
         routeStack.pop();
       }
       const targetRoute = routeStack[routeStack.length - 1];
       if (targetRoute && !isReaderStateRoute(targetRoute)) {
+        if (motionController) {
+          motionController.start({
+            id: "app.route.pop.backward",
+            action: "reader-exit",
+            from: fromRoute,
+            to: targetRoute
+          });
+        }
         renderActiveRoute(targetRoute);
         return;
       }
       routeStack.splice(0, routeStack.length, "bookshelf");
+      if (motionController) {
+        motionController.start({
+          id: "app.route.pop.backward",
+          action: "reader-exit",
+          from: fromRoute,
+          to: "bookshelf"
+        });
+      }
       renderActiveRoute("bookshelf");
     };
 
@@ -4197,12 +6152,20 @@
         window.clearTimeout(pendingRouteTimer);
         pendingRouteTimer = null;
       }
+      const fromRoute = routeStack[routeStack.length - 1];
       routeStack.pop();
+      const toRoute = routeStack[routeStack.length - 1];
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
+      appState.settingsToast = "";
       appState.mainTabFeedback = "";
       appState.readerMoreOpen = false;
-      goTo(routeStack[routeStack.length - 1], false);
+      goTo(toRoute, false, {
+        id: "app.route.pop.backward",
+        action: "pop",
+        from: fromRoute,
+        to: toRoute
+      });
     }
 
     if (backButton) {
@@ -4228,7 +6191,7 @@
     goTo(initialRoute, false);
   }
 
-  function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute) {
+  function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController) {
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const openReaderTextSelection = () => {
@@ -4409,7 +6372,12 @@
         if (tts.playing) {
           appState.readerAutoPageSession = false;
           appState.readerSettings.autoPage = false;
-          replaceTopRoute("immersive-reading");
+          replaceTopRoute("immersive-reading", {
+            id: "reader.session.tts.start",
+            action: "session-start",
+            from: currentRoute(),
+            to: "immersive-reading"
+          });
           return;
         }
       }
@@ -4451,7 +6419,12 @@
         if (appState.readerSettings[key]) {
           appState.readerTtsSession = false;
           appState.readerTts.playing = false;
-          replaceTopRoute("immersive-reading");
+          replaceTopRoute("immersive-reading", {
+            id: "reader.session.autoPage.start",
+            action: "session-start",
+            from: currentRoute(),
+            to: "immersive-reading"
+          });
           return;
         }
       }
@@ -4534,6 +6507,38 @@
       button.addEventListener("click", () => applyBookshelfView(button.getAttribute("data-bookshelf-view-button")));
     });
 
+    screenHost.querySelectorAll("[data-bookshelf-filter-toggle]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.bookshelfFilterOpen = button.getAttribute("aria-expanded") !== "true";
+        closeFilterDisclosures("bookshelfFilterOpen");
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-bookshelf-group-option]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.bookshelfGroup = button.getAttribute("data-bookshelf-group-option") || "全部";
+        appState.bookshelfFilterOpen = true;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-bookshelf-sort-option]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.bookshelfSort = button.getAttribute("data-bookshelf-sort-option") || "最近更新";
+        appState.bookshelfFilterOpen = true;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-bookshelf-filter-option]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.bookshelfFilter = button.getAttribute("data-bookshelf-filter-option") || "全部";
+        appState.bookshelfFilterOpen = true;
+        renderCurrentRoute();
+      });
+    });
+
     const closeBookshelfMore = (phone) => {
       const layer = phone?.querySelector("[data-bookshelf-more-layer]");
       if (layer) {
@@ -4542,6 +6547,14 @@
     };
 
     const currentRoute = () => screenHost.closest(".fd-demo")?.getAttribute("data-current-route") || "";
+    const filterOpenKeys = ["bookshelfFilterOpen", "discoverFilterOpen", "rssGroupFilterOpen", "rssManageFilterOpen", "rssCategoryFilterOpen", "rssFavoriteFilterOpen", "sourceFilterOpen"];
+    const closeFilterDisclosures = (exceptKey) => {
+      filterOpenKeys.forEach((key) => {
+        if (key !== exceptKey) {
+          appState[key] = false;
+        }
+      });
+    };
     const setMainTabFeedback = (message) => {
       appState.mainTabFeedback = message;
       renderCurrentRoute();
@@ -4550,7 +6563,7 @@
       const action = button.getAttribute("data-top-action") || button.getAttribute("aria-label") || "";
       const route = currentRoute();
       if (action === "search") {
-        if (route === "bookshelf" || route === "discover") {
+        if (route === "bookshelf" || route === "bookshelf-empty" || route === "sort-filter" || route === "discover") {
           appState.bookSearchPhase = "before";
           goTo("book-search", true);
           return;
@@ -4565,7 +6578,7 @@
         }
       }
       if (action === "more") {
-        if (route === "bookshelf" || route === "bookshelf-empty") {
+        if (route === "bookshelf" || route === "bookshelf-empty" || route === "sort-filter") {
           const phone = button.closest(".fd-phone");
           const layer = phone?.querySelector("[data-bookshelf-more-layer]");
           if (layer) {
@@ -4582,7 +6595,21 @@
         setMainTabFeedback(messages[route] || "更多入口已保留，当前页面暂不展开完整次级流程。");
         return;
       }
+      if (action === "source-stack") {
+        if (route === "rss" || route.startsWith("rss-")) {
+          goTo("rss-subscription-management", true);
+          return;
+        }
+      }
       if (action === "refresh") {
+        if (route === "discover" || route.startsWith("discover-")) {
+          goTo("discover-refreshing", true);
+          return;
+        }
+        if (route === "rss" || route.startsWith("rss-")) {
+          goTo("rss-refreshing", true);
+          return;
+        }
         setMainTabFeedback("刷新应发生在当前内容区，不替换 MainTabShell 顶部结构。");
       }
     };
@@ -4638,6 +6665,7 @@
       }
       if (overlay === "sheet" || overlay === "dialog" || overlay.startsWith("dialog:")) {
         appState.settingsOverlay = overlay;
+        appState.settingsToast = "";
         renderCurrentRoute();
       }
     };
@@ -4657,7 +6685,9 @@
 
     screenHost.querySelectorAll("[data-close-settings-overlay]").forEach((button) => {
       button.addEventListener("click", () => {
+        const resultToast = button.getAttribute("data-settings-confirm-result") || "";
         appState.settingsOverlay = "";
+        appState.settingsToast = resultToast;
         renderCurrentRoute();
       });
     });
@@ -4667,6 +6697,7 @@
         const key = targetEl.getAttribute("data-settings-option-key") || "";
         appState.settingsOverlay = "";
         appState.settingsExpandedOption = appState.settingsExpandedOption === key ? "" : key;
+        appState.settingsToast = "";
         renderCurrentRoute();
       };
       targetEl.addEventListener("click", (event) => {
@@ -4690,6 +6721,7 @@
         appState.settingsValues[key] = value;
         appState.settingsExpandedOption = "";
         appState.settingsOverlay = "";
+        appState.settingsToast = "";
         renderCurrentRoute();
       });
     });
@@ -4777,7 +6809,84 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
+        closeFilterDisclosures();
         appState.sourceMenuOpen = !appState.sourceMenuOpen;
+        renderCurrentRoute();
+      });
+    });
+
+    [
+      ["[data-discover-filter-toggle]", "discoverFilterOpen"],
+      ["[data-rss-group-filter-toggle]", "rssGroupFilterOpen"],
+      ["[data-rss-manage-filter-toggle]", "rssManageFilterOpen"],
+      ["[data-rss-category-filter-toggle]", "rssCategoryFilterOpen"],
+      ["[data-rss-favorite-filter-toggle]", "rssFavoriteFilterOpen"],
+      ["[data-source-filter-toggle]", "sourceFilterOpen"]
+    ].forEach(([selector, key]) => {
+      screenHost.querySelectorAll(selector).forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          const next = !appState[key];
+          closeFilterDisclosures(key);
+          appState[key] = next;
+          renderCurrentRoute();
+        });
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-group-filter]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.rssGroupFilter = button.getAttribute("data-rss-group-filter") || "全部";
+        appState.rssGroupFilterOpen = false;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-manage-filter]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.rssManageFilter = button.getAttribute("data-rss-manage-filter") || "全部";
+        appState.rssManageFilterOpen = false;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-category-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.rssCategoryFilterOpen = false;
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-favorite-filter]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.rssFavoriteFilter = button.getAttribute("data-rss-favorite-filter") || "默认分组";
+        appState.rssFavoriteFilterOpen = false;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-source-status-filter]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.sourceStatusFilter = button.getAttribute("data-source-status-filter") || "全部";
+        appState.sourceFilterOpen = false;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-source-group-filter]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.sourceGroupFilter = button.getAttribute("data-source-group-filter") || "全部分组";
+        appState.sourceFilterOpen = false;
         renderCurrentRoute();
       });
     });
@@ -4805,11 +6914,53 @@
       });
     });
 
+    screenHost.querySelectorAll("[data-discover-sort-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        closeFilterDisclosures("discoverFilterOpen");
+        appState.discoverFilterOpen = true;
+        appState.discoverSortOpen = !appState.discoverSortOpen;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-discover-sort-option]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.discoverSort = button.getAttribute("data-discover-sort-option") || "";
+        appState.discoverFilterOpen = false;
+        appState.discoverSortOpen = false;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-restore-scope]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const key = button.getAttribute("data-restore-scope") || "";
+        const available = restoreAvailableScopeKeys(appState);
+        if (!available.includes(key)) return;
+        const selected = restoreSelectedScopeKeys(appState);
+        const next = selected.includes(key)
+          ? selected.filter((item) => item !== key)
+          : selected.concat(key);
+        appState.restoreSelectedScopes = next.length ? next : selected;
+        renderCurrentRoute();
+      });
+    });
+
     screenHost.querySelectorAll("[data-route]").forEach((targetEl) => {
       if (targetEl.hasAttribute("data-book-cover")) {
         return;
       }
-      const navigate = () => {
+      const navigate = (event) => {
+        if (event) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
         const route = targetEl.getAttribute("data-route");
         const shouldReplaceRoute = targetEl.hasAttribute("data-route-replace") || Boolean(targetEl.closest(".fd-source-control-continuity"));
         if (targetEl.classList.contains("fd-reader-module") && route === currentRoute()) {
@@ -4819,8 +6970,39 @@
         if (route === "book-search") {
           appState.bookSearchPhase = "before";
         }
+        if (targetEl.hasAttribute("data-discover-reset")) {
+          appState.discoverEntry = "";
+          appState.discoverFilter = "男频";
+          appState.discoverSort = "";
+          appState.discoverFilterOpen = false;
+          appState.discoverSortOpen = false;
+        } else {
+          if (targetEl.hasAttribute("data-discover-entry")) {
+            appState.discoverEntry = targetEl.getAttribute("data-discover-entry") || "";
+          }
+          if (targetEl.hasAttribute("data-discover-filter")) {
+            appState.discoverFilter = targetEl.getAttribute("data-discover-filter") || "男频";
+            appState.discoverFilterOpen = false;
+            appState.discoverSortOpen = false;
+          }
+          if (targetEl.hasAttribute("data-discover-sort")) {
+            appState.discoverSort = targetEl.getAttribute("data-discover-sort") || "";
+            appState.discoverFilterOpen = false;
+            appState.discoverSortOpen = false;
+          }
+        }
+        if (targetEl.hasAttribute("data-filter-close")) {
+          closeFilterDisclosures();
+          appState.discoverSortOpen = false;
+        }
         if (targetEl.hasAttribute("data-restore-record")) {
           appState.selectedRestoreRecord = targetEl.getAttribute("data-restore-record") || "";
+          const scopeKeys = (targetEl.getAttribute("data-restore-scopes") || "")
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+          appState.restoreAvailableScopes = scopeKeys.length ? scopeKeys : restoreDefaultScopeKeys();
+          appState.restoreSelectedScopes = appState.restoreAvailableScopes.slice();
         }
         if (targetEl.closest("[data-reader-more-layer]")) {
           appState.readerMoreOpen = false;
@@ -4836,7 +7018,7 @@
       targetEl.addEventListener("keydown", (event) => {
         if (event.key === "Enter" || event.key === " ") {
           event.preventDefault();
-          navigate();
+          navigate(event);
         }
       });
     });
@@ -4878,13 +7060,23 @@
           return;
         }
         closeBookFocus(button.closest(".fd-phone"));
-        goTo(button.getAttribute("data-route") || "immersive-reading", true);
+        goTo(button.getAttribute("data-route") || "immersive-reading", true, {
+          id: "reader.entry.coverToImmersive",
+          action: "cover-route",
+          from: currentRoute(),
+          to: button.getAttribute("data-route") || "immersive-reading"
+        });
       });
       button.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault();
           closeBookFocus(button.closest(".fd-phone"));
-          goTo(button.getAttribute("data-route") || "immersive-reading", true);
+          goTo(button.getAttribute("data-route") || "immersive-reading", true, {
+            id: "reader.entry.coverToImmersive",
+            action: "cover-route",
+            from: currentRoute(),
+            to: button.getAttribute("data-route") || "immersive-reading"
+          });
         }
         if (event.key === " ") {
           event.preventDefault();

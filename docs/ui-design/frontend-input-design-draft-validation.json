@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-25T14:47:21.875Z",
+  "generatedAt": "2026-06-26T10:10:57.896Z",
   "manifest": "docs/ui-design/frontend-input/manifest.json",
   "passed": true,
   "tokenContract": {
@@ -99,7 +99,7 @@
     "passed": true,
     "failures": [],
     "expectedMainNav": "书架 / 发现 / RSS / 设置",
-    "checkedFileCount": 114
+    "checkedFileCount": 115
   },
   "projectStructureContract": {
     "passed": true,
@@ -110,17 +110,17 @@
     "passed": true,
     "failures": [],
     "moduleCount": 3,
-    "checkedDemoRouteCount": 15,
-    "checkedManifestTargetCount": 20,
-    "checkedHandoffPageCount": 21,
-    "checkedRouteManifestMapCount": 20,
-    "checkedHandoffRouteMapCount": 21
+    "checkedDemoRouteCount": 86,
+    "checkedManifestTargetCount": 16,
+    "checkedHandoffPageCount": 20,
+    "checkedRouteManifestMapCount": 119,
+    "checkedHandoffRouteMapCount": 20
   },
   "frontendDemoSplitContract": {
     "passed": true,
     "failures": [],
     "renderEntryLines": 9,
-    "styleEntryLines": 10,
+    "styleEntryLines": 11,
     "styleChunkCount": 7,
     "styleChunks": [
       "00-foundation.css",
@@ -836,7 +836,7 @@
             "readerAvoidance": null,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-compact-portrait.png",
-              "bytes": 112024,
+              "bytes": 117822,
               "dimensions": {
                 "width": 320,
                 "height": 568
@@ -909,7 +909,7 @@
             "readerAvoidance": null,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-standard-portrait.png",
-              "bytes": 228482,
+              "bytes": 238574,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -1014,20 +1014,20 @@
               "actions": {
                 "top": 524,
                 "right": 332,
-                "bottom": 602,
+                "bottom": 607,
                 "left": 46,
                 "width": 286,
-                "height": 78,
+                "height": 83,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 626,
+                "top": 613,
                 "right": 332,
                 "bottom": 714,
                 "left": 46,
                 "width": 286,
-                "height": 88,
+                "height": 101,
                 "display": "grid",
                 "visible": true
               },
@@ -1041,7 +1041,7 @@
             },
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-large-phone-portrait.png",
-              "bytes": 152391,
+              "bytes": 150593,
               "dimensions": {
                 "width": 430,
                 "height": 932
@@ -1088,12 +1088,12 @@
             },
             "wideVisual": {
               "reading": {
-                "top": 85,
+                "top": 149,
                 "right": 289,
                 "bottom": 329,
                 "left": 37,
                 "width": 252,
-                "height": 244,
+                "height": 180,
                 "display": "block",
                 "visible": true
               },
@@ -1162,12 +1162,12 @@
                 "visible": true
               },
               "nav": {
-                "top": 307,
+                "top": 87,
                 "right": 289,
-                "bottom": 361,
+                "bottom": 140,
                 "left": 37,
                 "width": 252,
-                "height": 54,
+                "height": 53,
                 "display": "grid",
                 "visible": true
               },
@@ -1184,20 +1184,20 @@
               "actions": {
                 "top": 182,
                 "right": 252,
-                "bottom": 226,
+                "bottom": 238,
                 "left": 36,
                 "width": 216,
-                "height": 44,
+                "height": 56,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 250,
+                "top": 242,
                 "right": 252,
                 "bottom": 310,
                 "left": 36,
                 "width": 216,
-                "height": 60,
+                "height": 68,
                 "display": "grid",
                 "visible": true
               },
@@ -1211,7 +1211,7 @@
             },
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-compact-landscape.png",
-              "bytes": 106546,
+              "bytes": 97863,
               "dimensions": {
                 "width": 844,
                 "height": 390
@@ -1260,10 +1260,10 @@
             "wideVisual": {
               "reading": {
                 "top": 75,
-                "right": 469,
+                "right": 459,
                 "bottom": 365,
                 "left": 31,
-                "width": 438,
+                "width": 428,
                 "height": 290,
                 "display": "block",
                 "visible": true
@@ -1287,12 +1287,12 @@
                 "visible": true
               },
               "sheet": {
-                "top": 79,
+                "top": 90,
                 "right": 827,
-                "bottom": 373,
+                "bottom": 320,
                 "left": 487,
                 "width": 340,
-                "height": 294,
+                "height": 230,
                 "display": "block",
                 "visible": true
               },
@@ -1307,32 +1307,32 @@
                 "visible": true
               },
               "rail": {
-                "top": 98,
+                "top": 109,
                 "right": 816,
-                "bottom": 294,
+                "bottom": 287,
                 "left": 786,
                 "width": 30,
-                "height": 196,
+                "height": 178,
                 "display": "grid",
                 "visible": true
               },
               "actions": {
-                "top": 98,
+                "top": 109,
                 "right": 778,
-                "bottom": 151,
+                "bottom": 187,
                 "left": 498,
                 "width": 280,
-                "height": 53,
+                "height": 78,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 227,
+                "top": 191,
                 "right": 778,
-                "bottom": 294,
+                "bottom": 287,
                 "left": 498,
                 "width": 280,
-                "height": 67,
+                "height": 96,
                 "display": "grid",
                 "visible": true
               },
@@ -1346,7 +1346,7 @@
             },
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-reader-compact-landscape.png",
-              "bytes": 100133,
+              "bytes": 98327,
               "dimensions": {
                 "width": 844,
                 "height": 390
@@ -1511,10 +1511,10 @@
               "phoneContent": {
                 "top": 141,
                 "right": 579,
-                "bottom": 703,
+                "bottom": 587,
                 "left": 21,
                 "width": 558,
-                "height": 562,
+                "height": 446,
                 "display": "grid",
                 "visible": true
               },
@@ -1526,7 +1526,7 @@
             "readerAvoidance": null,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-expanded-width.png",
-              "bytes": 72713,
+              "bytes": 51838,
               "dimensions": {
                 "width": 600,
                 "height": 960
@@ -1575,10 +1575,10 @@
             "wideVisual": {
               "reading": {
                 "top": 127,
-                "right": 407,
+                "right": 399,
                 "bottom": 937,
                 "left": 85,
-                "width": 322,
+                "width": 314,
                 "height": 810,
                 "display": "block",
                 "visible": true
@@ -1602,52 +1602,52 @@
                 "visible": true
               },
               "sheet": {
-                "top": 159,
+                "top": 631,
                 "right": 775,
-                "bottom": 867,
+                "bottom": 883,
                 "left": 435,
                 "width": 340,
-                "height": 708,
+                "height": 252,
                 "display": "block",
                 "visible": true
               },
               "nav": {
-                "top": 881,
+                "top": 882,
                 "right": 775,
                 "bottom": 961,
                 "left": 435,
                 "width": 340,
-                "height": 80,
+                "height": 79,
                 "display": "grid",
                 "visible": true
               },
               "rail": {
-                "top": 188,
+                "top": 660,
                 "right": 762,
-                "bottom": 758,
+                "bottom": 850,
                 "left": 724,
                 "width": 38,
-                "height": 570,
+                "height": 190,
                 "display": "grid",
                 "visible": true
               },
               "actions": {
-                "top": 188,
+                "top": 660,
                 "right": 710,
-                "bottom": 266,
+                "bottom": 743,
                 "left": 448,
                 "width": 262,
-                "height": 78,
+                "height": 83,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 670,
+                "top": 749,
                 "right": 710,
-                "bottom": 758,
+                "bottom": 850,
                 "left": 448,
                 "width": 262,
-                "height": 88,
+                "height": 101,
                 "display": "grid",
                 "visible": true
               },
@@ -1661,7 +1661,7 @@
             },
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-tablet-expanded.png",
-              "bytes": 217548,
+              "bytes": 207091,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -1709,12 +1709,12 @@
             "wideVisual": {
               "reading": null,
               "mainNav": {
-                "top": 330,
+                "top": 380,
                 "right": 139,
-                "bottom": 698,
+                "bottom": 648,
                 "left": 57,
                 "width": 82,
-                "height": 368,
+                "height": 268,
                 "display": "grid",
                 "visible": true
               },
@@ -1736,7 +1736,7 @@
             "readerAvoidance": null,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-main-tab-tablet-expanded.png",
-              "bytes": 458771,
+              "bytes": 481170,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -1851,10 +1851,10 @@
               "phoneContent": {
                 "top": 141,
                 "right": 799,
-                "bottom": 928,
+                "bottom": 993,
                 "left": 41,
                 "width": 758,
-                "height": 787,
+                "height": 852,
                 "display": "grid",
                 "visible": true
               },
@@ -1866,7 +1866,7 @@
             "readerAvoidance": null,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-settings-shell-tablet-expanded.png",
-              "bytes": 98274,
+              "bytes": 90106,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -1913,12 +1913,12 @@
             },
             "wideVisual": {
               "reading": {
-                "top": 119,
+                "top": 253,
                 "right": 329,
-                "bottom": 933,
+                "bottom": 721,
                 "left": 77,
                 "width": 252,
-                "height": 814,
+                "height": 468,
                 "display": "block",
                 "visible": true
               },
@@ -1987,12 +1987,12 @@
                 "visible": true
               },
               "nav": {
-                "top": 869,
+                "top": 159,
                 "right": 329,
-                "bottom": 949,
+                "bottom": 238,
                 "left": 77,
                 "width": 252,
-                "height": 80,
+                "height": 79,
                 "display": "grid",
                 "visible": true
               },
@@ -2009,20 +2009,20 @@
               "actions": {
                 "top": 762,
                 "right": 276,
-                "bottom": 806,
+                "bottom": 829,
                 "left": 78,
                 "width": 198,
-                "height": 44,
+                "height": 67,
                 "display": "grid",
                 "visible": true
               },
               "chapter": {
-                "top": 854,
+                "top": 833,
                 "right": 276,
                 "bottom": 914,
                 "left": 78,
                 "width": 198,
-                "height": 60,
+                "height": 81,
                 "display": "grid",
                 "visible": true
               },
@@ -2036,7 +2036,7 @@
             },
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/adaptive/frontend-demo-adaptive-flow-tablet-expanded.png",
-              "bytes": 220063,
+              "bytes": 188890,
               "dimensions": {
                 "width": 840,
                 "height": 1180
@@ -2079,7 +2079,7 @@
             "visibleStressCount": 17,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-main-tab-text-scale.png",
-              "bytes": 242259,
+              "bytes": 255873,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2161,7 +2161,7 @@
             "visibleStressCount": 13,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-reader-text-scale.png",
-              "bytes": 155913,
+              "bytes": 161038,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2202,7 +2202,7 @@
             "visibleStressCount": 35,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-flow-text-scale.png",
-              "bytes": 143635,
+              "bytes": 148716,
               "dimensions": {
                 "width": 390,
                 "height": 844
@@ -2240,10 +2240,10 @@
             },
             "outsideCount": 0,
             "outside": [],
-            "visibleStressCount": 18,
+            "visibleStressCount": 19,
             "visualEvidence": {
               "screenshot": "/Users/minliny/Documents/Reader UI/frontend-demo/verify/text-stress/frontend-demo-text-stress-settings-text-scale.png",
-              "bytes": 118241,
+              "bytes": 93849,
               "dimensions": {
                 "width": 390,
                 "height": 844

@@ -1,0 +1,201 @@
+:root {
+  --app-motion-duration-first-open: 280ms;
+  --app-motion-duration-tab-press: 80ms;
+  --app-motion-duration-tab-select: 120ms;
+  --app-motion-duration-tab-switch: 160ms;
+  --app-motion-duration-button-press: 80ms;
+  --app-motion-duration-button-activate: 120ms;
+  --app-motion-duration-toggle-switch: 140ms;
+  --app-motion-duration-chip-select: 120ms;
+  --app-motion-duration-filter-commit: 160ms;
+  --app-motion-duration-numeric-commit: 120ms;
+  --app-motion-duration-input-focus: 120ms;
+  --app-motion-duration-search-state: 160ms;
+  --app-motion-duration-feedback-toast: 180ms;
+  --app-motion-duration-state-replace: 160ms;
+  --app-motion-duration-selection-toolbar: 160ms;
+  --app-motion-duration-dropdown-press: 80ms;
+  --app-motion-duration-dropdown-expand: 160ms;
+  --app-motion-duration-dropdown-collapse: 120ms;
+  --app-motion-duration-dropdown-select: 120ms;
+  --reader-motion-duration-instant: 0ms;
+  --reader-motion-duration-micro: 80ms;
+  --reader-motion-duration-fast: 120ms;
+  --reader-motion-duration-base: 160ms;
+  --reader-motion-duration-handle-long-press: 320ms;
+  --reader-motion-duration-handle-snap: 120ms;
+  --reader-motion-duration-panel: 200ms;
+  --reader-motion-duration-page-turn: 220ms;
+  --reader-motion-duration-reader-entry: 240ms;
+  --reader-motion-duration-session-return: 200ms;
+  --reader-motion-duration-running-space: 180ms;
+  --reader-motion-duration-capsule-enter: 160ms;
+  --reader-motion-duration-capsule-control: 120ms;
+  --reader-motion-duration-capsule-tick: 120ms;
+  --reader-motion-duration-voice-pulse: 960ms;
+  --reader-motion-duration-overlay: 240ms;
+  --reader-motion-duration-loading-spin: 800ms;
+  --reader-motion-duration-interrupt-settle: 80ms;
+  --reader-motion-duration-viewport-reshape: 240ms;
+  --reader-motion-duration-orientation-freeze: 80ms;
+  --reader-motion-duration-orientation-settle: 240ms;
+  --reader-motion-easing-standard: ease;
+  --reader-motion-easing-exit: ease-in;
+  --reader-motion-easing-enter: ease-out;
+  --reader-motion-easing-reshape: ease-in-out;
+  --app-motion-distance-dropdown-y: 6px;
+  --app-motion-distance-feedback-y: 8px;
+  --app-motion-distance-selection-toolbar-y: 6px;
+  --reader-motion-distance-page-turn-x: 16px;
+  --reader-motion-distance-focus-y: -1px;
+  --reader-motion-distance-reader-entry-y: 12px;
+  --reader-motion-distance-control-drag-margin: 16px;
+  --reader-motion-distance-handle-pull-y: 18px;
+  --reader-motion-distance-running-space-y: 10px;
+  --reader-motion-distance-orientation-panel-y: 10px;
+  --reader-motion-distance-capsule-y: 6px;
+  --reader-motion-distance-capsule-tick-y: 4px;
+  --app-motion-scale-press: 0.98;
+  --reader-motion-scale-dialog-enter: 0.96;
+  --reader-motion-scale-cover-press: 0.98;
+  --reader-motion-scale-capsule-enter: 0.96;
+  --reader-motion-scale-capsule-control-press: 0.9;
+  --reader-motion-scale-running-space-dock: 0.92;
+  --reader-motion-scale-voice-pulse: 1.06;
+}
+
+.fd-demo {
+  --fd-motion-effective-button-press: var(--app-motion-duration-button-press);
+  --fd-motion-effective-button-activate: var(--app-motion-duration-button-activate);
+  --fd-motion-effective-toggle: var(--app-motion-duration-toggle-switch);
+  --fd-motion-effective-chip: var(--app-motion-duration-chip-select);
+  --fd-motion-effective-numeric: var(--app-motion-duration-numeric-commit);
+  --fd-motion-effective-state: var(--app-motion-duration-state-replace);
+  --fd-motion-effective-feedback: var(--app-motion-duration-feedback-toast);
+  --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
+}
+
+.fd-demo[data-motion-reduced="true"] {
+  --fd-motion-effective-button-press: var(--reader-motion-duration-instant);
+  --fd-motion-effective-button-activate: var(--reader-motion-duration-instant);
+  --fd-motion-effective-toggle: var(--reader-motion-duration-instant);
+  --fd-motion-effective-chip: var(--reader-motion-duration-instant);
+  --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
+  --fd-motion-effective-state: var(--reader-motion-duration-instant);
+  --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
+  --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
+}
+
+.fd-demo :where(button, [role="button"], [data-route], [data-route-back]) {
+  transition:
+    background-color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-button-press) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(button, [role="button"], [data-route], [data-route-back]):where(:active, .is-motion-pressed):not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(var(--app-motion-scale-press));
+}
+
+.fd-demo :where(button:disabled, [aria-disabled="true"]) {
+  cursor: default;
+}
+
+.fd-demo :where(.is-active, .is-selected, [aria-selected="true"], [aria-pressed="true"]) {
+  transition:
+    background-color var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    color var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-chip) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-settings-switch, .fd-reader-switch, .fd-source-switch, .fd-replace-switch) {
+  transition:
+    background-color var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-settings-switch i, .fd-source-switch i, .fd-replace-switch i) {
+  transition:
+    left var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    margin-left var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    background-color var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard);
+}
+
+.fd-demo .fd-reader-switch::after {
+  transition:
+    left var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard),
+    background-color var(--fd-motion-effective-toggle) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-reader-progress b, .fd-restore-progress-meter b, .fd-restore-stage-list i b) {
+  transition: width var(--fd-motion-effective-numeric) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-search-state, .fd-search-results, .fd-empty-state, .fd-bookshelf-empty-state, .fd-rss-state-card) {
+  transition:
+    opacity var(--fd-motion-effective-state) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-state) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-settings-toast, .fd-discover-toast, .fd-nav-feedback) {
+  transition:
+    opacity var(--fd-motion-effective-feedback) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-feedback) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-reader-selection-toolbar, .fd-reader-selection-range, .fd-reader-selection-handle) {
+  transition:
+    opacity var(--app-motion-duration-selection-toolbar) var(--reader-motion-easing-standard),
+    transform var(--app-motion-duration-selection-toolbar) var(--reader-motion-easing-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-demo {
+    --fd-motion-effective-button-press: var(--reader-motion-duration-instant);
+    --fd-motion-effective-button-activate: var(--reader-motion-duration-instant);
+    --fd-motion-effective-toggle: var(--reader-motion-duration-instant);
+    --fd-motion-effective-chip: var(--reader-motion-duration-instant);
+    --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
+    --fd-motion-effective-state: var(--reader-motion-duration-instant);
+    --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
+    --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-demo *,
+  .fd-demo *::before,
+  .fd-demo *::after {
+    scroll-behavior: auto !important;
+    transition-duration: var(--reader-motion-duration-instant) !important;
+    animation-duration: var(--reader-motion-duration-instant) !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+.fd-demo[data-motion-reduced="true"] *,
+.fd-demo[data-motion-reduced="true"] *::before,
+.fd-demo[data-motion-reduced="true"] *::after {
+  scroll-behavior: auto !important;
+  transition-duration: var(--reader-motion-duration-instant) !important;
+  animation-duration: var(--reader-motion-duration-instant) !important;
+  animation-iteration-count: 1 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fd-demo :where(.fd-ir-reading-layer.fd-reader-page-turn-next, .fd-ir-reading-layer.fd-reader-page-turn-prev, .fd-reader-loading-panel i) {
+    animation: none !important;
+  }
+}
+
+.fd-demo[data-motion-reduced="true"] :where(.fd-ir-reading-layer.fd-reader-page-turn-next, .fd-ir-reading-layer.fd-reader-page-turn-prev, .fd-reader-loading-panel i) {
+  animation: none !important;
+}

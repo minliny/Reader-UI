@@ -1,0 +1,92 @@
+{
+  "generatedAt": "2026-06-26T10:10:28.871Z",
+  "source": "frontend-demo source verification",
+  "checks": [
+    {
+      "id": "route.contract.render-coverage",
+      "passed": true,
+      "detail": "131 routes, missing=0, extra=0"
+    },
+    {
+      "id": "motion.controller.file",
+      "passed": true,
+      "detail": "motion-controller.js exports ReaderMotionController and writes controller state"
+    },
+    {
+      "id": "motion.controller.loaded",
+      "passed": true,
+      "detail": "index.html loads controller before render.js"
+    },
+    {
+      "id": "motion.controller.runtime-cache-bust",
+      "passed": true,
+      "detail": "motion=motion-controller-v1-20260626, render=bookshelf-group-in-filter-v1-20260626, runtime=bookshelf-group-in-filter-v1-20260626"
+    },
+    {
+      "id": "motion.controller.runtime-create",
+      "passed": true,
+      "detail": "render-runtime.js creates a controller for the active demo root"
+    },
+    {
+      "id": "motion.controller.runtime-ids",
+      "passed": true,
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.session.tts.start, reader.session.autoPage.start"
+    },
+    {
+      "id": "motion.selector.bindings",
+      "passed": true,
+      "detail": "60 bind calls, 50 unique Motion IDs"
+    },
+    {
+      "id": "motion.selector.data-coverage",
+      "passed": true,
+      "detail": "129/151 data-* directly mapped"
+    },
+    {
+      "id": "motion.reduced-motion",
+      "passed": true,
+      "detail": "URL/system reduced-motion state is visible to controller"
+    }
+  ],
+  "summary": {
+    "passed": 9,
+    "failed": 0,
+    "total": 9
+  },
+  "routeCoverage": {
+    "totalRoutes": 131,
+    "renderCases": 131,
+    "missingCases": [],
+    "extraCases": []
+  },
+  "selectorCoverage": {
+    "dataAttributeCount": 151,
+    "directMappedDataAttributeCount": 129,
+    "unmappedDataAttributes": [
+      "data-adaptive-runtime",
+      "data-book-author",
+      "data-book-chapter",
+      "data-book-title",
+      "data-cover-src",
+      "data-current-page",
+      "data-current-route",
+      "data-current-shell",
+      "data-dev-region",
+      "data-icon-missing",
+      "data-module",
+      "data-nav-type",
+      "data-page-space-row",
+      "data-reader-brightness-dim",
+      "data-reader-surface-signature",
+      "data-route-replace",
+      "data-route-stack",
+      "data-screen-host",
+      "data-shell",
+      "data-slot",
+      "data-stack-size",
+      "data-typography-row"
+    ],
+    "bindCallCount": 60,
+    "motionIdCount": 50
+  }
+}
