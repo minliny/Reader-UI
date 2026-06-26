@@ -56,8 +56,8 @@
   "selectorCoverage": {
     "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
     "dataAttributeCount": 159,
-    "bindCallCount": 68,
-    "motionIdCount": 56,
+    "bindCallCount": 69,
+    "motionIdCount": 57,
     "directMappedDataAttributeCount": 137,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
@@ -109,7 +109,7 @@
     "routePushPopMotionLifecycle": "controller transaction implemented; visual enter/exit still missing",
     "tabIndicatorMotionLifecycle": "main tab, reader module tab, and segmented control data-state adapters implemented; media evidence still missing",
     "dropdownMotionController": "trigger/menu/option state adapter implemented; collapse persistence, A-to-B media evidence, and resize/orientation reposition evidence still missing",
-    "coverToImmersiveSharedTransition": "missing",
+    "coverToImmersiveSharedTransition": "source/target state adapter and cover snapshot implemented; detail/chapter coverage and media evidence still missing",
     "readerGrabberLongPressDrag": "missing",
     "readerControlDockBoundsAndPersistence": "missing",
     "readerSessionStartTransaction": "implemented for TTS and auto-page",
@@ -151,7 +151,7 @@
     {
       "family": "reader.entry",
       "source": "data-book-cover",
-      "currentState": "Click routes to immersive reading through a controller transaction; long press opens focus menu; no shared cover transition.",
+      "currentState": "Cover and action entries now expose data-motion-entry-* state, cover snapshot, target reader reveal, and reduced-motion fallback; detail/chapter coverage, repeated-click interruption, and media evidence remain missing.",
       "requiredOwner": "reader entry motion"
     },
     {

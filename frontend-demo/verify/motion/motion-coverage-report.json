@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T14:32:04.145Z",
+  "generatedAt": "2026-06-26T14:43:41.339Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v5-20260626, render=dropdown-motion-v1-20260626, runtime=dropdown-motion-v1-20260626"
+      "detail": "motion=motion-controller-v6-20260626, render=reader-entry-motion-v1-20260626, runtime=reader-entry-motion-v1-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -40,12 +40,12 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "62/62 Motion IDs resolved; incomplete=0"
+      "detail": "63/63 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "62/62 runtime/selector Motion IDs expose state machines"
+      "detail": "63/63 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
@@ -68,9 +68,14 @@
       "detail": "dropdown triggers, menus, and options expose data-motion-dropdown-* states, press IDs, and tokenized CSS"
     },
     {
+      "id": "motion.reader-entry.state-adapter",
+      "passed": true,
+      "detail": "cover and action entry paths expose data-motion-entry-* states, target reveal, and tokenized CSS"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "68 bind calls, 56 unique Motion IDs"
+      "detail": "69 bind calls, 57 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
@@ -84,9 +89,9 @@
     }
   ],
   "summary": {
-    "passed": 16,
+    "passed": 17,
     "failed": 0,
-    "total": 16
+    "total": 17
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -121,8 +126,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 68,
-    "motionIdCount": 56
+    "bindCallCount": 69,
+    "motionIdCount": 57
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
@@ -163,6 +168,7 @@
       "overlay.sheet.exit",
       "reader.chapter.jump",
       "reader.control.hide",
+      "reader.entry.actionToImmersive",
       "reader.entry.coverToImmersive",
       "reader.module.switch",
       "reader.page.turn.next/prev",

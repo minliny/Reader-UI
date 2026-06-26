@@ -342,7 +342,7 @@
 - TAB / segmented 已补 `tab.item.press/select/switch` 和 `segment.item.switch` contract 状态机；主 TAB、阅读模块 TAB 和 segmented control 已接入实现层 `data-motion-tab-*` / `data-motion-segment-*` 状态、press-id 和 token 化状态 CSS。indicator 媒体证据和录屏仍缺。
 - 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 已接入实现层 `data-motion-dropdown-*` 状态、trigger/menu/option adapter、`dropdown.option.press` press-id 和 token 化展开/选项点击 CSS。关闭保留动画、打开 A 后切 B、resize/orientation reposition 和录屏证据仍缺。
 - 宽屏控制层长按拖动目前只有规划，demo 还没有 pointer capture、dock bounds 计算、offset 持久化和越界回弹证据。
-- 封面进入沉浸阅读目前只有规划，demo 还没有 shared element / snapshot 层和录屏证据。
+- 封面进入沉浸阅读已接入 `data-motion-entry-*` source/target 状态、封面 snapshot 层、普通按钮 fallback 和 token 化淡入；详情/章节入口覆盖、连续点击打断和录屏证据仍缺。
 - 自动翻页/朗读运行胶囊目前有状态和静态 UI，但还没有 token 化的进入、更新、切换、退出动画和录屏证据。
 - 首次打开应用、小横条拖拽、宽屏 control dock 长按拖动、运行胶囊与控制层运行中空间停靠、控制胶囊按钮运行/暂停、倒计时数字替换和朗读图标活动提示目前只有规划，demo 还没有统一实现和录屏证据。
 - 当前弹窗背景还没有独立命名的 fade token。

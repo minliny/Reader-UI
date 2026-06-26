@@ -5204,6 +5204,7 @@
 
     bind("[data-route]", "app.route.push");
     bind("[data-route-back], [data-demo-back], .fd-back-bar button[aria-label='返回']", "app.route.pop");
+    bind("[data-route='immersive-reading']:not([data-book-cover])", "reader.entry.actionToImmersive");
     bind("[data-nav-type]", "tab.item.switch");
     bind("[data-nav-type].is-active", "tab.item.select");
     bind("[data-bookshelf-view-button], [data-book-grid], [data-bookshelf-view]", "bookshelf.view.switch");
@@ -5348,6 +5349,11 @@
         }
         group.removeAttribute("data-motion-dropdown-pressed");
       };
+      const syncReaderEntryPressState = (pressed) => {
+        const role = element.getAttribute("data-motion-entry-role");
+        if (role !== "cover" && role !== "action") return;
+        element.setAttribute("data-motion-entry-state", pressed ? "pressed" : "idle");
+      };
       const setPressed = (pressed) => {
         if (isDisabled()) return;
         element.classList.toggle("is-motion-pressed", pressed);
@@ -5359,6 +5365,7 @@
         syncTabPressState(pressed);
         syncSegmentPressState(pressed);
         syncDropdownPressState(pressed);
+        syncReaderEntryPressState(pressed);
       };
       element.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
@@ -5878,6 +5885,130 @@
         });
       }
     });
+  }
+
+  function readerEntryKey(element) {
+    if (!element) return "";
+    return [
+      element.getAttribute("data-book-title") || "",
+      element.getAttribute("data-book-author") || "",
+      element.getAttribute("data-book-chapter") || "",
+      element.getAttribute("data-cover-src") || ""
+    ].filter(Boolean).join("|") || element.textContent.trim().replace(/\s+/g, " ").slice(0, 48);
+  }
+
+  function readerEntryMotionFromElement(element, screenHost, fromRoute, targetRoute, kind) {
+    const rect = element.getBoundingClientRect();
+    const hostRect = screenHost.getBoundingClientRect();
+    return {
+      id: kind === "cover" ? "reader.entry.coverToImmersive" : "reader.entry.actionToImmersive",
+      kind,
+      key: readerEntryKey(element),
+      from: fromRoute || "",
+      to: targetRoute || "immersive-reading",
+      title: element.getAttribute("data-book-title") || "",
+      author: element.getAttribute("data-book-author") || "",
+      chapter: element.getAttribute("data-book-chapter") || "",
+      coverSrc: element.getAttribute("data-cover-src") || element.querySelector?.("img")?.getAttribute("src") || "",
+      x: Math.round(rect.left - hostRect.left),
+      y: Math.round(rect.top - hostRect.top),
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+      settled: false
+    };
+  }
+
+  function setReaderEntrySourceState(element, role) {
+    const isCover = role === "cover";
+    element.setAttribute("data-motion-entry-role", role);
+    element.setAttribute("data-motion-entry-key", readerEntryKey(element));
+    element.setAttribute("data-motion-entry-state", "idle");
+    element.setAttribute("data-motion-press-id", isCover ? "reader.entry.coverToImmersive" : "reader.entry.actionToImmersive");
+  }
+
+  function createReaderEntrySnapshot(screenHost, motion) {
+    if (!motion?.coverSrc || !motion.width || !motion.height) return null;
+    const snapshot = document.createElement("div");
+    snapshot.className = "fd-reader-entry-snapshot";
+    snapshot.setAttribute("data-motion-entry-role", "snapshot");
+    snapshot.setAttribute("data-motion-entry-state", "entering");
+    snapshot.setAttribute("data-motion-entry-key", motion.key || "");
+    snapshot.setAttribute("aria-hidden", "true");
+    snapshot.style.setProperty("--reader-entry-x", `${motion.x}px`);
+    snapshot.style.setProperty("--reader-entry-y", `${motion.y}px`);
+    snapshot.style.setProperty("--reader-entry-width", `${motion.width}px`);
+    snapshot.style.setProperty("--reader-entry-height", `${motion.height}px`);
+    const image = document.createElement("img");
+    image.src = motion.coverSrc;
+    image.alt = "";
+    snapshot.appendChild(image);
+    screenHost.appendChild(snapshot);
+    return snapshot;
+  }
+
+  function settleReaderEntryMotion(root, appState, target, snapshot, motion) {
+    if (snapshot?.isConnected) {
+      snapshot.remove();
+    }
+    if (target?.isConnected) {
+      target.setAttribute("data-motion-entry-state", "settled");
+    }
+    if (root) {
+      root.setAttribute("data-motion-entry-phase", "settled");
+      root.setAttribute("data-motion-entry-last-id", motion.id || "");
+      root.setAttribute("data-motion-entry-last-kind", motion.kind || "");
+      root.setAttribute("data-motion-entry-last-from", motion.from || "");
+      root.setAttribute("data-motion-entry-last-to", motion.to || "");
+      root.removeAttribute("data-motion-entry-key");
+      root.removeAttribute("data-motion-entry-title");
+    }
+    if (appState && appState.readerEntryMotion === motion) {
+      appState.readerEntryMotion = null;
+    }
+  }
+
+  function attachReaderEntryMotionState(screenHost, appState) {
+    if (!screenHost || typeof screenHost.querySelectorAll !== "function") return;
+    const root = screenHost.closest(".fd-demo");
+    const reduced = root?.getAttribute("data-motion-reduced") === "true";
+
+    screenHost.querySelectorAll("[data-book-cover]").forEach((coverButton) => {
+      setReaderEntrySourceState(coverButton, "cover");
+    });
+    screenHost.querySelectorAll("[data-route='immersive-reading']:not([data-book-cover])").forEach((entryAction) => {
+      setReaderEntrySourceState(entryAction, "action");
+    });
+
+    const motion = appState?.readerEntryMotion;
+    const target = screenHost.querySelector(".fd-immersive-frame, .fd-reader-frame");
+    if (!root || !motion || motion.settled || motion.to !== "immersive-reading" || !target) {
+      return;
+    }
+
+    root.setAttribute("data-motion-entry-phase", reduced ? "settled" : "entering");
+    root.setAttribute("data-motion-entry-key", motion.key || "");
+    root.setAttribute("data-motion-entry-title", motion.title || "");
+    target.setAttribute("data-motion-entry-role", "target");
+    target.setAttribute("data-motion-entry-source", motion.kind || "");
+    target.setAttribute("data-motion-entry-state", reduced ? "settled" : "entering");
+
+    if (reduced) {
+      settleReaderEntryMotion(root, appState, target, null, motion);
+      return;
+    }
+
+    const snapshot = motion.kind === "cover" ? createReaderEntrySnapshot(screenHost, motion) : null;
+    window.requestAnimationFrame(() => {
+      if (!target.isConnected) return;
+      target.setAttribute("data-motion-entry-state", "active");
+      if (snapshot?.isConnected) {
+        snapshot.setAttribute("data-motion-entry-state", "exiting");
+      }
+    });
+    window.setTimeout(() => {
+      motion.settled = true;
+      settleReaderEntryMotion(root, appState, target, snapshot, motion);
+    }, 260);
   }
 
   function sourceCandidateRow(item, index, selectedSource) {
@@ -6565,6 +6696,7 @@
       attachSegmentMotionState(screenHost, appState, motionController);
       adjustReaderDropdownPlacement(screenHost);
       attachDropdownMotionState(screenHost, appState, motionController);
+      attachReaderEntryMotionState(screenHost, appState);
       attachMotionPressState(screenHost, motionController);
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
       if (renderedTurnDirection) {
@@ -7605,6 +7737,18 @@
             target: readerModuleButton
           };
         })();
+        const readerEntryMotionInput = (() => {
+          if (route !== "immersive-reading" || currentRoute() === "immersive-reading") return null;
+          appState.readerEntryMotion = readerEntryMotionFromElement(targetEl, screenHost, currentRoute(), route, "action");
+          return {
+            id: "reader.entry.actionToImmersive",
+            action: "action-route",
+            from: currentRoute(),
+            to: route,
+            target: targetEl
+          };
+        })();
+        const routeMotionInput = readerModuleMotionInput || readerEntryMotionInput;
         if (targetEl.classList.contains("fd-reader-module") && route === currentRoute()) {
           appState.readerModuleMotion = {
             action: "switch",
@@ -7661,10 +7805,10 @@
         }
         closeBookshelfMore(targetEl.closest(".fd-phone"));
         if (shouldReplaceRoute) {
-          replaceTopRoute(route, readerModuleMotionInput || undefined);
+          replaceTopRoute(route, routeMotionInput || undefined);
           return;
         }
-        goTo(route, true, readerModuleMotionInput || undefined);
+        goTo(route, true, routeMotionInput || undefined);
       };
       targetEl.addEventListener("click", navigate);
       targetEl.addEventListener("keydown", (event) => {
@@ -7712,22 +7856,28 @@
           return;
         }
         closeBookFocus(button.closest(".fd-phone"));
+        const targetRoute = button.getAttribute("data-route") || "immersive-reading";
+        appState.readerEntryMotion = readerEntryMotionFromElement(button, screenHost, currentRoute(), targetRoute, "cover");
         goTo(button.getAttribute("data-route") || "immersive-reading", true, {
           id: "reader.entry.coverToImmersive",
           action: "cover-route",
           from: currentRoute(),
-          to: button.getAttribute("data-route") || "immersive-reading"
+          to: targetRoute,
+          target: button
         });
       });
       button.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
           event.preventDefault();
           closeBookFocus(button.closest(".fd-phone"));
-          goTo(button.getAttribute("data-route") || "immersive-reading", true, {
+          const targetRoute = button.getAttribute("data-route") || "immersive-reading";
+          appState.readerEntryMotion = readerEntryMotionFromElement(button, screenHost, currentRoute(), targetRoute, "cover");
+          goTo(targetRoute, true, {
             id: "reader.entry.coverToImmersive",
             action: "cover-route",
             from: currentRoute(),
-            to: button.getAttribute("data-route") || "immersive-reading"
+            to: targetRoute,
+            target: button
           });
         }
         if (event.key === " ") {

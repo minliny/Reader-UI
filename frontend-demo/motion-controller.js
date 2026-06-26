@@ -17,6 +17,7 @@
     "dropdown.option.press": 80,
     "dropdown.option.select": 120,
     "reader.entry.coverToImmersive": 240,
+    "reader.entry.actionToImmersive": 200,
     "reader.session.tts.start": 200,
     "reader.session.autoPage.start": 200,
     "reader.session.capsule.control.press/toggle": 120,

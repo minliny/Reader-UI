@@ -234,6 +234,15 @@ const checks = [
     detail: "dropdown triggers, menus, and options expose data-motion-dropdown-* states, press IDs, and tokenized CSS"
   },
   {
+    id: "motion.reader-entry.state-adapter",
+    passed: runtime.includes("attachReaderEntryMotionState") &&
+      runtime.includes("data-motion-entry-state") &&
+      runtime.includes("reader.entry.coverToImmersive") &&
+      runtime.includes("reader.entry.actionToImmersive") &&
+      motionTokens.includes("[data-motion-entry-role=\"target\"]"),
+    detail: "cover and action entry paths expose data-motion-entry-* states, target reveal, and tokenized CSS"
+  },
+  {
     id: "motion.selector.bindings",
     passed: bindMatches.length >= 58 && motionIds.length >= 50,
     detail: `${bindMatches.length} bind calls, ${motionIds.length} unique Motion IDs`
