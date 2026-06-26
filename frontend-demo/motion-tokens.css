@@ -72,6 +72,8 @@
   --fd-motion-effective-numeric: var(--app-motion-duration-numeric-commit);
   --fd-motion-effective-state: var(--app-motion-duration-state-replace);
   --fd-motion-effective-feedback: var(--app-motion-duration-feedback-toast);
+  --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
+  --fd-motion-effective-overlay: var(--reader-motion-duration-base);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
 }
 
@@ -83,6 +85,8 @@
   --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
   --fd-motion-effective-state: var(--reader-motion-duration-instant);
   --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
+  --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
+  --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
 }
 
@@ -166,6 +170,8 @@
     --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
     --fd-motion-effective-state: var(--reader-motion-duration-instant);
     --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
+    --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
+    --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
   }
 }

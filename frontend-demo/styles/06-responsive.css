@@ -1392,17 +1392,45 @@
   line-height: 1.7;
 }
 
-.fd-source-dialog-backdrop {
-  opacity: 0.58;
+.fd-demo[data-demo-mode="regular"]:not([data-current-route^="source-debug"]):not([data-current-route="source-code-view"]):not([data-current-route="source-logs"]) .fd-source-demo-phone {
+  width: min(var(--reader-ds-size-phone-width), 100vw);
+  max-width: var(--reader-ds-size-phone-width);
+}
+
+.fd-source-dialog-backdrop,
+.fd-source-dialog-underlay {
   pointer-events: none;
 }
 
+.fd-settings-phone.has-dialog .fd-source-dialog-underlay {
+  transform: scale(0.995);
+  transition:
+    opacity var(--fd-motion-effective-overlay-fast) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-overlay) var(--reader-motion-easing-standard);
+}
+
 .fd-source-delete-dialog label {
-  display: block;
   color: var(--fd-muted);
   font-size: var(--fd-settings-source-meta-size);
 }
 
+.fd-source-delete-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  line-height: 1.45;
+}
+
 .fd-source-delete-dialog input {
-  margin-right: 6px;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--fd-danger);
+}
+
+.fd-source-delete-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }

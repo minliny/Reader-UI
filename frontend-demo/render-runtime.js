@@ -882,7 +882,7 @@
         <div class="fd-source-batch-top">
           <button type="button" data-route="discover-control">取消</button>
           <strong>已选 3 个</strong>
-          <button type="button">全选</button>
+          <button type="button" data-source-select-all aria-pressed="false">全选</button>
         </div>
         <label class="fd-source-search">${icon("search", "fd-small-icon")}<span>搜索书源名称或分组</span></label>
         <nav class="fd-source-chip-row" aria-label="发现源筛选">
@@ -891,7 +891,7 @@
         <section class="fd-discover-source-bulk-list" aria-label="发现源列表">
           ${sources.map(([name, meta, tone, checked]) => `
             <article class="${checked ? "is-selected" : ""}">
-              <button class="fd-source-check${checked ? " is-checked" : ""}" type="button" aria-label="${esc(name)}${checked ? "已选择" : "未选择"}">${checked ? icon("check", "fd-small-icon") : ""}</button>
+              <button class="fd-source-check${checked ? " is-checked" : ""}" type="button" data-source-select="${esc(name)}" aria-label="${esc(name)}${checked ? "已选择" : "未选择"}" aria-pressed="${checked ? "true" : "false"}">${checked ? icon("check", "fd-small-icon") : ""}</button>
               <span><strong>${esc(name)}</strong><small>${esc(meta)}</small></span>
               ${sourceBadge({ status: tone === "warn" ? "需处理" : tone === "good" ? "可用" : "暂停", tone })}
             </article>`).join("")}
@@ -900,9 +900,9 @@
         phoneClass: "fd-discover-subpage-phone",
         trailingHtml: `<button type="button" data-route="discover-control">完成</button>`,
         bottomActionHtml: sourceBottomActions([
-          { label: "启用", icon: "check" },
-          { label: "禁用", icon: "clear" },
-          { label: "刷新", icon: "refresh" }
+          { label: "启用", icon: "check", action: "enable-discover-sources" },
+          { label: "禁用", icon: "clear", action: "disable-discover-sources" },
+          { label: "刷新", icon: "refresh", action: "refresh-discover-sources" }
         ], "is-fixed")
       });
   }
@@ -2463,6 +2463,12 @@
   }
 
   function initialRouteStackFor(route) {
+    const parentRoutes = {
+      "source-delete-confirm": "source-batch"
+    };
+    if (parentRoutes[route]) {
+      return initialRouteStackFor(parentRoutes[route]).concat(route);
+    }
     if (["bookshelf", "discover", "rss", "settings"].includes(route)) {
       return [route];
     }
@@ -2962,12 +2968,13 @@
     const pageReadout = readerPageReadout(data, appState);
     const chapterState = currentReaderChapter(data, appState);
     const statusCapsule = readerImmersiveStatusCapsule(appState);
+    const footerStatusState = statusCapsule ? "session" : "page";
     return `
       <section class="fd-ir-info-layer" data-dev-region="ImmersiveInfoLayer" aria-label="阅读信息层">
         <span class="fd-ir-top-left">${esc(data.reader.title)} · ${esc(chapterState.chapter.title || readerChapterMeta(data))}</span>
         <span class="fd-ir-top-right">${esc(data.reader.status.time)}</span>
         <span class="fd-ir-bottom-left" data-dev-region="ImmersiveFooterProgress">${esc(pageReadout.progress || readout.progress || "38%")}</span>
-        <span class="fd-ir-bottom-right" data-dev-region="ImmersiveFooterStatus">
+        <span class="fd-ir-bottom-right${statusCapsule ? " has-session-capsule" : ""}" data-dev-region="ImmersiveFooterStatus" data-reader-footer-status="${esc(footerStatusState)}">
           <span class="fd-ir-page-label" data-reader-page-readout>${esc(pageReadout.pageLabel)}</span>
           ${statusCapsule}
         </span>
@@ -4553,7 +4560,8 @@
   function sourceShell(data, title, contentHtml, options) {
     const trailingHtml = options?.trailingHtml;
     const extraPhoneClass = options?.phoneClass ? ` ${options.phoneClass}` : "";
-    return shellKit().renderSettingsShell(Object.assign(phoneShellClasses(`fd-settings-phone fd-source-demo-phone${extraPhoneClass}`), {
+    const overlayPhoneClass = `${options?.sheetHtml ? " has-sheet" : ""}${options?.dialogHtml ? " has-dialog" : ""}`;
+    return shellKit().renderSettingsShell(Object.assign(phoneShellClasses(`fd-settings-phone fd-source-demo-phone${extraPhoneClass}${overlayPhoneClass}`), {
       data,
       title,
       ariaLabel: title,
@@ -4576,8 +4584,10 @@
     return `<div class="fd-source-bottom-bar ${esc(extraClass || "")}">${actions.map((action) => {
       const routeAttr = action.route ? ` data-route="${esc(action.route)}"` : "";
       const replaceAttr = action.replace ? " data-route-replace" : "";
+      const actionAttr = action.action ? ` data-source-action="${esc(action.action)}"` : "";
+      const ariaAttr = action.ariaLabel ? ` aria-label="${esc(action.ariaLabel)}"` : "";
       const classAttr = action.className ? ` class="${esc(action.className)}"` : "";
-      return `<button${classAttr} type="button"${routeAttr}${replaceAttr}>${action.icon ? icon(action.icon, "fd-small-icon") : ""}${esc(action.label)}</button>`;
+      return `<button${classAttr} type="button"${routeAttr}${replaceAttr}${actionAttr}${ariaAttr}>${action.icon ? icon(action.icon, "fd-small-icon") : ""}${esc(action.label)}</button>`;
     }).join("")}</div>`;
   }
 
@@ -4639,7 +4649,7 @@
     const selected = Boolean(item.selected);
     return `
       <article class="fd-source-row${selected ? " is-selected" : ""}"${isBatch ? "" : ' role="button" tabindex="0" data-route="source-detail"'}>
-        ${isBatch ? `<button class="fd-source-check${selected ? " is-checked" : ""}" type="button" aria-label="${esc(item.title)}${selected ? "已选择" : "未选择"}">${selected ? icon("check", "fd-small-icon") : ""}</button>` : ""}
+        ${isBatch ? `<button class="fd-source-check${selected ? " is-checked" : ""}" type="button" data-source-select="${esc(item.title)}" aria-label="${esc(item.title)}${selected ? "已选择" : "未选择"}" aria-pressed="${selected ? "true" : "false"}">${selected ? icon("check", "fd-small-icon") : ""}</button>` : ""}
         <span class="fd-source-row-main"><strong>${esc(item.title)}</strong><small>${esc(item.domain)} · ${esc(item.group)}</small></span>
         <em class="fd-source-row-state">${sourceBadge(item)}</em>
         ${isBatch ? "" : `<button class="fd-source-row-test" type="button" data-route="source-detect" aria-label="检测 ${esc(item.title)}">检测</button>`}
@@ -4682,7 +4692,7 @@
     return sourceShell(data, "书源管理", sourceHomeContent(false, appState), {
       bottomActionHtml: sourceHomeBottomActions(),
       sheetHtml: `
-      <section class="fd-source-bottom-sheet" aria-label="添加书源">
+      <section class="fd-demo-sheet fd-source-bottom-sheet" aria-label="添加书源" aria-hidden="false" data-demo-sheet>
         <div class="fd-sheet-grabber"></div>
         <h2>添加书源</h2>
         ${[
@@ -4728,16 +4738,16 @@
   function sourceBatchScreen(data, appState) {
     return sourceShell(data, "已选 3 个", `
       <section class="fd-source-home fd-source-batch">
-        <div class="fd-source-batch-top"><button type="button" data-route="source-management">取消</button><strong>已选 3 个</strong><button type="button">全选</button></div>
+        <div class="fd-source-batch-top"><button type="button" data-route="source-management">取消</button><strong>已选 3 个</strong><button type="button" data-source-select-all aria-pressed="false">全选</button></div>
         ${sourceSearchAndFilters(appState)}
         ${sourceList(sourceItems, "batch", appState)}
       </section>`, {
         bottomActionHtml: sourceBottomActions([
-          { label: "启用", icon: "check" },
-          { label: "禁用", icon: "close" },
-          { label: "检测", icon: "activity" },
-          { label: "分组", icon: "folder", route: "source-groups" },
-          { label: "删除", icon: "trash", route: "source-delete-confirm", className: "is-danger" }
+          { label: "启用", icon: "check", action: "enable-selected" },
+          { label: "禁用", icon: "close", action: "disable-selected" },
+          { label: "检测", icon: "activity", action: "detect-selected" },
+          { label: "分组", icon: "folder", route: "source-groups", action: "group-selected" },
+          { label: "删除", icon: "trash", route: "source-delete-confirm", className: "is-danger", action: "delete-selected", ariaLabel: "删除已选 3 个书源" }
         ], "fd-source-batch-actions")
       });
   }
@@ -5098,19 +5108,12 @@
 
   function sourceDeleteConfirmScreen(data, appState) {
     return sourceShell(data, "已选 3 个", `
-      <section class="fd-source-home fd-source-batch fd-source-dialog-backdrop">
-        <div class="fd-source-batch-top"><button type="button" data-route="source-batch">取消</button><strong>已选 3 个</strong><button type="button">全选</button></div>
+      <section class="fd-source-home fd-source-batch fd-source-dialog-underlay" aria-hidden="true" inert>
+        <div class="fd-source-batch-top"><button type="button" data-route="source-batch">取消</button><strong>已选 3 个</strong><button type="button" data-source-select-all aria-pressed="false">全选</button></div>
         ${sourceSearchAndFilters(appState)}
         ${sourceList(sourceItems, "batch", appState)}
       </section>`, {
-        bottomActionHtml: sourceBottomActions([
-          { label: "启用" },
-          { label: "禁用" },
-          { label: "检测" },
-          { label: "分组", route: "source-groups" },
-          { label: "删除", className: "is-danger" }
-        ], "fd-source-batch-actions"),
-        dialogHtml: `<section class="fd-demo-dialog fd-source-delete-dialog" aria-hidden="false"><h2>删除书源？</h2><p>将删除已选 3 个书源。不会删除书架书籍，但这些书源将不再参与搜索、发现和换源。</p><label><input type="checkbox"> 同时清除相关检测日志</label><div><button type="button" data-route="source-batch">取消</button><button type="button" data-route="source-management">删除</button></div></section>`
+        dialogHtml: `<section class="fd-demo-dialog fd-source-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="source-delete-title" aria-describedby="source-delete-desc" aria-hidden="false" data-demo-dialog data-source-delete-dialog><h2 id="source-delete-title">删除书源？</h2><p id="source-delete-desc">将删除已选 3 个书源。不会删除书架书籍，但这些书源将不再参与搜索、发现和换源。</p><label class="fd-source-delete-option"><input type="checkbox" data-source-delete-log-cleanup> <span>同时清除相关检测日志</span></label><div class="fd-source-delete-actions"><button type="button" data-route-back data-dialog-initial-focus>取消</button><button class="is-danger" type="button" data-route="source-management" data-route-replace data-source-delete-confirm>删除</button></div></section>`
       });
   }
 
@@ -5194,12 +5197,13 @@
     if (!root || typeof root.querySelectorAll !== "function") return;
     const bind = (selector, motionId) => {
       root.querySelectorAll(selector).forEach((element) => {
+        if (element.closest("[inert]")) return;
         element.setAttribute("data-motion-id", motionId);
       });
     };
 
     bind("[data-route]", "app.route.push");
-    bind("[data-route-back], [data-demo-back]", "app.route.pop");
+    bind("[data-route-back], [data-demo-back], .fd-back-bar button[aria-label='返回']", "app.route.pop");
     bind(".fd-main-tab-phone .fd-main-nav-item", "tab.item.switch");
     bind("[data-bookshelf-view-button], [data-book-grid], [data-bookshelf-view]", "bookshelf.view.switch");
     bind("[data-bookshelf-filter-toggle]", "dropdown.trigger.press");
@@ -5220,6 +5224,11 @@
     bind("[data-close-dialog]", "overlay.dialog.exit");
     bind("[data-demo-dialog]", "overlay.dialog.enter/exit");
     bind("[data-discover-entry]", "chip.item.select");
+    bind("[data-source-select], .fd-source-check", "selection.item.toggle");
+    bind("[data-source-select-all]", "selection.group.toggle");
+    bind(".fd-source-batch-actions button, [data-source-action]", "selection.toolbar.action");
+    bind("[data-source-delete-log-cleanup]", "selection.option.toggle");
+    bind("[data-source-delete-confirm]", "destructive.confirm.commit");
     bind("[data-discover-filter], [data-rss-group-filter], [data-rss-manage-filter], [data-rss-category-filter], [data-rss-favorite-filter], [data-source-status-filter], [data-source-group-filter]", "filter.item.toggle");
     bind("[data-discover-reset], [data-filter-close]", "filter.apply.commit");
     bind("[data-filter-toggle], [data-bookshelf-filter-toggle], [data-discover-filter-toggle], [data-discover-sort-toggle], [data-rss-group-filter-toggle], [data-rss-manage-filter-toggle], [data-rss-category-filter-toggle], [data-rss-favorite-filter-toggle], [data-source-filter-toggle], [data-source-menu-toggle], [data-reader-more-toggle], [data-settings-option-key], [data-reader-setting-option-key], [data-reader-tts-option-key]", "dropdown.trigger.press");
@@ -6194,6 +6203,39 @@
   function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController) {
     const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
     const roundTo = (value, digits) => Number(value.toFixed(digits));
+    const dialogFocusableSelector = [
+      "button:not([disabled])",
+      "input:not([disabled])",
+      "select:not([disabled])",
+      "textarea:not([disabled])",
+      "a[href]",
+      "[tabindex]:not([tabindex='-1'])"
+    ].join(",");
+    const visibleDialogFocusables = (dialog) => Array.from(dialog.querySelectorAll(dialogFocusableSelector)).filter((element) => {
+      const rect = element.getBoundingClientRect();
+      const style = window.getComputedStyle(element);
+      return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
+    });
+    const focusInitialDialogControl = (dialog) => {
+      if (!dialog) {
+        return;
+      }
+      const target = dialog?.querySelector("[data-dialog-initial-focus]") || visibleDialogFocusables(dialog)[0];
+      if (target && typeof target.focus === "function") {
+        window.setTimeout(() => target.focus({ preventScroll: true }), 0);
+      }
+    };
+    const closeDemoDialog = (dialog) => {
+      const routeBack = dialog?.querySelector("[data-route-back]");
+      if (routeBack) {
+        routeBack.click();
+        return;
+      }
+      const closeButton = dialog?.querySelector("[data-close-dialog]");
+      if (closeButton) {
+        closeButton.click();
+      }
+    };
     const openReaderTextSelection = () => {
       appState.readerTextSelectionOpen = true;
       appState.readerSelectedText = "雨，下了一整夜。";
@@ -6956,6 +6998,9 @@
       if (targetEl.hasAttribute("data-book-cover")) {
         return;
       }
+      if (targetEl.closest("[inert]")) {
+        return;
+      }
       const navigate = (event) => {
         if (event) {
           event.preventDefault();
@@ -7380,6 +7425,7 @@
         const dialog = phone.querySelector("[data-demo-dialog]");
         if (dialog) {
           dialog.setAttribute("aria-hidden", "false");
+          focusInitialDialogControl(dialog);
         }
       });
     });
@@ -7393,6 +7439,39 @@
           dialog.setAttribute("aria-hidden", "true");
         }
       });
+    });
+
+    screenHost.querySelectorAll("[data-demo-dialog]").forEach((dialog) => {
+      if (dialog.__readerDialogKeyboardBound) {
+        return;
+      }
+      dialog.__readerDialogKeyboardBound = true;
+      dialog.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          event.preventDefault();
+          event.stopPropagation();
+          closeDemoDialog(dialog);
+          return;
+        }
+        if (event.key !== "Tab") {
+          return;
+        }
+        const focusables = visibleDialogFocusables(dialog);
+        if (!focusables.length) {
+          event.preventDefault();
+          return;
+        }
+        event.preventDefault();
+        const activeIndex = focusables.indexOf(document.activeElement);
+        const baseIndex = activeIndex >= 0 ? activeIndex : event.shiftKey ? 0 : focusables.length - 1;
+        const nextIndex = event.shiftKey
+          ? (baseIndex - 1 + focusables.length) % focusables.length
+          : (baseIndex + 1) % focusables.length;
+        focusables[nextIndex].focus({ preventScroll: true });
+      });
+      if (dialog.getAttribute("aria-hidden") !== "true") {
+        focusInitialDialogControl(dialog);
+      }
     });
 
     screenHost.querySelectorAll(".fd-flow-comparison article").forEach((card) => {

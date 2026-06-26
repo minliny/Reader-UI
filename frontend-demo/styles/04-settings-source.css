@@ -851,6 +851,8 @@
   z-index: var(--reader-ds-z-bottom-sheet);
   inset: 0;
   background: rgba(31, 27, 23, 0.24);
+  pointer-events: auto;
+  transition: background-color var(--fd-motion-effective-overlay-fast) var(--reader-motion-easing-standard);
 }
 
 .fd-demo-dialog {
@@ -865,12 +867,18 @@
   border-radius: var(--fd-radius-md);
   background: rgba(255, 252, 248, 0.98);
   box-shadow: var(--fd-shadow);
-  transform: translateY(-44%) scale(0.96);
+  opacity: 0;
+  transform: translateY(-44%) scale(var(--reader-motion-scale-dialog-enter));
+  transition:
+    opacity var(--fd-motion-effective-overlay-fast) var(--reader-motion-easing-enter),
+    transform var(--fd-motion-effective-overlay) var(--reader-motion-easing-enter),
+    visibility var(--fd-motion-effective-overlay) var(--reader-motion-easing-enter);
 }
 
 .fd-library-phone.has-dialog .fd-demo-dialog,
 .fd-settings-phone.has-dialog .fd-demo-dialog {
   visibility: visible;
+  opacity: 1;
   transform: translateY(-50%) scale(1);
   pointer-events: auto;
 }
@@ -900,6 +908,7 @@
   white-space: nowrap;
 }
 
+.fd-demo-dialog button.is-danger,
 .fd-demo-dialog button:last-child {
   background: var(--fd-danger);
   color: #fff;
