@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T14:43:41.339Z",
+  "generatedAt": "2026-06-26T15:07:29.916Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v6-20260626, render=reader-entry-motion-v1-20260626, runtime=reader-entry-motion-v1-20260626"
+      "detail": "motion=motion-controller-v7-20260626, render=reader-handle-motion-v1-20260626, runtime=reader-handle-motion-v1-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -40,17 +40,17 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "63/63 Motion IDs resolved; incomplete=0"
+      "detail": "65/65 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "63/63 runtime/selector Motion IDs expose state machines"
+      "detail": "65/65 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
       "passed": true,
-      "detail": "37/37 detailed Motion IDs use exact state machines"
+      "detail": "40/40 detailed Motion IDs use exact state machines"
     },
     {
       "id": "motion.tab.state-adapter",
@@ -73,14 +73,19 @@
       "detail": "cover and action entry paths expose data-motion-entry-* states, target reveal, and tokenized CSS"
     },
     {
+      "id": "motion.reader-control-handle.state-adapter",
+      "passed": true,
+      "detail": "reader control grabbers expose press/drag/release states, route commit semantics, and tokenized snap CSS"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "69 bind calls, 57 unique Motion IDs"
+      "detail": "71 bind calls, 59 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "137/159 data-* directly mapped"
+      "detail": "138/160 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -89,9 +94,9 @@
     }
   ],
   "summary": {
-    "passed": 17,
+    "passed": 18,
     "failed": 0,
-    "total": 17
+    "total": 18
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -100,8 +105,8 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 159,
-    "directMappedDataAttributeCount": 137,
+    "dataAttributeCount": 160,
+    "directMappedDataAttributeCount": 138,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -126,8 +131,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 69,
-    "motionIdCount": 57
+    "bindCallCount": 71,
+    "motionIdCount": 59
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
@@ -167,6 +172,8 @@
       "overlay.sheet.enter/exit",
       "overlay.sheet.exit",
       "reader.chapter.jump",
+      "reader.control.handle.press",
+      "reader.control.handle.release",
       "reader.control.hide",
       "reader.entry.actionToImmersive",
       "reader.entry.coverToImmersive",
@@ -220,6 +227,9 @@
       "toggle.switch",
       "reader.entry.coverToImmersive",
       "reader.entry.actionToImmersive",
+      "reader.control.handle.press",
+      "reader.control.handle.drag",
+      "reader.control.handle.release",
       "reader.control.hide",
       "reader.session.autoPage.start",
       "reader.session.tts.start",
@@ -239,7 +249,7 @@
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 37,
+    "detailedMotionIdCount": 40,
     "missingDetailedStateMachines": []
   }
 }

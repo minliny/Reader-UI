@@ -21,6 +21,9 @@
     "reader.session.tts.start": 200,
     "reader.session.autoPage.start": 200,
     "reader.session.capsule.control.press/toggle": 120,
+    "reader.control.handle.press": 80,
+    "reader.control.handle.drag": 0,
+    "reader.control.handle.release": 120,
     "reader.module.switch": 160,
     "reader.page.turn.next/prev": 220,
     "viewport.orientation.reshape": 240
@@ -404,6 +407,27 @@
       interrupt: ["showAgain", "routeChange", "orientationPrepare"],
       finalState: "immersiveReadingHotZonesRestored",
       reducedMotion: "Hide control layer immediately and restore immersive hit regions."
+    },
+    "reader.control.handle.press": {
+      from: ["handleIdle", "controlLayerVisible"],
+      to: ["handlePressed"],
+      interrupt: ["pointerCancel", "routeChange", "orientationPrepare"],
+      finalState: "handlePressedFeedbackVisible",
+      reducedMotion: "Commit pressed state without scale or pull preview."
+    },
+    "reader.control.handle.drag": {
+      from: ["handlePressed"],
+      to: ["handleDragging", "dragOffsetPreview"],
+      interrupt: ["pointerCancel", "routeChange", "orientationPrepare"],
+      finalState: "dragOffsetPreviewOnly",
+      reducedMotion: "Track drag semantics without panel translation."
+    },
+    "reader.control.handle.release": {
+      from: ["handleDragging", "handlePressed"],
+      to: ["snapBack", "expandCommitted", "collapseCommitted"],
+      interrupt: ["routeChange", "orientationPrepare"],
+      finalState: "controlLayerResolvedToSingleRouteState",
+      reducedMotion: "Resolve expand, collapse, or snap-back immediately without panel travel."
     },
     "reader.session.autoPage.start": {
       from: ["controlLayerVisible", "session.inactiveOrTts"],

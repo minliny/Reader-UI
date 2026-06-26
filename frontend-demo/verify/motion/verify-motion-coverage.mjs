@@ -84,6 +84,9 @@ const detailedMotionIds = [
   "toggle.switch",
   "reader.entry.coverToImmersive",
   "reader.entry.actionToImmersive",
+  "reader.control.handle.press",
+  "reader.control.handle.drag",
+  "reader.control.handle.release",
   "reader.control.hide",
   "reader.session.autoPage.start",
   "reader.session.tts.start",
@@ -241,6 +244,16 @@ const checks = [
       runtime.includes("reader.entry.actionToImmersive") &&
       motionTokens.includes("[data-motion-entry-role=\"target\"]"),
     detail: "cover and action entry paths expose data-motion-entry-* states, target reveal, and tokenized CSS"
+  },
+  {
+    id: "motion.reader-control-handle.state-adapter",
+    passed: runtime.includes("attachReaderControlHandleMotionState") &&
+      runtime.includes("data-motion-control-handle-state") &&
+      runtime.includes("reader.control.handle.press") &&
+      runtime.includes("reader.control.handle.drag") &&
+      runtime.includes("reader.control.handle.release") &&
+      motionTokens.includes("[data-motion-control-handle-panel]"),
+    detail: "reader control grabbers expose press/drag/release states, route commit semantics, and tokenized snap CSS"
   },
   {
     id: "motion.selector.bindings",

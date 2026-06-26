@@ -82,6 +82,8 @@
   --fd-motion-effective-dropdown-y: var(--app-motion-distance-dropdown-y);
   --fd-motion-effective-reader-entry: var(--reader-motion-duration-reader-entry);
   --fd-motion-effective-reader-entry-y: var(--reader-motion-distance-reader-entry-y);
+  --fd-motion-effective-handle-snap: var(--reader-motion-duration-handle-snap);
+  --fd-motion-effective-handle-pull-y: var(--reader-motion-distance-handle-pull-y);
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
   --fd-motion-effective-overlay: var(--reader-motion-duration-base);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
@@ -105,6 +107,8 @@
   --fd-motion-effective-dropdown-y: 0px;
   --fd-motion-effective-reader-entry: var(--reader-motion-duration-instant);
   --fd-motion-effective-reader-entry-y: 0px;
+  --fd-motion-effective-handle-snap: var(--reader-motion-duration-instant);
+  --fd-motion-effective-handle-pull-y: 0px;
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
@@ -126,6 +130,33 @@
 
 .fd-demo :where(button:disabled, [aria-disabled="true"]) {
   cursor: default;
+}
+
+.fd-demo :where(.fd-reader-sheet, .fd-reader-full-page-panel)[data-motion-control-handle-panel] {
+  transform: translateY(var(--reader-control-handle-y, 0px));
+  transition: transform var(--fd-motion-effective-handle-snap) var(--reader-motion-easing-standard);
+  will-change: transform;
+}
+
+.fd-demo :where(.fd-reader-sheet, .fd-reader-full-page-panel)[data-motion-control-handle-state="dragging"] {
+  transition: none;
+}
+
+.fd-demo :where(.fd-reader-grabber, .fd-reader-full-grabber)[data-motion-control-handle] {
+  transform: translateX(-50%) scale(1);
+  transition:
+    background-color var(--fd-motion-effective-button-press) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-button-press) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-button-press) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-button-press) var(--reader-motion-easing-standard);
+  touch-action: none;
+}
+
+.fd-demo :where(.fd-reader-grabber, .fd-reader-full-grabber)[data-motion-control-handle-state="pressed"],
+.fd-demo :where(.fd-reader-grabber, .fd-reader-full-grabber)[data-motion-control-handle-state="dragging"] {
+  background: #8f8173;
+  box-shadow: 0 0 0 5px rgba(143, 129, 115, 0.12);
+  transform: translateX(-50%) scaleX(1.16) scaleY(1.2);
 }
 
 .fd-demo :where(.is-active, .is-selected, [aria-selected="true"], [aria-pressed="true"]) {
@@ -373,6 +404,8 @@
     --fd-motion-effective-dropdown-y: 0px;
     --fd-motion-effective-reader-entry: var(--reader-motion-duration-instant);
     --fd-motion-effective-reader-entry-y: 0px;
+    --fd-motion-effective-handle-snap: var(--reader-motion-duration-instant);
+    --fd-motion-effective-handle-pull-y: 0px;
     --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);

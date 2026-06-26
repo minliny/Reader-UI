@@ -262,6 +262,7 @@ Web demo：
 - 148 个唯一 `data-*` 交互入口已映射到 `Motion ID -> demo route -> platform component -> evidence` 总表；没有未归类的产品交互入口。
 - Demo 已接入统一 `dropdown.*` state adapter，覆盖下拉触发器、菜单和选项的 `data-motion-dropdown-*` 状态、press-id 和 token CSS；关闭保留动画、打开 A 切 B、reposition 和录屏证据仍需补齐。
 - Demo 已接入封面进入沉浸阅读 state adapter，覆盖 `data-motion-entry-*` source/target 状态、封面 snapshot、普通阅读按钮 fallback 和 reduced-motion；详情/章节入口与录屏证据仍需补齐。
+- Demo 已接入控制层小横条 state adapter，覆盖 `.fd-reader-grabber` / `.fd-reader-full-grabber` 的 `data-motion-control-handle-*` 状态、press/drag/release、阈值 snap/expand/collapse、full 页收回和 reduced-motion；真实设备录屏、目录 full 页上拉 promote 和宽屏 dock 长按移动仍需补齐。
 - Demo 已定义打断动画状态机，并验证连续点击、返回、关闭、loading 完成和拖动开始。
 - Demo 已有折叠屏/大屏 reshape capture，覆盖展开、折叠、横屏紧凑和阅读分页映射。
 - Demo 已有整屏旋转 capture，覆盖普通页面、沉浸阅读、控制层打开、运行胶囊、控制层运行空间、宽屏 dock clamp 和 overlay 重锚定。

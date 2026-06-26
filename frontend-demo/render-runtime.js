@@ -3398,9 +3398,7 @@
     const promotedRoute = readerPromotedRoutes[type] || "";
     return `
       <section class="fd-reader-full-page-panel fd-reader-full-page-${esc(type)}" data-dev-region="ReaderExpandedPanel" aria-label="${esc(module.label)}大半屏控制窗">
-        ${promotedRoute
-          ? `<button class="fd-reader-full-grabber" type="button" data-route="${esc(promotedRoute)}" aria-label="继续展开到全屏页面"></button>`
-          : `<span class="fd-reader-full-grabber" aria-hidden="true"></span>`}
+        <button class="fd-reader-full-grabber" type="button" data-route="${esc(quickRoute)}" data-route-replace${promotedRoute ? ` data-reader-handle-expand-route="${esc(promotedRoute)}"` : ""} aria-label="${promotedRoute ? "下拉收起，上拉继续展开" : "收起到阅读控制层"}"></button>
         <header class="fd-reader-full-head">
           <span>${icon(module.icon || module.type, "fd-small-icon")}<strong>${esc(module.label)}</strong></span>
           <button type="button" data-route="${esc(quickRoute)}" data-route-replace>收起</button>
@@ -5253,6 +5251,8 @@
     bind("[data-reader-page-action]", "reader.page.turn.next/prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
     bind("[data-reader-dismiss]", "reader.control.hide");
+    bind(".fd-reader-grabber, .fd-reader-full-grabber", "reader.control.handle.press");
+    bind("[data-reader-handle-expand-route]", "reader.control.handle.release");
     bind("[data-reader-exit]", "app.route.pop");
     bind("[data-reader-loading]", "state.loading.inline");
     bind("[data-reader-tts-action]", "reader.session.capsule.control.press/toggle");
@@ -6011,6 +6011,95 @@
     }, 260);
   }
 
+  function readerControlHandlePanel(button) {
+    return button?.closest?.(".fd-reader-sheet, .fd-reader-full-page-panel") || null;
+  }
+
+  function readerControlHandleTargetRoute(button, deltaY) {
+    const expandRoute = button?.getAttribute?.("data-reader-handle-expand-route") || "";
+    if (expandRoute && Number(deltaY) < 0) {
+      return expandRoute;
+    }
+    return button?.getAttribute?.("data-route") || "";
+  }
+
+  function readerControlHandleAction(button, deltaY) {
+    const expandRoute = button?.getAttribute?.("data-reader-handle-expand-route") || "";
+    if (expandRoute && Number(deltaY) < 0) {
+      return "expand";
+    }
+    const route = readerControlHandleTargetRoute(button, deltaY);
+    if (!route) return "static";
+    if (route === "reader" || route === "immersive-reading" || readerStateByRoute[route]) {
+      return "collapse";
+    }
+    return "expand";
+  }
+
+  function readerControlHandleMotionId(state) {
+    if (state === "dragging") return "reader.control.handle.drag";
+    if (state === "releasing" || state === "settled") return "reader.control.handle.release";
+    return "reader.control.handle.press";
+  }
+
+  function readerControlHandlePreviewOffset(deltaY, action, reduced) {
+    if (reduced || action === "static") return 0;
+    const limit = 18;
+    if (action === "expand") {
+      return Math.round(clamp(deltaY, -limit, 0));
+    }
+    return Math.round(clamp(deltaY, 0, limit));
+  }
+
+  function readerControlHandleShouldCommit(deltaY, action) {
+    const threshold = 34;
+    if (action === "expand") return deltaY <= -threshold;
+    if (action === "collapse") return deltaY >= threshold;
+    return false;
+  }
+
+  function setReaderControlHandleState(button, state, options) {
+    if (!button) return;
+    const panel = readerControlHandlePanel(button);
+    const deltaY = Number(options?.deltaY || 0);
+    const action = readerControlHandleAction(button, deltaY);
+    const route = readerControlHandleTargetRoute(button, deltaY);
+    const expandRoute = button.getAttribute("data-reader-handle-expand-route") || "";
+    const offsetY = Number(options?.offsetY || 0);
+    const motionId = readerControlHandleMotionId(state);
+
+    button.setAttribute("data-motion-control-handle", "true");
+    button.setAttribute("data-motion-control-handle-action", action);
+    button.setAttribute("data-motion-control-handle-route", route);
+    if (expandRoute) {
+      button.setAttribute("data-motion-control-handle-expand-route", expandRoute);
+    }
+    button.setAttribute("data-motion-control-handle-state", state);
+    button.setAttribute("data-motion-control-handle-id", motionId);
+    if (route) {
+      button.setAttribute("data-motion-press-id", "reader.control.handle.press");
+    }
+
+    if (panel) {
+      panel.setAttribute("data-motion-control-handle-panel", panel.classList.contains("fd-reader-full-page-panel") ? "full" : "sheet");
+      panel.setAttribute("data-motion-control-handle-action", action);
+      panel.setAttribute("data-motion-control-handle-route", route);
+      if (expandRoute) {
+        panel.setAttribute("data-motion-control-handle-expand-route", expandRoute);
+      }
+      panel.setAttribute("data-motion-control-handle-state", state);
+      panel.setAttribute("data-motion-control-handle-id", motionId);
+      panel.style.setProperty("--reader-control-handle-y", `${Math.round(offsetY)}px`);
+    }
+  }
+
+  function attachReaderControlHandleMotionState(screenHost) {
+    if (!screenHost || typeof screenHost.querySelectorAll !== "function") return;
+    screenHost.querySelectorAll(".fd-reader-grabber, .fd-reader-full-grabber").forEach((button) => {
+      setReaderControlHandleState(button, button.getAttribute("data-motion-control-handle-state") || "idle", { offsetY: 0 });
+    });
+  }
+
   function sourceCandidateRow(item, index, selectedSource) {
     const isCurrent = item.state === "当前";
     const isSelected = selectedSource ? item.source === selectedSource : isCurrent;
@@ -6697,6 +6786,7 @@
       adjustReaderDropdownPlacement(screenHost);
       attachDropdownMotionState(screenHost, appState, motionController);
       attachReaderEntryMotionState(screenHost, appState);
+      attachReaderControlHandleMotionState(screenHost);
       attachMotionPressState(screenHost, motionController);
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
       if (renderedTurnDirection) {
@@ -7817,6 +7907,146 @@
           navigate(event);
         }
       });
+    });
+
+    screenHost.querySelectorAll(".fd-reader-grabber[data-route], .fd-reader-full-grabber[data-route]").forEach((button) => {
+      let startY = 0;
+      let dragStarted = false;
+      let dragMotionStarted = false;
+      let suppressNextClick = false;
+      let activePointerId = null;
+      let lastDeltaY = 0;
+      const root = screenHost.closest(".fd-demo");
+      const reduced = () => root?.getAttribute("data-motion-reduced") === "true";
+      const routeForButton = (deltaY) => readerControlHandleTargetRoute(button, deltaY);
+      const handleMotionInput = (motionId, action, deltaY) => ({
+        id: motionId,
+        action,
+        from: currentRoute(),
+        to: routeForButton(deltaY),
+        target: button
+      });
+      const commitHandleRoute = (source, deltaY) => {
+        const route = routeForButton(deltaY);
+        if (!route) return;
+        const action = readerControlHandleAction(button, deltaY);
+        setReaderControlHandleState(button, "releasing", { offsetY: 0, deltaY });
+        const motionInput = handleMotionInput("reader.control.handle.release", `handle-${action}-${source}`, deltaY);
+        if (button.hasAttribute("data-route-replace") && route === (button.getAttribute("data-route") || "")) {
+          replaceTopRoute(route, motionInput);
+          return;
+        }
+        goTo(route, true, motionInput);
+      };
+      const snapBack = () => {
+        setReaderControlHandleState(button, "releasing", { offsetY: 0 });
+        if (motionController) {
+          motionController.start(handleMotionInput("reader.control.handle.release", "handle-snap", 0));
+        }
+        const settle = () => {
+          if (button.isConnected) {
+            setReaderControlHandleState(button, "idle", { offsetY: 0 });
+          }
+        };
+        if (reduced()) {
+          settle();
+        } else {
+          window.setTimeout(settle, 140);
+        }
+      };
+      const cleanupGlobalHandleRelease = () => {
+        window.removeEventListener("pointerup", onWindowPointerUp, true);
+        window.removeEventListener("pointercancel", onWindowPointerCancel, true);
+        window.removeEventListener("mouseup", onWindowMouseUp, true);
+      };
+      const finishHandleGesture = (deltaY, source) => {
+        if (activePointerId == null) return;
+        const pointerId = activePointerId;
+        activePointerId = null;
+        cleanupGlobalHandleRelease();
+        button.releasePointerCapture?.(pointerId);
+        if (dragStarted) {
+          suppressNextClick = true;
+          if (readerControlHandleShouldCommit(deltaY, readerControlHandleAction(button, deltaY))) {
+            commitHandleRoute(source, deltaY);
+          } else {
+            snapBack();
+          }
+          return;
+        }
+        setReaderControlHandleState(button, "idle", { offsetY: 0 });
+      };
+      function onWindowPointerUp(event) {
+        if (activePointerId !== event.pointerId) return;
+        finishHandleGesture(event.clientY - startY, "drag");
+      }
+      function onWindowPointerCancel(event) {
+        if (activePointerId !== event.pointerId) return;
+        activePointerId = null;
+        cleanupGlobalHandleRelease();
+        suppressNextClick = true;
+        snapBack();
+      }
+      function onWindowMouseUp(event) {
+        if (activePointerId == null) return;
+        finishHandleGesture(Number.isFinite(event.clientY) ? event.clientY - startY : lastDeltaY, "drag");
+      }
+
+      button.addEventListener("pointerdown", (event) => {
+        if (event.button && event.button !== 0) return;
+        activePointerId = event.pointerId;
+        startY = event.clientY;
+        lastDeltaY = 0;
+        dragStarted = false;
+        dragMotionStarted = false;
+        suppressNextClick = false;
+        button.setPointerCapture?.(event.pointerId);
+        window.addEventListener("pointerup", onWindowPointerUp, true);
+        window.addEventListener("pointercancel", onWindowPointerCancel, true);
+        window.addEventListener("mouseup", onWindowMouseUp, true);
+        setReaderControlHandleState(button, "pressed", { offsetY: 0 });
+        if (motionController) {
+          motionController.start(handleMotionInput("reader.control.handle.press", "handle-press", 0));
+        }
+      });
+
+      button.addEventListener("pointermove", (event) => {
+        if (activePointerId !== event.pointerId) return;
+        const deltaY = event.clientY - startY;
+        lastDeltaY = deltaY;
+        if (!dragStarted && Math.abs(deltaY) < 4) return;
+        dragStarted = true;
+        suppressNextClick = true;
+        event.preventDefault();
+        if (!dragMotionStarted && motionController) {
+          motionController.start(handleMotionInput("reader.control.handle.drag", "handle-drag", deltaY));
+          dragMotionStarted = true;
+        }
+        setReaderControlHandleState(button, "dragging", {
+          offsetY: readerControlHandlePreviewOffset(deltaY, readerControlHandleAction(button, deltaY), reduced()),
+          deltaY
+        });
+      });
+
+      button.addEventListener("pointerup", (event) => {
+        if (activePointerId !== event.pointerId) return;
+        finishHandleGesture(event.clientY - startY, "drag");
+      });
+
+      button.addEventListener("pointercancel", (event) => {
+        onWindowPointerCancel(event);
+      });
+
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        event.stopImmediatePropagation();
+        if (suppressNextClick) {
+          suppressNextClick = false;
+          return;
+        }
+        commitHandleRoute("click", 0);
+      }, true);
     });
 
     screenHost.querySelectorAll("[data-book-cover]").forEach((button) => {
