@@ -667,7 +667,7 @@
             <label>${icon("search", "fd-small-icon")}<span>关键词</span></label>
             <button class="${ctx.activeFilter === "男频" ? "is-active" : ""}" type="button" data-route="${esc(discoverFilterRoute("男频"))}" data-discover-filter="男频">男频</button>
             <button class="${ctx.activeFilter === "女频" ? "is-active" : ""}" type="button" data-route="${esc(discoverFilterRoute("女频"))}" data-discover-filter="女频">女频</button>
-            <button type="button" data-route="discover-sort">排序：${esc(ctx.sort)}${icon("chevron", "fd-small-icon")}</button>
+            <button type="button" data-route="discover-sort" data-discover-sort-toggle aria-expanded="${ctx.sortOpen ? "true" : "false"}">排序：${esc(ctx.sort)}${icon("chevron", "fd-small-icon")}</button>
             <button type="button" data-route="discover" data-discover-reset>重置</button>
             <button class="fd-discover-apply-button is-primary" type="button" data-route="discover">${icon("check", "fd-small-icon")}应用</button>
           </div>
@@ -687,7 +687,7 @@
 
   function discoverSortDropdown(ctx) {
     return `
-      <section class="fd-discover-sort-popover" aria-label="排序方式">
+      <section class="fd-discover-sort-popover" data-discover-sort aria-label="排序方式">
         <h2>排序方式</h2>
         ${["人气", "更新", "收藏", "完本", "字数"].map((item) => `<button class="${item === ctx.sort ? "is-active" : ""}" type="button" data-discover-sort-option="${esc(item)}"${item === ctx.sort ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
       </section>`;
@@ -5233,8 +5233,8 @@
     bind("[data-discover-filter], [data-rss-group-filter], [data-rss-manage-filter], [data-rss-category-filter], [data-rss-favorite-filter], [data-source-status-filter], [data-source-group-filter]", "filter.item.toggle");
     bind("[data-discover-reset], [data-filter-close]", "filter.apply.commit");
     bind("[data-filter-toggle], [data-bookshelf-filter-toggle], [data-discover-filter-toggle], [data-discover-sort-toggle], [data-rss-group-filter-toggle], [data-rss-manage-filter-toggle], [data-rss-category-filter-toggle], [data-rss-favorite-filter-toggle], [data-source-filter-toggle], [data-source-menu-toggle], [data-reader-more-toggle], [data-settings-option-key], [data-reader-setting-option-key], [data-reader-tts-option-key]", "dropdown.trigger.press");
-    bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option], [data-discover-sort-option], [data-settings-option-choice], [data-settings-option-value], [data-reader-setting-option], [data-reader-tts-option]", "dropdown.option.select");
-    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer]", "dropdown.menu.expand/collapse");
+    bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option], [data-discover-sort-option], [data-settings-option-choice], [data-settings-option-value], [data-reader-setting-option], [data-reader-tts-option], [data-reader-more-action], .fd-source-more-menu button, .fd-bookshelf-more-menu button, .fd-book-focus-menu button", "dropdown.option.select");
+    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-discover-sort], .fd-discover-sort-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer], [data-bookshelf-more-layer], .fd-source-more-menu, .fd-bookshelf-more-menu, .fd-book-focus-menu", "dropdown.menu.expand/collapse");
     bind("[data-settings-overlay]", "overlay.dialog.enter/exit");
     bind("[data-close-settings-overlay]", "overlay.dialog.exit");
     bind("[data-settings-confirm-result], [data-main-tab-feedback]", "feedback.toast.enter/update/exit");
@@ -5248,7 +5248,7 @@
     bind("[data-reader-typography-set], [data-reader-page-space-set], [data-reader-theme], [data-reader-theme-pair], [data-reader-theme-scheme], [data-reader-toc-mode]", "segment.item.switch");
     bind("[data-module]", "reader.module.switch");
     bind("[data-module].is-active", "tab.item.select");
-    bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value], [data-reader-tts-value], [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
+    bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value]:not([data-reader-setting-option]), [data-reader-tts-value]:not([data-reader-tts-option]), [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
     bind("[data-reader-page-action]", "reader.page.turn.next/prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
     bind("[data-reader-dismiss]", "reader.control.hide");
@@ -5327,6 +5327,27 @@
           }
         }
       };
+      const syncDropdownPressState = (pressed) => {
+        const role = element.getAttribute("data-motion-dropdown-role");
+        if (role !== "trigger" && role !== "option") return;
+        const group = element.closest("[data-motion-dropdown-group]") || element;
+        if (pressed) {
+          element.setAttribute("data-motion-dropdown-state", "pressed");
+          group.setAttribute("data-motion-dropdown-phase", "press");
+          group.setAttribute("data-motion-dropdown-pressed", element.getAttribute("data-motion-dropdown-item") || element.getAttribute("data-motion-dropdown-group") || "");
+          return;
+        }
+        if (role === "trigger") {
+          element.setAttribute("data-motion-dropdown-state", dropdownTriggerOpen(element) ? "open" : "closed");
+        } else {
+          const selected = element.classList.contains("is-active") || element.classList.contains("is-selected") || element.getAttribute("aria-selected") === "true" || element.getAttribute("aria-current") === "true";
+          element.setAttribute("data-motion-dropdown-state", selected ? "selected" : "idle");
+        }
+        if (group.getAttribute("data-motion-dropdown-phase") === "press") {
+          group.setAttribute("data-motion-dropdown-phase", "settled");
+        }
+        group.removeAttribute("data-motion-dropdown-pressed");
+      };
       const setPressed = (pressed) => {
         if (isDisabled()) return;
         element.classList.toggle("is-motion-pressed", pressed);
@@ -5337,6 +5358,7 @@
         }
         syncTabPressState(pressed);
         syncSegmentPressState(pressed);
+        syncDropdownPressState(pressed);
       };
       element.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
@@ -5602,6 +5624,259 @@
 
     groups.forEach((group) => {
       syncSegmentMotionGroup(group, appState, settleDelay);
+    });
+  }
+
+  const dropdownTriggerSelector = [
+    "[data-filter-toggle]",
+    "[data-bookshelf-filter-toggle]",
+    "[data-discover-filter-toggle]",
+    "[data-discover-sort-toggle]",
+    "[data-rss-group-filter-toggle]",
+    "[data-rss-manage-filter-toggle]",
+    "[data-rss-category-filter-toggle]",
+    "[data-rss-favorite-filter-toggle]",
+    "[data-source-filter-toggle]",
+    "[data-source-menu-toggle]",
+    "[data-reader-more-toggle]",
+    "[data-settings-option-key]",
+    "[data-reader-setting-option-key]",
+    "[data-reader-tts-option-key]"
+  ].join(",");
+
+  const dropdownMenuSelector = [
+    ".fd-filter-menu",
+    ".fd-bookshelf-filter-popover",
+    "[data-discover-sort]",
+    ".fd-discover-sort-popover",
+    "[data-settings-option-dropdown]",
+    "[data-reader-setting-dropdown]",
+    "[data-reader-tts-dropdown]",
+    "[data-reader-more-layer]",
+    "[data-bookshelf-more-layer]",
+    ".fd-source-more-menu",
+    ".fd-bookshelf-more-menu",
+    ".fd-book-focus-menu"
+  ].join(",");
+
+  const dropdownOptionSelector = [
+    "[data-bookshelf-group-option]",
+    "[data-bookshelf-sort-option]",
+    "[data-bookshelf-filter-option]",
+    "[data-discover-sort-option]",
+    "[data-settings-option-choice]",
+    "[data-settings-option-value]",
+    "[data-reader-setting-option]",
+    "[data-reader-tts-option]",
+    "[data-reader-more-action]",
+    "[data-rss-group-filter]",
+    "[data-rss-manage-filter]",
+    "[data-rss-category-filter]",
+    "[data-rss-favorite-filter]",
+    "[data-source-status-filter]",
+    "[data-source-group-filter]",
+    ".fd-source-more-menu button",
+    ".fd-bookshelf-more-menu button",
+    ".fd-book-focus-menu button"
+  ].join(",");
+
+  function dropdownGroupKey(element) {
+    if (!element) return "";
+    const containingMenu = element.closest?.(dropdownMenuSelector);
+    if (containingMenu && containingMenu !== element) {
+      return dropdownGroupKey(containingMenu);
+    }
+    const attrKeys = [
+      ["data-reader-setting-option-key", "reader-setting"],
+      ["data-reader-setting-dropdown", "reader-setting"],
+      ["data-reader-setting-option", "reader-setting"],
+      ["data-reader-tts-option-key", "reader-tts"],
+      ["data-reader-tts-dropdown", "reader-tts"],
+      ["data-reader-tts-option", "reader-tts"],
+      ["data-settings-option-key", "settings-option"],
+      ["data-settings-option-dropdown", "settings-option"],
+      ["data-settings-option-choice", "settings-option"],
+      ["data-bookshelf-filter-toggle", "bookshelf-filter"],
+      ["data-bookshelf-group-option", "bookshelf-filter"],
+      ["data-bookshelf-sort-option", "bookshelf-filter"],
+      ["data-bookshelf-filter-option", "bookshelf-filter"],
+      ["data-discover-filter-toggle", "discover-filter"],
+      ["data-discover-sort-toggle", "discover-sort"],
+      ["data-discover-sort", "discover-sort"],
+      ["data-discover-sort-option", "discover-sort"],
+      ["data-rss-group-filter-toggle", "rss-group-filter"],
+      ["data-rss-group-filter", "rss-group-filter"],
+      ["data-rss-manage-filter-toggle", "rss-manage-filter"],
+      ["data-rss-manage-filter", "rss-manage-filter"],
+      ["data-rss-category-filter-toggle", "rss-category-filter"],
+      ["data-rss-category-filter", "rss-category-filter"],
+      ["data-rss-favorite-filter-toggle", "rss-favorite-filter"],
+      ["data-rss-favorite-filter", "rss-favorite-filter"],
+      ["data-source-filter-toggle", "source-filter"],
+      ["data-source-status-filter", "source-filter"],
+      ["data-source-group-filter", "source-filter"],
+      ["data-source-menu-toggle", "source-menu"],
+      ["data-reader-more-toggle", "reader-more"],
+      ["data-reader-more-layer", "reader-more"],
+      ["data-reader-more-action", "reader-more"],
+      ["data-bookshelf-more-layer", "bookshelf-more"]
+    ];
+    for (const [attr, prefix] of attrKeys) {
+      if (element.hasAttribute(attr)) {
+        const value = element.getAttribute(attr);
+        return value ? `${prefix}:${value}` : prefix;
+      }
+    }
+    const filterControl = element.closest?.(".fd-filter-control");
+    const filterTrigger = filterControl?.querySelector(dropdownTriggerSelector);
+    if (filterTrigger) {
+      return dropdownGroupKey(filterTrigger);
+    }
+    if (element.classList?.contains("fd-discover-sort-popover")) return "discover-sort";
+    if (element.classList?.contains("fd-source-more-menu")) return "source-menu";
+    if (element.classList?.contains("fd-bookshelf-more-menu")) return "bookshelf-more";
+    if (element.classList?.contains("fd-book-focus-menu")) return "book-focus-menu";
+    return element.getAttribute("aria-label") || element.className || "dropdown";
+  }
+
+  function dropdownItemKey(element) {
+    if (!element) return "";
+    const attrs = [
+      "data-settings-option-value",
+      "data-reader-setting-value",
+      "data-reader-tts-value",
+      "data-discover-sort-option",
+      "data-bookshelf-group-option",
+      "data-bookshelf-sort-option",
+      "data-bookshelf-filter-option",
+      "data-rss-group-filter",
+      "data-rss-manage-filter",
+      "data-rss-category-filter",
+      "data-rss-favorite-filter",
+      "data-source-status-filter",
+      "data-source-group-filter",
+      "data-reader-more-action",
+      "data-route",
+      "data-book-action"
+    ];
+    for (const attr of attrs) {
+      if (element.hasAttribute(attr)) return element.getAttribute(attr) || "";
+    }
+    return element.textContent.trim().replace(/\s+/g, " ").slice(0, 40);
+  }
+
+  function dropdownTriggerOpen(trigger) {
+    if (!trigger) return false;
+    if (trigger.getAttribute("aria-expanded") === "true") return true;
+    if (trigger.classList.contains("is-option-open")) return true;
+    const group = dropdownGroupKey(trigger);
+    return Array.from(trigger.ownerDocument?.querySelectorAll(dropdownMenuSelector) || [])
+      .some((menu) => (menu.getAttribute("data-motion-dropdown-group") || dropdownGroupKey(menu)) === group);
+  }
+
+  function syncDropdownTrigger(trigger) {
+    const group = dropdownGroupKey(trigger);
+    const open = dropdownTriggerOpen(trigger);
+    trigger.setAttribute("data-motion-dropdown-role", "trigger");
+    trigger.setAttribute("data-motion-dropdown-group", group);
+    trigger.setAttribute("data-motion-dropdown-state", open ? "open" : "closed");
+    trigger.setAttribute("data-motion-dropdown-phase", open ? "expanded" : "settled");
+    trigger.setAttribute("data-motion-press-id", "dropdown.trigger.press");
+  }
+
+  function syncDropdownOption(option) {
+    const group = dropdownGroupKey(option);
+    const selected = option.classList.contains("is-active") || option.classList.contains("is-selected") || option.getAttribute("aria-selected") === "true" || option.getAttribute("aria-current") === "true";
+    option.setAttribute("data-motion-dropdown-role", "option");
+    option.setAttribute("data-motion-dropdown-group", group);
+    option.setAttribute("data-motion-dropdown-item", dropdownItemKey(option));
+    option.setAttribute("data-motion-dropdown-state", selected ? "selected" : "idle");
+    option.setAttribute("data-motion-press-id", "dropdown.option.press");
+  }
+
+  function settleDropdownMenu(menu, state) {
+    if (!menu.isConnected) return;
+    menu.setAttribute("data-motion-dropdown-state", state);
+    menu.setAttribute("data-motion-dropdown-phase", "settled");
+  }
+
+  function syncDropdownMenu(menu, reduced) {
+    const group = dropdownGroupKey(menu);
+    const placement = menu.classList.contains("is-drop-up") ? "up" : "down";
+    menu.setAttribute("data-motion-dropdown-role", "menu");
+    menu.setAttribute("data-motion-dropdown-group", group);
+    menu.setAttribute("data-motion-dropdown-placement", placement);
+    menu.setAttribute("data-motion-dropdown-phase", "expand");
+    if (menu.__readerDropdownMotionEntered || reduced) {
+      settleDropdownMenu(menu, "expanded");
+      return;
+    }
+    menu.__readerDropdownMotionEntered = true;
+    menu.setAttribute("data-motion-dropdown-state", "entering");
+    window.requestAnimationFrame(() => settleDropdownMenu(menu, "expanded"));
+  }
+
+  function attachDropdownMotionState(root, appState, motionController) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const reduced = root.closest(".fd-demo")?.getAttribute("data-motion-reduced") === "true";
+
+    root.querySelectorAll(dropdownTriggerSelector).forEach((trigger) => {
+      syncDropdownTrigger(trigger);
+      if (!trigger.__readerDropdownMotionBound) {
+        trigger.__readerDropdownMotionBound = true;
+        trigger.addEventListener("click", () => {
+          const group = dropdownGroupKey(trigger);
+          const wasOpen = dropdownTriggerOpen(trigger);
+          const id = wasOpen ? "dropdown.menu.collapse" : "dropdown.menu.expand";
+          appState.dropdownMotion = {
+            group,
+            phase: wasOpen ? "collapse" : "expand",
+            from: wasOpen ? "open" : "closed",
+            to: wasOpen ? "closed" : "open"
+          };
+          if (motionController) {
+            motionController.start({
+              id,
+              action: wasOpen ? "collapse" : "expand",
+              from: wasOpen ? "open" : "closed",
+              to: wasOpen ? "closed" : "open",
+              target: trigger
+            });
+          }
+        });
+      }
+    });
+
+    root.querySelectorAll(dropdownMenuSelector).forEach((menu) => {
+      syncDropdownMenu(menu, reduced);
+    });
+
+    root.querySelectorAll(dropdownOptionSelector).forEach((option) => {
+      syncDropdownOption(option);
+      if (!option.__readerDropdownOptionMotionBound) {
+        option.__readerDropdownOptionMotionBound = true;
+        option.addEventListener("click", () => {
+          const group = dropdownGroupKey(option);
+          const item = dropdownItemKey(option);
+          appState.dropdownMotion = {
+            group,
+            item,
+            phase: "select",
+            from: "open",
+            to: "valueCommitted"
+          };
+          option.setAttribute("data-motion-dropdown-state", "selecting");
+          if (motionController) {
+            motionController.start({
+              id: "dropdown.option.select",
+              action: "select",
+              from: group,
+              to: item,
+              target: option
+            });
+          }
+        });
+      }
     });
   }
 
@@ -6288,9 +6563,10 @@
       applyMotionSelectorBindings(screenHost);
       attachTabMotionState(screenHost, appState);
       attachSegmentMotionState(screenHost, appState, motionController);
+      adjustReaderDropdownPlacement(screenHost);
+      attachDropdownMotionState(screenHost, appState, motionController);
       attachMotionPressState(screenHost, motionController);
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
-      adjustReaderDropdownPlacement(screenHost);
       if (renderedTurnDirection) {
         const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
         const clearTurnClass = () => {

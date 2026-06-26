@@ -55,10 +55,10 @@
   },
   "selectorCoverage": {
     "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
-    "dataAttributeCount": 158,
+    "dataAttributeCount": 159,
     "bindCallCount": 68,
     "motionIdCount": 56,
-    "directMappedDataAttributeCount": 136,
+    "directMappedDataAttributeCount": 137,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -108,7 +108,7 @@
     "globalMotionStateController": "minimum transaction controller only; visual lifecycle still missing",
     "routePushPopMotionLifecycle": "controller transaction implemented; visual enter/exit still missing",
     "tabIndicatorMotionLifecycle": "main tab, reader module tab, and segmented control data-state adapters implemented; media evidence still missing",
-    "dropdownMotionController": "controller press transaction only; menu lifecycle still missing",
+    "dropdownMotionController": "trigger/menu/option state adapter implemented; collapse persistence, A-to-B media evidence, and resize/orientation reposition evidence still missing",
     "coverToImmersiveSharedTransition": "missing",
     "readerGrabberLongPressDrag": "missing",
     "readerControlDockBoundsAndPersistence": "missing",
@@ -145,7 +145,7 @@
     {
       "family": "dropdown",
       "source": "filterDisclosure, settings option dropdown, reader more/tts/settings dropdowns",
-      "currentState": "Trigger and option IDs exist; open/close/select/reposition lifecycle is not controller-owned.",
+      "currentState": "Trigger, menu, and option elements now expose data-motion-dropdown-* state, dropdown.option.press press IDs, tokenized CSS, and expand/select controller transactions; collapse persistence, A-to-B media evidence, and resize/orientation reposition proof remain missing.",
       "requiredOwner": "dropdown motion controller"
     },
     {

@@ -260,7 +260,7 @@ Web demo：
 - Demo 已实现主 TAB、阅读模块 TAB 和 segmented control 的 `data-motion-tab-*` / `data-motion-segment-*` 状态 adapter、`tab.item.press/select/switch` / `segment.item.switch` press-id 和 `reader.module.switch` / `segment.item.switch` 事务；录屏证据仍需补齐。
 - Demo 已实现通用组件族状态机，覆盖 button、toggle/switch/checkbox、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 和 bookshelf view switch。
 - 148 个唯一 `data-*` 交互入口已映射到 `Motion ID -> demo route -> platform component -> evidence` 总表；没有未归类的产品交互入口。
-- Demo 已实现统一 `dropdown.*` 动效，覆盖全部下拉栏/锚定菜单的展开、收起、选项点击、打开 A 切 B、reposition 和 reduced-motion。
+- Demo 已接入统一 `dropdown.*` state adapter，覆盖下拉触发器、菜单和选项的 `data-motion-dropdown-*` 状态、press-id 和 token CSS；关闭保留动画、打开 A 切 B、reposition 和录屏证据仍需补齐。
 - Demo 已实现封面进入沉浸阅读的 motion，并覆盖无封面入口降级。
 - Demo 已定义打断动画状态机，并验证连续点击、返回、关闭、loading 完成和拖动开始。
 - Demo 已有折叠屏/大屏 reshape capture，覆盖展开、折叠、横屏紧凑和阅读分页映射。

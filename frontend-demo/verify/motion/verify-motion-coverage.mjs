@@ -225,6 +225,15 @@ const checks = [
     detail: "segmented controls expose data-motion-segment-* states, press IDs, and tokenized CSS"
   },
   {
+    id: "motion.dropdown.state-adapter",
+    passed: runtime.includes("attachDropdownMotionState") &&
+      runtime.includes("data-motion-dropdown-state") &&
+      runtime.includes("dropdown.menu.expand") &&
+      runtime.includes("dropdown.option.press") &&
+      motionTokens.includes("[data-motion-dropdown-role=\"menu\"]"),
+    detail: "dropdown triggers, menus, and options expose data-motion-dropdown-* states, press IDs, and tokenized CSS"
+  },
+  {
     id: "motion.selector.bindings",
     passed: bindMatches.length >= 58 && motionIds.length >= 50,
     detail: `${bindMatches.length} bind calls, ${motionIds.length} unique Motion IDs`

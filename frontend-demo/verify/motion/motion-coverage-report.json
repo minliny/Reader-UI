@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T14:09:21.418Z",
+  "generatedAt": "2026-06-26T14:32:04.145Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v4-20260626, render=segment-motion-v1-20260626, runtime=segment-motion-v1-20260626"
+      "detail": "motion=motion-controller-v5-20260626, render=dropdown-motion-v1-20260626, runtime=dropdown-motion-v1-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -63,6 +63,11 @@
       "detail": "segmented controls expose data-motion-segment-* states, press IDs, and tokenized CSS"
     },
     {
+      "id": "motion.dropdown.state-adapter",
+      "passed": true,
+      "detail": "dropdown triggers, menus, and options expose data-motion-dropdown-* states, press IDs, and tokenized CSS"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "68 bind calls, 56 unique Motion IDs"
@@ -70,7 +75,7 @@
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "136/158 data-* directly mapped"
+      "detail": "137/159 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -79,9 +84,9 @@
     }
   ],
   "summary": {
-    "passed": 15,
+    "passed": 16,
     "failed": 0,
-    "total": 15
+    "total": 16
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -90,8 +95,8 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 158,
-    "directMappedDataAttributeCount": 136,
+    "dataAttributeCount": 159,
+    "directMappedDataAttributeCount": 137,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",

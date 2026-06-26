@@ -340,7 +340,7 @@
 - 当前路由推进多数是即时替换 HTML；需要决定原生应用是否使用平台 stack motion，还是在密集操作页面保持即时切换。
 - 通用交互组件族已完成 contract/effects/platform mapping、`MOTION_SELECTOR_MATRIX.md`、基础 token、reduced-motion 测试开关、`data-motion-id` / pressed state 接入和 contract 层状态机；还缺实现层 reducer / 状态机绑定和录屏证据。
 - TAB / segmented 已补 `tab.item.press/select/switch` 和 `segment.item.switch` contract 状态机；主 TAB、阅读模块 TAB 和 segmented control 已接入实现层 `data-motion-tab-*` / `data-motion-segment-*` 状态、press-id 和 token 化状态 CSS。indicator 媒体证据和录屏仍缺。
-- 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 仍是分散实现：阅读/朗读下拉有 placement 逻辑，发现排序有 chevron rotation，设置页选项和菜单多为即时 mount/unmount；还没有统一的组件实现、token 化展开/收起/点击动画和录屏证据。
+- 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 已接入实现层 `data-motion-dropdown-*` 状态、trigger/menu/option adapter、`dropdown.option.press` press-id 和 token 化展开/选项点击 CSS。关闭保留动画、打开 A 后切 B、resize/orientation reposition 和录屏证据仍缺。
 - 宽屏控制层长按拖动目前只有规划，demo 还没有 pointer capture、dock bounds 计算、offset 持久化和越界回弹证据。
 - 封面进入沉浸阅读目前只有规划，demo 还没有 shared element / snapshot 层和录屏证据。
 - 自动翻页/朗读运行胶囊目前有状态和静态 UI，但还没有 token 化的进入、更新、切换、退出动画和录屏证据。

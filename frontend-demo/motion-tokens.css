@@ -75,6 +75,11 @@
   --fd-motion-effective-numeric: var(--app-motion-duration-numeric-commit);
   --fd-motion-effective-state: var(--app-motion-duration-state-replace);
   --fd-motion-effective-feedback: var(--app-motion-duration-feedback-toast);
+  --fd-motion-effective-dropdown-press: var(--app-motion-duration-dropdown-press);
+  --fd-motion-effective-dropdown-expand: var(--app-motion-duration-dropdown-expand);
+  --fd-motion-effective-dropdown-collapse: var(--app-motion-duration-dropdown-collapse);
+  --fd-motion-effective-dropdown-select: var(--app-motion-duration-dropdown-select);
+  --fd-motion-effective-dropdown-y: var(--app-motion-distance-dropdown-y);
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
   --fd-motion-effective-overlay: var(--reader-motion-duration-base);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
@@ -91,6 +96,11 @@
   --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
   --fd-motion-effective-state: var(--reader-motion-duration-instant);
   --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
+  --fd-motion-effective-dropdown-press: var(--reader-motion-duration-instant);
+  --fd-motion-effective-dropdown-expand: var(--reader-motion-duration-instant);
+  --fd-motion-effective-dropdown-collapse: var(--reader-motion-duration-instant);
+  --fd-motion-effective-dropdown-select: var(--reader-motion-duration-instant);
+  --fd-motion-effective-dropdown-y: 0px;
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
@@ -222,6 +232,55 @@
   opacity: 0.86;
 }
 
+.fd-demo :where([data-motion-dropdown-role="trigger"], [data-motion-dropdown-role="option"]) {
+  transition:
+    background-color var(--fd-motion-effective-dropdown-select) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-dropdown-select) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-dropdown-select) var(--reader-motion-easing-standard),
+    color var(--fd-motion-effective-dropdown-select) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-dropdown-select) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-dropdown-press) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where([data-motion-dropdown-role="trigger"], [data-motion-dropdown-role="option"])[data-motion-dropdown-state="pressed"] {
+  transform: scale(var(--app-motion-scale-press));
+}
+
+.fd-demo :where([data-motion-dropdown-role="trigger"])[data-motion-dropdown-state="open"] {
+  box-shadow: inset 0 0 0 1px rgba(35, 121, 164, 0.14);
+}
+
+.fd-demo :where([data-motion-dropdown-role="option"])[data-motion-dropdown-state="selecting"] {
+  box-shadow: inset 0 0 0 1px rgba(35, 121, 164, 0.18);
+}
+
+.fd-demo :where([data-motion-dropdown-role="menu"]) {
+  transform-origin: top center;
+  transition:
+    opacity var(--fd-motion-effective-dropdown-expand) var(--reader-motion-easing-enter),
+    transform var(--fd-motion-effective-dropdown-expand) var(--reader-motion-easing-enter),
+    max-height var(--fd-motion-effective-dropdown-expand) var(--reader-motion-easing-standard);
+  will-change: opacity, transform;
+}
+
+.fd-demo :where([data-motion-dropdown-role="menu"])[data-motion-dropdown-placement="up"] {
+  transform-origin: bottom center;
+}
+
+.fd-demo :where([data-motion-dropdown-role="menu"])[data-motion-dropdown-state="entering"] {
+  opacity: 0;
+  transform: translateY(var(--fd-motion-effective-dropdown-y));
+}
+
+.fd-demo :where([data-motion-dropdown-role="menu"])[data-motion-dropdown-placement="up"][data-motion-dropdown-state="entering"] {
+  transform: translateY(calc(var(--fd-motion-effective-dropdown-y) * -1));
+}
+
+.fd-demo :where([data-motion-dropdown-role="menu"])[data-motion-dropdown-state="expanded"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fd-demo {
     --fd-motion-effective-tab-press: var(--reader-motion-duration-instant);
@@ -234,6 +293,11 @@
     --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
     --fd-motion-effective-state: var(--reader-motion-duration-instant);
     --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
+    --fd-motion-effective-dropdown-press: var(--reader-motion-duration-instant);
+    --fd-motion-effective-dropdown-expand: var(--reader-motion-duration-instant);
+    --fd-motion-effective-dropdown-collapse: var(--reader-motion-duration-instant);
+    --fd-motion-effective-dropdown-select: var(--reader-motion-duration-instant);
+    --fd-motion-effective-dropdown-y: 0px;
     --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
