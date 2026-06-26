@@ -5,7 +5,7 @@
 
 当前主导航和页面结构不以本目录历史报告为准，而以以下当前输入为准：
 
-- `docs/ui-design/frontend-input/frontend-demo-draft`
+- `frontend-demo/`
 - `docs/ui-design/frontend-input/MAIN_NAV_RECONCILIATION.md`
 - `docs/ui-handoff/ROUTE_MAP.md`
 - `docs/ui-handoff/SCREEN_MATRIX.md`

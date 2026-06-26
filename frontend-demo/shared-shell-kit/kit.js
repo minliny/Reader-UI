@@ -45,6 +45,9 @@
   }
 
   function appTopBar(config) {
+    if (config.topBarHtml !== undefined) {
+      return config.topBarHtml;
+    }
     return `
       <section class="${classList("rsk-app-top-bar", config.topBarClass)}" data-slot="appTopBar" aria-label="顶部栏">
         <h1>${esc(config.title || "")}</h1>

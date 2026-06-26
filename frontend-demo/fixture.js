@@ -28,9 +28,9 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
     },
     {
       name: "设置页框架（SettingsShell）",
-      pages: "通用设置、书架搜索、隐私权限、缓存、关于反馈、同步备份、书源管理",
+      pages: "通用设置、书架搜索、关于反馈、同步备份、书源管理",
       slots: "SettingsFrame / BackTopBar / SettingsContent / SettingSection / ToastHost / DialogHost / SettingsStateHost",
-      status: "七个设置二级页共享设置行、分组卡和状态宿主"
+      status: "五个设置二级页共享设置行、分组卡和状态宿主"
     },
     {
       name: "横向流程框架（FlowShell）",
@@ -73,7 +73,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       src: "../../04-阅读链路/换源/UI设计图.png"
     },
     {
-      title: "App 通用设置（General Settings）",
+      title: "通用设置（General Settings）",
       shell: "SettingsShell",
       src: "../../05-设置链路/App通用设置/UI设计图.png"
     }
@@ -340,8 +340,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
   settings: {
     rows: [
       { icon: "palette", title: "主题与外观", meta: "跟随系统 · 暖纸背景", value: "默认" },
-      { icon: "globe", title: "网络与书源", meta: "移动网络允许搜索", value: "已开启" },
-      { icon: "shield", title: "隐私与权限", meta: "本地书、通知、剪贴板", value: "管理" }
+      { icon: "globe", title: "网络与书源", meta: "移动网络允许搜索", value: "已开启" }
     ]
   },
   flow: {

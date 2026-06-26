@@ -6,7 +6,7 @@
 
 命名格式（Naming Format）：后续新增或重写的文档条目统一使用 `中文名称（English Name）`。本地 HTML 文件角色和文档准入规则以 `HTML_FILE_REQUIREMENTS.md` 为准。UI 图、封面和图标 token 以 `asset-library/ASSET_LIBRARY.md` 和 `asset-library/icons.js` 为统一素材库来源。
 
-页面框架本地来源（Local page shell source）：`docs/ui-design/frontend-input/shared-shell-kit/kit.js`。前端 demo 入口（Frontend demo entry）：`frontend-demo/index.html`；顶层 `UI设计图.png` 由该本地 demo 生成，`frontend-demo-draft` 只作历史参考。
+页面框架本地来源（Local page shell source）：`docs/ui-design/frontend-input/shared-shell-kit/kit.js`。前端 demo 入口（Frontend demo entry）：`frontend-demo/index.html`；顶层 `UI设计图.png` 由该本地 demo 生成，根目录 `frontend-demo/` 是当前视觉源头。
 
 本文档只基于本地资料（local sources）整理，不依赖当前 Figma 文件状态：
 

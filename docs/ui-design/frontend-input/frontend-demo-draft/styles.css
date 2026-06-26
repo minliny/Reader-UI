@@ -1,9 +1,0 @@
-@import "../tokens.css";
-
-@import "./styles/00-foundation.css?v=visual-constraints-v3-20260625";
-@import "./styles/01-shell-layout.css?v=visual-constraints-v3-20260625";
-@import "./styles/02-main-library.css?v=visual-constraints-v3-20260625";
-@import "./styles/03-reader.css?v=visual-constraints-v3-20260625";
-@import "./styles/04-settings-source.css?v=visual-constraints-v3-20260625";
-@import "./styles/05-flow-adaptive.css?v=visual-constraints-v3-20260625";
-@import "./styles/06-responsive.css?v=visual-constraints-v3-20260625";

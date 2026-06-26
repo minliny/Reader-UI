@@ -1,6 +1,6 @@
 # UI Handoff
 
-当前 UI handoff 的主导航以 `docs/ui-design/frontend-input/frontend-demo-draft` 为准：
+当前 UI handoff 的主导航以 `frontend-demo/` 为准：
 
 - 书架
 - 发现

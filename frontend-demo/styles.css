@@ -1,9 +1,10 @@
 @import "./tokens.css";
 
-@import "./styles/00-foundation.css?v=reader-settings-no-more-v1-20260625";
-@import "./styles/01-shell-layout.css?v=reader-settings-no-more-v1-20260625";
-@import "./styles/02-main-library.css?v=reader-settings-no-more-v1-20260625";
-@import "./styles/03-reader.css?v=reader-settings-no-more-v1-20260625";
-@import "./styles/04-settings-source.css?v=reader-settings-no-more-v1-20260625";
-@import "./styles/05-flow-adaptive.css?v=reader-settings-no-more-v1-20260625";
-@import "./styles/06-responsive.css?v=reader-settings-no-more-v1-20260625";
+@import "./styles/00-foundation.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./styles/01-shell-layout.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./styles/02-main-library.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./styles/03-reader.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./styles/04-settings-source.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./styles/05-flow-adaptive.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./styles/06-responsive.css?v=bookshelf-group-in-filter-v1-20260626";
+@import "./motion-tokens.css?v=motion-components-v1-20260626";

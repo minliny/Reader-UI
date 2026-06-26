@@ -21,7 +21,7 @@
     {
       "title": "书架链路（Library Flow）",
       "items": [
-        { "name": "书架空状态（Library Empty）", "path": "../../03-书架链路/书架空状态/UI设计图.png", "shell": "LibraryShell" },
+        { "name": "书架空状态（Bookshelf Empty）", "path": "../../03-书架链路/书架空状态/UI设计图.png", "shell": "MainTabShell" },
         { "name": "书籍搜索（Book Search）", "path": "../../03-书架链路/书籍搜索/UI设计图.png", "shell": "LibraryShell" },
         { "name": "书籍详情（Book Detail）", "path": "../../03-书架链路/书籍详情/UI设计图.png", "shell": "LibraryShell" },
         { "name": "书籍目录（Book Directory）", "path": "../../03-书架链路/书籍目录/UI设计图.png", "shell": "LibraryShell" },
@@ -52,8 +52,6 @@
       "items": [
         { "name": "App 通用设置（General Settings）", "path": "../../05-设置链路/App通用设置/UI设计图.png", "shell": "SettingsShell" },
         { "name": "书架与搜索设置（Bookshelf and Search Settings）", "path": "../../05-设置链路/书架与搜索设置/UI设计图.png", "shell": "SettingsShell" },
-        { "name": "隐私与权限（Privacy and Permissions）", "path": "../../05-设置链路/隐私与权限/UI设计图.png", "shell": "SettingsShell" },
-        { "name": "缓存管理（Cache Management）", "path": "../../05-设置链路/缓存管理/UI设计图.png", "shell": "SettingsShell" },
         { "name": "关于与反馈（About and Feedback）", "path": "../../05-设置链路/关于与反馈/UI设计图.png", "shell": "SettingsShell" },
         { "name": "同步与备份（Sync and Backup）", "path": "../../05-设置链路/同步与备份/UI设计图.png", "shell": "SettingsShell" },
         { "name": "书源管理（Source Management）", "path": "../../05-设置链路/书源管理/UI设计图.png", "shell": "SettingsShell" }

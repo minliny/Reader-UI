@@ -1,0 +1,176 @@
+{
+  "audit": "source-global-motion-audit",
+  "date": "2026-06-26",
+  "scope": "frontend-demo source only",
+  "excludedAsEvidence": [
+    "frontend-demo/MOTION_*.md",
+    "docs/ui-handoff/MOTION_PLATFORM_MAPPING.md",
+    "screenshots",
+    "prior planning docs"
+  ],
+  "sourceInputs": [
+    "frontend-demo/index.html",
+    "frontend-demo/render.js",
+    "frontend-demo/render-runtime.js",
+    "frontend-demo/route-contract.js",
+    "frontend-demo/shared-shell-kit/kit.js",
+    "frontend-demo/styles.css",
+    "frontend-demo/styles/*.css",
+    "frontend-demo/tokens.css",
+    "frontend-demo/motion-tokens.css"
+  ],
+  "routeCoverage": {
+    "totalRoutes": 131,
+    "renderRouteCases": 131,
+    "missingCases": [],
+    "extraCases": [],
+    "shellCounts": {
+      "MainTabShell": 35,
+      "LibraryShell": 52,
+      "SettingsShell": 28,
+      "ReaderShell": 15,
+      "FlowShell": 1
+    },
+    "prefixCounts": {
+      "bookshelf": 3,
+      "discover": 34,
+      "rss": 45,
+      "settings": 2,
+      "book": 4,
+      "sort": 1,
+      "group": 1,
+      "local": 1,
+      "immersive": 1,
+      "reader": 9,
+      "toc": 1,
+      "tts": 1,
+      "auto": 1,
+      "content": 2,
+      "source": 18,
+      "about": 1,
+      "sync": 1,
+      "webdav": 1,
+      "restore": 4
+    }
+  },
+  "selectorCoverage": {
+    "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
+    "dataAttributeCount": 147,
+    "bindCallCount": 58,
+    "motionIdCount": 50,
+    "directMappedDataAttributeCount": 125,
+    "unmappedDataAttributes": [
+      "data-adaptive-runtime",
+      "data-book-author",
+      "data-book-chapter",
+      "data-book-title",
+      "data-cover-src",
+      "data-current-page",
+      "data-current-route",
+      "data-current-shell",
+      "data-dev-region",
+      "data-icon-missing",
+      "data-module",
+      "data-nav-type",
+      "data-page-space-row",
+      "data-reader-brightness-dim",
+      "data-reader-surface-signature",
+      "data-route-replace",
+      "data-route-stack",
+      "data-screen-host",
+      "data-shell",
+      "data-slot",
+      "data-stack-size",
+      "data-typography-row"
+    ]
+  },
+  "runtimeEventCounts": {
+    "click": 62,
+    "keydown": 10,
+    "pointerdown": 5,
+    "pointerup": 3,
+    "pointercancel": 3,
+    "pointermove": 2,
+    "resize": 2,
+    "keyup": 1,
+    "animationend": 1,
+    "change": 1,
+    "contextmenu": 2,
+    "pointerleave": 1
+  },
+  "manualFeatureAssessment": {
+    "reducedMotionRuntimeAndCss": "implemented",
+    "motionIdAdapter": "implemented",
+    "minimumMotionController": "implemented",
+    "genericPressState": "implemented",
+    "readerPageTurnAnimation": "implemented",
+    "readerLoadingSpin": "implemented",
+    "globalMotionStateController": "minimum transaction controller only; visual lifecycle still missing",
+    "routePushPopMotionLifecycle": "controller transaction implemented; visual enter/exit still missing",
+    "tabIndicatorMotionLifecycle": "controller transaction implemented; indicator motion still missing",
+    "dropdownMotionController": "controller press transaction only; menu lifecycle still missing",
+    "coverToImmersiveSharedTransition": "missing",
+    "readerGrabberLongPressDrag": "missing",
+    "readerControlDockBoundsAndPersistence": "missing",
+    "readerSessionStartTransaction": "implemented for TTS and auto-page",
+    "readerSessionCapsuleEnterExitTickVoicePulse": "missing visual animation",
+    "capsuleRunPauseMorph": "missing",
+    "orientationPrepareReshapeSettleLifecycle": "controller reshape transaction implemented; prepare/freeze/settle visuals missing"
+  },
+  "componentFamilies": [
+    {
+      "family": "app.route",
+      "source": "data-route, data-route-back, data-demo-back",
+      "currentState": "Motion ID and controller transaction exist, but render is still immediate innerHTML replacement except Reader inline loading.",
+      "requiredOwner": "motion controller"
+    },
+    {
+      "family": "tab",
+      "source": ".fd-main-nav-item and module/segment tab buttons",
+      "currentState": "Controller transaction exists for main tab switch; selected state is still class and aria update with no from-to indicator migration.",
+      "requiredOwner": "tab motion controller"
+    },
+    {
+      "family": "button",
+      "source": "button, role=button, data-route",
+      "currentState": "Generic pressed state exists; semantic activate/commit feedback is not complete for plain business buttons.",
+      "requiredOwner": "common component motion"
+    },
+    {
+      "family": "chip/filter/segment",
+      "source": "data-discover-entry, data-*filter, data-reader-*set",
+      "currentState": "Motion IDs exist for many selectors; selection-switch state machine is not unified.",
+      "requiredOwner": "common component motion"
+    },
+    {
+      "family": "dropdown",
+      "source": "filterDisclosure, settings option dropdown, reader more/tts/settings dropdowns",
+      "currentState": "Trigger and option IDs exist; open/close/select/reposition lifecycle is not controller-owned.",
+      "requiredOwner": "dropdown motion controller"
+    },
+    {
+      "family": "reader.entry",
+      "source": "data-book-cover",
+      "currentState": "Click routes to immersive reading through a controller transaction; long press opens focus menu; no shared cover transition.",
+      "requiredOwner": "reader entry motion"
+    },
+    {
+      "family": "reader.control.handle",
+      "source": ".fd-reader-grabber, .fd-reader-full-grabber",
+      "currentState": "Click expands/collapses panels; no long-press drag, bounds clamp, or dock persistence.",
+      "requiredOwner": "reader control dock motion"
+    },
+    {
+      "family": "reader.session.capsule",
+      "source": "data-reader-immersive-status, data-reader-tts-action, data-reader-setting-toggle=autoPage",
+      "currentState": "TTS and auto-page session start transactions plus capsule rendering exist; capsule enter/exit/tick/voice/run-pause animations are missing.",
+      "requiredOwner": "reader session motion"
+    },
+    {
+      "family": "viewport",
+      "source": "data-orientation, data-viewport-class, resize listeners",
+      "currentState": "Responsive classification and controller reshape transaction exist; rotation/fold animation lifecycle is missing.",
+      "requiredOwner": "viewport motion controller"
+    }
+  ]
+}

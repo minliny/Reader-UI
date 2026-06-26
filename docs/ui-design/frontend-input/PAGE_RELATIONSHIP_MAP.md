@@ -7,7 +7,7 @@
 | 来源（Source） | 作用（Purpose） |
 |---|---|
 | `manifest.json` | 锁定 30 个正式页面、64 个正式验证目标、页面 shell、pageRole、slots 和状态矩阵目标。 |
-| `LOCAL_DEMO_DESIGN_ASSET_MAP.md` | 锁定本地 demo route 到顶层 `UI设计图.png` 的生成映射，避免继续使用 `frontend-demo-draft` 作为视觉源头。 |
+| `LOCAL_DEMO_DESIGN_ASSET_MAP.md` | 锁定本地 demo route 到顶层 `UI设计图.png` 的生成映射，避免旧候选稿继续作为视觉源头。 |
 | `contracts.d.ts` | 锁定每个页面的 Fixture、State union 和 Event union。 |
 | `EVENT_CALLBACK_MAPPING.md` | 锁定 Event 到 Compose 回调名的映射，禁止泛化成无语义 `onClick`。 |
 | `PAGE_FRAMEWORK_ARCHITECTURE.md` | 锁定 MainTabShell、LibraryShell、ReaderShell、SettingsShell、FlowShell 的结构边界。 |

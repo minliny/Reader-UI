@@ -1127,9 +1127,9 @@ async function validateFrontendDemoInteractions(page, failures) {
   assert(bookshelfHomeStructure.actionSheetRouteEntryCount === 0, "bookshelf should not expose action-sheet structure route", failures);
   assert(bookshelfHomeStructure.searchEntryCount === 0, "bookshelf home should not render a body search entry", failures);
   assert(bookshelfHomeStructure.keyboardHostCount === 0, "bookshelf home should not own a hidden keyboard host", failures);
-  assert(bookshelfHomeStructure.chipCount === 4, "bookshelf home should render four shelf filter chips", failures);
-  assert(bookshelfHomeStructure.activeChipCount === 1, "bookshelf home should keep exactly one active filter chip", failures);
-  assert(bookshelfHomeStructure.sectionToolButtonCount === 3, "bookshelf home should expose three compact shelf tools", failures);
+  assert(bookshelfHomeStructure.chipCount === 0, "bookshelf home should move shelf group chips into the filter popover", failures);
+  assert(bookshelfHomeStructure.activeChipCount === 0, "bookshelf home should not keep a separate active group chip", failures);
+  assert(bookshelfHomeStructure.sectionToolButtonCount === 4, "bookshelf home should expose cover/list/filter/settings compact shelf tools", failures);
   assert(bookshelfHomeStructure.activeSectionToolCount === 1, "bookshelf home should keep one active view tool", failures);
   assert(bookshelfHomeStructure.settingsToolCount === 1, "bookshelf home should expose exactly one bookshelf settings entry", failures);
   assert(bookshelfHomeStructure.settingsIconUsesGearToken, "bookshelf settings tool should use the asset-library gear token", failures);
@@ -1203,7 +1203,7 @@ async function validateFrontendDemoInteractions(page, failures) {
     };
   });
   assert(bookshelfMoreState.hidden === "false", "bookshelf top more action did not open operation layer", failures);
-  for (const option of ["批量管理", "分组管理", "本地书导入", "排序与筛选"]) {
+  for (const option of ["批量管理", "分组管理", "本地书导入"]) {
     assert(bookshelfMoreState.text.includes(option), `bookshelf top more operation layer missing ${option}`, failures);
   }
   assert(bookshelfMoreState.routeCount >= 3, "bookshelf top more operation layer should expose page-level operation routes", failures);
@@ -1477,7 +1477,8 @@ async function validateFrontendDemoInteractions(page, failures) {
       chapterProgressIsButton: document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")?.tagName === "BUTTON",
       chapterProgressValue: document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")?.getAttribute("aria-valuenow") || "",
       chapterProgressLabel: document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")?.getAttribute("aria-label") || "",
-      chapterReadout: document.querySelector(".fd-reader-chapter-panel small")?.textContent || "",
+      chapterReadout: document.querySelector(".fd-reader-chapter-panel .fd-reader-book-progress")?.textContent || "",
+      totalChaptersReadout: document.querySelector(".fd-reader-chapter-panel .fd-reader-total-chapters")?.textContent || "",
       chapterProgressPointer: document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")
         ? window.getComputedStyle(document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")).cursor
         : "",
@@ -1499,8 +1500,8 @@ async function validateFrontendDemoInteractions(page, failures) {
   assert(readerControlStructure.chapterProgressIsButton, "reader chapter progress should be an interactive control", failures);
   assert(Number(readerControlStructure.chapterProgressValue) >= 0, "reader chapter progress should expose aria-valuenow", failures);
   assert(readerControlStructure.chapterProgressLabel === "调整书籍进度", "reader progress control should describe book progress", failures);
-  assert(readerControlStructure.chapterReadout.includes("书籍进度"), "reader chapter panel should show book progress only", failures);
-  assert(/第\s*\d+\s*\/\s*128\s*章/.test(readerControlStructure.chapterReadout), "reader chapter panel should show current and total chapter count", failures);
+  assert(/^\d+(?:\.\d+)?%$/.test(readerControlStructure.chapterReadout.trim()), "reader chapter panel should show book progress as a compact percentage", failures);
+  assert(/共\s*128\s*章/.test(readerControlStructure.totalChaptersReadout), "reader chapter panel should show total chapter count", failures);
   assert(!readerControlStructure.chapterReadout.includes("本章"), "reader chapter panel readout should not show chapter-local progress text", failures);
   assert(!readerControlStructure.chapterReadout.includes("页"), "reader chapter panel readout should not show page count", failures);
   assert(readerControlStructure.chapterProgressPointer === "pointer", "reader chapter progress should expose clickable cursor feedback", failures);
@@ -1679,18 +1680,18 @@ async function validateFrontendDemoInteractions(page, failures) {
   const chapterControlBefore = await page.evaluate(() => ({
     chapter: document.querySelector(".fd-reader-chapter-panel [data-reader-current-chapter]")?.textContent || "",
     progress: document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")?.getAttribute("aria-valuenow") || "",
-    readout: document.querySelector(".fd-reader-chapter-panel small")?.textContent || ""
+    readout: document.querySelector(".fd-reader-chapter-panel .fd-reader-book-progress")?.textContent || ""
   }));
   await page.click('.fd-active-screen .fd-reader-chapter-panel [data-reader-chapter-action="next"]');
   const chapterControlAfterNext = await page.evaluate(() => ({
     chapter: document.querySelector(".fd-reader-chapter-panel [data-reader-current-chapter]")?.textContent || "",
     progress: document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")?.getAttribute("aria-valuenow") || "",
-    readout: document.querySelector(".fd-reader-chapter-panel small")?.textContent || ""
+    readout: document.querySelector(".fd-reader-chapter-panel .fd-reader-book-progress")?.textContent || ""
   }));
   assert(chapterControlAfterNext.chapter !== chapterControlBefore.chapter, "reader next chapter action did not change current chapter", failures);
   assert(chapterControlAfterNext.chapter.includes("第 33 章"), "reader next chapter action did not move to the next chapter", failures);
   assert(Number(chapterControlAfterNext.progress) > Number(chapterControlBefore.progress), "reader next chapter action should advance book progress instead of resetting it", failures);
-  assert(chapterControlAfterNext.readout.includes("书籍进度"), "reader next chapter readout should keep book progress", failures);
+  assert(/^\d+(?:\.\d+)?%$/.test(chapterControlAfterNext.readout.trim()), "reader next chapter readout should keep compact book progress", failures);
   assert(!chapterControlAfterNext.readout.includes("本章") && !chapterControlAfterNext.readout.includes("页"), "reader next chapter readout is too verbose", failures);
 
   const progressBox = await page.locator(".fd-active-screen .fd-reader-chapter-panel [data-reader-chapter-progress]").boundingBox();
@@ -1702,10 +1703,10 @@ async function validateFrontendDemoInteractions(page, failures) {
   }
   const chapterProgressAfterSeek = await page.evaluate(() => ({
     progress: Number(document.querySelector(".fd-reader-chapter-panel [data-reader-chapter-progress]")?.getAttribute("aria-valuenow") || 0),
-    readout: document.querySelector(".fd-reader-chapter-panel small")?.textContent || ""
+    readout: document.querySelector(".fd-reader-chapter-panel .fd-reader-book-progress")?.textContent || ""
   }));
   assert(chapterProgressAfterSeek.progress >= 45 && chapterProgressAfterSeek.progress <= 60, "reader chapter progress control did not update progress from pointer interaction", failures);
-  assert(chapterProgressAfterSeek.readout.includes("书籍进度"), "reader chapter progress readout did not stay tied to book progress", failures);
+  assert(/^\d+(?:\.\d+)?%$/.test(chapterProgressAfterSeek.readout.trim()), "reader chapter progress readout did not stay tied to compact book progress", failures);
   assert(!chapterProgressAfterSeek.readout.includes("本章") && !chapterProgressAfterSeek.readout.includes("页"), "reader chapter progress readout is too verbose", failures);
 
   await page.click('.fd-active-screen .fd-reader-module[data-route="reader-appearance"]');
@@ -1841,7 +1842,7 @@ async function validateFrontendDemoInteractions(page, failures) {
   assert(bookshelfStructureAfterReload.groupRouteCount === 0, "bookshelf home should not expose group-management as a primary structure action", failures);
   assert(bookshelfStructureAfterReload.importRouteCount === 0, "bookshelf home should not expose local-import as a primary structure action", failures);
   assert(bookshelfStructureAfterReload.sortRouteCount === 0, "bookshelf home should not expose sort-filter from compact visual tools", failures);
-  assert(bookshelfStructureAfterReload.visualToolCount === 3, "bookshelf home should keep three compact visual tools after reload", failures);
+  assert(bookshelfStructureAfterReload.visualToolCount === 4, "bookshelf home should keep cover/list/filter/settings compact visual tools after reload", failures);
   assert(bookshelfStructureAfterReload.settingsToolCount === 1, "bookshelf home should keep one settings tool after reload", failures);
 
   await page.click('.fd-active-screen .fd-section-head button[data-route="bookshelf-search-settings"]');
@@ -1967,13 +1968,11 @@ async function validateFrontendDemoInteractions(page, failures) {
   assert(settingsTopActions.length === 0, "settings tab should not expose placeholder search/more top actions", failures);
 
   const settingsSecondaryExpectations = [
-    { route: "settings-general", texts: ["通用设置", "基础偏好", "App主题", "启动时打开", "自动检查更新", "崩溃日志", "恢复默认"], sections: ["基础偏好", "行为与反馈"], optionDropdownMin: 1, dialogTriggerMin: 1 },
-    { route: "bookshelf-search-settings", texts: ["书架与搜索", "默认展示", "封面列数", "封面模式预览", "搜索范围", "结果排序", "搜索历史", "清空搜索历史"], sections: ["书架", "搜索"], optionDropdownMin: 1, dialogTriggerMin: 1 },
-    { route: "privacy-permissions", texts: ["文件访问", "通知权限", "网络访问说明", "去设置", "隐私开关", "清除隐私数据"], sections: ["系统权限", "隐私设置", "数据与说明"], dialogTriggerMin: 1 },
-    { route: "cache-management", texts: ["缓存管理", "缓存占用", "正在计算", "缓存分类", "书籍缓存", "封面缓存", "搜索缓存", "RSS 缓存", "清理缓存"], sections: ["缓存分类", "缓存策略", "清理缓存"], metricMin: 4, optionDropdownMin: 1, dialogTriggerMin: 2 },
-    { route: "about-feedback", texts: ["当前版本", "个人开源", "检查更新", "问题反馈", "功能建议", "源码仓库", "开源许可", "导出诊断日志"], sections: ["项目与版本", "反馈与支持", "开源与贡献"], metricMin: 4, dialogTriggerMin: 3 },
-    { route: "sync-backup", texts: ["同步与备份", "服务器地址", "测试 WebDAV", "保存配置", "WebDAV · 2026-06-23 08:00", "本地 · 2026-06-23 10:30", "恢复范围"], sections: ["WebDAV 配置", "恢复数据", "恢复范围"], dialogTriggerMin: 1, restoreRowsMin: 4 },
-    { route: "source-management", texts: ["书源管理", "搜索书源名称或域名", "全部分组", "起点中文网", "启用", "异常", "批量管理", "新增书源"], sourceRowsMin: 8 }
+    { route: "settings-general", texts: ["通用设置", "基础偏好", "App主题", "启动时打开", "自动检查更新", "崩溃日志", "缓存清理", "系统权限", "文件访问", "通知权限", "电池优化", "恢复默认"], sections: ["基础偏好", "行为与反馈", "系统权限"], optionDropdownMin: 1, dialogTriggerMin: 1 },
+    { route: "bookshelf-search-settings", texts: ["书架与搜索", "默认展示", "封面列数", "默认分组", "排序与筛选", "搜索范围", "结果排序", "搜索历史", "清空搜索历史"], sections: ["书架", "排序与筛选", "搜索"], optionDropdownMin: 1, dialogTriggerMin: 1 },
+    { route: "about-feedback", texts: ["关于与反馈", "检查更新", "源码仓库", "开源许可", "参与贡献"], sections: ["项目信息"] },
+    { route: "sync-backup", texts: ["同步与备份", "服务器地址", "测试网络连通性", "保存配置", "WebDAV", "2026-06-23 08:00", "本地", "2026-06-23 10:30", "书架、进度、设置、书源"], sections: ["WebDAV 配置", "恢复数据"], dialogTriggerMin: 1, restoreRowsMin: 4 },
+    { route: "source-management", texts: ["书源管理", "搜索书源名称或域名", "全部分组", "起点中文网", "8 个启用", "4 个异常", "批量管理", "新增书源"], sourceRowsMin: 4 }
   ];
   for (const expected of settingsSecondaryExpectations) {
     await page.click(`.fd-active-screen .fd-setting-row[data-route="${expected.route}"]`);
@@ -2088,7 +2087,7 @@ async function validateFrontendDemoInteractions(page, failures) {
   const discoverState = await snapshot();
   assert(discoverState.route === "discover", "main tab nav did not navigate to discover", failures);
   const discoverTopActions = await page.evaluate(() => Array.from(document.querySelectorAll(".fd-active-screen .fd-top-actions button")).map((button) => button.getAttribute("data-top-action") || ""));
-  assert(discoverTopActions.length === 0, "discover tab should not expose placeholder search/more top actions", failures);
+  assert(discoverTopActions.every((action) => action !== "search" && action !== "more"), "discover tab should not expose placeholder search/more top actions", failures);
 }
 
 async function validateFrontendDemoAdaptiveMatrix(page, htmlPath, initialViewport, failures) {
