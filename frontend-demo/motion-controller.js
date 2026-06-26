@@ -8,6 +8,7 @@
     "app.route.replace": 160,
     "tab.item.press": 80,
     "tab.item.switch": 160,
+    "segment.item.switch": 160,
     "button.press": 80,
     "dropdown.trigger.press": 80,
     "dropdown.menu.expand": 160,
@@ -308,6 +309,13 @@
       interrupt: ["switchTargetAgain", "routeChange", "pointerCancel"],
       finalState: "oneActiveTabAndStableBarSize",
       reducedMotion: "Switch active state instantly and keep indicator static."
+    },
+    "segment.item.switch": {
+      from: ["segment.previous"],
+      to: ["segment.next"],
+      interrupt: ["switchTargetAgain", "routeChange", "pointerCancel", "stateReset"],
+      finalState: "oneActiveSegmentAndStableGroupSize",
+      reducedMotion: "Commit selected segment state immediately without indicator travel or layout movement."
     },
     "dropdown.trigger.press": {
       from: ["closed", "open"],

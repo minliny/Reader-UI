@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T13:53:45.841Z",
+  "generatedAt": "2026-06-26T14:09:21.418Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v3-20260626, render=tab-motion-v2-20260626, runtime=tab-motion-v2-20260626"
+      "detail": "motion=motion-controller-v4-20260626, render=segment-motion-v1-20260626, runtime=segment-motion-v1-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -50,12 +50,17 @@
     {
       "id": "motion.contract.detailed-motion-ids",
       "passed": true,
-      "detail": "36/36 detailed Motion IDs use exact state machines"
+      "detail": "37/37 detailed Motion IDs use exact state machines"
     },
     {
       "id": "motion.tab.state-adapter",
       "passed": true,
       "detail": "main tab and reader module tab expose data-motion-tab-* states, press IDs, and tokenized CSS"
+    },
+    {
+      "id": "motion.segment.state-adapter",
+      "passed": true,
+      "detail": "segmented controls expose data-motion-segment-* states, press IDs, and tokenized CSS"
     },
     {
       "id": "motion.selector.bindings",
@@ -74,9 +79,9 @@
     }
   ],
   "summary": {
-    "passed": 14,
+    "passed": 15,
     "failed": 0,
-    "total": 14
+    "total": 15
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -192,6 +197,7 @@
       "tab.item.press",
       "tab.item.select",
       "tab.item.switch",
+      "segment.item.switch",
       "dropdown.trigger.press",
       "dropdown.menu.expand",
       "dropdown.menu.expand/collapse",
@@ -222,7 +228,7 @@
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 36,
+    "detailedMotionIdCount": 37,
     "missingDetailedStateMachines": []
   }
 }

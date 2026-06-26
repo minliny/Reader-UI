@@ -107,7 +107,7 @@
     "readerLoadingSpin": "implemented",
     "globalMotionStateController": "minimum transaction controller only; visual lifecycle still missing",
     "routePushPopMotionLifecycle": "controller transaction implemented; visual enter/exit still missing",
-    "tabIndicatorMotionLifecycle": "main tab and reader module tab data-state adapter implemented; segmented tab and media evidence still missing",
+    "tabIndicatorMotionLifecycle": "main tab, reader module tab, and segmented control data-state adapters implemented; media evidence still missing",
     "dropdownMotionController": "controller press transaction only; menu lifecycle still missing",
     "coverToImmersiveSharedTransition": "missing",
     "readerGrabberLongPressDrag": "missing",
@@ -127,7 +127,7 @@
     {
       "family": "tab",
       "source": ".fd-main-nav-item and module/segment tab buttons",
-      "currentState": "Main tab and reader module tab now expose data-motion-tab-* state, tab.item.press/select/switch press IDs, and reader.module.switch transactions; segmented tab and media evidence remain missing.",
+      "currentState": "Main tab, reader module tab, and segmented control now expose data-motion-tab-* / data-motion-segment-* state, tab.item.press/select/switch and segment.item.switch press IDs, and reader.module.switch / segment.item.switch transactions; media evidence remains missing.",
       "requiredOwner": "tab motion controller"
     },
     {

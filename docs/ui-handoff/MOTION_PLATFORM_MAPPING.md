@@ -257,7 +257,7 @@ Web demo：
 - `frontend-demo/motion-controller.js` 暴露可执行 `ReaderMotionController.CONTRACT`，并能把当前 renderer 使用的 Motion ID 解析到 token、state fields、state machine、平台组件和证据规则；关键 Motion ID 必须命中精确 `from/to/interrupt/finalState/reducedMotion`，不能只用 family fallback。
 - Demo CSS 已使用共享 motion token。
 - Demo 已实现 reduced-motion 行为。
-- Demo 已实现主 TAB 和阅读模块 TAB 的 `data-motion-tab-*` 状态 adapter、`tab.item.press/select/switch` press-id 和 `reader.module.switch` 事务；segmented TAB 和录屏证据仍需补齐。
+- Demo 已实现主 TAB、阅读模块 TAB 和 segmented control 的 `data-motion-tab-*` / `data-motion-segment-*` 状态 adapter、`tab.item.press/select/switch` / `segment.item.switch` press-id 和 `reader.module.switch` / `segment.item.switch` 事务；录屏证据仍需补齐。
 - Demo 已实现通用组件族状态机，覆盖 button、toggle/switch/checkbox、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 和 bookshelf view switch。
 - 148 个唯一 `data-*` 交互入口已映射到 `Motion ID -> demo route -> platform component -> evidence` 总表；没有未归类的产品交互入口。
 - Demo 已实现统一 `dropdown.*` 动效，覆盖全部下拉栏/锚定菜单的展开、收起、选项点击、打开 A 切 B、reposition 和 reduced-motion。

@@ -200,6 +200,28 @@
   opacity: 0.86;
 }
 
+.fd-demo :where([data-motion-segment-item]) {
+  transition:
+    background-color var(--fd-motion-effective-tab-select) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-tab-select) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-tab-switch) var(--reader-motion-easing-standard),
+    color var(--fd-motion-effective-tab-select) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-tab-switch) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-tab-press) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where([data-motion-segment-item])[data-motion-segment-state="pressed"] {
+  transform: scale(var(--app-motion-scale-press));
+}
+
+.fd-demo :where([data-motion-segment-item])[data-motion-segment-state="entering"] {
+  box-shadow: inset 0 0 0 1px rgba(35, 121, 164, 0.18), 0 6px 14px rgba(35, 121, 164, 0.1);
+}
+
+.fd-demo :where([data-motion-segment-item])[data-motion-segment-state="exiting"] {
+  opacity: 0.86;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fd-demo {
     --fd-motion-effective-tab-press: var(--reader-motion-duration-instant);

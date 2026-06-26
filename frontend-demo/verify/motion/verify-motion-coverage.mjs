@@ -72,6 +72,7 @@ const detailedMotionIds = [
   "tab.item.press",
   "tab.item.select",
   "tab.item.switch",
+  "segment.item.switch",
   "dropdown.trigger.press",
   "dropdown.menu.expand",
   "dropdown.menu.expand/collapse",
@@ -213,6 +214,15 @@ const checks = [
       runtime.includes("reader.module.switch") &&
       motionTokens.includes("--fd-motion-effective-tab-switch"),
     detail: "main tab and reader module tab expose data-motion-tab-* states, press IDs, and tokenized CSS"
+  },
+  {
+    id: "motion.segment.state-adapter",
+    passed: runtime.includes("attachSegmentMotionState") &&
+      runtime.includes("data-motion-segment-state") &&
+      runtime.includes("segment.item.switch") &&
+      runtime.includes("data-motion-press-id") &&
+      motionTokens.includes("[data-motion-segment-item]"),
+    detail: "segmented controls expose data-motion-segment-* states, press IDs, and tokenized CSS"
   },
   {
     id: "motion.selector.bindings",

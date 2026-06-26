@@ -5307,6 +5307,26 @@
           }
         }
       };
+      const syncSegmentPressState = (pressed) => {
+        const segmentItem = element.getAttribute("data-motion-segment-item");
+        if (!segmentItem) return;
+        const group = element.closest("[data-motion-segment-group]");
+        if (pressed) {
+          element.setAttribute("data-motion-segment-state", "pressed");
+          if (group) {
+            group.setAttribute("data-motion-segment-phase", "press");
+            group.setAttribute("data-motion-segment-pressed", segmentItem);
+          }
+          return;
+        }
+        element.setAttribute("data-motion-segment-state", element.classList.contains("is-active") ? "active" : "inactive");
+        if (group && group.getAttribute("data-motion-segment-pressed") === segmentItem) {
+          group.removeAttribute("data-motion-segment-pressed");
+          if (group.getAttribute("data-motion-segment-phase") === "press") {
+            group.setAttribute("data-motion-segment-phase", "settled");
+          }
+        }
+      };
       const setPressed = (pressed) => {
         if (isDisabled()) return;
         element.classList.toggle("is-motion-pressed", pressed);
@@ -5316,6 +5336,7 @@
           element.removeAttribute("data-motion-pressed");
         }
         syncTabPressState(pressed);
+        syncSegmentPressState(pressed);
       };
       element.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
@@ -5419,6 +5440,168 @@
           button.setAttribute("data-motion-tab-state", button.classList.contains("is-active") ? "active" : "inactive");
         });
       }, settleDelay);
+    });
+  }
+
+  const segmentMotionSelector = [
+    "[data-reader-toc-mode]",
+    "[data-reader-typography-set]",
+    "[data-reader-page-space-set]",
+    "[data-reader-theme]",
+    "[data-demo-mode-option]"
+  ].join(",");
+
+  function segmentMotionKey(button) {
+    if (!button) return "";
+    if (button.hasAttribute("data-demo-mode-option")) return button.getAttribute("data-demo-mode-option") || "";
+    if (button.hasAttribute("data-reader-toc-mode")) return button.getAttribute("data-reader-toc-mode") || "";
+    if (button.hasAttribute("data-reader-theme")) return button.getAttribute("data-reader-theme") || "";
+    if (button.hasAttribute("data-reader-typography-set")) {
+      return [
+        button.getAttribute("data-reader-typography-set") || "",
+        button.getAttribute("data-reader-typography-value") || ""
+      ].filter(Boolean).join(":");
+    }
+    if (button.hasAttribute("data-reader-page-space-set")) {
+      return [
+        button.getAttribute("data-reader-page-space-set") || "",
+        button.getAttribute("data-reader-page-space-value") || ""
+      ].filter(Boolean).join(":");
+    }
+    return button.textContent.trim();
+  }
+
+  function segmentMotionGroupKey(button) {
+    if (!button) return "";
+    if (button.hasAttribute("data-demo-mode-option")) return "demo-mode";
+    if (button.hasAttribute("data-reader-toc-mode")) return "reader-toc-mode";
+    if (button.hasAttribute("data-reader-theme")) return "reader-theme";
+    if (button.hasAttribute("data-reader-typography-set")) return `reader-typography-${button.getAttribute("data-reader-typography-set") || "value"}`;
+    if (button.hasAttribute("data-reader-page-space-set")) return `reader-page-space-${button.getAttribute("data-reader-page-space-set") || "value"}`;
+    return "segment";
+  }
+
+  function segmentMotionHost(button) {
+    return button?.closest(".fd-reader-segment-row, .fd-directory-toc-switch-row, .fd-reader-full-toc-switch-row, .fd-reader-font-row, .fd-reader-full-theme-grid, .fd-reader-theme-grid, .fd-reader-full-choice-grid, .fd-reader-appearance-quick-theme, .fd-reader-full-setting-block, .fd-demo-mode-switch") || button?.parentElement || null;
+  }
+
+  function segmentMotionActiveButton(host, groupKey) {
+    if (!host) return null;
+    return Array.from(host.querySelectorAll(segmentMotionSelector))
+      .find((button) => segmentMotionGroupKey(button) === groupKey && (button.classList.contains("is-active") || button.getAttribute("aria-pressed") === "true")) || null;
+  }
+
+  function segmentMotionButtonsForHost(host, groupKey) {
+    if (!host) return [];
+    return Array.from(host.querySelectorAll(segmentMotionSelector))
+      .filter((button) => segmentMotionGroupKey(button) === groupKey);
+  }
+
+  function syncSegmentMotionGroup(group, appState, settleDelay) {
+    if (!group?.host) return;
+    const active = segmentMotionActiveButton(group.host, group.key);
+    const activeKey = segmentMotionKey(active) || "";
+    group.host.setAttribute("data-motion-segment-group", group.key);
+    group.host.setAttribute("data-motion-segment-active", activeKey);
+    group.buttons.forEach((button) => {
+      const key = segmentMotionKey(button);
+      const isActive = button === active;
+      button.setAttribute("data-motion-segment-group", group.key);
+      button.setAttribute("data-motion-segment-item", key);
+      button.setAttribute("data-motion-segment-state", isActive ? "active" : "inactive");
+      button.setAttribute("data-motion-press-id", "tab.item.press");
+      button.classList.remove("is-segment-motion-from", "is-segment-motion-to");
+    });
+
+    const motion = appState?.segmentMotion && appState.segmentMotion.group === group.key && !appState.segmentMotion.settled
+      ? appState.segmentMotion
+      : null;
+    if (!motion || !motion.to) {
+      group.host.setAttribute("data-motion-segment-phase", "settled");
+      group.host.removeAttribute("data-motion-segment-from");
+      group.host.removeAttribute("data-motion-segment-to");
+      return;
+    }
+
+    group.host.setAttribute("data-motion-segment-phase", motion.from === motion.to ? "select" : "switch");
+    group.host.setAttribute("data-motion-segment-from", motion.from || "");
+    group.host.setAttribute("data-motion-segment-to", motion.to || "");
+    group.buttons.forEach((button) => {
+      const key = segmentMotionKey(button);
+      if (key === motion.from && motion.from !== motion.to) {
+        button.setAttribute("data-motion-segment-state", "exiting");
+        button.classList.add("is-segment-motion-from");
+      }
+      if (key === motion.to) {
+        button.setAttribute("data-motion-segment-state", "entering");
+        button.classList.add("is-segment-motion-to");
+      }
+    });
+
+    window.setTimeout(() => {
+      if (appState && appState.segmentMotion === motion) {
+        appState.segmentMotion = null;
+      }
+      if (!group.host.isConnected) return;
+      group.host.setAttribute("data-motion-segment-phase", "settled");
+      group.host.removeAttribute("data-motion-segment-from");
+      group.host.removeAttribute("data-motion-segment-to");
+      group.buttons.forEach((button) => {
+        button.classList.remove("is-segment-motion-from", "is-segment-motion-to");
+        button.setAttribute("data-motion-segment-state", button.classList.contains("is-active") ? "active" : "inactive");
+      });
+    }, settleDelay);
+  }
+
+  function attachSegmentMotionState(root, appState, motionController) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const reduced = root.closest(".fd-demo")?.getAttribute("data-motion-reduced") === "true";
+    const settleDelay = reduced ? 0 : 180;
+    const buttons = Array.from(root.querySelectorAll(segmentMotionSelector));
+    const groups = new Map();
+
+    buttons.forEach((button) => {
+      const groupKey = segmentMotionGroupKey(button);
+      const host = segmentMotionHost(button);
+      if (!host) return;
+      if (!groups.has(groupKey)) {
+        groups.set(groupKey, { key: groupKey, host, buttons: [] });
+      }
+      groups.get(groupKey).buttons.push(button);
+
+      if (!button.__readerSegmentMotionBound) {
+        button.__readerSegmentMotionBound = true;
+        button.addEventListener("click", () => {
+          const key = segmentMotionKey(button);
+          const currentHost = segmentMotionHost(button);
+          const active = segmentMotionActiveButton(currentHost, groupKey);
+          const from = segmentMotionKey(active) || "";
+          appState.segmentMotion = {
+            group: groupKey,
+            from,
+            to: key,
+            settled: false
+          };
+          if (motionController) {
+            motionController.start({
+              id: "segment.item.switch",
+              action: from === key ? "select" : "switch",
+              from,
+              to: key,
+              target: button
+            });
+          }
+          syncSegmentMotionGroup({
+            key: groupKey,
+            host: currentHost,
+            buttons: segmentMotionButtonsForHost(currentHost, groupKey)
+          }, appState, settleDelay);
+        });
+      }
+    });
+
+    groups.forEach((group) => {
+      syncSegmentMotionGroup(group, appState, settleDelay);
     });
   }
 
@@ -6062,6 +6245,9 @@
       } catch (error) {
         // Demo mode should remain usable even when storage is unavailable.
       }
+      applyMotionSelectorBindings(root);
+      attachSegmentMotionState(root, appState, motionController);
+      attachMotionPressState(root, motionController);
     };
 
     target.querySelectorAll("[data-demo-mode-option]").forEach((button) => {
@@ -6099,10 +6285,11 @@
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         updateRouteInfo(route);
       }
-      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
       applyMotionSelectorBindings(screenHost);
       attachTabMotionState(screenHost, appState);
+      attachSegmentMotionState(screenHost, appState, motionController);
       attachMotionPressState(screenHost, motionController);
+      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
       adjustReaderDropdownPlacement(screenHost);
       if (renderedTurnDirection) {
         const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
