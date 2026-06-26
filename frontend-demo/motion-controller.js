@@ -23,6 +23,488 @@
   const CONTRACT_VERSION = "reader-motion-contract-v1";
   const COMMON_STATE_FIELDS = ["motionId", "phase", "reducedMotion", "sequence"];
   const COMMON_EVIDENCE = ["frontend-demo/verify/motion/selector-matrix/<motion-id>__<route>__<selector>.webm"];
+  const DEFAULT_STATE_MACHINE = {
+    from: ["idle"],
+    to: ["running"],
+    interrupt: ["superseded", "routeChange", "destroy"],
+    finalState: "settled",
+    reducedMotion: "Commit final state immediately; do not run transform, opacity, scale, or repeated motion."
+  };
+
+  const FAMILY_STATE_MACHINES = {
+    "app.launch": {
+      from: ["coldStart", "deepLinkStart"],
+      to: ["shellVisible", "entryRouteReady"],
+      interrupt: ["deepLinkRedirect", "reducedMotion", "appBackgrounded"],
+      finalState: "shellVisible",
+      reducedMotion: "Skip launch movement and reveal shell plus entry route in final state."
+    },
+    "app.route": {
+      from: ["route.current"],
+      to: ["route.target"],
+      interrupt: ["newRoute", "back", "replace", "destroy"],
+      finalState: "route.targetVisible",
+      reducedMotion: "Replace route content without spatial push or pop movement."
+    },
+    tab: {
+      from: ["inactive", "active", "pressed"],
+      to: ["active", "inactive"],
+      interrupt: ["pointerCancel", "switchTarget", "routeChange"],
+      finalState: "oneActiveTab",
+      reducedMotion: "Commit selected tab state with no indicator travel."
+    },
+    button: {
+      from: ["enabled", "pressed", "loading"],
+      to: ["enabled", "loading", "commandCommitted"],
+      interrupt: ["pointerCancel", "disabled", "routeChange"],
+      finalState: "commandCommittedOrIdle",
+      reducedMotion: "Keep instant state feedback without scale or opacity tween."
+    },
+    "button.destructive": {
+      from: ["armed", "pressed", "confirming"],
+      to: ["confirmed", "cancelled"],
+      interrupt: ["cancel", "overlayDismiss", "routeChange"],
+      finalState: "confirmationResolved",
+      reducedMotion: "Commit confirm or cancel state without destructive emphasis movement."
+    },
+    toggle: {
+      from: ["unchecked", "checked", "pressed"],
+      to: ["checked", "unchecked"],
+      interrupt: ["pointerCancel", "revert", "routeChange"],
+      finalState: "valueCommitted",
+      reducedMotion: "Update semantics, thumb, check, and background instantly."
+    },
+    chip: {
+      from: ["unselected", "selected", "pressed"],
+      to: ["selected", "unselected"],
+      interrupt: ["pointerCancel", "filterReset", "routeChange"],
+      finalState: "selectionCommitted",
+      reducedMotion: "Commit chip visual and semantics without scale or travel."
+    },
+    filter: {
+      from: ["idle", "pendingValues"],
+      to: ["valuesCommitted", "resultsRefreshing"],
+      interrupt: ["reset", "routeChange", "newFilter"],
+      finalState: "filterCommitted",
+      reducedMotion: "Swap filter state and result count with no list movement."
+    },
+    segment: {
+      from: ["segment.active", "segment.pressed"],
+      to: ["segment.targetActive"],
+      interrupt: ["pointerCancel", "switchTarget", "routeChange"],
+      finalState: "oneActiveSegment",
+      reducedMotion: "Commit selected segment without indicator travel."
+    },
+    dropdown: {
+      from: ["closed", "triggerPressed", "open"],
+      to: ["open", "closed", "optionSelected", "repositioned"],
+      interrupt: ["outsidePress", "back", "routeChange", "resize", "openAnotherDropdown"],
+      finalState: "closedOrOpenAtLegalAnchor",
+      reducedMotion: "Measure anchor and commit open, close, select, or reposition state without offset tween."
+    },
+    overlay: {
+      from: ["closed", "opening", "open"],
+      to: ["open", "closed"],
+      interrupt: ["dismiss", "back", "routeChange", "keyboardChange"],
+      finalState: "focusAndInertStateResolved",
+      reducedMotion: "Commit overlay visibility and focus ownership without scale or slide."
+    },
+    input: {
+      from: ["blurred", "focused", "editing"],
+      to: ["focused", "blurred", "submitted", "cleared"],
+      interrupt: ["keyboardDismiss", "routeChange", "submit"],
+      finalState: "inputSemanticsResolved",
+      reducedMotion: "Update focus, value, and keyboard state without underline or state tween."
+    },
+    search: {
+      from: ["idle", "queryPending", "resultsVisible"],
+      to: ["loading", "empty", "resultsVisible", "error"],
+      interrupt: ["newQuery", "clear", "routeChange"],
+      finalState: "latestRequestWins",
+      reducedMotion: "Replace search state instantly while preserving result ownership."
+    },
+    feedback: {
+      from: ["hidden", "visible"],
+      to: ["visible", "hidden", "updated"],
+      interrupt: ["newMessage", "dismiss", "routeChange"],
+      finalState: "latestFeedbackVisibleOrHidden",
+      reducedMotion: "Commit toast or feedback state without y-offset movement."
+    },
+    state: {
+      from: ["previousState"],
+      to: ["nextState"],
+      interrupt: ["newState", "routeChange", "requestCancel"],
+      finalState: "nextStateVisible",
+      reducedMotion: "Replace content state without crossfade or offset."
+    },
+    selection: {
+      from: ["selectionHidden", "selectionVisible"],
+      to: ["selectionVisible", "toolbarVisible", "selectionHidden"],
+      interrupt: ["readerControlOpen", "dropdownOpen", "routeChange", "pointerCancel"],
+      finalState: "selectionLayerResolved",
+      reducedMotion: "Commit toolbar and selection visibility without anchor travel."
+    },
+    slider: {
+      from: ["idle", "dragging"],
+      to: ["dragging", "valueCommitted"],
+      interrupt: ["pointerCancel", "routeChange", "boundsClamp"],
+      finalState: "valueCommitted",
+      reducedMotion: "Keep drag/value changes direct with no easing."
+    },
+    stepper: {
+      from: ["idle", "pressed"],
+      to: ["valueCommitted", "repeatActive"],
+      interrupt: ["pointerCancel", "minMaxReached", "routeChange"],
+      finalState: "valueCommitted",
+      reducedMotion: "Commit value and disabled states instantly."
+    },
+    progress: {
+      from: ["previousValue"],
+      to: ["nextValue"],
+      interrupt: ["newValue", "routeChange"],
+      finalState: "latestValueVisible",
+      reducedMotion: "Snap to latest progress value without tween."
+    },
+    listRow: {
+      from: ["idle", "pressed", "selected"],
+      to: ["selected", "unselected", "routePending"],
+      interrupt: ["pointerCancel", "scroll", "routeChange"],
+      finalState: "rowStateCommitted",
+      reducedMotion: "Commit row background, check, or navigation state without height changes."
+    },
+    card: {
+      from: ["idle", "pressed", "selected"],
+      to: ["selected", "unselected", "routePending"],
+      interrupt: ["pointerCancel", "scroll", "routeChange"],
+      finalState: "cardStateCommitted",
+      reducedMotion: "Commit card selection or navigation state without scale or grid movement."
+    },
+    bookshelf: {
+      from: ["grid", "list"],
+      to: ["grid", "list"],
+      interrupt: ["routeChange", "filterChange", "scrollAnchorLost"],
+      finalState: "viewModeCommitted",
+      reducedMotion: "Switch view mode while preserving item identity and scroll anchor."
+    },
+    "reader.entry": {
+      from: ["sourceRoute", "coverPressed"],
+      to: ["immersiveReading"],
+      interrupt: ["back", "routeChange", "snapshotUnavailable"],
+      finalState: "immersiveReadingWithoutControlLayer",
+      reducedMotion: "Use source press plus reader surface reveal; skip shared-element movement."
+    },
+    "reader.control": {
+      from: ["controlHidden", "controlVisible", "dragging", "docked"],
+      to: ["controlHidden", "controlVisible", "dockOffsetCommitted"],
+      interrupt: ["back", "routeChange", "orientationPrepare", "pointerCancel"],
+      finalState: "controlLayerLegalPosition",
+      reducedMotion: "Commit control visibility or dock position without snap movement."
+    },
+    "reader.module": {
+      from: ["module.active"],
+      to: ["module.targetActive"],
+      interrupt: ["routeChange", "switchTarget"],
+      finalState: "oneActiveReaderModule",
+      reducedMotion: "Commit active module without indicator travel."
+    },
+    "reader.quick": {
+      from: ["quickIdle", "quickPressed"],
+      to: ["targetPanel", "loading", "committed"],
+      interrupt: ["routeChange", "panelDismiss", "newQuickAction"],
+      finalState: "quickActionResolved",
+      reducedMotion: "Commit quick action state without panel offset."
+    },
+    "reader.session": {
+      from: ["inactive", "autoPage", "tts", "capsuleVisible", "controlSpaceVisible"],
+      to: ["autoPage", "tts", "capsuleVisible", "controlSpaceVisible", "inactive"],
+      interrupt: ["mutualSessionSwitch", "stop", "exitReader", "orientationPrepare", "routeChange"],
+      finalState: "singleSessionOwner",
+      reducedMotion: "Commit active session and capsule/control-space owner without container travel."
+    },
+    "reader.page": {
+      from: ["page.current"],
+      to: ["page.next", "page.previous"],
+      interrupt: ["chapterJump", "autoPageTick", "manualTurn", "routeChange"],
+      finalState: "pageIndexCommitted",
+      reducedMotion: "Commit page index without page slide."
+    },
+    "reader.chapter": {
+      from: ["chapter.current"],
+      to: ["chapter.target"],
+      interrupt: ["newJump", "routeChange", "sessionTick"],
+      finalState: "chapterAnchorCommitted",
+      reducedMotion: "Jump to target chapter anchor without content movement."
+    },
+    "reader.sourceSwitch": {
+      from: ["readerVisible", "sourceOverlayOpen"],
+      to: ["sourceOverlayOpen", "sourceCommitted", "readerVisible"],
+      interrupt: ["dismiss", "routeChange", "newSource"],
+      finalState: "readerSourceResolved",
+      reducedMotion: "Commit source overlay or target source without overlay travel."
+    },
+    viewport: {
+      from: ["viewportStable"],
+      to: ["viewportFrozen", "viewportReshaped", "viewportStable"],
+      interrupt: ["newMetrics", "foldChange", "routeChange", "dragCancel"],
+      finalState: "viewportLegalLayout",
+      reducedMotion: "Freeze, reshape, and settle layout without animated spatial interpolation."
+    },
+    tooling: {
+      from: ["toolingMode.current"],
+      to: ["toolingMode.target"],
+      interrupt: ["newToolingMode", "routeChange"],
+      finalState: "toolingModeCommitted",
+      reducedMotion: "Commit debug mode switch instantly."
+    }
+  };
+
+  const MOTION_ID_STATE_MACHINES = {
+    "app.firstOpen.enter": {
+      from: ["coldStart", "deepLinkStart"],
+      to: ["shellVisible", "entryRouteReady"],
+      interrupt: ["deepLinkRedirect", "resumeInsteadOfColdStart", "reducedMotion"],
+      finalState: "entryRouteVisibleOnce",
+      reducedMotion: "Render shell and entry route immediately; do not replay on route, tab, or back actions."
+    },
+    "app.route.push.forward": {
+      from: ["route.current"],
+      to: ["route.targetOnStack"],
+      interrupt: ["backBeforeSettle", "replaceBeforeSettle", "newPush"],
+      finalState: "targetRouteVisibleAndStackUpdated",
+      reducedMotion: "Update stack and content immediately without forward slide."
+    },
+    "app.route.pop.backward": {
+      from: ["route.current"],
+      to: ["route.previousOnStack"],
+      interrupt: ["newPushBeforeSettle", "replaceBeforeSettle", "emptyBackStack"],
+      finalState: "previousRouteVisibleAndStackPopped",
+      reducedMotion: "Pop stack and render previous route immediately without backward slide."
+    },
+    "app.route.replace": {
+      from: ["route.current"],
+      to: ["route.replacedTarget"],
+      interrupt: ["newReplace", "backBeforeCommit", "sessionStartRedirect"],
+      finalState: "targetRouteVisibleWithoutNewBackEntry",
+      reducedMotion: "Replace route state in place with no push/pop movement."
+    },
+    "tab.item.press": {
+      from: ["idle"],
+      to: ["pressed"],
+      interrupt: ["pointerCancel", "pointerLeave", "routeChange"],
+      finalState: "pressedReleased",
+      reducedMotion: "Keep pressed feedback instant and do not move tab layout."
+    },
+    "tab.item.select": {
+      from: ["inactive"],
+      to: ["active"],
+      interrupt: ["switchTarget", "routeChange"],
+      finalState: "selectedTabActive",
+      reducedMotion: "Commit selected color/icon/text state without background travel."
+    },
+    "tab.item.switch": {
+      from: ["activeTab.previous"],
+      to: ["activeTab.next"],
+      interrupt: ["switchTargetAgain", "routeChange", "pointerCancel"],
+      finalState: "oneActiveTabAndStableBarSize",
+      reducedMotion: "Switch active state instantly and keep indicator static."
+    },
+    "dropdown.trigger.press": {
+      from: ["closed", "open"],
+      to: ["triggerPressed"],
+      interrupt: ["pointerCancel", "openAnotherDropdown", "routeChange"],
+      finalState: "triggerReleased",
+      reducedMotion: "Apply trigger pressed state instantly without chevron travel."
+    },
+    "dropdown.menu.expand": {
+      from: ["closed", "anchorMeasured"],
+      to: ["open"],
+      interrupt: ["openAnotherDropdown", "back", "routeChange", "viewportChanged"],
+      finalState: "openAtLegalAnchor",
+      reducedMotion: "Measure anchor, then show menu immediately without fade or y-offset."
+    },
+    "dropdown.menu.expand/collapse": {
+      from: ["closed", "open"],
+      to: ["open", "closed"],
+      interrupt: ["openAnotherDropdown", "back", "routeChange", "viewportChanged"],
+      finalState: "closedOrOpenAtLegalAnchor",
+      reducedMotion: "Commit final open/closed state immediately after anchor measurement."
+    },
+    "dropdown.menu.collapse": {
+      from: ["open"],
+      to: ["closed"],
+      interrupt: ["routeChange", "openAnotherDropdown", "destroy"],
+      finalState: "closedAndFocusReturnedToTrigger",
+      reducedMotion: "Hide menu and release focus/click target immediately."
+    },
+    "dropdown.menu.reposition": {
+      from: ["openAtPreviousAnchor"],
+      to: ["openAtLegalAnchor"],
+      interrupt: ["collapse", "routeChange", "newViewportMetrics"],
+      finalState: "openWithinViewportOrSheetFallback",
+      reducedMotion: "Recompute placement and snap to legal bounds without animated travel."
+    },
+    "dropdown.option.press": {
+      from: ["optionIdle"],
+      to: ["optionPressed"],
+      interrupt: ["pointerCancel", "collapse", "routeChange"],
+      finalState: "optionReleased",
+      reducedMotion: "Apply option pressed state instantly without moving menu container."
+    },
+    "dropdown.option.select": {
+      from: ["open", "optionPressed"],
+      to: ["valueCommitted", "closedOrOpen"],
+      interrupt: ["routeChange", "newSelection", "collapse"],
+      finalState: "valueAndSemanticsCommitted",
+      reducedMotion: "Update value, check/icon, and close single-select menus immediately."
+    },
+    "button.activate": {
+      from: ["pressed", "enabled"],
+      to: ["commandCommitted", "loading", "idle"],
+      interrupt: ["disabledBeforeRelease", "routeChange", "submitCancelled"],
+      finalState: "commandStateResolved",
+      reducedMotion: "Commit button command state without scale or label crossfade."
+    },
+    "toggle.switch": {
+      from: ["checked.previous"],
+      to: ["checked.next"],
+      interrupt: ["revert", "routeChange", "pointerCancel"],
+      finalState: "checkedSemanticsCommitted",
+      reducedMotion: "Update check/thumb/background and semantics instantly."
+    },
+    "reader.entry.coverToImmersive": {
+      from: ["sourceRoute", "coverPressed", "coverSnapshotMeasured"],
+      to: ["immersiveReading"],
+      interrupt: ["snapshotUnavailable", "backBeforeCommit", "routeChange"],
+      finalState: "immersiveReadingNoControlLayerAndSourceBackStackKept",
+      reducedMotion: "Use cover press and reader surface reveal; skip shared-element movement."
+    },
+    "reader.entry.actionToImmersive": {
+      from: ["sourceRoute", "actionPressed"],
+      to: ["immersiveReading"],
+      interrupt: ["backBeforeCommit", "routeChange"],
+      finalState: "immersiveReadingNoControlLayerAndSourceBackStackKept",
+      reducedMotion: "Use action press plus immediate reader surface reveal."
+    },
+    "reader.control.hide": {
+      from: ["controlLayerVisible"],
+      to: ["immersiveReading"],
+      interrupt: ["showAgain", "routeChange", "orientationPrepare"],
+      finalState: "immersiveReadingHotZonesRestored",
+      reducedMotion: "Hide control layer immediately and restore immersive hit regions."
+    },
+    "reader.session.autoPage.start": {
+      from: ["controlLayerVisible", "session.inactiveOrTts"],
+      to: ["immersiveReading", "session.autoPage", "capsuleVisible"],
+      interrupt: ["ttsStart", "stop", "exitReader", "routeChange"],
+      finalState: "autoPageOwnsSessionAndCapsule",
+      reducedMotion: "Set autoPage session, replace route, and show capsule immediately."
+    },
+    "reader.session.tts.start": {
+      from: ["controlLayerVisible", "ttsPageVisible", "session.inactiveOrAutoPage"],
+      to: ["immersiveReading", "session.tts", "capsuleVisible"],
+      interrupt: ["autoPageStart", "stop", "exitReader", "routeChange"],
+      finalState: "ttsOwnsSessionAndCapsule",
+      reducedMotion: "Set TTS session, replace route, and show capsule immediately."
+    },
+    "reader.session.capsule.enter": {
+      from: ["sessionActive", "capsuleHidden"],
+      to: ["capsuleVisible"],
+      interrupt: ["sessionSwitch", "stop", "controlLayerOpen", "exitReader"],
+      finalState: "capsuleVisibleAtReaderStatusAnchor",
+      reducedMotion: "Show capsule at anchor immediately without container scale or y-offset."
+    },
+    "reader.session.capsule.update": {
+      from: ["capsuleVisible", "session.previousState"],
+      to: ["capsuleVisible", "session.nextState"],
+      interrupt: ["sessionSwitch", "stop", "controlLayerOpen", "exitReader"],
+      finalState: "capsuleInternalStateUpdated",
+      reducedMotion: "Update internal icon, text, and count without replaying capsule enter."
+    },
+    "reader.session.capsule.control.press/toggle": {
+      from: ["capsuleVisible", "playing.previous"],
+      to: ["capsuleVisible", "playing.next"],
+      interrupt: ["pointerCancel", "sessionStop", "controlLayerOpen", "exitReader"],
+      finalState: "playingStateCommittedInsideCapsule",
+      reducedMotion: "Commit play/pause icon and state instantly; do not open control layer."
+    },
+    "reader.session.capsule.countdownTick": {
+      from: ["countdown.previous"],
+      to: ["countdown.next"],
+      interrupt: ["pause", "sessionSwitch", "pageTurn", "stop"],
+      finalState: "latestCountdownVisibleInFixedWidthSlot",
+      reducedMotion: "Replace number immediately in the fixed-width slot."
+    },
+    "reader.session.capsule.voiceIcon.active": {
+      from: ["ttsPlaying"],
+      to: ["ttsPlayingVisualActive"],
+      interrupt: ["pause", "reducedMotion", "sessionSwitch", "stop"],
+      finalState: "voiceIconActiveOnlyWhilePlaying",
+      reducedMotion: "Keep voice icon static while preserving playing semantics."
+    },
+    "reader.session.capsule.switch": {
+      from: ["capsuleVisible", "session.previousType"],
+      to: ["capsuleVisible", "session.nextType"],
+      interrupt: ["stop", "controlLayerOpen", "exitReader"],
+      finalState: "singleCapsuleWithNextSessionType",
+      reducedMotion: "Swap capsule internal content immediately at the same anchor."
+    },
+    "reader.session.capsule.exit": {
+      from: ["capsuleVisible"],
+      to: ["capsuleHidden"],
+      interrupt: ["sessionRestart", "routeChange", "destroy"],
+      finalState: "capsuleHiddenAndHitTargetReleased",
+      reducedMotion: "Hide capsule and release hit target immediately."
+    },
+    "reader.session.controlSpace.enter": {
+      from: ["capsuleVisible", "controlLayerOpening"],
+      to: ["controlSpaceVisible"],
+      interrupt: ["controlLayerClose", "sessionStop", "orientationPrepare"],
+      finalState: "singleRunningControlOwnerInControlLayer",
+      reducedMotion: "Hide capsule and show running control space without morph."
+    },
+    "reader.session.controlSpace.update": {
+      from: ["controlSpaceVisible", "session.previousState"],
+      to: ["controlSpaceVisible", "session.nextState"],
+      interrupt: ["sessionStop", "controlLayerClose", "orientationPrepare"],
+      finalState: "controlSpaceInternalStateUpdated",
+      reducedMotion: "Update internal running state instantly."
+    },
+    "reader.session.controlSpace.exit": {
+      from: ["controlSpaceVisible", "controlLayerClosing"],
+      to: ["capsuleVisible", "immersiveReading"],
+      interrupt: ["sessionStop", "exitReader", "orientationPrepare"],
+      finalState: "singleCapsuleOwnerInImmersiveReading",
+      reducedMotion: "Hide running control space and show capsule without morph."
+    },
+    "reader.page.turn.next/prev": {
+      from: ["page.current"],
+      to: ["page.nextOrPrevious"],
+      interrupt: ["oppositeTurn", "chapterJump", "routeChange", "sessionTick"],
+      finalState: "pageIndexCommittedAndPageInfoAnchored",
+      reducedMotion: "Commit page index and footer/page info immediately without slide."
+    },
+    "viewport.orientation.prepare": {
+      from: ["viewportStable"],
+      to: ["viewportFrozen"],
+      interrupt: ["routeChange", "newMetricsBeforeFreeze"],
+      finalState: "routeReaderSessionOverlayFocusFrozen",
+      reducedMotion: "Freeze motion state immediately."
+    },
+    "viewport.orientation.reshape": {
+      from: ["viewportFrozen", "viewportStable"],
+      to: ["viewportReshaped"],
+      interrupt: ["newMetrics", "foldChange", "routeChange"],
+      finalState: "readerOverlayCapsuleDockReanchored",
+      reducedMotion: "Recompute layout, pagination anchor, overlay, capsule, and dock bounds without interpolation."
+    },
+    "viewport.orientation.settle": {
+      from: ["viewportReshaped"],
+      to: ["viewportStable"],
+      interrupt: ["newMetrics", "routeChange"],
+      finalState: "focusPointerSessionMicroMotionRestored",
+      reducedMotion: "Restore focus, pointer, and session semantics without settle animation."
+    }
+  };
 
   const CONTRACT_RULES = [
     {
@@ -477,17 +959,40 @@
     ["app.route.", 160]
   ];
 
+  function cloneStateMachine(machine) {
+    const source = machine || DEFAULT_STATE_MACHINE;
+    return Object.freeze({
+      from: Object.freeze((source.from || []).slice()),
+      to: Object.freeze((source.to || []).slice()),
+      interrupt: Object.freeze((source.interrupt || []).slice()),
+      finalState: String(source.finalState || DEFAULT_STATE_MACHINE.finalState),
+      reducedMotion: String(source.reducedMotion || DEFAULT_STATE_MACHINE.reducedMotion)
+    });
+  }
+
+  function stateMachineFor(id, rule) {
+    const exact = MOTION_ID_STATE_MACHINES[id];
+    const fallback = FAMILY_STATE_MACHINES[rule.family] || DEFAULT_STATE_MACHINE;
+    return {
+      source: exact ? "motion-id" : "family",
+      machine: cloneStateMachine(exact || fallback)
+    };
+  }
+
   function contractFor(id) {
     const cleanId = clean(id);
     const rule = CONTRACT_RULES.find((item) => cleanId.startsWith(item.prefix));
     if (!rule) return null;
+    const stateMachine = stateMachineFor(cleanId, rule);
     return Object.freeze({
       id: cleanId,
       family: rule.family,
       tokens: Object.freeze(rule.tokens.slice()),
       stateFields: Object.freeze(COMMON_STATE_FIELDS.concat(rule.stateFields)),
       platformComponents: Object.freeze(Object.assign({}, rule.platformComponents)),
-      evidence: Object.freeze(rule.evidence.slice())
+      evidence: Object.freeze(rule.evidence.slice()),
+      stateMachineSource: stateMachine.source,
+      stateMachine: stateMachine.machine
     });
   }
 
@@ -651,6 +1156,8 @@
       }
       dispatch("start", transaction, {
         family: transaction.contract ? transaction.contract.family : "",
+        stateMachineSource: transaction.contract ? transaction.contract.stateMachineSource : "",
+        finalState: transaction.contract && transaction.contract.stateMachine ? transaction.contract.stateMachine.finalState : "",
         unresolvedContract: transaction.contract ? "false" : "true"
       });
       if (transaction.duration === 0) {
@@ -707,8 +1214,14 @@
         tokens: Object.freeze(rule.tokens.slice()),
         stateFields: Object.freeze(COMMON_STATE_FIELDS.concat(rule.stateFields)),
         evidence: Object.freeze(rule.evidence.slice()),
-        platformComponents: Object.freeze(Object.assign({}, rule.platformComponents))
-      }))))
+        platformComponents: Object.freeze(Object.assign({}, rule.platformComponents)),
+        stateMachine: cloneStateMachine(FAMILY_STATE_MACHINES[rule.family] || DEFAULT_STATE_MACHINE)
+      })))),
+      motionIds: Object.freeze(Object.keys(MOTION_ID_STATE_MACHINES).sort().map((id) => Object.freeze({
+        id,
+        stateMachineSource: "motion-id",
+        stateMachine: cloneStateMachine(MOTION_ID_STATE_MACHINES[id])
+      })))
     }),
     DEFAULT_DURATIONS: Object.freeze(Object.assign({}, DEFAULT_DURATIONS))
   };

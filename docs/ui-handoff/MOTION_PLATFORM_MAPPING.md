@@ -254,7 +254,7 @@ Web demo：
 
 - `frontend-demo/MOTION_CONTRACT.md` 已根据 canonical demo 复核。
 - `frontend-demo/MOTION_EFFECTS.md` 已补齐每个高风险 Motion ID 的视觉效果描述。
-- `frontend-demo/motion-controller.js` 暴露可执行 `ReaderMotionController.CONTRACT`，并能把当前 renderer 使用的 Motion ID 解析到 token、state fields、平台组件和证据规则。
+- `frontend-demo/motion-controller.js` 暴露可执行 `ReaderMotionController.CONTRACT`，并能把当前 renderer 使用的 Motion ID 解析到 token、state fields、state machine、平台组件和证据规则；关键 Motion ID 必须命中精确 `from/to/interrupt/finalState/reducedMotion`，不能只用 family fallback。
 - Demo CSS 已使用共享 motion token。
 - Demo 已实现 reduced-motion 行为。
 - Demo 已实现通用组件族状态机，覆盖 button、toggle/switch/checkbox、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 和 bookshelf view switch。

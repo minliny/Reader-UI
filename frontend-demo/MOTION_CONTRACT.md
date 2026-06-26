@@ -319,6 +319,7 @@
 - 每个 Motion ID 都有 `frontend-demo/` 内的 capture route 或可复现点击路径。
 - 每个 Motion ID 都出现在平台映射文档里。
 - 每个 Motion ID 都在 `MOTION_EFFECTS.md` 中有视觉效果说明。
+- 当前 renderer/runtime 使用的 Motion ID 都必须能通过 `ReaderMotionController.contractFor()` 解析到 state machine；P0 关键 Motion ID 必须有精确 `from/to/interrupt/finalState/reducedMotion`，不能只依赖 family fallback。
 - demo 使用集中 motion token，不再散落裸写 `160ms`、`220ms` 和 `0.8s`。
 - demo 定义并验证 `prefers-reduced-motion`。
 - 点击封面进入沉浸阅读必须覆盖书架封面、继续阅读封面和列表/详情无封面入口的降级路径。
@@ -337,9 +338,9 @@
 ## 10. 未决项
 
 - 当前路由推进多数是即时替换 HTML；需要决定原生应用是否使用平台 stack motion，还是在密集操作页面保持即时切换。
-- 通用交互组件族已完成 contract/effects/platform mapping、`MOTION_SELECTOR_MATRIX.md`、基础 token、reduced-motion 测试开关和 `data-motion-id` / pressed state 接入；还缺深度状态机和录屏证据。
-- TAB 栏目前只有整体 `app.tab.switch` / `reader.module.switch` 规划；demo 还没有统一的 `tab.item.press/select/switch` 状态机、indicator 迁移证据和录屏。
-- 下拉栏目前有分散实现：阅读/朗读下拉有 placement 逻辑，发现排序有 chevron rotation，设置页选项和菜单多为即时 mount/unmount；还没有统一的 `dropdown.*` 状态机、token 化展开/收起/点击动画和录屏证据。
+- 通用交互组件族已完成 contract/effects/platform mapping、`MOTION_SELECTOR_MATRIX.md`、基础 token、reduced-motion 测试开关、`data-motion-id` / pressed state 接入和 contract 层状态机；还缺实现层 reducer / 状态机绑定和录屏证据。
+- TAB 栏已补 `tab.item.press/select/switch` contract 状态机；demo 还没有统一的实现层 pressed/select/switch、indicator 迁移证据和录屏。
+- 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 仍是分散实现：阅读/朗读下拉有 placement 逻辑，发现排序有 chevron rotation，设置页选项和菜单多为即时 mount/unmount；还没有统一的组件实现、token 化展开/收起/点击动画和录屏证据。
 - 宽屏控制层长按拖动目前只有规划，demo 还没有 pointer capture、dock bounds 计算、offset 持久化和越界回弹证据。
 - 封面进入沉浸阅读目前只有规划，demo 还没有 shared element / snapshot 层和录屏证据。
 - 自动翻页/朗读运行胶囊目前有状态和静态 UI，但还没有 token 化的进入、更新、切换、退出动画和录屏证据。
@@ -349,7 +350,7 @@
 - 换源窗口需要在 portrait 和 compact landscape 下补 capture 证据，明确进入/退出表现。
 - 打断动画目前只有规格，还没有 demo 层统一动画控制器或自动化验证。
 - 折叠屏展开/折叠目前按 viewport 断点规划，仍需要真实设备或模拟器验证 hinge、半开态和窗口尺寸变化。
-- 整屏旋转目前只有 `data-orientation` / `viewportClass` 级别的响应式基础，缺少 `viewport.orientation.prepare/reshape/settle` 状态机、宽屏 dock 旋转后 clamp、运行胶囊重锚定和录屏证据。
+- 整屏旋转已补 `viewport.orientation.prepare/reshape/settle` contract 状态机；demo 目前仍只有 `data-orientation` / `viewportClass` 级别的响应式基础，缺少实现层 prepare/reshape/settle、宽屏 dock 旋转后 clamp、运行胶囊重锚定和录屏证据。
 - 当前 `docs/ui-handoff/compose/COMPOSE_INTERACTION_CONTRACTS.md` 只定义事件和状态变化，还没有定义 motion；首轮验证后应引用本契约。
 
 ## 11. 建议下一轮 Slice

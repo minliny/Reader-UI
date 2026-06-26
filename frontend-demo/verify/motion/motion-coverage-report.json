@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T12:22:26.779Z",
+  "generatedAt": "2026-06-26T13:13:35.796Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v1-20260626, render=bookshelf-group-in-filter-v1-20260626, runtime=bookshelf-group-in-filter-v1-20260626"
+      "detail": "motion=motion-controller-v2-20260626, render=bookshelf-group-in-filter-v1-20260626, runtime=bookshelf-group-in-filter-v1-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -43,6 +43,16 @@
       "detail": "60/60 Motion IDs resolved; incomplete=0"
     },
     {
+      "id": "motion.contract.state-machines",
+      "passed": true,
+      "detail": "60/60 runtime/selector Motion IDs expose state machines"
+    },
+    {
+      "id": "motion.contract.detailed-motion-ids",
+      "passed": true,
+      "detail": "35/35 detailed Motion IDs use exact state machines"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "65 bind calls, 54 unique Motion IDs"
@@ -59,9 +69,9 @@
     }
   ],
   "summary": {
-    "passed": 11,
+    "passed": 13,
     "failed": 0,
-    "total": 11
+    "total": 13
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -167,6 +177,46 @@
       "viewport.orientation.reshape"
     ],
     "unresolvedMotionIds": [],
-    "incompleteContractEntries": []
+    "incompleteContractEntries": [],
+    "missingStateMachineMotionIds": [],
+    "detailedMotionIds": [
+      "app.firstOpen.enter",
+      "app.route.push.forward",
+      "app.route.pop.backward",
+      "app.route.replace",
+      "tab.item.press",
+      "tab.item.select",
+      "tab.item.switch",
+      "dropdown.trigger.press",
+      "dropdown.menu.expand",
+      "dropdown.menu.expand/collapse",
+      "dropdown.menu.collapse",
+      "dropdown.menu.reposition",
+      "dropdown.option.press",
+      "dropdown.option.select",
+      "button.activate",
+      "toggle.switch",
+      "reader.entry.coverToImmersive",
+      "reader.entry.actionToImmersive",
+      "reader.control.hide",
+      "reader.session.autoPage.start",
+      "reader.session.tts.start",
+      "reader.session.capsule.enter",
+      "reader.session.capsule.update",
+      "reader.session.capsule.control.press/toggle",
+      "reader.session.capsule.countdownTick",
+      "reader.session.capsule.voiceIcon.active",
+      "reader.session.capsule.switch",
+      "reader.session.capsule.exit",
+      "reader.session.controlSpace.enter",
+      "reader.session.controlSpace.update",
+      "reader.session.controlSpace.exit",
+      "reader.page.turn.next/prev",
+      "viewport.orientation.prepare",
+      "viewport.orientation.reshape",
+      "viewport.orientation.settle"
+    ],
+    "detailedMotionIdCount": 35,
+    "missingDetailedStateMachines": []
   }
 }
