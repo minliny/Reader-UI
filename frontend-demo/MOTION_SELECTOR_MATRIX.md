@@ -58,7 +58,7 @@
 | 43 | `[data-keyboard-host]` | `overlay.keyboard.enter/exit` | book-search keyboard overlay | TextField focus / keyboard inset | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 44 | `[data-keyboard-input]` | `input.focus/blur` | book-search keyboard overlay | TextField focus | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 45 | `[data-main-tab-feedback]` | `feedback.toast.enter/update/exit` | main tab feedback | Inline feedback | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 46 | `[data-module]` | `state.content.replace` | reader module / developer mode | Semantic slot / module state | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 46 | `[data-module]` | `reader.module.switch` | reader module tab | ReaderModuleNav | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 47 | `[data-nav-type]` | `tab.item.switch` | main tab navigation | Tab / navigation bar | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 48 | `[data-open-dialog]` | `overlay.dialog.enter` | book-detail / settings confirm dialog | Dialog | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 49 | `[data-open-keyboard]` | `input.focus` | book-search keyboard overlay | TextField focus / keyboard inset | 待补 `frontend-demo/verify/motion/selector-matrix/*` |

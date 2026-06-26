@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T13:13:35.796Z",
+  "generatedAt": "2026-06-26T13:53:45.841Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v2-20260626, render=bookshelf-group-in-filter-v1-20260626, runtime=bookshelf-group-in-filter-v1-20260626"
+      "detail": "motion=motion-controller-v3-20260626, render=tab-motion-v2-20260626, runtime=tab-motion-v2-20260626"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.session.tts.start, reader.session.autoPage.start"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.session.tts.start, reader.session.autoPage.start"
     },
     {
       "id": "motion.contract.executable-registry",
@@ -40,27 +40,32 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "60/60 Motion IDs resolved; incomplete=0"
+      "detail": "62/62 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "60/60 runtime/selector Motion IDs expose state machines"
+      "detail": "62/62 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
       "passed": true,
-      "detail": "35/35 detailed Motion IDs use exact state machines"
+      "detail": "36/36 detailed Motion IDs use exact state machines"
+    },
+    {
+      "id": "motion.tab.state-adapter",
+      "passed": true,
+      "detail": "main tab and reader module tab expose data-motion-tab-* states, press IDs, and tokenized CSS"
     },
     {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "65 bind calls, 54 unique Motion IDs"
+      "detail": "68 bind calls, 56 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "134/158 data-* directly mapped"
+      "detail": "136/158 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -69,9 +74,9 @@
     }
   ],
   "summary": {
-    "passed": 13,
+    "passed": 14,
     "failed": 0,
-    "total": 13
+    "total": 14
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -81,7 +86,7 @@
   },
   "selectorCoverage": {
     "dataAttributeCount": 158,
-    "directMappedDataAttributeCount": 134,
+    "directMappedDataAttributeCount": 136,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -94,8 +99,6 @@
       "data-dev-region",
       "data-dialog-initial-focus",
       "data-icon-missing",
-      "data-module",
-      "data-nav-type",
       "data-page-space-row",
       "data-reader-brightness-dim",
       "data-reader-footer-status",
@@ -108,8 +111,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 65,
-    "motionIdCount": 54
+    "bindCallCount": 68,
+    "motionIdCount": 56
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
@@ -151,6 +154,7 @@
       "reader.chapter.jump",
       "reader.control.hide",
       "reader.entry.coverToImmersive",
+      "reader.module.switch",
       "reader.page.turn.next/prev",
       "reader.quick.promote",
       "reader.session.autoPage.start",
@@ -171,6 +175,7 @@
       "state.content.replace",
       "state.loading.inline",
       "stepper.press/value.change",
+      "tab.item.select",
       "tab.item.switch",
       "toggle.switch",
       "tooling.mode.switch",
@@ -211,12 +216,13 @@
       "reader.session.controlSpace.enter",
       "reader.session.controlSpace.update",
       "reader.session.controlSpace.exit",
+      "reader.module.switch",
       "reader.page.turn.next/prev",
       "viewport.orientation.prepare",
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 35,
+    "detailedMotionIdCount": 36,
     "missingDetailedStateMachines": []
   }
 }

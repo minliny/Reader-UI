@@ -16,6 +16,7 @@
     "reader.session.tts.start": 200,
     "reader.session.autoPage.start": 200,
     "reader.session.capsule.control.press/toggle": 120,
+    "reader.module.switch": 160,
     "reader.page.turn.next/prev": 220,
     "viewport.orientation.reshape": 240
   };
@@ -475,6 +476,13 @@
       interrupt: ["sessionStop", "exitReader", "orientationPrepare"],
       finalState: "singleCapsuleOwnerInImmersiveReading",
       reducedMotion: "Hide running control space and show capsule without morph."
+    },
+    "reader.module.switch": {
+      from: ["readerModule.previous", "controlLayerVisible"],
+      to: ["readerModule.next", "controlLayerVisible"],
+      interrupt: ["routeChange", "switchTargetAgain", "hideControlLayer"],
+      finalState: "oneActiveReaderModuleAndStableModuleBar",
+      reducedMotion: "Commit active module and panel content immediately; keep module nav dimensions stable."
     },
     "reader.page.turn.next/prev": {
       from: ["page.current"],

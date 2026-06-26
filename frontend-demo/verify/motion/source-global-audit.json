@@ -55,10 +55,10 @@
   },
   "selectorCoverage": {
     "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
-    "dataAttributeCount": 147,
-    "bindCallCount": 58,
-    "motionIdCount": 50,
-    "directMappedDataAttributeCount": 125,
+    "dataAttributeCount": 158,
+    "bindCallCount": 68,
+    "motionIdCount": 56,
+    "directMappedDataAttributeCount": 136,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -69,11 +69,11 @@
       "data-current-route",
       "data-current-shell",
       "data-dev-region",
+      "data-dialog-initial-focus",
       "data-icon-missing",
-      "data-module",
-      "data-nav-type",
       "data-page-space-row",
       "data-reader-brightness-dim",
+      "data-reader-footer-status",
       "data-reader-surface-signature",
       "data-route-replace",
       "data-route-stack",
@@ -107,7 +107,7 @@
     "readerLoadingSpin": "implemented",
     "globalMotionStateController": "minimum transaction controller only; visual lifecycle still missing",
     "routePushPopMotionLifecycle": "controller transaction implemented; visual enter/exit still missing",
-    "tabIndicatorMotionLifecycle": "controller transaction implemented; indicator motion still missing",
+    "tabIndicatorMotionLifecycle": "main tab and reader module tab data-state adapter implemented; segmented tab and media evidence still missing",
     "dropdownMotionController": "controller press transaction only; menu lifecycle still missing",
     "coverToImmersiveSharedTransition": "missing",
     "readerGrabberLongPressDrag": "missing",
@@ -127,7 +127,7 @@
     {
       "family": "tab",
       "source": ".fd-main-nav-item and module/segment tab buttons",
-      "currentState": "Controller transaction exists for main tab switch; selected state is still class and aria update with no from-to indicator migration.",
+      "currentState": "Main tab and reader module tab now expose data-motion-tab-* state, tab.item.press/select/switch press IDs, and reader.module.switch transactions; segmented tab and media evidence remain missing.",
       "requiredOwner": "tab motion controller"
     },
     {

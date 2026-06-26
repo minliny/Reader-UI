@@ -5204,7 +5204,8 @@
 
     bind("[data-route]", "app.route.push");
     bind("[data-route-back], [data-demo-back], .fd-back-bar button[aria-label='返回']", "app.route.pop");
-    bind(".fd-main-tab-phone .fd-main-nav-item", "tab.item.switch");
+    bind("[data-nav-type]", "tab.item.switch");
+    bind("[data-nav-type].is-active", "tab.item.select");
     bind("[data-bookshelf-view-button], [data-book-grid], [data-bookshelf-view]", "bookshelf.view.switch");
     bind("[data-bookshelf-filter-toggle]", "dropdown.trigger.press");
     bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option]", "dropdown.option.select");
@@ -5245,6 +5246,8 @@
     bind("[data-reader-brightness-track], [data-reader-chapter-progress]", "slider.drag.start/update/release");
     bind("[data-reader-typography-action], [data-reader-page-space-action]", "stepper.press/value.change");
     bind("[data-reader-typography-set], [data-reader-page-space-set], [data-reader-theme], [data-reader-theme-pair], [data-reader-theme-scheme], [data-reader-toc-mode]", "segment.item.switch");
+    bind("[data-module]", "reader.module.switch");
+    bind("[data-module].is-active", "tab.item.select");
     bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value], [data-reader-tts-value], [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
     bind("[data-reader-page-action]", "reader.page.turn.next/prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
@@ -5282,6 +5285,28 @@
       if (element.__readerMotionPressBound) return;
       element.__readerMotionPressBound = true;
       const isDisabled = () => element.disabled || element.getAttribute("aria-disabled") === "true";
+      const syncTabPressState = (pressed) => {
+        const tabItem = element.getAttribute("data-motion-tab-item");
+        if (!tabItem) return;
+        const group = element.closest("[data-motion-tab-group]");
+        if (pressed) {
+          element.setAttribute("data-motion-tab-state", "pressed");
+          element.classList.add("is-tab-motion-pressed");
+          if (group) {
+            group.setAttribute("data-motion-tab-phase", "press");
+            group.setAttribute("data-motion-tab-pressed", tabItem);
+          }
+          return;
+        }
+        element.classList.remove("is-tab-motion-pressed");
+        element.setAttribute("data-motion-tab-state", element.classList.contains("is-active") ? "active" : "inactive");
+        if (group && group.getAttribute("data-motion-tab-pressed") === tabItem) {
+          group.removeAttribute("data-motion-tab-pressed");
+          if (group.getAttribute("data-motion-tab-phase") === "press") {
+            group.setAttribute("data-motion-tab-phase", "settled");
+          }
+        }
+      };
       const setPressed = (pressed) => {
         if (isDisabled()) return;
         element.classList.toggle("is-motion-pressed", pressed);
@@ -5290,11 +5315,12 @@
         } else {
           element.removeAttribute("data-motion-pressed");
         }
+        syncTabPressState(pressed);
       };
       element.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
         if (motionController) {
-          const motionId = element.getAttribute("data-motion-id") || "button.press";
+          const motionId = element.getAttribute("data-motion-press-id") || element.getAttribute("data-motion-id") || "button.press";
           motionController.start({
             id: motionId.includes("press") ? motionId : `${motionId}.press`,
             action: "press",
@@ -5312,6 +5338,87 @@
         }
       });
       element.addEventListener("keyup", () => setPressed(false));
+    });
+  }
+
+  function attachTabMotionState(root, appState) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const reduced = root.closest(".fd-demo")?.getAttribute("data-motion-reduced") === "true";
+    const settleDelay = reduced ? 0 : 180;
+    const groups = [
+      {
+        group: "main",
+        host: root.querySelector(".fd-main-tab-phone .fd-main-nav"),
+        selector: ".fd-main-nav-item",
+        motion: appState?.mainTabMotion,
+        motionKey: "mainTabMotion",
+        itemKey: (button) => button.getAttribute("data-nav-type") || ""
+      },
+      {
+        group: "reader-module",
+        host: root.querySelector(".fd-reader-module-nav:not(.fd-reader-module-nav-empty)"),
+        selector: ".fd-reader-module",
+        motion: appState?.readerModuleMotion,
+        motionKey: "readerModuleMotion",
+        itemKey: (button) => button.getAttribute("data-module") || ""
+      }
+    ];
+
+    groups.forEach((config) => {
+      const nav = config.host;
+      if (!nav) return;
+      const buttons = Array.from(nav.querySelectorAll(config.selector));
+      if (!buttons.length) return;
+      const activeButton = buttons.find((button) => button.classList.contains("is-active") || button.getAttribute("aria-current") === "page") || null;
+      const activeKey = activeButton ? config.itemKey(activeButton) : "";
+      nav.setAttribute("data-motion-tab-group", config.group);
+      nav.setAttribute("data-motion-tab-active", activeKey);
+      buttons.forEach((button) => {
+        const key = config.itemKey(button);
+        const active = button === activeButton;
+        button.setAttribute("data-motion-tab-group", config.group);
+        button.setAttribute("data-motion-tab-item", key);
+        button.setAttribute("data-motion-tab-state", active ? "active" : "inactive");
+        button.setAttribute("data-motion-press-id", "tab.item.press");
+        button.classList.remove("is-tab-motion-from", "is-tab-motion-to", "is-tab-motion-pressed");
+      });
+
+      const motion = config.motion && !config.motion.settled ? config.motion : null;
+      if (!motion || !motion.to) {
+        nav.setAttribute("data-motion-tab-phase", "settled");
+        nav.removeAttribute("data-motion-tab-from");
+        nav.removeAttribute("data-motion-tab-to");
+        return;
+      }
+
+      nav.setAttribute("data-motion-tab-phase", motion.from === motion.to ? "select" : "switch");
+      nav.setAttribute("data-motion-tab-from", motion.from || "");
+      nav.setAttribute("data-motion-tab-to", motion.to || "");
+      buttons.forEach((button) => {
+        const key = config.itemKey(button);
+        if (key === motion.from && motion.from !== motion.to) {
+          button.setAttribute("data-motion-tab-state", "exiting");
+          button.classList.add("is-tab-motion-from");
+        }
+        if (key === motion.to) {
+          button.setAttribute("data-motion-tab-state", "entering");
+          button.classList.add("is-tab-motion-to");
+        }
+      });
+
+      window.setTimeout(() => {
+        if (appState && appState[config.motionKey] === motion) {
+          appState[config.motionKey] = null;
+        }
+        if (!nav.isConnected) return;
+        nav.setAttribute("data-motion-tab-phase", "settled");
+        nav.removeAttribute("data-motion-tab-from");
+        nav.removeAttribute("data-motion-tab-to");
+        buttons.forEach((button) => {
+          button.classList.remove("is-tab-motion-from", "is-tab-motion-to", "is-tab-motion-pressed");
+          button.setAttribute("data-motion-tab-state", button.classList.contains("is-active") ? "active" : "inactive");
+        });
+      }, settleDelay);
     });
   }
 
@@ -5994,6 +6101,7 @@
       }
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
       applyMotionSelectorBindings(screenHost);
+      attachTabMotionState(screenHost, appState);
       attachMotionPressState(screenHost, motionController);
       adjustReaderDropdownPlacement(screenHost);
       if (renderedTurnDirection) {
@@ -6074,6 +6182,12 @@
       appState.readerMoreOpen = false;
       appState.discoverSortOpen = false;
       const previous = routeStack[routeStack.length - 1];
+      appState.mainTabMotion = {
+        action: previous === route ? "select" : "switch",
+        from: previous,
+        to: route,
+        settled: false
+      };
       if (motionController) {
         motionController.start({
           id: previous === route ? "tab.item.press" : "tab.item.switch",
@@ -7008,8 +7122,38 @@
         }
         const route = targetEl.getAttribute("data-route");
         const shouldReplaceRoute = targetEl.hasAttribute("data-route-replace") || Boolean(targetEl.closest(".fd-source-control-continuity"));
+        const readerModuleButton = targetEl.classList.contains("fd-reader-module") ? targetEl : null;
+        const readerModuleMotionInput = (() => {
+          if (!readerModuleButton) return null;
+          const fromState = readerRouteState(currentRoute());
+          const fromModule = fromState.module || fromState.mode || "reader";
+          const toModule = readerModuleButton.getAttribute("data-module") || "reader";
+          appState.readerModuleMotion = {
+            action: fromModule === toModule ? "select" : "switch",
+            from: fromModule,
+            to: toModule,
+            settled: false
+          };
+          return {
+            id: "reader.module.switch",
+            action: fromModule === toModule ? "select" : "switch",
+            from: fromModule,
+            to: toModule,
+            target: readerModuleButton
+          };
+        })();
         if (targetEl.classList.contains("fd-reader-module") && route === currentRoute()) {
-          replaceTopRoute("reader");
+          appState.readerModuleMotion = {
+            action: "switch",
+            from: targetEl.getAttribute("data-module") || "module",
+            to: "control",
+            settled: false
+          };
+          replaceTopRoute("reader", Object.assign({}, readerModuleMotionInput, {
+            action: "switch",
+            from: targetEl.getAttribute("data-module") || "module",
+            to: "control"
+          }));
           return;
         }
         if (route === "book-search") {
@@ -7054,10 +7198,10 @@
         }
         closeBookshelfMore(targetEl.closest(".fd-phone"));
         if (shouldReplaceRoute) {
-          replaceTopRoute(route);
+          replaceTopRoute(route, readerModuleMotionInput || undefined);
           return;
         }
-        goTo(route, true);
+        goTo(route, true, readerModuleMotionInput || undefined);
       };
       targetEl.addEventListener("click", navigate);
       targetEl.addEventListener("keydown", (event) => {

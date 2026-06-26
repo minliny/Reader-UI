@@ -13,7 +13,7 @@
 | Motion token 落地 | 已新增 `frontend-demo/motion-tokens.css`，并把 `frontend-demo/styles/` 中裸写的 `160ms`、`220ms`、`0.8s` 替换为 token；通用控件也已接入基础 motion token | 继续做视觉回归，确认 token 替换没有改变既有布局和关键节奏 | `rg "160ms|220ms|0.8s" frontend-demo/styles` 不命中；关键路径截图/录屏无非预期变化 |
 | Reduced motion 实装 | 已新增 `@media (prefers-reduced-motion: reduce)`、`data-motion-reduced` 和 `?motionReduced=1/0` 测试开关；翻页、loading、通用控件 transition 已降级 | 补 reduced-motion capture，覆盖键盘、底表、弹窗、封面进入、控制层、翻页、loading、折叠重排 | 系统 reduced motion 或 `?motionReduced=1` 下移除位移/循环动画，状态反馈仍可辨认 |
 | 可执行 Motion Contract Registry | `motion-controller.js` 已暴露 `ReaderMotionController.CONTRACT`，可把当前 renderer 的 Motion ID 解析到 family、token、state fields、state machine、平台组件和证据规则；`verify-motion-coverage.mjs` 已校验 registry 解析、状态机字段和 35 个关键 Motion ID 的精确状态机 | 继续把 exact state machine 扩展到全部 P0/P1 Motion ID，并绑定实际组件状态机 | 当前绑定和 runtime 必需 Motion ID 全部能解析并具备状态机；平台不能照抄 CSS，只能按 registry 的 Motion ID、state fields、state machine、token 和证据要求映射原生实现 |
-| TAB 栏状态动效 | 已补 `tab.item.press/select/switch` contract 状态机，demo 仍是分散的 active class 样式 | 为主 TAB、阅读模块 TAB、segmented TAB 建统一 pressed/select/switch 实现和录屏 | 按下、单按钮选中、A -> B 切换、重复点击 active 行为可区分；栏尺寸稳定 |
+| TAB 栏状态动效 | 已补 `tab.item.press/select/switch` contract 状态机；主 TAB 和阅读模块 TAB 已接入 `data-motion-tab-*` 状态、`data-motion-press-id`、token 化 pressed/select/switch CSS 和 `reader.module.switch` 事务 | 继续覆盖 segmented TAB，并补主 TAB / 阅读模块 TAB / segmented TAB 的录屏证据 | 按下、单按钮选中、A -> B 切换、重复点击 active 行为可区分；栏尺寸稳定 |
 | 下拉栏统一动效 | 已补 `dropdown.*` contract 状态机；demo 有阅读/朗读 dropdown placement、发现排序 chevron 和多个即时 mount/unmount 菜单，但没有统一实现状态机 | 补 `dropdown.trigger.press`、`dropdown.menu.expand/collapse/reposition`、`dropdown.option.press/select` 的组件实现，覆盖阅读设置、朗读设置、设置页选项、发现排序、书源更多、书架更多和书籍焦点菜单 | 所有下拉展开/收起/点击节奏一致；同层只留一个 open；选择后值/semantics 同步；resize/orientation 可重定位 |
 | 通用交互组件族纳管 | 已新增 `MOTION_SELECTOR_MATRIX.md`，148 个唯一 `data-*` 入口均已映射到 Motion ID / route / platform component；demo 已通过 `data-motion-id`、`is-motion-pressed` 和 token CSS 接入基础状态；当前使用的 60 个 Motion ID 都有 contract 状态机 | 继续把基础 selector binding 深化成组件级实现状态机，并补每个组件族的录屏/截图证据 | 所有控件族都有 token、效果、平台映射、reduced-motion、实现代码和验证路径；证据文件可追溯到 Motion ID |
 | 首次打开应用动效 | 已补 `app.launch.firstOpen` 规划，demo 没有 cold-start flag | 增加一次性首启动画状态；区分冷启动、后台恢复、普通 route render | 冷启动默认页/深链页只播放一次，返回和切 Tab 不重播 |
@@ -53,7 +53,7 @@
 ## P0 推荐落地顺序
 
 1. 已完成第一版：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/测试开关、148 个 `data-*` selector 总表、基础 `data-motion-id` / pressed state 接入、`ReaderMotionController.CONTRACT` 可执行 registry，以及 35 个关键 Motion ID 的精确 contract 状态机。
-2. 实现 `tab.item.press/select/switch`，先覆盖主 TAB 和阅读模块 TAB。
+2. 已完成第一版：主 TAB 和阅读模块 TAB 已实现 `tab.item.press/select/switch` adapter、`reader.module.switch` 事务和 token 化状态；下一步补 segmented TAB 与录屏证据。
 3. 深化通用控件族状态机：button、toggle/switch、chip/filter/segment、slider/stepper/progress、input/search、feedback/state、selection、listRow/card。
 4. 实现 `dropdown.*`，覆盖全部下拉栏/锚定菜单的展开、收起、选项点击、reposition 和 reduced-motion。
 5. 实现 `app.launch.firstOpen`，建立 cold-start 与 resume/route render 的区分。
@@ -73,7 +73,7 @@
 - 不能声称 demo 已完成跨端动效实现。
 - 不能声称折叠屏动效已经验证。
 - 不能声称各平台可以直接照代码实现。
-- 不能声称 TAB 栏 press/select/switch 已有统一实现和录屏证据。
+- 不能声称 TAB 栏 press/select/switch 已有全量统一实现和录屏证据；当前只完成主 TAB 和阅读模块 TAB 的实现层 adapter，segmented TAB 和媒体证据仍缺。
 - 不能声称所有下拉栏已有统一展开、收起、选项点击、reposition 和 reduced-motion 实现证据。
 - 不能声称通用按钮、chip/filter、toggle/switch、slider/stepper/progress、input/search、toast/state、selection、业务 row/card 已经完成实现层纳管；当前只有 selector 总表、基础 token/reduced-motion、基础 pressed state 接入和 contract 状态机。
 - 不能声称封面进入沉浸阅读已有录屏证据。

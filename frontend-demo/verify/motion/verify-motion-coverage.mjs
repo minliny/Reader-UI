@@ -10,6 +10,7 @@ const indexHtml = read("frontend-demo/index.html");
 const renderLoader = read("frontend-demo/render.js");
 const runtime = read("frontend-demo/render-runtime.js");
 const controller = read("frontend-demo/motion-controller.js");
+const motionTokens = read("frontend-demo/motion-tokens.css");
 const routeContractSource = read("frontend-demo/route-contract.js");
 const sourceFiles = [
   "frontend-demo/index.html",
@@ -57,6 +58,7 @@ const requiredRuntimeMotionIds = [
   "app.route.pop.backward",
   "app.route.replace",
   "tab.item.switch",
+  "reader.module.switch",
   "viewport.orientation.reshape",
   "reader.entry.coverToImmersive",
   "reader.session.tts.start",
@@ -94,6 +96,7 @@ const detailedMotionIds = [
   "reader.session.controlSpace.enter",
   "reader.session.controlSpace.update",
   "reader.session.controlSpace.exit",
+  "reader.module.switch",
   "reader.page.turn.next/prev",
   "viewport.orientation.prepare",
   "viewport.orientation.reshape",
@@ -201,6 +204,15 @@ const checks = [
     id: "motion.contract.detailed-motion-ids",
     passed: missingDetailedStateMachines.length === 0 && Array.isArray(motionContract.motionIds) && motionContract.motionIds.length >= detailedMotionIds.length,
     detail: `${detailedMotionIds.length - missingDetailedStateMachines.length}/${detailedMotionIds.length} detailed Motion IDs use exact state machines`
+  },
+  {
+    id: "motion.tab.state-adapter",
+    passed: runtime.includes("attachTabMotionState") &&
+      runtime.includes("data-motion-tab-state") &&
+      runtime.includes("data-motion-press-id") &&
+      runtime.includes("reader.module.switch") &&
+      motionTokens.includes("--fd-motion-effective-tab-switch"),
+    detail: "main tab and reader module tab expose data-motion-tab-* states, press IDs, and tokenized CSS"
   },
   {
     id: "motion.selector.bindings",
