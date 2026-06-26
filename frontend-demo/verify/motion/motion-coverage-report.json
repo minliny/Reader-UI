@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T12:13:18.164Z",
+  "generatedAt": "2026-06-26T12:22:26.779Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -10,7 +10,7 @@
     {
       "id": "motion.controller.file",
       "passed": true,
-      "detail": "motion-controller.js exports ReaderMotionController and writes controller state"
+      "detail": "motion-controller.js exports ReaderMotionController, writes controller state, and exposes CONTRACT"
     },
     {
       "id": "motion.controller.loaded",
@@ -33,6 +33,16 @@
       "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.session.tts.start, reader.session.autoPage.start"
     },
     {
+      "id": "motion.contract.executable-registry",
+      "passed": true,
+      "detail": "reader-motion-contract-v1; rules=32"
+    },
+    {
+      "id": "motion.contract.id-resolution",
+      "passed": true,
+      "detail": "60/60 Motion IDs resolved; incomplete=0"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "65 bind calls, 54 unique Motion IDs"
@@ -49,9 +59,9 @@
     }
   ],
   "summary": {
-    "passed": 9,
+    "passed": 11,
     "failed": 0,
-    "total": 9
+    "total": 11
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -90,5 +100,73 @@
     ],
     "bindCallCount": 65,
     "motionIdCount": 54
+  },
+  "executableContract": {
+    "version": "reader-motion-contract-v1",
+    "ruleCount": 32,
+    "checkedMotionIds": [
+      "app.firstOpen.enter",
+      "app.route.pop",
+      "app.route.pop.backward",
+      "app.route.push",
+      "app.route.push.forward",
+      "app.route.replace",
+      "bookshelf.view.switch",
+      "button.activate",
+      "card.press/select/route",
+      "card.route",
+      "card.select",
+      "chip.item.select",
+      "destructive.confirm.commit",
+      "dropdown.menu.collapse",
+      "dropdown.menu.expand/collapse",
+      "dropdown.option.select",
+      "dropdown.trigger.press",
+      "feedback.toast.enter/update/exit",
+      "filter.apply.commit",
+      "filter.item.toggle",
+      "input.blur",
+      "input.clear",
+      "input.focus",
+      "input.focus/blur",
+      "input.submit",
+      "listRow.select",
+      "overlay.dialog.enter",
+      "overlay.dialog.enter/exit",
+      "overlay.dialog.exit",
+      "overlay.keyboard.enter/exit",
+      "overlay.sheet.enter",
+      "overlay.sheet.enter/exit",
+      "overlay.sheet.exit",
+      "reader.chapter.jump",
+      "reader.control.hide",
+      "reader.entry.coverToImmersive",
+      "reader.page.turn.next/prev",
+      "reader.quick.promote",
+      "reader.session.autoPage.start",
+      "reader.session.capsule.control.press/toggle",
+      "reader.session.capsule.enter/update/exit",
+      "reader.session.capsule.update",
+      "reader.session.tts.start",
+      "reader.sourceSwitch.open/close",
+      "search.state.replace",
+      "segment.item.switch",
+      "selection.group.toggle",
+      "selection.item.toggle",
+      "selection.option.toggle",
+      "selection.range.show",
+      "selection.toolbar.action",
+      "selection.toolbar.exit",
+      "slider.drag.start/update/release",
+      "state.content.replace",
+      "state.loading.inline",
+      "stepper.press/value.change",
+      "tab.item.switch",
+      "toggle.switch",
+      "tooling.mode.switch",
+      "viewport.orientation.reshape"
+    ],
+    "unresolvedMotionIds": [],
+    "incompleteContractEntries": []
   }
 }

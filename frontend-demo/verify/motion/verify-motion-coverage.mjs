@@ -22,7 +22,9 @@ const sourceFiles = [
 const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(routeContractSource, context);
+vm.runInContext(controller, context);
 const routes = context.window.ReaderFrontendDemoDraftRouteContract.routes || {};
+const motionController = context.window.ReaderMotionController || {};
 const routeNames = Object.keys(routes);
 const renderCases = [...runtime.matchAll(/case\s+"([^"]+)"\s*:/g)].map((match) => match[1]);
 const renderCaseSet = new Set(renderCases);
@@ -60,6 +62,32 @@ const requiredRuntimeMotionIds = [
   "reader.session.tts.start",
   "reader.session.autoPage.start"
 ];
+const runtimeAndSelectorMotionIds = [...new Set(motionIds.concat(requiredRuntimeMotionIds))].sort();
+
+const motionContract = motionController.CONTRACT || {};
+const resolveMotionContract = typeof motionController.contractFor === "function"
+  ? (motionId) => motionController.contractFor(motionId)
+  : () => null;
+const resolvedContractEntries = runtimeAndSelectorMotionIds
+  .map((motionId) => ({ motionId, contract: resolveMotionContract(motionId) }));
+const unresolvedMotionIds = resolvedContractEntries
+  .filter((item) => !item.contract)
+  .map((item) => item.motionId);
+const incompleteContractEntries = resolvedContractEntries
+  .filter(({ contract }) => contract && (
+    !Array.isArray(contract.tokens) ||
+    contract.tokens.length === 0 ||
+    !Array.isArray(contract.stateFields) ||
+    contract.stateFields.length < 5 ||
+    !contract.platformComponents ||
+    !contract.platformComponents.web ||
+    !contract.platformComponents.android ||
+    !contract.platformComponents.ios ||
+    !contract.platformComponents.harmony ||
+    !Array.isArray(contract.evidence) ||
+    contract.evidence.length === 0
+  ))
+  .map((item) => item.motionId);
 
 const checks = [
   {
@@ -69,8 +97,8 @@ const checks = [
   },
   {
     id: "motion.controller.file",
-    passed: controller.includes("window.ReaderMotionController") && controller.includes("data-motion-controller"),
-    detail: "motion-controller.js exports ReaderMotionController and writes controller state"
+    passed: controller.includes("window.ReaderMotionController") && controller.includes("data-motion-controller") && Boolean(motionController.CONTRACT),
+    detail: "motion-controller.js exports ReaderMotionController, writes controller state, and exposes CONTRACT"
   },
   {
     id: "motion.controller.loaded",
@@ -91,6 +119,16 @@ const checks = [
     id: "motion.controller.runtime-ids",
     passed: requiredRuntimeMotionIds.every((motionId) => runtime.includes(motionId)),
     detail: requiredRuntimeMotionIds.join(", ")
+  },
+  {
+    id: "motion.contract.executable-registry",
+    passed: motionContract.version === "reader-motion-contract-v1" && Array.isArray(motionContract.rules) && motionContract.rules.length >= 25,
+    detail: `${motionContract.version || "missing"}; rules=${Array.isArray(motionContract.rules) ? motionContract.rules.length : 0}`
+  },
+  {
+    id: "motion.contract.id-resolution",
+    passed: unresolvedMotionIds.length === 0 && incompleteContractEntries.length === 0,
+    detail: `${runtimeAndSelectorMotionIds.length - unresolvedMotionIds.length}/${runtimeAndSelectorMotionIds.length} Motion IDs resolved; incomplete=${incompleteContractEntries.length}`
   },
   {
     id: "motion.selector.bindings",
@@ -130,6 +168,13 @@ const report = {
     unmappedDataAttributes,
     bindCallCount: bindMatches.length,
     motionIdCount: motionIds.length
+  },
+  executableContract: {
+    version: motionContract.version || "",
+    ruleCount: Array.isArray(motionContract.rules) ? motionContract.rules.length : 0,
+    checkedMotionIds: runtimeAndSelectorMotionIds,
+    unresolvedMotionIds,
+    incompleteContractEntries
   }
 };
 

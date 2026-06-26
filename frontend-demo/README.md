@@ -49,6 +49,8 @@
 
 当前 demo 的动效规划由六份文档组成：`MOTION_CONTRACT.md` 定义跨端共享的 motion token、状态迁移和验收边界；`MOTION_EFFECTS.md` 描述每个场景的实际动画效果、方向、时序和禁用项；`MOTION_SELECTOR_MATRIX.md` 映射 148 个唯一 `data-*` 入口到 Motion ID、demo route、平台组件和证据位置；`MOTION_INTERACTION_COMPONENT_AUDIT.md` 审计当前交互组件族是否被统一 Motion ID 纳管；`MOTION_IMPLEMENTATION_GAP_AUDIT.md` 追踪从规划稿到可执行规格之间的缺口；`../docs/ui-handoff/MOTION_PLATFORM_MAPPING.md` 说明平台应用如何用原生 SwiftUI / Compose / ArkUI 实现，不直接复用 Web CSS 或 DOM 行为。
 
+执行入口是 `motion-controller.js` 暴露的 `ReaderMotionController.CONTRACT`。它把 Motion ID 解析到 family、token、state fields、平台组件和证据规则；`verify/motion/verify-motion-coverage.mjs` 会检查当前 renderer 绑定的 Motion ID 是否都能被这份 registry 解析。平台实现不得照抄 CSS，而应复用同一 Motion ID、state fields、token 和证据要求，再映射到 Compose / SwiftUI / ArkUI 的原生状态与动画 API。
+
 ## 图标来源（Icon Source）
 
 所有设计稿图标通过 `./asset-library/icons.js` 的 `ReaderAssetIcons.renderIcon(id, className)` 渲染。新稿内不新增一次性 SVG。
