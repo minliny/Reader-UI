@@ -76,10 +76,116 @@
   right: calc(12px + var(--reader-quick-rail-width) + var(--reader-quick-rail-gap));
   top: var(--reader-quick-top);
   bottom: var(--reader-quick-bottom);
+  box-sizing: border-box;
   display: grid;
-  grid-template-rows: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  grid-template-rows: minmax(76px, 0.82fr) minmax(104px, 1.18fr);
   align-content: stretch;
   gap: 6px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.fd-reader-control-main > * {
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.fd-reader-control-main.has-running-space {
+  grid-template-rows: 46px minmax(55px, 0.72fr) minmax(78px, 1fr);
+  gap: 5px;
+}
+
+.fd-reader-running-space {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 8px;
+  border: 1px solid rgba(47, 99, 115, 0.28);
+  border-radius: var(--fd-radius-md);
+  background: rgba(47, 99, 115, 0.09);
+  color: #2d3940;
+  overflow: hidden;
+}
+
+.fd-reader-running-indicator {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--fd-radius-circle);
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--fd-primary-dark);
+}
+
+.fd-reader-running-countdown {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--fd-radius-circle);
+  background: var(--fd-primary-dark);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 850;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.fd-reader-running-voice .fd-small-icon {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.2;
+}
+
+.fd-reader-running-label {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.fd-reader-running-label strong,
+.fd-reader-running-label small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-running-label strong {
+  font-family: var(--fd-sans);
+  font-size: 12px;
+  line-height: 1.1;
+  font-weight: 850;
+}
+
+.fd-reader-running-label small {
+  color: var(--fd-primary-dark);
+  font-family: var(--fd-sans);
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.fd-reader-running-control {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border-radius: var(--fd-radius-circle);
+  background: var(--fd-primary-dark);
+  color: #fff;
+}
+
+.fd-reader-running-control .fd-small-icon {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2.4;
 }
 
 .fd-reader-actions {
@@ -88,17 +194,20 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
   min-width: 0;
+  min-height: 0;
   padding: 9px 8px;
   border: 1px solid rgba(180, 166, 151, 0.34);
   border-radius: var(--fd-radius-md);
   background: rgba(255, 252, 248, 0.62);
+  overflow: hidden;
 }
 
 .fd-reader-actions button {
-  min-height: 58px;
+  min-height: 0;
   display: grid;
   gap: 6px;
   place-items: center;
+  align-content: center;
   min-width: 0;
   border-radius: var(--fd-radius-md);
   background: rgba(255, 255, 255, 0.5);
@@ -106,6 +215,21 @@
   font-family: var(--fd-sans);
   font-size: 11px;
   font-weight: 800;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-actions {
+  gap: 6px;
+  padding: 6px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-actions button {
+  gap: 3px;
+  font-size: 10px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-actions .fd-medium-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .fd-reader-actions button.is-active {
@@ -116,15 +240,17 @@
 
 .fd-reader-chapter-panel {
   min-width: 0;
+  min-height: 0;
   align-self: stretch;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-rows: minmax(0, 1fr) minmax(22px, auto);
   align-content: stretch;
   gap: 6px;
   padding: 9px 10px;
   border: 1px solid rgba(180, 166, 151, 0.34);
   border-radius: var(--fd-radius-md);
   background: rgba(255, 252, 248, 0.62);
+  overflow: hidden;
 }
 
 .fd-reader-chapter-row {
@@ -137,6 +263,7 @@
 .fd-reader-chapter-control-row {
   grid-template-columns: 34px minmax(0, 1fr) 34px;
   min-height: 52px;
+  overflow: hidden;
 }
 
 .fd-reader-chapter-row strong {
@@ -182,7 +309,7 @@
 .fd-reader-chapter-step::after {
   content: "";
   position: absolute;
-  inset: -4px;
+  inset: 0;
   border-radius: inherit;
 }
 
@@ -193,30 +320,32 @@
 .fd-reader-progress-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: end;
+  align-items: center;
   gap: 6px;
+  min-height: 30px;
   min-width: 0;
+  overflow: hidden;
 }
 
 .fd-reader-progress {
   position: relative;
   display: block;
   width: 100%;
-  height: 14px;
+  height: 30px;
   cursor: pointer;
 }
 
 .fd-reader-progress::before {
   content: "";
   position: absolute;
-  inset: -9px 0;
+  inset: 0;
 }
 
 .fd-reader-progress i {
   position: absolute;
   left: 0;
   right: 0;
-  top: 5px;
+  top: 13px;
   height: 5px;
 }
 
@@ -232,7 +361,7 @@
   content: "";
   position: absolute;
   left: calc(var(--progress) - 6px);
-  top: 2px;
+  top: 9px;
   width: 12px;
   height: 12px;
   border: 3px solid var(--fd-primary);
@@ -256,6 +385,45 @@
 
 .fd-reader-total-chapters {
   justify-self: start;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-chapter-panel {
+  grid-template-rows: minmax(0, 1fr) minmax(20px, auto);
+  gap: 4px;
+  padding: 6px 8px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-chapter-control-row {
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  min-height: 36px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-chapter-step {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-chapter-row strong {
+  font-size: 12px;
+  -webkit-line-clamp: 1;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-progress-row {
+  min-height: 26px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-progress {
+  height: 26px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-progress i {
+  top: 11px;
+}
+
+.fd-reader-control-main.has-running-space .fd-reader-progress::after {
+  top: 7px;
 }
 
 .fd-reader-detail-panel {

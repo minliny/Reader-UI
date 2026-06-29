@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-26T15:47:38.636Z",
+  "generatedAt": "2026-06-29T06:00:23.139Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v10-20260626, render=reader-session-capsule-v2-20260626, runtime=reader-session-capsule-v2-20260626"
+      "detail": "motion=motion-controller-v10-20260626, render=reader-control-space-v1-20260629, runtime=reader-control-space-v1-20260629"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, reader.session.controlSpace.enter, reader.session.controlSpace.update, reader.session.controlSpace.exit"
     },
     {
       "id": "motion.contract.executable-registry",
@@ -40,12 +40,12 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "74/74 Motion IDs resolved; incomplete=0"
+      "detail": "78/78 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "74/74 runtime/selector Motion IDs expose state machines"
+      "detail": "78/78 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
@@ -88,14 +88,19 @@
       "detail": "immersive auto-page/TTS capsule exposes enter/update/switch/tick/control/voice states, local countdown updates, and tokenized micro-motion CSS"
     },
     {
+      "id": "motion.reader-control-space.state-adapter",
+      "passed": true,
+      "detail": "reader control layer exposes the running auto-page/TTS space as a state adapter with tokenized enter/update/tick/voice/control motion"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "75 bind calls, 61 unique Motion IDs"
+      "detail": "77 bind calls, 63 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "142/164 data-* directly mapped"
+      "detail": "149/171 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -104,9 +109,9 @@
     }
   ],
   "summary": {
-    "passed": 20,
+    "passed": 21,
     "failed": 0,
-    "total": 20
+    "total": 21
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -115,8 +120,8 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 164,
-    "directMappedDataAttributeCount": 142,
+    "dataAttributeCount": 171,
+    "directMappedDataAttributeCount": 149,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -141,8 +146,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 75,
-    "motionIdCount": 61
+    "bindCallCount": 77,
+    "motionIdCount": 63
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
@@ -203,6 +208,10 @@
       "reader.session.capsule.switch",
       "reader.session.capsule.update",
       "reader.session.capsule.voiceIcon.active",
+      "reader.session.controlSpace.enter",
+      "reader.session.controlSpace.enter/update/exit",
+      "reader.session.controlSpace.exit",
+      "reader.session.controlSpace.update",
       "reader.session.tts.start",
       "reader.sourceSwitch.open/close",
       "search.state.replace",

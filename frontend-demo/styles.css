@@ -2,9 +2,9 @@
 
 @import "./styles/00-foundation.css?v=bookshelf-group-in-filter-v1-20260626";
 @import "./styles/01-shell-layout.css?v=bookshelf-group-in-filter-v1-20260626";
-@import "./styles/02-main-library.css?v=reader-control-structure-v1-20260626";
+@import "./styles/02-main-library.css?v=reader-control-space-v1-20260629";
 @import "./styles/03-reader.css?v=bookshelf-group-in-filter-v1-20260626";
 @import "./styles/04-settings-source.css?v=bookshelf-group-in-filter-v1-20260626";
 @import "./styles/05-flow-adaptive.css?v=bookshelf-group-in-filter-v1-20260626";
 @import "./styles/06-responsive.css?v=bookshelf-group-in-filter-v1-20260626";
-@import "./motion-tokens.css?v=reader-session-capsule-v2-20260626";
+@import "./motion-tokens.css?v=reader-control-space-v1-20260629";

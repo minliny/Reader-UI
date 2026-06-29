@@ -73,7 +73,10 @@ const requiredRuntimeMotionIds = [
   "reader.session.capsule.countdownTick",
   "reader.session.capsule.voiceIcon.active",
   "reader.session.capsule.switch",
-  "reader.session.capsule.exit"
+  "reader.session.capsule.exit",
+  "reader.session.controlSpace.enter",
+  "reader.session.controlSpace.update",
+  "reader.session.controlSpace.exit"
 ];
 const detailedMotionIds = [
   "app.firstOpen.enter",
@@ -305,13 +308,30 @@ const checks = [
     detail: "immersive auto-page/TTS capsule exposes enter/update/switch/tick/control/voice states, local countdown updates, and tokenized micro-motion CSS"
   },
   {
+    id: "motion.reader-control-space.state-adapter",
+    passed: runtime.includes("attachReaderControlSpaceMotionState") &&
+      runtime.includes("readerSessionControlSpaceHtml") &&
+      runtime.includes("readerControlSpaceSnapshot") &&
+      runtime.includes("data-motion-control-space-state") &&
+      runtime.includes("data-reader-control-space-countdown") &&
+      runtime.includes("data-reader-control-space-voice") &&
+      runtime.includes("data-reader-control-space-control") &&
+      runtime.includes("reader.session.controlSpace.enter") &&
+      runtime.includes("reader.session.controlSpace.update") &&
+      runtime.includes("reader.session.controlSpace.exit") &&
+      motionTokens.includes("[data-motion-control-space]") &&
+      motionTokens.includes("fd-reader-control-space-enter") &&
+      motionTokens.includes("fd-reader-control-space-update"),
+    detail: "reader control layer exposes the running auto-page/TTS space as a state adapter with tokenized enter/update/tick/voice/control motion"
+  },
+  {
     id: "motion.selector.bindings",
-    passed: bindMatches.length >= 58 && motionIds.length >= 50,
+    passed: bindMatches.length >= 60 && motionIds.length >= 51,
     detail: `${bindMatches.length} bind calls, ${motionIds.length} unique Motion IDs`
   },
   {
     id: "motion.selector.data-coverage",
-    passed: dataAttributes.length >= 147 && dataAttributes.length - unmappedDataAttributes.length >= 125,
+    passed: dataAttributes.length >= 151 && dataAttributes.length - unmappedDataAttributes.length >= 129,
     detail: `${dataAttributes.length - unmappedDataAttributes.length}/${dataAttributes.length} data-* directly mapped`
   },
   {

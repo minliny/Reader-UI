@@ -3077,6 +3077,16 @@
     return { id: "reader.session.capsule.update", state: "updated", action: "capsule-update" };
   }
 
+  function readerSessionControlSpaceMotionMeta(previous, next) {
+    if (!next) {
+      return { id: "reader.session.controlSpace.exit", state: "exiting", action: "control-space-exit" };
+    }
+    if (!previous) {
+      return { id: "reader.session.controlSpace.enter", state: "entering", action: "control-space-enter" };
+    }
+    return { id: "reader.session.controlSpace.update", state: "updated", action: "control-space-update" };
+  }
+
   function attachReaderSessionCapsuleMotionState(screenHost, appState, motionController) {
     const root = screenHost?.closest?.(".fd-demo") || null;
     const footer = screenHost?.querySelector?.("[data-reader-footer-status]") || null;
@@ -3158,6 +3168,93 @@
     appState.readerSessionCapsuleSnapshot = next;
   }
 
+  function attachReaderControlSpaceMotionState(screenHost, appState, motionController) {
+    const root = screenHost?.closest?.(".fd-demo") || null;
+    const space = screenHost?.querySelector?.("[data-reader-control-space]") || null;
+    const previous = appState.readerControlSpaceSnapshot || null;
+    const next = readerSessionCapsuleSnapshot(appState);
+    const active = Boolean(space && next);
+    const meta = active
+      ? readerSessionControlSpaceMotionMeta(previous, next)
+      : { id: "reader.session.controlSpace.exit", state: previous ? "exiting" : "hidden", action: "control-space-exit" };
+
+    root?.setAttribute("data-motion-control-space-state", active ? meta.state : "hidden");
+    root?.setAttribute("data-motion-control-space-id", meta.id);
+    root?.setAttribute("data-motion-control-space-active", active ? "true" : "false");
+
+    if (!active) {
+      if (previous && motionController) {
+        motionController.start({
+          id: "reader.session.controlSpace.exit",
+          action: "control-space-exit",
+          from: readerSessionCapsuleSnapshotKey(previous),
+          to: next ? readerSessionCapsuleSnapshotKey(next) : "inactive"
+        });
+      }
+      appState.readerControlSpaceSnapshot = null;
+      return;
+    }
+
+    const snapshotChanged = readerSessionCapsuleSnapshotKey(previous) !== readerSessionCapsuleSnapshotKey(next);
+    space.setAttribute("data-motion-control-space", "true");
+    space.setAttribute("data-motion-control-space-state", meta.state);
+    space.setAttribute("data-motion-control-space-id", meta.id);
+    space.setAttribute("data-motion-id", meta.id);
+    space.setAttribute("data-motion-phase", meta.state);
+    space.setAttribute("data-motion-control-space-type", next.type);
+    space.setAttribute("data-motion-control-space-playing", next.playing ? "true" : "false");
+    space.setAttribute("data-motion-control-space-countdown", String(next.countdown));
+    space.setAttribute("data-motion-control-space-key", readerSessionCapsuleSnapshotKey(next));
+
+    const countdown = space.querySelector("[data-reader-control-space-countdown]");
+    if (countdown) {
+      const ticking = next.type === "autoPage" && previous?.countdown !== next.countdown;
+      countdown.setAttribute("data-motion-control-space-role", "countdown");
+      countdown.setAttribute("data-motion-control-space-state", ticking ? "ticking" : "settled");
+      countdown.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
+      countdown.setAttribute("data-motion-id", "reader.session.controlSpace.update");
+      countdown.setAttribute("data-motion-state", countdown.getAttribute("data-motion-control-space-state"));
+    }
+
+    const voice = space.querySelector("[data-reader-control-space-voice]");
+    if (voice) {
+      voice.setAttribute("data-motion-control-space-role", "voice");
+      voice.setAttribute("data-motion-control-space-state", next.playing ? "active" : "paused");
+      voice.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
+      voice.setAttribute("data-motion-id", "reader.session.controlSpace.update");
+      voice.setAttribute("data-motion-state", voice.getAttribute("data-motion-control-space-state"));
+    }
+
+    const control = space.querySelector("[data-reader-control-space-control]");
+    if (control) {
+      control.setAttribute("data-motion-control-space-role", "control");
+      control.setAttribute("data-motion-control-space-state", next.playing ? "playing" : "paused");
+      control.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
+      control.setAttribute("data-motion-id", "reader.session.controlSpace.update");
+      control.setAttribute("data-motion-state", control.getAttribute("data-motion-control-space-state"));
+      control.setAttribute("data-motion-press-id", "reader.session.capsule.control.press/toggle");
+    }
+
+    const label = space.querySelector("[data-reader-control-space-label]");
+    if (label) {
+      label.setAttribute("data-motion-control-space-role", "label");
+      label.setAttribute("data-motion-control-space-state", meta.state);
+      label.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
+      label.setAttribute("data-motion-id", "reader.session.controlSpace.update");
+      label.setAttribute("data-motion-state", meta.state);
+    }
+
+    if (motionController && snapshotChanged) {
+      motionController.start({
+        id: meta.id,
+        action: meta.action,
+        from: previous ? readerSessionCapsuleSnapshotKey(previous) : "inactive",
+        to: readerSessionCapsuleSnapshotKey(next)
+      });
+    }
+    appState.readerControlSpaceSnapshot = next;
+  }
+
   function clearReaderSessionCapsuleTimer(appState) {
     if (appState?.readerSessionCapsuleTimer) {
       window.clearTimeout(appState.readerSessionCapsuleTimer);
@@ -3168,8 +3265,9 @@
   function scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute) {
     clearReaderSessionCapsuleTimer(appState);
     const capsule = screenHost?.querySelector?.("[data-reader-immersive-status]") || null;
+    const controlSpace = screenHost?.querySelector?.("[data-reader-control-space]") || null;
     const snapshot = readerSessionCapsuleSnapshot(appState);
-    if (!capsule || !snapshot || snapshot.type !== "autoPage" || !snapshot.playing) {
+    if (!(capsule || controlSpace) || !snapshot || snapshot.type !== "autoPage" || !snapshot.playing) {
       return;
     }
     appState.readerSessionCapsuleTimer = window.setTimeout(() => {
@@ -3689,6 +3787,31 @@
       </aside>`;
   }
 
+  function readerSessionControlSpaceHtml(appState) {
+    const snapshot = readerSessionCapsuleSnapshot(appState);
+    if (!snapshot) return "";
+    const isTts = snapshot.type === "tts";
+    const label = isTts ? "朗读" : "自动翻页";
+    const stateText = snapshot.playing
+      ? (isTts ? "正在朗读" : `${snapshot.countdown} 秒后翻页`)
+      : "已暂停";
+    const leading = isTts
+      ? `<span class="fd-reader-running-voice" data-reader-control-space-voice aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
+      : `<span class="fd-reader-running-countdown" data-reader-control-space-countdown="${esc(snapshot.countdown)}" aria-label="自动翻页倒计时 ${esc(snapshot.countdown)} 秒">${esc(snapshot.countdown)}</span>`;
+    const control = isTts
+      ? `<button class="fd-reader-running-control" type="button" data-reader-control-space-control data-reader-tts-action="toggle" aria-label="${snapshot.playing ? "暂停朗读" : "继续朗读"}">${icon(snapshot.playing ? "pause" : "play", "fd-small-icon")}</button>`
+      : `<button class="fd-reader-running-control" type="button" data-reader-control-space-control data-reader-setting-toggle="autoPage" aria-label="${snapshot.playing ? "暂停自动翻页" : "继续自动翻页"}">${icon(snapshot.playing ? "pause" : "play", "fd-small-icon")}</button>`;
+    return `
+        <section class="fd-reader-running-space" data-reader-control-space data-reader-control-space-type="${esc(snapshot.type)}" data-reader-control-space-playing="${snapshot.playing ? "true" : "false"}" aria-label="${esc(label)}运行中控制">
+          <span class="fd-reader-running-indicator" aria-hidden="${isTts ? "false" : "true"}">${leading}</span>
+          <span class="fd-reader-running-label" data-reader-control-space-label>
+            <strong>${esc(label)}</strong>
+            <small>${esc(stateText)}</small>
+          </span>
+          ${control}
+        </section>`;
+  }
+
   function readerControlMain(data, appState) {
     const chapter = data.reader.chapterProgress || {};
     const chapterProgressConfig = readerChapterProgressConfig(data);
@@ -3696,8 +3819,10 @@
     const chapterProgress = readerChapterProgressValue(data, appState);
     const chapterTitle = chapterState.chapter.title || chapter.title || "第 32 章 雨夜";
     const totalChapterCount = readerTotalChapterCount(data, chapterState.count);
+    const runningSpaceHtml = readerSessionControlSpaceHtml(appState);
     return `
-      <div class="fd-reader-control-main" data-dev-region="BottomControlPanel">
+      <div class="fd-reader-control-main ${runningSpaceHtml ? "has-running-space" : ""}" data-dev-region="BottomControlPanel">
+        ${runningSpaceHtml}
         <nav class="fd-reader-actions" aria-label="快捷操作">
           ${data.reader.quickActions.map((item) => `
             <button type="button" data-route="${esc(item.type === "search" ? "content-search" : item.type === "auto-page" ? "auto-page" : "content-replacement")}" data-quick-action="${esc(item.type)}">${icon(readerQuickActionIconMap[item.type] || item.type, "fd-medium-icon")}<span>${esc(item.label)}</span></button>
@@ -5420,6 +5545,8 @@
     bind("[data-reader-capsule-countdown]", "reader.session.capsule.countdownTick");
     bind("[data-reader-capsule-voice]", "reader.session.capsule.voiceIcon.active");
     bind("[data-reader-capsule-label]", "reader.session.capsule.update");
+    bind("[data-reader-control-space], [data-reader-control-space-type], [data-reader-control-space-playing]", "reader.session.controlSpace.enter/update/exit");
+    bind("[data-reader-control-space-countdown], [data-reader-control-space-voice], [data-reader-control-space-control], [data-reader-control-space-label]", "reader.session.controlSpace.update");
     bind("[data-reader-more-action]", "dropdown.option.select");
     bind("[data-reader-more-close]", "dropdown.menu.collapse");
     bind("[data-reader-selection-layer]", "selection.range.show");
@@ -6897,6 +7024,7 @@
       readerTtsSession: false,
       readerTtsExpandedOption: "",
       readerSessionCapsuleSnapshot: null,
+      readerControlSpaceSnapshot: null,
       readerSessionCapsuleTimer: null,
       readerSettings: Object.assign({}, readerControlSettingsConfig(data).defaults),
       readerReplacementRules: {},
@@ -7162,6 +7290,7 @@
       attachReaderControlHandleMotionState(screenHost);
       attachReaderControlDockMotionState(screenHost, appState, motionController);
       attachReaderSessionCapsuleMotionState(screenHost, appState, motionController);
+      attachReaderControlSpaceMotionState(screenHost, appState, motionController);
       window.requestAnimationFrame(() => {
         if (screenHost.isConnected) {
           attachReaderControlDockMotionState(screenHost, appState, motionController);
