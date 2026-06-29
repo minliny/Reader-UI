@@ -197,31 +197,33 @@
 
 - 自动翻页/朗读开启后回到沉浸页并出现控制胶囊这一状态存在，但相关过渡动画不完整。
 
-### P0-7：胶囊内部微动效缺实现
+### P0-7：胶囊内部微动效已接入第一版，缺媒体证据
 
 代码事实：
 
-- 自动翻页 countdown 只读取 `readerAutoPageCountdown`，初始为 8。
-- 没有 countdown interval/tick 逻辑。
-- motion token 定义了 `--reader-motion-duration-voice-pulse` 和 `--reader-motion-scale-voice-pulse`，但 CSS/JS 没有语音 icon pulse class。
-- 胶囊按钮按压目前只受通用 button pressed 影响，没有专属 run/pause morph。
+- `readerSessionCapsuleSnapshot()` 和 `scheduleReaderSessionCapsuleTick()` 会在自动翻页运行时局部推进倒计时。
+- 沉浸页胶囊写入 `data-motion-session-capsule-*`，countdown、voice、control、label 子节点有独立 role/state/id。
+- CSS 已补 `fd-reader-session-capsule-tick`、`fd-reader-session-voice-pulse` 和 capsule control press/toggle token。
+- 控制层运行中空间也写入 `data-motion-control-space-*`，复用 countdown/voice/control 子角色。
 
 影响：
 
-- 控制胶囊倒计时数字变化、语音图标活动提示、运行/暂停按钮动画没有实现级闭环。
+- 控制胶囊倒计时数字变化、语音图标活动提示、运行/暂停按钮已有实现级闭环；仍缺真实设备录屏、停止/退出打断和 matched capsule-to-space 证据。
 
-### P0-8：viewport/orientation 只有分类和响应式布局，没有旋转动效
+### P0-8：viewport/orientation 已接入第一版状态机，缺设备与折叠屏证据
 
 代码事实：
 
 - `applyViewportClass()` 写入 `data-width-class`、`data-height-class`、`data-orientation`、`data-viewport-class`、viewport width/height。
-- `resize` / `visualViewport.resize` 会重新计算 class，并调整 reader dropdown placement。
+- `resize` / `visualViewport.resize` 会重新计算 class；方向或 viewport class 改变时进入 `startViewportOrientationMotion()`。
+- root / screen host 会写入 `data-motion-orientation-state`、`data-motion-orientation-id`、from/to viewport、route、session、overlay、focus、dock sync 和 reanchor 状态。
+- `viewport.orientation.prepare/reshape/settle` 会触发 motion controller transaction；CSS 使用 token 化 `fd-viewport-orientation-reshape` 和 `fd-viewport-orientation-anchor-settle`，reduced-motion 即时 settle。
+- 旋转后复用 `adjustReaderDropdownPlacement()` 和 `attachReaderControlDockMotionState()`，让 dropdown 和宽屏 dock 重新锚定 / clamp。
 - CSS 对 compact-landscape、tablet-expanded、expanded-width 等有布局规则。
-- 没有 prepare/freeze/reshape/settle 状态，也没有 route/ReaderContext/session/overlay/focus 的旋转中冻结逻辑。
 
 影响：
 
-- 整屏旋转适配有布局基础，但没有旋转动效和打断状态机。
+- 整屏旋转已经从“只有响应式 CSS”推进到可执行 motion contract；仍缺真实旋转录屏、折叠屏 hinge/pane、正文字符锚点重分页、overlay/focus 恢复自动化和平台设备证据。
 
 ### P0-9：代码级 Motion ID 覆盖仍不完整
 
@@ -279,7 +281,7 @@
 | Reader 控制层小横条 | `.fd-reader-grabber`、`.fd-reader-full-grabber` | 点击展开/收起 | 没有拉动、长按、宽屏可移动 dock | `reader.control.handle.press/longPress/drag/snap/cancel` |
 | Reader 控制层运行空间 | 自动翻页/朗读控制页、沉浸页 capsule | session 状态能回沉浸页 | 控制层 running space 与 capsule 没有形变/停靠关系 | `reader.session.runningSpace.enter/expand/collapse/toCapsule` |
 | Reader 控制胶囊 | `data-reader-immersive-status`、`data-reader-tts-action`、`data-reader-setting-toggle=autoPage` | capsule 静态渲染、run/pause icon 切换 | enter/exit、倒计时数字 tick、语音 pulse、run/pause morph 未实现 | `reader.session.capsule.enter/update/tick/voicePulse/control.press/pause/resume/exit` |
-| Viewport / Orientation / Fold | `data-orientation`、`data-viewport-class`、resize listeners | 只做分类和响应式 CSS | 没有 prepare/freeze/reshape/settle；折叠屏展开/折叠无状态 | `viewport.orientation.prepare/freeze/reshape/settle`、`viewport.fold.expand/collapse` |
+| Viewport / Orientation / Fold | `data-orientation`、`data-viewport-class`、resize listeners、`data-motion-orientation-*` | orientation prepare/reshape/settle 第一版 adapter 已接入 | 折叠屏展开/折叠仍缺设备状态；正文字符锚点重分页、overlay/focus 恢复和录屏证据不足 | `viewport.orientation.prepare/reshape/settle` 继续补证据；`viewport.fold.expand/collapse` 补设备验证 |
 
 判定：除 Reader 翻页、loading、keyboard、pressed、部分 overlay/chevron 之外，多数组件目前只有选择器 ID 或静态状态变化，不能算“实现级统一纳管”。
 
@@ -345,7 +347,7 @@
 | `search.state.replace` | 搜索前/后、结果为空 | ID 存在 | 输入、提交、结果替换、清空的状态过渡 |
 | `feedback.toast.enter/update/exit` | toast / nav feedback | ID 存在 | 多 toast 更新与自动退出 |
 | `selection.toolbar.enter/action/exit` | Reader selection | ID 存在 | 选区出现、toolbar command、关闭 |
-| `viewport.orientation.*` | 旋转/窗口变化/折叠 | 只有 CSS 响应式 | freeze 当前内容、reshape 面板、settle 交互 |
+| `viewport.orientation.*` | 旋转/窗口变化/折叠 | 第一版 root/screen host 状态、anchor settle CSS 和 dock clamp 已接入 | 真实旋转录屏、折叠屏 posture、正文重分页、overlay/focus 自动化 |
 
 ## 10. 实现优先级
 
@@ -358,7 +360,7 @@ P0：
 
 P1：
 
-1. 补 orientation/fold 的 prepare/freeze/reshape/settle。
+1. 补 orientation/fold 的设备证据：真实旋转录屏、折叠屏 posture、正文重分页和 overlay/focus 恢复自动化。
 2. 把普通业务按钮、管理页 segment、批量选择和设置行全部补语义 Motion ID。
 3. 给 toast/search/selection/input 做统一动效证据。
 4. 把 CSS 裸动效声明收敛到 token，并给 reduced-motion 写自动测试。
@@ -377,7 +379,7 @@ P2：
 5. 做 `reader.entry.coverToImmersive` shared transition。
 6. 做 `reader.control.handle.*` 和宽屏 dock 拖动。
 7. 做 `reader.session.capsule.*`、control-space、countdown tick、voice icon active。
-8. 做 `viewport.orientation.prepare/reshape/settle` 和 fold/resize clamp。
+8. 已完成第一版 `viewport.orientation.prepare/reshape/settle`；继续做 fold/resize clamp 设备验证、正文重分页和录屏证据。
 9. 把浏览器 route smoke 固化成脚本，输出 Motion ID 覆盖率和 reduced-motion 覆盖率。
 
 ## 12. 本次验证命令

@@ -35,7 +35,7 @@
 | Reader 模块切换、快捷动作、完整页展开 | 已有 `reader.module.*` / `reader.quick.promote` / `reader.panel.expand` | 规划纳管，部分场景仍缺状态机 |
 | 自动翻页/朗读会话、控制胶囊、运行空间 | 已有 `reader.session.*` | 规划纳管，demo 多为静态 UI |
 | 翻页、章节跳转、换源窗口 | 已有 Reader 专属 Motion ID | 规划纳管，换源窗口缺 capture 证据 |
-| 打断动画、viewport/fold/orientation | 已有 `motion.interrupt.*` 和 `viewport.*` | 规划纳管，未实现统一控制器 |
+| 打断动画、viewport/fold/orientation | 已有 `motion.interrupt.*` 和 `viewport.*`；`viewport.orientation.prepare/reshape/settle` 第一版 adapter 已接入 `data-motion-orientation-*` | orientation 已进入实现层；fold posture、完整 interrupt reducer 和设备证据仍需补齐 |
 | 通用按钮、图标按钮、动作按钮 | 已补 `button.press/activate/disabledBlocked`，并接入基础 pressed state | 基础实现纳管，未录屏 |
 | chip/filter/segment/filter row | 已补 `chip.item.*`、`filter.*`、`segment.item.switch`，并接入 token 选中态 | 基础实现纳管，未录屏 |
 | switch/toggle/checkbox | 已补 `toggle.press/switch/revert`，checkbox 归入 toggle family，thumb/check 已有 token transition | 基础实现纳管，未录屏 |
@@ -62,7 +62,7 @@
 | Reader Session | `reader.session.*` | 胶囊动画、运行空间、倒计时 tick、语音 icon、互斥会话生命周期 |
 | Reader Paging | `reader.page.turn.*`、`reader.chapter.jump` | 翻页 token 化、章节/进度拖动互斥矩阵 |
 | Flow/Source Switch | `reader.sourceSwitch.open/close` | 换源窗口不同 viewport 的 capture 和打断规则 |
-| Interrupt/Viewport | `motion.interrupt.*`、`viewport.fold.*`、`viewport.orientation.*` | 统一 motion reducer、旋转/fold 设备验证 |
+| Interrupt/Viewport | `motion.interrupt.*`、`viewport.fold.*`、`viewport.orientation.*` | orientation lifecycle 已有第一版 adapter；继续补统一 interrupt reducer、fold posture 和旋转设备验证 |
 | 通用组件族 | `button.*`、`toggle.*`、`chip/filter/segment.*`、`slider/stepper/progress.*`、`input/search.*`、`feedback/state.*`、`selection.*`、`listRow/card.*` | 已有 selector 总表、token、reduced-motion 和基础 pressed state；缺深度状态机和录屏证据 |
 
 ## 4. 已进入规划、待实现的组件族

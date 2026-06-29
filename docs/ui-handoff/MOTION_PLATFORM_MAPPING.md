@@ -130,9 +130,9 @@
 | `motion.interrupt.completeThenReplace` | loading 完成或异步返回 | loading 最短显示后替换，主动返回优先。 | reducer 判断 user intent 优先级，loading result 不覆盖已离开 route。 | task result 写入前检查 current route/context。 | 异步结果写入前检查当前页面状态。 |
 | `viewport.fold.expand` | 折叠屏展开 | 单列重排到展开态，ReaderContext 保留。 | 使用 `WindowSizeClass` / fold posture 状态驱动布局；正文重新分页。 | 使用 size class / scene size 驱动布局；正文重新测量。 | 使用窗口尺寸/折叠状态驱动重排；正文重新测量。 |
 | `viewport.fold.collapse` | 折叠屏折叠 | 展开态收回手机态，overlay 等价降级。 | 宽布局状态映射回单列；overlay 映射到底表/面板。 | 宽布局映射回 compact；保留 navigation path。 | 宽布局映射回单列；保留 router state。 |
-| `viewport.orientation.prepare` | 横竖屏/整屏旋转开始 | 记录 route、ReaderContext、active session、overlay、focus、dock offset；取消旧动画。 | configuration/window metrics 变化时冻结 UI motion state，取消 drag/pressed/Animatable，保留 Navigation state。 | geometry/size class 变化前保存 NavigationPath、reader anchor、focus 和 dock offset；取消 gesture 临时态。 | window/orientation 变化时保存 router、reader state、session 和 overlay，取消旧 transition。 |
-| `viewport.orientation.reshape` | 横竖屏/resize/断点变化 | `data-orientation` / `data-viewport-class` 切换；正文重新分页；控制层、胶囊、overlay 重锚定。 | 根据 `WindowSizeClass`、constraints、insets 和 fold pane 重新 layout；阅读分页按进度/字符锚点映射。 | 根据 size class、GeometryProxy、safe area 重新 layout；阅读分页按进度/字符锚点映射。 | 根据窗口尺寸、方向和 fold safe area 重新 layout；阅读分页按进度/字符锚点映射。 |
-| `viewport.orientation.settle` | 旋转后布局稳定 | 恢复 focus/pointer；clamp fixed-width dock；恢复胶囊倒计时/朗读 icon 微动效。 | layout pass 后 clamp saved dock offset，恢复 semantics/focus，继续 active session 更新。 | layout 稳定后 clamp dock offset，恢复 VoiceOver focus 和 capsule micro motion。 | layout 稳定后 clamp dock offset，恢复可操作层和 session micro motion。 |
+| `viewport.orientation.prepare` | 横竖屏/整屏旋转开始 | 写入 `data-motion-orientation-state=preparing`，记录 route、active session、overlay、focus、dock sync、from/to viewport；取消旧动画由后续统一 interrupt reducer 补齐。 | configuration/window metrics 变化时冻结 UI motion state，取消 drag/pressed/Animatable，保留 Navigation state。 | geometry/size class 变化前保存 NavigationPath、reader anchor、focus 和 dock offset；取消 gesture 临时态。 | window/orientation 变化时保存 router、reader state、session 和 overlay，取消旧 transition。 |
+| `viewport.orientation.reshape` | 横竖屏/resize/断点变化 | `data-orientation` / `data-viewport-class` 切换，并写入 `data-motion-orientation-role`；控制层、胶囊、overlay、dropdown 和宽屏 dock 重锚定 / clamp，正文重分页证据仍需补。 | 根据 `WindowSizeClass`、constraints、insets 和 fold pane 重新 layout；阅读分页按进度/字符锚点映射。 | 根据 size class、GeometryProxy、safe area 重新 layout；阅读分页按进度/字符锚点映射。 | 根据窗口尺寸、方向和 fold safe area 重新 layout；阅读分页按进度/字符锚点映射。 |
+| `viewport.orientation.settle` | 旋转后布局稳定 | 写入 `data-motion-orientation-state=settling/settled`，恢复 pointer，clamp fixed-width dock，恢复胶囊倒计时/朗读 icon 微动效；focus 恢复自动化仍需补。 | layout pass 后 clamp saved dock offset，恢复 semantics/focus，继续 active session 更新。 | layout 稳定后 clamp dock offset，恢复 VoiceOver focus 和 capsule micro motion。 | layout 稳定后 clamp dock offset，恢复可操作层和 session micro motion。 |
 
 ## 3. 平台 Guardrails
 
@@ -265,7 +265,7 @@ Web demo：
 - Demo 已接入控制层小横条 state adapter，覆盖 `.fd-reader-grabber` / `.fd-reader-full-grabber` 的 `data-motion-control-handle-*` 状态、press/drag/release、阈值 snap/expand/collapse、full 页收回和 reduced-motion；宽屏 dock 长按移动也已接入 `reader.control.dock.longPress/drag/release/rebound` 第一版 adapter、bounds clamp、viewport-class offset 和 resize rebound；真实设备录屏、折叠屏 hinge/pane、目录 full 页上拉 promote 仍需补齐。
 - Demo 已接入运行胶囊 state adapter，覆盖 `reader.session.autoPage.start`、`reader.session.tts.start`、`reader.session.capsule.enter/update/switch/exit`、`reader.session.capsule.control.press/toggle`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active`；平台应映射这些 Motion ID、state 字段和 reducer 事件到原生组件，不能照搬 Web CSS；录屏、停止/退出打断和真实设备证据仍需补齐。
 - Demo 已定义打断动画状态机，并验证连续点击、返回、关闭、loading 完成和拖动开始。
-- Demo 已有折叠屏/大屏 reshape capture，覆盖展开、折叠、横屏紧凑和阅读分页映射。
-- Demo 已有整屏旋转 capture，覆盖普通页面、沉浸阅读、控制层打开、运行胶囊、控制层运行空间、宽屏 dock clamp 和 overlay 重锚定。
+- Demo 已有整屏旋转第一版 state adapter，覆盖 root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dropdown 重定位和宽屏 dock clamp；真实旋转录屏、正文字符锚点重分页、overlay/focus 自动化和平台设备证据仍需补齐。
+- Demo 仍没有折叠屏/大屏 reshape 的真实设备 capture；展开、折叠、半开态、hinge/pane 和阅读分页映射需要用模拟器或真机补证据。
 - 每个高风险阅读 transition 至少有一份截图或录屏证据。
 - 平台团队确认 route push 是走原生 stack motion，还是在密集操作页面保持即时切换。

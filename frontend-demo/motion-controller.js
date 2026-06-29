@@ -36,7 +36,9 @@
     "reader.control.dock.rebound": 120,
     "reader.module.switch": 160,
     "reader.page.turn.next/prev": 220,
-    "viewport.orientation.reshape": 240
+    "viewport.orientation.prepare": 80,
+    "viewport.orientation.reshape": 240,
+    "viewport.orientation.settle": 240
   };
 
   const CONTRACT_VERSION = "reader-motion-contract-v1";

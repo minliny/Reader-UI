@@ -1204,5 +1204,5 @@ Reduced motion：
 11. 给每个高风险动效补 demo capture 或录屏。
 12. 在平台映射文档中继续为每个 Motion ID 补 state 字段、测试文件和验收方式。
 13. 补打断动画的统一状态控制器，避免 CSS 动画和 route state 各自收尾。
-14. 补 `viewport.orientation.prepare/reshape/settle` 状态机，覆盖整屏旋转中的冻结、重排、收尾、dock clamp、胶囊重锚定和 overlay 焦点恢复。
-15. 用真实折叠屏/模拟器补 `viewport.fold.expand`、`viewport.fold.collapse`、`viewport.orientation.reshape` 的证据。
+14. 已完成第一版 `viewport.orientation.prepare/reshape/settle` adapter：root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dock clamp 和 reduced-motion 即时 settle 已接入；下一步补真实旋转录屏、正文字符锚点重分页和 overlay/focus 自动化证据。
+15. 用真实折叠屏/模拟器补 `viewport.fold.expand`、`viewport.fold.collapse`、`viewport.orientation.reshape` 的 hinge/pane/posture 证据。

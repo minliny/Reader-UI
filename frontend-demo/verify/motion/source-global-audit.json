@@ -118,7 +118,7 @@
     "readerSessionStartTransaction": "implemented for TTS and auto-page",
     "readerSessionCapsuleEnterExitTickVoicePulse": "implemented first pass with capsule state adapter, tokenized enter/update/switch/tick/voice CSS, and local auto-page countdown updates; media and stop/exit interruption proof still missing",
     "capsuleRunPauseMorph": "implemented first pass for local play/pause button state and control-layer running space; full matched morph media evidence still missing",
-    "orientationPrepareReshapeSettleLifecycle": "controller reshape transaction implemented; prepare/freeze/settle visuals missing"
+    "orientationPrepareReshapeSettleLifecycle": "implemented first pass with startViewportOrientationMotion, root/screen-host data-motion-orientation-* attributes, route/session/overlay/focus/dock metadata, tokenized reshape/anchor-settle CSS, reduced-motion immediate settle, dropdown reanchor, and wide dock clamp; real rotation media, fold posture, text-anchor repagination, and focus automation proof still missing"
   },
   "componentFamilies": [
     {
@@ -183,8 +183,8 @@
     },
     {
       "family": "viewport",
-      "source": "data-orientation, data-viewport-class, resize listeners",
-      "currentState": "Responsive classification and controller reshape transaction exist; rotation/fold animation lifecycle is missing.",
+      "source": "data-orientation, data-viewport-class, resize listeners, data-motion-orientation-*",
+      "currentState": "Viewport/orientation now exposes a first-pass prepare/reshape/settle adapter with root and screen-host data-motion-orientation-* state, route/session/overlay/focus/dock metadata, tokenized reshape/anchor-settle CSS, reduced-motion immediate settle, dropdown reanchor, and wide dock clamp; real rotation media, fold posture, text-anchor repagination, overlay/focus automation, and platform-device proof remain missing.",
       "requiredOwner": "viewport motion controller"
     }
   ]

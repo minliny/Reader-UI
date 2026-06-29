@@ -96,6 +96,10 @@
   --fd-motion-effective-capsule-tick-y: var(--reader-motion-distance-capsule-tick-y);
   --fd-motion-effective-running-space: var(--reader-motion-duration-running-space);
   --fd-motion-effective-running-space-y: var(--reader-motion-distance-running-space-y);
+  --fd-motion-effective-orientation-freeze: var(--reader-motion-duration-orientation-freeze);
+  --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-viewport-reshape);
+  --fd-motion-effective-orientation-settle: var(--reader-motion-duration-orientation-settle);
+  --fd-motion-effective-orientation-y: var(--reader-motion-distance-orientation-panel-y);
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
   --fd-motion-effective-overlay: var(--reader-motion-duration-base);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
@@ -132,6 +136,10 @@
   --fd-motion-effective-capsule-tick-y: 0px;
   --fd-motion-effective-running-space: var(--reader-motion-duration-instant);
   --fd-motion-effective-running-space-y: 0px;
+  --fd-motion-effective-orientation-freeze: var(--reader-motion-duration-instant);
+  --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-instant);
+  --fd-motion-effective-orientation-settle: var(--reader-motion-duration-instant);
+  --fd-motion-effective-orientation-y: 0px;
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
@@ -154,6 +162,54 @@
 .fd-demo[data-motion-first-open-state="settled"] :where([data-motion-first-open-target="screen-host"]) {
   opacity: 1;
   transform: translateY(0);
+}
+
+.fd-demo :where([data-motion-orientation-target="screen-host"]) {
+  transform-origin: center;
+}
+
+.fd-demo[data-motion-orientation-state="preparing"] :where([data-motion-orientation-target="screen-host"]),
+.fd-demo[data-motion-orientation-state="reshaping"] :where([data-motion-orientation-target="screen-host"]) {
+  pointer-events: none;
+}
+
+.fd-demo :where([data-motion-orientation-role]) {
+  transition:
+    opacity var(--fd-motion-effective-orientation-settle) var(--reader-motion-easing-standard),
+    translate var(--fd-motion-effective-orientation-settle) var(--reader-motion-easing-reshape),
+    filter var(--fd-motion-effective-orientation-settle) var(--reader-motion-easing-standard);
+}
+
+.fd-demo[data-motion-orientation-state="preparing"] :where([data-motion-orientation-role]) {
+  filter: saturate(0.98);
+}
+
+.fd-demo[data-motion-orientation-state="reshaping"] :where([data-motion-orientation-role="active-screen"], [data-motion-orientation-role="reader-content"]) {
+  animation: fd-viewport-orientation-reshape var(--fd-motion-effective-viewport-reshape) var(--reader-motion-easing-reshape) both;
+}
+
+.fd-demo[data-motion-orientation-state="reshaping"] :where(
+  [data-motion-orientation-role="reader-control-sheet"],
+  [data-motion-orientation-role="reader-control-nav"],
+  [data-motion-orientation-role="session-capsule"],
+  [data-motion-orientation-role="control-space"],
+  [data-motion-orientation-role="overlay-dialog"],
+  [data-motion-orientation-role="overlay-sheet"],
+  [data-motion-orientation-role="dropdown-menu"]
+) {
+  animation: fd-viewport-orientation-anchor-settle var(--fd-motion-effective-orientation-settle) var(--reader-motion-easing-reshape) both;
+}
+
+.fd-demo[data-motion-orientation-state="settling"] :where([data-motion-orientation-role]) {
+  opacity: 1;
+  translate: 0 0;
+  filter: none;
+}
+
+.fd-demo[data-motion-orientation-state="settled"] :where([data-motion-orientation-role]) {
+  opacity: 1;
+  translate: 0 0;
+  filter: none;
 }
 
 .fd-demo :where(button, [role="button"], [data-route], [data-route-back]) {
@@ -557,6 +613,32 @@
   }
 }
 
+@keyframes fd-viewport-orientation-reshape {
+  from {
+    opacity: 0.94;
+    translate: 0 var(--fd-motion-effective-orientation-y);
+    filter: saturate(0.98);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: none;
+  }
+}
+
+@keyframes fd-viewport-orientation-anchor-settle {
+  from {
+    opacity: 0.92;
+    translate: 0 calc(var(--fd-motion-effective-orientation-y) * -1);
+    filter: saturate(0.96);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: none;
+  }
+}
+
 @keyframes fd-reader-session-capsule-switch {
   0% {
     opacity: 0.72;
@@ -648,6 +730,10 @@
     --fd-motion-effective-capsule-tick-y: 0px;
     --fd-motion-effective-running-space: var(--reader-motion-duration-instant);
     --fd-motion-effective-running-space-y: 0px;
+    --fd-motion-effective-orientation-freeze: var(--reader-motion-duration-instant);
+    --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-instant);
+    --fd-motion-effective-orientation-settle: var(--reader-motion-duration-instant);
+    --fd-motion-effective-orientation-y: 0px;
     --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);

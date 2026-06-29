@@ -3319,6 +3319,203 @@
     }, 280);
   }
 
+  function clearViewportOrientationMotionTimer(appState) {
+    if (appState?.viewportOrientationMotionTimer) {
+      window.clearTimeout(appState.viewportOrientationMotionTimer);
+      appState.viewportOrientationMotionTimer = null;
+    }
+  }
+
+  function viewportSnapshotLabel(snapshot) {
+    if (!snapshot) return "";
+    return `${snapshot.viewportClass || "unknown"}:${snapshot.orientation || "unknown"}`;
+  }
+
+  function viewportSnapshotSize(snapshot) {
+    if (!snapshot) return "";
+    return `${Math.round(snapshot.width || 0)}x${Math.round(snapshot.height || 0)}`;
+  }
+
+  function viewportOrientationMotionId(state) {
+    if (state === "preparing") return "viewport.orientation.prepare";
+    if (state === "settling" || state === "settled") return "viewport.orientation.settle";
+    return "viewport.orientation.reshape";
+  }
+
+  function activeMotionFocusSummary(screenHost) {
+    const active = document.activeElement;
+    if (!active || !screenHost || !screenHost.contains(active)) return "outside";
+    const direct = active.getAttribute("data-motion-id") ||
+      active.getAttribute("data-route") ||
+      active.getAttribute("data-reader-setting-toggle") ||
+      active.getAttribute("data-reader-tts-action") ||
+      active.getAttribute("data-reader-page-action") ||
+      active.getAttribute("aria-label");
+    return String(direct || active.tagName || "inside").slice(0, 64);
+  }
+
+  function activeMotionOverlaySummary(screenHost, appState) {
+    if (!screenHost) return "none";
+    const dialog = screenHost.querySelector("[data-demo-dialog][aria-hidden=\"false\"]");
+    if (dialog) return "dialog";
+    const sheet = screenHost.querySelector("[data-demo-sheet][aria-hidden=\"false\"]");
+    if (sheet) return "sheet";
+    const dropdown = screenHost.querySelector("[data-motion-dropdown-role=\"menu\"][data-motion-dropdown-state=\"expanded\"]");
+    if (dropdown) return `dropdown:${dropdown.getAttribute("data-motion-dropdown-placement") || "down"}`;
+    if (appState?.readerMoreOpen) return "reader-more";
+    if (appState?.settingsOverlay) return `settings:${appState.settingsOverlay}`;
+    if (appState?.settingsExpandedOption) return `settings-option:${appState.settingsExpandedOption}`;
+    if (appState?.discoverFilterOpen || appState?.discoverSortOpen) return "discover-dropdown";
+    if (appState?.sourceMenuOpen || appState?.sourceFilterOpen) return "source-dropdown";
+    return "none";
+  }
+
+  function viewportOrientationRoleTargets(screenHost) {
+    if (!screenHost || typeof screenHost.querySelectorAll !== "function") return [];
+    const targets = [];
+    const add = (selector, role) => {
+      screenHost.querySelectorAll(selector).forEach((element) => {
+        targets.push({ element, role });
+      });
+    };
+    add(".fd-active-screen", "active-screen");
+    add(".fd-ir-reading-layer", "reader-content");
+    add(".fd-reader-sheet:not(.fd-reader-sheet-empty)", "reader-control-sheet");
+    add(".fd-reader-module-nav:not(.fd-reader-module-nav-empty)", "reader-control-nav");
+    add("[data-reader-immersive-status]", "session-capsule");
+    add("[data-reader-control-space]", "control-space");
+    add("[data-demo-dialog][aria-hidden=\"false\"]", "overlay-dialog");
+    add("[data-demo-sheet][aria-hidden=\"false\"]", "overlay-sheet");
+    add("[data-motion-dropdown-role=\"menu\"][data-motion-dropdown-state=\"expanded\"]", "dropdown-menu");
+    return targets;
+  }
+
+  function clearViewportOrientationRoleTargets(screenHost) {
+    if (!screenHost || typeof screenHost.querySelectorAll !== "function") return;
+    screenHost.querySelectorAll("[data-motion-orientation-role]").forEach((element) => {
+      [
+        "data-motion-orientation-role",
+        "data-motion-orientation-state",
+        "data-motion-orientation-id",
+        "data-motion-orientation-from",
+        "data-motion-orientation-to",
+        "data-motion-orientation-sequence"
+      ].forEach((attribute) => element.removeAttribute(attribute));
+    });
+  }
+
+  function applyViewportOrientationMotionAttributes(root, screenHost, appState, motion) {
+    if (!root || !screenHost || !motion) return;
+    const id = viewportOrientationMotionId(motion.state);
+    const reduced = root.getAttribute("data-motion-reduced") === "true";
+    const route = root.getAttribute("data-current-route") || motion.route || "";
+    const readerActive = Boolean(screenHost.querySelector(".fd-ir-reading-layer, .fd-reader-frame"));
+    const session = readerSessionCapsuleSnapshotKey(readerSessionCapsuleSnapshot(appState));
+    const overlay = activeMotionOverlaySummary(screenHost, appState);
+    const focus = activeMotionFocusSummary(screenHost);
+    const dockSync = readerControlDockMovable(screenHost) ? "movable" : "static";
+    const from = viewportSnapshotLabel(motion.from);
+    const to = viewportSnapshotLabel(motion.to);
+
+    motion.id = id;
+    motion.route = route;
+    motion.readerActive = readerActive;
+    motion.session = session;
+    motion.overlay = overlay;
+    motion.focus = focus;
+    motion.dockSync = dockSync;
+
+    root.setAttribute("data-motion-orientation", "true");
+    root.setAttribute("data-motion-orientation-state", motion.state);
+    root.setAttribute("data-motion-orientation-id", id);
+    root.setAttribute("data-motion-orientation-from", from);
+    root.setAttribute("data-motion-orientation-to", to);
+    root.setAttribute("data-motion-orientation-from-size", viewportSnapshotSize(motion.from));
+    root.setAttribute("data-motion-orientation-to-size", viewportSnapshotSize(motion.to));
+    root.setAttribute("data-motion-orientation-route", route);
+    root.setAttribute("data-motion-orientation-reader", readerActive ? "true" : "false");
+    root.setAttribute("data-motion-orientation-session", session);
+    root.setAttribute("data-motion-orientation-overlay", overlay);
+    root.setAttribute("data-motion-orientation-focus", focus);
+    root.setAttribute("data-motion-orientation-dock", dockSync);
+    root.setAttribute("data-motion-orientation-sequence", String(motion.sequence || 0));
+    root.setAttribute("data-motion-orientation-reduced", reduced ? "true" : "false");
+    root.setAttribute("data-motion-orientation-reanchored", motion.state === "preparing" ? "false" : "true");
+
+    screenHost.setAttribute("data-motion-orientation-target", "screen-host");
+    screenHost.setAttribute("data-motion-orientation-state", motion.state);
+    screenHost.setAttribute("data-motion-orientation-id", id);
+    screenHost.setAttribute("data-motion-orientation-from", from);
+    screenHost.setAttribute("data-motion-orientation-to", to);
+    screenHost.setAttribute("data-motion-orientation-sequence", String(motion.sequence || 0));
+
+    clearViewportOrientationRoleTargets(screenHost);
+    viewportOrientationRoleTargets(screenHost).forEach(({ element, role }) => {
+      element.setAttribute("data-motion-orientation-role", role);
+      element.setAttribute("data-motion-orientation-state", motion.state);
+      element.setAttribute("data-motion-orientation-id", id);
+      element.setAttribute("data-motion-orientation-from", from);
+      element.setAttribute("data-motion-orientation-to", to);
+      element.setAttribute("data-motion-orientation-sequence", String(motion.sequence || 0));
+    });
+  }
+
+  function startViewportOrientationMotion(root, screenHost, appState, motionController, previousSnapshot, nextSnapshot) {
+    if (!root || !screenHost || !previousSnapshot || !nextSnapshot) return;
+    clearViewportOrientationMotionTimer(appState);
+    const reduced = root.getAttribute("data-motion-reduced") === "true";
+    const sequence = (appState.viewportOrientationMotionSequence || 0) + 1;
+    appState.viewportOrientationMotionSequence = sequence;
+    const motion = {
+      state: "preparing",
+      from: previousSnapshot,
+      to: nextSnapshot,
+      sequence,
+      settled: false
+    };
+    appState.viewportOrientationMotion = motion;
+
+    const runState = (state) => {
+      if (appState.viewportOrientationMotion !== motion || motion.sequence !== appState.viewportOrientationMotionSequence) {
+        return false;
+      }
+      motion.state = state;
+      motion.settled = state === "settled";
+      applyViewportOrientationMotionAttributes(root, screenHost, appState, motion);
+      if (state !== "settled" && motionController) {
+        const id = viewportOrientationMotionId(state);
+        motionController.start({
+          id,
+          action: state === "preparing" ? "orientation-prepare" : state === "settling" ? "orientation-settle" : "orientation-reshape",
+          from: viewportSnapshotLabel(previousSnapshot),
+          to: viewportSnapshotLabel(nextSnapshot),
+          duration: reduced ? 0 : id === "viewport.orientation.prepare" ? 80 : 240
+        });
+      }
+      return true;
+    };
+
+    runState("preparing");
+    if (reduced) {
+      runState("reshaping");
+      runState("settling");
+      runState("settled");
+      return;
+    }
+
+    appState.viewportOrientationMotionTimer = window.setTimeout(() => {
+      if (!runState("reshaping")) return;
+      adjustReaderDropdownPlacement(screenHost);
+      attachReaderControlDockMotionState(screenHost, appState, motionController);
+      appState.viewportOrientationMotionTimer = window.setTimeout(() => {
+        if (!runState("settling")) return;
+        appState.viewportOrientationMotionTimer = window.setTimeout(() => {
+          runState("settled");
+        }, 240);
+      }, 240);
+    }, 80);
+  }
+
   function clearReaderSessionCapsuleTimer(appState) {
     if (appState?.readerSessionCapsuleTimer) {
       window.clearTimeout(appState.readerSessionCapsuleTimer);
@@ -7097,6 +7294,9 @@
       firstOpenMotion: null,
       firstOpenMotionTimer: null,
       hasPlayedFirstOpen: false,
+      viewportOrientationMotion: null,
+      viewportOrientationMotionTimer: null,
+      viewportOrientationMotionSequence: 0,
       readerDockOffsets: {},
       readerTextSelectionOpen: false,
       readerSelectedText: "雨，下了一整夜。",
@@ -7247,12 +7447,7 @@
         nextSnapshot &&
         (previousSnapshot.orientation !== nextSnapshot.orientation || previousSnapshot.viewportClass !== nextSnapshot.viewportClass)
       ) {
-        motionController.start({
-          id: "viewport.orientation.reshape",
-          action: "reshape",
-          from: previousSnapshot.viewportClass,
-          to: nextSnapshot.viewportClass
-        });
+        startViewportOrientationMotion(root, screenHost, appState, motionController, previousSnapshot, nextSnapshot);
       }
       viewportSnapshot = nextSnapshot;
       adjustReaderDropdownPlacement(screenHost);
@@ -7280,6 +7475,7 @@
     target.__readerAdaptiveViewportCleanup = () => {
       clearReaderSessionCapsuleTimer(appState);
       clearFirstOpenMotionTimer(appState);
+      clearViewportOrientationMotionTimer(appState);
       if (motionController) {
         motionController.destroy();
       }
@@ -7360,9 +7556,15 @@
       attachReaderSessionCapsuleMotionState(screenHost, appState, motionController);
       attachReaderControlSpaceMotionState(screenHost, appState, motionController);
       attachFirstOpenMotionState(root, screenHost, appState);
+      if (appState.viewportOrientationMotion) {
+        applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
+      }
       window.requestAnimationFrame(() => {
         if (screenHost.isConnected) {
           attachReaderControlDockMotionState(screenHost, appState, motionController);
+          if (appState.viewportOrientationMotion) {
+            applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
+          }
         }
       });
       attachMotionPressState(screenHost, motionController);

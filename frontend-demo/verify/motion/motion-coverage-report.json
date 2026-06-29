@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T06:11:38.868Z",
+  "generatedAt": "2026-06-29T06:29:32.047Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v10-20260626, render=app-first-open-v1-20260629, runtime=app-first-open-v1-20260629"
+      "detail": "motion=orientation-motion-v1-20260629, render=orientation-motion-v1-20260629, runtime=orientation-motion-v1-20260629"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, reader.session.controlSpace.enter, reader.session.controlSpace.update, reader.session.controlSpace.exit"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, reader.session.controlSpace.enter, reader.session.controlSpace.update, reader.session.controlSpace.exit, viewport.orientation.prepare, viewport.orientation.settle"
     },
     {
       "id": "motion.app-first-open.state-adapter",
@@ -45,12 +45,12 @@
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "78/78 Motion IDs resolved; incomplete=0"
+      "detail": "80/80 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "78/78 runtime/selector Motion IDs expose state machines"
+      "detail": "80/80 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
@@ -98,6 +98,11 @@
       "detail": "reader control layer exposes the running auto-page/TTS space as a state adapter with tokenized enter/update/tick/voice/control motion"
     },
     {
+      "id": "motion.viewport-orientation.state-adapter",
+      "passed": true,
+      "detail": "viewport resize/orientation changes expose prepare/reshape/settle root and role state, route/session/overlay/focus/dock metadata, tokenized anchor motion, and reduced-motion fallback"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "77 bind calls, 63 unique Motion IDs"
@@ -114,9 +119,9 @@
     }
   ],
   "summary": {
-    "passed": 22,
+    "passed": 23,
     "failed": 0,
-    "total": 22
+    "total": 23
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -235,7 +240,9 @@
       "tab.item.switch",
       "toggle.switch",
       "tooling.mode.switch",
-      "viewport.orientation.reshape"
+      "viewport.orientation.prepare",
+      "viewport.orientation.reshape",
+      "viewport.orientation.settle"
     ],
     "unresolvedMotionIds": [],
     "incompleteContractEntries": [],

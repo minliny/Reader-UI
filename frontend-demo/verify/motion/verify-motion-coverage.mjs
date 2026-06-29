@@ -76,7 +76,9 @@ const requiredRuntimeMotionIds = [
   "reader.session.capsule.exit",
   "reader.session.controlSpace.enter",
   "reader.session.controlSpace.update",
-  "reader.session.controlSpace.exit"
+  "reader.session.controlSpace.exit",
+  "viewport.orientation.prepare",
+  "viewport.orientation.settle"
 ];
 const detailedMotionIds = [
   "app.firstOpen.enter",
@@ -334,6 +336,23 @@ const checks = [
       motionTokens.includes("fd-reader-control-space-enter") &&
       motionTokens.includes("fd-reader-control-space-update"),
     detail: "reader control layer exposes the running auto-page/TTS space as a state adapter with tokenized enter/update/tick/voice/control motion"
+  },
+  {
+    id: "motion.viewport-orientation.state-adapter",
+    passed: runtime.includes("startViewportOrientationMotion") &&
+      runtime.includes("applyViewportOrientationMotionAttributes") &&
+      runtime.includes("data-motion-orientation-state") &&
+      runtime.includes("data-motion-orientation-reanchored") &&
+      runtime.includes("data-motion-orientation-dock") &&
+      runtime.includes("activeMotionOverlaySummary") &&
+      runtime.includes("activeMotionFocusSummary") &&
+      runtime.includes("viewport.orientation.prepare") &&
+      runtime.includes("viewport.orientation.reshape") &&
+      runtime.includes("viewport.orientation.settle") &&
+      motionTokens.includes("--fd-motion-effective-viewport-reshape") &&
+      motionTokens.includes("fd-viewport-orientation-reshape") &&
+      motionTokens.includes("fd-viewport-orientation-anchor-settle"),
+    detail: "viewport resize/orientation changes expose prepare/reshape/settle root and role state, route/session/overlay/focus/dock metadata, tokenized anchor motion, and reduced-motion fallback"
   },
   {
     id: "motion.selector.bindings",

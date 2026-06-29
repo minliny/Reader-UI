@@ -21,9 +21,9 @@
 | 控制层小横条拖拽 | 已补 `reader.control.handle.press/drag/release` 精确状态机和实现层 adapter；`.fd-reader-grabber` / `.fd-reader-full-grabber` 会写入 `data-motion-control-handle-*` 状态，拖动使用临时 offset，释放按阈值展开/收回，reduced-motion 即时提交；full 页小横条已可收回到对应控制层 | 补录屏/截图证据，并继续验证真实触摸设备上的长路径 drag、方向阈值和目录 full 页上拉 promote | 拖动中正文不动；释放只落到展开、收回或原状态之一；返回栈不乱 |
 | 宽屏控制层 dock 长按移动 | 已补 `reader.control.dock.longPress/drag/release/rebound` 精确状态机和第一版实现层 adapter；宽屏 `.fd-reader-grabber` 长按后移动同一组 fixed-width dock，按 ReaderFrame/dock group 计算 bounds，transform offset，按 viewport class 保存位置，并在 resize 后 clamp/rebound；窄屏会清理 dock transform | 补真实鼠标/触摸录屏、折叠屏 hinge/pane 安全区验证、旋转中打断证据和平台测试映射 | fixed-width dock 可移动但不变形；不跨 hinge/安全区；正文不重排；释放位置合法 |
 | 自动翻页/朗读运行胶囊动效 | 已补 `reader.session.autoPage.start` / `reader.session.tts.start` 启动事务和 `reader.session.capsule.enter/update/switch/exit` 第一版实现层 adapter；沉浸页胶囊会写入 `data-motion-session-capsule-*` 状态，自动翻页倒计时会局部更新并保留固定宽度，TTS/自动翻页互斥 | 补录屏证据、停止/退出路径、后台/切章打断验证和平台测试映射 | 从控制层或完整页开启自动翻页/朗读后回到 `immersive-reading`；只显示一个胶囊；互斥切换不排队 |
-| 控制层运行中空间动效 | 文档已补 `reader.session.controlSpace.*`；demo 没有运行胶囊与控制层运行空间的 snapshot/matched 过渡 | 补控制层运行中空间组件、锚点测量、snapshot/降级 crossfade 和唯一主控规则 | 打开控制层时胶囊停靠/展开到运行空间；隐藏控制层时回到胶囊；结束态没有双主控 |
+| 控制层运行中空间动效 | 已补 `reader.session.controlSpace.*` 第一版实现层 adapter；控制层会渲染 `data-reader-control-space` 运行中空间，并写入 `data-motion-control-space-*`、countdown/voice/control/label 子角色和 token 化 enter/update/tick/voice/control CSS | 补 matched geometry / snapshot 录屏证据、停止/退出打断验证和平台测试映射 | 打开控制层时胶囊停靠/展开到运行空间；隐藏控制层时回到胶囊；结束态没有双主控 |
 | 控制胶囊内部微动效 | 已补 `.fd-ir-status-controls button` / `data-reader-capsule-control` 局部按压、play/pause 状态、`data-reader-capsule-countdown` 数字 tick、`data-reader-capsule-voice` 播放态 pulse 和 reduced-motion 静态降级 | 补录屏证据、真实触摸按压和停止/切换时的退出验证 | 按钮切换不打开控制层；数字变化不重放整颗胶囊；朗读图标播放时轻提示、暂停静态 |
-| 整屏旋转适配与动效 | 已补 `viewport.orientation.prepare/reshape/settle` contract 状态机；demo 已有 `data-orientation`、`viewportClass`、`compact-landscape`、`tablet-expanded` 和 `visualViewport` resize 基础，但没有统一旋转实现状态机 | 补实现层 prepare/reshape/settle，覆盖 route/ReaderContext/session/overlay/focus 冻结、正文重分页、控制层等价容器、胶囊重锚定、宽屏 dock offset clamp 和旋转中打断 | portrait <-> landscape、compact-landscape、tablet-expanded resize 下，route/返回栈/active session 不丢；正文不跳章；控制层/胶囊/overlay/dock 都落到合法位置 |
+| 整屏旋转适配与动效 | 已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；resize / `visualViewport.resize` 发生方向或 viewport class 变化时，root / screen host 会写入 `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 anchor settle 动效；宽屏 dock 会复用 resize clamp/rebound | 补真实旋转录屏、折叠屏 hinge/pane 验证、正文字符锚点重分页证据、overlay/focus 恢复自动化和平台测试映射 | portrait <-> landscape、compact-landscape、tablet-expanded resize 下，route/返回栈/active session 不丢；正文不跳章；控制层/胶囊/overlay/dock 都落到合法位置 |
 | 打断动画状态机 | 文档有 `motion.interrupt.*`，demo 未统一控制 | 增加统一 motion state/reducer，清理 animation class、focus、pointer、route async 结果 | 连续点击、返回、关闭、loading 完成、拖动开始后最终状态唯一 |
 | Motion capture 证据 | 已建立 `frontend-demo/verify/motion/` 和 `selector-matrix/` 证据目录说明，但还没有按 Motion ID 的录屏/截图媒体 | 按 Motion ID 存放录屏/GIF/关键帧截图，并回填到 `MOTION_SELECTOR_MATRIX.md` 的 Evidence 列 | 每个 P0 Motion ID 至少一份证据，命名可追溯 |
 | 折叠屏/大屏验证 | 当前只有 viewport class 规划和部分 adaptive PNG | 增加 fold/open/collapse/compact-landscape 的手动或模拟器验证矩阵 | ReaderContext、overlay、返回栈、正文分页映射均有证据 |
@@ -60,9 +60,9 @@
 6. 已完成第一版：`reader.entry.coverToImmersive` / `reader.entry.actionToImmersive` 已接入 source cover/action、snapshot、target reveal 和 reduced-motion 状态；下一步补录屏、连续点击、返回来源页和详情/章节入口证据。
 7. 已完成第一版：`reader.control.handle.press/drag/release` 已接入小横条 press、drag preview、release snap/expand/collapse、full 页收回和 reduced-motion；下一步补真实触摸/鼠标录屏证据和目录 full 页上拉 promote 验证。
 8. 已完成第一版：`reader.control.dock.*` 已接入宽屏 fixed-width dock 长按移动、bounds clamp、viewport class offset 保存、resize 越界回弹和窄屏 transform 清理；下一步补真实设备/折叠屏/旋转打断录屏证据。
-9. 实现 `viewport.orientation.prepare/reshape/settle`，覆盖整屏旋转、正文重分页、控制层等价容器、运行胶囊重锚定、overlay 重锚定和宽屏 dock clamp。
+9. 已完成第一版：`viewport.orientation.prepare/reshape/settle` 已接入 root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、token 化 reshape/anchor settle、reduced-motion 即时 settle 和宽屏 dock clamp；下一步补真实旋转录屏、折叠屏 hinge/pane、正文字符锚点重分页和 overlay/focus 恢复证据。
 10. 已完成第一版：`reader.session.autoPage.start`、`reader.session.tts.start` 和 `reader.session.capsule.*` 已接入回沉浸阅读、唯一运行胶囊、内部更新、互斥切换、退出状态和 token 化 CSS；下一步补录屏、停止/退出打断和平台测试。
-11. 实现 `reader.session.controlSpace.*`，覆盖运行胶囊和控制层运行空间的停靠/展开。
+11. 已完成第一版：`reader.session.controlSpace.*` 已接入控制层运行空间、countdown/voice/control/label 子角色、局部 tick/update 和 reduced-motion token；下一步补 matched capsule-to-space 录屏、停止/退出打断和平台测试。
 12. 已完成第一版：`reader.session.capsule.control.*`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active` 已接入局部按钮、倒计时数字和朗读图标状态；下一步补真实设备/录屏证据。
 13. 抽出统一 motion state/reducer，先覆盖 tab、dropdown、通用控件族、overlay、reader entry、control handle、wide dock drag、orientation reshape、session capsule、control running space、loading、page turn。
 14. 建立 `frontend-demo/verify/motion/`，录制 TAB press/select/switch、下拉栏展开/收起/点击、通用控件族、首启、封面进入、控制层显隐、小横条、宽屏 dock 拖动、整屏旋转、运行胶囊、控制层运行中空间、翻页、打断、折叠/resize。
@@ -80,5 +80,5 @@
 - 不能声称宽屏控制层 dock 长按移动已有真实设备、折叠屏或录屏证据；当前只有第一版实现层 adapter、bounds clamp 和 coverage gate。
 - 不能声称自动翻页/朗读运行胶囊已有完整录屏、停止/退出打断或平台测试证据；当前只有第一版实现层 adapter、局部倒计时 timer 和 coverage gate。
 - 不能声称首次打开应用或控制层运行中空间已有录屏/设备证据；首次打开应用、控制胶囊按钮运行/暂停、倒计时数字变化、朗读图标和控制层运行中空间已有第一版实现层 adapter，但真实设备录屏仍缺；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
-- 不能声称整屏旋转已有完整实现层 `prepare/reshape/settle` 状态机、运行胶囊/overlay 重锚定和录屏证据；当前只接入了宽屏 dock 在 resize 后的 clamp/rebound。
+- 不能声称整屏旋转已有真实设备、折叠屏、正文字符锚点重分页和完整录屏证据；当前已有第一版 `prepare/reshape/settle` adapter、root/screen host 状态、route/session/overlay/focus/dock 元数据、token CSS 和 coverage gate。
 - 不能声称 reduced-motion 已完成录屏验证。

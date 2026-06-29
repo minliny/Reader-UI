@@ -351,12 +351,12 @@
 - 换源窗口需要在 portrait 和 compact landscape 下补 capture 证据，明确进入/退出表现。
 - 打断动画目前只有规格，还没有 demo 层统一动画控制器或自动化验证。
 - 折叠屏展开/折叠目前按 viewport 断点规划，仍需要真实设备或模拟器验证 hinge、半开态和窗口尺寸变化。
-- 整屏旋转已补 `viewport.orientation.prepare/reshape/settle` contract 状态机；demo 目前仍只有 `data-orientation` / `viewportClass` 级别的响应式基础和宽屏 dock resize clamp/rebound，缺少完整实现层 prepare/reshape/settle、运行胶囊重锚定和录屏证据。
+- 整屏旋转已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；demo 会在方向或 viewport class 改变时写入 root / screen host `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 reshape/anchor settle。真实设备、折叠屏 hinge/pane、正文字符锚点重分页、overlay/focus 恢复自动化和录屏证据仍缺。
 - 当前 `docs/ui-handoff/compose/COMPOSE_INTERACTION_CONTRACTS.md` 只定义事件和状态变化，还没有定义 motion；首轮验证后应引用本契约。
 
 ## 11. 建议下一轮 Slice
 
 1. 按 `MOTION_SELECTOR_MATRIX.md` 回填 evidence，优先录制通用组件族、键盘、底表、弹窗、翻页和 loading。
 2. 按 `MOTION_IMPLEMENTATION_GAP_AUDIT.md` 继续补 P0 缺口，优先深化通用组件族状态机。
-3. 继续实现整屏旋转；首次打开、运行胶囊、控制层运行中空间、控制胶囊内部微动效和宽屏 dock 已有第一版 adapter，下一步补录屏、停止/退出打断、后台恢复和折叠屏验证。
+3. 继续补整屏旋转和折叠屏证据；首次打开、运行胶囊、控制层运行中空间、控制胶囊内部微动效、宽屏 dock 和 orientation lifecycle 已有第一版 adapter，下一步补录屏、停止/退出打断、后台恢复、正文重分页和折叠屏验证。
 4. 从 canonical `frontend-demo/` 路径录制或截图核心动效状态。
