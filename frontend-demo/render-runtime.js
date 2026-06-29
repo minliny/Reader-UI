@@ -3255,6 +3255,70 @@
     appState.readerControlSpaceSnapshot = next;
   }
 
+  function clearFirstOpenMotionTimer(appState) {
+    if (appState?.firstOpenMotionTimer) {
+      window.clearTimeout(appState.firstOpenMotionTimer);
+      appState.firstOpenMotionTimer = null;
+    }
+  }
+
+  function applyFirstOpenMotionAttributes(root, screenHost, motion) {
+    if (!root || !screenHost || !motion) return;
+    root.setAttribute("data-motion-first-open", "true");
+    root.setAttribute("data-motion-first-open-state", motion.state);
+    root.setAttribute("data-motion-first-open-id", "app.firstOpen.enter");
+    root.setAttribute("data-motion-first-open-route", motion.route || "");
+    root.setAttribute("data-motion-first-open-cold-start", "true");
+    root.setAttribute("data-motion-first-open-played", motion.settled ? "true" : "false");
+    if (motion.state === "entering") {
+      screenHost.setAttribute("data-motion-first-open-target", "screen-host");
+      screenHost.setAttribute("data-motion-first-open-state", motion.state);
+      screenHost.setAttribute("data-motion-first-open-route", motion.route || "");
+      screenHost.setAttribute("data-motion-id", "app.firstOpen.enter");
+      screenHost.setAttribute("data-motion-phase", motion.state);
+    } else {
+      const firstOpenOwnedHost = screenHost.getAttribute("data-motion-id") === "app.firstOpen.enter" ||
+        screenHost.getAttribute("data-motion-first-open-state") === "entering";
+      screenHost.removeAttribute("data-motion-first-open-target");
+      screenHost.removeAttribute("data-motion-first-open-state");
+      screenHost.removeAttribute("data-motion-first-open-route");
+      if (firstOpenOwnedHost) {
+        screenHost.removeAttribute("data-motion-id");
+        screenHost.removeAttribute("data-motion-phase");
+      }
+    }
+  }
+
+  function settleFirstOpenMotion(root, screenHost, appState) {
+    const motion = appState?.firstOpenMotion;
+    if (!motion || motion.settled) return;
+    motion.state = "settled";
+    motion.settled = true;
+    appState.hasPlayedFirstOpen = true;
+    clearFirstOpenMotionTimer(appState);
+    applyFirstOpenMotionAttributes(root, screenHost, motion);
+  }
+
+  function attachFirstOpenMotionState(root, screenHost, appState) {
+    const motion = appState?.firstOpenMotion;
+    if (!root || !screenHost || !motion) return;
+    const reduced = root.getAttribute("data-motion-reduced") === "true";
+    if (motion.settled || reduced) {
+      motion.state = "settled";
+      motion.settled = true;
+      appState.hasPlayedFirstOpen = true;
+      clearFirstOpenMotionTimer(appState);
+      applyFirstOpenMotionAttributes(root, screenHost, motion);
+      return;
+    }
+    motion.state = motion.state || "entering";
+    applyFirstOpenMotionAttributes(root, screenHost, motion);
+    clearFirstOpenMotionTimer(appState);
+    appState.firstOpenMotionTimer = window.setTimeout(() => {
+      settleFirstOpenMotion(root, screenHost, appState);
+    }, 280);
+  }
+
   function clearReaderSessionCapsuleTimer(appState) {
     if (appState?.readerSessionCapsuleTimer) {
       window.clearTimeout(appState.readerSessionCapsuleTimer);
@@ -7030,6 +7094,9 @@
       readerReplacementRules: {},
       readerAutoPageSession: false,
       readerAutoPageCountdown: 8,
+      firstOpenMotion: null,
+      firstOpenMotionTimer: null,
+      hasPlayedFirstOpen: false,
       readerDockOffsets: {},
       readerTextSelectionOpen: false,
       readerSelectedText: "雨，下了一整夜。",
@@ -7212,6 +7279,7 @@
     syncMotionPreference();
     target.__readerAdaptiveViewportCleanup = () => {
       clearReaderSessionCapsuleTimer(appState);
+      clearFirstOpenMotionTimer(appState);
       if (motionController) {
         motionController.destroy();
       }
@@ -7291,6 +7359,7 @@
       attachReaderControlDockMotionState(screenHost, appState, motionController);
       attachReaderSessionCapsuleMotionState(screenHost, appState, motionController);
       attachReaderControlSpaceMotionState(screenHost, appState, motionController);
+      attachFirstOpenMotionState(root, screenHost, appState);
       window.requestAnimationFrame(() => {
         if (screenHost.isConnected) {
           attachReaderControlDockMotionState(screenHost, appState, motionController);
@@ -7332,6 +7401,14 @@
       }
       if (motionController) {
         const routeAction = hasRenderedInitialRoute ? (shouldPush ? "push" : "replace") : "firstOpen";
+        if (routeAction === "firstOpen" && !appState.hasPlayedFirstOpen) {
+          appState.firstOpenMotion = {
+            id: "app.firstOpen.enter",
+            route,
+            state: "entering",
+            settled: false
+          };
+        }
         motionController.start(motionInput || {
           id: routeAction === "firstOpen"
             ? "app.firstOpen.enter"

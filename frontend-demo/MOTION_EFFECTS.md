@@ -1196,11 +1196,11 @@ Reduced motion：
 3. 深化通用组件族 `button.*`、`toggle.*`、`chip/filter/segment.*`、`slider/stepper/progress.*`、`input/search.*`、`feedback/state.*`、`selection.*`、`listRow/card.*` 的状态机和录屏证据。
 4. 补 `dropdown.trigger.press`、`dropdown.menu.expand/collapse/reposition`、`dropdown.option.press/select` 的统一实现和录屏证据。
 5. 补封面进入沉浸阅读的 snapshot/shared-element 降级实现和录屏证据。
-6. 补首次打开应用和控制层小横条按压/拖动/释放的实现证据。
-7. 给自动翻页/朗读启动回沉浸阅读和运行胶囊进入、更新、切换、退出补 token 化实现。
-8. 补运行胶囊与控制层运行中空间之间的停靠/展开或淡入淡出降级实现。
-9. 补控制胶囊暂停/继续按钮的按压、取消、运行/暂停切换微动效。
-10. 补倒计时数字 tick 和朗读图标 active 提示的独立微动效。
+6. 已完成第一版：首次打开应用有 cold-start 一次性 adapter，控制层小横条按压/拖动/释放也已有第一版 adapter；下一步补默认页/深链页录屏、后台恢复和真实触摸证据。
+7. 已完成第一版：自动翻页/朗读启动回沉浸阅读和运行胶囊进入、更新、切换、退出已接 token 化 adapter；下一步补停止/退出打断和录屏证据。
+8. 已完成第一版：运行胶囊与控制层运行中空间之间已有同状态源的 running space adapter；下一步补 matched 停靠/展开媒体证据。
+9. 已完成第一版：控制胶囊暂停/继续按钮的按压、运行/暂停状态和 icon 切换已接 adapter；下一步补取消/真实触摸证据。
+10. 已完成第一版：倒计时数字 tick 和朗读图标 active 提示已有独立微动效；下一步补录屏证据。
 11. 给每个高风险动效补 demo capture 或录屏。
 12. 在平台映射文档中继续为每个 Motion ID 补 state 字段、测试文件和验收方式。
 13. 补打断动画的统一状态控制器，避免 CSS 动画和 route state 各自收尾。

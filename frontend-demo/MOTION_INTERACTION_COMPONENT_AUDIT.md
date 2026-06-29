@@ -25,7 +25,7 @@
 
 | 组件族 | 当前纳管状态 | 判断 |
 |---|---|---|
-| 冷启动/首次打开 | 已有 Motion ID、token、效果和 gap | 规划纳管，未实现证据 |
+| 冷启动/首次打开 | 已有 Motion ID、token、效果和第一版 adapter；root / screen host 会写入 `data-motion-first-open-*` | 基础实现纳管，未录屏 |
 | 主 TAB / 阅读模块 TAB / segmented TAB | 已有 `tab.item.*` | 规划纳管，未实现统一状态机 |
 | 路由 push/pop / 主 Tab 切换 | 已有基础契约 | 部分纳管，普通路由方向和 dense 页面策略还需细化 |
 | 键盘、底表、弹窗 | 已有 overlay Motion ID，核心时长已 token 化并接入 reduced-motion | 基础实现纳管，未录屏 |
@@ -53,7 +53,7 @@
 
 | 域 | 已有契约 | 缺口 |
 |---|---|---|
-| 首启与基础导航 | `app.launch.firstOpen`、`app.tab.switch`、`app.route.push/pop` | 冷启动 flag、路由栈动画策略和录屏证据 |
+| 首启与基础导航 | `app.launch.firstOpen`、`app.tab.switch`、`app.route.push/pop` | 首启动画已有 cold-start flag 和一次性 settle；仍缺路由栈方向策略和录屏证据 |
 | TAB | `tab.item.press/select/switch` | 主 TAB、阅读模块 TAB、segmented TAB 的统一 pressed/select/switch 状态机 |
 | Dropdown | `dropdown.trigger.press`、`dropdown.menu.expand/collapse/reposition`、`dropdown.option.press/select` | 当前 demo 仍是分散 mount/unmount、placement 和 chevron CSS |
 | Overlay | `overlay.keyboard/sheet/dialog.*` | token 化、reduced-motion、overlay 互斥和焦点陷阱 |

@@ -1,6 +1,6 @@
 {
   "audit": "source-global-motion-audit",
-  "date": "2026-06-26",
+  "date": "2026-06-29",
   "scope": "frontend-demo source only",
   "excludedAsEvidence": [
     "frontend-demo/MOTION_*.md",
@@ -55,10 +55,10 @@
   },
   "selectorCoverage": {
     "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
-    "dataAttributeCount": 164,
-    "bindCallCount": 75,
-    "motionIdCount": 61,
-    "directMappedDataAttributeCount": 142,
+    "dataAttributeCount": 171,
+    "bindCallCount": 77,
+    "motionIdCount": 63,
+    "directMappedDataAttributeCount": 149,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -103,6 +103,7 @@
     "reducedMotionRuntimeAndCss": "implemented",
     "motionIdAdapter": "implemented",
     "minimumMotionController": "implemented",
+    "appFirstOpenLifecycle": "implemented first pass with cold-start firstOpenMotion state, root/screen-host data-motion-first-open-* attributes, tokenized enter CSS, automatic settle, and reduced-motion immediate settle; media and background-resume proof still missing",
     "genericPressState": "implemented",
     "readerPageTurnAnimation": "implemented",
     "readerLoadingSpin": "implemented",
@@ -116,10 +117,16 @@
     "readerControlDockBoundsAndPersistence": "implemented first pass with frame/group bounds, viewport-class saved offsets, and resize clamp/rebound; fold pane and safe-area device proof still missing",
     "readerSessionStartTransaction": "implemented for TTS and auto-page",
     "readerSessionCapsuleEnterExitTickVoicePulse": "implemented first pass with capsule state adapter, tokenized enter/update/switch/tick/voice CSS, and local auto-page countdown updates; media and stop/exit interruption proof still missing",
-    "capsuleRunPauseMorph": "implemented first pass for local play/pause button state; full control-space morph still missing",
+    "capsuleRunPauseMorph": "implemented first pass for local play/pause button state and control-layer running space; full matched morph media evidence still missing",
     "orientationPrepareReshapeSettleLifecycle": "controller reshape transaction implemented; prepare/freeze/settle visuals missing"
   },
   "componentFamilies": [
+    {
+      "family": "app.firstOpen",
+      "source": "render(), captureRoute initialization, goTo(initialRoute)",
+      "currentState": "Cold-start first render now exposes app.firstOpen.enter transaction, firstOpenMotion one-shot state, root/screen-host data-motion-first-open-* attributes, tokenized 280ms enter CSS, automatic settle, and reduced-motion immediate settle; default/deep-link media evidence and background-resume proof remain missing.",
+      "requiredOwner": "app motion host"
+    },
     {
       "family": "app.route",
       "source": "data-route, data-route-back, data-demo-back",
@@ -165,7 +172,13 @@
     {
       "family": "reader.session.capsule",
       "source": "data-reader-immersive-status, data-reader-tts-action, data-reader-setting-toggle=autoPage",
-      "currentState": "TTS and auto-page session start transactions now drive a first-pass immersive capsule adapter with data-motion-session-capsule-* states, enter/update/switch/exit IDs, local countdown tick scheduling, control button press/toggle state, and TTS voice active pulse; media, stop/exit interruption, reduced-motion capture, and control-space morph proof remain missing.",
+      "currentState": "TTS and auto-page session start transactions now drive a first-pass immersive capsule adapter with data-motion-session-capsule-* states, enter/update/switch/exit IDs, local countdown tick scheduling, control button press/toggle state, and TTS voice active pulse; media, stop/exit interruption, reduced-motion capture, and matched morph proof remain missing.",
+      "requiredOwner": "reader session motion"
+    },
+    {
+      "family": "reader.session.controlSpace",
+      "source": "data-reader-control-space, data-reader-control-space-control, data-reader-control-space-countdown, data-reader-control-space-voice",
+      "currentState": "Reader control layer now exposes a first-pass running space for active TTS/auto-page sessions with data-motion-control-space-* states, enter/update/exit IDs, countdown/voice/control subroles, continued auto-page tick scheduling, and reduced-motion token fallback; matched capsule-to-space media evidence and stop/exit interruption proof remain missing.",
       "requiredOwner": "reader session motion"
     },
     {

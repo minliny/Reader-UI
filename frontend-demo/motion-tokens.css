@@ -44,6 +44,7 @@
   --reader-motion-easing-enter: ease-out;
   --reader-motion-easing-reshape: ease-in-out;
   --app-motion-distance-dropdown-y: 6px;
+  --app-motion-distance-first-open-y: 8px;
   --app-motion-distance-feedback-y: 8px;
   --app-motion-distance-selection-toolbar-y: 6px;
   --reader-motion-distance-page-turn-x: 16px;
@@ -65,6 +66,8 @@
 }
 
 .fd-demo {
+  --fd-motion-effective-first-open: var(--app-motion-duration-first-open);
+  --fd-motion-effective-first-open-y: var(--app-motion-distance-first-open-y);
   --fd-motion-effective-tab-press: var(--app-motion-duration-tab-press);
   --fd-motion-effective-tab-select: var(--app-motion-duration-tab-select);
   --fd-motion-effective-tab-switch: var(--app-motion-duration-tab-switch);
@@ -99,6 +102,8 @@
 }
 
 .fd-demo[data-motion-reduced="true"] {
+  --fd-motion-effective-first-open: var(--reader-motion-duration-instant);
+  --fd-motion-effective-first-open-y: 0px;
   --fd-motion-effective-tab-press: var(--reader-motion-duration-instant);
   --fd-motion-effective-tab-select: var(--reader-motion-duration-instant);
   --fd-motion-effective-tab-switch: var(--reader-motion-duration-instant);
@@ -135,6 +140,20 @@
 .fd-demo[data-motion-reduced="true"] :where([data-reader-capsule-voice], [data-reader-control-space-voice])[data-motion-state="active"],
 .fd-demo[data-motion-reduced="true"] :where([data-reader-capsule-voice])[data-motion-session-capsule-state="active"] {
   animation: none;
+}
+
+.fd-demo :where([data-motion-first-open-target="screen-host"]) {
+  transform-origin: center;
+}
+
+.fd-demo[data-motion-first-open-state="entering"] :where([data-motion-first-open-target="screen-host"]) {
+  animation: fd-app-first-open-enter var(--fd-motion-effective-first-open) var(--reader-motion-easing-enter) both;
+  will-change: opacity, transform;
+}
+
+.fd-demo[data-motion-first-open-state="settled"] :where([data-motion-first-open-target="screen-host"]) {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .fd-demo :where(button, [role="button"], [data-route], [data-route-back]) {
@@ -527,6 +546,17 @@
   }
 }
 
+@keyframes fd-app-first-open-enter {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fd-motion-effective-first-open-y));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fd-reader-session-capsule-switch {
   0% {
     opacity: 0.72;
@@ -588,6 +618,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .fd-demo {
+    --fd-motion-effective-first-open: var(--reader-motion-duration-instant);
+    --fd-motion-effective-first-open-y: 0px;
     --fd-motion-effective-tab-press: var(--reader-motion-duration-instant);
     --fd-motion-effective-tab-select: var(--reader-motion-duration-instant);
     --fd-motion-effective-tab-switch: var(--reader-motion-duration-instant);

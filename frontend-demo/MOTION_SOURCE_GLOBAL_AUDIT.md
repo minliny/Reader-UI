@@ -126,7 +126,7 @@
 代码事实：
 
 - `motion-controller.js` 已提供 `start/update/interrupt/settle/destroy`。
-- `render-runtime.js` 已接入首次打开、route push/pop/replace、Tab switch、viewport reshape、封面进入沉浸阅读、TTS/自动翻页 session start。
+- `render-runtime.js` 已接入首次打开、route push/pop/replace、Tab switch、viewport reshape、封面进入沉浸阅读、TTS/自动翻页 session start；首次打开已经有 `attachFirstOpenMotionState`、`firstOpenMotion` 一次性状态、root/screen host `data-motion-first-open-*` 和 token 化 CSS。
 - 普通 route 切换仍走 `screenHost.innerHTML = renderRoute(...)`。
 - 只有 reader loading 使用 `pendingRouteTimer`，翻页用 class + `animationend` 清理。
 - controller 当前负责 transaction 记录、root `data-motion-*` 状态和 reduced-motion 时长归零；还没有统一驱动视觉 enter/exit class、shared element、dropdown lifecycle 或 dock drag。
@@ -262,7 +262,7 @@
 
 | 组件族 | 当前源码入口 | 已有实现 | 缺口 | 纳管要求 |
 |---|---|---|---|---|
-| App 首次打开 | `render()`、`captureRoute` 初始化、`goTo(initialRoute)` | 直接渲染首屏，reduced-motion 可生效 | 没有 first-open staged enter、首屏 skeleton、恢复 route settle | 新增 `app.firstOpen.enter/settle`，只在正常启动首屏执行；capture/test 模式允许关闭 |
+| App 首次打开 | `render()`、`captureRoute` 初始化、`goTo(initialRoute)` | 已接入 `app.firstOpen.enter` transaction、`firstOpenMotion` cold-start flag、root/screen host `data-motion-first-open-*`、280ms token 化首屏淡入和 reduced-motion 即时 settle | 缺默认页/深链页录屏、后台恢复设备证据和平台测试映射；仍无首屏 skeleton | 首屏只在 cold start 执行一次；后台恢复、普通 route render、返回和切 Tab 不重播 |
 | 路由 push/pop/replace | `data-route`、`data-route-back`、`data-route-replace`、`goTo()`、`goBack()`、`replaceTopRoute()` | Motion ID 有 `app.route.push/pop`；Reader 局部 loading 有 360ms timer | route 大多即时替换，无方向、打断、返回取消、replace 无动画差异 | controller 记录 `fromRoute/toRoute/action/direction/interruption/finalState` |
 | 底部 Tab / 模块 Tab | `.fd-main-nav-item`、Reader module nav、RSS mode row、source module tabs | active class / aria 状态切换 | 没有 press/select/switch 分离；没有 indicator 从 A 到 B 迁移 | 统一 `tab.item.press/select/switch`，重复点击只给 press，不触发 switch |
 | Button / Icon button | `button`、`[role=button]`、`data-top-action`、`data-book-action` | 通用 pressed class 和 scale | 普通业务按钮缺语义 Motion ID；activate/commit/loading/disabled 反馈不统一 | fallback 只做 press，业务命令补 family ID：`button.activate`、`button.commit`、`button.destructive.confirm` |

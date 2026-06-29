@@ -16,7 +16,7 @@
 | TAB / segmented 状态动效 | 已补 `tab.item.press/select/switch` 和 `segment.item.switch` contract 状态机；主 TAB、阅读模块 TAB 和 segmented control 已接入 `data-motion-tab-*` / `data-motion-segment-*` 状态、`data-motion-press-id`、token 化 pressed/select/switch CSS 和 `reader.module.switch` / `segment.item.switch` 事务 | 补主 TAB / 阅读模块 TAB / segmented control 的录屏证据，并继续确认 indicator/active 层不推动布局 | 按下、单按钮选中、A -> B 切换、重复点击 active 行为可区分；栏尺寸稳定 |
 | 下拉栏统一动效 | 已补 `dropdown.*` contract 状态机；demo 已接入 `attachDropdownMotionState`，阅读设置、朗读设置、设置页选项、发现排序、筛选菜单、书源更多、书架更多和书籍焦点菜单会写入 `data-motion-dropdown-*` 状态、`dropdown.option.press` press-id 和 token 化 menu/option/trigger CSS | 继续补关闭保留动画、打开 A 后切 B 的录屏证据、resize/orientation 触发的 `dropdown.menu.reposition` 证据 | 所有下拉展开/收起/点击节奏一致；同层只留一个 open；选择后值/semantics 同步；resize/orientation 可重定位 |
 | 通用交互组件族纳管 | 已新增 `MOTION_SELECTOR_MATRIX.md`，148 个唯一 `data-*` 入口均已映射到 Motion ID / route / platform component；demo 已通过 `data-motion-id`、`is-motion-pressed` 和 token CSS 接入基础状态；当前 coverage 使用的 74 个 Motion ID 都有 contract 状态机 | 继续把基础 selector binding 深化成组件级实现状态机，并补每个组件族的录屏/截图证据 | 所有控件族都有 token、效果、平台映射、reduced-motion、实现代码和验证路径；证据文件可追溯到 Motion ID |
-| 首次打开应用动效 | 已补 `app.launch.firstOpen` 规划，demo 没有 cold-start flag | 增加一次性首启动画状态；区分冷启动、后台恢复、普通 route render | 冷启动默认页/深链页只播放一次，返回和切 Tab 不重播 |
+| 首次打开应用动效 | 已补 `app.launch.firstOpen` 规划和第一版实现层 adapter；demo 会在 cold start 初始化 `firstOpenMotion`，在 root / screen host 写入 `data-motion-first-open-*`，用 `--fd-motion-effective-first-open` 播放一次性首屏淡入并自动 settle；reduced-motion 即时落位 | 补冷启动默认页/深链页录屏、后台恢复设备证据和平台测试映射 | 冷启动默认页/深链页只播放一次，返回和切 Tab 不重播 |
 | 封面进入沉浸阅读 | 已补 `reader.entry.coverToImmersive` / `reader.entry.actionToImmersive` 实现层 adapter；书架封面、继续阅读封面和普通阅读按钮会写入 `data-motion-entry-*` 状态，封面入口有 snapshot 层，目标阅读面有 token 化淡入和 reduced-motion 降级 | 补封面入口、无封面按钮入口、返回来源页、连续点击和录屏/截图证据，并继续覆盖详情页/章节行入口 | 点击书架封面/继续阅读封面进入 `immersive-reading`；不显示控制层；返回来源页 |
 | 控制层小横条拖拽 | 已补 `reader.control.handle.press/drag/release` 精确状态机和实现层 adapter；`.fd-reader-grabber` / `.fd-reader-full-grabber` 会写入 `data-motion-control-handle-*` 状态，拖动使用临时 offset，释放按阈值展开/收回，reduced-motion 即时提交；full 页小横条已可收回到对应控制层 | 补录屏/截图证据，并继续验证真实触摸设备上的长路径 drag、方向阈值和目录 full 页上拉 promote | 拖动中正文不动；释放只落到展开、收回或原状态之一；返回栈不乱 |
 | 宽屏控制层 dock 长按移动 | 已补 `reader.control.dock.longPress/drag/release/rebound` 精确状态机和第一版实现层 adapter；宽屏 `.fd-reader-grabber` 长按后移动同一组 fixed-width dock，按 ReaderFrame/dock group 计算 bounds，transform offset，按 viewport class 保存位置，并在 resize 后 clamp/rebound；窄屏会清理 dock transform | 补真实鼠标/触摸录屏、折叠屏 hinge/pane 安全区验证、旋转中打断证据和平台测试映射 | fixed-width dock 可移动但不变形；不跨 hinge/安全区；正文不重排；释放位置合法 |
@@ -56,7 +56,7 @@
 2. 已完成第一版：主 TAB、阅读模块 TAB 和 segmented control 已实现 `tab.item.press/select/switch` / `segment.item.switch` adapter、`reader.module.switch` / `segment.item.switch` 事务和 token 化状态；下一步补录屏证据与 indicator/active 层校验。
 3. 深化通用控件族状态机：button、toggle/switch、chip/filter/segment、slider/stepper/progress、input/search、feedback/state、selection、listRow/card。
 4. 已完成第一版：`dropdown.*` 已接入 trigger/menu/option 状态 adapter、press-id 和 token 化 CSS；下一步补关闭保留动画、打开 A 后切 B、reposition 和录屏证据。
-5. 实现 `app.launch.firstOpen`，建立 cold-start 与 resume/route render 的区分。
+5. 已完成第一版：`app.launch.firstOpen` 已接入 cold-start 一次性状态、root/screen host `data-motion-first-open-*`、token 化首屏淡入和 reduced-motion 即时 settle；下一步补默认页/深链页录屏、后台恢复设备证据和平台测试映射。
 6. 已完成第一版：`reader.entry.coverToImmersive` / `reader.entry.actionToImmersive` 已接入 source cover/action、snapshot、target reveal 和 reduced-motion 状态；下一步补录屏、连续点击、返回来源页和详情/章节入口证据。
 7. 已完成第一版：`reader.control.handle.press/drag/release` 已接入小横条 press、drag preview、release snap/expand/collapse、full 页收回和 reduced-motion；下一步补真实触摸/鼠标录屏证据和目录 full 页上拉 promote 验证。
 8. 已完成第一版：`reader.control.dock.*` 已接入宽屏 fixed-width dock 长按移动、bounds clamp、viewport class offset 保存、resize 越界回弹和窄屏 transform 清理；下一步补真实设备/折叠屏/旋转打断录屏证据。
@@ -79,6 +79,6 @@
 - 不能声称封面进入沉浸阅读已有全量录屏证据；当前已完成书架封面、继续阅读封面和普通阅读按钮的实现层 adapter，但详情/章节入口、连续点击和媒体证据仍需补齐。
 - 不能声称宽屏控制层 dock 长按移动已有真实设备、折叠屏或录屏证据；当前只有第一版实现层 adapter、bounds clamp 和 coverage gate。
 - 不能声称自动翻页/朗读运行胶囊已有完整录屏、停止/退出打断或平台测试证据；当前只有第一版实现层 adapter、局部倒计时 timer 和 coverage gate。
-- 不能声称首次打开应用或控制层运行中空间已有实现证据；控制胶囊按钮运行/暂停、倒计时数字变化和朗读图标已有第一版实现层 adapter，但真实设备录屏仍缺；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
+- 不能声称首次打开应用或控制层运行中空间已有录屏/设备证据；首次打开应用、控制胶囊按钮运行/暂停、倒计时数字变化、朗读图标和控制层运行中空间已有第一版实现层 adapter，但真实设备录屏仍缺；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
 - 不能声称整屏旋转已有完整实现层 `prepare/reshape/settle` 状态机、运行胶囊/overlay 重锚定和录屏证据；当前只接入了宽屏 dock 在 resize 后的 clamp/rebound。
 - 不能声称 reduced-motion 已完成录屏验证。

@@ -76,7 +76,7 @@
 
 | Motion ID | Demo 来源 | Web 表现 | Android Compose 实现方向 | iOS SwiftUI 实现方向 | HarmonyOS ArkUI 实现方向 |
 |---|---|---|---|---|---|
-| `app.launch.firstOpen` | 冷启动首次 render | Shell 和首屏内容短 fade/lift，只播放一次。 | `LaunchedEffect(appSessionId)` 驱动一次性 content transition；不要绑定每次 route。 | app root `onAppear` 只在 cold start 标记下 `withAnimation`。 | app root 初始化状态驱动一次性淡入。 |
+| `app.launch.firstOpen` | 冷启动首次 render；demo 输出 `data-motion-first-open-*` | Shell 和首屏内容短 fade/lift，只播放一次；settle 后保持最终尺寸和命中区。 | `LaunchedEffect(appSessionId)` 驱动一次性 content transition；不要绑定每次 route。 | app root `onAppear` 只在 cold start 标记下 `withAnimation`。 | app root 初始化状态驱动一次性淡入。 |
 | `tab.item.press/select/switch` | 主 TAB / 阅读模块 TAB / segmented TAB | press、单按钮选中、A -> B 切换分层；栏尺寸稳定。 | `InteractionSource` 管 press；active indicator 放在 tab row overlay；内容动画放在 nav 外。 | `ButtonStyle`/gesture 管 press；`matchedGeometryEffect` 或 crossfade 管 indicator。 | pressed state + active indicator 独立层；内容区单独 transition。 |
 | `button.press/activate/disabledBlocked` | 普通按钮、图标按钮、行内操作按钮、危险按钮 | 按下只反馈当前按钮；释放后触发确认态、loading 或 route；禁用态只给不可用反馈。 | `Button`/`IconButton` + `InteractionSource`；loading/disabled 写入同一 button state。 | `ButtonStyle`/`PrimitiveButtonStyle` 管 pressed；loading/disabled 由 view state 驱动。 | Button/ImageButton pressed state；disabled/loading 不创建新 route。 |
 | `toggle.press/switch/revert` | switch、toggle、checkbox、多选按钮 | pressed、thumb/check 切换和失败回滚分开；多选汇总区独立更新。 | `Switch`/`Checkbox`/`FilterChip`，thumb/check 用 token；失败时 reducer 回滚目标值。 | `Toggle`/`ToggleStyle` 或 checkbox 自定义样式；失败回滚用同一 binding state。 | Toggle/Checkbox state；失败回滚回同一控件，不额外弹层。 |

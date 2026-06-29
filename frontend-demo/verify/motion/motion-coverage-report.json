@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T06:00:23.139Z",
+  "generatedAt": "2026-06-29T06:11:38.868Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-controller-v10-20260626, render=reader-control-space-v1-20260629, runtime=reader-control-space-v1-20260629"
+      "detail": "motion=motion-controller-v10-20260626, render=app-first-open-v1-20260629, runtime=app-first-open-v1-20260629"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -31,6 +31,11 @@
       "id": "motion.controller.runtime-ids",
       "passed": true,
       "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, reader.session.controlSpace.enter, reader.session.controlSpace.update, reader.session.controlSpace.exit"
+    },
+    {
+      "id": "motion.app-first-open.state-adapter",
+      "passed": true,
+      "detail": "cold-start first open exposes one-shot root/screen-host state, tokenized enter CSS, settle state, and reduced-motion fallback"
     },
     {
       "id": "motion.contract.executable-registry",
@@ -109,9 +114,9 @@
     }
   ],
   "summary": {
-    "passed": 21,
+    "passed": 22,
     "failed": 0,
-    "total": 21
+    "total": 22
   },
   "routeCoverage": {
     "totalRoutes": 131,

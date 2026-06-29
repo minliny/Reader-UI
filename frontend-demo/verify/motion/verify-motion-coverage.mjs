@@ -208,6 +208,17 @@ const checks = [
     detail: requiredRuntimeMotionIds.join(", ")
   },
   {
+    id: "motion.app-first-open.state-adapter",
+    passed: runtime.includes("attachFirstOpenMotionState") &&
+      runtime.includes("data-motion-first-open-state") &&
+      runtime.includes("data-motion-first-open-target") &&
+      runtime.includes("hasPlayedFirstOpen") &&
+      runtime.includes("app.firstOpen.enter") &&
+      motionTokens.includes("--fd-motion-effective-first-open") &&
+      motionTokens.includes("fd-app-first-open-enter"),
+    detail: "cold-start first open exposes one-shot root/screen-host state, tokenized enter CSS, settle state, and reduced-motion fallback"
+  },
+  {
     id: "motion.contract.executable-registry",
     passed: motionContract.version === "reader-motion-contract-v1" && Array.isArray(motionContract.rules) && motionContract.rules.length >= 25,
     detail: `${motionContract.version || "missing"}; rules=${Array.isArray(motionContract.rules) ? motionContract.rules.length : 0}`
