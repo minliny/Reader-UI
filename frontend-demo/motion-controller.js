@@ -36,6 +36,9 @@
     "reader.control.dock.rebound": 120,
     "reader.module.switch": 160,
     "reader.page.turn.next/prev": 220,
+    "motion.interrupt.cancel": 80,
+    "motion.interrupt.redirect": 80,
+    "motion.interrupt.completeThenReplace": 80,
     "viewport.orientation.prepare": 80,
     "viewport.orientation.reshape": 240,
     "viewport.orientation.settle": 240
@@ -262,6 +265,13 @@
       interrupt: ["dismiss", "routeChange", "newSource"],
       finalState: "readerSourceResolved",
       reducedMotion: "Commit source overlay or target source without overlay travel."
+    },
+    "motion.interrupt": {
+      from: ["motionRunning", "pressed", "dragging", "loading", "overlayEntering"],
+      to: ["latestTarget", "cancelled", "redirected", "replaced"],
+      interrupt: ["newInterrupt", "destroy", "routeChange"],
+      finalState: "latestStateOwnsSurface",
+      reducedMotion: "Clear transient pressed, dragging, and entering states immediately."
     },
     viewport: {
       from: ["viewportStable"],
@@ -566,6 +576,27 @@
       interrupt: ["oppositeTurn", "chapterJump", "routeChange", "sessionTick"],
       finalState: "pageIndexCommittedAndPageInfoAnchored",
       reducedMotion: "Commit page index and footer/page info immediately without slide."
+    },
+    "motion.interrupt.cancel": {
+      from: ["motionRunning", "pressed", "dragging", "entering"],
+      to: ["latestCommittedState"],
+      interrupt: ["newInterrupt", "destroy"],
+      finalState: "transientMotionCleared",
+      reducedMotion: "Clear transient motion flags immediately."
+    },
+    "motion.interrupt.redirect": {
+      from: ["motionRunningTowardOldTarget"],
+      to: ["motionRunningTowardNewTarget"],
+      interrupt: ["newTarget", "routeChange", "destroy"],
+      finalState: "newTargetOwnsMotion",
+      reducedMotion: "Cancel old target and commit new target without interpolation."
+    },
+    "motion.interrupt.completeThenReplace": {
+      from: ["requiredStateMotion", "loadingMinimumVisible"],
+      to: ["replacementState"],
+      interrupt: ["userBack", "routeChange", "newerAsyncResult"],
+      finalState: "replacementVisibleOnlyIfStillCurrent",
+      reducedMotion: "Replace with the latest valid state immediately."
     },
     "viewport.orientation.prepare": {
       from: ["viewportStable"],
@@ -994,6 +1025,19 @@
         harmony: "Reader inline source switch overlay"
       },
       evidence: COMMON_EVIDENCE
+    },
+    {
+      prefix: "motion.interrupt.",
+      family: "motion.interrupt",
+      tokens: ["reader.motion.duration.interruptSettle"],
+      stateFields: ["interruptedMotionId", "reason", "fromState", "toState", "transientCleared"],
+      platformComponents: {
+        web: "MotionInterruptAdapter",
+        android: "Motion state reducer",
+        ios: "Motion state reducer",
+        harmony: "Motion state reducer"
+      },
+      evidence: ["frontend-demo/verify/motion/interrupt/<motion-id>__<reason>.webm"]
     },
     {
       prefix: "viewport.",

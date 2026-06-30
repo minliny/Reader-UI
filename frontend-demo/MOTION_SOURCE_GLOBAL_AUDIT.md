@@ -115,9 +115,9 @@
 
 - 朗读 `data-reader-tts-action="toggle"` 会设置 `readerTtsSession=true`，播放时关闭自动翻页并 `replaceTopRoute("immersive-reading")`。
 - 自动翻页 `data-reader-setting-toggle="autoPage"` 会设置 `readerAutoPageSession=true`、`readerAutoPageCountdown=8`，开启时关闭朗读并 `replaceTopRoute("immersive-reading")`。
-- 沉浸页会渲染 `.fd-ir-status-capsule`，区分 `data-reader-immersive-status-type="tts|autoPage"` 和 `data-reader-immersive-status-playing`。
+- 沉浸页会渲染 `.fd-ir-status-capsule`，区分 `data-reader-immersive-status-type="tts|autoPage"` 和 `data-reader-immersive-status-playing`，并由 `attachReaderSessionCapsuleMotionState()` 写入 `data-motion-session-capsule-*`。
 
-判定：自动翻页/朗读互斥与回沉浸页逻辑已在代码里存在；胶囊本身仍主要是静态渲染，没有进入/退出、倒计时 tick、语音 icon active 的动画实现。
+判定：自动翻页/朗读互斥与回沉浸页逻辑已在代码里存在；胶囊进入/更新/倒计时 tick、语音 icon active 和控制层 running space 已接入第一版 adapter，但仍缺完整录屏、停止/退出打断和 matched morph 证据。
 
 ## 4. 关键缺口
 
@@ -125,15 +125,16 @@
 
 代码事实：
 
-- `motion-controller.js` 已提供 `start/update/interrupt/settle/destroy`。
-- `render-runtime.js` 已接入首次打开、route push/pop/replace、Tab switch、viewport reshape、封面进入沉浸阅读、TTS/自动翻页 session start；首次打开已经有 `attachFirstOpenMotionState`、`firstOpenMotion` 一次性状态、root/screen host `data-motion-first-open-*` 和 token 化 CSS。
+- `motion-controller.js` 已提供 `start/update/interrupt/settle/destroy`，并能解析 `motion.interrupt.cancel/redirect/completeThenReplace`。
+- `render-runtime.js` 已接入首次打开、route push/pop/replace、Tab switch、viewport reshape、封面进入沉浸阅读、TTS/自动翻页 session start 和第一版 interrupt adapter；首次打开已经有 `attachFirstOpenMotionState`、`firstOpenMotion` 一次性状态、root/screen host `data-motion-first-open-*` 和 token 化 CSS。
+- `startMotionInterrupt()` 会在 route、Tab、viewport、loading、dock drag 和 pointer cancel 场景写入 `data-motion-interrupt-*`，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态。
 - 普通 route 切换仍走 `screenHost.innerHTML = renderRoute(...)`。
 - 只有 reader loading 使用 `pendingRouteTimer`，翻页用 class + `animationend` 清理。
-- controller 当前负责 transaction 记录、root `data-motion-*` 状态和 reduced-motion 时长归零；还没有统一驱动视觉 enter/exit class、shared element、dropdown lifecycle 或 dock drag。
+- controller 当前负责 transaction 记录、root `data-motion-*` 状态、interrupt state 和 reduced-motion 时长归零；还没有完整统一驱动视觉 enter/exit class、shared element、dropdown collapse lifecycle 或 overlay focus restore。
 
 影响：
 
-- 连续点击、返回、关闭 overlay、loading 完成、拖动开始、route 替换已经有统一接入点，但还没有完整组件状态机。
+- 连续点击、返回、loading 完成、拖动开始、route 替换已经有第一版 interrupt 接入点；关闭 overlay、连续下拉 A->B、异步结果防覆盖和 focus restore 仍需深化。
 - 平台实现仍不能只看当前 demo 直接复刻完整动画，只能复用 controller 事件命名和 reduced-motion 口径。
 
 ### P0-2：route push/pop 和 Tab 切换不是动画系统
@@ -348,6 +349,7 @@
 | `feedback.toast.enter/update/exit` | toast / nav feedback | ID 存在 | 多 toast 更新与自动退出 |
 | `selection.toolbar.enter/action/exit` | Reader selection | ID 存在 | 选区出现、toolbar command、关闭 |
 | `viewport.orientation.*` | 旋转/窗口变化/折叠 | 第一版 root/screen host 状态、anchor settle CSS 和 dock clamp 已接入 | 真实旋转录屏、折叠屏 posture、正文重分页、overlay/focus 自动化 |
+| `motion.interrupt.*` | route/Tab/viewport/loading/drag 打断 | 第一版 root/screen host 状态、临时 pressed/drag 清理和 interrupt settle CSS 已接入 | overlay 关闭、连续下拉 A->B、异步结果防覆盖、focus restore 和录屏证据 |
 
 ## 10. 实现优先级
 
@@ -372,7 +374,7 @@ P2：
 
 ## 11. 建议落地顺序
 
-1. 扩展全局 motion controller：统一 `from/to/interruption/finalState/reducedMotion` 并驱动视觉 class。
+1. 深化全局 motion controller：interrupt adapter 已有第一版；继续把 overlay、dropdown A->B、async result 和 focus restore 纳入同一 reducer。
 2. 先收敛所有普通业务按钮：让无 `data-*` 的 button 也进入 button/listRow/segment/toggle family。
 3. 做 `tab.item.press/select/switch` 的真实状态机和 indicator 迁移。
 4. 做 `dropdown.*` 统一 controller，覆盖 filter、sort、reader setting、TTS、source menu。

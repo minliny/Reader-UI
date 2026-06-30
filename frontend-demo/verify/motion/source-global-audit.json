@@ -118,6 +118,7 @@
     "readerSessionStartTransaction": "implemented for TTS and auto-page",
     "readerSessionCapsuleEnterExitTickVoicePulse": "implemented first pass with capsule state adapter, tokenized enter/update/switch/tick/voice CSS, and local auto-page countdown updates; media and stop/exit interruption proof still missing",
     "capsuleRunPauseMorph": "implemented first pass for local play/pause button state and control-layer running space; full matched morph media evidence still missing",
+    "motionInterruptLifecycle": "implemented first pass with motion.interrupt.cancel/redirect/completeThenReplace contract IDs, startMotionInterrupt root/screen-host data-motion-interrupt-* attributes, transient pressed/drag/dropdown cleanup, route/tab/viewport/loading/dock-drag/pointer-cancel entrypoints, tokenized interrupt settle CSS, and coverage gate; overlay close, dropdown A-to-B, async result priority, focus restore, and media proof still missing",
     "orientationPrepareReshapeSettleLifecycle": "implemented first pass with startViewportOrientationMotion, root/screen-host data-motion-orientation-* attributes, route/session/overlay/focus/dock metadata, tokenized reshape/anchor-settle CSS, reduced-motion immediate settle, dropdown reanchor, and wide dock clamp; real rotation media, fold posture, text-anchor repagination, and focus automation proof still missing"
   },
   "componentFamilies": [
@@ -180,6 +181,12 @@
       "source": "data-reader-control-space, data-reader-control-space-control, data-reader-control-space-countdown, data-reader-control-space-voice",
       "currentState": "Reader control layer now exposes a first-pass running space for active TTS/auto-page sessions with data-motion-control-space-* states, enter/update/exit IDs, countdown/voice/control subroles, continued auto-page tick scheduling, and reduced-motion token fallback; matched capsule-to-space media evidence and stop/exit interruption proof remain missing.",
       "requiredOwner": "reader session motion"
+    },
+    {
+      "family": "motion.interrupt",
+      "source": "startMotionInterrupt, route/Tab/viewport/loading/dock drag/pointer cancel entrypoints, data-motion-interrupt-*",
+      "currentState": "Interrupt now exposes a first-pass adapter for cancel, redirect, and completeThenReplace with root/screen-host state, transient pressed/drag/dropdown cleanup, tokenized interrupt settle CSS, and coverage gate; overlay close, dropdown A-to-B, async result priority, focus restore, and media evidence remain missing.",
+      "requiredOwner": "motion interrupt reducer"
     },
     {
       "family": "viewport",

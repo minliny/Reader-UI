@@ -812,6 +812,48 @@
   font-size: 10px;
 }
 
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-panel {
+  grid-template-rows: minmax(64px, 1fr) 36px 30px;
+  gap: 6px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-control {
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  gap: 6px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-chapter {
+  gap: 2px;
+  padding: 5px 3px;
+  font-size: 8px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-toggle {
+  grid-template-columns: 22px minmax(0, 1fr);
+  column-gap: 6px;
+  padding: 6px 7px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-speed {
+  min-height: 36px;
+  height: 36px;
+  padding: 5px 7px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-speed button {
+  width: 24px;
+  height: 24px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-mode {
+  min-height: 30px;
+  height: 30px;
+}
+
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-mode button {
+  min-height: 30px;
+}
+
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-chapter-panel {
   gap: 4px;
   padding: 5px 7px;

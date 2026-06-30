@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T06:29:32.047Z",
+  "generatedAt": "2026-06-30T15:50:41.918Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=orientation-motion-v1-20260629, render=orientation-motion-v1-20260629, runtime=orientation-motion-v1-20260629"
+      "detail": "motion=motion-interrupt-v1-20260630, render=motion-interrupt-v1-20260630, runtime=motion-interrupt-v1-20260630"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, reader.session.controlSpace.enter, reader.session.controlSpace.update, reader.session.controlSpace.exit, viewport.orientation.prepare, viewport.orientation.settle"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press/toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, reader.session.controlSpace.enter, reader.session.controlSpace.update, reader.session.controlSpace.exit, motion.interrupt.cancel, motion.interrupt.redirect, motion.interrupt.completeThenReplace, viewport.orientation.prepare, viewport.orientation.settle"
     },
     {
       "id": "motion.app-first-open.state-adapter",
@@ -40,22 +40,22 @@
     {
       "id": "motion.contract.executable-registry",
       "passed": true,
-      "detail": "reader-motion-contract-v1; rules=32"
+      "detail": "reader-motion-contract-v1; rules=33"
     },
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "80/80 Motion IDs resolved; incomplete=0"
+      "detail": "83/83 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "80/80 runtime/selector Motion IDs expose state machines"
+      "detail": "83/83 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
       "passed": true,
-      "detail": "44/44 detailed Motion IDs use exact state machines"
+      "detail": "47/47 detailed Motion IDs use exact state machines"
     },
     {
       "id": "motion.tab.state-adapter",
@@ -103,6 +103,11 @@
       "detail": "viewport resize/orientation changes expose prepare/reshape/settle root and role state, route/session/overlay/focus/dock metadata, tokenized anchor motion, and reduced-motion fallback"
     },
     {
+      "id": "motion.interrupt.state-adapter",
+      "passed": true,
+      "detail": "interrupt adapter exposes cancel/redirect/completeThenReplace root state, clears transient press/drag/dropdown flags, maps to contract IDs, and uses tokenized settle CSS"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "77 bind calls, 63 unique Motion IDs"
@@ -119,9 +124,9 @@
     }
   ],
   "summary": {
-    "passed": 23,
+    "passed": 24,
     "failed": 0,
-    "total": 23
+    "total": 24
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -161,7 +166,7 @@
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
-    "ruleCount": 32,
+    "ruleCount": 33,
     "checkedMotionIds": [
       "app.firstOpen.enter",
       "app.route.pop",
@@ -189,6 +194,9 @@
       "input.focus/blur",
       "input.submit",
       "listRow.select",
+      "motion.interrupt.cancel",
+      "motion.interrupt.completeThenReplace",
+      "motion.interrupt.redirect",
       "overlay.dialog.enter",
       "overlay.dialog.enter/exit",
       "overlay.dialog.exit",
@@ -289,11 +297,14 @@
       "reader.session.controlSpace.exit",
       "reader.module.switch",
       "reader.page.turn.next/prev",
+      "motion.interrupt.cancel",
+      "motion.interrupt.redirect",
+      "motion.interrupt.completeThenReplace",
       "viewport.orientation.prepare",
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 44,
+    "detailedMotionIdCount": 47,
     "missingDetailedStateMachines": []
   }
 }

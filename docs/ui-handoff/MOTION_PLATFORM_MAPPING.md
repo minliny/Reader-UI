@@ -264,7 +264,7 @@ Web demo：
 - Demo 已接入封面进入沉浸阅读 state adapter，覆盖 `data-motion-entry-*` source/target 状态、封面 snapshot、普通阅读按钮 fallback 和 reduced-motion；详情/章节入口与录屏证据仍需补齐。
 - Demo 已接入控制层小横条 state adapter，覆盖 `.fd-reader-grabber` / `.fd-reader-full-grabber` 的 `data-motion-control-handle-*` 状态、press/drag/release、阈值 snap/expand/collapse、full 页收回和 reduced-motion；宽屏 dock 长按移动也已接入 `reader.control.dock.longPress/drag/release/rebound` 第一版 adapter、bounds clamp、viewport-class offset 和 resize rebound；真实设备录屏、折叠屏 hinge/pane、目录 full 页上拉 promote 仍需补齐。
 - Demo 已接入运行胶囊 state adapter，覆盖 `reader.session.autoPage.start`、`reader.session.tts.start`、`reader.session.capsule.enter/update/switch/exit`、`reader.session.capsule.control.press/toggle`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active`；平台应映射这些 Motion ID、state 字段和 reducer 事件到原生组件，不能照搬 Web CSS；录屏、停止/退出打断和真实设备证据仍需补齐。
-- Demo 已定义打断动画状态机，并验证连续点击、返回、关闭、loading 完成和拖动开始。
+- Demo 已接入 `motion.interrupt.cancel/redirect/completeThenReplace` 第一版 state adapter，覆盖 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始和 pointer cancel，输出 `data-motion-interrupt-*` 并清理 pressed/dragging/dropdown 临时态；overlay 关闭、连续下拉 A->B、异步结果防覆盖、focus restore 和录屏证据仍需补齐。
 - Demo 已有整屏旋转第一版 state adapter，覆盖 root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dropdown 重定位和宽屏 dock clamp；真实旋转录屏、正文字符锚点重分页、overlay/focus 自动化和平台设备证据仍需补齐。
 - Demo 仍没有折叠屏/大屏 reshape 的真实设备 capture；展开、折叠、半开态、hinge/pane 和阅读分页映射需要用模拟器或真机补证据。
 - 每个高风险阅读 transition 至少有一份截图或录屏证据。

@@ -100,6 +100,7 @@
   --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-viewport-reshape);
   --fd-motion-effective-orientation-settle: var(--reader-motion-duration-orientation-settle);
   --fd-motion-effective-orientation-y: var(--reader-motion-distance-orientation-panel-y);
+  --fd-motion-effective-interrupt-settle: var(--reader-motion-duration-interrupt-settle);
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
   --fd-motion-effective-overlay: var(--reader-motion-duration-base);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
@@ -140,6 +141,7 @@
   --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-instant);
   --fd-motion-effective-orientation-settle: var(--reader-motion-duration-instant);
   --fd-motion-effective-orientation-y: 0px;
+  --fd-motion-effective-interrupt-settle: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
@@ -209,6 +211,19 @@
 .fd-demo[data-motion-orientation-state="settled"] :where([data-motion-orientation-role]) {
   opacity: 1;
   translate: 0 0;
+  filter: none;
+}
+
+.fd-demo :where([data-motion-interrupt-target="screen-host"]) {
+  transform-origin: center;
+}
+
+.fd-demo[data-motion-interrupt-state="interrupting"] :where([data-motion-interrupt-target="screen-host"]) {
+  animation: fd-motion-interrupt-settle var(--fd-motion-effective-interrupt-settle) var(--reader-motion-easing-exit) both;
+}
+
+.fd-demo[data-motion-interrupt-state="settled"] :where([data-motion-interrupt-target="screen-host"]) {
+  opacity: 1;
   filter: none;
 }
 
@@ -639,6 +654,17 @@
   }
 }
 
+@keyframes fd-motion-interrupt-settle {
+  from {
+    opacity: 0.96;
+    filter: saturate(0.97);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
 @keyframes fd-reader-session-capsule-switch {
   0% {
     opacity: 0.72;
@@ -734,6 +760,7 @@
     --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-instant);
     --fd-motion-effective-orientation-settle: var(--reader-motion-duration-instant);
     --fd-motion-effective-orientation-y: 0px;
+    --fd-motion-effective-interrupt-settle: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);

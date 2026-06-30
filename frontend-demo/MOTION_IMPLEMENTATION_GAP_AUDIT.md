@@ -12,7 +12,7 @@
 |---|---|---|---|
 | Motion token 落地 | 已新增 `frontend-demo/motion-tokens.css`，并把 `frontend-demo/styles/` 中裸写的 `160ms`、`220ms`、`0.8s` 替换为 token；通用控件也已接入基础 motion token | 继续做视觉回归，确认 token 替换没有改变既有布局和关键节奏 | `rg "160ms|220ms|0.8s" frontend-demo/styles` 不命中；关键路径截图/录屏无非预期变化 |
 | Reduced motion 实装 | 已新增 `@media (prefers-reduced-motion: reduce)`、`data-motion-reduced` 和 `?motionReduced=1/0` 测试开关；翻页、loading、通用控件 transition 已降级 | 补 reduced-motion capture，覆盖键盘、底表、弹窗、封面进入、控制层、翻页、loading、折叠重排 | 系统 reduced motion 或 `?motionReduced=1` 下移除位移/循环动画，状态反馈仍可辨认 |
-| 可执行 Motion Contract Registry | `motion-controller.js` 已暴露 `ReaderMotionController.CONTRACT`，可把当前 renderer 的 Motion ID 解析到 family、token、state fields、state machine、平台组件和证据规则；`verify-motion-coverage.mjs` 已校验 registry 解析、状态机字段和 44 个关键 Motion ID 的精确状态机 | 继续把 exact state machine 扩展到全部 P0/P1 Motion ID，并绑定实际组件状态机 | 当前绑定和 runtime 必需 Motion ID 全部能解析并具备状态机；平台不能照抄 CSS，只能按 registry 的 Motion ID、state fields、state machine、token 和证据要求映射原生实现 |
+| 可执行 Motion Contract Registry | `motion-controller.js` 已暴露 `ReaderMotionController.CONTRACT`，可把当前 renderer 的 Motion ID 解析到 family、token、state fields、state machine、平台组件和证据规则；`verify-motion-coverage.mjs` 已校验 registry 解析、状态机字段和 47 个关键 Motion ID 的精确状态机 | 继续把 exact state machine 扩展到全部 P0/P1 Motion ID，并绑定实际组件状态机 | 当前绑定和 runtime 必需 Motion ID 全部能解析并具备状态机；平台不能照抄 CSS，只能按 registry 的 Motion ID、state fields、state machine、token 和证据要求映射原生实现 |
 | TAB / segmented 状态动效 | 已补 `tab.item.press/select/switch` 和 `segment.item.switch` contract 状态机；主 TAB、阅读模块 TAB 和 segmented control 已接入 `data-motion-tab-*` / `data-motion-segment-*` 状态、`data-motion-press-id`、token 化 pressed/select/switch CSS 和 `reader.module.switch` / `segment.item.switch` 事务 | 补主 TAB / 阅读模块 TAB / segmented control 的录屏证据，并继续确认 indicator/active 层不推动布局 | 按下、单按钮选中、A -> B 切换、重复点击 active 行为可区分；栏尺寸稳定 |
 | 下拉栏统一动效 | 已补 `dropdown.*` contract 状态机；demo 已接入 `attachDropdownMotionState`，阅读设置、朗读设置、设置页选项、发现排序、筛选菜单、书源更多、书架更多和书籍焦点菜单会写入 `data-motion-dropdown-*` 状态、`dropdown.option.press` press-id 和 token 化 menu/option/trigger CSS | 继续补关闭保留动画、打开 A 后切 B 的录屏证据、resize/orientation 触发的 `dropdown.menu.reposition` 证据 | 所有下拉展开/收起/点击节奏一致；同层只留一个 open；选择后值/semantics 同步；resize/orientation 可重定位 |
 | 通用交互组件族纳管 | 已新增 `MOTION_SELECTOR_MATRIX.md`，148 个唯一 `data-*` 入口均已映射到 Motion ID / route / platform component；demo 已通过 `data-motion-id`、`is-motion-pressed` 和 token CSS 接入基础状态；当前 coverage 使用的 74 个 Motion ID 都有 contract 状态机 | 继续把基础 selector binding 深化成组件级实现状态机，并补每个组件族的录屏/截图证据 | 所有控件族都有 token、效果、平台映射、reduced-motion、实现代码和验证路径；证据文件可追溯到 Motion ID |
@@ -24,7 +24,7 @@
 | 控制层运行中空间动效 | 已补 `reader.session.controlSpace.*` 第一版实现层 adapter；控制层会渲染 `data-reader-control-space` 运行中空间，并写入 `data-motion-control-space-*`、countdown/voice/control/label 子角色和 token 化 enter/update/tick/voice/control CSS | 补 matched geometry / snapshot 录屏证据、停止/退出打断验证和平台测试映射 | 打开控制层时胶囊停靠/展开到运行空间；隐藏控制层时回到胶囊；结束态没有双主控 |
 | 控制胶囊内部微动效 | 已补 `.fd-ir-status-controls button` / `data-reader-capsule-control` 局部按压、play/pause 状态、`data-reader-capsule-countdown` 数字 tick、`data-reader-capsule-voice` 播放态 pulse 和 reduced-motion 静态降级 | 补录屏证据、真实触摸按压和停止/切换时的退出验证 | 按钮切换不打开控制层；数字变化不重放整颗胶囊；朗读图标播放时轻提示、暂停静态 |
 | 整屏旋转适配与动效 | 已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；resize / `visualViewport.resize` 发生方向或 viewport class 变化时，root / screen host 会写入 `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 anchor settle 动效；宽屏 dock 会复用 resize clamp/rebound | 补真实旋转录屏、折叠屏 hinge/pane 验证、正文字符锚点重分页证据、overlay/focus 恢复自动化和平台测试映射 | portrait <-> landscape、compact-landscape、tablet-expanded resize 下，route/返回栈/active session 不丢；正文不跳章；控制层/胶囊/overlay/dock 都落到合法位置 |
-| 打断动画状态机 | 文档有 `motion.interrupt.*`，demo 未统一控制 | 增加统一 motion state/reducer，清理 animation class、focus、pointer、route async 结果 | 连续点击、返回、关闭、loading 完成、拖动开始后最终状态唯一 |
+| 打断动画状态机 | 已补 `motion.interrupt.cancel/redirect/completeThenReplace` 第一版实现层 adapter；route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始和 pointer cancel 会写入 root / screen host `data-motion-interrupt-*`，清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态，并接入 token 化 `interruptSettle` CSS | 补 overlay 关闭、连续下拉 A->B、异步结果防覆盖、焦点恢复自动化、真实交互录屏和平台测试映射 | 连续点击、返回、关闭、loading 完成、拖动开始后最终状态唯一 |
 | Motion capture 证据 | 已建立 `frontend-demo/verify/motion/` 和 `selector-matrix/` 证据目录说明，但还没有按 Motion ID 的录屏/截图媒体 | 按 Motion ID 存放录屏/GIF/关键帧截图，并回填到 `MOTION_SELECTOR_MATRIX.md` 的 Evidence 列 | 每个 P0 Motion ID 至少一份证据，命名可追溯 |
 | 折叠屏/大屏验证 | 当前只有 viewport class 规划和部分 adaptive PNG | 增加 fold/open/collapse/compact-landscape 的手动或模拟器验证矩阵 | ReaderContext、overlay、返回栈、正文分页映射均有证据 |
 | 平台实现映射到组件 | 平台映射已补通用组件族和 Reader 主链路的组件级方向，但仍缺 state 字段、测试文件和任务拆分 | 为每个 Motion ID 标明平台组件、state 字段、测试文件/验收方式 | Compose/SwiftUI/ArkUI 可直接拆任务 |
@@ -33,7 +33,7 @@
 
 | 缺口 | 当前状态 | 需要补充 | 验收标准 |
 |---|---|---|---|
-| Motion ID 状态机表 | 已在 `ReaderMotionController.CONTRACT` 中建立 family fallback，并为 44 个关键 Motion ID 补 `from/to/interrupt/finalState/reducedMotion` 精确状态机 | 扩展到剩余 P0/P1 Motion ID，并把状态机与真实组件 reducer / platform test 文件绑定 | 状态机表能解释所有打断和降级，coverage 能失败提示缺失项 |
+| Motion ID 状态机表 | 已在 `ReaderMotionController.CONTRACT` 中建立 family fallback，并为 47 个关键 Motion ID 补 `from/to/interrupt/finalState/reducedMotion` 精确状态机 | 扩展到剩余 P0/P1 Motion ID，并把状态机与真实组件 reducer / platform test 文件绑定 | 状态机表能解释所有打断和降级，coverage 能失败提示缺失项 |
 | 手势阈值 | 亮度/进度拖动有原则，无阈值 | 定义 drag slop、velocity、取消阈值、底表拖拽边界 | 手势跟手，无 easing 滞后；误触边界明确 |
 | 性能预算 | 未定义 | 补 FPS、layout shift、动画属性白名单、低端设备降级 | 动画只用 transform/opacity 等优先属性；有性能验收项 |
 | 无障碍/semantics | 只有 reduced motion | 补 VoiceOver/TalkBack 焦点迁移、弹窗焦点陷阱、aria/semantics 更新时机 | 动画期间不会读出隐藏 overlay；返回焦点正确 |
@@ -52,7 +52,7 @@
 
 ## P0 推荐落地顺序
 
-1. 已完成第一版：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/测试开关、148 个 `data-*` selector 总表、基础 `data-motion-id` / pressed state 接入、`ReaderMotionController.CONTRACT` 可执行 registry，以及 44 个关键 Motion ID 的精确 contract 状态机。
+1. 已完成第一版：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/测试开关、148 个 `data-*` selector 总表、基础 `data-motion-id` / pressed state 接入、`ReaderMotionController.CONTRACT` 可执行 registry，以及 47 个关键 Motion ID 的精确 contract 状态机。
 2. 已完成第一版：主 TAB、阅读模块 TAB 和 segmented control 已实现 `tab.item.press/select/switch` / `segment.item.switch` adapter、`reader.module.switch` / `segment.item.switch` 事务和 token 化状态；下一步补录屏证据与 indicator/active 层校验。
 3. 深化通用控件族状态机：button、toggle/switch、chip/filter/segment、slider/stepper/progress、input/search、feedback/state、selection、listRow/card。
 4. 已完成第一版：`dropdown.*` 已接入 trigger/menu/option 状态 adapter、press-id 和 token 化 CSS；下一步补关闭保留动画、打开 A 后切 B、reposition 和录屏证据。
@@ -64,7 +64,7 @@
 10. 已完成第一版：`reader.session.autoPage.start`、`reader.session.tts.start` 和 `reader.session.capsule.*` 已接入回沉浸阅读、唯一运行胶囊、内部更新、互斥切换、退出状态和 token 化 CSS；下一步补录屏、停止/退出打断和平台测试。
 11. 已完成第一版：`reader.session.controlSpace.*` 已接入控制层运行空间、countdown/voice/control/label 子角色、局部 tick/update 和 reduced-motion token；下一步补 matched capsule-to-space 录屏、停止/退出打断和平台测试。
 12. 已完成第一版：`reader.session.capsule.control.*`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active` 已接入局部按钮、倒计时数字和朗读图标状态；下一步补真实设备/录屏证据。
-13. 抽出统一 motion state/reducer，先覆盖 tab、dropdown、通用控件族、overlay、reader entry、control handle、wide dock drag、orientation reshape、session capsule、control running space、loading、page turn。
+13. 已完成第一版：`motion.interrupt.*` 已接入统一 interrupt adapter、root/screen host `data-motion-interrupt-*`、临时 pressed/dragging/dropdown 清理、route/Tab/viewport/loading/dock drag 入口和 token 化短收尾；下一步补 overlay 关闭、连续下拉 A->B、异步结果防覆盖、焦点恢复自动化和录屏证据。
 14. 建立 `frontend-demo/verify/motion/`，录制 TAB press/select/switch、下拉栏展开/收起/点击、通用控件族、首启、封面进入、控制层显隐、小横条、宽屏 dock 拖动、整屏旋转、运行胶囊、控制层运行中空间、翻页、打断、折叠/resize。
 15. 把平台映射继续细化到 state 字段、测试文件和平台任务拆分。
 
@@ -81,4 +81,5 @@
 - 不能声称自动翻页/朗读运行胶囊已有完整录屏、停止/退出打断或平台测试证据；当前只有第一版实现层 adapter、局部倒计时 timer 和 coverage gate。
 - 不能声称首次打开应用或控制层运行中空间已有录屏/设备证据；首次打开应用、控制胶囊按钮运行/暂停、倒计时数字变化、朗读图标和控制层运行中空间已有第一版实现层 adapter，但真实设备录屏仍缺；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
 - 不能声称整屏旋转已有真实设备、折叠屏、正文字符锚点重分页和完整录屏证据；当前已有第一版 `prepare/reshape/settle` adapter、root/screen host 状态、route/session/overlay/focus/dock 元数据、token CSS 和 coverage gate。
+- 不能声称打断动画已有完整自动化和录屏证据；当前已有第一版 `motion.interrupt.*` adapter、临时状态清理和 coverage gate，但 overlay 关闭、连续下拉 A->B、异步结果防覆盖和焦点恢复还需深化。
 - 不能声称 reduced-motion 已完成录屏验证。

@@ -1203,6 +1203,6 @@ Reduced motion：
 10. 已完成第一版：倒计时数字 tick 和朗读图标 active 提示已有独立微动效；下一步补录屏证据。
 11. 给每个高风险动效补 demo capture 或录屏。
 12. 在平台映射文档中继续为每个 Motion ID 补 state 字段、测试文件和验收方式。
-13. 补打断动画的统一状态控制器，避免 CSS 动画和 route state 各自收尾。
+13. 已完成第一版：`motion.interrupt.cancel/redirect/completeThenReplace` 已接入 root / screen host `data-motion-interrupt-*`、临时 pressed/dragging/dropdown 清理、route/Tab/viewport/loading/dock drag 入口和 token 化短收尾；下一步补 overlay 关闭、连续下拉 A->B、异步结果防覆盖、焦点恢复自动化和录屏证据。
 14. 已完成第一版 `viewport.orientation.prepare/reshape/settle` adapter：root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dock clamp 和 reduced-motion 即时 settle 已接入；下一步补真实旋转录屏、正文字符锚点重分页和 overlay/focus 自动化证据。
 15. 用真实折叠屏/模拟器补 `viewport.fold.expand`、`viewport.fold.collapse`、`viewport.orientation.reshape` 的 hinge/pane/posture 证据。

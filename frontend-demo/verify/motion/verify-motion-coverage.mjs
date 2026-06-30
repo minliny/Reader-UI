@@ -77,6 +77,9 @@ const requiredRuntimeMotionIds = [
   "reader.session.controlSpace.enter",
   "reader.session.controlSpace.update",
   "reader.session.controlSpace.exit",
+  "motion.interrupt.cancel",
+  "motion.interrupt.redirect",
+  "motion.interrupt.completeThenReplace",
   "viewport.orientation.prepare",
   "viewport.orientation.settle"
 ];
@@ -122,6 +125,9 @@ const detailedMotionIds = [
   "reader.session.controlSpace.exit",
   "reader.module.switch",
   "reader.page.turn.next/prev",
+  "motion.interrupt.cancel",
+  "motion.interrupt.redirect",
+  "motion.interrupt.completeThenReplace",
   "viewport.orientation.prepare",
   "viewport.orientation.reshape",
   "viewport.orientation.settle"
@@ -353,6 +359,20 @@ const checks = [
       motionTokens.includes("fd-viewport-orientation-reshape") &&
       motionTokens.includes("fd-viewport-orientation-anchor-settle"),
     detail: "viewport resize/orientation changes expose prepare/reshape/settle root and role state, route/session/overlay/focus/dock metadata, tokenized anchor motion, and reduced-motion fallback"
+  },
+  {
+    id: "motion.interrupt.state-adapter",
+    passed: runtime.includes("startMotionInterrupt") &&
+      runtime.includes("clearTransientMotionState") &&
+      runtime.includes("data-motion-interrupt-state") &&
+      runtime.includes("data-motion-interrupt-cleared") &&
+      runtime.includes("motion.interrupt.cancel") &&
+      runtime.includes("motion.interrupt.redirect") &&
+      runtime.includes("motion.interrupt.completeThenReplace") &&
+      controller.includes('prefix: "motion.interrupt."') &&
+      motionTokens.includes("--fd-motion-effective-interrupt-settle") &&
+      motionTokens.includes("fd-motion-interrupt-settle"),
+    detail: "interrupt adapter exposes cancel/redirect/completeThenReplace root state, clears transient press/drag/dropdown flags, maps to contract IDs, and uses tokenized settle CSS"
   },
   {
     id: "motion.selector.bindings",
