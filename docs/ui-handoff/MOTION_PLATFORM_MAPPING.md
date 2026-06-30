@@ -266,6 +266,7 @@ Web demo：
 - Demo 已接入运行胶囊 state adapter，覆盖 `reader.session.autoPage.start`、`reader.session.tts.start`、`reader.session.capsule.enter/update/switch/exit`、`reader.session.capsule.control.press/toggle`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active`；平台应映射这些 Motion ID、state 字段和 reducer 事件到原生组件，不能照搬 Web CSS；录屏、停止/退出打断和真实设备证据仍需补齐。
 - Demo 已接入 `motion.interrupt.cancel/redirect/completeThenReplace` 第一版 state adapter，覆盖 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始和 pointer cancel，输出 `data-motion-interrupt-*` 并清理 pressed/dragging/dropdown 临时态；overlay 关闭、连续下拉 A->B、异步结果防覆盖、focus restore 和录屏证据仍需补齐。
 - Demo 已有整屏旋转第一版 state adapter，覆盖 root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dropdown 重定位和宽屏 dock clamp；真实旋转录屏、正文字符锚点重分页、overlay/focus 自动化和平台设备证据仍需补齐。
+- Demo 已补 `frontend-demo/verify/motion/evidence/manifest.json` 第一批代表性浏览器截图，覆盖首启、Tab、下拉、封面进入、自动翻页胶囊、控制层运行空间、orientation 和 interrupt；这些截图只能证明 canonical demo 的代表状态，不等于平台真实设备录屏。
 - Demo 仍没有折叠屏/大屏 reshape 的真实设备 capture；展开、折叠、半开态、hinge/pane 和阅读分页映射需要用模拟器或真机补证据。
 - 每个高风险阅读 transition 至少有一份截图或录屏证据。
 - 平台团队确认 route push 是走原生 stack motion，还是在密集操作页面保持即时切换。

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T15:50:41.918Z",
+  "generatedAt": "2026-06-30T15:59:10.056Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -121,12 +121,17 @@
       "id": "motion.reduced-motion",
       "passed": true,
       "detail": "URL/system reduced-motion state is visible to controller"
+    },
+    {
+      "id": "motion.evidence.manifest",
+      "passed": true,
+      "detail": "9 entries; required missing=0; file problems=0"
     }
   ],
   "summary": {
-    "passed": 24,
+    "passed": 25,
     "failed": 0,
-    "total": 24
+    "total": 25
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -306,5 +311,31 @@
     ],
     "detailedMotionIdCount": 47,
     "missingDetailedStateMachines": []
+  },
+  "evidence": {
+    "manifest": "frontend-demo/verify/motion/evidence/manifest.json",
+    "entryCount": 9,
+    "motionIds": [
+      "app.firstOpen.enter",
+      "dropdown.menu.expand",
+      "motion.interrupt.redirect",
+      "reader.entry.coverToImmersive",
+      "reader.session.capsule.enter",
+      "reader.session.controlSpace.enter",
+      "tab.item.switch",
+      "viewport.orientation.reshape"
+    ],
+    "requiredMotionIds": [
+      "app.firstOpen.enter",
+      "tab.item.switch",
+      "dropdown.menu.expand",
+      "reader.entry.coverToImmersive",
+      "reader.session.capsule.enter",
+      "reader.session.controlSpace.enter",
+      "viewport.orientation.reshape",
+      "motion.interrupt.redirect"
+    ],
+    "missingMotionIds": [],
+    "fileProblems": []
   }
 }

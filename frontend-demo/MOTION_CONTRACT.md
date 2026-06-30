@@ -327,7 +327,7 @@
 - 148 个唯一 `data-*` 交互入口都需要映射到某个 Motion ID、demo route、平台组件和验证方式；不能只按业务页面口头归类。
 - 同一 TAB 栏必须分别覆盖按钮按下、单按钮选中、A -> B 切换、重复点击当前 active 的行为。
 - 所有下拉栏/锚定菜单必须覆盖触发器按下、展开、收起、选项按下、选项选中、打开 A 后切到 B、外部点击关闭、返回关闭、resize/orientation 重定位和 reduced-motion 降级。
-- 首次打开应用、运行胶囊与控制层运行中空间停靠必须有可复现路径；首次打开应用、控制层小横条按压/拖动/释放、宽屏 fixed dock 长按移动、运行胶囊进入/更新/切换、控制层运行中空间、控制胶囊按钮运行/暂停、倒计时数字变化和朗读语音图标活动提示已接入第一版 demo adapter，但仍需真实设备、折叠屏和录屏证据。
+- 首次打开应用、运行胶囊与控制层运行中空间停靠必须有可复现路径；首次打开应用、控制层小横条按压/拖动/释放、宽屏 fixed dock 长按移动、运行胶囊进入/更新/切换、控制层运行中空间、控制胶囊按钮运行/暂停、倒计时数字变化和朗读语音图标活动提示已接入第一版 demo adapter；首启、自动翻页胶囊和控制层运行空间已有代表性浏览器截图，但仍需真实设备、折叠屏和录屏证据。
 - 自动翻页和朗读启动必须覆盖“控制层/完整页 -> 沉浸阅读 -> 运行胶囊”的完整路径，并验证两者互斥切换。
 - 阅读控制层、模块切换、换源窗口、底表、键盘和弹窗都在 portrait、tablet-expanded、compact-landscape 视口下检查过。
 - 打断动画覆盖返回、关闭 overlay、切 Tab、切 route、loading 完成、拖动开始和连续点击模块。
@@ -338,18 +338,18 @@
 ## 10. 未决项
 
 - 当前路由推进多数是即时替换 HTML；需要决定原生应用是否使用平台 stack motion，还是在密集操作页面保持即时切换。
-- 通用交互组件族已完成 contract/effects/platform mapping、`MOTION_SELECTOR_MATRIX.md`、基础 token、reduced-motion 测试开关、`data-motion-id` / pressed state 接入和 contract 层状态机；还缺实现层 reducer / 状态机绑定和录屏证据。
+- 通用交互组件族已完成 contract/effects/platform mapping、`MOTION_SELECTOR_MATRIX.md`、基础 token、reduced-motion 测试开关、`data-motion-id` / pressed state 接入和 contract 层状态机；首批 P0 代表截图已进入 `frontend-demo/verify/motion/evidence/manifest.json`，但还缺通用组件族实现层 reducer / 状态机绑定和全量录屏证据。
 - TAB / segmented 已补 `tab.item.press/select/switch` 和 `segment.item.switch` contract 状态机；主 TAB、阅读模块 TAB 和 segmented control 已接入实现层 `data-motion-tab-*` / `data-motion-segment-*` 状态、press-id 和 token 化状态 CSS。indicator 媒体证据和录屏仍缺。
-- 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 已接入实现层 `data-motion-dropdown-*` 状态、trigger/menu/option adapter、`dropdown.option.press` press-id 和 token 化展开/选项点击 CSS。关闭保留动画、打开 A 后切 B、resize/orientation reposition 和录屏证据仍缺。
+- 下拉栏已补 `dropdown.*` contract 状态机；当前 demo 已接入实现层 `data-motion-dropdown-*` 状态、trigger/menu/option adapter、`dropdown.option.press` press-id 和 token 化展开/选项点击 CSS，并补 bookshelf more menu 展开代表截图。关闭保留动画、打开 A 后切 B、resize/orientation reposition 和录屏证据仍缺。
 - 宽屏控制层长按拖动已接入第一版 demo adapter：宽屏 `.fd-reader-grabber` 长按后进入 `reader.control.dock.longPress`，拖动时更新 dock group transform，释放提交 viewport class offset，resize 后 clamp/rebound，窄屏清理 transform；真实设备、折叠屏 hinge/pane 和录屏证据仍缺。
-- 封面进入沉浸阅读已接入 `data-motion-entry-*` source/target 状态、封面 snapshot 层、普通按钮 fallback 和 token 化淡入；详情/章节入口覆盖、连续点击打断和录屏证据仍缺。
-- 自动翻页/朗读运行胶囊已接入第一版实现层 adapter：启动会话后 route replace 回 `immersive-reading`，胶囊写入 `data-motion-session-capsule-*` 状态，支持 enter/update/switch/exit、倒计时 tick、play/pause 局部按钮和 TTS voice icon active；录屏、停止/退出打断和平台测试证据仍缺。
+- 封面进入沉浸阅读已接入 `data-motion-entry-*` source/target 状态、封面 snapshot 层、普通按钮 fallback 和 token 化淡入，并补书架封面 source/target 代表截图；详情/章节入口覆盖、连续点击打断和录屏证据仍缺。
+- 自动翻页/朗读运行胶囊已接入第一版实现层 adapter：启动会话后 route replace 回 `immersive-reading`，胶囊写入 `data-motion-session-capsule-*` 状态，支持 enter/update/switch/exit、倒计时 tick、play/pause 局部按钮和 TTS voice icon active；自动翻页胶囊已有代表截图，录屏、停止/退出打断和平台测试证据仍缺。
 - 控制层小横条已接入 `data-motion-control-handle-*` source/panel 状态、press/drag/release 精确状态机、drag preview、release snap/expand/collapse、full 页收回和 reduced-motion；真实设备长路径拖动、目录 full 页上拉 promote 和录屏证据仍缺。
 - 首次打开应用、运行胶囊与控制层运行中空间停靠已有第一版实现层 adapter，但还没有完整录屏/设备证据；控制胶囊按钮运行/暂停、倒计时数字替换和朗读图标活动提示已有第一版实现层 adapter，但还缺真实设备和录屏证据；宽屏 control dock 长按拖动已有第一版实现，但还缺真实设备、折叠屏和录屏证据。
 - 当前弹窗背景还没有独立命名的 fade token。
 - 阅读控制层显隐还需要单独做一次视觉 pass；当前 route-state 行为已经存在，但进入/退出动效没有完全 token 化。
 - 换源窗口需要在 portrait 和 compact landscape 下补 capture 证据，明确进入/退出表现。
-- 打断动画已接入第一版 demo adapter：`motion.interrupt.cancel/redirect/completeThenReplace` 会在 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始和 pointer cancel 时写入 `data-motion-interrupt-*`，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态；overlay 关闭、连续下拉 A->B、异步结果防覆盖、焦点恢复自动化和录屏证据仍缺。
+- 打断动画已接入第一版 demo adapter：`motion.interrupt.cancel/redirect/completeThenReplace` 会在 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始和 pointer cancel 时写入 `data-motion-interrupt-*`，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态；Tab switch redirect 已有代表截图，overlay 关闭、连续下拉 A->B、异步结果防覆盖、焦点恢复自动化和录屏证据仍缺。
 - 折叠屏展开/折叠目前按 viewport 断点规划，仍需要真实设备或模拟器验证 hinge、半开态和窗口尺寸变化。
 - 整屏旋转已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；demo 会在方向或 viewport class 改变时写入 root / screen host `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 reshape/anchor settle。真实设备、折叠屏 hinge/pane、正文字符锚点重分页、overlay/focus 恢复自动化和录屏证据仍缺。
 - 当前 `docs/ui-handoff/compose/COMPOSE_INTERACTION_CONTRACTS.md` 只定义事件和状态变化，还没有定义 motion；首轮验证后应引用本契约。

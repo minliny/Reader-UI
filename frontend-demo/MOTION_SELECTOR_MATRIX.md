@@ -19,11 +19,11 @@
 | 4 | `[data-book-author]` | `state.content.replace` | bookshelf / book focus metadata | State metadata | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 5 | `[data-book-card]` | `card.press/select/route` | bookshelf / book-detail | Card/List item | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 6 | `[data-book-chapter]` | `state.content.replace` | bookshelf / book focus metadata | State metadata | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 7 | `[data-book-cover]` | `reader.entry.coverToImmersive` | bookshelf / continue reading / book-detail cover | Shared transition / reader entry | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 7 | `[data-book-cover]` | `reader.entry.coverToImmersive` | bookshelf / continue reading / book-detail cover | Shared transition / reader entry | `frontend-demo/verify/motion/evidence/reader.entry.coverToImmersive__bookshelf__source-cover.jpg`, `frontend-demo/verify/motion/evidence/reader.entry.coverToImmersive__immersive-reading__target.jpg` |
 | 8 | `[data-book-focus-layer]` | `card.select` | book cover long press focus layer | Context overlay | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 9 | `[data-book-grid]` | `bookshelf.view.switch` | bookshelf view switch | Lazy grid/list state | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 10 | `[data-book-title]` | `state.content.replace` | bookshelf / book focus metadata | State metadata | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 11 | `[data-bookshelf-more-layer]` | `dropdown.menu.expand/collapse` | bookshelf more menu | Anchored popup / menu | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 11 | `[data-bookshelf-more-layer]` | `dropdown.menu.expand/collapse` | bookshelf more menu | Anchored popup / menu | `frontend-demo/verify/motion/evidence/dropdown.menu.expand__bookshelf__more-menu.jpg` |
 | 12 | `[data-bookshelf-view]` | `bookshelf.view.switch` | bookshelf view switch | Lazy grid/list state | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 13 | `[data-bookshelf-view-button]` | `bookshelf.view.switch` | bookshelf view switch | Segmented icon button / view mode | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 14 | `[data-capture-mode]` | `tooling.mode.switch` | `?captureMode=all` | Demo capture runner | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
@@ -59,7 +59,7 @@
 | 44 | `[data-keyboard-input]` | `input.focus/blur` | book-search keyboard overlay | TextField focus | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 45 | `[data-main-tab-feedback]` | `feedback.toast.enter/update/exit` | main tab feedback | Inline feedback | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 46 | `[data-module]` | `reader.module.switch` | reader module tab | ReaderModuleNav | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 47 | `[data-nav-type]` | `tab.item.switch` | main tab navigation | Tab / navigation bar | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 47 | `[data-nav-type]` | `tab.item.switch` | main tab navigation | Tab / navigation bar | `frontend-demo/verify/motion/evidence/tab.item.switch__rss__selected.jpg` |
 | 48 | `[data-open-dialog]` | `overlay.dialog.enter` | book-detail / settings confirm dialog | Dialog | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 49 | `[data-open-keyboard]` | `input.focus` | book-search keyboard overlay | TextField focus / keyboard inset | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 50 | `[data-open-sheet]` | `overlay.sheet.enter` | book-detail sheet / settings option sheet | Bottom sheet | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
@@ -76,7 +76,7 @@
 | 61 | `[data-reader-directory-index]` | `reader.chapter.jump` | reader directory list | Reader chapter state | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 62 | `[data-reader-dismiss]` | `reader.control.hide` | reader control dismiss | Reader overlay state | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 63 | `[data-reader-exit]` | `app.route.pop` | reader exit | Navigation pop | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 64 | `[data-reader-immersive-status]` | `reader.session.capsule.enter/update/exit` | immersive session capsule | Reader session overlay | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 64 | `[data-reader-immersive-status]` | `reader.session.capsule.enter/update/exit` | immersive session capsule | Reader session overlay | `frontend-demo/verify/motion/evidence/reader.session.capsule.enter__immersive-reading__auto-page.jpg` |
 | 65 | `[data-reader-immersive-status-playing]` | `reader.session.capsule.control.press/toggle` | immersive session capsule playing state | Reader session overlay | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 66 | `[data-reader-immersive-status-type]` | `reader.session.capsule.switch` | immersive session capsule type | Reader session overlay | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 67 | `[data-reader-loading]` | `state.loading.inline` | reader quick loading | Inline loading indicator | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
@@ -143,7 +143,7 @@
 | 128 | `[data-stack-size]` | `app.route.push/pop` | 开发者模式 / route panel | Navigation state / debug inspector | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 129 | `[data-top-action]` | `button.activate` | main tab top actions | IconButton | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 130 | `[data-typography-row]` | `state.content.replace` | reader numeric control row | Control row | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 131 | `[data-viewport-class]` | `viewport.orientation.reshape` | 任意 route resize / rotate | Window metrics / size class | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 131 | `[data-viewport-class]` | `viewport.orientation.reshape` | 任意 route resize / rotate | Window metrics / size class | `frontend-demo/verify/motion/evidence/viewport.orientation.reshape__compact-landscape__reader.jpg` |
 | 132 | `[data-viewport-height]` | `viewport.orientation.reshape` | 任意 route resize / rotate | Window metrics / size class | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 133 | `[data-viewport-width]` | `viewport.orientation.reshape` | 任意 route resize / rotate | Window metrics / size class | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 134 | `[data-width-class]` | `viewport.orientation.reshape` | 任意 route resize / rotate | Window metrics / size class | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
@@ -165,5 +165,6 @@
 ## 当前证据状态
 
 - 已完成：148 个唯一 `data-*` 入口均有 Motion ID、demo route / click path 和平台组件归类。
-- 待完成：为每个 P0 Motion ID 录制或截图，并把 `Evidence` 从待补路径改成具体文件。
+- 已完成第一批代表截图：`app.firstOpen.enter`、`tab.item.switch`、`dropdown.menu.expand`、`reader.entry.coverToImmersive`、`reader.session.capsule.enter`、`reader.session.controlSpace.enter`、`viewport.orientation.reshape`、`motion.interrupt.redirect` 已写入 `frontend-demo/verify/motion/evidence/manifest.json`，其中可直接对应 selector 的行已回填具体文件。
+- 待完成：继续为每个 P0 Motion ID 录制或截图，并把 `Evidence` 从待补路径改成具体文件。
 - 待完成：平台映射继续补 state 字段和测试文件名。

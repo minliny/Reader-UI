@@ -14,10 +14,19 @@ node frontend-demo/verify/motion/verify-motion-coverage.mjs
 
 - `frontend-demo/verify/motion/motion-coverage-report.json`
 
+同时会检查：
+
+- `frontend-demo/verify/motion/evidence/manifest.json`
+- `frontend-demo/verify/motion/evidence/*`
+
+当前 `evidence/manifest.json` 是 P0 Motion ID 的第一批代表性浏览器截图证据，覆盖首启、Tab 切换、下拉展开、封面进入、自动翻页胶囊、控制层运行空间、orientation 和 interrupt。它不是全量录屏闭环，不能替代后续真实设备、折叠屏、reduced-motion 和每个 selector 的媒体证据。
+
 命名规则：
 
 - `selector-matrix/<motion-id>__<route>__<selector-slug>.png`
+- `selector-matrix/<motion-id>__<route>__<selector-slug>.jpg`
 - `selector-matrix/<motion-id>__<route>__<selector-slug>.webm`
+- `evidence/<motion-id>__<route>__<state>.jpg`
 - `reader/<motion-id>__<route>__<state>.webm`
 - `viewport/<motion-id>__<viewport-class>__<route>.webm`
 

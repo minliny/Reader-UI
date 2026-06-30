@@ -84,7 +84,7 @@
 - `@media (prefers-reduced-motion: reduce)` 也会把 transition/animation duration 降到 `0ms`，并禁用翻页和 loading 动画。
 - `render-runtime.js` 支持 `?motionReduced=1/0` 和 `?reducedMotion=...`。
 
-判定：基础 token 和 reduced-motion 代码已落地，可以作为后续平台实现的输入，但仍缺视觉证据和平台测试映射。
+判定：基础 token 和 reduced-motion 代码已落地，可以作为后续平台实现的输入；首批 P0 代表截图已进入 `frontend-demo/verify/motion/evidence/manifest.json` 和 coverage gate，但仍缺完整录屏、真实设备证据和平台测试映射。
 
 ### 3.2 Motion ID adapter
 
@@ -257,9 +257,9 @@
 - 已经形成完整跨端动效规格。
 - 各平台可直接沿用当前实现。
 - 所有交互组件都被实现级统一纳管。
-- 打断、折叠/旋转、控制层拖动、运行胶囊、封面进入、dropdown、tab motion 已闭环。
+- 打断、折叠/旋转、控制层拖动、运行胶囊、封面进入、dropdown、tab motion 已完整闭环。
 
-结论：当前处于“最小 motion controller + 基础 motion adapter + 局部 CSS 动效 + 完整 route 可渲染”的阶段。要作为 iOS / Android / HarmonyOS 可直接排期复用的动效规格，还需要补全组件状态机、Reader 专属主链路动画和视觉证据自动化。
+结论：当前处于“最小 motion controller + 基础 motion adapter + 局部 CSS 动效 + 完整 route 可渲染 + 首批代表截图证据”的阶段。要作为 iOS / Android / HarmonyOS 可直接排期复用的动效规格，还需要补全组件状态机、Reader 专属主链路动画和视觉证据自动化。
 
 ## 6. 全局组件纳管矩阵
 
@@ -358,7 +358,7 @@ P0：
 1. 扩展已落地的 `motionController`，把 root transaction 变成可驱动 CSS class / shared-element / async settle 的状态机。
 2. 把 route、tab、dropdown、overlay、button、toggle、slider 这些通用组件完整接入 controller。
 3. 先补 `reader.entry.coverToImmersive`、`reader.session.capsule.*`、`reader.control.handle.drag.*` 三条 Reader 主链路。
-4. 浏览器验证脚本输出 route 覆盖、Motion ID 覆盖、reduced-motion 覆盖和组件族缺口。
+4. 浏览器验证脚本输出 route 覆盖、Motion ID 覆盖、reduced-motion 覆盖、代表性 evidence manifest 覆盖和组件族缺口。
 
 P1：
 

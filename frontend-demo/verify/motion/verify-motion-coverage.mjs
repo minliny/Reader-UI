@@ -12,6 +12,10 @@ const runtime = read("frontend-demo/render-runtime.js");
 const controller = read("frontend-demo/motion-controller.js");
 const motionTokens = read("frontend-demo/motion-tokens.css");
 const routeContractSource = read("frontend-demo/route-contract.js");
+const evidenceManifestPath = path.join(frontendRoot, "verify/motion/evidence/manifest.json");
+const evidenceManifest = fs.existsSync(evidenceManifestPath)
+  ? JSON.parse(fs.readFileSync(evidenceManifestPath, "utf8"))
+  : null;
 const sourceFiles = [
   "frontend-demo/index.html",
   "frontend-demo/render.js",
@@ -133,6 +137,31 @@ const detailedMotionIds = [
   "viewport.orientation.settle"
 ];
 const runtimeAndSelectorMotionIds = [...new Set(motionIds.concat(requiredRuntimeMotionIds))].sort();
+const requiredEvidenceMotionIds = [
+  "app.firstOpen.enter",
+  "tab.item.switch",
+  "dropdown.menu.expand",
+  "reader.entry.coverToImmersive",
+  "reader.session.capsule.enter",
+  "reader.session.controlSpace.enter",
+  "viewport.orientation.reshape",
+  "motion.interrupt.redirect"
+];
+const evidenceEntries = Array.isArray(evidenceManifest?.entries) ? evidenceManifest.entries : [];
+const evidenceFileProblems = evidenceEntries
+  .map((entry) => {
+    const fileName = String(entry.file || "");
+    const filePath = path.join(frontendRoot, "verify/motion/evidence", fileName);
+    if (!fileName) return { file: fileName, reason: "missing file name" };
+    if (fileName.includes("..") || path.isAbsolute(fileName)) return { file: fileName, reason: "invalid relative file path" };
+    if (!fs.existsSync(filePath)) return { file: fileName, reason: "file missing" };
+    if (fs.statSync(filePath).size <= 0) return { file: fileName, reason: "file empty" };
+    return null;
+  })
+  .filter(Boolean);
+const evidenceMotionIds = [...new Set(evidenceEntries.map((entry) => entry.motionId).filter(Boolean))].sort();
+const missingEvidenceMotionIds = requiredEvidenceMotionIds
+  .filter((motionId) => !evidenceMotionIds.includes(motionId));
 
 const motionContract = motionController.CONTRACT || {};
 const resolveMotionContract = typeof motionController.contractFor === "function"
@@ -388,6 +417,14 @@ const checks = [
     id: "motion.reduced-motion",
     passed: runtime.includes("motionReduced") && runtime.includes("prefers-reduced-motion") && controller.includes("reducedMotion"),
     detail: "URL/system reduced-motion state is visible to controller"
+  },
+  {
+    id: "motion.evidence.manifest",
+    passed: evidenceManifest?.version === "reader-motion-evidence-v1" &&
+      evidenceEntries.length >= 9 &&
+      missingEvidenceMotionIds.length === 0 &&
+      evidenceFileProblems.length === 0,
+    detail: `${evidenceEntries.length} entries; required missing=${missingEvidenceMotionIds.length}; file problems=${evidenceFileProblems.length}`
   }
 ];
 
@@ -423,6 +460,14 @@ const report = {
     detailedMotionIds,
     detailedMotionIdCount: Array.isArray(motionContract.motionIds) ? motionContract.motionIds.length : 0,
     missingDetailedStateMachines
+  },
+  evidence: {
+    manifest: path.relative(repoRoot, evidenceManifestPath),
+    entryCount: evidenceEntries.length,
+    motionIds: evidenceMotionIds,
+    requiredMotionIds: requiredEvidenceMotionIds,
+    missingMotionIds: missingEvidenceMotionIds,
+    fileProblems: evidenceFileProblems
   }
 };
 
