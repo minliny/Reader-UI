@@ -9,6 +9,13 @@
 
 本文档补齐“动画效果本身”。如果只看 `MOTION_CONTRACT.md`，只能得到状态契约，不能形成完整动效规划；完整规划必须同时包含本文件里的视觉效果描述、时间线、层级和验收方式。
 
+边界说明：
+
+- 本文件描述的是可感知效果和验收语义，不要求平台逐帧复制 Web CSS、DOM 层级或 easing 函数名。
+- `frontend-demo/` 中的位移、透明度、scale、截图和 `data-motion-*` 字段只用于证明 Motion ID 的状态流、打断结果和 reduced-motion 降级。
+- 平台最终实现必须按 Compose / SwiftUI / ArkUI 的原生组件、导航、手势、安全区、键盘、fold posture 和无障碍焦点重新落地。
+- Demo proof 可以证明“设计契约已具备”和“关键样板可复现”，不能证明真实设备性能、折叠屏、后台恢复、系统键盘或平台导航栈已经完成。
+
 ## 1. 总体动效语言
 
 Reader UI 的动效目标不是炫技，而是让阅读和管理操作更容易理解：
@@ -1141,6 +1148,14 @@ Reduced motion：
 
 ## 9. 验收路径
 
+证据分层：
+
+- Contract 证据：Motion ID 有 token、state fields、`from/to`、interrupt、`finalState` 和 reduced-motion 规则。
+- Demo proof 证据：canonical `frontend-demo/` 能用浏览器 route / 点击路径复现状态，coverage 通过，并有代表截图或录屏。
+- Platform 证据：平台仓库用原生 UI 组件完成实现，并提供真机/模拟器录屏、golden、单元测试、无障碍测试或性能数据。
+
+下表的 Demo 验收路径只证明 demo 样板，不替代 Platform 证据。
+
 | 动效 | Demo 验收路径 | 必看点 |
 |---|---|---|
 | 首次打开应用 | 冷启动默认书架/冷启动深链 | 首屏只播放一次，不阻塞操作；恢复前台不重复。 |
@@ -1207,3 +1222,13 @@ Reduced motion：
 14. 已完成第一版：`overlay.keyboard/sheet/dialog.*` 已接入 `data-motion-overlay-*` role/state/action/focus-return 字段、settings overlay 主体入口、token 化 enter CSS 和基础焦点恢复；下一步补连续 overlay 打断、遮罩互斥、录屏和平台焦点测试。
 15. 已完成第一版 `viewport.orientation.prepare/reshape/settle` adapter：root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dock clamp 和 reduced-motion 即时 settle 已接入；compact-landscape 已有代表截图，下一步补真实旋转录屏、正文字符锚点重分页和 overlay/focus 自动化证据。
 16. 用真实折叠屏/模拟器补 `viewport.fold.expand`、`viewport.fold.collapse`、`viewport.orientation.reshape` 的 hinge/pane/posture 证据。
+
+## 11. 平台不可从 Demo 继承的内容
+
+- 不继承 Web CSS selector、DOM 结构、`data-*` 属性名、query 参数、fixture route stack 或截图文件名。
+- 不继承 Web 的像素坐标、绝对高度、断点数值、scroll 容器或 z-index 实现。
+- 不继承 Web 的模拟键盘、模拟折叠屏、浏览器 viewport resize 作为真实平台证据。
+- 不把 demo 的 route replace/push 等同于平台 `NavigationStack`、Compose navigation、ArkUI router 或系统返回生命周期。
+- 不把 demo coverage 通过等同于平台完成；coverage 只说明 canonical demo 的契约样板没有断裂。
+
+平台必须继承的是 Motion ID、状态语义、互斥/打断规则、reduced-motion 规则、最终状态约束和验收清单。

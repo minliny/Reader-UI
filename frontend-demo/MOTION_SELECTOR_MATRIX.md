@@ -7,7 +7,9 @@
 说明：
 
 - 本表把原始 demo source 中 148 个唯一 `data-*` 入口纳入 Motion ID 归类，包含产品交互、运行时状态、viewport/capture/developer 辅助属性。
+- 本表是 demo proof 的证据索引，不是平台 selector API。Android / iOS / HarmonyOS 不能复制这些 `data-*` 名称、DOM 结构或 route fixture；只能映射对应的 Motion ID、state fields、token 语义和验收结果。
 - `data-motion-id`、`data-motion-pressed`、`data-motion-reduced`、`data-motion-reduced-source` 是本轮新增的 motion adapter 属性，不计入原始 148 个入口。
+- `verify-motion-coverage.mjs` 的 `data-*` 覆盖计数包含运行时 adapter、motion 状态字段和辅助字段，因此可能高于本表的 148 个原始入口；两者用途不同，不能互相替代。
 - `Evidence` 目前先标记为待补；只有录屏、GIF、截图或自动化断言落到 `frontend-demo/verify/motion/` 后，才允许改成已验证。
 - 业务页面不新增私有 motion。Discover、RSS、Source、Restore、Settings、Library 的控件必须映射到通用组件族或 Reader 专属 Motion ID。
 
@@ -166,5 +168,5 @@
 
 - 已完成：148 个唯一 `data-*` 入口均有 Motion ID、demo route / click path 和平台组件归类。
 - 已完成第一批代表截图：`app.firstOpen.enter`、`tab.item.switch`、`dropdown.menu.expand`、`reader.entry.coverToImmersive`、`reader.session.capsule.enter`、`reader.session.controlSpace.enter`、`viewport.orientation.reshape`、`motion.interrupt.redirect` 已写入 `frontend-demo/verify/motion/evidence/manifest.json`，其中可直接对应 selector 的行已回填具体文件。
-- 待完成：继续为每个 P0 Motion ID 录制或截图，并把 `Evidence` 从待补路径改成具体文件。
-- 待完成：平台映射继续补 state 字段和测试文件名。
+- 待完成：继续为高风险 P0 Motion ID 录制或截图，并把 `Evidence` 从待补路径改成具体文件；低风险通用控件以本矩阵、coverage 和少量代表证据支撑，不要求 Web 逐项模拟平台最终动效。
+- 待完成：平台映射继续补 state 字段、测试文件名和 native 证据类型。

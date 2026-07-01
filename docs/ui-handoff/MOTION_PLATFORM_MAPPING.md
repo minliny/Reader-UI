@@ -8,6 +8,30 @@
 
 本文档把 demo 动效契约映射到各平台的原生实现概念。它是实现指导，不是要求把 Web demo 嵌入平台应用，也不是要求复制 CSS。
 
+## 0. 交付分层
+
+| 层 | 交付物 | 责任边界 | 不承担 |
+|---|---|---|---|
+| Contract | Motion ID、token、state fields、`from/to`、interrupt、`finalState`、reduced-motion | 所有平台共享同一语义；变更时同步 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md` 和 contract registry | 不定义平台具体 API 调用和 DOM/CSS 结构 |
+| Demo proof | `frontend-demo/` route、`data-motion-*` 状态、coverage、代表截图/录屏 | 证明关键状态流、打断规则、层级、reduced-motion 和高风险链路可复现 | 不证明平台真机性能、折叠屏、键盘、安全区、导航栈或无障碍已完成 |
+| Platform implementation | Compose / SwiftUI / ArkUI 原生实现、平台测试、真机/模拟器证据 | 按原生组件、导航、手势、安全区、keyboard inset、fold posture、accessibility focus 实现最终体验 | 不复制 Web CSS、DOM、`data-* selector`、fixture route stack 或浏览器 viewport 行为 |
+
+平台团队接收的是任务边界和验收清单，不是 Web CSS 复用指令。`data-motion-*` 和 selector matrix 只用于把 demo 证据追溯到 Motion ID。
+
+## 0.1 高风险链路收束表
+
+| 链路 | Contract 层必须共享 | Demo proof 现在保留 | Platform implementation 必须完成 | 当前不能声称 |
+|---|---|---|---|---|
+| TAB / segmented | `tab.item.press/select/switch`、`reader.module.switch`、`segment.item.switch`；`from/to`、active-repeat、reduced-motion | 主 TAB、阅读模块 TAB、segmented 写入 `data-motion-tab-*` / `data-motion-segment-*`，coverage 验证状态机 | 原生 TabRow / NavigationBar / Picker / Segment 控件，indicator 不推动布局，录屏或 golden | 不能声称已有全量录屏或平台控件已完成 |
+| Dropdown / anchored menu | `dropdown.trigger.press`、`dropdown.menu.expand/collapse/reposition`、`dropdown.option.press/select`、A -> B `motion.interrupt.redirect` | demo 保留 trigger/menu/option/switch 状态和代表截图，用于证明同层单 open 与接管语义 | Compose DropdownMenu/Popup、SwiftUI Menu/Popover、ArkUI Popup；空间不足降级、orientation reposition、焦点恢复 | 不能声称关闭保留动画、reposition、平台焦点测试已完成 |
+| 封面进入阅读 | `reader.entry.coverToImmersive`、`reader.entry.actionToImmersive`；source/target、fallback、reduced-motion | 书架封面/继续阅读/普通按钮入口写入 source/target，代表截图证明最终是 `immersive-reading` | 原生 shared/snapshot 或 fade 降级；跨 pane/hinge 不做封面飞行；原生导航栈返回来源页 | 不能声称详情/章节入口、连续点击和真机录屏已完成 |
+| 阅读控制层 | `reader.control.handle.press/drag/release`、`reader.control.dock.longPress/drag/release/rebound`；阈值、bounds、finalState | 小横条、full 页收回、宽屏 dock bounds clamp 和 reduced-motion 保留 demo adapter | 原生 gesture、velocity/cancel、safe area、fold pane、resize clamp；真机/模拟器录屏 | 不能声称真实触摸、fold hinge、目录 full 页 promote 已完成 |
+| 自动翻页 / 朗读胶囊 | `reader.session.autoPage.start`、`reader.session.tts.start`、`reader.session.capsule.*`；互斥、playing、countdown、voice、exit | demo 证明启动后 replace 回沉浸页、唯一胶囊、倒计时/播放态局部更新 | 原生 `activeSession` reducer，后台恢复、锁屏、章节跳转、停止/退出打断；真机录屏 | 不能声称停止/退出、后台生命周期、平台测试完成 |
+| 控制层运行空间 | `reader.session.controlSpace.enter/update/exit`；capsule-to-space、single controller、reduced-motion | demo 保留 `data-reader-control-space` 和子角色，证明控制层里只有一个运行主控 | 原生控制层中映射 active session；隐藏控制层回胶囊；结束态释放 hit area | 不能声称 matched geometry、停止/退出、平台测试完成 |
+| Orientation / resize | `viewport.orientation.prepare/reshape/settle`、`viewport.fold.expand/collapse`；route/session/overlay/focus/dock 元数据 | demo 用 viewport class、orientation 状态和代表截图证明 reshape/reanchor 语义 | 原生 window metrics、size class、fold posture、正文锚点重分页、dock clamp | 不能声称真实旋转、折叠屏、正文字符锚点重分页已验证 |
+| Interrupt / async result | `motion.interrupt.cancel/redirect/completeThenReplace`、`motion.asyncResult.*`；latest intent wins、requestId、discard | demo coverage 验证 route/tab/dropdown/loading/dock drag 等入口清理临时态，async 旧结果不覆盖新 route | 平台 reducer 取消旧 transition、检查 route/context/requestId、overlay/focus restore 自动化 | 不能声称连续 overlay、焦点恢复和完整录屏已完成 |
+| Reduced motion | 所有高风险 Motion ID 的 reduced-motion fallback；状态反馈仍可辨认 | demo 保留 URL / system reduced-motion 状态和 coverage gate | 平台接入系统 reduced motion，去除大位移/循环动画，保留语义反馈 | 不能声称 reduced-motion 全链路录屏和平台证据已完成 |
+
 ## 1. 共享 Token 命名
 
 | 契约 token | Web/CSS 初稿 | Android Compose 初稿 | iOS SwiftUI 初稿 | HarmonyOS ArkUI 初稿 |
@@ -191,19 +215,13 @@ HarmonyOS ArkUI：
 - 折叠/展开只改变布局形态，不新增 router 记录。
 - 整屏旋转保留 router、reader progress anchor、active session 和 overlay；按窗口/折叠安全区 clamp 宽屏 dock。
 
-Web demo：
+Web demo proof：
 
-- 使用 CSS variables 表达 motion 值。
-- 补 `@media (prefers-reduced-motion: reduce)`。
-- 首启动效需要显式 cold-start flag；不能每次 route render 都重播。
-- 补通用组件 CSS class 和 JS state adapter：button、toggle、chip/filter、segment、slider/stepper/progress、input/search、toast/state、selection、row/card 都要映射到 Motion ID，不能继续依赖分散的 `:active`、`.is-active` 或页面私有 class。
-- 148 个唯一 `data-*` 交互入口需要形成 `selector -> Motion ID -> route -> platform component -> evidence` 总表；业务页面只能选择通用 Motion ID 或 Reader 专属 Motion ID。
-- 下拉栏需要统一 CSS class/token 和 open state；当前阅读/朗读 dropdown、设置 option dropdown、发现 sort popover、书源/书架菜单不能继续各自裸写动画。
-- route/state 更新和 CSS animation class 需要统一清理，避免打断后残留 class。
-- 小横条如果补拖拽，需要 pointer capture 和 release 阈值，不能只靠 click route。
-- 宽屏 control dock 拖动需要计算 `ReaderFrame` bounds、dock group rect、safe area、top bar bottom 和 fold pane；移动用 transform/offset，不能改宽高。Demo 已有第一版 frame/group bounds、viewport-class offset 和 resize clamp，平台仍需补原生 gesture、fold pane 和设备证据。
-- 用 `data-orientation`、`data-viewport-class` 和 `visualViewport` 覆盖折叠屏展开、折叠、横屏紧凑和整屏旋转重排。
-- 旋转期间清理 pressed/dragging/animation class，旋转后重新计算 overlay/capsule/dock 锚点。
+- 使用 CSS variables、`data-motion-*` 和测试 query 暴露契约状态，方便浏览器取证。
+- 保留 `@media (prefers-reduced-motion: reduce)` 和 `?motionReduced=1/0`，证明降级语义可复现。
+- 首启动效、TAB/dropdown、封面进入阅读、控制层、运行胶囊、orientation、interrupt 等高风险链路保留最小可执行 adapter。
+- Selector matrix 只追踪 demo 内部 `selector -> Motion ID -> route -> platform component -> evidence`，平台不得把 selector 当 API。
+- 宽屏 control dock、orientation、overlay、async result 等 demo adapter 用于证明状态边界；平台仍需补原生 gesture、fold pane、safe area、keyboard inset、accessibility focus 和设备证据。
 - dev mode 中保留 route/state 名称，方便平台实现者把视觉证据和契约对应起来。
 
 ## 4. 验证矩阵
@@ -271,3 +289,24 @@ Web demo：
 - Demo 仍没有折叠屏/大屏 reshape 的真实设备 capture；展开、折叠、半开态、hinge/pane 和阅读分页映射需要用模拟器或真机补证据。
 - 每个高风险阅读 transition 至少有一份截图或录屏证据。
 - 平台团队确认 route push 是走原生 stack motion，还是在密集操作页面保持即时切换。
+
+## 6. 平台任务拆分边界
+
+平台实现必须拆成以下 native work items，而不是“照 Web 写 CSS”：
+
+| 任务 | Compose | SwiftUI | ArkUI | 必需平台证据 |
+|---|---|---|---|---|
+| Contract token adapter | `ReaderMotionTokens` / `AppMotionTokens` | `ReaderMotion.Duration` / `AppMotion.Duration` | `ReaderMotion` token adapter | reduced-motion 开关、token 单测或 snapshot |
+| Motion reducer/state | 单一 UI state + `Transition` target | 单一 view model state + `withAnimation` | 单一状态源 + `animateTo` target | 打断后最终状态唯一的测试 |
+| 原生导航 | Navigation host / back stack | `NavigationStack` / `NavigationPath` | ArkUI router | route push/back/replace 与 demo Motion ID 对齐 |
+| 原生 overlay | `ModalBottomSheet`、dialog、Popup、keyboard inset | `.sheet`、dialog、popover、keyboard safe area | Sheet/dialog/popup/keyboard area | 焦点陷阱、关闭恢复、键盘/安全区证据 |
+| Reader 控制层和手势 | Compose gesture + window insets + fold posture | `DragGesture` + safe area + size class | Gesture + window/fold constraints | 小横条、宽屏 dock、bounds clamp 真机/模拟器录屏 |
+| 运行胶囊/session | `activeSession` reducer | `activeSession` observable state | `activeSession` state | 自动翻页/TTS 互斥、暂停/继续、后台恢复 |
+| orientation/fold | Window metrics / posture | scene size / size class | window/fold state | 旋转、半开态、hinge/pane、正文锚点重分页 |
+| accessibility/performance | TalkBack、Macrobenchmark | VoiceOver、Instruments | ArkUI accessibility/perf | 焦点恢复、低端设备帧率、reduced-motion |
+
+## 7. 当前结论
+
+- 设计契约：已具备第一版 Motion ID、token、状态机、reduced-motion 和高风险路径说明。
+- Demo 样板：已具备第一版可执行 proof，coverage 通过，代表截图覆盖部分 P0 链路；仍缺全量录屏、连续 overlay、focus restore 自动化、折叠屏和真实设备证据。
+- 平台最终实现：未完成。Compose / SwiftUI / ArkUI 需要按本文件拆 native work item，自行完成组件、导航、手势、生命周期、无障碍和性能验证。

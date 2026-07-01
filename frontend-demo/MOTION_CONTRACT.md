@@ -8,6 +8,18 @@
 
 文档边界：本文件只定义 motion token、Motion ID 和状态边界；具体动画效果、方向、透明度、位移、缩放、先后顺序和验收路径见 `MOTION_EFFECTS.md`。只靠本文件不能形成完整动效规划。
 
+交付分层：
+
+- Contract 层：跨平台共享 `Motion ID`、token 名称、state fields、`from/to`、interrupt、`finalState` 和 reduced-motion 规则。这一层是平台必须实现和测试的语义。
+- Demo proof 层：`frontend-demo/` 只作为可执行契约样板，用浏览器路径、`data-motion-*` 状态字段、coverage 和代表截图证明状态语义、打断规则和高风险链路成立。Demo proof 不是 Android / iOS / HarmonyOS 的最终 UI 代码。
+- Platform implementation 层：Android Compose、iOS SwiftUI、HarmonyOS ArkUI 必须用原生导航、原生组件、原生手势、safe area / keyboard inset、fold posture、accessibility focus 和性能工具实现最终动效。
+
+非目标：
+
+- 不把 Web CSS transition、DOM 结构、`data-*` selector 或 demo route stack 当作平台实现接口。
+- 不用 Web demo 模拟三端全部平台差异，也不把 demo fixture 等同于真实业务生命周期。
+- 不声称当前 demo 已完成跨端动效实现、折叠屏真机验证、真实设备录屏、无障碍焦点或平台性能验收。
+
 ## 1. 覆盖范围
 
 本契约覆盖当前 demo 已经表达出来的动效面：
@@ -306,12 +318,20 @@
 
 ## 8. 原生平台映射原则
 
-- Web demo：验证视觉目标、路由/状态关系、层级关系和响应式遮挡问题。
-- Android Compose：使用 `AnimatedVisibility`、`AnimatedContent`、`updateTransition` 和显式 `ReaderMotionTokens`。
-- iOS SwiftUI：使用 `withAnimation`、`transition`、必要时使用稳定容器，并遵守 `UIAccessibility.isReduceMotionEnabled`。
-- HarmonyOS ArkUI：使用原生 `animateTo` / transition API，并提供本地 `ReaderMotionTokens` adapter。
+- Web demo：验证 Motion ID、状态字段、route/context 关系、层级关系、reduced-motion 和高风险链路是否可复现；不作为平台 CSS/DOM 复用源。
+- Android Compose：使用原生 `AnimatedVisibility`、`AnimatedContent`、`updateTransition`、`Animatable` / gesture state 和显式 `ReaderMotionTokens`，按 reducer 的最新状态取消或接管旧动画。
+- iOS SwiftUI：使用 `withAnimation`、`transition`、`matchedGeometryEffect` 降级策略、稳定容器和 `UIAccessibility.isReduceMotionEnabled`，保留 `NavigationPath`、focus 和 reader progress anchor。
+- HarmonyOS ArkUI：使用原生 `animateTo` / transition / gesture API，并提供本地 `ReaderMotionTokens` adapter，按窗口/折叠状态和安全区重算布局。
 
 平台应用应该共享语义 ID 和 token 值，而不是共享实现语法。
+
+平台必须自行验证：
+
+- 真实设备录屏、低端设备帧率、GPU/CPU 性能预算和 reduced-motion。
+- 折叠屏展开/折叠、半开态、hinge/pane 约束、大屏多窗口和横屏紧凑态。
+- 原生键盘、安全区、系统返回、导航栈、后台/恢复生命周期和异步结果回写。
+- 原生手势阈值、velocity/cancel、pointer capture 等价行为。
+- TalkBack / VoiceOver / ArkUI accessibility focus、弹窗焦点陷阱和语义恢复。
 
 ## 9. 验收清单
 
@@ -321,6 +341,7 @@
 - 每个 Motion ID 都出现在平台映射文档里。
 - 每个 Motion ID 都在 `MOTION_EFFECTS.md` 中有视觉效果说明。
 - 当前 renderer/runtime 使用的 Motion ID 都必须能通过 `ReaderMotionController.contractFor()` 解析到 state machine；P0 关键 Motion ID 必须有精确 `from/to/interrupt/finalState/reducedMotion`，不能只依赖 family fallback。
+- 每个高风险 Motion ID 都明确区分：Contract 已定义、Demo proof 已具备或待补、Platform implementation 未完成或待验证。
 - demo 使用集中 motion token，不再散落裸写 `160ms`、`220ms` 和 `0.8s`。
 - demo 定义并验证 `prefers-reduced-motion`。
 - 点击封面进入沉浸阅读必须覆盖书架封面、继续阅读封面和列表/详情无封面入口的降级路径。
@@ -335,6 +356,10 @@
 - 折叠屏/大屏重排覆盖手机态、展开态、半展开态、横屏紧凑态；并验证 ReaderContext、overlay 层级和返回栈不丢失。
 - 整屏旋转覆盖 portrait -> landscape、landscape -> portrait、compact-landscape -> portrait、tablet-expanded resize；并验证控制层、运行胶囊、控制层运行中空间、overlay、focus 和宽屏 dock offset 都映射到合法位置。
 - 平台应用为阅读翻页、控制层显隐、模块切换、底表、弹窗、键盘和换源窗口提供 native motion 测试或 golden/人工复核证据。
+
+平台 handoff 输出必须是任务边界和验收清单，而不是 Web CSS 复用说明。任何 `data-motion-*`、`data-* selector`、CSS variable 或 demo query 参数只用于 demo 内部取证和调试；平台实现只能映射其背后的 Motion ID、state fields、token 语义和验收结果。
+
+高风险链路的最终交付边界见 `docs/ui-handoff/MOTION_PLATFORM_MAPPING.md` 的“高风险链路收束表”：该表逐项区分 Contract 层共享内容、Demo proof 保留范围、Platform implementation 必须完成的 native 证据，以及当前不能声称完成的事项。
 
 ## 10. 未决项
 

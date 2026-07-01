@@ -14,12 +14,12 @@
   --reader-quick-wide-height-reserve: 212px;
   --reader-quick-compact-height: 230px;
   --reader-quick-compact-bottom: 22px;
-  --reader-control-running-height: 48px;
-  --reader-control-actions-min-height: 58px;
-  --reader-control-chapter-min-height: 74px;
-  --reader-auto-primary-min-height: 66px;
-  --reader-auto-secondary-height: 36px;
-  --reader-auto-mode-height: 32px;
+  --reader-control-running-height: 44px;
+  --reader-control-actions-min-height: 50px;
+  --reader-control-chapter-min-height: 64px;
+  --reader-auto-primary-min-height: 58px;
+  --reader-auto-secondary-height: 34px;
+  --reader-auto-mode-height: 30px;
 }
 
 .fd-reader-sheet {
@@ -84,7 +84,7 @@
   bottom: var(--reader-quick-bottom);
   box-sizing: border-box;
   display: grid;
-  grid-template-rows: minmax(76px, 0.82fr) minmax(104px, 1.18fr);
+  grid-template-rows: minmax(70px, 0.82fr) minmax(96px, 1.18fr);
   align-content: stretch;
   gap: 6px;
   min-width: 0;
@@ -107,11 +107,13 @@
 }
 
 .fd-reader-running-space {
+  height: 100%;
+  min-height: 0;
   display: grid;
-  grid-template-columns: 34px minmax(0, 1fr) 34px;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
   align-items: center;
-  gap: 7px;
-  padding: 6px 8px;
+  gap: 6px;
+  padding: 5px 7px;
   border: 1px solid rgba(47, 99, 115, 0.28);
   border-radius: var(--fd-radius-md);
   background: rgba(47, 99, 115, 0.09);
@@ -120,8 +122,8 @@
 }
 
 .fd-reader-running-indicator {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
   border-radius: var(--fd-radius-circle);
@@ -130,8 +132,8 @@
 }
 
 .fd-reader-running-countdown {
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
   border-radius: var(--fd-radius-circle);
@@ -179,10 +181,10 @@
 }
 
 .fd-reader-running-control {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
-  min-height: 30px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   display: grid;
   place-items: center;
   padding: 0;
@@ -227,8 +229,8 @@
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-actions {
-  gap: 6px;
-  padding: 6px;
+  gap: 5px;
+  padding: 5px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-actions button {
@@ -237,8 +239,8 @@
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-actions .fd-medium-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 .fd-reader-actions button.is-active {
@@ -397,42 +399,42 @@
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-chapter-panel {
-  grid-template-rows: minmax(0, 1fr) minmax(20px, auto);
-  gap: 4px;
-  padding: 6px 8px;
+  grid-template-rows: minmax(0, 1fr) 22px;
+  gap: 3px;
+  padding: 5px 7px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-chapter-control-row {
-  grid-template-columns: 30px minmax(0, 1fr) 30px;
-  min-height: 36px;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  min-height: 28px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-chapter-step {
-  width: 30px;
-  height: 30px;
-  min-width: 30px;
-  min-height: 30px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-chapter-row strong {
-  font-size: 12px;
+  font-size: 11px;
   -webkit-line-clamp: 1;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-progress-row {
-  min-height: 26px;
+  min-height: 22px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-progress {
-  height: 26px;
+  height: 22px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-progress i {
-  top: 11px;
+  top: 9px;
 }
 
 .fd-reader-control-main.has-running-space .fd-reader-progress::after {
-  top: 7px;
+  top: 5px;
 }
 
 .fd-reader-detail-panel {
@@ -979,7 +981,7 @@
   min-width: 0;
   min-height: 0;
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
   align-items: stretch;
   gap: 6px;
   overflow: hidden;
@@ -1002,8 +1004,8 @@
   place-items: center;
   align-content: center;
   gap: 3px;
-  padding: 5px 4px;
-  font-size: 9px;
+  padding: 4px 3px;
+  font-size: 8px;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -1021,13 +1023,13 @@
 .fd-reader-auto-toggle {
   height: 100%;
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr);
+  grid-template-columns: 24px minmax(0, 1fr);
   grid-template-rows: auto auto;
   align-content: center;
   align-items: center;
-  column-gap: 8px;
+  column-gap: 7px;
   row-gap: 2px;
-  padding: 7px 9px;
+  padding: 6px 8px;
   text-align: left;
 }
 
@@ -1039,8 +1041,8 @@
 .fd-reader-auto-toggle i {
   grid-column: 1;
   grid-row: 1 / span 2;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   display: grid;
   place-items: center;
   border-radius: var(--fd-radius-circle);
