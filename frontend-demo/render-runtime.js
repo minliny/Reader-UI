@@ -5919,6 +5919,7 @@
     bind("[data-reader-handle-expand-route]", "reader.control.handle.release");
     bind("[data-reader-exit]", "app.route.pop");
     bind("[data-reader-loading]", "state.loading.inline");
+    bind("[data-motion-async], [data-motion-async-state], [data-motion-async-request]", "motion.interrupt.completeThenReplace");
     bind("[data-reader-tts-action]", "reader.session.capsule.control.press/toggle");
     bind("[data-reader-tts-cycle]", "reader.session.capsule.update");
     bind("[data-reader-immersive-status], [data-reader-immersive-status-playing], [data-reader-immersive-status-type]", "reader.session.capsule.enter/update/exit");
@@ -7860,8 +7861,13 @@
     const stackSize = target.querySelector("[data-stack-size]");
     const routeStack = ["bookshelf"];
     const appState = initialAppState(data);
-    let pendingRouteTimer = null;
+    let pendingRouteRequest = null;
     let hasRenderedInitialRoute = false;
+    const motionAsyncDelay = (() => {
+      const value = Number(new URLSearchParams(window.location.search).get("motionAsyncDelay"));
+      if (!Number.isFinite(value) || value <= 0) return 360;
+      return Math.min(3000, Math.max(80, Math.round(value)));
+    })();
     const motionController = window.ReaderMotionController
       ? window.ReaderMotionController.create({ root })
       : null;
@@ -7916,6 +7922,7 @@
       clearFirstOpenMotionTimer(appState);
       clearViewportOrientationMotionTimer(appState);
       clearMotionInterruptTimer(appState);
+      cancelPendingRouteRequest("destroy");
       if (motionController) {
         motionController.destroy();
       }
@@ -7978,6 +7985,102 @@
       }
     };
 
+    function routeStackSignature() {
+      return routeStack.join(">");
+    }
+
+    function applyAsyncResultMotionState(request) {
+      if (!root || !request) return;
+      const currentRoute = routeStack[routeStack.length - 1] || "";
+      const visibleState = request.state === "completed" && currentRoute && currentRoute !== request.to
+        ? "superseded"
+        : request.state;
+      const visibleReason = visibleState === "superseded" ? "route-left-after-complete" : request.reason || "";
+      const attrs = {
+        "data-motion-async": "true",
+        "data-motion-async-id": request.id,
+        "data-motion-async-state": visibleState,
+        "data-motion-async-request": String(request.requestId),
+        "data-motion-async-from": request.from,
+        "data-motion-async-to": request.to,
+        "data-motion-async-reason": visibleReason,
+        "data-motion-async-stack": request.stack,
+        "data-motion-async-current-route": currentRoute,
+        "data-motion-async-sequence": String(request.sequence)
+      };
+      Object.entries(attrs).forEach(([key, value]) => root.setAttribute(key, value));
+      if (screenHost) {
+        screenHost.setAttribute("data-motion-async-target", "screen-host");
+        screenHost.setAttribute("data-motion-async-id", request.id);
+        screenHost.setAttribute("data-motion-async-state", visibleState);
+        screenHost.setAttribute("data-motion-async-request", String(request.requestId));
+        screenHost.setAttribute("data-motion-async-to", request.to);
+      }
+    }
+
+    function cancelPendingRouteRequest(reason) {
+      if (!pendingRouteRequest) return null;
+      const request = pendingRouteRequest;
+      if (request.timer) {
+        window.clearTimeout(request.timer);
+        request.timer = null;
+      }
+      request.state = "cancelled";
+      request.reason = reason || "cancelled";
+      request.active = false;
+      pendingRouteRequest = null;
+      appState.asyncRouteRequest = null;
+      appState.asyncResultMotion = request;
+      applyAsyncResultMotionState(request);
+      return request;
+    }
+
+    function startPendingRouteRequest(from, to) {
+      const sequence = (appState.asyncResultSequence || 0) + 1;
+      const request = {
+        id: "motion.interrupt.completeThenReplace",
+        requestId: `route:${sequence}`,
+        sequence,
+        state: "pending",
+        reason: "reader-route-loading",
+        from: from || "",
+        to: to || "",
+        stack: routeStackSignature(),
+        active: true,
+        timer: null
+      };
+      appState.asyncResultSequence = sequence;
+      appState.asyncRouteRequest = request;
+      appState.asyncResultMotion = request;
+      pendingRouteRequest = request;
+      applyAsyncResultMotionState(request);
+      return request;
+    }
+
+    function completePendingRouteRequest(request) {
+      const stillCurrent = pendingRouteRequest === request &&
+        request?.active &&
+        routeStack[routeStack.length - 1] === request.to &&
+        routeStackSignature() === request.stack;
+      if (!stillCurrent) {
+        request.state = "discarded";
+        request.reason = "stale-async-result";
+        request.active = false;
+        appState.asyncResultMotion = request;
+        applyAsyncResultMotionState(request);
+        return false;
+      }
+      request.state = "completed";
+      request.reason = "loading-complete";
+      request.active = false;
+      request.timer = null;
+      pendingRouteRequest = null;
+      appState.asyncRouteRequest = null;
+      appState.asyncResultMotion = request;
+      applyAsyncResultMotionState(request);
+      return true;
+    }
+
     const renderActiveRoute = (route, options) => {
       const renderedTurnDirection = appState.readerTurnDirection;
       screenHost.innerHTML = renderRoute(route, data, options, appState);
@@ -8002,6 +8105,9 @@
       if (appState.motionInterruptMotion) {
         applyMotionInterruptState(root, screenHost, appState, appState.motionInterruptMotion, {});
       }
+      if (appState.asyncResultMotion) {
+        applyAsyncResultMotionState(appState.asyncResultMotion);
+      }
       if (appState.viewportOrientationMotion) {
         applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
       }
@@ -8010,6 +8116,9 @@
           attachReaderControlDockMotionState(screenHost, appState, motionController);
           if (appState.motionInterruptMotion) {
             applyMotionInterruptState(root, screenHost, appState, appState.motionInterruptMotion, {});
+          }
+          if (appState.asyncResultMotion) {
+            applyAsyncResultMotionState(appState.asyncResultMotion);
           }
           if (appState.viewportOrientationMotion) {
             applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
@@ -8044,10 +8153,7 @@
       if (!routes[route]) {
         return;
       }
-      if (pendingRouteTimer) {
-        window.clearTimeout(pendingRouteTimer);
-        pendingRouteTimer = null;
-      }
+      cancelPendingRouteRequest("route-change");
       const previous = routeStack[routeStack.length - 1];
       if (hasRenderedInitialRoute) {
         const isPopMotion = motionInput?.id === "app.route.pop.backward" || motionInput?.action === "pop";
@@ -8088,17 +8194,18 @@
       appState.readerMoreOpen = false;
       appState.discoverSortOpen = false;
       if (shouldLoadReaderTransition(previous, route)) {
+        const request = startPendingRouteRequest(previous, route);
         renderActiveRoute(route, { loading: true });
         hasRenderedInitialRoute = true;
-        pendingRouteTimer = window.setTimeout(() => {
-          pendingRouteTimer = null;
+        request.timer = window.setTimeout(() => {
+          if (!completePendingRouteRequest(request)) return;
           startMotionInterrupt(root, screenHost, appState, motionController, "loading-complete", {
             kind: "completeThenReplace",
             from: "loading",
             to: route
           });
           renderActiveRoute(route);
-        }, 360);
+        }, motionAsyncDelay);
         return;
       }
       renderActiveRoute(route);
@@ -8109,10 +8216,7 @@
       if (!routes[route]) {
         return;
       }
-      if (pendingRouteTimer) {
-        window.clearTimeout(pendingRouteTimer);
-        pendingRouteTimer = null;
-      }
+      cancelPendingRouteRequest("tab-switch");
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
       appState.settingsToast = "";
@@ -8148,10 +8252,7 @@
       if (!routes[route]) {
         return;
       }
-      if (pendingRouteTimer) {
-        window.clearTimeout(pendingRouteTimer);
-        pendingRouteTimer = null;
-      }
+      cancelPendingRouteRequest("route-replace");
       const previous = routeStack[routeStack.length - 1] || "";
       startMotionInterrupt(root, screenHost, appState, motionController, "route-replace", {
         kind: "completeThenReplace",
@@ -8182,10 +8283,7 @@
     };
 
     const exitReader = () => {
-      if (pendingRouteTimer) {
-        window.clearTimeout(pendingRouteTimer);
-        pendingRouteTimer = null;
-      }
+      cancelPendingRouteRequest("reader-exit");
       const fromRoute = routeStack[routeStack.length - 1] || "reader";
       startMotionInterrupt(root, screenHost, appState, motionController, "reader-exit", {
         kind: "cancel",
@@ -8224,10 +8322,7 @@
       if (routeStack.length <= 1) {
         return;
       }
-      if (pendingRouteTimer) {
-        window.clearTimeout(pendingRouteTimer);
-        pendingRouteTimer = null;
-      }
+      cancelPendingRouteRequest("back");
       const fromRoute = routeStack[routeStack.length - 1];
       routeStack.pop();
       const toRoute = routeStack[routeStack.length - 1];

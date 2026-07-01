@@ -227,6 +227,20 @@
   filter: none;
 }
 
+.fd-demo[data-motion-async-state="pending"] :where([data-reader-loading]) {
+  box-shadow: inset 0 0 0 1px rgba(47, 99, 115, 0.18);
+}
+
+.fd-demo[data-motion-async-state="completed"] :where([data-motion-async-target="screen-host"]) {
+  animation: fd-motion-async-complete var(--fd-motion-effective-interrupt-settle) var(--reader-motion-easing-standard) both;
+}
+
+.fd-demo[data-motion-async-state="cancelled"],
+.fd-demo[data-motion-async-state="discarded"],
+.fd-demo[data-motion-async-state="superseded"] {
+  --fd-motion-async-result: resolved;
+}
+
 .fd-demo :where([data-motion-overlay]) {
   transform-origin: center;
   transition:
@@ -733,6 +747,15 @@
   to {
     opacity: 1;
     filter: none;
+  }
+}
+
+@keyframes fd-motion-async-complete {
+  from {
+    opacity: 0.96;
+  }
+  to {
+    opacity: 1;
   }
 }
 

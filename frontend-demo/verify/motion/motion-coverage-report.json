@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T07:25:56.323Z",
+  "generatedAt": "2026-07-01T07:35:56.713Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -113,6 +113,11 @@
       "detail": "interrupt adapter exposes cancel/redirect/completeThenReplace root state, clears transient press/drag/dropdown flags, maps to contract IDs, and uses tokenized settle CSS"
     },
     {
+      "id": "motion.async-result.state-adapter",
+      "passed": true,
+      "detail": "reader loading/result replacement exposes request-scoped async state, cancellation/discard guards, and tokenized completion CSS"
+    },
+    {
       "id": "motion.common-components.state-adapter",
       "passed": true,
       "detail": "generic button/toggle/choice/numeric/input/state/selection/surface components expose normalized component family, role, state, phase, value, and tokenized pressed feedback"
@@ -125,7 +130,7 @@
     {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "77 bind calls, 63 unique Motion IDs"
+      "detail": "78 bind calls, 64 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
@@ -144,9 +149,9 @@
     }
   ],
   "summary": {
-    "passed": 28,
+    "passed": 29,
     "failed": 0,
-    "total": 28
+    "total": 29
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -182,8 +187,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 77,
-    "motionIdCount": 63
+    "bindCallCount": 78,
+    "motionIdCount": 64
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",

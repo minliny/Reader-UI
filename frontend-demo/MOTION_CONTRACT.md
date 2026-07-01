@@ -225,6 +225,7 @@
 | `motion.interrupt.cancel` | 返回、关闭、切 Tab、切 route、拖动开始 | 正在播放的非必要动画立即取消，状态切到最新目标；允许使用 `interruptSettle` 做最短收尾。 |
 | `motion.interrupt.redirect` | 面板 A 进入中又打开面板 B | 当前动画不倒放回起点，直接从当前视觉位置接管到新目标。 |
 | `motion.interrupt.completeThenReplace` | loading 完成、数据到达、异步状态返回 | 当前必要状态动画收尾后立即替换内容；总延迟不能让交互显得卡住。 |
+| `motion.async.resultGuard` | reader loading、搜索或远端结果返回前用户已经返回/切 route | 每个异步结果必须带 requestId、from/to、stack/context；只有仍匹配当前 route/context 的结果才能替换内容，过期结果写入 discarded/cancelled 状态且不得覆盖新页面。 |
 | `viewport.fold.expand` | 折叠屏从手机/半开态进入展开态 | 布局从单列过渡到双栏/宽布局；阅读正文重新测量，控制层保持同一交互语义。 |
 | `viewport.fold.collapse` | 折叠屏从展开态回到手机/半开态 | 双栏/宽布局收回单列；当前 route、overlay 和 ReaderContext 保留。 |
 | `viewport.orientation.prepare` | 横竖屏/整屏旋转开始、`visualViewport` 或 window metrics 变化 | 冻结当前 route、ReaderContext、active session、overlay、focus、dock offset 和正文阅读锚点；取消非必要动画和进行中的拖动。 |
@@ -350,7 +351,7 @@
 - 当前弹窗背景还没有独立命名的 fade token。
 - 阅读控制层显隐还需要单独做一次视觉 pass；当前 route-state 行为已经存在，但进入/退出动效没有完全 token 化。
 - 换源窗口需要在 portrait 和 compact landscape 下补 capture 证据，明确进入/退出表现。
-- 打断动画已接入第一版 demo adapter：`motion.interrupt.cancel/redirect/completeThenReplace` 会在 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始、pointer cancel 和连续下拉 A->B 时写入对应 interrupt / dropdown switch 状态，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态；Tab switch redirect 已有代表截图，overlay/focus 状态字段也已有第一版 adapter，连续 overlay 打断、异步结果防覆盖和录屏证据仍缺。
+- 打断动画已接入第一版 demo adapter：`motion.interrupt.cancel/redirect/completeThenReplace` 会在 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始、pointer cancel 和连续下拉 A->B 时写入对应 interrupt / dropdown switch 状态，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态；reader loading 异步结果已接入 `data-motion-async-*` requestId / pending / completed / cancelled / discarded 防覆盖状态；Tab switch redirect 已有代表截图，overlay/focus 状态字段也已有第一版 adapter，连续 overlay 打断和录屏证据仍缺。
 - 折叠屏展开/折叠目前按 viewport 断点规划，仍需要真实设备或模拟器验证 hinge、半开态和窗口尺寸变化。
 - 整屏旋转已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；demo 会在方向或 viewport class 改变时写入 root / screen host `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 reshape/anchor settle。真实设备、折叠屏 hinge/pane、正文字符锚点重分页、overlay/focus 恢复自动化和录屏证据仍缺。
 - 当前 `docs/ui-handoff/compose/COMPOSE_INTERACTION_CONTRACTS.md` 只定义事件和状态变化，还没有定义 motion；首轮验证后应引用本契约。
@@ -358,6 +359,6 @@
 ## 11. 建议下一轮 Slice
 
 1. 按 `MOTION_SELECTOR_MATRIX.md` 回填 evidence，优先录制通用组件族、键盘、底表、弹窗、翻页和 loading。
-2. 按 `MOTION_IMPLEMENTATION_GAP_AUDIT.md` 继续补 P0 缺口；通用组件族和 overlay/focus 已有第一版 adapter，下一步补全族录屏、async pending、平台测试文件映射，并把 interrupt adapter 继续覆盖到连续 overlay、连续下拉和异步结果。
+2. 按 `MOTION_IMPLEMENTATION_GAP_AUDIT.md` 继续补 P0 缺口；通用组件族和 overlay/focus 已有第一版 adapter，reader loading 已有 request-scoped async result guard，下一步补全族录屏、平台测试文件映射，并把 interrupt adapter 继续覆盖到连续 overlay。
 3. 继续补整屏旋转和折叠屏证据；首次打开、运行胶囊、控制层运行中空间、控制胶囊内部微动效、宽屏 dock 和 orientation lifecycle 已有第一版 adapter，下一步补录屏、停止/退出打断、后台恢复、正文重分页和折叠屏验证。
 4. 从 canonical `frontend-demo/` 路径录制或截图核心动效状态。

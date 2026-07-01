@@ -1203,7 +1203,7 @@ Reduced motion：
 10. 已完成第一版：倒计时数字 tick 和朗读图标 active 提示已有独立微动效；下一步补录屏证据。
 11. 给每个高风险动效补 demo capture 或录屏。
 12. 在平台映射文档中继续为每个 Motion ID 补 state 字段、测试文件和验收方式。
-13. 已完成第一版：`motion.interrupt.cancel/redirect/completeThenReplace` 已接入 root / screen host `data-motion-interrupt-*`、临时 pressed/dragging/dropdown 清理、route/Tab/viewport/loading/dock drag/连续下拉 A->B 入口和 token 化短收尾；Tab switch redirect 已有代表截图，下一步补 overlay 关闭、异步结果防覆盖、焦点恢复自动化和录屏证据。
+13. 已完成第一版：`motion.interrupt.cancel/redirect/completeThenReplace` 已接入 root / screen host `data-motion-interrupt-*`、临时 pressed/dragging/dropdown 清理、route/Tab/viewport/loading/dock drag/连续下拉 A->B 入口和 token 化短收尾；reader loading async result 已接入 `data-motion-async-*` request guard、cancel/discard 和完成态 CSS；Tab switch redirect 已有代表截图，下一步补 overlay 关闭、焦点恢复自动化和录屏证据。
 14. 已完成第一版：`overlay.keyboard/sheet/dialog.*` 已接入 `data-motion-overlay-*` role/state/action/focus-return 字段、settings overlay 主体入口、token 化 enter CSS 和基础焦点恢复；下一步补连续 overlay 打断、遮罩互斥、录屏和平台焦点测试。
 15. 已完成第一版 `viewport.orientation.prepare/reshape/settle` adapter：root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dock clamp 和 reduced-motion 即时 settle 已接入；compact-landscape 已有代表截图，下一步补真实旋转录屏、正文字符锚点重分页和 overlay/focus 自动化证据。
 16. 用真实折叠屏/模拟器补 `viewport.fold.expand`、`viewport.fold.collapse`、`viewport.orientation.reshape` 的 hinge/pane/posture 证据。

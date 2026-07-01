@@ -417,6 +417,22 @@ const checks = [
     detail: "interrupt adapter exposes cancel/redirect/completeThenReplace root state, clears transient press/drag/dropdown flags, maps to contract IDs, and uses tokenized settle CSS"
   },
   {
+    id: "motion.async-result.state-adapter",
+    passed: runtime.includes("startPendingRouteRequest") &&
+      runtime.includes("completePendingRouteRequest") &&
+      runtime.includes("cancelPendingRouteRequest") &&
+      runtime.includes("motionAsyncDelay") &&
+      runtime.includes("data-motion-async-state") &&
+      runtime.includes("data-motion-async-request") &&
+      runtime.includes("stale-async-result") &&
+      runtime.includes("route-left-after-complete") &&
+      runtime.includes("motion.interrupt.completeThenReplace") &&
+      motionTokens.includes("[data-motion-async-state=\"pending\"]") &&
+      motionTokens.includes("[data-motion-async-state=\"superseded\"]") &&
+      motionTokens.includes("fd-motion-async-complete"),
+    detail: "reader loading/result replacement exposes request-scoped async state, cancellation/discard guards, and tokenized completion CSS"
+  },
+  {
     id: "motion.common-components.state-adapter",
     passed: runtime.includes("attachCommonMotionComponentState") &&
       runtime.includes("syncCommonMotionComponentState") &&
