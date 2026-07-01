@@ -813,12 +813,14 @@
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-panel {
-  grid-template-rows: 64px 34px 28px;
+  --reader-auto-primary-min-height: 58px;
+  --reader-auto-secondary-height: 32px;
+  --reader-auto-mode-height: 28px;
   gap: 5px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-control {
-  grid-template-columns: 46px minmax(0, 1fr) 46px;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
   gap: 5px;
 }
 
@@ -835,8 +837,8 @@
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-speed {
-  min-height: 34px;
-  height: 34px;
+  min-height: var(--reader-auto-secondary-height);
+  height: var(--reader-auto-secondary-height);
   gap: 6px;
   padding: 4px 6px;
 }
@@ -853,12 +855,12 @@
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-mode {
-  min-height: 28px;
-  height: 28px;
+  min-height: var(--reader-auto-mode-height);
+  height: var(--reader-auto-mode-height);
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-auto-mode button {
-  min-height: 28px;
+  min-height: var(--reader-auto-mode-height);
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-chapter-panel {

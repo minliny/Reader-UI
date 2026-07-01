@@ -14,6 +14,12 @@
   --reader-quick-wide-height-reserve: 212px;
   --reader-quick-compact-height: 230px;
   --reader-quick-compact-bottom: 22px;
+  --reader-control-running-height: 48px;
+  --reader-control-actions-min-height: 58px;
+  --reader-control-chapter-min-height: 74px;
+  --reader-auto-primary-min-height: 66px;
+  --reader-auto-secondary-height: 36px;
+  --reader-auto-mode-height: 32px;
 }
 
 .fd-reader-sheet {
@@ -93,7 +99,10 @@
 }
 
 .fd-reader-control-main.has-running-space {
-  grid-template-rows: 46px minmax(55px, 0.72fr) minmax(78px, 1fr);
+  grid-template-rows:
+    var(--reader-control-running-height)
+    minmax(var(--reader-control-actions-min-height), 0.72fr)
+    minmax(var(--reader-control-chapter-min-height), 1fr);
   gap: 5px;
 }
 
@@ -956,9 +965,12 @@
   min-height: 0;
   height: 100%;
   display: grid;
-  grid-template-rows: 82px 38px 34px;
+  grid-template-rows:
+    minmax(var(--reader-auto-primary-min-height), 1fr)
+    var(--reader-auto-secondary-height)
+    var(--reader-auto-mode-height);
   align-content: stretch;
-  gap: 8px;
+  gap: 7px;
   justify-content: stretch;
   overflow: hidden;
 }
@@ -967,7 +979,7 @@
   min-width: 0;
   min-height: 0;
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) 52px;
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
   align-items: stretch;
   gap: 6px;
   overflow: hidden;
@@ -1070,8 +1082,8 @@
 
 .fd-reader-auto-speed {
   min-width: 0;
-  min-height: 38px;
-  height: 38px;
+  min-height: var(--reader-auto-secondary-height);
+  height: var(--reader-auto-secondary-height);
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
@@ -1115,13 +1127,13 @@
 .fd-reader-auto-mode {
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
-  height: 34px;
-  min-height: 34px;
+  height: var(--reader-auto-mode-height);
+  min-height: var(--reader-auto-mode-height);
   overflow: hidden;
 }
 
 .fd-reader-auto-mode button {
-  min-height: 34px;
+  min-height: var(--reader-auto-mode-height);
   font-size: 10px;
 }
 
