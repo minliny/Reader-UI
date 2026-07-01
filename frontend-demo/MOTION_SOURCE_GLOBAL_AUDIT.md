@@ -130,11 +130,11 @@
 - `startMotionInterrupt()` 会在 route、Tab、viewport、loading、dock drag 和 pointer cancel 场景写入 `data-motion-interrupt-*`，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态。
 - 普通 route 切换仍走 `screenHost.innerHTML = renderRoute(...)`。
 - 只有 reader loading 使用 `pendingRouteTimer`，翻页用 class + `animationend` 清理。
-- controller 当前负责 transaction 记录、root `data-motion-*` 状态、interrupt state 和 reduced-motion 时长归零；还没有完整统一驱动视觉 enter/exit class、shared element、dropdown collapse lifecycle 或 overlay focus restore。
+- controller 当前负责 transaction 记录、root `data-motion-*` 状态、interrupt state、overlay/focus 第一版状态 adapter 和 reduced-motion 时长归零；还没有完整统一驱动视觉 enter/exit class、shared element、dropdown collapse lifecycle、连续 overlay 打断或 async settle。
 
 影响：
 
-- 连续点击、返回、loading 完成、拖动开始、route 替换已经有第一版 interrupt 接入点；关闭 overlay、连续下拉 A->B、异步结果防覆盖和 focus restore 仍需深化。
+- 连续点击、返回、loading 完成、拖动开始、route 替换已经有第一版 interrupt 接入点；overlay/键盘/底表/弹窗已有 role/state/action/focus-return 字段和基础焦点恢复，连续 overlay 打断、连续下拉 A->B 和异步结果防覆盖仍需深化。
 - 平台实现仍不能只看当前 demo 直接复刻完整动画，只能复用 controller 事件命名和 reduced-motion 口径。
 
 ### P0-2：route push/pop 和 Tab 切换不是动画系统
@@ -271,7 +271,7 @@
 | Button / Icon button | `button`、`[role=button]`、`data-top-action`、`data-book-action` | 通用 pressed class、scale、`data-motion-component-family=button`、role/state/phase/value 字段 | async pending、commit/loading/disabled 证据和平台测试映射仍缺 | fallback 只做 press，业务命令补 family ID：`button.activate`、`button.commit`、`button.destructive.confirm` |
 | Chip / Filter / Segment | `data-discover-entry`、`data-*filter`、`data-reader-*set`、`fd-chip-row` | selector 已绑定 chip/filter/segment ID，并落入 `data-motion-component-family=choice` | 多个路由重渲染，缺 selected->selected 状态迁移录屏和取消规则证据 | 统一 `item.press -> item.select -> group.commit`；选中态移动不改变容器尺寸 |
 | Dropdown / Menu | `filterDisclosure()`、settings option dropdown、reader more/setting/tts dropdown | trigger/option/menu Motion ID 存在；chevron 有 rotate | 菜单 enter/exit/select/cancel/reposition 没有统一生命周期 | `dropdown.opening/open/closing/closed/selecting`，外点/返回/resize 都走同一 exit |
-| Sheet / Dialog / Toast / Keyboard | `data-demo-sheet`、`data-demo-dialog`、settings overlay、keyboard host | 基础 overlay、toast、keyboard transition/ID 存在 | 没有统一遮罩、focus return、连续打开打断规则 | `overlay.enter/exit/interrupted`，结束态必须恢复 focus 和 aria |
+| Sheet / Dialog / Toast / Keyboard | `data-demo-sheet`、`data-demo-dialog`、settings overlay、keyboard host | overlay 已接入 `data-motion-overlay-*` role/state/action/focus-return 字段，settings overlay 主体也进入同一入口；toast、keyboard transition/ID 存在 | 连续打开/关闭打断、遮罩队列、录屏和平台焦点证据仍缺 | `overlay.enter/exit/interrupted`，结束态必须恢复 focus 和 aria |
 | List row / Card | `role=button`、`data-book-card`、`data-restore-record`、RSS/source rows | fallback `listRow.press`、部分 card route ID，并落入 `data-motion-component-family=surface` | rows/cards 与 route push、selection、multi-select 的深状态证据仍缺 | rows 分为 `listRow.press/select/route/reorder`，card 分为 `card.press/select/route` |
 | Input / Search | `data-open-keyboard`、`data-search-submit`、`data-search-reset`、search state | keyboard enter/exit、search state ID 和 `data-motion-component-family=input/state` 存在 | focus、clear、submit、result replace 的录屏证据和 focus restore 仍缺 | `input.focus/blur/clear/submit`、`search.state.replace` 统一 token |
 | Toggle / Switch | `data-reader-setting-toggle`、`data-source-switch`、`data-restore-scope` | switch knob/active transition 基础存在，并落入 `data-motion-component-family=toggle` | toggle 与 session start、dialog confirm、bulk selection 的 async pending 反馈仍缺 | `toggle.press/offToOn/onToOff/settle`，需要支持 async pending |
@@ -349,7 +349,7 @@
 | `feedback.toast.enter/update/exit` | toast / nav feedback | ID 存在 | 多 toast 更新与自动退出 |
 | `selection.toolbar.enter/action/exit` | Reader selection | ID 存在 | 选区出现、toolbar command、关闭 |
 | `viewport.orientation.*` | 旋转/窗口变化/折叠 | 第一版 root/screen host 状态、anchor settle CSS 和 dock clamp 已接入 | 真实旋转录屏、折叠屏 posture、正文重分页、overlay/focus 自动化 |
-| `motion.interrupt.*` | route/Tab/viewport/loading/drag 打断 | 第一版 root/screen host 状态、临时 pressed/drag 清理和 interrupt settle CSS 已接入 | overlay 关闭、连续下拉 A->B、异步结果防覆盖、focus restore 和录屏证据 |
+| `motion.interrupt.*` | route/Tab/viewport/loading/drag 打断 | 第一版 root/screen host 状态、临时 pressed/drag 清理和 interrupt settle CSS 已接入；overlay/focus 第一版状态字段已接入 | 连续 overlay 关闭/打开、连续下拉 A->B、异步结果防覆盖和录屏证据 |
 
 ## 10. 实现优先级
 
@@ -374,7 +374,7 @@ P2：
 
 ## 11. 建议落地顺序
 
-1. 深化全局 motion controller：interrupt adapter 已有第一版；继续把 overlay、dropdown A->B、async result 和 focus restore 纳入同一 reducer。
+1. 深化全局 motion controller：interrupt adapter 和 overlay/focus adapter 已有第一版；继续把连续 overlay、dropdown A->B 和 async result 纳入同一 reducer。
 2. 先收敛所有普通业务按钮：让无 `data-*` 的 button 也进入 button/listRow/segment/toggle family。
 3. 做 `tab.item.press/select/switch` 的真实状态机和 indicator 迁移。
 4. 做 `dropdown.*` 统一 controller，覆盖 filter、sort、reader setting、TTS、source menu。

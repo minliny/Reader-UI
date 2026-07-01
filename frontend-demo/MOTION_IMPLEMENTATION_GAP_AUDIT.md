@@ -65,8 +65,9 @@
 11. 已完成第一版：`reader.session.controlSpace.*` 已接入控制层运行空间、countdown/voice/control/label 子角色、局部 tick/update 和 reduced-motion token；下一步补 matched capsule-to-space 录屏、停止/退出打断和平台测试。
 12. 已完成第一版：`reader.session.capsule.control.*`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active` 已接入局部按钮、倒计时数字和朗读图标状态；下一步补真实设备/录屏证据。
 13. 已完成第一版：`motion.interrupt.*` 已接入统一 interrupt adapter、root/screen host `data-motion-interrupt-*`、临时 pressed/dragging/dropdown 清理、route/Tab/viewport/loading/dock drag 入口和 token 化短收尾；下一步补 overlay 关闭、连续下拉 A->B、异步结果防覆盖、焦点恢复自动化和录屏证据。
-14. 已建立 `frontend-demo/verify/motion/evidence/manifest.json` 并补第一批代表性浏览器截图；下一步录制 TAB press/select/switch、下拉栏展开/收起/点击、通用控件族、首启、封面进入、控制层显隐、小横条、宽屏 dock 拖动、整屏旋转、运行胶囊、控制层运行中空间、翻页、打断、折叠/resize 的完整视频或关键帧序列。
-15. 把平台映射继续细化到 state 字段、测试文件和平台任务拆分。
+14. 已完成第一版：`overlay.keyboard/sheet/dialog.*` 已接入 `data-motion-overlay-*` role/state/action/focus-return 字段，settings sheet/dialog 主体进入同一 `data-demo-sheet/dialog` 入口，键盘/底表/弹窗基础焦点恢复已通过浏览器验证；下一步补连续 overlay 打断、遮罩互斥、录屏和平台焦点测试。
+15. 已建立 `frontend-demo/verify/motion/evidence/manifest.json` 并补第一批代表性浏览器截图；下一步录制 TAB press/select/switch、下拉栏展开/收起/点击、通用控件族、首启、封面进入、控制层显隐、小横条、宽屏 dock 拖动、整屏旋转、运行胶囊、控制层运行中空间、翻页、打断、折叠/resize 的完整视频或关键帧序列。
+16. 把平台映射继续细化到 state 字段、测试文件和平台任务拆分。
 
 ## 当前不应声称完成的内容
 
@@ -81,5 +82,5 @@
 - 不能声称自动翻页/朗读运行胶囊已有完整录屏、停止/退出打断或平台测试证据；当前已有第一版实现层 adapter、局部倒计时 timer、coverage gate 和自动翻页胶囊代表截图。
 - 不能声称首次打开应用或控制层运行中空间已有录屏/设备证据；首次打开应用、控制胶囊按钮运行/暂停、倒计时数字变化、朗读图标和控制层运行中空间已有第一版实现层 adapter，并补了首启/控制层运行空间代表截图，但真实设备录屏仍缺；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
 - 不能声称整屏旋转已有真实设备、折叠屏、正文字符锚点重分页和完整录屏证据；当前已有第一版 `prepare/reshape/settle` adapter、root/screen host 状态、route/session/overlay/focus/dock 元数据、token CSS、coverage gate 和 compact-landscape 代表截图。
-- 不能声称打断动画已有完整自动化和录屏证据；当前已有第一版 `motion.interrupt.*` adapter、临时状态清理、coverage gate 和 Tab switch redirect 代表截图，但 overlay 关闭、连续下拉 A->B、异步结果防覆盖和焦点恢复还需深化。
+- 不能声称打断动画已有完整自动化和录屏证据；当前已有第一版 `motion.interrupt.*` adapter、临时状态清理、coverage gate 和 Tab switch redirect 代表截图，overlay/focus 状态也有第一版 adapter，但连续 overlay 打断、连续下拉 A->B、异步结果防覆盖和完整录屏还需深化。
 - 不能声称 reduced-motion 已完成录屏验证。

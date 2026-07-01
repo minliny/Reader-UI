@@ -227,6 +227,27 @@
   filter: none;
 }
 
+.fd-demo :where([data-motion-overlay]) {
+  transform-origin: center;
+  transition:
+    opacity var(--fd-motion-effective-overlay-fast) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-overlay) var(--reader-motion-easing-standard),
+    visibility var(--fd-motion-effective-overlay) var(--reader-motion-easing-standard);
+  will-change: opacity, transform;
+}
+
+.fd-demo :where([data-motion-overlay-role="sheet"], [data-motion-overlay-role="keyboard"]) {
+  transform-origin: center bottom;
+}
+
+.fd-demo :where([data-motion-overlay-state="visible"][data-motion-overlay-role="dialog"]) {
+  animation: fd-motion-overlay-dialog-enter var(--fd-motion-effective-overlay) var(--reader-motion-easing-enter) both;
+}
+
+.fd-demo :where([data-motion-overlay-state="visible"]:where([data-motion-overlay-role="sheet"], [data-motion-overlay-role="keyboard"])) {
+  animation: fd-motion-overlay-sheet-enter var(--fd-motion-effective-overlay) var(--reader-motion-easing-enter) both;
+}
+
 .fd-demo :where([data-motion-component]) {
   transform-origin: center;
   transition:
@@ -692,6 +713,28 @@
   to {
     opacity: 1;
     filter: none;
+  }
+}
+
+@keyframes fd-motion-overlay-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-44%) scale(var(--reader-motion-scale-dialog-enter));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+@keyframes fd-motion-overlay-sheet-enter {
+  from {
+    opacity: 0.72;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

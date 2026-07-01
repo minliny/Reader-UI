@@ -3370,6 +3370,124 @@
     return "none";
   }
 
+  function overlayMotionRole(element) {
+    if (!element) return "unknown";
+    if (element.matches("[data-keyboard-host]")) return "keyboard";
+    if (element.matches("[data-demo-sheet]")) return "sheet";
+    if (element.matches("[data-demo-dialog]")) return "dialog";
+    return "unknown";
+  }
+
+  function overlayMotionId(role, state) {
+    const action = state === "visible" || state === "entering" ? "enter" : "exit";
+    if (role === "keyboard") return `overlay.keyboard.${action}`;
+    if (role === "sheet") return `overlay.sheet.${action}`;
+    if (role === "dialog") return `overlay.dialog.${action}`;
+    return `overlay.${action}`;
+  }
+
+  function overlayMotionFocusLabel(element) {
+    if (!element) return "none";
+    return String(
+      element.getAttribute("data-motion-id") ||
+      element.getAttribute("data-route") ||
+      element.getAttribute("data-settings-overlay") ||
+      element.getAttribute("aria-label") ||
+      element.textContent ||
+      element.tagName ||
+      "unknown"
+    ).trim().replace(/\s+/g, " ").slice(0, 72) || "unknown";
+  }
+
+  function overlayMotionVisible(element) {
+    if (!element) return false;
+    if (element.getAttribute("aria-hidden") === "false") return true;
+    if (element.matches("[data-keyboard-host]")) return Boolean(element.closest(".fd-phone.has-keyboard"));
+    if (element.matches("[data-demo-sheet]")) return Boolean(element.closest(".fd-phone.has-sheet, .fd-settings-phone.has-sheet, .fd-library-phone.has-sheet, .fd-sheet-page"));
+    if (element.matches("[data-demo-dialog]")) return Boolean(element.closest(".fd-phone.has-dialog, .fd-settings-phone.has-dialog, .fd-library-phone.has-dialog"));
+    return false;
+  }
+
+  function syncOverlayMotionElement(element, appState) {
+    if (!element) return;
+    const role = overlayMotionRole(element);
+    const visible = overlayMotionVisible(element);
+    const state = visible ? "visible" : "hidden";
+    const phase = visible ? "entered" : "exited";
+    element.setAttribute("data-motion-overlay", "true");
+    element.setAttribute("data-motion-overlay-role", role);
+    element.setAttribute("data-motion-overlay-state", state);
+    element.setAttribute("data-motion-overlay-phase", phase);
+    element.setAttribute("data-motion-overlay-id", overlayMotionId(role, state));
+    element.setAttribute("data-motion-overlay-focus", element.contains(document.activeElement) ? "inside" : "outside");
+    element.setAttribute("data-motion-overlay-focus-return", appState?.motionOverlayFocusReturn || "none");
+    element.setAttribute("data-motion-id", overlayMotionId(role, state));
+  }
+
+  function attachOverlayMotionState(screenHost, appState) {
+    if (!screenHost || typeof screenHost.querySelectorAll !== "function") return;
+    const root = screenHost.closest(".fd-demo");
+    let activeRole = "none";
+    let activeCount = 0;
+    screenHost.querySelectorAll("[data-keyboard-host], [data-demo-sheet], [data-demo-dialog]").forEach((element) => {
+      syncOverlayMotionElement(element, appState);
+      if (element.getAttribute("data-motion-overlay-state") === "visible") {
+        activeRole = element.getAttribute("data-motion-overlay-role") || activeRole;
+        activeCount += 1;
+      }
+    });
+
+    const bindAction = (selector, action, role) => {
+      screenHost.querySelectorAll(selector).forEach((element) => {
+        element.setAttribute("data-motion-overlay-action", action);
+        element.setAttribute("data-motion-overlay-target", role);
+        element.setAttribute("data-motion-overlay-focus-return", appState?.motionOverlayFocusReturn || "none");
+      });
+    };
+    bindAction("[data-open-keyboard]", "open", "keyboard");
+    bindAction("[data-close-keyboard]", "close", "keyboard");
+    bindAction("[data-open-sheet]", "open", "sheet");
+    bindAction("[data-close-sheet]", "close", "sheet");
+    bindAction("[data-open-dialog]", "open", "dialog");
+    bindAction("[data-close-dialog]", "close", "dialog");
+    bindAction("[data-settings-overlay]", "open", "settings");
+    bindAction("[data-close-settings-overlay]", "close", "settings");
+
+    if (root) {
+      root.setAttribute("data-motion-overlay-active", activeCount > 0 ? "true" : "false");
+      root.setAttribute("data-motion-overlay-active-role", activeRole);
+      root.setAttribute("data-motion-overlay-focus-return", appState?.motionOverlayFocusReturn || "none");
+    }
+  }
+
+  function startOverlayMotion(screenHost, appState, motionController, role, action, trigger) {
+    if (!appState) return;
+    if (action === "open") {
+      appState.motionOverlayFocusReturn = overlayMotionFocusLabel(trigger || document.activeElement);
+      appState.motionOverlayReturnTarget = trigger || document.activeElement || null;
+    }
+    appState.motionOverlaySequence = (appState.motionOverlaySequence || 0) + 1;
+    appState.motionOverlayRole = role;
+    appState.motionOverlayAction = action;
+    const id = overlayMotionId(role, action === "open" ? "visible" : "hidden");
+    motionController?.start?.({
+      id,
+      sourceState: action === "open" ? "hidden" : "visible",
+      targetState: action === "open" ? "visible" : "hidden",
+      reason: `overlay-${action}`,
+      route: screenHost?.closest?.(".fd-demo")?.getAttribute("data-current-route") || "",
+      target: trigger || null
+    });
+  }
+
+  function restoreOverlayMotionFocus(appState) {
+    const target = appState?.motionOverlayReturnTarget;
+    if (!target || !target.isConnected || typeof target.focus !== "function") return;
+    window.setTimeout(() => {
+      if (target.isConnected) target.focus({ preventScroll: true });
+    }, 0);
+  }
+
   function viewportOrientationRoleTargets(screenHost) {
     if (!screenHost || typeof screenHost.querySelectorAll !== "function") return [];
     const targets = [];
@@ -4798,7 +4916,7 @@
     const row = optionRows[0];
     if (!row) return "";
     return `
-      <section class="fd-demo-sheet fd-settings-option-sheet" aria-hidden="false">
+      <section class="fd-demo-sheet fd-settings-option-sheet" aria-hidden="false" data-demo-sheet data-settings-overlay-panel="sheet">
         <div class="fd-sheet-grabber"></div>
         <h2>${esc(row.title)}</h2>
         ${(row.options || []).map((option) => `<button class="${option === row.value ? "is-selected" : ""}" type="button">${esc(option)}</button>`).join("")}
@@ -4812,7 +4930,7 @@
     if (!confirm.title) return "";
     const confirmResult = confirm.resultToast ? ` data-settings-confirm-result="${esc(confirm.resultToast)}"` : "";
     return `
-      <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false">
+      <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false" data-demo-dialog data-settings-overlay-panel="dialog">
         <h2>${esc(confirm.title)}</h2>
         <p>${esc(confirm.copy)}</p>
         <div>
@@ -7784,6 +7902,7 @@
       }
       applyMotionSelectorBindings(screenHost);
       attachCommonMotionComponentState(screenHost);
+      attachOverlayMotionState(screenHost, appState);
       attachTabMotionState(screenHost, appState);
       attachSegmentMotionState(screenHost, appState, motionController);
       adjustReaderDropdownPlacement(screenHost);
@@ -7809,6 +7928,7 @@
           if (appState.viewportOrientationMotion) {
             applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
           }
+          attachOverlayMotionState(screenHost, appState);
           attachCommonMotionComponentState(screenHost);
         }
       });
@@ -8566,6 +8686,7 @@
         return;
       }
       if (overlay === "sheet" || overlay === "dialog" || overlay.startsWith("dialog:")) {
+        startOverlayMotion(screenHost, appState, motionController, overlay === "sheet" ? "sheet" : "dialog", "open", trigger);
         appState.settingsOverlay = overlay;
         appState.settingsToast = "";
         renderCurrentRoute();
@@ -8588,9 +8709,12 @@
     screenHost.querySelectorAll("[data-close-settings-overlay]").forEach((button) => {
       button.addEventListener("click", () => {
         const resultToast = button.getAttribute("data-settings-confirm-result") || "";
+        const overlay = appState.settingsOverlay || "";
+        startOverlayMotion(screenHost, appState, motionController, overlay === "sheet" ? "sheet" : "dialog", "close", button);
         appState.settingsOverlay = "";
         appState.settingsToast = resultToast;
         renderCurrentRoute();
+        restoreOverlayMotionFocus(appState);
       });
     });
 
@@ -9526,6 +9650,7 @@
     screenHost.querySelectorAll("[data-open-keyboard]").forEach((button) => {
       button.addEventListener("click", () => {
         const phone = button.closest(".fd-phone");
+        startOverlayMotion(screenHost, appState, motionController, "keyboard", "open", button);
         phone.classList.add("has-keyboard");
         const keyboard = phone.querySelector("[data-keyboard-host]");
         const input = phone.querySelector("[data-keyboard-input]");
@@ -9541,62 +9666,77 @@
           window.setTimeout(focusInput, 30);
           window.setTimeout(focusInput, 120);
         }
+        attachOverlayMotionState(screenHost, appState);
       });
     });
 
     screenHost.querySelectorAll("[data-close-keyboard]").forEach((button) => {
       button.addEventListener("click", () => {
         const phone = button.closest(".fd-phone");
+        startOverlayMotion(screenHost, appState, motionController, "keyboard", "close", button);
         phone.classList.remove("has-keyboard");
         const keyboard = phone.querySelector("[data-keyboard-host]");
         if (keyboard) {
           keyboard.setAttribute("aria-hidden", "true");
         }
+        restoreOverlayMotionFocus(appState);
+        attachOverlayMotionState(screenHost, appState);
       });
     });
 
     screenHost.querySelectorAll("[data-open-sheet]").forEach((button) => {
       button.addEventListener("click", () => {
         const phone = button.closest(".fd-phone");
+        startOverlayMotion(screenHost, appState, motionController, "sheet", "open", button);
         phone.classList.add("has-sheet");
         const sheet = phone.querySelector("[data-demo-sheet]");
         if (sheet) {
           sheet.setAttribute("aria-hidden", "false");
         }
+        attachOverlayMotionState(screenHost, appState);
       });
     });
 
     screenHost.querySelectorAll("[data-close-sheet]").forEach((button) => {
       button.addEventListener("click", () => {
         const phone = button.closest(".fd-phone");
+        startOverlayMotion(screenHost, appState, motionController, "sheet", "close", button);
         phone.classList.remove("has-sheet");
         const sheet = phone.querySelector("[data-demo-sheet]");
         if (sheet) {
           sheet.setAttribute("aria-hidden", "true");
         }
+        restoreOverlayMotionFocus(appState);
+        attachOverlayMotionState(screenHost, appState);
       });
     });
 
     screenHost.querySelectorAll("[data-open-dialog]").forEach((button) => {
       button.addEventListener("click", () => {
         const phone = button.closest(".fd-phone");
+        startOverlayMotion(screenHost, appState, motionController, "dialog", "open", button);
         phone.classList.add("has-dialog");
         const dialog = phone.querySelector("[data-demo-dialog]");
         if (dialog) {
           dialog.setAttribute("aria-hidden", "false");
           focusInitialDialogControl(dialog);
         }
+        attachOverlayMotionState(screenHost, appState);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 40);
       });
     });
 
     screenHost.querySelectorAll("[data-close-dialog]").forEach((button) => {
       button.addEventListener("click", () => {
         const phone = button.closest(".fd-phone");
+        startOverlayMotion(screenHost, appState, motionController, "dialog", "close", button);
         phone.classList.remove("has-dialog");
         const dialog = phone.querySelector("[data-demo-dialog]");
         if (dialog) {
           dialog.setAttribute("aria-hidden", "true");
         }
+        restoreOverlayMotionFocus(appState);
+        attachOverlayMotionState(screenHost, appState);
       });
     });
 
@@ -9630,6 +9770,7 @@
       });
       if (dialog.getAttribute("aria-hidden") !== "true") {
         focusInitialDialogControl(dialog);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 40);
       }
     });
 

@@ -416,6 +416,22 @@ const checks = [
     detail: "generic button/toggle/choice/numeric/input/state/selection/surface components expose normalized component family, role, state, phase, value, and tokenized pressed feedback"
   },
   {
+    id: "motion.overlay-focus.state-adapter",
+    passed: runtime.includes("attachOverlayMotionState") &&
+      runtime.includes("syncOverlayMotionElement") &&
+      runtime.includes("startOverlayMotion") &&
+      runtime.includes("restoreOverlayMotionFocus") &&
+      runtime.includes("data-motion-overlay-role") &&
+      runtime.includes("data-motion-overlay-state") &&
+      runtime.includes("data-motion-overlay-focus-return") &&
+      runtime.includes("data-motion-overlay-action") &&
+      runtime.includes("data-settings-overlay-panel") &&
+      motionTokens.includes("[data-motion-overlay]") &&
+      motionTokens.includes("fd-motion-overlay-dialog-enter") &&
+      motionTokens.includes("fd-motion-overlay-sheet-enter"),
+    detail: "keyboard/sheet/dialog overlays expose role/state/action/focus-return fields, settings overlay panels use the same data entry, and tokenized enter CSS is available"
+  },
+  {
     id: "motion.selector.bindings",
     passed: bindMatches.length >= 60 && motionIds.length >= 51,
     detail: `${bindMatches.length} bind calls, ${motionIds.length} unique Motion IDs`

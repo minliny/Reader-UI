@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T02:20:43.781Z",
+  "generatedAt": "2026-07-01T02:37:28.056Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-interrupt-v1-20260630, render=motion-common-components-v1-20260701, runtime=motion-common-components-v1-20260701"
+      "detail": "motion=motion-interrupt-v1-20260630, render=motion-overlay-focus-v1-20260701, runtime=motion-overlay-focus-v1-20260701"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -113,6 +113,11 @@
       "detail": "generic button/toggle/choice/numeric/input/state/selection/surface components expose normalized component family, role, state, phase, value, and tokenized pressed feedback"
     },
     {
+      "id": "motion.overlay-focus.state-adapter",
+      "passed": true,
+      "detail": "keyboard/sheet/dialog overlays expose role/state/action/focus-return fields, settings overlay panels use the same data entry, and tokenized enter CSS is available"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "77 bind calls, 63 unique Motion IDs"
@@ -120,7 +125,7 @@
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "149/171 data-* directly mapped"
+      "detail": "149/172 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -134,9 +139,9 @@
     }
   ],
   "summary": {
-    "passed": 26,
+    "passed": 27,
     "failed": 0,
-    "total": 26
+    "total": 27
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -145,7 +150,7 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 171,
+    "dataAttributeCount": 172,
     "directMappedDataAttributeCount": 149,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
@@ -166,6 +171,7 @@
       "data-route-replace",
       "data-route-stack",
       "data-screen-host",
+      "data-settings-overlay-panel",
       "data-shell",
       "data-slot",
       "data-stack-size",

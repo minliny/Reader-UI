@@ -28,14 +28,14 @@
 | 冷启动/首次打开 | 已有 Motion ID、token、效果和第一版 adapter；root / screen host 会写入 `data-motion-first-open-*` | 基础实现纳管，未录屏 |
 | 主 TAB / 阅读模块 TAB / segmented TAB | 已有 `tab.item.*` | 规划纳管，未实现统一状态机 |
 | 路由 push/pop / 主 Tab 切换 | 已有基础契约 | 部分纳管，普通路由方向和 dense 页面策略还需细化 |
-| 键盘、底表、弹窗 | 已有 overlay Motion ID，核心时长已 token 化并接入 reduced-motion | 基础实现纳管，未录屏 |
+| 键盘、底表、弹窗 | 已有 overlay Motion ID、核心时长、reduced-motion 和 `data-motion-overlay-*` role/state/action/focus-return adapter | 第一版实现纳管，未录屏 |
 | 下拉栏 / popover / 锚定菜单 | 已补 `dropdown.*` | 规划纳管，未实现统一状态机 |
 | Reader 封面进入沉浸阅读 | 已有 `reader.entry.*` | 规划纳管，未实现 snapshot/降级证据 |
 | Reader 控制层显隐、小横条、宽屏 dock | 已有 `reader.control.*` / `reader.control.dock.*` | 规划纳管，拖动和 dock 仍未实现 |
 | Reader 模块切换、快捷动作、完整页展开 | 已有 `reader.module.*` / `reader.quick.promote` / `reader.panel.expand` | 规划纳管，部分场景仍缺状态机 |
 | 自动翻页/朗读会话、控制胶囊、运行空间 | 已有 `reader.session.*` | 规划纳管，demo 多为静态 UI |
 | 翻页、章节跳转、换源窗口 | 已有 Reader 专属 Motion ID | 规划纳管，换源窗口缺 capture 证据 |
-| 打断动画、viewport/fold/orientation | 已有 `motion.interrupt.*` 和 `viewport.*`；`motion.interrupt.*` 与 `viewport.orientation.prepare/reshape/settle` 第一版 adapter 已分别接入 `data-motion-interrupt-*` / `data-motion-orientation-*` | interrupt/orientation 已进入实现层；overlay/连续下拉/异步结果、fold posture 和设备证据仍需补齐 |
+| 打断动画、viewport/fold/orientation | 已有 `motion.interrupt.*` 和 `viewport.*`；`motion.interrupt.*` 与 `viewport.orientation.prepare/reshape/settle` 第一版 adapter 已分别接入 `data-motion-interrupt-*` / `data-motion-orientation-*`；overlay/focus 已接入第一版状态 adapter | interrupt/orientation/overlay 已进入实现层；连续 overlay 打断、连续下拉/异步结果、fold posture 和设备证据仍需补齐 |
 | 通用按钮、图标按钮、动作按钮 | 已补 `button.press/activate/disabledBlocked`，并接入基础 pressed state 与 `data-motion-component-family=button` | 第一版实现纳管，async pending / disabled evidence 和录屏仍缺 |
 | chip/filter/segment/filter row | 已补 `chip.item.*`、`filter.*`、`segment.item.switch`，并接入 token 选中态 | 基础实现纳管，未录屏 |
 | switch/toggle/checkbox | 已补 `toggle.press/switch/revert`，checkbox 归入 toggle family，thumb/check 已有 token transition | 基础实现纳管，未录屏 |
@@ -56,13 +56,13 @@
 | 首启与基础导航 | `app.launch.firstOpen`、`app.tab.switch`、`app.route.push/pop` | 首启动画已有 cold-start flag 和一次性 settle；仍缺路由栈方向策略和录屏证据 |
 | TAB | `tab.item.press/select/switch` | 主 TAB、阅读模块 TAB、segmented TAB 的统一 pressed/select/switch 状态机 |
 | Dropdown | `dropdown.trigger.press`、`dropdown.menu.expand/collapse/reposition`、`dropdown.option.press/select` | 当前 demo 仍是分散 mount/unmount、placement 和 chevron CSS |
-| Overlay | `overlay.keyboard/sheet/dialog.*` | token 化、reduced-motion、overlay 互斥和焦点陷阱 |
+| Overlay | `overlay.keyboard/sheet/dialog.*` | 已接入 token、reduced-motion、role/state/action/focus-return 字段和基础焦点陷阱；仍缺连续 overlay 互斥打断、录屏和平台焦点证据 |
 | Reader Entry | `reader.entry.coverToImmersive`、`reader.entry.actionToImmersive` | 封面 snapshot/shared-element 和无封面入口降级 |
 | Reader Control | `reader.control.show/hide`、`reader.control.handle.*`、`reader.control.dock.*` | 手势、阈值、pointer capture、dock bounds、offset 持久化 |
 | Reader Session | `reader.session.*` | 胶囊动画、运行空间、倒计时 tick、语音 icon、互斥会话生命周期 |
 | Reader Paging | `reader.page.turn.*`、`reader.chapter.jump` | 翻页 token 化、章节/进度拖动互斥矩阵 |
 | Flow/Source Switch | `reader.sourceSwitch.open/close` | 换源窗口不同 viewport 的 capture 和打断规则 |
-| Interrupt/Viewport | `motion.interrupt.*`、`viewport.fold.*`、`viewport.orientation.*` | interrupt 和 orientation lifecycle 已有第一版 adapter；继续补 overlay/连续下拉/异步结果、fold posture 和旋转设备验证 |
+| Interrupt/Viewport | `motion.interrupt.*`、`viewport.fold.*`、`viewport.orientation.*` | interrupt、orientation 和 overlay/focus lifecycle 已有第一版 adapter；继续补连续 overlay、连续下拉/异步结果、fold posture 和旋转设备验证 |
 | 通用组件族 | `button.*`、`toggle.*`、`chip/filter/segment.*`、`slider/stepper/progress.*`、`input/search.*`、`feedback/state.*`、`selection.*`、`listRow/card.*` | 已有 selector 总表、token、reduced-motion、基础 pressed state 和 `data-motion-component-*` normalized adapter；缺 async pending、focus restore、深度状态机证据和录屏证据 |
 
 ## 4. 已进入规划、待实现的组件族
@@ -287,7 +287,7 @@ P2：
 
 - 不能声称各种交互组件的动效已经实现级统一全面纳管。
 - 不能声称 demo 已经有跨端可直接实现的完整动效体系。
-- 不能声称通用按钮、chip/filter、toggle/switch、slider/stepper、toast、selection、业务 row/card 已经完成深度状态机和证据。
+- 不能声称通用按钮、chip/filter、toggle/switch、slider/stepper、toast、selection、业务 row/card 已经完成深度状态机和证据；overlay 也仍缺录屏、连续打开打断和平台焦点证据。
 - 不能声称已有录屏证据。
 
 ## 8. 建议下一步
