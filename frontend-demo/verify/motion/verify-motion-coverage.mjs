@@ -303,6 +303,19 @@ const checks = [
     detail: "dropdown triggers, menus, and options expose data-motion-dropdown-* states, press IDs, and tokenized CSS"
   },
   {
+    id: "motion.dropdown-switch.state-adapter",
+    passed: runtime.includes("startDropdownSwitchMotion") &&
+      runtime.includes("activeDropdownGroups") &&
+      runtime.includes("data-motion-dropdown-switch-from") &&
+      runtime.includes("data-motion-dropdown-switch-to") &&
+      runtime.includes("data-motion-dropdown-switch-role") &&
+      runtime.includes("dropdown-a-to-b") &&
+      runtime.includes("motion.interrupt.redirect") &&
+      motionTokens.includes("[data-motion-dropdown-switch-role=\"to\"]") &&
+      motionTokens.includes("fd-motion-dropdown-switch-to"),
+    detail: "opening dropdown B while A is open emits dropdown switch fields and motion.interrupt.redirect with tokenized target takeover CSS"
+  },
+  {
     id: "motion.reader-entry.state-adapter",
     passed: runtime.includes("attachReaderEntryMotionState") &&
       runtime.includes("data-motion-entry-state") &&

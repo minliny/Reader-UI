@@ -6702,6 +6702,84 @@
     menu.setAttribute("data-motion-dropdown-phase", "settled");
   }
 
+  function activeDropdownGroups(root) {
+    if (!root || typeof root.querySelectorAll !== "function") return [];
+    return Array.from(root.querySelectorAll(dropdownMenuSelector))
+      .map((menu) => menu.getAttribute("data-motion-dropdown-group") || dropdownGroupKey(menu))
+      .filter(Boolean);
+  }
+
+  function clearDropdownSwitchMotion(root, appState, motion) {
+    if (appState?.dropdownSwitchMotion && appState.dropdownSwitchMotion !== motion) return;
+    if (appState) {
+      appState.dropdownSwitchMotion = null;
+      appState.dropdownSwitchTimer = null;
+    }
+    root?.removeAttribute("data-motion-dropdown-switch");
+    root?.removeAttribute("data-motion-dropdown-switch-id");
+    root?.removeAttribute("data-motion-dropdown-switch-state");
+    root?.removeAttribute("data-motion-dropdown-switch-from");
+    root?.removeAttribute("data-motion-dropdown-switch-to");
+    root?.removeAttribute("data-motion-dropdown-switch-sequence");
+    root?.querySelectorAll?.("[data-motion-dropdown-switch-role]").forEach((element) => {
+      element.removeAttribute("data-motion-dropdown-switch-role");
+    });
+  }
+
+  function applyDropdownSwitchMotion(root, appState) {
+    const motion = appState?.dropdownSwitchMotion;
+    if (!root || !motion) return;
+    root.setAttribute("data-motion-dropdown-switch", "true");
+    root.setAttribute("data-motion-dropdown-switch-id", motion.id);
+    root.setAttribute("data-motion-dropdown-switch-state", motion.state);
+    root.setAttribute("data-motion-dropdown-switch-from", motion.from);
+    root.setAttribute("data-motion-dropdown-switch-to", motion.to);
+    root.setAttribute("data-motion-dropdown-switch-sequence", String(motion.sequence));
+    root.querySelectorAll("[data-motion-dropdown-role]").forEach((element) => {
+      const group = element.getAttribute("data-motion-dropdown-group") || dropdownGroupKey(element);
+      if (group === motion.to) {
+        element.setAttribute("data-motion-dropdown-switch-role", "to");
+      } else if (group === motion.from) {
+        element.setAttribute("data-motion-dropdown-switch-role", "from");
+      } else {
+        element.removeAttribute("data-motion-dropdown-switch-role");
+      }
+    });
+  }
+
+  function startDropdownSwitchMotion(root, appState, motionController, trigger) {
+    if (!root || !appState || !trigger) return null;
+    const to = dropdownGroupKey(trigger);
+    const from = activeDropdownGroups(root).find((group) => group && group !== to);
+    if (!from || !to) return null;
+    const sequence = (appState.dropdownSwitchSequence || 0) + 1;
+    const motion = {
+      id: "motion.interrupt.redirect",
+      state: "redirecting",
+      from,
+      to,
+      sequence
+    };
+    appState.dropdownSwitchSequence = sequence;
+    appState.dropdownSwitchMotion = motion;
+    if (appState.dropdownSwitchTimer) {
+      window.clearTimeout(appState.dropdownSwitchTimer);
+      appState.dropdownSwitchTimer = null;
+    }
+    startMotionInterrupt(root.closest(".fd-demo") || root, root, appState, motionController, "dropdown-a-to-b", {
+      kind: "redirect",
+      from,
+      to
+    });
+    applyDropdownSwitchMotion(root, appState);
+    appState.dropdownSwitchTimer = window.setTimeout(() => {
+      motion.state = "settled";
+      applyDropdownSwitchMotion(root, appState);
+      appState.dropdownSwitchTimer = null;
+    }, root.closest(".fd-demo")?.getAttribute("data-motion-reduced") === "true" ? 0 : 160);
+    return motion;
+  }
+
   function syncDropdownMenu(menu, reduced) {
     const group = dropdownGroupKey(menu);
     const placement = menu.classList.contains("is-drop-up") ? "up" : "down";
@@ -6729,6 +6807,13 @@
         trigger.addEventListener("click", () => {
           const group = dropdownGroupKey(trigger);
           const wasOpen = dropdownTriggerOpen(trigger);
+          let switchMotion = null;
+          if (!wasOpen) {
+            switchMotion = startDropdownSwitchMotion(root, appState, motionController, trigger);
+          }
+          if (!switchMotion) {
+            clearDropdownSwitchMotion(root, appState, appState.dropdownSwitchMotion);
+          }
           const id = wasOpen ? "dropdown.menu.collapse" : "dropdown.menu.expand";
           appState.dropdownMotion = {
             group,
@@ -6780,6 +6865,7 @@
         });
       }
     });
+    applyDropdownSwitchMotion(root, appState);
   }
 
   function readerEntryKey(element) {

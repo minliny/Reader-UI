@@ -130,11 +130,11 @@
 - `startMotionInterrupt()` 会在 route、Tab、viewport、loading、dock drag 和 pointer cancel 场景写入 `data-motion-interrupt-*`，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态。
 - 普通 route 切换仍走 `screenHost.innerHTML = renderRoute(...)`。
 - 只有 reader loading 使用 `pendingRouteTimer`，翻页用 class + `animationend` 清理。
-- controller 当前负责 transaction 记录、root `data-motion-*` 状态、interrupt state、overlay/focus 第一版状态 adapter 和 reduced-motion 时长归零；还没有完整统一驱动视觉 enter/exit class、shared element、dropdown collapse lifecycle、连续 overlay 打断或 async settle。
+- controller 当前负责 transaction 记录、root `data-motion-*` 状态、interrupt state、overlay/focus 第一版状态 adapter、dropdown A->B redirect 字段和 reduced-motion 时长归零；还没有完整统一驱动视觉 enter/exit class、shared element、dropdown collapse lifecycle、连续 overlay 打断或 async settle。
 
 影响：
 
-- 连续点击、返回、loading 完成、拖动开始、route 替换已经有第一版 interrupt 接入点；overlay/键盘/底表/弹窗已有 role/state/action/focus-return 字段和基础焦点恢复，连续 overlay 打断、连续下拉 A->B 和异步结果防覆盖仍需深化。
+- 连续点击、返回、loading 完成、拖动开始、route 替换和连续下拉 A->B 已经有第一版 interrupt / switch 接入点；overlay/键盘/底表/弹窗已有 role/state/action/focus-return 字段和基础焦点恢复，连续 overlay 打断和异步结果防覆盖仍需深化。
 - 平台实现仍不能只看当前 demo 直接复刻完整动画，只能复用 controller 事件命名和 reduced-motion 口径。
 
 ### P0-2：route push/pop 和 Tab 切换不是动画系统
@@ -349,7 +349,7 @@
 | `feedback.toast.enter/update/exit` | toast / nav feedback | ID 存在 | 多 toast 更新与自动退出 |
 | `selection.toolbar.enter/action/exit` | Reader selection | ID 存在 | 选区出现、toolbar command、关闭 |
 | `viewport.orientation.*` | 旋转/窗口变化/折叠 | 第一版 root/screen host 状态、anchor settle CSS 和 dock clamp 已接入 | 真实旋转录屏、折叠屏 posture、正文重分页、overlay/focus 自动化 |
-| `motion.interrupt.*` | route/Tab/viewport/loading/drag 打断 | 第一版 root/screen host 状态、临时 pressed/drag 清理和 interrupt settle CSS 已接入；overlay/focus 第一版状态字段已接入 | 连续 overlay 关闭/打开、连续下拉 A->B、异步结果防覆盖和录屏证据 |
+| `motion.interrupt.*` | route/Tab/viewport/loading/drag/dropdown switch 打断 | 第一版 root/screen host 状态、dropdown switch 字段、临时 pressed/drag 清理和 interrupt settle CSS 已接入；overlay/focus 第一版状态字段已接入 | 连续 overlay 关闭/打开、异步结果防覆盖和录屏证据 |
 
 ## 10. 实现优先级
 
@@ -374,7 +374,7 @@ P2：
 
 ## 11. 建议落地顺序
 
-1. 深化全局 motion controller：interrupt adapter 和 overlay/focus adapter 已有第一版；继续把连续 overlay、dropdown A->B 和 async result 纳入同一 reducer。
+1. 深化全局 motion controller：interrupt adapter、overlay/focus adapter 和 dropdown A->B redirect 已有第一版；继续把连续 overlay 和 async result 纳入同一 reducer。
 2. 先收敛所有普通业务按钮：让无 `data-*` 的 button 也进入 button/listRow/segment/toggle family。
 3. 做 `tab.item.press/select/switch` 的真实状态机和 indicator 迁移。
 4. 做 `dropdown.*` 统一 controller，覆盖 filter、sort、reader setting、TTS、source menu。

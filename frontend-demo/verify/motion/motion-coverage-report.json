@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T02:37:28.056Z",
+  "generatedAt": "2026-07-01T07:25:56.323Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -73,6 +73,11 @@
       "detail": "dropdown triggers, menus, and options expose data-motion-dropdown-* states, press IDs, and tokenized CSS"
     },
     {
+      "id": "motion.dropdown-switch.state-adapter",
+      "passed": true,
+      "detail": "opening dropdown B while A is open emits dropdown switch fields and motion.interrupt.redirect with tokenized target takeover CSS"
+    },
+    {
       "id": "motion.reader-entry.state-adapter",
       "passed": true,
       "detail": "cover and action entry paths expose data-motion-entry-* states, target reveal, and tokenized CSS"
@@ -139,9 +144,9 @@
     }
   ],
   "summary": {
-    "passed": 27,
+    "passed": 28,
     "failed": 0,
-    "total": 27
+    "total": 28
   },
   "routeCoverage": {
     "totalRoutes": 131,
