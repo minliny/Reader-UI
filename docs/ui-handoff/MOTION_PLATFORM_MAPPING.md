@@ -258,7 +258,7 @@ Web demo：
 - Demo CSS 已使用共享 motion token。
 - Demo 已实现 reduced-motion 行为。
 - Demo 已实现主 TAB、阅读模块 TAB 和 segmented control 的 `data-motion-tab-*` / `data-motion-segment-*` 状态 adapter、`tab.item.press/select/switch` / `segment.item.switch` press-id 和 `reader.module.switch` / `segment.item.switch` 事务；录屏证据仍需补齐。
-- Demo 已实现通用组件族状态机，覆盖 button、toggle/switch/checkbox、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 和 bookshelf view switch。
+- Demo 已实现通用组件族第一版 `data-motion-component-*` normalized adapter，覆盖 button、toggle/switch/checkbox、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 和 bookshelf view switch 的 family / role / state / phase / value 字段；平台应映射这些字段到原生组件状态机，不能从 Web CSS 推断控件行为。async pending、focus restore、平台测试文件映射和全族录屏仍需补齐。
 - 148 个唯一 `data-*` 交互入口已映射到 `Motion ID -> demo route -> platform component -> evidence` 总表；没有未归类的产品交互入口。
 - Demo 已接入统一 `dropdown.*` state adapter，覆盖下拉触发器、菜单和选项的 `data-motion-dropdown-*` 状态、press-id 和 token CSS；关闭保留动画、打开 A 切 B、reposition 和录屏证据仍需补齐。
 - Demo 已接入封面进入沉浸阅读 state adapter，覆盖 `data-motion-entry-*` source/target 状态、封面 snapshot、普通阅读按钮 fallback 和 reduced-motion；详情/章节入口与录屏证据仍需补齐。

@@ -4,7 +4,7 @@
 
 范围：基于当前 `frontend-demo/` 的 `render-runtime.js`、样式层和四份动效规划文档，判断各类交互组件是否已经被统一动效体系纳管。
 
-结论：通用交互组件已经进入基础实现纳管，但还没有达到完整实现级纳管。当前 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md`、`MOTION_PLATFORM_MAPPING.md` 和 `MOTION_SELECTOR_MATRIX.md` 已补 button、toggle、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 等 Motion ID、效果、平台映射和 148 个 `data-*` selector 总表；demo 已落 `motion-tokens.css`、reduced-motion 测试开关、基础 `data-motion-id`、pressed state 和第一版 `motion.interrupt.*` adapter。仍缺组件族专属深度状态机、打断规则深化和录屏/截图证据。
+结论：通用交互组件已经进入第一版实现纳管，但还没有达到完整交付级纳管。当前 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md`、`MOTION_PLATFORM_MAPPING.md` 和 `MOTION_SELECTOR_MATRIX.md` 已补 button、toggle、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 等 Motion ID、效果、平台映射和 148 个 `data-*` selector 总表；demo 已落 `motion-tokens.css`、reduced-motion 测试开关、基础 `data-motion-id`、pressed state、`data-motion-component-*` normalized adapter 和第一版 `motion.interrupt.*` adapter。仍缺组件族专属深度状态机、async pending / focus restore、打断规则深化和录屏/截图证据。
 
 ## 1. 审计口径
 
@@ -36,14 +36,14 @@
 | 自动翻页/朗读会话、控制胶囊、运行空间 | 已有 `reader.session.*` | 规划纳管，demo 多为静态 UI |
 | 翻页、章节跳转、换源窗口 | 已有 Reader 专属 Motion ID | 规划纳管，换源窗口缺 capture 证据 |
 | 打断动画、viewport/fold/orientation | 已有 `motion.interrupt.*` 和 `viewport.*`；`motion.interrupt.*` 与 `viewport.orientation.prepare/reshape/settle` 第一版 adapter 已分别接入 `data-motion-interrupt-*` / `data-motion-orientation-*` | interrupt/orientation 已进入实现层；overlay/连续下拉/异步结果、fold posture 和设备证据仍需补齐 |
-| 通用按钮、图标按钮、动作按钮 | 已补 `button.press/activate/disabledBlocked`，并接入基础 pressed state | 基础实现纳管，未录屏 |
+| 通用按钮、图标按钮、动作按钮 | 已补 `button.press/activate/disabledBlocked`，并接入基础 pressed state 与 `data-motion-component-family=button` | 第一版实现纳管，async pending / disabled evidence 和录屏仍缺 |
 | chip/filter/segment/filter row | 已补 `chip.item.*`、`filter.*`、`segment.item.switch`，并接入 token 选中态 | 基础实现纳管，未录屏 |
 | switch/toggle/checkbox | 已补 `toggle.press/switch/revert`，checkbox 归入 toggle family，thumb/check 已有 token transition | 基础实现纳管，未录屏 |
 | slider/progress/stepper 数值控件 | 已补 `slider.*`、`stepper.*`、`progress.meter.update`，progress fill 已接 token | 基础实现纳管，未录屏 |
 | 搜索输入、输入行、键盘焦点 | 已补 `input.*`、`search.state.replace`，键盘和 search state 已接 reduced-motion | 基础实现纳管，未录屏 |
 | toast、inline feedback、状态卡 | 已补 `feedback.toast.*`、`state.*`，toast/state 已接 token transition | 基础实现纳管，未录屏 |
 | 文本选择层、toolbar、拖拽选区手柄 | 已补 `selection.range.*`、`selection.toolbar.*`，toolbar 已接 token transition | 基础实现纳管，未录屏 |
-| 书架视图切换、卡片/列表行、封面聚焦层 | 已补 `listRow.*`、`card.*`、`bookshelf.view.switch`，并接入基础 pressed / selector binding | 基础实现纳管，封面进入深动效未完成 |
+| 书架视图切换、卡片/列表行、封面聚焦层 | 已补 `listRow.*`、`card.*`、`bookshelf.view.switch`，并接入基础 pressed / selector binding 与 `data-motion-component-family=surface/choice` | 第一版实现纳管，封面进入深动效和录屏仍缺 |
 | Discover / RSS / Source / Restore 业务管理流 | 已归入通用组件族，并在 `MOTION_SELECTOR_MATRIX.md` 建立 selector 总表 | 基础实现纳管，缺证据 |
 | demo/dev mode 控件 | 不属于产品主路径，但仍无统一策略 | 可低优先级纳管 |
 
@@ -63,7 +63,7 @@
 | Reader Paging | `reader.page.turn.*`、`reader.chapter.jump` | 翻页 token 化、章节/进度拖动互斥矩阵 |
 | Flow/Source Switch | `reader.sourceSwitch.open/close` | 换源窗口不同 viewport 的 capture 和打断规则 |
 | Interrupt/Viewport | `motion.interrupt.*`、`viewport.fold.*`、`viewport.orientation.*` | interrupt 和 orientation lifecycle 已有第一版 adapter；继续补 overlay/连续下拉/异步结果、fold posture 和旋转设备验证 |
-| 通用组件族 | `button.*`、`toggle.*`、`chip/filter/segment.*`、`slider/stepper/progress.*`、`input/search.*`、`feedback/state.*`、`selection.*`、`listRow/card.*` | 已有 selector 总表、token、reduced-motion 和基础 pressed state；缺深度状态机和录屏证据 |
+| 通用组件族 | `button.*`、`toggle.*`、`chip/filter/segment.*`、`slider/stepper/progress.*`、`input/search.*`、`feedback/state.*`、`selection.*`、`listRow/card.*` | 已有 selector 总表、token、reduced-motion、基础 pressed state 和 `data-motion-component-*` normalized adapter；缺 async pending、focus restore、深度状态机证据和录屏证据 |
 
 ## 4. 已进入规划、待实现的组件族
 
@@ -259,7 +259,7 @@
 | L0 未纳管 | 没有 Motion ID，只有静态样式或即时状态 | 产品主路径暂不保留 L0；demo/developer controls 可低优先级归类 |
 | L1 泛化纳管 | 被 route/overlay/tab 等大类间接覆盖，但缺组件专属状态 | 普通 route、部分历史 CSS class、尚未映射的 dev mode 控件 |
 | L2 规划纳管 | 有 Motion ID、效果说明、平台映射和缺口 | app launch、tab、dropdown、overlay、Reader 主链路、interrupt、viewport |
-| L2.5 基础实现纳管 | 有 selector 总表、token、reduced-motion 测试开关、基础 pressed / state transition 和第一版 interrupt adapter | 通用组件族、overlay 基础降级、Reader 翻页/loading token、motion.interrupt.* |
+| L2.5 基础实现纳管 | 有 selector 总表、token、reduced-motion 测试开关、基础 pressed / state transition、`data-motion-component-*` normalized adapter 和第一版 interrupt adapter | 通用组件族、overlay 基础降级、Reader 翻页/loading token、motion.interrupt.* |
 | L3 实现纳管 | demo 已统一 token、状态机、reduced-motion 和证据 | 当前没有完整达到 L3 的组件族 |
 
 ## 6. 必补缺口优先级

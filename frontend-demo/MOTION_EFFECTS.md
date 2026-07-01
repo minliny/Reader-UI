@@ -1191,7 +1191,7 @@ Reduced motion：
 
 这份说明仍是规划稿，要进入可交付动效规范，还需要：
 
-1. 已完成第一版：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/查询开关、`MOTION_SELECTOR_MATRIX.md`、基础 `data-motion-id` / pressed state 接入。
+1. 已完成第一版：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/查询开关、`MOTION_SELECTOR_MATRIX.md`、基础 `data-motion-id` / pressed state 和 `data-motion-component-*` normalized adapter 接入。
 2. 补 TAB 栏 `tab.item.press/select/switch` 的统一实现和录屏证据。
 3. 深化通用组件族 `button.*`、`toggle.*`、`chip/filter/segment.*`、`slider/stepper/progress.*`、`input/search.*`、`feedback/state.*`、`selection.*`、`listRow/card.*` 的状态机和录屏证据。
 4. 补 `dropdown.trigger.press`、`dropdown.menu.expand/collapse/reposition`、`dropdown.option.press/select` 的统一实现和录屏证据。

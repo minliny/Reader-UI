@@ -5831,6 +5831,88 @@
     });
   }
 
+  function commonMotionFamily(motionId) {
+    const id = String(motionId || "");
+    if (id.startsWith("button.") || id === "destructive.confirm.commit" || id === "tooling.mode.switch") return "button";
+    if (id.startsWith("toggle.") || id === "selection.option.toggle" || id === "selection.item.toggle" || id === "selection.group.toggle") return "toggle";
+    if (id.startsWith("chip.") || id.startsWith("filter.") || id.startsWith("segment.") || id === "bookshelf.view.switch") return "choice";
+    if (id.startsWith("slider.") || id.startsWith("stepper.") || id.includes("progress")) return "numeric";
+    if (id.startsWith("input.") || id.startsWith("search.")) return "input";
+    if (id.startsWith("feedback.") || id.startsWith("state.") || id.includes(".replace") || id.includes(".loading")) return "state";
+    if (id.startsWith("selection.")) return "selection";
+    if (id.startsWith("listRow.") || id.startsWith("card.")) return "surface";
+    return "";
+  }
+
+  function commonMotionRole(element, motionId, family) {
+    if (!element) return "item";
+    if (element.matches?.("button")) return "button";
+    if (element.matches?.("[role='button']")) return "row-button";
+    if (element.matches?.("input, textarea, [contenteditable='true']")) return "field";
+    if (element.hasAttribute("data-reader-brightness-track") || element.hasAttribute("data-reader-chapter-progress")) return "slider";
+    if (motionId.startsWith("stepper.")) return "stepper";
+    if (motionId.startsWith("feedback.")) return "feedback";
+    if (family === "surface" && motionId.startsWith("card.")) return "card";
+    if (family === "surface") return "row";
+    return family || "item";
+  }
+
+  function commonMotionState(element, motionId, family) {
+    if (!element) return "idle";
+    if (element.disabled || element.getAttribute("aria-disabled") === "true") return "disabled";
+    if (element.classList.contains("is-motion-pressed") || element.getAttribute("data-motion-pressed") === "true") return "pressed";
+    if (element.getAttribute("aria-busy") === "true" || element.classList.contains("is-loading")) return "loading";
+    if (element.getAttribute("aria-expanded") === "true" || element.classList.contains("is-open")) return "expanded";
+    if (element.getAttribute("aria-pressed") === "true" || element.classList.contains("is-on")) return "on";
+    if (element.getAttribute("aria-selected") === "true" || element.getAttribute("aria-current") === "true" || element.classList.contains("is-selected")) return "selected";
+    if (element.classList.contains("is-active")) return family === "toggle" ? "on" : "active";
+    if (family === "feedback" || family === "state") return element.textContent?.trim() ? "visible" : "idle";
+    return "idle";
+  }
+
+  function commonMotionPhase(state) {
+    if (state === "pressed") return "press";
+    if (state === "loading") return "pending";
+    if (state === "expanded" || state === "visible") return "entered";
+    if (state === "on" || state === "active" || state === "selected") return "settled";
+    return "idle";
+  }
+
+  function commonMotionValue(element) {
+    if (!element) return "";
+    if (element.hasAttribute("aria-valuenow")) return element.getAttribute("aria-valuenow") || "";
+    if (element.hasAttribute("aria-pressed")) return element.getAttribute("aria-pressed") || "";
+    if (element.hasAttribute("aria-selected")) return element.getAttribute("aria-selected") || "";
+    if (element.hasAttribute("data-reader-setting-value")) return element.getAttribute("data-reader-setting-value") || "";
+    if (element.hasAttribute("data-reader-tts-value")) return element.getAttribute("data-reader-tts-value") || "";
+    return "";
+  }
+
+  function syncCommonMotionComponentState(element) {
+    if (!element || !element.hasAttribute("data-motion-id")) return;
+    const motionId = element.getAttribute("data-motion-id") || "";
+    const family = commonMotionFamily(motionId);
+    if (!family) return;
+    const state = commonMotionState(element, motionId, family);
+    element.setAttribute("data-motion-component", "true");
+    element.setAttribute("data-motion-component-family", family);
+    element.setAttribute("data-motion-component-role", commonMotionRole(element, motionId, family));
+    element.setAttribute("data-motion-component-state", state);
+    element.setAttribute("data-motion-component-phase", commonMotionPhase(state));
+    element.setAttribute("data-motion-component-id", motionId);
+    const value = commonMotionValue(element);
+    if (value) {
+      element.setAttribute("data-motion-component-value", value);
+    } else {
+      element.removeAttribute("data-motion-component-value");
+    }
+  }
+
+  function attachCommonMotionComponentState(root) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    root.querySelectorAll("[data-motion-id]").forEach(syncCommonMotionComponentState);
+  }
+
   function attachMotionPressState(root, motionController) {
     if (!root || typeof root.querySelectorAll !== "function") return;
     const pressables = root.querySelectorAll("button, [role='button'], [data-route], [data-route-back], [data-motion-id]");
@@ -5918,6 +6000,7 @@
         syncSegmentPressState(pressed);
         syncDropdownPressState(pressed);
         syncReaderEntryPressState(pressed);
+        syncCommonMotionComponentState(element);
       };
       element.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
@@ -7659,6 +7742,7 @@
         // Demo mode should remain usable even when storage is unavailable.
       }
       applyMotionSelectorBindings(root);
+      attachCommonMotionComponentState(root);
       attachSegmentMotionState(root, appState, motionController);
       attachMotionPressState(root, motionController);
     };
@@ -7699,6 +7783,7 @@
         updateRouteInfo(route);
       }
       applyMotionSelectorBindings(screenHost);
+      attachCommonMotionComponentState(screenHost);
       attachTabMotionState(screenHost, appState);
       attachSegmentMotionState(screenHost, appState, motionController);
       adjustReaderDropdownPlacement(screenHost);
@@ -7724,6 +7809,7 @@
           if (appState.viewportOrientationMotion) {
             applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
           }
+          attachCommonMotionComponentState(screenHost);
         }
       });
       attachMotionPressState(screenHost, motionController);

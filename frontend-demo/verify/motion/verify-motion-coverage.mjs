@@ -404,6 +404,18 @@ const checks = [
     detail: "interrupt adapter exposes cancel/redirect/completeThenReplace root state, clears transient press/drag/dropdown flags, maps to contract IDs, and uses tokenized settle CSS"
   },
   {
+    id: "motion.common-components.state-adapter",
+    passed: runtime.includes("attachCommonMotionComponentState") &&
+      runtime.includes("syncCommonMotionComponentState") &&
+      runtime.includes("data-motion-component-family") &&
+      runtime.includes("data-motion-component-state") &&
+      runtime.includes("data-motion-component-phase") &&
+      runtime.includes("commonMotionFamily") &&
+      motionTokens.includes("[data-motion-component]") &&
+      motionTokens.includes("data-motion-component-state=\"pressed\""),
+    detail: "generic button/toggle/choice/numeric/input/state/selection/surface components expose normalized component family, role, state, phase, value, and tokenized pressed feedback"
+  },
+  {
     id: "motion.selector.bindings",
     passed: bindMatches.length >= 60 && motionIds.length >= 51,
     detail: `${bindMatches.length} bind calls, ${motionIds.length} unique Motion IDs`

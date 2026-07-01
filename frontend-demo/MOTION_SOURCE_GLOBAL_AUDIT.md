@@ -94,7 +94,7 @@
 - 主要 `data-*` selector 会被写入 `data-motion-id`。
 - `attachMotionPressState(screenHost)` 为 `button`、`[role="button"]`、`[data-route]`、`[data-route-back]`、`[data-motion-id]` 加 pressed class 和 `data-motion-pressed`。
 
-判定：有基础 adapter，但作用域是 `screenHost`。外层 demo chrome 不纳入；无 `data-*` 的普通业务按钮只能靠 fallback，且当前仍有不少 route 的普通按钮没有 Motion ID。
+判定：有基础 adapter 和第一版通用组件状态 adapter，作用域主要是 `screenHost`。外层 demo chrome 只覆盖 demo mode 等少量控件；无 `data-*` 的普通业务按钮仍只能靠 fallback，深层 async pending、focus restore 和平台测试映射仍需要补齐。
 
 ### 3.3 当前真实动画
 
@@ -105,7 +105,7 @@
 - 阅读翻页：`.fd-ir-reading-layer.fd-reader-page-turn-next/prev` 使用 `fd-reader-page-next/prev` keyframes。
 - 阅读 loading：`.fd-reader-loading-panel i` 使用 `fd-reader-loading-spin` infinite animation。
 - 设置/书源部分 overlay：存在 transform/visibility 或 transform/box-shadow transition。
-- 通用控件：`motion-tokens.css` 给 button、active/selected、switch、progress、state、toast、selection 加基础 transition。
+- 通用控件：`motion-tokens.css` 给 button、active/selected、switch、progress、state、toast、selection 和 `[data-motion-component]` 加基础 transition。
 
 判定：当前 demo 已有一批真实 CSS 动效，但覆盖的是基础状态和少量 Reader 主链路，不是完整跨端动效系统。
 
@@ -259,7 +259,7 @@
 - 所有交互组件都被实现级统一纳管。
 - 打断、折叠/旋转、控制层拖动、运行胶囊、封面进入、dropdown、tab motion 已完整闭环。
 
-结论：当前处于“最小 motion controller + 基础 motion adapter + 局部 CSS 动效 + 完整 route 可渲染 + 首批代表截图证据”的阶段。要作为 iOS / Android / HarmonyOS 可直接排期复用的动效规格，还需要补全组件状态机、Reader 专属主链路动画和视觉证据自动化。
+结论：当前处于“最小 motion controller + 基础 motion adapter + 第一版通用组件状态 adapter + 局部 CSS 动效 + 完整 route 可渲染 + 首批代表截图证据”的阶段。要作为 iOS / Android / HarmonyOS 可直接排期复用的动效规格，还需要补全深层组件状态机、Reader 专属主链路动画和视觉证据自动化。
 
 ## 6. 全局组件纳管矩阵
 
@@ -268,15 +268,15 @@
 | App 首次打开 | `render()`、`captureRoute` 初始化、`goTo(initialRoute)` | 已接入 `app.firstOpen.enter` transaction、`firstOpenMotion` cold-start flag、root/screen host `data-motion-first-open-*`、280ms token 化首屏淡入和 reduced-motion 即时 settle | 缺默认页/深链页录屏、后台恢复设备证据和平台测试映射；仍无首屏 skeleton | 首屏只在 cold start 执行一次；后台恢复、普通 route render、返回和切 Tab 不重播 |
 | 路由 push/pop/replace | `data-route`、`data-route-back`、`data-route-replace`、`goTo()`、`goBack()`、`replaceTopRoute()` | Motion ID 有 `app.route.push/pop`；Reader 局部 loading 有 360ms timer | route 大多即时替换，无方向、打断、返回取消、replace 无动画差异 | controller 记录 `fromRoute/toRoute/action/direction/interruption/finalState` |
 | 底部 Tab / 模块 Tab | `.fd-main-nav-item`、Reader module nav、RSS mode row、source module tabs | active class / aria 状态切换 | 没有 press/select/switch 分离；没有 indicator 从 A 到 B 迁移 | 统一 `tab.item.press/select/switch`，重复点击只给 press，不触发 switch |
-| Button / Icon button | `button`、`[role=button]`、`data-top-action`、`data-book-action` | 通用 pressed class 和 scale | 普通业务按钮缺语义 Motion ID；activate/commit/loading/disabled 反馈不统一 | fallback 只做 press，业务命令补 family ID：`button.activate`、`button.commit`、`button.destructive.confirm` |
-| Chip / Filter / Segment | `data-discover-entry`、`data-*filter`、`data-reader-*set`、`fd-chip-row` | 部分 selector 已绑定 chip/filter/segment ID | 多个路由重渲染，缺 selected->selected 状态迁移和取消规则 | 统一 `item.press -> item.select -> group.commit`；选中态移动不改变容器尺寸 |
+| Button / Icon button | `button`、`[role=button]`、`data-top-action`、`data-book-action` | 通用 pressed class、scale、`data-motion-component-family=button`、role/state/phase/value 字段 | async pending、commit/loading/disabled 证据和平台测试映射仍缺 | fallback 只做 press，业务命令补 family ID：`button.activate`、`button.commit`、`button.destructive.confirm` |
+| Chip / Filter / Segment | `data-discover-entry`、`data-*filter`、`data-reader-*set`、`fd-chip-row` | selector 已绑定 chip/filter/segment ID，并落入 `data-motion-component-family=choice` | 多个路由重渲染，缺 selected->selected 状态迁移录屏和取消规则证据 | 统一 `item.press -> item.select -> group.commit`；选中态移动不改变容器尺寸 |
 | Dropdown / Menu | `filterDisclosure()`、settings option dropdown、reader more/setting/tts dropdown | trigger/option/menu Motion ID 存在；chevron 有 rotate | 菜单 enter/exit/select/cancel/reposition 没有统一生命周期 | `dropdown.opening/open/closing/closed/selecting`，外点/返回/resize 都走同一 exit |
 | Sheet / Dialog / Toast / Keyboard | `data-demo-sheet`、`data-demo-dialog`、settings overlay、keyboard host | 基础 overlay、toast、keyboard transition/ID 存在 | 没有统一遮罩、focus return、连续打开打断规则 | `overlay.enter/exit/interrupted`，结束态必须恢复 focus 和 aria |
-| List row / Card | `role=button`、`data-book-card`、`data-restore-record`、RSS/source rows | fallback `listRow.press`，部分 card route ID | rows/cards 与 route push、selection、multi-select 混用 | rows 分为 `listRow.press/select/route/reorder`，card 分为 `card.press/select/route` |
-| Input / Search | `data-open-keyboard`、`data-search-submit`、`data-search-reset`、search state | keyboard enter/exit 和 search state ID 存在 | focus、clear、submit、result replace 的动效没有统一证据 | `input.focus/blur/clear/submit`、`search.state.replace` 统一 token |
-| Toggle / Switch | `data-reader-setting-toggle`、`data-source-switch`、`data-restore-scope` | switch knob/active transition 基础存在 | toggle 与 session start、dialog confirm、bulk selection 的运行中反馈混在一起 | `toggle.press/offToOn/onToOff/settle`，需要支持 async pending |
-| Slider / Progress / Stepper | 亮度、章节进度、字号/间距 stepper | 亮度和章节进度有 pointer capture；progress width 有 transition | drag start/update/release 没有统一事件状态；stepper value tick 未统一 | `slider.drag.start/update/release/cancel`、`stepper.press/value.change` |
-| Selection toolbar | `data-reader-selection-layer`、`data-reader-selection-action` | selection layer 和 toolbar action ID 存在 | range show、toolbar enter/exit、action commit 缺打断规则 | `selection.range.show/update`、`selection.toolbar.enter/action/exit` |
+| List row / Card | `role=button`、`data-book-card`、`data-restore-record`、RSS/source rows | fallback `listRow.press`、部分 card route ID，并落入 `data-motion-component-family=surface` | rows/cards 与 route push、selection、multi-select 的深状态证据仍缺 | rows 分为 `listRow.press/select/route/reorder`，card 分为 `card.press/select/route` |
+| Input / Search | `data-open-keyboard`、`data-search-submit`、`data-search-reset`、search state | keyboard enter/exit、search state ID 和 `data-motion-component-family=input/state` 存在 | focus、clear、submit、result replace 的录屏证据和 focus restore 仍缺 | `input.focus/blur/clear/submit`、`search.state.replace` 统一 token |
+| Toggle / Switch | `data-reader-setting-toggle`、`data-source-switch`、`data-restore-scope` | switch knob/active transition 基础存在，并落入 `data-motion-component-family=toggle` | toggle 与 session start、dialog confirm、bulk selection 的 async pending 反馈仍缺 | `toggle.press/offToOn/onToOff/settle`，需要支持 async pending |
+| Slider / Progress / Stepper | 亮度、章节进度、字号/间距 stepper | 亮度和章节进度有 pointer capture；progress width 有 transition，并落入 `data-motion-component-family=numeric` | drag start/update/release 的连续证据、cancel 和 stepper value tick 仍缺 | `slider.drag.start/update/release/cancel`、`stepper.press/value.change` |
+| Selection toolbar | `data-reader-selection-layer`、`data-reader-selection-action` | selection layer、toolbar action ID 和 `data-motion-component-family=selection` 存在 | range show、toolbar enter/exit、action commit 缺打断规则和录屏 | `selection.range.show/update`、`selection.toolbar.enter/action/exit` |
 | Reader 封面进入 | `data-book-cover`、`openBookFocus()`、`immersive-reading` route | 长按封面 focus layer 已有；普通点击直接 route | 没有 cover shared element 到沉浸阅读页 | `reader.entry.coverToImmersive.prepare/clone/expand/fade/settle` |
 | Reader 翻页 | `data-reader-page-action`、`readerTurnDirection`、keyframes | next/prev keyframes 已有，reduced-motion 可关闭 | 章节跳转、目录跳转、自动翻页没有统一进入/中断规则 | `reader.page.turn.next/prev/interrupt/settle` |
 | Reader 控制层小横条 | `.fd-reader-grabber`、`.fd-reader-full-grabber` | 点击展开/收起 | 没有拉动、长按、宽屏可移动 dock | `reader.control.handle.press/longPress/drag/snap/cancel` |

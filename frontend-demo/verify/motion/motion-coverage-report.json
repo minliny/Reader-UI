@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-30T15:59:10.056Z",
+  "generatedAt": "2026-07-01T02:20:43.781Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-interrupt-v1-20260630, render=motion-interrupt-v1-20260630, runtime=motion-interrupt-v1-20260630"
+      "detail": "motion=motion-interrupt-v1-20260630, render=motion-common-components-v1-20260701, runtime=motion-common-components-v1-20260701"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -108,6 +108,11 @@
       "detail": "interrupt adapter exposes cancel/redirect/completeThenReplace root state, clears transient press/drag/dropdown flags, maps to contract IDs, and uses tokenized settle CSS"
     },
     {
+      "id": "motion.common-components.state-adapter",
+      "passed": true,
+      "detail": "generic button/toggle/choice/numeric/input/state/selection/surface components expose normalized component family, role, state, phase, value, and tokenized pressed feedback"
+    },
+    {
       "id": "motion.selector.bindings",
       "passed": true,
       "detail": "77 bind calls, 63 unique Motion IDs"
@@ -129,9 +134,9 @@
     }
   ],
   "summary": {
-    "passed": 25,
+    "passed": 26,
     "failed": 0,
-    "total": 25
+    "total": 26
   },
   "routeCoverage": {
     "totalRoutes": 131,

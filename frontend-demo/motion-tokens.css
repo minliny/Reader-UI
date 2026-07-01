@@ -227,6 +227,36 @@
   filter: none;
 }
 
+.fd-demo :where([data-motion-component]) {
+  transform-origin: center;
+  transition:
+    background-color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
+    opacity var(--fd-motion-effective-state) var(--reader-motion-easing-standard),
+    transform var(--fd-motion-effective-button-press) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where([data-motion-component-state="pressed"]):not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(var(--app-motion-scale-press));
+}
+
+.fd-demo :where([data-motion-component-family="toggle"][data-motion-component-state="on"],
+[data-motion-component-family="choice"]:where([data-motion-component-state="active"], [data-motion-component-state="selected"]),
+[data-motion-component-family="surface"]:where([data-motion-component-state="active"], [data-motion-component-state="selected"])) {
+  transition-duration: var(--fd-motion-effective-toggle);
+}
+
+.fd-demo :where([data-motion-component-family="numeric"]) {
+  transition-duration: var(--fd-motion-effective-numeric);
+}
+
+.fd-demo :where([data-motion-component-family="feedback"],
+[data-motion-component-family="state"]) {
+  transition-duration: var(--fd-motion-effective-feedback);
+}
+
 .fd-demo :where(button, [role="button"], [data-route], [data-route-back]) {
   transition:
     background-color var(--fd-motion-effective-button-activate) var(--reader-motion-easing-standard),
