@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-02T06:53:41.306Z",
+  "generatedAt": "2026-07-02T12:43:42.833Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-interrupt-v1-20260630, render=reader-session-pushed-capsule-v2-20260702, runtime=reader-session-pushed-capsule-v2-20260702"
+      "detail": "motion=motion-interrupt-v1-20260630, render=reader-app-theme-sync-v1-20260702, runtime=reader-app-theme-sync-v1-20260702"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -130,12 +130,12 @@
     {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "78 bind calls, 64 unique Motion IDs"
+      "detail": "80 bind calls, 65 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "149/173 data-* directly mapped"
+      "detail": "151/183 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -160,8 +160,8 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 173,
-    "directMappedDataAttributeCount": 149,
+    "dataAttributeCount": 183,
+    "directMappedDataAttributeCount": 151,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
@@ -176,9 +176,17 @@
       "data-icon-missing",
       "data-page-space-row",
       "data-reader-brightness-dim",
+      "data-reader-chapter-download-state",
       "data-reader-control-session-host",
       "data-reader-footer-status",
+      "data-reader-search-submit",
       "data-reader-surface-signature",
+      "data-reader-theme-texture",
+      "data-reader-tts-active",
+      "data-reader-tts-current",
+      "data-reader-tts-index",
+      "data-reader-tts-playing",
+      "data-reader-tts-segment",
       "data-route-replace",
       "data-route-stack",
       "data-screen-host",
@@ -188,8 +196,8 @@
       "data-stack-size",
       "data-typography-row"
     ],
-    "bindCallCount": 78,
-    "motionIdCount": 64
+    "bindCallCount": 80,
+    "motionIdCount": 65
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",

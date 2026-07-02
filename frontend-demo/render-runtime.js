@@ -96,12 +96,66 @@
     return chapterMarkers(chapter).includes(marker);
   }
 
-  function chapterMarkerSlots(chapter) {
-    const cached = chapterHasMarker(chapter, "已缓存");
+  function bookSupportsChapterDownload(book) {
+    if (!book) {
+      return true;
+    }
+    if (book.local === true || book.isLocal === true || book.kind === "local" || book.type === "local") {
+      return false;
+    }
+    const bookSource = [book.source, book.author, book.meta].filter(Boolean).join(" ");
+    return !/(本地|导入|离线|文件)/.test(bookSource);
+  }
+
+  function chapterDownloadKey(chapter, index) {
+    return `${Number.isFinite(Number(index)) ? Number(index) : 0}:${chapter?.title || "chapter"}`;
+  }
+
+  function chapterDownloadState(chapter, appState, options) {
+    if (!bookSupportsChapterDownload(options?.book)) {
+      return "local";
+    }
+    const key = chapterDownloadKey(chapter, options?.chapterIndex);
+    const runtimeState = appState?.readerChapterDownloads?.[key] || "";
+    if (runtimeState === "loading" || runtimeState === "complete" || runtimeState === "cached") {
+      return runtimeState;
+    }
+    return chapterHasMarker(chapter, "已缓存") ? "cached" : "idle";
+  }
+
+  function chapterDownloadSlot(chapter, appState, options) {
+    const state = chapterDownloadState(chapter, appState, options);
+    if (state === "local") {
+      return "";
+    }
+    const key = chapterDownloadKey(chapter, options?.chapterIndex);
+    const completed = state === "complete" || Boolean(appState?.readerChapterDownloadCompleted?.[key]);
+    const isLoading = state === "loading";
+    const isCached = state === "cached" || state === "complete";
+    const classes = [
+      "is-download-slot",
+      "fd-chapter-download-button",
+      isCached ? "is-active" : "",
+      isLoading ? "is-loading" : "",
+      completed ? "is-complete" : ""
+    ].filter(Boolean).join(" ");
+    const label = isLoading
+      ? `正在下载 ${chapter?.title || "章节"}`
+      : isCached
+        ? `${chapter?.title || "章节"} 已下载`
+        : `下载 ${chapter?.title || "章节"}`;
+    return `
+        <button class="${classes}" type="button" data-reader-chapter-download="${esc(key)}" data-reader-chapter-download-state="${esc(state)}" aria-label="${esc(label)}" aria-busy="${isLoading ? "true" : "false"}" aria-disabled="${isCached || isLoading ? "true" : "false"}" title="${esc(isLoading ? "下载中" : isCached ? "已下载" : "未下载，点击下载")}">
+          ${isLoading ? `<i class="fd-chapter-download-spinner" aria-hidden="true"></i>` : icon(isCached ? "check" : "download", "fd-small-icon")}
+        </button>`;
+  }
+
+  function chapterMarkerSlots(chapter, appState, options) {
+    const supportsDownload = bookSupportsChapterDownload(options?.book);
     const bookmarked = chapterHasMarker(chapter, "书签");
     return `
-      <span class="fd-chapter-marker-slots" aria-label="章节标识">
-        <em class="is-download-slot ${cached ? "is-active" : ""}" title="${cached ? "已下载" : "未下载"}">${icon(cached ? "check" : "download", "fd-small-icon")}</em>
+      <span class="fd-chapter-marker-slots${supportsDownload ? "" : " is-local-book"}" aria-label="章节标识">
+        ${chapterDownloadSlot(chapter, appState, options)}
         <em class="is-bookmark-slot ${bookmarked ? "is-active" : ""}" title="${bookmarked ? "书签" : "无书签"}">${icon("bookmark", "fd-small-icon")}</em>
       </span>`;
   }
@@ -2116,13 +2170,10 @@
             <h2>章节信息</h2>
             <button class="fd-inline-route" type="button" data-route="book-directory">${icon("directory", "fd-small-icon")}完整目录</button>
           </header>
-          ${data.library.chapters.map((chapter) => `
+          ${data.library.chapters.map((chapter, index) => `
             <article class="${chapterIsCurrent(chapter) ? "is-current" : ""}" role="button" tabindex="0" data-route="immersive-reading">
               <span>${esc(chapter.title)}</span>
-              <span class="fd-chapter-marker-slots" aria-label="章节标识">
-                <em class="is-download-slot ${chapterMarkers(chapter).includes("已缓存") ? "is-active" : ""}" title="${chapterMarkers(chapter).includes("已缓存") ? "已下载" : "未下载"}">${icon(chapterMarkers(chapter).includes("已缓存") ? "check" : "download", "fd-small-icon")}</em>
-                <em class="is-bookmark-slot ${chapterMarkers(chapter).includes("书签") ? "is-active" : ""}" title="书签">${icon("bookmark", "fd-small-icon")}</em>
-              </span>
+              ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex: index })}
             </article>
           `).join("")}
         </section>`,
@@ -2219,15 +2270,15 @@
             <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">书签</button>
           </nav>
           <div class="fd-directory-full-rows">
-            ${visibleChapters.map((chapter) => `
+            ${visibleChapters.map((chapter) => {
+              const chapterIndex = Math.max(0, chapters.indexOf(chapter));
+              return `
             <article class="${chapterIsCurrent(chapter) ? "is-current" : ""}" role="button" tabindex="0" data-route="immersive-reading">
               <span>${esc(chapter.title)}</span>
-              <span class="fd-chapter-marker-slots" aria-label="章节标识">
-                <em class="is-download-slot ${chapterHasMarker(chapter, "已缓存") ? "is-active" : ""}" title="${chapterHasMarker(chapter, "已缓存") ? "已下载" : "未下载"}">${icon(chapterHasMarker(chapter, "已缓存") ? "check" : "download", "fd-small-icon")}</em>
-                <em class="is-bookmark-slot ${chapterHasMarker(chapter, "书签") ? "is-active" : ""}" title="书签">${icon("bookmark", "fd-small-icon")}</em>
-              </span>
+              ${chapterMarkerSlots(chapter, appState, { book, chapterIndex })}
             </article>
-            `).join("")}
+            `;
+            }).join("")}
           </div>
         </section>`
     }));
@@ -2680,7 +2731,7 @@
       `--reader-top-margin:${esc(safe.topMargin)}px`,
       `--reader-side-margin:${esc(safe.sideMargin)}px`,
       `--reader-paragraph-indent:${esc(safe.paragraphIndent)}em`,
-      `--reader-texture-opacity:${safe.texture === "paper" ? "0.04" : safe.texture === "soft" ? "0.02" : "0"}`
+      `--reader-page-texture-opacity:${safe.texture === "paper" ? "0.04" : safe.texture === "soft" ? "0.02" : "0"}`
     ].join(";");
   }
 
@@ -2702,11 +2753,139 @@
 
   function readerThemeStyle(data, appState) {
     const theme = currentReaderTheme(data, appState);
+    const isNight = theme.scheme === "night";
+    const themeTexture = theme.texture || "plain";
+    const textureOpacity = Number.isFinite(Number(theme.textureOpacity))
+      ? Math.max(0, Math.min(0.08, Number(theme.textureOpacity)))
+      : themeTexture === "paper"
+        ? isNight ? 0.026 : 0.034
+        : 0;
+    const textureRgb = theme.textureRgb || (isNight ? "222 202 174" : "138 116 84");
+    const control = isNight
+      ? {
+        surface: "rgba(38, 35, 31, 0.96)",
+        surfaceSolid: "rgba(34, 31, 28, 0.98)",
+        panel: "rgba(46, 42, 37, 0.82)",
+        panelSoft: "rgba(66, 59, 51, 0.66)",
+        elevated: "rgba(52, 47, 42, 0.92)",
+        field: "rgba(58, 52, 46, 0.78)",
+        line: "rgba(226, 209, 185, 0.16)",
+        lineStrong: "rgba(226, 209, 185, 0.28)",
+        ink: "#eadfce",
+        muted: "#baad9c",
+        icon: "#d4c5b2",
+        primary: "#7a684f",
+        primaryText: "#fffaf4",
+        action: "#d2bd96",
+        activeBg: "rgba(210, 189, 150, 0.18)",
+        activeStrong: "rgba(210, 189, 150, 0.28)",
+        activeSoft: "rgba(210, 189, 150, 0.12)",
+        disabledBg: "rgba(226, 209, 185, 0.12)",
+        handle: "rgba(215, 203, 188, 0.42)",
+        shadow: "0 14px 30px rgba(0, 0, 0, 0.28)",
+        innerShadow: "inset 0 1px 0 rgba(255, 250, 244, 0.07), 0 8px 22px rgba(0, 0, 0, 0.18)",
+        selectionToolbar: "rgba(28, 25, 22, 0.96)",
+        selectionToolbarLine: "rgba(235, 222, 204, 0.16)",
+        selectionToolbarText: "#fff7ec",
+        selectionFill: "rgba(235, 222, 204, 0.14)",
+        selectionLine: "rgba(235, 222, 204, 0.38)",
+        selectionHandle: "#d7c7b2",
+        selectionHandleBorder: "rgba(28, 25, 22, 0.92)",
+        ttsCursor: "rgba(234, 223, 206, 0.46)",
+        ttsCursorSoft: "rgba(234, 223, 206, 0.08)",
+        annotationLine: "color-mix(in srgb, currentColor 58%, transparent)"
+      }
+      : {
+        surface: "rgba(255, 250, 244, 0.98)",
+        surfaceSolid: "rgba(255, 252, 248, 0.98)",
+        panel: "rgba(255, 252, 248, 0.62)",
+        panelSoft: "rgba(238, 230, 219, 0.64)",
+        elevated: "rgba(255, 252, 248, 0.74)",
+        field: "rgba(255, 248, 239, 0.78)",
+        line: "rgba(155, 132, 102, 0.18)",
+        lineStrong: "rgba(180, 166, 151, 0.34)",
+        ink: "#332c25",
+        muted: "#5b5046",
+        icon: "#4d463f",
+        primary: "#2f6373",
+        primaryText: "#fffaf4",
+        action: "#2f6373",
+        activeBg: "rgba(47, 99, 115, 0.1)",
+        activeStrong: "rgba(47, 99, 115, 0.16)",
+        activeSoft: "rgba(47, 99, 115, 0.08)",
+        disabledBg: "rgba(238, 230, 219, 0.56)",
+        handle: "#b9ad9f",
+        shadow: "var(--fd-shadow)",
+        innerShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 5px 18px rgba(92, 71, 50, 0.05)",
+        selectionToolbar: "rgba(48, 42, 35, 0.95)",
+        selectionToolbarLine: "rgba(75, 63, 50, 0.24)",
+        selectionToolbarText: "#fffaf4",
+        selectionFill: "rgba(57, 49, 40, 0.12)",
+        selectionLine: "rgba(57, 49, 40, 0.26)",
+        selectionHandle: "#5b5046",
+        selectionHandleBorder: "#fffaf4",
+        ttsCursor: "rgba(43, 36, 29, 0.42)",
+        ttsCursorSoft: "rgba(43, 36, 29, 0.045)",
+        annotationLine: "color-mix(in srgb, currentColor 48%, transparent)"
+      };
     return [
+      `--reader-theme-scheme:${esc(theme.scheme || "day")}`,
       `--reader-paper-start:${esc(theme.paperStart)}`,
       `--reader-paper-end:${esc(theme.paperEnd)}`,
-      `--reader-ink:${esc(theme.ink)}`
+      `--reader-ink:${esc(theme.ink)}`,
+      `--reader-theme-texture:${esc(themeTexture)}`,
+      `--reader-theme-texture-opacity:${esc(textureOpacity.toFixed(3))}`,
+      `--reader-texture-color-rgb:${esc(textureRgb)}`,
+      `--reader-control-surface:${esc(control.surface)}`,
+      `--reader-control-surface-solid:${esc(control.surfaceSolid)}`,
+      `--reader-control-panel:${esc(control.panel)}`,
+      `--reader-control-panel-soft:${esc(control.panelSoft)}`,
+      `--reader-control-elevated:${esc(control.elevated)}`,
+      `--reader-control-field:${esc(control.field)}`,
+      `--reader-control-line:${esc(control.line)}`,
+      `--reader-control-line-strong:${esc(control.lineStrong)}`,
+      `--reader-control-ink:${esc(control.ink)}`,
+      `--reader-control-muted:${esc(control.muted)}`,
+      `--reader-control-icon:${esc(control.icon)}`,
+      `--reader-control-primary:${esc(control.primary)}`,
+      `--reader-control-primary-text:${esc(control.primaryText)}`,
+      `--reader-control-action:${esc(control.action)}`,
+      `--reader-control-active-bg:${esc(control.activeBg)}`,
+      `--reader-control-active-strong:${esc(control.activeStrong)}`,
+      `--reader-control-active-soft:${esc(control.activeSoft)}`,
+      `--reader-control-disabled-bg:${esc(control.disabledBg)}`,
+      `--reader-control-handle:${esc(control.handle)}`,
+      `--reader-control-shadow:${esc(control.shadow)}`,
+      `--reader-control-inner-shadow:${esc(control.innerShadow)}`,
+      `--reader-selection-toolbar:${esc(control.selectionToolbar)}`,
+      `--reader-selection-toolbar-line:${esc(control.selectionToolbarLine)}`,
+      `--reader-selection-toolbar-text:${esc(control.selectionToolbarText)}`,
+      `--reader-selection-fill:${esc(control.selectionFill)}`,
+      `--reader-selection-line:${esc(control.selectionLine)}`,
+      `--reader-selection-handle:${esc(control.selectionHandle)}`,
+      `--reader-selection-handle-border:${esc(control.selectionHandleBorder)}`,
+      `--reader-tts-cursor:${esc(control.ttsCursor)}`,
+      `--reader-tts-cursor-soft:${esc(control.ttsCursorSoft)}`,
+      `--reader-annotation-line:${esc(control.annotationLine)}`,
+      `--fd-ink:var(--reader-control-ink)`,
+      `--fd-muted:var(--reader-control-muted)`,
+      `--fd-primary:var(--reader-control-primary)`,
+      `--fd-primary-dark:var(--reader-control-primary)`
     ].join(";");
+  }
+
+  function syncAppThemeRoot(root, data, appState) {
+    if (!root) return;
+    const theme = currentReaderTheme(data, appState);
+    const scheme = theme.scheme === "night" ? "night" : "day";
+    root.setAttribute("data-app-theme", theme.value || "");
+    root.setAttribute("data-app-theme-scheme", scheme);
+    document.documentElement.setAttribute("data-reader-app-theme", theme.value || "");
+    document.documentElement.setAttribute("data-reader-app-theme-scheme", scheme);
+    if (document.body) {
+      document.body.setAttribute("data-reader-app-theme", theme.value || "");
+      document.body.setAttribute("data-reader-app-theme-scheme", scheme);
+    }
   }
 
   function readerBrightnessConfig(data) {
@@ -2738,10 +2917,18 @@
 
   function readerTtsConfig(data) {
     const config = data.reader?.tts || {};
-    const defaults = config.defaults || {};
+    const rawDefaults = config.defaults || {};
+    const segmentCount = readerTtsSegments(data).length;
+    const defaults = Object.assign({}, rawDefaults);
+    const defaultIndex = Number(defaults.sentenceIndex);
+    const fallbackMin = Number.isFinite(defaultIndex) && defaultIndex > 0 ? defaultIndex : 1;
+    const sentenceMin = Number.isFinite(Number(config.sentenceMin)) ? Number(config.sentenceMin) : fallbackMin;
+    const configuredMax = Number.isFinite(Number(config.sentenceMax)) ? Number(config.sentenceMax) : fallbackMin;
+    const sentenceMax = Math.max(sentenceMin, configuredMax, segmentCount || sentenceMin);
+    defaults.sentenceIndex = clamp(Number.isFinite(defaultIndex) ? defaultIndex : sentenceMin, sentenceMin, sentenceMax);
     return {
-      sentenceMin: Number.isFinite(Number(config.sentenceMin)) ? Number(config.sentenceMin) : Number(defaults.sentenceIndex) || 0,
-      sentenceMax: Number.isFinite(Number(config.sentenceMax)) ? Number(config.sentenceMax) : Number(defaults.sentenceIndex) || 0,
+      sentenceMin,
+      sentenceMax,
       defaults,
       options: config.options || {}
     };
@@ -2907,6 +3094,121 @@
       .filter(Boolean);
   }
 
+  function readerTtsSegmentTexts(text) {
+    const normalized = String(text || "").trim();
+    if (!normalized) return [];
+    const pieces = normalized.match(/[^。！？!?；;]+[。！？!?；;]?/g) || [normalized];
+    return pieces.map((item) => item.trim()).filter(Boolean);
+  }
+
+  function readerTtsSegments(data) {
+    const segments = [];
+    readerTextBlocks(data).forEach((paragraph, paragraphIndex) => {
+      readerTtsSegmentTexts(paragraph).forEach((text) => {
+        segments.push({
+          index: segments.length + 1,
+          paragraphIndex,
+          text
+        });
+      });
+    });
+    return segments;
+  }
+
+  const readerAnnotationPresets = [
+    { text: "无数细小的针", style: "single" },
+    { text: "迟到许久的答案", style: "dashed" },
+    { text: "短暂而摇晃的光", style: "wavy" },
+    { text: "某个雨夜", style: "single" }
+  ];
+
+  function readerAnnotationHtml(text) {
+    const source = String(text || "");
+    if (!source) {
+      return "";
+    }
+    const matches = readerAnnotationPresets
+      .map((item) => {
+        const start = source.indexOf(item.text);
+        return start >= 0 ? {
+          start,
+          end: start + item.text.length,
+          text: item.text,
+          style: item.style || "single"
+        } : null;
+      })
+      .filter(Boolean)
+      .sort((left, right) => left.start - right.start || left.end - right.end);
+    const visible = [];
+    let lastEnd = -1;
+    matches.forEach((match) => {
+      if (match.start < lastEnd) return;
+      visible.push(match);
+      lastEnd = match.end;
+    });
+    if (!visible.length) {
+      return esc(source);
+    }
+    let html = "";
+    let cursor = 0;
+    visible.forEach((match) => {
+      html += esc(source.slice(cursor, match.start));
+      html += `<span class="fd-reader-annotation is-${esc(match.style)}" title="已标注">${esc(match.text)}</span>`;
+      cursor = match.end;
+    });
+    html += esc(source.slice(cursor));
+    return html;
+  }
+
+  function readerTtsSentenceIndex(data, appState) {
+    const config = readerTtsConfig(data);
+    const raw = Number(appState?.readerTts?.sentenceIndex || config.defaults.sentenceIndex || config.sentenceMin);
+    return clamp(Number.isFinite(raw) ? raw : config.sentenceMin, config.sentenceMin, config.sentenceMax);
+  }
+
+  function readerTtsIsActive(appState) {
+    return Boolean(appState?.readerTtsSession || appState?.readerTts?.playing);
+  }
+
+  function readerTtsParagraphHtml(line, segments, activeIndex) {
+    const source = String(line || "");
+    if (!source || !segments.length) {
+      return `<p>${readerAnnotationHtml(source)}</p>`;
+    }
+    const matches = segments
+      .map((segment) => {
+        const start = source.indexOf(segment.text);
+        return start >= 0 ? {
+          start,
+          end: start + segment.text.length,
+          index: segment.index,
+          text: segment.text
+        } : null;
+      })
+      .filter(Boolean)
+      .sort((left, right) => left.start - right.start || left.index - right.index);
+    const visible = [];
+    let lastEnd = -1;
+    matches.forEach((match) => {
+      if (match.start < lastEnd) return;
+      visible.push(match);
+      lastEnd = match.end;
+    });
+    if (!visible.length) {
+      return `<p>${readerAnnotationHtml(source)}</p>`;
+    }
+    let html = "";
+    let cursor = 0;
+    visible.forEach((match) => {
+      const isCurrent = match.index === activeIndex;
+      html += readerAnnotationHtml(source.slice(cursor, match.start));
+      html += `<span class="fd-reader-tts-segment${isCurrent ? " is-tts-current" : ""}" data-reader-tts-segment="${esc(match.index)}"${isCurrent ? ` data-reader-tts-current="true"` : ""}>${readerAnnotationHtml(match.text)}</span>`;
+      cursor = match.end;
+    });
+    html += readerAnnotationHtml(source.slice(cursor));
+    return `<p>${html}</p>`;
+  }
+
   function fallbackReaderPages(data) {
     return [{
       progress: (data.reader && data.reader.bottomReadout && data.reader.bottomReadout.progress) || "38%",
@@ -2957,11 +3259,16 @@
     const chapterTitle = chapterState.chapter.title || `${readerChapterMeta(data)} ${readerChapterTitle(data)}`;
     const chapterTitleHtml = pageState.index === 0 ? `<h1>${esc(chapterTitle.replace(/^第\s*\d+\s*章\s*/, ""))}</h1>` : "";
     const paginationMode = appState?.readerPages?.length ? "runtime" : "fallback";
+    const ttsActive = readerTtsIsActive(appState);
+    const ttsPlaying = Boolean(appState?.readerTts?.playing);
+    const ttsIndex = ttsActive ? readerTtsSentenceIndex(data, appState) : 0;
+    const ttsSegments = ttsActive ? readerTtsSegments(data) : [];
+    const paragraphHtml = paragraphs.map((line) => ttsActive ? readerTtsParagraphHtml(line, ttsSegments, ttsIndex) : `<p>${readerAnnotationHtml(line)}</p>`).join("");
     return `
       <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
-      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
+      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
         ${chapterTitleHtml}
-        ${paragraphs.map((line) => `<p>${esc(line)}</p>`).join("")}
+        ${paragraphHtml}
       </article>
       <div class="fd-reader-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>
       ${dismissRoute ? `<button class="fd-reader-dismiss-zone" type="button" data-dev-region="ControlDismissZone" data-reader-dismiss="${esc(dismissRoute)}" aria-label="隐藏阅读控制层"></button>` : ""}`;
@@ -3711,35 +4018,54 @@
 
   function readerQuickActionPanel(type, appState, data) {
     const autoPageEnabled = Boolean(appState?.readerSettings?.autoPage);
+    const autoPageSession = Boolean(appState?.readerAutoPageSession || appState?.readerSettings?.autoPage);
     const chapterState = data ? currentReaderChapter(data, appState) : { index: 0, count: 1, chapter: {} };
     const panels = {
       search: {
         title: "内容搜索",
         meta: "仅在当前书籍正文内定位结果",
+        hideHeader: true,
+        className: "fd-reader-search-quick-panel fd-reader-action-quick-panel",
         body: `
-          <label class="fd-reader-panel-search">${icon("search", "fd-small-icon")}<span>雨夜</span></label>
-          <div class="fd-reader-module-list">
-            <button type="button" data-route="immersive-reading"><strong>第 32 章 雨夜</strong><small>雨夜的风格外冷 · 当前结果 1/2</small></button>
-            <button type="button" data-route="immersive-reading"><strong>第 33 章 灯塔</strong><small>雨夜之后，远处灯塔亮起 · 结果 2/2</small></button>
+          <div class="fd-reader-search-panel fd-reader-quick-action-panel">
+            <header class="fd-reader-quick-toolbar" aria-label="内容搜索操作">
+              <button class="fd-reader-quick-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
+                ${icon("back", "fd-small-icon")}<span>返回</span>
+              </button>
+              <button class="fd-reader-quick-action" type="button" data-reader-search-submit aria-label="搜索当前输入内容">搜索</button>
+            </header>
+            <label class="fd-reader-panel-search fd-reader-search-field">${icon("search", "fd-small-icon")}<span>雨夜</span></label>
+            <div class="fd-reader-search-result-list fd-reader-module-list" aria-label="内容搜索结果">
+              <button type="button" data-route="immersive-reading"><strong>第 32 章 雨夜</strong><small>雨夜的风格外冷 · 当前结果 1/2</small></button>
+              <button type="button" data-route="immersive-reading"><strong>第 33 章 灯塔</strong><small>雨夜之后，远处灯塔亮起 · 结果 2/2</small></button>
+            </div>
           </div>`
       },
       "auto-page": {
         title: "自动翻页",
         meta: "启动后进入沉浸阅读，底部胶囊控制暂停继续",
         hideHeader: true,
+        className: "fd-reader-auto-page-quick-panel",
         body: `
           <div class="fd-reader-auto-panel">
+            <header class="fd-reader-auto-toolbar" aria-label="自动翻页操作">
+              <button class="fd-reader-auto-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
+                ${icon("back", "fd-small-icon")}<span>返回</span>
+              </button>
+              <button class="fd-reader-auto-stop ${autoPageSession ? "" : "is-disabled"}" type="button"${autoPageSession ? ` data-reader-session-stop="autoPage"` : ` aria-disabled="true"`}>
+                停止自动翻页
+              </button>
+            </header>
             <section class="fd-reader-auto-control" aria-label="自动翻页控制">
               <button class="fd-reader-auto-chapter" type="button" data-reader-chapter-action="prev" aria-label="上一章" aria-disabled="${chapterState.index === 0 ? "true" : "false"}">
-                ${icon("chevron-left", "fd-small-icon")}<span>上一章</span>
+                <span class="fd-reader-auto-chevrons is-prev" aria-hidden="true">${icon("chevron-left", "fd-small-icon")}${icon("chevron-left", "fd-small-icon")}</span><span>上一章</span>
               </button>
               <button class="fd-reader-auto-toggle ${autoPageEnabled ? "is-on" : ""}" type="button" data-reader-setting-toggle="autoPage" aria-pressed="${autoPageEnabled ? "true" : "false"}">
                 <i>${icon(autoPageEnabled ? "pause" : "play", "fd-small-icon")}</i>
                 <strong>自动翻页</strong>
-                <small>${autoPageEnabled ? "运行中" : "未启动"}</small>
               </button>
               <button class="fd-reader-auto-chapter" type="button" data-reader-chapter-action="next" aria-label="下一章" aria-disabled="${chapterState.index >= chapterState.count - 1 ? "true" : "false"}">
-                ${icon("chevron", "fd-small-icon")}<span>下一章</span>
+                <span class="fd-reader-auto-chevrons is-next" aria-hidden="true">${icon("chevron", "fd-small-icon")}${icon("chevron", "fd-small-icon")}</span><span>下一章</span>
               </button>
             </section>
             <div class="fd-reader-step-row fd-reader-auto-speed" aria-label="翻页速度"><strong>翻页速度</strong><span><button type="button" aria-label="减慢自动翻页">-</button><em>8 秒</em><button type="button" aria-label="加快自动翻页">+</button></span></div>
@@ -3748,21 +4074,23 @@
       },
       replace: {
         title: "内容替换",
-        className: "fd-replace-quick-panel",
-        headerHtml: `
-          <header class="fd-replace-quick-head">
-            <span aria-hidden="true"></span>
-            <strong>内容替换</strong>
-            <button type="button" data-route="reader">关闭</button>
-          </header>`,
+        hideHeader: true,
+        className: "fd-replace-quick-panel fd-reader-action-quick-panel",
         body: `
-          <div class="fd-replace-rule-list fd-replace-toggle-list" aria-label="内容替换规则开关">
-            ${readerReplacementRules(appState).map((rule) => `
-              <button class="fd-replace-rule-row fd-replace-toggle-row ${rule.enabled ? "is-on" : ""}" type="button" data-reader-replace-rule="${esc(rule.id)}" aria-pressed="${rule.enabled ? "true" : "false"}">
-                <strong>${esc(rule.title)}</strong>
-                <span class="fd-replace-switch ${rule.enabled ? "is-on" : ""}" aria-hidden="true"><i></i></span>
+          <div class="fd-reader-replace-panel fd-reader-quick-action-panel">
+            <header class="fd-reader-quick-toolbar" aria-label="内容替换操作">
+              <button class="fd-reader-quick-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
+                ${icon("back", "fd-small-icon")}<span>返回</span>
               </button>
-            `).join("")}
+            </header>
+            <div class="fd-replace-rule-list fd-replace-toggle-list" aria-label="内容替换规则开关">
+              ${readerReplacementRules(appState).map((rule) => `
+                <button class="fd-replace-rule-row fd-replace-toggle-row ${rule.enabled ? "is-on" : ""}" type="button" data-reader-replace-rule="${esc(rule.id)}" aria-pressed="${rule.enabled ? "true" : "false"}">
+                  <strong>${esc(rule.title)}</strong>
+                  <span class="fd-replace-switch ${rule.enabled ? "is-on" : ""}" aria-hidden="true"><i></i></span>
+                </button>
+              `).join("")}
+            </div>
           </div>
         `
       }
@@ -3788,10 +4116,10 @@
       const listHtml = visibleItems.map((chapter) => {
         const chapterIndex = Math.max(0, chapters.indexOf(chapter));
         return `
-            <button class="fd-reader-toc-row fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" type="button" data-reader-directory-index="${chapterIndex}">
+            <article class="fd-reader-toc-row fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
               <strong>${esc(chapter.title)}</strong>
-              ${chapterMarkerSlots(chapter)}
-            </button>`;
+              ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
+            </article>`;
       }).join("");
       return `
         <section class="fd-reader-module-panel fd-reader-toc-panel" data-dev-region="ReaderModulePanel" aria-label="目录与书签">
@@ -3806,9 +4134,15 @@
       const ttsConfig = readerTtsConfig(data);
       const ttsDefaults = ttsConfig.defaults;
       const ttsOptions = ttsConfig.options;
+      const ttsSession = Boolean(appState?.readerTtsSession || tts.playing);
       return `
         <section class="fd-reader-module-panel fd-reader-tts-panel" data-dev-region="ReaderModulePanel" aria-label="朗读">
-          <strong class="fd-reader-module-title">朗读</strong>
+          <header class="fd-reader-tts-toolbar" aria-label="朗读操作">
+            <strong class="fd-reader-module-title">朗读</strong>
+            <button class="fd-reader-tts-stop ${ttsSession ? "" : "is-disabled"}" type="button"${ttsSession ? ` data-reader-session-stop="tts"` : ` aria-disabled="true"`}>
+              停止朗读
+            </button>
+          </header>
           <div class="fd-reader-tts-list fd-reader-module-list">
             <section class="fd-reader-tts-row fd-reader-tts-control-row" aria-label="播放控制">
               <i>${icon("tts", "fd-small-icon")}</i>
@@ -3846,17 +4180,17 @@
         <section class="fd-reader-module-panel fd-reader-appearance-panel" data-dev-region="ReaderModulePanel" aria-label="阅读外观">
           <div class="fd-reader-appearance-list fd-reader-module-list">
             <section class="fd-reader-full-setting-block fd-reader-appearance-quick-theme">
-              <header><strong>阅读主题</strong><em>${esc(activeTheme.label)}</em></header>
+              <header><strong>阅读主题</strong></header>
               <div class="fd-reader-full-theme-grid">
                 ${quickThemes.map((item, index) => `
-                  <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 2 ? "day" : "night"))}" aria-label="${esc(item.scheme === "night" ? "夜晚主题" : "白天主题")}：${esc(item.label)}">
-                    <span style="--swatch:${esc(item.swatch)}"></span><small>${esc(item.label)}</small>
+                  <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 2 ? "day" : "night"))}" data-reader-theme-texture="${esc(item.texture || "plain")}" aria-label="${esc(item.scheme === "night" ? "夜晚" : "白天")}${item.texture === "paper" ? "纹理" : "纯色"}主题：${esc(item.label)}">
+                    <span style="--swatch:${esc(item.swatch)};--swatch-texture-rgb:${esc(item.textureRgb || (item.scheme === "night" ? "222 202 174" : "138 116 84"))}"></span>
                   </button>
                 `).join("")}
               </div>
             </section>
             <section class="fd-reader-full-setting-block fd-reader-full-typography fd-reader-appearance-quick-typography">
-              <header><strong>文字排版</strong><em>字号 / 行距 / 字体</em></header>
+              <header><strong>文字排版</strong></header>
               ${quickTypographyPanelRows(data, typography)}
             </section>
           </div>
@@ -3919,10 +4253,10 @@
           ${visibleItems.map((chapter) => {
             const chapterIndex = Math.max(0, chapters.indexOf(chapter));
             return `
-              <button class="fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" type="button" data-reader-directory-index="${chapterIndex}">
+              <article class="fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
                 <strong>${esc(chapter.title)}</strong>
-                ${chapterMarkerSlots(chapter)}
-              </button>`;
+                ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
+              </article>`;
           }).join("")}
         </div>
       </section>`;
@@ -3955,32 +4289,26 @@
   function readerFullAppearancePage(data, appState) {
     const typography = appState?.readerTypography || normalizeReaderTypography(data);
     const pageSpace = appState?.readerPageSpace || normalizeReaderPageSpace(data);
-    const pageSpaceConfig = readerPageSpaceConfig(data);
     const activeTheme = currentReaderTheme(data, appState);
     return `
       <section class="fd-reader-full-section fd-reader-full-appearance" aria-label="完整界面设置">
         <section class="fd-reader-full-setting-block">
-          <header><strong>阅读主题</strong><em>${esc(activeTheme.label)}</em></header>
+          <header><strong>阅读主题</strong></header>
           <div class="fd-reader-full-theme-grid">
             ${readerThemeOptions(data).map((item, index) => `
-              <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 4 ? "day" : "night"))}" data-reader-theme-pair="${esc(item.pair || "")}" aria-label="${esc(index < 4 ? "白天主题" : "夜晚主题")}：${esc(item.label)}">
-                <span style="--swatch:${esc(item.swatch)}"></span><small>${esc(item.label)}</small>
+              <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 4 ? "day" : "night"))}" data-reader-theme-texture="${esc(item.texture || "plain")}" data-reader-theme-pair="${esc(item.pair || "")}" aria-label="${esc((item.scheme || (index < 4 ? "day" : "night")) === "night" ? "夜晚" : "白天")}${item.texture === "paper" ? "纹理" : "纯色"}主题：${esc(item.label)}">
+                <span style="--swatch:${esc(item.swatch)};--swatch-texture-rgb:${esc(item.textureRgb || ((item.scheme || (index < 4 ? "day" : "night")) === "night" ? "222 202 174" : "138 116 84"))}"></span>
               </button>
             `).join("")}
           </div>
         </section>
         <section class="fd-reader-full-setting-block fd-reader-full-typography">
-          <header><strong>文字排版</strong><em>字号 / 行距 / 段距 / 字距</em></header>
+          <header><strong>文字排版</strong></header>
           ${typographyPanelRows(data, typography)}
         </section>
         <section class="fd-reader-full-setting-block fd-reader-full-page-space">
-          <header><strong>页面空间</strong><em>边距 / 缩进 / 纹理</em></header>
+          <header><strong>页面空间</strong><em>边距 / 缩进</em></header>
           ${readerPageSpaceRows(data, pageSpace)}
-          <div class="fd-reader-full-choice-grid">
-            ${pageSpaceConfig.textureOptions.map((item) => `
-              <button class="${pageSpace.texture === item.value ? "is-active" : ""}" type="button" data-reader-page-space-set="texture" data-reader-page-space-value="${esc(item.value)}">${esc(item.label)}</button>
-            `).join("")}
-          </div>
         </section>
       </section>`;
   }
@@ -4248,6 +4576,7 @@
     const isCache = route === "reader-book-cache";
     return shellKit().renderReaderShell({
       frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-full fd-reader-utility-frame ${isCache ? "fd-reader-cache-frame" : "fd-reader-debug-frame"}`,
+      frameStyle: readerThemeStyle(data, appState),
       readingSurfaceClass: "fd-reading-surface",
       overlayClass: "fd-reader-overlay fd-reader-full-overlay",
       bottomSheetHostClass: "fd-reader-full-host",
@@ -4266,6 +4595,7 @@
     const type = readerFullTypeByRoute[route] || "settings";
     return shellKit().renderReaderShell({
       frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-full fd-reader-mode-full-${esc(type)}`,
+      frameStyle: readerThemeStyle(data, appState),
       readingSurfaceClass: "fd-reading-surface",
       overlayClass: "fd-reader-overlay fd-reader-full-overlay",
       bottomSheetHostClass: "fd-reader-full-host",
@@ -4289,6 +4619,7 @@
     const frameMode = isImmersive ? "immersive" : state.mode;
     return shellKit().renderReaderShell({
       frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-${esc(frameMode)}${isImmersive ? " fd-immersive-frame" : ""}`,
+      frameStyle: readerThemeStyle(data, appState),
       readingSurfaceClass: "fd-reading-surface",
       overlayClass: `fd-reader-overlay${isImmersive ? " fd-immersive-overlay" : ""}`,
       bottomSheetHostClass: isImmersive ? "fd-reader-sheet fd-reader-sheet-empty" : "fd-reader-sheet",
@@ -5890,6 +6221,8 @@
     bind("[data-search-state]", "search.state.replace");
     bind("[data-add-search-shelf], [data-top-action], [data-book-action]", "button.activate");
     bind("[data-reader-setting-toggle], [data-source-switch], [data-restore-scope], [data-reader-brightness-auto], [data-reader-replace-rule]", "toggle.switch");
+    bind("[data-reader-chapter-download]", "state.loading.inline");
+    bind("[data-reader-session-stop]", "reader.session.capsule.exit");
     bind("[data-reader-brightness-track], [data-reader-chapter-progress]", "slider.drag.start/update/release");
     bind("[data-reader-typography-action], [data-reader-page-space-action]", "stepper.press/value.change");
     bind("[data-reader-typography-set], [data-reader-page-space-set], [data-reader-theme], [data-reader-theme-pair], [data-reader-theme-scheme], [data-reader-toc-mode]", "segment.item.switch");
@@ -7719,6 +8052,9 @@
       readerDockOffsets: {},
       readerTextSelectionOpen: false,
       readerSelectedText: "雨，下了一整夜。",
+      readerChapterDownloads: {},
+      readerChapterDownloadCompleted: {},
+      readerChapterDownloadTimers: {},
       readerSettingsExpandedOption: "",
       discoverEntry: "",
       discoverFilter: "男频",
@@ -8067,9 +8403,11 @@
 
     const renderActiveRoute = (route, options) => {
       const renderedTurnDirection = appState.readerTurnDirection;
+      syncAppThemeRoot(root, data, appState);
       screenHost.innerHTML = renderRoute(route, data, options, appState);
       updateRouteInfo(route);
       if (!options?.loading && updateReaderPagination(screenHost, data, appState)) {
+        syncAppThemeRoot(root, data, appState);
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         updateRouteInfo(route);
       }
@@ -8393,6 +8731,33 @@
       appState.readerTextSelectionOpen = false;
       renderCurrentRoute();
     };
+    const applyReaderChapterDownload = (key) => {
+      if (!key) {
+        return;
+      }
+      appState.readerChapterDownloads = appState.readerChapterDownloads || {};
+      appState.readerChapterDownloadCompleted = appState.readerChapterDownloadCompleted || {};
+      appState.readerChapterDownloadTimers = appState.readerChapterDownloadTimers || {};
+      const currentState = appState.readerChapterDownloads[key] || "";
+      if (currentState === "loading" || currentState === "complete" || currentState === "cached") {
+        return;
+      }
+      window.clearTimeout(appState.readerChapterDownloadTimers[key]);
+      window.clearTimeout(appState.readerChapterDownloadTimers[`${key}:complete`]);
+      delete appState.readerChapterDownloadCompleted[key];
+      appState.readerChapterDownloads[key] = "loading";
+      renderCurrentRoute();
+      appState.readerChapterDownloadTimers[key] = window.setTimeout(() => {
+        appState.readerChapterDownloads[key] = "complete";
+        appState.readerChapterDownloadCompleted[key] = true;
+        renderCurrentRoute();
+        appState.readerChapterDownloadTimers[`${key}:complete`] = window.setTimeout(() => {
+          appState.readerChapterDownloads[key] = "cached";
+          delete appState.readerChapterDownloadCompleted[key];
+          renderCurrentRoute();
+        }, 720);
+      }, 880);
+    };
     const applyReaderPageAction = (action) => {
       const pageCount = readerPages(data, appState).length;
       const currentIndex = Number.isFinite(Number(appState.readerPageIndex)) ? Number(appState.readerPageIndex) : 0;
@@ -8556,6 +8921,7 @@
       if (action === "toggle") {
         appState.readerTtsSession = true;
         tts.playing = !tts.playing;
+        tts.sentenceIndex = readerTtsSentenceIndex(data, appState);
         if (tts.playing) {
           appState.readerAutoPageSession = false;
           appState.readerSettings.autoPage = false;
@@ -8570,6 +8936,20 @@
       }
       if (action === "prev") tts.sentenceIndex = clamp((tts.sentenceIndex || ttsConfig.defaults.sentenceIndex) - 1, ttsConfig.sentenceMin, ttsConfig.sentenceMax);
       if (action === "next") tts.sentenceIndex = clamp((tts.sentenceIndex || ttsConfig.defaults.sentenceIndex) + 1, ttsConfig.sentenceMin, ttsConfig.sentenceMax);
+      renderCurrentRoute();
+    };
+    const stopReaderSession = (type) => {
+      appState.readerSettingsExpandedOption = "";
+      appState.readerTtsExpandedOption = "";
+      if (type === "autoPage") {
+        appState.readerAutoPageSession = false;
+        appState.readerAutoPageCountdown = 8;
+        appState.readerSettings.autoPage = false;
+      }
+      if (type === "tts") {
+        appState.readerTtsSession = false;
+        appState.readerTts.playing = false;
+      }
       renderCurrentRoute();
     };
     const toggleReaderTtsOption = (key) => {
@@ -9610,10 +9990,28 @@
       });
     });
 
-    screenHost.querySelectorAll("[data-reader-directory-index]").forEach((button) => {
+    screenHost.querySelectorAll("[data-reader-chapter-download]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
+        event.stopPropagation();
+        if (button.getAttribute("aria-disabled") === "true") {
+          return;
+        }
+        applyReaderChapterDownload(button.getAttribute("data-reader-chapter-download") || "");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-directory-index]").forEach((button) => {
+      const activateDirectoryRow = (event) => {
+        event.preventDefault();
         applyReaderDirectoryIndex(button.getAttribute("data-reader-directory-index"));
+      };
+      button.addEventListener("click", activateDirectoryRow);
+      button.addEventListener("keydown", (event) => {
+        if (event.target !== button || (event.key !== "Enter" && event.key !== " ")) {
+          return;
+        }
+        activateDirectoryRow(event);
       });
     });
 
@@ -9621,6 +10019,14 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         applyReaderTtsAction(button.getAttribute("data-reader-tts-action"));
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-session-stop]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (button.getAttribute("aria-disabled") === "true") return;
+        stopReaderSession(button.getAttribute("data-reader-session-stop"));
       });
     });
 

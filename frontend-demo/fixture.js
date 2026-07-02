@@ -210,14 +210,14 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
     },
     themeDefault: "paper",
     themeOptions: [
-      { value: "paper", label: "纸色", scheme: "day", pair: "paper-night", swatch: "#fff7ec", paperStart: "#fff9f0", paperEnd: "#f7ead9", ink: "#2b241d" },
-      { value: "warm", label: "暖白", scheme: "day", pair: "warm-night", swatch: "#fff1df", paperStart: "#fff4e8", paperEnd: "#f2dfc8", ink: "#2e241b" },
-      { value: "green", label: "护眼", scheme: "day", pair: "green-night", swatch: "#dbecc9", paperStart: "#eef7df", paperEnd: "#dcebc8", ink: "#253421" },
-      { value: "blue", label: "浅蓝", scheme: "day", pair: "blue-night", swatch: "#dce9f3", paperStart: "#edf5fb", paperEnd: "#d9e7f1", ink: "#21313b" },
-      { value: "paper-night", label: "夜纸", scheme: "night", pair: "paper", swatch: "#3b352f", paperStart: "#37312c", paperEnd: "#24211e", ink: "#eadfd0" },
-      { value: "warm-night", label: "暖夜", scheme: "night", pair: "warm", swatch: "#3d3027", paperStart: "#3a2d25", paperEnd: "#241f1b", ink: "#f0ded0" },
-      { value: "green-night", label: "墨绿", scheme: "night", pair: "green", swatch: "#24362d", paperStart: "#25372f", paperEnd: "#18231f", ink: "#dce9d5" },
-      { value: "blue-night", label: "深蓝", scheme: "night", pair: "blue", swatch: "#263541", paperStart: "#263642", paperEnd: "#171f28", ink: "#dce8f1" }
+      { value: "paper", label: "纸纹", scheme: "day", pair: "paper-night", texture: "paper", textureOpacity: 0.034, textureRgb: "138 116 84", swatch: "#f5ead8", paperStart: "#fbf4e9", paperEnd: "#efe2d0", ink: "#2b241d" },
+      { value: "warm", label: "暖白", scheme: "day", pair: "warm-night", texture: "plain", swatch: "#fbf0df", paperStart: "#fff6e9", paperEnd: "#fff6e9", ink: "#2c241d" },
+      { value: "green", label: "青绿", scheme: "day", pair: "green-night", texture: "plain", swatch: "#e7f0e2", paperStart: "#eef5e8", paperEnd: "#eef5e8", ink: "#263423" },
+      { value: "blue", label: "雾蓝", scheme: "day", pair: "blue-night", texture: "plain", swatch: "#e9f1f4", paperStart: "#eff6f8", paperEnd: "#eff6f8", ink: "#22313a" },
+      { value: "paper-night", label: "夜纹", scheme: "night", pair: "paper", texture: "paper", textureOpacity: 0.026, textureRgb: "222 202 174", swatch: "#2d2924", paperStart: "#302b26", paperEnd: "#211f1c", ink: "#e9dece" },
+      { value: "warm-night", label: "暖夜", scheme: "night", pair: "warm", texture: "plain", swatch: "#27231f", paperStart: "#27231f", paperEnd: "#27231f", ink: "#e7d8c8" },
+      { value: "green-night", label: "墨绿", scheme: "night", pair: "green", texture: "plain", swatch: "#202b26", paperStart: "#202b26", paperEnd: "#202b26", ink: "#d8e2d2" },
+      { value: "blue-night", label: "蓝夜", scheme: "night", pair: "blue", texture: "plain", swatch: "#232934", paperStart: "#232934", paperEnd: "#232934", ink: "#dbe2ea" }
     ],
     fontOptions: [
       { label: "系统", value: "system", fontStack: "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif" },

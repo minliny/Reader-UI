@@ -128,8 +128,9 @@
   }
 
   function renderReaderShell(config) {
+    const frameStyle = config.frameStyle ? ` style="${config.frameStyle}"` : "";
     return `
-      <main class="${classList("rsk-reader-frame", config.frameClass)}" data-shell="ReaderShell" data-slot="readerFrame" aria-label="${esc(config.ariaLabel || "阅读器页面")}">
+      <main class="${classList("rsk-reader-frame", config.frameClass)}"${frameStyle} data-shell="ReaderShell" data-slot="readerFrame" aria-label="${esc(config.ariaLabel || "阅读器页面")}">
         <article class="${classList("rsk-reading-surface", config.readingSurfaceClass)}" data-slot="readingSurface" aria-label="阅读正文">
           ${config.readingSurfaceHtml || ""}
         </article>

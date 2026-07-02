@@ -8,6 +8,7 @@
   --fd-border: var(--reader-ds-color-border);
   --fd-primary: var(--reader-ds-color-primary);
   --fd-primary-dark: var(--reader-ds-color-primary-dark);
+  --fd-on-primary: #fffaf4;
   --fd-accent: var(--reader-ds-color-accent);
   --fd-forest: #367a4d;
   --fd-danger: #d62222;
@@ -38,6 +39,12 @@ body {
   font-family: var(--fd-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: geometricPrecision;
+}
+
+html[data-reader-app-theme-scheme="night"],
+body[data-reader-app-theme-scheme="night"] {
+  background: #1c1a18;
+  color: #eadfce;
 }
 
 button {
@@ -82,12 +89,30 @@ button:focus-visible {
   margin: 0 auto;
   padding: 48px 44px 72px;
   background: var(--fd-paper-solid);
+  color: var(--fd-ink);
   --fd-viewport-width: 1440px;
   --fd-viewport-height: 100vh;
   --fd-runtime-phone-width: var(--reader-ds-size-phone-width);
   --fd-runtime-phone-height: var(--reader-ds-size-phone-height);
   --fd-runtime-stack-phone-height: var(--reader-ds-size-stack-phone-height);
   --fd-runtime-flow-width: var(--reader-ds-size-flow-width);
+}
+
+.fd-demo[data-app-theme-scheme="night"] {
+  --fd-paper: #24211e;
+  --fd-paper-bright: #2c2824;
+  --fd-paper-solid: #1c1a18;
+  --fd-surface: rgba(42, 38, 34, 0.9);
+  --fd-ink: #eadfce;
+  --fd-muted: #baad9c;
+  --fd-border: rgba(226, 209, 185, 0.2);
+  --fd-primary: #d2bd96;
+  --fd-primary-dark: #7a684f;
+  --fd-on-primary: #fffaf4;
+  --fd-accent: #d69b5f;
+  --fd-shadow: 0 22px 48px rgba(0, 0, 0, 0.36);
+  --fd-soft-shadow: 0 10px 26px rgba(0, 0, 0, 0.24);
+  --reader-ds-state-focus: 0 0 0 4px rgba(210, 189, 150, 0.24);
 }
 
 .fd-capture-board {
@@ -189,10 +214,10 @@ button:focus-visible {
   display: flex;
   gap: 4px;
   padding: 4px;
-  border: 1px solid rgba(154, 139, 124, 0.42);
+  border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-pill);
-  background: rgba(255, 252, 248, 0.9);
-  box-shadow: 0 10px 24px rgba(70, 52, 35, 0.14);
+  background: var(--fd-surface);
+  box-shadow: var(--fd-soft-shadow);
 }
 
 .fd-demo-mode-switch button {
@@ -206,7 +231,7 @@ button:focus-visible {
 
 .fd-demo-mode-switch button.is-active {
   background: var(--fd-primary-dark);
-  color: #fff;
+  color: var(--fd-on-primary);
 }
 
 .fd-demo[data-demo-mode="regular"] {
@@ -412,8 +437,8 @@ button:focus-visible {
 .fd-source-strip {
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
-  background: rgba(255, 252, 248, 0.78);
-  box-shadow: 0 12px 28px rgba(89, 70, 50, 0.09);
+  background: var(--fd-surface);
+  box-shadow: var(--fd-soft-shadow);
 }
 
 .fd-demo-header dl div {
@@ -570,8 +595,8 @@ button:focus-visible {
   padding: 18px;
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
-  background: rgba(255, 252, 248, 0.78);
-  box-shadow: 0 12px 28px rgba(89, 70, 50, 0.09);
+  background: var(--fd-surface);
+  box-shadow: var(--fd-soft-shadow);
 }
 
 .fd-route-panel h2 {
@@ -590,7 +615,7 @@ button:focus-visible {
   display: grid;
   gap: 4px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(180, 166, 151, 0.32);
+  border-bottom: 1px solid var(--fd-border);
 }
 
 .fd-route-panel dt {
@@ -617,7 +642,7 @@ button:focus-visible {
 }
 
 .fd-route-panel li[aria-current="step"] {
-  color: var(--fd-primary-dark);
+  color: var(--fd-primary);
   font-weight: 900;
 }
 
@@ -633,7 +658,7 @@ button:focus-visible {
   gap: 8px;
   margin-top: 16px;
   padding-top: 14px;
-  border-top: 1px solid rgba(180, 166, 151, 0.32);
+  border-top: 1px solid var(--fd-border);
 }
 
 .fd-dev-range-legend span {
@@ -683,7 +708,7 @@ button:focus-visible {
   padding: 0 12px;
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-xs);
-  background: rgba(255, 252, 248, 0.76);
+  background: var(--fd-surface);
   color: var(--fd-muted);
   font-size: 13px;
   font-weight: 800;
@@ -699,10 +724,11 @@ button:focus-visible {
   width: var(--fd-runtime-phone-width);
   height: var(--fd-runtime-phone-height);
   overflow: hidden;
-  border: 1px solid rgba(154, 139, 124, 0.34);
+  border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-device);
   background: var(--fd-paper-solid);
-  box-shadow: 0 22px 50px rgba(70, 52, 35, 0.16);
+  color: var(--fd-ink);
+  box-shadow: var(--fd-shadow);
 }
 
 .fd-reader-frame {
@@ -721,6 +747,7 @@ button:focus-visible {
   align-items: end;
   justify-content: space-between;
   padding: 0 23px 9px;
+  color: var(--fd-ink);
   font-size: 14px;
   font-weight: 700;
 }
@@ -736,7 +763,7 @@ button:focus-visible {
 .fd-battery {
   display: block;
   flex: 0 0 auto;
-  color: #111;
+  color: currentColor;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -768,6 +795,7 @@ button:focus-visible {
   justify-content: space-between;
   min-height: var(--reader-ds-size-top-bar-height);
   padding: 6px 20px 0;
+  color: var(--fd-ink);
 }
 
 .fd-top-bar h1,
@@ -1007,8 +1035,8 @@ button:focus-visible {
   overflow: hidden;
   padding: 0 12px;
   border-radius: var(--fd-radius-pill);
-  background: rgba(238, 232, 223, 0.9);
-  color: #2b251f;
+  background: var(--fd-surface);
+  color: var(--fd-ink);
   font-size: 14px;
   font-weight: 700;
   text-overflow: ellipsis;
@@ -1017,7 +1045,7 @@ button:focus-visible {
 
 .fd-chip-row .is-active {
   background: var(--fd-primary);
-  color: #fff;
+  color: var(--fd-on-primary);
 }
 
 .fd-continue-card,
@@ -1102,7 +1130,7 @@ button:focus-visible {
 .fd-continue-cover-button {
   position: relative;
   width: 62px;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2 / 3;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -1131,7 +1159,7 @@ button:focus-visible {
   align-self: end;
   border-radius: var(--fd-radius-pill);
   background: var(--fd-primary);
-  color: #fff;
+  color: var(--fd-on-primary);
   font-size: 13px;
   font-weight: 800;
 }
@@ -1148,7 +1176,7 @@ button:focus-visible {
   display: block;
   overflow: hidden;
   border-radius: var(--fd-radius-pill);
-  background: #e1d6ca;
+  background: var(--fd-border);
 }
 
 .fd-section-head {
@@ -1170,7 +1198,7 @@ button:focus-visible {
 .fd-section-head span {
   display: flex;
   gap: 8px;
-  color: #2b251f;
+  color: var(--fd-ink);
 }
 
 .fd-section-head button {
@@ -1180,7 +1208,7 @@ button:focus-visible {
   place-items: center;
   border-radius: var(--fd-radius-circle);
   background: transparent;
-  color: #6f6962;
+  color: var(--fd-muted);
 }
 
 .fd-section-head button.is-active {
@@ -1215,15 +1243,15 @@ button:focus-visible {
 
 .fd-book-cover-frame {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2 / 3;
   display: grid;
   place-items: center;
   overflow: hidden;
   padding: 0;
   border: 0;
   border-radius: var(--fd-radius-md);
-  background: rgba(255, 255, 255, 0.58);
-  box-shadow: 0 10px 18px rgba(52, 38, 26, 0.13);
+  background: var(--fd-surface);
+  box-shadow: var(--fd-soft-shadow);
   color: inherit;
 }
 
@@ -1238,6 +1266,7 @@ button:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .fd-book-card strong {

@@ -34,7 +34,15 @@ Run validation:
 ```sh
 cd "/Users/minliny/Documents/Reader UI"
 node docs/ui-design/frontend-input/validate-frontend-inputs.js
+node frontend-demo/verify/motion/verify-motion-coverage.mjs
+node frontend-demo/verify/handoff/verify-ui-handoff-readiness.mjs
 ```
 
 The UI validation is self-contained for HTML/CSS tokens. Set `READER_TOKEN_CONTRACT_REQUIRE_COMPOSE=1`
 with `READER_ANDROID_ROOT` only when the host Android repo still exposes the Compose token source files.
+
+Frontend development readiness:
+
+- `docs/ui-handoff/FRONTEND_DEVELOPMENT_READINESS.md`: UI-side start gate and ownership split.
+- `docs/ui-handoff/FRONTEND_DEVELOPMENT_SLICE_MATRIX.md`: recommended bounded platform slices.
+- `docs/ui-handoff/UI_PLATFORM_EVIDENCE_REQUESTS.md`: native evidence required from Android / iOS / HarmonyOS repos.

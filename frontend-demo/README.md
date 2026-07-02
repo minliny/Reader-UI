@@ -68,6 +68,13 @@
 
 ## 后续动作（Next Actions）
 
-1. 继续把 `render-runtime.js` 内部页面模板按 `main-tabs / library / reader / settings / source-management` 做组件级拆分。
-2. 把 demo 中已验证的返回、键盘、底表和弹窗规则迁移到真实平台导航和状态层。
-3. 按 `MOTION_SELECTOR_MATRIX.md` 录制 motion 证据，并继续深化 TAB、dropdown、Reader entry、控制层和运行胶囊状态机。
+1. 平台开发启动前先读 `../docs/ui-handoff/FRONTEND_DEVELOPMENT_READINESS.md`、`../docs/ui-handoff/FRONTEND_DEVELOPMENT_SLICE_MATRIX.md` 和 `../docs/ui-handoff/UI_PLATFORM_EVIDENCE_REQUESTS.md`。
+2. 继续把 `render-runtime.js` 内部页面模板按 `main-tabs / library / reader / settings / source-management` 做组件级拆分；这只改善 demo 维护性，不代表平台实现。
+3. 把 demo 中已验证的返回、键盘、底表和弹窗规则迁移到真实平台导航和状态层；平台必须提供 native evidence。
+4. 按 `MOTION_SELECTOR_MATRIX.md` 录制 motion 证据，并继续深化 TAB、dropdown、Reader entry、控制层和运行胶囊状态机。
+
+UI handoff readiness 可运行：
+
+```bash
+node frontend-demo/verify/handoff/verify-ui-handoff-readiness.mjs
+```

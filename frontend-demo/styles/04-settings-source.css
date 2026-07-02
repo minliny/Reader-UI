@@ -18,7 +18,7 @@
 
 .fd-reader-full-setting-block header em {
   overflow: hidden;
-  color: var(--fd-muted);
+  color: var(--reader-control-muted, var(--fd-muted));
   font-size: 10px;
   font-style: normal;
   font-weight: 500;
@@ -44,43 +44,40 @@
 
 .fd-reader-full-theme-grid button {
   min-width: 0;
-  min-height: 46px;
+  min-height: 34px;
   display: grid;
-  grid-template-rows: 22px auto;
-  gap: 4px;
+  grid-template-rows: 24px;
   padding: 5px;
   border: 0;
   border-radius: var(--fd-radius-md);
-  background: rgba(238, 230, 219, 0.48);
-  color: #332c25;
+  background: var(--reader-control-disabled-bg, rgba(238, 230, 219, 0.48));
+  color: var(--reader-control-ink, #332c25);
   box-shadow: none;
 }
 
 .fd-reader-full-theme-grid button.is-active {
-  background: rgba(47, 99, 115, 0.1);
-  color: var(--fd-primary-dark);
+  background: var(--reader-control-active-bg, rgba(47, 99, 115, 0.1));
+  color: var(--reader-control-action, var(--fd-primary-dark));
 }
 
 .fd-reader-full-theme-grid button[data-reader-theme-scheme="night"] {
-  background: rgba(51, 45, 39, 0.08);
+  background: var(--reader-control-disabled-bg, rgba(51, 45, 39, 0.08));
 }
 
 .fd-reader-full-theme-grid button[data-reader-theme-scheme="night"].is-active {
-  background: rgba(47, 99, 115, 0.16);
+  background: var(--reader-control-active-strong, rgba(47, 99, 115, 0.16));
 }
 
 .fd-reader-full-theme-grid span {
-  border: 1px solid rgba(154, 139, 124, 0.34);
+  border: 1px solid var(--reader-control-line-strong, rgba(154, 139, 124, 0.34));
   border-radius: var(--fd-radius-md);
   background: var(--swatch);
 }
 
-.fd-reader-full-theme-grid small {
-  overflow: hidden;
-  font-size: 9px;
-  font-weight: 600;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.fd-reader-full-theme-grid button[data-reader-theme-texture="paper"] span {
+  background:
+    repeating-linear-gradient(0deg, rgb(var(--swatch-texture-rgb, 138 116 84) / 0.16) 0 1px, transparent 1px 5px),
+    var(--swatch);
 }
 
 .fd-reader-full-typography .fd-reader-step-row {
@@ -96,7 +93,7 @@
 
 .fd-reader-full-typography .fd-reader-step-row + .fd-reader-step-row,
 .fd-reader-full-typography .fd-reader-step-row + .fd-reader-font-row {
-  border-top: 1px solid rgba(155, 132, 102, 0.18);
+  border-top: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
 }
 
 .fd-reader-full-typography .fd-reader-step-row strong {
@@ -116,15 +113,15 @@
   min-height: 28px;
   border: 0;
   border-radius: var(--fd-radius-md);
-  background: rgba(238, 230, 219, 0.56);
-  color: #332c25;
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.56));
+  color: var(--reader-control-ink, #332c25);
   font-size: 10px;
   font-weight: 700;
   box-shadow: none;
 }
 
 .fd-reader-full-typography .fd-reader-step-row em {
-  color: #332c25;
+  color: var(--reader-control-ink, #332c25);
   font-size: 11px;
   font-style: normal;
   font-weight: 700;
@@ -140,7 +137,7 @@
 
 .fd-reader-full-typography .fd-reader-font-row button.is-active {
   background: var(--fd-primary-dark);
-  color: #fff;
+  color: var(--reader-control-primary-text, #fff);
 }
 
 .fd-reader-full-toggle-list {
@@ -157,13 +154,13 @@
   padding: 0 8px;
   border: 0;
   background: transparent;
-  color: #332c25;
+  color: var(--reader-control-ink, #332c25);
   text-align: left;
   box-shadow: none;
 }
 
 .fd-reader-full-toggle-list button + button {
-  border-top: 1px solid rgba(155, 132, 102, 0.18);
+  border-top: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
 }
 
 .fd-reader-full-toggle-list strong {
@@ -184,9 +181,9 @@
   justify-items: center;
   gap: 10px;
   padding: 12px 0;
-  border: 1px solid rgba(180, 166, 151, 0.34);
+  border: 1px solid var(--reader-control-line-strong, rgba(180, 166, 151, 0.34));
   border-radius: var(--fd-radius-pill);
-  background: rgba(255, 250, 244, 0.82);
+  background: var(--reader-control-panel, rgba(255, 250, 244, 0.82));
   color: var(--fd-primary);
   font-family: var(--fd-sans);
   font-size: 11px;
@@ -235,9 +232,9 @@
   position: absolute;
   inset: 0 2px;
   z-index: -1;
-  border: 1px solid rgba(180, 166, 151, 0.34);
+  border: 1px solid var(--reader-control-line-strong, rgba(180, 166, 151, 0.34));
   border-radius: var(--fd-radius-circle);
-  background: rgba(250, 244, 236, 0.86);
+  background: var(--reader-control-elevated, rgba(250, 244, 236, 0.86));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 2px 8px rgba(93, 72, 51, 0.06);
 }
 
@@ -1004,8 +1001,8 @@
   overflow: hidden;
   border: 0;
   border-radius: var(--fd-radius-md);
-  background: rgba(238, 230, 219, 0.7);
-  color: #332c25;
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.7));
+  color: var(--reader-control-ink, #332c25);
   font-size: 12px;
   font-weight: 700;
   text-overflow: ellipsis;
@@ -1015,15 +1012,15 @@
 
 .fd-directory-toc-switch-row button.is-active {
   background: var(--fd-primary-dark);
-  color: #fff;
+  color: var(--reader-control-primary-text, #fff);
 }
 
 .fd-directory-full-rows {
   min-height: 0;
   overflow: auto;
-  border: 1px solid rgba(180, 166, 151, 0.26);
+  border: 1px solid var(--reader-control-line, rgba(180, 166, 151, 0.26));
   border-radius: var(--fd-radius-lg);
-  background: rgba(255, 252, 248, 0.72);
+  background: var(--reader-control-panel, rgba(255, 252, 248, 0.72));
   scrollbar-width: none;
 }
 
@@ -1039,7 +1036,7 @@
   gap: 12px;
   min-height: 58px;
   padding: 0 14px;
-  border-top: 1px solid rgba(180, 166, 151, 0.28);
+  border-top: 1px solid var(--reader-control-line, rgba(180, 166, 151, 0.28));
   font-size: 14px;
 }
 
@@ -1071,7 +1068,11 @@
   gap: 6px;
 }
 
-.fd-chapter-marker-slots em {
+.fd-chapter-marker-slots.is-local-book {
+  grid-template-columns: 26px;
+}
+
+.fd-chapter-marker-slots :is(em, button) {
   min-width: 0;
   width: 26px;
   height: 26px;
@@ -1079,13 +1080,42 @@
   place-items: center;
   padding: 0;
   border-radius: var(--fd-radius-pill);
-  background: rgba(238, 232, 223, 0.82);
-  color: var(--fd-muted);
+  background: var(--reader-control-panel-soft, rgba(238, 232, 223, 0.82));
+  color: var(--reader-control-muted, var(--fd-muted));
+  font: inherit;
+  box-shadow: none;
 }
 
-.fd-chapter-marker-slots em.is-active {
-  background: rgba(35, 121, 164, 0.1);
-  color: var(--fd-primary);
+.fd-chapter-marker-slots button {
+  cursor: pointer;
+}
+
+.fd-chapter-marker-slots button[aria-disabled="true"] {
+  cursor: default;
+}
+
+.fd-chapter-marker-slots :is(em, button).is-active {
+  background: var(--reader-control-active-bg, rgba(35, 121, 164, 0.1));
+  color: var(--reader-control-action, var(--fd-primary));
+}
+
+.fd-chapter-marker-slots .fd-chapter-download-button.is-loading {
+  background: var(--reader-control-active-soft, rgba(47, 99, 115, 0.08));
+  color: var(--reader-control-action, var(--fd-primary-dark));
+}
+
+.fd-chapter-download-spinner {
+  width: 14px;
+  height: 14px;
+  box-sizing: border-box;
+  border: 2px solid var(--reader-control-active-bg, rgba(47, 99, 115, 0.18));
+  border-top-color: var(--reader-control-action, var(--fd-primary-dark));
+  border-radius: var(--fd-radius-circle);
+  animation: fd-reader-loading-spin var(--reader-motion-duration-loading-spin) linear infinite;
+}
+
+.fd-chapter-marker-slots .fd-chapter-download-button.is-complete .fd-small-icon {
+  animation: fd-chapter-download-complete 520ms var(--reader-motion-easing-enter) both;
 }
 
 .fd-chapter-marker-slots .is-bookmark-slot:not(.is-active) {
@@ -1098,7 +1128,7 @@
 }
 
 .fd-chapter-list article.is-current {
-  color: var(--fd-primary);
+  color: var(--reader-control-action, var(--fd-primary));
 }
 
 .fd-chapter-list em {
@@ -1114,7 +1144,7 @@
   white-space: nowrap;
 }
 
-.fd-book-chapter-preview .fd-chapter-marker-slots em {
+.fd-book-chapter-preview .fd-chapter-marker-slots :is(em, button) {
   min-width: 0;
   width: 26px;
   height: 26px;
@@ -1125,7 +1155,7 @@
   color: var(--fd-muted);
 }
 
-.fd-book-chapter-preview .fd-chapter-marker-slots em.is-active {
+.fd-book-chapter-preview .fd-chapter-marker-slots :is(em, button).is-active {
   background: rgba(35, 121, 164, 0.1);
   color: var(--fd-primary);
 }
@@ -1138,6 +1168,23 @@
   color: var(--fd-muted);
   font-size: 12px;
   font-style: normal;
+}
+
+@keyframes fd-chapter-download-complete {
+  0% {
+    opacity: 0.62;
+    transform: scale(0.72);
+  }
+
+  58% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .fd-settings-content {
