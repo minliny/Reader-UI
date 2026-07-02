@@ -167,6 +167,6 @@
 ## 当前证据状态
 
 - 已完成：148 个唯一 `data-*` 入口均有 Motion ID、demo route / click path 和平台组件归类。
-- 已完成第一批代表截图：`app.firstOpen.enter`、`tab.item.switch`、`dropdown.menu.expand`、`reader.entry.coverToImmersive`、`reader.session.capsule.enter`、`reader.session.controlSpace.enter`、`viewport.orientation.reshape`、`motion.interrupt.redirect` 已写入 `frontend-demo/verify/motion/evidence/manifest.json`，其中可直接对应 selector 的行已回填具体文件。
+- 已完成第一批代表截图：`app.firstOpen.enter`、`tab.item.switch`、`dropdown.menu.expand`、`reader.entry.coverToImmersive`、`reader.session.capsule.enter`、`reader.session.controlSpace.enter`、`viewport.orientation.reshape`、`motion.interrupt.redirect` 已写入 `frontend-demo/verify/motion/evidence/manifest.json`，其中 `reader.session.controlSpace.enter` 表示控制层上方胶囊锚点状态，可直接对应 selector 的行已回填具体文件。
 - 待完成：继续为高风险 P0 Motion ID 录制或截图，并把 `Evidence` 从待补路径改成具体文件；低风险通用控件以本矩阵、coverage 和少量代表证据支撑，不要求 Web 逐项模拟平台最终动效。
 - 待完成：平台映射继续补 state 字段、测试文件名和 native 证据类型。

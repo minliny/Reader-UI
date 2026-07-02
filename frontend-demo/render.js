@@ -2,7 +2,7 @@
   const currentScript = document.currentScript;
   const currentSrc = currentScript && currentScript.src ? currentScript.src : "";
   const baseUrl = currentSrc.slice(0, currentSrc.lastIndexOf("/") + 1);
-  const runtimeUrl = `${baseUrl || "./"}render-runtime.js?v=motion-overlay-focus-v1-20260701`;
+  const runtimeUrl = `${baseUrl || "./"}render-runtime.js?v=reader-session-pushed-capsule-v2-20260702`;
 
   document.write(`<script src="${runtimeUrl}"><\/script>`);
 })(window, document);

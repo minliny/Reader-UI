@@ -380,7 +380,7 @@
   animation: fd-reader-session-voice-pulse var(--fd-motion-effective-voice-pulse) var(--reader-motion-easing-standard) infinite;
 }
 
-.fd-demo :where(.fd-reader-running-space)[data-motion-control-space] {
+.fd-demo :where(.fd-reader-running-space, .fd-reader-control-session-capsule)[data-motion-control-space] {
   transform-origin: center top;
   transition:
     opacity var(--fd-motion-effective-running-space) var(--reader-motion-easing-standard),
@@ -391,11 +391,11 @@
   will-change: transform, opacity;
 }
 
-.fd-demo :where(.fd-reader-running-space)[data-motion-control-space-state="entering"] {
+.fd-demo :where(.fd-reader-running-space, .fd-reader-control-session-capsule)[data-motion-control-space-state="entering"] {
   animation: fd-reader-control-space-enter var(--fd-motion-effective-running-space) var(--reader-motion-easing-enter) both;
 }
 
-.fd-demo :where(.fd-reader-running-space)[data-motion-control-space-state="updated"] {
+.fd-demo :where(.fd-reader-running-space, .fd-reader-control-session-capsule)[data-motion-control-space-state="updated"] {
   animation: fd-reader-control-space-update var(--fd-motion-effective-capsule-control) var(--reader-motion-easing-standard) both;
 }
 

@@ -45,6 +45,28 @@
   --reader-quick-bottom: 12px;
 }
 
+.fd-reader-control-session-host {
+  position: absolute;
+  z-index: calc(var(--reader-ds-z-bottom-sheet) + 1);
+  right: 24px;
+  bottom: calc(18px + 330px + 8px);
+  height: 26px;
+  width: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  pointer-events: none;
+}
+
+.fd-reader-control-session-host .fd-ir-status-capsule {
+  pointer-events: auto;
+}
+
+.fd-reader-control-session-capsule {
+  background: rgba(255, 252, 248, 0.92);
+  box-shadow: 0 4px 12px rgba(70, 52, 35, 0.1);
+}
+
 .fd-reader-grabber {
   position: absolute;
   top: 9px;

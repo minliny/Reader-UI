@@ -93,7 +93,7 @@
 | `reader.motion.duration.pageTurn` | `220ms` | 阅读翻页；与当前 demo 一致。 |
 | `reader.motion.duration.readerEntry` | `240ms` | 从书架封面/继续阅读进入沉浸阅读。 |
 | `reader.motion.duration.sessionReturn` | `200ms` | 自动翻页/朗读开启后从控制层回到沉浸阅读。 |
-| `reader.motion.duration.runningSpace` | `180ms` | 运行胶囊与控制层运行中空间之间的停靠/展开。 |
+| `reader.motion.duration.runningSpace` | `180ms` | 运行胶囊在沉浸页脚与控制层上方锚点之间的重锚定。 |
 | `reader.motion.duration.capsuleEnter` | `160ms` | 沉浸阅读运行胶囊进入、退出和类型切换。 |
 | `reader.motion.duration.capsuleControl` | `120ms` | 控制胶囊内暂停/继续按钮的按压和状态切换。 |
 | `reader.motion.duration.capsuleTick` | `120ms` | 自动翻页倒计时数字变化。 |
@@ -116,8 +116,8 @@
 | `reader.motion.distance.readerEntryY` | `12px` | 沉浸阅读正文进入时的轻位移。 |
 | `reader.motion.distance.controlDragMargin` | `16px` | 宽屏可移动控制层距离安全边界的最小间距。 |
 | `reader.motion.distance.handlePullY` | `18px` | 控制层小横条低幅拖拽预览距离。 |
-| `reader.motion.distance.runningSpaceY` | `10px` | 控制层运行中空间进入/退出的轻位移。 |
-| `reader.motion.distance.orientationPanelY` | `10px` | 整屏旋转后控制层、overlay 和运行空间重新锚定的轻位移上限。 |
+| `reader.motion.distance.runningSpaceY` | `10px` | 控制层上方胶囊锚点进入/退出的轻位移。 |
+| `reader.motion.distance.orientationPanelY` | `10px` | 整屏旋转后控制层、overlay 和运行胶囊锚点重新定位的轻位移上限。 |
 | `reader.motion.distance.capsuleY` | `6px` | 运行胶囊进入/退出的轻位移。 |
 | `reader.motion.distance.capsuleTickY` | `4px` | 倒计时数字替换时的内部位移。 |
 | `reader.motion.scale.dialogEnter` | `0.96 -> 1` | 弹窗进入缩放。 |
@@ -125,7 +125,7 @@
 | `reader.motion.scale.coverPress` | `0.98` | 点击封面时的按压反馈。 |
 | `reader.motion.scale.capsuleEnter` | `0.96 -> 1` | 运行胶囊出现时的轻缩放。 |
 | `reader.motion.scale.capsuleControlPress` | `1 -> 0.90 -> 1` | 控制胶囊内暂停/继续按钮按压反馈。 |
-| `reader.motion.scale.runningSpaceDock` | `0.92 -> 1` | 胶囊停靠到控制层运行中空间时的轻缩放。 |
+| `reader.motion.scale.runningSpaceDock` | `0.92 -> 1` | 胶囊停靠到控制层上方锚点时的轻缩放。 |
 | `reader.motion.scale.voicePulse` | `1 -> 1.06 -> 1` | 朗读图标活动提示缩放范围。 |
 
 平台实现可以使用各自原生 easing 名称，只要视觉结果等价。
@@ -223,9 +223,9 @@
 | `reader.session.capsule.voiceIcon.active` | 朗读进行中语音图标 | 语音图标提供低频活动提示；暂停、reduced motion 或后台时保持静态。 |
 | `reader.session.capsule.switch` | 自动翻页和朗读互斥切换 | 胶囊留在原锚点，内部 icon/label 交叉替换；不要先退场再重新入场。 |
 | `reader.session.capsule.exit` | 停止会话、退出阅读、会话结束 | 胶囊淡出并释放点击热区；正文仍保持沉浸阅读上下文。 |
-| `reader.session.controlSpace.enter` | 运行会话存在时 `immersive-reading` -> `reader` | 运行胶囊停靠/展开成控制层运行中空间；不同时显示两套运行主控。 |
-| `reader.session.controlSpace.update` | 控制层打开时运行/暂停、倒计时、朗读状态变化 | 只更新控制层运行中空间内部状态，不重启动控制层进入动画。 |
-| `reader.session.controlSpace.exit` | 控制层隐藏回 `immersive-reading` | 控制层运行中空间收束回沉浸阅读胶囊，或在不支持 morph 时等价淡出/淡入。 |
+| `reader.session.controlSpace.enter` | 运行会话存在时 `immersive-reading` -> `reader` | 同一运行胶囊重锚定到控制层上方；不在控制首页额外生成临时状态条，也不同时显示两套运行主控。 |
+| `reader.session.controlSpace.update` | 控制层打开时运行/暂停、倒计时、朗读状态变化 | 只更新控制层上方胶囊内部状态，不重启动控制层进入动画。 |
+| `reader.session.controlSpace.exit` | 控制层隐藏回 `immersive-reading` | 控制层上方胶囊回到沉浸阅读页脚胶囊锚点，或在不支持 morph 时等价淡出/淡入。 |
 | `reader.panel.expand` | `reader-full-*` 路由 | 展开式阅读面板从控制层上方展开；顶部阅读栏和阅读正文保持上下文可见。 |
 | `reader.page.turn.next` | `onNextPage` / `data-reader-page-action=next` | 正文层从右侧进入，使用 `pageTurn` 时长；页码状态只变更一次。 |
 | `reader.page.turn.prev` | `onPreviousPage` / `data-reader-page-action=prev` | 正文层从左侧进入，使用 `pageTurn` 时长；页码状态只变更一次。 |
@@ -241,7 +241,7 @@
 | `viewport.fold.expand` | 折叠屏从手机/半开态进入展开态 | 布局从单列过渡到双栏/宽布局；阅读正文重新测量，控制层保持同一交互语义。 |
 | `viewport.fold.collapse` | 折叠屏从展开态回到手机/半开态 | 双栏/宽布局收回单列；当前 route、overlay 和 ReaderContext 保留。 |
 | `viewport.orientation.prepare` | 横竖屏/整屏旋转开始、`visualViewport` 或 window metrics 变化 | 冻结当前 route、ReaderContext、active session、overlay、focus、dock offset 和正文阅读锚点；取消非必要动画和进行中的拖动。 |
-| `viewport.orientation.reshape` | portrait / landscape / compact-landscape / tablet-expanded 断点变化 | 使用 `viewportReshape` 统一处理整屏布局重排；阅读正文优先重新测量和分页，控制层、overlay、运行胶囊和运行中空间重新锚定。 |
+| `viewport.orientation.reshape` | portrait / landscape / compact-landscape / tablet-expanded 断点变化 | 使用 `viewportReshape` 统一处理整屏布局重排；阅读正文优先重新测量和分页，控制层、overlay、运行胶囊和控制层上方锚点重新定位。 |
 | `viewport.orientation.settle` | 旋转后布局测量稳定 | 恢复 focus/pointer/语义可见性，clamp 宽屏 control dock 位置，恢复运行胶囊倒计时/朗读图标微动效。 |
 
 ## 5. 通用交互组件约束
@@ -281,7 +281,7 @@
 - 宽屏固定宽度控制层可通过长按小横条拖动。可拖动对象是同一组 control dock，包括底部控制面板、当前模块/快捷面板和模块导航；顶栏、正文层和沉浸热区不跟随移动。
 - 宽屏 control dock 拖动只改变 dock offset，不能改变 `--reader-dock-width`、面板高度、按钮间距、正文测量宽高或阅读分页。
 - 宽屏 control dock 可移动空间必须裁剪在当前 ReaderFrame 或当前 fold pane 内，并保留安全边距；不能跨 hinge、不能进入系统安全区、不能把小横条拖出可触达区域。
-- 整屏旋转不是 route transition。旋转中必须保留 active tab、当前 route、返回栈、ReaderContext、章节进度、当前模块、active session、运行胶囊/运行中空间状态和 overlay 语义。
+- 整屏旋转不是 route transition。旋转中必须保留 active tab、当前 route、返回栈、ReaderContext、章节进度、当前模块、active session、运行胶囊/控制层上方锚点状态和 overlay 语义。
 - 整屏旋转时，阅读正文按章节进度或字符锚点重新分页；不能只按旧 page index 映射，避免横竖屏页数变化后跳章或跳段。
 - 整屏旋转中如果控制层打开，需要把控制层映射到新 viewport class 的等价容器；手机底部整宽面板、compact landscape 压缩面板、宽屏 fixed dock 之间只改变容器锚点，不改变 ReaderContext。
 - 整屏旋转后，宽屏 fixed dock 的保存 offset 必须按新的可移动空间重新 clamp；如果旧 offset 越界，使用 `reader.control.dock.rebound` 回弹到合法锚点。
@@ -290,7 +290,7 @@
 - 自动翻页/朗读从控制层或完整设置页启动后，必须用 route replace 回到 `immersive-reading`，不能把控制层留成额外返回层。
 - 运行胶囊（控制胶囊）只表达当前会话状态和轻量控制；不能把完整控制层、朗读面板或自动翻页设置塞进胶囊。
 - 点击控制胶囊内暂停/继续按钮只切换当前会话运行态，不触发 `reader.control.show`，不重播胶囊入场。
-- 运行会话存在时打开控制层，需要有唯一的运行中空间承接胶囊状态；不能让沉浸胶囊和控制层运行卡片同时成为主控制。
+- 运行会话存在时打开控制层，需要让同一颗胶囊重锚定到控制层上方；不能让沉浸胶囊和控制层临时状态条同时成为主控制。
 - 倒计时数字变化和朗读图标活动提示都是胶囊内部微动效，不能触发整颗胶囊重入场或正文重排。
 - 沉浸阅读中点击正文中部打开控制层时，运行胶囊需要淡出或停靠到控制层语义位置，不能与控制层重复显示成两套主控制。
 - 快捷 overlay 和底部功能 overlay 的可见性契约不同：
@@ -313,7 +313,7 @@
 - input/search、toast/state、selection toolbar 最多保留 `80ms` fade，不做 y 位移或 scale。
 - 下拉栏 reduced motion 下即时展开/收起或最多 `80ms` 淡入淡出；不做 y 位移、缩放、chevron 旋转动画或列表项级联动画。
 - 自动翻页/朗读回到沉浸阅读时即时替换 route；运行胶囊最多做 `80ms` 淡入淡出，不做 y 位移或缩放。
-- 首次打开应用只保留首屏淡入；控制层小横条不做拖拽跟随动画，宽屏 control dock 释放后即时落到合法位置；运行胶囊与控制层运行中空间使用短淡入淡出，不做 morph；控制胶囊按钮、倒计时数字和语音图标保持静态状态变化。
+- 首次打开应用只保留首屏淡入；控制层小横条不做拖拽跟随动画，宽屏 control dock 释放后即时落到合法位置；运行胶囊在沉浸页脚与控制层上方锚点之间使用短淡入淡出，不做 morph；控制胶囊按钮、倒计时数字和语音图标保持静态状态变化。
 - 整屏旋转只做即时重排或最多 `80ms` 淡换；不做整页旋转、缩放、飞入或长距离滑动。
 
 ## 8. 原生平台映射原则
@@ -349,12 +349,12 @@
 - 148 个唯一 `data-*` 交互入口都需要映射到某个 Motion ID、demo route、平台组件和验证方式；不能只按业务页面口头归类。
 - 同一 TAB 栏必须分别覆盖按钮按下、单按钮选中、A -> B 切换、重复点击当前 active 的行为。
 - 所有下拉栏/锚定菜单必须覆盖触发器按下、展开、收起、选项按下、选项选中、打开 A 后切到 B、外部点击关闭、返回关闭、resize/orientation 重定位和 reduced-motion 降级。
-- 首次打开应用、运行胶囊与控制层运行中空间停靠必须有可复现路径；首次打开应用、控制层小横条按压/拖动/释放、宽屏 fixed dock 长按移动、运行胶囊进入/更新/切换、控制层运行中空间、控制胶囊按钮运行/暂停、倒计时数字变化和朗读语音图标活动提示已接入第一版 demo adapter；首启、自动翻页胶囊和控制层运行空间已有代表性浏览器截图，但仍需真实设备、折叠屏和录屏证据。
+- 首次打开应用、运行胶囊与控制层上方锚点停靠必须有可复现路径；首次打开应用、控制层小横条按压/拖动/释放、宽屏 fixed dock 长按移动、运行胶囊进入/更新/切换、控制层上方胶囊锚点、控制胶囊按钮运行/暂停、倒计时数字变化和朗读语音图标活动提示已接入第一版 demo adapter；首启、自动翻页胶囊和控制层上方胶囊锚点已有代表性浏览器截图，但仍需真实设备、折叠屏和录屏证据。
 - 自动翻页和朗读启动必须覆盖“控制层/完整页 -> 沉浸阅读 -> 运行胶囊”的完整路径，并验证两者互斥切换。
 - 阅读控制层、模块切换、换源窗口、底表、键盘和弹窗都在 portrait、tablet-expanded、compact-landscape 视口下检查过。
 - 打断动画覆盖返回、关闭 overlay、切 Tab、切 route、loading 完成、拖动开始和连续点击模块。
 - 折叠屏/大屏重排覆盖手机态、展开态、半展开态、横屏紧凑态；并验证 ReaderContext、overlay 层级和返回栈不丢失。
-- 整屏旋转覆盖 portrait -> landscape、landscape -> portrait、compact-landscape -> portrait、tablet-expanded resize；并验证控制层、运行胶囊、控制层运行中空间、overlay、focus 和宽屏 dock offset 都映射到合法位置。
+- 整屏旋转覆盖 portrait -> landscape、landscape -> portrait、compact-landscape -> portrait、tablet-expanded resize；并验证控制层、运行胶囊、控制层上方胶囊锚点、overlay、focus 和宽屏 dock offset 都映射到合法位置。
 - 平台应用为阅读翻页、控制层显隐、模块切换、底表、弹窗、键盘和换源窗口提供 native motion 测试或 golden/人工复核证据。
 
 平台 handoff 输出必须是任务边界和验收清单，而不是 Web CSS 复用说明。任何 `data-motion-*`、`data-* selector`、CSS variable 或 demo query 参数只用于 demo 内部取证和调试；平台实现只能映射其背后的 Motion ID、state fields、token 语义和验收结果。
@@ -371,7 +371,7 @@
 - 封面进入沉浸阅读已接入 `data-motion-entry-*` source/target 状态、封面 snapshot 层、普通按钮 fallback 和 token 化淡入，并补书架封面 source/target 代表截图；详情/章节入口覆盖、连续点击打断和录屏证据仍缺。
 - 自动翻页/朗读运行胶囊已接入第一版实现层 adapter：启动会话后 route replace 回 `immersive-reading`，胶囊写入 `data-motion-session-capsule-*` 状态，支持 enter/update/switch/exit、倒计时 tick、play/pause 局部按钮和 TTS voice icon active；自动翻页胶囊已有代表截图，录屏、停止/退出打断和平台测试证据仍缺。
 - 控制层小横条已接入 `data-motion-control-handle-*` source/panel 状态、press/drag/release 精确状态机、drag preview、release snap/expand/collapse、full 页收回和 reduced-motion；真实设备长路径拖动、目录 full 页上拉 promote 和录屏证据仍缺。
-- 首次打开应用、运行胶囊与控制层运行中空间停靠已有第一版实现层 adapter，但还没有完整录屏/设备证据；控制胶囊按钮运行/暂停、倒计时数字替换和朗读图标活动提示已有第一版实现层 adapter，但还缺真实设备和录屏证据；宽屏 control dock 长按拖动已有第一版实现，但还缺真实设备、折叠屏和录屏证据。
+- 首次打开应用、运行胶囊与控制层上方胶囊锚点停靠已有第一版实现层 adapter，但还没有完整录屏/设备证据；控制胶囊按钮运行/暂停、倒计时数字替换和朗读图标活动提示已有第一版实现层 adapter，但还缺真实设备和录屏证据；宽屏 control dock 长按拖动已有第一版实现，但还缺真实设备、折叠屏和录屏证据。
 - 键盘、底表、弹窗和 settings overlay 已接入第一版 `data-motion-overlay-*` role/state/action/focus-return adapter，overlay 主体和触发器都有可验证状态字段，token 化 enter CSS 已接入；连续 overlay 打断、遮罩互斥、录屏和平台焦点测试仍缺。
 - 当前弹窗背景还没有独立命名的 fade token。
 - 阅读控制层显隐还需要单独做一次视觉 pass；当前 route-state 行为已经存在，但进入/退出动效没有完全 token 化。
@@ -385,5 +385,5 @@
 
 1. 按 `MOTION_SELECTOR_MATRIX.md` 回填 evidence，优先录制通用组件族、键盘、底表、弹窗、翻页和 loading。
 2. 按 `MOTION_IMPLEMENTATION_GAP_AUDIT.md` 继续补 P0 缺口；通用组件族和 overlay/focus 已有第一版 adapter，reader loading 已有 request-scoped async result guard，下一步补全族录屏、平台测试文件映射，并把 interrupt adapter 继续覆盖到连续 overlay。
-3. 继续补整屏旋转和折叠屏证据；首次打开、运行胶囊、控制层运行中空间、控制胶囊内部微动效、宽屏 dock 和 orientation lifecycle 已有第一版 adapter，下一步补录屏、停止/退出打断、后台恢复、正文重分页和折叠屏验证。
+3. 继续补整屏旋转和折叠屏证据；首次打开、运行胶囊、控制层上方胶囊锚点、控制胶囊内部微动效、宽屏 dock 和 orientation lifecycle 已有第一版 adapter，下一步补录屏、停止/退出打断、后台恢复、正文重分页和折叠屏验证。
 4. 从 canonical `frontend-demo/` 路径录制或截图核心动效状态。

@@ -383,7 +383,7 @@ const checks = [
       motionTokens.includes("[data-motion-control-space]") &&
       motionTokens.includes("fd-reader-control-space-enter") &&
       motionTokens.includes("fd-reader-control-space-update"),
-    detail: "reader control layer exposes the running auto-page/TTS space as a state adapter with tokenized enter/update/tick/voice/control motion"
+    detail: "reader control layer exposes the running auto-page/TTS above-control capsule anchor as a state adapter with tokenized enter/update/tick/voice/control motion"
   },
   {
     id: "motion.viewport-orientation.state-adapter",

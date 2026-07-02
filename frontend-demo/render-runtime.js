@@ -3008,7 +3008,7 @@
       </section>`;
   }
 
-  function readerImmersiveStatusCapsule(appState) {
+  function readerImmersiveStatusCapsule(appState, options = {}) {
     const ttsSession = Boolean(appState?.readerTtsSession || appState?.readerTts?.playing);
     const ttsPlaying = Boolean(appState?.readerTts?.playing);
     const autoSession = Boolean(appState?.readerAutoPageSession || appState?.readerSettings?.autoPage);
@@ -3021,16 +3021,19 @@
     const label = isTts ? "朗读" : "自动翻页";
     const isPlaying = isTts ? ttsPlaying : autoPlaying;
     const autoCountdown = Math.max(1, Math.min(99, Number(appState?.readerAutoPageCountdown || 8)));
+    const controlLayerAttrs = options.controlLayer
+      ? ` data-reader-control-space data-reader-control-space-type="${esc(activeType)}" data-reader-control-space-playing="${isPlaying ? "true" : "false"}"`
+      : "";
     const leading = isTts
-      ? `<span class="fd-ir-voice-icon" data-reader-capsule-voice aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
-      : `<span class="fd-ir-countdown-dot" data-reader-capsule-countdown="${esc(autoCountdown)}" aria-label="自动翻页倒计时 ${esc(autoCountdown)} 秒">${esc(autoCountdown)}</span>`;
+      ? `<span class="fd-ir-voice-icon" data-reader-capsule-voice${options.controlLayer ? " data-reader-control-space-voice" : ""} aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
+      : `<span class="fd-ir-countdown-dot" data-reader-capsule-countdown="${esc(autoCountdown)}"${options.controlLayer ? ` data-reader-control-space-countdown="${esc(autoCountdown)}"` : ""} aria-label="自动翻页倒计时 ${esc(autoCountdown)} 秒">${esc(autoCountdown)}</span>`;
     const control = isTts
-      ? `<button type="button" data-reader-capsule-control data-reader-tts-action="toggle" aria-label="${ttsPlaying ? "暂停朗读" : "继续朗读"}">${icon(ttsPlaying ? "pause" : "play", "fd-small-icon")}</button>`
-      : `<button type="button" data-reader-capsule-control data-reader-setting-toggle="autoPage" aria-label="${autoPlaying ? "暂停自动翻页" : "继续自动翻页"}">${icon(autoPlaying ? "pause" : "play", "fd-small-icon")}</button>`;
+      ? `<button type="button" data-reader-capsule-control${options.controlLayer ? " data-reader-control-space-control" : ""} data-reader-tts-action="toggle" aria-label="${ttsPlaying ? "暂停朗读" : "继续朗读"}">${icon(ttsPlaying ? "pause" : "play", "fd-small-icon")}</button>`
+      : `<button type="button" data-reader-capsule-control${options.controlLayer ? " data-reader-control-space-control" : ""} data-reader-setting-toggle="autoPage" aria-label="${autoPlaying ? "暂停自动翻页" : "继续自动翻页"}">${icon(autoPlaying ? "pause" : "play", "fd-small-icon")}</button>`;
     return `
-      <span class="fd-ir-status-capsule" data-reader-immersive-status data-reader-immersive-status-type="${esc(activeType)}" data-reader-immersive-status-playing="${isPlaying ? "true" : "false"}">
+      <span class="fd-ir-status-capsule${options.controlLayer ? " fd-reader-control-session-capsule" : ""}" data-reader-immersive-status data-reader-immersive-status-type="${esc(activeType)}" data-reader-immersive-status-playing="${isPlaying ? "true" : "false"}"${controlLayerAttrs}>
         ${leading}
-        <b data-reader-capsule-label>${esc(label)}</b>
+        <b data-reader-capsule-label${options.controlLayer ? " data-reader-control-space-label" : ""}>${esc(label)}</b>
         <span class="fd-ir-status-controls">${control}</span>
       </span>`;
   }
@@ -4171,25 +4174,9 @@
   function readerSessionControlSpaceHtml(appState) {
     const snapshot = readerSessionCapsuleSnapshot(appState);
     if (!snapshot) return "";
-    const isTts = snapshot.type === "tts";
-    const label = isTts ? "朗读" : "自动翻页";
-    const stateText = snapshot.playing
-      ? (isTts ? "正在朗读" : `${snapshot.countdown} 秒后翻页`)
-      : "已暂停";
-    const leading = isTts
-      ? `<span class="fd-reader-running-voice" data-reader-control-space-voice aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
-      : `<span class="fd-reader-running-countdown" data-reader-control-space-countdown="${esc(snapshot.countdown)}" aria-label="自动翻页倒计时 ${esc(snapshot.countdown)} 秒">${esc(snapshot.countdown)}</span>`;
-    const control = isTts
-      ? `<button class="fd-reader-running-control" type="button" data-reader-control-space-control data-reader-tts-action="toggle" aria-label="${snapshot.playing ? "暂停朗读" : "继续朗读"}">${icon(snapshot.playing ? "pause" : "play", "fd-small-icon")}</button>`
-      : `<button class="fd-reader-running-control" type="button" data-reader-control-space-control data-reader-setting-toggle="autoPage" aria-label="${snapshot.playing ? "暂停自动翻页" : "继续自动翻页"}">${icon(snapshot.playing ? "pause" : "play", "fd-small-icon")}</button>`;
     return `
-        <section class="fd-reader-running-space" data-reader-control-space data-reader-control-space-type="${esc(snapshot.type)}" data-reader-control-space-playing="${snapshot.playing ? "true" : "false"}" aria-label="${esc(label)}运行中控制">
-          <span class="fd-reader-running-indicator" aria-hidden="${isTts ? "false" : "true"}">${leading}</span>
-          <span class="fd-reader-running-label" data-reader-control-space-label>
-            <strong>${esc(label)}</strong>
-            <small>${esc(stateText)}</small>
-          </span>
-          ${control}
+        <section class="fd-reader-control-session-host" data-reader-control-session-host aria-label="运行会话胶囊">
+          ${readerImmersiveStatusCapsule(appState, { controlLayer: true })}
         </section>`;
   }
 
@@ -4200,10 +4187,8 @@
     const chapterProgress = readerChapterProgressValue(data, appState);
     const chapterTitle = chapterState.chapter.title || chapter.title || "第 32 章 雨夜";
     const totalChapterCount = readerTotalChapterCount(data, chapterState.count);
-    const runningSpaceHtml = readerSessionControlSpaceHtml(appState);
     return `
-      <div class="fd-reader-control-main ${runningSpaceHtml ? "has-running-space" : ""}" data-dev-region="BottomControlPanel">
-        ${runningSpaceHtml}
+      <div class="fd-reader-control-main" data-dev-region="BottomControlPanel">
         <nav class="fd-reader-actions" aria-label="快捷操作">
           ${data.reader.quickActions.map((item) => `
             <button type="button" data-route="${esc(item.type === "search" ? "content-search" : item.type === "auto-page" ? "auto-page" : "content-replacement")}" data-quick-action="${esc(item.type)}">${icon(readerQuickActionIconMap[item.type] || item.type, "fd-medium-icon")}<span>${esc(item.label)}</span></button>
@@ -4302,7 +4287,6 @@
     const isImmersive = baseState.mode === "immersive" && !isLoading;
     const activeModule = baseState.mode === "module" ? baseState.module : "";
     const frameMode = isImmersive ? "immersive" : state.mode;
-
     return shellKit().renderReaderShell({
       frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-${esc(frameMode)}${isImmersive ? " fd-immersive-frame" : ""}`,
       readingSurfaceClass: "fd-reading-surface",
@@ -4313,7 +4297,7 @@
       stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`,
       ariaLabel: (routes[route] || routes.reader).title,
       readingSurfaceHtml: sharedReaderSurface(data, isImmersive ? "" : "immersive-reading", appState),
-      overlayHtml: isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : readerTopOverlay(data, appState),
+      overlayHtml: isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : `${readerTopOverlay(data, appState)}${readerSessionControlSpaceHtml(appState)}`,
       bottomSheetHtml: readerBottomSheetHtml(data, state, route, isLoading, appState),
       moduleNavHtml: isImmersive ? "" : readerModuleNavHtml(data, activeModule)
     });

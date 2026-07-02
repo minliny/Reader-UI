@@ -27,7 +27,7 @@
 | 封面进入阅读 | `reader.entry.coverToImmersive`、`reader.entry.actionToImmersive`；source/target、fallback、reduced-motion | 书架封面/继续阅读/普通按钮入口写入 source/target，代表截图证明最终是 `immersive-reading` | 原生 shared/snapshot 或 fade 降级；跨 pane/hinge 不做封面飞行；原生导航栈返回来源页 | 不能声称详情/章节入口、连续点击和真机录屏已完成 |
 | 阅读控制层 | `reader.control.handle.press/drag/release`、`reader.control.dock.longPress/drag/release/rebound`；阈值、bounds、finalState | 小横条、full 页收回、宽屏 dock bounds clamp 和 reduced-motion 保留 demo adapter | 原生 gesture、velocity/cancel、safe area、fold pane、resize clamp；真机/模拟器录屏 | 不能声称真实触摸、fold hinge、目录 full 页 promote 已完成 |
 | 自动翻页 / 朗读胶囊 | `reader.session.autoPage.start`、`reader.session.tts.start`、`reader.session.capsule.*`；互斥、playing、countdown、voice、exit | demo 证明启动后 replace 回沉浸页、唯一胶囊、倒计时/播放态局部更新 | 原生 `activeSession` reducer，后台恢复、锁屏、章节跳转、停止/退出打断；真机录屏 | 不能声称停止/退出、后台生命周期、平台测试完成 |
-| 控制层运行空间 | `reader.session.controlSpace.enter/update/exit`；capsule-to-space、single controller、reduced-motion | demo 保留 `data-reader-control-space` 和子角色，证明控制层里只有一个运行主控 | 原生控制层中映射 active session；隐藏控制层回胶囊；结束态释放 hit area | 不能声称 matched geometry、停止/退出、平台测试完成 |
+| 控制层上方胶囊锚点 | `reader.session.controlSpace.enter/update/exit`；capsule-to-above-control-anchor、single controller、reduced-motion | demo 保留 `data-reader-control-space` 和子角色，证明控制层里只有同一颗运行胶囊主控，切换控制层子页不丢失 | 原生控制层中映射 active session；隐藏控制层回沉浸页脚胶囊；结束态释放 hit area | 不能声称 matched geometry、停止/退出、平台测试完成 |
 | Orientation / resize | `viewport.orientation.prepare/reshape/settle`、`viewport.fold.expand/collapse`；route/session/overlay/focus/dock 元数据 | demo 用 viewport class、orientation 状态和代表截图证明 reshape/reanchor 语义 | 原生 window metrics、size class、fold posture、正文锚点重分页、dock clamp | 不能声称真实旋转、折叠屏、正文字符锚点重分页已验证 |
 | Interrupt / async result | `motion.interrupt.cancel/redirect/completeThenReplace`、`motion.asyncResult.*`；latest intent wins、requestId、discard | demo coverage 验证 route/tab/dropdown/loading/dock drag 等入口清理临时态，async 旧结果不覆盖新 route | 平台 reducer 取消旧 transition、检查 route/context/requestId、overlay/focus restore 自动化 | 不能声称连续 overlay、焦点恢复和完整录屏已完成 |
 | Reduced motion | 所有高风险 Motion ID 的 reduced-motion fallback；状态反馈仍可辨认 | demo 保留 URL / system reduced-motion 状态和 coverage gate | 平台接入系统 reduced motion，去除大位移/循环动画，保留语义反馈 | 不能声称 reduced-motion 全链路录屏和平台证据已完成 |
@@ -142,7 +142,7 @@
 | `reader.session.capsule.countdownTick` | `.fd-ir-countdown-dot` | 数字固定宽度，旧数上移淡出，新数下方淡入。 | `AnimatedContent(targetState = countdown)`，容器固定宽度，禁用整颗 capsule 重入场。 | 固定宽度 text，可用局部 numeric transition 或 opacity/offset。 | 固定宽度 Text，数字节点局部 transition。 |
 | `reader.session.capsule.voiceIcon.active` | `.fd-ir-status-capsule[type=tts]` | 朗读图标低频 opacity/scale pulse；暂停静态。 | 仅 playing 时 `rememberInfiniteTransition`，reduced motion 下禁用。 | 仅 playing 时 symbol/opacity pulse，reduced motion 下静态。 | 仅 playing 时循环 scale/opacity，reduced motion 下静态。 |
 | `reader.session.capsule.switch` | 自动翻页/朗读互斥切换 | 同锚点替换 icon/label，不退场再入场。 | 同一 capsule container，`AnimatedContent(targetState = activeSession)` 替换内部内容。 | 同一 capsule view，内部内容交叉替换。 | 同一 capsule 容器，内部内容 transition。 |
-| `reader.session.controlSpace.enter/update/exit` | 运行胶囊 <-> 控制层运行空间 | 支持时用 snapshot/matched geometry 停靠；不支持时胶囊 fade out、运行空间 fade in。 | `SharedTransitionLayout` 或 overlay snapshot；结束态只保留控制层运行控件。 | `matchedGeometryEffect` 或 ZStack snapshot；降级为交叉淡入淡出。 | overlay snapshot 或普通 fade；hinge 场景不跨 pane。 |
+| `reader.session.controlSpace.enter/update/exit` | 运行胶囊 <-> 控制层上方胶囊锚点 | 支持时用 snapshot/matched geometry 停靠；不支持时同一胶囊在两个锚点间 fade/position update。 | `SharedTransitionLayout` 或 overlay snapshot；结束态只保留控制层上方胶囊。 | `matchedGeometryEffect` 或 ZStack snapshot；降级为交叉淡入淡出。 | overlay snapshot 或普通 fade；hinge 场景不跨 pane。 |
 | `reader.panel.expand` | `reader-full-*` 路由 | ReaderShell 内展开式面板。 | 底部面板从控制层增长/滑出；顶部阅读栏保持稳定。 | 自定义底部面板 transition；除非产品变更契约，否则不要推成无关全屏。 | Reader shell 内自定义 panel transition。 |
 | `reader.page.turn.next/prev` | `readerTurnDirection` class | 正文从 +/- `16px` 进入，`220ms ease-out`。 | 以 page index 为 key 的 `AnimatedContent` 横向 slide/fade；不能改变 route。 | 基于 page index 做 `transition(.asymmetric(...))` 或 offset/opacity。 | 基于 page index 动画正文容器 offset/opacity。 |
 | `reader.chapter.jump` | 章节行 | 即时替换正文，重置页状态。 | 直接更新 chapter/page 状态，不做装饰性 stack motion。 | 直接更新 reader state。 | 直接更新 reader state。 |
@@ -176,7 +176,7 @@ Android Compose：
 - 宽屏 control dock 拖动只在 fixed-width dock 布局启用；demo 第一版使用 `.fd-reader-grabber` 长按进入 `reader.control.dock.longPress`，移动同一组 bottom sheet + module nav dock，bounds 以当前 Reader pane、window insets、top bar 和 dock group size 计算，不能跨 hinge。
 - 自动翻页和朗读共用一个 `activeSession` 状态，不能出现双胶囊；启动会话使用 replace/handoff，不新增 navigation entry。
 - 胶囊暂停/继续按钮只更新 `activeSession.playing`，不能打开控制层或写 navigation。
-- 控制层打开时需要把 active session 映射到唯一运行空间；不要同时暴露沉浸胶囊和控制层运行主控。
+- 控制层打开时需要把 active session 映射到唯一的控制层上方胶囊锚点；不要同时暴露沉浸胶囊和控制层临时状态条。
 - 胶囊作为阅读 surface overlay；倒计时更新不触发整颗 capsule 重入场。
 - 折叠屏使用窗口尺寸和 posture 状态驱动布局，不能把展开/折叠写成新 route。
 - 整屏旋转使用 configuration/window metrics 触发布局重算；不要销毁 Navigation host，不重建 ReaderContext，不把旋转写成 route。
@@ -249,7 +249,7 @@ Web demo proof：
 | 快捷动作展开 | 搜索/自动翻页/替换快捷动作 | 行内 loading 先于 expanded panel，或平台等价状态。 |
 | 自动翻页/朗读启动 | 控制层或完整页开启自动翻页/朗读 | route replace 回沉浸阅读；只显示一个运行胶囊；互斥状态正确。 |
 | 运行胶囊更新/切换/退出 | 沉浸阅读运行胶囊 | 倒计时、播放/暂停、类型切换不重放整颗入场动画；退出释放点击热区。 |
-| 控制层运行中空间 | 运行胶囊可见时打开/隐藏控制层 | 胶囊与控制层运行空间有明确空间映射或降级；结束态只有一个主控。 |
+| 控制层上方胶囊锚点 | 运行胶囊可见时打开/隐藏控制层 | 胶囊与控制层上方锚点有明确空间映射或降级；结束态只有一个主控，控制层子页切换不丢失。 |
 | 胶囊暂停/继续按钮 | 自动翻页/朗读胶囊右侧控制按钮 | 按下局部反馈；释放后只切换 playing state；不打开控制层。 |
 | 胶囊倒计时数字 | 自动翻页胶囊 countdown tick | 数字局部替换，胶囊容器和页码不抖动。 |
 | 胶囊朗读图标 | 朗读胶囊播放/暂停 | 播放时低频活动提示，暂停/reduced motion 静态。 |
@@ -261,7 +261,7 @@ Web demo proof：
 | 横屏/resize 重排 | compact-landscape / tablet-expanded 断点切换 | 控制层连续，正文重新分页不跳章。 |
 | 整屏旋转 prepare/reshape/settle | portrait <-> landscape，普通页面和阅读页 | route、返回栈、active tab、focus、overlay、ReaderContext、active session 保留；旧动画不排队。 |
 | 阅读中整屏旋转 | `immersive-reading` / `reader` / `reader-full-*` 旋转 | 正文按进度/字符锚点重新分页；控制层映射到等价容器；模块状态保留。 |
-| 运行会话中整屏旋转 | 自动翻页/朗读运行时旋转 | 胶囊或控制层运行空间重锚定；倒计时/播放态保留；不出现双主控。 |
+| 运行会话中整屏旋转 | 自动翻页/朗读运行时旋转 | 胶囊或控制层上方锚点重锚定；倒计时/播放态保留；不出现双主控。 |
 | 宽屏 dock 旋转 clamp | fixed-width dock 移动后旋转或 resize | saved offset 按新可移动空间 clamp；越界回弹或 reduced-motion 即时落位；不跨 hinge/安全区。 |
 | overlay 旋转适配 | 底表/弹窗/换源窗口打开时旋转 | overlay 重新锚定或等价降级；焦点/semantics 不指向隐藏控件。 |
 | Reduced motion | 系统开启 reduced motion | 移除位移，保留状态反馈。 |
@@ -285,7 +285,7 @@ Web demo proof：
 - Demo 已接入运行胶囊 state adapter，覆盖 `reader.session.autoPage.start`、`reader.session.tts.start`、`reader.session.capsule.enter/update/switch/exit`、`reader.session.capsule.control.press/toggle`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active`；平台应映射这些 Motion ID、state 字段和 reducer 事件到原生组件，不能照搬 Web CSS；录屏、停止/退出打断和真实设备证据仍需补齐。
 - Demo 已接入 `motion.interrupt.cancel/redirect/completeThenReplace` 第一版 state adapter，覆盖 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始、pointer cancel、连续下拉 A->B 和 reader loading async result guard，输出 `data-motion-interrupt-*` / `data-motion-dropdown-switch-*` / `data-motion-async-*` 并清理 pressed/dragging/dropdown 临时态；overlay/focus 第一版状态字段已接入，连续 overlay 打断和录屏证据仍需补齐。
 - Demo 已有整屏旋转第一版 state adapter，覆盖 root / screen host `data-motion-orientation-*`、route/session/overlay/focus/dock 元数据、anchor settle CSS、dropdown 重定位和宽屏 dock clamp；真实旋转录屏、正文字符锚点重分页、overlay/focus 自动化和平台设备证据仍需补齐。
-- Demo 已补 `frontend-demo/verify/motion/evidence/manifest.json` 第一批代表性浏览器截图，覆盖首启、Tab、下拉、封面进入、自动翻页胶囊、控制层运行空间、orientation 和 interrupt；这些截图只能证明 canonical demo 的代表状态，不等于平台真实设备录屏。
+- Demo 已补 `frontend-demo/verify/motion/evidence/manifest.json` 第一批代表性浏览器截图，覆盖首启、Tab、下拉、封面进入、自动翻页胶囊、控制层上方胶囊锚点、orientation 和 interrupt；这些截图只能证明 canonical demo 的代表状态，不等于平台真实设备录屏。
 - Demo 仍没有折叠屏/大屏 reshape 的真实设备 capture；展开、折叠、半开态、hinge/pane 和阅读分页映射需要用模拟器或真机补证据。
 - 每个高风险阅读 transition 至少有一份截图或录屏证据。
 - 平台团队确认 route push 是走原生 stack motion，还是在密集操作页面保持即时切换。

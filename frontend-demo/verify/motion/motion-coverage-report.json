@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-01T09:18:09.598Z",
+  "generatedAt": "2026-07-02T06:53:41.306Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-interrupt-v1-20260630, render=motion-overlay-focus-v1-20260701, runtime=motion-overlay-focus-v1-20260701"
+      "detail": "motion=motion-interrupt-v1-20260630, render=reader-session-pushed-capsule-v2-20260702, runtime=reader-session-pushed-capsule-v2-20260702"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -100,7 +100,7 @@
     {
       "id": "motion.reader-control-space.state-adapter",
       "passed": true,
-      "detail": "reader control layer exposes the running auto-page/TTS space as a state adapter with tokenized enter/update/tick/voice/control motion"
+      "detail": "reader control layer exposes the running auto-page/TTS above-control capsule anchor as a state adapter with tokenized enter/update/tick/voice/control motion"
     },
     {
       "id": "motion.viewport-orientation.state-adapter",
@@ -135,7 +135,7 @@
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "149/172 data-* directly mapped"
+      "detail": "149/173 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -160,7 +160,7 @@
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 172,
+    "dataAttributeCount": 173,
     "directMappedDataAttributeCount": 149,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
@@ -176,6 +176,7 @@
       "data-icon-missing",
       "data-page-space-row",
       "data-reader-brightness-dim",
+      "data-reader-control-session-host",
       "data-reader-footer-status",
       "data-reader-surface-signature",
       "data-route-replace",
