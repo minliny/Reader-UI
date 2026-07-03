@@ -2131,7 +2131,7 @@
     }));
   }
 
-  function libraryScreen(data) {
+  function libraryScreen(data, appState) {
     const book = data.library.book;
     const sourceName = String(book.source || "").split("·")[0].trim() || "当前书源";
     const intro = book.intro || "旧世界的余烬尚未冷却，新的秩序已经在废墟之上生长。主角沿着被遗忘的线索追寻真相，也在一次次选择里确认自己想守住的东西。";
@@ -7926,7 +7926,7 @@
       case "book-search":
         return bookSearchScreen(data, appState);
       case "book-detail":
-        return libraryScreen(data);
+        return libraryScreen(data, appState);
       case "book-directory":
         return bookDirectoryScreen(data, appState);
       case "bookshelf-empty":
