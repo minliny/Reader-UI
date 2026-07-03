@@ -7632,6 +7632,8 @@
     const current = candidates.find((item) => item.state === "当前") || candidates[0] || {};
     const selectedSource = appState?.sourceSwitchSelectedSource || current.source || "";
     const selected = candidates.find((item) => item.source === selectedSource) || current;
+    const selectedSpeedLabel = selected.speed || selected.latency || "未知";
+    const selectedLatestLabel = selected.latestChapter || selected.chapter || selected.latest || "章节同步";
     return shellKit().renderFlowShell({
       frameClass: "fd-flow-frame fd-source-phone-flow fd-source-reader-continuation",
       stepClass: "fd-flow-step fd-source-continuity-slot",
@@ -7668,7 +7670,7 @@
         <section class="fd-source-switch-result" aria-label="换源确认">
           <span>${icon("check", "fd-small-icon")}</span>
           <strong>${esc(selected.source || "优书网")}</strong>
-          <small>${esc(selected.state || "当前")} · ${esc(selected.latency || "")} · ${esc(selected.latest || "章节同步")}</small>
+          <small>${esc(selected.state || "当前")} · ${esc(selectedSpeedLabel)} · ${esc(selectedLatestLabel)}</small>
           <p>确认后保持当前阅读位置，仅替换正文来源与章节解析结果。</p>
           <button type="button" data-route="reader" data-route-replace>确认换源</button>
         </section>`,
