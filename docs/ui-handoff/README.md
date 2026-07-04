@@ -14,6 +14,11 @@
 
 - `FRONTEND_DEVELOPMENT_READINESS.md`：当前 UI 侧是否足够支撑有边界的真实前端开发。
 - `FRONTEND_DEVELOPMENT_SLICE_MATRIX.md`：推荐平台先启动的 bounded vertical slices。
+- `FRONTEND_COMPLETE_APP_GAP_MATRIX.md`：完整可用前端应用还缺什么，以及三轮自评后的跨仓缺口矩阵。
+- `FRONTEND_COMPLETE_APP_GAP_MATRIX_ANDROID.md`：Android Compose 侧实现与证据矩阵。
+- `FRONTEND_COMPLETE_APP_GAP_MATRIX_IOS.md`：iOS SwiftUI 侧实现与证据矩阵。
+- `FRONTEND_COMPLETE_APP_GAP_MATRIX_HARMONYOS.md`：HarmonyOS ArkUI 侧实现与证据矩阵。
+- `FRONTEND_COMPLETE_APP_GAP_MATRIX_CORE_BRIDGE.md`：Reader-Core-Native bridge 与 DomainState 归属矩阵。
 - `UI_PLATFORM_EVIDENCE_REQUESTS.md`：平台完成后必须回传的 native 证据。
 
 验证：

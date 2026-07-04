@@ -5,7 +5,10 @@
   "description": "Reader 多端 UI 路由契约。RouteId 一经发布不得改名，只能标记 deprecated。来源：frontend-demo/route-contract.js、docs/cross-platform-ui/CROSS_PLATFORM_ROUTE_MATRIX.md、docs/ui-handoff/SCREEN_MATRIX.md。",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "shell"],
+  "required": [
+    "id",
+    "shell"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -148,7 +151,68 @@
         "state-error",
         "state-offline",
         "control-layer-base-v2",
-        "reader-directory-overlay-v2"
+        "reader-directory-overlay-v2",
+        "discover-entry-ranking",
+        "discover-entry-bestseller",
+        "discover-entry-finished",
+        "discover-entry-latest",
+        "discover-entry-new",
+        "discover-entry-booklist",
+        "discover-filter-keyword",
+        "discover-filter-male",
+        "discover-filter-female",
+        "discover-sort-popularity",
+        "discover-sort-update",
+        "discover-sort-collection",
+        "discover-sort-finished",
+        "discover-sort-words",
+        "discover-cache-confirm",
+        "discover-cache-toast",
+        "rss-source-category-releases",
+        "rss-source-category-issues",
+        "rss-source-category-discussions",
+        "rss-source-actions",
+        "rss-source-debug",
+        "rss-source-vars",
+        "rss-source-login",
+        "rss-source-login-web",
+        "rss-source-login-cookie",
+        "rss-source-login-clear",
+        "rss-source-groups",
+        "rss-source-group-edit",
+        "rss-source-batch",
+        "rss-source-export",
+        "rss-source-export-detail",
+        "rss-source-export-result",
+        "rss-source-pin",
+        "rss-source-disable",
+        "rss-source-batch-disable",
+        "rss-source-import",
+        "rss-source-import-detail",
+        "rss-source-import-result",
+        "rss-read-record",
+        "rss-record-clear",
+        "rss-rule-subscription",
+        "rss-rule-subscription-detail",
+        "rss-rule-subscription-test",
+        "rss-rule-subscription-apply",
+        "rss-favorite-groups",
+        "rss-favorite-group-edit",
+        "rss-favorite-clear",
+        "reader-full-directory",
+        "reader-full-tts",
+        "reader-full-appearance",
+        "reader-full-settings",
+        "restore-confirm",
+        "restore-progress",
+        "restore-conflict",
+        "source-batch",
+        "source-groups",
+        "source-debug-search-result",
+        "source-debug-detail-result",
+        "source-debug-catalog-result",
+        "source-debug-content-log",
+        "source-edit-debug"
       ],
       "description": "唯一 RouteId。新增视为 MINOR，删除视为 MAJOR。"
     },
@@ -166,7 +230,9 @@
     "params": {
       "type": "object",
       "description": "路由参数。例如 detail/{detailUrl}、reader_content/{contentUrl}/{chapterTitle}、source_detail/{sourceId}。",
-      "additionalProperties": { "type": "string" }
+      "additionalProperties": {
+        "type": "string"
+      }
     },
     "deprecated": {
       "type": "boolean",
@@ -174,12 +240,24 @@
       "description": "标记废弃。废弃项至少保留一个 MINOR 周期后再 MAJOR 删除。"
     },
     "replacedBy": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "废弃后的替代 RouteId。"
     },
     "mainTab": {
-      "type": ["string", "null"],
-      "enum": ["bookshelf", "discover", "rss", "settings", null],
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "bookshelf",
+        "discover",
+        "rss",
+        "settings",
+        null
+      ],
       "description": "若属于主 Tab 根页面，标记所属主 Tab。"
     }
   }
