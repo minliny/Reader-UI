@@ -1,0 +1,60 @@
+{
+  "version": "1.2.0",
+  "schema": {
+    "route": "1.0.0",
+    "ui-event": "1.0.0",
+    "ui-state": "1.0.0",
+    "view-state": "1.0.0",
+    "motion": "1.0.0",
+    "token": "1.0.0",
+    "core-command": "1.0.0",
+    "core-event": "1.0.0",
+    "host-request": "1.0.0",
+    "progress-location": "1.0.0",
+    "content": "1.0.0",
+    "sync-conflict": "1.0.0",
+    "state-rule": "1.0.0"
+  },
+  "changelog": [
+    {
+      "version": "1.2.0",
+      "date": "2026-07-04",
+      "summary": "Phase 1.5 Contract Release Hygiene：state-rule 纳入版本映射 + npm test 路径修正 + generated README 滞后描述清理",
+      "changes": [
+        "state-rule.schema.json 纳入 VERSION.json schema 映射（之前遗漏）",
+        "修正 contracts/tests/package.json 的 test 脚本路径（./tests/*.test.mjs → ./*.test.mjs），npm test 现可正常执行",
+        "npm test 现跑出 132 tests / 132 pass / 0 fail（含 state-rule.test.mjs 17 项）",
+        "generated 三端各 13 个文件确认（Swift/Kotlin/ArkTS × 13 schema，含 StateRule.*）",
+        "更新 generated/README.md 与三端 generated README，删除\"暂不提交/未来生成\"滞后描述",
+        "加强 codegen-consistency.test.mjs，明确检查 StateRule 三端 generated",
+        "新增 generated drift check：codegen 后必须无 diff"
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-07-04",
+      "summary": "Phase 2 Core 协议收敛 + Phase 1 优先链路覆盖验证",
+      "changes": [
+        "新增 core-command / core-event / host-request / progress-location / content / sync-conflict schema",
+        "新增 ffi-protocol-version.md（FFI 协议版本 1.0.0）",
+        "新增 Phase 2 fixtures 共 124 项（core-command 45 / core-event 33 / host-request 31 / progress-location 6 / content 3 / sync-conflict 6）",
+        "codegen 扩展支持 Phase 2，生成 18 个新类型文件（Swift / Kotlin / ArkTS × 6 schema）",
+        "新增 phase2-contract.test.mjs（32 项：schema 自检 + fixtures 校验 + §5/§7 对齐 + 命名约定 + 唯一性）",
+        "新增 phase1-slice.test.mjs（25 项：6 优先链路覆盖 + Slice 1-4 过渡连续性）",
+        "扩展 codegen-consistency.test.mjs 至 22 项，覆盖 Phase 2 三端 enum 一致性",
+        "Phase 1 fixtures 按 Slice 1-4 标注扩展，覆盖 AppShell / main tabs / bookshelf→reader / reader overlay / session / focus"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-07-04",
+      "summary": "Phase 0 / Phase 1 初始冻结",
+      "changes": [
+        "新增 ARCHITECTURE.md / BOUNDARY_RULES.md / STATE_OWNERSHIP.md / CONTRACT_VERSIONING.md",
+        "新增 route / ui-event / ui-state / view-state / motion / token schema",
+        "新增 fixtures 与 contract tests",
+        "新增 codegen 与 generated Swift / Kotlin / ArkTS 类型"
+      ]
+    }
+  ]
+}

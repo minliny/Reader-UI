@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/state-rule.schema.json",
+  "title": "StateRule",
+  "description": "UiState 互斥规则与 async guard 契约。Owner: Platform Interaction Reducer（消费方）。来源：CONTRACT_FIRST_NATIVE_UI_PLAN.md §4 StateRule、§6 reducer 统一管理项、STATE_OWNERSHIP.md。本 schema 描述 reducer 必须遵守的状态约束，不描述业务事实源（Core 侧）约束。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ruleId", "kind", "target", "constraint"],
+  "properties": {
+    "ruleId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "规则唯一 id。kebab-case。"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["mutex", "async-guard", "required-with", "forbidden-with", "transition-guard"],
+      "description": "规则类型。mutex: 字段互斥（同一时刻只能取其一）；async-guard: 异步操作进行中时禁止某些状态变更；required-with: 字段 A 非空时字段 B 必须非空；forbidden-with: 字段 A 非空时字段 B 必须为空；transition-guard: 状态转移限制（from -> to）。"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "规则作用的 UiState 字段路径。如 'overlay'、'activeSession'、'reader.textSelectionOpen'、'loading'。"
+        },
+        "slices": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["slice-1", "slice-2", "slice-3", "slice-4", "slice-5", "slice-6"] },
+          "description": "规则生效的 slice。空数组或缺失表示全局生效。"
+        }
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "约束细节。结构因 kind 而异。",
+      "properties": {
+        "maxNonNull": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "mutex: target.fields 中最多 N 个字段同时非 null/非 false。默认 1。"
+        },
+        "guardField": {
+          "type": "string",
+          "description": "async-guard: 守卫字段路径（如 'loading'）。当 guardField=true 时禁止 target.fields 变更。"
+        },
+        "guardValue": {
+          "description": "async-guard: 触发守卫的 guardField 取值。boolean true 或字符串值。"
+        },
+        "requiredField": {
+          "type": "string",
+          "description": "required-with: 当 target.fields[0] 非空时，requiredField 必须非空。"
+        },
+        "forbiddenField": {
+          "type": "string",
+          "description": "forbidden-with: 当 target.fields[0] 非空时，forbiddenField 必须为空。"
+        },
+        "fromStates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "transition-guard: 允许的起始状态值。空数组表示任意起始状态。"
+        },
+        "toStates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "transition-guard: 允许的目标状态值。"
+        },
+        "description": {
+          "type": "string",
+          "description": "人类可读的规则说明。"
+        }
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["error", "warn"],
+      "default": "error",
+      "description": "违反规则时的严重程度。error: reducer 测试失败；warn: 仅记录日志。"
+    },
+    "deprecated": {
+      "type": "boolean",
+      "default": false,
+      "description": "是否已废弃。废弃规则保留用于历史对照，reducer 不再强制执行。"
+    }
+  }
+}

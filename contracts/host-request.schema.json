@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/host-request.schema.json",
+  "title": "HostRequest",
+  "description": "Core 或 Reducer 发送给 Host Adapter 的平台能力请求契约。Owner: Host Adapter。来源：CONTRACT_FIRST_NATIVE_UI_PLAN.md §7。能力清单一经发布不得改名。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "payload"],
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "http.execute",
+        "http.cancel",
+        "webview.open",
+        "webview.close",
+        "webview.evaluate",
+        "cookie.get",
+        "cookie.set",
+        "cookie.clear",
+        "file.read",
+        "file.write",
+        "file.delete",
+        "storage.path",
+        "credential.get",
+        "credential.set",
+        "credential.delete",
+        "tts.system.start",
+        "tts.system.stop",
+        "tts.system.pause",
+        "tts.system.resume",
+        "permission.request",
+        "permission.check",
+        "background.schedule",
+        "background.cancel",
+        "notification.show",
+        "notification.cancel",
+        "share.invoke",
+        "clipboard.copy",
+        "clipboard.paste",
+        "device.vibrate",
+        "device.screen.keep-on",
+        "device.screen.release"
+      ],
+      "description": "Host 能力请求类型。新增视为 MINOR，删除视为 MAJOR。来源：CONTRACT_FIRST_NATIVE_UI_PLAN.md §7 能力清单。"
+    },
+    "payload": {
+      "type": "object",
+      "description": "请求负载。http: { url, method, headers, body, timeoutMs }；webview: { url, script }；cookie: { url, name, value }；file: { path, content }；credential: { key, value }；tts: { text, voice, rate, pitch }；permission: { scope }；background: { taskId, delayMs }；notification: { title, body }；share: { text, url, files }。",
+      "additionalProperties": true
+    },
+    "correlationId": {
+      "type": "string",
+      "description": "用于关联 HostResult 响应。"
+    },
+    "requestId": {
+      "type": "string",
+      "description": "唯一请求 id，用于 cancellation。"
+    },
+    "initiator": {
+      "type": "string",
+      "enum": ["core", "reducer"],
+      "description": "发起方。Core 可发起 HostRequest，Reducer 可发起平台 UI 相关 HostCommand。来源：§7。"
+    }
+  }
+}

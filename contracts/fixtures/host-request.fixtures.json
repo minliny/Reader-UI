@@ -1,0 +1,56 @@
+[
+  { "_comment": "§7: http.execute（Core 发起）",
+    "type": "http.execute", "payload": { "url": "https://example.com/book/1", "method": "GET", "headers": {}, "timeoutMs": 15000 }, "correlationId": "h-001", "requestId": "hr-001", "initiator": "core" },
+  { "type": "http.cancel", "payload": { "requestId": "hr-001" }, "correlationId": "h-002", "requestId": "hr-002", "initiator": "core" },
+
+  { "_comment": "§7: webview.open / webview.evaluate",
+    "type": "webview.open", "payload": { "url": "https://example.com/login" }, "correlationId": "h-003", "requestId": "hr-003", "initiator": "core" },
+  { "type": "webview.evaluate", "payload": { "url": "https://example.com", "script": "document.title" }, "correlationId": "h-004", "requestId": "hr-004", "initiator": "core" },
+  { "type": "webview.close", "payload": {}, "correlationId": "h-005", "requestId": "hr-005", "initiator": "reducer" },
+
+  { "_comment": "§7: cookie.get / cookie.set / cookie.clear",
+    "type": "cookie.get", "payload": { "url": "https://example.com", "name": "session" }, "correlationId": "h-006", "requestId": "hr-006", "initiator": "core" },
+  { "type": "cookie.set", "payload": { "url": "https://example.com", "name": "session", "value": "abc" }, "correlationId": "h-007", "requestId": "hr-007", "initiator": "core" },
+  { "type": "cookie.clear", "payload": { "url": "https://example.com" }, "correlationId": "h-008", "requestId": "hr-008", "initiator": "reducer" },
+
+  { "_comment": "§7: file.read / file.write / file.delete",
+    "type": "file.read", "payload": { "path": "/books/bk-001.epub" }, "correlationId": "h-009", "requestId": "hr-009", "initiator": "core" },
+  { "type": "file.write", "payload": { "path": "/cache/bk-001/ch-001.html", "content": "..." }, "correlationId": "h-010", "requestId": "hr-010", "initiator": "core" },
+  { "type": "file.delete", "payload": { "path": "/cache/bk-001/ch-001.html" }, "correlationId": "h-011", "requestId": "hr-011", "initiator": "reducer" },
+
+  { "_comment": "§7: storage.path",
+    "type": "storage.path", "payload": { "scope": "cache" }, "correlationId": "h-012", "requestId": "hr-012", "initiator": "core" },
+
+  { "_comment": "§7: credential.get / credential.set / credential.delete",
+    "type": "credential.get", "payload": { "key": "webdav-password" }, "correlationId": "h-013", "requestId": "hr-013", "initiator": "reducer" },
+  { "type": "credential.set", "payload": { "key": "webdav-password", "value": "secret" }, "correlationId": "h-014", "requestId": "hr-014", "initiator": "reducer" },
+  { "type": "credential.delete", "payload": { "key": "webdav-password" }, "correlationId": "h-015", "requestId": "hr-015", "initiator": "reducer" },
+
+  { "_comment": "§7: tts.system.start / stop（系统 TTS，区别于 Core 的 tts.queue）",
+    "type": "tts.system.start", "payload": { "text": "第一章", "voice": "system-default", "rate": 1.0, "pitch": 1.0 }, "correlationId": "h-016", "requestId": "hr-016", "initiator": "core" },
+  { "type": "tts.system.pause", "payload": {}, "correlationId": "h-017", "requestId": "hr-017", "initiator": "core" },
+  { "type": "tts.system.resume", "payload": {}, "correlationId": "h-018", "requestId": "hr-018", "initiator": "core" },
+  { "type": "tts.system.stop", "payload": {}, "correlationId": "h-019", "requestId": "hr-019", "initiator": "core" },
+
+  { "_comment": "§7: permission.request / permission.check",
+    "type": "permission.request", "payload": { "scope": "storage" }, "correlationId": "h-020", "requestId": "hr-020", "initiator": "reducer" },
+  { "type": "permission.check", "payload": { "scope": "storage" }, "correlationId": "h-021", "requestId": "hr-021", "initiator": "reducer" },
+
+  { "_comment": "§7: background.schedule / background.cancel",
+    "type": "background.schedule", "payload": { "taskId": "rss-refresh", "delayMs": 3600000 }, "correlationId": "h-022", "requestId": "hr-022", "initiator": "reducer" },
+  { "type": "background.cancel", "payload": { "taskId": "rss-refresh" }, "correlationId": "h-023", "requestId": "hr-023", "initiator": "reducer" },
+
+  { "_comment": "§7: notification.show / notification.cancel",
+    "type": "notification.show", "payload": { "title": "更新提醒", "body": "RSS 有 3 条新内容" }, "correlationId": "h-024", "requestId": "hr-024", "initiator": "reducer" },
+  { "type": "notification.cancel", "payload": { "id": "n-001" }, "correlationId": "h-025", "requestId": "hr-025", "initiator": "reducer" },
+
+  { "_comment": "§7: share.invoke",
+    "type": "share.invoke", "payload": { "text": "推荐一本书", "url": "https://example.com/book/1" }, "correlationId": "h-026", "requestId": "hr-026", "initiator": "reducer" },
+
+  { "_comment": "扩展：clipboard / device",
+    "type": "clipboard.copy", "payload": { "text": "选中片段" }, "correlationId": "h-027", "requestId": "hr-027", "initiator": "reducer" },
+  { "type": "clipboard.paste", "payload": {}, "correlationId": "h-028", "requestId": "hr-028", "initiator": "reducer" },
+  { "type": "device.vibrate", "payload": { "durationMs": 50 }, "correlationId": "h-029", "requestId": "hr-029", "initiator": "reducer" },
+  { "type": "device.screen.keep-on", "payload": { "enabled": true }, "correlationId": "h-030", "requestId": "hr-030", "initiator": "reducer" },
+  { "type": "device.screen.release", "payload": {}, "correlationId": "h-031", "requestId": "hr-031", "initiator": "reducer" }
+]

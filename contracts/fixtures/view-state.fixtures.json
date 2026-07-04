@@ -1,0 +1,462 @@
+[
+  {
+    "_comment": "Slice 1: AppShell 启动页",
+    "routeId": "app-shell",
+    "pageState": "loading",
+    "context": {},
+    "components": [
+      { "type": "Loading", "id": "first-open-loading", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 1: Main tabs 容器（书架为初始 tab）",
+    "routeId": "main-tabs",
+    "pageState": "default",
+    "context": { "activeTab": "bookshelf" },
+    "components": [
+      { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "bookshelf" } }
+    ]
+  },
+
+  {
+    "_comment": "Slice 1: 书架首页（封面模式）",
+    "routeId": "bookshelf",
+    "pageState": "cover-mode",
+    "context": { "tab": "bookshelf" },
+    "components": [
+      { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
+      { "type": "ShelfChipGroup", "id": "shelf-chips", "props": { "selected": "all" } },
+      { "type": "ContinueReadingCard", "id": "continue-reading", "props": { "bookId": "bk-001", "title": "示例书" } },
+      { "type": "ShelfSectionHeader", "id": "shelf-header", "props": { "title": "我的书架" } },
+      {
+        "type": "BookCard",
+        "id": "book-1",
+        "props": { "bookId": "bk-001", "title": "示例书", "author": "示例作者" },
+        "children": [
+          { "type": "BookCover", "props": {} },
+          { "type": "ProgressBar", "props": { "progress": 0.42 } }
+        ]
+      },
+      { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "bookshelf" } }
+    ]
+  },
+  {
+    "_comment": "Slice 1: 书架空状态",
+    "routeId": "bookshelf-empty",
+    "pageState": "shelf-empty",
+    "context": { "tab": "bookshelf" },
+    "components": [
+      { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
+      { "type": "Empty", "id": "shelf-empty", "props": { "message": "书架为空" } },
+      { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "bookshelf" } }
+    ]
+  },
+  {
+    "_comment": "Slice 1: 发现首页",
+    "routeId": "discover",
+    "pageState": "default",
+    "context": { "tab": "discover" },
+    "components": [
+      { "type": "AppTopBar", "id": "discover-topbar", "props": { "title": "发现" } },
+      { "type": "SearchEntry", "id": "discover-search", "props": {} },
+      { "type": "SourceTypeSegment", "id": "source-type", "props": { "selected": "all" } },
+      { "type": "CurrentSourceCard", "id": "current-source", "props": {} },
+      { "type": "SourceCategoryChips", "id": "source-category", "props": {} },
+      { "type": "DiscoveryContentCard", "id": "discovery-content", "props": {} },
+      { "type": "SourceStatusBar", "id": "source-status", "props": {} },
+      { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "discover" } }
+    ]
+  },
+  {
+    "_comment": "Slice 1: RSS 首页",
+    "routeId": "rss",
+    "pageState": "default",
+    "context": { "tab": "rss" },
+    "components": [
+      { "type": "AppTopBar", "id": "rss-topbar", "props": { "title": "RSS" } },
+      { "type": "SubscriptionSummaryCard", "id": "rss-summary", "props": { "sources": 12, "unread": 28 } },
+      { "type": "FeedStatusChips", "id": "feed-status", "props": { "selected": "all" } },
+      { "type": "FeedSourceChips", "id": "feed-source", "props": { "selected": "all" } },
+      {
+        "type": "RssEntryItem",
+        "id": "rss-entry-1",
+        "props": { "rssId": "rss-001", "title": "示例条目" },
+        "children": [
+          { "type": "UnreadIndicator", "props": { "color": "#2F6F93" } }
+        ]
+      },
+      { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "rss" } }
+    ]
+  },
+  {
+    "_comment": "Slice 1: 设置首页",
+    "routeId": "settings",
+    "pageState": "default",
+    "context": { "tab": "settings" },
+    "components": [
+      { "type": "AppTopBar", "id": "settings-topbar", "props": { "title": "设置" } },
+      { "type": "LocalOverviewCard", "id": "local-overview", "props": {} },
+      { "type": "QuickEntryGrid", "id": "quick-entry", "props": {} },
+      { "type": "SettingsSection", "id": "section-general", "props": { "title": "通用" } },
+      { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "settings" } }
+    ]
+  },
+
+  {
+    "_comment": "Slice 2: 书籍搜索页",
+    "routeId": "book-search",
+    "pageState": "default",
+    "context": { "tab": "bookshelf" },
+    "components": [
+      { "type": "AppTopBar", "id": "search-topbar", "props": { "title": "搜索" } },
+      { "type": "SearchInputBox", "id": "search-input", "props": { "query": "" } },
+      { "type": "ScopeSelector", "id": "scope-selector", "props": {} },
+      { "type": "GroupSelector", "id": "group-selector", "props": {} },
+      { "type": "SearchHistoryList", "id": "search-history", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 2: 书籍详情 loading",
+    "routeId": "book-detail",
+    "pageState": "loading",
+    "context": {},
+    "components": [
+      { "type": "AppTopBar", "id": "detail-topbar", "props": {} },
+      { "type": "Loading", "id": "detail-loading", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 2: 书籍详情 default",
+    "routeId": "book-detail",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "AppTopBar", "id": "detail-topbar", "props": {} },
+      { "type": "BookCover", "id": "detail-cover", "props": {} },
+      { "type": "BookTitleAuthor", "id": "detail-title", "props": { "title": "示例书", "author": "示例作者" } },
+      { "type": "SourceStatus", "id": "detail-source", "props": {} },
+      { "type": "ReadButton", "id": "read-button", "props": {} },
+      { "type": "DirectoryPreview", "id": "detail-toc", "props": {} },
+      { "type": "BookIntro", "id": "detail-intro", "props": {} },
+      { "type": "ConfigEntry", "id": "detail-config", "props": {} }
+    ]
+  },
+
+  {
+    "_comment": "Slice 2: 阅读器沉浸页 default",
+    "routeId": "reader",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "chapterId": "ch-001" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
+      {
+        "type": "ReadingTextFlow",
+        "id": "reading-text",
+        "props": { "chapterTitle": "第一章", "paragraphs": [] }
+      },
+      { "type": "ReadingInfoLayer", "id": "reading-info", "props": {} },
+      { "type": "TapZones", "id": "tap-zones", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 2: 阅读器 loading",
+    "routeId": "reader",
+    "pageState": "loading",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
+      { "type": "Loading", "id": "reader-loading", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 2: 阅读器 offline",
+    "routeId": "reader",
+    "pageState": "offline",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
+      { "type": "Offline", "id": "reader-offline", "props": { "message": "网络不可用" } }
+    ]
+  },
+
+  {
+    "_comment": "Slice 3: 阅读器 + reader-control overlay",
+    "routeId": "reader",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "overlay": "reader-control" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
+      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
+      {
+        "type": "Overlay",
+        "id": "reader-control-overlay",
+        "props": { "overlayType": "reader-control" }
+      }
+    ]
+  },
+  {
+    "_comment": "Slice 3: 阅读器 + directory overlay",
+    "routeId": "reader",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "overlay": "directory" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": {} },
+      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
+      {
+        "type": "Overlay",
+        "id": "directory-overlay",
+        "props": { "overlayType": "directory" },
+        "children": [
+          { "type": "ListRow", "id": "directory-list", "props": {} }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Slice 3: 阅读器 + tts overlay",
+    "routeId": "reader",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "overlay": "tts", "session": "tts" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": {} },
+      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
+      {
+        "type": "Overlay",
+        "id": "tts-overlay",
+        "props": { "overlayType": "tts" }
+      }
+    ]
+  },
+  {
+    "_comment": "Slice 3: 阅读器 + appearance overlay",
+    "routeId": "reader",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "overlay": "appearance" },
+    "components": [
+      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": {} },
+      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
+      {
+        "type": "Overlay",
+        "id": "appearance-overlay",
+        "props": { "overlayType": "appearance" }
+      }
+    ]
+  },
+  {
+    "_comment": "Slice 3: 书架页 + book-action overlay",
+    "routeId": "bookshelf",
+    "pageState": "cover-mode",
+    "context": { "tab": "bookshelf", "overlay": "book-action" },
+    "components": [
+      { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
+      { "type": "BookCard", "id": "book-1", "props": {} },
+      {
+        "type": "Overlay",
+        "id": "book-action-sheet",
+        "props": { "overlayType": "book-action" },
+        "children": [
+          { "type": "Button", "id": "action-edit", "props": { "label": "修改" } },
+          { "type": "Button", "id": "action-delete", "props": { "label": "删除", "destructive": true } }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Slice 3: 书架页 + sort-filter overlay",
+    "routeId": "bookshelf",
+    "pageState": "cover-mode",
+    "context": { "tab": "bookshelf", "overlay": "sort-filter" },
+    "components": [
+      { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
+      {
+        "type": "Overlay",
+        "id": "sort-filter-sheet",
+        "props": { "overlayType": "sort-filter" },
+        "children": [
+          { "type": "FormSection", "id": "sort-section", "props": {} },
+          { "type": "Button", "id": "sort-filter-apply", "props": { "label": "应用" } }
+        ]
+      }
+    ]
+  },
+
+  {
+    "_comment": "Slice 4: 全局 offline 状态页",
+    "routeId": "state-offline",
+    "pageState": "offline",
+    "context": {},
+    "components": [
+      { "type": "Offline", "id": "global-offline", "props": { "message": "网络不可用" } }
+    ]
+  },
+  {
+    "_comment": "Slice 4: 全局 error 状态页",
+    "routeId": "state-error",
+    "pageState": "error",
+    "context": { "message": "网络异常" },
+    "components": [
+      { "type": "Error", "id": "global-error", "props": { "message": "网络异常", "retryable": true } }
+    ]
+  },
+
+  {
+    "_comment": "Slice 5: RSS 主页 rss-all",
+    "routeId": "rss-all",
+    "pageState": "default",
+    "context": { "filter": "all" },
+    "components": [
+      { "type": "AppTopBar", "id": "rss-topbar", "props": { "title": "RSS" } },
+      { "type": "FilterBar", "id": "rss-filter", "props": { "filter": "all" } },
+      { "type": "List", "id": "rss-entry-list", "props": {}, "children": [
+        { "type": "ListRow", "id": "rss-entry-001", "props": { "title": "AI 周报" } },
+        { "type": "ListRow", "id": "rss-entry-002", "props": { "title": "技术日报" } }
+      ]}
+    ]
+  },
+  {
+    "_comment": "Slice 5: RSS 详情页",
+    "routeId": "rss-detail",
+    "pageState": "default",
+    "context": { "entryId": "rss-entry-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "rss-detail-topbar", "props": { "title": "AI 周报" } },
+      { "type": "Content", "id": "rss-detail-content", "props": { "html": "..." } },
+      { "type": "Button", "id": "rss-open-original", "props": { "label": "查看原文" } }
+    ]
+  },
+  {
+    "_comment": "Slice 5: RSS 原文 webview 页",
+    "routeId": "rss-original",
+    "pageState": "loading",
+    "context": { "url": "https://example.com/feed/001" },
+    "components": [
+      { "type": "BackTopBar", "id": "rss-original-topbar", "props": { "title": "原文" } },
+      { "type": "Loading", "id": "rss-original-loading", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 5: source 搜索首页",
+    "routeId": "search-home",
+    "pageState": "default",
+    "context": {},
+    "components": [
+      { "type": "BackTopBar", "id": "search-topbar", "props": { "title": "搜索" } },
+      { "type": "Input", "id": "search-input", "props": { "placeholder": "搜索书名/作者" } }
+    ]
+  },
+  {
+    "_comment": "Slice 5: source 搜索结果页",
+    "routeId": "search-results",
+    "pageState": "default",
+    "context": { "query": "三体" },
+    "components": [
+      { "type": "BackTopBar", "id": "search-results-topbar", "props": { "title": "搜索结果" } },
+      { "type": "FilterBar", "id": "search-filter", "props": {} },
+      { "type": "List", "id": "search-results-list", "props": {}, "children": [
+        { "type": "Card", "id": "search-result-001", "props": { "title": "三体", "author": "刘慈欣" } }
+      ]}
+    ]
+  },
+  {
+    "_comment": "Slice 5: source 搜索空结果",
+    "routeId": "search-empty",
+    "pageState": "empty",
+    "context": { "query": "三体" },
+    "components": [
+      { "type": "Empty", "id": "search-empty-state", "props": { "message": "无搜索结果" } }
+    ]
+  },
+  {
+    "_comment": "Slice 5: 书源详情页",
+    "routeId": "source-detail",
+    "pageState": "default",
+    "context": { "sourceId": "src-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "source-detail-topbar", "props": { "title": "书源详情" } },
+      { "type": "FormSection", "id": "source-detail-form", "props": {} },
+      { "type": "Button", "id": "source-detail-edit", "props": { "label": "编辑" } }
+    ]
+  },
+  {
+    "_comment": "Slice 5: 换源结果页",
+    "routeId": "source-switch-results",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "Overlay", "id": "source-switch-overlay", "props": { "overlayType": "source-switch" }, "children": [
+        { "type": "List", "id": "source-switch-results-list", "props": {}, "children": [
+          { "type": "ListRow", "id": "source-switch-src-001", "props": { "title": "源 A" } },
+          { "type": "ListRow", "id": "source-switch-src-002", "props": { "title": "源 B" } }
+        ]}
+      ]}
+    ]
+  },
+
+  {
+    "_comment": "Slice 6: sync 同步页",
+    "routeId": "sync-backup",
+    "pageState": "default",
+    "context": {},
+    "components": [
+      { "type": "BackTopBar", "id": "sync-topbar", "props": { "title": "同步备份" } },
+      { "type": "FormSection", "id": "sync-section", "props": {} },
+      { "type": "Button", "id": "sync-run", "props": { "label": "立即同步" } }
+    ]
+  },
+  {
+    "_comment": "Slice 6: sync loading",
+    "routeId": "sync-backup",
+    "pageState": "loading",
+    "context": {},
+    "components": [
+      { "type": "BackTopBar", "id": "sync-topbar", "props": { "title": "同步备份" } },
+      { "type": "Loading", "id": "sync-loading", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Slice 6: restore 结果页",
+    "routeId": "restore-result",
+    "pageState": "default",
+    "context": { "scopes": ["progress", "bookshelf"] },
+    "components": [
+      { "type": "BackTopBar", "id": "restore-result-topbar", "props": { "title": "恢复完成" } },
+      { "type": "Content", "id": "restore-result-content", "props": { "message": "已恢复 2 项" } },
+      { "type": "Button", "id": "restore-result-done", "props": { "label": "完成" } }
+    ]
+  },
+  {
+    "_comment": "Slice 6: sync 冲突错误页",
+    "routeId": "sync-error",
+    "pageState": "error",
+    "context": { "errorCode": "SYNC_CONFLICT" },
+    "components": [
+      { "type": "BackTopBar", "id": "sync-error-topbar", "props": { "title": "同步冲突" } },
+      { "type": "Error", "id": "sync-error-state", "props": { "message": "进度同步冲突", "retryable": true } },
+      { "type": "Overlay", "id": "conflict-dialog", "props": { "overlayType": "dialog" }, "children": [
+        { "type": "Button", "id": "conflict-resolve-button", "props": { "label": "解决冲突" } }
+      ]}
+    ]
+  },
+  {
+    "_comment": "Slice 6: WebDAV 配置页",
+    "routeId": "webdav-config",
+    "pageState": "default",
+    "context": {},
+    "components": [
+      { "type": "BackTopBar", "id": "webdav-topbar", "props": { "title": "WebDAV" } },
+      { "type": "FormSection", "id": "webdav-form", "props": {} },
+      { "type": "Input", "id": "webdav-url-input", "props": { "placeholder": "https://dav.example.com" } },
+      { "type": "Button", "id": "webdav-test", "props": { "label": "测试连接" } }
+    ]
+  },
+  {
+    "_comment": "Slice 6: restore 进行中",
+    "routeId": "restore-running",
+    "pageState": "loading",
+    "context": { "scopes": ["progress", "bookshelf"] },
+    "components": [
+      { "type": "BackTopBar", "id": "restore-running-topbar", "props": { "title": "恢复中" } },
+      { "type": "Loading", "id": "restore-running-loading", "props": {} }
+    ]
+  }
+]

@@ -1,0 +1,293 @@
+[
+  {
+    "id": "app.firstOpen.enter",
+    "durationMs": 280,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "app.motion.duration.firstOpen", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "app.route.push.forward",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "app.motion.duration.tabSwitch", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "app.route.pop.backward",
+    "durationMs": 160,
+    "easing": "ease-in",
+    "tokens": { "durationToken": "app.motion.duration.tabSwitch", "easingToken": "app.motion.easing.exit" }
+  },
+  {
+    "id": "app.route.replace",
+    "durationMs": 160,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.stateReplace", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "bookshelf.view.switch",
+    "durationMs": 160,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.tabSwitch", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "button.activate",
+    "durationMs": 120,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.buttonActivate", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "tab.switch",
+    "durationMs": 160,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.tabSwitch", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "tab.item.select",
+    "durationMs": 120,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.tabSelect", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "toggle.switch",
+    "durationMs": 140,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.toggleSwitch", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "chip.item.select",
+    "durationMs": 120,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.chipSelect", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "dropdown.menu.expand",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "app.motion.duration.dropdownExpand", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "dropdown.menu.collapse",
+    "durationMs": 120,
+    "easing": "ease-in",
+    "tokens": { "durationToken": "app.motion.duration.dropdownCollapse", "easingToken": "app.motion.easing.exit" }
+  },
+  {
+    "id": "overlay.sheet.enter",
+    "durationMs": 240,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.overlay", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "overlay.sheet.exit",
+    "durationMs": 240,
+    "easing": "ease-in",
+    "tokens": { "durationToken": "reader.motion.duration.overlay", "easingToken": "app.motion.easing.exit" }
+  },
+  {
+    "id": "overlay.dialog.enter",
+    "durationMs": 240,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.overlay", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "overlay.dialog.exit",
+    "durationMs": 240,
+    "easing": "ease-in",
+    "tokens": { "durationToken": "reader.motion.duration.overlay", "easingToken": "app.motion.easing.exit" }
+  },
+  {
+    "id": "feedback.toast.enter",
+    "durationMs": 180,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "app.motion.duration.feedbackToast", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "feedback.toast.exit",
+    "durationMs": 180,
+    "easing": "ease-in",
+    "tokens": { "durationToken": "app.motion.duration.feedbackToast", "easingToken": "app.motion.easing.exit" }
+  },
+  {
+    "id": "input.focus",
+    "durationMs": 120,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.inputFocus", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "input.blur",
+    "durationMs": 120,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.inputFocus", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "search.state.replace",
+    "durationMs": 160,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.searchState", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "state.content.replace",
+    "durationMs": 160,
+    "easing": "ease",
+    "tokens": { "durationToken": "app.motion.duration.stateReplace", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "state.loading.inline",
+    "durationMs": 800,
+    "easing": "linear",
+    "tokens": { "durationToken": "reader.motion.duration.loadingSpin", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["reducedMotion:forceZeroDuration"]
+  },
+  {
+    "id": "reader.page.turn.next-prev",
+    "durationMs": 220,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.pageTurn", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.chapter.jump",
+    "durationMs": 160,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.base", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "reader.module.switch",
+    "durationMs": 200,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.panel", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "reader.entry.coverToImmersive",
+    "durationMs": 240,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.readerEntry", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.entry.actionToImmersive",
+    "durationMs": 240,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.readerEntry", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.session.capsule.enter",
+    "durationMs": 160,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.capsuleEnter", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.session.capsule.exit",
+    "durationMs": 160,
+    "easing": "ease-in",
+    "tokens": { "durationToken": "reader.motion.duration.capsuleEnter", "easingToken": "app.motion.easing.exit" }
+  },
+  {
+    "id": "reader.session.capsule.countdownTick",
+    "durationMs": 120,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.capsuleTick", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "reader.session.capsule.voiceIcon.active",
+    "durationMs": 960,
+    "easing": "ease-in-out",
+    "tokens": { "durationToken": "reader.motion.duration.voicePulse", "easingToken": "app.motion.easing.reshape" }
+  },
+  {
+    "id": "reader.session.tts.start",
+    "durationMs": 200,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.sessionReturn", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.session.autoPage.start",
+    "durationMs": 200,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.sessionReturn", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.sourceSwitch.open-close",
+    "durationMs": 240,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.overlay", "easingToken": "app.motion.easing.enter" }
+  },
+  {
+    "id": "reader.control.handle.press",
+    "durationMs": 0,
+    "easing": "none",
+    "tokens": { "durationToken": "reader.motion.duration.instant", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["dragMustFollowFinger:noEasing"]
+  },
+  {
+    "id": "reader.control.handle.release",
+    "durationMs": 120,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.handleSnap", "easingToken": "app.motion.easing.enter" },
+    "guardRules": ["releaseToSnap:afterReleaseOnly"]
+  },
+  {
+    "id": "reader.control.dock.longPress",
+    "durationMs": 320,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.handleLongPress", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "slider.drag.start",
+    "durationMs": 0,
+    "easing": "none",
+    "tokens": { "durationToken": "reader.motion.duration.instant", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["dragMustFollowFinger:noEasing"]
+  },
+  {
+    "id": "slider.drag.update",
+    "durationMs": 0,
+    "easing": "none",
+    "tokens": { "durationToken": "reader.motion.duration.instant", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["dragMustFollowFinger:noEasing"]
+  },
+  {
+    "id": "slider.drag.release",
+    "durationMs": 120,
+    "easing": "ease-out",
+    "tokens": { "durationToken": "reader.motion.duration.handleSnap", "easingToken": "app.motion.easing.enter" },
+    "guardRules": ["releaseToSnap:afterReleaseOnly"]
+  },
+  {
+    "id": "viewport.orientation.reshape",
+    "durationMs": 240,
+    "easing": "ease-in-out",
+    "tokens": { "durationToken": "reader.motion.duration.viewportReshape", "easingToken": "app.motion.easing.reshape" }
+  },
+  {
+    "id": "viewport.orientation.settle",
+    "durationMs": 240,
+    "easing": "ease-in-out",
+    "tokens": { "durationToken": "reader.motion.duration.orientationSettle", "easingToken": "app.motion.easing.reshape" }
+  },
+  {
+    "id": "viewport.orientation.prepare",
+    "durationMs": 80,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.orientationFreeze", "easingToken": "app.motion.easing.standard" }
+  },
+  {
+    "id": "motion.interrupt.cancel",
+    "durationMs": 80,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.interruptSettle", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["interrupt:cancel|redirect|completeThenReplace"]
+  },
+  {
+    "id": "motion.interrupt.redirect",
+    "durationMs": 80,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.interruptSettle", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["interrupt:cancel|redirect|completeThenReplace"]
+  },
+  {
+    "id": "motion.interrupt.completeThenReplace",
+    "durationMs": 80,
+    "easing": "ease",
+    "tokens": { "durationToken": "reader.motion.duration.interruptSettle", "easingToken": "app.motion.easing.standard" },
+    "guardRules": ["interrupt:cancel|redirect|completeThenReplace", "asyncGuard:cancelOnRouteReplace"]
+  }
+]

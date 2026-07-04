@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/token.schema.json",
+  "title": "Token",
+  "description": "视觉 token 契约。Token name 一经发布不得改名。来源：frontend-demo/tokens.css、frontend-demo/motion-tokens.css、docs/ui-design/01-全局规范/、docs/ui-design/02-主标签页/RSS/02-组件规格稿.md。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "category", "value"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^--reader-ds-[a-zA-Z][a-zA-Z0-9-]*$",
+      "description": "Token 名称。必须以 --reader-ds- 开头。允许小写和驼峰。"
+    },
+    "category": {
+      "type": "string",
+      "enum": ["color", "font", "type", "spacing", "size", "radius", "shadow", "elevation", "z-index", "text-constraint", "motion-duration", "motion-easing"],
+      "description": "Token 类别。"
+    },
+    "value": {
+      "type": "string",
+      "description": "Token 值。颜色用 #hex 或 rgba()；字号/间距/尺寸用 Npx；阴影用 box-shadow 表达式；motion-duration 用 Nms；motion-easing 用 CSS easing 函数名。"
+    },
+    "platforms": {
+      "type": "object",
+      "description": "三端映射建议。平台实际值由 generated 类型承载，本字段仅作映射提示。",
+      "additionalProperties": false,
+      "properties": {
+        "swift": { "type": "string", "description": "SwiftUI 对应（如 Color、CGFloat）" },
+        "kotlin": { "type": "string", "description": "Compose 对应（如 Color、Dp）" },
+        "arkts": { "type": "string", "description": "ArkUI 对应（如 ResourceColor、number）" }
+      }
+    },
+    "deprecated": { "type": "boolean", "default": false }
+  }
+}

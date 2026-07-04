@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/ui-state.schema.json",
+  "title": "UiState",
+  "description": "Platform Interaction Reducer 持有的 UI 状态契约。Owner: Platform Interaction Reducer。来源：STATE_OWNERSHIP.md §3、frontend-demo/render-runtime.js 的 appState.*。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["route", "tab", "readerMode", "overlay", "activeSession", "focusTarget", "loading", "error", "reducedMotion"],
+  "properties": {
+    "route": {
+      "type": "object",
+      "description": "当前路由。route.id 必须存在于 route.schema.json。",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "params": { "type": "object", "additionalProperties": { "type": "string" } },
+        "stack": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string" },
+              "params": { "type": "object", "additionalProperties": { "type": "string" } }
+            }
+          },
+          "description": "路由栈。来源：data-route-stack / data-stack-size。"
+        }
+      }
+    },
+    "tab": {
+      "type": "string",
+      "enum": ["bookshelf", "discover", "rss", "settings"],
+      "description": "当前主 Tab。来源：02-主标签页/00-目录.md。"
+    },
+    "readerMode": {
+      "type": "string",
+      "enum": ["default", "loading", "empty", "error", "offline", "permission"],
+      "description": "阅读模式 / 页面状态枚举。来源：04-阅读链路/沉浸阅读/04-状态规则稿.md。"
+    },
+    "overlay": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "settings",
+        "reader-control",
+        "directory",
+        "tts",
+        "appearance",
+        "auto-page",
+        "content-search",
+        "content-replacement",
+        "source-switch",
+        "book-action",
+        "sort-filter",
+        "group-management",
+        "local-import",
+        "batch-management",
+        "reader-night-state",
+        "reader-debug-info",
+        "reader-book-cache",
+        "keyboard",
+        "dialog",
+        "sheet",
+        "toast"
+      ],
+      "description": "当前 overlay。null 表示无 overlay。"
+    },
+    "activeSession": {
+      "type": ["string", "null"],
+      "enum": [null, "reading", "tts", "auto-page"],
+      "description": "阅读会话类型。"
+    },
+    "focusTarget": {
+      "type": ["string", "null"],
+      "description": "当前焦点目标 id。"
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "全局 loading 标志。"
+    },
+    "error": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "retryable": { "type": "boolean", "default": false }
+      },
+      "description": "错误信息。null 表示无错误。"
+    },
+    "reducedMotion": {
+      "type": "boolean",
+      "default": false,
+      "description": "是否启用减少动态效果。来源：MOTION_SOURCE_GLOBAL_AUDIT.md。"
+    },
+    "pageState": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "offline",
+        "permission",
+        "cover-mode",
+        "list-mode",
+        "shelf-empty",
+        "no-cover",
+        "long-title",
+        "switching-source-type",
+        "source-empty",
+        "source-unavailable",
+        "network-failed",
+        "refreshing",
+        "no-subscription",
+        "no-unread",
+        "local-data-loading",
+        "no-backup",
+        "permission-missing",
+        "topbar-action"
+      ],
+      "description": "页面级状态枚举。来源：各页 04-状态规则稿.md。"
+    },
+    "bookshelf": {
+      "type": "object",
+      "description": "书架页面派生 UiState。",
+      "additionalProperties": false,
+      "properties": {
+        "viewMode": { "type": "string", "enum": ["cover", "list"] },
+        "selectedGroupId": { "type": ["string", "null"] },
+        "sortKey": { "type": "string" },
+        "sortOrder": { "type": "string", "enum": ["asc", "desc"] },
+        "filterKeys": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "discover": {
+      "type": "object",
+      "description": "发现页面派生 UiState。来源：appState.discoverFilter/discoverSort/discoverSortOpen。",
+      "additionalProperties": false,
+      "properties": {
+        "filter": { "type": "string" },
+        "sort": { "type": "string" },
+        "sortOpen": { "type": "boolean" },
+        "sourceType": { "type": "string", "enum": ["all", "book-source", "subscription-source"] },
+        "sourceEnabled": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" }
+        }
+      }
+    },
+    "reader": {
+      "type": "object",
+      "description": "阅读器派生 UiState。来源：appState.reader*。",
+      "additionalProperties": false,
+      "properties": {
+        "turnDirection": { "type": "string", "enum": ["next", "prev"] },
+        "pageIndex": { "type": "integer", "minimum": 0 },
+        "chapterIndex": { "type": "integer", "minimum": 0 },
+        "chapterProgress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "chapterDownloads": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "enum": ["loading", "complete", "cached"] }
+        },
+        "tts": { "type": "object", "additionalProperties": true },
+        "settings": { "type": "object", "additionalProperties": true },
+        "typography": { "type": "object", "additionalProperties": true },
+        "textSelectionOpen": { "type": "boolean" },
+        "selectedText": { "type": ["string", "null"] },
+        "sessionCapsuleSnapshot": { "type": ["object", "null"] },
+        "controlSpaceSnapshot": { "type": ["object", "null"] },
+        "autoPageCountdown": { "type": ["number", "null"] },
+        "dockOffsets": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "entryMotion": { "type": ["string", "null"] }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "description": "设置派生 UiState。来源：appState.settingsOverlay/settingsExpandedOption/restoreAvailableScopes/restoreSelectedScopes。",
+      "additionalProperties": false,
+      "properties": {
+        "overlay": { "type": ["string", "null"] },
+        "expandedOption": { "type": ["string", "null"] },
+        "restoreAvailableScopes": { "type": "array", "items": { "type": "string" } },
+        "restoreSelectedScopes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "description": "Motion 派生 UiState。来源：appState.motion*/dropdownMotion/segmentMotion/viewportOrientation*/asyncRouteRequest。",
+      "additionalProperties": false,
+      "properties": {
+        "overlaySequence": { "type": ["string", "null"] },
+        "overlayRole": { "type": ["string", "null"] },
+        "overlayAction": { "type": ["string", "null"] },
+        "overlayFocusReturn": { "type": ["string", "null"] },
+        "overlayReturnTarget": { "type": ["string", "null"] },
+        "viewportOrientationMotion": { "type": ["string", "null"] },
+        "viewportOrientationSequence": { "type": ["string", "null"] },
+        "viewportOrientationTimer": { "type": ["number", "null"] },
+        "interruptMotion": { "type": ["string", "null"] },
+        "interruptSequence": { "type": ["string", "null"] },
+        "interruptTimer": { "type": ["number", "null"] },
+        "dropdownMotion": { "type": ["string", "null"] },
+        "dropdownSwitchMotion": { "type": ["string", "null"] },
+        "dropdownSwitchSequence": { "type": ["string", "null"] },
+        "dropdownSwitchTimer": { "type": ["number", "null"] },
+        "segmentMotion": { "type": ["string", "null"] },
+        "asyncRouteRequest": { "type": ["string", "null"] },
+        "asyncResultMotion": { "type": ["string", "null"] },
+        "asyncResultSequence": { "type": ["string", "null"] }
+      }
+    },
+    "firstOpen": {
+      "type": "object",
+      "description": "首次启动派生 UiState。来源：appState.hasPlayedFirstOpen/firstOpenMotionTimer。",
+      "additionalProperties": false,
+      "properties": {
+        "hasPlayed": { "type": "boolean" },
+        "motionTimer": { "type": ["number", "null"] }
+      }
+    }
+  }
+}
