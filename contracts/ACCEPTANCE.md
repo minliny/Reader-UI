@@ -29,7 +29,7 @@ Reader UI 仓库不持有任何运行时状态。schema 只定义形状与 enum�
 - ✓ `motion.schema.json` —— 84 个 MotionId
 - ✓ `token.schema.json` —— 12 个 TokenCategory
 
-**Phase 2 Core 协议收敛（6 schema）**：
+**Phase 2 Core bridge 规划契约（6 schema）**：
 - ✓ `core-command.schema.json` —— 45 个 CoreCommandType
 - ✓ `core-event.schema.json` —— 69 个 CoreEventType
 - ✓ `host-request.schema.json` —— 31 个 HostRequestType
@@ -85,7 +85,8 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 
 **Reader UI 仓库范围内**：不绕过。
 
-- Core 业务事实源由 `Reader-Core-Native` 持有，本仓 `core-command` / `core-event` / `progress-location` / `content` / `sync-conflict` schema 只定义形状，不实现业务逻辑
+- Core 业务事实源由 `Reader-Core-Native` 持有，本仓 `core-command` / `core-event` / `progress-location` / `content` / `sync-conflict` schema 只定义 Reader UI 侧 Core bridge 规划形状，不实现业务逻辑
+- `CoreCommand` / `CoreEvent` 不等于 Reader-Core-Native 当前协议已经完全对齐；后续仍需 Core bridge mapping / 协议收敛，把契约项逐项映射到真实 Core 命令、事件、错误与 Host 边界
 - Host Adapter 能力由三端实现，本仓 `host-request` schema 只列能力清单 enum，不实现平台调用
 - `ffi-protocol-version.md` 只描述 FFI 入口形状，不写 Rust 代码
 
@@ -108,7 +109,7 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 |---|---|---|
 | Phase 0 架构冻结 | ✓ 完成 | Reader UI/contracts |
 | Phase 1 契约基础 | ✓ 完成（6 schema + codegen + tests + Slice 1-6 fixtures + StateRule） | Reader UI |
-| Phase 2 Core 协议收敛 | ✓ 完成（6 schema + codegen + tests + FFI 协议） | Reader UI |
+| Phase 2 Core bridge 规划契约 | ✓ Reader UI 侧完成（6 schema + codegen + tests + FFI 协议）；跨仓 Core bridge mapping / 协议收敛未完成 | Reader UI + Reader-Core-Native |
 | Phase 3 三端 reducer 落地 | ✗ 未开始（归三端仓库） | iOS / Android / HarmonyOS |
 | Phase 4 Host Adapter 补齐 | ✗ 未开始（归三端仓库） | iOS / Android / HarmonyOS |
 | Phase 5 一致性验证 | 部分（contract test ✓ / reducer golden test ✗ / core protocol test ✗ / device smoke ✗） | 跨仓 |
@@ -118,6 +119,7 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 ```bash
 # 全量契约测试
 node --test contracts/tests/*.test.mjs
+# 当前结果：143 tests / 143 pass / 0 fail
 
 # fixtures 校验
 node contracts/tests/validate.mjs
@@ -131,4 +133,4 @@ node frontend-demo/verify/contract/verify-demo-contract-consistency.mjs
 
 ## 版本
 
-见 [VERSION.json](./VERSION.json)。当前 1.1.0。
+见 [VERSION.json](./VERSION.json)。当前 1.3.0。

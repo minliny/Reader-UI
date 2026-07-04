@@ -300,7 +300,7 @@ contract validation tests
 
 优先覆盖 AppShell、main tabs、bookshelf -> reader、reader overlay、session、focus。
 
-### Phase 2：Core 协议收敛
+### Phase 2：Core bridge 规划契约
 
 交付：
 
@@ -312,7 +312,8 @@ sync conflict model
 host request protocol
 ```
 
-目标是让三端打开书、章节、正文、进度、同步和 TTS 语义一致。
+目标是定义 Reader UI 侧 Core bridge 的规划契约，让三端打开书、章节、正文、进度、同步和 TTS 语义一致。
+这不证明 Reader-Core-Native 当前协议已经完全对齐；后续仍需要 Core bridge mapping / 协议收敛，把契约项逐项映射到真实 Core 命令、事件、错误与 Host 边界。
 
 ### Phase 3：三端 reducer 落地
 

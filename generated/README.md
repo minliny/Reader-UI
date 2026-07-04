@@ -2,7 +2,7 @@
 
 本目录保存 Reader UI Contract 的生成产物。当前已由 tools/codegen/generate.mjs 从 contracts/*.schema.json + fixtures/*.fixtures.json 生成三端类型文件。
 
-当前产物（VERSION.json 1.2.0）：
+当前产物（VERSION.json 1.3.0）：
 
 ```text
 generated/
@@ -16,8 +16,8 @@ generated/
 生成方式：
 
 ```bash
-cd tools/codegen
-node generate.mjs
+# from repository root
+node tools/codegen/generate.mjs
 ```
 
 要求：

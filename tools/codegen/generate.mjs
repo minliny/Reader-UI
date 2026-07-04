@@ -117,8 +117,8 @@ public struct UiEvent: Codable, Equatable, Sendable {
 }
 
 public struct AnyCodable: Codable, Equatable, Sendable {
-    public let value: Any
-    public init(_ value: Any) { self.value = value }
+    public let value: any Sendable
+    public init(_ value: any Sendable) { self.value = value }
     public init(from decoder: Decoder) throws {
         let c = try decoder.singleValueContainer()
         if let v = try? c.decode(Bool.self) { self.value = v }
@@ -127,7 +127,7 @@ public struct AnyCodable: Codable, Equatable, Sendable {
         else if let v = try? c.decode(String.self) { self.value = v }
         else if let v = try? c.decode([AnyCodable].self) { self.value = v }
         else if let v = try? c.decode([String: AnyCodable].self) { self.value = v }
-        else { self.value = NSNull() }
+        else { self.value = Optional<String>.none as String? }
     }
     public func encode(to encoder: Encoder) throws {
         var c = encoder.singleValueContainer()
@@ -375,7 +375,7 @@ function genSwiftMotion(schema) {
 import Foundation
 
 public enum MotionId: String, Codable, CaseIterable, Sendable {
-${ids.map((id) => `    case ${id.replace(/\./g, "_")} = "${id}"`).join("\n")}
+${ids.map((id) => `    case ${id.replace(/[^A-Za-z0-9_]/g, "_")} = "${id}"`).join("\n")}
 }
 
 public enum MotionEasing: String, Codable, CaseIterable, Sendable {

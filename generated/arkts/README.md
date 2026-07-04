@@ -5,11 +5,11 @@
 生成命令：
 
 ```bash
-cd ../../tools/codegen
-node generate.mjs
+# from repository root
+node tools/codegen/generate.mjs
 ```
 
-当前产物（VERSION.json 1.2.0）：13 个 .ets 文件
+当前产物（VERSION.json 1.3.0）：13 个 .ets 文件
 
 - Route.ets / UiEvent.ets / UiState.ets / ViewState.ets / Motion.ets / Token.ets
 - CoreCommand.ets / CoreEvent.ets / HostRequest.ets / ProgressLocation.ets / Content.ets / SyncConflict.ets

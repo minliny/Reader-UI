@@ -5,11 +5,11 @@
 生成命令：
 
 ```bash
-cd ../../tools/codegen
-node generate.mjs
+# from repository root
+node tools/codegen/generate.mjs
 ```
 
-当前产物（VERSION.json 1.2.0）：13 个 .kt 文件
+当前产物（VERSION.json 1.3.0）：13 个 .kt 文件
 
 - Route.kt / UiEvent.kt / UiState.kt / ViewState.kt / Motion.kt / Token.kt
 - CoreCommand.kt / CoreEvent.kt / HostRequest.kt / ProgressLocation.kt / Content.kt / SyncConflict.kt
