@@ -80,7 +80,7 @@ Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链�
 - 脚本：`frontend-demo/verify/contract/verify-demo-contract-consistency.mjs`
 - Baseline：`frontend-demo/verify/contract/demo-contract-baseline.json`
 - Exception policy：`frontend-demo/verify/contract/demo-contract-exceptions.json`
-- 当前 baseline：found=433 / unknown=111 / approved=111 / unapproved=0
+- 当前 baseline：found=515 / unknown=111 / approved=111 / unapproved=0
 - 策略：route/token unknown 必须为 0；motion unknown 必须是 explicit alias/deprecated/exception，否则脚本失败。当前不是 0 drift，后续 schema/demo 收敛时应递减 exception 清单。
 
 ## 目录结构

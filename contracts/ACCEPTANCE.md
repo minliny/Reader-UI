@@ -97,7 +97,7 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 - 三端从同一套 schema 生成类型，schema breaking change 会触发三端编译或测试失败
 - `state-rule.fixtures.json` 定义统一的状态约束，三端 reducer 必须遵守
 - `phase1-slice.test.mjs`（40 项）校验 6 个优先链路（Slice 1-6）在 fixtures 中的覆盖完整
-- `demo-consistency.test.mjs`（6 项）校验 frontend-demo 与 schema 的一致性：route/token unknown 必须为 0，motion unknown 必须为 schema 命中或 `demo-contract-exceptions.json` 中的 explicit alias/deprecated/exception；当前 `found=433 unknown=111 approved=111 unapproved=0`
+- `demo-consistency.test.mjs`（6 项）校验 frontend-demo 与 schema 的一致性：route/token unknown 必须为 0，motion unknown 必须为 schema 命中或 `demo-contract-exceptions.json` 中的 explicit alias/deprecated/exception；当前 `found=515 unknown=111 approved=111 unapproved=0`
 - `matrix-coverage.test.mjs` / `motion-guard.test.mjs` / `token-group.test.mjs` / `core-host-boundary.test.mjs` 校验 P0 矩阵、motion guard、token 分组、Core/Host 边界引用一致性
 
 剩余风险：
@@ -150,4 +150,4 @@ node frontend-demo/verify/contract/verify-demo-contract-consistency.mjs
 
 ## 版本
 
-见 [VERSION.json](./VERSION.json)。当前 1.4.4。
+见 [VERSION.json](./VERSION.json)。当前 1.4.5。

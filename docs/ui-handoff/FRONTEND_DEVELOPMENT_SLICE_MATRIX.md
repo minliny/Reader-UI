@@ -86,7 +86,7 @@ Scope: 只定义 `Reader UI` 交付给平台开发的启动顺序和验收输入
 
 这些工作必须等 Slice 1-5 的原生闭环通过后再展开：
 
-- 131 routes 全量迁移。
+- 200 routes 全量迁移。
 - Discover/RSS/Source/Settings 全业务状态全量接入。
 - 全 Motion ID 一次性实现。
 - 全平台折叠屏、大屏、多窗口、无障碍和性能矩阵。

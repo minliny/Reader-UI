@@ -47,26 +47,31 @@ vm.createContext(routeContext);
 vm.runInContext(read("frontend-demo/route-contract.js"), routeContext);
 const routeContract = routeContext.window.ReaderFrontendDemoDraftRouteContract || {};
 const routes = routeContract.routes || {};
+const routeSchema = JSON.parse(read("contracts/route.schema.json"));
+const schemaRouteIds = routeSchema.properties?.id?.enum || [];
+const routeIds = Object.keys(routes);
+const routeIdSet = new Set(routeIds);
+const schemaRouteIdSet = new Set(schemaRouteIds);
+const missingSchemaRoutes = schemaRouteIds.filter((routeId) => !routeIdSet.has(routeId));
+const extraDemoRoutes = routeIds.filter((routeId) => !schemaRouteIdSet.has(routeId));
 const shellCounts = Object.values(routes).reduce((acc, route) => {
   acc[route.shell] = (acc[route.shell] || 0) + 1;
   return acc;
 }, {});
 addCheck(
   "handoff.route-contract",
-  Object.keys(routes).length === 131 &&
-    shellCounts.MainTabShell === 36 &&
-    shellCounts.LibraryShell === 51 &&
-    shellCounts.SettingsShell === 28 &&
-    shellCounts.ReaderShell === 15 &&
-    shellCounts.FlowShell === 1,
-  `routes=${Object.keys(routes).length}; shells=${JSON.stringify(shellCounts)}`
+  routeIds.length === schemaRouteIds.length &&
+    missingSchemaRoutes.length === 0 &&
+    extraDemoRoutes.length === 0 &&
+    ["MainTabShell", "LibraryShell", "SettingsShell", "ReaderShell", "FlowShell"].every((shell) => Number(shellCounts[shell] || 0) > 0),
+  `routes=${routeIds.length}/${schemaRouteIds.length}; shells=${JSON.stringify(shellCounts)}; missing=${missingSchemaRoutes.length}; extra=${extraDemoRoutes.length}`
 );
 
 const coverage = JSON.parse(read("frontend-demo/verify/motion/motion-coverage-report.json"));
 addCheck(
   "handoff.motion-coverage",
   coverage.summary?.passed === coverage.summary?.total &&
-    coverage.routeCoverage?.totalRoutes === 131 &&
+    coverage.routeCoverage?.totalRoutes === schemaRouteIds.length &&
     coverage.routeCoverage?.missingCases?.length === 0 &&
     coverage.executableContract?.unresolvedMotionIds?.length === 0 &&
     coverage.executableContract?.missingStateMachineMotionIds?.length === 0,
@@ -146,12 +151,22 @@ const productionEntries = [
   "hvigorfile.ts"
 ];
 const presentProductionEntries = productionEntries.filter((relativePath) => exists(relativePath));
+const allowedContractEntries = presentProductionEntries.filter((relativePath) => {
+  if (relativePath !== "Package.swift") return false;
+  const manifest = read(relativePath);
+  return manifest.includes("Reader UI Contract") &&
+    manifest.includes("ReaderUIContract") &&
+    manifest.includes('path: "generated/swift"') &&
+    !manifest.includes(".executableTarget");
+});
+const unexpectedProductionEntries = presentProductionEntries
+  .filter((relativePath) => !allowedContractEntries.includes(relativePath));
 addCheck(
   "handoff.project-role",
-  presentProductionEntries.length === 0 && read("README.md").includes("Not migrated:") && read("README.md").includes("Android source code"),
-  presentProductionEntries.length === 0
-    ? "design/handoff repository; no production frontend entry detected"
-    : `unexpected production entries: ${presentProductionEntries.join(", ")}`
+  unexpectedProductionEntries.length === 0 && read("README.md").includes("Not migrated:") && read("README.md").includes("Android source code"),
+  unexpectedProductionEntries.length === 0
+    ? `design/handoff repository; allowed contract entries=${allowedContractEntries.join(", ") || "none"}`
+    : `unexpected production entries: ${unexpectedProductionEntries.join(", ")}`
 );
 
 checks.forEach((check) => {

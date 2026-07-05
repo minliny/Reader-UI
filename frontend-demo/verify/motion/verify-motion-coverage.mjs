@@ -12,6 +12,7 @@ const runtime = read("frontend-demo/render-runtime.js");
 const controller = read("frontend-demo/motion-controller.js");
 const motionTokens = read("frontend-demo/motion-tokens.css");
 const routeContractSource = read("frontend-demo/route-contract.js");
+const routeSchema = JSON.parse(read("contracts/route.schema.json"));
 const motionSchema = JSON.parse(read("contracts/motion.schema.json"));
 const motionFixtures = JSON.parse(read("contracts/fixtures/motion.fixtures.json"));
 const evidenceManifestPath = path.join(frontendRoot, "verify/motion/evidence/manifest.json");
@@ -33,9 +34,13 @@ vm.runInContext(controller, context);
 const routes = context.window.ReaderFrontendDemoDraftRouteContract.routes || {};
 const motionController = context.window.ReaderMotionController || {};
 const routeNames = Object.keys(routes);
+const schemaRouteIds = routeSchema.properties?.id?.enum || [];
+const schemaRouteIdSet = new Set(schemaRouteIds);
+const routeSet = new Set(routeNames);
+const missingSchemaRoutes = schemaRouteIds.filter((route) => !routeSet.has(route));
+const extraContractRoutes = routeNames.filter((route) => !schemaRouteIdSet.has(route));
 const renderCases = [...runtime.matchAll(/case\s+"([^"]+)"\s*:/g)].map((match) => match[1]);
 const renderCaseSet = new Set(renderCases);
-const routeSet = new Set(routeNames);
 const missingCases = routeNames.filter((route) => !renderCaseSet.has(route));
 const extraCases = renderCases.filter((route) => !routeSet.has(route));
 
@@ -234,8 +239,12 @@ const motionFixturesMissingGuardRules = motionFixtures
 const checks = [
   {
     id: "route.contract.render-coverage",
-    passed: routeNames.length === 131 && missingCases.length === 0 && extraCases.length === 0,
-    detail: `${routeNames.length} routes, missing=${missingCases.length}, extra=${extraCases.length}`
+    passed: routeNames.length === schemaRouteIds.length &&
+      missingSchemaRoutes.length === 0 &&
+      extraContractRoutes.length === 0 &&
+      missingCases.length === 0 &&
+      extraCases.length === 0,
+    detail: `${routeNames.length}/${schemaRouteIds.length} routes, missingSchema=${missingSchemaRoutes.length}, extraContract=${extraContractRoutes.length}, missingRender=${missingCases.length}, extraRender=${extraCases.length}`
   },
   {
     id: "motion.controller.file",
@@ -525,6 +534,9 @@ const report = {
   },
   routeCoverage: {
     totalRoutes: routeNames.length,
+    schemaRoutes: schemaRouteIds.length,
+    missingSchemaRoutes,
+    extraContractRoutes,
     renderCases: renderCases.length,
     missingCases,
     extraCases

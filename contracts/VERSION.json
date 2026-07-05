@@ -1,5 +1,5 @@
 {
-  "version": "1.4.4",
+  "version": "1.4.5",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
@@ -16,6 +16,18 @@
     "state-rule": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "1.4.5",
+      "date": "2026-07-05",
+      "summary": "frontend-demo 200/200 route closure and handoff readiness gate",
+      "changes": [
+        "frontend-demo/route-contract.js 与 renderRoute() 补齐至 route.schema.json 的 200/200 RouteId，新增搜索、发现缓存、RSS 细分类、reader full/overlay、restore/progress/about/global state、source debug 等长尾静态页渲染入口",
+        "verify-demo-contract-consistency.mjs 改为执行 route-contract.js 读取实际 routes，当前 baseline 为 found=515 / unknown=111 / approved=111 / unapproved=0，route/token unknown 仍为 0",
+        "verify-motion-coverage.mjs 使用 route.schema.json 作为 route coverage 基准，当前 route coverage 为 200/200，selector data coverage 为 151/184",
+        "verify-ui-handoff-readiness.mjs 当前 8/8 pass；project-role 只允许 contract-only Package.swift（ReaderUIContract + generated/swift + no executable target），其他生产入口仍失败",
+        "更新 frontend readiness / complete app gap / closure work breakdown 文档，明确 Reader UI demo 是完整 contract/handoff reference，不等同于 Android/iOS/HarmonyOS native delivery proof"
+      ]
+    },
     {
       "version": "1.4.4",
       "date": "2026-07-04",
@@ -48,10 +60,10 @@
       "summary": "Demo/schema strict exception gate 起点",
       "changes": [
         "新增 frontend-demo/verify/contract/demo-contract-exceptions.json：route/token unknown 必须为 0，motion unknown 只能来自 explicit alias/deprecated/exception policy",
-        "verify-demo-contract-consistency.mjs 不再使用宽松 unknown 阈值，当前 baseline 为 found=433 / unknown=111 / approved=111 / unapproved=0",
+        "verify-demo-contract-consistency.mjs 不再使用宽松 unknown 阈值，1.4.2 当时 baseline 为 found=433 / unknown=111 / approved=111 / unapproved=0",
         "motion-controller.js 增加首批 MotionId alias：reader.session.capsule.control.press/toggle -> reader.session.capsule.control.press-toggle，reader.page.turn.next/prev -> reader.page.turn.next-prev，tab.item.switch -> tab.switch",
         "demo-consistency.test.mjs 扩展为 6 项，校验 baseline unapproved=0 与 exception policy 结构",
-        "Reader UI contract tests 当前 162/162 pass"
+        "Reader UI contract tests 在 1.4.2 当时为 162/162 pass"
       ]
     },
     {

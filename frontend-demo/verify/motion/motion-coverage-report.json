@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-04T10:27:34.387Z",
+  "generatedAt": "2026-07-05T05:55:49.955Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
       "id": "route.contract.render-coverage",
       "passed": true,
-      "detail": "131 routes, missing=0, extra=0"
+      "detail": "200/200 routes, missingSchema=0, extraContract=0, missingRender=0, extraRender=0"
     },
     {
       "id": "motion.controller.file",
@@ -140,7 +140,7 @@
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "151/183 data-* directly mapped"
+      "detail": "151/184 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -159,19 +159,23 @@
     "total": 30
   },
   "routeCoverage": {
-    "totalRoutes": 131,
-    "renderCases": 131,
+    "totalRoutes": 200,
+    "schemaRoutes": 200,
+    "missingSchemaRoutes": [],
+    "extraContractRoutes": [],
+    "renderCases": 200,
     "missingCases": [],
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 183,
+    "dataAttributeCount": 184,
     "directMappedDataAttributeCount": 151,
     "unmappedDataAttributes": [
       "data-adaptive-runtime",
       "data-book-author",
       "data-book-chapter",
       "data-book-title",
+      "data-contract-static-route",
       "data-cover-src",
       "data-current-page",
       "data-current-route",

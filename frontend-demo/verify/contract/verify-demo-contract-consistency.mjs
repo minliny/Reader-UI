@@ -9,6 +9,7 @@
 import { readFileSync, readdirSync, existsSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import vm from "node:vm";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..", "..", "..");
@@ -60,28 +61,35 @@ for (const entry of exceptionPolicy.motion || []) {
 
 // --- 扫描 demo 文件提取 id ---
 
-// 从 route-contract.js 提取 route id（对象 key 形如 "rss-all": { ... shell: "..." })
+// 从 route-contract.js 提取 route id（对象 key 形如 "rss-all": { ... shell: "..." }）
 // 只提取含 shell 字段的对象 key，避免误识别 motion/event id
 function extractRouteIdsFromRouteContract(text) {
-  const ids = new Set();
-  // 匹配 "kebab-case": { 后续含 shell 字段
-  const re = /["']([a-z][a-z0-9-]*)["']\s*:\s*\{\s*[^}]*?shell:\s*["']/g;
+  const context = { window: {} };
+  vm.createContext(context);
+  vm.runInContext(text, context);
+  const routes = context.window.ReaderFrontendDemoDraftRouteContract?.routes || {};
+  const ids = new Set(Object.keys(routes));
+  if (ids.size > 0) {
+    return ids;
+  }
+  const fallbackIds = new Set();
+  const re = /["']([a-z][a-z0-9_-]*)["']\s*:\s*\{\s*[^}]*?shell:\s*["']/g;
   let m;
   while ((m = re.exec(text)) !== null) {
-    ids.add(m[1]);
+    fallbackIds.add(m[1]);
   }
-  return ids;
+  return fallbackIds;
 }
 
 // 从 fixture.js / render-runtime.js 提取 route id 引用（data-route="xxx" 或 route: "xxx"）
 function extractRouteIdsFromJs(text) {
   const ids = new Set();
   // data-route="xxx" 或 data-route='xxx'（kebab-case）
-  const re1 = /data-route=["']([a-z][a-z0-9-]*)["']/g;
+  const re1 = /data-route=["']([a-z][a-z0-9_-]*)["']/g;
   let m;
   while ((m = re1.exec(text)) !== null) ids.add(m[1]);
   // route: "xxx" 或 route: 'xxx'（kebab-case，排除 motion id 含点号）
-  const re2 = /\broute:\s*["']([a-z][a-z0-9-]*)["']/g;
+  const re2 = /\broute:\s*["']([a-z][a-z0-9_-]*)["']/g;
   while ((m = re2.exec(text)) !== null) {
     ids.add(m[1]);
   }

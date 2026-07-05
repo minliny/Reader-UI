@@ -19,7 +19,7 @@
 - `../docs/ui-handoff/FRONTEND_DEVELOPMENT_READINESS.md`：UI 侧 start gate、Design / Contract ready、Demo proof ready、Platform implementation missing 的分层结论。
 - `../docs/ui-handoff/FRONTEND_DEVELOPMENT_SLICE_MATRIX.md`：建议平台先做的 bounded vertical slices。
 - `../docs/ui-handoff/UI_PLATFORM_EVIDENCE_REQUESTS.md`：平台完成后必须回传的 native build、navigation、gesture、fold、accessibility 和 performance 证据。
-- `verify/handoff/verify-ui-handoff-readiness.mjs`：检查 UI handoff 文件、131 route contract、motion coverage、代表证据和项目角色边界。
+- `verify/handoff/verify-ui-handoff-readiness.mjs`：检查 UI handoff 文件、200 route contract、motion coverage、代表证据和项目角色边界。
 
 这些文件把 UI 侧缺口收束为“开发输入和验收基准已可用”。它们不声称平台实现完成；真实 Compose / SwiftUI / ArkUI 组件、原生导航、设备录屏、无障碍和性能仍由各平台仓库完成。
 

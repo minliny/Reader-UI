@@ -11,7 +11,7 @@ Canonical demo: `/Users/minliny/Documents/Reader UI/frontend-demo`
 当前 `Reader UI` 仓库已经完成真实前端开发启动前，UI 侧必须交付的第一版输入：
 
 - Design / Contract ready: 已具备 App Shell、主 Tab、route/state/component 基线、Motion ID、token、state machine、reduced-motion、interrupt 和 orientation/fold 契约。
-- Demo proof ready: canonical `frontend-demo/` 已有 131 条 route render 覆盖、motion coverage gate、第一批代表截图证据和可执行 `ReaderMotionController.CONTRACT`。
+- Demo proof ready: canonical `frontend-demo/` 已有 200 条 route render 覆盖、motion coverage gate、第一批代表截图证据和可执行 `ReaderMotionController.CONTRACT`。
 - Platform implementation missing: Android Compose、iOS SwiftUI、HarmonyOS ArkUI 的真实工程、原生导航、手势、安全区、键盘、fold posture、无障碍和性能证据不属于本仓库，必须在平台仓库完成。
 
 因此可以启动有边界的原生平台开发；不可以把 `frontend-demo/` 当作生产前端直接开发，也不可以把 demo coverage 通过等同于平台完成。
@@ -76,7 +76,7 @@ Canonical demo: `/Users/minliny/Documents/Reader UI/frontend-demo`
 
 现在不推荐启动：
 
-1. 131 routes 全量迁移。
+1. 200 routes 全量迁移。
 2. 三端并行全量重写。
 3. 按 Web CSS/DOM 复刻。
 4. 折叠屏、大屏、无障碍和性能的一次性全量攻坚。

@@ -479,9 +479,11 @@
 
   function discoverContext(route, appState) {
     const entryRouteMap = {
+      "discover-home": "排行榜",
       "discover-entry-ranking": "排行榜",
       "discover-entry-bestseller": "畅销",
       "discover-entry-category": "分类",
+      "discover-entry-source": "书源",
       "discover-entry-finished": "完本",
       "discover-entry-latest": "最新",
       "discover-entry-new": "新书",
@@ -490,7 +492,9 @@
     const filterRouteMap = {
       "discover-filter-keyword": "关键词",
       "discover-filter-male": "男频",
-      "discover-filter-female": "女频"
+      "discover-filter-female": "女频",
+      "discover-filter-source-type": "正版源",
+      "discover-filter-category": "分类"
     };
     const sortRouteMap = {
       "discover-sort-popularity": "人气",
@@ -503,7 +507,7 @@
     const source = switched
       ? { name: "起点导入", meta: "正版 · 已启用发现 · 180ms", status: "已启用发现", speed: "180ms" }
       : { name: "优书网", meta: "默认分组 · 已启用发现 · 120ms", status: "已启用发现", speed: "120ms" };
-    const entries = switched ? ["畅销", "分类", "新书", "完本"] : ["排行榜", "分类", "完本", "最新", "书单"];
+    const entries = switched ? ["畅销", "分类", "新书", "完本"] : ["排行榜", "书源", "分类", "完本", "最新", "书单"];
     const routedEntry = entryRouteMap[route];
     const routedFilter = filterRouteMap[route];
     const stateEntry = appState?.discoverEntry;
@@ -517,11 +521,17 @@
     const sortOpen = route === "discover-sort" || Boolean(appState?.discoverSortOpen);
     const totalByRoute = {
       "discover-entry-category": 32,
+      "discover-entry-source": 12,
       "discover-entry-finished": 21,
       "discover-entry-latest": 27,
       "discover-entry-booklist": 14,
       "discover-filter-keyword": 9,
+      "discover-filter-source-type": 12,
+      "discover-filter-category": 32,
       "discover-filter-female": 16,
+      "discover-cache-empty": 0,
+      "discover-cache-stale": 18,
+      "discover-cache-fresh": 18,
       "discover-sort-update": 25,
       "discover-sort-collection": 19,
       "discover-sort-finished": 21,
@@ -549,6 +559,7 @@
     return {
       "排行榜": "discover-entry-ranking",
       "畅销": "discover-entry-bestseller",
+      "书源": "discover-entry-source",
       "分类": "discover-entry-category",
       "完本": "discover-entry-finished",
       "最新": "discover-entry-latest",
@@ -561,7 +572,9 @@
     return {
       "关键词": "discover-filter-keyword",
       "男频": "discover-filter-male",
-      "女频": "discover-filter-female"
+      "女频": "discover-filter-female",
+      "正版源": "discover-filter-source-type",
+      "分类": "discover-filter-category"
     }[item] || "discover";
   }
 
@@ -617,7 +630,7 @@
   }
 
   function discoverFilterBar(ctx, appState) {
-    const filters = ["关键词", "男频", "女频"];
+    const filters = ["关键词", "男频", "女频", "正版源", "分类"];
     const sorts = ["人气", "更新", "收藏", "完本", "字数"];
     return filterDisclosure({
       className: "fd-discover-filter-control",
@@ -797,8 +810,20 @@
         </section>
         ${discoverBookRows(data, "discover", true)}`;
     }
+    if (route === "discover-cache-empty") {
+      return `
+        ${discoverSourceBar(ctx, false, route)}
+        <section class="fd-discover-empty-state">
+          ${icon("storage", "fd-empty-icon")}
+          <h2>暂无发现缓存</h2>
+          <p>当前书源还没有本地发现缓存。首次刷新成功后，会保留入口、筛选条件和结果列表供离线回看。</p>
+          <div><button type="button" data-route="discover-refreshing">立即刷新</button><button type="button" data-route="discover-control">切换书源</button></div>
+        </section>`;
+    }
     return `
       ${route === "discover-cache-toast" ? `<section class="fd-discover-toast">已清除优书网发现缓存</section>` : ""}
+      ${route === "discover-cache-stale" ? `<section class="fd-discover-toast">正在使用 2 小时前缓存，刷新后会替换当前列表</section>` : ""}
+      ${route === "discover-cache-fresh" ? `<section class="fd-discover-toast">当前发现缓存已是最新</section>` : ""}
       ${discoverSourceBar(ctx, expanded, route)}
       ${expanded ? discoverControlPanel(ctx, route === "discover-switching-source" ? "switching" : route === "discover-entry-error" ? "entry-error" : "") : ""}
       ${expanded ? "" : `${discoverEntryChips(ctx)}${discoverFilterBar(ctx, appState)}`}
@@ -1013,7 +1038,10 @@
       { label: "全部", route: "rss-source-feed", title: "GitHub Releases", meta: "默认 RSS 解析 · 18 条" },
       { label: "Releases", route: "rss-source-category-releases", title: "Releases", meta: "版本发布 · 8 条" },
       { label: "Issues", route: "rss-source-category-issues", title: "Issues", meta: "问题讨论 · 6 条" },
-      { label: "Discussions", route: "rss-source-category-discussions", title: "Discussions", meta: "社区讨论 · 4 条" }
+      { label: "Discussions", route: "rss-source-category-discussions", title: "Discussions", meta: "社区讨论 · 4 条" },
+      { label: "Novel", route: "rss-source-category-novel", title: "Novel", meta: "小说订阅 · 6 条" },
+      { label: "Tech", route: "rss-source-category-tech", title: "Tech", meta: "技术文章 · 5 条" },
+      { label: "Booklist", route: "rss-source-category-booklist", title: "Booklist", meta: "书单更新 · 3 条" }
     ];
   }
 
@@ -2464,7 +2492,12 @@
     "reader-full-directory": "directory",
     "reader-full-tts": "tts",
     "reader-full-appearance": "appearance",
-    "reader-full-settings": "settings"
+    "reader-full-settings": "settings",
+    "reader-full-font": "appearance",
+    "reader-full-theme": "appearance",
+    "reader-full-theme-edit": "appearance",
+    "reader-full-layout": "appearance",
+    "reader-full-page-turn": "settings"
   };
 
   const readerPromotedRoutes = {
@@ -2473,14 +2506,24 @@
 
   const readerStateByRoute = {
     "immersive-reading": { mode: "immersive" },
+    reader_content: { mode: "immersive" },
     reader: { mode: "control" },
     "toc-bookmarks": { mode: "module", module: "directory" },
+    "reader-directory-overlay-v2": { mode: "module", module: "directory" },
     tts: { mode: "module", module: "tts" },
+    "reader-tts-overlay-v2": { mode: "module", module: "tts" },
     "reader-appearance": { mode: "module", module: "appearance" },
+    "reader-appearance-overlay-v2": { mode: "module", module: "appearance" },
+    "reader-night-state-v2": { mode: "module", module: "appearance" },
     "reader-settings": { mode: "module", module: "settings" },
+    "reader-settings-overlay-v2": { mode: "module", module: "settings" },
     "content-search": { mode: "quick", quick: "search" },
+    "reader-search-overlay-v2": { mode: "quick", quick: "search" },
     "auto-page": { mode: "quick", quick: "auto-page" },
-    "content-replacement": { mode: "quick", quick: "replace" }
+    "reader-auto-scroll-overlay-v2": { mode: "quick", quick: "auto-page" },
+    "content-replacement": { mode: "quick", quick: "replace" },
+    "reader-replace-overlay-v2": { mode: "quick", quick: "replace" },
+    "control-layer-base-v2": { mode: "control" }
   };
 
   const readerQuickActionIconMap = {
@@ -7711,16 +7754,201 @@
       </section>`;
   }
 
+  function routeTitle(route) {
+    return String((routes[route] && routes[route].title) || route).replace(/（.*$/, "").trim();
+  }
+
+  function withAppState(appState, overrides) {
+    return Object.assign({}, appState || {}, overrides || {});
+  }
+
+  function mainTabForRoute(route) {
+    if (route === "settings" || route.startsWith("settings") || route.startsWith("global") || route.startsWith("about") || route.startsWith("sync") || route.startsWith("backup") || route.startsWith("progress") || route.startsWith("remote")) {
+      return "settings";
+    }
+    if (route === "rss" || route.startsWith("rss")) {
+      return "rss";
+    }
+    if (route === "discover" || route.startsWith("discover")) {
+      return "discover";
+    }
+    return "bookshelf";
+  }
+
+  function contractStaticContent(route, options) {
+    const title = options?.title || routeTitle(route);
+    const shell = options?.shell || routes[route]?.shell || "LibraryShell";
+    const summary = options?.summary || "该 RouteId 已纳入 canonical demo 静态渲染闭环，用于平台实现前的结构、状态和合同对齐。";
+    const rows = options?.rows || [
+      ["RouteId", route],
+      ["Shell", shell],
+      ["Source", "frontend-demo/route-contract.js"],
+      ["Boundary", "静态 demo/handoff，不替代平台设备证据"]
+    ];
+    return `
+      <section class="fd-search-state fd-contract-static-state" data-contract-static-route="${esc(route)}" aria-label="${esc(title)}">
+        <span>${icon(options?.icon || "info", "fd-medium-icon")}</span>
+        <h2>${esc(title)}</h2>
+        <p>${esc(summary)}</p>
+        <section class="fd-reader-debug-grid" aria-label="${esc(title)}合同信息">
+          ${rows.map(([label, value]) => `<article><small>${esc(label)}</small><strong>${esc(value)}</strong></article>`).join("")}
+        </section>
+        ${options?.actions ? `<div class="fd-action-row">${options.actions.map((action) => `<button type="button"${action.route ? ` data-route="${esc(action.route)}"` : ""}>${esc(action.label)}</button>`).join("")}</div>` : ""}
+      </section>`;
+  }
+
+  function contractStaticRouteScreen(data, route, appState, options) {
+    const meta = routes[route] || {};
+    const shell = options?.shell || meta.shell || "LibraryShell";
+    const title = options?.title || routeTitle(route);
+    const contentHtml = contractStaticContent(route, Object.assign({ title, shell }, options));
+    if (shell === "MainTabShell") {
+      return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
+        data,
+        title,
+        activeType: options?.activeType || mainTabForRoute(route),
+        actions: [],
+        ariaLabel: title,
+        contentHtml,
+        stateHostHtml: mainTabFeedbackHtml(appState)
+      }));
+    }
+    if (shell === "ReaderShell") {
+      return shellKit().renderReaderShell({
+        frameClass: "fd-reader-frame fd-reader-flow-frame fd-reader-mode-full fd-reader-utility-frame",
+        frameStyle: readerThemeStyle(data, appState),
+        readingSurfaceClass: "fd-reading-surface",
+        overlayClass: "fd-reader-overlay fd-reader-full-overlay",
+        bottomSheetHostClass: "fd-reader-full-host",
+        moduleNavClass: "fd-reader-module-nav fd-reader-module-nav-empty",
+        stateHostClass: "fd-reader-state-host",
+        stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`,
+        ariaLabel: title,
+        readingSurfaceHtml: sharedReaderSurface(data, "", appState),
+        overlayHtml: readerTopOverlay(data, Object.assign({}, appState, { readerMoreOpen: false })),
+        bottomSheetHtml: readerUtilityPanel(title, options?.icon || "info", route, contentHtml),
+        moduleNavHtml: ""
+      });
+    }
+    if (shell === "SettingsShell") {
+      return shellKit().renderSettingsShell(Object.assign(phoneShellClasses("fd-settings-phone"), {
+        data,
+        title,
+        ariaLabel: title,
+        topBarClass: "fd-back-bar",
+        contentClass: "fd-phone-content fd-settings-content",
+        toastHostClass: "fd-toast-host",
+        dialogHostClass: "fd-dialog-host",
+        stateHostClass: "fd-settings-state-host",
+        contentHtml
+      }));
+    }
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+      data,
+      title,
+      ariaLabel: title,
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml
+    }));
+  }
+
+  function searchStateScreen(data, route) {
+    const states = {
+      "search-loading": {
+        icon: "refresh",
+        title: "正在搜索",
+        summary: "搜索请求已发起，保留返回和输入焦点；结果回来后替换为 search-results。",
+        actions: [{ label: "取消", route: "search-home" }]
+      },
+      "search-empty": {
+        icon: "search",
+        title: "没有搜索结果",
+        summary: "当前关键词没有匹配书籍，可调整范围、切换书源或回到发现入口。",
+        actions: [{ label: "重新搜索", route: "search-home" }, { label: "去发现", route: "discover" }]
+      },
+      "search-error": {
+        icon: "warning",
+        title: "搜索失败",
+        summary: "书源请求失败或规则返回异常，平台实现需要保留重试、切换源和错误详情入口。",
+        actions: [{ label: "重试", route: "search-loading" }, { label: "书源管理", route: "source-management" }]
+      }
+    };
+    const state = states[route] || states["search-empty"];
+    return contractStaticRouteScreen(data, route, null, Object.assign({ shell: "LibraryShell" }, state));
+  }
+
+  function globalStateScreen(data, route, appState) {
+    const states = {
+      "global-loading": ["refresh", "全局加载中", "应用级加载态，保留当前导航宿主并展示可取消或可等待的进度反馈。"],
+      "global-empty": ["info", "全局空状态", "用于缺少可展示内容的跨模块兜底状态，平台实现需提供下一步入口。"],
+      "global-error": ["warning", "全局错误状态", "用于 route 或数据层失败后的兜底错误页，必须可重试或返回来源页。"],
+      "offline-state": ["offline", "离线状态", "网络不可用时展示缓存可读能力和重试入口。"],
+      "permission-required": ["permission", "权限需要", "本地导入、文件访问或系统能力缺失时展示权限说明和系统设置入口。"],
+      "state-error": ["warning", "状态错误", "state/error/{message} 的静态合同页，平台实现需注入真实错误消息。"],
+      "state-offline": ["offline", "状态离线", "state/offline 的静态合同页，平台实现需保留来源 route 和离线缓存动作。"],
+      "sync-error": ["warning", "同步错误", "同步与备份失败时展示重试、重新配置和查看日志入口。"]
+    };
+    const [iconName, title, summary] = states[route] || states["global-error"];
+    return contractStaticRouteScreen(data, route, appState, {
+      shell: "SettingsShell",
+      icon: iconName,
+      title,
+      summary,
+      actions: [{ label: "返回设置", route: "settings" }, { label: "重试", route: route === "sync-error" ? "sync-backup" : "global-loading" }]
+    });
+  }
+
+  function sourceDebugRunningScreen(data) {
+    return sourceShell(data, "书源调测运行中", `
+      <section class="fd-source-debug">
+        <article class="fd-source-detail-head fd-source-debug-context"><span><strong>正在调测正文模块</strong><small>笔趣阁 · 第 128 章 风雨夜</small></span>${sourceBadge({ status: "运行中", tone: "warn" })}</article>
+        ${sourceDebugModules("content")}
+        <section class="fd-source-detect-summary">
+          <strong>4/5 项完成</strong>
+          <span>正在请求正文页面并执行内容选择器</span>
+        </section>
+        ${restoreStageList([
+          { title: "站点访问", meta: "200 OK · 126ms", status: "完成", tone: "good", progress: "100%", done: true },
+          { title: "搜索规则", meta: "关键词返回 12 条", status: "完成", tone: "good", progress: "100%", done: true },
+          { title: "详情规则", meta: "字段解析成功", status: "完成", tone: "good", progress: "100%", done: true },
+          { title: "目录规则", meta: "812 章 · URL 有效", status: "完成", tone: "good", progress: "100%", done: true },
+          { title: "正文规则", meta: "正在匹配 #content@text", status: "运行中", tone: "warn", progress: "62%", active: true }
+        ])}
+      </section>`, {
+        bottomActionHtml: sourceBottomActions([
+          { label: "取消", route: "source-debug" },
+          { label: "查看日志", route: "source-debug-content-log" }
+        ])
+      });
+  }
+
   function renderRoute(route, data, options, appState) {
     switch (route) {
       case "bookshelf":
         return mainTabBookshelf(data, appState);
+      case "bookshelf-cover-mode":
+      case "app-shell":
+      case "main-tabs":
+        return mainTabBookshelf(data, withAppState(appState, { bookshelfView: "cover" }));
+      case "bookshelf-list-mode":
+        return mainTabBookshelf(data, withAppState(appState, { bookshelfView: "list" }));
+      case "bookshelf-book-more-menu":
+        return contractStaticRouteScreen(data, route, appState, {
+          shell: "MainTabShell",
+          activeType: "bookshelf",
+          icon: "more",
+          summary: "书籍长按或更多菜单的静态合同页；平台实现应展示真实选中书籍上下文、焦点恢复和系统返回行为。",
+          actions: [{ label: "批量管理", route: "book-batch-management" }, { label: "书籍详情", route: "book-detail" }]
+        });
       case "discover":
+      case "discover-home":
       case "discover-control":
       case "discover-sort":
       case "discover-entry-ranking":
       case "discover-entry-bestseller":
       case "discover-entry-category":
+      case "discover-entry-source":
       case "discover-entry-finished":
       case "discover-entry-latest":
       case "discover-entry-new":
@@ -7728,6 +7956,8 @@
       case "discover-filter-keyword":
       case "discover-filter-male":
       case "discover-filter-female":
+      case "discover-filter-source-type":
+      case "discover-filter-category":
       case "discover-sort-popularity":
       case "discover-sort-update":
       case "discover-sort-collection":
@@ -7738,6 +7968,9 @@
       case "discover-refreshing":
       case "discover-infinite-loading":
       case "discover-page-two":
+      case "discover-cache-empty":
+      case "discover-cache-stale":
+      case "discover-cache-fresh":
       case "discover-cache-confirm":
       case "discover-cache-toast":
       case "discover-login-return":
@@ -7759,6 +7992,9 @@
       case "rss-source-category-releases":
       case "rss-source-category-issues":
       case "rss-source-category-discussions":
+      case "rss-source-category-novel":
+      case "rss-source-category-tech":
+      case "rss-source-category-booklist":
       case "rss-refreshing":
         return mainTabRss(data, appState, route);
       case "rss-starred":
@@ -7785,7 +8021,18 @@
       case "rss-source-actions":
         return rssSourceActionsScreen(data, appState);
       case "rss-source-edit":
+      case "rss-source-add":
         return rssSourceEditScreen(data, appState);
+      case "rss-source-delete-confirm":
+        return rssConfirmScreen(data, {
+          title: "删除订阅源",
+          icon: "trash",
+          heading: "删除 GitHub Releases？",
+          copy: "删除后该订阅源不会再刷新，已缓存文章和阅读记录可按平台策略保留或一并清理。",
+          cancelRoute: "rss-source-actions",
+          confirmRoute: "rss-subscription-management",
+          confirmLabel: "确认删除"
+        }, appState);
       case "rss-source-debug":
         return rssSourceDebugScreen(data, appState);
       case "rss-source-vars":
@@ -7891,6 +8138,7 @@
       case "rss-rule-subscription-detail":
         return rssRuleSubscriptionDetailScreen(data, appState);
       case "rss-rule-subscription-edit":
+      case "rss-rule-subscription-create":
         return rssRuleSubscriptionEditScreen(data, appState);
       case "rss-rule-subscription-test":
         return rssRuleSubscriptionTestScreen(data, appState);
@@ -7906,6 +8154,26 @@
         }, appState);
       case "rss-favorite-groups":
         return rssFavoriteGroupsScreen(data, appState);
+      case "rss-favorite-add":
+        return rssConfirmScreen(data, {
+          title: "添加收藏",
+          icon: "bookmark",
+          heading: "收藏当前 RSS 条目？",
+          copy: "收藏后该条目会出现在 RSS 收藏列表，并保留原订阅源、阅读状态和分组信息。",
+          cancelRoute: "rss-detail",
+          confirmRoute: "rss-starred",
+          confirmLabel: "确认收藏"
+        }, appState);
+      case "rss-favorite-remove":
+        return rssConfirmScreen(data, {
+          title: "移除收藏",
+          icon: "trash",
+          heading: "从收藏中移除？",
+          copy: "只移除收藏关系，不删除原文、订阅源或阅读记录。",
+          cancelRoute: "rss-starred",
+          confirmRoute: "rss-starred",
+          confirmLabel: "确认移除"
+        }, appState);
       case "rss-favorite-group-edit":
         return rssFavoriteGroupEditScreen(data, appState);
       case "rss-favorite-clear":
@@ -7925,7 +8193,16 @@
         return mainTabSettings(data, appState);
       case "book-search":
         return bookSearchScreen(data, appState);
+      case "search-home":
+        return bookSearchScreen(data, withAppState(appState, { bookSearchPhase: "before" }));
+      case "search-results":
+        return bookSearchScreen(data, withAppState(appState, { bookSearchPhase: "after" }));
+      case "search-loading":
+      case "search-empty":
+      case "search-error":
+        return searchStateScreen(data, route);
       case "book-detail":
+      case "book-detail-toc-preview":
         return libraryScreen(data, appState);
       case "book-directory":
         return bookDirectoryScreen(data, appState);
@@ -7936,32 +8213,52 @@
       case "sort-filter":
         return sortFilterScreen(data, appState);
       case "group-management":
+      case "bookshelf-group-management":
         return groupManagementScreen(data);
       case "local-import":
         return localImportScreen(data);
       case "immersive-reading":
+      case "reader_content":
       case "reader":
+      case "control-layer-base-v2":
       case "toc-bookmarks":
+      case "reader-directory-overlay-v2":
       case "reader-appearance":
+      case "reader-appearance-overlay-v2":
+      case "reader-night-state-v2":
       case "tts":
+      case "reader-tts-overlay-v2":
       case "reader-settings":
+      case "reader-settings-overlay-v2":
       case "auto-page":
+      case "reader-auto-scroll-overlay-v2":
       case "content-search":
+      case "reader-search-overlay-v2":
       case "content-replacement":
+      case "reader-replace-overlay-v2":
         return readerStateScreen(data, route, options, appState);
       case "reader-full-directory":
       case "reader-full-tts":
       case "reader-full-appearance":
       case "reader-full-settings":
+      case "reader-full-font":
+      case "reader-full-theme":
+      case "reader-full-theme-edit":
+      case "reader-full-layout":
+      case "reader-full-page-turn":
         return readerFullPageScreen(data, route, appState);
       case "reader-book-cache":
       case "reader-debug-info":
         return readerUtilityScreen(data, route, appState);
       case "source-switch":
         return flowScreen(data, appState);
+      case "source-switch-results":
+        return flowScreen(data, withAppState(appState, { sourceSwitchSelectedSource: "起点导入" }));
       case "source-management":
+      case "source-settings-entry":
         return sourceManagementScreen(data, appState);
       case "source-import-options":
+      case "source-add":
         return sourceImportOptionsScreen(data, appState);
       case "source-import-preview":
         return sourceImportPreviewScreen(data);
@@ -7972,11 +8269,17 @@
       case "source-detail":
         return sourceDetailScreen(data);
       case "source-detect":
+      case "source-test-result":
         return sourceDetectScreen(data);
       case "source-rule-edit":
+      case "source-edit":
         return sourceRuleEditScreen(data);
       case "source-debug":
         return sourceDebugScreen(data);
+      case "source-debug-running":
+        return sourceDebugRunningScreen(data);
+      case "source-debug-result":
+        return sourceDebugResultScreen(data, "source-debug-search-result");
       case "source-debug-search-result":
       case "source-debug-detail-result":
       case "source-debug-catalog-result":
@@ -7992,15 +8295,45 @@
       case "source-delete-confirm":
         return sourceDeleteConfirmScreen(data, appState);
       case "settings-general":
+      case "global-settings":
       case "bookshelf-search-settings":
-      case "about-feedback":
       case "sync-backup":
         return settingsScreen(data, route, appState);
+      case "about-feedback":
+      case "about":
+      case "about-version":
+        return settingsScreen(data, "about-feedback", appState);
+      case "sync-settings-entry":
+      case "backup-settings":
+      case "progress-sync":
+      case "progress-sync-status":
+        return settingsScreen(data, "sync-backup", appState);
+      case "remote-webdav-books":
+        return contractStaticRouteScreen(data, route, appState, {
+          shell: "SettingsShell",
+          icon: "cloud",
+          summary: "远程 WebDAV 书籍列表的静态合同页；平台实现需要接入真实 WebDAV 目录、下载状态和错误恢复。",
+          actions: [{ label: "同步与备份", route: "sync-backup" }, { label: "WebDAV 配置", route: "webdav-config" }]
+        });
+      case "reading-settings-entry":
+        return settingsScreen(data, "settings-general", appState);
+      case "global-loading":
+      case "global-empty":
+      case "global-error":
+      case "offline-state":
+      case "permission-required":
+      case "state-error":
+      case "state-offline":
+      case "sync-error":
+        return globalStateScreen(data, route, appState);
       case "restore-confirm":
+      case "restore-scopes":
+      case "restore-preview":
       case "restore-progress":
+      case "restore-running":
       case "restore-conflict":
       case "restore-result":
-        return restoreFlowScreen(data, route, appState);
+        return restoreFlowScreen(data, route === "restore-scopes" || route === "restore-preview" ? "restore-confirm" : route === "restore-running" ? "restore-progress" : route, appState);
       case "webdav-config":
         return settingsScreen(data, "sync-backup", appState);
       default:

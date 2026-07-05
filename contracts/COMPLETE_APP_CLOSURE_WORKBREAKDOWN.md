@@ -35,11 +35,11 @@ node --test contracts/tests/*.test.mjs
 
 | ID | 任务 | 当前状态 | 完成标准 |
 | --- | --- | --- | --- |
-| RUI-01 | demo/schema unknown 收敛 | strict/exception 起点已建立：`found=433 unknown=111 approved=111 unapproved=0`；route/token unknown 为 0，motion unknown 必须列入 `demo-contract-exceptions.json` | strict gate 或 explicit alias/deprecated exception list；route/token unknown 必须为 0，motion unknown 必须为 0 或列入例外 |
+| RUI-01 | demo/schema unknown 收敛 | strict/exception 起点已建立：`found=515 unknown=111 approved=111 unapproved=0`；route/token unknown 为 0，motion unknown 必须列入 `demo-contract-exceptions.json` | strict gate 或 explicit alias/deprecated exception list；route/token unknown 必须为 0，motion unknown 必须为 0 或列入例外 |
 | RUI-02 | MotionId 归一化 | 已建立首批 alias 表：`reader.session.capsule.control.press/toggle` -> `reader.session.capsule.control.press-toggle`、`reader.page.turn.next/prev` -> `reader.page.turn.next-prev`、`tab.item.switch` -> `tab.switch`；demo 中仍有历史/内部 motion id 例外 | schema、demo runtime、fixtures、generated 使用同一 canonical MotionId；旧 id 只通过 deprecated alias 表存在 |
 | RUI-03 | 全量 MotionSpec registry | 合同侧已完成：Swift/Kotlin/ArkTS 生成文件内已有 `MotionSpecRegistry` / `motionSpecRegistry`，覆盖 84/84 canonical MotionId fixtures，包含 id、duration/easing token refs、guardRules、reducedMotion 派生信息；`motion-guard.test.mjs` 强制 schema/fixture 1:1 | 平台仓继续实现 MotionAdapter 编译接入、reduced-motion 映射、native animation proof 和 device evidence |
 | RUI-04 | TokenRegistry value codegen | registry 起点已完成：Swift/Kotlin/ArkTS 生成文件内已有 `TokenRegistry` / `tokenRegistry`，覆盖当前 117 条 token fixtures 的 name/category/value/platforms/deprecated；平台 TokenAdapter 实现仍归三端仓库 | 生成 Swift/Kotlin/ArkTS token value registry；三端 TokenAdapter 可直接消费或映射 |
-| RUI-05 | handoff readiness 8/8 | 旧检查曾因 contract-only `Package.swift` 失败 | verifier 明确允许 contract-only package 或文件移动；`verify-ui-handoff-readiness.mjs` 8/8 |
+| RUI-05 | handoff readiness 8/8 | 已闭合：verifier 明确允许 contract-only `Package.swift`，同时继续拒绝真实生产入口 | `verify-ui-handoff-readiness.mjs` 8/8 |
 
 这些任务完成后，Reader UI 才能从“P0 可控开发参考”升级到“强门禁 contract release source”。
 
