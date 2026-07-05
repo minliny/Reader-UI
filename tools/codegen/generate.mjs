@@ -407,22 +407,46 @@ public struct ViewState: Codable, Equatable, Sendable {
 `;
 }
 
+function genSwiftMotionEnum(name, values) {
+  // 新增 motion enum 值均为合法 camelCase Swift 标识符，直接用作 case 名。
+  const cases = values.map((v) => `    case ${v} = "${v}"`);
+  return `public enum ${name}: String, Codable, CaseIterable, Sendable {
+${cases.join("\n")}
+}`;
+}
+
 function genSwiftMotion(schema, fixtures) {
   const ids = extractEnum(schema, "id");
   const easings = extractEnum(schema, "easing");
+  const implementationKinds = extractEnum(schema, "implementationKind");
+  const containerRoles = extractEnum(schema, "containerRole");
+  const operations = extractEnum(schema, "operation");
+  const visualPatterns = extractEnum(schema, "visualPattern");
+  const interruptPolicies = extractEnum(schema, "interruptPolicy");
+  const reducedMotionPolicies = extractEnum(schema, "reducedMotionPolicy");
   const registry = fixtures.map((item) => {
     const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
     const reduced = reducedMotionInfo(item);
     const durationToken = item.tokens?.durationToken ? stringLiteral(item.tokens.durationToken) : "nil";
     const easingToken = item.tokens?.easingToken ? stringLiteral(item.tokens.easingToken) : "nil";
     const sourceRule = reduced.sourceRule ? stringLiteral(reduced.sourceRule) : "nil";
+    const containerRole = item.containerRole ? `.${item.containerRole}` : "nil";
+    const operation = item.operation ? `.${item.operation}` : "nil";
+    const visualPattern = item.visualPattern ? `.${item.visualPattern}` : "nil";
     return `        Motion(
             id: .${swiftMotionIdCase(item.id)},
             durationMs: ${item.durationMs},
             easing: .${swiftEasingCase(item.easing)},
+            implementationKind: .${item.implementationKind},
+            containerRole: ${containerRole},
+            operation: ${operation},
+            visualPattern: ${visualPattern},
+            interruptPolicy: .${item.interruptPolicy},
+            reducedMotionPolicy: .${item.reducedMotionPolicy},
             tokens: MotionTokens(durationToken: ${durationToken}, easingToken: ${easingToken}),
             guardRules: ${swiftStringArray(guardRules)},
             reducedMotion: MotionReducedMotion(forceZeroDuration: ${reduced.forceZeroDuration}, directManipulation: ${reduced.directManipulation}, sourceRule: ${sourceRule}),
+            loop: ${item.loop ? `MotionLoop(forever: ${item.loop.forever === true ? "true" : "false"}, autoreverses: ${item.loop.autoreverses === true ? "true" : "false"})` : "nil"},
             deprecated: ${item.deprecated === true ? "true" : "false"}
         )`;
   });
@@ -438,14 +462,65 @@ public enum MotionEasing: String, Codable, CaseIterable, Sendable {
 ${easings.map((e) => `    case ${swiftEasingCase(e)} = "${e}"`).join("\n")}
 }
 
+${genSwiftMotionEnum("MotionImplementationKind", implementationKinds)}
+
+${genSwiftMotionEnum("MotionContainerRole", containerRoles)}
+
+${genSwiftMotionEnum("MotionOperation", operations)}
+
+${genSwiftMotionEnum("MotionVisualPattern", visualPatterns)}
+
+${genSwiftMotionEnum("MotionInterruptPolicy", interruptPolicies)}
+
+${genSwiftMotionEnum("MotionReducedMotionPolicy", reducedMotionPolicies)}
+
 public struct Motion: Codable, Equatable, Sendable {
     public let id: MotionId
     public let durationMs: Int
     public let easing: MotionEasing
+    public let implementationKind: MotionImplementationKind
+    public var containerRole: MotionContainerRole?
+    public var operation: MotionOperation?
+    public var visualPattern: MotionVisualPattern?
+    public let interruptPolicy: MotionInterruptPolicy
+    public let reducedMotionPolicy: MotionReducedMotionPolicy
     public var tokens: MotionTokens?
     public var guardRules: [String]?
     public var reducedMotion: MotionReducedMotion?
+    public var loop: MotionLoop?
     public var deprecated: Bool?
+
+    public init(
+        id: MotionId,
+        durationMs: Int,
+        easing: MotionEasing,
+        implementationKind: MotionImplementationKind,
+        containerRole: MotionContainerRole? = nil,
+        operation: MotionOperation? = nil,
+        visualPattern: MotionVisualPattern? = nil,
+        interruptPolicy: MotionInterruptPolicy,
+        reducedMotionPolicy: MotionReducedMotionPolicy,
+        tokens: MotionTokens? = nil,
+        guardRules: [String]? = nil,
+        reducedMotion: MotionReducedMotion? = nil,
+        loop: MotionLoop? = nil,
+        deprecated: Bool? = nil
+    ) {
+        self.id = id
+        self.durationMs = durationMs
+        self.easing = easing
+        self.implementationKind = implementationKind
+        self.interruptPolicy = interruptPolicy
+        self.reducedMotionPolicy = reducedMotionPolicy
+        self.containerRole = containerRole
+        self.operation = operation
+        self.visualPattern = visualPattern
+        self.tokens = tokens
+        self.guardRules = guardRules
+        self.reducedMotion = reducedMotion
+        self.loop = loop
+        self.deprecated = deprecated
+    }
 }
 
 public struct MotionTokens: Codable, Equatable, Sendable {
@@ -457,6 +532,11 @@ public struct MotionReducedMotion: Codable, Equatable, Sendable {
     public var forceZeroDuration: Bool
     public var directManipulation: Bool
     public var sourceRule: String?
+}
+
+public struct MotionLoop: Codable, Equatable, Sendable {
+    public var forever: Bool
+    public var autoreverses: Bool
 }
 
 public enum MotionSpecRegistry {
@@ -745,14 +825,29 @@ data class ViewState(
 function genKotlinMotion(schema, fixtures) {
   const ids = extractEnum(schema, "id");
   const easings = extractEnum(schema, "easing");
+  const implementationKinds = extractEnum(schema, "implementationKind");
+  const containerRoles = extractEnum(schema, "containerRole");
+  const operations = extractEnum(schema, "operation");
+  const visualPatterns = extractEnum(schema, "visualPattern");
+  const interruptPolicies = extractEnum(schema, "interruptPolicy");
+  const reducedMotionPolicies = extractEnum(schema, "reducedMotionPolicy");
   const registry = fixtures.map((item) => {
     const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
     const reduced = reducedMotionInfo(item);
     const sourceRule = reduced.sourceRule ? stringLiteral(reduced.sourceRule) : "null";
+    const containerRole = item.containerRole ? `MotionContainerRole.${kotlinCase(item.containerRole)}` : "null";
+    const operation = item.operation ? `MotionOperation.${kotlinCase(item.operation)}` : "null";
+    const visualPattern = item.visualPattern ? `MotionVisualPattern.${kotlinCase(item.visualPattern)}` : "null";
     return `    Motion(
         id = MotionId.${kotlinCase(item.id)},
         durationMs = ${item.durationMs},
         easing = MotionEasing.${kotlinCase(item.easing)},
+        implementationKind = MotionImplementationKind.${kotlinCase(item.implementationKind)},
+        containerRole = ${containerRole},
+        operation = ${operation},
+        visualPattern = ${visualPattern},
+        interruptPolicy = MotionInterruptPolicy.${kotlinCase(item.interruptPolicy)},
+        reducedMotionPolicy = MotionReducedMotionPolicy.${kotlinCase(item.reducedMotionPolicy)},
         tokens = MotionTokens(durationToken = ${item.tokens?.durationToken ? stringLiteral(item.tokens.durationToken) : "null"}, easingToken = ${item.tokens?.easingToken ? stringLiteral(item.tokens.easingToken) : "null"}),
         guardRules = ${kotlinStringList(guardRules)},
         reducedMotion = MotionReducedMotion(forceZeroDuration = ${reduced.forceZeroDuration}, directManipulation = ${reduced.directManipulation}, sourceRule = ${sourceRule}),
@@ -770,6 +865,18 @@ ${genKotlinEnum("MotionId", ids)}
 
 ${genKotlinEnum("MotionEasing", easings)}
 
+${genKotlinEnum("MotionImplementationKind", implementationKinds)}
+
+${genKotlinEnum("MotionContainerRole", containerRoles)}
+
+${genKotlinEnum("MotionOperation", operations)}
+
+${genKotlinEnum("MotionVisualPattern", visualPatterns)}
+
+${genKotlinEnum("MotionInterruptPolicy", interruptPolicies)}
+
+${genKotlinEnum("MotionReducedMotionPolicy", reducedMotionPolicies)}
+
 @Serializable
 data class MotionTokens(
     val durationToken: String? = null,
@@ -781,6 +888,12 @@ data class Motion(
     val id: MotionId,
     val durationMs: Int,
     val easing: MotionEasing,
+    val implementationKind: MotionImplementationKind,
+    val interruptPolicy: MotionInterruptPolicy,
+    val reducedMotionPolicy: MotionReducedMotionPolicy,
+    val containerRole: MotionContainerRole? = null,
+    val operation: MotionOperation? = null,
+    val visualPattern: MotionVisualPattern? = null,
     val tokens: MotionTokens? = null,
     val guardRules: List<String>? = null,
     val reducedMotion: MotionReducedMotion? = null,
@@ -1037,14 +1150,29 @@ export interface ViewState {
 function genArkTsMotion(schema, fixtures) {
   const ids = extractEnum(schema, "id");
   const easings = extractEnum(schema, "easing");
+  const implementationKinds = extractEnum(schema, "implementationKind");
+  const containerRoles = extractEnum(schema, "containerRole");
+  const operations = extractEnum(schema, "operation");
+  const visualPatterns = extractEnum(schema, "visualPattern");
+  const interruptPolicies = extractEnum(schema, "interruptPolicy");
+  const reducedMotionPolicies = extractEnum(schema, "reducedMotionPolicy");
   const registry = fixtures.map((item) => {
     const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
     const reduced = reducedMotionInfo(item);
     const sourceRule = reduced.sourceRule ? stringLiteral(reduced.sourceRule) : "undefined";
+    const containerRole = item.containerRole ? stringLiteral(item.containerRole) : "undefined";
+    const operation = item.operation ? stringLiteral(item.operation) : "undefined";
+    const visualPattern = item.visualPattern ? stringLiteral(item.visualPattern) : "undefined";
     return `  ${stringLiteral(item.id)}: {
     id: ${stringLiteral(item.id)},
     durationMs: ${item.durationMs},
     easing: ${stringLiteral(item.easing)},
+    implementationKind: ${stringLiteral(item.implementationKind)},
+    containerRole: ${containerRole},
+    operation: ${operation},
+    visualPattern: ${visualPattern},
+    interruptPolicy: ${stringLiteral(item.interruptPolicy)},
+    reducedMotionPolicy: ${stringLiteral(item.reducedMotionPolicy)},
     tokens: { durationToken: ${item.tokens?.durationToken ? stringLiteral(item.tokens.durationToken) : "undefined"}, easingToken: ${item.tokens?.easingToken ? stringLiteral(item.tokens.easingToken) : "undefined"} },
     guardRules: ${arkTsStringArray(guardRules)},
     reducedMotion: { forceZeroDuration: ${reduced.forceZeroDuration}, directManipulation: ${reduced.directManipulation}, sourceRule: ${sourceRule} },
@@ -1057,6 +1185,18 @@ ${genArkTsEnum("MotionId", ids)}
 
 ${genArkTsEnum("MotionEasing", easings)}
 
+${genArkTsEnum("MotionImplementationKind", implementationKinds)}
+
+${genArkTsEnum("MotionContainerRole", containerRoles)}
+
+${genArkTsEnum("MotionOperation", operations)}
+
+${genArkTsEnum("MotionVisualPattern", visualPatterns)}
+
+${genArkTsEnum("MotionInterruptPolicy", interruptPolicies)}
+
+${genArkTsEnum("MotionReducedMotionPolicy", reducedMotionPolicies)}
+
 export interface MotionTokens {
   durationToken?: string;
   easingToken?: string;
@@ -1066,6 +1206,12 @@ export interface Motion {
   id: MotionId;
   durationMs: number;
   easing: MotionEasing;
+  implementationKind: MotionImplementationKind;
+  interruptPolicy: MotionInterruptPolicy;
+  reducedMotionPolicy: MotionReducedMotionPolicy;
+  containerRole?: MotionContainerRole;
+  operation?: MotionOperation;
+  visualPattern?: MotionVisualPattern;
   tokens?: MotionTokens;
   guardRules?: string[];
   reducedMotion?: MotionReducedMotion;
@@ -1820,6 +1966,387 @@ export interface StateRule {
 `;
 }
 
+// --- Phase 2: MotionPolicy + ReaderMotionResolver ---
+
+function swiftShellCase(shell) {
+  // MainTabShell -> mainTabShell, LibraryShell -> libraryShell
+  return shell.charAt(0).toLowerCase() + shell.slice(1);
+}
+
+function swiftOptionalEnum(typeName, value) {
+  // value is a string enum raw value; produce .case or nil
+  return value ? `${typeName}.${swiftMotionIdCase(value)}` : "nil";
+}
+
+function genSwiftMotionPolicy(policySchema, policyFixtures, routeFixtures) {
+  const policies = policyFixtures.filter((p) => p.id);
+  const registry = policies.map((p) => {
+    const m = p.match || {};
+    const fromRoute = m.fromRoute ? stringLiteral(m.fromRoute) : "nil";
+    const toRoute = m.toRoute ? stringLiteral(m.toRoute) : "nil";
+    const fromShell = m.fromShell ? `RouteShell.${swiftShellCase(m.fromShell)}` : "nil";
+    const toShell = m.toShell ? `RouteShell.${swiftShellCase(m.toShell)}` : "nil";
+    const operation = m.operation ? `MotionOperation.${swiftMotionIdCase(m.operation)}` : "nil";
+    const sourceRole = m.sourceRole ? stringLiteral(m.sourceRole) : "nil";
+    const targetRole = m.targetRole ? stringLiteral(m.targetRole) : "nil";
+    const containerRole = m.containerRole ? `MotionContainerRole.${swiftMotionIdCase(m.containerRole)}` : "nil";
+    const reducedMotion = typeof m.reducedMotion === "boolean" ? (m.reducedMotion ? "true" : "false") : "nil";
+    return `        MotionPolicy(
+            id: ${stringLiteral(p.id)},
+            priority: ${p.priority},
+            match: MotionPolicyMatch(fromRoute: ${fromRoute}, toRoute: ${toRoute}, fromShell: ${fromShell}, toShell: ${toShell}, operation: ${operation}, sourceRole: ${sourceRole}, targetRole: ${targetRole}, containerRole: ${containerRole}, reducedMotion: ${reducedMotion}),
+            motionId: .${swiftMotionIdCase(p.motionId)},
+            deprecated: ${p.deprecated === true ? "true" : "false"}
+        )`;
+  });
+  // Route id -> shell lookup from route fixtures
+  const routeShellMap = routeFixtures
+    .filter((r) => r.id && r.shell)
+    .map((r) => `        ${stringLiteral(r.id)}: .${swiftShellCase(r.shell)}`);
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
+// Source: contracts/motion-policy.schema.json + fixtures/motion-policy.fixtures.json
+import Foundation
+
+public struct MotionPolicyMatch: Codable, Equatable, Sendable {
+    public var fromRoute: String?
+    public var toRoute: String?
+    public var fromShell: RouteShell?
+    public var toShell: RouteShell?
+    public var operation: MotionOperation?
+    public var sourceRole: String?
+    public var targetRole: String?
+    public var containerRole: MotionContainerRole?
+    public var reducedMotion: Bool?
+
+    public init(
+        fromRoute: String? = nil,
+        toRoute: String? = nil,
+        fromShell: RouteShell? = nil,
+        toShell: RouteShell? = nil,
+        operation: MotionOperation? = nil,
+        sourceRole: String? = nil,
+        targetRole: String? = nil,
+        containerRole: MotionContainerRole? = nil,
+        reducedMotion: Bool? = nil
+    ) {
+        self.fromRoute = fromRoute
+        self.toRoute = toRoute
+        self.fromShell = fromShell
+        self.toShell = toShell
+        self.operation = operation
+        self.sourceRole = sourceRole
+        self.targetRole = targetRole
+        self.containerRole = containerRole
+        self.reducedMotion = reducedMotion
+    }
+
+    public var specificity: Int {
+        var count = 0
+        if fromRoute != nil { count += 1 }
+        if toRoute != nil { count += 1 }
+        if fromShell != nil { count += 1 }
+        if toShell != nil { count += 1 }
+        if operation != nil { count += 1 }
+        if sourceRole != nil { count += 1 }
+        if targetRole != nil { count += 1 }
+        if containerRole != nil { count += 1 }
+        if reducedMotion != nil { count += 1 }
+        return count
+    }
+
+    public func matches(_ request: MotionPolicyMatch) -> Bool {
+        if let v = fromRoute, request.fromRoute != v { return false }
+        if let v = toRoute, request.toRoute != v { return false }
+        if let v = fromShell, request.fromShell != v { return false }
+        if let v = toShell, request.toShell != v { return false }
+        if let v = operation, request.operation != v { return false }
+        if let v = sourceRole, request.sourceRole != v { return false }
+        if let v = targetRole, request.targetRole != v { return false }
+        if let v = containerRole, request.containerRole != v { return false }
+        if let v = reducedMotion, request.reducedMotion != v { return false }
+        return true
+    }
+}
+
+public typealias MotionRequest = MotionPolicyMatch
+
+public struct MotionPolicy: Codable, Equatable, Sendable {
+    public let id: String
+    public let priority: Int
+    public let match: MotionPolicyMatch
+    public let motionId: MotionId
+    public var deprecated: Bool?
+}
+
+public enum MotionPolicyRegistry {
+    public static let all: [MotionPolicy] = [
+${registry.join(",\n")}
+    ]
+}
+
+public enum RouteShellLookup {
+    public static let shellByRouteId: [String: RouteShell] = [
+${routeShellMap.join(",\n")}
+    ]
+
+    public static func shell(for routeId: String) -> RouteShell? {
+        shellByRouteId[routeId]
+    }
+}
+
+public enum ReaderMotionResolver {
+    public static func resolve(_ request: MotionRequest) -> MotionId? {
+        var resolved = request
+        if resolved.fromShell == nil, let fr = request.fromRoute {
+            resolved.fromShell = RouteShellLookup.shell(for: fr)
+        }
+        if resolved.toShell == nil, let tr = request.toRoute {
+            resolved.toShell = RouteShellLookup.shell(for: tr)
+        }
+        let sorted = MotionPolicyRegistry.all.sorted { a, b in
+            if a.priority != b.priority { return a.priority > b.priority }
+            return a.match.specificity > b.match.specificity
+        }
+        for policy in sorted {
+            if policy.match.matches(resolved) {
+                return policy.motionId
+            }
+        }
+        return nil
+    }
+}
+`;
+}
+
+function genKotlinMotionPolicy(policySchema, policyFixtures, routeFixtures) {
+  const policies = policyFixtures.filter((p) => p.id);
+  const registry = policies.map((p) => {
+    const m = p.match || {};
+    const fromRoute = m.fromRoute ? stringLiteral(m.fromRoute) : "null";
+    const toRoute = m.toRoute ? stringLiteral(m.toRoute) : "null";
+    const fromShell = m.fromShell ? `RouteShell.${kotlinCase(m.fromShell)}` : "null";
+    const toShell = m.toShell ? `RouteShell.${kotlinCase(m.toShell)}` : "null";
+    const operation = m.operation ? `MotionOperation.${kotlinCase(m.operation)}` : "null";
+    const sourceRole = m.sourceRole ? stringLiteral(m.sourceRole) : "null";
+    const targetRole = m.targetRole ? stringLiteral(m.targetRole) : "null";
+    const containerRole = m.containerRole ? `MotionContainerRole.${kotlinCase(m.containerRole)}` : "null";
+    const reducedMotion = typeof m.reducedMotion === "boolean" ? (m.reducedMotion ? "true" : "false") : "null";
+    return `    MotionPolicy(
+        id = ${stringLiteral(p.id)},
+        priority = ${p.priority},
+        match = MotionPolicyMatch(fromRoute = ${fromRoute}, toRoute = ${toRoute}, fromShell = ${fromShell}, toShell = ${toShell}, operation = ${operation}, sourceRole = ${sourceRole}, targetRole = ${targetRole}, containerRole = ${containerRole}, reducedMotion = ${reducedMotion}),
+        motionId = MotionId.${kotlinCase(p.motionId)},
+        deprecated = ${p.deprecated === true ? "true" : "false"}
+    )`;
+  });
+  const routeShellMap = routeFixtures
+    .filter((r) => r.id && r.shell)
+    .map((r) => `    ${stringLiteral(r.id)} to RouteShell.${kotlinCase(r.shell)}`);
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
+// Source: contracts/motion-policy.schema.json + fixtures/motion-policy.fixtures.json
+package io.reader.ui.contract
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class MotionPolicyMatch(
+    val fromRoute: String? = null,
+    val toRoute: String? = null,
+    val fromShell: RouteShell? = null,
+    val toShell: RouteShell? = null,
+    val operation: MotionOperation? = null,
+    val sourceRole: String? = null,
+    val targetRole: String? = null,
+    val containerRole: MotionContainerRole? = null,
+    val reducedMotion: Boolean? = null
+) {
+    val specificity: Int
+        get() {
+            var count = 0
+            if (fromRoute != null) count += 1
+            if (toRoute != null) count += 1
+            if (fromShell != null) count += 1
+            if (toShell != null) count += 1
+            if (operation != null) count += 1
+            if (sourceRole != null) count += 1
+            if (targetRole != null) count += 1
+            if (containerRole != null) count += 1
+            if (reducedMotion != null) count += 1
+            return count
+        }
+
+    fun matches(request: MotionPolicyMatch): Boolean {
+        if (fromRoute != null && request.fromRoute != fromRoute) return false
+        if (toRoute != null && request.toRoute != toRoute) return false
+        if (fromShell != null && request.fromShell != fromShell) return false
+        if (toShell != null && request.toShell != toShell) return false
+        if (operation != null && request.operation != operation) return false
+        if (sourceRole != null && request.sourceRole != sourceRole) return false
+        if (targetRole != null && request.targetRole != targetRole) return false
+        if (containerRole != null && request.containerRole != containerRole) return false
+        if (reducedMotion != null && request.reducedMotion != reducedMotion) return false
+        return true
+    }
+}
+
+typealias MotionRequest = MotionPolicyMatch
+
+@Serializable
+data class MotionPolicy(
+    val id: String,
+    val priority: Int,
+    val match: MotionPolicyMatch,
+    val motionId: MotionId,
+    val deprecated: Boolean = false
+)
+
+object MotionPolicyRegistry {
+    val all: List<MotionPolicy> = listOf(
+${registry.join(",\n")}
+    )
+}
+
+object RouteShellLookup {
+    val shellByRouteId: Map<String, RouteShell> = mapOf(
+${routeShellMap.join(",\n")}
+    )
+
+    fun shell(routeId: String): RouteShell? = shellByRouteId[routeId]
+}
+
+object ReaderMotionResolver {
+    fun resolve(request: MotionRequest): MotionId? {
+        var resolved = request
+        if (resolved.fromShell == null && request.fromRoute != null) {
+            resolved = resolved.copy(fromShell = RouteShellLookup.shell(request.fromRoute!!))
+        }
+        if (resolved.toShell == null && request.toRoute != null) {
+            resolved = resolved.copy(toShell = RouteShellLookup.shell(request.toRoute!!))
+        }
+        val sorted = MotionPolicyRegistry.all.sortedWith(
+            compareByDescending<MotionPolicy> { it.priority }.thenByDescending { it.match.specificity }
+        )
+        for (policy in sorted) {
+            if (policy.match.matches(resolved)) {
+                return policy.motionId
+            }
+        }
+        return null
+    }
+}
+`;
+}
+
+function genArkTsMotionPolicy(policySchema, policyFixtures, routeFixtures) {
+  const policies = policyFixtures.filter((p) => p.id);
+  const registry = policies.map((p) => {
+    const m = p.match || {};
+    const fromRoute = m.fromRoute ? stringLiteral(m.fromRoute) : "undefined";
+    const toRoute = m.toRoute ? stringLiteral(m.toRoute) : "undefined";
+    const fromShell = m.fromShell ? stringLiteral(m.fromShell) : "undefined";
+    const toShell = m.toShell ? stringLiteral(m.toShell) : "undefined";
+    const operation = m.operation ? stringLiteral(m.operation) : "undefined";
+    const sourceRole = m.sourceRole ? stringLiteral(m.sourceRole) : "undefined";
+    const targetRole = m.targetRole ? stringLiteral(m.targetRole) : "undefined";
+    const containerRole = m.containerRole ? stringLiteral(m.containerRole) : "undefined";
+    const reducedMotion = typeof m.reducedMotion === "boolean" ? (m.reducedMotion ? "true" : "false") : "undefined";
+    return `  {
+    id: ${stringLiteral(p.id)},
+    priority: ${p.priority},
+    match: { fromRoute: ${fromRoute}, toRoute: ${toRoute}, fromShell: ${fromShell}, toShell: ${toShell}, operation: ${operation}, sourceRole: ${sourceRole}, targetRole: ${targetRole}, containerRole: ${containerRole}, reducedMotion: ${reducedMotion} },
+    motionId: ${stringLiteral(p.motionId)},
+    deprecated: ${p.deprecated === true ? "true" : "false"}
+  }`;
+  });
+  const routeShellMap = routeFixtures
+    .filter((r) => r.id && r.shell)
+    .map((r) => `  ${stringLiteral(r.id)}: ${stringLiteral(r.shell)}`);
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
+// Source: contracts/motion-policy.schema.json + fixtures/motion-policy.fixtures.json
+
+export interface MotionPolicyMatch {
+  fromRoute?: string;
+  toRoute?: string;
+  fromShell?: RouteShell;
+  toShell?: RouteShell;
+  operation?: MotionOperation;
+  sourceRole?: string;
+  targetRole?: string;
+  containerRole?: MotionContainerRole;
+  reducedMotion?: boolean;
+}
+
+export type MotionRequest = MotionPolicyMatch;
+
+export interface MotionPolicy {
+  id: string;
+  priority: number;
+  match: MotionPolicyMatch;
+  motionId: MotionId;
+  deprecated?: boolean;
+}
+
+function motionPolicyMatchSpecificity(m: MotionPolicyMatch): number {
+  let count = 0;
+  if (m.fromRoute !== undefined) count += 1;
+  if (m.toRoute !== undefined) count += 1;
+  if (m.fromShell !== undefined) count += 1;
+  if (m.toShell !== undefined) count += 1;
+  if (m.operation !== undefined) count += 1;
+  if (m.sourceRole !== undefined) count += 1;
+  if (m.targetRole !== undefined) count += 1;
+  if (m.containerRole !== undefined) count += 1;
+  if (m.reducedMotion !== undefined) count += 1;
+  return count;
+}
+
+function motionPolicyMatchMatches(policy: MotionPolicyMatch, request: MotionPolicyMatch): boolean {
+  if (policy.fromRoute !== undefined && request.fromRoute !== policy.fromRoute) return false;
+  if (policy.toRoute !== undefined && request.toRoute !== policy.toRoute) return false;
+  if (policy.fromShell !== undefined && request.fromShell !== policy.fromShell) return false;
+  if (policy.toShell !== undefined && request.toShell !== policy.toShell) return false;
+  if (policy.operation !== undefined && request.operation !== policy.operation) return false;
+  if (policy.sourceRole !== undefined && request.sourceRole !== policy.sourceRole) return false;
+  if (policy.targetRole !== undefined && request.targetRole !== policy.targetRole) return false;
+  if (policy.containerRole !== undefined && request.containerRole !== policy.containerRole) return false;
+  if (policy.reducedMotion !== undefined && request.reducedMotion !== policy.reducedMotion) return false;
+  return true;
+}
+
+export const motionPolicyRegistry: MotionPolicy[] = [
+${registry.join(",\n")}
+];
+
+export const routeShellLookup: Record<string, RouteShell> = {
+${routeShellMap.join(",\n")}
+};
+
+export function routeShell(routeId: string): RouteShell | undefined {
+  return routeShellLookup[routeId];
+}
+
+export function resolveMotion(request: MotionRequest): MotionId | undefined {
+  const resolved: MotionPolicyMatch = { ...request };
+  if (resolved.fromShell === undefined && request.fromRoute !== undefined) {
+    resolved.fromShell = routeShell(request.fromRoute);
+  }
+  if (resolved.toShell === undefined && request.toRoute !== undefined) {
+    resolved.toShell = routeShell(request.toRoute);
+  }
+  const sorted = [...motionPolicyRegistry].sort((a, b) => {
+    if (a.priority !== b.priority) return b.priority - a.priority;
+    return motionPolicyMatchSpecificity(b.match) - motionPolicyMatchSpecificity(a.match);
+  });
+  for (const policy of sorted) {
+    if (motionPolicyMatchMatches(policy.match, resolved)) {
+      return policy.motionId;
+    }
+  }
+  return undefined;
+}
+`;
+}
+
 // --- 主流程 ---
 function ensureDir(p) {
   if (!existsSync(p)) mkdirSync(p, { recursive: true });
@@ -1849,10 +2376,14 @@ function generate() {
   // Phase 1 收尾 schema
   const stateRuleSchema = loadSchema("state-rule");
 
+  // Phase 2 Motion Runtime schema
+  const motionPolicySchema = loadSchema("motion-policy");
+
   const routeFixtures = loadFixtures("route");
   const eventFixtures = loadFixtures("ui-event");
   const motionFixtures = loadFixtures("motion");
   const tokenFixtures = loadFixtures("token");
+  const motionPolicyFixtures = loadFixtures("motion-policy");
 
   // Swift - Phase 1
   writeFile(join(GENERATED_DIR, "swift", "Route.swift"), genSwiftRoute(routeSchema, routeFixtures));
@@ -1873,6 +2404,9 @@ function generate() {
   // Swift - Phase 1 收尾
   writeFile(join(GENERATED_DIR, "swift", "StateRule.swift"), genSwiftStateRule(stateRuleSchema));
 
+  // Swift - Phase 2 Motion Runtime
+  writeFile(join(GENERATED_DIR, "swift", "MotionPolicy.swift"), genSwiftMotionPolicy(motionPolicySchema, motionPolicyFixtures, routeFixtures));
+
   // Kotlin - Phase 1
   writeFile(join(GENERATED_DIR, "kotlin", "Route.kt"), genKotlinRoute(routeSchema));
   writeFile(join(GENERATED_DIR, "kotlin", "UiEvent.kt"), genKotlinUiEvent(eventSchema));
@@ -1891,6 +2425,9 @@ function generate() {
 
   // Kotlin - Phase 1 收尾
   writeFile(join(GENERATED_DIR, "kotlin", "StateRule.kt"), genKotlinStateRule(stateRuleSchema));
+
+  // Kotlin - Phase 2 Motion Runtime
+  writeFile(join(GENERATED_DIR, "kotlin", "MotionPolicy.kt"), genKotlinMotionPolicy(motionPolicySchema, motionPolicyFixtures, routeFixtures));
 
   // ArkTS - Phase 1
   writeFile(join(GENERATED_DIR, "arkts", "Route.ets"), genArkTsRoute(routeSchema));
@@ -1911,11 +2448,15 @@ function generate() {
   // ArkTS - Phase 1 收尾
   writeFile(join(GENERATED_DIR, "arkts", "StateRule.ets"), genArkTsStateRule(stateRuleSchema));
 
-  console.log("[codegen] generated swift / kotlin / arkts types (Phase 1 + Phase 2 + Phase 1 收尾)");
+  // ArkTS - Phase 2 Motion Runtime
+  writeFile(join(GENERATED_DIR, "arkts", "MotionPolicy.ets"), genArkTsMotionPolicy(motionPolicySchema, motionPolicyFixtures, routeFixtures));
+
+  console.log("[codegen] generated swift / kotlin / arkts types (Phase 1 + Phase 2 + Phase 1 收尾 + Phase 2 Motion Runtime)");
   console.log(`[codegen] Phase 1: route ids=${extractEnum(routeSchema, "id").length}, ui-event types=${extractEnum(eventSchema, "type").length}, motion ids=${extractEnum(motionSchema, "id").length}, token categories=${extractEnum(tokenSchema, "category").length}`);
   console.log(`[codegen] Registries: motion specs=${motionFixtures.length}, tokens=${tokenFixtures.length}`);
   console.log(`[codegen] Phase 2: core-command types=${extractEnum(coreCmdSchema, "type").length}, core-event types=${extractEnum(coreEvtSchema, "type").length}, host-request types=${extractEnum(hostReqSchema, "type").length}`);
   console.log(`[codegen] Phase 1 收尾: state-rule kinds=${extractEnum(stateRuleSchema, "kind").length}, severity=${extractEnum(stateRuleSchema, "severity").length}`);
+  console.log(`[codegen] Phase 2 Motion Runtime: motion policies=${motionPolicyFixtures.filter((p) => p.id).length}, route shell lookups=${routeFixtures.filter((r) => r.id && r.shell).length}`);
 }
 
 generate();

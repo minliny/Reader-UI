@@ -5,7 +5,14 @@
   "description": "动效契约。MotionId 一经发布不得改名。来源：frontend-demo/verify/motion/motion-coverage-report.json、frontend-demo/MOTION_CONTRACT.md、frontend-demo/motion-tokens.css。",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "durationMs", "easing"],
+  "required": [
+    "id",
+    "durationMs",
+    "easing",
+    "implementationKind",
+    "interruptPolicy",
+    "reducedMotionPolicy"
+  ],
   "properties": {
     "id": {
       "type": "string",
@@ -104,22 +111,124 @@
     },
     "easing": {
       "type": "string",
-      "enum": ["ease", "ease-in", "ease-out", "ease-in-out", "linear", "none"],
+      "enum": [
+        "ease",
+        "ease-in",
+        "ease-out",
+        "ease-in-out",
+        "linear",
+        "none"
+      ],
       "description": "缓动函数。来源：MOTION_CONTRACT.md standard=ease, exit=ease-in, enter=ease-out, reshape=ease-in-out。"
+    },
+    "implementationKind": {
+      "type": "string",
+      "enum": [
+        "routeTransition",
+        "tabTransition",
+        "overlayTransition",
+        "stateReplace",
+        "readerEntry",
+        "readerPageTurn",
+        "directManipulation",
+        "sessionCapsule",
+        "orientationReshape",
+        "componentFeedback"
+      ],
+      "description": "动效实现分类。平台 MotionAdapter 按此选择执行路径。Phase 1 Motion Runtime 新增。"
+    },
+    "containerRole": {
+      "type": "string",
+      "enum": [
+        "appShell",
+        "mainTabShell",
+        "readerShell",
+        "libraryShell",
+        "settingsShell",
+        "flowShell",
+        "overlayHost",
+        "inlineState",
+        "listItem",
+        "card",
+        "readerSurface",
+        "sessionCapsule"
+      ],
+      "description": "动效所属容器角色。用于 MotionPolicy 匹配。Phase 1 Motion Runtime 新增。"
+    },
+    "operation": {
+      "type": "string",
+      "enum": [
+        "push",
+        "pop",
+        "replace",
+        "tabSwitch",
+        "enter",
+        "exit",
+        "update",
+        "dragStart",
+        "dragUpdate",
+        "dragRelease",
+        "reshape",
+        "settle"
+      ],
+      "description": "切换意图。页面只声明 operation，不指定具体 MotionId。Phase 1 Motion Runtime 新增。"
+    },
+    "visualPattern": {
+      "type": "string",
+      "enum": [
+        "nativeStackForward",
+        "nativeStackBackward",
+        "fadeReplace",
+        "slideSheetUp",
+        "scaleDialog",
+        "matchedCoverToReader",
+        "pageTurn",
+        "directDrag",
+        "capsuleAnchorMove",
+        "noMotion"
+      ],
+      "description": "视觉模式。平台 MotionAdapter 内部映射到原生动画 API。Phase 1 Motion Runtime 新增。"
+    },
+    "interruptPolicy": {
+      "type": "string",
+      "enum": [
+        "redirect",
+        "cancel",
+        "completeThenReplace",
+        "updateInSameHost"
+      ],
+      "description": "打断策略（guardRules 中 interrupt:* 的结构化投影）。redirect=新动效接管，cancel=取消当前，completeThenReplace=完成后替换，updateInSameHost=同宿主原地更新。Phase 1 Motion Runtime 新增。"
+    },
+    "reducedMotionPolicy": {
+      "type": "string",
+      "enum": [
+        "zeroDuration",
+        "keepDirectManipulation",
+        "noMotion"
+      ],
+      "description": "reduced-motion 降级策略（guardRules 中 reducedMotion:* / dragMustFollowFinger:* / releaseToSnap:* 的结构化投影）。zeroDuration=时长归零，keepDirectManipulation=手势跟随不可降级，noMotion=无视觉效果。Phase 1 Motion Runtime 新增。"
     },
     "tokens": {
       "type": "object",
       "description": "对应 motion-tokens.css 的 duration token 引用。",
       "additionalProperties": false,
       "properties": {
-        "durationToken": { "type": "string", "description": "如 app.motion.duration.tabSwitch。" },
-        "easingToken": { "type": "string", "description": "如 app.motion.easing.standard。" }
+        "durationToken": {
+          "type": "string",
+          "description": "如 app.motion.duration.tabSwitch。"
+        },
+        "easingToken": {
+          "type": "string",
+          "description": "如 app.motion.easing.standard。"
+        }
       }
     },
     "guardRules": {
       "type": "array",
       "description": "动效守卫规则。来源：MOTION_CONTRACT.md 与 STATE_OWNERSHIP.md §6。",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "items_enum_examples": [
         "reducedMotion:forceZeroDuration",
         "dragMustFollowFinger:noEasing",
@@ -128,6 +237,24 @@
         "asyncGuard:cancelOnRouteReplace"
       ]
     },
-    "deprecated": { "type": "boolean", "default": false }
+    "deprecated": {
+      "type": "boolean",
+      "default": false
+    },
+    "loop": {
+      "type": "object",
+      "description": "连续动画配置（循环）。存在时表示动画循环播放。Phase 1 Motion Runtime 扩展。",
+      "additionalProperties": false,
+      "properties": {
+        "forever": {
+          "type": "boolean",
+          "description": "是否无限循环。true=repeatForever。"
+        },
+        "autoreverses": {
+          "type": "boolean",
+          "description": "是否自动反转。true=正反向交替。"
+        }
+      }
+    }
   }
 }
