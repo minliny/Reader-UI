@@ -3,6 +3,7 @@
 package io.reader.ui.contract
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.json.JsonElement
 
 @Serializable

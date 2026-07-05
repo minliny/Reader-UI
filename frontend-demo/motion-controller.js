@@ -23,6 +23,7 @@
     "reader.session.capsule.enter": 160,
     "reader.session.capsule.update": 120,
     "reader.session.capsule.control.press/toggle": 120,
+    "reader.session.capsule.control.press-toggle": 120,
     "reader.session.capsule.countdownTick": 120,
     "reader.session.capsule.voiceIcon.active": 960,
     "reader.session.capsule.switch": 160,
@@ -36,6 +37,7 @@
     "reader.control.dock.rebound": 120,
     "reader.module.switch": 160,
     "reader.page.turn.next/prev": 220,
+    "reader.page.turn.next-prev": 220,
     "motion.interrupt.cancel": 80,
     "motion.interrupt.redirect": 80,
     "motion.interrupt.completeThenReplace": 80,
@@ -45,6 +47,11 @@
   };
 
   const CONTRACT_VERSION = "reader-motion-contract-v1";
+  const MOTION_ID_ALIASES = {
+    "reader.session.capsule.control.press/toggle": "reader.session.capsule.control.press-toggle",
+    "reader.page.turn.next/prev": "reader.page.turn.next-prev",
+    "tab.item.switch": "tab.switch"
+  };
   const COMMON_STATE_FIELDS = ["motionId", "phase", "reducedMotion", "sequence"];
   const COMMON_EVIDENCE = ["frontend-demo/verify/motion/selector-matrix/<motion-id>__<route>__<selector>.webm"];
   const DEFAULT_STATE_MACHINE = {
@@ -339,6 +346,13 @@
       finalState: "oneActiveTabAndStableBarSize",
       reducedMotion: "Switch active state instantly and keep indicator static."
     },
+    "tab.switch": {
+      from: ["activeTab.previous"],
+      to: ["activeTab.next"],
+      interrupt: ["switchTargetAgain", "routeChange", "pointerCancel"],
+      finalState: "oneActiveTabAndStableBarSize",
+      reducedMotion: "Switch active state instantly and keep indicator static."
+    },
     "segment.item.switch": {
       from: ["segment.previous"],
       to: ["segment.next"],
@@ -514,6 +528,13 @@
       finalState: "playingStateCommittedInsideCapsule",
       reducedMotion: "Commit play/pause icon and state instantly; do not open control layer."
     },
+    "reader.session.capsule.control.press-toggle": {
+      from: ["capsuleVisible", "playing.previous"],
+      to: ["capsuleVisible", "playing.next"],
+      interrupt: ["pointerCancel", "sessionStop", "controlLayerOpen", "exitReader"],
+      finalState: "playingStateCommittedInsideCapsule",
+      reducedMotion: "Commit play/pause icon and state instantly; do not open control layer."
+    },
     "reader.session.capsule.countdownTick": {
       from: ["countdown.previous"],
       to: ["countdown.next"],
@@ -571,6 +592,13 @@
       reducedMotion: "Commit active module and panel content immediately; keep module nav dimensions stable."
     },
     "reader.page.turn.next/prev": {
+      from: ["page.current"],
+      to: ["page.nextOrPrevious"],
+      interrupt: ["oppositeTurn", "chapterJump", "routeChange", "sessionTick"],
+      finalState: "pageIndexCommittedAndPageInfoAnchored",
+      reducedMotion: "Commit page index and footer/page info immediately without slide."
+    },
+    "reader.page.turn.next-prev": {
       from: ["page.current"],
       to: ["page.nextOrPrevious"],
       interrupt: ["oppositeTurn", "chapterJump", "routeChange", "sessionTick"],
@@ -1108,7 +1136,7 @@
   }
 
   function contractFor(id) {
-    const cleanId = clean(id);
+    const cleanId = normalizeMotionId(id);
     const rule = CONTRACT_RULES.find((item) => cleanId.startsWith(item.prefix));
     if (!rule) return null;
     const stateMachine = stateMachineFor(cleanId, rule);
@@ -1128,6 +1156,11 @@
     return String(value == null ? "" : value)
       .replace(/[^\w./:-]/g, "")
       .slice(0, 96);
+  }
+
+  function normalizeMotionId(value) {
+    const cleanId = clean(value);
+    return MOTION_ID_ALIASES[cleanId] || cleanId;
   }
 
   function setAttr(element, name, value) {
@@ -1255,7 +1288,7 @@
 
     const start = (input) => {
       const details = input || {};
-      const id = clean(details.id || "motion.unknown");
+      const id = normalizeMotionId(details.id || "motion.unknown");
       if (active) {
         interrupt(details.interruptReason || "superseded");
       }
@@ -1338,6 +1371,7 @@
     contractFor,
     CONTRACT: Object.freeze({
       version: CONTRACT_VERSION,
+      aliases: Object.freeze(Object.assign({}, MOTION_ID_ALIASES)),
       rules: Object.freeze(CONTRACT_RULES.map((rule) => Object.freeze(Object.assign({}, rule, {
         tokens: Object.freeze(rule.tokens.slice()),
         stateFields: Object.freeze(COMMON_STATE_FIELDS.concat(rule.stateFields)),

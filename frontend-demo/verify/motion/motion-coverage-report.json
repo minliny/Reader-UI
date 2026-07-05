@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T06:45:04.681Z",
+  "generatedAt": "2026-07-04T10:27:34.387Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -41,6 +41,11 @@
       "id": "motion.contract.executable-registry",
       "passed": true,
       "detail": "reader-motion-contract-v1; rules=33"
+    },
+    {
+      "id": "motion.contract.fixture-registry",
+      "passed": true,
+      "detail": "84/84 canonical MotionSpec fixtures; missing=0, extra=0, missingTokens=0, missingGuardRules=0"
     },
     {
       "id": "motion.contract.id-resolution",
@@ -149,9 +154,9 @@
     }
   ],
   "summary": {
-    "passed": 29,
+    "passed": 30,
     "failed": 0,
-    "total": 29
+    "total": 30
   },
   "routeCoverage": {
     "totalRoutes": 131,
@@ -339,8 +344,17 @@
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 47,
+    "detailedMotionIdCount": 50,
     "missingDetailedStateMachines": []
+  },
+  "motionFixtureCoverage": {
+    "schemaMotionIdCount": 84,
+    "fixtureCount": 84,
+    "missingMotionFixtureIds": [],
+    "extraMotionFixtureIds": [],
+    "duplicateMotionFixtureIds": [],
+    "fixturesMissingTokenRefs": [],
+    "fixturesMissingGuardRules": []
   },
   "evidence": {
     "manifest": "frontend-demo/verify/motion/evidence/manifest.json",

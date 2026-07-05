@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Demo 一致性校验：扫描 frontend-demo 中的 route id / motion id / token name，
-// 校验全部能在 contracts/*.schema.json 的 enum 中找到。
+// 校验全部能在 contracts/*.schema.json 的 enum 中找到；demo 历史 motion
+// unknown 必须显式列入 demo-contract-exceptions.json。
 // 满足 CONTRACT_FIRST_NATIVE_UI_PLAN.md §4 验收门槛：
 //   "demo 中出现的 route / motion / state 必须能在 contract 中找到"
 //
@@ -13,6 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..", "..", "..");
 const CONTRACTS_DIR = join(REPO_ROOT, "contracts");
 const DEMO_DIR = join(REPO_ROOT, "frontend-demo");
+const EXCEPTION_POLICY_PATH = join(DEMO_DIR, "verify", "contract", "demo-contract-exceptions.json");
 
 function resolve(...p) {
   // 简易 resolve，避免与 node:path.resolve 重名
@@ -38,6 +40,23 @@ const motionIds = new Set(motionSchema.properties.id.enum);
 const tokenNamePattern = tokenSchema.properties.name
   ? new RegExp(tokenSchema.properties.name.pattern)
   : null;
+const exceptionPolicy = JSON.parse(readFileSync(EXCEPTION_POLICY_PATH, "utf8"));
+const motionExceptionTypes = new Set(["alias", "deprecated", "exception"]);
+const motionExceptions = new Map((exceptionPolicy.motion || []).map((entry) => [entry.id, entry]));
+for (const entry of exceptionPolicy.motion || []) {
+  if (!entry.id || typeof entry.id !== "string") {
+    throw new Error("demo-contract-exceptions.json motion entry missing id");
+  }
+  if (!motionExceptionTypes.has(entry.type)) {
+    throw new Error(`demo-contract-exceptions.json invalid type for ${entry.id}: ${entry.type}`);
+  }
+  if (entry.type === "alias" && !motionIds.has(entry.canonicalId)) {
+    throw new Error(`demo-contract-exceptions.json alias ${entry.id} points to unknown canonical MotionId: ${entry.canonicalId}`);
+  }
+  if (!entry.reason || typeof entry.reason !== "string") {
+    throw new Error(`demo-contract-exceptions.json motion entry missing reason: ${entry.id}`);
+  }
+}
 
 // --- 扫描 demo 文件提取 id ---
 
@@ -97,21 +116,61 @@ function extractTokenNames(text) {
 // --- 主流程 ---
 let totalFound = 0;
 let totalUnknown = 0;
-const report = { items: [] };
+let totalUnapproved = 0;
+const report = {
+  policy: {
+    routeUnknown: "fail",
+    tokenUnknown: "fail",
+    motionUnknown: "allow-only-listed",
+    exceptionPolicy: "frontend-demo/verify/contract/demo-contract-exceptions.json"
+  },
+  items: []
+};
+
+function policyForLabel(label) {
+  if (label.includes("motion")) return "motion";
+  if (label.includes("token")) return "token";
+  return "route";
+}
+
+function approvedMotionException(id) {
+  const entry = motionExceptions.get(id);
+  return entry && motionExceptionTypes.has(entry.type);
+}
 
 function check(label, found, allowed) {
   const unknown = [...found].filter((id) => !allowed.has(id));
+  const policy = policyForLabel(label);
+  const approvedUnknown = policy === "motion"
+    ? unknown.filter((id) => approvedMotionException(id))
+    : [];
+  const unapproved = policy === "motion"
+    ? unknown.filter((id) => !approvedMotionException(id))
+    : unknown;
   totalFound += found.size;
   totalUnknown += unknown.length;
-  report.items.push({ label, found: found.size, unknown: unknown.length, unknownIds: unknown });
+  totalUnapproved += unapproved.length;
+  report.items.push({
+    label,
+    policy,
+    found: found.size,
+    unknown: unknown.length,
+    approvedUnknown: approvedUnknown.length,
+    unapproved: unapproved.length,
+    unknownIds: unknown,
+    approvedUnknownIds: approvedUnknown,
+    unapprovedIds: unapproved
+  });
   if (unknown.length === 0) {
     console.log(`[ PASS ] ${label} | found=${found.size} | unknown=0`);
+  } else if (unapproved.length === 0) {
+    console.log(`[ PASS ] ${label} | found=${found.size} | unknown=${unknown.length} | approved=${approvedUnknown.length} | unapproved=0`);
   } else {
-    console.log(`[ DIFF ] ${label} | found=${found.size} | unknown=${unknown.length}`);
-    for (const id of unknown.slice(0, 10)) {
+    console.log(`[ FAIL ] ${label} | found=${found.size} | unknown=${unknown.length} | approved=${approvedUnknown.length} | unapproved=${unapproved.length}`);
+    for (const id of unapproved.slice(0, 10)) {
       console.log(`  - ${id}`);
     }
-    if (unknown.length > 10) console.log(`  ... 还有 ${unknown.length - 10} 个`);
+    if (unapproved.length > 10) console.log(`  ... 还有 ${unapproved.length - 10} 个未列入例外清单`);
   }
 }
 
@@ -158,13 +217,25 @@ if (existsSync(join(DEMO_DIR, "tokens.css"))) {
   const names = extractTokenNames(text);
   if (tokenNamePattern) {
     const unknown = [...names].filter((n) => !tokenNamePattern.test(n));
+    const unapproved = unknown;
     totalFound += names.size;
     totalUnknown += unknown.length;
-    report.items.push({ label: "tokens.css token names", found: names.size, unknown: unknown.length, unknownIds: unknown });
+    totalUnapproved += unapproved.length;
+    report.items.push({
+      label: "tokens.css token names",
+      policy: "token",
+      found: names.size,
+      unknown: unknown.length,
+      approvedUnknown: 0,
+      unapproved: unapproved.length,
+      unknownIds: unknown,
+      approvedUnknownIds: [],
+      unapprovedIds: unapproved
+    });
     if (unknown.length === 0) {
       console.log(`[ PASS ] tokens.css token names | found=${names.size} | unknown=0`);
     } else {
-      console.log(`[ DIFF ] tokens.css token names | found=${names.size} | unknown=${unknown.length}`);
+      console.log(`[ FAIL ] tokens.css token names | found=${names.size} | unknown=${unknown.length} | unapproved=${unapproved.length}`);
       for (const n of unknown.slice(0, 10)) console.log(`  - ${n}`);
     }
   } else {
@@ -177,7 +248,10 @@ const reportPath = join(DEMO_DIR, "verify", "contract", "demo-contract-baseline.
 writeFileSync(reportPath, JSON.stringify(report, null, 2), "utf8");
 
 console.log("");
-console.log(`总计：found=${totalFound} unknown=${totalUnknown}`);
+console.log(`总计：found=${totalFound} unknown=${totalUnknown} unapproved=${totalUnapproved}`);
 console.log(`baseline 报告：${reportPath}`);
-console.log("说明：unknown 表示 demo 中存在但 schema 未收录的 id，需产品决策是否补入 schema。");
-console.log("退出码 0，不阻塞测试。schema 扩展后 unknown 会相应减少。");
+console.log("说明：route/token unknown 必须为 0；motion unknown 必须列入 explicit alias/deprecated/exception 清单。");
+if (totalUnapproved > 0) {
+  console.error(`失败：存在 ${totalUnapproved} 个未批准的 demo/schema unknown。`);
+  process.exitCode = 1;
+}

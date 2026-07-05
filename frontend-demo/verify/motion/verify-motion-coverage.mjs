@@ -12,6 +12,8 @@ const runtime = read("frontend-demo/render-runtime.js");
 const controller = read("frontend-demo/motion-controller.js");
 const motionTokens = read("frontend-demo/motion-tokens.css");
 const routeContractSource = read("frontend-demo/route-contract.js");
+const motionSchema = JSON.parse(read("contracts/motion.schema.json"));
+const motionFixtures = JSON.parse(read("contracts/fixtures/motion.fixtures.json"));
 const evidenceManifestPath = path.join(frontendRoot, "verify/motion/evidence/manifest.json");
 const evidenceManifest = fs.existsSync(evidenceManifestPath)
   ? JSON.parse(fs.readFileSync(evidenceManifestPath, "utf8"))
@@ -212,6 +214,22 @@ const detailedStateMachineEntries = detailedMotionIds
 const missingDetailedStateMachines = detailedStateMachineEntries
   .filter(({ contract }) => !contract || contract.stateMachineSource !== "motion-id" || !hasValidStateMachine(contract))
   .map((item) => item.motionId);
+const canonicalMotionIds = Array.isArray(motionSchema?.properties?.id?.enum)
+  ? motionSchema.properties.id.enum
+  : [];
+const motionFixtureIds = motionFixtures.map((item) => item.id);
+const motionFixtureIdSet = new Set(motionFixtureIds);
+const missingMotionFixtureIds = canonicalMotionIds.filter((motionId) => !motionFixtureIdSet.has(motionId));
+const extraMotionFixtureIds = motionFixtureIds.filter((motionId) => !canonicalMotionIds.includes(motionId));
+const duplicateMotionFixtureIds = motionFixtureIds
+  .filter((motionId, index) => motionFixtureIds.indexOf(motionId) !== index)
+  .filter((motionId, index, values) => values.indexOf(motionId) === index);
+const motionFixturesMissingTokenRefs = motionFixtures
+  .filter((item) => !item.tokens?.durationToken || !item.tokens?.easingToken)
+  .map((item) => item.id);
+const motionFixturesMissingGuardRules = motionFixtures
+  .filter((item) => !Array.isArray(item.guardRules) || item.guardRules.length === 0)
+  .map((item) => item.id);
 
 const checks = [
   {
@@ -259,6 +277,17 @@ const checks = [
     id: "motion.contract.executable-registry",
     passed: motionContract.version === "reader-motion-contract-v1" && Array.isArray(motionContract.rules) && motionContract.rules.length >= 25,
     detail: `${motionContract.version || "missing"}; rules=${Array.isArray(motionContract.rules) ? motionContract.rules.length : 0}`
+  },
+  {
+    id: "motion.contract.fixture-registry",
+    passed: canonicalMotionIds.length === 84 &&
+      motionFixtures.length === canonicalMotionIds.length &&
+      missingMotionFixtureIds.length === 0 &&
+      extraMotionFixtureIds.length === 0 &&
+      duplicateMotionFixtureIds.length === 0 &&
+      motionFixturesMissingTokenRefs.length === 0 &&
+      motionFixturesMissingGuardRules.length === 0,
+    detail: `${motionFixtures.length}/${canonicalMotionIds.length} canonical MotionSpec fixtures; missing=${missingMotionFixtureIds.length}, extra=${extraMotionFixtureIds.length}, missingTokens=${motionFixturesMissingTokenRefs.length}, missingGuardRules=${motionFixturesMissingGuardRules.length}`
   },
   {
     id: "motion.contract.id-resolution",
@@ -517,6 +546,15 @@ const report = {
     detailedMotionIds,
     detailedMotionIdCount: Array.isArray(motionContract.motionIds) ? motionContract.motionIds.length : 0,
     missingDetailedStateMachines
+  },
+  motionFixtureCoverage: {
+    schemaMotionIdCount: canonicalMotionIds.length,
+    fixtureCount: motionFixtures.length,
+    missingMotionFixtureIds,
+    extraMotionFixtureIds,
+    duplicateMotionFixtureIds,
+    fixturesMissingTokenRefs: motionFixturesMissingTokenRefs,
+    fixturesMissingGuardRules: motionFixturesMissingGuardRules
   },
   evidence: {
     manifest: path.relative(repoRoot, evidenceManifestPath),

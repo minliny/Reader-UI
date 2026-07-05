@@ -27,6 +27,7 @@ Native UI
 
 - [CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md)
 - [ACCEPTANCE.md](./ACCEPTANCE.md) —— §10 合并门槛 7 问逐项回答
+- [COMPLETE_APP_CLOSURE_WORKBREAKDOWN.md](./COMPLETE_APP_CLOSURE_WORKBREAKDOWN.md) —— Reader UI / Core / 三端拆分后的闭环工作单
 
 ## 已交付清单
 
@@ -38,9 +39,9 @@ Native UI
 | Phase 2 | core-command / core-event / host-request / progress-location / content / sync-conflict | Core bridge 规划契约 6 schema |
 | Phase 1 收尾 | state-rule | 状态归属与转移约束（5 种 kind） |
 
-### Fixtures（598 项）
+### Fixtures（635 项）
 
-- Phase 1：route 76 / ui-event 143 / ui-state 43 / view-state 35 / motion 47 / token 117
+- Phase 1：route 76 / ui-event 143 / ui-state 43 / view-state 35 / motion 84 / token 117
 - Phase 2：core-command 45 / core-event 33 / host-request 31 / progress-location 6 / content 3 / sync-conflict 6
 - Phase 1 收尾：state-rule 13
 
@@ -52,10 +53,12 @@ Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链�
 - `generated/swift/` —— 13 个 .swift 文件
 - `generated/kotlin/` —— 13 个 .kt 文件
 - `generated/arkts/` —— 13 个 .ets 文件
+- `Motion.*` 现在包含 84 条 canonical motion fixtures 的 `MotionSpecRegistry` / `motionSpecRegistry`，保留原有 MotionId enum。
+- `Token.*` 现在包含当前 117 条 token fixtures 的 `TokenRegistry` / `tokenRegistry`，保留原有 TokenCategory enum。
 
 入口：`node tools/codegen/generate.mjs`，无本机绝对路径依赖，可重复生成。
 
-### Tests（143 项 / 0 fail）
+### Tests（171 项 / 0 fail）
 
 | 测试文件 | 项数 | 覆盖 |
 |---|---|---|
@@ -65,22 +68,28 @@ Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链�
 | state-rule.test.mjs | — | StateRule schema + fixtures + 关键规则 |
 | codegen-consistency.test.mjs | — | 三端 generated enum 一致性 + drift check |
 | codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 39 个 generated 文件幂等性 |
-| demo-consistency.test.mjs | 5 | frontend-demo 与 schema 一致性 baseline |
+| registry-codegen.test.mjs | 6 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
+| demo-consistency.test.mjs | 6 | frontend-demo 与 schema 一致性 baseline + explicit exception policy |
+| matrix-coverage.test.mjs | 5 | P0 route token/motion matrix + MotionId / token group 引用一致性 |
+| motion-guard.test.mjs | 7 | 40 个 P0 MotionId + 84 个 schema MotionId fixture、token refs、guardRules 完整性 |
+| token-group.test.mjs | 5 | TOKEN_SPEC 语义分组、fixtures 引用、route token group 一致性 |
+| core-host-boundary.test.mjs | 4 | Core/Host 边界域归属、UiEvent/CoreCommand/HostRequest schema 引用一致性 |
 
 ### Demo 一致性校验
 
 - 脚本：`frontend-demo/verify/contract/verify-demo-contract-consistency.mjs`
 - Baseline：`frontend-demo/verify/contract/demo-contract-baseline.json`
-- 当前 baseline：found=432 / unknown=209
-- 策略：demo 是早期设计稿，unknown id 可追踪但不阻塞（退出码恒为 0），后续 schema/demo 收敛时应递减
+- Exception policy：`frontend-demo/verify/contract/demo-contract-exceptions.json`
+- 当前 baseline：found=433 / unknown=111 / approved=111 / unapproved=0
+- 策略：route/token unknown 必须为 0；motion unknown 必须是 explicit alias/deprecated/exception，否则脚本失败。当前不是 0 drift，后续 schema/demo 收敛时应递减 exception 清单。
 
 ## 目录结构
 
 ```text
 contracts/
   *.schema.json          # 13 个契约 schema
-  fixtures/              # 598 项 fixtures
-  tests/                 # 7 个测试文件 + validate.mjs
+  fixtures/              # 635 项 fixtures
+  tests/                 # 12 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 
