@@ -289,43 +289,6 @@
       { "type": "NightToast", "id": "night-toast", "props": {} }
     ]
   },
-  {
-    "_comment": "Slice 3: 书架页 + book-action overlay",
-    "routeId": "bookshelf",
-    "pageState": "cover-mode",
-    "context": { "tab": "bookshelf", "overlay": "book-action" },
-    "components": [
-      { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
-      { "type": "BookCard", "id": "book-1", "props": {} },
-      {
-        "type": "Overlay",
-        "id": "book-action-sheet",
-        "props": { "overlayType": "book-action" },
-        "children": [
-          { "type": "Button", "id": "action-edit", "props": { "label": "修改" } },
-          { "type": "Button", "id": "action-delete", "props": { "label": "删除", "destructive": true } }
-        ]
-      }
-    ]
-  },
-  {
-    "_comment": "Slice 3: 书架页 + sort-filter overlay",
-    "routeId": "bookshelf",
-    "pageState": "cover-mode",
-    "context": { "tab": "bookshelf", "overlay": "sort-filter" },
-    "components": [
-      { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
-      {
-        "type": "Overlay",
-        "id": "sort-filter-sheet",
-        "props": { "overlayType": "sort-filter" },
-        "children": [
-          { "type": "FormSection", "id": "sort-section", "props": {} },
-          { "type": "Button", "id": "sort-filter-apply", "props": { "label": "应用" } }
-        ]
-      }
-    ]
-  },
 
   {
     "_comment": "Slice 4: 全局 offline 状态页",
