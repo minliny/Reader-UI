@@ -2,16 +2,16 @@
 
 本目录保存 Reader UI Contract 的生成产物。当前已由 tools/codegen/generate.mjs 从 contracts/*.schema.json + fixtures/*.fixtures.json 生成三端类型文件。
 
-当前产物（VERSION.json 1.3.0）：
+当前产物（VERSION.json 1.5.0）：
 
 ```text
 generated/
-  swift/    13 个 .swift 文件
-  kotlin/   13 个 .kt 文件
-  arkts/    13 个 .ets 文件
+  swift/    14 个 .swift 文件
+  kotlin/   14 个 .kt 文件
+  arkts/    14 个 .ets 文件
 ```
 
-每个端 13 个文件对应 13 个 schema：route / ui-event / ui-state / view-state / motion / token / core-command / core-event / host-request / progress-location / content / sync-conflict / state-rule。
+每个端 14 个文件对应 14 个 schema：route / ui-event / ui-state / view-state / motion / token / core-command / core-event / host-request / progress-location / content / sync-conflict / state-rule / motion-policy。
 
 生成方式：
 

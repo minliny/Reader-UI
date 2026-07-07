@@ -13,7 +13,9 @@ export type ComponentType =
   | "ShelfChipGroup"
   | "ContinueReadingCard"
   | "RecentUpdateCard"
+  | "BookshelfShelfSection"
   | "ShelfSectionHeader"
+  | "BookGrid"
   | "BookCard"
   | "BookListItem"
   | "ProgressBar"
@@ -66,7 +68,21 @@ export type ComponentType =
   | "FormSection"
   | "FilterBar"
   | "Content"
-  | "WebView";
+  | "WebView"
+  | "ReaderBase"
+  | "ReaderBottomBar"
+  | "ReaderDirectoryPanel"
+  | "ReaderAppearancePanel"
+  | "ReaderTtsPanel"
+  | "ReaderSettingsPanel"
+  | "ReaderSearchPanel"
+  | "ReaderReplacePanel"
+  | "ReaderAutoScrollPanel"
+  | "FloatingBrightness"
+  | "FloatingQuickActions"
+  | "FloatingPageControl"
+  | "NightToast"
+  | "SourceSwitchResultsPanel";
 
 export interface ViewStateComponent {
   type: ComponentType;

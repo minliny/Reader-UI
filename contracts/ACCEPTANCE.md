@@ -25,7 +25,7 @@ Reader UI 仓库不持有任何运行时状态。schema 只定义形状与 enum�
 - ✓ `route.schema.json` —— 200 个 RouteId
 - ✓ `ui-event.schema.json` —— 209 个 UiEventType
 - ✓ `ui-state.schema.json` —— 9 必填字段 + 派生状态
-- ✓ `view-state.schema.json` —— 66 个 ComponentType
+- ✓ `view-state.schema.json` —— 67 个 ComponentType
 - ✓ `motion.schema.json` —— 84 个 MotionId
 - ✓ `token.schema.json` —— 12 个 TokenCategory
 
@@ -40,19 +40,23 @@ Reader UI 仓库不持有任何运行时状态。schema 只定义形状与 enum�
 **Phase 1 收尾（1 schema）**：
 - ✓ `state-rule.schema.json` —— 5 种 kind（mutex / async-guard / required-with / forbidden-with / transition-guard）
 
+**Phase 1-2 Motion Runtime（1 schema）**：
+- ✓ `motion-policy.schema.json` —— MotionPolicy 规则表 + ReaderMotionResolver 输入契约，覆盖 12 个 operation
+
 **FFI 协议**：
 - ✓ `ffi-protocol-version.md` —— FFI 协议版本 1.0.0
 
 ### 3. 三端生成类型是否通过？
 
-**13 个 schema × 3 端 = 39 个 generated 文件**：
-- ✓ `generated/swift/` —— 13 个 .swift 文件
-- ✓ `generated/kotlin/` —— 13 个 .kt 文件
-- ✓ `generated/arkts/` —— 13 个 .ets 文件
+**14 个 schema × 3 端 = 42 个 generated 代码文件**：
+- ✓ `generated/swift/` —— 14 个 .swift 文件（含 `MotionPolicy.swift`）
+- ✓ `generated/kotlin/` —— 14 个 .kt 文件（含 `MotionPolicy.kt`）
+- ✓ `generated/arkts/` —— 14 个 .ets 文件（含 `MotionPolicy.ets`）
 
 校验方式：
 - `node --test contracts/tests/codegen-consistency.test.mjs` —— 23 项测试，校验三端 generated 文件的 enum 值与 schema 一致
 - `node tools/codegen/generate.mjs` —— 可重复生成，不依赖本机绝对路径
+- `node tools/codegen/check-drift.mjs` —— 重新生成并校验 generated 与 schema / fixtures 无漂移
 
 ### 4. reducer 是否有 golden test？
 
@@ -77,7 +81,7 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 
 ### 5. UI 是否只渲染 ViewState？
 
-**Reader UI 仓库范围内**：`view-state.schema.json` 定义了 64 个 ComponentType，覆盖 AppShell、main tabs、bookshelf→reader、reader overlay、session、focus、RSS、source、search、sync、conflict、offline 链路。
+**Reader UI 仓库范围内**：`view-state.schema.json` 定义了 67 个 ComponentType，覆盖 AppShell、main tabs、bookshelf→reader、reader overlay、session、focus、RSS、source、search、sync、conflict、offline 链路。
 
 三端 Native UI 是否只渲染 ViewState，由各端仓库自验。Reader UI 仓库通过 `view-state.fixtures.json`（35 项）提供可渲染状态样本，三端可作为渲染输入。
 
@@ -96,12 +100,14 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 
 - 三端从同一套 schema 生成类型，schema breaking change 会触发三端编译或测试失败
 - `state-rule.fixtures.json` 定义统一的状态约束，三端 reducer 必须遵守
+- `motion-policy.fixtures.json` 定义统一的 motion 选择规则，三端通过同一套 generated resolver 解析 MotionId
 - `phase1-slice.test.mjs`（40 项）校验 6 个优先链路（Slice 1-6）在 fixtures 中的覆盖完整
 - `demo-consistency.test.mjs`（6 项）校验 frontend-demo 与 schema 的一致性：route/token unknown 必须为 0，motion unknown 必须为 schema 命中或 `demo-contract-exceptions.json` 中的 explicit alias/deprecated/exception；当前 `found=515 unknown=111 approved=111 unapproved=0`
-- `matrix-coverage.test.mjs` / `motion-guard.test.mjs` / `token-group.test.mjs` / `core-host-boundary.test.mjs` 校验 P0 矩阵、motion guard、token 分组、Core/Host 边界引用一致性
+- `matrix-coverage.test.mjs` / `motion-guard.test.mjs` / `motion-policy.test.mjs` / `motion-resolver.test.mjs` / `token-group.test.mjs` / `core-host-boundary.test.mjs` 校验 P0 矩阵、motion guard、MotionPolicy / Resolver、token 分组、Core/Host 边界引用一致性
 
 剩余风险：
 - 三端 reducer 实现可能对同一 StateRule 有不同解释（需 Phase 3 golden test 验证）
+- 三端 MotionAdapter 仍需在平台仓库证明 native animation、reduced-motion、interrupt/back stack 与设备行为一致；本仓只提供 contract / resolver
 - demo 中 111 个 motion-like id 未在 schema 中，当前已全部列为 explicit alias/deprecated/exception；仍需后续产品/契约决策逐步补入 schema、归一化或删除例外，不能视为 0 drift
 
 ## 当前完成度汇总
@@ -111,13 +117,14 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 | Phase 0 架构冻结 | ✓ 完成 | Reader UI/contracts |
 | Phase 1 契约基础 | ✓ 完成（6 schema + codegen + tests + Slice 1-6 fixtures + StateRule） | Reader UI |
 | Phase 2 Core bridge 规划契约 | ✓ Reader UI 侧完成（6 schema + codegen + tests + FFI 协议）；跨仓 Core bridge mapping / 协议收敛未完成 | Reader UI + Reader-Core-Native |
+| Phase 1-2 Motion Runtime | ✓ Reader UI 侧完成（MotionSpec 结构化字段 + MotionPolicy + ReaderMotionResolver + 三端 generated resolver）；平台 MotionAdapter / navigator 接入未完成 | Reader UI + platforms |
 | P0 可执行参考规格 | ✓ 完成（PAGE_REFERENCE + TOKEN_SPEC + MOTION_SPEC + CORE_HOST_BOUNDARY） | Reader UI |
 | 完整矩阵 | ✓ 完成（ROUTE_COMPONENT_MATRIX：route × component × state × motion × token） | Reader UI |
 | 三端开发切片 | ✓ 完成（SLICE_PLAN：Slice 0-8 启动顺序 + 输入文档 + 每端交付物 + 并行/串行约束） | Reader UI |
 | 验收和防漂移机制 | ✓ 本仓 P0 脚本完成（matrix-coverage / motion-guard / token-group / core-host-boundary）；三端 CI 检查仍归平台仓库 | Reader UI + platforms |
-| Phase 3 三端 reducer 落地 | ✗ 未开始（归三端仓库，按 [SLICE_PLAN.md](./SLICE_PLAN.md) 推进） | iOS / Android / HarmonyOS |
-| Phase 4 Host Adapter 补齐 | ✗ 未开始（归三端仓库，按 [SLICE_PLAN.md](./SLICE_PLAN.md) Slice 7 推进） | iOS / Android / HarmonyOS |
-| Phase 5 一致性验证 | 部分（Reader UI contract 防漂移测试 ✓ / reducer golden test ✗ / core protocol test ✗ / device smoke ✗） | 跨仓 |
+| Phase 3 三端 reducer 落地 | 进行中（平台仓负责；Android / iOS 已有局部 reducer/golden evidence，HarmonyOS reducer/store 工作已开放；完成度以各端 gap matrix 和 evidence 为准） | iOS / Android / HarmonyOS |
+| Phase 4 Host Adapter 补齐 | 进行中/部分证明（平台仓负责；Android / iOS 已有部分 Host Adapter / Core bridge executor proof，HarmonyOS NAPI / Host Adapter 工作已开放；仍需跨端 App/device proof） | iOS / Android / HarmonyOS |
+| Phase 5 一致性验证 | 部分（Reader UI contract 防漂移测试 ✓；平台 reducer / Core protocol / Host Adapter / device smoke 仍按各端 evidence 收口） | 跨仓 |
 
 ## P0 可执行参考规格文档清单
 
@@ -136,7 +143,7 @@ Reader UI 仓库提供的是 `state-rule.fixtures.json`（13 项规则），定�
 ```bash
 # 全量契约测试
 node --test contracts/tests/*.test.mjs
-# 当前结果：171 tests / 171 pass / 0 fail
+# 当前结果：215 tests / 215 pass / 0 fail
 
 # fixtures 校验
 node contracts/tests/validate.mjs
@@ -150,4 +157,4 @@ node frontend-demo/verify/contract/verify-demo-contract-consistency.mjs
 
 ## 版本
 
-见 [VERSION.json](./VERSION.json)。当前 1.4.5。
+见 [VERSION.json](./VERSION.json)。当前 1.5.0。

@@ -259,6 +259,13 @@
         null
       ],
       "description": "若属于主 Tab 根页面，标记所属主 Tab。"
+    },
+    "aliasFor": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "可选 ViewState 复用目标 RouteId。用于语义等价页面复用另一路由的 ViewState。"
     }
   }
 }

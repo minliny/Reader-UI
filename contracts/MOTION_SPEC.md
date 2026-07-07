@@ -1,11 +1,11 @@
 # Motion Spec
 
-状态：Phase 1 P0 可执行参考规格
+状态：Phase 1-2 Motion Runtime 可执行参考规格
 日期：2026-07-04
-权威源：[motion.schema.json](./motion.schema.json)、[motion.fixtures.json](./fixtures/motion.fixtures.json)、[token.fixtures.json](./fixtures/token.fixtures.json) motion-duration/motion-easing
+权威源：[motion.schema.json](./motion.schema.json)、[motion.fixtures.json](./fixtures/motion.fixtures.json)、[motion-policy.schema.json](./motion-policy.schema.json)、[motion-policy.fixtures.json](./fixtures/motion-policy.fixtures.json)、[token.fixtures.json](./fixtures/token.fixtures.json) motion-duration/motion-easing
 来源：[frontend-demo/MOTION_CONTRACT.md](../frontend-demo/MOTION_CONTRACT.md)、[frontend-demo/MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md)、[frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md)、[frontend-demo/verify/motion/motion-coverage-report.json](../frontend-demo/verify/motion/motion-coverage-report.json)、[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6
 
-本文是 P0 阶段"动效和交互规范"。归并现有 `frontend-demo/MOTION_*.md` 文档到 contracts/ 权威源，定义 P0 MotionId 集合、触发/结束/打断规则、reduced-motion 降级、手势阈值、demo 等价性边界。
+本文是 Motion Runtime P0/P1 阶段的"动效和交互规范"。归并现有 `frontend-demo/MOTION_*.md` 文档到 contracts/ 权威源，定义 P0 MotionId 集合、触发/结束/打断规则、reduced-motion 降级、手势阈值、demo 等价性边界，并定义 Phase 1 MotionSpec 结构化字段与 Phase 2 MotionPolicy / ReaderMotionResolver 规则。
 
 ## 0. 文档边界
 
@@ -14,12 +14,15 @@
 - 每个 P0 MotionId 的触发条件、结束状态、打断规则、reduced-motion 降级
 - 通用交互规则：手势阈值、拖拽边界、焦点恢复、system back、键盘 inset
 - demo 等价性边界：哪些 demo 动效只是浏览器证明
+- Phase 1 Motion Runtime：MotionSpec 6 个结构化字段（implementationKind / containerRole / operation / visualPattern / interruptPolicy / reducedMotionPolicy）的 enum 与派生规则
+- Phase 2 Motion Runtime：MotionPolicy 规则表与 ReaderMotionResolver 接口
 
 本文不覆盖：
 - 不重复 84 个 MotionId 全集（以 [motion.schema.json](./motion.schema.json) enum 为准）
 - 不重复 motion-duration 数值（以 [token.fixtures.json](./fixtures/token.fixtures.json) 为唯一源）
 - 不写 Compose / SwiftUI / ArkUI 实现代码（归三端仓库）
 - 不重复视觉效果描述（以 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md) 为准）
+- 不写平台 MotionAdapter 实现细节（归三端仓库，见 [PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md)）
 
 权威层级：
 1. **Contract 层**（本仓）：MotionId / state fields / from / to / interrupt / finalState / reducedMotion
@@ -77,12 +80,110 @@ Demo proof 不等于 Platform implementation。平台不能用 Web CSS / DOM / `
 
 P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.json](./fixtures/motion.fixtures.json) 全集。
 
-## 2. 每个 P0 MotionId 的规则
+## 2. MotionSpec 结构化字段（Phase 1 Motion Runtime）
+
+Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapter 不再依赖字符串 guardRules 解析，且 MotionPolicy / Resolver 可以按 `operation` / `containerRole` 匹配。权威源为 [motion.schema.json](./motion.schema.json)，fixture 在 [motion.fixtures.json](./fixtures/motion.fixtures.json)。
+
+### 2.1 `implementationKind` 动效实现分类
+
+平台 MotionAdapter 按此字段选择执行路径。enum 值：
+
+| 值 | 含义 |
+| --- | --- |
+| `routeTransition` | 路由切换（push / pop / replace） |
+| `tabTransition` | 主 Tab 切换 |
+| `overlayTransition` | overlay / sheet / dialog / keyboard |
+| `stateReplace` | 状态页原地替换（搜索 / loading / content replace） |
+| `readerEntry` | 阅读器进入（coverToImmersive / actionToImmersive） |
+| `readerPageTurn` | 翻页 / 章节跳转 |
+| `directManipulation` | 手势跟随（drag / slider / dock） |
+| `sessionCapsule` | TTS / auto-page 胶囊事务 |
+| `orientationReshape` | 折叠屏 / 旋转重排（prepare / reshape / settle） |
+| `componentFeedback` | 组件级反馈（button / card / chip / toast） |
+
+`implementationKind` 是必填字段。
+
+### 2.2 `containerRole` 动效所属容器角色
+
+用于 MotionPolicy 匹配。enum 值：`appShell` / `mainTabShell` / `readerShell` / `libraryShell` / `settingsShell` / `flowShell` / `overlayHost` / `inlineState` / `listItem` / `card` / `readerSurface` / `sessionCapsule`。
+
+### 2.3 `operation` 切换意图
+
+页面只声明 `operation`，不指定具体 MotionId，由 [ReaderMotionResolver](#7-motionpolicy--readermotionresolver-phase-2-motion-runtime) 解析。enum 值：
+
+| 值 | 含义 |
+| --- | --- |
+| `push` | 路由推进 |
+| `pop` | 路由返回 |
+| `replace` | 原地替换 |
+| `tabSwitch` | Tab 切换 |
+| `enter` | overlay / session 进入 |
+| `exit` | overlay / session 退出 |
+| `update` | 同宿主原地更新 |
+| `dragStart` | 拖拽开始 |
+| `dragUpdate` | 拖拽中（跟手） |
+| `dragRelease` | 拖拽释放 |
+| `reshape` | 折叠屏 / 旋转重排 |
+| `settle` | 重排落位 |
+
+12 个 operation 是 MotionPolicy 匹配的主要维度，fixtures 必须覆盖全部 12 个。
+
+### 2.4 `visualPattern` 视觉模式
+
+平台 MotionAdapter 内部映射到原生动画 API。enum 值：`nativeStackForward` / `nativeStackBackward` / `fadeReplace` / `slideSheetUp` / `scaleDialog` / `matchedCoverToReader` / `pageTurn` / `directDrag` / `capsuleAnchorMove` / `noMotion`。
+
+### 2.5 `interruptPolicy` 打断策略
+
+`guardRules` 中 `interrupt:*` 的结构化投影。enum 值：
+
+| 值 | 含义 |
+| --- | --- |
+| `redirect` | 新动效接管，旧动效立即停止 |
+| `cancel` | 取消当前动效，回退到稳定状态 |
+| `completeThenReplace` | 完成当前动效后再替换 |
+| `updateInSameHost` | 同宿主原地更新（如 capsule countdown tick） |
+
+派生规则：
+- 若 `guardRules` 含 `interrupt:cancel` → `interruptPolicy = cancel`
+- 若 `guardRules` 含 `interrupt:redirect` → `interruptPolicy = redirect`
+- 若 `guardRules` 含 `interrupt:completeThenReplace` → `interruptPolicy = completeThenReplace`
+- `guardRules` 允许多值格式 `interrupt:cancel|redirect`，`interruptPolicy` 必须取其中一个
+- `motion.interrupt.*` 自身的 `interruptPolicy` 从 id 派生（如 `motion.interrupt.cancel` → `cancel`）
+
+`interruptPolicy` 是必填字段。
+
+### 2.6 `reducedMotionPolicy` reduced-motion 降级策略
+
+`guardRules` 中 `reducedMotion:*` / `dragMustFollowFinger:*` / `releaseToSnap:*` 的结构化投影。enum 值：
+
+| 值 | 含义 |
+| --- | --- |
+| `zeroDuration` | 时长归零，状态语义不变 |
+| `keepDirectManipulation` | 手势跟随不可降级（drag / slider 必须跟手） |
+| `noMotion` | 无视觉效果（瞬切） |
+
+派生规则：
+- 若 `guardRules` 含 `dragMustFollowFinger:*` 或 `releaseToSnap:*` → `reducedMotionPolicy = keepDirectManipulation`
+- 否则若 `guardRules` 含 `reducedMotion:forceZeroDuration` → `reducedMotionPolicy = zeroDuration`
+- `implementationKind = directManipulation` 的 MotionSpec 必须为 `keepDirectManipulation`
+
+`reducedMotionPolicy` 是必填字段。
+
+### 2.7 字段一致性守卫
+
+[contracts/tests/motion-guard.test.mjs](../contracts/tests/motion-guard.test.mjs) 强制：
+- 6 个字段全部存在
+- `interruptPolicy` 与 `guardRules` 中 `interrupt:*` 一致
+- `reducedMotionPolicy` 与 `guardRules` 中手势/reducedMotion 规则一致
+- `implementationKind` / `containerRole` / `operation` / `visualPattern` 值在 schema enum 内
+- `directManipulation` 类对应 `reducedMotionPolicy = keepDirectManipulation`
+
+## 3. 每个 P0 MotionId 的规则
 
 每项给出：触发 UiEvent / duration token / 结束状态 / 打断规则 / reduced-motion 降级。
 完整视觉效果描述见 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md)。
 
-### 2.1 应用启动 / 路由
+### 3.1 应用启动 / 路由
 
 #### `app.firstOpen.enter`
 - 触发：冷启动后 `app.firstOpen.enter` UiEvent，仅播一次（`hasPlayedFirstOpen` guard）
@@ -100,7 +201,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - reduced-motion：duration 0ms，直接切换
 - 系统返回：等价于 `app.route.pop.backward`
 
-### 2.2 主 Tab
+### 3.2 主 Tab
 
 #### `tab.item.select` / `tab.switch`
 - 触发：`tab.item.select` / `tab.switch` UiEvent
@@ -117,7 +218,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 打断：切换中再次切换触发 `redirect`
 - reduced-motion：duration 0ms
 
-### 2.3 阅读器进入 / 翻页
+### 3.3 阅读器进入 / 翻页
 
 #### `reader.entry.coverToImmersive`
 - 触发：`reader.entry.coverToImmersive` UiEvent（点击书架封面）
@@ -145,7 +246,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 结束状态：目标章节落位，Core `content.load` 返回后渲染
 - 打断：连续跳转触发 `redirect`；返回触发 `cancel`
 
-### 2.4 阅读控制层
+### 3.4 阅读控制层
 
 #### `reader.control.handle.press` / `reader.control.handle.release`
 - 触发：`reader.control.handlePress` / `reader.control.handleRelease` UiEvent
@@ -153,7 +254,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 结束状态：展开 / 收回 / 原状态（按阈值）
 - 打断：拖动中 `route.pop` 触发 `cancel`，立即收回
 - reduced-motion：拖动跟手无 easing（dragMustFollowFinger），释放即时提交
-- 手势阈值：见 §3.1
+- 手势阈值：见 §4.1
 
 #### `reader.control.dock.longPress` / `reader.control.dock.drag` / `reader.control.dock.release` / `reader.control.dock.rebound`
 - 触发：`reader.control.dockLongPress` / `reader.control.dockDrag` / `reader.control.dockRelease` / `reader.control.dockRebound`
@@ -161,7 +262,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 结束状态：dock 落到合法位置；resize 时 clamp 后 rebound
 - 打断：drag 中 `viewport.orientation.reshape` 触发 `completeThenReplace`，clamp 后落位
 - reduced-motion：drag 跟手无 easing；rebound duration 0ms
-- 边界：见 §3.2
+- 边界：见 §4.2
 
 #### `reader.control.hide`
 - 触发：`reader.control.toggle`（关闭）/ 系统返回
@@ -175,7 +276,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 结束状态：目标模块 overlay 落位
 - 打断：快速切换触发 `redirect`；overlay 互斥规则强制经 `null` 中转（transition-guard）
 
-### 2.5 阅读会话胶囊
+### 3.5 阅读会话胶囊
 
 #### `reader.session.capsule.enter` / `update` / `exit` / `switch`
 - 触发：`reader.session.capsuleEnter/Exit/Switch` UiEvent
@@ -199,7 +300,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 结束状态：`activeSession = tts` / `auto-page`，控制层关闭，胶囊显示
 - 打断：互斥切换触发 `completeThenReplace`
 
-### 2.6 Overlay
+### 3.6 Overlay
 
 #### `overlay.sheet.enter` / `overlay.sheet.exit`
 - 触发：`overlay.sheet.open` / `overlay.sheet.close` UiEvent
@@ -219,10 +320,10 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 触发：`overlay.keyboard.open` / `overlay.keyboard.close`
 - duration：`overlay`（240ms）
 - 方向：从底部进入
-- inset：见 §3.3
+- inset：见 §4.5
 - 打断：`route.pop` 触发 `cancel`，键盘关闭后路由
 
-### 2.7 打断
+### 3.7 打断
 
 #### `motion.interrupt.cancel` / `motion.interrupt.redirect` / `motion.interrupt.completeThenReplace`
 - 触发：新输入 / 返回 / 路由替换 / overlay 互斥 / loading 完成 / 拖动开始
@@ -232,7 +333,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - async guard：request-scoped async state 必须有 cancellation/discard guards
 - reduced-motion：duration 0ms，瞬切
 
-### 2.8 折叠屏 / 旋转
+### 3.8 折叠屏 / 旋转
 
 #### `viewport.orientation.reshape`
 - 触发：`viewport.orientation.reshape` UiEvent（resize / orientation change）
@@ -242,7 +343,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 打断：reshape 中再次 reshape 触发 `completeThenReplace`
 - reduced-motion：duration 0ms，直接 settle
 
-### 2.9 状态反馈
+### 3.9 状态反馈
 
 #### `state.loading.inline`
 - 触发：`state.loading.inline` UiEvent
@@ -256,7 +357,7 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - 结束状态：Toast 显示 / 隐藏
 - 打断：新 Toast 触发 `redirect`，旧 Toast 立即隐藏
 
-### 2.10 换源
+### 3.10 换源
 
 #### `reader.sourceSwitch.open-close`
 - 触发：`reader.sourceSwitch.open` / `reader.sourceSwitch.close`
@@ -265,9 +366,9 @@ P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.js
 - FlowShell 不使用全屏阻断
 - 打断：`reader.exit` 触发 `cancel`
 
-## 3. 通用交互规则
+## 4. 通用交互规则
 
-### 3.1 手势阈值
+### 4.1 手势阈值
 
 来源：[MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md) P1 手势阈值缺口。
 
@@ -291,7 +392,7 @@ P1 阶段需要补的阈值（P0 不阻塞）：
 - 底表拖拽关闭阈值
 - 翻页拖动阈值
 
-### 3.2 拖拽边界
+### 4.2 拖拽边界
 
 - handle drag：垂直方向，不超出展开高度
 - dock drag：水平 + 垂直，clamp 到 ReaderFrame + dock group + 安全区
@@ -299,7 +400,7 @@ P1 阶段需要补的阈值（P0 不阻塞）：
 - list drag：沿列表轴向，无边界（虚拟列表）
 - 所有 drag 期间：不触发 `route.push`、不触发 `overlay.open`、不修改 Core state
 
-### 3.3 焦点恢复
+### 4.3 焦点恢复
 
 来源：[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6 + 本仓 `motionOverlayFocusReturn` / `motionOverlayReturnTarget`。
 
@@ -319,7 +420,7 @@ P1 阶段需要补的阈值（P0 不阻塞）：
 - 关闭浮层时 reducer 把 focusTarget 写回 returnTarget
 - VoiceOver / TalkBack / 屏幕阅读器焦点同步（P1 验收）
 
-### 3.4 system back
+### 4.4 system back
 
 来源：[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6。
 
@@ -338,7 +439,7 @@ system back 等价表：
 
 平台必须实现 back handler 链：overlay > dialog > sheet > keyboard > session > route。
 
-### 3.5 键盘 inset
+### 4.5 键盘 inset
 
 - 含输入的 route（见 [PAGE_REFERENCE.md](./PAGE_REFERENCE.md) §10 keyboard）必须处理 keyboard inset
 - 键盘弹出：内容区上移 `--reader-ds-space-keyboard-gap`（12px）+ 键盘高度
@@ -346,14 +447,14 @@ system back 等价表：
 - 键盘弹出期间禁止 `route.push`
 - iOS：`KeyboardObserver` / `safeAreaInsets`；Android：`WindowInsets.ime`；HarmonyOS：`avoidArea` / `expandSafeArea`
 
-### 3.6 safe area / fold posture
+### 4.6 safe area / fold posture
 
 - 顶部 / 底部 / 水平 safe area 使用 `--reader-ds-space-safe-area-*` token
 - 折叠屏 hinge：dock 不跨 hinge
 - fold posture 变化触发 `viewport.orientation.reshape`
 - 平台必须使用原生 fold posture API（不依赖 Web `visualViewport`）
 
-## 4. Reduced-motion 降级
+## 5. Reduced-motion 降级
 
 来源：[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6 + [MOTION_CONTRACT.md](../frontend-demo/MOTION_CONTRACT.md)。
 
@@ -375,7 +476,7 @@ system back 等价表：
 - async guard
 - transition-guard（overlay 互斥仍经 `null` 中转，但 0ms）
 
-## 5. demo 等价性边界
+## 6. demo 等价性边界
 
 哪些 demo 动效只是浏览器证明，不能直接等价为端侧完成：
 
@@ -401,47 +502,162 @@ demo 等价的部分（可作为端侧实现参考）：
 - reduced-motion 降级规则
 - 互斥 / async guard / transition-guard 规则
 
-## 6. 生成 registry
+## 7. MotionPolicy / ReaderMotionResolver（Phase 2 Motion Runtime）
 
-`node tools/codegen/generate.mjs` 现在会把 [motion.fixtures.json](./fixtures/motion.fixtures.json) 中 84 条 canonical MotionSpec fixture 生成到三端文件：
+Phase 2 引入 MotionPolicy 规则表与 ReaderMotionResolver，让平台业务页面只声明 `operation` / `sourceRole` / `targetRole` / `containerRole`，由 Resolver 解析到具体 MotionId，再从 MotionSpecRegistry 取规格交给 MotionAdapter 执行。
 
+权威源：[motion-policy.schema.json](./motion-policy.schema.json)、[motion-policy.fixtures.json](./fixtures/motion-policy.fixtures.json)。
+
+### 7.1 MotionPolicy 结构
+
+```json
+{
+  "id": "route-push-default",
+  "priority": 100,
+  "match": {
+    "operation": "push"
+  },
+  "motionId": "app.route.push.forward"
+}
+```
+
+字段：
+- `id`：policy 规则 id（如 `route-push-default`）
+- `priority`：匹配优先级，数值越大越先匹配。同 priority 时按 match 字段数量（specificity）降序
+- `match`：匹配条件，省略的字段视为通配。空 `match = {}` 表示全匹配（最低优先级兜底）
+- `match.fromRoute` / `match.toRoute`：来源 / 目标 RouteId
+- `match.fromShell` / `match.toShell`：来源 / 目标 shell（`MainTabShell` / `LibraryShell` / `ReaderShell` / `SettingsShell` / `FlowShell`）
+- `match.operation`：切换意图（与 [motion.schema.json](./motion.schema.json) `operation` enum 对齐，12 个值）
+- `match.sourceRole`：来源语义角色（如 `bookCover` / `actionButton` / `handle` / `dock` / `slider` / `orientation`）
+- `match.targetRole`：目标语义角色（如 `sheet` / `dialog` / `dropdown` / `toast`）
+- `match.containerRole`：容器角色（与 [motion.schema.json](./motion.schema.json) `containerRole` enum 对齐，12 个值）
+- `match.reducedMotion`：是否启用 reduced-motion
+- `motionId`：解析结果 MotionId（必须存在于 [motion.schema.json](./motion.schema.json) `id` enum）
+
+### 7.2 MotionPolicy fixtures 覆盖
+
+[motion-policy.fixtures.json](./fixtures/motion-policy.fixtures.json) 当前 28 条 policy（外加 13 条 `_comment` 注释），覆盖全部 12 个 `operation`：
+
+| priority 层级 | 覆盖场景 |
+| --- | --- |
+| 0 | 兜底（`fallback-no-motion` → `motion.interrupt.redirect`） |
+| 50 | interrupt 兜底 |
+| 100 | route push/pop/replace defaults + componentFeedback |
+| 150 | tab item / toggle / input |
+| 200 | tab switch / inline state |
+| 250 | overlayHost dropdown / toast |
+| 300 | readerShell overlay / readerSurface / slider / orientation |
+| 350 | reader entry / session capsule |
+
+用户原始规格要求的 5 条示例 policy 均已落地：
+- `route-push-default`（priority 100, operation=push → `app.route.push.forward`）
+- `route-pop-default`（priority 100, operation=pop → `app.route.pop.backward`）
+- `main-tab-switch`（priority 200, operation=tabSwitch → `tab.switch`）
+- `bookshelf-cover-to-reader`（priority 350, fromShell=MainTabShell, toShell=ReaderShell, operation=push, sourceRole=bookCover → `reader.entry.coverToImmersive`）
+- `reader-overlay-sheet-enter`（priority 300, containerRole=readerShell, operation=enter, targetRole=sheet → `overlay.sheet.enter`）
+
+### 7.3 ReaderMotionResolver 接口
+
+```text
+resolveMotion({
+  fromRoute,
+  toRoute,
+  fromShell,
+  toShell,
+  operation,
+  sourceRole,
+  targetRole,
+  containerRole,
+  reducedMotion
+}) -> MotionId | null
+```
+
+解析逻辑：
+1. 若调用方未传 `fromShell` / `toShell` 但传了 `fromRoute` / `toRoute`，由 `RouteShellLookup`（从 [route.fixtures.json](./fixtures/route.fixtures.json) 派生，76 条 route→shell 映射）补全
+2. 将全部 policy 按 `priority` 降序排序；同 priority 按 `match` 字段数（specificity）降序排序
+3. 依次匹配，第一条 `match` 命中的 policy 返回其 `motionId`
+4. 全部未命中返回 `null`（fixtures 中 `fallback-no-motion` priority=0 兜底确保极少返回 null）
+
+Resolver 是纯函数，不修改输入 request，无副作用。
+
+### 7.4 三端生成产物
+
+`node tools/codegen/generate.mjs` 生成：
+
+**MotionSpecRegistry**（Phase 1）：
 - Swift：`generated/swift/Motion.swift` 的 `MotionSpecRegistry`
 - Kotlin：`generated/kotlin/Motion.kt` 的 `MotionSpecRegistry`
 - ArkTS：`generated/arkts/Motion.ets` 的 `motionSpecRegistry`
 
-registry 保留原有 MotionId enum，同时给平台提供可消费的 spec 列表 / map。每条 spec 包含：
-- `id`
-- `durationMs`
-- `easing`
-- `tokens.durationToken`
-- `tokens.easingToken`
-- `guardRules`
-- 从 `guardRules` 派生的 `reducedMotion.forceZeroDuration` / `directManipulation` / `sourceRule`
+每条 MotionSpec 包含：`id` / `durationMs` / `easing` / `implementationKind` / `containerRole` / `operation` / `visualPattern` / `interruptPolicy` / `reducedMotionPolicy` / `tokens.durationToken` / `tokens.easingToken` / `guardRules`。
+
+**MotionPolicy + ReaderMotionResolver**（Phase 2）：
+- Swift：`generated/swift/MotionPolicy.swift`（`MotionPolicyRegistry` + `RouteShellLookup` + `ReaderMotionResolver.resolve`）
+- Kotlin：`generated/kotlin/MotionPolicy.kt`（`MotionPolicyRegistry` + `RouteShellLookup` + `ReaderMotionResolver.resolve`）
+- ArkTS：`generated/arkts/MotionPolicy.ets`（`motionPolicyRegistry` + `routeShellLookup` + `resolveMotion` 函数）
+
+平台调用方式（Swift 示例）：
+```swift
+let motionId = ReaderMotionResolver.resolve(
+    MotionRequest(
+        fromRoute: currentRoute,
+        toRoute: nextRoute,
+        operation: .push,
+        sourceRole: .bookCover
+    )
+)
+readerMotion.run(motionId) {
+    navigationPath.append(nextRoute)
+}
+```
+
+业务页面禁止直接写 `withAnimation` / `animate*AsState` / `animateTo`，必须经 Resolver + MotionAdapter。
+
+### 7.5 测试覆盖
+
+- [contracts/tests/motion-policy.test.mjs](../contracts/tests/motion-policy.test.mjs)：13 项 — schema 校验、id 唯一、motionId 引用合法、覆盖全部 12 operation、用户规格 5 个示例 policy 存在且正确
+- [contracts/tests/motion-resolver.test.mjs](../contracts/tests/motion-resolver.test.mjs)：21 项 — JS 移植 resolver 逻辑验证 route push/pop、tab switch、bookshelf-cover-to-reader、reader overlay sheet/dialog、dropdown、reader page turn、chapter jump、slider drag、session capsule、orientation reshape/settle、高优先级优先、空 request 命中兜底、resolver 纯函数不修改输入
+- [contracts/tests/motion-guard.test.mjs](../contracts/tests/motion-guard.test.mjs)：8 项 Phase 1 字段守卫 — 6 字段存在性、interruptPolicy 与 guardRules 一容、reducedMotionPolicy 与 guardRules 一致、enum 值合法、directManipulation 对应 keepDirectManipulation
+- [contracts/tests/codegen-idempotent.test.mjs](../contracts/tests/codegen-idempotent.test.mjs)：三端 42 个生成文件幂等
+- [contracts/tests/codegen-consistency.test.mjs](../contracts/tests/codegen-consistency.test.mjs)：三端 14 个文件存在 + enum 一致
 
 当前 canonical 覆盖状态：
-- `motion.schema.json`：84 个 MotionId。
-- `motion.fixtures.json`：84 条 MotionSpec fixture，且每条都有 `tokens.durationToken`、`tokens.easingToken`、`guardRules`。
-- `generated/swift/Motion.swift`、`generated/kotlin/Motion.kt`、`generated/arkts/Motion.ets`：均生成完整 MotionSpec registry。
-- `contracts/tests/motion-guard.test.mjs`：强制 schema MotionId 与 fixture 1:1、token refs 合法、guardRules 不为空，并要求 reduced-motion / direct-manipulation / interrupt 语义至少存在其一。
+- `motion.schema.json`：84 个 MotionId + 6 个 Phase 1 结构化字段
+- `motion.fixtures.json`：84 条 MotionSpec fixture，每条都有 6 个新字段 + `tokens` + `guardRules`
+- `motion-policy.schema.json`：MotionPolicy 契约
+- `motion-policy.fixtures.json`：28 条 policy + 13 条注释，覆盖全部 12 operation
+- `generated/swift/Motion.swift` + `MotionPolicy.swift`、`generated/kotlin/Motion.kt` + `MotionPolicy.kt`、`generated/arkts/Motion.ets` + `MotionPolicy.ets`：均生成完整 registry + resolver
 
 注意：`frontend-demo/verify/motion/motion-coverage-report.json` 的 `83/83` 指 demo runtime / selector alias resolution，不是 canonical schema 总数。canonical 84/84 以本节 schema + fixture + generated registry 为准。
 
-## 7. MotionId 新增 / 废弃流程
+## 8. MotionId 新增 / 废弃流程
 
 1. 在 [motion.schema.json](./motion.schema.json) `id.enum` 新增 MotionId。
-2. 在 [motion.fixtures.json](./fixtures/motion.fixtures.json) 新增对应 fixture（含 durationMs / easing / tokens / guardRules）。
-3. 在 [token.fixtures.json](./fixtures/token.fixtures.json) 新增对应 motion-duration token（如需新 token）。
-4. 在 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md) 补视觉效果描述。
-5. 三端 `ReaderMotionController` / `MotionAdapter` 同步新增映射。
-6. 跑 `node --test contracts/tests/*.test.mjs` 校验。
-7. 跑 `node tools/codegen/generate.mjs` 重新生成 `generated/{swift,kotlin,arkts}/Motion.*`。
+2. 在 [motion.fixtures.json](./fixtures/motion.fixtures.json) 新增对应 fixture（含 durationMs / easing / 6 个 Phase 1 结构化字段 / tokens / guardRules）。
+3. 在 [motion-policy.schema.json](./motion-policy.schema.json) `motionId.enum` 同步新增（保持与 motion.schema.json 一致）。
+4. 在 [token.fixtures.json](./fixtures/token.fixtures.json) 新增对应 motion-duration token（如需新 token）。
+5. 在 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md) 补视觉效果描述。
+6. 若新 MotionId 需要被 Resolver 解析，在 [motion-policy.fixtures.json](./fixtures/motion-policy.fixtures.json) 新增对应 policy 规则。
+7. 三端 `MotionAdapter` 同步新增映射（归平台仓库）。
+8. 跑 `node --test contracts/tests/*.test.mjs` 校验。
+9. 跑 `node tools/codegen/generate.mjs` 重新生成 `generated/{swift,kotlin,arkts}/Motion.*` 与 `MotionPolicy.*`。
+10. 跑 `node tools/codegen/check-drift.mjs` 校验生成幂等。
 
 废弃：`deprecated: true` + 至少保留一个 MINOR 周期。
 
-## 8. 缺口与下一步
+## 9. 缺口与下一步
 
-P0 阶段已补 40 个 P0 MotionId 的触发/结束/打断/reduced-motion + 通用交互规则 + demo 等价性边界。剩余缺口：
+Phase 1-2 Motion Runtime 已完成：
+- 84 个 MotionId 全部补齐 6 个结构化字段（implementationKind / containerRole / operation / visualPattern / interruptPolicy / reducedMotionPolicy）
+- MotionPolicy 规则表（28 条 policy，覆盖全部 12 operation）+ ReaderMotionResolver 纯函数
+- 三端生成 MotionSpecRegistry + MotionPolicyRegistry + RouteShellLookup + ReaderMotionResolver
+- 215 项测试全部通过，46 个文件 drift check 通过
+
+剩余缺口（归三端平台仓库或 P1）：
 - 44 个 P1 MotionId 已有 MotionSpec fixture，但精确状态机还未在本文逐项展开。
+- 平台 MotionAdapter 实现（Phase 4，归 `Reader for iOS` / `Reader for Android` / `Reader for HarmonyOS` 仓库）
+- 切换入口统一改造（Phase 5，navigator.push/pop/replace、tabs.switchTo、overlay.present/dismiss，归平台仓库）
+- 平台 lint 禁止裸动画（Phase 6，归平台仓库）
 - 亮度 / 进度拖动精确阈值（P1 补）
 - 底表拖拽关闭阈值（P1 补）
 - VoiceOver / TalkBack 焦点迁移规则（P1 补）

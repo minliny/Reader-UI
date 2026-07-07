@@ -32,8 +32,12 @@ enum class ComponentType {
     ContinueReadingCard,
     @SerialName("RecentUpdateCard")
     RecentUpdateCard,
+    @SerialName("BookshelfShelfSection")
+    BookshelfShelfSection,
     @SerialName("ShelfSectionHeader")
     ShelfSectionHeader,
+    @SerialName("BookGrid")
+    BookGrid,
     @SerialName("BookCard")
     BookCard,
     @SerialName("BookListItem")
@@ -139,7 +143,35 @@ enum class ComponentType {
     @SerialName("Content")
     Content,
     @SerialName("WebView")
-    WebView
+    WebView,
+    @SerialName("ReaderBase")
+    ReaderBase,
+    @SerialName("ReaderBottomBar")
+    ReaderBottomBar,
+    @SerialName("ReaderDirectoryPanel")
+    ReaderDirectoryPanel,
+    @SerialName("ReaderAppearancePanel")
+    ReaderAppearancePanel,
+    @SerialName("ReaderTtsPanel")
+    ReaderTtsPanel,
+    @SerialName("ReaderSettingsPanel")
+    ReaderSettingsPanel,
+    @SerialName("ReaderSearchPanel")
+    ReaderSearchPanel,
+    @SerialName("ReaderReplacePanel")
+    ReaderReplacePanel,
+    @SerialName("ReaderAutoScrollPanel")
+    ReaderAutoScrollPanel,
+    @SerialName("FloatingBrightness")
+    FloatingBrightness,
+    @SerialName("FloatingQuickActions")
+    FloatingQuickActions,
+    @SerialName("FloatingPageControl")
+    FloatingPageControl,
+    @SerialName("NightToast")
+    NightToast,
+    @SerialName("SourceSwitchResultsPanel")
+    SourceSwitchResultsPanel
 }
 
 @Serializable

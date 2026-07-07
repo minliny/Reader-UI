@@ -154,6 +154,40 @@ test("view-state 组件 type 在 ComponentType enum 中", () => {
   }
 });
 
+test("bookshelf view-state 对齐 frontend-demo 书架结构", () => {
+  const bookshelf = viewFixtures.find((item) => item.routeId === "bookshelf" && item.pageState === "default");
+  assert.ok(bookshelf, "bookshelf/default fixture 应存在");
+
+  assert.deepEqual(
+    bookshelf.components.map((component) => component.type),
+    ["AppTopBar", "ContinueReadingCard", "BookshelfShelfSection", "BottomNav"]
+  );
+
+  const allTypes = [];
+  function collect(component) {
+    allTypes.push(component.type);
+    if (component.children) for (const child of component.children) collect(child);
+  }
+  for (const component of bookshelf.components) collect(component);
+
+  assert.equal(allTypes.includes("ShelfChipGroup"), false, "bookshelf 不应出现 demo 中不存在的顶部 chips");
+  assert.equal(allTypes.includes("ProgressBar"), false, "bookshelf 默认书卡不应内嵌进度条");
+
+  const shelfSection = bookshelf.components.find((component) => component.type === "BookshelfShelfSection");
+  assert.ok(shelfSection, "bookshelf 应包含 shelf section 包装器");
+  assert.deepEqual(
+    shelfSection.children.map((component) => component.type),
+    ["ShelfSectionHeader", "BookGrid"]
+  );
+
+  const bookGrid = shelfSection.children.find((component) => component.type === "BookGrid");
+  assert.ok(bookGrid, "shelf section 应包含 BookGrid");
+  assert.deepEqual(
+    bookGrid.children.map((component) => component.type),
+    ["BookCard", "BookCard", "BookCard"]
+  );
+});
+
 test("motion.fixtures 中 id 全部在 motion schema enum 中", () => {
   const allowed = new Set(motionSchema.properties.id.enum);
   for (const item of motionFixtures) {

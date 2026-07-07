@@ -180,7 +180,7 @@
   },
 
   {
-    "_comment": "Batch1: 阅读器控制层底座（route-driven，浮动 quick-actions + page-control + 底栏）",
+    "_comment": "Slice 3: 阅读器控制层底座（route-driven；浮动 quick-actions + page-control + 底栏）",
     "routeId": "control-layer-base-v2",
     "pageState": "default",
     "context": { "bookId": "bk-001" },
@@ -393,12 +393,7 @@
     "pageState": "default",
     "context": { "bookId": "bk-001" },
     "components": [
-      { "type": "Overlay", "id": "source-switch-overlay", "props": { "overlayType": "source-switch" }, "children": [
-        { "type": "List", "id": "source-switch-results-list", "props": {}, "children": [
-          { "type": "ListRow", "id": "source-switch-src-001", "props": { "title": "源 A" } },
-          { "type": "ListRow", "id": "source-switch-src-002", "props": { "title": "源 B" } }
-        ]}
-      ]}
+      { "type": "SourceSwitchResultsPanel", "id": "source-switch-results-panel", "props": {} }
     ]
   },
 

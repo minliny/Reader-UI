@@ -9,11 +9,11 @@
 node tools/codegen/generate.mjs
 ```
 
-当前产物（VERSION.json 1.3.0）：13 个 .swift 文件
+当前产物（VERSION.json 1.5.0）：14 个 .swift 文件
 
 - Route.swift / UiEvent.swift / UiState.swift / ViewState.swift / Motion.swift / Token.swift
 - CoreCommand.swift / CoreEvent.swift / HostRequest.swift / ProgressLocation.swift / Content.swift / SyncConflict.swift
-- StateRule.swift
+- StateRule.swift / MotionPolicy.swift
 
 规则：
 

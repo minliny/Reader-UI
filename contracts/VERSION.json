@@ -1,11 +1,11 @@
 {
-  "version": "1.4.5",
+  "version": "1.5.0",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
     "ui-state": "1.0.0",
     "view-state": "1.0.0",
-    "motion": "1.0.0",
+    "motion": "1.1.0",
     "token": "1.0.0",
     "core-command": "1.0.0",
     "core-event": "1.0.0",
@@ -13,9 +13,28 @@
     "progress-location": "1.0.0",
     "content": "1.0.0",
     "sync-conflict": "1.0.0",
-    "state-rule": "1.0.0"
+    "state-rule": "1.0.0",
+    "motion-policy": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "1.5.0",
+      "date": "2026-07-05",
+      "summary": "Phase 1-2 Motion Runtime：MotionSpec 结构化字段 + MotionPolicy + ReaderMotionResolver",
+      "changes": [
+        "Phase 1：motion.schema.json 为每条 MotionSpec 新增 6 个结构化字段（implementationKind / containerRole / operation / visualPattern / interruptPolicy / reducedMotionPolicy），motion.schema.json required 扩展，motion.fixtures.json 84 条 fixture 全部补齐",
+        "Phase 2：新增 motion-policy.schema.json + motion-policy.fixtures.json（28 条 policy + 13 条注释），覆盖全部 12 个 operation，包含用户规格要求的 5 个示例 policy（route-push-default / route-pop-default / main-tab-switch / bookshelf-cover-to-reader / reader-overlay-sheet-enter）",
+        "tools/codegen/generate.mjs 新增 genSwiftMotionPolicy / genKotlinMotionPolicy / genArkTsMotionPolicy，生成 MotionPolicyMatch + specificity + matches + MotionPolicyRegistry（28 条）+ RouteShellLookup（76 条 route→shell）+ ReaderMotionResolver.resolve 纯函数",
+        "三端各新增 MotionPolicy.swift / MotionPolicy.kt / MotionPolicy.ets，与 MotionSpecRegistry 配合提供完整 Motion Runtime 契约",
+        "新增 motion-policy.test.mjs（13 项）：schema 校验、id 唯一、motionId 引用合法、覆盖全部 12 operation、用户规格 5 个示例 policy 存在且正确",
+        "新增 motion-resolver.test.mjs（21 项）：JS 移植 resolver 逻辑验证 route push/pop、tab switch、bookshelf-cover-to-reader、reader overlay sheet/dialog、dropdown、reader page turn、chapter jump、slider drag、session capsule、orientation reshape/settle、高优先级优先、空 request 命中兜底、resolver 纯函数不修改输入",
+        "motion-guard.test.mjs 扩展 8 项 Phase 1 字段守卫：6 字段存在性、interruptPolicy 与 guardRules 一致、reducedMotionPolicy 与 guardRules 一致、enum 值合法、directManipulation 对应 keepDirectManipulation",
+        "codegen-idempotent.test.mjs 文件计数从 39 改为 42（14 schema × 3 端），codegen-consistency.test.mjs 三端文件存在性检查从 13 个改为 14 个",
+        "MOTION_SPEC.md 扩展：新增 §2 文档化 6 个结构化字段 enum 与派生规则，新增 §7 文档化 MotionPolicy + ReaderMotionResolver 接口与三端生成产物，§8 新增/废弃流程补充 motion-policy 同步步骤，§9 缺口与下一步更新",
+        "VERSION.json schema 映射新增 motion-policy 1.0.0，motion schema 版本从 1.0.0 升至 1.1.0 反映 6 个新字段",
+        "Reader UI contract tests 当前 215/215 pass，drift check 46 个文件通过"
+      ]
+    },
     {
       "version": "1.4.5",
       "date": "2026-07-05",

@@ -141,6 +141,41 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--reader-ds-color-paper-night": {
+    name: "--reader-ds-color-paper-night",
+    category: "color",
+    value: "#181f22",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--reader-ds-color-ink-night": {
+    name: "--reader-ds-color-ink-night",
+    category: "color",
+    value: "#d8ccc4",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--reader-ds-color-control-ink-night": {
+    name: "--reader-ds-color-control-ink-night",
+    category: "color",
+    value: "#d7e1e5",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--reader-ds-color-primary-night": {
+    name: "--reader-ds-color-primary-night",
+    category: "color",
+    value: "#8fb6ca",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--reader-ds-color-floating-control-bg-alt-night": {
+    name: "--reader-ds-color-floating-control-bg-alt-night",
+    category: "color",
+    value: "#2b3b43",
+    platforms: undefined,
+    deprecated: false
+  },
   "--reader-ds-font-sans": {
     name: "--reader-ds-font-sans",
     category: "font",

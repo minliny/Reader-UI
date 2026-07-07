@@ -31,34 +31,37 @@ Native UI
 
 ## 已交付清单
 
-### Schema（13 个）
+### Schema（14 个）
 
 | 阶段 | Schema | 说明 |
 |---|---|---|
 | Phase 1 | route / ui-event / ui-state / view-state / motion / token | UI 契约基础 6 schema |
 | Phase 2 | core-command / core-event / host-request / progress-location / content / sync-conflict | Core bridge 规划契约 6 schema |
 | Phase 1 收尾 | state-rule | 状态归属与转移约束（5 种 kind） |
+| Phase 1-2 Motion Runtime | motion-policy | MotionPolicy 规则表 + ReaderMotionResolver 输入契约 |
 
-### Fixtures（635 项）
+### Fixtures（676 项）
 
 - Phase 1：route 76 / ui-event 143 / ui-state 43 / view-state 35 / motion 84 / token 117
 - Phase 2：core-command 45 / core-event 33 / host-request 31 / progress-location 6 / content 3 / sync-conflict 6
 - Phase 1 收尾：state-rule 13
+- Phase 1-2 Motion Runtime：motion-policy 41（28 条 policy + 13 条注释项）
 
 Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链路
 （AppShell / main tabs / bookshelf→reader / reader overlay / session·focus / RSS·source·search / sync·conflict·offline）。
 
-### Generated（39 个 = 13 schema × 3 端）
+### Generated（42 个 = 14 schema × 3 端）
 
-- `generated/swift/` —— 13 个 .swift 文件
-- `generated/kotlin/` —— 13 个 .kt 文件
-- `generated/arkts/` —— 13 个 .ets 文件
+- `generated/swift/` —— 14 个 .swift 文件
+- `generated/kotlin/` —— 14 个 .kt 文件
+- `generated/arkts/` —— 14 个 .ets 文件
 - `Motion.*` 现在包含 84 条 canonical motion fixtures 的 `MotionSpecRegistry` / `motionSpecRegistry`，保留原有 MotionId enum。
+- `MotionPolicy.*` 现在包含 28 条 motion policy、`RouteShellLookup`、`MotionPolicyRegistry` 与 `ReaderMotionResolver` / `resolveMotion` 纯函数。
 - `Token.*` 现在包含当前 117 条 token fixtures 的 `TokenRegistry` / `tokenRegistry`，保留原有 TokenCategory enum。
 
 入口：`node tools/codegen/generate.mjs`，无本机绝对路径依赖，可重复生成。
 
-### Tests（171 项 / 0 fail）
+### Tests（215 项 / 0 fail）
 
 | 测试文件 | 项数 | 覆盖 |
 |---|---|---|
@@ -67,11 +70,13 @@ Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链�
 | phase1-slice.test.mjs | 40 | 6 个优先链路 Slice 1-6 覆盖 + 过渡连续性 |
 | state-rule.test.mjs | — | StateRule schema + fixtures + 关键规则 |
 | codegen-consistency.test.mjs | — | 三端 generated enum 一致性 + drift check |
-| codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 39 个 generated 文件幂等性 |
+| codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 42 个 generated 文件幂等性 |
 | registry-codegen.test.mjs | 6 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
+| motion-policy.test.mjs | 13 | MotionPolicy schema / fixtures / motionId 引用 / operation 覆盖 / fallback / 示例 policy |
+| motion-resolver.test.mjs | 23 | ReaderMotionResolver route、tab、overlay、reader surface、drag、session、orientation、优先级与纯函数行为 |
 | demo-consistency.test.mjs | 6 | frontend-demo 与 schema 一致性 baseline + explicit exception policy |
 | matrix-coverage.test.mjs | 5 | P0 route token/motion matrix + MotionId / token group 引用一致性 |
-| motion-guard.test.mjs | 7 | 40 个 P0 MotionId + 84 个 schema MotionId fixture、token refs、guardRules 完整性 |
+| motion-guard.test.mjs | 15 | 40 个 P0 MotionId + 84 个 schema MotionId fixture、token refs、guardRules、6 个结构化字段完整性 |
 | token-group.test.mjs | 5 | TOKEN_SPEC 语义分组、fixtures 引用、route token group 一致性 |
 | core-host-boundary.test.mjs | 4 | Core/Host 边界域归属、UiEvent/CoreCommand/HostRequest schema 引用一致性 |
 
@@ -87,9 +92,9 @@ Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链�
 
 ```text
 contracts/
-  *.schema.json          # 13 个契约 schema
-  fixtures/              # 635 项 fixtures
-  tests/                 # 12 个测试文件 + validate.mjs
+  *.schema.json          # 14 个契约 schema
+  fixtures/              # 676 项 fixtures
+  tests/                 # 14 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 

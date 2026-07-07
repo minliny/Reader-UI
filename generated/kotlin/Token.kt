@@ -164,6 +164,41 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--reader-ds-color-paper-night",
+        category = TokenCategory.Color,
+        value = "#181f22",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--reader-ds-color-ink-night",
+        category = TokenCategory.Color,
+        value = "#d8ccc4",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--reader-ds-color-control-ink-night",
+        category = TokenCategory.Color,
+        value = "#d7e1e5",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--reader-ds-color-primary-night",
+        category = TokenCategory.Color,
+        value = "#8fb6ca",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--reader-ds-color-floating-control-bg-alt-night",
+        category = TokenCategory.Color,
+        value = "#2b3b43",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--reader-ds-font-sans",
         category = TokenCategory.Font,
         value = "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",

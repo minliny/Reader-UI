@@ -18,6 +18,10 @@ import PackageDescription
 
 let package = Package(
     name: "Reader UI",
+    platforms: [
+        .iOS(.v17),
+        .macOS(.v13)
+    ],
     products: [
         .library(name: "ReaderUIContract", targets: ["ReaderUIContract"])
     ],

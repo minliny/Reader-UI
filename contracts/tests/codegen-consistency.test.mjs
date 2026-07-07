@@ -40,34 +40,34 @@ const syncConflictSchema = loadJson("sync-conflict.schema.json");
 // Phase 1 收尾 schema
 const stateRuleSchema = loadJson("state-rule.schema.json");
 
-test("generated/swift 13 个文件全部存在", () => {
+test("generated/swift 14 个文件全部存在", () => {
   for (const f of [
     "Route.swift", "UiEvent.swift", "UiState.swift", "ViewState.swift", "Motion.swift", "Token.swift",
     "CoreCommand.swift", "CoreEvent.swift", "HostRequest.swift",
     "ProgressLocation.swift", "Content.swift", "SyncConflict.swift",
-    "StateRule.swift"
+    "StateRule.swift", "MotionPolicy.swift"
   ]) {
     ensureExists(join("swift", f));
   }
 });
 
-test("generated/kotlin 13 个文件全部存在", () => {
+test("generated/kotlin 14 个文件全部存在", () => {
   for (const f of [
     "Route.kt", "UiEvent.kt", "UiState.kt", "ViewState.kt", "Motion.kt", "Token.kt",
     "CoreCommand.kt", "CoreEvent.kt", "HostRequest.kt",
     "ProgressLocation.kt", "Content.kt", "SyncConflict.kt",
-    "StateRule.kt"
+    "StateRule.kt", "MotionPolicy.kt"
   ]) {
     ensureExists(join("kotlin", f));
   }
 });
 
-test("generated/arkts 13 个文件全部存在", () => {
+test("generated/arkts 14 个文件全部存在", () => {
   for (const f of [
     "Route.ets", "UiEvent.ets", "UiState.ets", "ViewState.ets", "Motion.ets", "Token.ets",
     "CoreCommand.ets", "CoreEvent.ets", "HostRequest.ets",
     "ProgressLocation.ets", "Content.ets", "SyncConflict.ets",
-    "StateRule.ets"
+    "StateRule.ets", "MotionPolicy.ets"
   ]) {
     ensureExists(join("arkts", f));
   }

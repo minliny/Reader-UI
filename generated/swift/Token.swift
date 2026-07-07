@@ -146,6 +146,41 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--reader-ds-color-paper-night",
+            category: .color,
+            value: "#181f22",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--reader-ds-color-ink-night",
+            category: .color,
+            value: "#d8ccc4",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--reader-ds-color-control-ink-night",
+            category: .color,
+            value: "#d7e1e5",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--reader-ds-color-primary-night",
+            category: .color,
+            value: "#8fb6ca",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--reader-ds-color-floating-control-bg-alt-night",
+            category: .color,
+            value: "#2b3b43",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--reader-ds-font-sans",
             category: .font,
             value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",

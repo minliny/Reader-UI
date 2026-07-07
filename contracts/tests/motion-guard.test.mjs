@@ -114,3 +114,89 @@ test("every MotionSpec guardRules include reduced-motion, direct-manipulation, o
     );
   }
 });
+
+// --- Phase 1 Motion Runtime: 新增 6 个结构化字段守卫 ---
+
+test("every MotionSpec fixture has 6 new structured fields (Phase 1 Motion Runtime)", () => {
+  const required = ["implementationKind", "containerRole", "operation", "visualPattern", "interruptPolicy", "reducedMotionPolicy"];
+  for (const item of motionFixtures) {
+    for (const field of required) {
+      assert.ok(item[field] !== undefined, `motion fixture 缺少字段 ${field}: ${item.id}`);
+    }
+  }
+});
+
+test("interruptPolicy 与 guardRules 中 interrupt:* 一致", () => {
+  for (const item of motionFixtures) {
+    const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
+    const interruptRule = guardRules.find((r) => String(r).startsWith("interrupt:"));
+    if (interruptRule) {
+      // guardRule 可能是单值（interrupt:cancel）或多值（interrupt:cancel|redirect）
+      const allowedValues = interruptRule.split(":")[1].split("|");
+      assert.ok(
+        allowedValues.includes(item.interruptPolicy),
+        `motion ${item.id} interruptPolicy=${item.interruptPolicy} 不在 guardRule ${interruptRule} 允许值 [${allowedValues.join(", ")}] 内`
+      );
+    } else if (item.id.startsWith("motion.interrupt.")) {
+      // motion.interrupt.* 自身的 policy 直接从 id 派生
+      const expected = item.id.split(".").pop();
+      assert.equal(item.interruptPolicy, expected, `motion ${item.id} interruptPolicy 应为 ${expected}`);
+    }
+  }
+});
+
+test("reducedMotionPolicy 与 guardRules 一致", () => {
+  for (const item of motionFixtures) {
+    const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
+    const hasForceZero = guardRules.includes("reducedMotion:forceZeroDuration");
+    const hasDragMustFollow = guardRules.some((r) => String(r).startsWith("dragMustFollowFinger:"));
+    const hasReleaseToSnap = guardRules.some((r) => String(r).startsWith("releaseToSnap:"));
+    if (hasDragMustFollow || hasReleaseToSnap) {
+      assert.equal(item.reducedMotionPolicy, "keepDirectManipulation", `motion ${item.id} 含手势跟随规则，reducedMotionPolicy 应为 keepDirectManipulation`);
+    } else if (hasForceZero) {
+      assert.equal(item.reducedMotionPolicy, "zeroDuration", `motion ${item.id} 含 forceZeroDuration，reducedMotionPolicy 应为 zeroDuration`);
+    }
+  }
+});
+
+test("implementationKind 值在 schema enum 内", () => {
+  const allowed = new Set(motionSchema.properties.implementationKind.enum);
+  for (const item of motionFixtures) {
+    assert.ok(allowed.has(item.implementationKind), `motion ${item.id} implementationKind 不在 enum: ${item.implementationKind}`);
+  }
+});
+
+test("containerRole 值在 schema enum 内（若存在）", () => {
+  const allowed = new Set(motionSchema.properties.containerRole.enum);
+  for (const item of motionFixtures) {
+    if (item.containerRole !== undefined && item.containerRole !== null) {
+      assert.ok(allowed.has(item.containerRole), `motion ${item.id} containerRole 不在 enum: ${item.containerRole}`);
+    }
+  }
+});
+
+test("operation 值在 schema enum 内（若存在）", () => {
+  const allowed = new Set(motionSchema.properties.operation.enum);
+  for (const item of motionFixtures) {
+    if (item.operation !== undefined && item.operation !== null) {
+      assert.ok(allowed.has(item.operation), `motion ${item.id} operation 不在 enum: ${item.operation}`);
+    }
+  }
+});
+
+test("visualPattern 值在 schema enum 内（若存在）", () => {
+  const allowed = new Set(motionSchema.properties.visualPattern.enum);
+  for (const item of motionFixtures) {
+    if (item.visualPattern !== undefined && item.visualPattern !== null) {
+      assert.ok(allowed.has(item.visualPattern), `motion ${item.id} visualPattern 不在 enum: ${item.visualPattern}`);
+    }
+  }
+});
+
+test("directManipulation 类 implementationKind 对应 reducedMotionPolicy=keepDirectManipulation", () => {
+  for (const item of motionFixtures) {
+    if (item.implementationKind === "directManipulation") {
+      assert.equal(item.reducedMotionPolicy, "keepDirectManipulation", `motion ${item.id} 是 directManipulation，reducedMotionPolicy 应为 keepDirectManipulation`);
+    }
+  }
+});
