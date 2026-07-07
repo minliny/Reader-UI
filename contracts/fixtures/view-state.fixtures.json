@@ -234,6 +234,39 @@
     ]
   },
   {
+    "_comment": "Batch1: 阅读器搜索 overlay（quick-action variant，route-driven）",
+    "routeId": "reader-search-overlay-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderSearchPanel", "id": "search-panel", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Batch1: 阅读器内容替换 overlay（quick-action variant，route-driven）",
+    "routeId": "reader-replace-overlay-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderReplacePanel", "id": "replace-panel", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Batch1: 阅读器自动翻页 overlay（quick-action variant，route-driven）",
+    "routeId": "reader-auto-scroll-overlay-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderAutoScrollPanel", "id": "auto-scroll-panel", "props": {} }
+    ]
+  },
+  {
     "_comment": "Slice 3: 书架页 + book-action overlay",
     "routeId": "bookshelf",
     "pageState": "cover-mode",
