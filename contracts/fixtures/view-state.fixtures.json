@@ -19,22 +19,29 @@
   },
 
   {
-    "_comment": "Slice 1: 书架首页（封面模式）",
+    "_comment": "Slice 1: 书架首页（默认封面模式）",
     "routeId": "bookshelf",
-    "pageState": "cover-mode",
-    "context": { "tab": "bookshelf" },
+    "pageState": "default",
+    "context": { "tab": "bookshelf", "bookshelfViewMode": "cover-mode" },
     "components": [
       { "type": "AppTopBar", "id": "bookshelf-topbar", "props": { "title": "书架" } },
-      { "type": "ShelfChipGroup", "id": "shelf-chips", "props": { "selected": "all" } },
-      { "type": "ContinueReadingCard", "id": "continue-reading", "props": { "bookId": "bk-001", "title": "示例书" } },
-      { "type": "ShelfSectionHeader", "id": "shelf-header", "props": { "title": "我的书架" } },
+      { "type": "ContinueReadingCard", "id": "continue-reading", "props": { "bookId": "bk-001", "title": "三体", "author": "刘慈欣" } },
       {
-        "type": "BookCard",
-        "id": "book-1",
-        "props": { "bookId": "bk-001", "title": "示例书", "author": "示例作者" },
+        "type": "BookshelfShelfSection",
+        "id": "bookshelf-shelf-section",
+        "props": { "title": "我的书架", "viewMode": "cover" },
         "children": [
-          { "type": "BookCover", "props": {} },
-          { "type": "ProgressBar", "props": { "progress": 0.42 } }
+          { "type": "ShelfSectionHeader", "id": "shelf-header", "props": { "title": "我的书架", "viewMode": "cover" } },
+          {
+            "type": "BookGrid",
+            "id": "book-grid",
+            "props": { "viewMode": "cover" },
+            "children": [
+              { "type": "BookCard", "id": "book-1", "props": { "bookId": "bk-001", "title": "三体", "author": "刘慈欣" } },
+              { "type": "BookCard", "id": "book-2", "props": { "bookId": "bk-002", "title": "基地", "author": "阿西莫夫" } },
+              { "type": "BookCard", "id": "book-3", "props": { "bookId": "bk-003", "title": "球状闪电", "author": "刘慈欣" } }
+            ]
+          }
         ]
       },
       { "type": "BottomNav", "id": "bottom-nav", "props": { "selected": "bookshelf" } }
@@ -148,14 +155,7 @@
     "pageState": "default",
     "context": { "bookId": "bk-001", "chapterId": "ch-001" },
     "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
-      {
-        "type": "ReadingTextFlow",
-        "id": "reading-text",
-        "props": { "chapterTitle": "第一章", "paragraphs": [] }
-      },
-      { "type": "ReadingInfoLayer", "id": "reading-info", "props": {} },
-      { "type": "TapZones", "id": "tap-zones", "props": {} }
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } }
     ]
   },
   {
@@ -164,7 +164,7 @@
     "pageState": "loading",
     "context": { "bookId": "bk-001" },
     "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
       { "type": "Loading", "id": "reader-loading", "props": {} }
     ]
   },
@@ -174,72 +174,30 @@
     "pageState": "offline",
     "context": { "bookId": "bk-001" },
     "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
       { "type": "Offline", "id": "reader-offline", "props": { "message": "网络不可用" } }
     ]
   },
 
   {
-    "_comment": "Slice 3: 阅读器 + reader-control overlay",
-    "routeId": "reader",
+    "_comment": "Batch1: 阅读器控制层底座（route-driven；浮动控件待 step2 补）",
+    "routeId": "control-layer-base-v2",
     "pageState": "default",
-    "context": { "bookId": "bk-001", "overlay": "reader-control" },
+    "context": { "bookId": "bk-001" },
     "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": { "theme": "paper" } },
-      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
-      {
-        "type": "Overlay",
-        "id": "reader-control-overlay",
-        "props": { "overlayType": "reader-control" }
-      }
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} }
     ]
   },
   {
-    "_comment": "Slice 3: 阅读器 + directory overlay",
-    "routeId": "reader",
+    "_comment": "Batch1: 阅读器目录书签 overlay（route-driven，panel 从契约 body 渲染）",
+    "routeId": "reader-directory-overlay-v2",
     "pageState": "default",
-    "context": { "bookId": "bk-001", "overlay": "directory" },
+    "context": { "bookId": "bk-001" },
     "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": {} },
-      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
-      {
-        "type": "Overlay",
-        "id": "directory-overlay",
-        "props": { "overlayType": "directory" },
-        "children": [
-          { "type": "ListRow", "id": "directory-list", "props": {} }
-        ]
-      }
-    ]
-  },
-  {
-    "_comment": "Slice 3: 阅读器 + tts overlay",
-    "routeId": "reader",
-    "pageState": "default",
-    "context": { "bookId": "bk-001", "overlay": "tts", "session": "tts" },
-    "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": {} },
-      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
-      {
-        "type": "Overlay",
-        "id": "tts-overlay",
-        "props": { "overlayType": "tts" }
-      }
-    ]
-  },
-  {
-    "_comment": "Slice 3: 阅读器 + appearance overlay",
-    "routeId": "reader",
-    "pageState": "default",
-    "context": { "bookId": "bk-001", "overlay": "appearance" },
-    "components": [
-      { "type": "ReadingBackgroundLayer", "id": "reading-bg", "props": {} },
-      { "type": "ReadingTextFlow", "id": "reading-text", "props": {} },
-      {
-        "type": "Overlay",
-        "id": "appearance-overlay",
-        "props": { "overlayType": "appearance" }
-      }
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderDirectoryPanel", "id": "directory-panel", "props": {} }
     ]
   },
   {
