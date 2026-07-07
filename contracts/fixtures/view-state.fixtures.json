@@ -180,12 +180,14 @@
   },
 
   {
-    "_comment": "Batch1: 阅读器控制层底座（route-driven；浮动控件待 step2 补）",
+    "_comment": "Batch1: 阅读器控制层底座（route-driven，浮动 quick-actions + page-control + 底栏）",
     "routeId": "control-layer-base-v2",
     "pageState": "default",
     "context": { "bookId": "bk-001" },
     "components": [
       { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "FloatingQuickActions", "id": "floating-quick-actions", "props": {} },
+      { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
       { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} }
     ]
   },
@@ -240,6 +242,8 @@
     "context": { "bookId": "bk-001" },
     "components": [
       { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "FloatingQuickActions", "id": "floating-quick-actions", "props": {} },
+      { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
       { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
       { "type": "ReaderSearchPanel", "id": "search-panel", "props": {} }
     ]
@@ -251,6 +255,8 @@
     "context": { "bookId": "bk-001" },
     "components": [
       { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "FloatingQuickActions", "id": "floating-quick-actions", "props": {} },
+      { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
       { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
       { "type": "ReaderReplacePanel", "id": "replace-panel", "props": {} }
     ]
@@ -262,6 +268,8 @@
     "context": { "bookId": "bk-001" },
     "components": [
       { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "FloatingQuickActions", "id": "floating-quick-actions", "props": {} },
+      { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
       { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
       { "type": "ReaderAutoScrollPanel", "id": "auto-scroll-panel", "props": {} }
     ]
