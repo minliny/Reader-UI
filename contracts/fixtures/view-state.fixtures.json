@@ -186,6 +186,7 @@
     "context": { "bookId": "bk-001" },
     "components": [
       { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "FloatingBrightness", "id": "floating-brightness", "props": {} },
       { "type": "FloatingQuickActions", "id": "floating-quick-actions", "props": {} },
       { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
       { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} }
@@ -272,6 +273,20 @@
       { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
       { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
       { "type": "ReaderAutoScrollPanel", "id": "auto-scroll-panel", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Batch1: 阅读器夜间状态（themed base + 浮动控件 + 夜间 toast，无面板）",
+    "routeId": "reader-night-state-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "night" } },
+      { "type": "FloatingBrightness", "id": "floating-brightness", "props": {} },
+      { "type": "FloatingQuickActions", "id": "floating-quick-actions", "props": {} },
+      { "type": "FloatingPageControl", "id": "floating-page-control", "props": {} },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "NightToast", "id": "night-toast", "props": {} }
     ]
   },
   {
