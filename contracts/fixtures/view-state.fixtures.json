@@ -201,6 +201,39 @@
     ]
   },
   {
+    "_comment": "Batch1: 阅读器外观 overlay（route-driven）",
+    "routeId": "reader-appearance-overlay-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderAppearancePanel", "id": "appearance-panel", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Batch1: 阅读器朗读 overlay（route-driven）",
+    "routeId": "reader-tts-overlay-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderTtsPanel", "id": "tts-panel", "props": {} }
+    ]
+  },
+  {
+    "_comment": "Batch1: 阅读器设置 overlay（route-driven）",
+    "routeId": "reader-settings-overlay-v2",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "ReaderBase", "id": "reader-base", "props": { "theme": "paper" } },
+      { "type": "ReaderBottomBar", "id": "reader-bottom-bar", "props": {} },
+      { "type": "ReaderSettingsPanel", "id": "settings-panel", "props": {} }
+    ]
+  },
+  {
     "_comment": "Slice 3: 书架页 + book-action overlay",
     "routeId": "bookshelf",
     "pageState": "cover-mode",
