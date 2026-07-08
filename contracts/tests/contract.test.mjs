@@ -234,15 +234,23 @@ test("normalized 状态页文案与 handoff HTML 对齐", () => {
   }
 });
 
-test("rss-subscription-management 含 4 个订阅源行", () => {
-  const entry = viewFixtures.find((item) => item.routeId === "rss-subscription-management" && item.pageState === "default");
-  assert.ok(entry, "rss-subscription-management/default fixture 应存在");
-  const section = entry.components.find((item) => item.type === "SettingsSection");
-  assert.ok(section, "rss-subscription-management 应包含 SettingsSection");
-  assert.deepEqual(
-    section.children.map((item) => item.id),
-    ["sub-1", "sub-2", "sub-3", "sub-4"]
-  );
+test("normalized 设置/表单类页面使用页面级组件，避免退回通用拼装", () => {
+  const expected = new Map([
+    ["bookshelf-book-more-menu/default", ["AppTopBar", "BookMoreMenuPage", "BottomNav"]],
+    ["bookshelf-group-management/default", ["BackTopBar", "BookGroupManagementPage"]],
+    ["rss-subscription-management/default", ["BackTopBar", "RssSubscriptionManagementPage"]],
+    ["source-add/default", ["BackTopBar", "SourceFormPage"]],
+    ["source-edit/default", ["BackTopBar", "SourceFormPage"]],
+    ["global-settings/default", ["BackTopBar", "GlobalSettingsPage"]],
+    ["backup-settings/default", ["BackTopBar", "BackupSettingsPage"]],
+  ]);
+
+  for (const [key, types] of expected.entries()) {
+    const [routeId, pageState] = key.split("/");
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === pageState);
+    assert.ok(entry, `${key} fixture 应存在`);
+    assert.deepEqual(entry.components.map((item) => item.type), types, `${key} 应使用页面级组件`);
+  }
 });
 
 test("motion.fixtures 中 id 全部在 motion schema enum 中", () => {

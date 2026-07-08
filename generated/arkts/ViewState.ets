@@ -115,7 +115,13 @@ export type ComponentType =
   | "PermissionRequiredPage"
   | "AboutVersionPage"
   | "LocalBookImportPage"
-  | "ReadingSettingsEntryPage";
+  | "ReadingSettingsEntryPage"
+  | "BookMoreMenuPage"
+  | "BookGroupManagementPage"
+  | "SourceFormPage"
+  | "GlobalSettingsPage"
+  | "BackupSettingsPage"
+  | "RssSubscriptionManagementPage";
 
 export interface ViewStateComponent {
   type: ComponentType;

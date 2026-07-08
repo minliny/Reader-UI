@@ -180,7 +180,13 @@
             "PermissionRequiredPage",
             "AboutVersionPage",
             "LocalBookImportPage",
-            "ReadingSettingsEntryPage"
+            "ReadingSettingsEntryPage",
+            "BookMoreMenuPage",
+            "BookGroupManagementPage",
+            "SourceFormPage",
+            "GlobalSettingsPage",
+            "BackupSettingsPage",
+            "RssSubscriptionManagementPage"
           ],
           "description": "组件类型。来源：各页 02-组件规格稿.md。"
         },

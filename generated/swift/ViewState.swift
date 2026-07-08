@@ -118,6 +118,12 @@ public enum ComponentType: String, Codable, CaseIterable, Sendable {
     case aboutVersionPage = "AboutVersionPage"
     case localBookImportPage = "LocalBookImportPage"
     case readingSettingsEntryPage = "ReadingSettingsEntryPage"
+    case bookMoreMenuPage = "BookMoreMenuPage"
+    case bookGroupManagementPage = "BookGroupManagementPage"
+    case sourceFormPage = "SourceFormPage"
+    case globalSettingsPage = "GlobalSettingsPage"
+    case backupSettingsPage = "BackupSettingsPage"
+    case rssSubscriptionManagementPage = "RssSubscriptionManagementPage"
 }
 
 public struct ViewStateComponent: Codable, Equatable, Sendable {

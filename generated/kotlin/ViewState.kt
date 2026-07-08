@@ -237,7 +237,19 @@ enum class ComponentType {
     @SerialName("LocalBookImportPage")
     LocalBookImportPage,
     @SerialName("ReadingSettingsEntryPage")
-    ReadingSettingsEntryPage
+    ReadingSettingsEntryPage,
+    @SerialName("BookMoreMenuPage")
+    BookMoreMenuPage,
+    @SerialName("BookGroupManagementPage")
+    BookGroupManagementPage,
+    @SerialName("SourceFormPage")
+    SourceFormPage,
+    @SerialName("GlobalSettingsPage")
+    GlobalSettingsPage,
+    @SerialName("BackupSettingsPage")
+    BackupSettingsPage,
+    @SerialName("RssSubscriptionManagementPage")
+    RssSubscriptionManagementPage
 }
 
 @Serializable
