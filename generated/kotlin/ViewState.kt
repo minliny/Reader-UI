@@ -302,6 +302,12 @@ enum class ComponentType {
     BookMoreMenuPage,
     @SerialName("BookGroupManagementPage")
     BookGroupManagementPage,
+    @SerialName("GroupManagementPage")
+    GroupManagementPage,
+    @SerialName("BookBatchManagementPage")
+    BookBatchManagementPage,
+    @SerialName("BookDirectoryPage")
+    BookDirectoryPage,
     @SerialName("SourceFormPage")
     SourceFormPage,
     @SerialName("GlobalSettingsPage")
