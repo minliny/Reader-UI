@@ -441,22 +441,10 @@
   font-size: 17px;
 }
 
-.fd-component-rules span,
-.fd-handoff-notes li {
+.fd-component-rules span {
   color: var(--fd-muted);
   font-size: 14px;
   line-height: 1.55;
-}
-
-.fd-handoff-notes {
-  padding: 20px;
-}
-
-.fd-handoff-notes ul {
-  display: grid;
-  gap: 9px;
-  margin: 0;
-  padding-left: 20px;
 }
 
 .fd-source-strip {

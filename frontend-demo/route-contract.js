@@ -280,12 +280,6 @@
         "discover-source-login": ["discovery-home-state-matrix"],
         "discover-rule-test": ["discovery-home-state-matrix"],
         "discover-source-bulk": ["discovery-home-state-matrix"]
-      },
-      handoffPages: [
-        "discover-home.html"
-      ],
-      handoffRouteMap: {
-        "discover-home.html": "discover"
       }
     },
     rss: {
@@ -338,14 +332,6 @@
         "rss-favorite-clear": ["rss-home-state-matrix"],
         "rss-empty": ["rss-home-state-matrix"],
         "rss-error": ["rss-home-state-matrix"]
-      },
-      handoffPages: ["rss-list.html", "rss-detail.html", "rss-subscription-management.html", "rss-empty.html", "rss-error.html"],
-      handoffRouteMap: {
-        "rss-list.html": "rss",
-        "rss-detail.html": "rss-detail",
-        "rss-subscription-management.html": "rss-subscription-management",
-        "rss-empty.html": "rss-empty",
-        "rss-error.html": "rss-error"
       }
     },
     settings: {
@@ -381,38 +367,6 @@
         "sync-backup": ["sync-backup-preview", "sync-backup-state-matrix"],
         "webdav-config": ["sync-backup-state-matrix"],
         "source-management": ["source-management-preview", "source-management-state-matrix"]
-      },
-      handoffPages: [
-        "global-settings.html",
-        "backup-settings.html",
-        "sync-settings-entry.html",
-        "webdav-config.html",
-        "source-settings-entry.html",
-        "source-management-list.html",
-        "source-add.html",
-        "source-import.html",
-        "source-detail.html",
-        "source-edit.html",
-        "source-test-result.html",
-        "source-disabled-error.html",
-        "reading-settings-entry.html",
-        "about-version.html"
-      ],
-      handoffRouteMap: {
-        "global-settings.html": "settings",
-        "backup-settings.html": "sync-backup",
-        "sync-settings-entry.html": "sync-backup",
-        "webdav-config.html": "webdav-config",
-        "source-settings-entry.html": "source-management",
-        "source-management-list.html": "source-management",
-        "source-add.html": "source-import-options",
-        "source-import.html": "source-import-preview",
-        "source-detail.html": "source-detail",
-        "source-edit.html": "source-rule-edit",
-        "source-test-result.html": "source-detect",
-        "source-disabled-error.html": "source-management",
-        "reading-settings-entry.html": "reader-settings",
-        "about-version.html": "about-feedback"
       }
     }
   };

@@ -4,7 +4,7 @@
 
 范围：基于当前 `frontend-demo/` 的 `render-runtime.js`、样式层和四份动效规划文档，判断各类交互组件是否已经被统一动效体系纳管。
 
-结论：通用交互组件已经进入第一版实现纳管，但还没有达到完整交付级纳管。当前 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md`、`MOTION_PLATFORM_MAPPING.md` 和 `MOTION_SELECTOR_MATRIX.md` 已补 button、toggle、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 等 Motion ID、效果、平台映射和 148 个 `data-*` selector 总表；demo 已落 `motion-tokens.css`、reduced-motion 测试开关、基础 `data-motion-id`、pressed state、`data-motion-component-*` normalized adapter 和第一版 `motion.interrupt.*` adapter。仍缺组件族专属深度状态机、async pending / focus restore、打断规则深化和录屏/截图证据。
+结论：通用交互组件已经进入第一版实现纳管，但还没有达到完整交付级纳管。当前 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md`、`MOTION_SELECTOR_MATRIX.md` 和 contract motion fixtures 已补 button、toggle、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 等 Motion ID、效果、平台映射和 148 个 `data-*` selector 总表；demo 已落 `motion-tokens.css`、reduced-motion 测试开关、基础 `data-motion-id`、pressed state、`data-motion-component-*` normalized adapter 和第一版 `motion.interrupt.*` adapter。仍缺组件族专属深度状态机、async pending / focus restore、打断规则深化和录屏/截图证据。
 
 ## 1. 审计口径
 

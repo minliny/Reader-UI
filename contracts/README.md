@@ -1,7 +1,7 @@
 # Reader UI Contracts
 
-本目录是 Reader 多端 UI 契约源入口，用于把现有 `frontend-demo/`、handoff 文档、
-route/motion/token/state 资料逐步升级为机器可读契约。
+本目录是 Reader 多端 UI 契约源入口，用于把现有 `frontend-demo/`
+route/motion/token/state 资料升级为机器可读契约。
 
 当前阶段的目标不是实现统一 UI runtime，也不是让三端复用 Web/CSS/DOM，而是支撑
 Contract-first Native UI Architecture：

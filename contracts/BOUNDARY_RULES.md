@@ -61,7 +61,6 @@ Reader-Core
 - 新增 / 修改 `tools/codegen/` 下的生成器。
 - 新增 / 修改 `generated/` 下的生成产物。
 - 维护 `frontend-demo/` 作为 route / motion / state / token 的语义参考与运行演示。
-- 维护 `docs/ui-design/` 页面包、规范、审计。
 
 禁止：
 
@@ -86,8 +85,8 @@ Reader-Core
 - contract 不允许出现 demo 中从未使用的虚构 id。
 - demo 大文件（`render.js` / `styles.css`）的拆分不阻塞 contract 推进，但拆分结果必须保持 route / motion / state 集合不变。
 
-## 7. 历史归档边界
+## 7. 历史源边界
 
-- `docs/ui-design/91-历史归档/` 内的图、规格、Stitch 草案只能作为参考，不能作为当前 source。
-- 历史归档的 route / motion / state 不得反向覆盖当前 contract。
+- 旧文档页面包、设计导出、Stitch 草案和截图基线已从本仓移除，不能作为当前 source。
+- 历史 route / motion / state 不得反向覆盖当前 `frontend-demo/` 和 contract fixtures。
 - 旧 `Reader-Core` 的 Swift 实现只用于行为对照，不进入当前 schema。

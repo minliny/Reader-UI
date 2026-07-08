@@ -41,7 +41,7 @@ node --test contracts/tests/*.test.mjs
 | RUI-02 | MotionId 归一化 | 已建立首批 alias 表：`reader.session.capsule.control.press/toggle` -> `reader.session.capsule.control.press-toggle`、`reader.page.turn.next/prev` -> `reader.page.turn.next-prev`、`tab.item.switch` -> `tab.switch`；demo 中仍有历史/内部 motion id 例外 | schema、demo runtime、fixtures、generated 使用同一 canonical MotionId；旧 id 只通过 deprecated alias 表存在 |
 | RUI-03 | 全量 MotionSpec registry + MotionPolicy resolver | 合同侧已完成：Swift/Kotlin/ArkTS 生成文件内已有 `MotionSpecRegistry` / `motionSpecRegistry`，覆盖 84/84 canonical MotionId fixtures，包含 id、duration/easing token refs、guardRules、6 个结构化字段与 reduced-motion 策略；新增 `MotionPolicy.*`，包含 28 条 policy、`RouteShellLookup`、`MotionPolicyRegistry` 与 `ReaderMotionResolver` / `resolveMotion` 纯函数；`motion-guard.test.mjs` / `motion-policy.test.mjs` / `motion-resolver.test.mjs` 强制 schema/fixture/resolver 约束 | 平台仓继续实现 MotionAdapter 编译接入、reduced-motion 映射、native animation proof、navigator/back stack 集成和 device evidence |
 | RUI-04 | TokenRegistry value codegen | registry 起点已完成：Swift/Kotlin/ArkTS 生成文件内已有 `TokenRegistry` / `tokenRegistry`，覆盖当前 117 条 token fixtures 的 name/category/value/platforms/deprecated；平台 TokenAdapter 实现仍归三端仓库 | 生成 Swift/Kotlin/ArkTS token value registry；三端 TokenAdapter 可直接消费或映射 |
-| RUI-05 | handoff readiness 8/8 | 已闭合：verifier 明确允许 contract-only `Package.swift`，同时继续拒绝真实生产入口 | `verify-ui-handoff-readiness.mjs` 8/8 |
+| RUI-05 | contract release gate | 当前以 codegen、contract tests、drift check 和 motion coverage 作为本仓可执行门禁；旧设计导出门禁已移除 | `node tools/codegen/generate.mjs` + `npm test --prefix contracts/tests` + `node tools/codegen/check-drift.mjs` + `node frontend-demo/verify/motion/verify-motion-coverage.mjs` |
 
 这些任务完成后，Reader UI 才能从“P0 可控开发参考”升级到“强门禁 contract release source”。
 

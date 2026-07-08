@@ -3,7 +3,7 @@
 状态：Phase 1 P0 可执行参考规格
 日期：2026-07-04
 权威源：[route.schema.json](./route.schema.json)、[view-state.schema.json](./view-state.schema.json)、[ui-state.schema.json](./ui-state.schema.json)、[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md)
-来源：[docs/ui-design/](../docs/ui-design/) 各页 01-页面结构稿 / 02-组件规格稿 / 03-交互规则稿 / 04-状态规则稿、[frontend-demo/route-contract.js](../frontend-demo/route-contract.js)
+来源：[frontend-demo/route-contract.js](../frontend-demo/route-contract.js)、[frontend-demo/render-runtime.js](../frontend-demo/render-runtime.js)、[view-state.fixtures.json](./fixtures/view-state.fixtures.json)
 
 本文是 P0 阶段"页面级实现参考"。覆盖 Slice 1-6 优先链路的关键 route，给三端 reducer / Native UI 实现提供单一参考。全量 route × component 矩阵见 [ROUTE_COMPONENT_MATRIX.md](./ROUTE_COMPONENT_MATRIX.md)。
 
@@ -87,14 +87,16 @@ overlay：tab 切换时若 `loading=true` 且 `async guard` 命中，屏蔽切�
 ```
 BookshelfRoot
   ├─ AppTopBar（标题 + 搜索入口 + 排序入口）
-  ├─ ShelfChipGroup（分组 chip）
-  ├─ ContinueReadingCard / RecentUpdateCard（条件渲染）
-  └─ BookGrid / BookList（按 view mode）
+  ├─ ContinueReadingCard
+  └─ BookshelfShelfSection
+      ├─ ShelfSectionHeader（标题 + grid/list/filter/settings 操作）
+      ├─ ShelfFilterPopover（仅 filter 展开时）
+      └─ BookGrid / BookList（按 view mode）
   └─ BottomNav
 ```
 
 组件树（ComponentType）：
-- `AppTopBar`、`SearchEntry`、`ShelfChipGroup`、`ContinueReadingCard`、`RecentUpdateCard`、`ShelfSectionHeader`、`BookCard` / `BookListItem`、`BottomNav`
+- `AppTopBar`、`SearchEntry`、`ContinueReadingCard`、`BookshelfShelfSection`、`ShelfSectionHeader`、`ShelfFilterPopover`、`BookCard` / `BookListItem`、`BottomNav`
 
 状态集合：
 | 状态 | 归属 | 来源 |
@@ -497,34 +499,14 @@ async guard：`restore.loading` 时禁止 `route.push`（state-rule fixtures syn
 - 焦点丢失：`input.blur` 或系统返回必须关闭键盘。
 - async guard：键盘弹出期间禁止 `route.push`（避免键盘 inset 与新页面冲突）。
 
-## 11. 与现有页面包的对应
+## 11. 当前 demo 对应
 
-P0 route 对应的 `docs/ui-design/` 页面包：
+旧页面包、设计导出和 Stitch 草案已从仓库移除，不再作为当前 source。P0 route 的结构对应以 `frontend-demo/route-contract.js` 的 RouteId、`frontend-demo/render-runtime.js` 的实时 renderer、以及 `contracts/fixtures/view-state.fixtures.json` 的组件树为准。
 
-| Shell | 页面包目录 |
-| --- | --- |
-| MainTabShell - bookshelf | `docs/ui-design/02-主标签页/书架/` |
-| MainTabShell - discover | `docs/ui-design/02-主标签页/发现/` |
-| MainTabShell - rss | `docs/ui-design/02-主标签页/RSS/` |
-| MainTabShell - settings | `docs/ui-design/02-主标签页/设置/` |
-| LibraryShell - bookshelf-empty | `docs/ui-design/03-书架链路/书架空状态/` |
-| LibraryShell - book-search | `docs/ui-design/03-书架链路/书籍搜索/` |
-| LibraryShell - book-detail | `docs/ui-design/03-书架链路/书籍详情/` |
-| LibraryShell - book-directory | `docs/ui-design/03-书架链路/书籍目录/` |
-| LibraryShell - local-import | `docs/ui-design/03-书架链路/本地书导入/` |
-| LibraryShell - sort-filter | `docs/ui-design/03-书架链路/排序与筛选/` |
-| LibraryShell - group-management | `docs/ui-design/03-书架链路/分组管理/` |
-| LibraryShell - 书籍操作底表 | `docs/ui-design/03-书架链路/书籍操作底表/` |
-| ReaderShell - 沉浸阅读 | `docs/ui-design/04-阅读链路/沉浸阅读/` |
-| ReaderShell - 朗读 | `docs/ui-design/04-阅读链路/朗读/` |
-| ReaderShell - 内容搜索 | `docs/ui-design/04-阅读链路/内容搜索/` |
-| ReaderShell - 内容替换 | `docs/ui-design/04-阅读链路/内容替换/` |
-| ReaderShell - 换源 | `docs/ui-design/04-阅读链路/换源/` |
-
-页面包内文件命名规范：`00-说明.md` / `01-页面结构稿.md` / `02-组件规格稿.md` / `03-交互规则稿.md` / `04-状态规则稿.md` / `05-文案稿.md` / `06-禁止项.md` / `08-*视觉规格.md` / `09-资产与验收清单.md` / `10-正式UI设计稿.md`。
+平台迁移时不得从已删除的旧页面包补结构；如果 demo 与 fixtures 不一致，先修本仓 contract fixture / codegen，再让平台仓库消费生成产物。
 
 ## 12. 缺口与下一步
 
 P0 阶段已覆盖 Slice 1-6 关键 route 的页面参考。剩余缺口：
 - 部分 RouteId（如 `reader-full-*` 全屏设置页、`source-debug-*` 调试链路、`rss-source-*` RSS 源管理细分）未在本文展开，归入阶段 2 [ROUTE_COMPONENT_MATRIX.md](./ROUTE_COMPONENT_MATRIX.md)。
-- demo baseline 中 111 个 unknown id 的产品决策（是否补入 schema、归一化或列为 deprecated/alias 例外）不阻塞本文。
+- demo / fixtures 中出现的 unknown id 必须在 contract test 中显式失败或登记为 deprecated / alias 例外，不再依赖旧页面包解释。

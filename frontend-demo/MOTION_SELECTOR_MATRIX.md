@@ -122,7 +122,7 @@
 | 105 | `[data-restore-scopes]` | `state.content.replace` | restore flow | Backup metadata | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 106 | `[data-route]` | `app.route.push` | all route entries | NavigationLink / NavController / Router | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 107 | `[data-route-back]` | `app.route.pop` | back buttons / settings confirm | Back navigation | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
-| 108 | `[data-route-replace]` | `app.route.push` | source-switch / reader handoff | Replace navigation / state handoff | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
+| 108 | `[data-route-replace]` | `app.route.push` | source-switch / reader transition | Replace navigation / state transfer | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 109 | `[data-route-stack]` | `app.route.push/pop` | 开发者模式 / route panel | Navigation state / debug inspector | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 110 | `[data-screen-host]` | `state.content.replace` | route screen host | Semantic slot / page host | 待补 `frontend-demo/verify/motion/selector-matrix/*` |
 | 111 | `[data-search-reset]` | `input.clear` | book search | Search field / result state | 待补 `frontend-demo/verify/motion/selector-matrix/*` |

@@ -3,7 +3,7 @@
 状态：Phase 1 P0 可执行参考规格
 日期：2026-07-04
 权威源：[token.schema.json](./token.schema.json)、[token.fixtures.json](./fixtures/token.fixtures.json)
-来源：[frontend-demo/tokens.css](../frontend-demo/tokens.css)、[frontend-demo/motion-tokens.css](../frontend-demo/motion-tokens.css)、[docs/ui-design/01-全局规范/](../docs/ui-design/01-全局规范/)、各页 `08-*视觉规格.md`
+来源：[frontend-demo/tokens.css](../frontend-demo/tokens.css)、[frontend-demo/motion-tokens.css](../frontend-demo/motion-tokens.css)、[token.fixtures.json](./fixtures/token.fixtures.json)
 
 本文是 P0 阶段"Token 和视觉规范"。定义语义 token 分组、三端 TokenAdapter 映射规则、raw 值检查口径。Token 数值以 [token.fixtures.json](./fixtures/token.fixtures.json) 为唯一源；本文不重复数值，只定义分组、映射、检查规则。
 

@@ -182,7 +182,7 @@
 | `selection.toolbar.exit` | 取消选择、切 route、打开控制层 | toolbar 和选区退出，释放 pointer/focus。 |
 | `listRow.press` | 可点击列表行 pointer down / touch down | 当前 row pressed；不改变列表行高度、分隔线或滚动位置。 |
 | `listRow.select` | 选择型列表行选中/取消 | 选中背景、check、badge 或主文案状态同步更新。 |
-| `listRow.route` | 导航型列表行进入详情 | row pressed 后执行 `app.route.push` 或对应业务 handoff。 |
+| `listRow.route` | 导航型列表行进入详情 | row pressed 后执行 `app.route.push` 或对应业务 route transition。 |
 | `card.press` | 书籍卡片、RSS 卡片、备份卡片、结果卡片按下 | 当前卡片局部 pressed；封面/内容不重排。 |
 | `card.select` | 卡片进入选中、批量选择或聚焦状态 | 选中层、check、阴影或 focus ring 短更新。 |
 | `card.route` | 卡片进入详情或阅读 | 卡片 pressed 后进入 route；书籍封面阅读入口优先使用 `reader.entry.coverToImmersive`。 |
@@ -200,7 +200,7 @@
 | `overlay.dialog.enter` | `[data-open-dialog]` -> `.has-dialog` | 背景淡入，弹窗在中心 scale/fade 进入；层级必须高于底表。 |
 | `overlay.dialog.exit` | `[data-close-dialog]` | 弹窗 scale/fade 退出，再清理背景。 |
 | `reader.entry.coverToImmersive` | `[data-book-cover][data-route="immersive-reading"]` | 封面提供按压和上下文过渡，然后进入 `immersive-reading`；默认不显示阅读控制层，返回栈保留来源页。 |
-| `reader.entry.actionToImmersive` | 继续阅读/章节/详情页阅读按钮 -> `immersive-reading` | 无封面 shared element 时使用轻量 route handoff；进入后仍是沉浸阅读态。 |
+| `reader.entry.actionToImmersive` | 继续阅读/章节/详情页阅读按钮 -> `immersive-reading` | 无封面 shared element 时使用轻量 route transition；进入后仍是沉浸阅读态。 |
 | `reader.control.show` | `immersive-reading` -> `reader` | 阅读控制层覆盖在同一个阅读正文层之上；正文层不能重排、变暗或改变透明度。 |
 | `reader.control.hide` | `[data-reader-dismiss]` -> `immersive-reading` | 控制层离开，正文阅读面保持连续。 |
 | `reader.control.handle.press` | `.fd-reader-grabber` / `.fd-reader-full-grabber` 按下 | 小横条提供轻量 pressed 反馈，点击热区不变化，不触发正文动画。 |
@@ -357,9 +357,9 @@
 - 整屏旋转覆盖 portrait -> landscape、landscape -> portrait、compact-landscape -> portrait、tablet-expanded resize；并验证控制层、运行胶囊、控制层上方胶囊锚点、overlay、focus 和宽屏 dock offset 都映射到合法位置。
 - 平台应用为阅读翻页、控制层显隐、模块切换、底表、弹窗、键盘和换源窗口提供 native motion 测试或 golden/人工复核证据。
 
-平台 handoff 输出必须是任务边界和验收清单，而不是 Web CSS 复用说明。任何 `data-motion-*`、`data-* selector`、CSS variable 或 demo query 参数只用于 demo 内部取证和调试；平台实现只能映射其背后的 Motion ID、state fields、token 语义和验收结果。
+平台输出必须是任务边界和验收清单，而不是 Web CSS 复用说明。任何 `data-motion-*`、`data-* selector`、CSS variable 或 demo query 参数只用于 demo 内部取证和调试；平台实现只能映射其背后的 Motion ID、state fields、token 语义和验收结果。
 
-高风险链路的最终交付边界见 `docs/ui-handoff/MOTION_PLATFORM_MAPPING.md` 的“高风险链路收束表”：该表逐项区分 Contract 层共享内容、Demo proof 保留范围、Platform implementation 必须完成的 native 证据，以及当前不能声称完成的事项。
+高风险链路的最终交付边界由本文件、`MOTION_EFFECTS.md`、`MOTION_SELECTOR_MATRIX.md` 和 `contracts/fixtures/motion.fixtures.json` 共同定义：必须逐项区分 Contract 层共享内容、Demo proof 保留范围、Platform implementation 必须完成的 native 证据，以及当前不能声称完成的事项。
 
 ## 10. 未决项
 
@@ -379,7 +379,7 @@
 - 打断动画已接入第一版 demo adapter：`motion.interrupt.cancel/redirect/completeThenReplace` 会在 route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始、pointer cancel 和连续下拉 A->B 时写入对应 interrupt / dropdown switch 状态，并清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态；reader loading 异步结果已接入 `data-motion-async-*` requestId / pending / completed / cancelled / discarded 防覆盖状态；Tab switch redirect 已有代表截图，overlay/focus 状态字段也已有第一版 adapter，连续 overlay 打断和录屏证据仍缺。
 - 折叠屏展开/折叠目前按 viewport 断点规划，仍需要真实设备或模拟器验证 hinge、半开态和窗口尺寸变化。
 - 整屏旋转已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；demo 会在方向或 viewport class 改变时写入 root / screen host `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 reshape/anchor settle。真实设备、折叠屏 hinge/pane、正文字符锚点重分页、overlay/focus 恢复自动化和录屏证据仍缺。
-- 当前 `docs/ui-handoff/compose/COMPOSE_INTERACTION_CONTRACTS.md` 只定义事件和状态变化，还没有定义 motion；首轮验证后应引用本契约。
+- 平台侧交互契约必须引用本目录 Motion ID、state fields、token 和 reduced-motion 规则，不能引用已删除的旧设计文档。
 
 ## 11. 建议下一轮 Slice
 

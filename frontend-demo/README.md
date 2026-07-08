@@ -47,7 +47,7 @@
 
 ## 动效规划（Motion Planning）
 
-当前 demo 的动效规划由六份文档组成：`MOTION_CONTRACT.md` 定义跨端共享的 motion token、状态迁移和验收边界；`MOTION_EFFECTS.md` 描述每个场景的实际动画效果、方向、时序和禁用项；`MOTION_SELECTOR_MATRIX.md` 映射 148 个唯一 `data-*` 入口到 Motion ID、demo route、平台组件和证据位置；`MOTION_INTERACTION_COMPONENT_AUDIT.md` 审计当前交互组件族是否被统一 Motion ID 纳管；`MOTION_IMPLEMENTATION_GAP_AUDIT.md` 追踪从规划稿到可执行规格之间的缺口；`../docs/ui-handoff/MOTION_PLATFORM_MAPPING.md` 说明平台应用如何用原生 SwiftUI / Compose / ArkUI 实现，不直接复用 Web CSS 或 DOM 行为。
+当前 demo 的动效规划由本目录内文档和 contract fixtures 组成：`MOTION_CONTRACT.md` 定义跨端共享的 motion token、状态迁移和验收边界；`MOTION_EFFECTS.md` 描述每个场景的实际动画效果、方向、时序和禁用项；`MOTION_SELECTOR_MATRIX.md` 映射 148 个唯一 `data-*` 入口到 Motion ID、demo route、平台组件和证据位置；`MOTION_INTERACTION_COMPONENT_AUDIT.md` 审计当前交互组件族是否被统一 Motion ID 纳管；`MOTION_IMPLEMENTATION_GAP_AUDIT.md` 追踪从规划稿到可执行规格之间的缺口。平台应用用原生 SwiftUI / Compose / ArkUI 实现，不直接复用 Web CSS 或 DOM 行为。
 
 执行入口是 `motion-controller.js` 暴露的 `ReaderMotionController.CONTRACT`。它把 Motion ID 解析到 family、token、state fields、state machine、平台组件和证据规则；`verify/motion/verify-motion-coverage.mjs` 会检查当前 renderer 绑定的 Motion ID 是否都能被这份 registry 解析，并校验关键 Motion ID 是否有精确 `from/to/interrupt/finalState/reducedMotion` 状态机。平台实现不得照抄 CSS，而应复用同一 Motion ID、state fields、state machine、token 和证据要求，再映射到 Compose / SwiftUI / ArkUI 的原生状态与动画 API。
 
@@ -68,13 +68,16 @@
 
 ## 后续动作（Next Actions）
 
-1. 平台开发启动前先读 `../docs/ui-handoff/FRONTEND_DEVELOPMENT_READINESS.md`、`../docs/ui-handoff/FRONTEND_DEVELOPMENT_SLICE_MATRIX.md` 和 `../docs/ui-handoff/UI_PLATFORM_EVIDENCE_REQUESTS.md`。
+1. 平台开发启动前先读本目录 demo 结构和 `../contracts/` schema / fixtures；旧设计导出已删除，不再作为输入。
 2. 继续把 `render-runtime.js` 内部页面模板按 `main-tabs / library / reader / settings / source-management` 做组件级拆分；这只改善 demo 维护性，不代表平台实现。
 3. 把 demo 中已验证的返回、键盘、底表和弹窗规则迁移到真实平台导航和状态层；平台必须提供 native evidence。
 4. 按 `MOTION_SELECTOR_MATRIX.md` 录制 motion 证据，并继续深化 TAB、dropdown、Reader entry、控制层和运行胶囊状态机。
 
-UI handoff readiness 可运行：
+当前可运行门禁：
 
 ```bash
-node frontend-demo/verify/handoff/verify-ui-handoff-readiness.mjs
+node tools/codegen/generate.mjs
+npm test --prefix contracts/tests
+node tools/codegen/check-drift.mjs
+node frontend-demo/verify/motion/verify-motion-coverage.mjs
 ```

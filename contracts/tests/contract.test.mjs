@@ -204,23 +204,25 @@ test("book-detail view-state 使用详情页复合结构", () => {
   );
 });
 
-test("control-layer-base-v2 对齐 normalized HTML 的浮动控制结构", () => {
+test("control-layer-base-v2 对齐 frontend-demo live 控制层结构", () => {
   const control = viewFixtures.find((item) => item.routeId === "control-layer-base-v2" && item.pageState === "default");
   assert.ok(control, "control-layer-base-v2/default fixture 应存在");
 
   assert.deepEqual(
     control.components.map((component) => component.type),
-    ["ReaderBase", "FloatingBrightness", "FloatingQuickActions", "FloatingPageControl", "ReaderBottomBar"]
+    ["ReaderBase", "ReaderControlSheet", "ReaderBottomBar"]
   );
 
-  assert.equal(
-    control.components.some((component) => component.type === "ReaderControlSheet"),
-    false,
-    "control-layer-base-v2 不应回退到过期 bottom sheet 结构"
-  );
+  for (const staleType of ["FloatingBrightness", "FloatingQuickActions", "FloatingPageControl"]) {
+    assert.equal(
+      control.components.some((component) => component.type === staleType),
+      false,
+      `control-layer-base-v2 不应回退到旧浮动控制结构：${staleType}`
+    );
+  }
 });
 
-test("normalized 状态页文案与 handoff HTML 对齐", () => {
+test("状态页文案与 frontend-demo contract fixture 对齐", () => {
   const cases = [
     ["bookshelf-empty", "shelf-empty", "BookshelfEmptyPage", { title: "书架还是空的", message: "导入本地书籍或通过搜索加入书架。" }],
     ["rss-detail", "default", "RssDetailPage", { title: "深空信号更新" }],

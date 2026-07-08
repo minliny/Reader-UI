@@ -21,7 +21,7 @@
 
 ## 本地预览（Local Preview）
 
-入口（Entry）：`docs/ui-design/frontend-input/shared-shell-kit/preview.html`
+入口（Entry）：`frontend-demo/shared-shell-kit/preview.html`
 
 Manifest 目标（Manifest Target）：`shared-shell-kit`
 

@@ -7783,7 +7783,7 @@
       ["RouteId", route],
       ["Shell", shell],
       ["Source", "frontend-demo/route-contract.js"],
-      ["Boundary", "静态 demo/handoff，不替代平台设备证据"]
+      ["Boundary", "静态 demo/contract，不替代平台设备证据"]
     ];
     return `
       <section class="fd-search-state fd-contract-static-state" data-contract-static-route="${esc(route)}" aria-label="${esc(title)}">

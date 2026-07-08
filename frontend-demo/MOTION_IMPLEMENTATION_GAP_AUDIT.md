@@ -14,14 +14,14 @@
 
 ## UI / Platform Ownership Split
 
-当前 UI 侧已补齐真实前端开发启动前的 handoff 包：
+当前 UI 侧开发输入收束为 `frontend-demo/` 与 `contracts/`：
 
-- `../docs/ui-handoff/FRONTEND_DEVELOPMENT_READINESS.md`：UI 侧 start gate、Design / Contract ready、Demo proof ready、Platform implementation missing 的分层结论。
-- `../docs/ui-handoff/FRONTEND_DEVELOPMENT_SLICE_MATRIX.md`：建议平台先做的 bounded vertical slices。
-- `../docs/ui-handoff/UI_PLATFORM_EVIDENCE_REQUESTS.md`：平台完成后必须回传的 native build、navigation、gesture、fold、accessibility 和 performance 证据。
-- `verify/handoff/verify-ui-handoff-readiness.mjs`：检查 UI handoff 文件、200 route contract、motion coverage、代表证据和项目角色边界。
+- `frontend-demo/route-contract.js`、`frontend-demo/render-runtime.js` 和 `frontend-demo/styles/`：当前 demo 的结构、交互和视觉语义。
+- `contracts/fixtures/*.json`：平台消费的 route / state / token / motion / view-state 契约数据。
+- `generated/`：Swift / Kotlin / ArkTS generated contract types。
+- `frontend-demo/verify/motion/verify-motion-coverage.mjs`、`contracts/tests` 和 codegen drift check：当前可执行门禁。
 
-这些文件把 UI 侧缺口收束为“开发输入和验收基准已可用”。它们不声称平台实现完成；真实 Compose / SwiftUI / ArkUI 组件、原生导航、设备录屏、无障碍和性能仍由各平台仓库完成。
+旧设计导出、Stitch 草案和页面包已删除，不再作为平台开发输入。真实 Compose / SwiftUI / ArkUI 组件、原生导航、设备录屏、无障碍和性能仍由各平台仓库完成。
 
 ## P0：阻塞实装的缺口
 

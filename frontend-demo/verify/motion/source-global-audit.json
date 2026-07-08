@@ -4,7 +4,7 @@
   "scope": "frontend-demo source only",
   "excludedAsEvidence": [
     "frontend-demo/MOTION_*.md",
-    "docs/ui-handoff/MOTION_PLATFORM_MAPPING.md",
+    "deleted legacy design exports",
     "screenshots",
     "prior planning docs"
   ],

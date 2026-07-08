@@ -294,7 +294,6 @@ button:focus-visible {
 .fd-demo[data-demo-mode="regular"] .fd-route-panel,
 .fd-demo[data-demo-mode="regular"] .fd-shell-overview,
 .fd-demo[data-demo-mode="regular"] .fd-component-rules,
-.fd-demo[data-demo-mode="regular"] .fd-handoff-notes,
 .fd-demo[data-demo-mode="regular"] .fd-source-strip {
   display: none;
 }
@@ -433,7 +432,6 @@ button:focus-visible {
 .fd-demo-header dl div,
 .fd-shell-overview article,
 .fd-component-rules article,
-.fd-handoff-notes,
 .fd-source-strip {
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
@@ -461,14 +459,12 @@ button:focus-visible {
 
 .fd-shell-overview,
 .fd-component-rules,
-.fd-handoff-notes,
 .fd-source-strip {
   margin-top: 30px;
 }
 
 .fd-shell-overview h2,
 .fd-component-rules h2,
-.fd-handoff-notes h2,
 .fd-source-strip h2 {
   margin: 0 0 16px;
   font-size: 24px;

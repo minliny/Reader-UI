@@ -33,7 +33,7 @@ Native UI
 
 | 仓库 | 当前职责 | 修改方向 |
 | --- | --- | --- |
-| `Reader UI` | UI demo、handoff、route/motion/token/state 资料 | 升级为机器可读 UI Contract 源，提供 schema、fixtures、codegen、contract tests |
+| `Reader UI` | UI demo、route/motion/token/state 资料 | 升级为机器可读 UI Contract 源，提供 schema、fixtures、codegen、contract tests |
 | `Reader-Core-Native` | Rust 业务内核、FFI、protocol、host bus | 收敛为唯一业务事实源，补齐 CoreCommand/CoreEvent/HostRequest/progress/sync contract |
 | `Reader for iOS` | SwiftUI 原生 App | 接入 UI Contract generated Swift types，建立 Swift reducer/coordinator、Core bridge、Host Adapter |
 | `Reader for Android` | Compose 原生 App | 接入 UI Contract generated Kotlin types，收敛 ReaderUiReducer/ViewModel、Core bridge、Host Adapter |

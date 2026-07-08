@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/token.schema.json",
   "title": "Token",
-  "description": "视觉 token 契约。Token name 一经发布不得改名。来源：frontend-demo/tokens.css、frontend-demo/motion-tokens.css、docs/ui-design/01-全局规范/、docs/ui-design/02-主标签页/RSS/02-组件规格稿.md。",
+  "description": "视觉 token 契约。Token name 一经发布不得改名。来源：frontend-demo/tokens.css、frontend-demo/motion-tokens.css、contracts/fixtures/token.fixtures.json。",
   "type": "object",
   "additionalProperties": false,
   "required": ["name", "category", "value"],

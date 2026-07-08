@@ -38,13 +38,13 @@
     {
       "version": "1.4.5",
       "date": "2026-07-05",
-      "summary": "frontend-demo 200/200 route closure and handoff readiness gate",
+      "summary": "frontend-demo 200/200 route closure and contract readiness gate",
       "changes": [
         "frontend-demo/route-contract.js 与 renderRoute() 补齐至 route.schema.json 的 200/200 RouteId，新增搜索、发现缓存、RSS 细分类、reader full/overlay、restore/progress/about/global state、source debug 等长尾静态页渲染入口",
         "verify-demo-contract-consistency.mjs 改为执行 route-contract.js 读取实际 routes，当前 baseline 为 found=515 / unknown=111 / approved=111 / unapproved=0，route/token unknown 仍为 0",
         "verify-motion-coverage.mjs 使用 route.schema.json 作为 route coverage 基准，当前 route coverage 为 200/200，selector data coverage 为 151/184",
-        "verify-ui-handoff-readiness.mjs 当前 8/8 pass；project-role 只允许 contract-only Package.swift（ReaderUIContract + generated/swift + no executable target），其他生产入口仍失败",
-        "更新 frontend readiness / complete app gap / closure work breakdown 文档，明确 Reader UI demo 是完整 contract/handoff reference，不等同于 Android/iOS/HarmonyOS native delivery proof"
+        "contract readiness gate 当前允许 contract-only Package.swift（ReaderUIContract + generated/swift + no executable target），其他生产入口仍失败",
+        "更新 frontend readiness / complete app gap / closure work breakdown 文档，明确 Reader UI demo 是完整 contract reference，不等同于 Android/iOS/HarmonyOS native delivery proof"
       ]
     },
     {
@@ -106,7 +106,7 @@
       "date": "2026-07-04",
       "summary": "Reader UI 三类补全：P0 可执行参考规格 + 完整矩阵 + 验收和防漂移机制",
       "changes": [
-        "新增 PAGE_REFERENCE.md：Slice 1-6 P0 route 的页面结构、组件树、状态归属 [C]/[R]/[E]、入口返回 overlay keyboard 行为、与 docs/ui-design 页面包对应表",
+        "新增 PAGE_REFERENCE.md：Slice 1-6 P0 route 的页面结构、组件树、状态归属 [C]/[R]/[E]、入口返回 overlay keyboard 行为、与当前 demo / fixtures 对齐说明",
         "新增 TOKEN_SPEC.md：10 个语义 token 分组（reading-theme / reading-typography / card / list / button / tab / overlay / night-mode / rss-status / motion）+ 三端 TokenAdapter 映射规则（SwiftUI / Compose / ArkUI）+ 禁止 raw color/spacing/radius/duration 的检查口径 + fixtures platforms 字段补全策略",
         "新增 MOTION_SPEC.md：40 个 P0 MotionId 的触发条件 / 结束状态 / 打断规则 / reduced-motion 降级 + 手势阈值表 + 拖拽边界 + 焦点恢复 + system back 等价表 + 键盘 inset + safe area / fold posture + demo 等价性边界（区分 demo proof 与 platform implementation）",
         "新增 CORE_HOST_BOUNDARY.md：业务域归属表（14 业务域 + 平台持久化禁令）+ UiEvent→CoreCommand 映射（6 业务域：路由 / 书架 / 阅读 / TTS / 发现-RSS-搜索 / 设置-同步-备份）+ HostRequest 能力清单（30 项含 initiator 归属）+ 异常处理 + async guard",

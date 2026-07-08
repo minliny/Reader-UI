@@ -4,7 +4,7 @@
 
 审计日期：2026-06-26
 
-审计口径：只基于当前 `frontend-demo/` 源码和本地运行结果，不把 `MOTION_*.md`、handoff 文档或既有规划表作为事实来源。
+审计口径：只基于当前 `frontend-demo/` 源码和本地运行结果，不把 `MOTION_*.md` 或既有规划表作为事实来源。
 
 ## 1. 输入范围
 
@@ -23,7 +23,7 @@
 显式排除：
 
 - `frontend-demo/MOTION_*.md`
-- `docs/ui-handoff/MOTION_PLATFORM_MAPPING.md`
+- deleted legacy design exports
 - 既有截图、录屏和验收文档
 
 ## 2. 代码事实快照

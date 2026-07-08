@@ -434,7 +434,7 @@
     ]
   },
   {
-    "_comment": "Slice 3: 阅读器控制层底座（route-driven；normalized floating controls + bottom bar）",
+    "_comment": "Slice 3: 阅读器控制层底座（route-driven；frontend-demo live control sheet + module nav）",
     "routeId": "control-layer-base-v2",
     "pageState": "default",
     "context": {
@@ -449,18 +449,8 @@
         }
       },
       {
-        "type": "FloatingBrightness",
-        "id": "reader-floating-brightness",
-        "props": {}
-      },
-      {
-        "type": "FloatingQuickActions",
-        "id": "reader-floating-quick-actions",
-        "props": {}
-      },
-      {
-        "type": "FloatingPageControl",
-        "id": "reader-floating-page-control",
+        "type": "ReaderControlSheet",
+        "id": "reader-control-sheet",
         "props": {}
       },
       {

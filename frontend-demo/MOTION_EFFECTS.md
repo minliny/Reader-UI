@@ -5,7 +5,7 @@
 依赖文档：
 
 - `MOTION_CONTRACT.md`：定义 motion token、Motion ID、Reader 约束和验收边界。
-- `docs/ui-handoff/MOTION_PLATFORM_MAPPING.md`：定义平台实现映射。
+- `MOTION_SELECTOR_MATRIX.md`：定义 demo selector、Motion ID、route 和平台组件映射。
 
 本文档补齐“动画效果本身”。如果只看 `MOTION_CONTRACT.md`，只能得到状态契约，不能形成完整动效规划；完整规划必须同时包含本文件里的视觉效果描述、时间线、层级和验收方式。
 
@@ -621,8 +621,8 @@ Reduced motion：
 
 无封面或非封面入口降级：
 
-- `reader.entry.actionToImmersive` 用轻量 route handoff：按钮 pressed `80ms`，旧内容淡出，新阅读纸面从下方 `12px` 淡入。
-- 章节行进入沉浸阅读时不使用封面 snapshot，只做内容 handoff。
+- `reader.entry.actionToImmersive` 用轻量 route transition：按钮 pressed `80ms`，旧内容淡出，新阅读纸面从下方 `12px` 淡入。
+- 章节行进入沉浸阅读时不使用封面 snapshot，只做内容 transition。
 
 打断规则：
 
@@ -1174,7 +1174,7 @@ Reduced motion：
 | 底表 | 书籍详情 -> 更换书源/更多操作 | 底表从底部进入，关闭后焦点释放。 |
 | 弹窗 | 书籍详情 -> 删除/移除确认 | 背景和弹窗层级正确。 |
 | 封面进入沉浸阅读 | 书架封面/继续阅读封面 -> `immersive-reading` | 封面只作来源锚点，最终为沉浸阅读，返回栈正确。 |
-| 普通入口进入沉浸阅读 | 继续阅读按钮/章节行/详情阅读按钮 -> `immersive-reading` | 无封面时轻量 handoff，不显示控制层。 |
+| 普通入口进入沉浸阅读 | 继续阅读按钮/章节行/详情阅读按钮 -> `immersive-reading` | 无封面时轻量 transition，不显示控制层。 |
 | 控制层显示/隐藏 | `immersive-reading` 正文中部点击 -> `reader` -> dismiss | 正文不重排、不变暗。 |
 | 控制层小横条 | `reader` 小横条点击/拖动、`reader-full-*` 小横条拖动 | 小横条按压有反馈；拖动跟手；释放只落到一个最终状态。 |
 | 模块切换 | reader -> 目录/朗读/界面/设置 | 模块导航几何不变，面板内容轻切换。 |
