@@ -188,6 +188,22 @@ test("bookshelf view-state 对齐 frontend-demo 书架结构", () => {
   );
 });
 
+test("book-detail view-state 使用详情页复合结构", () => {
+  const detail = viewFixtures.find((item) => item.routeId === "book-detail" && item.pageState === "default");
+  assert.ok(detail, "book-detail/default fixture 应存在");
+
+  assert.deepEqual(
+    detail.components.map((component) => component.type),
+    ["AppTopBar", "BookHero", "BookSummaryCard", "BookChapterList"]
+  );
+
+  assert.equal(
+    detail.components.some((component) => component.type === "BookCover"),
+    false,
+    "book-detail 不应把 BookCover 作为顶层 body 组件渲染"
+  );
+});
+
 test("motion.fixtures 中 id 全部在 motion schema enum 中", () => {
   const allowed = new Set(motionSchema.properties.id.enum);
   for (const item of motionFixtures) {

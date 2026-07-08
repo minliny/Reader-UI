@@ -90,6 +90,12 @@ enum class ComponentType {
     DirectoryPreview,
     @SerialName("BookIntro")
     BookIntro,
+    @SerialName("BookHero")
+    BookHero,
+    @SerialName("BookSummaryCard")
+    BookSummaryCard,
+    @SerialName("BookChapterList")
+    BookChapterList,
     @SerialName("ConfigEntry")
     ConfigEntry,
     @SerialName("ReadingBackgroundLayer")

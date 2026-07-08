@@ -390,41 +390,18 @@
         "props": {}
       },
       {
-        "type": "BookCover",
-        "id": "detail-cover",
+        "type": "BookHero",
+        "id": "detail-hero",
         "props": {}
       },
       {
-        "type": "BookTitleAuthor",
-        "id": "detail-title",
-        "props": {
-          "title": "示例书",
-          "author": "示例作者"
-        }
-      },
-      {
-        "type": "SourceStatus",
-        "id": "detail-source",
+        "type": "BookSummaryCard",
+        "id": "detail-summary",
         "props": {}
       },
       {
-        "type": "ReadButton",
-        "id": "read-button",
-        "props": {}
-      },
-      {
-        "type": "DirectoryPreview",
-        "id": "detail-toc",
-        "props": {}
-      },
-      {
-        "type": "BookIntro",
-        "id": "detail-intro",
-        "props": {}
-      },
-      {
-        "type": "ConfigEntry",
-        "id": "detail-config",
+        "type": "BookChapterList",
+        "id": "detail-chapters",
         "props": {}
       }
     ]
