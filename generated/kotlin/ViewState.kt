@@ -214,6 +214,26 @@ enum class ComponentType {
     NightToast,
     @SerialName("SourceSwitchResultsPanel")
     SourceSwitchResultsPanel,
+    @SerialName("SourceImportPreviewPage")
+    SourceImportPreviewPage,
+    @SerialName("SourceGroupsPage")
+    SourceGroupsPage,
+    @SerialName("SourceDetectPage")
+    SourceDetectPage,
+    @SerialName("SourceDebugPage")
+    SourceDebugPage,
+    @SerialName("SourceDebugRunningPage")
+    SourceDebugRunningPage,
+    @SerialName("SourceDebugResultPage")
+    SourceDebugResultPage,
+    @SerialName("SourceDebugContentLogPage")
+    SourceDebugContentLogPage,
+    @SerialName("SourceCodeViewPage")
+    SourceCodeViewPage,
+    @SerialName("SourceLogsPage")
+    SourceLogsPage,
+    @SerialName("SourceDeleteConfirmPage")
+    SourceDeleteConfirmPage,
     @SerialName("AppShellStructure")
     AppShellStructure,
     @SerialName("MainTabsStructure")

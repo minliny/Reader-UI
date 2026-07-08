@@ -253,6 +253,34 @@ test("normalized 设置/表单类页面使用页面级组件，避免退回通�
   }
 });
 
+test("书源工具流使用页面级组件，避免退回通用 scaffold", () => {
+  const expected = new Map([
+    ["source-import-preview/default", ["BackTopBar", "SourceImportPreviewPage"]],
+    ["source-groups/default", ["BackTopBar", "SourceGroupsPage"]],
+    ["source-detect/default", ["BackTopBar", "SourceDetectPage"]],
+    ["source-debug/default", ["BackTopBar", "SourceDebugPage"]],
+    ["source-debug-running/loading", ["BackTopBar", "SourceDebugRunningPage"]],
+    ["source-debug-result/default", ["BackTopBar", "SourceDebugResultPage"]],
+    ["source-debug-search-result/default", ["BackTopBar", "SourceDebugResultPage"]],
+    ["source-debug-detail-result/default", ["BackTopBar", "SourceDebugResultPage"]],
+    ["source-debug-catalog-result/default", ["BackTopBar", "SourceDebugResultPage"]],
+    ["source-debug-content-log/default", ["BackTopBar", "SourceDebugContentLogPage"]],
+    ["source-code-view/default", ["BackTopBar", "SourceCodeViewPage"]],
+    ["source-logs/default", ["BackTopBar", "SourceLogsPage"]],
+    ["source-delete-confirm/default", ["BackTopBar", "SourceDeleteConfirmPage"]],
+  ]);
+
+  for (const [key, types] of expected.entries()) {
+    const [routeId, pageState] = key.split("/");
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === pageState);
+    assert.ok(entry, `${key} fixture 应存在`);
+    assert.deepEqual(entry.components.map((item) => item.type), types, `${key} 应使用书源工具页级组件`);
+    for (const type of ["List", "Content", "Loading", "Card", "Button", "SettingsSection"]) {
+      assert.equal(entry.components.some((item) => item.type === type), false, `${key} 不应退回 ${type}`);
+    }
+  }
+});
+
 test("motion.fixtures 中 id 全部在 motion schema enum 中", () => {
   const allowed = new Set(motionSchema.properties.id.enum);
   for (const item of motionFixtures) {
