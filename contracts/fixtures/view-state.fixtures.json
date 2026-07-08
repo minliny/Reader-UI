@@ -176,35 +176,28 @@
         }
       },
       {
-        "type": "SearchEntry",
-        "id": "discover-search",
+        "type": "DiscoverSourceBar",
+        "id": "discover-source-bar",
         "props": {}
       },
       {
-        "type": "SourceTypeSegment",
-        "id": "source-type",
-        "props": {
-          "selected": "all"
-        }
-      },
-      {
-        "type": "CurrentSourceCard",
-        "id": "current-source",
+        "type": "DiscoverEntryRow",
+        "id": "discover-entry-row",
         "props": {}
       },
       {
-        "type": "SourceCategoryChips",
-        "id": "source-category",
+        "type": "DiscoverFilterTrigger",
+        "id": "discover-filter",
         "props": {}
       },
       {
-        "type": "DiscoveryContentCard",
-        "id": "discovery-content",
+        "type": "DiscoverListHead",
+        "id": "discover-list-head",
         "props": {}
       },
       {
-        "type": "SourceStatusBar",
-        "id": "source-status",
+        "type": "DiscoverBookList",
+        "id": "discover-book-list",
         "props": {}
       },
       {
@@ -232,42 +225,24 @@
         }
       },
       {
-        "type": "SubscriptionSummaryCard",
-        "id": "rss-summary",
-        "props": {
-          "sources": 12,
-          "unread": 28
-        }
+        "type": "RssSearchEntry",
+        "id": "rss-search",
+        "props": {}
       },
       {
-        "type": "FeedStatusChips",
-        "id": "feed-status",
-        "props": {
-          "selected": "all"
-        }
+        "type": "RssModeRow",
+        "id": "rss-mode-row",
+        "props": {}
       },
       {
-        "type": "FeedSourceChips",
-        "id": "feed-source",
-        "props": {
-          "selected": "all"
-        }
+        "type": "RssSourceOverview",
+        "id": "rss-source-overview",
+        "props": {}
       },
       {
-        "type": "RssEntryItem",
-        "id": "rss-entry-1",
-        "props": {
-          "rssId": "rss-001",
-          "title": "示例条目"
-        },
-        "children": [
-          {
-            "type": "UnreadIndicator",
-            "props": {
-              "color": "#2F6F93"
-            }
-          }
-        ]
+        "type": "RssArticleSection",
+        "id": "rss-article-section",
+        "props": {}
       },
       {
         "type": "BottomNav",

@@ -24,6 +24,16 @@ enum class ComponentType {
     DiscoveryContentCard,
     @SerialName("SourceStatusBar")
     SourceStatusBar,
+    @SerialName("DiscoverSourceBar")
+    DiscoverSourceBar,
+    @SerialName("DiscoverEntryRow")
+    DiscoverEntryRow,
+    @SerialName("DiscoverFilterTrigger")
+    DiscoverFilterTrigger,
+    @SerialName("DiscoverListHead")
+    DiscoverListHead,
+    @SerialName("DiscoverBookList")
+    DiscoverBookList,
     @SerialName("BottomNav")
     BottomNav,
     @SerialName("ShelfChipGroup")
@@ -54,6 +64,10 @@ enum class ComponentType {
     RssEntryItem,
     @SerialName("RssSearchEntry")
     RssSearchEntry,
+    @SerialName("RssModeRow")
+    RssModeRow,
+    @SerialName("RssSourceOverview")
+    RssSourceOverview,
     @SerialName("RssArticleSection")
     RssArticleSection,
     @SerialName("UnreadIndicator")
