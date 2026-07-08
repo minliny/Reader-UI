@@ -264,10 +264,20 @@ enum class ComponentType {
     WebDavConfigPage,
     @SerialName("SyncSettingsEntryPage")
     SyncSettingsEntryPage,
+    @SerialName("SyncBackupPage")
+    SyncBackupPage,
     @SerialName("SyncErrorPage")
     SyncErrorPage,
     @SerialName("SyncProgressPage")
     SyncProgressPage,
+    @SerialName("RestoreConfirmPage")
+    RestoreConfirmPage,
+    @SerialName("RestoreProgressPage")
+    RestoreProgressPage,
+    @SerialName("RestoreConflictPage")
+    RestoreConflictPage,
+    @SerialName("RestoreResultPage")
+    RestoreResultPage,
     @SerialName("RemoteWebDavBooksPage")
     RemoteWebDavBooksPage,
     @SerialName("RssDetailPage")

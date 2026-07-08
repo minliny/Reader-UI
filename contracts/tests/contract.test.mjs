@@ -281,6 +281,29 @@ test("书源工具流使用页面级组件，避免退回通用 scaffold", () =>
   }
 });
 
+test("同步恢复流使用页面级组件，避免退回通用 scaffold", () => {
+  const expected = new Map([
+    ["sync-backup/default", ["BackTopBar", "SyncBackupPage"]],
+    ["sync-backup/loading", ["BackTopBar", "SyncBackupPage"]],
+    ["restore-confirm/default", ["BackTopBar", "RestoreConfirmPage"]],
+    ["restore-preview/default", ["BackTopBar", "RestoreConfirmPage"]],
+    ["restore-progress/loading", ["BackTopBar", "RestoreProgressPage"]],
+    ["restore-running/loading", ["BackTopBar", "RestoreProgressPage"]],
+    ["restore-conflict/error", ["BackTopBar", "RestoreConflictPage"]],
+    ["restore-result/default", ["BackTopBar", "RestoreResultPage"]],
+  ]);
+
+  for (const [key, types] of expected.entries()) {
+    const [routeId, pageState] = key.split("/");
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === pageState);
+    assert.ok(entry, `${key} fixture 应存在`);
+    assert.deepEqual(entry.components.map((item) => item.type), types, `${key} 应使用同步恢复页级组件`);
+    for (const type of ["FormSection", "List", "Content", "Loading", "ErrorState", "Button"]) {
+      assert.equal(entry.components.some((item) => item.type === type), false, `${key} 不应退回 ${type}`);
+    }
+  }
+});
+
 test("motion.fixtures 中 id 全部在 motion schema enum 中", () => {
   const allowed = new Set(motionSchema.properties.id.enum);
   for (const item of motionFixtures) {

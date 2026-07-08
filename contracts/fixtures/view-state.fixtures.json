@@ -894,7 +894,7 @@
     ]
   },
   {
-    "_comment": "Slice 6: sync 同步页",
+    "_comment": "Slice 6: Structure migration: sync backup",
     "routeId": "sync-backup",
     "pageState": "default",
     "context": {},
@@ -907,21 +907,14 @@
         }
       },
       {
-        "type": "FormSection",
-        "id": "sync-section",
+        "type": "SyncBackupPage",
+        "id": "sync-backup-page",
         "props": {}
-      },
-      {
-        "type": "Button",
-        "id": "sync-run",
-        "props": {
-          "label": "立即同步"
-        }
       }
     ]
   },
   {
-    "_comment": "Slice 6: sync loading",
+    "_comment": "Slice 6: Structure migration: sync backup loading",
     "routeId": "sync-backup",
     "pageState": "loading",
     "context": {},
@@ -934,14 +927,16 @@
         }
       },
       {
-        "type": "Loading",
-        "id": "sync-loading",
-        "props": {}
+        "type": "SyncBackupPage",
+        "id": "sync-backup-loading-page",
+        "props": {
+          "variant": "loading"
+        }
       }
     ]
   },
   {
-    "_comment": "Slice 6: restore 结果页",
+    "_comment": "Slice 6: Structure migration: restore result",
     "routeId": "restore-result",
     "pageState": "default",
     "context": {
@@ -959,23 +954,14 @@
         }
       },
       {
-        "type": "Content",
-        "id": "restore-result-content",
-        "props": {
-          "message": "已恢复 2 项"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "restore-result-done",
-        "props": {
-          "label": "完成"
-        }
+        "type": "RestoreResultPage",
+        "id": "restore-result-page",
+        "props": {}
       }
     ]
   },
   {
-    "_comment": "Structure migration: sync error",
+    "_comment": "Slice 6: Structure migration: sync error",
     "routeId": "sync-error",
     "pageState": "error",
     "context": {},
@@ -1020,7 +1006,7 @@
     ]
   },
   {
-    "_comment": "Slice 6: restore 进行中",
+    "_comment": "Slice 6: Structure migration: restore running",
     "routeId": "restore-running",
     "pageState": "loading",
     "context": {
@@ -1038,9 +1024,11 @@
         }
       },
       {
-        "type": "Loading",
-        "id": "restore-running-loading",
-        "props": {}
+        "type": "RestoreProgressPage",
+        "id": "restore-running-page",
+        "props": {
+          "variant": "running"
+        }
       }
     ]
   },
@@ -2381,7 +2369,7 @@
     ]
   },
   {
-    "_comment": "Phase3: 恢复确认",
+    "_comment": "Slice 6: Structure migration: restore confirm",
     "routeId": "restore-confirm",
     "pageState": "default",
     "context": {},
@@ -2394,23 +2382,14 @@
         }
       },
       {
-        "type": "Content",
-        "id": "restore-confirm-hint",
-        "props": {
-          "message": "确认从备份恢复？当前数据将被覆盖。"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "confirm-restore",
-        "props": {
-          "label": "确认恢复"
-        }
+        "type": "RestoreConfirmPage",
+        "id": "restore-confirm-page",
+        "props": {}
       }
     ]
   },
   {
-    "_comment": "Phase3: 恢复冲突",
+    "_comment": "Slice 6: Structure migration: restore conflict",
     "routeId": "restore-conflict",
     "pageState": "error",
     "context": {
@@ -2425,21 +2404,14 @@
         }
       },
       {
-        "type": "ErrorState",
-        "id": "conflict-error",
+        "type": "RestoreConflictPage",
+        "id": "restore-conflict-page",
         "props": {}
-      },
-      {
-        "type": "Button",
-        "id": "resolve-conflict",
-        "props": {
-          "label": "解决冲突"
-        }
       }
     ]
   },
   {
-    "_comment": "Phase3: 恢复预览",
+    "_comment": "Slice 6: Structure migration: restore preview",
     "routeId": "restore-preview",
     "pageState": "default",
     "context": {},
@@ -2452,37 +2424,16 @@
         }
       },
       {
-        "type": "List",
-        "id": "preview-list",
-        "props": {},
-        "children": [
-          {
-            "type": "ListRow",
-            "id": "preview-progress",
-            "props": {
-              "title": "阅读进度 · 2 项"
-            }
-          },
-          {
-            "type": "ListRow",
-            "id": "preview-bookshelf",
-            "props": {
-              "title": "书架 · 12 本"
-            }
-          }
-        ]
-      },
-      {
-        "type": "Button",
-        "id": "confirm-restore",
+        "type": "RestoreConfirmPage",
+        "id": "restore-preview-page",
         "props": {
-          "label": "确认恢复"
+          "variant": "preview"
         }
       }
     ]
   },
   {
-    "_comment": "Phase3: 恢复进度",
+    "_comment": "Slice 6: Structure migration: restore progress",
     "routeId": "restore-progress",
     "pageState": "loading",
     "context": {},
@@ -2495,8 +2446,8 @@
         }
       },
       {
-        "type": "Loading",
-        "id": "restore-progress-loading",
+        "type": "RestoreProgressPage",
+        "id": "restore-progress-page",
         "props": {}
       }
     ]
