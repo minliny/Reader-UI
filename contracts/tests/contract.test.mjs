@@ -236,6 +236,10 @@ test("normalized 状态页文案与 handoff HTML 对齐", () => {
 
 test("normalized 设置/表单类页面使用页面级组件，避免退回通用拼装", () => {
   const expected = new Map([
+    ["settings/default", ["AppTopBar", "SettingsHomePage", "BottomNav"]],
+    ["settings-general/default", ["BackTopBar", "SettingsGeneralPage"]],
+    ["about/default", ["BackTopBar", "AboutFeedbackPage"]],
+    ["bookshelf-search-settings/default", ["BackTopBar", "BookshelfSearchSettingsPage"]],
     ["bookshelf-book-more-menu/default", ["AppTopBar", "BookMoreMenuPage", "BottomNav"]],
     ["bookshelf-group-management/default", ["BackTopBar", "BookGroupManagementPage"]],
     ["rss-subscription-management/default", ["BackTopBar", "RssSubscriptionManagementPage"]],
@@ -243,6 +247,7 @@ test("normalized 设置/表单类页面使用页面级组件，避免退回通�
     ["source-edit/default", ["BackTopBar", "SourceFormPage"]],
     ["global-settings/default", ["BackTopBar", "GlobalSettingsPage"]],
     ["backup-settings/default", ["BackTopBar", "BackupSettingsPage"]],
+    ["progress-sync/default", ["BackTopBar", "ProgressSyncPage"]],
   ]);
 
   for (const [key, types] of expected.entries()) {
@@ -253,9 +258,22 @@ test("normalized 设置/表单类页面使用页面级组件，避免退回通�
   }
 });
 
+test("书架排序筛选路由复用书架 DOM 并展开筛选浮层", () => {
+  const entry = viewFixtures.find((item) => item.routeId === "sort-filter" && item.pageState === "default");
+  assert.ok(entry, "sort-filter/default fixture 应存在");
+  assert.deepEqual(
+    entry.components.map((component) => component.type),
+    ["AppTopBar", "ContinueReadingCard", "BookshelfShelfSection", "BottomNav"],
+    "sort-filter 应是书架结构加筛选态，不应是独立 SettingsSection"
+  );
+  const shelfSection = entry.components.find((component) => component.type === "BookshelfShelfSection");
+  assert.equal(shelfSection.props.filterOpen, true, "sort-filter 应通过 filterOpen 展开书架筛选浮层");
+});
+
 test("书源工具流使用页面级组件，避免退回通用 scaffold", () => {
   const expected = new Map([
     ["source-import-preview/default", ["BackTopBar", "SourceImportPreviewPage"]],
+    ["source-batch/default", ["BackTopBar", "SourceBatchPage"]],
     ["source-groups/default", ["BackTopBar", "SourceGroupsPage"]],
     ["source-detect/default", ["BackTopBar", "SourceDetectPage"]],
     ["source-rule-edit/default", ["BackTopBar", "SourceRuleEditPage"]],

@@ -269,21 +269,9 @@
         }
       },
       {
-        "type": "LocalOverviewCard",
-        "id": "local-overview",
+        "type": "SettingsHomePage",
+        "id": "settings-home-page",
         "props": {}
-      },
-      {
-        "type": "QuickEntryGrid",
-        "id": "quick-entry",
-        "props": {}
-      },
-      {
-        "type": "SettingsSection",
-        "id": "section-general",
-        "props": {
-          "title": "通用"
-        }
       },
       {
         "type": "BottomNav",
@@ -2192,28 +2180,9 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "general-section",
-        "props": {
-          "title": "通用"
-        },
-        "children": [
-          {
-            "type": "SettingsListItem",
-            "id": "general-language",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "general-theme",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "general-font",
-            "props": {}
-          }
-        ]
+        "type": "SettingsGeneralPage",
+        "id": "settings-general-page",
+        "props": {}
       }
     ]
   },
@@ -2231,31 +2200,9 @@
         }
       },
       {
-        "type": "Card",
-        "id": "about-card",
-        "props": {
-          "title": "Reader for HarmonyOS",
-          "subtitle": "多端阅读器 · ArkTS 原生"
-        }
-      },
-      {
-        "type": "SettingsSection",
-        "id": "about-section",
-        "props": {
-          "title": "信息"
-        },
-        "children": [
-          {
-            "type": "SettingsListItem",
-            "id": "about-version-entry",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "about-feedback-entry",
-            "props": {}
-          }
-        ]
+        "type": "AboutFeedbackPage",
+        "id": "about-page",
+        "props": {}
       }
     ]
   },
@@ -2289,27 +2236,13 @@
         "type": "BackTopBar",
         "id": "topbar",
         "props": {
-          "title": "书架搜索设置"
+          "title": "书架与搜索"
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "search-settings-section",
-        "props": {
-          "title": "搜索"
-        },
-        "children": [
-          {
-            "type": "SettingsListItem",
-            "id": "search-default-source",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "search-scope",
-            "props": {}
-          }
-        ]
+        "type": "BookshelfSearchSettingsPage",
+        "id": "bookshelf-search-settings-page",
+        "props": {}
       }
     ]
   },
@@ -2433,23 +2366,9 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "progress-sync-section",
-        "props": {
-          "title": "同步"
-        },
-        "children": [
-          {
-            "type": "SettingsListItem",
-            "id": "sync-auto",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "sync-interval",
-            "props": {}
-          }
-        ]
+        "type": "ProgressSyncPage",
+        "id": "progress-sync-page",
+        "props": {}
       }
     ]
   },
@@ -2463,32 +2382,13 @@
         "type": "BackTopBar",
         "id": "topbar",
         "props": {
-          "title": "批量操作"
+          "title": "已选 3 个"
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "batch-section",
-        "props": {
-          "title": "操作"
-        },
-        "children": [
-          {
-            "type": "SettingsListItem",
-            "id": "batch-enable-all",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "batch-disable-all",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "batch-delete",
-            "props": {}
-          }
-        ]
+        "type": "SourceBatchPage",
+        "id": "source-batch-page",
+        "props": {}
       }
     ]
   },
@@ -3221,32 +3121,69 @@
     "components": [
       {
         "type": "AppTopBar",
-        "id": "topbar",
+        "id": "bookshelf-topbar",
         "props": {
-          "title": "排序筛选"
+          "title": "书架"
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "sort-section",
+        "type": "ContinueReadingCard",
+        "id": "continue-reading",
         "props": {
-          "title": "排序"
+          "bookId": "bk-001",
+          "title": "三体",
+          "author": "刘慈欣"
+        }
+      },
+      {
+        "type": "BookshelfShelfSection",
+        "id": "bookshelf-shelf-section",
+        "props": {
+          "title": "我的书架",
+          "viewMode": "cover",
+          "filterOpen": true
         },
         "children": [
           {
-            "type": "SettingsListItem",
-            "id": "sort-recent",
-            "props": {}
+            "type": "ShelfSectionHeader",
+            "id": "shelf-header",
+            "props": {
+              "title": "我的书架"
+            }
           },
           {
-            "type": "SettingsListItem",
-            "id": "sort-title",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "sort-author",
-            "props": {}
+            "type": "BookGrid",
+            "id": "book-grid",
+            "props": {},
+            "children": [
+              {
+                "type": "BookCard",
+                "id": "book-bk-001",
+                "props": {
+                  "bookId": "bk-001",
+                  "title": "三体",
+                  "author": "刘慈欣"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-bk-002",
+                "props": {
+                  "bookId": "bk-002",
+                  "title": "基地",
+                  "author": "阿西莫夫"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-bk-003",
+                "props": {
+                  "bookId": "bk-003",
+                  "title": "球状闪电",
+                  "author": "刘慈欣"
+                }
+              }
+            ]
           }
         ]
       },

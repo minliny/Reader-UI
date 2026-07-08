@@ -100,6 +100,14 @@ enum class ComponentType {
     LocalOverviewCard,
     @SerialName("QuickEntryGrid")
     QuickEntryGrid,
+    @SerialName("SettingsHomePage")
+    SettingsHomePage,
+    @SerialName("SettingsGeneralPage")
+    SettingsGeneralPage,
+    @SerialName("BookshelfSearchSettingsPage")
+    BookshelfSearchSettingsPage,
+    @SerialName("ProgressSyncPage")
+    ProgressSyncPage,
     @SerialName("SettingsSection")
     SettingsSection,
     @SerialName("SettingsListItem")
@@ -246,6 +254,8 @@ enum class ComponentType {
     SourceDeleteConfirmPage,
     @SerialName("SourceRuleEditPage")
     SourceRuleEditPage,
+    @SerialName("SourceBatchPage")
+    SourceBatchPage,
     @SerialName("AppShellStructure")
     AppShellStructure,
     @SerialName("MainTabsStructure")
