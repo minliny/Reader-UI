@@ -471,7 +471,7 @@
     ]
   },
   {
-    "_comment": "Slice 3: 阅读器控制层底座（route-driven；浮动 quick-actions + page-control + 底栏）",
+    "_comment": "Slice 3: 阅读器控制层底座（route-driven；bottom sheet + module nav）",
     "routeId": "control-layer-base-v2",
     "pageState": "default",
     "context": {
@@ -486,18 +486,8 @@
         }
       },
       {
-        "type": "FloatingBrightness",
-        "id": "floating-brightness",
-        "props": {}
-      },
-      {
-        "type": "FloatingQuickActions",
-        "id": "floating-quick-actions",
-        "props": {}
-      },
-      {
-        "type": "FloatingPageControl",
-        "id": "floating-page-control",
+        "type": "ReaderControlSheet",
+        "id": "reader-control-sheet",
         "props": {}
       },
       {
@@ -631,16 +621,6 @@
         }
       },
       {
-        "type": "FloatingQuickActions",
-        "id": "floating-quick-actions",
-        "props": {}
-      },
-      {
-        "type": "FloatingPageControl",
-        "id": "floating-page-control",
-        "props": {}
-      },
-      {
         "type": "ReaderBottomBar",
         "id": "reader-bottom-bar",
         "props": {}
@@ -666,16 +646,6 @@
         "props": {
           "theme": "paper"
         }
-      },
-      {
-        "type": "FloatingQuickActions",
-        "id": "floating-quick-actions",
-        "props": {}
-      },
-      {
-        "type": "FloatingPageControl",
-        "id": "floating-page-control",
-        "props": {}
       },
       {
         "type": "ReaderBottomBar",
@@ -705,16 +675,6 @@
         }
       },
       {
-        "type": "FloatingQuickActions",
-        "id": "floating-quick-actions",
-        "props": {}
-      },
-      {
-        "type": "FloatingPageControl",
-        "id": "floating-page-control",
-        "props": {}
-      },
-      {
         "type": "ReaderBottomBar",
         "id": "reader-bottom-bar",
         "props": {}
@@ -740,21 +700,6 @@
         "props": {
           "theme": "night"
         }
-      },
-      {
-        "type": "FloatingBrightness",
-        "id": "floating-brightness",
-        "props": {}
-      },
-      {
-        "type": "FloatingQuickActions",
-        "id": "floating-quick-actions",
-        "props": {}
-      },
-      {
-        "type": "FloatingPageControl",
-        "id": "floating-page-control",
-        "props": {}
       },
       {
         "type": "ReaderBottomBar",

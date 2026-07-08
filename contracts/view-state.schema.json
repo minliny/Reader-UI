@@ -141,6 +141,7 @@
             "Content",
             "WebView",
             "ReaderBase",
+            "ReaderControlSheet",
             "ReaderBottomBar",
             "ReaderDirectoryPanel",
             "ReaderAppearancePanel",

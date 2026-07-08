@@ -78,6 +78,7 @@ public enum ComponentType: String, Codable, CaseIterable, Sendable {
     case content = "Content"
     case webView = "WebView"
     case readerBase = "ReaderBase"
+    case readerControlSheet = "ReaderControlSheet"
     case readerBottomBar = "ReaderBottomBar"
     case readerDirectoryPanel = "ReaderDirectoryPanel"
     case readerAppearancePanel = "ReaderAppearancePanel"

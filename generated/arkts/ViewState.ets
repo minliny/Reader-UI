@@ -76,6 +76,7 @@ export type ComponentType =
   | "Content"
   | "WebView"
   | "ReaderBase"
+  | "ReaderControlSheet"
   | "ReaderBottomBar"
   | "ReaderDirectoryPanel"
   | "ReaderAppearancePanel"

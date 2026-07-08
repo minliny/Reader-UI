@@ -158,6 +158,8 @@ enum class ComponentType {
     WebView,
     @SerialName("ReaderBase")
     ReaderBase,
+    @SerialName("ReaderControlSheet")
+    ReaderControlSheet,
     @SerialName("ReaderBottomBar")
     ReaderBottomBar,
     @SerialName("ReaderDirectoryPanel")
