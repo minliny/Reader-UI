@@ -313,8 +313,30 @@ keyboard：沉浸阅读一般不弹键盘；`content-search` / `content-replacem
 
 ### 5.1 `control-layer-base-v2`
 
-屏幕结构：阅读器顶部 + 底部控制条浮层，覆盖在 `immersive-reading` 之上。
-组件树：`Overlay`（包含 `AppTopBar`、`BottomNav` 替身、模块入口 chips）
+真相源：当前 live demo 的 [render-runtime.js](../frontend-demo/render-runtime.js)。
+
+- `readerRouteConfigs["control-layer-base-v2"] = { mode: "control" }`
+- `renderRoute()` 将 `control-layer-base-v2` 交给 `readerScreen(...)`
+- `readerBottomSheetHtml(...)` 在 control mode 下渲染 `readerControlMain(...)` + `readerBrightnessRail(...)`
+- `renderReaderShell(...)` 承载同一个阅读正文底层、顶部 reader overlay、底部 control sheet、模块导航和 state host
+
+屏幕结构：
+```
+ReaderShell
+  ├─ ReadingSurface（与 immersive-reading 共用正文底层）
+  ├─ ReaderTopOverlay（顶部返回 / 换源 / 更多）
+  ├─ ReaderControlSheet
+  │   ├─ ReaderControlSessionHost（有运行会话时）
+  │   ├─ ReaderQuickActions（搜索 / 自动翻页 / 替换）
+  │   ├─ ReaderChapterPanel（上一章 / 当前章 / 下一章 / 进度）
+  │   └─ ReaderBrightnessRail
+  ├─ ReaderBottomBar（目录 / 朗读 / 界面 / 设置模块导航）
+  └─ ReaderStateHost
+```
+
+组件树（ComponentType）：`ReaderBase`、`ReaderControlSheet`、`ReaderBottomBar`。
+
+禁止回退到旧浮动控制拆分：`FloatingBrightness`、`FloatingQuickActions`、`FloatingPageControl` 不是当前 live demo 的控制层结构，也不得重新进入 `control-layer-base-v2/default` fixture。
 
 状态集合：
 | 状态 | 归属 | 来源 |

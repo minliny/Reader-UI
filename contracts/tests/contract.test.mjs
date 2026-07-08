@@ -7,6 +7,7 @@ import { validate, assertValid } from "./mini-validator.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CONTRACTS_DIR = join(__dirname, "..");
+const REPO_ROOT = join(CONTRACTS_DIR, "..");
 
 function loadJson(rel) {
   return JSON.parse(readFileSync(join(CONTRACTS_DIR, rel), "utf8"));
@@ -25,6 +26,7 @@ const stateFixtures = loadJson("fixtures/ui-state.fixtures.json");
 const viewFixtures = loadJson("fixtures/view-state.fixtures.json");
 const motionFixtures = loadJson("fixtures/motion.fixtures.json");
 const tokenFixtures = loadJson("fixtures/token.fixtures.json");
+const frontendRuntimeSource = readFileSync(join(REPO_ROOT, "frontend-demo/render-runtime.js"), "utf8");
 
 // --- Schema 自检 ---
 test("route.schema.json 结构合法", () => {
@@ -220,6 +222,18 @@ test("control-layer-base-v2 对齐 frontend-demo live 控制层结构", () => {
       `control-layer-base-v2 不应回退到旧浮动控制结构：${staleType}`
     );
   }
+});
+
+test("control-layer-base-v2 真相源固定为 frontend-demo live renderer", () => {
+  assert.match(
+    frontendRuntimeSource,
+    /"control-layer-base-v2":\s*\{\s*mode:\s*"control"\s*\}/,
+    "live demo 必须把 control-layer-base-v2 映射为 reader control mode"
+  );
+  assert.match(frontendRuntimeSource, /function\s+readerControlMain\s*\(/, "live demo control sheet body 来源应为 readerControlMain()");
+  assert.match(frontendRuntimeSource, /function\s+readerBottomSheetHtml\s*\(/, "live demo control sheet 宿主来源应为 readerBottomSheetHtml()");
+  assert.match(frontendRuntimeSource, /function\s+readerBrightnessRail\s*\(/, "live demo control sheet 内的亮度栏来源应为 readerBrightnessRail()");
+  assert.doesNotMatch(frontendRuntimeSource, /FloatingBrightness|FloatingQuickActions|FloatingPageControl/, "live demo 不应恢复旧浮动控制组件名");
 });
 
 test("状态页文案与 frontend-demo contract fixture 对齐", () => {
