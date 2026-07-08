@@ -722,7 +722,7 @@
     ]
   },
   {
-    "_comment": "Slice 5: RSS 主页 rss-all",
+    "_comment": "Slice 5: RSS 全部条目",
     "routeId": "rss-all",
     "pageState": "default",
     "context": {
@@ -730,39 +730,16 @@
     },
     "components": [
       {
-        "type": "AppTopBar",
+        "type": "BackTopBar",
         "id": "rss-topbar",
         "props": {
-          "title": "RSS"
+          "title": "全部条目"
         }
       },
       {
-        "type": "FilterBar",
-        "id": "rss-filter",
-        "props": {
-          "filter": "all"
-        }
-      },
-      {
-        "type": "List",
-        "id": "rss-entry-list",
-        "props": {},
-        "children": [
-          {
-            "type": "ListRow",
-            "id": "rss-entry-001",
-            "props": {
-              "title": "AI 周报"
-            }
-          },
-          {
-            "type": "ListRow",
-            "id": "rss-entry-002",
-            "props": {
-              "title": "技术日报"
-            }
-          }
-        ]
+        "type": "RssAllPage",
+        "id": "rss-all-page",
+        "props": {}
       }
     ]
   },
@@ -791,7 +768,7 @@
   {
     "_comment": "Slice 5: RSS 原文 webview 页",
     "routeId": "rss-original",
-    "pageState": "loading",
+    "pageState": "default",
     "context": {
       "url": "https://example.com/feed/001"
     },
@@ -804,8 +781,8 @@
         }
       },
       {
-        "type": "Loading",
-        "id": "rss-original-loading",
+        "type": "RssOriginalPage",
+        "id": "rss-original-page",
         "props": {}
       }
     ]
@@ -3314,23 +3291,16 @@
     },
     "components": [
       {
-        "type": "AppTopBar",
+        "type": "BackTopBar",
         "id": "rss-topbar",
         "props": {
-          "title": "RSS"
+          "title": "刷新订阅"
         }
       },
       {
-        "type": "Loading",
-        "id": "rss-refreshing",
+        "type": "RssRefreshingPage",
+        "id": "rss-refreshing-page",
         "props": {}
-      },
-      {
-        "type": "BottomNav",
-        "id": "bottom-nav",
-        "props": {
-          "selected": "rss"
-        }
       }
     ]
   },
@@ -3395,7 +3365,7 @@
   {
     "_comment": "Phase4: RSS 原文浏览器",
     "routeId": "rss-original-browser",
-    "pageState": "loading",
+    "pageState": "default",
     "context": {
       "url": "https://example.com"
     },
@@ -3408,8 +3378,8 @@
         }
       },
       {
-        "type": "Loading",
-        "id": "browser-loading",
+        "type": "RssOriginalBrowserPage",
+        "id": "rss-original-browser-page",
         "props": {}
       }
     ]
@@ -3428,25 +3398,9 @@
         }
       },
       {
-        "type": "List",
-        "id": "favorite-groups-list",
-        "props": {},
-        "children": [
-          {
-            "type": "ListRow",
-            "id": "fav-group-1",
-            "props": {
-              "title": "技术文章 · 12 篇"
-            }
-          },
-          {
-            "type": "ListRow",
-            "id": "fav-group-2",
-            "props": {
-              "title": "小说连载 · 5 篇"
-            }
-          }
-        ]
+        "type": "RssFavoriteGroupsPage",
+        "id": "rss-favorite-groups-page",
+        "props": {}
       }
     ]
   },
@@ -3464,25 +3418,9 @@
         }
       },
       {
-        "type": "List",
-        "id": "source-groups-list",
-        "props": {},
-        "children": [
-          {
-            "type": "ListRow",
-            "id": "src-group-tech",
-            "props": {
-              "title": "技术 · 5 个源"
-            }
-          },
-          {
-            "type": "ListRow",
-            "id": "src-group-novel",
-            "props": {
-              "title": "小说 · 3 个源"
-            }
-          }
-        ]
+        "type": "RssSourceGroupsPage",
+        "id": "rss-source-groups-page",
+        "props": {}
       }
     ]
   },
@@ -3588,17 +3526,10 @@
         }
       },
       {
-        "type": "Content",
-        "id": "import-hint",
+        "type": "RssSourceImportPage",
+        "id": "rss-source-import-page",
         "props": {
           "message": "从 OPML 或 URL 导入。"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "pick-method",
-        "props": {
-          "label": "选择导入方式"
         }
       }
     ]

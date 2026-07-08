@@ -70,6 +70,20 @@ enum class ComponentType {
     RssSourceOverview,
     @SerialName("RssArticleSection")
     RssArticleSection,
+    @SerialName("RssAllPage")
+    RssAllPage,
+    @SerialName("RssOriginalPage")
+    RssOriginalPage,
+    @SerialName("RssRefreshingPage")
+    RssRefreshingPage,
+    @SerialName("RssOriginalBrowserPage")
+    RssOriginalBrowserPage,
+    @SerialName("RssFavoriteGroupsPage")
+    RssFavoriteGroupsPage,
+    @SerialName("RssSourceGroupsPage")
+    RssSourceGroupsPage,
+    @SerialName("RssSourceImportPage")
+    RssSourceImportPage,
     @SerialName("UnreadIndicator")
     UnreadIndicator,
     @SerialName("LocalOverviewCard")
