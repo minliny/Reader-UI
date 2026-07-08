@@ -34,6 +34,10 @@ enum class ComponentType {
     DiscoverListHead,
     @SerialName("DiscoverBookList")
     DiscoverBookList,
+    @SerialName("DiscoverStatePage")
+    DiscoverStatePage,
+    @SerialName("DiscoverSourceBulkPage")
+    DiscoverSourceBulkPage,
     @SerialName("BottomNav")
     BottomNav,
     @SerialName("ShelfChipGroup")
@@ -308,6 +312,8 @@ enum class ComponentType {
     BookBatchManagementPage,
     @SerialName("BookDirectoryPage")
     BookDirectoryPage,
+    @SerialName("AboutFeedbackPage")
+    AboutFeedbackPage,
     @SerialName("SourceFormPage")
     SourceFormPage,
     @SerialName("GlobalSettingsPage")
