@@ -38,6 +38,10 @@ enum class ComponentType {
     DiscoverStatePage,
     @SerialName("DiscoverSourceBulkPage")
     DiscoverSourceBulkPage,
+    @SerialName("DiscoverSourceLoginPage")
+    DiscoverSourceLoginPage,
+    @SerialName("DiscoverRuleTestPage")
+    DiscoverRuleTestPage,
     @SerialName("BottomNav")
     BottomNav,
     @SerialName("ShelfChipGroup")
@@ -88,6 +92,8 @@ enum class ComponentType {
     RssSourceGroupsPage,
     @SerialName("RssSourceImportPage")
     RssSourceImportPage,
+    @SerialName("RssSourceEditPage")
+    RssSourceEditPage,
     @SerialName("UnreadIndicator")
     UnreadIndicator,
     @SerialName("LocalOverviewCard")
@@ -238,6 +244,8 @@ enum class ComponentType {
     SourceLogsPage,
     @SerialName("SourceDeleteConfirmPage")
     SourceDeleteConfirmPage,
+    @SerialName("SourceRuleEditPage")
+    SourceRuleEditPage,
     @SerialName("AppShellStructure")
     AppShellStructure,
     @SerialName("MainTabsStructure")

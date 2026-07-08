@@ -258,6 +258,8 @@ test("书源工具流使用页面级组件，避免退回通用 scaffold", () =>
     ["source-import-preview/default", ["BackTopBar", "SourceImportPreviewPage"]],
     ["source-groups/default", ["BackTopBar", "SourceGroupsPage"]],
     ["source-detect/default", ["BackTopBar", "SourceDetectPage"]],
+    ["source-rule-edit/default", ["BackTopBar", "SourceRuleEditPage"]],
+    ["source-edit-debug/default", ["BackTopBar", "SourceRuleEditPage"]],
     ["source-debug/default", ["BackTopBar", "SourceDebugPage"]],
     ["source-debug-running/loading", ["BackTopBar", "SourceDebugRunningPage"]],
     ["source-debug-result/default", ["BackTopBar", "SourceDebugResultPage"]],
@@ -286,6 +288,7 @@ test("同步恢复流使用页面级组件，避免退回通用 scaffold", () =>
     ["sync-backup/default", ["BackTopBar", "SyncBackupPage"]],
     ["sync-backup/loading", ["BackTopBar", "SyncBackupPage"]],
     ["restore-confirm/default", ["BackTopBar", "RestoreConfirmPage"]],
+    ["restore-scopes/default", ["BackTopBar", "RestoreConfirmPage"]],
     ["restore-preview/default", ["BackTopBar", "RestoreConfirmPage"]],
     ["restore-progress/loading", ["BackTopBar", "RestoreProgressPage"]],
     ["restore-running/loading", ["BackTopBar", "RestoreProgressPage"]],
@@ -326,6 +329,8 @@ test("Discover 与关于反馈使用页面级组件，避免退回通用 scaffol
   const expected = new Map([
     ["about-feedback/default", ["BackTopBar", "AboutFeedbackPage"]],
     ["discover-source-bulk/default", ["BackTopBar", "DiscoverSourceBulkPage"]],
+    ["discover-source-login/default", ["BackTopBar", "DiscoverSourceLoginPage"]],
+    ["discover-rule-test/default", ["BackTopBar", "DiscoverRuleTestPage"]],
     ["discover-empty/empty", ["AppTopBar", "DiscoverStatePage", "BottomNav"]],
     ["discover-error/error", ["AppTopBar", "DiscoverStatePage", "BottomNav"]],
     ["discover-loading/loading", ["AppTopBar", "DiscoverStatePage", "BottomNav"]],
@@ -338,6 +343,23 @@ test("Discover 与关于反馈使用页面级组件，避免退回通用 scaffol
     assert.ok(entry, `${key} fixture 应存在`);
     assert.deepEqual(entry.components.map((item) => item.type), types, `${key} 应使用页面级组件`);
     for (const type of ["List", "ListRow", "Button", "Content", "Loading", "Empty", "ErrorState"]) {
+      assert.equal(entry.components.some((item) => item.type === type), false, `${key} 不应退回 ${type}`);
+    }
+  }
+});
+
+test("RSS 源编辑流使用页面级组件，避免退回通用 scaffold", () => {
+  const expected = new Map([
+    ["rss-source-add/default", ["BackTopBar", "RssSourceEditPage"]],
+    ["rss-source-edit/default", ["BackTopBar", "RssSourceEditPage"]],
+  ]);
+
+  for (const [key, types] of expected.entries()) {
+    const [routeId, pageState] = key.split("/");
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === pageState);
+    assert.ok(entry, `${key} fixture 应存在`);
+    assert.deepEqual(entry.components.map((item) => item.type), types, `${key} 应使用 RSS 源编辑页级组件`);
+    for (const type of ["FormSection", "List", "Content", "Button", "Input", "SettingsSection"]) {
       assert.equal(entry.components.some((item) => item.type === type), false, `${key} 不应退回 ${type}`);
     }
   }

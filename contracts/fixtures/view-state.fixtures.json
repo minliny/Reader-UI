@@ -2327,34 +2327,10 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "restore-scopes-section",
+        "type": "RestoreConfirmPage",
+        "id": "restore-scopes-page",
         "props": {
-          "title": "选择恢复项"
-        },
-        "children": [
-          {
-            "type": "SettingsListItem",
-            "id": "scope-progress",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "scope-bookshelf",
-            "props": {}
-          },
-          {
-            "type": "SettingsListItem",
-            "id": "scope-settings",
-            "props": {}
-          }
-        ]
-      },
-      {
-        "type": "Button",
-        "id": "restore-start",
-        "props": {
-          "label": "开始恢复"
+          "variant": "scopes"
         }
       }
     ]
@@ -2758,31 +2734,10 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "edit-debug-form",
+        "type": "SourceRuleEditPage",
+        "id": "source-edit-debug-page",
         "props": {
-          "title": "书源信息"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "edit-name",
-        "props": {
-          "placeholder": "书源名称"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "edit-url",
-        "props": {
-          "placeholder": "书源 URL"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "edit-debug-run",
-        "props": {
-          "label": "保存并调试"
+          "variant": "debug"
         }
       }
     ]
@@ -2865,32 +2820,9 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "rule-section",
-        "props": {
-          "title": "搜索规则"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "rule-search-url",
-        "props": {
-          "placeholder": "搜索 URL 规则"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "rule-search-list",
-        "props": {
-          "placeholder": "结果列表规则"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "save-rule",
-        "props": {
-          "label": "保存规则"
-        }
+        "type": "SourceRuleEditPage",
+        "id": "source-rule-edit-page",
+        "props": {}
       }
     ]
   },
@@ -2908,25 +2840,9 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "rule-test-section",
-        "props": {
-          "title": "测试"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "test-url",
-        "props": {
-          "placeholder": "测试 URL"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "run-test",
-        "props": {
-          "label": "运行测试"
-        }
+        "type": "DiscoverRuleTestPage",
+        "id": "discover-rule-test-page",
+        "props": {}
       }
     ]
   },
@@ -3241,31 +3157,10 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "add-section",
+        "type": "RssSourceEditPage",
+        "id": "rss-source-add-page",
         "props": {
-          "title": "源信息"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "rss-name",
-        "props": {
-          "placeholder": "源名称"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "rss-url",
-        "props": {
-          "placeholder": "Feed URL"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "save",
-        "props": {
-          "label": "添加"
+          "mode": "add"
         }
       }
     ]
@@ -3286,31 +3181,10 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "edit-section",
+        "type": "RssSourceEditPage",
+        "id": "rss-source-edit-page",
         "props": {
-          "title": "源信息"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "rss-name",
-        "props": {
-          "placeholder": "源名称"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "rss-url",
-        "props": {
-          "placeholder": "Feed URL"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "save",
-        "props": {
-          "label": "保存"
+          "mode": "edit"
         }
       }
     ]
@@ -3463,32 +3337,9 @@
         }
       },
       {
-        "type": "SettingsSection",
-        "id": "login-section",
-        "props": {
-          "title": "登录"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "username",
-        "props": {
-          "placeholder": "用户名"
-        }
-      },
-      {
-        "type": "Input",
-        "id": "password",
-        "props": {
-          "placeholder": "密码"
-        }
-      },
-      {
-        "type": "Button",
-        "id": "login",
-        "props": {
-          "label": "登录"
-        }
+        "type": "DiscoverSourceLoginPage",
+        "id": "discover-source-login-page",
+        "props": {}
       }
     ]
   },
