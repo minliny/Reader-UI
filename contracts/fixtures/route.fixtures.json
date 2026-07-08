@@ -1,210 +1,911 @@
 [
-  { "id": "app-shell", "shell": "MainTabShell" },
-  { "id": "main-tabs", "shell": "MainTabShell" },
-
-  { "id": "bookshelf", "shell": "MainTabShell", "mainTab": "bookshelf" },
-  { "id": "bookshelf-cover-mode", "shell": "MainTabShell", "mainTab": "bookshelf" },
-  { "id": "bookshelf-list-mode", "shell": "MainTabShell", "mainTab": "bookshelf" },
-  { "id": "bookshelf-empty", "shell": "MainTabShell", "mainTab": "bookshelf" },
-  { "id": "bookshelf-book-more-menu", "shell": "MainTabShell" },
-  { "id": "bookshelf-group-management", "shell": "LibraryShell" },
-  { "id": "sort-filter", "shell": "MainTabShell" },
-  { "id": "group-management", "shell": "LibraryShell" },
-  { "id": "local-import", "shell": "LibraryShell" },
-
-  { "id": "book-search", "shell": "LibraryShell" },
-  { "id": "search-home", "shell": "LibraryShell" },
-  { "id": "search-results", "shell": "LibraryShell" },
-  { "id": "search-loading", "shell": "LibraryShell" },
-  { "id": "search-empty", "shell": "LibraryShell" },
-  { "id": "search-error", "shell": "LibraryShell" },
-
-  { "id": "book-detail", "shell": "LibraryShell", "params": { "detailUrl": "https://example.com/book/1" } },
-  { "id": "book-detail-toc-preview", "shell": "LibraryShell" },
-  { "id": "book-directory", "shell": "LibraryShell" },
-
-  { "id": "immersive-reading", "shell": "ReaderShell" },
-  { "id": "reader", "shell": "ReaderShell" },
-  { "id": "reader_content", "shell": "ReaderShell", "params": { "contentUrl": "https://example.com/chapter/1", "chapterTitle": "第一章" } },
-  { "id": "toc-bookmarks", "shell": "ReaderShell" },
-  { "id": "reader-appearance", "shell": "ReaderShell" },
-  { "id": "reader-appearance-overlay-v2", "shell": "ReaderShell" },
-  { "id": "tts", "shell": "ReaderShell" },
-  { "id": "reader-tts-overlay-v2", "shell": "ReaderShell" },
-  { "id": "reader-settings", "shell": "ReaderShell" },
-  { "id": "reader-settings-overlay-v2", "shell": "ReaderShell" },
-  { "id": "reader-full-font", "shell": "ReaderShell" },
-  { "id": "reader-full-theme", "shell": "ReaderShell" },
-  { "id": "reader-full-theme-edit", "shell": "ReaderShell" },
-  { "id": "reader-full-layout", "shell": "ReaderShell" },
-  { "id": "reader-full-page-turn", "shell": "ReaderShell" },
-  { "id": "reader-book-cache", "shell": "ReaderShell" },
-  { "id": "reader-debug-info", "shell": "ReaderShell" },
-  { "id": "auto-page", "shell": "ReaderShell" },
-  { "id": "reader-auto-scroll-overlay-v2", "shell": "ReaderShell" },
-  { "id": "content-search", "shell": "ReaderShell" },
-  { "id": "reader-search-overlay-v2", "shell": "ReaderShell" },
-  { "id": "content-replacement", "shell": "ReaderShell" },
-  { "id": "reader-replace-overlay-v2", "shell": "ReaderShell" },
-  { "id": "source-switch", "shell": "FlowShell" },
-  { "id": "source-switch-results", "shell": "FlowShell" },
-  { "id": "reader-night-state-v2", "shell": "ReaderShell" },
-  { "id": "control-layer-base-v2", "shell": "ReaderShell" },
-  { "id": "reader-directory-overlay-v2", "shell": "ReaderShell" },
-
-  { "id": "discover", "shell": "MainTabShell", "mainTab": "discover" },
-  { "id": "discover-home", "shell": "MainTabShell", "mainTab": "discover", "aliasFor": "discover" },
-
-  { "id": "rss", "shell": "MainTabShell", "mainTab": "rss" },
-  { "id": "rss-all", "shell": "LibraryShell", "params": { "filter": "all" } },
-  { "id": "rss-detail", "shell": "LibraryShell", "params": { "rssId": "rss-001" } },
-  { "id": "rss-original", "shell": "LibraryShell", "params": { "url": "https://example.com/feed/001" } },
-  { "id": "rss-refreshing", "shell": "LibraryShell" },
-  { "id": "rss-subscription-management", "shell": "LibraryShell" },
-
-  { "id": "settings", "shell": "MainTabShell", "mainTab": "settings" },
-  { "id": "global-settings", "shell": "SettingsShell" },
-  { "id": "settings-general", "shell": "SettingsShell" },
-  { "id": "source-management", "shell": "SettingsShell" },
-  { "id": "source-detail", "shell": "SettingsShell", "params": { "sourceId": "src-001" } },
-  { "id": "source-edit", "shell": "SettingsShell", "params": { "sourceId": "src-001" } },
-  { "id": "webdav-config", "shell": "SettingsShell" },
-  { "id": "sync-backup", "shell": "SettingsShell" },
-  { "id": "restore-scopes", "shell": "SettingsShell" },
-  { "id": "restore-running", "shell": "SettingsShell" },
-  { "id": "restore-result", "shell": "SettingsShell" },
-  { "id": "sync-error", "shell": "SettingsShell" },
-  { "id": "about-feedback", "shell": "SettingsShell" },
-
-  { "id": "global-loading", "shell": "SettingsShell" },
-  { "id": "global-empty", "shell": "SettingsShell" },
-  { "id": "global-error", "shell": "SettingsShell" },
-  { "id": "offline-state", "shell": "SettingsShell" },
-  { "id": "permission-required", "shell": "SettingsShell" },
-  { "id": "state-error", "shell": "SettingsShell", "params": { "message": "网络异常" } },
-  { "id": "state-offline", "shell": "SettingsShell" },
-  { "id": "discover-cache-confirm", "shell": "MainTabShell" },
-  { "id": "discover-cache-empty", "shell": "MainTabShell" },
-  { "id": "discover-cache-fresh", "shell": "MainTabShell" },
-  { "id": "discover-cache-stale", "shell": "MainTabShell" },
-  { "id": "discover-cache-toast", "shell": "MainTabShell" },
-  { "id": "discover-control", "shell": "MainTabShell" },
-  { "id": "discover-empty", "shell": "MainTabShell" },
-  { "id": "discover-entry-bestseller", "shell": "MainTabShell" },
-  { "id": "discover-entry-booklist", "shell": "MainTabShell" },
-  { "id": "discover-entry-category", "shell": "MainTabShell" },
-  { "id": "discover-entry-error", "shell": "MainTabShell" },
-  { "id": "discover-entry-finished", "shell": "MainTabShell" },
-  { "id": "discover-entry-latest", "shell": "MainTabShell" },
-  { "id": "discover-entry-new", "shell": "MainTabShell" },
-  { "id": "discover-entry-ranking", "shell": "MainTabShell" },
-  { "id": "discover-entry-source", "shell": "MainTabShell" },
-  { "id": "discover-error", "shell": "MainTabShell" },
-  { "id": "discover-filter-category", "shell": "MainTabShell" },
-  { "id": "discover-filter-female", "shell": "MainTabShell" },
-  { "id": "discover-filter-keyword", "shell": "MainTabShell" },
-  { "id": "discover-filter-male", "shell": "MainTabShell" },
-  { "id": "discover-filter-source-type", "shell": "MainTabShell" },
-  { "id": "discover-infinite-loading", "shell": "MainTabShell" },
-  { "id": "discover-loading", "shell": "MainTabShell" },
-  { "id": "discover-login-return", "shell": "MainTabShell" },
-  { "id": "discover-no-results", "shell": "MainTabShell" },
-  { "id": "discover-page-two", "shell": "MainTabShell" },
-  { "id": "discover-refreshing", "shell": "MainTabShell" },
-  { "id": "discover-sort", "shell": "MainTabShell" },
-  { "id": "discover-sort-collection", "shell": "MainTabShell" },
-  { "id": "discover-sort-finished", "shell": "MainTabShell" },
-  { "id": "discover-sort-popularity", "shell": "MainTabShell" },
-  { "id": "discover-sort-update", "shell": "MainTabShell" },
-  { "id": "discover-sort-words", "shell": "MainTabShell" },
-  { "id": "discover-switched-source", "shell": "MainTabShell" },
-  { "id": "discover-switching-source", "shell": "MainTabShell" },
-  { "id": "book-batch-management", "shell": "LibraryShell" },
-  { "id": "discover-source-login", "shell": "LibraryShell" },
-  { "id": "rss-empty", "shell": "LibraryShell" },
-  { "id": "rss-error", "shell": "LibraryShell" },
-  { "id": "rss-favorite-add", "shell": "LibraryShell" },
-  { "id": "rss-favorite-clear", "shell": "LibraryShell" },
-  { "id": "rss-favorite-group-edit", "shell": "LibraryShell" },
-  { "id": "rss-favorite-groups", "shell": "LibraryShell" },
-  { "id": "rss-favorite-remove", "shell": "LibraryShell" },
-  { "id": "rss-original-browser", "shell": "LibraryShell" },
-  { "id": "rss-read-record", "shell": "LibraryShell" },
-  { "id": "rss-record-clear", "shell": "LibraryShell" },
-  { "id": "rss-rule-subscription", "shell": "LibraryShell" },
-  { "id": "rss-rule-subscription-apply", "shell": "LibraryShell" },
-  { "id": "rss-rule-subscription-create", "shell": "LibraryShell" },
-  { "id": "rss-rule-subscription-detail", "shell": "LibraryShell" },
-  { "id": "rss-rule-subscription-edit", "shell": "LibraryShell" },
-  { "id": "rss-rule-subscription-test", "shell": "LibraryShell" },
-  { "id": "rss-search", "shell": "LibraryShell" },
-  { "id": "rss-source-actions", "shell": "LibraryShell" },
-  { "id": "rss-source-add", "shell": "LibraryShell" },
-  { "id": "rss-source-batch", "shell": "LibraryShell" },
-  { "id": "rss-source-batch-disable", "shell": "LibraryShell" },
-  { "id": "rss-source-category-booklist", "shell": "LibraryShell" },
-  { "id": "rss-source-category-discussions", "shell": "LibraryShell" },
-  { "id": "rss-source-category-issues", "shell": "LibraryShell" },
-  { "id": "rss-source-category-novel", "shell": "LibraryShell" },
-  { "id": "rss-source-category-releases", "shell": "LibraryShell" },
-  { "id": "rss-source-category-tech", "shell": "LibraryShell" },
-  { "id": "rss-source-debug", "shell": "LibraryShell" },
-  { "id": "rss-source-delete-confirm", "shell": "LibraryShell" },
-  { "id": "rss-source-disable", "shell": "LibraryShell" },
-  { "id": "rss-source-edit", "shell": "LibraryShell" },
-  { "id": "rss-source-export", "shell": "LibraryShell" },
-  { "id": "rss-source-export-detail", "shell": "LibraryShell" },
-  { "id": "rss-source-export-result", "shell": "LibraryShell" },
-  { "id": "rss-source-feed", "shell": "LibraryShell" },
-  { "id": "rss-source-group-edit", "shell": "LibraryShell" },
-  { "id": "rss-source-groups", "shell": "LibraryShell" },
-  { "id": "rss-source-import", "shell": "LibraryShell" },
-  { "id": "rss-source-import-detail", "shell": "LibraryShell" },
-  { "id": "rss-source-import-result", "shell": "LibraryShell" },
-  { "id": "rss-source-login", "shell": "LibraryShell" },
-  { "id": "rss-source-login-clear", "shell": "LibraryShell" },
-  { "id": "rss-source-login-cookie", "shell": "LibraryShell" },
-  { "id": "rss-source-login-web", "shell": "LibraryShell" },
-  { "id": "rss-source-pin", "shell": "LibraryShell" },
-  { "id": "rss-source-vars", "shell": "LibraryShell" },
-  { "id": "rss-starred", "shell": "LibraryShell" },
-  { "id": "reader-full-appearance", "shell": "ReaderShell" },
-  { "id": "reader-full-directory", "shell": "ReaderShell" },
-  { "id": "reader-full-settings", "shell": "ReaderShell" },
-  { "id": "reader-full-tts", "shell": "ReaderShell" },
-  { "id": "about", "shell": "SettingsShell" },
-  { "id": "about-version", "shell": "SettingsShell" },
-  { "id": "backup-settings", "shell": "SettingsShell" },
-  { "id": "bookshelf-search-settings", "shell": "SettingsShell" },
-  { "id": "discover-rule-test", "shell": "SettingsShell" },
-  { "id": "discover-source-bulk", "shell": "SettingsShell" },
-  { "id": "progress-sync", "shell": "SettingsShell" },
-  { "id": "progress-sync-status", "shell": "SettingsShell" },
-  { "id": "reading-settings-entry", "shell": "SettingsShell" },
-  { "id": "remote-webdav-books", "shell": "SettingsShell" },
-  { "id": "restore-confirm", "shell": "SettingsShell" },
-  { "id": "restore-conflict", "shell": "SettingsShell" },
-  { "id": "restore-preview", "shell": "SettingsShell" },
-  { "id": "restore-progress", "shell": "SettingsShell" },
-  { "id": "source-add", "shell": "SettingsShell" },
-  { "id": "source-batch", "shell": "SettingsShell" },
-  { "id": "source-code-view", "shell": "SettingsShell" },
-  { "id": "source-debug", "shell": "SettingsShell" },
-  { "id": "source-debug-catalog-result", "shell": "SettingsShell" },
-  { "id": "source-debug-content-log", "shell": "SettingsShell" },
-  { "id": "source-debug-detail-result", "shell": "SettingsShell" },
-  { "id": "source-debug-result", "shell": "SettingsShell" },
-  { "id": "source-debug-running", "shell": "SettingsShell" },
-  { "id": "source-debug-search-result", "shell": "SettingsShell" },
-  { "id": "source-delete-confirm", "shell": "SettingsShell" },
-  { "id": "source-detect", "shell": "SettingsShell" },
-  { "id": "source-edit-debug", "shell": "SettingsShell" },
-  { "id": "source-groups", "shell": "SettingsShell" },
-  { "id": "source-import-options", "shell": "SettingsShell" },
-  { "id": "source-import-preview", "shell": "SettingsShell" },
-  { "id": "source-logs", "shell": "SettingsShell" },
-  { "id": "source-rule-edit", "shell": "SettingsShell" },
-  { "id": "source-settings-entry", "shell": "SettingsShell" },
-  { "id": "source-test-result", "shell": "SettingsShell" },
-  { "id": "sync-settings-entry", "shell": "SettingsShell" }
+  {
+    "id": "app-shell",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "main-tabs",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "bookshelf",
+    "shell": "MainTabShell",
+    "mainTab": "bookshelf"
+  },
+  {
+    "id": "bookshelf-cover-mode",
+    "shell": "MainTabShell",
+    "mainTab": "bookshelf"
+  },
+  {
+    "id": "bookshelf-list-mode",
+    "shell": "MainTabShell",
+    "mainTab": "bookshelf"
+  },
+  {
+    "id": "bookshelf-empty",
+    "shell": "MainTabShell",
+    "mainTab": "bookshelf"
+  },
+  {
+    "id": "bookshelf-book-more-menu",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "bookshelf-group-management",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "sort-filter",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "group-management",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "local-import",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "book-search",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "search-home",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "search-results",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "search-loading",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "search-empty",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "search-error",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "book-detail",
+    "shell": "LibraryShell",
+    "params": {
+      "detailUrl": "https://example.com/book/1"
+    }
+  },
+  {
+    "id": "book-detail-toc-preview",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "book-directory",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "immersive-reading",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader_content",
+    "shell": "ReaderShell",
+    "params": {
+      "contentUrl": "https://example.com/chapter/1",
+      "chapterTitle": "第一章"
+    }
+  },
+  {
+    "id": "toc-bookmarks",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-appearance",
+    "shell": "ReaderShell",
+    "aliasFor": "reader-appearance-overlay-v2"
+  },
+  {
+    "id": "reader-appearance-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "tts",
+    "shell": "ReaderShell",
+    "aliasFor": "reader-tts-overlay-v2"
+  },
+  {
+    "id": "reader-tts-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-settings",
+    "shell": "ReaderShell",
+    "aliasFor": "reader-settings-overlay-v2"
+  },
+  {
+    "id": "reader-settings-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-font",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-theme",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-theme-edit",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-layout",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-page-turn",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-book-cache",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-debug-info",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "auto-page",
+    "shell": "ReaderShell",
+    "aliasFor": "reader-auto-scroll-overlay-v2"
+  },
+  {
+    "id": "reader-auto-scroll-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "content-search",
+    "shell": "ReaderShell",
+    "aliasFor": "reader-search-overlay-v2"
+  },
+  {
+    "id": "reader-search-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "content-replacement",
+    "shell": "ReaderShell",
+    "aliasFor": "reader-replace-overlay-v2"
+  },
+  {
+    "id": "reader-replace-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "source-switch",
+    "shell": "FlowShell"
+  },
+  {
+    "id": "source-switch-results",
+    "shell": "FlowShell"
+  },
+  {
+    "id": "reader-night-state-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "control-layer-base-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-directory-overlay-v2",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "discover",
+    "shell": "MainTabShell",
+    "mainTab": "discover"
+  },
+  {
+    "id": "discover-home",
+    "shell": "MainTabShell",
+    "mainTab": "discover",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "rss",
+    "shell": "MainTabShell",
+    "mainTab": "rss"
+  },
+  {
+    "id": "rss-all",
+    "shell": "LibraryShell",
+    "params": {
+      "filter": "all"
+    }
+  },
+  {
+    "id": "rss-detail",
+    "shell": "LibraryShell",
+    "params": {
+      "rssId": "rss-001"
+    }
+  },
+  {
+    "id": "rss-original",
+    "shell": "LibraryShell",
+    "params": {
+      "url": "https://example.com/feed/001"
+    }
+  },
+  {
+    "id": "rss-refreshing",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-subscription-management",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "settings",
+    "shell": "MainTabShell",
+    "mainTab": "settings"
+  },
+  {
+    "id": "global-settings",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "settings-general",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-management",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-detail",
+    "shell": "SettingsShell",
+    "params": {
+      "sourceId": "src-001"
+    }
+  },
+  {
+    "id": "source-edit",
+    "shell": "SettingsShell",
+    "params": {
+      "sourceId": "src-001"
+    }
+  },
+  {
+    "id": "webdav-config",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "sync-backup",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-scopes",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-running",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-result",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "sync-error",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "about-feedback",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "global-loading",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "global-empty",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "global-error",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "offline-state",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "permission-required",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "state-error",
+    "shell": "SettingsShell",
+    "params": {
+      "message": "网络异常"
+    }
+  },
+  {
+    "id": "state-offline",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "discover-cache-confirm",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-cache-empty",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-cache-fresh",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-cache-stale",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-cache-toast",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-control",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-empty",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "discover-entry-bestseller",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-booklist",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-category",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-error",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-finished",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-latest",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-new",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-ranking",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-entry-source",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-error",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "discover-filter-category",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-filter-female",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-filter-keyword",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-filter-male",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-filter-source-type",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-infinite-loading",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-loading",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "discover-login-return",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-no-results",
+    "shell": "MainTabShell"
+  },
+  {
+    "id": "discover-page-two",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-refreshing",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-sort",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-sort-collection",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-sort-finished",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-sort-popularity",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-sort-update",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-sort-words",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-switched-source",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "discover-switching-source",
+    "shell": "MainTabShell",
+    "aliasFor": "discover"
+  },
+  {
+    "id": "book-batch-management",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "discover-source-login",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-empty",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-error",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-favorite-add",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-favorite-clear",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-favorite-group-edit",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-favorite-groups",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-favorite-remove",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-original-browser",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-read-record",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-record-clear",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-rule-subscription",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-rule-subscription-apply",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-rule-subscription-create",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-rule-subscription-detail",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-rule-subscription-edit",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-rule-subscription-test",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-search",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-source-actions",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-add",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-source-batch",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-batch-disable",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-category-booklist",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-category-discussions",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-category-issues",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-category-novel",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-category-releases",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-category-tech",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-debug",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-delete-confirm",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-disable",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-edit",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-source-export",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-export-detail",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-export-result",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-feed",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-group-edit",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-groups",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-source-import",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "rss-source-import-detail",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-import-result",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-login",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-login-clear",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-login-cookie",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-login-web",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-pin",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-source-vars",
+    "shell": "LibraryShell",
+    "aliasFor": "rss-subscription-management"
+  },
+  {
+    "id": "rss-starred",
+    "shell": "LibraryShell"
+  },
+  {
+    "id": "reader-full-appearance",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-directory",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-settings",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "reader-full-tts",
+    "shell": "ReaderShell"
+  },
+  {
+    "id": "about",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "about-version",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "backup-settings",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "bookshelf-search-settings",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "discover-rule-test",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "discover-source-bulk",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "progress-sync",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "progress-sync-status",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "reading-settings-entry",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "remote-webdav-books",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-confirm",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-conflict",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-preview",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "restore-progress",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-add",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-batch",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-code-view",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug-catalog-result",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug-content-log",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug-detail-result",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug-result",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug-running",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-debug-search-result",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-delete-confirm",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-detect",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-edit-debug",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-groups",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-import-options",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-import-preview",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-logs",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-rule-edit",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-settings-entry",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "source-test-result",
+    "shell": "SettingsShell"
+  },
+  {
+    "id": "sync-settings-entry",
+    "shell": "SettingsShell"
+  }
 ]

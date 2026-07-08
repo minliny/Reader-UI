@@ -52,6 +52,10 @@ enum class ComponentType {
     FeedSourceChips,
     @SerialName("RssEntryItem")
     RssEntryItem,
+    @SerialName("RssSearchEntry")
+    RssSearchEntry,
+    @SerialName("RssArticleSection")
+    RssArticleSection,
     @SerialName("UnreadIndicator")
     UnreadIndicator,
     @SerialName("LocalOverviewCard")
@@ -102,6 +106,8 @@ enum class ComponentType {
     Empty,
     @SerialName("Error")
     Error,
+    @SerialName("ErrorState")
+    ErrorState,
     @SerialName("Offline")
     Offline,
     @SerialName("Permission")
@@ -171,7 +177,61 @@ enum class ComponentType {
     @SerialName("NightToast")
     NightToast,
     @SerialName("SourceSwitchResultsPanel")
-    SourceSwitchResultsPanel
+    SourceSwitchResultsPanel,
+    @SerialName("AppShellStructure")
+    AppShellStructure,
+    @SerialName("MainTabsStructure")
+    MainTabsStructure,
+    @SerialName("SearchHomePage")
+    SearchHomePage,
+    @SerialName("SearchResultsPage")
+    SearchResultsPage,
+    @SerialName("SearchStatePage")
+    SearchStatePage,
+    @SerialName("BookTocPreviewPage")
+    BookTocPreviewPage,
+    @SerialName("BookshelfEmptyPage")
+    BookshelfEmptyPage,
+    @SerialName("SourceManagementPage")
+    SourceManagementPage,
+    @SerialName("SourceDetailPage")
+    SourceDetailPage,
+    @SerialName("SourceImportOptionsPage")
+    SourceImportOptionsPage,
+    @SerialName("SourceDisabledState")
+    SourceDisabledState,
+    @SerialName("SourceSettingsEntryPage")
+    SourceSettingsEntryPage,
+    @SerialName("SourceTestResultPage")
+    SourceTestResultPage,
+    @SerialName("WebDavConfigPage")
+    WebDavConfigPage,
+    @SerialName("SyncSettingsEntryPage")
+    SyncSettingsEntryPage,
+    @SerialName("SyncErrorPage")
+    SyncErrorPage,
+    @SerialName("SyncProgressPage")
+    SyncProgressPage,
+    @SerialName("RemoteWebDavBooksPage")
+    RemoteWebDavBooksPage,
+    @SerialName("RssDetailPage")
+    RssDetailPage,
+    @SerialName("RssEmptyState")
+    RssEmptyState,
+    @SerialName("RssErrorState")
+    RssErrorState,
+    @SerialName("GlobalStatePage")
+    GlobalStatePage,
+    @SerialName("OfflineStatePage")
+    OfflineStatePage,
+    @SerialName("PermissionRequiredPage")
+    PermissionRequiredPage,
+    @SerialName("AboutVersionPage")
+    AboutVersionPage,
+    @SerialName("LocalBookImportPage")
+    LocalBookImportPage,
+    @SerialName("ReadingSettingsEntryPage")
+    ReadingSettingsEntryPage
 }
 
 @Serializable
