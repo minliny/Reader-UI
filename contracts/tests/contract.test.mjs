@@ -204,6 +204,47 @@ test("book-detail view-state 使用详情页复合结构", () => {
   );
 });
 
+test("normalized 状态页文案与 handoff HTML 对齐", () => {
+  const cases = [
+    ["bookshelf-empty", "shelf-empty", "BookshelfEmptyPage", { title: "书架还是空的", message: "导入本地书籍或通过搜索加入书架。" }],
+    ["rss-detail", "default", "RssDetailPage", { title: "深空信号更新" }],
+    ["search-loading", "loading", "SearchStatePage", { title: "正在搜索", message: "正在从启用书源获取结果。" }],
+    ["search-empty", "empty", "SearchStatePage", { title: "没有找到结果", message: "换个关键词或检查书源状态。" }],
+    ["search-error", "error", "SearchStatePage", { title: "搜索失败", message: "网络源暂时不可用。", action: "重试" }],
+    ["rss-empty", "empty", "RssEmptyState", { title: "暂无订阅", message: "添加 RSS 订阅后查看更新。", action: "添加订阅" }],
+    ["rss-error", "error", "RssErrorState", { title: "订阅加载失败", message: "网络异常或订阅源不可访问。", action: "重试" }],
+    ["sync-error", "error", "SyncErrorPage", { title: "同步失败", message: "WebDAV auth error，请重新登录。" }],
+    ["global-loading", "loading", "GlobalStatePage", { title: "加载中", message: "正在准备内容。" }],
+    ["global-empty", "empty", "GlobalStatePage", { title: "暂无内容", message: "当前列表为空。" }],
+    ["global-error", "error", "GlobalStatePage", { title: "出错了", message: "请稍后重试。", action: "重试" }],
+    ["offline-state", "offline", "OfflineStatePage", { title: "当前离线", message: "可继续阅读已缓存书籍。" }],
+    ["permission-required", "permission", "PermissionRequiredPage", { title: "需要存储权限", message: "授予权限后可导入本地书籍。", action: "授予权限" }],
+    ["about-version", "default", "AboutVersionPage", { title: "Reader for Android", version: "1.0.0" }],
+  ];
+
+  for (const [routeId, pageState, type, expectedProps] of cases) {
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === pageState);
+    assert.ok(entry, `${routeId}/${pageState} fixture 应存在`);
+    const component = entry.components.find((item) => item.type === type);
+    assert.ok(component, `${routeId}/${pageState} 应包含 ${type}`);
+    assert.deepEqual(
+      Object.fromEntries(Object.keys(expectedProps).map((key) => [key, component.props[key]])),
+      expectedProps
+    );
+  }
+});
+
+test("rss-subscription-management 含 4 个订阅源行", () => {
+  const entry = viewFixtures.find((item) => item.routeId === "rss-subscription-management" && item.pageState === "default");
+  assert.ok(entry, "rss-subscription-management/default fixture 应存在");
+  const section = entry.components.find((item) => item.type === "SettingsSection");
+  assert.ok(section, "rss-subscription-management 应包含 SettingsSection");
+  assert.deepEqual(
+    section.children.map((item) => item.id),
+    ["sub-1", "sub-2", "sub-3", "sub-4"]
+  );
+});
+
 test("motion.fixtures 中 id 全部在 motion schema enum 中", () => {
   const allowed = new Set(motionSchema.properties.id.enum);
   for (const item of motionFixtures) {
