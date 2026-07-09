@@ -29,855 +29,904 @@ export interface Token {
 }
 
 export const tokenRegistry: Record<string, Token> = {
-  "--reader-ds-color-paper": {
-    name: "--reader-ds-color-paper",
+  "--fd-ds-color-paper": {
+    name: "--fd-ds-color-paper",
     category: "color",
     value: "#fff8f4",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-paper-bright": {
-    name: "--reader-ds-color-paper-bright",
+  "--fd-ds-color-paper-bright": {
+    name: "--fd-ds-color-paper-bright",
     category: "color",
     value: "#fff8f1",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-surface": {
-    name: "--reader-ds-color-surface",
+  "--fd-ds-color-surface": {
+    name: "--fd-ds-color-surface",
     category: "color",
     value: "rgba(255,255,255,0.88)",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-surface-soft": {
-    name: "--reader-ds-color-surface-soft",
+  "--fd-ds-color-surface-soft": {
+    name: "--fd-ds-color-surface-soft",
     category: "color",
     value: "rgba(255,252,248,0.72)",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-ink": {
-    name: "--reader-ds-color-ink",
+  "--fd-ds-color-ink": {
+    name: "--fd-ds-color-ink",
     category: "color",
     value: "#1f1b17",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-control-ink": {
-    name: "--reader-ds-color-control-ink",
+  "--fd-ds-color-control-ink": {
+    name: "--fd-ds-color-control-ink",
     category: "color",
     value: "#41484c",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-muted": {
-    name: "--reader-ds-color-muted",
+  "--fd-ds-color-muted": {
+    name: "--fd-ds-color-muted",
     category: "color",
     value: "#756f69",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-border": {
-    name: "--reader-ds-color-border",
+  "--fd-ds-color-border": {
+    name: "--fd-ds-color-border",
     category: "color",
     value: "#c1c7cd",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-primary": {
-    name: "--reader-ds-color-primary",
+  "--fd-ds-color-primary": {
+    name: "--fd-ds-color-primary",
     category: "color",
-    value: "#366179",
+    value: "#2d4a3e",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-primary-dark": {
-    name: "--reader-ds-color-primary-dark",
+  "--fd-ds-color-primary-dark": {
+    name: "--fd-ds-color-primary-dark",
     category: "color",
-    value: "#274f66",
+    value: "#1f3528",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-accent": {
-    name: "--reader-ds-color-accent",
+  "--fd-ds-color-accent": {
+    name: "--fd-ds-color-accent",
     category: "color",
     value: "#f48b13",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-bottom-bar-bg": {
-    name: "--reader-ds-color-bottom-bar-bg",
+  "--fd-ds-color-bottom-bar-bg": {
+    name: "--fd-ds-color-bottom-bar-bg",
     category: "color",
     value: "#fbf2eb",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-floating-control-bg": {
-    name: "--reader-ds-color-floating-control-bg",
+  "--fd-ds-color-floating-control-bg": {
+    name: "--fd-ds-color-floating-control-bg",
     category: "color",
     value: "#fbf2eb",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-floating-control-bg-alt": {
-    name: "--reader-ds-color-floating-control-bg-alt",
+  "--fd-ds-color-floating-control-bg-alt": {
+    name: "--fd-ds-color-floating-control-bg-alt",
     category: "color",
     value: "#eae1da",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-meta-bg": {
-    name: "--reader-ds-color-meta-bg",
+  "--fd-ds-color-meta-bg": {
+    name: "--fd-ds-color-meta-bg",
     category: "color",
     value: "#f5ece6",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-rss-unread": {
-    name: "--reader-ds-color-rss-unread",
+  "--fd-ds-color-rss-unread": {
+    name: "--fd-ds-color-rss-unread",
     category: "color",
     value: "#2F6F93",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-paper-night": {
-    name: "--reader-ds-color-paper-night",
+  "--fd-ds-color-status-good": {
+    name: "--fd-ds-color-status-good",
+    category: "color",
+    value: "#338144",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-status-warn": {
+    name: "--fd-ds-color-status-warn",
+    category: "color",
+    value: "#d7473e",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-paper-night": {
+    name: "--fd-ds-color-paper-night",
     category: "color",
     value: "#181f22",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-ink-night": {
-    name: "--reader-ds-color-ink-night",
+  "--fd-ds-color-ink-night": {
+    name: "--fd-ds-color-ink-night",
     category: "color",
     value: "#d8ccc4",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-control-ink-night": {
-    name: "--reader-ds-color-control-ink-night",
+  "--fd-ds-color-control-ink-night": {
+    name: "--fd-ds-color-control-ink-night",
     category: "color",
     value: "#d7e1e5",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-primary-night": {
-    name: "--reader-ds-color-primary-night",
+  "--fd-ds-color-primary-night": {
+    name: "--fd-ds-color-primary-night",
     category: "color",
     value: "#8fb6ca",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-color-floating-control-bg-alt-night": {
-    name: "--reader-ds-color-floating-control-bg-alt-night",
+  "--fd-ds-color-floating-control-bg-alt-night": {
+    name: "--fd-ds-color-floating-control-bg-alt-night",
     category: "color",
     value: "#2b3b43",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-font-sans": {
-    name: "--reader-ds-font-sans",
+  "--fd-ds-font-sans": {
+    name: "--fd-ds-font-sans",
     category: "font",
-    value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",
+    value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans SC\", \"Source Han Sans SC\", sans-serif",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-font-serif": {
-    name: "--reader-ds-font-serif",
+  "--fd-ds-font-serif": {
+    name: "--fd-ds-font-serif",
     category: "font",
-    value: "\"Songti SC\", \"STSong\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", serif",
+    value: "\"Songti SC\", \"STSong\", \"Noto Serif SC\", \"Source Han Serif SC\", serif",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-app-title-size": {
-    name: "--reader-ds-type-app-title-size",
+  "--fd-ds-type-app-title-size": {
+    name: "--fd-ds-type-app-title-size",
     category: "type",
     value: "20px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-page-title-size": {
-    name: "--reader-ds-type-page-title-size",
+  "--fd-ds-type-page-title-size": {
+    name: "--fd-ds-type-page-title-size",
     category: "type",
     value: "20px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-section-title-size": {
-    name: "--reader-ds-type-section-title-size",
+  "--fd-ds-type-section-title-size": {
+    name: "--fd-ds-type-section-title-size",
     category: "type",
     value: "15px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-book-title-size": {
-    name: "--reader-ds-type-book-title-size",
+  "--fd-ds-type-book-title-size": {
+    name: "--fd-ds-type-book-title-size",
     category: "type",
     value: "14px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-book-meta-size": {
-    name: "--reader-ds-type-book-meta-size",
+  "--fd-ds-type-book-meta-size": {
+    name: "--fd-ds-type-book-meta-size",
     category: "type",
     value: "12px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-reader-body-size": {
-    name: "--reader-ds-type-reader-body-size",
+  "--fd-ds-type-reader-body-size": {
+    name: "--fd-ds-type-reader-body-size",
     category: "type",
     value: "18px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-type-reader-control-label-size": {
-    name: "--reader-ds-type-reader-control-label-size",
+  "--fd-ds-type-reader-control-label-size": {
+    name: "--fd-ds-type-reader-control-label-size",
     category: "type",
     value: "12px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-xs": {
-    name: "--reader-ds-space-xs",
+  "--fd-ds-space-xs": {
+    name: "--fd-ds-space-xs",
     category: "spacing",
     value: "8px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-sm": {
-    name: "--reader-ds-space-sm",
+  "--fd-ds-space-sm": {
+    name: "--fd-ds-space-sm",
     category: "spacing",
     value: "12px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-md": {
-    name: "--reader-ds-space-md",
+  "--fd-ds-space-md": {
+    name: "--fd-ds-space-md",
     category: "spacing",
     value: "16px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-lg": {
-    name: "--reader-ds-space-lg",
+  "--fd-ds-space-lg": {
+    name: "--fd-ds-space-lg",
     category: "spacing",
     value: "24px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-xl": {
-    name: "--reader-ds-space-xl",
+  "--fd-ds-space-xl": {
+    name: "--fd-ds-space-xl",
     category: "spacing",
     value: "48px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-screen-padding": {
-    name: "--reader-ds-space-screen-padding",
+  "--fd-ds-space-screen-padding": {
+    name: "--fd-ds-space-screen-padding",
     category: "spacing",
     value: "16px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-card-padding": {
-    name: "--reader-ds-space-card-padding",
+  "--fd-ds-space-card-padding": {
+    name: "--fd-ds-space-card-padding",
     category: "spacing",
     value: "14px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-safe-area-top": {
-    name: "--reader-ds-space-safe-area-top",
+  "--fd-ds-space-safe-area-top": {
+    name: "--fd-ds-space-safe-area-top",
     category: "spacing",
     value: "24px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-safe-area-bottom": {
-    name: "--reader-ds-space-safe-area-bottom",
+  "--fd-ds-space-safe-area-bottom": {
+    name: "--fd-ds-space-safe-area-bottom",
     category: "spacing",
     value: "14px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-safe-area-horizontal": {
-    name: "--reader-ds-space-safe-area-horizontal",
+  "--fd-ds-space-safe-area-horizontal": {
+    name: "--fd-ds-space-safe-area-horizontal",
     category: "spacing",
     value: "16px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-space-keyboard-gap": {
-    name: "--reader-ds-space-keyboard-gap",
+  "--fd-ds-space-keyboard-gap": {
+    name: "--fd-ds-space-keyboard-gap",
     category: "spacing",
     value: "12px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-phone-width": {
-    name: "--reader-ds-size-phone-width",
+  "--fd-ds-size-phone-width": {
+    name: "--fd-ds-size-phone-width",
     category: "size",
     value: "390px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-phone-height": {
-    name: "--reader-ds-size-phone-height",
+  "--fd-ds-size-phone-height": {
+    name: "--fd-ds-size-phone-height",
     category: "size",
     value: "844px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-stack-phone-height": {
-    name: "--reader-ds-size-stack-phone-height",
+  "--fd-ds-size-stack-phone-height": {
+    name: "--fd-ds-size-stack-phone-height",
     category: "size",
     value: "878px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-flow-width": {
-    name: "--reader-ds-size-flow-width",
+  "--fd-ds-size-flow-width": {
+    name: "--fd-ds-size-flow-width",
     category: "size",
     value: "1284px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-flow-min-height": {
-    name: "--reader-ds-size-flow-min-height",
+  "--fd-ds-size-flow-min-height": {
+    name: "--fd-ds-size-flow-min-height",
     category: "size",
     value: "520px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-top-bar-height": {
-    name: "--reader-ds-size-top-bar-height",
+  "--fd-ds-size-top-bar-height": {
+    name: "--fd-ds-size-top-bar-height",
     category: "size",
     value: "58px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-bottom-bar-height": {
-    name: "--reader-ds-size-bottom-bar-height",
+  "--fd-ds-size-bottom-bar-height": {
+    name: "--fd-ds-size-bottom-bar-height",
     category: "size",
     value: "68px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-main-nav-height": {
-    name: "--reader-ds-size-main-nav-height",
+  "--fd-ds-size-main-nav-height": {
+    name: "--fd-ds-size-main-nav-height",
     category: "size",
     value: "68px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-reader-bottom-sheet-min-height": {
-    name: "--reader-ds-size-reader-bottom-sheet-min-height",
+  "--fd-ds-size-reader-bottom-sheet-min-height": {
+    name: "--fd-ds-size-reader-bottom-sheet-min-height",
     category: "size",
     value: "284px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-reader-module-nav-height": {
-    name: "--reader-ds-size-reader-module-nav-height",
+  "--fd-ds-size-reader-module-nav-height": {
+    name: "--fd-ds-size-reader-module-nav-height",
     category: "size",
     value: "82px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-size-keyboard-height": {
-    name: "--reader-ds-size-keyboard-height",
+  "--fd-ds-size-keyboard-height": {
+    name: "--fd-ds-size-keyboard-height",
     category: "size",
     value: "320px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-small": {
-    name: "--reader-ds-radius-small",
+  "--fd-ds-radius-small": {
+    name: "--fd-ds-radius-small",
     category: "radius",
     value: "4px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-medium": {
-    name: "--reader-ds-radius-medium",
+  "--fd-ds-radius-medium": {
+    name: "--fd-ds-radius-medium",
     category: "radius",
     value: "6px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-large": {
-    name: "--reader-ds-radius-large",
+  "--fd-ds-radius-large": {
+    name: "--fd-ds-radius-large",
     category: "radius",
     value: "8px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-card": {
-    name: "--reader-ds-radius-card",
+  "--fd-ds-radius-card": {
+    name: "--fd-ds-radius-card",
     category: "radius",
     value: "4px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-chip": {
-    name: "--reader-ds-radius-chip",
+  "--fd-ds-radius-chip": {
+    name: "--fd-ds-radius-chip",
     category: "radius",
     value: "2px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-bottom-sheet": {
-    name: "--reader-ds-radius-bottom-sheet",
+  "--fd-ds-radius-bottom-sheet": {
+    name: "--fd-ds-radius-bottom-sheet",
     category: "radius",
     value: "8px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-radius-control": {
-    name: "--reader-ds-radius-control",
+  "--fd-ds-radius-control": {
+    name: "--fd-ds-radius-control",
     category: "radius",
     value: "999px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-elevation-none": {
-    name: "--reader-ds-elevation-none",
+  "--fd-ds-elevation-none": {
+    name: "--fd-ds-elevation-none",
     category: "elevation",
     value: "0px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-elevation-subtle": {
-    name: "--reader-ds-elevation-subtle",
+  "--fd-ds-elevation-subtle": {
+    name: "--fd-ds-elevation-subtle",
     category: "elevation",
     value: "1px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-elevation-card": {
-    name: "--reader-ds-elevation-card",
+  "--fd-ds-elevation-card": {
+    name: "--fd-ds-elevation-card",
     category: "elevation",
     value: "2px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-elevation-overlay": {
-    name: "--reader-ds-elevation-overlay",
+  "--fd-ds-elevation-overlay": {
+    name: "--fd-ds-elevation-overlay",
     category: "elevation",
     value: "2px",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-shadow-elevated": {
-    name: "--reader-ds-shadow-elevated",
+  "--fd-ds-shadow-elevated": {
+    name: "--fd-ds-shadow-elevated",
     category: "shadow",
     value: "0 18px 46px rgba(89,70,50,0.16)",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-shadow-soft": {
-    name: "--reader-ds-shadow-soft",
+  "--fd-ds-shadow-soft": {
+    name: "--fd-ds-shadow-soft",
     category: "shadow",
     value: "0 8px 26px rgba(89,70,50,0.1)",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-state-focus": {
-    name: "--reader-ds-state-focus",
+  "--fd-ds-state-focus": {
+    name: "--fd-ds-state-focus",
     category: "shadow",
-    value: "0 0 0 4px rgba(54,97,121,0.22)",
+    value: "0 0 0 4px rgba(45,74,62,0.22)",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-content": {
-    name: "--reader-ds-z-content",
+  "--fd-ds-z-content": {
+    name: "--fd-ds-z-content",
     category: "z-index",
     value: "0",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-overlay": {
-    name: "--reader-ds-z-overlay",
+  "--fd-ds-z-overlay": {
+    name: "--fd-ds-z-overlay",
     category: "z-index",
     value: "10",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-main-nav": {
-    name: "--reader-ds-z-main-nav",
+  "--fd-ds-z-main-nav": {
+    name: "--fd-ds-z-main-nav",
     category: "z-index",
     value: "20",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-bottom-sheet": {
-    name: "--reader-ds-z-bottom-sheet",
+  "--fd-ds-z-bottom-sheet": {
+    name: "--fd-ds-z-bottom-sheet",
     category: "z-index",
     value: "30",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-reader-module-nav": {
-    name: "--reader-ds-z-reader-module-nav",
+  "--fd-ds-z-flow-window": {
+    name: "--fd-ds-z-flow-window",
+    category: "z-index",
+    value: "36",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-z-reader-module-nav": {
+    name: "--fd-ds-z-reader-module-nav",
     category: "z-index",
     value: "40",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-dialog": {
-    name: "--reader-ds-z-dialog",
+  "--fd-ds-z-settings-dropdown": {
+    name: "--fd-ds-z-settings-dropdown",
+    category: "z-index",
+    value: "42",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-z-dialog": {
+    name: "--fd-ds-z-dialog",
     category: "z-index",
     value: "60",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-z-keyboard": {
-    name: "--reader-ds-z-keyboard",
+  "--fd-ds-z-keyboard": {
+    name: "--fd-ds-z-keyboard",
     category: "z-index",
     value: "70",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-text-nav-label-lines": {
-    name: "--reader-ds-text-nav-label-lines",
+  "--fd-ds-z-dev-overlay": {
+    name: "--fd-ds-z-dev-overlay",
+    category: "z-index",
+    value: "95",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-z-dev-region": {
+    name: "--fd-ds-z-dev-region",
+    category: "z-index",
+    value: "96",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-z-demo-switch": {
+    name: "--fd-ds-z-demo-switch",
+    category: "z-index",
+    value: "100",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-text-nav-label-lines": {
+    name: "--fd-ds-text-nav-label-lines",
     category: "text-constraint",
     value: "1",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-text-title-lines": {
-    name: "--reader-ds-text-title-lines",
+  "--fd-ds-text-title-lines": {
+    name: "--fd-ds-text-title-lines",
     category: "text-constraint",
     value: "1",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-text-book-title-lines": {
-    name: "--reader-ds-text-book-title-lines",
+  "--fd-ds-text-book-title-lines": {
+    name: "--fd-ds-text-book-title-lines",
     category: "text-constraint",
     value: "2",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-text-reader-line-length": {
-    name: "--reader-ds-text-reader-line-length",
+  "--fd-ds-text-reader-line-length": {
+    name: "--fd-ds-text-reader-line-length",
     category: "text-constraint",
     value: "31ch",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-text-action-label-lines": {
-    name: "--reader-ds-text-action-label-lines",
+  "--fd-ds-text-action-label-lines": {
+    name: "--fd-ds-text-action-label-lines",
     category: "text-constraint",
     value: "1",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-firstOpen": {
-    name: "--reader-ds-motion-duration-firstOpen",
+  "--fd-ds-motion-duration-firstOpen": {
+    name: "--fd-ds-motion-duration-firstOpen",
     category: "motion-duration",
     value: "280ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-tabPress": {
-    name: "--reader-ds-motion-duration-tabPress",
+  "--fd-ds-motion-duration-tabPress": {
+    name: "--fd-ds-motion-duration-tabPress",
     category: "motion-duration",
     value: "80ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-tabSelect": {
-    name: "--reader-ds-motion-duration-tabSelect",
+  "--fd-ds-motion-duration-tabSelect": {
+    name: "--fd-ds-motion-duration-tabSelect",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-tabSwitch": {
-    name: "--reader-ds-motion-duration-tabSwitch",
+  "--fd-ds-motion-duration-tabSwitch": {
+    name: "--fd-ds-motion-duration-tabSwitch",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-buttonPress": {
-    name: "--reader-ds-motion-duration-buttonPress",
+  "--fd-ds-motion-duration-buttonPress": {
+    name: "--fd-ds-motion-duration-buttonPress",
     category: "motion-duration",
     value: "80ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-buttonActivate": {
-    name: "--reader-ds-motion-duration-buttonActivate",
+  "--fd-ds-motion-duration-buttonActivate": {
+    name: "--fd-ds-motion-duration-buttonActivate",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-toggleSwitch": {
-    name: "--reader-ds-motion-duration-toggleSwitch",
+  "--fd-ds-motion-duration-toggleSwitch": {
+    name: "--fd-ds-motion-duration-toggleSwitch",
     category: "motion-duration",
     value: "140ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-chipSelect": {
-    name: "--reader-ds-motion-duration-chipSelect",
+  "--fd-ds-motion-duration-chipSelect": {
+    name: "--fd-ds-motion-duration-chipSelect",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-filterCommit": {
-    name: "--reader-ds-motion-duration-filterCommit",
+  "--fd-ds-motion-duration-filterCommit": {
+    name: "--fd-ds-motion-duration-filterCommit",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-numericCommit": {
-    name: "--reader-ds-motion-duration-numericCommit",
+  "--fd-ds-motion-duration-numericCommit": {
+    name: "--fd-ds-motion-duration-numericCommit",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-inputFocus": {
-    name: "--reader-ds-motion-duration-inputFocus",
+  "--fd-ds-motion-duration-inputFocus": {
+    name: "--fd-ds-motion-duration-inputFocus",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-searchState": {
-    name: "--reader-ds-motion-duration-searchState",
+  "--fd-ds-motion-duration-searchState": {
+    name: "--fd-ds-motion-duration-searchState",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-feedbackToast": {
-    name: "--reader-ds-motion-duration-feedbackToast",
+  "--fd-ds-motion-duration-feedbackToast": {
+    name: "--fd-ds-motion-duration-feedbackToast",
     category: "motion-duration",
     value: "180ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-stateReplace": {
-    name: "--reader-ds-motion-duration-stateReplace",
+  "--fd-ds-motion-duration-stateReplace": {
+    name: "--fd-ds-motion-duration-stateReplace",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-selectionToolbar": {
-    name: "--reader-ds-motion-duration-selectionToolbar",
+  "--fd-ds-motion-duration-selectionToolbar": {
+    name: "--fd-ds-motion-duration-selectionToolbar",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-dropdownPress": {
-    name: "--reader-ds-motion-duration-dropdownPress",
+  "--fd-ds-motion-duration-dropdownPress": {
+    name: "--fd-ds-motion-duration-dropdownPress",
     category: "motion-duration",
     value: "80ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-dropdownExpand": {
-    name: "--reader-ds-motion-duration-dropdownExpand",
+  "--fd-ds-motion-duration-dropdownExpand": {
+    name: "--fd-ds-motion-duration-dropdownExpand",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-dropdownCollapse": {
-    name: "--reader-ds-motion-duration-dropdownCollapse",
+  "--fd-ds-motion-duration-dropdownCollapse": {
+    name: "--fd-ds-motion-duration-dropdownCollapse",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-dropdownSelect": {
-    name: "--reader-ds-motion-duration-dropdownSelect",
+  "--fd-ds-motion-duration-dropdownSelect": {
+    name: "--fd-ds-motion-duration-dropdownSelect",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-readerInstant": {
-    name: "--reader-ds-motion-duration-readerInstant",
+  "--fd-ds-motion-duration-readerInstant": {
+    name: "--fd-ds-motion-duration-readerInstant",
     category: "motion-duration",
     value: "0ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-readerMicro": {
-    name: "--reader-ds-motion-duration-readerMicro",
+  "--fd-ds-motion-duration-readerMicro": {
+    name: "--fd-ds-motion-duration-readerMicro",
     category: "motion-duration",
     value: "80ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-readerFast": {
-    name: "--reader-ds-motion-duration-readerFast",
+  "--fd-ds-motion-duration-readerFast": {
+    name: "--fd-ds-motion-duration-readerFast",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-readerBase": {
-    name: "--reader-ds-motion-duration-readerBase",
+  "--fd-ds-motion-duration-readerBase": {
+    name: "--fd-ds-motion-duration-readerBase",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-handleLongPress": {
-    name: "--reader-ds-motion-duration-handleLongPress",
+  "--fd-ds-motion-duration-handleLongPress": {
+    name: "--fd-ds-motion-duration-handleLongPress",
     category: "motion-duration",
     value: "320ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-handleSnap": {
-    name: "--reader-ds-motion-duration-handleSnap",
+  "--fd-ds-motion-duration-handleSnap": {
+    name: "--fd-ds-motion-duration-handleSnap",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-panel": {
-    name: "--reader-ds-motion-duration-panel",
+  "--fd-ds-motion-duration-panel": {
+    name: "--fd-ds-motion-duration-panel",
     category: "motion-duration",
     value: "200ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-pageTurn": {
-    name: "--reader-ds-motion-duration-pageTurn",
+  "--fd-ds-motion-duration-pageTurn": {
+    name: "--fd-ds-motion-duration-pageTurn",
     category: "motion-duration",
     value: "220ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-readerEntry": {
-    name: "--reader-ds-motion-duration-readerEntry",
+  "--fd-ds-motion-duration-readerEntry": {
+    name: "--fd-ds-motion-duration-readerEntry",
     category: "motion-duration",
     value: "240ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-sessionReturn": {
-    name: "--reader-ds-motion-duration-sessionReturn",
+  "--fd-ds-motion-duration-sessionReturn": {
+    name: "--fd-ds-motion-duration-sessionReturn",
     category: "motion-duration",
     value: "200ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-runningSpace": {
-    name: "--reader-ds-motion-duration-runningSpace",
+  "--fd-ds-motion-duration-runningSpace": {
+    name: "--fd-ds-motion-duration-runningSpace",
     category: "motion-duration",
     value: "180ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-capsuleEnter": {
-    name: "--reader-ds-motion-duration-capsuleEnter",
+  "--fd-ds-motion-duration-capsuleEnter": {
+    name: "--fd-ds-motion-duration-capsuleEnter",
     category: "motion-duration",
     value: "160ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-capsuleControl": {
-    name: "--reader-ds-motion-duration-capsuleControl",
+  "--fd-ds-motion-duration-capsuleControl": {
+    name: "--fd-ds-motion-duration-capsuleControl",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-capsuleTick": {
-    name: "--reader-ds-motion-duration-capsuleTick",
+  "--fd-ds-motion-duration-capsuleTick": {
+    name: "--fd-ds-motion-duration-capsuleTick",
     category: "motion-duration",
     value: "120ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-voicePulse": {
-    name: "--reader-ds-motion-duration-voicePulse",
+  "--fd-ds-motion-duration-voicePulse": {
+    name: "--fd-ds-motion-duration-voicePulse",
     category: "motion-duration",
     value: "960ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-overlay": {
-    name: "--reader-ds-motion-duration-overlay",
+  "--fd-ds-motion-duration-overlay": {
+    name: "--fd-ds-motion-duration-overlay",
     category: "motion-duration",
     value: "240ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-loadingSpin": {
-    name: "--reader-ds-motion-duration-loadingSpin",
+  "--fd-ds-motion-duration-loadingSpin": {
+    name: "--fd-ds-motion-duration-loadingSpin",
     category: "motion-duration",
     value: "800ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-interruptSettle": {
-    name: "--reader-ds-motion-duration-interruptSettle",
+  "--fd-ds-motion-duration-interruptSettle": {
+    name: "--fd-ds-motion-duration-interruptSettle",
     category: "motion-duration",
     value: "80ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-viewportReshape": {
-    name: "--reader-ds-motion-duration-viewportReshape",
+  "--fd-ds-motion-duration-viewportReshape": {
+    name: "--fd-ds-motion-duration-viewportReshape",
     category: "motion-duration",
     value: "240ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-orientationFreeze": {
-    name: "--reader-ds-motion-duration-orientationFreeze",
+  "--fd-ds-motion-duration-orientationFreeze": {
+    name: "--fd-ds-motion-duration-orientationFreeze",
     category: "motion-duration",
     value: "80ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-duration-orientationSettle": {
-    name: "--reader-ds-motion-duration-orientationSettle",
+  "--fd-ds-motion-duration-orientationSettle": {
+    name: "--fd-ds-motion-duration-orientationSettle",
     category: "motion-duration",
     value: "240ms",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-easing-standard": {
-    name: "--reader-ds-motion-easing-standard",
+  "--fd-ds-motion-easing-standard": {
+    name: "--fd-ds-motion-easing-standard",
     category: "motion-easing",
     value: "ease",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-easing-enter": {
-    name: "--reader-ds-motion-easing-enter",
+  "--fd-ds-motion-easing-enter": {
+    name: "--fd-ds-motion-easing-enter",
     category: "motion-easing",
     value: "ease-out",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-easing-exit": {
-    name: "--reader-ds-motion-easing-exit",
+  "--fd-ds-motion-easing-exit": {
+    name: "--fd-ds-motion-easing-exit",
     category: "motion-easing",
     value: "ease-in",
     platforms: undefined,
     deprecated: false
   },
-  "--reader-ds-motion-easing-reshape": {
-    name: "--reader-ds-motion-easing-reshape",
+  "--fd-ds-motion-easing-reshape": {
+    name: "--fd-ds-motion-easing-reshape",
     category: "motion-easing",
     value: "ease-in-out",
     platforms: undefined,

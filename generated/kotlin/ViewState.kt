@@ -204,6 +204,8 @@ enum class ComponentType {
     WebView,
     @SerialName("ReaderBase")
     ReaderBase,
+    @SerialName("ReaderTopArea")
+    ReaderTopArea,
     @SerialName("ReaderControlSheet")
     ReaderControlSheet,
     @SerialName("ReaderBottomBar")
@@ -216,6 +218,18 @@ enum class ComponentType {
     ReaderTtsPanel,
     @SerialName("ReaderSettingsPanel")
     ReaderSettingsPanel,
+    @SerialName("ReaderFullDirectoryPage")
+    ReaderFullDirectoryPage,
+    @SerialName("ReaderFullTtsPage")
+    ReaderFullTtsPage,
+    @SerialName("ReaderFullAppearancePage")
+    ReaderFullAppearancePage,
+    @SerialName("ReaderFullSettingsPage")
+    ReaderFullSettingsPage,
+    @SerialName("ReaderBookCachePage")
+    ReaderBookCachePage,
+    @SerialName("ReaderDebugInfoPage")
+    ReaderDebugInfoPage,
     @SerialName("ReaderSearchPanel")
     ReaderSearchPanel,
     @SerialName("ReaderReplacePanel")
@@ -232,6 +246,8 @@ enum class ComponentType {
     NightToast,
     @SerialName("SourceSwitchResultsPanel")
     SourceSwitchResultsPanel,
+    @SerialName("SourceSwitchFlowPage")
+    SourceSwitchFlowPage,
     @SerialName("SourceImportPreviewPage")
     SourceImportPreviewPage,
     @SerialName("SourceGroupsPage")

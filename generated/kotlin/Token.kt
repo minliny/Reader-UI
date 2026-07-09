@@ -52,854 +52,903 @@ data class Token(
 object TokenRegistry {
     val all: List<Token> = listOf(
     Token(
-        name = "--reader-ds-color-paper",
+        name = "--fd-ds-color-paper",
         category = TokenCategory.Color,
         value = "#fff8f4",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-paper-bright",
+        name = "--fd-ds-color-paper-bright",
         category = TokenCategory.Color,
         value = "#fff8f1",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-surface",
+        name = "--fd-ds-color-surface",
         category = TokenCategory.Color,
         value = "rgba(255,255,255,0.88)",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-surface-soft",
+        name = "--fd-ds-color-surface-soft",
         category = TokenCategory.Color,
         value = "rgba(255,252,248,0.72)",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-ink",
+        name = "--fd-ds-color-ink",
         category = TokenCategory.Color,
         value = "#1f1b17",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-control-ink",
+        name = "--fd-ds-color-control-ink",
         category = TokenCategory.Color,
         value = "#41484c",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-muted",
+        name = "--fd-ds-color-muted",
         category = TokenCategory.Color,
         value = "#756f69",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-border",
+        name = "--fd-ds-color-border",
         category = TokenCategory.Color,
         value = "#c1c7cd",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-primary",
+        name = "--fd-ds-color-primary",
         category = TokenCategory.Color,
-        value = "#366179",
+        value = "#2d4a3e",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-primary-dark",
+        name = "--fd-ds-color-primary-dark",
         category = TokenCategory.Color,
-        value = "#274f66",
+        value = "#1f3528",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-accent",
+        name = "--fd-ds-color-accent",
         category = TokenCategory.Color,
         value = "#f48b13",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-bottom-bar-bg",
+        name = "--fd-ds-color-bottom-bar-bg",
         category = TokenCategory.Color,
         value = "#fbf2eb",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-floating-control-bg",
+        name = "--fd-ds-color-floating-control-bg",
         category = TokenCategory.Color,
         value = "#fbf2eb",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-floating-control-bg-alt",
+        name = "--fd-ds-color-floating-control-bg-alt",
         category = TokenCategory.Color,
         value = "#eae1da",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-meta-bg",
+        name = "--fd-ds-color-meta-bg",
         category = TokenCategory.Color,
         value = "#f5ece6",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-rss-unread",
+        name = "--fd-ds-color-rss-unread",
         category = TokenCategory.Color,
         value = "#2F6F93",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-paper-night",
+        name = "--fd-ds-color-status-good",
+        category = TokenCategory.Color,
+        value = "#338144",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-status-warn",
+        category = TokenCategory.Color,
+        value = "#d7473e",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-paper-night",
         category = TokenCategory.Color,
         value = "#181f22",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-ink-night",
+        name = "--fd-ds-color-ink-night",
         category = TokenCategory.Color,
         value = "#d8ccc4",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-control-ink-night",
+        name = "--fd-ds-color-control-ink-night",
         category = TokenCategory.Color,
         value = "#d7e1e5",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-primary-night",
+        name = "--fd-ds-color-primary-night",
         category = TokenCategory.Color,
         value = "#8fb6ca",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-color-floating-control-bg-alt-night",
+        name = "--fd-ds-color-floating-control-bg-alt-night",
         category = TokenCategory.Color,
         value = "#2b3b43",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-font-sans",
+        name = "--fd-ds-font-sans",
         category = TokenCategory.Font,
-        value = "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",
+        value = "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans SC\", \"Source Han Sans SC\", sans-serif",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-font-serif",
+        name = "--fd-ds-font-serif",
         category = TokenCategory.Font,
-        value = "\"Songti SC\", \"STSong\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", serif",
+        value = "\"Songti SC\", \"STSong\", \"Noto Serif SC\", \"Source Han Serif SC\", serif",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-app-title-size",
+        name = "--fd-ds-type-app-title-size",
         category = TokenCategory.Type,
         value = "20px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-page-title-size",
+        name = "--fd-ds-type-page-title-size",
         category = TokenCategory.Type,
         value = "20px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-section-title-size",
+        name = "--fd-ds-type-section-title-size",
         category = TokenCategory.Type,
         value = "15px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-book-title-size",
+        name = "--fd-ds-type-book-title-size",
         category = TokenCategory.Type,
         value = "14px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-book-meta-size",
+        name = "--fd-ds-type-book-meta-size",
         category = TokenCategory.Type,
         value = "12px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-reader-body-size",
+        name = "--fd-ds-type-reader-body-size",
         category = TokenCategory.Type,
         value = "18px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-type-reader-control-label-size",
+        name = "--fd-ds-type-reader-control-label-size",
         category = TokenCategory.Type,
         value = "12px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-xs",
+        name = "--fd-ds-space-xs",
         category = TokenCategory.Spacing,
         value = "8px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-sm",
+        name = "--fd-ds-space-sm",
         category = TokenCategory.Spacing,
         value = "12px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-md",
+        name = "--fd-ds-space-md",
         category = TokenCategory.Spacing,
         value = "16px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-lg",
+        name = "--fd-ds-space-lg",
         category = TokenCategory.Spacing,
         value = "24px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-xl",
+        name = "--fd-ds-space-xl",
         category = TokenCategory.Spacing,
         value = "48px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-screen-padding",
+        name = "--fd-ds-space-screen-padding",
         category = TokenCategory.Spacing,
         value = "16px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-card-padding",
+        name = "--fd-ds-space-card-padding",
         category = TokenCategory.Spacing,
         value = "14px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-safe-area-top",
+        name = "--fd-ds-space-safe-area-top",
         category = TokenCategory.Spacing,
         value = "24px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-safe-area-bottom",
+        name = "--fd-ds-space-safe-area-bottom",
         category = TokenCategory.Spacing,
         value = "14px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-safe-area-horizontal",
+        name = "--fd-ds-space-safe-area-horizontal",
         category = TokenCategory.Spacing,
         value = "16px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-space-keyboard-gap",
+        name = "--fd-ds-space-keyboard-gap",
         category = TokenCategory.Spacing,
         value = "12px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-phone-width",
+        name = "--fd-ds-size-phone-width",
         category = TokenCategory.Size,
         value = "390px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-phone-height",
+        name = "--fd-ds-size-phone-height",
         category = TokenCategory.Size,
         value = "844px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-stack-phone-height",
+        name = "--fd-ds-size-stack-phone-height",
         category = TokenCategory.Size,
         value = "878px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-flow-width",
+        name = "--fd-ds-size-flow-width",
         category = TokenCategory.Size,
         value = "1284px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-flow-min-height",
+        name = "--fd-ds-size-flow-min-height",
         category = TokenCategory.Size,
         value = "520px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-top-bar-height",
+        name = "--fd-ds-size-top-bar-height",
         category = TokenCategory.Size,
         value = "58px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-bottom-bar-height",
+        name = "--fd-ds-size-bottom-bar-height",
         category = TokenCategory.Size,
         value = "68px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-main-nav-height",
+        name = "--fd-ds-size-main-nav-height",
         category = TokenCategory.Size,
         value = "68px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-reader-bottom-sheet-min-height",
+        name = "--fd-ds-size-reader-bottom-sheet-min-height",
         category = TokenCategory.Size,
         value = "284px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-reader-module-nav-height",
+        name = "--fd-ds-size-reader-module-nav-height",
         category = TokenCategory.Size,
         value = "82px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-size-keyboard-height",
+        name = "--fd-ds-size-keyboard-height",
         category = TokenCategory.Size,
         value = "320px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-small",
+        name = "--fd-ds-radius-small",
         category = TokenCategory.Radius,
         value = "4px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-medium",
+        name = "--fd-ds-radius-medium",
         category = TokenCategory.Radius,
         value = "6px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-large",
+        name = "--fd-ds-radius-large",
         category = TokenCategory.Radius,
         value = "8px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-card",
+        name = "--fd-ds-radius-card",
         category = TokenCategory.Radius,
         value = "4px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-chip",
+        name = "--fd-ds-radius-chip",
         category = TokenCategory.Radius,
         value = "2px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-bottom-sheet",
+        name = "--fd-ds-radius-bottom-sheet",
         category = TokenCategory.Radius,
         value = "8px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-radius-control",
+        name = "--fd-ds-radius-control",
         category = TokenCategory.Radius,
         value = "999px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-elevation-none",
+        name = "--fd-ds-elevation-none",
         category = TokenCategory.Elevation,
         value = "0px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-elevation-subtle",
+        name = "--fd-ds-elevation-subtle",
         category = TokenCategory.Elevation,
         value = "1px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-elevation-card",
+        name = "--fd-ds-elevation-card",
         category = TokenCategory.Elevation,
         value = "2px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-elevation-overlay",
+        name = "--fd-ds-elevation-overlay",
         category = TokenCategory.Elevation,
         value = "2px",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-shadow-elevated",
+        name = "--fd-ds-shadow-elevated",
         category = TokenCategory.Shadow,
         value = "0 18px 46px rgba(89,70,50,0.16)",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-shadow-soft",
+        name = "--fd-ds-shadow-soft",
         category = TokenCategory.Shadow,
         value = "0 8px 26px rgba(89,70,50,0.1)",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-state-focus",
+        name = "--fd-ds-state-focus",
         category = TokenCategory.Shadow,
-        value = "0 0 0 4px rgba(54,97,121,0.22)",
+        value = "0 0 0 4px rgba(45,74,62,0.22)",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-content",
+        name = "--fd-ds-z-content",
         category = TokenCategory.ZIndex,
         value = "0",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-overlay",
+        name = "--fd-ds-z-overlay",
         category = TokenCategory.ZIndex,
         value = "10",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-main-nav",
+        name = "--fd-ds-z-main-nav",
         category = TokenCategory.ZIndex,
         value = "20",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-bottom-sheet",
+        name = "--fd-ds-z-bottom-sheet",
         category = TokenCategory.ZIndex,
         value = "30",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-reader-module-nav",
+        name = "--fd-ds-z-flow-window",
+        category = TokenCategory.ZIndex,
+        value = "36",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-z-reader-module-nav",
         category = TokenCategory.ZIndex,
         value = "40",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-dialog",
+        name = "--fd-ds-z-settings-dropdown",
+        category = TokenCategory.ZIndex,
+        value = "42",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-z-dialog",
         category = TokenCategory.ZIndex,
         value = "60",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-z-keyboard",
+        name = "--fd-ds-z-keyboard",
         category = TokenCategory.ZIndex,
         value = "70",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-text-nav-label-lines",
+        name = "--fd-ds-z-dev-overlay",
+        category = TokenCategory.ZIndex,
+        value = "95",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-z-dev-region",
+        category = TokenCategory.ZIndex,
+        value = "96",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-z-demo-switch",
+        category = TokenCategory.ZIndex,
+        value = "100",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-text-nav-label-lines",
         category = TokenCategory.TextConstraint,
         value = "1",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-text-title-lines",
+        name = "--fd-ds-text-title-lines",
         category = TokenCategory.TextConstraint,
         value = "1",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-text-book-title-lines",
+        name = "--fd-ds-text-book-title-lines",
         category = TokenCategory.TextConstraint,
         value = "2",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-text-reader-line-length",
+        name = "--fd-ds-text-reader-line-length",
         category = TokenCategory.TextConstraint,
         value = "31ch",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-text-action-label-lines",
+        name = "--fd-ds-text-action-label-lines",
         category = TokenCategory.TextConstraint,
         value = "1",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-firstOpen",
+        name = "--fd-ds-motion-duration-firstOpen",
         category = TokenCategory.MotionDuration,
         value = "280ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-tabPress",
+        name = "--fd-ds-motion-duration-tabPress",
         category = TokenCategory.MotionDuration,
         value = "80ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-tabSelect",
+        name = "--fd-ds-motion-duration-tabSelect",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-tabSwitch",
+        name = "--fd-ds-motion-duration-tabSwitch",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-buttonPress",
+        name = "--fd-ds-motion-duration-buttonPress",
         category = TokenCategory.MotionDuration,
         value = "80ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-buttonActivate",
+        name = "--fd-ds-motion-duration-buttonActivate",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-toggleSwitch",
+        name = "--fd-ds-motion-duration-toggleSwitch",
         category = TokenCategory.MotionDuration,
         value = "140ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-chipSelect",
+        name = "--fd-ds-motion-duration-chipSelect",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-filterCommit",
+        name = "--fd-ds-motion-duration-filterCommit",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-numericCommit",
+        name = "--fd-ds-motion-duration-numericCommit",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-inputFocus",
+        name = "--fd-ds-motion-duration-inputFocus",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-searchState",
+        name = "--fd-ds-motion-duration-searchState",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-feedbackToast",
+        name = "--fd-ds-motion-duration-feedbackToast",
         category = TokenCategory.MotionDuration,
         value = "180ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-stateReplace",
+        name = "--fd-ds-motion-duration-stateReplace",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-selectionToolbar",
+        name = "--fd-ds-motion-duration-selectionToolbar",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-dropdownPress",
+        name = "--fd-ds-motion-duration-dropdownPress",
         category = TokenCategory.MotionDuration,
         value = "80ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-dropdownExpand",
+        name = "--fd-ds-motion-duration-dropdownExpand",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-dropdownCollapse",
+        name = "--fd-ds-motion-duration-dropdownCollapse",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-dropdownSelect",
+        name = "--fd-ds-motion-duration-dropdownSelect",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-readerInstant",
+        name = "--fd-ds-motion-duration-readerInstant",
         category = TokenCategory.MotionDuration,
         value = "0ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-readerMicro",
+        name = "--fd-ds-motion-duration-readerMicro",
         category = TokenCategory.MotionDuration,
         value = "80ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-readerFast",
+        name = "--fd-ds-motion-duration-readerFast",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-readerBase",
+        name = "--fd-ds-motion-duration-readerBase",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-handleLongPress",
+        name = "--fd-ds-motion-duration-handleLongPress",
         category = TokenCategory.MotionDuration,
         value = "320ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-handleSnap",
+        name = "--fd-ds-motion-duration-handleSnap",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-panel",
+        name = "--fd-ds-motion-duration-panel",
         category = TokenCategory.MotionDuration,
         value = "200ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-pageTurn",
+        name = "--fd-ds-motion-duration-pageTurn",
         category = TokenCategory.MotionDuration,
         value = "220ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-readerEntry",
+        name = "--fd-ds-motion-duration-readerEntry",
         category = TokenCategory.MotionDuration,
         value = "240ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-sessionReturn",
+        name = "--fd-ds-motion-duration-sessionReturn",
         category = TokenCategory.MotionDuration,
         value = "200ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-runningSpace",
+        name = "--fd-ds-motion-duration-runningSpace",
         category = TokenCategory.MotionDuration,
         value = "180ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-capsuleEnter",
+        name = "--fd-ds-motion-duration-capsuleEnter",
         category = TokenCategory.MotionDuration,
         value = "160ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-capsuleControl",
+        name = "--fd-ds-motion-duration-capsuleControl",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-capsuleTick",
+        name = "--fd-ds-motion-duration-capsuleTick",
         category = TokenCategory.MotionDuration,
         value = "120ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-voicePulse",
+        name = "--fd-ds-motion-duration-voicePulse",
         category = TokenCategory.MotionDuration,
         value = "960ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-overlay",
+        name = "--fd-ds-motion-duration-overlay",
         category = TokenCategory.MotionDuration,
         value = "240ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-loadingSpin",
+        name = "--fd-ds-motion-duration-loadingSpin",
         category = TokenCategory.MotionDuration,
         value = "800ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-interruptSettle",
+        name = "--fd-ds-motion-duration-interruptSettle",
         category = TokenCategory.MotionDuration,
         value = "80ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-viewportReshape",
+        name = "--fd-ds-motion-duration-viewportReshape",
         category = TokenCategory.MotionDuration,
         value = "240ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-orientationFreeze",
+        name = "--fd-ds-motion-duration-orientationFreeze",
         category = TokenCategory.MotionDuration,
         value = "80ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-duration-orientationSettle",
+        name = "--fd-ds-motion-duration-orientationSettle",
         category = TokenCategory.MotionDuration,
         value = "240ms",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-easing-standard",
+        name = "--fd-ds-motion-easing-standard",
         category = TokenCategory.MotionEasing,
         value = "ease",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-easing-enter",
+        name = "--fd-ds-motion-easing-enter",
         category = TokenCategory.MotionEasing,
         value = "ease-out",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-easing-exit",
+        name = "--fd-ds-motion-easing-exit",
         category = TokenCategory.MotionEasing,
         value = "ease-in",
         platforms = null,
         deprecated = false
     ),
     Token(
-        name = "--reader-ds-motion-easing-reshape",
+        name = "--fd-ds-motion-easing-reshape",
         category = TokenCategory.MotionEasing,
         value = "ease-in-out",
         platforms = null,

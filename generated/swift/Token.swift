@@ -34,854 +34,903 @@ public struct TokenPlatforms: Codable, Equatable, Sendable {
 public enum TokenRegistry {
     public static let all: [Token] = [
         Token(
-            name: "--reader-ds-color-paper",
+            name: "--fd-ds-color-paper",
             category: .color,
             value: "#fff8f4",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-paper-bright",
+            name: "--fd-ds-color-paper-bright",
             category: .color,
             value: "#fff8f1",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-surface",
+            name: "--fd-ds-color-surface",
             category: .color,
             value: "rgba(255,255,255,0.88)",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-surface-soft",
+            name: "--fd-ds-color-surface-soft",
             category: .color,
             value: "rgba(255,252,248,0.72)",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-ink",
+            name: "--fd-ds-color-ink",
             category: .color,
             value: "#1f1b17",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-control-ink",
+            name: "--fd-ds-color-control-ink",
             category: .color,
             value: "#41484c",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-muted",
+            name: "--fd-ds-color-muted",
             category: .color,
             value: "#756f69",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-border",
+            name: "--fd-ds-color-border",
             category: .color,
             value: "#c1c7cd",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-primary",
+            name: "--fd-ds-color-primary",
             category: .color,
-            value: "#366179",
+            value: "#2d4a3e",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-primary-dark",
+            name: "--fd-ds-color-primary-dark",
             category: .color,
-            value: "#274f66",
+            value: "#1f3528",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-accent",
+            name: "--fd-ds-color-accent",
             category: .color,
             value: "#f48b13",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-bottom-bar-bg",
+            name: "--fd-ds-color-bottom-bar-bg",
             category: .color,
             value: "#fbf2eb",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-floating-control-bg",
+            name: "--fd-ds-color-floating-control-bg",
             category: .color,
             value: "#fbf2eb",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-floating-control-bg-alt",
+            name: "--fd-ds-color-floating-control-bg-alt",
             category: .color,
             value: "#eae1da",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-meta-bg",
+            name: "--fd-ds-color-meta-bg",
             category: .color,
             value: "#f5ece6",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-rss-unread",
+            name: "--fd-ds-color-rss-unread",
             category: .color,
             value: "#2F6F93",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-paper-night",
+            name: "--fd-ds-color-status-good",
+            category: .color,
+            value: "#338144",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-status-warn",
+            category: .color,
+            value: "#d7473e",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-paper-night",
             category: .color,
             value: "#181f22",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-ink-night",
+            name: "--fd-ds-color-ink-night",
             category: .color,
             value: "#d8ccc4",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-control-ink-night",
+            name: "--fd-ds-color-control-ink-night",
             category: .color,
             value: "#d7e1e5",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-primary-night",
+            name: "--fd-ds-color-primary-night",
             category: .color,
             value: "#8fb6ca",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-color-floating-control-bg-alt-night",
+            name: "--fd-ds-color-floating-control-bg-alt-night",
             category: .color,
             value: "#2b3b43",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-font-sans",
+            name: "--fd-ds-font-sans",
             category: .font,
-            value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif",
+            value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans SC\", \"Source Han Sans SC\", sans-serif",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-font-serif",
+            name: "--fd-ds-font-serif",
             category: .font,
-            value: "\"Songti SC\", \"STSong\", \"Noto Serif CJK SC\", \"Source Han Serif SC\", serif",
+            value: "\"Songti SC\", \"STSong\", \"Noto Serif SC\", \"Source Han Serif SC\", serif",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-app-title-size",
+            name: "--fd-ds-type-app-title-size",
             category: .type,
             value: "20px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-page-title-size",
+            name: "--fd-ds-type-page-title-size",
             category: .type,
             value: "20px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-section-title-size",
+            name: "--fd-ds-type-section-title-size",
             category: .type,
             value: "15px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-book-title-size",
+            name: "--fd-ds-type-book-title-size",
             category: .type,
             value: "14px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-book-meta-size",
+            name: "--fd-ds-type-book-meta-size",
             category: .type,
             value: "12px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-reader-body-size",
+            name: "--fd-ds-type-reader-body-size",
             category: .type,
             value: "18px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-type-reader-control-label-size",
+            name: "--fd-ds-type-reader-control-label-size",
             category: .type,
             value: "12px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-xs",
+            name: "--fd-ds-space-xs",
             category: .spacing,
             value: "8px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-sm",
+            name: "--fd-ds-space-sm",
             category: .spacing,
             value: "12px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-md",
+            name: "--fd-ds-space-md",
             category: .spacing,
             value: "16px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-lg",
+            name: "--fd-ds-space-lg",
             category: .spacing,
             value: "24px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-xl",
+            name: "--fd-ds-space-xl",
             category: .spacing,
             value: "48px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-screen-padding",
+            name: "--fd-ds-space-screen-padding",
             category: .spacing,
             value: "16px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-card-padding",
+            name: "--fd-ds-space-card-padding",
             category: .spacing,
             value: "14px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-safe-area-top",
+            name: "--fd-ds-space-safe-area-top",
             category: .spacing,
             value: "24px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-safe-area-bottom",
+            name: "--fd-ds-space-safe-area-bottom",
             category: .spacing,
             value: "14px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-safe-area-horizontal",
+            name: "--fd-ds-space-safe-area-horizontal",
             category: .spacing,
             value: "16px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-space-keyboard-gap",
+            name: "--fd-ds-space-keyboard-gap",
             category: .spacing,
             value: "12px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-phone-width",
+            name: "--fd-ds-size-phone-width",
             category: .size,
             value: "390px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-phone-height",
+            name: "--fd-ds-size-phone-height",
             category: .size,
             value: "844px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-stack-phone-height",
+            name: "--fd-ds-size-stack-phone-height",
             category: .size,
             value: "878px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-flow-width",
+            name: "--fd-ds-size-flow-width",
             category: .size,
             value: "1284px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-flow-min-height",
+            name: "--fd-ds-size-flow-min-height",
             category: .size,
             value: "520px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-top-bar-height",
+            name: "--fd-ds-size-top-bar-height",
             category: .size,
             value: "58px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-bottom-bar-height",
+            name: "--fd-ds-size-bottom-bar-height",
             category: .size,
             value: "68px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-main-nav-height",
+            name: "--fd-ds-size-main-nav-height",
             category: .size,
             value: "68px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-reader-bottom-sheet-min-height",
+            name: "--fd-ds-size-reader-bottom-sheet-min-height",
             category: .size,
             value: "284px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-reader-module-nav-height",
+            name: "--fd-ds-size-reader-module-nav-height",
             category: .size,
             value: "82px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-size-keyboard-height",
+            name: "--fd-ds-size-keyboard-height",
             category: .size,
             value: "320px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-small",
+            name: "--fd-ds-radius-small",
             category: .radius,
             value: "4px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-medium",
+            name: "--fd-ds-radius-medium",
             category: .radius,
             value: "6px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-large",
+            name: "--fd-ds-radius-large",
             category: .radius,
             value: "8px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-card",
+            name: "--fd-ds-radius-card",
             category: .radius,
             value: "4px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-chip",
+            name: "--fd-ds-radius-chip",
             category: .radius,
             value: "2px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-bottom-sheet",
+            name: "--fd-ds-radius-bottom-sheet",
             category: .radius,
             value: "8px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-radius-control",
+            name: "--fd-ds-radius-control",
             category: .radius,
             value: "999px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-elevation-none",
+            name: "--fd-ds-elevation-none",
             category: .elevation,
             value: "0px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-elevation-subtle",
+            name: "--fd-ds-elevation-subtle",
             category: .elevation,
             value: "1px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-elevation-card",
+            name: "--fd-ds-elevation-card",
             category: .elevation,
             value: "2px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-elevation-overlay",
+            name: "--fd-ds-elevation-overlay",
             category: .elevation,
             value: "2px",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-shadow-elevated",
+            name: "--fd-ds-shadow-elevated",
             category: .shadow,
             value: "0 18px 46px rgba(89,70,50,0.16)",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-shadow-soft",
+            name: "--fd-ds-shadow-soft",
             category: .shadow,
             value: "0 8px 26px rgba(89,70,50,0.1)",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-state-focus",
+            name: "--fd-ds-state-focus",
             category: .shadow,
-            value: "0 0 0 4px rgba(54,97,121,0.22)",
+            value: "0 0 0 4px rgba(45,74,62,0.22)",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-content",
+            name: "--fd-ds-z-content",
             category: .zIndex,
             value: "0",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-overlay",
+            name: "--fd-ds-z-overlay",
             category: .zIndex,
             value: "10",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-main-nav",
+            name: "--fd-ds-z-main-nav",
             category: .zIndex,
             value: "20",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-bottom-sheet",
+            name: "--fd-ds-z-bottom-sheet",
             category: .zIndex,
             value: "30",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-reader-module-nav",
+            name: "--fd-ds-z-flow-window",
+            category: .zIndex,
+            value: "36",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-z-reader-module-nav",
             category: .zIndex,
             value: "40",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-dialog",
+            name: "--fd-ds-z-settings-dropdown",
+            category: .zIndex,
+            value: "42",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-z-dialog",
             category: .zIndex,
             value: "60",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-z-keyboard",
+            name: "--fd-ds-z-keyboard",
             category: .zIndex,
             value: "70",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-text-nav-label-lines",
+            name: "--fd-ds-z-dev-overlay",
+            category: .zIndex,
+            value: "95",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-z-dev-region",
+            category: .zIndex,
+            value: "96",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-z-demo-switch",
+            category: .zIndex,
+            value: "100",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-text-nav-label-lines",
             category: .textConstraint,
             value: "1",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-text-title-lines",
+            name: "--fd-ds-text-title-lines",
             category: .textConstraint,
             value: "1",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-text-book-title-lines",
+            name: "--fd-ds-text-book-title-lines",
             category: .textConstraint,
             value: "2",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-text-reader-line-length",
+            name: "--fd-ds-text-reader-line-length",
             category: .textConstraint,
             value: "31ch",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-text-action-label-lines",
+            name: "--fd-ds-text-action-label-lines",
             category: .textConstraint,
             value: "1",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-firstOpen",
+            name: "--fd-ds-motion-duration-firstOpen",
             category: .motionDuration,
             value: "280ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-tabPress",
+            name: "--fd-ds-motion-duration-tabPress",
             category: .motionDuration,
             value: "80ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-tabSelect",
+            name: "--fd-ds-motion-duration-tabSelect",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-tabSwitch",
+            name: "--fd-ds-motion-duration-tabSwitch",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-buttonPress",
+            name: "--fd-ds-motion-duration-buttonPress",
             category: .motionDuration,
             value: "80ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-buttonActivate",
+            name: "--fd-ds-motion-duration-buttonActivate",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-toggleSwitch",
+            name: "--fd-ds-motion-duration-toggleSwitch",
             category: .motionDuration,
             value: "140ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-chipSelect",
+            name: "--fd-ds-motion-duration-chipSelect",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-filterCommit",
+            name: "--fd-ds-motion-duration-filterCommit",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-numericCommit",
+            name: "--fd-ds-motion-duration-numericCommit",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-inputFocus",
+            name: "--fd-ds-motion-duration-inputFocus",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-searchState",
+            name: "--fd-ds-motion-duration-searchState",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-feedbackToast",
+            name: "--fd-ds-motion-duration-feedbackToast",
             category: .motionDuration,
             value: "180ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-stateReplace",
+            name: "--fd-ds-motion-duration-stateReplace",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-selectionToolbar",
+            name: "--fd-ds-motion-duration-selectionToolbar",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-dropdownPress",
+            name: "--fd-ds-motion-duration-dropdownPress",
             category: .motionDuration,
             value: "80ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-dropdownExpand",
+            name: "--fd-ds-motion-duration-dropdownExpand",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-dropdownCollapse",
+            name: "--fd-ds-motion-duration-dropdownCollapse",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-dropdownSelect",
+            name: "--fd-ds-motion-duration-dropdownSelect",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-readerInstant",
+            name: "--fd-ds-motion-duration-readerInstant",
             category: .motionDuration,
             value: "0ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-readerMicro",
+            name: "--fd-ds-motion-duration-readerMicro",
             category: .motionDuration,
             value: "80ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-readerFast",
+            name: "--fd-ds-motion-duration-readerFast",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-readerBase",
+            name: "--fd-ds-motion-duration-readerBase",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-handleLongPress",
+            name: "--fd-ds-motion-duration-handleLongPress",
             category: .motionDuration,
             value: "320ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-handleSnap",
+            name: "--fd-ds-motion-duration-handleSnap",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-panel",
+            name: "--fd-ds-motion-duration-panel",
             category: .motionDuration,
             value: "200ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-pageTurn",
+            name: "--fd-ds-motion-duration-pageTurn",
             category: .motionDuration,
             value: "220ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-readerEntry",
+            name: "--fd-ds-motion-duration-readerEntry",
             category: .motionDuration,
             value: "240ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-sessionReturn",
+            name: "--fd-ds-motion-duration-sessionReturn",
             category: .motionDuration,
             value: "200ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-runningSpace",
+            name: "--fd-ds-motion-duration-runningSpace",
             category: .motionDuration,
             value: "180ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-capsuleEnter",
+            name: "--fd-ds-motion-duration-capsuleEnter",
             category: .motionDuration,
             value: "160ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-capsuleControl",
+            name: "--fd-ds-motion-duration-capsuleControl",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-capsuleTick",
+            name: "--fd-ds-motion-duration-capsuleTick",
             category: .motionDuration,
             value: "120ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-voicePulse",
+            name: "--fd-ds-motion-duration-voicePulse",
             category: .motionDuration,
             value: "960ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-overlay",
+            name: "--fd-ds-motion-duration-overlay",
             category: .motionDuration,
             value: "240ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-loadingSpin",
+            name: "--fd-ds-motion-duration-loadingSpin",
             category: .motionDuration,
             value: "800ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-interruptSettle",
+            name: "--fd-ds-motion-duration-interruptSettle",
             category: .motionDuration,
             value: "80ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-viewportReshape",
+            name: "--fd-ds-motion-duration-viewportReshape",
             category: .motionDuration,
             value: "240ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-orientationFreeze",
+            name: "--fd-ds-motion-duration-orientationFreeze",
             category: .motionDuration,
             value: "80ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-duration-orientationSettle",
+            name: "--fd-ds-motion-duration-orientationSettle",
             category: .motionDuration,
             value: "240ms",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-easing-standard",
+            name: "--fd-ds-motion-easing-standard",
             category: .motionEasing,
             value: "ease",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-easing-enter",
+            name: "--fd-ds-motion-easing-enter",
             category: .motionEasing,
             value: "ease-out",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-easing-exit",
+            name: "--fd-ds-motion-easing-exit",
             category: .motionEasing,
             value: "ease-in",
             platforms: nil,
             deprecated: false
         ),
         Token(
-            name: "--reader-ds-motion-easing-reshape",
+            name: "--fd-ds-motion-easing-reshape",
             category: .motionEasing,
             value: "ease-in-out",
             platforms: nil,
