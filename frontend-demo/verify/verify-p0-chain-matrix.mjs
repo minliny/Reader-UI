@@ -305,8 +305,28 @@ function verifyAndroid(chain) {
   // D. MotionPolicyAdapter 生产调用
   const D = testRegex(appShellViewModel, /MotionPolicyAdapter\.resolve/);
 
-  // E. token：该链路 Screen 无 raw Color(0x
-  const tokenCheckFiles = matchedScreens.length > 0 ? matchedScreens : [];
+  // E. token：该链路目录下所有 .kt 文件无 raw Color(0x（token 化）
+  // 扫描链路对应目录的全部 .kt 文件，避免漏检同链路的其他文件（如 BookshelfRouteScreens.kt）
+  const CHAIN_DIR = {
+    bookshelf: ["com/reader/ui/bookshelf"],
+    reader: ["com/reader/ui/reading"],
+    "source-switch": ["com/reader/ui/reading"],
+    "book-detail": ["com/reader/ui/book"],
+    settings: ["com/reader/ui/settings"],
+  };
+  // token 定义源头文件，Color(0x) 是合法的 token 值定义，排除不查
+  const TOKEN_SOURCE_SUFFIXES = ["tokens/ReaderTokenAdapter.kt", "theme/ReaderTheme.kt"];
+  let tokenCheckFiles = [];
+  for (const rel of CHAIN_DIR[chain] || []) {
+    tokenCheckFiles = tokenCheckFiles.concat(collectFiles(join(mainKotlinDir, rel), [".kt"]));
+  }
+  // 排除 token 定义源头文件
+  tokenCheckFiles = tokenCheckFiles.filter((f) => {
+    const norm = f.replace(/\\/g, "/");
+    return !TOKEN_SOURCE_SUFFIXES.some((s) => norm.endsWith(s));
+  });
+  // 兜底：纳入 C 列已识别的 Screen 文件，确保 source-switch 等特殊链路也被覆盖
+  tokenCheckFiles = [...new Set([...tokenCheckFiles, ...matchedScreens])];
   const hasRawColor = tokenCheckFiles.some((f) => {
     const content = readText(f) || "";
     // 排除注释行中的 Color(0x
@@ -488,7 +508,7 @@ function generateMarkdown(matrix) {
   lines.push("- B. Reducer intent：ReaderUiReducer 中有该链路的 intent handler");
   lines.push("- C. Screen：存在该链路的 Screen 文件（Compose）");
   lines.push("- D. MotionPolicyAdapter 生产调用：AppShellViewModel 中调用 MotionPolicyAdapter.resolve");
-  lines.push("- E. token：该链路 Screen 无 raw Color(0x（token 化）");
+  lines.push("- E. token：该链路目录下所有 .kt 文件无 raw Color(0x（token 化，排除 token 定义源头）");
   lines.push("- F. test：存在该链路的 focused test");
   lines.push("");
   lines.push("### HarmonyOS 仓库（A-F）");
