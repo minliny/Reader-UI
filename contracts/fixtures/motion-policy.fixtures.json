@@ -170,6 +170,72 @@
     "motionId": "overlay.dialog.exit"
   },
   {
+    "_comment": "=== FlowShell route transitions (priority 200) — Phase 1 Contract 闭环 ===",
+    "id": "flow-shell-route-push",
+    "priority": 200,
+    "match": {
+      "containerRole": "flowShell",
+      "operation": "push"
+    },
+    "motionId": "source.switch.route.push"
+  },
+  {
+    "id": "flow-shell-route-pop",
+    "priority": 200,
+    "match": {
+      "containerRole": "flowShell",
+      "operation": "pop"
+    },
+    "motionId": "source.switch.route.pop"
+  },
+  {
+    "id": "flow-shell-route-replace",
+    "priority": 200,
+    "match": {
+      "containerRole": "flowShell",
+      "operation": "replace"
+    },
+    "motionId": "source.switch.route.replace"
+  },
+  {
+    "_comment": "=== LibraryShell route transitions (priority 150) — book-detail ===",
+    "id": "library-shell-route-push",
+    "priority": 150,
+    "match": {
+      "containerRole": "libraryShell",
+      "operation": "push"
+    },
+    "motionId": "app.route.push.forward"
+  },
+  {
+    "id": "library-shell-route-pop",
+    "priority": 150,
+    "match": {
+      "containerRole": "libraryShell",
+      "operation": "pop"
+    },
+    "motionId": "app.route.pop.backward"
+  },
+  {
+    "_comment": "=== SettingsShell route transitions (priority 150) — settings 子页 ===",
+    "id": "settings-shell-route-push",
+    "priority": 150,
+    "match": {
+      "containerRole": "settingsShell",
+      "operation": "push"
+    },
+    "motionId": "app.route.push.forward"
+  },
+  {
+    "id": "settings-shell-route-pop",
+    "priority": 150,
+    "match": {
+      "containerRole": "settingsShell",
+      "operation": "pop"
+    },
+    "motionId": "app.route.pop.backward"
+  },
+  {
     "_comment": "=== Reader surface (priority 300) ===",
     "id": "reader-page-turn",
     "priority": 300,

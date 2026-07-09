@@ -63,6 +63,9 @@ export type MotionId =
   | "reader.session.controlSpace.exit"
   | "reader.session.tts.start"
   | "reader.sourceSwitch.open-close"
+  | "source.switch.route.push"
+  | "source.switch.route.pop"
+  | "source.switch.route.replace"
   | "search.state.replace"
   | "segment.item.switch"
   | "selection.group.toggle"
@@ -737,6 +740,51 @@ export const motionSpecRegistry: Record<MotionId, Motion> = {
     reducedMotionPolicy: "zeroDuration",
     tokens: { durationToken: "reader.motion.duration.overlay", easingToken: "app.motion.easing.enter" },
     guardRules: ["reducedMotion:forceZeroDuration", "focusReturn:restoreTarget", "interrupt:cancel"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: true
+  },
+  "source.switch.route.push": {
+    id: "source.switch.route.push",
+    durationMs: 280,
+    easing: "ease-out",
+    implementationKind: "routeTransition",
+    containerRole: "flowShell",
+    operation: "push",
+    visualPattern: "nativeStackForward",
+    interruptPolicy: "completeThenReplace",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "reader.motion.duration.route", easingToken: "app.motion.easing.enter" },
+    guardRules: ["reducedMotion:forceZeroDuration", "interrupt:completeThenReplace"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: false
+  },
+  "source.switch.route.pop": {
+    id: "source.switch.route.pop",
+    durationMs: 240,
+    easing: "ease-in",
+    implementationKind: "routeTransition",
+    containerRole: "flowShell",
+    operation: "pop",
+    visualPattern: "nativeStackBackward",
+    interruptPolicy: "cancel",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "reader.motion.duration.route", easingToken: "app.motion.easing.exit" },
+    guardRules: ["reducedMotion:forceZeroDuration", "interrupt:cancel"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: false
+  },
+  "source.switch.route.replace": {
+    id: "source.switch.route.replace",
+    durationMs: 200,
+    easing: "ease-out",
+    implementationKind: "routeTransition",
+    containerRole: "flowShell",
+    operation: "replace",
+    visualPattern: "fadeReplace",
+    interruptPolicy: "completeThenReplace",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "reader.motion.duration.route", easingToken: "app.motion.easing.standard" },
+    guardRules: ["reducedMotion:forceZeroDuration", "interrupt:completeThenReplace"],
     reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
     deprecated: false
   },

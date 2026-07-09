@@ -32,6 +32,11 @@
           "type": "array",
           "items": { "type": "string", "enum": ["slice-1", "slice-2", "slice-3", "slice-4", "slice-5", "slice-6"] },
           "description": "规则生效的 slice。空数组或缺失表示全局生效。"
+        },
+        "routeIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "规则生效的 routeId。空数组或缺失表示对所有 route 生效。与 slices 取交集（两者都匹配才生效）。Phase 1 Contract 闭环新增。"
         }
       }
     },

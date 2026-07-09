@@ -869,6 +869,13 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--fd-ds-motion-duration-route": {
+    name: "--fd-ds-motion-duration-route",
+    category: "motion-duration",
+    value: "280ms",
+    platforms: undefined,
+    deprecated: false
+  },
   "--fd-ds-motion-duration-loadingSpin": {
     name: "--fd-ds-motion-duration-loadingSpin",
     category: "motion-duration",

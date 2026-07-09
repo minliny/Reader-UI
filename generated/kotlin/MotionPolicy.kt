@@ -178,6 +178,55 @@ object MotionPolicyRegistry {
         deprecated = false
     ),
     MotionPolicy(
+        id = "flow-shell-route-push",
+        priority = 200,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Push, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.FlowShell, reducedMotion = null),
+        motionId = MotionId.SourceSwitchRoutePush,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "flow-shell-route-pop",
+        priority = 200,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Pop, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.FlowShell, reducedMotion = null),
+        motionId = MotionId.SourceSwitchRoutePop,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "flow-shell-route-replace",
+        priority = 200,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Replace, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.FlowShell, reducedMotion = null),
+        motionId = MotionId.SourceSwitchRouteReplace,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "library-shell-route-push",
+        priority = 150,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Push, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.LibraryShell, reducedMotion = null),
+        motionId = MotionId.AppRoutePushForward,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "library-shell-route-pop",
+        priority = 150,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Pop, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.LibraryShell, reducedMotion = null),
+        motionId = MotionId.AppRoutePopBackward,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "settings-shell-route-push",
+        priority = 150,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Push, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.SettingsShell, reducedMotion = null),
+        motionId = MotionId.AppRoutePushForward,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "settings-shell-route-pop",
+        priority = 150,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Pop, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.SettingsShell, reducedMotion = null),
+        motionId = MotionId.AppRoutePopBackward,
+        deprecated = false
+    ),
+    MotionPolicy(
         id = "reader-page-turn",
         priority = 300,
         match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Update, sourceRole = "page", targetRole = null, containerRole = MotionContainerRole.ReaderSurface, reducedMotion = null),

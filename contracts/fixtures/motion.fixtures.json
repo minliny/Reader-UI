@@ -722,6 +722,7 @@
     ]
   },
   {
+    "_comment": "DEPRECATED: overlay 语义，已被 source.switch.route.push/pop/replace 替代。保留向后兼容，新代码不应引用。",
     "id": "reader.sourceSwitch.open-close",
     "durationMs": 240,
     "easing": "ease-out",
@@ -731,6 +732,7 @@
     "visualPattern": "slideSheetUp",
     "interruptPolicy": "cancel",
     "reducedMotionPolicy": "zeroDuration",
+    "deprecated": true,
     "tokens": {
       "durationToken": "reader.motion.duration.overlay",
       "easingToken": "app.motion.easing.enter"
@@ -739,6 +741,64 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ]
+  },
+  {
+    "_comment": "Phase 1 Contract 闭环: source-switch FlowShell route 化语义（push/pop/replace）",
+    "id": "source.switch.route.push",
+    "durationMs": 280,
+    "easing": "ease-out",
+    "implementationKind": "routeTransition",
+    "containerRole": "flowShell",
+    "operation": "push",
+    "visualPattern": "nativeStackForward",
+    "interruptPolicy": "completeThenReplace",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "reader.motion.duration.route",
+      "easingToken": "app.motion.easing.enter"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "interrupt:completeThenReplace"
+    ]
+  },
+  {
+    "id": "source.switch.route.pop",
+    "durationMs": 240,
+    "easing": "ease-in",
+    "implementationKind": "routeTransition",
+    "containerRole": "flowShell",
+    "operation": "pop",
+    "visualPattern": "nativeStackBackward",
+    "interruptPolicy": "cancel",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "reader.motion.duration.route",
+      "easingToken": "app.motion.easing.exit"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "interrupt:cancel"
+    ]
+  },
+  {
+    "id": "source.switch.route.replace",
+    "durationMs": 200,
+    "easing": "ease-out",
+    "implementationKind": "routeTransition",
+    "containerRole": "flowShell",
+    "operation": "replace",
+    "visualPattern": "fadeReplace",
+    "interruptPolicy": "completeThenReplace",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "reader.motion.duration.route",
+      "easingToken": "app.motion.easing.standard"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "interrupt:completeThenReplace"
     ]
   },
   {

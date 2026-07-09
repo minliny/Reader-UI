@@ -131,6 +131,12 @@ enum class MotionId {
     ReaderSessionTtsStart,
     @SerialName("reader.sourceSwitch.open-close")
     ReaderSourceSwitchOpenClose,
+    @SerialName("source.switch.route.push")
+    SourceSwitchRoutePush,
+    @SerialName("source.switch.route.pop")
+    SourceSwitchRoutePop,
+    @SerialName("source.switch.route.replace")
+    SourceSwitchRouteReplace,
     @SerialName("search.state.replace")
     SearchStateReplace,
     @SerialName("segment.item.switch")
@@ -903,6 +909,51 @@ object MotionSpecRegistry {
         reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
         tokens = MotionTokens(durationToken = "reader.motion.duration.overlay", easingToken = "app.motion.easing.enter"),
         guardRules = listOf("reducedMotion:forceZeroDuration", "focusReturn:restoreTarget", "interrupt:cancel"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = true
+    ),
+    Motion(
+        id = MotionId.SourceSwitchRoutePush,
+        durationMs = 280,
+        easing = MotionEasing.EaseOut,
+        implementationKind = MotionImplementationKind.RouteTransition,
+        containerRole = MotionContainerRole.FlowShell,
+        operation = MotionOperation.Push,
+        visualPattern = MotionVisualPattern.NativeStackForward,
+        interruptPolicy = MotionInterruptPolicy.CompleteThenReplace,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "reader.motion.duration.route", easingToken = "app.motion.easing.enter"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "interrupt:completeThenReplace"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.SourceSwitchRoutePop,
+        durationMs = 240,
+        easing = MotionEasing.EaseIn,
+        implementationKind = MotionImplementationKind.RouteTransition,
+        containerRole = MotionContainerRole.FlowShell,
+        operation = MotionOperation.Pop,
+        visualPattern = MotionVisualPattern.NativeStackBackward,
+        interruptPolicy = MotionInterruptPolicy.Cancel,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "reader.motion.duration.route", easingToken = "app.motion.easing.exit"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "interrupt:cancel"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.SourceSwitchRouteReplace,
+        durationMs = 200,
+        easing = MotionEasing.EaseOut,
+        implementationKind = MotionImplementationKind.RouteTransition,
+        containerRole = MotionContainerRole.FlowShell,
+        operation = MotionOperation.Replace,
+        visualPattern = MotionVisualPattern.FadeReplace,
+        interruptPolicy = MotionInterruptPolicy.CompleteThenReplace,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "reader.motion.duration.route", easingToken = "app.motion.easing.standard"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "interrupt:completeThenReplace"),
         reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
         deprecated = false
     ),

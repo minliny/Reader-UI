@@ -264,3 +264,47 @@ test("route shell lookup: bookshelf -> MainTabShell, reader -> ReaderShell, sett
   assert.equal(routeShellByRouteId.get("global-settings"), "SettingsShell");
   assert.equal(routeShellByRouteId.get("global-loading"), "SettingsShell");
 });
+
+test("route shell lookup: source-switch -> FlowShell (Phase 1 Contract 闭环)", () => {
+  assert.equal(routeShellByRouteId.get("source-switch"), "FlowShell");
+  assert.equal(routeShellByRouteId.get("source-switch-results"), "FlowShell");
+  assert.equal(routeShellByRouteId.get("book-detail"), "LibraryShell");
+});
+
+test("FlowShell route push/pop/replace resolve to source.switch.route.* (route-event 覆盖)", () => {
+  const pushId = resolveMotion({ operation: "push", containerRole: "flowShell" });
+  assert.equal(pushId, "source.switch.route.push", "FlowShell push should resolve to source.switch.route.push");
+
+  const popId = resolveMotion({ operation: "pop", containerRole: "flowShell" });
+  assert.equal(popId, "source.switch.route.pop", "FlowShell pop should resolve to source.switch.route.pop");
+
+  const replaceId = resolveMotion({ operation: "replace", containerRole: "flowShell" });
+  assert.equal(replaceId, "source.switch.route.replace", "FlowShell replace should resolve to source.switch.route.replace");
+});
+
+test("LibraryShell/SettingsShell push/pop resolve to app.route.* (route-event 覆盖)", () => {
+  const libPush = resolveMotion({ operation: "push", containerRole: "libraryShell" });
+  assert.equal(libPush, "app.route.push.forward", "LibraryShell push should resolve to app.route.push.forward");
+
+  const libPop = resolveMotion({ operation: "pop", containerRole: "libraryShell" });
+  assert.equal(libPop, "app.route.pop.backward", "LibraryShell pop should resolve to app.route.pop.backward");
+
+  const settingsPush = resolveMotion({ operation: "push", containerRole: "settingsShell" });
+  assert.equal(settingsPush, "app.route.push.forward", "SettingsShell push should resolve to app.route.push.forward");
+
+  const settingsPop = resolveMotion({ operation: "pop", containerRole: "settingsShell" });
+  assert.equal(settingsPop, "app.route.pop.backward", "SettingsShell pop should resolve to app.route.pop.backward");
+});
+
+test("reader.sourceSwitch.open-close is deprecated, source.switch.route.* are not (Phase 1 Contract 闭环)", () => {
+  const legacy = motionById.get("reader.sourceSwitch.open-close");
+  assert.ok(legacy?.deprecated, "reader.sourceSwitch.open-close must be marked deprecated");
+
+  for (const id of ["source.switch.route.push", "source.switch.route.pop", "source.switch.route.replace"]) {
+    const m = motionById.get(id);
+    assert.ok(m, `motion fixture missing: ${id}`);
+    assert.ok(!m.deprecated, `${id} should not be deprecated`);
+    assert.equal(m.containerRole, "flowShell", `${id} containerRole should be flowShell`);
+    assert.equal(m.implementationKind, "routeTransition", `${id} implementationKind should be routeTransition`);
+  }
+});

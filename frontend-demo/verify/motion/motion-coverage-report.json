@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-08T16:19:48.294Z",
+  "generatedAt": "2026-07-09T09:40:24.023Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -44,8 +44,8 @@
     },
     {
       "id": "motion.contract.fixture-registry",
-      "passed": true,
-      "detail": "84/84 canonical MotionSpec fixtures; missing=0, extra=0, missingTokens=0, missingGuardRules=0"
+      "passed": false,
+      "detail": "87/87 canonical MotionSpec fixtures; missing=0, extra=0, missingTokens=0, missingGuardRules=0"
     },
     {
       "id": "motion.contract.id-resolution",
@@ -154,8 +154,8 @@
     }
   ],
   "summary": {
-    "passed": 30,
-    "failed": 0,
+    "passed": 29,
+    "failed": 1,
     "total": 30
   },
   "routeCoverage": {
@@ -352,8 +352,8 @@
     "missingDetailedStateMachines": []
   },
   "motionFixtureCoverage": {
-    "schemaMotionIdCount": 84,
-    "fixtureCount": 84,
+    "schemaMotionIdCount": 87,
+    "fixtureCount": 87,
     "missingMotionFixtureIds": [],
     "extraMotionFixtureIds": [],
     "duplicateMotionFixtureIds": [],

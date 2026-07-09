@@ -1,11 +1,11 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
     "ui-state": "1.0.0",
     "view-state": "1.0.0",
-    "motion": "1.1.0",
+    "motion": "1.2.0",
     "token": "2.0.0",
     "core-command": "1.0.0",
     "core-event": "1.0.0",
@@ -13,10 +13,28 @@
     "progress-location": "1.0.0",
     "content": "1.0.0",
     "sync-conflict": "1.0.0",
-    "state-rule": "1.0.0",
-    "motion-policy": "1.0.0"
+    "state-rule": "1.1.0",
+    "motion-policy": "1.1.0"
   },
   "changelog": [
+    {
+      "version": "2.1.0",
+      "date": "2026-07-09",
+      "summary": "MINOR：source-switch FlowShell route 化 motion-policy + state-rule routeIds 扩展（Phase 1 Contract 闭环）",
+      "changes": [
+        "P0 修复：source-switch view-state 已 route 化，但 motion-policy 仍缺 FlowShell route policy，遗留 reader.sourceSwitch.open-close 为 overlay 语义。本版补齐 FlowShell route 化 motion-policy，消除 route view-state + overlay motion 的混合状态。",
+        "motion.schema.json / motion-policy.schema.json：新增 3 个 routeTransition motionId（source.switch.route.push / source.switch.route.pop / source.switch.route.replace），motion schema 版本 1.1.0 → 1.2.0，motion-policy schema 版本 1.0.0 → 1.1.0。",
+        "motion.fixtures.json：标记 reader.sourceSwitch.open-close 为 deprecated:true（保留向后兼容），新增 3 条 routeTransition MotionSpec（containerRole=flowShell, implementationKind=routeTransition, visualPattern=nativeStackForward/nativeStackBackward/fadeReplace）。",
+        "motion-policy.fixtures.json：新增 7 条 policy（flow-shell-route-push/pop/replace priority=200, library-shell-route-push/pop priority=150, settings-shell-route-push/pop priority=150），覆盖 FlowShell/LibraryShell/SettingsShell 三类 shell 的 route transition。",
+        "state-rule.schema.json：target.properties 新增 routeIds 字段（数组，规则生效的 routeId，与 slices 取交集），state-rule schema 版本 1.0.0 → 1.1.0。",
+        "state-rule.fixtures.json：新增 3 条规则（source-switch-loading-guard async-guard routeIds=[source-switch,source-switch-results], book-detail-error-requires-error-pagestate required-with routeIds=[book-detail], settings-overlay-guard-tab-switch async-guard routeIds=[settings,settings-general,global-settings]）。",
+        "token.fixtures.json：新增 --fd-ds-motion-duration-route token（category=motion-duration, value=280ms）供 source.switch.route.* durationToken 引用。",
+        "motion-resolver.test.mjs：新增 4 项 route-event 覆盖测试（FlowShell route lookup, FlowShell push/pop/replace 解析, LibraryShell/SettingsShell push/pop 解析, deprecated 标记校验）。",
+        "三端 generated Motion.{swift,kt,ets} / MotionPolicy.{swift,kt,ets} / Token.{swift,kt,ets} 由 tools/codegen/generate.mjs 重新生成：87 motionIds, 50 policies, 130 tokens, 200 route shell lookups。",
+        "验收全部通过：contracts/tests npm test 234/234 pass, validate.mjs 923 fixtures 0 errors, verify-demo-contract-consistency.mjs PASS (515 found, 111 unknown approved), verify-motion-coverage.mjs PASS。",
+        "依据：P0_CHAIN_MATRIX.md 阶段 0 审计发现 source-switch contract 不一致（route 化 view-state + overlay motion），本版为阶段 1 Contract 闭环交付。"
+      ]
+    },
     {
       "version": "2.0.0",
       "date": "2026-07-09",

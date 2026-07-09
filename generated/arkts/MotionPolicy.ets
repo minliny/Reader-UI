@@ -171,6 +171,55 @@ export const motionPolicyRegistry: MotionPolicy[] = [
     deprecated: false
   },
   {
+    id: "flow-shell-route-push",
+    priority: 200,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "push", sourceRole: undefined, targetRole: undefined, containerRole: "flowShell", reducedMotion: undefined },
+    motionId: "source.switch.route.push",
+    deprecated: false
+  },
+  {
+    id: "flow-shell-route-pop",
+    priority: 200,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "pop", sourceRole: undefined, targetRole: undefined, containerRole: "flowShell", reducedMotion: undefined },
+    motionId: "source.switch.route.pop",
+    deprecated: false
+  },
+  {
+    id: "flow-shell-route-replace",
+    priority: 200,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "replace", sourceRole: undefined, targetRole: undefined, containerRole: "flowShell", reducedMotion: undefined },
+    motionId: "source.switch.route.replace",
+    deprecated: false
+  },
+  {
+    id: "library-shell-route-push",
+    priority: 150,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "push", sourceRole: undefined, targetRole: undefined, containerRole: "libraryShell", reducedMotion: undefined },
+    motionId: "app.route.push.forward",
+    deprecated: false
+  },
+  {
+    id: "library-shell-route-pop",
+    priority: 150,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "pop", sourceRole: undefined, targetRole: undefined, containerRole: "libraryShell", reducedMotion: undefined },
+    motionId: "app.route.pop.backward",
+    deprecated: false
+  },
+  {
+    id: "settings-shell-route-push",
+    priority: 150,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "push", sourceRole: undefined, targetRole: undefined, containerRole: "settingsShell", reducedMotion: undefined },
+    motionId: "app.route.push.forward",
+    deprecated: false
+  },
+  {
+    id: "settings-shell-route-pop",
+    priority: 150,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "pop", sourceRole: undefined, targetRole: undefined, containerRole: "settingsShell", reducedMotion: undefined },
+    motionId: "app.route.pop.backward",
+    deprecated: false
+  },
+  {
     id: "reader-page-turn",
     priority: 300,
     match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "update", sourceRole: "page", targetRole: undefined, containerRole: "readerSurface", reducedMotion: undefined },

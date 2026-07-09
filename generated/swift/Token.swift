@@ -874,6 +874,13 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--fd-ds-motion-duration-route",
+            category: .motionDuration,
+            value: "280ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--fd-ds-motion-duration-loadingSpin",
             category: .motionDuration,
             value: "800ms",

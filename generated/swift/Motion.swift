@@ -65,6 +65,9 @@ public enum MotionId: String, Codable, CaseIterable, Sendable {
     case reader_session_controlSpace_exit = "reader.session.controlSpace.exit"
     case reader_session_tts_start = "reader.session.tts.start"
     case reader_sourceSwitch_open_close = "reader.sourceSwitch.open-close"
+    case source_switch_route_push = "source.switch.route.push"
+    case source_switch_route_pop = "source.switch.route.pop"
+    case source_switch_route_replace = "source.switch.route.replace"
     case search_state_replace = "search.state.replace"
     case segment_item_switch = "segment.item.switch"
     case selection_group_toggle = "selection.group.toggle"
@@ -822,6 +825,54 @@ public enum MotionSpecRegistry {
             reducedMotionPolicy: .zeroDuration,
             tokens: MotionTokens(durationToken: "reader.motion.duration.overlay", easingToken: "app.motion.easing.enter"),
             guardRules: ["reducedMotion:forceZeroDuration", "focusReturn:restoreTarget", "interrupt:cancel"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: true
+        ),
+        Motion(
+            id: .source_switch_route_push,
+            durationMs: 280,
+            easing: .ease_out,
+            implementationKind: .routeTransition,
+            containerRole: .flowShell,
+            operation: .push,
+            visualPattern: .nativeStackForward,
+            interruptPolicy: .completeThenReplace,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "reader.motion.duration.route", easingToken: "app.motion.easing.enter"),
+            guardRules: ["reducedMotion:forceZeroDuration", "interrupt:completeThenReplace"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .source_switch_route_pop,
+            durationMs: 240,
+            easing: .ease_in,
+            implementationKind: .routeTransition,
+            containerRole: .flowShell,
+            operation: .pop,
+            visualPattern: .nativeStackBackward,
+            interruptPolicy: .cancel,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "reader.motion.duration.route", easingToken: "app.motion.easing.exit"),
+            guardRules: ["reducedMotion:forceZeroDuration", "interrupt:cancel"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .source_switch_route_replace,
+            durationMs: 200,
+            easing: .ease_out,
+            implementationKind: .routeTransition,
+            containerRole: .flowShell,
+            operation: .replace,
+            visualPattern: .fadeReplace,
+            interruptPolicy: .completeThenReplace,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "reader.motion.duration.route", easingToken: "app.motion.easing.standard"),
+            guardRules: ["reducedMotion:forceZeroDuration", "interrupt:completeThenReplace"],
             reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
             loop: nil,
             deprecated: false

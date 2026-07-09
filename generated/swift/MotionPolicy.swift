@@ -195,6 +195,55 @@ public enum MotionPolicyRegistry {
             deprecated: false
         ),
         MotionPolicy(
+            id: "flow-shell-route-push",
+            priority: 200,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.push, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.flowShell, reducedMotion: nil),
+            motionId: .source_switch_route_push,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "flow-shell-route-pop",
+            priority: 200,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.pop, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.flowShell, reducedMotion: nil),
+            motionId: .source_switch_route_pop,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "flow-shell-route-replace",
+            priority: 200,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.replace, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.flowShell, reducedMotion: nil),
+            motionId: .source_switch_route_replace,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "library-shell-route-push",
+            priority: 150,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.push, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.libraryShell, reducedMotion: nil),
+            motionId: .app_route_push_forward,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "library-shell-route-pop",
+            priority: 150,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.pop, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.libraryShell, reducedMotion: nil),
+            motionId: .app_route_pop_backward,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "settings-shell-route-push",
+            priority: 150,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.push, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.settingsShell, reducedMotion: nil),
+            motionId: .app_route_push_forward,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "settings-shell-route-pop",
+            priority: 150,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.pop, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.settingsShell, reducedMotion: nil),
+            motionId: .app_route_pop_backward,
+            deprecated: false
+        ),
+        MotionPolicy(
             id: "reader-page-turn",
             priority: 300,
             match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.update, sourceRole: "page", targetRole: nil, containerRole: MotionContainerRole.readerSurface, reducedMotion: nil),

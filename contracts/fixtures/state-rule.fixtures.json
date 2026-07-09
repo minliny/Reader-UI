@@ -185,5 +185,50 @@
       "description": "error 非空时 pageState 必须为 error 或相关错误态"
     },
     "severity": "warn"
+  },
+  {
+    "_comment": "Phase 1 Contract 闭环: source-switch FlowShell loading 时禁止 route 跳转",
+    "ruleId": "source-switch-loading-guard",
+    "kind": "async-guard",
+    "target": {
+      "fields": ["route"],
+      "routeIds": ["source-switch", "source-switch-results"]
+    },
+    "constraint": {
+      "guardField": "loading",
+      "guardValue": true,
+      "description": "source-switch loading 时禁止 route 变更，避免换源中途跳走"
+    },
+    "severity": "error"
+  },
+  {
+    "_comment": "Phase 1 Contract 闭环: book-detail error 态必须反映到 pageState（slice-2 扩展）",
+    "ruleId": "book-detail-error-requires-error-pagestate",
+    "kind": "required-with",
+    "target": {
+      "fields": ["error"],
+      "routeIds": ["book-detail"],
+      "slices": ["slice-2"]
+    },
+    "constraint": {
+      "requiredField": "pageState",
+      "description": "book-detail error 非空时 pageState 必须为 error 或 source-unavailable"
+    },
+    "severity": "warn"
+  },
+  {
+    "_comment": "Phase 1 Contract 闭环: settings overlay 非空时禁止 tab 切换",
+    "ruleId": "settings-overlay-guard-tab-switch",
+    "kind": "async-guard",
+    "target": {
+      "fields": ["tab"],
+      "routeIds": ["settings", "settings-general", "global-settings"]
+    },
+    "constraint": {
+      "guardField": "settings.overlay",
+      "guardValue": "expandedOption",
+      "description": "settings overlay 展开时禁止 tab 切换"
+    },
+    "severity": "warn"
   }
 ]

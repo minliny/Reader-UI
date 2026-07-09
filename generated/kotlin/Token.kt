@@ -892,6 +892,13 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--fd-ds-motion-duration-route",
+        category = TokenCategory.MotionDuration,
+        value = "280ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--fd-ds-motion-duration-loadingSpin",
         category = TokenCategory.MotionDuration,
         value = "800ms",
