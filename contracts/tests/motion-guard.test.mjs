@@ -22,7 +22,7 @@ function tokenRefToFixtureName(ref) {
   if (parts[0] === "reader" && parts[2] === "duration" && ["instant", "micro", "fast", "base"].includes(semanticParts[0])) {
     semanticParts[0] = `reader${semanticParts[0][0].toUpperCase()}${semanticParts[0].slice(1)}`;
   }
-  return `--reader-ds-motion-${parts[2]}-${semanticParts.join("-")}`;
+  return `--fd-ds-motion-${parts[2]}-${semanticParts.join("-")}`;
 }
 
 const motionSchema = loadJson("motion.schema.json");

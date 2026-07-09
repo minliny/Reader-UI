@@ -187,7 +187,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `app.firstOpen.enter`
 - 触发：冷启动后 `app.firstOpen.enter` UiEvent，仅播一次（`hasPlayedFirstOpen` guard）
-- duration：`--reader-ds-motion-duration-firstOpen`（280ms）
+- duration：`--fd-ds-motion-duration-firstOpen`（280ms）
 - 结束状态：首屏落位，`hasPlayedFirstOpen = true`
 - 打断：被 `route.push` 触发 `motion.interrupt.completeThenReplace`，跳到目标 route
 - reduced-motion：duration 0ms，首屏直接落位，无淡入
@@ -195,7 +195,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `app.route.push.forward` / `app.route.pop.backward` / `app.route.replace`
 - 触发：`route.push` / `route.pop` / `route.popToRoot` / `route.replace` UiEvent
-- duration：使用 `--reader-ds-motion-duration-panel`（200ms）或平台导航默认值
+- duration：使用 `--fd-ds-motion-duration-panel`（200ms）或平台导航默认值
 - 结束状态：目标 route 落位，focusTarget 回到 route 最后 focus
 - 打断：新 `route.push` 触发 `motion.interrupt.redirect`；`route.pop` 触发 `motion.interrupt.cancel`
 - reduced-motion：duration 0ms，直接切换
@@ -213,7 +213,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `bookshelf.view.switch`
 - 触发：`bookshelf.view.switch` UiEvent（cover-mode ↔ list-mode）
-- duration：`--reader-ds-motion-duration-stateReplace`（160ms）
+- duration：`--fd-ds-motion-duration-stateReplace`（160ms）
 - 结束状态：目标视图模式落位
 - 打断：切换中再次切换触发 `redirect`
 - reduced-motion：duration 0ms
@@ -222,7 +222,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `reader.entry.coverToImmersive`
 - 触发：`reader.entry.coverToImmersive` UiEvent（点击书架封面）
-- duration：`--reader-ds-motion-duration-readerEntry`（240ms）
+- duration：`--fd-ds-motion-duration-readerEntry`（240ms）
 - 结束状态：进入 `immersive-reading`，控制层不显示
 - 打断：连续点击触发 `motion.interrupt.cancel`；返回触发 `app.route.pop.backward`
 - reduced-motion：duration 0ms，直接进入阅读
@@ -234,7 +234,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `reader.page.turn.next-prev`
 - 触发：`reader.page.next` / `reader.page.prev` UiEvent
-- duration：`--reader-ds-motion-duration-pageTurn`（220ms）
+- duration：`--fd-ds-motion-duration-pageTurn`（220ms）
 - 结束状态：目标页落位，`readerPageIndex` 更新，触发 `reader.progress.update` CoreCommand
 - 打断：连续翻页触发 `motion.interrupt.redirect`；chapter jump 触发 `completeThenReplace`
 - reduced-motion：duration 0ms，瞬切
@@ -242,7 +242,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `reader.chapter.jump`
 - 触发：`reader.chapter.jump` UiEvent
-- duration：`--reader-ds-motion-duration-pageTurn`（220ms）
+- duration：`--fd-ds-motion-duration-pageTurn`（220ms）
 - 结束状态：目标章节落位，Core `content.load` 返回后渲染
 - 打断：连续跳转触发 `redirect`；返回触发 `cancel`
 
@@ -266,13 +266,13 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 #### `reader.control.hide`
 - 触发：`reader.control.toggle`（关闭）/ 系统返回
-- duration：`--reader-ds-motion-duration-overlay`（240ms）
+- duration：`--fd-ds-motion-duration-overlay`（240ms）
 - 结束状态：overlay = null，focusTarget 回到 `reader.control.handle`
 - 打断：被新 `reader.*.open` 触发 `redirect`
 
 #### `reader.module.switch`
 - 触发：`reader.module.switch` UiEvent
-- duration：`--reader-ds-motion-duration-panel`（200ms）
+- duration：`--fd-ds-motion-duration-panel`（200ms）
 - 结束状态：目标模块 overlay 落位
 - 打断：快速切换触发 `redirect`；overlay 互斥规则强制经 `null` 中转（transition-guard）
 
@@ -442,14 +442,14 @@ system back 等价表：
 ### 4.5 键盘 inset
 
 - 含输入的 route（见 [PAGE_REFERENCE.md](./PAGE_REFERENCE.md) §10 keyboard）必须处理 keyboard inset
-- 键盘弹出：内容区上移 `--reader-ds-space-keyboard-gap`（12px）+ 键盘高度
+- 键盘弹出：内容区上移 `--fd-ds-space-keyboard-gap`（12px）+ 键盘高度
 - 键盘关闭：内容区复位
 - 键盘弹出期间禁止 `route.push`
 - iOS：`KeyboardObserver` / `safeAreaInsets`；Android：`WindowInsets.ime`；HarmonyOS：`avoidArea` / `expandSafeArea`
 
 ### 4.6 safe area / fold posture
 
-- 顶部 / 底部 / 水平 safe area 使用 `--reader-ds-space-safe-area-*` token
+- 顶部 / 底部 / 水平 safe area 使用 `--fd-ds-space-safe-area-*` token
 - 折叠屏 hinge：dock 不跨 hinge
 - fold posture 变化触发 `viewport.orientation.reshape`
 - 平台必须使用原生 fold posture API（不依赖 Web `visualViewport`）

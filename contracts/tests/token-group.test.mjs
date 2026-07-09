@@ -26,7 +26,7 @@ function tokenNamesFromTables(markdown) {
   const names = [];
   for (const line of markdown.split("\n")) {
     if (!line.startsWith("|")) continue;
-    for (const match of line.matchAll(/`(--reader-ds-[^`]+)`/g)) names.push(match[1]);
+    for (const match of line.matchAll(/`(--fd-ds-[^`]+)`/g)) names.push(match[1]);
   }
   return names;
 }

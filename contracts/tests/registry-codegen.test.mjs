@@ -84,10 +84,10 @@ test("TokenRegistry is emitted for all three platforms", () => {
 
 test("TokenRegistry includes fixture names, categories, and raw values", () => {
   const required = [
-    "--reader-ds-color-paper",
-    "--reader-ds-space-screen-padding",
-    "--reader-ds-motion-duration-pageTurn",
-    "--reader-ds-motion-easing-enter",
+    "--fd-ds-color-paper",
+    "--fd-ds-space-screen-padding",
+    "--fd-ds-motion-duration-pageTurn",
+    "--fd-ds-motion-easing-enter",
   ];
 
   for (const rel of ["swift/Token.swift", "kotlin/Token.kt", "arkts/Token.ets"]) {

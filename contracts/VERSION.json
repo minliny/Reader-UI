@@ -1,12 +1,12 @@
 {
-  "version": "1.5.0",
+  "version": "2.0.0",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
     "ui-state": "1.0.0",
     "view-state": "1.0.0",
     "motion": "1.1.0",
-    "token": "1.0.0",
+    "token": "2.0.0",
     "core-command": "1.0.0",
     "core-event": "1.0.0",
     "host-request": "1.0.0",
@@ -17,6 +17,21 @@
     "motion-policy": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "2.0.0",
+      "date": "2026-07-09",
+      "summary": "MAJOR：token 前缀迁移 --reader-ds-* → --fd-ds-* + 颜色值对齐 frontend-demo-optimized",
+      "changes": [
+        "MAJOR 破坏性变更：token.fixtures.json 全量前缀迁移 --reader-ds-* → --fd-ds-*，对齐 frontend-demo-optimized/tokens.css 真源。token.schema.json name.pattern 从 ^--reader-ds- 改为 ^--fd-ds-。",
+        "颜色值对齐 optimized demo：color-primary #366179（蓝）→ #2d4a3e（墨绿）、color-primary-dark #274f66 → #1f3528、state-focus rgba(54,97,121,0.22) → rgba(45,74,62,0.22)（绿色调）。shadow-elevated / shadow-soft 已是绿色调 rgba(89,70,50,*) 无需变更。",
+        "字体值对齐 optimized demo：font-sans 新增 \"Noto Sans SC\" / \"Source Han Sans SC\"；font-serif \"Noto Serif CJK SC\" → \"Noto Serif SC\"。",
+        "z-index token 已在前版本补齐 5 个（flow-window 36 / settings-dropdown 42 / dev-overlay 95 / dev-region 96 / demo-switch 100），本版无新增。",
+        "TOKEN_SPEC.md / MOTION_SPEC.md 全量前缀替换；contract.test.mjs / token-group.test.mjs / motion-guard.test.mjs / registry-codegen.test.mjs 同步更新前缀校验。",
+        "VERSION.json token schema 从 1.0.0 升至 2.0.0 反映前缀迁移破坏性变更。",
+        "三端 generated Token.{swift,kt,ets} 由 tools/codegen/generate.mjs 重新生成，TokenRegistry 包含迁移后的 --fd-ds-* 名称与新颜色值。",
+        "依据：用户裁定以 frontend-demo-optimized 为准，三端统一迁移到 --fd-ds-* 前缀与墨绿 primary 色。"
+      ]
+    },
     {
       "version": "1.5.0",
       "date": "2026-07-05",

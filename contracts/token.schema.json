@@ -2,15 +2,15 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/token.schema.json",
   "title": "Token",
-  "description": "视觉 token 契约。Token name 一经发布不得改名。来源：frontend-demo/tokens.css、frontend-demo/motion-tokens.css、contracts/fixtures/token.fixtures.json。",
+  "description": "视觉 token 契约。Token name 一经发布不得改名。来源：frontend-demo-optimized/tokens.css、frontend-demo-optimized/motion-tokens.css、contracts/fixtures/token.fixtures.json。",
   "type": "object",
   "additionalProperties": false,
   "required": ["name", "category", "value"],
   "properties": {
     "name": {
       "type": "string",
-      "pattern": "^--reader-ds-[a-zA-Z][a-zA-Z0-9-]*$",
-      "description": "Token 名称。必须以 --reader-ds- 开头。允许小写和驼峰。"
+      "pattern": "^--fd-ds-[a-zA-Z][a-zA-Z0-9-]*$",
+      "description": "Token 名称。必须以 --fd-ds- 开头。允许小写和驼峰。"
     },
     "category": {
       "type": "string",

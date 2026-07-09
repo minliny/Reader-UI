@@ -63,8 +63,9 @@
         "id": "continue-reading",
         "props": {
           "bookId": "bk-001",
-          "title": "三体",
-          "author": "刘慈欣"
+          "title": "长夜余火",
+          "author": "爱潜水的乌贼",
+          "coverKey": "longNight"
         }
       },
       {
@@ -95,8 +96,9 @@
                 "id": "book-1",
                 "props": {
                   "bookId": "bk-001",
-                  "title": "三体",
-                  "author": "刘慈欣"
+                  "title": "长夜余火",
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "longNight"
                 }
               },
               {
@@ -104,8 +106,9 @@
                 "id": "book-2",
                 "props": {
                   "bookId": "bk-002",
-                  "title": "基地",
-                  "author": "阿西莫夫"
+                  "title": "诡秘之主",
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "mysteryLord"
                 }
               },
               {
@@ -113,8 +116,39 @@
                 "id": "book-3",
                 "props": {
                   "bookId": "bk-003",
-                  "title": "球状闪电",
-                  "author": "刘慈欣"
+                  "title": "明朝那些事儿",
+                  "author": "当年明月",
+                  "coverKey": "brightMoon"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-4",
+                "props": {
+                  "bookId": "bk-004",
+                  "title": "三体",
+                  "author": "刘慈欣",
+                  "coverKey": "threeBody"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-5",
+                "props": {
+                  "bookId": "bk-005",
+                  "title": "人间词话",
+                  "author": "王国维",
+                  "coverKey": "renjian"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-6",
+                "props": {
+                  "bookId": "bk-006",
+                  "title": "Android 开发笔记",
+                  "author": "本地文档",
+                  "coverKey": "androidNotes"
                 }
               }
             ]
@@ -330,7 +364,9 @@
       {
         "type": "AppTopBar",
         "id": "detail-topbar",
-        "props": {}
+        "props": {
+          "title": "书籍详情"
+        }
       },
       {
         "type": "Loading",
@@ -350,7 +386,9 @@
       {
         "type": "AppTopBar",
         "id": "detail-topbar",
-        "props": {}
+        "props": {
+          "title": "书籍详情"
+        }
       },
       {
         "type": "BookHero",
@@ -370,7 +408,7 @@
     ]
   },
   {
-    "_comment": "Slice 2: 阅读器沉浸页 default",
+    "_comment": "Slice 2: 阅读器控制层 default（live demo reader route）",
     "routeId": "reader",
     "pageState": "default",
     "context": {
@@ -384,6 +422,21 @@
         "props": {
           "theme": "paper"
         }
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
+        "props": {}
+      },
+      {
+        "type": "ReaderControlSheet",
+        "id": "reader-control-sheet",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
+        "props": {}
       }
     ]
   },
@@ -401,6 +454,11 @@
         "props": {
           "theme": "paper"
         }
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
+        "props": {}
       },
       {
         "type": "Loading",
@@ -425,6 +483,11 @@
         }
       },
       {
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
+        "props": {}
+      },
+      {
         "type": "Offline",
         "id": "reader-offline",
         "props": {
@@ -447,6 +510,11 @@
         "props": {
           "theme": "paper"
         }
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
+        "props": {}
       },
       {
         "type": "ReaderControlSheet",
@@ -476,13 +544,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderDirectoryPanel",
         "id": "directory-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -503,13 +576,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderAppearancePanel",
         "id": "appearance-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -530,13 +608,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderTtsPanel",
         "id": "tts-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -557,13 +640,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderSettingsPanel",
         "id": "settings-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -584,13 +672,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderSearchPanel",
         "id": "search-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -611,13 +704,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderReplacePanel",
         "id": "replace-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -638,13 +736,18 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
         "type": "ReaderAutoScrollPanel",
         "id": "auto-scroll-panel",
+        "props": {}
+      },
+      {
+        "type": "ReaderBottomBar",
+        "id": "reader-bottom-bar",
         "props": {}
       }
     ]
@@ -663,6 +766,11 @@
         "props": {
           "theme": "night"
         }
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
+        "props": {}
       },
       {
         "type": "ReaderBottomBar",
@@ -861,7 +969,7 @@
         "type": "SourceDetailPage",
         "id": "source-detail-page",
         "props": {
-          "title": "阅读书源 1"
+          "title": "笔趣阁"
         }
       }
     ]
@@ -875,8 +983,8 @@
     },
     "components": [
       {
-        "type": "SourceSwitchResultsPanel",
-        "id": "source-switch-results-panel",
+        "type": "SourceSwitchFlowPage",
+        "id": "source-switch-results-flow",
         "props": {}
       }
     ]
@@ -891,7 +999,7 @@
         "type": "BackTopBar",
         "id": "sync-topbar",
         "props": {
-          "title": "同步备份"
+          "title": "同步与备份"
         }
       },
       {
@@ -911,7 +1019,7 @@
         "type": "BackTopBar",
         "id": "sync-topbar",
         "props": {
-          "title": "同步备份"
+          "title": "同步与备份"
         }
       },
       {
@@ -972,24 +1080,22 @@
     ]
   },
   {
-    "_comment": "Structure migration: webdav config",
+    "_comment": "Structure migration: webdav config mirrors live sync-backup screen",
     "routeId": "webdav-config",
     "pageState": "default",
     "context": {},
     "components": [
       {
         "type": "BackTopBar",
-        "id": "webdav-topbar",
+        "id": "webdav-sync-topbar",
         "props": {
-          "title": "WebDAV"
+          "title": "同步与备份"
         }
       },
       {
-        "type": "WebDavConfigPage",
-        "id": "webdav-config-page",
-        "props": {
-          "title": "WebDAV 配置"
-        }
+        "type": "SyncBackupPage",
+        "id": "webdav-sync-backup-page",
+        "props": {}
       }
     ]
   },
@@ -1064,8 +1170,9 @@
                 "id": "book-1",
                 "props": {
                   "bookId": "bk-001",
-                  "title": "深空信号",
-                  "author": "本地书籍"
+                  "title": "长夜余火",
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "longNight"
                 }
               },
               {
@@ -1073,8 +1180,19 @@
                 "id": "book-2",
                 "props": {
                   "bookId": "bk-002",
-                  "title": "三体",
-                  "author": "刘慈欣"
+                  "title": "诡秘之主",
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "mysteryLord"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-3",
+                "props": {
+                  "bookId": "bk-003",
+                  "title": "明朝那些事儿",
+                  "author": "当年明月",
+                  "coverKey": "brightMoon"
                 }
               }
             ]
@@ -1131,16 +1249,16 @@
                 "type": "ListRow",
                 "id": "book-row-1",
                 "props": {
-                  "title": "深空信号",
-                  "author": "本地书籍"
+                  "title": "长夜余火",
+                  "author": "爱潜水的乌贼"
                 }
               },
               {
                 "type": "ListRow",
                 "id": "book-row-2",
                 "props": {
-                  "title": "三体",
-                  "author": "刘慈欣"
+                  "title": "诡秘之主",
+                  "author": "爱潜水的乌贼"
                 }
               }
             ]
@@ -1398,7 +1516,7 @@
     ]
   },
   {
-    "_comment": "Phase1: 添加书源",
+    "_comment": "Structure migration: source add uses live add-source sheet",
     "routeId": "source-add",
     "pageState": "default",
     "context": {},
@@ -1407,20 +1525,20 @@
         "type": "BackTopBar",
         "id": "topbar",
         "props": {
-          "title": "添加书源"
+          "title": "书源管理"
         }
       },
       {
-        "type": "SourceFormPage",
+        "type": "SourceImportOptionsPage",
         "id": "source-add-page",
         "props": {
-          "action": "保存"
+          "title": "书源管理"
         }
       }
     ]
   },
   {
-    "_comment": "Phase1: 编辑书源",
+    "_comment": "Structure migration: source edit uses live rule editor",
     "routeId": "source-edit",
     "pageState": "default",
     "context": {
@@ -1431,14 +1549,14 @@
         "type": "BackTopBar",
         "id": "topbar",
         "props": {
-          "title": "编辑书源"
+          "title": "规则编辑"
         }
       },
       {
-        "type": "SourceFormPage",
+        "type": "SourceRuleEditPage",
         "id": "source-edit-page",
         "props": {
-          "action": "保存修改"
+          "title": "规则编辑"
         }
       }
     ]
@@ -1453,7 +1571,7 @@
         "type": "BackTopBar",
         "id": "source-import-topbar",
         "props": {
-          "title": "导入书源"
+          "title": "书源管理"
         }
       },
       {
@@ -1543,14 +1661,14 @@
         "type": "BackTopBar",
         "id": "source-settings-topbar",
         "props": {
-          "title": "书源设置"
+          "title": "书源管理"
         }
       },
       {
-        "type": "SourceSettingsEntryPage",
+        "type": "SourceManagementPage",
         "id": "source-settings-page",
         "props": {
-          "title": "书源设置"
+          "title": "书源管理"
         }
       }
     ]
@@ -1801,16 +1919,6 @@
         "props": {
           "theme": "paper"
         }
-      },
-      {
-        "type": "ReadingTextFlow",
-        "id": "reading-text-flow",
-        "props": {}
-      },
-      {
-        "type": "TapZones",
-        "id": "tap-zones",
-        "props": {}
       }
     ]
   },
@@ -1829,16 +1937,6 @@
         "props": {
           "theme": "paper"
         }
-      },
-      {
-        "type": "ReadingTextFlow",
-        "id": "reading-text-flow",
-        "props": {}
-      },
-      {
-        "type": "ReadingInfoLayer",
-        "id": "reading-info-layer",
-        "props": {}
       }
     ]
   },
@@ -1856,6 +1954,11 @@
         "props": {
           "theme": "paper"
         }
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
+        "props": {}
       },
       {
         "type": "ReaderBottomBar",
@@ -1885,13 +1988,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderSettingsPanel",
-        "id": "font-settings-panel",
+        "type": "ReaderFullAppearancePage",
+        "id": "font-full-page",
         "props": {}
       }
     ]
@@ -1912,13 +2015,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderAppearancePanel",
-        "id": "theme-panel",
+        "type": "ReaderFullAppearancePage",
+        "id": "theme-full-page",
         "props": {}
       }
     ]
@@ -1939,13 +2042,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderAppearancePanel",
-        "id": "theme-edit-panel",
+        "type": "ReaderFullAppearancePage",
+        "id": "theme-edit-full-page",
         "props": {}
       }
     ]
@@ -1966,13 +2069,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderSettingsPanel",
-        "id": "layout-panel",
+        "type": "ReaderFullAppearancePage",
+        "id": "layout-full-page",
         "props": {}
       }
     ]
@@ -1993,13 +2096,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderSettingsPanel",
-        "id": "page-turn-panel",
+        "type": "ReaderFullSettingsPage",
+        "id": "page-turn-full-page",
         "props": {}
       }
     ]
@@ -2020,13 +2123,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderAppearancePanel",
-        "id": "appearance-panel",
+        "type": "ReaderFullAppearancePage",
+        "id": "appearance-full-page",
         "props": {}
       }
     ]
@@ -2047,13 +2150,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderDirectoryPanel",
-        "id": "full-directory-panel",
+        "type": "ReaderFullDirectoryPage",
+        "id": "directory-full-page",
         "props": {}
       }
     ]
@@ -2074,13 +2177,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderSettingsPanel",
-        "id": "full-settings-panel",
+        "type": "ReaderFullSettingsPage",
+        "id": "settings-full-page",
         "props": {}
       }
     ]
@@ -2101,13 +2204,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderTtsPanel",
-        "id": "full-tts-panel",
+        "type": "ReaderFullTtsPage",
+        "id": "tts-full-page",
         "props": {}
       }
     ]
@@ -2128,13 +2231,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderSettingsPanel",
-        "id": "cache-panel",
+        "type": "ReaderBookCachePage",
+        "id": "cache-page",
         "props": {}
       }
     ]
@@ -2155,13 +2258,13 @@
         }
       },
       {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
+        "type": "ReaderTopArea",
+        "id": "reader-top-area",
         "props": {}
       },
       {
-        "type": "ReaderSettingsPanel",
-        "id": "debug-panel",
+        "type": "ReaderDebugInfoPage",
+        "id": "debug-info-page",
         "props": {}
       }
     ]
@@ -3131,8 +3234,9 @@
         "id": "continue-reading",
         "props": {
           "bookId": "bk-001",
-          "title": "三体",
-          "author": "刘慈欣"
+          "title": "长夜余火",
+          "author": "爱潜水的乌贼",
+          "coverKey": "longNight"
         }
       },
       {
@@ -3161,8 +3265,9 @@
                 "id": "book-bk-001",
                 "props": {
                   "bookId": "bk-001",
-                  "title": "三体",
-                  "author": "刘慈欣"
+                  "title": "长夜余火",
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "longNight"
                 }
               },
               {
@@ -3170,8 +3275,9 @@
                 "id": "book-bk-002",
                 "props": {
                   "bookId": "bk-002",
-                  "title": "基地",
-                  "author": "阿西莫夫"
+                  "title": "诡秘之主",
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "mysteryLord"
                 }
               },
               {
@@ -3179,8 +3285,9 @@
                 "id": "book-bk-003",
                 "props": {
                   "bookId": "bk-003",
-                  "title": "球状闪电",
-                  "author": "刘慈欣"
+                  "title": "明朝那些事儿",
+                  "author": "当年明月",
+                  "coverKey": "brightMoon"
                 }
               }
             ]
@@ -3289,15 +3396,8 @@
     },
     "components": [
       {
-        "type": "BackTopBar",
-        "id": "topbar",
-        "props": {
-          "title": "换源"
-        }
-      },
-      {
-        "type": "SourceSwitchResultsPanel",
-        "id": "source-switch-panel",
+        "type": "SourceSwitchFlowPage",
+        "id": "source-switch-flow",
         "props": {}
       }
     ]

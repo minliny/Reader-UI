@@ -66,7 +66,7 @@ test("motion.schema.json 结构合法", () => {
 
 test("token.schema.json 结构合法", () => {
   assert.equal(tokenSchema.title, "Token");
-  assert.ok(tokenSchema.properties.name.pattern.startsWith("^--reader-ds-"));
+  assert.ok(tokenSchema.properties.name.pattern.startsWith("^--fd-ds-"));
   assert.ok(tokenSchema.properties.category.enum.includes("color"));
   assert.ok(tokenSchema.properties.category.enum.includes("motion-duration"));
 });
@@ -184,9 +184,14 @@ test("bookshelf view-state 对齐 frontend-demo 书架结构", () => {
 
   const bookGrid = shelfSection.children.find((component) => component.type === "BookGrid");
   assert.ok(bookGrid, "shelf section 应包含 BookGrid");
+  assert.ok(bookGrid.children.length >= 6, "bookshelf 默认书架应覆盖至少 6 本 live demo 书卡");
   assert.deepEqual(
     bookGrid.children.map((component) => component.type),
-    ["BookCard", "BookCard", "BookCard"]
+    Array(bookGrid.children.length).fill("BookCard")
+  );
+  assert.deepEqual(
+    bookGrid.children.slice(0, 6).map((component) => component.props?.title),
+    ["长夜余火", "诡秘之主", "明朝那些事儿", "三体", "人间词话", "Android 开发笔记"]
   );
 });
 
@@ -212,7 +217,7 @@ test("control-layer-base-v2 对齐 frontend-demo live 控制层结构", () => {
 
   assert.deepEqual(
     control.components.map((component) => component.type),
-    ["ReaderBase", "ReaderControlSheet", "ReaderBottomBar"]
+    ["ReaderBase", "ReaderTopArea", "ReaderControlSheet", "ReaderBottomBar"]
   );
 
   for (const staleType of ["FloatingBrightness", "FloatingQuickActions", "FloatingPageControl"]) {
@@ -234,6 +239,95 @@ test("control-layer-base-v2 真相源固定为 frontend-demo live renderer", () 
   assert.match(frontendRuntimeSource, /function\s+readerBottomSheetHtml\s*\(/, "live demo control sheet 宿主来源应为 readerBottomSheetHtml()");
   assert.match(frontendRuntimeSource, /function\s+readerBrightnessRail\s*\(/, "live demo control sheet 内的亮度栏来源应为 readerBrightnessRail()");
   assert.doesNotMatch(frontendRuntimeSource, /FloatingBrightness|FloatingQuickActions|FloatingPageControl/, "live demo 不应恢复旧浮动控制组件名");
+});
+
+test("reader full/utility routes 对齐 frontend-demo live 全屏控制窗", () => {
+  const expected = new Map([
+    ["reader-full-directory", "ReaderFullDirectoryPage"],
+    ["reader-full-tts", "ReaderFullTtsPage"],
+    ["reader-full-appearance", "ReaderFullAppearancePage"],
+    ["reader-full-font", "ReaderFullAppearancePage"],
+    ["reader-full-theme", "ReaderFullAppearancePage"],
+    ["reader-full-theme-edit", "ReaderFullAppearancePage"],
+    ["reader-full-layout", "ReaderFullAppearancePage"],
+    ["reader-full-settings", "ReaderFullSettingsPage"],
+    ["reader-full-page-turn", "ReaderFullSettingsPage"],
+    ["reader-book-cache", "ReaderBookCachePage"],
+    ["reader-debug-info", "ReaderDebugInfoPage"]
+  ]);
+
+  assert.match(frontendRuntimeSource, /function\s+readerFullPageScreen\s*\(/, "live demo 应存在 readerFullPageScreen()");
+  assert.match(frontendRuntimeSource, /function\s+readerUtilityScreen\s*\(/, "live demo 应存在 readerUtilityScreen()");
+  assert.match(frontendRuntimeSource, /fd-reader-full-page-panel/, "live demo full route 应使用 fd-reader-full-page-panel");
+  assert.match(frontendRuntimeSource, /fd-reader-utility-panel/, "live demo utility route 应使用 fd-reader-utility-panel");
+
+  for (const [routeId, componentType] of expected) {
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === "default");
+    assert.ok(entry, `${routeId}/default fixture 应存在`);
+    assert.deepEqual(
+      entry.components.map((component) => component.type),
+      ["ReaderBase", "ReaderTopArea", componentType],
+      `${routeId} 应渲染 live demo 全屏控制窗，不应复用底部模块面板`
+    );
+    assert.equal(
+      entry.components.some((component) => component.type === "ReaderBottomBar"),
+      false,
+      `${routeId} 不应渲染 ReaderBottomBar`
+    );
+    for (const staleType of ["ReaderDirectoryPanel", "ReaderAppearancePanel", "ReaderTtsPanel", "ReaderSettingsPanel"]) {
+      assert.equal(
+        entry.components.some((component) => component.type === staleType),
+        false,
+        `${routeId} 不应回退到 quick/module panel：${staleType}`
+      );
+    }
+  }
+});
+
+test("reader overlay routes keep module nav above bottomSheetHost", () => {
+  const expected = new Map([
+    ["reader-directory-overlay-v2", "ReaderDirectoryPanel"],
+    ["reader-appearance-overlay-v2", "ReaderAppearancePanel"],
+    ["reader-tts-overlay-v2", "ReaderTtsPanel"],
+    ["reader-settings-overlay-v2", "ReaderSettingsPanel"],
+    ["reader-search-overlay-v2", "ReaderSearchPanel"],
+    ["reader-replace-overlay-v2", "ReaderReplacePanel"],
+    ["reader-auto-scroll-overlay-v2", "ReaderAutoScrollPanel"]
+  ]);
+
+  for (const [routeId, panelType] of expected) {
+    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === "default");
+    assert.ok(entry, `${routeId}/default fixture 应存在`);
+    assert.deepEqual(
+      entry.components.map((component) => component.type),
+      ["ReaderBase", "ReaderTopArea", panelType, "ReaderBottomBar"],
+      `${routeId} 必须先渲染 bottomSheetHost 面板，再渲染 readerModuleNav，否则 ArkUI 全屏 wrapper 会遮住底部导航`
+    );
+  }
+});
+
+test("非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () => {
+  const immersiveRoutes = new Set(["immersive-reading", "reader_content"]);
+  const readerEntries = viewFixtures.filter((entry) =>
+    entry.components.some((component) => component.type === "ReaderBase")
+  );
+
+  for (const entry of readerEntries) {
+    const componentTypes = entry.components.map((component) => component.type);
+    if (immersiveRoutes.has(entry.routeId)) {
+      assert.equal(
+        componentTypes.includes("ReaderTopArea"),
+        false,
+        `${entry.routeId}/${entry.pageState} 是沉浸阅读路由，不应显示 ReaderTopArea`
+      );
+    } else {
+      assert.equal(
+        componentTypes[1],
+        "ReaderTopArea",
+        `${entry.routeId}/${entry.pageState} 应在 ReaderBase 后声明 ReaderTopArea，对齐 live demo readerOverlayHost`
+      );
+    }
+  }
 });
 
 test("状态页文案与 frontend-demo contract fixture 对齐", () => {
@@ -275,8 +369,11 @@ test("normalized 设置/表单类页面使用页面级组件，避免退回通�
     ["bookshelf-book-more-menu/default", ["AppTopBar", "BookMoreMenuPage", "BottomNav"]],
     ["bookshelf-group-management/default", ["BackTopBar", "BookGroupManagementPage"]],
     ["rss-subscription-management/default", ["BackTopBar", "RssSubscriptionManagementPage"]],
-    ["source-add/default", ["BackTopBar", "SourceFormPage"]],
-    ["source-edit/default", ["BackTopBar", "SourceFormPage"]],
+    ["source-detail/default", ["BackTopBar", "SourceDetailPage"]],
+    ["source-import-options/default", ["BackTopBar", "SourceImportOptionsPage"]],
+    ["source-settings-entry/default", ["BackTopBar", "SourceManagementPage"]],
+    ["source-add/default", ["BackTopBar", "SourceImportOptionsPage"]],
+    ["source-edit/default", ["BackTopBar", "SourceRuleEditPage"]],
     ["global-settings/default", ["BackTopBar", "GlobalSettingsPage"]],
     ["backup-settings/default", ["BackTopBar", "BackupSettingsPage"]],
     ["progress-sync/default", ["BackTopBar", "ProgressSyncPage"]],
@@ -304,6 +401,8 @@ test("书架排序筛选路由复用书架 DOM 并展开筛选浮层", () => {
 
 test("书源工具流使用页面级组件，避免退回通用 scaffold", () => {
   const expected = new Map([
+    ["source-add/default", ["BackTopBar", "SourceImportOptionsPage"]],
+    ["source-edit/default", ["BackTopBar", "SourceRuleEditPage"]],
     ["source-import-preview/default", ["BackTopBar", "SourceImportPreviewPage"]],
     ["source-batch/default", ["BackTopBar", "SourceBatchPage"]],
     ["source-groups/default", ["BackTopBar", "SourceGroupsPage"]],
@@ -337,6 +436,7 @@ test("同步恢复流使用页面级组件，避免退回通用 scaffold", () =>
   const expected = new Map([
     ["sync-backup/default", ["BackTopBar", "SyncBackupPage"]],
     ["sync-backup/loading", ["BackTopBar", "SyncBackupPage"]],
+    ["webdav-config/default", ["BackTopBar", "SyncBackupPage"]],
     ["restore-confirm/default", ["BackTopBar", "RestoreConfirmPage"]],
     ["restore-scopes/default", ["BackTopBar", "RestoreConfirmPage"]],
     ["restore-preview/default", ["BackTopBar", "RestoreConfirmPage"]],
@@ -351,6 +451,9 @@ test("同步恢复流使用页面级组件，避免退回通用 scaffold", () =>
     const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === pageState);
     assert.ok(entry, `${key} fixture 应存在`);
     assert.deepEqual(entry.components.map((item) => item.type), types, `${key} 应使用同步恢复页级组件`);
+    if (routeId === "sync-backup" || routeId === "webdav-config") {
+      assert.equal(entry.components[0].props.title, "同步与备份", `${key} 顶栏标题应对齐 live demo`);
+    }
     for (const type of ["FormSection", "List", "Content", "Loading", "ErrorState", "Button"]) {
       assert.equal(entry.components.some((item) => item.type === type), false, `${key} 不应退回 ${type}`);
     }
@@ -428,9 +531,9 @@ test("motion durationMs 非负整数", () => {
   }
 });
 
-test("token.fixtures 中 name 全部匹配 --reader-ds- 前缀", () => {
+test("token.fixtures 中 name 全部匹配 --fd-ds- 前缀", () => {
   for (const item of tokenFixtures) {
-    assert.ok(item.name.startsWith("--reader-ds-"), `token name=${item.name} 不匹配前缀`);
+    assert.ok(item.name.startsWith("--fd-ds-"), `token name=${item.name} 不匹配前缀`);
   }
 });
 
