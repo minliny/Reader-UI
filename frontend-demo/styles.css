@@ -1,6 +1,6 @@
 @import "./tokens.css";
 
-@import "./styles/00-foundation.css?v=bookshelf-cover-crop-v1-20260702";
+@import "./styles/00-foundation.css?v=reader-hide-status-bar-v1-20260709";
 @import "./styles/01-shell-layout.css?v=reader-control-dismiss-full-surface-v1-20260709";
 @import "./styles/02-main-library.css?v=reader-night-control-theme-v1-20260702";
 @import "./styles/03-reader.css?v=reader-wide-control-overlay-v1-20260709";

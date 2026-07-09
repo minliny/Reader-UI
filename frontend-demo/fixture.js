@@ -325,7 +325,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         keepScreenOn: true,
         statusInfo: true,
         hapticFeedback: false,
-        cacheNext: true
+        cacheNext: true,
+        hideStatusBar: false
       },
       options: {
         tapMode: ["左右区域", "上下区域", "整屏翻页"],

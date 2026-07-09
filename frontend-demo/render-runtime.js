@@ -4262,6 +4262,7 @@
             <button type="button" data-reader-setting-toggle="statusInfo"><i>${icon("progress", "fd-small-icon")}</i><strong>页脚进度信息</strong><span class="fd-reader-switch ${settings.statusInfo ? "is-on" : ""}" aria-hidden="true"></span></button>
             <button type="button" data-reader-setting-toggle="hapticFeedback"><i>${icon("gesture", "fd-small-icon")}</i><strong>触摸反馈</strong><span class="fd-reader-switch ${settings.hapticFeedback ? "is-on" : ""}" aria-hidden="true"></span></button>
             <button type="button" data-reader-setting-toggle="cacheNext"><i>${icon("download", "fd-small-icon")}</i><strong>自动缓存后续章节</strong><span class="fd-reader-switch ${settings.cacheNext ? "is-on" : ""}" aria-hidden="true"></span></button>
+            <button type="button" data-reader-setting-toggle="hideStatusBar"><i>${icon("eyeOff", "fd-small-icon")}</i><strong>隐藏状态栏</strong><span class="fd-reader-switch ${settings.hideStatusBar ? "is-on" : ""}" aria-hidden="true"></span></button>
           </div>
         </section>`;
     }
@@ -4369,7 +4370,8 @@
       ["keepScreenOn", "屏幕常亮", "sun"],
       ["statusInfo", "页脚进度信息", "progress"],
       ["hapticFeedback", "触摸反馈", "gesture"],
-      ["cacheNext", "自动缓存后续章节", "download"]
+      ["cacheNext", "自动缓存后续章节", "download"],
+      ["hideStatusBar", "隐藏状态栏", "eyeOff"]
     ];
     return `
       <section class="fd-reader-full-section fd-reader-full-settings" aria-label="完整阅读设置">
@@ -9328,6 +9330,28 @@
             to: "immersive-reading"
           });
           return;
+        }
+      }
+      if (key === "hideStatusBar") {
+        // 隐藏状态栏：优先调用 Fullscreen API（更接近原生"隐藏状态栏"语义），
+        // 同时切换根节点 CSS class 以在 demo 内同步隐藏模拟状态栏。
+        const enabled = appState.readerSettings.hideStatusBar;
+        const root = document.documentElement;
+        root.classList.toggle("fd-hide-status-bar", enabled);
+        try {
+          if (enabled) {
+            const req = root.requestFullscreen || root.webkitRequestFullscreen;
+            if (typeof req === "function" && !document.fullscreenElement) {
+              Promise.resolve(req.call(root)).catch(() => {});
+            }
+          } else if (document.fullscreenElement) {
+            const exit = document.exitFullscreen || document.webkitExitFullscreen;
+            if (typeof exit === "function") {
+              Promise.resolve(exit.call(document)).catch(() => {});
+            }
+          }
+        } catch (err) {
+          // Fullscreen API 在部分环境（iframe / 不支持）下会失败，忽略以保证 demo 可用
         }
       }
       renderCurrentRoute();

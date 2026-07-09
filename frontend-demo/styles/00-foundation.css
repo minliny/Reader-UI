@@ -748,6 +748,11 @@ button:focus-visible {
   font-weight: 700;
 }
 
+/* 隐藏状态栏：由设置项 hideStatusBar 切换根节点 class 触发 */
+.fd-hide-status-bar .fd-status-bar {
+  display: none;
+}
+
 .fd-system-icons {
   display: flex;
   align-items: center;
