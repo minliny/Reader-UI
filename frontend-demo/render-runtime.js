@@ -10310,7 +10310,11 @@
     });
 
     screenHost.querySelectorAll("[data-reader-dismiss]").forEach((button) => {
-      button.addEventListener("click", () => replaceTopRoute(button.getAttribute("data-reader-dismiss") || "immersive-reading"));
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        replaceTopRoute(button.getAttribute("data-reader-dismiss") || "immersive-reading");
+      });
     });
 
     screenHost.querySelectorAll("[data-reader-exit]").forEach((button) => {

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T01:08:35.225Z",
+  "generatedAt": "2026-07-08T16:19:48.294Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-interrupt-v1-20260630, render=reader-app-theme-sync-v1-20260702, runtime=reader-app-theme-sync-v1-20260702"
+      "detail": "motion=motion-interrupt-v1-20260630, render=reader-control-dismiss-full-surface-v1-20260709, runtime=reader-control-dismiss-full-surface-v1-20260709"
     },
     {
       "id": "motion.controller.runtime-create",

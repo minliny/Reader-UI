@@ -1,14 +1,14 @@
 @import "../tokens.css";
 
 :root {
-  --asset-bg: var(--reader-ds-color-paper);
-  --asset-panel: var(--reader-ds-color-paper-bright);
+  --asset-bg: var(--fd-ds-color-paper);
+  --asset-panel: var(--fd-ds-color-paper-bright);
   --asset-panel-strong: #ffffff;
-  --asset-ink: var(--reader-ds-color-ink);
-  --asset-muted: var(--reader-ds-color-muted);
-  --asset-line: var(--reader-ds-color-border);
-  --asset-primary: var(--reader-ds-color-primary);
-  --asset-accent: var(--reader-ds-color-accent);
+  --asset-ink: var(--fd-ds-color-ink);
+  --asset-muted: var(--fd-ds-color-muted);
+  --asset-line: var(--fd-ds-color-border);
+  --asset-primary: var(--fd-ds-color-primary);
+  --asset-accent: var(--fd-ds-color-accent);
   --asset-good: #277a48;
   --asset-danger: #b43d32;
   color: var(--asset-ink);

@@ -112,10 +112,10 @@ function extractMotionIds(text) {
   return ids;
 }
 
-// 从 tokens.css 提取 token name（--reader-ds-xxx）
+// 从 tokens.css 提取 token name（--fd-ds-xxx）
 function extractTokenNames(text) {
   const names = new Set();
-  const re = /(--reader-ds-[a-zA-Z][a-zA-Z0-9-]*)/g;
+  const re = /(--fd-ds-[a-zA-Z][a-zA-Z0-9-]*)/g;
   let m;
   while ((m = re.exec(text)) !== null) names.add(m[1]);
   return names;

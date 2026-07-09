@@ -203,7 +203,7 @@
 .fd-settings-action-list button:focus-visible,
 .fd-settings-chip-row button:focus-visible {
   outline: none;
-  box-shadow: var(--reader-ds-state-focus);
+  box-shadow: var(--fd-ds-state-focus);
 }
 
 .fd-setting-row.is-danger {
@@ -409,7 +409,7 @@
 
 .fd-settings-backup-card:focus-visible {
   outline: none;
-  box-shadow: var(--reader-ds-state-focus);
+  box-shadow: var(--fd-ds-state-focus);
 }
 
 .fd-settings-backup-card > span {
@@ -541,7 +541,7 @@
 
 .fd-setting-row.is-input-field input:focus {
   border-color: rgba(35, 97, 121, 0.45);
-  box-shadow: var(--reader-ds-state-focus);
+  box-shadow: var(--fd-ds-state-focus);
 }
 
 .fd-settings-section-actions {
@@ -931,7 +931,7 @@
 }
 
 .fd-settings-subpanel.is-focused {
-  box-shadow: var(--reader-ds-state-focus), var(--fd-soft-shadow);
+  box-shadow: var(--fd-ds-state-focus), var(--fd-soft-shadow);
   transform: translateY(-1px);
 }
 

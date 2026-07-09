@@ -774,7 +774,7 @@
 }
 
 .fd-demo-sheet {
-  z-index: var(--reader-ds-z-bottom-sheet);
+  z-index: var(--fd-ds-z-bottom-sheet);
   left: 12px;
   right: 12px;
   bottom: 0;
@@ -782,7 +782,7 @@
   display: grid;
   align-content: start;
   gap: 10px;
-  padding: 24px 14px calc(var(--reader-ds-safe-area-bottom) + 12px);
+  padding: 24px 14px calc(var(--fd-ds-safe-area-bottom) + 12px);
   border: 1px solid rgba(164, 149, 132, 0.42);
   border-radius: var(--fd-radius-xl) var(--fd-radius-xl) 0 0;
   background: rgba(255, 250, 244, 0.97);
@@ -845,7 +845,7 @@
 .fd-settings-phone.has-dialog::after {
   content: "";
   position: absolute;
-  z-index: var(--reader-ds-z-bottom-sheet);
+  z-index: var(--fd-ds-z-bottom-sheet);
   inset: 0;
   background: rgba(31, 27, 23, 0.24);
   pointer-events: auto;
@@ -853,7 +853,7 @@
 }
 
 .fd-demo-dialog {
-  z-index: var(--reader-ds-z-dialog);
+  z-index: var(--fd-ds-z-dialog);
   left: 42px;
   right: 42px;
   top: 50%;

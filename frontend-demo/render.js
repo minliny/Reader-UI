@@ -2,7 +2,7 @@
   const currentScript = document.currentScript;
   const currentSrc = currentScript && currentScript.src ? currentScript.src : "";
   const baseUrl = currentSrc.slice(0, currentSrc.lastIndexOf("/") + 1);
-  const runtimeUrl = `${baseUrl || "./"}render-runtime.js?v=reader-app-theme-sync-v1-20260702`;
+  const runtimeUrl = `${baseUrl || "./"}render-runtime.js?v=reader-control-dismiss-full-surface-v1-20260709`;
 
   document.write(`<script src="${runtimeUrl}"><\/script>`);
 })(window, document);

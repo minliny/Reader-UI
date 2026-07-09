@@ -1381,8 +1381,8 @@
 }
 
 .fd-demo[data-demo-mode="regular"]:not([data-current-route^="source-debug"]):not([data-current-route="source-code-view"]):not([data-current-route="source-logs"]) .fd-source-demo-phone {
-  width: min(var(--reader-ds-size-phone-width), 100vw);
-  max-width: var(--reader-ds-size-phone-width);
+  width: min(var(--fd-ds-size-phone-width), 100vw);
+  max-width: var(--fd-ds-size-phone-width);
 }
 
 .fd-source-dialog-backdrop,

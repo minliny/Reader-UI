@@ -1,21 +1,21 @@
 :root {
-  --fd-paper: var(--reader-ds-color-paper);
-  --fd-paper-bright: var(--reader-ds-color-paper-bright);
+  --fd-paper: var(--fd-ds-color-paper);
+  --fd-paper-bright: var(--fd-ds-color-paper-bright);
   --fd-paper-solid: #f8f4ec;
   --fd-surface: rgba(255, 252, 248, 0.9);
-  --fd-ink: var(--reader-ds-color-ink);
-  --fd-muted: var(--reader-ds-color-muted);
-  --fd-border: var(--reader-ds-color-border);
-  --fd-primary: var(--reader-ds-color-primary);
-  --fd-primary-dark: var(--reader-ds-color-primary-dark);
+  --fd-ink: var(--fd-ds-color-ink);
+  --fd-muted: var(--fd-ds-color-muted);
+  --fd-border: var(--fd-ds-color-border);
+  --fd-primary: var(--fd-ds-color-primary);
+  --fd-primary-dark: var(--fd-ds-color-primary-dark);
   --fd-on-primary: #fffaf4;
-  --fd-accent: var(--reader-ds-color-accent);
+  --fd-accent: var(--fd-ds-color-accent);
   --fd-forest: #367a4d;
   --fd-danger: #d62222;
-  --fd-shadow: var(--reader-ds-shadow-elevated);
-  --fd-soft-shadow: var(--reader-ds-shadow-soft);
-  --fd-sans: var(--reader-ds-font-sans);
-  --fd-serif: var(--reader-ds-font-serif);
+  --fd-shadow: var(--fd-ds-shadow-elevated);
+  --fd-soft-shadow: var(--fd-ds-shadow-soft);
+  --fd-sans: var(--fd-ds-font-sans);
+  --fd-serif: var(--fd-ds-font-serif);
   --fd-radius-xs: 4px;
   --fd-radius-sm: 6px;
   --fd-radius-md: 8px;
@@ -59,7 +59,7 @@ button {
 
 button:focus-visible {
   outline: 0;
-  box-shadow: var(--reader-ds-state-focus);
+  box-shadow: var(--fd-ds-state-focus);
 }
 
 .fd-sr-only {
@@ -92,10 +92,10 @@ button:focus-visible {
   color: var(--fd-ink);
   --fd-viewport-width: 1440px;
   --fd-viewport-height: 100vh;
-  --fd-runtime-phone-width: var(--reader-ds-size-phone-width);
-  --fd-runtime-phone-height: var(--reader-ds-size-phone-height);
-  --fd-runtime-stack-phone-height: var(--reader-ds-size-stack-phone-height);
-  --fd-runtime-flow-width: var(--reader-ds-size-flow-width);
+  --fd-runtime-phone-width: var(--fd-ds-size-phone-width);
+  --fd-runtime-phone-height: var(--fd-ds-size-phone-height);
+  --fd-runtime-stack-phone-height: var(--fd-ds-size-stack-phone-height);
+  --fd-runtime-flow-width: var(--fd-ds-size-flow-width);
 }
 
 .fd-demo[data-app-theme-scheme="night"] {
@@ -112,7 +112,7 @@ button:focus-visible {
   --fd-accent: #d69b5f;
   --fd-shadow: 0 22px 48px rgba(0, 0, 0, 0.36);
   --fd-soft-shadow: 0 10px 26px rgba(0, 0, 0, 0.24);
-  --reader-ds-state-focus: 0 0 0 4px rgba(210, 189, 150, 0.24);
+  --fd-ds-state-focus: 0 0 0 4px rgba(210, 189, 150, 0.24);
 }
 
 .fd-capture-board {
@@ -241,10 +241,10 @@ button:focus-visible {
   justify-items: center;
   align-items: start;
   padding: 34px 18px 54px;
-  --fd-runtime-phone-width: min(var(--reader-ds-size-phone-width), 100vw);
-  --fd-runtime-phone-height: min(var(--reader-ds-size-phone-height), 100vh);
-  --fd-runtime-stack-phone-height: min(var(--reader-ds-size-stack-phone-height), 100vh);
-  --fd-runtime-flow-width: min(var(--reader-ds-size-flow-width), 100vw);
+  --fd-runtime-phone-width: min(var(--fd-ds-size-phone-width), 100vw);
+  --fd-runtime-phone-height: min(var(--fd-ds-size-phone-height), 100vh);
+  --fd-runtime-stack-phone-height: min(var(--fd-ds-size-stack-phone-height), 100vh);
+  --fd-runtime-flow-width: min(var(--fd-ds-size-flow-width), 100vw);
 }
 
 .fd-demo[data-demo-mode="regular"][data-width-class="compact"],
@@ -255,7 +255,7 @@ button:focus-visible {
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="expanded-width"] {
   --fd-runtime-phone-width: min(560px, calc(100vw - 40px));
-  --fd-runtime-phone-height: min(var(--reader-ds-size-phone-height), calc(100vh - 68px));
+  --fd-runtime-phone-height: min(var(--fd-ds-size-phone-height), calc(100vh - 68px));
   --fd-runtime-stack-phone-height: min(900px, calc(100vh - 68px));
   --fd-runtime-flow-width: min(560px, calc(100vw - 40px));
 }
@@ -789,7 +789,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: var(--reader-ds-size-top-bar-height);
+  min-height: var(--fd-ds-size-top-bar-height);
   padding: 6px 20px 0;
   color: var(--fd-ink);
 }
@@ -890,19 +890,19 @@ button:focus-visible {
   gap: 8px;
   padding:
     8px
-    calc(var(--reader-ds-safe-area-horizontal) + 3px)
-    calc(var(--reader-ds-size-main-nav-height) + var(--reader-ds-safe-area-bottom) + 34px);
+    calc(var(--fd-ds-safe-area-horizontal) + 3px)
+    calc(var(--fd-ds-size-main-nav-height) + var(--fd-ds-safe-area-bottom) + 34px);
 }
 
 .fd-main-tab-phone .fd-phone-content {
-  max-height: calc(100% - 48px - var(--reader-ds-size-top-bar-height));
+  max-height: calc(100% - 48px - var(--fd-ds-size-top-bar-height));
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
 }
 
 .fd-library-phone .fd-phone-content {
-  max-height: calc(100% - 48px - var(--reader-ds-size-top-bar-height));
+  max-height: calc(100% - 48px - var(--fd-ds-size-top-bar-height));
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-bottom: 112px;
@@ -910,7 +910,7 @@ button:focus-visible {
 }
 
 .fd-settings-phone .fd-phone-content {
-  max-height: calc(100% - 48px - var(--reader-ds-size-top-bar-height));
+  max-height: calc(100% - 48px - var(--fd-ds-size-top-bar-height));
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-bottom: 112px;
@@ -933,16 +933,16 @@ button:focus-visible {
 }
 
 .fd-phone.has-keyboard .fd-phone-content {
-  padding-bottom: calc(var(--reader-ds-size-keyboard-height) + var(--reader-ds-space-keyboard-gap));
+  padding-bottom: calc(var(--fd-ds-size-keyboard-height) + var(--fd-ds-space-keyboard-gap));
 }
 
 .fd-phone.has-keyboard .fd-bottom-action-host {
-  z-index: calc(var(--reader-ds-z-keyboard) + 1);
-  bottom: calc(var(--reader-ds-size-keyboard-height) + var(--reader-ds-space-keyboard-gap));
+  z-index: calc(var(--fd-ds-z-keyboard) + 1);
+  bottom: calc(var(--fd-ds-size-keyboard-height) + var(--fd-ds-space-keyboard-gap));
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-phone {
-  --reader-ds-size-keyboard-height: 150px;
+  --fd-ds-size-keyboard-height: 150px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-orientation="landscape"][data-current-route^="restore-"] .fd-settings-phone,
@@ -1272,7 +1272,7 @@ button:focus-visible {
   font-size: 15px;
   line-height: 1.22;
   display: -webkit-box;
-  -webkit-line-clamp: var(--reader-ds-text-book-title-lines);
+  -webkit-line-clamp: var(--fd-ds-text-book-title-lines);
   -webkit-box-orient: vertical;
   white-space: normal;
 }
@@ -1300,7 +1300,7 @@ button:focus-visible {
 .fd-phone.has-book-focus .fd-book-card.is-cover-focused,
 .fd-phone.has-book-focus .fd-continue-cover-button.is-cover-focused {
   position: relative;
-  z-index: calc(var(--reader-ds-z-dialog) + 1);
+  z-index: calc(var(--fd-ds-z-dialog) + 1);
 }
 
 .fd-phone.has-book-focus .fd-book-card.is-cover-focused .fd-book-cover-frame,
@@ -1321,14 +1321,14 @@ button:focus-visible {
 .fd-book-focus-layer {
   position: absolute;
   inset: 0;
-  z-index: calc(var(--reader-ds-z-dialog) - 1);
+  z-index: calc(var(--fd-ds-z-dialog) - 1);
   pointer-events: none;
 }
 
 .fd-bookshelf-more-layer {
   position: absolute;
   inset: 0;
-  z-index: calc(var(--reader-ds-z-dialog) - 2);
+  z-index: calc(var(--fd-ds-z-dialog) - 2);
   pointer-events: none;
 }
 
@@ -1352,7 +1352,7 @@ button:focus-visible {
   position: absolute;
   left: 18px;
   right: 18px;
-  bottom: calc(var(--reader-ds-size-main-nav-height) + var(--reader-ds-safe-area-bottom) + 12px);
+  bottom: calc(var(--fd-ds-size-main-nav-height) + var(--fd-ds-safe-area-bottom) + 12px);
   z-index: 2;
   display: grid;
   gap: 12px;
@@ -1366,8 +1366,8 @@ button:focus-visible {
 
 .fd-bookshelf-more-menu {
   position: absolute;
-  top: calc(var(--reader-ds-safe-area-top) + var(--reader-ds-size-top-bar-height) + 8px);
-  right: calc(var(--reader-ds-safe-area-horizontal) + 2px);
+  top: calc(var(--fd-ds-safe-area-top) + var(--fd-ds-size-top-bar-height) + 8px);
+  right: calc(var(--fd-ds-safe-area-horizontal) + 2px);
   z-index: 2;
   width: 238px;
   display: grid;

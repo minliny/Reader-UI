@@ -1,0 +1,85 @@
+{
+  "version": "reader-motion-evidence-v1",
+  "generatedAt": "2026-06-30",
+  "source": "canonical frontend-demo browser screenshots",
+  "scope": "first-pass representative evidence for P0 motion IDs; not full selector-matrix media closure",
+  "entries": [
+    {
+      "motionId": "app.firstOpen.enter",
+      "route": "bookshelf",
+      "state": "default",
+      "selector": "[data-screen-host]",
+      "file": "app.firstOpen.enter__bookshelf__default.jpg",
+      "notes": "Cold route render after loading frontend-demo with motion enabled."
+    },
+    {
+      "motionId": "tab.item.switch",
+      "route": "rss",
+      "state": "selected",
+      "selector": "[data-nav-type=\"rss\"]",
+      "file": "tab.item.switch__rss__selected.jpg",
+      "notes": "Main tab switch from bookshelf to RSS."
+    },
+    {
+      "motionId": "dropdown.menu.expand",
+      "route": "bookshelf",
+      "state": "expanded",
+      "selector": "[data-bookshelf-more-layer]",
+      "file": "dropdown.menu.expand__bookshelf__more-menu.jpg",
+      "notes": "Bookshelf anchored menu expanded state."
+    },
+    {
+      "motionId": "reader.entry.coverToImmersive",
+      "route": "bookshelf",
+      "state": "source-cover",
+      "selector": "[data-book-cover]",
+      "file": "reader.entry.coverToImmersive__bookshelf__source-cover.jpg",
+      "notes": "Source route before cover-to-immersive transition."
+    },
+    {
+      "motionId": "reader.entry.coverToImmersive",
+      "route": "immersive-reading",
+      "state": "target",
+      "selector": "[data-motion-entry-role=\"target\"]",
+      "file": "reader.entry.coverToImmersive__immersive-reading__target.jpg",
+      "notes": "Target immersive reading state after cover entry."
+    },
+    {
+      "motionId": "reader.session.capsule.enter",
+      "route": "immersive-reading",
+      "state": "auto-page-capsule",
+      "selector": "[data-reader-immersive-status]",
+      "file": "reader.session.capsule.enter__immersive-reading__auto-page.jpg",
+      "notes": "Auto-page session returns to immersive reading with the status capsule visible."
+    },
+    {
+      "motionId": "reader.session.controlSpace.enter",
+      "route": "reader",
+      "state": "running-space",
+      "selector": "[data-reader-control-space]",
+      "file": "reader.session.controlSpace.enter__reader__running-space.jpg",
+      "notes": "Reader control layer shows the running auto-page control space."
+    },
+    {
+      "motionId": "viewport.orientation.reshape",
+      "route": "reader",
+      "state": "compact-landscape",
+      "selector": "[data-motion-orientation-role=\"reader-control-sheet\"]",
+      "file": "viewport.orientation.reshape__compact-landscape__reader.jpg",
+      "notes": "Temporary compact landscape viewport evidence for reader control anchoring."
+    },
+    {
+      "motionId": "motion.interrupt.redirect",
+      "route": "discover",
+      "state": "tab-switch",
+      "selector": "[data-motion-interrupt-id=\"motion.interrupt.redirect\"]",
+      "file": "motion.interrupt.redirect__tab-switch__discover.jpg",
+      "notes": "Tab switch redirect interrupt evidence after navigating from bookshelf to discover."
+    }
+  ],
+  "remaining": [
+    "Need video or frame-sequence evidence for actual easing over time.",
+    "Need full selector-matrix media coverage beyond representative P0 entries.",
+    "Need real device or simulator captures for fold, orientation, touch drag, and reduced-motion."
+  ]
+}

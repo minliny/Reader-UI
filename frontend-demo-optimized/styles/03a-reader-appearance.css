@@ -1,0 +1,476 @@
+
+.fd-reader-appearance-list {
+  min-height: 0;
+  display: grid;
+  align-content: start;
+  overflow: auto;
+  border: 0;
+  background: transparent;
+  scrollbar-width: none;
+}
+
+.fd-reader-appearance-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.fd-reader-appearance-row {
+  min-height: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 0 9px;
+  color: var(--reader-control-ink, #332c25);
+}
+
+.fd-reader-appearance-row + .fd-reader-appearance-row {
+  border-top: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
+}
+
+.fd-reader-appearance-row i {
+  color: var(--reader-control-icon, #5b5046);
+  font-style: normal;
+}
+
+.fd-reader-appearance-row i .fd-small-icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.fd-reader-appearance-row strong {
+  overflow: hidden;
+  color: var(--reader-control-ink, #332c25);
+  font-size: 11px;
+  line-height: 1.12;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-theme-palette,
+.fd-reader-font-choice,
+.fd-reader-custom-links,
+.fd-reader-stepper {
+  justify-self: end;
+}
+
+.fd-reader-theme-palette {
+  display: grid;
+  grid-template-columns: repeat(4, 22px);
+  gap: 5px;
+}
+
+.fd-reader-theme-palette button {
+  width: 22px;
+  height: 21px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--fd-radius-sm);
+  background: transparent;
+}
+
+.fd-reader-theme-palette button[data-reader-theme-scheme="night"] span {
+  border-color: rgba(255, 250, 244, 0.16);
+}
+
+.fd-reader-theme-palette span {
+  width: 18px;
+  height: 18px;
+  display: block;
+  border: 1px solid rgba(91, 80, 70, 0.12);
+  border-radius: var(--fd-radius-sm);
+  background: var(--swatch);
+}
+
+.fd-reader-theme-palette button.is-active span {
+  border-color: #2d8795;
+  box-shadow: 0 0 0 2px rgba(45, 135, 149, 0.18);
+}
+
+.fd-reader-stepper {
+  height: 24px;
+  display: grid;
+  grid-template-columns: 28px 33px 28px;
+  align-items: center;
+  overflow: hidden;
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.42));
+}
+
+.fd-reader-stepper button {
+  min-width: 0;
+  height: 100%;
+  color: var(--reader-control-ink, #332c25);
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.fd-reader-stepper em {
+  color: #241f1a;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.fd-reader-font-choice {
+  height: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 42px);
+  overflow: hidden;
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.42));
+}
+
+.fd-reader-font-choice button {
+  min-width: 0;
+  overflow: hidden;
+  padding: 0 4px;
+  color: var(--reader-control-ink, #332c25);
+  font-size: 9px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-font-choice button.is-active {
+  background: var(--reader-control-active-bg, rgba(239, 225, 202, 0.82));
+  color: var(--reader-control-action, var(--fd-primary-dark));
+  font-weight: 600;
+}
+
+.fd-reader-custom-links {
+  height: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 47px);
+  gap: 5px;
+}
+
+.fd-reader-custom-links button {
+  min-width: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.42));
+  color: var(--reader-control-ink, #332c25);
+  font-size: 9px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-appearance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.fd-reader-mini-control {
+  min-width: 0;
+  min-height: 39px;
+  display: grid;
+  grid-template-rows: 12px 1fr;
+  gap: 3px;
+  padding: 4px 5px;
+  border: 0;
+  border-radius: var(--fd-radius-sm);
+  background: var(--reader-control-disabled-bg, rgba(238, 230, 219, 0.34));
+}
+
+.fd-reader-mini-control strong {
+  overflow: hidden;
+  color: var(--reader-control-muted, #5b5046);
+  font-size: 8px;
+  font-weight: 500;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-mini-control span {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 23px minmax(0, 1fr);
+  align-items: center;
+  gap: 3px;
+}
+
+.fd-reader-mini-control button {
+  min-width: 0;
+  min-height: 20px;
+  overflow: hidden;
+  border-radius: var(--fd-radius-xs);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.56));
+  color: var(--reader-control-ink, #332c25);
+  font-size: 8px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-mini-control em {
+  min-width: 17px;
+  color: var(--reader-control-ink, #241f1a);
+  font-size: 8px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+}
+
+.fd-reader-theme-grid button {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  justify-items: center;
+  overflow: hidden;
+  color: var(--reader-control-ink, #332c25);
+  font-size: 8px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-theme-grid span {
+  width: 34px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: var(--fd-radius-xs);
+  background: var(--swatch);
+  color: var(--fd-primary-dark);
+}
+
+.fd-reader-font-row-wide {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.fd-reader-font-row-wide button {
+  min-height: 19px;
+  border-radius: var(--fd-radius-sm);
+  font-size: 8px;
+  font-weight: 600;
+}
+
+.fd-reader-custom-area {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fd-radius-md);
+  background: transparent;
+}
+
+.fd-reader-custom-area header {
+  min-height: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+}
+
+.fd-reader-custom-area header strong {
+  color: var(--reader-control-ink, #332c25);
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.fd-reader-custom-area header small {
+  color: var(--fd-muted);
+  font-size: 7px;
+  line-height: 1;
+}
+
+.fd-reader-custom-area > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.fd-reader-custom-area button {
+  min-width: 0;
+  min-height: 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 1px;
+  padding: 2px 3px;
+  border-radius: var(--fd-radius-sm);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.56));
+  color: var(--reader-control-ink, #332c25);
+  text-align: center;
+}
+
+.fd-reader-custom-area button strong,
+.fd-reader-custom-area button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-custom-area button strong {
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.fd-reader-custom-area button span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--fd-muted);
+  font-size: 7px;
+}
+
+.fd-reader-appearance-panel .fd-reader-theme-grid span {
+  height: 14px;
+}
+
+.fd-reader-appearance-panel .fd-reader-mini-control {
+  min-height: 37px;
+}
+
+.fd-reader-appearance-panel .fd-reader-font-row-wide {
+  min-height: 27px;
+}
+
+.fd-reader-appearance-panel .fd-reader-custom-area button {
+  min-height: 26px;
+}
+
+.fd-reader-appearance-panel .fd-reader-inline-entry {
+  min-height: 27px;
+}
+
+.fd-reader-appearance-panel .fd-reader-appearance-list {
+  gap: 0;
+  align-content: start;
+  padding: 0 1px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-setting-block {
+  gap: 3px;
+  padding: 3px 0 2px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-setting-block + .fd-reader-full-setting-block {
+  border-top: 1px solid var(--quick-line-soft);
+}
+
+.fd-reader-appearance-panel .fd-reader-full-setting-block header {
+  min-height: 10px;
+  gap: 6px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-setting-block header strong {
+  font-size: 9px;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-setting-block header em {
+  font-size: 7px;
+  line-height: 1;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-theme-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-theme-grid button {
+  min-height: 24px;
+  display: grid;
+  grid-template-columns: none;
+  grid-template-rows: 18px;
+  justify-items: stretch;
+  padding: 2px 3px;
+  text-align: center;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-theme-grid span {
+  min-width: 0;
+  width: 46px;
+  height: 18px;
+  display: block;
+  justify-self: center;
+  border-radius: var(--fd-radius-sm);
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row {
+  min-height: 24px;
+  gap: 5px;
+  padding: 0;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row + .fd-reader-step-row,
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row + .fd-reader-font-row {
+  border-top: 1px solid var(--quick-line-soft);
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row strong {
+  font-size: 9px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row span {
+  grid-template-columns: 24px 34px 24px;
+  gap: 3px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row button,
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-font-row button,
+.fd-reader-appearance-panel .fd-reader-full-choice-grid button {
+  display: grid;
+  grid-template-columns: none;
+  place-items: center;
+  min-height: 22px;
+  padding: 0 5px;
+  text-align: center;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row button {
+  width: 24px;
+  min-height: 22px;
+  padding: 0;
+  font-size: 8px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-step-row em {
+  min-width: 0;
+  font-size: 9px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-font-row {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px 0 0;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-typography .fd-reader-font-row button,
+.fd-reader-appearance-panel .fd-reader-full-choice-grid button {
+  font-size: 8px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-choice-grid {
+  gap: 4px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-choice-grid button {
+  min-height: 22px;
+}
+
+.fd-reader-theme-grid button.is-active span {
+  border-color: #2d8795;
+  box-shadow: inset 0 0 0 1px rgba(45, 135, 149, 0.26);
+}
+

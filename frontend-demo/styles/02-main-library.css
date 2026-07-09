@@ -31,7 +31,7 @@
 
 .fd-reader-sheet {
   position: absolute;
-  z-index: var(--reader-ds-z-bottom-sheet);
+  z-index: var(--fd-ds-z-bottom-sheet);
   --reader-quick-top: 28px;
   --reader-quick-bottom: 110px;
   --reader-quick-rail-width: 38px;
@@ -55,7 +55,7 @@
 
 .fd-reader-control-session-host {
   position: absolute;
-  z-index: calc(var(--reader-ds-z-bottom-sheet) + 1);
+  z-index: calc(var(--fd-ds-z-bottom-sheet) + 1);
   right: 24px;
   bottom: calc(18px + 330px + 8px);
   height: 26px;
