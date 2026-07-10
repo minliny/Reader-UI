@@ -2534,15 +2534,32 @@
 
   function readerReplacementRules(appState) {
     const rules = [
-      { id: "rain-name", title: "雨容称呼", enabled: true },
-      { id: "old-name", title: "旧称统一", enabled: true },
-      { id: "punctuation", title: "标点清理", enabled: false },
-      { id: "ad-filter", title: "广告过滤", enabled: true }
+      { id: "rain-name", title: "雨容称呼", enabled: true, pattern: "雨容", replacement: "雨蓉", scope: ["chapter"], custom: false },
+      { id: "old-name", title: "旧称统一", enabled: true, pattern: "老张", replacement: "张老", scope: ["chapter"], custom: false },
+      { id: "punctuation", title: "标点清理", enabled: false, pattern: "[，。]{2,}", replacement: "。", scope: ["chapter"], custom: false },
+      { id: "ad-filter", title: "广告过滤", enabled: true, pattern: "本章未完.*?点击", replacement: "", scope: ["chapter"], custom: false }
     ];
     const overrides = appState?.readerReplacementRules || {};
-    return rules.map((rule) => Object.assign({}, rule, {
+    const preset = rules.map((rule) => Object.assign({}, rule, {
       enabled: Object.prototype.hasOwnProperty.call(overrides, rule.id) ? Boolean(overrides[rule.id]) : rule.enabled
     }));
+    const custom = (Array.isArray(appState?.replaceRules) ? appState.replaceRules : []).map((rule) => Object.assign({
+      pattern: "",
+      replacement: "",
+      scope: ["chapter"],
+      enabled: true,
+      custom: true
+    }, rule));
+    return preset.concat(custom);
+  }
+
+  function readerReplaceScopeOptions() {
+    return [
+      { value: "chapter", label: "正文" },
+      { value: "title", label: "标题" },
+      { value: "toc", label: "目录" },
+      { value: "bookmark", label: "书签" }
+    ];
   }
 
   function readerRouteState(route) {
@@ -4151,23 +4168,75 @@
         title: "内容替换",
         hideHeader: true,
         className: "fd-replace-quick-panel fd-reader-action-quick-panel",
-        body: `
+        body: (() => {
+          const allRules = readerReplacementRules(appState);
+          const formOpen = Boolean(appState?.replaceRuleFormOpen);
+          const draft = appState?.replaceRuleDraft || { title: "", pattern: "", replacement: "", scope: ["chapter"] };
+          const error = appState?.replaceRuleError || "";
+          const editingId = appState?.replaceRuleEditingId || "";
+          const scopeOptions = readerReplaceScopeOptions();
+          const formTitle = editingId ? "编辑规则" : "新增规则";
+          return `
           <div class="fd-reader-replace-panel fd-reader-quick-action-panel">
             <header class="fd-reader-quick-toolbar" aria-label="内容替换操作">
               <button class="fd-reader-quick-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
                 ${icon("back", "fd-small-icon")}<span>返回</span>
               </button>
+              <button class="fd-reader-quick-action fd-replace-add-entry" type="button" data-reader-replace-rule-add aria-label="新增替换规则" ${formOpen ? "aria-disabled=\"true\"" : ""}>
+                ${icon("add", "fd-small-icon")}<span>新增规则</span>
+              </button>
             </header>
             <div class="fd-replace-rule-list fd-replace-toggle-list" aria-label="内容替换规则开关">
-              ${readerReplacementRules(appState).map((rule) => `
-                <button class="fd-replace-rule-row fd-replace-toggle-row ${rule.enabled ? "is-on" : ""}" type="button" data-reader-replace-rule="${esc(rule.id)}" aria-pressed="${rule.enabled ? "true" : "false"}">
-                  <strong>${esc(rule.title)}</strong>
-                  <span class="fd-replace-switch ${rule.enabled ? "is-on" : ""}" aria-hidden="true"><i></i></span>
-                </button>
+              ${allRules.map((rule) => `
+                <article class="fd-replace-rule-row fd-replace-toggle-row ${rule.enabled ? "is-on" : ""}" data-reader-replace-rule-item="${esc(rule.id)}">
+                  <button class="fd-replace-rule-toggle" type="button" data-reader-replace-rule="${esc(rule.id)}" aria-pressed="${rule.enabled ? "true" : "false"}" aria-label="切换规则 ${esc(rule.title)}">
+                    <strong><span>${esc(rule.title)}</span>${rule.custom ? "<em>自定义</em>" : ""}</strong>
+                    <small>${esc(rule.pattern || "")} → ${esc(rule.replacement || "(空)")}</small>
+                    <span class="fd-replace-switch ${rule.enabled ? "is-on" : ""}" aria-hidden="true"><i></i></span>
+                  </button>
+                  <div class="fd-replace-rule-actions">
+                    <button type="button" data-reader-replace-rule-edit="${esc(rule.id)}" aria-label="编辑规则 ${esc(rule.title)}">${icon("edit", "fd-small-icon")}</button>
+                    ${rule.custom ? `<button type="button" data-reader-replace-rule-delete="${esc(rule.id)}" aria-label="删除规则 ${esc(rule.title)}">${icon("trash", "fd-small-icon")}</button>` : ""}
+                  </div>
+                </article>
               `).join("")}
             </div>
+            ${formOpen ? `
+              <section class="fd-replace-rule-form" data-reader-replace-rule-form aria-label="${esc(formTitle)}">
+                <header><strong>${esc(formTitle)}</strong></header>
+                <label class="fd-replace-form-field">
+                  <span>名称</span>
+                  <input type="text" data-reader-replace-form-field="title" value="${esc(draft.title)}" placeholder="规则名称" maxlength="12" />
+                </label>
+                <label class="fd-replace-form-field">
+                  <span>正则</span>
+                  <input type="text" data-reader-replace-form-field="pattern" value="${esc(draft.pattern)}" placeholder="如：雨容" />
+                </label>
+                <label class="fd-replace-form-field">
+                  <span>替换为</span>
+                  <input type="text" data-reader-replace-form-field="replacement" value="${esc(draft.replacement)}" placeholder="如：雨蓉" />
+                </label>
+                <fieldset class="fd-replace-form-field fd-replace-form-scope" aria-label="作用范围">
+                  <legend>作用范围</legend>
+                  <div class="fd-replace-scope-options">
+                    ${scopeOptions.map((option) => `
+                      <label class="${(draft.scope || []).includes(option.value) ? "is-active" : ""}">
+                        <input type="checkbox" data-reader-replace-scope="${esc(option.value)}" ${(draft.scope || []).includes(option.value) ? "checked" : ""} />
+                        <span>${esc(option.label)}</span>
+                      </label>
+                    `).join("")}
+                  </div>
+                </fieldset>
+                ${error ? `<p class="fd-replace-form-error" role="alert">${esc(error)}</p>` : ""}
+                <div class="fd-replace-form-actions">
+                  <button class="is-cancel" type="button" data-reader-replace-rule-cancel>取消</button>
+                  <button class="is-primary" type="button" data-reader-replace-rule-save>${editingId ? "保存修改" : "添加规则"}</button>
+                </div>
+              </section>
+            ` : ""}
           </div>
-        `
+        `;
+        })()
       }
     };
     const panel = panels[type];
@@ -4432,26 +4501,200 @@
       </section>`;
   }
 
-  function readerFullPageBody(type, data, appState) {
+  function readerFullThemeEditPage(data, appState) {
+    const draft = appState?.readerThemeEditDraft || { name: "", bg: "#fff7ec", ink: "#2b241d", scheme: "day" };
+    const customThemes = Array.isArray(appState?.readerCustomThemes) ? appState.readerCustomThemes : [];
+    const error = appState?.readerThemeEditError || "";
+    return `
+      <section class="fd-reader-full-section fd-reader-full-theme-edit" aria-label="自定义主题编辑">
+        <section class="fd-reader-full-setting-block fd-reader-full-theme-edit-form">
+          <header><strong>自定义主题</strong><em>保存后写入 state 并返回</em></header>
+          <div class="fd-reader-theme-edit-fields">
+            <label class="fd-reader-theme-edit-field">
+              <span>主题名称</span>
+              <input type="text" data-reader-theme-edit-field="name" value="${esc(draft.name)}" placeholder="如：暖光纸" maxlength="12" />
+            </label>
+            <label class="fd-reader-theme-edit-field">
+              <span>背景色</span>
+              <input type="color" data-reader-theme-edit-field="bg" value="${esc(draft.bg)}" />
+              <em data-reader-theme-edit-value="bg">${esc(draft.bg)}</em>
+            </label>
+            <label class="fd-reader-theme-edit-field">
+              <span>文字色</span>
+              <input type="color" data-reader-theme-edit-field="ink" value="${esc(draft.ink)}" />
+              <em data-reader-theme-edit-value="ink">${esc(draft.ink)}</em>
+            </label>
+            <div class="fd-reader-theme-edit-field fd-reader-theme-edit-scheme" role="radiogroup" aria-label="日夜间模式">
+              <span>模式</span>
+              <div class="fd-reader-full-choice-grid">
+                <button class="${draft.scheme === "day" ? "is-active" : ""}" type="button" data-reader-theme-edit-scheme="day">白天</button>
+                <button class="${draft.scheme === "night" ? "is-active" : ""}" type="button" data-reader-theme-edit-scheme="night">夜间</button>
+              </div>
+            </div>
+          </div>
+          ${error ? `<p class="fd-reader-theme-edit-error" role="alert">${esc(error)}</p>` : ""}
+        </section>
+        ${customThemes.length > 0 ? `
+          <section class="fd-reader-full-setting-block fd-reader-full-theme-edit-list">
+            <header><strong>已保存自定义主题</strong><em>${esc(customThemes.length)} 个</em></header>
+            <div class="fd-reader-full-theme-grid fd-reader-custom-theme-grid">
+              ${customThemes.map((item) => `
+                <button class="${appState.readerTheme === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || "day")}" aria-label="应用自定义主题：${esc(item.label)}">
+                  <span style="--swatch:${esc(item.swatch || item.bg)}"></span>
+                </button>
+              `).join("")}
+            </div>
+          </section>
+        ` : ""}
+        <section class="fd-reader-full-setting-block fd-reader-full-theme-edit-actions">
+          <div class="fd-reader-theme-edit-actions">
+            <button class="is-cancel" type="button" data-route-back>取消</button>
+            <button class="is-primary" type="button" data-reader-theme-edit-save>保存主题</button>
+          </div>
+        </section>
+      </section>`;
+  }
+
+  function readerFullFontPage(data, appState) {
+    const typography = appState?.readerTypography || normalizeReaderTypography(data);
+    const fontOptions = readerFontOptions(data);
+    return `
+      <section class="fd-reader-full-section fd-reader-full-font" aria-label="字体完整设置">
+        <section class="fd-reader-full-setting-block">
+          <header><strong>字体族</strong><em>${esc(typography.fontFamily)}</em></header>
+          <div class="fd-reader-full-choice-grid fd-reader-full-font-grid">
+            ${fontOptions.map((item) => `
+              <button class="${typography.fontFamily === item.value ? "is-active" : ""}" type="button" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(item.value)}">${esc(item.label)}</button>
+            `).join("")}
+          </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-full-typography">
+          <header><strong>文字排版</strong><em>字号 / 行距 / 段距 / 字距</em></header>
+          ${typographyPanelRows(data, typography)}
+        </section>
+      </section>`;
+  }
+
+  function readerFullThemePage(data, appState) {
+    const activeTheme = currentReaderTheme(data, appState);
+    const customThemes = Array.isArray(appState?.readerCustomThemes) ? appState.readerCustomThemes : [];
+    return `
+      <section class="fd-reader-full-section fd-reader-full-theme" aria-label="主题完整设置">
+        <section class="fd-reader-full-setting-block">
+          <header><strong>预设主题</strong><em>${esc(activeTheme.label)}</em></header>
+          <div class="fd-reader-full-theme-grid">
+            ${readerThemeOptions(data).map((item, index) => `
+              <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 4 ? "day" : "night"))}" data-reader-theme-texture="${esc(item.texture || "plain")}" data-reader-theme-pair="${esc(item.pair || "")}" aria-label="主题：${esc(item.label)}">
+                <span style="--swatch:${esc(item.swatch)}"></span>
+              </button>
+            `).join("")}
+          </div>
+        </section>
+        ${customThemes.length > 0 ? `
+          <section class="fd-reader-full-setting-block">
+            <header><strong>自定义主题</strong><em>${esc(customThemes.length)} 个</em></header>
+            <div class="fd-reader-full-theme-grid fd-reader-custom-theme-grid">
+              ${customThemes.map((item) => `
+                <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || "day")}" aria-label="应用自定义主题：${esc(item.label)}">
+                  <span style="--swatch:${esc(item.swatch || item.bg)}"></span>
+                </button>
+              `).join("")}
+            </div>
+          </section>
+        ` : ""}
+        <section class="fd-reader-full-setting-block fd-reader-full-theme-edit-entry">
+          <header><strong>新建自定义主题</strong><em>进入编辑器</em></header>
+          <div class="fd-reader-full-choice-grid">
+            <button type="button" data-route="reader-full-theme-edit">编辑自定义主题</button>
+          </div>
+        </section>
+      </section>`;
+  }
+
+  function readerFullLayoutPage(data, appState) {
+    const pageSpace = appState?.readerPageSpace || normalizeReaderPageSpace(data);
+    const pageSpaceConfig = readerPageSpaceConfig(data);
+    const textureOptions = pageSpaceConfig.textureOptions || [];
+    return `
+      <section class="fd-reader-full-section fd-reader-full-layout" aria-label="版式完整设置">
+        <section class="fd-reader-full-setting-block fd-reader-full-page-space">
+          <header><strong>页面空间</strong><em>边距 / 缩进</em></header>
+          ${readerPageSpaceRows(data, pageSpace)}
+        </section>
+        <section class="fd-reader-full-setting-block">
+          <header><strong>页面纹理</strong><em>${esc(pageSpace.texture)}</em></header>
+          <div class="fd-reader-full-choice-grid">
+            ${readerChoiceButtons(textureOptions.map((item) => item.value), pageSpace.texture, (value) => `data-reader-page-space-set="texture" data-reader-page-space-value="${esc(value)}"`)}
+          </div>
+        </section>
+      </section>`;
+  }
+
+  function readerFullPageTurnPage(data, appState) {
+    const settings = appState.readerSettings || {};
+    const settingConfig = readerControlSettingsConfig(data);
+    const defaults = settingConfig.defaults;
+    const options = settingConfig.options;
+    const current = (key) => settings[key] || defaults[key] || (options[key] || [])[0] || "";
+    const toggles = [
+      ["volumePage", "音量键翻页", "volume"],
+      ["landscapeLock", "横屏锁定", "permission"],
+      ["keepScreenOn", "屏幕常亮", "sun"],
+      ["hapticFeedback", "触摸反馈", "gesture"]
+    ];
+    return `
+      <section class="fd-reader-full-section fd-reader-full-page-turn" aria-label="翻页完整设置">
+        ${["pageMode", "tapMode", "pageAnimation"].map((key) => `
+          <section class="fd-reader-full-setting-block">
+            <header><strong>${esc(key === "pageMode" ? "翻页模式" : key === "tapMode" ? "点击翻页方式" : "翻页动画")}</strong><em>${esc(current(key))}</em></header>
+            <div class="fd-reader-full-choice-grid">
+              ${readerChoiceButtons(options[key] || [], current(key), (value) => `data-reader-setting-option="${esc(key)}" data-reader-setting-value="${esc(value)}"`)}
+            </div>
+          </section>
+        `).join("")}
+        <section class="fd-reader-full-setting-block">
+          <header><strong>翻页行为</strong><em>开关项</em></header>
+          <div class="fd-reader-full-toggle-list">
+            ${toggles.map(([key, label, iconName]) => `
+              <button type="button" data-reader-setting-toggle="${esc(key)}">
+                <i>${icon(iconName, "fd-small-icon")}</i>
+                <strong>${esc(label)}</strong>
+                <span class="fd-reader-switch ${settings[key] ? "is-on" : ""}" aria-hidden="true"></span>
+              </button>
+            `).join("")}
+          </div>
+        </section>
+      </section>`;
+  }
+
+  function readerFullPageBody(type, data, appState, route) {
     if (type === "directory") return readerFullDirectoryPage(data, appState);
     if (type === "tts") return readerFullTtsPage(data, appState);
-    if (type === "appearance") return readerFullAppearancePage(data, appState);
+    if (type === "appearance") {
+      if (route === "reader-full-theme-edit") return readerFullThemeEditPage(data, appState);
+      if (route === "reader-full-font") return readerFullFontPage(data, appState);
+      if (route === "reader-full-theme") return readerFullThemePage(data, appState);
+      if (route === "reader-full-layout") return readerFullLayoutPage(data, appState);
+      return readerFullAppearancePage(data, appState);
+    }
+    if (route === "reader-full-page-turn") return readerFullPageTurnPage(data, appState);
     return readerFullSettingsPage(data, appState);
   }
 
-  function readerFullPagePanel(data, type, appState) {
+  function readerFullPagePanel(data, type, appState, route) {
     const module = (data.reader.modules || []).find((item) => item.type === type) || { label: "阅读设置", type: "settings", icon: "settings" };
     const quickRoute = readerModuleRoutes[type] || "reader-settings";
     const promotedRoute = readerPromotedRoutes[type] || "";
+    const headTitle = (routes[route] || {}).title || module.label;
     return `
-      <section class="fd-reader-full-page-panel fd-reader-full-page-${esc(type)}" data-dev-region="ReaderExpandedPanel" aria-label="${esc(module.label)}大半屏控制窗">
+      <section class="fd-reader-full-page-panel fd-reader-full-page-${esc(type)}${route ? ` fd-reader-full-page-route-${esc(route)}` : ""}" data-dev-region="ReaderExpandedPanel" aria-label="${esc(headTitle)}大半屏控制窗">
         <button class="fd-reader-full-grabber" type="button" data-route="${esc(quickRoute)}" data-route-replace${promotedRoute ? ` data-reader-handle-expand-route="${esc(promotedRoute)}"` : ""} aria-label="${promotedRoute ? "下拉收起，上拉继续展开" : "收起到阅读控制层"}"></button>
         <header class="fd-reader-full-head">
-          <span>${icon(module.icon || module.type, "fd-small-icon")}<strong>${esc(module.label)}</strong></span>
+          <span>${icon(module.icon || module.type, "fd-small-icon")}<strong>${esc(headTitle)}</strong></span>
           <button type="button" data-route="${esc(quickRoute)}" data-route-replace>收起</button>
         </header>
         <div class="fd-reader-full-content">
-          ${readerFullPageBody(type, data, appState)}
+          ${readerFullPageBody(type, data, appState, route)}
         </div>
       </section>`;
   }
@@ -4685,7 +4928,7 @@
       ariaLabel: (routes[route] || routes["reader-full-settings"]).title,
       readingSurfaceHtml: sharedReaderSurface(data, "", appState),
       overlayHtml: readerTopOverlay(data, appState),
-      bottomSheetHtml: readerFullPagePanel(data, type, appState),
+      bottomSheetHtml: readerFullPagePanel(data, type, appState, route),
       moduleNavHtml: ""
     });
   }
@@ -6306,6 +6549,12 @@
     bind("[data-search-state]", "search.state.replace");
     bind("[data-add-search-shelf], [data-top-action], [data-book-action]", "button.activate");
     bind("[data-reader-setting-toggle], [data-source-switch], [data-restore-scope], [data-reader-brightness-auto], [data-reader-replace-rule]", "toggle.switch");
+    bind("[data-reader-replace-rule-add], [data-reader-replace-rule-save], [data-reader-replace-rule-cancel], [data-reader-theme-edit-save]", "button.activate");
+    bind("[data-reader-replace-rule-edit]", "dropdown.option.select");
+    bind("[data-reader-replace-rule-delete]", "destructive.confirm.commit");
+    bind("[data-reader-replace-scope]", "selection.item.toggle");
+    bind("[data-reader-replace-form-field], [data-reader-theme-edit-field]", "input.focus/blur");
+    bind("[data-reader-theme-edit-scheme]", "segment.item.switch");
     bind("[data-reader-chapter-download]", "state.loading.inline");
     bind("[data-reader-session-stop]", "reader.session.capsule.exit");
     bind("[data-reader-brightness-track], [data-reader-chapter-progress]", "slider.drag.start/update/release");
@@ -8418,6 +8667,14 @@
       readerSessionCapsuleTimer: null,
       readerSettings: Object.assign({}, readerControlSettingsConfig(data).defaults),
       readerReplacementRules: {},
+      replaceRules: [],
+      replaceRuleFormOpen: false,
+      replaceRuleEditingId: "",
+      replaceRuleDraft: { title: "", pattern: "", replacement: "", scope: ["chapter"] },
+      replaceRuleError: "",
+      readerCustomThemes: [],
+      readerThemeEditDraft: { name: "", bg: "#fff7ec", ink: "#2b241d", scheme: "day" },
+      readerThemeEditError: "",
       readerAutoPageSession: false,
       readerAutoPageCountdown: 8,
       firstOpenMotion: null,
@@ -9265,10 +9522,145 @@
     const applyReaderReplacementRuleToggle = (ruleId) => {
       const target = readerReplacementRules(appState).find((rule) => rule.id === ruleId);
       if (!target) return;
-      appState.readerReplacementRules = Object.assign({}, appState.readerReplacementRules, {
-        [ruleId]: !target.enabled
-      });
+      if (target.custom) {
+        const idx = (appState.replaceRules || []).findIndex((rule) => rule.id === ruleId);
+        if (idx >= 0) {
+          appState.replaceRules = appState.replaceRules.slice();
+          appState.replaceRules[idx] = Object.assign({}, appState.replaceRules[idx], { enabled: !target.enabled });
+        }
+      } else {
+        appState.readerReplacementRules = Object.assign({}, appState.readerReplacementRules, {
+          [ruleId]: !target.enabled
+        });
+      }
       renderCurrentRoute();
+    };
+    const resetReplaceRuleDraft = () => {
+      appState.replaceRuleDraft = { title: "", pattern: "", replacement: "", scope: ["chapter"] };
+      appState.replaceRuleEditingId = "";
+      appState.replaceRuleError = "";
+    };
+    const applyReaderReplaceRuleAdd = () => {
+      resetReplaceRuleDraft();
+      appState.replaceRuleFormOpen = true;
+      renderCurrentRoute();
+    };
+    const applyReaderReplaceRuleEdit = (ruleId) => {
+      const target = readerReplacementRules(appState).find((rule) => rule.id === ruleId);
+      if (!target) return;
+      appState.replaceRuleDraft = {
+        title: target.title,
+        pattern: target.pattern || "",
+        replacement: target.replacement || "",
+        scope: Array.isArray(target.scope) ? target.scope.slice() : ["chapter"]
+      };
+      appState.replaceRuleEditingId = ruleId;
+      appState.replaceRuleError = "";
+      appState.replaceRuleFormOpen = true;
+      renderCurrentRoute();
+    };
+    const applyReaderReplaceRuleDelete = (ruleId) => {
+      appState.replaceRules = (appState.replaceRules || []).filter((rule) => rule.id !== ruleId);
+      if (appState.replaceRuleEditingId === ruleId) {
+        resetReplaceRuleDraft();
+        appState.replaceRuleFormOpen = false;
+      }
+      renderCurrentRoute();
+    };
+    const applyReaderReplaceRuleCancel = () => {
+      resetReplaceRuleDraft();
+      appState.replaceRuleFormOpen = false;
+      renderCurrentRoute();
+    };
+    const applyReaderReplaceFormField = (field, value) => {
+      appState.replaceRuleDraft = Object.assign({}, appState.replaceRuleDraft, { [field]: value });
+      appState.replaceRuleError = "";
+      renderCurrentRoute();
+    };
+    const applyReaderReplaceScopeToggle = (scope) => {
+      const draft = appState.replaceRuleDraft || { title: "", pattern: "", replacement: "", scope: ["chapter"] };
+      const current = Array.isArray(draft.scope) ? draft.scope.slice() : [];
+      const idx = current.indexOf(scope);
+      if (idx >= 0) {
+        current.splice(idx, 1);
+      } else {
+        current.push(scope);
+      }
+      if (current.length === 0) current.push("chapter");
+      appState.replaceRuleDraft = Object.assign({}, draft, { scope: current });
+      renderCurrentRoute();
+    };
+    const applyReaderReplaceRuleSave = () => {
+      const draft = appState.replaceRuleDraft || {};
+      const title = String(draft.title || "").trim();
+      const pattern = String(draft.pattern || "").trim();
+      const replacement = String(draft.replacement || "");
+      const scope = Array.isArray(draft.scope) && draft.scope.length ? draft.scope.slice() : ["chapter"];
+      if (!title) {
+        appState.replaceRuleError = "请填写规则名称";
+        renderCurrentRoute();
+        return;
+      }
+      if (!pattern) {
+        appState.replaceRuleError = "请填写正则表达式";
+        renderCurrentRoute();
+        return;
+      }
+      try {
+        new RegExp(pattern);
+      } catch (error) {
+        appState.replaceRuleError = `正则无效：${error.message}`;
+        renderCurrentRoute();
+        return;
+      }
+      const editingId = appState.replaceRuleEditingId;
+      if (editingId) {
+        const idx = (appState.replaceRules || []).findIndex((rule) => rule.id === editingId);
+        if (idx >= 0) {
+          appState.replaceRules = appState.replaceRules.slice();
+          appState.replaceRules[idx] = Object.assign({}, appState.replaceRules[idx], { title, pattern, replacement, scope });
+        }
+      } else {
+        const newId = `custom-${Date.now()}`;
+        appState.replaceRules = (appState.replaceRules || []).concat([{ id: newId, title, pattern, replacement, scope, enabled: true, custom: true }]);
+      }
+      resetReplaceRuleDraft();
+      appState.replaceRuleFormOpen = false;
+      renderCurrentRoute();
+    };
+    const applyReaderThemeEditField = (field, value) => {
+      appState.readerThemeEditDraft = Object.assign({}, appState.readerThemeEditDraft, { [field]: value });
+      appState.readerThemeEditError = "";
+      renderCurrentRoute();
+    };
+    const applyReaderThemeEditScheme = (scheme) => {
+      appState.readerThemeEditDraft = Object.assign({}, appState.readerThemeEditDraft, { scheme: scheme === "night" ? "night" : "day" });
+      renderCurrentRoute();
+    };
+    const applyReaderCustomThemeSave = () => {
+      const draft = appState.readerThemeEditDraft || {};
+      const name = String(draft.name || "").trim();
+      if (!name) {
+        appState.readerThemeEditError = "请填写主题名称";
+        renderCurrentRoute();
+        return;
+      }
+      const value = `custom-${Date.now()}`;
+      const newTheme = {
+        value,
+        label: name,
+        swatch: draft.bg || "#fff7ec",
+        bg: draft.bg || "#fff7ec",
+        ink: draft.ink || "#2b241d",
+        scheme: draft.scheme === "night" ? "night" : "day",
+        texture: "plain",
+        custom: true
+      };
+      appState.readerCustomThemes = (appState.readerCustomThemes || []).concat([newTheme]);
+      appState.readerTheme = value;
+      appState.readerThemeEditDraft = { name: "", bg: "#fff7ec", ink: "#2b241d", scheme: "day" };
+      appState.readerThemeEditError = "";
+      goBack();
     };
     const applyReaderPageSpaceAction = (action) => {
       const pageSpaceConfig = readerPageSpaceConfig(data);
@@ -10493,6 +10885,86 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         applyReaderReplacementRuleToggle(button.getAttribute("data-reader-replace-rule") || "");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-rule-add]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (button.getAttribute("aria-disabled") === "true") return;
+        applyReaderReplaceRuleAdd();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-rule-edit]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        applyReaderReplaceRuleEdit(button.getAttribute("data-reader-replace-rule-edit") || "");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-rule-delete]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        applyReaderReplaceRuleDelete(button.getAttribute("data-reader-replace-rule-delete") || "");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-rule-save]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        applyReaderReplaceRuleSave();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-rule-cancel]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        applyReaderReplaceRuleCancel();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-form-field]").forEach((input) => {
+      input.addEventListener("input", (event) => {
+        applyReaderReplaceFormField(input.getAttribute("data-reader-replace-form-field") || "", input.value);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-replace-scope]").forEach((checkbox) => {
+      checkbox.addEventListener("change", (event) => {
+        applyReaderReplaceScopeToggle(checkbox.getAttribute("data-reader-replace-scope") || "");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-theme-edit-save]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        applyReaderCustomThemeSave();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-theme-edit-field]").forEach((input) => {
+      const field = input.getAttribute("data-reader-theme-edit-field") || "";
+      const updateValue = () => {
+        const valueEl = screenHost.querySelector(`[data-reader-theme-edit-value="${field}"]`);
+        if (valueEl) valueEl.textContent = input.value;
+      };
+      input.addEventListener("input", (event) => {
+        updateValue();
+        applyReaderThemeEditField(field, input.value);
+      });
+      input.addEventListener("change", (event) => {
+        updateValue();
+        applyReaderThemeEditField(field, input.value);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-theme-edit-scheme]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        applyReaderThemeEditScheme(button.getAttribute("data-reader-theme-edit-scheme") || "day");
       });
     });
 

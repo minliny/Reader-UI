@@ -15,6 +15,7 @@ public enum TokenCategory: String, Codable, CaseIterable, Sendable {
     case textConstraint = "text-constraint"
     case motionDuration = "motion-duration"
     case motionEasing = "motion-easing"
+    case icon = "icon"
 }
 
 public struct Token: Codable, Equatable, Sendable {
@@ -198,14 +199,35 @@ public enum TokenRegistry {
             name: "--fd-ds-font-sans",
             category: .font,
             value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans SC\", \"Source Han Sans SC\", sans-serif",
-            platforms: nil,
+            platforms: TokenPlatforms(swift: "Font.system(.body, design: .default)", kotlin: "FontFamily.Default", arkts: "\"HarmonyOS Sans\", \"PingFang SC\", \"Microsoft YaHei\", sans-serif"),
             deprecated: false
         ),
         Token(
             name: "--fd-ds-font-serif",
             category: .font,
             value: "\"Songti SC\", \"STSong\", \"Noto Serif SC\", \"Source Han Serif SC\", serif",
-            platforms: nil,
+            platforms: TokenPlatforms(swift: "Font.custom(\"STSongti-SC-Regular\", size:)", kotlin: "FontFamily.Serif", arkts: "\"Noto Serif CJK SC\", serif"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-font-kai",
+            category: .font,
+            value: "\"Kaiti SC\", \"KaiTi\", \"STKaiti\", serif",
+            platforms: TokenPlatforms(swift: "Font.custom(\"STKaiti-SC-Regular\", size:)", kotlin: "FontFamily.Serif", arkts: "\"KaiTi\", serif"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-font-fangsong",
+            category: .font,
+            value: "\"FangSong\", \"STFangsong\", \"仿宋\", serif",
+            platforms: TokenPlatforms(swift: "Font.custom(\"STFangsong\", size:)", kotlin: "FontFamily.Serif", arkts: "\"FangSong\", serif"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-font-mono",
+            category: .font,
+            value: "\"SFMono-Regular\", Consolas, \"Liberation Mono\", monospace",
+            platforms: TokenPlatforms(swift: "Font.system(.body, design: .monospaced)", kotlin: "FontFamily.Monospace", arkts: "\"SFMono-Regular\", \"HarmonyOS Sans Mono\", monospace"),
             deprecated: false
         ),
         Token(
@@ -254,6 +276,69 @@ public enum TokenRegistry {
             name: "--fd-ds-type-reader-control-label-size",
             category: .type,
             value: "12px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-top-bar-title-size",
+            category: .type,
+            value: "16px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-top-bar-subtitle-size",
+            category: .type,
+            value: "10px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-action-label-size",
+            category: .type,
+            value: "11px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-chapter-title-size",
+            category: .type,
+            value: "13px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-reader-title-size",
+            category: .type,
+            value: "28px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-app-bar-title-size",
+            category: .type,
+            value: "29px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-back-bar-title-size",
+            category: .type,
+            value: "29px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-reader-chapter-title-size",
+            category: .type,
+            value: "23px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-empty-heading-size",
+            category: .type,
+            value: "19px",
             platforms: nil,
             deprecated: false
         ),
@@ -941,6 +1026,664 @@ public enum TokenRegistry {
             category: .motionEasing,
             value: "ease-in-out",
             platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-add",
+            category: .icon,
+            value: "add",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-add\")", kotlin: "R.drawable.reader_ic_add", arkts: "$r('app.media.reader_icon_add')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-activity",
+            category: .icon,
+            value: "activity",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-activity\")", kotlin: "R.drawable.reader_ic_activity", arkts: "$r('app.media.reader_icon_activity')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-appearance",
+            category: .icon,
+            value: "appearance",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-appearance\")", kotlin: "R.drawable.reader_ic_appearance", arkts: "$r('app.media.reader_icon_appearance')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-assist",
+            category: .icon,
+            value: "assist",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-assist\")", kotlin: "R.drawable.reader_ic_assist", arkts: "$r('app.media.reader_icon_assist')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-auto-page",
+            category: .icon,
+            value: "auto-page",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-auto-page\")", kotlin: "R.drawable.reader_ic_auto_page", arkts: "$r('app.media.reader_icon_auto_page')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-back",
+            category: .icon,
+            value: "back",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-back\")", kotlin: "R.drawable.reader_ic_back", arkts: "$r('app.media.reader_icon_back')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-badge",
+            category: .icon,
+            value: "badge",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-badge\")", kotlin: "R.drawable.reader_ic_badge", arkts: "$r('app.media.reader_icon_badge')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-battery",
+            category: .icon,
+            value: "battery",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-battery\")", kotlin: "R.drawable.reader_ic_battery", arkts: "$r('app.media.reader_icon_battery')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-bell",
+            category: .icon,
+            value: "bell",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-bell\")", kotlin: "R.drawable.reader_ic_bell", arkts: "$r('app.media.reader_icon_bell')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-book",
+            category: .icon,
+            value: "book",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-book\")", kotlin: "R.drawable.reader_ic_book", arkts: "$r('app.media.reader_icon_book')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-book-open",
+            category: .icon,
+            value: "book-open",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-book-open\")", kotlin: "R.drawable.reader_ic_book_open", arkts: "$r('app.media.reader_icon_book_open')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-bookmark",
+            category: .icon,
+            value: "bookmark",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-bookmark\")", kotlin: "R.drawable.reader_ic_bookmark", arkts: "$r('app.media.reader_icon_bookmark')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-bookshelf",
+            category: .icon,
+            value: "bookshelf",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-bookshelf\")", kotlin: "R.drawable.reader_ic_bookshelf", arkts: "$r('app.media.reader_icon_bookshelf')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-bug",
+            category: .icon,
+            value: "bug",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-bug\")", kotlin: "R.drawable.reader_ic_bug", arkts: "$r('app.media.reader_icon_bug')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-check",
+            category: .icon,
+            value: "check",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-check\")", kotlin: "R.drawable.reader_ic_check", arkts: "$r('app.media.reader_icon_check')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-checkmark",
+            category: .icon,
+            value: "checkmark",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-checkmark\")", kotlin: "R.drawable.reader_ic_checkmark", arkts: "$r('app.media.reader_icon_checkmark')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-chevron",
+            category: .icon,
+            value: "chevron",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-chevron\")", kotlin: "R.drawable.reader_ic_chevron", arkts: "$r('app.media.reader_icon_chevron')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-chevron-left",
+            category: .icon,
+            value: "chevron-left",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-chevron-left\")", kotlin: "R.drawable.reader_ic_chevron_left", arkts: "$r('app.media.reader_icon_chevron_left')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-clear",
+            category: .icon,
+            value: "clear",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-clear\")", kotlin: "R.drawable.reader_ic_clear", arkts: "$r('app.media.reader_icon_clear')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-clock",
+            category: .icon,
+            value: "clock",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-clock\")", kotlin: "R.drawable.reader_ic_clock", arkts: "$r('app.media.reader_icon_clock')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-close",
+            category: .icon,
+            value: "close",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-close\")", kotlin: "R.drawable.reader_ic_close", arkts: "$r('app.media.reader_icon_close')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-cloud",
+            category: .icon,
+            value: "cloud",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-cloud\")", kotlin: "R.drawable.reader_ic_cloud", arkts: "$r('app.media.reader_icon_cloud')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-code",
+            category: .icon,
+            value: "code",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-code\")", kotlin: "R.drawable.reader_ic_code", arkts: "$r('app.media.reader_icon_code')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-columns",
+            category: .icon,
+            value: "columns",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-columns\")", kotlin: "R.drawable.reader_ic_columns", arkts: "$r('app.media.reader_icon_columns')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-copy",
+            category: .icon,
+            value: "copy",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-copy\")", kotlin: "R.drawable.reader_ic_copy", arkts: "$r('app.media.reader_icon_copy')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-current-location",
+            category: .icon,
+            value: "current-location",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-current-location\")", kotlin: "R.drawable.reader_ic_current_location", arkts: "$r('app.media.reader_icon_current_location')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-database",
+            category: .icon,
+            value: "database",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-database\")", kotlin: "R.drawable.reader_ic_database", arkts: "$r('app.media.reader_icon_database')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-directory",
+            category: .icon,
+            value: "directory",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-directory\")", kotlin: "R.drawable.reader_ic_directory", arkts: "$r('app.media.reader_icon_directory')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-discover",
+            category: .icon,
+            value: "discover",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-discover\")", kotlin: "R.drawable.reader_ic_discover", arkts: "$r('app.media.reader_icon_discover')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-download",
+            category: .icon,
+            value: "download",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-download\")", kotlin: "R.drawable.reader_ic_download", arkts: "$r('app.media.reader_icon_download')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-edit",
+            category: .icon,
+            value: "edit",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-edit\")", kotlin: "R.drawable.reader_ic_edit", arkts: "$r('app.media.reader_icon_edit')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-eyeOff",
+            category: .icon,
+            value: "eyeOff",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-eye-off\")", kotlin: "R.drawable.reader_ic_eye_off", arkts: "$r('app.media.reader_icon_eye_off')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-file",
+            category: .icon,
+            value: "file",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-file\")", kotlin: "R.drawable.reader_ic_file", arkts: "$r('app.media.reader_icon_file')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-filter",
+            category: .icon,
+            value: "filter",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-filter\")", kotlin: "R.drawable.reader_ic_filter", arkts: "$r('app.media.reader_icon_filter')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-folder",
+            category: .icon,
+            value: "folder",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-folder\")", kotlin: "R.drawable.reader_ic_folder", arkts: "$r('app.media.reader_icon_folder')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-folder-off",
+            category: .icon,
+            value: "folder-off",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-folder-off\")", kotlin: "R.drawable.reader_ic_folder_off", arkts: "$r('app.media.reader_icon_folder_off')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-gear",
+            category: .icon,
+            value: "gear",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-gear\")", kotlin: "R.drawable.reader_ic_gear", arkts: "$r('app.media.reader_icon_gear')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-gesture",
+            category: .icon,
+            value: "gesture",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-gesture\")", kotlin: "R.drawable.reader_ic_gesture", arkts: "$r('app.media.reader_icon_gesture')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-globe",
+            category: .icon,
+            value: "globe",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-globe\")", kotlin: "R.drawable.reader_ic_globe", arkts: "$r('app.media.reader_icon_globe')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-grid",
+            category: .icon,
+            value: "grid",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-grid\")", kotlin: "R.drawable.reader_ic_grid", arkts: "$r('app.media.reader_icon_grid')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-help",
+            category: .icon,
+            value: "help",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-help\")", kotlin: "R.drawable.reader_ic_help", arkts: "$r('app.media.reader_icon_help')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-home",
+            category: .icon,
+            value: "home",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-home\")", kotlin: "R.drawable.reader_ic_home", arkts: "$r('app.media.reader_icon_home')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-image",
+            category: .icon,
+            value: "image",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-image\")", kotlin: "R.drawable.reader_ic_image", arkts: "$r('app.media.reader_icon_image')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-info",
+            category: .icon,
+            value: "info",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-info\")", kotlin: "R.drawable.reader_ic_info", arkts: "$r('app.media.reader_icon_info')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-link",
+            category: .icon,
+            value: "link",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-link\")", kotlin: "R.drawable.reader_ic_link", arkts: "$r('app.media.reader_icon_link')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-list",
+            category: .icon,
+            value: "list",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-list\")", kotlin: "R.drawable.reader_ic_list", arkts: "$r('app.media.reader_icon_list')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-log",
+            category: .icon,
+            value: "log",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-log\")", kotlin: "R.drawable.reader_ic_log", arkts: "$r('app.media.reader_icon_log')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-mail",
+            category: .icon,
+            value: "mail",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-mail\")", kotlin: "R.drawable.reader_ic_mail", arkts: "$r('app.media.reader_icon_mail')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-message",
+            category: .icon,
+            value: "message",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-message\")", kotlin: "R.drawable.reader_ic_message", arkts: "$r('app.media.reader_icon_message')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-monitor",
+            category: .icon,
+            value: "monitor",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-monitor\")", kotlin: "R.drawable.reader_ic_monitor", arkts: "$r('app.media.reader_icon_monitor')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-more",
+            category: .icon,
+            value: "more",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-more\")", kotlin: "R.drawable.reader_ic_more", arkts: "$r('app.media.reader_icon_more')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-motion",
+            category: .icon,
+            value: "motion",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-motion\")", kotlin: "R.drawable.reader_ic_motion", arkts: "$r('app.media.reader_icon_motion')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-nav-list",
+            category: .icon,
+            value: "nav-list",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-nav-list\")", kotlin: "R.drawable.reader_ic_nav_list", arkts: "$r('app.media.reader_icon_nav_list')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-night-mode",
+            category: .icon,
+            value: "night-mode",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-night-mode\")", kotlin: "R.drawable.reader_ic_night_mode", arkts: "$r('app.media.reader_icon_night_mode')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-offline",
+            category: .icon,
+            value: "offline",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-offline\")", kotlin: "R.drawable.reader_ic_offline", arkts: "$r('app.media.reader_icon_offline')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-palette",
+            category: .icon,
+            value: "palette",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-palette\")", kotlin: "R.drawable.reader_ic_palette", arkts: "$r('app.media.reader_icon_palette')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-pause",
+            category: .icon,
+            value: "pause",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-pause\")", kotlin: "R.drawable.reader_ic_pause", arkts: "$r('app.media.reader_icon_pause')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-people",
+            category: .icon,
+            value: "people",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-people\")", kotlin: "R.drawable.reader_ic_people", arkts: "$r('app.media.reader_icon_people')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-permission",
+            category: .icon,
+            value: "permission",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-permission\")", kotlin: "R.drawable.reader_ic_permission", arkts: "$r('app.media.reader_icon_permission')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-phone",
+            category: .icon,
+            value: "phone",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-phone\")", kotlin: "R.drawable.reader_ic_phone", arkts: "$r('app.media.reader_icon_phone')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-play",
+            category: .icon,
+            value: "play",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-play\")", kotlin: "R.drawable.reader_ic_play", arkts: "$r('app.media.reader_icon_play')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-progress",
+            category: .icon,
+            value: "progress",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-progress\")", kotlin: "R.drawable.reader_ic_progress", arkts: "$r('app.media.reader_icon_progress')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-auto-page",
+            category: .icon,
+            value: "reader-auto-page",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-auto-page\")", kotlin: "R.drawable.reader_ic_reader_auto_page", arkts: "$r('app.media.reader_icon_reader_auto_page')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-content-replace",
+            category: .icon,
+            value: "reader-content-replace",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-content-replace\")", kotlin: "R.drawable.reader_ic_reader_content_replace", arkts: "$r('app.media.reader_icon_reader_content_replace')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-content-search",
+            category: .icon,
+            value: "reader-content-search",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-content-search\")", kotlin: "R.drawable.reader_ic_reader_content_search", arkts: "$r('app.media.reader_icon_reader_content_search')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-module-directory",
+            category: .icon,
+            value: "reader-module-directory",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-module-directory\")", kotlin: "R.drawable.reader_ic_reader_module_directory", arkts: "$r('app.media.reader_icon_reader_module_directory')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-module-tts",
+            category: .icon,
+            value: "reader-module-tts",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-module-tts\")", kotlin: "R.drawable.reader_ic_reader_module_tts", arkts: "$r('app.media.reader_icon_reader_module_tts')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-module-appearance",
+            category: .icon,
+            value: "reader-module-appearance",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-module-appearance\")", kotlin: "R.drawable.reader_ic_reader_module_appearance", arkts: "$r('app.media.reader_icon_reader_module_appearance')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-reader-module-settings",
+            category: .icon,
+            value: "reader-module-settings",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-reader-module-settings\")", kotlin: "R.drawable.reader_ic_reader_module_settings", arkts: "$r('app.media.reader_icon_reader_module_settings')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-refresh",
+            category: .icon,
+            value: "refresh",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-refresh\")", kotlin: "R.drawable.reader_ic_refresh", arkts: "$r('app.media.reader_icon_refresh')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-replace",
+            category: .icon,
+            value: "replace",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-replace\")", kotlin: "R.drawable.reader_ic_replace", arkts: "$r('app.media.reader_icon_replace')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-rss",
+            category: .icon,
+            value: "rss",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-rss\")", kotlin: "R.drawable.reader_ic_rss", arkts: "$r('app.media.reader_icon_rss')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-search",
+            category: .icon,
+            value: "search",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-search\")", kotlin: "R.drawable.reader_ic_search", arkts: "$r('app.media.reader_icon_search')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-settings",
+            category: .icon,
+            value: "settings",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-settings\")", kotlin: "R.drawable.reader_ic_settings", arkts: "$r('app.media.reader_icon_settings')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-shield",
+            category: .icon,
+            value: "shield",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-shield\")", kotlin: "R.drawable.reader_ic_shield", arkts: "$r('app.media.reader_icon_shield')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-signal",
+            category: .icon,
+            value: "signal",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-signal\")", kotlin: "R.drawable.reader_ic_signal", arkts: "$r('app.media.reader_icon_signal')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-sort",
+            category: .icon,
+            value: "sort",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-sort\")", kotlin: "R.drawable.reader_ic_sort", arkts: "$r('app.media.reader_icon_sort')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-source",
+            category: .icon,
+            value: "source",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-source\")", kotlin: "R.drawable.reader_ic_source", arkts: "$r('app.media.reader_icon_source')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-source-stack",
+            category: .icon,
+            value: "source-stack",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-source-stack\")", kotlin: "R.drawable.reader_ic_source_stack", arkts: "$r('app.media.reader_icon_source_stack')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-source-switch",
+            category: .icon,
+            value: "source-switch",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-source-switch\")", kotlin: "R.drawable.reader_ic_source_switch", arkts: "$r('app.media.reader_icon_source_switch')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-sparkle",
+            category: .icon,
+            value: "sparkle",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-sparkle\")", kotlin: "R.drawable.reader_ic_sparkle", arkts: "$r('app.media.reader_icon_sparkle')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-stop",
+            category: .icon,
+            value: "stop",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-stop\")", kotlin: "R.drawable.reader_ic_stop", arkts: "$r('app.media.reader_icon_stop')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-storage",
+            category: .icon,
+            value: "storage",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-storage\")", kotlin: "R.drawable.reader_ic_storage", arkts: "$r('app.media.reader_icon_storage')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-sun",
+            category: .icon,
+            value: "sun",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-sun\")", kotlin: "R.drawable.reader_ic_sun", arkts: "$r('app.media.reader_icon_sun')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-sync",
+            category: .icon,
+            value: "sync",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-sync\")", kotlin: "R.drawable.reader_ic_sync", arkts: "$r('app.media.reader_icon_sync')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-text",
+            category: .icon,
+            value: "text",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-text\")", kotlin: "R.drawable.reader_ic_text", arkts: "$r('app.media.reader_icon_text')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-top",
+            category: .icon,
+            value: "top",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-top\")", kotlin: "R.drawable.reader_ic_top", arkts: "$r('app.media.reader_icon_top')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-trash",
+            category: .icon,
+            value: "trash",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-trash\")", kotlin: "R.drawable.reader_ic_trash", arkts: "$r('app.media.reader_icon_trash')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-tts",
+            category: .icon,
+            value: "tts",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-tts\")", kotlin: "R.drawable.reader_ic_tts", arkts: "$r('app.media.reader_icon_tts')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-typo",
+            category: .icon,
+            value: "typo",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-typo\")", kotlin: "R.drawable.reader_ic_typo", arkts: "$r('app.media.reader_icon_typo')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-upload",
+            category: .icon,
+            value: "upload",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-upload\")", kotlin: "R.drawable.reader_ic_upload", arkts: "$r('app.media.reader_icon_upload')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-volume",
+            category: .icon,
+            value: "volume",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-volume\")", kotlin: "R.drawable.reader_ic_volume", arkts: "$r('app.media.reader_icon_volume')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-warning",
+            category: .icon,
+            value: "warning",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-warning\")", kotlin: "R.drawable.reader_ic_warning", arkts: "$r('app.media.reader_icon_warning')"),
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-icon-wifi",
+            category: .icon,
+            value: "wifi",
+            platforms: TokenPlatforms(swift: "Image(\"reader-icon-wifi\")", kotlin: "R.drawable.reader_ic_wifi", arkts: "$r('app.media.reader_icon_wifi')"),
             deprecated: false
         )
     ]

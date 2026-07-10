@@ -657,3 +657,110 @@
   background: var(--fd-primary-dark);
   color: var(--reader-control-primary-text, #fff);
 }
+
+/* W4: 自定义主题编辑页 */
+.fd-reader-full-theme-edit {
+  gap: 4px;
+}
+
+.fd-reader-theme-edit-fields {
+  display: grid;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.fd-reader-theme-edit-field {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.fd-reader-theme-edit-field > span {
+  color: var(--fd-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.fd-reader-theme-edit-field input[type="text"] {
+  min-width: 0;
+  min-height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--reader-control-line, rgba(180, 166, 151, 0.34));
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-field, rgba(255, 248, 239, 0.82));
+  color: var(--reader-control-ink, #332c25);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.fd-reader-theme-edit-field input[type="text"]:focus {
+  border-color: var(--reader-control-action, var(--fd-primary-dark));
+  outline: none;
+}
+
+.fd-reader-theme-edit-field input[type="color"] {
+  width: 42px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--reader-control-line, rgba(180, 166, 151, 0.34));
+  border-radius: var(--fd-radius-sm);
+  background: transparent;
+  cursor: pointer;
+}
+
+.fd-reader-theme-edit-field em {
+  color: var(--fd-muted);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 600;
+  font-family: monospace;
+}
+
+.fd-reader-theme-edit-scheme {
+  grid-template-columns: 64px minmax(0, 1fr);
+}
+
+.fd-reader-theme-edit-scheme .fd-reader-full-choice-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fd-reader-theme-edit-error {
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: var(--fd-radius-sm);
+  background: rgba(192, 57, 43, 0.1);
+  color: #c0392b;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.fd-reader-theme-edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.fd-reader-theme-edit-actions button {
+  min-height: 32px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--fd-radius-md);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.fd-reader-theme-edit-actions .is-cancel {
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.56));
+  color: var(--reader-control-muted, #7b7065);
+}
+
+.fd-reader-theme-edit-actions .is-primary {
+  background: var(--fd-primary-dark);
+  color: var(--reader-control-primary-text, #fff);
+}
+
+.fd-reader-custom-theme-grid button span {
+  border: 1px dashed var(--reader-control-action, var(--fd-primary-dark));
+}

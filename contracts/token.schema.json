@@ -14,12 +14,12 @@
     },
     "category": {
       "type": "string",
-      "enum": ["color", "font", "type", "spacing", "size", "radius", "shadow", "elevation", "z-index", "text-constraint", "motion-duration", "motion-easing"],
-      "description": "Token 类别。"
+      "enum": ["color", "font", "type", "spacing", "size", "radius", "shadow", "elevation", "z-index", "text-constraint", "motion-duration", "motion-easing", "icon"],
+      "description": "Token 类别。icon 类别用于把图标语义名纳入 token 治理，value 为图标语义名（与 asset-library/icons.js 的 key 一致），platforms 字段提供三端资源引用模板。"
     },
     "value": {
       "type": "string",
-      "description": "Token 值。颜色用 #hex 或 rgba()；字号/间距/尺寸用 Npx；阴影用 box-shadow 表达式；motion-duration 用 Nms；motion-easing 用 CSS easing 函数名。"
+      "description": "Token 值。颜色用 #hex 或 rgba()；字号/间距/尺寸用 Npx；阴影用 box-shadow 表达式；motion-duration 用 Nms；motion-easing 用 CSS easing 函数名；font 用 CSS font-family 栈；icon 用图标语义名（与 asset-library/icons.js 的 key 一致）。"
     },
     "platforms": {
       "type": "object",

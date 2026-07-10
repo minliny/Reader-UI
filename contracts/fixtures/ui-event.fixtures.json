@@ -59,6 +59,11 @@
   { "_comment": "Slice 3: content-replacement overlay",
     "type": "reader.contentReplacement.open", "payload": {} },
   { "type": "reader.contentReplacement.close", "payload": {} },
+  { "_comment": "Slice 3: content-replacement rule CRUD",
+    "type": "reader.contentReplacement.rule.add", "payload": { "pattern": "\\s+", "replacement": " ", "scope": "body" } },
+  { "type": "reader.contentReplacement.rule.edit", "payload": { "ruleId": "rule-001", "pattern": "\\s+", "replacement": " ", "scope": "body" } },
+  { "type": "reader.contentReplacement.rule.delete", "payload": { "ruleId": "rule-001" } },
+  { "type": "reader.contentReplacement.rule.toggle", "payload": { "ruleId": "rule-001", "enabled": false } },
 
   { "_comment": "Slice 3: source-switch overlay",
     "type": "reader.sourceSwitch.open", "payload": {} },
