@@ -1,5 +1,5 @@
 {
-  "version": "2.5.0",
+  "version": "2.5.1",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
@@ -25,6 +25,17 @@
   },
   "changelog": [
     {
+      "version": "2.5.1",
+      "date": "2026-07-12",
+      "summary": "PATCH：ViewState presentation resolver 与 UI/Figma/Host truth correction",
+      "changes": [
+        "frontend-demo-optimized 不再由 RouteId 单独决定当前 page/overlay/state surface；resolveRoutePresentation 统一根据 pageState、overlayState 与组件树解析，并以 165 条 ViewState fixture 做穷举门禁。",
+        "Phase 0/1 固化 Shell 几何、ReaderShell 六槽与共享亮度控件边界；Phase 3/4 Figma 仅保留可编辑组件库和三个代表视口，不把 235-route runnable demo 伪装成可自动回写的设计源。",
+        "修正 rollout 文档与三端状态口径：当前 35 covered events 为 7 Pilot、28 Shadow、0 Authoritative；120/120 静态链路矩阵、单元/构建通过与历史设备证据都不能替代 fresh physical-device proof。",
+        "修正 R16D ScreenGraph 组件实例计数为 519，并保留 235 routes、165 variants、36 executable bindings、19 state-event evidence 与 6 action gaps 的机器事实。"
+      ]
+    },
+    {
       "version": "2.5.0",
       "date": "2026-07-11",
       "summary": "MINOR：61-action runtime、7/28 rollout truth 与 immutable release manifest",
@@ -34,7 +45,7 @@
         "三端 rollout allowlist 精确覆盖 35 条：directory、book.open、TTS、auto-page 共 7 条 Pilot；page、import、source-switch、replace、RSS、Sync 共 28 条保持默认 Shadow。",
         "Host consumer checker 强制 exact covered/pilot policy、动态 effectful event 分类、timer handler 注册证明与 HarmonyOS oh-package lock 版本一致。",
         "R14 为 61/61 action 建立 strict lossless payload/result contract，并为 Swift/Kotlin/ArkTS 生成递归 JSONValue 边界；nested object/array 不再降级为字符串 map。",
-        "R16D ScreenGraph 1.1.0 覆盖 235 routes / 165 variants / 521 components，并把 55 条事件证据拆成 36 条明确 trigger 的 executable bindings 与 19 条不可执行 state-event evidence，另保留 6 条显式 action gaps。",
+        "R16D ScreenGraph 1.1.0 覆盖 235 routes / 165 variants / 519 component instances，并把 55 条事件证据拆成 36 条明确 trigger 的 executable bindings 与 19 条不可执行 state-event evidence，另保留 6 条显式 action gaps。",
         "R18 生成 iOS/Android/HarmonyOS 各 58 项的 device conformance plan，全部 deviceVerified 默认 false，只有绑定可信 release identity 与逐项 artifact 的真实证据才能转为 true。",
         "新增 187 文件 / 12 组的 UI_RELEASE_MANIFEST.json（含 R18 device-conformance plan）与 6 组 ordered ABI hash；JSON Schema 校验切换到 Ajv 2020-12 并覆盖 oneOf/allOf/not/conditional/format。",
         "当前 HostRequest 权威计数为 58；其余计数由生成报告与测试输出给出，避免在变更中的手工快照冒充最新验收结果。"

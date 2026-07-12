@@ -188,7 +188,14 @@ export const manifestFileGroups = Object.freeze([
   {
     name: "generated",
     files(root) {
-      return listFiles(root, "generated", { recursive: true, include: () => true });
+      // Codegen publishes each output through `<name>.<pid>.tmp` + rename so
+      // concurrent readers never observe truncated files. Those transient
+      // files are implementation details, not release inputs, and may vanish
+      // between readdir and lstat during parallel contract tests.
+      return listFiles(root, "generated", {
+        recursive: true,
+        include: (relativePath) => !relativePath.endsWith(".tmp"),
+      });
     },
   },
   {

@@ -434,10 +434,11 @@
   };
 
   // Route ids remain stable wire values, but they are not all independent
-  // canvases. This presentation index gives the demo one canonical place to
-  // decide which routes share a page, overlay/state host, and adaptive layout.
-  // CSS must consume `layout`/`surface` from the demo root instead of branching
-  // on individual route ids.
+  // canvases. A RouteId owns family/layout and a default surface only. The
+  // active surface is resolved from the current ViewState/OverlayState because
+  // one RouteId may render default, loading, offline and dialog variants.
+  // CSS must consume the resolved `layout`/`surface` from the demo root instead
+  // of branching on individual route ids.
   function routeFamily(routeId) {
     if (routeId === "immersive-reading" || routeId === "tts" || routeId === "auto-page" || routeId === "toc-bookmarks" || routeId.startsWith("reader") || routeId.startsWith("content-")) return "reader";
     if (routeId.startsWith("source-switch")) return "source-switch";
@@ -451,10 +452,125 @@
     return "system";
   }
 
-  function routeSurface(routeId) {
-    if (/overlay-v2$/.test(routeId) || /(?:confirm|menu|toast)$/.test(routeId) || routeId === "reader-font-fallback") return "overlay";
-    if (/(?:loading|empty|error|offline|timeout|refreshing|running|rollback)$/.test(routeId) || /(?:permission-denied|format-unsupported|partial-success)$/.test(routeId)) return "state";
+  // These sets describe the default renderer for routes whose default fixture
+  // is itself an overlay/state. They intentionally do not try to encode every
+  // possible ViewState in the RouteId.
+  const defaultOverlayRoutes = new Set([
+    "bookshelf-book-more-menu",
+    "discover-cache-confirm",
+    "discover-cache-toast",
+    "import-conflict-resolve",
+    "import-duplicate",
+    "reader-appearance-overlay-v2",
+    "reader-auto-scroll-overlay-v2",
+    "reader-background-restore",
+    "reader-directory-overlay-v2",
+    "reader-font-delete-confirm",
+    "reader-font-fallback",
+    "reader-font-import-confirm",
+    "reader-night-state-v2",
+    "reader-progress-restore",
+    "reader-replace-delete-confirm",
+    "reader-replace-overlay-v2",
+    "reader-search-overlay-v2",
+    "reader-settings-overlay-v2",
+    "reader-theme-delete-confirm",
+    "reader-tts-overlay-v2",
+    "reader-typography-reset-confirm",
+    "restore-confirm",
+    "restore-preview",
+    "restore-scopes",
+    "rss-source-delete-confirm",
+    "source-delete-confirm"
+  ]);
+
+  const defaultStateRoutes = new Set([
+    "bookshelf-empty",
+    "discover-cache-empty",
+    "discover-empty",
+    "discover-entry-error",
+    "discover-error",
+    "discover-infinite-loading",
+    "discover-loading",
+    "discover-no-results",
+    "discover-refreshing",
+    "global-empty",
+    "global-error",
+    "global-loading",
+    "import-empty-file",
+    "import-format-unsupported",
+    "import-parsing",
+    "import-partial-success",
+    "import-permission-denied",
+    "offline-state",
+    "permission-required",
+    "reader-content-error",
+    "reader-content-loading",
+    "reader-content-offline",
+    "reader-toc-error",
+    "reader-toc-loading",
+    "reader-toc-offline",
+    "restore-conflict",
+    "restore-progress",
+    "restore-running",
+    "rss-empty",
+    "rss-error",
+    "rss-refreshing",
+    "search-empty",
+    "search-error",
+    "search-loading",
+    "source-debug-running",
+    "source-switch-empty",
+    "source-switch-error",
+    "source-switch-loading",
+    "source-switch-timeout",
+    "state-error",
+    "state-offline",
+    "sync-error"
+  ]);
+
+  const statePageStates = new Set([
+    "empty",
+    "error",
+    "format-unsupported",
+    "loading",
+    "offline",
+    "partial-success",
+    "permission",
+    "permission-denied",
+    "refreshing",
+    "rollback",
+    "running",
+    "shelf-empty",
+    "source-unavailable",
+    "timeout"
+  ]);
+
+  const overlayComponentTypes = new Set(["Dialog", "NightToast", "Toast"]);
+
+  function routeDefaultSurface(routeId) {
+    if (defaultOverlayRoutes.has(routeId)) return "overlay";
+    if (defaultStateRoutes.has(routeId)) return "state";
     return "page";
+  }
+
+  function componentTreeContainsOverlay(components) {
+    return (Array.isArray(components) ? components : []).some((component) => (
+      overlayComponentTypes.has(component && component.type)
+      || componentTreeContainsOverlay(component && component.children)
+    ));
+  }
+
+  function hasActiveOverlayState(overlayState) {
+    if (overlayState == null || overlayState === false) return false;
+    if (typeof overlayState === "string") {
+      return !["", "closed", "hidden", "none"].includes(overlayState.toLowerCase());
+    }
+    if (typeof overlayState === "object") {
+      if (overlayState.active === false || overlayState.visible === false || overlayState.open === false) return false;
+      return true;
+    }
+    return Boolean(overlayState);
   }
 
   function routeLayout(routeId, shell) {
@@ -470,14 +586,40 @@
     routeId,
     Object.freeze({
       family: routeFamily(routeId),
-      surface: routeSurface(routeId),
+      defaultSurface: routeDefaultSurface(routeId),
       layout: routeLayout(routeId, meta.shell)
     })
   ]));
 
+  function resolveRoutePresentation(routeId, viewState) {
+    const base = routePresentation[routeId] || Object.freeze({
+      family: "system",
+      defaultSurface: "page",
+      layout: "main-tab"
+    });
+    const state = viewState && typeof viewState === "object" ? viewState : {};
+    const overlayActive = hasActiveOverlayState(state.overlayState)
+      || componentTreeContainsOverlay(state.components);
+    const pageState = typeof state.pageState === "string" ? state.pageState.toLowerCase() : "default";
+    const surface = overlayActive
+      ? "overlay"
+      : statePageStates.has(pageState)
+        ? "state"
+        : base.defaultSurface;
+    return Object.freeze({
+      family: base.family,
+      surface,
+      defaultSurface: base.defaultSurface,
+      layout: base.layout,
+      pageState,
+      overlayActive
+    });
+  }
+
   window.ReaderFrontendDemoDraftRouteContract = {
     routes,
     deepRouteClosure,
-    routePresentation
+    routePresentation,
+    resolveRoutePresentation
   };
 })(window);

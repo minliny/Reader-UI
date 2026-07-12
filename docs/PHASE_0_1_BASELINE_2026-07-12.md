@@ -17,8 +17,10 @@ commands below pass against the exact bytes recorded in
 ## Phase 1 structural invariants
 
 1. A route id is a stable wire value, not permission to create a new device
-   canvas. `routePresentation` assigns every route a family, surface and layout
-   profile.
+   canvas. `routePresentation` assigns every route a family, default surface
+   and layout profile. `resolveRoutePresentation(routeId, viewState)` resolves
+   the active surface from `pageState`, `overlayState` and the component tree;
+   RouteId alone is never the active-surface authority.
 2. Shells own geometry. Page renderers fill slots and must not redefine the
    device viewport.
 3. `ReaderShell` owns `readingSurface`, `readerOverlayHost`,
@@ -26,8 +28,9 @@ commands below pass against the exact bytes recorded in
    `readerStateHost`.
 4. Brightness is a single `readerAccessoryHost` control. Reader panels may not
    append their own rail to panel content.
-5. Loading, empty, error, offline and confirmation routes keep their stable ids
-   but render as state/overlay surfaces inside their owning Shell.
+5. Loading, empty, error, offline and confirmation variants keep their stable
+   route ids but render as state/overlay surfaces inside their owning Shell.
+   The 165 ViewState fixtures are an exhaustive presentation-resolution gate.
 6. Wide workspace and flow-continuity behavior is selected by a layout profile,
    never by CSS branching on individual route ids.
 7. The current product renders one running-session capsule in immersive reader

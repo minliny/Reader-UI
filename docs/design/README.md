@@ -8,6 +8,7 @@
 
 - [Paper Flow Motion Language](./PAPER_FLOW_MOTION_LANGUAGE.md)：统一动效艺术语言、动效家族、节奏、缓动和阅读纪律。
 - [Paper Flow Icon System](./PAPER_FLOW_ICON_SYSTEM.md)：图标网格、静态状态、图标动效和禁止项。
+- [Figma Handoff Status (2026-07-12)](./FIGMA_HANDOFF_STATUS_2026-07-12.md)：当前可编辑组件、Phase 4 三视口基线、代码回写方式和不可自动同步边界。
 
 ## 控件视觉基线
 

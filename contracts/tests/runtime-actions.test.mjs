@@ -146,7 +146,7 @@ test("host consumer manifest is complete and lock schema accepts the canonical s
   assertValid(consumerLockSchema, {
     schemaVersion: 2,
     host: "ios",
-    readerUiVersion: "2.5.0",
+    readerUiVersion: "2.5.1",
     hostRequestSchemaVersion: "1.1.0",
     runtimeActionsSchemaVersion: spec.schemaVersion,
     runtimeActionsSha256: "0".repeat(64),

@@ -182,6 +182,17 @@ test("new release inputs are discovered dynamically in every extensible group", 
   );
 });
 
+test("atomic codegen temp files are never release inputs", (context) => {
+  const temporaryRoot = copyManifestInputs();
+  context.after(() => fs.rmSync(temporaryRoot, { recursive: true, force: true }));
+  const temporaryCodegenPath = path.join(temporaryRoot, "generated", "swift", "Route.swift.12345.tmp");
+  fs.writeFileSync(temporaryCodegenPath, "partial atomic write\n");
+
+  const changed = buildReleaseManifest(temporaryRoot);
+  assert.deepEqual(changed, manifest);
+  assert.equal(changed.files.some((entry) => entry.path.endsWith(".tmp")), false);
+});
+
 test("ordered ABI source mutations change both raw groups and only the matching semantic ABI", (context) => {
   const temporaryRoot = copyManifestInputs();
   context.after(() => fs.rmSync(temporaryRoot, { recursive: true, force: true }));

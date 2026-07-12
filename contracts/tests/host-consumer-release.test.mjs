@@ -34,19 +34,19 @@ function metadata() {
   return {
     schemaVersion: 1,
     eventType: "reader-ui-updated",
-    version: "2.5.0",
-    tag: "v2.5.0",
+    version: "2.5.1",
+    tag: "v2.5.1",
     releaseId: `${sourceSha}:${manifestSha256}`,
     runtimeActionsSha256: "3".repeat(64),
     manifestSha256,
     targetConfigSha256: "4".repeat(64),
     source: {
       repository: "minliny/Reader-UI",
-      ref: "refs/tags/v2.5.0",
+      ref: "refs/tags/v2.5.1",
       sha: sourceSha,
     },
     artifact: {
-      name: "reader-ui-v2.5.0",
+      name: "reader-ui-v2.5.1",
       workflowRunId: "123456",
       manifestPath: "UI_RELEASE_MANIFEST.json",
       inventoryPath: "UI_RELEASE_ARTIFACT_INVENTORY.json",
@@ -166,7 +166,7 @@ test("lock v2 updater changes only release/version/hash identity and is byte-ide
   const first = updateHostConsumerLock(current, verifiedRelease());
   assert.equal(first.changed, true);
   assert.equal(first.lock.schemaVersion, 2);
-  assert.equal(first.lock.readerUiVersion, "2.5.0");
+  assert.equal(first.lock.readerUiVersion, "2.5.1");
   assert.equal(first.lock.releaseIdentity.releaseId, metadata().releaseId);
   assert.equal(
     JSON.stringify({

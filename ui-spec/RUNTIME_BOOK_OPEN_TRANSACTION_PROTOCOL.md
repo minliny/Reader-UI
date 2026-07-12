@@ -133,8 +133,8 @@ following:
 - success, Core/Host error, cancel, stale result, empty TOC, and delayed-layout
   tests; plus the platform's build/unit/Host and available device proof.
 
-Reader-UI 2.5.0 consumers have admitted `book.open` as an independent Pilot
-cohort after the three Host implementations closed the typed executor,
+Reader-UI 2.5.0 first admitted `book.open` as an independent Pilot cohort;
+2.5.1 retains that rollout after the three Host implementations closed the typed executor,
 correlation/stale-result, rollback, and available build/test gates. This Pilot
 does not imply Authoritative status: fresh physical-device proof remains an
 independent blocker, and the directory Pilot is unrelated evidence.

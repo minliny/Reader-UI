@@ -194,9 +194,9 @@ in this document has been promoted.
 
 This implementation remains additive to the existing `ReaderUIRuntime` APIs.
 The current `ui-spec/runtime-actions.json` contains 61 actions; its SHA-256 is
-`d5c158b4562ce24642df6c16907f30ac112dbe0c4809b87c229d067eeb14d520`.
-Reader-UI 2.5.0 and all three consumer locks carry this action hash plus
-HostRequest schema 1.1.0. The synchronized locks keep the page pair in Shadow
+`0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c`.
+Reader-UI 2.5.1 and all three consumer locks carry this action hash plus
+HostRequest schema 1.2.0. The synchronized locks keep the page pair in Shadow
 and admit the TTS and auto-page pairs to Pilot with exactly-once cohorts.
 Version/lock sync and unit/build proof are still not physical-device proof or
 Authoritative promotion.

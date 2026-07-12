@@ -1,7 +1,7 @@
 {
   "$schema": "ui-spec/ui-release-manifest.schema.json",
   "schemaVersion": 1,
-  "version": "2.5.0",
+  "version": "2.5.1",
   "hashAlgorithm": "sha256",
   "files": [
     {
@@ -16,8 +16,8 @@
     },
     {
       "path": "contracts/VERSION.json",
-      "byteLength": 26767,
-      "sha256": "ebe95bb1e8e4de9de3db17210d1e91f1bd24dc9800f51870b033deb646e47d62"
+      "byteLength": 27858,
+      "sha256": "ab3ee3fe8c5b29c477f1fc3181a7be6ecaab7e2cfe51dce98040a5c43d6d2a32"
     },
     {
       "path": "contracts/content.schema.json",
@@ -202,7 +202,7 @@
     {
       "path": "device-conformance/DEVICE_CONFORMANCE_PLAN.json",
       "byteLength": 155698,
-      "sha256": "0323f6e196980ba4fe12e8ab692424a900f16be57b1668dbbea2778d8eaf85c8"
+      "sha256": "d80ff88b15ccd7a9876f1af25484c624a8b378e1d9cdbd1f44f645f6ea3602c1"
     },
     {
       "path": "frontend-demo-optimized/asset-library/icons.js",
@@ -336,8 +336,8 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 681922,
-      "sha256": "2c24d8f4bdc02cd98d09df556c9c3a730354fec31dcafc4e8f40e308b51cc11d"
+      "byteLength": 682685,
+      "sha256": "af7e6b02f55468dbc116309c513480ddb68a67ea884ff3eeb270b7669730d197"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -401,8 +401,8 @@
     },
     {
       "path": "frontend-demo-optimized/route-contract.js",
-      "byteLength": 38954,
-      "sha256": "60c589f4d3dff5b2dcf56d4e6eed7591b7db01af7542590ecdd4979e1ac03dbc"
+      "byteLength": 43005,
+      "sha256": "ebe9bcaedf5e288b61c3db179dbf00f333fb6382fe738b53dfbcac6cc061454c"
     },
     {
       "path": "frontend-demo-optimized/shared-shell-kit/kit.css",
@@ -792,7 +792,7 @@
     {
       "path": "packages/arkts/reader-ui-runtime/oh-package.json5",
       "byteLength": 219,
-      "sha256": "a77fd9b55ef80cd54ec9ef08e75588902b4bd66387c999df8b2334a322574d4c"
+      "sha256": "e73d8eb3e4fa1e056c65cfd24778480cd9c5e5c9fe391491f3b49b30ed1f0142"
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
@@ -822,7 +822,7 @@
     {
       "path": "packages/kotlin/reader-ui-runtime/build.gradle.kts",
       "byteLength": 720,
-      "sha256": "ee6ff931734b93ef8b6496ed9e23f26c82e00cd8f181548a8f2081e53a89a7e1"
+      "sha256": "42b600bc25b0e356cb98d333ec77c282ef6096a3f0b4990a85c86c2ab8a08ae6"
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeActions.kt",
@@ -882,7 +882,7 @@
     {
       "path": "reader-ui-contract/build.gradle.kts",
       "byteLength": 840,
-      "sha256": "1d5cd304718e54bc96817d08c6182ad8dbf2f91800bf0d8ae41a699a4f132be5"
+      "sha256": "642acc13852ea485c341f2371c18889dd035f7125ffea180733efae5beba8880"
     },
     {
       "path": "settings.gradle.kts",
@@ -949,8 +949,8 @@
     {
       "name": "design-runtime",
       "fileCount": 59,
-      "byteLength": 2523860,
-      "sha256": "d81706ef342e46be143654b1a79b506bd410282328b88ec7fedd14e818615754",
+      "byteLength": 2528674,
+      "sha256": "7628b557b473c043afd03f0da2d2a93a5f11488873773e3e2e823fc09f20bd0e",
       "files": [
         "frontend-demo-optimized/asset-library/icons.js",
         "frontend-demo-optimized/asset-library/icons/reader-auto-page-traced.svg",
@@ -1017,7 +1017,7 @@
       "name": "device-conformance",
       "fileCount": 7,
       "byteLength": 247371,
-      "sha256": "4a33c093385f64f49504126f01cc95f530f84efbe07df51ffc18df51c30815e0",
+      "sha256": "6a529d69628f0d76a5ac4d7a954ee349f5a8f43f3741ed3870b843329cda25bf",
       "files": [
         "contracts/device-conformance-evidence.schema.json",
         "contracts/device-conformance-plan.schema.json",
@@ -1118,7 +1118,7 @@
       "name": "package-entrypoints",
       "fileCount": 14,
       "byteLength": 60916,
-      "sha256": "39e66bc1f9c5b6cdd27cf3b9bea078bba2b9f20e2f257f08a97ba5037a46952b",
+      "sha256": "d334df999c73973cc2ae7bddd30cb6bc16aa6d918194bb8e8bd15533a2b502ff",
       "files": [
         "Package.swift",
         "build.gradle.kts",
@@ -1242,8 +1242,8 @@
     {
       "name": "version",
       "fileCount": 1,
-      "byteLength": 26767,
-      "sha256": "f2bed6f2d27124614f8c1d64cc4313f33303971c3023011efac26a49da9e1a3e",
+      "byteLength": 27858,
+      "sha256": "fe8f4141321bc8f58a70369dba2aaab87e2eb301fc62467998586d7df8a4ff11",
       "files": [
         "contracts/VERSION.json"
       ]

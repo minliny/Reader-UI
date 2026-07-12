@@ -273,6 +273,17 @@
   const routes = routeContract.routes || {};
   const deepRouteClosure = routeContract.deepRouteClosure || {};
   const routePresentation = routeContract.routePresentation || {};
+  const resolveRoutePresentation = routeContract.resolveRoutePresentation || ((routeId) => {
+    const base = routePresentation[routeId] || {};
+    return {
+      family: base.family || "system",
+      surface: base.defaultSurface || base.surface || "page",
+      defaultSurface: base.defaultSurface || base.surface || "page",
+      layout: base.layout || "main-tab",
+      pageState: "default",
+      overlayActive: false
+    };
+  });
 
   function bookCard(data, book) {
     const coverSrc = cover(data, book.coverKey);
@@ -10400,17 +10411,15 @@
       button.addEventListener("click", () => setDemoMode(button.getAttribute("data-demo-mode-option")));
     });
 
-    const updateRouteInfo = (route) => {
+    const updateRouteInfo = (route, viewState) => {
       const meta = routes[route] || routes.bookshelf;
-      const presentation = routePresentation[route] || {
-        family: "system",
-        surface: "page",
-        layout: "main-tab"
-      };
+      const presentation = resolveRoutePresentation(route, viewState);
       root.setAttribute("data-current-route", route);
       root.setAttribute("data-route-family", presentation.family);
       root.setAttribute("data-route-surface", presentation.surface);
       root.setAttribute("data-route-layout", presentation.layout);
+      root.setAttribute("data-view-page-state", presentation.pageState);
+      root.setAttribute("data-view-overlay-state", presentation.overlayActive ? "active" : "none");
       if (routeStatus) {
         routeStatus.textContent = `当前路由：${meta.title} · ${meta.shell}`;
       }
@@ -10537,11 +10546,15 @@
       }
       syncAppThemeRoot(root, data, appState);
       screenHost.innerHTML = renderRoute(route, data, options, appState);
-      updateRouteInfo(route);
+      const viewState = options?.viewState || {
+        pageState: options?.pageState || (options?.loading ? "loading" : "default"),
+        overlayState: options?.overlayState || null
+      };
+      updateRouteInfo(route, viewState);
       if (!options?.loading && updateReaderPagination(screenHost, data, appState)) {
         syncAppThemeRoot(root, data, appState);
         screenHost.innerHTML = renderRoute(route, data, options, appState);
-        updateRouteInfo(route);
+        updateRouteInfo(route, viewState);
       }
       restoreReaderScrollSnapshot(screenHost, scrollSnapshot, shouldRestorePanelScroll);
       applyMotionSelectorBindings(screenHost);

@@ -1,7 +1,7 @@
 # Executable UI Runtime
 
-状态：2.5.0 已同步 61-action runtime 与三端 35-event consumer allowlist；7 events 为 Pilot，28 events 保持 Shadow，其余 26 actions 仅 staging
-日期：2026-07-11
+状态：2.5.1 已同步 61-action runtime 与三端 35-event consumer allowlist；7 events 为 Pilot，28 events 保持 Shadow，其余 26 actions 仅 staging
+日期：2026-07-12
 权威架构：[contracts/ARCHITECTURE.md](./contracts/ARCHITECTURE.md)
 
 ## 1. 目标与边界
@@ -93,7 +93,7 @@ runtime 立即进入 `immersive-reading`、进入 loading，并以同一 correla
 
 ## 5. 当前覆盖与迁移阶段
 
-当前 2.5.0 action table 包含 61 条 action，覆盖 P0 navigation、main tab、overlay、reader enter/exit/page、TTS/auto-page 互斥、reduced motion、source switch、sync/WebDAV、result-dependent `book.open` 编排，以及 W1/W3/W4/W5/RSS/Sync 的 Core/Host effect plan。三端 consumer lock 已统一到 2.5.0 / HostRequest schema 1.2.0 / runtime hash `0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c`。35 条 covered event 中，directory 2 + `book.open` 1 + TTS 2 + auto-page 2 为 Pilot；page 2 + import 3 + source-switch 6 + replace 3 + RSS 7 + Sync 7 共 28 条保持 Shadow。剩余 26 条 action 仅 staging，不能计入生产接线。
+当前 2.5.1 action table 包含 61 条 action，覆盖 P0 navigation、main tab、overlay、reader enter/exit/page、TTS/auto-page 互斥、reduced motion、source switch、sync/WebDAV、result-dependent `book.open` 编排，以及 W1/W3/W4/W5/RSS/Sync 的 Core/Host effect plan。三端 consumer lock 已统一到 2.5.1 / HostRequest schema 1.2.0 / runtime hash `0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c`。35 条 covered event 中，directory 2 + `book.open` 1 + TTS 2 + auto-page 2 为 Pilot；page 2 + import 3 + source-switch 6 + replace 3 + RSS 7 + Sync 7 共 28 条保持 Shadow。剩余 26 条 action 仅 staging，不能计入生产接线。
 
 generated/runtime-coverage.json 是 270 条 canonical UiEvent 的强制 ownership 报告：当前 61 条已实现、202 条 runtime/split planned、7 条原生 ephemeral。它由 ui-spec/runtime-ownership.json 生成；canonical event 数或 action 数变化会使 release gate 失败，直到 ownership 和覆盖预期被显式更新。
 
@@ -155,7 +155,7 @@ JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home" \
 
 每个 Host 根目录必须提交 `READER_UI_CONSUMER.json`。`node tools/runtime/check-host-consumers.mjs` 同时校验版本、runtime action SHA-256、covered event、依赖声明与 shadow/pilot/authoritative 阶段，防止 Host 仍引用旧 UI 语义。
 
-rollout.mode 是该 Host 的默认阶段；可选 rollout.cohorts 为不可重叠的逐事件 override。这样目录可以先处于 Pilot，而 book.open、TTS、auto-page 仍保持 Shadow；cohort event 必须同时列入 coveredEvents，CI 会拒绝重复、未知或未覆盖 event。
+rollout.mode 是该 Host 的默认阶段；可选 rollout.cohorts 为不可重叠的逐事件 override。当前目录、book.open、TTS 与 auto-page 通过三个 cohort 覆盖 7 条 Pilot event，另外 28 条 covered event 继承默认 Shadow；cohort event 必须同时列入 coveredEvents，CI 会拒绝重复、未知或未覆盖 event。
 
 Reader-UI 自带 Gradle wrapper 与 `.github/workflows/ui-runtime.yml`。PR/main 会独立编译 Node/Swift/Kotlin；`v<contracts/VERSION.json>` tag 还会校验 tag-version 一致并产出三端 consumer source artifact。Host CI 必须 checkout lock 指定版本的 Reader-UI，再执行本端 consumer gate 与编译测试。
 

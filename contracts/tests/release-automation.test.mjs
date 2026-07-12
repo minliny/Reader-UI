@@ -40,7 +40,7 @@ import {
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "..", "..");
 const workflow = fs.readFileSync(path.join(root, ".github/workflows/ui-runtime.yml"), "utf8");
-const artifactManifestBytes = Buffer.from('{"version":"2.5.0"}\n', "utf8");
+const artifactManifestBytes = Buffer.from('{"version":"2.5.1"}\n', "utf8");
 const sourceSha = "b".repeat(40);
 const manifestSha256 = sha256(artifactManifestBytes);
 
@@ -48,19 +48,19 @@ function fixtureMetadata() {
   return {
     schemaVersion: RELEASE_METADATA_SCHEMA_VERSION,
     eventType: RELEASE_EVENT_TYPE,
-    version: "2.5.0",
-    tag: "v2.5.0",
+    version: "2.5.1",
+    tag: "v2.5.1",
     releaseId: `${sourceSha}:${manifestSha256}`,
     runtimeActionsSha256: "a".repeat(64),
     manifestSha256,
     targetConfigSha256: "e".repeat(64),
     source: {
       repository: "reader-org/Reader-UI",
-      ref: "refs/tags/v2.5.0",
+      ref: "refs/tags/v2.5.1",
       sha: sourceSha,
     },
     artifact: {
-      name: "reader-ui-v2.5.0",
+      name: "reader-ui-v2.5.1",
       workflowRunId: "123456789",
       manifestPath: RELEASE_ARTIFACT_MANIFEST_PATH,
       inventoryPath: RELEASE_ARTIFACT_INVENTORY_PATH,
@@ -140,7 +140,7 @@ test("release metadata strictly binds version, tag, source, runtime, manifest, a
   const metadata = fixtureMetadata();
   assert.equal(assertReleaseMetadata(metadata), metadata);
   assert.equal(serializeReleaseMetadata(metadata), `${JSON.stringify(metadata, null, 2)}\n`);
-  assert.equal(verifyReleaseArtifact(metadata, artifactManifestBytes).version, "2.5.0");
+  assert.equal(verifyReleaseArtifact(metadata, artifactManifestBytes).version, "2.5.1");
 
   const wrongRef = structuredClone(metadata);
   wrongRef.source.ref = "refs/heads/main";
