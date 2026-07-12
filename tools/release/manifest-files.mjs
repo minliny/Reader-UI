@@ -213,7 +213,10 @@ export const manifestFileGroups = Object.freeze([
         ...listFiles(root, "gradle/wrapper", { recursive: true, include: () => true }),
         ...listFiles(root, "packages/arkts/reader-ui-runtime", {
           recursive: false,
-          include: (relativePath) => [".ets", ".json5", ".ts"].includes(path.extname(relativePath)),
+          // Hvigor writes ignored BuildProfile.ets beside the tracked package
+          // entrypoints. A host build must not mutate Reader-UI release bytes.
+          include: (relativePath) => path.basename(relativePath) !== "BuildProfile.ets"
+            && [".ets", ".json5", ".ts"].includes(path.extname(relativePath)),
         }),
         ...existingOptionalFiles(root, ["gradle.properties"]),
       ]);

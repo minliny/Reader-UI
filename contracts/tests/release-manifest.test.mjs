@@ -193,6 +193,23 @@ test("atomic codegen temp files are never release inputs", (context) => {
   assert.equal(changed.files.some((entry) => entry.path.endsWith(".tmp")), false);
 });
 
+test("Hvigor BuildProfile output cannot change Reader-UI release identity", (context) => {
+  const temporaryRoot = copyManifestInputs();
+  context.after(() => fs.rmSync(temporaryRoot, { recursive: true, force: true }));
+  const buildProfilePath = path.join(
+    temporaryRoot,
+    "packages",
+    "arkts",
+    "reader-ui-runtime",
+    "BuildProfile.ets",
+  );
+  fs.writeFileSync(buildProfilePath, "export const HAR_VERSION = 'build-output';\n");
+
+  const changed = buildReleaseManifest(temporaryRoot);
+  assert.deepEqual(changed, manifest);
+  assert.equal(changed.files.some((entry) => entry.path.endsWith("BuildProfile.ets")), false);
+});
+
 test("ordered ABI source mutations change both raw groups and only the matching semantic ABI", (context) => {
   const temporaryRoot = copyManifestInputs();
   context.after(() => fs.rmSync(temporaryRoot, { recursive: true, force: true }));

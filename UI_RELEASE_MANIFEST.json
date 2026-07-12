@@ -775,11 +775,6 @@
       "sha256": "57931b17dd228e5c24dac90e815d0bf82477e831a4618dfab4136f5446b42a9f"
     },
     {
-      "path": "packages/arkts/reader-ui-runtime/BuildProfile.ets",
-      "byteLength": 519,
-      "sha256": "dfa3b6dbfc166b15a8ea1e35498a9a996f89e0308cee21518f533ff61ca52668"
-    },
-    {
       "path": "packages/arkts/reader-ui-runtime/build-profile.json5",
       "byteLength": 334,
       "sha256": "b595e2ab759c940e4d19f56dd35e6840044c35ab0865515854cf152aa3e3e19d"
@@ -1116,9 +1111,9 @@
     },
     {
       "name": "package-entrypoints",
-      "fileCount": 14,
-      "byteLength": 60916,
-      "sha256": "d334df999c73973cc2ae7bddd30cb6bc16aa6d918194bb8e8bd15533a2b502ff",
+      "fileCount": 13,
+      "byteLength": 60397,
+      "sha256": "b0b09f6c016d321f29f4f41e364dac9a89403d384ae800933af314324e687e01",
       "files": [
         "Package.swift",
         "build.gradle.kts",
@@ -1126,7 +1121,6 @@
         "gradle/wrapper/gradle-wrapper.properties",
         "gradlew",
         "gradlew.bat",
-        "packages/arkts/reader-ui-runtime/BuildProfile.ets",
         "packages/arkts/reader-ui-runtime/build-profile.json5",
         "packages/arkts/reader-ui-runtime/hvigorfile.ts",
         "packages/arkts/reader-ui-runtime/oh-package.json5",
