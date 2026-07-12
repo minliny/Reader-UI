@@ -13,7 +13,8 @@ export type TokenCategory =
   | "text-constraint"
   | "motion-duration"
   | "motion-easing"
-  | "icon";
+  | "icon"
+  | "preset";
 
 export interface TokenPlatforms {
   swift?: string;
@@ -191,6 +192,62 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--fd-ds-color-control-field-surface": {
+    name: "--fd-ds-color-control-field-surface",
+    category: "color",
+    value: "rgba(255,248,239,0.82)",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-border-default": {
+    name: "--fd-ds-color-control-field-border-default",
+    category: "color",
+    value: "#c1c7cd",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-border-hover": {
+    name: "--fd-ds-color-control-field-border-hover",
+    category: "color",
+    value: "#87928d",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-border-focus": {
+    name: "--fd-ds-color-control-field-border-focus",
+    category: "color",
+    value: "#2d4a3e",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-surface-disabled": {
+    name: "--fd-ds-color-control-field-surface-disabled",
+    category: "color",
+    value: "rgba(234,225,218,0.62)",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-ink-disabled": {
+    name: "--fd-ds-color-control-field-ink-disabled",
+    category: "color",
+    value: "#928b84",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-border-error": {
+    name: "--fd-ds-color-control-field-border-error",
+    category: "color",
+    value: "#d7473e",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-color-control-field-border-success": {
+    name: "--fd-ds-color-control-field-border-success",
+    category: "color",
+    value: "#338144",
+    platforms: undefined,
+    deprecated: false
+  },
   "--fd-ds-font-sans": {
     name: "--fd-ds-font-sans",
     category: "font",
@@ -338,6 +395,27 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--fd-ds-type-control-label-size": {
+    name: "--fd-ds-type-control-label-size",
+    category: "type",
+    value: "12px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-type-control-value-size": {
+    name: "--fd-ds-type-control-value-size",
+    category: "type",
+    value: "12px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-type-control-helper-size": {
+    name: "--fd-ds-type-control-helper-size",
+    category: "type",
+    value: "10px",
+    platforms: undefined,
+    deprecated: false
+  },
   "--fd-ds-space-xs": {
     name: "--fd-ds-space-xs",
     category: "spacing",
@@ -412,6 +490,27 @@ export const tokenRegistry: Record<string, Token> = {
     name: "--fd-ds-space-keyboard-gap",
     category: "spacing",
     value: "12px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-space-control-inline": {
+    name: "--fd-ds-space-control-inline",
+    category: "spacing",
+    value: "10px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-space-control-gap": {
+    name: "--fd-ds-space-control-gap",
+    category: "spacing",
+    value: "12px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-space-control-row-block": {
+    name: "--fd-ds-space-control-row-block",
+    category: "spacing",
+    value: "4px",
     platforms: undefined,
     deprecated: false
   },
@@ -492,6 +591,69 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--fd-ds-size-control-sm-height": {
+    name: "--fd-ds-size-control-sm-height",
+    category: "size",
+    value: "28px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-control-md-height": {
+    name: "--fd-ds-size-control-md-height",
+    category: "size",
+    value: "36px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-control-lg-height": {
+    name: "--fd-ds-size-control-lg-height",
+    category: "size",
+    value: "44px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-control-touch-target": {
+    name: "--fd-ds-size-control-touch-target",
+    category: "size",
+    value: "44px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-switch-track-width": {
+    name: "--fd-ds-size-switch-track-width",
+    category: "size",
+    value: "44px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-switch-track-height": {
+    name: "--fd-ds-size-switch-track-height",
+    category: "size",
+    value: "24px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-switch-thumb": {
+    name: "--fd-ds-size-switch-thumb",
+    category: "size",
+    value: "20px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-control-icon": {
+    name: "--fd-ds-size-control-icon",
+    category: "size",
+    value: "16px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-size-reader-field-label-column": {
+    name: "--fd-ds-size-reader-field-label-column",
+    category: "size",
+    value: "108px",
+    platforms: undefined,
+    deprecated: false
+  },
   "--fd-ds-radius-small": {
     name: "--fd-ds-radius-small",
     category: "radius",
@@ -536,6 +698,27 @@ export const tokenRegistry: Record<string, Token> = {
   },
   "--fd-ds-radius-control": {
     name: "--fd-ds-radius-control",
+    category: "radius",
+    value: "999px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-radius-field": {
+    name: "--fd-ds-radius-field",
+    category: "radius",
+    value: "6px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-radius-button": {
+    name: "--fd-ds-radius-button",
+    category: "radius",
+    value: "6px",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-radius-switch": {
+    name: "--fd-ds-radius-switch",
     category: "radius",
     value: "999px",
     platforms: undefined,

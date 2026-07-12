@@ -1,0 +1,2096 @@
+[
+  {
+    "id": "source-switch-confirm-valid",
+    "event": "source.switch.confirm",
+    "valid": true,
+    "payload": {
+      "from": {
+        "sourceId": "source-old",
+        "bookId": "book-old"
+      },
+      "target": {
+        "sourceId": "source-new",
+        "bookId": "book-new",
+        "title": "New source",
+        "author": "Author",
+        "coverUrl": null
+      },
+      "newToc": [
+        {
+          "chapterId": "c1",
+          "chapterTitle": "Chapter 1",
+          "chapterUrl": "https://example.test/c1",
+          "order": 0
+        }
+      ],
+      "currentChapterTitle": "Chapter 1",
+      "currentChapterIndex": 0,
+      "updatedAt": 300
+    }
+  },
+  {
+    "id": "source-switch-confirm-missing",
+    "event": "source.switch.confirm",
+    "valid": false,
+    "payload": {
+      "from": {
+        "sourceId": "source-old",
+        "bookId": "book-old"
+      },
+      "target": {
+        "sourceId": "source-new",
+        "bookId": "book-new",
+        "title": "New source"
+      },
+      "newToc": [
+        {
+          "chapterId": "c1",
+          "chapterTitle": "Chapter 1",
+          "chapterUrl": "u",
+          "order": 0
+        }
+      ],
+      "currentChapterTitle": "Chapter 1",
+      "currentChapterIndex": 0
+    }
+  },
+  {
+    "id": "source-switch-confirm-unknown-nested",
+    "event": "source.switch.confirm",
+    "valid": false,
+    "payload": {
+      "from": {
+        "sourceId": "source-old",
+        "bookId": "book-old",
+        "origin": "invented"
+      },
+      "target": {
+        "sourceId": "source-new",
+        "bookId": "book-new",
+        "title": "New source"
+      },
+      "newToc": [
+        {
+          "chapterId": "c1",
+          "chapterTitle": "Chapter 1",
+          "chapterUrl": "u",
+          "order": 0
+        }
+      ],
+      "currentChapterTitle": "Chapter 1",
+      "currentChapterIndex": 0,
+      "updatedAt": 300
+    }
+  },
+  {
+    "id": "source-switch-confirm-wrong-nested-type",
+    "event": "source.switch.confirm",
+    "valid": false,
+    "payload": {
+      "from": {
+        "sourceId": "source-old",
+        "bookId": "book-old"
+      },
+      "target": {
+        "sourceId": "source-new",
+        "bookId": "book-new",
+        "title": "New source"
+      },
+      "newToc": [
+        {
+          "chapterId": "c1",
+          "chapterTitle": "Chapter 1",
+          "chapterUrl": "u",
+          "order": "0"
+        }
+      ],
+      "currentChapterTitle": "Chapter 1",
+      "currentChapterIndex": 0,
+      "updatedAt": 300
+    }
+  },
+  {
+    "id": "source-switch-rollback-valid",
+    "event": "source.switch.rollback",
+    "valid": true,
+    "payload": {
+      "rollbackToken": {
+        "oldBook": {
+          "sourceId": "source-old",
+          "bookId": "book-old",
+          "addedAt": 10,
+          "title": "Old"
+        },
+        "oldProgress": null,
+        "oldProgressHistory": [],
+        "committedBook": {
+          "sourceId": "source-new",
+          "bookId": "book-new",
+          "addedAt": 10,
+          "title": "New"
+        },
+        "committedProgressHistory": [],
+        "replacedTargetBook": null
+      }
+    }
+  },
+  {
+    "id": "source-switch-rollback-missing",
+    "event": "source.switch.rollback",
+    "valid": false,
+    "payload": {}
+  },
+  {
+    "id": "source-switch-rollback-unknown-nested",
+    "event": "source.switch.rollback",
+    "valid": false,
+    "payload": {
+      "rollbackToken": {
+        "oldBook": {
+          "sourceId": "source-old",
+          "bookId": "book-old",
+          "addedAt": 10,
+          "legacyOrigin": "x"
+        },
+        "committedBook": {
+          "sourceId": "source-new",
+          "bookId": "book-new",
+          "addedAt": 10
+        }
+      }
+    }
+  },
+  {
+    "id": "source-switch-rollback-wrong-nested-type",
+    "event": "source.switch.rollback",
+    "valid": false,
+    "payload": {
+      "rollbackToken": {
+        "oldBook": {
+          "sourceId": "source-old",
+          "bookId": "book-old",
+          "addedAt": "10"
+        },
+        "committedBook": {
+          "sourceId": "source-new",
+          "bookId": "book-new",
+          "addedAt": 10
+        }
+      }
+    }
+  },
+  {
+    "id": "replace-apply-valid",
+    "event": "reader.replace.apply",
+    "valid": true,
+    "payload": {
+      "text": "rain",
+      "bookName": "Book",
+      "bookOrigin": "source",
+      "target": "chapter"
+    }
+  },
+  {
+    "id": "replace-apply-missing",
+    "event": "reader.replace.apply",
+    "valid": false,
+    "payload": {
+      "text": "rain",
+      "bookName": "Book",
+      "target": "chapter"
+    }
+  },
+  {
+    "id": "replace-apply-unknown",
+    "event": "reader.replace.apply",
+    "valid": false,
+    "payload": {
+      "text": "rain",
+      "bookName": "Book",
+      "bookOrigin": "source",
+      "target": "chapter",
+      "scope": "invented"
+    }
+  },
+  {
+    "id": "replace-apply-wrong-type",
+    "event": "reader.replace.apply",
+    "valid": false,
+    "payload": {
+      "text": "rain",
+      "bookName": "Book",
+      "bookOrigin": "source",
+      "target": [
+        "chapter"
+      ]
+    }
+  },
+  {
+    "id": "replace-create-valid",
+    "event": "reader.replace.create",
+    "valid": true,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "id": 41,
+        "name": "rename",
+        "pattern": "rain",
+        "replacement": "sun",
+        "scopeContent": true,
+        "isRegex": false
+      }
+    }
+  },
+  {
+    "id": "replace-create-missing",
+    "event": "reader.replace.create",
+    "valid": false,
+    "payload": {
+      "params": {
+        "pattern": "rain"
+      }
+    }
+  },
+  {
+    "id": "replace-create-unknown-nested",
+    "event": "reader.replace.create",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "pattern": "rain",
+        "replace": "invented"
+      }
+    }
+  },
+  {
+    "id": "replace-create-wrong-nested-type",
+    "event": "reader.replace.create",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "id": "41"
+      }
+    }
+  },
+  {
+    "id": "replace-validate-valid",
+    "event": "reader.replace.validate",
+    "valid": true,
+    "payload": {
+      "pattern": "rain",
+      "isRegex": true,
+      "scope": [
+        "chapter",
+        "title"
+      ]
+    }
+  },
+  {
+    "id": "replace-validate-missing",
+    "event": "reader.replace.validate",
+    "valid": false,
+    "payload": {
+      "pattern": "rain"
+    }
+  },
+  {
+    "id": "replace-validate-unknown",
+    "event": "reader.replace.validate",
+    "valid": false,
+    "payload": {
+      "pattern": "rain",
+      "scope": [
+        "chapter"
+      ],
+      "flags": "i"
+    }
+  },
+  {
+    "id": "replace-validate-wrong-nested-type",
+    "event": "reader.replace.validate",
+    "valid": false,
+    "payload": {
+      "pattern": "rain",
+      "scope": [
+        "chapter",
+        2
+      ]
+    }
+  },
+  {
+    "id": "rss-refresh-valid",
+    "event": "rss.refresh",
+    "valid": true,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "evaluatedAt": 300
+    }
+  },
+  {
+    "id": "rss-refresh-missing",
+    "event": "rss.refresh",
+    "valid": false,
+    "payload": {
+      "evaluatedAt": 300
+    }
+  },
+  {
+    "id": "rss-refresh-unknown",
+    "event": "rss.refresh",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "force": true
+    }
+  },
+  {
+    "id": "rss-refresh-wrong-type",
+    "event": "rss.refresh",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "evaluatedAt": "300"
+    }
+  },
+  {
+    "id": "rss-add-valid",
+    "event": "rss.subscription.add",
+    "valid": true,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "subscriptionId": "feed-a",
+        "feedUrl": "https://feed.test/rss.xml",
+        "title": "Feed",
+        "siteUrl": null,
+        "enabled": true
+      }
+    }
+  },
+  {
+    "id": "rss-add-missing",
+    "event": "rss.subscription.add",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "subscriptionId": "feed-a"
+      }
+    }
+  },
+  {
+    "id": "rss-add-unknown-nested",
+    "event": "rss.subscription.add",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "subscriptionId": "feed-a",
+        "feedUrl": "https://feed.test/rss.xml",
+        "url": "invented"
+      }
+    }
+  },
+  {
+    "id": "rss-add-wrong-nested-type",
+    "event": "rss.subscription.add",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "subscriptionId": "feed-a",
+        "feedUrl": "https://feed.test/rss.xml",
+        "enabled": "true"
+      }
+    }
+  },
+  {
+    "id": "rss-edit-valid",
+    "event": "rss.subscription.edit",
+    "valid": true,
+    "payload": {
+      "operation": "update",
+      "params": {
+        "subscriptionId": "feed-a",
+        "feedUrl": "https://feed.test/new.xml",
+        "title": "Renamed",
+        "enabled": false
+      }
+    }
+  },
+  {
+    "id": "rss-edit-missing",
+    "event": "rss.subscription.edit",
+    "valid": false,
+    "payload": {
+      "operation": "update",
+      "params": {
+        "title": "Renamed"
+      }
+    }
+  },
+  {
+    "id": "rss-edit-unknown-nested",
+    "event": "rss.subscription.edit",
+    "valid": false,
+    "payload": {
+      "operation": "update",
+      "params": {
+        "subscriptionId": "feed-a",
+        "siteUrl": "invented"
+      }
+    }
+  },
+  {
+    "id": "rss-edit-wrong-nested-type",
+    "event": "rss.subscription.edit",
+    "valid": false,
+    "payload": {
+      "operation": "update",
+      "params": {
+        "subscriptionId": "feed-a",
+        "enabled": 1
+      }
+    }
+  },
+  {
+    "id": "rss-delete-valid",
+    "event": "rss.subscription.delete",
+    "valid": true,
+    "payload": {
+      "subscriptionId": "feed-a"
+    }
+  },
+  {
+    "id": "rss-delete-missing",
+    "event": "rss.subscription.delete",
+    "valid": false,
+    "payload": {}
+  },
+  {
+    "id": "rss-delete-unknown",
+    "event": "rss.subscription.delete",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "feedUrl": "invented"
+    }
+  },
+  {
+    "id": "rss-delete-wrong-type",
+    "event": "rss.subscription.delete",
+    "valid": false,
+    "payload": {
+      "subscriptionId": 1
+    }
+  },
+  {
+    "id": "rss-entry-open-valid",
+    "event": "rss.entry.open",
+    "valid": true,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "read": true
+    }
+  },
+  {
+    "id": "rss-entry-open-missing",
+    "event": "rss.entry.open",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1"
+    }
+  },
+  {
+    "id": "rss-entry-open-unknown",
+    "event": "rss.entry.open",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "read": true,
+      "openedAt": 300
+    }
+  },
+  {
+    "id": "rss-entry-open-wrong-type",
+    "event": "rss.entry.open",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": [
+        "entry-1"
+      ],
+      "read": true
+    }
+  },
+  {
+    "id": "rss-favorite-add-valid",
+    "event": "rss.favorite.add",
+    "valid": true,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "addedAt": 300
+    }
+  },
+  {
+    "id": "rss-favorite-add-missing",
+    "event": "rss.favorite.add",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1"
+    }
+  },
+  {
+    "id": "rss-favorite-add-unknown",
+    "event": "rss.favorite.add",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "addedAt": 300,
+      "entryId": "legacy-entry"
+    }
+  },
+  {
+    "id": "rss-favorite-add-wrong-type",
+    "event": "rss.favorite.add",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "addedAt": "300"
+    }
+  },
+  {
+    "id": "rss-favorite-add-whitespace-guid",
+    "event": "rss.favorite.add",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "   ",
+      "addedAt": 300
+    }
+  },
+  {
+    "id": "rss-favorite-add-negative-added-at",
+    "event": "rss.favorite.add",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "addedAt": -1
+    }
+  },
+  {
+    "id": "rss-favorite-add-unsafe-added-at",
+    "event": "rss.favorite.add",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "addedAt": 9007199254740992
+    }
+  },
+  {
+    "id": "rss-favorite-remove-valid",
+    "event": "rss.favorite.remove",
+    "valid": true,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1"
+    }
+  },
+  {
+    "id": "rss-favorite-remove-missing",
+    "event": "rss.favorite.remove",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a"
+    }
+  },
+  {
+    "id": "rss-favorite-remove-unknown",
+    "event": "rss.favorite.remove",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "entryId": "legacy-entry"
+    }
+  },
+  {
+    "id": "rss-favorite-remove-wrong-type",
+    "event": "rss.favorite.remove",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": 1
+    }
+  },
+  {
+    "id": "rss-favorite-remove-whitespace-id",
+    "event": "rss.favorite.remove",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "   ",
+      "guid": "entry-1"
+    }
+  },
+  {
+    "id": "sync-conflict-valid",
+    "event": "sync.conflict",
+    "valid": true,
+    "payload": {
+      "local": {
+        "snapshotId": "local",
+        "deviceId": "device-a",
+        "createdAt": 100,
+        "records": [
+          {
+            "collection": "readingProgress",
+            "recordId": "book",
+            "updatedAt": 100,
+            "deviceId": "device-a",
+            "revision": 1,
+            "payload": "{\"chapter\":1}",
+            "deleted": false
+          }
+        ]
+      },
+      "remote": {
+        "snapshotId": "remote",
+        "deviceId": "device-b",
+        "createdAt": 200,
+        "records": [
+          {
+            "collection": "readingProgress",
+            "recordId": "book",
+            "updatedAt": 200,
+            "deviceId": "device-b",
+            "revision": 1,
+            "payload": "{\"chapter\":2}",
+            "deleted": false
+          }
+        ]
+      },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "merge-device",
+      "mergedCreatedAt": 300
+    }
+  },
+  {
+    "id": "sync-conflict-missing",
+    "event": "sync.conflict",
+    "valid": false,
+    "payload": {
+      "local": {},
+      "remote": {}
+    }
+  },
+  {
+    "id": "sync-conflict-unknown-nested",
+    "event": "sync.conflict",
+    "valid": false,
+    "payload": {
+      "local": {
+        "snapshotId": "local",
+        "deviceId": "device-a",
+        "createdAt": 100,
+        "records": [],
+        "schemaVersion": 1
+      },
+      "remote": {
+        "snapshotId": "remote",
+        "deviceId": "device-b",
+        "createdAt": 200,
+        "records": []
+      },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "merge-device"
+    }
+  },
+  {
+    "id": "sync-conflict-wrong-nested-type",
+    "event": "sync.conflict",
+    "valid": false,
+    "payload": {
+      "local": {
+        "snapshotId": "local",
+        "deviceId": "device-a",
+        "createdAt": 100,
+        "records": [
+          {
+            "collection": "readingProgress",
+            "recordId": "book",
+            "updatedAt": 100,
+            "deviceId": "device-a",
+            "revision": "1",
+            "payload": "{}",
+            "deleted": false
+          }
+        ]
+      },
+      "remote": {
+        "snapshotId": "remote",
+        "deviceId": "device-b",
+        "createdAt": 200,
+        "records": []
+      },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "merge-device"
+    }
+  },
+  {
+    "id": "replace-create-blank-pattern",
+    "event": "reader.replace.create",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "pattern": "   "
+      }
+    }
+  },
+  {
+    "id": "replace-create-invalid-regex",
+    "event": "reader.replace.create",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "pattern": "([",
+        "isRegex": true
+      }
+    }
+  },
+  {
+    "id": "replace-create-no-target-scope",
+    "event": "reader.replace.create",
+    "valid": false,
+    "payload": {
+      "operation": "create",
+      "params": {
+        "pattern": "rain",
+        "scopeTitle": false,
+        "scopeContent": false
+      }
+    }
+  },
+  {
+    "id": "replace-validate-invalid-input-is-request",
+    "event": "reader.replace.validate",
+    "valid": true,
+    "payload": {
+      "pattern": "([",
+      "isRegex": true,
+      "scope": [
+        "toc"
+      ]
+    }
+  },
+  {
+    "id": "rss-refresh-whitespace-id",
+    "event": "rss.refresh",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "   "
+    }
+  },
+  {
+    "id": "rss-entry-open-read-false",
+    "event": "rss.entry.open",
+    "valid": false,
+    "payload": {
+      "subscriptionId": "feed-a",
+      "guid": "entry-1",
+      "read": false
+    }
+  },
+  {
+    "id": "sync-conflict-live-blank-payload",
+    "event": "sync.conflict",
+    "valid": false,
+    "payload": {
+      "local": {
+        "snapshotId": "local",
+        "deviceId": "device-a",
+        "createdAt": 100,
+        "records": [
+          {
+            "collection": "readingProgress",
+            "recordId": "book",
+            "updatedAt": 100,
+            "deviceId": "device-a",
+            "revision": 1,
+            "payload": "",
+            "deleted": false
+          }
+        ]
+      },
+      "remote": {
+        "snapshotId": "remote",
+        "deviceId": "device-b",
+        "createdAt": 200,
+        "records": []
+      },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "merge-device"
+    }
+  },
+  {
+    "id": "sync-conflict-tombstone-blank-payload",
+    "event": "sync.conflict",
+    "valid": true,
+    "payload": {
+      "local": {
+        "snapshotId": "local",
+        "deviceId": "device-a",
+        "createdAt": 100,
+        "records": [
+          {
+            "collection": "readingProgress",
+            "recordId": "book",
+            "updatedAt": 100,
+            "deviceId": "device-a",
+            "revision": 1,
+            "payload": "",
+            "deleted": true
+          }
+        ]
+      },
+      "remote": {
+        "snapshotId": "remote",
+        "deviceId": "device-b",
+        "createdAt": 200,
+        "records": []
+      },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "merge-device"
+    }
+  },
+  {
+    "id": "appearance-font-register-valid",
+    "event": "reader.font.import",
+    "valid": true,
+    "payload": {
+      "fontId": "font-serif",
+      "path": "/fonts/reader-serif.ttf",
+      "familyName": "Reader Serif"
+    }
+  },
+  {
+    "id": "appearance-font-register-unknown",
+    "event": "reader.font.import",
+    "valid": false,
+    "payload": {
+      "fontId": "font-serif",
+      "path": "/fonts/reader-serif.ttf",
+      "familyName": "Reader Serif",
+      "postScriptName": "invented"
+    }
+  },
+  {
+    "id": "appearance-font-unregister-valid",
+    "event": "reader.font.delete",
+    "valid": true,
+    "payload": {
+      "fontId": "font-serif"
+    }
+  },
+  {
+    "id": "appearance-font-unregister-wrong-type",
+    "event": "reader.font.delete",
+    "valid": false,
+    "payload": {
+      "fontId": [
+        "font-serif"
+      ]
+    }
+  },
+  {
+    "id": "appearance-theme-create-valid",
+    "event": "reader.theme.new",
+    "valid": true,
+    "payload": {
+      "theme": {
+        "id": "theme-paper",
+        "name": "Paper",
+        "colorScheme": "light",
+        "background": "#FFF8EE",
+        "foreground": "#2B241D",
+        "accent": "#8B5E34"
+      }
+    }
+  },
+  {
+    "id": "appearance-theme-create-unknown-nested",
+    "event": "reader.theme.new",
+    "valid": false,
+    "payload": {
+      "theme": {
+        "id": "theme-paper",
+        "name": "Paper",
+        "colorScheme": "light",
+        "background": "#FFF8EE",
+        "foreground": "#2B241D",
+        "accent": "#8B5E34",
+        "legacy": true
+      }
+    }
+  },
+  {
+    "id": "appearance-theme-update-valid",
+    "event": "reader.theme.edit",
+    "valid": true,
+    "payload": {
+      "theme": {
+        "id": "theme-paper",
+        "name": "Paper 2",
+        "colorScheme": "system",
+        "background": "#FFF8EE",
+        "foreground": "#2B241D",
+        "accent": "#7A5030"
+      }
+    }
+  },
+  {
+    "id": "appearance-theme-update-wrong-enum",
+    "event": "reader.theme.edit",
+    "valid": false,
+    "payload": {
+      "theme": {
+        "id": "theme-paper",
+        "name": "Paper",
+        "colorScheme": "sepia",
+        "background": "#FFF8EE",
+        "foreground": "#2B241D",
+        "accent": "#8B5E34"
+      }
+    }
+  },
+  {
+    "id": "appearance-theme-delete-valid",
+    "event": "reader.theme.delete",
+    "valid": true,
+    "payload": {
+      "themeId": "theme-paper"
+    }
+  },
+  {
+    "id": "appearance-theme-delete-unknown",
+    "event": "reader.theme.delete",
+    "valid": false,
+    "payload": {
+      "themeId": "theme-paper",
+      "fallback": "default"
+    }
+  },
+  {
+    "id": "appearance-typography-valid",
+    "event": "reader.typography.persist",
+    "valid": true,
+    "payload": {
+      "typography": {
+        "fontFamily": null,
+        "fontSize": 18,
+        "lineHeight": 1.7,
+        "paragraphSpacing": 10,
+        "letterSpacing": 0.2,
+        "textAlign": "justify"
+      }
+    }
+  },
+  {
+    "id": "appearance-typography-out-of-range",
+    "event": "reader.typography.persist",
+    "valid": false,
+    "payload": {
+      "typography": {
+        "fontFamily": null,
+        "fontSize": 120,
+        "lineHeight": 1.7,
+        "paragraphSpacing": 10,
+        "letterSpacing": 0.2,
+        "textAlign": "justify"
+      }
+    }
+  },
+  {
+    "id": "appearance-load-valid",
+    "event": "reader.config.restart.simulate",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "appearance-load-unknown",
+    "event": "reader.config.restart.simulate",
+    "valid": false,
+    "payload": {
+      "ignoreCorrupt": true
+    }
+  },
+  {
+    "id": "appearance-save-valid",
+    "event": "reader.config.persist",
+    "valid": true,
+    "payload": {
+      "preference": {
+        "schemaVersion": 1,
+        "revision": 0,
+        "activeThemeId": null,
+        "themes": [],
+        "typography": {
+          "fontFamily": null,
+          "fontSize": 17,
+          "lineHeight": 1.6,
+          "paragraphSpacing": 8,
+          "letterSpacing": 0,
+          "textAlign": "start"
+        },
+        "fonts": []
+      }
+    }
+  },
+  {
+    "id": "appearance-save-unknown-nested",
+    "event": "reader.config.persist",
+    "valid": false,
+    "payload": {
+      "preference": {
+        "schemaVersion": 1,
+        "revision": 0,
+        "activeThemeId": null,
+        "themes": [],
+        "typography": {
+          "fontFamily": null,
+          "fontSize": 17,
+          "lineHeight": 1.6,
+          "paragraphSpacing": 8,
+          "letterSpacing": 0,
+          "textAlign": "start",
+          "hyphenation": true
+        },
+        "fonts": []
+      }
+    }
+  },
+  {
+    "id": "import-parse-local-valid",
+    "event": "import.start",
+    "valid": true,
+    "payload": {
+      "kind": "localBook",
+      "input": {
+        "bookId": "local-1",
+        "title": "Local One",
+        "fileName": "local-1.txt",
+        "text": "第一章\n正文"
+      }
+    }
+  },
+  {
+    "id": "import-parse-book-source-valid",
+    "event": "import.start",
+    "valid": true,
+    "payload": {
+      "kind": "bookSource",
+      "input": {
+        "sourceId": "source-a",
+        "rules": {
+          "search": [
+            {
+              "type": "css",
+              "selector": ".book"
+            }
+          ]
+        },
+        "bookSource": {
+          "bookSourceName": "Source A",
+          "bookSourceUrl": "https://books.test",
+          "enabled": true,
+          "nested": {
+            "headers": [
+              "a",
+              "b"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-parse-rss-valid",
+    "event": "import.start",
+    "valid": true,
+    "payload": {
+      "kind": "rssSource",
+      "input": {
+        "subscriptionId": "feed-a",
+        "feedUrl": "https://feeds.test/a.xml",
+        "title": "Feed A",
+        "siteUrl": null,
+        "enabled": true
+      }
+    }
+  },
+  {
+    "id": "import-parse-local-no-content",
+    "event": "import.start",
+    "valid": false,
+    "payload": {
+      "kind": "localBook",
+      "input": {
+        "bookId": "local-1",
+        "text": "  ",
+        "bytesBase64": null
+      }
+    }
+  },
+  {
+    "id": "import-parse-cross-kind",
+    "event": "import.start",
+    "valid": false,
+    "payload": {
+      "kind": "rssSource",
+      "input": {
+        "sourceId": "source-a",
+        "bookSource": {}
+      }
+    }
+  },
+  {
+    "id": "import-parse-unknown-nested",
+    "event": "import.start",
+    "valid": false,
+    "payload": {
+      "kind": "rssSource",
+      "input": {
+        "subscriptionId": "feed-a",
+        "feedUrl": "https://feeds.test/a.xml",
+        "legacy": true
+      }
+    }
+  },
+  {
+    "id": "import-persist-local-valid",
+    "event": "import.apply",
+    "valid": true,
+    "payload": {
+      "transactionId": "tx-local-1",
+      "parsed": {
+        "kind": "localBook",
+        "preview": {
+          "input": {
+            "bookId": "local-1",
+            "text": "第一章\n正文"
+          },
+          "summary": {
+            "book": {
+              "book": {
+                "bookId": "local-1",
+                "title": "Local One",
+                "author": "",
+                "variables": {}
+              },
+              "format": "txt",
+              "encoding": "utf8",
+              "byteLen": 16,
+              "charLen": 8,
+              "toc": [],
+              "chapters": []
+            },
+            "format": "txt",
+            "encoding": "utf8",
+            "byteLen": 16,
+            "charLen": 8,
+            "chapterCount": 1,
+            "toc": [
+              {
+                "index": 0,
+                "title": "第一章",
+                "url": "local://local-1/chapter/0",
+                "variables": {}
+              }
+            ]
+          },
+          "contentSha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+        }
+      }
+    }
+  },
+  {
+    "id": "import-persist-book-source-valid",
+    "event": "import.apply",
+    "valid": true,
+    "payload": {
+      "transactionId": "tx-source-a",
+      "parsed": {
+        "kind": "bookSource",
+        "preview": {
+          "sourceId": "source-a",
+          "name": "Source A",
+          "baseUrl": "https://books.test",
+          "rules": {},
+          "bookSource": {
+            "bookSourceName": "Source A",
+            "bookSourceUrl": "https://books.test"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-persist-rss-valid",
+    "event": "import.apply",
+    "valid": true,
+    "payload": {
+      "transactionId": "tx-feed-a",
+      "parsed": {
+        "kind": "rssSource",
+        "preview": {
+          "subscriptionId": "feed-a",
+          "feedUrl": "https://feeds.test/a.xml",
+          "title": "Feed A",
+          "siteUrl": null,
+          "enabled": true
+        }
+      }
+    }
+  },
+  {
+    "id": "import-persist-cross-kind-preview",
+    "event": "import.apply",
+    "valid": false,
+    "payload": {
+      "transactionId": "tx-cross",
+      "parsed": {
+        "kind": "bookSource",
+        "preview": {
+          "subscriptionId": "feed-a",
+          "feedUrl": "https://feeds.test/a.xml",
+          "title": "Feed A",
+          "enabled": true
+        }
+      }
+    }
+  },
+  {
+    "id": "import-persist-invalid-sha",
+    "event": "import.apply",
+    "valid": false,
+    "payload": {
+      "transactionId": "tx-local",
+      "parsed": {
+        "kind": "localBook",
+        "preview": {
+          "input": {
+            "bookId": "local-1",
+            "text": "正文"
+          },
+          "summary": {
+            "book": {},
+            "format": "txt",
+            "encoding": "utf8",
+            "byteLen": 6,
+            "charLen": 2,
+            "chapterCount": 0,
+            "toc": []
+          },
+          "contentSha256": "not-a-sha"
+        }
+      }
+    }
+  },
+  {
+    "id": "import-rollback-local-valid",
+    "event": "import.cancel",
+    "valid": true,
+    "payload": {
+      "rollbackToken": {
+        "kind": "localBook",
+        "token": {
+          "transactionId": "tx-local-1",
+          "journal": {
+            "transactionId": "tx-local-1",
+            "sourceId": "local",
+            "bookId": "local-1",
+            "previousBook": null,
+            "previousTocCache": null,
+            "previousChapters": [],
+            "committedBook": {
+              "bookId": "local-1",
+              "title": "Local One",
+              "author": "",
+              "variables": {}
+            },
+            "committedTocCache": {
+              "key": "toc:local-1",
+              "payload": "[]"
+            },
+            "committedChapters": [],
+            "previousMarker": null,
+            "committedMarker": {
+              "key": "reader.ui.import.v1.marker:localBook:local-1",
+              "payload": "marker"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-rollback-book-source-valid",
+    "event": "import.cancel",
+    "valid": true,
+    "payload": {
+      "rollbackToken": {
+        "kind": "bookSource",
+        "token": {
+          "transactionId": "tx-source-a",
+          "journal": {
+            "transactionId": "tx-source-a",
+            "sourceId": "source-a",
+            "previousSource": null,
+            "committedSource": {
+              "sourceId": "source-a",
+              "name": "Source A",
+              "baseUrl": "https://books.test",
+              "rules": {
+                "search": null,
+                "explore": null,
+                "detail": null,
+                "toc": null,
+                "chapter": null
+              },
+              "bookSource": {
+                "bookSourceName": "Source A",
+                "bookSourceUrl": "https://books.test"
+              }
+            },
+            "previousMarker": null,
+            "committedMarker": {
+              "key": "reader.ui.import.v1.marker:bookSource:source-a",
+              "payload": "marker"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-rollback-rss-valid",
+    "event": "import.cancel",
+    "valid": true,
+    "payload": {
+      "rollbackToken": {
+        "kind": "rssSource",
+        "token": {
+          "transactionId": "tx-feed-a",
+          "journal": {
+            "transactionId": "tx-feed-a",
+            "subscriptionId": "feed-a",
+            "previousSubscription": null,
+            "previousEntryCache": null,
+            "committedSubscription": {
+              "subscriptionId": "feed-a",
+              "feedUrl": "https://feeds.test/a.xml",
+              "title": "Feed A",
+              "siteUrl": null,
+              "enabled": true,
+              "lastFetchAt": null,
+              "lastEntryId": null,
+              "unreadCount": 0
+            },
+            "committedEntryCache": {
+              "key": "reader.rss.subscription.v1.entries:feed-a",
+              "payload": "{}"
+            },
+            "previousMarker": null,
+            "committedMarker": {
+              "key": "reader.ui.import.v1.marker:rssSource:feed-a",
+              "payload": "marker"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-rollback-cross-kind-journal",
+    "event": "import.cancel",
+    "valid": false,
+    "payload": {
+      "rollbackToken": {
+        "kind": "bookSource",
+        "token": {
+          "transactionId": "tx-cross",
+          "journal": {
+            "transactionId": "tx-cross",
+            "subscriptionId": "feed-a"
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-rollback-unknown-journal",
+    "event": "import.cancel",
+    "valid": false,
+    "payload": {
+      "rollbackToken": {
+        "kind": "rssSource",
+        "token": {
+          "transactionId": "tx-feed-a",
+          "journal": {
+            "transactionId": "tx-feed-a",
+            "subscriptionId": "feed-a",
+            "previousSubscription": null,
+            "previousEntryCache": null,
+            "committedSubscription": {
+              "subscriptionId": "feed-a",
+              "feedUrl": "https://feeds.test/a.xml",
+              "title": "Feed A",
+              "enabled": true,
+              "unreadCount": 0
+            },
+            "committedEntryCache": {
+              "key": "entries",
+              "payload": "{}"
+            },
+            "previousMarker": null,
+            "committedMarker": {
+              "key": "marker",
+              "payload": "marker"
+            },
+            "forged": true
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "route.push-valid",
+    "event": "route.push",
+    "valid": true,
+    "payload": {
+      "routeId": "book-detail",
+      "routeParams": {
+        "bookId": "book-1"
+      }
+    }
+  },
+  {
+    "id": "route.push-unknown",
+    "event": "route.push",
+    "valid": false,
+    "payload": {
+      "routeId": "book-detail",
+      "routeParams": {
+        "bookId": "book-1"
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "route.replace-valid",
+    "event": "route.replace",
+    "valid": true,
+    "payload": {
+      "routeId": "book-detail",
+      "routeParams": {
+        "bookId": "book-1"
+      }
+    }
+  },
+  {
+    "id": "route.replace-unknown",
+    "event": "route.replace",
+    "valid": false,
+    "payload": {
+      "routeId": "book-detail",
+      "routeParams": {
+        "bookId": "book-1"
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "route.pop-valid",
+    "event": "route.pop",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "route.pop-unknown",
+    "event": "route.pop",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "route.popToRoot-valid",
+    "event": "route.popToRoot",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "route.popToRoot-unknown",
+    "event": "route.popToRoot",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "mainTab.select-valid",
+    "event": "mainTab.select",
+    "valid": true,
+    "payload": {
+      "tab": "bookshelf"
+    }
+  },
+  {
+    "id": "mainTab.select-unknown",
+    "event": "mainTab.select",
+    "valid": false,
+    "payload": {
+      "tab": "bookshelf",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "overlay.dialog.open-valid",
+    "event": "overlay.dialog.open",
+    "valid": true,
+    "payload": {
+      "overlayName": "book-action"
+    }
+  },
+  {
+    "id": "overlay.dialog.open-unknown",
+    "event": "overlay.dialog.open",
+    "valid": false,
+    "payload": {
+      "overlayName": "book-action",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "overlay.dialog.close-valid",
+    "event": "overlay.dialog.close",
+    "valid": true,
+    "payload": {
+      "overlayName": "book-action"
+    }
+  },
+  {
+    "id": "overlay.dialog.close-unknown",
+    "event": "overlay.dialog.close",
+    "valid": false,
+    "payload": {
+      "overlayName": "book-action",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "overlay.sheet.open-valid",
+    "event": "overlay.sheet.open",
+    "valid": true,
+    "payload": {
+      "overlayName": "book-action"
+    }
+  },
+  {
+    "id": "overlay.sheet.open-unknown",
+    "event": "overlay.sheet.open",
+    "valid": false,
+    "payload": {
+      "overlayName": "book-action",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "overlay.sheet.close-valid",
+    "event": "overlay.sheet.close",
+    "valid": true,
+    "payload": {
+      "overlayName": "book-action"
+    }
+  },
+  {
+    "id": "overlay.sheet.close-unknown",
+    "event": "overlay.sheet.close",
+    "valid": false,
+    "payload": {
+      "overlayName": "book-action",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "overlay.keyboard.open-valid",
+    "event": "overlay.keyboard.open",
+    "valid": true,
+    "payload": {
+      "overlayName": "book-action"
+    }
+  },
+  {
+    "id": "overlay.keyboard.open-unknown",
+    "event": "overlay.keyboard.open",
+    "valid": false,
+    "payload": {
+      "overlayName": "book-action",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "overlay.keyboard.close-valid",
+    "event": "overlay.keyboard.close",
+    "valid": true,
+    "payload": {
+      "overlayName": "book-action"
+    }
+  },
+  {
+    "id": "overlay.keyboard.close-unknown",
+    "event": "overlay.keyboard.close",
+    "valid": false,
+    "payload": {
+      "overlayName": "book-action",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.directory.open-valid",
+    "event": "reader.directory.open",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.directory.open-unknown",
+    "event": "reader.directory.open",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.directory.close-valid",
+    "event": "reader.directory.close",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.directory.close-unknown",
+    "event": "reader.directory.close",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.appearance.open-valid",
+    "event": "reader.appearance.open",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.appearance.open-unknown",
+    "event": "reader.appearance.open",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.settings.open-valid",
+    "event": "reader.settings.open",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.settings.open-unknown",
+    "event": "reader.settings.open",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.settings.close-valid",
+    "event": "reader.settings.close",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.settings.close-unknown",
+    "event": "reader.settings.close",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.sourceSwitch.open-valid",
+    "event": "reader.sourceSwitch.open",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.sourceSwitch.open-unknown",
+    "event": "reader.sourceSwitch.open",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.sourceSwitch.close-valid",
+    "event": "reader.sourceSwitch.close",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.sourceSwitch.close-unknown",
+    "event": "reader.sourceSwitch.close",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book.open-valid",
+    "event": "book.open",
+    "valid": true,
+    "payload": {
+      "bookId": "book-1",
+      "sourceId": "source-1",
+      "sourceKind": "remote",
+      "chapterIndex": 0
+    }
+  },
+  {
+    "id": "book.open-unknown",
+    "event": "book.open",
+    "valid": false,
+    "payload": {
+      "bookId": "book-1",
+      "sourceId": "source-1",
+      "sourceKind": "remote",
+      "chapterIndex": 0,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.enter-valid",
+    "event": "reader.enter",
+    "valid": true,
+    "payload": {
+      "bookId": "book-1"
+    }
+  },
+  {
+    "id": "reader.enter-unknown",
+    "event": "reader.enter",
+    "valid": false,
+    "payload": {
+      "bookId": "book-1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.exit-valid",
+    "event": "reader.exit",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.exit-unknown",
+    "event": "reader.exit",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.page.next-valid",
+    "event": "reader.page.next",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.page.next-unknown",
+    "event": "reader.page.next",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.page.prev-valid",
+    "event": "reader.page.prev",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.page.prev-unknown",
+    "event": "reader.page.prev",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.tts.start-valid",
+    "event": "reader.tts.start",
+    "valid": true,
+    "payload": {
+      "voice": "system-default"
+    }
+  },
+  {
+    "id": "reader.tts.start-unknown",
+    "event": "reader.tts.start",
+    "valid": false,
+    "payload": {
+      "voice": "system-default",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.tts.stop-valid",
+    "event": "reader.tts.stop",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.tts.stop-unknown",
+    "event": "reader.tts.stop",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.autoPage.start-valid",
+    "event": "reader.autoPage.start",
+    "valid": true,
+    "payload": {
+      "intervalMs": 5000
+    }
+  },
+  {
+    "id": "reader.autoPage.start-unknown",
+    "event": "reader.autoPage.start",
+    "valid": false,
+    "payload": {
+      "intervalMs": 5000,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader.autoPage.stop-valid",
+    "event": "reader.autoPage.stop",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reader.autoPage.stop-unknown",
+    "event": "reader.autoPage.stop",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reducedMotion.enable-valid",
+    "event": "reducedMotion.enable",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reducedMotion.enable-unknown",
+    "event": "reducedMotion.enable",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reducedMotion.disable-valid",
+    "event": "reducedMotion.disable",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "reducedMotion.disable-unknown",
+    "event": "reducedMotion.disable",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "source.switch.open-valid",
+    "event": "source.switch.open",
+    "valid": true,
+    "payload": {
+      "bookId": "book-1"
+    }
+  },
+  {
+    "id": "source.switch.open-unknown",
+    "event": "source.switch.open",
+    "valid": false,
+    "payload": {
+      "bookId": "book-1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "source.switch.cancel-valid",
+    "event": "source.switch.cancel",
+    "valid": true,
+    "payload": {}
+  },
+  {
+    "id": "source.switch.cancel-unknown",
+    "event": "source.switch.cancel",
+    "valid": false,
+    "payload": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync.run-valid",
+    "event": "sync.run",
+    "valid": true,
+    "payload": {
+      "local": {},
+      "remote": {},
+      "baseUrl": "https://dav.test/reader",
+      "requests": []
+    }
+  },
+  {
+    "id": "sync.run-unknown",
+    "event": "sync.run",
+    "valid": false,
+    "payload": {
+      "local": {},
+      "remote": {},
+      "baseUrl": "https://dav.test/reader",
+      "requests": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "webdav.config.test-valid",
+    "event": "webdav.config.test",
+    "valid": true,
+    "payload": {
+      "baseUrl": "https://dav.test/reader",
+      "requests": []
+    }
+  },
+  {
+    "id": "webdav.config.test-unknown",
+    "event": "webdav.config.test",
+    "valid": false,
+    "payload": {
+      "baseUrl": "https://dav.test/reader",
+      "requests": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync.start-valid",
+    "event": "sync.start",
+    "valid": true,
+    "payload": {
+      "local": { "snapshotId": "local", "deviceId": "device-a", "createdAt": 1, "records": [] },
+      "remote": { "snapshotId": "remote", "deviceId": "device-b", "createdAt": 1, "records": [] },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "device-a"
+    }
+  },
+  {
+    "id": "sync.start-unknown",
+    "event": "sync.start",
+    "valid": false,
+    "payload": {
+      "local": { "snapshotId": "local", "deviceId": "device-a", "createdAt": 1, "records": [] },
+      "remote": { "snapshotId": "remote", "deviceId": "device-b", "createdAt": 1, "records": [] },
+      "mergedSnapshotId": "merged",
+      "mergedDeviceId": "device-a",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync.progress-valid",
+    "event": "sync.progress",
+    "valid": true,
+    "payload": {
+      "baseUrl": "https://dav.test/reader",
+      "requests": []
+    }
+  },
+  {
+    "id": "sync.progress-unknown",
+    "event": "sync.progress",
+    "valid": false,
+    "payload": {
+      "baseUrl": "https://dav.test/reader",
+      "requests": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync.complete-valid",
+    "event": "sync.complete",
+    "valid": true,
+    "payload": {
+      "baseUrl": "https://dav.test/reader",
+      "requests": []
+    }
+  },
+  {
+    "id": "sync.complete-unknown",
+    "event": "sync.complete",
+    "valid": false,
+    "payload": {
+      "baseUrl": "https://dav.test/reader",
+      "requests": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync.resolve-valid",
+    "event": "sync.resolve",
+    "valid": true,
+    "payload": {
+      "local": {},
+      "remote": {},
+      "resolutions": []
+    }
+  },
+  {
+    "id": "sync.resolve-unknown",
+    "event": "sync.resolve",
+    "valid": false,
+    "payload": {
+      "local": {},
+      "remote": {},
+      "resolutions": [],
+      "__unknown": true
+    }
+  }
+]

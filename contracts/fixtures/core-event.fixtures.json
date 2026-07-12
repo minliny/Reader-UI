@@ -17,6 +17,8 @@
 
   { "_comment": "source.search.completed / source.detail.loaded",
     "type": "source.search.completed", "payload": { "query": "示例", "results": [{ "bookId": "bk-001", "title": "示例书" }] }, "correlationId": "c-012", "requestId": "r-012" },
+  { "type": "source.listed", "payload": { "sources": [{ "sourceId": "src-001", "name": "示例源", "enabled": true }] }, "correlationId": "c-012a", "requestId": "r-012a" },
+  { "type": "source.changed", "payload": { "bookId": "bk-001", "sourceId": "src-002" }, "correlationId": "c-012b", "requestId": "r-012b" },
   { "type": "source.detail.loaded", "payload": { "bookId": "bk-001", "title": "示例书", "author": "示例作者" }, "correlationId": "c-013", "requestId": "r-013" },
   { "type": "source.detected", "payload": { "sourceId": "src-001", "available": true }, "correlationId": "c-014", "requestId": "r-014" },
 

@@ -26,7 +26,7 @@ const stateFixtures = loadJson("fixtures/ui-state.fixtures.json");
 const viewFixtures = loadJson("fixtures/view-state.fixtures.json");
 const motionFixtures = loadJson("fixtures/motion.fixtures.json");
 const tokenFixtures = loadJson("fixtures/token.fixtures.json");
-const frontendRuntimeSource = readFileSync(join(REPO_ROOT, "frontend-demo/render-runtime.js"), "utf8");
+const frontendRuntimeSource = readFileSync(join(REPO_ROOT, "frontend-demo-optimized/render-runtime.js"), "utf8");
 
 // --- Schema 自检 ---
 test("route.schema.json 结构合法", () => {
@@ -156,7 +156,7 @@ test("view-state 组件 type 在 ComponentType enum 中", () => {
   }
 });
 
-test("bookshelf view-state 对齐 frontend-demo 书架结构", () => {
+test("bookshelf view-state 对齐 frontend-demo-optimized 书架结构", () => {
   const bookshelf = viewFixtures.find((item) => item.routeId === "bookshelf" && item.pageState === "default");
   assert.ok(bookshelf, "bookshelf/default fixture 应存在");
 
@@ -211,7 +211,7 @@ test("book-detail view-state 使用详情页复合结构", () => {
   );
 });
 
-test("control-layer-base-v2 对齐 frontend-demo live 控制层结构", () => {
+test("control-layer-base-v2 对齐 frontend-demo-optimized live 控制层结构", () => {
   const control = viewFixtures.find((item) => item.routeId === "control-layer-base-v2" && item.pageState === "default");
   assert.ok(control, "control-layer-base-v2/default fixture 应存在");
 
@@ -229,7 +229,7 @@ test("control-layer-base-v2 对齐 frontend-demo live 控制层结构", () => {
   }
 });
 
-test("control-layer-base-v2 真相源固定为 frontend-demo live renderer", () => {
+test("control-layer-base-v2 真相源固定为 frontend-demo-optimized live renderer", () => {
   assert.match(
     frontendRuntimeSource,
     /"control-layer-base-v2":\s*\{\s*mode:\s*"control"\s*\}/,
@@ -241,7 +241,7 @@ test("control-layer-base-v2 真相源固定为 frontend-demo live renderer", () 
   assert.doesNotMatch(frontendRuntimeSource, /FloatingBrightness|FloatingQuickActions|FloatingPageControl/, "live demo 不应恢复旧浮动控制组件名");
 });
 
-test("reader full/utility routes 对齐 frontend-demo live 全屏控制窗", () => {
+test("reader full/utility routes 对齐 frontend-demo-optimized live 全屏控制窗", () => {
   const expected = new Map([
     ["reader-full-directory", "ReaderFullDirectoryPage"],
     ["reader-full-tts", "ReaderFullTtsPage"],
@@ -330,7 +330,7 @@ test("非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () 
   }
 });
 
-test("状态页文案与 frontend-demo contract fixture 对齐", () => {
+test("状态页文案与 frontend-demo-optimized contract fixture 对齐", () => {
   const cases = [
     ["bookshelf-empty", "shelf-empty", "BookshelfEmptyPage", { title: "书架还是空的", message: "导入本地书籍或通过搜索加入书架。" }],
     ["rss-detail", "default", "RssDetailPage", { title: "深空信号更新" }],

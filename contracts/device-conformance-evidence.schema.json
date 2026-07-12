@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/device-conformance-evidence.schema.json",
+  "title": "R18 Device Conformance Evidence",
+  "description": "Detached per-host/per-type execution evidence. A summary is never a substitute for all 174 records.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schemaVersion", "planPath", "planSha256", "releaseId", "records"],
+  "properties": {
+    "$schema": { "const": "contracts/device-conformance-evidence.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "planPath": { "const": "device-conformance/DEVICE_CONFORMANCE_PLAN.json" },
+    "planSha256": { "$ref": "#/$defs/Sha256" },
+    "releaseId": {
+      "type": "string",
+      "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64}):[0-9a-f]{64}$"
+    },
+    "records": {
+      "type": "array",
+      "minItems": 174,
+      "maxItems": 174,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/Record" }
+    }
+  },
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "SourceSha": {
+      "type": "string",
+      "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$"
+    },
+    "Record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host",
+        "sourceSha",
+        "manifestSha",
+        "deviceId",
+        "type",
+        "proofTier",
+        "targetKind",
+        "executedAt",
+        "outcome",
+        "requestFixtureSha256",
+        "expectedResultFixtureSha256",
+        "artifact"
+      ],
+      "properties": {
+        "host": { "enum": ["ios", "android", "harmonyos"] },
+        "sourceSha": { "$ref": "#/$defs/SourceSha" },
+        "manifestSha": { "$ref": "#/$defs/Sha256" },
+        "deviceId": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 256,
+          "pattern": "^(?!(?:unknown|none|null|mock|fake|test|device|simulator|emulator)$).+$"
+        },
+        "type": { "$ref": "host-request.schema.json#/properties/type" },
+        "proofTier": { "enum": ["unit", "simulator", "physical", "manual"] },
+        "targetKind": { "enum": ["unit-runner", "simulator", "physical-device", "manual-observation"] },
+        "executedAt": { "type": "string", "format": "date-time" },
+        "outcome": { "enum": ["passed", "failed"] },
+        "requestFixtureSha256": { "$ref": "#/$defs/Sha256" },
+        "expectedResultFixtureSha256": { "$ref": "#/$defs/Sha256" },
+        "observedResult": { "$ref": "host-result.schema.json" },
+        "failure": { "$ref": "#/$defs/Failure" },
+        "operator": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "observation": { "type": "string", "minLength": 1, "maxLength": 2048 },
+        "artifact": { "$ref": "#/$defs/Artifact" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "outcome": { "const": "passed" } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "required": ["observedResult"],
+            "properties": {
+              "observedResult": { "$ref": "host-result.schema.json" },
+              "failure": false
+            }
+          },
+          "else": {
+            "required": ["failure"],
+            "properties": {
+              "failure": { "$ref": "#/$defs/Failure" },
+              "observedResult": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "proofTier": { "const": "manual" } },
+            "required": ["proofTier"]
+          },
+          "then": {
+            "required": ["operator", "observation"],
+            "properties": {
+              "targetKind": { "const": "manual-observation" },
+              "operator": { "type": "string", "minLength": 1, "maxLength": 256 },
+              "observation": { "type": "string", "minLength": 1, "maxLength": 2048 }
+            }
+          },
+          "else": {
+            "properties": {
+              "operator": false,
+              "observation": false
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "proofTier": { "const": "unit" } },
+            "required": ["proofTier"]
+          },
+          "then": { "properties": { "targetKind": { "const": "unit-runner" } } }
+        },
+        {
+          "if": {
+            "properties": { "proofTier": { "const": "simulator" } },
+            "required": ["proofTier"]
+          },
+          "then": { "properties": { "targetKind": { "const": "simulator" } } }
+        },
+        {
+          "if": {
+            "properties": { "proofTier": { "const": "physical" } },
+            "required": ["proofTier"]
+          },
+          "then": { "properties": { "targetKind": { "const": "physical-device" } } }
+        }
+      ]
+    },
+    "Failure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "message": { "type": "string", "minLength": 1, "maxLength": 2048 }
+      }
+    },
+    "Artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "byteLength", "sha256"],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+        },
+        "byteLength": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/Sha256" }
+      }
+    }
+  }
+}

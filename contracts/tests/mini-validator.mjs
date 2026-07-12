@@ -1,131 +1,121 @@
-// 内置最小化 JSON Schema 校验器，避免依赖外部包。
-// 仅支持本仓库 schema 使用到的子集：type / enum / required / properties /
-// additionalProperties / items / minimum / maximum / $defs / $ref（仅 #/$defs/... 形式） /
-// pattern / oneOf（基本）。
-// 不支持：$ref 跨文件、allOf/anyOf 复杂组合、format 实际校验（只校验类型）。
+// JSON Schema 2020-12 validator used by contract tests and fixture gates.
+//
+// Keep this module's small validate/assertValid/registerSchema API so existing
+// tests stay focused on contract semantics, while delegating the actual schema
+// language to Ajv. The previous hand-written subset silently ignored oneOf,
+// allOf and if/then/else, which could make discriminated DTO schemas look green
+// without enforcing their branches.
+import Ajv2020 from "ajv/dist/2020.js";
+import addFormats from "ajv-formats";
 
-function resolveRef(ref, root) {
-  if (!ref.startsWith("#/")) throw new Error(`仅支持本地 #/ 引用，收到：${ref}`);
-  const parts = ref.slice(2).split("/");
-  let node = root;
-  for (const p of parts) {
-    if (node == null || typeof node !== "object") return undefined;
-    node = node[p];
-  }
-  return node;
+const schemaRegistry = new Map();
+let ajv = createAjv();
+let validatorCache = new WeakMap();
+
+function createAjv() {
+  const instance = new Ajv2020({
+    allErrors: true,
+    allowUnionTypes: true,
+    strict: true,
+    validateFormats: true,
+  });
+  addFormats(instance);
+  // state-rule.schema.json embeds the executable rule catalog beside the
+  // validation vocabulary. Treat that project-specific field as an explicit
+  // annotation; every other unknown keyword remains a strict-mode error.
+  instance.addKeyword({ keyword: "rules", schemaType: "array", valid: true });
+  return instance;
 }
 
-export function validate(schema, data, root = schema, path = "$") {
-  const errors = [];
+function rebuildAjv() {
+  ajv = createAjv();
+  validatorCache = new WeakMap();
 
-  if (schema == null) return errors;
+  const registeredObjects = new Set();
+  for (const [name, schema] of schemaRegistry.entries()) {
+    if (registeredObjects.has(schema)) continue;
+    registeredObjects.add(schema);
 
-  // $ref
-  if (schema.$ref) {
-    const ref = resolveRef(schema.$ref, root);
-    if (!ref) {
-      errors.push({ path, message: `无法解析 $ref: ${schema.$ref}` });
-      return errors;
-    }
-    return validate(ref, data, root, path);
+    // The filename alias supports legacy relative refs such as
+    // motion.schema.json#/$defs/MotionId. Ajv also registers schema.$id, so
+    // standards-compliant absolute resolution works at the same time.
+    ajv.addSchema(schema, name === schema.$id ? undefined : name);
   }
+}
 
-  // type
-  if (schema.type != null) {
-    const types = Array.isArray(schema.type) ? schema.type : [schema.type];
-    let ok = false;
-    for (const t of types) {
-      if (t === "null" && data === null) { ok = true; break; }
-      if (t === "boolean" && typeof data === "boolean") { ok = true; break; }
-      if (t === "integer" && typeof data === "number" && Number.isInteger(data)) { ok = true; break; }
-      if (t === "number" && typeof data === "number") { ok = true; break; }
-      if (t === "string" && typeof data === "string") { ok = true; break; }
-      if (t === "object" && typeof data === "object" && data !== null && !Array.isArray(data)) { ok = true; break; }
-      if (t === "array" && Array.isArray(data)) { ok = true; break; }
-    }
-    if (!ok) {
-      errors.push({ path, message: `期望类型 ${types.join("|")}，实际 ${Array.isArray(data) ? "array" : data === null ? "null" : typeof data}` });
-      return errors;
-    }
+export function registerSchema(name, schema) {
+  schemaRegistry.set(name, schema);
+  if (schema && schema.$id) schemaRegistry.set(schema.$id, schema);
+  rebuildAjv();
+}
+
+export function registerSchemas(obj) {
+  for (const [name, schema] of Object.entries(obj)) {
+    schemaRegistry.set(name, schema);
+    if (schema && schema.$id) schemaRegistry.set(schema.$id, schema);
   }
+  rebuildAjv();
+}
 
-  // enum
-  if (Array.isArray(schema.enum) && !schema.enum.includes(data)) {
-    errors.push({ path, message: `值不在 enum 中：${JSON.stringify(data)}` });
-    return errors;
+function stripFixtureComments(value) {
+  if (Array.isArray(value)) return value.map(stripFixtureComments);
+  if (value === null || typeof value !== "object") return value;
+
+  const result = {};
+  for (const [key, child] of Object.entries(value)) {
+    if (key === "_comment") continue;
+    result[key] = stripFixtureComments(child);
   }
+  return result;
+}
 
-  // const
-  if (schema.const !== undefined && schema.const !== data) {
-    errors.push({ path, message: `期望常量 ${JSON.stringify(schema.const)}` });
+function validatorFor(schema) {
+  if (validatorCache.has(schema)) return validatorCache.get(schema);
+
+  let compiled = schema?.$id ? ajv.getSchema(schema.$id) : undefined;
+  if (!compiled) compiled = ajv.compile(schema);
+  validatorCache.set(schema, compiled);
+  return compiled;
+}
+
+function pointerPath(instancePath, fallbackPath) {
+  if (!instancePath) return fallbackPath;
+  const parts = instancePath
+    .split("/")
+    .slice(1)
+    .map((part) => part.replaceAll("~1", "/").replaceAll("~0", "~"));
+  return parts.reduce(
+    (path, part) => (/^(0|[1-9][0-9]*)$/.test(part) ? `${path}[${part}]` : `${path}.${part}`),
+    fallbackPath,
+  );
+}
+
+export function validate(schema, data, _root = schema, path = "$") {
+  if (schema == null) return [];
+
+  try {
+    const compiled = validatorFor(schema);
+    if (compiled(stripFixtureComments(data))) return [];
+    return (compiled.errors ?? []).map((error) => ({
+      path: pointerPath(error.instancePath, path),
+      message: error.message ?? error.keyword,
+      keyword: error.keyword,
+      schemaPath: error.schemaPath,
+      params: error.params,
+    }));
+  } catch (error) {
+    return [{
+      path,
+      message: `schema 编译失败: ${error instanceof Error ? error.message : String(error)}`,
+      keyword: "schema",
+    }];
   }
-
-  // pattern（仅 string）
-  if (schema.pattern && typeof data === "string") {
-    const re = new RegExp(schema.pattern);
-    if (!re.test(data)) {
-      errors.push({ path, message: `不匹配 pattern ${schema.pattern}` });
-    }
-  }
-
-  // minimum / maximum
-  if (typeof data === "number") {
-    if (schema.minimum !== undefined && data < schema.minimum) {
-      errors.push({ path, message: `小于 minimum ${schema.minimum}` });
-    }
-    if (schema.maximum !== undefined && data > schema.maximum) {
-      errors.push({ path, message: `大于 maximum ${schema.maximum}` });
-    }
-  }
-
-  // object: required / properties / additionalProperties
-  if (typeof data === "object" && data !== null && !Array.isArray(data)) {
-    if (Array.isArray(schema.required)) {
-      for (const k of schema.required) {
-        if (!(k in data)) {
-          errors.push({ path: `${path}.${k}`, message: `缺少必填字段 ${k}` });
-        }
-      }
-    }
-    if (schema.properties) {
-      for (const [k, sub] of Object.entries(schema.properties)) {
-        if (k in data) {
-          errors.push(...validate(sub, data[k], root, `${path}.${k}`));
-        }
-      }
-    }
-    if (schema.additionalProperties === false) {
-      const allowed = schema.properties ? new Set(Object.keys(schema.properties)) : new Set();
-      for (const k of Object.keys(data)) {
-        if (k === "_comment") continue; // fixtures 注释约定，不参与 schema 校验
-        if (!allowed.has(k)) {
-          errors.push({ path: `${path}.${k}`, message: `不允许的属性 ${k}` });
-        }
-      }
-    } else if (schema.additionalProperties && typeof schema.additionalProperties === "object") {
-      for (const k of Object.keys(data)) {
-        if (k === "_comment") continue;
-        if (!schema.properties || !(k in schema.properties)) {
-          errors.push(...validate(schema.additionalProperties, data[k], root, `${path}.${k}`));
-        }
-      }
-    }
-  }
-
-  // array: items
-  if (Array.isArray(data) && schema.items) {
-    for (let i = 0; i < data.length; i++) {
-      errors.push(...validate(schema.items, data[i], root, `${path}[${i}]`));
-    }
-  }
-
-  return errors;
 }
 
 export function assertValid(schema, data, label) {
   const errors = validate(schema, data);
   if (errors.length > 0) {
-    const msg = errors.map((e) => `${e.path}: ${e.message}`).join("\n  - ");
+    const msg = errors.map((error) => `${error.path}: ${error.message}`).join("\n  - ");
     throw new Error(`[${label}] 校验失败：\n  - ${msg}`);
   }
 }

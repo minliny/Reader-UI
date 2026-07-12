@@ -1,6 +1,6 @@
 // P0 链路验收矩阵测试 — 断言 Contract 仓库 5 条 P0 链路 A-F 全部 ✅
 // 该测试作为 CI gate：Contract 侧必须全绿，否则阻断合并
-// 调用 frontend-demo/verify/verify-p0-chain-matrix.mjs 中的核心逻辑
+// 调用 frontend-demo-optimized/verify/verify-p0-chain-matrix.mjs 中的核心逻辑
 
 import { test } from "node:test";
 import assert from "node:assert/strict";
@@ -8,7 +8,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-import { verifyP0ChainMatrix } from "../../frontend-demo/verify/verify-p0-chain-matrix.mjs";
+import { verifyP0ChainMatrix } from "../../frontend-demo-optimized/verify/verify-p0-chain-matrix.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

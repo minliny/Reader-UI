@@ -1722,5 +1722,125 @@
       "layoutStable:preserveRouteShell",
       "interrupt:completeThenReplace"
     ]
+  },
+  {
+    "id": "dropdown.menu.reposition",
+    "durationMs": 120,
+    "easing": "ease",
+    "implementationKind": "overlayTransition",
+    "containerRole": "overlayHost",
+    "operation": "update",
+    "visualPattern": "noMotion",
+    "interruptPolicy": "redirect",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "app.motion.duration.dropdownSelect",
+      "easingToken": "app.motion.easing.standard"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "layoutStable:keepTriggerAnchor",
+      "interrupt:redirect"
+    ]
+  },
+  {
+    "id": "dropdown.option.press",
+    "durationMs": 80,
+    "easing": "ease",
+    "implementationKind": "componentFeedback",
+    "containerRole": "listItem",
+    "operation": "update",
+    "visualPattern": "noMotion",
+    "interruptPolicy": "cancel",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "app.motion.duration.dropdownPress",
+      "easingToken": "app.motion.easing.standard"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "layoutStable:hitAreaStable",
+      "interrupt:cancel"
+    ]
+  },
+  {
+    "id": "reader.control.handle.drag",
+    "durationMs": 0,
+    "easing": "none",
+    "implementationKind": "directManipulation",
+    "containerRole": "readerSurface",
+    "operation": "dragUpdate",
+    "visualPattern": "directDrag",
+    "interruptPolicy": "cancel",
+    "reducedMotionPolicy": "keepDirectManipulation",
+    "tokens": {
+      "durationToken": "reader.motion.duration.instant",
+      "easingToken": "app.motion.easing.standard"
+    },
+    "guardRules": [
+      "dragMustFollowFinger:noEasing",
+      "layoutStable:clampToReaderFrame"
+    ]
+  },
+  {
+    "id": "reader.control.show",
+    "durationMs": 240,
+    "easing": "ease-out",
+    "implementationKind": "readerEntry",
+    "containerRole": "readerShell",
+    "operation": "update",
+    "visualPattern": "fadeReplace",
+    "interruptPolicy": "redirect",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "reader.motion.duration.overlay",
+      "easingToken": "app.motion.easing.enter"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "focusReturn:keepTarget",
+      "interrupt:redirect"
+    ]
+  },
+  {
+    "id": "tab.item.press",
+    "durationMs": 80,
+    "easing": "ease",
+    "implementationKind": "componentFeedback",
+    "containerRole": "mainTabShell",
+    "operation": "update",
+    "visualPattern": "noMotion",
+    "interruptPolicy": "cancel",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "app.motion.duration.tabPress",
+      "easingToken": "app.motion.easing.standard"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "layoutStable:hitAreaStable",
+      "interrupt:cancel"
+    ]
+  },
+  {
+    "id": "tab.item.switch",
+    "durationMs": 160,
+    "easing": "ease",
+    "implementationKind": "tabTransition",
+    "containerRole": "mainTabShell",
+    "operation": "tabSwitch",
+    "visualPattern": "fadeReplace",
+    "interruptPolicy": "redirect",
+    "reducedMotionPolicy": "zeroDuration",
+    "deprecated": true,
+    "tokens": {
+      "durationToken": "app.motion.duration.tabSwitch",
+      "easingToken": "app.motion.easing.standard"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "layoutStable:indicatorDoesNotPushLayout",
+      "interrupt:redirect"
+    ]
   }
 ]

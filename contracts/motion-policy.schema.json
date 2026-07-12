@@ -65,98 +65,103 @@
       }
     },
     "motionId": {
-      "type": "string",
-      "enum": [
-        "app.firstOpen.enter",
-        "app.route.push.forward",
-        "app.route.pop.backward",
-        "app.route.replace",
-        "bookshelf.view.switch",
-        "button.activate",
-        "card.press",
-        "card.select",
-        "card.route",
-        "chip.item.select",
-        "destructive.confirm.commit",
-        "dropdown.menu.collapse",
-        "dropdown.menu.expand",
-        "dropdown.option.select",
-        "dropdown.trigger.press",
-        "feedback.toast.enter",
-        "feedback.toast.update",
-        "feedback.toast.exit",
-        "filter.apply.commit",
-        "filter.item.toggle",
-        "input.blur",
-        "input.clear",
-        "input.focus",
-        "input.focus-blur",
-        "input.submit",
-        "listRow.select",
-        "motion.interrupt.cancel",
-        "motion.interrupt.completeThenReplace",
-        "motion.interrupt.redirect",
-        "overlay.dialog.enter",
-        "overlay.dialog.enter-exit",
-        "overlay.dialog.exit",
-        "overlay.keyboard.enter-exit",
-        "overlay.sheet.enter",
-        "overlay.sheet.enter-exit",
-        "overlay.sheet.exit",
-        "reader.chapter.jump",
-        "reader.control.dock.drag",
-        "reader.control.dock.longPress",
-        "reader.control.dock.rebound",
-        "reader.control.dock.release",
-        "reader.control.handle.press",
-        "reader.control.handle.release",
-        "reader.control.hide",
-        "reader.entry.actionToImmersive",
-        "reader.entry.coverToImmersive",
-        "reader.module.switch",
-        "reader.page.turn.next-prev",
-        "reader.quick.promote",
-        "reader.session.autoPage.start",
-        "reader.session.capsule.enter",
-        "reader.session.capsule.update",
-        "reader.session.capsule.exit",
-        "reader.session.capsule.switch",
-        "reader.session.capsule.control.press-toggle",
-        "reader.session.capsule.countdownTick",
-        "reader.session.capsule.voiceIcon.active",
-        "reader.session.controlSpace.enter",
-        "reader.session.controlSpace.update",
-        "reader.session.controlSpace.exit",
-        "reader.session.tts.start",
-        "reader.sourceSwitch.open-close",
-        "source.switch.route.push",
-        "source.switch.route.pop",
-        "source.switch.route.replace",
-        "search.state.replace",
-        "segment.item.switch",
-        "selection.group.toggle",
-        "selection.item.toggle",
-        "selection.option.toggle",
-        "selection.range.show",
-        "selection.toolbar.action",
-        "selection.toolbar.exit",
-        "slider.drag.start",
-        "slider.drag.update",
-        "slider.drag.release",
-        "state.content.replace",
-        "state.loading.inline",
-        "stepper.press",
-        "stepper.value.change",
-        "tab.item.select",
-        "tab.switch",
-        "toggle.switch",
-        "tooling.mode.switch",
-        "viewport.orientation.prepare",
-        "viewport.orientation.reshape",
-        "viewport.orientation.settle"
-      ],
-      "description": "解析结果 MotionId。必须存在于 motion.schema.json id enum。"
+      "$ref": "motion.schema.json#/$defs/MotionId",
+      "description": "解析结果 MotionId。必须存在于 motion.schema.json id enum。枚举由 motion.schema.json#/$defs/MotionId 单一维护，避免在此重复列举。"
     },
-    "deprecated": { "type": "boolean", "default": false }
+    "deprecated": { "type": "boolean", "default": false },
+    "reducedMotionPolicy": {
+      "type": "object",
+      "description": "reduced-motion 降级策略。当 match.reducedMotion=true 时触发，对应 motion.schema.json reducedMotionPolicy 字段的结构化投影。来源：motion-controller.js FAMILY_STATE_MACHINES reducedMotion 描述。",
+      "properties": {
+        "motionId": {
+          "type": "string",
+          "description": "关联的 MotionId。必须存在于 motion.schema.json id enum。"
+        },
+        "reducedMotion": {
+          "type": "string",
+          "description": "降级行为描述。对应 MOTION_CONTRACT.md 中 reducedMotion 字段。"
+        }
+      },
+      "examples": [
+        {
+          "motionId": "reader.control.show",
+          "reducedMotion": "Show control layer immediately without slide or fade movement; keep reading surface layout stable."
+        }
+      ]
+    },
+    "controlLayerTransitions": {
+      "type": "object",
+      "description": "控制层切换策略（L1↔L2↔L3）。阅读器控制层分三级：L1=沉浸阅读无控制层，L2=控制层可见基础态，L3=控制层展开态（如全设置面板）。来源：D5 控制层切换动效设计。",
+      "properties": {
+        "transitions": {
+          "type": "array",
+          "description": "层级切换配置列表。",
+          "items": {
+            "type": "object",
+            "properties": {
+              "transition": {
+                "type": "string",
+                "enum": ["L1.to.L2", "L2.to.L3", "L3.to.L2", "L2.to.L1"],
+                "description": "层级切换方向。"
+              },
+              "duration": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "持续时长（毫秒）。"
+              },
+              "easing": {
+                "type": "string",
+                "enum": ["ease", "ease-in", "ease-out", "ease-in-out", "linear", "none"],
+                "description": "缓动函数。"
+              }
+            },
+            "required": ["transition", "duration", "easing"]
+          }
+        }
+      },
+      "examples": [
+        {
+          "transitions": [
+            { "transition": "L1.to.L2", "duration": 200, "easing": "ease-out" },
+            { "transition": "L2.to.L3", "duration": 250, "easing": "ease-in-out" },
+            { "transition": "L3.to.L2", "duration": 200, "easing": "ease-out" },
+            { "transition": "L2.to.L1", "duration": 150, "easing": "ease-in" }
+          ]
+        }
+      ]
+    },
+    "overlayInterruptPolicy": {
+      "type": "object",
+      "description": "overlay 连续打断策略。当 overlay.active 时新 overlay 替换旧 overlay 的行为规则。来源：D5 overlay 连续打断动效设计。",
+      "properties": {
+        "policy": {
+          "type": "string",
+          "enum": ["overlay.replace", "overlay.queue", "overlay.dismiss"],
+          "description": "打断策略类型。overlay.replace=立即替换，overlay.queue=排队等待，overlay.dismiss=拒绝新 overlay。"
+        },
+        "condition": {
+          "type": "string",
+          "description": "触发条件与行为描述。"
+        },
+        "oldOverlayExitMotion": {
+          "type": "boolean",
+          "default": false,
+          "description": "旧 overlay 是否执行退出动效。false=无退出动效立即移除。"
+        },
+        "newOverlayEnterMotion": {
+          "type": "boolean",
+          "default": true,
+          "description": "新 overlay 是否执行进入动效。"
+        }
+      },
+      "examples": [
+        {
+          "policy": "overlay.replace",
+          "condition": "overlay.active 时新 overlay 替换旧的，旧 overlay 无退出动效，新 overlay 执行进入动效",
+          "oldOverlayExitMotion": false,
+          "newOverlayEnterMotion": true
+        }
+      ]
+    }
   }
 }

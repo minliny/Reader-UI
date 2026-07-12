@@ -154,7 +154,7 @@
 | Phase 1 Slice 1-6 覆盖 | `phase1-slice.test.mjs` | ✓ 已有 |
 | Phase 2 Core bridge 契约 | `phase2-contract.test.mjs` | ✓ 已有 |
 | StateRule fixtures | `state-rule.test.mjs` | ✓ 已有 |
-| demo 与 schema 一致性 | `demo-consistency.test.mjs` | ✓ 已有（route/token unknown=0；motion unknown 需列入 explicit exception，当前 unknown=111 approved=111 unapproved=0）|
+| demo 与 schema 一致性 | `demo-consistency.test.mjs` | ✓ 已有（route/token unknown=0；motion unknown 需列入 explicit exception，当前 unknown=106 approved=106 unapproved=0）|
 | route × component × motion × token 矩阵覆盖 | `matrix-coverage.test.mjs` | ✓ 已有 |
 | motion fixture guardRules 完整性 | `motion-guard.test.mjs` | ✓ 已有 |
 | token 分组覆盖 | `token-group.test.mjs` | ✓ 已有 |
@@ -220,7 +220,7 @@ node --test contracts/tests/*.test.mjs
 #### 3.3.5 demo baseline 漂移检查（已有）
 
 - **目的**：demo 与 schema 一致性
-- **方式**：`node frontend-demo/verify/contract/verify-demo-contract-consistency.mjs`
+- **方式**：`node frontend-demo-optimized/verify/contract/verify-demo-contract-consistency.mjs`
 - **失败条件**：route/token unknown 非 0；motion unknown 未列入 `demo-contract-exceptions.json`；found 数量异常减少
 
 ### 3.4 AST 检查（P1，Phase 5 必须实现）

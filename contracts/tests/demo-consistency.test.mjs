@@ -15,9 +15,9 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "..", "..");
-const SCRIPT = join(REPO_ROOT, "frontend-demo", "verify", "contract", "verify-demo-contract-consistency.mjs");
-const BASELINE = join(REPO_ROOT, "frontend-demo", "verify", "contract", "demo-contract-baseline.json");
-const EXCEPTIONS = join(REPO_ROOT, "frontend-demo", "verify", "contract", "demo-contract-exceptions.json");
+const SCRIPT = join(REPO_ROOT, "frontend-demo-optimized", "verify", "contract", "verify-demo-contract-consistency.mjs");
+const BASELINE = join(REPO_ROOT, "frontend-demo-optimized", "verify", "contract", "demo-contract-baseline.json");
+const EXCEPTIONS = join(REPO_ROOT, "frontend-demo-optimized", "verify", "contract", "demo-contract-exceptions.json");
 
 test("demo 一致性校验脚本能成功执行", () => {
   assert.ok(existsSync(SCRIPT), `脚本不存在：${SCRIPT}`);
@@ -91,4 +91,46 @@ test("motion exception policy 结构合法", () => {
       assert.ok(typeof entry.canonicalId === "string" && entry.canonicalId.length > 0, `alias 必须有 canonicalId：${entry.id}`);
     }
   }
+});
+
+test("R16B 五个 workflow 的 35 个 direct ViewState route 都有 optimized demo dispatcher", () => {
+  const runtime = readFileSync(join(REPO_ROOT, "frontend-demo-optimized", "render-runtime.js"), "utf8");
+  const rendererSources = Object.fromEntries(
+    ["w3-source-switch-renderers.js", "w4-theme-font-typography-renderers.js", "w5-replace-rules-renderers.js"]
+      .map((name) => [name, readFileSync(join(REPO_ROOT, "frontend-demo-optimized", "renderers", name), "utf8")]),
+  );
+  const directCases = [
+    "import-permission-denied", "import-format-unsupported", "import-empty-file", "import-parsing",
+    "import-duplicate", "import-conflict-resolve", "import-partial-success", "import-result-detail",
+    "reader-toc-loading", "reader-toc-offline", "reader-toc-error",
+    "reader-content-loading", "reader-content-offline", "reader-content-error",
+    "reader-page-boundary-first", "reader-page-boundary-last",
+    "reader-progress-restore", "reader-background-restore",
+  ];
+  for (const routeId of directCases) {
+    assert.ok(runtime.includes(`case "${routeId}":`), `render-runtime.js 缺少 ${routeId} dispatcher`);
+  }
+
+  const modularRoutes = {
+    "w3-source-switch-renderers.js": [
+      "source-switch-empty", "source-switch-error", "source-switch-timeout",
+      "source-switch-loading", "source-switch-rollback", "source-switch-preview",
+    ],
+    "w4-theme-font-typography-renderers.js": [
+      "reader-font-import-confirm", "reader-font-delete-confirm", "reader-font-fallback",
+      "reader-theme-new", "reader-theme-delete-confirm", "reader-typography-reset-confirm",
+    ],
+    "w5-replace-rules-renderers.js": [
+      "reader-replace-delete-confirm", "reader-replace-apply-result",
+      "reader-replace-import-export", "reader-replace-preview", "reader-replace-page",
+    ],
+  };
+  for (const [name, routeIds] of Object.entries(modularRoutes)) {
+    for (const routeId of routeIds) {
+      assert.ok(rendererSources[name].includes(`"${routeId}":`), `${name} 缺少 ${routeId} integration map`);
+    }
+  }
+  assert.match(runtime, /ReaderW3SourceSwitchRenderers\.INTEGRATION_MAP/);
+  assert.match(runtime, /ReaderW4ThemeFontTypographyRenderers\.renderW4Route/);
+  assert.match(runtime, /ReaderW5ReplaceRulesRenderers\.INTEGRATION_MAP/);
 });

@@ -3,13 +3,13 @@
     "routeUnknown": "fail",
     "tokenUnknown": "fail",
     "motionUnknown": "allow-only-listed",
-    "exceptionPolicy": "frontend-demo/verify/contract/demo-contract-exceptions.json"
+    "exceptionPolicy": "frontend-demo-optimized/verify/contract/demo-contract-exceptions.json"
   },
   "items": [
     {
       "label": "route-contract.js route ids",
       "policy": "route",
-      "found": 200,
+      "found": 235,
       "unknown": 0,
       "approvedUnknown": 0,
       "unapproved": 0,
@@ -31,7 +31,7 @@
     {
       "label": "render-runtime.js route refs",
       "policy": "route",
-      "found": 90,
+      "found": 98,
       "unknown": 0,
       "approvedUnknown": 0,
       "unapproved": 0,
@@ -54,16 +54,11 @@
       "label": "motion-controller.js motion ids",
       "policy": "motion",
       "found": 151,
-      "unknown": 111,
-      "approvedUnknown": 111,
+      "unknown": 106,
+      "approvedUnknown": 106,
       "unapproved": 0,
       "unknownIds": [
-        "tab.item.press",
-        "tab.item.switch",
         "button.press",
-        "dropdown.menu.reposition",
-        "dropdown.option.press",
-        "reader.control.handle.drag",
         "app.launch",
         "app.route",
         "route.current",
@@ -171,12 +166,7 @@
         "motion.unknown"
       ],
       "approvedUnknownIds": [
-        "tab.item.press",
-        "tab.item.switch",
         "button.press",
-        "dropdown.menu.reposition",
-        "dropdown.option.press",
-        "reader.control.handle.drag",
         "app.launch",
         "app.route",
         "route.current",
@@ -299,7 +289,7 @@
     {
       "label": "tokens.css token names",
       "policy": "token",
-      "found": 79,
+      "found": 105,
       "unknown": 0,
       "approvedUnknown": 0,
       "unapproved": 0,

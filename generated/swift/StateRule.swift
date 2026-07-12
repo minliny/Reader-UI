@@ -22,15 +22,20 @@ public enum StateRuleSlice: String, Codable, CaseIterable, Sendable {
     case slice_4 = "slice-4"
     case slice_5 = "slice-5"
     case slice_6 = "slice-6"
+    case controlLayer = "controlLayer"
+    case reader = "reader"
+    case overlay = "overlay"
 }
 
 public struct StateRuleTarget: Codable, Equatable, Sendable {
     public let fields: [String]
     public var slices: [StateRuleSlice]?
+    public var routeIds: [String]?
 
-    public init(fields: [String], slices: [StateRuleSlice]? = nil) {
+    public init(fields: [String], slices: [StateRuleSlice]? = nil, routeIds: [String]? = nil) {
         self.fields = fields
         self.slices = slices
+        self.routeIds = routeIds
     }
 }
 

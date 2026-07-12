@@ -131,6 +131,7 @@
 .rsk-state-host,
 .rsk-toast-host,
 .rsk-settings-state-host,
+.rsk-reader-accessory-host,
 .rsk-reader-state-host {
   display: contents;
 }

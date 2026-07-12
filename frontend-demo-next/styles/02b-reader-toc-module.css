@@ -1,0 +1,472 @@
+.fd-reader-module-panel {
+  position: absolute;
+  left: 12px;
+  right: calc(12px + var(--reader-quick-rail-width) + var(--reader-quick-rail-gap));
+  top: var(--reader-quick-top);
+  bottom: var(--reader-quick-bottom);
+  box-sizing: border-box;
+  display: grid;
+  align-content: start;
+  --quick-gap: 4px;
+  --quick-line: var(--reader-quick-line);
+  --quick-line-soft: var(--reader-quick-line-soft);
+  --quick-surface: var(--reader-quick-surface);
+  --quick-surface-strong: var(--reader-quick-surface-strong);
+  --quick-active: var(--reader-quick-active);
+  gap: var(--quick-gap);
+  min-width: 0;
+  overflow: hidden;
+  overscroll-behavior: contain;
+  padding: 12px 10px;
+  border: 1px solid var(--reader-control-line-strong, rgba(180, 166, 151, 0.34));
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel, rgba(255, 252, 248, 0.62));
+  box-shadow: var(--reader-control-inner-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 5px 18px rgba(92, 71, 50, 0.05));
+  font-family: var(--fd-sans);
+  scrollbar-width: none;
+}
+
+.fd-reader-module-panel .fd-small-icon {
+  width: 11px;
+  height: 11px;
+  stroke-width: 2.2;
+}
+
+.fd-reader-module-panel .fd-medium-icon {
+  width: 15px;
+  height: 15px;
+  stroke-width: 2.1;
+}
+
+.fd-reader-module-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--fd-ink);
+  font-size: 12px;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-loading-panel {
+  position: absolute;
+  left: 12px;
+  right: calc(12px + var(--reader-quick-rail-width) + var(--reader-quick-rail-gap));
+  top: var(--reader-quick-top);
+  bottom: var(--reader-quick-bottom);
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px 10px;
+  border: 1px solid var(--reader-control-line-strong, rgba(180, 166, 151, 0.34));
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel, rgba(255, 252, 248, 0.62));
+  box-shadow: var(--reader-control-inner-shadow, inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 5px 18px rgba(92, 71, 50, 0.05));
+  color: var(--fd-ink);
+  font-family: var(--fd-sans);
+  text-align: center;
+}
+
+.fd-reader-loading-panel i {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(45, 74, 62, 0.2);
+  border-top-color: var(--fd-primary-dark);
+  border-radius: var(--fd-radius-circle);
+  animation: fd-reader-loading-spin var(--reader-motion-duration-loading-spin) linear infinite;
+}
+
+.fd-reader-loading-panel strong {
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-loading-panel small {
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--fd-muted);
+  font-size: 11px;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@keyframes fd-reader-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.fd-reader-module-panel::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.fd-reader-module-panel header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+  min-height: 21px;
+}
+
+.fd-reader-module-panel header span {
+  min-width: 0;
+  display: grid;
+  gap: 0;
+}
+
+.fd-reader-module-panel header strong {
+  overflow: hidden;
+  color: var(--fd-ink);
+  font-size: 13px;
+  line-height: 1.08;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-module-panel header small {
+  overflow: hidden;
+  color: var(--fd-muted);
+  font-size: 8px;
+  line-height: 1.12;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-module-panel header button,
+.fd-reader-primary-action {
+  min-height: 20px;
+  padding: 0 2px;
+  border-radius: var(--fd-radius-sm);
+  background: transparent;
+  color: var(--reader-control-action, var(--fd-primary-dark));
+  font-size: 9px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.fd-reader-segment-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.fd-reader-toc-panel .fd-reader-segment-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fd-reader-toc-panel,
+.fd-reader-settings-panel {
+  gap: 4px;
+}
+
+.fd-reader-settings-panel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  min-height: 0;
+  align-content: stretch;
+  overflow: hidden;
+}
+
+.fd-reader-appearance-panel {
+  gap: 4px;
+  overflow: hidden;
+}
+
+.fd-reader-segment-row-even {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.fd-reader-segment-row button {
+  min-width: 0;
+  min-height: 23px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.64));
+  color: var(--reader-control-icon, #4d463f);
+  font-size: 9px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-segment-row button.is-active {
+  background: var(--quick-active);
+  color: var(--reader-control-primary-text, #fff);
+}
+
+.fd-reader-module-list {
+  display: grid;
+  gap: 0;
+}
+
+.fd-reader-module-list button {
+  min-width: 0;
+  min-height: 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 5px;
+  row-gap: 0;
+  padding: 3px 7px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--reader-control-ink, #332c25);
+  text-align: left;
+}
+
+.fd-reader-toc-panel .fd-reader-module-list {
+  overflow: hidden;
+  gap: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.fd-reader-toc-panel .fd-reader-module-list button {
+  min-height: 21px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.fd-reader-toc-panel .fd-reader-module-list button + button {
+  border-top: 1px solid var(--quick-line-soft);
+}
+
+.fd-reader-directory-list button {
+  grid-template-columns: minmax(0, 1fr) auto;
+  padding: 2px 8px;
+}
+
+.fd-reader-directory-list button strong {
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.08;
+}
+
+.fd-reader-bookmark-list button {
+  min-height: 34px;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  column-gap: 6px;
+  padding: 3px 7px;
+}
+
+.fd-reader-bookmark-list i {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--reader-control-icon, #5d554c);
+  font-style: normal;
+}
+
+.fd-reader-bookmark-list strong {
+  grid-column: 2;
+}
+
+.fd-reader-bookmark-list small {
+  grid-column: 2;
+}
+
+.fd-reader-bookmark-list em {
+  grid-column: 3;
+}
+
+.fd-reader-toc-panel header strong,
+.fd-reader-settings-panel header strong {
+  font-size: 14px;
+}
+
+.fd-reader-toc-panel header small {
+  font-size: 8px;
+}
+
+.fd-reader-module-list button.is-current {
+  background: var(--reader-control-active-soft, rgba(45, 74, 62, 0.09));
+}
+
+.fd-reader-module-list strong,
+.fd-reader-module-list small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-module-list strong {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 10px;
+  line-height: 1.12;
+  font-weight: 600;
+}
+
+.fd-reader-module-list small {
+  grid-column: 1;
+  grid-row: 2;
+  display: block;
+  color: var(--fd-muted);
+  font-size: 8px;
+  line-height: 1.12;
+}
+
+.fd-reader-module-list em {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  color: var(--quick-active);
+  font-size: 9px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.fd-reader-toc-list {
+  min-height: 0;
+  display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
+  overflow: auto;
+  border: 0;
+  background: transparent;
+  scrollbar-width: none;
+}
+
+.fd-reader-toc-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.fd-reader-toc-switch-row,
+.fd-reader-toc-row {
+  min-height: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  align-items: center;
+  color: var(--reader-control-ink, #332c25);
+}
+
+.fd-reader-toc-switch-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 5px;
+  padding: 3px 0;
+}
+
+.fd-reader-toc-switch-row button {
+  min-width: 0;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.56));
+  color: var(--reader-control-ink, #332c25);
+  font-size: 10px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: none;
+}
+
+.fd-reader-toc-switch-row button .fd-small-icon {
+  width: 12px;
+  height: 12px;
+  stroke-width: 2;
+}
+
+.fd-reader-toc-switch-row button.is-active {
+  background: var(--fd-primary-dark);
+  color: var(--reader-control-primary-text, #fff);
+}
+
+.fd-reader-toc-row {
+  grid-template-columns: minmax(0, 1fr) 24px 24px;
+  gap: 4px;
+  padding: 0 8px;
+  text-align: left;
+  box-shadow: none;
+}
+
+.fd-reader-toc-panel .fd-reader-module-list .fd-reader-toc-row {
+  min-height: 27px;
+  height: 27px;
+  grid-template-columns: minmax(0, 1fr) 24px 24px;
+  grid-template-rows: 1fr;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.fd-reader-toc-switch-row + .fd-reader-toc-row,
+.fd-reader-toc-row + .fd-reader-toc-row {
+  border-top: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
+}
+
+.fd-reader-toc-row.is-current {
+  background: var(--reader-control-active-soft, rgba(45, 74, 62, 0.08));
+  box-shadow: inset 3px 0 0 var(--fd-accent);
+}
+
+.fd-reader-toc-row strong {
+  grid-row: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--reader-control-ink, #332c25);
+  font-size: 11px;
+  line-height: 1.12;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-toc-marker {
+  grid-row: 1;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--reader-control-muted, #5b5046) 58%, transparent);
+}
+
+.fd-reader-toc-marker.is-active {
+  color: var(--reader-control-action, var(--fd-primary-dark));
+}
+
+.fd-reader-toc-marker .fd-small-icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+}
+
+.fd-reader-panel-search {
+  min-height: 30px;
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 0 8px;
+  border: 1px solid rgba(190, 174, 156, 0.35);
+  border-radius: var(--fd-radius-pill);
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--fd-muted);
+  font-size: 10px;
+}
+
+.fd-reader-quick-no-header {
+  grid-template-rows: minmax(0, 1fr);
+  align-content: stretch;
+  gap: 0;
+}

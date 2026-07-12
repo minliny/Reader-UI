@@ -41,13 +41,20 @@ enum class StateRuleSlice {
     @SerialName("slice-5")
     Slice5,
     @SerialName("slice-6")
-    Slice6
+    Slice6,
+    @SerialName("controlLayer")
+    ControlLayer,
+    @SerialName("reader")
+    Reader,
+    @SerialName("overlay")
+    Overlay
 }
 
 @Serializable
 data class StateRuleTarget(
     val fields: List<String>,
-    val slices: List<StateRuleSlice>? = null
+    val slices: List<StateRuleSlice>? = null,
+    val routeIds: List<String>? = null
 )
 
 @Serializable

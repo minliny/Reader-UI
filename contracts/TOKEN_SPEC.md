@@ -1,9 +1,9 @@
 # Token Spec
 
 状态：Phase 1 P0 可执行参考规格
-日期：2026-07-04
+日期：2026-07-11
 权威源：[token.schema.json](./token.schema.json)、[token.fixtures.json](./fixtures/token.fixtures.json)
-来源：[frontend-demo/tokens.css](../frontend-demo/tokens.css)、[frontend-demo/motion-tokens.css](../frontend-demo/motion-tokens.css)、[token.fixtures.json](./fixtures/token.fixtures.json)
+来源：[frontend-demo-optimized/tokens.css](../frontend-demo-optimized/tokens.css)、[frontend-demo-optimized/motion-tokens.css](../frontend-demo-optimized/motion-tokens.css)、[token.fixtures.json](./fixtures/token.fixtures.json)
 
 本文是 P0 阶段"Token 和视觉规范"。定义语义 token 分组、三端 TokenAdapter 映射规则、raw 值检查口径。Token 数值以 [token.fixtures.json](./fixtures/token.fixtures.json) 为唯一源；本文不重复数值，只定义分组、映射、检查规则。
 
@@ -13,7 +13,7 @@
 - 语义 token 分组（按用途归并，不按 category）
 - 三端 TokenAdapter 映射规则（SwiftUI / Compose / ArkUI）
 - 禁止 raw color / spacing / radius / duration 的检查口径
-- 阅读主题、字号、行距、页边距、夜间模式、卡片、列表、按钮、tab、overlay 的 token 分组
+- 阅读主题、字号、行距、页边距、夜间模式、卡片、列表、按钮、tab、overlay、表单控件原语的 token 分组
 
 本文不覆盖：
 - 不重复 token 数值（以 fixtures 为唯一源）
@@ -29,7 +29,7 @@
 ```
 
 - 前缀固定 `--fd-ds-`
-- `<category>` ∈ `color / font / type / spacing / size / radius / shadow / elevation / z-index / text-constraint / motion-duration / motion-easing`
+- `<category>` ∈ `color / font / type / spacing / size / radius / shadow / elevation / z-index / text-constraint / motion-duration / motion-easing / icon / preset`
 - `<semantic>` 描述用途，不允许使用 raw 数值（如 `--fd-ds-color-fff8f4` 禁止）
 - 一经发布不得改名，只能 `deprecated: true` + `replacedBy`
 
@@ -53,16 +53,16 @@
 | `--fd-ds-color-paper-bright` | color | 亮纸张色 |
 | `--fd-ds-color-ink` | color | 正文墨色 |
 | `--fd-ds-color-control-ink` | color | 控制层文字色 |
+| `--fd-ds-color-paper-night` | color | 夜间阅读背景色 |
+| `--fd-ds-color-ink-night` | color | 夜间阅读正文色 |
+| `--fd-ds-color-control-ink-night` | color | 夜间控制层文字色 |
+| `--fd-ds-color-primary-night` | color | 夜间主强调色 |
+| `--fd-ds-color-floating-control-bg-alt-night` | color | 夜间控制层备用背景色 |
 | `--fd-ds-font-serif` | font | 阅读正文衬线字体 |
 | `--fd-ds-type-reader-body-size` | type | 阅读正文字号 |
 | `--fd-ds-text-reader-line-length` | text-constraint | 阅读正文行宽（ch 单位）|
 
-夜间模式 token：当前 fixtures 暂未拆分 night 子组，由 `reader.nightState.toggle` 触发平台 TokenAdapter 切换为系统 dark color set。后续如需明确夜间主题 token，按以下命名补入 fixtures：
-```
---fd-ds-color-paper-night
---fd-ds-color-ink-night
---fd-ds-color-control-ink-night
-```
+夜间模式必须使用上表已发布的 `*-night` token；`reader.nightState.toggle` 只负责切换语义集合，不得在组件内临时派生夜间 raw color。
 
 ### 2.2 字号 / 行距 / 页边距组（reading-typography）
 
@@ -145,23 +145,23 @@
 | `--fd-ds-color-floating-control-bg-alt` | color | overlay 备用背景 |
 | `--fd-ds-color-meta-bg` | color | meta 区背景 |
 | `--fd-ds-size-reader-bottom-sheet-min-height` | size | reader 底表最小高度 |
-| `--fd-ds-size-reader-module-nav-height` | size | reader 模块导航高度 |
+| `--fd-ds-size-reader-module-nav-height` | size | 保留 token 名；产品用途待新规格 |
 | `--fd-ds-radius-bottom-sheet` | radius | 底表圆角 |
 | `--fd-ds-z-overlay` | z-index | overlay 层级 |
 | `--fd-ds-z-bottom-sheet` | z-index | 底表层级 |
-| `--fd-ds-z-reader-module-nav` | z-index | reader 模块导航层级 |
+| `--fd-ds-z-reader-module-nav` | z-index | 保留 token 名；产品用途待新规格 |
 | `--fd-ds-z-dialog` | z-index | dialog 层级 |
 | `--fd-ds-shadow-elevated` | shadow | overlay 阴影 |
 | `--fd-ds-motion-duration-overlay` | motion-duration | overlay 进入退出 |
 
 ### 2.8 夜间模式组（night-mode）
 
-夜间模式当前由 `reader.nightState.toggle` 事件触发，平台 TokenAdapter 切换到系统 dark color set。
+夜间模式由 `reader.nightState.toggle` 事件触发，平台 TokenAdapter 切换到 fixtures 已定义的 night semantic set；平台 dark color set 必须映射到该集合，不得成为另一套未登记颜色。
 
 策略：
-- 不在本仓定义 `*-night` token（避免与系统 dark set 重复）。
-- 平台 TokenAdapter 必须实现"light/dark 双值"，依据 `ui-state.readerMode` 或系统 appearance 切换。
-- 如需明确夜间主题 token（如阅读器专用夜间配色），按 `--fd-ds-color-*-night` 命名补入 fixtures。
+- 阅读正文、正文背景、控制层文字、主强调及控制层备用背景使用 §2.1 已发布的 `*-night` token。
+- 平台 TokenAdapter 必须实现 light/dark 双值，依据 `ui-state.readerMode` 或系统 appearance 切换。
+- 新增夜间语义时必须先补 fixtures 和三端 registry；不得只在某一端增加私有 dark color。
 
 ### 2.9 RSS / 状态色组（rss-status）
 
@@ -174,6 +174,60 @@
 ### 2.10 Motion 组（motion）
 
 motion-duration 和 motion-easing 全集见 [MOTION_SPEC.md](./MOTION_SPEC.md) §3。本组不重复列。
+
+### 2.11 控件原语组（control-primitives）
+
+本组是 `Input / Select / Switch / Button` 的共享视觉合同。所有 Reader 表单与设置场景必须消费同一组 token；组件不得再声明同义的局部高度、边框、圆角、标签列或状态色。该合同不定义控制层结构或模块内容。
+
+状态颜色：
+
+| Token | Category | 用途 |
+| --- | --- | --- |
+| `--fd-ds-color-control-field-surface` | color | 输入框和下拉框默认底色 |
+| `--fd-ds-color-control-field-border-default` | color | 默认边框 |
+| `--fd-ds-color-control-field-border-hover` | color | hover 边框 |
+| `--fd-ds-color-control-field-border-focus` | color | focus / active 边框与 focus ring 基色 |
+| `--fd-ds-color-control-field-surface-disabled` | color | disabled 底色 |
+| `--fd-ds-color-control-field-ink-disabled` | color | disabled 标签、值和图标色 |
+| `--fd-ds-color-control-field-border-error` | color | error 边框和辅助文字色 |
+| `--fd-ds-color-control-field-border-success` | color | success 边框和辅助文字色 |
+
+尺寸与几何：
+
+| Token | Category | 用途 |
+| --- | --- | --- |
+| `--fd-ds-size-control-sm-height` | size | 紧凑型控件视觉高度 |
+| `--fd-ds-size-control-md-height` | size | 默认控件视觉高度 |
+| `--fd-ds-size-control-lg-height` | size | 强调型控件视觉高度 |
+| `--fd-ds-size-control-touch-target` | size | 所有可交互控件最小触控高度/宽度 |
+| `--fd-ds-size-switch-track-width` | size | Switch 轨道宽度 |
+| `--fd-ds-size-switch-track-height` | size | Switch 轨道高度 |
+| `--fd-ds-size-switch-thumb` | size | Switch 滑块直径 |
+| `--fd-ds-size-control-icon` | size | 控件内图标标准尺寸 |
+| `--fd-ds-size-reader-field-label-column` | size | Reader 设置行固定标签列宽 |
+| `--fd-ds-radius-field` | radius | Input / Select 圆角 |
+| `--fd-ds-radius-button` | radius | 标准 Button 圆角 |
+| `--fd-ds-radius-switch` | radius | Switch 轨道胶囊圆角 |
+
+间距与文字：
+
+| Token | Category | 用途 |
+| --- | --- | --- |
+| `--fd-ds-space-control-inline` | spacing | 控件左右内边距 |
+| `--fd-ds-space-control-gap` | spacing | 标签、控件、图标之间的标准间距 |
+| `--fd-ds-space-control-row-block` | spacing | 控件行上下内边距 |
+| `--fd-ds-type-control-label-size` | type | 字段标签字号 |
+| `--fd-ds-type-control-value-size` | type | 输入值、选项值和按钮文字字号 |
+| `--fd-ds-type-control-helper-size` | type | 说明、错误和成功辅助文字字号 |
+
+消费规则：
+
+1. 控件视觉高度只允许使用 `sm / md / lg`；视觉高度小于触控尺寸时，外层 hit target 仍必须满足 `control-touch-target`。
+2. 状态优先级固定为 `disabled > error/success > focus > hover > default`，同一时刻只能呈现一个最高优先级边框状态。
+3. Input 与 Select 必须共用 field surface、field border 和 field radius；标准 Button 使用 button radius；Switch 使用固定 track/thumb 几何和 switch radius。
+4. `--fd-ds-radius-control` 作为已发布的 legacy pill token 保留；新表单控件不得把它当作 field/button 的默认圆角。
+5. Reader 配置行默认使用固定 label column。窄屏可折叠为单列，但不得用局部 raw width 替换该 token。
+6. label、value、helper 各自只使用对应 type token；错误/成功状态不得通过改变字号或布局表达。
 
 ## 3. 三端 TokenAdapter 映射规则
 
@@ -274,13 +328,13 @@ P0 阶段建议先实现 grep 检查；AST 检查作为 Phase 5 验收门槛（�
 
 ### 4.3 demo 例外
 
-`frontend-demo/` 是浏览器 demo，使用 CSS variable 直接引用 token：
+`frontend-demo-optimized/` 是浏览器 demo，使用 CSS variable 直接引用 token：
 ```css
 background: var(--fd-ds-color-paper);
 padding: var(--fd-ds-space-md);
 ```
 
-CSS variable 使用不算 raw 值。但 `frontend-demo/styles/*.css` 中如出现 `background: #fff8f4` 而不是 `var(--fd-ds-color-paper)`，视为漂移，应修正或补入 fixtures。
+CSS variable 使用不算 raw 值。但 `frontend-demo-optimized/styles/*.css` 中如出现 `background: #fff8f4` 而不是 `var(--fd-ds-color-paper)`，视为漂移，应修正或补入 fixtures。
 
 ## 5. token.fixtures.json `platforms` 字段补全策略
 
@@ -296,7 +350,7 @@ P0 阶段的检查口径：
 
 ## 6. 生成 registry 起点
 
-`node tools/codegen/generate.mjs` 现在会把 [token.fixtures.json](./fixtures/token.fixtures.json) 中已有 117 条 fixture 生成到三端文件：
+`node tools/codegen/generate.mjs` 会把 [token.fixtures.json](./fixtures/token.fixtures.json) 中全部 fixture 生成到三端文件：
 
 - Swift：`generated/swift/Token.swift` 的 `TokenRegistry`
 - Kotlin：`generated/kotlin/Token.kt` 的 `TokenRegistry`
@@ -326,8 +380,10 @@ registry 保留原有 TokenCategory enum，同时给平台提供可消费的 tok
 
 ## 8. 缺口与下一步
 
-P0 阶段已补 token 分组、三端映射规则、raw 值检查口径。剩余缺口：
+P0 阶段已补 token 分组、三端映射规则、raw 值检查口径。控件原语 token 层已闭环：状态颜色、三档视觉高度、最小触控尺寸、Switch 几何、控件图标、Reader 标签列、行内/行间距、组件圆角及 label/value/helper 字号均以 §2.11 为唯一来源。
+
+跨层剩余项：
 - fixtures 的 `platforms.swift / kotlin / arkts` 字段未填（P1 阶段回填）。
-- 阅读主题夜间模式 token 未明确（当前依赖平台 dark color set；如需独立夜间配色，按 §2.8 命名补入）。
 - 行距 / 阅读页边距 token 未明确（当前由平台排版层派生；如需统一，按 §2.2 命名补入）。
 - 三端 TokenAdapter 实现归各端仓库，P0 不验证；Phase 5 验收门槛覆盖。
+- Demo 及三端组件必须迁移到 §2.11；控件 selector/state 是否已消费 token 属于实现验收，不得通过新增局部同义变量绕过。

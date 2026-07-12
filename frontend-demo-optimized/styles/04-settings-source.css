@@ -173,10 +173,10 @@
 
 .fd-brightness-rail {
   position: absolute;
-  right: 12px;
-  top: var(--reader-quick-top);
-  bottom: var(--reader-quick-bottom);
-  width: var(--reader-quick-rail-width);
+  right: var(--reader-brightness-right, 12px);
+  top: var(--reader-brightness-top, 28px);
+  bottom: var(--reader-brightness-bottom, 110px);
+  width: var(--reader-brightness-width, 38px);
   display: grid;
   justify-items: center;
   gap: 10px;
@@ -908,6 +908,17 @@
 .fd-demo-dialog button.is-danger,
 .fd-demo-dialog button:last-child {
   background: var(--fd-danger);
+  color: #fff;
+}
+
+.fd-rss-confirm-dialog small {
+  color: var(--fd-muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.fd-rss-confirm-dialog button:last-child:not(.is-danger) {
+  background: var(--fd-primary);
   color: #fff;
 }
 

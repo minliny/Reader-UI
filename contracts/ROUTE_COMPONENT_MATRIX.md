@@ -60,22 +60,24 @@
 
 ### 1.3 ReaderShell（阅读链路）
 
+本节只登记 schema 中既有 RouteId 与 overlay enum，不定义控制层结构、模块内容或 route 之间的展开关系。
+
 | RouteId | overlay enum | 说明 |
 | --- | --- | --- |
 | `immersive-reading` | null | 沉浸阅读主页 |
 | `reader` | null | reader 别名 |
 | `reader_content` | null | 阅读正文层 |
-| `control-layer-base-v2` | reader-control | 控制层基础 |
-| `reader-appearance-overlay-v2` / `reader-appearance` | appearance | 外观 |
-| `reader-tts-overlay-v2` / `tts` | tts | 朗读 |
-| `reader-settings-overlay-v2` / `reader-settings` | settings | 设置 |
-| `reader-search-overlay-v2` / `content-search` | content-search | 内容搜索 |
-| `reader-replace-overlay-v2` / `content-replacement` | content-replacement | 内容替换 |
-| `reader-directory-overlay-v2` / `toc-bookmarks` | directory | 目录书签 |
-| `reader-auto-scroll-overlay-v2` / `auto-page` | auto-page | 自动翻页 |
-| `source-switch` / `source-switch-results` | source-switch | 换源 |
+| `control-layer-base-v2` | reader-control | schema route |
+| `reader-appearance-overlay-v2` / `reader-appearance` | appearance | schema route |
+| `reader-tts-overlay-v2` / `tts` | tts | schema route |
+| `reader-settings-overlay-v2` / `reader-settings` | settings | schema route |
+| `reader-search-overlay-v2` / `content-search` | content-search | schema route |
+| `reader-replace-overlay-v2` / `content-replacement` | content-replacement | schema route |
+| `reader-directory-overlay-v2` / `toc-bookmarks` | directory | schema route |
+| `reader-auto-scroll-overlay-v2` / `auto-page` | auto-page | schema route |
+| `source-switch` / `source-switch-results` | source-switch | schema route |
 | `reader-night-state-v2` | null | 夜间态派生（非 overlay）|
-| `reader-full-font` / `reader-full-theme` / `reader-full-theme-edit` / `reader-full-layout` / `reader-full-page-turn` / `reader-full-directory` / `reader-full-tts` / `reader-full-appearance` / `reader-full-settings` | null | 全屏设置页（从 overlay 展开）|
+| `reader-full-font` / `reader-full-theme` / `reader-full-theme-edit` / `reader-full-layout` / `reader-full-page-turn` / `reader-full-directory` / `reader-full-tts` / `reader-full-appearance` / `reader-full-settings` | null | schema route；产品关系未定义 |
 | `reader-book-cache` | null | 书籍缓存管理 |
 | `reader-debug-info` | null | 调试信息 |
 
@@ -277,7 +279,7 @@
 | --- | --- |
 | `immersive-reading` / `reader` / `reader_content` | `reader.entry.coverToImmersive` / `reader.entry.actionToImmersive` / `reader.page.turn.next-prev` / `reader.chapter.jump` / `reader.control.handle.press` / `reader.control.handle.release` / `reader.control.dock.longPress` / `reader.control.dock.drag` / `reader.control.dock.release` / `reader.control.dock.rebound` / `reader.control.hide` |
 | `control-layer-base-v2` | `reader.module.switch` |
-| `reader-appearance-overlay-v2` / `reader-tts-overlay-v2` / `reader-settings-overlay-v2` / `reader-search-overlay-v2` / `reader-replace-overlay-v2` / `reader-directory-overlay-v2` / `reader-auto-scroll-overlay-v2` | `overlay.sheet.enter` / `overlay.sheet.exit` / `reader.module.switch`（互斥切换）|
+| `reader-appearance-overlay-v2` / `reader-tts-overlay-v2` / `reader-settings-overlay-v2` / `reader-search-overlay-v2` / `reader-replace-overlay-v2` / `reader-directory-overlay-v2` / `reader-auto-scroll-overlay-v2` | `overlay.sheet.enter` / `overlay.sheet.exit` / `reader.module.switch` |
 | `tts` / `auto-page` | `reader.session.capsule.enter` / `reader.session.capsule.update` / `reader.session.capsule.exit` / `reader.session.capsule.switch` / `reader.session.controlSpace.enter` / `reader.session.controlSpace.exit` / `reader.session.tts.start` / `reader.session.autoPage.start` |
 | `source-switch` / `source-switch-results` | `reader.sourceSwitch.open-close` |
 | `reader-night-state-v2` | `state.content.replace` |

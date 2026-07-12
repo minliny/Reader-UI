@@ -111,6 +111,8 @@ Native UI 发 UiEvent → Reducer 处理 → 必要时 emit CoreCommand。下表
 | `book.action`（加入书架）| — | `bookshelf.book.add` |
 | `book.action`（删除）| 弹删除确认 Dialog | — |
 | `book.detail.open` | `route.push` 到 `book-detail` | `source.detail` + `chapter.list` |
+| `source.management.open` | 加载可管理书源 | `source.list` |
+| `source.switch.confirm` | 选择新书源并刷新详情、目录与正文 | `source.change` + `source.detail` + `chapter.list` + `content.load` |
 | `book.directory.open` | `route.push` 到 `book-directory` | `chapter.list` |
 | `book.search.submit` | 更新 `searchQuery` | `source.search` |
 | `book.search.scopeChange` | 更新 `searchScope` | — |
@@ -241,6 +243,8 @@ Core 可以发起 `HostRequest`（`initiator: core`），Reducer 可以发起平
 | `permission.check` | reducer | 检查权限 | 启动时检查存储 / 通知权限 |
 | `background.schedule` | reducer | 后台任务调度 | RSS 后台刷新 |
 | `background.cancel` | reducer | 取消后台任务 | — |
+| `timer.foreground.arm` | reducer | 启动可取消的前台 one-shot timer | auto-page；不得映射为后台任务 |
+| `timer.foreground.cancel` | reducer | 失效 generation 并取消前台 timer | auto-page stop / 手动翻页 / 退后台 |
 | `notification.show` | reducer | 显示通知 | RSS 更新 / TTS 状态 |
 | `notification.cancel` | reducer | 取消通知 | — |
 | `share.invoke` | reducer | 调用分享 | 分享书籍 / RSS 条目 |
@@ -259,6 +263,7 @@ Core 可以发起 `HostRequest`（`initiator: core`），Reducer 可以发起平
 - Reducer 不能发起 `tts.system.*`（系统 TTS 由 Core 控制）
 - Core 不能发起 `webview.open / close / evaluate`（WebView 是 UI 行为）
 - Core 不能发起 `permission.request / check`（权限弹窗是 UI 行为）
+- auto-page 前台 timer 不能使用 `background.schedule / cancel`；Reducer 必须使用 `timer.foreground.arm / cancel`
 - Core 不能发起 `notification.show`（通知展示由 Reducer 决定）
 - Core 不能发起 `share.invoke / clipboard.*`（分享 / 剪贴板是 UI 行为）
 - Core 不能发起 `device.vibrate / screen.keep-on / screen.release`（设备行为由 Reducer 决定）
@@ -283,19 +288,19 @@ Host Adapter 不允许：
 Native UI
   -> emit UiEvent
 
-Platform Interaction Reducer
+ReaderUIRuntime
   -> update UiState
   -> emit CoreCommand（必要时）
-  -> emit HostCommand（必要时，initiator=reducer）
+  -> emit HostRequest effect（必要时，initiator=reducer）
 
 Reader-Core-Native
   -> return CoreEvent（成功 / 失败）
   -> emit HostRequest（必要时，initiator=core）
 
 Host Adapter
-  -> return HostResult（给 Core 或 Reducer）
+  -> return HostResult（给 Core 或 thin Host coordinator）
 
-Platform Interaction Reducer
+Thin Host Coordinator -> ReaderUIRuntime
   -> merge CoreEvent / HostResult
   -> produce ViewState
 

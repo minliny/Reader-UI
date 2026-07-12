@@ -137,7 +137,10 @@
         </article>
         <div class="${classList("rsk-reader-overlay-host", config.overlayClass)}" data-slot="readerOverlayHost">
           ${config.overlayHtml || ""}
-          <div class="${classList("rsk-bottom-sheet-host", config.bottomSheetHostClass)}" data-slot="bottomSheetHost">${config.bottomSheetHtml || ""}</div>
+          <div class="${classList("rsk-bottom-sheet-host", config.bottomSheetHostClass)}" data-slot="bottomSheetHost">
+            ${config.bottomSheetHtml || ""}
+            <div class="${classList("rsk-reader-accessory-host", config.accessoryHostClass)}" data-slot="readerAccessoryHost">${config.accessoryHtml || ""}</div>
+          </div>
           <nav class="${classList("rsk-reader-module-nav", config.moduleNavClass)}" data-slot="readerModuleNav" aria-label="阅读模块导航">
             ${config.moduleNavHtml || ""}
           </nav>
@@ -148,11 +151,22 @@
 
   function renderSettingsShell(config) {
     const data = config.data || {};
+    const settingsFrameClass = config.frameClass || config.phoneClass || "fd-phone fd-settings-phone";
+    const settingsConfig = Object.assign({
+      statusBarClass: "fd-status-bar",
+      systemIconsClass: "fd-system-icons",
+      signalClass: "fd-signal",
+      wifiClass: "fd-wifi",
+      batteryClass: "fd-battery",
+      topBarClass: "fd-back-bar",
+      iconButtonClass: "fd-icon-button",
+      iconClass: "fd-icon"
+    }, config);
     return `
-      <main class="${classList("rsk-phone", "rsk-settings-shell", config.frameClass)}" data-shell="SettingsShell" data-slot="settingsFrame" aria-label="${esc(config.ariaLabel || config.title || "设置页面")}">
-        ${statusBar(data, config)}
-        ${backTopBar(Object.assign({}, config, { trailingIcon: config.trailingIcon === undefined ? null : config.trailingIcon }))}
-        <div class="${classList("rsk-settings-content", config.contentClass)}" data-slot="settingsContent">
+      <main class="${classList("rsk-phone", "rsk-settings-shell", settingsFrameClass)}" data-shell="SettingsShell" data-slot="settingsFrame" aria-label="${esc(config.ariaLabel || config.title || "设置页面")}">
+        ${statusBar(data, settingsConfig)}
+        ${backTopBar(Object.assign({}, settingsConfig, { trailingIcon: config.trailingIcon === undefined ? null : config.trailingIcon }))}
+        <div class="${classList("rsk-settings-content", config.contentClass || "fd-phone-content fd-settings-content")}" data-slot="settingsContent">
           ${config.contentHtml || ""}
         </div>
         <div class="${classList("rsk-bottom-action-host", config.bottomActionHostClass)}" data-slot="bottomActionHost">${config.bottomActionHtml || ""}</div>

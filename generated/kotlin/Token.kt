@@ -32,7 +32,9 @@ enum class TokenCategory {
     @SerialName("motion-easing")
     MotionEasing,
     @SerialName("icon")
-    Icon
+    Icon,
+    @SerialName("preset")
+    Preset
 }
 
 @Serializable
@@ -215,6 +217,62 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--fd-ds-color-control-field-surface",
+        category = TokenCategory.Color,
+        value = "rgba(255,248,239,0.82)",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-border-default",
+        category = TokenCategory.Color,
+        value = "#c1c7cd",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-border-hover",
+        category = TokenCategory.Color,
+        value = "#87928d",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-border-focus",
+        category = TokenCategory.Color,
+        value = "#2d4a3e",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-surface-disabled",
+        category = TokenCategory.Color,
+        value = "rgba(234,225,218,0.62)",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-ink-disabled",
+        category = TokenCategory.Color,
+        value = "#928b84",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-border-error",
+        category = TokenCategory.Color,
+        value = "#d7473e",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-color-control-field-border-success",
+        category = TokenCategory.Color,
+        value = "#338144",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--fd-ds-font-sans",
         category = TokenCategory.Font,
         value = "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans SC\", \"Source Han Sans SC\", sans-serif",
@@ -362,6 +420,27 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--fd-ds-type-control-label-size",
+        category = TokenCategory.Type,
+        value = "12px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-type-control-value-size",
+        category = TokenCategory.Type,
+        value = "12px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-type-control-helper-size",
+        category = TokenCategory.Type,
+        value = "10px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--fd-ds-space-xs",
         category = TokenCategory.Spacing,
         value = "8px",
@@ -435,6 +514,27 @@ object TokenRegistry {
         name = "--fd-ds-space-keyboard-gap",
         category = TokenCategory.Spacing,
         value = "12px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-space-control-inline",
+        category = TokenCategory.Spacing,
+        value = "10px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-space-control-gap",
+        category = TokenCategory.Spacing,
+        value = "12px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-space-control-row-block",
+        category = TokenCategory.Spacing,
+        value = "4px",
         platforms = null,
         deprecated = false
     ),
@@ -516,6 +616,69 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--fd-ds-size-control-sm-height",
+        category = TokenCategory.Size,
+        value = "28px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-control-md-height",
+        category = TokenCategory.Size,
+        value = "36px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-control-lg-height",
+        category = TokenCategory.Size,
+        value = "44px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-control-touch-target",
+        category = TokenCategory.Size,
+        value = "44px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-switch-track-width",
+        category = TokenCategory.Size,
+        value = "44px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-switch-track-height",
+        category = TokenCategory.Size,
+        value = "24px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-switch-thumb",
+        category = TokenCategory.Size,
+        value = "20px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-control-icon",
+        category = TokenCategory.Size,
+        value = "16px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-size-reader-field-label-column",
+        category = TokenCategory.Size,
+        value = "108px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--fd-ds-radius-small",
         category = TokenCategory.Radius,
         value = "4px",
@@ -559,6 +722,27 @@ object TokenRegistry {
     ),
     Token(
         name = "--fd-ds-radius-control",
+        category = TokenCategory.Radius,
+        value = "999px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-radius-field",
+        category = TokenCategory.Radius,
+        value = "6px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-radius-button",
+        category = TokenCategory.Radius,
+        value = "6px",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-radius-switch",
         category = TokenCategory.Radius,
         value = "999px",
         platforms = null,

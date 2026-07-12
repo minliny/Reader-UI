@@ -82,6 +82,14 @@ enum class UiEventType {
     ReaderContentReplacementOpen,
     @SerialName("reader.contentReplacement.close")
     ReaderContentReplacementClose,
+    @SerialName("reader.contentReplacement.rule.add")
+    ReaderContentReplacementRuleAdd,
+    @SerialName("reader.contentReplacement.rule.edit")
+    ReaderContentReplacementRuleEdit,
+    @SerialName("reader.contentReplacement.rule.delete")
+    ReaderContentReplacementRuleDelete,
+    @SerialName("reader.contentReplacement.rule.toggle")
+    ReaderContentReplacementRuleToggle,
     @SerialName("reader.sourceSwitch.open")
     ReaderSourceSwitchOpen,
     @SerialName("reader.sourceSwitch.close")
@@ -254,6 +262,16 @@ enum class UiEventType {
     SourceImportApply,
     @SerialName("sync.run")
     SyncRun,
+    @SerialName("sync.start")
+    SyncStart,
+    @SerialName("sync.progress")
+    SyncProgress,
+    @SerialName("sync.complete")
+    SyncComplete,
+    @SerialName("sync.conflict")
+    SyncConflict,
+    @SerialName("sync.resolve")
+    SyncResolve,
     @SerialName("sync.resolveConflict")
     SyncResolveConflict,
     @SerialName("sync.conflict.list")
@@ -425,7 +443,111 @@ enum class UiEventType {
     @SerialName("reducedMotion.enable")
     ReducedMotionEnable,
     @SerialName("reducedMotion.disable")
-    ReducedMotionDisable
+    ReducedMotionDisable,
+    @SerialName("import.permission.denied")
+    ImportPermissionDenied,
+    @SerialName("import.format.unsupported")
+    ImportFormatUnsupported,
+    @SerialName("import.file.empty")
+    ImportFileEmpty,
+    @SerialName("import.duplicate.found")
+    ImportDuplicateFound,
+    @SerialName("import.conflict.resolve")
+    ImportConflictResolve,
+    @SerialName("import.partial.success")
+    ImportPartialSuccess,
+    @SerialName("import.retry.failed")
+    ImportRetryFailed,
+    @SerialName("reader.toc.load")
+    ReaderTocLoad,
+    @SerialName("reader.toc.offline")
+    ReaderTocOffline,
+    @SerialName("reader.toc.error")
+    ReaderTocError,
+    @SerialName("reader.content.load")
+    ReaderContentLoad,
+    @SerialName("reader.content.offline")
+    ReaderContentOffline,
+    @SerialName("reader.content.error")
+    ReaderContentError,
+    @SerialName("reader.page.boundary")
+    ReaderPageBoundary,
+    @SerialName("reader.progress.restore")
+    ReaderProgressRestore,
+    @SerialName("reader.background.restore")
+    ReaderBackgroundRestore,
+    @SerialName("reader.bookmark.add")
+    ReaderBookmarkAdd,
+    @SerialName("reader.bookmark.remove")
+    ReaderBookmarkRemove,
+    @SerialName("source.switch.empty")
+    SourceSwitchEmpty,
+    @SerialName("source.switch.error")
+    SourceSwitchError,
+    @SerialName("source.switch.timeout")
+    SourceSwitchTimeout,
+    @SerialName("source.switch.loading")
+    SourceSwitchLoading,
+    @SerialName("source.switch.rollback")
+    SourceSwitchRollback,
+    @SerialName("source.switch.preview")
+    SourceSwitchPreview,
+    @SerialName("reader.font.import")
+    ReaderFontImport,
+    @SerialName("reader.font.delete")
+    ReaderFontDelete,
+    @SerialName("reader.font.fallback")
+    ReaderFontFallback,
+    @SerialName("reader.font.rename")
+    ReaderFontRename,
+    @SerialName("reader.font.enable")
+    ReaderFontEnable,
+    @SerialName("reader.theme.new")
+    ReaderThemeNew,
+    @SerialName("reader.theme.edit")
+    ReaderThemeEdit,
+    @SerialName("reader.theme.delete")
+    ReaderThemeDelete,
+    @SerialName("reader.theme.duplicate")
+    ReaderThemeDuplicate,
+    @SerialName("reader.theme.setdefault")
+    ReaderThemeSetdefault,
+    @SerialName("reader.typography.reset")
+    ReaderTypographyReset,
+    @SerialName("reader.config.persist")
+    ReaderConfigPersist,
+    @SerialName("reader.config.restart.simulate")
+    ReaderConfigRestartSimulate,
+    @SerialName("reader.replace.create")
+    ReaderReplaceCreate,
+    @SerialName("reader.replace.update")
+    ReaderReplaceUpdate,
+    @SerialName("reader.replace.delete")
+    ReaderReplaceDelete,
+    @SerialName("reader.replace.enable")
+    ReaderReplaceEnable,
+    @SerialName("reader.replace.sort")
+    ReaderReplaceSort,
+    @SerialName("reader.replace.validate")
+    ReaderReplaceValidate,
+    @SerialName("reader.replace.apply")
+    ReaderReplaceApply,
+    @SerialName("reader.replace.import")
+    ReaderReplaceImport,
+    @SerialName("reader.replace.export")
+    ReaderReplaceExport,
+    @SerialName("reader.replace.preview")
+    ReaderReplacePreview,
+    @SerialName("reader.replace.undo")
+    ReaderReplaceUndo,
+    @SerialName("import.start")
+    ImportStart,
+    @SerialName("import.apply")
+    ImportApply,
+    @SerialName("import.cancel")
+    ImportCancel,
+    @SerialName("reader.typography.persist")
+    ReaderTypographyPersist
 }
 
 @Serializable

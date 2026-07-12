@@ -32,12 +32,18 @@ enum class CoreCommandType {
     ReaderProgressSnapshot,
     @SerialName("source.search")
     SourceSearch,
+    @SerialName("source.list")
+    SourceList,
+    @SerialName("source.change")
+    SourceChange,
     @SerialName("source.detail")
     SourceDetail,
     @SerialName("source.detect")
     SourceDetect,
     @SerialName("source.save")
     SourceSave,
+    @SerialName("source.export")
+    SourceExport,
     @SerialName("source.delete")
     SourceDelete,
     @SerialName("source.debug.run")
@@ -46,6 +52,8 @@ enum class CoreCommandType {
     RssList,
     @SerialName("rss.item.read")
     RssItemRead,
+    @SerialName("rss.entry.read")
+    RssEntryRead,
     @SerialName("rss.subscription.list")
     RssSubscriptionList,
     @SerialName("rss.subscription.add")
@@ -54,8 +62,18 @@ enum class CoreCommandType {
     RssSubscriptionUpdate,
     @SerialName("rss.subscription.delete")
     RssSubscriptionDelete,
+    @SerialName("rss.subscription.persist")
+    RssSubscriptionPersist,
+    @SerialName("rss.subscription.remove")
+    RssSubscriptionRemove,
     @SerialName("rss.refresh")
     RssRefresh,
+    @SerialName("rss.feed.refresh")
+    RssFeedRefresh,
+    @SerialName("rss.favorite.persist")
+    RssFavoritePersist,
+    @SerialName("rss.favorite.remove")
+    RssFavoriteRemove,
     @SerialName("tts.queue.plan")
     TtsQueuePlan,
     @SerialName("tts.queue.start")
@@ -74,6 +92,8 @@ enum class CoreCommandType {
     SyncPush,
     @SerialName("sync.pull")
     SyncPull,
+    @SerialName("sync.conflict.detect")
+    SyncConflictDetect,
     @SerialName("sync.conflict.resolve")
     SyncConflictResolve,
     @SerialName("bookshelf.list")
@@ -97,7 +117,39 @@ enum class CoreCommandType {
     @SerialName("cache.book.prefetch")
     CacheBookPrefetch,
     @SerialName("cache.book.status")
-    CacheBookStatus
+    CacheBookStatus,
+    @SerialName("import.parse")
+    ImportParse,
+    @SerialName("import.persist")
+    ImportPersist,
+    @SerialName("import.rollback")
+    ImportRollback,
+    @SerialName("source.switch.commit")
+    SourceSwitchCommit,
+    @SerialName("source.switch.rollback")
+    SourceSwitchRollback,
+    @SerialName("font.register")
+    FontRegister,
+    @SerialName("font.unregister")
+    FontUnregister,
+    @SerialName("theme.create")
+    ThemeCreate,
+    @SerialName("theme.update")
+    ThemeUpdate,
+    @SerialName("theme.delete")
+    ThemeDelete,
+    @SerialName("typography.persist")
+    TypographyPersist,
+    @SerialName("config.loadPersisted")
+    ConfigLoadPersisted,
+    @SerialName("config.savePersisted")
+    ConfigSavePersisted,
+    @SerialName("replace.apply")
+    ReplaceApply,
+    @SerialName("replace.persist")
+    ReplacePersist,
+    @SerialName("replace.validate")
+    ReplaceValidate
 }
 
 @Serializable

@@ -1,0 +1,561 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/host-result.schema.json",
+  "title": "HostResult",
+  "description": "Host Adapter 成功结果 envelope。type 与 HostRequest 一致，result 由 type 判别。平台错误必须走 HostFailure，不能伪造成成功结果。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "result"],
+  "properties": {
+    "type": { "$ref": "host-request.schema.json#/properties/type" },
+    "result": { "type": "object" },
+    "correlationId": { "type": "string", "minLength": 1 },
+    "requestId": { "type": "string", "minLength": 1 }
+  },
+  "allOf": [
+    { "$ref": "#/$defs/HttpExecuteCase" },
+    { "$ref": "#/$defs/HttpCancelCase" },
+    { "$ref": "#/$defs/WebViewOpenCase" },
+    { "$ref": "#/$defs/WebViewCloseCase" },
+    { "$ref": "#/$defs/WebViewEvaluateCase" },
+    { "$ref": "#/$defs/CookieGetCase" },
+    { "$ref": "#/$defs/CookieSetCase" },
+    { "$ref": "#/$defs/CookieClearCase" },
+    { "$ref": "#/$defs/FileReadCase" },
+    { "$ref": "#/$defs/FileWriteCase" },
+    { "$ref": "#/$defs/FileDeleteCase" },
+    { "$ref": "#/$defs/StoragePathCase" },
+    { "$ref": "#/$defs/PersistenceGetCase" },
+    { "$ref": "#/$defs/PersistencePutCase" },
+    { "$ref": "#/$defs/CredentialGetCase" },
+    { "$ref": "#/$defs/CredentialSetCase" },
+    { "$ref": "#/$defs/CredentialDeleteCase" },
+    { "$ref": "#/$defs/TtsSystemStartCase" },
+    { "$ref": "#/$defs/TtsSystemStopCase" },
+    { "$ref": "#/$defs/TtsSystemPauseCase" },
+    { "$ref": "#/$defs/TtsSystemResumeCase" },
+    { "$ref": "#/$defs/PermissionRequestCase" },
+    { "$ref": "#/$defs/PermissionCheckCase" },
+    { "$ref": "#/$defs/BackgroundScheduleCase" },
+    { "$ref": "#/$defs/BackgroundCancelCase" },
+    { "$ref": "#/$defs/ForegroundTimerArmCase" },
+    { "$ref": "#/$defs/ForegroundTimerCancelCase" },
+    { "$ref": "#/$defs/NotificationShowCase" },
+    { "$ref": "#/$defs/NotificationCancelCase" },
+    { "$ref": "#/$defs/ShareInvokeCase" },
+    { "$ref": "#/$defs/ClipboardCopyCase" },
+    { "$ref": "#/$defs/ClipboardPasteCase" },
+    { "$ref": "#/$defs/DeviceVibrateCase" },
+    { "$ref": "#/$defs/DeviceScreenKeepOnCase" },
+    { "$ref": "#/$defs/DeviceScreenReleaseCase" },
+    { "$ref": "#/$defs/FileSelectCase" },
+    { "$ref": "#/$defs/FontRegisterFileCase" },
+    { "$ref": "#/$defs/FontUnregisterFileCase" },
+    { "$ref": "#/$defs/ClipboardReadCase" },
+    { "$ref": "#/$defs/ClipboardWriteCase" },
+    { "$ref": "#/$defs/TtsStartCase" },
+    { "$ref": "#/$defs/TtsStopCase" },
+    { "$ref": "#/$defs/TtsPauseCase" },
+    { "$ref": "#/$defs/BrightnessSetCase" },
+    { "$ref": "#/$defs/BrightnessGetCase" },
+    { "$ref": "#/$defs/ScreenKeepAwakeCase" },
+    { "$ref": "#/$defs/ScreenAllowSleepCase" },
+    { "$ref": "#/$defs/HapticsLightCase" },
+    { "$ref": "#/$defs/HapticsMediumCase" },
+    { "$ref": "#/$defs/HapticsHeavyCase" },
+    { "$ref": "#/$defs/NetworkStatusCase" },
+    { "$ref": "#/$defs/WebDavConnectCase" },
+    { "$ref": "#/$defs/WebDavBackupCase" },
+    { "$ref": "#/$defs/WebDavRestoreCase" },
+    { "$ref": "#/$defs/ShareTextCase" },
+    { "$ref": "#/$defs/ShareFileCase" },
+    { "$ref": "#/$defs/BackgroundTaskStartCase" },
+    { "$ref": "#/$defs/BackgroundTaskEndCase" }
+  ],
+  "$defs": {
+    "NonBlankString": { "type": "string", "minLength": 1 },
+    "StringOrNull": { "type": ["string", "null"] },
+    "HttpCookie": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "$ref": "#/$defs/NonBlankString" },
+        "value": { "type": "string" },
+        "domain": { "type": "string" },
+        "path": { "type": "string" },
+        "secure": { "type": "boolean" },
+        "httpOnly": { "type": "boolean" }
+      }
+    },
+    "HttpExecuteResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "body"],
+      "properties": {
+        "status": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "body": { "type": "string" },
+        "bodyBase64": { "type": "string" },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "array", "items": { "type": "string" } }
+            ]
+          }
+        },
+        "finalUrl": { "type": "string", "format": "uri" },
+        "charsetHint": { "type": "string" },
+        "cookies": { "type": "array", "items": { "$ref": "#/$defs/HttpCookie" } }
+      }
+    },
+    "CancelledResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cancelled"],
+      "properties": { "cancelled": { "type": "boolean" } }
+    },
+    "WebViewOpenResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["opened"],
+      "properties": {
+        "opened": { "type": "boolean" },
+        "profileId": { "$ref": "#/$defs/NonBlankString" }
+      }
+    },
+    "WebViewCloseResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["closed"],
+      "properties": { "closed": { "type": "boolean" } }
+    },
+    "WebViewEvaluateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result"],
+      "properties": {
+        "result": { "type": "object" },
+        "finalUrl": { "type": "string", "format": "uri" },
+        "title": { "type": "string" }
+      }
+    },
+    "CookieGetResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cookies"],
+      "properties": { "cookies": { "type": "array", "items": { "$ref": "#/$defs/HttpCookie" } } }
+    },
+    "StoredResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stored"],
+      "properties": { "stored": { "type": "boolean" } }
+    },
+    "ClearedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cleared"],
+      "properties": { "cleared": { "type": "boolean" } }
+    },
+    "FileReadResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "content": { "type": "string" },
+        "contentBase64": { "type": "string" },
+        "encoding": { "type": "string" },
+        "byteLength": { "type": "integer", "minimum": 0 }
+      },
+      "oneOf": [
+        { "type": "object", "properties": { "content": { "type": "string" } }, "required": ["content"] },
+        { "type": "object", "properties": { "contentBase64": { "type": "string" } }, "required": ["contentBase64"] }
+      ]
+    },
+    "FileWriteResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["written"],
+      "properties": {
+        "written": { "type": "boolean" },
+        "byteLength": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "DeletedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["deleted"],
+      "properties": { "deleted": { "type": "boolean" } }
+    },
+    "PathResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path"],
+      "properties": { "path": { "$ref": "#/$defs/NonBlankString" } }
+    },
+    "PersistenceGetResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["found"],
+          "properties": { "found": { "const": false } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["found", "value", "revision"],
+          "properties": {
+            "found": { "const": true },
+            "value": { "type": "string" },
+            "revision": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" }
+          }
+        }
+      ]
+    },
+    "PersistencePutResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stored", "revision"],
+      "properties": {
+        "stored": { "const": true },
+        "revision": { "type": "string", "pattern": "^(0|[1-9][0-9]*)$" }
+      }
+    },
+    "CredentialGetResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["exists"],
+          "properties": { "exists": { "const": false } }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["exists", "value"],
+          "properties": { "exists": { "const": true }, "value": { "type": "string" } }
+        }
+      ]
+    },
+    "StartedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started"],
+      "properties": { "started": { "type": "boolean" } }
+    },
+    "AcknowledgedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["acknowledged"],
+      "properties": { "acknowledged": { "type": "boolean" } }
+    },
+    "GrantedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["granted"],
+      "properties": { "granted": { "type": "boolean" } }
+    },
+    "ScheduledResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scheduled"],
+      "properties": { "scheduled": { "type": "boolean" } }
+    },
+    "TimerArmResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["armed"],
+      "properties": {
+        "armed": { "type": "boolean" },
+        "replaced": { "type": "boolean" },
+        "timerId": { "$ref": "#/$defs/NonBlankString" },
+        "generation": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "TimerCancelResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cancelled"],
+      "properties": {
+        "cancelled": { "type": "boolean" },
+        "timerId": { "$ref": "#/$defs/NonBlankString" },
+        "generation": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "NotificationShowResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shown"],
+      "properties": {
+        "shown": { "type": "boolean" },
+        "id": { "$ref": "#/$defs/NonBlankString" }
+      }
+    },
+    "SharedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shared"],
+      "properties": { "shared": { "type": "boolean" } }
+    },
+    "CopiedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["copied"],
+      "properties": { "copied": { "type": "boolean" } }
+    },
+    "ClipboardTextResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": { "text": { "$ref": "#/$defs/StringOrNull" } }
+    },
+    "VibratedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["vibrated"],
+      "properties": { "vibrated": { "type": "boolean" } }
+    },
+    "EnabledResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled"],
+      "properties": { "enabled": { "type": "boolean" } }
+    },
+    "ReleasedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["released"],
+      "properties": { "released": { "type": "boolean" } }
+    },
+    "SelectedFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "name"],
+      "properties": {
+        "path": { "$ref": "#/$defs/NonBlankString" },
+        "name": { "$ref": "#/$defs/NonBlankString" },
+        "mimeType": { "type": ["string", "null"] },
+        "size": { "type": ["integer", "null"], "minimum": 0 }
+      }
+    },
+    "FileSelectResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected", "files"],
+      "properties": {
+        "selected": { "type": "boolean" },
+        "files": { "type": "array", "items": { "$ref": "#/$defs/SelectedFile" } }
+      }
+    },
+    "FontRegisterFileResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["registered", "path", "familyName", "fontNames"],
+      "properties": {
+        "registered": { "const": true },
+        "path": { "$ref": "#/$defs/NonBlankString" },
+        "familyName": { "$ref": "#/$defs/NonBlankString" },
+        "fontNames": { "type": "array", "items": { "$ref": "#/$defs/NonBlankString" }, "minItems": 1, "uniqueItems": true }
+      }
+    },
+    "FontUnregisterFileResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["logicalUnregistered", "physicallyUnregistered", "restartRequired"],
+      "properties": {
+        "logicalUnregistered": { "const": true },
+        "physicallyUnregistered": { "type": "boolean" },
+        "restartRequired": { "type": "boolean" }
+      },
+      "anyOf": [
+        { "type": "object", "properties": { "physicallyUnregistered": { "const": true } }, "required": ["physicallyUnregistered"] },
+        { "type": "object", "properties": { "restartRequired": { "const": true } }, "required": ["restartRequired"] }
+      ]
+    },
+    "WrittenResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["written"],
+      "properties": { "written": { "type": "boolean" } }
+    },
+    "TtsStartResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started"],
+      "properties": {
+        "started": { "type": "boolean" },
+        "rate": { "type": "number" },
+        "pitch": { "type": "number" },
+        "language": { "type": "string" }
+      }
+    },
+    "StoppedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stopped"],
+      "properties": { "stopped": { "type": "boolean" } }
+    },
+    "PausedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["paused"],
+      "properties": { "paused": { "type": "boolean" } }
+    },
+    "BrightnessResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["brightness"],
+      "properties": { "brightness": { "type": "number", "minimum": 0, "maximum": 1 } }
+    },
+    "ScreenAppliedResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applied", "keepAwake"],
+      "properties": {
+        "applied": { "type": "boolean" },
+        "keepAwake": { "type": "boolean" }
+      }
+    },
+    "HapticResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["performed", "style"],
+      "properties": {
+        "performed": { "type": "boolean" },
+        "style": { "enum": ["light", "medium", "heavy"] }
+      }
+    },
+    "NetworkStatusResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connected", "status", "interface", "isExpensive", "isConstrained"],
+      "properties": {
+        "connected": { "type": "boolean" },
+        "status": { "enum": ["online", "limited", "offline"] },
+        "interface": { "type": "string" },
+        "isExpensive": { "type": "boolean" },
+        "isConstrained": { "type": "boolean" }
+      }
+    },
+    "WebDavConnectResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["connected", "statusCode", "message"],
+      "properties": {
+        "connected": { "type": "boolean" },
+        "statusCode": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "message": { "type": "string" }
+      }
+    },
+    "WebDavBackupResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["backedUp", "remoteURL", "statusCode", "resourceCount"],
+      "properties": {
+        "backedUp": { "type": "boolean" },
+        "remoteURL": { "type": "string", "format": "uri" },
+        "statusCode": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "resourceCount": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "WebDavRestoreResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["restored", "remoteURL", "statusCode", "applied"],
+      "properties": {
+        "restored": { "type": "boolean" },
+        "remoteURL": { "type": "string", "format": "uri" },
+        "statusCode": { "type": "integer", "minimum": 100, "maximum": 599 },
+        "applied": { "type": "boolean" }
+      }
+    },
+    "ShareFileResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shared", "path"],
+      "properties": {
+        "shared": { "type": "boolean" },
+        "path": { "$ref": "#/$defs/NonBlankString" }
+      }
+    },
+    "BackgroundTaskStartResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["started", "taskId", "name"],
+      "properties": {
+        "started": { "type": "boolean" },
+        "taskId": { "$ref": "#/$defs/NonBlankString" },
+        "name": { "$ref": "#/$defs/NonBlankString" }
+      }
+    },
+    "BackgroundTaskEndResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ended", "taskId"],
+      "properties": {
+        "ended": { "type": "boolean" },
+        "taskId": { "$ref": "#/$defs/NonBlankString" }
+      }
+    },
+    "HttpExecuteCase": { "if": { "type": "object", "properties": { "type": { "const": "http.execute" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/HttpExecuteResult" } } } },
+    "HttpCancelCase": { "if": { "type": "object", "properties": { "type": { "const": "http.cancel" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/CancelledResult" } } } },
+    "WebViewOpenCase": { "if": { "type": "object", "properties": { "type": { "const": "webview.open" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WebViewOpenResult" } } } },
+    "WebViewCloseCase": { "if": { "type": "object", "properties": { "type": { "const": "webview.close" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WebViewCloseResult" } } } },
+    "WebViewEvaluateCase": { "if": { "type": "object", "properties": { "type": { "const": "webview.evaluate" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WebViewEvaluateResult" } } } },
+    "CookieGetCase": { "if": { "type": "object", "properties": { "type": { "const": "cookie.get" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/CookieGetResult" } } } },
+    "CookieSetCase": { "if": { "type": "object", "properties": { "type": { "const": "cookie.set" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/StoredResult" } } } },
+    "CookieClearCase": { "if": { "type": "object", "properties": { "type": { "const": "cookie.clear" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ClearedResult" } } } },
+    "FileReadCase": { "if": { "type": "object", "properties": { "type": { "const": "file.read" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/FileReadResult" } } } },
+    "FileWriteCase": { "if": { "type": "object", "properties": { "type": { "const": "file.write" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/FileWriteResult" } } } },
+    "FileDeleteCase": { "if": { "type": "object", "properties": { "type": { "const": "file.delete" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/DeletedResult" } } } },
+    "StoragePathCase": { "if": { "type": "object", "properties": { "type": { "const": "storage.path" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/PathResult" } } } },
+    "PersistenceGetCase": { "if": { "type": "object", "properties": { "type": { "const": "persistence.get" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/PersistenceGetResult" } } } },
+    "PersistencePutCase": { "if": { "type": "object", "properties": { "type": { "const": "persistence.put" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/PersistencePutResult" } } } },
+    "CredentialGetCase": { "if": { "type": "object", "properties": { "type": { "const": "credential.get" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/CredentialGetResult" } } } },
+    "CredentialSetCase": { "if": { "type": "object", "properties": { "type": { "const": "credential.set" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/StoredResult" } } } },
+    "CredentialDeleteCase": { "if": { "type": "object", "properties": { "type": { "const": "credential.delete" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/DeletedResult" } } } },
+    "TtsSystemStartCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.system.start" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/StartedResult" } } } },
+    "TtsSystemStopCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.system.stop" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/AcknowledgedResult" } } } },
+    "TtsSystemPauseCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.system.pause" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/AcknowledgedResult" } } } },
+    "TtsSystemResumeCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.system.resume" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/AcknowledgedResult" } } } },
+    "PermissionRequestCase": { "if": { "type": "object", "properties": { "type": { "const": "permission.request" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/GrantedResult" } } } },
+    "PermissionCheckCase": { "if": { "type": "object", "properties": { "type": { "const": "permission.check" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/GrantedResult" } } } },
+    "BackgroundScheduleCase": { "if": { "type": "object", "properties": { "type": { "const": "background.schedule" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ScheduledResult" } } } },
+    "BackgroundCancelCase": { "if": { "type": "object", "properties": { "type": { "const": "background.cancel" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/CancelledResult" } } } },
+    "ForegroundTimerArmCase": { "if": { "type": "object", "properties": { "type": { "const": "timer.foreground.arm" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/TimerArmResult" } } } },
+    "ForegroundTimerCancelCase": { "if": { "type": "object", "properties": { "type": { "const": "timer.foreground.cancel" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/TimerCancelResult" } } } },
+    "NotificationShowCase": { "if": { "type": "object", "properties": { "type": { "const": "notification.show" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/NotificationShowResult" } } } },
+    "NotificationCancelCase": { "if": { "type": "object", "properties": { "type": { "const": "notification.cancel" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/CancelledResult" } } } },
+    "ShareInvokeCase": { "if": { "type": "object", "properties": { "type": { "const": "share.invoke" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/SharedResult" } } } },
+    "ClipboardCopyCase": { "if": { "type": "object", "properties": { "type": { "const": "clipboard.copy" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/CopiedResult" } } } },
+    "ClipboardPasteCase": { "if": { "type": "object", "properties": { "type": { "const": "clipboard.paste" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ClipboardTextResult" } } } },
+    "DeviceVibrateCase": { "if": { "type": "object", "properties": { "type": { "const": "device.vibrate" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/VibratedResult" } } } },
+    "DeviceScreenKeepOnCase": { "if": { "type": "object", "properties": { "type": { "const": "device.screen.keep-on" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/EnabledResult" } } } },
+    "DeviceScreenReleaseCase": { "if": { "type": "object", "properties": { "type": { "const": "device.screen.release" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ReleasedResult" } } } },
+    "FileSelectCase": { "if": { "type": "object", "properties": { "type": { "const": "file.select" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/FileSelectResult" } } } },
+    "FontRegisterFileCase": { "if": { "type": "object", "properties": { "type": { "const": "font.registerFile" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/FontRegisterFileResult" } } } },
+    "FontUnregisterFileCase": { "if": { "type": "object", "properties": { "type": { "const": "font.unregisterFile" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/FontUnregisterFileResult" } } } },
+    "ClipboardReadCase": { "if": { "type": "object", "properties": { "type": { "const": "clipboard.read" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ClipboardTextResult" } } } },
+    "ClipboardWriteCase": { "if": { "type": "object", "properties": { "type": { "const": "clipboard.write" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WrittenResult" } } } },
+    "TtsStartCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.start" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/TtsStartResult" } } } },
+    "TtsStopCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.stop" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/StoppedResult" } } } },
+    "TtsPauseCase": { "if": { "type": "object", "properties": { "type": { "const": "tts.pause" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/PausedResult" } } } },
+    "BrightnessSetCase": { "if": { "type": "object", "properties": { "type": { "const": "brightness.set" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/BrightnessResult" } } } },
+    "BrightnessGetCase": { "if": { "type": "object", "properties": { "type": { "const": "brightness.get" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/BrightnessResult" } } } },
+    "ScreenKeepAwakeCase": { "if": { "type": "object", "properties": { "type": { "const": "screen.keepAwake" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ScreenAppliedResult" } } } },
+    "ScreenAllowSleepCase": { "if": { "type": "object", "properties": { "type": { "const": "screen.allowSleep" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ScreenAppliedResult" } } } },
+    "HapticsLightCase": { "if": { "type": "object", "properties": { "type": { "const": "haptics.light" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/HapticResult" } } } },
+    "HapticsMediumCase": { "if": { "type": "object", "properties": { "type": { "const": "haptics.medium" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/HapticResult" } } } },
+    "HapticsHeavyCase": { "if": { "type": "object", "properties": { "type": { "const": "haptics.heavy" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/HapticResult" } } } },
+    "NetworkStatusCase": { "if": { "type": "object", "properties": { "type": { "const": "network.status" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/NetworkStatusResult" } } } },
+    "WebDavConnectCase": { "if": { "type": "object", "properties": { "type": { "const": "webdav.connect" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WebDavConnectResult" } } } },
+    "WebDavBackupCase": { "if": { "type": "object", "properties": { "type": { "const": "webdav.backup" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WebDavBackupResult" } } } },
+    "WebDavRestoreCase": { "if": { "type": "object", "properties": { "type": { "const": "webdav.restore" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/WebDavRestoreResult" } } } },
+    "ShareTextCase": { "if": { "type": "object", "properties": { "type": { "const": "share.text" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/SharedResult" } } } },
+    "ShareFileCase": { "if": { "type": "object", "properties": { "type": { "const": "share.file" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/ShareFileResult" } } } },
+    "BackgroundTaskStartCase": { "if": { "type": "object", "properties": { "type": { "const": "background.task.start" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/BackgroundTaskStartResult" } } } },
+    "BackgroundTaskEndCase": { "if": { "type": "object", "properties": { "type": { "const": "background.task.end" } }, "required": ["type"] }, "then": { "type": "object", "properties": { "result": { "$ref": "#/$defs/BackgroundTaskEndResult" } } } }
+  }
+}

@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validate } from "./mini-validator.mjs";
+import { validate, registerSchema } from "./mini-validator.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CONTRACTS_DIR = join(__dirname, "..");
@@ -17,6 +17,11 @@ const motionSchema = loadJson("motion.schema.json");
 const motionPolicySchema = loadJson("motion-policy.schema.json");
 const policyFixtures = loadJson("fixtures/motion-policy.fixtures.json");
 const routeSchema = loadJson("route.schema.json");
+
+// motion-policy.schema.json 的 motionId 通过跨文件 $ref 引用 motion.schema.json#/$defs/MotionId，
+// 需注册目标 schema 供 mini-validator 解析。
+registerSchema("motion.schema.json", motionSchema);
+registerSchema("motion-policy.schema.json", motionPolicySchema);
 
 const motionIds = new Set(motionSchema.properties.id.enum);
 const routeIds = new Set(routeSchema.properties.id.enum);

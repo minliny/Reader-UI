@@ -1,0 +1,4705 @@
+{
+  "schemaVersion": 1,
+  "sourceOfTruth": {
+    "repository": "Reader-Core-Native",
+    "sources": [
+      {
+        "path": "crates/reader-contract/src/reader_ui.rs",
+        "sha256": "6e646842545c1ff554c7d5389c73696e9745e54ad985655c780b8777aea96bc3"
+      },
+      {
+        "path": "crates/reader-contract/src/remote.rs",
+        "sha256": "512fadde70025a1a49d6eb42bd7bca603919870137c0ec08d312cac32aa8fd22"
+      },
+      {
+        "path": "crates/reader-sync/src/lib.rs",
+        "sha256": "5496b4af978dfa18e619d949a5797d9155a3945380118e9e6ddc5818b59708d8"
+      },
+      {
+        "path": "crates/reader-storage/src/lib.rs",
+        "sha256": "312c03ef39dbc0a6bec4f745713caa58ccfaef2926134e626f2d5c95a68c8228"
+      }
+    ],
+    "numericPolicy": "ieee754-safe-integer"
+  },
+  "appearanceSourceOfTruth": {
+    "owner": "ReaderUIRuntime",
+    "storage": "Host persistence.get/persistence.put opaque JSON with expectedRevision CAS",
+    "schemaVersion": 1
+  },
+  "definitions": {
+    "string": {
+      "type": "string"
+    },
+    "nonBlankString": {
+      "type": "string",
+      "minLength": 1,
+      "nonBlank": true
+    },
+    "nullableNonBlankString": {
+      "type": "string",
+      "nullable": true,
+      "minLength": 1,
+      "nonBlank": true
+    },
+    "nullableString": {
+      "type": "string",
+      "nullable": true
+    },
+    "integer": {
+      "type": "integer",
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "nullableInteger": {
+      "type": "integer",
+      "nullable": true,
+      "minimum": -9007199254740991,
+      "maximum": 9007199254740991
+    },
+    "nonNegativeInteger": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "u32": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "i32": {
+      "type": "integer",
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "boolean": {
+      "type": "boolean"
+    },
+    "jsonValue": {
+      "type": "json",
+      "nullable": true
+    },
+    "jsonObject": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/jsonValue"
+      },
+      "required": [],
+      "properties": {}
+    },
+    "nullableJsonObject": {
+      "$ref": "#/definitions/jsonObject",
+      "nullable": true
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/string"
+      },
+      "required": [],
+      "properties": {}
+    },
+    "importLocalBookInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bookId"
+      ],
+      "constraints": [
+        {
+          "kind": "stringAnyNonBlank",
+          "fields": [
+            "text",
+            "bytesBase64"
+          ]
+        }
+      ],
+      "properties": {
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "author": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "fileName": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 16777216
+        },
+        "bytesBase64": {
+          "type": "string",
+          "nullable": true,
+          "minLength": 1,
+          "maxLength": 25165824,
+          "nonBlank": true
+        },
+        "format": {
+          "$ref": "#/definitions/nullableString"
+        }
+      }
+    },
+    "importBookSourceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookSource"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "name": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "baseUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "rules": {
+          "$ref": "#/definitions/nullableJsonObject"
+        },
+        "bookSource": {
+          "$ref": "#/definitions/jsonObject"
+        }
+      }
+    },
+    "importRssSourceInput": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "feedUrl"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "siteUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "importParseLocalBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "input"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "localBook"
+        },
+        "input": {
+          "$ref": "#/definitions/importLocalBookInput"
+        }
+      }
+    },
+    "importParseBookSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "input"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "bookSource"
+        },
+        "input": {
+          "$ref": "#/definitions/importBookSourceInput"
+        }
+      }
+    },
+    "importParseRssSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "input"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "rssSource"
+        },
+        "input": {
+          "$ref": "#/definitions/importRssSourceInput"
+        }
+      }
+    },
+    "importParseParams": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/importParseLocalBook"
+        },
+        {
+          "$ref": "#/definitions/importParseBookSource"
+        },
+        {
+          "$ref": "#/definitions/importParseRssSource"
+        }
+      ]
+    },
+    "importDomainBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bookId",
+        "title",
+        "author"
+      ],
+      "properties": {
+        "bookId": {
+          "$ref": "#/definitions/string"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "author": {
+          "$ref": "#/definitions/string"
+        },
+        "coverUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "intro": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "kind": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "lastChapter": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "variables": {
+          "$ref": "#/definitions/stringMap"
+        }
+      }
+    },
+    "importTocEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index",
+        "title",
+        "url"
+      ],
+      "properties": {
+        "index": {
+          "$ref": "#/definitions/u32"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "url": {
+          "$ref": "#/definitions/string"
+        },
+        "variables": {
+          "$ref": "#/definitions/stringMap"
+        }
+      }
+    },
+    "importLocalBookSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "book",
+        "format",
+        "encoding",
+        "byteLen",
+        "charLen",
+        "chapterCount",
+        "toc"
+      ],
+      "properties": {
+        "book": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "txt",
+            "epub",
+            "pdf",
+            "html",
+            "mobi",
+            "azw",
+            "umd",
+            "archive",
+            "webdav",
+            "unknown"
+          ]
+        },
+        "encoding": {
+          "type": "string",
+          "enum": [
+            "utf8",
+            "utf8Bom",
+            "utf16Le",
+            "utf16Be",
+            "gbk",
+            "gb18030"
+          ]
+        },
+        "byteLen": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "charLen": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "chapterCount": {
+          "$ref": "#/definitions/u32"
+        },
+        "toc": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/importTocEntry"
+          }
+        }
+      }
+    },
+    "importLocalBookPreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "input",
+        "summary",
+        "contentSha256"
+      ],
+      "properties": {
+        "input": {
+          "$ref": "#/definitions/importLocalBookInput"
+        },
+        "summary": {
+          "$ref": "#/definitions/importLocalBookSummary"
+        },
+        "contentSha256": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "importBookSourcePreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "name",
+        "baseUrl",
+        "rules",
+        "bookSource"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "name": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "baseUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "rules": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "bookSource": {
+          "$ref": "#/definitions/jsonObject"
+        }
+      }
+    },
+    "importRssSourcePreview": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "feedUrl",
+        "title",
+        "enabled"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "siteUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "importParsedLocalBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "preview"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "localBook"
+        },
+        "preview": {
+          "$ref": "#/definitions/importLocalBookPreview"
+        }
+      }
+    },
+    "importParsedBookSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "preview"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "bookSource"
+        },
+        "preview": {
+          "$ref": "#/definitions/importBookSourcePreview"
+        }
+      }
+    },
+    "importParsedRssSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "preview"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "rssSource"
+        },
+        "preview": {
+          "$ref": "#/definitions/importRssSourcePreview"
+        }
+      }
+    },
+    "importParseData": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/importParsedLocalBook"
+        },
+        {
+          "$ref": "#/definitions/importParsedBookSource"
+        },
+        {
+          "$ref": "#/definitions/importParsedRssSource"
+        }
+      ]
+    },
+    "importPersistParams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transactionId",
+        "parsed"
+      ],
+      "properties": {
+        "transactionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "parsed": {
+          "$ref": "#/definitions/importParseData"
+        }
+      }
+    },
+    "importCachedEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "payload"
+      ],
+      "properties": {
+        "key": {
+          "$ref": "#/definitions/string"
+        },
+        "payload": {
+          "$ref": "#/definitions/string"
+        }
+      }
+    },
+    "importChapterCacheEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "chapterIndex",
+        "title",
+        "url",
+        "content",
+        "cachedAt"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/string"
+        },
+        "bookId": {
+          "$ref": "#/definitions/string"
+        },
+        "chapterIndex": {
+          "$ref": "#/definitions/u32"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "url": {
+          "$ref": "#/definitions/string"
+        },
+        "content": {
+          "$ref": "#/definitions/string"
+        },
+        "cachedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "revision": {
+          "$ref": "#/definitions/nullableString"
+        }
+      }
+    },
+    "importSourceRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "search",
+        "explore",
+        "detail",
+        "toc",
+        "chapter"
+      ],
+      "properties": {
+        "search": {
+          "$ref": "#/definitions/jsonValue"
+        },
+        "explore": {
+          "$ref": "#/definitions/jsonValue"
+        },
+        "detail": {
+          "$ref": "#/definitions/jsonValue"
+        },
+        "toc": {
+          "$ref": "#/definitions/jsonValue"
+        },
+        "chapter": {
+          "$ref": "#/definitions/jsonValue"
+        }
+      }
+    },
+    "importDomainSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "name",
+        "baseUrl",
+        "rules"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/string"
+        },
+        "name": {
+          "$ref": "#/definitions/string"
+        },
+        "baseUrl": {
+          "$ref": "#/definitions/string"
+        },
+        "rules": {
+          "$ref": "#/definitions/importSourceRules"
+        },
+        "bookSource": {
+          "$ref": "#/definitions/jsonObject"
+        }
+      }
+    },
+    "importRssSubscriptionRow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "feedUrl",
+        "title",
+        "enabled",
+        "unreadCount"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/string"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/string"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "siteUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/boolean"
+        },
+        "lastFetchAt": {
+          "$ref": "#/definitions/nullableInteger"
+        },
+        "lastEntryId": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "unreadCount": {
+          "$ref": "#/definitions/u32"
+        }
+      }
+    },
+    "importLocalBookJournal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transactionId",
+        "sourceId",
+        "bookId",
+        "previousBook",
+        "previousTocCache",
+        "previousChapters",
+        "committedBook",
+        "committedTocCache",
+        "committedChapters",
+        "previousMarker",
+        "committedMarker"
+      ],
+      "properties": {
+        "transactionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "sourceId": {
+          "$ref": "#/definitions/string"
+        },
+        "bookId": {
+          "$ref": "#/definitions/string"
+        },
+        "previousBook": {
+          "$ref": "#/definitions/importDomainBook",
+          "nullable": true
+        },
+        "previousTocCache": {
+          "$ref": "#/definitions/importCachedEntry",
+          "nullable": true
+        },
+        "previousChapters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/importChapterCacheEntry"
+          }
+        },
+        "committedBook": {
+          "$ref": "#/definitions/importDomainBook"
+        },
+        "committedTocCache": {
+          "$ref": "#/definitions/importCachedEntry"
+        },
+        "committedChapters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/importChapterCacheEntry"
+          }
+        },
+        "previousMarker": {
+          "$ref": "#/definitions/importCachedEntry",
+          "nullable": true
+        },
+        "committedMarker": {
+          "$ref": "#/definitions/importCachedEntry"
+        }
+      }
+    },
+    "importBookSourceJournal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transactionId",
+        "sourceId",
+        "previousSource",
+        "committedSource",
+        "previousMarker",
+        "committedMarker"
+      ],
+      "properties": {
+        "transactionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "sourceId": {
+          "$ref": "#/definitions/string"
+        },
+        "previousSource": {
+          "$ref": "#/definitions/importDomainSource",
+          "nullable": true
+        },
+        "committedSource": {
+          "$ref": "#/definitions/importDomainSource"
+        },
+        "previousMarker": {
+          "$ref": "#/definitions/importCachedEntry",
+          "nullable": true
+        },
+        "committedMarker": {
+          "$ref": "#/definitions/importCachedEntry"
+        }
+      }
+    },
+    "importRssSourceJournal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transactionId",
+        "subscriptionId",
+        "previousSubscription",
+        "previousEntryCache",
+        "committedSubscription",
+        "committedEntryCache",
+        "previousMarker",
+        "committedMarker"
+      ],
+      "properties": {
+        "transactionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "subscriptionId": {
+          "$ref": "#/definitions/string"
+        },
+        "previousSubscription": {
+          "$ref": "#/definitions/importRssSubscriptionRow",
+          "nullable": true
+        },
+        "previousEntryCache": {
+          "$ref": "#/definitions/importCachedEntry",
+          "nullable": true
+        },
+        "committedSubscription": {
+          "$ref": "#/definitions/importRssSubscriptionRow"
+        },
+        "committedEntryCache": {
+          "$ref": "#/definitions/importCachedEntry"
+        },
+        "previousMarker": {
+          "$ref": "#/definitions/importCachedEntry",
+          "nullable": true
+        },
+        "committedMarker": {
+          "$ref": "#/definitions/importCachedEntry"
+        }
+      }
+    },
+    "importRollbackTokenLocalBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "token"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "localBook"
+        },
+        "token": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transactionId",
+            "journal"
+          ],
+          "properties": {
+            "transactionId": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "journal": {
+              "$ref": "#/definitions/importLocalBookJournal"
+            }
+          }
+        }
+      }
+    },
+    "importRollbackTokenBookSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "token"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "bookSource"
+        },
+        "token": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transactionId",
+            "journal"
+          ],
+          "properties": {
+            "transactionId": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "journal": {
+              "$ref": "#/definitions/importBookSourceJournal"
+            }
+          }
+        }
+      }
+    },
+    "importRollbackTokenRssSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "token"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "rssSource"
+        },
+        "token": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transactionId",
+            "journal"
+          ],
+          "properties": {
+            "transactionId": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "journal": {
+              "$ref": "#/definitions/importRssSourceJournal"
+            }
+          }
+        }
+      }
+    },
+    "importRollbackToken": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/importRollbackTokenLocalBook"
+        },
+        {
+          "$ref": "#/definitions/importRollbackTokenBookSource"
+        },
+        {
+          "$ref": "#/definitions/importRollbackTokenRssSource"
+        }
+      ]
+    },
+    "importRollbackParams": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rollbackToken"
+      ],
+      "properties": {
+        "rollbackToken": {
+          "$ref": "#/definitions/importRollbackToken"
+        }
+      }
+    },
+    "appearanceTheme": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "colorScheme",
+        "background",
+        "foreground",
+        "accent"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "name": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "colorScheme": {
+          "type": "string",
+          "enum": [
+            "light",
+            "dark",
+            "system"
+          ]
+        },
+        "background": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "foreground": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "accent": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "appearanceTypography": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fontFamily",
+        "fontSize",
+        "lineHeight",
+        "paragraphSpacing",
+        "letterSpacing",
+        "textAlign"
+      ],
+      "properties": {
+        "fontFamily": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "fontSize": {
+          "type": "number",
+          "minimum": 8,
+          "maximum": 96
+        },
+        "lineHeight": {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "paragraphSpacing": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 64
+        },
+        "letterSpacing": {
+          "type": "number",
+          "minimum": -4,
+          "maximum": 16
+        },
+        "textAlign": {
+          "type": "string",
+          "enum": [
+            "start",
+            "justify",
+            "center"
+          ]
+        }
+      }
+    },
+    "appearanceFont": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "familyName",
+        "fontNames",
+        "enabled"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "path": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "familyName": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "fontNames": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/nonBlankString"
+          }
+        },
+        "enabled": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "appearancePreference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "revision",
+        "activeThemeId",
+        "themes",
+        "typography",
+        "fonts"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        },
+        "revision": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "activeThemeId": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "themes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/appearanceTheme"
+          }
+        },
+        "typography": {
+          "$ref": "#/definitions/appearanceTypography"
+        },
+        "fonts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/appearanceFont"
+          }
+        }
+      }
+    },
+    "appearanceFontRegister": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fontId",
+        "path",
+        "familyName"
+      ],
+      "properties": {
+        "fontId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "path": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "familyName": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "appearanceFontUnregister": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fontId"
+      ],
+      "properties": {
+        "fontId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "appearanceThemeMutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "theme"
+      ],
+      "properties": {
+        "theme": {
+          "$ref": "#/definitions/appearanceTheme"
+        }
+      }
+    },
+    "appearanceThemeDelete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "themeId"
+      ],
+      "properties": {
+        "themeId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "appearanceTypographyPersist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "typography"
+      ],
+      "properties": {
+        "typography": {
+          "$ref": "#/definitions/appearanceTypography"
+        }
+      }
+    },
+    "appearanceLoadPersisted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "appearanceSavePersisted": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preference"
+      ],
+      "properties": {
+        "preference": {
+          "$ref": "#/definitions/appearancePreference"
+        }
+      }
+    },
+    "rssFeedRefresh": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "evaluatedAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
+    "rssSubscriptionAdd": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "feedUrl"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "siteUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "rssSubscriptionUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "enabled": {
+          "type": "boolean",
+          "nullable": true
+        }
+      }
+    },
+    "rssPersistCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "params"
+      ],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "const": "create"
+        },
+        "params": {
+          "$ref": "#/definitions/rssSubscriptionAdd"
+        }
+      }
+    },
+    "rssPersistUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "params"
+      ],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "const": "update"
+        },
+        "params": {
+          "$ref": "#/definitions/rssSubscriptionUpdate"
+        }
+      }
+    },
+    "rssSubscriptionRemove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "rssEntryRead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "guid",
+        "read"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "read": {
+          "type": "boolean",
+          "const": true
+        }
+      }
+    },
+    "rssFavoritePersist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "guid",
+        "addedAt"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "addedAt": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        }
+      }
+    },
+    "rssFavoriteRemove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "guid"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "replaceApply": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "bookName",
+        "bookOrigin",
+        "target"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/definitions/string"
+        },
+        "bookName": {
+          "$ref": "#/definitions/string"
+        },
+        "bookOrigin": {
+          "$ref": "#/definitions/string"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "chapter",
+            "title"
+          ]
+        }
+      }
+    },
+    "replaceRuleCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pattern"
+      ],
+      "constraints": [
+        {
+          "kind": "validRegexWhen",
+          "field": "pattern",
+          "flagField": "isRegex",
+          "default": true
+        },
+        {
+          "kind": "booleanAnyTrue",
+          "fields": [
+            "scopeTitle",
+            "scopeContent"
+          ],
+          "defaults": {
+            "scopeTitle": false,
+            "scopeContent": true
+          }
+        }
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/string"
+        },
+        "group": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "pattern": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "replacement": {
+          "$ref": "#/definitions/string"
+        },
+        "scope": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "scopeTitle": {
+          "$ref": "#/definitions/boolean"
+        },
+        "scopeContent": {
+          "$ref": "#/definitions/boolean"
+        },
+        "excludeScope": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "isEnabled": {
+          "$ref": "#/definitions/boolean"
+        },
+        "isRegex": {
+          "$ref": "#/definitions/boolean"
+        },
+        "timeoutMillisecond": {
+          "$ref": "#/definitions/integer"
+        },
+        "order": {
+          "$ref": "#/definitions/i32"
+        },
+        "id": {
+          "$ref": "#/definitions/nullableInteger"
+        }
+      }
+    },
+    "replacePersistCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "params"
+      ],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "const": "create"
+        },
+        "params": {
+          "$ref": "#/definitions/replaceRuleCreate"
+        }
+      }
+    },
+    "replaceValidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pattern",
+        "scope"
+      ],
+      "properties": {
+        "pattern": {
+          "$ref": "#/definitions/string"
+        },
+        "isRegex": {
+          "$ref": "#/definitions/boolean"
+        },
+        "scope": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/string"
+          }
+        }
+      }
+    },
+    "sourceSwitchBookKey": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "sourceSwitchTargetBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "title"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "author": {
+          "$ref": "#/definitions/string"
+        },
+        "coverUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "intro": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "kind": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "lastChapter": {
+          "$ref": "#/definitions/nullableString"
+        }
+      }
+    },
+    "sourceSwitchChapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chapterId",
+        "chapterTitle",
+        "chapterUrl",
+        "order"
+      ],
+      "properties": {
+        "chapterId": {
+          "$ref": "#/definitions/string"
+        },
+        "chapterTitle": {
+          "$ref": "#/definitions/string"
+        },
+        "chapterUrl": {
+          "$ref": "#/definitions/string"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        }
+      }
+    },
+    "sourceSwitchCommit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "target",
+        "newToc",
+        "currentChapterTitle",
+        "currentChapterIndex",
+        "updatedAt"
+      ],
+      "properties": {
+        "from": {
+          "$ref": "#/definitions/sourceSwitchBookKey"
+        },
+        "target": {
+          "$ref": "#/definitions/sourceSwitchTargetBook"
+        },
+        "newToc": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/sourceSwitchChapter"
+          }
+        },
+        "currentChapterTitle": {
+          "$ref": "#/definitions/string"
+        },
+        "currentChapterIndex": {
+          "$ref": "#/definitions/u32"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
+    "bookshelfEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "addedAt"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "author": {
+          "$ref": "#/definitions/string"
+        },
+        "coverUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "intro": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "kind": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "lastChapter": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "addedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "lastReadAt": {
+          "$ref": "#/definitions/nullableInteger"
+        },
+        "group": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "sortIndex": {
+          "$ref": "#/definitions/i32"
+        }
+      }
+    },
+    "readingProgress": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "chapterIndex",
+        "chapterOffset",
+        "chapterProgress",
+        "updatedAt"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "chapterIndex": {
+          "$ref": "#/definitions/u32"
+        },
+        "chapterOffset": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "chapterProgress": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "deviceId": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "locationRevision": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        }
+      }
+    },
+    "nullableBookshelfEntry": {
+      "$ref": "#/definitions/bookshelfEntry",
+      "nullable": true
+    },
+    "nullableReadingProgress": {
+      "$ref": "#/definitions/readingProgress",
+      "nullable": true
+    },
+    "progressHistory": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/readingProgress"
+      }
+    },
+    "sourceSwitchRollbackToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "oldBook",
+        "committedBook"
+      ],
+      "properties": {
+        "oldBook": {
+          "$ref": "#/definitions/bookshelfEntry"
+        },
+        "oldProgress": {
+          "$ref": "#/definitions/nullableReadingProgress"
+        },
+        "oldProgressHistory": {
+          "$ref": "#/definitions/progressHistory"
+        },
+        "committedBook": {
+          "$ref": "#/definitions/bookshelfEntry"
+        },
+        "committedProgress": {
+          "$ref": "#/definitions/nullableReadingProgress"
+        },
+        "committedProgressHistory": {
+          "$ref": "#/definitions/progressHistory"
+        },
+        "replacedTargetBook": {
+          "$ref": "#/definitions/nullableBookshelfEntry"
+        },
+        "replacedTargetProgress": {
+          "$ref": "#/definitions/nullableReadingProgress"
+        },
+        "replacedTargetProgressHistory": {
+          "$ref": "#/definitions/progressHistory"
+        }
+      }
+    },
+    "sourceSwitchRollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rollbackToken"
+      ],
+      "properties": {
+        "rollbackToken": {
+          "$ref": "#/definitions/sourceSwitchRollbackToken"
+        }
+      }
+    },
+    "syncRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collection",
+        "recordId",
+        "updatedAt",
+        "deviceId",
+        "revision",
+        "payload",
+        "deleted"
+      ],
+      "constraints": [
+        {
+          "kind": "nonBlankWhen",
+          "field": "payload",
+          "whenField": "deleted",
+          "equals": false
+        }
+      ],
+      "properties": {
+        "collection": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "recordId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "updatedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "deviceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "revision": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "payload": {
+          "$ref": "#/definitions/string"
+        },
+        "deleted": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "syncSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshotId",
+        "deviceId",
+        "createdAt",
+        "records"
+      ],
+      "properties": {
+        "snapshotId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "deviceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "createdAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/syncRecord"
+          }
+        }
+      }
+    },
+    "syncConflictDetect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local",
+        "remote",
+        "mergedSnapshotId",
+        "mergedDeviceId"
+      ],
+      "properties": {
+        "local": {
+          "$ref": "#/definitions/syncSnapshot"
+        },
+        "remote": {
+          "$ref": "#/definitions/syncSnapshot"
+        },
+        "mergedSnapshotId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "mergedDeviceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "mergedCreatedAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
+    "emptyObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "routePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routeId"
+      ],
+      "properties": {
+        "routeId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "routeParams": {
+          "$ref": "#/definitions/jsonObject"
+        }
+      }
+    },
+    "fixedRoutePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "mainTabPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tab"
+      ],
+      "properties": {
+        "tab": {
+          "type": "string",
+          "enum": [
+            "bookshelf",
+            "discover",
+            "rss",
+            "settings"
+          ]
+        }
+      }
+    },
+    "overlayPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "overlayName": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "bookOpenPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bookId",
+        "sourceId",
+        "sourceKind"
+      ],
+      "properties": {
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "sourceKind": {
+          "type": "string",
+          "enum": [
+            "remote",
+            "local"
+          ]
+        },
+        "chapterId": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "chapterIndex": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "detailUrl": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        }
+      }
+    },
+    "ttsStartPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "voice": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "chapterId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "autoPageStartPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intervalMs"
+      ],
+      "properties": {
+        "intervalMs": {
+          "oneOf": [
+            {
+              "type": "integer",
+              "minimum": 250,
+              "maximum": 3600000
+            },
+            {
+              "type": "string",
+              "pattern": "^[0-9]+$",
+              "minLength": 1,
+              "maxLength": 7
+            }
+          ]
+        }
+      }
+    },
+    "webDavRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "path",
+        "headers"
+      ],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": [
+            "PROPFIND",
+            "GET",
+            "PUT",
+            "DELETE",
+            "MKCOL",
+            "MOVE",
+            "COPY"
+          ]
+        },
+        "path": {
+          "$ref": "#/definitions/string"
+        },
+        "headers": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/string"
+            }
+          }
+        },
+        "body": {
+          "type": "array",
+          "nullable": true,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          }
+        },
+        "depth": {
+          "type": "integer",
+          "nullable": true,
+          "minimum": 0,
+          "maximum": 1
+        },
+        "acceptedStatusCodes": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 100,
+            "maximum": 599
+          }
+        }
+      }
+    },
+    "syncWebDavPlanPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseUrl"
+      ],
+      "properties": {
+        "baseUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "auth": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/webDavRequest"
+          }
+        }
+      }
+    },
+    "syncRunPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local",
+        "remote",
+        "baseUrl"
+      ],
+      "properties": {
+        "local": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "remote": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "mergedSnapshotId": {
+          "$ref": "#/definitions/string"
+        },
+        "mergedDeviceId": {
+          "$ref": "#/definitions/string"
+        },
+        "mergedCreatedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "baseUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "auth": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/webDavRequest"
+          }
+        }
+      }
+    },
+    "syncResolution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collection",
+        "recordId",
+        "choice"
+      ],
+      "properties": {
+        "collection": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "recordId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "choice": {
+          "type": "string",
+          "enum": [
+            "local",
+            "remote",
+            "merged"
+          ]
+        },
+        "mergedPayload": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "mergedDeleted": {
+          "type": "boolean",
+          "nullable": true
+        },
+        "mergedUpdatedAt": {
+          "$ref": "#/definitions/nullableInteger"
+        },
+        "mergedDeviceId": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "mergedRevision": {
+          "$ref": "#/definitions/nullableInteger"
+        }
+      }
+    },
+    "syncConflictResolvePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "local",
+        "remote"
+      ],
+      "properties": {
+        "local": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "remote": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "mergedSnapshotId": {
+          "$ref": "#/definitions/string"
+        },
+        "mergedDeviceId": {
+          "$ref": "#/definitions/string"
+        },
+        "mergedCreatedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "resolutions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/syncResolution"
+          }
+        }
+      }
+    },
+    "errorResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "error"
+      ],
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "emptyOrErrorResult": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/emptyObject"
+        },
+        {
+          "$ref": "#/definitions/errorResult"
+        }
+      ]
+    },
+    "chapterListResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "chapterCount"
+          ],
+          "properties": {
+            "chapterCount": {
+              "$ref": "#/definitions/nonNegativeInteger"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/errorResult"
+        }
+      ]
+    },
+    "readerLocationResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalLocation",
+            "pageIndex"
+          ],
+          "properties": {
+            "canonicalLocation": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "pageIndex": {
+              "$ref": "#/definitions/nonNegativeInteger"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/errorResult"
+        }
+      ]
+    },
+    "ttsSystemStartResult": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/emptyObject"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "started"
+          ],
+          "properties": {
+            "started": {
+              "$ref": "#/definitions/boolean"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/errorResult"
+        }
+      ]
+    },
+    "acknowledgedOrErrorResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "acknowledged"
+          ],
+          "properties": {
+            "acknowledged": {
+              "$ref": "#/definitions/boolean"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/errorResult"
+        }
+      ]
+    },
+    "timerArmResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "armed"
+      ],
+      "properties": {
+        "armed": {
+          "$ref": "#/definitions/boolean"
+        },
+        "replaced": {
+          "$ref": "#/definitions/boolean"
+        },
+        "timerId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "generation": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        }
+      }
+    },
+    "timerCancelResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cancelled"
+      ],
+      "properties": {
+        "cancelled": {
+          "$ref": "#/definitions/boolean"
+        },
+        "timerId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "generation": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        }
+      }
+    },
+    "persistenceGetResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "found"
+          ],
+          "properties": {
+            "found": {
+              "type": "boolean",
+              "const": false
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "found",
+            "value",
+            "revision"
+          ],
+          "properties": {
+            "found": {
+              "type": "boolean",
+              "const": true
+            },
+            "value": {
+              "$ref": "#/definitions/string"
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^(0|[1-9][0-9]*)$"
+            }
+          }
+        }
+      ]
+    },
+    "persistencePutResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "stored",
+        "revision"
+      ],
+      "properties": {
+        "stored": {
+          "type": "boolean",
+          "const": true
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]*)$"
+        }
+      }
+    },
+    "fontRegisterResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registered",
+        "path",
+        "familyName",
+        "fontNames"
+      ],
+      "properties": {
+        "registered": {
+          "type": "boolean",
+          "const": true
+        },
+        "path": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "familyName": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "fontNames": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/nonBlankString"
+          }
+        }
+      }
+    },
+    "fontUnregisterResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logicalUnregistered",
+        "physicallyUnregistered",
+        "restartRequired"
+      ],
+      "properties": {
+        "logicalUnregistered": {
+          "type": "boolean",
+          "const": true
+        },
+        "physicallyUnregistered": {
+          "$ref": "#/definitions/boolean"
+        },
+        "restartRequired": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "httpHeaderValue": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/string"
+        },
+        {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/string"
+          }
+        }
+      ]
+    },
+    "httpRedirectResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from",
+        "to",
+        "status"
+      ],
+      "properties": {
+        "from": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "to": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        }
+      }
+    },
+    "httpCookieResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "value": {
+          "$ref": "#/definitions/string"
+        },
+        "domain": {
+          "$ref": "#/definitions/string"
+        },
+        "path": {
+          "$ref": "#/definitions/string"
+        },
+        "secure": {
+          "$ref": "#/definitions/boolean"
+        },
+        "httpOnly": {
+          "$ref": "#/definitions/boolean"
+        },
+        "expiresAt": {
+          "type": "number"
+        }
+      }
+    },
+    "httpExecuteResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "body"
+      ],
+      "properties": {
+        "status": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "body": {
+          "$ref": "#/definitions/string"
+        },
+        "bodyBase64": {
+          "$ref": "#/definitions/string"
+        },
+        "headers": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/httpHeaderValue"
+          },
+          "required": [],
+          "properties": {}
+        },
+        "finalUrl": {
+          "$ref": "#/definitions/string"
+        },
+        "charsetHint": {
+          "$ref": "#/definitions/string"
+        },
+        "redirects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/httpRedirectResult"
+          }
+        },
+        "cookies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/httpCookieResult"
+          }
+        },
+        "sessionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "requestId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "plannedHttpRequestResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "method",
+        "headers"
+      ],
+      "properties": {
+        "url": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "method": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "headers": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "body": {
+          "$ref": "#/definitions/jsonValue"
+        },
+        "charset": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "followRedirects": {
+          "type": "boolean",
+          "nullable": true
+        },
+        "maxRedirects": {
+          "$ref": "#/definitions/nullableInteger"
+        },
+        "retry": {
+          "$ref": "#/definitions/nullableJsonObject"
+        },
+        "usePlatformCookieJar": {
+          "type": "boolean",
+          "nullable": true
+        },
+        "session": {
+          "$ref": "#/definitions/nullableJsonObject"
+        },
+        "diagnostic": {
+          "$ref": "#/definitions/nullableJsonObject"
+        }
+      }
+    },
+    "syncWebDavPlanResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requests"
+      ],
+      "properties": {
+        "requests": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/plannedHttpRequestResult"
+          }
+        }
+      }
+    },
+    "importPersistedLocalBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "localBook"
+        },
+        "data": {
+          "$ref": "#/definitions/importLocalBookSummary"
+        }
+      }
+    },
+    "importPersistedBookSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "bookSource"
+        },
+        "data": {
+          "$ref": "#/definitions/importBookSourcePreview"
+        }
+      }
+    },
+    "importPersistedRssSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "rssSource"
+        },
+        "data": {
+          "$ref": "#/definitions/importRssSourcePreview"
+        }
+      }
+    },
+    "importPersistedData": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/importPersistedLocalBook"
+        },
+        {
+          "$ref": "#/definitions/importPersistedBookSource"
+        },
+        {
+          "$ref": "#/definitions/importPersistedRssSource"
+        }
+      ]
+    },
+    "importPersistResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "persisted",
+        "rollbackToken"
+      ],
+      "properties": {
+        "persisted": {
+          "$ref": "#/definitions/importPersistedData"
+        },
+        "rollbackToken": {
+          "$ref": "#/definitions/importRollbackToken"
+        }
+      }
+    },
+    "importRollbackLocalBookResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "localBook"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bookId",
+            "restored"
+          ],
+          "properties": {
+            "bookId": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "restored": {
+              "$ref": "#/definitions/boolean"
+            }
+          }
+        }
+      }
+    },
+    "importRollbackBookSourceResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "bookSource"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sourceId",
+            "restored"
+          ],
+          "properties": {
+            "sourceId": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "restored": {
+              "$ref": "#/definitions/boolean"
+            }
+          }
+        }
+      }
+    },
+    "importRollbackRssSourceResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "data"
+      ],
+      "properties": {
+        "kind": {
+          "type": "string",
+          "const": "rssSource"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subscriptionId",
+            "restored"
+          ],
+          "properties": {
+            "subscriptionId": {
+              "$ref": "#/definitions/nonBlankString"
+            },
+            "restored": {
+              "$ref": "#/definitions/boolean"
+            }
+          }
+        }
+      }
+    },
+    "importRollbackResult": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/importRollbackLocalBookResult"
+        },
+        {
+          "$ref": "#/definitions/importRollbackBookSourceResult"
+        },
+        {
+          "$ref": "#/definitions/importRollbackRssSourceResult"
+        }
+      ]
+    },
+    "sourceSwitchCommitResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "book",
+        "matchedChapter",
+        "strategy",
+        "rollbackToken"
+      ],
+      "properties": {
+        "book": {
+          "$ref": "#/definitions/bookshelfEntry"
+        },
+        "progress": {
+          "$ref": "#/definitions/nullableReadingProgress"
+        },
+        "matchedChapter": {
+          "$ref": "#/definitions/sourceSwitchChapter"
+        },
+        "strategy": {
+          "type": "string",
+          "enum": [
+            "exactTitleMatch",
+            "orderIndexMatch",
+            "fuzzyTitleMatch",
+            "lastReadFallback"
+          ]
+        },
+        "rollbackToken": {
+          "$ref": "#/definitions/sourceSwitchRollbackToken"
+        }
+      }
+    },
+    "sourceSwitchRollbackResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "restoredBook"
+      ],
+      "properties": {
+        "restoredBook": {
+          "$ref": "#/definitions/bookshelfEntry"
+        },
+        "restoredProgress": {
+          "$ref": "#/definitions/nullableReadingProgress"
+        },
+        "reinstatedTargetBook": {
+          "$ref": "#/definitions/nullableBookshelfEntry"
+        },
+        "reinstatedTargetProgress": {
+          "$ref": "#/definitions/nullableReadingProgress"
+        }
+      }
+    },
+    "replaceApplyResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text",
+        "changed",
+        "target",
+        "storedRuleCount",
+        "enabledRuleCount"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/definitions/string"
+        },
+        "changed": {
+          "$ref": "#/definitions/boolean"
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "chapter",
+            "title"
+          ]
+        },
+        "storedRuleCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "enabledRuleCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        }
+      }
+    },
+    "replaceRuleResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "pattern",
+        "replacement",
+        "scopeTitle",
+        "scopeContent",
+        "isEnabled",
+        "isRegex",
+        "timeoutMillisecond",
+        "order"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/integer"
+        },
+        "name": {
+          "$ref": "#/definitions/string"
+        },
+        "group": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "pattern": {
+          "$ref": "#/definitions/string"
+        },
+        "replacement": {
+          "$ref": "#/definitions/string"
+        },
+        "scope": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "scopeTitle": {
+          "$ref": "#/definitions/boolean"
+        },
+        "scopeContent": {
+          "$ref": "#/definitions/boolean"
+        },
+        "excludeScope": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "isEnabled": {
+          "$ref": "#/definitions/boolean"
+        },
+        "isRegex": {
+          "$ref": "#/definitions/boolean"
+        },
+        "timeoutMillisecond": {
+          "$ref": "#/definitions/integer"
+        },
+        "order": {
+          "$ref": "#/definitions/i32"
+        }
+      }
+    },
+    "replacePersistResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "data"
+      ],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "const": "create"
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "rule"
+          ],
+          "properties": {
+            "rule": {
+              "$ref": "#/definitions/replaceRuleResult"
+            }
+          }
+        }
+      }
+    },
+    "replaceValidationIssue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "empty_pattern",
+            "invalid_regex",
+            "empty_scope",
+            "unsupported_scope"
+          ]
+        },
+        "message": {
+          "$ref": "#/definitions/string"
+        },
+        "scope": {
+          "$ref": "#/definitions/nullableString"
+        }
+      }
+    },
+    "replaceValidateResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "valid",
+        "issues"
+      ],
+      "properties": {
+        "valid": {
+          "$ref": "#/definitions/boolean"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/replaceValidationIssue"
+          }
+        }
+      }
+    },
+    "rssSubscriptionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "feedUrl",
+        "title",
+        "enabled",
+        "unreadCount"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "siteUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "enabled": {
+          "$ref": "#/definitions/boolean"
+        },
+        "lastFetchAt": {
+          "$ref": "#/definitions/nullableInteger"
+        },
+        "lastEntryId": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "unreadCount": {
+          "$ref": "#/definitions/u32"
+        }
+      }
+    },
+    "rssItemResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "title",
+        "guid",
+        "read",
+        "firstSeenAt"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "link": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "description": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "author": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "pubDate": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "read": {
+          "$ref": "#/definitions/boolean"
+        },
+        "firstSeenAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
+    "rssRefreshResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscription",
+        "items",
+        "count",
+        "unreadCount",
+        "newCount",
+        "fetched",
+        "notModified",
+        "evaluatedAt"
+      ],
+      "properties": {
+        "subscription": {
+          "$ref": "#/definitions/rssSubscriptionResult"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/rssItemResult"
+          }
+        },
+        "count": {
+          "$ref": "#/definitions/u32"
+        },
+        "unreadCount": {
+          "$ref": "#/definitions/u32"
+        },
+        "newCount": {
+          "$ref": "#/definitions/u32"
+        },
+        "fetched": {
+          "$ref": "#/definitions/boolean"
+        },
+        "notModified": {
+          "$ref": "#/definitions/boolean"
+        },
+        "evaluatedAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
+    "rssPersistResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "data"
+      ],
+      "properties": {
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update"
+          ]
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subscription"
+          ],
+          "properties": {
+            "subscription": {
+              "$ref": "#/definitions/rssSubscriptionResult"
+            }
+          }
+        }
+      }
+    },
+    "rssRemoveResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "deleted"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "deleted": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "rssEntryReadResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "marked",
+        "guid",
+        "read"
+      ],
+      "properties": {
+        "marked": {
+          "$ref": "#/definitions/boolean"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "read": {
+          "$ref": "#/definitions/boolean"
+        },
+        "subscriptionId": {
+          "$ref": "#/definitions/nullableNonBlankString"
+        },
+        "unreadCount": {
+          "$ref": "#/definitions/nullableInteger"
+        }
+      }
+    },
+    "rssFavoriteResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "guid",
+        "feedUrl",
+        "subscriptionTitle",
+        "title",
+        "firstSeenAt",
+        "addedAt"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "feedUrl": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "subscriptionTitle": {
+          "$ref": "#/definitions/string"
+        },
+        "siteUrl": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "link": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "summary": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "publishedAt": {
+          "$ref": "#/definitions/nullableString"
+        },
+        "firstSeenAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "addedAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
+    "rssFavoritePersistResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "created",
+        "favorite"
+      ],
+      "properties": {
+        "created": {
+          "$ref": "#/definitions/boolean"
+        },
+        "favorite": {
+          "$ref": "#/definitions/rssFavoriteResult"
+        }
+      }
+    },
+    "rssFavoriteRemoveResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subscriptionId",
+        "guid",
+        "removed"
+      ],
+      "properties": {
+        "subscriptionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "guid": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "removed": {
+          "$ref": "#/definitions/boolean"
+        }
+      }
+    },
+    "syncMergeResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot",
+        "conflicts"
+      ],
+      "properties": {
+        "snapshot": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "conflicts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/jsonObject"
+          }
+        }
+      }
+    },
+    "syncConflictResolveResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "snapshot",
+        "resolvedCount",
+        "autoResolvedCount"
+      ],
+      "properties": {
+        "snapshot": {
+          "$ref": "#/definitions/jsonObject"
+        },
+        "resolvedCount": {
+          "$ref": "#/definitions/u32"
+        },
+        "autoResolvedCount": {
+          "$ref": "#/definitions/u32"
+        }
+      }
+    }
+  },
+  "contracts": [
+    {
+      "event": "route.push",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "pushRoute",
+      "descriptor": {
+        "action": "pushRoute",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/routePayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "route.replace",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "replaceRoute",
+      "descriptor": {
+        "action": "replaceRoute",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/routePayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "route.pop",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "popRoute",
+      "descriptor": {
+        "action": "popRoute",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "route.popToRoot",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "popToRoot",
+      "descriptor": {
+        "action": "popToRoot",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "mainTab.select",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "selectTab",
+      "descriptor": {
+        "action": "selectTab",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/mainTabPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "overlay.dialog.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "dialog"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/overlayPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "overlay.dialog.close",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "clearOverlay",
+      "descriptor": {
+        "action": "clearOverlay",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/overlayPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "overlay.sheet.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "sheet"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/overlayPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "overlay.sheet.close",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "clearOverlay",
+      "descriptor": {
+        "action": "clearOverlay",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/overlayPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "overlay.keyboard.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "keyboard"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/overlayPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "overlay.keyboard.close",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "clearOverlay",
+      "descriptor": {
+        "action": "clearOverlay",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/overlayPayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.directory.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "directory"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.directory.close",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "clearOverlayIfMatches",
+      "descriptor": {
+        "action": "clearOverlayIfMatches",
+        "coreSequence": [],
+        "value": "directory"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.appearance.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "appearance"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.settings.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "settings"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.settings.close",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "clearOverlay",
+      "descriptor": {
+        "action": "clearOverlay",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.sourceSwitch.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setOverlay",
+      "descriptor": {
+        "action": "setOverlay",
+        "coreSequence": [],
+        "value": "source-switch"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.sourceSwitch.close",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "clearOverlay",
+      "descriptor": {
+        "action": "clearOverlay",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "book.open",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "bookOpenSequence",
+      "descriptor": {
+        "action": "bookOpenSequence",
+        "coreSequence": [
+          "source.detail",
+          "chapter.list",
+          "content.load",
+          "reader.location.resolve"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/bookOpenPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "source.detail",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "chapter.list",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/chapterListResult"
+          }
+        },
+        {
+          "effectType": "content.load",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "reader.location.resolve",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerLocationResult"
+          }
+        },
+        {
+          "effectType": "tts.system.stop",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/acknowledgedOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.queue.stop",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.enter",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "pushRoute",
+      "descriptor": {
+        "action": "pushRoute",
+        "coreSequence": [],
+        "value": "immersive-reading"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/fixedRoutePayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.exit",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "popRoute",
+      "descriptor": {
+        "action": "popRoute",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "tts.system.stop",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/acknowledgedOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.queue.stop",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.page.next",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "readerPageStep",
+      "descriptor": {
+        "action": "readerPageStep",
+        "coreSequence": [
+          "reader.location.resolve"
+        ],
+        "value": "1"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "reader.location.resolve",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerLocationResult"
+          }
+        },
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.page.prev",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "readerPageStep",
+      "descriptor": {
+        "action": "readerPageStep",
+        "coreSequence": [
+          "reader.location.resolve"
+        ],
+        "value": "-1"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "reader.location.resolve",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerLocationResult"
+          }
+        },
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.tts.start",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "startSession",
+      "descriptor": {
+        "action": "startSession",
+        "coreSequence": [
+          "tts.queue.start"
+        ],
+        "value": "tts",
+        "hostRequest": "tts.system.start"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/ttsStartPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "tts.queue.plan",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.queue.start",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.system.start",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/ttsSystemStartResult"
+          }
+        },
+        {
+          "effectType": "tts.system.stop",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/acknowledgedOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.queue.stop",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.tts.stop",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "stopSession",
+      "descriptor": {
+        "action": "stopSession",
+        "coreSequence": [
+          "tts.queue.stop"
+        ],
+        "hostRequest": "tts.system.stop"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "tts.system.stop",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/acknowledgedOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.queue.stop",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.autoPage.start",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "startSession",
+      "descriptor": {
+        "action": "startSession",
+        "coreSequence": [],
+        "value": "auto-page"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/autoPageStartPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "timer.foreground.arm",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerArmResult"
+          }
+        },
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        },
+        {
+          "effectType": "tts.system.stop",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/acknowledgedOrErrorResult"
+          }
+        },
+        {
+          "effectType": "tts.queue.stop",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/emptyOrErrorResult"
+          }
+        },
+        {
+          "effectType": "reader.location.resolve",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerLocationResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.autoPage.stop",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "stopSession",
+      "descriptor": {
+        "action": "stopSession",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "timer.foreground.cancel",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/timerCancelResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reducedMotion.enable",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setReducedMotion",
+      "descriptor": {
+        "action": "setReducedMotion",
+        "coreSequence": [],
+        "value": "true"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reducedMotion.disable",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "setReducedMotion",
+      "descriptor": {
+        "action": "setReducedMotion",
+        "coreSequence": [],
+        "value": "false"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "source.switch.open",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "pushRoute",
+      "descriptor": {
+        "action": "pushRoute",
+        "coreSequence": [],
+        "value": "source-switch"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/fixedRoutePayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "source.switch.cancel",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "popRoute",
+      "descriptor": {
+        "action": "popRoute",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/emptyObject"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "sync.run",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "emitEffects",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.snapshot",
+          "sync.push"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncRunPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.snapshot",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncMergeResult"
+          }
+        },
+        {
+          "effectType": "sync.push",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncWebDavPlanResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "webdav.config.test",
+      "dispatchTarget": "composite",
+      "runtimeOperation": "emitEffects",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.push"
+        ],
+        "hostRequest": "http.execute"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncWebDavPlanPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.push",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncWebDavPlanResult"
+          }
+        },
+        {
+          "effectType": "http.execute",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/httpExecuteResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "import.start",
+      "dispatchTarget": "core",
+      "coreCommand": "import.parse",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "import.parse"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/importParseParams"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "import.parse",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/importParseData"
+          }
+        }
+      ]
+    },
+    {
+      "event": "import.apply",
+      "dispatchTarget": "core",
+      "coreCommand": "import.persist",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "import.persist"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/importPersistParams"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "import.persist",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/importPersistResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "import.cancel",
+      "dispatchTarget": "core",
+      "coreCommand": "import.rollback",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "import.rollback"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/importRollbackParams"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "import.rollback",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/importRollbackResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "source.switch.confirm",
+      "dispatchTarget": "core",
+      "coreCommand": "source.switch.commit",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "source.switch.commit"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/sourceSwitchCommit"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "source.switch.commit",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/sourceSwitchCommitResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "source.switch.rollback",
+      "dispatchTarget": "core",
+      "coreCommand": "source.switch.rollback",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "source.switch.rollback"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/sourceSwitchRollback"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "source.switch.rollback",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/sourceSwitchRollbackResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.font.import",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "font.register",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "font.register"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceFontRegister"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "font.registerFile",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/fontRegisterResult"
+          }
+        },
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        },
+        {
+          "effectType": "font.unregisterFile",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/fontUnregisterResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.font.delete",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "font.unregister",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "font.unregister"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceFontUnregister"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        },
+        {
+          "effectType": "font.unregisterFile",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/fontUnregisterResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.theme.new",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "theme.create",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "theme.create"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceThemeMutation"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.theme.edit",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "theme.update",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "theme.update"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceThemeMutation"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.theme.delete",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "theme.delete",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "theme.delete"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceThemeDelete"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.typography.persist",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "typography.persist",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "typography.persist"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceTypographyPersist"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.config.restart.simulate",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "config.loadPersisted",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "config.loadPersisted"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceLoadPersisted"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.config.persist",
+      "dispatchTarget": "runtime",
+      "runtimeOperation": "config.savePersisted",
+      "descriptor": {
+        "action": "appearanceTransaction",
+        "coreSequence": [],
+        "value": "config.savePersisted"
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/appearanceSavePersisted"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "persistence.get",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistenceGetResult"
+          }
+        },
+        {
+          "effectType": "persistence.put",
+          "effectKind": "host",
+          "schema": {
+            "$ref": "#/definitions/persistencePutResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.replace.apply",
+      "dispatchTarget": "core",
+      "coreCommand": "replace.apply",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "replace.apply"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/replaceApply"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "replace.apply",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/replaceApplyResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.replace.create",
+      "dispatchTarget": "core",
+      "coreCommand": "replace.persist",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "replace.persist"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/replacePersistCreate"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "replace.persist",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/replacePersistResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.replace.validate",
+      "dispatchTarget": "core",
+      "coreCommand": "replace.validate",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "replace.validate"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/replaceValidate"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "replace.validate",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/replaceValidateResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.refresh",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.feed.refresh",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.feed.refresh"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssFeedRefresh"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.feed.refresh",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssRefreshResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.subscription.add",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.subscription.persist",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.subscription.persist"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssPersistCreate"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.subscription.persist",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssPersistResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.subscription.delete",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.subscription.remove",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.subscription.remove"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssSubscriptionRemove"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.subscription.remove",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssRemoveResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.subscription.edit",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.subscription.persist",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.subscription.persist"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssPersistUpdate"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.subscription.persist",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssPersistResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.entry.open",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.entry.read",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.entry.read"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssEntryRead"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.entry.read",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssEntryReadResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.favorite.add",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.favorite.persist",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.favorite.persist"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssFavoritePersist"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.favorite.persist",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssFavoritePersistResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "rss.favorite.remove",
+      "dispatchTarget": "core",
+      "coreCommand": "rss.favorite.remove",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "rss.favorite.remove"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/rssFavoriteRemove"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "rss.favorite.remove",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/rssFavoriteRemoveResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "sync.start",
+      "dispatchTarget": "core",
+      "coreCommand": "sync.snapshot",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.snapshot"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncConflictDetect"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.snapshot",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncMergeResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "sync.progress",
+      "dispatchTarget": "core",
+      "coreCommand": "sync.push",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.push"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncWebDavPlanPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.push",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncWebDavPlanResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "sync.complete",
+      "dispatchTarget": "core",
+      "coreCommand": "sync.push",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.push"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncWebDavPlanPayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.push",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncWebDavPlanResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "sync.conflict",
+      "dispatchTarget": "core",
+      "coreCommand": "sync.conflict.detect",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.conflict.detect"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncConflictDetect"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.conflict.detect",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncMergeResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "sync.resolve",
+      "dispatchTarget": "core",
+      "coreCommand": "sync.conflict.resolve",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "sync.conflict.resolve"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/syncConflictResolvePayload"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "sync.conflict.resolve",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/syncConflictResolveResult"
+          }
+        }
+      ]
+    }
+  ]
+}

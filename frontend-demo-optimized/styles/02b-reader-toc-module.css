@@ -348,6 +348,116 @@
   height: 0;
 }
 
+.fd-reader-quick-directory-workspace {
+  min-height: 0;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 32px minmax(0, 1fr);
+  overflow: hidden;
+}
+
+.fd-reader-quick-directory-tabs {
+  padding: 0 5px;
+}
+
+.fd-reader-quick-directory-tabs button {
+  font-size: 10px;
+}
+
+.fd-reader-quick-directory-list,
+.fd-reader-quick-bookmark-list {
+  min-height: 0;
+  overflow: auto;
+  padding: 3px 6px;
+  scrollbar-width: none;
+}
+
+.fd-reader-quick-directory-list {
+  display: grid;
+  grid-auto-rows: 29px;
+  align-content: start;
+}
+
+.fd-reader-quick-directory-row {
+  min-height: 29px;
+  height: 29px;
+  grid-template-columns: minmax(0, 1fr) 56px;
+  padding: 0 7px;
+  border-radius: var(--fd-radius-sm);
+}
+
+.fd-reader-quick-directory-row + .fd-reader-quick-directory-row {
+  border-top: 0;
+}
+
+.fd-reader-quick-directory-row .fd-chapter-marker-slots {
+  width: 56px;
+  display: grid;
+  grid-template-columns: repeat(2, 24px);
+  justify-content: end;
+  gap: 4px;
+}
+
+.fd-reader-quick-directory-row .fd-chapter-marker-slots button {
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fd-radius-sm);
+  background: transparent;
+}
+
+.fd-reader-quick-bookmark-list {
+  display: grid;
+  align-content: start;
+}
+
+.fd-reader-quick-bookmark-card {
+  min-height: 54px;
+  display: grid;
+  align-content: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.13));
+}
+
+.fd-reader-quick-bookmark-card > strong {
+  color: var(--reader-control-ink, #332c25);
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.fd-reader-quick-bookmark-card p {
+  position: relative;
+  display: -webkit-box;
+  margin: 0;
+  padding-left: 2em;
+  overflow: hidden;
+  color: var(--reader-control-muted, #8a8176);
+  font-family: var(--fd-serif);
+  font-size: 8px;
+  line-height: 1.45;
+  font-weight: 400;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  text-overflow: ellipsis;
+}
+
+.fd-reader-quick-bookmark-card p::before {
+  content: "";
+  position: absolute;
+  top: 0.12em;
+  bottom: 0.12em;
+  left: 0.85em;
+  width: 1px;
+  border-radius: var(--fd-radius-pill);
+  background: currentColor;
+  opacity: 0.8;
+}
+
 .fd-reader-toc-switch-row,
 .fd-reader-toc-row {
   min-height: 32px;
@@ -470,4 +580,3 @@
   align-content: stretch;
   gap: 0;
 }
-

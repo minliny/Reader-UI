@@ -58,16 +58,16 @@ test("codegen 入口存在且可执行", () => {
   assert.ok(existsSync(CODEGEN_ENTRY), `codegen 入口不存在：${CODEGEN_ENTRY}`);
 });
 
-test("generated/ 下存在 42 个代码文件（14 schema × 3 端）", () => {
+test("generated/ 下存在 45 个代码文件（14 schema + ScreenGraph × 3 端）", () => {
   const files = listGeneratedFiles();
-  assert.equal(files.length, 42, `expected 42 generated files, got ${files.length}`);
-  // 每端各 14 个
+  assert.equal(files.length, 45, `expected 45 generated files, got ${files.length}`);
+  // 每端各 15 个：14 个 contract schema 产物 + 1 个 R16 ScreenGraph 产物。
   const swift = files.filter((f) => f.startsWith("swift/")).length;
   const kotlin = files.filter((f) => f.startsWith("kotlin/")).length;
   const arkts = files.filter((f) => f.startsWith("arkts/")).length;
-  assert.equal(swift, 14, `swift 端文件数应为 14，实际 ${swift}`);
-  assert.equal(kotlin, 14, `kotlin 端文件数应为 14，实际 ${kotlin}`);
-  assert.equal(arkts, 14, `arkts 端文件数应为 14，实际 ${arkts}`);
+  assert.equal(swift, 15, `swift 端文件数应为 15，实际 ${swift}`);
+  assert.equal(kotlin, 15, `kotlin 端文件数应为 15，实际 ${kotlin}`);
+  assert.equal(arkts, 15, `arkts 端文件数应为 15，实际 ${arkts}`);
 });
 
 test("codegen 退出码为 0", () => {
@@ -77,7 +77,7 @@ test("codegen 退出码为 0", () => {
 
 test("codegen 幂等性：跑前后所有文件 byte-for-byte 一致", () => {
   const files = listGeneratedFiles();
-  assert.ok(files.length === 42, "generated 文件数应为 42");
+  assert.ok(files.length === 45, "generated 文件数应为 45");
 
   // 1. 读 baseline
   const before = new Map();

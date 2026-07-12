@@ -40,6 +40,14 @@ enum class CoreEventType {
     SourceSearchCompleted,
     @SerialName("source.search.failed")
     SourceSearchFailed,
+    @SerialName("source.listed")
+    SourceListed,
+    @SerialName("source.list.failed")
+    SourceListFailed,
+    @SerialName("source.changed")
+    SourceChanged,
+    @SerialName("source.change.failed")
+    SourceChangeFailed,
     @SerialName("source.detail.loaded")
     SourceDetailLoaded,
     @SerialName("source.detail.failed")
@@ -145,7 +153,51 @@ enum class CoreEventType {
     @SerialName("cache.book.status.updated")
     CacheBookStatusUpdated,
     @SerialName("cache.operation.failed")
-    CacheOperationFailed
+    CacheOperationFailed,
+    @SerialName("import.parsed")
+    ImportParsed,
+    @SerialName("import.persist.completed")
+    ImportPersistCompleted,
+    @SerialName("import.rollback.completed")
+    ImportRollbackCompleted,
+    @SerialName("import.partial.completed")
+    ImportPartialCompleted,
+    @SerialName("import.completed")
+    ImportCompleted,
+    @SerialName("import.failed")
+    ImportFailed,
+    @SerialName("source.switch.commit.completed")
+    SourceSwitchCommitCompleted,
+    @SerialName("source.switch.rollback.completed")
+    SourceSwitchRollbackCompleted,
+    @SerialName("source.switch.failed")
+    SourceSwitchFailed,
+    @SerialName("font.register.completed")
+    FontRegisterCompleted,
+    @SerialName("font.unregister.completed")
+    FontUnregisterCompleted,
+    @SerialName("font.fallback.detected")
+    FontFallbackDetected,
+    @SerialName("theme.created")
+    ThemeCreated,
+    @SerialName("theme.updated")
+    ThemeUpdated,
+    @SerialName("theme.deleted")
+    ThemeDeleted,
+    @SerialName("typography.persist.completed")
+    TypographyPersistCompleted,
+    @SerialName("config.persisted.loaded")
+    ConfigPersistedLoaded,
+    @SerialName("config.persisted.saved")
+    ConfigPersistedSaved,
+    @SerialName("replace.applied")
+    ReplaceApplied,
+    @SerialName("replace.persist.completed")
+    ReplacePersistCompleted,
+    @SerialName("replace.validation.completed")
+    ReplaceValidationCompleted,
+    @SerialName("replace.undo.completed")
+    ReplaceUndoCompleted
 }
 
 @Serializable

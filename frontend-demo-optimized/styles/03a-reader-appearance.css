@@ -392,10 +392,292 @@
   min-height: 24px;
   display: grid;
   grid-template-columns: none;
-  grid-template-rows: 18px;
+  grid-template-rows: 18px auto;
   justify-items: stretch;
   padding: 2px 3px;
   text-align: center;
+}
+
+.fd-reader-appearance-panel .fd-reader-appearance-quick-theme .fd-reader-full-theme-grid button {
+  min-height: 24px;
+  grid-template-rows: 18px;
+}
+
+.fd-reader-appearance-panel .fd-reader-appearance-quick-theme > header em {
+  justify-self: end;
+  font-size: 8px;
+  white-space: nowrap;
+}
+
+.fd-reader-appearance-panel .fd-reader-appearance-list {
+  gap: 10px;
+}
+
+.fd-reader-appearance-panel .fd-reader-full-theme-grid button small {
+  color: var(--reader-control-muted, #746a60);
+  font-size: 7px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.fd-reader-appearance-quick-selects {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.fd-reader-appearance-quick-selects label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fd-reader-appearance-quick-selects strong {
+  font-size: 9px;
+  white-space: nowrap;
+}
+
+.fd-reader-appearance-quick-selects select {
+  width: 100%;
+  min-width: 0;
+  height: 24px;
+  padding: 0 20px 0 7px;
+  border: 1px solid var(--quick-line-soft);
+  border-radius: var(--fd-radius-sm);
+  background: var(--reader-control-surface-solid, #fffaf4);
+  color: var(--reader-control-ink, #332c25);
+  font: 700 9px/1 var(--fd-sans);
+}
+
+.fd-reader-full-appearance .fd-reader-full-theme-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.fd-reader-full-appearance .fd-reader-full-theme-grid button {
+  grid-template-columns: 1fr;
+  grid-template-rows: 34px auto;
+  gap: 4px;
+  text-align: center;
+}
+
+.fd-reader-full-appearance .fd-reader-full-theme-grid button small {
+  overflow: hidden;
+  color: var(--reader-muted, #5b5046);
+  font-size: 9px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-full-appearance .fd-reader-full-theme-grid button[data-reader-theme],
+.fd-reader-appearance-panel .fd-reader-full-theme-grid button[data-reader-theme] {
+  position: relative;
+  border-color: transparent;
+  opacity: 0.8;
+  transition:
+    opacity 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.fd-reader-full-appearance .fd-reader-full-theme-grid button[data-reader-theme]:hover,
+.fd-reader-appearance-panel .fd-reader-full-theme-grid button[data-reader-theme]:hover {
+  opacity: 0.92;
+}
+
+.fd-reader-full-appearance .fd-reader-full-theme-grid button[data-reader-theme].is-active,
+.fd-reader-appearance-panel .fd-reader-full-theme-grid button[data-reader-theme].is-active {
+  z-index: 1;
+  border-color: var(--reader-primary, #2f6373);
+  box-shadow:
+    inset 0 0 0 1px var(--reader-primary, #2f6373),
+    0 1px 3px rgba(47, 99, 115, 0.12);
+  opacity: 1;
+  transform: none;
+}
+
+.fd-reader-appearance-panel .fd-reader-appearance-quick-fonts .fd-reader-appearance-font-grid {
+  gap: 4px;
+}
+
+.fd-reader-appearance-panel .fd-reader-appearance-quick-fonts .fd-reader-appearance-font-grid button {
+  min-height: 27px;
+  padding: 2px 4px;
+  font-size: 8px;
+}
+
+.fd-reader-theme-default-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.fd-reader-theme-default-actions button {
+  min-height: 28px;
+  padding: 0 9px;
+  border: 1px solid var(--reader-line, rgba(155, 132, 102, 0.18));
+  border-radius: var(--fd-radius-sm);
+  background: transparent;
+  color: inherit;
+  font: 700 9px/1 var(--fd-sans);
+}
+
+.fd-reader-appearance-select-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 12px;
+  padding: 9px;
+  border: 1px solid color-mix(in srgb, var(--reader-line, rgba(155, 132, 102, 0.18)) 72%, transparent);
+  border-radius: var(--fd-radius-md);
+  background: color-mix(in srgb, var(--reader-panel, rgba(255, 252, 248, 0.62)) 72%, transparent);
+}
+
+.fd-reader-appearance-select-grid label {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 7ch;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  min-height: 32px;
+  padding: 3px 6px 3px 9px;
+  border: 1px solid color-mix(in srgb, var(--reader-line, rgba(155, 132, 102, 0.18)) 62%, transparent);
+  border-radius: var(--fd-radius-sm);
+  background: color-mix(in srgb, var(--reader-surface, rgba(255, 250, 244, 0.98)) 86%, transparent);
+}
+
+.fd-reader-appearance-select-grid label > strong {
+  overflow: hidden;
+  color: var(--reader-ink, #332c25);
+  font-size: 10px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-appearance-select-grid select {
+  width: 7ch;
+  min-width: 0;
+  height: 28px;
+  padding: 0 16px 0 5px;
+  border: 1px solid var(--reader-line, rgba(155, 132, 102, 0.18));
+  border-radius: var(--fd-radius-sm);
+  background: var(--reader-surface, rgba(255, 250, 244, 0.98));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
+  color: inherit;
+  justify-self: end;
+  font: 700 9px/1 var(--fd-sans);
+  cursor: pointer;
+}
+
+.fd-reader-appearance-step-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  margin-top: 8px;
+  padding: 2px 9px;
+  border: 1px solid color-mix(in srgb, var(--reader-line, rgba(155, 132, 102, 0.18)) 72%, transparent);
+  border-radius: var(--fd-radius-md);
+  background: color-mix(in srgb, var(--reader-surface, rgba(255, 250, 244, 0.98)) 78%, transparent);
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row {
+  min-height: 34px;
+  padding: 0 4px;
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row + .fd-reader-step-row {
+  border-top-color: color-mix(in srgb, var(--reader-line, rgba(155, 132, 102, 0.18)) 68%, transparent);
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row > strong {
+  color: var(--reader-ink, #332c25);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row > span {
+  gap: 5px;
+  justify-self: end;
+  margin-left: auto;
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row button {
+  width: 24px;
+  min-height: 24px;
+  border-color: transparent;
+  border-radius: var(--fd-radius-sm);
+  background: color-mix(in srgb, var(--reader-panel, rgba(255, 252, 248, 0.62)) 86%, var(--reader-line, rgba(155, 132, 102, 0.18)));
+  color: var(--reader-ink, #332c25);
+  font-weight: 800;
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row button:hover {
+  border-color: var(--reader-primary, #2f6373);
+  color: var(--reader-primary, #2f6373);
+}
+
+.fd-reader-appearance-step-list .fd-reader-step-row em {
+  min-width: 4ch;
+  color: var(--reader-ink, #332c25);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: center;
+}
+
+.fd-reader-appearance-typography-library > header {
+  padding-bottom: 5px;
+}
+
+.fd-reader-appearance-typography-library > header strong {
+  color: var(--reader-ink, #332c25);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.fd-reader-appearance-typography-library > header em {
+  padding: 3px 7px;
+  border-radius: var(--fd-radius-pill);
+  background: color-mix(in srgb, var(--reader-primary, #2f6373) 9%, transparent);
+  color: var(--reader-primary, #2f6373);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.fd-reader-appearance-font-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.fd-reader-appearance-font-grid button {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 38px;
+  padding: 4px;
+  overflow: hidden;
+  border: 1px solid var(--reader-line, rgba(155, 132, 102, 0.18));
+  border-radius: var(--fd-radius-sm);
+  background: transparent;
+  color: inherit;
+  font-size: 10px;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.fd-reader-appearance-font-grid button.is-active {
+  border-color: var(--reader-primary, #2f6373);
+  background: var(--reader-active-bg, rgba(45, 74, 62, 0.1));
+}
+
+.fd-reader-appearance-font-grid .fd-reader-font-import-cell {
+  border-style: dashed;
+  font-family: var(--fd-sans);
 }
 
 .fd-reader-appearance-panel .fd-reader-full-theme-grid span {
@@ -473,4 +755,3 @@
   border-color: #2d8795;
   box-shadow: inset 0 0 0 1px rgba(45, 135, 149, 0.26);
 }
-

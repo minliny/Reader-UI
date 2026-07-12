@@ -1,0 +1,118 @@
+name: Reader UI contract and runtime
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  validate:
+    runs-on: macos-15
+    outputs:
+      artifact_name: ${{ steps.release-metadata.outputs.artifact_name }}
+      artifact_id: ${{ steps.release-artifact.outputs.artifact-id }}
+      artifact_digest: ${{ steps.release-artifact.outputs.artifact-digest }}
+      inventory_sha256: ${{ steps.release-metadata.outputs.inventory_sha256 }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: contracts/tests/package-lock.json
+
+      - uses: actions/setup-java@c1e323688fd81a25caa38c78aa6df2d33d3e20d9 # v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install contract test dependencies
+        run: npm ci --prefix contracts/tests
+
+      - name: Contract, fixtures, and generated drift
+        run: |
+          npm test --prefix contracts/tests
+          node contracts/tests/validate.mjs
+          node tools/codegen/check-drift.mjs
+
+      - name: Runtime release lock
+        run: |
+          node tools/runtime/generate-runtime-coverage.mjs --check
+          node tools/runtime/check-runtime-release.mjs
+
+      - name: Swift contract and runtime
+        run: swift test --disable-sandbox
+
+      - name: Kotlin contract and runtime
+        run: ./gradlew --no-daemon test
+
+      - name: Generate and validate release manifest
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          node tools/release/generate-ui-release-manifest.mjs --check
+          node tools/release/check-ui-release-manifest.mjs
+
+      - name: Prepare fail-closed release metadata and artifact manifest
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: release-metadata
+        run: |
+          rm -rf release-stage
+          node tools/release/prepare-ui-release.mjs \
+            --tag "$GITHUB_REF_NAME" \
+            --source-repository "$GITHUB_REPOSITORY" \
+            --source-ref "$GITHUB_REF" \
+            --source-sha "$GITHUB_SHA" \
+            --workflow-run-id "$GITHUB_RUN_ID" \
+            --artifact-name "reader-ui-$GITHUB_REF_NAME" \
+            --artifact-output release-stage \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Upload native consumer sources
+        if: startsWith(github.ref, 'refs/tags/v')
+        id: release-artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: ${{ steps.release-metadata.outputs.artifact_name }}
+          if-no-files-found: error
+          include-hidden-files: true
+          retention-days: 30
+          path: release-stage/
+
+  notify-hosts:
+    needs: validate
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: reader-ui-release
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '24'
+
+      - name: Download immutable UI release artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          artifact-ids: ${{ needs.validate.outputs.artifact_id }}
+          path: release-download
+
+      - name: Dispatch verified UI release to configured host repositories
+        env:
+          READER_HOST_SYNC_TOKEN: ${{ secrets.READER_HOST_SYNC_TOKEN }}
+          READER_HOST_SYNC_REPOSITORIES: ${{ vars.READER_HOST_SYNC_REPOSITORIES }}
+          READER_UI_ARTIFACT_NAME: ${{ needs.validate.outputs.artifact_name }}
+          READER_UI_ARTIFACT_ID: ${{ needs.validate.outputs.artifact_id }}
+          READER_UI_ARTIFACT_DIGEST: ${{ needs.validate.outputs.artifact_digest }}
+          READER_UI_INVENTORY_SHA256: ${{ needs.validate.outputs.inventory_sha256 }}
+        run: |
+          node tools/release/dispatch-ui-release.mjs \
+            --artifact-root release-download \
+            --artifact-id "$READER_UI_ARTIFACT_ID" \
+            --artifact-digest "$READER_UI_ARTIFACT_DIGEST" \
+            --inventory-sha256 "$READER_UI_INVENTORY_SHA256"

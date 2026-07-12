@@ -1,5 +1,7 @@
 # Contract-first Native UI Architecture
 
+> **已被 2.2 架构取代（2026-07-10）**：本文保留为历史迁移背景。当前权威源是 [ARCHITECTURE.md](./ARCHITECTURE.md) 与 [../EXECUTABLE_UI_RUNTIME.md](../EXECUTABLE_UI_RUNTIME.md)；“三端各自实现 reducer / 不共享 runtime”不再用于新开发。
+
 本文是 Reader 多端 UI 架构改造的当前主规划。它用于指导 `Reader UI`、
 `Reader-Core-Native`、`Reader for iOS`、`Reader for Android`、
 `Reader for HarmonyOS`、旧 `Reader-Core` 和暂不在当前移动三端主线内的
@@ -245,6 +247,7 @@ credential.get/set
 tts.system.start/stop
 permission.request
 background.schedule
+timer.foreground.arm/cancel
 notification.show
 share.invoke
 ```
@@ -322,7 +325,7 @@ host request protocol
 ```text
 Slice 1: AppShell + main tabs
 Slice 2: Bookshelf -> open book -> reader surface
-Slice 3: Reader overlay / control dock / reader mode
+Slice 3: reserved pending new Reader control product specification
 Slice 4: Progress / session / focus / TTS
 Slice 5: RSS / source / search
 Slice 6: Sync / conflict / offline state
@@ -364,7 +367,6 @@ device smoke test
 打开一本书
 进入 reader
 翻页
-打开控制层
 切换 readerMode
 更新进度
 触发 TTS

@@ -4,7 +4,7 @@
 > 闭环交付时间：2026-07-10（120/120 全绿）
 > 审计范围：Reader UI (Contract) / Reader for iOS / Reader for Android / Reader-for-HarmonyOS
 > 验收口径：5 条 P0 链路 × 4 个仓库 × A-F 六列（✅ 通过 / ❌ 失败 / ⚠️ 豁免）
-> 生成方式：`node frontend-demo/verify/verify-p0-chain-matrix.mjs`（CI 友好，可重复执行）
+> 生成方式：`node frontend-demo-optimized/verify/verify-p0-chain-matrix.mjs`（CI 友好，可重复执行）
 
 ## 总表
 
@@ -92,7 +92,7 @@
 
 ```bash
 # 在 Reader UI 仓库根目录执行
-node frontend-demo/verify/verify-p0-chain-matrix.mjs
+node frontend-demo-optimized/verify/verify-p0-chain-matrix.mjs
 
 # 退出码：
 #   0 = 全绿（无 ❌）

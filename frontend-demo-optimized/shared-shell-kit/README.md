@@ -17,11 +17,10 @@
 - 页面 renderer 只负责生成 slot 内容，再调用对应 shell。
 - 图标必须通过 `ReaderShellKit.icon(...)` 或 `ReaderAssetIcons.renderIcon(...)`。
 - 状态切换不得移除 shell 根节点和固定 slot。
-- 阅读控制层四模块按钮的选中态不得改变按钮尺寸、间距和相对位置。
 
 ## 本地预览（Local Preview）
 
-入口（Entry）：`frontend-demo/shared-shell-kit/preview.html`
+入口（Entry）：`frontend-demo-optimized/shared-shell-kit/preview.html`
 
 Manifest 目标（Manifest Target）：`shared-shell-kit`
 

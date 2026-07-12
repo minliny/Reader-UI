@@ -907,5 +907,180 @@
   {
     "id": "sync-settings-entry",
     "shell": "SettingsShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-permission-denied",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-format-unsupported",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-empty-file",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-parsing",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-duplicate",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-conflict-resolve",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-partial-success",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W1 direct import state",
+    "id": "import-result-detail",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-toc-loading",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-toc-offline",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-toc-error",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-content-loading",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-content-offline",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-content-error",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-page-boundary-first",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-page-boundary-last",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-progress-restore",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W2 direct reader state",
+    "id": "reader-background-restore",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W3 direct source-switch state",
+    "id": "source-switch-empty",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "R16B W3 direct source-switch state",
+    "id": "source-switch-error",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "R16B W3 direct source-switch state",
+    "id": "source-switch-timeout",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "R16B W3 direct source-switch state",
+    "id": "source-switch-loading",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "R16B W3 direct source-switch state",
+    "id": "source-switch-rollback",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "R16B W3 direct source-switch state",
+    "id": "source-switch-preview",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "R16B W4 direct appearance state",
+    "id": "reader-font-import-confirm",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W4 direct appearance state",
+    "id": "reader-font-delete-confirm",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W4 direct appearance state",
+    "id": "reader-font-fallback",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W4 direct appearance state",
+    "id": "reader-theme-new",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W4 direct appearance state",
+    "id": "reader-theme-delete-confirm",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W4 direct appearance state",
+    "id": "reader-typography-reset-confirm",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W5 direct replacement state",
+    "id": "reader-replace-delete-confirm",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W5 direct replacement state",
+    "id": "reader-replace-apply-result",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W5 direct replacement state",
+    "id": "reader-replace-import-export",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W5 direct replacement state",
+    "id": "reader-replace-preview",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "R16B W5 direct replacement state",
+    "id": "reader-replace-page",
+    "shell": "ReaderShell"
   }
 ]

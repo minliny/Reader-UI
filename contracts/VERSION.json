@@ -1,5 +1,5 @@
 {
-  "version": "2.1.0",
+  "version": "2.5.0",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
@@ -9,14 +9,76 @@
     "token": "2.0.0",
     "core-command": "1.0.0",
     "core-event": "1.0.0",
-    "host-request": "1.0.0",
+    "host-request": "1.2.0",
+    "host-result": "1.0.0",
     "progress-location": "1.0.0",
     "content": "1.0.0",
     "sync-conflict": "1.0.0",
     "state-rule": "1.1.0",
-    "motion-policy": "1.1.0"
+    "motion-policy": "1.1.0",
+    "runtime-actions": "2.1.0",
+    "host-consumer-lock": "1.1.0",
+    "runtime-ownership": "1.0.0",
+    "screen-graph": "1.1.0",
+    "device-conformance-plan": "1.0.0",
+    "device-conformance-evidence": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "2.5.0",
+      "date": "2026-07-11",
+      "summary": "MINOR：61-action runtime、7/28 rollout truth 与 immutable release manifest",
+      "changes": [
+        "Reader UI 统一为 2.5.0；runtime-actions.json 扩展至 61 条，当前 raw-byte SHA-256 为 0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c。",
+        "host-request schema 升至 1.2.0：58 个 type 全部改为 type-discriminated strict payload，正式加入 ReaderUIRuntime appearance aggregate 所需的 persistence.get/put CAS 与 font.unregisterFile；W4 不再伪装为 Core 业务命令。新增 host-result 1.0.0，以同一 58-type 集合约束成功结果并固定 appearance CAS/font 不变量。",
+        "三端 rollout allowlist 精确覆盖 35 条：directory、book.open、TTS、auto-page 共 7 条 Pilot；page、import、source-switch、replace、RSS、Sync 共 28 条保持默认 Shadow。",
+        "Host consumer checker 强制 exact covered/pilot policy、动态 effectful event 分类、timer handler 注册证明与 HarmonyOS oh-package lock 版本一致。",
+        "R14 为 61/61 action 建立 strict lossless payload/result contract，并为 Swift/Kotlin/ArkTS 生成递归 JSONValue 边界；nested object/array 不再降级为字符串 map。",
+        "R16D ScreenGraph 1.1.0 覆盖 235 routes / 165 variants / 521 components，并把 55 条事件证据拆成 36 条明确 trigger 的 executable bindings 与 19 条不可执行 state-event evidence，另保留 6 条显式 action gaps。",
+        "R18 生成 iOS/Android/HarmonyOS 各 58 项的 device conformance plan，全部 deviceVerified 默认 false，只有绑定可信 release identity 与逐项 artifact 的真实证据才能转为 true。",
+        "新增 187 文件 / 12 组的 UI_RELEASE_MANIFEST.json（含 R18 device-conformance plan）与 6 组 ordered ABI hash；JSON Schema 校验切换到 Ajv 2020-12 并覆盖 oneOf/allOf/not/conditional/format。",
+        "当前 HostRequest 权威计数为 58；其余计数由生成报告与测试输出给出，避免在变更中的手工快照冒充最新验收结果。"
+      ]
+    },
+    {
+      "version": "2.4.0",
+      "date": "2026-07-11",
+      "summary": "MINOR：book.open result-dependent serial transaction",
+      "changes": [
+        "book.open 不再并发发出四个 Core effect：remote 串行执行 source.detail → chapter.list → content.load → awaiting-layout → reader.location.resolve，local 从 chapter.list 开始。",
+        "book.open canonical input 新增必填 sourceKind=remote|local，并直接进入 immersive-reading；book.detail.open 继续独立表示详情页导航。",
+        "reference、Swift、Kotlin、ArkTS runtime 新增 correlation/stage ledger、requested chapter clamp、delayed layout handoff、stale/duplicate ignore、cancel restore 与 latest-intent supersede。",
+        "新增 RUNTIME_BOOK_OPEN_TRANSACTION_PROTOCOL.md，固定 Host typed DomainStore、request-scoped cancel、local Core identity、继续阅读 chapterIndex 与 Pilot admission 边界。",
+        "directory open/close 仍是唯一 Pilot cohort；book.open 在三端完成无损 Core DTO、cancel handle、真实 layout 与旧 native executor 去重前保持 Shadow。"
+      ]
+    },
+    {
+      "version": "2.3.0",
+      "date": "2026-07-10",
+      "summary": "MINOR：R7 runtime ownership inventory 与 directory cohort safety",
+      "changes": [
+        "新增 runtime-ownership spec 与生成的 213-event coverage report；release gate 强制声明每个 canonical UiEvent 的 runtime、split 或 platform ephemeral ownership。",
+        "runtime action schema 升级到 2：reader.directory.close 改为 conditional clearOverlayIfMatches，关闭旧 directory 不会错误清除后来替换的 overlay。",
+        "Swift、Kotlin、ArkTS 和 reference runtime 均实现 conditional overlay close，并增加 JS/Swift/Kotlin regression tests。",
+        "Host consumer lock 支持可选的逐事件 cohorts，使同一 Host 可让 directory 进入 Pilot 而 book.open、TTS、auto-page 继续 Shadow。",
+        "本版本仍未将任何生产 workflow 切为 authoritative；下一步是三端 live-shadow coordinator 与目录 pair Pilot。"
+      ]
+    },
+    {
+      "version": "2.2.0",
+      "date": "2026-07-10",
+      "summary": "MINOR：Executable UI Spec 与三端 ReaderUIRuntime 包起点",
+      "changes": [
+        "新增 ui-spec/runtime-actions.schema.json 与 runtime-actions.json，将 33 条 P0 路由、overlay、reader session、source switch、sync 交互从说明文档升级为可执行 action descriptor。",
+        "新增 packages/reference/reader-ui-runtime.mjs，作为跨端 reducer/effect 语义的可执行参考实现；unsupported event、缺少 payload、async/overlay guard 均 fail closed。",
+        "新增 Swift ReaderUIRuntime、Kotlin reader-ui-runtime、ArkTS HAR `reader_ui_runtime` 三个原生可消费包；action table 统一由 tools/runtime/generate-runtime.mjs 生成。",
+        "book.open 明确采用 reducer-managed sequence：source.detail -> chapter.list -> content.load -> reader.location.resolve，不向 Core 添加伪原子命令。",
+        "新增 JS 11 项、Swift 4 项、Kotlin 4 项 runtime 测试，覆盖 schema、consumer lock、canonical command/request 引用、codegen drift、book.open、session 互斥、overlay guard 与 fail-closed。",
+        "ArkTS runtime 采用可被 hvigor 识别的 HAR/source module 结构，package/module 统一命名为 reader_ui_runtime；行为测试由消费它的 HAP test harness 执行，避免 HAR TestAbility runner 缺失导致假失败。",
+        "新增三端 READER_UI_CONSUMER.json lock 规范与 check-host-consumers.mjs，锁定 UI 版本、runtime schema、spec SHA-256、covered events 与 rollout 差异。",
+        "架构从仅共享静态 Contract 升级为 Executable UI Spec + Native Renderer：Reader-UI 共享确定性 UiState transition/effects，Host 保留 native renderer、EphemeralState 与 Host Adapter。"
+      ]
+    },
     {
       "version": "2.1.0",
       "date": "2026-07-09",

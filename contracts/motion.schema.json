@@ -2,9 +2,15 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/motion.schema.json",
   "title": "Motion",
-  "description": "动效契约。MotionId 一经发布不得改名。来源：frontend-demo/verify/motion/motion-coverage-report.json、frontend-demo/MOTION_CONTRACT.md、frontend-demo/motion-tokens.css。",
+  "description": "动效契约。MotionId 一经发布不得改名。删除带 `/` 的 MotionId 以避免 codegen 转换 `/` 与 `-` 产生重复 case 名。来源：frontend-demo-optimized/verify/motion/motion-coverage-report.json、frontend-demo-optimized/MOTION_CONTRACT.md、frontend-demo-optimized/motion-tokens.css。",
   "type": "object",
   "additionalProperties": false,
+  "$defs": {
+    "MotionId": {
+      "$ref": "#/properties/id",
+      "description": "MotionId 枚举的具名句柄，供 motion-policy.schema.json 等外部 schema 通过 motion.schema.json#/$defs/MotionId 引用，避免重复维护 93 个枚举值。实际定义见 properties.id。"
+    }
+  },
   "required": [
     "id",
     "durationMs",
@@ -30,6 +36,8 @@
         "destructive.confirm.commit",
         "dropdown.menu.collapse",
         "dropdown.menu.expand",
+        "dropdown.menu.reposition",
+        "dropdown.option.press",
         "dropdown.option.select",
         "dropdown.trigger.press",
         "feedback.toast.enter",
@@ -58,9 +66,11 @@
         "reader.control.dock.longPress",
         "reader.control.dock.rebound",
         "reader.control.dock.release",
+        "reader.control.handle.drag",
         "reader.control.handle.press",
         "reader.control.handle.release",
         "reader.control.hide",
+        "reader.control.show",
         "reader.entry.actionToImmersive",
         "reader.entry.coverToImmersive",
         "reader.module.switch",
@@ -97,7 +107,9 @@
         "state.loading.inline",
         "stepper.press",
         "stepper.value.change",
+        "tab.item.press",
         "tab.item.select",
+        "tab.item.switch",
         "tab.switch",
         "toggle.switch",
         "tooling.mode.switch",
@@ -230,15 +242,15 @@
       "type": "array",
       "description": "动效守卫规则。来源：MOTION_CONTRACT.md 与 STATE_OWNERSHIP.md §6。",
       "items": {
-        "type": "string"
-      },
-      "items_enum_examples": [
-        "reducedMotion:forceZeroDuration",
-        "dragMustFollowFinger:noEasing",
-        "releaseToSnap:afterReleaseOnly",
-        "interrupt:cancel|redirect|completeThenReplace",
-        "asyncGuard:cancelOnRouteReplace"
-      ]
+        "type": "string",
+        "examples": [
+          "reducedMotion:forceZeroDuration",
+          "dragMustFollowFinger:noEasing",
+          "releaseToSnap:afterReleaseOnly",
+          "interrupt:cancel|redirect|completeThenReplace",
+          "asyncGuard:cancelOnRouteReplace"
+        ]
+      }
     },
     "deprecated": {
       "type": "boolean",

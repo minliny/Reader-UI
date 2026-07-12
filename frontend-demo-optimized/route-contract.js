@@ -202,7 +202,47 @@
     "about-version": { title: "关于版本（About Version）", shell: "SettingsShell" },
     "state-error": { title: "状态错误（State Error）", shell: "SettingsShell" },
     "state-offline": { title: "状态离线（State Offline）", shell: "SettingsShell" },
-    "control-layer-base-v2": { title: "阅读控制层基线 V2（Control Layer Base V2）", shell: "ReaderShell" }
+    "control-layer-base-v2": { title: "阅读控制层基线 V2（Control Layer Base V2）", shell: "ReaderShell" },
+    // R16B W1：canonical direct ViewState 路由（renderer/state fixture 已闭合）
+    "import-permission-denied": { title: "导入权限被拒绝（Import Permission Denied）", shell: "LibraryShell" },
+    "import-format-unsupported": { title: "格式不支持（Import Format Unsupported）", shell: "LibraryShell" },
+    "import-empty-file": { title: "空文件（Import Empty File）", shell: "LibraryShell" },
+    "import-parsing": { title: "解析中（Import Parsing）", shell: "LibraryShell" },
+    "import-duplicate": { title: "重复检测（Import Duplicate）", shell: "LibraryShell" },
+    "import-conflict-resolve": { title: "冲突解决（Import Conflict Resolve）", shell: "LibraryShell" },
+    "import-partial-success": { title: "部分导入成功（Import Partial Success）", shell: "LibraryShell" },
+    "import-result-detail": { title: "导入结果详情（Import Result Detail）", shell: "LibraryShell" },
+    // R16B W2：canonical direct ViewState 路由（TOC/content/boundary/restore）
+    "reader-content-loading": { title: "正文加载中（Reader Content Loading）", shell: "ReaderShell" },
+    "reader-content-offline": { title: "正文离线（Reader Content Offline）", shell: "ReaderShell" },
+    "reader-content-error": { title: "正文加载错误（Reader Content Error）", shell: "ReaderShell" },
+    "reader-toc-loading": { title: "目录加载中（Reader TOC Loading）", shell: "ReaderShell" },
+    "reader-toc-offline": { title: "目录离线（Reader TOC Offline）", shell: "ReaderShell" },
+    "reader-toc-error": { title: "目录加载错误（Reader TOC Error）", shell: "ReaderShell" },
+    "reader-page-boundary-first": { title: "首章边界（Reader Page Boundary First）", shell: "ReaderShell" },
+    "reader-page-boundary-last": { title: "末章边界（Reader Page Boundary Last）", shell: "ReaderShell" },
+    "reader-progress-restore": { title: "阅读进度恢复（Reader Progress Restore）", shell: "ReaderShell" },
+    "reader-background-restore": { title: "后台恢复提示（Reader Background Restore）", shell: "ReaderShell" },
+    // R16B W3：canonical direct ViewState 路由（sourceSwitchState）
+    "source-switch-empty": { title: "无可用源（Source Switch Empty）", shell: "FlowShell" },
+    "source-switch-error": { title: "换源失败（Source Switch Error）", shell: "FlowShell" },
+    "source-switch-timeout": { title: "换源超时（Source Switch Timeout）", shell: "FlowShell" },
+    "source-switch-loading": { title: "换源加载中（Source Switch Loading）", shell: "FlowShell" },
+    "source-switch-rollback": { title: "回滚书源（Source Switch Rollback）", shell: "FlowShell" },
+    "source-switch-preview": { title: "换源预览（Source Switch Preview）", shell: "FlowShell" },
+    // R16B W4：canonical direct ViewState 路由（font/theme/typography state）
+    "reader-font-import-confirm": { title: "导入字体确认（Reader Font Import Confirm）", shell: "ReaderShell" },
+    "reader-font-delete-confirm": { title: "删除字体确认（Reader Font Delete Confirm）", shell: "ReaderShell" },
+    "reader-font-fallback": { title: "字体回退（Reader Font Fallback）", shell: "ReaderShell" },
+    "reader-theme-new": { title: "新建主题（Reader Theme New）", shell: "ReaderShell" },
+    "reader-theme-delete-confirm": { title: "删除主题确认（Reader Theme Delete Confirm）", shell: "ReaderShell" },
+    "reader-typography-reset-confirm": { title: "排版重置确认（Reader Typography Reset Confirm）", shell: "ReaderShell" },
+    // R16B W5：canonical direct ViewState 路由（replaceRulesState）
+    "reader-replace-delete-confirm": { title: "删除替换规则确认（Reader Replace Delete Confirm）", shell: "ReaderShell" },
+    "reader-replace-apply-result": { title: "替换规则应用结果（Reader Replace Apply Result）", shell: "ReaderShell" },
+    "reader-replace-import-export": { title: "替换规则导入导出（Reader Replace Import Export）", shell: "ReaderShell" },
+    "reader-replace-preview": { title: "替换规则预览（Reader Replace Preview）", shell: "ReaderShell" },
+    "reader-replace-page": { title: "替换规则管理（Reader Replace Page）", shell: "ReaderShell" }
   });
 
   const deepRouteClosure = {
@@ -242,7 +282,14 @@
         "discover-error",
         "discover-source-login",
         "discover-rule-test",
-        "discover-source-bulk"
+        "discover-source-bulk",
+        "discover-home",
+        "discover-entry-source",
+        "discover-filter-source-type",
+        "discover-filter-category",
+        "discover-cache-empty",
+        "discover-cache-stale",
+        "discover-cache-fresh"
       ],
       manifestTargets: ["discovery-home-preview", "discovery-home-state-matrix"],
       routeManifestTargets: {
@@ -279,12 +326,19 @@
         "discover-error": ["discovery-home-state-matrix"],
         "discover-source-login": ["discovery-home-state-matrix"],
         "discover-rule-test": ["discovery-home-state-matrix"],
-        "discover-source-bulk": ["discovery-home-state-matrix"]
+        "discover-source-bulk": ["discovery-home-state-matrix"],
+        "discover-home": ["discovery-home-preview", "discovery-home-state-matrix"],
+        "discover-entry-source": ["discovery-home-preview", "discovery-home-state-matrix"],
+        "discover-filter-source-type": ["discovery-home-preview", "discovery-home-state-matrix"],
+        "discover-filter-category": ["discovery-home-preview", "discovery-home-state-matrix"],
+        "discover-cache-empty": ["discovery-home-state-matrix"],
+        "discover-cache-stale": ["discovery-home-state-matrix"],
+        "discover-cache-fresh": ["discovery-home-state-matrix"]
       }
     },
     rss: {
       label: "RSS",
-      demoRoutes: ["rss", "rss-all", "rss-starred", "rss-source-feed", "rss-source-category-releases", "rss-source-category-issues", "rss-source-category-discussions", "rss-refreshing", "rss-search", "rss-detail", "rss-original", "rss-original-browser", "rss-subscription-management", "rss-source-actions", "rss-source-edit", "rss-source-debug", "rss-source-vars", "rss-source-login", "rss-source-login-web", "rss-source-login-cookie", "rss-source-login-clear", "rss-source-groups", "rss-source-group-edit", "rss-source-batch", "rss-source-export", "rss-source-export-detail", "rss-source-export-result", "rss-source-pin", "rss-source-disable", "rss-source-batch-disable", "rss-source-import", "rss-source-import-detail", "rss-source-import-result", "rss-read-record", "rss-record-clear", "rss-rule-subscription", "rss-rule-subscription-detail", "rss-rule-subscription-edit", "rss-rule-subscription-test", "rss-rule-subscription-apply", "rss-favorite-groups", "rss-favorite-group-edit", "rss-favorite-clear", "rss-empty", "rss-error"],
+      demoRoutes: ["rss", "rss-all", "rss-starred", "rss-source-feed", "rss-source-category-releases", "rss-source-category-issues", "rss-source-category-discussions", "rss-refreshing", "rss-search", "rss-detail", "rss-original", "rss-original-browser", "rss-subscription-management", "rss-source-actions", "rss-source-edit", "rss-source-debug", "rss-source-vars", "rss-source-login", "rss-source-login-web", "rss-source-login-cookie", "rss-source-login-clear", "rss-source-groups", "rss-source-group-edit", "rss-source-batch", "rss-source-export", "rss-source-export-detail", "rss-source-export-result", "rss-source-pin", "rss-source-disable", "rss-source-batch-disable", "rss-source-import", "rss-source-import-detail", "rss-source-import-result", "rss-read-record", "rss-record-clear", "rss-rule-subscription", "rss-rule-subscription-detail", "rss-rule-subscription-edit", "rss-rule-subscription-test", "rss-rule-subscription-apply", "rss-favorite-groups", "rss-favorite-group-edit", "rss-favorite-clear", "rss-empty", "rss-error", "rss-source-category-novel", "rss-source-category-tech", "rss-source-category-booklist", "rss-source-add", "rss-source-delete-confirm", "rss-rule-subscription-create", "rss-favorite-add", "rss-favorite-remove"],
       manifestTargets: ["rss-home-preview", "rss-home-state-matrix"],
       routeManifestTargets: {
         rss: ["rss-home-preview", "rss-home-state-matrix"],
@@ -331,7 +385,15 @@
         "rss-favorite-group-edit": ["rss-home-state-matrix"],
         "rss-favorite-clear": ["rss-home-state-matrix"],
         "rss-empty": ["rss-home-state-matrix"],
-        "rss-error": ["rss-home-state-matrix"]
+        "rss-error": ["rss-home-state-matrix"],
+        "rss-source-category-novel": ["rss-home-preview", "rss-home-state-matrix"],
+        "rss-source-category-tech": ["rss-home-preview", "rss-home-state-matrix"],
+        "rss-source-category-booklist": ["rss-home-preview", "rss-home-state-matrix"],
+        "rss-source-add": ["rss-home-state-matrix"],
+        "rss-source-delete-confirm": ["rss-home-state-matrix"],
+        "rss-rule-subscription-create": ["rss-home-state-matrix"],
+        "rss-favorite-add": ["rss-home-state-matrix"],
+        "rss-favorite-remove": ["rss-home-state-matrix"]
       }
     },
     settings: {
@@ -371,8 +433,51 @@
     }
   };
 
+  // Route ids remain stable wire values, but they are not all independent
+  // canvases. This presentation index gives the demo one canonical place to
+  // decide which routes share a page, overlay/state host, and adaptive layout.
+  // CSS must consume `layout`/`surface` from the demo root instead of branching
+  // on individual route ids.
+  function routeFamily(routeId) {
+    if (routeId === "immersive-reading" || routeId === "tts" || routeId === "auto-page" || routeId === "toc-bookmarks" || routeId.startsWith("reader") || routeId.startsWith("content-")) return "reader";
+    if (routeId.startsWith("source-switch")) return "source-switch";
+    if (routeId.startsWith("discover")) return "discover";
+    if (routeId.startsWith("rss")) return "rss";
+    if (routeId.startsWith("import-") || routeId === "local-import") return "import";
+    if (routeId.startsWith("source-")) return "source";
+    if (routeId.startsWith("restore-") || routeId.startsWith("sync-") || routeId.startsWith("webdav") || routeId.startsWith("backup-") || routeId.startsWith("progress-") || routeId.startsWith("remote-")) return "sync";
+    if (routeId.startsWith("settings") || routeId.startsWith("global-settings") || routeId.startsWith("about")) return "settings";
+    if (routeId.startsWith("book") || routeId.startsWith("bookshelf") || routeId.startsWith("search-") || routeId.startsWith("group-") || routeId === "sort-filter") return "library";
+    return "system";
+  }
+
+  function routeSurface(routeId) {
+    if (/overlay-v2$/.test(routeId) || /(?:confirm|menu|toast)$/.test(routeId) || routeId === "reader-font-fallback") return "overlay";
+    if (/(?:loading|empty|error|offline|timeout|refreshing|running|rollback)$/.test(routeId) || /(?:permission-denied|format-unsupported|partial-success)$/.test(routeId)) return "state";
+    return "page";
+  }
+
+  function routeLayout(routeId, shell) {
+    if (routeId.startsWith("source-switch")) return "flow-continuity";
+    if (routeId.startsWith("restore-") || routeId.startsWith("source-debug") || routeId === "source-code-view" || routeId === "source-logs") return "wide-workspace";
+    if (shell === "ReaderShell") return "reader-control";
+    if (shell === "SettingsShell") return "settings-stack";
+    if (shell === "LibraryShell") return "library-stack";
+    return "main-tab";
+  }
+
+  const routePresentation = Object.fromEntries(Object.entries(routes).map(([routeId, meta]) => [
+    routeId,
+    Object.freeze({
+      family: routeFamily(routeId),
+      surface: routeSurface(routeId),
+      layout: routeLayout(routeId, meta.shell)
+    })
+  ]));
+
   window.ReaderFrontendDemoDraftRouteContract = {
     routes,
-    deepRouteClosure
+    deepRouteClosure,
+    routePresentation
   };
 })(window);

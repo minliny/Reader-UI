@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-// Demo 一致性校验：扫描 frontend-demo 中的 route id / motion id / token name，
+// Demo 一致性校验：扫描 frontend-demo-optimized 中的 route id / motion id / token name，
 // 校验全部能在 contracts/*.schema.json 的 enum 中找到；demo 历史 motion
 // unknown 必须显式列入 demo-contract-exceptions.json。
 // 满足 CONTRACT_FIRST_NATIVE_UI_PLAN.md §4 验收门槛：
 //   "demo 中出现的 route / motion / state 必须能在 contract 中找到"
 //
-// 用法：node frontend-demo/verify/contract/verify-demo-contract-consistency.mjs
+// 用法：node frontend-demo-optimized/verify/contract/verify-demo-contract-consistency.mjs
 import { readFileSync, readdirSync, existsSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -38,7 +38,7 @@ const tokenSchema = loadJson("token.schema.json");
 const routeIds = new Set(routeSchema.properties.id.enum);
 const motionIds = new Set(motionSchema.properties.id.enum);
 // token name 是 pattern（无 enum），用正则校验
-// contract schema 规范为 --reader-ds-*；optimized demo 迁移到 --fd-ds-*，两者均视为合法
+// contract schema 与 optimized demo 均以 --fd-ds-* 为权威；兼容正则仅用于报告旧别名。
 const tokenNamePattern = tokenSchema.properties.name
   ? new RegExp("^--(reader|fd)-ds-[a-zA-Z][a-zA-Z0-9-]*$")
   : null;
@@ -131,7 +131,7 @@ const report = {
     routeUnknown: "fail",
     tokenUnknown: "fail",
     motionUnknown: "allow-only-listed",
-    exceptionPolicy: "frontend-demo/verify/contract/demo-contract-exceptions.json"
+    exceptionPolicy: "frontend-demo-optimized/verify/contract/demo-contract-exceptions.json"
   },
   items: []
 };

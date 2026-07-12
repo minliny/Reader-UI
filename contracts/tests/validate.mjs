@@ -5,7 +5,7 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { join, dirname, basename } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validate } from "./mini-validator.mjs";
+import { validate, registerSchemas } from "./mini-validator.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CONTRACTS_DIR = join(__dirname, "..");
@@ -23,6 +23,14 @@ const schemas = {};
 for (const name of schemaFiles) {
   schemas[name] = loadJson(`${name}.schema.json`);
 }
+
+// 注册全部 schema（以文件名与 $id 为键），供 mini-validator 解析跨文件 $ref
+// （如 motion-policy.schema.json -> motion.schema.json#/$defs/MotionId）。
+const registryByName = {};
+for (const name of schemaFiles) {
+  registryByName[`${name}.schema.json`] = schemas[name];
+}
+registerSchemas(registryByName);
 
 // 自动加载对应 fixtures（若存在）
 const fixtures = {};

@@ -16,6 +16,7 @@ public enum TokenCategory: String, Codable, CaseIterable, Sendable {
     case motionDuration = "motion-duration"
     case motionEasing = "motion-easing"
     case icon = "icon"
+    case preset = "preset"
 }
 
 public struct Token: Codable, Equatable, Sendable {
@@ -196,6 +197,62 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--fd-ds-color-control-field-surface",
+            category: .color,
+            value: "rgba(255,248,239,0.82)",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-border-default",
+            category: .color,
+            value: "#c1c7cd",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-border-hover",
+            category: .color,
+            value: "#87928d",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-border-focus",
+            category: .color,
+            value: "#2d4a3e",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-surface-disabled",
+            category: .color,
+            value: "rgba(234,225,218,0.62)",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-ink-disabled",
+            category: .color,
+            value: "#928b84",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-border-error",
+            category: .color,
+            value: "#d7473e",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-color-control-field-border-success",
+            category: .color,
+            value: "#338144",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--fd-ds-font-sans",
             category: .font,
             value: "-apple-system, BlinkMacSystemFont, \"SF Pro Text\", \"PingFang SC\", \"Microsoft YaHei\", \"Noto Sans SC\", \"Source Han Sans SC\", sans-serif",
@@ -343,6 +400,27 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--fd-ds-type-control-label-size",
+            category: .type,
+            value: "12px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-control-value-size",
+            category: .type,
+            value: "12px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-type-control-helper-size",
+            category: .type,
+            value: "10px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--fd-ds-space-xs",
             category: .spacing,
             value: "8px",
@@ -416,6 +494,27 @@ public enum TokenRegistry {
             name: "--fd-ds-space-keyboard-gap",
             category: .spacing,
             value: "12px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-space-control-inline",
+            category: .spacing,
+            value: "10px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-space-control-gap",
+            category: .spacing,
+            value: "12px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-space-control-row-block",
+            category: .spacing,
+            value: "4px",
             platforms: nil,
             deprecated: false
         ),
@@ -497,6 +596,69 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--fd-ds-size-control-sm-height",
+            category: .size,
+            value: "28px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-control-md-height",
+            category: .size,
+            value: "36px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-control-lg-height",
+            category: .size,
+            value: "44px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-control-touch-target",
+            category: .size,
+            value: "44px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-switch-track-width",
+            category: .size,
+            value: "44px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-switch-track-height",
+            category: .size,
+            value: "24px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-switch-thumb",
+            category: .size,
+            value: "20px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-control-icon",
+            category: .size,
+            value: "16px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-size-reader-field-label-column",
+            category: .size,
+            value: "108px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--fd-ds-radius-small",
             category: .radius,
             value: "4px",
@@ -540,6 +702,27 @@ public enum TokenRegistry {
         ),
         Token(
             name: "--fd-ds-radius-control",
+            category: .radius,
+            value: "999px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-radius-field",
+            category: .radius,
+            value: "6px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-radius-button",
+            category: .radius,
+            value: "6px",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-radius-switch",
             category: .radius,
             value: "999px",
             platforms: nil,

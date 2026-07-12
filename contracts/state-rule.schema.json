@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/state-rule.schema.json",
   "title": "StateRule",
-  "description": "UiState 互斥规则与 async guard 契约。Owner: Platform Interaction Reducer（消费方）。来源：CONTRACT_FIRST_NATIVE_UI_PLAN.md §4 StateRule、§6 reducer 统一管理项、STATE_OWNERSHIP.md。本 schema 描述 reducer 必须遵守的状态约束，不描述业务事实源（Core 侧）约束。",
+  "description": "UiState 互斥规则与 async guard 契约。Owner: ReaderUIRuntime；Host shadow/pilot 用同一规则做 parity。本 schema 不描述业务事实源（Core 侧）约束。",
   "type": "object",
   "additionalProperties": false,
   "required": ["ruleId", "kind", "target", "constraint"],
@@ -30,8 +30,8 @@
         },
         "slices": {
           "type": "array",
-          "items": { "type": "string", "enum": ["slice-1", "slice-2", "slice-3", "slice-4", "slice-5", "slice-6"] },
-          "description": "规则生效的 slice。空数组或缺失表示全局生效。"
+          "items": { "type": "string", "enum": ["slice-1", "slice-2", "slice-3", "slice-4", "slice-5", "slice-6", "controlLayer", "reader", "overlay"] },
+          "description": "规则生效的 slice。空数组或缺失表示全局生效。controlLayer/reader/overlay 为 W1-W5 新增 slice。"
         },
         "routeIds": {
           "type": "array",
@@ -92,5 +92,100 @@
       "default": false,
       "description": "是否已废弃。废弃规则保留用于历史对照，reducer 不再强制执行。"
     }
-  }
+  },
+  "rules": [
+    {
+      "ruleId": "control-layer-l1-l2-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["controlLayer.L1.visible"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "forbiddenField": "controlLayer.L2.visible",
+        "description": "L1.visible forbidden-with L2.visible"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "control-layer-l1-l3-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["controlLayer.L1.visible"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "forbiddenField": "controlLayer.L3.visible",
+        "description": "L1.visible forbidden-with L3.visible"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "control-layer-l2-l3-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["controlLayer.L2.visible"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "forbiddenField": "controlLayer.L3.visible",
+        "description": "L2.visible forbidden-with L3.visible"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "tts-auto-page-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["reader.tts.running"],
+        "slices": ["reader"]
+      },
+      "constraint": {
+        "forbiddenField": "reader.autoPage.running",
+        "description": "tts.running forbidden-with autoPage.running"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "overlay-session-required",
+      "kind": "required-with",
+      "target": {
+        "fields": ["overlay.active"],
+        "slices": ["overlay"]
+      },
+      "constraint": {
+        "requiredField": "session.id",
+        "description": "overlay.active required-with session.id"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "overlay-dismiss-guard",
+      "kind": "transition-guard",
+      "target": {
+        "fields": ["overlay.dismiss"],
+        "slices": ["overlay"]
+      },
+      "constraint": {
+        "fromStates": ["overlay.active"],
+        "toStates": ["overlay.inactive"],
+        "description": "overlay.dismiss transition-guard overlay.active"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "control-layer-show-interrupt",
+      "kind": "transition-guard",
+      "target": {
+        "fields": ["controlLayer.show"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "fromStates": ["routeChange", "orientationPrepare", "sessionStart"],
+        "toStates": ["controlLayer.visible"],
+        "description": "controlLayer.show interrupt routeChange, orientationPrepare, sessionStart"
+      },
+      "severity": "error"
+    }
+  ]
 }

@@ -7,19 +7,19 @@
 运行：
 
 ```bash
-node frontend-demo/verify/motion/verify-motion-coverage.mjs
+node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs
 ```
 
 脚本会检查当前 `frontend-demo` 的 route 覆盖、Motion selector 覆盖、`motion-controller.js` 加载顺序和 runtime 接入点，并输出：
 
-- `frontend-demo/verify/motion/motion-coverage-report.json`
+- `frontend-demo-optimized/verify/motion/motion-coverage-report.json`
 
 同时会检查：
 
-- `frontend-demo/verify/motion/evidence/manifest.json`
-- `frontend-demo/verify/motion/evidence/*`
+- `frontend-demo-optimized/verify/motion/evidence/manifest.json`
+- `frontend-demo-optimized/verify/motion/evidence/*`
 
-当前 `evidence/manifest.json` 是 P0 Motion ID 的第一批代表性浏览器截图证据，覆盖首启、Tab 切换、下拉展开、封面进入、自动翻页胶囊、控制层运行空间、orientation 和 interrupt。它不是全量录屏闭环，不能替代后续真实设备、折叠屏、reduced-motion 和每个 selector 的媒体证据。
+当前 `evidence/manifest.json` 是 P0 Motion ID 的第一批代表性浏览器截图证据，覆盖首启、Tab 切换、下拉展开、封面进入、自动翻页胶囊、orientation 和 interrupt。它不是全量录屏闭环，不能替代后续真实设备、折叠屏、reduced-motion 和每个 selector 的媒体证据。
 
 命名规则：
 

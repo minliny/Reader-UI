@@ -6,6 +6,7 @@
 
 .fd-reader-frame {
   --reader-quick-panel-max-width: 340px;
+  --reader-full-page-max-width: 720px;
   --reader-quick-panel-wide-width: min(var(--reader-quick-panel-max-width), calc(100% - 36px));
   --reader-quick-control-wide-height: 252px;
   --reader-quick-control-bottom: 32px;
@@ -36,6 +37,10 @@
   --reader-quick-bottom: 110px;
   --reader-quick-rail-width: 38px;
   --reader-quick-rail-gap: 14px;
+  --reader-brightness-top: 28px;
+  --reader-brightness-right: 12px;
+  --reader-brightness-bottom: 110px;
+  --reader-brightness-width: 38px;
   --reader-quick-grabber-rail-offset: var(--reader-control-grabber-x-offset);
   left: 12px;
   right: 12px;
@@ -519,4 +524,3 @@
   gap: 5px;
   padding: 8px 9px;
 }
-

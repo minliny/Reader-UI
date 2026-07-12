@@ -14,6 +14,8 @@ export type MotionId =
   | "destructive.confirm.commit"
   | "dropdown.menu.collapse"
   | "dropdown.menu.expand"
+  | "dropdown.menu.reposition"
+  | "dropdown.option.press"
   | "dropdown.option.select"
   | "dropdown.trigger.press"
   | "feedback.toast.enter"
@@ -42,9 +44,11 @@ export type MotionId =
   | "reader.control.dock.longPress"
   | "reader.control.dock.rebound"
   | "reader.control.dock.release"
+  | "reader.control.handle.drag"
   | "reader.control.handle.press"
   | "reader.control.handle.release"
   | "reader.control.hide"
+  | "reader.control.show"
   | "reader.entry.actionToImmersive"
   | "reader.entry.coverToImmersive"
   | "reader.module.switch"
@@ -81,7 +85,9 @@ export type MotionId =
   | "state.loading.inline"
   | "stepper.press"
   | "stepper.value.change"
+  | "tab.item.press"
   | "tab.item.select"
+  | "tab.item.switch"
   | "tab.switch"
   | "toggle.switch"
   | "tooling.mode.switch"
@@ -1492,6 +1498,96 @@ export const motionSpecRegistry: Record<MotionId, Motion> = {
     guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:preserveRouteShell", "interrupt:completeThenReplace"],
     reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
     deprecated: false
+  },
+  "dropdown.menu.reposition": {
+    id: "dropdown.menu.reposition",
+    durationMs: 120,
+    easing: "ease",
+    implementationKind: "overlayTransition",
+    containerRole: "overlayHost",
+    operation: "update",
+    visualPattern: "noMotion",
+    interruptPolicy: "redirect",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "app.motion.duration.dropdownSelect", easingToken: "app.motion.easing.standard" },
+    guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:keepTriggerAnchor", "interrupt:redirect"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: false
+  },
+  "dropdown.option.press": {
+    id: "dropdown.option.press",
+    durationMs: 80,
+    easing: "ease",
+    implementationKind: "componentFeedback",
+    containerRole: "listItem",
+    operation: "update",
+    visualPattern: "noMotion",
+    interruptPolicy: "cancel",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "app.motion.duration.dropdownPress", easingToken: "app.motion.easing.standard" },
+    guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:hitAreaStable", "interrupt:cancel"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: false
+  },
+  "reader.control.handle.drag": {
+    id: "reader.control.handle.drag",
+    durationMs: 0,
+    easing: "none",
+    implementationKind: "directManipulation",
+    containerRole: "readerSurface",
+    operation: "dragUpdate",
+    visualPattern: "directDrag",
+    interruptPolicy: "cancel",
+    reducedMotionPolicy: "keepDirectManipulation",
+    tokens: { durationToken: "reader.motion.duration.instant", easingToken: "app.motion.easing.standard" },
+    guardRules: ["dragMustFollowFinger:noEasing", "layoutStable:clampToReaderFrame"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: true, sourceRule: undefined },
+    deprecated: false
+  },
+  "reader.control.show": {
+    id: "reader.control.show",
+    durationMs: 240,
+    easing: "ease-out",
+    implementationKind: "readerEntry",
+    containerRole: "readerShell",
+    operation: "update",
+    visualPattern: "fadeReplace",
+    interruptPolicy: "redirect",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "reader.motion.duration.overlay", easingToken: "app.motion.easing.enter" },
+    guardRules: ["reducedMotion:forceZeroDuration", "focusReturn:keepTarget", "interrupt:redirect"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: false
+  },
+  "tab.item.press": {
+    id: "tab.item.press",
+    durationMs: 80,
+    easing: "ease",
+    implementationKind: "componentFeedback",
+    containerRole: "mainTabShell",
+    operation: "update",
+    visualPattern: "noMotion",
+    interruptPolicy: "cancel",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "app.motion.duration.tabPress", easingToken: "app.motion.easing.standard" },
+    guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:hitAreaStable", "interrupt:cancel"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: false
+  },
+  "tab.item.switch": {
+    id: "tab.item.switch",
+    durationMs: 160,
+    easing: "ease",
+    implementationKind: "tabTransition",
+    containerRole: "mainTabShell",
+    operation: "tabSwitch",
+    visualPattern: "fadeReplace",
+    interruptPolicy: "redirect",
+    reducedMotionPolicy: "zeroDuration",
+    tokens: { durationToken: "app.motion.duration.tabSwitch", easingToken: "app.motion.easing.standard" },
+    guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:indicatorDoesNotPushLayout", "interrupt:redirect"],
+    reducedMotion: { forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration" },
+    deprecated: true
   }
 };
 

@@ -3,9 +3,9 @@
 状态：Phase 1-2 Motion Runtime 可执行参考规格
 日期：2026-07-04
 权威源：[motion.schema.json](./motion.schema.json)、[motion.fixtures.json](./fixtures/motion.fixtures.json)、[motion-policy.schema.json](./motion-policy.schema.json)、[motion-policy.fixtures.json](./fixtures/motion-policy.fixtures.json)、[token.fixtures.json](./fixtures/token.fixtures.json) motion-duration/motion-easing
-来源：[frontend-demo/MOTION_CONTRACT.md](../frontend-demo/MOTION_CONTRACT.md)、[frontend-demo/MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md)、[frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md)、[frontend-demo/verify/motion/motion-coverage-report.json](../frontend-demo/verify/motion/motion-coverage-report.json)、[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6
+来源：[frontend-demo-optimized/MOTION_CONTRACT.md](../frontend-demo-optimized/MOTION_CONTRACT.md)、[frontend-demo-optimized/MOTION_EFFECTS.md](../frontend-demo-optimized/MOTION_EFFECTS.md)、[frontend-demo-optimized/MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo-optimized/MOTION_IMPLEMENTATION_GAP_AUDIT.md)、[frontend-demo-optimized/verify/motion/motion-coverage-report.json](../frontend-demo-optimized/verify/motion/motion-coverage-report.json)、[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6
 
-本文是 Motion Runtime P0/P1 阶段的"动效和交互规范"。归并现有 `frontend-demo/MOTION_*.md` 文档到 contracts/ 权威源，定义 P0 MotionId 集合、触发/结束/打断规则、reduced-motion 降级、手势阈值、demo 等价性边界，并定义 Phase 1 MotionSpec 结构化字段与 Phase 2 MotionPolicy / ReaderMotionResolver 规则。
+本文是 Motion Runtime P0/P1 阶段的"动效和交互规范"。归并现有 `frontend-demo-optimized/MOTION_*.md` 文档到 contracts/ 权威源，定义 P0 MotionId 集合、触发/结束/打断规则、reduced-motion 降级、手势阈值、demo 等价性边界，并定义 Phase 1 MotionSpec 结构化字段与 Phase 2 MotionPolicy / ReaderMotionResolver 规则。
 
 ## 0. 文档边界
 
@@ -21,12 +21,12 @@
 - 不重复 84 个 MotionId 全集（以 [motion.schema.json](./motion.schema.json) enum 为准）
 - 不重复 motion-duration 数值（以 [token.fixtures.json](./fixtures/token.fixtures.json) 为唯一源）
 - 不写 Compose / SwiftUI / ArkUI 实现代码（归三端仓库）
-- 不重复视觉效果描述（以 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md) 为准）
+- 不重复视觉效果描述（以 [MOTION_EFFECTS.md](../frontend-demo-optimized/MOTION_EFFECTS.md) 为准）
 - 不写平台 MotionAdapter 实现细节（归三端仓库，见 [PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md)）
 
 权威层级：
 1. **Contract 层**（本仓）：MotionId / state fields / from / to / interrupt / finalState / reducedMotion
-2. **Demo proof 层**（`frontend-demo/`）：浏览器可执行样板，证明状态流、打断、降级成立
+2. **Demo proof 层**（`frontend-demo-optimized/`）：浏览器可执行样板，证明状态流、打断、降级成立
 3. **Platform implementation 层**（三端仓库）：原生导航 / 原生组件 / 原生手势 / safe area / keyboard inset / fold posture / accessibility focus
 
 Demo proof 不等于 Platform implementation。平台不能用 Web CSS / DOM / `data-*` selector / demo route stack 作为实现接口。
@@ -48,20 +48,20 @@ Demo proof 不等于 Platform implementation。平台不能用 Web CSS / DOM / `
 | `reader.entry.actionToImmersive` | P0 | 按钮进入沉浸阅读 |
 | `reader.page.turn.next-prev` | P0 | 阅读翻页，正文动效核心 |
 | `reader.chapter.jump` | P0 | 章节跳转 |
-| `reader.control.handle.press` | P0 | 控制层小横条按下 |
-| `reader.control.handle.release` | P0 | 控制层小横条释放 |
-| `reader.control.dock.longPress` | P0 | 宽屏 dock 长按移动 |
-| `reader.control.dock.drag` | P0 | 宽屏 dock 拖拽 |
-| `reader.control.dock.release` | P0 | dock 释放 |
-| `reader.control.dock.rebound` | P0 | dock 回弹（resize clamp）|
-| `reader.control.hide` | P0 | 控制层隐藏 |
-| `reader.module.switch` | P0 | 阅读模块切换 |
+| `reader.control.handle.press` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.control.handle.release` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.control.dock.longPress` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.control.dock.drag` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.control.dock.release` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.control.dock.rebound` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.control.hide` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.module.switch` | P0 | 保留 MotionId；产品语义待新规格 |
 | `reader.session.capsule.enter` | P0 | 运行胶囊进入 |
 | `reader.session.capsule.update` | P0 | 胶囊更新 |
 | `reader.session.capsule.exit` | P0 | 胶囊退出 |
 | `reader.session.capsule.switch` | P0 | TTS/auto-page 互斥切换 |
-| `reader.session.controlSpace.enter` | P0 | 控制层上方胶囊锚定 |
-| `reader.session.controlSpace.exit` | P0 | 控制层上方胶囊退出 |
+| `reader.session.controlSpace.enter` | P0 | 保留 MotionId；产品语义待新规格 |
+| `reader.session.controlSpace.exit` | P0 | 保留 MotionId；产品语义待新规格 |
 | `reader.session.tts.start` | P0 | TTS 启动事务 |
 | `reader.session.autoPage.start` | P0 | 自动翻页启动事务 |
 | `reader.sourceSwitch.open-close` | P0 | 换源窗口 |
@@ -78,7 +78,7 @@ Demo proof 不等于 Platform implementation。平台不能用 Web CSS / DOM / `
 | `feedback.toast.enter` | P0 | Toast 进入 |
 | `feedback.toast.exit` | P0 | Toast 退出 |
 
-P0 共 40 项。剩余 44 项 MotionId 归 P1，P1 集合见 [motion.fixtures.json](./fixtures/motion.fixtures.json) 全集。
+P0 共 40 项。剩余 56 项 MotionId 归 P1，P1 集合见 [motion.fixtures.json](./fixtures/motion.fixtures.json) 全集。
 
 ## 2. MotionSpec 结构化字段（Phase 1 Motion Runtime）
 
@@ -96,7 +96,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 | `stateReplace` | 状态页原地替换（搜索 / loading / content replace） |
 | `readerEntry` | 阅读器进入（coverToImmersive / actionToImmersive） |
 | `readerPageTurn` | 翻页 / 章节跳转 |
-| `directManipulation` | 手势跟随（drag / slider / dock） |
+| `directManipulation` | 手势跟随（drag / slider） |
 | `sessionCapsule` | TTS / auto-page 胶囊事务 |
 | `orientationReshape` | 折叠屏 / 旋转重排（prepare / reshape / settle） |
 | `componentFeedback` | 组件级反馈（button / card / chip / toast） |
@@ -181,7 +181,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 ## 3. 每个 P0 MotionId 的规则
 
 每项给出：触发 UiEvent / duration token / 结束状态 / 打断规则 / reduced-motion 降级。
-完整视觉效果描述见 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md)。
+完整视觉效果描述见 [MOTION_EFFECTS.md](../frontend-demo-optimized/MOTION_EFFECTS.md)。
 
 ### 3.1 应用启动 / 路由
 
@@ -246,36 +246,6 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 - 结束状态：目标章节落位，Core `content.load` 返回后渲染
 - 打断：连续跳转触发 `redirect`；返回触发 `cancel`
 
-### 3.4 阅读控制层
-
-#### `reader.control.handle.press` / `reader.control.handle.release`
-- 触发：`reader.control.handlePress` / `reader.control.handleRelease` UiEvent
-- duration：`handleLongPress`（320ms 长按识别）/ `handleSnap`（120ms 释放 snap）
-- 结束状态：展开 / 收回 / 原状态（按阈值）
-- 打断：拖动中 `route.pop` 触发 `cancel`，立即收回
-- reduced-motion：拖动跟手无 easing（dragMustFollowFinger），释放即时提交
-- 手势阈值：见 §4.1
-
-#### `reader.control.dock.longPress` / `reader.control.dock.drag` / `reader.control.dock.release` / `reader.control.dock.rebound`
-- 触发：`reader.control.dockLongPress` / `reader.control.dockDrag` / `reader.control.dockRelease` / `reader.control.dockRebound`
-- duration：`handleLongPress`（320ms）/ drag 0ms（跟手）/ `handleSnap`（120ms rebound）
-- 结束状态：dock 落到合法位置；resize 时 clamp 后 rebound
-- 打断：drag 中 `viewport.orientation.reshape` 触发 `completeThenReplace`，clamp 后落位
-- reduced-motion：drag 跟手无 easing；rebound duration 0ms
-- 边界：见 §4.2
-
-#### `reader.control.hide`
-- 触发：`reader.control.toggle`（关闭）/ 系统返回
-- duration：`--fd-ds-motion-duration-overlay`（240ms）
-- 结束状态：overlay = null，focusTarget 回到 `reader.control.handle`
-- 打断：被新 `reader.*.open` 触发 `redirect`
-
-#### `reader.module.switch`
-- 触发：`reader.module.switch` UiEvent
-- duration：`--fd-ds-motion-duration-panel`（200ms）
-- 结束状态：目标模块 overlay 落位
-- 打断：快速切换触发 `redirect`；overlay 互斥规则强制经 `null` 中转（transition-guard）
-
 ### 3.5 阅读会话胶囊
 
 #### `reader.session.capsule.enter` / `update` / `exit` / `switch`
@@ -287,17 +257,10 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 - reduced-motion：duration 0ms，胶囊瞬显/瞬隐
 - 稳定性：胶囊切换时尺寸不抖动；countdown 数字局部更新不重放整颗胶囊
 
-#### `reader.session.controlSpace.enter` / `exit`
-- 触发：`reader.session.controlSpaceEnter/Exit` UiEvent（打开/关闭控制层）
-- duration：`runningSpace`（180ms）
-- 结束状态：胶囊锚定到控制层上方 / 回到沉浸页脚
-- 打断：关闭控制层触发 `completeThenReplace`
-- 禁止：切换控制层子页时胶囊不可见（双主控禁令）
-
 #### `reader.session.tts.start` / `reader.session.autoPage.start`
 - 触发：`reader.session.ttsStart` / `reader.session.autoPageStart` UiEvent
-- duration：复合事务，包含 `capsule.enter` + `control.hide`
-- 结束状态：`activeSession = tts` / `auto-page`，控制层关闭，胶囊显示
+- duration：复合事务，包含 `capsule.enter`
+- 结束状态：`activeSession = tts` / `auto-page`，胶囊显示
 - 打断：互斥切换触发 `completeThenReplace`
 
 ### 3.6 Overlay
@@ -339,7 +302,7 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 - 触发：`viewport.orientation.reshape` UiEvent（resize / orientation change）
 - duration：`viewportReshape`（240ms）
 - 三个阶段：`prepare`（80ms freeze）→ `reshape`（240ms 重排）→ `settle`（240ms 落位）
-- 结束状态：route / 返回栈 / activeSession 不丢；正文不跳章；overlay / 胶囊 / dock 落到合法位置
+- 结束状态：route / 返回栈 / activeSession 不丢；正文不跳章；overlay / 胶囊落到合法位置
 - 打断：reshape 中再次 reshape 触发 `completeThenReplace`
 - reduced-motion：duration 0ms，直接 settle
 
@@ -370,18 +333,12 @@ Phase 1 给每条 MotionSpec 新增 6 个结构化字段，让平台 MotionAdapt
 
 ### 4.1 手势阈值
 
-来源：[MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md) P1 手势阈值缺口。
+来源：[MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo-optimized/MOTION_IMPLEMENTATION_GAP_AUDIT.md) P1 手势阈值缺口。
 
 P0 阶段必须明确的阈值：
 
 | 手势 | 阈值 | 规则 |
 | --- | --- | --- |
-| 控制层 handle drag slop | 8dp / 8pt / 8vp | 小于阈值不视为 drag，按 tap 处理 |
-| handle drag 展开阈值 | 拖动距离 ≥ 50% 展开高度 | 释放后展开 |
-| handle drag 收回阈值 | 拖动距离 ≤ 50% 展开高度 | 释放后收回 |
-| handle drag velocity | ≥ 400 dp/s | 快速滑动直接展开/收回，不等阈值 |
-| dock longPress 识别 | 320ms | 长按 320ms 后进入 drag |
-| dock drag bounds | ReaderFrame + dock group | 不跨 hinge / 安全区；clamp 到合法位置 |
 | slider drag slop | 4dp / 4pt / 4vp | 小于阈值不视为 drag |
 | slider drag 跟手 | 0ms easing | 拖动中无 easing，释放才 snap/commit |
 | list fling velocity | ≥ 500 dp/s | 触发 fling |
@@ -394,8 +351,6 @@ P1 阶段需要补的阈值（P0 不阻塞）：
 
 ### 4.2 拖拽边界
 
-- handle drag：垂直方向，不超出展开高度
-- dock drag：水平 + 垂直，clamp 到 ReaderFrame + dock group + 安全区
 - slider drag：沿 slider 轴向，clamp 到 min/max
 - list drag：沿列表轴向，无边界（虚拟列表）
 - 所有 drag 期间：不触发 `route.push`、不触发 `overlay.open`、不修改 Core state
@@ -406,14 +361,14 @@ P1 阶段需要补的阈值（P0 不阻塞）：
 
 | 场景 | 焦点恢复目标 |
 | --- | --- |
-| 关闭 overlay | 回到打开 overlay 的触发器（如 `reader.control.handle`）|
+| 关闭 overlay | 回到打开 overlay 的触发器 |
 | 系统返回关闭 overlay | 同上 |
 | `route.pop` | 回到上一页最后 focusTarget |
 | `route.push` | 新页面的默认 focus（第一个可聚焦组件）|
 | dialog 关闭 | 回到打开 dialog 的触发器 |
 | sheet 关闭 | 回到打开 sheet 的触发器 |
 | TTS / auto-page 启动 | 胶囊内主控按钮 |
-| TTS / auto-page 退出 | 回到 `reader.control.handle` |
+| TTS / auto-page 退出 | 回到启动前记录的 focusTarget |
 
 平台必须实现：
 - 焦点变化写入 `ui-state.focusTarget`
@@ -450,13 +405,13 @@ system back 等价表：
 ### 4.6 safe area / fold posture
 
 - 顶部 / 底部 / 水平 safe area 使用 `--fd-ds-space-safe-area-*` token
-- 折叠屏 hinge：dock 不跨 hinge
+- 折叠屏 hinge：浮动交互面不跨 hinge
 - fold posture 变化触发 `viewport.orientation.reshape`
 - 平台必须使用原生 fold posture API（不依赖 Web `visualViewport`）
 
 ## 5. Reduced-motion 降级
 
-来源：[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6 + [MOTION_CONTRACT.md](../frontend-demo/MOTION_CONTRACT.md)。
+来源：[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6 + [MOTION_CONTRACT.md](../frontend-demo-optimized/MOTION_CONTRACT.md)。
 
 启用条件：
 - 系统级 reduced-motion（iOS `UIAccessibility.isReduceMotionEnabled` / Android `Animator.areAnimatorsEnabled()` / HarmonyOS `accessibility` 设置）
@@ -491,7 +446,7 @@ system back 等价表：
 | `data-motion-session-capsule-*` | 平台用 `ui-state.activeSession` + 胶囊 reducer |
 | `data-motion-orientation-*` | 平台用原生 orientation / fold API |
 | 浏览器截图 / manifest | 平台必须真机录屏 |
-| `frontend-demo/verify/motion/evidence/` | demo proof，不是平台 evidence；平台 evidence 见 [PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md) |
+| `frontend-demo-optimized/verify/motion/evidence/` | demo proof，不是平台 evidence；平台 evidence 见 [PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md) |
 | matched geometry（snapshot 层）| 平台用 SwiftUI `.matchedGeometryEffect` / Compose `SharedTransitionLayout` / ArkUI `sharedTransition` |
 
 demo 等价的部分（可作为端侧实现参考）：
@@ -528,7 +483,7 @@ Phase 2 引入 MotionPolicy 规则表与 ReaderMotionResolver，让平台业务�
 - `match.fromRoute` / `match.toRoute`：来源 / 目标 RouteId
 - `match.fromShell` / `match.toShell`：来源 / 目标 shell（`MainTabShell` / `LibraryShell` / `ReaderShell` / `SettingsShell` / `FlowShell`）
 - `match.operation`：切换意图（与 [motion.schema.json](./motion.schema.json) `operation` enum 对齐，12 个值）
-- `match.sourceRole`：来源语义角色（如 `bookCover` / `actionButton` / `handle` / `dock` / `slider` / `orientation`）
+- `match.sourceRole`：来源语义角色（如 `bookCover` / `actionButton` / `slider` / `orientation`）
 - `match.targetRole`：目标语义角色（如 `sheet` / `dialog` / `dropdown` / `toast`）
 - `match.containerRole`：容器角色（与 [motion.schema.json](./motion.schema.json) `containerRole` enum 对齐，12 个值）
 - `match.reducedMotion`：是否启用 reduced-motion
@@ -628,7 +583,7 @@ readerMotion.run(motionId) {
 - `motion-policy.fixtures.json`：28 条 policy + 13 条注释，覆盖全部 12 operation
 - `generated/swift/Motion.swift` + `MotionPolicy.swift`、`generated/kotlin/Motion.kt` + `MotionPolicy.kt`、`generated/arkts/Motion.ets` + `MotionPolicy.ets`：均生成完整 registry + resolver
 
-注意：`frontend-demo/verify/motion/motion-coverage-report.json` 的 `83/83` 指 demo runtime / selector alias resolution，不是 canonical schema 总数。canonical 84/84 以本节 schema + fixture + generated registry 为准。
+注意：`frontend-demo-optimized/verify/motion/motion-coverage-report.json` 的 `83/83` 指 demo runtime / selector alias resolution，不是 canonical schema 总数。canonical 84/84 以本节 schema + fixture + generated registry 为准。
 
 ## 8. MotionId 新增 / 废弃流程
 
@@ -636,7 +591,7 @@ readerMotion.run(motionId) {
 2. 在 [motion.fixtures.json](./fixtures/motion.fixtures.json) 新增对应 fixture（含 durationMs / easing / 6 个 Phase 1 结构化字段 / tokens / guardRules）。
 3. 在 [motion-policy.schema.json](./motion-policy.schema.json) `motionId.enum` 同步新增（保持与 motion.schema.json 一致）。
 4. 在 [token.fixtures.json](./fixtures/token.fixtures.json) 新增对应 motion-duration token（如需新 token）。
-5. 在 [MOTION_EFFECTS.md](../frontend-demo/MOTION_EFFECTS.md) 补视觉效果描述。
+5. 在 [MOTION_EFFECTS.md](../frontend-demo-optimized/MOTION_EFFECTS.md) 补视觉效果描述。
 6. 若新 MotionId 需要被 Resolver 解析，在 [motion-policy.fixtures.json](./fixtures/motion-policy.fixtures.json) 新增对应 policy 规则。
 7. 三端 `MotionAdapter` 同步新增映射（归平台仓库）。
 8. 跑 `node --test contracts/tests/*.test.mjs` 校验。
@@ -651,7 +606,7 @@ Phase 1-2 Motion Runtime 已完成：
 - 84 个 MotionId 全部补齐 6 个结构化字段（implementationKind / containerRole / operation / visualPattern / interruptPolicy / reducedMotionPolicy）
 - MotionPolicy 规则表（28 条 policy，覆盖全部 12 operation）+ ReaderMotionResolver 纯函数
 - 三端生成 MotionSpecRegistry + MotionPolicyRegistry + RouteShellLookup + ReaderMotionResolver
-- 215 项测试全部通过，46 个文件 drift check 通过
+- 250 项 contract/runtime 测试全部通过，46 个 generated 文件 drift check 通过
 
 剩余缺口（归三端平台仓库或 P1）：
 - 44 个 P1 MotionId 已有 MotionSpec fixture，但精确状态机还未在本文逐项展开。

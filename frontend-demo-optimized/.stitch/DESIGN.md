@@ -1,133 +1,206 @@
 ---
-name: Reader Frontend Demo
+name: Reader Paper Flow
 colors:
   paper: "#fff8f4"
-  paperSolid: "#f8f4ec"
-  surface: "rgba(255, 252, 248, 0.90)"
+  paperBright: "#fff8f1"
+  surface: "rgba(255,255,255,0.88)"
+  surfaceSoft: "rgba(255,252,248,0.72)"
   ink: "#1f1b17"
+  controlInk: "#41484c"
   muted: "#756f69"
   border: "#c1c7cd"
   primary: "#2d4a3e"
   primaryDark: "#1f3528"
   accent: "#f48b13"
-  danger: "#d62222"
+  success: "#338144"
+  error: "#d7473e"
+  nightPaper: "#181f22"
+  nightInk: "#d8ccc4"
 ---
 
-# Design System: Reader Frontend Demo
+# Reader Paper Flow Design System
 
-## 1. Visual Theme & Atmosphere
+## 1. Theme and visual character
 
-Reader uses a warm paper interface with compact, tool-like controls. The app avoids large decorative surfaces: the main feeling is a native reading utility, with soft cream backgrounds, low-contrast borders, small radii, and dense but readable rows.
+Reader is a quiet reading utility built from warm paper, restrained forest-green actions, precise alignment, and compact native controls. The interface should feel like tools resting on a page, not a collection of floating cards.
 
-The primary composition is a phone-sized reading shell: fixed top system/status space, scrollable content, and floating bottom or side control surfaces. Controls are intentionally compact; most copy is 10-15px, while book titles and reading body text receive serif treatment.
+Use one main surface per module. Establish hierarchy with typography, whitespace, label alignment, and fine dividers. Avoid stacking rounded containers, decorative gradients, large shadows, or independent pill controls around every setting.
 
-## 2. Color Palette & Roles
+Control state changes must remain local to the owning component and must not mutate unrelated content or layout.
 
-### Primary Foundation
+## 2. Semantic color system
 
-- Warm Paper `#fff8f4` and Solid Paper `#f8f4ec`: root app background and phone shell foundation.
-- Translucent Surface `rgba(255, 252, 248, 0.90-0.96)`: cards, nav, reader overlays, and settings rows.
-- Soft Meta Surface `#f5ece6`: secondary metadata blocks.
-- Border Gray Beige `#c1c7cd` and `rgba(180,166,151,0.2-0.42)`: hairline card and row separation.
+All implementation colors come from `tokens.css`; the hexadecimal values in frontmatter are discovery metadata, not permission to hardcode them in components.
 
-### Accent & Interactive
+### Foundation roles
 
-- Muted Forest Primary `#2d4a3e`: active controls, chips, source buttons.
-- Deep Forest Primary Dark `#1f3528`: selected main tabs, primary pill actions.
-- Warm Orange Accent `#f48b13`: secondary accent and attention.
-- Forest `#367a4d`: success/available state.
-- Danger Red `#d62222`: destructive settings and error states.
+- `--fd-ds-color-paper` and `--fd-ds-color-paper-bright`: reading and application paper.
+- `--fd-ds-color-surface` and `--fd-ds-color-surface-soft`: elevated and quiet utility surfaces.
+- `--fd-ds-color-ink`: reading and primary application text.
+- `--fd-ds-color-control-ink`: control labels and values.
+- `--fd-ds-color-muted`: descriptions, metadata, helper text.
+- `--fd-ds-color-border`: low-emphasis structural separation.
+- `--fd-ds-color-primary` and `--fd-ds-color-primary-dark`: selection and primary action.
+- `--fd-ds-color-accent`: scarce attention accent, never a replacement for status semantics.
 
-### Typography & Text Hierarchy
+### Control-state roles
 
-- Ink `#1f1b17`: primary text.
-- Control Ink `#41484c`: controls and neutral button text.
-- Muted `#756f69`: metadata, subtitles, timestamps, summaries.
-- White `#ffffff`: selected tab/action text on primary dark surfaces.
+- Field surface: `--fd-ds-color-control-field-surface`.
+- Default, hover, and focus borders: `--fd-ds-color-control-field-border-default`, `-hover`, and `-focus`.
+- Disabled surface and ink: `--fd-ds-color-control-field-surface-disabled` and `--fd-ds-color-control-field-ink-disabled`.
+- Validation borders: `--fd-ds-color-control-field-border-error` and `--fd-ds-color-control-field-border-success`.
+- Keyboard focus ring: `--fd-ds-state-focus`; it overlays the current state and never replaces an error border.
 
-### Functional States
+State priority is `disabled > error/success > focus-visible > pressed > selected/on > hover > rest`. A state must not alter geometry. Color is never the only signal: selection also uses shape/checkmark, Switch uses thumb position, and validation uses a nearby message.
 
-- Focus: `0 0 0 4px rgba(45, 74, 62, 0.22)`.
-- Active selected: primary dark fill with white text.
-- Pressed/active light: `rgba(45, 74, 62, 0.08-0.14)`.
-- Disabled/read markers: muted beige dots and lowered opacity.
+### Night mode
 
-## 3. Typography Rules
+Night reading uses the published `*-night` semantic set. Components switch semantic roles; they do not invent local dark colors.
 
-### Hierarchy & Weights
+## 3. Typography
 
-- Sans stack: `-apple-system`, BlinkMacSystemFont, `SF Pro Text`, `PingFang SC`, `Microsoft YaHei`, sans-serif.
-- Serif stack: `Songti SC`, `STSong`, `Noto Serif CJK SC`, `Source Han Serif SC`, serif.
-- Top app title: serif 29px, weight 700, single line.
-- Page/section title: 15-20px, mostly weight 800-900.
-- Book title cards: serif 15-20px, line-height 1.2-1.22, one or two lines.
-- Reader body: serif 18px, line-height 1.96, paragraph indent 2em.
-- Metadata: 10-12px, muted, weight 650-800 depending on density.
-- Tab labels and compact controls: 11-12px, heavy weight, one line.
+### Families
 
-### Spacing Principles
+- UI sans: `--fd-ds-font-sans`, using the platform system UI stack with Chinese fallbacks.
+- Reading serif: `--fd-ds-font-serif`, used for long-form text and selected editorial titles.
 
-- Base spacing is 8px, with common increments at 10, 12, 14, 16, 24, 32.
-- Main content uses tight 8px vertical gaps inside the phone content area.
-- Card rows use 10-12px padding and 8-14px gaps.
-- Reader content uses larger reading margins: 72px top, 32px side, 48px bottom in phone mode.
+### Hierarchy
 
-## 4. Component Stylings
+- Reading body: `--fd-ds-type-reader-body-size` with a generous reader-owned line height.
+- Field label: `--fd-ds-type-control-label-size`, weight 700, normal sentence casing.
+- Field value and button label: `--fd-ds-type-control-value-size`, weight 600-700.
+- Helper, validation, and compact metadata: `--fd-ds-type-control-helper-size`.
+- Section titles are stronger than field labels but remain visually quieter than the reading title.
 
-### Buttons
+Do not shrink control text to resolve overflow. At 150% and 200% text size, controls grow or FieldRows stack. Labels, values, actions, and validation messages cannot be clipped to preserve a fixed panel height.
 
-Buttons are compact and pill-like for navigation/filter actions. Common heights are 30-34px for chips, 40-46px for fixed actions, and 42px circular reader module icons. Primary buttons use deep teal fill with white text; secondary buttons use translucent warm surface with muted ink.
+## 4. Spacing, geometry, and density
 
-### Cards & Containers
+Use semantic spacing tokens. Control-specific spacing is `--fd-ds-space-control-inline`, `--fd-ds-space-control-gap`, and `--fd-ds-space-control-row-block`.
 
-Cards use small radii: 4px for covers, 6-8px for rows/cards, 12px for reader module nav, 24px for floating nav. Shadows are soft and warm, usually `0 8px 26px` or `0 18px 36px` with brown opacity. Borders are preferred over heavy elevation.
+### Control size ladder
 
-### Navigation
+| Size | Visual minimum | Required hit target | Use |
+| --- | --- | --- | --- |
+| `sm` | `--fd-ds-size-control-sm-height` = 28px | `--fd-ds-size-control-touch-target` = 44px | Dense controls and popovers |
+| `md` | `--fd-ds-size-control-md-height` = 36px | 44px | Default FieldRows |
+| `lg` | `--fd-ds-size-control-lg-height` = 44px | 44px | Primary or descriptive controls |
 
-The main nav is a floating 4-column pill: 68px min-height, 7px vertical and 8px horizontal padding, 24px radius, and selected item filled with primary dark. On tablet-expanded layouts the same nav becomes a left vertical rail, 82px wide, centered vertically.
+The visual box may be smaller than the hit target only when a parent row or transparent interactive wrapper supplies the full 44px target. Standard fields use `--fd-ds-radius-field`; standard buttons use `--fd-ds-radius-button`; Switch tracks use `--fd-ds-radius-switch`. `--fd-ds-radius-control` is a legacy pill token and is not the default field/button radius.
 
-### Inputs & Forms
+## 5. Core control primitives
 
-Settings and source forms use compact rows with fixed icon boxes. Standard settings row: 58px min-height, 28px icon box, 10px gap, 12px horizontal padding. Inputs are 30px high inside 68px rows. Switches are 38x22 with an 18px thumb.
+### FieldRow
 
-### Reader-Specific Components
+An ordinary setting is always composed as:
 
-Reader top overlay: absolute at top 18px, left/right 14px, min-height 54px, four columns `44 / 1fr / 62 / 34`, 24px radius. Reader module nav: absolute bottom 32px, left/right 24px, four columns, 78px min-height, 12px radius. Reader full control sheet: bottom 18px, left/right 12px, height 330px, 24px radius, containing a main grid and a right rail.
+```text
+FieldRow
+├── LabelBlock: Label + optional Description
+├── ControlSlot: one primary control
+└── AssistiveMessage: Hint, Error, or Success
+```
 
-## 5. Layout Principles
+Wide containers use a shared label column (`--fd-ds-size-reader-field-label-column`) and a flexible control column. Labels align left; controls align right or fill their slot. Narrow containers stack LabelBlock above ControlSlot. Adjacent rows use whitespace or one divider, not an extra rounded card per row.
 
-### Grid & Structure
+Use `.fd-control-field-row` or `data-ui-primitive="field-row"`. Use `data-ui-size="sm|md|lg"`, `data-ui-state="error|success|disabled"`, and `data-ui-responsive="stack"` rather than local offsets.
 
-The canonical phone shell is 390x844 with 34px device radius. It contains a 48px status bar, a 58px top bar, a scrollable content area, and floating bottom navigation. Primary tabs share the same shell; secondary routes use back-bar shells with bottom action hosts.
+### Input
 
-### Whitespace Strategy
+Input and Select share surface, border, radius, value type, padding, and the size ladder. A visible Label is mandatory; placeholder text only demonstrates format. URL and credential fields retain user input after failure. Password values never appear in helper text, logs, or ordinary readable state.
 
-The UI is dense. Inner gaps are 4-12px, cards rarely exceed 16px horizontal padding, and lists avoid large empty bands. Reading mode is the main exception, with generous text margins and high line-height.
+Use `.fd-control-input` or `data-ui-primitive="input"`. Validation uses `aria-invalid` plus an associated message. Read-only remains focusable and copyable; disabled is removed from ordinary interaction and uses disabled semantic roles.
 
-### Alignment & Visual Balance
+### Select
 
-List rows use icon/cover on the left, text in the center, and actions/status on the right. Text is mostly left-aligned; reader chapter title is centered in the reading layer. Floating controls sit above content rather than resizing content.
+The value is left-aligned and the chevron occupies a fixed trailing zone. The trigger never uses primary-button fill. Popup width is at least the trigger width, selected options use text plus a checkmark, and opening the popup does not resize the trigger.
 
-### Responsive Behavior & Touch
+Use `.fd-control-select` or `data-ui-primitive="select"`. `sm` is reserved for dense contexts; ordinary fields default to `md`. Two to five short stable choices may use SegmentedControl; longer or dynamic sets use Select.
 
-Phone mode keeps bottom nav. Tablet-expanded mode can move main nav to a left rail and reader controls to a right dock. Compact landscape reduces reader top height, module icon size, nav height, and panel gaps. Reduced motion collapses durations and movement distances to zero.
+### Switch
 
-## 6. Design System Notes for Stitch Generation
+Switch is only for a persistent binary setting. The published geometry is a 44x24 track with a 20px thumb and a 44px minimum hit target. Off uses the default control border color; On uses primary dark; the thumb uses surface color. The thumb position and the accessible checked value both communicate state.
 
-### Language to Use
+Decorative tracks inside an interactive FieldRow are `aria-hidden`; the parent owns `role="switch"` and `aria-checked`. A standalone Switch button supplies its own 44px hit target. Never use Switch for navigation, playback, or a one-shot command.
 
-Warm paper reader UI, compact native utility, dense information rows, floating pill navigation, soft translucent surfaces, small radius cards, serif reading typography, low-contrast beige borders, teal active states.
+### Button
 
-### Color References
+Every action group has at most one Primary action.
 
-Use warm cream surfaces and muted teal active states. Avoid pure white page dominance; surfaces should remain slightly translucent and paper-toned.
+- Primary: the one commit action, primary fill and surface-colored text.
+- Secondary: normal bordered action on field surface.
+- Tertiary: transparent reversible action, surface appears only on interaction.
+- Destructive: explicit consequence text with error border/text; confirmation when impact is high.
+- IconButton: only when the icon is unambiguous; the icon may be compact but the hit target remains 44px.
 
-### Component Prompts
+Use `.fd-control-button` or `data-ui-primitive="button"` plus `data-ui-variant="primary|secondary|tertiary|danger"`. Loading preserves label width and blocks duplicate activation. Product-specific interactive components consume shared tokens and focus behavior but are not automatically restyled as ordinary buttons.
 
-- Create a mobile reader app shell with a 390x844 phone frame, warm paper background, 48px status bar, 58px top bar, scrollable content, and a floating 68px four-tab pill nav.
-- Create a bookshelf screen with a 100px continue-reading card, a three-column book grid, serif book titles, compact metadata, and warm soft shadows.
-- Create an immersive reader view with serif body text, 18px type, 1.96 line height, invisible 26/48/26 tap zones, a 54px floating progress top bar, and a 78px bottom module nav.
+### SegmentedControl
 
-### Incremental Iteration
+Use for two to five short, stable, mutually exclusive values. It is one shared soft container with equal-height options, not a row of independent pills. Selection uses a field surface, stronger border, strong text, and `aria-selected`; it never enlarges or lifts the selected option.
 
-Start from shell and navigation, then align repeated row primitives, then reader overlays. Do not copy DOM or CSS class structure into native implementations; translate dimensions, hierarchy, state, and motion tokens into platform-native components.
+Use `.fd-control-segmented` or `data-ui-primitive="segmented"`. Descriptive options may use the `lg` state language while retaining their internal icon-and-description layout. Selectable tiles are not SegmentedControl.
+
+### Slider
+
+Slider has a textual value, inactive track, active track, and thumb. Track thickness stays quiet while the interactive height is 44px. The control declares min, max, step, and accessible value text. Dragging follows the pointer; expensive reading reflow is throttled and committed on release.
+
+Use `.fd-control-slider` or `data-ui-primitive="slider"`; Web may supply `--fd-control-slider-value` for the active-track percentage. Horizontal and vertical sliders share state semantics while retaining their task-specific orientation.
+
+## 6. Control states and interaction
+
+| State | Visual treatment | Behavior |
+| --- | --- | --- |
+| Rest | Field surface, default border, control ink | Stable |
+| Hover | Hover border on precise-pointer devices | No movement |
+| Pressed | Quiet surface response | No layout or hit-target change |
+| Focus-visible | Existing state plus `--fd-ds-state-focus` | Keyboard/assistive input only |
+| Selected / On | Shape or thumb position plus stronger semantic color | Short non-spring transition |
+| Disabled | Disabled surface and ink | No interaction or animation |
+| Read-only | Normal readable surface | Focus/copy allowed, editing blocked |
+| Loading | Original geometry and label space retained | Duplicate action blocked |
+| Error | Error border and adjacent repair message | User value retained, no shaking |
+| Success | Success border/message only when useful | Settles once, no persistent flourish |
+
+Inputs and Selects support keyboard focus; Select popup returns focus to its trigger. SegmentedControl uses roving selection semantics. Slider supports arrows, PageUp/PageDown, Home, and End. Switch uses Space. Buttons use Enter and Space. Popup and dialog focus is moved in and restored on close.
+
+## 7. Layout and responsive behavior
+
+This design-system document does not define product structure, module content, navigation, or expansion behavior. Those decisions must come from a separate authoritative product specification.
+
+- FieldRows may use two columns while space permits.
+- Narrow content or 150-200% text: FieldRows stack, controls fill the available width, action groups wrap, and the page scrolls vertically.
+- Wider layouts retain the same primitive sizes and state language.
+- Safe areas are always respected. Popup lists, focus rings, and validation messages cannot be clipped by an ancestor overflow rule.
+- RTL and long localization use logical inline directions; no component relies on hand-tuned left offsets.
+
+## 8. Motion
+
+Use Paper Flow Ink Response: press feedback is approximately 60-80ms, activation 100-120ms, and selection 120-160ms through published motion variables. Motion changes color, border, or a small local surface; it does not bounce, glow, or push adjacent content.
+
+Switch thumb motion is short and linear. Dropdowns use a restrained fade/settle. Reduced Motion retains color and focus feedback while movement and scale collapse to the instant motion token.
+
+## 9. Stitch generation guidance
+
+### Preferred language
+
+Warm paper reading utility, quiet native controls, fine beige-gray borders, forest-green selection, aligned FieldRows, compact but accessible hit targets, serif long-form reading, one surface per module, restrained Ink Response.
+
+### Build order
+
+1. Create the phone/application or Reader shell without decorative nested cards.
+2. Establish semantic colors and typography.
+3. Build FieldRow, Input, Select, Switch, Button, SegmentedControl, and Slider from the token size ladder.
+4. Assemble product structure only from a separate authoritative specification; this document does not supply module hierarchy or content.
+5. Add specialized interactive components without turning them into ordinary buttons.
+6. Verify rest, hover, pressed, focus-visible, selected, disabled, loading, error, and success at phone width and 200% text.
+
+### Do not generate
+
+- A unique rounded-card style for every field.
+- Full-width Selects where a short right-aligned control is specified.
+- Tiny switches or icon buttons without a 44px hit target.
+- Pill-shaped ordinary Input/Select/Button controls.
+- Color-only selection or validation.
+
+When translating to native platforms, preserve semantic tokens, hierarchy, state, accessibility, and layout boundaries; do not copy browser DOM structure literally.

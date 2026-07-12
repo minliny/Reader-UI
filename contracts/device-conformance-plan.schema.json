@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/device-conformance-plan.schema.json",
+  "title": "R18 Device Conformance Plan",
+  "description": "Deterministic three-host execution plan. Plan entries are never execution evidence and deviceVerified is always false.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schemaVersion",
+    "kitVersion",
+    "generatedBy",
+    "contracts",
+    "releaseIdentityAuthority",
+    "verificationPolicy",
+    "sources",
+    "hosts"
+  ],
+  "properties": {
+    "$schema": { "const": "contracts/device-conformance-plan.schema.json" },
+    "schemaVersion": { "const": 1 },
+    "kitVersion": { "const": "1.0.0" },
+    "generatedBy": { "const": "tools/device-conformance/generate-device-conformance-kit.mjs" },
+    "contracts": { "$ref": "#/$defs/Contracts" },
+    "releaseIdentityAuthority": { "$ref": "#/$defs/ReleaseIdentityAuthority" },
+    "verificationPolicy": { "$ref": "#/$defs/VerificationPolicy" },
+    "sources": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/SourceFile" }
+    },
+    "hosts": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/HostPlan" }
+    }
+  },
+  "$defs": {
+    "Sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "SafePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?![A-Za-z]:)(?!.*\\\\)(?!.*//)(?!.*(?:^|/)\\.\\.(?:/|$)).+$"
+    },
+    "Contracts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hostRequest", "hostResult", "typeCount", "fixtureHashEncoding"],
+      "properties": {
+        "hostRequest": { "const": "1.2.0" },
+        "hostResult": { "const": "1.0.0" },
+        "typeCount": { "const": 58 },
+        "fixtureHashEncoding": { "const": "sorted-key-json-utf8" }
+      }
+    },
+    "ReleaseIdentityAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifestPath",
+        "sourceShaAuthority",
+        "manifestShaAuthority",
+        "releaseIdRule",
+        "embeddedReleaseIdentity"
+      ],
+      "properties": {
+        "manifestPath": { "const": "UI_RELEASE_MANIFEST.json" },
+        "sourceShaAuthority": { "const": "R13 staged release metadata or verified host consumer lock" },
+        "manifestShaAuthority": { "const": "sha256 of the exact raw UI_RELEASE_MANIFEST.json bytes used by the run" },
+        "releaseIdRule": { "const": "sourceSha:manifestSha" },
+        "embeddedReleaseIdentity": { "const": false }
+      }
+    },
+    "VerificationPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deviceVerifiedDefault",
+        "exactRecordCount",
+        "requiredPerRecordIdentity",
+        "fixtureValidationIsExecutionEvidence",
+        "trustedContextRequired",
+        "proofArtifactDigestRequired",
+        "syntheticSummaryAccepted"
+      ],
+      "properties": {
+        "deviceVerifiedDefault": { "const": false },
+        "exactRecordCount": { "const": 174 },
+        "requiredPerRecordIdentity": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "prefixItems": [
+            { "const": "host" },
+            { "const": "sourceSha" },
+            { "const": "manifestSha" },
+            { "const": "deviceId" },
+            { "const": "type" }
+          ],
+          "items": false
+        },
+        "fixtureValidationIsExecutionEvidence": { "const": false },
+        "trustedContextRequired": { "const": true },
+        "proofArtifactDigestRequired": { "const": true },
+        "syntheticSummaryAccepted": { "const": false }
+      }
+    },
+    "SourceFile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "byteLength", "sha256"],
+      "properties": {
+        "path": {
+          "enum": [
+            "contracts/host-request.schema.json",
+            "contracts/host-result.schema.json",
+            "contracts/fixtures/host-request.fixtures.json",
+            "contracts/fixtures/host-result.fixtures.json",
+            "contracts/VERSION.json",
+            "tools/device-conformance/device-conformance-policy.mjs"
+          ]
+        },
+        "byteLength": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/Sha256" }
+      }
+    },
+    "HostPlan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host", "cases"],
+      "properties": {
+        "host": { "enum": ["ios", "android", "harmonyos"] },
+        "cases": {
+          "type": "array",
+          "minItems": 58,
+          "maxItems": 58,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/Case" }
+        }
+      }
+    },
+    "Case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "type",
+        "capability",
+        "minimumProofTier",
+        "destructive",
+        "externalSideEffect",
+        "requestFixture",
+        "expectedResultFixture",
+        "deviceVerified"
+      ],
+      "properties": {
+        "sequence": { "type": "integer", "minimum": 1, "maximum": 58 },
+        "type": { "$ref": "host-request.schema.json#/properties/type" },
+        "capability": {
+          "enum": [
+            "background",
+            "brightness",
+            "clipboard",
+            "cookie",
+            "credential",
+            "device",
+            "file",
+            "font",
+            "haptics",
+            "http",
+            "network",
+            "notification",
+            "permission",
+            "persistence",
+            "screen",
+            "share",
+            "storage",
+            "timer",
+            "tts",
+            "webdav",
+            "webview"
+          ]
+        },
+        "minimumProofTier": { "enum": ["unit", "simulator", "physical", "manual"] },
+        "destructive": { "type": "boolean" },
+        "externalSideEffect": { "type": "boolean" },
+        "requestFixture": { "$ref": "#/$defs/FixtureBinding" },
+        "expectedResultFixture": { "$ref": "#/$defs/FixtureBinding" },
+        "deviceVerified": { "const": false }
+      }
+    },
+    "FixtureBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "index", "fixtureSha256", "requestId", "correlationId"],
+      "properties": {
+        "path": {
+          "enum": [
+            "contracts/fixtures/host-request.fixtures.json",
+            "contracts/fixtures/host-result.fixtures.json"
+          ]
+        },
+        "index": { "type": "integer", "minimum": 0, "maximum": 57 },
+        "fixtureSha256": { "$ref": "#/$defs/Sha256" },
+        "requestId": { "type": "string", "pattern": "^hr-[0-9]{3}$" },
+        "correlationId": { "type": "string", "pattern": "^h-[0-9]{3}$" }
+      }
+    }
+  }
+}

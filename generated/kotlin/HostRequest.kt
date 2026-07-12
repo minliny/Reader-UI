@@ -32,6 +32,10 @@ enum class HostRequestType {
     FileDelete,
     @SerialName("storage.path")
     StoragePath,
+    @SerialName("persistence.get")
+    PersistenceGet,
+    @SerialName("persistence.put")
+    PersistencePut,
     @SerialName("credential.get")
     CredentialGet,
     @SerialName("credential.set")
@@ -54,6 +58,10 @@ enum class HostRequestType {
     BackgroundSchedule,
     @SerialName("background.cancel")
     BackgroundCancel,
+    @SerialName("timer.foreground.arm")
+    TimerForegroundArm,
+    @SerialName("timer.foreground.cancel")
+    TimerForegroundCancel,
     @SerialName("notification.show")
     NotificationShow,
     @SerialName("notification.cancel")
@@ -69,7 +77,53 @@ enum class HostRequestType {
     @SerialName("device.screen.keep-on")
     DeviceScreenKeepOn,
     @SerialName("device.screen.release")
-    DeviceScreenRelease
+    DeviceScreenRelease,
+    @SerialName("file.select")
+    FileSelect,
+    @SerialName("font.registerFile")
+    FontRegisterFile,
+    @SerialName("font.unregisterFile")
+    FontUnregisterFile,
+    @SerialName("clipboard.read")
+    ClipboardRead,
+    @SerialName("clipboard.write")
+    ClipboardWrite,
+    @SerialName("tts.start")
+    TtsStart,
+    @SerialName("tts.stop")
+    TtsStop,
+    @SerialName("tts.pause")
+    TtsPause,
+    @SerialName("brightness.set")
+    BrightnessSet,
+    @SerialName("brightness.get")
+    BrightnessGet,
+    @SerialName("screen.keepAwake")
+    ScreenKeepAwake,
+    @SerialName("screen.allowSleep")
+    ScreenAllowSleep,
+    @SerialName("haptics.light")
+    HapticsLight,
+    @SerialName("haptics.medium")
+    HapticsMedium,
+    @SerialName("haptics.heavy")
+    HapticsHeavy,
+    @SerialName("network.status")
+    NetworkStatus,
+    @SerialName("webdav.connect")
+    WebdavConnect,
+    @SerialName("webdav.backup")
+    WebdavBackup,
+    @SerialName("webdav.restore")
+    WebdavRestore,
+    @SerialName("share.text")
+    ShareText,
+    @SerialName("share.file")
+    ShareFile,
+    @SerialName("background.task.start")
+    BackgroundTaskStart,
+    @SerialName("background.task.end")
+    BackgroundTaskEnd
 }
 
 @Serializable

@@ -306,7 +306,30 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         speed: "1.0x",
         voice: "清晰女声",
         scope: "当前章节",
-        timer: "15 分钟"
+        timer: "15 分钟",
+        provider: "system",
+        systemEngine: "default",
+        systemLocale: "zh-CN",
+        audioSession: "speech",
+        unavailablePolicy: "prompt",
+        onlineProvider: "custom",
+        endpoint: "",
+        authType: "api-key",
+        credentialConfigured: false,
+        apiKey: "",
+        onlineRegion: "",
+        onlineModel: "",
+        onlineVoice: "",
+        onlineLocale: "zh-CN",
+        audioFormat: "opus",
+        sampleRate: "24000",
+        timeoutRetry: "30-2",
+        onlineStreaming: true,
+        requestWordTiming: true,
+        fallbackToSystem: true,
+        cacheAudio: false,
+        onlineConnectionState: "idle",
+        onlineConfigSaved: false
       },
       options: {
         speed: ["0.8x", "1.0x", "1.2x", "1.5x"],
@@ -322,8 +345,17 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         volumePage: true,
         pageMode: "横向翻页",
         pageAnimation: "平滑",
+        screenOrientation: "跟随系统",
+        screenTimeout: "5 分钟",
         landscapeLock: false,
         keepScreenOn: true,
+        hideStatusBar: false,
+        hideNavigationBar: false,
+        extendIntoCutout: true,
+        textJustify: true,
+        bottomAlign: false,
+        stopTtsOnScreenOff: true,
+        longPressSelection: true,
         statusInfo: true,
         hapticFeedback: false,
         cacheNext: true
@@ -331,7 +363,9 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       options: {
         tapMode: ["左右区域", "上下区域", "整屏翻页"],
         pageMode: ["横向翻页", "竖向翻页"],
-        pageAnimation: ["平滑", "仿真", "无动画"]
+        pageAnimation: ["覆盖", "滑动", "仿真", "滚动", "无动画"],
+        screenOrientation: ["跟随系统", "竖屏", "横屏"],
+        screenTimeout: ["跟随系统", "1 分钟", "5 分钟", "10 分钟", "始终开启"]
       }
     },
     bottomReadout: {

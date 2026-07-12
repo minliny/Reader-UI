@@ -10,20 +10,6 @@
   },
   "motion": [
     {
-      "id": "reader.session.capsule.control.press/toggle",
-      "type": "alias",
-      "canonicalId": "reader.session.capsule.control.press-toggle",
-      "deprecated": true,
-      "reason": "Historical slash form kept for demo runtime compatibility while schema uses the canonical hyphenated MotionId."
-    },
-    {
-      "id": "reader.page.turn.next/prev",
-      "type": "alias",
-      "canonicalId": "reader.page.turn.next-prev",
-      "deprecated": true,
-      "reason": "Historical slash form kept for demo runtime compatibility while schema uses the canonical hyphenated MotionId."
-    },
-    {
       "id": "tab.item.switch",
       "type": "alias",
       "canonicalId": "tab.switch",

@@ -3,7 +3,7 @@
 状态：Phase 3 三端开发切片
 日期：2026-07-04
 权威源：[CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §9、[PAGE_REFERENCE.md](./PAGE_REFERENCE.md)、[MOTION_SPEC.md](./MOTION_SPEC.md)、[CORE_HOST_BOUNDARY.md](./CORE_HOST_BOUNDARY.md)、[PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md)
-来源：[frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo/MOTION_IMPLEMENTATION_GAP_AUDIT.md) UI/Platform Ownership Split
+来源：[frontend-demo-optimized/MOTION_IMPLEMENTATION_GAP_AUDIT.md](../frontend-demo-optimized/MOTION_IMPLEMENTATION_GAP_AUDIT.md) UI/Platform Ownership Split
 
 本文是阶段 3"三端开发切片"。定义 Slice 0..N 启动顺序、每个 slice 的输入文档、每端必须产出的源码/测试/截图/录屏/设备证据、并行/串行约束。
 
@@ -27,7 +27,7 @@
 | Slice 0 | 契约 + 工具链接入 | 无 | 是（三端各自接入 generated types）|
 | Slice 1 | AppShell + main tabs | Slice 0 | 是 |
 | Slice 2 | Bookshelf → open book → reader surface | Slice 1 + Core `book.open / content.load / reader.location.resolve` | 是（Core bridge 串行先定）|
-| Slice 3 | Reader overlay / control dock / reader mode | Slice 2 | 是 |
+| Slice 3 | 保留，等待新的阅读控制产品规格 | Slice 2 | 是 |
 | Slice 4 | Progress / session / focus / TTS | Slice 3 + Core `tts.queue.* / reader.progress.update` | 是 |
 | Slice 5 | RSS / source / search | Slice 1 + Core `rss.* / source.search` | 是（与 Slice 2-4 并行）|
 | Slice 6 | Sync / conflict / offline state | Slice 5 + Core `sync.* / sync.conflict.resolve` | 是 |
@@ -183,44 +183,9 @@
 - canonical location 覆盖本地 readerPageIndex 派生
 - 三端 reducer golden test 通过
 
-## 5. Slice 3：Reader overlay / control dock / reader mode
+## 5. Slice 3：保留
 
-### 5.1 输入文档
-
-- [PAGE_REFERENCE.md](./PAGE_REFERENCE.md) §5 Slice 3
-- [MOTION_SPEC.md](./MOTION_SPEC.md) §2.4 阅读控制层、§2.6 Overlay
-- [TOKEN_SPEC.md](./TOKEN_SPEC.md) §2.7 overlay 组
-- [ROUTE_COMPONENT_MATRIX.md](./ROUTE_COMPONENT_MATRIX.md) §1.3 ReaderShell overlay
-- [CORE_HOST_BOUNDARY.md](./CORE_HOST_BOUNDARY.md) §2.3 阅读 overlay 部分
-
-### 5.2 范围
-
-- `control-layer-base-v2` + 9 个 reader overlay（appearance / tts / settings / content-search / content-replacement / directory / auto-page / source-switch / night-state）
-- 控制层 handle / dock 拖拽
-- overlay 互斥 + transition-guard
-- focus 恢复
-
-### 5.3 每端交付物
-
-**iOS**：
-- 源码：`ControlLayerView.swift`、`ReaderOverlayContainer.swift`、`ReaderAppearanceOverlay.swift`、`ReaderTtsOverlay.swift`、`ReaderSettingsOverlay.swift`、`ContentSearchOverlay.swift`、`ContentReplacementOverlay.swift`、`ReaderDirectoryOverlay.swift`、`AutoPageOverlay.swift`、`SourceSwitchOverlay.swift`、`ReaderControlHandle.swift`、`ReaderControlDock.swift`、`ReaderReducer+overlay.swift`
-- 测试：`ReaderOverlayReducerTest.swift`（golden test，覆盖 overlay 互斥 / transition-guard / focus 恢复 / handle drag 阈值 / dock drag bounds）
-- 证据：
-  - `slice-3-ios-control-layer.mov`（控制层开关 + handle 拖拽）
-  - `slice-3-ios-overlay-switch.mov`（overlay 互斥切换）
-  - `slice-3-ios-dock-drag.mov`（宽屏 dock 长按拖拽，真机或模拟器）
-  - `slice-3-ios-focus-restore.mov`（focus 恢复录屏）
-
-**Android** / **HarmonyOS**：同 iOS 对应文件。
-
-### 5.4 验收门槛
-
-- 9 个 overlay 可独立打开 / 关闭
-- overlay 互斥规则成立（一次只一个，经 null 中转）
-- handle drag 阈值与 [MOTION_SPEC.md](./MOTION_SPEC.md) §3.1 一致
-- dock drag bounds 不跨 hinge / 安全区
-- focus 恢复正确
-- 三端 reducer golden test 通过
+本 Slice 暂不定义阅读控制层的结构、模块内容、交互层级、平台交付物或验收门槛；等待新的权威产品规格后重写。
 
 ## 6. Slice 4：Progress / session / focus / TTS
 
@@ -236,7 +201,6 @@
 - TTS session（`activeSession = tts`）
 - auto-page session（`activeSession = auto-page`）
 - 运行胶囊（capsule）
-- 控制层上方胶囊锚定（controlSpace）
 - 进度更新链路
 
 ### 6.3 依赖
@@ -246,21 +210,19 @@
 
 ### 6.4 每端交付物
 
-- 源码：`ReaderSessionCapsule.swift / .kt / .ets`、`ReaderControlSpace.swift / .kt / .ets`、`TtsController.swift / .kt / .ets`、`AutoPageController.swift / .kt / .ets`、`ReaderReducer+session.swift / .kt / .ets`
-- 测试：`ReaderSessionReducerTest.swift / .kt / .ets`（覆盖 TTS / auto-page 互斥 / capsule enter/exit/switch / controlSpace 锚定 / 进度更新）
+- 源码：`ReaderSessionCapsule.swift / .kt / .ets`、`TtsController.swift / .kt / .ets`、`AutoPageController.swift / .kt / .ets`、`ReaderReducer+session.swift / .kt / .ets`
+- 测试：`ReaderSessionReducerTest.swift / .kt / .ets`（覆盖 TTS / auto-page 互斥 / capsule enter/exit/switch / 进度更新）
 - 证据：
   - `slice-4-*-tts-start-stop.mov`（TTS 启动 / 停止录屏）
   - `slice-4-*-auto-page.mov`（自动翻页录屏）
   - `slice-4-*-capsule-switch.mov`（TTS ↔ auto-page 互斥切换）
-  - `slice-4-*-control-space.mov`（控制层上方胶囊锚定）
   - `slice-4-*-progress-update.mov`（翻页触发 progress 更新）
 
 ### 6.5 验收门槛
 
-- TTS 启动后 `activeSession = tts`，胶囊显示，控制层关闭
+- TTS 启动后 `activeSession = tts`，胶囊显示
 - TTS 与 auto-page 互斥
 - 胶囊切换时尺寸不抖动
-- 控制层上方胶囊锚定正确
 - 翻页触发 `reader.progress.update`，Core 返回 canonical location 覆盖本地派生
 - 系统 TTS 真机可播放（不是 demo proof）
 - 三端 reducer golden test 通过
@@ -413,7 +375,7 @@
 
 - 测试：全量 reducer golden test、core protocol test、device smoke test
 - 证据：
-  - `slice-8-*-device-smoke.mov`（真机冷启动 → bookshelf → 打开书 → reader → 翻页 → 控制层 → readerMode → 进度更新 → TTS → 退出再进入 → 同步进度，覆盖 [CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §9 Phase 5 最低验收链路）
+  - `slice-8-*-device-smoke.mov`（真机冷启动 → bookshelf → 打开书 → reader → 翻页 → 进度更新 → TTS → 退出再进入 → 同步进度，覆盖 [CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §9 Phase 5 最低验收链路）
   - `slice-8-*-accessibility.mov`（VoiceOver / TalkBack / 屏幕阅读器 focus 迁移录屏）
   - `slice-8-*-reduced-motion.mov`（reduced-motion 降级录屏）
   - `slice-8-*-fold-orientation.mov`（折叠屏 / 旋转录屏，真机或模拟器）
@@ -439,7 +401,6 @@
 
 - Slice 1 → Slice 2（bookshelf → reader 需要 Slice 1 的 AppShell）
 - Slice 2 → Slice 3（reader overlay 需要 Slice 2 的 immersive-reading）
-- Slice 3 → Slice 4（session 胶囊需要 Slice 3 的控制层）
 - Slice 6 需要 Slice 5（sync 需要 source / rss 链路先定）
 - Slice 8 需要 Slice 1-7 全部完成
 

@@ -22,7 +22,6 @@
     "reader.session.autoPage.start": 200,
     "reader.session.capsule.enter": 160,
     "reader.session.capsule.update": 120,
-    "reader.session.capsule.control.press/toggle": 120,
     "reader.session.capsule.control.press-toggle": 120,
     "reader.session.capsule.countdownTick": 120,
     "reader.session.capsule.voiceIcon.active": 960,
@@ -36,7 +35,6 @@
     "reader.control.dock.release": 120,
     "reader.control.dock.rebound": 120,
     "reader.module.switch": 160,
-    "reader.page.turn.next/prev": 220,
     "reader.page.turn.next-prev": 220,
     "motion.interrupt.cancel": 80,
     "motion.interrupt.redirect": 80,
@@ -48,12 +46,10 @@
 
   const CONTRACT_VERSION = "reader-motion-contract-v1";
   const MOTION_ID_ALIASES = {
-    "reader.session.capsule.control.press/toggle": "reader.session.capsule.control.press-toggle",
-    "reader.page.turn.next/prev": "reader.page.turn.next-prev",
     "tab.item.switch": "tab.switch"
   };
   const COMMON_STATE_FIELDS = ["motionId", "phase", "reducedMotion", "sequence"];
-  const COMMON_EVIDENCE = ["frontend-demo/verify/motion/selector-matrix/<motion-id>__<route>__<selector>.webm"];
+  const COMMON_EVIDENCE = ["frontend-demo-optimized/verify/motion/selector-matrix/<motion-id>__<route>__<selector>.webm"];
   const DEFAULT_STATE_MACHINE = {
     from: ["idle"],
     to: ["running"],
@@ -374,13 +370,6 @@
       finalState: "openAtLegalAnchor",
       reducedMotion: "Measure anchor, then show menu immediately without fade or y-offset."
     },
-    "dropdown.menu.expand/collapse": {
-      from: ["closed", "open"],
-      to: ["open", "closed"],
-      interrupt: ["openAnotherDropdown", "back", "routeChange", "viewportChanged"],
-      finalState: "closedOrOpenAtLegalAnchor",
-      reducedMotion: "Commit final open/closed state immediately after anchor measurement."
-    },
     "dropdown.menu.collapse": {
       from: ["open"],
       to: ["closed"],
@@ -521,13 +510,6 @@
       finalState: "capsuleInternalStateUpdated",
       reducedMotion: "Update internal icon, text, and count without replaying capsule enter."
     },
-    "reader.session.capsule.control.press/toggle": {
-      from: ["capsuleVisible", "playing.previous"],
-      to: ["capsuleVisible", "playing.next"],
-      interrupt: ["pointerCancel", "sessionStop", "controlLayerOpen", "exitReader"],
-      finalState: "playingStateCommittedInsideCapsule",
-      reducedMotion: "Commit play/pause icon and state instantly; do not open control layer."
-    },
     "reader.session.capsule.control.press-toggle": {
       from: ["capsuleVisible", "playing.previous"],
       to: ["capsuleVisible", "playing.next"],
@@ -590,13 +572,6 @@
       interrupt: ["routeChange", "switchTargetAgain", "hideControlLayer"],
       finalState: "oneActiveReaderModuleAndStableModuleBar",
       reducedMotion: "Commit active module and panel content immediately; keep module nav dimensions stable."
-    },
-    "reader.page.turn.next/prev": {
-      from: ["page.current"],
-      to: ["page.nextOrPrevious"],
-      interrupt: ["oppositeTurn", "chapterJump", "routeChange", "sessionTick"],
-      finalState: "pageIndexCommittedAndPageInfoAnchored",
-      reducedMotion: "Commit page index and footer/page info immediately without slide."
     },
     "reader.page.turn.next-prev": {
       from: ["page.current"],
@@ -661,7 +636,7 @@
         ios: "AppRootMotionHost",
         harmony: "AppMotionHost"
       },
-      evidence: ["frontend-demo/verify/motion/app/app.launch.firstOpen__cold-start.webm"]
+      evidence: ["frontend-demo-optimized/verify/motion/app/app.launch.firstOpen__cold-start.webm"]
     },
     {
       prefix: "app.route.",
@@ -953,7 +928,7 @@
         ios: "ReaderEntryMotionHost",
         harmony: "ReaderEntryMotionHost"
       },
-      evidence: ["frontend-demo/verify/motion/reader/reader.entry.coverToImmersive__bookshelf__cover.webm"]
+      evidence: ["frontend-demo-optimized/verify/motion/reader/reader.entry.coverToImmersive__bookshelf__cover.webm"]
     },
     {
       prefix: "reader.control.",
@@ -1013,7 +988,7 @@
         ios: "ReaderSessionCapsule / ActiveSessionState",
         harmony: "ReaderSessionCapsule / ActiveSessionState"
       },
-      evidence: ["frontend-demo/verify/motion/reader/<motion-id>__immersive-reading__session.webm"]
+      evidence: ["frontend-demo-optimized/verify/motion/reader/<motion-id>__immersive-reading__session.webm"]
     },
     {
       prefix: "reader.page.",
@@ -1065,7 +1040,7 @@
         ios: "Motion state reducer",
         harmony: "Motion state reducer"
       },
-      evidence: ["frontend-demo/verify/motion/interrupt/<motion-id>__<reason>.webm"]
+      evidence: ["frontend-demo-optimized/verify/motion/interrupt/<motion-id>__<reason>.webm"]
     },
     {
       prefix: "viewport.",
@@ -1083,7 +1058,7 @@
         ios: "Geometry / size class adapter",
         harmony: "Window metrics / fold adapter"
       },
-      evidence: ["frontend-demo/verify/motion/viewport/<motion-id>__<viewport-class>__<route>.webm"]
+      evidence: ["frontend-demo-optimized/verify/motion/viewport/<motion-id>__<viewport-class>__<route>.webm"]
     },
     {
       prefix: "tooling.",
@@ -1096,7 +1071,7 @@
         ios: "debug only",
         harmony: "debug only"
       },
-      evidence: ["frontend-demo/verify/motion/tooling/<motion-id>.webm"]
+      evidence: ["frontend-demo-optimized/verify/motion/tooling/<motion-id>.webm"]
     }
   ];
 

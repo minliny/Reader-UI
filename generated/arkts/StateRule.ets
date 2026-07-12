@@ -17,11 +17,15 @@ export type StateRuleSlice =
   | "slice-3"
   | "slice-4"
   | "slice-5"
-  | "slice-6";
+  | "slice-6"
+  | "controlLayer"
+  | "reader"
+  | "overlay";
 
 export interface StateRuleTarget {
   fields: string[];
   slices?: StateRuleSlice[];
+  routeIds?: string[];
 }
 
 export interface StateRuleConstraint {

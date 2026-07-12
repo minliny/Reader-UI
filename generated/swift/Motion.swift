@@ -16,6 +16,8 @@ public enum MotionId: String, Codable, CaseIterable, Sendable {
     case destructive_confirm_commit = "destructive.confirm.commit"
     case dropdown_menu_collapse = "dropdown.menu.collapse"
     case dropdown_menu_expand = "dropdown.menu.expand"
+    case dropdown_menu_reposition = "dropdown.menu.reposition"
+    case dropdown_option_press = "dropdown.option.press"
     case dropdown_option_select = "dropdown.option.select"
     case dropdown_trigger_press = "dropdown.trigger.press"
     case feedback_toast_enter = "feedback.toast.enter"
@@ -44,9 +46,11 @@ public enum MotionId: String, Codable, CaseIterable, Sendable {
     case reader_control_dock_longPress = "reader.control.dock.longPress"
     case reader_control_dock_rebound = "reader.control.dock.rebound"
     case reader_control_dock_release = "reader.control.dock.release"
+    case reader_control_handle_drag = "reader.control.handle.drag"
     case reader_control_handle_press = "reader.control.handle.press"
     case reader_control_handle_release = "reader.control.handle.release"
     case reader_control_hide = "reader.control.hide"
+    case reader_control_show = "reader.control.show"
     case reader_entry_actionToImmersive = "reader.entry.actionToImmersive"
     case reader_entry_coverToImmersive = "reader.entry.coverToImmersive"
     case reader_module_switch = "reader.module.switch"
@@ -83,7 +87,9 @@ public enum MotionId: String, Codable, CaseIterable, Sendable {
     case state_loading_inline = "state.loading.inline"
     case stepper_press = "stepper.press"
     case stepper_value_change = "stepper.value.change"
+    case tab_item_press = "tab.item.press"
     case tab_item_select = "tab.item.select"
+    case tab_item_switch = "tab.item.switch"
     case tab_switch = "tab.switch"
     case toggle_switch = "toggle.switch"
     case tooling_mode_switch = "tooling.mode.switch"
@@ -1628,6 +1634,102 @@ public enum MotionSpecRegistry {
             reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
             loop: nil,
             deprecated: false
+        ),
+        Motion(
+            id: .dropdown_menu_reposition,
+            durationMs: 120,
+            easing: .ease,
+            implementationKind: .overlayTransition,
+            containerRole: .overlayHost,
+            operation: .update,
+            visualPattern: .noMotion,
+            interruptPolicy: .redirect,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "app.motion.duration.dropdownSelect", easingToken: "app.motion.easing.standard"),
+            guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:keepTriggerAnchor", "interrupt:redirect"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .dropdown_option_press,
+            durationMs: 80,
+            easing: .ease,
+            implementationKind: .componentFeedback,
+            containerRole: .listItem,
+            operation: .update,
+            visualPattern: .noMotion,
+            interruptPolicy: .cancel,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "app.motion.duration.dropdownPress", easingToken: "app.motion.easing.standard"),
+            guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:hitAreaStable", "interrupt:cancel"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .reader_control_handle_drag,
+            durationMs: 0,
+            easing: .noneValue,
+            implementationKind: .directManipulation,
+            containerRole: .readerSurface,
+            operation: .dragUpdate,
+            visualPattern: .directDrag,
+            interruptPolicy: .cancel,
+            reducedMotionPolicy: .keepDirectManipulation,
+            tokens: MotionTokens(durationToken: "reader.motion.duration.instant", easingToken: "app.motion.easing.standard"),
+            guardRules: ["dragMustFollowFinger:noEasing", "layoutStable:clampToReaderFrame"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: true, sourceRule: nil),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .reader_control_show,
+            durationMs: 240,
+            easing: .ease_out,
+            implementationKind: .readerEntry,
+            containerRole: .readerShell,
+            operation: .update,
+            visualPattern: .fadeReplace,
+            interruptPolicy: .redirect,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "reader.motion.duration.overlay", easingToken: "app.motion.easing.enter"),
+            guardRules: ["reducedMotion:forceZeroDuration", "focusReturn:keepTarget", "interrupt:redirect"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .tab_item_press,
+            durationMs: 80,
+            easing: .ease,
+            implementationKind: .componentFeedback,
+            containerRole: .mainTabShell,
+            operation: .update,
+            visualPattern: .noMotion,
+            interruptPolicy: .cancel,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "app.motion.duration.tabPress", easingToken: "app.motion.easing.standard"),
+            guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:hitAreaStable", "interrupt:cancel"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: false
+        ),
+        Motion(
+            id: .tab_item_switch,
+            durationMs: 160,
+            easing: .ease,
+            implementationKind: .tabTransition,
+            containerRole: .mainTabShell,
+            operation: .tabSwitch,
+            visualPattern: .fadeReplace,
+            interruptPolicy: .redirect,
+            reducedMotionPolicy: .zeroDuration,
+            tokens: MotionTokens(durationToken: "app.motion.duration.tabSwitch", easingToken: "app.motion.easing.standard"),
+            guardRules: ["reducedMotion:forceZeroDuration", "layoutStable:indicatorDoesNotPushLayout", "interrupt:redirect"],
+            reducedMotion: MotionReducedMotion(forceZeroDuration: true, directManipulation: false, sourceRule: "reducedMotion:forceZeroDuration"),
+            loop: nil,
+            deprecated: true
         )
     ]
 

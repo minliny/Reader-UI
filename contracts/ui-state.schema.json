@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/ui-state.schema.json",
   "title": "UiState",
-  "description": "Platform Interaction Reducer 持有的 UI 状态契约。Owner: Platform Interaction Reducer。来源：STATE_OWNERSHIP.md §3、frontend-demo/render-runtime.js 的 appState.*。",
+  "description": "ReaderUIRuntime 持有的共享 UI 状态契约。Owner: Reader-UI executable runtime。来源：STATE_OWNERSHIP.md §3、frontend-demo-optimized/render-runtime.js 的 appState.*。",
   "type": "object",
   "additionalProperties": false,
   "required": ["route", "tab", "readerMode", "overlay", "activeSession", "focusTarget", "loading", "error", "reducedMotion"],
@@ -225,6 +225,150 @@
       "properties": {
         "hasPlayed": { "type": "boolean" },
         "motionTimer": { "type": ["number", "null"] }
+      }
+    },
+    "importState": {
+      "type": "object",
+      "description": "W1 导入流程派生 UiState。来源：appState.importPhase/importConflicts/importPartialResults。",
+      "properties": {
+        "phase": { "type": "string", "enum": ["idle", "selecting", "input", "parsing", "preview", "conflict", "applying", "result"] },
+        "conflicts": { "type": "array" },
+        "partialResults": { "type": "array" },
+        "retryableFailures": { "type": "array" }
+      }
+    },
+    "readerTocState": {
+      "type": "object",
+      "description": "W2 目录加载派生 UiState。来源：appState.readerTocLoading/readerTocOffline/readerTocError。",
+      "properties": {
+        "loading": { "type": "boolean" },
+        "offline": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "chapters": { "type": "array" }
+      }
+    },
+    "readerContentState": {
+      "type": "object",
+      "description": "W2 正文加载派生 UiState。来源：appState.readerContentLoading/readerContentOffline/readerPageBoundary。",
+      "properties": {
+        "loading": { "type": "boolean" },
+        "offline": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "pageIndex": { "type": "integer" },
+        "pageBoundary": { "type": "string", "enum": ["none", "first", "last"] }
+      }
+    },
+    "sourceSwitchState": {
+      "type": "object",
+      "description": "W3 换源流程派生 UiState。来源：appState.sourceSwitchLoading/sourceSwitchError/sourceSwitchSession。",
+      "properties": {
+        "loading": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "timeout": { "type": "boolean" },
+        "rollback": { "type": "boolean" },
+        "preview": { "type": "object" },
+        "session": { "type": ["string", "null"] }
+      }
+    },
+    "fontManagementState": {
+      "type": "object",
+      "description": "W4 字体管理派生 UiState。来源：appState.readerFonts/readerFontImportConfirm/readerFontFallback。",
+      "properties": {
+        "fonts": { "type": "array" },
+        "importConfirm": { "type": "object" },
+        "deleteConfirm": { "type": "object" },
+        "fallback": { "type": "boolean" },
+        "activeFontId": { "type": ["string", "null"] }
+      }
+    },
+    "themeManagementState": {
+      "type": "object",
+      "description": "W4 主题管理派生 UiState。来源：appState.readerThemes/readerEditingTheme/readerDefaultThemeId。",
+      "properties": {
+        "themes": { "type": "array" },
+        "editingTheme": { "type": "object" },
+        "newTheme": { "type": "boolean" },
+        "deleteConfirm": { "type": "object" },
+        "defaultThemeId": { "type": ["string", "null"] }
+      }
+    },
+    "typographyState": {
+      "type": "object",
+      "description": "W4 排版参数派生 UiState。来源：appState.readerTypography/readerTypographyResetConfirm。",
+      "properties": {
+        "fontSize": { "type": "integer" },
+        "lineHeight": { "type": "number" },
+        "paragraphSpacing": { "type": "number" },
+        "letterSpacing": { "type": "number" },
+        "margins": { "type": "object" },
+        "indent": { "type": "boolean" },
+        "align": { "type": "string", "enum": ["left", "center", "right", "justify"] },
+        "fontFamily": { "type": "string" },
+        "pageTexture": { "type": "string" },
+        "pageTurn": { "type": "string", "enum": ["slide", "scroll", "none"] },
+        "resetConfirm": { "type": "boolean" }
+      }
+    },
+    "replaceRulesState": {
+      "type": "object",
+      "description": "W5 替换规则管理派生 UiState。来源：appState.replaceRules/replaceEditingRule/replaceApplyResult。",
+      "properties": {
+        "rules": { "type": "array" },
+        "editingRule": { "type": "object" },
+        "deleteConfirm": { "type": "object" },
+        "applyResult": { "type": "object" },
+        "importExport": { "type": "object" },
+        "preview": { "type": "object" },
+        "scope": { "type": "string", "enum": ["single", "global"] }
+      }
+    },
+    "configPersistenceState": {
+      "type": "object",
+      "description": "W4 配置持久化派生 UiState。来源：appState.configPersistedAt/configRestarted/configRestoredConfig。",
+      "properties": {
+        "persistedAt": { "type": ["string", "null"] },
+        "restarted": { "type": "boolean" },
+        "restoredConfig": { "type": "object" }
+      }
+    },
+    "controlLayer": {
+      "type": "object",
+      "description": "控制层派生 UiState（L0-L3）。L0=沉浸层（无控制层可见）；L1=基础控制层；L2=模块/快捷面板；L3=完整控制页。来源：D3 控制层 L0-L3 renderer、state-rule.schema.json control-layer-* 规则、view-state.schema.json controlLayerLevel。",
+      "additionalProperties": false,
+      "properties": {
+        "L0": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L0 沉浸层是否可见。" }
+          }
+        },
+        "L1": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L1 基础控制层是否可见。" }
+          }
+        },
+        "L2": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L2 模块/快捷面板是否可见。" }
+          }
+        },
+        "L3": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L3 完整控制页是否可见。" }
+          }
+        },
+        "activeLevel": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3"],
+          "description": "当前激活的控制层层级。与 view-state.schema.json controlLayerLevel 对齐。"
+        }
       }
     }
   }

@@ -122,6 +122,19 @@ test("Swift Motion.swift 包含全部 motion id", () => {
   }
 });
 
+test("Swift/Kotlin MotionId 生成标识符无标点归一化冲突", () => {
+  const expected = motionSchema.properties.id.enum.length;
+  const swiftBlock = readText("swift/Motion.swift").split("public enum MotionEasing")[0];
+  const swiftCases = [...swiftBlock.matchAll(/^\s*case\s+([A-Za-z0-9_]+)\s*=/gm)].map((match) => match[1]);
+  assert.equal(swiftCases.length, expected);
+  assert.equal(new Set(swiftCases).size, expected, "Swift MotionId case 名发生归一化冲突");
+
+  const kotlinBlock = readText("kotlin/Motion.kt").split("enum class MotionEasing")[0];
+  const kotlinCases = [...kotlinBlock.matchAll(/^\s{4}([A-Za-z0-9_]+),?$/gm)].map((match) => match[1]);
+  assert.equal(kotlinCases.length, expected);
+  assert.equal(new Set(kotlinCases).size, expected, "Kotlin MotionId case 名发生归一化冲突");
+});
+
 test("Kotlin Motion.kt 包含全部 motion id", () => {
   const text = readText("kotlin/Motion.kt");
   for (const id of motionSchema.properties.id.enum) {
@@ -224,6 +237,14 @@ test("三端 StateRule 包含全部 StateRuleKind / Severity / Slice", () => {
     for (const sl of slices) {
       assert.ok(text.includes(`"${sl}"`), `${platform}/StateRule.${ext} 缺少 slice：${sl}`);
     }
+  }
+});
+
+test("三端 StateRule 包含 routeIds 字段", () => {
+  for (const platform of ["swift", "kotlin", "arkts"]) {
+    const ext = platform === "swift" ? "swift" : platform === "kotlin" ? "kt" : "ets";
+    const text = readText(`${platform}/StateRule.${ext}`);
+    assert.ok(text.includes("routeIds"), `${platform}/StateRule.${ext} 缺少 routeIds 字段`);
   }
 });
 

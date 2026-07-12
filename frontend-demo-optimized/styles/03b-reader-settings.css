@@ -95,6 +95,57 @@
   height: 0;
 }
 
+.fd-reader-quick-screen-settings {
+  min-height: 0;
+  display: grid;
+  gap: 7px;
+  padding: 7px 8px 8px;
+}
+
+.fd-reader-quick-screen-row {
+  display: grid;
+  gap: 5px;
+}
+
+.fd-reader-quick-screen-row > strong {
+  color: var(--reader-control-muted, #665e55);
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.fd-reader-quick-segment {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(38px, 1fr));
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--fd-radius-md);
+  background: var(--reader-control-disabled-bg, rgba(238, 230, 219, 0.5));
+}
+
+.fd-reader-quick-segment button {
+  min-width: 0;
+  min-height: 24px;
+  overflow: hidden;
+  padding: 0 3px;
+  border: 0;
+  border-radius: calc(var(--fd-radius-md) - 2px);
+  background: transparent;
+  color: var(--reader-control-muted, #665e55);
+  font-size: 9px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-reader-quick-segment button.is-active {
+  background: var(--reader-control-elevated, #fffaf4);
+  color: var(--reader-control-action, var(--fd-primary-dark));
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(55, 44, 32, 0.12);
+}
+
 .fd-reader-settings-list > button,
 .fd-reader-setting-row > button {
   min-height: 34px;
@@ -255,8 +306,11 @@
 }
 
 .fd-reader-switch {
-  width: 25px;
-  height: 15px;
+  box-sizing: border-box;
+  display: block;
+  flex: 0 0 auto;
+  width: var(--fd-ds-size-switch-track-width, 44px);
+  height: var(--fd-ds-size-switch-track-height, 24px);
   position: relative;
   border-radius: var(--fd-radius-pill);
   background: #aaa39a;
@@ -265,10 +319,10 @@
 .fd-reader-switch::after {
   content: "";
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 11px;
-  height: 11px;
+  top: calc((var(--fd-ds-size-switch-track-height, 24px) - var(--fd-ds-size-switch-thumb, 20px)) / 2);
+  left: calc((var(--fd-ds-size-switch-track-height, 24px) - var(--fd-ds-size-switch-thumb, 20px)) / 2);
+  width: var(--fd-ds-size-switch-thumb, 20px);
+  height: var(--fd-ds-size-switch-thumb, 20px);
   border-radius: var(--fd-radius-circle);
   background: var(--reader-control-elevated, #fff);
   box-shadow: 0 1px 3px rgba(55, 44, 32, 0.22);
@@ -279,6 +333,9 @@
 }
 
 .fd-reader-switch.is-on::after {
-  left: 12px;
+  left: calc(
+    var(--fd-ds-size-switch-track-width, 44px) -
+    var(--fd-ds-size-switch-thumb, 20px) -
+    ((var(--fd-ds-size-switch-track-height, 24px) - var(--fd-ds-size-switch-thumb, 20px)) / 2)
+  );
 }
-

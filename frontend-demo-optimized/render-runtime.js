@@ -243,7 +243,7 @@
 
   function shellKit() {
     if (!window.ReaderShellKit) {
-      throw new Error("ReaderShellKit is required before frontend-demo/render-runtime.js");
+      throw new Error("ReaderShellKit is required before frontend-demo-optimized/render-runtime.js");
     }
     return window.ReaderShellKit;
   }
@@ -272,6 +272,7 @@
   const routeContract = window.ReaderFrontendDemoDraftRouteContract || {};
   const routes = routeContract.routes || {};
   const deepRouteClosure = routeContract.deepRouteClosure || {};
+  const routePresentation = routeContract.routePresentation || {};
 
   function bookCard(data, book) {
     const coverSrc = cover(data, book.coverKey);
@@ -992,21 +993,74 @@
 
   function rssSourcesData() {
     return [
-      { name: "GitHub Releases", group: "开源项目", unread: 6, latest: "10:18", status: "正常", tone: "good", enabled: true, categories: 3, articleStyle: "列表", rule: "默认 RSS", login: false, singleUrl: false },
-      { name: "阅读器版本讨论", group: "社区", unread: 12, latest: "09:42", status: "有更新", tone: "good", enabled: true, categories: 4, articleStyle: "图文", rule: "自定义列表", login: false, singleUrl: false },
-      { name: "书源维护公告", group: "维护", unread: 2, latest: "昨天", status: "需登录", tone: "warn", enabled: true, categories: 2, articleStyle: "紧凑", rule: "正文规则", login: true, singleUrl: false },
-      { name: "本地系统通知", group: "系统", unread: 0, latest: "周二", status: "暂停", tone: "muted", enabled: false, categories: 1, articleStyle: "列表", rule: "单 URL", login: false, singleUrl: true }
+      { id: "github-releases", name: "GitHub Releases", group: "开源项目", unread: 6, latest: "10:18", status: "正常", tone: "good", enabled: true, categories: 3, articleStyle: "列表", rule: "默认 RSS", login: false, singleUrl: false },
+      { id: "reader-discussions", name: "阅读器版本讨论", group: "社区", unread: 12, latest: "09:42", status: "有更新", tone: "good", enabled: true, categories: 4, articleStyle: "图文", rule: "自定义列表", login: false, singleUrl: false },
+      { id: "source-maintenance", name: "书源维护公告", group: "维护", unread: 2, latest: "昨天", status: "需登录", tone: "warn", enabled: true, categories: 2, articleStyle: "紧凑", rule: "正文规则", login: true, singleUrl: false },
+      { id: "local-system", name: "本地系统通知", group: "系统", unread: 0, latest: "周二", status: "暂停", tone: "muted", enabled: false, categories: 1, articleStyle: "列表", rule: "单 URL", login: false, singleUrl: true }
     ];
   }
 
   function rssArticlesData() {
     return [
-      { title: "Reader UI 前端输入件更新说明", source: "GitHub Releases", time: "10:18", group: "开源项目", desc: "新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。", unread: true, starred: true },
-      { title: "订阅源规则解析失败排查", source: "书源维护公告", time: "09:52", group: "维护", desc: "部分订阅源返回 HTML 而不是 XML，已建议检查 Cookie、登录态和正文提取规则。", unread: true, starred: false },
-      { title: "Legado 订阅源配置经验整理", source: "阅读器版本讨论", time: "昨天", group: "社区", desc: "社区整理了单 URL 源、分类入口、文章样式和 WebView 正文处理的常见配置方式。", unread: true, starred: false },
-      { title: "本地导入完成解析", source: "本地系统通知", time: "周二", group: "系统", desc: "本地 OPML 导入完成，4 个订阅源已启用，1 个订阅源需要补全图标。", unread: false, starred: false },
-      { title: "阅读器路线图讨论摘要", source: "阅读器版本讨论", time: "周一", group: "社区", desc: "围绕 RSS 收藏、源分组、正文阅读和同步备份的交互关系做了讨论。", unread: false, starred: true }
+      { id: "reader-ui-update", sourceId: "github-releases", categories: ["releases", "tech"], title: "Reader UI 前端输入件更新说明", source: "GitHub Releases", time: "10:18", group: "开源项目", desc: "新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。", unread: true, starred: true },
+      { id: "source-rule-debug", sourceId: "source-maintenance", categories: ["issues", "tech"], title: "订阅源规则解析失败排查", source: "书源维护公告", time: "09:52", group: "维护", desc: "部分订阅源返回 HTML 而不是 XML，已建议检查 Cookie、登录态和正文提取规则。", unread: true, starred: false },
+      { id: "legado-rss-config", sourceId: "reader-discussions", categories: ["discussions", "novel"], title: "Legado 订阅源配置经验整理", source: "阅读器版本讨论", time: "昨天", group: "社区", desc: "社区整理了单 URL 源、分类入口、文章样式和 WebView 正文处理的常见配置方式。", unread: true, starred: false },
+      { id: "local-import-complete", sourceId: "local-system", categories: ["booklist"], title: "本地导入完成解析", source: "本地系统通知", time: "周二", group: "系统", desc: "本地 OPML 导入完成，4 个订阅源已启用，1 个订阅源需要补全图标。", unread: false, starred: false },
+      { id: "reader-roadmap", sourceId: "reader-discussions", categories: ["discussions", "tech"], title: "阅读器路线图讨论摘要", source: "阅读器版本讨论", time: "周一", group: "社区", desc: "围绕 RSS 收藏、源分组、正文阅读和同步备份的交互关系做了讨论。", unread: false, starred: true }
     ];
+  }
+
+  function rssEffectiveSources(appState) {
+    const overrides = appState?.rssSourceOverrides || {};
+    return rssSourcesData()
+      .map((source) => Object.assign({}, source, overrides[source.id] || {}))
+      .filter((source) => !source.deleted)
+      .sort((left, right) => Number(Boolean(right.pinned)) - Number(Boolean(left.pinned)));
+  }
+
+  function rssEffectiveArticles(appState) {
+    const favoriteIds = Array.isArray(appState?.rssFavoriteArticleIds)
+      ? new Set(appState.rssFavoriteArticleIds)
+      : null;
+    return rssArticlesData().map((article) => favoriteIds
+      ? Object.assign({}, article, { starred: favoriteIds.has(article.id) })
+      : article);
+  }
+
+  function rssSelectedSource(appState) {
+    const sources = rssEffectiveSources(appState);
+    const selectedId = appState?.rssSelectedSourceId || "";
+    return sources.find((item) => item.id === selectedId) || sources[0];
+  }
+
+  function rssSelectedArticle(appState) {
+    const articles = rssEffectiveArticles(appState);
+    const selectedId = appState?.rssSelectedArticleId || "";
+    return articles.find((item) => item.id === selectedId) || articles[0];
+  }
+
+  function rssSourcesForGroupFilter(sources, activeFilter) {
+    const list = Array.isArray(sources) ? sources : [];
+    if (activeFilter === "全部") return list;
+    if (activeFilter === "需登录") return list.filter((item) => item.login || item.status === "需登录");
+    if (activeFilter === "暂停") return list.filter((item) => !item.enabled || item.status === "暂停");
+    return list.filter((item) => item.group === activeFilter);
+  }
+
+  function rssSourcesForManageFilter(sources, activeFilter) {
+    const list = Array.isArray(sources) ? sources : [];
+    if (activeFilter === "全部") return list;
+    if (activeFilter === "已启用") return list.filter((item) => item.enabled);
+    if (activeFilter === "需登录") return list.filter((item) => item.login || item.status === "需登录");
+    if (activeFilter === "无分组") return list.filter((item) => !item.group);
+    if (activeFilter === "暂停") return list.filter((item) => !item.enabled || item.status === "暂停");
+    return list;
+  }
+
+  function rssFavoritesForFilter(articles, activeFilter) {
+    const favorites = (Array.isArray(articles) ? articles : []).filter((item) => item.starred);
+    if (activeFilter === "默认分组") return favorites;
+    return favorites.filter((item) => item.group === activeFilter);
   }
 
   function rssRuleSubsData() {
@@ -1027,21 +1081,21 @@
 
   function rssRecordsData() {
     return [
-      ["Reader UI 前端输入件更新说明", "今天 10:26 · GitHub Releases"],
-      ["订阅源规则解析失败排查", "今天 09:58 · 书源维护公告"],
-      ["Legado 订阅源配置经验整理", "昨天 22:10 · 阅读器版本讨论"]
+      { id: "reader-ui-update", title: "Reader UI 前端输入件更新说明", meta: "今天 10:26 · GitHub Releases" },
+      { id: "source-rule-debug", title: "订阅源规则解析失败排查", meta: "今天 09:58 · 书源维护公告" },
+      { id: "legado-rss-config", title: "Legado 订阅源配置经验整理", meta: "昨天 22:10 · 阅读器版本讨论" }
     ];
   }
 
   function rssCategoryTabs() {
     return [
-      { label: "全部", route: "rss-source-feed", title: "GitHub Releases", meta: "默认 RSS 解析 · 18 条" },
-      { label: "Releases", route: "rss-source-category-releases", title: "Releases", meta: "版本发布 · 8 条" },
-      { label: "Issues", route: "rss-source-category-issues", title: "Issues", meta: "问题讨论 · 6 条" },
-      { label: "Discussions", route: "rss-source-category-discussions", title: "Discussions", meta: "社区讨论 · 4 条" },
-      { label: "Novel", route: "rss-source-category-novel", title: "Novel", meta: "小说订阅 · 6 条" },
-      { label: "Tech", route: "rss-source-category-tech", title: "Tech", meta: "技术文章 · 5 条" },
-      { label: "Booklist", route: "rss-source-category-booklist", title: "Booklist", meta: "书单更新 · 3 条" }
+      { key: "all", label: "全部", route: "rss-source-feed", title: "全部条目", meta: "默认 RSS 解析 · 18 条" },
+      { key: "releases", label: "Releases", route: "rss-source-category-releases", title: "Releases", meta: "版本发布 · 8 条" },
+      { key: "issues", label: "Issues", route: "rss-source-category-issues", title: "Issues", meta: "问题讨论 · 6 条" },
+      { key: "discussions", label: "Discussions", route: "rss-source-category-discussions", title: "Discussions", meta: "社区讨论 · 4 条" },
+      { key: "novel", label: "Novel", route: "rss-source-category-novel", title: "Novel", meta: "小说订阅 · 6 条" },
+      { key: "tech", label: "Tech", route: "rss-source-category-tech", title: "Tech", meta: "技术文章 · 5 条" },
+      { key: "booklist", label: "Booklist", route: "rss-source-category-booklist", title: "Booklist", meta: "书单更新 · 3 条" }
     ];
   }
 
@@ -1061,11 +1115,15 @@
     return rssModeTitle(route);
   }
 
-  function rssFilteredArticles(route) {
-    const articles = rssArticlesData();
+  function rssFilteredArticles(route, appState) {
+    const articles = rssEffectiveArticles(appState);
     if (route === "rss-all") return articles;
     if (route === "rss-starred") return articles.filter((item) => item.starred);
-    if (route === "rss-source-feed" || route.startsWith("rss-source-category-")) return articles.filter((item) => item.source === "GitHub Releases");
+    if (route === "rss-source-feed" || route.startsWith("rss-source-category-")) {
+      const source = rssSelectedSource(appState);
+      const category = rssCategoryForRoute(route);
+      return articles.filter((item) => item.sourceId === source.id && (category.key === "all" || item.categories.includes(category.key)));
+    }
     return articles.filter((item) => item.unread);
   }
 
@@ -1129,7 +1187,7 @@
 
   function rssArticleRows(articles) {
     return articles.map((item) => `
-              <article class="fd-rss-article-row${item.unread ? " is-unread" : ""}" role="button" tabindex="0" data-route="rss-detail">
+              <article class="fd-rss-article-row${item.unread ? " is-unread" : ""}" role="button" tabindex="0" data-route="rss-detail" data-rss-article-id="${esc(item.id)}">
                 <i></i>
                 <span>
                   <strong>${esc(item.title)}</strong>
@@ -1155,8 +1213,8 @@
   }
 
   function rssSourceRows(sources) {
-    return sources.map((source, index) => `
-          <article class="${source.enabled ? "" : "is-disabled"}" data-route="rss-source-feed" role="button" tabindex="0">
+    return sources.map((source) => `
+          <article class="${source.enabled ? "" : "is-disabled"}" data-route="rss-source-feed" data-rss-source-id="${esc(source.id)}" role="button" tabindex="0">
             <span>${icon(source.enabled ? "rss" : "offline", "fd-small-icon")}</span>
             <div>
               <strong>${esc(source.name)}</strong>
@@ -1171,6 +1229,7 @@
   function rssSourceOverview(sources, appState) {
     const filters = ["全部", "开源项目", "社区", "需登录", "暂停"];
     const activeFilter = appState?.rssGroupFilter || "全部";
+    const visibleSources = rssSourcesForGroupFilter(sources, activeFilter);
     return `
         <section class="fd-rss-source-overview">
           <header>
@@ -1197,16 +1256,17 @@
             }]
           })}
           <section class="fd-rss-source-overview-list" aria-label="订阅源列表">
-            ${rssSourceRows(sources)}
+            ${visibleSources.length ? rssSourceRows(visibleSources) : `<p class="fd-rss-filter-empty">当前筛选下没有订阅源</p>`}
           </section>
         </section>`;
   }
 
-  function rssSourceStrip(sources, currentRoute) {
+  function rssSourceStrip(sources, currentRoute, appState) {
+    const selectedSource = rssSelectedSource(appState);
     return `
         <section class="fd-rss-source-strip" aria-label="订阅源快捷入口">
-          ${sources.map((source, index) => `
-            <button class="${(currentRoute === "rss" || currentRoute === "rss-source-feed") && index === 0 ? "is-active" : ""}" type="button" data-route="rss-source-feed">
+          ${sources.map((source) => `
+            <button class="${source.id === selectedSource?.id ? "is-active" : ""}" type="button" data-route="rss-source-feed" data-rss-source-id="${esc(source.id)}">
               <span>${icon(source.enabled ? "rss" : "offline", "fd-small-icon")}</span>
               <strong>${esc(source.name)}</strong>
               <small>${esc(source.group)} · ${source.unread ? `${esc(source.unread)} 未读` : "无未读"}</small>
@@ -1221,23 +1281,23 @@
         ${rssModeNav("rss")}
         ${refreshing ? `<section class="fd-rss-refresh-line"><i></i><span>正在刷新启用订阅源和分类入口</span></section>` : ""}
         ${rssSourceOverview(sources, appState)}
-        ${rssArticleSection("最近未读", rssFilteredArticles("rss").slice(0, 3), "rss-all", "查看全部", "list")}`;
+        ${rssArticleSection("最近未读", rssFilteredArticles("rss", appState).slice(0, 3), "rss-all", "查看全部", "list")}`;
   }
 
-  function rssArticleHubContent(currentRoute, sources, unreadCount, refreshing) {
-    const articles = rssFilteredArticles(currentRoute);
+  function rssArticleHubContent(currentRoute, sources, unreadCount, refreshing, appState) {
+    const articles = rssFilteredArticles(currentRoute, appState);
     return `
         ${rssSearchEntry()}
         ${rssModeNav(currentRoute)}
-        ${rssSourceStrip(sources, currentRoute)}
+        ${rssSourceStrip(sources, currentRoute, appState)}
         ${refreshing ? `<section class="fd-rss-refresh-line"><i></i><span>正在刷新启用订阅源</span></section>` : ""}
         ${rssArticleSection(rssModeTitle(currentRoute), articles, "rss-subscription-management", "管理源", "source-stack")}`;
   }
 
   function rssSourceFeedContent(sources, currentRoute, appState) {
-    const source = sources[0];
+    const source = rssSelectedSource(appState);
     const category = rssCategoryForRoute(currentRoute || "rss-source-feed");
-    const articles = rssFilteredArticles(currentRoute || "rss-source-feed");
+    const articles = rssFilteredArticles(currentRoute || "rss-source-feed", appState);
     return `
         <article class="fd-rss-source-hero">
           <span>${icon("rss", "fd-medium-icon")}</span>
@@ -1249,7 +1309,7 @@
         </article>
         <section class="fd-rss-source-toolbar">
           <button type="button" data-route="rss-refreshing">${icon("refresh", "fd-small-icon")}刷新</button>
-          <button type="button" data-route="rss-source-edit">${icon("edit", "fd-small-icon")}编辑源</button>
+          <button type="button" data-route="rss-source-edit" data-rss-source-id="${esc(source.id)}">${icon("edit", "fd-small-icon")}编辑源</button>
           <button type="button" data-route="rss-read-record">${icon("clock", "fd-small-icon")}记录</button>
           <button type="button" data-route="rss-source-debug">${icon("bug", "fd-small-icon")}调试</button>
         </section>
@@ -1276,14 +1336,14 @@
 
   function mainTabRss(data, appState, route) {
     const currentRoute = route || "rss";
-    const sources = rssSourcesData();
-    const unreadCount = rssArticlesData().filter((item) => item.unread).length;
+    const sources = rssEffectiveSources(appState);
+    const unreadCount = rssEffectiveArticles(appState).filter((item) => item.unread).length;
     const refreshing = currentRoute === "rss-refreshing";
     const contentHtml = currentRoute === "rss" || currentRoute === "rss-refreshing"
       ? rssHomeContent(sources, unreadCount, refreshing, appState)
       : currentRoute === "rss-source-feed" || currentRoute.startsWith("rss-source-category-")
         ? rssSourceFeedContent(sources, currentRoute, appState)
-        : rssArticleHubContent(currentRoute, sources, unreadCount, refreshing);
+        : rssArticleHubContent(currentRoute, sources, unreadCount, refreshing, appState);
 
     if (currentRoute !== "rss") {
       return rssLibraryScreen(data, rssSubpageTitle(currentRoute), contentHtml, "", appState);
@@ -1320,6 +1380,9 @@
   }
 
   function rssDetailScreen(data, appState) {
+    const article = rssSelectedArticle(appState);
+    const source = rssEffectiveSources(appState).find((item) => item.id === article.sourceId) || rssSelectedSource(appState);
+    const favoriteRoute = article.starred ? "rss-favorite-remove" : "rss-favorite-add";
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
       data,
       title: "RSS 阅读",
@@ -1328,7 +1391,7 @@
       bottomActionHostClass: "fd-bottom-action-host",
       trailingHtml: `
         <span class="fd-rss-reader-top-actions">
-          <button type="button" data-route="rss-starred" aria-label="收藏">${icon("bookmark", "fd-small-icon")}</button>
+          <button type="button" data-route="${favoriteRoute}" data-rss-article-id="${esc(article.id)}" aria-label="${article.starred ? "移除收藏" : "添加收藏"}">${icon("bookmark", "fd-small-icon")}</button>
           <button type="button" data-route="rss-original" aria-label="打开原文">${icon("link", "fd-small-icon")}</button>
         </span>`,
       contentHtml: `
@@ -1336,30 +1399,30 @@
           <header class="fd-rss-reader-source">
             <span>${icon("rss", "fd-small-icon")}</span>
             <div>
-              <strong>GitHub Releases</strong>
-              <small>今天 10:18 · 开源项目 · 已解析正文</small>
+              <strong>${esc(source.name)}</strong>
+              <small>${esc(article.time)} · ${esc(article.group)} · 已解析正文</small>
             </div>
-            <button type="button" data-route="rss-source-feed">查看源</button>
+            <button type="button" data-route="rss-source-feed" data-rss-source-id="${esc(source.id)}">查看源</button>
           </header>
           <section class="fd-rss-reader-title">
-            <h1>Reader UI 前端输入件更新说明</h1>
-            <p>本条目汇总最近的阅读体验修复、发现页状态补充和 RSS 页面结构调整。</p>
+            <h1>${esc(article.title)}</h1>
+            <p>${esc(article.desc)}</p>
           </section>
           <nav class="fd-rss-reader-inline-actions" aria-label="RSS 阅读操作">
             <button type="button" data-route="rss">${icon("check", "fd-small-icon")}已读</button>
-            <button type="button" data-route="rss-starred">${icon("bookmark", "fd-small-icon")}收藏</button>
+            <button type="button" data-route="${favoriteRoute}" data-rss-article-id="${esc(article.id)}">${icon("bookmark", "fd-small-icon")}${article.starred ? "移除收藏" : "收藏"}</button>
             <button type="button" data-route="rss-subscription-management">${icon("source-stack", "fd-small-icon")}源设置</button>
           </nav>
           <section class="fd-rss-reader-body">
-            <p>RSS 页面现在以订阅源为一级对象，同时保留常规阅读器里的未读、全部、收藏和刷新工作流。主页负责快速浏览条目，阅读页则专注正文、原文和源相关操作。</p>
-            <p>如果订阅源提供正文规则，文章应直接进入当前阅读页；如果源只提供链接，则在阅读页保留原文入口，并用 WebView 或外部浏览器作为兜底。</p>
-            <p>后续实现里，已读状态应在进入阅读页时自动写入，收藏和源设置需要回到订阅源维度同步，不应该散落在主 Tab 的临时按钮里。</p>
+            <p>${esc(article.desc)} 当前阅读页保留订阅源、发布时间、分组和正文解析状态，返回列表时仍回到原有 RSS 上下文。</p>
+            <p>如果订阅源提供正文规则，文章会直接进入当前阅读页；如果源只提供链接，则保留原文入口，并用 WebView 或外部浏览器作为兜底。</p>
+            <p>已读、收藏和源设置都继续关联到 ${esc(source.name)}，不会因为打开正文或确认弹窗而丢失当前选择。</p>
           </section>
           <footer class="fd-rss-original-card">
             <span>${icon("link", "fd-small-icon")}</span>
             <div>
               <strong>原文链接</strong>
-              <small>github.com/minliny/Reader-UI/releases/latest</small>
+              <small>${esc(source.name)} · 原始条目链接</small>
             </div>
             <button type="button" data-route="rss-original">打开</button>
           </footer>
@@ -1374,6 +1437,8 @@
   }
 
   function rssOriginalScreen(data, appState) {
+    const article = rssSelectedArticle(appState);
+    const source = rssEffectiveSources(appState).find((item) => item.id === article.sourceId) || rssSelectedSource(appState);
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
       data,
       title: "原文页面",
@@ -1386,13 +1451,13 @@
           <header>
             <span>${icon("link", "fd-small-icon")}</span>
             <div>
-              <strong>github.com/minliny/Reader-UI/releases/latest</strong>
-              <small>来自 GitHub Releases · 已保留 RSS 阅读上下文</small>
+            <strong>github.com/minliny/Reader-UI/releases/latest</strong>
+              <small>来自 ${esc(source.name)} · 已保留 RSS 阅读上下文</small>
             </div>
           </header>
           <article class="fd-rss-web-preview">
-            <h2>Reader UI 前端输入件更新说明</h2>
-            <p>这里展示原文网页入口的预览状态。实际 APP 中应打开内置 WebView，并保留返回 RSS 阅读页、复制链接、分享和用浏览器打开。</p>
+            <h2>${esc(article.title)}</h2>
+            <p>${esc(article.desc)} 实际 APP 中应打开内置 WebView，并保留返回 RSS 阅读页、复制链接、分享和用浏览器打开。</p>
             <div><i></i><i></i><i></i></div>
           </article>
         </section>`,
@@ -1406,7 +1471,7 @@
   }
 
   function rssSourceActionsScreen(data, appState) {
-    const source = rssSourcesData()[0];
+    const source = rssSelectedSource(appState);
     return rssLibraryScreen(data, "源操作", `
       <section class="fd-rss-action-source-card">
         <span>${icon("rss", "fd-medium-icon")}</span>
@@ -1425,8 +1490,9 @@
           ["源变量", "code", "rss-source-vars"],
           ["登录", "shield", "rss-source-login"],
           ["置顶", "top", "rss-source-pin"],
-          ["禁用", "offline", "rss-source-disable"]
-        ].map(([label, itemIcon, target]) => `<button type="button" data-route="${esc(target)}">${icon(itemIcon, "fd-small-icon")}<span>${esc(label)}</span></button>`).join("")}
+          ["禁用", "offline", "rss-source-disable"],
+          ["删除源", "trash", "rss-source-delete-confirm"]
+        ].map(([label, itemIcon, target]) => `<button type="button" data-route="${esc(target)}" data-rss-source-id="${esc(source.id)}">${icon(itemIcon, "fd-small-icon")}<span>${esc(label)}</span></button>`).join("")}
       </section>`, `
       <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
         <button type="button" data-route="rss-source-feed">返回源</button>
@@ -1434,22 +1500,24 @@
       </div>`, appState);
   }
 
-  function rssSourceEditScreen(data, appState) {
+  function rssSourceEditScreen(data, appState, route) {
+    const source = rssSelectedSource(appState);
+    const isNew = route === "rss-source-add";
     const fields = [
-      ["基础", "源名称", "GitHub Releases"],
-      ["基础", "源地址", "https://github.com/minliny/Reader-UI/releases.atom"],
-      ["基础", "分组", "开源项目"],
-      ["基础", "分类 URL", "Releases::/releases.atom && Issues::/issues.atom"],
-      ["请求", "请求头", "User-Agent: Reader UI"],
-      ["请求", "并发率", "2/1000"],
+      ["基础", "源名称", isNew ? "未命名订阅源" : source.name],
+      ["基础", "源地址", isNew ? "请输入 RSS / Atom 地址" : "https://github.com/minliny/Reader-UI/releases.atom"],
+      ["基础", "分组", isNew ? "无分组" : (source.group || "无分组")],
+      ["基础", "分类 URL", isNew ? "可选" : "Releases::/releases.atom && Issues::/issues.atom"],
+      ["请求", "请求头", isNew ? "默认" : "User-Agent: Reader UI"],
+      ["请求", "并发率", isNew ? "1/1000" : "2/1000"],
       ["列表", "文章列表", "默认 RSS 解析"],
-      ["列表", "下一页", "PAGE"],
+      ["列表", "下一页", isNew ? "未配置" : "PAGE"],
       ["列表", "标题 / 时间 / 链接", "title / pubDate / link"],
-      ["WebView", "正文规则", "content:encoded || article"],
-      ["WebView", "注入 JS / CSS", "图片宽度、夜间样式、跳转拦截"],
-      ["WebView", "白名单 / 黑名单", "过滤广告资源"]
+      ["WebView", "正文规则", isNew ? "自动提取" : "content:encoded || article"],
+      ["WebView", "注入 JS / CSS", isNew ? "未配置" : "图片宽度、夜间样式、跳转拦截"],
+      ["WebView", "白名单 / 黑名单", isNew ? "未配置" : "过滤广告资源"]
     ];
-    return rssLibraryScreen(data, "RSS 源编辑", `
+    return rssLibraryScreen(data, isNew ? "新建 RSS 源" : "RSS 源编辑", `
       <section class="fd-rss-edit-tabs" aria-label="源编辑分组">
         ${["基础", "请求", "列表", "WebView"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
       </section>
@@ -1468,11 +1536,12 @@
   }
 
   function rssSourceDebugScreen(data, appState) {
+    const source = rssSelectedSource(appState);
     return rssLibraryScreen(data, "规则调试", `
       <section class="fd-rss-debug-panel">
         <header>
           <span>${icon("bug", "fd-small-icon")}</span>
-          <div><strong>GitHub Releases</strong><small>列表解析 · 正文解析 · WebView 拦截</small></div>
+          <div><strong>${esc(source.name)}</strong><small>列表解析 · 正文解析 · WebView 拦截</small></div>
         </header>
         <article><strong>1. 获取分类入口</strong><p>Releases / Issues / Discussions 已解析，缓存命中 3 项。</p></article>
         <article><strong>2. 获取文章列表</strong><p>默认 RSS 解析命中 18 条，下一页规则 PAGE 可用。</p></article>
@@ -1499,7 +1568,68 @@
       </div>`, appState);
   }
 
+  const rssConfirmRoutes = new Set([
+    "rss-source-delete-confirm",
+    "rss-source-login-clear",
+    "rss-source-pin",
+    "rss-source-disable",
+    "rss-source-batch-disable",
+    "rss-record-clear",
+    "rss-rule-subscription-apply",
+    "rss-favorite-add",
+    "rss-favorite-remove",
+    "rss-favorite-clear"
+  ]);
+
+  function rssConfirmOriginScreen(data, originRoute, appState) {
+    switch (originRoute) {
+      case "rss-source-actions":
+        return rssSourceActionsScreen(data, appState);
+      case "rss-source-login":
+        return rssSourceLoginScreen(data, appState);
+      case "rss-source-batch":
+        return rssSourceBatchScreen(data, appState);
+      case "rss-read-record":
+        return rssReadRecordScreen(data, appState);
+      case "rss-rule-subscription-detail":
+        return rssRuleSubscriptionDetailScreen(data, appState);
+      case "rss-detail":
+        return rssDetailScreen(data, appState);
+      case "rss-starred":
+        return rssFavoritesScreen(data, appState);
+      default:
+        return rssSubscriptionManagementScreen(data, appState);
+    }
+  }
+
+  function rssConfirmOverlayScreen(data, fallbackOriginRoute, config, appState) {
+    const candidateOrigin = appState?.rssConfirmOriginRoute || "";
+    const originRoute = Array.isArray(config.allowedOrigins) && config.allowedOrigins.includes(candidateOrigin)
+      ? candidateOrigin
+      : fallbackOriginRoute;
+    const targetRoute = config.returnToOrigin ? originRoute : (config.confirmRoute || originRoute);
+    const originHtml = rssConfirmOriginScreen(data, originRoute, appState);
+    const dialogId = `rss-confirm-${String(config.id || "action").replace(/[^a-z0-9-]/gi, "-")}`;
+    const shellHtml = String(originHtml || "").replace(/<main class="([^"]*)"/, (match, className) => {
+      const classes = className.split(/\s+/).filter(Boolean);
+      if (!classes.includes("has-dialog")) classes.push("has-dialog");
+      return `<main class="${classes.join(" ")}"`;
+    });
+    const dialogHtml = `
+      <section class="fd-demo-dialog fd-rss-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="${esc(dialogId)}-title" aria-describedby="${esc(dialogId)}-copy" data-demo-dialog data-rss-confirm-overlay data-rss-confirm-origin="${esc(originRoute)}">
+        <h2 id="${esc(dialogId)}-title">${esc(config.heading)}</h2>
+        <p id="${esc(dialogId)}-copy">${esc(config.copy)}</p>
+        ${config.detail ? `<small>${esc(config.detail)}</small>` : ""}
+        <div>
+          <button type="button" data-route-back data-rss-confirm-cancel data-dialog-initial-focus>${esc(config.cancelLabel || "取消")}</button>
+          <button class="${config.danger === false ? "" : "is-danger"}" type="button" data-rss-confirm-action data-rss-confirm-origin="${esc(originRoute)}" data-rss-confirm-target="${esc(targetRoute)}">${esc(config.confirmLabel || "确认")}</button>
+        </div>
+      </section>`;
+    return appendReaderOverlayHtml(shellHtml, dialogHtml);
+  }
+
   function rssSourceVarsScreen(data, appState) {
+    const source = rssSelectedSource(appState);
     const variables = [
       ["请求变量", "{{page}}", "当前分页，从 1 开始递增，用于列表和下一页规则。"],
       ["请求变量", "{{sourceUrl}}", "当前订阅源地址，调试和跳转拦截时可引用。"],
@@ -1511,7 +1641,7 @@
       <section class="fd-rss-debug-panel">
         <header>
           <span>${icon("code", "fd-small-icon")}</span>
-          <div><strong>GitHub Releases</strong><small>变量作用于请求头、分类 URL、正文规则和 WebView 注入脚本</small></div>
+          <div><strong>${esc(source.name)}</strong><small>变量作用于请求头、分类 URL、正文规则和 WebView 注入脚本</small></div>
         </header>
       </section>
       <section class="fd-rss-edit-list" aria-label="RSS 源变量">
@@ -1529,11 +1659,12 @@
   }
 
   function rssSourceLoginScreen(data, appState) {
+    const source = rssSelectedSource(appState);
     return rssLibraryScreen(data, "源登录", `
       <section class="fd-rss-debug-panel">
         <header>
           <span>${icon("shield", "fd-small-icon")}</span>
-          <div><strong>书源维护公告</strong><small>网页登录 · Cookie 保存 · 登录态检测</small></div>
+          <div><strong>${esc(source.name)}</strong><small>网页登录 · Cookie 保存 · 登录态检测</small></div>
         </header>
         <article><strong>登录地址</strong><p>https://example.com/login?from=rss</p></article>
         <article><strong>Cookie 状态</strong><p>reader_session=•••••• · 2 天后过期 · 已关联当前订阅源</p></article>
@@ -1545,7 +1676,7 @@
           ["提取 Cookie", "copy", "rss-source-login-cookie"],
           ["测试登录态", "refresh", "rss-source-debug"],
           ["清除登录", "trash", "rss-source-login-clear"]
-        ].map(([label, itemIcon, target]) => `<button type="button" data-route="${esc(target)}">${icon(itemIcon, "fd-small-icon")}<span>${esc(label)}</span></button>`).join("")}
+        ].map(([label, itemIcon, target]) => `<button type="button" data-route="${esc(target)}" data-rss-source-id="${esc(source.id)}">${icon(itemIcon, "fd-small-icon")}<span>${esc(label)}</span></button>`).join("")}
       </section>`, `
       <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
         <button type="button" data-route="rss-source-actions">返回操作</button>
@@ -1554,13 +1685,14 @@
   }
 
   function rssSourceLoginWebScreen(data, appState) {
+    const source = rssSelectedSource(appState);
     return rssLibraryScreen(data, "网页登录", `
       <section class="fd-rss-original-preview">
         <header>
           <span>${icon("shield", "fd-small-icon")}</span>
           <div>
             <strong>example.com/login</strong>
-            <small>来自书源维护公告 · 登录完成后回写 Cookie</small>
+            <small>来自 ${esc(source.name)} · 登录完成后回写 Cookie</small>
           </div>
         </header>
         <article class="fd-rss-web-preview">
@@ -1641,17 +1773,18 @@
   }
 
   function rssSourceBatchScreen(data, appState) {
-    const sources = rssSourcesData();
+    const sources = rssEffectiveSources(appState);
+    const selectedIds = new Set(Array.isArray(appState?.rssBatchSelectedSourceIds) ? appState.rssBatchSelectedSourceIds : sources.slice(0, 2).map((source) => source.id));
     return rssLibraryScreen(data, "批量管理", `
       <section class="fd-rss-manage-batch-row fd-rss-batch-summary">
-        <strong>已选 2 个订阅源</strong>
-        <button type="button">反选</button>
-        <button type="button">全选</button>
+        <strong>已选 ${esc(selectedIds.size)} 个订阅源</strong>
+        <button type="button" data-rss-batch-invert>反选</button>
+        <button type="button" data-rss-batch-select-all>全选</button>
       </section>
       <section class="fd-rss-source-list fd-rss-batch-list" aria-label="批量选择订阅源">
-        ${sources.map((source, index) => `
-          <article class="${source.enabled ? "" : "is-disabled"}" role="button" tabindex="0">
-            <span>${icon(index < 2 ? "check" : "rss", "fd-small-icon")}</span>
+        ${sources.map((source) => `
+          <article class="${source.enabled ? "" : "is-disabled"}" role="button" tabindex="0" data-rss-batch-source-id="${esc(source.id)}" aria-pressed="${selectedIds.has(source.id) ? "true" : "false"}">
+            <span>${icon(selectedIds.has(source.id) ? "check" : "rss", "fd-small-icon")}</span>
             <strong>${esc(source.name)}<small>${esc(source.group)} · ${esc(source.status)} · ${source.unread ? `${esc(source.unread)} 条未读` : "无未读"}</small></strong>
             ${rssBadge(source.enabled ? "启用" : "暂停", source.enabled ? "good" : "muted")}
           </article>
@@ -1764,9 +1897,9 @@
   }
 
   function rssFavoritesScreen(data, appState) {
-    const favorites = rssArticlesData().filter((item) => item.starred);
     const groups = ["默认分组", "开源项目", "社区"];
     const activeGroup = appState?.rssFavoriteFilter || "默认分组";
+    const favorites = rssFavoritesForFilter(rssEffectiveArticles(appState), activeGroup);
     return rssShellScreen(data, "RSS 收藏", `
       ${rssModeNav("rss-starred")}
       ${filterDisclosure({
@@ -1818,15 +1951,16 @@
   }
 
   function rssReadRecordScreen(data, appState) {
-    const records = rssRecordsData();
+    const visibleIds = Array.isArray(appState?.rssReadRecordIds) ? new Set(appState.rssReadRecordIds) : null;
+    const records = rssRecordsData().filter((record) => !visibleIds || visibleIds.has(record.id));
     return rssLibraryScreen(data, "阅读记录", `
       <section class="fd-rss-record-list">
-        ${records.map(([title, meta]) => `
-          <article role="button" tabindex="0" data-route="rss-detail">
+        ${records.length ? records.map((record) => `
+          <article role="button" tabindex="0" data-route="rss-detail" data-rss-article-id="${esc(record.id)}">
             <span>${icon("clock", "fd-small-icon")}</span>
-            <strong>${esc(title)}<small>${esc(meta)}</small></strong>
+            <strong>${esc(record.title)}<small>${esc(record.meta)}</small></strong>
             ${icon("chevron", "fd-small-icon")}
-          </article>`).join("")}
+          </article>`).join("") : `<p class="fd-rss-filter-empty">暂无 RSS 阅读记录</p>`}
       </section>`, `
       <div class="fd-fixed-action-row fd-rss-reader-bottom-actions">
         <button type="button" data-route="rss">返回列表</button>
@@ -1918,7 +2052,7 @@
   }
 
   function rssSearchScreen(data, appState) {
-    const articles = rssArticlesData();
+    const articles = rssEffectiveArticles(appState);
     return rssShellScreen(data, "RSS 搜索", `
       <section class="fd-rss-search-panel">
         <label>${icon("search", "fd-small-icon")}<span>搜索订阅源、文章标题或分组</span></label>
@@ -1933,7 +2067,7 @@
         </header>
         <section class="fd-rss-article-list" aria-label="RSS 搜索结果">
           ${articles.slice(0, 3).map((item) => `
-            <article class="fd-rss-article-row${item.unread ? " is-unread" : ""}" role="button" tabindex="0" data-route="rss-detail">
+            <article class="fd-rss-article-row${item.unread ? " is-unread" : ""}" role="button" tabindex="0" data-route="rss-detail" data-rss-article-id="${esc(item.id)}">
               <i></i>
               <span>
                 <strong>${esc(item.title)}</strong>
@@ -1948,12 +2082,13 @@
   }
 
   function rssSubscriptionManagementScreen(data, appState) {
-    const subscriptions = rssSourcesData();
+    const subscriptions = rssEffectiveSources(appState);
     const filters = ["全部", "已启用", "需登录", "无分组", "暂停"];
     const activeFilter = appState?.rssManageFilter || "全部";
+    const visibleSubscriptions = rssSourcesForManageFilter(subscriptions, activeFilter);
     return rssLibraryScreen(data, "RSS 订阅管理", `
       <section class="fd-rss-manage-actions">
-        <button type="button" data-route="rss-source-edit">${icon("add", "fd-small-icon")}新建</button>
+        <button type="button" data-route="rss-source-add">${icon("add", "fd-small-icon")}新建</button>
         <button type="button" data-route="rss-source-import">${icon("upload", "fd-small-icon")}导入</button>
         <button type="button" data-route="rss-rule-subscription">${icon("sync", "fd-small-icon")}规则订阅</button>
         <button type="button" data-route="rss-source-groups">${icon("folder", "fd-small-icon")}分组</button>
@@ -1975,14 +2110,14 @@
         }]
       })}
       <section class="fd-rss-source-list" aria-label="RSS 订阅源列表">
-        ${subscriptions.map((source) => `
-          <article class="${source.enabled ? "" : "is-disabled"}" role="button" tabindex="0" data-route="rss-source-feed">
+        ${visibleSubscriptions.length ? visibleSubscriptions.map((source) => `
+          <article class="${source.enabled ? "" : "is-disabled"}" role="button" tabindex="0" data-route="rss-source-feed" data-rss-source-id="${esc(source.id)}">
             <span>${icon(source.enabled ? "rss" : "offline", "fd-small-icon")}</span>
             <strong>${esc(source.name)}<small>${esc(source.group)} · ${source.unread ? `${esc(source.unread)} 条未读` : "无未读"} · ${esc(source.latest)} · ${esc(source.articleStyle)}</small></strong>
             ${rssBadge(source.status, source.tone)}
-            <button type="button" data-route="rss-source-actions" aria-label="${esc(source.name)}更多操作">${icon("more", "fd-small-icon")}</button>
+            <button type="button" data-route="rss-source-actions" data-rss-source-id="${esc(source.id)}" aria-label="${esc(source.name)}更多操作">${icon("more", "fd-small-icon")}</button>
           </article>
-        `).join("")}
+        `).join("") : `<p class="fd-rss-filter-empty">当前筛选下没有订阅源</p>`}
       </section>
       <section class="fd-rss-manage-batch-row">
         <strong>已选 2 个</strong>
@@ -2027,6 +2162,7 @@
       activeType: "settings",
       actions: [],
       ariaLabel: "设置首页",
+      contentClass: "fd-phone-content fd-settings-main-content",
       contentHtml: `
         <section class="fd-setting-section" data-slot="settingSection">
           <h2>设置</h2>
@@ -2500,6 +2636,42 @@
     "reader-full-page-turn": "settings"
   };
 
+  const readerW4OverlayRoutes = new Set([
+    "reader-font-import-confirm",
+    "reader-font-delete-confirm",
+    "reader-font-fallback",
+    "reader-theme-new",
+    "reader-theme-delete-confirm",
+    "reader-typography-reset-confirm"
+  ]);
+
+  const readerW4FullPageRoutes = new Set([
+    "reader-full-appearance",
+    "reader-full-font",
+    "reader-full-theme",
+    "reader-full-theme-edit",
+    "reader-full-layout"
+  ]);
+
+  const readerContinuityStandaloneRoutes = new Set([
+    "reader-book-cache",
+    "reader-debug-info",
+    "reader-content-loading",
+    "reader-content-offline",
+    "reader-content-error",
+    "reader-toc-loading",
+    "reader-toc-offline",
+    "reader-toc-error",
+    "reader-page-boundary-first",
+    "reader-page-boundary-last",
+    "reader-background-restore",
+    "reader-replace-page",
+    "reader-replace-preview",
+    "reader-replace-apply-result",
+    "reader-replace-import-export",
+    "reader-replace-delete-confirm"
+  ]);
+
   const readerPromotedRoutes = {
     directory: "book-directory"
   };
@@ -2574,12 +2746,54 @@
     if (state?.mode === "module" && readerFullRoutes[state.module]) {
       return readerFullRoutes[state.module];
     }
+    if (state?.mode === "quick" && state.quick === "replace") {
+      return "reader-replace-page";
+    }
     return readerFullRoutes.settings;
+  }
+
+  function isReaderContinuityOriginRoute(route) {
+    return Boolean(
+      route &&
+      route !== "reader-progress-restore" &&
+      (readerStateByRoute[route] || readerFullTypeByRoute[route] || readerContinuityStandaloneRoutes.has(route))
+    );
+  }
+
+  function readerContinuityOriginRoute(route) {
+    return isReaderContinuityOriginRoute(route) ? route : "reader";
+  }
+
+  function renderReaderContinuityOrigin(data, route, appState) {
+    const originRoute = readerContinuityOriginRoute(route);
+    return originRoute === "reader"
+      ? readerStateScreen(data, "reader", {}, appState)
+      : renderRoute(originRoute, data, {}, appState);
+  }
+
+  function appendReaderOverlayHtml(screenHtml, overlayHtml) {
+    const html = String(screenHtml || "");
+    const closingMain = html.lastIndexOf("</main>");
+    if (closingMain < 0) return `${html}${overlayHtml || ""}`;
+    return `${html.slice(0, closingMain)}${overlayHtml || ""}${html.slice(closingMain)}`;
   }
 
   function initialRouteStackFor(route) {
     const parentRoutes = {
-      "source-delete-confirm": "source-batch"
+      "source-delete-confirm": "source-batch",
+      "rss-original-browser": "rss-original",
+      "rss-source-delete-confirm": "rss-source-actions",
+      "rss-source-login-clear": "rss-source-login",
+      "rss-source-pin": "rss-source-actions",
+      "rss-source-disable": "rss-source-actions",
+      "rss-source-batch-disable": "rss-source-batch",
+      "rss-source-export-result": "rss-source-export",
+      "rss-source-import-result": "rss-source-import",
+      "rss-record-clear": "rss-read-record",
+      "rss-rule-subscription-apply": "rss-rule-subscription-detail",
+      "rss-favorite-add": "rss-detail",
+      "rss-favorite-remove": "rss-starred",
+      "rss-favorite-clear": "rss-starred"
     };
     if (parentRoutes[route]) {
       return initialRouteStackFor(parentRoutes[route]).concat(route);
@@ -3000,6 +3214,61 @@
     };
   }
 
+  const readerTtsQuickTimerPresets = Object.freeze([
+    { seconds: 30, label: "30s" },
+    { seconds: 60, label: "1min" },
+    { seconds: 120, label: "2min" },
+    { seconds: 180, label: "3min" },
+    { seconds: 240, label: "4min" },
+    { seconds: 300, label: "5min" }
+  ]);
+
+  function readerTtsTimerParts(appState) {
+    const rawMinutes = Number(appState?.readerTtsTimerMinutes);
+    const rawSeconds = Number(appState?.readerTtsTimerSeconds);
+    return {
+      minutes: clamp(Number.isFinite(rawMinutes) ? Math.round(rawMinutes) : 15, 0, 180),
+      seconds: clamp(Number.isFinite(rawSeconds) ? Math.round(rawSeconds) : 0, 0, 59)
+    };
+  }
+
+  function readerAutoTimerParts(appState) {
+    const rawMinutes = Number(appState?.readerAutoTimerMinutes);
+    const rawSeconds = Number(appState?.readerAutoTimerSeconds);
+    return {
+      minutes: clamp(Number.isFinite(rawMinutes) ? Math.round(rawMinutes) : 15, 0, 180),
+      seconds: clamp(Number.isFinite(rawSeconds) ? Math.round(rawSeconds) : 0, 0, 59)
+    };
+  }
+
+  function readerAutoPageSpeedSeconds(appState) {
+    const raw = Number(appState?.readerAutoPageSpeedSeconds);
+    return clamp(Number.isFinite(raw) ? Math.round(raw) : 8, 2, 20);
+  }
+
+  function readerTtsTimerTotalSeconds(appState) {
+    const timer = readerTtsTimerParts(appState);
+    return timer.minutes * 60 + timer.seconds;
+  }
+
+  function readerTtsQuickTimerPresetSeconds(appState) {
+    const totalSeconds = readerTtsTimerTotalSeconds(appState);
+    return readerTtsQuickTimerPresets.reduce((closest, item) => (
+      Math.abs(item.seconds - totalSeconds) < Math.abs(closest - totalSeconds)
+        ? item.seconds
+        : closest
+    ), readerTtsQuickTimerPresets[0].seconds);
+  }
+
+  function normalizeReaderTtsQuickTimerState(appState) {
+    const presetSeconds = readerTtsQuickTimerPresetSeconds(appState);
+    if (readerTtsTimerTotalSeconds(appState) !== presetSeconds) {
+      appState.readerTtsTimerMinutes = Math.floor(presetSeconds / 60);
+      appState.readerTtsTimerSeconds = presetSeconds % 60;
+    }
+    return presetSeconds;
+  }
+
   function readerControlSettingsConfig(data) {
     const config = data.reader?.controlSettings || {};
     return {
@@ -3014,8 +3283,10 @@
     "竖向翻页": "vertical"
   };
   const readerPageAnimationCssByLabel = {
-    "平滑": "smooth",
+    "覆盖": "cover",
+    "滑动": "smooth",
     "仿真": "curl",
+    "滚动": "scroll",
     "无动画": "none"
   };
   function readerPageModeCssValue(label) {
@@ -3114,26 +3385,19 @@
 
   function quickTypographyPanelRows(data, typography) {
     return `
-      <div class="fd-reader-step-row" data-typography-row="font-size">
-        <strong>字号</strong>
-        <span>
-          <button type="button" data-reader-typography-action="font-size-decrease">-</button>
-          <em data-reader-typography-value="font-size">${esc(typographyNumber(typography.fontSize, 0))}</em>
-          <button type="button" data-reader-typography-action="font-size-increase">+</button>
-        </span>
-      </div>
-      <div class="fd-reader-step-row" data-typography-row="line-height">
-        <strong>行距</strong>
-        <span>
-          <button type="button" data-reader-typography-action="line-height-decrease">-</button>
-          <em data-reader-typography-value="line-height">${esc(typographyNumber(typography.lineHeight, 2))}</em>
-          <button type="button" data-reader-typography-action="line-height-increase">+</button>
-        </span>
-      </div>
-      <div class="fd-reader-font-row" aria-label="字体">
-        ${readerFontOptions(data).slice(0, 3).map((item) => `
-          <button class="${typography.fontFamily === item.value ? "is-active" : ""}" type="button" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(item.value)}">${esc(item.label)}</button>
-        `).join("")}
+      <div class="fd-reader-appearance-quick-selects">
+        <label>
+          <strong>字号</strong>
+          <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-typography-select="fontSize" aria-label="字号">
+            ${[14, 16, 18, 20, 22, 24].map((value) => `<option value="${value}"${Number(typography.fontSize) === value ? " selected" : ""}>${value}</option>`).join("")}
+          </select>
+        </label>
+        <label>
+          <strong>行距</strong>
+          <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-typography-select="lineHeight" aria-label="行距">
+            ${[1.4, 1.6, 1.8, 2].map((value) => `<option value="${value}"${Number(typography.lineHeight) === value ? " selected" : ""}>${value}</option>`).join("")}
+          </select>
+        </label>
       </div>`;
   }
 
@@ -3354,7 +3618,7 @@
     const ttsIndex = ttsActive ? readerTtsSentenceIndex(data, appState) : 0;
     const ttsSegments = ttsActive ? readerTtsSegments(data) : [];
     const paragraphHtml = paragraphs.map((line) => ttsActive ? readerTtsParagraphHtml(line, ttsSegments, ttsIndex) : `<p>${readerAnnotationHtml(line)}</p>`).join("");
-    const verticalTapAttr = isVerticalMode ? ' data-reader-vertical-tap="reader"' : "";
+    const verticalTapAttr = isVerticalMode ? ' data-reader-vertical-tap="reader" tabindex="0"' : "";
     return `
       <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
       <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
@@ -3368,13 +3632,19 @@
   function readerInfoOverlay(data, appState) {
     const readout = data.reader.bottomReadout || {};
     const pageReadout = readerPageReadout(data, appState);
-    const chapterState = currentReaderChapter(data, appState);
     const statusCapsule = readerImmersiveStatusCapsule(appState);
     const footerStatusState = statusCapsule ? "session" : "page";
+    const hideStatusBar = Boolean(appState?.readerSettings?.hideStatusBar);
+    const topInfoHtml = hideStatusBar
+      ? `<span class="fd-ir-top-left" data-reader-top-corner="title">${esc(data.reader.title)}</span>
+        <span class="fd-ir-top-right" data-reader-top-corner="time">${esc(data.reader.status.time)}</span>`
+      : `<header class="fd-reader-system-status" data-reader-system-status aria-label="系统状态栏">
+          <span>${esc(data.reader.status.time)}</span>
+          <span aria-hidden="true">${icon("signal", "fd-reader-status-icon")}${icon("wifi", "fd-reader-status-icon")}${icon("battery", "fd-reader-status-icon")}</span>
+        </header>`;
     return `
       <section class="fd-ir-info-layer" data-dev-region="ImmersiveInfoLayer" aria-label="阅读信息层">
-        <span class="fd-ir-top-left">${esc(data.reader.title)} · ${esc(chapterState.chapter.title || readerChapterMeta(data))}</span>
-        <span class="fd-ir-top-right">${esc(data.reader.status.time)}</span>
+        ${topInfoHtml}
         <span class="fd-ir-bottom-left" data-dev-region="ImmersiveFooterProgress">${esc(pageReadout.progress || readout.progress || "38%")}</span>
         <span class="fd-ir-bottom-right${statusCapsule ? " has-session-capsule" : ""}" data-dev-region="ImmersiveFooterStatus" data-reader-footer-status="${esc(footerStatusState)}">
           <span class="fd-ir-page-label" data-reader-page-readout>${esc(pageReadout.pageLabel)}</span>
@@ -3406,7 +3676,7 @@
       </section>`;
   }
 
-  function readerImmersiveStatusCapsule(appState, options = {}) {
+  function readerImmersiveStatusCapsule(appState) {
     const ttsSession = Boolean(appState?.readerTtsSession || appState?.readerTts?.playing);
     const ttsPlaying = Boolean(appState?.readerTts?.playing);
     const autoSession = Boolean(appState?.readerAutoPageSession || appState?.readerSettings?.autoPage);
@@ -3419,19 +3689,16 @@
     const label = isTts ? "朗读" : "自动翻页";
     const isPlaying = isTts ? ttsPlaying : autoPlaying;
     const autoCountdown = Math.max(1, Math.min(99, Number(appState?.readerAutoPageCountdown || 8)));
-    const controlLayerAttrs = options.controlLayer
-      ? ` data-reader-control-space data-reader-control-space-type="${esc(activeType)}" data-reader-control-space-playing="${isPlaying ? "true" : "false"}"`
-      : "";
     const leading = isTts
-      ? `<span class="fd-ir-voice-icon" data-reader-capsule-voice${options.controlLayer ? " data-reader-control-space-voice" : ""} aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
-      : `<span class="fd-ir-countdown-dot" data-reader-capsule-countdown="${esc(autoCountdown)}"${options.controlLayer ? ` data-reader-control-space-countdown="${esc(autoCountdown)}"` : ""} aria-label="自动翻页倒计时 ${esc(autoCountdown)} 秒">${esc(autoCountdown)}</span>`;
+      ? `<span class="fd-ir-voice-icon" data-reader-capsule-voice aria-hidden="true">${icon("tts", "fd-small-icon")}</span>`
+      : `<span class="fd-ir-countdown-dot" data-reader-capsule-countdown="${esc(autoCountdown)}" aria-label="自动翻页倒计时 ${esc(autoCountdown)} 秒">${esc(autoCountdown)}</span>`;
     const control = isTts
-      ? `<button type="button" data-reader-capsule-control${options.controlLayer ? " data-reader-control-space-control" : ""} data-reader-tts-action="toggle" aria-label="${ttsPlaying ? "暂停朗读" : "继续朗读"}">${icon(ttsPlaying ? "pause" : "play", "fd-small-icon")}</button>`
-      : `<button type="button" data-reader-capsule-control${options.controlLayer ? " data-reader-control-space-control" : ""} data-reader-setting-toggle="autoPage" aria-label="${autoPlaying ? "暂停自动翻页" : "继续自动翻页"}">${icon(autoPlaying ? "pause" : "play", "fd-small-icon")}</button>`;
+      ? `<button type="button" data-reader-capsule-control data-reader-tts-action="toggle" aria-label="${ttsPlaying ? "暂停朗读" : "继续朗读"}">${icon(ttsPlaying ? "pause" : "play", "fd-small-icon")}</button>`
+      : `<button type="button" data-reader-capsule-control data-reader-setting-toggle="autoPage" aria-label="${autoPlaying ? "暂停自动翻页" : "继续自动翻页"}">${icon(autoPlaying ? "pause" : "play", "fd-small-icon")}</button>`;
     return `
-      <span class="fd-ir-status-capsule${options.controlLayer ? " fd-reader-control-session-capsule" : ""}" data-reader-immersive-status data-reader-immersive-status-type="${esc(activeType)}" data-reader-immersive-status-playing="${isPlaying ? "true" : "false"}"${controlLayerAttrs}>
+      <span class="fd-ir-status-capsule" data-reader-immersive-status data-reader-immersive-status-type="${esc(activeType)}" data-reader-immersive-status-playing="${isPlaying ? "true" : "false"}">
         ${leading}
-        <b data-reader-capsule-label${options.controlLayer ? " data-reader-control-space-label" : ""}>${esc(label)}</b>
+        <b data-reader-capsule-label>${esc(label)}</b>
         <span class="fd-ir-status-controls">${control}</span>
       </span>`;
   }
@@ -3467,7 +3734,7 @@
       return { id: "reader.session.capsule.switch", state: "switching", action: "capsule-switch" };
     }
     if (previous.playing !== next.playing) {
-      return { id: "reader.session.capsule.control.press/toggle", state: "control-toggle", action: "capsule-control-toggle" };
+      return { id: "reader.session.capsule.control.press-toggle", state: "control-toggle", action: "capsule-control-toggle" };
     }
     if (next.type === "autoPage" && previous.countdown !== next.countdown) {
       return { id: "reader.session.capsule.countdownTick", state: "countdown-tick", action: "capsule-countdown-tick" };
@@ -3476,16 +3743,6 @@
       return { id: "reader.session.capsule.voiceIcon.active", state: "voice-active", action: "capsule-voice-active" };
     }
     return { id: "reader.session.capsule.update", state: "updated", action: "capsule-update" };
-  }
-
-  function readerSessionControlSpaceMotionMeta(previous, next) {
-    if (!next) {
-      return { id: "reader.session.controlSpace.exit", state: "exiting", action: "control-space-exit" };
-    }
-    if (!previous) {
-      return { id: "reader.session.controlSpace.enter", state: "entering", action: "control-space-enter" };
-    }
-    return { id: "reader.session.controlSpace.update", state: "updated", action: "control-space-update" };
   }
 
   function attachReaderSessionCapsuleMotionState(screenHost, appState, motionController) {
@@ -3543,10 +3800,10 @@
     if (control) {
       control.setAttribute("data-motion-session-capsule-role", "control");
       control.setAttribute("data-motion-session-capsule-state", next.playing ? "playing" : "paused");
-      control.setAttribute("data-motion-session-capsule-id", "reader.session.capsule.control.press/toggle");
-      control.setAttribute("data-motion-id", "reader.session.capsule.control.press/toggle");
+      control.setAttribute("data-motion-session-capsule-id", "reader.session.capsule.control.press-toggle");
+      control.setAttribute("data-motion-id", "reader.session.capsule.control.press-toggle");
       control.setAttribute("data-motion-state", control.getAttribute("data-motion-session-capsule-state"));
-      control.setAttribute("data-motion-press-id", "reader.session.capsule.control.press/toggle");
+      control.setAttribute("data-motion-press-id", "reader.session.capsule.control.press-toggle");
     }
 
     const label = capsule.querySelector("[data-reader-capsule-label]");
@@ -3567,93 +3824,6 @@
       });
     }
     appState.readerSessionCapsuleSnapshot = next;
-  }
-
-  function attachReaderControlSpaceMotionState(screenHost, appState, motionController) {
-    const root = screenHost?.closest?.(".fd-demo") || null;
-    const space = screenHost?.querySelector?.("[data-reader-control-space]") || null;
-    const previous = appState.readerControlSpaceSnapshot || null;
-    const next = readerSessionCapsuleSnapshot(appState);
-    const active = Boolean(space && next);
-    const meta = active
-      ? readerSessionControlSpaceMotionMeta(previous, next)
-      : { id: "reader.session.controlSpace.exit", state: previous ? "exiting" : "hidden", action: "control-space-exit" };
-
-    root?.setAttribute("data-motion-control-space-state", active ? meta.state : "hidden");
-    root?.setAttribute("data-motion-control-space-id", meta.id);
-    root?.setAttribute("data-motion-control-space-active", active ? "true" : "false");
-
-    if (!active) {
-      if (previous && motionController) {
-        motionController.start({
-          id: "reader.session.controlSpace.exit",
-          action: "control-space-exit",
-          from: readerSessionCapsuleSnapshotKey(previous),
-          to: next ? readerSessionCapsuleSnapshotKey(next) : "inactive"
-        });
-      }
-      appState.readerControlSpaceSnapshot = null;
-      return;
-    }
-
-    const snapshotChanged = readerSessionCapsuleSnapshotKey(previous) !== readerSessionCapsuleSnapshotKey(next);
-    space.setAttribute("data-motion-control-space", "true");
-    space.setAttribute("data-motion-control-space-state", meta.state);
-    space.setAttribute("data-motion-control-space-id", meta.id);
-    space.setAttribute("data-motion-id", meta.id);
-    space.setAttribute("data-motion-phase", meta.state);
-    space.setAttribute("data-motion-control-space-type", next.type);
-    space.setAttribute("data-motion-control-space-playing", next.playing ? "true" : "false");
-    space.setAttribute("data-motion-control-space-countdown", String(next.countdown));
-    space.setAttribute("data-motion-control-space-key", readerSessionCapsuleSnapshotKey(next));
-
-    const countdown = space.querySelector("[data-reader-control-space-countdown]");
-    if (countdown) {
-      const ticking = next.type === "autoPage" && previous?.countdown !== next.countdown;
-      countdown.setAttribute("data-motion-control-space-role", "countdown");
-      countdown.setAttribute("data-motion-control-space-state", ticking ? "ticking" : "settled");
-      countdown.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
-      countdown.setAttribute("data-motion-id", "reader.session.controlSpace.update");
-      countdown.setAttribute("data-motion-state", countdown.getAttribute("data-motion-control-space-state"));
-    }
-
-    const voice = space.querySelector("[data-reader-control-space-voice]");
-    if (voice) {
-      voice.setAttribute("data-motion-control-space-role", "voice");
-      voice.setAttribute("data-motion-control-space-state", next.playing ? "active" : "paused");
-      voice.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
-      voice.setAttribute("data-motion-id", "reader.session.controlSpace.update");
-      voice.setAttribute("data-motion-state", voice.getAttribute("data-motion-control-space-state"));
-    }
-
-    const control = space.querySelector("[data-reader-control-space-control]");
-    if (control) {
-      control.setAttribute("data-motion-control-space-role", "control");
-      control.setAttribute("data-motion-control-space-state", next.playing ? "playing" : "paused");
-      control.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
-      control.setAttribute("data-motion-id", "reader.session.controlSpace.update");
-      control.setAttribute("data-motion-state", control.getAttribute("data-motion-control-space-state"));
-      control.setAttribute("data-motion-press-id", "reader.session.capsule.control.press/toggle");
-    }
-
-    const label = space.querySelector("[data-reader-control-space-label]");
-    if (label) {
-      label.setAttribute("data-motion-control-space-role", "label");
-      label.setAttribute("data-motion-control-space-state", meta.state);
-      label.setAttribute("data-motion-control-space-id", "reader.session.controlSpace.update");
-      label.setAttribute("data-motion-id", "reader.session.controlSpace.update");
-      label.setAttribute("data-motion-state", meta.state);
-    }
-
-    if (motionController && snapshotChanged) {
-      motionController.start({
-        id: meta.id,
-        action: meta.action,
-        from: previous ? readerSessionCapsuleSnapshotKey(previous) : "inactive",
-        to: readerSessionCapsuleSnapshotKey(next)
-      });
-    }
-    appState.readerControlSpaceSnapshot = next;
   }
 
   function clearFirstOpenMotionTimer(appState) {
@@ -3902,7 +4072,6 @@
     add(".fd-reader-sheet:not(.fd-reader-sheet-empty)", "reader-control-sheet");
     add(".fd-reader-module-nav:not(.fd-reader-module-nav-empty)", "reader-control-nav");
     add("[data-reader-immersive-status]", "session-capsule");
-    add("[data-reader-control-space]", "control-space");
     add("[data-demo-dialog][aria-hidden=\"false\"]", "overlay-dialog");
     add("[data-demo-sheet][aria-hidden=\"false\"]", "overlay-sheet");
     add("[data-motion-dropdown-role=\"menu\"][data-motion-dropdown-state=\"expanded\"]", "dropdown-menu");
@@ -4044,10 +4213,10 @@
 
   function scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute) {
     clearReaderSessionCapsuleTimer(appState);
+    const immersiveFrame = screenHost?.querySelector?.(".fd-immersive-frame") || null;
     const capsule = screenHost?.querySelector?.("[data-reader-immersive-status]") || null;
-    const controlSpace = screenHost?.querySelector?.("[data-reader-control-space]") || null;
     const snapshot = readerSessionCapsuleSnapshot(appState);
-    if (!(capsule || controlSpace) || !snapshot || snapshot.type !== "autoPage" || !snapshot.playing) {
+    if (!immersiveFrame || !capsule || !snapshot || snapshot.type !== "autoPage" || !snapshot.playing) {
       return;
     }
     appState.readerSessionCapsuleTimer = window.setTimeout(() => {
@@ -4061,10 +4230,51 @@
         const currentIndex = Number.isFinite(Number(appState.readerPageIndex)) ? Number(appState.readerPageIndex) : 0;
         appState.readerPageIndex = clamp(currentIndex + 1, 0, Math.max(0, pageCount - 1));
         appState.readerTurnDirection = "next";
-        appState.readerAutoPageCountdown = 8;
+        appState.readerAutoPageCountdown = readerAutoPageSpeedSeconds(appState);
       }
       renderCurrentRoute();
     }, 1000);
+  }
+
+  const readerScrollSelectors = [
+    ".fd-ir-reading-layer",
+    ".fd-reader-full-content",
+    ".fd-reader-full-section",
+    ".fd-reader-module-panel",
+    ".fd-reader-module-list",
+    ".fd-source-candidate-list"
+  ];
+
+  function captureReaderScrollSnapshot(screenHost) {
+    if (!screenHost) return [];
+    return readerScrollSelectors.flatMap((selector) => Array.from(screenHost.querySelectorAll(selector)).map((node, index) => ({
+      selector,
+      index,
+      top: Number(node.scrollTop) || 0,
+      left: Number(node.scrollLeft) || 0,
+      signature: node.getAttribute("data-reader-surface-signature") || ""
+    })));
+  }
+
+  function restoreReaderScrollSnapshot(screenHost, snapshot, sameRoute) {
+    if (!screenHost || !Array.isArray(snapshot)) return;
+    snapshot.forEach((item) => {
+      const node = screenHost.querySelectorAll(item.selector)[item.index];
+      if (!node) return;
+      const isReadingLayer = item.selector === ".fd-ir-reading-layer";
+      const currentSignature = node.getAttribute("data-reader-surface-signature") || "";
+      if (isReadingLayer) {
+        if (item.signature && currentSignature !== item.signature) return;
+      } else if (!sameRoute) {
+        return;
+      }
+      const previousScrollBehavior = node.style.scrollBehavior;
+      node.style.scrollBehavior = "auto";
+      node.scrollLeft = item.left;
+      node.scrollTop = item.top;
+      node.getBoundingClientRect();
+      node.style.scrollBehavior = previousScrollBehavior;
+    });
   }
 
   function readerTapZones(data, appState) {
@@ -4108,10 +4318,30 @@
       ${readerMoreMenuHtml(appState)}`;
   }
 
-  function readerQuickActionPanel(type, appState, data) {
+  function readerAutoPageControlHtml(data, appState, options = {}) {
     const autoPageEnabled = Boolean(appState?.readerSettings?.autoPage);
-    const autoPageSession = Boolean(appState?.readerAutoPageSession || appState?.readerSettings?.autoPage);
     const chapterState = data ? currentReaderChapter(data, appState) : { index: 0, count: 1, chapter: {} };
+    const showStop = Boolean(options.showStop);
+    return `
+      <section class="fd-reader-auto-control${showStop ? " has-stop" : ""}" aria-label="自动翻页控制">
+        <button class="fd-reader-auto-chapter" type="button" data-reader-chapter-action="prev" aria-label="上一章" aria-disabled="${chapterState.index === 0 ? "true" : "false"}">
+          <span class="fd-reader-auto-chevrons is-prev" aria-hidden="true">${icon("chevron-left", "fd-small-icon")}${icon("chevron-left", "fd-small-icon")}</span><span>上一章</span>
+        </button>
+        <button class="fd-reader-auto-toggle ${autoPageEnabled ? "is-on" : ""}" type="button" data-reader-setting-toggle="autoPage" aria-pressed="${autoPageEnabled ? "true" : "false"}">
+          <i>${icon(autoPageEnabled ? "pause" : "play", "fd-small-icon")}</i>
+          <strong>自动翻页</strong>
+        </button>
+        ${showStop ? `<button class="fd-reader-auto-stop-mini" type="button" data-reader-session-stop="autoPage" aria-label="停止自动翻页"><i>${icon("stop", "fd-small-icon")}</i><strong>停止</strong></button>` : ""}
+        <button class="fd-reader-auto-chapter" type="button" data-reader-chapter-action="next" aria-label="下一章" aria-disabled="${chapterState.index >= chapterState.count - 1 ? "true" : "false"}">
+          <span class="fd-reader-auto-chevrons is-next" aria-hidden="true">${icon("chevron", "fd-small-icon")}${icon("chevron", "fd-small-icon")}</span><span>下一章</span>
+        </button>
+      </section>`;
+  }
+
+  function readerQuickActionPanel(type, appState, data) {
+    const quickBackAttributes = appState?.readerQuickExpanded === type
+      ? "data-reader-quick-collapse"
+      : 'data-route="reader" data-route-replace';
     const panels = {
       search: {
         title: "内容搜索",
@@ -4121,15 +4351,18 @@
         body: `
           <div class="fd-reader-search-panel fd-reader-quick-action-panel">
             <header class="fd-reader-quick-toolbar" aria-label="内容搜索操作">
-              <button class="fd-reader-quick-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
+              <button class="fd-reader-quick-back" type="button" ${quickBackAttributes} aria-label="${appState?.readerQuickExpanded === type ? "收起完整控制页" : "返回阅读控制首页"}">
                 ${icon("back", "fd-small-icon")}<span>返回</span>
               </button>
-              <button class="fd-reader-quick-action" type="button" data-reader-search-submit aria-label="搜索当前输入内容">搜索</button>
+              <label class="fd-reader-panel-search fd-reader-search-field">${icon("search", "fd-small-icon")}<input type="search" value="雨夜" aria-label="搜索正文内容" data-reader-search-input /></label>
+              <button class="fd-reader-quick-action is-primary" type="button" data-reader-search-submit aria-label="搜索当前输入内容">搜索</button>
             </header>
-            <label class="fd-reader-panel-search fd-reader-search-field">${icon("search", "fd-small-icon")}<span>雨夜</span></label>
             <div class="fd-reader-search-result-list fd-reader-module-list" aria-label="内容搜索结果">
-              <button type="button" data-route="immersive-reading"><strong>第 32 章 雨夜</strong><small>雨夜的风格外冷 · 当前结果 1/2</small></button>
-              <button type="button" data-route="immersive-reading"><strong>第 33 章 灯塔</strong><small>雨夜之后，远处灯塔亮起 · 结果 2/2</small></button>
+              ${readerSearchDemoResults(data, appState).map((item) => `
+                <button type="button" data-route="immersive-reading" data-reader-directory-index="${esc(item.chapterIndex)}">
+                  <strong>${esc(item.title)}</strong>
+                  <small>${readerSearchKeywordHtml(item.excerpt, "雨夜")}</small>
+                </button>`).join("")}
             </div>
           </div>`
       },
@@ -4141,27 +4374,12 @@
         body: `
           <div class="fd-reader-auto-panel">
             <header class="fd-reader-auto-toolbar" aria-label="自动翻页操作">
-              <button class="fd-reader-auto-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
+              <button class="fd-reader-auto-back" type="button" ${quickBackAttributes} aria-label="${appState?.readerQuickExpanded === type ? "收起完整控制页" : "返回阅读控制首页"}">
                 ${icon("back", "fd-small-icon")}<span>返回</span>
               </button>
-              <button class="fd-reader-auto-stop ${autoPageSession ? "" : "is-disabled"}" type="button"${autoPageSession ? ` data-reader-session-stop="autoPage"` : ` aria-disabled="true"`}>
-                停止自动翻页
-              </button>
             </header>
-            <section class="fd-reader-auto-control" aria-label="自动翻页控制">
-              <button class="fd-reader-auto-chapter" type="button" data-reader-chapter-action="prev" aria-label="上一章" aria-disabled="${chapterState.index === 0 ? "true" : "false"}">
-                <span class="fd-reader-auto-chevrons is-prev" aria-hidden="true">${icon("chevron-left", "fd-small-icon")}${icon("chevron-left", "fd-small-icon")}</span><span>上一章</span>
-              </button>
-              <button class="fd-reader-auto-toggle ${autoPageEnabled ? "is-on" : ""}" type="button" data-reader-setting-toggle="autoPage" aria-pressed="${autoPageEnabled ? "true" : "false"}">
-                <i>${icon(autoPageEnabled ? "pause" : "play", "fd-small-icon")}</i>
-                <strong>自动翻页</strong>
-              </button>
-              <button class="fd-reader-auto-chapter" type="button" data-reader-chapter-action="next" aria-label="下一章" aria-disabled="${chapterState.index >= chapterState.count - 1 ? "true" : "false"}">
-                <span class="fd-reader-auto-chevrons is-next" aria-hidden="true">${icon("chevron", "fd-small-icon")}${icon("chevron", "fd-small-icon")}</span><span>下一章</span>
-              </button>
-            </section>
-            <div class="fd-reader-step-row fd-reader-auto-speed" aria-label="翻页速度"><strong>翻页速度</strong><span><button type="button" aria-label="减慢自动翻页">-</button><em>8 秒</em><button type="button" aria-label="加快自动翻页">+</button></span></div>
-            <div class="fd-reader-segment-row fd-reader-auto-mode" aria-label="自动翻页方式"><button class="is-active" type="button">连续</button><button type="button">单页</button></div>
+            ${readerAutoPageControlHtml(data, appState, { showStop: true })}
+            <div class="fd-reader-step-row fd-reader-auto-speed" aria-label="翻页速度"><strong>翻页速度</strong><span><button type="button" data-reader-auto-speed-step="-1" aria-label="减慢自动翻页">-</button><em data-reader-auto-speed-readout>${esc(readerAutoPageSpeedSeconds(appState))} 秒</em><button type="button" data-reader-auto-speed-step="1" aria-label="加快自动翻页">+</button></span></div>
           </div>`
       },
       replace: {
@@ -4179,7 +4397,7 @@
           return `
           <div class="fd-reader-replace-panel fd-reader-quick-action-panel">
             <header class="fd-reader-quick-toolbar" aria-label="内容替换操作">
-              <button class="fd-reader-quick-back" type="button" data-route="reader" aria-label="返回阅读控制首页">
+              <button class="fd-reader-quick-back" type="button" ${quickBackAttributes} aria-label="${appState?.readerQuickExpanded === type ? "收起完整控制页" : "返回阅读控制首页"}">
                 ${icon("back", "fd-small-icon")}<span>返回</span>
               </button>
               <button class="fd-reader-quick-action fd-replace-add-entry" type="button" data-reader-replace-rule-add aria-label="新增替换规则" ${formOpen ? "aria-disabled=\"true\"" : ""}>
@@ -4256,20 +4474,36 @@
       const tocMode = readerTocMode(appState);
       const currentChapterState = currentReaderChapter(data, appState);
       const chapters = readerChapters(data);
-      const visibleItems = (tocMode === "bookmark" ? chapters.filter((chapter) => chapterHasMarker(chapter, "书签")) : chapters).slice(0, 6);
+      const chapterPool = tocMode === "bookmark" ? chapters.filter((chapter) => chapterHasMarker(chapter, "书签")) : chapters;
+      const currentPoolIndex = Math.max(0, chapterPool.indexOf(currentChapterState.chapter));
+      const visibleItems = chapterPool.slice(Math.max(0, currentPoolIndex - 2), Math.min(chapterPool.length, currentPoolIndex + 4));
+      const quickBookmarkExcerpts = [
+        "雨声在窗外连成一片，密密地刺在玻璃上，汇成朦胧的水幕。",
+        "他站在窗前，手里握着那封被雨水润湿的信，字迹依旧清晰。"
+      ];
       const listHtml = visibleItems.map((chapter) => {
         const chapterIndex = Math.max(0, chapters.indexOf(chapter));
+        if (tocMode === "bookmark") {
+          const excerptIndex = Math.max(0, chapterPool.indexOf(chapter));
+          return `
+            <article class="fd-reader-quick-bookmark-card" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+              <strong>${esc(chapter.title)}</strong>
+              <p>${esc(`${quickBookmarkExcerpts[excerptIndex % quickBookmarkExcerpts.length]}${quickBookmarkExcerpts[(excerptIndex + 1) % quickBookmarkExcerpts.length]}`)}</p>
+            </article>`;
+        }
         return `
-            <article class="fd-reader-toc-row fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+            <article class="fd-reader-toc-row fd-reader-quick-directory-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
               <strong>${esc(chapter.title)}</strong>
               ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
             </article>`;
       }).join("");
       return `
         <section class="fd-reader-module-panel fd-reader-toc-panel" data-dev-region="ReaderModulePanel" aria-label="目录与书签">
-          <div class="fd-reader-toc-list fd-reader-full-toc-list">
-            ${readerTocSwitchHtml(tocMode, "fd-reader-toc-switch-row fd-reader-full-toc-switch-row")}
-            ${listHtml}
+          <div class="fd-reader-quick-directory-workspace is-${esc(tocMode)}">
+            ${readerTocSwitchHtml(tocMode, "fd-reader-full-directory-tabs fd-reader-quick-directory-tabs")}
+            <div class="${tocMode === "bookmark" ? "fd-reader-quick-bookmark-list" : "fd-reader-toc-list fd-reader-quick-directory-list"}">
+              ${listHtml}
+            </div>
           </div>
         </section>`;
     }
@@ -4277,41 +4511,33 @@
       const tts = appState.readerTts || {};
       const ttsConfig = readerTtsConfig(data);
       const ttsDefaults = ttsConfig.defaults;
-      const ttsOptions = ttsConfig.options;
-      const ttsSession = Boolean(appState?.readerTtsSession || tts.playing);
+      const timerPresetSeconds = readerTtsQuickTimerPresetSeconds(appState);
+      const speedNumber = Math.max(0.5, Math.min(2, Number.parseFloat(tts.speed || ttsDefaults.speed) || 1));
+      const speedProgress = Math.round(((speedNumber - 0.5) / 1.5) * 100);
       return `
-        <section class="fd-reader-module-panel fd-reader-tts-panel" data-dev-region="ReaderModulePanel" aria-label="朗读">
-          <header class="fd-reader-tts-toolbar" aria-label="朗读操作">
-            <strong class="fd-reader-module-title">朗读</strong>
-            <button class="fd-reader-tts-stop ${ttsSession ? "" : "is-disabled"}" type="button"${ttsSession ? ` data-reader-session-stop="tts"` : ` aria-disabled="true"`}>
-              停止朗读
-            </button>
-          </header>
+        <section class="fd-reader-module-panel fd-reader-tts-panel" data-dev-region="ReaderModulePanel" data-ui-control-scope="reader-tts-quick" aria-label="朗读">
           <div class="fd-reader-tts-list fd-reader-module-list">
             <section class="fd-reader-tts-row fd-reader-tts-control-row" aria-label="播放控制">
-              <i>${icon("tts", "fd-small-icon")}</i>
-              <strong>播放控制</strong>
+              <span class="fd-reader-tts-quick-row-label"><i aria-hidden="true">${icon("tts", "fd-small-icon")}</i><strong>播放</strong></span>
               <span class="fd-reader-tts-controls">
-                <button type="button" data-reader-tts-action="prev" aria-label="上一句">${icon("chevron-left", "fd-small-icon")}</button>
-                <button class="is-primary ${tts.playing ? "is-playing" : ""}" type="button" data-reader-tts-action="toggle" aria-label="${tts.playing ? "暂停朗读" : "开始朗读"}">${icon(tts.playing ? "pause" : "play", "fd-small-icon")}</button>
-                <button type="button" data-reader-tts-action="next" aria-label="下一句">${icon("chevron", "fd-small-icon")}</button>
+                <button class="fd-control-button" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="tertiary" data-reader-tts-action="prev" aria-label="上一句">${icon("chevron-left", "fd-small-icon")}</button>
+                <button class="fd-control-button is-primary ${tts.playing ? "is-playing" : ""}" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="primary" data-reader-tts-action="toggle" aria-label="${tts.playing ? "暂停朗读" : "开始朗读"}">${icon(tts.playing ? "pause" : "play", "fd-small-icon")}</button>
+                <button class="fd-control-button fd-reader-tts-quick-stop" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="danger" data-reader-session-stop="tts" aria-label="停止朗读">${icon("stop", "fd-small-icon")}</button>
+                <button class="fd-control-button" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="tertiary" data-reader-tts-action="next" aria-label="下一句">${icon("chevron", "fd-small-icon")}</button>
               </span>
             </section>
-            <div class="fd-reader-tts-option-row">
-              <button type="button" data-reader-tts-option-key="speed" aria-expanded="${appState?.readerTtsExpandedOption === "speed" ? "true" : "false"}"><i>${icon("motion", "fd-small-icon")}</i><strong>语速</strong><em>${esc(tts.speed || ttsDefaults.speed)}${chevron()}</em></button>
-              ${readerTtsDropdownHtml("speed", "语速", tts, ttsDefaults, ttsOptions, appState)}
-            </div>
-            <div class="fd-reader-tts-option-row">
-              <button type="button" data-reader-tts-option-key="voice" aria-expanded="${appState?.readerTtsExpandedOption === "voice" ? "true" : "false"}"><i>${icon("volume", "fd-small-icon")}</i><strong>音色</strong><em>${esc(tts.voice || ttsDefaults.voice)}${chevron()}</em></button>
-              ${readerTtsDropdownHtml("voice", "音色", tts, ttsDefaults, ttsOptions, appState)}
-            </div>
-            <div class="fd-reader-tts-option-row">
-              <button type="button" data-reader-tts-option-key="scope" aria-expanded="${appState?.readerTtsExpandedOption === "scope" ? "true" : "false"}"><i>${icon("current-location", "fd-small-icon")}</i><strong>范围</strong><em>${esc(tts.scope || ttsDefaults.scope)}${chevron()}</em></button>
-              ${readerTtsDropdownHtml("scope", "范围", tts, ttsDefaults, ttsOptions, appState)}
-            </div>
-            <div class="fd-reader-tts-option-row">
-              <button type="button" data-reader-tts-option-key="timer" aria-expanded="${appState?.readerTtsExpandedOption === "timer" ? "true" : "false"}"><i>${icon("clock", "fd-small-icon")}</i><strong>定时</strong><em>${esc(tts.timer || ttsDefaults.timer)}${chevron()}</em></button>
-              ${readerTtsDropdownHtml("timer", "定时", tts, ttsDefaults, ttsOptions, appState)}
+            <div class="fd-reader-tts-quick-fields">
+              <label class="fd-reader-tts-quick-control fd-reader-tts-quick-timer">
+                <span><i aria-hidden="true">${icon("clock", "fd-small-icon")}</i><strong>定时</strong></span>
+                <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-tts-timer-preset aria-label="朗读定时">
+                  ${readerTtsQuickTimerPresets.map((item) => `<option value="${esc(item.seconds)}"${item.seconds === timerPresetSeconds ? " selected" : ""}>${esc(item.label)}</option>`).join("")}
+                </select>
+              </label>
+              <label class="fd-reader-tts-quick-control fd-reader-tts-quick-speed fd-reader-tts-speed-module">
+                <span><i aria-hidden="true">${icon("motion", "fd-small-icon")}</i><strong>语速</strong></span>
+                <input class="fd-control-slider" type="range" min="0.5" max="2" step="0.1" value="${esc(speedNumber)}" style="--fd-control-slider-value:${esc(speedProgress)}%" data-ui-primitive="slider" data-ui-size="sm" data-reader-tts-speed-range aria-label="调整朗读语速">
+                <output data-reader-tts-speed-readout>${esc(speedNumber.toFixed(1))}x</output>
+              </label>
             </div>
           </div>
         </section>`;
@@ -4319,12 +4545,18 @@
     if (type === "appearance") {
       const typography = appState?.readerTypography || normalizeReaderTypography(data);
       const activeTheme = currentReaderTheme(data, appState);
-      const quickThemes = readerQuickThemeOptions(data);
+      const w4Api = typeof window !== "undefined" ? window.ReaderW4ThemeFontTypographyRenderers : null;
+      const quickThemes = (w4Api?.data?.allThemes?.() || readerThemeOptions(data)).slice(0, 8);
+      const quickFonts = (w4Api?.data?.allFonts?.(data) || readerFontOptions(data)).slice(0, 8);
+      const defaultDayValue = w4Api?.storage?.get?.("default-day-theme", "paper") || "paper";
+      const defaultNightValue = w4Api?.storage?.get?.("default-night-theme", "paper-night") || "paper-night";
+      const defaultDayTheme = quickThemes.find((item) => item.value === defaultDayValue) || quickThemes.find((item) => item.scheme === "day") || {};
+      const defaultNightTheme = quickThemes.find((item) => item.value === defaultNightValue) || quickThemes.find((item) => item.scheme === "night") || {};
       return `
         <section class="fd-reader-module-panel fd-reader-appearance-panel" data-dev-region="ReaderModulePanel" aria-label="阅读外观">
           <div class="fd-reader-appearance-list fd-reader-module-list">
             <section class="fd-reader-full-setting-block fd-reader-appearance-quick-theme">
-              <header><strong>阅读主题</strong></header>
+              <header><strong>主题库</strong><em>日间：${esc(defaultDayTheme.label || "纸纹")} · 夜间：${esc(defaultNightTheme.label || "夜纹")}</em></header>
               <div class="fd-reader-full-theme-grid">
                 ${quickThemes.map((item, index) => `
                   <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 2 ? "day" : "night"))}" data-reader-theme-texture="${esc(item.texture || "plain")}" aria-label="${esc(item.scheme === "night" ? "夜晚" : "白天")}${item.texture === "paper" ? "纹理" : "纯色"}主题：${esc(item.label)}">
@@ -4333,9 +4565,13 @@
                 `).join("")}
               </div>
             </section>
-            <section class="fd-reader-full-setting-block fd-reader-full-typography fd-reader-appearance-quick-typography">
-              <header><strong>文字排版</strong></header>
-              ${quickTypographyPanelRows(data, typography)}
+            <section class="fd-reader-full-setting-block fd-reader-appearance-quick-fonts">
+              <header><strong>字体库</strong></header>
+              <div class="fd-reader-appearance-font-grid">
+                ${quickFonts.map((item) => `
+                  <button class="${typography.fontFamily === item.value ? "is-active" : ""}" type="button" draggable="true" data-w4-font-cell data-w4-font-value="${esc(item.value)}" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(item.value)}" style="font-family:${esc(item.fontStack || "inherit")}">${esc(item.label)}</button>
+                `).join("")}
+              </div>
             </section>
           </div>
         </section>`;
@@ -4345,28 +4581,23 @@
       const settingConfig = readerControlSettingsConfig(data);
       const settingDefaults = settingConfig.defaults;
       const settingOptions = settingConfig.options;
+      const quickSetting = (key, label) => {
+        const values = settingOptions[key] || [];
+        const active = settings[key] || settingDefaults[key] || values[0] || "";
+        return `
+          <div class="fd-reader-quick-screen-row">
+            <strong>${esc(label)}</strong>
+            <div class="fd-reader-quick-segment" role="group" aria-label="${esc(label)}">
+              ${values.map((value) => `<button class="${value === active ? "is-active" : ""}" type="button" data-reader-setting-option="${esc(key)}" data-reader-setting-value="${esc(value)}">${esc(value)}</button>`).join("")}
+            </div>
+          </div>`;
+      };
       return `
         <section class="fd-reader-module-panel fd-reader-settings-panel" data-dev-region="ReaderModulePanel" aria-label="阅读设置">
-          <div class="fd-reader-settings-list">
-            <button type="button" data-reader-setting-toggle="autoPage"><i>${icon("refresh", "fd-small-icon")}</i><strong>自动翻页</strong><span class="fd-reader-switch ${settings.autoPage ? "is-on" : ""}" aria-hidden="true"></span></button>
-            <div class="fd-reader-setting-row">
-              <button type="button" data-reader-setting-option-key="pageMode" aria-expanded="${appState?.readerSettingsExpandedOption === "pageMode" ? "true" : "false"}"><i>${icon("book", "fd-small-icon")}</i><strong>翻页模式</strong><em>${esc(settings.pageMode || settingDefaults.pageMode)}${chevron()}</em></button>
-              ${readerSettingDropdownHtml("pageMode", "翻页模式", settings, settingDefaults, settingOptions, appState)}
-            </div>
-            <div class="fd-reader-setting-row">
-              <button type="button" data-reader-setting-option-key="tapMode" aria-expanded="${appState?.readerSettingsExpandedOption === "tapMode" ? "true" : "false"}"><i>${icon("gesture", "fd-small-icon")}</i><strong>点击翻页方式</strong><em>${esc(settings.tapMode || settingDefaults.tapMode)}${chevron()}</em></button>
-              ${readerSettingDropdownHtml("tapMode", "点击翻页方式", settings, settingDefaults, settingOptions, appState)}
-            </div>
-            <button type="button" data-reader-setting-toggle="volumePage"><i>${icon("volume", "fd-small-icon")}</i><strong>音量键翻页</strong><span class="fd-reader-switch ${settings.volumePage ? "is-on" : ""}" aria-hidden="true"></span></button>
-            <div class="fd-reader-setting-row">
-              <button type="button" data-reader-setting-option-key="pageAnimation" aria-expanded="${appState?.readerSettingsExpandedOption === "pageAnimation" ? "true" : "false"}"><i>${icon("file", "fd-small-icon")}</i><strong>翻页动画</strong><em>${esc(settings.pageAnimation || settingDefaults.pageAnimation)}${chevron()}</em></button>
-              ${readerSettingDropdownHtml("pageAnimation", "翻页动画", settings, settingDefaults, settingOptions, appState)}
-            </div>
-            <button type="button" data-reader-setting-toggle="landscapeLock"><i>${icon("permission", "fd-small-icon")}</i><strong>横屏锁定</strong><span class="fd-reader-switch ${settings.landscapeLock ? "is-on" : ""}" aria-hidden="true"></span></button>
-            <button type="button" data-reader-setting-toggle="keepScreenOn"><i>${icon("sun", "fd-small-icon")}</i><strong>屏幕常亮</strong><span class="fd-reader-switch ${settings.keepScreenOn ? "is-on" : ""}" aria-hidden="true"></span></button>
-            <button type="button" data-reader-setting-toggle="statusInfo"><i>${icon("progress", "fd-small-icon")}</i><strong>页脚进度信息</strong><span class="fd-reader-switch ${settings.statusInfo ? "is-on" : ""}" aria-hidden="true"></span></button>
-            <button type="button" data-reader-setting-toggle="hapticFeedback"><i>${icon("gesture", "fd-small-icon")}</i><strong>触摸反馈</strong><span class="fd-reader-switch ${settings.hapticFeedback ? "is-on" : ""}" aria-hidden="true"></span></button>
-            <button type="button" data-reader-setting-toggle="cacheNext"><i>${icon("download", "fd-small-icon")}</i><strong>自动缓存后续章节</strong><span class="fd-reader-switch ${settings.cacheNext ? "is-on" : ""}" aria-hidden="true"></span></button>
+          <div class="fd-reader-quick-screen-settings">
+            ${quickSetting("screenOrientation", "屏幕方向")}
+            ${quickSetting("pageAnimation", "翻页样式")}
+            ${quickSetting("screenTimeout", "屏幕超时")}
           </div>
         </section>`;
     }
@@ -4393,20 +4624,160 @@
     const tocMode = readerTocMode(appState);
     const currentChapterState = currentReaderChapter(data, appState);
     const chapters = readerChapters(data);
-    const visibleItems = tocMode === "bookmark" ? chapters.filter((chapter) => chapterHasMarker(chapter, "书签")) : chapters;
+    const bookmarks = chapters.filter((chapter) => chapterHasMarker(chapter, "书签"));
+    const descending = Boolean(appState?.readerDirectoryDescending);
+    const visibleItems = (tocMode === "bookmark" ? bookmarks : chapters).slice();
+    if (descending && tocMode === "directory") visibleItems.reverse();
+    const bookmarkExcerpts = [
+      "雨声在窗外连成一片，像无数细小的针，密密地刺在玻璃上。",
+      "他站在窗前，手里握着那封被雨水润湿的信，字迹依旧清晰。",
+      "有些选择从一开始就注定要在某个雨夜到来，迟来的答案终于抵达。"
+    ];
+    const searchHtml = (bookmarkMode) => `
+      <div class="fd-reader-directory-search${bookmarkMode ? " is-bookmark" : ""}" role="search">
+        <label>${icon("search", "fd-small-icon")}<input type="search" placeholder="${bookmarkMode ? "搜索书签内容" : "搜索章节名称"}" aria-label="${bookmarkMode ? "搜索书签内容" : "搜索章节名称"}"></label>
+        <button type="button" aria-label="搜索">${icon("search", "fd-small-icon")}</button>
+        ${bookmarkMode ? "" : `
+          <button type="button" data-reader-directory-jump="top" aria-label="跳到目录顶部">${icon("top", "fd-small-icon")}</button>
+          <button type="button" data-reader-directory-jump="bottom" aria-label="跳到目录底部">${icon("bottom", "fd-small-icon")}</button>
+          <button type="button" data-reader-directory-sort aria-label="${descending ? "当前倒序，切换为正序" : "当前正序，切换为倒序"}">${icon(descending ? "sort-desc" : "sort-asc", "fd-small-icon")}</button>`}
+      </div>`;
     return `
       <section class="fd-reader-full-section fd-reader-full-directory" aria-label="完整目录">
-        ${readerTocSwitchHtml(tocMode, "fd-reader-full-toc-switch-row")}
-        <div class="fd-reader-full-toc-list">
-          ${visibleItems.map((chapter) => {
-            const chapterIndex = Math.max(0, chapters.indexOf(chapter));
-            return `
-              <article class="fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
-                <strong>${esc(chapter.title)}</strong>
-                ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
-              </article>`;
-          }).join("")}
+        <nav class="fd-reader-full-directory-tabs" aria-label="目录与书签">
+          <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">目录</button>
+          <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">${icon("bookmark-folder", "fd-small-icon")}书签</button>
+        </nav>
+        <div class="fd-reader-full-directory-body is-${esc(tocMode)}">
+          ${searchHtml(tocMode === "bookmark")}
+          ${tocMode === "bookmark" ? `
+            <div class="fd-reader-full-bookmark-list">
+              ${visibleItems.map((chapter, index) => {
+                const chapterIndex = Math.max(0, chapters.indexOf(chapter));
+                return `<article class="fd-reader-bookmark-card" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+                  <strong>${esc(chapter.title)}</strong>
+                  <p>${esc(`${bookmarkExcerpts[index % bookmarkExcerpts.length]}${bookmarkExcerpts[(index + 1) % bookmarkExcerpts.length]}`)}</p>
+                </article>`;
+              }).join("") || `<div class="fd-reader-bookmark-empty">${icon("bookmark-folder", "fd-medium-icon")}<strong>暂无书签</strong></div>`}
+            </div>` : `
+            <div class="fd-reader-full-toc-list">
+              ${visibleItems.map((chapter) => {
+                const chapterIndex = Math.max(0, chapters.indexOf(chapter));
+                return `<article class="fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+                  <strong>${esc(chapter.title)}</strong>
+                  ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
+                </article>`;
+              }).join("")}
+            </div>
+            <footer class="fd-reader-directory-current">
+              <span><small>当前章节</small><strong>${esc(currentChapterState.chapter.title || "")}</strong></span>
+              <em>${esc(currentChapterState.index + 1)} / ${esc(currentChapterState.count)}</em>
+            </footer>`}
         </div>
+      </section>`;
+  }
+
+  function readerSearchKeywordHtml(text, keyword) {
+    const source = String(text || "");
+    const query = String(keyword || "");
+    if (!query) return esc(source);
+    return source.split(query).map((part) => esc(part)).join(`<mark class="fd-reader-search-keyword">${esc(query)}</mark>`);
+  }
+
+  function readerSearchDemoResults(data, appState) {
+    const chapters = readerChapters(data);
+    const current = currentReaderChapter(data, appState);
+    const firstIndex = Math.max(0, current.index);
+    const secondIndex = Math.min(Math.max(0, chapters.length - 1), firstIndex + 1);
+    return [
+      {
+        chapterIndex: firstIndex,
+        title: chapters[firstIndex]?.title || "第 32 章 雨夜",
+        excerpt: "雨夜的风格外冷，雨声沿着窗沿一层层落下，像一封迟到许久的回信。他站在旧窗前，看见远处的灯光被水雾揉成模糊的光团，石阶尽头偶尔传来很轻的脚步声，又很快消失在风里，只留下檐下不断坠落的水滴。"
+      },
+      {
+        chapterIndex: secondIndex,
+        title: chapters[secondIndex]?.title || "第 33 章 灯塔",
+        excerpt: "雨夜之后，远处灯塔重新亮起，他终于看清那条被雾遮住的路。潮湿的风掠过海面，也带回了码头尽头断断续续的回声，废弃仓库的门在风里缓慢开合，微弱光束一遍遍扫过空无一人的堤岸。"
+      }
+    ];
+  }
+
+  function readerFullSearchPage(data, appState) {
+    const keyword = "雨夜";
+    const results = readerSearchDemoResults(data, appState);
+    return `
+      <section class="fd-reader-full-section fd-reader-full-directory fd-reader-full-search" aria-label="完整内容搜索">
+        <div class="fd-reader-full-directory-body is-search">
+          <div class="fd-reader-directory-search is-search" role="search">
+            <label>${icon("search", "fd-small-icon")}<input type="search" value="${esc(keyword)}" aria-label="搜索正文内容"></label>
+            <button type="button" data-reader-search-submit aria-label="搜索">${icon("search", "fd-small-icon")}</button>
+          </div>
+          <div class="fd-reader-full-toc-list fd-reader-full-search-result-list" aria-label="正文搜索结果">
+            ${results.map((item) => `
+              <article class="fd-reader-full-toc-row fd-reader-full-search-result-row" role="button" tabindex="0" data-reader-directory-index="${esc(item.chapterIndex)}">
+                <strong>${esc(item.title)}</strong>
+                <small class="fd-reader-full-search-copy">${readerSearchKeywordHtml(item.excerpt, keyword)}</small>
+              </article>`).join("")}
+          </div>
+        </div>
+      </section>`;
+  }
+
+  function readerFullAutoPage(data, appState) {
+    const timer = readerAutoTimerParts(appState);
+    const speedSeconds = readerAutoPageSpeedSeconds(appState);
+    const speedProgress = Math.round(((speedSeconds - 2) / 18) * 100);
+    const followHighlight = appState?.readerAutoFollowHighlight !== false;
+    const autoPageEnabled = Boolean(appState?.readerSettings?.autoPage);
+    const formatTimerValue = (value) => String(value).padStart(2, "0");
+    const timerWheelHtml = (part, value, max, unit) => `
+      <div class="fd-reader-tts-wheel-column">
+        <div class="fd-reader-tts-wheel-viewport">
+          <div class="fd-reader-tts-wheel" data-reader-auto-timer-wheel="${esc(part)}" data-reader-auto-timer-max="${esc(max)}" role="listbox" aria-label="定时${esc(unit)}" aria-orientation="vertical" tabindex="0">
+            <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+            ${Array.from({ length: max + 1 }, (_, optionValue) => `<button class="${optionValue === value ? "is-active" : ""}" type="button" role="option" tabindex="-1" aria-selected="${optionValue === value ? "true" : "false"}" data-reader-auto-timer-value="${optionValue}">${esc(formatTimerValue(optionValue))}</button>`).join("")}
+            <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+          </div>
+        </div>
+        <small>${esc(unit)}</small>
+      </div>`;
+    return `
+      <section class="fd-reader-full-section fd-reader-full-tts fd-reader-full-auto" data-ui-control-scope="reader-auto-page" aria-label="完整自动翻页控制">
+        <section class="fd-reader-full-setting-block fd-reader-auto-control-module">
+          <header><strong>自动翻页控制</strong><em>${autoPageEnabled ? "翻页中" : "未开始"}</em></header>
+          ${readerAutoPageControlHtml(data, appState, { showStop: true })}
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-tts-timer-module fd-reader-auto-timer-module">
+          <header><strong>定时</strong><em>${esc(formatTimerValue(timer.minutes))}:${esc(formatTimerValue(timer.seconds))}</em></header>
+          <div class="fd-reader-tts-clock" aria-label="自动翻页定时">
+            <div class="fd-reader-auto-timer-summary">
+              <span aria-hidden="true">${icon("clock", "fd-medium-icon")}</span>
+              <strong>自动停止</strong>
+            </div>
+            <div class="fd-reader-tts-wheel-deck">
+              ${timerWheelHtml("minutes", timer.minutes, 180, "分")}
+              <i aria-hidden="true">:</i>
+              ${timerWheelHtml("seconds", timer.seconds, 59, "秒")}
+            </div>
+          </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-auto-detail-module">
+          <header><strong>详细配置</strong><em>即时生效</em></header>
+          <div class="fd-reader-auto-detail-fields">
+            <div class="fd-reader-auto-detail-speed fd-reader-tts-speed-module" data-ui-primitive="field-row" data-ui-size="md">
+              <span class="fd-reader-auto-detail-label"><strong>翻页速度</strong><em data-reader-auto-speed-readout>${esc(speedSeconds)} 秒</em></span>
+              <div class="fd-reader-tts-speed-slider">
+                <span>2 秒</span>
+                <input class="fd-control-slider" type="range" min="2" max="20" step="1" value="${esc(speedSeconds)}" style="--fd-control-slider-value:${esc(speedProgress)}%" data-ui-primitive="slider" data-ui-size="md" data-reader-auto-speed-range aria-label="调整翻页速度">
+                <span>20 秒</span>
+              </div>
+            </div>
+            <div class="fd-reader-tts-detail-switches">
+              <button type="button" role="switch" aria-checked="${followHighlight ? "true" : "false"}" data-ui-primitive="field-row" data-ui-size="md" data-reader-auto-toggle="followHighlight"><strong>跟随高亮</strong><span class="fd-reader-switch ${followHighlight ? "is-on" : ""}" aria-hidden="true"></span></button>
+            </div>
+          </div>
+        </section>
       </section>`;
   }
 
@@ -4416,21 +4787,155 @@
     const defaults = ttsConfig.defaults;
     const options = ttsConfig.options;
     const current = (key) => tts[key] || defaults[key] || (options[key] || [])[0] || "";
+    const speedNumber = Math.max(0.5, Math.min(2, Number.parseFloat(current("speed")) || 1));
+    const speedProgress = Math.round(((speedNumber - 0.5) / 1.5) * 100);
+    const timerParts = readerTtsTimerParts(appState);
+    const timerMinutes = timerParts.minutes;
+    const timerSeconds = timerParts.seconds;
+    const ttsSession = Boolean(appState.readerTtsSession || tts.playing);
+    const ttsProvider = tts.provider === "online" ? "online" : "system";
+    const selected = (value, expected) => String(value) === String(expected) ? " selected" : "";
+    const checked = (value) => value ? " is-on" : "";
+    const formatTimerValue = (value) => String(value).padStart(2, "0");
+    const timerWheelHtml = (part, value, max, unit) => `
+      <div class="fd-reader-tts-wheel-column">
+        <div class="fd-reader-tts-wheel-viewport">
+          <div class="fd-reader-tts-wheel" data-reader-tts-timer-wheel="${esc(part)}" data-reader-tts-timer-max="${esc(max)}" role="listbox" aria-label="定时${esc(unit)}" aria-orientation="vertical" tabindex="0">
+            <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+            ${Array.from({ length: max + 1 }, (_, optionValue) => `<button class="${optionValue === value ? "is-active" : ""}" type="button" role="option" tabindex="-1" aria-selected="${optionValue === value ? "true" : "false"}" data-reader-tts-timer-value="${optionValue}">${esc(formatTimerValue(optionValue))}</button>`).join("")}
+            <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+          </div>
+        </div>
+        <small>${esc(unit)}</small>
+      </div>`;
+    const onlineProviderLabels = {
+      custom: "自定义服务",
+      azure: "Azure Speech",
+      aliyun: "阿里云语音"
+    };
+    const onlineProviderLabel = onlineProviderLabels[tts.onlineProvider] || onlineProviderLabels.custom;
+    const onlineConnectionState = tts.onlineConfigSaved ? "saved" : (tts.onlineConnectionState || "idle");
+    const endpointError = onlineConnectionState === "missing-endpoint";
+    const credentialError = onlineConnectionState === "missing-credential";
+    const onlineConnectionLabels = {
+      idle: "尚未测试连接",
+      testing: "正在校验在线服务…",
+      success: `连接可用 · ${esc(tts.onlineTestLatency || 86)} ms · ${esc(tts.onlineVoiceCount || 12)} 个音色`,
+      saved: `已应用 · ${esc(onlineProviderLabel)} · ${esc(tts.onlineVoice || "默认音色")}`,
+      "missing-endpoint": "请先填写接口地址",
+      "missing-credential": "请先配置访问凭据",
+      error: "连接失败，请检查配置"
+    };
+    const playbackStateLabel = tts.playbackError
+      ? tts.playbackError
+      : ttsSession
+        ? (tts.playing ? `${ttsProvider === "online" ? "在线" : "系统"}朗读中` : "已暂停")
+        : ttsProvider === "online"
+          ? (tts.onlineConfigSaved ? `在线 · ${onlineProviderLabel}` : "在线配置待应用")
+          : "未开始";
     return `
-      <section class="fd-reader-full-section fd-reader-full-tts" aria-label="完整朗读控制">
-        <section class="fd-reader-full-playback">
-          <button type="button" data-reader-tts-action="prev" aria-label="上一句">${icon("chevron-left", "fd-small-icon")}</button>
-          <button class="is-primary ${tts.playing ? "is-playing" : ""}" type="button" data-reader-tts-action="toggle" aria-label="${tts.playing ? "暂停朗读" : "开始朗读"}">${icon(tts.playing ? "pause" : "play", "fd-medium-icon")}</button>
-          <button type="button" data-reader-tts-action="next" aria-label="下一句">${icon("chevron", "fd-small-icon")}</button>
+      <section class="fd-reader-full-section fd-reader-full-tts" data-ui-control-scope="reader-tts" aria-label="完整朗读控制">
+        <section class="fd-reader-full-setting-block fd-reader-tts-playback-module">
+          <header><strong>播放控制区</strong><em>${esc(playbackStateLabel)}</em></header>
+          <div class="fd-reader-full-playback" role="group" aria-label="朗读播放控制">
+            <button class="fd-control-button fd-reader-tts-transport-button" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="secondary" data-reader-tts-action="prev" aria-label="上一句">${icon("chevron-left", "fd-small-icon")}</button>
+            <button class="fd-control-button fd-reader-tts-transport-button is-primary ${tts.playing ? "is-playing" : ""}" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="primary" data-reader-tts-action="toggle" aria-label="${tts.playing ? "暂停朗读" : "开始朗读"}">${icon(tts.playing ? "pause" : "play", "fd-medium-icon")}</button>
+            <button class="fd-control-button fd-reader-tts-transport-button fd-reader-tts-stop-mini" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="danger" data-reader-session-stop="tts" aria-label="停止朗读">${icon("stop", "fd-small-icon")}</button>
+            <button class="fd-control-button fd-reader-tts-transport-button" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="secondary" data-reader-tts-action="next" aria-label="下一句">${icon("chevron", "fd-small-icon")}</button>
+          </div>
         </section>
-        ${["speed", "voice", "scope", "timer"].map((key) => `
-          <section class="fd-reader-full-setting-block">
-            <header><strong>${esc({ speed: "语速", voice: "音色", scope: "朗读范围", timer: "定时关闭" }[key])}</strong><em>${esc(current(key))}</em></header>
-            <div class="fd-reader-full-choice-grid">
-              ${readerChoiceButtons(options[key] || [], current(key), (value) => `data-reader-tts-option="${esc(key)}" data-reader-tts-value="${esc(value)}"`)}
+        <section class="fd-reader-full-setting-block fd-reader-tts-timer-module">
+          <header><strong>定时</strong><em>${esc(String(timerMinutes).padStart(2, "0"))}:${esc(String(timerSeconds).padStart(2, "0"))}</em></header>
+          <div class="fd-reader-tts-clock" aria-label="朗读定时">
+            <div class="fd-reader-tts-timer-summary">
+              <span aria-hidden="true">${icon("clock", "fd-medium-icon")}</span>
+              <span>
+                <small>朗读后停止</small>
+                <strong data-reader-tts-timer-readout>${esc(formatTimerValue(timerMinutes))}:${esc(formatTimerValue(timerSeconds))}</strong>
+              </span>
             </div>
-          </section>
-        `).join("")}
+            <div class="fd-reader-tts-wheel-deck">
+              ${timerWheelHtml("minutes", timerMinutes, 180, "分")}
+              <i aria-hidden="true">:</i>
+              ${timerWheelHtml("seconds", timerSeconds, 59, "秒")}
+            </div>
+          </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-tts-speed-module">
+          <header><strong>语速</strong><em data-reader-tts-speed-readout>${esc(speedNumber.toFixed(1))}x</em></header>
+          <div class="fd-reader-tts-speed-slider">
+            <span>0.5x</span>
+            <input class="fd-control-slider" type="range" min="0.5" max="2" step="0.1" value="${esc(speedNumber)}" style="--fd-control-slider-value:${esc(speedProgress)}%" data-ui-primitive="slider" data-ui-size="md" data-reader-tts-speed-range aria-label="调整朗读语速">
+            <span>2.0x</span>
+          </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-tts-detail-module">
+          <header><strong>详细配置</strong><em>即时生效</em></header>
+          <div class="fd-reader-tts-detail-fields">
+            <label class="fd-reader-tts-detail-select" data-ui-primitive="field-row" data-ui-size="md" data-ui-responsive="stack"><strong>音色选项</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-reader-tts-voice-select aria-label="音色选项">${(options.voice || []).map((voice) => `<option value="${esc(voice)}"${voice === current("voice") ? " selected" : ""}>${esc(voice)}</option>`).join("")}</select></label>
+            <div class="fd-reader-tts-detail-switches">
+              ${[
+                ["highlight", "跟随高亮", tts.highlight !== false],
+                ["pauseOnCall", "来电暂停", tts.pauseOnCall !== false],
+                ["mixWithOthers", "允许与其他应用同时播放", Boolean(tts.mixWithOthers)]
+              ].map(([key, label, enabled]) => `<button type="button" role="switch" aria-checked="${enabled ? "true" : "false"}" data-ui-primitive="field-row" data-ui-size="md" data-ui-responsive="stack" data-reader-tts-toggle="${esc(key)}"><strong>${esc(label)}</strong><span class="fd-reader-switch ${enabled ? "is-on" : ""}" aria-hidden="true"></span></button>`).join("")}
+            </div>
+          </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-tts-config-module">
+          <header><strong>TTS 配置</strong><em>${ttsProvider === "online" ? "在线服务" : "设备引擎"}</em></header>
+          <div class="fd-reader-tts-config-shell">
+            <div class="fd-reader-tts-provider-switch" data-ui-primitive="segmented" data-ui-size="lg" role="tablist" aria-label="TTS 服务类型">
+              <button class="${ttsProvider === "system" ? "is-active" : ""}" type="button" role="tab" tabindex="${ttsProvider === "system" ? "0" : "-1"}" aria-selected="${ttsProvider === "system" ? "true" : "false"}" aria-controls="reader-tts-system-panel" data-reader-tts-provider="system">
+                <i>${icon("phone", "fd-small-icon")}</i><span><strong>系统 TTS</strong><small>使用设备内置语音</small></span>
+              </button>
+              <button class="${ttsProvider === "online" ? "is-active" : ""}" type="button" role="tab" tabindex="${ttsProvider === "online" ? "0" : "-1"}" aria-selected="${ttsProvider === "online" ? "true" : "false"}" aria-controls="reader-tts-online-panel" data-reader-tts-provider="online">
+                <i>${icon("cloud", "fd-small-icon")}</i><span><strong>在线 TTS</strong><small>第三方或自定义服务</small></span>
+              </button>
+            </div>
+            ${ttsProvider === "online" ? `
+            <div class="fd-reader-tts-config-body is-online" id="reader-tts-online-panel">
+              <div class="fd-reader-tts-config-grid" role="tabpanel" aria-label="在线 TTS 配置">
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>服务商</strong><select data-reader-tts-config-field="onlineProvider"><option value="custom"${selected(tts.onlineProvider || "custom", "custom")}>自定义服务</option><option value="azure"${selected(tts.onlineProvider, "azure")}>Azure Speech</option><option value="aliyun"${selected(tts.onlineProvider, "aliyun")}>阿里云语音</option></select></label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>鉴权方式</strong><select data-reader-tts-config-field="authType"><option value="api-key"${selected(tts.authType || "api-key", "api-key")}>API Key</option><option value="bearer"${selected(tts.authType, "bearer")}>Bearer Token</option><option value="none"${selected(tts.authType, "none")}>无鉴权</option></select></label>
+              <label class="fd-reader-tts-config-row is-wide" data-ui-primitive="field-row" data-ui-size="md" data-ui-responsive="stack"${endpointError ? ' data-ui-state="error"' : ""}><strong>接口地址</strong><input type="url" data-reader-tts-config-field="endpoint" value="${esc(tts.endpoint || "")}" placeholder="https://api.example.com/tts"${endpointError ? ' aria-invalid="true" aria-describedby="reader-tts-endpoint-error"' : ""}>${endpointError ? '<small class="fd-control-helper" id="reader-tts-endpoint-error" data-ui-control-message>请填写可用的 HTTPS 接口地址</small>' : ""}</label>
+              <label class="fd-reader-tts-config-row is-wide" data-ui-primitive="field-row" data-ui-size="md" data-ui-responsive="stack"${credentialError ? ' data-ui-state="error"' : ""}><strong>访问凭据</strong><input type="password" data-reader-tts-config-field="apiKey" value="${esc(tts.apiKey || "")}" placeholder="${tts.credentialConfigured ? "凭据已保存，输入新值可替换" : "仅写入 Host 安全存储"}"${credentialError ? ' aria-invalid="true" aria-describedby="reader-tts-credential-error"' : ""}>${credentialError ? '<small class="fd-control-helper" id="reader-tts-credential-error" data-ui-control-message>当前鉴权方式需要访问凭据</small>' : ""}</label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>区域</strong><input type="text" data-reader-tts-config-field="onlineRegion" value="${esc(tts.onlineRegion || "")}" placeholder="例如 cn-east-1"></label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>模型</strong><input type="text" data-reader-tts-config-field="onlineModel" value="${esc(tts.onlineModel || "")}" placeholder="Model / Deployment"></label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>Voice ID</strong><input type="text" data-reader-tts-config-field="onlineVoice" value="${esc(tts.onlineVoice || "")}" placeholder="音色标识"></label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>语言</strong><select data-reader-tts-config-field="onlineLocale"><option value="zh-CN"${selected(tts.onlineLocale || "zh-CN", "zh-CN")}>zh-CN</option><option value="zh-TW"${selected(tts.onlineLocale, "zh-TW")}>zh-TW</option><option value="en-US"${selected(tts.onlineLocale, "en-US")}>en-US</option></select></label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>音频格式</strong><select data-reader-tts-config-field="audioFormat"><option value="opus"${selected(tts.audioFormat || "opus", "opus")}>Opus</option><option value="mp3"${selected(tts.audioFormat, "mp3")}>MP3</option><option value="pcm"${selected(tts.audioFormat, "pcm")}>PCM</option></select></label>
+              <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>采样率</strong><select data-reader-tts-config-field="sampleRate"><option value="16000"${selected(tts.sampleRate, "16000")}>16 kHz</option><option value="24000"${selected(tts.sampleRate || "24000", "24000")}>24 kHz</option><option value="48000"${selected(tts.sampleRate, "48000")}>48 kHz</option></select></label>
+              <label class="fd-reader-tts-config-row is-wide" data-ui-primitive="field-row" data-ui-size="md"><strong>超时 / 重试</strong><select data-reader-tts-config-field="timeoutRetry"><option value="15-1"${selected(tts.timeoutRetry, "15-1")}>15 秒 / 1 次</option><option value="30-2"${selected(tts.timeoutRetry || "30-2", "30-2")}>30 秒 / 2 次</option><option value="60-3"${selected(tts.timeoutRetry, "60-3")}>60 秒 / 3 次</option></select></label>
+              </div>
+              <div class="fd-reader-tts-detail-switches fd-reader-tts-online-switches">
+              ${[
+                ["onlineStreaming", "流式播放", tts.onlineStreaming !== false],
+                ["requestWordTiming", "请求字词时间戳", tts.requestWordTiming !== false],
+                ["fallbackToSystem", "失败时回退系统 TTS", tts.fallbackToSystem !== false],
+                ["cacheAudio", "缓存合成音频", Boolean(tts.cacheAudio)]
+              ].map(([key, label, enabled]) => `<button type="button" role="switch" aria-checked="${enabled ? "true" : "false"}" data-ui-primitive="field-row" data-ui-size="sm" data-reader-tts-toggle="${esc(key)}"><strong>${esc(label)}</strong><span class="fd-reader-switch${checked(enabled)}" aria-hidden="true"></span></button>`).join("")}
+              </div>
+              <div class="fd-reader-tts-online-actions">
+                <span class="fd-reader-tts-online-status is-${esc(onlineConnectionState)}" aria-live="polite">${icon(onlineConnectionState === "saved" || onlineConnectionState === "success" ? "check" : onlineConnectionState === "error" || onlineConnectionState.startsWith("missing") ? "warning" : "activity", "fd-small-icon")}<strong>${onlineConnectionLabels[onlineConnectionState] || onlineConnectionLabels.idle}</strong></span>
+                <span>
+                  <button class="fd-control-button" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="secondary" data-reader-tts-test-online${onlineConnectionState === "testing" ? " disabled" : ""}>${onlineConnectionState === "testing" ? "测试中…" : "测试连接"}</button>
+                  <button class="fd-control-button is-primary" type="button" data-ui-primitive="button" data-ui-size="lg" data-ui-variant="primary" data-reader-tts-save-online${onlineConnectionState !== "success" && onlineConnectionState !== "saved" ? " disabled" : ""}>保存并应用</button>
+                </span>
+              </div>
+            </div>
+          ` : `
+            <div class="fd-reader-tts-config-body is-system" id="reader-tts-system-panel">
+              <div class="fd-reader-tts-config-grid" role="tabpanel" aria-label="系统 TTS 配置">
+                <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>系统引擎</strong><select data-reader-tts-config-field="systemEngine"><option value="default"${selected(tts.systemEngine || "default", "default")}>系统默认</option><option value="preferred"${selected(tts.systemEngine, "preferred")}>首选可用引擎</option></select></label>
+                <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>语言</strong><select data-reader-tts-config-field="systemLocale"><option value="zh-CN"${selected(tts.systemLocale || "zh-CN", "zh-CN")}>zh-CN</option><option value="zh-TW"${selected(tts.systemLocale, "zh-TW")}>zh-TW</option><option value="en-US"${selected(tts.systemLocale, "en-US")}>en-US</option></select></label>
+                <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>音频会话</strong><select data-reader-tts-config-field="audioSession"><option value="speech"${selected(tts.audioSession || "speech", "speech")}>语音播放</option><option value="media"${selected(tts.audioSession, "media")}>媒体播放</option><option value="mix"${selected(tts.audioSession, "mix")}>与其他应用混音</option></select></label>
+                <label class="fd-reader-tts-config-row" data-ui-primitive="field-row" data-ui-size="md"><strong>不可用处理</strong><select data-reader-tts-config-field="unavailablePolicy"><option value="prompt"${selected(tts.unavailablePolicy || "prompt", "prompt")}>提示安装或启用</option><option value="online"${selected(tts.unavailablePolicy, "online")}>切换在线 TTS</option><option value="error"${selected(tts.unavailablePolicy, "error")}>仅显示错误</option></select></label>
+              </div>
+            </div>
+            `}
+          </div>
+        </section>
       </section>`;
   }
 
@@ -4467,36 +4972,53 @@
     const defaults = settingConfig.defaults;
     const options = settingConfig.options;
     const current = (key) => settings[key] || defaults[key] || (options[key] || [])[0] || "";
-    const toggles = [
-      ["autoPage", "自动翻页", "refresh"],
-      ["volumePage", "音量键翻页", "volume"],
-      ["landscapeLock", "横屏锁定", "permission"],
-      ["keepScreenOn", "屏幕常亮", "sun"],
-      ["statusInfo", "页脚进度信息", "progress"],
-      ["hapticFeedback", "触摸反馈", "gesture"],
-      ["cacheNext", "自动缓存后续章节", "download"]
-    ];
+    const optionRow = (key, label) => `
+      <div class="fd-reader-settings-option-row is-stacked">
+        <strong>${esc(label)}</strong>
+        <div class="fd-reader-full-choice-grid" role="group" aria-label="${esc(label)}">
+          ${readerChoiceButtons(options[key] || [], current(key), (value) => `data-reader-setting-option="${esc(key)}" data-reader-setting-value="${esc(value)}"`)}
+        </div>
+      </div>`;
+    const toggleRows = (items) => `
+      <div class="fd-reader-full-toggle-list">
+        ${items.map(([key, label]) => `
+          <button type="button" role="switch" aria-checked="${settings[key] ? "true" : "false"}" data-reader-setting-toggle="${esc(key)}">
+            <strong>${esc(label)}</strong>
+            <span class="fd-reader-switch ${settings[key] ? "is-on" : ""}" aria-hidden="true"></span>
+          </button>`).join("")}
+      </div>`;
     return `
       <section class="fd-reader-full-section fd-reader-full-settings" aria-label="完整阅读设置">
-        ${["pageMode", "tapMode", "pageAnimation"].map((key) => `
-          <section class="fd-reader-full-setting-block">
-            <header><strong>${esc(key === "pageMode" ? "翻页模式" : key === "tapMode" ? "点击翻页方式" : "翻页动画")}</strong><em>${esc(current(key))}</em></header>
-            <div class="fd-reader-full-choice-grid">
-              ${readerChoiceButtons(options[key] || [], current(key), (value) => `data-reader-setting-option="${esc(key)}" data-reader-setting-value="${esc(value)}"`)}
-            </div>
-          </section>
-        `).join("")}
-        <section class="fd-reader-full-setting-block">
-          <header><strong>阅读行为</strong><em>开关项</em></header>
-          <div class="fd-reader-full-toggle-list">
-            ${toggles.map(([key, label, iconName]) => `
-              <button type="button" data-reader-setting-toggle="${esc(key)}">
-                <i>${icon(iconName, "fd-small-icon")}</i>
-                <strong>${esc(label)}</strong>
-                <span class="fd-reader-switch ${settings[key] ? "is-on" : ""}" aria-hidden="true"></span>
-              </button>
-            `).join("")}
+        <section class="fd-reader-full-setting-block fd-reader-settings-group">
+          <header><strong>屏幕样式</strong></header>
+          <div class="fd-reader-settings-group-body">
+            ${optionRow("screenOrientation", "屏幕方向")}
+            ${optionRow("pageAnimation", "翻页样式")}
+            ${optionRow("screenTimeout", "屏幕超时")}
           </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-settings-group">
+          <header><strong>导航状态栏</strong></header>
+          ${toggleRows([
+            ["hideStatusBar", "隐藏状态栏"],
+            ["hideNavigationBar", "隐藏导航栏"],
+            ["extendIntoCutout", "拓展到刘海（灵动岛）"]
+          ])}
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-settings-group">
+          <header><strong>排版</strong></header>
+          ${toggleRows([
+            ["textJustify", "文字两端对齐"],
+            ["bottomAlign", "底部对齐"]
+          ])}
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-settings-group">
+          <header><strong>控制</strong></header>
+          ${toggleRows([
+            ["volumePage", "音量键翻页"],
+            ["stopTtsOnScreenOff", "息屏终止朗读"],
+            ["longPressSelection", "长按选择文本"]
+          ])}
         </section>
       </section>`;
   }
@@ -4685,7 +5207,18 @@
     const module = (data.reader.modules || []).find((item) => item.type === type) || { label: "阅读设置", type: "settings", icon: "settings" };
     const quickRoute = readerModuleRoutes[type] || "reader-settings";
     const promotedRoute = readerPromotedRoutes[type] || "";
-    const headTitle = (routes[route] || {}).title || module.label;
+    const headTitleByRoute = {
+      "reader-full-directory": "目录",
+      "reader-full-tts": "朗读",
+      "reader-full-appearance": "界面",
+      "reader-full-theme": "主题",
+      "reader-full-theme-edit": "自定义主题",
+      "reader-full-font": "字体与文本",
+      "reader-full-layout": "页面布局",
+      "reader-full-settings": "设置",
+      "reader-full-page-turn": "翻页与手势"
+    };
+    const headTitle = headTitleByRoute[route] || module.label;
     return `
       <section class="fd-reader-full-page-panel fd-reader-full-page-${esc(type)}${route ? ` fd-reader-full-page-route-${esc(route)}` : ""}" data-dev-region="ReaderExpandedPanel" aria-label="${esc(headTitle)}大半屏控制窗">
         <button class="fd-reader-full-grabber" type="button" data-route="${esc(quickRoute)}" data-route-replace${promotedRoute ? ` data-reader-handle-expand-route="${esc(promotedRoute)}"` : ""} aria-label="${promotedRoute ? "下拉收起，上拉继续展开" : "收起到阅读控制层"}"></button>
@@ -4821,15 +5354,6 @@
       </aside>`;
   }
 
-  function readerSessionControlSpaceHtml(appState) {
-    const snapshot = readerSessionCapsuleSnapshot(appState);
-    if (!snapshot) return "";
-    return `
-        <section class="fd-reader-control-session-host" data-reader-control-session-host aria-label="运行会话胶囊">
-          ${readerImmersiveStatusCapsule(appState, { controlLayer: true })}
-        </section>`;
-  }
-
   function readerControlMain(data, appState) {
     const chapter = data.reader.chapterProgress || {};
     const chapterProgressConfig = readerChapterProgressConfig(data);
@@ -4878,6 +5402,10 @@
       return "";
     }
     const expandedRoute = readerFullRouteForState(state);
+    const quickExpandable = state.mode === "quick" && (state.quick === "search" || state.quick === "auto-page");
+    const grabberAttributes = quickExpandable
+      ? `data-reader-quick-expand="${esc(state.quick)}"`
+      : `data-route="${esc(expandedRoute)}" data-route-replace`;
     let bodyHtml = "";
     if (isLoading) {
       bodyHtml = readerLoadingPanel(route);
@@ -4889,9 +5417,50 @@
       bodyHtml = readerControlMain(data, appState);
     }
     return `
-      <button class="fd-reader-grabber" type="button" data-route="${esc(expandedRoute)}" data-route-replace aria-label="展开完整控制页"></button>
-      ${bodyHtml}
-      ${readerBrightnessRail(data, appState)}`;
+      <button class="fd-reader-grabber" type="button" ${grabberAttributes} aria-label="展开完整控制页"></button>
+      ${bodyHtml}`;
+  }
+
+  function readerQuickFullPagePanel(type, appState, data) {
+    const meta = type === "search"
+      ? { title: "内容搜索", iconName: "reader-content-search" }
+      : { title: "自动翻页", iconName: "reader-auto-page" };
+    const contentClass = type === "search"
+      ? "fd-reader-full-content fd-reader-full-search-content"
+      : "fd-reader-full-content";
+    const contentHtml = type === "search"
+      ? readerFullSearchPage(data, appState)
+      : readerFullAutoPage(data, appState);
+    return `
+      <section class="fd-reader-full-page-panel fd-reader-quick-full-page fd-reader-quick-full-page-${esc(type)}" data-dev-region="ReaderExpandedPanel" data-reader-quick-full-page="${esc(type)}" aria-label="${esc(meta.title)}完整控制页">
+        <button class="fd-reader-full-grabber" type="button" data-reader-quick-collapse aria-label="收起到快捷控制栏"></button>
+        <header class="fd-reader-full-head">
+          <span>${icon(meta.iconName, "fd-small-icon")}<strong>${esc(meta.title)}</strong></span>
+          <button type="button" data-reader-quick-collapse>收起</button>
+        </header>
+        <div class="${contentClass}">
+          ${contentHtml}
+        </div>
+      </section>`;
+  }
+
+  function readerQuickFullPageScreen(data, route, type, appState) {
+    const pageModeClass = appState?.readerPageMode === "vertical" ? " fd-reader-page-mode-vertical" : " fd-reader-page-mode-horizontal";
+    return shellKit().renderReaderShell({
+      frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-full fd-reader-mode-full-quick${pageModeClass}`,
+      frameStyle: readerThemeStyle(data, appState),
+      readingSurfaceClass: "fd-reading-surface",
+      overlayClass: "fd-reader-overlay fd-reader-full-overlay",
+      bottomSheetHostClass: "fd-reader-full-host",
+      moduleNavClass: "fd-reader-module-nav fd-reader-module-nav-empty",
+      stateHostClass: "fd-reader-state-host",
+      stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`,
+      ariaLabel: (routes[route] || routes.reader).title,
+      readingSurfaceHtml: sharedReaderSurface(data, "", appState),
+      overlayHtml: readerTopOverlay(data, Object.assign({}, appState, { readerMoreOpen: false })),
+      bottomSheetHtml: readerQuickFullPagePanel(type, appState, data),
+      moduleNavHtml: ""
+    });
   }
 
   function readerUtilityScreen(data, route, appState) {
@@ -4936,23 +5505,33 @@
   function readerStateScreen(data, route, options, appState) {
     const baseState = readerRouteState(route);
     const isLoading = Boolean(options && options.loading);
-    const state = isLoading ? Object.assign({}, baseState, { mode: "loading" }) : baseState;
+    if (
+      !isLoading &&
+      baseState.mode === "quick" &&
+      (baseState.quick === "search" || baseState.quick === "auto-page") &&
+      appState?.readerQuickExpanded === baseState.quick
+    ) {
+      return readerQuickFullPageScreen(data, route, baseState.quick, appState);
+    }
+    const state = baseState;
     const isImmersive = baseState.mode === "immersive" && !isLoading;
     const activeModule = baseState.mode === "module" ? baseState.module : "";
     const frameMode = isImmersive ? "immersive" : state.mode;
     const pageModeClass = appState?.readerPageMode === "vertical" ? " fd-reader-page-mode-vertical" : " fd-reader-page-mode-horizontal";
     return shellKit().renderReaderShell({
-      frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-${esc(frameMode)}${isImmersive ? " fd-immersive-frame" : ""}${pageModeClass}`,
+      frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-${esc(frameMode)}${isLoading ? " is-reader-loading" : ""}${isImmersive ? " fd-immersive-frame" : ""}${pageModeClass}`,
       frameStyle: readerThemeStyle(data, appState),
       readingSurfaceClass: "fd-reading-surface",
       overlayClass: `fd-reader-overlay${isImmersive ? " fd-immersive-overlay" : ""}`,
       bottomSheetHostClass: isImmersive ? "fd-reader-sheet fd-reader-sheet-empty" : "fd-reader-sheet",
       moduleNavClass: isImmersive ? "fd-reader-module-nav fd-reader-module-nav-empty" : "fd-reader-module-nav",
+      accessoryHostClass: "fd-reader-accessory-host",
+      accessoryHtml: isImmersive ? "" : readerBrightnessRail(data, appState),
       stateHostClass: "fd-reader-state-host",
       stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`,
       ariaLabel: (routes[route] || routes.reader).title,
       readingSurfaceHtml: sharedReaderSurface(data, isImmersive ? "" : "immersive-reading", appState),
-      overlayHtml: isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : `${readerTopOverlay(data, appState)}${readerSessionControlSpaceHtml(appState)}`,
+      overlayHtml: isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : readerTopOverlay(data, appState),
       bottomSheetHtml: readerBottomSheetHtml(data, state, route, isLoading, appState),
       moduleNavHtml: isImmersive ? "" : readerModuleNavHtml(data, activeModule)
     });
@@ -6365,7 +6944,7 @@
           { label: "复制日志" },
           { label: "回到解析", route: "source-debug" },
           { label: "回到编辑", route: "source-rule-edit" }
-        ])
+        ], "fd-source-debug-log-controls is-three-columns")
       });
   }
 
@@ -6518,7 +7097,7 @@
     bind("[data-book-card]", "card.press/select/route");
     bind("[data-book-cover]", "reader.entry.coverToImmersive");
     bind("[data-close-book-focus], [data-book-focus-layer], [data-focus-cover], [data-focus-title], [data-focus-meta]", "card.select");
-    bind("[data-bookshelf-more-layer]", "dropdown.menu.expand/collapse");
+    bind("[data-bookshelf-more-layer]", "dropdown.menu.expand");
     bind("[data-close-bookshelf-more]", "dropdown.menu.collapse");
     bind("[data-open-keyboard]", "input.focus");
     bind("[data-close-keyboard]", "input.blur");
@@ -6540,7 +7119,7 @@
     bind("[data-discover-reset], [data-filter-close]", "filter.apply.commit");
     bind("[data-filter-toggle], [data-bookshelf-filter-toggle], [data-discover-filter-toggle], [data-discover-sort-toggle], [data-rss-group-filter-toggle], [data-rss-manage-filter-toggle], [data-rss-category-filter-toggle], [data-rss-favorite-filter-toggle], [data-source-filter-toggle], [data-source-menu-toggle], [data-reader-more-toggle], [data-settings-option-key], [data-reader-setting-option-key], [data-reader-tts-option-key]", "dropdown.trigger.press");
     bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option], [data-discover-sort-option], [data-settings-option-choice], [data-settings-option-value], [data-reader-setting-option], [data-reader-tts-option], [data-reader-more-action], .fd-source-more-menu button, .fd-bookshelf-more-menu button, .fd-book-focus-menu button", "dropdown.option.select");
-    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-discover-sort], .fd-discover-sort-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer], [data-bookshelf-more-layer], .fd-source-more-menu, .fd-bookshelf-more-menu, .fd-book-focus-menu", "dropdown.menu.expand/collapse");
+    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-discover-sort], .fd-discover-sort-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer], [data-bookshelf-more-layer], .fd-source-more-menu, .fd-bookshelf-more-menu, .fd-book-focus-menu", "dropdown.menu.expand");
     bind("[data-settings-overlay]", "overlay.dialog.enter/exit");
     bind("[data-close-settings-overlay]", "overlay.dialog.exit");
     bind("[data-settings-confirm-result], [data-main-tab-feedback]", "feedback.toast.enter/update/exit");
@@ -6563,7 +7142,7 @@
     bind("[data-module]", "reader.module.switch");
     bind("[data-module].is-active", "tab.item.select");
     bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value]:not([data-reader-setting-option]), [data-reader-tts-value]:not([data-reader-tts-option]), [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
-    bind("[data-reader-page-action]", "reader.page.turn.next/prev");
+    bind("[data-reader-page-action]", "reader.page.turn.next-prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
     bind("[data-reader-dismiss]", "reader.control.hide");
     bind(".fd-reader-grabber, .fd-reader-full-grabber", "reader.control.handle.press");
@@ -6571,15 +7150,13 @@
     bind("[data-reader-exit]", "app.route.pop");
     bind("[data-reader-loading]", "state.loading.inline");
     bind("[data-motion-async], [data-motion-async-state], [data-motion-async-request]", "motion.interrupt.completeThenReplace");
-    bind("[data-reader-tts-action]", "reader.session.capsule.control.press/toggle");
+    bind("[data-reader-tts-action]", "reader.session.capsule.control.press-toggle");
     bind("[data-reader-tts-cycle]", "reader.session.capsule.update");
     bind("[data-reader-immersive-status], [data-reader-immersive-status-playing], [data-reader-immersive-status-type]", "reader.session.capsule.enter/update/exit");
-    bind("[data-reader-capsule-control]", "reader.session.capsule.control.press/toggle");
+    bind("[data-reader-capsule-control]", "reader.session.capsule.control.press-toggle");
     bind("[data-reader-capsule-countdown]", "reader.session.capsule.countdownTick");
     bind("[data-reader-capsule-voice]", "reader.session.capsule.voiceIcon.active");
     bind("[data-reader-capsule-label]", "reader.session.capsule.update");
-    bind("[data-reader-control-space], [data-reader-control-space-type], [data-reader-control-space-playing]", "reader.session.controlSpace.enter/update/exit");
-    bind("[data-reader-control-space-countdown], [data-reader-control-space-voice], [data-reader-control-space-control], [data-reader-control-space-label]", "reader.session.controlSpace.update");
     bind("[data-reader-more-action]", "dropdown.option.select");
     bind("[data-reader-more-close]", "dropdown.menu.collapse");
     bind("[data-reader-selection-layer]", "selection.range.show");
@@ -7684,8 +8261,11 @@
     return Math.round(clamp(deltaY, 0, limit));
   }
 
-  function readerControlHandleShouldCommit(deltaY, action) {
-    const threshold = 34;
+  function readerControlHandleShouldCommit(button, deltaY, action) {
+    // The full-page handle has a short travel distance. Commit its downward
+    // collapse promptly instead of leaving the full settings panel translated
+    // under the finger, which reads as the page itself being squeezed.
+    const threshold = button?.classList?.contains("fd-reader-full-grabber") ? 16 : 34;
     if (action === "expand") return deltaY <= -threshold;
     if (action === "collapse") return deltaY >= threshold;
     return false;
@@ -7968,6 +8548,11 @@
     const selected = candidates.find((item) => item.source === selectedSource) || current;
     const selectedSpeedLabel = selected.speed || selected.latency || "未知";
     const selectedLatestLabel = selected.latestChapter || selected.chapter || selected.latest || "章节同步";
+    const hasSourceSwitchReaderOrigin = isReaderContinuityOriginRoute(appState?.sourceSwitchOriginRoute);
+    const sourceSwitchOriginRoute = readerContinuityOriginRoute(appState?.sourceSwitchOriginRoute);
+    const sourceSwitchReturnAttributes = hasSourceSwitchReaderOrigin
+      ? "data-route-back"
+      : `data-route="${esc(sourceSwitchOriginRoute)}" data-route-replace`;
     return shellKit().renderFlowShell({
       frameClass: "fd-flow-frame fd-source-phone-flow fd-source-reader-continuation",
       stepClass: "fd-flow-step fd-source-continuity-slot",
@@ -7975,26 +8560,14 @@
       resultClass: "fd-flow-result fd-source-result-slot",
       stateHostClass: "fd-source-unused-slot",
       ariaLabel: "换源",
-      stepHtml: `
-        <section class="fd-source-reader-continuity fd-source-control-continuity" aria-label="阅读控制层背景">
-          ${sharedReaderSurface(data, "", appState, { disableTurnAnimation: true })}
-          <section class="fd-source-control-overlay" aria-label="换源期间可操作的阅读控制层">
-            ${readerTopOverlay(data, appState)}
-            <div class="fd-reader-sheet fd-source-control-sheet">
-              ${readerBottomSheetHtml(data, readerRouteState("reader"), "reader", false, appState)}
-            </div>
-            <nav class="fd-reader-module-nav fd-source-control-nav">
-              ${readerModuleNavHtml(data, "")}
-            </nav>
-          </section>
-        </section>`,
+      stepHtml: renderReaderContinuityOrigin(data, sourceSwitchOriginRoute, appState),
       comparisonHtml: `
         <section class="fd-source-switch-window" data-source-switch-window aria-label="换源窗口">
           <div class="fd-source-window-info">
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>按延迟排序</span>
-            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" ${sourceSwitchReturnAttributes} aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-candidate-list">
             ${candidates.map((item, index) => sourceCandidateRow(item, index, selectedSource)).join("")}
@@ -8006,7 +8579,7 @@
           <strong>${esc(selected.source || "优书网")}</strong>
           <small>${esc(selected.state || "当前")} · ${esc(selectedSpeedLabel)} · ${esc(selectedLatestLabel)}</small>
           <p>确认后保持当前阅读位置，仅替换正文来源与章节解析结果。</p>
-          <button type="button" data-route="reader" data-route-replace>确认换源</button>
+          <button type="button" ${sourceSwitchReturnAttributes}>确认换源</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -8073,7 +8646,7 @@
     const rows = options?.rows || [
       ["RouteId", route],
       ["Shell", shell],
-      ["Source", "frontend-demo/route-contract.js"],
+      ["Source", "frontend-demo-optimized/route-contract.js"],
       ["Boundary", "静态 demo/contract，不替代平台设备证据"]
     ];
     return `
@@ -8214,7 +8787,822 @@
       });
   }
 
+  // =============================================================================
+  // W1 导入工作流 renderer 函数（从 w1-import-renderers.js 集成）
+  // =============================================================================
+
+  function w1ImportPhaseBreadcrumb(currentPhase) {
+    const phases = [
+      ["selecting", "选择"],
+      ["input", "输入"],
+      ["parsing", "解析"],
+      ["preview", "预览"],
+      ["conflict", "冲突"],
+      ["applying", "应用"],
+      ["result", "结果"]
+    ];
+    const items = phases.map(([key, label]) => {
+      const isActive = key === currentPhase;
+      const isPast = phases.findIndex(([k]) => k === currentPhase) > phases.findIndex(([k]) => k === key);
+      const stateClass = isActive ? " is-active" : (isPast ? " is-done" : "");
+      return `<li class="fd-import-phase-item${stateClass}" data-phase="${esc(key)}"><span>${esc(label)}</span></li>`;
+    }).join("");
+    return `<ol class="fd-import-phase-breadcrumb" aria-label="导入流程阶段">${items}</ol>`;
+  }
+
+  function w1ImportStateCard(route, phase, iconName, title, summary, extraHtml, actionsHtml) {
+    return `
+    <section class="fd-import-state fd-import-state-card" data-route="${esc(route)}" data-import-phase="${esc(phase)}">
+      <span class="fd-state-icon">${icon(iconName, "fd-medium-icon")}</span>
+      <h2>${esc(title)}</h2>
+      <p>${esc(summary)}</p>
+      ${extraHtml || ""}
+      ${actionsHtml ? `<div class="fd-action-row">${actionsHtml}</div>` : ""}
+    </section>`;
+  }
+
+  function importPermissionDeniedScreen(data, appState) {
+    const phase = "selecting";
+    const permission = appState?.importPermission || "storage";
+    const reason = appState?.importPermissionReason || "系统未授予存储访问权限，无法读取本地书籍文件。";
+    const extraHtml = `
+    <section class="fd-import-permission-detail" aria-label="权限说明">
+      <article><small>所需权限</small><strong>${esc(permission === "storage" ? "存储访问" : "文件访问")}</strong></article>
+      <article><small>触发场景</small><strong>本地书导入 · 选择文件阶段</strong></article>
+      <article><small>影响范围</small><strong>无法读取或写入本地书籍文件</strong></article>
+    </section>`;
+    const actionsHtml = `
+    <button type="button" data-action="open-system-settings">前往系统设置</button>
+    <button type="button" data-route="local-import">重新选择</button>
+    <button type="button" data-route="bookshelf">返回书架</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-permission-denied", phase, "lock", "导入权限被拒绝", reason, extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "导入权限被拒绝",
+      ariaLabel: "导入权限被拒绝",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importFormatUnsupportedScreen(data, appState) {
+    const phase = "input";
+    const fileName = appState?.importFileName || "未知文件";
+    const fileFormat = appState?.importFileFormat || "未知格式";
+    const supported = ["EPUB", "TXT", "MOBI", "AZW3", "PDF"];
+    const extraHtml = `
+    <section class="fd-import-format-detail" aria-label="格式信息">
+      <article><small>文件名</small><strong>${esc(fileName)}</strong></article>
+      <article><small>检测格式</small><strong>${esc(fileFormat)}</strong></article>
+      <article><small>支持格式</small><strong>${supported.join(" · ")}</strong></article>
+    </section>
+    <p class="fd-import-hint">可尝试使用格式转换工具转换为支持的格式后重新导入。</p>`;
+    const actionsHtml = `
+    <button type="button" data-action="convert-format">尝试转换</button>
+    <button type="button" data-route="local-import">重新选择</button>
+    <button type="button" data-route="bookshelf">取消</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-format-unsupported", phase, "file-warning", "文件格式不支持", `当前文件格式（${esc(fileFormat)}）暂不支持导入，请转换为支持的格式。`, extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "格式不支持",
+      ariaLabel: "文件格式不支持",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importEmptyFileScreen(data, appState) {
+    const phase = "parsing";
+    const fileName = appState?.importFileName || "未知文件";
+    const fileSize = appState?.importFileSize || "0 KB";
+    const extraHtml = `
+    <section class="fd-import-empty-detail" aria-label="文件信息">
+      <article><small>文件名</small><strong>${esc(fileName)}</strong></article>
+      <article><small>文件大小</small><strong>${esc(fileSize)}</strong></article>
+      <article><small>检测结果</small><strong>文件内容为空或无法读取</strong></article>
+    </section>`;
+    const actionsHtml = `
+    <button type="button" data-route="local-import">重新选择文件</button>
+    <button type="button" data-route="bookshelf">返回书架</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-empty-file", phase, "file", "文件为空", "所选文件没有可导入的内容，请确认文件未损坏后重新选择。", extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "空文件",
+      ariaLabel: "导入文件为空",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importParsingScreen(data, appState) {
+    const phase = "parsing";
+    const fileName = appState?.importFileName || "雨夜.epub";
+    const progress = Math.max(0, Math.min(100, Number(appState?.importParseProgress) || 72));
+    const step = appState?.importParseStep || "正在识别章节结构";
+    const extraHtml = `
+    <section class="fd-import-parsing-detail" aria-label="解析进度">
+      <article><small>当前文件</small><strong>${esc(fileName)}</strong></article>
+      <article><small>当前步骤</small><strong>${esc(step)}</strong></article>
+    </section>
+    <div class="fd-import-progress" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100" aria-label="解析进度">
+      <div class="fd-import-progress-bar" style="width: ${progress}%"></div>
+      <span class="fd-import-progress-text">${progress}%</span>
+    </div>`;
+    const actionsHtml = `
+    <button type="button" data-action="import-cancel">取消解析</button>
+    <button type="button" data-route="bookshelf">后台运行</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-parsing", phase, "refresh", "正在解析书籍", "正在解析文件内容、识别章节结构和元数据，请稍候。", extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "解析中",
+      ariaLabel: "导入解析中",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importDuplicateScreen(data, appState) {
+    const phase = "preview";
+    const duplicates = (appState?.importDuplicates && appState.importDuplicates.length)
+      ? appState.importDuplicates
+      : [
+          { title: "雨夜.epub", meta: "本地已存在 · 同名同作者", size: "1.2 MB" },
+          { title: "旧书扫描.txt", meta: "本地已存在 · 同名不同作者", size: "0.8 MB" }
+        ];
+    const listHtml = duplicates.map((item, index) => `
+    <article class="fd-import-duplicate-item" data-duplicate-index="${index}">
+      ${icon("copy", "fd-small-icon")}
+      <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
+      <em>${esc(item.size || "")}</em>
+    </article>`).join("");
+    const extraHtml = `
+    <section class="fd-import-duplicate-list" aria-label="重复项列表">
+      <h3>检测到 ${duplicates.length} 个重复项</h3>
+      ${listHtml}
+    </section>`;
+    const actionsHtml = `
+    <button type="button" data-action="duplicate-skip-all">全部跳过</button>
+    <button type="button" data-action="duplicate-overwrite-all">全部覆盖</button>
+    <button type="button" data-action="duplicate-review">逐项处理</button>
+    <button type="button" data-route="local-import">取消</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-duplicate", phase, "copy", "检测到重复书籍", "以下书籍在本地书架已存在，请选择处理方式。", extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "重复检测",
+      ariaLabel: "导入重复检测",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importConflictResolveScreen(data, appState) {
+    const phase = "conflict";
+    const conflicts = (appState?.importConflicts && appState.importConflicts.length)
+      ? appState.importConflicts
+      : [
+          { field: "书名", local: "雨夜", remote: "雨夜（修订版）" },
+          { field: "作者", local: "佚名", remote: "张三" },
+          { field: "分组", local: "默认分组", remote: "小说" }
+        ];
+    const listHtml = conflicts.map((item, index) => `
+    <article class="fd-import-conflict-row" data-conflict-index="${index}">
+      <small>${esc(item.field)}</small>
+      <div class="fd-import-conflict-values">
+        <span class="fd-import-conflict-local"><strong>本地</strong>${esc(item.local)}</span>
+        <span class="fd-import-conflict-remote"><strong>导入</strong>${esc(item.remote)}</span>
+      </div>
+    </article>`).join("");
+    const extraHtml = `
+    <section class="fd-import-conflict-list" aria-label="冲突详情">
+      <h3>字段冲突</h3>
+      ${listHtml}
+    </section>
+    <p class="fd-import-hint">选择解决方案后将进入应用阶段，可通过回滚撤销本次导入。</p>`;
+    const actionsHtml = `
+    <button type="button" data-action="conflict-keep-local">保留本地</button>
+    <button type="button" data-action="conflict-overwrite">覆盖本地</button>
+    <button type="button" data-action="conflict-keep-both">保留两份</button>
+    <button type="button" data-action="import-rollback">取消并回滚</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-conflict-resolve", phase, "warning", "解决导入冲突", "导入数据与本地记录存在冲突，请逐项选择处理方式。", extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "解决冲突",
+      ariaLabel: "导入冲突解决",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importPartialSuccessScreen(data, appState) {
+    const phase = "result";
+    const results = (appState?.importPartialResults && appState.importPartialResults.length)
+      ? appState.importPartialResults
+      : [
+          { title: "雨夜.epub", status: "成功", tone: "good" },
+          { title: "旧书扫描.txt", status: "失败 · 编码异常", tone: "danger" },
+          { title: "缺失章节.mobi", status: "失败 · 格式不支持", tone: "danger" }
+        ];
+    const successCount = results.filter((item) => item.tone === "good").length;
+    const failCount = results.length - successCount;
+    const listHtml = results.map((item) => `
+    <article class="fd-import-result-item is-${esc(item.tone)}">
+      ${icon(item.tone === "danger" ? "warning" : "check", "fd-small-icon")}
+      <span><strong>${esc(item.title)}</strong></span>
+      <em>${esc(item.status)}</em>
+    </article>`).join("");
+    const extraHtml = `
+    <section class="fd-import-partial-summary" aria-label="导入结果摘要">
+      <article><small>成功</small><strong class="is-good">${successCount} 项</strong></article>
+      <article><small>失败</small><strong class="is-danger">${failCount} 项</strong></article>
+      <article><small>总计</small><strong>${results.length} 项</strong></article>
+    </section>
+    <section class="fd-import-result-list" aria-label="结果明细">${listHtml}</section>`;
+    const actionsHtml = `
+    <button type="button" data-action="import-retry-failed">重试失败项</button>
+    <button type="button" data-route="import-result-detail">查看详情</button>
+    <button type="button" data-route="bookshelf">完成</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-partial-success", phase, "check-partial", "部分导入成功", `本次导入共 ${results.length} 项，其中 ${successCount} 项成功、${failCount} 项失败，可重试失败项或查看详情。`, extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "部分导入成功",
+      ariaLabel: "导入部分成功",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function importResultDetailScreen(data, appState) {
+    const phase = "result";
+    const results = (appState?.importFullResults && appState.importFullResults.length)
+      ? appState.importFullResults
+      : [
+          { title: "雨夜.epub", status: "成功", meta: "作者已识别 · 加入默认分组", tone: "good" },
+          { title: "旧书扫描.txt", status: "成功", meta: "编码 UTF-8 · 章节识别完成", tone: "good" },
+          { title: "缺失章节.mobi", status: "失败", meta: "格式不支持 · 已跳过", tone: "danger" }
+        ];
+    const listHtml = results.map((item) => `
+    <article class="fd-import-result-item is-${esc(item.tone)}">
+      ${icon(item.tone === "danger" ? "warning" : "book-open", "fd-small-icon")}
+      <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
+      <em>${esc(item.status)}</em>
+    </article>`).join("");
+    const extraHtml = `
+    <section class="fd-import-result-detail-summary" aria-label="结果统计">
+      <article><small>导入时间</small><strong>${esc(appState?.importTimestamp || "刚刚")}</strong></article>
+      <article><small>来源</small><strong>${esc(appState?.importSource || "本地文件")}</strong></article>
+      <article><small>分组</small><strong>${esc(appState?.importGroup || "默认分组")}</strong></article>
+    </section>
+    <section class="fd-import-result-list" aria-label="完整结果">${listHtml}</section>`;
+    const actionsHtml = `
+    <button type="button" data-action="export-report">导出报告</button>
+    <button type="button" data-route="local-import">继续导入</button>
+    <button type="button" data-route="bookshelf">返回书架</button>`;
+    const contentHtml = `
+    ${w1ImportPhaseBreadcrumb(phase)}
+    ${w1ImportStateCard("import-result-detail", phase, "info", "导入结果详情", "以下是本次导入的完整结果，可导出报告或继续导入其他书籍。", extraHtml, actionsHtml)}`;
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "导入结果详情",
+      ariaLabel: "导入结果详情",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function w1ImportVariantCard(route, variant, iconName, title, summary, actionsHtml) {
+    return `
+    <section class="fd-import-state fd-import-variant is-${esc(variant)}" data-route="${esc(route)}" data-variant="${esc(variant)}">
+      <span class="fd-state-icon">${icon(iconName, "fd-medium-icon")}</span>
+      <h2>${esc(title)}</h2>
+      <p>${esc(summary)}</p>
+      ${actionsHtml ? `<div class="fd-action-row">${actionsHtml}</div>` : ""}
+    </section>`;
+  }
+
+  function rssSourceImportScreenV2(data, appState) {
+    const variant = appState?.importLoading ? "loading"
+      : appState?.importOffline ? "offline"
+      : appState?.importError ? "error"
+      : appState?.importEmpty ? "empty"
+      : "";
+    if (!variant) {
+      return rssSourceImportScreen(data, appState);
+    }
+    const states = {
+      loading: ["refresh", "正在拉取订阅源", "正在从远程地址拉取订阅源列表，请稍候。"],
+      empty: ["info", "无可导入的订阅源", "当前地址没有解析到可导入的订阅源，请确认地址或更换来源。"],
+      error: ["warning", "拉取订阅源失败", "订阅源列表拉取失败，可能是地址无效或规则解析异常，可重试或手动管理。"],
+      offline: ["offline", "离线无法拉取", "当前网络不可用，无法拉取远程订阅源列表，可在恢复网络后重试。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="rss-source-import">${variant === "loading" ? "取消" : "重试"}</button>
+    <button type="button" data-route="rss-subscription-management">手动管理</button>`;
+    const contentHtml = w1ImportVariantCard("rss-source-import", variant, iconName, title, summary, actionsHtml);
+    return rssLibraryScreen(data, "导入订阅源", contentHtml, "", appState);
+  }
+
+  function rssSourceImportDetailScreenV2(data, appState) {
+    const variant = appState?.importLoading ? "loading"
+      : appState?.importError ? "error"
+      : "";
+    if (!variant) {
+      return rssSourceImportDetailScreen(data, appState);
+    }
+    const states = {
+      loading: ["refresh", "正在加载导入详情", "正在解析订阅源变更摘要和冲突处理策略，请稍候。"],
+      error: ["warning", "详情加载失败", "导入详情解析失败，可返回重新发起导入或查看订阅源管理。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="rss-source-import">${variant === "loading" ? "取消" : "重试"}</button>
+    <button type="button" data-route="rss-source-import">返回</button>`;
+    const contentHtml = w1ImportVariantCard("rss-source-import-detail", variant, iconName, title, summary, actionsHtml);
+    return rssLibraryScreen(data, "导入详情", contentHtml, "", appState);
+  }
+
+  function rssSourceImportResultScreenV2(data, appState) {
+    const variant = appState?.importError ? "error"
+      : appState?.importRetryable ? "retry"
+      : "";
+    if (!variant) {
+      return rssConfirmScreen(data, {
+        title: "导入完成",
+        icon: "check",
+        heading: "已导入 2 个订阅源",
+        copy: "新增源已加入 RSS 订阅管理，冲突源保留本地名称、分组和启用状态。",
+        detail: "需要登录的源不会自动导入 Cookie。",
+        cancelLabel: "继续导入",
+        cancelRoute: "rss-source-import",
+        confirmRoute: "rss-subscription-management",
+        confirmLabel: "完成"
+      }, appState);
+    }
+    const states = {
+      error: ["warning", "导入失败", "订阅源导入过程失败，已回滚未完成的变更，可重试或查看管理列表。"],
+      retry: ["refresh", "部分导入失败", "部分订阅源导入失败，可重试失败项或先完成已成功的导入。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="rss-source-import">${variant === "error" ? "重试导入" : "重试失败项"}</button>
+    <button type="button" data-route="rss-subscription-management">查看管理</button>`;
+    const contentHtml = w1ImportVariantCard("rss-source-import-result", variant, iconName, title, summary, actionsHtml);
+    return rssLibraryScreen(data, "导入结果", contentHtml, "", appState);
+  }
+
+  function localImportScreenV2(data, appState) {
+    const variant = appState?.importLoading ? "loading"
+      : appState?.importOffline ? "offline"
+      : appState?.importError ? "error"
+      : appState?.importEmpty ? "empty"
+      : "";
+    if (!variant) {
+      return localImportScreen(data);
+    }
+    const states = {
+      loading: ["refresh", "正在扫描本地文件", "正在扫描本地存储中的可导入书籍文件，请稍候。"],
+      empty: ["info", "未选择文件", "尚未选择要导入的本地书籍文件，点击下方按钮开始选择。"],
+      error: ["warning", "扫描失败", "本地文件扫描失败，可能是存储权限变更或读取异常，可重试或检查权限。"],
+      offline: ["offline", "存储不可用", "本地存储当前不可用，无法扫描或读取文件，请确认存储已挂载后重试。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="local-import">${variant === "loading" ? "取消" : variant === "empty" ? "选择文件" : "重试"}</button>
+    <button type="button" data-route="bookshelf">返回书架</button>`;
+    const contentHtml = w1ImportVariantCard("local-import", variant, iconName, title, summary, actionsHtml);
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
+      data,
+      title: "本地书导入",
+      ariaLabel: "本地书导入",
+      topBarClass: "fd-back-bar",
+      bottomActionHostClass: "fd-bottom-action-host",
+      contentHtml,
+      stateHostHtml: mainTabFeedbackHtml(appState)
+    }));
+  }
+
+  function sourceImportOptionsScreenV2(data, appState) {
+    const variant = appState?.importLoading ? "loading"
+      : appState?.importError ? "error"
+      : "";
+    if (!variant) {
+      return sourceImportOptionsScreen(data, appState);
+    }
+    const states = {
+      loading: ["refresh", "正在加载导入选项", "正在准备网络导入、本地导入和剪贴板导入入口，请稍候。"],
+      error: ["warning", "加载失败", "导入选项加载失败，可重试或返回书源管理。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="source-import-options">${variant === "loading" ? "取消" : "重试"}</button>
+    <button type="button" data-route="source-management">返回书源管理</button>`;
+    const contentHtml = w1ImportVariantCard("source-import-options", variant, iconName, title, summary, actionsHtml);
+    return sourceShell(data, "添加书源", contentHtml, {});
+  }
+
+  function sourceAddScreenV2(data, appState) {
+    const variant = appState?.importLoading ? "loading"
+      : appState?.importError ? "error"
+      : "";
+    if (!variant) {
+      return sourceImportOptionsScreen(data, appState);
+    }
+    const states = {
+      loading: ["refresh", "正在准备新建书源", "正在初始化空白书源编辑表单和默认规则模板，请稍候。"],
+      error: ["warning", "初始化失败", "新建书源表单初始化失败，可重试或返回书源管理。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="source-add">${variant === "loading" ? "取消" : "重试"}</button>
+    <button type="button" data-route="source-management">返回书源管理</button>`;
+    const contentHtml = w1ImportVariantCard("source-add", variant, iconName, title, summary, actionsHtml);
+    return sourceShell(data, "新增书源", contentHtml, {});
+  }
+
+  function sourceImportPreviewScreenV2(data, appState) {
+    const variant = appState?.importLoading ? "loading"
+      : appState?.importOffline ? "offline"
+      : appState?.importError ? "error"
+      : appState?.importEmpty ? "empty"
+      : "";
+    if (!variant) {
+      return sourceImportPreviewScreen(data);
+    }
+    const states = {
+      loading: ["refresh", "正在解析书源包", "正在解析书源包内容、检测重复和异常源，请稍候。"],
+      empty: ["info", "书源包为空", "当前书源包没有解析到有效书源，请确认来源或更换书源包。"],
+      error: ["warning", "解析失败", "书源包解析失败，可能是格式错误或规则不兼容，可重试或手动新建。"],
+      offline: ["offline", "离线无法拉取", "网络不可用，无法拉取远程书源包，可在恢复网络后重试。"]
+    };
+    const [iconName, title, summary] = states[variant];
+    const actionsHtml = `
+    <button type="button" data-route="source-import-preview">${variant === "loading" ? "取消" : "重试"}</button>
+    <button type="button" data-route="source-import-options">更换来源</button>
+    <button type="button" data-route="source-management">返回管理</button>`;
+    const contentHtml = w1ImportVariantCard("source-import-preview", variant, iconName, title, summary, actionsHtml);
+    return sourceShell(data, "导入书源", contentHtml, {
+      bottomActionHtml: sourceBottomActions([
+        { label: "取消", route: "source-management" },
+        { label: variant === "loading" ? "解析中" : "重试", route: "source-import-preview" }
+      ])
+    });
+  }
+
+  // =============================================================================
+  // W2 阅读工作流 renderer 函数（从 w2-reading-renderers.js 集成）
+  // =============================================================================
+
+  function w2ReaderStatePanel(route, variant, iconName, title, summary, extraHtml, actionsHtml) {
+    return `
+    <section class="fd-reader-state-panel fd-reader-state-${esc(variant)}" data-route="${esc(route)}" data-reader-variant="${esc(variant)}" aria-live="polite">
+      <span class="fd-reader-state-icon">${icon(iconName, "fd-medium-icon")}</span>
+      <h2>${esc(title)}</h2>
+      <p>${esc(summary)}</p>
+      ${extraHtml || ""}
+      ${actionsHtml ? `<div class="fd-action-row fd-reader-state-actions">${actionsHtml}</div>` : ""}
+    </section>`;
+  }
+
+  function w2ReaderStateShell(data, appState, route, options) {
+    const opts = options || {};
+    const pageModeClass = appState?.readerPageMode === "vertical" ? " fd-reader-page-mode-vertical" : " fd-reader-page-mode-horizontal";
+    const frameExtra = opts.frameClassExtra ? ` ${opts.frameClassExtra}` : "";
+    const ariaLabel = (routes[route] && routes[route].title) || routeTitle(route) || "阅读状态";
+    const dialogHtml = opts.dialogHtml || "";
+    return shellKit().renderReaderShell({
+      frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-full fd-reader-state-frame${frameExtra}${pageModeClass}`,
+      frameStyle: readerThemeStyle(data, appState),
+      readingSurfaceClass: "fd-reading-surface",
+      overlayClass: "fd-reader-overlay fd-reader-full-overlay",
+      bottomSheetHostClass: "fd-reader-full-host",
+      moduleNavClass: "fd-reader-module-nav fd-reader-module-nav-empty",
+      stateHostClass: "fd-reader-state-host",
+      stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>${dialogHtml}`,
+      ariaLabel,
+      readingSurfaceHtml: opts.surfaceHtml != null ? opts.surfaceHtml : sharedReaderSurface(data, "", appState),
+      overlayHtml: opts.overlayHtml != null ? opts.overlayHtml : readerTopOverlay(data, Object.assign({}, appState, { readerMoreOpen: false })),
+      bottomSheetHtml: opts.bottomSheetHtml || "",
+      moduleNavHtml: ""
+    });
+  }
+
+  function w2ReaderSkeletonSurface(data, appState) {
+    const chapterState = currentReaderChapter(data, appState);
+    const chapterTitle = chapterState.chapter.title || readerChapterMeta(data);
+    const pageIndex = Number.isFinite(Number(appState?.readerPageIndex)) ? Number(appState.readerPageIndex) : 0;
+    const skeletonLines = Array.from({ length: 7 }, (_, i) => `<p class="fd-reader-skeleton-line" style="--skel-w:${30 + ((i * 13) % 60)}%"></p>`).join("");
+    return `
+    <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" aria-hidden="true" style="${readerThemeStyle(data, appState)}"></div>
+    <article class="fd-ir-reading-layer fd-reader-skeleton-surface" aria-label="正文加载中" data-dev-region="ReadingTextLayer" data-reader-loading-surface data-reader-page-index="${esc(pageIndex)}" data-reader-surface-signature="${esc(chapterTitle)}" style="${readerThemeStyle(data, appState)}">
+      <h1>${esc(chapterTitle.replace(/^第\s*\d+\s*章\s*/, ""))}</h1>
+      ${skeletonLines}
+    </article>
+    <div class="fd-reader-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`;
+  }
+
+  function w2ReaderProgressRestoreDialog(data, appState) {
+    const lastChapter = appState?.readerRestoreChapter || "第 45 章 雨霁";
+    const lastProgress = appState?.readerRestoreProgress || "68%";
+    const lastTime = appState?.readerRestoreTime || "昨天 23:14";
+    return `
+    <section class="fd-reader-restore-dialog" role="dialog" aria-modal="true" aria-label="恢复阅读进度" data-reader-restore-dialog>
+      <div class="fd-reader-restore-dialog-body">
+        <header>
+          ${icon("bookmark", "fd-small-icon")}
+          <strong>是否跳转到上次阅读位置？</strong>
+        </header>
+        <dl class="fd-reader-restore-meta">
+          <div><dt>上次章节</dt><dd>${esc(lastChapter)}</dd></div>
+          <div><dt>阅读进度</dt><dd>${esc(lastProgress)}</dd></div>
+          <div><dt>阅读时间</dt><dd>${esc(lastTime)}</dd></div>
+        </dl>
+        <div class="fd-action-row fd-reader-restore-actions">
+          <button type="button" data-reader-restore="jump" data-route="immersive-reading" data-route-replace>跳转到${esc(lastChapter)}</button>
+          <button type="button" data-reader-restore="reset" data-route="immersive-reading" data-route-replace>从头开始</button>
+        </div>
+      </div>
+    </section>`;
+  }
+
+  function readerContentLoadingScreen(data, appState) {
+    const chapterState = currentReaderChapter(data, appState);
+    const chapterTitle = chapterState.chapter.title || readerChapterMeta(data);
+    const pageIndex = Number.isFinite(Number(appState?.readerPageIndex)) ? Number(appState.readerPageIndex) : 0;
+    const pageHint = `第 ${chapterState.index + 1}/${chapterState.count} 章 · 第 ${pageIndex + 1} 页`;
+    const extraHtml = `
+    <section class="fd-reader-state-meta" aria-label="加载上下文">
+      <article><small>当前章节</small><strong>${esc(chapterTitle)}</strong></article>
+      <article><small>阅读位置</small><strong>${esc(pageHint)}</strong></article>
+    </section>
+    <div class="fd-reader-state-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="正文加载进度">
+      <i class="fd-reader-state-spinner" aria-hidden="true"></i>
+      <span>正在拉取正文内容</span>
+    </div>`;
+    const actionsHtml = `
+    <button type="button" data-route="immersive-reading">取消加载</button>
+    <button type="button" data-route="reader">返回控制层</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-content-loading", "loading", "refresh", "正文加载中", "正在从书源拉取章节正文，加载完成后自动回到阅读。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-content-loading", {
+      surfaceHtml: w2ReaderSkeletonSurface(data, appState),
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-state-loading"
+    });
+  }
+
+  function readerContentOfflineScreen(data, appState) {
+    const chapterState = currentReaderChapter(data, appState);
+    const chapterTitle = chapterState.chapter.title || readerChapterMeta(data);
+    const cachedChapters = readerChapters(data).filter((ch) => ch.markers && ch.markers.indexOf("已缓存") >= 0);
+    const cachedCount = cachedChapters.length || 2;
+    const extraHtml = `
+    <section class="fd-reader-state-meta" aria-label="离线上下文">
+      <article><small>当前章节</small><strong>${esc(chapterTitle)}</strong></article>
+      <article><small>可读缓存</small><strong>${esc(cachedCount)} 章已缓存</strong></article>
+    </section>
+    <p class="fd-reader-state-hint">网络不可用，可继续阅读已缓存章节，或在恢复网络后重试拉取当前章节正文。</p>`;
+    const actionsHtml = `
+    <button type="button" data-route="reader-book-cache">阅读缓存章节</button>
+    <button type="button" data-route="immersive-reading">重试</button>
+    <button type="button" data-route="source-switch">换源</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-content-offline", "offline", "offline", "正文离线", "当前网络不可用，无法拉取当前章节正文。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-content-offline", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-state-offline"
+    });
+  }
+
+  function readerContentErrorScreen(data, appState) {
+    const chapterState = currentReaderChapter(data, appState);
+    const chapterTitle = chapterState.chapter.title || readerChapterMeta(data);
+    const errorCode = appState?.readerContentError || "HTTP 503";
+    const errorMsg = appState?.readerContentErrorMsg || "书源响应超时或返回了无效内容，可重试或切换书源。";
+    const extraHtml = `
+    <section class="fd-reader-state-meta" aria-label="错误上下文">
+      <article><small>当前章节</small><strong>${esc(chapterTitle)}</strong></article>
+      <article><small>错误码</small><strong>${esc(errorCode)}</strong></article>
+    </section>
+    <p class="fd-reader-state-hint">${esc(errorMsg)}</p>`;
+    const actionsHtml = `
+    <button type="button" data-route="immersive-reading">重试</button>
+    <button type="button" data-route="source-switch">换源</button>
+    <button type="button" data-route="reader-book-cache">查看缓存</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-content-error", "error", "warning", "正文加载失败", "当前章节正文拉取失败，可重试或切换书源。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-content-error", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-state-error"
+    });
+  }
+
+  function readerTocLoadingScreen(data, appState) {
+    const skeletonItems = Array.from({ length: 6 }, (_, i) => `
+    <article class="fd-reader-toc-skeleton-item" aria-hidden="true">
+      <span class="fd-reader-toc-skeleton-index">${esc(i + 1)}</span>
+      <span class="fd-reader-toc-skeleton-line" style="--skel-w:${40 + ((i * 17) % 45)}%"></span>
+    </article>`).join("");
+    const extraHtml = `
+    <section class="fd-reader-toc-loading-list" aria-label="目录加载占位">${skeletonItems}</section>`;
+    const actionsHtml = `
+    <button type="button" data-route="reader">返回阅读</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-toc-loading", "loading", "refresh", "目录加载中", "正在从书源拉取章节目录，加载完成后可点击跳转。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-toc-loading", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-toc-loading"
+    });
+  }
+
+  function readerTocOfflineScreen(data, appState) {
+    const chapters = readerChapters(data);
+    const current = currentReaderChapter(data, appState);
+    const listHtml = chapters.map((chapter, index) => {
+      const isCurrent = index === current.index;
+      const cached = chapter.markers && chapter.markers.indexOf("已缓存") >= 0;
+      return `
+      <article class="fd-reader-toc-cached-item${isCurrent ? " is-current" : ""}${cached ? " is-cached" : ""}">
+        <span><strong>${esc(chapter.title)}</strong>${cached ? "<em>已缓存</em>" : ""}</span>
+        <button type="button" data-reader-toc-jump="${esc(index)}"${cached ? "" : " disabled aria-disabled=\"true\""}>${cached ? "阅读" : "未缓存"}</button>
+      </article>`;
+    }).join("");
+    const extraHtml = `
+    <section class="fd-reader-toc-cached-list" aria-label="缓存目录">${listHtml}</section>
+    <p class="fd-reader-state-hint">网络不可用，仅显示已缓存章节；未缓存章节需恢复网络后拉取。</p>`;
+    const actionsHtml = `
+    <button type="button" data-route="reader-toc-offline">重试</button>
+    <button type="button" data-route="reader">返回阅读</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-toc-offline", "offline", "offline", "目录离线", "当前网络不可用，已展示缓存目录。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-toc-offline", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-toc-offline"
+    });
+  }
+
+  function readerTocErrorScreen(data, appState) {
+    const errorCode = appState?.readerTocError || "解析超时";
+    const extraHtml = `
+    <section class="fd-reader-state-meta" aria-label="错误上下文">
+      <article><small>错误原因</small><strong>${esc(errorCode)}</strong></article>
+      <article><small>影响范围</small><strong>无法浏览和跳转章节目录</strong></article>
+    </section>
+    <p class="fd-reader-state-hint">目录规则解析失败或书源未响应，可重试或切换书源后重新加载目录。</p>`;
+    const actionsHtml = `
+    <button type="button" data-route="reader-toc-error">重试</button>
+    <button type="button" data-route="source-switch">换源</button>
+    <button type="button" data-route="reader">返回阅读</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-toc-error", "error", "warning", "目录加载失败", "章节目录拉取失败，可重试或切换书源。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-toc-error", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-toc-error"
+    });
+  }
+
+  function readerPageBoundaryFirstScreen(data, appState) {
+    const chapterState = currentReaderChapter(data, appState);
+    const chapterTitle = chapterState.chapter.title || readerChapterMeta(data);
+    const extraHtml = `
+    <section class="fd-reader-state-meta" aria-label="边界上下文">
+      <article><small>当前章节</small><strong>${esc(chapterTitle)}</strong></article>
+      <article><small>章节位置</small><strong>第 1 章 · 已是首章</strong></article>
+    </section>
+    <p class="fd-reader-state-hint">已是第一章，无法继续向前翻页；可打开上一本继续阅读，或查看目录选择章节。</p>`;
+    const actionsHtml = `
+    <button type="button" data-action="reader-open-previous-book">上一本</button>
+    <button type="button" data-route="reader-full-directory">查看目录</button>
+    <button type="button" data-route="immersive-reading">留在当前页</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-page-boundary-first", "boundary", "chevron-left", "已是第一章", "当前章节已是本书第一章，无法继续向前翻页。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-page-boundary-first", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-boundary fd-reader-boundary-first"
+    });
+  }
+
+  function readerPageBoundaryLastScreen(data, appState) {
+    const chapterState = currentReaderChapter(data, appState);
+    const chapterTitle = chapterState.chapter.title || readerChapterMeta(data);
+    const extraHtml = `
+    <section class="fd-reader-state-meta" aria-label="边界上下文">
+      <article><small>当前章节</small><strong>${esc(chapterTitle)}</strong></article>
+      <article><small>章节位置</small><strong>第 ${esc(chapterState.count)} 章 · 已是末章</strong></article>
+    </section>
+    <p class="fd-reader-state-hint">已是最后一章，无法继续向后翻页；可打开下一本继续阅读，或将本书标记为已完结。</p>`;
+    const actionsHtml = `
+    <button type="button" data-action="reader-open-next-book">下一本</button>
+    <button type="button" data-action="reader-mark-finished">标记完结</button>
+    <button type="button" data-route="immersive-reading">留在当前页</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-page-boundary-last", "boundary", "chevron", "已是最后一章", "当前章节已是本书最后一章，无法继续向后翻页。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-page-boundary-last", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-boundary fd-reader-boundary-last"
+    });
+  }
+
+  function readerProgressRestoreScreen(data, appState) {
+    const dialogHtml = w2ReaderProgressRestoreDialog(data, appState);
+    const originRoute = readerContinuityOriginRoute(appState?.readerModalOriginRoute);
+    const originScreen = renderReaderContinuityOrigin(data, originRoute, appState);
+    return appendReaderOverlayHtml(originScreen, dialogHtml);
+  }
+
+  function readerBackgroundRestoreScreen(data, appState) {
+    const restoreStage = appState?.readerRestoreStage || "正在恢复阅读位置和书签";
+    const restoreProgress = Math.max(0, Math.min(100, Number(appState?.readerRestoreProgress) || 42));
+    const extraHtml = `
+    <section class="fd-reader-restore-progress" aria-label="恢复进度">
+      <article><small>当前步骤</small><strong>${esc(restoreStage)}</strong></article>
+    </section>
+    <div class="fd-reader-state-progress" role="progressbar" aria-valuenow="${esc(restoreProgress)}" aria-valuemin="0" aria-valuemax="100" aria-label="阅读状态恢复进度">
+      <i class="fd-reader-state-spinner" aria-hidden="true"></i>
+      <span>恢复进度 ${esc(restoreProgress)}%</span>
+    </div>`;
+    const actionsHtml = `
+    <button type="button" data-route="immersive-reading">立即进入阅读</button>`;
+    const bottomSheetHtml = w2ReaderStatePanel("reader-background-restore", "restore", "refresh", "正在恢复阅读状态", "应用从后台返回，正在恢复阅读位置、书签和排版设置。", extraHtml, actionsHtml);
+    return w2ReaderStateShell(data, appState, "reader-background-restore", {
+      bottomSheetHtml,
+      frameClassExtra: "fd-reader-background-restore"
+    });
+  }
+
   function renderRoute(route, data, options, appState) {
+    // W3/W4/W5 模块 dispatch hook（在 switch 之前优先分发到自包含模块）
+    if (typeof window !== "undefined") {
+      // W4：有 renderW4Route 分发函数
+      if (window.ReaderW4ThemeFontTypographyRenderers && window.ReaderW4ThemeFontTypographyRenderers.renderW4Route) {
+        const w4Html = window.ReaderW4ThemeFontTypographyRenderers.renderW4Route(route, data, options, appState);
+        if (w4Html) return w4Html;
+      }
+      // W3：通过 INTEGRATION_MAP 分发（无 renderW3Route，需查映射表）
+      if (window.ReaderW3SourceSwitchRenderers && window.ReaderW3SourceSwitchRenderers.INTEGRATION_MAP) {
+        const w3FnName = window.ReaderW3SourceSwitchRenderers.INTEGRATION_MAP[route];
+        if (w3FnName && typeof window.ReaderW3SourceSwitchRenderers[w3FnName] === "function") {
+          return window.ReaderW3SourceSwitchRenderers[w3FnName](data, appState);
+        }
+      }
+      // W5：通过 INTEGRATION_MAP 分发（函数签名为 data, route, appState）
+      if (window.ReaderW5ReplaceRulesRenderers && window.ReaderW5ReplaceRulesRenderers.INTEGRATION_MAP) {
+        const w5FnName = window.ReaderW5ReplaceRulesRenderers.INTEGRATION_MAP[route];
+        if (w5FnName && typeof window.ReaderW5ReplaceRulesRenderers[w5FnName] === "function") {
+          return window.ReaderW5ReplaceRulesRenderers[w5FnName](data, route, appState);
+        }
+      }
+      // D2-A：仅书架增强通过 INTEGRATION_MAP + STATE_VARIANT_MAP 分发。
+      // Discover 与 RSS 已有 canonical renderer，不允许模块在此抢占整页结构。
+      if (window.ReaderD2BookshelfDiscoverRenderers) {
+        const d2aFnName = window.ReaderD2BookshelfDiscoverRenderers.INTEGRATION_MAP[route]
+          || window.ReaderD2BookshelfDiscoverRenderers.STATE_VARIANT_MAP[route];
+        if (d2aFnName && typeof window.ReaderD2BookshelfDiscoverRenderers[d2aFnName] === "function") {
+          return window.ReaderD2BookshelfDiscoverRenderers[d2aFnName](data, route, appState);
+        }
+      }
+      // D2-C：设置与同步通过 renderD2Route 分发
+      if (window.ReaderD2SettingsSyncRenderers && window.ReaderD2SettingsSyncRenderers.renderD2Route) {
+        const d2cHtml = window.ReaderD2SettingsSyncRenderers.renderD2Route(route, data, appState);
+        if (d2cHtml) return d2cHtml;
+      }
+      // D3：控制层通过 renderD3Route 分发
+      if (window.ReaderD3ControlLayersRenderers && window.ReaderD3ControlLayersRenderers.renderD3Route) {
+        const d3Html = window.ReaderD3ControlLayersRenderers.renderD3Route(route, data, appState);
+        if (d3Html) return d3Html;
+      }
+      // D4：视觉增强通过 renderD4Route 分发
+      if (window.ReaderD4VisualPolishRenderers && window.ReaderD4VisualPolishRenderers.renderD4Route) {
+        const d4Html = window.ReaderD4VisualPolishRenderers.renderD4Route(route, data, appState);
+        if (d4Html) return d4Html;
+      }
+      // D5：动效增强通过 renderD5Route 分发
+      if (window.ReaderD5MotionClosureRenderers && window.ReaderD5MotionClosureRenderers.renderD5Route) {
+        const d5Html = window.ReaderD5MotionClosureRenderers.renderD5Route(route, data, appState);
+        if (d5Html) return d5Html;
+      }
+    }
     switch (route) {
       case "bookshelf":
         return mainTabBookshelf(data, appState);
@@ -8313,13 +9701,15 @@
         return rssSourceActionsScreen(data, appState);
       case "rss-source-edit":
       case "rss-source-add":
-        return rssSourceEditScreen(data, appState);
+        return rssSourceEditScreen(data, appState, route);
       case "rss-source-delete-confirm":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-source-actions", {
+          id: route,
           title: "删除订阅源",
           icon: "trash",
-          heading: "删除 GitHub Releases？",
+          heading: `删除 ${rssSelectedSource(appState).name}？`,
           copy: "删除后该订阅源不会再刷新，已缓存文章和阅读记录可按平台策略保留或一并清理。",
+          allowedOrigins: ["rss-source-actions", "rss-source-edit", "rss-subscription-management"],
           cancelRoute: "rss-source-actions",
           confirmRoute: "rss-subscription-management",
           confirmLabel: "确认删除"
@@ -8335,11 +9725,13 @@
       case "rss-source-login-cookie":
         return rssSourceLoginCookieScreen(data, appState);
       case "rss-source-login-clear":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-source-login", {
+          id: route,
           title: "清除登录",
           icon: "trash",
           heading: "清除当前源登录信息？",
           copy: "清除后该 RSS 源下次刷新会重新进入登录流程，不影响其他订阅源和已缓存文章。",
+          allowedOrigins: ["rss-source-login"],
           cancelRoute: "rss-source-login",
           confirmRoute: "rss-source-actions",
           confirmLabel: "确认清除"
@@ -8367,39 +9759,46 @@
           confirmLabel: "完成"
         }, appState);
       case "rss-source-pin":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-source-actions", {
+          id: route,
           title: "置顶订阅源",
           icon: "top",
-          heading: "置顶 GitHub Releases？",
+          heading: `置顶 ${rssSelectedSource(appState).name}？`,
           copy: "置顶后该订阅源会显示在源列表和快捷入口最前面，不影响刷新规则和分组。",
+          allowedOrigins: ["rss-source-actions", "rss-source-feed", "rss-subscription-management"],
           detail: "适合高频阅读的发布源、公告源或需要优先查看的订阅源。",
           confirmRoute: "rss-source-feed",
-          confirmLabel: "确认置顶"
+          confirmLabel: "确认置顶",
+          danger: false
         }, appState);
       case "rss-source-disable":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-source-actions", {
+          id: route,
           title: "禁用订阅源",
           icon: "offline",
           heading: "禁用已选订阅源？",
           copy: "禁用后不会参与自动刷新、未读提醒和 RSS 首页统计，已缓存条目和阅读记录会保留。",
+          allowedOrigins: ["rss-source-actions", "rss-source-feed", "rss-subscription-management"],
           detail: "可以在订阅管理页重新启用。",
           confirmRoute: "rss-subscription-management",
           confirmLabel: "确认禁用"
         }, appState);
       case "rss-source-batch-disable":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-source-batch", {
+          id: route,
           title: "批量禁用",
           icon: "offline",
           heading: "禁用已选 2 个订阅源？",
           copy: "禁用后这些订阅源不会参与自动刷新、未读提醒和首页统计，已缓存条目和阅读记录会保留。",
+          allowedOrigins: ["rss-source-batch", "rss-subscription-management"],
           cancelRoute: "rss-source-batch",
           confirmRoute: "rss-subscription-management",
           confirmLabel: "确认禁用"
         }, appState);
       case "rss-source-import":
-        return rssSourceImportScreen(data, appState);
+        return rssSourceImportScreenV2(data, appState);
       case "rss-source-import-detail":
-        return rssSourceImportDetailScreen(data, appState);
+        return rssSourceImportDetailScreenV2(data, appState);
       case "rss-source-import-result":
         return rssConfirmScreen(data, {
           title: "导入完成",
@@ -8415,14 +9814,17 @@
       case "rss-read-record":
         return rssReadRecordScreen(data, appState);
       case "rss-record-clear":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-read-record", {
+          id: route,
           title: "清空阅读记录",
           icon: "trash",
           heading: "清空 RSS 阅读记录？",
           copy: "只会清除 RSS 阅读历史，不会删除收藏、订阅源、未读状态或正文缓存。",
+          allowedOrigins: ["rss-read-record"],
           cancelRoute: "rss-read-record",
           confirmRoute: "rss-read-record",
-          confirmLabel: "确认清空"
+          confirmLabel: "确认清空",
+          returnToOrigin: true
         }, appState);
       case "rss-rule-subscription":
         return rssRuleSubscriptionScreen(data, appState);
@@ -8434,48 +9836,60 @@
       case "rss-rule-subscription-test":
         return rssRuleSubscriptionTestScreen(data, appState);
       case "rss-rule-subscription-apply":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-rule-subscription-detail", {
+          id: route,
           title: "应用订阅更新",
           icon: "sync",
           heading: "应用社区 RSS 源订阅更新？",
           copy: "将新增 2 个源、更新 1 个规则，并跳过 1 个本地冲突。登录凭据不会被覆盖。",
+          allowedOrigins: ["rss-rule-subscription-detail"],
           cancelRoute: "rss-rule-subscription-detail",
           confirmRoute: "rss-source-import",
-          confirmLabel: "进入导入预览"
+          confirmLabel: "进入导入预览",
+          danger: false
         }, appState);
       case "rss-favorite-groups":
         return rssFavoriteGroupsScreen(data, appState);
       case "rss-favorite-add":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-detail", {
+          id: route,
           title: "添加收藏",
           icon: "bookmark",
           heading: "收藏当前 RSS 条目？",
           copy: "收藏后该条目会出现在 RSS 收藏列表，并保留原订阅源、阅读状态和分组信息。",
+          allowedOrigins: ["rss-detail"],
           cancelRoute: "rss-detail",
           confirmRoute: "rss-starred",
-          confirmLabel: "确认收藏"
+          confirmLabel: "确认收藏",
+          danger: false
         }, appState);
       case "rss-favorite-remove":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-starred", {
+          id: route,
           title: "移除收藏",
           icon: "trash",
           heading: "从收藏中移除？",
           copy: "只移除收藏关系，不删除原文、订阅源或阅读记录。",
+          allowedOrigins: ["rss-starred", "rss-detail"],
           cancelRoute: "rss-starred",
           confirmRoute: "rss-starred",
-          confirmLabel: "确认移除"
+          confirmLabel: "确认移除",
+          returnToOrigin: true
         }, appState);
       case "rss-favorite-group-edit":
         return rssFavoriteGroupEditScreen(data, appState);
       case "rss-favorite-clear":
-        return rssConfirmScreen(data, {
+        return rssConfirmOverlayScreen(data, "rss-starred", {
+          id: route,
           title: "清空收藏分组",
           icon: "trash",
           heading: "清空默认分组收藏？",
           copy: "仅移除当前收藏分组里的条目，文章本身和订阅源不会删除。",
+          allowedOrigins: ["rss-starred"],
           cancelRoute: "rss-starred",
           confirmRoute: "rss-starred",
-          confirmLabel: "确认清空"
+          confirmLabel: "确认清空",
+          returnToOrigin: true
         }, appState);
       case "rss-empty":
       case "rss-error":
@@ -8506,8 +9920,24 @@
       case "group-management":
       case "bookshelf-group-management":
         return groupManagementScreen(data);
+      case "import-permission-denied":
+        return importPermissionDeniedScreen(data, appState);
+      case "import-format-unsupported":
+        return importFormatUnsupportedScreen(data, appState);
+      case "import-empty-file":
+        return importEmptyFileScreen(data, appState);
+      case "import-parsing":
+        return importParsingScreen(data, appState);
+      case "import-duplicate":
+        return importDuplicateScreen(data, appState);
+      case "import-conflict-resolve":
+        return importConflictResolveScreen(data, appState);
+      case "import-partial-success":
+        return importPartialSuccessScreen(data, appState);
+      case "import-result-detail":
+        return importResultDetailScreen(data, appState);
       case "local-import":
-        return localImportScreen(data);
+        return localImportScreenV2(data, appState);
       case "immersive-reading":
       case "reader_content":
       case "reader":
@@ -8541,6 +9971,26 @@
       case "reader-book-cache":
       case "reader-debug-info":
         return readerUtilityScreen(data, route, appState);
+      case "reader-content-loading":
+        return readerContentLoadingScreen(data, appState);
+      case "reader-content-offline":
+        return readerContentOfflineScreen(data, appState);
+      case "reader-content-error":
+        return readerContentErrorScreen(data, appState);
+      case "reader-toc-loading":
+        return readerTocLoadingScreen(data, appState);
+      case "reader-toc-offline":
+        return readerTocOfflineScreen(data, appState);
+      case "reader-toc-error":
+        return readerTocErrorScreen(data, appState);
+      case "reader-page-boundary-first":
+        return readerPageBoundaryFirstScreen(data, appState);
+      case "reader-page-boundary-last":
+        return readerPageBoundaryLastScreen(data, appState);
+      case "reader-progress-restore":
+        return readerProgressRestoreScreen(data, appState);
+      case "reader-background-restore":
+        return readerBackgroundRestoreScreen(data, appState);
       case "source-switch":
         return flowScreen(data, appState);
       case "source-switch-results":
@@ -8549,10 +9999,11 @@
       case "source-settings-entry":
         return sourceManagementScreen(data, appState);
       case "source-import-options":
+        return sourceImportOptionsScreenV2(data, appState);
       case "source-add":
-        return sourceImportOptionsScreen(data, appState);
+        return sourceAddScreenV2(data, appState);
       case "source-import-preview":
-        return sourceImportPreviewScreen(data);
+        return sourceImportPreviewScreenV2(data, appState);
       case "source-batch":
         return sourceBatchScreen(data, appState);
       case "source-groups":
@@ -8655,6 +10106,9 @@
       readerPageMode: readerPageModeCssValue(settingDefaults.pageMode),
       readerPageAnimation: readerPageAnimationCssValue(settingDefaults.pageAnimation),
       readerMoreOpen: false,
+      readerQuickExpanded: "",
+      readerModalOriginRoute: "",
+      w4OverlayOriginRoute: "",
       readerTocMode: "directory",
       readerTheme: readerDefaultThemeValue(data),
       readerBrightness: readerBrightnessConfig(data).defaultValue,
@@ -8663,7 +10117,6 @@
       readerTtsSession: false,
       readerTtsExpandedOption: "",
       readerSessionCapsuleSnapshot: null,
-      readerControlSpaceSnapshot: null,
       readerSessionCapsuleTimer: null,
       readerSettings: Object.assign({}, readerControlSettingsConfig(data).defaults),
       readerReplacementRules: {},
@@ -8677,6 +10130,10 @@
       readerThemeEditError: "",
       readerAutoPageSession: false,
       readerAutoPageCountdown: 8,
+      readerAutoTimerMinutes: 15,
+      readerAutoTimerSeconds: 0,
+      readerAutoPageSpeedSeconds: 8,
+      readerAutoFollowHighlight: true,
       firstOpenMotion: null,
       firstOpenMotionTimer: null,
       hasPlayedFirstOpen: false,
@@ -8706,7 +10163,16 @@
       rssCategoryFilterOpen: false,
       rssFavoriteFilter: "默认分组",
       rssFavoriteFilterOpen: false,
+      rssSelectedSourceId: "github-releases",
+      rssSelectedArticleId: "reader-ui-update",
+      rssSourceOverrides: {},
+      rssFavoriteArticleIds: rssArticlesData().filter((item) => item.starred).map((item) => item.id),
+      rssReadRecordIds: rssRecordsData().map((item) => item.id),
+      rssBatchSelectedSourceIds: rssSourcesData().slice(0, 2).map((item) => item.id),
+      rssRuleUpdateApplied: false,
+      rssConfirmOriginRoute: "",
       sourceSwitchSelectedSource: "",
+      sourceSwitchOriginRoute: "",
       sourceMenuOpen: false,
       sourceStatusFilter: "全部",
       sourceGroupFilter: "全部分组",
@@ -8761,7 +10227,7 @@
       // Fall back to the interactive demo when URLSearchParams is unavailable.
     }
     target.innerHTML = `
-      <main class="fd-demo" data-shell="ComponentLibraryShell" data-current-route="bookshelf" data-demo-mode="regular" data-adaptive-runtime="viewport-class-v1" aria-label="前端 Demo 设计稿">
+      <main class="fd-demo" data-shell="ComponentLibraryShell" data-current-route="bookshelf" data-route-family="library" data-route-surface="page" data-route-layout="main-tab" data-demo-mode="regular" data-adaptive-runtime="viewport-class-v1" aria-label="前端 Demo 设计稿">
         <nav class="fd-demo-mode-switch" aria-label="显示模式">
           <button class="is-active" type="button" data-demo-mode-option="regular" aria-pressed="true">常规显示</button>
           <button type="button" data-demo-mode-option="developer" aria-pressed="false">开发者模式</button>
@@ -8936,7 +10402,15 @@
 
     const updateRouteInfo = (route) => {
       const meta = routes[route] || routes.bookshelf;
+      const presentation = routePresentation[route] || {
+        family: "system",
+        surface: "page",
+        layout: "main-tab"
+      };
       root.setAttribute("data-current-route", route);
+      root.setAttribute("data-route-family", presentation.family);
+      root.setAttribute("data-route-surface", presentation.surface);
+      root.setAttribute("data-route-layout", presentation.layout);
       if (routeStatus) {
         routeStatus.textContent = `当前路由：${meta.title} · ${meta.shell}`;
       }
@@ -9055,6 +10529,12 @@
 
     const renderActiveRoute = (route, options) => {
       const renderedTurnDirection = appState.readerTurnDirection;
+      const previousRenderedRoute = root.getAttribute("data-current-route") || "";
+      const scrollSnapshot = captureReaderScrollSnapshot(screenHost);
+      const shouldRestorePanelScroll = previousRenderedRoute === route;
+      if (route === "tts" || route === "reader-tts-overlay-v2") {
+        normalizeReaderTtsQuickTimerState(appState);
+      }
       syncAppThemeRoot(root, data, appState);
       screenHost.innerHTML = renderRoute(route, data, options, appState);
       updateRouteInfo(route);
@@ -9063,6 +10543,7 @@
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         updateRouteInfo(route);
       }
+      restoreReaderScrollSnapshot(screenHost, scrollSnapshot, shouldRestorePanelScroll);
       applyMotionSelectorBindings(screenHost);
       attachCommonMotionComponentState(screenHost);
       attachOverlayMotionState(screenHost, appState);
@@ -9074,7 +10555,6 @@
       attachReaderControlHandleMotionState(screenHost);
       attachReaderControlDockMotionState(screenHost, appState, motionController);
       attachReaderSessionCapsuleMotionState(screenHost, appState, motionController);
-      attachReaderControlSpaceMotionState(screenHost, appState, motionController);
       attachFirstOpenMotionState(root, screenHost, appState);
       if (appState.motionInterruptMotion) {
         applyMotionInterruptState(root, screenHost, appState, appState.motionInterruptMotion, {});
@@ -9086,7 +10566,8 @@
         applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
       }
       window.requestAnimationFrame(() => {
-        if (screenHost.isConnected) {
+        if (screenHost.isConnected && root.getAttribute("data-current-route") === route) {
+          restoreReaderScrollSnapshot(screenHost, scrollSnapshot, shouldRestorePanelScroll);
           attachReaderControlDockMotionState(screenHost, appState, motionController);
           if (appState.motionInterruptMotion) {
             applyMotionInterruptState(root, screenHost, appState, appState.motionInterruptMotion, {});
@@ -9123,12 +10604,21 @@
       renderActiveRoute(routeStack[routeStack.length - 1]);
     };
 
+    const syncReaderQuickExpansionForRoute = (route) => {
+      const preserveForOverlay = route === "reader-progress-restore" || String(route || "").startsWith("source-switch");
+      const targetQuick = readerStateByRoute[route]?.quick || "";
+      if (!preserveForOverlay && targetQuick !== appState.readerQuickExpanded) {
+        appState.readerQuickExpanded = "";
+      }
+    };
+
     const goTo = (route, shouldPush, motionInput) => {
       if (!routes[route]) {
         return;
       }
       cancelPendingRouteRequest("route-change");
       const previous = routeStack[routeStack.length - 1];
+      syncReaderQuickExpansionForRoute(route);
       if (hasRenderedInitialRoute) {
         const isPopMotion = motionInput?.id === "app.route.pop.backward" || motionInput?.action === "pop";
         startMotionInterrupt(root, screenHost, appState, motionController, isPopMotion ? "back" : shouldPush ? "route-push" : "route-replace", {
@@ -9191,6 +10681,7 @@
         return;
       }
       cancelPendingRouteRequest("tab-switch");
+      appState.readerQuickExpanded = "";
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
       appState.settingsToast = "";
@@ -9228,6 +10719,7 @@
       }
       cancelPendingRouteRequest("route-replace");
       const previous = routeStack[routeStack.length - 1] || "";
+      syncReaderQuickExpansionForRoute(route);
       startMotionInterrupt(root, screenHost, appState, motionController, "route-replace", {
         kind: "completeThenReplace",
         from: previous,
@@ -9258,6 +10750,7 @@
 
     const exitReader = () => {
       cancelPendingRouteRequest("reader-exit");
+      appState.readerQuickExpanded = "";
       const fromRoute = routeStack[routeStack.length - 1] || "reader";
       startMotionInterrupt(root, screenHost, appState, motionController, "reader-exit", {
         kind: "cancel",
@@ -9713,6 +11206,12 @@
       const tts = appState.readerTts;
       appState.readerTtsExpandedOption = "";
       if (action === "toggle") {
+        if (!tts.playing && tts.provider === "online" && !tts.onlineConfigSaved) {
+          tts.playbackError = "请先测试并应用在线配置";
+          renderCurrentRoute();
+          return;
+        }
+        tts.playbackError = "";
         appState.readerTtsSession = true;
         tts.playing = !tts.playing;
         tts.sentenceIndex = readerTtsSentenceIndex(data, appState);
@@ -9737,7 +11236,7 @@
       appState.readerTtsExpandedOption = "";
       if (type === "autoPage") {
         appState.readerAutoPageSession = false;
-        appState.readerAutoPageCountdown = 8;
+        appState.readerAutoPageCountdown = readerAutoPageSpeedSeconds(appState);
         appState.readerSettings.autoPage = false;
       }
       if (type === "tts") {
@@ -9776,7 +11275,7 @@
       appState.readerSettings[key] = !appState.readerSettings[key];
       if (key === "autoPage") {
         appState.readerAutoPageSession = true;
-        appState.readerAutoPageCountdown = 8;
+        appState.readerAutoPageCountdown = readerAutoPageSpeedSeconds(appState);
         if (appState.readerSettings[key]) {
           appState.readerTtsSession = false;
           appState.readerTts.playing = false;
@@ -10295,6 +11794,11 @@
         event.stopPropagation();
         closeFilterDisclosures("discoverFilterOpen");
         appState.discoverFilterOpen = true;
+        if (currentRoute() === "discover-sort") {
+          appState.discoverSortOpen = false;
+          replaceTopRoute("discover");
+          return;
+        }
         appState.discoverSortOpen = !appState.discoverSortOpen;
         renderCurrentRoute();
       });
@@ -10304,10 +11808,98 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        appState.discoverSort = button.getAttribute("data-discover-sort-option") || "";
+        const selectedSort = button.getAttribute("data-discover-sort-option") || "";
+        appState.discoverSort = selectedSort;
         appState.discoverFilterOpen = false;
         appState.discoverSortOpen = false;
+        replaceTopRoute(discoverSortRoute(selectedSort));
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-batch-source-id]").forEach((row) => {
+      row.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const sourceId = row.getAttribute("data-rss-batch-source-id") || "";
+        const selected = new Set(Array.isArray(appState.rssBatchSelectedSourceIds) ? appState.rssBatchSelectedSourceIds : []);
+        if (selected.has(sourceId)) selected.delete(sourceId);
+        else if (sourceId) selected.add(sourceId);
+        appState.rssBatchSelectedSourceIds = Array.from(selected);
         renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-batch-select-all]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.rssBatchSelectedSourceIds = rssEffectiveSources(appState).map((source) => source.id);
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-batch-invert]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const selected = new Set(Array.isArray(appState.rssBatchSelectedSourceIds) ? appState.rssBatchSelectedSourceIds : []);
+        appState.rssBatchSelectedSourceIds = rssEffectiveSources(appState).map((source) => source.id).filter((id) => !selected.has(id));
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-confirm-cancel]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.rssConfirmOriginRoute = "";
+      });
+    });
+
+    screenHost.querySelectorAll("[data-rss-confirm-action]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const actionRoute = currentRoute();
+        const sourceId = appState.rssSelectedSourceId;
+        const articleId = appState.rssSelectedArticleId;
+        appState.rssSourceOverrides = appState.rssSourceOverrides || {};
+        if (sourceId && ["rss-source-delete-confirm", "rss-source-login-clear", "rss-source-pin", "rss-source-disable"].includes(actionRoute)) {
+          const sourceOverride = Object.assign({}, appState.rssSourceOverrides[sourceId] || {});
+          if (actionRoute === "rss-source-delete-confirm") sourceOverride.deleted = true;
+          if (actionRoute === "rss-source-login-clear") sourceOverride.loginCleared = true;
+          if (actionRoute === "rss-source-pin") sourceOverride.pinned = true;
+          if (actionRoute === "rss-source-disable") sourceOverride.enabled = false;
+          appState.rssSourceOverrides[sourceId] = sourceOverride;
+        }
+        if (actionRoute === "rss-source-batch-disable") {
+          (appState.rssBatchSelectedSourceIds || []).forEach((id) => {
+            appState.rssSourceOverrides[id] = Object.assign({}, appState.rssSourceOverrides[id] || {}, { enabled: false });
+          });
+        }
+        if (actionRoute === "rss-record-clear") {
+          appState.rssReadRecordIds = [];
+        }
+        if (actionRoute === "rss-rule-subscription-apply") {
+          appState.rssRuleUpdateApplied = true;
+        }
+        if (actionRoute === "rss-favorite-add" && articleId) {
+          appState.rssFavoriteArticleIds = Array.from(new Set([...(appState.rssFavoriteArticleIds || []), articleId]));
+        }
+        if (actionRoute === "rss-favorite-remove" && articleId) {
+          appState.rssFavoriteArticleIds = (appState.rssFavoriteArticleIds || []).filter((id) => id !== articleId);
+        }
+        if (actionRoute === "rss-favorite-clear") {
+          const activeGroup = appState.rssFavoriteFilter || "默认分组";
+          const idsToClear = new Set(rssFavoritesForFilter(rssEffectiveArticles(appState), activeGroup).map((article) => article.id));
+          appState.rssFavoriteArticleIds = (appState.rssFavoriteArticleIds || []).filter((id) => !idsToClear.has(id));
+        }
+        const originRoute = button.getAttribute("data-rss-confirm-origin") || "rss";
+        const targetRoute = button.getAttribute("data-rss-confirm-target") || originRoute;
+        appState.rssConfirmOriginRoute = "";
+        if (targetRoute === originRoute) {
+          goBack();
+          return;
+        }
+        replaceTopRoute(targetRoute);
       });
     });
 
@@ -10327,6 +11919,24 @@
       });
     });
 
+    screenHost.querySelectorAll("[data-reader-quick-expand]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.readerQuickExpanded = button.getAttribute("data-reader-quick-expand") || "";
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-quick-collapse]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        appState.readerQuickExpanded = "";
+        renderCurrentRoute();
+      });
+    });
+
     screenHost.querySelectorAll("[data-route]").forEach((targetEl) => {
       if (targetEl.hasAttribute("data-book-cover")) {
         return;
@@ -10340,7 +11950,42 @@
           event.stopPropagation();
         }
         const route = targetEl.getAttribute("data-route");
-        const shouldReplaceRoute = targetEl.hasAttribute("data-route-replace") || Boolean(targetEl.closest(".fd-source-control-continuity"));
+        if (rssConfirmRoutes.has(route)) {
+          appState.rssConfirmOriginRoute = currentRoute();
+        }
+        if (targetEl.hasAttribute("data-rss-source-id")) {
+          appState.rssSelectedSourceId = targetEl.getAttribute("data-rss-source-id") || appState.rssSelectedSourceId;
+        }
+        if (targetEl.hasAttribute("data-rss-article-id")) {
+          const articleId = targetEl.getAttribute("data-rss-article-id") || appState.rssSelectedArticleId;
+          appState.rssSelectedArticleId = articleId;
+          const selectedArticle = rssArticlesData().find((item) => item.id === articleId);
+          const selectedSource = rssSourcesData().find((item) => item.id === selectedArticle?.sourceId);
+          if (selectedSource) {
+            appState.rssSelectedSourceId = selectedSource.id;
+          }
+        }
+        if (route === "source-switch") {
+          const originRoute = currentRoute();
+          appState.sourceSwitchOriginRoute = isReaderContinuityOriginRoute(originRoute) ? originRoute : "";
+        }
+        if (readerW4OverlayRoutes.has(route)) {
+          const originRoute = currentRoute();
+          appState.w4OverlayOriginRoute = readerW4FullPageRoutes.has(originRoute) ? originRoute : "";
+        }
+        if (route === "reader-progress-restore") {
+          const originRoute = currentRoute();
+          appState.readerModalOriginRoute = isReaderContinuityOriginRoute(originRoute) ? originRoute : "";
+        }
+        const originReaderState = readerStateByRoute[currentRoute()] || null;
+        const targetReaderState = readerStateByRoute[route] || null;
+        const sameReaderOverlayFamily = Boolean(
+          originReaderState &&
+          targetReaderState &&
+          originReaderState.mode !== "immersive" &&
+          targetReaderState.mode !== "immersive"
+        );
+        const shouldReplaceRoute = targetEl.hasAttribute("data-route-replace") || Boolean(targetEl.closest(".fd-source-control-continuity")) || sameReaderOverlayFamily;
         const readerModuleButton = targetEl.classList.contains("fd-reader-module") ? targetEl : null;
         const readerModuleMotionInput = (() => {
           if (!readerModuleButton) return null;
@@ -10373,7 +12018,11 @@
           };
         })();
         const routeMotionInput = readerModuleMotionInput || readerEntryMotionInput;
-        if (targetEl.classList.contains("fd-reader-module") && route === currentRoute()) {
+        if (
+          targetEl.classList.contains("fd-reader-module") &&
+          originReaderState?.mode === "module" &&
+          originReaderState.module === (targetEl.getAttribute("data-module") || "")
+        ) {
           appState.readerModuleMotion = {
             action: "switch",
             from: targetEl.getAttribute("data-module") || "module",
@@ -10566,6 +12215,7 @@
       };
       const cleanupGlobalHandleRelease = () => {
         clearDockLongPress();
+        window.removeEventListener("pointermove", onWindowPointerMove, true);
         window.removeEventListener("pointerup", onWindowPointerUp, true);
         window.removeEventListener("pointercancel", onWindowPointerCancel, true);
         window.removeEventListener("mouseup", onWindowMouseUp, true);
@@ -10583,7 +12233,7 @@
         }
         if (dragStarted) {
           suppressNextClick = true;
-          if (readerControlHandleShouldCommit(deltaY, readerControlHandleAction(button, deltaY))) {
+          if (readerControlHandleShouldCommit(button, deltaY, readerControlHandleAction(button, deltaY))) {
             commitHandleRoute(source, deltaY);
           } else {
             snapBack();
@@ -10612,42 +12262,7 @@
           snapBack();
         }
       }
-      function onWindowMouseUp(event) {
-        if (activePointerId == null) return;
-        finishHandleGesture(
-          Number.isFinite(event.clientX) ? event.clientX - startX : lastDeltaX,
-          Number.isFinite(event.clientY) ? event.clientY - startY : lastDeltaY,
-          "drag"
-        );
-      }
-
-      button.addEventListener("pointerdown", (event) => {
-        if (event.button && event.button !== 0) return;
-        activePointerId = event.pointerId;
-        startX = event.clientX;
-        startY = event.clientY;
-        lastDeltaX = 0;
-        lastDeltaY = 0;
-        dragStarted = false;
-        dragMotionStarted = false;
-        dockDragActive = false;
-        dockDragMotionStarted = false;
-        suppressNextClick = false;
-        button.setPointerCapture?.(event.pointerId);
-        window.addEventListener("pointerup", onWindowPointerUp, true);
-        window.addEventListener("pointercancel", onWindowPointerCancel, true);
-        window.addEventListener("mouseup", onWindowMouseUp, true);
-        setReaderControlHandleState(button, "pressed", { offsetY: 0 });
-        if (motionController) {
-          motionController.start(handleMotionInput("reader.control.handle.press", "handle-press", 0));
-        }
-        if (dockCanDrag()) {
-          clearDockLongPress();
-          dockLongPressTimer = window.setTimeout(startDockDrag, 320);
-        }
-      });
-
-      button.addEventListener("pointermove", (event) => {
+      function onWindowPointerMove(event) {
         if (activePointerId !== event.pointerId) return;
         const deltaX = event.clientX - startX;
         const deltaY = event.clientY - startY;
@@ -10671,6 +12286,41 @@
           offsetY: readerControlHandlePreviewOffset(deltaY, readerControlHandleAction(button, deltaY), reduced()),
           deltaY
         });
+      }
+      function onWindowMouseUp(event) {
+        if (activePointerId == null) return;
+        finishHandleGesture(
+          Number.isFinite(event.clientX) ? event.clientX - startX : lastDeltaX,
+          Number.isFinite(event.clientY) ? event.clientY - startY : lastDeltaY,
+          "drag"
+        );
+      }
+
+      button.addEventListener("pointerdown", (event) => {
+        if (event.button && event.button !== 0) return;
+        activePointerId = event.pointerId;
+        startX = event.clientX;
+        startY = event.clientY;
+        lastDeltaX = 0;
+        lastDeltaY = 0;
+        dragStarted = false;
+        dragMotionStarted = false;
+        dockDragActive = false;
+        dockDragMotionStarted = false;
+        suppressNextClick = false;
+        button.setPointerCapture?.(event.pointerId);
+        window.addEventListener("pointermove", onWindowPointerMove, true);
+        window.addEventListener("pointerup", onWindowPointerUp, true);
+        window.addEventListener("pointercancel", onWindowPointerCancel, true);
+        window.addEventListener("mouseup", onWindowMouseUp, true);
+        setReaderControlHandleState(button, "pressed", { offsetY: 0 });
+        if (motionController) {
+          motionController.start(handleMotionInput("reader.control.handle.press", "handle-press", 0));
+        }
+        if (dockCanDrag()) {
+          clearDockLongPress();
+          dockLongPressTimer = window.setTimeout(startDockDrag, 320);
+        }
       });
 
       button.addEventListener("pointerup", (event) => {
@@ -10794,6 +12444,23 @@
       });
     });
 
+    screenHost.querySelectorAll("[data-reader-directory-sort]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        appState.readerDirectoryDescending = !appState.readerDirectoryDescending;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-directory-jump]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const list = screenHost.querySelector(".fd-reader-full-toc-list");
+        if (!list) return;
+        list.scrollTo({ top: button.getAttribute("data-reader-directory-jump") === "bottom" ? list.scrollHeight : 0, behavior: "smooth" });
+      });
+    });
+
     screenHost.querySelectorAll("[data-reader-chapter-download]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
@@ -10856,10 +12523,339 @@
       });
     });
 
+    screenHost.querySelectorAll("[data-reader-tts-timer-preset]").forEach((select) => {
+      select.addEventListener("change", () => {
+        const totalSeconds = Math.round(Number(select.value));
+        if (!readerTtsQuickTimerPresets.some((item) => item.seconds === totalSeconds)) return;
+        appState.readerTtsTimerMinutes = Math.floor(totalSeconds / 60);
+        appState.readerTtsTimerSeconds = totalSeconds % 60;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-timer-wheel]").forEach((wheel) => {
+      const part = wheel.getAttribute("data-reader-tts-timer-wheel") === "seconds" ? "seconds" : "minutes";
+      const max = Number(wheel.getAttribute("data-reader-tts-timer-max")) || (part === "seconds" ? 59 : 180);
+      const stateKey = part === "seconds" ? "readerTtsTimerSeconds" : "readerTtsTimerMinutes";
+      const itemHeight = Math.max(1, wheel.querySelector("[data-reader-tts-timer-value]")?.getBoundingClientRect().height || 44);
+      const initialValue = clamp(Math.round(Number(appState[stateKey] ?? (part === "seconds" ? 0 : 15))), 0, max);
+      let frame = 0;
+      const commit = (rawValue) => {
+        const value = clamp(Math.round(Number(rawValue) || 0), 0, max);
+        appState[stateKey] = value;
+        wheel.setAttribute("aria-activedescendant", `${part}-${value}`);
+        wheel.querySelectorAll("[data-reader-tts-timer-value]").forEach((item) => {
+          const active = Number(item.getAttribute("data-reader-tts-timer-value")) === value;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-selected", active ? "true" : "false");
+          item.id = `${part}-${item.getAttribute("data-reader-tts-timer-value")}`;
+        });
+        const host = wheel.closest(".fd-reader-tts-timer-module");
+        const minutes = clamp(Math.round(Number(appState.readerTtsTimerMinutes ?? 15)), 0, 180);
+        const seconds = clamp(Math.round(Number(appState.readerTtsTimerSeconds ?? 0)), 0, 59);
+        const label = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        host?.querySelectorAll("[data-reader-tts-timer-readout], header em").forEach((readout) => {
+          readout.textContent = label;
+        });
+      };
+      const scrollToValue = (value, behavior = "smooth") => {
+        const normalized = clamp(Math.round(Number(value) || 0), 0, max);
+        wheel.scrollTo({ top: normalized * itemHeight, behavior });
+        commit(normalized);
+      };
+      wheel.scrollTop = initialValue * itemHeight;
+      commit(initialValue);
+      wheel.addEventListener("scroll", () => {
+        if (frame) window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(() => {
+          frame = 0;
+          commit(Math.round(wheel.scrollTop / itemHeight));
+        });
+      }, { passive: true });
+      wheel.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        const currentValue = Math.round(wheel.scrollTop / itemHeight);
+        scrollToValue(currentValue + (event.deltaY > 0 ? 1 : -1));
+      }, { passive: false });
+      wheel.addEventListener("keydown", (event) => {
+        const currentValue = Math.round(wheel.scrollTop / itemHeight);
+        const targets = {
+          ArrowUp: currentValue - 1,
+          ArrowDown: currentValue + 1,
+          PageUp: currentValue - 5,
+          PageDown: currentValue + 5,
+          Home: 0,
+          End: max
+        };
+        if (!(event.key in targets)) return;
+        event.preventDefault();
+        scrollToValue(targets[event.key]);
+      });
+      wheel.querySelectorAll("[data-reader-tts-timer-value]").forEach((item) => {
+        item.addEventListener("click", (event) => {
+          event.preventDefault();
+          scrollToValue(Number(item.getAttribute("data-reader-tts-timer-value")));
+        });
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-speed-range]").forEach((input) => {
+      input.addEventListener("input", () => {
+        const value = Math.max(0.5, Math.min(2, Number(input.value) || 1));
+        appState.readerTts.speed = `${value.toFixed(1)}x`;
+        input.style.setProperty("--fd-control-slider-value", `${Math.round(((value - 0.5) / 1.5) * 100)}%`);
+        const readout = input.closest(".fd-reader-tts-speed-module")?.querySelector("[data-reader-tts-speed-readout]");
+        if (readout) readout.textContent = appState.readerTts.speed;
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-auto-timer-wheel]").forEach((wheel) => {
+      const part = wheel.getAttribute("data-reader-auto-timer-wheel") === "seconds" ? "seconds" : "minutes";
+      const max = Number(wheel.getAttribute("data-reader-auto-timer-max")) || (part === "seconds" ? 59 : 180);
+      const stateKey = part === "seconds" ? "readerAutoTimerSeconds" : "readerAutoTimerMinutes";
+      const itemHeight = Math.max(1, wheel.querySelector("[data-reader-auto-timer-value]")?.getBoundingClientRect().height || 34);
+      const initialValue = clamp(Math.round(Number(appState[stateKey] ?? (part === "seconds" ? 0 : 15))), 0, max);
+      let frame = 0;
+      const commit = (rawValue) => {
+        const value = clamp(Math.round(Number(rawValue) || 0), 0, max);
+        appState[stateKey] = value;
+        wheel.setAttribute("aria-activedescendant", `auto-${part}-${value}`);
+        wheel.querySelectorAll("[data-reader-auto-timer-value]").forEach((item) => {
+          const active = Number(item.getAttribute("data-reader-auto-timer-value")) === value;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-selected", active ? "true" : "false");
+          item.id = `auto-${part}-${item.getAttribute("data-reader-auto-timer-value")}`;
+        });
+        const host = wheel.closest(".fd-reader-auto-timer-module");
+        const timer = readerAutoTimerParts(appState);
+        const label = `${String(timer.minutes).padStart(2, "0")}:${String(timer.seconds).padStart(2, "0")}`;
+        host?.querySelectorAll("[data-reader-auto-timer-readout], header em").forEach((readout) => {
+          readout.textContent = label;
+        });
+      };
+      const scrollToValue = (value, behavior = "smooth") => {
+        const normalized = clamp(Math.round(Number(value) || 0), 0, max);
+        wheel.scrollTo({ top: normalized * itemHeight, behavior });
+        commit(normalized);
+      };
+      wheel.scrollTop = initialValue * itemHeight;
+      commit(initialValue);
+      wheel.addEventListener("scroll", () => {
+        if (frame) window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(() => {
+          frame = 0;
+          commit(Math.round(wheel.scrollTop / itemHeight));
+        });
+      }, { passive: true });
+      wheel.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        scrollToValue(Math.round(wheel.scrollTop / itemHeight) + (event.deltaY > 0 ? 1 : -1));
+      }, { passive: false });
+      wheel.addEventListener("keydown", (event) => {
+        const currentValue = Math.round(wheel.scrollTop / itemHeight);
+        const targets = { ArrowUp: currentValue - 1, ArrowDown: currentValue + 1, PageUp: currentValue - 5, PageDown: currentValue + 5, Home: 0, End: max };
+        if (!(event.key in targets)) return;
+        event.preventDefault();
+        scrollToValue(targets[event.key]);
+      });
+      wheel.querySelectorAll("[data-reader-auto-timer-value]").forEach((item) => {
+        item.addEventListener("click", (event) => {
+          event.preventDefault();
+          scrollToValue(Number(item.getAttribute("data-reader-auto-timer-value")));
+        });
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-auto-speed-step]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const delta = Number(button.getAttribute("data-reader-auto-speed-step")) || 0;
+        appState.readerAutoPageSpeedSeconds = clamp(readerAutoPageSpeedSeconds(appState) + delta, 2, 20);
+        appState.readerAutoPageCountdown = appState.readerAutoPageSpeedSeconds;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-auto-speed-range]").forEach((input) => {
+      input.addEventListener("input", () => {
+        const value = clamp(Math.round(Number(input.value) || 8), 2, 20);
+        appState.readerAutoPageSpeedSeconds = value;
+        appState.readerAutoPageCountdown = value;
+        input.style.setProperty("--fd-control-slider-value", `${Math.round(((value - 2) / 18) * 100)}%`);
+        input.closest(".fd-reader-auto-detail-speed")?.querySelectorAll("[data-reader-auto-speed-readout]").forEach((readout) => {
+          readout.textContent = `${value} 秒`;
+        });
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-auto-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (button.getAttribute("data-reader-auto-toggle") !== "followHighlight") return;
+        appState.readerAutoFollowHighlight = appState.readerAutoFollowHighlight === false;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-voice-select]").forEach((select) => {
+      select.addEventListener("change", () => {
+        const voices = readerTtsConfig(data).options.voice || [];
+        if (!voices.includes(select.value)) return;
+        appState.readerTts.voice = select.value;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const key = button.getAttribute("data-reader-tts-toggle") || "";
+        if (!["highlight", "pauseOnCall", "mixWithOthers", "onlineStreaming", "requestWordTiming", "fallbackToSystem", "cacheAudio"].includes(key)) return;
+        const defaultValue = ["mixWithOthers", "cacheAudio"].includes(key) ? false : true;
+        appState.readerTts[key] = !(appState.readerTts[key] ?? defaultValue);
+        if (["onlineStreaming", "requestWordTiming", "fallbackToSystem", "cacheAudio"].includes(key)) {
+          appState.readerTts.onlineConnectionState = "idle";
+          appState.readerTts.onlineConfigSaved = false;
+          appState.readerTts.playbackError = "";
+        }
+        renderCurrentRoute();
+      });
+    });
+
+    const readerTtsProviderButtons = Array.from(screenHost.querySelectorAll("[data-reader-tts-provider]"));
+    const activateReaderTtsProvider = (provider, restoreFocus = false) => {
+      const normalizedProvider = provider === "online" ? "online" : "system";
+      appState.readerTts.provider = normalizedProvider;
+      appState.readerTts.playbackError = "";
+      renderCurrentRoute();
+      if (restoreFocus) {
+        window.requestAnimationFrame(() => {
+          screenHost.querySelector(`[data-reader-tts-provider="${normalizedProvider}"]`)?.focus();
+        });
+      }
+    };
+    readerTtsProviderButtons.forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        activateReaderTtsProvider(button.getAttribute("data-reader-tts-provider"));
+      });
+      button.addEventListener("keydown", (event) => {
+        const currentIndex = readerTtsProviderButtons.indexOf(button);
+        const targetIndex = event.key === "ArrowRight" || event.key === "ArrowDown"
+          ? (currentIndex + 1) % readerTtsProviderButtons.length
+          : event.key === "ArrowLeft" || event.key === "ArrowUp"
+            ? (currentIndex - 1 + readerTtsProviderButtons.length) % readerTtsProviderButtons.length
+            : event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? readerTtsProviderButtons.length - 1
+                : -1;
+        if (targetIndex < 0) return;
+        event.preventDefault();
+        activateReaderTtsProvider(readerTtsProviderButtons[targetIndex]?.getAttribute("data-reader-tts-provider"), true);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-config-field]").forEach((field) => {
+      const commit = () => {
+        const key = field.getAttribute("data-reader-tts-config-field") || "";
+        if (!key) return;
+        appState.readerTts[key] = field.value;
+        if (appState.readerTts.provider === "online") {
+          appState.readerTts.onlineConnectionState = "idle";
+          appState.readerTts.onlineConfigSaved = false;
+          appState.readerTts.playbackError = "";
+        }
+      };
+      field.addEventListener("input", commit);
+      field.addEventListener("change", () => {
+        commit();
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-test-online]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const tts = appState.readerTts;
+        if (!String(tts.endpoint || "").trim()) {
+          tts.onlineConnectionState = "missing-endpoint";
+          tts.onlineConfigSaved = false;
+          renderCurrentRoute();
+          return;
+        }
+        if (tts.authType !== "none" && !String(tts.apiKey || "").trim() && !tts.credentialConfigured) {
+          tts.onlineConnectionState = "missing-credential";
+          tts.onlineConfigSaved = false;
+          renderCurrentRoute();
+          return;
+        }
+        const attempt = Date.now();
+        tts.onlineConnectionAttempt = attempt;
+        tts.onlineConnectionState = "testing";
+        tts.onlineConfigSaved = false;
+        renderCurrentRoute();
+        window.setTimeout(() => {
+          if (appState.readerTts.onlineConnectionAttempt !== attempt || appState.readerTts.provider !== "online") return;
+          appState.readerTts.onlineConnectionState = "success";
+          appState.readerTts.onlineTestLatency = appState.readerTts.onlineProvider === "custom" ? 124 : 86;
+          appState.readerTts.onlineVoiceCount = appState.readerTts.onlineProvider === "custom" ? 8 : 24;
+          renderCurrentRoute();
+        }, 520);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-save-online]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const tts = appState.readerTts;
+        if (!["success", "saved"].includes(tts.onlineConnectionState) && !tts.onlineConfigSaved) return;
+        tts.credentialConfigured = tts.authType === "none" || Boolean(String(tts.apiKey || "").trim()) || Boolean(tts.credentialConfigured);
+        tts.apiKey = "";
+        tts.onlineConfigSaved = true;
+        tts.playbackError = "";
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-reader-tts-config-open]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        appState.readerTtsConfigOpen = !appState.readerTtsConfigOpen;
+        renderCurrentRoute();
+      });
+    });
+
     screenHost.querySelectorAll("[data-reader-theme]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
         applyReaderTheme(button.getAttribute("data-reader-theme"));
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w4-theme-default-scheme]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const scheme = button.getAttribute("data-w4-theme-default-scheme") === "night" ? "night" : "day";
+        const activeTheme = appState.readerTheme || readerDefaultThemeValue(data);
+        window.ReaderW4ThemeFontTypographyRenderers?.storage?.set?.(`default-${scheme}-theme`, activeTheme);
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w4-appearance-select]").forEach((select) => {
+      select.addEventListener("change", () => {
+        const key = select.getAttribute("data-w4-appearance-select") || "";
+        if (!["firstLineIndent", "script", "pageAnimation", "alignment"].includes(key)) return;
+        const value = key === "firstLineIndent" ? select.value === "true" : select.value;
+        appState.readerTypography[key] = value;
+        try {
+          const stored = JSON.parse(window.localStorage.getItem("reader-w4-typography") || "null") || {};
+          window.localStorage.setItem("reader-w4-typography", JSON.stringify(Object.assign({}, stored, appState.readerTypography, { [key]: value })));
+        } catch (_) {
+          // The live state still updates when demo persistence is unavailable.
+        }
+        renderCurrentRoute();
       });
     });
 
@@ -10870,14 +12866,63 @@
       });
     });
 
+    screenHost.querySelectorAll("[data-reader-typography-select]").forEach((select) => {
+      select.addEventListener("change", () => {
+        const key = select.getAttribute("data-reader-typography-select") || "";
+        const value = Number(select.value);
+        if (!Number.isFinite(value) || !["fontSize", "lineHeight"].includes(key)) return;
+        appState.readerTypography[key] = value;
+        try {
+          const stored = JSON.parse(window.localStorage.getItem("reader-w4-typography") || "null") || {};
+          window.localStorage.setItem("reader-w4-typography", JSON.stringify(Object.assign({}, appState.readerTypography, stored, { [key]: value })));
+        } catch (_) {
+          // The live state still updates when demo persistence is unavailable.
+        }
+        renderCurrentRoute();
+      });
+    });
+
     screenHost.querySelectorAll("[data-reader-typography-set]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
         const key = button.getAttribute("data-reader-typography-set");
         if (key === "fontFamily") {
           appState.readerTypography.fontFamily = button.getAttribute("data-reader-typography-value") || readerDefaultFontValue(data);
+          try {
+            const stored = JSON.parse(window.localStorage.getItem("reader-w4-typography") || "null") || {};
+            window.localStorage.setItem("reader-w4-typography", JSON.stringify(Object.assign({}, stored, appState.readerTypography)));
+          } catch (_) {
+            // The live state still updates when demo persistence is unavailable.
+          }
           renderCurrentRoute();
         }
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w4-font-cell]").forEach((cell) => {
+      cell.addEventListener("dragstart", (event) => {
+        event.dataTransfer?.setData("text/plain", cell.getAttribute("data-w4-font-value") || "");
+        if (event.dataTransfer) event.dataTransfer.effectAllowed = "move";
+      });
+      cell.addEventListener("dragover", (event) => {
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = "move";
+      });
+      cell.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const sourceValue = event.dataTransfer?.getData("text/plain") || "";
+        const targetValue = cell.getAttribute("data-w4-font-value") || "";
+        if (!sourceValue || !targetValue || sourceValue === targetValue) return;
+        const order = Array.from(screenHost.querySelectorAll("[data-w4-font-cell]"))
+          .map((item) => item.getAttribute("data-w4-font-value") || "")
+          .filter(Boolean);
+        const sourceIndex = order.indexOf(sourceValue);
+        const targetIndex = order.indexOf(targetValue);
+        if (sourceIndex < 0 || targetIndex < 0) return;
+        order.splice(sourceIndex, 1);
+        order.splice(targetIndex, 0, sourceValue);
+        window.ReaderW4ThemeFontTypographyRenderers?.storage?.set?.("font-order", order);
+        renderCurrentRoute();
       });
     });
 
@@ -10935,6 +12980,55 @@
     screenHost.querySelectorAll("[data-reader-replace-scope]").forEach((checkbox) => {
       checkbox.addEventListener("change", (event) => {
         applyReaderReplaceScopeToggle(checkbox.getAttribute("data-reader-replace-scope") || "");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w5-rule-add]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.replaceRuleEditingId = "";
+        appState.replaceRuleDraft = {
+          title: "",
+          pattern: "",
+          replacement: "",
+          scope: ["chapter"],
+          bookIds: ["long-night"],
+          testText: "他愣了一下，随即点头；雨容站在窗前。\n雨容望着窗外连绵的雨，迟迟没有开口。\n老张收起信纸，转身离开房间。"
+        };
+        appState.replaceRuleFormOpen = true;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w5-rule-edit]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const ruleId = button.getAttribute("data-w5-rule-edit") || "";
+        const store = window.ReaderW5ReplaceRulesRenderers?.store;
+        const rule = store?.load?.().find((item) => item.id === ruleId);
+        if (!rule) return;
+        appState.replaceRuleEditingId = ruleId;
+        appState.replaceRuleDraft = Object.assign({}, rule, {
+          scope: (rule.scope || ["chapter"]).filter((scope) => scope === "chapter" || scope === "title"),
+          bookIds: rule.bookIds?.length ? rule.bookIds.slice() : ["long-night"],
+          testText: "他愣了一下，随即点头；雨容站在窗前。\n雨容望着窗外连绵的雨，迟迟没有开口。\n老张收起信纸，转身离开房间。"
+        });
+        appState.replaceRuleFormOpen = true;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w5-rule-cancel]").forEach((button) => {
+      button.addEventListener("click", () => {
+        appState.replaceRuleFormOpen = false;
+        appState.replaceRuleEditingId = "";
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w5-form-field]").forEach((input) => {
+      input.addEventListener("input", () => {
+        const key = input.getAttribute("data-w5-form-field") || "";
+        appState.replaceRuleDraft = Object.assign({}, appState.replaceRuleDraft, { [key]: input.value });
+        if (key === "pattern" || key === "replacement" || key === "testText") renderCurrentRoute();
       });
     });
 
@@ -11298,6 +13392,27 @@
       });
     });
   }
+
+  window.ReaderRuntimeSharedFragments = {
+    frameStyle(data, appState) {
+      return readerThemeStyle(data, appState);
+    },
+    surfaceHtml(data, appState) {
+      return sharedReaderSurface(data, "", appState);
+    },
+    topOverlayHtml(data, appState) {
+      return readerTopOverlay(data, Object.assign({}, appState, { readerMoreOpen: false }));
+    },
+    stateHostHtml(data, appState) {
+      return `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`;
+    },
+    brightnessRailHtml(data, appState) {
+      return readerBrightnessRail(data, appState);
+    },
+    originReaderScreen(data, appState) {
+      return renderReaderContinuityOrigin(data, appState?.sourceSwitchOriginRoute, appState);
+    }
+  };
 
   window.ReaderFrontendDemoDraft = {
     render

@@ -267,7 +267,7 @@ test("core-event fixture correlationId 为非空字符串（若存在）", () =>
 
 // CoreCommand 与 CoreEvent 命名约定：CoreEvent 使用过去式，CoreCommand 使用动词原形
 test("CoreEvent type 命名采用过去式（含 .ed/.failed/.ready 等后缀或 completed/updated）", () => {
-  const pastSuffixes = [".opened", ".parsed", ".failed", ".listed", ".loaded", ".resolved", ".updated", ".ready", ".completed", ".applied", ".detected", ".saved", ".deleted", ".refreshed", ".planned", ".started", ".paused", ".resumed", ".stopped", ".progress", ".pushed", ".pulled", ".added", ".removed", ".prefetched", ".cleared", ".created", ".operation.failed"];
+  const pastSuffixes = [".opened", ".parsed", ".failed", ".listed", ".loaded", ".resolved", ".updated", ".ready", ".completed", ".applied", ".detected", ".saved", ".deleted", ".changed", ".refreshed", ".planned", ".started", ".paused", ".resumed", ".stopped", ".progress", ".pushed", ".pulled", ".added", ".removed", ".prefetched", ".cleared", ".created", ".operation.failed"];
   for (const t of coreEvtSchema.properties.type.enum) {
     const ok = pastSuffixes.some((s) => t.endsWith(s));
     assert.ok(ok, `CoreEvent type=${t} 不符合过去式命名约定`);

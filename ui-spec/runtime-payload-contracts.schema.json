@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/ui-spec/runtime-payload-contracts.schema.json",
+  "title": "Reader UI Runtime Typed Payload Contracts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "sourceOfTruth", "appearanceSourceOfTruth", "definitions", "contracts"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "sourceOfTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "sources", "numericPolicy"],
+      "properties": {
+        "repository": { "type": "string", "minLength": 1 },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["path", "sha256"],
+            "properties": {
+              "path": { "type": "string", "minLength": 1 },
+              "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+            }
+          }
+        },
+        "numericPolicy": { "type": "string", "enum": ["ieee754-safe-integer"] }
+      }
+    },
+    "appearanceSourceOfTruth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "storage", "schemaVersion"],
+      "properties": {
+        "owner": { "type": "string", "const": "ReaderUIRuntime" },
+        "storage": { "type": "string", "minLength": 1 },
+        "schemaVersion": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "definitions": {
+      "type": "object",
+      "additionalProperties": { "$ref": "#/$defs/schemaNode" }
+    },
+    "contracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "event": { "type": "string", "minLength": 1 },
+          "dispatchTarget": { "type": "string", "enum": ["core", "runtime", "internal", "composite"] },
+          "coreCommand": { "type": "string", "minLength": 1 },
+          "runtimeOperation": { "type": "string", "minLength": 1 },
+          "descriptor": { "$ref": "#/$defs/actionDescriptor" },
+          "payloadSchema": { "$ref": "#/$defs/schemaNode" },
+          "resultSchemas": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/resultSchema" }
+          }
+        },
+        "required": ["event", "dispatchTarget", "descriptor", "payloadSchema", "resultSchemas"]
+      }
+    }
+  },
+  "$defs": {
+    "actionDescriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "coreSequence"],
+      "properties": {
+        "action": { "type": "string", "minLength": 1 },
+        "value": { "type": "string" },
+        "coreSequence": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "hostRequest": { "type": "string", "minLength": 1 }
+      }
+    },
+    "resultSchema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["effectType", "effectKind", "schema"],
+      "properties": {
+        "effectType": { "type": "string", "minLength": 1 },
+        "effectKind": { "type": "string", "enum": ["core", "host"] },
+        "schema": { "$ref": "#/$defs/schemaNode" }
+      }
+    },
+    "schemaNode": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["$ref"],
+          "properties": {
+            "$ref": { "type": "string", "pattern": "^#/definitions/" },
+            "nullable": { "type": "boolean" }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type"],
+          "properties": {
+            "type": { "type": "string", "enum": ["object", "array", "string", "integer", "number", "boolean", "json"] },
+            "nullable": { "type": "boolean" },
+            "additionalProperties": {
+              "oneOf": [
+                { "type": "boolean" },
+                { "$ref": "#/$defs/schemaNode" }
+              ]
+            },
+            "properties": {
+              "type": "object",
+              "additionalProperties": { "$ref": "#/$defs/schemaNode" }
+            },
+            "required": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+            "items": { "$ref": "#/$defs/schemaNode" },
+            "enum": { "type": "array", "items": { "type": "string" }, "minItems": 1, "uniqueItems": true },
+            "const": { "type": ["string", "boolean", "number"] },
+            "minLength": { "type": "integer", "minimum": 0 },
+            "maxLength": { "type": "integer", "minimum": 0 },
+            "pattern": { "type": "string", "minLength": 1 },
+            "nonBlank": { "type": "boolean" },
+            "minItems": { "type": "integer", "minimum": 0 },
+            "minimum": { "type": "number" },
+            "maximum": { "type": "number" },
+            "constraints": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["kind"],
+                "properties": {
+                  "kind": { "type": "string", "enum": ["nonBlankWhen", "booleanAnyTrue", "validRegexWhen", "stringAnyNonBlank"] },
+                  "field": { "type": "string" },
+                  "whenField": { "type": "string" },
+                  "equals": { "type": "boolean" },
+                  "fields": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+                  "defaults": { "type": "object", "additionalProperties": { "type": "boolean" } },
+                  "flagField": { "type": "string" },
+                  "default": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["oneOf"],
+          "properties": {
+            "oneOf": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "$ref": "#/$defs/schemaNode" }
+            },
+            "nullable": { "type": "boolean" }
+          }
+        }
+      ]
+    }
+  }
+}

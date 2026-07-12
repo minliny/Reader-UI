@@ -80,3 +80,13 @@ Reducer 也可以直接发起 HostRequest（如 `permission.request`、`clipboar
 - App 启动时调用 `core_initialize(config)`，config 含 `protocolVersion`。
 - Core 校验 protocolVersion，不兼容则返回错误。
 - 三端应在 `core_initialize` 失败时降级到只读模式或提示升级。
+
+## 8. Core Bridge Mapping
+
+P0 CoreCommand（RUI 命名）与 Reader-Core-Native Rust protocol 的逐项映射见：
+
+- [Reader-Core-Native/docs/core-bridge-mapping.md](../../Reader-Core-Native/docs/core-bridge-mapping.md)
+
+该文档覆盖 Slice 2 解锁所需的 9 条 P0 命令：`book.open` / `book.parse` / `chapter.list` / `content.load` / `reader.location.resolve` / `reader.progress.update` / `source.detail` / `source.search` / `bookshelf.list`。
+
+三端 Core bridge executor 必须按该文档完成命名翻译（RUI → Core protocol）和 payload 字段补齐后调用 `rc_runtime_send`。本文 FFI 协议版本不变（1.0.0），mapping 文档是对现有协议的引用补充。

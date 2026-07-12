@@ -1,0 +1,2293 @@
+{
+  "schemaVersion": "1.1.0",
+  "graphSha256": "c83fad4bf87a80a529d45f1ca6c2f0540ac37d084fd218efab22adc48e9de822",
+  "canonicalRoutes": 235,
+  "graphRoutes": 235,
+  "routeFixtureRoutes": 235,
+  "directRoutes": 159,
+  "aliasRoutes": 76,
+  "resolvableRoutes": 235,
+  "explicitGapRoutes": 0,
+  "viewStateFixtures": 165,
+  "variants": 165,
+  "componentInstances": 519,
+  "canonicalComponentTypes": 174,
+  "componentCatalogTypes": 174,
+  "usedComponentTypes": 129,
+  "referencedComponentTypes": 129,
+  "explicitGapComponentTypes": 45,
+  "unusedComponentTypes": [
+    "SearchEntry",
+    "SourceTypeSegment",
+    "CurrentSourceCard",
+    "SourceCategoryChips",
+    "DiscoveryContentCard",
+    "SourceStatusBar",
+    "ShelfChipGroup",
+    "RecentUpdateCard",
+    "BookListItem",
+    "ProgressBar",
+    "SubscriptionSummaryCard",
+    "FeedStatusChips",
+    "FeedSourceChips",
+    "RssEntryItem",
+    "UnreadIndicator",
+    "LocalOverviewCard",
+    "QuickEntryGrid",
+    "SettingsSection",
+    "SettingsListItem",
+    "SearchResultList",
+    "AddToShelfButton",
+    "ReadButton",
+    "BookCover",
+    "BookTitleAuthor",
+    "SourceStatus",
+    "DirectoryPreview",
+    "BookIntro",
+    "ConfigEntry",
+    "Sheet",
+    "Overlay",
+    "Card",
+    "Chip",
+    "Toggle",
+    "Slider",
+    "Stepper",
+    "Segment",
+    "Dropdown",
+    "Input",
+    "FilterBar",
+    "WebView",
+    "FloatingBrightness",
+    "FloatingQuickActions",
+    "SourceSettingsEntryPage",
+    "WebDavConfigPage",
+    "SourceFormPage"
+  ],
+  "componentFixtureEvidenceSummary": {
+    "data-backed": 63,
+    "explicit-gap": 45,
+    "type-only": 57,
+    "partial": 9
+  },
+  "componentFixtureEvidence": [
+    {
+      "type": "AppTopBar",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 18,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BackTopBar",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 89,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchEntry",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceTypeSegment",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "CurrentSourceCard",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceCategoryChips",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoveryContentCard",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceStatusBar",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverSourceBar",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverEntryRow",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverFilterTrigger",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverListHead",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverBookList",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverStatePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 4,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger",
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 3,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverSourceBulkPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverSourceLoginPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DiscoverRuleTestPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BottomNav",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 15,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "selected"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ShelfChipGroup",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ContinueReadingCard",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "author",
+        "bookId",
+        "coverKey",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RecentUpdateCard",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookshelfShelfSection",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 4,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "filterOpen",
+        "title",
+        "viewMode"
+      ],
+      "childTypes": [
+        "BookGrid",
+        "List",
+        "ShelfSectionHeader"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ShelfSectionHeader",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 4,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title",
+        "viewMode"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookGrid",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 3,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "viewMode"
+      ],
+      "childTypes": [
+        "BookCard"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookCard",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 12,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "author",
+        "bookId",
+        "coverKey",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookListItem",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ProgressBar",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SubscriptionSummaryCard",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FeedStatusChips",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FeedSourceChips",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssEntryItem",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssSearchEntry",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssModeRow",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssSourceOverview",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssArticleSection",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssAllPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssOriginalPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssRefreshingPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssOriginalBrowserPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssFavoriteGroupsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssSourceGroupsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssSourceImportPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssSourceEditPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "mode"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "UnreadIndicator",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "LocalOverviewCard",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "QuickEntryGrid",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SettingsHomePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SettingsGeneralPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookshelfSearchSettingsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ProgressSyncPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SettingsSection",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SettingsListItem",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchInputBox",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "query"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ScopeSelector",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "GroupSelector",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchHistoryList",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchResultList",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "AddToShelfButton",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReadButton",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookCover",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookTitleAuthor",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceStatus",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "DirectoryPreview",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookIntro",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookHero",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookSummaryCard",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookChapterList",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ConfigEntry",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReadingBackgroundLayer",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 21,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "theme"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReadingTextFlow",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 8,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "fontFamily",
+        "phase",
+        "state"
+      ],
+      "childTypes": [
+        "Button",
+        "ErrorState",
+        "Loading",
+        "Offline"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReadingInfoLayer",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 8,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "chapterTitle",
+        "progress"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "TapZones",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 5,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "enabled"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Loading",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 7,
+      "typeOnlyInstanceCount": 3,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 3
+    },
+    {
+      "type": "Empty",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 2
+    },
+    {
+      "type": "Error",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "retryable"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ErrorState",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 5,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 5
+    },
+    {
+      "type": "Offline",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 4,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 2
+    },
+    {
+      "type": "Permission",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 1
+    },
+    {
+      "type": "Toast",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [
+        "Button"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 1
+    },
+    {
+      "type": "Sheet",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Dialog",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 9,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [
+        "Button"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 1
+    },
+    {
+      "type": "Overlay",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "List",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [
+        "ListRow"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ListRow",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "author",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Card",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Chip",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Button",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 33,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "label",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 31,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Toggle",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Slider",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Stepper",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Segment",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Dropdown",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Input",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FormSection",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [
+        "Button"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FilterBar",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "Content",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 4,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 1
+    },
+    {
+      "type": "WebView",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderBase",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 47,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "theme"
+      ],
+      "childTypes": [
+        "ReadingBackgroundLayer",
+        "ReadingInfoLayer",
+        "ReadingTextFlow",
+        "TapZones"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderTopArea",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 45,
+      "typeOnlyInstanceCount": 45,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderControlSheet",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderBottomBar",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 11,
+      "typeOnlyInstanceCount": 11,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderDirectoryPanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 5,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [
+        "phase"
+      ],
+      "childTypes": [
+        "Button",
+        "ErrorState",
+        "Loading",
+        "Offline"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderAppearancePanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 7,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [
+        "section"
+      ],
+      "childTypes": [
+        "Dialog",
+        "FormSection",
+        "Toast"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderTtsPanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderSettingsPanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderFullDirectoryPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderFullTtsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderFullAppearancePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 5,
+      "typeOnlyInstanceCount": 5,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderFullSettingsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderBookCachePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderDebugInfoPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderSearchPanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderReplacePanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 6,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [
+        "section"
+      ],
+      "childTypes": [
+        "Button",
+        "Content",
+        "Dialog",
+        "FormSection",
+        "List"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReaderAutoScrollPanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FloatingBrightness",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FloatingQuickActions",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "FloatingPageControl",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 2
+    },
+    {
+      "type": "NightToast",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceSwitchResultsPanel",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 1
+    },
+    {
+      "type": "SourceSwitchFlowPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 8,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [
+        "phase"
+      ],
+      "childTypes": [
+        "Button",
+        "Dialog",
+        "Empty",
+        "ErrorState",
+        "Loading",
+        "SourceSwitchResultsPanel"
+      ],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceImportPreviewPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceGroupsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDetectPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDebugPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDebugRunningPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDebugResultPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 4,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDebugContentLogPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceCodeViewPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceLogsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDeleteConfirmPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceRuleEditPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 3,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [
+        "title",
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceBatchPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "AppShellStructure",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "MainTabsStructure",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchHomePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "placeholder",
+        "query"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchResultsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "query"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SearchStatePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 3,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title",
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookTocPreviewPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookshelfEmptyPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceManagementPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDetailPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceImportOptionsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceDisabledState",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 1,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceSettingsEntryPage",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceTestResultPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "WebDavConfigPage",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SyncSettingsEntryPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SyncBackupPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 3,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SyncErrorPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SyncProgressPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "progress",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RestoreConfirmPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 3,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RestoreProgressPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "partial",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RestoreConflictPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RestoreResultPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RemoteWebDavBooksPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssDetailPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssEmptyState",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title",
+        "uiEvent",
+        "uiEventPayload",
+        "uiEventTrigger"
+      ],
+      "childTypes": [],
+      "executableBindings": 1,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssErrorState",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "GlobalStatePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 3,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title",
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "OfflineStatePage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "PermissionRequiredPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "action",
+        "message",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "AboutVersionPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title",
+        "version"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "LocalBookImportPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "ReadingSettingsEntryPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookMoreMenuPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "subtitle",
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookGroupManagementPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "GroupManagementPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "variant"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookBatchManagementPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BookDirectoryPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 1,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "AboutFeedbackPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "type-only",
+      "instanceCount": 2,
+      "typeOnlyInstanceCount": 2,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "SourceFormPage",
+      "catalogStatus": "explicit-gap",
+      "evidenceClass": "explicit-gap",
+      "instanceCount": 0,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "GlobalSettingsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "BackupSettingsPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    },
+    {
+      "type": "RssSubscriptionManagementPage",
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
+      "typeOnlyInstanceCount": 0,
+      "propKeys": [
+        "title"
+      ],
+      "childTypes": [],
+      "executableBindings": 0,
+      "stateEventEvidence": 0
+    }
+  ],
+  "typedActionBindings": 36,
+  "stateEventEvidence": 19,
+  "totalCanonicalEventEvidence": 55,
+  "explicitActionGaps": 6,
+  "variantsWithActionGaps": 6,
+  "actionGapsByReason": {
+    "label-without-ui-event": 6
+  },
+  "missingRouteFixtureIds": [],
+  "explicitGapRouteIds": [],
+  "proofBoundary": {
+    "graphGreenMeans": "canonical route/shell/alias/direct fixture tree/gap consistency",
+    "graphGreenDoesNotMean": [
+      "iOS native renderer complete",
+      "Android native renderer complete",
+      "HarmonyOS native renderer complete",
+      "Authoritative rollout enabled",
+      "type-only or partial component fixtures contain enough semantic data for a native renderer"
+    ]
+  }
+}

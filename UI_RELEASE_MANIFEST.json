@@ -1,0 +1,1302 @@
+{
+  "$schema": "ui-spec/ui-release-manifest.schema.json",
+  "schemaVersion": 1,
+  "version": "2.5.0",
+  "hashAlgorithm": "sha256",
+  "files": [
+    {
+      "path": "Package.swift",
+      "byteLength": 1786,
+      "sha256": "29044755420febef87da85053b4c91ef4048639c14b93c06a9b3ff89d3bd65f9"
+    },
+    {
+      "path": "build.gradle.kts",
+      "byteLength": 155,
+      "sha256": "0c67bfe1f11ca83049ee3f21952e377755345da941d0c4cce80f0c8952cae36d"
+    },
+    {
+      "path": "contracts/VERSION.json",
+      "byteLength": 26767,
+      "sha256": "ebe95bb1e8e4de9de3db17210d1e91f1bd24dc9800f51870b033deb646e47d62"
+    },
+    {
+      "path": "contracts/content.schema.json",
+      "byteLength": 2887,
+      "sha256": "b1895f4fbcf527b89551c6cce12ba0a55e69e01460cd039e73e2149ba67bd717"
+    },
+    {
+      "path": "contracts/core-command.schema.json",
+      "byteLength": 3202,
+      "sha256": "3203a6e3a3b885984d7c83af55a68ffe573ef995281214e377b9fa0158f5ad9c"
+    },
+    {
+      "path": "contracts/core-event.schema.json",
+      "byteLength": 4457,
+      "sha256": "48f048437a0898ebe46e285b419627377e531a8c41141edc65125abfc6caabaa"
+    },
+    {
+      "path": "contracts/device-conformance-evidence.schema.json",
+      "byteLength": 5556,
+      "sha256": "cf7d8c26be704e8e7b502edd7c4064ff010e920dfd8c2652c98ada12e154034c"
+    },
+    {
+      "path": "contracts/device-conformance-plan.schema.json",
+      "byteLength": 6983,
+      "sha256": "61a1ee6aaf7086c94033ad0dda5ca3276ad414b4e93e48cb09b4d36c16c3ca33"
+    },
+    {
+      "path": "contracts/fixtures/content.fixtures.json",
+      "byteLength": 1982,
+      "sha256": "9e06eb424ed4e0eedb51ae5c825cc97c08e18ad1f3245c5de82b60de0787a3f9"
+    },
+    {
+      "path": "contracts/fixtures/core-command.fixtures.json",
+      "byteLength": 6819,
+      "sha256": "17fbc447d9123e013f336f5ee5d0350887702f7bbb587e909b2230a24754097e"
+    },
+    {
+      "path": "contracts/fixtures/core-event.fixtures.json",
+      "byteLength": 5938,
+      "sha256": "1e094526f74343c8b13787d6bbb39425b60114d861dbc4d656ab69b8be1fcb8d"
+    },
+    {
+      "path": "contracts/fixtures/host-request.fixtures.json",
+      "byteLength": 8855,
+      "sha256": "27200293dd75a1feb39a32d6658c06a1762e23f5b694e51d1c6e67fdcdea85ca"
+    },
+    {
+      "path": "contracts/fixtures/host-result.fixtures.json",
+      "byteLength": 7939,
+      "sha256": "547bd36f2bd6ee26600cccab6507e2a536fd2a02fa5a2af871cb5eeefab081b1"
+    },
+    {
+      "path": "contracts/fixtures/motion-policy.fixtures.json",
+      "byteLength": 11675,
+      "sha256": "ae40ccf95b1e0638a66160d27ca062592e65a5142fb6a4dbca70a2e8387fbeaa"
+    },
+    {
+      "path": "contracts/fixtures/motion.fixtures.json",
+      "byteLength": 53610,
+      "sha256": "6b36a260291a5283326776e8d5e26fe0ba66d3849ab9c8889595d508c54dd624"
+    },
+    {
+      "path": "contracts/fixtures/progress-location.fixtures.json",
+      "byteLength": 1976,
+      "sha256": "1ff2398895ecfd3844eaa6e1c291afe1cf42cdd97bcc6f74f07417cf3c110c20"
+    },
+    {
+      "path": "contracts/fixtures/route.fixtures.json",
+      "byteLength": 21707,
+      "sha256": "73e3bab166c929201060d6260899c16eb46b7f61858ab227f5056f2037f497b9"
+    },
+    {
+      "path": "contracts/fixtures/runtime-payload-contract.fixtures.json",
+      "byteLength": 45527,
+      "sha256": "683e9a815ec765e89b154200307b197dac853597d657baeb08454b1ead9d589b"
+    },
+    {
+      "path": "contracts/fixtures/runtime-payload-contract.fixtures.schema.json",
+      "byteLength": 511,
+      "sha256": "4a262b1736422edb85c3b12730dcf69d4a1436fa462909844a838e06ea223f39"
+    },
+    {
+      "path": "contracts/fixtures/runtime-result-contract.fixtures.json",
+      "byteLength": 40658,
+      "sha256": "cbc17d17f9207ad4df91544d846d495579667e74cc54ddc813d81015220f102b"
+    },
+    {
+      "path": "contracts/fixtures/runtime-result-contract.fixtures.schema.json",
+      "byteLength": 580,
+      "sha256": "c55323efa486cffdf1617f9289ccb828fa3e44f152a8e761528e41ae562cb29f"
+    },
+    {
+      "path": "contracts/fixtures/state-rule.fixtures.json",
+      "byteLength": 7498,
+      "sha256": "67be3bceb17aa96ca17df2a13603a46adb031c528d7c4b1f97052bde0b952a0d"
+    },
+    {
+      "path": "contracts/fixtures/sync-conflict.fixtures.json",
+      "byteLength": 2897,
+      "sha256": "10a49107acd148105b7b9a17bfe831b84844024ff618ffccd773fd11c44d9b86"
+    },
+    {
+      "path": "contracts/fixtures/token.fixtures.json",
+      "byteLength": 37664,
+      "sha256": "91769cfad87a4bd1161735f7b723cbf3fa4edfead288d1c623e821eea1b04222"
+    },
+    {
+      "path": "contracts/fixtures/ui-event.fixtures.json",
+      "byteLength": 14706,
+      "sha256": "478a5b54d58b233a4fe21a73b19789208cf142d477c23b2fcd7bacbd85f30d8e"
+    },
+    {
+      "path": "contracts/fixtures/ui-state.fixtures.json",
+      "byteLength": 21040,
+      "sha256": "444f0fd9baa710e39b9ca934da1abcbb1f8e089b02e869f595702d8e191d7d2d"
+    },
+    {
+      "path": "contracts/fixtures/view-state.fixtures.json",
+      "byteLength": 129581,
+      "sha256": "ff9d3acb65f224d2c4cc165c7918dc95826db9ee88eca0d90a5f3cbd3b9f9fd3"
+    },
+    {
+      "path": "contracts/host-request.schema.json",
+      "byteLength": 31494,
+      "sha256": "39fa3556a6f2dd9ec814b5db75462eeb9e0d5ab920351986f6600fc063cfd89d"
+    },
+    {
+      "path": "contracts/host-result.schema.json",
+      "byteLength": 30846,
+      "sha256": "019d97f7b72d7d13e2a3f7b53184f1629e98ab7927444a699f9190a4f6ea2d4d"
+    },
+    {
+      "path": "contracts/motion-policy.schema.json",
+      "byteLength": 7343,
+      "sha256": "cdaef520f23763e2d600b114f9426a89575c34a43db48fa98e89c582b34890ad"
+    },
+    {
+      "path": "contracts/motion.schema.json",
+      "byteLength": 8975,
+      "sha256": "1e86dfbf9ff0d3470c041a097b42917d74ddd5bb46e8d6d135772024e6a20716"
+    },
+    {
+      "path": "contracts/progress-location.schema.json",
+      "byteLength": 2853,
+      "sha256": "43909cca27a5ca4b25dbedce6d93b736d5c06ea824307d1e60837ec27bde5844"
+    },
+    {
+      "path": "contracts/route.schema.json",
+      "byteLength": 9128,
+      "sha256": "9545fecec2aca82694c379f7c4ff85561866b2c7c35ef9a279ca6e2aa4ebe86a"
+    },
+    {
+      "path": "contracts/state-rule.schema.json",
+      "byteLength": 6826,
+      "sha256": "74d99eb6049eedbd660473d94b1ec02bdbd8d15a0d357e17cb452e3504cb62fc"
+    },
+    {
+      "path": "contracts/sync-conflict.schema.json",
+      "byteLength": 2178,
+      "sha256": "c361a4b152ff48b9496a17eedc05dae2ab972cf33b9b3a9dacb5c6a10292410b"
+    },
+    {
+      "path": "contracts/token.schema.json",
+      "byteLength": 6954,
+      "sha256": "27c07b387b10a262c3c74b1b619d7498c077ebbabc847c148a74f959e22694be"
+    },
+    {
+      "path": "contracts/ui-event.schema.json",
+      "byteLength": 10205,
+      "sha256": "2e79eb02797e7494e6f686cf0383df630e9589b4699a9c75462920c2d2916655"
+    },
+    {
+      "path": "contracts/ui-state.schema.json",
+      "byteLength": 14740,
+      "sha256": "c596f65f9b8d5008860d43acc1876f0165273ebcddbaf62f561be4bf96d9d6e8"
+    },
+    {
+      "path": "contracts/view-state.schema.json",
+      "byteLength": 9847,
+      "sha256": "32973143b51fbd652fcff4201ee0e59bf3043c11e00e776f74e187c31dbadbf6"
+    },
+    {
+      "path": "device-conformance/DEVICE_CONFORMANCE_PLAN.json",
+      "byteLength": 155698,
+      "sha256": "0323f6e196980ba4fe12e8ab692424a900f16be57b1668dbbea2778d8eaf85c8"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons.js",
+      "byteLength": 36671,
+      "sha256": "41b519c4e5777f004f24662cd473fcac8dcfdf609c1c23477c1faad992c18e91"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-auto-page-traced.svg",
+      "byteLength": 2142,
+      "sha256": "0734e4c09fe5a6ab4ef392fb7199a295d4ed515862f9009804dad0f32c02a21a"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-auto-page.png",
+      "byteLength": 4439,
+      "sha256": "5053c35c9e2768c4df7723b09d1ece0d255096c0eb553dca5bd43ad8a2fb5518"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-content-replace-traced.svg",
+      "byteLength": 1964,
+      "sha256": "1cea404051ea6b41b673eca6ed4996e1bc73b0726acf98ca1ae901eb5880968b"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-content-replace.png",
+      "byteLength": 3703,
+      "sha256": "383a8c23af814a9d321980b289af3e98dcab3c71b8cadc876b4414251a3e2552"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-content-replace.svg",
+      "byteLength": 25837,
+      "sha256": "f2477efbd3590f432227d944a2532c3622ddf87fcf2260dc5f69afb16d4bf3b5"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-content-search-traced.svg",
+      "byteLength": 3006,
+      "sha256": "999fce0df92de4a7948e3c6fc87c538663e1ae351dedd79248b18b30ffe893cb"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-content-search.png",
+      "byteLength": 5557,
+      "sha256": "49cdac4feb6ec8be3ac7d27b9a0f79475616e82fc46f4a1082762687d1eb59e3"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-appearance-traced.svg",
+      "byteLength": 3595,
+      "sha256": "1cf7858b172cd82959eef60563290fc62103b734b62d801459915ef177adfaa7"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-appearance.png",
+      "byteLength": 5194,
+      "sha256": "997ef7aaae39b3f00a785f5f39c11856808f1fedce8c60ecfd33f0fe9647f066"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-directory-traced.svg",
+      "byteLength": 1942,
+      "sha256": "17a58dad0859ac274279152857b8f49496695078cf9db26b1fcbd939a04f9a05"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-directory.png",
+      "byteLength": 3108,
+      "sha256": "2afa1ca8296063b95516d85d4c2f35eb266037279ffee9ef1f0a176db7385e52"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-settings-traced.svg",
+      "byteLength": 4098,
+      "sha256": "4b7ccc93d43ddfde2db90f92ea8b0430ee8e3137346e19eac59ed166d437daea"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-settings.png",
+      "byteLength": 7744,
+      "sha256": "b0a25c3bf2187fc6889152335a829b6698a305952b5a756786cc9cf9fe54a400"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-tts-traced.svg",
+      "byteLength": 1404,
+      "sha256": "ca3f707953847b13d4dbacecbdee08a19deaded12ac12440e525b12e991bef1f"
+    },
+    {
+      "path": "frontend-demo-optimized/asset-library/icons/reader-module-tts.png",
+      "byteLength": 2310,
+      "sha256": "b09ae1f8eb1eacc1df68f6c701db204df9762c9398b2ff0e3bb3937947eebc5d"
+    },
+    {
+      "path": "frontend-demo-optimized/covers/android-notes.png",
+      "byteLength": 70009,
+      "sha256": "ccb2cc33211ab8964ba5c3841cc6c1c4b2c37608b778457874b414a6d84f14a6"
+    },
+    {
+      "path": "frontend-demo-optimized/covers/bright-moon.png",
+      "byteLength": 55571,
+      "sha256": "efedf19ba05c76a1e47831f44606aae1cc931445585d2cefe771fa7d6dcab48e"
+    },
+    {
+      "path": "frontend-demo-optimized/covers/long-night.png",
+      "byteLength": 79039,
+      "sha256": "23291bf388d4358e0cb44b3f612ba7b692292078a5f87bd0c7e0bcc55ac51045"
+    },
+    {
+      "path": "frontend-demo-optimized/covers/mystery-lord.png",
+      "byteLength": 69997,
+      "sha256": "66a7a82c14d8c4a52c18febe22d5bc9aa0a2927f669ef5211bff46e99f449b36"
+    },
+    {
+      "path": "frontend-demo-optimized/covers/renjian-cihua.png",
+      "byteLength": 70118,
+      "sha256": "08637e47a7caa80eaadfc416c3907231d65f8b31b0eac4cf5e8a8d19242bb547"
+    },
+    {
+      "path": "frontend-demo-optimized/covers/three-body.png",
+      "byteLength": 53590,
+      "sha256": "09a5a05dc28d4d3f292830bd12d115856a90c6ff79deecde5f20b9cf4f0f84a6"
+    },
+    {
+      "path": "frontend-demo-optimized/fixture.js",
+      "byteLength": 21857,
+      "sha256": "c0e36122fa8ef30e352f3da8b693c76ed069a446b61fa0543d9f344b1ccac48d"
+    },
+    {
+      "path": "frontend-demo-optimized/index.html",
+      "byteLength": 2719,
+      "sha256": "9a81669141b7eb3cffaef7f9386f903103c118d473ad684034df787b70637d30"
+    },
+    {
+      "path": "frontend-demo-optimized/motion-controller.js",
+      "byteLength": 54091,
+      "sha256": "8d6263070429e8411b57abf89b5a5856be56e2486971ebcbdd381e24dcd1021b"
+    },
+    {
+      "path": "frontend-demo-optimized/motion-tokens.css",
+      "byteLength": 40244,
+      "sha256": "69ce6dc71d46214375d39e5665b87f1d260dfa839ae379fde4d172d9015ebdac"
+    },
+    {
+      "path": "frontend-demo-optimized/render-runtime.js",
+      "byteLength": 681922,
+      "sha256": "2c24d8f4bdc02cd98d09df556c9c3a730354fec31dcafc4e8f40e308b51cc11d"
+    },
+    {
+      "path": "frontend-demo-optimized/render.js",
+      "byteLength": 452,
+      "sha256": "e30acca8b333a026bc21532b5d7586df717cc46e8bc15906662e7d30492645eb"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
+      "byteLength": 116575,
+      "sha256": "07864a08ae1f0901aa78a3f665b78d03dc25aa03af469edbd66ec482a7a1c3e3"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/d2-rss-renderers.js",
+      "byteLength": 112221,
+      "sha256": "6774ca17153817465ccf6bdadba28d5ccd768930005d47a4c01df1d63e98c407"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+      "byteLength": 109337,
+      "sha256": "1a402acdce70aca0d6bf2c4718d83c304b35cf8c5cb5a41342b3dd550b73d041"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
+      "byteLength": 56464,
+      "sha256": "457c9e7a2d9410a1d367afca35979deaea0a102265b5e97a6d3a825f241ae6ce"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
+      "byteLength": 32236,
+      "sha256": "24a601bf50bcab3b897c1db4f41ee84a02b648f6e7770dc6cae674c364b3e41c"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
+      "byteLength": 23833,
+      "sha256": "fb25340c299d9af562d3b9db3e1057db364bd6bbe96b4ca7005035988cee76f5"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/w1-import-renderers.js",
+      "byteLength": 35319,
+      "sha256": "065b6fb915f756c2628c9c6edc17b6bddcdd98ad45829217bfd5552bea0fee52"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/w2-reading-renderers.js",
+      "byteLength": 27416,
+      "sha256": "cd4d2ab838a82bebd42e57a354dc11a8ab685e7f52be9f7a7cf247b24ada290f"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
+      "byteLength": 25639,
+      "sha256": "5da9bbae6ccff9163802f9ea76756816ae6f43ff643945e1564c627805ac8776"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
+      "byteLength": 74854,
+      "sha256": "bb6d8853268d81976c4c46ee9cf5212b132658d13dc412027292879b7c5dfa4d"
+    },
+    {
+      "path": "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
+      "byteLength": 54046,
+      "sha256": "cc63e95c3ed003893a78e0b457edfac958230bb77da4914dc12068913e736e7e"
+    },
+    {
+      "path": "frontend-demo-optimized/route-contract.js",
+      "byteLength": 38954,
+      "sha256": "60c589f4d3dff5b2dcf56d4e6eed7591b7db01af7542590ecdd4979e1ac03dbc"
+    },
+    {
+      "path": "frontend-demo-optimized/shared-shell-kit/kit.css",
+      "byteLength": 3209,
+      "sha256": "abe882194fe65eae530df70c8873753f84d4d2a2d6fd7956fad30ff780a50417"
+    },
+    {
+      "path": "frontend-demo-optimized/shared-shell-kit/kit.js",
+      "byteLength": 10649,
+      "sha256": "1f21f82bcfd1b7fb44107377ff4d6ce090920a4ec255c0e5bf08d1e6ac073f9e"
+    },
+    {
+      "path": "frontend-demo-optimized/styles.css",
+      "byteLength": 1812,
+      "sha256": "54bfd7e149c52b073d70c66373ae975699ee11eca9aa54d8444557c05330a65f"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/00-foundation.css",
+      "byteLength": 30585,
+      "sha256": "d24d28b0fe9f91f041969c83c9073edc640240b1e28a8e58316e540915057857"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/01-shell-layout.css",
+      "byteLength": 102342,
+      "sha256": "b03e56f2dc1dd81377a786456279e0480b8ead6f861b71eba117f36356920441"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/02a-reader-control.css",
+      "byteLength": 12591,
+      "sha256": "3b9e42c6fbae812a93182820afd4996e44e94aa98218fd170a52067c9ee75a1a"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/02b-reader-toc-module.css",
+      "byteLength": 12537,
+      "sha256": "6db2ba584d9cec154ef6fd98a38494ca49ecceae7797cc5a13b189997d9a091d"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/02c-reader-auto-search.css",
+      "byteLength": 22541,
+      "sha256": "1f17ccfca604bbd32fb8727f2c04a292fc338a894be3bda2b3a1b7bd63ee39fa"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/02d-reader-tts-typography.css",
+      "byteLength": 8989,
+      "sha256": "4e3a0057ef841afb0791dd24440068f85608605e5150b0c4c6dae9e2b8aaae36"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/03a-reader-appearance.css",
+      "byteLength": 18276,
+      "sha256": "e9c20f20e6261a2557071d0be07b0708d4703f55f9a6eab495a8a8937d7b1caf"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/03b-reader-settings.css",
+      "byteLength": 8425,
+      "sha256": "505d6ecc230740f59dc759f94c3ff0f668491b9d38185f724d68b2707839a4f9"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/03c-reader-viewport.css",
+      "byteLength": 28827,
+      "sha256": "403b6ef2fcffc0b15e4e2edd9eb89a4883beebce42fdb05f16753a3e3cac2dd2"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/03d-reader-fullpage.css",
+      "byteLength": 51657,
+      "sha256": "e3a16996bba42d89af971b0040aa2ef7621206874b888f41609ab70297387052"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/03e-reader-replace-page.css",
+      "byteLength": 10409,
+      "sha256": "476dcef4ea6a8faefd5835a104ed6805b4edd67352d27c757b0fd181af0bf6b1"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/04-settings-source.css",
+      "byteLength": 32749,
+      "sha256": "e6f53f5503f662b64d2d8ebfe143b76a06550ec5c1524b847fd4d87e67a55fc1"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/05-flow-adaptive.css",
+      "byteLength": 38453,
+      "sha256": "ae8a957f10b7a557d928e3653e6d78da15eb0f7e61c0c77461b5ff4b6e7b0cd4"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/06-responsive.css",
+      "byteLength": 39673,
+      "sha256": "c0060154f2671f845981be27a7563a999eba77417b9dbfb30521877d734c4060"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/07-control-primitives.css",
+      "byteLength": 66492,
+      "sha256": "f4467cddb45f447a9318a5d7cc72350a4362762369465bb355019a008acceb8a"
+    },
+    {
+      "path": "frontend-demo-optimized/tokens.css",
+      "byteLength": 4427,
+      "sha256": "f207e8a1a2ce608c33252529dc199af43a778aff3b02954b42dfd4b8a7ed384d"
+    },
+    {
+      "path": "generated/README.md",
+      "byteLength": 1655,
+      "sha256": "269d4490520083b6f532eb69881b38f60bf73338476457431460b2ac73b9398e"
+    },
+    {
+      "path": "generated/arkts/Content.ets",
+      "byteLength": 724,
+      "sha256": "31303b54a957e4ffd5767bb904f1b2407314920a93926c131a03dcc5047c1c71"
+    },
+    {
+      "path": "generated/arkts/CoreCommand.ets",
+      "byteLength": 1943,
+      "sha256": "e5f4c53496d6af9c6ade5952b7037724a9044dd90ee82b9db3c6286ee69db87b"
+    },
+    {
+      "path": "generated/arkts/CoreEvent.ets",
+      "byteLength": 2884,
+      "sha256": "683951be3699869aa73122c4ee3ed73d4b2a20baeb54a2dd5376caa5f8aa336b"
+    },
+    {
+      "path": "generated/arkts/HostRequest.ets",
+      "byteLength": 1647,
+      "sha256": "2c3db2310d8fbb0f948396d49a701a0f210c733a750fd8c581bd91bcf681c740"
+    },
+    {
+      "path": "generated/arkts/Motion.ets",
+      "byteLength": 67875,
+      "sha256": "c0cf37eba8c7e4f42dbf323f1aced35667efa78936a4e8a1413ad91264f69bff"
+    },
+    {
+      "path": "generated/arkts/MotionPolicy.ets",
+      "byteLength": 29802,
+      "sha256": "3dd46c768c02275db82f5ced70fddaa44076731cbbab4db4be91f2b4f80961a2"
+    },
+    {
+      "path": "generated/arkts/ProgressLocation.ets",
+      "byteLength": 859,
+      "sha256": "16865836c6ff8d8e2b8a1f7b5fee4c39b5b1daa5408e4b3c909c4ba3b17a2c7b"
+    },
+    {
+      "path": "generated/arkts/README.md",
+      "byteLength": 782,
+      "sha256": "ed49e13c6c86dd833b5e696806a07993301bad61a7d285fc7adea98a24ce0468"
+    },
+    {
+      "path": "generated/arkts/Route.ets",
+      "byteLength": 6490,
+      "sha256": "2b76e5cae44bf004893ec718e0fa4ef389409c92553ddb6336a5ed0e1380a46e"
+    },
+    {
+      "path": "generated/arkts/ScreenGraph.ets",
+      "byteLength": 271629,
+      "sha256": "d83d181270311dfbd941b395b5ef8486f1e14aae0b7444c0dd0db058e74cc83f"
+    },
+    {
+      "path": "generated/arkts/StateRule.ets",
+      "byteLength": 1010,
+      "sha256": "6eb934184baafb4493f07d985885d938ec4cbd4c446418431ed1e5126ff9a756"
+    },
+    {
+      "path": "generated/arkts/SyncConflict.ets",
+      "byteLength": 765,
+      "sha256": "87e0e8efa865149b78768ea790705f3135736179dd98282a82e88e2acd6b8ca8"
+    },
+    {
+      "path": "generated/arkts/Token.ets",
+      "byteLength": 58214,
+      "sha256": "1c7a1aeaf8d00b241d8017c5ab539224636cbde6f55a8ae4215df8fdbc9313b2"
+    },
+    {
+      "path": "generated/arkts/UiEvent.ets",
+      "byteLength": 7710,
+      "sha256": "bed82678373b23386b1e8b422d26c0c258fccb98c4214f566ef2ed72b64b9554"
+    },
+    {
+      "path": "generated/arkts/UiState.ets",
+      "byteLength": 3469,
+      "sha256": "06feab5cc722d50d6b574e26ab82fdd54f6ba94628d1817beadcf787e2907b06"
+    },
+    {
+      "path": "generated/arkts/ViewState.ets",
+      "byteLength": 4396,
+      "sha256": "9d9f8b1d0010f87519a21a59b84c2f216c27d3410e87222410fff367422c454d"
+    },
+    {
+      "path": "generated/kotlin/Content.kt",
+      "byteLength": 1283,
+      "sha256": "3de0577e9d67338926dd3c34f2f8fa0d76fd0e34c2c02896ef699377b37f5f2d"
+    },
+    {
+      "path": "generated/kotlin/CoreCommand.kt",
+      "byteLength": 4514,
+      "sha256": "1f74088960927c60347208c2733a604cc5742a849ace5b557e99b464e5e4ac9d"
+    },
+    {
+      "path": "generated/kotlin/CoreEvent.kt",
+      "byteLength": 6609,
+      "sha256": "35f2a96ef1b4a871253620f4ee4e890c56fa8d1392f1e33b6425e222b4f69211"
+    },
+    {
+      "path": "generated/kotlin/HostRequest.kt",
+      "byteLength": 3793,
+      "sha256": "846eaa275fc77a96b21232ee0f605f2d3fca89239a79daf303256cc965a86b74"
+    },
+    {
+      "path": "generated/kotlin/Motion.kt",
+      "byteLength": 93874,
+      "sha256": "9b94804ca709c407fe2a6c31ef69e3069121e08f9c25956e0eafee9fdde15799"
+    },
+    {
+      "path": "generated/kotlin/MotionPolicy.kt",
+      "byteLength": 36363,
+      "sha256": "fd24dbea6d04ed9b44892469f25b1445e1d28c1212095f22d53e06ce9e08709c"
+    },
+    {
+      "path": "generated/kotlin/ProgressLocation.kt",
+      "byteLength": 1409,
+      "sha256": "5bd02f374d317c7cf21ec5ca7dceb7c5362afa20a7949e205a1ecb9254369909"
+    },
+    {
+      "path": "generated/kotlin/README.md",
+      "byteLength": 780,
+      "sha256": "812d0e80d305b057efc8457dc7b44fd6f9ea4668b18a495c5412894504eeb499"
+    },
+    {
+      "path": "generated/kotlin/Route.kt",
+      "byteLength": 15357,
+      "sha256": "812ebc7f49a07dad39f5026e831af8ad6810237ef4fd171cfa3e71e8ef6a9538"
+    },
+    {
+      "path": "generated/kotlin/ScreenGraph.kt",
+      "byteLength": 254159,
+      "sha256": "6d55639d2a640fff9b57cf047c50be02857e5735e05ef5934a72765a19bd84e1"
+    },
+    {
+      "path": "generated/kotlin/StateRule.kt",
+      "byteLength": 1856,
+      "sha256": "7718a8b25ab8d734dc0d6054228e0501efd22c4633456ebfb5501f9f0374ae5b"
+    },
+    {
+      "path": "generated/kotlin/SyncConflict.kt",
+      "byteLength": 1226,
+      "sha256": "b23494a6ddabe882b6fca0baa56d054224e5d56b57684893179dae7f0edae9f8"
+    },
+    {
+      "path": "generated/kotlin/Token.kt",
+      "byteLength": 63739,
+      "sha256": "c4e1eee78699836c0c3a0f1c62e46a6d634dacdae72ade35dfd9c10f0ff82542"
+    },
+    {
+      "path": "generated/kotlin/UiEvent.kt",
+      "byteLength": 18060,
+      "sha256": "1bdbf7d63fb9a1debb91d494028a9e2d6a09b9bd67cf04a9947e33b6760fa607"
+    },
+    {
+      "path": "generated/kotlin/UiState.kt",
+      "byteLength": 6137,
+      "sha256": "4f5fe0730d07f76440ec93604ac593bbb26ade8ef22f044fba1483c81fca7fbc"
+    },
+    {
+      "path": "generated/kotlin/ViewState.kt",
+      "byteLength": 10583,
+      "sha256": "2bafc2a6ad764b984db14a0e0d6f1e29d30618e9861a0c486076c9378360b2cb"
+    },
+    {
+      "path": "generated/runtime-coverage.json",
+      "byteLength": 105495,
+      "sha256": "1926e8a4f75e5e5b06efcce0fdd1b4f36b8916f2483ee03c6180cb9961b7b5b9"
+    },
+    {
+      "path": "generated/screen-graph-coverage.json",
+      "byteLength": 57001,
+      "sha256": "c9fdbe86eff2741a2fc7f29276b19997a2a5bdd46f8030aa1490ffde67300eb4"
+    },
+    {
+      "path": "generated/swift/Content.swift",
+      "byteLength": 1192,
+      "sha256": "e7201a8723713cc2759cd75f41500dcedd55f139b2534878c65d942641bc734f"
+    },
+    {
+      "path": "generated/swift/CoreCommand.swift",
+      "byteLength": 4015,
+      "sha256": "8e28f4ad2f5b46634283f62af8e191c250fbb52519f48ba59905cc163658559b"
+    },
+    {
+      "path": "generated/swift/CoreEvent.swift",
+      "byteLength": 5915,
+      "sha256": "b8a8bb8c509028e768c653ac21d7afe959c6afa2480af0ac9b0579f7355dc0c9"
+    },
+    {
+      "path": "generated/swift/HostRequest.swift",
+      "byteLength": 3475,
+      "sha256": "279f92756e1160cf18b091e1b9b28434f34d5f22dabf21a18bf932161c879a3b"
+    },
+    {
+      "path": "generated/swift/Motion.swift",
+      "byteLength": 86534,
+      "sha256": "1066e6d0f85a9c6557c8739b588a21f29af23fd2cc42665317f9bd374dfe0b2e"
+    },
+    {
+      "path": "generated/swift/MotionPolicy.swift",
+      "byteLength": 35205,
+      "sha256": "72250652c33413f032f4fa12119d3ead0e478e1500f600424968ec1fe199458a"
+    },
+    {
+      "path": "generated/swift/ProgressLocation.swift",
+      "byteLength": 1300,
+      "sha256": "098b086a90bd191808a20eb859a773a0625b5f554a72cb4c0a6d31137895ea38"
+    },
+    {
+      "path": "generated/swift/README.md",
+      "byteLength": 809,
+      "sha256": "e38b83bf7ccae8ca9a975a835e148d6e887393ac2d44851397b0764d532006d0"
+    },
+    {
+      "path": "generated/swift/Route.swift",
+      "byteLength": 12889,
+      "sha256": "677de07fbf7aaae0b6c73cfa0fb768b26ed32f8a46b43a8c8c06c373fbfe6ac7"
+    },
+    {
+      "path": "generated/swift/ScreenGraph.swift",
+      "byteLength": 257071,
+      "sha256": "f1c136734c06047183d9e95cf127c13433641f7b419de9d0ef4480afa4dc1d01"
+    },
+    {
+      "path": "generated/swift/StateRule.swift",
+      "byteLength": 2262,
+      "sha256": "57085086ef87ff29a1d57bb7dc63c866f1336470a727f63a4db583fd537192f4"
+    },
+    {
+      "path": "generated/swift/SyncConflict.swift",
+      "byteLength": 1065,
+      "sha256": "28ff061b4caf7d844bdb0d710613478ea16b6121e66973f031412b14b2e73dc3"
+    },
+    {
+      "path": "generated/swift/Token.swift",
+      "byteLength": 65726,
+      "sha256": "7d7e049aacbca115034a990b354222ce3333361820df7d568c3b773a2a5a7f89"
+    },
+    {
+      "path": "generated/swift/UiEvent.swift",
+      "byteLength": 17098,
+      "sha256": "220fcea69427382b266fc5884344b27f989d5867c90a416d5ec4916944f56c68"
+    },
+    {
+      "path": "generated/swift/UiState.swift",
+      "byteLength": 6009,
+      "sha256": "d9e9823c7aac2dc93e54de35264a47fc10f6c230cf02b325a77a8358c65b3e52"
+    },
+    {
+      "path": "generated/swift/ViewState.swift",
+      "byteLength": 8603,
+      "sha256": "04d99c457972c5b7f39807f5cff85d881fba81fa32935dcd361c7c05c6ec8310"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.jar",
+      "byteLength": 43583,
+      "sha256": "2db75c40782f5e8ba1fc278a5574bab070adccb2d21ca5a6e5ed840888448046"
+    },
+    {
+      "path": "gradle/wrapper/gradle-wrapper.properties",
+      "byteLength": 253,
+      "sha256": "d7010368a34c1c06df2bae1a85d8b24c39b2499c74ac892fc7e66d005dbd7b8a"
+    },
+    {
+      "path": "gradlew",
+      "byteLength": 8762,
+      "sha256": "a3648413b47ef77af21d5ebc36c687c7d103aaef3e17f33de7d4f080a6f300a3"
+    },
+    {
+      "path": "gradlew.bat",
+      "byteLength": 2966,
+      "sha256": "57931b17dd228e5c24dac90e815d0bf82477e831a4618dfab4136f5446b42a9f"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/BuildProfile.ets",
+      "byteLength": 519,
+      "sha256": "dfa3b6dbfc166b15a8ea1e35498a9a996f89e0308cee21518f533ff61ca52668"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/build-profile.json5",
+      "byteLength": 334,
+      "sha256": "b595e2ab759c940e4d19f56dd35e6840044c35ab0865515854cf152aa3e3e19d"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/hvigorfile.ts",
+      "byteLength": 106,
+      "sha256": "98299a4dcd27dc2af0fa81a8c74e0d4af1fd9973bda28ed72053514accad50bf"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/oh-package.json5",
+      "byteLength": 219,
+      "sha256": "a77fd9b55ef80cd54ec9ef08e75588902b4bd66387c999df8b2334a322574d4c"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
+      "byteLength": 10078,
+      "sha256": "1ad1ba49e4b6d3b0e76919225be3aeea57a75135c97dfcf474ccbbf40d3c072a"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
+      "byteLength": 130691,
+      "sha256": "66bff4214656338e9c19847d11b1a708d240c3b8bbf25c0698e0244ed5bc880c"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/src/main/ets/Index.ets",
+      "byteLength": 76,
+      "sha256": "fb834154eba99db32f274cfdb91ef3cc9bfbdf90bed727dd5452454e791b0d45"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/src/main/ets/ReaderUIRuntime.ets",
+      "byteLength": 95866,
+      "sha256": "d565363453d3c4be223a4774126a39bf925c66daf05358da53e8e8df8e376175"
+    },
+    {
+      "path": "packages/arkts/reader-ui-runtime/src/main/module.json5",
+      "byteLength": 213,
+      "sha256": "90d988a529d306f925fef5e367b55a00c8dcbf89b53dbcdd903d98f14afaf760"
+    },
+    {
+      "path": "packages/kotlin/reader-ui-runtime/build.gradle.kts",
+      "byteLength": 720,
+      "sha256": "ee6ff931734b93ef8b6496ed9e23f26c82e00cd8f181548a8f2081e53a89a7e1"
+    },
+    {
+      "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeActions.kt",
+      "byteLength": 8458,
+      "sha256": "c4037dc6f77b863f457bf00e17b2832cb91c7c332e14b877579dfd410a430ce7"
+    },
+    {
+      "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadContracts.kt",
+      "byteLength": 131873,
+      "sha256": "57ce789a8888d40c28cf42f13be188269d7d93d4a5f171197850c32607e46b30"
+    },
+    {
+      "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUIRuntime.kt",
+      "byteLength": 76693,
+      "sha256": "fa8cda9a055eb565a2805befbb617e3437bf848208865f96ce41389f3027b577"
+    },
+    {
+      "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUITypedPayloadValidator.kt",
+      "byteLength": 12006,
+      "sha256": "f146bce902f842677adec97b3347e2df7f8b31324a0489fba3e677cf47417ed8"
+    },
+    {
+      "path": "packages/reference/generated-runtime-payload-contracts.mjs",
+      "byteLength": 291212,
+      "sha256": "c576b04dfb122d8298d60a8c08f929ea20a384aed2240f32e09b3a68315288ff"
+    },
+    {
+      "path": "packages/reference/reader-ui-runtime.mjs",
+      "byteLength": 63829,
+      "sha256": "2c5016117dea594c1673dc253d9fd3bf514f3f4c6645d1e180093540ff52e2e7"
+    },
+    {
+      "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeActions.swift",
+      "byteLength": 11283,
+      "sha256": "1cf357af9008c4bd5043e42f3bcf52c248bd8ef8c55383ba5eb748e4a6f1d47a"
+    },
+    {
+      "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeTypedPayloadContracts.swift",
+      "byteLength": 131813,
+      "sha256": "b7b74b767ed3590c68ec8ffba45af44e28aff162e8569b26900e76bb07389a94"
+    },
+    {
+      "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIJSONValue.swift",
+      "byteLength": 8650,
+      "sha256": "8a2ac3fb7e5b18e316840a9bd94f807b626926c4fa4d7c3488183971d4855d39"
+    },
+    {
+      "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIRuntime.swift",
+      "byteLength": 83144,
+      "sha256": "b0ffa9fbe45d5c7f3f0e9ad62611a3e5433c66d085c211092d4c9df03d9ca7dc"
+    },
+    {
+      "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUITypedPayloadValidator.swift",
+      "byteLength": 11253,
+      "sha256": "6b7ac3f689943a4dd07bfe3bae4a846f8f8e844c3b6004378f9593522fce8c42"
+    },
+    {
+      "path": "reader-ui-contract/build.gradle.kts",
+      "byteLength": 840,
+      "sha256": "1d5cd304718e54bc96817d08c6182ad8dbf2f91800bf0d8ae41a699a4f132be5"
+    },
+    {
+      "path": "settings.gradle.kts",
+      "byteLength": 460,
+      "sha256": "034a613805e7bd2592160186a8adeffe38446e00224b17b2994c613c707e243f"
+    },
+    {
+      "path": "ui-spec/host-consumer-lock.schema.json",
+      "byteLength": 3511,
+      "sha256": "b85c8e36cd7275f6cedc9a7b01a85766ea1382b264ff1fe266b40307fe62044c"
+    },
+    {
+      "path": "ui-spec/host-consumers.json",
+      "byteLength": 4590,
+      "sha256": "036a7bdcdd217cd6f59ac12dc5c45b407f894a75e73dcc0fff98620cc755ffec"
+    },
+    {
+      "path": "ui-spec/runtime-actions.json",
+      "byteLength": 9118,
+      "sha256": "0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c"
+    },
+    {
+      "path": "ui-spec/runtime-actions.schema.json",
+      "byteLength": 1556,
+      "sha256": "6e9143eed2b2934d8483aa19ed157f0fb45d681bac5d1f9a6fd08fd1d1ce53f5"
+    },
+    {
+      "path": "ui-spec/runtime-ownership.json",
+      "byteLength": 3069,
+      "sha256": "bb3ce90f73c83fb14196f2015f0bbd2eba0b2abbbfe1e5428c6a664ca739bc7e"
+    },
+    {
+      "path": "ui-spec/runtime-ownership.schema.json",
+      "byteLength": 1980,
+      "sha256": "784e601c1073f47b0ba16e9e8d73e03ce75a5460f03cc8d9c1e33ca50939a38b"
+    },
+    {
+      "path": "ui-spec/runtime-payload-contracts.json",
+      "byteLength": 111841,
+      "sha256": "d2e7480bf91339f1f583e4b7aafa54ef6fb47e4350efcec8f8914f2a3fe024ef"
+    },
+    {
+      "path": "ui-spec/runtime-payload-contracts.schema.json",
+      "byteLength": 6203,
+      "sha256": "0cb510bc9c2ff316811d683c2971455cfef7797406e5243f1cfa9027b6905c69"
+    },
+    {
+      "path": "ui-spec/screen-graph.json",
+      "byteLength": 392690,
+      "sha256": "c83fad4bf87a80a529d45f1ca6c2f0540ac37d084fd218efab22adc48e9de822"
+    },
+    {
+      "path": "ui-spec/screen-graph.schema.json",
+      "byteLength": 79474,
+      "sha256": "3dee26e8f5924191a3d81189c31f79a5c9380a5bd77c8fe4163cdd5623218a9d"
+    },
+    {
+      "path": "ui-spec/ui-release-manifest.schema.json",
+      "byteLength": 6173,
+      "sha256": "47ef3266f2a2080f0af0bdc3455ceceec6cc27c20b963881730d94afa32b6b9c"
+    }
+  ],
+  "groups": [
+    {
+      "name": "design-runtime",
+      "fileCount": 59,
+      "byteLength": 2523860,
+      "sha256": "d81706ef342e46be143654b1a79b506bd410282328b88ec7fedd14e818615754",
+      "files": [
+        "frontend-demo-optimized/asset-library/icons.js",
+        "frontend-demo-optimized/asset-library/icons/reader-auto-page-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-auto-page.png",
+        "frontend-demo-optimized/asset-library/icons/reader-content-replace-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-content-replace.png",
+        "frontend-demo-optimized/asset-library/icons/reader-content-replace.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-content-search-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-content-search.png",
+        "frontend-demo-optimized/asset-library/icons/reader-module-appearance-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-module-appearance.png",
+        "frontend-demo-optimized/asset-library/icons/reader-module-directory-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-module-directory.png",
+        "frontend-demo-optimized/asset-library/icons/reader-module-settings-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-module-settings.png",
+        "frontend-demo-optimized/asset-library/icons/reader-module-tts-traced.svg",
+        "frontend-demo-optimized/asset-library/icons/reader-module-tts.png",
+        "frontend-demo-optimized/covers/android-notes.png",
+        "frontend-demo-optimized/covers/bright-moon.png",
+        "frontend-demo-optimized/covers/long-night.png",
+        "frontend-demo-optimized/covers/mystery-lord.png",
+        "frontend-demo-optimized/covers/renjian-cihua.png",
+        "frontend-demo-optimized/covers/three-body.png",
+        "frontend-demo-optimized/fixture.js",
+        "frontend-demo-optimized/index.html",
+        "frontend-demo-optimized/motion-controller.js",
+        "frontend-demo-optimized/motion-tokens.css",
+        "frontend-demo-optimized/render-runtime.js",
+        "frontend-demo-optimized/render.js",
+        "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
+        "frontend-demo-optimized/renderers/d2-rss-renderers.js",
+        "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+        "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
+        "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
+        "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
+        "frontend-demo-optimized/renderers/w1-import-renderers.js",
+        "frontend-demo-optimized/renderers/w2-reading-renderers.js",
+        "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
+        "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
+        "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
+        "frontend-demo-optimized/route-contract.js",
+        "frontend-demo-optimized/shared-shell-kit/kit.css",
+        "frontend-demo-optimized/shared-shell-kit/kit.js",
+        "frontend-demo-optimized/styles.css",
+        "frontend-demo-optimized/styles/00-foundation.css",
+        "frontend-demo-optimized/styles/01-shell-layout.css",
+        "frontend-demo-optimized/styles/02a-reader-control.css",
+        "frontend-demo-optimized/styles/02b-reader-toc-module.css",
+        "frontend-demo-optimized/styles/02c-reader-auto-search.css",
+        "frontend-demo-optimized/styles/02d-reader-tts-typography.css",
+        "frontend-demo-optimized/styles/03a-reader-appearance.css",
+        "frontend-demo-optimized/styles/03b-reader-settings.css",
+        "frontend-demo-optimized/styles/03c-reader-viewport.css",
+        "frontend-demo-optimized/styles/03d-reader-fullpage.css",
+        "frontend-demo-optimized/styles/03e-reader-replace-page.css",
+        "frontend-demo-optimized/styles/04-settings-source.css",
+        "frontend-demo-optimized/styles/05-flow-adaptive.css",
+        "frontend-demo-optimized/styles/06-responsive.css",
+        "frontend-demo-optimized/styles/07-control-primitives.css",
+        "frontend-demo-optimized/tokens.css"
+      ]
+    },
+    {
+      "name": "device-conformance",
+      "fileCount": 7,
+      "byteLength": 247371,
+      "sha256": "4a33c093385f64f49504126f01cc95f530f84efbe07df51ffc18df51c30815e0",
+      "files": [
+        "contracts/device-conformance-evidence.schema.json",
+        "contracts/device-conformance-plan.schema.json",
+        "contracts/fixtures/host-request.fixtures.json",
+        "contracts/fixtures/host-result.fixtures.json",
+        "contracts/host-request.schema.json",
+        "contracts/host-result.schema.json",
+        "device-conformance/DEVICE_CONFORMANCE_PLAN.json"
+      ]
+    },
+    {
+      "name": "fixtures",
+      "fileCount": 19,
+      "byteLength": 421163,
+      "sha256": "fa926dfce3fcc22384c8e6b64d9594919d27edc7c6ab84fdc7bed26656370255",
+      "files": [
+        "contracts/fixtures/content.fixtures.json",
+        "contracts/fixtures/core-command.fixtures.json",
+        "contracts/fixtures/core-event.fixtures.json",
+        "contracts/fixtures/host-request.fixtures.json",
+        "contracts/fixtures/host-result.fixtures.json",
+        "contracts/fixtures/motion-policy.fixtures.json",
+        "contracts/fixtures/motion.fixtures.json",
+        "contracts/fixtures/progress-location.fixtures.json",
+        "contracts/fixtures/route.fixtures.json",
+        "contracts/fixtures/runtime-payload-contract.fixtures.json",
+        "contracts/fixtures/runtime-payload-contract.fixtures.schema.json",
+        "contracts/fixtures/runtime-result-contract.fixtures.json",
+        "contracts/fixtures/runtime-result-contract.fixtures.schema.json",
+        "contracts/fixtures/state-rule.fixtures.json",
+        "contracts/fixtures/sync-conflict.fixtures.json",
+        "contracts/fixtures/token.fixtures.json",
+        "contracts/fixtures/ui-event.fixtures.json",
+        "contracts/fixtures/ui-state.fixtures.json",
+        "contracts/fixtures/view-state.fixtures.json"
+      ]
+    },
+    {
+      "name": "generated",
+      "fileCount": 51,
+      "byteLength": 1653260,
+      "sha256": "3f9352005dfe32ebf05b7441b69483cb57ee65844d0d21fc1b83cc24b91d8b1e",
+      "files": [
+        "generated/README.md",
+        "generated/arkts/Content.ets",
+        "generated/arkts/CoreCommand.ets",
+        "generated/arkts/CoreEvent.ets",
+        "generated/arkts/HostRequest.ets",
+        "generated/arkts/Motion.ets",
+        "generated/arkts/MotionPolicy.ets",
+        "generated/arkts/ProgressLocation.ets",
+        "generated/arkts/README.md",
+        "generated/arkts/Route.ets",
+        "generated/arkts/ScreenGraph.ets",
+        "generated/arkts/StateRule.ets",
+        "generated/arkts/SyncConflict.ets",
+        "generated/arkts/Token.ets",
+        "generated/arkts/UiEvent.ets",
+        "generated/arkts/UiState.ets",
+        "generated/arkts/ViewState.ets",
+        "generated/kotlin/Content.kt",
+        "generated/kotlin/CoreCommand.kt",
+        "generated/kotlin/CoreEvent.kt",
+        "generated/kotlin/HostRequest.kt",
+        "generated/kotlin/Motion.kt",
+        "generated/kotlin/MotionPolicy.kt",
+        "generated/kotlin/ProgressLocation.kt",
+        "generated/kotlin/README.md",
+        "generated/kotlin/Route.kt",
+        "generated/kotlin/ScreenGraph.kt",
+        "generated/kotlin/StateRule.kt",
+        "generated/kotlin/SyncConflict.kt",
+        "generated/kotlin/Token.kt",
+        "generated/kotlin/UiEvent.kt",
+        "generated/kotlin/UiState.kt",
+        "generated/kotlin/ViewState.kt",
+        "generated/runtime-coverage.json",
+        "generated/screen-graph-coverage.json",
+        "generated/swift/Content.swift",
+        "generated/swift/CoreCommand.swift",
+        "generated/swift/CoreEvent.swift",
+        "generated/swift/HostRequest.swift",
+        "generated/swift/Motion.swift",
+        "generated/swift/MotionPolicy.swift",
+        "generated/swift/ProgressLocation.swift",
+        "generated/swift/README.md",
+        "generated/swift/Route.swift",
+        "generated/swift/ScreenGraph.swift",
+        "generated/swift/StateRule.swift",
+        "generated/swift/SyncConflict.swift",
+        "generated/swift/Token.swift",
+        "generated/swift/UiEvent.swift",
+        "generated/swift/UiState.swift",
+        "generated/swift/ViewState.swift"
+      ]
+    },
+    {
+      "name": "package-entrypoints",
+      "fileCount": 14,
+      "byteLength": 60916,
+      "sha256": "39e66bc1f9c5b6cdd27cf3b9bea078bba2b9f20e2f257f08a97ba5037a46952b",
+      "files": [
+        "Package.swift",
+        "build.gradle.kts",
+        "gradle/wrapper/gradle-wrapper.jar",
+        "gradle/wrapper/gradle-wrapper.properties",
+        "gradlew",
+        "gradlew.bat",
+        "packages/arkts/reader-ui-runtime/BuildProfile.ets",
+        "packages/arkts/reader-ui-runtime/build-profile.json5",
+        "packages/arkts/reader-ui-runtime/hvigorfile.ts",
+        "packages/arkts/reader-ui-runtime/oh-package.json5",
+        "packages/arkts/reader-ui-runtime/src/main/module.json5",
+        "packages/kotlin/reader-ui-runtime/build.gradle.kts",
+        "reader-ui-contract/build.gradle.kts",
+        "settings.gradle.kts"
+      ]
+    },
+    {
+      "name": "primitive-abi",
+      "fileCount": 6,
+      "byteLength": 68180,
+      "sha256": "76aae688d50cc55cb4274b7620f727481304e4220605e66112d580e41b97b1f5",
+      "files": [
+        "contracts/core-command.schema.json",
+        "contracts/core-event.schema.json",
+        "contracts/host-request.schema.json",
+        "contracts/motion.schema.json",
+        "contracts/ui-event.schema.json",
+        "contracts/view-state.schema.json"
+      ]
+    },
+    {
+      "name": "runtime-actions",
+      "fileCount": 1,
+      "byteLength": 9118,
+      "sha256": "e9fb60fd6bdd8694b58359f26de9f40014e8867e5865bc8415158960e90190c0",
+      "files": [
+        "ui-spec/runtime-actions.json"
+      ]
+    },
+    {
+      "name": "runtime-packages",
+      "fileCount": 15,
+      "byteLength": 1066925,
+      "sha256": "97221723bd680e6ad9d20d60b4d9adae79d9913b5e5361b785aeca87ed96fbb4",
+      "files": [
+        "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
+        "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
+        "packages/arkts/reader-ui-runtime/src/main/ets/Index.ets",
+        "packages/arkts/reader-ui-runtime/src/main/ets/ReaderUIRuntime.ets",
+        "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeActions.kt",
+        "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadContracts.kt",
+        "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUIRuntime.kt",
+        "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUITypedPayloadValidator.kt",
+        "packages/reference/generated-runtime-payload-contracts.mjs",
+        "packages/reference/reader-ui-runtime.mjs",
+        "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeActions.swift",
+        "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeTypedPayloadContracts.swift",
+        "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIJSONValue.swift",
+        "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIRuntime.swift",
+        "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUITypedPayloadValidator.swift"
+      ]
+    },
+    {
+      "name": "schemas",
+      "fileCount": 23,
+      "byteLength": 263371,
+      "sha256": "a53efd07e7df6853279c75fc25a1361497e7030d58df8b8bcb1c0e7deb56a7e5",
+      "files": [
+        "contracts/content.schema.json",
+        "contracts/core-command.schema.json",
+        "contracts/core-event.schema.json",
+        "contracts/device-conformance-evidence.schema.json",
+        "contracts/device-conformance-plan.schema.json",
+        "contracts/host-request.schema.json",
+        "contracts/host-result.schema.json",
+        "contracts/motion-policy.schema.json",
+        "contracts/motion.schema.json",
+        "contracts/progress-location.schema.json",
+        "contracts/route.schema.json",
+        "contracts/state-rule.schema.json",
+        "contracts/sync-conflict.schema.json",
+        "contracts/token.schema.json",
+        "contracts/ui-event.schema.json",
+        "contracts/ui-state.schema.json",
+        "contracts/view-state.schema.json",
+        "ui-spec/host-consumer-lock.schema.json",
+        "ui-spec/runtime-actions.schema.json",
+        "ui-spec/runtime-ownership.schema.json",
+        "ui-spec/runtime-payload-contracts.schema.json",
+        "ui-spec/screen-graph.schema.json",
+        "ui-spec/ui-release-manifest.schema.json"
+      ]
+    },
+    {
+      "name": "screen-graph",
+      "fileCount": 5,
+      "byteLength": 562953,
+      "sha256": "e17ddfd4f7b56cba13e78ee79e1854238152591c1d05fbef10740913cd6c04ba",
+      "files": [
+        "contracts/fixtures/route.fixtures.json",
+        "contracts/fixtures/view-state.fixtures.json",
+        "contracts/route.schema.json",
+        "contracts/view-state.schema.json",
+        "ui-spec/screen-graph.json"
+      ]
+    },
+    {
+      "name": "ui-spec",
+      "fileCount": 5,
+      "byteLength": 521308,
+      "sha256": "a55ff2b11b9816fafe465dad2e363a06011f01663f7075f77fc4f95e8d871c33",
+      "files": [
+        "ui-spec/host-consumers.json",
+        "ui-spec/runtime-actions.json",
+        "ui-spec/runtime-ownership.json",
+        "ui-spec/runtime-payload-contracts.json",
+        "ui-spec/screen-graph.json"
+      ]
+    },
+    {
+      "name": "version",
+      "fileCount": 1,
+      "byteLength": 26767,
+      "sha256": "f2bed6f2d27124614f8c1d64cc4313f33303971c3023011efac26a49da9e1a3e",
+      "files": [
+        "contracts/VERSION.json"
+      ]
+    }
+  ],
+  "abis": [
+    {
+      "name": "component-types",
+      "source": "contracts/view-state.schema.json",
+      "jsonPointer": "/$defs/Component/properties/type/enum",
+      "entryCount": 174,
+      "encoding": "ordered-json-array-utf8-lf",
+      "sha256": "19cf03771aa766f83667240a4ae5d7f7347648b6c1d7c185aec17a36b7522694"
+    },
+    {
+      "name": "core-commands",
+      "source": "contracts/core-command.schema.json",
+      "jsonPointer": "/properties/type/enum",
+      "entryCount": 71,
+      "encoding": "ordered-json-array-utf8-lf",
+      "sha256": "2d3a5f3176ab4d974f6006b65b9d24da24e4bc9aaae45d2a65f54965b435c81d"
+    },
+    {
+      "name": "core-events",
+      "source": "contracts/core-event.schema.json",
+      "jsonPointer": "/properties/type/enum",
+      "entryCount": 95,
+      "encoding": "ordered-json-array-utf8-lf",
+      "sha256": "9544218d7c6050f0fb01be5b7d3481394ceedc1a1310fd8c028260bd9f8914ab"
+    },
+    {
+      "name": "host-requests",
+      "source": "contracts/host-request.schema.json",
+      "jsonPointer": "/properties/type/enum",
+      "entryCount": 58,
+      "encoding": "ordered-json-array-utf8-lf",
+      "sha256": "cde630d653040a5b3ad379ec8a6d6cfad6a53cf8f9bd5571688d4b94a982c3a8"
+    },
+    {
+      "name": "motion-ids",
+      "source": "contracts/motion.schema.json",
+      "jsonPointer": "/properties/id/enum",
+      "entryCount": 93,
+      "encoding": "ordered-json-array-utf8-lf",
+      "sha256": "bc2415aab4cc3e50b20450c361b700f4a171d973dc7c25f54cecfe04d4318f06"
+    },
+    {
+      "name": "ui-events",
+      "source": "contracts/ui-event.schema.json",
+      "jsonPointer": "/properties/type/enum",
+      "entryCount": 270,
+      "encoding": "ordered-json-array-utf8-lf",
+      "sha256": "7ed6e7a4a530c060593ffbc9db9b062a78b15173fe058420613ebd621585e2e3"
+    }
+  ]
+}

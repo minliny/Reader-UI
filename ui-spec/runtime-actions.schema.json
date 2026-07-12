@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/ui-spec/runtime-actions.schema.json",
+  "title": "Reader UI Runtime Actions",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "actions"],
+  "properties": {
+    "schemaVersion": { "type": "integer", "minimum": 1 },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["event", "action"],
+        "properties": {
+          "event": { "type": "string" },
+          "action": {
+            "type": "string",
+            "enum": [
+              "pushRoute", "replaceRoute", "popRoute", "popToRoot",
+              "selectTab", "setOverlay", "clearOverlay", "clearOverlayIfMatches",
+              "startSession", "stopSession", "setReducedMotion",
+              "bookOpenSequence", "readerPageStep", "appearanceTransaction", "emitEffects"
+            ]
+          },
+          "value": { "type": "string" },
+          "requiredPayload": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "guards": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["loadingFalse", "overlayEmpty"]
+            }
+          },
+          "coreSequence": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "hostRequest": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

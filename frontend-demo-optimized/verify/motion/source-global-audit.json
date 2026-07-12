@@ -3,21 +3,21 @@
   "date": "2026-06-29",
   "scope": "frontend-demo source only",
   "excludedAsEvidence": [
-    "frontend-demo/MOTION_*.md",
+    "frontend-demo-optimized/MOTION_*.md",
     "deleted legacy design exports",
     "screenshots",
     "prior planning docs"
   ],
   "sourceInputs": [
-    "frontend-demo/index.html",
-    "frontend-demo/render.js",
-    "frontend-demo/render-runtime.js",
-    "frontend-demo/route-contract.js",
-    "frontend-demo/shared-shell-kit/kit.js",
-    "frontend-demo/styles.css",
-    "frontend-demo/styles/*.css",
-    "frontend-demo/tokens.css",
-    "frontend-demo/motion-tokens.css"
+    "frontend-demo-optimized/index.html",
+    "frontend-demo-optimized/render.js",
+    "frontend-demo-optimized/render-runtime.js",
+    "frontend-demo-optimized/route-contract.js",
+    "frontend-demo-optimized/shared-shell-kit/kit.js",
+    "frontend-demo-optimized/styles.css",
+    "frontend-demo-optimized/styles/*.css",
+    "frontend-demo-optimized/tokens.css",
+    "frontend-demo-optimized/motion-tokens.css"
   ],
   "routeCoverage": {
     "totalRoutes": 131,

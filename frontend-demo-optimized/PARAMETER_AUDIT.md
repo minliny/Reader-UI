@@ -40,7 +40,7 @@
 执行重复项扫描：
 
 ```bash
-rg -n "readerModuleIconMap|const readerThemeOptions|const readerFontOptions|\\|\\| \"paper\"|\\|\\| \"serif\"|current - 5|current \\+ 5|fontSize.*\\+ 1|fontSize.*- 1|aria-valuemin=\"0\" aria-valuemax=\"100\"" frontend-demo/render-runtime.js frontend-demo/fixture.js
+rg -n "readerModuleIconMap|const readerThemeOptions|const readerFontOptions|\\|\\| \"paper\"|\\|\\| \"serif\"|current - 5|current \\+ 5|fontSize.*\\+ 1|fontSize.*- 1|aria-valuemin=\"0\" aria-valuemax=\"100\"" frontend-demo-optimized/render-runtime.js frontend-demo-optimized/fixture.js
 ```
 
 结果：无命中。

@@ -53,6 +53,51 @@
       "type": "object",
       "description": "页面级上下文，如当前书 id、章节 id、来源 id 等。",
       "additionalProperties": true
+    },
+    "controlLayerLevel": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3"],
+      "description": "阅读控制层层级。来源：ARCHITECTURE.md §7。L0 沉浸层；L1 基础控制层；L2 模块/快捷面板；L3 完整控制页。"
+    },
+    "importPhase": {
+      "type": "string",
+      "enum": ["idle", "selecting", "input", "parsing", "preview", "conflict", "applying", "result"],
+      "description": "W1 导入流程阶段。对应 importState.phase。"
+    },
+    "readerTocPhase": {
+      "type": "string",
+      "enum": ["idle", "loading", "offline", "error", "ready"],
+      "description": "W2 目录加载阶段。对应 readerTocState。"
+    },
+    "readerContentPhase": {
+      "type": "string",
+      "enum": ["idle", "loading", "offline", "error", "ready", "boundary"],
+      "description": "W2 正文加载阶段。对应 readerContentState。boundary 表示首章/末章边界。"
+    },
+    "sourceSwitchPhase": {
+      "type": "string",
+      "enum": ["idle", "loading", "error", "timeout", "rollback", "preview", "success"],
+      "description": "W3 换源流程阶段。对应 sourceSwitchState。"
+    },
+    "fontManagePhase": {
+      "type": "string",
+      "enum": ["idle", "importing", "deleting", "fallback", "rename", "enable"],
+      "description": "W4 字体管理阶段。对应 fontManagementState。"
+    },
+    "themeManagePhase": {
+      "type": "string",
+      "enum": ["idle", "new", "edit", "delete", "duplicate", "setdefault"],
+      "description": "W4 主题管理阶段。对应 themeManagementState。"
+    },
+    "typographyManagePhase": {
+      "type": "string",
+      "enum": ["idle", "reset", "persist"],
+      "description": "W4 排版管理阶段。对应 typographyState.resetConfirm 与排版持久化状态。"
+    },
+    "replaceRulePhase": {
+      "type": "string",
+      "enum": ["idle", "create", "update", "delete", "enable", "sort", "validate", "apply", "import", "export", "preview"],
+      "description": "W5 替换规则管理阶段。对应 replaceRulesState。"
     }
   },
   "$defs": {

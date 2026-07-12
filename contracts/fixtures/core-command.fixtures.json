@@ -18,9 +18,12 @@
 
   { "_comment": "Phase 2 §5: source.search / source.detail",
     "type": "source.search", "payload": { "query": "示例", "sourceId": "src-001" }, "correlationId": "c-012", "requestId": "r-012" },
+  { "type": "source.list", "payload": { "enabledOnly": true }, "correlationId": "c-012a", "requestId": "r-012a" },
+  { "type": "source.change", "payload": { "bookId": "bk-001", "sourceIds": ["src-002"], "keyword": "示例" }, "correlationId": "c-012b", "requestId": "r-012b" },
   { "type": "source.detail", "payload": { "detailUrl": "https://example.com/book/1", "sourceId": "src-001" }, "correlationId": "c-013", "requestId": "r-013" },
   { "type": "source.detect", "payload": { "sourceId": "src-001" }, "correlationId": "c-014", "requestId": "r-014" },
   { "type": "source.save", "payload": { "sourceId": "src-001", "config": {} }, "correlationId": "c-015", "requestId": "r-015" },
+  { "type": "source.export", "payload": { "sourceIds": ["src-001"], "format": "json" }, "correlationId": "c-015a", "requestId": "r-015a" },
   { "type": "source.delete", "payload": { "sourceId": "src-001" }, "correlationId": "c-016", "requestId": "r-016" },
   { "type": "source.debug.run", "payload": { "sourceId": "src-001", "url": "https://example.com" }, "correlationId": "c-017", "requestId": "r-017" },
 

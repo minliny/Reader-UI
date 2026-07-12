@@ -1,8 +1,8 @@
 # State Ownership
 
-状态：Phase 0 状态归属冻结
-日期：2026-07-04
-权威源：[ARCHITECTURE.md](./ARCHITECTURE.md)、[CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §2
+状态：2.2 状态归属冻结
+日期：2026-07-10
+权威源：[ARCHITECTURE.md](./ARCHITECTURE.md)
 
 本文冻结三层状态的归属、字段范围与跨层规则。schema 必须按本文字段范围定义。
 
@@ -11,7 +11,7 @@
 | 层 | Owner | 内容 |
 | --- | --- | --- |
 | DomainState | Reader-Core-Native | bookId、chapterId、content、progress、source、rssItem、ttsQueue、syncStatus、conflictState |
-| UiState | Platform Interaction Reducer | route、tab、readerMode、overlay、activeSession、focusTarget、loading、error、reducedMotion |
+| UiState | Reader-UI `ReaderUIRuntime` | route、tab、readerMode、overlay、activeSession、focusTarget、loading、error、reducedMotion |
 | EphemeralState | Native UI | dragOffset、scrollPixel、layoutMeasurement、pressedState、textSelection、accessibilityFocus |
 
 ## 2. DomainState 字段范围
@@ -35,7 +35,7 @@ Owner：Reader-Core-Native。本仓库不定义其 schema，只定义 UI 侧引�
 
 ## 3. UiState 字段范围
 
-Owner：Platform Interaction Reducer。本仓库通过 `ui-state.schema.json` 定义。
+Owner：Reader-UI `ReaderUIRuntime`。本仓库通过 `ui-state.schema.json` 与 `ui-spec/runtime-actions.json` 定义并执行；Host 只能订阅/渲染，不能另建同名状态真源。
 
 | 字段 | 类型 | 说明 |
 | --- | --- | --- |
@@ -49,7 +49,7 @@ Owner：Platform Interaction Reducer。本仓库通过 `ui-state.schema.json` �
 | `error` | object \| null | 错误信息：`{ code, message, retryable }` |
 | `reducedMotion` | boolean | 是否启用减少动态效果 |
 
-页面级派生 UiState（来自 [frontend-demo/render-runtime.js](../frontend-demo/render-runtime.js) 的 `appState.*`）：
+页面级派生 UiState（来自 [frontend-demo-optimized/render-runtime.js](../frontend-demo-optimized/render-runtime.js) 的 `appState.*`）：
 
 - `discoverFilter` / `discoverSort` / `discoverSortOpen`
 - `readerTurnDirection`：`next / prev`
@@ -57,7 +57,7 @@ Owner：Platform Interaction Reducer。本仓库通过 `ui-state.schema.json` �
 - `readerChapterDownloads[key]`：`loading / complete / cached`
 - `readerTts` / `readerSettings` / `readerTypography`
 - `readerTextSelectionOpen` / `readerSelectedText`
-- `readerSessionCapsuleSnapshot` / `readerControlSpaceSnapshot`
+- `readerSessionCapsuleSnapshot`（当前产品只在沉浸阅读信息层渲染一个运行会话胶囊；`controlSpace` 事件与 MotionId 保留为协议兼容项，不创建第二份运行态 UI）
 - `readerAutoPageCountdown`
 - `settingsOverlay` / `settingsExpandedOption`
 - `motionOverlaySequence` / `motionOverlayRole` / `motionOverlayAction` / `motionOverlayFocusReturn` / `motionOverlayReturnTarget`
@@ -107,7 +107,7 @@ EphemeralState 可以保留在平台 UI 内，但不能参与业务判断
 
 ## 6. StateRule / 互斥 / async guard
 
-来源：各页交互规则稿与 [frontend-demo/MOTION_CONTRACT.md](../frontend-demo/MOTION_CONTRACT.md)。
+来源：各页交互规则稿与 [frontend-demo-optimized/MOTION_CONTRACT.md](../frontend-demo-optimized/MOTION_CONTRACT.md)。
 
 互斥规则：
 

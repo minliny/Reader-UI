@@ -74,19 +74,22 @@ contracts/VERSION.json
 2. 同步更新 fixtures 与 contract tests。
 3. 跑 `tools/codegen` 重新生成 `generated/{swift,kotlin,arkts}`。
 4. 跑 `contracts/tests` 校验。
-5. 更新 `VERSION.json`：bump 版本号、追加 changelog 条目。
-6. 提交时 schema + fixtures + tests + generated + VERSION.json 五类变更必须同提交。
+5. 若交互语义变化，更新 `ui-spec/runtime-actions.json` 并运行 `tools/runtime/generate-runtime.mjs`。
+6. 更新 runtime ownership 后运行 tools/runtime/generate-runtime-coverage.mjs；270-event ownership/report drift 必须为零。
+7. 若 Host rollout/covered event 或 HostRequest schema 变化，更新对应 READER_UI_CONSUMER.json 与 ui-spec/host-consumers.json，并运行 tools/runtime/check-host-consumers.mjs；effectPolicy 必须同时识别 descriptor effect 与 runtime 动态 effect（例如 foreground timer）。
+8. 更新 `VERSION.json`：bump 版本号、追加 changelog 条目，并同步 native package 版本。
+9. 提交时 schema/spec + fixtures + tests + generated/runtime outputs + VERSION.json 五类变更必须同提交。
 
 ## 6. 三端传导
 
-- `generated/` 是平台仓库的依赖入口。平台仓库应通过 git submodule / 包管理 / 复制三种方式之一接入。
-- 平台仓库接入后，必须把 `generated/{swift,kotlin,arkts}` 转译或映射为本地类型，再在本地 reducer / coordinator 中使用。
+- `generated/` 与 `packages/` 共同构成平台仓库依赖入口。优先使用 SwiftPM / Gradle composite or artifact / ohpm path or registry；禁止复制后分叉。
+- 平台仓库接入后，必须消费同一版本的 contract 与 ReaderUIRuntime；本地 coordinator 只负责 effect 执行与结果回送。
 - contract 变更必须能触发三端编译或测试失败。三端 CI 必须包含 schema 校验或 generated 类型编译。
-- 三端不得绕过 `generated/` 直接读 `contracts/*.schema.json`。
+- 三端不得绕过 generated/runtime package 另建同名 action table 或 UiState 真源。
 
 ## 7. 与 demo 的关系
 
-- `frontend-demo/` 不需要随 contract 版本升级。
+- `frontend-demo-optimized/` 不需要随 contract 版本升级。
 - demo 是 contract 的语义参考，不是版本载体。
 - demo 中出现的 route / motion / state 必须在 contract 中找到，否则视为 contract 缺漏，需补 schema。
 

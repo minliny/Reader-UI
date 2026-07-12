@@ -33,6 +33,10 @@ enum class MotionId {
     DropdownMenuCollapse,
     @SerialName("dropdown.menu.expand")
     DropdownMenuExpand,
+    @SerialName("dropdown.menu.reposition")
+    DropdownMenuReposition,
+    @SerialName("dropdown.option.press")
+    DropdownOptionPress,
     @SerialName("dropdown.option.select")
     DropdownOptionSelect,
     @SerialName("dropdown.trigger.press")
@@ -89,12 +93,16 @@ enum class MotionId {
     ReaderControlDockRebound,
     @SerialName("reader.control.dock.release")
     ReaderControlDockRelease,
+    @SerialName("reader.control.handle.drag")
+    ReaderControlHandleDrag,
     @SerialName("reader.control.handle.press")
     ReaderControlHandlePress,
     @SerialName("reader.control.handle.release")
     ReaderControlHandleRelease,
     @SerialName("reader.control.hide")
     ReaderControlHide,
+    @SerialName("reader.control.show")
+    ReaderControlShow,
     @SerialName("reader.entry.actionToImmersive")
     ReaderEntryActionToImmersive,
     @SerialName("reader.entry.coverToImmersive")
@@ -167,8 +175,12 @@ enum class MotionId {
     StepperPress,
     @SerialName("stepper.value.change")
     StepperValueChange,
+    @SerialName("tab.item.press")
+    TabItemPress,
     @SerialName("tab.item.select")
     TabItemSelect,
+    @SerialName("tab.item.switch")
+    TabItemSwitch,
     @SerialName("tab.switch")
     TabSwitch,
     @SerialName("toggle.switch")
@@ -1661,6 +1673,96 @@ object MotionSpecRegistry {
         guardRules = listOf("reducedMotion:forceZeroDuration", "layoutStable:preserveRouteShell", "interrupt:completeThenReplace"),
         reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
         deprecated = false
+    ),
+    Motion(
+        id = MotionId.DropdownMenuReposition,
+        durationMs = 120,
+        easing = MotionEasing.Ease,
+        implementationKind = MotionImplementationKind.OverlayTransition,
+        containerRole = MotionContainerRole.OverlayHost,
+        operation = MotionOperation.Update,
+        visualPattern = MotionVisualPattern.NoMotion,
+        interruptPolicy = MotionInterruptPolicy.Redirect,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "app.motion.duration.dropdownSelect", easingToken = "app.motion.easing.standard"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "layoutStable:keepTriggerAnchor", "interrupt:redirect"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.DropdownOptionPress,
+        durationMs = 80,
+        easing = MotionEasing.Ease,
+        implementationKind = MotionImplementationKind.ComponentFeedback,
+        containerRole = MotionContainerRole.ListItem,
+        operation = MotionOperation.Update,
+        visualPattern = MotionVisualPattern.NoMotion,
+        interruptPolicy = MotionInterruptPolicy.Cancel,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "app.motion.duration.dropdownPress", easingToken = "app.motion.easing.standard"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "layoutStable:hitAreaStable", "interrupt:cancel"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.ReaderControlHandleDrag,
+        durationMs = 0,
+        easing = MotionEasing.None,
+        implementationKind = MotionImplementationKind.DirectManipulation,
+        containerRole = MotionContainerRole.ReaderSurface,
+        operation = MotionOperation.DragUpdate,
+        visualPattern = MotionVisualPattern.DirectDrag,
+        interruptPolicy = MotionInterruptPolicy.Cancel,
+        reducedMotionPolicy = MotionReducedMotionPolicy.KeepDirectManipulation,
+        tokens = MotionTokens(durationToken = "reader.motion.duration.instant", easingToken = "app.motion.easing.standard"),
+        guardRules = listOf("dragMustFollowFinger:noEasing", "layoutStable:clampToReaderFrame"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = true, sourceRule = null),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.ReaderControlShow,
+        durationMs = 240,
+        easing = MotionEasing.EaseOut,
+        implementationKind = MotionImplementationKind.ReaderEntry,
+        containerRole = MotionContainerRole.ReaderShell,
+        operation = MotionOperation.Update,
+        visualPattern = MotionVisualPattern.FadeReplace,
+        interruptPolicy = MotionInterruptPolicy.Redirect,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "reader.motion.duration.overlay", easingToken = "app.motion.easing.enter"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "focusReturn:keepTarget", "interrupt:redirect"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.TabItemPress,
+        durationMs = 80,
+        easing = MotionEasing.Ease,
+        implementationKind = MotionImplementationKind.ComponentFeedback,
+        containerRole = MotionContainerRole.MainTabShell,
+        operation = MotionOperation.Update,
+        visualPattern = MotionVisualPattern.NoMotion,
+        interruptPolicy = MotionInterruptPolicy.Cancel,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "app.motion.duration.tabPress", easingToken = "app.motion.easing.standard"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "layoutStable:hitAreaStable", "interrupt:cancel"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = false
+    ),
+    Motion(
+        id = MotionId.TabItemSwitch,
+        durationMs = 160,
+        easing = MotionEasing.Ease,
+        implementationKind = MotionImplementationKind.TabTransition,
+        containerRole = MotionContainerRole.MainTabShell,
+        operation = MotionOperation.TabSwitch,
+        visualPattern = MotionVisualPattern.FadeReplace,
+        interruptPolicy = MotionInterruptPolicy.Redirect,
+        reducedMotionPolicy = MotionReducedMotionPolicy.ZeroDuration,
+        tokens = MotionTokens(durationToken = "app.motion.duration.tabSwitch", easingToken = "app.motion.easing.standard"),
+        guardRules = listOf("reducedMotion:forceZeroDuration", "layoutStable:indicatorDoesNotPushLayout", "interrupt:redirect"),
+        reducedMotion = MotionReducedMotion(forceZeroDuration = true, directManipulation = false, sourceRule = "reducedMotion:forceZeroDuration"),
+        deprecated = true
     )
     )
 

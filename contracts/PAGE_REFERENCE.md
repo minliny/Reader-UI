@@ -3,7 +3,7 @@
 状态：Phase 1 P0 可执行参考规格
 日期：2026-07-04
 权威源：[route.schema.json](./route.schema.json)、[view-state.schema.json](./view-state.schema.json)、[ui-state.schema.json](./ui-state.schema.json)、[STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md)
-来源：[frontend-demo/route-contract.js](../frontend-demo/route-contract.js)、[frontend-demo/render-runtime.js](../frontend-demo/render-runtime.js)、[view-state.fixtures.json](./fixtures/view-state.fixtures.json)
+来源：[frontend-demo-optimized/route-contract.js](../frontend-demo-optimized/route-contract.js)、[frontend-demo-optimized/render-runtime.js](../frontend-demo-optimized/render-runtime.js)、[view-state.fixtures.json](./fixtures/view-state.fixtures.json)
 
 本文是 P0 阶段"页面级实现参考"。覆盖 Slice 1-6 优先链路的关键 route，给三端 reducer / Native UI 实现提供单一参考。全量 route × component 矩阵见 [ROUTE_COMPONENT_MATRIX.md](./ROUTE_COMPONENT_MATRIX.md)。
 
@@ -35,7 +35,7 @@
 每个状态用三标记之一：
 
 - `[C]` DomainState —— Owner: Reader-Core-Native。UI 不能直接改。
-- `[R]` UiState —— Owner: Platform Interaction Reducer。本仓 schema 定义形状。
+- `[R]` UiState —— Owner: ReaderUIRuntime。本仓 schema/spec 定义并执行；Host renderer 只读。
 - `[E]` EphemeralState —— Owner: Native UI。不进入本仓 schema，不参与业务判断、不持久化、不跨页共享。
 
 详见 [STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md)。
@@ -279,8 +279,7 @@ ImmersiveReading
   ├─ ReadingBackgroundLayer
   ├─ ReadingTextFlow（章节正文）
   ├─ ReadingInfoLayer（页码 / 章节名）
-  ├─ TapZones（左右点击翻页）
-  └─ ControlLayer（按需浮起，见 Slice 3）
+  └─ TapZones（左右点击翻页）
 ```
 
 组件树：`ReadingBackgroundLayer`、`ReadingTextFlow`、`ReadingInfoLayer`、`TapZones`、`Loading`、`Error`、`Offline`
@@ -308,67 +307,6 @@ ImmersiveReading
 返回：`reader.exit` 事件 → `route.pop` 回到 `book-detail` 或 `bookshelf`。
 keyboard：沉浸阅读一般不弹键盘；`content-search` / `content-replacement` overlay 打开时接管。
 禁止：阅读进度以 Core canonical location 为准；平台排版测量不能反向覆盖业务进度（见 [STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §2）。
-
-## 5. Slice 3：Reader overlay / control dock / reader mode
-
-### 5.1 `control-layer-base-v2`
-
-真相源：当前 live demo 的 [render-runtime.js](../frontend-demo/render-runtime.js)。
-
-- `readerRouteConfigs["control-layer-base-v2"] = { mode: "control" }`
-- `renderRoute()` 将 `control-layer-base-v2` 交给 `readerScreen(...)`
-- `readerBottomSheetHtml(...)` 在 control mode 下渲染 `readerControlMain(...)` + `readerBrightnessRail(...)`
-- `renderReaderShell(...)` 承载同一个阅读正文底层、顶部 reader overlay、底部 control sheet、模块导航和 state host
-
-屏幕结构：
-```
-ReaderShell
-  ├─ ReadingSurface（与 immersive-reading 共用正文底层）
-  ├─ ReaderTopOverlay（顶部返回 / 换源 / 更多）
-  ├─ ReaderControlSheet
-  │   ├─ ReaderControlSessionHost（有运行会话时）
-  │   ├─ ReaderQuickActions（搜索 / 自动翻页 / 替换）
-  │   ├─ ReaderChapterPanel（上一章 / 当前章 / 下一章 / 进度）
-  │   └─ ReaderBrightnessRail
-  ├─ ReaderBottomBar（目录 / 朗读 / 界面 / 设置模块导航）
-  └─ ReaderStateHost
-```
-
-组件树（ComponentType）：`ReaderBase`、`ReaderControlSheet`、`ReaderBottomBar`。
-
-禁止回退到旧浮动控制拆分：`FloatingBrightness`、`FloatingQuickActions`、`FloatingPageControl` 不是当前 live demo 的控制层结构，也不得重新进入 `control-layer-base-v2/default` fixture。
-
-状态集合：
-| 状态 | 归属 | 来源 |
-| --- | --- | --- |
-| `overlay` | `[R]` | `ui-state.overlay = reader-control` |
-| `readerControlSpaceSnapshot` | `[R]` | `appState.readerControlSpaceSnapshot` |
-| `readerDockOffsets[key]` | `[R]` | `appState.readerDockOffsets` |
-| `motionOverlaySequence` / `motionOverlayRole` / `motionOverlayAction` / `motionOverlayFocusReturn` / `motionOverlayReturnTarget` | `[R]` | `appState.motionOverlay*` |
-
-入口：`reader.control.toggle` 事件（点击阅读区中央切换）。
-返回：再点中央 / 系统返回 → `reader.control.toggle` 关闭 overlay。
-互斥：与所有 reader overlay 互斥（state-rule fixtures overlay 互斥规则）。
-
-### 5.2 reader overlay 集合
-
-| RouteId | overlay enum | 入口事件 | 关闭事件 |
-| --- | --- | --- | --- |
-| `reader-appearance-overlay-v2` / `reader-appearance` | `appearance` | `reader.appearance.open` | `reader.settings.close` |
-| `reader-tts-overlay-v2` / `tts` | `tts` | `reader.tts.start` / `reader.tts.toggle` | `reader.tts.stop` / `reader.tts.toggle` |
-| `reader-settings-overlay-v2` / `reader-settings` | `settings` | `reader.settings.open` | `reader.settings.close` |
-| `reader-search-overlay-v2` / `content-search` | `content-search` | `reader.contentSearch.open` | `reader.contentSearch.close` |
-| `reader-replace-overlay-v2` / `content-replacement` | `content-replacement` | `reader.contentReplacement.open` | `reader.contentReplacement.close` |
-| `reader-directory-overlay-v2` / `toc-bookmarks` | `directory` | `reader.directory.open` | `reader.directory.close` |
-| `reader-auto-scroll-overlay-v2` / `auto-page` | `auto-page` | `reader.autoPage.start` | `reader.autoPage.stop` |
-| `source-switch` / `source-switch-results` | `source-switch` | `reader.sourceSwitch.open` | `reader.sourceSwitch.close` |
-| `reader-night-state-v2` | `null`（不是 overlay，是 readerMode 派生）| `reader.nightState.toggle` | — |
-
-通用规则：
-- overlay 之间互斥（一次只开一个）。
-- overlay 切换必须经 `null` 中转（transition-guard，见 state-rule fixtures）。
-- `activeSession = tts` 或 `auto-page` 时，关闭对应 overlay 不结束 session。
-- overlay 关闭顺序：先关闭当前浮层，再返回上级页面（见 [STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md) §6）。
 
 ## 6. Slice 4：Progress / session / focus / TTS
 
@@ -523,7 +461,7 @@ async guard：`restore.loading` 时禁止 `route.push`（state-rule fixtures syn
 
 ## 11. 当前 demo 对应
 
-旧页面包、设计导出和 Stitch 草案已从仓库移除，不再作为当前 source。P0 route 的结构对应以 `frontend-demo/route-contract.js` 的 RouteId、`frontend-demo/render-runtime.js` 的实时 renderer、以及 `contracts/fixtures/view-state.fixtures.json` 的组件树为准。
+旧页面包、设计导出和 Stitch 草案已从仓库移除，不再作为当前 source。P0 route 的结构对应以 `frontend-demo-optimized/route-contract.js` 的 RouteId、`frontend-demo-optimized/render-runtime.js` 的实时 renderer、以及 `contracts/fixtures/view-state.fixtures.json` 的组件树为准。
 
 平台迁移时不得从已删除的旧页面包补结构；如果 demo 与 fixtures 不一致，先修本仓 contract fixture / codegen，再让平台仓库消费生成产物。
 

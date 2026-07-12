@@ -37,6 +37,13 @@ test("state-rule target.slices 枚举覆盖 Slice 1-6", () => {
   }
 });
 
+test("state-rule target.routeIds 已定义 (schema 1.1.0)", () => {
+  const routeIds = stateRuleSchema.properties.target.properties.routeIds;
+  assert.ok(routeIds, "state-rule schema 缺少 target.routeIds");
+  assert.equal(routeIds.type, "array");
+  assert.equal(routeIds.items.type, "string");
+});
+
 // --- Fixtures 校验 ---
 test("state-rule.fixtures.json 全部通过 schema", () => {
   for (const item of stateRuleFixtures) {
