@@ -1122,11 +1122,11 @@
   border: 2px solid var(--reader-control-active-bg, rgba(45, 74, 62, 0.18));
   border-top-color: var(--reader-control-action, var(--fd-primary-dark));
   border-radius: var(--fd-radius-circle);
-  animation: fd-reader-loading-spin var(--reader-motion-duration-loading-spin) linear infinite;
+  animation: fd-reader-loading-spin var(--fd-motion-effective-loading-spin) linear infinite;
 }
 
 .fd-chapter-marker-slots .fd-chapter-download-button.is-complete .fd-small-icon {
-  animation: fd-chapter-download-complete 520ms var(--reader-motion-easing-enter) both;
+  animation: fd-chapter-download-complete var(--fd-motion-effective-download-complete) var(--reader-motion-easing-enter) both;
 }
 
 .fd-chapter-marker-slots .is-bookmark-slot:not(.is-active) {

@@ -16,7 +16,9 @@
   display: grid;
   grid-template-rows: 30px minmax(0, 1fr);
   gap: 8px;
-  padding: 18px 12px 12px;
+  /* Reader 2 full-page master: Header/ContentSurface start at 13px/57px
+     inside the floating panel. */
+  padding: 19px 13px 12px;
   border: 1px solid var(--reader-control-line-strong, rgba(164, 149, 132, 0.42));
   border-radius: var(--fd-radius-xl);
   background: var(--reader-control-surface, rgba(255, 250, 244, 0.98));
@@ -67,6 +69,11 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.fd-reader-full-head .fd-small-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .fd-reader-full-head strong {
@@ -1061,7 +1068,10 @@
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.72),
     0 3px 8px rgba(75, 58, 41, 0.11);
-  transition: transform 100ms ease, box-shadow 100ms ease, border-color 100ms ease;
+  transition:
+    transform var(--fd-motion-effective-fullpage-press) ease,
+    box-shadow var(--fd-motion-effective-fullpage-press) ease,
+    border-color var(--fd-motion-effective-fullpage-press) ease;
 }
 
 .fd-reader-full-tts .fd-reader-full-playback > button:hover {
@@ -1509,7 +1519,10 @@
   color: var(--reader-control-muted, #5b5046);
   font: 600 11px/1 var(--fd-sans);
   opacity: 0.42;
-  transition: color 120ms ease, font-size 120ms ease, opacity 120ms ease;
+  transition:
+    color var(--fd-motion-effective-typography-feedback) ease,
+    font-size var(--fd-motion-effective-typography-feedback) ease,
+    opacity var(--fd-motion-effective-typography-feedback) ease;
 }
 
 .fd-reader-tts-wheel > button.is-active {

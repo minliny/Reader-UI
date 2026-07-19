@@ -212,11 +212,6 @@ body {
   text-align: center;
 }
 
-.asset-icon-card.is-supplemented {
-  border-color: rgba(217, 111, 20, .35);
-  background: #fff7ee;
-}
-
 .asset-icon-box {
   display: grid;
   place-items: center;
@@ -234,11 +229,6 @@ body {
   display: block;
   width: 32px;
   height: 32px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 3.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }
 
 .asset-icon-card strong,

@@ -30,21 +30,22 @@
 
 | 项 | 代码事实 |
 |---|---|
-| 路由规模 | `route-contract.js` 注册 131 个 route |
-| 路由渲染覆盖 | `render-runtime.js` 的 `renderRoute()` 覆盖 131/131 个 route，无缺失 case |
-| Shell 分布 | MainTabShell 35、LibraryShell 52、SettingsShell 28、ReaderShell 15、FlowShell 1 |
-| 非 motion adapter 的 `data-*` | 合并 `index/render/render-runtime/route-contract/shared-shell-kit` 后 147 个唯一入口 |
-| motion adapter 属性 | `data-motion-id`、`data-motion-pressed`、`data-motion-reduced`、`data-motion-reduced-source` |
-| 运行时代码 Motion ID | `applyMotionSelectorBindings()` 中 58 个 bind 调用，50 个唯一 Motion ID |
-| 直接绑定覆盖 | 147 个 `data-*` 中 125 个被 bind selector 直接覆盖 |
-| 未被 bind selector 直接覆盖 | 22 个，多数是 route/debug/metadata/slot 属性 |
+| 路由规模 | `route-contract.js` 注册 260 个 route |
+| 路由渲染覆盖 | runtime + modular renderers 覆盖 260/260 个 route；新增 24 个能力 route 由 D6 renderer 显式覆盖，不回落 bookshelf |
+| Shell 分布 | MainTabShell 48、LibraryShell 74、SettingsShell 55、ReaderShell 51、FlowShell 8 |
+| 当前 coverage scanner 的 `data-*` | 合并 runtime、shared kit 与 modular renderers 后 372 个唯一入口（包含 motion adapter / state 字段） |
+| motion adapter 属性 | 除基础 `data-motion-id/pressed/reduced` 外，已包含 tab、segment、dropdown、input/search/content、overlay、loading、toast、Reader session/orientation/interrupt 等结构化状态族 |
+| 运行时代码 Motion ID | `applyMotionSelectorBindings()` 中 89 个 bind 调用，66 个唯一 Motion ID |
+| 直接绑定覆盖 | 当前 coverage gate 为 159/372；其余多为状态输出、route/debug/metadata/slot 属性，不应全部转成点击绑定 |
+| canonical exact 状态机 | 89/95 active exact；controller 84 项（含 3 个 controlSpace reserved 参考态），高风险 detailed coverage 70/70；其余 canonical 条目为 3 deprecated + 3 reserved |
 | CSS 动效文件 | `01-shell-layout.css`、`02-main-library.css`、`04-settings-source.css`、`05-flow-adaptive.css`、`motion-tokens.css` |
 | Reduced motion | `matchMedia("(prefers-reduced-motion: reduce)")`、URL 开关和 CSS 降级都已存在 |
 | Motion controller | `motion-controller.js` 已接入 `index.html`，`render-runtime.js` 会创建 root-scoped controller |
 
 证据文件：
 
-- `frontend-demo-optimized/verify/motion/source-global-audit.json`
+- `frontend-demo-optimized/verify/motion/motion-coverage-report.json`（当前可执行事实）
+- `frontend-demo-optimized/verify/motion/source-global-audit.json`（2026-06-29 旧源扫描快照，仅作历史对照，不作为当前数量真相）
 
 源码锚点：
 
@@ -273,7 +274,7 @@
 | Dropdown / Menu | `filterDisclosure()`、settings option dropdown、reader more/setting/tts dropdown | trigger/option/menu Motion ID 存在；chevron 有 rotate | 菜单 enter/exit/select/cancel/reposition 没有统一生命周期 | `dropdown.opening/open/closing/closed/selecting`，外点/返回/resize 都走同一 exit |
 | Sheet / Dialog / Toast / Keyboard | `data-demo-sheet`、`data-demo-dialog`、settings overlay、keyboard host | overlay 已接入 `data-motion-overlay-*` role/state/action/focus-return 字段，settings overlay 主体也进入同一入口；toast、keyboard transition/ID 存在 | 连续打开/关闭打断、遮罩队列、录屏和平台焦点证据仍缺 | `overlay.enter/exit/interrupted`，结束态必须恢复 focus 和 aria |
 | List row / Card | `role=button`、`data-book-card`、`data-restore-record`、RSS/source rows | fallback `listRow.press`、部分 card route ID，并落入 `data-motion-component-family=surface` | rows/cards 与 route push、selection、multi-select 的深状态证据仍缺 | rows 分为 `listRow.press/select/route/reorder`，card 分为 `card.press/select/route` |
-| Input / Search | `data-open-keyboard`、`data-search-submit`、`data-search-reset`、search state | keyboard enter/exit、search state ID 和 `data-motion-component-family=input/state` 存在 | focus、clear、submit、result replace 的录屏证据和 focus restore 仍缺 | `input.focus/blur/clear/submit`、`search.state.replace` 统一 token |
+| Input / Search | `data-open-keyboard`、`data-search-submit`、`data-search-reset`、search state | input/search 七项 exact；D2 canonical 图书搜索已统一 before/loading/results/empty/error、request version / owner / discard、键盘内外值镜像、Enter submit、clear 回焦与 reduced-motion；浏览器真实页已验收 | RSS/settings/source search 仍未逐页迁移；缺原生输入法、无障碍和设备动态证据 | 其余搜索入口复用同一 reducer，平台补 IME/focus/latest-wins 测试 |
 | Toggle / Switch | `data-reader-setting-toggle`、`data-source-switch`、`data-restore-scope` | switch knob/active transition 基础存在，并落入 `data-motion-component-family=toggle` | toggle 与 session start、dialog confirm、bulk selection 的 async pending 反馈仍缺 | `toggle.press/offToOn/onToOff/settle`，需要支持 async pending |
 | Slider / Progress / Stepper | 亮度、章节进度、字号/间距 stepper | 亮度和章节进度有 pointer capture；progress width 有 transition，并落入 `data-motion-component-family=numeric` | drag start/update/release 的连续证据、cancel 和 stepper value tick 仍缺 | `slider.drag.start/update/release/cancel`、`stepper.press/value.change` |
 | Selection toolbar | `data-reader-selection-layer`、`data-reader-selection-action` | selection layer、toolbar action ID 和 `data-motion-component-family=selection` 存在 | range show、toolbar enter/exit、action commit 缺打断规则和录屏 | `selection.range.show/update`、`selection.toolbar.enter/action/exit` |

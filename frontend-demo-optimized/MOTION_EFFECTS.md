@@ -438,7 +438,7 @@ Reduced motion：
 1. `listRow.press` / `card.press`：当前 row/card 局部 pressed；不改变列表行高、卡片尺寸、封面比例或滚动位置。
 2. `listRow.select` / `card.select`：选择型 row/card 更新 check、背景、badge 或 focus ring；批量汇总区可用 `feedback.toast.update` 或 `state.content.replace` 更新。
 3. `listRow.route` / `card.route`：导航型 row/card 在 pressed 后进入目标 route；书籍封面阅读入口优先走 `reader.entry.coverToImmersive`。
-4. `bookshelf.view.switch`：封面/列表视图切换时，保留分组、筛选、滚动意图和选中语义；容器短淡换，不逐本书飞入。
+4. `bookshelf.view.switch`：封面/列表视图切换时，同一批稳定 `BookItem` 同步进行共享几何重排；保留分组、筛选、滚动锚点和选中语义，不做容器淡换，也不逐本书飞入。
 
 通用禁用项：
 

@@ -3,6 +3,8 @@
   --app-motion-duration-tab-press: 80ms;
   --app-motion-duration-tab-select: 120ms;
   --app-motion-duration-tab-switch: 160ms;
+  --fd-ds-motion-duration-layoutSwitch: 320ms;
+  --app-motion-duration-layout-switch: var(--fd-ds-motion-duration-layoutSwitch);
   --app-motion-duration-button-press: 80ms;
   --app-motion-duration-button-activate: 120ms;
   --app-motion-duration-toggle-switch: 140ms;
@@ -25,6 +27,10 @@
   --reader-motion-duration-handle-long-press: 320ms;
   --reader-motion-duration-handle-snap: 120ms;
   --reader-motion-duration-panel: 200ms;
+  --reader-motion-duration-control-enter: 420ms;
+  --reader-motion-duration-control-exit: 360ms;
+  --reader-motion-duration-quick-promote: 320ms;
+  --reader-motion-duration-module-switch: 360ms;
   --reader-motion-duration-page-turn: 220ms;
   --reader-motion-duration-reader-entry: 240ms;
   --reader-motion-duration-session-return: 200ms;
@@ -50,6 +56,9 @@
   --reader-motion-distance-page-turn-x: 16px;
   --reader-motion-distance-focus-y: -1px;
   --reader-motion-distance-reader-entry-y: 12px;
+  --reader-motion-distance-control-topbar-y: 8px;
+  --reader-motion-distance-control-panel-y: 18px;
+  --reader-motion-distance-quick-panel-y: 12px;
   --reader-motion-distance-control-drag-margin: 16px;
   --reader-motion-distance-handle-pull-y: 18px;
   --reader-motion-distance-running-space-y: 10px;
@@ -66,44 +75,104 @@
 }
 
 .fd-demo {
-  --fd-motion-effective-first-open: var(--app-motion-duration-first-open);
+  --fd-motion-runtime-first-open: var(--app-motion-duration-first-open);
+  --fd-motion-runtime-tab-press: var(--app-motion-duration-tab-press);
+  --fd-motion-runtime-tab-select: var(--app-motion-duration-tab-select);
+  --fd-motion-runtime-tab-switch: var(--app-motion-duration-tab-switch);
+  --fd-motion-runtime-layout-switch: var(--app-motion-duration-layout-switch);
+  --fd-motion-runtime-button-press: var(--app-motion-duration-button-press);
+  --fd-motion-runtime-button-activate: var(--app-motion-duration-button-activate);
+  --fd-motion-runtime-toggle: var(--app-motion-duration-toggle-switch);
+  --fd-motion-runtime-chip: var(--app-motion-duration-chip-select);
+  --fd-motion-runtime-numeric: var(--app-motion-duration-numeric-commit);
+  --fd-motion-runtime-input-focus: var(--app-motion-duration-input-focus);
+  --fd-motion-runtime-search-state: var(--app-motion-duration-search-state);
+  --fd-motion-runtime-state: var(--app-motion-duration-state-replace);
+  --fd-motion-runtime-feedback: var(--app-motion-duration-feedback-toast);
+  --fd-motion-runtime-dropdown-press: var(--app-motion-duration-dropdown-press);
+  --fd-motion-runtime-dropdown-expand: var(--app-motion-duration-dropdown-expand);
+  --fd-motion-runtime-dropdown-collapse: var(--app-motion-duration-dropdown-collapse);
+  --fd-motion-runtime-dropdown-select: var(--app-motion-duration-dropdown-select);
+  --fd-motion-runtime-reader-entry: var(--reader-motion-duration-reader-entry);
+  --fd-motion-runtime-handle-snap: var(--reader-motion-duration-handle-snap);
+  --fd-motion-runtime-dock-release: var(--reader-motion-duration-handle-snap);
+  --fd-motion-runtime-capsule-enter: var(--reader-motion-duration-capsule-enter);
+  --fd-motion-runtime-capsule-control: var(--reader-motion-duration-capsule-control);
+  --fd-motion-runtime-capsule-tick: var(--reader-motion-duration-capsule-tick);
+  --fd-motion-runtime-voice-pulse: var(--reader-motion-duration-voice-pulse);
+  --fd-motion-runtime-running-space: var(--reader-motion-duration-running-space);
+  --fd-motion-runtime-orientation-freeze: var(--reader-motion-duration-orientation-freeze);
+  --fd-motion-runtime-viewport-reshape: var(--reader-motion-duration-viewport-reshape);
+  --fd-motion-runtime-orientation-settle: var(--reader-motion-duration-orientation-settle);
+  --fd-motion-runtime-interrupt-settle: var(--reader-motion-duration-interrupt-settle);
+  --fd-motion-runtime-overlay-fast: var(--reader-motion-duration-fast);
+  --fd-motion-runtime-overlay: var(--reader-motion-duration-base);
+  --fd-motion-runtime-page-turn: var(--reader-motion-duration-page-turn);
+  --fd-motion-runtime-reader-control-show: var(--reader-motion-duration-control-enter);
+  --fd-motion-runtime-reader-control-hide: var(--reader-motion-duration-control-exit);
+  --fd-motion-runtime-reader-quick-promote: var(--reader-motion-duration-quick-promote);
+  --fd-motion-runtime-reader-module-switch: var(--reader-motion-duration-module-switch);
+  --fd-motion-runtime-reader-panel-expand: var(--reader-motion-duration-control-enter);
+  --fd-motion-runtime-reader-panel-collapse: var(--reader-motion-duration-control-exit);
+  --fd-motion-runtime-loading-spin: var(--reader-motion-duration-loading-spin);
+  --fd-motion-runtime-night-aurora: 14000ms;
+  --fd-motion-runtime-tts-cursor-pulse: 1400ms;
+  --fd-motion-runtime-download-complete: 520ms;
+  --fd-motion-runtime-fullpage-press: 100ms;
+  --fd-motion-runtime-typography-feedback: 120ms;
+  --fd-motion-effective-first-open: var(--fd-motion-runtime-first-open);
   --fd-motion-effective-first-open-y: var(--app-motion-distance-first-open-y);
-  --fd-motion-effective-tab-press: var(--app-motion-duration-tab-press);
-  --fd-motion-effective-tab-select: var(--app-motion-duration-tab-select);
-  --fd-motion-effective-tab-switch: var(--app-motion-duration-tab-switch);
-  --fd-motion-effective-button-press: var(--app-motion-duration-button-press);
-  --fd-motion-effective-button-activate: var(--app-motion-duration-button-activate);
-  --fd-motion-effective-toggle: var(--app-motion-duration-toggle-switch);
-  --fd-motion-effective-chip: var(--app-motion-duration-chip-select);
-  --fd-motion-effective-numeric: var(--app-motion-duration-numeric-commit);
-  --fd-motion-effective-state: var(--app-motion-duration-state-replace);
-  --fd-motion-effective-feedback: var(--app-motion-duration-feedback-toast);
-  --fd-motion-effective-dropdown-press: var(--app-motion-duration-dropdown-press);
-  --fd-motion-effective-dropdown-expand: var(--app-motion-duration-dropdown-expand);
-  --fd-motion-effective-dropdown-collapse: var(--app-motion-duration-dropdown-collapse);
-  --fd-motion-effective-dropdown-select: var(--app-motion-duration-dropdown-select);
+  --fd-motion-effective-tab-press: var(--fd-motion-runtime-tab-press);
+  --fd-motion-effective-tab-select: var(--fd-motion-runtime-tab-select);
+  --fd-motion-effective-tab-switch: var(--fd-motion-runtime-tab-switch);
+  --fd-motion-effective-layout-switch: var(--fd-motion-runtime-layout-switch);
+  --fd-motion-effective-button-press: var(--fd-motion-runtime-button-press);
+  --fd-motion-effective-button-activate: var(--fd-motion-runtime-button-activate);
+  --fd-motion-effective-toggle: var(--fd-motion-runtime-toggle);
+  --fd-motion-effective-chip: var(--fd-motion-runtime-chip);
+  --fd-motion-effective-numeric: var(--fd-motion-runtime-numeric);
+  --fd-motion-effective-input-focus: var(--fd-motion-runtime-input-focus);
+  --fd-motion-effective-search-state: var(--fd-motion-runtime-search-state);
+  --fd-motion-effective-state: var(--fd-motion-runtime-state);
+  --fd-motion-effective-feedback: var(--fd-motion-runtime-feedback);
+  --fd-motion-effective-dropdown-press: var(--fd-motion-runtime-dropdown-press);
+  --fd-motion-effective-dropdown-expand: var(--fd-motion-runtime-dropdown-expand);
+  --fd-motion-effective-dropdown-collapse: var(--fd-motion-runtime-dropdown-collapse);
+  --fd-motion-effective-dropdown-select: var(--fd-motion-runtime-dropdown-select);
   --fd-motion-effective-dropdown-y: var(--app-motion-distance-dropdown-y);
-  --fd-motion-effective-reader-entry: var(--reader-motion-duration-reader-entry);
+  --fd-motion-effective-reader-entry: var(--fd-motion-runtime-reader-entry);
   --fd-motion-effective-reader-entry-y: var(--reader-motion-distance-reader-entry-y);
-  --fd-motion-effective-handle-snap: var(--reader-motion-duration-handle-snap);
+  --fd-motion-effective-handle-snap: var(--fd-motion-runtime-handle-snap);
   --fd-motion-effective-handle-pull-y: var(--reader-motion-distance-handle-pull-y);
-  --fd-motion-effective-dock-release: var(--reader-motion-duration-handle-snap);
-  --fd-motion-effective-capsule-enter: var(--reader-motion-duration-capsule-enter);
-  --fd-motion-effective-capsule-control: var(--reader-motion-duration-capsule-control);
-  --fd-motion-effective-capsule-tick: var(--reader-motion-duration-capsule-tick);
-  --fd-motion-effective-voice-pulse: var(--reader-motion-duration-voice-pulse);
+  --fd-motion-effective-dock-release: var(--fd-motion-runtime-dock-release);
+  --fd-motion-effective-capsule-enter: var(--fd-motion-runtime-capsule-enter);
+  --fd-motion-effective-capsule-control: var(--fd-motion-runtime-capsule-control);
+  --fd-motion-effective-capsule-tick: var(--fd-motion-runtime-capsule-tick);
+  --fd-motion-effective-voice-pulse: var(--fd-motion-runtime-voice-pulse);
   --fd-motion-effective-capsule-y: var(--reader-motion-distance-capsule-y);
   --fd-motion-effective-capsule-tick-y: var(--reader-motion-distance-capsule-tick-y);
-  --fd-motion-effective-running-space: var(--reader-motion-duration-running-space);
+  --fd-motion-effective-running-space: var(--fd-motion-runtime-running-space);
   --fd-motion-effective-running-space-y: var(--reader-motion-distance-running-space-y);
-  --fd-motion-effective-orientation-freeze: var(--reader-motion-duration-orientation-freeze);
-  --fd-motion-effective-viewport-reshape: var(--reader-motion-duration-viewport-reshape);
-  --fd-motion-effective-orientation-settle: var(--reader-motion-duration-orientation-settle);
+  --fd-motion-effective-orientation-freeze: var(--fd-motion-runtime-orientation-freeze);
+  --fd-motion-effective-viewport-reshape: var(--fd-motion-runtime-viewport-reshape);
+  --fd-motion-effective-orientation-settle: var(--fd-motion-runtime-orientation-settle);
   --fd-motion-effective-orientation-y: var(--reader-motion-distance-orientation-panel-y);
-  --fd-motion-effective-interrupt-settle: var(--reader-motion-duration-interrupt-settle);
-  --fd-motion-effective-overlay-fast: var(--reader-motion-duration-fast);
-  --fd-motion-effective-overlay: var(--reader-motion-duration-base);
-  --fd-motion-effective-page-turn: var(--reader-motion-duration-page-turn);
+  --fd-motion-effective-interrupt-settle: var(--fd-motion-runtime-interrupt-settle);
+  --fd-motion-effective-overlay-fast: var(--fd-motion-runtime-overlay-fast);
+  --fd-motion-effective-overlay: var(--fd-motion-runtime-overlay);
+  --fd-motion-effective-page-turn: var(--fd-motion-runtime-page-turn);
+  --fd-motion-effective-reader-control-show: var(--fd-motion-runtime-reader-control-show);
+  --fd-motion-effective-reader-control-hide: var(--fd-motion-runtime-reader-control-hide);
+  --fd-motion-effective-reader-quick-promote: var(--fd-motion-runtime-reader-quick-promote);
+  --fd-motion-effective-reader-module-switch: var(--fd-motion-runtime-reader-module-switch);
+  --fd-motion-effective-reader-panel-expand: var(--fd-motion-runtime-reader-panel-expand);
+  --fd-motion-effective-reader-panel-collapse: var(--fd-motion-runtime-reader-panel-collapse);
+  --fd-motion-effective-loading-spin: var(--fd-motion-runtime-loading-spin);
+  --fd-motion-effective-night-aurora: var(--fd-motion-runtime-night-aurora);
+  --fd-motion-effective-tts-cursor-pulse: var(--fd-motion-runtime-tts-cursor-pulse);
+  --fd-motion-effective-download-complete: var(--fd-motion-runtime-download-complete);
+  --fd-motion-effective-fullpage-press: var(--fd-motion-runtime-fullpage-press);
+  --fd-motion-effective-typography-feedback: var(--fd-motion-runtime-typography-feedback);
 }
 
 .fd-demo[data-motion-reduced="true"] {
@@ -112,11 +181,14 @@
   --fd-motion-effective-tab-press: var(--reader-motion-duration-instant);
   --fd-motion-effective-tab-select: var(--reader-motion-duration-instant);
   --fd-motion-effective-tab-switch: var(--reader-motion-duration-instant);
+  --fd-motion-effective-layout-switch: var(--reader-motion-duration-instant);
   --fd-motion-effective-button-press: var(--reader-motion-duration-instant);
   --fd-motion-effective-button-activate: var(--reader-motion-duration-instant);
   --fd-motion-effective-toggle: var(--reader-motion-duration-instant);
   --fd-motion-effective-chip: var(--reader-motion-duration-instant);
   --fd-motion-effective-numeric: var(--reader-motion-duration-instant);
+  --fd-motion-effective-input-focus: var(--reader-motion-duration-instant);
+  --fd-motion-effective-search-state: var(--reader-motion-duration-instant);
   --fd-motion-effective-state: var(--reader-motion-duration-instant);
   --fd-motion-effective-feedback: var(--reader-motion-duration-instant);
   --fd-motion-effective-dropdown-press: var(--reader-motion-duration-instant);
@@ -145,6 +217,18 @@
   --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
   --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
   --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
+  --fd-motion-effective-reader-control-show: var(--reader-motion-duration-instant);
+  --fd-motion-effective-reader-control-hide: var(--reader-motion-duration-instant);
+  --fd-motion-effective-reader-quick-promote: var(--reader-motion-duration-instant);
+  --fd-motion-effective-reader-module-switch: var(--reader-motion-duration-instant);
+  --fd-motion-effective-reader-panel-expand: var(--reader-motion-duration-instant);
+  --fd-motion-effective-reader-panel-collapse: var(--reader-motion-duration-instant);
+  --fd-motion-effective-loading-spin: var(--reader-motion-duration-instant);
+  --fd-motion-effective-night-aurora: var(--reader-motion-duration-instant);
+  --fd-motion-effective-tts-cursor-pulse: var(--reader-motion-duration-instant);
+  --fd-motion-effective-download-complete: var(--reader-motion-duration-instant);
+  --fd-motion-effective-fullpage-press: var(--reader-motion-duration-instant);
+  --fd-motion-effective-typography-feedback: var(--reader-motion-duration-instant);
 }
 
 .fd-demo[data-motion-reduced="true"] :where([data-reader-capsule-voice], [data-reader-control-space-voice])[data-motion-state="active"],
@@ -229,6 +313,16 @@
 
 .fd-demo[data-motion-async-state="pending"] :where([data-reader-loading]) {
   box-shadow: inset 0 0 0 1px rgba(47, 99, 115, 0.18);
+}
+
+.fd-demo :where(.fd-reader-loading-panel.fd-reader-loading-runtime) {
+  z-index: 46;
+  left: 12px;
+  right: 12px;
+  top: 54px;
+  bottom: 12px;
+  background: color-mix(in srgb, var(--reader-control-panel, #fffaf5) 94%, transparent);
+  backdrop-filter: blur(8px);
 }
 
 .fd-demo[data-motion-async-state="completed"] :where([data-motion-async-target="screen-host"]) {
@@ -480,16 +574,120 @@
   transition: width var(--fd-motion-effective-numeric) var(--reader-motion-easing-standard);
 }
 
+.fd-demo [data-motion-primitive-id="button.activate"][data-motion-primitive-phase="running"],
+.fd-demo [data-motion-primitive-id="stepper.press"][data-motion-primitive-phase="running"],
+.fd-demo [data-motion-primitive-id="card.press"][data-motion-primitive-phase="running"] {
+  box-shadow: 0 0 0 3px rgba(47, 99, 115, 0.08);
+}
+
+.fd-demo [data-motion-primitive-id="toggle.switch"],
+.fd-demo [data-motion-primitive-id="chip.item.select"],
+.fd-demo [data-motion-primitive-id="card.select"],
+.fd-demo [data-motion-primitive-id="listRow.select"] {
+  transition:
+    background-color var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    border-color var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    color var(--fd-motion-effective-chip) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-chip) var(--reader-motion-easing-standard);
+}
+
+.fd-demo [data-motion-slider-state="dragging"],
+.fd-demo [data-motion-slider-state="draggingValueUpdated"],
+.fd-demo [data-motion-slider-state="dragging"] *,
+.fd-demo [data-motion-slider-state="draggingValueUpdated"] * {
+  transition-duration: 0ms !important;
+  transition-timing-function: linear !important;
+}
+
+.fd-demo [data-motion-slider-id="slider.drag.release"] {
+  transition-duration: var(--fd-motion-effective-numeric);
+  transition-timing-function: var(--reader-motion-easing-enter);
+}
+
+.fd-demo [data-motion-stepper-id="stepper.value.change"][data-motion-stepper-phase="running"] {
+  animation: fd-primitive-value-commit var(--fd-motion-effective-numeric) var(--reader-motion-easing-standard) both;
+}
+
 .fd-demo :where(.fd-search-state, .fd-search-results, .fd-empty-state, .fd-bookshelf-empty-state, .fd-rss-state-card) {
   transition:
     opacity var(--fd-motion-effective-state) var(--reader-motion-easing-standard),
     transform var(--fd-motion-effective-state) var(--reader-motion-easing-standard);
 }
 
+.fd-demo :where(input, textarea, [contenteditable="true"])[data-motion-input-contract="input.focus-blur"] {
+  transition:
+    border-color var(--fd-motion-effective-input-focus) var(--reader-motion-easing-standard),
+    box-shadow var(--fd-motion-effective-input-focus) var(--reader-motion-easing-standard),
+    background-color var(--fd-motion-effective-input-focus) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(input, textarea, [contenteditable="true"])[data-motion-input-state="focused"] {
+  box-shadow: 0 0 0 3px rgba(35, 121, 164, 0.12);
+}
+
+.fd-demo [data-motion-search-id="search.state.replace"][data-motion-search-phase="replacing"] {
+  animation: fd-search-state-replace var(--fd-motion-effective-search-state) var(--reader-motion-easing-standard) both;
+}
+
+.fd-demo [data-motion-content-id="state.content.replace"][data-motion-content-role="target"][data-motion-content-phase="replacing"] {
+  animation: fd-content-state-replace var(--fd-motion-effective-state) var(--reader-motion-easing-standard) both;
+}
+
+@keyframes fd-search-state-replace {
+  from { opacity: 0.72; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fd-content-state-replace {
+  from { opacity: 0.76; }
+  to { opacity: 1; }
+}
+
+@keyframes fd-primitive-value-commit {
+  0% { opacity: 0.78; }
+  100% { opacity: 1; }
+}
+
+.fd-demo[data-motion-reduced="true"] :where(
+  [data-motion-search-id="search.state.replace"],
+  [data-motion-content-id="state.content.replace"]
+) {
+  animation: none;
+  transform: none;
+}
+
 .fd-demo :where(.fd-settings-toast, .fd-discover-toast, .fd-nav-feedback) {
   transition:
     opacity var(--fd-motion-effective-feedback) var(--reader-motion-easing-standard),
     transform var(--fd-motion-effective-feedback) var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where([data-motion-toast][data-motion-toast-phase="entering"]) {
+  animation: fd-feedback-toast-enter var(--fd-motion-effective-feedback) var(--reader-motion-easing-enter) both;
+}
+
+.fd-demo :where([data-motion-toast][data-motion-toast-phase="updating"]) {
+  animation: fd-feedback-toast-update var(--fd-motion-effective-feedback) var(--reader-motion-easing-standard) both;
+}
+
+.fd-demo :where([data-motion-toast][data-motion-toast-phase="exiting"]) {
+  animation: fd-feedback-toast-exit var(--fd-motion-effective-feedback) var(--reader-motion-easing-exit) both;
+  pointer-events: none;
+}
+
+@keyframes fd-feedback-toast-enter {
+  from { opacity: 0; transform: translateY(var(--app-motion-distance-feedback-y)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fd-feedback-toast-update {
+  0% { opacity: 0.72; transform: translateY(2px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fd-feedback-toast-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(var(--app-motion-distance-feedback-y)); }
 }
 
 .fd-demo :where(.fd-reader-selection-toolbar, .fd-reader-selection-range, .fd-reader-selection-handle) {
@@ -529,6 +727,106 @@
 
 .fd-demo :where(.fd-main-nav-item, .fd-reader-module)[data-motion-tab-state="exiting"] {
   opacity: 0.86;
+}
+
+.fd-demo :where(.fd-reader-module-nav)[data-motion-tab-group="reader-module"][data-motion-tab-phase="switch"] {
+  --fd-motion-effective-tab-switch: var(--fd-motion-effective-reader-module-switch);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-control] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-module-switch);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.control.show"] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-control-show);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-enter);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.control.hide"] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-control-hide);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-exit);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.quick.promote"] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-quick-promote);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-enter);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.module.switch"] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-module-switch);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-standard);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.panel.expand"] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-panel-expand);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-enter);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.panel.collapse"] {
+  --fd-motion-reader-active-duration: var(--fd-motion-effective-reader-panel-collapse);
+  --fd-motion-reader-active-easing: var(--reader-motion-easing-exit);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-control] :where([data-motion-reader-role="incoming"], [data-motion-reader-role="outgoing"]) {
+  opacity: 1;
+  scale: 1;
+  translate: 0 0;
+  transform-origin: center;
+  transition:
+    opacity var(--fd-motion-reader-active-duration) var(--fd-motion-reader-active-easing),
+    scale var(--fd-motion-reader-active-duration) var(--fd-motion-reader-active-easing),
+    translate var(--fd-motion-reader-active-duration) var(--fd-motion-reader-active-easing);
+  will-change: opacity, scale, translate;
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-phase="prepare"] :where([data-motion-reader-role="incoming"]) {
+  opacity: 0;
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-phase="running"] :where([data-motion-reader-role="incoming"]) {
+  opacity: 1;
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-phase="running"] :where([data-motion-reader-role="outgoing"]) {
+  opacity: 0;
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.control.show"][data-motion-reader-phase="prepare"] :where([data-motion-reader-role="incoming"][data-motion-reader-part="topbar"]) {
+  translate: 0 calc(var(--reader-motion-distance-control-topbar-y) * -1);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.control.show"][data-motion-reader-phase="prepare"] :where([data-motion-reader-role="incoming"]):where([data-motion-reader-part="panel"], [data-motion-reader-part="nav"]) {
+  translate: 0 var(--reader-motion-distance-control-panel-y);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.control.hide"][data-motion-reader-phase="running"] :where([data-motion-reader-role="outgoing"][data-motion-reader-part="topbar"]) {
+  translate: 0 calc(var(--reader-motion-distance-control-topbar-y) * -1);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.control.hide"][data-motion-reader-phase="running"] :where([data-motion-reader-role="outgoing"]):where([data-motion-reader-part="panel"], [data-motion-reader-part="nav"]) {
+  translate: 0 var(--reader-motion-distance-control-panel-y);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.quick.promote"][data-motion-reader-phase="prepare"] :where([data-motion-reader-role="incoming"][data-motion-reader-part="panel"]) {
+  translate: 0 var(--reader-motion-distance-quick-panel-y);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.panel.expand"][data-motion-reader-phase="prepare"] :where([data-motion-reader-role="incoming"][data-motion-reader-part="panel"]) {
+  translate: 0 var(--reader-motion-distance-quick-panel-y);
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.panel.expand"][data-motion-reader-phase="running"] :where([data-motion-reader-role="incoming"][data-motion-reader-part="panel"]) {
+  translate: 0 0;
+}
+
+.fd-demo :where(.fd-reader-frame)[data-motion-reader-id="reader.panel.collapse"][data-motion-reader-phase="running"] :where([data-motion-reader-role="outgoing"][data-motion-reader-part="panel"]) {
+  translate: 0 var(--reader-motion-distance-quick-panel-y);
+}
+
+.fd-demo :where(.fd-reader-control-transition-clone) {
+  z-index: calc(var(--fd-ds-z-dialog) - 2);
+  pointer-events: none !important;
 }
 
 .fd-demo :where([data-motion-segment-item]) {
@@ -880,6 +1178,25 @@
     --fd-motion-effective-overlay-fast: var(--reader-motion-duration-instant);
     --fd-motion-effective-overlay: var(--reader-motion-duration-instant);
     --fd-motion-effective-page-turn: var(--reader-motion-duration-instant);
+    --fd-motion-effective-reader-control-show: var(--reader-motion-duration-instant);
+    --fd-motion-effective-reader-control-hide: var(--reader-motion-duration-instant);
+    --fd-motion-effective-reader-quick-promote: var(--reader-motion-duration-instant);
+    --fd-motion-effective-reader-module-switch: var(--reader-motion-duration-instant);
+    --fd-motion-effective-reader-panel-expand: var(--reader-motion-duration-instant);
+    --fd-motion-effective-reader-panel-collapse: var(--reader-motion-duration-instant);
+    --fd-motion-effective-loading-spin: var(--reader-motion-duration-instant);
+    --fd-motion-effective-night-aurora: var(--reader-motion-duration-instant);
+    --fd-motion-effective-tts-cursor-pulse: var(--reader-motion-duration-instant);
+    --fd-motion-effective-download-complete: var(--reader-motion-duration-instant);
+    --fd-motion-effective-fullpage-press: var(--reader-motion-duration-instant);
+    --fd-motion-effective-typography-feedback: var(--reader-motion-duration-instant);
+  }
+
+  .fd-demo [data-motion-primitive-id],
+  .fd-demo [data-motion-slider-id],
+  .fd-demo [data-motion-stepper-id] {
+    animation: none !important;
+    transition-duration: 0ms !important;
   }
 
   .fd-demo :where([data-reader-capsule-voice], [data-reader-control-space-voice])[data-motion-state="active"],
@@ -915,5 +1232,16 @@
 }
 
 .fd-demo[data-motion-reduced="true"] :where(.fd-ir-reading-layer.fd-reader-page-turn-next, .fd-ir-reading-layer.fd-reader-page-turn-prev, .fd-reader-loading-panel i) {
+  animation: none !important;
+}
+
+.fd-demo[data-motion-speed-loop-instant="true"] :where(
+  .fd-reader-loading-panel i,
+  .fd-chapter-download-state.is-loading i,
+  .fd-ir-reading-layer[data-reader-theme="aurora"]::before,
+  .fd-reader-tts-cursor,
+  [data-reader-capsule-voice],
+  [data-reader-control-space-voice]
+) {
   animation: none !important;
 }

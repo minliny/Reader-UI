@@ -523,15 +523,10 @@
   inset: 92px 44px 56px;
 }
 
-.fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-reader-mode-control .fd-ir-reading-layer,
-.fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-reader-mode-module .fd-ir-reading-layer,
-.fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-reader-mode-quick .fd-ir-reading-layer,
-.fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-reader-mode-full .fd-ir-reading-layer {
-  right: calc(var(--reader-dock-right) + var(--reader-dock-width) + 36px);
-}
-
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-ir-reading-layer {
-  inset: 74px var(--reader-dock-reading-right) 24px 30px;
+  /* The control dock is an overlay. It must never reduce the page width used
+     by the chapter paginator. */
+  inset: 74px 30px 24px;
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-reader-top {

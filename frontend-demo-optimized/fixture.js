@@ -1,3 +1,9 @@
+const READER_APPEARANCE_SPEC = window.ReaderAppearanceSpec;
+if (!READER_APPEARANCE_SPEC) throw new Error("appearance-spec.js must load before fixture.js");
+const READER_APPEARANCE_STEPPERS = Object.fromEntries(
+  READER_APPEARANCE_SPEC.steppers.map((item) => [item.id, item])
+);
+
 window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
   meta: {
     title: "前端 Demo 设计稿（Frontend Demo Draft）",
@@ -87,6 +93,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
     ],
     books: [
       {
+        bookId: "long-night",
         title: "长夜余火",
         author: "爱潜水的乌贼",
         chapter: "第 32 章 雨夜",
@@ -94,6 +101,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "longNight"
       },
       {
+        bookId: "mystery-lord",
         title: "诡秘之主",
         author: "爱潜水的乌贼",
         chapter: "第 1426 章",
@@ -101,6 +109,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "mysteryLord"
       },
       {
+        bookId: "ming-dynasty-stories",
         title: "明朝那些事儿",
         author: "当年明月",
         chapter: "第 218 章",
@@ -108,6 +117,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "brightMoon"
       },
       {
+        bookId: "three-body",
         title: "三体",
         author: "刘慈欣",
         chapter: "65%",
@@ -115,6 +125,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "threeBody"
       },
       {
+        bookId: "renjian-cihua",
         title: "人间词话",
         author: "王国维",
         chapter: "卷上 · 境界",
@@ -122,6 +133,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "renjian"
       },
       {
+        bookId: "android-notes",
         title: "Android 开发笔记",
         author: "本地文档",
         chapter: "Compose Shell 结构",
@@ -129,6 +141,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "androidNotes"
       },
       {
+        bookId: "old-day-echoes",
         title: "旧日回响",
         author: "离线书库",
         chapter: "第 18 章",
@@ -136,6 +149,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "longNight"
       },
       {
+        bookId: "among-stars",
         title: "群星之间",
         author: "本地导入",
         chapter: "第 7 章",
@@ -143,6 +157,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "threeBody"
       },
       {
+        bookId: "lighthouse-and-fog",
         title: "灯塔与雾",
         author: "书源同步",
         chapter: "第 51 章",
@@ -150,6 +165,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "brightMoon"
       },
       {
+        bookId: "paper-city",
         title: "纸上城市",
         author: "默认分组",
         chapter: "第 12 章",
@@ -157,6 +173,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         coverKey: "mysteryLord"
       },
       {
+        bookId: "long-title-layout-sample",
         title: "长标题测试：这本书的名字很长需要两行截断",
         author: "排版样本",
         chapter: "很长的章节名称需要保持单行省略",
@@ -196,37 +213,36 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
     chapterTitle: "雨夜",
     chapterMeta: "第 32 章",
     typography: {
-      fontSize: 18,
-      lineHeight: 1.96,
-      paragraphGap: 16,
-      letterSpacing: 0,
-      fontFamily: "serif"
+      fontSize: READER_APPEARANCE_STEPPERS.fontSize.defaultValue,
+      lineHeight: READER_APPEARANCE_STEPPERS.lineHeight.defaultValue,
+      paragraphGap: READER_APPEARANCE_STEPPERS.paragraphGap.defaultValue,
+      letterSpacing: READER_APPEARANCE_STEPPERS.letterSpacing.defaultValue,
+      fontFamily: READER_APPEARANCE_SPEC.defaults.fontId
     },
     typographyConfig: {
-      fontSize: { min: 14, max: 26, step: 1, precision: 0 },
-      lineHeight: { min: 1.4, max: 2.4, step: 0.08, precision: 2 },
-      paragraphGap: { min: 4, max: 32, step: 2, precision: 0 },
-      letterSpacing: { min: 0, max: 2, step: 0.2, precision: 1 }
+      fontSize: { min: READER_APPEARANCE_STEPPERS.fontSize.minimum, max: READER_APPEARANCE_STEPPERS.fontSize.maximum, step: READER_APPEARANCE_STEPPERS.fontSize.step, precision: READER_APPEARANCE_STEPPERS.fontSize.precision },
+      lineHeight: { min: READER_APPEARANCE_STEPPERS.lineHeight.minimum, max: READER_APPEARANCE_STEPPERS.lineHeight.maximum, step: READER_APPEARANCE_STEPPERS.lineHeight.step, precision: READER_APPEARANCE_STEPPERS.lineHeight.precision },
+      paragraphGap: { min: READER_APPEARANCE_STEPPERS.paragraphGap.minimum, max: READER_APPEARANCE_STEPPERS.paragraphGap.maximum, step: READER_APPEARANCE_STEPPERS.paragraphGap.step, precision: READER_APPEARANCE_STEPPERS.paragraphGap.precision },
+      letterSpacing: { min: READER_APPEARANCE_STEPPERS.letterSpacing.minimum, max: READER_APPEARANCE_STEPPERS.letterSpacing.maximum, step: READER_APPEARANCE_STEPPERS.letterSpacing.step, precision: READER_APPEARANCE_STEPPERS.letterSpacing.precision }
     },
-    themeDefault: "paper",
-    themeOptions: [
-      { value: "paper", label: "纸纹", scheme: "day", pair: "paper-night", texture: "paper", textureOpacity: 0.034, textureRgb: "138 116 84", swatch: "#f5ead8", paperStart: "#fbf4e9", paperEnd: "#efe2d0", ink: "#2b241d" },
-      { value: "warm", label: "暖白", scheme: "day", pair: "warm-night", texture: "plain", swatch: "#fbf0df", paperStart: "#fff6e9", paperEnd: "#fff6e9", ink: "#2c241d" },
-      { value: "green", label: "青绿", scheme: "day", pair: "green-night", texture: "plain", swatch: "#e7f0e2", paperStart: "#eef5e8", paperEnd: "#eef5e8", ink: "#263423" },
-      { value: "blue", label: "雾蓝", scheme: "day", pair: "blue-night", texture: "plain", swatch: "#e9f1f4", paperStart: "#eff6f8", paperEnd: "#eff6f8", ink: "#22313a" },
-      { value: "paper-night", label: "夜纹", scheme: "night", pair: "paper", texture: "paper", textureOpacity: 0.026, textureRgb: "222 202 174", swatch: "#2d2924", paperStart: "#302b26", paperEnd: "#211f1c", ink: "#e9dece" },
-      { value: "warm-night", label: "暖夜", scheme: "night", pair: "warm", texture: "plain", swatch: "#27231f", paperStart: "#27231f", paperEnd: "#27231f", ink: "#e7d8c8" },
-      { value: "green-night", label: "墨绿", scheme: "night", pair: "green", texture: "plain", swatch: "#202b26", paperStart: "#202b26", paperEnd: "#202b26", ink: "#d8e2d2" },
-      { value: "blue-night", label: "蓝夜", scheme: "night", pair: "blue", texture: "plain", swatch: "#232934", paperStart: "#232934", paperEnd: "#232934", ink: "#dbe2ea" }
-    ],
-    fontOptions: [
-      { label: "系统", value: "system", fontStack: "system-ui, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif" },
-      { label: "宋体", value: "serif", fontStack: "var(--fd-serif)" },
-      { label: "黑体", value: "sans", fontStack: "var(--fd-sans)" },
-      { label: "楷体", value: "kai", fontStack: "\"Kaiti SC\", \"KaiTi\", serif" },
-      { label: "仿宋", value: "fangsong", fontStack: "\"FangSong\", \"STFangsong\", serif" },
-      { label: "等宽", value: "mono", fontStack: "\"SFMono-Regular\", Consolas, \"Liberation Mono\", monospace" }
-    ],
+    themeDefault: READER_APPEARANCE_SPEC.defaults.dayThemeId,
+    themeOptions: READER_APPEARANCE_SPEC.themes.map((item) => ({
+      value: item.id,
+      label: item.label,
+      scheme: item.scheme,
+      pair: item.pairId,
+      texture: item.texture,
+      textureOpacity: item.texture === "paper" ? (item.scheme === "night" ? 0.026 : 0.034) : 0,
+      textureRgb: item.scheme === "night" ? "222 202 174" : "138 116 84",
+      swatch: item.swatchHex,
+      bg: item.backgroundHex,
+      paperStart: item.backgroundHex,
+      paperEnd: item.backgroundHex,
+      ink: item.inkHex
+    })),
+    fontOptions: READER_APPEARANCE_SPEC.fonts
+      .filter((item) => !item.importAction)
+      .map((item) => ({ label: item.label, value: item.id, fontStack: item.webFontStack })),
     readingText: [
       "雨声在窗外连成一片，像无数细小的针，密密地刺在玻璃上，汇成一层朦胧的水幕，将城市的灯光晕成模糊的光团。",
       "他站在窗前，手里握着那封被雨水润湿的信。纸页边角微微卷起，字迹却依旧清晰，像某个迟到许久的答案终于抵达。",

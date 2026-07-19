@@ -68,6 +68,7 @@
 | `app.motion.duration.tabPress` | `80ms` | 同一 TAB 栏按钮按下/取消按下反馈。 |
 | `app.motion.duration.tabSelect` | `120ms` | 单个 TAB 按钮进入或退出选中态。 |
 | `app.motion.duration.tabSwitch` | `160ms` | 同一 TAB 栏从一个按钮切换到另一个按钮。 |
+| `app.motion.duration.layoutSwitch` | `320ms` | 同一稳定内容集合在布局模式间做共享几何重排。 |
 | `app.motion.duration.dropdownPress` | `80ms` | 下拉触发器和下拉选项的按下反馈。 |
 | `app.motion.duration.dropdownExpand` | `160ms` | 下拉栏、popover、锚定菜单展开。 |
 | `app.motion.duration.dropdownCollapse` | `120ms` | 下拉栏、popover、锚定菜单收起。 |
@@ -87,6 +88,10 @@
 | `reader.motion.duration.micro` | `80ms` | 按压反馈、选中态轻反馈。 |
 | `reader.motion.duration.fast` | `120ms` | 主 Tab 选中、小 chip/toggle 状态变化。 |
 | `reader.motion.duration.base` | `160ms` | 键盘、底表、弹窗、焦点上浮；与当前 demo 一致。 |
+| `reader.motion.duration.controlEnter` | `420ms` | Reader 控制层显示、快捷栏展开为完整页；为大面积悬浮层保留清晰可见的进入过程。 |
+| `reader.motion.duration.controlExit` | `360ms` | Reader 控制层隐藏、完整页收回快捷栏；退出比进入略短。 |
+| `reader.motion.duration.quickPromote` | `320ms` | Reader 控制首页进入单个快捷栏。 |
+| `reader.motion.duration.moduleSwitch` | `360ms` | Reader 目录、朗读、外观、设置模块内容切换。 |
 | `reader.motion.duration.pageTurn` | `220ms` | 阅读翻页；与当前 demo 一致。 |
 | `reader.motion.duration.readerEntry` | `240ms` | 从书架封面/继续阅读进入沉浸阅读。 |
 | `reader.motion.duration.sessionReturn` | `200ms` | 自动翻页/朗读开启后回到沉浸阅读。 |
@@ -95,6 +100,9 @@
 | `reader.motion.duration.capsuleTick` | `120ms` | 自动翻页倒计时数字变化。 |
 | `reader.motion.duration.voicePulse` | `960ms` | 朗读中语音图标的低频活动提示。 |
 | `reader.motion.duration.overlay` | `240ms` | 弹窗背景、换源窗口、路由级覆盖层组合。 |
+| `reader.motion.duration.route` | `280ms` | 换源 FlowShell 前进入栈。 |
+| `reader.motion.duration.routePop` | `240ms` | 换源 FlowShell 返回出栈。 |
+| `reader.motion.duration.routeReplace` | `200ms` | 换源确认 / 回滚后的同位路由替换。 |
 | `reader.motion.duration.loadingSpin` | `800ms` | 行内加载 spinner 单圈时长；与当前 demo 一致。 |
 | `reader.motion.duration.interruptSettle` | `80ms` | 动画被新输入打断后的收尾/接管。 |
 | `reader.motion.duration.viewportReshape` | `240ms` | 折叠屏展开/折叠、横竖屏或大屏断点变化后的布局重排。 |
@@ -231,7 +239,7 @@
 - toast、inline feedback、empty/error/success/state card 走 `feedback.*` 或 `state.*`，不能用临时 route 或弹窗伪装轻反馈。
 - 文本选择层走 `selection.*`，它和 reader control、dropdown、overlay 互斥；选区拖动不能改变正文排版。
 - 导航型 row/card、选择型 row/card、批量型 row/card 必须分开：按下走 `listRow.press` / `card.press`，选择走 `select`，进入详情或阅读才走 `route` 或 reader entry。
-- 书架封面/列表视图切换走 `bookshelf.view.switch`，不能混成主 TAB 切换、route push 或列表逐项飞入。
+- 书架封面/列表视图切换走 `bookshelf.view.switch`：同一 `BookItem` 按稳定 `bookId` 做 `sharedLayoutMorph`；不能混成主 TAB 切换、route push、容器淡换或列表逐项飞入。
 - Discover、RSS、Source、Restore 的业务页面不单独定义业务专属动效；它们必须映射到 button、chip/filter、toggle、segment、row/card、state、progress、dialog/sheet 这些通用组件族。
 
 ## 6. Reader 专属约束

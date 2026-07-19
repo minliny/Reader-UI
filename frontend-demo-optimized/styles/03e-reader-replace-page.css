@@ -158,7 +158,8 @@
 .fd-w5-overlay-v2-panel {
   min-height: 0;
   display: grid;
-  grid-template-rows: 28px minmax(0, 1fr);
+  grid-template-rows: 28px 115px;
+  align-content: start;
   overflow: hidden;
 }
 
@@ -183,9 +184,9 @@
 .fd-w5-overlay-v2-body {
   min-height: 0;
   display: grid;
-  grid-template-rows: minmax(0, 1fr) 28px;
-  gap: 3px;
-  padding: 3px 7px 5px;
+  grid-template-rows: minmax(0, 1fr);
+  gap: 0;
+  padding: 3px 7px 0;
   overflow: hidden;
 }
 
@@ -232,29 +233,3 @@
 .fd-w5-overlay-v2-rule-toggle > small { grid-column: 2; grid-row: 2; overflow: hidden; color: var(--reader-control-muted, #746b62); font-size: 7px; text-overflow: ellipsis; white-space: nowrap; }
 .fd-w5-overlay-v2-rule-meta { grid-column: 3; grid-row: 1 / span 2; display: grid; justify-items: end; gap: 2px; }
 .fd-w5-overlay-v2-rule-meta em { color: var(--reader-control-muted, #746b62); font-size: 7px; font-style: normal; }
-
-.fd-w5-overlay-v2-footer {
-  display: grid;
-  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
-  gap: 6px;
-}
-
-.fd-w5-overlay-v2-footer button {
-  min-width: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border: 1px solid var(--quick-line);
-  border-radius: var(--fd-radius-md);
-  background: var(--quick-surface);
-  color: var(--reader-control-ink, #332c25);
-  font-size: 8px;
-  font-weight: 600;
-}
-
-.fd-w5-overlay-v2-footer button.is-primary {
-  border-color: transparent;
-  background: var(--fd-primary-dark);
-  color: #fff;
-}

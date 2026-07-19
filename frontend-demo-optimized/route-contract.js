@@ -106,6 +106,7 @@
     "content-replacement": { title: "内容替换（Content Replacement）", shell: "ReaderShell" },
     "source-switch": { title: "换源（Source Switching）", shell: "FlowShell" },
     "settings-general": { title: "通用设置（General Settings）", shell: "SettingsShell" },
+    "settings-developer": { title: "开发模式（Developer Mode）", shell: "SettingsShell" },
     "bookshelf-search-settings": { title: "书架与搜索设置（Bookshelf and Search Settings）", shell: "SettingsShell" },
     "about-feedback": { title: "关于与反馈（About and Feedback）", shell: "SettingsShell" },
     "sync-backup": { title: "同步与备份（Sync and Backup）", shell: "SettingsShell" },
@@ -243,6 +244,37 @@
     "reader-replace-import-export": { title: "替换规则导入导出（Reader Replace Import Export）", shell: "ReaderShell" },
     "reader-replace-preview": { title: "替换规则预览（Reader Replace Preview）", shell: "ReaderShell" },
     "reader-replace-page": { title: "替换规则管理（Reader Replace Page）", shell: "ReaderShell" }
+  });
+
+  // Capability-complete frontend surfaces. Registration here states that the
+  // UI owns a route and canonical ViewState; it does not manufacture a missing
+  // CoreCommand. Host/app-owned surfaces declare that boundary in their fixture
+  // props and must remain capability-gated at runtime.
+  Object.assign(routes, {
+    "onboarding-welcome": { title: "首次使用（Onboarding Welcome）", shell: "FlowShell" },
+    "onboarding-capability-setup": { title: "能力与权限设置（Onboarding Capability Setup）", shell: "FlowShell" },
+    "permission-recovery": { title: "权限恢复（Permission Recovery）", shell: "FlowShell" },
+    "local-format-support": { title: "本地格式支持（Local Format Support）", shell: "LibraryShell" },
+    "pdf-reader": { title: "PDF 阅读（PDF Reader）", shell: "ReaderShell" },
+    "manga-reader": { title: "漫画阅读（Manga Reader）", shell: "ReaderShell" },
+    "http-tts-management": { title: "HTTP TTS 管理（HTTP TTS Management）", shell: "SettingsShell" },
+    "http-tts-editor": { title: "HTTP TTS 编辑（HTTP TTS Editor）", shell: "SettingsShell" },
+    "http-tts-test": { title: "HTTP TTS 测试（HTTP TTS Test）", shell: "SettingsShell" },
+    "content-edit": { title: "正文编辑（Content Edit）", shell: "ReaderShell" },
+    "book-cover-change": { title: "更换封面（Change Book Cover）", shell: "LibraryShell" },
+    "book-cover-search": { title: "搜索封面（Search Book Cover）", shell: "LibraryShell" },
+    "chapter-reviews": { title: "章节评论（Chapter Reviews）", shell: "LibraryShell" },
+    "bookmarks-manager": { title: "书签管理（Bookmarks Manager）", shell: "LibraryShell" },
+    "download-queue": { title: "下载队列（Download Queue）", shell: "LibraryShell" },
+    "download-task-detail": { title: "下载任务（Download Task Detail）", shell: "LibraryShell" },
+    "storage-management": { title: "存储管理（Storage Management）", shell: "SettingsShell" },
+    "webview-login": { title: "网页登录（WebView Login）", shell: "FlowShell" },
+    "webview-captcha": { title: "人机验证（WebView Captcha）", shell: "FlowShell" },
+    "webview-challenge": { title: "验证恢复（WebView Challenge Recovery）", shell: "FlowShell" },
+    "webview-cookie-return": { title: "Cookie 回传（WebView Cookie Return）", shell: "FlowShell" },
+    "settings-tts": { title: "朗读设置（TTS Settings）", shell: "SettingsShell" },
+    "settings-storage": { title: "存储设置（Storage Settings）", shell: "SettingsShell" },
+    "settings-accessibility": { title: "无障碍设置（Accessibility Settings）", shell: "SettingsShell" }
   });
 
   const deepRouteClosure = {
@@ -401,6 +433,7 @@
       demoRoutes: [
         "settings",
         "settings-general",
+        "settings-developer",
         "bookshelf-search-settings",
         "about-feedback",
         "sync-backup",
@@ -424,6 +457,7 @@
       routeManifestTargets: {
         settings: ["settings-home-preview", "settings-home-state-matrix"],
         "settings-general": ["general-settings-preview", "general-settings-state-matrix"],
+        "settings-developer": ["general-settings-preview", "general-settings-state-matrix"],
         "bookshelf-search-settings": ["bookshelf-search-settings-preview", "bookshelf-search-settings-state-matrix"],
         "about-feedback": ["about-feedback-preview", "about-feedback-state-matrix"],
         "sync-backup": ["sync-backup-preview", "sync-backup-state-matrix"],
@@ -440,7 +474,13 @@
   // CSS must consume the resolved `layout`/`surface` from the demo root instead
   // of branching on individual route ids.
   function routeFamily(routeId) {
-    if (routeId === "immersive-reading" || routeId === "tts" || routeId === "auto-page" || routeId === "toc-bookmarks" || routeId.startsWith("reader") || routeId.startsWith("content-")) return "reader";
+    if (routeId === "immersive-reading" || routeId === "tts" || routeId === "auto-page" || routeId === "toc-bookmarks" || routeId === "pdf-reader" || routeId === "manga-reader" || routeId.startsWith("reader") || routeId.startsWith("content-")) return "reader";
+    if (routeId.startsWith("onboarding-") || routeId === "permission-recovery") return "onboarding";
+    if (routeId.startsWith("webview-")) return "web-auth";
+    if (routeId.startsWith("http-tts-")) return "settings";
+    if (routeId === "local-format-support") return "import";
+    if (routeId.startsWith("download-") || routeId.startsWith("book-cover-") || routeId === "chapter-reviews" || routeId === "bookmarks-manager") return "library";
+    if (routeId === "storage-management") return "settings";
     if (routeId.startsWith("source-switch")) return "source-switch";
     if (routeId.startsWith("discover")) return "discover";
     if (routeId.startsWith("rss")) return "rss";
@@ -577,6 +617,7 @@
     if (routeId.startsWith("source-switch")) return "flow-continuity";
     if (routeId.startsWith("restore-") || routeId.startsWith("source-debug") || routeId === "source-code-view" || routeId === "source-logs") return "wide-workspace";
     if (shell === "ReaderShell") return "reader-control";
+    if (shell === "FlowShell") return "flow-continuity";
     if (shell === "SettingsShell") return "settings-stack";
     if (shell === "LibraryShell") return "library-stack";
     return "main-tab";

@@ -10,6 +10,10 @@ import { readFileSync, readdirSync, existsSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import vm from "node:vm";
+import {
+  extractMotionIdsFromController,
+  extractMotionIdsFromCss
+} from "./motion-id-extractor.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(__dirname, "..", "..", "..");
@@ -93,22 +97,6 @@ function extractRouteIdsFromJs(text) {
   const re2 = /\broute:\s*["']([a-z][a-z0-9_-]*)["']/g;
   while ((m = re2.exec(text)) !== null) {
     ids.add(m[1]);
-  }
-  return ids;
-}
-
-// 从 motion-controller.js / motion-tokens.css 提取 motion id
-function extractMotionIds(text) {
-  const ids = new Set();
-  // motion id 形如 "app.firstOpen.enter" / "reader.entry.coverToImmersive"
-  const re = /["']([a-z][a-z0-9]*\.[a-zA-Z0-9.]+)["']/g;
-  let m;
-  while ((m = re.exec(text)) !== null) {
-    const id = m[1];
-    // 过滤明显非 motion id 的（如 "1.0" / "true" / 文件路径）
-    if (id.includes(".") && !/^\d/.test(id) && !id.includes("/")) {
-      ids.add(id);
-    }
   }
   return ids;
 }
@@ -209,14 +197,14 @@ for (const f of ["render-runtime.js", "render.js"]) {
 // motion-controller.js
 if (existsSync(join(DEMO_DIR, "motion-controller.js"))) {
   const text = readText("motion-controller.js");
-  const ids = extractMotionIds(text);
+  const ids = extractMotionIdsFromController(text);
   check("motion-controller.js motion ids", ids, motionIds);
 }
 
 // motion-tokens.css
 if (existsSync(join(DEMO_DIR, "motion-tokens.css"))) {
   const text = readText("motion-tokens.css");
-  const ids = extractMotionIds(text);
+  const ids = extractMotionIdsFromCss(text);
   check("motion-tokens.css motion ids", ids, motionIds);
 }
 

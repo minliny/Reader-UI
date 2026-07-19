@@ -187,6 +187,21 @@
     };
   }
 
+  // BookItem 的稳定实体键：只由书籍自身字段决定，不受排序、筛选或视图模式影响。
+  function bookshelfBookId(book) {
+    var explicitId = book && (book.bookId || book.id);
+    if (explicitId) return String(explicitId);
+    var source = [book && book.coverKey, book && book.title, book && book.author].map(function (value) {
+      return String(value || "");
+    }).join("\u001f");
+    var hash = 2166136261;
+    for (var index = 0; index < source.length; index += 1) {
+      hash ^= source.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return "book-" + (hash >>> 0).toString(36);
+  }
+
   // 书架排序/筛选/分组状态
   function bookshelfState(appState) {
     return {
@@ -223,41 +238,35 @@
     });
   }
 
-  // 书籍卡片（带本地/网络书差异标识）
-  function bookCardV2(data, book, index, appState) {
-    var coverSrc = cover(data, book.coverKey);
-    var sourceType = bookSourceType(book, index);
-    var readable = bookReadable(book, index, appState);
-    return `
-      <article class="fd-book-card" data-book-card data-book-source-type="${esc(sourceType)}" data-book-cached="${readable.cached ? "true" : "false"}">
-        <button class="fd-book-cover-frame" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
-          <img src="${coverSrc}" alt="${esc(book.title)}封面">
-        </button>
-        <strong>${esc(book.title)}</strong>
-        <span>${esc(book.author)}</span>
-      </article>`;
-  }
-
-  // 列表视图行（带本地/网络书差异标识）
-  function bookListRowV2(data, book, index, appState) {
+  // 封面与列表共用同一个持久 BookItem；视图只由父容器和 aria 状态切换。
+  function bookItemV2(data, book, index, appState, listPosition, listSize) {
     var coverSrc = cover(data, book.coverKey);
     var sourceType = bookSourceType(book, index);
     var readable = bookReadable(book, index, appState);
     var isLocal = sourceType === "local";
     var sourceLabel = isLocal ? "本地书" : "网络书";
     var cacheLabel = isLocal ? "离线可读" : (readable.cached ? "已缓存" : "未缓存");
+    var bookId = bookshelfBookId(book);
+    var listView = Boolean(appState && appState.view === "list") || bookshelfState(appState).view === "list";
+    var ariaPosition = Number.isFinite(listPosition) ? listPosition : index + 1;
+    var ariaSize = Number.isFinite(listSize)
+      ? listSize
+      : (((data && data.mainTabs && data.mainTabs.books) || []).length || ariaPosition);
     return `
-      <article class="fd-book-list-row" data-book-card data-book-source-type="${esc(sourceType)}" role="button" tabindex="0" data-route="immersive-reading">
-        <img src="${coverSrc}" alt="${esc(book.title)}封面">
-        <div class="fd-book-list-info">
-          <strong>${esc(book.title)}</strong>
-          <small>${esc(book.author)} · ${esc(book.chapter)}</small>
-          <div class="fd-book-list-meta">
+      <article class="fd-book-card fd-book-item" role="listitem" aria-posinset="${ariaPosition}" aria-setsize="${ariaSize}" data-book-card data-book-item data-book-id="${esc(bookId)}" data-motion-actor-key="bookshelf.book.${esc(bookId)}" data-bookshelf-item-view="${listView ? "list" : "cover"}" data-book-source-type="${esc(sourceType)}" data-book-cached="${readable.cached ? "true" : "false"}" data-book-title="${esc(book.title)}">
+        <button class="fd-book-cover-frame" type="button" data-book-cover data-book-id="${esc(bookId)}" data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
+          <img src="${coverSrc}" alt="${esc(book.title)}封面">
+        </button>
+        <div class="fd-book-item-content">
+          <strong class="fd-book-item-title">${esc(book.title)}</strong>
+          <span class="fd-book-item-author">${esc(book.author)}</span>
+          <span class="fd-book-item-chapter" data-book-list-detail aria-hidden="${listView ? "false" : "true"}">${esc(book.chapter)}</span>
+          <div class="fd-book-list-meta" data-book-list-detail aria-hidden="${listView ? "false" : "true"}">
             <em class="fd-book-source-tag ${isLocal ? "is-local" : "is-network"}">${esc(sourceLabel)}</em>
             <i class="fd-book-cache-tag ${readable.cached ? "is-cached" : "is-missing"}">${esc(cacheLabel)}</i>
           </div>
         </div>
-        <button class="fd-book-list-more" type="button" data-book-more data-book-title="${esc(book.title)}" aria-label="更多操作">${icon("more", "fd-small-icon")}</button>
+        <button class="fd-book-list-more" type="button" data-book-list-detail data-book-more data-route="bookshelf-book-more-menu" data-book-focus-index="${index}" data-book-id="${esc(bookId)}" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-hidden="${listView ? "false" : "true"}" tabindex="${listView ? "0" : "-1"}" aria-label="${esc(book.title)}更多操作">${icon("more", "fd-small-icon")}</button>
       </article>`;
   }
 
@@ -420,18 +429,16 @@
           <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
             ${bookshelfSectionHeaderV2(state, false)}
             ${bookshelfFilterPopoverV2(state)}
-            <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
+            <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" role="list" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
               ${offlineCached.length === 0
                 ? `<p class="fd-bookshelf-empty-inline">离线无缓存书籍</p>`
-                : offlineCached.map(function (entry) {
-                  return state.view === "list"
-                    ? bookListRowV2(data, entry.book, entry.index, merged)
-                    : bookCardV2(data, entry.book, entry.index, merged);
+                : offlineCached.map(function (entry, position) {
+                  return bookItemV2(data, entry.book, entry.index, merged, position + 1, offlineCached.length);
                 }).join("")}
             </section>
             <p class="fd-bookshelf-offline-meta">已缓存 ${offlineCached.length} 本可离线阅读，其余 ${visibleBooks.length - offlineCached.length} 本需联网后加载。</p>
           </section>`,
-        stateHostHtml: `<p class="fd-nav-feedback">离线模式 · 视图：${esc(view === "list" ? "列表" : "封面")} · 可读 ${offlineCached.length}/${visibleBooks.length}</p>${bookshelfMoreLayerV2()}`
+        stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">离线模式 · 视图：${esc(view === "list" ? "列表" : "封面")} · 可读 ${offlineCached.length}/${visibleBooks.length}</p>${bookshelfMoreLayerV2()}`
       }));
     }
 
@@ -460,19 +467,17 @@
         <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
           ${bookshelfSectionHeaderV2(state, false)}
           ${bookshelfFilterPopoverV2(state)}
-          <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
+          <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" role="list" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
             ${visibleBooks.length === 0
               ? `<p class="fd-bookshelf-empty-inline">当前筛选条件下没有书籍</p>`
-              : visibleBooks.map(function (entry) {
-                return state.view === "list"
-                  ? bookListRowV2(data, entry.book, entry.index, merged)
-                  : bookCardV2(data, entry.book, entry.index, merged);
+              : visibleBooks.map(function (entry, position) {
+                return bookItemV2(data, entry.book, entry.index, merged, position + 1, visibleBooks.length);
               }).join("")}
           </section>
           ${state.search ? `<p class="fd-bookshelf-search-result-meta">搜索"${esc(state.search)}" · 命中 ${visibleBooks.length} 本</p>` : ""}
         </section>`,
       stateHostHtml: `
-        <p class="fd-nav-feedback">当前 Tab：书架 · 视图：${esc(view === "list" ? "列表" : "封面")}${state.group !== "全部" ? " · 分组：" + esc(state.group) : ""}${state.filter !== "全部" ? " · 筛选：" + esc(state.filter) : ""}${viewFeedback ? " · " + viewFeedback : ""}</p>
+        <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">当前 Tab：书架 · 视图：${esc(view === "list" ? "列表" : "封面")}${state.group !== "全部" ? " · 分组：" + esc(state.group) : ""}${state.filter !== "全部" ? " · 筛选：" + esc(state.filter) : ""}${viewFeedback ? " · " + viewFeedback : ""}</p>
         ${bookshelfMoreLayerV2()}`
     }));
   }
@@ -570,17 +575,15 @@
       contentHtml: `
         <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
           ${bookshelfSectionHeaderV2(bookshelfState(appState), false)}
-          <section class="fd-book-grid ${((appState && appState.bookshelfView) === "list" ? "is-list-view" : "is-cover-view")}" data-book-grid data-bookshelf-view="${(appState && appState.bookshelfView) === "list" ? "list" : "cover"}" aria-label="书籍封面网格">
-            ${books.slice(0, 6).map(function (b, i) {
-              return (appState && appState.bookshelfView) === "list"
-                ? bookListRowV2(data, b, i, appState)
-                : bookCardV2(data, b, i, appState);
+          <section class="fd-book-grid ${((appState && appState.bookshelfView) === "list" ? "is-list-view" : "is-cover-view")}" role="list" data-book-grid data-bookshelf-view="${(appState && appState.bookshelfView) === "list" ? "list" : "cover"}" aria-label="${(appState && appState.bookshelfView) === "list" ? "书籍列表" : "书籍封面网格"}">
+            ${books.slice(0, 6).map(function (b, i, visible) {
+              return bookItemV2(data, b, i, appState, i + 1, visible.length);
             }).join("")}
           </section>
         </section>
         <section class="fd-book-focus-layer is-inline is-open" data-book-focus-layer data-book-focus-index="${focusIndex}" aria-label="书籍操作菜单">
           <button class="fd-book-focus-backdrop" type="button" data-close-book-focus aria-label="关闭书籍操作层"></button>
-          <section class="fd-book-focus-menu" role="dialog" aria-modal="true" aria-label="${esc(book.title)}操作">
+          <section class="fd-book-focus-menu" role="dialog" aria-modal="true" aria-label="${esc(book.title)}操作" data-demo-dialog aria-hidden="false">
             <header>
               <span class="fd-book-focus-cover" data-focus-cover aria-hidden="true" style="--focus-cover:url('${coverCss(data, book.coverKey)}')"></span>
               <strong data-focus-title>${esc(book.title)}</strong>
@@ -591,21 +594,21 @@
               </div>
             </header>
             <div>
-              ${actions.map(function (item) {
-                return `<button class="${item.danger ? "is-danger" : ""}" type="button"${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`} data-book-focus-action>
+              ${actions.map(function (item, actionIndex) {
+                return `<button class="${item.danger ? "is-danger" : ""}" type="button"${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`} data-book-focus-action${actionIndex === 0 ? " data-dialog-initial-focus" : ""}>
                   ${icon(item.icon, "fd-small-icon")}
                   <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
                 </button>`;
               }).join("")}
             </div>
             <footer>
-              <button type="button" data-close-book-focus data-route="bookshelf">${icon("chevron-left", "fd-small-icon")}返回书架</button>
+              <button type="button" data-route-back>${icon("chevron-left", "fd-small-icon")}返回书架</button>
               <span class="fd-book-focus-hint">系统返回将关闭菜单并恢复书架焦点</span>
             </footer>
           </section>
         </section>`,
       stateHostHtml: `
-        <p class="fd-nav-feedback">长按菜单 · 选中：${esc(book.title)} · 来源：${isLocal ? "本地" : "网络"} · 焦点恢复到书架</p>
+        <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">长按菜单 · 选中：${esc(book.title)} · 来源：${isLocal ? "本地" : "网络"} · 焦点恢复到书架</p>
         ${bookshelfMoreLayerV2()}`
     }));
   }
@@ -768,18 +771,16 @@
         <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
           ${bookshelfSectionHeaderV2(state, false)}
           ${bookshelfFilterPopoverV2(state)}
-          <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
+          <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" role="list" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
             ${visibleBooks.length === 0
               ? `<p class="fd-bookshelf-empty-inline">当前组合条件下没有书籍，请重置筛选或搜索。</p>`
-              : visibleBooks.map(function (entry) {
-                return state.view === "list"
-                  ? bookListRowV2(data, entry.book, entry.index, state)
-                  : bookCardV2(data, entry.book, entry.index, state);
+              : visibleBooks.map(function (entry, position) {
+                return bookItemV2(data, entry.book, entry.index, state, position + 1, visibleBooks.length);
               }).join("")}
           </section>
           <p class="fd-bookshelf-filter-result-meta">分组：${esc(state.group)} · 排序：${esc(state.sort)} · 筛选：${esc(state.filter)}${state.search ? " · 搜索：" + esc(state.search) : ""} · 命中 ${visibleBooks.length}/${books.length}</p>
         </section>`,
-      stateHostHtml: `<p class="fd-nav-feedback">排序筛选组合 · 命中 ${visibleBooks.length} 本</p>${bookshelfMoreLayerV2()}`
+      stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">排序筛选组合 · 命中 ${visibleBooks.length} 本</p>${bookshelfMoreLayerV2()}`
     }));
   }
 
@@ -1114,6 +1115,24 @@
 
   // ============ 书架搜索 V2 ============
 
+  function bookSearchKeyboardLayerV2(query) {
+    return `
+      <section class="fd-demo-keyboard" aria-hidden="true" data-keyboard-host>
+        <div class="fd-keyboard-panel">
+          <label>
+            <span>搜索书籍</span>
+            <input type="text" value="${esc(query == null ? "" : query)}" data-keyboard-input aria-label="搜索书籍" autocomplete="off">
+          </label>
+          <button type="button" data-close-keyboard>完成</button>
+          <div class="fd-keyboard-keys" aria-hidden="true">
+            ${["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L"].map(function (key) {
+              return `<i>${key}</i>`;
+            }).join("")}
+          </div>
+        </div>
+      </section>`;
+  }
+
   /**
    * bookSearchV2 - 书架搜索状态变体
    * 覆盖路由：book-search / search-home / search-results
@@ -1122,6 +1141,8 @@
     var phase = route === "search-home" ? "before"
       : route === "search-results" ? "after"
       : (appState && appState.bookSearchPhase) || "before";
+    if (["before", "loading", "after", "empty", "error"].indexOf(phase) < 0) phase = "before";
+    var query = String((appState && appState.bookSearchQuery) || "");
     var history = ["长夜", "诡秘", "三体", "明朝那些事"];
     var suggestions = ["长夜余火", "诡秘之主", "三体", "明朝那些事儿"];
     var results = [
@@ -1129,6 +1150,65 @@
       { title: "诡秘之主", author: "爱潜水的乌贼", coverKey: "mysteryLord", source: "书仓搜索", inShelf: true },
       { title: "三体", author: "刘慈欣", coverKey: "threeBody", source: "起点导入", inShelf: false }
     ];
+    var beforeHtml = `
+      <section class="fd-search-state fd-search-state-before" data-search-state="before">
+        <section class="fd-search-history">
+          <h2>搜索历史</h2>
+          <div>
+            ${history.map(function (h) {
+              return `<button type="button" data-search-submit data-search-query="${esc(h)}">${esc(h)}</button>`;
+            }).join("")}
+            <button type="button" data-book-search-clear-history>清除历史</button>
+          </div>
+        </section>
+        <section class="fd-search-suggestions">
+          <h2>热门搜索</h2>
+          <div>
+            ${suggestions.map(function (s) {
+              return `<button type="button" data-search-submit data-search-query="${esc(s)}">${esc(s)}</button>`;
+            }).join("")}
+          </div>
+        </section>
+      </section>`;
+    var loadingHtml = `
+      <section class="fd-search-state fd-search-state-loading" data-search-state="loading" role="status" aria-live="polite" aria-busy="true">
+        <span class="fd-search-state-icon" aria-hidden="true">${icon("refresh", "fd-small-icon")}</span>
+        <h2>正在搜索“${esc(query || "全部书籍")}”</h2>
+        <p>正在合并本地书架与可用书源，新的搜索会接管当前结果区。</p>
+      </section>`;
+    var emptyHtml = `
+      <section class="fd-search-state fd-search-state-empty" data-search-state="empty" role="status" aria-live="polite">
+        <span class="fd-search-state-icon" aria-hidden="true">${icon("search", "fd-small-icon")}</span>
+        <h2>没有可搜索的关键词</h2>
+        <p>输入书名、作者或关键词后再试；结果区和页面位置会保持不变。</p>
+      </section>`;
+    var errorHtml = `
+      <section class="fd-search-state fd-search-state-error" data-search-state="error" role="alert" aria-live="assertive">
+        <span class="fd-search-state-icon" aria-hidden="true">${icon("warning", "fd-small-icon")}</span>
+        <h2>搜索暂时失败</h2>
+        <p>当前请求没有覆盖已有输入，可直接重试或清空关键词。</p>
+      </section>`;
+    var resultsHtml = `
+      <section class="fd-search-results" data-search-state="after" role="status" aria-live="polite">
+        <h2>搜索结果（${results.length}）</h2>
+        ${results.map(function (r) {
+          return `<article class="fd-search-result-row" role="button" tabindex="0" data-route="book-detail">
+            <img src="${cover(data, r.coverKey)}" alt="${esc(r.title)}封面">
+            <span>
+              <strong>${esc(r.title)}</strong>
+              <small>${esc(r.author)} · ${esc(r.source)}</small>
+            </span>
+            ${r.inShelf
+              ? `<em class="fd-book-source-tag is-cached">已在书架</em>`
+              : `<button type="button" data-search-add-to-bookshelf>${icon("plus", "fd-small-icon")}加入书架</button>`}
+          </article>`;
+        }).join("")}
+      </section>`;
+    var stateHtml = phase === "after" ? resultsHtml
+      : phase === "loading" ? loadingHtml
+      : phase === "empty" ? emptyHtml
+      : phase === "error" ? errorHtml
+      : beforeHtml;
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
       data: data,
       title: "搜索书籍",
@@ -1137,49 +1217,20 @@
       bottomActionHostClass: "fd-bottom-action-host",
       contentHtml: `
         <section class="fd-search-bar">
-          <input type="search" placeholder="搜索书名、作者或关键词" value="${esc((appState && appState.bookSearchQuery) || "")}" data-book-search-input>
-          <button type="button" data-book-search-submit>${icon("search", "fd-small-icon")}</button>
+          <input type="search" placeholder="搜索书名、作者或关键词" value="${esc(query)}" data-book-search-input data-open-keyboard>
+          <button type="button" data-search-submit data-book-search-submit>${icon("search", "fd-small-icon")}</button>
         </section>
-        ${phase === "before" ? `
-          <section class="fd-search-history">
-            <h2>搜索历史</h2>
-            <div>
-              ${history.map(function (h) {
-                return `<button type="button" data-book-search-history="${esc(h)}">${esc(h)}</button>`;
-              }).join("")}
-              <button type="button" data-book-search-clear-history>清除历史</button>
-            </div>
-          </section>
-          <section class="fd-search-suggestions">
-            <h2>热门搜索</h2>
-            <div>
-              ${suggestions.map(function (s) {
-                return `<button type="button" data-book-search-suggestion="${esc(s)}">${esc(s)}</button>`;
-              }).join("")}
-            </div>
-          </section>
-        ` : `
-          <section class="fd-search-results">
-            <h2>搜索结果（${results.length}）</h2>
-            ${results.map(function (r) {
-              return `<article class="fd-search-result-row" role="button" tabindex="0" data-route="book-detail">
-                <img src="${cover(data, r.coverKey)}" alt="${esc(r.title)}封面">
-                <span>
-                  <strong>${esc(r.title)}</strong>
-                  <small>${esc(r.author)} · ${esc(r.source)}</small>
-                </span>
-                ${r.inShelf
-                  ? `<em class="fd-book-source-tag is-cached">已在书架</em>`
-                  : `<button type="button" data-search-add-to-bookshelf>${icon("plus", "fd-small-icon")}加入书架</button>`}
-              </article>`;
-            }).join("")}
-          </section>
-        `}`,
+        ${stateHtml}
+        ${bookSearchKeyboardLayerV2(query)}`,
       bottomActionHtml: `
         <div class="fd-fixed-action-row">
           ${phase === "after"
             ? `<button type="button" data-search-reset>重新搜索</button><button type="button" data-route="book-detail">查看详情</button>`
-            : `<button type="button" data-book-search-submit data-primary-search-submit>开始搜索</button><button type="button" data-book-search-clear-history>清除历史</button>`}
+            : phase === "loading"
+              ? `<button type="button" data-search-reset>清空并取消</button><button type="button" data-search-submit data-book-search-submit data-primary-search-submit>用最新输入搜索</button>`
+              : phase === "empty" || phase === "error"
+                ? `<button type="button" data-search-reset>清空关键词</button><button type="button" data-search-submit data-book-search-submit data-primary-search-submit>重新搜索</button>`
+                : `<button type="button" data-search-submit data-book-search-submit data-primary-search-submit>开始搜索</button><button type="button" data-book-search-clear-history>清除历史</button>`}
         </div>`
     }));
   }

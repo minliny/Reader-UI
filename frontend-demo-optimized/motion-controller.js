@@ -6,10 +6,22 @@
     "app.route.push.forward": 160,
     "app.route.pop.backward": 160,
     "app.route.replace": 160,
+    "bookshelf.view.switch": 320,
+    "button.activate": 120,
+    "toggle.switch": 140,
+    "chip.item.select": 120,
+    "slider.drag.start": 0,
+    "slider.drag.update": 0,
+    "slider.drag.release": 120,
+    "stepper.press": 80,
+    "stepper.value.change": 120,
+    "card.press": 80,
+    "card.select": 120,
+    "card.route": 160,
+    "listRow.select": 120,
     "tab.item.press": 80,
     "tab.item.switch": 160,
     "segment.item.switch": 160,
-    "button.press": 80,
     "dropdown.trigger.press": 80,
     "dropdown.menu.expand": 160,
     "dropdown.menu.collapse": 120,
@@ -17,7 +29,7 @@
     "dropdown.option.press": 80,
     "dropdown.option.select": 120,
     "reader.entry.coverToImmersive": 240,
-    "reader.entry.actionToImmersive": 200,
+    "reader.entry.actionToImmersive": 240,
     "reader.session.tts.start": 200,
     "reader.session.autoPage.start": 200,
     "reader.session.capsule.enter": 160,
@@ -34,19 +46,78 @@
     "reader.control.dock.drag": 0,
     "reader.control.dock.release": 120,
     "reader.control.dock.rebound": 120,
-    "reader.module.switch": 160,
+    "reader.control.show": 420,
+    "reader.control.hide": 360,
+    "reader.quick.promote": 320,
+    "reader.module.switch": 360,
+    "reader.panel.expand": 420,
+    "reader.panel.collapse": 360,
     "reader.page.turn.next-prev": 220,
     "motion.interrupt.cancel": 80,
     "motion.interrupt.redirect": 80,
     "motion.interrupt.completeThenReplace": 80,
     "viewport.orientation.prepare": 80,
     "viewport.orientation.reshape": 240,
-    "viewport.orientation.settle": 240
+    "viewport.orientation.settle": 240,
+    "source.switch.route.push": 280,
+    "source.switch.route.pop": 240,
+    "source.switch.route.replace": 200,
+    "overlay.sheet.enter": 240,
+    "overlay.sheet.exit": 240,
+    "overlay.dialog.enter": 240,
+    "overlay.dialog.exit": 240,
+    "overlay.keyboard.enter-exit": 240,
+    "state.loading.inline": 800,
+    "feedback.toast.enter": 180,
+    "feedback.toast.update": 180,
+    "feedback.toast.exit": 180,
+    "input.focus": 120,
+    "input.blur": 120,
+    "input.clear": 120,
+    "input.focus-blur": 120,
+    "input.submit": 160,
+    "search.state.replace": 160,
+    "state.content.replace": 160
+  };
+
+  const DEFAULT_EASINGS = {
+    "bookshelf.view.switch": "ease-out",
+    "slider.drag.start": "none",
+    "slider.drag.update": "none",
+    "slider.drag.release": "ease-out",
+    "card.route": "ease-out",
+    "reader.entry.coverToImmersive": "ease-out",
+    "reader.control.show": "ease-out",
+    "reader.control.hide": "ease-in",
+    "reader.quick.promote": "ease-out",
+    "reader.module.switch": "ease",
+    "reader.panel.expand": "ease-out",
+    "reader.panel.collapse": "ease-in",
+    "source.switch.route.push": "ease-out",
+    "source.switch.route.pop": "ease-in",
+    "source.switch.route.replace": "ease-out",
+    "overlay.sheet.enter": "ease-out",
+    "overlay.sheet.exit": "ease-in",
+    "overlay.dialog.enter": "ease-out",
+    "overlay.dialog.exit": "ease-in",
+    "overlay.keyboard.enter-exit": "ease-out",
+    "state.loading.inline": "linear",
+    "feedback.toast.enter": "ease-out",
+    "feedback.toast.update": "ease",
+    "feedback.toast.exit": "ease-in",
+    "input.focus": "ease",
+    "input.blur": "ease",
+    "input.clear": "ease",
+    "input.focus-blur": "ease",
+    "input.submit": "ease",
+    "search.state.replace": "ease",
+    "state.content.replace": "ease"
   };
 
   const CONTRACT_VERSION = "reader-motion-contract-v1";
   const MOTION_ID_ALIASES = {
-    "tab.item.switch": "tab.switch"
+    "tab.item.switch": "tab.switch",
+    "input.focus/blur": "input.focus-blur"
   };
   const COMMON_STATE_FIELDS = ["motionId", "phase", "reducedMotion", "sequence"];
   const COMMON_EVIDENCE = ["frontend-demo-optimized/verify/motion/selector-matrix/<motion-id>__<route>__<selector>.webm"];
@@ -207,11 +278,11 @@
       reducedMotion: "Commit card selection or navigation state without scale or grid movement."
     },
     bookshelf: {
-      from: ["grid", "list"],
-      to: ["grid", "list"],
-      interrupt: ["routeChange", "filterChange", "scrollAnchorLost"],
-      finalState: "viewModeCommitted",
-      reducedMotion: "Switch view mode while preserving item identity and scroll anchor."
+      from: ["bookshelf.view.cover", "bookshelf.view.list"],
+      to: ["bookshelf.view.target"],
+      interrupt: ["bookshelf.view.switch", "filterChange", "sortChange", "routeChange", "orientationPrepare"],
+      finalState: "bookshelf.view.target.settled",
+      reducedMotion: "Commit the target layout immediately while preserving BookItem identity, scroll anchor, and focus."
     },
     "reader.entry": {
       from: ["sourceRoute", "coverPressed"],
@@ -240,6 +311,13 @@
       interrupt: ["routeChange", "panelDismiss", "newQuickAction"],
       finalState: "quickActionResolved",
       reducedMotion: "Commit quick action state without panel offset."
+    },
+    "reader.panel": {
+      from: ["control.quick.module", "control.full.module"],
+      to: ["control.full.module", "control.quick.module"],
+      interrupt: ["oppositePanelAction", "moduleSwitch", "hideControlLayer", "routeChange"],
+      finalState: "oneReaderControlPanelAtTargetSize",
+      reducedMotion: "Commit the target panel size immediately without sheet travel."
     },
     "reader.session": {
       from: ["inactive", "autoPage", "tts", "capsuleVisible", "controlSpaceVisible"],
@@ -321,6 +399,13 @@
       finalState: "targetRouteVisibleWithoutNewBackEntry",
       reducedMotion: "Replace route state in place with no push/pop movement."
     },
+    "bookshelf.view.switch": {
+      from: ["bookshelf.view.cover", "bookshelf.view.list"],
+      to: ["bookshelf.view.target"],
+      interrupt: ["bookshelf.view.switch", "bookshelf.sortFilter.apply", "bookshelf.group.select", "route.replace", "viewport.orientation.prepare"],
+      finalState: "bookshelf.view.target.settled",
+      reducedMotion: "Commit the target layout immediately while preserving BookItem identity, scroll anchor, and focus."
+    },
     "tab.item.press": {
       from: ["idle"],
       to: ["pressed"],
@@ -399,18 +484,151 @@
       reducedMotion: "Update value, check/icon, and close single-select menus immediately."
     },
     "button.activate": {
-      from: ["pressed", "enabled"],
-      to: ["commandCommitted", "loading", "idle"],
-      interrupt: ["disabledBeforeRelease", "routeChange", "submitCancelled"],
-      finalState: "commandStateResolved",
+      from: ["button.enabled", "button.pressed"],
+      to: ["button.commandCommitted", "button.pendingOrIdle"],
+      interrupt: ["button.disable", "pointerCancel", "commandCancel", "routeChange"],
+      finalState: "buttonCommandResolvedWithoutHitAreaChange",
       reducedMotion: "Commit button command state without scale or label crossfade."
     },
     "toggle.switch": {
-      from: ["checked.previous"],
-      to: ["checked.next"],
-      interrupt: ["revert", "routeChange", "pointerCancel"],
-      finalState: "checkedSemanticsCommitted",
+      from: ["toggle.previousValue", "toggle.pressed"],
+      to: ["toggle.nextValue"],
+      interrupt: ["toggle.switch", "toggle.revert", "pointerCancel", "routeChange"],
+      finalState: "toggleValueAndSemanticsCommitted",
       reducedMotion: "Update check/thumb/background and semantics instantly."
+    },
+    "chip.item.select": {
+      from: ["chip.previousSelection", "chip.idle"],
+      to: ["chip.targetSelected"],
+      interrupt: ["chip.item.select", "pointerCancel", "routeChange"],
+      finalState: "oneTargetSelectionCommittedWithinStableGroup",
+      reducedMotion: "Commit the target chip and semantics immediately without indicator travel or group reflow."
+    },
+    "destructive.confirm.commit": {
+      from: ["confirmation.armed", "confirmation.focused"],
+      to: ["destructive.commandCommitted", "confirmation.pendingOrResolved"],
+      interrupt: ["destructive.confirm.cancel", "overlayDismiss", "routeChange", "commandCancel"],
+      finalState: "destructiveConfirmationResolvedBySingleCommittedIntent",
+      reducedMotion: "Commit the single confirmed destructive intent immediately without emphasis movement."
+    },
+    "filter.apply.commit": {
+      from: ["filter.pendingValues", "filter.results.previous"],
+      to: ["filter.valuesCommitted", "filter.resultsRefreshing"],
+      interrupt: ["filter.apply.commit", "filter.reset", "routeChange", "requestCancel"],
+      finalState: "latestCommittedFilterOwnsStableResultHost",
+      reducedMotion: "Commit the latest filter and refresh state immediately while preserving result-host geometry."
+    },
+    "filter.item.toggle": {
+      from: ["filter.item.previousValue", "filter.item.idle"],
+      to: ["filter.item.nextValue", "filter.pendingValues"],
+      interrupt: ["filter.item.toggle", "filter.reset", "routeChange", "pointerCancel"],
+      finalState: "latestFilterItemAndPendingSummaryCommittedWithoutResultReplacement",
+      reducedMotion: "Commit the item and pending summary immediately without replacing or moving the result list."
+    },
+    "slider.drag.start": {
+      from: ["slider.idle", "slider.valueCommitted"],
+      to: ["slider.dragging"],
+      interrupt: ["pointerCancel", "slider.disabled", "routeChange"],
+      finalState: "sliderDraggingWithPointerOwnership",
+      reducedMotion: "Keep direct manipulation and pointer ownership; no decorative motion is allowed."
+    },
+    "slider.drag.update": {
+      from: ["slider.dragging"],
+      to: ["slider.draggingValueUpdated"],
+      interrupt: ["pointerCancel", "slider.drag.release", "routeChange"],
+      finalState: "sliderValueMatchesLatestDirectInput",
+      reducedMotion: "Keep track, thumb, and readout matched to the latest direct input with no easing."
+    },
+    "slider.drag.release": {
+      from: ["slider.dragging", "slider.draggingValueUpdated"],
+      to: ["slider.snappedValue", "slider.valueCommitted"],
+      interrupt: ["slider.drag.start", "slider.disabled", "routeChange"],
+      finalState: "sliderLegalValueCommittedAndPointerReleased",
+      reducedMotion: "Commit the legal value immediately and release pointer ownership without snap travel."
+    },
+    "stepper.press": {
+      from: ["stepper.idle", "stepper.valueCommitted"],
+      to: ["stepper.pressed"],
+      interrupt: ["pointerCancel", "pointerLeave", "stepper.disabled", "routeChange"],
+      finalState: "stepperPressReleasedWithoutHitAreaChange",
+      reducedMotion: "Apply and clear pressed semantics immediately without scale or hit-area changes."
+    },
+    "stepper.value.change": {
+      from: ["stepper.previousValue", "stepper.pressed"],
+      to: ["stepper.nextLegalValue"],
+      interrupt: ["stepper.value.change", "stepper.disabled", "routeChange"],
+      finalState: "stepperLegalValueAndReadoutCommitted",
+      reducedMotion: "Commit the next legal value and preview immediately without numeric crossfade."
+    },
+    "card.press": {
+      from: ["card.idle", "card.selected", "card.focused"],
+      to: ["card.pressed"],
+      interrupt: ["pointerCancel", "pointerLeave", "card.select", "routeChange"],
+      finalState: "cardPressedFeedbackReleasedWithoutGeometryChange",
+      reducedMotion: "Apply card pressed semantics without scale, cover movement, or scroll displacement."
+    },
+    "card.select": {
+      from: ["card.idle", "card.previousSelection", "card.pressed"],
+      to: ["card.targetSelected"],
+      interrupt: ["card.select", "selection.clear", "routeChange"],
+      finalState: "cardSelectionCommittedWithoutContentReflow",
+      reducedMotion: "Commit selection, check, and focus semantics instantly without card reflow."
+    },
+    "card.route": {
+      from: ["card.idle", "card.pressed", "route.current"],
+      to: ["card.destinationRoute"],
+      interrupt: ["card.route", "route.replace", "route.back", "asyncResult.stale"],
+      finalState: "latestCardIntentOwnsVisibleDestinationRoute",
+      reducedMotion: "Commit the latest destination route without card movement or source snapshot travel."
+    },
+    "listRow.select": {
+      from: ["listRow.idle", "listRow.previousSelection", "listRow.pressed"],
+      to: ["listRow.targetSelected"],
+      interrupt: ["listRow.select", "selection.clear", "routeChange"],
+      finalState: "listRowSelectionAndSemanticsCommitted",
+      reducedMotion: "Commit row selection and semantics instantly without changing row height or scroll anchor."
+    },
+    "selection.group.toggle": {
+      from: ["selection.group.previousState", "selection.group.idle"],
+      to: ["selection.group.nextState", "selection.summary.latest"],
+      interrupt: ["selection.group.toggle", "selection.clear", "routeChange", "pointerCancel"],
+      finalState: "latestGroupSelectionAndSummaryCommittedWithoutListReflow",
+      reducedMotion: "Commit group selection and summary immediately without list reflow."
+    },
+    "selection.item.toggle": {
+      from: ["selection.item.previousValue", "selection.item.idle"],
+      to: ["selection.item.nextValue", "selection.summary.latest"],
+      interrupt: ["selection.item.toggle", "selection.clear", "routeChange", "pointerCancel"],
+      finalState: "latestItemSelectionAndSummaryCommittedWithoutRowReflow",
+      reducedMotion: "Commit item selection and summary immediately without row reflow."
+    },
+    "selection.option.toggle": {
+      from: ["selection.option.previousValue", "selection.option.idle"],
+      to: ["selection.option.nextValue", "selection.optionSummary.latest"],
+      interrupt: ["selection.option.toggle", "selection.reset", "routeChange", "pointerCancel"],
+      finalState: "latestOptionSelectionAndSummaryCommittedWithoutRowReflow",
+      reducedMotion: "Commit option selection and summary immediately without row reflow."
+    },
+    "selection.range.show": {
+      from: ["textSelection.none", "textSelection.rangeCommitted"],
+      to: ["textSelection.rangeVisible", "selectionToolbar.visibleAtLegalAnchor"],
+      interrupt: ["selection.range.show", "readerControlOpen", "dropdownOpen", "dialogOpen", "routeChange"],
+      finalState: "latestTextRangeAndToolbarVisibleWithoutTextReflow",
+      reducedMotion: "Show the latest text range and toolbar at the legal anchor without text reflow or anchor travel."
+    },
+    "selection.toolbar.action": {
+      from: ["selectionToolbar.visible", "selectionToolbar.actionIdle"],
+      to: ["selectionToolbar.actionCommittedOrPending", "textSelection.keptOrClosedByAction"],
+      interrupt: ["selection.toolbar.action", "readerControlOpen", "dialogOpen", "routeChange", "commandCancel"],
+      finalState: "latestToolbarActionResolvedWithDeclaredSelectionRetention",
+      reducedMotion: "Commit the latest toolbar action and its declared selection retention immediately."
+    },
+    "selection.toolbar.exit": {
+      from: ["selectionToolbar.visible", "textSelection.rangeVisible"],
+      to: ["selectionToolbar.hidden", "textSelection.none", "focus.returned"],
+      interrupt: ["selection.range.show", "routeChange", "destroy"],
+      finalState: "selectionLayerHiddenAndPointerFocusOwnershipReleased",
+      reducedMotion: "Hide the selection layer and release pointer and focus ownership immediately."
     },
     "reader.entry.coverToImmersive": {
       from: ["sourceRoute", "coverPressed", "coverSnapshotMeasured"],
@@ -427,11 +645,18 @@
       reducedMotion: "Use action press plus immediate reader surface reveal."
     },
     "reader.control.hide": {
-      from: ["controlLayerVisible"],
-      to: ["immersiveReading"],
-      interrupt: ["showAgain", "routeChange", "orientationPrepare"],
-      finalState: "immersiveReadingHotZonesRestored",
+      from: ["control.home", "control.quick"],
+      to: ["immersive.hidden"],
+      interrupt: ["reader.control.show", "app.route.replace", "viewport.orientation.prepare"],
+      finalState: "immersive.hidden",
       reducedMotion: "Hide control layer immediately and restore immersive hit regions."
+    },
+    "reader.control.show": {
+      from: ["immersive.hidden"],
+      to: ["control.home"],
+      interrupt: ["reader.control.hide", "app.route.replace", "viewport.orientation.prepare"],
+      finalState: "control.home.visible",
+      reducedMotion: "Show the control layer immediately and release immersive hit regions."
     },
     "reader.control.handle.press": {
       from: ["handleIdle", "controlLayerVisible"],
@@ -567,11 +792,32 @@
       reducedMotion: "Hide running control space and show capsule without morph."
     },
     "reader.module.switch": {
-      from: ["readerModule.previous", "controlLayerVisible"],
-      to: ["readerModule.next", "controlLayerVisible"],
-      interrupt: ["routeChange", "switchTargetAgain", "hideControlLayer"],
-      finalState: "oneActiveReaderModuleAndStableModuleBar",
+      from: ["control.home", "control.quick.module.previous"],
+      to: ["control.quick.module.target"],
+      interrupt: ["reader.module.switch", "reader.panel.expand", "reader.control.hide", "app.route.replace"],
+      finalState: "control.quick.module.singleTargetVisible",
       reducedMotion: "Commit active module and panel content immediately; keep module nav dimensions stable."
+    },
+    "reader.quick.promote": {
+      from: ["control.home"],
+      to: ["control.quick.target"],
+      interrupt: ["reader.quick.promote", "reader.module.switch", "reader.control.hide", "app.route.replace"],
+      finalState: "control.quick.singleTargetVisible",
+      reducedMotion: "Commit the target quick panel immediately without scale or opacity motion."
+    },
+    "reader.panel.expand": {
+      from: ["control.quick.module"],
+      to: ["control.full.module"],
+      interrupt: ["reader.panel.collapse", "reader.module.switch", "reader.control.hide", "app.route.replace"],
+      finalState: "control.full.module.singleTargetVisible",
+      reducedMotion: "Commit the full reader panel immediately without sheet travel."
+    },
+    "reader.panel.collapse": {
+      from: ["control.full.module"],
+      to: ["control.quick.module"],
+      interrupt: ["reader.panel.expand", "reader.module.switch", "reader.control.hide", "app.route.replace"],
+      finalState: "control.quick.module.singleTargetVisible",
+      reducedMotion: "Commit the quick reader panel immediately without sheet travel."
     },
     "reader.page.turn.next-prev": {
       from: ["page.current"],
@@ -579,6 +825,13 @@
       interrupt: ["oppositeTurn", "chapterJump", "routeChange", "sessionTick"],
       finalState: "pageIndexCommittedAndPageInfoAnchored",
       reducedMotion: "Commit page index and footer/page info immediately without slide."
+    },
+    "reader.chapter.jump": {
+      from: ["chapter.current"],
+      to: ["chapter.target"],
+      interrupt: ["newJump", "routeChange", "sessionTick"],
+      finalState: "chapterAnchorCommitted",
+      reducedMotion: "Commit target chapter, page index, and progress anchor immediately without content movement."
     },
     "motion.interrupt.cancel": {
       from: ["motionRunning", "pressed", "dragging", "entering"],
@@ -600,6 +853,90 @@
       interrupt: ["userBack", "routeChange", "newerAsyncResult"],
       finalState: "replacementVisibleOnlyIfStillCurrent",
       reducedMotion: "Replace with the latest valid state immediately."
+    },
+    "state.loading.inline": {
+      from: ["inlineState.idle", "inlineState.content"],
+      to: ["inlineState.loading"],
+      interrupt: ["loading.result.ready", "loading.request.cancel", "loading.request.superseded", "routeChange", "destroy"],
+      finalState: "latestRequestOwnsInlineStateAndTerminalResultStopsIndicator",
+      reducedMotion: "Show a static loading indicator; keep request ownership and stop it on the latest terminal result."
+    },
+    "feedback.toast.enter": {
+      from: ["toast.hidden", "toastHost.empty"],
+      to: ["toast.visible", "toastHost.singleOwner"],
+      interrupt: ["feedback.toast.show", "feedback.toast.update", "feedback.toast.dismiss", "routeChange", "destroy"],
+      finalState: "latestToastVisibleWithSingleHostOwner",
+      reducedMotion: "Show and announce the latest toast immediately without y-offset movement."
+    },
+    "feedback.toast.update": {
+      from: ["toast.visible", "toastHost.singleOwner"],
+      to: ["toast.visible", "toastHost.singleOwner", "toast.message.latest"],
+      interrupt: ["feedback.toast.show", "feedback.toast.update", "feedback.toast.dismiss", "routeChange", "destroy"],
+      finalState: "latestToastVisibleWithSingleHostOwner",
+      reducedMotion: "Commit the latest message in the existing live-region host immediately and replace the auto-dismiss timer."
+    },
+    "feedback.toast.exit": {
+      from: ["toast.visible", "toastHost.singleOwner"],
+      to: ["toast.hidden", "toastHost.empty"],
+      interrupt: ["feedback.toast.show", "feedback.toast.update", "routeChange", "destroy"],
+      finalState: "toastHiddenAndHostReleased",
+      reducedMotion: "Hide the toast and release its host immediately without y-offset movement."
+    },
+    "input.focus": {
+      from: ["input.blurred", "keyboard.hidden"],
+      to: ["input.focused", "caret.visible", "keyboard.requestedOrNotRequired"],
+      interrupt: ["input.blur", "input.submit", "routeChange", "destroy"],
+      finalState: "focusedInputOwnsCaretAndOptionalKeyboard",
+      reducedMotion: "Commit focus ring, caret, and keyboard request immediately without tween."
+    },
+    "input.blur": {
+      from: ["input.focused", "input.editing"],
+      to: ["input.blurred", "value.preserved", "keyboard.dismissedOrTransferred"],
+      interrupt: ["input.focus", "routeChange", "destroy"],
+      finalState: "blurredInputPreservesValueAndReleasesKeyboardOwnership",
+      reducedMotion: "Release focus and keyboard ownership immediately while preserving the value."
+    },
+    "input.clear": {
+      from: ["input.focused", "input.blurred", "value.nonEmpty", "search.resultsVisible"],
+      to: ["input.focused", "value.empty", "search.beforeOrEmpty"],
+      interrupt: ["input.submit", "newInput", "routeChange", "destroy"],
+      finalState: "emptyValueVisibleWithInputFocusPreserved",
+      reducedMotion: "Clear the value and stale results immediately while preserving input focus."
+    },
+    "input.focus-blur": {
+      from: ["input.blurred", "input.focused", "input.editing"],
+      to: ["input.focusedOrBlurred", "value.preserved"],
+      interrupt: ["input.submit", "input.clear", "routeChange", "destroy"],
+      finalState: "latestFocusOwnerAndValueSemanticsResolved",
+      reducedMotion: "Commit the latest focus owner and keyboard state immediately without tween."
+    },
+    "input.submit": {
+      from: ["input.focused", "input.editing", "submit.idle"],
+      to: ["submit.pending", "latestResult.committed"],
+      interrupt: ["input.clear", "input.submit", "newInput", "routeChange", "destroy"],
+      finalState: "latestSubmitResultOwnsStableInputAndResultHost",
+      reducedMotion: "Commit pending and terminal submit states without visual interpolation."
+    },
+    "search.state.replace": {
+      from: ["search.before", "search.loading", "search.results", "search.empty", "search.error"],
+      to: ["search.latestState"],
+      interrupt: ["search.submit", "search.clear", "search.loadMore", "routeChange", "destroy"],
+      finalState: "latestSearchRequestOwnsStableResultHost",
+      reducedMotion: "Replace the search state immediately while preserving result-host geometry."
+    },
+    "state.content.replace": {
+      from: ["content.previous", "contentHost.stable"],
+      to: ["content.latest", "contentHost.stable"],
+      interrupt: ["state.replace", "routeChange", "requestCancel", "destroy"],
+      finalState: "latestContentVisibleWithShellAndScrollAnchorPreserved",
+      reducedMotion: "Commit the latest content immediately while preserving shell, scroll, and focus ownership."
+    },
+    "tooling.mode.switch": {
+      from: ["toolingMode.current", "toolingSurface.stable"],
+      to: ["toolingMode.target", "toolingSurface.stable"],
+      interrupt: ["tooling.mode.switch", "routeChange", "destroy"],
+      finalState: "latestToolingModeCommittedWithinStableRouteShell",
+      reducedMotion: "Commit the latest tooling mode immediately while preserving the route shell and focus owner."
     },
     "viewport.orientation.prepare": {
       from: ["viewportStable"],
@@ -648,6 +985,19 @@
         android: "NavHost / route reducer",
         ios: "NavigationStack / route reducer",
         harmony: "Router / route reducer"
+      },
+      evidence: COMMON_EVIDENCE
+    },
+    {
+      prefix: "source.switch.route.",
+      family: "app.route",
+      tokens: ["reader.motion.duration.route", "reader.motion.duration.routePop", "reader.motion.duration.routeReplace"],
+      stateFields: ["fromRoute", "toRoute", "routeStack", "readerContinuityOrigin", "focusReturnTarget"],
+      platformComponents: {
+        web: "FlowShell / DemoRouteHost",
+        android: "FlowShell NavHost / route reducer",
+        ios: "FlowShell NavigationStack / route reducer",
+        harmony: "FlowShell Router / route reducer"
       },
       evidence: COMMON_EVIDENCE
     },
@@ -907,8 +1257,8 @@
     {
       prefix: "bookshelf.",
       family: "bookshelf",
-      tokens: ["app.motion.duration.stateReplace"],
-      stateFields: ["viewMode", "previousViewMode", "scrollAnchor"],
+      tokens: ["app.motion.duration.layoutSwitch"],
+      stateFields: ["viewMode", "previousViewMode", "targetViewMode", "stableBookIds", "scrollAnchor"],
       platformComponents: {
         web: "bookshelf view host",
         android: "Lazy grid/list host",
@@ -933,7 +1283,7 @@
     {
       prefix: "reader.control.",
       family: "reader.control",
-      tokens: ["reader.motion.duration.panel", "reader.motion.duration.handleSnap", "reader.motion.distance.handlePullY"],
+      tokens: ["reader.motion.duration.overlay", "reader.motion.duration.panel", "reader.motion.duration.handleSnap", "reader.motion.distance.handlePullY"],
       stateFields: ["controlLayerOpen", "handlePressed", "dragOffset", "dockOffset", "viewportClass"],
       platformComponents: {
         web: "ReaderControlDock",
@@ -959,13 +1309,26 @@
     {
       prefix: "reader.quick.",
       family: "reader.quick",
-      tokens: ["reader.motion.duration.panel"],
+      tokens: ["reader.motion.duration.fast"],
       stateFields: ["quickAction", "targetPanel", "loadingState"],
       platformComponents: {
         web: "ReaderQuickAction",
         android: "ReaderQuickAction",
         ios: "ReaderQuickAction",
         harmony: "ReaderQuickAction"
+      },
+      evidence: COMMON_EVIDENCE
+    },
+    {
+      prefix: "reader.panel.",
+      family: "reader.panel",
+      tokens: ["reader.motion.duration.panel"],
+      stateFields: ["sourcePanel", "targetPanel", "controlLayerOpen", "readerContext"],
+      platformComponents: {
+        web: "ReaderControlPanel",
+        android: "ReaderControlPanel",
+        ios: "ReaderControlPanel",
+        harmony: "ReaderControlPanel"
       },
       evidence: COMMON_EVIDENCE
     },
@@ -1080,6 +1443,8 @@
     ["tab.", 120],
     ["dropdown.", 160],
     ["overlay.", 160],
+    ["feedback.", 180],
+    ["state.loading.", 800],
     ["toggle.", 140],
     ["slider.", 120],
     ["reader.entry.", 240],
@@ -1138,6 +1503,13 @@
     return MOTION_ID_ALIASES[cleanId] || cleanId;
   }
 
+  function pressMotionIdFor(value) {
+    const motionId = normalizeMotionId(value);
+    return motionId.includes("press") && Object.prototype.hasOwnProperty.call(MOTION_ID_STATE_MACHINES, motionId)
+      ? motionId
+      : "button.activate";
+  }
+
   function setAttr(element, name, value) {
     if (!element) return;
     if (value == null || value === "") {
@@ -1169,6 +1541,12 @@
     return matchedPrefix ? matchedPrefix[1] : 120;
   }
 
+  function easingFor(id, explicitEasing) {
+    const requested = clean(explicitEasing || "");
+    if (requested) return requested;
+    return DEFAULT_EASINGS[id] || "ease";
+  }
+
   function create(options) {
     const config = options || {};
     const root = config.root || null;
@@ -1176,6 +1554,13 @@
     let active = null;
     let sequence = 0;
     let reducedOverride = config.reducedMotion;
+    let runtimeProfile = config.runtimeProfile || null;
+
+    const getRuntimeProfile = () => {
+      if (runtimeProfile) return runtimeProfile;
+      runtimeProfile = window.ReaderMotionRuntimeProfile?.create?.({ root }) || null;
+      return runtimeProfile;
+    };
 
     if (root) {
       root.setAttribute("data-motion-controller", "ready");
@@ -1189,6 +1574,12 @@
         phase: transaction.phase,
         from: transaction.from,
         to: transaction.to,
+        duration: transaction.duration,
+        baseDuration: transaction.baseDuration,
+        speed: transaction.speed,
+        effectiveDuration: transaction.effectiveDuration,
+        category: transaction.category,
+        easing: transaction.easing,
         reducedMotion: transaction.reducedMotion,
         sequence: transaction.sequence,
         timestamp: Math.round(window.performance && window.performance.now ? window.performance.now() : Date.now())
@@ -1210,6 +1601,11 @@
       setAttr(root, "data-motion-action", transaction.action);
       setAttr(root, "data-motion-from", transaction.from);
       setAttr(root, "data-motion-to", transaction.to);
+      setAttr(root, "data-motion-duration", transaction.duration);
+      setAttr(root, "data-motion-base-duration", transaction.baseDuration);
+      setAttr(root, "data-motion-speed", transaction.speed);
+      setAttr(root, "data-motion-category", transaction.category);
+      setAttr(root, "data-motion-easing", transaction.easing);
       root.setAttribute("data-motion-reduced-active", transaction.reducedMotion ? "true" : "false");
     };
 
@@ -1237,6 +1633,11 @@
         setAttr(root, "data-motion-action", "");
         setAttr(root, "data-motion-from", "");
         setAttr(root, "data-motion-to", "");
+        setAttr(root, "data-motion-duration", "");
+        setAttr(root, "data-motion-base-duration", "");
+        setAttr(root, "data-motion-speed", "");
+        setAttr(root, "data-motion-category", "");
+        setAttr(root, "data-motion-easing", "");
       }
       if (active && active.sequence === target.sequence) {
         active = null;
@@ -1268,6 +1669,22 @@
         interrupt(details.interruptReason || "superseded");
       }
       const reducedMotion = reducedFrom(root, details.reducedMotion != null ? details.reducedMotion : reducedOverride);
+      const baseDuration = durationFor(id, details.duration, false);
+      const durationResolution = getRuntimeProfile()?.resolveDuration?.({
+        motionId: id,
+        baseDuration,
+        reducedMotion
+      }) || {
+        baseDuration,
+        speed: reducedMotion ? 0 : 1,
+        effectiveDuration: durationFor(id, details.duration, reducedMotion),
+        category: "",
+        enabled: false,
+        reducedMotion
+      };
+      // Freeze the effective duration at transaction start. Profile changes
+      // affect the next transaction and never desynchronise an active timer.
+      const effectiveDuration = Math.max(0, Number(durationResolution.effectiveDuration) || 0);
       const transaction = {
         id,
         contract: contractFor(id),
@@ -1277,7 +1694,12 @@
         phase: "running",
         target: details.target || null,
         reducedMotion,
-        duration: durationFor(id, details.duration, reducedMotion),
+        baseDuration,
+        speed: Number(durationResolution.speed) || 0,
+        effectiveDuration,
+        category: clean(durationResolution.category || ""),
+        duration: effectiveDuration,
+        easing: easingFor(id, details.easing),
         sequence: ++sequence,
         timer: null
       };
@@ -1297,7 +1719,7 @@
         unresolvedContract: transaction.contract ? "false" : "true"
       });
       if (transaction.duration === 0) {
-        settle(transaction, "reduced-motion");
+        settle(transaction, transaction.reducedMotion ? "reduced-motion" : "debug-instant");
       } else {
         transaction.timer = window.setTimeout(() => settle(transaction, "complete"), transaction.duration);
       }
@@ -1320,6 +1742,7 @@
       setReducedMotion(value) {
         reducedOverride = value == null ? null : Boolean(value);
       },
+      getRuntimeProfile,
       getSnapshot() {
         return {
           active: active ? Object.assign({}, active, { target: undefined, timer: undefined }) : null,
@@ -1335,6 +1758,11 @@
           root.removeAttribute("data-motion-action");
           root.removeAttribute("data-motion-from");
           root.removeAttribute("data-motion-to");
+          root.removeAttribute("data-motion-duration");
+          root.removeAttribute("data-motion-base-duration");
+          root.removeAttribute("data-motion-speed");
+          root.removeAttribute("data-motion-category");
+          root.removeAttribute("data-motion-easing");
           root.removeAttribute("data-motion-reduced-active");
         }
       }
@@ -1344,6 +1772,7 @@
   window.ReaderMotionController = {
     create,
     contractFor,
+    pressMotionIdFor,
     CONTRACT: Object.freeze({
       version: CONTRACT_VERSION,
       aliases: Object.freeze(Object.assign({}, MOTION_ID_ALIASES)),

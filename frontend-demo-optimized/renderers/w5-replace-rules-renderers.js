@@ -772,10 +772,10 @@
       ariaLabel: "替换规则管理",
       bottomSheetHtml: `
         <section class="fd-reader-full-page-panel fd-w5-replace-page-panel" data-dev-region="W5ReplacePage" aria-label="替换规则全屏管理">
-          <button class="fd-reader-full-grabber" type="button" data-route="content-replacement" data-route-replace aria-label="收起到替换覆盖层"></button>
+          <button class="fd-reader-full-grabber" type="button" data-route="content-replacement" data-route-replace data-reader-panel-collapse aria-label="收起到替换覆盖层"></button>
           <header class="fd-reader-full-head">
             <span>${icon("reader-content-replace", "fd-small-icon")}<strong>替换规则管理</strong></span>
-            <button type="button" data-route="reader" data-route-replace>完成</button>
+            <button type="button" data-route="reader" data-route-replace data-reader-panel-collapse>完成</button>
           </header>
           <div class="fd-reader-full-content">
             <div class="fd-w5-page-toolbar" aria-label="规则管理工具栏">
@@ -936,7 +936,7 @@
     }).join("");
 
     return renderW5ReaderShell(data, appState, {
-      frameClass: "fd-reader-frame fd-reader-flow-frame fd-reader-mode-control fd-w5-replace-overlay-v2-frame",
+      frameClass: "fd-reader-frame fd-reader-flow-frame fd-reader-mode-quick fd-w5-replace-overlay-v2-frame",
       readingSurfaceClass: "fd-reading-surface",
       overlayClass: "fd-reader-overlay",
       bottomSheetHostClass: "fd-reader-sheet",
@@ -946,8 +946,8 @@
       stateHostClass: "fd-reader-state-host",
       ariaLabel: "内容替换覆盖层 V2",
       bottomSheetHtml: `
-        <button class="fd-reader-grabber" type="button" data-route="reader-replace-page" data-route-replace aria-label="上拉进入替换规则完整控制页"></button>
-        <section class="fd-reader-module-panel fd-reader-quick-detail fd-w5-overlay-v2-panel" data-dev-region="W5ReplaceOverlayV2" aria-label="内容替换覆盖层 V2">
+        <button class="fd-reader-grabber" type="button" data-route="reader-replace-page" data-route-replace data-reader-panel-expand aria-label="上拉进入替换规则完整控制页"></button>
+        <section class="fd-reader-module-panel fd-reader-quick-detail fd-reader-action-quick-panel fd-w5-overlay-v2-panel" data-dev-region="W5ReplaceOverlayV2" aria-label="内容替换覆盖层 V2">
           <header class="fd-w5-overlay-v2-head">
             <span><strong>替换规则</strong></span>
             <div class="fd-w5-overlay-v2-head-actions">
@@ -958,10 +958,6 @@
             <div class="fd-w5-overlay-v2-rule-list">
               ${ruleRowsHtml || `<p class="fd-w5-rule-empty">暂无规则</p>`}
             </div>
-            <footer class="fd-w5-overlay-v2-footer">
-              <button type="button" data-route="reader-replace-preview" data-route-replace>${icon("search", "fd-small-icon")}<span>预览效果</span></button>
-              <button class="is-primary" type="button" data-route="reader-replace-page" data-route-replace>${icon("settings", "fd-small-icon")}<span>完整管理</span></button>
-            </footer>
           </div>
         </section>`,
       moduleNavHtml: readerModuleNavHtml(data)

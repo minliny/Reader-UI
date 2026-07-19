@@ -52,7 +52,8 @@ const extraContractRoutes = routeNames.filter((route) => !schemaRouteIdSet.has(r
 const modularRenderRoutes = [
   ...Object.keys(context.window.ReaderW3SourceSwitchRenderers?.INTEGRATION_MAP || {}),
   ...Object.keys(context.window.ReaderW4ThemeFontTypographyRenderers?.screenMap || {}),
-  ...Object.keys(context.window.ReaderW5ReplaceRulesRenderers?.INTEGRATION_MAP || {})
+  ...Object.keys(context.window.ReaderW5ReplaceRulesRenderers?.INTEGRATION_MAP || {}),
+  ...Object.keys(context.window.ReaderD6CapabilityClosureRenderers?.INTEGRATION_MAP || {})
 ];
 const renderCases = [
   ...[...runtime.matchAll(/case\s+"([^"]+)"\s*:/g)].map((match) => match[1]),
@@ -86,6 +87,7 @@ const requiredRuntimeMotionIds = [
   "app.route.push.forward",
   "app.route.pop.backward",
   "app.route.replace",
+  "bookshelf.view.switch",
   "tab.item.switch",
   "reader.module.switch",
   "viewport.orientation.reshape",
@@ -106,14 +108,46 @@ const requiredRuntimeMotionIds = [
   "motion.interrupt.cancel",
   "motion.interrupt.redirect",
   "motion.interrupt.completeThenReplace",
+  "state.loading.inline",
+  "feedback.toast.enter",
+  "feedback.toast.update",
+  "feedback.toast.exit",
   "viewport.orientation.prepare",
-  "viewport.orientation.settle"
+  "viewport.orientation.settle",
+  "overlay.sheet.enter",
+  "overlay.sheet.exit",
+  "overlay.dialog.enter",
+  "overlay.dialog.exit",
+  "overlay.keyboard.enter-exit",
+  "source.switch.route.push",
+  "source.switch.route.pop",
+  "source.switch.route.replace",
+  "input.focus",
+  "input.blur",
+  "input.clear",
+  "input.focus-blur",
+  "input.submit",
+  "search.state.replace",
+  "state.content.replace",
+  "button.activate",
+  "toggle.switch",
+  "chip.item.select",
+  "slider.drag.start",
+  "slider.drag.update",
+  "slider.drag.release",
+  "stepper.press",
+  "stepper.value.change",
+  "card.press",
+  "card.select",
+  "card.route",
+  "listRow.select"
 ];
 const detailedMotionIds = [
   "app.firstOpen.enter",
   "app.route.push.forward",
   "app.route.pop.backward",
   "app.route.replace",
+  "bookshelf.view.switch",
   "tab.item.press",
   "tab.item.select",
   "tab.item.switch",
@@ -126,6 +160,16 @@ const detailedMotionIds = [
   "dropdown.option.select",
   "button.activate",
   "toggle.switch",
+  "chip.item.select",
+  "slider.drag.start",
+  "slider.drag.update",
+  "slider.drag.release",
+  "stepper.press",
+  "stepper.value.change",
+  "card.press",
+  "card.select",
+  "card.route",
+  "listRow.select",
   "reader.entry.coverToImmersive",
   "reader.entry.actionToImmersive",
   "reader.control.handle.press",
@@ -135,7 +179,11 @@ const detailedMotionIds = [
   "reader.control.dock.drag",
   "reader.control.dock.release",
   "reader.control.dock.rebound",
+  "reader.control.show",
   "reader.control.hide",
+  "reader.quick.promote",
+  "reader.panel.expand",
+  "reader.panel.collapse",
   "reader.session.autoPage.start",
   "reader.session.tts.start",
   "reader.session.capsule.enter",
@@ -147,12 +195,24 @@ const detailedMotionIds = [
   "reader.session.capsule.exit",
   "reader.module.switch",
   "reader.page.turn.next-prev",
+  "reader.chapter.jump",
   "motion.interrupt.cancel",
   "motion.interrupt.redirect",
   "motion.interrupt.completeThenReplace",
+  "state.loading.inline",
+  "feedback.toast.enter",
+  "feedback.toast.update",
+  "feedback.toast.exit",
   "viewport.orientation.prepare",
   "viewport.orientation.reshape",
-  "viewport.orientation.settle"
+  "viewport.orientation.settle",
+  "input.focus",
+  "input.blur",
+  "input.clear",
+  "input.focus-blur",
+  "input.submit",
+  "search.state.replace",
+  "state.content.replace"
 ];
 const runtimeAndSelectorMotionIds = [...new Set(motionIds.concat(requiredRuntimeMotionIds))].sort();
 const requiredEvidenceMotionIds = [
@@ -232,6 +292,44 @@ const missingDetailedStateMachines = detailedStateMachineEntries
 const canonicalMotionIds = Array.isArray(motionSchema?.properties?.id?.enum)
   ? motionSchema.properties.id.enum
   : [];
+const canonicalExactStateMachineFields = ["trigger", "from", "to", "interrupt", "cleanup"];
+const hasCanonicalExactStateMachine = (fixture) => Boolean(
+  fixture &&
+  canonicalExactStateMachineFields.every((field) => Array.isArray(fixture[field]) && fixture[field].length > 0) &&
+  typeof fixture.finalState === "string" &&
+  fixture.finalState.length > 0
+);
+const canonicalExactStateMachineIds = motionFixtures
+  .filter(hasCanonicalExactStateMachine)
+  .map((item) => item.id)
+  .sort();
+const canonicalPendingStateMachineIds = canonicalMotionIds
+  .filter((motionId) => !canonicalExactStateMachineIds.includes(motionId));
+const canonicalDeprecatedStateMachineIds = new Set([
+  "reader.sourceSwitch.open-close",
+  "overlay.dialog.enter-exit",
+  "overlay.sheet.enter-exit"
+]);
+const canonicalReservedStateMachineIds = new Set([
+  "reader.session.controlSpace.enter",
+  "reader.session.controlSpace.update",
+  "reader.session.controlSpace.exit"
+]);
+const canonicalNonProductionStateMachineIds = new Set([
+  ...canonicalDeprecatedStateMachineIds,
+  ...canonicalReservedStateMachineIds
+]);
+const requiredCanonicalExactMotionIds = canonicalMotionIds
+  .filter((motionId) => !canonicalNonProductionStateMachineIds.has(motionId));
+const missingRequiredCanonicalExactMotionIds = requiredCanonicalExactMotionIds
+  .filter((motionId) => !canonicalExactStateMachineIds.includes(motionId));
+const motionFixtureById = new Map(motionFixtures.map((fixture) => [fixture.id, fixture]));
+const pendingCanonicalSetClosed = canonicalPendingStateMachineIds.length === canonicalNonProductionStateMachineIds.size &&
+  canonicalPendingStateMachineIds.every((motionId) => canonicalNonProductionStateMachineIds.has(motionId));
+const deprecatedCanonicalSetClosed = [...canonicalDeprecatedStateMachineIds]
+  .every((motionId) => motionFixtureById.get(motionId)?.deprecated === true);
+const reservedCanonicalSetClosed = [...canonicalReservedStateMachineIds]
+  .every((motionId) => motionFixtureById.get(motionId)?.deprecated !== true);
 const motionFixtureIds = motionFixtures.map((item) => item.id);
 const motionFixtureIdSet = new Set(motionFixtureIds);
 const missingMotionFixtureIds = canonicalMotionIds.filter((motionId) => !motionFixtureIdSet.has(motionId));
@@ -307,6 +405,17 @@ const checks = [
     detail: `${motionFixtures.length}/${canonicalMotionIds.length} canonical MotionSpec fixtures; missing=${missingMotionFixtureIds.length}, extra=${extraMotionFixtureIds.length}, missingTokens=${motionFixturesMissingTokenRefs.length}, missingGuardRules=${motionFixturesMissingGuardRules.length}`
   },
   {
+    id: "motion.contract.canonical-exact-state-machines",
+    passed: missingRequiredCanonicalExactMotionIds.length === 0 &&
+      canonicalExactStateMachineIds.length + canonicalPendingStateMachineIds.length === canonicalMotionIds.length,
+    detail: `${canonicalExactStateMachineIds.length}/${canonicalMotionIds.length} canonical exact state machines; pending=${canonicalPendingStateMachineIds.length}; missingRequired=${missingRequiredCanonicalExactMotionIds.length}`
+  },
+  {
+    id: "motion.contract.non-production-exemptions",
+    passed: pendingCanonicalSetClosed && deprecatedCanonicalSetClosed && reservedCanonicalSetClosed,
+    detail: `activeExact=${requiredCanonicalExactMotionIds.length - missingRequiredCanonicalExactMotionIds.length}/${requiredCanonicalExactMotionIds.length}; reserved=${canonicalReservedStateMachineIds.size}; deprecated=${canonicalDeprecatedStateMachineIds.size}`
+  },
+  {
     id: "motion.contract.id-resolution",
     passed: unresolvedMotionIds.length === 0 && incompleteContractEntries.length === 0,
     detail: `${runtimeAndSelectorMotionIds.length - unresolvedMotionIds.length}/${runtimeAndSelectorMotionIds.length} Motion IDs resolved; incomplete=${incompleteContractEntries.length}`
@@ -360,6 +469,39 @@ const checks = [
       motionTokens.includes("[data-motion-dropdown-switch-role=\"to\"]") &&
       motionTokens.includes("fd-motion-dropdown-switch-to"),
     detail: "opening dropdown B while A is open emits dropdown switch fields and motion.interrupt.redirect with tokenized target takeover CSS"
+  },
+  {
+    id: "motion.input-search.state-adapter",
+    passed: runtime.includes("attachInputSearchMotionState") &&
+      runtime.includes("attachContentReplaceMotionState") &&
+      runtime.includes("cancelBookSearchRequest") &&
+      runtime.includes("data-motion-input-contract") &&
+      runtime.includes("data-motion-search-request-version") &&
+      runtime.includes("data-motion-search-discarded-request") &&
+      runtime.includes("data-motion-content-phase") &&
+      runtime.includes("motionSearchDelay") &&
+      runtime.includes("superseded-by-latest-submit") &&
+      !runtime.includes('bind("[data-keyboard-input]", "input.focus/blur")') &&
+      motionTokens.includes("--fd-motion-effective-input-focus") &&
+      motionTokens.includes("--fd-motion-effective-search-state") &&
+      motionTokens.includes("fd-search-state-replace") &&
+      motionTokens.includes("fd-content-state-replace"),
+    detail: "input focus/blur/clear/submit and search/content replacement expose exact state fields, latest-request ownership, stale-result discard, tokenized CSS, and reduced-motion fallbacks"
+  },
+  {
+    id: "motion.primitive-exact.state-adapter",
+    passed: runtime.includes("attachPrimitiveExactMotionState") &&
+      runtime.includes("primitiveExactMotionIds") &&
+      runtime.includes("data-motion-primitive-sequence") &&
+      runtime.includes("data-motion-primitive-interrupt") &&
+      runtime.includes("data-motion-slider-owner") &&
+      runtime.includes("data-motion-stepper-value") &&
+      runtime.includes("keyboardAdjustBegin") &&
+      runtime.includes("keyboardAdjustCommit") &&
+      motionTokens.includes("data-motion-slider-state=\"dragging\"") &&
+      motionTokens.includes("data-motion-stepper-id=\"stepper.value.change\"") &&
+      motionTokens.includes("fd-primitive-value-commit"),
+    detail: "button/toggle/chip/slider/stepper/card/list-row primitives expose exact latest-owner transactions, pointer and keyboard parity, direct manipulation, tokenized settle, and reduced-motion fallbacks"
   },
   {
     id: "motion.reader-entry.state-adapter",
@@ -469,6 +611,32 @@ const checks = [
     detail: "reader loading/result replacement exposes request-scoped async state, cancellation/discard guards, and tokenized completion CSS"
   },
   {
+    id: "motion.inline-loading.exact-state-adapter",
+    passed: runtime.includes("attachInlineLoadingMotionState") &&
+      runtime.includes("ensureInlineLoadingIndicator") &&
+      runtime.includes('id: "state.loading.inline"') &&
+      runtime.includes("data-motion-loading-state") &&
+      runtime.includes("data-motion-loading-request") &&
+      runtime.includes("loading.result.ready") &&
+      runtime.includes("loading.request.cancel") &&
+      motionTokens.includes("--fd-motion-effective-loading-spin"),
+    detail: "inline loading owns a canonical request-scoped state.loading.inline transaction, exposes pending/terminal state, cancels stale ownership, and reduces the spinner to static state"
+  },
+  {
+    id: "motion.toast.exact-state-adapter",
+    passed: runtime.includes("showToastMotion") &&
+      runtime.includes("dismissToastMotion") &&
+      runtime.includes("resetToastMotionState") &&
+      runtime.includes("data-motion-toast-phase") &&
+      runtime.includes("feedback.toast.enter") &&
+      runtime.includes("feedback.toast.update") &&
+      runtime.includes("feedback.toast.exit") &&
+      motionTokens.includes("fd-feedback-toast-enter") &&
+      motionTokens.includes("fd-feedback-toast-update") &&
+      motionTokens.includes("fd-feedback-toast-exit"),
+    detail: "toast host enforces latest-message ownership, canonical enter/update/exit transactions, polite live-region semantics, auto-dismiss, and zero-duration reduced motion"
+  },
+  {
     id: "motion.common-components.state-adapter",
     passed: runtime.includes("attachCommonMotionComponentState") &&
       runtime.includes("syncCommonMotionComponentState") &&
@@ -486,6 +654,17 @@ const checks = [
       runtime.includes("syncOverlayMotionElement") &&
       runtime.includes("startOverlayMotion") &&
       runtime.includes("restoreOverlayMotionFocus") &&
+      runtime.includes("focusInitialDialogControl(sheet, 40)") &&
+      runtime.includes("focusInitialDialogControl(dialog, 40)") &&
+      runtime.includes('id: "source.switch.route.push"') &&
+      runtime.includes('id: isSourceSwitchPop ? "source.switch.route.pop"') &&
+      runtime.includes('id: "source.switch.route.replace"') &&
+      runtime.includes("sourceSwitchRestoreFocus") &&
+      runtime.includes('return "overlay.keyboard.enter-exit"') &&
+      runtime.includes('bind("[data-keyboard-host]", "overlay.keyboard.enter-exit")') &&
+      rendererFilePaths.some((relativePath) => read(relativePath).includes("data-book-search-input data-open-keyboard")) &&
+      runtime.includes("window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 160)") &&
+      runtime.match(/restoreOverlayMotionFocus\(appState\);[\s\S]{0,160}setTimeout\(\(\) => attachOverlayMotionState\(screenHost, appState\), 40\)/g)?.length >= 3 &&
       runtime.includes("data-motion-overlay-role") &&
       runtime.includes("data-motion-overlay-state") &&
       runtime.includes("data-motion-overlay-focus-return") &&
@@ -494,7 +673,7 @@ const checks = [
       motionTokens.includes("[data-motion-overlay]") &&
       motionTokens.includes("fd-motion-overlay-dialog-enter") &&
       motionTokens.includes("fd-motion-overlay-sheet-enter"),
-    detail: "keyboard/sheet/dialog overlays expose role/state/action/focus-return fields, settings overlay panels use the same data entry, and tokenized enter CSS is available"
+    detail: "keyboard/sheet/dialog overlays expose role/state/action/focus-return fields, sheet/dialog move focus inside then restore it, settings overlay panels use the same data entry, and tokenized enter CSS is available"
   },
   {
     id: "motion.selector.bindings",
@@ -554,12 +733,19 @@ const report = {
     incompleteContractEntries,
     missingStateMachineMotionIds,
     detailedMotionIds,
-    detailedMotionIdCount: Array.isArray(motionContract.motionIds) ? motionContract.motionIds.length : 0,
+    controllerExactMotionIdCount: Array.isArray(motionContract.motionIds) ? motionContract.motionIds.length : 0,
+    requiredDetailedMotionIdCount: detailedMotionIds.length,
+    verifiedDetailedMotionIdCount: detailedMotionIds.length - missingDetailedStateMachines.length,
     missingDetailedStateMachines
   },
   motionFixtureCoverage: {
     schemaMotionIdCount: canonicalMotionIds.length,
     fixtureCount: motionFixtures.length,
+    canonicalExactStateMachineCount: canonicalExactStateMachineIds.length,
+    canonicalExactStateMachineIds,
+    canonicalPendingStateMachineCount: canonicalPendingStateMachineIds.length,
+    canonicalPendingStateMachineIds,
+    missingRequiredCanonicalExactMotionIds,
     missingMotionFixtureIds,
     extraMotionFixtureIds,
     duplicateMotionFixtureIds,

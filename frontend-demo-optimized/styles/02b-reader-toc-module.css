@@ -76,7 +76,7 @@
   border: 3px solid rgba(45, 74, 62, 0.2);
   border-top-color: var(--fd-primary-dark);
   border-radius: var(--fd-radius-circle);
-  animation: fd-reader-loading-spin var(--reader-motion-duration-loading-spin) linear infinite;
+  animation: fd-reader-loading-spin var(--fd-motion-effective-loading-spin) linear infinite;
 }
 
 .fd-reader-loading-panel strong {

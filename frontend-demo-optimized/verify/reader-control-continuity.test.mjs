@@ -32,14 +32,20 @@ function evaluateScript(source, filename, windowOverrides = {}) {
 
 const runtimeSource = readDemoFile("render-runtime.js");
 const d3Source = readDemoFile("renderers/d3-control-layers-renderers.js");
+const d2Source = readDemoFile("renderers/d2-bookshelf-discover-renderers.js");
+const motionControllerSource = readDemoFile("motion-controller.js");
 const fullPageStyles = readDemoFile("styles/03d-reader-fullpage.css");
 const quickSearchStyles = readDemoFile("styles/02c-reader-auto-search.css");
 const w3Source = readDemoFile("renderers/w3-source-switch-renderers.js");
+const appearanceSpecSource = readDemoFile("appearance-spec.js");
 const w4Source = readDemoFile("renderers/w4-theme-font-typography-renderers.js");
 const w5Source = readDemoFile("renderers/w5-replace-rules-renderers.js");
+const w5ReplaceStyles = readDemoFile("styles/03e-reader-replace-page.css");
 const readerControlCss = readDemoFile("styles/02a-reader-control.css");
 const readerBrightnessCss = readDemoFile("styles/04-settings-source.css");
 const readerViewportCss = readDemoFile("styles/03c-reader-viewport.css");
+const responsiveCss = readDemoFile("styles/06-responsive.css");
+const flowAdaptiveCss = readDemoFile("styles/05-flow-adaptive.css");
 const shellKitSource = readDemoFile("shared-shell-kit/kit.js");
 
 test("session capsule is rendered and scheduled only by the immersive reader", () => {
@@ -120,9 +126,40 @@ test("search and auto-page expand and collapse on the same quick route", () => {
   assert.match(readerStateScreen, /appState\?\.readerQuickExpanded\s*===\s*baseState\.quick/);
   assert.match(readerStateScreen, /return readerQuickFullPageScreen\(data,\s*route,\s*baseState\.quick,\s*appState\)/);
   assert.match(interactions, /querySelectorAll\(\s*["']\[data-reader-quick-expand\]["']\s*\)/);
-  assert.match(interactions, /appState\.readerQuickExpanded\s*=\s*button\.getAttribute\(\s*["']data-reader-quick-expand["']\s*\)[\s\S]*renderCurrentRoute\(\)/);
+  assert.match(interactions, /const quick\s*=\s*button\.getAttribute\(\s*["']data-reader-quick-expand["']\s*\)[\s\S]*const commit\s*=\s*\(\)\s*=>\s*\{[\s\S]*appState\.readerQuickExpanded\s*=\s*quick;[\s\S]*renderCurrentRoute\(\);[\s\S]*readerControlTransition\.run\(\{[\s\S]*id:\s*["']reader\.panel\.expand["'][\s\S]*commit/);
   assert.match(interactions, /querySelectorAll\(\s*["']\[data-reader-quick-collapse\]["']\s*\)/);
-  assert.match(interactions, /appState\.readerQuickExpanded\s*=\s*["']["'][\s\S]*renderCurrentRoute\(\)/);
+  assert.match(interactions, /querySelectorAll\(\s*["']\[data-reader-quick-collapse\]["']\s*\)[\s\S]*const commit\s*=\s*\(\)\s*=>\s*\{[\s\S]*appState\.readerQuickExpanded\s*=\s*["']["'];[\s\S]*renderCurrentRoute\(\);[\s\S]*readerControlTransition\.run\(\{[\s\S]*id:\s*["']reader\.panel\.collapse["'][\s\S]*commit/);
+});
+
+test("route-backed Reader panels use the same expand/collapse motion transaction", () => {
+  const bottomSheet = sourceSection(
+    runtimeSource,
+    "  function readerBottomSheetHtml(",
+    "  function readerQuickFullPagePanel(",
+  );
+  const fullPanel = sourceSection(
+    runtimeSource,
+    "  function readerFullPagePanel(",
+    "  function readerUtilityPanel(",
+  );
+  const interactions = sourceSection(
+    runtimeSource,
+    "  function attachScreenInteractions(",
+    "  window.ReaderRuntimeSharedFragments",
+  );
+
+  assert.match(bottomSheet, /data-route="\$\{esc\(expandedRoute\)\}" data-route-replace data-reader-panel-expand/);
+  assert.match(fullPanel, /data-reader-panel-collapse/);
+  assert.match(interactions, /hasAttribute\("data-reader-panel-expand"\)[\s\S]*id:\s*"reader\.panel\.expand"/);
+  assert.match(interactions, /hasAttribute\("data-reader-panel-collapse"\)[\s\S]*id:\s*"reader\.panel\.collapse"/);
+  assert.match(interactions, /readerPanelExpandMotionInput \|\| readerPanelCollapseMotionInput/);
+  assert.match(interactions, /commitHandleRoute[\s\S]*panelMotionId[\s\S]*reader\.panel\.expand[\s\S]*reader\.panel\.collapse/);
+  assert.match(w4Source, /data-route="reader-appearance" data-route-replace data-reader-panel-collapse/);
+  assert.match(w5Source, /data-route="reader-replace-page" data-route-replace data-reader-panel-expand/);
+  assert.match(w5Source, /data-route="content-replacement" data-route-replace data-reader-panel-collapse/);
+  assert.match(w5Source, /data-route="reader" data-route-replace data-reader-panel-collapse>完成<\/button>/);
+  assert.match(d3Source, /data-route="\$\{esc\(fullRoute\)\}" data-route-replace data-reader-panel-expand/);
+  assert.match(d3Source, /data-route="reader-full-settings" data-route-replace data-reader-panel-expand/);
 });
 
 test("full search reuses the directory workspace without directory tabs and highlights body matches", () => {
@@ -443,7 +480,7 @@ test("D3, W3, W4, and W5 consume runtime-owned reader continuity fragments", () 
   assert.match(w3Html, /data-origin-reader-sentinel/);
 
   sharedCalls.length = 0;
-  const w4Window = evaluateScript(w4Source, "w4-theme-font-typography-renderers.js", {
+  const w4Window = evaluateScript(`${appearanceSpecSource}\n${w4Source}`, "appearance-spec+w4-theme-font-typography-renderers.js", {
     ReaderShellKit: shellKit,
     ReaderRuntimeSharedFragments: sharedFragments,
     localStorage: storage,
@@ -480,4 +517,68 @@ test("D3, W3, W4, and W5 consume runtime-owned reader continuity fragments", () 
   );
   assert.ok(sharedCalls.includes("brightnessRailHtml"), "W5 overlay must consume the shared brightness rail");
   assert.match(w5OverlayHtml, new RegExp(sentinel("brightnessRailHtml")));
+  assert.match(w5OverlayHtml, /fd-reader-mode-quick/, "replacement overlay must use the quick-control shell mode");
+  assert.match(w5OverlayHtml, /fd-reader-action-quick-panel[^\"]*fd-w5-overlay-v2-panel/, "replacement panel must inherit the shared Search\/AutoPage quick-panel size");
+  assert.doesNotMatch(w5OverlayHtml, /fd-w5-overlay-v2-footer|预览效果|完整管理/, "replacement quick panel must not restore the deleted footer actions");
+  assert.match(w5OverlayHtml, /fd-reader-grabber/, "replacement quick panel must retain the shared grabber");
+  assert.match(w5OverlayHtml, /reader-replace-page/, "full replacement management remains reachable from the shared grabber");
+  assert.match(
+    runtimeSource,
+    /querySelectorAll\("\[data-w5-rule-toggle\]"\)[\s\S]*store\.save\([\s\S]*enabled:\s*!rule\.enabled[\s\S]*renderCurrentRoute\(\)/,
+    "replacement switches must remain interactive after the footer is removed",
+  );
+
+  const replacementPanelStyles = sourceSection(
+    w5ReplaceStyles,
+    ".fd-w5-overlay-v2-panel {",
+    ".fd-w5-overlay-v2-head {",
+  );
+  const replacementBodyStyles = sourceSection(
+    w5ReplaceStyles,
+    ".fd-w5-overlay-v2-body {",
+    ".fd-w5-overlay-v2-rule-list {",
+  );
+  assert.match(replacementPanelStyles, /grid-template-rows:\s*28px 115px;/, "replacement panel must preserve the frozen Header\/Content geometry");
+  assert.match(replacementPanelStyles, /align-content:\s*start;/);
+  assert.match(replacementBodyStyles, /grid-template-rows:\s*minmax\(0, 1fr\);/);
+  assert.match(replacementBodyStyles, /padding:\s*3px 7px 0;/, "replacement rule list must remain 250x112 inside the 264x115 content slot");
+  assert.doesNotMatch(w5ReplaceStyles, /\.fd-w5-overlay-v2-footer/, "deleted replacement footer CSS must not remain as a hidden source");
+});
+
+test("compact landscape source switch keeps the candidate window beside the reader dock", () => {
+  const compactSourceWindow = sourceSection(
+    responsiveCss,
+    '.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"][data-route-layout="flow-continuity"] .fd-source-reader-continuation .fd-source-window-slot {',
+    ".fd-source-phone-flow .fd-source-row-checks",
+  );
+
+  assert.match(compactSourceWindow, /inset:\s*74px auto 16px 16px;/);
+  assert.match(compactSourceWindow, /width:\s*min\(420px, calc\(54% - 24px\)\);/);
+  assert.doesNotMatch(compactSourceWindow, /bottom:\s*360px;/);
+});
+
+test("overlay focus and source-switch route motion stay reachable from current renderers", () => {
+  assert.ok(d2Source.includes("data-book-search-input data-open-keyboard"), "current D2 search input must open the keyboard overlay");
+  assert.ok(d2Source.includes("data-keyboard-host"), "current D2 search renderer must include a keyboard host");
+  assert.ok(runtimeSource.includes('return "overlay.keyboard.enter-exit"'), "keyboard runtime must emit the canonical combined MotionId");
+  assert.ok(runtimeSource.includes("focusInitialDialogControl(sheet, 40)"), "sheet open must move focus inside after the click transaction");
+  assert.ok(runtimeSource.includes("focusInitialDialogControl(dialog, 40)"), "dialog open must move focus inside after the click transaction");
+  assert.ok(runtimeSource.includes('id: "source.switch.route.push"'), "source switch entry must use the FlowShell push MotionId");
+  assert.ok(runtimeSource.includes('id: isSourceSwitchPop ? "source.switch.route.pop"'), "source switch back must use the FlowShell pop MotionId");
+  assert.ok(runtimeSource.includes('id: "source.switch.route.replace"'), "source switch state replacement must use the FlowShell replace MotionId");
+  assert.ok(runtimeSource.includes("sourceSwitchRestoreFocus"), "source switch pop must restore the Reader trigger focus");
+  assert.ok(w3Source.includes('comparisonHtml: `${slots.comparisonHtml || ""}${slots.resultHtml || ""}`'), "W3 state actions must be inside the visible FlowShell window");
+  assert.match(flowAdaptiveCss, /\.fd-source-reader-continuation\.fd-w3-source-switch \.fd-source-window-slot \{[\s\S]*overflow:\s*auto;/);
+  for (const [id, duration] of [
+    ["source.switch.route.push", 280],
+    ["source.switch.route.pop", 240],
+    ["source.switch.route.replace", 200],
+    ["overlay.sheet.enter", 240],
+    ["overlay.sheet.exit", 240],
+    ["overlay.dialog.enter", 240],
+    ["overlay.dialog.exit", 240],
+    ["overlay.keyboard.enter-exit", 240],
+  ]) {
+    assert.ok(motionControllerSource.includes(`"${id}": ${duration}`), `${id} must use its canonical runtime duration`);
+  }
 });

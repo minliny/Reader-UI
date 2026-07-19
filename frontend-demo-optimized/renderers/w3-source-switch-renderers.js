@@ -241,8 +241,8 @@
       stateHostClass: "fd-source-unused-slot fd-w3-state-host",
       ariaLabel: slots.ariaLabel || "换源",
       stepHtml: slots.stepHtml || originReaderStepHtml(data, appState),
-      comparisonHtml: slots.comparisonHtml || "",
-      resultHtml: slots.resultHtml || "",
+      comparisonHtml: `${slots.comparisonHtml || ""}${slots.resultHtml || ""}`,
+      resultHtml: "",
       stateHostHtml: ""
     });
   }

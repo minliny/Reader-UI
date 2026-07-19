@@ -2,7 +2,7 @@
  * D5 动作与动效闭环 renderer 函数模块
  * ------------------------------------------------------------------------
  * 职责：为 Reader-UI Demo 提供动效闭环运行时辅助：
- *   1. 93 个 MotionId 的运行时元数据（layer / category / implementationKind）
+ *   1. 95 个 MotionId 的运行时元数据；MR0 pilot 使用完整 MotionSpec
  *   2. reduced-motion 降级策略（zeroDuration / keepDirectManipulation / noMotion）
  *   3. 打断策略处理（redirect / cancel / completeThenReplace / updateInSameHost）
  *   4. stale-result guard（防止过期异步动效结果覆盖最新状态）
@@ -16,8 +16,8 @@
  *   - 挂载到 window.ReaderD5MotionClosureRenderers
  *   - render-runtime.js 通过 dispatch hook 在 switch 之前分发
  *
- * 注意：本模块不重复 motion.schema.json 中的定义，而是提供运行时使用的辅助。
- * MotionId 删除带 `/` 的版本后，三端 codegen 不再产生重复 case 名。
+ * 注意：本模块的 legacy 项保留轻量元数据；书架布局切换与六条 Reader control pilot
+ * 必须逐字段镜像 contracts/fixtures/motion.fixtures.json，避免 demo 与合同漂移。
  * ------------------------------------------------------------------------
  */
 (function attachReaderD5MotionClosureRenderers(window) {
@@ -36,9 +36,9 @@
   };
 
   // ===========================================================================
-  // 动效运行时元数据（93 个 MotionId）
+  // 动效运行时元数据（95 个 MotionId）
   // 来源：contracts/motion.schema.json + contracts/fixtures/motion.fixtures.json
-  // 删除 3 个带 `/` 的 MotionId 后总数从 96 降为 93。
+  // 93 个既有项 + reader.panel.expand / reader.panel.collapse。
   // ===========================================================================
 
   var MOTION_RUNTIME = {
@@ -49,7 +49,7 @@
     "app.route.replace":                   { layer: "app",        category: "replace",  implementationKind: "routeTransition" },
 
     // --- bookshelf 视图切换 ---
-    "bookshelf.view.switch":               { layer: "bookshelf",  category: "switch",   implementationKind: "tabTransition" },
+    "bookshelf.view.switch":               { layer: "bookshelf",  category: "switch",   implementationKind: "stateReplace" },
 
     // --- button / card / chip 反馈 ---
     "button.activate":                     { layer: "component",  category: "activate", implementationKind: "componentFeedback" },
@@ -116,22 +116,12 @@
     "reader.control.handle.press":         { layer: "reader",     category: "press",    implementationKind: "directManipulation" },
     "reader.control.handle.release":       { layer: "reader",     category: "release",  implementationKind: "directManipulation" },
 
-    // --- reader control 显隐 ---
-    "reader.control.hide":                 { layer: "reader",     category: "hide",     implementationKind: "readerEntry" },
-    "reader.control.show":                 { layer: "reader",     category: "show",     implementationKind: "readerEntry" },
-
     // --- reader entry（封面进入阅读）---
     "reader.entry.actionToImmersive":      { layer: "reader",     category: "enter",    implementationKind: "readerEntry" },
     "reader.entry.coverToImmersive":       { layer: "reader",     category: "enter",    implementationKind: "readerEntry" },
 
-    // --- reader module switch ---
-    "reader.module.switch":                { layer: "reader",     category: "switch",   implementationKind: "readerEntry" },
-
     // --- reader page turn ---
     "reader.page.turn.next-prev":          { layer: "reader",     category: "turn",     implementationKind: "readerPageTurn" },
-
-    // --- reader quick promote ---
-    "reader.quick.promote":                { layer: "reader",     category: "promote",  implementationKind: "componentFeedback" },
 
     // --- reader session autoPage / tts ---
     "reader.session.autoPage.start":       { layer: "session",    category: "enter",    implementationKind: "sessionCapsule" },
@@ -203,6 +193,22 @@
     "viewport.orientation.reshape":        { layer: "viewport",   category: "reshape",  implementationKind: "orientationReshape" },
     "viewport.orientation.settle":         { layer: "viewport",   category: "settle",   implementationKind: "orientationReshape" }
   };
+
+  // MR0 pilot。以下对象必须与 motion.fixtures.json 完全一致；
+  // 不添加 layer/category 等 demo-only 字段，避免两份语义继续分叉。
+  var PILOT_MOTION_SPECS = {
+    "bookshelf.view.switch": {"id":"bookshelf.view.switch","durationMs":320,"easing":"ease-out","implementationKind":"stateReplace","containerRole":"mainTabShell","operation":"replace","visualPattern":"sharedLayoutMorph","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"app.motion.duration.layoutSwitch","easingToken":"app.motion.easing.enter"},"guardRules":["reducedMotion:forceZeroDuration","interrupt:redirect","layoutStable:preserveScrollAnchor","transitionGuard:preserveBookItemIdentity","focusReturn:keepTrigger"],"trigger":["bookshelf.view.switch"],"from":["bookshelf.view.cover","bookshelf.view.list"],"to":["bookshelf.view.target"],"interrupt":["bookshelf.view.switch","bookshelf.sortFilter.apply","bookshelf.group.select","route.replace","viewport.orientation.prepare"],"finalState":"bookshelf.view.target.settled","cleanup":["bookshelf.view.previousLayout.clear","bookshelf.scrollAnchor.preserve","focus.bookshelfViewTrigger.restore"]},
+    "reader.control.show": {"id":"reader.control.show","durationMs":420,"easing":"ease-out","implementationKind":"overlayTransition","containerRole":"readerShell","operation":"enter","visualPattern":"fadeReplace","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"reader.motion.duration.controlEnter","easingToken":"app.motion.easing.enter"},"guardRules":["reducedMotion:forceZeroDuration","focusReturn:keepTarget","interrupt:redirect"],"trigger":["reader.control.show"],"from":["immersive.hidden"],"to":["control.home"],"interrupt":["reader.control.hide","app.route.replace","viewport.orientation.prepare"],"finalState":"control.home.visible","cleanup":["reader.control.transientState.clear","reader.surface.layout.preserve","focus.readerControlHome.restore"]},
+    "reader.control.hide": {"id":"reader.control.hide","durationMs":360,"easing":"ease-in","implementationKind":"overlayTransition","containerRole":"readerShell","operation":"exit","visualPattern":"fadeReplace","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"reader.motion.duration.controlExit","easingToken":"app.motion.easing.exit"},"guardRules":["reducedMotion:forceZeroDuration","focusReturn:restoreTarget","interrupt:redirect"],"trigger":["reader.control.hide","system.back"],"from":["control.home","control.quick"],"to":["immersive.hidden"],"interrupt":["reader.control.show","app.route.replace","viewport.orientation.prepare"],"finalState":"immersive.hidden","cleanup":["reader.control.transientState.clear","reader.control.activePanel.clear","focus.readerSurface.restore"]},
+    "reader.quick.promote": {"id":"reader.quick.promote","durationMs":320,"easing":"ease-out","implementationKind":"overlayTransition","containerRole":"readerShell","operation":"enter","visualPattern":"fadeReplace","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"reader.motion.duration.quickPromote","easingToken":"app.motion.easing.enter"},"guardRules":["reducedMotion:forceZeroDuration","transitionGuard:singleReaderControlSurface","layoutStable:readingSurfaceDoesNotReflow","interrupt:redirect"],"trigger":["reader.quick.promote"],"from":["control.home"],"to":["control.quick.target"],"interrupt":["reader.quick.promote","reader.module.switch","reader.control.hide","app.route.replace"],"finalState":"control.quick.singleTargetVisible","cleanup":["reader.quick.previousTransientState.clear","reader.surface.layout.preserve","focus.readerQuickTarget.restore"]},
+    "reader.module.switch": {"id":"reader.module.switch","durationMs":360,"easing":"ease","implementationKind":"tabTransition","containerRole":"readerShell","operation":"tabSwitch","visualPattern":"fadeReplace","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"reader.motion.duration.moduleSwitch","easingToken":"app.motion.easing.standard"},"guardRules":["reducedMotion:forceZeroDuration","transitionGuard:singleReaderControlSurface","focusReturn:restoreTarget","interrupt:redirect"],"trigger":["reader.module.switch"],"from":["control.home","control.quick.module.previous"],"to":["control.quick.module.target"],"interrupt":["reader.module.switch","reader.panel.expand","reader.control.hide","app.route.replace"],"finalState":"control.quick.module.singleTargetVisible","cleanup":["reader.module.previousPressedState.clear","reader.module.navigationGeometry.preserve","focus.readerModuleTarget.restore"]},
+    "reader.panel.expand": {"id":"reader.panel.expand","durationMs":420,"easing":"ease-out","implementationKind":"overlayTransition","containerRole":"readerShell","operation":"enter","visualPattern":"slideSheetUp","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"reader.motion.duration.controlEnter","easingToken":"app.motion.easing.enter"},"guardRules":["reducedMotion:forceZeroDuration","transitionGuard:singleReaderControlSurface","layoutStable:readingSurfaceDoesNotReflow","interrupt:redirect"],"trigger":["reader.panel.expand","reader.control.handle.release.expand"],"from":["control.quick.module"],"to":["control.full.module"],"interrupt":["reader.panel.collapse","reader.module.switch","reader.control.hide","app.route.replace"],"finalState":"control.full.module.singleTargetVisible","cleanup":["reader.control.handleTransientOffset.clear","reader.surface.layout.preserve","focus.readerFullPanel.restore"]},
+    "reader.panel.collapse": {"id":"reader.panel.collapse","durationMs":360,"easing":"ease-in","implementationKind":"overlayTransition","containerRole":"readerShell","operation":"exit","visualPattern":"slideSheetUp","interruptPolicy":"redirect","reducedMotionPolicy":"zeroDuration","tokens":{"durationToken":"reader.motion.duration.controlExit","easingToken":"app.motion.easing.exit"},"guardRules":["reducedMotion:forceZeroDuration","transitionGuard:singleReaderControlSurface","layoutStable:readingSurfaceDoesNotReflow","interrupt:redirect"],"trigger":["reader.panel.collapse","reader.control.handle.release.collapse","system.back"],"from":["control.full.module"],"to":["control.quick.module"],"interrupt":["reader.panel.expand","reader.module.switch","reader.control.hide","app.route.replace"],"finalState":"control.quick.module.singleTargetVisible","cleanup":["reader.control.handleTransientOffset.clear","reader.control.fullPanelTransientOverlay.clear","focus.readerQuickPanel.restore"]}
+  };
+
+  Object.keys(PILOT_MOTION_SPECS).forEach(function(motionId) {
+    MOTION_RUNTIME[motionId] = PILOT_MOTION_SPECS[motionId];
+  });
 
   // reduced-motion 降级策略映射（按 implementationKind）
   var REDUCED_MOTION_BY_KIND = {
@@ -323,13 +329,13 @@
 
   function getMotionIdsByLayer(layer) {
     return Object.keys(MOTION_RUNTIME).filter(function(id) {
-      return MOTION_RUNTIME[id].layer === layer;
+      return (MOTION_RUNTIME[id].layer || id.split(".")[0]) === layer;
     });
   }
 
   function getMotionIdsByCategory(category) {
     return Object.keys(MOTION_RUNTIME).filter(function(id) {
-      return MOTION_RUNTIME[id].category === category;
+      return (MOTION_RUNTIME[id].category || MOTION_RUNTIME[id].operation) === category;
     });
   }
 
@@ -343,6 +349,7 @@
     "dropdown": ["dropdown.menu.expand", "dropdown.menu.collapse"],
     "coverToImmersive": ["reader.entry.coverToImmersive", "reader.entry.actionToImmersive"],
     "controlShowHide": ["reader.control.show", "reader.control.hide"],
+    "quickAndFullPanel": ["reader.quick.promote", "reader.module.switch", "reader.panel.expand", "reader.panel.collapse"],
     "handleDrag": ["reader.control.handle.drag", "reader.control.handle.press", "reader.control.handle.release"],
     "dockDrag": ["reader.control.dock.drag", "reader.control.dock.longPress", "reader.control.dock.rebound", "reader.control.dock.release"],
     "moduleSwitch": ["reader.module.switch"],
@@ -391,7 +398,7 @@
     INTEGRATION_MAP: INTEGRATION_MAP,
     // D5 动效状态
     state: d5MotionState,
-    // 93 个 MotionId 运行时元数据
+    // 95 个 MotionId 运行时元数据
     MOTION_RUNTIME: MOTION_RUNTIME,
     // reduced-motion 降级策略映射
     REDUCED_MOTION_BY_KIND: REDUCED_MOTION_BY_KIND,

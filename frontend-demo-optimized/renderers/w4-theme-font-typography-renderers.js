@@ -57,6 +57,21 @@
     return icon("chevron", "fd-inline-chevron");
   }
 
+  function appearanceSpec() {
+    if (!window.ReaderAppearanceSpec) {
+      throw new Error("ReaderAppearanceSpec is required before w4-theme-font-typography-renderers.js");
+    }
+    return window.ReaderAppearanceSpec;
+  }
+
+  function appearanceSelect(id) {
+    return appearanceSpec().selects.find((item) => item.id === id);
+  }
+
+  function appearanceStepper(id) {
+    return appearanceSpec().steppers.find((item) => item.id === id);
+  }
+
   // 路由元数据（用于标题）
   const routeContract = window.ReaderFrontendDemoDraftRouteContract || {};
   const routes = routeContract.routes || {};
@@ -97,16 +112,22 @@
 
   // ===== 8 个默认主题 =====
   function w4DefaultThemes() {
-    return [
-      { value: "day", label: "日间", scheme: "day", texture: "plain", textureOpacity: 0, textureRgb: "138 116 84", swatch: "#ffffff", bg: "#ffffff", ink: "#332c25", control: "#2f6373", pair: "night", system: true },
-      { value: "warm", label: "暖白", scheme: "day", texture: "plain", textureOpacity: 0, textureRgb: "138 116 84", swatch: "#fbf0df", bg: "#fff6e9", ink: "#2c241d", control: "#2f6373", pair: "warm-night", system: true },
-      { value: "night", label: "夜间", scheme: "night", texture: "plain", textureOpacity: 0, textureRgb: "222 202 174", swatch: "#26231f", bg: "#26231f", ink: "#eadfce", control: "#7a684f", pair: "day", system: true },
-      { value: "warm-night", label: "暖夜", scheme: "night", texture: "plain", textureOpacity: 0, textureRgb: "222 202 174", swatch: "#302922", bg: "#302922", ink: "#eadfce", control: "#8a7656", pair: "warm", system: true },
-      { value: "paper", label: "纸纹", scheme: "day", texture: "paper", textureOpacity: 0.034, textureRgb: "138 116 84", swatch: "#f5ead8", bg: "#fff7ec", ink: "#2b241d", control: "#2f6373", pair: "paper-night", system: true },
-      { value: "green", label: "青叶纹", scheme: "day", texture: "paper", textureOpacity: 0.03, textureRgb: "92 126 86", swatch: "#e7f0e2", bg: "#eef5e8", ink: "#263423", control: "#2f6373", pair: "green-night", system: true },
-      { value: "paper-night", label: "夜纹", scheme: "night", texture: "paper", textureOpacity: 0.026, textureRgb: "222 202 174", swatch: "#34302b", bg: "#34302b", ink: "#eadfce", control: "#8a7656", pair: "paper", system: true },
-      { value: "green-night", label: "林夜纹", scheme: "night", texture: "paper", textureOpacity: 0.024, textureRgb: "154 184 142", swatch: "#263129", bg: "#263129", ink: "#dbe7d7", control: "#79906f", pair: "green", system: true }
-    ];
+    return appearanceSpec().themes.map((item) => ({
+      value: item.id,
+      label: item.label,
+      scheme: item.scheme,
+      texture: item.texture,
+      textureOpacity: item.texture === "paper" ? (item.scheme === "night" ? 0.026 : 0.034) : 0,
+      textureRgb: item.scheme === "night" ? "222 202 174" : "138 116 84",
+      swatch: item.swatchHex,
+      bg: item.backgroundHex,
+      paperStart: item.backgroundHex,
+      paperEnd: item.backgroundHex,
+      ink: item.inkHex,
+      control: item.scheme === "night" ? "#8a7656" : "#2f6373",
+      pair: item.pairId,
+      system: true
+    }));
   }
 
   // 获取全部主题（默认 + 自定义）
@@ -144,25 +165,45 @@
   }
 
   // ===== 排版数据 =====
-  function w4NormalizeTypography(data) {
-    const t = (data?.reader && data.reader.typography) || {};
-    const stored = w4Get("typography", null);
-    if (stored) return stored;
+  function w4TypographyDefaults() {
+    const indent = appearanceSelect("paragraphIndentMode");
+    const script = appearanceSelect("textConversion");
+    const pageAnimation = appearanceSelect("pageAnimation");
+    const alignment = appearanceSelect("textAlignment");
     return {
-      fontSize: Number.isFinite(Number(t.fontSize)) ? Number(t.fontSize) : 18,
-      lineHeight: Number.isFinite(Number(t.lineHeight)) ? Number(t.lineHeight) : 1.96,
-      paragraphGap: Number.isFinite(Number(t.paragraphGap)) ? Number(t.paragraphGap) : 16,
-      letterSpacing: Number.isFinite(Number(t.letterSpacing)) ? Number(t.letterSpacing) : 0,
-      fontFamily: t.fontFamily || "serif",
-      alignment: "left",
-      firstLineIndent: true,
+      fontSize: appearanceStepper("fontSize").defaultValue,
+      lineHeight: appearanceStepper("lineHeight").defaultValue,
+      paragraphGap: appearanceStepper("paragraphGap").defaultValue,
+      letterSpacing: appearanceStepper("letterSpacing").defaultValue,
+      fontFamily: appearanceSpec().defaults.fontId,
+      alignment: alignment.defaultValue,
+      firstLineIndent: indent.defaultValue !== "none",
+      script: script.defaultValue,
       pageMode: "horizontal",
-      pageAnimation: "smooth",
+      pageAnimation: pageAnimation.defaultValue,
       topMargin: 72,
       sideMargin: 32,
       bottomMargin: 72,
       texture: "plain"
     };
+  }
+
+  function w4NormalizeTypography(data) {
+    const t = (data?.reader && data.reader.typography) || {};
+    const stored = w4Get("typography", null);
+    const defaults = w4TypographyDefaults();
+    const normalized = Object.assign({}, defaults, {
+      fontSize: Number.isFinite(Number(t.fontSize)) ? Number(t.fontSize) : defaults.fontSize,
+      lineHeight: Number.isFinite(Number(t.lineHeight)) ? Number(t.lineHeight) : defaults.lineHeight,
+      paragraphGap: Number.isFinite(Number(t.paragraphGap)) ? Number(t.paragraphGap) : defaults.paragraphGap,
+      letterSpacing: Number.isFinite(Number(t.letterSpacing)) ? Number(t.letterSpacing) : defaults.letterSpacing,
+      fontFamily: t.fontFamily || defaults.fontFamily
+    }, stored || {});
+    if (normalized.script === "简体") normalized.script = "simplified";
+    if (normalized.script === "繁體" || normalized.script === "繁体") normalized.script = "traditional";
+    if (normalized.pageAnimation === "smooth") normalized.pageAnimation = "slide";
+    if (normalized.alignment === "left") normalized.alignment = "leading";
+    return normalized;
   }
 
   function w4TypographyConfig(data) {
@@ -173,11 +214,15 @@
       step: Number.isFinite(Number(item?.step)) ? Number(item.step) : fb.step,
       precision: Number.isFinite(Number(item?.precision)) ? Number(item.precision) : fb.precision
     });
+    const fromSpec = (id) => {
+      const item = appearanceStepper(id);
+      return { min: item.minimum, max: item.maximum, step: item.step, precision: item.precision };
+    };
     return {
-      fontSize: norm(c.fontSize, { min: 14, max: 26, step: 1, precision: 0 }),
-      lineHeight: norm(c.lineHeight, { min: 1.4, max: 2.4, step: 0.08, precision: 2 }),
-      paragraphGap: norm(c.paragraphGap, { min: 4, max: 32, step: 2, precision: 0 }),
-      letterSpacing: norm(c.letterSpacing, { min: 0, max: 2, step: 0.2, precision: 1 }),
+      fontSize: norm(c.fontSize, fromSpec("fontSize")),
+      lineHeight: norm(c.lineHeight, fromSpec("lineHeight")),
+      paragraphGap: norm(c.paragraphGap, fromSpec("paragraphGap")),
+      letterSpacing: norm(c.letterSpacing, fromSpec("letterSpacing")),
       topMargin: norm(null, { min: 48, max: 96, step: 4, precision: 0 }),
       sideMargin: norm(null, { min: 20, max: 48, step: 4, precision: 0 }),
       bottomMargin: norm(null, { min: 48, max: 96, step: 4, precision: 0 })
@@ -186,7 +231,8 @@
 
   function w4TypographyStyle(data, typography) {
     const safe = typography || w4NormalizeTypography(data);
-    const fontStack = w4ActiveFont(data).fontStack || "var(--fd-serif)";
+    const selectedFont = w4AllFonts(data).find((item) => item.value === safe.fontFamily) || w4ActiveFont(data);
+    const fontStack = selectedFont.fontStack || "var(--fd-serif)";
     return [
       `--reader-font-size:${esc(safe.fontSize)}px`,
       `--reader-line-height:${esc(safe.lineHeight)}`,
@@ -198,24 +244,31 @@
 
   // ===== 字体数据 =====
   function w4SystemFonts(data) {
-    const options = data?.reader?.fontOptions;
-    return Array.isArray(options) && options.length > 0
-      ? options
-      : [
-        { label: "系统", value: "system", fontStack: "system-ui, -apple-system, sans-serif" },
-        { label: "宋体", value: "serif", fontStack: "var(--fd-serif)" },
-        { label: "黑体", value: "sans", fontStack: "var(--fd-sans)" },
-        { label: "楷体", value: "kai", fontStack: '"Kaiti SC", "KaiTi", serif' },
-        { label: "仿宋", value: "fangsong", fontStack: '"FangSong", "STFangsong", serif' }
-      ];
+    const managedImported = new Set(["source-han-serif", "lxgw-wenkai"]);
+    return appearanceSpec().fonts
+      .filter((item) => !item.importAction && !managedImported.has(item.id))
+      .map((item) => ({ label: item.label, value: item.id, fontStack: item.webFontStack }));
   }
 
   // 导入字体初始演示数据（首次加载时填充，让列表非空）
   function w4DefaultImportedFonts() {
-    return [
-      { id: "imp-source-serif", label: "思源宋体", value: "source-han-serif", fontStack: '"Noto Serif SC", serif', system: false, fileSize: "8.2 MB", format: "ttf", enabled: true, inUse: false },
-      { id: "imp-lxgw-wenkai", label: "霞鹜文楷", value: "lxgw-wenkai", fontStack: '"LXGW WenKai", serif', system: false, fileSize: "5.6 MB", format: "otf", enabled: false, inUse: false }
-    ];
+    const details = {
+      "source-han-serif": { id: "imp-source-serif", fileSize: "8.2 MB", format: "ttf", enabled: true },
+      "lxgw-wenkai": { id: "imp-lxgw-wenkai", fileSize: "5.6 MB", format: "otf", enabled: false }
+    };
+    return appearanceSpec().fonts
+      .filter((item) => details[item.id])
+      .map((item) => ({
+        id: details[item.id].id,
+        label: item.label,
+        value: item.id,
+        fontStack: item.webFontStack,
+        system: false,
+        fileSize: details[item.id].fileSize,
+        format: details[item.id].format,
+        enabled: details[item.id].enabled,
+        inUse: false
+      }));
   }
 
   function w4ImportedFonts() {
@@ -233,10 +286,86 @@
     });
   }
 
-  function w4ActiveFont(data) {
-    const typography = w4NormalizeTypography(data);
+  function w4ActiveFont(data, appState) {
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const fonts = w4AllFonts(data);
     return fonts.find((f) => f.value === typography.fontFamily) || fonts[0];
+  }
+
+  // ===== Reader 2 外观原子（唯一 DOM 输入源）=====
+  // Figma: Reader/Appearance/ThemeSwatch · 62.5×24
+  // 所有主题列表只能通过此 helper 生成色块，卡片/列表只负责外层编排。
+  function w4ThemeSwatch(item, activeValue, options) {
+    const safe = item || {};
+    const config = options || {};
+    const isActive = String(activeValue || "") === String(safe.value || "");
+    const textureRgb = safe.textureRgb || (safe.scheme === "night" ? "222 202 174" : "138 116 84");
+    const extraClass = config.className ? ` ${esc(config.className)}` : "";
+    const extraStyle = config.style ? `;${config.style}` : "";
+    return `
+      <button class="fd-reader-theme-swatch${isActive ? " is-active" : ""}${extraClass}" type="button"
+        data-reader-appearance-source="ThemeSwatch"
+        data-reader-theme="${esc(safe.value)}"
+        data-reader-theme-scheme="${esc(safe.scheme || "day")}"
+        data-reader-theme-texture="${esc(safe.texture || "plain")}"
+        data-reader-theme-pair="${esc(safe.pair || "")}"
+        aria-label="${esc(config.ariaLabel || `主题：${safe.label || safe.value || "未命名"}`)}"
+        style="--swatch:${esc(safe.swatch || safe.bg || "#ffffff")};--swatch-texture-rgb:${esc(textureRgb)}${extraStyle}">
+        <span class="fd-reader-theme-swatch-fill" aria-hidden="true"></span>
+      </button>`;
+  }
+
+  function w4FontCellFamily(item) {
+    const value = String(item?.value || "");
+    if (value === "system" || value === "sans" || value === "import") {
+      return '"Noto Sans SC", "Source Han Sans SC", var(--fd-sans)';
+    }
+    if (value === "serif" || value === "source-han-serif") {
+      return '"Noto Serif SC", "Source Han Serif SC", var(--fd-serif)';
+    }
+    if (value === "fangsong") {
+      return '"Noto Serif SC", "Source Han Serif SC", var(--fd-serif)';
+    }
+    if (value === "kai" || value === "lxgw-wenkai") {
+      return '"LXGW WenKai TC", "LXGW WenKai", "Kaiti SC", "KaiTi", serif';
+    }
+    if (value === "mono") {
+      return '"LXGW WenKai Mono TC", "LXGW WenKai Mono", "SFMono-Regular", Consolas, monospace';
+    }
+    return item?.fontStack || '"Noto Sans SC", "Source Han Sans SC", var(--fd-sans)';
+  }
+
+  // Figma: Reader/Appearance/FontCell · 62.5×27
+  // 按钮外框只提供命中区，视觉必须由内部 55×22 pill 统一表达。
+  function w4FontCell(item, activeValue, options) {
+    const safe = item || {};
+    const config = options || {};
+    const isActive = String(activeValue || "") === String(safe.value || "");
+    const isImport = config.import === true;
+    const value = safe.value || (isImport ? "import" : "");
+    const extraClass = config.className ? ` ${esc(config.className)}` : "";
+    const draggable = config.draggable === false || isImport ? "" : ' draggable="true"';
+    const route = config.route ? ` data-route="${esc(config.route)}"` : "";
+    const bindings = isImport
+      ? ""
+      : ` data-w4-font-cell data-w4-font-value="${esc(value)}" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(value)}"`;
+    const weight = value === "fangsong" ? "300" : "400";
+    return `
+      <button class="fd-reader-font-cell${isActive ? " is-active" : ""}${extraClass}" type="button"
+        data-reader-appearance-source="FontCell"${draggable}${route}${bindings}
+        aria-label="${esc(config.ariaLabel || (isImport ? "导入字体" : `字体：${safe.label || value}`))}"
+        style="--reader-font-cell-family:${esc(w4FontCellFamily(safe))};--reader-font-cell-weight:${weight}">
+        <span class="fd-reader-font-cell-pill">${esc(safe.label || (isImport ? "导入" : value))}</span>
+      </button>`;
+  }
+
+  function w4ThemeOption(item, activeValue) {
+    const isActive = String(activeValue || "") === String(item.value || "");
+    return `
+      <article class="fd-reader-theme-option${isActive ? " is-active" : ""}" data-reader-theme-option="${esc(item.value)}">
+        ${w4ThemeSwatch(item, activeValue)}
+        <small>${esc(item.label)}</small>
+      </article>`;
   }
 
   // ===== 亮度样式 =====
@@ -299,7 +428,7 @@
   // ===== 阅读正文表面（L3 控制页保持上下文）=====
   // 轻量版正文层：只渲染前几段，保持上下文但不重建完整分页
   function w4ReaderSurface(data, appState) {
-    const typography = w4NormalizeTypography(data);
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const paragraphs = (data?.reader?.readingText || ["雨，下了一整夜。"]).slice(0, 3);
     const chapterTitle = data?.reader?.chapterMeta
       ? `${data.reader.chapterMeta} ${data.reader.chapterTitle || ""}`.trim()
@@ -327,10 +456,10 @@
   function w4FullPagePanel(data, appState, route, title, iconName, contentHtml) {
     return `
       <section class="fd-reader-full-page-panel fd-reader-full-page-appearance fd-reader-full-page-route-${esc(route)}" data-dev-region="ReaderExpandedPanel" aria-label="${esc(title)}大半屏控制窗">
-        <button class="fd-reader-full-grabber" type="button" data-route="reader-appearance" data-route-replace aria-label="收起到阅读控制层"></button>
+        <button class="fd-reader-full-grabber" type="button" data-route="reader-appearance" data-route-replace data-reader-panel-collapse aria-label="收起到阅读控制层"></button>
         <header class="fd-reader-full-head">
           <span>${icon(iconName || "appearance", "fd-small-icon")}<strong>${esc(title)}</strong></span>
-          <button type="button" data-route="reader-appearance" data-route-replace>收起</button>
+          <button type="button" data-route="reader-appearance" data-route-replace data-reader-panel-collapse>收起</button>
         </header>
         <div class="fd-reader-full-content">
           ${contentHtml}
@@ -468,7 +597,7 @@
   function readerFontDeleteConfirmScreen(data, appState) {
     const title = routeTitle("reader-font-delete-confirm");
     const fonts = w4AllFonts(data);
-    const activeFont = w4ActiveFont(data);
+    const activeFont = w4ActiveFont(data, appState);
     // 待删除字体（默认取第一个导入字体，可被 appState 覆盖）
     const targetId = appState?.w4PendingFontId || fonts.find((f) => !f.system)?.id || "";
     const target = fonts.find((f) => f.id === targetId) || fonts.find((f) => !f.system) || fonts[0];
@@ -500,7 +629,7 @@
   // ====================================================================
   function readerFontFallbackScreen(data, appState) {
     const title = routeTitle("reader-font-fallback");
-    const activeFont = w4ActiveFont(data);
+    const activeFont = w4ActiveFont(data, appState);
     const fallbackFont = w4SystemFonts(data)[0] || { label: "系统" };
     const closeAttrs = w4OverlayNavigationAttrs(appState, "reader");
     const bannerHtml = `
@@ -633,21 +762,9 @@
   // ====================================================================
   function readerTypographyResetConfirmScreen(data, appState) {
     const title = routeTitle("reader-typography-reset-confirm");
-    const typography = w4NormalizeTypography(data);
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const config = w4TypographyConfig(data);
-    const defaultTypography = {
-      fontSize: data?.reader?.typography?.fontSize || 18,
-      lineHeight: data?.reader?.typography?.lineHeight || 1.96,
-      paragraphGap: data?.reader?.typography?.paragraphGap || 16,
-      letterSpacing: data?.reader?.typography?.letterSpacing || 0,
-      fontFamily: data?.reader?.typography?.fontFamily || "serif",
-      alignment: "left",
-      firstLineIndent: true,
-      topMargin: 72,
-      sideMargin: 32,
-      bottomMargin: 72,
-      texture: "plain"
-    };
+    const defaultTypography = w4TypographyDefaults();
     const detailsHtml = `
       <dl class="fd-w4-confirm-detail">
         <div><dt>字号</dt><dd>${esc(typography.fontSize)}px → ${esc(defaultTypography.fontSize)}px</dd></div>
@@ -681,12 +798,16 @@
   }
 
   function readerFullAppearanceBody(data, appState) {
-    const typography = w4NormalizeTypography(data);
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const activeTheme = w4CurrentTheme(data, appState);
     const themes = w4AllThemes().slice(0, 8);
     const fonts = w4AllFonts(data);
-    const defaultDayTheme = w4Get("default-day-theme", "paper");
-    const defaultNightTheme = w4Get("default-night-theme", "paper-night");
+    const defaultDayTheme = w4Get("default-day-theme", appearanceSpec().defaults.dayThemeId);
+    const defaultNightTheme = w4Get("default-night-theme", appearanceSpec().defaults.nightThemeId);
+    const indentSelect = appearanceSelect("paragraphIndentMode");
+    const conversionSelect = appearanceSelect("textConversion");
+    const animationSelect = appearanceSelect("pageAnimation");
+    const alignmentSelect = appearanceSelect("textAlignment");
     const selectOptions = (values, current) => values.map((item) => {
       const value = typeof item === "string" ? item : item.value;
       const label = typeof item === "string" ? item : item.label;
@@ -697,36 +818,29 @@
         <section class="fd-reader-full-setting-block fd-reader-appearance-theme-library">
           <header><strong>主题库</strong><em>日间：${esc((themes.find((item) => item.value === defaultDayTheme) || {}).label || "纸纹")} · 夜间：${esc((themes.find((item) => item.value === defaultNightTheme) || {}).label || "夜纹")}</em></header>
           <div class="fd-reader-full-theme-grid">
-            ${themes.map((item) => `
-              <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme)}" data-reader-theme-texture="${esc(item.texture || "plain")}" aria-label="主题：${esc(item.label)}">
-                <span style="--swatch:${esc(item.swatch)}"></span>
-                <small>${esc(item.label)}</small>
-              </button>
-            `).join("")}
+            ${themes.map((item) => w4ThemeOption(item, activeTheme.value)).join("")}
           </div>
           <div class="fd-reader-theme-default-actions">
             <button class="fd-control-button" type="button" data-ui-primitive="button" data-ui-size="sm" data-ui-variant="secondary" data-w4-theme-default-scheme="day">设为日间主题</button>
             <button class="fd-control-button" type="button" data-ui-primitive="button" data-ui-size="sm" data-ui-variant="secondary" data-w4-theme-default-scheme="night">设为夜间主题</button>
           </div>
         </section>
-        <section class="fd-reader-full-setting-block fd-reader-full-typography fd-reader-appearance-typography-library">
-          <header><strong>排版库</strong><em>即时应用</em></header>
-          <div class="fd-reader-appearance-select-grid">
-            <label><strong>缩进</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="firstLineIndent">${selectOptions([{ value: "true", label: "开启" }, { value: "false", label: "关闭" }], typography.firstLineIndent !== false ? "true" : "false")}</select></label>
-            <label><strong>简繁</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="script">${selectOptions(["简体", "繁體"], typography.script || "简体")}</select></label>
-            <label><strong>翻页动画</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="pageAnimation">${selectOptions([{ value: "smooth", label: "平滑" }, { value: "simulation", label: "仿真" }, { value: "slide", label: "滑动" }, { value: "none", label: "无" }], typography.pageAnimation || "smooth")}</select></label>
-            <label><strong>文字两端对齐</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="alignment">${selectOptions([{ value: "justify", label: "开启" }, { value: "left", label: "关闭" }], typography.alignment || "left")}</select></label>
-          </div>
-          <div class="fd-reader-appearance-step-list">${w4TypographyRows(data, typography)}</div>
-        </section>
         <section class="fd-reader-full-setting-block fd-reader-appearance-font-library">
           <header><strong>字体库</strong><em>可拖动调整位置</em></header>
           <div class="fd-reader-appearance-font-grid">
-            ${fonts.map((item) => `
-              <button class="${typography.fontFamily === item.value ? "is-active" : ""}" type="button" draggable="true" data-w4-font-cell data-w4-font-value="${esc(item.value)}" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(item.value)}" style="font-family:${esc(item.fontStack)}">${esc(item.label)}</button>
-            `).join("")}
-            <button class="fd-reader-font-import-cell" type="button" data-route="reader-font-import-confirm">导入</button>
+            ${fonts.map((item) => w4FontCell(item, typography.fontFamily)).join("")}
+            ${w4FontCell({ value: "import", label: appearanceSpec().fonts.find((item) => item.importAction)?.label || "+ 导入", fontStack: '"Noto Sans SC", var(--fd-sans)' }, typography.fontFamily, { import: true, route: "reader-font-import-confirm", className: "fd-reader-font-import-cell" })}
           </div>
+        </section>
+        <section class="fd-reader-full-setting-block fd-reader-full-typography fd-reader-appearance-typography-library">
+          <header><strong>排版库</strong><em>即时应用</em></header>
+          <div class="fd-reader-appearance-select-grid">
+            <label><strong>${esc(indentSelect.label)}</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="firstLineIndent">${selectOptions(indentSelect.options.map((item) => ({ value: item.value === "none" ? "false" : "true", label: item.label })), typography.firstLineIndent === true ? "true" : "false")}</select></label>
+            <label><strong>${esc(conversionSelect.label)}</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="script">${selectOptions(conversionSelect.options, typography.script || conversionSelect.defaultValue)}</select></label>
+            <label><strong>${esc(animationSelect.label)}</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="pageAnimation">${selectOptions(animationSelect.options, typography.pageAnimation || animationSelect.defaultValue)}</select></label>
+            <label><strong>${esc(alignmentSelect.label)}</strong><select class="fd-control-select" data-ui-primitive="select" data-ui-size="md" data-w4-appearance-select="alignment">${selectOptions(alignmentSelect.options, typography.alignment || alignmentSelect.defaultValue)}</select></label>
+          </div>
+          <div class="fd-reader-appearance-step-list">${w4TypographyRows(data, typography)}</div>
         </section>
       </section>`;
   }
@@ -742,7 +856,7 @@
   }
 
   function readerFullFontBody(data, appState) {
-    const typography = w4NormalizeTypography(data);
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const systemFonts = w4SystemFonts(data).map((f) => Object.assign({}, f, { system: true }));
     const importedFonts = w4ImportedFonts();
     const activeValue = typography.fontFamily;
@@ -768,7 +882,7 @@
         </section>
         <section class="fd-reader-full-setting-block fd-reader-full-typography">
           <header><strong>当前字体预览</strong></header>
-          <p class="fd-w4-font-preview" style="font-family:${esc(w4ActiveFont(data).fontStack)}">
+          <p class="fd-w4-font-preview" style="font-family:${esc(w4ActiveFont(data, appState).fontStack)}">
             雨夜的风格外冷，远处灯塔亮起。
           </p>
         </section>
@@ -785,7 +899,7 @@
           <strong>${esc(item.label)}</strong>
           <small>${isSystem ? "系统" : `${esc(item.format || "ttf").toUpperCase()} · ${esc(item.fileSize || "—")}${item.enabled === false ? " · 已禁用" : ""}`}</small>
         </div>
-        <span class="fd-w4-font-preview-text" style="font-family:${esc(item.fontStack)}">永和九年</span>
+        ${w4FontCell(item, activeValue, { draggable: false, className: "fd-w4-font-preview-text" })}
         <div class="fd-w4-font-actions">
           <button class="${isActive ? "is-active" : ""}" type="button" data-w4-font-action="enable" data-w4-font-value="${esc(item.value)}"${enabledAttr}>${isActive ? "已启用" : "启用"}</button>
           ${!isSystem ? `<button type="button" data-w4-font-action="rename" data-w4-font-id="${esc(item.id)}">重命名</button>` : ""}
@@ -842,9 +956,7 @@
     const isDefault = defaultThemeValue === item.value;
     return `
       <article class="fd-w4-theme-card${isActive ? " is-active" : ""}" data-w4-theme-value="${esc(item.value)}">
-        <button class="fd-w4-theme-swatch" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme)}" aria-label="应用主题：${esc(item.label)}" style="--swatch:${esc(item.swatch)};--reader-bg:${esc(item.bg)};--reader-ink:${esc(item.ink)}">
-          <span class="fd-w4-theme-swatch-text" style="color:${esc(item.ink)};background:${esc(item.bg)}">永</span>
-        </button>
+        ${w4ThemeSwatch(item, activeTheme.value, { ariaLabel: `应用主题：${item.label}`, className: "fd-w4-theme-swatch" })}
         <div class="fd-w4-theme-meta">
           <strong>${esc(item.label)}${isDefault ? " · 默认" : ""}</strong>
           <small>${isSystem ? "系统" : "自定义"} · ${esc(item.scheme === "night" ? "夜间" : "白天")}</small>
@@ -950,11 +1062,7 @@
           <section class="fd-reader-full-setting-block fd-reader-full-theme-edit-list">
             <header><strong>已保存自定义主题</strong><em>${esc(customThemes.length)} 个</em></header>
             <div class="fd-reader-full-theme-grid fd-reader-custom-theme-grid">
-              ${customThemes.map((item) => `
-                <button class="${w4CurrentTheme(data, appState).value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || "day")}" aria-label="应用自定义主题：${esc(item.label)}" style="--swatch:${esc(item.swatch || item.bg)}">
-                  <span style="--swatch:${esc(item.swatch || item.bg)}"></span>
-                </button>
-              `).join("")}
+              ${customThemes.map((item) => w4ThemeSwatch(item, w4CurrentTheme(data, appState).value, { ariaLabel: `应用自定义主题：${item.label}` })).join("")}
             </div>
           </section>
         ` : ""}
@@ -979,7 +1087,7 @@
   }
 
   function readerFullLayoutBody(data, appState) {
-    const typography = w4NormalizeTypography(data);
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const config = w4TypographyConfig(data);
     const fonts = w4AllFonts(data);
     const textureOptions = [
@@ -987,20 +1095,12 @@
       { value: "paper", label: "纸张" },
       { value: "soft", label: "柔和" }
     ];
-    const alignmentOptions = [
-      { value: "left", label: "左对齐" },
-      { value: "center", label: "居中" },
-      { value: "justify", label: "两端对齐" }
-    ];
+    const alignmentOptions = appearanceSelect("textAlignment").options;
     const pageModeOptions = [
       { value: "horizontal", label: "横向翻页" },
       { value: "vertical", label: "纵向滚动" }
     ];
-    const pageAnimationOptions = [
-      { value: "smooth", label: "平滑" },
-      { value: "slide", label: "滑动" },
-      { value: "none", label: "无动画" }
-    ];
+    const pageAnimationOptions = appearanceSelect("pageAnimation").options;
     return `
       <section class="fd-reader-full-section fd-reader-full-layout" aria-label="版式完整设置">
         <section class="fd-reader-full-setting-block fd-reader-full-typography">
@@ -1027,11 +1127,9 @@
           </div>
         </section>
         <section class="fd-reader-full-setting-block">
-          <header><strong>字体</strong><em>${esc(w4ActiveFont(data).label)}</em></header>
+          <header><strong>字体</strong><em>${esc(w4ActiveFont(data, appState).label)}</em></header>
           <div class="fd-reader-full-choice-grid fd-reader-full-font-grid">
-            ${fonts.map((item) => `
-              <button class="${typography.fontFamily === item.value ? "is-active" : ""}" type="button" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(item.value)}">${esc(item.label)}</button>
-            `).join("")}
+            ${fonts.map((item) => w4FontCell(item, typography.fontFamily, { draggable: false })).join("")}
           </div>
         </section>
         <section class="fd-reader-full-setting-block">
@@ -1075,7 +1173,7 @@
         <strong>字号</strong>
         <span>
           <button type="button" data-reader-typography-action="font-size-decrease">-</button>
-          <em data-reader-typography-value="font-size">${esc(typography.fontSize)}</em>
+          <em data-reader-typography-value="font-size">${esc(typography.fontSize)}px</em>
           <button type="button" data-reader-typography-action="font-size-increase">+</button>
         </span>
       </div>
@@ -1091,7 +1189,7 @@
         <strong>段距</strong>
         <span>
           <button type="button" data-reader-typography-action="paragraph-gap-decrease">-</button>
-          <em data-reader-typography-value="paragraph-gap">${esc(typography.paragraphGap)}</em>
+          <em data-reader-typography-value="paragraph-gap">${esc(typography.paragraphGap)}px</em>
           <button type="button" data-reader-typography-action="paragraph-gap-increase">+</button>
         </span>
       </div>
@@ -1099,7 +1197,7 @@
         <strong>字距</strong>
         <span>
           <button type="button" data-reader-typography-action="letter-spacing-decrease">-</button>
-          <em data-reader-typography-value="letter-spacing">${esc(typography.letterSpacing)}</em>
+          <em data-reader-typography-value="letter-spacing">${esc(typography.letterSpacing)}px</em>
           <button type="button" data-reader-typography-action="letter-spacing-increase">+</button>
         </span>
       </div>`;
@@ -1153,41 +1251,26 @@
     return w4RenderReaderShellWithSheet(data, appState, "reader-appearance-overlay-v2", title, panelHtml, true);
   }
 
-  // 外观模块面板（L2，快捷主题 + 排版）
+  // 外观模块面板（L2，快捷主题 + 字体）
   function w4AppearanceModulePanel(data, appState, route, isV2) {
-    const typography = w4NormalizeTypography(data);
+    const typography = appState?.readerTypography || w4NormalizeTypography(data);
     const activeTheme = w4CurrentTheme(data, appState);
     const themes = w4AllThemes();
-    // 快捷主题：取前 4 个默认主题
-    const quickThemes = themes.slice(0, 4);
+    const quickThemes = themes.slice(0, 8);
+    const quickFonts = w4AllFonts(data).slice(0, 8);
     return `
       <section class="fd-reader-module-panel fd-reader-appearance-panel${isV2 ? " fd-reader-appearance-panel-v2" : ""}" data-dev-region="ReaderModulePanel" aria-label="阅读外观">
         <div class="fd-reader-appearance-list fd-reader-module-list">
           <section class="fd-reader-full-setting-block fd-reader-appearance-quick-theme">
             <header><strong>阅读主题</strong>${isV2 ? `<button type="button" data-route="reader-full-appearance" data-route-replace>展开</button>` : ""}</header>
             <div class="fd-reader-full-theme-grid">
-              ${quickThemes.map((item) => `
-                <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme)}" data-reader-theme-texture="${esc(item.texture || "plain")}" aria-label="主题：${esc(item.label)}">
-                  <span style="--swatch:${esc(item.swatch)}"></span>
-                  <small>${esc(item.label)}</small>
-                </button>
-              `).join("")}
+              ${quickThemes.map((item) => w4ThemeSwatch(item, activeTheme.value)).join("")}
             </div>
           </section>
-          <section class="fd-reader-full-setting-block fd-reader-appearance-quick-typography">
-            <div class="fd-reader-appearance-quick-selects">
-              <label>
-                <strong>字号</strong>
-                <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-typography-select="fontSize" aria-label="字号">
-                  ${[14, 16, 18, 20, 22, 24].map((value) => `<option value="${value}"${Number(typography.fontSize) === value ? " selected" : ""}>${value}</option>`).join("")}
-                </select>
-              </label>
-              <label>
-                <strong>行距</strong>
-                <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-typography-select="lineHeight" aria-label="行距">
-                  ${[1.4, 1.6, 1.8, 1.96, 2].map((value) => `<option value="${value}"${Number(typography.lineHeight) === value ? " selected" : ""}>${value}</option>`).join("")}
-                </select>
-              </label>
+          <section class="fd-reader-full-setting-block fd-reader-appearance-quick-fonts">
+            <header><strong>字体库</strong></header>
+            <div class="fd-reader-appearance-font-grid">
+              ${quickFonts.map((item) => w4FontCell(item, typography.fontFamily)).join("")}
             </div>
           </section>
         </div>
@@ -1349,6 +1432,12 @@
       typographyConfig: w4TypographyConfig,
       themeStyle: w4ThemeStyle,
       typographyStyle: w4TypographyStyle
+    },
+    components: {
+      themeSwatch: w4ThemeSwatch,
+      themeOption: w4ThemeOption,
+      fontCell: w4FontCell,
+      fontCellFamily: w4FontCellFamily
     },
     // 集成映射（文本形式，供文档/校验）
     INTEGRATION_MAP: {

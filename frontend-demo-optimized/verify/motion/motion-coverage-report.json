@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-12T09:38:32.451Z",
+  "generatedAt": "2026-07-19T03:26:37.823Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
       "id": "route.contract.render-coverage",
       "passed": true,
-      "detail": "235/235 routes, missingSchema=0, extraContract=0, missingRender=0, extraRender=0"
+      "detail": "260/260 routes, missingSchema=0, extraContract=0, missingRender=0, extraRender=0"
     },
     {
       "id": "motion.controller.file",
@@ -20,7 +20,7 @@
     {
       "id": "motion.controller.runtime-cache-bust",
       "passed": true,
-      "detail": "motion=motion-interrupt-v1-20260630, render=phase01-shell-route-profile-v1-20260712, runtime=phase01-shell-route-profile-v1-20260712"
+      "detail": "motion=reader-control-family-mr1-timing-v2-overlay-focus-v3-feedback-loading-v1-dropdown-exact-v1-input-search-exact-v1-primitive-exact-v1-20260716, render=phase01-shell-route-profile-v1-reader-pagination-reflow-v1-reader2-static-vc2-v1-reader2-replace-toggle-v1-reader-control-family-mr1-timing-v2-reader-panel-motion-v1-bookshelf-bookitem-v2-overlay-focus-v9-feedback-loading-v1-dropdown-exact-v1-input-search-exact-v2-primitive-exact-v4-20260716, runtime=phase01-shell-route-profile-v1-reader-pagination-reflow-v1-reader2-static-vc2-v1-reader2-replace-toggle-v1-reader-control-family-mr1-timing-v2-reader-panel-motion-v1-bookshelf-bookitem-v2-overlay-focus-v9-feedback-loading-v1-dropdown-exact-v1-input-search-exact-v2-primitive-exact-v4-20260716"
     },
     {
       "id": "motion.controller.runtime-create",
@@ -30,7 +30,7 @@
     {
       "id": "motion.controller.runtime-ids",
       "passed": true,
-      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press-toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, motion.interrupt.cancel, motion.interrupt.redirect, motion.interrupt.completeThenReplace, viewport.orientation.prepare, viewport.orientation.settle"
+      "detail": "app.firstOpen.enter, app.route.push.forward, app.route.pop.backward, app.route.replace, bookshelf.view.switch, tab.item.switch, reader.module.switch, viewport.orientation.reshape, reader.entry.coverToImmersive, reader.control.dock.longPress, reader.control.dock.drag, reader.control.dock.release, reader.control.dock.rebound, reader.session.tts.start, reader.session.autoPage.start, reader.session.capsule.enter, reader.session.capsule.update, reader.session.capsule.control.press-toggle, reader.session.capsule.countdownTick, reader.session.capsule.voiceIcon.active, reader.session.capsule.switch, reader.session.capsule.exit, motion.interrupt.cancel, motion.interrupt.redirect, motion.interrupt.completeThenReplace, state.loading.inline, feedback.toast.enter, feedback.toast.update, feedback.toast.exit, viewport.orientation.prepare, viewport.orientation.settle, overlay.sheet.enter, overlay.sheet.exit, overlay.dialog.enter, overlay.dialog.exit, overlay.keyboard.enter-exit, source.switch.route.push, source.switch.route.pop, source.switch.route.replace, input.focus, input.blur, input.clear, input.focus-blur, input.submit, search.state.replace, state.content.replace, button.activate, toggle.switch, chip.item.select, slider.drag.start, slider.drag.update, slider.drag.release, stepper.press, stepper.value.change, card.press, card.select, card.route, listRow.select"
     },
     {
       "id": "motion.app-first-open.state-adapter",
@@ -40,27 +40,37 @@
     {
       "id": "motion.contract.executable-registry",
       "passed": true,
-      "detail": "reader-motion-contract-v1; rules=33"
+      "detail": "reader-motion-contract-v1; rules=35"
     },
     {
       "id": "motion.contract.fixture-registry",
       "passed": true,
-      "detail": "93/93 canonical MotionSpec fixtures; missing=0, extra=0, missingTokens=0, missingGuardRules=0"
+      "detail": "95/95 canonical MotionSpec fixtures; missing=0, extra=0, missingTokens=0, missingGuardRules=0"
+    },
+    {
+      "id": "motion.contract.canonical-exact-state-machines",
+      "passed": true,
+      "detail": "89/95 canonical exact state machines; pending=6; missingRequired=0"
+    },
+    {
+      "id": "motion.contract.non-production-exemptions",
+      "passed": true,
+      "detail": "activeExact=89/89; reserved=3; deprecated=3"
     },
     {
       "id": "motion.contract.id-resolution",
       "passed": true,
-      "detail": "79/79 Motion IDs resolved; incomplete=0"
+      "detail": "93/93 Motion IDs resolved; incomplete=0"
     },
     {
       "id": "motion.contract.state-machines",
       "passed": true,
-      "detail": "79/79 runtime/selector Motion IDs expose state machines"
+      "detail": "93/93 runtime/selector Motion IDs expose state machines"
     },
     {
       "id": "motion.contract.detailed-motion-ids",
       "passed": true,
-      "detail": "43/43 detailed Motion IDs use exact state machines"
+      "detail": "70/70 detailed Motion IDs use exact state machines"
     },
     {
       "id": "motion.tab.state-adapter",
@@ -81,6 +91,16 @@
       "id": "motion.dropdown-switch.state-adapter",
       "passed": true,
       "detail": "opening dropdown B while A is open emits dropdown switch fields and motion.interrupt.redirect with tokenized target takeover CSS"
+    },
+    {
+      "id": "motion.input-search.state-adapter",
+      "passed": true,
+      "detail": "input focus/blur/clear/submit and search/content replacement expose exact state fields, latest-request ownership, stale-result discard, tokenized CSS, and reduced-motion fallbacks"
+    },
+    {
+      "id": "motion.primitive-exact.state-adapter",
+      "passed": true,
+      "detail": "button/toggle/chip/slider/stepper/card/list-row primitives expose exact latest-owner transactions, pointer and keyboard parity, direct manipulation, tokenized settle, and reduced-motion fallbacks"
     },
     {
       "id": "motion.reader-entry.state-adapter",
@@ -123,6 +143,16 @@
       "detail": "reader loading/result replacement exposes request-scoped async state, cancellation/discard guards, and tokenized completion CSS"
     },
     {
+      "id": "motion.inline-loading.exact-state-adapter",
+      "passed": true,
+      "detail": "inline loading owns a canonical request-scoped state.loading.inline transaction, exposes pending/terminal state, cancels stale ownership, and reduces the spinner to static state"
+    },
+    {
+      "id": "motion.toast.exact-state-adapter",
+      "passed": true,
+      "detail": "toast host enforces latest-message ownership, canonical enter/update/exit transactions, polite live-region semantics, auto-dismiss, and zero-duration reduced motion"
+    },
+    {
       "id": "motion.common-components.state-adapter",
       "passed": true,
       "detail": "generic button/toggle/choice/numeric/input/state/selection/surface components expose normalized component family, role, state, phase, value, and tokenized pressed feedback"
@@ -130,17 +160,17 @@
     {
       "id": "motion.overlay-focus.state-adapter",
       "passed": true,
-      "detail": "keyboard/sheet/dialog overlays expose role/state/action/focus-return fields, settings overlay panels use the same data entry, and tokenized enter CSS is available"
+      "detail": "keyboard/sheet/dialog overlays expose role/state/action/focus-return fields, sheet/dialog move focus inside then restore it, settings overlay panels use the same data entry, and tokenized enter CSS is available"
     },
     {
       "id": "motion.selector.bindings",
       "passed": true,
-      "detail": "84 bind calls, 63 unique Motion IDs"
+      "detail": "89 bind calls, 66 unique Motion IDs"
     },
     {
       "id": "motion.selector.data-coverage",
       "passed": true,
-      "detail": "154/358 data-* directly mapped"
+      "detail": "159/377 data-* directly mapped"
     },
     {
       "id": "motion.reduced-motion",
@@ -154,24 +184,25 @@
     }
   ],
   "summary": {
-    "passed": 30,
+    "passed": 36,
     "failed": 0,
-    "total": 30
+    "total": 36
   },
   "routeCoverage": {
-    "totalRoutes": 235,
-    "schemaRoutes": 235,
+    "totalRoutes": 260,
+    "schemaRoutes": 260,
     "missingSchemaRoutes": [],
     "extraContractRoutes": [],
-    "renderCases": 249,
+    "renderCases": 274,
     "missingCases": [],
     "extraCases": []
   },
   "selectorCoverage": {
-    "dataAttributeCount": 358,
-    "directMappedDataAttributeCount": 154,
+    "dataAttributeCount": 377,
+    "directMappedDataAttributeCount": 159,
     "unmappedDataAttributes": [
       "data-action",
+      "data-action-policy",
       "data-adaptive-runtime",
       "data-article-title",
       "data-assignment-group",
@@ -186,14 +217,19 @@
       "data-book-cached",
       "data-book-chapter",
       "data-book-focus-index",
+      "data-book-id",
+      "data-book-item",
+      "data-book-list-detail",
       "data-book-more",
-      "data-book-search-history",
-      "data-book-search-submit",
-      "data-book-search-suggestion",
+      "data-book-search-input",
       "data-book-source-type",
       "data-book-title",
+      "data-bookshelf-item-view",
       "data-bookshelf-offline-banner",
       "data-bookshelf-search-clear",
+      "data-bookshelf-view-feedback",
+      "data-capability-route",
+      "data-capture-chrome",
       "data-conflict-index",
       "data-contract-static-route",
       "data-cover-src",
@@ -210,6 +246,7 @@
       "data-d3-shared-surface",
       "data-d3-toc-mode",
       "data-d4-viewport",
+      "data-delivery-state",
       "data-dev-region",
       "data-dialog-initial-focus",
       "data-discover-add-to-bookshelf",
@@ -230,6 +267,7 @@
       "data-page-mode",
       "data-page-space-row",
       "data-phase",
+      "data-reader-appearance-source",
       "data-reader-auto-speed",
       "data-reader-auto-speed-range",
       "data-reader-auto-speed-readout",
@@ -247,8 +285,6 @@
       "data-reader-loading-surface",
       "data-reader-next",
       "data-reader-prev",
-      "data-reader-quick-collapse",
-      "data-reader-quick-expand",
       "data-reader-quick-full-page",
       "data-reader-replace-rule-form",
       "data-reader-replace-rule-item",
@@ -258,7 +294,9 @@
       "data-reader-surface-signature",
       "data-reader-system-status",
       "data-reader-theme-edit-value",
+      "data-reader-theme-option",
       "data-reader-theme-texture",
+      "data-reader-timer-card",
       "data-reader-toc-jump",
       "data-reader-top-corner",
       "data-reader-tts-active",
@@ -273,6 +311,7 @@
       "data-reader-tts-speed-range",
       "data-reader-tts-speed-readout",
       "data-reader-tts-test-online",
+      "data-reader-tts-timer-index",
       "data-reader-tts-timer-max",
       "data-reader-tts-timer-preset",
       "data-reader-tts-timer-readout",
@@ -283,6 +322,7 @@
       "data-reader-typography-select",
       "data-reader-variant",
       "data-reader-vertical-tap",
+      "data-renderer",
       "data-route-family",
       "data-route-layout",
       "data-route-replace",
@@ -299,10 +339,13 @@
       "data-rss-confirm-target",
       "data-rss-source-id",
       "data-screen-host",
+      "data-search-query",
       "data-search-scope",
+      "data-settings-confirm-result",
       "data-settings-option",
       "data-settings-overlay-panel",
       "data-settings-toggle",
+      "data-sheet-initial-focus",
       "data-shell",
       "data-slot",
       "data-source-login-cookie-toggle",
@@ -310,6 +353,7 @@
       "data-tab",
       "data-typography-row",
       "data-ui-control-scope",
+      "data-ui-event",
       "data-ui-primitive",
       "data-ui-responsive",
       "data-ui-size",
@@ -376,12 +420,12 @@
       "data-w5-rule-toggle",
       "data-webview-container"
     ],
-    "bindCallCount": 84,
-    "motionIdCount": 63
+    "bindCallCount": 89,
+    "motionIdCount": 66
   },
   "executableContract": {
     "version": "reader-motion-contract-v1",
-    "ruleCount": 33,
+    "ruleCount": 35,
     "checkedMotionIds": [
       "app.firstOpen.enter",
       "app.route.pop",
@@ -391,6 +435,7 @@
       "app.route.replace",
       "bookshelf.view.switch",
       "button.activate",
+      "card.press",
       "card.press/select/route",
       "card.route",
       "card.select",
@@ -400,13 +445,15 @@
       "dropdown.menu.expand",
       "dropdown.option.select",
       "dropdown.trigger.press",
-      "feedback.toast.enter/update/exit",
+      "feedback.toast.enter",
+      "feedback.toast.exit",
+      "feedback.toast.update",
       "filter.apply.commit",
       "filter.item.toggle",
       "input.blur",
       "input.clear",
       "input.focus",
-      "input.focus/blur",
+      "input.focus-blur",
       "input.submit",
       "listRow.select",
       "motion.interrupt.cancel",
@@ -415,7 +462,7 @@
       "overlay.dialog.enter",
       "overlay.dialog.enter/exit",
       "overlay.dialog.exit",
-      "overlay.keyboard.enter/exit",
+      "overlay.keyboard.enter-exit",
       "overlay.sheet.enter",
       "overlay.sheet.enter/exit",
       "overlay.sheet.exit",
@@ -427,10 +474,13 @@
       "reader.control.handle.press",
       "reader.control.handle.release",
       "reader.control.hide",
+      "reader.control.show",
       "reader.entry.actionToImmersive",
       "reader.entry.coverToImmersive",
       "reader.module.switch",
       "reader.page.turn.next-prev",
+      "reader.panel.collapse",
+      "reader.panel.expand",
       "reader.quick.promote",
       "reader.session.autoPage.start",
       "reader.session.capsule.control.press-toggle",
@@ -451,10 +501,18 @@
       "selection.range.show",
       "selection.toolbar.action",
       "selection.toolbar.exit",
+      "slider.drag.release",
+      "slider.drag.start",
       "slider.drag.start/update/release",
+      "slider.drag.update",
+      "source.switch.route.pop",
+      "source.switch.route.push",
+      "source.switch.route.replace",
       "state.content.replace",
       "state.loading.inline",
+      "stepper.press",
       "stepper.press/value.change",
+      "stepper.value.change",
       "tab.item.select",
       "tab.item.switch",
       "toggle.switch",
@@ -471,6 +529,7 @@
       "app.route.push.forward",
       "app.route.pop.backward",
       "app.route.replace",
+      "bookshelf.view.switch",
       "tab.item.press",
       "tab.item.select",
       "tab.item.switch",
@@ -483,6 +542,16 @@
       "dropdown.option.select",
       "button.activate",
       "toggle.switch",
+      "chip.item.select",
+      "slider.drag.start",
+      "slider.drag.update",
+      "slider.drag.release",
+      "stepper.press",
+      "stepper.value.change",
+      "card.press",
+      "card.select",
+      "card.route",
+      "listRow.select",
       "reader.entry.coverToImmersive",
       "reader.entry.actionToImmersive",
       "reader.control.handle.press",
@@ -492,7 +561,11 @@
       "reader.control.dock.drag",
       "reader.control.dock.release",
       "reader.control.dock.rebound",
+      "reader.control.show",
       "reader.control.hide",
+      "reader.quick.promote",
+      "reader.panel.expand",
+      "reader.panel.collapse",
       "reader.session.autoPage.start",
       "reader.session.tts.start",
       "reader.session.capsule.enter",
@@ -504,19 +577,135 @@
       "reader.session.capsule.exit",
       "reader.module.switch",
       "reader.page.turn.next-prev",
+      "reader.chapter.jump",
       "motion.interrupt.cancel",
       "motion.interrupt.redirect",
       "motion.interrupt.completeThenReplace",
+      "state.loading.inline",
+      "feedback.toast.enter",
+      "feedback.toast.update",
+      "feedback.toast.exit",
+      "viewport.orientation.prepare",
+      "viewport.orientation.reshape",
+      "viewport.orientation.settle",
+      "input.focus",
+      "input.blur",
+      "input.clear",
+      "input.focus-blur",
+      "input.submit",
+      "search.state.replace",
+      "state.content.replace"
+    ],
+    "controllerExactMotionIdCount": 84,
+    "requiredDetailedMotionIdCount": 70,
+    "verifiedDetailedMotionIdCount": 70,
+    "missingDetailedStateMachines": []
+  },
+  "motionFixtureCoverage": {
+    "schemaMotionIdCount": 95,
+    "fixtureCount": 95,
+    "canonicalExactStateMachineCount": 89,
+    "canonicalExactStateMachineIds": [
+      "app.firstOpen.enter",
+      "app.route.pop.backward",
+      "app.route.push.forward",
+      "app.route.replace",
+      "bookshelf.view.switch",
+      "button.activate",
+      "card.press",
+      "card.route",
+      "card.select",
+      "chip.item.select",
+      "destructive.confirm.commit",
+      "dropdown.menu.collapse",
+      "dropdown.menu.expand",
+      "dropdown.menu.reposition",
+      "dropdown.option.press",
+      "dropdown.option.select",
+      "dropdown.trigger.press",
+      "feedback.toast.enter",
+      "feedback.toast.exit",
+      "feedback.toast.update",
+      "filter.apply.commit",
+      "filter.item.toggle",
+      "input.blur",
+      "input.clear",
+      "input.focus",
+      "input.focus-blur",
+      "input.submit",
+      "listRow.select",
+      "motion.interrupt.cancel",
+      "motion.interrupt.completeThenReplace",
+      "motion.interrupt.redirect",
+      "overlay.dialog.enter",
+      "overlay.dialog.exit",
+      "overlay.keyboard.enter-exit",
+      "overlay.sheet.enter",
+      "overlay.sheet.exit",
+      "reader.chapter.jump",
+      "reader.control.dock.drag",
+      "reader.control.dock.longPress",
+      "reader.control.dock.rebound",
+      "reader.control.dock.release",
+      "reader.control.handle.drag",
+      "reader.control.handle.press",
+      "reader.control.handle.release",
+      "reader.control.hide",
+      "reader.control.show",
+      "reader.entry.actionToImmersive",
+      "reader.entry.coverToImmersive",
+      "reader.module.switch",
+      "reader.page.turn.next-prev",
+      "reader.panel.collapse",
+      "reader.panel.expand",
+      "reader.quick.promote",
+      "reader.session.autoPage.start",
+      "reader.session.capsule.control.press-toggle",
+      "reader.session.capsule.countdownTick",
+      "reader.session.capsule.enter",
+      "reader.session.capsule.exit",
+      "reader.session.capsule.switch",
+      "reader.session.capsule.update",
+      "reader.session.capsule.voiceIcon.active",
+      "reader.session.tts.start",
+      "search.state.replace",
+      "segment.item.switch",
+      "selection.group.toggle",
+      "selection.item.toggle",
+      "selection.option.toggle",
+      "selection.range.show",
+      "selection.toolbar.action",
+      "selection.toolbar.exit",
+      "slider.drag.release",
+      "slider.drag.start",
+      "slider.drag.update",
+      "source.switch.route.pop",
+      "source.switch.route.push",
+      "source.switch.route.replace",
+      "state.content.replace",
+      "state.loading.inline",
+      "stepper.press",
+      "stepper.value.change",
+      "tab.item.press",
+      "tab.item.select",
+      "tab.item.switch",
+      "tab.switch",
+      "toggle.switch",
+      "tooling.mode.switch",
       "viewport.orientation.prepare",
       "viewport.orientation.reshape",
       "viewport.orientation.settle"
     ],
-    "detailedMotionIdCount": 47,
-    "missingDetailedStateMachines": []
-  },
-  "motionFixtureCoverage": {
-    "schemaMotionIdCount": 93,
-    "fixtureCount": 93,
+    "canonicalPendingStateMachineCount": 6,
+    "canonicalPendingStateMachineIds": [
+      "overlay.dialog.enter-exit",
+      "overlay.sheet.enter-exit",
+      "reader.session.controlSpace.enter",
+      "reader.session.controlSpace.update",
+      "reader.session.controlSpace.exit",
+      "reader.sourceSwitch.open-close"
+    ],
+    "missingRequiredCanonicalExactMotionIds": [],
     "missingMotionFixtureIds": [],
     "extraMotionFixtureIds": [],
     "duplicateMotionFixtureIds": [],

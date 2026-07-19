@@ -405,7 +405,7 @@
         ${d3ChapterProgressHtml(data, appState)}
       </div>`;
     var bottomSheet = `
-      <button class="fd-reader-grabber" type="button" data-d3-layer-up="3" aria-label="展开完整控制页"></button>
+      <button class="fd-reader-grabber" type="button" data-route="reader-full-settings" data-route-replace data-reader-panel-expand data-d3-layer-up="3" aria-label="展开完整控制页"></button>
       ${controlMain}`;
     return shellKit().renderReaderShell({
       frameClass: `fd-reader-frame fd-reader-flow-frame fd-reader-mode-control fd-d3-layer fd-d3-layer-l1${pageModeClass}`,
@@ -441,7 +441,7 @@
     var grabber = quickExpandable
       ? `<button class="fd-reader-grabber" type="button" data-reader-quick-expand="${esc(moduleType === "autoPage" ? "auto-page" : moduleType)}" data-d3-layer-up="3" aria-label="展开完整控制页"></button>`
       : fullRoute
-      ? `<button class="fd-reader-grabber" type="button" data-route="${esc(fullRoute)}" data-route-replace data-d3-layer-up="3" aria-label="展开完整控制页"></button>`
+      ? `<button class="fd-reader-grabber" type="button" data-route="${esc(fullRoute)}" data-route-replace data-reader-panel-expand data-d3-layer-up="3" aria-label="展开完整控制页"></button>`
       : "";
     var bottomSheet = grabber + panelHtml;
     return shellKit().renderReaderShell({
@@ -543,13 +543,14 @@
 
   // 外观面板（L2 精简版）
   function d3AppearancePanel(data, appState) {
-    var themes = [
-      { value: "day", label: "日间", swatch: "#f5f0e8", scheme: "day" },
-      { value: "night", label: "夜间", swatch: "#1a1a2e", scheme: "night" },
-      { value: "paper", label: "纸纹", swatch: "#ede4d3", scheme: "day" },
-      { value: "warm", label: "暖白", swatch: "#f0e6d2", scheme: "day" }
-    ];
-    var activeTheme = (appState && appState.readerThemeValue) || "day";
+    var w4 = window.ReaderW4ThemeFontTypographyRenderers;
+    if (!w4 || !w4.components || !w4.components.themeSwatch || !w4.components.fontCell) {
+      throw new Error("Reader 2 appearance atoms are required before rendering the D3 appearance panel");
+    }
+    var themes = w4.data.allThemes().slice(0, 8);
+    var fonts = w4.data.allFonts(data).slice(0, 8);
+    var activeTheme = w4.data.currentTheme(data, appState);
+    var typography = (appState && appState.readerTypography) || w4.data.normalizeTypography(data);
     return `
       <section class="fd-reader-module-panel fd-reader-appearance-panel" data-dev-region="ReaderModulePanel" aria-label="阅读外观">
         <header class="fd-reader-module-header">
@@ -557,30 +558,15 @@
         </header>
         <div class="fd-reader-appearance-list fd-reader-module-list">
           <section class="fd-reader-full-setting-block fd-reader-appearance-quick-theme">
-            <header><strong>阅读主题</strong></header>
+            <header><strong>主题库</strong></header>
             <div class="fd-reader-full-theme-grid">
-              ${themes.map(function(item) {
-                return `<button class="${activeTheme === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme)}" aria-label="${esc(item.label)}主题">
-                  <span style="--swatch:${esc(item.swatch)}"></span>
-                  <small>${esc(item.label)}</small>
-                </button>`;
-              }).join("")}
+              ${themes.map(function(item) { return w4.components.themeSwatch(item, activeTheme.value); }).join("")}
             </div>
           </section>
-          <section class="fd-reader-full-setting-block fd-reader-appearance-quick-typography">
-            <div class="fd-reader-appearance-quick-selects">
-              <label>
-                <strong>字号</strong>
-                <select data-reader-typography-select="fontSize" aria-label="字号">
-                  ${[14, 16, 18, 20, 22, 24].map(function(value) { return `<option value="${value}"${Number((appState && appState.readerTypography && appState.readerTypography.fontSize) || 18) === value ? " selected" : ""}>${value}</option>`; }).join("")}
-                </select>
-              </label>
-              <label>
-                <strong>行距</strong>
-                <select data-reader-typography-select="lineHeight" aria-label="行距">
-                  ${[1.4, 1.6, 1.8, 2].map(function(value) { return `<option value="${value}"${Number((appState && appState.readerTypography && appState.readerTypography.lineHeight) || 1.6) === value ? " selected" : ""}>${value}</option>`; }).join("")}
-                </select>
-              </label>
+          <section class="fd-reader-full-setting-block fd-reader-appearance-quick-fonts">
+            <header><strong>字体库</strong></header>
+            <div class="fd-reader-appearance-font-grid">
+              ${fonts.map(function(item) { return w4.components.fontCell(item, typography.fontFamily); }).join("")}
             </div>
           </section>
         </div>
@@ -741,10 +727,10 @@
     var collapseRoute = d3ModuleRouteForType(pageType);
     return `
       <section class="fd-reader-full-page-panel fd-reader-full-page-${esc(pageType)} fd-d3-full-panel" data-dev-region="ReaderExpandedPanel" aria-label="${esc(title)}大半屏控制窗">
-        <button class="fd-reader-full-grabber" type="button" data-route="${esc(collapseRoute)}" data-route-replace data-d3-layer-down="2" aria-label="收起到阅读控制层"></button>
+        <button class="fd-reader-full-grabber" type="button" data-route="${esc(collapseRoute)}" data-route-replace data-reader-panel-collapse data-d3-layer-down="2" aria-label="收起到阅读控制层"></button>
         <header class="fd-reader-full-head">
           <span>${icon(iconName, "fd-small-icon")}<strong>${esc(title)}</strong></span>
-          <button type="button" data-route="${esc(collapseRoute)}" data-route-replace data-d3-layer-down="2">收起</button>
+          <button type="button" data-route="${esc(collapseRoute)}" data-route-replace data-reader-panel-collapse data-d3-layer-down="2">收起</button>
         </header>
         <div class="fd-reader-full-content">
           ${contentHtml}

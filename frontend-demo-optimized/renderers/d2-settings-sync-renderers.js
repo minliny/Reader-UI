@@ -58,6 +58,53 @@
     return icon("chevron", className || "fd-small-icon");
   }
 
+  // Reader 2 / Full / AppearanceContent 的唯一数据源。D2 设置页只投影展示，
+  // 不再保留主题、字体、离散选项或步进器默认值的第二份手写数组。
+  function readerAppearanceSpec() {
+    if (!window.ReaderAppearanceSpec) {
+      throw new Error("ReaderAppearanceSpec is required before d2-settings-sync-renderers.js");
+    }
+    return window.ReaderAppearanceSpec;
+  }
+
+  function readerAppearanceTheme(id) {
+    var item = readerAppearanceSpec().themes.find(function (theme) { return theme.id === id; });
+    if (!item) throw new Error("Missing Reader Appearance theme: " + id);
+    return item;
+  }
+
+  function readerAppearanceFont(id) {
+    var item = readerAppearanceSpec().fonts.find(function (font) { return font.id === id; });
+    if (!item) throw new Error("Missing Reader Appearance font: " + id);
+    return item;
+  }
+
+  function readerAppearanceSelect(id) {
+    var item = readerAppearanceSpec().selects.find(function (select) { return select.id === id; });
+    if (!item) throw new Error("Missing Reader Appearance select: " + id);
+    return item;
+  }
+
+  function readerAppearanceStepper(id) {
+    var item = readerAppearanceSpec().steppers.find(function (stepper) { return stepper.id === id; });
+    if (!item) throw new Error("Missing Reader Appearance stepper: " + id);
+    return item;
+  }
+
+  function readerAppearanceOptionLabels(select) {
+    return select.options.map(function (option) { return option.label; });
+  }
+
+  function readerAppearanceDefaultLabel(select) {
+    var option = select.options.find(function (item) { return item.value === select.defaultValue; });
+    if (!option) throw new Error("Missing Reader Appearance default option: " + select.id);
+    return option.label;
+  }
+
+  function readerAppearanceValue(stepper) {
+    return Number(stepper.defaultValue).toFixed(stepper.precision);
+  }
+
   // 路由标题（去掉括号后缀）
   function routeTitle(route) {
     var contract = window.ReaderFrontendDemoDraftRouteContract || {};
@@ -405,6 +452,17 @@
   }
 
   function d2GlobalSettingsPage(route, appState) {
+    var appearance = readerAppearanceSpec();
+    var defaultTheme = readerAppearanceTheme(appearance.defaults.dayThemeId);
+    var defaultNightTheme = readerAppearanceTheme(appearance.defaults.nightThemeId);
+    var defaultFont = readerAppearanceFont(appearance.defaults.fontId);
+    var fontLabels = appearance.fonts
+      .filter(function (font) { return !font.importAction; })
+      .map(function (font) { return font.label; });
+    var fontSize = readerAppearanceStepper("fontSize");
+    var lineHeight = readerAppearanceStepper("lineHeight");
+    var paragraphGap = readerAppearanceStepper("paragraphGap");
+    var pageAnimation = readerAppearanceSelect("pageAnimation");
     var pages = {
       // 全局设置入口：4 个分区入口
       "global-settings": {
@@ -466,8 +524,8 @@
       "settings-reading-preferences": {
         title: "阅读偏好",
         metrics: [
-          { icon: "palette", label: "当前主题", value: "纸纹" },
-          { icon: "font", label: "默认字号", value: "18" },
+          { icon: "palette", label: "当前主题", value: defaultTheme.label },
+          { icon: "font", label: "默认字号", value: readerAppearanceValue(fontSize) },
           { icon: "book", label: "翻页模式", value: "覆盖" },
           { icon: "sun", label: "默认亮度", value: "62%" }
         ],
@@ -475,10 +533,10 @@
           {
             title: "排版默认值",
             rows: [
-              { type: "select", icon: "palette", title: "默认主题", value: "纸纹", options: ["日间", "夜间", "纸纹", "暖白", "青绿", "雾蓝"] },
-              { type: "stepper", icon: "font", title: "默认字号", value: "18", minLabel: "-", maxLabel: "+" },
-              { type: "stepper", icon: "motion", title: "默认行距", value: "1.6", minLabel: "-", maxLabel: "+" },
-              { type: "select", icon: "font", title: "默认字体", value: "系统默认", options: ["系统默认", "思源宋体", "思源黑体", "霞鹜文楷"] },
+              { type: "select", icon: "palette", title: "默认主题", value: defaultTheme.label, options: appearance.themes.map(function (theme) { return theme.label; }) },
+              { type: "stepper", icon: "font", title: "默认字号", value: readerAppearanceValue(fontSize), minLabel: "-", maxLabel: "+" },
+              { type: "stepper", icon: "motion", title: "默认行距", value: readerAppearanceValue(lineHeight), minLabel: "-", maxLabel: "+" },
+              { type: "select", icon: "font", title: "默认字体", value: defaultFont.label, options: fontLabels },
               { type: "switch", icon: "indent", title: "首行缩进", enabled: true },
               { type: "switch", icon: "spacing", title: "段间空行", enabled: true }
             ]
@@ -487,7 +545,7 @@
             title: "翻页与交互",
             rows: [
               { type: "select", icon: "book", title: "默认翻页模式", value: "覆盖", options: ["滚动", "左右", "覆盖", "无动画"] },
-              { type: "select", icon: "file", title: "默认翻页动画", value: "平滑", options: ["无", "平滑", "仿真"] },
+              { type: "select", icon: "file", title: "默认翻页动画", value: readerAppearanceDefaultLabel(pageAnimation), options: readerAppearanceOptionLabels(pageAnimation) },
               { type: "switch", icon: "volume", title: "音量键翻页", enabled: true },
               { type: "switch", icon: "sun", title: "屏幕常亮", enabled: false },
               { type: "switch", icon: "permission", title: "横屏锁定", enabled: false }
@@ -499,7 +557,7 @@
               { type: "stepper", icon: "sun", title: "默认亮度", value: "62%", minLabel: "-", maxLabel: "+" },
               { type: "switch", icon: "auto", title: "自动亮度", enabled: true },
               { type: "switch", icon: "moon", title: "夜间跟随系统", enabled: true },
-              { type: "select", icon: "palette", title: "夜间配色", value: "墨黑", options: ["墨黑", "深灰", "纸纹夜"] }
+              { type: "select", icon: "palette", title: "夜间配色", value: defaultNightTheme.label, options: appearance.themes.filter(function (theme) { return theme.scheme === "night"; }).map(function (theme) { return theme.label; }) }
             ]
           }
         ],
@@ -646,6 +704,17 @@
   }
 
   function d2ReadingSettingsPage(route, appState) {
+    var appearance = readerAppearanceSpec();
+    var defaultFont = readerAppearanceFont(appearance.defaults.fontId);
+    var fontLabels = appearance.fonts
+      .filter(function (font) { return !font.importAction; })
+      .map(function (font) { return font.label; });
+    var fontSize = readerAppearanceStepper("fontSize");
+    var lineHeight = readerAppearanceStepper("lineHeight");
+    var paragraphGap = readerAppearanceStepper("paragraphGap");
+    var paragraphIndent = readerAppearanceSelect("paragraphIndentMode");
+    var textAlignment = readerAppearanceSelect("textAlignment");
+    var pageAnimation = readerAppearanceSelect("pageAnimation");
     var pages = {
       // 阅读设置入口
       "reading-settings-entry": {
@@ -672,26 +741,26 @@
       "reading-typography-default": {
         title: "默认排版",
         metrics: [
-          { icon: "font", label: "默认字号", value: "18" },
-          { icon: "motion", label: "行距", value: "1.6" },
-          { icon: "align", label: "对齐", value: "两端" },
-          { icon: "palette", label: "默认字体", value: "系统" }
+          { icon: "font", label: "默认字号", value: readerAppearanceValue(fontSize) },
+          { icon: "motion", label: "行距", value: readerAppearanceValue(lineHeight) },
+          { icon: "align", label: "对齐", value: readerAppearanceDefaultLabel(textAlignment) },
+          { icon: "palette", label: "默认字体", value: defaultFont.label }
         ],
         sections: [
           {
             title: "字体与字号",
             rows: [
-              { type: "select", icon: "font", title: "默认字体", value: "系统默认", options: ["系统默认", "思源宋体", "思源黑体", "霞鹜文楷"] },
-              { type: "stepper", icon: "font", title: "字号", value: "18", minLabel: "A-", maxLabel: "A+" },
-              { type: "stepper", icon: "motion", title: "行距", value: "1.6", minLabel: "-", maxLabel: "+" },
-              { type: "stepper", icon: "spacing", title: "段距", value: "12", minLabel: "-", maxLabel: "+" }
+              { type: "select", icon: "font", title: "默认字体", value: defaultFont.label, options: fontLabels },
+              { type: "stepper", icon: "font", title: "字号", value: readerAppearanceValue(fontSize), minLabel: "A-", maxLabel: "A+" },
+              { type: "stepper", icon: "motion", title: "行距", value: readerAppearanceValue(lineHeight), minLabel: "-", maxLabel: "+" },
+              { type: "stepper", icon: "spacing", title: "段距", value: readerAppearanceValue(paragraphGap), minLabel: "-", maxLabel: "+" }
             ]
           },
           {
             title: "排版样式",
             rows: [
-              { type: "select", icon: "align", title: "对齐方式", value: "两端对齐", options: ["左对齐", "两端对齐", "居中"] },
-              { type: "switch", icon: "indent", title: "首行缩进", enabled: true },
+              { type: "select", icon: "align", title: textAlignment.label, value: readerAppearanceDefaultLabel(textAlignment), options: readerAppearanceOptionLabels(textAlignment) },
+              { type: "select", icon: "indent", title: paragraphIndent.label, value: readerAppearanceDefaultLabel(paragraphIndent), options: readerAppearanceOptionLabels(paragraphIndent) },
               { type: "switch", icon: "spacing", title: "段间空行", enabled: true },
               { type: "switch", icon: "punctuation", title: "标点压缩", enabled: true },
               { type: "switch", icon: "bold", title: "加粗正文", enabled: false }
@@ -715,7 +784,7 @@
         title: "翻页方式",
         metrics: [
           { icon: "book", label: "翻页模式", value: "覆盖" },
-          { icon: "file", label: "动画", value: "平滑" },
+          { icon: "file", label: "动画", value: readerAppearanceDefaultLabel(pageAnimation) },
           { icon: "volume", title: "音量键", label: "音量键", value: "开" },
           { icon: "gesture", label: "点击翻页", value: "左右" }
         ],
@@ -724,7 +793,7 @@
             title: "翻页模式",
             rows: [
               { type: "segment", icon: "book", title: "模式", value: "覆盖", options: ["滚动", "左右", "覆盖", "无动画"] },
-              { type: "select", icon: "file", title: "翻页动画", value: "平滑", options: ["无", "平滑", "仿真"] },
+              { type: "select", icon: "file", title: "翻页动画", value: readerAppearanceDefaultLabel(pageAnimation), options: readerAppearanceOptionLabels(pageAnimation) },
               { type: "stepper", icon: "motion", title: "动画时长", value: "280 ms", minLabel: "-", maxLabel: "+" }
             ]
           },

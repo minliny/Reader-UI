@@ -2159,12 +2159,23 @@
   }
 
   function mainTabSettings(data, appState) {
-    const rows = [
-      { icon: "gear", title: "通用设置", route: "settings-general" },
-      { icon: "bookshelf", title: "书架与搜索设置", route: "bookshelf-search-settings" },
-      { icon: "source-stack", title: "书源管理", route: "source-management" },
-      { icon: "sync", title: "同步与备份", route: "sync-backup" },
-      { icon: "info", title: "关于与反馈", route: "about-feedback" }
+    const sections = [
+      {
+        title: "设置",
+        rows: [
+          { icon: "gear", title: "通用设置", route: "settings-general" },
+          { icon: "bookshelf", title: "书架与搜索设置", route: "bookshelf-search-settings" },
+          { icon: "source-stack", title: "书源管理", route: "source-management" },
+          { icon: "sync", title: "同步与备份", route: "sync-backup" },
+          { icon: "info", title: "关于与反馈", route: "about-feedback" }
+        ]
+      },
+      {
+        title: "高级",
+        rows: [
+          { icon: "bug", title: "开发模式", meta: "动画速度与运行诊断", route: "settings-developer" }
+        ]
+      }
     ];
 
     return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
@@ -2175,22 +2186,26 @@
       ariaLabel: "设置首页",
       contentClass: "fd-phone-content fd-settings-main-content",
       contentHtml: `
-        <section class="fd-setting-section" data-slot="settingSection">
-          <h2>设置</h2>
-          ${rows.map((row) => `
-            <article class="fd-setting-row" role="button" tabindex="0" data-route="${esc(row.route)}">
-              <span>${icon(row.icon, "fd-small-icon")}</span>
-              <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
-              <em class="fd-settings-row-side is-icon">${icon("chevron", "fd-small-icon")}</em>
-            </article>
-          `).join("")}
-        </section>`,
+        ${sections.map((section) => `
+          <section class="fd-setting-section" data-slot="settingSection">
+            <h2>${esc(section.title)}</h2>
+            ${section.rows.map((row) => `
+              <article class="fd-setting-row" role="button" tabindex="0" data-route="${esc(row.route)}">
+                <span>${icon(row.icon, "fd-small-icon")}</span>
+                <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
+                <em class="fd-settings-row-side is-icon">${icon("chevron", "fd-small-icon")}</em>
+              </article>
+            `).join("")}
+          </section>
+        `).join("")}`,
       stateHostHtml: mainTabFeedbackHtml(appState)
     }));
   }
 
   function bookSearchScreen(data, appState) {
-    const phase = appState?.bookSearchPhase === "after" ? "after" : "before";
+    const supportedPhases = new Set(["before", "loading", "after", "empty", "error"]);
+    const phase = supportedPhases.has(appState?.bookSearchPhase) ? appState.bookSearchPhase : "before";
+    const query = String(appState?.bookSearchQuery || "");
     const searchResults = [
       {
         title: "三体",
@@ -2254,15 +2269,33 @@
             ["爱潜水的乌贼", "作者 · 网络"],
             ["本地导入", "关键词 · 本地"]
           ].map(([keyword, meta]) => `
-            <button class="fd-search-history-row" type="button" data-search-submit>
+            <button class="fd-search-history-row" type="button" data-search-submit data-search-query="${esc(keyword)}">
               ${icon("clock", "fd-small-icon")}
               <span><strong>${esc(keyword)}</strong><small>${esc(meta)}</small></span>
               <em>填入</em>
             </button>`).join("")}
         </div>
       </section>`;
+    const searchLoadingHtml = `
+      <section class="fd-search-state fd-search-state-loading" data-search-state="loading" role="status" aria-live="polite" aria-busy="true">
+        <span class="fd-search-state-icon" aria-hidden="true">${icon("refresh", "fd-small-icon")}</span>
+        <h2>正在搜索“${esc(query || "全部书籍")}”</h2>
+        <p>正在合并本地书架与可用书源，新的搜索会接管当前结果区。</p>
+      </section>`;
+    const searchEmptyHtml = `
+      <section class="fd-search-state fd-search-state-empty" data-search-state="empty" role="status" aria-live="polite">
+        <span class="fd-search-state-icon" aria-hidden="true">${icon("search", "fd-small-icon")}</span>
+        <h2>没有可搜索的关键词</h2>
+        <p>输入书名、作者或关键词后再试；结果区和页面位置会保持不变。</p>
+      </section>`;
+    const searchErrorHtml = `
+      <section class="fd-search-state fd-search-state-error" data-search-state="error" role="alert" aria-live="assertive">
+        <span class="fd-search-state-icon" aria-hidden="true">${icon("warning", "fd-small-icon")}</span>
+        <h2>搜索暂时失败</h2>
+        <p>当前请求没有覆盖已有输入，可直接重试或清空关键词。</p>
+      </section>`;
     const searchAfterHtml = `
-      <section class="fd-search-results" data-search-state="after">
+      <section class="fd-search-results" data-search-state="after" role="status" aria-live="polite">
         <header class="fd-search-section-head">
           <h2>搜索结果</h2>
         </header>
@@ -2282,6 +2315,15 @@
           `).join("")}
         </div>
       </section>`;
+    const stateHtml = phase === "after"
+      ? searchAfterHtml
+      : phase === "loading"
+        ? searchLoadingHtml
+        : phase === "empty"
+          ? searchEmptyHtml
+          : phase === "error"
+            ? searchErrorHtml
+            : searchBeforeHtml;
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
       data,
       title: "书籍搜索",
@@ -2290,18 +2332,22 @@
       bottomActionHostClass: "fd-bottom-action-host",
       contentHtml: `
         <button class="fd-search-entry fd-keyboard-target" type="button" data-open-keyboard>
-          ${icon("search", "fd-small-icon")}<span>${phase === "after" ? "三体" : "搜索书名、作者、关键词"}</span>
+          ${icon("search", "fd-small-icon")}<span>${query ? esc(query) : "搜索书名、作者、关键词"}</span>
         </button>
         <nav class="fd-chip-row ${phase === "before" ? "fd-search-scope-hidden" : ""}" aria-label="搜索范围">
           ${["全部", "书名", "作者", "书源"].map((item, index) => `<button class="${index === 0 ? "is-active" : ""}" type="button">${esc(item)}</button>`).join("")}
         </nav>
-        ${phase === "after" ? searchAfterHtml : searchBeforeHtml}
-        ${keyboardLayer()}`,
+        ${stateHtml}
+        ${keyboardLayer(query)}`,
       bottomActionHtml: `
         <div class="fd-fixed-action-row">
           ${phase === "after"
             ? `<button type="button" data-search-reset>重新搜索</button><button type="button" data-route="book-detail">查看详情</button>`
-            : `<button type="button" data-search-submit data-primary-search-submit>开始搜索</button><button type="button">清除历史</button>`}
+            : phase === "loading"
+              ? `<button type="button" data-search-reset>清空并取消</button><button type="button" data-search-submit data-primary-search-submit>用最新输入搜索</button>`
+              : phase === "empty" || phase === "error"
+                ? `<button type="button" data-search-reset>清空关键词</button><button type="button" data-search-submit data-primary-search-submit>重新搜索</button>`
+                : `<button type="button" data-search-submit data-primary-search-submit>开始搜索</button><button type="button">清除历史</button>`}
         </div>`
     }));
   }
@@ -2591,13 +2637,13 @@
     }));
   }
 
-  function keyboardLayer() {
+  function keyboardLayer(value) {
     return `
       <section class="fd-demo-keyboard" aria-hidden="true" data-keyboard-host>
         <div class="fd-keyboard-panel">
           <label>
             <span>搜索书籍</span>
-            <input type="text" value="三体" data-keyboard-input aria-label="搜索书籍">
+            <input type="text" value="${esc(value == null ? "" : value)}" data-keyboard-input aria-label="搜索书籍" autocomplete="off">
           </label>
           <button type="button" data-close-keyboard>完成</button>
           <div class="fd-keyboard-keys" aria-hidden="true">
@@ -2633,6 +2679,14 @@
     tts: "reader-full-tts",
     appearance: "reader-full-appearance",
     settings: "reader-full-settings"
+  };
+
+  const readerPrimaryFullQuickRoutes = {
+    "reader-full-directory": "toc-bookmarks",
+    "reader-full-tts": "tts",
+    "reader-full-appearance": "reader-appearance",
+    "reader-full-settings": "reader-settings",
+    "reader-replace-page": "content-replacement"
   };
 
   const readerFullTypeByRoute = {
@@ -2938,13 +2992,42 @@
   }
 
   function readerThemeOptions(data) {
+    const canonical = typeof window !== "undefined"
+      ? window.ReaderW4ThemeFontTypographyRenderers?.data?.allThemes?.()
+      : null;
+    if (Array.isArray(canonical) && canonical.length > 0) {
+      return canonical;
+    }
+    const appearanceThemes = typeof window !== "undefined"
+      ? window.ReaderAppearanceSpec?.themes
+      : null;
+    if (Array.isArray(appearanceThemes) && appearanceThemes.length > 0) {
+      return appearanceThemes.map((item) => ({
+        value: item.id,
+        label: item.label,
+        scheme: item.scheme,
+        pair: item.pairId,
+        texture: item.texture,
+        swatch: item.swatchHex,
+        bg: item.backgroundHex,
+        paperStart: item.backgroundHex,
+        paperEnd: item.backgroundHex,
+        ink: item.inkHex
+      }));
+    }
     const options = data.reader?.themeOptions;
     return Array.isArray(options) && options.length > 0
       ? options
-      : [{ value: "paper", label: "纸色", swatch: "#fff7ec", paperStart: "#fff9f0", paperEnd: "#f7ead9", ink: "#2b241d" }];
+      : [{ value: "paper", label: "纸纹", swatch: "#F5EAD8", paperStart: "#FFF7EC", paperEnd: "#FFF7EC", ink: "#2B241D" }];
   }
 
   function readerFontOptions(data) {
+    const canonical = typeof window !== "undefined"
+      ? window.ReaderW4ThemeFontTypographyRenderers?.data?.allFonts?.(data)
+      : null;
+    if (Array.isArray(canonical) && canonical.length > 0) {
+      return canonical;
+    }
     const options = data.reader?.fontOptions;
     return Array.isArray(options) && options.length > 0
       ? options
@@ -2964,7 +3047,10 @@
   function readerFontFamilyValue(data, fontFamily) {
     const options = readerFontOptions(data);
     const selected = options.find((item) => item.value === fontFamily) || options[0];
-    return selected.fontStack || "var(--fd-serif)";
+    const canonicalFamily = typeof window !== "undefined"
+      ? window.ReaderW4ThemeFontTypographyRenderers?.components?.fontCellFamily?.(selected)
+      : "";
+    return canonicalFamily || selected.fontStack || "var(--fd-serif)";
   }
 
   function readerTypographyStyle(data, typography) {
@@ -2974,7 +3060,7 @@
       `--reader-line-height:${esc(safe.lineHeight)}`,
       `--reader-paragraph-gap:${esc(safe.paragraphGap)}px`,
       `--reader-letter-spacing:${esc(safe.letterSpacing)}px`,
-      `--reader-font-family:${readerFontFamilyValue(data, safe.fontFamily)}`
+      `--reader-font-family:${esc(readerFontFamilyValue(data, safe.fontFamily))}`
     ].join(";");
   }
 
@@ -3395,18 +3481,27 @@
   }
 
   function quickTypographyPanelRows(data, typography) {
+    const config = readerTypographyConfig(data);
+    const valuesFor = (item) => {
+      const values = [];
+      const factor = 10 ** item.precision;
+      for (let value = item.min; value <= item.max + item.step / 2; value += item.step) {
+        values.push(Math.round(value * factor) / factor);
+      }
+      return values;
+    };
     return `
       <div class="fd-reader-appearance-quick-selects">
         <label>
           <strong>字号</strong>
           <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-typography-select="fontSize" aria-label="字号">
-            ${[14, 16, 18, 20, 22, 24].map((value) => `<option value="${value}"${Number(typography.fontSize) === value ? " selected" : ""}>${value}</option>`).join("")}
+            ${valuesFor(config.fontSize).map((value) => `<option value="${value}"${Number(typography.fontSize) === value ? " selected" : ""}>${value}</option>`).join("")}
           </select>
         </label>
         <label>
           <strong>行距</strong>
           <select class="fd-control-select" data-ui-primitive="select" data-ui-size="sm" data-reader-typography-select="lineHeight" aria-label="行距">
-            ${[1.4, 1.6, 1.8, 2].map((value) => `<option value="${value}"${Number(typography.lineHeight) === value ? " selected" : ""}>${value}</option>`).join("")}
+            ${valuesFor(config.lineHeight).map((value) => `<option value="${value}"${Number(typography.lineHeight) === value ? " selected" : ""}>${Number(value).toFixed(config.lineHeight.precision)}</option>`).join("")}
           </select>
         </label>
       </div>`;
@@ -3962,7 +4057,7 @@
 
   function overlayMotionId(role, state) {
     const action = state === "visible" || state === "entering" ? "enter" : "exit";
-    if (role === "keyboard") return `overlay.keyboard.${action}`;
+    if (role === "keyboard") return "overlay.keyboard.enter-exit";
     if (role === "sheet") return `overlay.sheet.${action}`;
     if (role === "dialog") return `overlay.dialog.${action}`;
     return `overlay.${action}`;
@@ -4068,6 +4163,173 @@
     window.setTimeout(() => {
       if (target.isConnected) target.focus({ preventScroll: true });
     }, 0);
+  }
+
+  function clearToastMotionTimers(appState) {
+    if (!appState) return;
+    ["motionToastAutoDismissTimer", "motionToastPhaseTimer", "motionToastExitTimer"].forEach((key) => {
+      if (appState[key]) {
+        window.clearTimeout(appState[key]);
+        appState[key] = null;
+      }
+    });
+  }
+
+  function toastMotionElements(screenHost) {
+    if (!screenHost || typeof screenHost.querySelectorAll !== "function") return [];
+    return Array.from(screenHost.querySelectorAll(".fd-settings-toast, .fd-discover-toast, [data-main-tab-feedback]"));
+  }
+
+  function attachToastMotionState(screenHost, appState) {
+    if (!screenHost) return;
+    const root = screenHost.closest(".fd-demo");
+    const elements = toastMotionElements(screenHost);
+    const state = appState?.motionToastState || (elements.length ? "visible" : "hidden");
+    const phase = appState?.motionToastPhase || (elements.length ? "visible" : "exited");
+    const id = appState?.motionToastId || (elements.length ? "feedback.toast.enter" : "feedback.toast.exit");
+    const sequence = String(appState?.motionToastSequence || 0);
+    const owner = appState?.motionToastOwner || (elements.length ? "static-route" : "none");
+    elements.forEach((element) => {
+      element.setAttribute("data-motion-toast", "true");
+      element.setAttribute("data-motion-toast-state", state);
+      element.setAttribute("data-motion-toast-phase", phase);
+      element.setAttribute("data-motion-toast-owner", owner);
+      element.setAttribute("data-motion-toast-sequence", sequence);
+      element.setAttribute("data-motion-toast-id", id);
+      element.setAttribute("data-motion-id", id);
+      element.setAttribute("role", "status");
+      element.setAttribute("aria-live", "polite");
+      element.setAttribute("aria-atomic", "true");
+    });
+    if (root) {
+      root.setAttribute("data-motion-toast-state", state);
+      root.setAttribute("data-motion-toast-phase", phase);
+      root.setAttribute("data-motion-toast-owner", owner);
+      root.setAttribute("data-motion-toast-sequence", sequence);
+      root.setAttribute("data-motion-toast-id", id);
+      root.setAttribute("data-motion-toast-count", String(elements.length));
+    }
+  }
+
+  function resetToastMotionState(appState, motionController, reason) {
+    if (!appState) return;
+    clearToastMotionTimers(appState);
+    appState.motionToastSequence = (appState.motionToastSequence || 0) + 1;
+    appState.motionToastState = "hidden";
+    appState.motionToastPhase = "exited";
+    appState.motionToastId = "feedback.toast.exit";
+    appState.motionToastOwner = "none";
+    appState.settingsToast = "";
+    appState.mainTabFeedback = "";
+  }
+
+  function dismissToastMotion(screenHost, appState, motionController, renderCurrentRoute, reason) {
+    if (!appState || appState.motionToastState !== "visible") return;
+    if (appState.motionToastAutoDismissTimer) {
+      window.clearTimeout(appState.motionToastAutoDismissTimer);
+      appState.motionToastAutoDismissTimer = null;
+    }
+    if (appState.motionToastPhaseTimer) {
+      window.clearTimeout(appState.motionToastPhaseTimer);
+      appState.motionToastPhaseTimer = null;
+    }
+    const sequence = appState.motionToastSequence || 0;
+    appState.motionToastPhase = "exiting";
+    appState.motionToastId = "feedback.toast.exit";
+    motionController?.start?.({
+      id: "feedback.toast.exit",
+      action: "feedback.toast.dismiss",
+      from: "toast.visible",
+      to: "toast.hidden",
+      reason: reason || "auto-dismiss"
+    });
+    renderCurrentRoute();
+    const reduced = screenHost?.closest?.(".fd-demo")?.getAttribute("data-motion-reduced") === "true";
+    appState.motionToastExitTimer = window.setTimeout(() => {
+      if ((appState.motionToastSequence || 0) !== sequence) return;
+      appState.motionToastExitTimer = null;
+      appState.motionToastState = "hidden";
+      appState.motionToastPhase = "exited";
+      appState.motionToastOwner = "none";
+      appState.settingsToast = "";
+      appState.mainTabFeedback = "";
+      renderCurrentRoute();
+    }, reduced ? 0 : 180);
+  }
+
+  function showToastMotion(screenHost, appState, motionController, owner, message, renderCurrentRoute) {
+    if (!appState || !message) return;
+    const wasVisible = appState.motionToastState === "visible";
+    clearToastMotionTimers(appState);
+    appState.motionToastSequence = (appState.motionToastSequence || 0) + 1;
+    const sequence = appState.motionToastSequence;
+    const previousOwner = appState.motionToastOwner;
+    if (previousOwner && previousOwner !== owner && previousOwner !== "none") {
+      appState[previousOwner] = "";
+    }
+    appState[owner] = message;
+    appState.motionToastOwner = owner;
+    appState.motionToastState = "visible";
+    appState.motionToastPhase = wasVisible ? "updating" : "entering";
+    appState.motionToastId = wasVisible ? "feedback.toast.update" : "feedback.toast.enter";
+    motionController?.start?.({
+      id: appState.motionToastId,
+      action: wasVisible ? "feedback.toast.update" : "feedback.toast.show",
+      from: wasVisible ? "toast.visible" : "toast.hidden",
+      to: "toast.visible",
+      interruptReason: wasVisible ? "new-message" : ""
+    });
+    renderCurrentRoute();
+    const reduced = screenHost?.closest?.(".fd-demo")?.getAttribute("data-motion-reduced") === "true";
+    appState.motionToastPhaseTimer = window.setTimeout(() => {
+      if ((appState.motionToastSequence || 0) !== sequence) return;
+      appState.motionToastPhaseTimer = null;
+      appState.motionToastPhase = "visible";
+      attachToastMotionState(screenHost, appState);
+    }, reduced ? 0 : 180);
+    appState.motionToastAutoDismissTimer = window.setTimeout(() => {
+      if ((appState.motionToastSequence || 0) !== sequence) return;
+      appState.motionToastAutoDismissTimer = null;
+      dismissToastMotion(screenHost, appState, motionController, renderCurrentRoute, "auto-dismiss");
+    }, 2200);
+  }
+
+  function attachInlineLoadingMotionState(screenHost, appState) {
+    if (!screenHost) return;
+    const root = screenHost.closest(".fd-demo");
+    const request = appState?.asyncRouteRequest || appState?.asyncResultMotion || null;
+    const elements = Array.from(screenHost.querySelectorAll("[data-reader-loading], [data-reader-loading-surface], .fd-chapter-download-state.is-loading"));
+    const state = request?.state || (elements.length ? "static" : "idle");
+    const requestId = request?.requestId || (elements.length ? "static-route" : "none");
+    elements.forEach((element) => {
+      element.setAttribute("data-motion-loading", "true");
+      element.setAttribute("data-motion-loading-id", "state.loading.inline");
+      element.setAttribute("data-motion-loading-state", state);
+      element.setAttribute("data-motion-loading-request", String(requestId));
+      element.setAttribute("data-motion-loading-owner", request?.active ? "latest-request" : "route-state");
+      element.setAttribute("data-motion-id", "state.loading.inline");
+      if (!element.hasAttribute("aria-live")) element.setAttribute("aria-live", "polite");
+    });
+    if (root) {
+      root.setAttribute("data-motion-loading-id", "state.loading.inline");
+      root.setAttribute("data-motion-loading-state", state);
+      root.setAttribute("data-motion-loading-request", String(requestId));
+      root.setAttribute("data-motion-loading-count", String(elements.length));
+      root.setAttribute("data-motion-loading-terminal", request && request.state !== "pending" ? request.reason || request.state : "none");
+    }
+  }
+
+  function ensureInlineLoadingIndicator(screenHost) {
+    if (!screenHost || screenHost.querySelector("[data-reader-loading]")) return;
+    const host = screenHost.querySelector(".fd-reader-phone, .fd-phone") || screenHost;
+    const panel = document.createElement("section");
+    panel.className = "fd-reader-loading-panel fd-reader-loading-runtime";
+    panel.setAttribute("data-reader-loading", "");
+    panel.setAttribute("role", "status");
+    panel.setAttribute("aria-live", "polite");
+    panel.setAttribute("aria-label", "ReaderShell 正在加载最新内容");
+    panel.innerHTML = '<i aria-hidden="true"></i><strong>正在加载</strong><small>完成后只提交最新请求结果</small>';
+    host.appendChild(panel);
   }
 
   function viewportOrientationRoleTargets(screenHost) {
@@ -4205,6 +4467,7 @@
     appState.viewportOrientationMotionTimer = window.setTimeout(() => {
       if (!runState("reshaping")) return;
       adjustReaderDropdownPlacement(screenHost);
+      attachDropdownMotionState(screenHost, appState, motionController);
       attachReaderControlDockMotionState(screenHost, appState, motionController);
       appState.viewportOrientationMotionTimer = window.setTimeout(() => {
         if (!runState("settling")) return;
@@ -4294,7 +4557,7 @@
     return `
       <section class="fd-ir-tap-zone-layer" data-dev-region="ImmersiveTapZones" aria-label="透明点击热区层">
         <button class="fd-immersive-hotzone fd-hotzone-prev" type="button" aria-label="上一页" data-dev-region="PrevPageHotzone" data-reader-page-action="prev" aria-disabled="${isVertical || pageState.index === 0 ? "true" : "false"}"></button>
-        <button class="fd-immersive-hotzone fd-hotzone-center" type="button" aria-label="打开阅读控制层" data-dev-region="ControlLayerHotzone" data-route="reader"></button>
+        <button class="fd-immersive-hotzone fd-hotzone-center" type="button" aria-label="打开阅读控制层" data-dev-region="ControlLayerHotzone" data-reader-control-show data-route="reader" data-route-replace></button>
         <button class="fd-immersive-hotzone fd-hotzone-next" type="button" aria-label="下一页" data-dev-region="NextPageHotzone" data-reader-page-action="next" aria-disabled="${isVertical || pageState.index >= pageState.count - 1 ? "true" : "false"}"></button>
       </section>`;
   }
@@ -4555,10 +4818,13 @@
     }
     if (type === "appearance") {
       const typography = appState?.readerTypography || normalizeReaderTypography(data);
-      const activeTheme = currentReaderTheme(data, appState);
       const w4Api = typeof window !== "undefined" ? window.ReaderW4ThemeFontTypographyRenderers : null;
-      const quickThemes = (w4Api?.data?.allThemes?.() || readerThemeOptions(data)).slice(0, 8);
-      const quickFonts = (w4Api?.data?.allFonts?.(data) || readerFontOptions(data)).slice(0, 8);
+      if (!w4Api?.components?.themeSwatch || !w4Api?.components?.fontCell) {
+        throw new Error("Reader 2 appearance atoms are required before rendering the appearance panel");
+      }
+      const activeTheme = w4Api.data.currentTheme(data, appState);
+      const quickThemes = w4Api.data.allThemes().slice(0, 8);
+      const quickFonts = w4Api.data.allFonts(data).slice(0, 8);
       const defaultDayValue = w4Api?.storage?.get?.("default-day-theme", "paper") || "paper";
       const defaultNightValue = w4Api?.storage?.get?.("default-night-theme", "paper-night") || "paper-night";
       const defaultDayTheme = quickThemes.find((item) => item.value === defaultDayValue) || quickThemes.find((item) => item.scheme === "day") || {};
@@ -4569,19 +4835,13 @@
             <section class="fd-reader-full-setting-block fd-reader-appearance-quick-theme">
               <header><strong>主题库</strong><em>日间：${esc(defaultDayTheme.label || "纸纹")} · 夜间：${esc(defaultNightTheme.label || "夜纹")}</em></header>
               <div class="fd-reader-full-theme-grid">
-                ${quickThemes.map((item, index) => `
-                  <button class="${activeTheme.value === item.value ? "is-active" : ""}" type="button" data-reader-theme="${esc(item.value)}" data-reader-theme-scheme="${esc(item.scheme || (index < 2 ? "day" : "night"))}" data-reader-theme-texture="${esc(item.texture || "plain")}" aria-label="${esc(item.scheme === "night" ? "夜晚" : "白天")}${item.texture === "paper" ? "纹理" : "纯色"}主题：${esc(item.label)}">
-                    <span style="--swatch:${esc(item.swatch)};--swatch-texture-rgb:${esc(item.textureRgb || (item.scheme === "night" ? "222 202 174" : "138 116 84"))}"></span>
-                  </button>
-                `).join("")}
+                ${quickThemes.map((item) => w4Api.components.themeSwatch(item, activeTheme.value)).join("")}
               </div>
             </section>
             <section class="fd-reader-full-setting-block fd-reader-appearance-quick-fonts">
               <header><strong>字体库</strong></header>
               <div class="fd-reader-appearance-font-grid">
-                ${quickFonts.map((item) => `
-                  <button class="${typography.fontFamily === item.value ? "is-active" : ""}" type="button" draggable="true" data-w4-font-cell data-w4-font-value="${esc(item.value)}" data-reader-typography-set="fontFamily" data-reader-typography-value="${esc(item.value)}" style="font-family:${esc(item.fontStack || "inherit")}">${esc(item.label)}</button>
-                `).join("")}
+                ${quickFonts.map((item) => w4Api.components.fontCell(item, typography.fontFamily)).join("")}
               </div>
             </section>
           </div>
@@ -4656,8 +4916,8 @@
     return `
       <section class="fd-reader-full-section fd-reader-full-directory" aria-label="完整目录">
         <nav class="fd-reader-full-directory-tabs" aria-label="目录与书签">
-          <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">目录</button>
-          <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">${icon("bookmark-folder", "fd-small-icon")}书签</button>
+          <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">${icon("reader-module-directory", "fd-small-icon")}目录</button>
+          <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">${icon("bookmark", "fd-small-icon")}书签</button>
         </nav>
         <div class="fd-reader-full-directory-body is-${esc(tocMode)}">
           ${searchHtml(tocMode === "bookmark")}
@@ -4808,17 +5068,21 @@
     const selected = (value, expected) => String(value) === String(expected) ? " selected" : "";
     const checked = (value) => value ? " is-on" : "";
     const formatTimerValue = (value) => String(value).padStart(2, "0");
-    const timerWheelHtml = (part, value, max, unit) => `
-      <div class="fd-reader-tts-wheel-column">
-        <div class="fd-reader-tts-wheel-viewport">
-          <div class="fd-reader-tts-wheel" data-reader-tts-timer-wheel="${esc(part)}" data-reader-tts-timer-max="${esc(max)}" role="listbox" aria-label="定时${esc(unit)}" aria-orientation="vertical" tabindex="0">
-            <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
-            ${Array.from({ length: max + 1 }, (_, optionValue) => `<button class="${optionValue === value ? "is-active" : ""}" type="button" role="option" tabindex="-1" aria-selected="${optionValue === value ? "true" : "false"}" data-reader-tts-timer-value="${optionValue}">${esc(formatTimerValue(optionValue))}</button>`).join("")}
-            <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+    const timerWheelHtml = (part, value, max, unit) => {
+      const range = max + 1;
+      const wheelValues = Array.from({ length: range }, (_, index) => (value - 2 + index + range) % range);
+      return `
+        <div class="fd-reader-tts-wheel-column">
+          <div class="fd-reader-tts-wheel-viewport">
+            <div class="fd-reader-tts-wheel" data-reader-tts-timer-wheel="${esc(part)}" data-reader-tts-timer-max="${esc(max)}" role="listbox" aria-label="定时${esc(unit)}" aria-orientation="vertical" tabindex="0">
+              <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+              ${wheelValues.map((optionValue, optionIndex) => `<button class="${optionValue === value ? "is-active" : ""}" type="button" role="option" tabindex="-1" aria-selected="${optionValue === value ? "true" : "false"}" data-reader-tts-timer-index="${optionIndex}" data-reader-tts-timer-value="${optionValue}">${esc(formatTimerValue(optionValue))}</button>`).join("")}
+              <span class="fd-reader-tts-wheel-spacer" aria-hidden="true"></span>
+            </div>
           </div>
-        </div>
-        <small>${esc(unit)}</small>
-      </div>`;
+          <small>${esc(unit)}</small>
+        </div>`;
+    };
     const onlineProviderLabels = {
       custom: "自定义服务",
       azure: "Azure Speech",
@@ -4857,7 +5121,7 @@
         </section>
         <section class="fd-reader-full-setting-block fd-reader-tts-timer-module">
           <header><strong>定时</strong><em>${esc(String(timerMinutes).padStart(2, "0"))}:${esc(String(timerSeconds).padStart(2, "0"))}</em></header>
-          <div class="fd-reader-tts-clock" aria-label="朗读定时">
+          <div class="fd-reader-tts-clock" data-reader-timer-card="Reader2/timer-card" aria-label="朗读定时">
             <div class="fd-reader-tts-timer-summary">
               <span aria-hidden="true">${icon("clock", "fd-medium-icon")}</span>
               <span>
@@ -5230,12 +5494,13 @@
       "reader-full-page-turn": "翻页与手势"
     };
     const headTitle = headTitleByRoute[route] || module.label;
+    const collapseMotionAttribute = " data-reader-panel-collapse";
     return `
       <section class="fd-reader-full-page-panel fd-reader-full-page-${esc(type)}${route ? ` fd-reader-full-page-route-${esc(route)}` : ""}" data-dev-region="ReaderExpandedPanel" aria-label="${esc(headTitle)}大半屏控制窗">
-        <button class="fd-reader-full-grabber" type="button" data-route="${esc(quickRoute)}" data-route-replace${promotedRoute ? ` data-reader-handle-expand-route="${esc(promotedRoute)}"` : ""} aria-label="${promotedRoute ? "下拉收起，上拉继续展开" : "收起到阅读控制层"}"></button>
+        <button class="fd-reader-full-grabber" type="button" data-route="${esc(quickRoute)}" data-route-replace${collapseMotionAttribute}${promotedRoute ? ` data-reader-handle-expand-route="${esc(promotedRoute)}"` : ""} aria-label="${promotedRoute ? "下拉收起，上拉继续展开" : "收起到阅读控制层"}"></button>
         <header class="fd-reader-full-head">
           <span>${icon(module.icon || module.type, "fd-small-icon")}<strong>${esc(headTitle)}</strong></span>
-          <button type="button" data-route="${esc(quickRoute)}" data-route-replace>收起</button>
+          <button type="button" data-route="${esc(quickRoute)}" data-route-replace${collapseMotionAttribute}>收起</button>
         </header>
         <div class="fd-reader-full-content">
           ${readerFullPageBody(type, data, appState, route)}
@@ -5416,7 +5681,7 @@
     const quickExpandable = state.mode === "quick" && (state.quick === "search" || state.quick === "auto-page");
     const grabberAttributes = quickExpandable
       ? `data-reader-quick-expand="${esc(state.quick)}"`
-      : `data-route="${esc(expandedRoute)}" data-route-replace`;
+      : `data-route="${esc(expandedRoute)}" data-route-replace data-reader-panel-expand`;
     let bodyHtml = "";
     if (isLoading) {
       bodyHtml = readerLoadingPanel(route);
@@ -5563,7 +5828,13 @@
   }
 
   function readerSourceSignature(blocks) {
-    return blocks.map((item) => item.length).join(".");
+    const source = blocks.join("\u241e");
+    let hash = 2166136261;
+    for (let index = 0; index < source.length; index += 1) {
+      hash ^= source.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return `${blocks.length}:${source.length}:${(hash >>> 0).toString(36)}`;
   }
 
   function readerSplitIndex(text, bestIndex) {
@@ -5597,6 +5868,7 @@
     }
 
     const typography = appState.readerTypography || normalizeReaderTypography(data);
+    const pageSpace = appState.readerPageSpace || normalizeReaderPageSpace(data);
     const sourceBlocks = readerTextBlocks(data);
     const key = [
       width,
@@ -5606,6 +5878,8 @@
       typography.paragraphGap,
       typography.letterSpacing,
       typography.fontFamily,
+      pageSpace.paragraphIndent,
+      readerChapterTitle(data),
       readerSourceSignature(sourceBlocks)
     ].join("|");
 
@@ -5618,6 +5892,7 @@
     measurer.setAttribute("aria-hidden", "true");
     measurer.style.cssText = [
       readerTypographyStyle(data, typography),
+      readerPageSpaceStyle(data, pageSpace),
       "position:fixed",
       "inset:auto",
       "left:-10000px",
@@ -5657,8 +5932,7 @@
     const pages = [];
     let blockIndex = 0;
     let offset = 0;
-    const maxPages = 80;
-    while (blockIndex < sourceBlocks.length && pages.length < maxPages) {
+    while (blockIndex < sourceBlocks.length) {
       const includeTitle = pages.length === 0;
       const pageParagraphs = [];
       let madeProgress = false;
@@ -5683,7 +5957,7 @@
 
         const splitIndex = fitSplitIndex(pageParagraphs, remaining, includeTitle);
         if (splitIndex > 0) {
-          pageParagraphs.push(remaining.slice(0, splitIndex).trimEnd());
+          pageParagraphs.push(remaining.slice(0, splitIndex));
           offset += splitIndex;
           madeProgress = true;
         }
@@ -5726,7 +6000,43 @@
     return true;
   }
 
-  function settingsPageFor(route, data) {
+  function invalidateReaderPagination(appState) {
+    if (!appState) {
+      return;
+    }
+    appState.readerPaginationKey = "";
+  }
+
+  function refreshReaderPaginationForLayout(screenHost, data, appState) {
+    if (!appState || appState.readerPageMode === "vertical") {
+      return false;
+    }
+    invalidateReaderPagination(appState);
+    return updateReaderPagination(screenHost, data, appState);
+  }
+
+  function settingsPageFor(route, data, appState) {
+    const developerMotionProfile = appState?.motionSpeedProfile || {
+      enabled: false,
+      globalSpeed: 1,
+      categories: {
+        navigation: 1,
+        componentFeedback: 1,
+        overlay: 1,
+        readerControl: 1,
+        readerReading: 1,
+        session: 1,
+        viewport: 1,
+        loop: 1
+      }
+    };
+    const developerMotionSpeeds = developerMotionProfile.categories || developerMotionProfile.speeds || developerMotionProfile.speed || {};
+    const motionSpeed = (scope) => {
+      const value = Number(scope === "global"
+        ? (developerMotionProfile.globalSpeed ?? developerMotionSpeeds.global)
+        : developerMotionSpeeds[scope]);
+      return Number.isFinite(value) ? value : 1;
+    };
     const pages = {
       "settings-general": {
         title: "通用设置",
@@ -5767,6 +6077,49 @@
           "notification-permission": { title: "打开通知权限设置？", copy: "将跳转到系统设置中的通知权限，用于开启或关闭阅读提醒。", confirmLabel: "去设置" },
           "battery-permission": { title: "打开电池优化设置？", copy: "将跳转到系统设置中的电池优化页面，用于管理后台运行策略。", confirmLabel: "去设置" }
         }
+      },
+      "settings-developer": {
+        title: "开发模式",
+        developerMotion: true,
+        sections: [
+          {
+            title: "运行状态",
+            rows: [
+              {
+                type: "motion-developer-toggle",
+                icon: "bug",
+                title: "启用动画调试",
+                meta: "只在本机生效，不修改正式 Motion Contract",
+                enabled: Boolean(developerMotionProfile.enabled)
+              }
+            ]
+          },
+          {
+            title: "动画速度",
+            rows: [
+              { type: "motion-speed", icon: "motion", title: "全部动画", meta: "作为各分类倍率的基础值", scope: "global", value: motionSpeed("global") },
+              { type: "motion-speed", icon: "source-switch", title: "页面与导航", meta: "路由、主 Tab 与分段切换", scope: "navigation", value: motionSpeed("navigation") },
+              { type: "motion-speed", icon: "gesture", title: "控件反馈", meta: "按钮、开关、输入与状态替换", scope: "componentFeedback", value: motionSpeed("componentFeedback") },
+              { type: "motion-speed", icon: "layers", title: "弹层与反馈", meta: "Dialog、Sheet、下拉与 Toast", scope: "overlay", value: motionSpeed("overlay") },
+              { type: "motion-speed", icon: "settings", title: "阅读控制层", meta: "控制层、快捷栏、模块与完整面板", scope: "readerControl", value: motionSpeed("readerControl") },
+              { type: "motion-speed", icon: "book", title: "阅读与翻页", meta: "进入阅读、翻页与章节跳转", scope: "readerReading", value: motionSpeed("readerReading") },
+              { type: "motion-speed", icon: "play", title: "会话与胶囊", meta: "朗读、自动翻页与运行胶囊", scope: "session", value: motionSpeed("session") },
+              { type: "motion-speed", icon: "viewport", title: "屏幕与布局", meta: "旋转、尺寸变化与中断收尾", scope: "viewport", value: motionSpeed("viewport") },
+              { type: "motion-speed", icon: "refresh", title: "循环动画", meta: "加载、脉冲与持续状态", scope: "loop", value: motionSpeed("loop") }
+            ]
+          },
+          {
+            title: "管理",
+            rows: [
+              {
+                type: "motion-reset",
+                icon: "refresh",
+                title: "恢复 1× 速度",
+                meta: "保留开发模式开关，清除全部分类覆盖"
+              }
+            ]
+          }
+        ]
       },
       "bookshelf-search-settings": {
         title: "书架与搜索",
@@ -5989,7 +6342,61 @@
       </div>`;
   }
 
+  function formatMotionSpeed(value) {
+    const numeric = Number(value);
+    const normalized = Number.isFinite(numeric) ? Math.max(0, Math.min(4, numeric)) : 1;
+    return `${Number(normalized.toFixed(2))}×`;
+  }
+
+  function settingsMotionDeveloperToggleHtml(row) {
+    const enabled = Boolean(row.enabled);
+    return `
+      <article class="fd-setting-row is-motion-developer-toggle" role="group" data-motion-developer-status="${enabled ? "enabled" : "disabled"}">
+        <span>${icon(row.icon || "bug", "fd-small-icon")}</span>
+        <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
+        <em class="fd-settings-row-side is-switch">
+          <button class="fd-motion-developer-switch" type="button" data-motion-developer-toggle aria-label="${enabled ? "关闭" : "开启"}${esc(row.title)}" aria-pressed="${enabled ? "true" : "false"}">
+            ${settingsSwitch(enabled)}
+          </button>
+        </em>
+      </article>`;
+  }
+
+  function settingsMotionSpeedHtml(row, appState) {
+    const speed = Number.isFinite(Number(row.value)) ? Number(row.value) : 1;
+    const disabled = !Boolean(appState?.motionSpeedProfile?.enabled);
+    return `
+      <article class="fd-setting-row is-motion-speed${disabled ? " is-disabled" : ""}" role="group" data-motion-speed-row="${esc(row.scope)}">
+        <span>${icon(row.icon || "motion", "fd-small-icon")}</span>
+        <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
+        <em class="fd-motion-speed-control">
+          <output data-motion-speed-output="${esc(row.scope)}">${esc(formatMotionSpeed(speed))}</output>
+          <input type="range" min="0.25" max="4" step="0.25" value="${esc(speed)}" data-motion-speed-scope="${esc(row.scope)}" aria-label="${esc(row.title)}速度倍率"${disabled ? " disabled" : ""}>
+        </em>
+      </article>`;
+  }
+
+  function settingsMotionResetHtml(row) {
+    return `
+      <article class="fd-setting-row is-motion-reset" role="group">
+        <span>${icon(row.icon || "refresh", "fd-small-icon")}</span>
+        <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
+        <em class="fd-settings-row-side is-action">
+          <button class="fd-settings-row-action" type="button" data-motion-speed-reset>重置</button>
+        </em>
+      </article>`;
+  }
+
   function settingsRowHtml(row, route, appState) {
+    if (row.type === "motion-developer-toggle") {
+      return settingsMotionDeveloperToggleHtml(row);
+    }
+    if (row.type === "motion-speed") {
+      return settingsMotionSpeedHtml(row, appState);
+    }
+    if (row.type === "motion-reset") {
+      return settingsMotionResetHtml(row);
+    }
     if (row.type === "input") {
       return settingsInputRowHtml(row);
     }
@@ -6089,6 +6496,23 @@
     return `<label class="fd-settings-search-box">${icon("search", "fd-small-icon")}<span>${esc(searchBox.placeholder)}</span></label>`;
   }
 
+  function settingsDeveloperMotionIntroHtml(page, appState) {
+    if (!page?.developerMotion) return "";
+    const enabled = Boolean(appState?.motionSpeedProfile?.enabled);
+    const reduced = Boolean(appState?.motionReduced);
+    return `
+      <section class="fd-motion-developer-intro" aria-label="开发模式说明">
+        <div>
+          <strong>运行时动画速度</strong>
+          <p>最终速度 = “全部动画”倍率 × 当前分类倍率。0.25× 是四倍慢放，1× 是产品速度，4× 是四倍加速；修改只影响下一次动画。</p>
+        </div>
+        <dl>
+          <div><dt>动画调试</dt><dd class="${enabled ? "is-active" : ""}">${enabled ? "已启用" : "未启用"}</dd></div>
+          <div><dt>减少动态效果</dt><dd class="${reduced ? "is-reduced" : ""}">${reduced ? "优先生效" : "未启用"}</dd></div>
+        </dl>
+      </section>`;
+  }
+
   function settingsChipsHtml(items, label) {
     if (!items || !items.length) return "";
     return `<nav class="fd-settings-chip-row" aria-label="${esc(label)}">${items.map((item) => `<button class="${item.active ? "is-active" : ""}" type="button">${esc(item.label)}</button>`).join("")}</nav>`;
@@ -6174,7 +6598,7 @@
   }
 
   function settingsScreen(data, route, appState) {
-    const page = settingsPageFor(route, data);
+    const page = settingsPageFor(route, data, appState);
     const values = appState?.settingsValues || {};
     (page.sections || []).forEach((section) => {
       (section.rows || []).forEach((row) => {
@@ -6190,6 +6614,7 @@
     const toastMessage = appState?.settingsToast || page.toast || "";
     const frameState = overlay === "sheet" ? " has-sheet" : overlay.startsWith("dialog") ? " has-dialog" : "";
     const contentHtml = `
+      ${settingsDeveloperMotionIntroHtml(page, appState)}
       ${settingsMetricsHtml(page.metrics)}
       ${settingsStorageHtml(page.storage)}
       ${settingsSearchHtml(page.searchBox)}
@@ -7112,8 +7537,8 @@
     bind("[data-close-bookshelf-more]", "dropdown.menu.collapse");
     bind("[data-open-keyboard]", "input.focus");
     bind("[data-close-keyboard]", "input.blur");
-    bind("[data-keyboard-host]", "overlay.keyboard.enter/exit");
-    bind("[data-keyboard-input]", "input.focus/blur");
+    bind("[data-keyboard-host]", "overlay.keyboard.enter-exit");
+    bind("[data-keyboard-input]", "input.focus-blur");
     bind("[data-open-sheet]", "overlay.sheet.enter");
     bind("[data-close-sheet]", "overlay.sheet.exit");
     bind("[data-demo-sheet]", "overlay.sheet.enter/exit");
@@ -7133,8 +7558,8 @@
     bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-discover-sort], .fd-discover-sort-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer], [data-bookshelf-more-layer], .fd-source-more-menu, .fd-bookshelf-more-menu, .fd-book-focus-menu", "dropdown.menu.expand");
     bind("[data-settings-overlay]", "overlay.dialog.enter/exit");
     bind("[data-close-settings-overlay]", "overlay.dialog.exit");
-    bind("[data-settings-confirm-result], [data-main-tab-feedback]", "feedback.toast.enter/update/exit");
-    bind("[data-search-submit], [data-primary-search-submit]", "input.submit");
+    bind(".fd-settings-toast, .fd-discover-toast, [data-main-tab-feedback]", "feedback.toast.enter");
+    bind("[data-search-submit], [data-book-search-submit], [data-primary-search-submit]", "input.submit");
     bind("[data-search-reset]", "input.clear");
     bind("[data-search-state]", "search.state.replace");
     bind("[data-add-search-shelf], [data-top-action], [data-book-action]", "button.activate");
@@ -7143,7 +7568,7 @@
     bind("[data-reader-replace-rule-edit]", "dropdown.option.select");
     bind("[data-reader-replace-rule-delete]", "destructive.confirm.commit");
     bind("[data-reader-replace-scope]", "selection.item.toggle");
-    bind("[data-reader-replace-form-field], [data-reader-theme-edit-field]", "input.focus/blur");
+    bind("[data-reader-replace-form-field], [data-reader-theme-edit-field]", "input.focus-blur");
     bind("[data-reader-theme-edit-scheme]", "segment.item.switch");
     bind("[data-reader-chapter-download]", "state.loading.inline");
     bind("[data-reader-session-stop]", "reader.session.capsule.exit");
@@ -7156,6 +7581,7 @@
     bind("[data-reader-page-action]", "reader.page.turn.next-prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
     bind("[data-reader-dismiss]", "reader.control.hide");
+    bind("[data-reader-control-show]", "reader.control.show");
     bind(".fd-reader-grabber, .fd-reader-full-grabber", "reader.control.handle.press");
     bind("[data-reader-handle-expand-route]", "reader.control.handle.release");
     bind("[data-reader-exit]", "app.route.pop");
@@ -7174,10 +7600,14 @@
     bind("[data-reader-selection-action]", "selection.toolbar.action");
     bind("[data-reader-selection-close]", "selection.toolbar.exit");
     bind("[data-quick-action]", "reader.quick.promote");
+    bind("[data-reader-quick-expand]", "reader.panel.expand");
+    bind("[data-reader-quick-collapse]", "reader.panel.collapse");
+    bind("[data-reader-panel-expand]", "reader.panel.expand");
+    bind("[data-reader-panel-collapse]", "reader.panel.collapse");
     bind("[data-source-name]", "listRow.select");
     bind("[data-source-switch-window]", "reader.sourceSwitch.open/close");
     bind("[data-restore-record]", "card.route");
-    bind("[data-restore-scopes], [data-settings-scope], [data-source-index]", "state.content.replace");
+    bind("[data-restore-scopes]:not([data-restore-record]), [data-settings-scope], [data-source-index]:not([data-source-name])", "state.content.replace");
     bind("[data-width-class], [data-height-class], [data-orientation], [data-viewport-class], [data-viewport-width], [data-viewport-height]", "viewport.orientation.reshape");
     bind("[data-demo-mode-option], [data-demo-mode]", "segment.item.switch");
     bind("[data-capture-mode], [data-capture-route]", "tooling.mode.switch");
@@ -7269,6 +7699,556 @@
   function attachCommonMotionComponentState(root) {
     if (!root || typeof root.querySelectorAll !== "function") return;
     root.querySelectorAll("[data-motion-id]").forEach(syncCommonMotionComponentState);
+  }
+
+  const primitiveExactMotionIds = new Set([
+    "button.activate",
+    "toggle.switch",
+    "chip.item.select",
+    "slider.drag.start",
+    "slider.drag.update",
+    "slider.drag.release",
+    "stepper.press",
+    "stepper.value.change",
+    "card.press",
+    "card.select",
+    "card.route",
+    "listRow.select"
+  ]);
+
+  function primitiveMotionIds(element) {
+    const raw = String(element?.getAttribute?.("data-motion-id") || "");
+    const compound = {
+      "card.press/select/route": ["card.press", "card.select", "card.route"],
+      "slider.drag.start/update/release": ["slider.drag.start", "slider.drag.update", "slider.drag.release"],
+      "stepper.press/value.change": ["stepper.press", "stepper.value.change"]
+    }[raw];
+    if (compound) return compound;
+    return raw
+      .split("/")
+      .map((part) => part.trim())
+      .filter((part) => primitiveExactMotionIds.has(part));
+  }
+
+  function primitiveMotionOwner(element) {
+    if (!element) return "primitive";
+    const ownerAttrs = [
+      "data-reader-typography-action",
+      "data-reader-page-space-action",
+      "data-reader-setting-toggle",
+      "data-reader-brightness-track",
+      "data-reader-chapter-progress",
+      "data-book-id",
+      "data-restore-record",
+      "data-source-name",
+      "data-discover-entry",
+      "data-book-action",
+      "data-top-action",
+      "aria-label",
+      "name"
+    ];
+    for (const attr of ownerAttrs) {
+      if (!element.hasAttribute(attr)) continue;
+      const value = element.getAttribute(attr);
+      return `${attr}:${value || "true"}`;
+    }
+    return `${element.tagName?.toLowerCase?.() || "item"}:${String(element.textContent || "").trim().slice(0, 48)}`;
+  }
+
+  function primitiveMotionValue(element) {
+    if (!element) return "unknown";
+    for (const attr of ["aria-valuenow", "aria-pressed", "aria-selected", "aria-current", "value"]) {
+      if (element.hasAttribute?.(attr)) return element.getAttribute(attr) || "empty";
+    }
+    if ("value" in element && element.value !== undefined) return String(element.value);
+    if (element.classList?.contains("is-selected")) return "selected";
+    if (element.classList?.contains("is-active") || element.classList?.contains("is-on")) return "on";
+    return "idle";
+  }
+
+  function primitiveMotionDuration(motionId, reducedMotion) {
+    if (reducedMotion && !motionId.startsWith("slider.drag.")) return 0;
+    return {
+      "button.activate": 120,
+      "toggle.switch": 140,
+      "chip.item.select": 120,
+      "slider.drag.start": 0,
+      "slider.drag.update": 0,
+      "slider.drag.release": reducedMotion ? 0 : 120,
+      "stepper.press": 80,
+      "stepper.value.change": 120,
+      "card.press": 80,
+      "card.select": 120,
+      "card.route": 160,
+      "listRow.select": 120
+    }[motionId] || 0;
+  }
+
+  function attachPrimitiveExactMotionState(root, appState, motionController) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const demoRoot = root.closest?.(".fd-demo") || root;
+    const allPrimitiveElements = () => Array.from(root.querySelectorAll("[data-motion-id]"))
+      .filter((element) => primitiveMotionIds(element).length > 0);
+    const findLiveElement = (owner, motionId, fallback) => {
+      if (fallback?.isConnected) return fallback;
+      return allPrimitiveElements().find((candidate) =>
+        primitiveMotionIds(candidate).includes(motionId) && primitiveMotionOwner(candidate) === owner
+      ) || null;
+    };
+    const writeMotion = (motion, element) => {
+      if (!motion) return;
+      const attrs = {
+        "data-motion-primitive-id": motion.id,
+        "data-motion-primitive-state": motion.state,
+        "data-motion-primitive-phase": motion.phase,
+        "data-motion-primitive-owner": motion.owner,
+        "data-motion-primitive-value": motion.value,
+        "data-motion-primitive-sequence": String(motion.sequence),
+        "data-motion-primitive-interrupt": motion.interrupt || "none"
+      };
+      Object.entries(attrs).forEach(([key, value]) => demoRoot.setAttribute(key, value));
+      if (element?.isConnected) {
+        Object.entries(attrs).forEach(([key, value]) => element.setAttribute(key, value));
+        if (motion.id.startsWith("slider.drag.")) {
+          element.setAttribute("data-motion-slider-id", motion.id);
+          element.setAttribute("data-motion-slider-state", motion.state);
+          element.setAttribute("data-motion-slider-phase", motion.phase);
+          element.setAttribute("data-motion-slider-value", motion.value);
+          element.setAttribute("data-motion-slider-owner", motion.owner);
+        }
+        if (motion.id.startsWith("stepper.")) {
+          element.setAttribute("data-motion-stepper-id", motion.id);
+          element.setAttribute("data-motion-stepper-state", motion.state);
+          element.setAttribute("data-motion-stepper-phase", motion.phase);
+          element.setAttribute("data-motion-stepper-value", motion.value);
+        }
+        syncCommonMotionComponentState(element);
+      }
+      window.__readerPrimitiveMotionState = Object.assign({}, motion);
+    };
+    const startMotion = (motionId, element, options) => {
+      const owner = primitiveMotionOwner(element);
+      const previous = appState.primitiveMotion;
+      const sequence = (appState.primitiveMotionSequence || 0) + 1;
+      const interrupt = previous && previous.phase !== "settled" && previous.sequence !== sequence ? "redirect" : "none";
+      if (appState.primitiveMotionTimer) {
+        window.clearTimeout(appState.primitiveMotionTimer);
+        appState.primitiveMotionTimer = null;
+      }
+      const motion = {
+        id: motionId,
+        owner,
+        state: options?.state || "running",
+        phase: options?.phase || "running",
+        value: options?.value ?? primitiveMotionValue(element),
+        sequence,
+        interrupt,
+        from: options?.from || "primitive.previous",
+        to: options?.to || "primitive.next"
+      };
+      appState.primitiveMotionSequence = sequence;
+      appState.primitiveMotion = motion;
+      motionController?.start?.({
+        id: motionId,
+        action: options?.action || motionId,
+        from: motion.from,
+        to: motion.to,
+        target: element
+      });
+      writeMotion(motion, findLiveElement(owner, motionId, element));
+      const duration = primitiveMotionDuration(motionId, Boolean(appState.motionReduced));
+      appState.primitiveMotionTimer = window.setTimeout(() => {
+        if (appState.primitiveMotion?.sequence !== sequence) return;
+        const live = findLiveElement(owner, motionId, element);
+        motion.phase = "settled";
+        motion.state = options?.settledState || "settled";
+        motion.value = primitiveMotionValue(live || element);
+        writeMotion(motion, live);
+        appState.primitiveMotionTimer = null;
+      }, duration);
+      return motion;
+    };
+    const afterCurrentEvent = (callback) => Promise.resolve().then(callback);
+
+    if (appState.primitiveMotion) {
+      const current = appState.primitiveMotion;
+      writeMotion(current, findLiveElement(current.owner, current.id, null));
+    }
+
+    allPrimitiveElements().forEach((element) => {
+      if (element.__readerPrimitiveExactMotionBound) return;
+      element.__readerPrimitiveExactMotionBound = true;
+      const ids = primitiveMotionIds(element);
+      const has = (id) => ids.includes(id);
+      const disabled = () => element.disabled || element.getAttribute("aria-disabled") === "true";
+
+      element.addEventListener("pointerdown", (event) => {
+        if (disabled() || (event.button && event.button !== 0)) return;
+        if (has("slider.drag.start")) {
+          element.__readerPrimitiveSliderPointer = event.pointerId;
+          startMotion("slider.drag.start", element, {
+            state: "dragging",
+            from: "slider.idle",
+            to: "slider.dragging",
+            settledState: "dragging",
+            action: "pointerDown"
+          });
+          return;
+        }
+        if (has("stepper.press")) {
+          startMotion("stepper.press", element, {
+            state: "pressed",
+            from: "stepper.idle",
+            to: "stepper.pressed",
+            settledState: "pressedReleased",
+            action: "pointerDown"
+          });
+          return;
+        }
+        if (has("card.press")) {
+          startMotion("card.press", element, {
+            state: "pressed",
+            from: "card.idle",
+            to: "card.pressed",
+            settledState: "pressedReleased",
+            action: "pointerDown"
+          });
+        }
+      });
+
+      element.addEventListener("pointermove", (event) => {
+        if (!has("slider.drag.update") || element.__readerPrimitiveSliderPointer !== event.pointerId) return;
+        afterCurrentEvent(() => startMotion("slider.drag.update", findLiveElement(primitiveMotionOwner(element), "slider.drag.update", element) || element, {
+          state: "draggingValueUpdated",
+          from: "slider.dragging",
+          to: "slider.draggingValueUpdated",
+          settledState: "draggingValueUpdated",
+          action: "pointerMove"
+        }));
+      });
+
+      element.addEventListener("pointerup", (event) => {
+        if (!has("slider.drag.release") || element.__readerPrimitiveSliderPointer !== event.pointerId) return;
+        element.__readerPrimitiveSliderPointer = null;
+        afterCurrentEvent(() => startMotion("slider.drag.release", findLiveElement(primitiveMotionOwner(element), "slider.drag.release", element) || element, {
+          state: "valueCommitted",
+          from: "slider.draggingValueUpdated",
+          to: "slider.valueCommitted",
+          settledState: "valueCommitted",
+          action: "pointerUp"
+        }));
+      });
+
+      element.addEventListener("pointercancel", () => {
+        if (element.__readerPrimitiveSliderPointer == null) return;
+        element.__readerPrimitiveSliderPointer = null;
+        if (appState.primitiveMotion) {
+          appState.primitiveMotion.state = "cancelled";
+          appState.primitiveMotion.phase = "settled";
+          appState.primitiveMotion.interrupt = "cancel";
+          writeMotion(appState.primitiveMotion, element);
+        }
+        motionController?.interrupt?.("pointerCancel");
+      });
+
+      element.addEventListener("click", (event) => {
+        if (disabled()) return;
+        const nestedOwner = event.target?.closest?.("[data-motion-id]");
+        if (nestedOwner && nestedOwner !== element) {
+          const nestedIds = primitiveMotionIds(nestedOwner);
+          if (nestedIds.some((id) => ids.includes(id))) return;
+        }
+        const owner = primitiveMotionOwner(element);
+        afterCurrentEvent(() => {
+          const liveFor = (id) => findLiveElement(owner, id, element) || element;
+          if (has("button.activate")) {
+            startMotion("button.activate", liveFor("button.activate"), {
+              state: "commandCommitted",
+              from: "button.pressed",
+              to: "button.commandCommitted",
+              settledState: "commandResolved",
+              action: "activate"
+            });
+          } else if (has("toggle.switch")) {
+            startMotion("toggle.switch", liveFor("toggle.switch"), {
+              state: "valueCommitted",
+              from: "toggle.previousValue",
+              to: "toggle.nextValue",
+              settledState: "valueCommitted",
+              action: "switch"
+            });
+          } else if (has("chip.item.select")) {
+            startMotion("chip.item.select", liveFor("chip.item.select"), {
+              state: "selected",
+              from: "chip.previousSelection",
+              to: "chip.targetSelected",
+              settledState: "selected",
+              action: "select"
+            });
+          } else if (has("card.route") && element.hasAttribute("data-restore-record")) {
+            startMotion("card.route", liveFor("card.route"), {
+              state: "routeCommitted",
+              from: "route.current",
+              to: "card.destinationRoute",
+              settledState: "destinationVisible",
+              action: "route"
+            });
+          } else if (has("card.select") && !event.target?.closest?.("[data-book-cover]")) {
+            startMotion("card.select", liveFor("card.select"), {
+              state: "selected",
+              from: "card.previousSelection",
+              to: "card.targetSelected",
+              settledState: "selected",
+              action: "select"
+            });
+          } else if (has("listRow.select")) {
+            startMotion("listRow.select", liveFor("listRow.select"), {
+              state: "selected",
+              from: "listRow.previousSelection",
+              to: "listRow.targetSelected",
+              settledState: "selected",
+              action: "select"
+            });
+          }
+          if (has("stepper.value.change")) {
+            startMotion("stepper.value.change", liveFor("stepper.value.change"), {
+              state: "valueCommitted",
+              from: "stepper.previousValue",
+              to: "stepper.nextLegalValue",
+              settledState: "valueCommitted",
+              action: "valueChange"
+            });
+          }
+        });
+      });
+
+      element.addEventListener("keydown", (event) => {
+        if (disabled()) return;
+        if (has("slider.drag.start") && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) {
+          startMotion("slider.drag.start", element, {
+            state: "dragging",
+            from: "slider.valueCommitted",
+            to: "slider.dragging",
+            settledState: "dragging",
+            action: "keyboardAdjustBegin"
+          });
+          afterCurrentEvent(() => startMotion("slider.drag.update", findLiveElement(primitiveMotionOwner(element), "slider.drag.update", element) || element, {
+            state: "draggingValueUpdated",
+            from: "slider.dragging",
+            to: "slider.draggingValueUpdated",
+            settledState: "draggingValueUpdated",
+            action: "keyboardAdjustRepeat"
+          }));
+        }
+      });
+
+      element.addEventListener("keyup", (event) => {
+        if (!has("slider.drag.release") || !["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
+        afterCurrentEvent(() => startMotion("slider.drag.release", findLiveElement(primitiveMotionOwner(element), "slider.drag.release", element) || element, {
+          state: "valueCommitted",
+          from: "slider.draggingValueUpdated",
+          to: "slider.valueCommitted",
+          settledState: "valueCommitted",
+          action: "keyboardAdjustCommit"
+        }));
+      });
+    });
+  }
+
+  function attachInputSearchMotionState(root, appState, motionController) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const demoRoot = root.closest?.(".fd-demo") || root;
+    const writeInputState = (field, state, phase, motionId) => {
+      const value = String(field?.value || "");
+      const owner = field?.getAttribute("data-keyboard-input") != null
+        ? "book-search-query"
+        : field?.getAttribute("data-reader-replace-form-field")
+          || field?.getAttribute("data-reader-theme-edit-field")
+          || field?.getAttribute("name")
+          || "input";
+      if (field) {
+        field.setAttribute("data-motion-input-contract", "input.focus-blur");
+        field.setAttribute("data-motion-input-id", motionId || "input.focus-blur");
+        field.setAttribute("data-motion-input-state", state);
+        field.setAttribute("data-motion-input-phase", phase);
+        field.setAttribute("data-motion-input-owner", owner);
+        field.setAttribute("data-motion-input-value", value ? "non-empty" : "empty");
+      }
+      demoRoot.setAttribute("data-motion-input-id", motionId || "input.focus-blur");
+      demoRoot.setAttribute("data-motion-input-state", state);
+      demoRoot.setAttribute("data-motion-input-phase", phase);
+      demoRoot.setAttribute("data-motion-input-owner", owner);
+      demoRoot.setAttribute("data-motion-input-value", value ? "non-empty" : "empty");
+      demoRoot.setAttribute("data-motion-input-sequence", String(appState?.inputMotionSequence || 0));
+      window.__readerInputSearchMotionState = {
+        inputId: motionId || "input.focus-blur",
+        inputState: state,
+        inputPhase: phase,
+        inputOwner: owner,
+        inputValue: value ? "non-empty" : "empty",
+        sequence: appState?.inputMotionSequence || 0
+      };
+      syncCommonMotionComponentState(field);
+    };
+    const settleInputState = (field, sequence, state, motionId) => {
+      if (appState?.inputMotionTimer) {
+        window.clearTimeout(appState.inputMotionTimer);
+      }
+      appState.inputMotionTimer = window.setTimeout(() => {
+        if (!field?.isConnected || sequence !== appState.inputMotionSequence) return;
+        writeInputState(field, state, "settled", motionId);
+        appState.inputMotionTimer = null;
+      }, appState?.motionReduced ? 0 : 120);
+    };
+
+    root.querySelectorAll("input[data-motion-id^='input.'], textarea[data-motion-id^='input.'], [contenteditable='true'][data-motion-id^='input.']").forEach((field) => {
+      const focused = document.activeElement === field;
+      writeInputState(field, focused ? "focused" : "blurred", focused ? "settled" : "idle", "input.focus-blur");
+      if (field.__readerInputMotionBound) return;
+      field.__readerInputMotionBound = true;
+      field.addEventListener("focus", () => {
+        appState.inputMotionSequence = (appState.inputMotionSequence || 0) + 1;
+        appState.inputMotion = { id: "input.focus", state: "focused", phase: "entering", sequence: appState.inputMotionSequence };
+        motionController?.start?.({ id: "input.focus", action: "focus", from: "input.blurred", to: "input.focused", target: field });
+        writeInputState(field, "focused", "entering", "input.focus");
+        settleInputState(field, appState.inputMotionSequence, "focused", "input.focus");
+      });
+      field.addEventListener("input", () => {
+        if (field.hasAttribute("data-keyboard-input") || field.hasAttribute("data-book-search-input")) {
+          appState.bookSearchQuery = field.value;
+          const mirrorSelector = field.hasAttribute("data-keyboard-input")
+            ? "[data-book-search-input]"
+            : "[data-keyboard-input]";
+          const mirror = root.querySelector(mirrorSelector);
+          if (mirror && mirror !== field && mirror.value !== field.value) {
+            mirror.value = field.value;
+            mirror.setAttribute("data-motion-input-value", field.value ? "non-empty" : "empty");
+          }
+        }
+        writeInputState(field, "editing", "updating", "input.focus-blur");
+      });
+      field.addEventListener("blur", () => {
+        appState.inputMotionSequence = (appState.inputMotionSequence || 0) + 1;
+        appState.inputMotion = { id: "input.blur", state: "blurred", phase: "exiting", sequence: appState.inputMotionSequence };
+        motionController?.start?.({ id: "input.blur", action: "blur", from: "input.focused", to: "input.blurred", target: field });
+        writeInputState(field, "blurred", "exiting", "input.blur");
+        settleInputState(field, appState.inputMotionSequence, "blurred", "input.blur");
+      });
+      field.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" || (!field.hasAttribute("data-keyboard-input") && !field.hasAttribute("data-book-search-input"))) return;
+        event.preventDefault();
+        root.querySelector("[data-primary-search-submit]")?.click();
+      });
+    });
+
+    const searchState = root.querySelector("[data-search-state]");
+    if (!searchState) return;
+    const state = searchState.getAttribute("data-search-state") || "before";
+    const motion = appState?.bookSearchMotion || null;
+    const phase = motion?.to === state && motion?.phase === "replacing" ? "replacing" : state === "loading" ? "pending" : "settled";
+    const owner = motion?.owner || `search-${appState?.bookSearchRequestSequence || 0}`;
+    searchState.setAttribute("data-motion-search-id", "search.state.replace");
+    searchState.setAttribute("data-motion-search-state", state);
+    searchState.setAttribute("data-motion-search-phase", phase);
+    searchState.setAttribute("data-motion-search-owner", owner);
+    searchState.setAttribute("data-motion-search-request-version", String(appState?.bookSearchRequestSequence || 0));
+    searchState.setAttribute("data-motion-search-discarded-request", String(appState?.bookSearchDiscardedRequest || 0));
+    demoRoot.setAttribute("data-motion-search-id", "search.state.replace");
+    demoRoot.setAttribute("data-motion-search-state", state);
+    demoRoot.setAttribute("data-motion-search-phase", phase);
+    demoRoot.setAttribute("data-motion-search-owner", owner);
+    demoRoot.setAttribute("data-motion-search-request-version", String(appState?.bookSearchRequestSequence || 0));
+    demoRoot.setAttribute("data-motion-search-discarded-request", String(appState?.bookSearchDiscardedRequest || 0));
+    window.__readerInputSearchMotionState = Object.assign({}, window.__readerInputSearchMotionState || {}, {
+      searchId: "search.state.replace",
+      searchState: state,
+      searchPhase: phase,
+      searchOwner: owner,
+      requestVersion: appState?.bookSearchRequestSequence || 0,
+      query: String(appState?.bookSearchQuery || "")
+    });
+    if (motion?.to === state && motion.phase === "replacing") {
+      if (appState.bookSearchMotionPhaseTimer) {
+        window.clearTimeout(appState.bookSearchMotionPhaseTimer);
+      }
+      const sequence = motion.sequence;
+      appState.bookSearchMotionPhaseTimer = window.setTimeout(() => {
+        if (appState.bookSearchMotion?.sequence !== sequence) return;
+        appState.bookSearchMotion.phase = "settled";
+        if (searchState.isConnected) searchState.setAttribute("data-motion-search-phase", "settled");
+        demoRoot.setAttribute("data-motion-search-phase", "settled");
+        appState.bookSearchMotionPhaseTimer = null;
+      }, appState?.motionReduced ? 0 : 160);
+    }
+  }
+
+  function attachContentReplaceMotionState(root, appState, motionController, route) {
+    if (!root || typeof root.querySelectorAll !== "function") return;
+    const demoRoot = root.closest?.(".fd-demo") || root;
+    const targets = Array.from(root.querySelectorAll('[data-motion-id="state.content.replace"]'));
+    if (!targets.length) return;
+    const routeKey = String(route || "unknown");
+    const signature = targets.map((element) => `${element.tagName}:${element.textContent?.trim() || ""}`).join("|");
+    appState.contentReplaceSignatures = appState.contentReplaceSignatures || {};
+    const previous = appState.contentReplaceSignatures[routeKey];
+    const changed = Boolean(previous && previous !== signature);
+    appState.contentReplaceSignatures[routeKey] = signature;
+    if (changed) {
+      appState.contentReplaceSequence = (appState.contentReplaceSequence || 0) + 1;
+      appState.contentReplaceMotion = {
+        id: "state.content.replace",
+        route: routeKey,
+        phase: "replacing",
+        sequence: appState.contentReplaceSequence
+      };
+      motionController?.start?.({
+        id: "state.content.replace",
+        action: "replace",
+        from: "content.previous",
+        to: "content.latest",
+        target: targets[0]
+      });
+    }
+    const phase = changed ? "replacing" : "settled";
+    targets.forEach((element) => {
+      element.setAttribute("data-motion-content-id", "state.content.replace");
+      element.setAttribute("data-motion-content-role", "target");
+      element.setAttribute("data-motion-content-state", "latest");
+      element.setAttribute("data-motion-content-phase", phase);
+      element.setAttribute("data-motion-content-sequence", String(appState.contentReplaceSequence || 0));
+    });
+    demoRoot.setAttribute("data-motion-content-id", "state.content.replace");
+    demoRoot.setAttribute("data-motion-content-state", "latest");
+    demoRoot.setAttribute("data-motion-content-phase", phase);
+    demoRoot.setAttribute("data-motion-content-route", routeKey);
+    demoRoot.setAttribute("data-motion-content-sequence", String(appState.contentReplaceSequence || 0));
+    if (!changed) return;
+    if (appState.contentReplaceTimer) window.clearTimeout(appState.contentReplaceTimer);
+    const sequence = appState.contentReplaceSequence;
+    appState.contentReplaceTimer = window.setTimeout(() => {
+      if (sequence !== appState.contentReplaceSequence) return;
+      targets.forEach((element) => {
+        if (element.isConnected) element.setAttribute("data-motion-content-phase", "settled");
+      });
+      demoRoot.setAttribute("data-motion-content-phase", "settled");
+      if (appState.contentReplaceMotion?.sequence === sequence) appState.contentReplaceMotion.phase = "settled";
+      appState.contentReplaceTimer = null;
+    }, appState?.motionReduced ? 0 : 160);
+  }
+
+  function cancelBookSearchRequest(appState, reason) {
+    const request = appState?.bookSearchRequest;
+    if (!request) return null;
+    if (request.timer) {
+      window.clearTimeout(request.timer);
+      request.timer = null;
+    }
+    request.active = false;
+    request.state = "discarded";
+    request.reason = reason || "cancelled";
+    appState.bookSearchDiscardedRequest = request.sequence;
+    appState.bookSearchRequest = null;
+    return request;
   }
 
   function attachMotionPressState(root, motionController) {
@@ -7363,9 +8343,10 @@
       element.addEventListener("pointerdown", (event) => {
         if (event.button && event.button !== 0) return;
         if (motionController) {
-          const motionId = element.getAttribute("data-motion-press-id") || element.getAttribute("data-motion-id") || "button.press";
+          const semanticMotionId = element.getAttribute("data-motion-press-id") || element.getAttribute("data-motion-id") || "";
+          const motionId = window.ReaderMotionController?.pressMotionIdFor?.(semanticMotionId) || "button.activate";
           motionController.start({
-            id: motionId.includes("press") ? motionId : `${motionId}.press`,
+            id: motionId,
             action: "press",
             target: element
           });
@@ -7526,10 +8507,39 @@
     return motion;
   }
 
+  function settleTabMotionNav(nav, buttons) {
+    if (!nav) return;
+    nav.setAttribute("data-motion-tab-phase", "settled");
+    nav.removeAttribute("data-motion-tab-from");
+    nav.removeAttribute("data-motion-tab-to");
+    nav.removeAttribute("data-motion-tab-pressed");
+    buttons.forEach((button) => {
+      button.classList.remove("is-tab-motion-from", "is-tab-motion-to", "is-tab-motion-pressed");
+      button.setAttribute("data-motion-tab-state", button.classList.contains("is-active") ? "active" : "inactive");
+    });
+  }
+
+  function clearTabMotionTimer(appState, timerKey) {
+    const timer = appState?.[timerKey];
+    if (timer) {
+      window.clearTimeout(timer);
+      appState[timerKey] = null;
+    }
+  }
+
+  function settleReaderModuleTabMotionState(root, appState) {
+    clearTabMotionTimer(appState, "readerModuleMotionTimer");
+    if (appState) {
+      appState.readerModuleMotion = null;
+    }
+    const nav = root?.querySelector?.(".fd-reader-module-nav:not(.fd-reader-module-nav-empty)");
+    if (!nav) return;
+    settleTabMotionNav(nav, Array.from(nav.querySelectorAll(".fd-reader-module")));
+  }
+
   function attachTabMotionState(root, appState) {
     if (!root || typeof root.querySelectorAll !== "function") return;
     const reduced = root.closest(".fd-demo")?.getAttribute("data-motion-reduced") === "true";
-    const settleDelay = reduced ? 0 : 180;
     const groups = [
       {
         group: "main",
@@ -7537,6 +8547,7 @@
         selector: ".fd-main-nav-item",
         motion: appState?.mainTabMotion,
         motionKey: "mainTabMotion",
+        settleDelay: 160,
         itemKey: (button) => button.getAttribute("data-nav-type") || ""
       },
       {
@@ -7545,6 +8556,7 @@
         selector: ".fd-reader-module",
         motion: appState?.readerModuleMotion,
         motionKey: "readerModuleMotion",
+        settleDelay: 200,
         itemKey: (button) => button.getAttribute("data-module") || ""
       }
     ];
@@ -7552,6 +8564,8 @@
     groups.forEach((config) => {
       const nav = config.host;
       if (!nav) return;
+      const timerKey = `${config.motionKey}Timer`;
+      clearTabMotionTimer(appState, timerKey);
       const buttons = Array.from(nav.querySelectorAll(config.selector));
       if (!buttons.length) return;
       const activeButton = buttons.find((button) => button.classList.contains("is-active") || button.getAttribute("aria-current") === "page") || null;
@@ -7570,9 +8584,7 @@
 
       const motion = config.motion && !config.motion.settled ? config.motion : null;
       if (!motion || !motion.to) {
-        nav.setAttribute("data-motion-tab-phase", "settled");
-        nav.removeAttribute("data-motion-tab-from");
-        nav.removeAttribute("data-motion-tab-to");
+        settleTabMotionNav(nav, buttons);
         return;
       }
 
@@ -7591,19 +8603,23 @@
         }
       });
 
-      window.setTimeout(() => {
+      const settle = () => {
         if (appState && appState[config.motionKey] === motion) {
           appState[config.motionKey] = null;
         }
+        if (appState) {
+          appState[timerKey] = null;
+        }
         if (!nav.isConnected) return;
-        nav.setAttribute("data-motion-tab-phase", "settled");
-        nav.removeAttribute("data-motion-tab-from");
-        nav.removeAttribute("data-motion-tab-to");
-        buttons.forEach((button) => {
-          button.classList.remove("is-tab-motion-from", "is-tab-motion-to", "is-tab-motion-pressed");
-          button.setAttribute("data-motion-tab-state", button.classList.contains("is-active") ? "active" : "inactive");
-        });
-      }, settleDelay);
+        settleTabMotionNav(nav, buttons);
+      };
+      if (reduced) {
+        settle();
+      } else if (appState) {
+        appState[timerKey] = window.setTimeout(settle, config.settleDelay);
+      } else {
+        window.setTimeout(settle, config.settleDelay);
+      }
     });
   }
 
@@ -7924,6 +8940,8 @@
     trigger.setAttribute("data-motion-dropdown-state", open ? "open" : "closed");
     trigger.setAttribute("data-motion-dropdown-phase", open ? "expanded" : "settled");
     trigger.setAttribute("data-motion-press-id", "dropdown.trigger.press");
+    trigger.setAttribute("aria-haspopup", "menu");
+    trigger.setAttribute("aria-expanded", open ? "true" : "false");
   }
 
   function syncDropdownOption(option) {
@@ -7934,12 +8952,75 @@
     option.setAttribute("data-motion-dropdown-item", dropdownItemKey(option));
     option.setAttribute("data-motion-dropdown-state", selected ? "selected" : "idle");
     option.setAttribute("data-motion-press-id", "dropdown.option.press");
+    if (!option.hasAttribute("role")) option.setAttribute("role", "menuitem");
   }
 
   function settleDropdownMenu(menu, state) {
     if (!menu.isConnected) return;
     menu.setAttribute("data-motion-dropdown-state", state);
     menu.setAttribute("data-motion-dropdown-phase", "settled");
+  }
+
+  function clearDropdownRepositionMotion(root, appState, motion) {
+    if (appState?.dropdownRepositionMotion && appState.dropdownRepositionMotion !== motion) return;
+    if (appState) {
+      appState.dropdownRepositionMotion = null;
+      appState.dropdownRepositionTimer = null;
+    }
+    root?.removeAttribute("data-motion-dropdown-reposition");
+    root?.removeAttribute("data-motion-dropdown-reposition-id");
+    root?.removeAttribute("data-motion-dropdown-reposition-state");
+    root?.removeAttribute("data-motion-dropdown-reposition-group");
+    root?.removeAttribute("data-motion-dropdown-reposition-from");
+    root?.removeAttribute("data-motion-dropdown-reposition-to");
+    root?.removeAttribute("data-motion-dropdown-reposition-sequence");
+  }
+
+  function applyDropdownRepositionMotion(root, appState) {
+    const motion = appState?.dropdownRepositionMotion;
+    if (!root || !motion) return;
+    root.setAttribute("data-motion-dropdown-reposition", "true");
+    root.setAttribute("data-motion-dropdown-reposition-id", motion.id);
+    root.setAttribute("data-motion-dropdown-reposition-state", motion.state);
+    root.setAttribute("data-motion-dropdown-reposition-group", motion.group);
+    root.setAttribute("data-motion-dropdown-reposition-from", motion.from);
+    root.setAttribute("data-motion-dropdown-reposition-to", motion.to);
+    root.setAttribute("data-motion-dropdown-reposition-sequence", String(motion.sequence));
+    root.querySelectorAll("[data-motion-dropdown-role=\"menu\"]").forEach((menu) => {
+      if (menu.getAttribute("data-motion-dropdown-group") !== motion.group) return;
+      menu.setAttribute("data-motion-dropdown-phase", "reposition");
+      menu.setAttribute("data-motion-dropdown-state", motion.state === "settled" ? "expanded" : "repositioning");
+      menu.setAttribute("data-motion-dropdown-reposition-from", motion.from);
+      menu.setAttribute("data-motion-dropdown-reposition-to", motion.to);
+    });
+  }
+
+  function startDropdownRepositionMotion(root, menu, appState, motionController, from, to, reduced) {
+    if (!root || !menu || !appState || !from || !to || from === to) return null;
+    if (appState.dropdownRepositionTimer) {
+      window.clearTimeout(appState.dropdownRepositionTimer);
+      appState.dropdownRepositionTimer = null;
+    }
+    const group = menu.getAttribute("data-motion-dropdown-group") || dropdownGroupKey(menu);
+    const sequence = (appState.dropdownRepositionSequence || 0) + 1;
+    const motion = { id: "dropdown.menu.reposition", group, from, to, state: "repositioning", sequence };
+    appState.dropdownRepositionSequence = sequence;
+    appState.dropdownRepositionMotion = motion;
+    motionController?.start?.({
+      id: motion.id,
+      action: "viewport.orientation.reshape",
+      from: `openAtAnchor.${from}`,
+      to: `openAtLegalAnchor.${to}`,
+      target: menu
+    });
+    applyDropdownRepositionMotion(root, appState);
+    appState.dropdownRepositionTimer = window.setTimeout(() => {
+      if (appState.dropdownRepositionMotion !== motion) return;
+      motion.state = "settled";
+      appState.dropdownRepositionTimer = null;
+      applyDropdownRepositionMotion(root, appState);
+    }, reduced ? 0 : 120);
+    return motion;
   }
 
   function activeDropdownGroups(root) {
@@ -8020,20 +9101,87 @@
     return motion;
   }
 
-  function syncDropdownMenu(menu, reduced) {
+  function syncDropdownMenu(menu, reduced, root, appState, motionController) {
     const group = dropdownGroupKey(menu);
     const placement = menu.classList.contains("is-drop-up") ? "up" : "down";
+    const previousPlacement = appState?.dropdownPlacementByGroup?.[group] || "";
+    const hadEntered = Boolean(menu.__readerDropdownMotionEntered);
     menu.setAttribute("data-motion-dropdown-role", "menu");
     menu.setAttribute("data-motion-dropdown-group", group);
     menu.setAttribute("data-motion-dropdown-placement", placement);
+    if (!menu.hasAttribute("role")) menu.setAttribute("role", "menu");
+    if (appState) {
+      appState.dropdownPlacementByGroup = appState.dropdownPlacementByGroup || {};
+      appState.dropdownPlacementByGroup[group] = placement;
+    }
+    if (hadEntered && previousPlacement && previousPlacement !== placement) {
+      startDropdownRepositionMotion(root, menu, appState, motionController, previousPlacement, placement, reduced);
+      return;
+    }
     menu.setAttribute("data-motion-dropdown-phase", "expand");
-    if (menu.__readerDropdownMotionEntered || reduced) {
+    if (hadEntered || reduced) {
       settleDropdownMenu(menu, "expanded");
       return;
     }
     menu.__readerDropdownMotionEntered = true;
     menu.setAttribute("data-motion-dropdown-state", "entering");
     window.requestAnimationFrame(() => settleDropdownMenu(menu, "expanded"));
+  }
+
+  function dropdownElementsForGroup(root, selector, group) {
+    return Array.from(root?.querySelectorAll?.(selector) || [])
+      .filter((element) => (element.getAttribute("data-motion-dropdown-group") || dropdownGroupKey(element)) === group);
+  }
+
+  function applyDropdownFocusRequest(root, appState) {
+    const request = appState?.dropdownFocusRequest;
+    if (!root || !request) return;
+    window.requestAnimationFrame(() => {
+      if (appState.dropdownFocusRequest !== request || !root.isConnected) return;
+      const menus = dropdownElementsForGroup(root, "[data-motion-dropdown-role=\"menu\"]", request.group);
+      const options = dropdownElementsForGroup(root, "[data-motion-dropdown-role=\"option\"]", request.group);
+      const triggers = dropdownElementsForGroup(root, "[data-motion-dropdown-role=\"trigger\"]", request.group);
+      let target = null;
+      if (request.kind === "menu") {
+        target = options.find((option) => option.getAttribute("data-motion-dropdown-state") === "selected") || options[0] || menus[0];
+      } else if (menus.length) {
+        target = options.find((option) => option.getAttribute("data-motion-dropdown-item") === request.item) || options[0] || menus[0];
+      } else {
+        target = triggers[0];
+      }
+      if (!target || typeof target.focus !== "function") return;
+      if (target === menus[0] && !target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+      appState.dropdownFocusRequest = null;
+    });
+  }
+
+  function bindDropdownMenuKeyboard(menu, root, appState) {
+    if (!menu || menu.__readerDropdownKeyboardBound) return;
+    menu.__readerDropdownKeyboardBound = true;
+    menu.addEventListener("keydown", (event) => {
+      const group = menu.getAttribute("data-motion-dropdown-group") || dropdownGroupKey(menu);
+      const options = dropdownElementsForGroup(root, "[data-motion-dropdown-role=\"option\"]", group)
+        .filter((option) => !option.disabled && option.getAttribute("aria-disabled") !== "true");
+      if (event.key === "Escape") {
+        event.preventDefault();
+        appState.dropdownFocusRequest = { group, kind: "trigger", item: "" };
+        dropdownElementsForGroup(root, "[data-motion-dropdown-role=\"trigger\"]", group)[0]?.click?.();
+        return;
+      }
+      if (!options.length || !["ArrowDown", "ArrowUp", "Home", "End", "Tab"].includes(event.key)) return;
+      const currentIndex = Math.max(0, options.indexOf(document.activeElement));
+      let nextIndex = currentIndex;
+      if (event.key === "Home") nextIndex = 0;
+      if (event.key === "End") nextIndex = options.length - 1;
+      if (event.key === "ArrowDown") nextIndex = (currentIndex + 1) % options.length;
+      if (event.key === "ArrowUp") nextIndex = (currentIndex - 1 + options.length) % options.length;
+      if (event.key === "Tab") nextIndex = event.shiftKey
+        ? (currentIndex - 1 + options.length) % options.length
+        : (currentIndex + 1) % options.length;
+      event.preventDefault();
+      options[nextIndex]?.focus?.({ preventScroll: true });
+    });
   }
 
   function attachDropdownMotionState(root, appState, motionController) {
@@ -8061,6 +9209,11 @@
             from: wasOpen ? "open" : "closed",
             to: wasOpen ? "closed" : "open"
           };
+          appState.dropdownFocusRequest = {
+            group,
+            kind: wasOpen ? "trigger" : "menu",
+            item: ""
+          };
           if (motionController) {
             motionController.start({
               id,
@@ -8075,7 +9228,8 @@
     });
 
     root.querySelectorAll(dropdownMenuSelector).forEach((menu) => {
-      syncDropdownMenu(menu, reduced);
+      syncDropdownMenu(menu, reduced, root, appState, motionController);
+      bindDropdownMenuKeyboard(menu, root, appState);
     });
 
     root.querySelectorAll(dropdownOptionSelector).forEach((option) => {
@@ -8092,6 +9246,11 @@
             from: "open",
             to: "valueCommitted"
           };
+          appState.dropdownFocusRequest = {
+            group,
+            kind: "trigger-or-option",
+            item
+          };
           option.setAttribute("data-motion-dropdown-state", "selecting");
           if (motionController) {
             motionController.start({
@@ -8106,6 +9265,8 @@
       }
     });
     applyDropdownSwitchMotion(root, appState);
+    applyDropdownRepositionMotion(root, appState);
+    applyDropdownFocusRequest(root, appState);
   }
 
   function readerEntryKey(element) {
@@ -9613,6 +10774,11 @@
         const d5Html = window.ReaderD5MotionClosureRenderers.renderD5Route(route, data, appState);
         if (d5Html) return d5Html;
       }
+      // D6：产品扩展能力路由使用显式语义页；业务动作在 runtime 接入前保持失败关闭。
+      if (window.ReaderD6CapabilityClosureRenderers && window.ReaderD6CapabilityClosureRenderers.renderD6Route) {
+        const d6Html = window.ReaderD6CapabilityClosureRenderers.renderD6Route(route, data, appState);
+        if (d6Html) return d6Html;
+      }
     }
     switch (route) {
       case "bookshelf":
@@ -10048,6 +11214,7 @@
       case "source-delete-confirm":
         return sourceDeleteConfirmScreen(data, appState);
       case "settings-general":
+      case "settings-developer":
       case "global-settings":
       case "bookshelf-search-settings":
       case "sync-backup":
@@ -10106,6 +11273,22 @@
     return {
       bookshelfView: "cover",
       bookSearchPhase: "before",
+      bookSearchQuery: "三体",
+      bookSearchRequest: null,
+      bookSearchRequestSequence: 0,
+      bookSearchDiscardedRequest: 0,
+      bookSearchMotion: null,
+      bookSearchMotionPhaseTimer: null,
+      inputMotion: null,
+      inputMotionSequence: 0,
+      inputMotionTimer: null,
+      contentReplaceMotion: null,
+      contentReplaceSequence: 0,
+      contentReplaceTimer: null,
+      contentReplaceSignatures: {},
+      primitiveMotion: null,
+      primitiveMotionSequence: 0,
+      primitiveMotionTimer: null,
       readerChapterIndex: initialReaderChapterIndex(data),
       readerChapterProgress: readerChapterProgressValue(data, {}),
       readerTypography: normalizeReaderTypography(data),
@@ -10184,6 +11367,7 @@
       rssConfirmOriginRoute: "",
       sourceSwitchSelectedSource: "",
       sourceSwitchOriginRoute: "",
+      sourceSwitchRestoreFocus: false,
       sourceMenuOpen: false,
       sourceStatusFilter: "全部",
       sourceGroupFilter: "全部分组",
@@ -10193,8 +11377,24 @@
       restoreSelectedScopes: restoreDefaultScopeKeys(),
       settingsOverlay: "",
       settingsExpandedOption: "",
+      dropdownMotion: null,
+      dropdownFocusRequest: null,
+      dropdownPlacementByGroup: {},
+      dropdownRepositionMotion: null,
+      dropdownRepositionTimer: null,
+      dropdownRepositionSequence: 0,
       settingsToast: "",
+      motionToastState: "hidden",
+      motionToastPhase: "exited",
+      motionToastId: "feedback.toast.exit",
+      motionToastOwner: "none",
+      motionToastSequence: 0,
+      motionToastAutoDismissTimer: null,
+      motionToastPhaseTimer: null,
+      motionToastExitTimer: null,
       settingsValues: {},
+      motionSpeedProfile: null,
+      motionReduced: false,
       mainTabFeedback: ""
     };
   }
@@ -10229,16 +11429,19 @@
   }
 
   function render(target, data) {
+    let captureChrome = "visible";
     try {
-      if (new URLSearchParams(window.location.search).get("captureMode") === "all") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("captureMode") === "all") {
         renderCaptureBoard(target, data);
         return;
       }
+      captureChrome = params.get("captureChrome") === "0" ? "hidden" : "visible";
     } catch (error) {
       // Fall back to the interactive demo when URLSearchParams is unavailable.
     }
     target.innerHTML = `
-      <main class="fd-demo" data-shell="ComponentLibraryShell" data-current-route="bookshelf" data-route-family="library" data-route-surface="page" data-route-layout="main-tab" data-demo-mode="regular" data-adaptive-runtime="viewport-class-v1" aria-label="前端 Demo 设计稿">
+      <main class="fd-demo" data-shell="ComponentLibraryShell" data-current-route="bookshelf" data-route-family="library" data-route-surface="page" data-route-layout="main-tab" data-demo-mode="regular" data-capture-chrome="${captureChrome}" data-adaptive-runtime="viewport-class-v1" aria-label="前端 Demo 设计稿">
         <nav class="fd-demo-mode-switch" aria-label="显示模式">
           <button class="is-active" type="button" data-demo-mode-option="regular" aria-pressed="true">常规显示</button>
           <button type="button" data-demo-mode-option="developer" aria-pressed="false">开发者模式</button>
@@ -10298,13 +11501,30 @@
     const appState = initialAppState(data);
     let pendingRouteRequest = null;
     let hasRenderedInitialRoute = false;
+    let readerPaginationRefreshFrame = 0;
+    let readerPaginationResizeObserver = null;
+    let readerPaginationObservedBox = "";
+    let readerPaginationActive = true;
     const motionAsyncDelay = (() => {
       const value = Number(new URLSearchParams(window.location.search).get("motionAsyncDelay"));
       if (!Number.isFinite(value) || value <= 0) return 360;
       return Math.min(3000, Math.max(80, Math.round(value)));
     })();
+    const motionSearchDelay = (() => {
+      const value = Number(new URLSearchParams(window.location.search).get("motionSearchDelay"));
+      if (!Number.isFinite(value) || value <= 0) return 420;
+      return Math.min(3000, Math.max(80, Math.round(value)));
+    })();
+    const motionRuntimeProfile = window.ReaderMotionRuntimeProfile
+      ? window.ReaderMotionRuntimeProfile.create({ root })
+      : null;
+    appState.motionSpeedProfile = motionRuntimeProfile?.getSnapshot?.() || appState.motionSpeedProfile;
+    window.__readerMotionRuntimeProfile = motionRuntimeProfile || null;
     const motionController = window.ReaderMotionController
       ? window.ReaderMotionController.create({ root })
+      : null;
+    const readerControlTransition = window.ReaderControlTransition
+      ? window.ReaderControlTransition.create({ root, screenHost, motionController })
       : null;
     let viewportSnapshot = applyViewportClass(root);
     if (target.__readerAdaptiveViewportCleanup) {
@@ -10313,6 +11533,70 @@
     const motionMediaQuery = typeof window.matchMedia === "function"
       ? window.matchMedia("(prefers-reduced-motion: reduce)")
       : null;
+    const readerPaginationBoxKey = (layer) => {
+      if (!layer) return "";
+      const rect = layer.getBoundingClientRect();
+      const width = Math.round(rect.width);
+      const height = Math.round(rect.height);
+      return width > 0 && height > 0 ? `${width}x${height}` : "";
+    };
+    const scheduleReaderPaginationRefresh = () => {
+      if (
+        !readerPaginationActive ||
+        !hasRenderedInitialRoute ||
+        appState.readerPageMode === "vertical" ||
+        !screenHost.querySelector(".fd-ir-reading-layer")
+      ) {
+        return;
+      }
+      if (readerPaginationRefreshFrame && typeof window.cancelAnimationFrame === "function") {
+        window.cancelAnimationFrame(readerPaginationRefreshFrame);
+      }
+      readerPaginationRefreshFrame = window.requestAnimationFrame(() => {
+        readerPaginationRefreshFrame = 0;
+        if (
+          screenHost.isConnected === false ||
+          appState.readerPageMode === "vertical" ||
+          !screenHost.querySelector(".fd-ir-reading-layer")
+        ) {
+          return;
+        }
+        if (refreshReaderPaginationForLayout(screenHost, data, appState)) {
+          renderCurrentRoute();
+        }
+      });
+    };
+    const observeReaderPaginationBox = () => {
+      if (readerPaginationResizeObserver) {
+        readerPaginationResizeObserver.disconnect();
+        readerPaginationResizeObserver = null;
+      }
+      const layer = screenHost.querySelector(".fd-ir-reading-layer");
+      readerPaginationObservedBox = readerPaginationBoxKey(layer);
+      if (!layer || !readerPaginationObservedBox || typeof window.ResizeObserver !== "function") {
+        return;
+      }
+      readerPaginationResizeObserver = new window.ResizeObserver((entries) => {
+        const nextBox = readerPaginationBoxKey(entries && entries[0] ? entries[0].target : null);
+        if (!nextBox || nextBox === readerPaginationObservedBox) {
+          return;
+        }
+        readerPaginationObservedBox = nextBox;
+        scheduleReaderPaginationRefresh();
+      });
+      readerPaginationResizeObserver.observe(layer);
+    };
+    const handleReaderFontMetricsChange = () => {
+      scheduleReaderPaginationRefresh();
+    };
+    if (document.fonts) {
+      if (document.fonts.ready && typeof document.fonts.ready.then === "function") {
+        document.fonts.ready.then(handleReaderFontMetricsChange);
+      }
+      if (typeof document.fonts.addEventListener === "function") {
+        document.fonts.addEventListener("loadingdone", handleReaderFontMetricsChange);
+      }
+    }
     const handleViewportChange = () => {
       const previousSnapshot = viewportSnapshot;
       const nextSnapshot = applyViewportClass(root);
@@ -10322,6 +11606,7 @@
         nextSnapshot &&
         (previousSnapshot.orientation !== nextSnapshot.orientation || previousSnapshot.viewportClass !== nextSnapshot.viewportClass)
       ) {
+        readerControlTransition?.settleNow("orientation-change");
         startMotionInterrupt(root, screenHost, appState, motionController, "viewport-change", {
           kind: "cancel",
           from: previousSnapshot.viewportClass,
@@ -10331,16 +11616,25 @@
       }
       viewportSnapshot = nextSnapshot;
       adjustReaderDropdownPlacement(screenHost);
+      attachDropdownMotionState(screenHost, appState, motionController);
       attachReaderControlDockMotionState(screenHost, appState, motionController);
+      scheduleReaderPaginationRefresh();
     };
     const syncMotionPreference = () => {
       applyMotionPreference(root, motionMediaQuery);
-      if (motionController) {
-        motionController.setReducedMotion(root.getAttribute("data-motion-reduced") === "true");
+      const reduced = root.getAttribute("data-motion-reduced") === "true";
+      appState.motionReduced = reduced;
+      readerControlTransition?.setReducedMotion(reduced);
+      if (!readerControlTransition && motionController) {
+        motionController.setReducedMotion(reduced);
+      }
+      if (reduced) {
+        settleReaderModuleTabMotionState(screenHost, appState);
       }
     };
     const handleMotionPreferenceChange = syncMotionPreference;
     window.addEventListener("resize", handleViewportChange);
+    window.addEventListener("orientationchange", handleViewportChange);
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleViewportChange);
     }
@@ -10353,14 +11647,46 @@
     }
     syncMotionPreference();
     target.__readerAdaptiveViewportCleanup = () => {
+      readerPaginationActive = false;
       clearReaderSessionCapsuleTimer(appState);
       clearFirstOpenMotionTimer(appState);
       clearViewportOrientationMotionTimer(appState);
       clearMotionInterruptTimer(appState);
+      clearTabMotionTimer(appState, "readerModuleMotionTimer");
+      if (readerPaginationRefreshFrame && typeof window.cancelAnimationFrame === "function") {
+        window.cancelAnimationFrame(readerPaginationRefreshFrame);
+        readerPaginationRefreshFrame = 0;
+      }
+      if (readerPaginationResizeObserver) {
+        readerPaginationResizeObserver.disconnect();
+        readerPaginationResizeObserver = null;
+      }
       if (appState.dropdownSwitchTimer) {
         window.clearTimeout(appState.dropdownSwitchTimer);
         appState.dropdownSwitchTimer = null;
       }
+      if (appState.dropdownRepositionTimer) {
+        window.clearTimeout(appState.dropdownRepositionTimer);
+        appState.dropdownRepositionTimer = null;
+      }
+      cancelBookSearchRequest(appState, "destroy");
+      if (appState.bookSearchMotionPhaseTimer) {
+        window.clearTimeout(appState.bookSearchMotionPhaseTimer);
+        appState.bookSearchMotionPhaseTimer = null;
+      }
+      if (appState.inputMotionTimer) {
+        window.clearTimeout(appState.inputMotionTimer);
+        appState.inputMotionTimer = null;
+      }
+      if (appState.contentReplaceTimer) {
+        window.clearTimeout(appState.contentReplaceTimer);
+        appState.contentReplaceTimer = null;
+      }
+      if (appState.primitiveMotionTimer) {
+        window.clearTimeout(appState.primitiveMotionTimer);
+        appState.primitiveMotionTimer = null;
+      }
+      clearDropdownRepositionMotion(screenHost, appState, appState.dropdownRepositionMotion);
       if (appState.readerTextSelectionTimer) {
         window.clearTimeout(appState.readerTextSelectionTimer);
         appState.readerTextSelectionTimer = null;
@@ -10372,12 +11698,17 @@
         appState.readerChapterDownloadTimers = {};
       }
       cancelPendingRouteRequest("destroy");
+      readerControlTransition?.destroy();
       if (motionController) {
         motionController.destroy();
       }
       window.removeEventListener("resize", handleViewportChange);
+      window.removeEventListener("orientationchange", handleViewportChange);
       if (window.visualViewport) {
         window.visualViewport.removeEventListener("resize", handleViewportChange);
+      }
+      if (document.fonts && typeof document.fonts.removeEventListener === "function") {
+        document.fonts.removeEventListener("loadingdone", handleReaderFontMetricsChange);
       }
       if (motionMediaQuery) {
         if (typeof motionMediaQuery.removeEventListener === "function") {
@@ -10483,6 +11814,7 @@
       request.state = "cancelled";
       request.reason = reason || "cancelled";
       request.active = false;
+      motionController?.interrupt?.("loading.request.cancel");
       pendingRouteRequest = null;
       appState.asyncRouteRequest = null;
       appState.asyncResultMotion = request;
@@ -10493,7 +11825,7 @@
     function startPendingRouteRequest(from, to) {
       const sequence = (appState.asyncResultSequence || 0) + 1;
       const request = {
-        id: "motion.interrupt.completeThenReplace",
+        id: "state.loading.inline",
         requestId: `route:${sequence}`,
         sequence,
         state: "pending",
@@ -10508,6 +11840,13 @@
       appState.asyncRouteRequest = request;
       appState.asyncResultMotion = request;
       pendingRouteRequest = request;
+      motionController?.start?.({
+        id: "state.loading.inline",
+        action: "state.loading.inline",
+        from: "inlineState.content",
+        to: "inlineState.loading",
+        requestId: request.requestId
+      });
       applyAsyncResultMotionState(request);
       return request;
     }
@@ -10532,11 +11871,21 @@
       pendingRouteRequest = null;
       appState.asyncRouteRequest = null;
       appState.asyncResultMotion = request;
+      motionController?.interrupt?.("loading.result.ready");
       applyAsyncResultMotionState(request);
       return true;
     }
 
     const renderActiveRoute = (route, options) => {
+      if (readerPaginationResizeObserver) {
+        readerPaginationResizeObserver.disconnect();
+        readerPaginationResizeObserver = null;
+      }
+      if (route === "bookshelf-list-mode") {
+        appState.bookshelfView = "list";
+      } else if (route === "bookshelf-cover-mode") {
+        appState.bookshelfView = "cover";
+      }
       const renderedTurnDirection = appState.readerTurnDirection;
       const previousRenderedRoute = root.getAttribute("data-current-route") || "";
       const scrollSnapshot = captureReaderScrollSnapshot(screenHost);
@@ -10546,6 +11895,9 @@
       }
       syncAppThemeRoot(root, data, appState);
       screenHost.innerHTML = renderRoute(route, data, options, appState);
+      if (options?.loading) {
+        ensureInlineLoadingIndicator(screenHost);
+      }
       const viewState = options?.viewState || {
         pageState: options?.pageState || (options?.loading ? "loading" : "default"),
         overlayState: options?.overlayState || null
@@ -10559,6 +11911,11 @@
       restoreReaderScrollSnapshot(screenHost, scrollSnapshot, shouldRestorePanelScroll);
       applyMotionSelectorBindings(screenHost);
       attachCommonMotionComponentState(screenHost);
+      attachPrimitiveExactMotionState(screenHost, appState, motionController);
+      attachInputSearchMotionState(screenHost, appState, motionController);
+      attachContentReplaceMotionState(screenHost, appState, motionController, route);
+      attachToastMotionState(screenHost, appState);
+      attachInlineLoadingMotionState(screenHost, appState);
       attachOverlayMotionState(screenHost, appState);
       attachTabMotionState(screenHost, appState);
       attachSegmentMotionState(screenHost, appState, motionController);
@@ -10568,6 +11925,7 @@
       attachReaderControlHandleMotionState(screenHost);
       attachReaderControlDockMotionState(screenHost, appState, motionController);
       attachReaderSessionCapsuleMotionState(screenHost, appState, motionController);
+      observeReaderPaginationBox();
       attachFirstOpenMotionState(root, screenHost, appState);
       if (appState.motionInterruptMotion) {
         applyMotionInterruptState(root, screenHost, appState, appState.motionInterruptMotion, {});
@@ -10592,11 +11950,38 @@
             applyViewportOrientationMotionAttributes(root, screenHost, appState, appState.viewportOrientationMotion);
           }
           attachOverlayMotionState(screenHost, appState);
+          attachToastMotionState(screenHost, appState);
+          attachInlineLoadingMotionState(screenHost, appState);
           attachCommonMotionComponentState(screenHost);
+          attachPrimitiveExactMotionState(screenHost, appState, motionController);
+          attachInputSearchMotionState(screenHost, appState, motionController);
         }
       });
       attachMotionPressState(screenHost, motionController);
-      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController);
+      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay);
+      if (appState.sourceSwitchRestoreFocus && route === appState.sourceSwitchOriginRoute) {
+        appState.sourceSwitchRestoreFocus = false;
+        window.requestAnimationFrame(() => {
+          const sourceSwitchTrigger = screenHost.querySelector('[data-route="source-switch"]');
+          if (sourceSwitchTrigger && typeof sourceSwitchTrigger.focus === "function") {
+            sourceSwitchTrigger.focus({ preventScroll: true });
+          }
+        });
+      }
+      if (appState.bookshelfFocusBookId && route !== "bookshelf-book-more-menu") {
+        const focusBookId = appState.bookshelfFocusBookId;
+        window.requestAnimationFrame(() => {
+          const item = Array.from(screenHost.querySelectorAll("[data-book-item][data-book-id]")).find(
+            (candidate) => candidate.getAttribute("data-book-id") === focusBookId
+          );
+          const focusTarget = item?.querySelector("[data-book-more]:not([tabindex='-1'])")
+            || item?.querySelector("[data-book-cover]");
+          if (focusTarget && typeof focusTarget.focus === "function") {
+            focusTarget.focus({ preventScroll: true });
+            appState.bookshelfFocusBookId = "";
+          }
+        });
+      }
       scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute);
       if (renderedTurnDirection) {
         const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
@@ -10625,14 +12010,37 @@
       }
     };
 
+    const runReaderControlTransition = (motionInput, commit) => {
+      if (
+        !readerControlTransition ||
+        motionInput?.readerTransitionCommitted ||
+        !readerControlTransition.accepts(motionInput?.id)
+      ) {
+        return false;
+      }
+      readerControlTransition.run(Object.assign({}, motionInput, { commit }));
+      return true;
+    };
+
     const goTo = (route, shouldPush, motionInput) => {
       if (!routes[route]) {
         return;
       }
+      if (runReaderControlTransition(motionInput, () => goTo(route, shouldPush, Object.assign({}, motionInput, {
+        readerTransitionCommitted: true,
+        target: null
+      })))) {
+        return;
+      }
+      const readerTransitionCommitted = Boolean(motionInput?.readerTransitionCommitted);
+      if (!readerTransitionCommitted) {
+        readerControlTransition?.settleNow("route-change");
+      }
       cancelPendingRouteRequest("route-change");
       const previous = routeStack[routeStack.length - 1];
+      if (previous === "book-search" && route !== previous) cancelBookSearchRequest(appState, "route-change");
       syncReaderQuickExpansionForRoute(route);
-      if (hasRenderedInitialRoute) {
+      if (hasRenderedInitialRoute && !readerTransitionCommitted) {
         const isPopMotion = motionInput?.id === "app.route.pop.backward" || motionInput?.action === "pop";
         startMotionInterrupt(root, screenHost, appState, motionController, isPopMotion ? "back" : shouldPush ? "route-push" : "route-replace", {
           kind: isPopMotion ? "cancel" : shouldPush ? "redirect" : "completeThenReplace",
@@ -10643,7 +12051,7 @@
       if (shouldPush && previous !== route) {
         routeStack.push(route);
       }
-      if (motionController) {
+      if (motionController && !readerTransitionCommitted) {
         const routeAction = hasRenderedInitialRoute ? (shouldPush ? "push" : "replace") : "firstOpen";
         if (routeAction === "firstOpen" && !appState.hasPlayedFirstOpen) {
           appState.firstOpenMotion = {
@@ -10666,11 +12074,10 @@
       }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
-      appState.settingsToast = "";
-      appState.mainTabFeedback = "";
+      resetToastMotionState(appState, motionController, "route-change");
       appState.readerMoreOpen = false;
       appState.discoverSortOpen = false;
-      if (shouldLoadReaderTransition(previous, route)) {
+      if (!readerTransitionCommitted && shouldLoadReaderTransition(previous, route)) {
         const request = startPendingRouteRequest(previous, route);
         renderActiveRoute(route, { loading: true });
         hasRenderedInitialRoute = true;
@@ -10693,15 +12100,16 @@
       if (!routes[route]) {
         return;
       }
+      readerControlTransition?.settleNow("tab-switch");
       cancelPendingRouteRequest("tab-switch");
       appState.readerQuickExpanded = "";
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
-      appState.settingsToast = "";
-      appState.mainTabFeedback = "";
+      resetToastMotionState(appState, motionController, "tab-switch");
       appState.readerMoreOpen = false;
       appState.discoverSortOpen = false;
       const previous = routeStack[routeStack.length - 1];
+      if (previous === "book-search" && route !== previous) cancelBookSearchRequest(appState, "tab-switch");
       startMotionInterrupt(root, screenHost, appState, motionController, "tab-switch", {
         kind: "redirect",
         from: previous,
@@ -10730,20 +12138,33 @@
       if (!routes[route]) {
         return;
       }
+      if (runReaderControlTransition(motionInput, () => replaceTopRoute(route, Object.assign({}, motionInput, {
+        readerTransitionCommitted: true,
+        target: null
+      })))) {
+        return;
+      }
+      const readerTransitionCommitted = Boolean(motionInput?.readerTransitionCommitted);
+      if (!readerTransitionCommitted) {
+        readerControlTransition?.settleNow("route-change");
+      }
       cancelPendingRouteRequest("route-replace");
       const previous = routeStack[routeStack.length - 1] || "";
+      if (previous === "book-search" && route !== previous) cancelBookSearchRequest(appState, "route-replace");
       syncReaderQuickExpansionForRoute(route);
-      startMotionInterrupt(root, screenHost, appState, motionController, "route-replace", {
-        kind: "completeThenReplace",
-        from: previous,
-        to: route
-      });
+      if (!readerTransitionCommitted) {
+        startMotionInterrupt(root, screenHost, appState, motionController, "route-replace", {
+          kind: "completeThenReplace",
+          from: previous,
+          to: route
+        });
+      }
       if (routeStack.length === 0) {
         routeStack.push(route);
       } else {
         routeStack[routeStack.length - 1] = route;
       }
-      if (motionController) {
+      if (motionController && !readerTransitionCommitted) {
         motionController.start(motionInput || {
           id: "app.route.replace",
           action: "replace",
@@ -10753,8 +12174,7 @@
       }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
-      appState.settingsToast = "";
-      appState.mainTabFeedback = "";
+      resetToastMotionState(appState, motionController, "route-replace");
       appState.readerMoreOpen = false;
       appState.discoverSortOpen = false;
       renderActiveRoute(route);
@@ -10762,6 +12182,7 @@
     };
 
     const exitReader = () => {
+      readerControlTransition?.settleNow("reader-exit");
       cancelPendingRouteRequest("reader-exit");
       appState.readerQuickExpanded = "";
       const fromRoute = routeStack[routeStack.length - 1] || "reader";
@@ -10799,6 +12220,36 @@
     };
 
     function goBack() {
+      const currentReaderRoute = routeStack[routeStack.length - 1] || "";
+      if (currentReaderRoute === "book-search") cancelBookSearchRequest(appState, "back");
+      const fullTargetRoute = readerPrimaryFullQuickRoutes[currentReaderRoute] || "";
+      const currentReaderMode = readerStateByRoute[currentReaderRoute]?.mode || (fullTargetRoute ? "full" : "");
+      const readerBackDecision = window.ReaderControlTransition?.backDecision?.({
+        route: currentReaderRoute,
+        mode: currentReaderMode,
+        quickExpanded: appState.readerQuickExpanded,
+        targetRoute: fullTargetRoute
+      }) || null;
+      if (readerBackDecision?.id === "reader.panel.collapse") {
+        if (readerBackDecision.targetRoute && readerBackDecision.targetRoute !== currentReaderRoute) {
+          replaceTopRoute(readerBackDecision.targetRoute, readerBackDecision);
+          return;
+        }
+        const commit = () => {
+          appState.readerQuickExpanded = "";
+          renderCurrentRoute();
+        };
+        if (readerControlTransition) {
+          readerControlTransition.run(Object.assign({}, readerBackDecision, { commit }));
+        } else {
+          commit();
+        }
+        return;
+      }
+      if (readerBackDecision?.id === "reader.control.hide") {
+        replaceTopRoute(readerBackDecision.targetRoute, readerBackDecision);
+        return;
+      }
       if (routeStack.length <= 1) {
         return;
       }
@@ -10806,13 +12257,16 @@
       const fromRoute = routeStack[routeStack.length - 1];
       routeStack.pop();
       const toRoute = routeStack[routeStack.length - 1];
+      const isSourceSwitchPop = String(fromRoute || "").startsWith("source-switch");
+      if (isSourceSwitchPop && toRoute === appState.sourceSwitchOriginRoute) {
+        appState.sourceSwitchRestoreFocus = true;
+      }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
-      appState.settingsToast = "";
-      appState.mainTabFeedback = "";
+      resetToastMotionState(appState, motionController, "back");
       appState.readerMoreOpen = false;
       goTo(toRoute, false, {
-        id: "app.route.pop.backward",
+        id: isSourceSwitchPop ? "source.switch.route.pop" : "app.route.pop.backward",
         action: "pop",
         from: fromRoute,
         to: toRoute
@@ -10842,7 +12296,89 @@
     goTo(initialRoute, false);
   }
 
-  function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController) {
+  function bookshelfViewAnchorSnapshot(grid) {
+    if (!grid) return null;
+    const scrollHost = grid.closest(".fd-phone-content") || grid.parentElement || grid;
+    const items = Array.from(grid.querySelectorAll("[data-book-item][data-book-id]"));
+    if (!items.length || typeof scrollHost.getBoundingClientRect !== "function") return null;
+    const viewportRect = scrollHost.getBoundingClientRect();
+    const visibleItems = items.map((item) => {
+      const rect = item.getBoundingClientRect();
+      const visiblePixels = Math.max(0, Math.min(rect.bottom, viewportRect.bottom) - Math.max(rect.top, viewportRect.top));
+      return { item, rect, visiblePixels };
+    }).filter((entry) => entry.visiblePixels > 0);
+    const anchorEntry = visibleItems.reduce((best, entry) => (
+      !best || entry.visiblePixels > best.visiblePixels ? entry : best
+    ), null) || { item: items[0], rect: items[0].getBoundingClientRect() };
+    const maxScroll = Number.isFinite(scrollHost.scrollHeight) && Number.isFinite(scrollHost.clientHeight)
+      ? Math.max(0, scrollHost.scrollHeight - scrollHost.clientHeight)
+      : null;
+    return {
+      scrollHost,
+      bookId: anchorEntry.item.getAttribute("data-book-id") || "",
+      top: anchorEntry.rect.top - viewportRect.top,
+      preserveEnd: maxScroll !== null && maxScroll > 2 && maxScroll - scrollHost.scrollTop <= 2
+    };
+  }
+
+  function applyBookshelfViewState(screenHost, appState, mode) {
+    const view = mode === "list" ? "list" : "cover";
+    const grid = screenHost.querySelector("[data-book-grid]");
+    const anchor = bookshelfViewAnchorSnapshot(grid);
+    appState.bookshelfView = view;
+    appState.bookshelfViewFeedback = `已切换到${view === "list" ? "列表" : "封面"}视图`;
+
+    if (grid) {
+      grid.setAttribute("data-bookshelf-view", view);
+      grid.setAttribute("aria-label", view === "list" ? "书籍列表" : "书籍封面网格");
+      grid.classList.toggle("is-list-view", view === "list");
+      grid.classList.toggle("is-cover-view", view === "cover");
+      Array.from(grid.querySelectorAll("[data-book-item]")).forEach((item, index, items) => {
+        item.setAttribute("data-bookshelf-item-view", view);
+        item.setAttribute("aria-posinset", String(index + 1));
+        item.setAttribute("aria-setsize", String(items.length));
+        item.querySelectorAll("[data-book-list-detail]").forEach((detail) => {
+          detail.setAttribute("aria-hidden", view === "list" ? "false" : "true");
+        });
+        item.querySelectorAll("[data-book-more]").forEach((button) => {
+          button.setAttribute("tabindex", view === "list" ? "0" : "-1");
+        });
+      });
+    }
+
+    screenHost.querySelectorAll("[data-bookshelf-view-button]").forEach((button) => {
+      const active = button.getAttribute("data-bookshelf-view-button") === view;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+
+    const feedback = screenHost.querySelector("[data-bookshelf-view-feedback]");
+    if (feedback) {
+      feedback.textContent = appState.bookshelfViewFeedback;
+    }
+
+    if (anchor && grid && anchor.bookId) {
+      if (anchor.preserveEnd) {
+        anchor.scrollHost.scrollTop = Math.max(0, anchor.scrollHost.scrollHeight - anchor.scrollHost.clientHeight);
+        return { view, anchorBookId: anchor.bookId };
+      }
+      const settledAnchor = Array.from(grid.querySelectorAll("[data-book-item][data-book-id]")).find(
+        (item) => item.getAttribute("data-book-id") === anchor.bookId
+      );
+      if (settledAnchor) {
+        const viewportTop = anchor.scrollHost.getBoundingClientRect().top;
+        const settledTop = settledAnchor.getBoundingClientRect().top - viewportTop;
+        const delta = settledTop - anchor.top;
+        if (Number.isFinite(delta) && delta !== 0) {
+          anchor.scrollHost.scrollTop += delta;
+        }
+      }
+    }
+
+    return { view, anchorBookId: anchor?.bookId || "" };
+  }
+
+  function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay) {
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const dialogFocusableSelector = [
       "button:not([disabled])",
@@ -10857,14 +12393,18 @@
       const style = window.getComputedStyle(element);
       return style.display !== "none" && style.visibility !== "hidden" && rect.width > 0 && rect.height > 0;
     });
-    const focusInitialDialogControl = (dialog) => {
+    const focusInitialDialogControl = (dialog, delayMs = 0) => {
       if (!dialog) {
         return;
       }
-      const target = dialog?.querySelector("[data-dialog-initial-focus]") || visibleDialogFocusables(dialog)[0];
-      if (target && typeof target.focus === "function") {
-        window.setTimeout(() => target.focus({ preventScroll: true }), 0);
-      }
+      window.setTimeout(() => {
+        const target = dialog?.querySelector("[data-dialog-initial-focus], [data-sheet-initial-focus]") ||
+          (dialog?.matches?.("[data-demo-sheet]") ? dialog.querySelector(dialogFocusableSelector) : null) ||
+          visibleDialogFocusables(dialog)[0];
+        if (target && typeof target.focus === "function") {
+          target.focus({ preventScroll: true });
+        }
+      }, delayMs);
     };
     const closeDemoDialog = (dialog) => {
       const routeBack = dialog?.querySelector("[data-route-back]");
@@ -11369,22 +12909,7 @@
       layer.querySelector(".fd-book-focus-menu button")?.focus({ preventScroll: true });
     };
 
-    const applyBookshelfView = (mode) => {
-      const view = mode === "list" ? "list" : "cover";
-      appState.bookshelfView = view;
-      const grid = screenHost.querySelector("[data-book-grid]");
-      if (grid) {
-        grid.setAttribute("data-bookshelf-view", view);
-        grid.setAttribute("aria-label", view === "list" ? "书籍列表" : "书籍封面网格");
-        grid.classList.toggle("is-list-view", view === "list");
-        grid.classList.toggle("is-cover-view", view === "cover");
-      }
-      screenHost.querySelectorAll("[data-bookshelf-view-button]").forEach((button) => {
-        const active = button.getAttribute("data-bookshelf-view-button") === view;
-        button.classList.toggle("is-active", active);
-        button.setAttribute("aria-pressed", active ? "true" : "false");
-      });
-    };
+    const applyBookshelfView = (mode) => applyBookshelfViewState(screenHost, appState, mode);
 
     screenHost.querySelectorAll("[data-bookshelf-view-button]").forEach((button) => {
       button.addEventListener("click", () => applyBookshelfView(button.getAttribute("data-bookshelf-view-button")));
@@ -11439,8 +12964,7 @@
       });
     };
     const setMainTabFeedback = (message) => {
-      appState.mainTabFeedback = message;
-      renderCurrentRoute();
+      showToastMotion(screenHost, appState, motionController, "mainTabFeedback", message, renderCurrentRoute);
     };
     const handleTopAction = (button) => {
       const action = button.getAttribute("data-top-action") || button.getAttribute("aria-label") || "";
@@ -11505,18 +13029,100 @@
       button.addEventListener("click", () => closeBookshelfMore(button.closest(".fd-phone")));
     });
 
-    screenHost.querySelectorAll("[data-search-submit]").forEach((button) => {
-      button.addEventListener("click", () => {
-        appState.bookSearchPhase = "after";
-        renderCurrentRoute();
+    const replaceBookSearchState = (from, to, owner, sequence, target, action) => {
+      appState.bookSearchPhase = to;
+      appState.bookSearchMotion = {
+        id: "search.state.replace",
+        from,
+        to,
+        owner,
+        sequence,
+        phase: "replacing"
+      };
+      motionController?.start?.({
+        id: "search.state.replace",
+        action: action || "replace",
+        from: `search.${from}`,
+        to: `search.${to}`,
+        target
       });
+    };
+
+    const submitBookSearch = (button) => {
+      const previousPhase = appState.bookSearchPhase || "before";
+      const historyQuery = button.getAttribute("data-search-query");
+      if (historyQuery != null) appState.bookSearchQuery = historyQuery;
+      const query = String(appState.bookSearchQuery || "").trim();
+      const previousRequest = cancelBookSearchRequest(appState, "superseded-by-latest-submit");
+      appState.bookSearchRequestSequence = (appState.bookSearchRequestSequence || 0) + 1;
+      const sequence = appState.bookSearchRequestSequence;
+      const owner = `search-${sequence}`;
+      const request = {
+        id: "book-search",
+        sequence,
+        owner,
+        query,
+        state: "pending",
+        active: true,
+        supersedes: previousRequest?.sequence || 0,
+        timer: null
+      };
+      appState.bookSearchRequest = request;
+      motionController?.start?.({
+        id: "input.submit",
+        action: "submit",
+        from: "submit.idle",
+        to: "submit.pending",
+        target: button
+      });
+      if (!query) {
+        request.state = "completed";
+        request.active = false;
+        appState.bookSearchRequest = null;
+        replaceBookSearchState(previousPhase, "empty", owner, sequence, button, "empty");
+        renderCurrentRoute();
+        return;
+      }
+      replaceBookSearchState(previousPhase, "loading", owner, sequence, button, previousRequest ? "redirect" : "submit");
+      renderCurrentRoute();
+      request.timer = window.setTimeout(() => {
+        if (appState.bookSearchRequest !== request || !request.active) return;
+        request.timer = null;
+        request.active = false;
+        request.state = "completed";
+        appState.bookSearchRequest = null;
+        const terminalState = /^(error|错误|失败)$/i.test(query) ? "error" : "after";
+        replaceBookSearchState("loading", terminalState, owner, sequence, screenHost.querySelector("[data-search-state]"), "complete");
+        renderCurrentRoute();
+      }, motionSearchDelay);
+    };
+
+    const clearBookSearch = (button) => {
+      const previousPhase = appState.bookSearchPhase || "before";
+      cancelBookSearchRequest(appState, "cleared-by-user");
+      appState.bookSearchRequestSequence = (appState.bookSearchRequestSequence || 0) + 1;
+      const sequence = appState.bookSearchRequestSequence;
+      appState.bookSearchQuery = "";
+      motionController?.start?.({
+        id: "input.clear",
+        action: "clear",
+        from: "value.nonEmpty",
+        to: "value.empty",
+        target: button
+      });
+      replaceBookSearchState(previousPhase, "before", `search-${sequence}`, sequence, button, "clear");
+      renderCurrentRoute();
+      window.requestAnimationFrame(() => {
+        screenHost.querySelector("[data-open-keyboard]")?.focus?.({ preventScroll: true });
+      });
+    };
+
+    screenHost.querySelectorAll("[data-search-submit], [data-book-search-submit]").forEach((button) => {
+      button.addEventListener("click", () => submitBookSearch(button));
     });
 
     screenHost.querySelectorAll("[data-search-reset]").forEach((button) => {
-      button.addEventListener("click", () => {
-        appState.bookSearchPhase = "before";
-        renderCurrentRoute();
-      });
+      button.addEventListener("click", () => clearBookSearch(button));
     });
 
     screenHost.querySelectorAll("[data-add-search-shelf]").forEach((button) => {
@@ -11549,7 +13155,7 @@
       if (overlay === "sheet" || overlay === "dialog" || overlay.startsWith("dialog:")) {
         startOverlayMotion(screenHost, appState, motionController, overlay === "sheet" ? "sheet" : "dialog", "open", trigger);
         appState.settingsOverlay = overlay;
-        appState.settingsToast = "";
+        resetToastMotionState(appState, motionController, "overlay-open");
         renderCurrentRoute();
       }
     };
@@ -11573,8 +13179,12 @@
         const overlay = appState.settingsOverlay || "";
         startOverlayMotion(screenHost, appState, motionController, overlay === "sheet" ? "sheet" : "dialog", "close", button);
         appState.settingsOverlay = "";
-        appState.settingsToast = resultToast;
-        renderCurrentRoute();
+        if (resultToast) {
+          showToastMotion(screenHost, appState, motionController, "settingsToast", resultToast, renderCurrentRoute);
+        } else {
+          resetToastMotionState(appState, motionController, "overlay-close");
+          renderCurrentRoute();
+        }
         restoreOverlayMotionFocus(appState);
       });
     });
@@ -11584,7 +13194,7 @@
         const key = targetEl.getAttribute("data-settings-option-key") || "";
         appState.settingsOverlay = "";
         appState.settingsExpandedOption = appState.settingsExpandedOption === key ? "" : key;
-        appState.settingsToast = "";
+        resetToastMotionState(appState, motionController, "settings-option");
         renderCurrentRoute();
       };
       targetEl.addEventListener("click", (event) => {
@@ -11608,8 +13218,55 @@
         appState.settingsValues[key] = value;
         appState.settingsExpandedOption = "";
         appState.settingsOverlay = "";
-        appState.settingsToast = "";
+        resetToastMotionState(appState, motionController, "settings-choice");
         renderCurrentRoute();
+      });
+    });
+
+    const motionProfileRuntime = window.ReaderMotionRuntimeProfile
+      ? window.ReaderMotionRuntimeProfile.create({ root: screenHost.closest(".fd-demo") })
+      : null;
+    const syncMotionProfileState = () => {
+      appState.motionSpeedProfile = motionProfileRuntime?.getSnapshot?.() || appState.motionSpeedProfile;
+      return appState.motionSpeedProfile;
+    };
+
+    screenHost.querySelectorAll("[data-motion-developer-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (!motionProfileRuntime) return;
+        const enabled = button.getAttribute("aria-pressed") !== "true";
+        motionProfileRuntime.setEnabled(enabled);
+        syncMotionProfileState();
+        showToastMotion(screenHost, appState, motionController, "settingsToast", enabled ? "动画调试已启用" : "动画调试已关闭，已恢复产品速度", renderCurrentRoute);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-motion-speed-scope]").forEach((input) => {
+      const applySpeed = () => {
+        if (!motionProfileRuntime) return;
+        const scope = input.getAttribute("data-motion-speed-scope") || "global";
+        const speed = Number(input.value);
+        const profile = motionProfileRuntime.setSpeed(scope, speed);
+        appState.motionSpeedProfile = profile || motionProfileRuntime.getSnapshot();
+        const output = screenHost.querySelector(`[data-motion-speed-output="${scope}"]`);
+        if (output) output.textContent = formatMotionSpeed(speed);
+      };
+      input.addEventListener("input", applySpeed);
+      input.addEventListener("change", applySpeed);
+    });
+
+    screenHost.querySelectorAll("[data-motion-speed-reset]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        if (!motionProfileRuntime) return;
+        const enabled = Boolean(motionProfileRuntime.getSnapshot()?.enabled);
+        motionProfileRuntime.reset();
+        if (enabled) {
+          motionProfileRuntime.setEnabled(true);
+        }
+        syncMotionProfileState();
+        showToastMotion(screenHost, appState, motionController, "settingsToast", "全部动画速度已恢复为 1×", renderCurrentRoute);
       });
     });
 
@@ -11936,8 +13593,22 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        appState.readerQuickExpanded = button.getAttribute("data-reader-quick-expand") || "";
-        renderCurrentRoute();
+        const quick = button.getAttribute("data-reader-quick-expand") || "";
+        const commit = () => {
+          appState.readerQuickExpanded = quick;
+          renderCurrentRoute();
+        };
+        if (readerControlTransition) {
+          readerControlTransition.run({
+            id: "reader.panel.expand",
+            action: "expand-full-panel",
+            from: `${currentRoute()}:quick`,
+            to: `${currentRoute()}:full`,
+            commit
+          });
+        } else {
+          commit();
+        }
       });
     });
 
@@ -11945,8 +13616,21 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        appState.readerQuickExpanded = "";
-        renderCurrentRoute();
+        const commit = () => {
+          appState.readerQuickExpanded = "";
+          renderCurrentRoute();
+        };
+        if (readerControlTransition) {
+          readerControlTransition.run({
+            id: "reader.panel.collapse",
+            action: "collapse-full-panel",
+            from: `${currentRoute()}:full`,
+            to: `${currentRoute()}:quick`,
+            commit
+          });
+        } else {
+          commit();
+        }
       });
     });
 
@@ -11963,6 +13647,11 @@
           event.stopPropagation();
         }
         const route = targetEl.getAttribute("data-route");
+        if (targetEl.hasAttribute("data-book-focus-index")) {
+          const bookFocusIndex = Number.parseInt(targetEl.getAttribute("data-book-focus-index") || "0", 10);
+          appState.bookFocusIndex = Number.isFinite(bookFocusIndex) ? Math.max(0, bookFocusIndex) : 0;
+          appState.bookshelfFocusBookId = targetEl.getAttribute("data-book-id") || "";
+        }
         if (rssConfirmRoutes.has(route)) {
           appState.rssConfirmOriginRoute = currentRoute();
         }
@@ -12019,6 +13708,42 @@
             target: readerModuleButton
           };
         })();
+        const readerControlShowMotionInput = targetEl.hasAttribute("data-reader-control-show")
+          ? {
+              id: "reader.control.show",
+              action: "show-control-layer",
+              from: currentRoute(),
+              to: route,
+              target: targetEl
+            }
+          : null;
+        const readerQuickPromoteMotionInput = targetEl.hasAttribute("data-quick-action")
+          ? {
+              id: "reader.quick.promote",
+              action: "open-quick-panel",
+              from: currentRoute(),
+              to: route,
+              target: targetEl
+            }
+          : null;
+        const readerPanelExpandMotionInput = targetEl.hasAttribute("data-reader-panel-expand")
+          ? {
+              id: "reader.panel.expand",
+              action: "expand-full-panel",
+              from: currentRoute(),
+              to: route,
+              target: targetEl
+            }
+          : null;
+        const readerPanelCollapseMotionInput = targetEl.hasAttribute("data-reader-panel-collapse")
+          ? {
+              id: "reader.panel.collapse",
+              action: "collapse-full-panel",
+              from: currentRoute(),
+              to: route,
+              target: targetEl
+            }
+          : null;
         const readerEntryMotionInput = (() => {
           if (route !== "immersive-reading" || currentRoute() === "immersive-reading") return null;
           appState.readerEntryMotion = readerEntryMotionFromElement(targetEl, screenHost, currentRoute(), route, "action");
@@ -12030,7 +13755,24 @@
             target: targetEl
           };
         })();
-        const routeMotionInput = readerModuleMotionInput || readerEntryMotionInput;
+        const sourceSwitchRouteMotionInput = route === "source-switch"
+          ? {
+              id: "source.switch.route.push",
+              action: "push",
+              from: currentRoute(),
+              to: route,
+              target: targetEl
+            }
+          : (String(currentRoute() || "").startsWith("source-switch") || String(route || "").startsWith("source-switch"))
+            ? {
+                id: "source.switch.route.replace",
+                action: "replace",
+                from: currentRoute(),
+                to: route,
+                target: targetEl
+              }
+            : null;
+        const routeMotionInput = readerModuleMotionInput || readerControlShowMotionInput || readerQuickPromoteMotionInput || readerPanelExpandMotionInput || readerPanelCollapseMotionInput || readerEntryMotionInput || sourceSwitchRouteMotionInput;
         if (
           targetEl.classList.contains("fd-reader-module") &&
           originReaderState?.mode === "module" &&
@@ -12203,7 +13945,25 @@
         if (!route) return;
         const action = readerControlHandleAction(button, deltaY);
         setReaderControlHandleState(button, "releasing", { offsetY: 0, deltaY });
-        const motionInput = handleMotionInput("reader.control.handle.release", `handle-${action}-${source}`, deltaY);
+        const handleReleaseInput = handleMotionInput("reader.control.handle.release", `handle-${action}-${source}`, deltaY);
+        const isBaseRoute = route === (button.getAttribute("data-route") || "");
+        const panelMotionId = isBaseRoute && button.hasAttribute("data-reader-panel-expand")
+          ? "reader.panel.expand"
+          : isBaseRoute && button.hasAttribute("data-reader-panel-collapse")
+          ? "reader.panel.collapse"
+          : "";
+        if (panelMotionId && motionController) {
+          motionController.start(handleReleaseInput);
+        }
+        const motionInput = panelMotionId
+          ? {
+              id: panelMotionId,
+              action: panelMotionId === "reader.panel.expand" ? "expand-full-panel" : "collapse-full-panel",
+              from: currentRoute(),
+              to: route,
+              target: button
+            }
+          : handleReleaseInput;
         if (button.hasAttribute("data-route-replace") && route === (button.getAttribute("data-route") || "")) {
           replaceTopRoute(route, motionInput);
           return;
@@ -12442,11 +14202,22 @@
     });
 
     screenHost.querySelectorAll("[data-reader-dismiss]").forEach((button) => {
-      button.addEventListener("click", () => replaceTopRoute(button.getAttribute("data-reader-dismiss") || "immersive-reading"));
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const targetRoute = button.getAttribute("data-reader-dismiss") || "immersive-reading";
+        replaceTopRoute(targetRoute, {
+          id: "reader.control.hide",
+          action: "hide-control-layer",
+          from: currentRoute(),
+          to: targetRoute,
+          target: button
+        });
+      });
     });
 
     screenHost.querySelectorAll("[data-reader-exit]").forEach((button) => {
-      button.addEventListener("click", exitReader);
+      button.addEventListener("click", goBack);
     });
 
     screenHost.querySelectorAll("[data-reader-toc-mode]").forEach((button) => {
@@ -12550,15 +14321,19 @@
       const part = wheel.getAttribute("data-reader-tts-timer-wheel") === "seconds" ? "seconds" : "minutes";
       const max = Number(wheel.getAttribute("data-reader-tts-timer-max")) || (part === "seconds" ? 59 : 180);
       const stateKey = part === "seconds" ? "readerTtsTimerSeconds" : "readerTtsTimerMinutes";
-      const itemHeight = Math.max(1, wheel.querySelector("[data-reader-tts-timer-value]")?.getBoundingClientRect().height || 44);
+      const items = Array.from(wheel.querySelectorAll("[data-reader-tts-timer-value]"));
+      const itemHeight = Math.max(1, items[0]?.getBoundingClientRect().height || 44);
       const initialValue = clamp(Math.round(Number(appState[stateKey] ?? (part === "seconds" ? 0 : 15))), 0, max);
+      const initialIndex = Math.max(0, items.findIndex((item) => Number(item.getAttribute("data-reader-tts-timer-value")) === initialValue));
       let frame = 0;
-      const commit = (rawValue) => {
-        const value = clamp(Math.round(Number(rawValue) || 0), 0, max);
+      const commit = (rawIndex) => {
+        const index = clamp(Math.round(Number(rawIndex) || 0), 0, Math.max(0, items.length - 1));
+        const selectedItem = items[index] || items[0];
+        const value = clamp(Math.round(Number(selectedItem?.getAttribute("data-reader-tts-timer-value")) || 0), 0, max);
         appState[stateKey] = value;
         wheel.setAttribute("aria-activedescendant", `${part}-${value}`);
-        wheel.querySelectorAll("[data-reader-tts-timer-value]").forEach((item) => {
-          const active = Number(item.getAttribute("data-reader-tts-timer-value")) === value;
+        items.forEach((item) => {
+          const active = item === selectedItem;
           item.classList.toggle("is-active", active);
           item.setAttribute("aria-selected", active ? "true" : "false");
           item.id = `${part}-${item.getAttribute("data-reader-tts-timer-value")}`;
@@ -12573,11 +14348,12 @@
       };
       const scrollToValue = (value, behavior = "smooth") => {
         const normalized = clamp(Math.round(Number(value) || 0), 0, max);
-        wheel.scrollTo({ top: normalized * itemHeight, behavior });
-        commit(normalized);
+        const index = Math.max(0, items.findIndex((item) => Number(item.getAttribute("data-reader-tts-timer-value")) === normalized));
+        wheel.scrollTo({ top: index * itemHeight, behavior });
+        commit(index);
       };
-      wheel.scrollTop = initialValue * itemHeight;
-      commit(initialValue);
+      wheel.scrollTop = initialIndex * itemHeight;
+      commit(initialIndex);
       wheel.addEventListener("scroll", () => {
         if (frame) window.cancelAnimationFrame(frame);
         frame = window.requestAnimationFrame(() => {
@@ -12587,22 +14363,25 @@
       }, { passive: true });
       wheel.addEventListener("wheel", (event) => {
         event.preventDefault();
-        const currentValue = Math.round(wheel.scrollTop / itemHeight);
-        scrollToValue(currentValue + (event.deltaY > 0 ? 1 : -1));
+        const currentIndex = Math.round(wheel.scrollTop / itemHeight);
+        const targetIndex = clamp(currentIndex + (event.deltaY > 0 ? 1 : -1), 0, Math.max(0, items.length - 1));
+        const targetValue = Number(items[targetIndex]?.getAttribute("data-reader-tts-timer-value"));
+        scrollToValue(targetValue);
       }, { passive: false });
       wheel.addEventListener("keydown", (event) => {
-        const currentValue = Math.round(wheel.scrollTop / itemHeight);
+        const currentIndex = Math.round(wheel.scrollTop / itemHeight);
         const targets = {
-          ArrowUp: currentValue - 1,
-          ArrowDown: currentValue + 1,
-          PageUp: currentValue - 5,
-          PageDown: currentValue + 5,
+          ArrowUp: currentIndex - 1,
+          ArrowDown: currentIndex + 1,
+          PageUp: currentIndex - 5,
+          PageDown: currentIndex + 5,
           Home: 0,
-          End: max
+          End: Math.max(0, items.length - 1)
         };
         if (!(event.key in targets)) return;
         event.preventDefault();
-        scrollToValue(targets[event.key]);
+        const targetIndex = clamp(targets[event.key], 0, Math.max(0, items.length - 1));
+        scrollToValue(Number(items[targetIndex]?.getAttribute("data-reader-tts-timer-value")));
       });
       wheel.querySelectorAll("[data-reader-tts-timer-value]").forEach((item) => {
         item.addEventListener("click", (event) => {
@@ -12996,6 +14775,20 @@
       });
     });
 
+    screenHost.querySelectorAll("[data-w5-rule-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const ruleId = button.getAttribute("data-w5-rule-toggle") || "";
+        const store = window.ReaderW5ReplaceRulesRenderers?.store;
+        const rules = store?.load?.();
+        if (!ruleId || !Array.isArray(rules)) return;
+        store.save(rules.map((rule) => rule.id === ruleId
+          ? Object.assign({}, rule, { enabled: !rule.enabled })
+          : rule));
+        renderCurrentRoute();
+      });
+    });
+
     screenHost.querySelectorAll("[data-w5-rule-add]").forEach((button) => {
       button.addEventListener("click", () => {
         appState.replaceRuleEditingId = "";
@@ -13277,6 +15070,7 @@
           window.setTimeout(focusInput, 120);
         }
         attachOverlayMotionState(screenHost, appState);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 160);
       });
     });
 
@@ -13291,6 +15085,7 @@
         }
         restoreOverlayMotionFocus(appState);
         attachOverlayMotionState(screenHost, appState);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 40);
       });
     });
 
@@ -13302,8 +15097,10 @@
         const sheet = phone.querySelector("[data-demo-sheet]");
         if (sheet) {
           sheet.setAttribute("aria-hidden", "false");
+          focusInitialDialogControl(sheet, 40);
         }
         attachOverlayMotionState(screenHost, appState);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 80);
       });
     });
 
@@ -13318,6 +15115,7 @@
         }
         restoreOverlayMotionFocus(appState);
         attachOverlayMotionState(screenHost, appState);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 40);
       });
     });
 
@@ -13329,10 +15127,10 @@
         const dialog = phone.querySelector("[data-demo-dialog]");
         if (dialog) {
           dialog.setAttribute("aria-hidden", "false");
-          focusInitialDialogControl(dialog);
+          focusInitialDialogControl(dialog, 40);
         }
         attachOverlayMotionState(screenHost, appState);
-        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 40);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 80);
       });
     });
 
@@ -13347,6 +15145,7 @@
         }
         restoreOverlayMotionFocus(appState);
         attachOverlayMotionState(screenHost, appState);
+        window.setTimeout(() => attachOverlayMotionState(screenHost, appState), 40);
       });
     });
 
@@ -13426,6 +15225,15 @@
       return renderReaderContinuityOrigin(data, appState?.sourceSwitchOriginRoute, appState);
     }
   };
+
+  window.ReaderRuntimeTestHooks = Object.assign({}, window.ReaderRuntimeTestHooks, {
+    readerTextBlocks,
+    updateReaderPagination,
+    invalidateReaderPagination,
+    refreshReaderPaginationForLayout,
+    bookshelfViewAnchorSnapshot,
+    applyBookshelfViewState
+  });
 
   window.ReaderFrontendDemoDraft = {
     render

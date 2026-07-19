@@ -17,6 +17,8 @@ const foundationCss = readDemo("styles/00-foundation.css");
 const responsiveCss = readDemo("styles/06-responsive.css");
 const readme = readFileSync(join(repoRoot, "README.md"), "utf8");
 const viewStateFixtures = JSON.parse(readFileSync(join(repoRoot, "contracts/fixtures/view-state.fixtures.json"), "utf8"));
+const routeSchema = JSON.parse(readFileSync(join(repoRoot, "contracts/route.schema.json"), "utf8"));
+const screenGraphCoverage = JSON.parse(readFileSync(join(repoRoot, "generated/screen-graph-coverage.json"), "utf8"));
 
 const context = vm.createContext({ window: {} });
 new vm.Script(routeSource, { filename: "route-contract.js" }).runInContext(context);
@@ -30,7 +32,8 @@ test("optimized demo remains the explicit canonical runnable source", () => {
 test("every route has one family, default surface and layout profile", () => {
   const routeIds = Object.keys(contract.routes);
   const presentationIds = Object.keys(contract.routePresentation);
-  assert.equal(routeIds.length, 235);
+  assert.equal(routeIds.length, routeSchema.properties.id.enum.length);
+  assert.deepEqual([...routeIds].sort(), [...routeSchema.properties.id.enum].sort());
   assert.deepEqual(presentationIds, routeIds);
   for (const routeId of routeIds) {
     const item = contract.routePresentation[routeId];
@@ -57,7 +60,7 @@ test("all ViewState fixtures resolve surface from page and overlay state", () =>
       || hasOverlayComponent(component.children)
   ));
 
-  assert.equal(viewStateFixtures.length, 165);
+  assert.equal(viewStateFixtures.length, screenGraphCoverage.viewStateFixtures);
   for (const fixture of viewStateFixtures) {
     const resolved = contract.resolveRoutePresentation(fixture.routeId, fixture);
     const expected = hasOverlayComponent(fixture.components)

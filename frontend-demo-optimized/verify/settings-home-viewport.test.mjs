@@ -64,6 +64,7 @@ const settingsViewportCss = [foundationCss, shellCss, settingsSourceCss, flowAda
 
 const settingsHomeEntryRoutes = [
   "settings-general",
+  "settings-developer",
   "bookshelf-search-settings",
   "source-management",
   "sync-backup",
@@ -134,7 +135,7 @@ test("settings bottom navigation is anchored independently of list height", () =
   assert.match(declaration(navRule, "z-index"), /--fd-ds-z-main-nav/);
 });
 
-test("all five settings-home entries render inside the shared bounded SettingsShell content region", () => {
+test("all six settings-home entries render inside the shared bounded SettingsShell content region", () => {
   const settingsHome = sourceSection(
     runtimeSource,
     "  function mainTabSettings(",
@@ -174,6 +175,7 @@ test("all five settings-home entries render inside the shared bounded SettingsSh
   assert.match(bookshelfSettings, /contentClass:\s*["']fd-phone-content fd-settings-content["']/);
   assert.doesNotMatch(bookshelfSettings, /bottomActionHtml\s*:/, "bookshelf/search settings has no fixed bottom action");
   assert.match(canonicalSettingsScreen, /contentClass:\s*["']fd-phone-content fd-settings-content["']/);
+  assert.match(runtimeSource, /["']settings-developer["']:\s*\{\s*title:\s*["']开发模式["']/);
 });
 
 test("secondary settings pages without fixed actions cannot extend below the SettingsShell viewport", () => {

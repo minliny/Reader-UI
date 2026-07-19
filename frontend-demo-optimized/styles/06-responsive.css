@@ -410,6 +410,19 @@
   display: none;
 }
 
+/* Compact landscape keeps the Reader control dock on the right, so the
+   source candidate window must use the remaining reading plane on the left.
+   The portrait/tablet top+bottom anchors collapse to zero height at 390px. */
+.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"][data-route-layout="flow-continuity"] .fd-source-reader-continuation .fd-source-window-slot {
+  inset: 74px auto 16px 16px;
+  width: min(420px, calc(54% - 24px));
+  height: auto;
+  min-height: 0;
+  display: block;
+  overflow: hidden;
+  border-radius: var(--fd-radius-xl);
+}
+
 .fd-source-phone-flow .fd-source-row-checks,
 .fd-source-phone-flow .fd-source-row-meta,
 .fd-source-phone-flow .fd-flow-comparison article button,

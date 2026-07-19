@@ -1545,6 +1545,11 @@
   display: none;
 }
 
+.fd-source-reader-continuation.fd-w3-source-switch .fd-source-window-slot {
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
 .fd-source-phone-flow .fd-flow-step,
 .fd-source-phone-flow .fd-flow-comparison,
 .fd-source-phone-flow .fd-flow-result {

@@ -4,7 +4,7 @@
 
 范围：基于当前 `frontend-demo-optimized/` 的 `render-runtime.js`、样式层和四份动效规划文档，判断各类交互组件是否已经被统一动效体系纳管。
 
-结论：通用交互组件已经进入第一版实现纳管，但还没有达到完整交付级纳管。当前 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md`、`MOTION_SELECTOR_MATRIX.md` 和 contract motion fixtures 已补 button、toggle、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 等 Motion ID、效果、平台映射和 148 个 `data-*` selector 总表；demo 已落 `motion-tokens.css`、reduced-motion 测试开关、基础 `data-motion-id`、pressed state、`data-motion-component-*` normalized adapter 和第一版 `motion.interrupt.*` adapter。仍缺组件族专属深度状态机、async pending / focus restore、打断规则深化和录屏/截图证据。
+结论：通用交互组件已经进入第一版实现纳管，但还没有达到完整交付级纳管。当前 `MOTION_CONTRACT.md`、`MOTION_EFFECTS.md`、`MOTION_SELECTOR_MATRIX.md` 和 contract motion fixtures 已补 button、toggle、chip/filter/segment、slider/progress/stepper、input/search、feedback/state、selection、listRow/card 等 Motion ID、效果、平台映射和 148 个 `data-*` selector 总表；demo 已落 `motion-tokens.css`、reduced-motion 测试开关、`data-motion-component-*` normalized adapter、`motion.interrupt.*` adapter 和第十批 primitive exact transaction owner。当前 button/toggle/chip/slider/stepper/card/listRow 12 项已在真实外观、亮度、书架、Discover、同步恢复与换源页面完成 pointer、keyboard、redirect 和 reduced-motion 验证；剩余 filter、selection、tooling、组合 overlay/sourceSwitch 与 controlSpace 仍缺专属深度状态机、动态证据与平台映射闭环。
 
 ## 1. 审计口径
 
@@ -153,16 +153,15 @@
 - 搜索入口、搜索历史、搜索结果、RSS search、settings search、source search。
 - `data-open-keyboard` 只覆盖键盘层进入。
 
-缺口：
+当前实现：
 
-- 已补 `input.focus/blur/clear/submit` 和 `search.state.replace`，但输入 selector、键盘 overlay 和结果区状态还没有同一 reducer。
-- 搜索 before/loading/results/empty/error 状态切换未统一到 `search.state.replace`。
-- 搜索历史点击、clear、submit 和旧请求返回的打断规则仍缺。
+- `input.focus/blur/clear/focus-blur/submit`、`search.state.replace` 已补 exact fixture/controller/codegen；旧 `input.focus/blur` selector 通过兼容别名收束到 canonical `input.focus-blur`。
+- D2 canonical 图书搜索把 before/loading/results/empty/error 统一到单一结果宿主；重复 submit 由递增 request version 接管，旧 timer 被取消并记录 discarded request。
+- 键盘内外输入共用 `bookSearchQuery` 并双向镜像；关闭键盘时保值并回到外层输入，清空后焦点回到搜索入口；Enter submit、empty/error live-region 与 reduced-motion 已通过浏览器验证。
 
-建议：
+剩余：
 
-- 让键盘 overlay 与 input focus 同步，而不是只做键盘层动画。
-- 旧 query 结果写入前检查 current query token。
+- RSS search、settings search、source search 尚未逐页复用同一 reducer；三端原生输入法、TalkBack/VoiceOver 和真机异步证据仍待平台补齐。
 
 ### 4.6 Toast、Inline Feedback、状态卡
 

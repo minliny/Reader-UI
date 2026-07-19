@@ -755,3 +755,516 @@
   border-color: #2d8795;
   box-shadow: inset 0 0 0 1px rgba(45, 135, 149, 0.26);
 }
+
+/* Reader 2 canonical appearance atoms ----------------------------------
+ * ThemeSwatch and FontCell are the only reusable visual sources for every
+ * quick/full appearance route. Layout containers may position the atoms,
+ * but must not recreate their border, radius, fill, or effects.
+ */
+.fd-demo .fd-reader-full-theme-grid button.fd-reader-theme-swatch,
+.fd-demo button.fd-reader-theme-swatch {
+  position: relative;
+  box-sizing: border-box;
+  width: 62.5px;
+  min-width: 62.5px;
+  max-width: 62.5px;
+  height: 24px;
+  min-height: 24px;
+  max-height: 24px;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.fd-demo .fd-reader-full-theme-grid button.fd-reader-theme-swatch:hover,
+.fd-demo button.fd-reader-theme-swatch:hover {
+  border: 0;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+}
+
+.fd-demo .fd-reader-full-theme-grid button.fd-reader-theme-swatch.is-active,
+.fd-demo button.fd-reader-theme-swatch.is-active {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  opacity: 1;
+  transform: none;
+}
+
+.fd-demo .fd-reader-theme-swatch .fd-reader-theme-swatch-fill {
+  position: absolute;
+  inset: 2px auto auto 8.25px;
+  box-sizing: border-box;
+  width: 46px;
+  min-width: 46px;
+  height: 18px;
+  min-height: 18px;
+  display: block;
+  border: 0.5px solid rgba(180, 166, 151, 0.3);
+  border-radius: 6px;
+  background: var(--swatch);
+  box-shadow: none;
+  transform: none;
+}
+
+.fd-demo .fd-reader-full-theme-grid button.fd-reader-theme-swatch .fd-reader-theme-swatch-fill {
+  border: 0.5px solid rgba(180, 166, 151, 0.3);
+  background: var(--swatch);
+  box-shadow: none;
+}
+
+.fd-demo button.fd-reader-theme-swatch.is-active .fd-reader-theme-swatch-fill,
+.fd-demo .fd-reader-full-theme-grid button.fd-reader-theme-swatch.is-active .fd-reader-theme-swatch-fill {
+  border: 2px solid #2f6373;
+}
+
+.fd-demo button.fd-reader-theme-swatch[data-reader-theme-texture="paper"] .fd-reader-theme-swatch-fill,
+.fd-demo .fd-reader-full-theme-grid button.fd-reader-theme-swatch[data-reader-theme-texture="paper"] .fd-reader-theme-swatch-fill {
+  background:
+    repeating-linear-gradient(90deg, rgb(var(--swatch-texture-rgb, 138 116 84) / 0.16) 0 1px, transparent 1px 5px),
+    var(--swatch);
+}
+
+.fd-demo .fd-reader-appearance-panel .fd-reader-full-theme-grid {
+  grid-template-columns: repeat(4, 62.5px);
+  justify-content: center;
+  gap: 4px;
+}
+
+.fd-demo .fd-reader-theme-option {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 73.5px;
+  height: 58.8px;
+  min-height: 58.8px;
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.64));
+  box-shadow: none;
+}
+
+.fd-demo .fd-reader-theme-option.is-active {
+  border: 1px solid var(--reader-control-action, #2f6373);
+  background: var(--reader-control-active-bg, rgba(47, 99, 115, 0.1));
+}
+
+.fd-demo .fd-reader-theme-option > .fd-reader-theme-swatch {
+  position: absolute;
+  inset: 10px auto auto 5.5px;
+}
+
+.fd-demo .fd-reader-theme-option.is-active > .fd-reader-theme-swatch {
+  inset: 8px auto auto 3.5px;
+}
+
+.fd-demo .fd-reader-theme-option small {
+  position: absolute;
+  inset: 39px auto auto 5px;
+  width: 63.5px;
+  height: 13px;
+  max-width: 100%;
+  overflow: hidden;
+  color: var(--reader-control-muted, #5b5046);
+  font: 400 9px/11px var(--fd-sans);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-demo .fd-reader-theme-option.is-active small {
+  inset: 37px auto auto 3px;
+}
+
+.fd-demo .fd-reader-appearance-theme-library .fd-reader-full-theme-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.fd-demo button.fd-reader-font-cell,
+.fd-demo .fd-reader-appearance-font-grid button.fd-reader-font-cell,
+.fd-demo .fd-reader-full-choice-grid button.fd-reader-font-cell {
+  position: relative;
+  box-sizing: border-box;
+  width: 62.5px;
+  min-width: 62.5px;
+  max-width: 62.5px;
+  height: 27px;
+  min-height: 27px;
+  max-height: 27px;
+  display: block;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #332c25;
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+.fd-demo .fd-reader-font-cell .fd-reader-font-cell-pill {
+  position: absolute;
+  inset: 3px auto auto 4px;
+  box-sizing: border-box;
+  width: 55px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border: 0.555556px solid rgba(180, 166, 151, 0.34);
+  border-radius: 11px;
+  background: #fffcf8;
+  box-shadow: none;
+  color: #332c25;
+  font-family: var(--reader-font-cell-family, "Noto Sans SC", var(--fd-sans));
+  font-size: 8px;
+  font-style: normal;
+  font-weight: var(--reader-font-cell-weight, 400);
+  line-height: 10px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-demo button.fd-reader-font-cell:hover,
+.fd-demo button.fd-reader-font-cell:focus-visible {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  transform: none;
+}
+
+.fd-demo button.fd-reader-font-cell.is-active {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #fffcf8;
+}
+
+.fd-demo button.fd-reader-font-cell.is-active .fd-reader-font-cell-pill {
+  border-color: transparent;
+  background: #2f6373;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  color: #fffcf8;
+}
+
+.fd-demo .fd-reader-appearance-font-grid,
+.fd-demo .fd-reader-appearance-panel .fd-reader-appearance-font-grid,
+.fd-demo .fd-reader-full-font-grid {
+  grid-template-columns: repeat(4, 62.5px);
+  justify-content: center;
+  gap: 4px;
+}
+
+.fd-demo .fd-reader-font-cell.fd-reader-font-import-cell .fd-reader-font-cell-pill {
+  border-style: solid;
+  font-family: "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-w4-font-row > button.fd-reader-font-cell {
+  justify-self: center;
+}
+
+/* Reader 2 full appearance composition -------------------------------- */
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-full-appearance > .fd-reader-appearance-theme-library {
+  position: relative;
+  box-sizing: border-box;
+  width: 316px;
+  height: 210px;
+  min-height: 210px;
+  display: block;
+  padding: 0;
+  border: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library > header {
+  position: absolute;
+  inset: 10px auto auto 2px;
+  width: 312px;
+  height: 20px;
+  display: grid;
+  grid-template-columns: 180px 140px;
+  align-items: start;
+  gap: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library > header strong {
+  font: 700 12px/17px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library > header em {
+  padding-top: 3px;
+  font: 400 9px/13px "Noto Sans SC", var(--fd-sans);
+  text-align: right;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library > .fd-reader-full-theme-grid {
+  position: absolute;
+  inset: 32.39px auto auto 2px;
+  width: 312px;
+  height: 123.6px;
+  display: grid;
+  grid-template-columns: repeat(4, 73.5px);
+  grid-template-rows: repeat(2, 58.8px);
+  gap: 6px;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library > .fd-reader-theme-default-actions {
+  position: absolute;
+  inset: 172px auto auto 2px;
+  width: 312px;
+  height: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library > .fd-reader-theme-default-actions button {
+  box-sizing: border-box;
+  width: 74px;
+  min-width: 74px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0 4px;
+  border: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
+  border-radius: 6px;
+  background: transparent;
+  box-shadow: none;
+  font: 700 9px/13px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-theme-library::after {
+  content: "";
+  position: absolute;
+  inset: 209px auto auto 0;
+  width: 316px;
+  height: 1px;
+  background: var(--reader-control-line, rgba(155, 132, 102, 0.18));
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-full-appearance > .fd-reader-appearance-typography-library {
+  box-sizing: border-box;
+  width: 316px;
+  height: 406px;
+  min-height: 406px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 2px 0;
+  overflow: visible;
+  border: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-typography-library > header {
+  box-sizing: border-box;
+  width: 312px;
+  height: 36px;
+  min-height: 36px;
+  display: grid;
+  grid-template-columns: 180px 140px;
+  align-items: start;
+  gap: 0;
+  padding: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-typography-library > header strong {
+  padding-top: 1px;
+  font: 700 12px/17px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-typography-library > header em {
+  padding: 3px 0 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--reader-control-muted, #5b5046);
+  font: 400 9px/13px "Noto Sans SC", var(--fd-sans);
+  text-align: right;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-select-grid {
+  box-sizing: border-box;
+  width: 312px;
+  height: 200px;
+  min-height: 200px;
+  display: grid;
+  grid-template-columns: 312px;
+  grid-template-rows: repeat(4, 44px);
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-select-grid label {
+  box-sizing: border-box;
+  width: 312px;
+  height: 44px;
+  min-height: 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 88px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 9px;
+  border: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
+  border-radius: 6px;
+  background: var(--reader-control-panel, rgba(255, 252, 248, 0.62));
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-select-grid label > strong {
+  color: var(--reader-control-ink, #332c25);
+  font: 700 10px/14px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-select-grid select {
+  box-sizing: border-box;
+  width: 88px;
+  height: 32px;
+  justify-self: end;
+  padding: 0 12px;
+  border: 0.555556px solid rgba(180, 166, 151, 0.34);
+  border-radius: 10px;
+  background-color: #fffdf8;
+  box-shadow: 0 1px 3px rgba(89, 70, 50, 0.06);
+  color: #332c25;
+  font: 700 12px/normal "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list {
+  box-sizing: border-box;
+  width: 312px;
+  height: 144px;
+  min-height: 144px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin: 0;
+  padding: 0 0 2px;
+  border: 1px solid var(--reader-control-line, rgba(155, 132, 102, 0.18));
+  border-radius: 8px;
+  background: var(--reader-control-panel, rgba(255, 252, 248, 0.62));
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row {
+  position: relative;
+  box-sizing: border-box;
+  width: 312px;
+  height: 34px;
+  min-height: 34px;
+  flex: 0 0 34px;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row + .fd-reader-step-row {
+  border: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row > strong {
+  position: absolute;
+  inset: 10px auto auto 17px;
+  font: 500 10px/14px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row > span {
+  position: absolute;
+  inset: 3px auto auto 184px;
+  width: 104px;
+  height: 28px;
+  display: block;
+  margin: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row button {
+  position: absolute;
+  inset: 0 auto auto 0;
+  box-sizing: border-box;
+  width: 24px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: var(--reader-control-panel-soft, rgba(238, 230, 219, 0.64));
+  box-shadow: none;
+  color: var(--reader-control-ink, #332c25);
+  font: 700 10px/14px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row button:last-child {
+  inset: 0 auto auto 80px;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-step-list .fd-reader-step-row em {
+  position: absolute;
+  inset: 7px auto auto 32px;
+  width: 48px;
+  min-width: 48px;
+  height: 14px;
+  color: var(--reader-control-ink, #332c25);
+  font: 700 10px/14px "Noto Sans SC", var(--fd-sans);
+  text-align: center;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-full-appearance > .fd-reader-appearance-font-library {
+  position: relative;
+  box-sizing: border-box;
+  width: 316px;
+  height: 169.4px;
+  min-height: 169.4px;
+  display: block;
+  padding: 0;
+  border: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-font-library > header {
+  position: absolute;
+  inset: 11px auto auto 2px;
+  width: 312px;
+  height: 20px;
+  display: grid;
+  grid-template-columns: 180px 140px;
+  align-items: start;
+  gap: 0;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-font-library > header strong {
+  padding-top: 1px;
+  font: 700 12px/17px "Noto Sans SC", var(--fd-sans);
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-font-library > header em {
+  padding-top: 3px;
+  font: 400 9px/13px "Noto Sans SC", var(--fd-sans);
+  text-align: right;
+}
+
+.fd-demo .fd-reader-full-page-route-reader-full-appearance .fd-reader-appearance-font-library > .fd-reader-appearance-font-grid {
+  position: absolute;
+  inset: 33.4px auto auto 27px;
+  width: 262px;
+  display: grid;
+  grid-template-columns: repeat(4, 62.5px);
+  grid-auto-rows: 27px;
+  gap: 4px;
+}
