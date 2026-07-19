@@ -125,14 +125,22 @@ export const manifestFileGroups = Object.freeze([
   {
     name: "design-runtime",
     files(root) {
-      const runtimeExtensions = new Set([".css", ".html", ".js", ".jpg", ".jpeg", ".png", ".svg", ".webp"]);
+      const runtimeExtensions = new Set([".css", ".html", ".js", ".json", ".jpg", ".jpeg", ".png", ".svg", ".txt", ".webp"]);
       const includeRuntimeFile = (relativePath) => runtimeExtensions.has(path.extname(relativePath).toLowerCase());
       return sortPaths([
         "frontend-demo-optimized/asset-library/icons.js",
+        "frontend-demo-optimized/asset-library/asset-library.css",
+        "frontend-demo-optimized/asset-library/fixture.json",
+        "frontend-demo-optimized/asset-library/preview.html",
+        "frontend-demo-optimized/asset-library/render.js",
+        "frontend-demo-optimized/asset-library/tabler-icon-map.json",
+        "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/fixture.js",
         "frontend-demo-optimized/index.html",
         "frontend-demo-optimized/motion-controller.js",
+        "frontend-demo-optimized/motion-runtime-profile.js",
         "frontend-demo-optimized/motion-tokens.css",
+        "frontend-demo-optimized/reader-control-transition.js",
         "frontend-demo-optimized/render-runtime.js",
         "frontend-demo-optimized/render.js",
         "frontend-demo-optimized/route-contract.js",
@@ -287,7 +295,11 @@ export const manifestFileGroups = Object.freeze([
         "contracts/fixtures/view-state.fixtures.json",
         "contracts/route.schema.json",
         "contracts/view-state.schema.json",
-        ...existingOptionalFiles(root, ["ui-spec/screen-graph.json"]),
+        ...existingOptionalFiles(root, [
+          "ui-spec/component-render-semantics.json",
+          "ui-spec/component-render-semantics.schema.json",
+          "ui-spec/screen-graph.json",
+        ]),
         ...existingOptionalDirectoryFiles(root, "ui-spec/screens"),
       ]);
     },
