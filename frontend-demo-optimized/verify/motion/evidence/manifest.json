@@ -1,8 +1,9 @@
 {
   "version": "reader-motion-evidence-v1",
-  "generatedAt": "2026-06-30",
-  "source": "canonical frontend-demo browser screenshots",
-  "scope": "first-pass representative evidence for P0 motion IDs; not full selector-matrix media closure",
+  "generatedAt": "2026-07-19",
+  "source": "canonical frontend-demo browser screenshots and Playwright WebM captures",
+  "scope": "representative P0 browser evidence with continuous normal, interrupt, orientation, and reduced-motion captures; not native device proof or full selector-matrix closure",
+  "captureCommand": "node tools/motion/capture-browser-motion-evidence.mjs",
   "entries": [
     {
       "motionId": "app.firstOpen.enter",
@@ -75,11 +76,87 @@
       "selector": "[data-motion-interrupt-id=\"motion.interrupt.redirect\"]",
       "file": "motion.interrupt.redirect__tab-switch__discover.jpg",
       "notes": "Tab switch redirect interrupt evidence after navigating from bookshelf to discover."
+    },
+    {
+      "motionId": "app.firstOpen.enter",
+      "route": "bookshelf",
+      "state": "normal",
+      "selector": "[data-screen-host]",
+      "file": "app.firstOpen.enter__bookshelf__normal.webm",
+      "kind": "browser-webm",
+      "byteLength": 131457,
+      "sha256": "8c30393c5aec3bffd339b9410441da635c9364a9149fc5d745f31c98476b083e",
+      "notes": "Continuous cold-load capture with motion enabled; external font requests are fulfilled offline."
+    },
+    {
+      "motionId": "tab.item.switch",
+      "route": "bookshelf-to-rss",
+      "state": "normal",
+      "selector": "[data-nav-type=\"rss\"]",
+      "file": "tab.item.switch__bookshelf-to-rss__normal.webm",
+      "kind": "browser-webm",
+      "byteLength": 160756,
+      "sha256": "78ec464d78527583065bdeb24faea778241e52efd8e128ba38ba745dc665b032",
+      "notes": "Continuous main-tab transition from Bookshelf to RSS."
+    },
+    {
+      "motionId": "dropdown.menu.expand",
+      "route": "bookshelf",
+      "state": "expand-collapse-normal",
+      "selector": "[data-bookshelf-more-layer]",
+      "file": "dropdown.menu.expand-collapse__bookshelf__normal.webm",
+      "kind": "browser-webm",
+      "byteLength": 187821,
+      "sha256": "a0aebddb4369aea1462ec7ef5d8190e84fc98322b5a52a3bc650a7cd57dcc216",
+      "notes": "Continuous anchored menu expand, settled state, and collapse capture."
+    },
+    {
+      "motionId": "reader.entry.coverToImmersive",
+      "route": "bookshelf-to-immersive-reading",
+      "state": "normal",
+      "selector": "[data-book-cover][data-book-id=\"long-night\"]",
+      "file": "reader.entry.coverToImmersive__bookshelf__normal.webm",
+      "kind": "browser-webm",
+      "byteLength": 241478,
+      "sha256": "5e4341b4bf3859020e62987b7ef41d8bf1029b04815262cb0e146b8acd99d6db",
+      "notes": "Continuous cover press and immersive target reveal."
+    },
+    {
+      "motionId": "motion.interrupt.redirect",
+      "route": "bookshelf-to-discover-to-rss",
+      "state": "rapid-repeat",
+      "selector": "[data-nav-type]",
+      "file": "motion.interrupt.redirect__rapid-tab-switch__normal.webm",
+      "kind": "browser-webm",
+      "byteLength": 192185,
+      "sha256": "847c1de84745dd33ce9addea59d116644ab83b531d210021b2e95b6b8143406e",
+      "notes": "Rapid Discover then RSS switch; the latest route owns the unique terminal state."
+    },
+    {
+      "motionId": "viewport.orientation.reshape",
+      "route": "reader",
+      "state": "portrait-landscape-portrait",
+      "selector": "[data-motion-orientation-role]",
+      "file": "viewport.orientation.reshape-settle__reader__normal.webm",
+      "kind": "browser-webm",
+      "byteLength": 264890,
+      "sha256": "dc3f23fe9bba0ee6774f8ab4d1f42f99602f2ff6a2ef7e1f8a111af17b85cc65",
+      "notes": "Continuous 390x844 to 844x390 and back browser viewport capture; not fold or device orientation proof."
+    },
+    {
+      "motionId": "tab.item.switch",
+      "route": "bookshelf-to-rss",
+      "state": "reduced-motion",
+      "selector": "[data-nav-type=\"rss\"]",
+      "file": "tab.item.switch__bookshelf-to-rss__reduced-motion.webm",
+      "kind": "browser-webm",
+      "byteLength": 121963,
+      "sha256": "5c51d03b50e158a907fa400a35fb5b7c1456db9f0e50cb2778eb3173d77aa19a",
+      "notes": "Continuous main-tab transition with both browser reduced-motion and the demo override enabled."
     }
   ],
   "remaining": [
-    "Need video or frame-sequence evidence for actual easing over time.",
     "Need full selector-matrix media coverage beyond representative P0 entries.",
-    "Need real device or simulator captures for fold, orientation, touch drag, and reduced-motion."
+    "Need real device or simulator captures for fold, physical orientation, touch drag, accessibility, performance, and platform reduced-motion."
   ]
 }

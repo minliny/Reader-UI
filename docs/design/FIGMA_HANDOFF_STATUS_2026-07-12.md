@@ -38,7 +38,7 @@ Reader 2 权威页：<https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK?node-i
 | 其他页面族本地 demo 浏览器复验 | 未完成 |
 | MR1 Reader Control Motion 样板 | 已完成自验，待用户确认 |
 | MR2 十个核心 Motion 家族 | 进行中；Review artifact 不等于闭环 |
-| MR3 canonical registry + 确定性 trace | 已完成十家族 × 5 模式；动态 WebM / viewport 连续画面未完成 |
+| MR3 canonical registry + 确定性 trace | 已完成十家族 × 5 模式；7 段代表性 browser WebM 已补，十家族/三档完整媒体未完成 |
 | MR4–MR5 Native/device Motion 闭环 | 未完成 |
 | 三个 Host 最终实现与设备证明 | 未完成 |
 

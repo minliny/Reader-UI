@@ -1,4 +1,5 @@
 import fs from "node:fs";
+import { createHash } from "node:crypto";
 import path from "node:path";
 import vm from "node:vm";
 
@@ -232,7 +233,18 @@ const evidenceFileProblems = evidenceEntries
     if (!fileName) return { file: fileName, reason: "missing file name" };
     if (fileName.includes("..") || path.isAbsolute(fileName)) return { file: fileName, reason: "invalid relative file path" };
     if (!fs.existsSync(filePath)) return { file: fileName, reason: "file missing" };
-    if (fs.statSync(filePath).size <= 0) return { file: fileName, reason: "file empty" };
+    const bytes = fs.readFileSync(filePath);
+    if (bytes.length <= 0) return { file: fileName, reason: "file empty" };
+    if (entry.byteLength !== undefined && entry.byteLength !== bytes.length) {
+      return { file: fileName, reason: `byteLength mismatch: manifest=${entry.byteLength} actual=${bytes.length}` };
+    }
+    if (entry.sha256 !== undefined) {
+      if (typeof entry.sha256 !== "string" || !/^[a-f0-9]{64}$/.test(entry.sha256)) {
+        return { file: fileName, reason: "invalid sha256" };
+      }
+      const actualSha256 = createHash("sha256").update(bytes).digest("hex");
+      if (entry.sha256 !== actualSha256) return { file: fileName, reason: "sha256 mismatch" };
+    }
     return null;
   })
   .filter(Boolean);

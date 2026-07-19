@@ -1,8 +1,8 @@
 # Reader Motion 四层交付规划
 
-状态：Reader 2 控制层 MR1 已完成自验；MR2 Reference Batch 进行中；MR3 canonical registry 与确定性十家族 trace harness 已完成，动态 WebM/真实连续画面仍待补；89/95 canonical MotionId 已有精确状态机，其余 6 条严格限定为 3 个 deprecated 与 3 个 contract-reserved；P0 仅有两个 contract-reserved controlSpace 项不进入生产路径
+状态：Reader 2 控制层 MR1 已完成自验；MR2 Reference Batch 进行中；MR3 canonical registry 与确定性十家族 trace harness 已完成，7 段代表性 browser WebM 已补，完整十家族/三档动态媒体仍待补；89/95 canonical MotionId 已有精确状态机，其余 6 条严格限定为 3 个 deprecated 与 3 个 contract-reserved；P0 仅有两个 contract-reserved controlSpace 项不进入生产路径
 
-更新时间：2026-07-16
+更新时间：2026-07-19
 
 ## 1. 结论
 
@@ -55,10 +55,10 @@ Figma 可以用 Smart Animate 或 prototype 辅助评审，但 reaction 不是�
 
 - canonical contract registry 已更新为 95/95 MotionSpec 与 53/53 MotionPolicy，并由 `tools/motion/generate-demo-motion-registry.mjs` 确定性生成浏览器注册表；D5 runtime 不再只对少量 pilot 逐字段对齐。
 - demo controller 的 duration / easing 与 request-first 解析优先消费 canonical generated registry / resolver；未知请求返回 `motion.policy.no-match`，不会伪装为某个 MotionId。
-- 当前证据 manifest 只有 9 条静态 JPG 记录，没有 WebM 动态闭环。
+- 当前证据 manifest 包含 9 条静态 JPG 与 7 段可重复采集的 browser WebM；WebM 已记录字节数与 SHA-256，但仍只是代表性浏览器证据，不是完整选择器矩阵或原生设备闭环。
 - Reader 控制层 transition harness 继续覆盖 normal、latest-wins、相反操作、完整页展开/收起、返回层级和最终状态清理。
 - 新增统一 `motion-scenario-harness.js`：十个核心家族 × normal / rapid-repeat / opposite / interrupt / reduced 共 50 条确定性 trace，覆盖 Phone / Compact / Tablet 元数据和四种 interrupt policy；contract-reserved Capsule Anchor Morph 保持不进入生产执行。
-- reduced-motion 现在对装饰性动效归零，同时保留 `keepDirectManipulation` 的 slider/drag 直接操控时序。仍需把 trace 对应到真实连续画面、WebM 与三个 Host 原生行为。
+- reduced-motion 现在对装饰性动效归零，同时保留 `keepDirectManipulation` 的 slider/drag 直接操控时序。首启、Tab、下拉、封面进入、快速打断、viewport 往返与 reduced-motion 已有代表性连续 WebM；仍需覆盖完整十家族/三档并对应三个 Host 原生行为。
 
 ### 3.4 三个 Host
 
@@ -111,7 +111,7 @@ Figma 可以用 Smart Animate 或 prototype 辅助评审，但 reaction 不是�
 | MR0 · Contract Truth Reset | Route / Tab、Reader 主链路、input/search、基础交互、筛选/选择/确认/tooling 闭环 | 已统一 95 MotionId / 53 explicit policy；89 个 active MotionId 已进入 fixture/test/codegen exact registry，剩余 6 个由门禁固定为 3 deprecated + 3 reserved。Reader 外观/亮度、书架、Discover、同步恢复和换源真实页完成 pointer、keyboard、redirect、reduced-motion 验证，并修复恢复卡片/书源候选行的 selector 覆盖冲突；unknown request 返回 no-match diagnostic。剩余工作是首个双 dropdown/reposition 实际消费者页面证据 | active exact-set 与 drift gate 通过；两个 P0 controlSpace 保持 contract-reserved |
 | MR1 · One-family Pilot | 自验完成，待用户确认 | 已建立 `25 · Motion Reference`，完成控制层 show/hide/promote/module switch 与 panel expand/collapse 的 Contract、Figma timeline 和最小 harness | Reader 2 组件未被重画；三档 viewport 的 normal / interrupt / reduced 场景通过；用户确认视觉节奏后关闭 MR1 |
 | MR2 · Reference Batch | 进行中 | `Review A-R`（含 Dropdown J1/J2）已形成第一批 Figma 样板；继续按风险补十个核心家族的 Contract 精化与本地 harness | 十个家族全部有 Figma/Contract/harness 三方映射；普通控件没有重复 storyboard；无私有 duration |
-| MR3 · Unified Demo Harness | 确定性合同/trace 层完成，动态媒体进行中 | demo 已直接消费 canonical registry / resolver；十家族 50 条场景、四种 interrupt policy、request-first no-match、reduced-motion 与 direct-manipulation 门禁已通过 | 最终状态断言与事件 trace 已通过；仍需真实连续画面、截图/WebM、resize/orientation 浏览器媒体证据后才能关闭 MR3 |
+| MR3 · Unified Demo Harness | 确定性合同/trace 层完成，代表性动态媒体已补，完整媒体进行中 | demo 已直接消费 canonical registry / resolver；十家族 50 条场景、四种 interrupt policy、request-first no-match、reduced-motion 与 direct-manipulation 门禁已通过；7 段 WebM 可重录且带 SHA-256 | 最终状态断言、事件 trace、首启/Tab/下拉/封面/打断/viewport/reduced-motion 连续画面已通过；仍需完整十家族 × Phone/Compact/Tablet 媒体后才能关闭 MR3 |
 | MR4 · Native Motion Closure | 未开始 | iOS / Android / HarmonyOS 分别收口 resolver-first 和原生 visual pattern；清理未经批准的裸动画 | 生产调用都能反查 canonical spec；未知 motion 不静默伪装为 interrupt；Motion 不进入 HostAdapter/Core；三端目标测试通过 |
 | MR5 · Device Evidence | 未开始 | 真机/模拟器录屏、帧率/卡顿、手势、系统返回、键盘、安全区、旋转/折叠、reduced-motion、无障碍 | 建立 `MotionId -> test -> video -> device/OS -> result` 清单；核心家族三端都有最终状态和性能证明 |
 

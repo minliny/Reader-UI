@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-19T03:26:37.823Z",
+  "generatedAt": "2026-07-19T05:56:08.683Z",
   "source": "frontend-demo source verification",
   "checks": [
     {
@@ -180,7 +180,7 @@
     {
       "id": "motion.evidence.manifest",
       "passed": true,
-      "detail": "9 entries; required missing=0; file problems=0"
+      "detail": "16 entries; required missing=0; file problems=0"
     }
   ],
   "summary": {
@@ -714,7 +714,7 @@
   },
   "evidence": {
     "manifest": "frontend-demo-optimized/verify/motion/evidence/manifest.json",
-    "entryCount": 9,
+    "entryCount": 16,
     "motionIds": [
       "app.firstOpen.enter",
       "dropdown.menu.expand",

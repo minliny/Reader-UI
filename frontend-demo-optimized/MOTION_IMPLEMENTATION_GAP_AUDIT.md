@@ -4,7 +4,7 @@
 
 范围：基于当前 `frontend-demo-optimized/` 和三份动效规划文档，审计从“完整规划初稿”到“可交给各平台排期实现”的剩余缺口。
 
-结论：canonical registry 已由 95 个 MotionSpec、53 个 MotionPolicy 和 route-shell lookup 自动生成，89 个 active exact 状态机均可精确解析；十个核心家族的 normal / rapid-repeat / opposite / interrupt / reduced 共 50 条确定性 trace 已闭合。当前剩余缺口集中在真实连续画面/WebM、三档 viewport 动态媒体、平台测试映射和设备验证，不能把 trace 门禁当作视觉或原生 proof。
+结论：canonical registry 已由 95 个 MotionSpec、53 个 MotionPolicy 和 route-shell lookup 自动生成，89 个 active exact 状态机均可精确解析；十个核心家族的 normal / rapid-repeat / opposite / interrupt / reduced 共 50 条确定性 trace 已闭合。首启、Tab、下拉、封面进入、快速打断、viewport 往返和 reduced-motion 已补 7 段代表性 WebM。当前剩余缺口集中在完整十家族 × 三档 viewport 动态媒体、平台测试映射和设备验证，不能把 browser capture 当作原生 proof。
 
 收束原则：
 
@@ -42,7 +42,7 @@
 | 控制胶囊内部微动效 | 已补 `.fd-ir-status-controls button` / `data-reader-capsule-control` 局部按压、play/pause 状态、`data-reader-capsule-countdown` 数字 tick、`data-reader-capsule-voice` 播放态 pulse 和 reduced-motion 静态降级 | 补录屏证据、真实触摸按压和停止/切换时的退出验证 | 按钮切换不打开控制层；数字变化不重放整颗胶囊；朗读图标播放时轻提示、暂停静态 |
 | 整屏旋转适配与动效 | 已补 `viewport.orientation.prepare/reshape/settle` 第一版实现层 adapter；resize / `visualViewport.resize` 发生方向或 viewport class 变化时，root / screen host 会写入 `data-motion-orientation-*`，记录 route、session、overlay、focus、dock sync、from/to viewport 和 reanchor 状态，并用 token 化 anchor settle 动效；宽屏 dock 会复用 resize clamp/rebound | 补真实旋转录屏、折叠屏 hinge/pane 验证、正文字符锚点重分页证据、overlay/focus 恢复自动化和平台测试映射 | portrait <-> landscape、compact-landscape、tablet-expanded resize 下，route/返回栈/active session 不丢；正文不跳章；控制层/胶囊/overlay/dock 都落到合法位置 |
 | 打断动画状态机 | 已补 `motion.interrupt.cancel/redirect/completeThenReplace` 第一版实现层 adapter；route push/replace/back、Tab 切换、viewport 变化、loading 完成、宽屏 dock 拖动开始、pointer cancel、连续下拉 A->B 和 reader loading 异步结果会写入 root / screen host 或 dropdown switch / async result 状态，清理 pressed、tab/segment/dropdown pressed、handle dragging 和 dock dragging 临时状态，并接入 token 化 `interruptSettle` / dropdown switch / async completion CSS；sheet/dialog/keyboard 关闭后的最终焦点字段已补二次同步 | 补连续 overlay 互斥打断、真实交互录屏和平台测试映射 | 连续点击、返回、关闭、loading 完成、拖动开始后最终状态唯一；旧异步结果不能覆盖新 route |
-| Motion capture 证据 | 已建立 `frontend-demo-optimized/verify/motion/` 和 `selector-matrix/` 证据目录说明，并补第一批代表性浏览器截图：首启、Tab、下拉、封面进入、自动翻页胶囊、orientation 和 interrupt 已写入 `evidence/manifest.json`；旧 controlSpace 截图只作为 reserved 历史参考，不代表当前产品 DOM | 只为高风险 Motion ID 继续补代表录屏/GIF/关键帧截图，并回填到 `MOTION_SELECTOR_MATRIX.md` 的 Evidence 列；低风险通用控件以 selector matrix + coverage + 少量代表证据为准 | P0 高风险 Motion ID 至少一份 demo proof；证据命名可追溯；明确该证据不等于平台真机录屏 |
+| Motion capture 证据 | `evidence/manifest.json` 现含 9 张历史代表截图和 7 段 Playwright WebM；WebM 记录 byteLength / SHA-256，可由 `tools/motion/capture-browser-motion-evidence.mjs` 重录，覆盖首启、Tab、下拉、封面进入、快速打断、viewport 往返和 reduced-motion；旧 controlSpace 截图只作为 reserved 历史参考 | 继续补控制层手势、session capsule、翻页/章节、overlay/keyboard/source-switch 和完整三档媒体，并回填 selector matrix | P0 高风险 Motion ID 至少一份 demo proof；证据命名和 digest 可追溯；明确 browser WebM 不等于平台真机录屏 |
 | 折叠屏/大屏验证 | 当前只有 viewport class 规划和部分 adaptive PNG | 增加 fold/open/collapse/compact-landscape 的手动或模拟器验证矩阵 | ReaderContext、overlay、返回栈、正文分页映射均有证据 |
 | 平台实现映射到组件 | 平台映射已补通用组件族和 Reader 主链路的组件级方向，并新增 Contract / Demo proof / Platform implementation 分层 | 继续为高风险 Motion ID 标明平台组件、state 字段、测试文件/验收方式和真机证据类型 | Compose/SwiftUI/ArkUI 可按 native work item 拆任务；不引用 Web CSS/DOM 作为实现依据 |
 
@@ -70,7 +70,7 @@
 ## P0 推荐落地顺序
 
 1. 已完成：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/测试开关、selector 总表、基础 `data-motion-id` / pressed state，以及由 canonical fixtures 生成的 95-spec registry；89 个 active exact 状态机全部可解析，其余 6 个为门禁固定的 3 deprecated + 3 reserved 非生产条目。十家族 × 5 模式的 50 条确定性 trace 已通过；真实连续媒体仍是独立门禁。
-2. 已完成第一版：主 TAB、阅读模块 TAB 和 segmented control 已实现 `tab.item.press/select/switch` / `segment.item.switch` adapter、`reader.module.switch` / `segment.item.switch` 事务和 token 化状态；下一步补录屏证据与 indicator/active 层校验。
+2. 已完成第一版：主 TAB、阅读模块 TAB 和 segmented control 已实现 `tab.item.press/select/switch` / `segment.item.switch` adapter、`reader.module.switch` / `segment.item.switch` 事务和 token 化状态；主 Tab normal / rapid interrupt / reduced-motion 已补代表性 WebM，阅读模块 TAB 与 segmented control 的完整录屏仍待补。
 3. 已完成第一版：通用控件族已接入 `data-motion-component-*` normalized adapter，覆盖 button、toggle/switch、chip/filter/segment、slider/stepper/progress、input/search、feedback/state、selection、listRow/card 的 family / role / state / phase / value 字段；下一步补全族录屏、async pending、focus restore 和平台测试文件映射。
 4. 已完成第八批：`dropdown.*` 六项已进入 canonical exact contract，并接入 trigger/menu/option 状态、press-id、焦点进入/回还、键盘循环、A→B redirect、placement snapshot/reposition 与 reduced-motion；发现筛选真实页已完成展开/选择/Escape/回焦验证。下一步是给尚无真实消费者的双 dropdown redirect / 自动 reposition 补首个同屏页面证据。
 - 第九批补充：`input.focus/blur/clear/focus-blur/submit`、`search.state.replace`、`state.content.replace` 已进入 exact contract、三端 codegen 与 runtime adapter。D2 canonical 图书搜索页完成 before/loading/results/empty/error、Enter submit、最新请求接管、旧请求 discard、清空回焦、键盘 blur 保值和 reduced-motion 浏览器验收；Reader 外观页 18px→19px 已验证稳定内容宿主替换。
@@ -85,7 +85,7 @@
 12. 已完成第一版：`reader.session.capsule.control.*`、`reader.session.capsule.countdownTick` 和 `reader.session.capsule.voiceIcon.active` 已接入局部按钮、倒计时数字和朗读图标状态；下一步补真实设备/录屏证据。
 13. 已完成第一版：`motion.interrupt.*` 已接入统一 interrupt adapter、root/screen host `data-motion-interrupt-*`、临时 pressed/dragging/dropdown 清理、route/Tab/viewport/loading/dock drag/连续下拉 A->B 入口和 token 化短收尾；reader loading 结果已补 `data-motion-async-*` request-scoped 状态、取消/过期防覆盖和 completion CSS；下一步补 overlay 关闭、焦点恢复自动化和录屏证据。
 14. 已完成第一版：`overlay.keyboard/sheet/dialog.*` 已接入 `data-motion-overlay-*` role/state/action/focus-return 字段；sheet/dialog 延迟移焦避免 click 覆盖，dialog Tab 环、keyboard canonical `overlay.keyboard.enter-exit`、三类关闭最终态二次同步和 trigger focus restore 已通过浏览器验证；D2 当前搜索 renderer 已接回可达 keyboard host；下一步补连续 overlay 打断、遮罩互斥、录屏和平台焦点测试。
-15. 已建立 `frontend-demo-optimized/verify/motion/evidence/manifest.json` 并补第一批代表性浏览器截图；下一步录制 TAB press/select/switch、下拉栏展开/收起/点击、通用控件族、首启、封面进入、控制层显隐、小横条、宽屏 dock 拖动、整屏旋转、单一运行胶囊、翻页、打断、折叠/resize 的完整视频或关键帧序列；controlSpace 历史图不作为当前生产证据。
+15. 已建立 `frontend-demo-optimized/verify/motion/evidence/manifest.json`，并补 9 张历史截图与 7 段可重录 browser WebM；下一步补控制层显隐/手势、宽屏 dock、session capsule、翻页/章节、overlay/keyboard/source-switch、折叠和完整三档视频；controlSpace 历史图不作为当前生产证据。
 16. 把平台映射继续细化到 state 字段、测试文件和平台任务拆分。
 
 收束后的优先级：先保留并补证据的 demo 高风险链路是 TAB/dropdown、封面进阅读、阅读控制层、单一自动翻页/朗读胶囊、orientation/resize、interrupt、reduced-motion；平台侧优先拆 native work item，包括 token adapter、motion reducer、原生导航、原生 overlay、Reader 控制层手势、运行 session、orientation/fold、accessibility/performance。
@@ -95,15 +95,15 @@
 - 不能声称 demo 已完成跨端动效实现。
 - 不能声称折叠屏动效已经验证。
 - 不能声称各平台可以直接照代码实现。
-- 不能声称 TAB / segmented press/select/switch 已有全量录屏证据；当前已完成主 TAB、阅读模块 TAB 和 segmented control 的实现层 adapter，并补了主 TAB 切换代表截图，但媒体证据仍不完整。
-- 不能声称所有下拉栏已有全量录屏证据或关闭保留动画；当前已完成 trigger/menu/option/switch 的实现层 adapter、token CSS 和 coverage gate，但 `collapse` 保留动画、打开 A 后切 B 录屏与 resize/orientation reposition 仍需证据。
+- 不能声称 TAB / segmented press/select/switch 已有全量录屏证据；当前已完成实现层 adapter，并补主 TAB normal / rapid interrupt / reduced-motion WebM，但阅读模块 TAB 与 segmented control 媒体仍不完整。
+- 不能声称所有下拉栏已有全量录屏证据；当前已完成 trigger/menu/option/switch adapter、token CSS、coverage gate 和单菜单 expand/collapse WebM，但打开 A 后切 B 与 resize/orientation reposition 仍需证据。
 - 不能声称通用按钮、chip/filter、toggle/switch、slider/stepper/progress、input/search、toast/state、selection、业务 row/card 已经完成全量交付；当前已有 selector 总表、基础 token/reduced-motion、normalized `data-motion-component-*` 状态 adapter 和 contract 状态机，但全族录屏、async pending、focus restore 和平台测试映射仍缺。
 - 不能声称 `frontend-demo-optimized` 或三个 Host 已实现新的拟物书本 morph；当前闭环仅覆盖 canonical Contract、三端 generated registry 和独立本地 harness，旧 snapshot adapter、详情/章节降级、连续点击、anchor 丢失与真机视频仍需补齐。
 - 不能声称宽屏控制层 dock 长按移动已有真实设备、折叠屏或录屏证据；当前只有第一版实现层 adapter、bounds clamp 和 coverage gate。
 - 不能声称自动翻页/朗读运行胶囊已有完整录屏、停止/退出打断或平台测试证据；当前已有第一版实现层 adapter、局部倒计时 timer、coverage gate 和自动翻页胶囊代表截图。
-- 不能声称首次打开应用已有录屏/设备证据；首次打开应用、控制胶囊按钮运行/暂停、倒计时数字变化和朗读图标已有第一版实现层 adapter，但真实设备录屏仍缺。旧控制层上方胶囊锚点截图仅为 reserved 历史参考，不代表当前生产实现；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
-- 不能声称整屏旋转已有真实设备、折叠屏、正文字符锚点重分页和完整录屏证据；当前已有第一版 `prepare/reshape/settle` adapter、root/screen host 状态、route/session/overlay/focus/dock 元数据、token CSS、coverage gate 和 compact-landscape 代表截图。
-- 不能声称打断动画已有完整自动化和录屏证据；当前已有第一版 `motion.interrupt.*` adapter、临时状态清理、coverage gate 和 Tab switch redirect 代表截图，overlay/focus 最终态与换源 push/pop/replace 已有浏览器验证，连续下拉 A->B 和 reader loading async result 防覆盖已有第一版状态字段，但连续 overlay 打断和完整录屏还需深化。
-- 不能声称 reduced-motion 已完成录屏验证。
+- 不能声称首次打开应用已有设备证据；首启已有 browser WebM，控制胶囊按钮运行/暂停、倒计时数字变化和朗读图标已有第一版实现层 adapter，但真实设备录屏仍缺。旧控制层上方胶囊锚点截图只作 reserved 历史参考，不代表当前生产实现；控制层小横条已有第一版实现层 adapter，但真实设备录屏和 full 页 promote 证据仍缺。
+- 不能声称整屏旋转已有真实设备、折叠屏、正文字符锚点重分页和完整三档录屏证据；当前已有第一版 adapter、状态/元数据、token CSS、coverage gate 与 portrait→landscape→portrait browser WebM。
+- 不能声称打断动画已有完整自动化和录屏证据；当前已有第一版 `motion.interrupt.*` adapter、临时状态清理、coverage gate 与快速 Tab redirect WebM，连续 overlay、下拉 A→B、loading completion 和 source-switch 的完整录屏还需深化。
+- 不能声称 reduced-motion 已完成跨端录屏验证；当前只有主 Tab 的 browser reduced-motion 代表 WebM，三个原生平台的系统设置与设备证据仍缺。
 - 不能把 `frontend-demo-optimized/` 的 CSS、DOM、`data-*` 字段、截图或 route stack 作为 Android / iOS / HarmonyOS 的最终前端实现依据；它们只证明契约样板。
 - 不能把 demo coverage 通过等同于平台实现完成；平台必须另行提供 native test、真机/模拟器录屏、无障碍和性能证据。

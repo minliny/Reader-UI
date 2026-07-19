@@ -150,7 +150,8 @@ test("design index states one VC/MR completion policy", () => {
   assert.match(designIndex, /不会自动替代其他页面族的用户视觉确认、Design Delta 或三档动态复验/);
   assert.match(designIndex, /MR1 控制层完成自验但待用户确认/);
   assert.match(designIndex, /MR2 进行中/);
-  assert.match(designIndex, /MR3 的 canonical registry 与十家族 50 条确定性 trace 已完成/);
-  assert.match(designIndex, /真实连续画面\/WebM 与三档 viewport 动态媒体仍待补/);
+  assert.match(designIndex, /MR3 的 canonical registry、十家族 50 条确定性 trace 及 7 段代表性 browser WebM 已完成/);
+  assert.match(designIndex, /7 段代表性 browser WebM 已完成/);
+  assert.match(designIndex, /完整十家族\/三档 viewport 动态媒体仍待补/);
   assert.match(designIndex, /MR4–MR5 原生\/设备门禁尚未闭环/);
 });
