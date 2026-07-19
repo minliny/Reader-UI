@@ -10,6 +10,8 @@ Reader 2 权威页：<https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK?node-i
 
 详细清单：[FIGMA_MATERIAL_INVENTORY_2026-07-13.md](./FIGMA_MATERIAL_INVENTORY_2026-07-13.md)
 
+2026-07-19 现场审计：[FIGMA_FULL_AUDIT_2026-07-19.md](./FIGMA_FULL_AUDIT_2026-07-19.md)
+
 ## 当前事实
 
 - Figma 当前有 29 个页面（`00`–`28`）。M0–M5 物料快照之后已新增 `25 · Motion Reference`、`26 · Reader Control Continuity`、`27 · Interaction Playground` 与 `28 · Project Index & Audit`；新增页面不自动关闭 VC/MR 门禁。
@@ -17,18 +19,19 @@ Reader 2 权威页：<https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK?node-i
 - 当前通用图标源为 139 个 Tabler 图标组件，不再使用手绘近似图标作为新组件输入。
 - 保留 6 张原始封面和 35 个唯一手机实页参考，其中 22 个为本轮 M3 六域代表状态。
 - 除既有 M4 参考外，本轮从当前 demo 重新锁定 24 个页面/状态族 × Phone / Compact / Tablet，共 72 个实页基线。
-- `23 · Pages · Final` 已装配 25 个响应式 Set（含既有 Reader Control Home）、75 个顶层 viewport 实例；`24 · Responsive Masters · Phase 4` 保存 24 个新页面级 Set / 72 个 variants。`Final` 是现有节点名，不代表用户视觉验收已经完成。
+- `23 · Pages · Final` 已装配 25 个响应式 Set（含既有 Reader Control Home）、75 个顶层 viewport 实例；`24 · Responsive Masters · Phase 4` 保存 24 个新页面级 Set / 72 个 variants。2026-07-19 exact-set 门禁确认 72/72 variant 和 75/75 prototype viewport 尺寸、引用与原点一致，11 个普通页面 Compact 母版已按 live demo 的居中受限 surface 规则修复；`Final` 仍不代表用户视觉确认或 Host 已完成。
 - `21 · Inventory` 已建立“存在 / 分散 / reference-only / 可复用 / 缺失”五类矩阵。
 
 ## 当前闭环状态
 
 | 工作 | 当前状态 |
 | --- | --- |
-| 页面级 master 与三档实例装配 | 已有候选 |
+| 页面级 master 与三档实例装配 | 结构门禁通过：24×3 variants、25×3 prototype viewports exact；用户视觉确认仍独立 |
 | Reader 2 Figma 静态源冻结 | 已完成 |
 | Reader 2 Design Delta 与 Reader-UI 显式回写 | VC2 已完成 |
 | Reader 2 三档浏览器复验 | VC3 已完成 |
-| Reader 2 之外的页面/状态族逐页视觉复核 | 未完成 |
+| Reader 2 之外的页面/状态族结构复核 | 已完成 exact-set 与引用门禁；11 个 Compact 明确缺陷已修复 |
+| Reader 2 之外的页面/状态族逐页视觉确认 | 未完成 |
 | Reader 2 之外的用户视觉确认与改版决策 | 未完成 |
 | 其他页面族 Figma 设计修正 | 未完成 |
 | 其他页面族 Design Delta 与 Reader-UI 回写 | 未完成 |

@@ -13,6 +13,7 @@
 - [Motion 四层交付规划 (2026-07-14)](./MOTION_DELIVERY_PLAN_2026-07-14.md)：VC3 通过后的 Figma / Contract / demo / 三端 Host 职责边界、十个核心动效家族与 MR0–MR5 执行门槛。
 - [Paper Flow Icon System](./PAPER_FLOW_ICON_SYSTEM.md)：图标网格、静态状态、图标动效和禁止项。
 - [Figma Handoff Status (updated 2026-07-19)](./FIGMA_HANDOFF_STATUS_2026-07-12.md)：`15 · Reader 2` 是 Reader 控制层唯一静态源；同时记录 Material M0–M5 候选、reference-only 边界、当前 29 页结构，以及其他页面族和 Motion 尚未完成的闭环。
+- [Figma Full Audit (2026-07-19)](./FIGMA_FULL_AUDIT_2026-07-19.md)：当前 29 页全文件结构审计、24×3 响应式 exact-set、25×3 原型门禁、11 个 Compact 母版修复、Motion timeline 现场值和 Figma / Reader-UI / Core / Host 完成边界。
 - [Figma Material Coverage Inventory (2026-07-13)](./FIGMA_MATERIAL_INVENTORY_2026-07-13.md)：M0–M5 的 25 页历史物料快照，记录 497 个变量、24 个新响应式页面 Set、139 个 Tabler 图标和五类素材覆盖矩阵；当前 Figma 已扩展到 29 页，历史数量不代表实时数量或完成度。
 
 ## 控件视觉基线
@@ -21,7 +22,7 @@
 
 Reader 控制层的静态视觉以 Figma `15 · Reader 2` 为唯一输入；`frontend-demo-optimized/` 是 route、state、交互、连续分页与响应式浏览器 proof。`23 · Pages · Final` 只保留为其他页面族的候选装配区。
 
-当前完成口径：M0–M5 只表示物料、参考、master 与候选实例已经装配；Reader 2 静态 VC2 / VC3 已关闭，其他 24 个页面/状态族的 VC0–VC3 尚未关闭。Motion 已建立独立 `25 · Motion Reference`，MR1 控制层完成自验但待用户确认，MR2 进行中，十个核心家族及 MR3–MR5 尚未闭环。
+当前完成口径：M0–M5 只表示物料、参考、master 与候选实例已经装配；Reader 2 静态 VC2 / VC3 已关闭。2026-07-19 已完成 24×3 响应式结构和 25×3 原型引用门禁，并修复 11 个 Compact 母版，但这不会自动替代其他页面族的用户视觉确认、Design Delta 或三档动态复验。Motion 已建立独立 `25 · Motion Reference`，MR1 控制层完成自验但待用户确认，MR2 进行中，十个核心家族及 MR3–MR5 尚未闭环。
 
 ## 阅读视口与系统区域
 

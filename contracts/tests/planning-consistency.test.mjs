@@ -145,7 +145,8 @@ test("Figma handoff records the current page and Motion Reference state", () => 
 test("design index states one VC/MR completion policy", () => {
   assert.match(designIndex, /M0–M5 只表示物料、参考、master 与候选实例已经装配/);
   assert.match(designIndex, /Reader 2 静态 VC2 \/ VC3 已关闭/);
-  assert.match(designIndex, /其他 24 个页面\/状态族的 VC0–VC3 尚未关闭/);
+  assert.match(designIndex, /24×3 响应式结构和 25×3 原型引用门禁/);
+  assert.match(designIndex, /不会自动替代其他页面族的用户视觉确认、Design Delta 或三档动态复验/);
   assert.match(designIndex, /MR1 控制层完成自验但待用户确认/);
   assert.match(designIndex, /MR2 进行中/);
   assert.match(designIndex, /十个核心家族及 MR3–MR5 尚未闭环/);
