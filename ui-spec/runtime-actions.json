@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "actions": [
     { "event": "route.push", "action": "pushRoute", "requiredPayload": ["routeId"], "guards": ["loadingFalse"] },
     { "event": "route.replace", "action": "replaceRoute", "requiredPayload": ["routeId"], "guards": ["loadingFalse"] },
@@ -13,6 +13,8 @@
     { "event": "overlay.sheet.close", "action": "clearOverlay" },
     { "event": "overlay.keyboard.open", "action": "setOverlay", "value": "keyboard" },
     { "event": "overlay.keyboard.close", "action": "clearOverlay" },
+    { "event": "reader.control.toggle", "action": "toggleReaderControl", "requiredPayload": ["overlay"], "description": "Atomically toggles the Reader control overlay family without changing route identity." },
+    { "event": "reader.module.switch", "action": "switchReaderModule", "requiredPayload": ["module"], "description": "Atomically selects one Reader module overlay; repeated selection is a semantic no-op and motion is derived from the state delta." },
     { "event": "reader.directory.open", "action": "setOverlay", "value": "directory" },
     { "event": "reader.directory.close", "action": "clearOverlayIfMatches", "value": "directory" },
     { "event": "reader.appearance.open", "action": "setOverlay", "value": "appearance" },
@@ -30,8 +32,8 @@
     },
     { "event": "reader.enter", "action": "pushRoute", "value": "immersive-reading", "guards": ["loadingFalse"] },
     { "event": "reader.exit", "action": "popRoute" },
-    { "event": "reader.page.next", "action": "readerPageStep", "value": "1", "coreSequence": ["reader.location.resolve"] },
-    { "event": "reader.page.prev", "action": "readerPageStep", "value": "-1", "coreSequence": ["reader.location.resolve"] },
+    { "event": "reader.page.next", "action": "readerPageStep", "value": "1", "coreSequence": ["reader.location.resolve", "reader.progress.update"], "description": "Resolve the proposed page, persist the correlation-scoped canonical progress through Host DomainContext, then commit the visible page." },
+    { "event": "reader.page.prev", "action": "readerPageStep", "value": "-1", "coreSequence": ["reader.location.resolve", "reader.progress.update"], "description": "Resolve the proposed page, persist the correlation-scoped canonical progress through Host DomainContext, then commit the visible page." },
 
     { "event": "reader.tts.start", "action": "startSession", "value": "tts", "coreSequence": ["tts.queue.start"], "hostRequest": "tts.system.start" },
     { "event": "reader.tts.stop", "action": "stopSession", "coreSequence": ["tts.queue.stop"], "hostRequest": "tts.system.stop" },

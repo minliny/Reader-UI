@@ -4,16 +4,16 @@
 
 runtime-coverage.json 由 canonical UiEvent、runtime-actions.json 与 runtime-ownership.json 生成；它是逐事件 ownership/rollout 清单，不是平台 renderer。
 
-当前产物（VERSION.json 2.2.0）：
+当前产物（VERSION.json 3.0.0）：
 
 ```text
 generated/
-  swift/    14 个 .swift 文件
-  kotlin/   14 个 .kt 文件
-  arkts/    14 个 .ets 文件
+  swift/    16 个 .swift 文件
+  kotlin/   16 个 .kt 文件
+  arkts/    16 个 .ets 文件
 ```
 
-每个端 14 个文件对应 14 个 schema：route / ui-event / ui-state / view-state / motion / token / core-command / core-event / host-request / progress-location / content / sync-conflict / state-rule / motion-policy。
+每个端包含 15 个 contract schema 输出，再加 1 个 `ScreenGraph` 输出，共 16 个文件。15 个 contract schema 为：route / ui-event / ui-state / view-state / motion / token / appearance / core-command / core-event / host-request / progress-location / content / sync-conflict / state-rule / motion-policy。
 
 生成方式：
 

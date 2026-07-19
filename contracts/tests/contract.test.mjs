@@ -19,6 +19,7 @@ const stateSchema = loadJson("ui-state.schema.json");
 const viewSchema = loadJson("view-state.schema.json");
 const motionSchema = loadJson("motion.schema.json");
 const tokenSchema = loadJson("token.schema.json");
+const appearanceSchema = loadJson("appearance.schema.json");
 
 const routeFixtures = loadJson("fixtures/route.fixtures.json");
 const eventFixtures = loadJson("fixtures/ui-event.fixtures.json");
@@ -26,6 +27,7 @@ const stateFixtures = loadJson("fixtures/ui-state.fixtures.json");
 const viewFixtures = loadJson("fixtures/view-state.fixtures.json");
 const motionFixtures = loadJson("fixtures/motion.fixtures.json");
 const tokenFixtures = loadJson("fixtures/token.fixtures.json");
+const appearanceFixture = loadJson("fixtures/appearance.fixtures.json");
 const frontendRuntimeSource = readFileSync(join(REPO_ROOT, "frontend-demo-optimized/render-runtime.js"), "utf8");
 
 // --- Schema 自检 ---
@@ -71,6 +73,13 @@ test("token.schema.json 结构合法", () => {
   assert.ok(tokenSchema.properties.category.enum.includes("motion-duration"));
 });
 
+test("appearance.schema.json 固定 Reader 2 AppearanceContent 真源", () => {
+  assert.equal(appearanceSchema.title, "ReaderAppearanceSpec");
+  assert.equal(appearanceSchema.additionalProperties, false);
+  assert.equal(appearanceFixture.source.path, "Reader 2/Full/AppearanceContent");
+  assertValid(appearanceSchema, appearanceFixture, "appearance fixture");
+});
+
 // --- Fixtures 校验 ---
 test("route.fixtures.json 全部通过 schema", () => {
   for (const item of routeFixtures) {
@@ -106,6 +115,42 @@ test("token.fixtures.json 全部通过 schema", () => {
   for (const item of tokenFixtures) {
     assertValid(tokenSchema, item, `token fixture ${item.name}`);
   }
+});
+
+test("appearance fixture 主题字体控件 exact-set 与默认值闭合", () => {
+  assert.deepEqual(
+    appearanceFixture.themes.map((item) => [item.id, item.label, item.swatchHex]),
+    [
+      ["blue", "日间", "#FFFFFF"],
+      ["warm", "暖白", "#FBF0DF"],
+      ["blue-night", "夜间", "#26231F"],
+      ["warm-night", "暖夜", "#302922"],
+      ["paper", "纸纹", "#F5EAD8"],
+      ["green", "青叶纹", "#E7F0E2"],
+      ["paper-night", "夜纹", "#34302B"],
+      ["green-night", "林夜纹", "#263129"],
+    ]
+  );
+  assert.deepEqual(
+    appearanceFixture.fonts.map((item) => item.label),
+    ["系统", "宋体", "黑体", "楷体", "仿宋", "等宽", "思源宋体", "霞鹜文楷", "+ 导入"]
+  );
+  assert.deepEqual(
+    appearanceFixture.selects.map((item) => [item.label, item.options.find((option) => option.value === item.defaultValue)?.label]),
+    [["缩进", "无"], ["简繁", "简体"], ["翻页动画", "平移"], ["文字对齐", "开启"]]
+  );
+  assert.deepEqual(
+    appearanceFixture.steppers.map((item) => [item.id, item.defaultValue]),
+    [["fontSize", 18], ["lineHeight", 1.96], ["paragraphGap", 16], ["letterSpacing", 0]]
+  );
+  const themeIds = new Set(appearanceFixture.themes.map((item) => item.id));
+  const fontIds = new Set(appearanceFixture.fonts.map((item) => item.id));
+  assert.equal(themeIds.size, appearanceFixture.themes.length);
+  assert.equal(fontIds.size, appearanceFixture.fonts.length);
+  assert.ok(themeIds.has(appearanceFixture.defaults.dayThemeId));
+  assert.ok(themeIds.has(appearanceFixture.defaults.nightThemeId));
+  assert.ok(fontIds.has(appearanceFixture.defaults.fontId));
+  for (const theme of appearanceFixture.themes) assert.ok(themeIds.has(theme.pairId), `${theme.id} pair missing`);
 });
 
 // --- 跨文件一致性 ---
@@ -184,6 +229,7 @@ test("bookshelf view-state 对齐 frontend-demo-optimized 书架结构", () => {
 
   const bookGrid = shelfSection.children.find((component) => component.type === "BookGrid");
   assert.ok(bookGrid, "shelf section 应包含 BookGrid");
+  assert.equal(bookGrid.id, "book-collection", "书架 collection id 必须跨布局稳定");
   assert.ok(bookGrid.children.length >= 6, "bookshelf 默认书架应覆盖至少 6 本 live demo 书卡");
   assert.deepEqual(
     bookGrid.children.map((component) => component.type),
@@ -193,6 +239,33 @@ test("bookshelf view-state 对齐 frontend-demo-optimized 书架结构", () => {
     bookGrid.children.slice(0, 6).map((component) => component.props?.title),
     ["长夜余火", "诡秘之主", "明朝那些事儿", "三体", "人间词话", "Android 开发笔记"]
   );
+  assert.equal(
+    bookGrid.children.every((component) => component.props?.semanticRole === "BookItem"),
+    true,
+    "BookCard canonical type 必须显式表达稳定 BookItem 语义"
+  );
+});
+
+test("bookshelf cover/list view-state 复用同一 BookItem identity tree", () => {
+  const cover = viewFixtures.find((item) => item.routeId === "bookshelf-cover-mode" && item.pageState === "default");
+  const list = viewFixtures.find((item) => item.routeId === "bookshelf-list-mode" && item.pageState === "default");
+  assert.ok(cover && list, "bookshelf cover/list fixtures 应同时存在");
+
+  const collectionOf = (fixture) => fixture.components
+    .find((component) => component.type === "BookshelfShelfSection")
+    ?.children.find((component) => component.id === "book-collection");
+  const coverCollection = collectionOf(cover);
+  const listCollection = collectionOf(list);
+  assert.ok(coverCollection && listCollection, "cover/list 应共用稳定 book-collection");
+  assert.equal(coverCollection.type, "BookGrid");
+  assert.equal(listCollection.type, "BookGrid");
+  assert.equal(listCollection.children.some((component) => component.type === "ListRow"), false);
+  assert.deepEqual(
+    coverCollection.children.map((component) => [component.type, component.id, component.props?.bookId, component.props?.semanticRole]),
+    listCollection.children.map((component) => [component.type, component.id, component.props?.bookId, component.props?.semanticRole])
+  );
+  assert.deepEqual(coverCollection.children.map((component) => component.props?.viewMode), ["cover", "cover", "cover"]);
+  assert.deepEqual(listCollection.children.map((component) => component.props?.viewMode), ["list", "list", "list"]);
 });
 
 test("book-detail view-state 使用详情页复合结构", () => {

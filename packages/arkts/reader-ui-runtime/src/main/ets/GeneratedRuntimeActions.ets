@@ -8,7 +8,7 @@ export interface RuntimeActionDescriptor {
   hostRequest?: string;
 }
 
-export const RUNTIME_ACTION_SCHEMA_VERSION: number = 2;
+export const RUNTIME_ACTION_SCHEMA_VERSION: number = 3;
 export const GENERATED_RUNTIME_ACTIONS: Record<string, RuntimeActionDescriptor> = {
   "route.push": { action: "pushRoute", value: undefined, requiredPayload: ["routeId"], guards: ["loadingFalse"], coreSequence: [], hostRequest: undefined },
   "route.replace": { action: "replaceRoute", value: undefined, requiredPayload: ["routeId"], guards: ["loadingFalse"], coreSequence: [], hostRequest: undefined },
@@ -21,6 +21,8 @@ export const GENERATED_RUNTIME_ACTIONS: Record<string, RuntimeActionDescriptor> 
   "overlay.sheet.close": { action: "clearOverlay", value: undefined, requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
   "overlay.keyboard.open": { action: "setOverlay", value: "keyboard", requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
   "overlay.keyboard.close": { action: "clearOverlay", value: undefined, requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
+  "reader.control.toggle": { action: "toggleReaderControl", value: undefined, requiredPayload: ["overlay"], guards: [], coreSequence: [], hostRequest: undefined },
+  "reader.module.switch": { action: "switchReaderModule", value: undefined, requiredPayload: ["module"], guards: [], coreSequence: [], hostRequest: undefined },
   "reader.directory.open": { action: "setOverlay", value: "directory", requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
   "reader.directory.close": { action: "clearOverlayIfMatches", value: "directory", requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
   "reader.appearance.open": { action: "setOverlay", value: "appearance", requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
@@ -31,8 +33,8 @@ export const GENERATED_RUNTIME_ACTIONS: Record<string, RuntimeActionDescriptor> 
   "book.open": { action: "bookOpenSequence", value: undefined, requiredPayload: ["bookId","sourceId","sourceKind"], guards: [], coreSequence: ["source.detail","chapter.list","content.load","reader.location.resolve"], hostRequest: undefined },
   "reader.enter": { action: "pushRoute", value: "immersive-reading", requiredPayload: [], guards: ["loadingFalse"], coreSequence: [], hostRequest: undefined },
   "reader.exit": { action: "popRoute", value: undefined, requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },
-  "reader.page.next": { action: "readerPageStep", value: "1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve"], hostRequest: undefined },
-  "reader.page.prev": { action: "readerPageStep", value: "-1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve"], hostRequest: undefined },
+  "reader.page.next": { action: "readerPageStep", value: "1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve","reader.progress.update"], hostRequest: undefined },
+  "reader.page.prev": { action: "readerPageStep", value: "-1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve","reader.progress.update"], hostRequest: undefined },
   "reader.tts.start": { action: "startSession", value: "tts", requiredPayload: [], guards: [], coreSequence: ["tts.queue.start"], hostRequest: "tts.system.start" },
   "reader.tts.stop": { action: "stopSession", value: undefined, requiredPayload: [], guards: [], coreSequence: ["tts.queue.stop"], hostRequest: "tts.system.stop" },
   "reader.autoPage.start": { action: "startSession", value: "auto-page", requiredPayload: [], guards: [], coreSequence: [], hostRequest: undefined },

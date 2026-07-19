@@ -1,11 +1,11 @@
 # Platform Evidence Spec
 
-状态：Phase 3 验收和防漂移机制
-日期：2026-07-04
+状态：Phase 3 Slice 0–12 验收和防漂移机制
+日期：2026-07-19
 权威源：[ACCEPTANCE.md](./ACCEPTANCE.md)、[SLICE_PLAN.md](./SLICE_PLAN.md)、[BOUNDARY_RULES.md](./BOUNDARY_RULES.md) §5
 来源：[CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §9 Phase 5、§10 合并门槛
 
-本文是阶段 3"验收和防漂移机制"。定义每端 evidence 要求、防漂移自动检查脚本口径、contract 变更传导机制。
+本文是阶段 3"验收和防漂移机制"。定义 Slice 0–12 每端 evidence 要求、防漂移自动检查脚本口径、contract 变更传导机制，以及 `evidence/manifest.json` 的机器可校验登记规则。
 
 ## 0. 文档边界
 
@@ -31,6 +31,8 @@
 | 截图 | `.png` | 各端仓库 `slice-N-{platform}-*.png` | 各端 |
 | 录屏 | `.mov / .mp4 / .gif` | 各端仓库 `slice-N-{platform}-*.mov` | 各端 |
 | 设备证据 | 真机 / 模拟器录屏 + 性能数据 | 各端仓库 `slice-N-{platform}-device-*` | 各端 |
+
+在 `evidence/manifest.json` 中把 slice 标为 `planned / in-progress / blocked` 只表示任务已登记，不属于执行证据。只有测试、实际 artifact、可信 release identity 和该 slice 所有 gate 均关闭时才能标为 `passed`。
 
 ## 2. 每端 Evidence 要求
 
@@ -71,7 +73,7 @@
 #### 设备证据
 - 真机或模拟器
 - 性能数据：Instruments 抓取 FPS / 内存 / CPU（Slice 8）
-- 真机录屏：`slice-8-ios-device-smoke.mov`，覆盖 [CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §9 Phase 5 最低验收链路
+- 真机录屏：`slice-8-ios-device-smoke.mov` 覆盖既有文本阅读主链；全产品旅程另需 `slice-12-ios-complete-journey-device.mov`
 - 无障碍：`slice-8-ios-voiceover.mov`（VoiceOver focus 迁移）
 
 ### 2.2 Android（Compose）
@@ -103,7 +105,7 @@
 #### 设备证据
 - 真机或模拟器
 - 性能数据：Android Studio Profiler 抓取 FPS / 内存 / CPU（Slice 8）
-- 真机录屏：`slice-8-android-device-smoke.mov`
+- 真机录屏：`slice-8-android-device-smoke.mov` 覆盖既有文本阅读主链；全产品旅程另需 `slice-12-android-complete-journey-device.mp4`
 - 折叠屏：`slice-8-android-fold-orientation.mov`（如有折叠屏真机，必须真机；否则模拟器）
 
 ### 2.3 HarmonyOS（ArkUI）
@@ -136,7 +138,25 @@
 - **真机优先**：HarmonyOS 必须有真机证据（来源：[CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) §8 HarmonyOS 修改方向"补 real-device proof"）
 - 如真机不可得，模拟器证据必须明确标记 `simulator`，且最终验收前必须补真机
 - 性能数据：DevEco Studio Profiler 抓取 FPS / 内存 / CPU（Slice 8）
-- 真机录屏：`slice-8-harmony-device-smoke.mov`
+- 真机录屏：`slice-8-harmony-device-smoke.mov` 覆盖既有文本阅读主链；全产品旅程另需 `slice-12-harmony-complete-journey-device.mp4`
+
+### 2.4 Slice 9–12 分域 evidence bundle
+
+下表是三端共同最低分母；[SLICE_PLAN.md](./SLICE_PLAN.md) 中各 slice 的平台专属交付物仍需同时满足。
+
+| Slice | 必须登记的 coverage | 必须存在的测试/数据 | 必须存在的 App/device artifact | `passed` 的附加门槛 |
+| --- | --- | --- | --- | --- |
+| Slice 9 | 本地五格式、PDF、漫画、音频、download/storage | 五格式真实 corpus、locator round-trip、Core protocol、Host file/permission/media/download happy+error、reducer golden | 导入→专属 reader、PDF/漫画、媒体/下载、空间不足/断网/重启恢复 | 同 corpus canonical 结果一致；无非文本静默降级；下载/媒体状态可恢复 |
+| Slice 10 | 书签/历史/搜索、编辑、规则、换源、封面、段评、HttpTTS、session | 实体 CRUD/冲突/回滚/持久化、Core protocol、Host HTTP/credential/media、reducer golden | reading-data、edit/rules、cover/review、HttpTTS/媒体键/后台 | 业务实体 Core-owned；换源/编辑失败可回滚；active session 唯一 |
+| Slice 11 | DSL/书源/订阅、WebView challenge、RSS、protected download | 同一真实 source corpus、DSL/JS sandbox、Cookie/profile 隔离、Host HTTP/Cookie/WebView/Credential、Core diff | rule debug、登录/captcha/challenge/回流、认证 RSS、受保护下载 | 普通 HTTP/Cookie/WebView/RSS 四类真实源三端同结果；凭据不越界 |
+| Slice 12 | onboarding/权限/设置、全部 viewport、无障碍、系统集成、release | 全量构建/测试、Slice 9–11 smoke 索引、同 corpus diff、性能、迁移/回滚、consumer lock | 完整用户旅程、无障碍、Phone/横屏/Tablet/Fold、后台恢复 | Slice 9–11 已 passed；release digest/locks 一致；同 corpus diff=0；回滚成功 |
+
+通用要求：
+
+- 每个实际 artifact 必须记录相对路径、SHA-256、字节数、目标类型和执行结果；summary 文档不能代替原始 artifact。
+- physical/manual 证据必须记录真实设备标识、OS、时间和 operator；`unknown / mock / simulator` 等占位标识不能冒充真机。
+- corpus、性能 JSON、release lock 和测试报告与录屏同等属于 evidence artifact，必须可从 manifest 重算 digest。
+- Slice 12 不得把 Slice 8 的单一文本阅读 smoke 复用成 Slice 9–11 的分域 App/device proof。
 
 ## 3. 防漂移自动检查脚本口径
 
@@ -159,6 +179,7 @@
 | motion fixture guardRules 完整性 | `motion-guard.test.mjs` | ✓ 已有 |
 | token 分组覆盖 | `token-group.test.mjs` | ✓ 已有 |
 | Core/Host 边界一致性 | `core-host-boundary.test.mjs` | ✓ 已有 |
+| Slice 0–12 平台 manifest schema、登记 exact-set 与 fail-closed | `platform-evidence-manifest.test.mjs` | ✓ 已有 |
 
 执行入口：
 ```bash
@@ -287,9 +308,13 @@ slice-3-harmony-overlay-switch.mov
 slice-4-ios-tts-start-stop.mov
 slice-8-android-device-smoke.mov
 slice-8-harmony-fold-orientation.mov
+slice-9-ios-import-reader.mov
+slice-10-android-http-tts-device.mp4
+slice-11-harmony-webview-challenge-device.mp4
+slice-12-ios-complete-journey-device.mov
 ```
 
-- `N`：slice 编号（0-8）
+- `N`：slice 编号（0–12）
 - `platform`：`ios` / `android` / `harmony`
 - `feature`：route 或功能名（kebab-case）
 - `state`：可选，状态名（default / loading / empty / error / offline / permission / night-mode / reduced-motion）
@@ -303,33 +328,63 @@ slice-8-harmony-fold-orientation.mov
 
 ### 5.3 evidence manifest
 
-每端仓库必须有 `evidence/manifest.json`，记录所有 evidence：
+每端仓库必须有 `evidence/manifest.json`，并通过 [platform-evidence-manifest.schema.json](./platform-evidence-manifest.schema.json)。本仓 [platform-evidence-manifest.fixtures.json](./fixtures/platform-evidence-manifest.fixtures.json) 是 Slice 0–12 的空白登记模板，不是任何平台的执行证据。
+
+首次接入时必须完整登记 `slice-0` 到 `slice-12`，未施工项保持 `planned`；不得省略，也不得使用 `slice-13` 或私有名称绕开正式计划。实际执行 manifest 必须把 `manifestKind` 改为 `execution` 并填写可信 release identity。
 
 ```json
 {
+  "$schema": "contracts/platform-evidence-manifest.schema.json",
+  "schemaVersion": 1,
+  "manifestKind": "execution",
   "platform": "ios",
+  "releaseIdentity": {
+    "contractVersion": "3.0.0",
+    "sourceSha": "<Reader-UI exact source SHA>",
+    "manifestSha": "<UI_RELEASE_MANIFEST.json SHA-256>",
+    "readerCoreArtifactSha": "<Reader-Core artifact SHA-256>",
+    "consumerLockSha": "<platform consumer lock SHA-256>"
+  },
   "slices": {
-    "slice-1": {
-      "videos": ["slice-1-ios-cold-start.mov", "slice-1-ios-tab-switch.mov"],
-      "images": ["slice-1-ios-bookshelf-default.png", "slice-1-ios-bookshelf-loading.png"],
-      "tests": ["AppShellReducerTest.swift"],
+    "slice-9": {
+      "title": "多格式、本地书、漫画与媒体交付",
+      "status": "in-progress",
+      "dependencies": ["slice-2", "slice-7"],
       "coverage": {
-        "routes": ["app-shell", "bookshelf", "discover", "rss", "settings"],
-        "motions": ["app.firstOpen.enter", "tab.switch", "tab.item.select"],
-        "pageStates": ["default", "loading", "empty", "error", "offline"]
-      }
+        "capabilityRefs": ["B02", "C02", "C03", "C11", "E06", "F02"],
+        "routeIds": ["local-format-support", "pdf-reader", "manga-reader"],
+        "eventTypes": [],
+        "motionIds": [],
+        "pageStates": ["default", "loading", "empty", "error", "offline", "permission"]
+      },
+      "gates": {
+        "contract": "passed",
+        "generated": "passed",
+        "coreHost": "pending",
+        "nativeBuild": "pending",
+        "device": "pending"
+      },
+      "tests": [],
+      "evidence": [],
+      "blockers": ["format/media Core and Host protocol not closed"],
+      "notes": "Registration is not completion."
     }
   }
 }
 ```
 
+上例只展示字段形状；实际文件必须保留 schema 要求的 Slice 0–12 全部条目。`sourceSha / manifestSha / artifactSha / consumerLockSha` 不能保留占位符。
+
 ### 5.4 evidence 验收
 
 每个 slice 验收时，三端必须提交对应 manifest。验收方检查：
-1. manifest 中声明的 evidence 文件实际存在
-2. coverage 中的 routes / motions / pageStates 在该 slice 范围内
-3. 测试文件存在且通过
-4. 录屏 / 截图与 manifest 声明一致
+1. manifest 通过 schema，平台、release identity 与 consumer lock 属于同一次执行
+2. manifest 中声明的 tests / evidence 文件实际存在，字节数和 SHA-256 可重算
+3. coverage 中的 capabilityRefs / routeIds / eventTypes / motionIds / pageStates 在该 slice 范围内
+4. 测试与 evidence 的 `result` 均为 `passed`，不存在 blocker，所有 gates 为 `passed / not-required`
+5. physical/manual artifact 有真实 deviceId、OS、时间；manual 另有 operator
+6. `planned / in-progress / blocked` 不计入完成分子；template、fixture、summary-only 和浏览器 demo 不计入平台执行 evidence
+7. Slice 12 还必须确认 Slice 9–11 三端均 passed、同 corpus diff=0、release locks 一致并完成回滚演练
 
 ## 6. 防漂移机制汇总
 
@@ -344,6 +399,7 @@ slice-8-harmony-fold-orientation.mov
 | 三端用 mock contract 替代 generated | device smoke 检查 | Slice 8 验收 | 是 |
 | 三端绕过 Core / HostAdapter | code review + AST 检查（P1）| 各端 code review | 是 |
 | 三端持久化业务数据 | code review + grep（UserDefaults / DataStore / preferences 中出现业务字段）| 各端 CI | 是 |
+| Slice 9–12 未登记或伪 passed | `platform-evidence-manifest.schema.json` + `platform-evidence-manifest.test.mjs` + 各端 artifact digest check | 本仓模板 / 各端 CI / Slice 12 | 是 |
 
 ## 7. 验收门槛对应
 
@@ -361,7 +417,8 @@ slice-8-harmony-fold-orientation.mov
 
 ## 8. 缺口与下一步
 
-阶段 3 PLATFORM_EVIDENCE_SPEC 已定义每端 evidence 要求 + 防漂移检查口径 + contract 变更传导。本仓层 P0 防漂移检查已补齐。剩余缺口：
+阶段 3 PLATFORM_EVIDENCE_SPEC 已定义 Slice 0–12 每端 evidence、机器 manifest、分域 bundle、防漂移检查口径与 contract 变更传导。本仓能验证登记结构和 fail-closed 规则，但不会生成平台执行证据。剩余缺口：
 - 三端层 grep / AST 检查脚本归各端 CI 实现
 - TokenAdapter coverage 检查依赖三端 TokenAdapter 实现稳定
 - HarmonyOS 真机 evidence 依赖真机可得性
+- 三端仓库需要导入 schema/模板并用真实 release identity、tests 与 artifact 替换 planned 空登记

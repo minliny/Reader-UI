@@ -179,11 +179,19 @@ public enum ComponentType: String, Codable, CaseIterable, Sendable {
     case rssSubscriptionManagementPage = "RssSubscriptionManagementPage"
 }
 
+public struct ViewStateExplicitBinding: Codable, Equatable, Sendable {
+    public let target: String
+    public let event: String
+    public let payload: [String: AnyCodable]
+    public let trigger: String
+}
+
 public struct ViewStateComponent: Codable, Equatable, Sendable {
     public let type: ComponentType
     public var id: String?
     public var props: [String: AnyCodable]?
     public var children: [ViewStateComponent]?
+    public var bindings: [ViewStateExplicitBinding]?
 }
 
 public struct ViewState: Codable, Equatable, Sendable {

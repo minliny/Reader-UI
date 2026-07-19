@@ -40,34 +40,34 @@ const syncConflictSchema = loadJson("sync-conflict.schema.json");
 // Phase 1 收尾 schema
 const stateRuleSchema = loadJson("state-rule.schema.json");
 
-test("generated/swift 14 个文件全部存在", () => {
+test("generated/swift 16 个文件全部存在", () => {
   for (const f of [
     "Route.swift", "UiEvent.swift", "UiState.swift", "ViewState.swift", "Motion.swift", "Token.swift",
     "CoreCommand.swift", "CoreEvent.swift", "HostRequest.swift",
     "ProgressLocation.swift", "Content.swift", "SyncConflict.swift",
-    "StateRule.swift", "MotionPolicy.swift"
+    "StateRule.swift", "MotionPolicy.swift", "Appearance.swift", "ScreenGraph.swift"
   ]) {
     ensureExists(join("swift", f));
   }
 });
 
-test("generated/kotlin 14 个文件全部存在", () => {
+test("generated/kotlin 16 个文件全部存在", () => {
   for (const f of [
     "Route.kt", "UiEvent.kt", "UiState.kt", "ViewState.kt", "Motion.kt", "Token.kt",
     "CoreCommand.kt", "CoreEvent.kt", "HostRequest.kt",
     "ProgressLocation.kt", "Content.kt", "SyncConflict.kt",
-    "StateRule.kt", "MotionPolicy.kt"
+    "StateRule.kt", "MotionPolicy.kt", "Appearance.kt", "ScreenGraph.kt"
   ]) {
     ensureExists(join("kotlin", f));
   }
 });
 
-test("generated/arkts 14 个文件全部存在", () => {
+test("generated/arkts 16 个文件全部存在", () => {
   for (const f of [
     "Route.ets", "UiEvent.ets", "UiState.ets", "ViewState.ets", "Motion.ets", "Token.ets",
     "CoreCommand.ets", "CoreEvent.ets", "HostRequest.ets",
     "ProgressLocation.ets", "Content.ets", "SyncConflict.ets",
-    "StateRule.ets", "MotionPolicy.ets"
+    "StateRule.ets", "MotionPolicy.ets", "Appearance.ets", "ScreenGraph.ets"
   ]) {
     ensureExists(join("arkts", f));
   }
@@ -160,6 +160,18 @@ test("Swift ViewState.swift 包含全部 ComponentType", () => {
   const text = readText("swift/ViewState.swift");
   for (const t of viewSchema.$defs.Component.properties.type.enum) {
     assert.ok(text.includes(`"${t}"`), `Swift ViewState.swift 缺少 ComponentType：${t}`);
+  }
+});
+
+test("三端 ViewState 生成显式 target binding", () => {
+  const expectations = {
+    "swift/ViewState.swift": ["ViewStateExplicitBinding", "public let target: String", "public var bindings: [ViewStateExplicitBinding]?"],
+    "kotlin/ViewState.kt": ["ViewStateExplicitBinding", "val target: String", "val bindings: List<ViewStateExplicitBinding>?"],
+    "arkts/ViewState.ets": ["ViewStateExplicitBinding", "target: string", "bindings?: ViewStateExplicitBinding[]"],
+  };
+  for (const [relativePath, fragments] of Object.entries(expectations)) {
+    const text = readText(relativePath);
+    for (const fragment of fragments) assert.ok(text.includes(fragment), `${relativePath} 缺少 ${fragment}`);
   }
 });
 

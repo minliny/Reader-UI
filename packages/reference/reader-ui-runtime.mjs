@@ -338,6 +338,25 @@ export const READER_FOREGROUND_TIMER_ARM = "timer.foreground.arm";
 export const READER_FOREGROUND_TIMER_CANCEL = "timer.foreground.cancel";
 export const READER_AUTO_PAGE_MIN_INTERVAL_MS = 250;
 export const READER_AUTO_PAGE_MAX_INTERVAL_MS = 3_600_000;
+const READER_IDENTITY_OR_ROUTE_MUTATION_EVENTS = new Set([
+  "route.push",
+  "route.replace",
+  "route.pop",
+  "route.popToRoot",
+  "mainTab.select",
+  "book.open",
+  "reader.enter",
+  "reader.exit",
+  "source.switch.open",
+  "source.switch.cancel"
+]);
+const READER_CONTROL_OVERLAY_FAMILY = new Set([
+  "reader-control",
+  "directory",
+  "tts",
+  "appearance",
+  "settings"
+]);
 export const READER_APPEARANCE_PERSISTENCE_GET = "persistence.get";
 export const READER_APPEARANCE_PERSISTENCE_PUT = "persistence.put";
 export const READER_FONT_REGISTER_FILE = "font.registerFile";
@@ -366,6 +385,13 @@ export class ReaderUIRuntime {
       }
     }
     this.#checkGuards(descriptor, event);
+    if (READER_IDENTITY_OR_ROUTE_MUTATION_EVENTS.has(event) &&
+        this.state.pageTransaction?.stage === "persisting-progress") {
+      throw new ReaderUIRuntimeError(
+        "PAGE_PROGRESS_COMMIT_PENDING",
+        `${event} cannot replace the reader route or identity while progress persistence is pending`
+      );
+    }
     if (descriptor.action === "bookOpenSequence") {
       this.#preflightBookOpen(event, payload, correlationId, descriptor);
     }
@@ -450,6 +476,28 @@ export class ReaderUIRuntime {
         const expectedOverlay = value || readerUIJSONString(payload, "overlay");
         if (!expectedOverlay) throw new ReaderUIRuntimeError("MISSING_PAYLOAD", `${event} requires an overlay identity`);
         if (this.state.overlay === expectedOverlay) this.state.overlay = null;
+        break;
+      }
+      case "toggleReaderControl": {
+        if (this.state.routeId !== "immersive-reading") {
+          throw new ReaderUIRuntimeError("READER_ROUTE_GUARD", `${event} requires the immersive-reading route`);
+        }
+        const currentOverlay = this.state.overlay;
+        if (currentOverlay !== null && !READER_CONTROL_OVERLAY_FAMILY.has(currentOverlay)) {
+          throw new ReaderUIRuntimeError("READER_CONTROL_OVERLAY_GUARD", `${event} cannot replace ${currentOverlay}`);
+        }
+        this.state.overlay = currentOverlay === null ? "reader-control" : null;
+        break;
+      }
+      case "switchReaderModule": {
+        if (this.state.routeId !== "immersive-reading") {
+          throw new ReaderUIRuntimeError("READER_ROUTE_GUARD", `${event} requires the immersive-reading route`);
+        }
+        const currentOverlay = this.state.overlay;
+        if (currentOverlay === null || !READER_CONTROL_OVERLAY_FAMILY.has(currentOverlay)) {
+          throw new ReaderUIRuntimeError("READER_CONTROL_OVERLAY_GUARD", `${event} requires an active Reader control overlay`);
+        }
+        this.state.overlay = readerUIJSONString(payload, "module");
         break;
       }
       case "startSession":
@@ -675,20 +723,50 @@ export class ReaderUIRuntime {
     const canonicalLocation = readerUIJSONResultString(result, "canonicalLocation");
     const pageIndex = readerUIJSONResultInteger(result, "pageIndex");
     const error = readerUIJSONResultString(result, "error");
-    this.state.pageTransaction = null;
     if (error) {
+      this.state.pageTransaction = null;
       this.state.error = error;
       this.#finishFailedAutoPage(transaction);
       return this.#playbackResult(true, previous);
     }
     if (typeof canonicalLocation !== "string" || canonicalLocation.trim().length === 0 ||
         !Number.isInteger(pageIndex) || pageIndex < 0) {
+      this.state.pageTransaction = null;
       this.state.error = "PAGE_LOCATION_INVALID_RESULT";
       this.#finishFailedAutoPage(transaction);
       return this.#playbackResult(true, previous);
     }
-    this.state.readerCanonicalLocation = canonicalLocation;
-    this.state.readerPageIndex = pageIndex;
+    transaction.stage = "persisting-progress";
+    transaction.pendingCanonicalLocation = canonicalLocation;
+    transaction.pendingPageIndex = pageIndex;
+    this.state.error = null;
+    return this.#playbackResult(true, previous, [this.#pageProgressEffect(transaction)]);
+  }
+
+  acceptPageProgressResult(correlationId, jsonResult = {}) {
+    const previous = structuredClone(this.state);
+    const transaction = this.state.pageTransaction;
+    if (!transaction || transaction.correlationId !== correlationId || transaction.stage !== "persisting-progress") {
+      return this.#playbackResult(false, previous);
+    }
+    const result = cloneReaderUIJSONResult(jsonResult);
+    validateReaderUITypedResult(transaction.contractEvent, "reader.progress.update", result);
+    const stored = result.stored === true;
+    const error = readerUIJSONResultString(result, "error");
+    this.state.pageTransaction = null;
+    if (error) {
+      this.state.error = error;
+      this.#finishFailedAutoPage(transaction);
+      return this.#playbackResult(true, previous);
+    }
+    if (!stored || typeof transaction.pendingCanonicalLocation !== "string" ||
+        !Number.isInteger(transaction.pendingPageIndex)) {
+      this.state.error = "PAGE_PROGRESS_INVALID_RESULT";
+      this.#finishFailedAutoPage(transaction);
+      return this.#playbackResult(true, previous);
+    }
+    this.state.readerCanonicalLocation = transaction.pendingCanonicalLocation;
+    this.state.readerPageIndex = transaction.pendingPageIndex;
     this.state.error = null;
 
     const effects = [];
@@ -702,10 +780,20 @@ export class ReaderUIRuntime {
     return this.#playbackResult(true, previous, effects);
   }
 
+  acceptPageProgressJSONResult(correlationId, result = {}) {
+    return this.acceptPageProgressResult(correlationId, result);
+  }
+
   cancelPageStep(correlationId) {
     const previous = structuredClone(this.state);
     const transaction = this.state.pageTransaction;
     if (!transaction || transaction.correlationId !== correlationId) return this.#playbackResult(false, previous);
+    if (transaction.stage === "persisting-progress") {
+      throw new ReaderUIRuntimeError(
+        "PAGE_PROGRESS_COMMIT_PENDING",
+        "reader.progress.update was already dispatched and cannot be cancelled or rolled back"
+      );
+    }
     this.state.pageTransaction = null;
     return this.#playbackResult(true, previous, [], [correlationId]);
   }
@@ -768,6 +856,12 @@ export class ReaderUIRuntime {
   acceptAutoPageTimerFired(correlationId, generation) {
     const previous = structuredClone(this.state);
     const transaction = this.state.autoPageTransaction;
+    if (this.state.pageTransaction?.stage === "persisting-progress") {
+      throw new ReaderUIRuntimeError(
+        "PAGE_PROGRESS_COMMIT_PENDING",
+        "reader.autoPage.timer waits for the in-flight progress commit"
+      );
+    }
     if (!transaction || transaction.correlationId !== correlationId || transaction.generation !== generation ||
         !transaction.timerArmed || this.state.activeSession !== "auto-page" || this.state.pageTransaction) {
       return this.#playbackResult(false, previous);
@@ -899,11 +993,20 @@ export class ReaderUIRuntime {
   ) {
     this.#requireActiveReader(event);
     if (!correlationId) throw new ReaderUIRuntimeError("MISSING_CORRELATION", `${event} requires correlationId`);
+    if (this.state.bookOpenTransaction) {
+      throw new ReaderUIRuntimeError("BOOK_OPEN_TRANSACTION_PENDING", `${event} waits for the active book.open transaction`);
+    }
     if (!["next", "previous", "explicit"].includes(direction)) {
       throw new ReaderUIRuntimeError("INVALID_PAGE_DIRECTION", `${event} requires next|previous|explicit`);
     }
     if (this.state.pageTransaction?.correlationId === correlationId) {
       throw new ReaderUIRuntimeError("DUPLICATE_CORRELATION", `${event} was already dispatched for ${correlationId}`);
+    }
+    if (this.state.pageTransaction?.stage === "persisting-progress") {
+      throw new ReaderUIRuntimeError(
+        "PAGE_PROGRESS_COMMIT_PENDING",
+        `${event} waits for the in-flight progress commit`
+      );
     }
     const cancelledCorrelationIds = [];
     const effects = [];
@@ -1012,7 +1115,10 @@ export class ReaderUIRuntime {
       throw new ReaderUIRuntimeError("DUPLICATE_CORRELATION", `${event} was already dispatched for ${correlationId}`);
     }
     if (this.state.pageTransaction) {
-      throw new ReaderUIRuntimeError("PAGE_TRANSACTION_PENDING", `${event} waits for the active page transaction`);
+      const code = this.state.pageTransaction.stage === "persisting-progress"
+        ? "PAGE_PROGRESS_COMMIT_PENDING"
+        : "PAGE_TRANSACTION_PENDING";
+      throw new ReaderUIRuntimeError(code, `${event} waits for the active page transaction`);
     }
     const teardown = this.#teardownPlaybackSession();
     this.state.playbackGeneration += 1;
@@ -1051,8 +1157,10 @@ export class ReaderUIRuntime {
     const cancelledCorrelationIds = [transaction.correlationId];
     if (this.state.pageTransaction?.source === "auto-page" &&
         this.state.pageTransaction.sessionCorrelationId === transaction.correlationId) {
-      cancelledCorrelationIds.push(this.state.pageTransaction.correlationId);
-      this.state.pageTransaction = null;
+      if (this.state.pageTransaction.stage !== "persisting-progress") {
+        cancelledCorrelationIds.push(this.state.pageTransaction.correlationId);
+        this.state.pageTransaction = null;
+      }
     }
     const effects = [this.#timerEffect(READER_FOREGROUND_TIMER_CANCEL, transaction)];
     this.state.playbackGeneration += 1;
@@ -1084,8 +1192,10 @@ export class ReaderUIRuntime {
       effects.push(this.#timerEffect(READER_FOREGROUND_TIMER_CANCEL, autoPage));
       if (this.state.pageTransaction?.source === "auto-page" &&
           this.state.pageTransaction.sessionCorrelationId === autoPage.correlationId) {
-        cancelledCorrelationIds.push(this.state.pageTransaction.correlationId);
-        this.state.pageTransaction = null;
+        if (this.state.pageTransaction.stage !== "persisting-progress") {
+          cancelledCorrelationIds.push(this.state.pageTransaction.correlationId);
+          this.state.pageTransaction = null;
+        }
       }
       this.state.playbackGeneration += 1;
       this.state.autoPageTransaction = null;
@@ -1096,7 +1206,7 @@ export class ReaderUIRuntime {
 
   #teardownAllPlayback() {
     const teardown = this.#teardownPlaybackSession();
-    if (this.state.pageTransaction) {
+    if (this.state.pageTransaction && this.state.pageTransaction.stage !== "persisting-progress") {
       teardown.cancelledCorrelationIds.push(this.state.pageTransaction.correlationId);
       this.state.pageTransaction = null;
     }
@@ -1162,6 +1272,10 @@ export class ReaderUIRuntime {
       },
       transaction.correlationId
     );
+  }
+
+  #pageProgressEffect(transaction) {
+    return readerUIEffect("core", "reader.progress.update", {}, transaction.correlationId);
   }
 
   #normalizePageLayout(layout) {

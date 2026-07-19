@@ -94,6 +94,13 @@ private fun ReaderUIJSONResult.optionalResultInt(key: String): Int? {
         )
 }
 
+private fun ReaderUIJSONResult.optionalResultBoolean(key: String): Boolean? {
+    val value = this[key]
+    if (value == null || value === JsonNull) return null
+    return (value as? JsonPrimitive)?.takeIf { !it.isString }?.booleanOrNull
+        ?: throw ReaderUIRuntimeException("INVALID_JSON_RESULT", "result.$key must be a JSON boolean or null")
+}
+
 enum class ReaderUIEffectKind { CORE, HOST }
 
 private data class ReaderUILegacyPayloadProjection(
@@ -178,6 +185,27 @@ object ReaderUIPlaybackDirective {
     const val AUTO_PAGE_MAXIMUM_INTERVAL_MS = 3_600_000
 }
 
+private val readerIdentityOrRouteMutationEvents = setOf(
+    "route.push",
+    "route.replace",
+    "route.pop",
+    "route.popToRoot",
+    "mainTab.select",
+    "book.open",
+    "reader.enter",
+    "reader.exit",
+    "source.switch.open",
+    "source.switch.cancel"
+)
+
+private val readerControlOverlayFamily = setOf(
+    "reader-control",
+    "directory",
+    "tts",
+    "appearance",
+    "settings"
+)
+
 data class ReaderUIPageLayout(
     val anchor: String,
     val targetPageIndex: Int,
@@ -198,7 +226,9 @@ data class ReaderUIPageTransaction(
     val generation: Int? = null,
     val stage: String = "awaiting-layout",
     val payload: ReaderUIJSONPayload = emptyMap(),
-    val layout: ReaderUIPageLayout? = null
+    val layout: ReaderUIPageLayout? = null,
+    val pendingCanonicalLocation: String? = null,
+    val pendingPageIndex: Int? = null
 )
 
 data class ReaderUITTSTransaction(
@@ -345,6 +375,13 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             }
         }
         checkGuards(descriptor, event)
+        if (event in readerIdentityOrRouteMutationEvents &&
+            state.pageTransaction?.stage == "persisting-progress") {
+            fail(
+                "PAGE_PROGRESS_COMMIT_PENDING",
+                "$event cannot replace the reader route or identity while progress persistence is pending"
+            )
+        }
         if (descriptor.action == "bookOpenSequence") {
             preflightBookOpen(event, payload, correlationId, descriptor)
         }
@@ -403,6 +440,26 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
                     ?: fail("MISSING_PAYLOAD", "$event requires an overlay identity")
                 if (expectedOverlay.isEmpty()) fail("MISSING_PAYLOAD", "$event requires an overlay identity")
                 if (state.overlay == expectedOverlay) state.copy(overlay = null) else state
+            }
+            "toggleReaderControl" -> {
+                if (state.routeId != "immersive-reading") {
+                    fail("READER_ROUTE_GUARD", "$event requires the immersive-reading route")
+                }
+                val currentOverlay = state.overlay
+                if (currentOverlay != null && currentOverlay !in readerControlOverlayFamily) {
+                    fail("READER_CONTROL_OVERLAY_GUARD", "$event cannot replace $currentOverlay")
+                }
+                state.copy(overlay = if (currentOverlay == null) "reader-control" else null)
+            }
+            "switchReaderModule" -> {
+                if (state.routeId != "immersive-reading") {
+                    fail("READER_ROUTE_GUARD", "$event requires the immersive-reading route")
+                }
+                val currentOverlay = state.overlay
+                if (currentOverlay == null || currentOverlay !in readerControlOverlayFamily) {
+                    fail("READER_CONTROL_OVERLAY_GUARD", "$event requires an active Reader control overlay")
+                }
+                state.copy(overlay = payload.stringValue("module"))
             }
             "startSession" -> state.copy(activeSession = descriptor.value, overlay = null)
             "stopSession" -> state.copy(activeSession = null)
@@ -786,14 +843,49 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         if (transaction == null || transaction.correlationId != correlationId || transaction.stage != "resolving-location") {
             return playbackResult(false, previous)
         }
+        if (!error.isNullOrEmpty()) {
+            state = state.copy(pageTransaction = null)
+            state = state.copy(error = error)
+            finishFailedAutoPage(transaction)
+            return playbackResult(true, previous)
+        }
+        if (canonicalLocation.isNullOrBlank() || pageIndex == null || pageIndex < 0) {
+            state = state.copy(pageTransaction = null)
+            state = state.copy(error = "PAGE_LOCATION_INVALID_RESULT")
+            finishFailedAutoPage(transaction)
+            return playbackResult(true, previous)
+        }
+        state = state.copy(
+            pageTransaction = transaction.copy(
+                stage = "persisting-progress",
+                pendingCanonicalLocation = canonicalLocation,
+                pendingPageIndex = pageIndex
+            ),
+            error = null
+        )
+        return playbackResult(true, previous, effects = listOf(pageProgressEffect(transaction)))
+    }
+
+    fun acceptPageProgressResult(
+        correlationId: String,
+        stored: Boolean? = null,
+        error: String? = null
+    ): ReaderUIPlaybackTransition {
+        val previous = state
+        val transaction = state.pageTransaction
+        if (transaction == null || transaction.correlationId != correlationId || transaction.stage != "persisting-progress") {
+            return playbackResult(false, previous)
+        }
         state = state.copy(pageTransaction = null)
         if (!error.isNullOrEmpty()) {
             state = state.copy(error = error)
             finishFailedAutoPage(transaction)
             return playbackResult(true, previous)
         }
-        if (canonicalLocation.isNullOrBlank() || pageIndex == null || pageIndex < 0) {
-            state = state.copy(error = "PAGE_LOCATION_INVALID_RESULT")
+        val canonicalLocation = transaction.pendingCanonicalLocation
+        val pageIndex = transaction.pendingPageIndex
+        if (stored != true || canonicalLocation.isNullOrBlank() || pageIndex == null || pageIndex < 0) {
+            state = state.copy(error = "PAGE_PROGRESS_INVALID_RESULT")
             finishFailedAutoPage(transaction)
             return playbackResult(true, previous)
         }
@@ -813,6 +905,24 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             emptyList()
         }
         return playbackResult(true, previous, effects = effects)
+    }
+
+    /** Lossless JSON result entry point for progress persistence callbacks. */
+    fun acceptPageProgressJSONResult(
+        correlationId: String,
+        result: ReaderUIJSONResult
+    ): ReaderUIPlaybackTransition {
+        val transaction = state.pageTransaction
+        if (transaction == null || transaction.correlationId != correlationId || transaction.stage != "persisting-progress") {
+            return acceptPageProgressResult(correlationId)
+        }
+        val validated = cloneReaderUIJSONResult(result)
+        validateReaderUITypedResult(transaction.contractEvent, "reader.progress.update", validated)
+        return acceptPageProgressResult(
+            correlationId = correlationId,
+            stored = validated.optionalResultBoolean("stored"),
+            error = validated.optionalResultString("error")
+        )
     }
 
     /** Lossless JSON result entry point for canonical location callbacks. */
@@ -836,7 +946,14 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
 
     fun cancelPageStep(correlationId: String): ReaderUIPlaybackTransition {
         val previous = state
-        if (state.pageTransaction?.correlationId != correlationId) return playbackResult(false, previous)
+        val transaction = state.pageTransaction
+        if (transaction?.correlationId != correlationId) return playbackResult(false, previous)
+        if (transaction.stage == "persisting-progress") {
+            fail(
+                "PAGE_PROGRESS_COMMIT_PENDING",
+                "reader.progress.update was already dispatched and cannot be cancelled or rolled back"
+            )
+        }
         state = state.copy(pageTransaction = null)
         return playbackResult(true, previous, cancelledCorrelationIds = listOf(correlationId))
     }
@@ -935,6 +1052,9 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
     fun acceptAutoPageTimerFired(correlationId: String, generation: Int): ReaderUIPlaybackTransition {
         val previous = state
         var transaction = state.autoPageTransaction
+        if (state.pageTransaction?.stage == "persisting-progress") {
+            fail("PAGE_PROGRESS_COMMIT_PENDING", "reader.autoPage.timer waits for the in-flight progress commit")
+        }
         if (transaction == null || transaction.correlationId != correlationId || transaction.generation != generation ||
             !transaction.timerArmed || state.activeSession != "auto-page" || state.pageTransaction != null) {
             return playbackResult(false, previous)
@@ -985,11 +1105,17 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         requireActiveReader(event)
         val activeCorrelationId = correlationId?.takeIf { it.isNotEmpty() }
             ?: fail("MISSING_CORRELATION", "$event requires correlationId")
+        if (state.bookOpenTransaction != null) {
+            fail("BOOK_OPEN_TRANSACTION_PENDING", "$event waits for the active book.open transaction")
+        }
         if (direction !in listOf("next", "previous", "explicit")) {
             fail("INVALID_PAGE_DIRECTION", "$event requires next|previous|explicit")
         }
         if (state.pageTransaction?.correlationId == activeCorrelationId) {
             fail("DUPLICATE_CORRELATION", "$event was already dispatched for $activeCorrelationId")
+        }
+        if (state.pageTransaction?.stage == "persisting-progress") {
+            fail("PAGE_PROGRESS_COMMIT_PENDING", "$event waits for the in-flight progress commit")
         }
         val cancelledCorrelationIds = mutableListOf<String>()
         val prefixEffects = mutableListOf<ReaderUIEffect>()
@@ -1078,7 +1204,12 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             fail("DUPLICATE_CORRELATION", "$event was already dispatched for $activeCorrelationId")
         }
         if (state.pageTransaction != null) {
-            fail("PAGE_TRANSACTION_PENDING", "$event waits for the active page transaction")
+            val code = if (state.pageTransaction?.stage == "persisting-progress") {
+                "PAGE_PROGRESS_COMMIT_PENDING"
+            } else {
+                "PAGE_TRANSACTION_PENDING"
+            }
+            fail(code, "$event waits for the active page transaction")
         }
         val teardown = teardownPlaybackSession()
         val generation = state.playbackGeneration + 1
@@ -1119,8 +1250,10 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         val cancelledCorrelationIds = mutableListOf(transaction.correlationId)
         var pageTransaction = state.pageTransaction
         if (pageTransaction?.source == "auto-page" && pageTransaction.sessionCorrelationId == transaction.correlationId) {
-            cancelledCorrelationIds += pageTransaction.correlationId
-            pageTransaction = null
+            if (pageTransaction.stage != "persisting-progress") {
+                cancelledCorrelationIds += pageTransaction.correlationId
+                pageTransaction = null
+            }
         }
         val effects = listOf(timerEffect(ReaderUIPlaybackDirective.FOREGROUND_TIMER_CANCEL, transaction))
         state = state.copy(
@@ -1151,8 +1284,10 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             effects += timerEffect(ReaderUIPlaybackDirective.FOREGROUND_TIMER_CANCEL, autoPage)
             var pageTransaction = state.pageTransaction
             if (pageTransaction?.source == "auto-page" && pageTransaction.sessionCorrelationId == autoPage.correlationId) {
-                cancelledCorrelationIds += pageTransaction.correlationId
-                pageTransaction = null
+                if (pageTransaction.stage != "persisting-progress") {
+                    cancelledCorrelationIds += pageTransaction.correlationId
+                    pageTransaction = null
+                }
             }
             state = state.copy(
                 pageTransaction = pageTransaction,
@@ -1167,8 +1302,10 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
     private fun teardownAllPlayback(): PlaybackTeardown {
         val teardown = teardownPlaybackSession()
         val cancelledCorrelationIds = teardown.cancelledCorrelationIds.toMutableList()
-        state.pageTransaction?.let { cancelledCorrelationIds += it.correlationId }
-        state = state.copy(pageTransaction = null)
+        if (state.pageTransaction?.stage != "persisting-progress") {
+            state.pageTransaction?.let { cancelledCorrelationIds += it.correlationId }
+            state = state.copy(pageTransaction = null)
+        }
         return PlaybackTeardown(teardown.effects, cancelledCorrelationIds)
     }
 
@@ -1222,6 +1359,9 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         }
         return readerUIEffect(ReaderUIEffectKind.CORE, "reader.location.resolve", payload, transaction.correlationId)
     }
+
+    private fun pageProgressEffect(transaction: ReaderUIPageTransaction): ReaderUIEffect =
+        readerUIEffect(ReaderUIEffectKind.CORE, "reader.progress.update", emptyMap(), transaction.correlationId)
 
     private fun validatePageLayout(layout: ReaderUIPageLayout) {
         if (layout.anchor.isEmpty() || layout.targetPageIndex < 0 || layout.chapterIndex < 0 ||

@@ -33,15 +33,15 @@ Reader UI 本仓当前已闭合：
 node --test contracts/tests/*.test.mjs
 ```
 
-当前结果：`250/250 pass`，另有 Swift runtime 4/4、Kotlin runtime 4/4。
+当前结果以各命令的即时输出为准；不要把历史测试总数当成当前 release proof。Swift / Kotlin runtime 与三个 Host 的结果分别由对应命令和仓库证据确认。
 
 ## 2. Reader UI 剩余任务
 
 | ID | 任务 | 当前状态 | 完成标准 |
 | --- | --- | --- | --- |
-| RUI-01 | demo/schema unknown 收敛 | strict/exception 起点已建立：`found=521 unknown=106 approved=106 unapproved=0`；route/token unknown 为 0，motion unknown 必须列入 `demo-contract-exceptions.json` | strict gate 或 explicit alias/deprecated exception list；route/token unknown 必须为 0，motion unknown 必须为 0 或列入例外 |
+| RUI-01 | demo/schema unknown 收敛 | strict/exception gate 已建立；route/token unknown 为 0，motion unknown 必须列入 `demo-contract-exceptions.json`，即时计数以 machine report 为准 | strict gate 或 explicit alias/deprecated exception list；route/token unknown 必须为 0，motion unknown 必须为 0 或列入例外 |
 | RUI-02 | MotionId 归一化 | 已建立首批 alias 表：`reader.session.capsule.control.press/toggle` -> `reader.session.capsule.control.press-toggle`、`reader.page.turn.next/prev` -> `reader.page.turn.next-prev`、`tab.item.switch` -> `tab.switch`；demo 中仍有历史/内部 motion id 例外 | schema、demo runtime、fixtures、generated 使用同一 canonical MotionId；旧 id 只通过 deprecated alias 表存在 |
-| RUI-03 | 全量 MotionSpec registry + MotionPolicy resolver | 合同侧已完成：Swift/Kotlin/ArkTS 生成文件内已有 `MotionSpecRegistry` / `motionSpecRegistry`，覆盖 84/84 canonical MotionId fixtures，包含 id、duration/easing token refs、guardRules、6 个结构化字段与 reduced-motion 策略；新增 `MotionPolicy.*`，包含 28 条 policy、`RouteShellLookup`、`MotionPolicyRegistry` 与 `ReaderMotionResolver` / `resolveMotion` 纯函数；`motion-guard.test.mjs` / `motion-policy.test.mjs` / `motion-resolver.test.mjs` 强制 schema/fixture/resolver 约束 | 平台仓继续实现 MotionAdapter 编译接入、reduced-motion 映射、native animation proof、navigator/back stack 集成和 device evidence |
+| RUI-03 | 全量 MotionSpec registry + MotionPolicy resolver | 合同基础已完成：Swift/Kotlin/ArkTS 生成 registry 覆盖 95/95 canonical MotionId fixtures；53 条显式 policy 通过 `RouteShellLookup`、`MotionPolicyRegistry` 与 resolver 输出匹配结果或 `motion.policy.no-match` diagnostic，不再用空 match fallback。当前 canonical exact 为 89/95；其余 6 项已封闭为 3 个 contract-reserved `controlSpace.*` 与 3 个 deprecated 兼容 ID，不再存在未分类的 active MotionSpec。Reader 外观、亮度、书架、Discover、筛选、选择、危险确认、tooling、同步恢复与换源真实页已具备逐项状态契约；恢复卡片和书源候选行的 selector 覆盖冲突已修复。当前真实页面仍没有双 dropdown 同屏宿主，A→B redirect / reposition 需在首个实际消费者页面补验收证据 | Reader-UI 补首个双 dropdown/reposition 页面证据；平台仓分别实现 MotionAdapter、reduced-motion、native animation、navigator/back stack 与 device evidence，不能把本仓 generated resolver 当作 Host 完成证明 |
 | RUI-04 | TokenRegistry value codegen | registry 起点已完成：Swift/Kotlin/ArkTS 生成文件内已有 `TokenRegistry` / `tokenRegistry`，覆盖当前 117 条 token fixtures 的 name/category/value/platforms/deprecated；平台 TokenAdapter 实现仍归三端仓库 | 生成 Swift/Kotlin/ArkTS token value registry；三端 TokenAdapter 可直接消费或映射 |
 | RUI-05 | contract release gate | 当前以 codegen、contract tests、drift check 和 motion coverage 作为本仓可执行门禁；旧设计导出门禁已移除 | `node tools/codegen/generate.mjs` + `npm test --prefix contracts/tests` + `node tools/codegen/check-drift.mjs` + `node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs` |
 

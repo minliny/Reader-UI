@@ -16,6 +16,28 @@
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "app.firstOpen.enter"
+    ],
+    "from": [
+      "coldStart",
+      "deepLinkStart"
+    ],
+    "to": [
+      "shellVisible",
+      "entryRouteReady"
+    ],
+    "interrupt": [
+      "deepLinkRedirect",
+      "resumeInsteadOfColdStart",
+      "reducedMotion"
+    ],
+    "finalState": "entryRouteVisibleOnce",
+    "cleanup": [
+      "app.firstOpen.transientState.clear",
+      "app.firstOpen.hasPlayed.commit",
+      "focus.entryRoute.restore"
     ]
   },
   {
@@ -36,6 +58,26 @@
       "reducedMotion:forceZeroDuration",
       "interrupt:redirect",
       "asyncGuard:discardStaleRouteResult"
+    ],
+    "trigger": [
+      "route.push"
+    ],
+    "from": [
+      "route.current"
+    ],
+    "to": [
+      "route.targetOnStack"
+    ],
+    "interrupt": [
+      "backBeforeSettle",
+      "replaceBeforeSettle",
+      "newPush"
+    ],
+    "finalState": "targetRouteVisibleAndStackUpdated",
+    "cleanup": [
+      "route.previousSnapshot.clear",
+      "routeStack.target.commit",
+      "focus.targetRoute.restore"
     ]
   },
   {
@@ -56,6 +98,27 @@
       "reducedMotion:forceZeroDuration",
       "interrupt:cancel",
       "focusReturn:restorePreviousRoute"
+    ],
+    "trigger": [
+      "route.pop",
+      "reader.exit"
+    ],
+    "from": [
+      "route.current"
+    ],
+    "to": [
+      "route.previousOnStack"
+    ],
+    "interrupt": [
+      "newPushBeforeSettle",
+      "replaceBeforeSettle",
+      "emptyBackStack"
+    ],
+    "finalState": "previousRouteVisibleAndStackPopped",
+    "cleanup": [
+      "route.outgoingSnapshot.clear",
+      "routeStack.previous.commit",
+      "focus.previousRoute.restore"
     ]
   },
   {
@@ -76,26 +139,71 @@
       "reducedMotion:forceZeroDuration",
       "interrupt:completeThenReplace",
       "asyncGuard:discardStaleRouteResult"
+    ],
+    "trigger": [
+      "route.replace"
+    ],
+    "from": [
+      "route.current"
+    ],
+    "to": [
+      "route.replacedTarget"
+    ],
+    "interrupt": [
+      "newReplace",
+      "backBeforeCommit",
+      "sessionStartRedirect"
+    ],
+    "finalState": "targetRouteVisibleWithoutNewBackEntry",
+    "cleanup": [
+      "route.replacedSnapshot.clear",
+      "routeStack.depth.preserve",
+      "focus.targetRoute.restore"
     ]
   },
   {
     "id": "bookshelf.view.switch",
-    "durationMs": 160,
-    "easing": "ease",
-    "implementationKind": "tabTransition",
+    "durationMs": 320,
+    "easing": "ease-out",
+    "implementationKind": "stateReplace",
     "containerRole": "mainTabShell",
     "operation": "replace",
-    "visualPattern": "fadeReplace",
+    "visualPattern": "sharedLayoutMorph",
     "interruptPolicy": "redirect",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "app.motion.duration.tabSwitch",
-      "easingToken": "app.motion.easing.standard"
+      "durationToken": "app.motion.duration.layoutSwitch",
+      "easingToken": "app.motion.easing.enter"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:redirect",
-      "layoutStable:preserveScrollAnchor"
+      "layoutStable:preserveScrollAnchor",
+      "transitionGuard:preserveBookItemIdentity",
+      "focusReturn:keepTrigger"
+    ],
+    "trigger": [
+      "bookshelf.view.switch"
+    ],
+    "from": [
+      "bookshelf.view.cover",
+      "bookshelf.view.list"
+    ],
+    "to": [
+      "bookshelf.view.target"
+    ],
+    "interrupt": [
+      "bookshelf.view.switch",
+      "bookshelf.sortFilter.apply",
+      "bookshelf.group.select",
+      "route.replace",
+      "viewport.orientation.prepare"
+    ],
+    "finalState": "bookshelf.view.target.settled",
+    "cleanup": [
+      "bookshelf.view.previousLayout.clear",
+      "bookshelf.scrollAnchor.preserve",
+      "focus.bookshelfViewTrigger.restore"
     ]
   },
   {
@@ -116,6 +224,31 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "button.release",
+      "button.keyboardActivate"
+    ],
+    "from": [
+      "button.enabled",
+      "button.pressed"
+    ],
+    "to": [
+      "button.commandCommitted",
+      "button.pendingOrIdle"
+    ],
+    "interrupt": [
+      "button.disable",
+      "pointerCancel",
+      "commandCancel",
+      "routeChange"
+    ],
+    "finalState": "buttonCommandResolvedWithoutHitAreaChange",
+    "cleanup": [
+      "button.pressedState.clear",
+      "button.pendingOwnership.releaseWhenTerminal",
+      "button.hitArea.preserve",
+      "focus.button.preserveWhenRouteStable"
     ]
   },
   {
@@ -136,6 +269,26 @@
       "reducedMotion:forceZeroDuration",
       "interrupt:redirect",
       "layoutStable:indicatorDoesNotPushLayout"
+    ],
+    "trigger": [
+      "tab.switch"
+    ],
+    "from": [
+      "activeTab.previous"
+    ],
+    "to": [
+      "activeTab.next"
+    ],
+    "interrupt": [
+      "switchTargetAgain",
+      "routeChange",
+      "pointerCancel"
+    ],
+    "finalState": "oneActiveTabAndStableBarSize",
+    "cleanup": [
+      "tab.item.previousPressedState.clear",
+      "tabBar.geometry.preserve",
+      "focus.selectedTab.restore"
     ]
   },
   {
@@ -156,6 +309,25 @@
       "reducedMotion:forceZeroDuration",
       "interrupt:cancel",
       "layoutStable:hitAreaStable"
+    ],
+    "trigger": [
+      "tab.item.select"
+    ],
+    "from": [
+      "inactive"
+    ],
+    "to": [
+      "active"
+    ],
+    "interrupt": [
+      "switchTarget",
+      "routeChange"
+    ],
+    "finalState": "selectedTabActive",
+    "cleanup": [
+      "tab.item.previousSelection.clear",
+      "tabBar.geometry.preserve",
+      "focus.selectedTab.restore"
     ]
   },
   {
@@ -176,6 +348,30 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "toggle.release",
+      "toggle.keyboardActivate"
+    ],
+    "from": [
+      "toggle.previousValue",
+      "toggle.pressed"
+    ],
+    "to": [
+      "toggle.nextValue"
+    ],
+    "interrupt": [
+      "toggle.switch",
+      "toggle.revert",
+      "pointerCancel",
+      "routeChange"
+    ],
+    "finalState": "toggleValueAndSemanticsCommitted",
+    "cleanup": [
+      "toggle.pressedState.clear",
+      "toggle.previousVisualState.clear",
+      "toggle.hitArea.preserve",
+      "toggle.semantics.commit"
     ]
   },
   {
@@ -196,6 +392,29 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "chip.item.select",
+      "chip.keyboardSelect"
+    ],
+    "from": [
+      "chip.previousSelection",
+      "chip.idle"
+    ],
+    "to": [
+      "chip.targetSelected"
+    ],
+    "interrupt": [
+      "chip.item.select",
+      "pointerCancel",
+      "routeChange"
+    ],
+    "finalState": "oneTargetSelectionCommittedWithinStableGroup",
+    "cleanup": [
+      "chip.previousPressedState.clear",
+      "chip.previousSelection.clear",
+      "chip.group.geometry.preserve",
+      "focus.selectedChip.restore"
     ]
   },
   {
@@ -216,6 +435,30 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:trapFocus",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "dropdown.expand"
+    ],
+    "from": [
+      "closed",
+      "anchorMeasured"
+    ],
+    "to": [
+      "open"
+    ],
+    "interrupt": [
+      "openAnotherDropdown",
+      "back",
+      "routeChange",
+      "viewportChanged"
+    ],
+    "finalState": "openAtLegalAnchor",
+    "cleanup": [
+      "dropdown.previousHost.release",
+      "dropdown.anchor.latestSnapshot.commit",
+      "dropdown.openGroup.singleOwner.commit",
+      "dropdown.menu.hitTarget.enable",
+      "focus.dropdownFirstOption.commit"
     ]
   },
   {
@@ -236,6 +479,28 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "dropdown.collapse"
+    ],
+    "from": [
+      "open"
+    ],
+    "to": [
+      "closed"
+    ],
+    "interrupt": [
+      "routeChange",
+      "openAnotherDropdown",
+      "destroy"
+    ],
+    "finalState": "closedAndFocusReturnedToTrigger",
+    "cleanup": [
+      "dropdown.menu.hitTarget.release",
+      "dropdown.openGroup.clear",
+      "dropdown.anchor.snapshot.clear",
+      "dropdown.trigger.ariaExpandedFalse.commit",
+      "focus.dropdownTrigger.restore"
     ]
   },
   {
@@ -256,6 +521,30 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "overlay.sheet.open"
+    ],
+    "from": [
+      "sheetHidden",
+      "overlayHostAvailable"
+    ],
+    "to": [
+      "sheetVisible",
+      "backgroundInert"
+    ],
+    "interrupt": [
+      "closeBeforeEnter",
+      "anotherOverlayOpen",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "singleSheetVisibleAndFocusInside",
+    "cleanup": [
+      "overlay.previousSnapshot.clear",
+      "overlayHost.singleOwner.commit",
+      "background.interaction.inert",
+      "focus.sheetInitialTarget.restore"
     ]
   },
   {
@@ -276,6 +565,28 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "overlay.sheet.close"
+    ],
+    "from": [
+      "sheetVisible"
+    ],
+    "to": [
+      "sheetHidden",
+      "backgroundInteractive"
+    ],
+    "interrupt": [
+      "reopenBeforeExit",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "sheetHiddenAndTriggerFocusRestored",
+    "cleanup": [
+      "overlay.sheetSnapshot.clear",
+      "overlayHost.owner.release",
+      "background.interaction.restore",
+      "focus.overlayReturnTarget.restoreIfCurrent"
     ]
   },
   {
@@ -296,6 +607,32 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:trapFocus",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "overlay.dialog.open"
+    ],
+    "from": [
+      "dialogHidden",
+      "overlayHostAvailable"
+    ],
+    "to": [
+      "dialogVisible",
+      "backgroundInert",
+      "focusTrapped"
+    ],
+    "interrupt": [
+      "closeBeforeEnter",
+      "anotherDialogOpen",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "singleDialogVisibleWithFocusTrap",
+    "cleanup": [
+      "overlay.previousDialogSnapshot.clear",
+      "overlayHost.singleOwner.commit",
+      "background.interaction.inert",
+      "focus.dialogInitialTarget.commit",
+      "focus.dialogTrap.activate"
     ]
   },
   {
@@ -316,6 +653,31 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "overlay.dialog.close"
+    ],
+    "from": [
+      "dialogVisible",
+      "focusTrapped"
+    ],
+    "to": [
+      "dialogHidden",
+      "backgroundInteractive",
+      "focusReturned"
+    ],
+    "interrupt": [
+      "reopenBeforeExit",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "dialogHiddenAndTriggerFocusRestored",
+    "cleanup": [
+      "focus.dialogTrap.release",
+      "overlay.dialogSnapshot.clear",
+      "overlayHost.owner.release",
+      "background.interaction.restore",
+      "focus.overlayReturnTarget.restoreIfCurrent"
     ]
   },
   {
@@ -335,6 +697,31 @@
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:updateInSameHost"
+    ],
+    "trigger": [
+      "feedback.toast.show"
+    ],
+    "from": [
+      "toast.hidden",
+      "toastHost.empty"
+    ],
+    "to": [
+      "toast.visible",
+      "toastHost.singleOwner"
+    ],
+    "interrupt": [
+      "feedback.toast.show",
+      "feedback.toast.update",
+      "feedback.toast.dismiss",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "latestToastVisibleWithSingleHostOwner",
+    "cleanup": [
+      "toast.previousSnapshot.clear",
+      "toastHost.singleOwner.commit",
+      "ariaLive.latestMessage.commit",
+      "toast.autoDismiss.latestTimer.replace"
     ]
   },
   {
@@ -354,6 +741,30 @@
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:updateInSameHost"
+    ],
+    "trigger": [
+      "feedback.toast.dismiss"
+    ],
+    "from": [
+      "toast.visible",
+      "toastHost.singleOwner"
+    ],
+    "to": [
+      "toast.hidden",
+      "toastHost.empty"
+    ],
+    "interrupt": [
+      "feedback.toast.show",
+      "feedback.toast.update",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "toastHiddenAndHostReleased",
+    "cleanup": [
+      "toast.autoDismiss.timer.clear",
+      "toast.snapshot.clear",
+      "toastHost.owner.release",
+      "ariaLive.toast.idle"
     ]
   },
   {
@@ -375,6 +786,32 @@
       "keyboardInset:platformNative",
       "focusReturn:keepTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "input.focus"
+    ],
+    "from": [
+      "input.blurred",
+      "keyboard.hidden"
+    ],
+    "to": [
+      "input.focused",
+      "caret.visible",
+      "keyboard.requestedOrNotRequired"
+    ],
+    "interrupt": [
+      "input.blur",
+      "input.submit",
+      "app.route.replace",
+      "motion.interrupt.cancel"
+    ],
+    "finalState": "focusedInputOwnsCaretAndOptionalKeyboard",
+    "cleanup": [
+      "focus.previousOwner.release",
+      "input.focus.latestOwner.commit",
+      "caret.latestOwner.enable",
+      "keyboard.latestRequest.reconcile",
+      "focus.semantics.commit"
     ]
   },
   {
@@ -396,6 +833,31 @@
       "keyboardInset:platformNative",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "input.blur"
+    ],
+    "from": [
+      "input.focused",
+      "input.editing"
+    ],
+    "to": [
+      "input.blurred",
+      "value.preserved",
+      "keyboard.dismissedOrTransferred"
+    ],
+    "interrupt": [
+      "input.focus",
+      "app.route.replace",
+      "motion.interrupt.redirect"
+    ],
+    "finalState": "blurredInputPreservesValueAndReleasesKeyboardOwnership",
+    "cleanup": [
+      "input.focusRing.clear",
+      "caret.owner.release",
+      "input.value.preserve",
+      "keyboard.owner.dismissOrTransfer",
+      "blur.semantics.commit"
     ]
   },
   {
@@ -416,6 +878,36 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:discardStaleSearchResult",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "search.submit",
+      "search.clear",
+      "search.loadMore"
+    ],
+    "from": [
+      "search.before",
+      "search.loading",
+      "search.results",
+      "search.empty",
+      "search.error"
+    ],
+    "to": [
+      "search.latestState"
+    ],
+    "interrupt": [
+      "search.submit",
+      "search.clear",
+      "search.loadMore",
+      "app.route.replace",
+      "motion.interrupt.redirect"
+    ],
+    "finalState": "latestSearchRequestOwnsStableResultHost",
+    "cleanup": [
+      "search.previousState.snapshot.clear",
+      "search.staleResult.discard",
+      "search.latestState.commit",
+      "search.resultHost.geometry.preserve",
+      "ariaLive.searchState.latest.commit"
     ]
   },
   {
@@ -436,6 +928,30 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:preserveScrollAnchor",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "state.replace"
+    ],
+    "from": [
+      "content.previous",
+      "contentHost.stable"
+    ],
+    "to": [
+      "content.latest",
+      "contentHost.stable"
+    ],
+    "interrupt": [
+      "state.replace",
+      "app.route.replace",
+      "motion.interrupt.completeThenReplace"
+    ],
+    "finalState": "latestContentVisibleWithShellAndScrollAnchorPreserved",
+    "cleanup": [
+      "content.previousSnapshot.clear",
+      "content.latest.commit",
+      "content.shellGeometry.preserve",
+      "content.scrollAnchor.preserve",
+      "content.focusOwner.preserve"
     ]
   },
   {
@@ -453,7 +969,37 @@
       "easingToken": "app.motion.easing.standard"
     },
     "guardRules": [
-      "reducedMotion:forceZeroDuration"
+      "reducedMotion:forceZeroDuration",
+      "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "state.loading.inline",
+      "reader.toc.load",
+      "reader.content.load",
+      "search.loadMore",
+      "source.switch.loading"
+    ],
+    "from": [
+      "inlineState.idle",
+      "inlineState.content"
+    ],
+    "to": [
+      "inlineState.loading"
+    ],
+    "interrupt": [
+      "loading.result.ready",
+      "loading.request.cancel",
+      "loading.request.superseded",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "latestRequestOwnsInlineStateAndTerminalResultStopsIndicator",
+    "cleanup": [
+      "inlineLoading.previousRequest.cancel",
+      "inlineLoading.staleResult.discard",
+      "inlineLoading.spinner.stop",
+      "inlineState.latestTerminalResult.commit",
+      "ariaLive.latestState.commit"
     ]
   },
   {
@@ -474,6 +1020,28 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:noTextReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.page.next",
+      "reader.page.prev"
+    ],
+    "from": [
+      "page.current"
+    ],
+    "to": [
+      "page.nextOrPrevious"
+    ],
+    "interrupt": [
+      "oppositeTurn",
+      "chapterJump",
+      "routeChange",
+      "sessionTick"
+    ],
+    "finalState": "pageIndexCommittedAndPageInfoAnchored",
+    "cleanup": [
+      "reader.page.transientOffset.clear",
+      "reader.page.previousSnapshot.clear",
+      "reader.page.infoAnchor.preserve"
     ]
   },
   {
@@ -494,27 +1062,70 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:discardStaleContent",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.chapter.jump"
+    ],
+    "from": [
+      "chapter.current"
+    ],
+    "to": [
+      "chapter.target"
+    ],
+    "interrupt": [
+      "newJump",
+      "routeChange",
+      "sessionTick"
+    ],
+    "finalState": "chapterAnchorCommitted",
+    "cleanup": [
+      "reader.chapter.pendingRequest.clear",
+      "reader.page.index.reset",
+      "reader.progress.anchor.commit",
+      "focus.readerSurface.restore"
     ]
   },
   {
     "id": "reader.module.switch",
-    "durationMs": 200,
+    "durationMs": 360,
     "easing": "ease",
-    "implementationKind": "readerEntry",
+    "implementationKind": "tabTransition",
     "containerRole": "readerShell",
     "operation": "tabSwitch",
     "visualPattern": "fadeReplace",
     "interruptPolicy": "redirect",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "reader.motion.duration.panel",
+      "durationToken": "reader.motion.duration.moduleSwitch",
       "easingToken": "app.motion.easing.standard"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
-      "transitionGuard:overlayNullIntermediate",
+      "transitionGuard:singleReaderControlSurface",
       "focusReturn:restoreTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.module.switch"
+    ],
+    "from": [
+      "control.home",
+      "control.quick.module.previous"
+    ],
+    "to": [
+      "control.quick.module.target"
+    ],
+    "interrupt": [
+      "reader.module.switch",
+      "reader.panel.expand",
+      "reader.control.hide",
+      "app.route.replace"
+    ],
+    "finalState": "control.quick.module.singleTargetVisible",
+    "cleanup": [
+      "reader.module.previousPressedState.clear",
+      "reader.module.navigationGeometry.preserve",
+      "focus.readerModuleTarget.restore"
     ]
   },
   {
@@ -535,6 +1146,29 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:latestIntentWins",
       "interrupt:cancel|redirect"
+    ],
+    "trigger": [
+      "reader.entry.coverToImmersive"
+    ],
+    "from": [
+      "sourceRoute",
+      "coverPressed",
+      "coverSnapshotMeasured"
+    ],
+    "to": [
+      "immersiveReading"
+    ],
+    "interrupt": [
+      "snapshotUnavailable",
+      "backBeforeCommit",
+      "routeChange"
+    ],
+    "finalState": "immersiveReadingNoControlLayerAndSourceBackStackKept",
+    "cleanup": [
+      "reader.entry.coverSnapshot.clear",
+      "reader.entry.transientPress.clear",
+      "reader.sourceBackStack.preserve",
+      "focus.readerSurface.restore"
     ]
   },
   {
@@ -555,6 +1189,26 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:latestIntentWins",
       "interrupt:cancel|redirect"
+    ],
+    "trigger": [
+      "reader.entry.actionToImmersive"
+    ],
+    "from": [
+      "sourceRoute",
+      "actionPressed"
+    ],
+    "to": [
+      "immersiveReading"
+    ],
+    "interrupt": [
+      "backBeforeCommit",
+      "routeChange"
+    ],
+    "finalState": "immersiveReadingNoControlLayerAndSourceBackStackKept",
+    "cleanup": [
+      "reader.entry.actionTransientState.clear",
+      "reader.sourceBackStack.preserve",
+      "focus.readerSurface.restore"
     ]
   },
   {
@@ -575,6 +1229,29 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "layoutStable:capsuleHitAreaStable"
+    ],
+    "trigger": [
+      "reader.session.capsuleEnter"
+    ],
+    "from": [
+      "sessionActive",
+      "capsuleHidden"
+    ],
+    "to": [
+      "capsuleVisible"
+    ],
+    "interrupt": [
+      "sessionSwitch",
+      "stop",
+      "controlLayerOpen",
+      "exitReader"
+    ],
+    "finalState": "capsuleVisibleAtReaderStatusAnchor",
+    "cleanup": [
+      "reader.session.capsule.pendingEnter.clear",
+      "reader.session.capsule.previousSnapshot.clear",
+      "reader.session.capsule.singleOwner.commit",
+      "reader.session.capsule.statusAnchor.preserve"
     ]
   },
   {
@@ -595,6 +1272,30 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "layoutStable:localUpdateOnly"
+    ],
+    "trigger": [
+      "reader.tts.toggle"
+    ],
+    "from": [
+      "capsuleVisible",
+      "session.previousState"
+    ],
+    "to": [
+      "capsuleVisible",
+      "session.nextState"
+    ],
+    "interrupt": [
+      "sessionSwitch",
+      "stop",
+      "controlLayerOpen",
+      "exitReader"
+    ],
+    "finalState": "capsuleInternalStateUpdated",
+    "cleanup": [
+      "reader.session.capsule.previousInternalSnapshot.clear",
+      "reader.session.capsule.singleOwner.preserve",
+      "reader.session.capsule.statusAnchor.preserve",
+      "reader.session.capsule.hitArea.preserve"
     ]
   },
   {
@@ -615,6 +1316,27 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "focusReturn:restoreTarget"
+    ],
+    "trigger": [
+      "reader.session.capsuleExit"
+    ],
+    "from": [
+      "capsuleVisible"
+    ],
+    "to": [
+      "capsuleHidden"
+    ],
+    "interrupt": [
+      "sessionRestart",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "capsuleHiddenAndHitTargetReleased",
+    "cleanup": [
+      "reader.session.capsule.snapshot.clear",
+      "reader.session.capsule.hitTarget.release",
+      "reader.session.capsule.owner.clear",
+      "focus.readerSurface.restore"
     ]
   },
   {
@@ -635,6 +1357,29 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "reader.session.capsuleSwitch"
+    ],
+    "from": [
+      "capsuleVisible",
+      "session.previousType"
+    ],
+    "to": [
+      "capsuleVisible",
+      "session.nextType"
+    ],
+    "interrupt": [
+      "stop",
+      "controlLayerOpen",
+      "exitReader"
+    ],
+    "finalState": "singleCapsuleWithNextSessionType",
+    "cleanup": [
+      "reader.session.capsule.previousTypeState.clear",
+      "reader.session.capsule.previousLoop.cancel",
+      "reader.session.capsule.singleOwner.commit",
+      "reader.session.capsule.statusAnchor.preserve"
     ]
   },
   {
@@ -655,6 +1400,28 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "layoutStable:localUpdateOnly"
+    ],
+    "trigger": [
+      "reader.session.capsuleCountdownTick"
+    ],
+    "from": [
+      "countdown.previous"
+    ],
+    "to": [
+      "countdown.next"
+    ],
+    "interrupt": [
+      "pause",
+      "sessionSwitch",
+      "pageTurn",
+      "stop"
+    ],
+    "finalState": "latestCountdownVisibleInFixedWidthSlot",
+    "cleanup": [
+      "reader.session.capsule.previousCountdownSnapshot.clear",
+      "reader.session.capsule.latestCountdown.commit",
+      "reader.session.capsule.countdownSlotWidth.preserve",
+      "reader.session.capsule.statusAnchor.preserve"
     ]
   },
   {
@@ -675,6 +1442,27 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "layoutStable:localUpdateOnly"
+    ],
+    "trigger": [
+      "reader.session.capsuleVoiceIconActive"
+    ],
+    "from": [
+      "ttsPlaying"
+    ],
+    "to": [
+      "ttsPlayingVisualActive"
+    ],
+    "interrupt": [
+      "pause",
+      "reducedMotion",
+      "sessionSwitch",
+      "stop"
+    ],
+    "finalState": "voiceIconActiveOnlyWhilePlaying",
+    "cleanup": [
+      "reader.session.capsule.voicePulse.cancelWhenInactive",
+      "reader.session.capsule.voiceIconStaticFallback.restore",
+      "reader.session.capsule.statusAnchor.preserve"
     ],
     "loop": {
       "forever": true,
@@ -699,6 +1487,33 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "asyncGuard:latestIntentWins"
+    ],
+    "trigger": [
+      "reader.session.ttsStart"
+    ],
+    "from": [
+      "controlLayerVisible",
+      "ttsPageVisible",
+      "session.inactiveOrAutoPage"
+    ],
+    "to": [
+      "immersiveReading",
+      "session.tts",
+      "capsuleVisible"
+    ],
+    "interrupt": [
+      "autoPageStart",
+      "stop",
+      "exitReader",
+      "routeChange"
+    ],
+    "finalState": "ttsOwnsSessionAndCapsule",
+    "cleanup": [
+      "reader.session.pendingStart.clear",
+      "reader.session.previousOwner.release",
+      "reader.control.transientState.clear",
+      "reader.session.capsule.singleOwner.commit",
+      "focus.readerSessionCapsule.restore"
     ]
   },
   {
@@ -719,6 +1534,32 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "asyncGuard:latestIntentWins"
+    ],
+    "trigger": [
+      "reader.session.autoPageStart"
+    ],
+    "from": [
+      "controlLayerVisible",
+      "session.inactiveOrTts"
+    ],
+    "to": [
+      "immersiveReading",
+      "session.autoPage",
+      "capsuleVisible"
+    ],
+    "interrupt": [
+      "ttsStart",
+      "stop",
+      "exitReader",
+      "routeChange"
+    ],
+    "finalState": "autoPageOwnsSessionAndCapsule",
+    "cleanup": [
+      "reader.session.pendingStart.clear",
+      "reader.session.previousOwner.release",
+      "reader.control.transientState.clear",
+      "reader.session.capsule.singleOwner.commit",
+      "focus.readerSessionCapsule.restore"
     ]
   },
   {
@@ -761,6 +1602,28 @@
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "source.switch.open"
+    ],
+    "from": [
+      "readerContinuityOrigin",
+      "flowRoute.current"
+    ],
+    "to": [
+      "sourceSwitchRoute.onStack"
+    ],
+    "interrupt": [
+      "cancelBeforeCommit",
+      "newSourceIntent",
+      "routeChange"
+    ],
+    "finalState": "sourceSwitchRouteVisibleAndReaderOriginPreserved",
+    "cleanup": [
+      "flowRoute.previousSnapshot.clear",
+      "flowRoute.sourceSwitch.commit",
+      "reader.continuityOrigin.preserve",
+      "focus.sourceSwitchInitialTarget.restore"
     ]
   },
   {
@@ -774,12 +1637,33 @@
     "interruptPolicy": "cancel",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "reader.motion.duration.route",
+      "durationToken": "reader.motion.duration.routePop",
       "easingToken": "app.motion.easing.exit"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "source.switch.cancel"
+    ],
+    "from": [
+      "flowRoute.current"
+    ],
+    "to": [
+      "flowRoute.previousOnStack"
+    ],
+    "interrupt": [
+      "newPushBeforeSettle",
+      "replaceBeforeSettle",
+      "emptyBackStack"
+    ],
+    "finalState": "previousFlowRouteVisibleAndStackPopped",
+    "cleanup": [
+      "flowRoute.outgoingSnapshot.clear",
+      "flowRouteStack.previous.commit",
+      "sourceSwitch.transientSelection.clear",
+      "focus.readerContinuityOrigin.restore"
     ]
   },
   {
@@ -793,12 +1677,36 @@
     "interruptPolicy": "completeThenReplace",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "reader.motion.duration.route",
+      "durationToken": "reader.motion.duration.routeReplace",
       "easingToken": "app.motion.easing.standard"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "source.switch.confirm",
+      "source.switch.rollback"
+    ],
+    "from": [
+      "flowRoute.current",
+      "sourceSwitch.pendingOrResult"
+    ],
+    "to": [
+      "flowRoute.replacementTarget"
+    ],
+    "interrupt": [
+      "userBack",
+      "newerSourceResult",
+      "routeChange"
+    ],
+    "finalState": "replacementFlowRouteVisibleOnlyIfCurrent",
+    "cleanup": [
+      "sourceSwitch.staleAsyncResult.discard",
+      "flowRoute.replacedSnapshot.clear",
+      "flowRouteStack.replacement.commit",
+      "reader.continuityOrigin.preserve",
+      "focus.replacementTarget.restore"
     ]
   },
   {
@@ -817,6 +1725,28 @@
     },
     "guardRules": [
       "dragMustFollowFinger:noEasing"
+    ],
+    "trigger": [
+      "reader.control.handlePress"
+    ],
+    "from": [
+      "handleIdle",
+      "controlLayerVisible"
+    ],
+    "to": [
+      "handlePressed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "routeChange",
+      "orientationPrepare"
+    ],
+    "finalState": "handlePressedFeedbackVisible",
+    "cleanup": [
+      "reader.control.handle.longPressTimer.clear",
+      "reader.control.handle.hitArea.preserve",
+      "reader.control.panel.geometry.preserve",
+      "reader.readingSurface.layout.preserve"
     ]
   },
   {
@@ -835,6 +1765,29 @@
     },
     "guardRules": [
       "releaseToSnap:afterReleaseOnly"
+    ],
+    "trigger": [
+      "reader.control.handleRelease"
+    ],
+    "from": [
+      "handleDragging",
+      "handlePressed"
+    ],
+    "to": [
+      "snapBack",
+      "expandCommitted",
+      "collapseCommitted"
+    ],
+    "interrupt": [
+      "routeChange",
+      "orientationPrepare"
+    ],
+    "finalState": "controlLayerResolvedToSingleRouteState",
+    "cleanup": [
+      "reader.control.handle.dragPreview.clear",
+      "reader.control.handle.pointerCapture.release",
+      "reader.control.handle.pressedState.clear",
+      "reader.control.panel.singleRouteState.commit"
     ]
   },
   {
@@ -854,6 +1807,29 @@
     "guardRules": [
       "dragMustFollowFinger:noEasing",
       "layoutStable:hitAreaStable"
+    ],
+    "trigger": [
+      "reader.control.dockLongPress"
+    ],
+    "from": [
+      "fixedWidthDock",
+      "handlePressed"
+    ],
+    "to": [
+      "dockDragArmed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "routeChange",
+      "orientationPrepare",
+      "viewportClassChange"
+    ],
+    "finalState": "dockDragReadyWithinBounds",
+    "cleanup": [
+      "reader.control.dock.longPressTimer.clear",
+      "reader.control.dock.bounds.snapshot",
+      "reader.control.dock.dimensions.preserve",
+      "reader.readingSurface.layout.preserve"
     ]
   },
   {
@@ -873,6 +1849,29 @@
     "guardRules": [
       "dragMustFollowFinger:noEasing",
       "layoutStable:clampToReaderFrame"
+    ],
+    "trigger": [
+      "reader.control.dockDrag"
+    ],
+    "from": [
+      "dockDragArmed",
+      "dockOffset.previous"
+    ],
+    "to": [
+      "dockOffset.previewClamped"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "routeChange",
+      "orientationPrepare",
+      "viewportClassChange"
+    ],
+    "finalState": "dockPreviewOffsetWithinMovableSpace",
+    "cleanup": [
+      "reader.control.dock.preview.clamp",
+      "reader.control.dock.offsetCommit.deferUntilRelease",
+      "reader.control.dock.dimensions.preserve",
+      "reader.readingSurface.layout.preserve"
     ]
   },
   {
@@ -892,6 +1891,28 @@
     "guardRules": [
       "releaseToSnap:afterReleaseOnly",
       "layoutStable:clampToReaderFrame"
+    ],
+    "trigger": [
+      "reader.control.dockRelease"
+    ],
+    "from": [
+      "dockDragging",
+      "dockOffset.previewClamped"
+    ],
+    "to": [
+      "dockOffset.committed"
+    ],
+    "interrupt": [
+      "routeChange",
+      "orientationPrepare",
+      "viewportClassChange"
+    ],
+    "finalState": "dockOffsetSavedForViewportClass",
+    "cleanup": [
+      "reader.control.dock.pointerCapture.release",
+      "reader.control.dock.preview.clear",
+      "reader.control.dock.offset.persistForViewportClass",
+      "reader.control.dock.dimensions.preserve"
     ]
   },
   {
@@ -912,26 +1933,69 @@
       "releaseToSnap:afterReleaseOnly",
       "layoutStable:clampToReaderFrame",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "reader.control.dockRebound"
+    ],
+    "from": [
+      "dockOffset.saved",
+      "bounds.changed"
+    ],
+    "to": [
+      "dockOffset.clamped"
+    ],
+    "interrupt": [
+      "routeChange",
+      "orientationPrepare"
+    ],
+    "finalState": "dockOffsetLegalInCurrentBounds",
+    "cleanup": [
+      "reader.control.dock.outOfBoundsOffset.clear",
+      "reader.control.dock.offset.persistForViewportClass",
+      "reader.control.dock.dimensions.preserve",
+      "reader.readingSurface.layout.preserve"
     ]
   },
   {
     "id": "reader.control.hide",
-    "durationMs": 240,
+    "durationMs": 360,
     "easing": "ease-in",
-    "implementationKind": "readerEntry",
+    "implementationKind": "overlayTransition",
     "containerRole": "readerShell",
-    "operation": "update",
+    "operation": "exit",
     "visualPattern": "fadeReplace",
     "interruptPolicy": "redirect",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "reader.motion.duration.overlay",
+      "durationToken": "reader.motion.duration.controlExit",
       "easingToken": "app.motion.easing.exit"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.control.hide",
+      "system.back"
+    ],
+    "from": [
+      "control.home",
+      "control.quick"
+    ],
+    "to": [
+      "immersive.hidden"
+    ],
+    "interrupt": [
+      "reader.control.show",
+      "app.route.replace",
+      "viewport.orientation.prepare"
+    ],
+    "finalState": "immersive.hidden",
+    "cleanup": [
+      "reader.control.transientState.clear",
+      "reader.control.activePanel.clear",
+      "focus.readerSurface.restore"
     ]
   },
   {
@@ -950,6 +2014,29 @@
     },
     "guardRules": [
       "dragMustFollowFinger:noEasing"
+    ],
+    "trigger": [
+      "slider.pointerDown",
+      "slider.keyboardAdjustBegin"
+    ],
+    "from": [
+      "slider.idle",
+      "slider.valueCommitted"
+    ],
+    "to": [
+      "slider.dragging"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "slider.disabled",
+      "routeChange"
+    ],
+    "finalState": "sliderDraggingWithPointerOwnership",
+    "cleanup": [
+      "slider.conflictingDecoration.cancel",
+      "slider.staleInputSample.clear",
+      "slider.trackGeometry.preserve",
+      "slider.pointerOwnership.commit"
     ]
   },
   {
@@ -968,6 +2055,27 @@
     },
     "guardRules": [
       "dragMustFollowFinger:noEasing"
+    ],
+    "trigger": [
+      "slider.pointerMove",
+      "slider.keyboardAdjustRepeat"
+    ],
+    "from": [
+      "slider.dragging"
+    ],
+    "to": [
+      "slider.draggingValueUpdated"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "slider.drag.release",
+      "routeChange"
+    ],
+    "finalState": "sliderValueMatchesLatestDirectInput",
+    "cleanup": [
+      "slider.staleInputSample.discard",
+      "slider.trackGeometry.preserve",
+      "slider.readout.commit"
     ]
   },
   {
@@ -986,6 +2094,30 @@
     },
     "guardRules": [
       "releaseToSnap:afterReleaseOnly"
+    ],
+    "trigger": [
+      "slider.pointerUp",
+      "slider.keyboardAdjustCommit"
+    ],
+    "from": [
+      "slider.dragging",
+      "slider.draggingValueUpdated"
+    ],
+    "to": [
+      "slider.snappedValue",
+      "slider.valueCommitted"
+    ],
+    "interrupt": [
+      "slider.drag.start",
+      "slider.disabled",
+      "routeChange"
+    ],
+    "finalState": "sliderLegalValueCommittedAndPointerReleased",
+    "cleanup": [
+      "slider.pointerOwnership.release",
+      "slider.dragTransientState.clear",
+      "slider.snapRequest.release",
+      "slider.trackGeometry.preserve"
     ]
   },
   {
@@ -1006,6 +2138,29 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:clampAnchors",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "viewport.orientation.reshape"
+    ],
+    "from": [
+      "viewportFrozen",
+      "viewportStable"
+    ],
+    "to": [
+      "viewportReshaped"
+    ],
+    "interrupt": [
+      "newMetrics",
+      "foldChange",
+      "routeChange"
+    ],
+    "finalState": "readerOverlayCapsuleDockReanchored",
+    "cleanup": [
+      "viewport.previousLayoutSnapshot.clear",
+      "viewport.latestMetrics.commit",
+      "reader.paginationAnchor.restore",
+      "reader.overlayCapsuleDock.reanchorAndClamp",
+      "viewport.illegalPreviewTransforms.clear"
     ]
   },
   {
@@ -1025,6 +2180,27 @@
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "layoutStable:restoreAnchors"
+    ],
+    "trigger": [
+      "viewport.orientation.settle"
+    ],
+    "from": [
+      "viewportReshaped"
+    ],
+    "to": [
+      "viewportStable"
+    ],
+    "interrupt": [
+      "newMetrics",
+      "routeChange"
+    ],
+    "finalState": "focusPointerSessionMicroMotionRestored",
+    "cleanup": [
+      "viewport.orientationTransientState.clear",
+      "reader.pointerInteraction.restore",
+      "reader.sessionMicroMotion.restoreIfActive",
+      "focus.preOrientationTarget.restoreIfCurrent",
+      "viewport.roleTargets.release"
     ]
   },
   {
@@ -1044,6 +2220,27 @@
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "layoutStable:freezeAnchors"
+    ],
+    "trigger": [
+      "viewport.orientation.prepare"
+    ],
+    "from": [
+      "viewportStable"
+    ],
+    "to": [
+      "viewportFrozen"
+    ],
+    "interrupt": [
+      "routeChange",
+      "newMetricsBeforeFreeze"
+    ],
+    "finalState": "routeReaderSessionOverlayFocusFrozen",
+    "cleanup": [
+      "reader.directManipulation.cancel",
+      "viewport.previousMetrics.capture",
+      "reader.paginationAnchor.capture",
+      "reader.sessionOverlayFocusSnapshot.capture",
+      "viewport.pendingMetrics.latestOnly"
     ]
   },
   {
@@ -1105,6 +2302,31 @@
       "keyboardInset:platformNative",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "overlay.keyboard.open",
+      "overlay.keyboard.close"
+    ],
+    "from": [
+      "keyboardHidden",
+      "keyboardVisible"
+    ],
+    "to": [
+      "keyboardVisible",
+      "keyboardHidden"
+    ],
+    "interrupt": [
+      "oppositeKeyboardAction",
+      "focusTargetChange",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "keyboardVisibilityInsetAndFocusMatchLatestIntent",
+    "cleanup": [
+      "keyboard.previousInsetSnapshot.clear",
+      "keyboard.platformInset.commitOrReset",
+      "content.scrollAnchor.preserve",
+      "focus.keyboardTargetOrReturnTarget.restoreIfCurrent"
     ]
   },
   {
@@ -1123,6 +2345,29 @@
     },
     "guardRules": [
       "interrupt:cancel|redirect|completeThenReplace"
+    ],
+    "trigger": [
+      "motion.interrupt.cancel"
+    ],
+    "from": [
+      "motionRunning",
+      "pressed",
+      "dragging",
+      "entering"
+    ],
+    "to": [
+      "latestCommittedState"
+    ],
+    "interrupt": [
+      "newInterrupt",
+      "destroy"
+    ],
+    "finalState": "transientMotionCleared",
+    "cleanup": [
+      "motion.activeTransaction.cancel",
+      "motion.pressedDraggingEnteringFlags.clear",
+      "motion.previewTransforms.clear",
+      "motion.latestCommittedState.preserve"
     ]
   },
   {
@@ -1141,6 +2386,27 @@
     },
     "guardRules": [
       "interrupt:cancel|redirect|completeThenReplace"
+    ],
+    "trigger": [
+      "motion.interrupt.redirect"
+    ],
+    "from": [
+      "motionRunningTowardOldTarget"
+    ],
+    "to": [
+      "motionRunningTowardNewTarget"
+    ],
+    "interrupt": [
+      "newTarget",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "newTargetOwnsMotion",
+    "cleanup": [
+      "motion.oldTargetTransaction.cancel",
+      "motion.oldTargetSnapshot.clear",
+      "motion.newTargetOwnership.commit",
+      "motion.transientPressedState.clear"
     ]
   },
   {
@@ -1160,6 +2426,29 @@
     "guardRules": [
       "interrupt:cancel|redirect|completeThenReplace",
       "asyncGuard:cancelOnRouteReplace"
+    ],
+    "trigger": [
+      "motion.interrupt.completeThenReplace"
+    ],
+    "from": [
+      "requiredStateMotion",
+      "loadingMinimumVisible"
+    ],
+    "to": [
+      "replacementState"
+    ],
+    "interrupt": [
+      "userBack",
+      "routeChange",
+      "newerAsyncResult"
+    ],
+    "finalState": "replacementVisibleOnlyIfStillCurrent",
+    "cleanup": [
+      "motion.requiredState.finishOrCommit",
+      "async.staleResult.discard",
+      "motion.previousSnapshot.clear",
+      "motion.replacement.commitIfCurrent",
+      "motion.pendingRequest.release"
     ]
   },
   {
@@ -1180,6 +2469,31 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "card.pointerDown",
+      "card.keyboardPress"
+    ],
+    "from": [
+      "card.idle",
+      "card.selected",
+      "card.focused"
+    ],
+    "to": [
+      "card.pressed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "pointerLeave",
+      "card.select",
+      "routeChange"
+    ],
+    "finalState": "cardPressedFeedbackReleasedWithoutGeometryChange",
+    "cleanup": [
+      "card.pressedState.clear",
+      "card.hitArea.preserve",
+      "card.contentGeometry.preserve",
+      "card.scrollAnchor.preserve"
     ]
   },
   {
@@ -1200,6 +2514,30 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:selectionDoesNotReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "card.select",
+      "card.keyboardSelect"
+    ],
+    "from": [
+      "card.idle",
+      "card.previousSelection",
+      "card.pressed"
+    ],
+    "to": [
+      "card.targetSelected"
+    ],
+    "interrupt": [
+      "card.select",
+      "selection.clear",
+      "routeChange"
+    ],
+    "finalState": "cardSelectionCommittedWithoutContentReflow",
+    "cleanup": [
+      "card.pressedState.clear",
+      "card.previousSelection.clear",
+      "card.contentGeometry.preserve",
+      "card.scrollAnchor.preserve"
     ]
   },
   {
@@ -1220,6 +2558,31 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:latestIntentWins",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "card.route",
+      "card.keyboardRoute"
+    ],
+    "from": [
+      "card.idle",
+      "card.pressed",
+      "route.current"
+    ],
+    "to": [
+      "card.destinationRoute"
+    ],
+    "interrupt": [
+      "card.route",
+      "route.replace",
+      "route.back",
+      "asyncResult.stale"
+    ],
+    "finalState": "latestCardIntentOwnsVisibleDestinationRoute",
+    "cleanup": [
+      "card.pressedState.clear",
+      "card.staleRouteIntent.cancel",
+      "card.sourceGeometry.release",
+      "focus.destinationRoute.restore"
     ]
   },
   {
@@ -1240,6 +2603,31 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:confirmationRequired",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "destructive.confirm.commit",
+      "destructive.keyboardConfirm"
+    ],
+    "from": [
+      "confirmation.armed",
+      "confirmation.focused"
+    ],
+    "to": [
+      "destructive.commandCommitted",
+      "confirmation.pendingOrResolved"
+    ],
+    "interrupt": [
+      "destructive.confirm.cancel",
+      "overlayDismiss",
+      "routeChange",
+      "commandCancel"
+    ],
+    "finalState": "destructiveConfirmationResolvedBySingleCommittedIntent",
+    "cleanup": [
+      "destructive.pressedState.clear",
+      "destructive.duplicateCommit.block",
+      "confirmation.overlayOwner.releaseWhenTerminal",
+      "focus.confirmationReturnTarget.restoreWhenCancelled"
     ]
   },
   {
@@ -1260,6 +2648,30 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "dropdown.option.select"
+    ],
+    "from": [
+      "open",
+      "optionPressed"
+    ],
+    "to": [
+      "valueCommitted",
+      "closedOrOpen"
+    ],
+    "interrupt": [
+      "routeChange",
+      "newSelection",
+      "collapse"
+    ],
+    "finalState": "valueAndSemanticsCommitted",
+    "cleanup": [
+      "dropdown.option.previousSelection.clear",
+      "dropdown.option.valueAndAria.commit",
+      "dropdown.singleSelectMenu.close",
+      "dropdown.anchor.snapshot.clear",
+      "focus.dropdownTrigger.restore"
     ]
   },
   {
@@ -1280,6 +2692,27 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "dropdown.press"
+    ],
+    "from": [
+      "closed",
+      "open"
+    ],
+    "to": [
+      "triggerPressed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "openAnotherDropdown",
+      "routeChange"
+    ],
+    "finalState": "triggerReleased",
+    "cleanup": [
+      "dropdown.trigger.pressedFlag.clear",
+      "dropdown.trigger.hitTarget.preserve",
+      "dropdown.trigger.ariaExpanded.reconcile"
     ]
   },
   {
@@ -1300,6 +2733,33 @@
       "reducedMotion:forceZeroDuration",
       "interrupt:updateInSameHost",
       "layoutStable:toastHostStable"
+    ],
+    "trigger": [
+      "feedback.toast.update"
+    ],
+    "from": [
+      "toast.visible",
+      "toastHost.singleOwner"
+    ],
+    "to": [
+      "toast.visible",
+      "toastHost.singleOwner",
+      "toast.message.latest"
+    ],
+    "interrupt": [
+      "feedback.toast.show",
+      "feedback.toast.update",
+      "feedback.toast.dismiss",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "latestToastVisibleWithSingleHostOwner",
+    "cleanup": [
+      "toast.previousMessageSnapshot.clear",
+      "toast.message.latest.commit",
+      "toastHost.singleOwner.commit",
+      "toast.autoDismiss.latestTimer.replace",
+      "toast.liveRegion.latestMessage.commit"
     ]
   },
   {
@@ -1320,6 +2780,32 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:discardStaleFilterResult",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "filter.apply.commit",
+      "filter.reset.commit"
+    ],
+    "from": [
+      "filter.pendingValues",
+      "filter.results.previous"
+    ],
+    "to": [
+      "filter.valuesCommitted",
+      "filter.resultsRefreshing"
+    ],
+    "interrupt": [
+      "filter.apply.commit",
+      "filter.reset",
+      "routeChange",
+      "requestCancel"
+    ],
+    "finalState": "latestCommittedFilterOwnsStableResultHost",
+    "cleanup": [
+      "filter.pendingValues.commit",
+      "filter.staleResult.discard",
+      "filter.previousRequest.cancel",
+      "filter.resultHost.geometry.preserve",
+      "filter.focusOwner.preserve"
     ]
   },
   {
@@ -1340,6 +2826,32 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "filter.item.toggle",
+      "filter.keyboardToggle"
+    ],
+    "from": [
+      "filter.item.previousValue",
+      "filter.item.idle"
+    ],
+    "to": [
+      "filter.item.nextValue",
+      "filter.pendingValues"
+    ],
+    "interrupt": [
+      "filter.item.toggle",
+      "filter.reset",
+      "routeChange",
+      "pointerCancel"
+    ],
+    "finalState": "latestFilterItemAndPendingSummaryCommittedWithoutResultReplacement",
+    "cleanup": [
+      "filter.item.pressedState.clear",
+      "filter.item.previousValue.clear",
+      "filter.pendingSummary.recompute",
+      "filter.row.geometry.preserve",
+      "focus.filterItem.preserve"
     ]
   },
   {
@@ -1360,6 +2872,35 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:keepTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "input.clear",
+      "search.clear"
+    ],
+    "from": [
+      "input.focused",
+      "input.blurred",
+      "value.nonEmpty",
+      "search.resultsVisible"
+    ],
+    "to": [
+      "input.focused",
+      "value.empty",
+      "search.beforeOrEmpty"
+    ],
+    "interrupt": [
+      "input.submit",
+      "search.submit",
+      "input.focus",
+      "app.route.replace"
+    ],
+    "finalState": "emptyValueVisibleWithInputFocusPreserved",
+    "cleanup": [
+      "input.previousValue.clear",
+      "input.emptyValue.commit",
+      "search.staleResult.discard",
+      "search.beforeOrEmpty.commit",
+      "input.focus.latestOwner.preserve"
     ]
   },
   {
@@ -1381,6 +2922,33 @@
       "keyboardInset:platformNative",
       "focusReturn:restoreTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "input.focus",
+      "input.blur"
+    ],
+    "from": [
+      "input.blurred",
+      "input.focused",
+      "input.editing"
+    ],
+    "to": [
+      "input.focusedOrBlurred",
+      "value.preserved"
+    ],
+    "interrupt": [
+      "input.submit",
+      "input.clear",
+      "app.route.replace",
+      "motion.interrupt.redirect"
+    ],
+    "finalState": "latestFocusOwnerAndValueSemanticsResolved",
+    "cleanup": [
+      "focus.previousOwner.release",
+      "focus.latestOwner.commit",
+      "input.value.preserve",
+      "keyboard.latestRequest.reconcile",
+      "focus.semantics.commit"
     ]
   },
   {
@@ -1401,6 +2969,34 @@
       "reducedMotion:forceZeroDuration",
       "asyncGuard:discardStaleSubmitResult",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "input.submit",
+      "search.submit"
+    ],
+    "from": [
+      "input.focused",
+      "input.editing",
+      "submit.idle"
+    ],
+    "to": [
+      "submit.pending",
+      "latestResult.committed"
+    ],
+    "interrupt": [
+      "input.clear",
+      "input.submit",
+      "search.submit",
+      "app.route.replace",
+      "motion.interrupt.completeThenReplace"
+    ],
+    "finalState": "latestSubmitResultOwnsStableInputAndResultHost",
+    "cleanup": [
+      "submit.previousRequest.cancel",
+      "submit.staleResult.discard",
+      "submit.latestQuerySnapshot.commit",
+      "submit.resultHost.geometry.preserve",
+      "submit.latestTerminalResult.commit"
     ]
   },
   {
@@ -1421,9 +3017,34 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "listRow.select",
+      "listRow.keyboardSelect"
+    ],
+    "from": [
+      "listRow.idle",
+      "listRow.previousSelection",
+      "listRow.pressed"
+    ],
+    "to": [
+      "listRow.targetSelected"
+    ],
+    "interrupt": [
+      "listRow.select",
+      "selection.clear",
+      "routeChange"
+    ],
+    "finalState": "listRowSelectionAndSemanticsCommitted",
+    "cleanup": [
+      "listRow.pressedState.clear",
+      "listRow.previousSelection.clear",
+      "listRow.hitArea.preserve",
+      "list.scrollAnchor.preserve"
     ]
   },
   {
+    "_comment": "DEPRECATED: combined enter-exit compatibility ID; use overlay.dialog.enter or overlay.dialog.exit.",
     "id": "overlay.dialog.enter-exit",
     "durationMs": 240,
     "easing": "ease-out",
@@ -1441,9 +3062,11 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
-    ]
+    ],
+    "deprecated": true
   },
   {
+    "_comment": "DEPRECATED: combined enter-exit compatibility ID; use overlay.sheet.enter or overlay.sheet.exit.",
     "id": "overlay.sheet.enter-exit",
     "durationMs": 240,
     "easing": "ease-out",
@@ -1461,26 +3084,49 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
-    ]
+    ],
+    "deprecated": true
   },
   {
     "id": "reader.quick.promote",
-    "durationMs": 120,
+    "durationMs": 320,
     "easing": "ease-out",
-    "implementationKind": "componentFeedback",
-    "containerRole": "readerSurface",
-    "operation": "update",
-    "visualPattern": "scaleDialog",
+    "implementationKind": "overlayTransition",
+    "containerRole": "readerShell",
+    "operation": "enter",
+    "visualPattern": "fadeReplace",
     "interruptPolicy": "redirect",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "reader.motion.duration.fast",
+      "durationToken": "reader.motion.duration.quickPromote",
       "easingToken": "app.motion.easing.enter"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
-      "layoutStable:noTextReflow",
+      "transitionGuard:singleReaderControlSurface",
+      "layoutStable:readingSurfaceDoesNotReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.quick.promote"
+    ],
+    "from": [
+      "control.home"
+    ],
+    "to": [
+      "control.quick.target"
+    ],
+    "interrupt": [
+      "reader.quick.promote",
+      "reader.module.switch",
+      "reader.control.hide",
+      "app.route.replace"
+    ],
+    "finalState": "control.quick.singleTargetVisible",
+    "cleanup": [
+      "reader.quick.previousTransientState.clear",
+      "reader.surface.layout.preserve",
+      "focus.readerQuickTarget.restore"
     ]
   },
   {
@@ -1501,6 +3147,30 @@
       "reducedMotion:forceZeroDuration",
       "activeSession:mutex",
       "layoutStable:hitAreaStable"
+    ],
+    "trigger": [
+      "reader.session.capsuleControlPressToggle"
+    ],
+    "from": [
+      "capsuleVisible",
+      "playing.previous"
+    ],
+    "to": [
+      "capsuleVisible",
+      "playing.next"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "sessionStop",
+      "controlLayerOpen",
+      "exitReader"
+    ],
+    "finalState": "playingStateCommittedInsideCapsule",
+    "cleanup": [
+      "reader.session.capsule.controlPressedState.clear",
+      "reader.session.playingState.commit",
+      "reader.session.capsule.hitArea.preserve",
+      "reader.control.layer.remainClosed"
     ]
   },
   {
@@ -1541,6 +3211,27 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:indicatorDoesNotPushLayout",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "segment.item.switch"
+    ],
+    "from": [
+      "segment.previous"
+    ],
+    "to": [
+      "segment.next"
+    ],
+    "interrupt": [
+      "switchTargetAgain",
+      "routeChange",
+      "pointerCancel",
+      "stateReset"
+    ],
+    "finalState": "oneActiveSegmentAndStableGroupSize",
+    "cleanup": [
+      "segment.item.previousPressedState.clear",
+      "segment.geometry.preserve",
+      "focus.selectedSegment.restore"
     ]
   },
   {
@@ -1561,6 +3252,32 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:selectionDoesNotReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "selection.group.toggle",
+      "selection.group.keyboardToggle"
+    ],
+    "from": [
+      "selection.group.previousState",
+      "selection.group.idle"
+    ],
+    "to": [
+      "selection.group.nextState",
+      "selection.summary.latest"
+    ],
+    "interrupt": [
+      "selection.group.toggle",
+      "selection.clear",
+      "routeChange",
+      "pointerCancel"
+    ],
+    "finalState": "latestGroupSelectionAndSummaryCommittedWithoutListReflow",
+    "cleanup": [
+      "selection.group.pressedState.clear",
+      "selection.group.previousState.clear",
+      "selection.summary.recompute",
+      "selection.listGeometry.preserve",
+      "focus.selectionGroup.preserve"
     ]
   },
   {
@@ -1581,6 +3298,32 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:selectionDoesNotReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "selection.item.toggle",
+      "selection.item.keyboardToggle"
+    ],
+    "from": [
+      "selection.item.previousValue",
+      "selection.item.idle"
+    ],
+    "to": [
+      "selection.item.nextValue",
+      "selection.summary.latest"
+    ],
+    "interrupt": [
+      "selection.item.toggle",
+      "selection.clear",
+      "routeChange",
+      "pointerCancel"
+    ],
+    "finalState": "latestItemSelectionAndSummaryCommittedWithoutRowReflow",
+    "cleanup": [
+      "selection.item.pressedState.clear",
+      "selection.item.previousValue.clear",
+      "selection.summary.recompute",
+      "selection.rowGeometry.preserve",
+      "focus.selectionItem.preserve"
     ]
   },
   {
@@ -1601,6 +3344,32 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:selectionDoesNotReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "selection.option.toggle",
+      "selection.option.keyboardToggle"
+    ],
+    "from": [
+      "selection.option.previousValue",
+      "selection.option.idle"
+    ],
+    "to": [
+      "selection.option.nextValue",
+      "selection.optionSummary.latest"
+    ],
+    "interrupt": [
+      "selection.option.toggle",
+      "selection.reset",
+      "routeChange",
+      "pointerCancel"
+    ],
+    "finalState": "latestOptionSelectionAndSummaryCommittedWithoutRowReflow",
+    "cleanup": [
+      "selection.option.pressedState.clear",
+      "selection.option.previousValue.clear",
+      "selection.optionSummary.recompute",
+      "selection.optionGeometry.preserve",
+      "focus.selectionOption.preserve"
     ]
   },
   {
@@ -1621,6 +3390,33 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:noTextReflow",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "selection.range.show",
+      "text.selection.commit"
+    ],
+    "from": [
+      "textSelection.none",
+      "textSelection.rangeCommitted"
+    ],
+    "to": [
+      "textSelection.rangeVisible",
+      "selectionToolbar.visibleAtLegalAnchor"
+    ],
+    "interrupt": [
+      "selection.range.show",
+      "readerControlOpen",
+      "dropdownOpen",
+      "dialogOpen",
+      "routeChange"
+    ],
+    "finalState": "latestTextRangeAndToolbarVisibleWithoutTextReflow",
+    "cleanup": [
+      "textSelection.staleRange.clear",
+      "selectionToolbar.previousAnchor.clear",
+      "selectionToolbar.legalAnchor.commit",
+      "readerText.layout.preserve",
+      "selection.pointerOwnership.commit"
     ]
   },
   {
@@ -1641,6 +3437,33 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:keepTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "selection.toolbar.action",
+      "selection.toolbar.keyboardAction"
+    ],
+    "from": [
+      "selectionToolbar.visible",
+      "selectionToolbar.actionIdle"
+    ],
+    "to": [
+      "selectionToolbar.actionCommittedOrPending",
+      "textSelection.keptOrClosedByAction"
+    ],
+    "interrupt": [
+      "selection.toolbar.action",
+      "readerControlOpen",
+      "dialogOpen",
+      "routeChange",
+      "commandCancel"
+    ],
+    "finalState": "latestToolbarActionResolvedWithDeclaredSelectionRetention",
+    "cleanup": [
+      "selectionToolbar.pressedState.clear",
+      "selectionToolbar.staleAction.cancel",
+      "selectionToolbar.latestActionOwnership.commit",
+      "textSelection.retentionPolicy.apply",
+      "focus.selectionToolbar.preserveWhenVisible"
     ]
   },
   {
@@ -1661,6 +3484,32 @@
       "reducedMotion:forceZeroDuration",
       "focusReturn:restoreTarget",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "selection.toolbar.exit",
+      "selection.cancel"
+    ],
+    "from": [
+      "selectionToolbar.visible",
+      "textSelection.rangeVisible"
+    ],
+    "to": [
+      "selectionToolbar.hidden",
+      "textSelection.none",
+      "focus.returned"
+    ],
+    "interrupt": [
+      "selection.range.show",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "selectionLayerHiddenAndPointerFocusOwnershipReleased",
+    "cleanup": [
+      "selectionToolbar.anchor.clear",
+      "selectionToolbar.hitTarget.release",
+      "textSelection.range.clear",
+      "selection.pointerOwnership.release",
+      "focus.selectionReturnTarget.restoreIfCurrent"
     ]
   },
   {
@@ -1681,6 +3530,30 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "stepper.pointerDown",
+      "stepper.keyboardPress"
+    ],
+    "from": [
+      "stepper.idle",
+      "stepper.valueCommitted"
+    ],
+    "to": [
+      "stepper.pressed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "pointerLeave",
+      "stepper.disabled",
+      "routeChange"
+    ],
+    "finalState": "stepperPressReleasedWithoutHitAreaChange",
+    "cleanup": [
+      "stepper.pressedState.clear",
+      "stepper.repeatTimer.clear",
+      "stepper.hitArea.preserve",
+      "stepper.valueWidth.preserve"
     ]
   },
   {
@@ -1701,6 +3574,29 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:numericWidthStable",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "stepper.value.change",
+      "stepper.keyboardValueChange"
+    ],
+    "from": [
+      "stepper.previousValue",
+      "stepper.pressed"
+    ],
+    "to": [
+      "stepper.nextLegalValue"
+    ],
+    "interrupt": [
+      "stepper.value.change",
+      "stepper.disabled",
+      "routeChange"
+    ],
+    "finalState": "stepperLegalValueAndReadoutCommitted",
+    "cleanup": [
+      "stepper.staleValue.clear",
+      "stepper.pressedState.clear",
+      "stepper.valueWidth.preserve",
+      "stepper.preview.commit"
     ]
   },
   {
@@ -1721,6 +3617,31 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:preserveRouteShell",
       "interrupt:completeThenReplace"
+    ],
+    "trigger": [
+      "tooling.mode.switch",
+      "tooling.keyboardSwitch"
+    ],
+    "from": [
+      "toolingMode.current",
+      "toolingSurface.stable"
+    ],
+    "to": [
+      "toolingMode.target",
+      "toolingSurface.stable"
+    ],
+    "interrupt": [
+      "tooling.mode.switch",
+      "routeChange",
+      "destroy"
+    ],
+    "finalState": "latestToolingModeCommittedWithinStableRouteShell",
+    "cleanup": [
+      "toolingMode.previous.clear",
+      "toolingMode.latest.commit",
+      "toolingSurface.geometry.preserve",
+      "toolingRouteShell.preserve",
+      "focus.toolingControl.restore"
     ]
   },
   {
@@ -1741,6 +3662,28 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:keepTriggerAnchor",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "viewport.orientation.reshape"
+    ],
+    "from": [
+      "openAtPreviousAnchor"
+    ],
+    "to": [
+      "openAtLegalAnchor"
+    ],
+    "interrupt": [
+      "collapse",
+      "routeChange",
+      "newViewportMetrics"
+    ],
+    "finalState": "openWithinViewportOrSheetFallback",
+    "cleanup": [
+      "dropdown.anchor.previousSnapshot.clear",
+      "dropdown.anchor.latestSnapshot.commit",
+      "dropdown.menu.bounds.clamp",
+      "dropdown.menu.placement.commit",
+      "focus.dropdownOwner.preserve"
     ]
   },
   {
@@ -1761,6 +3704,26 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "dropdown.press"
+    ],
+    "from": [
+      "optionIdle"
+    ],
+    "to": [
+      "optionPressed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "collapse",
+      "routeChange"
+    ],
+    "finalState": "optionReleased",
+    "cleanup": [
+      "dropdown.option.pressedFlag.clear",
+      "dropdown.option.hitTarget.preserve",
+      "dropdown.menu.geometry.preserve"
     ]
   },
   {
@@ -1780,26 +3743,155 @@
     "guardRules": [
       "dragMustFollowFinger:noEasing",
       "layoutStable:clampToReaderFrame"
+    ],
+    "trigger": [
+      "reader.control.handleDrag"
+    ],
+    "from": [
+      "handlePressed"
+    ],
+    "to": [
+      "handleDragging",
+      "dragOffsetPreview"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "routeChange",
+      "orientationPrepare"
+    ],
+    "finalState": "dragOffsetPreviewOnly",
+    "cleanup": [
+      "reader.control.handle.preview.clamp",
+      "reader.control.handle.routeCommit.deferUntilRelease",
+      "reader.control.panel.geometry.preserve",
+      "reader.readingSurface.layout.preserve"
     ]
   },
   {
     "id": "reader.control.show",
-    "durationMs": 240,
+    "durationMs": 420,
     "easing": "ease-out",
-    "implementationKind": "readerEntry",
+    "implementationKind": "overlayTransition",
     "containerRole": "readerShell",
-    "operation": "update",
+    "operation": "enter",
     "visualPattern": "fadeReplace",
     "interruptPolicy": "redirect",
     "reducedMotionPolicy": "zeroDuration",
     "tokens": {
-      "durationToken": "reader.motion.duration.overlay",
+      "durationToken": "reader.motion.duration.controlEnter",
       "easingToken": "app.motion.easing.enter"
     },
     "guardRules": [
       "reducedMotion:forceZeroDuration",
       "focusReturn:keepTarget",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.control.show"
+    ],
+    "from": [
+      "immersive.hidden"
+    ],
+    "to": [
+      "control.home"
+    ],
+    "interrupt": [
+      "reader.control.hide",
+      "app.route.replace",
+      "viewport.orientation.prepare"
+    ],
+    "finalState": "control.home.visible",
+    "cleanup": [
+      "reader.control.transientState.clear",
+      "reader.surface.layout.preserve",
+      "focus.readerControlHome.restore"
+    ]
+  },
+  {
+    "id": "reader.panel.expand",
+    "durationMs": 420,
+    "easing": "ease-out",
+    "implementationKind": "overlayTransition",
+    "containerRole": "readerShell",
+    "operation": "enter",
+    "visualPattern": "slideSheetUp",
+    "interruptPolicy": "redirect",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "reader.motion.duration.controlEnter",
+      "easingToken": "app.motion.easing.enter"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "transitionGuard:singleReaderControlSurface",
+      "layoutStable:readingSurfaceDoesNotReflow",
+      "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.panel.expand",
+      "reader.control.handle.release.expand"
+    ],
+    "from": [
+      "control.quick.module"
+    ],
+    "to": [
+      "control.full.module"
+    ],
+    "interrupt": [
+      "reader.panel.collapse",
+      "reader.module.switch",
+      "reader.control.hide",
+      "app.route.replace"
+    ],
+    "finalState": "control.full.module.singleTargetVisible",
+    "cleanup": [
+      "reader.control.handleTransientOffset.clear",
+      "reader.surface.layout.preserve",
+      "focus.readerFullPanel.restore"
+    ]
+  },
+  {
+    "id": "reader.panel.collapse",
+    "durationMs": 360,
+    "easing": "ease-in",
+    "implementationKind": "overlayTransition",
+    "containerRole": "readerShell",
+    "operation": "exit",
+    "visualPattern": "slideSheetUp",
+    "interruptPolicy": "redirect",
+    "reducedMotionPolicy": "zeroDuration",
+    "tokens": {
+      "durationToken": "reader.motion.duration.controlExit",
+      "easingToken": "app.motion.easing.exit"
+    },
+    "guardRules": [
+      "reducedMotion:forceZeroDuration",
+      "transitionGuard:singleReaderControlSurface",
+      "layoutStable:readingSurfaceDoesNotReflow",
+      "interrupt:redirect"
+    ],
+    "trigger": [
+      "reader.panel.collapse",
+      "reader.control.handle.release.collapse",
+      "system.back"
+    ],
+    "from": [
+      "control.full.module"
+    ],
+    "to": [
+      "control.quick.module"
+    ],
+    "interrupt": [
+      "reader.panel.expand",
+      "reader.module.switch",
+      "reader.control.hide",
+      "app.route.replace"
+    ],
+    "finalState": "control.quick.module.singleTargetVisible",
+    "cleanup": [
+      "reader.control.handleTransientOffset.clear",
+      "reader.control.fullPanelTransientOverlay.clear",
+      "focus.readerQuickPanel.restore"
     ]
   },
   {
@@ -1820,6 +3912,25 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:hitAreaStable",
       "interrupt:cancel"
+    ],
+    "trigger": [
+      "tab.item.press"
+    ],
+    "from": [
+      "idle"
+    ],
+    "to": [
+      "pressed"
+    ],
+    "interrupt": [
+      "pointerCancel",
+      "pointerLeave",
+      "routeChange"
+    ],
+    "finalState": "pressedReleased",
+    "cleanup": [
+      "tab.item.pressedState.clear",
+      "tabBar.geometry.preserve"
     ]
   },
   {
@@ -1832,7 +3943,6 @@
     "visualPattern": "fadeReplace",
     "interruptPolicy": "redirect",
     "reducedMotionPolicy": "zeroDuration",
-    "deprecated": true,
     "tokens": {
       "durationToken": "app.motion.duration.tabSwitch",
       "easingToken": "app.motion.easing.standard"
@@ -1841,6 +3951,26 @@
       "reducedMotion:forceZeroDuration",
       "layoutStable:indicatorDoesNotPushLayout",
       "interrupt:redirect"
+    ],
+    "trigger": [
+      "tab.item.switch"
+    ],
+    "from": [
+      "activeTab.previous"
+    ],
+    "to": [
+      "activeTab.next"
+    ],
+    "interrupt": [
+      "switchTargetAgain",
+      "routeChange",
+      "pointerCancel"
+    ],
+    "finalState": "oneActiveTabAndStableBarSize",
+    "cleanup": [
+      "tab.item.previousPressedState.clear",
+      "tabBar.geometry.preserve",
+      "focus.selectedTab.restore"
     ]
   }
 ]

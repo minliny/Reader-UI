@@ -136,6 +136,7 @@
 | `--fd-ds-motion-duration-tabPress` | motion-duration | tab 按下反馈 |
 | `--fd-ds-motion-duration-tabSelect` | motion-duration | tab 选中切换 |
 | `--fd-ds-motion-duration-tabSwitch` | motion-duration | tab 之间切换 |
+| `--fd-ds-motion-duration-layoutSwitch` | motion-duration | 同一稳定内容集合在布局模式间切换 |
 
 ### 2.7 Overlay 组（overlay）
 

@@ -78,8 +78,8 @@ test("all six ordered native ABI hashes have exact names, counts, sources, and p
     "core-commands": 71,
     "core-events": 95,
     "host-requests": 58,
-    "motion-ids": 93,
-    "ui-events": 270,
+    "motion-ids": 95,
+    "ui-events": 300,
   };
   assert.deepEqual(manifest.abis.map((abi) => abi.name), Object.keys(expectedCounts).sort());
   assert.deepEqual(manifest.abis.map(({ name, source, jsonPointer }) => ({ name, source, jsonPointer })), RELEASE_ABI_DEFINITIONS);
@@ -230,7 +230,7 @@ test("ordered ABI source mutations change both raw groups and only the matching 
     "group changed: schemas",
   ]);
   assert.deepEqual(messages.filter((message) => message.startsWith("ABI changed: ")), ["ABI changed: motion-ids"]);
-  assert.equal(changed.abis.find((abi) => abi.name === "motion-ids").entryCount, 93);
+  assert.equal(changed.abis.find((abi) => abi.name === "motion-ids").entryCount, 95);
   assert.notEqual(
     changed.abis.find((abi) => abi.name === "motion-ids").sha256,
     manifest.abis.find((abi) => abi.name === "motion-ids").sha256,

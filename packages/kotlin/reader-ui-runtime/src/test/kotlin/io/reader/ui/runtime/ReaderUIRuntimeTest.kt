@@ -109,6 +109,14 @@ class ReaderUIRuntimeTest {
             }
         )
         assertTrue(accepted.accepted)
+        assertEquals(listOf("reader.progress.update"), accepted.effects.map { it.type })
+        assertEquals(2, runtime.state.readerPageIndex)
+        assertTrue(
+            runtime.acceptPageProgressJSONResult(
+                "json-result",
+                buildJsonObject { put("stored", true) }
+            ).accepted
+        )
         assertEquals(3, runtime.state.readerPageIndex)
         assertEquals("chapter-4:p3", runtime.state.readerCanonicalLocation)
 
@@ -130,7 +138,7 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun generatedTypedPayloadFixturesHaveExactParity() {
-        assertEquals(61, GeneratedRuntimeTypedPayloadContracts.byEvent.size)
+        assertEquals(63, GeneratedRuntimeTypedPayloadContracts.byEvent.size)
         assertEquals(170, GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.size)
         GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.forEach { fixture ->
             if (fixture.valid) {
@@ -146,7 +154,7 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun generatedTypedResultFixturesHaveExactParity() {
-        assertEquals(142, GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.size)
+        assertEquals(154, GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.size)
         GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.forEach { fixture ->
             if (fixture.valid) {
                 validateReaderUITypedResult(fixture.event, fixture.effectType, fixture.result)
@@ -262,10 +270,49 @@ class ReaderUIRuntimeTest {
 
         runtime.dispatch("reader.page.prev", correlationId = "page-2")
         runtime.providePageLayout("page-2", measuredPageLayout(targetPageIndex = 3))
-        assertTrue(runtime.acceptPageLocationResult("page-2", "canonical-ch4-p3", 3).accepted)
+        val persisting = runtime.acceptPageLocationResult("page-2", "canonical-ch4-p3", 3)
+        assertTrue(persisting.accepted)
+        assertEquals(listOf("reader.progress.update"), persisting.effects.map { it.type })
+        assertTrue(persisting.effects.single().jsonPayload.isEmpty())
+        assertEquals("persisting-progress", runtime.state.pageTransaction?.stage)
+        assertEquals(4, runtime.state.readerPageIndex)
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> {
+                runtime.dispatch("reader.page.next", correlationId = "page-blocked")
+            }.code
+        )
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> {
+                runtime.dispatch(
+                    "reader.autoPage.start",
+                    mapOf("intervalMs" to "4000"),
+                    "auto-blocked"
+                )
+            }.code
+        )
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> { runtime.cancelPageStep("page-2") }.code
+        )
+        assertTrue(runtime.acceptPageProgressResult("page-2", stored = true).accepted)
         assertEquals(3, runtime.state.readerPageIndex)
         assertEquals("canonical-ch4-p3", runtime.state.readerCanonicalLocation)
         assertFalse(runtime.acceptPageLocationResult("page-2", "duplicate", 9).accepted)
+
+        runtime.dispatch("reader.page.next", correlationId = "page-progress-error")
+        runtime.providePageLayout("page-progress-error", measuredPageLayout(targetPageIndex = 4))
+        runtime.acceptPageLocationResult("page-progress-error", "canonical-ch4-p4", 4)
+        assertTrue(
+            runtime.acceptPageProgressResult(
+                "page-progress-error",
+                error = "PROGRESS_STORE_FAILED"
+            ).accepted
+        )
+        assertEquals(3, runtime.state.readerPageIndex)
+        assertEquals("canonical-ch4-p3", runtime.state.readerCanonicalLocation)
+        assertEquals("PROGRESS_STORE_FAILED", runtime.state.error)
     }
 
     @Test
@@ -284,6 +331,64 @@ class ReaderUIRuntimeTest {
         val resolving = runtime.providePageLayout("page-explicit", measuredPageLayout(targetPageIndex = 0))
         assertEquals(JsonPrimitive("explicit"), resolving.effects.single().jsonPayload["direction"])
         assertEquals(JsonPrimitive("chapter-jump"), resolving.effects.single().jsonPayload["reason"])
+    }
+
+    @Test
+    fun progressCommitBoundaryBlocksExitAndBookReplacementWithoutCrossRouteContamination() {
+        val runtime = activeReaderRuntime(2, "book-a-page-2")
+        runtime.dispatch("reader.page.next", correlationId = "page-boundary")
+        runtime.providePageLayout("page-boundary", measuredPageLayout(targetPageIndex = 3))
+        runtime.acceptPageLocationResult("page-boundary", "book-a-page-3", 3)
+        val pending = runtime.state
+
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> { runtime.dispatch("reader.exit") }.code
+        )
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> {
+                runtime.dispatch(
+                    "book.open",
+                    mapOf("bookId" to "book-b", "sourceId" to "source-b", "sourceKind" to "remote"),
+                    "open-book-b"
+                )
+            }.code
+        )
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> {
+                runtime.dispatch("route.replace", mapOf("routeId" to "bookshelf"))
+            }.code
+        )
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> { runtime.dispatch("route.pop") }.code
+        )
+        assertEquals(
+            "PAGE_PROGRESS_COMMIT_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> {
+                runtime.dispatch("mainTab.select", mapOf("tab" to "settings"))
+            }.code
+        )
+        assertEquals(pending, runtime.state)
+
+        assertTrue(runtime.acceptPageProgressResult("page-boundary", stored = true).accepted)
+        val opened = runtime.dispatch(
+            "book.open",
+            mapOf("bookId" to "book-b", "sourceId" to "source-b", "sourceKind" to "remote"),
+            "open-book-b"
+        )
+        assertEquals("open-book-b", opened.state.bookOpenTransaction?.correlationId)
+        assertEquals(
+            "BOOK_OPEN_TRANSACTION_PENDING",
+            assertFailsWith<ReaderUIRuntimeException> {
+                runtime.dispatch("reader.page.next", correlationId = "book-open-page")
+            }.code
+        )
+        assertFalse(runtime.acceptPageProgressResult("page-boundary", stored = true).accepted)
+        assertEquals(3, runtime.state.readerPageIndex)
+        assertEquals("book-a-page-3", runtime.state.readerCanonicalLocation)
     }
 
     @Test
@@ -350,7 +455,10 @@ class ReaderUIRuntimeTest {
         val pageCorrelation = requireNotNull(fired.state.pageTransaction).correlationId
         assertFalse(runtime.acceptAutoPageTimerFired("auto-1", generation).accepted)
         runtime.providePageLayout(pageCorrelation, measuredPageLayout(targetPageIndex = 2))
-        val committed = runtime.acceptPageLocationResult(pageCorrelation, "page-2", 2)
+        val persisting = runtime.acceptPageLocationResult(pageCorrelation, "page-2", 2)
+        assertEquals(listOf("reader.progress.update"), persisting.effects.map { it.type })
+        assertEquals(1, runtime.state.readerPageIndex)
+        val committed = runtime.acceptPageProgressResult(pageCorrelation, stored = true)
         assertEquals(listOf(ReaderUIPlaybackDirective.FOREGROUND_TIMER_ARM), committed.effects.map { it.type })
         assertEquals(2, runtime.state.readerPageIndex)
 
@@ -481,6 +589,49 @@ class ReaderUIRuntimeTest {
         runtime.dispatch("overlay.sheet.open")
         runtime.dispatch("reader.directory.close")
         assertEquals("sheet", runtime.state.overlay)
+    }
+
+    @Test
+    fun readerControlAndModuleActionsAreAtomicAndRouteStable() {
+        val runtime = activeReaderRuntime()
+        val routeBefore = runtime.state.routeId
+
+        val opened = runtime.dispatch("reader.control.toggle", mapOf("overlay" to "reader-control"))
+        assertEquals("reader-control", opened.state.overlay)
+        assertEquals(routeBefore, opened.state.routeId)
+        assertTrue(opened.effects.isEmpty())
+
+        runtime.dispatch("reader.module.switch", mapOf("module" to "directory"))
+        assertEquals("directory", runtime.state.overlay)
+        val repeated = runtime.state
+        runtime.dispatch("reader.module.switch", mapOf("module" to "directory"))
+        assertEquals(repeated, runtime.state)
+
+        runtime.dispatch("reader.module.switch", mapOf("module" to "appearance"))
+        assertEquals("appearance", runtime.state.overlay)
+        runtime.dispatch("reader.control.toggle", mapOf("overlay" to "reader-control"))
+        assertNull(runtime.state.overlay)
+        assertEquals(routeBefore, runtime.state.routeId)
+    }
+
+    @Test
+    fun readerControlActionsFailClosedOutsideReaderOverlayFamily() {
+        val outsideReader = ReaderUIRuntime()
+        assertEquals("READER_ROUTE_GUARD", assertFailsWith<ReaderUIRuntimeException> {
+            outsideReader.dispatch("reader.control.toggle", mapOf("overlay" to "reader-control"))
+        }.code)
+
+        val runtime = activeReaderRuntime()
+        assertEquals("READER_CONTROL_OVERLAY_GUARD", assertFailsWith<ReaderUIRuntimeException> {
+            runtime.dispatch("reader.module.switch", mapOf("module" to "tts"))
+        }.code)
+        runtime.dispatch("overlay.dialog.open")
+        assertEquals("READER_CONTROL_OVERLAY_GUARD", assertFailsWith<ReaderUIRuntimeException> {
+            runtime.dispatch("reader.control.toggle", mapOf("overlay" to "reader-control"))
+        }.code)
+        assertEquals("INVALID_TYPED_PAYLOAD", assertFailsWith<ReaderUIRuntimeException> {
+            runtime.dispatch("reader.module.switch", mapOf("module" to "search"))
+        }.code)
     }
 
     @Test

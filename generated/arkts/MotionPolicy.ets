@@ -15,6 +15,11 @@ export interface MotionPolicyMatch {
 
 export type MotionRequest = MotionPolicyMatch;
 
+export interface MotionResolution {
+  motionId?: MotionId;
+  diagnostic?: string;
+}
+
 export interface MotionPolicy {
   id: string;
   priority: number;
@@ -95,8 +100,8 @@ export const motionPolicyRegistry: MotionPolicy[] = [
   },
   {
     id: "reader-module-switch",
-    priority: 200,
-    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "tabSwitch", sourceRole: undefined, targetRole: undefined, containerRole: "readerSurface", reducedMotion: undefined },
+    priority: 320,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "tabSwitch", sourceRole: "moduleNav", targetRole: "quickPanel", containerRole: "readerShell", reducedMotion: undefined },
     motionId: "reader.module.switch",
     deprecated: false
   },
@@ -234,10 +239,38 @@ export const motionPolicyRegistry: MotionPolicy[] = [
     deprecated: false
   },
   {
+    id: "reader-control-show",
+    priority: 320,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "enter", sourceRole: "controlLayer", targetRole: "controlHome", containerRole: "readerShell", reducedMotion: undefined },
+    motionId: "reader.control.show",
+    deprecated: false
+  },
+  {
     id: "reader-control-hide",
-    priority: 300,
-    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "exit", sourceRole: "controlLayer", targetRole: undefined, containerRole: "readerSurface", reducedMotion: undefined },
+    priority: 320,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "exit", sourceRole: "controlLayer", targetRole: "immersiveReading", containerRole: "readerShell", reducedMotion: undefined },
     motionId: "reader.control.hide",
+    deprecated: false
+  },
+  {
+    id: "reader-quick-promote",
+    priority: 320,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "enter", sourceRole: "controlHome", targetRole: "quickPanel", containerRole: "readerShell", reducedMotion: undefined },
+    motionId: "reader.quick.promote",
+    deprecated: false
+  },
+  {
+    id: "reader-panel-expand",
+    priority: 320,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "enter", sourceRole: "quickPanel", targetRole: "fullPanel", containerRole: "readerShell", reducedMotion: undefined },
+    motionId: "reader.panel.expand",
+    deprecated: false
+  },
+  {
+    id: "reader-panel-collapse",
+    priority: 320,
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "exit", sourceRole: "fullPanel", targetRole: "quickPanel", containerRole: "readerShell", reducedMotion: undefined },
+    motionId: "reader.panel.collapse",
     deprecated: false
   },
   {
@@ -390,14 +423,7 @@ export const motionPolicyRegistry: MotionPolicy[] = [
   {
     id: "motion-interrupt-redirect",
     priority: 50,
-    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "update", sourceRole: "interrupt", targetRole: undefined, containerRole: undefined, reducedMotion: undefined },
-    motionId: "motion.interrupt.redirect",
-    deprecated: false
-  },
-  {
-    id: "fallback-no-motion",
-    priority: 0,
-    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: undefined, sourceRole: undefined, targetRole: undefined, containerRole: undefined, reducedMotion: undefined },
+    match: { fromRoute: undefined, toRoute: undefined, fromShell: undefined, toShell: undefined, operation: "update", sourceRole: "interrupt", targetRole: "redirect", containerRole: undefined, reducedMotion: undefined },
     motionId: "motion.interrupt.redirect",
     deprecated: false
   }
@@ -463,6 +489,7 @@ export const routeShellLookup: Record<string, RouteShell> = {
   "settings": "MainTabShell",
   "global-settings": "SettingsShell",
   "settings-general": "SettingsShell",
+  "settings-developer": "SettingsShell",
   "source-management": "SettingsShell",
   "source-detail": "SettingsShell",
   "source-edit": "SettingsShell",
@@ -638,14 +665,38 @@ export const routeShellLookup: Record<string, RouteShell> = {
   "reader-replace-apply-result": "ReaderShell",
   "reader-replace-import-export": "ReaderShell",
   "reader-replace-preview": "ReaderShell",
-  "reader-replace-page": "ReaderShell"
+  "reader-replace-page": "ReaderShell",
+  "onboarding-welcome": "FlowShell",
+  "onboarding-capability-setup": "FlowShell",
+  "permission-recovery": "FlowShell",
+  "local-format-support": "LibraryShell",
+  "pdf-reader": "ReaderShell",
+  "manga-reader": "ReaderShell",
+  "http-tts-management": "SettingsShell",
+  "http-tts-editor": "SettingsShell",
+  "http-tts-test": "SettingsShell",
+  "content-edit": "ReaderShell",
+  "book-cover-change": "LibraryShell",
+  "book-cover-search": "LibraryShell",
+  "chapter-reviews": "LibraryShell",
+  "bookmarks-manager": "LibraryShell",
+  "download-queue": "LibraryShell",
+  "download-task-detail": "LibraryShell",
+  "storage-management": "SettingsShell",
+  "webview-login": "FlowShell",
+  "webview-captcha": "FlowShell",
+  "webview-challenge": "FlowShell",
+  "webview-cookie-return": "FlowShell",
+  "settings-tts": "SettingsShell",
+  "settings-storage": "SettingsShell",
+  "settings-accessibility": "SettingsShell"
 };
 
 export function routeShell(routeId: string): RouteShell | undefined {
   return routeShellLookup[routeId];
 }
 
-export function resolveMotion(request: MotionRequest): MotionId | undefined {
+export function resolveMotionWithDiagnostic(request: MotionRequest): MotionResolution {
   const resolved: MotionPolicyMatch = { ...request };
   if (resolved.fromShell === undefined && request.fromRoute !== undefined) {
     resolved.fromShell = routeShell(request.fromRoute);
@@ -659,8 +710,12 @@ export function resolveMotion(request: MotionRequest): MotionId | undefined {
   });
   for (const policy of sorted) {
     if (motionPolicyMatchMatches(policy.match, resolved)) {
-      return policy.motionId;
+      return { motionId: policy.motionId };
     }
   }
-  return undefined;
+  return { diagnostic: "motion.policy.no-match" };
+}
+
+export function resolveMotion(request: MotionRequest): MotionId | undefined {
+  return resolveMotionWithDiagnostic(request).motionId;
 }

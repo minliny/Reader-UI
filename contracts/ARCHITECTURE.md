@@ -164,11 +164,11 @@ packages/
 - contract/runtime 版本变更必须触发三端依赖升级、编译或 parity test 失败。
 - structural matrix、unit tests、host runtime proof、simulator/device proof 分层记录，不合并成单一“完成”。
 
-## 7. R16A-R16B Canonical Screen Graph 边界
+## 7. R16A-R16D Canonical Screen Graph 边界
 
 `ui-spec/screen-graph.json` 是 route / ViewState fixture 的确定性机器索引，严格 schema 为 `ui-spec/screen-graph.schema.json`，覆盖报告为 `generated/screen-graph-coverage.json`。生成规则和证明边界见 [SCREEN_GRAPH_FOUNDATION.md](../ui-spec/SCREEN_GRAPH_FOUNDATION.md)。
 
-graph 必须覆盖 `route.schema.json` 的全部 235 个 RouteId，并把三种事实分开：
+graph 必须覆盖 `route.schema.json` 的全部 260 个 RouteId，并把三种事实分开：
 
 - `direct`：已有 ViewState fixture，内联 page-state/context/facet variant 与有序 canonical ComponentType tree；
 - `alias`：通过 `aliasFor` 解析到 direct route，不复制或伪造组件树；
@@ -176,6 +176,8 @@ graph 必须覆盖 `route.schema.json` 的全部 235 个 RouteId，并把三种�
 
 graph 的 ComponentType catalog 必须按 `view-state.schema.json` 顺序登记全部 canonical 类型：有真实 fixture 实例的类型为 `referenced`；没有实例的类型为 `explicit-gap`。不得为了让 coverage 变绿而合成组件实例。
 
-action binding 只能来自 fixture 中明确的 canonical UiEvent 与触发语义。人类按钮文案、组件命名或 demo DOM 不能被猜测为 UiEvent；证据不足必须成为计数化 explicit action gap。R16D 将 55 条事件证据拆成 36 条带明确 `tap` trigger 的可执行 binding 与 19 条不可执行 `state-evidence`，避免 Host 把 loading/error/offline 等状态标记误发成用户意图；另有 6 个显式 action gaps。若 executable binding 对应 61-action runtime，其 payload 还必须通过 R14 typed contract；当前 12 条此类 binding 已逐项通过 R14 校验。
+action binding 只能来自 fixture 中明确的 canonical UiEvent 与触发语义。人类按钮文案、组件命名或 demo DOM 不能被猜测为 UiEvent；证据不足必须成为计数化 explicit action gap。R16D 当前将 116 条事件证据拆成 97 条 canonical action binding 与 19 条不可执行 `state-evidence`；97 条中 38 条命中 63-action runtime 的严格 payload contract，59 条属于新增能力或既有未实现事件并保持 planned/fail-closed。61 条 binding 使用显式 target，另有 6 个显式 action gaps。该拆分避免 Host 把 loading/error/offline 等状态标记误发成用户意图，也避免把已登记事件冒充为可执行事务。
 
-R16B 当前机器事实为 159 direct + 76 alias + 0 explicit-gap，235/235 route 可解析；35 个原 gap 均因已有 optimized demo renderer 与独立 reducer state 语义而补成 direct ViewState，没有使用等价性不足的 alias。graph gate 绿色只证明 route/shell/alias/direct fixture tree/gap 的一致性与确定性。`235 graph resolvable` 不证明 iOS/Android/HarmonyOS 原生 renderer 已实现，不证明设备交互或像素一致，也不改变 Pilot/Shadow/Authoritative rollout 状态。
+每个 component node/catalog entry 同时声明 `stateAuthorities` 与 `compositionMode`。`contract-tree` children 可由通用 renderer 递归消费；`host-composite` children 只表示 anatomy evidence，由 Host 从 Core、ReaderUIRuntime、Host Store 与 Host Layout 的真实 owner 组合，禁止通用 renderer 重复实例化或用 fixture 值覆盖 live state。
+
+当前机器事实为 184 direct + 76 alias + 0 explicit-gap，260/260 route 可解析。R16B 的 35 个原 gap 已以独立 reducer state 语义补成 direct ViewState；本轮另增加 24 个项目能力 intake direct route，并为其提供显式 D6 demo，但没有新增 runtime action。graph gate 绿色只证明 route/shell/alias/direct fixture tree/gap 的一致性与确定性。`260 graph resolvable` 不证明 iOS/Android/HarmonyOS 原生 renderer 已实现，不证明 Core/Host 事务、设备交互或像素一致，也不改变 Pilot/Shadow/Authoritative rollout 状态。

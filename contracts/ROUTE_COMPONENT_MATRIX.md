@@ -1,11 +1,11 @@
 # Route Component Matrix
 
-状态：Phase 2 完整矩阵
-日期：2026-07-04
+状态：Phase 2 当前合同全量矩阵（含项目能力 intake）
+日期：2026-07-19
 权威源：[route.schema.json](./route.schema.json)、[view-state.schema.json](./view-state.schema.json)、[motion.schema.json](./motion.schema.json)、[token.schema.json](./token.schema.json)、[ui-state.schema.json](./ui-state.schema.json)
 来源：[PAGE_REFERENCE.md](./PAGE_REFERENCE.md)、[MOTION_SPEC.md](./MOTION_SPEC.md)、[TOKEN_SPEC.md](./TOKEN_SPEC.md)
 
-本文是阶段 2"完整 route/component/state/motion/token 矩阵"。覆盖全部 RouteId（200+）× Shell × PageState × Motion × Token 分组，给三端实现提供完整索引。P0 链路的详细描述见 [PAGE_REFERENCE.md](./PAGE_REFERENCE.md)。
+本文是阶段 2"当前合同全量 route/component/state/motion/token 矩阵"。覆盖 [route.schema.json](./route.schema.json) 当前全部 260 个 RouteId × Shell × PageState × Motion × Token 分组，给三端实现提供完整索引。这里的“全量”只表示 Reader-UI 当前合同分母，不代表 [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md) 中的项目能力、Core/Host、三端原生页面或设备证据均已完成。分母变化以 schema/fixtures 和生成门禁为准；P0 链路的详细描述见 [PAGE_REFERENCE.md](./PAGE_REFERENCE.md)。
 
 ## 0. 文档边界
 
@@ -22,7 +22,7 @@
 
 ## 1. Route × Shell × mainTab 全量矩阵
 
-来源：[route.schema.json](./route.schema.json) enum（200 项）。
+来源：[route.schema.json](./route.schema.json) enum（当前 260 项；以 schema 为机器权威）。
 
 ### 1.1 MainTabShell（4 个主 Tab 根 + AppShell）
 
@@ -147,9 +147,40 @@
 | `rss-source-actions` / `rss-source-debug` / `rss-source-vars` / `rss-source-login` / `rss-source-login-web` / `rss-source-login-cookie` / `rss-source-login-clear` / `rss-source-groups` / `rss-source-group-edit` / `rss-source-batch` / `rss-source-export` / `rss-source-export-detail` / `rss-source-export-result` / `rss-source-pin` / `rss-source-disable` / `rss-source-batch-disable` / `rss-source-import` / `rss-source-import-detail` / `rss-source-import-result` | RSS 源管理 |
 | `rss-read-record` / `rss-record-clear` | RSS 阅读记录 |
 
+### 1.9 项目能力 intake route（本轮新增 24 项）
+
+以下 route 已进入 Route/ViewState/UiEvent 合同并有 D6 demo 语义展示。新增的 30 个 UiEvent 仍为 planned/fail-closed，runtime action 分母仍为 63；表中登记不等于 Core/Host、原生 renderer 或设备链路已经实现。
+
+| RouteId | Shell | 主 PageState | 合同主操作 | 当前边界 |
+| --- | --- | --- | --- | --- |
+| `onboarding-welcome` | FlowShell | default | `onboarding.continue` | 首次启动引导已登记；业务完成事件 planned |
+| `onboarding-capability-setup` | FlowShell | permission | `onboarding.capabilitySetup.complete` | 按需授权意图已登记；平台权限回流待 Host |
+| `permission-recovery` | FlowShell | permission | `permission.recovery.openSettings` / `permission.recovery.retry` | 拒绝、设置回流与重试状态已登记；待平台实现 |
+| `local-format-support` | LibraryShell | default | `localFormat.open` / `localFormat.select` | 格式能力协商，不宣称未声明的解析能力 |
+| `pdf-reader` | ReaderShell | default | `pdf.open` | platform-renderer surface；Core parser 未声明 |
+| `manga-reader` | ReaderShell | default | `manga.open` | platform image-sequence surface；Core parser 未声明 |
+| `http-tts-management` | SettingsShell | default | `httpTts.management.open` | Host orchestration；不宣称播放闭环 |
+| `http-tts-editor` | SettingsShell | default | `httpTts.provider.save` | 凭据与持久化待 Host/Core mapping |
+| `http-tts-test` | SettingsShell | loading | `httpTts.test.start` / `httpTts.test.cancel` | 仅定义请求测试状态，不冒充可播放 |
+| `content-edit` | ReaderShell | default | `content.edit.open` / `content.edit.save` | 仅允许 replacement-rule mutation，不支持原始源篡改 |
+| `book-cover-change` | LibraryShell | default | `book.cover.change` | 本地选择与保存事务待 Core/Host |
+| `book-cover-search` | LibraryShell | default | `book.cover.search` | 远程搜索、解密、缓存与回滚待闭环 |
+| `chapter-reviews` | LibraryShell | default | `chapter.reviews.open` / `chapter.reviews.retry` | 评论加载状态已登记；真实数据链待 Core |
+| `bookmarks-manager` | LibraryShell | default | `bookmarks.manage.open` | 管理入口已登记；CRUD/持久化待 Core bridge |
+| `download-queue` | LibraryShell | default | `download.queue.open` | 队列状态已登记；媒体下载事务待 Host |
+| `download-task-detail` | LibraryShell | loading | `download.task.open` / `download.task.retry` / `download.task.cancel` | retry/cancel 保持 planned/fail-closed |
+| `storage-management` | SettingsShell | default | `storage.management.open` / `storage.cleanup.confirm` | 统计与清理事务待 Core/Host |
+| `webview-login` | FlowShell | default | `webview.login.open` / `webview.login.cancel` | WebView/profile/cookie 归 Host |
+| `webview-captcha` | FlowShell | permission | `webview.challenge.retry` | 验证码挑战状态已登记；不得跨层解析平台对象 |
+| `webview-challenge` | FlowShell | error | `webview.challenge.retry` | 反爬挑战恢复待 Host session |
+| `webview-cookie-return` | FlowShell | default | `webview.cookie.return` | 只返回可序列化 cookie 结果，平台对象不入 Core |
+| `settings-tts` | SettingsShell | default | `settings.capability.open` | 系统 TTS 设置入口；实际引擎能力由 Host 决定 |
+| `settings-storage` | SettingsShell | default | `settings.capability.open` | 存储入口与清理动作分层登记 |
+| `settings-accessibility` | SettingsShell | default | `settings.capability.open` | reduced-motion 可共享；读屏与字体缩放归平台 |
+
 ## 2. ComponentType × Shell 归属
 
-来源：[view-state.schema.json](./view-state.schema.json) ComponentType enum（64 项）。
+来源：[view-state.schema.json](./view-state.schema.json) ComponentType enum（当前 174 项；以 schema 为机器权威）。
 
 | ComponentType | 主要 Shell | 主要用途 |
 | --- | --- | --- |
@@ -166,7 +197,7 @@
 | `ContinueReadingCard` | MainTabShell - bookshelf | 继续阅读卡片 |
 | `RecentUpdateCard` | MainTabShell - bookshelf | 最近更新卡片 |
 | `ShelfSectionHeader` | MainTabShell - bookshelf | 书架区段标题 |
-| `BookCard` | MainTabShell - bookshelf | 书籍卡片（封面模式）|
+| `BookCard` | MainTabShell - bookshelf | 兼容 canonical 类型名；以 `semanticRole=BookItem` 在封面/列表模式复用同一实体 |
 | `BookListItem` | MainTabShell - bookshelf | 书籍列表项（列表模式）|
 | `ProgressBar` | Reader / Settings | 进度条（阅读进度 / 恢复进度）|
 | `SubscriptionSummaryCard` | MainTabShell - rss | RSS 订阅汇总 |
@@ -251,7 +282,7 @@
 
 ## 4. Route × MotionId 映射（关键链路）
 
-完整 MotionId 集合见 [motion.schema.json](./motion.schema.json)（84 项）+ [MOTION_SPEC.md](./MOTION_SPEC.md)。
+完整 MotionId 集合见 [motion.schema.json](./motion.schema.json)（当前 95 项；以 schema/fixtures 为机器权威）+ [MOTION_SPEC.md](./MOTION_SPEC.md)。
 
 ### 4.1 MainTabShell
 
@@ -268,6 +299,7 @@
 | --- | --- |
 | `book-search` / `search-home` / `search-results` / `search-loading` / `search-empty` / `search-error` | `app.route.push.forward` / `search.state.replace` / `state.loading.inline` |
 | `book-detail` / `book-detail-toc-preview` / `book-directory` | `app.route.push.forward` / `app.route.pop.backward` |
+| `rss-original-browser` | `app.route.push.forward` / `app.route.pop.backward` |
 | `sort-filter` | `overlay.sheet.enter` / `overlay.sheet.exit` / `filter.apply.commit` |
 | `group-management` / `bookshelf-group-management` | `app.route.push.forward` / `app.route.pop.backward` |
 | `local-import` | `app.route.push.forward` |
@@ -280,8 +312,8 @@
 | `immersive-reading` / `reader` / `reader_content` | `reader.entry.coverToImmersive` / `reader.entry.actionToImmersive` / `reader.page.turn.next-prev` / `reader.chapter.jump` / `reader.control.handle.press` / `reader.control.handle.release` / `reader.control.dock.longPress` / `reader.control.dock.drag` / `reader.control.dock.release` / `reader.control.dock.rebound` / `reader.control.hide` |
 | `control-layer-base-v2` | `reader.module.switch` |
 | `reader-appearance-overlay-v2` / `reader-tts-overlay-v2` / `reader-settings-overlay-v2` / `reader-search-overlay-v2` / `reader-replace-overlay-v2` / `reader-directory-overlay-v2` / `reader-auto-scroll-overlay-v2` | `overlay.sheet.enter` / `overlay.sheet.exit` / `reader.module.switch` |
-| `tts` / `auto-page` | `reader.session.capsule.enter` / `reader.session.capsule.update` / `reader.session.capsule.exit` / `reader.session.capsule.switch` / `reader.session.controlSpace.enter` / `reader.session.controlSpace.exit` / `reader.session.tts.start` / `reader.session.autoPage.start` |
-| `source-switch` / `source-switch-results` | `reader.sourceSwitch.open-close` |
+| `tts` / `auto-page` | `reader.session.capsule.enter` / `reader.session.capsule.update` / `reader.session.capsule.exit` / `reader.session.capsule.switch` / `reader.session.tts.start` / `reader.session.autoPage.start`；control-space 三项 ID 仅为 contract-reserved，不进入当前产品路径 |
+| `source-switch` / `source-switch-results` | `source.switch.route.push` / `source.switch.route.pop` / `source.switch.route.replace` |
 | `reader-night-state-v2` | `state.content.replace` |
 | `reader-full-*` | `app.route.push.forward` / `app.route.pop.backward` |
 | `reader-book-cache` | `app.route.push.forward` |
@@ -304,8 +336,7 @@
 
 | Route | 触发 MotionId |
 | --- | --- |
-| `rss-original-browser` | `reader.sourceSwitch.open-close`（同源轻浮现）|
-| `source-switch`（从 ReaderShell）| `reader.sourceSwitch.open-close` |
+| `source-switch`（从 ReaderShell）| `source.switch.route.push` / `source.switch.route.pop` / `source.switch.route.replace` |
 
 ### 4.6 全局状态层
 
@@ -366,7 +397,8 @@ P0 阶段已实现本仓矩阵覆盖检查：`contracts/tests/matrix-coverage.te
 
 ## 7. 缺口与下一步
 
-阶段 2 已补全量 RouteId × Shell × ComponentType × PageState × MotionId × Token 分组矩阵。剩余缺口：
+阶段 2 已补齐当前合同分母的 RouteId × Shell × ComponentType × PageState × MotionId × Token 分组索引。剩余缺口：
 - 部分 RouteId（如 `rss-source-export-*` / `rss-source-import-*` 细分链路）的详细组件树未展开，归 P1。
-- demo baseline 中 111 个 unknown id 的产品决策不阻塞本文；若后续收敛，应递减。
+- 24 个项目能力 intake route 已有显式 D6 demo，但 30 个新增 UiEvent 仍是 planned/fail-closed；必须在 runtime/Core/Host/原生/设备逐层验收后才能升级状态。
+- 完整项目能力缺口、Slice 9–12 与跨仓验收见 [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md)，不得用 260/260 graph 替代。
 - 三端源码级矩阵证据归阶段 3 / 各平台仓库。

@@ -128,10 +128,10 @@ Native UI 发 UiEvent → Reducer 处理 → 必要时 emit CoreCommand。下表
 | `reader.exit` | `route.pop` | `book.close`（可选）|
 | `reader.page.next` / `reader.page.prev` | 更新 `readerPageIndex` | `reader.progress.update` |
 | `reader.chapter.jump` | 更新 `readerChapterIndex` | `content.load` + `reader.progress.update` |
-| `reader.control.toggle` | 切换 `overlay = reader-control / null` | — |
+| `reader.control.toggle` | 在 `immersive-reading` 内原子切换 Reader control overlay family：`null -> reader-control`，任一兼容 Reader module overlay -> `null`；非 Reader overlay fail closed，route 不变 | — |
 | `reader.control.handlePress` / `reader.control.handleRelease` / `reader.control.handleDrag` | 更新 EphemeralState | — |
 | `reader.control.dockLongPress` / `reader.control.dockDrag` / `reader.control.dockRelease` | 更新 `readerDockOffsets` + EphemeralState | — |
-| `reader.module.switch` | 切换 overlay（经 null 中转）| — |
+| `reader.module.switch` | 在 `reader-control / directory / tts / appearance / settings` family 内原子选择唯一 module overlay；重复选择 no-op，route 不变，动画由前后状态差分派生 | — |
 | `reader.appearance.open` | `overlay = appearance` | — |
 | `reader.settings.open` / `reader.settings.close` | 切换 `overlay = settings / null` | — |
 | `reader.directory.open` / `reader.directory.close` | 切换 `overlay = directory / null` | `chapter.list` |

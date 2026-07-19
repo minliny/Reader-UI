@@ -103,6 +103,27 @@ public enum ReaderUIPlaybackDirective {
     public static let autoPageMaximumIntervalMs = 3_600_000
 }
 
+private let readerIdentityOrRouteMutationEvents: Set<String> = [
+    "route.push",
+    "route.replace",
+    "route.pop",
+    "route.popToRoot",
+    "mainTab.select",
+    "book.open",
+    "reader.enter",
+    "reader.exit",
+    "source.switch.open",
+    "source.switch.cancel",
+]
+
+private let readerControlOverlayFamily: Set<String> = [
+    "reader-control",
+    "directory",
+    "tts",
+    "appearance",
+    "settings",
+]
+
 public struct ReaderUIPageLayout: Sendable, Equatable {
     public let anchor: String
     public let targetPageIndex: Int
@@ -144,6 +165,8 @@ public struct ReaderUIPageTransaction: Sendable, Equatable {
     public var stage: String
     public var payload: ReaderUIJSONPayload
     public var layout: ReaderUIPageLayout?
+    public var pendingCanonicalLocation: String?
+    public var pendingPageIndex: Int?
 }
 
 public struct ReaderUITTSTransaction: Sendable, Equatable {
@@ -387,6 +410,13 @@ public final class ReaderUIRuntime {
             throw failure("MISSING_PAYLOAD", "\(event) requires payload.\(field)")
         }
         try checkGuards(descriptor, event: event)
+        if readerIdentityOrRouteMutationEvents.contains(event),
+           state.pageTransaction?.stage == "persisting-progress" {
+            throw failure(
+                "PAGE_PROGRESS_COMMIT_PENDING",
+                "\(event) cannot replace the reader route or identity while progress persistence is pending"
+            )
+        }
         if descriptor.action == "bookOpenSequence" {
             try preflightBookOpen(event: event, payload: payload, correlationId: correlationId, descriptor: descriptor)
         }
@@ -464,6 +494,24 @@ public final class ReaderUIRuntime {
                 throw failure("MISSING_PAYLOAD", "(event) requires an overlay identity")
             }
             if state.overlay == expectedOverlay { state.overlay = nil }
+        case "toggleReaderControl":
+            guard state.routeId == "immersive-reading" else {
+                throw failure("READER_ROUTE_GUARD", "\(event) requires the immersive-reading route")
+            }
+            if let currentOverlay = state.overlay,
+               !readerControlOverlayFamily.contains(currentOverlay) {
+                throw failure("READER_CONTROL_OVERLAY_GUARD", "\(event) cannot replace \(currentOverlay)")
+            }
+            state.overlay = state.overlay == nil ? "reader-control" : nil
+        case "switchReaderModule":
+            guard state.routeId == "immersive-reading" else {
+                throw failure("READER_ROUTE_GUARD", "\(event) requires the immersive-reading route")
+            }
+            guard let currentOverlay = state.overlay,
+                  readerControlOverlayFamily.contains(currentOverlay) else {
+                throw failure("READER_CONTROL_OVERLAY_GUARD", "\(event) requires an active Reader control overlay")
+            }
+            state.overlay = payload["module"]?.stringValue
         case "startSession":
             state.activeSession = descriptor.value
             state.overlay = nil
@@ -906,8 +954,8 @@ public final class ReaderUIRuntime {
               transaction.stage == "resolving-location" else {
             return playbackResult(false, previous)
         }
-        state.pageTransaction = nil
         if let error, !error.isEmpty {
+            state.pageTransaction = nil
             state.error = error
             finishFailedAutoPage(transaction)
             return playbackResult(true, previous)
@@ -915,7 +963,44 @@ public final class ReaderUIRuntime {
         guard let canonicalLocation,
               !canonicalLocation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               let pageIndex, pageIndex >= 0 else {
+            state.pageTransaction = nil
             state.error = "PAGE_LOCATION_INVALID_RESULT"
+            finishFailedAutoPage(transaction)
+            return playbackResult(true, previous)
+        }
+        var persisting = transaction
+        persisting.stage = "persisting-progress"
+        persisting.pendingCanonicalLocation = canonicalLocation
+        persisting.pendingPageIndex = pageIndex
+        state.pageTransaction = persisting
+        state.error = nil
+        return playbackResult(true, previous, effects: [pageProgressEffect(persisting)])
+    }
+
+    @discardableResult
+    public func acceptPageProgressResult(
+        correlationId: String,
+        stored: Bool? = nil,
+        error: String? = nil
+    ) -> ReaderUIPlaybackTransition {
+        let previous = state
+        guard let transaction = state.pageTransaction,
+              transaction.correlationId == correlationId,
+              transaction.stage == "persisting-progress" else {
+            return playbackResult(false, previous)
+        }
+        state.pageTransaction = nil
+        if let error, !error.isEmpty {
+            state.error = error
+            finishFailedAutoPage(transaction)
+            return playbackResult(true, previous)
+        }
+        guard stored == true,
+              let canonicalLocation = transaction.pendingCanonicalLocation,
+              !canonicalLocation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              let pageIndex = transaction.pendingPageIndex,
+              pageIndex >= 0 else {
+            state.error = "PAGE_PROGRESS_INVALID_RESULT"
             finishFailedAutoPage(transaction)
             return playbackResult(true, previous)
         }
@@ -934,6 +1019,30 @@ public final class ReaderUIRuntime {
             effects.append(timerEffect(ReaderUIPlaybackDirective.foregroundTimerArm, autoPage))
         }
         return playbackResult(true, previous, effects: effects)
+    }
+
+    /// Lossless JSON result entry point for progress persistence callbacks.
+    @discardableResult
+    public func acceptPageProgressJSONResult(
+        correlationId: String,
+        result: ReaderUIJSONResult
+    ) throws -> ReaderUIPlaybackTransition {
+        guard let transaction = state.pageTransaction,
+              transaction.correlationId == correlationId,
+              transaction.stage == "persisting-progress" else {
+            return acceptPageProgressResult(correlationId: correlationId)
+        }
+        let result = try validatedJSONResult(result)
+        _ = try validateReaderUITypedResult(
+            event: transaction.contractEvent,
+            effectType: "reader.progress.update",
+            result: result
+        )
+        return acceptPageProgressResult(
+            correlationId: correlationId,
+            stored: result["stored"]?.boolValue,
+            error: try optionalJSONResultString(result, key: "error")
+        )
     }
 
     /// Lossless JSON result entry point for canonical location callbacks.
@@ -958,10 +1067,17 @@ public final class ReaderUIRuntime {
     }
 
     @discardableResult
-    public func cancelPageStep(correlationId: String) -> ReaderUIPlaybackTransition {
+    public func cancelPageStep(correlationId: String) throws -> ReaderUIPlaybackTransition {
         let previous = state
-        guard state.pageTransaction?.correlationId == correlationId else {
+        guard let transaction = state.pageTransaction,
+              transaction.correlationId == correlationId else {
             return playbackResult(false, previous)
+        }
+        if transaction.stage == "persisting-progress" {
+            throw failure(
+                "PAGE_PROGRESS_COMMIT_PENDING",
+                "reader.progress.update was already dispatched and cannot be cancelled or rolled back"
+            )
         }
         state.pageTransaction = nil
         return playbackResult(true, previous, cancelledCorrelationIds: [correlationId])
@@ -1096,6 +1212,9 @@ public final class ReaderUIRuntime {
         generation: Int
     ) throws -> ReaderUIPlaybackTransition {
         let previous = state
+        if state.pageTransaction?.stage == "persisting-progress" {
+            throw failure("PAGE_PROGRESS_COMMIT_PENDING", "reader.autoPage.timer waits for the in-flight progress commit")
+        }
         guard var transaction = state.autoPageTransaction,
               transaction.correlationId == correlationId,
               transaction.generation == generation,
@@ -1158,11 +1277,17 @@ public final class ReaderUIRuntime {
         guard let correlationId, !correlationId.isEmpty else {
             throw failure("MISSING_CORRELATION", "\(event) requires correlationId")
         }
+        if state.bookOpenTransaction != nil {
+            throw failure("BOOK_OPEN_TRANSACTION_PENDING", "\(event) waits for the active book.open transaction")
+        }
         guard ["next", "previous", "explicit"].contains(direction) else {
             throw failure("INVALID_PAGE_DIRECTION", "\(event) requires next|previous|explicit")
         }
         if state.pageTransaction?.correlationId == correlationId {
             throw failure("DUPLICATE_CORRELATION", "\(event) was already dispatched for \(correlationId)")
+        }
+        if state.pageTransaction?.stage == "persisting-progress" {
+            throw failure("PAGE_PROGRESS_COMMIT_PENDING", "\(event) waits for the in-flight progress commit")
         }
         var cancelledCorrelationIds: [String] = []
         var effects: [ReaderUIEffect] = []
@@ -1183,7 +1308,9 @@ public final class ReaderUIRuntime {
             generation: generation,
             stage: "awaiting-layout",
             payload: payload,
-            layout: nil
+            layout: nil,
+            pendingCanonicalLocation: nil,
+            pendingPageIndex: nil
         )
         state.error = nil
         return ReaderUITransition(
@@ -1278,7 +1405,10 @@ public final class ReaderUIRuntime {
             throw failure("DUPLICATE_CORRELATION", "\(event) was already dispatched for \(correlationId)")
         }
         if state.pageTransaction != nil {
-            throw failure("PAGE_TRANSACTION_PENDING", "\(event) waits for the active page transaction")
+            let code = state.pageTransaction?.stage == "persisting-progress"
+                ? "PAGE_PROGRESS_COMMIT_PENDING"
+                : "PAGE_TRANSACTION_PENDING"
+            throw failure(code, "\(event) waits for the active page transaction")
         }
         var teardown = teardownPlaybackSession()
         state.playbackGeneration += 1
@@ -1330,8 +1460,10 @@ public final class ReaderUIRuntime {
         if let page = state.pageTransaction,
            page.source == "auto-page",
            page.sessionCorrelationId == transaction.correlationId {
-            cancelledCorrelationIds.append(page.correlationId)
-            state.pageTransaction = nil
+            if page.stage != "persisting-progress" {
+                cancelledCorrelationIds.append(page.correlationId)
+                state.pageTransaction = nil
+            }
         }
         let effects = [timerEffect(ReaderUIPlaybackDirective.foregroundTimerCancel, transaction)]
         state.playbackGeneration += 1
@@ -1360,8 +1492,10 @@ public final class ReaderUIRuntime {
             if let page = state.pageTransaction,
                page.source == "auto-page",
                page.sessionCorrelationId == autoPage.correlationId {
-                cancelledCorrelationIds.append(page.correlationId)
-                state.pageTransaction = nil
+                if page.stage != "persisting-progress" {
+                    cancelledCorrelationIds.append(page.correlationId)
+                    state.pageTransaction = nil
+                }
             }
             state.playbackGeneration += 1
             state.autoPageTransaction = nil
@@ -1372,7 +1506,7 @@ public final class ReaderUIRuntime {
 
     private func teardownAllPlayback() -> (effects: [ReaderUIEffect], cancelledCorrelationIds: [String]) {
         var teardown = teardownPlaybackSession()
-        if let page = state.pageTransaction {
+        if let page = state.pageTransaction, page.stage != "persisting-progress" {
             teardown.cancelledCorrelationIds.append(page.correlationId)
             state.pageTransaction = nil
         }
@@ -1440,6 +1574,15 @@ public final class ReaderUIRuntime {
             kind: .core,
             type: "reader.location.resolve",
             jsonPayload: payload,
+            correlationId: transaction.correlationId
+        )
+    }
+
+    private func pageProgressEffect(_ transaction: ReaderUIPageTransaction) -> ReaderUIEffect {
+        ReaderUIEffect(
+            kind: .core,
+            type: "reader.progress.update",
+            jsonPayload: [:],
             correlationId: transaction.correlationId
         )
     }

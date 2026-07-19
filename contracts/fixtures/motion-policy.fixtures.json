@@ -59,10 +59,12 @@
   },
   {
     "id": "reader-module-switch",
-    "priority": 200,
+    "priority": 320,
     "match": {
       "operation": "tabSwitch",
-      "containerRole": "readerSurface"
+      "containerRole": "readerShell",
+      "sourceRole": "moduleNav",
+      "targetRole": "quickPanel"
     },
     "motionId": "reader.module.switch"
   },
@@ -257,14 +259,60 @@
     "motionId": "reader.chapter.jump"
   },
   {
-    "id": "reader-control-hide",
-    "priority": 300,
+    "_comment": "=== Reader control pilot family (priority 320) ===",
+    "id": "reader-control-show",
+    "priority": 320,
     "match": {
-      "containerRole": "readerSurface",
+      "containerRole": "readerShell",
+      "operation": "enter",
+      "sourceRole": "controlLayer",
+      "targetRole": "controlHome"
+    },
+    "motionId": "reader.control.show"
+  },
+  {
+    "id": "reader-control-hide",
+    "priority": 320,
+    "match": {
+      "containerRole": "readerShell",
       "operation": "exit",
-      "sourceRole": "controlLayer"
+      "sourceRole": "controlLayer",
+      "targetRole": "immersiveReading"
     },
     "motionId": "reader.control.hide"
+  },
+  {
+    "id": "reader-quick-promote",
+    "priority": 320,
+    "match": {
+      "containerRole": "readerShell",
+      "operation": "enter",
+      "sourceRole": "controlHome",
+      "targetRole": "quickPanel"
+    },
+    "motionId": "reader.quick.promote"
+  },
+  {
+    "id": "reader-panel-expand",
+    "priority": 320,
+    "match": {
+      "containerRole": "readerShell",
+      "operation": "enter",
+      "sourceRole": "quickPanel",
+      "targetRole": "fullPanel"
+    },
+    "motionId": "reader.panel.expand"
+  },
+  {
+    "id": "reader-panel-collapse",
+    "priority": 320,
+    "match": {
+      "containerRole": "readerShell",
+      "operation": "exit",
+      "sourceRole": "fullPanel",
+      "targetRole": "quickPanel"
+    },
+    "motionId": "reader.panel.collapse"
   },
   {
     "id": "reader-control-handle-press",
@@ -485,15 +533,9 @@
     "priority": 50,
     "match": {
       "operation": "update",
-      "sourceRole": "interrupt"
+      "sourceRole": "interrupt",
+      "targetRole": "redirect"
     },
-    "motionId": "motion.interrupt.redirect"
-  },
-  {
-    "_comment": "=== Fallback default (priority 0) ===",
-    "id": "fallback-no-motion",
-    "priority": 0,
-    "match": {},
     "motionId": "motion.interrupt.redirect"
   }
 ]

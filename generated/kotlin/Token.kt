@@ -945,6 +945,13 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--fd-ds-motion-duration-layoutSwitch",
+        category = TokenCategory.MotionDuration,
+        value = "320ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--fd-ds-motion-duration-buttonPress",
         category = TokenCategory.MotionDuration,
         value = "80ms",
@@ -1099,6 +1106,34 @@ object TokenRegistry {
         deprecated = false
     ),
     Token(
+        name = "--fd-ds-motion-duration-controlEnter",
+        category = TokenCategory.MotionDuration,
+        value = "420ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-motion-duration-controlExit",
+        category = TokenCategory.MotionDuration,
+        value = "360ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-motion-duration-quickPromote",
+        category = TokenCategory.MotionDuration,
+        value = "320ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-motion-duration-moduleSwitch",
+        category = TokenCategory.MotionDuration,
+        value = "360ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
         name = "--fd-ds-motion-duration-pageTurn",
         category = TokenCategory.MotionDuration,
         value = "220ms",
@@ -1165,6 +1200,20 @@ object TokenRegistry {
         name = "--fd-ds-motion-duration-route",
         category = TokenCategory.MotionDuration,
         value = "280ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-motion-duration-routePop",
+        category = TokenCategory.MotionDuration,
+        value = "240ms",
+        platforms = null,
+        deprecated = false
+    ),
+    Token(
+        name = "--fd-ds-motion-duration-routeReplace",
+        category = TokenCategory.MotionDuration,
+        value = "200ms",
         platforms = null,
         deprecated = false
     ),

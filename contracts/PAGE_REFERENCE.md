@@ -91,12 +91,13 @@ BookshelfRoot
   └─ BookshelfShelfSection
       ├─ ShelfSectionHeader（标题 + grid/list/filter/settings 操作）
       ├─ ShelfFilterPopover（仅 filter 展开时）
-      └─ BookGrid / BookList（按 view mode）
+      └─ BookGrid（稳定 collection，viewMode=cover/list）
+          └─ BookCard（兼容类型名；semanticRole=BookItem，bookId 跨模式稳定）
   └─ BottomNav
 ```
 
 组件树（ComponentType）：
-- `AppTopBar`、`SearchEntry`、`ContinueReadingCard`、`BookshelfShelfSection`、`ShelfSectionHeader`、`ShelfFilterPopover`、`BookCard` / `BookListItem`、`BottomNav`
+- `AppTopBar`、`SearchEntry`、`ContinueReadingCard`、`BookshelfShelfSection`、`ShelfSectionHeader`、`ShelfFilterPopover`、`BookGrid`、`BookCard`（稳定 `BookItem`）、`BottomNav`
 
 状态集合：
 | 状态 | 归属 | 来源 |

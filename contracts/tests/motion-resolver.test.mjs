@@ -53,7 +53,7 @@ function matches(policyMatch, request) {
   return true;
 }
 
-function resolveMotion(request) {
+function resolveMotionWithDiagnostic(request) {
   const resolved = { ...request };
   if (resolved.fromShell === undefined && request.fromRoute !== undefined) {
     resolved.fromShell = routeShellByRouteId.get(request.fromRoute);
@@ -67,16 +67,20 @@ function resolveMotion(request) {
   });
   for (const policy of sorted) {
     if (matches(policy.match, resolved)) {
-      return policy.motionId;
+      return { motionId: policy.motionId };
     }
   }
-  return undefined;
+  return { diagnostic: "motion.policy.no-match" };
+}
+
+function resolveMotion(request) {
+  return resolveMotionWithDiagnostic(request).motionId;
 }
 
 // --- 测试用例 ---
 
 test("resolver 存在且可调用", () => {
-  const result = resolveMotion({ operation: "push" });
+  const result = resolveMotion({ operation: "push", containerRole: "appShell" });
   assert.ok(result, "resolveMotion({operation: push}) 应返回非 undefined");
 });
 
@@ -93,6 +97,15 @@ test("route pop 默认解析到 app.route.pop.backward", () => {
 test("main tab switch 解析到 tab.switch", () => {
   const result = resolveMotion({ operation: "tabSwitch", containerRole: "mainTabShell" });
   assert.equal(result, "tab.switch");
+});
+
+test("bookshelf cover/list in-place replace 解析到 bookshelf.view.switch", () => {
+  const result = resolveMotion({
+    operation: "replace",
+    containerRole: "mainTabShell",
+    sourceRole: "viewMode"
+  });
+  assert.equal(result, "bookshelf.view.switch");
 });
 
 test("bookshelf cover to reader 通过 fromRoute/toRoute 解析（resolver 内部查 shell）", () => {
@@ -226,9 +239,29 @@ test("高优先级 policy 优先于低优先级（bookshelf-cover-to-reader 优�
   assert.notEqual(generic, specific, "高优先级 policy 应解析到不同 motionId");
 });
 
-test("空 request 命中 priority=0 兜底 policy", () => {
-  const result = resolveMotion({});
-  assert.ok(result, "空 request 也应命中兜底 policy 返回非 undefined");
+test("unknown request returns undefined with a diagnostic instead of impersonating an interrupt MotionId", () => {
+  assert.equal(resolveMotion({}), undefined);
+  assert.deepEqual(resolveMotionWithDiagnostic({}), { diagnostic: "motion.policy.no-match" });
+  assert.equal(resolveMotion({ operation: "update", sourceRole: "interrupt", targetRole: "cancel" }), undefined);
+  assert.deepEqual(
+    resolveMotionWithDiagnostic({ operation: "update", sourceRole: "interrupt", targetRole: "cancel" }),
+    { diagnostic: "motion.policy.no-match" },
+  );
+});
+
+test("MR0 Reader control pilot family resolves by explicit semantic roles", () => {
+  const cases = [
+    [{ containerRole: "readerShell", operation: "enter", sourceRole: "controlLayer", targetRole: "controlHome" }, "reader.control.show"],
+    [{ containerRole: "readerShell", operation: "exit", sourceRole: "controlLayer", targetRole: "immersiveReading" }, "reader.control.hide"],
+    [{ containerRole: "readerShell", operation: "enter", sourceRole: "controlHome", targetRole: "quickPanel" }, "reader.quick.promote"],
+    [{ containerRole: "readerShell", operation: "tabSwitch", sourceRole: "moduleNav", targetRole: "quickPanel" }, "reader.module.switch"],
+    [{ containerRole: "readerShell", operation: "enter", sourceRole: "quickPanel", targetRole: "fullPanel" }, "reader.panel.expand"],
+    [{ containerRole: "readerShell", operation: "exit", sourceRole: "fullPanel", targetRole: "quickPanel" }, "reader.panel.collapse"],
+  ];
+  for (const [request, expected] of cases) {
+    assert.equal(resolveMotion(request), expected, JSON.stringify(request));
+    assert.deepEqual(resolveMotionWithDiagnostic(request), { motionId: expected });
+  }
 });
 
 test("resolver 返回的 motionId 都能在 MotionSpecRegistry 中找到对应 spec", () => {

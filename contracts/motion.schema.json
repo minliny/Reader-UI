@@ -8,7 +8,7 @@
   "$defs": {
     "MotionId": {
       "$ref": "#/properties/id",
-      "description": "MotionId 枚举的具名句柄，供 motion-policy.schema.json 等外部 schema 通过 motion.schema.json#/$defs/MotionId 引用，避免重复维护 93 个枚举值。实际定义见 properties.id。"
+      "description": "MotionId 枚举的具名句柄，供 motion-policy.schema.json 等外部 schema 通过 motion.schema.json#/$defs/MotionId 引用，避免重复维护 95 个枚举值。实际定义见 properties.id。"
     }
   },
   "required": [
@@ -74,6 +74,8 @@
         "reader.entry.actionToImmersive",
         "reader.entry.coverToImmersive",
         "reader.module.switch",
+        "reader.panel.collapse",
+        "reader.panel.expand",
         "reader.page.turn.next-prev",
         "reader.quick.promote",
         "reader.session.autoPage.start",
@@ -197,6 +199,7 @@
         "slideSheetUp",
         "scaleDialog",
         "matchedCoverToReader",
+        "sharedLayoutMorph",
         "pageTurn",
         "directDrag",
         "capsuleAnchorMove",
@@ -252,6 +255,61 @@
         ]
       }
     },
+    "trigger": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "触发该动效事务的语义事件。canonical exact family 分批结构化；其余 MotionId 后续逐族补齐。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "from": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "允许进入事务的来源状态集合。状态名表达产品语义，不表达 DOM/CSS 实现。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "to": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "事务目标状态集合。动态目标使用稳定的语义占位符，例如 quickPanel.target。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "interrupt": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "可打断当前事务的语义事件集合；处理方式由 interruptPolicy 决定。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "finalState": {
+      "type": "string",
+      "minLength": 1,
+      "description": "正常完成、打断收束或 reduced-motion 降级后必须唯一落到的稳定终态。"
+    },
+    "cleanup": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "description": "事务结束前必须执行的语义清理动作；不得包含平台或 DOM 私有 API。",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "deprecated": {
       "type": "boolean",
       "default": false
@@ -271,5 +329,118 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "id": {
+            "enum": [
+              "app.firstOpen.enter",
+              "app.route.push.forward",
+              "app.route.pop.backward",
+              "app.route.replace",
+              "bookshelf.view.switch",
+              "button.activate",
+              "toggle.switch",
+              "chip.item.select",
+              "destructive.confirm.commit",
+              "filter.apply.commit",
+              "filter.item.toggle",
+              "slider.drag.start",
+              "slider.drag.update",
+              "slider.drag.release",
+              "stepper.press",
+              "stepper.value.change",
+              "card.press",
+              "card.select",
+              "card.route",
+              "listRow.select",
+              "tab.item.press",
+              "tab.item.select",
+              "tab.item.switch",
+              "tab.switch",
+              "segment.item.switch",
+              "dropdown.trigger.press",
+              "dropdown.menu.expand",
+              "dropdown.menu.collapse",
+              "dropdown.menu.reposition",
+              "dropdown.option.press",
+              "dropdown.option.select",
+              "reader.entry.coverToImmersive",
+              "reader.entry.actionToImmersive",
+              "reader.page.turn.next-prev",
+              "reader.chapter.jump",
+              "reader.control.handle.press",
+              "reader.control.handle.drag",
+              "reader.control.handle.release",
+              "reader.control.dock.longPress",
+              "reader.control.dock.drag",
+              "reader.control.dock.release",
+              "reader.control.dock.rebound",
+              "reader.session.tts.start",
+              "reader.session.autoPage.start",
+              "reader.session.capsule.enter",
+              "reader.session.capsule.update",
+              "reader.session.capsule.control.press-toggle",
+              "reader.session.capsule.countdownTick",
+              "reader.session.capsule.voiceIcon.active",
+              "reader.session.capsule.switch",
+              "reader.session.capsule.exit",
+              "viewport.orientation.prepare",
+              "viewport.orientation.reshape",
+              "viewport.orientation.settle",
+              "motion.interrupt.cancel",
+              "motion.interrupt.redirect",
+              "motion.interrupt.completeThenReplace",
+              "source.switch.route.push",
+              "source.switch.route.pop",
+              "source.switch.route.replace",
+              "overlay.sheet.enter",
+              "overlay.sheet.exit",
+              "overlay.dialog.enter",
+              "overlay.dialog.exit",
+              "overlay.keyboard.enter-exit",
+              "state.loading.inline",
+              "feedback.toast.enter",
+              "feedback.toast.update",
+              "feedback.toast.exit",
+              "input.focus",
+              "input.blur",
+              "input.clear",
+              "input.focus-blur",
+              "input.submit",
+              "search.state.replace",
+              "state.content.replace",
+              "selection.group.toggle",
+              "selection.item.toggle",
+              "selection.option.toggle",
+              "selection.range.show",
+              "selection.toolbar.action",
+              "selection.toolbar.exit",
+              "tooling.mode.switch",
+              "reader.control.show",
+              "reader.control.hide",
+              "reader.quick.promote",
+              "reader.module.switch",
+              "reader.panel.expand",
+              "reader.panel.collapse"
+            ]
+          }
+        },
+        "required": ["id"]
+      },
+      "then": {
+        "properties": {
+          "trigger": {},
+          "from": {},
+          "to": {},
+          "interrupt": {},
+          "finalState": {},
+          "cleanup": {}
+        },
+        "required": ["trigger", "from", "to", "interrupt", "finalState", "cleanup"]
+      }
+    }
+  ]
 }

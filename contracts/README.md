@@ -29,10 +29,13 @@ Native UI
 - [CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) —— 2.1 以前的历史迁移规划
 - [ACCEPTANCE.md](./ACCEPTANCE.md) —— §10 合并门槛 7 问逐项回答
 - [COMPLETE_APP_CLOSURE_WORKBREAKDOWN.md](./COMPLETE_APP_CLOSURE_WORKBREAKDOWN.md) —— Reader UI / Core / 三端拆分后的闭环工作单
+- [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md) —— 区分当前合同全量与项目能力全量；Slice 9–12 已升级为正式跨仓施工范围
+- [SLICE_PLAN.md](./SLICE_PLAN.md) / [PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md) —— Slice 0–12 依赖、三端交付物与 evidence 门禁
+- [design-delta.schema.json](./design-delta.schema.json) —— 冻结 Figma 批次、影响集、兼容策略、四端证据与发布事务的机器校验入口
 
 ## 已交付清单
 
-### Schema（17 个）
+### Schema（21 个）
 
 | 阶段 | Schema | 说明 |
 |---|---|---|
@@ -41,31 +44,40 @@ Native UI
 | Phase 1 收尾 | state-rule | 状态归属与转移约束（5 种 kind） |
 | Phase 1-2 Motion Runtime | motion-policy | MotionPolicy 规则表 + ReaderMotionResolver 输入契约 |
 | R18 device conformance | device-conformance-plan / device-conformance-evidence | Host58 三端逐项计划、可信 release/device/artifact 证据与 fail-closed 验证 |
+| Platform slice evidence | platform-evidence-manifest | Slice 0–12 三端登记、可信 release identity、测试/artifact/gate 与 `passed` fail-closed |
+| Reader 2 Appearance | appearance | 主题、字体、选择项和步进器的单一跨端配置源 |
+| Design intake | design-delta | 冻结 Figma revision、D0-D4 影响集、兼容/回滚、Host 证据和发布要求 |
+| Product capability | product-capability | 项目能力到 Figma、Reader-UI、Core/Host、原生 Host 的分层交付与验收状态 |
 
-### Fixtures（1233 项）
+### Fixtures（1329 项）
 
-- Phase 1：route 235 / ui-event 155 / ui-state 43 / view-state 165 / motion 93 / token 262
+- Phase 1：route 260 / ui-event 185 / ui-state 43 / view-state 190 / motion 95 / token 269
 - Phase 2：core-command 48 / core-event 35 / host-request 58 / host-result 58 / progress-location 6 / content 3 / sync-conflict 6
 - Phase 1 收尾：state-rule 16
-- Phase 1-2 Motion Runtime：motion-policy 50
+- Phase 1-2 Motion Runtime：motion-policy 53
+- Reader 2 Appearance：appearance 1
+- Design intake：design-delta 1
+- Product capability：product-capability 1（24 个能力条目）
+- Platform slice evidence：platform-evidence-manifest 1（Slice 0–12 空白登记模板，不是执行证据）
 
-Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链路
-（AppShell / main tabs / bookshelf→reader / reader overlay / session·focus / RSS·source·search / sync·conflict·offline）。
+Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个优先链路
+（AppShell / main tabs / bookshelf→reader / reader overlay / session·focus / RSS·source·search / sync·conflict·offline）；platform evidence template 另以 exact-set 登记正式 Slice 0–12，但不增加任何平台完成分子。
 
-### Generated（45 个 =（14 个 native-codegen contract + ScreenGraph）× 3 端）
+### Generated（48 个 =（15 个 native-codegen contract + ScreenGraph）× 3 端）
 
-17 个 contract schema 中，R18 的 2 个 device-conformance schema 与 host-result 是验证/证据边界；当前原生 enum/model codegen 仍以 14 个既有 contract schema 加 ScreenGraph 为输入。
+21 个 contract schema 中，R18 的 2 个 device-conformance schema、platform-evidence-manifest、host-result、design-delta 与 product-capability 是验证/证据边界；当前原生 enum/model codegen 仍以 15 个 contract schema（含 Reader 2 AppearanceSpec）加 ScreenGraph 为输入。
 
-- `generated/swift/` —— 15 个 .swift 文件
-- `generated/kotlin/` —— 15 个 .kt 文件
-- `generated/arkts/` —— 15 个 .ets 文件
-- `Motion.*` 包含 93 条 canonical motion fixtures 的 registry。
-- `MotionPolicy.*` 包含 50 条 policy、`RouteShellLookup`、registry 与 resolver。
-- `Token.*` 包含 262 条 token fixtures 的 registry。
+- `generated/swift/` —— 16 个 .swift 文件
+- `generated/kotlin/` —— 16 个 .kt 文件
+- `generated/arkts/` —— 16 个 .ets 文件
+- `Motion.*` 包含 95 条 canonical motion fixtures 的 registry；89 个当前生产 MotionId 已带精确结构化状态机字段，其余 6 个严格限定为 3 个 contract-reserved `controlSpace.*` 与 3 个 deprecated 兼容 ID。
+- `MotionPolicy.*` 包含 53 条显式 policy、`RouteShellLookup`、registry、带 no-match diagnostic 的 resolver；未知请求不再映射到 interrupt fallback。
+- `Token.*` 包含 269 条 token fixtures 的 registry。
+- `Appearance.*` 与 `frontend-demo-optimized/appearance-spec.js` 由同一 fixture 生成，承载 Reader 2 的主题、字体、选择项和步进器配置。
 
 入口：`node tools/codegen/generate.mjs`，无本机绝对路径依赖，可重复生成。
 
-### Tests（374 项 / 0 fail）
+### Tests（以 `npm test` 当前输出为准）
 
 | 测试文件 | 项数 | 覆盖 |
 |---|---|---|
@@ -74,33 +86,37 @@ Slice 覆盖：fixtures 按 `_comment` 标注 Slice 1-6，覆盖 6 个优先链�
 | phase1-slice.test.mjs | 40 | 6 个优先链路 Slice 1-6 覆盖 + 过渡连续性 |
 | state-rule.test.mjs | — | StateRule schema + fixtures + 关键规则 |
 | codegen-consistency.test.mjs | — | 三端 generated enum 一致性 + drift check |
-| codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 45 个 generated 文件幂等性 |
-| screen-graph.test.mjs | 30 | 235-route graph、36 executable bindings / 19 state evidence / 6 action gaps、三语言 registry 与 fail-closed |
+| codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 48 个 generated 文件幂等性 |
+| screen-graph.test.mjs | 33 | 260-route graph、97 canonical bindings（38 executable runtime payload + 59 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
 | device-conformance-kit.test.mjs | 9 | 三端 174 项计划、可信 identity/artifact、低 tier/伪证据拒绝 |
-| registry-codegen.test.mjs | 6 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
-| motion-policy.test.mjs | 13 | MotionPolicy schema / fixtures / motionId 引用 / operation 覆盖 / fallback / 示例 policy |
-| motion-resolver.test.mjs | 23 | ReaderMotionResolver route、tab、overlay、reader surface、drag、session、orientation、优先级与纯函数行为 |
+| registry-codegen.test.mjs | 8 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
+| motion-policy.test.mjs | 14 | MotionPolicy schema / fixtures / motionId 引用 / operation 覆盖 / no-match diagnostic / 示例 policy |
+| motion-resolver.test.mjs | 28 | ReaderMotionResolver route、tab、overlay、reader surface、drag、session、orientation、优先级、no-match diagnostic 与纯函数行为 |
 | demo-consistency.test.mjs | 6 | frontend-demo-optimized 与 schema 一致性 baseline + explicit exception policy |
 | matrix-coverage.test.mjs | 5 | P0 route token/motion matrix + MotionId / token group 引用一致性 |
-| motion-guard.test.mjs | 15 | 40 个 P0 MotionId + 84 个 schema MotionId fixture、token refs、guardRules、6 个结构化字段完整性 |
+| motion-guard.test.mjs | 19 | 47 个 P0 MotionId + 95 个 schema MotionId fixture、token refs、guardRules、89 个 active MotionId 的结构化状态机字段与 6 个非生产豁免 exact-set |
 | token-group.test.mjs | 5 | TOKEN_SPEC 语义分组、fixtures 引用、route token group 一致性 |
 | core-host-boundary.test.mjs | 4 | Core/Host 边界域归属、UiEvent/CoreCommand/HostRequest schema 引用一致性 |
+| design-delta.test.mjs | 5 | frozen revision、精确合同引用、D3/D4 milestone、wire migration 与安全路径 |
+| product-capability-coverage.test.mjs | 5 | 24 项产品能力分母、Route/UiEvent 引用、四层状态与证据边界 |
+| platform-evidence-manifest.test.mjs | 6 | Slice 0–12 exact-set、三端模板、canonical route、依赖 DAG、template 防冒充与 execution `passed` fail-closed |
+| planning-consistency.test.mjs | 8 | 规划分母、Slice 3/7、正式 Slice 9–12、evidence/README/ACCEPTANCE 与 Figma VC/MR 口径防漂移 |
 
 ### Demo 一致性校验
 
 - 脚本：`frontend-demo-optimized/verify/contract/verify-demo-contract-consistency.mjs`
 - Baseline：`frontend-demo-optimized/verify/contract/demo-contract-baseline.json`
 - Exception policy：`frontend-demo-optimized/verify/contract/demo-contract-exceptions.json`
-- 当前 baseline：found=521 / unknown=106 / approved=106 / unapproved=0
-- 策略：route/token unknown 必须为 0；motion unknown 必须是 explicit alias/deprecated/exception，否则脚本失败。当前不是 0 drift，后续 schema/demo 收敛时应递减 exception 清单。
+- 当前统计以校验脚本生成的 baseline 与 machine report 为准，不在说明文档中固化易漂移计数。
+- 策略：route/token unknown 必须为 0；motion unknown 必须是 explicit alias/deprecated/exception，否则脚本失败。当前 machine report 的 unapproved unknown 为 0；批准过的 alias/deprecated/exception 仍按清单独立维护。
 
 ## 目录结构
 
 ```text
 contracts/
-  *.schema.json          # 17 个契约 schema
-  fixtures/              # 1233 项 fixtures
-  tests/                 # 26 个测试文件 + validate.mjs
+  *.schema.json          # 21 个契约 schema
+  fixtures/              # 1329 项可被 schema 扫描的 fixtures
+  tests/                 # 30 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 

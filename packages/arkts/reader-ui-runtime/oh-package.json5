@@ -1,6 +1,6 @@
 {
   "name": "reader_ui_runtime",
-  "version": "2.5.1",
+  "version": "3.0.0",
   "description": "Executable Reader UI state machine and effect descriptors",
   "main": "src/main/ets/Index.ets",
   "author": "Reader",

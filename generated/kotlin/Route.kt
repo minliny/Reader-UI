@@ -197,6 +197,8 @@ enum class RouteId {
     GlobalSettings,
     @SerialName("settings-general")
     SettingsGeneral,
+    @SerialName("settings-developer")
+    SettingsDeveloper,
     @SerialName("bookshelf-search-settings")
     BookshelfSearchSettings,
     @SerialName("about-feedback")
@@ -476,7 +478,55 @@ enum class RouteId {
     @SerialName("import-partial-success")
     ImportPartialSuccess,
     @SerialName("import-result-detail")
-    ImportResultDetail
+    ImportResultDetail,
+    @SerialName("onboarding-welcome")
+    OnboardingWelcome,
+    @SerialName("onboarding-capability-setup")
+    OnboardingCapabilitySetup,
+    @SerialName("permission-recovery")
+    PermissionRecovery,
+    @SerialName("local-format-support")
+    LocalFormatSupport,
+    @SerialName("pdf-reader")
+    PdfReader,
+    @SerialName("manga-reader")
+    MangaReader,
+    @SerialName("http-tts-management")
+    HttpTtsManagement,
+    @SerialName("http-tts-editor")
+    HttpTtsEditor,
+    @SerialName("http-tts-test")
+    HttpTtsTest,
+    @SerialName("content-edit")
+    ContentEdit,
+    @SerialName("book-cover-change")
+    BookCoverChange,
+    @SerialName("book-cover-search")
+    BookCoverSearch,
+    @SerialName("chapter-reviews")
+    ChapterReviews,
+    @SerialName("bookmarks-manager")
+    BookmarksManager,
+    @SerialName("download-queue")
+    DownloadQueue,
+    @SerialName("download-task-detail")
+    DownloadTaskDetail,
+    @SerialName("storage-management")
+    StorageManagement,
+    @SerialName("webview-login")
+    WebviewLogin,
+    @SerialName("webview-captcha")
+    WebviewCaptcha,
+    @SerialName("webview-challenge")
+    WebviewChallenge,
+    @SerialName("webview-cookie-return")
+    WebviewCookieReturn,
+    @SerialName("settings-tts")
+    SettingsTts,
+    @SerialName("settings-storage")
+    SettingsStorage,
+    @SerialName("settings-accessibility")
+    SettingsAccessibility
 }
 
 @Serializable

@@ -1,6 +1,6 @@
 # Executable UI Runtime
 
-状态：2.5.1 已同步 61-action runtime 与三端 35-event consumer allowlist；7 events 为 Pilot，28 events 保持 Shadow，其余 26 actions 仅 staging
+状态：Reader-UI Contract head 为 3.0.0；63-action runtime 表未变。三个 Host consumer lock 仍为 2.5.1，覆盖 35 events（7 Pilot / 28 Shadow），其余 28 actions 仅 staging
 日期：2026-07-12
 权威架构：[contracts/ARCHITECTURE.md](./contracts/ARCHITECTURE.md)
 
@@ -93,9 +93,9 @@ runtime 立即进入 `immersive-reading`、进入 loading，并以同一 correla
 
 ## 5. 当前覆盖与迁移阶段
 
-当前 2.5.1 action table 包含 61 条 action，覆盖 P0 navigation、main tab、overlay、reader enter/exit/page、TTS/auto-page 互斥、reduced motion、source switch、sync/WebDAV、result-dependent `book.open` 编排，以及 W1/W3/W4/W5/RSS/Sync 的 Core/Host effect plan。三端 consumer lock 已统一到 2.5.1 / HostRequest schema 1.2.0 / runtime hash `0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c`。35 条 covered event 中，directory 2 + `book.open` 1 + TTS 2 + auto-page 2 为 Pilot；page 2 + import 3 + source-switch 6 + replace 3 + RSS 7 + Sync 7 共 28 条保持 Shadow。剩余 26 条 action 仅 staging，不能计入生产接线。
+Reader-UI 3.0.0 继续发布同一张 63-action table，覆盖 P0 navigation、main tab、overlay、reader enter/exit/page、TTS/auto-page 互斥、reduced motion、source switch、sync/WebDAV、result-dependent `book.open` 编排，以及 W1/W3/W4/W5/RSS/Sync 的 Core/Host effect plan。三个 Host consumer lock 仍停在 2.5.1，不能据此宣称 Host 已消费 Reader-UI 3.0.0。35 条 covered event 中，directory 2 + `book.open` 1 + TTS 2 + auto-page 2 为 Pilot；page 2 + import 3 + source-switch 6 + replace 3 + RSS 7 + Sync 7 共 28 条保持 Shadow。剩余 28 条 action 仅 staging，不能计入生产接线。
 
-generated/runtime-coverage.json 是 270 条 canonical UiEvent 的强制 ownership 报告：当前 61 条已实现、202 条 runtime/split planned、7 条原生 ephemeral。它由 ui-spec/runtime-ownership.json 生成；canonical event 数或 action 数变化会使 release gate 失败，直到 ownership 和覆盖预期被显式更新。
+generated/runtime-coverage.json 是 300 条 canonical UiEvent 的强制 ownership 报告：当前 63 条已实现、230 条 runtime/split planned、7 条原生 ephemeral。新增的 30 条项目能力事件全部处于 planned/fail-closed，没有运行时 action。该报告由 ui-spec/runtime-ownership.json 生成；canonical event 数或 action 数变化会使 release gate 失败，直到 ownership 和覆盖预期被显式更新。
 
 这不是全量 UiEvent 覆盖。Host 迁移采用以下 gate：
 
@@ -110,7 +110,7 @@ R8 的首个 Pilot 是 reader.directory.open 与 reader.directory.close 成对 c
 
 ### 5.1 Lossless typed payload/result 与 Core compatibility 纵切
 
-R14.1 已为 61/61 actions 定义严格 lossless payload contract，并提供 170 个 payload fixtures、70 个 result mappings 与 142 个 result fixtures；reference、Swift、Kotlin、ArkTS 对 nested object/array/null/number/bool 使用同一语义，unknown field、unsafe integer、错误 effect variant 均 fail closed。61 条按责任分为 23 internal、20 Core、10 composite、8 runtime-owned。以下表格保留最早的 13 条 Core compatibility 纵切，rollout 仍保持 Shadow；typed 校验通过不等于 Host 已切换为 Pilot 或 Authoritative：
+R14.1 已为 63/63 actions 定义严格 lossless payload contract，并提供 170 个 payload fixtures、73 个 result mappings 与 154 个 result fixtures；reference、Swift、Kotlin、ArkTS 对 nested object/array/null/number/bool 使用同一语义，unknown field、unsafe integer、错误 effect variant 均 fail closed。63 条按责任分为 25 internal、20 Core、10 composite、8 runtime-owned。以下表格保留最早的 13 条 Core compatibility 纵切，rollout 仍保持 Shadow；typed 校验通过不等于 Host 已切换为 Pilot 或 Authoritative：
 
 | UiEvent | CoreCommand | 关键 fail-closed 约束 |
 | --- | --- | --- |

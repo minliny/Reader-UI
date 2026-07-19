@@ -9,11 +9,12 @@
 node tools/codegen/generate.mjs
 ```
 
-当前产物（VERSION.json 2.2.0）：14 个 .ets 文件
+当前产物（VERSION.json 3.0.0）：16 个 .ets 文件
 
-- Route.ets / UiEvent.ets / UiState.ets / ViewState.ets / Motion.ets / Token.ets
+- Route.ets / UiEvent.ets / UiState.ets / ViewState.ets / Motion.ets / Token.ets / Appearance.ets
 - CoreCommand.ets / CoreEvent.ets / HostRequest.ets / ProgressLocation.ets / Content.ets / SyncConflict.ets
 - StateRule.ets / MotionPolicy.ets
+- ScreenGraph.ets
 
 规则：
 

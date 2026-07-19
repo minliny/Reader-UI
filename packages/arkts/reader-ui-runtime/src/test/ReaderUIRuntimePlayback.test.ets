@@ -136,6 +136,8 @@ export default function ReaderUIRuntimePlaybackTests(): void {
         'pageIndex': 3
       }
       expect(runtime.acceptPageLocationJSONResult('json-result', result).accepted).assertTrue()
+      expect(runtime.state.readerPageIndex).assertEqual(2)
+      expect(runtime.acceptPageProgressJSONResult('json-result', { 'stored': true }).accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(3)
       expect(runtime.state.readerCanonicalLocation).assertEqual('chapter-4:p3')
 
@@ -158,7 +160,7 @@ export default function ReaderUIRuntimePlaybackTests(): void {
 
     it('generated typed payload fixtures have exact parity', 0, (): void => {
       expect(GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.length).assertEqual(170)
-      expect(Object.keys(GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS).length).assertEqual(61)
+      expect(Object.keys(GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS).length).assertEqual(63)
       GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.forEach((fixture: RuntimeTypedPayloadFixture): void => {
         if (fixture.valid) {
           expect(validateReaderUITypedPayload(fixture.event, fixture.payload) !== undefined).assertTrue()
@@ -175,7 +177,7 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('generated typed result fixtures have exact parity', 0, (): void => {
-      expect(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.length).assertEqual(142)
+      expect(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.length).assertEqual(154)
       GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.forEach((fixture: RuntimeTypedResultFixture): void => {
         if (fixture.valid) {
           expect(validateReaderUITypedResult(fixture.event, fixture.effectType, fixture.result).effectKind.length > 0)
@@ -234,10 +236,117 @@ export default function ReaderUIRuntimePlaybackTests(): void {
 
       runtime.dispatch('reader.page.prev', {}, 'page-2')
       runtime.providePageLayout('page-2', measuredPageLayout(3))
-      expect(runtime.acceptPageLocationResult('page-2', 'canonical-ch4-p3', 3).accepted).assertTrue()
+      const persisting = runtime.acceptPageLocationResult('page-2', 'canonical-ch4-p3', 3)
+      expect(persisting.accepted).assertTrue()
+      expect(effectTypes(persisting.effects)).assertEqual('reader.progress.update')
+      expect(Object.keys(persisting.effects[0].jsonPayload).length).assertEqual(0)
+      expect(runtime.state.pageTransaction?.stage).assertEqual('persisting-progress')
+      expect(runtime.state.readerPageIndex).assertEqual(4)
+      let pageBlockedCode: string = ''
+      try {
+        runtime.dispatch('reader.page.next', {}, 'page-blocked')
+      } catch (error) {
+        pageBlockedCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(pageBlockedCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      let autoBlockedCode: string = ''
+      try {
+        runtime.dispatch('reader.autoPage.start', { 'intervalMs': '4000' }, 'auto-blocked')
+      } catch (error) {
+        autoBlockedCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(autoBlockedCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      let cancelBlockedCode: string = ''
+      try {
+        runtime.cancelPageStep('page-2')
+      } catch (error) {
+        cancelBlockedCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(cancelBlockedCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      expect(runtime.acceptPageProgressResult('page-2', true).accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(3)
       expect(runtime.state.readerCanonicalLocation).assertEqual('canonical-ch4-p3')
       expect(runtime.acceptPageLocationResult('page-2', 'duplicate', 9).accepted).assertFalse()
+
+      runtime.dispatch('reader.page.next', {}, 'page-progress-error')
+      runtime.providePageLayout('page-progress-error', measuredPageLayout(4))
+      runtime.acceptPageLocationResult('page-progress-error', 'canonical-ch4-p4', 4)
+      expect(runtime.acceptPageProgressResult(
+        'page-progress-error',
+        undefined,
+        'PROGRESS_STORE_FAILED'
+      ).accepted).assertTrue()
+      expect(runtime.state.readerPageIndex).assertEqual(3)
+      expect(runtime.state.readerCanonicalLocation).assertEqual('canonical-ch4-p3')
+      expect(runtime.state.error).assertEqual('PROGRESS_STORE_FAILED')
+    })
+
+    it('progress commit boundary blocks exit and book replacement without cross-route contamination', 0, (): void => {
+      const runtime: ReaderUIRuntime = activeReaderRuntime(2, 'book-a-page-2')
+      runtime.dispatch('reader.page.next', {}, 'page-boundary')
+      runtime.providePageLayout('page-boundary', measuredPageLayout(3))
+      runtime.acceptPageLocationResult('page-boundary', 'book-a-page-3', 3)
+
+      let exitCode: string = ''
+      try {
+        runtime.dispatch('reader.exit')
+      } catch (error) {
+        exitCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(exitCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      let bookCode: string = ''
+      try {
+        runtime.dispatch(
+          'book.open',
+          { 'bookId': 'book-b', 'sourceId': 'source-b', 'sourceKind': 'remote' },
+          'open-book-b'
+        )
+      } catch (error) {
+        bookCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(bookCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      let routeCode: string = ''
+      try {
+        runtime.dispatch('route.replace', { 'routeId': 'bookshelf' })
+      } catch (error) {
+        routeCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(routeCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      let popCode: string = ''
+      try {
+        runtime.dispatch('route.pop')
+      } catch (error) {
+        popCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(popCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      let tabCode: string = ''
+      try {
+        runtime.dispatch('mainTab.select', { 'tab': 'settings' })
+      } catch (error) {
+        tabCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(tabCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
+      expect(runtime.state.routeId).assertEqual('immersive-reading')
+      expect(runtime.state.pageTransaction?.correlationId).assertEqual('page-boundary')
+      expect(runtime.state.readerPageIndex).assertEqual(2)
+
+      expect(runtime.acceptPageProgressResult('page-boundary', true).accepted).assertTrue()
+      const opened = runtime.dispatch(
+        'book.open',
+        { 'bookId': 'book-b', 'sourceId': 'source-b', 'sourceKind': 'remote' },
+        'open-book-b'
+      )
+      expect(opened.state.bookOpenTransaction?.correlationId).assertEqual('open-book-b')
+      let pageDuringOpenCode: string = ''
+      try {
+        runtime.dispatch('reader.page.next', {}, 'book-open-page')
+      } catch (error) {
+        pageDuringOpenCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(pageDuringOpenCode).assertEqual('BOOK_OPEN_TRANSACTION_PENDING')
+      expect(runtime.acceptPageProgressResult('page-boundary', true).accepted).assertFalse()
+      expect(runtime.state.readerPageIndex).assertEqual(3)
+      expect(runtime.state.readerCanonicalLocation).assertEqual('book-a-page-3')
     })
 
     it('tts advances plan queue speech exactly once and tears down in order', 0, (): void => {
@@ -288,7 +397,10 @@ export default function ReaderUIRuntimePlaybackTests(): void {
       expect(runtime.acceptAutoPageTimerFired('auto-1', generation).accepted).assertFalse()
       const pageCorrelation: string = runtime.state.pageTransaction?.correlationId ?? ''
       runtime.providePageLayout(pageCorrelation, measuredPageLayout(2))
-      const committed = runtime.acceptPageLocationResult(pageCorrelation, 'page-2', 2)
+      const persisting = runtime.acceptPageLocationResult(pageCorrelation, 'page-2', 2)
+      expect(effectTypes(persisting.effects)).assertEqual('reader.progress.update')
+      expect(runtime.state.readerPageIndex).assertEqual(1)
+      const committed = runtime.acceptPageProgressResult(pageCorrelation, true)
       expect(effectTypes(committed.effects)).assertEqual(READER_FOREGROUND_TIMER_ARM)
 
       const beforeManualGeneration: number = runtime.state.playbackGeneration ?? 0
@@ -379,6 +491,42 @@ export default function ReaderUIRuntimePlaybackTests(): void {
         'open-good'
       )
       expect(effectTypes(opened.effects)).assertEqual('tts.system.stop,tts.queue.stop,source.detail')
+    })
+
+    it('reader control and module actions are atomic route stable and fail closed', 0, (): void => {
+      const runtime: ReaderUIRuntime = activeReaderRuntime()
+      const routeBefore: string = runtime.state.routeId
+      const opened = runtime.dispatch('reader.control.toggle', { 'overlay': 'reader-control' })
+      expect(opened.state.overlay).assertEqual('reader-control')
+      expect(opened.state.routeId).assertEqual(routeBefore)
+      expect(opened.effects.length).assertEqual(0)
+
+      runtime.dispatch('reader.module.switch', { 'module': 'directory' })
+      expect(runtime.state.overlay).assertEqual('directory')
+      runtime.dispatch('reader.module.switch', { 'module': 'directory' })
+      expect(runtime.state.overlay).assertEqual('directory')
+      runtime.dispatch('reader.module.switch', { 'module': 'appearance' })
+      expect(runtime.state.overlay).assertEqual('appearance')
+      runtime.dispatch('reader.control.toggle', { 'overlay': 'reader-control' })
+      expect(runtime.state.overlay === undefined).assertTrue()
+      expect(runtime.state.routeId).assertEqual(routeBefore)
+
+      let failureCode: string = ''
+      try {
+        runtime.dispatch('reader.module.switch', { 'module': 'tts' })
+      } catch (error) {
+        failureCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(failureCode).assertEqual('READER_CONTROL_OVERLAY_GUARD')
+
+      const outsideReader: ReaderUIRuntime = new ReaderUIRuntime()
+      failureCode = ''
+      try {
+        outsideReader.dispatch('reader.control.toggle', { 'overlay': 'reader-control' })
+      } catch (error) {
+        failureCode = (error as ReaderUIRuntimeError).code
+      }
+      expect(failureCode).assertEqual('READER_ROUTE_GUARD')
     })
   })
 }

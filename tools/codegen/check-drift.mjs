@@ -21,6 +21,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "..", "..");
 const GENERATED_DIR = join(REPO_ROOT, "generated");
 const CODEGEN_DIR = join(REPO_ROOT, "tools", "codegen");
+const WEB_APPEARANCE_SPEC = join(REPO_ROOT, "frontend-demo-optimized", "appearance-spec.js");
 
 function hashDir(dir) {
   if (!existsSync(dir)) return {};
@@ -39,6 +40,11 @@ function hashDir(dir) {
   for (const f of files.sort()) {
     const rel = f.replace(GENERATED_DIR + "/", "");
     hashes[rel] = createHash("sha256").update(readFileSync(f)).digest("hex");
+  }
+  if (existsSync(WEB_APPEARANCE_SPEC)) {
+    hashes["web/appearance-spec.js"] = createHash("sha256")
+      .update(readFileSync(WEB_APPEARANCE_SPEC))
+      .digest("hex");
   }
   return hashes;
 }

@@ -65,6 +65,16 @@ public struct MotionPolicyMatch: Codable, Equatable, Sendable {
 
 public typealias MotionRequest = MotionPolicyMatch
 
+public struct MotionResolution: Codable, Equatable, Sendable {
+    public let motionId: MotionId?
+    public let diagnostic: String?
+
+    public init(motionId: MotionId?, diagnostic: String? = nil) {
+        self.motionId = motionId
+        self.diagnostic = diagnostic
+    }
+}
+
 public struct MotionPolicy: Codable, Equatable, Sendable {
     public let id: String
     public let priority: Int
@@ -119,8 +129,8 @@ public enum MotionPolicyRegistry {
         ),
         MotionPolicy(
             id: "reader-module-switch",
-            priority: 200,
-            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.tabSwitch, sourceRole: nil, targetRole: nil, containerRole: MotionContainerRole.readerSurface, reducedMotion: nil),
+            priority: 320,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.tabSwitch, sourceRole: "moduleNav", targetRole: "quickPanel", containerRole: MotionContainerRole.readerShell, reducedMotion: nil),
             motionId: .reader_module_switch,
             deprecated: false
         ),
@@ -258,10 +268,38 @@ public enum MotionPolicyRegistry {
             deprecated: false
         ),
         MotionPolicy(
+            id: "reader-control-show",
+            priority: 320,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.enter, sourceRole: "controlLayer", targetRole: "controlHome", containerRole: MotionContainerRole.readerShell, reducedMotion: nil),
+            motionId: .reader_control_show,
+            deprecated: false
+        ),
+        MotionPolicy(
             id: "reader-control-hide",
-            priority: 300,
-            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.exit, sourceRole: "controlLayer", targetRole: nil, containerRole: MotionContainerRole.readerSurface, reducedMotion: nil),
+            priority: 320,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.exit, sourceRole: "controlLayer", targetRole: "immersiveReading", containerRole: MotionContainerRole.readerShell, reducedMotion: nil),
             motionId: .reader_control_hide,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "reader-quick-promote",
+            priority: 320,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.enter, sourceRole: "controlHome", targetRole: "quickPanel", containerRole: MotionContainerRole.readerShell, reducedMotion: nil),
+            motionId: .reader_quick_promote,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "reader-panel-expand",
+            priority: 320,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.enter, sourceRole: "quickPanel", targetRole: "fullPanel", containerRole: MotionContainerRole.readerShell, reducedMotion: nil),
+            motionId: .reader_panel_expand,
+            deprecated: false
+        ),
+        MotionPolicy(
+            id: "reader-panel-collapse",
+            priority: 320,
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.exit, sourceRole: "fullPanel", targetRole: "quickPanel", containerRole: MotionContainerRole.readerShell, reducedMotion: nil),
+            motionId: .reader_panel_collapse,
             deprecated: false
         ),
         MotionPolicy(
@@ -414,14 +452,7 @@ public enum MotionPolicyRegistry {
         MotionPolicy(
             id: "motion-interrupt-redirect",
             priority: 50,
-            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.update, sourceRole: "interrupt", targetRole: nil, containerRole: nil, reducedMotion: nil),
-            motionId: .motion_interrupt_redirect,
-            deprecated: false
-        ),
-        MotionPolicy(
-            id: "fallback-no-motion",
-            priority: 0,
-            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: nil, sourceRole: nil, targetRole: nil, containerRole: nil, reducedMotion: nil),
+            match: MotionPolicyMatch(fromRoute: nil, toRoute: nil, fromShell: nil, toShell: nil, operation: MotionOperation.update, sourceRole: "interrupt", targetRole: "redirect", containerRole: nil, reducedMotion: nil),
             motionId: .motion_interrupt_redirect,
             deprecated: false
         )
@@ -489,6 +520,7 @@ public enum RouteShellLookup {
         "settings": .mainTabShell,
         "global-settings": .settingsShell,
         "settings-general": .settingsShell,
+        "settings-developer": .settingsShell,
         "source-management": .settingsShell,
         "source-detail": .settingsShell,
         "source-edit": .settingsShell,
@@ -664,7 +696,31 @@ public enum RouteShellLookup {
         "reader-replace-apply-result": .readerShell,
         "reader-replace-import-export": .readerShell,
         "reader-replace-preview": .readerShell,
-        "reader-replace-page": .readerShell
+        "reader-replace-page": .readerShell,
+        "onboarding-welcome": .flowShell,
+        "onboarding-capability-setup": .flowShell,
+        "permission-recovery": .flowShell,
+        "local-format-support": .libraryShell,
+        "pdf-reader": .readerShell,
+        "manga-reader": .readerShell,
+        "http-tts-management": .settingsShell,
+        "http-tts-editor": .settingsShell,
+        "http-tts-test": .settingsShell,
+        "content-edit": .readerShell,
+        "book-cover-change": .libraryShell,
+        "book-cover-search": .libraryShell,
+        "chapter-reviews": .libraryShell,
+        "bookmarks-manager": .libraryShell,
+        "download-queue": .libraryShell,
+        "download-task-detail": .libraryShell,
+        "storage-management": .settingsShell,
+        "webview-login": .flowShell,
+        "webview-captcha": .flowShell,
+        "webview-challenge": .flowShell,
+        "webview-cookie-return": .flowShell,
+        "settings-tts": .settingsShell,
+        "settings-storage": .settingsShell,
+        "settings-accessibility": .settingsShell
     ]
 
     public static func shell(for routeId: String) -> RouteShell? {
@@ -673,7 +729,7 @@ public enum RouteShellLookup {
 }
 
 public enum ReaderMotionResolver {
-    public static func resolve(_ request: MotionRequest) -> MotionId? {
+    public static func resolveWithDiagnostic(_ request: MotionRequest) -> MotionResolution {
         var resolved = request
         if resolved.fromShell == nil, let fr = request.fromRoute {
             resolved.fromShell = RouteShellLookup.shell(for: fr)
@@ -687,9 +743,13 @@ public enum ReaderMotionResolver {
         }
         for policy in sorted {
             if policy.match.matches(resolved) {
-                return policy.motionId
+                return MotionResolution(motionId: policy.motionId)
             }
         }
-        return nil
+        return MotionResolution(motionId: nil, diagnostic: "motion.policy.no-match")
+    }
+
+    public static func resolve(_ request: MotionRequest) -> MotionId? {
+        resolveWithDiagnostic(request).motionId
     }
 }

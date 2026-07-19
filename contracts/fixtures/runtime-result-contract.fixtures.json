@@ -209,6 +209,43 @@
     }
   },
   {
+    "id": "reader-page-next-reader-progress-update-valid",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "stored": true
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-error",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "error": "PROGRESS_STORE_FAILED"
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-false",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": false
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-unknown",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "__unknown": true
+    }
+  },
+  {
     "id": "reader-page-next-timer-foreground-cancel-valid",
     "event": "reader.page.next",
     "effectType": "timer.foreground.cancel",
@@ -249,6 +286,43 @@
     "result": {
       "canonicalLocation": "chapter:1:offset:0",
       "pageIndex": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-valid",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "stored": true
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-error",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "error": "PROGRESS_STORE_FAILED"
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-false",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": false
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-unknown",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": true,
       "__unknown": true
     }
   },
@@ -520,6 +594,43 @@
     "result": {
       "canonicalLocation": "chapter:1:offset:0",
       "pageIndex": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "stored": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-error",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "error": "PROGRESS_STORE_FAILED"
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-false",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": false
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": true,
       "__unknown": true
     }
   },

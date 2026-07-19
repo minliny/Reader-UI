@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "sourceOfTruth": {
     "repository": "Reader-Core-Native",
     "sources": [
@@ -1890,6 +1890,37 @@
         }
       }
     },
+    "readerControlTogglePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overlay"
+      ],
+      "properties": {
+        "overlay": {
+          "type": "string",
+          "const": "reader-control"
+        }
+      }
+    },
+    "readerModuleSwitchPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "module"
+      ],
+      "properties": {
+        "module": {
+          "type": "string",
+          "enum": [
+            "directory",
+            "tts",
+            "appearance",
+            "settings"
+          ]
+        }
+      }
+    },
     "bookOpenPayload": {
       "type": "object",
       "additionalProperties": false,
@@ -2208,6 +2239,26 @@
             },
             "pageIndex": {
               "$ref": "#/definitions/nonNegativeInteger"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/errorResult"
+        }
+      ]
+    },
+    "readerProgressUpdateResult": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "stored"
+          ],
+          "properties": {
+            "stored": {
+              "type": "boolean",
+              "const": true
             }
           }
         },
@@ -3442,6 +3493,32 @@
       "resultSchemas": []
     },
     {
+      "event": "reader.control.toggle",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "toggleReaderControl",
+      "descriptor": {
+        "action": "toggleReaderControl",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/readerControlTogglePayload"
+      },
+      "resultSchemas": []
+    },
+    {
+      "event": "reader.module.switch",
+      "dispatchTarget": "internal",
+      "runtimeOperation": "switchReaderModule",
+      "descriptor": {
+        "action": "switchReaderModule",
+        "coreSequence": []
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/readerModuleSwitchPayload"
+      },
+      "resultSchemas": []
+    },
+    {
       "event": "reader.directory.open",
       "dispatchTarget": "internal",
       "runtimeOperation": "setOverlay",
@@ -3661,7 +3738,8 @@
       "descriptor": {
         "action": "readerPageStep",
         "coreSequence": [
-          "reader.location.resolve"
+          "reader.location.resolve",
+          "reader.progress.update"
         ],
         "value": "1"
       },
@@ -3674,6 +3752,13 @@
           "effectKind": "core",
           "schema": {
             "$ref": "#/definitions/readerLocationResult"
+          }
+        },
+        {
+          "effectType": "reader.progress.update",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerProgressUpdateResult"
           }
         },
         {
@@ -3692,7 +3777,8 @@
       "descriptor": {
         "action": "readerPageStep",
         "coreSequence": [
-          "reader.location.resolve"
+          "reader.location.resolve",
+          "reader.progress.update"
         ],
         "value": "-1"
       },
@@ -3705,6 +3791,13 @@
           "effectKind": "core",
           "schema": {
             "$ref": "#/definitions/readerLocationResult"
+          }
+        },
+        {
+          "effectType": "reader.progress.update",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerProgressUpdateResult"
           }
         },
         {
@@ -3853,6 +3946,13 @@
           "effectKind": "core",
           "schema": {
             "$ref": "#/definitions/readerLocationResult"
+          }
+        },
+        {
+          "effectType": "reader.progress.update",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/readerProgressUpdateResult"
           }
         }
       ]

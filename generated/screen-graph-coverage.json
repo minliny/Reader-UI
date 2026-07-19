@@ -1,21 +1,21 @@
 {
-  "schemaVersion": "1.1.0",
-  "graphSha256": "c83fad4bf87a80a529d45f1ca6c2f0540ac37d084fd218efab22adc48e9de822",
-  "canonicalRoutes": 235,
-  "graphRoutes": 235,
-  "routeFixtureRoutes": 235,
-  "directRoutes": 159,
+  "schemaVersion": "1.2.0",
+  "graphSha256": "f1de99e9aa0139a537f4a7b94ce82e0207beaf74b2bcbf08f192deab0141d1b4",
+  "canonicalRoutes": 260,
+  "graphRoutes": 260,
+  "routeFixtureRoutes": 260,
+  "directRoutes": 184,
   "aliasRoutes": 76,
-  "resolvableRoutes": 235,
+  "resolvableRoutes": 260,
   "explicitGapRoutes": 0,
-  "viewStateFixtures": 165,
-  "variants": 165,
-  "componentInstances": 519,
+  "viewStateFixtures": 190,
+  "variants": 190,
+  "componentInstances": 615,
   "canonicalComponentTypes": 174,
   "componentCatalogTypes": 174,
-  "usedComponentTypes": 129,
-  "referencedComponentTypes": 129,
-  "explicitGapComponentTypes": 45,
+  "usedComponentTypes": 138,
+  "referencedComponentTypes": 138,
+  "explicitGapComponentTypes": 36,
   "unusedComponentTypes": [
     "SearchEntry",
     "SourceTypeSegment",
@@ -26,7 +26,6 @@
     "ShelfChipGroup",
     "RecentUpdateCard",
     "BookListItem",
-    "ProgressBar",
     "SubscriptionSummaryCard",
     "FeedStatusChips",
     "FeedSourceChips",
@@ -35,11 +34,9 @@
     "LocalOverviewCard",
     "QuickEntryGrid",
     "SettingsSection",
-    "SettingsListItem",
     "SearchResultList",
     "AddToShelfButton",
     "ReadButton",
-    "BookCover",
     "BookTitleAuthor",
     "SourceStatus",
     "DirectoryPreview",
@@ -49,25 +46,19 @@
     "Overlay",
     "Card",
     "Chip",
-    "Toggle",
-    "Slider",
     "Stepper",
     "Segment",
-    "Dropdown",
-    "Input",
     "FilterBar",
-    "WebView",
     "FloatingBrightness",
     "FloatingQuickActions",
     "SourceSettingsEntryPage",
-    "WebDavConfigPage",
-    "SourceFormPage"
+    "WebDavConfigPage"
   ],
   "componentFixtureEvidenceSummary": {
-    "data-backed": 63,
-    "explicit-gap": 45,
-    "type-only": 57,
-    "partial": 9
+    "data-backed": 72,
+    "explicit-gap": 36,
+    "type-only": 54,
+    "partial": 12
   },
   "componentFixtureEvidence": [
     {
@@ -87,7 +78,7 @@
       "type": "BackTopBar",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 89,
+      "instanceCount": 106,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "title"
@@ -333,7 +324,6 @@
       ],
       "childTypes": [
         "BookGrid",
-        "List",
         "ShelfSectionHeader"
       ],
       "executableBindings": 0,
@@ -357,7 +347,7 @@
       "type": "BookGrid",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 3,
+      "instanceCount": 4,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "viewMode"
@@ -372,13 +362,15 @@
       "type": "BookCard",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 12,
+      "instanceCount": 15,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "author",
         "bookId",
         "coverKey",
-        "title"
+        "semanticRole",
+        "title",
+        "viewMode"
       ],
       "childTypes": [],
       "executableBindings": 0,
@@ -397,11 +389,15 @@
     },
     {
       "type": "ProgressBar",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "completedChapters",
+        "totalChapters",
+        "value"
+      ],
       "childTypes": [],
       "executableBindings": 0,
       "stateEventEvidence": 0
@@ -633,12 +629,30 @@
     {
       "type": "SettingsGeneralPage",
       "catalogStatus": "referenced",
-      "evidenceClass": "type-only",
-      "instanceCount": 1,
+      "evidenceClass": "partial",
+      "instanceCount": 6,
       "typeOnlyInstanceCount": 1,
-      "propKeys": [],
-      "childTypes": [],
-      "executableBindings": 0,
+      "propKeys": [
+        "coreBasis",
+        "coreSupport",
+        "executionOwner",
+        "hostBasis",
+        "platformDifferenceRequired",
+        "playbackSupport",
+        "runtimeBasis",
+        "screenReaderAndTextScale",
+        "states",
+        "variant"
+      ],
+      "childTypes": [
+        "Button",
+        "Dropdown",
+        "ListRow",
+        "SettingsListItem",
+        "Slider",
+        "Toggle"
+      ],
+      "executableBindings": 4,
       "stateEventEvidence": 0
     },
     {
@@ -676,20 +690,26 @@
     },
     {
       "type": "SettingsListItem",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 5,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "availability",
+        "scope",
+        "summary",
+        "title",
+        "usedBytes"
+      ],
       "childTypes": [],
-      "executableBindings": 0,
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
       "type": "SearchInputBox",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 1,
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "query"
@@ -766,11 +786,15 @@
     },
     {
       "type": "BookCover",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "bookId",
+        "resultId",
+        "state"
+      ],
       "childTypes": [],
       "executableBindings": 0,
       "stateEventEvidence": 0
@@ -914,22 +938,30 @@
       "type": "TapZones",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 5,
+      "instanceCount": 7,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
-        "enabled"
+        "controlEnabled",
+        "controlRatio",
+        "enabled",
+        "mode",
+        "nextEnabled",
+        "nextRatio",
+        "previousEnabled",
+        "previousRatio"
       ],
       "childTypes": [],
-      "executableBindings": 0,
+      "executableBindings": 16,
       "stateEventEvidence": 0
     },
     {
       "type": "Loading",
       "catalogStatus": "referenced",
       "evidenceClass": "partial",
-      "instanceCount": 7,
+      "instanceCount": 9,
       "typeOnlyInstanceCount": 3,
       "propKeys": [
+        "label",
         "message",
         "title",
         "uiEvent",
@@ -1089,26 +1121,44 @@
       "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
+        "availability",
+        "coreSupport",
+        "executionOwner",
+        "hostBasis",
         "message",
+        "states",
         "title"
       ],
       "childTypes": [
+        "Button",
         "ListRow"
       ],
-      "executableBindings": 0,
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
       "type": "ListRow",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 2,
+      "instanceCount": 5,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "author",
-        "title"
+        "body",
+        "bookId",
+        "bookmarkId",
+        "chapterId",
+        "createdAt",
+        "label",
+        "name",
+        "progress",
+        "providerId",
+        "state",
+        "taskId"
       ],
-      "childTypes": [],
+      "childTypes": [
+        "Button"
+      ],
       "executableBindings": 0,
       "stateEventEvidence": 0
     },
@@ -1138,37 +1188,46 @@
       "type": "Button",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 33,
+      "instanceCount": 59,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "action",
+        "availability",
         "label",
         "uiEvent",
         "uiEventPayload",
         "uiEventTrigger"
       ],
       "childTypes": [],
-      "executableBindings": 31,
+      "executableBindings": 57,
       "stateEventEvidence": 0
     },
     {
       "type": "Toggle",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "label",
+        "value"
+      ],
       "childTypes": [],
-      "executableBindings": 0,
+      "executableBindings": 2,
       "stateEventEvidence": 0
     },
     {
       "type": "Slider",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "label",
+        "max",
+        "min",
+        "value"
+      ],
       "childTypes": [],
       "executableBindings": 0,
       "stateEventEvidence": 0
@@ -1197,22 +1256,28 @@
     },
     {
       "type": "Dropdown",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "label",
+        "value"
+      ],
       "childTypes": [],
       "executableBindings": 0,
       "stateEventEvidence": 0
     },
     {
       "type": "Input",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 1,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "multiline",
+        "value"
+      ],
       "childTypes": [],
       "executableBindings": 0,
       "stateEventEvidence": 0
@@ -1248,14 +1313,20 @@
       "type": "Content",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 4,
+      "instanceCount": 6,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
+        "imageCount",
+        "imageIndex",
         "message",
+        "page",
+        "pageCount",
+        "readingDirection",
         "title",
         "uiEvent",
         "uiEventPayload",
-        "uiEventTrigger"
+        "uiEventTrigger",
+        "zoom"
       ],
       "childTypes": [],
       "executableBindings": 0,
@@ -1263,40 +1334,63 @@
     },
     {
       "type": "WebView",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
+      "propKeys": [
+        "completionSignal",
+        "coreSupport",
+        "credentialCapture",
+        "hostBasis",
+        "profileId",
+        "requiresUiContext",
+        "state",
+        "states",
+        "url"
+      ],
       "childTypes": [],
-      "executableBindings": 0,
+      "executableBindings": 2,
       "stateEventEvidence": 0
     },
     {
       "type": "ReaderBase",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 47,
+      "instanceCount": 49,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
+        "availability",
+        "coreSupport",
+        "documentKind",
+        "executionOwner",
+        "hostBasis",
         "theme"
       ],
       "childTypes": [
+        "Content",
         "ReadingBackgroundLayer",
         "ReadingInfoLayer",
         "ReadingTextFlow",
         "TapZones"
       ],
-      "executableBindings": 0,
+      "executableBindings": 2,
       "stateEventEvidence": 0
     },
     {
       "type": "ReaderTopArea",
       "catalogStatus": "referenced",
-      "evidenceClass": "type-only",
-      "instanceCount": 45,
+      "evidenceClass": "partial",
+      "instanceCount": 48,
       "typeOnlyInstanceCount": 45,
-      "propKeys": [],
+      "propKeys": [
+        "documentKind",
+        "imageCount",
+        "imageIndex",
+        "page",
+        "pageCount",
+        "title"
+      ],
       "childTypes": [],
       "executableBindings": 0,
       "stateEventEvidence": 0
@@ -1327,18 +1421,23 @@
       "type": "ReaderDirectoryPanel",
       "catalogStatus": "referenced",
       "evidenceClass": "partial",
-      "instanceCount": 5,
+      "instanceCount": 6,
       "typeOnlyInstanceCount": 2,
       "propKeys": [
-        "phase"
+        "coreSupport",
+        "executionOwner",
+        "phase",
+        "syncDataBasis",
+        "tab"
       ],
       "childTypes": [
         "Button",
         "ErrorState",
+        "ListRow",
         "Loading",
         "Offline"
       ],
-      "executableBindings": 0,
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
@@ -1427,12 +1526,24 @@
     {
       "type": "ReaderBookCachePage",
       "catalogStatus": "referenced",
-      "evidenceClass": "type-only",
-      "instanceCount": 1,
+      "evidenceClass": "partial",
+      "instanceCount": 3,
       "typeOnlyInstanceCount": 1,
-      "propKeys": [],
-      "childTypes": [],
-      "executableBindings": 0,
+      "propKeys": [
+        "coreBasis",
+        "hostBasis",
+        "pauseOrCancelCoreSupport",
+        "platformDifferenceRequired",
+        "state",
+        "states",
+        "variant"
+      ],
+      "childTypes": [
+        "Button",
+        "ListRow",
+        "ProgressBar"
+      ],
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
@@ -1461,19 +1572,24 @@
       "type": "ReaderReplacePanel",
       "catalogStatus": "referenced",
       "evidenceClass": "partial",
-      "instanceCount": 6,
+      "instanceCount": 7,
       "typeOnlyInstanceCount": 1,
       "propKeys": [
-        "section"
+        "coreBasis",
+        "mutationScope",
+        "raw-source-mutation",
+        "section",
+        "variant"
       ],
       "childTypes": [
         "Button",
         "Content",
         "Dialog",
         "FormSection",
+        "Input",
         "List"
       ],
-      "executableBindings": 0,
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
@@ -1714,13 +1830,18 @@
       "type": "AppShellStructure",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 1,
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
+        "coreSupport",
+        "description",
         "message",
-        "title"
+        "title",
+        "variant"
       ],
-      "childTypes": [],
+      "childTypes": [
+        "Button"
+      ],
       "executableBindings": 0,
       "stateEventEvidence": 0
     },
@@ -1756,12 +1877,21 @@
       "type": "SearchResultsPage",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 1,
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
-        "query"
+        "coreBasis",
+        "executionOwner",
+        "hostBasis",
+        "query",
+        "remoteProviderRequired",
+        "variant"
       ],
-      "childTypes": [],
+      "childTypes": [
+        "BookCover",
+        "Button",
+        "SearchInputBox"
+      ],
       "executableBindings": 0,
       "stateEventEvidence": 0
     },
@@ -2065,16 +2195,30 @@
       "type": "GlobalStatePage",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 3,
+      "instanceCount": 6,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "action",
+        "cookieScope",
+        "effectPlan",
+        "errorCode",
+        "failureStates",
+        "fallback",
+        "hostBasis",
         "message",
+        "playbackSupport",
+        "retryable",
+        "secretDisplay",
+        "state",
+        "successProof",
         "title",
         "variant"
       ],
-      "childTypes": [],
-      "executableBindings": 0,
+      "childTypes": [
+        "Button",
+        "Loading"
+      ],
+      "executableBindings": 2,
       "stateEventEvidence": 0
     },
     {
@@ -2095,14 +2239,24 @@
       "type": "PermissionRequiredPage",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 1,
+      "instanceCount": 3,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
         "action",
+        "availability",
+        "capabilityBasis",
         "message",
-        "title"
+        "permissionScopes",
+        "platformDifferenceRequired",
+        "policy",
+        "recoveryStates",
+        "state",
+        "title",
+        "variant"
       ],
-      "childTypes": [],
+      "childTypes": [
+        "Button"
+      ],
       "executableBindings": 0,
       "stateEventEvidence": 0
     },
@@ -2124,13 +2278,21 @@
       "type": "LocalBookImportPage",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 1,
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
-        "title"
+        "capabilityBasis",
+        "formatAvailability",
+        "formatKinds",
+        "pdfAndMangaCoreSupport",
+        "title",
+        "unsupportedBehavior",
+        "variant"
       ],
-      "childTypes": [],
-      "executableBindings": 0,
+      "childTypes": [
+        "Button"
+      ],
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
@@ -2221,12 +2383,23 @@
     },
     {
       "type": "SourceFormPage",
-      "catalogStatus": "explicit-gap",
-      "evidenceClass": "explicit-gap",
-      "instanceCount": 0,
+      "catalogStatus": "referenced",
+      "evidenceClass": "data-backed",
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
-      "propKeys": [],
-      "childTypes": [],
+      "propKeys": [
+        "coreBasis",
+        "coreSupport",
+        "fields",
+        "hostBasis",
+        "secretStorage",
+        "states",
+        "variant"
+      ],
+      "childTypes": [
+        "BookCover",
+        "Button"
+      ],
       "executableBindings": 0,
       "stateEventEvidence": 0
     },
@@ -2234,13 +2407,21 @@
       "type": "GlobalSettingsPage",
       "catalogStatus": "referenced",
       "evidenceClass": "data-backed",
-      "instanceCount": 1,
+      "instanceCount": 2,
       "typeOnlyInstanceCount": 0,
       "propKeys": [
-        "title"
+        "availability",
+        "coreBasis",
+        "hostBasis",
+        "scopes",
+        "title",
+        "variant"
       ],
-      "childTypes": [],
-      "executableBindings": 0,
+      "childTypes": [
+        "Button",
+        "SettingsListItem"
+      ],
+      "executableBindings": 1,
       "stateEventEvidence": 0
     },
     {
@@ -2270,9 +2451,16 @@
       "stateEventEvidence": 0
     }
   ],
-  "typedActionBindings": 36,
+  "hostCompositeComponentTypes": [
+    "TapZones",
+    "ReaderBase",
+    "ReaderTopArea",
+    "ReaderBottomBar"
+  ],
+  "typedActionBindings": 97,
+  "explicitTargetBindings": 61,
   "stateEventEvidence": 19,
-  "totalCanonicalEventEvidence": 55,
+  "totalCanonicalEventEvidence": 116,
   "explicitActionGaps": 6,
   "variantsWithActionGaps": 6,
   "actionGapsByReason": {

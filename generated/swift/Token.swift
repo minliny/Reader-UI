@@ -925,6 +925,13 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--fd-ds-motion-duration-layoutSwitch",
+            category: .motionDuration,
+            value: "320ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--fd-ds-motion-duration-buttonPress",
             category: .motionDuration,
             value: "80ms",
@@ -1079,6 +1086,34 @@ public enum TokenRegistry {
             deprecated: false
         ),
         Token(
+            name: "--fd-ds-motion-duration-controlEnter",
+            category: .motionDuration,
+            value: "420ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-motion-duration-controlExit",
+            category: .motionDuration,
+            value: "360ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-motion-duration-quickPromote",
+            category: .motionDuration,
+            value: "320ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-motion-duration-moduleSwitch",
+            category: .motionDuration,
+            value: "360ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
             name: "--fd-ds-motion-duration-pageTurn",
             category: .motionDuration,
             value: "220ms",
@@ -1145,6 +1180,20 @@ public enum TokenRegistry {
             name: "--fd-ds-motion-duration-route",
             category: .motionDuration,
             value: "280ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-motion-duration-routePop",
+            category: .motionDuration,
+            value: "240ms",
+            platforms: nil,
+            deprecated: false
+        ),
+        Token(
+            name: "--fd-ds-motion-duration-routeReplace",
+            category: .motionDuration,
+            value: "200ms",
             platforms: nil,
             deprecated: false
         ),

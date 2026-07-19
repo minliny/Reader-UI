@@ -72,6 +72,112 @@ test("MotionSpec registry emits every current motion fixture exactly as a consum
   }
 });
 
+test("canonical exact state machines are emitted for all three platforms", () => {
+  const exactIds = [
+    "app.firstOpen.enter",
+    "app.route.push.forward",
+    "app.route.pop.backward",
+    "app.route.replace",
+    "bookshelf.view.switch",
+    "button.activate",
+    "toggle.switch",
+    "chip.item.select",
+    "slider.drag.start",
+    "slider.drag.update",
+    "slider.drag.release",
+    "stepper.press",
+    "stepper.value.change",
+    "card.press",
+    "card.select",
+    "card.route",
+    "listRow.select",
+    "tab.item.press",
+    "tab.item.select",
+    "tab.item.switch",
+    "tab.switch",
+    "segment.item.switch",
+    "dropdown.trigger.press",
+    "dropdown.menu.expand",
+    "dropdown.menu.collapse",
+    "dropdown.menu.reposition",
+    "dropdown.option.press",
+    "dropdown.option.select",
+    "reader.entry.coverToImmersive",
+    "reader.entry.actionToImmersive",
+    "reader.page.turn.next-prev",
+    "reader.chapter.jump",
+    "reader.control.handle.press",
+    "reader.control.handle.drag",
+    "reader.control.handle.release",
+    "reader.control.dock.longPress",
+    "reader.control.dock.drag",
+    "reader.control.dock.release",
+    "reader.control.dock.rebound",
+    "reader.control.show",
+    "reader.control.hide",
+    "reader.quick.promote",
+    "reader.module.switch",
+    "reader.panel.expand",
+    "reader.panel.collapse",
+    "reader.session.tts.start",
+    "reader.session.autoPage.start",
+    "reader.session.capsule.enter",
+    "reader.session.capsule.update",
+    "reader.session.capsule.control.press-toggle",
+    "reader.session.capsule.countdownTick",
+    "reader.session.capsule.voiceIcon.active",
+    "reader.session.capsule.switch",
+    "reader.session.capsule.exit",
+    "viewport.orientation.prepare",
+    "viewport.orientation.reshape",
+    "viewport.orientation.settle",
+    "motion.interrupt.cancel",
+    "motion.interrupt.redirect",
+    "motion.interrupt.completeThenReplace",
+    "source.switch.route.push",
+    "source.switch.route.pop",
+    "source.switch.route.replace",
+    "overlay.sheet.enter",
+    "overlay.sheet.exit",
+    "overlay.dialog.enter",
+    "overlay.dialog.exit",
+    "overlay.keyboard.enter-exit",
+    "state.loading.inline",
+    "feedback.toast.enter",
+    "feedback.toast.update",
+    "feedback.toast.exit",
+    "input.focus",
+    "input.blur",
+    "input.clear",
+    "input.focus-blur",
+    "input.submit",
+    "search.state.replace",
+    "state.content.replace",
+  ];
+  for (const rel of ["swift/Motion.swift", "kotlin/Motion.kt", "arkts/Motion.ets"]) {
+    const text = readGenerated(rel);
+    for (const id of exactIds) assert.ok(text.includes(`"${id}"`), `${rel} missing exact MotionId ${id}`);
+    for (const field of ["trigger", "from", "to", "interrupt", "finalState", "cleanup"]) {
+      assert.ok(text.includes(field), `${rel} missing structured field ${field}`);
+    }
+    for (const state of ["route.targetOnStack", "activeTab.next", "segment.next", "bookshelf.view.target", "button.commandCommitted", "toggle.nextValue", "chip.targetSelected", "slider.draggingValueUpdated", "slider.valueCommitted", "stepper.nextLegalValue", "card.targetSelected", "card.destinationRoute", "listRow.targetSelected", "immersiveReading", "page.nextOrPrevious", "chapter.target", "handlePressed", "dragOffsetPreview", "dockDragArmed", "dockOffset.previewClamped", "dockOffset.committed", "dockOffset.clamped", "immersive.hidden", "control.home", "control.quick.target", "control.full.module", "session.tts", "session.autoPage", "capsuleVisible", "session.nextState", "playing.next", "countdown.next", "ttsPlayingVisualActive", "session.nextType", "capsuleHidden", "viewportFrozen", "viewportReshaped", "viewportStable", "latestCommittedState", "motionRunningTowardNewTarget", "replacementState", "sourceSwitchRoute.onStack", "flowRoute.previousOnStack", "flowRoute.replacementTarget", "sheetVisible", "sheetHidden", "dialogVisible", "dialogHidden", "keyboardVisible", "keyboardHidden", "inlineState.loading", "toast.visible", "toastHost.singleOwner", "toast.hidden", "toastHost.empty", "input.focused", "value.empty", "submit.pending", "search.latestState", "content.latest"]) {
+      assert.ok(text.includes(`"${state}"`), `${rel} missing exact state ${state}`);
+    }
+  }
+});
+
+test("MotionPolicy generated resolvers expose explicit no-match diagnostics and no fallback impersonation", () => {
+  for (const rel of ["swift/MotionPolicy.swift", "kotlin/MotionPolicy.kt", "arkts/MotionPolicy.ets"]) {
+    const text = readGenerated(rel);
+    assert.ok(text.includes("motion.policy.no-match"), `${rel} missing no-match diagnostic`);
+    assert.ok(text.includes("MotionResolution"), `${rel} missing MotionResolution`);
+    assert.equal(text.includes("fallback-no-motion"), false, `${rel} must not emit fallback-no-motion`);
+    for (const policyId of ["reader-control-show", "reader-control-hide", "reader-quick-promote", "reader-module-switch", "reader-panel-expand", "reader-panel-collapse"]) {
+      assert.ok(text.includes(`"${policyId}"`), `${rel} missing explicit policy ${policyId}`);
+    }
+  }
+});
+
 test("TokenRegistry is emitted for all three platforms", () => {
   for (const rel of ["swift/Token.swift", "kotlin/Token.kt", "arkts/Token.ets"]) {
     assertGeneratedExists(rel);

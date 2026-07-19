@@ -54,8 +54,8 @@
     },
     {
       "path": "contracts/VERSION.json",
-      "byteLength": 27858,
-      "sha256": "ab3ee3fe8c5b29c477f1fc3181a7be6ecaab7e2cfe51dce98040a5c43d6d2a32"
+      "byteLength": 32658,
+      "sha256": "5bdf63cc420079f4fab63e5134894de77af2ebc613030cc6393b8015a020e02f"
     },
     {
       "path": "tools/device-conformance/device-conformance-policy.mjs",

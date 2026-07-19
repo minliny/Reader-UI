@@ -11,7 +11,7 @@ public struct RuntimeActionDescriptor: Sendable, Equatable {
 }
 
 public enum GeneratedRuntimeActions {
-    public static let schemaVersion = 2
+    public static let schemaVersion = 3
     public static let byEvent: [String: RuntimeActionDescriptor] = [
         "route.push": RuntimeActionDescriptor(action: "pushRoute", value: nil, requiredPayload: ["routeId"], guards: ["loadingFalse"], coreSequence: [], hostRequest: nil),
         "route.replace": RuntimeActionDescriptor(action: "replaceRoute", value: nil, requiredPayload: ["routeId"], guards: ["loadingFalse"], coreSequence: [], hostRequest: nil),
@@ -24,6 +24,8 @@ public enum GeneratedRuntimeActions {
         "overlay.sheet.close": RuntimeActionDescriptor(action: "clearOverlay", value: nil, requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
         "overlay.keyboard.open": RuntimeActionDescriptor(action: "setOverlay", value: "keyboard", requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
         "overlay.keyboard.close": RuntimeActionDescriptor(action: "clearOverlay", value: nil, requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
+        "reader.control.toggle": RuntimeActionDescriptor(action: "toggleReaderControl", value: nil, requiredPayload: ["overlay"], guards: [], coreSequence: [], hostRequest: nil),
+        "reader.module.switch": RuntimeActionDescriptor(action: "switchReaderModule", value: nil, requiredPayload: ["module"], guards: [], coreSequence: [], hostRequest: nil),
         "reader.directory.open": RuntimeActionDescriptor(action: "setOverlay", value: "directory", requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
         "reader.directory.close": RuntimeActionDescriptor(action: "clearOverlayIfMatches", value: "directory", requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
         "reader.appearance.open": RuntimeActionDescriptor(action: "setOverlay", value: "appearance", requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
@@ -34,8 +36,8 @@ public enum GeneratedRuntimeActions {
         "book.open": RuntimeActionDescriptor(action: "bookOpenSequence", value: nil, requiredPayload: ["bookId", "sourceId", "sourceKind"], guards: [], coreSequence: ["source.detail", "chapter.list", "content.load", "reader.location.resolve"], hostRequest: nil),
         "reader.enter": RuntimeActionDescriptor(action: "pushRoute", value: "immersive-reading", requiredPayload: [], guards: ["loadingFalse"], coreSequence: [], hostRequest: nil),
         "reader.exit": RuntimeActionDescriptor(action: "popRoute", value: nil, requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),
-        "reader.page.next": RuntimeActionDescriptor(action: "readerPageStep", value: "1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve"], hostRequest: nil),
-        "reader.page.prev": RuntimeActionDescriptor(action: "readerPageStep", value: "-1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve"], hostRequest: nil),
+        "reader.page.next": RuntimeActionDescriptor(action: "readerPageStep", value: "1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve", "reader.progress.update"], hostRequest: nil),
+        "reader.page.prev": RuntimeActionDescriptor(action: "readerPageStep", value: "-1", requiredPayload: [], guards: [], coreSequence: ["reader.location.resolve", "reader.progress.update"], hostRequest: nil),
         "reader.tts.start": RuntimeActionDescriptor(action: "startSession", value: "tts", requiredPayload: [], guards: [], coreSequence: ["tts.queue.start"], hostRequest: "tts.system.start"),
         "reader.tts.stop": RuntimeActionDescriptor(action: "stopSession", value: nil, requiredPayload: [], guards: [], coreSequence: ["tts.queue.stop"], hostRequest: "tts.system.stop"),
         "reader.autoPage.start": RuntimeActionDescriptor(action: "startSession", value: "auto-page", requiredPayload: [], guards: [], coreSequence: [], hostRequest: nil),

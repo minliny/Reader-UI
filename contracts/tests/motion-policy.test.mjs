@@ -93,9 +93,43 @@ test("motion-policy 覆盖全部 12 个 operation", () => {
   }
 });
 
-test("存在 priority=0 的兜底 policy（空 match）", () => {
-  const fallback = policies.find((p) => p.priority === 0 && Object.keys(p.match || {}).length === 0);
-  assert.ok(fallback, "应存在 priority=0 且 match={} 的兜底 policy");
+test("不存在把未知请求伪装为 MotionId 的空 match fallback", () => {
+  const fallbacks = policies.filter((p) => Object.keys(p.match || {}).length === 0);
+  assert.deepEqual(fallbacks, [], "未知请求必须由 resolver 返回 no-match diagnostic，不能映射到 motion.interrupt.redirect");
+  assert.equal(policies.some((p) => p.id === "fallback-no-motion"), false);
+
+  const invalid = { ...policies[0], id: "invalid-empty-match", match: {} };
+  assert.ok(validate(motionPolicySchema, invalid).some((error) => error.keyword === "minProperties"), "schema must reject future empty-match fallbacks");
+});
+
+test("MR0 Reader control pilot family has one explicit policy per MotionId", () => {
+  const expected = new Map([
+    ["reader.control.show", "reader-control-show"],
+    ["reader.control.hide", "reader-control-hide"],
+    ["reader.quick.promote", "reader-quick-promote"],
+    ["reader.module.switch", "reader-module-switch"],
+    ["reader.panel.expand", "reader-panel-expand"],
+    ["reader.panel.collapse", "reader-panel-collapse"],
+  ]);
+  for (const [motionId, policyId] of expected) {
+    const matches = policies.filter((p) => p.motionId === motionId);
+    assert.equal(matches.length, 1, `${motionId} must have exactly one explicit policy`);
+    assert.equal(matches[0].id, policyId);
+    assert.equal(matches[0].match.containerRole, "readerShell");
+    assert.ok(matches[0].match.sourceRole, `${policyId} must declare sourceRole`);
+    assert.ok(matches[0].match.targetRole, `${policyId} must declare targetRole`);
+  }
+});
+
+test("bookshelf shared-layout pilot resolves as an in-place MainTabShell replace", () => {
+  const matches = policies.filter((p) => p.motionId === "bookshelf.view.switch");
+  assert.equal(matches.length, 1);
+  assert.equal(matches[0].id, "bookshelf-view-switch");
+  assert.deepEqual(matches[0].match, {
+    operation: "replace",
+    containerRole: "mainTabShell",
+    sourceRole: "viewMode",
+  });
 });
 
 test("用户原始规格中的 5 个示例 policy 都存在", () => {

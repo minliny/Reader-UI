@@ -11,7 +11,7 @@ data class RuntimeActionDescriptor(
 )
 
 object GeneratedRuntimeActions {
-    const val schemaVersion: Int = 2
+    const val schemaVersion: Int = 3
     val byEvent: Map<String, RuntimeActionDescriptor> = mapOf(
         "route.push" to RuntimeActionDescriptor("pushRoute", null, listOf("routeId"), listOf("loadingFalse"), listOf(), null),
         "route.replace" to RuntimeActionDescriptor("replaceRoute", null, listOf("routeId"), listOf("loadingFalse"), listOf(), null),
@@ -24,6 +24,8 @@ object GeneratedRuntimeActions {
         "overlay.sheet.close" to RuntimeActionDescriptor("clearOverlay", null, listOf(), listOf(), listOf(), null),
         "overlay.keyboard.open" to RuntimeActionDescriptor("setOverlay", "keyboard", listOf(), listOf(), listOf(), null),
         "overlay.keyboard.close" to RuntimeActionDescriptor("clearOverlay", null, listOf(), listOf(), listOf(), null),
+        "reader.control.toggle" to RuntimeActionDescriptor("toggleReaderControl", null, listOf("overlay"), listOf(), listOf(), null),
+        "reader.module.switch" to RuntimeActionDescriptor("switchReaderModule", null, listOf("module"), listOf(), listOf(), null),
         "reader.directory.open" to RuntimeActionDescriptor("setOverlay", "directory", listOf(), listOf(), listOf(), null),
         "reader.directory.close" to RuntimeActionDescriptor("clearOverlayIfMatches", "directory", listOf(), listOf(), listOf(), null),
         "reader.appearance.open" to RuntimeActionDescriptor("setOverlay", "appearance", listOf(), listOf(), listOf(), null),
@@ -34,8 +36,8 @@ object GeneratedRuntimeActions {
         "book.open" to RuntimeActionDescriptor("bookOpenSequence", null, listOf("bookId", "sourceId", "sourceKind"), listOf(), listOf("source.detail", "chapter.list", "content.load", "reader.location.resolve"), null),
         "reader.enter" to RuntimeActionDescriptor("pushRoute", "immersive-reading", listOf(), listOf("loadingFalse"), listOf(), null),
         "reader.exit" to RuntimeActionDescriptor("popRoute", null, listOf(), listOf(), listOf(), null),
-        "reader.page.next" to RuntimeActionDescriptor("readerPageStep", "1", listOf(), listOf(), listOf("reader.location.resolve"), null),
-        "reader.page.prev" to RuntimeActionDescriptor("readerPageStep", "-1", listOf(), listOf(), listOf("reader.location.resolve"), null),
+        "reader.page.next" to RuntimeActionDescriptor("readerPageStep", "1", listOf(), listOf(), listOf("reader.location.resolve", "reader.progress.update"), null),
+        "reader.page.prev" to RuntimeActionDescriptor("readerPageStep", "-1", listOf(), listOf(), listOf("reader.location.resolve", "reader.progress.update"), null),
         "reader.tts.start" to RuntimeActionDescriptor("startSession", "tts", listOf(), listOf(), listOf("tts.queue.start"), "tts.system.start"),
         "reader.tts.stop" to RuntimeActionDescriptor("stopSession", null, listOf(), listOf(), listOf("tts.queue.stop"), "tts.system.stop"),
         "reader.autoPage.start" to RuntimeActionDescriptor("startSession", "auto-page", listOf(), listOf(), listOf(), null),

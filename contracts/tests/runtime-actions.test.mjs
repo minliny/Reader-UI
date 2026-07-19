@@ -338,6 +338,9 @@ test("runtime results preserve recursive JSON types and reject invalid result va
     pageIndex: 3
   });
   assert.equal(accepted.accepted, true);
+  assert.deepEqual(accepted.effects.map((effect) => effect.type), ["reader.progress.update"]);
+  assert.equal(runtime.state.readerPageIndex, 0);
+  runtime.acceptPageProgressJSONResult("json-result", { stored: true });
   assert.equal(runtime.state.readerPageIndex, 3);
 });
 
@@ -467,14 +470,46 @@ test("page transaction commits only a matching canonical location result", () =>
 
   runtime.dispatch("reader.page.prev", {}, "page-2");
   runtime.providePageLayout("page-2", measuredPageLayout({ targetPageIndex: 3 }));
-  const committed = runtime.acceptPageLocationResult("page-2", {
+  const persisting = runtime.acceptPageLocationResult("page-2", {
     canonicalLocation: "canonical-ch4-p3",
     pageIndex: 3
   });
+  assert.equal(persisting.accepted, true);
+  assert.deepEqual(persisting.effects.map((effect) => effect.type), ["reader.progress.update"]);
+  assert.deepEqual(persisting.effects[0].jsonPayload, {});
+  assert.equal(runtime.state.pageTransaction.stage, "persisting-progress");
+  assert.equal(runtime.state.readerPageIndex, 4);
+  assert.throws(
+    () => runtime.dispatch("reader.page.next", {}, "page-blocked"),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.throws(
+    () => runtime.dispatch("reader.autoPage.start", { intervalMs: "4000" }, "auto-blocked"),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.throws(
+    () => runtime.cancelPageStep("page-2"),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  const committed = runtime.acceptPageProgressResult("page-2", { stored: true });
   assert.equal(committed.accepted, true);
   assert.equal(runtime.state.readerPageIndex, 3);
   assert.equal(runtime.state.readerCanonicalLocation, "canonical-ch4-p3");
   assert.equal(runtime.acceptPageLocationResult("page-2", { canonicalLocation: "duplicate", pageIndex: 9 }).accepted, false);
+
+  runtime.dispatch("reader.page.next", {}, "page-progress-error");
+  runtime.providePageLayout("page-progress-error", measuredPageLayout({ targetPageIndex: 4 }));
+  runtime.acceptPageLocationResult("page-progress-error", {
+    canonicalLocation: "canonical-ch4-p4",
+    pageIndex: 4
+  });
+  const progressFailed = runtime.acceptPageProgressResult("page-progress-error", {
+    error: "PROGRESS_STORE_FAILED"
+  });
+  assert.equal(progressFailed.accepted, true);
+  assert.equal(runtime.state.readerPageIndex, 3);
+  assert.equal(runtime.state.readerCanonicalLocation, "canonical-ch4-p3");
+  assert.equal(runtime.state.error, "PROGRESS_STORE_FAILED");
 });
 
 test("page intents supersede exactly once and explicit location shares the same transaction", () => {
@@ -489,6 +524,58 @@ test("page intents supersede exactly once and explicit location shares the same 
   const resolving = runtime.providePageLayout("page-explicit", measuredPageLayout({ targetPageIndex: 0 }));
   assert.equal(resolving.effects[0].jsonPayload.direction, "explicit");
   assert.equal(resolving.effects[0].jsonPayload.reason, "chapter-jump");
+});
+
+test("progress commit boundary blocks reader exit and book replacement without cross-route contamination", () => {
+  const runtime = activeReaderRuntime({ readerPageIndex: 2, readerCanonicalLocation: "book-a-page-2" });
+  runtime.dispatch("reader.page.next", {}, "page-boundary");
+  runtime.providePageLayout("page-boundary", measuredPageLayout({ targetPageIndex: 3 }));
+  runtime.acceptPageLocationResult("page-boundary", {
+    canonicalLocation: "book-a-page-3",
+    pageIndex: 3
+  });
+  const pending = runtime.state;
+
+  assert.throws(
+    () => runtime.dispatch("reader.exit"),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.throws(
+    () => runtime.dispatch(
+      "book.open",
+      { bookId: "book-b", sourceId: "source-b", sourceKind: "remote" },
+      "open-book-b"
+    ),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.throws(
+    () => runtime.dispatch("route.replace", { routeId: "bookshelf" }),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.throws(
+    () => runtime.dispatch("route.pop"),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.throws(
+    () => runtime.dispatch("mainTab.select", { tab: "settings" }),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "PAGE_PROGRESS_COMMIT_PENDING"
+  );
+  assert.deepEqual(runtime.state, pending);
+
+  runtime.acceptPageProgressResult("page-boundary", { stored: true });
+  const opened = runtime.dispatch(
+    "book.open",
+    { bookId: "book-b", sourceId: "source-b", sourceKind: "remote" },
+    "open-book-b"
+  );
+  assert.equal(opened.state.bookOpenTransaction.correlationId, "open-book-b");
+  assert.throws(
+    () => runtime.dispatch("reader.page.next", {}, "book-open-page"),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "BOOK_OPEN_TRANSACTION_PENDING"
+  );
+  assert.equal(runtime.acceptPageProgressResult("page-boundary", { stored: true }).accepted, false);
+  assert.equal(runtime.state.readerPageIndex, 3);
+  assert.equal(runtime.state.readerCanonicalLocation, "book-a-page-3");
 });
 
 test("TTS advances plan then queue then system speech one effect at a time", () => {
@@ -553,10 +640,13 @@ test("auto-page uses non-overlapping foreground one-shot timers and rearms only 
   assert.equal(runtime.acceptAutoPageTimerFired("auto-1", generation).accepted, false);
 
   runtime.providePageLayout(pageCorrelation, measuredPageLayout({ targetPageIndex: 2 }));
-  const committed = runtime.acceptPageLocationResult(pageCorrelation, {
+  const persisting = runtime.acceptPageLocationResult(pageCorrelation, {
     canonicalLocation: "page-2",
     pageIndex: 2
   });
+  assert.deepEqual(persisting.effects.map((effect) => effect.type), ["reader.progress.update"]);
+  assert.equal(runtime.state.readerPageIndex, 1);
+  const committed = runtime.acceptPageProgressResult(pageCorrelation, { stored: true });
   assert.deepEqual(committed.effects.map((effect) => effect.type), [READER_FOREGROUND_TIMER_ARM]);
   assert.equal(runtime.state.readerPageIndex, 2);
   assert.equal(runtime.acceptPageLocationResult(pageCorrelation, { canonicalLocation: "late", pageIndex: 9 }).accepted, false);
@@ -664,6 +754,51 @@ test("directory close only clears the semantic directory overlay it opened", () 
   runtime.dispatch("overlay.sheet.open");
   runtime.dispatch("reader.directory.close");
   assert.equal(runtime.state.overlay, "sheet");
+});
+
+test("reader control and module actions atomically own one compatible overlay without route churn", () => {
+  const runtime = activeReaderRuntime();
+  const routeBefore = runtime.state.routeId;
+
+  const opened = runtime.dispatch("reader.control.toggle", { overlay: "reader-control" });
+  assert.equal(opened.state.overlay, "reader-control");
+  assert.equal(opened.state.routeId, routeBefore);
+  assert.deepEqual(opened.effects, []);
+
+  runtime.dispatch("reader.module.switch", { module: "directory" });
+  assert.equal(runtime.state.overlay, "directory");
+  const repeated = structuredClone(runtime.state);
+  runtime.dispatch("reader.module.switch", { module: "directory" });
+  assert.deepEqual(runtime.state, repeated);
+
+  runtime.dispatch("reader.module.switch", { module: "appearance" });
+  assert.equal(runtime.state.overlay, "appearance");
+  runtime.dispatch("reader.control.toggle", { overlay: "reader-control" });
+  assert.equal(runtime.state.overlay, null);
+  assert.equal(runtime.state.routeId, routeBefore);
+});
+
+test("reader control actions fail closed outside the reader overlay family", () => {
+  const outsideReader = new ReaderUIRuntime(spec);
+  assert.throws(
+    () => outsideReader.dispatch("reader.control.toggle", { overlay: "reader-control" }),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "READER_ROUTE_GUARD"
+  );
+
+  const runtime = activeReaderRuntime();
+  assert.throws(
+    () => runtime.dispatch("reader.module.switch", { module: "tts" }),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "READER_CONTROL_OVERLAY_GUARD"
+  );
+  runtime.dispatch("overlay.dialog.open");
+  assert.throws(
+    () => runtime.dispatch("reader.control.toggle", { overlay: "reader-control" }),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "READER_CONTROL_OVERLAY_GUARD"
+  );
+  assert.throws(
+    () => runtime.dispatch("reader.module.switch", { module: "search" }),
+    (error) => error instanceof ReaderUIRuntimeError && error.code === "INVALID_TYPED_PAYLOAD"
+  );
 });
 
 test("reduced motion remains independent from pending page transactions", () => {

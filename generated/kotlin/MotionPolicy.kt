@@ -48,6 +48,12 @@ data class MotionPolicyMatch(
 typealias MotionRequest = MotionPolicyMatch
 
 @Serializable
+data class MotionResolution(
+    val motionId: MotionId? = null,
+    val diagnostic: String? = null
+)
+
+@Serializable
 data class MotionPolicy(
     val id: String,
     val priority: Int,
@@ -102,8 +108,8 @@ object MotionPolicyRegistry {
     ),
     MotionPolicy(
         id = "reader-module-switch",
-        priority = 200,
-        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.TabSwitch, sourceRole = null, targetRole = null, containerRole = MotionContainerRole.ReaderSurface, reducedMotion = null),
+        priority = 320,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.TabSwitch, sourceRole = "moduleNav", targetRole = "quickPanel", containerRole = MotionContainerRole.ReaderShell, reducedMotion = null),
         motionId = MotionId.ReaderModuleSwitch,
         deprecated = false
     ),
@@ -241,10 +247,38 @@ object MotionPolicyRegistry {
         deprecated = false
     ),
     MotionPolicy(
+        id = "reader-control-show",
+        priority = 320,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Enter, sourceRole = "controlLayer", targetRole = "controlHome", containerRole = MotionContainerRole.ReaderShell, reducedMotion = null),
+        motionId = MotionId.ReaderControlShow,
+        deprecated = false
+    ),
+    MotionPolicy(
         id = "reader-control-hide",
-        priority = 300,
-        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Exit, sourceRole = "controlLayer", targetRole = null, containerRole = MotionContainerRole.ReaderSurface, reducedMotion = null),
+        priority = 320,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Exit, sourceRole = "controlLayer", targetRole = "immersiveReading", containerRole = MotionContainerRole.ReaderShell, reducedMotion = null),
         motionId = MotionId.ReaderControlHide,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "reader-quick-promote",
+        priority = 320,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Enter, sourceRole = "controlHome", targetRole = "quickPanel", containerRole = MotionContainerRole.ReaderShell, reducedMotion = null),
+        motionId = MotionId.ReaderQuickPromote,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "reader-panel-expand",
+        priority = 320,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Enter, sourceRole = "quickPanel", targetRole = "fullPanel", containerRole = MotionContainerRole.ReaderShell, reducedMotion = null),
+        motionId = MotionId.ReaderPanelExpand,
+        deprecated = false
+    ),
+    MotionPolicy(
+        id = "reader-panel-collapse",
+        priority = 320,
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Exit, sourceRole = "fullPanel", targetRole = "quickPanel", containerRole = MotionContainerRole.ReaderShell, reducedMotion = null),
+        motionId = MotionId.ReaderPanelCollapse,
         deprecated = false
     ),
     MotionPolicy(
@@ -397,14 +431,7 @@ object MotionPolicyRegistry {
     MotionPolicy(
         id = "motion-interrupt-redirect",
         priority = 50,
-        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Update, sourceRole = "interrupt", targetRole = null, containerRole = null, reducedMotion = null),
-        motionId = MotionId.MotionInterruptRedirect,
-        deprecated = false
-    ),
-    MotionPolicy(
-        id = "fallback-no-motion",
-        priority = 0,
-        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = null, sourceRole = null, targetRole = null, containerRole = null, reducedMotion = null),
+        match = MotionPolicyMatch(fromRoute = null, toRoute = null, fromShell = null, toShell = null, operation = MotionOperation.Update, sourceRole = "interrupt", targetRole = "redirect", containerRole = null, reducedMotion = null),
         motionId = MotionId.MotionInterruptRedirect,
         deprecated = false
     )
@@ -472,6 +499,7 @@ object RouteShellLookup {
     "settings" to RouteShell.MainTabShell,
     "global-settings" to RouteShell.SettingsShell,
     "settings-general" to RouteShell.SettingsShell,
+    "settings-developer" to RouteShell.SettingsShell,
     "source-management" to RouteShell.SettingsShell,
     "source-detail" to RouteShell.SettingsShell,
     "source-edit" to RouteShell.SettingsShell,
@@ -647,14 +675,38 @@ object RouteShellLookup {
     "reader-replace-apply-result" to RouteShell.ReaderShell,
     "reader-replace-import-export" to RouteShell.ReaderShell,
     "reader-replace-preview" to RouteShell.ReaderShell,
-    "reader-replace-page" to RouteShell.ReaderShell
+    "reader-replace-page" to RouteShell.ReaderShell,
+    "onboarding-welcome" to RouteShell.FlowShell,
+    "onboarding-capability-setup" to RouteShell.FlowShell,
+    "permission-recovery" to RouteShell.FlowShell,
+    "local-format-support" to RouteShell.LibraryShell,
+    "pdf-reader" to RouteShell.ReaderShell,
+    "manga-reader" to RouteShell.ReaderShell,
+    "http-tts-management" to RouteShell.SettingsShell,
+    "http-tts-editor" to RouteShell.SettingsShell,
+    "http-tts-test" to RouteShell.SettingsShell,
+    "content-edit" to RouteShell.ReaderShell,
+    "book-cover-change" to RouteShell.LibraryShell,
+    "book-cover-search" to RouteShell.LibraryShell,
+    "chapter-reviews" to RouteShell.LibraryShell,
+    "bookmarks-manager" to RouteShell.LibraryShell,
+    "download-queue" to RouteShell.LibraryShell,
+    "download-task-detail" to RouteShell.LibraryShell,
+    "storage-management" to RouteShell.SettingsShell,
+    "webview-login" to RouteShell.FlowShell,
+    "webview-captcha" to RouteShell.FlowShell,
+    "webview-challenge" to RouteShell.FlowShell,
+    "webview-cookie-return" to RouteShell.FlowShell,
+    "settings-tts" to RouteShell.SettingsShell,
+    "settings-storage" to RouteShell.SettingsShell,
+    "settings-accessibility" to RouteShell.SettingsShell
     )
 
     fun shell(routeId: String): RouteShell? = shellByRouteId[routeId]
 }
 
 object ReaderMotionResolver {
-    fun resolve(request: MotionRequest): MotionId? {
+    fun resolveWithDiagnostic(request: MotionRequest): MotionResolution {
         var resolved = request
         if (resolved.fromShell == null && request.fromRoute != null) {
             resolved = resolved.copy(fromShell = RouteShellLookup.shell(request.fromRoute!!))
@@ -667,9 +719,13 @@ object ReaderMotionResolver {
         )
         for (policy in sorted) {
             if (policy.match.matches(resolved)) {
-                return policy.motionId
+                return MotionResolution(motionId = policy.motionId)
             }
         }
-        return null
+        return MotionResolution(diagnostic = "motion.policy.no-match")
+    }
+
+    fun resolve(request: MotionRequest): MotionId? {
+        return resolveWithDiagnostic(request).motionId
     }
 }

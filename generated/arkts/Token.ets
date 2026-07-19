@@ -920,6 +920,13 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--fd-ds-motion-duration-layoutSwitch": {
+    name: "--fd-ds-motion-duration-layoutSwitch",
+    category: "motion-duration",
+    value: "320ms",
+    platforms: undefined,
+    deprecated: false
+  },
   "--fd-ds-motion-duration-buttonPress": {
     name: "--fd-ds-motion-duration-buttonPress",
     category: "motion-duration",
@@ -1074,6 +1081,34 @@ export const tokenRegistry: Record<string, Token> = {
     platforms: undefined,
     deprecated: false
   },
+  "--fd-ds-motion-duration-controlEnter": {
+    name: "--fd-ds-motion-duration-controlEnter",
+    category: "motion-duration",
+    value: "420ms",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-motion-duration-controlExit": {
+    name: "--fd-ds-motion-duration-controlExit",
+    category: "motion-duration",
+    value: "360ms",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-motion-duration-quickPromote": {
+    name: "--fd-ds-motion-duration-quickPromote",
+    category: "motion-duration",
+    value: "320ms",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-motion-duration-moduleSwitch": {
+    name: "--fd-ds-motion-duration-moduleSwitch",
+    category: "motion-duration",
+    value: "360ms",
+    platforms: undefined,
+    deprecated: false
+  },
   "--fd-ds-motion-duration-pageTurn": {
     name: "--fd-ds-motion-duration-pageTurn",
     category: "motion-duration",
@@ -1141,6 +1176,20 @@ export const tokenRegistry: Record<string, Token> = {
     name: "--fd-ds-motion-duration-route",
     category: "motion-duration",
     value: "280ms",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-motion-duration-routePop": {
+    name: "--fd-ds-motion-duration-routePop",
+    category: "motion-duration",
+    value: "240ms",
+    platforms: undefined,
+    deprecated: false
+  },
+  "--fd-ds-motion-duration-routeReplace": {
+    name: "--fd-ds-motion-duration-routeReplace",
+    category: "motion-duration",
+    value: "200ms",
     platforms: undefined,
     deprecated: false
   },

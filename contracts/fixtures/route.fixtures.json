@@ -267,6 +267,10 @@
     "shell": "SettingsShell"
   },
   {
+    "id": "settings-developer",
+    "shell": "SettingsShell"
+  },
+  {
     "id": "source-management",
     "shell": "SettingsShell"
   },
@@ -1082,5 +1086,125 @@
     "_comment": "R16B W5 direct replacement state",
     "id": "reader-replace-page",
     "shell": "ReaderShell"
+  },
+  {
+    "_comment": "Capability closure: first-run orientation without claiming a Core command",
+    "id": "onboarding-welcome",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: first-run permission and import setup",
+    "id": "onboarding-capability-setup",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: recover denied or unavailable Host permission",
+    "id": "permission-recovery",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: explain negotiated local format availability",
+    "id": "local-format-support",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: platform-rendered PDF surface; no Core parser claim",
+    "id": "pdf-reader",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "Capability closure: platform-rendered image sequence surface; no Core parser claim",
+    "id": "manga-reader",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "Capability closure: app/Host-owned HTTP TTS configuration list",
+    "id": "http-tts-management",
+    "shell": "SettingsShell"
+  },
+  {
+    "_comment": "Capability closure: app/Host-owned HTTP TTS endpoint editor",
+    "id": "http-tts-editor",
+    "shell": "SettingsShell"
+  },
+  {
+    "_comment": "Capability closure: app/Host-owned HTTP TTS connectivity test",
+    "id": "http-tts-test",
+    "shell": "SettingsShell"
+  },
+  {
+    "_comment": "Capability closure: editable content backed only by declared replace commands",
+    "id": "content-edit",
+    "shell": "ReaderShell"
+  },
+  {
+    "_comment": "Capability closure: update a bookshelf item's local cover reference",
+    "id": "book-cover-change",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: Host-network cover lookup before bookshelf update",
+    "id": "book-cover-search",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: source-network chapter review surface; no Core command claim",
+    "id": "chapter-reviews",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: local bookmark manager over declared reader/sync data",
+    "id": "bookmarks-manager",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: cache prefetch task queue",
+    "id": "download-queue",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: cache prefetch task detail",
+    "id": "download-task-detail",
+    "shell": "LibraryShell"
+  },
+  {
+    "_comment": "Capability closure: cache and sandbox storage accounting",
+    "id": "storage-management",
+    "shell": "SettingsShell"
+  },
+  {
+    "_comment": "Capability closure: generic source login in Host WebView",
+    "id": "webview-login",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: human verification state in Host WebView",
+    "id": "webview-captcha",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: CHALLENGE_REQUIRED recovery state",
+    "id": "webview-challenge",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: scoped cookie extraction and return",
+    "id": "webview-cookie-return",
+    "shell": "FlowShell"
+  },
+  {
+    "_comment": "Capability closure: system TTS settings",
+    "id": "settings-tts",
+    "shell": "SettingsShell"
+  },
+  {
+    "_comment": "Capability closure: storage and cache settings",
+    "id": "settings-storage",
+    "shell": "SettingsShell"
+  },
+  {
+    "_comment": "Capability closure: accessibility and reduced-motion settings",
+    "id": "settings-accessibility",
+    "shell": "SettingsShell"
   }
 ]

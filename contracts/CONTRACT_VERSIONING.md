@@ -33,7 +33,8 @@ contracts/VERSION.json
     "ui-state": "1.0.0",
     "view-state": "1.0.0",
     "motion": "1.0.0",
-    "token": "1.0.0"
+    "token": "1.0.0",
+    "appearance": "1.0.0"
   },
   "changelog": [
     {
@@ -59,6 +60,8 @@ contracts/VERSION.json
 | 兼容新增 | 新增 RouteId、新增 MotionId、新增 token、新增可选字段 | MINOR |
 | 修复 | 文案、默认值、描述修正 | PATCH |
 
+AppearanceSpec 同样遵循 SemVer：现有 id 改名/删除或字段变为必填属于 MAJOR，新增可选项属于 MINOR，只改标签、顺序、默认值或视觉值且 wire 语义不变属于 PATCH。
+
 ## 4. 向后兼容策略
 
 - RouteId 一经发布不得改名或删除，只能标记 `deprecated`。
@@ -75,7 +78,7 @@ contracts/VERSION.json
 3. 跑 `tools/codegen` 重新生成 `generated/{swift,kotlin,arkts}`。
 4. 跑 `contracts/tests` 校验。
 5. 若交互语义变化，更新 `ui-spec/runtime-actions.json` 并运行 `tools/runtime/generate-runtime.mjs`。
-6. 更新 runtime ownership 后运行 tools/runtime/generate-runtime-coverage.mjs；270-event ownership/report drift 必须为零。
+6. 更新 runtime ownership 后运行 tools/runtime/generate-runtime-coverage.mjs；300-event ownership/report drift 必须为零。
 7. 若 Host rollout/covered event 或 HostRequest schema 变化，更新对应 READER_UI_CONSUMER.json 与 ui-spec/host-consumers.json，并运行 tools/runtime/check-host-consumers.mjs；effectPolicy 必须同时识别 descriptor effect 与 runtime 动态 effect（例如 foreground timer）。
 8. 更新 `VERSION.json`：bump 版本号、追加 changelog 条目，并同步 native package 版本。
 9. 提交时 schema/spec + fixtures + tests + generated/runtime outputs + VERSION.json 五类变更必须同提交。

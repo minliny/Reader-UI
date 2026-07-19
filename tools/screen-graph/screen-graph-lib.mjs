@@ -24,6 +24,8 @@ const SOURCE_PATHS = Object.freeze({
   viewStateSchema: "contracts/view-state.schema.json",
   viewStateFixtures: "contracts/fixtures/view-state.fixtures.json",
   uiEventSchema: "contracts/ui-event.schema.json",
+  componentRenderSemanticsSchema: "ui-spec/component-render-semantics.schema.json",
+  componentRenderSemantics: "ui-spec/component-render-semantics.json",
   routeContract: "frontend-demo-optimized/route-contract.js",
 });
 
@@ -101,6 +103,9 @@ export const R16B_WORKFLOW_ROUTE_EXPECTATIONS = Object.freeze({
 });
 
 const EXPLICIT_EVENT_PROPERTIES = new Set(["uiEvent", "eventId"]);
+const ACTION_EVIDENCE_PROPERTIES = new Set([...EXPLICIT_EVENT_PROPERTIES, "explicitBinding"]);
+const STATE_AUTHORITIES = Object.freeze(["contract", "core", "reader-ui-runtime", "host-store", "host-layout"]);
+const COMPOSITION_MODES = Object.freeze(["contract-tree", "host-composite"]);
 const ACTION_SHAPED_PROPERTY = /^(?:action|actions|event|on[A-Z].*)$/;
 const FORBIDDEN_PSEUDO_COMPONENTS = new Set(["Unknown", "Fallback", "Placeholder"]);
 
@@ -182,8 +187,43 @@ export function loadScreenGraphInputs() {
     viewStateSchema: readJson(SOURCE_PATHS.viewStateSchema),
     viewStateFixtures: readJson(SOURCE_PATHS.viewStateFixtures),
     uiEventSchema: readJson(SOURCE_PATHS.uiEventSchema),
+    componentRenderSemanticsSchema: readJson(SOURCE_PATHS.componentRenderSemanticsSchema),
+    componentRenderSemantics: readJson(SOURCE_PATHS.componentRenderSemantics),
     routeContract: loadRouteContract(),
   };
+}
+
+function validateComponentSemantics(value, label) {
+  assertAllowedKeys(value, new Set(["stateAuthorities", "compositionMode", "notes"]), label);
+  assert(Array.isArray(value.stateAuthorities) && value.stateAuthorities.length > 0, `${label}.stateAuthorities must be non-empty`);
+  assert(new Set(value.stateAuthorities).size === value.stateAuthorities.length, `${label}.stateAuthorities must be unique`);
+  for (const authority of value.stateAuthorities) {
+    assert(STATE_AUTHORITIES.includes(authority), `${label} has unknown state authority ${authority}`);
+  }
+  assert(COMPOSITION_MODES.includes(value.compositionMode), `${label} has unknown compositionMode ${value.compositionMode}`);
+  assert(typeof value.notes === "string" && value.notes.length > 0, `${label}.notes must be non-empty`);
+  return {
+    stateAuthorities: plainClone(value.stateAuthorities),
+    compositionMode: value.compositionMode,
+  };
+}
+
+function resolveComponentSemantics(inputs, componentTypes) {
+  const source = inputs.componentRenderSemantics;
+  assertAllowedKeys(source, new Set(["schemaVersion", "default", "overrides"]), "component render semantics");
+  assert(source.schemaVersion === "1.0.0", "component render semantics schemaVersion must be 1.0.0");
+  assert(isPlainObject(source.overrides), "component render semantics overrides must be an object");
+  const typeSet = new Set(componentTypes);
+  const defaultSemantics = validateComponentSemantics(source.default, "component render semantics default");
+  for (const type of Object.keys(source.overrides)) {
+    assert(typeSet.has(type), `component render semantics references unknown ComponentType ${type}`);
+  }
+  return new Map(componentTypes.map((type) => [
+    type,
+    type in source.overrides
+      ? validateComponentSemantics(source.overrides[type], `component render semantics ${type}`)
+      : plainClone(defaultSemantics),
+  ]));
 }
 
 function jsonValueDefinition() {
@@ -229,7 +269,7 @@ export function buildScreenGraphSchema(inputs = loadScreenGraphInputs()) {
     additionalProperties: false,
     required: ["schemaVersion", "generatedFrom", "componentCatalog", "routes"],
     properties: {
-      schemaVersion: { const: "1.1.0" },
+      schemaVersion: { const: "1.2.0" },
       generatedFrom: {
         type: "array",
         const: Object.values(SOURCE_PATHS),
@@ -256,13 +296,14 @@ export function buildScreenGraphSchema(inputs = loadScreenGraphInputs()) {
       ActionBinding: {
         type: "object",
         additionalProperties: false,
-        required: ["event", "payload", "evidenceProperty", "trigger"],
+        required: ["target", "event", "payload", "evidenceProperty", "trigger"],
         properties: {
+          target: { type: "string", pattern: "^[a-z][a-z0-9.-]*$" },
           event: { type: "string", enum: eventTypes },
           payload: { $ref: "#/$defs/JsonObject" },
           evidenceProperty: {
             type: "string",
-            enum: [...EXPLICIT_EVENT_PROPERTIES],
+            enum: [...ACTION_EVIDENCE_PROPERTIES],
           },
           trigger: { type: "string", enum: ["tap", "change", "submit", "appear"] },
         },
@@ -305,10 +346,17 @@ export function buildScreenGraphSchema(inputs = loadScreenGraphInputs()) {
       ComponentNode: {
         type: "object",
         additionalProperties: false,
-        required: ["type", "id", "props", "children", "bindings", "stateEventEvidence"],
+        required: ["type", "id", "stateAuthorities", "compositionMode", "props", "children", "bindings", "stateEventEvidence"],
         properties: {
           type: { type: "string", enum: componentTypes },
           id: { type: "string", minLength: 1 },
+          stateAuthorities: {
+            type: "array",
+            minItems: 1,
+            uniqueItems: true,
+            items: { type: "string", enum: STATE_AUTHORITIES },
+          },
+          compositionMode: { type: "string", enum: COMPOSITION_MODES },
           props: { $ref: "#/$defs/JsonObject" },
           children: {
             type: "array",
@@ -337,9 +385,16 @@ export function buildScreenGraphSchema(inputs = loadScreenGraphInputs()) {
       ComponentCatalogEntry: {
         type: "object",
         additionalProperties: false,
-        required: ["type", "status", "instanceCount", "routeIds", "gap"],
+        required: ["type", "stateAuthorities", "compositionMode", "status", "instanceCount", "routeIds", "gap"],
         properties: {
           type: { type: "string", enum: componentTypes },
+          stateAuthorities: {
+            type: "array",
+            minItems: 1,
+            uniqueItems: true,
+            items: { type: "string", enum: STATE_AUTHORITIES },
+          },
+          compositionMode: { type: "string", enum: COMPOSITION_MODES },
           status: { type: "string", enum: ["referenced", "explicit-gap"] },
           instanceCount: { type: "integer", minimum: 0 },
           routeIds: {
@@ -542,6 +597,8 @@ function validateInputs(inputs) {
 
   const viewRouteSet = new Set();
   const componentTypes = new Set(inputs.viewStateSchema.$defs.Component.properties.type.enum);
+  const eventTypes = new Set(inputs.uiEventSchema.properties.type.enum);
+  const semanticsByType = resolveComponentSemantics(inputs, [...componentTypes]);
   for (const [index, item] of inputs.viewStateFixtures.entries()) {
     assertAllowedKeys(
       item,
@@ -562,6 +619,17 @@ function validateInputs(inputs) {
       assert(!seen.has(component.id), `view-state fixture ${index} duplicates component id ${component.id}`);
       assert(isPlainObject(component.props ?? {}), `view-state fixture ${index} component ${component.id} props must be object`);
       assert(Array.isArray(component.children ?? []), `view-state fixture ${index} component ${component.id} children must be array`);
+      assert(Array.isArray(component.bindings ?? []), `view-state fixture ${index} component ${component.id} bindings must be array`);
+      const bindingTargets = new Set();
+      for (const binding of component.bindings ?? []) {
+        assertAllowedKeys(binding, new Set(["target", "event", "payload", "trigger"]), `view-state fixture ${index} component ${component.id} binding`);
+        assert(typeof binding.target === "string" && /^[a-z][a-z0-9.-]*$/.test(binding.target), `invalid binding target on ${component.id}`);
+        assert(!bindingTargets.has(binding.target), `duplicate binding target ${component.id}/${binding.target}`);
+        bindingTargets.add(binding.target);
+        assert(eventTypes.has(binding.event), `unknown explicit UiEvent binding ${binding.event}`);
+        assert(isPlainObject(binding.payload), `explicit binding payload must be object for ${binding.event}`);
+        assert(["tap", "change", "submit", "appear"].includes(binding.trigger), `explicit binding trigger invalid for ${binding.event}`);
+      }
       seen.add(component.id);
       for (const child of component.children ?? []) walk(child);
     };
@@ -598,6 +666,7 @@ function validateInputs(inputs) {
       for (const property of EXPLICIT_EVENT_PROPERTIES) {
         if (typeof component.props?.[property] === "string") events.add(component.props[property]);
       }
+      for (const binding of component.bindings ?? []) events.add(binding.event);
       for (const child of component.children ?? []) visit(child);
     };
     for (const component of viewFixture.components) visit(component);
@@ -609,7 +678,7 @@ function validateInputs(inputs) {
     }
   }
 
-  return { routeIds, routeFixtureMap };
+  return { routeIds, routeFixtureMap, semanticsByType };
 }
 
 function actionEvidence(component, eventTypes) {
@@ -629,6 +698,7 @@ function actionEvidence(component, eventTypes) {
           const trigger = props[triggerProperty];
           if (["tap", "change", "submit", "appear"].includes(trigger)) {
             bindings.push({
+              target: "self",
               event: value,
               payload: plainClone(payloadCandidate),
               evidenceProperty: property,
@@ -693,17 +763,33 @@ function actionEvidence(component, eventTypes) {
     }
   }
 
+  for (const binding of component.bindings ?? []) {
+    assert(eventTypes.has(binding.event), `unknown explicit UiEvent binding ${binding.event}`);
+    assert(isPlainObject(binding.payload), `explicit binding payload must be object for ${binding.event}`);
+    assert(["tap", "change", "submit", "appear"].includes(binding.trigger), `explicit binding trigger invalid for ${binding.event}`);
+    bindings.push({
+      target: binding.target,
+      event: binding.event,
+      payload: plainClone(binding.payload),
+      evidenceProperty: "explicitBinding",
+      trigger: binding.trigger,
+    });
+  }
+
   return { bindings, stateEventEvidence, gaps };
 }
 
-function normalizeComponent(component, eventTypes, actionGaps) {
+function normalizeComponent(component, eventTypes, actionGaps, semanticsByType) {
   const evidence = actionEvidence(component, eventTypes);
+  const semantics = semanticsByType.get(component.type);
   actionGaps.push(...evidence.gaps);
   return {
     type: component.type,
     id: component.id,
+    stateAuthorities: plainClone(semantics.stateAuthorities),
+    compositionMode: semantics.compositionMode,
     props: plainClone(component.props ?? {}),
-    children: (component.children ?? []).map((child) => normalizeComponent(child, eventTypes, actionGaps)),
+    children: (component.children ?? []).map((child) => normalizeComponent(child, eventTypes, actionGaps, semanticsByType)),
     bindings: evidence.bindings,
     stateEventEvidence: evidence.stateEventEvidence,
   };
@@ -721,7 +807,7 @@ function variantSelector(fixture) {
   };
 }
 
-function buildVariants(entries, eventTypes) {
+function buildVariants(entries, eventTypes, semanticsByType) {
   const pageStateCounts = new Map();
   const selectorKeys = new Set();
   for (const { item } of entries) {
@@ -742,7 +828,7 @@ function buildVariants(entries, eventTypes) {
       pageState: item.pageState,
       context: selector.context,
       facets: selector.facets,
-      components: item.components.map((component) => normalizeComponent(component, eventTypes, actionGaps)),
+      components: item.components.map((component) => normalizeComponent(component, eventTypes, actionGaps, semanticsByType)),
       actionGaps,
       viewStateFixtureIndex: index,
     };
@@ -767,7 +853,7 @@ function assertAliasGraph(routes) {
 }
 
 export function buildScreenGraph(inputs = loadScreenGraphInputs()) {
-  const { routeIds, routeFixtureMap } = validateInputs(inputs);
+  const { routeIds, routeFixtureMap, semanticsByType } = validateInputs(inputs);
   const eventTypes = new Set(inputs.uiEventSchema.properties.type.enum);
   const viewEntriesByRoute = new Map();
   for (const [index, item] of inputs.viewStateFixtures.entries()) {
@@ -789,7 +875,7 @@ export function buildScreenGraph(inputs = loadScreenGraphInputs()) {
       status = "alias";
     } else if (viewEntries.length > 0) {
       status = "direct";
-      variants = buildVariants(viewEntries, eventTypes);
+      variants = buildVariants(viewEntries, eventTypes, semanticsByType);
     } else {
       status = "explicit-gap";
       if (fixtureEntry == null) {
@@ -840,6 +926,8 @@ export function buildScreenGraph(inputs = loadScreenGraphInputs()) {
   }
   const componentCatalog = [...componentStats].map(([type, stat]) => ({
     type,
+    stateAuthorities: plainClone(semanticsByType.get(type).stateAuthorities),
+    compositionMode: semanticsByType.get(type).compositionMode,
     status: stat.instanceCount > 0 ? "referenced" : "explicit-gap",
     instanceCount: stat.instanceCount,
     routeIds: [...stat.routeIds],
@@ -852,7 +940,7 @@ export function buildScreenGraph(inputs = loadScreenGraphInputs()) {
         },
   }));
   return {
-    schemaVersion: "1.1.0",
+    schemaVersion: "1.2.0",
     generatedFrom: Object.values(SOURCE_PATHS),
     componentCatalog,
     routes,
@@ -872,6 +960,7 @@ export function validateScreenGraphSemantics(graph, inputs = loadScreenGraphInpu
   const componentTypes = new Set(inputs.viewStateSchema.$defs.Component.properties.type.enum);
   const pageStates = new Set(inputs.viewStateSchema.properties.pageState.enum);
   const eventTypes = new Set(inputs.uiEventSchema.properties.type.enum);
+  const semanticsByType = resolveComponentSemantics(inputs, [...componentTypes]);
   const graphIds = graph.routes.map((route) => route.routeId);
   assert(canonicalJson(graphIds) === canonicalJson(routeIds), "screen graph routes must match canonical RouteId order exactly");
   assert(new Set(graphIds).size === graphIds.length, "screen graph contains duplicate routes");
@@ -886,6 +975,11 @@ export function validateScreenGraphSemantics(graph, inputs = loadScreenGraphInpu
     new Set(componentCatalogTypes).size === componentCatalogTypes.length,
     "component catalog contains duplicate ComponentType values",
   );
+  for (const entry of graph.componentCatalog) {
+    const semantics = semanticsByType.get(entry.type);
+    assert(canonicalJson(entry.stateAuthorities) === canonicalJson(semantics.stateAuthorities), `component catalog authority drift for ${entry.type}`);
+    assert(entry.compositionMode === semantics.compositionMode, `component catalog composition drift for ${entry.type}`);
+  }
 
   for (const route of graph.routes) {
     assert(routeSet.has(route.routeId), `screen graph has orphan route ${route.routeId}`);
@@ -904,6 +998,17 @@ export function validateScreenGraphSemantics(graph, inputs = loadScreenGraphInpu
       assert(!selectorKeys.has(selectorKey), `duplicate selector ${route.routeId}/${variant.variantId}`);
       selectorKeys.add(selectorKey);
 
+      const sourceFixture = inputs.viewStateFixtures[variant.viewStateFixtureIndex];
+      assert(sourceFixture?.routeId === route.routeId, `view-state fixture index drift for ${route.routeId}/${variant.variantId}`);
+      const sourceComponentsById = new Map();
+      const collectSource = (components) => {
+        for (const component of components) {
+          sourceComponentsById.set(component.id, component);
+          collectSource(component.children ?? []);
+        }
+      };
+      collectSource(sourceFixture.components);
+
       const componentIds = new Set();
       const graphGaps = new Map(
         variant.actionGaps.map((gap) => [`${gap.componentId}\u0000${gap.property}`, gap]),
@@ -915,16 +1020,30 @@ export function validateScreenGraphSemantics(graph, inputs = loadScreenGraphInpu
         assert(!componentIds.has(component.id), `duplicate component id ${route.routeId}/${variant.variantId}/${component.id}`);
         componentIds.add(component.id);
 
-        const evidence = actionEvidence(component, eventTypes);
+        const sourceComponent = sourceComponentsById.get(component.id);
+        assert(sourceComponent != null, `generated component has no ViewState source ${route.routeId}/${component.id}`);
+        const semantics = semanticsByType.get(component.type);
+        assert(canonicalJson(component.stateAuthorities) === canonicalJson(semantics.stateAuthorities), `component authority drift for ${route.routeId}/${component.id}`);
+        assert(component.compositionMode === semantics.compositionMode, `component composition drift for ${route.routeId}/${component.id}`);
+
+        const evidence = actionEvidence(sourceComponent, eventTypes);
         expectedGaps.push(...evidence.gaps);
+        const bindingTargets = new Set();
         for (const binding of component.bindings) {
           assert(eventTypes.has(binding.event), `unknown UiEvent binding ${binding.event}`);
+          assert(typeof binding.target === "string" && /^[a-z][a-z0-9.-]*$/.test(binding.target), `binding target invalid for ${binding.event}`);
+          assert(!bindingTargets.has(binding.target), `duplicate binding target ${component.id}/${binding.target}`);
+          bindingTargets.add(binding.target);
           assert(isPlainObject(binding.payload), `binding payload must be object for ${binding.event}`);
           assert(["tap", "change", "submit", "appear"].includes(binding.trigger), `binding trigger invalid for ${binding.event}`);
-          assert(
-            component.props[binding.evidenceProperty] === binding.event,
-            `binding ${binding.event} has no matching fixture evidence on ${component.id}`,
-          );
+          if (binding.evidenceProperty === "explicitBinding") {
+            assert(binding.target !== "self", `explicit binding on ${component.id} must name a semantic target`);
+          } else {
+            assert(
+              component.props[binding.evidenceProperty] === binding.event,
+              `binding ${binding.event} has no matching fixture evidence on ${component.id}`,
+            );
+          }
         }
         for (const evidenceEntry of component.stateEventEvidence) {
           assert(eventTypes.has(evidenceEntry.event), `unknown state event evidence ${evidenceEntry.event}`);
@@ -1077,7 +1196,7 @@ export function buildScreenGraphCoverage(graph, inputs = loadScreenGraphInputs()
   }
 
   return {
-    schemaVersion: "1.1.0",
+    schemaVersion: "1.2.0",
     graphSha256: sha256(formatJson(graph)),
     canonicalRoutes: inputs.routeSchema.properties.id.enum.length,
     graphRoutes: graph.routes.length,
@@ -1097,7 +1216,17 @@ export function buildScreenGraphCoverage(graph, inputs = loadScreenGraphInputs()
     unusedComponentTypes: canonicalComponents.filter((type) => !usedComponents.has(type)),
     componentFixtureEvidenceSummary,
     componentFixtureEvidence: componentFixtureEvidenceRecords,
+    hostCompositeComponentTypes: graph.componentCatalog
+      .filter((entry) => entry.compositionMode === "host-composite")
+      .map((entry) => entry.type),
     typedActionBindings: bindings,
+    explicitTargetBindings: graph.routes.reduce((total, route) => total + route.variants.reduce((routeTotal, variant) => {
+      let count = 0;
+      walkComponents(variant.components, (component) => {
+        count += component.bindings.filter((binding) => binding.evidenceProperty === "explicitBinding").length;
+      });
+      return routeTotal + count;
+    }, 0), 0),
     stateEventEvidence,
     totalCanonicalEventEvidence: bindings + stateEventEvidence,
     explicitActionGaps: actionGaps,

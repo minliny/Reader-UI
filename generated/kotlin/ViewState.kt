@@ -359,11 +359,20 @@ enum class ComponentType {
 }
 
 @Serializable
+data class ViewStateExplicitBinding(
+    val target: String,
+    val event: String,
+    val payload: Map<String, JsonElement>,
+    val trigger: String
+)
+
+@Serializable
 data class ViewStateComponent(
     val type: ComponentType,
     val id: String? = null,
     val props: Map<String, JsonElement>? = null,
-    val children: List<ViewStateComponent>? = null
+    val children: List<ViewStateComponent>? = null,
+    val bindings: List<ViewStateExplicitBinding>? = null
 )
 
 @Serializable

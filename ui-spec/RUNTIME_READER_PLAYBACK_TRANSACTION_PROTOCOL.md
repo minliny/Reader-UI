@@ -1,9 +1,9 @@
 # Reader Page / TTS / Auto-Page Transaction Protocol
 
-This protocol defines the R8 batch after `book.open`. It does not promote any
-event by itself and does not change the 2.4 runtime action hash. The purpose is
-to freeze the one-owner, exactly-once boundary before the shared runtime and
-the three Hosts implement it.
+This protocol defines the shared playback transaction batch after `book.open`.
+It does not promote any event by itself. Runtime action schema 3 adds the
+required progress-persistence stage to the page pair before any Host may treat
+the visible page as committed.
 
 The covered canonical events are:
 
@@ -40,7 +40,10 @@ page intent(direction, correlation)
   -> Host paginator proposes a real chapter-local anchor
   -> runtime validates active reader + direction + measured viewport
   -> reader.location.resolve(anchor, viewport)
-  -> commit canonical location and visible page index
+  -> runtime stores pending canonical location/page index
+  -> reader.progress.update({})
+     Host fills the correlation-scoped Core DTO from DomainContext
+  -> commit canonical location and visible page index only after stored=true
   -> completed
 ```
 
@@ -48,14 +51,29 @@ The renderer/paginator supplies a measured, non-zero viewport and a real anchor
 derived from the current Core content. At a chapter boundary it supplies the
 adjacent Core TOC entry through DomainContext; the runtime still owns whether
 one page intent is pending. The visible page index is committed only after the
-matching `reader.location.resolve` succeeds. Failure preserves the last
-committed page/location and records a recoverable error.
+matching `reader.progress.update` succeeds with `{stored:true}`. Resolve or
+persistence failure preserves the last committed page/location and records a
+recoverable error. The progress effect payload is deliberately `{}`:
+book/source/device, chapter offset/progress, location revision and timestamp
+are typed Core facts that the Host binds from correlation-scoped DomainContext.
+They must not be reconstructed from UI payload aliases.
 
 Only one page transaction may be active. Latest intent may supersede the old
-one only by cancelling its request handle and invalidating its correlation.
-Back, reader exit, book replacement and session teardown cancel it. A synthetic
-`0x0` layout, an array offset substituted for Core chapter identity, or a late
-location result must never advance the page.
+one while it is awaiting layout or resolving location by cancelling its request
+handle and invalidating its correlation. Emitting `reader.progress.update` is
+the commit boundary: `persisting-progress` cannot be cancelled, rolled back or
+superseded. A new manual/explicit/automatic page intent, auto-page start/tick,
+or explicit page cancellation fails closed with
+`PAGE_PROGRESS_COMMIT_PENDING`. Any route/reader-identity mutation, including
+`reader.exit`, `book.open`, generic push/replace/pop/pop-to-root and tab select,
+also fails with the same code before state changes, so an old terminal callback
+cannot contaminate another route/book. A page intent is likewise rejected with
+`BOOK_OPEN_TRANSACTION_PENDING` while `book.open` owns the reader identity. A
+non-identity session teardown may stop
+timers or sessions, but it retains the in-flight progress transaction and must
+accept its matching terminal callback; it must not report that Core mutation as
+cancelled. A synthetic `0x0` layout, an array offset substituted for Core
+chapter identity, or a late result must never advance the page.
 
 The shared runtime implementation therefore needs conceptual APIs equivalent
 to:
@@ -63,7 +81,8 @@ to:
 1. `beginPageStep(direction, correlationId)`;
 2. `providePageLayout(correlationId, anchor, viewport)`;
 3. `acceptPageLocationResult(correlationId, result|error)`;
-4. `cancelPageStep(correlationId)`.
+4. `acceptPageProgressResult(correlationId, stored|error)`;
+5. `cancelPageStep(correlationId)` before the progress commit boundary only.
 
 ## 3. TTS start and stop transaction
 
@@ -121,13 +140,19 @@ reader.autoPage.start(intervalMs, correlation)
 
 timer fires(correlation, generation)
   -> begin the canonical page-next transaction
-  -> after matching page commit, arm the next one-shot timer
+  -> resolve location and persist progress
+  -> after matching stored=true page commit, arm the next one-shot timer
 
-reader.autoPage.stop / reader exit / book replacement / app background
+reader.autoPage.stop / app background
   -> invalidate generation
   -> cancel timer
-  -> cancel pending auto-page page transaction
+  -> cancel a pre-commit auto-page page transaction
+  -> retain an already dispatched progress update until its terminal callback
   -> clear activeSession and countdown state
+
+reader.exit / book replacement while progress is pending
+  -> fail PAGE_PROGRESS_COMMIT_PENDING before route or identity mutation
+  -> retry only after the matching progress callback terminates
 ```
 
 The timer callback never mutates page state directly. It enters the same page
@@ -148,6 +173,10 @@ first invalidates the auto-page generation and emits exactly one
 `timer.foreground.cancel`, then enters the manual page transaction. Conversely,
 auto-page start while a manual page transaction is pending fails closed with
 `PAGE_TRANSACTION_PENDING`; it never cancels or overlaps that manual intent.
+If any page transaction has already entered `persisting-progress`, both paths
+fail with `PAGE_PROGRESS_COMMIT_PENDING` and emit no cancellation or replacement
+effect. Auto-page rearms only after progress persistence succeeds; persistence
+failure keeps the old visible page and terminates the matching auto-page session.
 
 ## 5. Projection and exactly-once rules
 
@@ -192,11 +221,11 @@ in this document has been promoted.
 
 ## 7. Compatibility and release staging
 
-This implementation remains additive to the existing `ReaderUIRuntime` APIs.
-The current `ui-spec/runtime-actions.json` contains 61 actions; its SHA-256 is
-`0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c`.
-Reader-UI 2.5.1 and all three consumer locks carry this action hash plus
-HostRequest schema 1.2.0. The synchronized locks keep the page pair in Shadow
-and admit the TTS and auto-page pairs to Pilot with exactly-once cohorts.
-Version/lock sync and unit/build proof are still not physical-device proof or
-Authoritative promotion.
+The new callback APIs are additive, but page next/previous semantics and their
+action descriptor sequence are intentionally breaking: consumers must execute
+both Core effects in order and keep DomainContext alive through the progress
+callback. Runtime action schema 3 and typed payload/result schema 2 therefore
+require a coordinated consumer upgrade. Host consumer locks remain unchanged
+until each platform implements the correlation-scoped progress DTO bridge and
+proves the sequence. Version/lock sync and unit/build proof are still not
+physical-device proof or Authoritative promotion.

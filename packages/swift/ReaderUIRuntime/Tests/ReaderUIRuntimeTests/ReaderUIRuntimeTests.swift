@@ -92,6 +92,14 @@ final class ReaderUIRuntimeTests: XCTestCase {
             ]
         )
         XCTAssertTrue(accepted.accepted)
+        XCTAssertEqual(accepted.effects.map(\.type), ["reader.progress.update"])
+        XCTAssertEqual(runtime.state.readerPageIndex, 2)
+        XCTAssertTrue(
+            try runtime.acceptPageProgressJSONResult(
+                correlationId: "json-result",
+                result: ["stored": true]
+            ).accepted
+        )
         XCTAssertEqual(runtime.state.readerPageIndex, 3)
         XCTAssertEqual(runtime.state.readerCanonicalLocation, "chapter-4:p3")
 
@@ -116,7 +124,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testGeneratedTypedPayloadFixturesHaveExactParity() throws {
-        XCTAssertEqual(GeneratedRuntimeTypedPayloadContracts.byEvent.count, 61)
+        XCTAssertEqual(GeneratedRuntimeTypedPayloadContracts.byEvent.count, 63)
         XCTAssertEqual(GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.count, 170)
         for fixture in GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES {
             if fixture.valid {
@@ -133,7 +141,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testGeneratedTypedResultFixturesHaveExactParity() throws {
-        XCTAssertEqual(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.count, 142)
+        XCTAssertEqual(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.count, 154)
         for fixture in GENERATED_RUNTIME_TYPED_RESULT_FIXTURES {
             if fixture.valid {
                 XCTAssertNoThrow(
@@ -294,13 +302,32 @@ final class ReaderUIRuntimeTests: XCTestCase {
 
         _ = try runtime.dispatch(event: "reader.page.prev", correlationId: "page-2")
         _ = try runtime.providePageLayout(correlationId: "page-2", layout: measuredPageLayout(targetPageIndex: 3))
-        XCTAssertTrue(
-            runtime.acceptPageLocationResult(
-                correlationId: "page-2",
-                canonicalLocation: "canonical-ch4-p3",
-                pageIndex: 3
-            ).accepted
+        let persisting = runtime.acceptPageLocationResult(
+            correlationId: "page-2",
+            canonicalLocation: "canonical-ch4-p3",
+            pageIndex: 3
         )
+        XCTAssertTrue(persisting.accepted)
+        XCTAssertEqual(persisting.effects.map(\.type), ["reader.progress.update"])
+        XCTAssertTrue(persisting.effects[0].jsonPayload.isEmpty)
+        XCTAssertEqual(runtime.state.pageTransaction?.stage, "persisting-progress")
+        XCTAssertEqual(runtime.state.readerPageIndex, 4)
+        XCTAssertThrowsError(try runtime.dispatch(event: "reader.page.next", correlationId: "page-blocked")) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertThrowsError(
+            try runtime.dispatch(
+                event: "reader.autoPage.start",
+                payload: ["intervalMs": "4000"],
+                correlationId: "auto-blocked"
+            )
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertThrowsError(try runtime.cancelPageStep(correlationId: "page-2")) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertTrue(runtime.acceptPageProgressResult(correlationId: "page-2", stored: true).accepted)
         XCTAssertEqual(runtime.state.readerPageIndex, 3)
         XCTAssertEqual(runtime.state.readerCanonicalLocation, "canonical-ch4-p3")
         XCTAssertFalse(
@@ -310,6 +337,26 @@ final class ReaderUIRuntimeTests: XCTestCase {
                 pageIndex: 9
             ).accepted
         )
+
+        _ = try runtime.dispatch(event: "reader.page.next", correlationId: "page-progress-error")
+        _ = try runtime.providePageLayout(
+            correlationId: "page-progress-error",
+            layout: measuredPageLayout(targetPageIndex: 4)
+        )
+        _ = runtime.acceptPageLocationResult(
+            correlationId: "page-progress-error",
+            canonicalLocation: "canonical-ch4-p4",
+            pageIndex: 4
+        )
+        XCTAssertTrue(
+            runtime.acceptPageProgressResult(
+                correlationId: "page-progress-error",
+                error: "PROGRESS_STORE_FAILED"
+            ).accepted
+        )
+        XCTAssertEqual(runtime.state.readerPageIndex, 3)
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, "canonical-ch4-p3")
+        XCTAssertEqual(runtime.state.error, "PROGRESS_STORE_FAILED")
     }
 
     func testPageSupersessionAndExplicitLocationShareOneTransaction() throws {
@@ -332,6 +379,64 @@ final class ReaderUIRuntimeTests: XCTestCase {
         )
         XCTAssertEqual(resolving.effects.first?.jsonPayload["direction"], .string("explicit"))
         XCTAssertEqual(resolving.effects.first?.jsonPayload["reason"], .string("chapter-jump"))
+    }
+
+    func testProgressCommitBoundaryBlocksExitAndBookReplacementWithoutCrossRouteContamination() throws {
+        let runtime = activeReaderRuntime(pageIndex: 2, canonicalLocation: "book-a-page-2")
+        _ = try runtime.dispatch(event: "reader.page.next", correlationId: "page-boundary")
+        _ = try runtime.providePageLayout(
+            correlationId: "page-boundary",
+            layout: measuredPageLayout(targetPageIndex: 3)
+        )
+        _ = runtime.acceptPageLocationResult(
+            correlationId: "page-boundary",
+            canonicalLocation: "book-a-page-3",
+            pageIndex: 3
+        )
+        let pending = runtime.state
+
+        XCTAssertThrowsError(try runtime.dispatch(event: "reader.exit")) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertThrowsError(
+            try runtime.dispatch(
+                event: "book.open",
+                payload: ["bookId": "book-b", "sourceId": "source-b", "sourceKind": "remote"],
+                correlationId: "open-book-b"
+            )
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertThrowsError(
+            try runtime.dispatch(event: "route.replace", payload: ["routeId": "bookshelf"])
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertThrowsError(try runtime.dispatch(event: "route.pop")) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertThrowsError(
+            try runtime.dispatch(event: "mainTab.select", payload: ["tab": "settings"])
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "PAGE_PROGRESS_COMMIT_PENDING")
+        }
+        XCTAssertEqual(pending, runtime.state)
+
+        XCTAssertTrue(runtime.acceptPageProgressResult(correlationId: "page-boundary", stored: true).accepted)
+        let opened = try runtime.dispatch(
+            event: "book.open",
+            payload: ["bookId": "book-b", "sourceId": "source-b", "sourceKind": "remote"],
+            correlationId: "open-book-b"
+        )
+        XCTAssertEqual(opened.state.bookOpenTransaction?.correlationId, "open-book-b")
+        XCTAssertThrowsError(
+            try runtime.dispatch(event: "reader.page.next", correlationId: "book-open-page")
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "BOOK_OPEN_TRANSACTION_PENDING")
+        }
+        XCTAssertFalse(runtime.acceptPageProgressResult(correlationId: "page-boundary", stored: true).accepted)
+        XCTAssertEqual(runtime.state.readerPageIndex, 3)
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, "book-a-page-3")
     }
 
     func testTTSPlanQueueSpeechAndOrderedTeardown() throws {
@@ -398,11 +503,14 @@ final class ReaderUIRuntimeTests: XCTestCase {
             correlationId: pageCorrelation,
             layout: measuredPageLayout(targetPageIndex: 2)
         )
-        let committed = runtime.acceptPageLocationResult(
+        let persisting = runtime.acceptPageLocationResult(
             correlationId: pageCorrelation,
             canonicalLocation: "page-2",
             pageIndex: 2
         )
+        XCTAssertEqual(persisting.effects.map(\.type), ["reader.progress.update"])
+        XCTAssertEqual(runtime.state.readerPageIndex, 1)
+        let committed = runtime.acceptPageProgressResult(correlationId: pageCorrelation, stored: true)
         XCTAssertEqual(committed.effects.map(\.type), [ReaderUIPlaybackDirective.foregroundTimerArm])
         XCTAssertEqual(runtime.state.readerPageIndex, 2)
 
@@ -529,6 +637,54 @@ final class ReaderUIRuntimeTests: XCTestCase {
         _ = try runtime.dispatch(event: "overlay.sheet.open")
         _ = try runtime.dispatch(event: "reader.directory.close")
         XCTAssertEqual(runtime.state.overlay, "sheet")
+    }
+
+    func testReaderControlAndModuleActionsAreAtomicAndRouteStable() throws {
+        let runtime = activeReaderRuntime()
+        let routeBefore = runtime.state.routeId
+
+        let opened = try runtime.dispatch(
+            event: "reader.control.toggle",
+            payload: ["overlay": "reader-control"]
+        )
+        XCTAssertEqual(opened.state.overlay, "reader-control")
+        XCTAssertEqual(opened.state.routeId, routeBefore)
+        XCTAssertTrue(opened.effects.isEmpty)
+
+        _ = try runtime.dispatch(event: "reader.module.switch", payload: ["module": "directory"])
+        XCTAssertEqual(runtime.state.overlay, "directory")
+        let repeated = runtime.state
+        _ = try runtime.dispatch(event: "reader.module.switch", payload: ["module": "directory"])
+        XCTAssertEqual(runtime.state, repeated)
+
+        _ = try runtime.dispatch(event: "reader.module.switch", payload: ["module": "appearance"])
+        XCTAssertEqual(runtime.state.overlay, "appearance")
+        _ = try runtime.dispatch(event: "reader.control.toggle", payload: ["overlay": "reader-control"])
+        XCTAssertNil(runtime.state.overlay)
+        XCTAssertEqual(runtime.state.routeId, routeBefore)
+    }
+
+    func testReaderControlActionsFailClosedOutsideReaderOverlayFamily() throws {
+        let outsideReader = ReaderUIRuntime()
+        XCTAssertThrowsError(
+            try outsideReader.dispatch(event: "reader.control.toggle", payload: ["overlay": "reader-control"])
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "READER_ROUTE_GUARD")
+        }
+
+        let runtime = activeReaderRuntime()
+        XCTAssertThrowsError(try runtime.dispatch(event: "reader.module.switch", payload: ["module": "tts"])) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "READER_CONTROL_OVERLAY_GUARD")
+        }
+        _ = try runtime.dispatch(event: "overlay.dialog.open")
+        XCTAssertThrowsError(
+            try runtime.dispatch(event: "reader.control.toggle", payload: ["overlay": "reader-control"])
+        ) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "READER_CONTROL_OVERLAY_GUARD")
+        }
+        XCTAssertThrowsError(try runtime.dispatch(event: "reader.module.switch", payload: ["module": "search"])) { error in
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "INVALID_TYPED_PAYLOAD")
+        }
     }
 
     func testUnknownEventFailsClosed() {

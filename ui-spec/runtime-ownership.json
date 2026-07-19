@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "canonicalUiEventCount": 270,
-  "expectedImplementedActions": 61,
+  "canonicalUiEventCount": 300,
+  "expectedImplementedActions": 63,
   "ownershipRules": [
     {
       "id": "raw-reader-gesture",
@@ -65,7 +65,8 @@
         "source.",
         "discover.",
         "rss.",
-        "search."
+        "search.",
+        "webview."
       ],
       "workflow": "W3"
     },
@@ -89,12 +90,32 @@
     },
     {
       "id": "reader",
-      "prefixes": ["book.", "reader.", "tts."],
+      "prefixes": [
+        "book.",
+        "reader.",
+        "tts.",
+        "httpTts.",
+        "pdf.",
+        "manga.",
+        "content.",
+        "chapter.",
+        "bookmarks."
+      ],
       "workflow": "W2"
     },
     {
       "id": "import-and-library",
-      "prefixes": ["import.", "bookshelf.", "mainTab.", "app.firstOpen."],
+      "prefixes": [
+        "import.",
+        "bookshelf.",
+        "mainTab.",
+        "app.firstOpen.",
+        "onboarding.",
+        "permission.",
+        "localFormat.",
+        "download.",
+        "storage."
+      ],
       "workflow": "W1"
     },
     {

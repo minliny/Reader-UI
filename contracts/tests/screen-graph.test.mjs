@@ -32,6 +32,8 @@ const inputs = loadScreenGraphInputs();
 const schema = loadJson(SCREEN_GRAPH_SCHEMA_PATH);
 const graph = loadJson(SCREEN_GRAPH_PATH);
 const coverage = loadJson(SCREEN_GRAPH_COVERAGE_PATH);
+const componentRenderSemanticsSchema = loadJson("ui-spec/component-render-semantics.schema.json");
+const componentRenderSemantics = loadJson("ui-spec/component-render-semantics.json");
 
 function firstDirectVariant(target = graph) {
   return target.routes.find((route) => route.status === "direct").variants[0];
@@ -57,9 +59,9 @@ test("R16A screen graph schema is strict JSON Schema 2020-12", () => {
   assert.equal(schema.$defs.ComponentNode.additionalProperties, false);
   assert.equal(schema.$defs.ComponentCatalogEntry.additionalProperties, false);
   assert.equal(schema.$defs.ActionBinding.additionalProperties, false);
-  assert.equal(schema.$defs.RouteNode.properties.routeId.enum.length, 235);
+  assert.equal(schema.$defs.RouteNode.properties.routeId.enum.length, 260);
   assert.equal(schema.$defs.ComponentNode.properties.type.enum.length, 174);
-  assert.equal(schema.$defs.ActionBinding.properties.event.enum.length, 270);
+  assert.equal(schema.$defs.ActionBinding.properties.event.enum.length, 300);
 });
 
 test("R16A canonical screen graph passes schema and semantic source parity", () => {
@@ -67,11 +69,26 @@ test("R16A canonical screen graph passes schema and semantic source parity", () 
   assert.equal(validateScreenGraphSemantics(graph, inputs), true);
 });
 
+test("R16A component render semantics are strict and cover only canonical component types", () => {
+  assertValid(componentRenderSemanticsSchema, componentRenderSemantics, "component render semantics");
+  const canonicalTypes = new Set(inputs.viewStateSchema.$defs.Component.properties.type.enum);
+  assert.equal(Object.keys(componentRenderSemantics.overrides).every((type) => canonicalTypes.has(type)), true);
+  assert.deepEqual(coverage.hostCompositeComponentTypes, [
+    "TapZones",
+    "ReaderBase",
+    "ReaderTopArea",
+    "ReaderBottomBar",
+  ]);
+  const readerBase = graph.componentCatalog.find((entry) => entry.type === "ReaderBase");
+  assert.deepEqual(readerBase.stateAuthorities, ["core", "reader-ui-runtime", "host-store", "host-layout"]);
+  assert.equal(readerBase.compositionMode, "host-composite");
+});
+
 test("R16A graph covers every canonical route once in canonical order", () => {
   const canonical = inputs.routeSchema.properties.id.enum;
   assert.deepEqual(graph.routes.map((route) => route.routeId), canonical);
   assert.equal(new Set(graph.routes.map((route) => route.routeId)).size, canonical.length);
-  assert.equal(graph.routes.length, 235);
+  assert.equal(graph.routes.length, 260);
 });
 
 test("R16A preserves direct trees, aliases, and explicit gaps as separate truth", () => {
@@ -82,7 +99,7 @@ test("R16A preserves direct trees, aliases, and explicit gaps as separate truth"
         graph.routes.filter((route) => route.status === status).length,
       ]),
     ),
-    { direct: 159, alias: 76, "explicit-gap": 0 },
+    { direct: 184, alias: 76, "explicit-gap": 0 },
   );
   assert.equal(graph.routes.filter((route) => route.status === "direct").every((route) => route.variants.length > 0), true);
   assert.equal(graph.routes.filter((route) => route.status === "alias").every((route) => route.variants.length === 0 && route.aliasFor), true);
@@ -107,8 +124,8 @@ test("R16A component tree uses canonical ComponentType and never pseudo-covers g
     graph.componentCatalog.map((entry) => entry.type),
     inputs.viewStateSchema.$defs.Component.properties.type.enum,
   );
-  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "referenced").length, 129);
-  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "explicit-gap").length, 45);
+  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "referenced").length, 138);
+  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "explicit-gap").length, 36);
   assert.equal(
     graph.componentCatalog
       .filter((entry) => entry.status === "explicit-gap")
@@ -135,16 +152,24 @@ test("R16A variants and component ids are unique within their route/variant", ()
 });
 
 test("R16D executable bindings, state evidence, and unresolved labels stay separate", () => {
-  assert.equal(coverage.typedActionBindings, 36);
+  assert.equal(coverage.typedActionBindings, 97);
+  assert.equal(coverage.explicitTargetBindings, 61);
   assert.equal(coverage.stateEventEvidence, 19);
-  assert.equal(coverage.totalCanonicalEventEvidence, 55);
+  assert.equal(coverage.totalCanonicalEventEvidence, 116);
   assert.equal(coverage.explicitActionGaps, 6);
   assert.deepEqual(coverage.actionGapsByReason, { "label-without-ui-event": 6 });
   for (const route of graph.routes) {
     for (const variant of route.variants) {
       const walk = (components) => {
         for (const component of components) {
-          for (const binding of component.bindings) assert.equal(binding.trigger, "tap");
+          for (const binding of component.bindings) {
+            assert.ok(
+              schema.$defs.ActionBinding.properties.trigger.enum.includes(binding.trigger),
+              `unsupported binding trigger ${binding.trigger}`,
+            );
+            if (binding.evidenceProperty === "explicitBinding") assert.notEqual(binding.target, "self");
+            else assert.equal(binding.target, "self");
+          }
           for (const evidence of component.stateEventEvidence) {
             assert.equal(evidence.classification, "state-evidence");
             assert.equal(component.props[evidence.evidenceProperty], evidence.event);
@@ -163,25 +188,28 @@ test("R16D executable bindings, state evidence, and unresolved labels stay separ
 
 test("R16E component fixture evidence exposes data-backed, partial, and type-only renderer gaps", () => {
   assert.deepEqual(coverage.componentFixtureEvidenceSummary, {
-    "data-backed": 63,
-    "type-only": 57,
-    partial: 9,
-    "explicit-gap": 45,
+    "data-backed": 72,
+    "type-only": 54,
+    partial: 12,
+    "explicit-gap": 36,
   });
   assert.equal(coverage.componentFixtureEvidence.length, 174);
   assert.equal(
     coverage.componentFixtureEvidence.filter((entry) => entry.catalogStatus === "referenced").length,
-    129,
+    138,
   );
-  const typeOnly = coverage.componentFixtureEvidence.find((entry) => entry.type === "ReaderTopArea");
+  const typeOnly = coverage.componentFixtureEvidence.find((entry) => entry.type === "DiscoverSourceBar");
   assert.equal(typeOnly.evidenceClass, "type-only");
   assert.equal(typeOnly.typeOnlyInstanceCount, typeOnly.instanceCount);
+  const readerTopArea = coverage.componentFixtureEvidence.find((entry) => entry.type === "ReaderTopArea");
+  assert.equal(readerTopArea.evidenceClass, "partial");
+  assert.ok(readerTopArea.typeOnlyInstanceCount > 0 && readerTopArea.typeOnlyInstanceCount < readerTopArea.instanceCount);
   const partial = coverage.componentFixtureEvidence.find((entry) => entry.type === "ReaderAppearancePanel");
   assert.equal(partial.evidenceClass, "partial");
   assert.ok(partial.typeOnlyInstanceCount > 0 && partial.typeOnlyInstanceCount < partial.instanceCount);
   const dataBacked = coverage.componentFixtureEvidence.find((entry) => entry.type === "BookCard");
   assert.equal(dataBacked.evidenceClass, "data-backed");
-  assert.deepEqual(dataBacked.propKeys, ["author", "bookId", "coverKey", "title"]);
+  assert.deepEqual(dataBacked.propKeys, ["author", "bookId", "coverKey", "semanticRole", "title", "viewMode"]);
 });
 
 test("R16C executable action bindings satisfy the R14 typed payload contract", () => {
@@ -196,7 +224,41 @@ test("R16C executable action bindings satisfy the R14 typed payload contract", (
     }
   };
   for (const route of graph.routes) for (const variant of route.variants) walk(variant.components);
-  assert.equal(executableBindings, 12);
+  assert.equal(executableBindings, 38);
+});
+
+test("R16D TapZones expose canonical geometry, boundary gating, and semantic targets", () => {
+  const expected = {
+    "reader-content-loading": [],
+    "reader-content-offline": ["previous:reader.page.prev", "control:reader.control.toggle", "next:reader.page.next"],
+    "reader-content-error": ["previous:reader.page.prev", "control:reader.control.toggle", "next:reader.page.next"],
+    "reader-page-boundary-first": ["control:reader.control.toggle", "next:reader.page.next"],
+    "reader-page-boundary-last": ["previous:reader.page.prev", "control:reader.control.toggle"],
+  };
+  for (const [routeId, expectedBindings] of Object.entries(expected)) {
+    const route = graph.routes.find((entry) => entry.routeId === routeId);
+    const queue = [...route.variants[0].components];
+    let tapZones;
+    while (queue.length > 0) {
+      const component = queue.shift();
+      if (component.type === "TapZones") {
+        tapZones = component;
+        break;
+      }
+      queue.push(...component.children);
+    }
+    assert.ok(tapZones, routeId);
+    assert.deepEqual(
+      [tapZones.props.previousRatio, tapZones.props.controlRatio, tapZones.props.nextRatio],
+      [0.26, 0.48, 0.26],
+    );
+    assert.deepEqual(
+      tapZones.bindings.map((binding) => `${binding.target}:${binding.event}`),
+      expectedBindings,
+    );
+    assert.deepEqual(tapZones.stateAuthorities, ["reader-ui-runtime", "host-layout"]);
+    assert.equal(tapZones.compositionMode, "host-composite");
+  }
 });
 
 function routeNode(routeId) {
@@ -311,17 +373,17 @@ test("R16B W5 fails closed when replacement preview loses apply action", () => {
 });
 
 test("R16A coverage report preserves native-renderer and Authoritative boundary", () => {
-  assert.equal(coverage.canonicalRoutes, 235);
-  assert.equal(coverage.resolvableRoutes, 235);
+  assert.equal(coverage.canonicalRoutes, 260);
+  assert.equal(coverage.resolvableRoutes, 260);
   assert.equal(coverage.explicitGapRoutes, 0);
-  assert.equal(coverage.viewStateFixtures, 165);
-  assert.equal(coverage.variants, 165);
+  assert.equal(coverage.viewStateFixtures, 190);
+  assert.equal(coverage.variants, 190);
   assert.equal(coverage.componentInstances, componentInstanceCount());
   assert.equal(coverage.canonicalComponentTypes, 174);
   assert.equal(coverage.componentCatalogTypes, 174);
-  assert.equal(coverage.usedComponentTypes, 129);
-  assert.equal(coverage.referencedComponentTypes, 129);
-  assert.equal(coverage.explicitGapComponentTypes, 45);
+  assert.equal(coverage.usedComponentTypes, 138);
+  assert.equal(coverage.referencedComponentTypes, 138);
+  assert.equal(coverage.explicitGapComponentTypes, 36);
   assert.deepEqual(coverage.proofBoundary.graphGreenDoesNotMean, [
     "iOS native renderer complete",
     "Android native renderer complete",
@@ -375,8 +437,8 @@ test("R16C native registries embed the complete canonical graph losslessly", () 
     assert.equal(value, expected);
     const decoded = JSON.parse(value);
     assert.deepEqual(decoded, graph);
-    assert.equal(decoded.routes.length, 235);
-    assert.equal(decoded.routes.reduce((count, route) => count + route.variants.length, 0), 165);
+    assert.equal(decoded.routes.length, 260);
+    assert.equal(decoded.routes.reduce((count, route) => count + route.variants.length, 0), 190);
   }
   const expectedHash = createHash("sha256").update(expected).digest("hex");
   assert.equal(swift.includes(`sha256 = "${expectedHash}"`), true);
@@ -394,24 +456,39 @@ test("R16C native APIs type RouteId, ComponentType, PageState, and UiEvent bindi
   assert.match(swift, /public let pageState: PageState/);
   assert.match(swift, /public let type: ComponentType/);
   assert.match(swift, /public let event: UiEventType/);
+  assert.match(swift, /public let target: String/);
+  assert.match(swift, /public let stateAuthorities: \[String\]/);
+  assert.match(swift, /public let compositionMode: String/);
   assert.match(swift, /public let stateEventEvidence: \[ScreenGraphStateEventEvidence\]/);
   assert.match(swift, /public static func loadCanonical\(\) throws -> ScreenGraphRegistry/);
+  assert.match(swift, /document\.schemaVersion == "1\.2\.0"/);
+  assert.doesNotMatch(swift, /document\.schemaVersion == "1\.1\.0"/);
   assert.match(swift, /public func resolve\(_ routeId: RouteId\) throws -> ScreenGraphRouteNode/);
 
   assert.match(kotlin, /val routeId: RouteId/);
   assert.match(kotlin, /val pageState: PageState/);
   assert.match(kotlin, /val type: ComponentType/);
   assert.match(kotlin, /val event: UiEventType/);
+  assert.match(kotlin, /val target: String/);
+  assert.match(kotlin, /val stateAuthorities: List<String>/);
+  assert.match(kotlin, /val compositionMode: String/);
   assert.match(kotlin, /val stateEventEvidence: List<ScreenGraphStateEventEvidence>/);
   assert.match(kotlin, /fun loadCanonical\(\): ScreenGraphRegistry/);
+  assert.match(kotlin, /document\.schemaVersion == "1\.2\.0"/);
+  assert.doesNotMatch(kotlin, /document\.schemaVersion == "1\.1\.0"/);
   assert.match(kotlin, /fun resolve\(routeId: RouteId\): ScreenGraphRouteNode/);
 
   assert.match(arkts, /routeId: RouteId/);
   assert.match(arkts, /pageState: PageState/);
   assert.match(arkts, /type: ComponentType/);
   assert.match(arkts, /event: UiEventType/);
+  assert.match(arkts, /target: string/);
+  assert.match(arkts, /stateAuthorities: string\[\]/);
+  assert.match(arkts, /compositionMode: 'contract-tree' \| 'host-composite'/);
   assert.match(arkts, /stateEventEvidence: ScreenGraphStateEventEvidence\[\]/);
   assert.match(arkts, /static loadCanonical\(\): ScreenGraphRegistry/);
+  assert.match(arkts, /this\.document\.schemaVersion !== '1\.2\.0'/);
+  assert.doesNotMatch(arkts, /this\.document\.schemaVersion !== '1\.1\.0'/);
   assert.match(arkts, /resolve\(routeId: RouteId\): ScreenGraphRouteNode/);
 });
 
@@ -451,7 +528,7 @@ test("R16C native generation fails closed on canonical set and recursive binding
   missingRoute.routes.pop();
   assert.throws(
     () => validateNativeRegistryGeneration(missingRoute, inputs),
-    /requires 235 routes/,
+    /requires 260 routes/,
   );
 
   const catalogDrift = structuredClone(graph);

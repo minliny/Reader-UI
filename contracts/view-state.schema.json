@@ -302,6 +302,36 @@
           "items": {
             "$ref": "#/$defs/Component"
           }
+        },
+        "bindings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ExplicitBinding"
+          },
+          "description": "A component with multiple semantic targets may declare executable bindings directly instead of encoding one event in props."
+        }
+      }
+    },
+    "ExplicitBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target", "event", "payload", "trigger"],
+      "properties": {
+        "target": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "trigger": {
+          "type": "string",
+          "enum": ["tap", "change", "submit", "appear"]
         }
       }
     }

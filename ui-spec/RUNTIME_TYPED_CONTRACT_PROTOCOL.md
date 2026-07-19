@@ -1,17 +1,17 @@
 # Runtime typed payload and result protocol
 
 `runtime-payload-contracts.json` is the executable, fail-closed contract for
-all 61 entries in `runtime-actions.json`. It is intentionally broader than the
+all 63 entries in `runtime-actions.json`. It is intentionally broader than the
 Core-only DTO registry: navigation, overlay, session, composite, Core and
 ReaderUIRuntime-owned actions all carry an exact descriptor snapshot and an
 explicit payload schema.
 
 Current coverage:
 
-- 61/61 runtime actions: 23 internal, 20 single-Core, 10 composite and 8
+- 63/63 runtime actions: 25 internal, 20 single-Core, 10 composite and 8
   ReaderUIRuntime-owned appearance transactions.
 - 170 payload fixtures.
-- 70 event/effect result mappings across 34 effect types and 142 result
+- 73 event/effect result mappings across 35 effect types and 154 result
   fixtures.
 - Every internal synchronous action has `resultSchemas: []`; no missing result
   registry entry is interpreted as an untyped success.

@@ -29,12 +29,12 @@ test("typed payload registry and fixtures pass their machine schemas", () => {
   assertValid(contractSchema, contracts, "runtime-payload-contracts.json");
   assertValid(fixtureSchema, fixtures, "runtime-payload-contract.fixtures.json");
   assertValid(resultFixtureSchema, resultFixtures, "runtime-result-contract.fixtures.json");
-  assert.equal(contracts.contracts.length, 61);
-  assert.equal(new Set(contracts.contracts.map((item) => item.event)).size, 61);
+  assert.equal(contracts.contracts.length, 63);
+  assert.equal(new Set(contracts.contracts.map((item) => item.event)).size, 63);
   assert.deepEqual(new Set(contracts.contracts.map((item) => item.event)), new Set(actions.actions.map((item) => item.event)));
   assert.equal(fixtures.length, 170);
-  assert.equal(contracts.contracts.reduce((count, item) => count + item.resultSchemas.length, 0), 70);
-  assert.equal(resultFixtures.length, 142);
+  assert.equal(contracts.contracts.reduce((count, item) => count + item.resultSchemas.length, 0), 73);
+  assert.equal(resultFixtures.length, 154);
   for (const contract of contracts.contracts) {
     assert.ok(Array.isArray(contract.resultSchemas), `${contract.event} must explicitly declare resultSchemas`);
   }

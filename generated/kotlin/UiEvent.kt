@@ -547,7 +547,67 @@ enum class UiEventType {
     @SerialName("import.cancel")
     ImportCancel,
     @SerialName("reader.typography.persist")
-    ReaderTypographyPersist
+    ReaderTypographyPersist,
+    @SerialName("onboarding.continue")
+    OnboardingContinue,
+    @SerialName("onboarding.capabilitySetup.complete")
+    OnboardingCapabilitySetupComplete,
+    @SerialName("permission.recovery.openSettings")
+    PermissionRecoveryOpenSettings,
+    @SerialName("permission.recovery.retry")
+    PermissionRecoveryRetry,
+    @SerialName("localFormat.open")
+    LocalFormatOpen,
+    @SerialName("localFormat.select")
+    LocalFormatSelect,
+    @SerialName("pdf.open")
+    PdfOpen,
+    @SerialName("manga.open")
+    MangaOpen,
+    @SerialName("httpTts.management.open")
+    HttpTtsManagementOpen,
+    @SerialName("httpTts.provider.save")
+    HttpTtsProviderSave,
+    @SerialName("httpTts.test.start")
+    HttpTtsTestStart,
+    @SerialName("httpTts.test.cancel")
+    HttpTtsTestCancel,
+    @SerialName("content.edit.open")
+    ContentEditOpen,
+    @SerialName("content.edit.save")
+    ContentEditSave,
+    @SerialName("book.cover.change")
+    BookCoverChange,
+    @SerialName("book.cover.search")
+    BookCoverSearch,
+    @SerialName("chapter.reviews.open")
+    ChapterReviewsOpen,
+    @SerialName("chapter.reviews.retry")
+    ChapterReviewsRetry,
+    @SerialName("bookmarks.manage.open")
+    BookmarksManageOpen,
+    @SerialName("download.queue.open")
+    DownloadQueueOpen,
+    @SerialName("download.task.open")
+    DownloadTaskOpen,
+    @SerialName("download.task.retry")
+    DownloadTaskRetry,
+    @SerialName("download.task.cancel")
+    DownloadTaskCancel,
+    @SerialName("storage.management.open")
+    StorageManagementOpen,
+    @SerialName("storage.cleanup.confirm")
+    StorageCleanupConfirm,
+    @SerialName("webview.login.open")
+    WebviewLoginOpen,
+    @SerialName("webview.login.cancel")
+    WebviewLoginCancel,
+    @SerialName("webview.challenge.retry")
+    WebviewChallengeRetry,
+    @SerialName("webview.cookie.return")
+    WebviewCookieReturn,
+    @SerialName("settings.capability.open")
+    SettingsCapabilityOpen
 }
 
 @Serializable

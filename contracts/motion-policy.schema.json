@@ -20,7 +20,8 @@
     "match": {
       "type": "object",
       "additionalProperties": false,
-      "description": "匹配条件。省略的字段视为通配。空 match = 全匹配（最低优先级兜底）。",
+      "minProperties": 1,
+      "description": "匹配条件。省略的字段视为通配。MR0 起禁止空 match；未知请求必须返回 no-match diagnostic，不能伪装为某个 MotionId。",
       "properties": {
         "fromRoute": {
           "type": "string",

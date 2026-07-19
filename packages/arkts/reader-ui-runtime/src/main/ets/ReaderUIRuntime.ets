@@ -64,6 +64,25 @@ export const READER_FOREGROUND_TIMER_ARM: string = 'timer.foreground.arm'
 export const READER_FOREGROUND_TIMER_CANCEL: string = 'timer.foreground.cancel'
 export const READER_AUTO_PAGE_MIN_INTERVAL_MS: number = 250
 export const READER_AUTO_PAGE_MAX_INTERVAL_MS: number = 3600000
+const READER_IDENTITY_OR_ROUTE_MUTATION_EVENTS: string[] = [
+  'route.push',
+  'route.replace',
+  'route.pop',
+  'route.popToRoot',
+  'mainTab.select',
+  'book.open',
+  'reader.enter',
+  'reader.exit',
+  'source.switch.open',
+  'source.switch.cancel'
+]
+const READER_CONTROL_OVERLAY_FAMILY: string[] = [
+  'reader-control',
+  'directory',
+  'tts',
+  'appearance',
+  'settings'
+]
 export const READER_APPEARANCE_PERSISTENCE_GET: string = 'persistence.get'
 export const READER_APPEARANCE_PERSISTENCE_PUT: string = 'persistence.put'
 export const READER_FONT_REGISTER_FILE: string = 'font.registerFile'
@@ -90,6 +109,8 @@ export interface ReaderUIPageTransaction {
   stage: string
   payload: ReaderUIJSONPayload
   layout?: ReaderUIPageLayout
+  pendingCanonicalLocation?: string
+  pendingPageIndex?: number
 }
 
 export interface ReaderUITTSTransaction {
@@ -355,6 +376,13 @@ function optionalJSONResultInteger(result: ReaderUIJSONResult, key: string): num
     'INVALID_JSON_RESULT',
     `result.${key} must be an integer JSON number or numeric string`
   )
+}
+
+function optionalJSONResultBoolean(result: ReaderUIJSONResult, key: string): boolean | undefined {
+  const value: ReaderUIJSONValue | undefined = result[key]
+  if (value === undefined || value === null) return undefined
+  if (typeof value === 'boolean') return value
+  throw new ReaderUIRuntimeError('INVALID_JSON_RESULT', `result.${key} must be a JSON boolean or null`)
 }
 
 function invalidTypedPayload(path: string, message: string): never {
@@ -690,7 +718,9 @@ function clonePageTransaction(transaction?: ReaderUIPageTransaction): ReaderUIPa
     sessionCorrelationId: transaction.sessionCorrelationId,
     generation: transaction.generation,
     stage: transaction.stage,
-    payload: clonePayload(transaction.payload)
+    payload: clonePayload(transaction.payload),
+    pendingCanonicalLocation: transaction.pendingCanonicalLocation,
+    pendingPageIndex: transaction.pendingPageIndex
   }
   if (transaction.layout !== undefined) {
     result.layout = {
@@ -791,6 +821,13 @@ export class ReaderUIRuntime {
       }
     })
     this.checkGuards(descriptor, event)
+    if (READER_IDENTITY_OR_ROUTE_MUTATION_EVENTS.indexOf(event) >= 0 &&
+      this.currentState.pageTransaction?.stage === 'persisting-progress') {
+      throw new ReaderUIRuntimeError(
+        'PAGE_PROGRESS_COMMIT_PENDING',
+        `${event} cannot replace the reader route or identity while progress persistence is pending`
+      )
+    }
     if (descriptor.action === 'bookOpenSequence') {
       this.preflightBookOpen(event, payload, correlationId, descriptor)
     }
@@ -877,6 +914,31 @@ export class ReaderUIRuntime {
           throw new ReaderUIRuntimeError('MISSING_PAYLOAD', `${event} requires an overlay identity`)
         }
         if (this.currentState.overlay === expectedOverlay) this.currentState.overlay = undefined
+        break
+      }
+      case 'toggleReaderControl': {
+        if (this.currentState.routeId !== 'immersive-reading') {
+          throw new ReaderUIRuntimeError('READER_ROUTE_GUARD', `${event} requires the immersive-reading route`)
+        }
+        const currentOverlay: string | undefined = this.currentState.overlay
+        if (currentOverlay !== undefined && READER_CONTROL_OVERLAY_FAMILY.indexOf(currentOverlay) < 0) {
+          throw new ReaderUIRuntimeError('READER_CONTROL_OVERLAY_GUARD', `${event} cannot replace ${currentOverlay}`)
+        }
+        this.currentState.overlay = currentOverlay === undefined ? 'reader-control' : undefined
+        break
+      }
+      case 'switchReaderModule': {
+        if (this.currentState.routeId !== 'immersive-reading') {
+          throw new ReaderUIRuntimeError('READER_ROUTE_GUARD', `${event} requires the immersive-reading route`)
+        }
+        const currentOverlay: string | undefined = this.currentState.overlay
+        if (currentOverlay === undefined || READER_CONTROL_OVERLAY_FAMILY.indexOf(currentOverlay) < 0) {
+          throw new ReaderUIRuntimeError(
+            'READER_CONTROL_OVERLAY_GUARD',
+            `${event} requires an active Reader control overlay`
+          )
+        }
+        this.currentState.overlay = jsonString(payload, 'module')
         break
       }
       case 'startSession':
@@ -1283,20 +1345,53 @@ export class ReaderUIRuntime {
     if (transaction === undefined || transaction.correlationId !== correlationId || transaction.stage !== 'resolving-location') {
       return this.playbackResult(false, previous)
     }
-    this.currentState.pageTransaction = undefined
     if (error !== undefined && error.length > 0) {
+      this.currentState.pageTransaction = undefined
       this.currentState.error = error
       this.finishFailedAutoPage(transaction)
       return this.playbackResult(true, previous)
     }
     if (canonicalLocation === undefined || canonicalLocation.trim().length === 0 ||
       pageIndex === undefined || !Number.isInteger(pageIndex) || pageIndex < 0) {
+      this.currentState.pageTransaction = undefined
       this.currentState.error = 'PAGE_LOCATION_INVALID_RESULT'
       this.finishFailedAutoPage(transaction)
       return this.playbackResult(true, previous)
     }
-    this.currentState.readerCanonicalLocation = canonicalLocation
-    this.currentState.readerPageIndex = pageIndex
+    transaction.stage = 'persisting-progress'
+    transaction.pendingCanonicalLocation = canonicalLocation
+    transaction.pendingPageIndex = pageIndex
+    this.currentState.pageTransaction = transaction
+    this.currentState.error = undefined
+    return this.playbackResult(true, previous, [this.pageProgressEffect(transaction)])
+  }
+
+  acceptPageProgressResult(
+    correlationId: string,
+    stored?: boolean,
+    error?: string
+  ): ReaderUIPlaybackTransition {
+    const previous: ReaderUIState = cloneState(this.currentState)
+    const transaction: ReaderUIPageTransaction | undefined = this.currentState.pageTransaction
+    if (transaction === undefined || transaction.correlationId !== correlationId ||
+      transaction.stage !== 'persisting-progress') {
+      return this.playbackResult(false, previous)
+    }
+    this.currentState.pageTransaction = undefined
+    if (error !== undefined && error.length > 0) {
+      this.currentState.error = error
+      this.finishFailedAutoPage(transaction)
+      return this.playbackResult(true, previous)
+    }
+    if (stored !== true || transaction.pendingCanonicalLocation === undefined ||
+      transaction.pendingCanonicalLocation.trim().length === 0 ||
+      transaction.pendingPageIndex === undefined || transaction.pendingPageIndex < 0) {
+      this.currentState.error = 'PAGE_PROGRESS_INVALID_RESULT'
+      this.finishFailedAutoPage(transaction)
+      return this.playbackResult(true, previous)
+    }
+    this.currentState.readerCanonicalLocation = transaction.pendingCanonicalLocation
+    this.currentState.readerPageIndex = transaction.pendingPageIndex
     this.currentState.error = undefined
 
     const effects: ReaderUIEffect[] = []
@@ -1309,6 +1404,24 @@ export class ReaderUIRuntime {
       effects.push(this.timerEffect(READER_FOREGROUND_TIMER_ARM, autoPage))
     }
     return this.playbackResult(true, previous, effects)
+  }
+
+  acceptPageProgressJSONResult(
+    correlationId: string,
+    result: ReaderUIJSONResult
+  ): ReaderUIPlaybackTransition {
+    const transaction: ReaderUIPageTransaction | undefined = this.currentState.pageTransaction
+    if (transaction === undefined || transaction.correlationId !== correlationId ||
+      transaction.stage !== 'persisting-progress') {
+      return this.acceptPageProgressResult(correlationId)
+    }
+    const validated: ReaderUIJSONResult = cloneReaderUIJSONResult(result)
+    validateReaderUITypedResult(transaction.contractEvent, 'reader.progress.update', validated)
+    return this.acceptPageProgressResult(
+      correlationId,
+      optionalJSONResultBoolean(validated, 'stored'),
+      optionalJSONResultString(validated, 'error')
+    )
   }
 
   acceptPageLocationJSONResult(
@@ -1335,6 +1448,12 @@ export class ReaderUIRuntime {
     if (this.currentState.pageTransaction === undefined ||
       this.currentState.pageTransaction?.correlationId !== correlationId) {
       return this.playbackResult(false, previous)
+    }
+    if (this.currentState.pageTransaction.stage === 'persisting-progress') {
+      throw new ReaderUIRuntimeError(
+        'PAGE_PROGRESS_COMMIT_PENDING',
+        'reader.progress.update was already dispatched and cannot be cancelled or rolled back'
+      )
     }
     this.currentState.pageTransaction = undefined
     return this.playbackResult(true, previous, [], [correlationId])
@@ -1436,6 +1555,12 @@ export class ReaderUIRuntime {
   acceptAutoPageTimerFired(correlationId: string, generation: number): ReaderUIPlaybackTransition {
     const previous: ReaderUIState = cloneState(this.currentState)
     const transaction: ReaderUIAutoPageTransaction | undefined = this.currentState.autoPageTransaction
+    if (this.currentState.pageTransaction?.stage === 'persisting-progress') {
+      throw new ReaderUIRuntimeError(
+        'PAGE_PROGRESS_COMMIT_PENDING',
+        'reader.autoPage.timer waits for the in-flight progress commit'
+      )
+    }
     if (transaction === undefined || transaction.correlationId !== correlationId ||
       transaction.generation !== generation || !transaction.timerArmed ||
       this.currentState.activeSession !== 'auto-page' || this.currentState.pageTransaction !== undefined) {
@@ -1492,11 +1617,23 @@ export class ReaderUIRuntime {
     if (correlationId === undefined || correlationId.length === 0) {
       throw new ReaderUIRuntimeError('MISSING_CORRELATION', `${event} requires correlationId`)
     }
+    if (this.currentState.bookOpenTransaction !== undefined) {
+      throw new ReaderUIRuntimeError(
+        'BOOK_OPEN_TRANSACTION_PENDING',
+        `${event} waits for the active book.open transaction`
+      )
+    }
     if (direction !== 'next' && direction !== 'previous' && direction !== 'explicit') {
       throw new ReaderUIRuntimeError('INVALID_PAGE_DIRECTION', `${event} requires next|previous|explicit`)
     }
     if (this.currentState.pageTransaction?.correlationId === correlationId) {
       throw new ReaderUIRuntimeError('DUPLICATE_CORRELATION', `${event} was already dispatched for ${correlationId}`)
+    }
+    if (this.currentState.pageTransaction?.stage === 'persisting-progress') {
+      throw new ReaderUIRuntimeError(
+        'PAGE_PROGRESS_COMMIT_PENDING',
+        `${event} waits for the in-flight progress commit`
+      )
     }
     const cancelledCorrelationIds: string[] = []
     const effects: ReaderUIEffect[] = []
@@ -1610,7 +1747,10 @@ export class ReaderUIRuntime {
       throw new ReaderUIRuntimeError('DUPLICATE_CORRELATION', `${event} was already dispatched for ${correlationId}`)
     }
     if (this.currentState.pageTransaction !== undefined) {
-      throw new ReaderUIRuntimeError('PAGE_TRANSACTION_PENDING', `${event} waits for the active page transaction`)
+      const code: string = this.currentState.pageTransaction.stage === 'persisting-progress'
+        ? 'PAGE_PROGRESS_COMMIT_PENDING'
+        : 'PAGE_TRANSACTION_PENDING'
+      throw new ReaderUIRuntimeError(code, `${event} waits for the active page transaction`)
     }
     const teardown: ReaderUIPlaybackTeardown = this.teardownPlaybackSession()
     const generation: number = this.nextPlaybackGeneration()
@@ -1661,8 +1801,10 @@ export class ReaderUIRuntime {
     const cancelledCorrelationIds: string[] = [transaction.correlationId]
     const page: ReaderUIPageTransaction | undefined = this.currentState.pageTransaction
     if (page !== undefined && page.source === 'auto-page' && page.sessionCorrelationId === transaction.correlationId) {
-      cancelledCorrelationIds.push(page.correlationId)
-      this.currentState.pageTransaction = undefined
+      if (page.stage !== 'persisting-progress') {
+        cancelledCorrelationIds.push(page.correlationId)
+        this.currentState.pageTransaction = undefined
+      }
     }
     const effects: ReaderUIEffect[] = [this.timerEffect(READER_FOREGROUND_TIMER_CANCEL, transaction)]
     this.nextPlaybackGeneration()
@@ -1687,8 +1829,10 @@ export class ReaderUIRuntime {
       effects.push(this.timerEffect(READER_FOREGROUND_TIMER_CANCEL, autoPage))
       const page: ReaderUIPageTransaction | undefined = this.currentState.pageTransaction
       if (page !== undefined && page.source === 'auto-page' && page.sessionCorrelationId === autoPage.correlationId) {
-        cancelledCorrelationIds.push(page.correlationId)
-        this.currentState.pageTransaction = undefined
+        if (page.stage !== 'persisting-progress') {
+          cancelledCorrelationIds.push(page.correlationId)
+          this.currentState.pageTransaction = undefined
+        }
       }
       this.nextPlaybackGeneration()
       this.currentState.autoPageTransaction = undefined
@@ -1700,7 +1844,7 @@ export class ReaderUIRuntime {
   private teardownAllPlayback(): ReaderUIPlaybackTeardown {
     const teardown: ReaderUIPlaybackTeardown = this.teardownPlaybackSession()
     const page: ReaderUIPageTransaction | undefined = this.currentState.pageTransaction
-    if (page !== undefined) {
+    if (page !== undefined && page.stage !== 'persisting-progress') {
       teardown.cancelledCorrelationIds.push(page.correlationId)
       this.currentState.pageTransaction = undefined
     }
@@ -1759,6 +1903,10 @@ export class ReaderUIRuntime {
     payload['viewportHeight'] = layout.viewportHeight
     payload['fontScale'] = layout.fontScale
     return readerUIEffect('core', 'reader.location.resolve', payload, transaction.correlationId)
+  }
+
+  private pageProgressEffect(transaction: ReaderUIPageTransaction): ReaderUIEffect {
+    return readerUIEffect('core', 'reader.progress.update', {}, transaction.correlationId)
   }
 
   private validatePageLayout(layout: ReaderUIPageLayout): void {

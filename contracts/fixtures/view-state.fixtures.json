@@ -86,15 +86,17 @@
           },
           {
             "type": "BookGrid",
-            "id": "book-grid",
+            "id": "book-collection",
             "props": {
               "viewMode": "cover"
             },
             "children": [
               {
                 "type": "BookCard",
-                "id": "book-1",
+                "id": "book-bk-001",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-001",
                   "title": "长夜余火",
                   "author": "爱潜水的乌贼",
@@ -103,8 +105,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-2",
+                "id": "book-bk-002",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-002",
                   "title": "诡秘之主",
                   "author": "爱潜水的乌贼",
@@ -113,8 +117,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-3",
+                "id": "book-bk-003",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-003",
                   "title": "明朝那些事儿",
                   "author": "当年明月",
@@ -123,8 +129,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-4",
+                "id": "book-bk-004",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-004",
                   "title": "三体",
                   "author": "刘慈欣",
@@ -133,8 +141,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-5",
+                "id": "book-bk-005",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-005",
                   "title": "人间词话",
                   "author": "王国维",
@@ -143,8 +153,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-6",
+                "id": "book-bk-006",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-006",
                   "title": "Android 开发笔记",
                   "author": "本地文档",
@@ -1160,15 +1172,17 @@
           },
           {
             "type": "BookGrid",
-            "id": "book-grid",
+            "id": "book-collection",
             "props": {
               "viewMode": "cover"
             },
             "children": [
               {
                 "type": "BookCard",
-                "id": "book-1",
+                "id": "book-bk-001",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-001",
                   "title": "长夜余火",
                   "author": "爱潜水的乌贼",
@@ -1177,8 +1191,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-2",
+                "id": "book-bk-002",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-002",
                   "title": "诡秘之主",
                   "author": "爱潜水的乌贼",
@@ -1187,8 +1203,10 @@
               },
               {
                 "type": "BookCard",
-                "id": "book-3",
+                "id": "book-bk-003",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-003",
                   "title": "明朝那些事儿",
                   "author": "当年明月",
@@ -1221,7 +1239,7 @@
         "type": "AppTopBar",
         "id": "topbar",
         "props": {
-          "title": "书架列表"
+          "title": "书架"
         }
       },
       {
@@ -1241,24 +1259,46 @@
             }
           },
           {
-            "type": "List",
-            "id": "book-list",
-            "props": {},
+            "type": "BookGrid",
+            "id": "book-collection",
+            "props": {
+              "viewMode": "list"
+            },
             "children": [
               {
-                "type": "ListRow",
-                "id": "book-row-1",
+                "type": "BookCard",
+                "id": "book-bk-001",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "list",
+                  "bookId": "bk-001",
                   "title": "长夜余火",
-                  "author": "爱潜水的乌贼"
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "longNight"
                 }
               },
               {
-                "type": "ListRow",
-                "id": "book-row-2",
+                "type": "BookCard",
+                "id": "book-bk-002",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "list",
+                  "bookId": "bk-002",
                   "title": "诡秘之主",
-                  "author": "爱潜水的乌贼"
+                  "author": "爱潜水的乌贼",
+                  "coverKey": "mysteryLord"
+                }
+              },
+              {
+                "type": "BookCard",
+                "id": "book-bk-003",
+                "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "list",
+                  "bookId": "bk-003",
+                  "title": "明朝那些事儿",
+                  "author": "当年明月",
+                  "coverKey": "brightMoon"
                 }
               }
             ]
@@ -2295,6 +2335,28 @@
     ]
   },
   {
+    "_comment": "Developer mode: 动画速度设置",
+    "routeId": "settings-developer",
+    "pageState": "default",
+    "context": {},
+    "components": [
+      {
+        "type": "BackTopBar",
+        "id": "settings-developer-topbar",
+        "props": {
+          "title": "开发模式"
+        }
+      },
+      {
+        "type": "SettingsGeneralPage",
+        "id": "settings-developer-page",
+        "props": {
+          "variant": "developer-motion"
+        }
+      }
+    ]
+  },
+  {
     "_comment": "Phase3: 关于",
     "routeId": "about",
     "pageState": "default",
@@ -3257,13 +3319,17 @@
           },
           {
             "type": "BookGrid",
-            "id": "book-grid",
-            "props": {},
+            "id": "book-collection",
+            "props": {
+              "viewMode": "cover"
+            },
             "children": [
               {
                 "type": "BookCard",
                 "id": "book-bk-001",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-001",
                   "title": "长夜余火",
                   "author": "爱潜水的乌贼",
@@ -3274,6 +3340,8 @@
                 "type": "BookCard",
                 "id": "book-bk-002",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-002",
                   "title": "诡秘之主",
                   "author": "爱潜水的乌贼",
@@ -3284,6 +3352,8 @@
                 "type": "BookCard",
                 "id": "book-bk-003",
                 "props": {
+                  "semanticRole": "BookItem",
+                  "viewMode": "cover",
                   "bookId": "bk-003",
                   "title": "明朝那些事儿",
                   "author": "当年明月",
@@ -4045,8 +4115,16 @@
             "type": "TapZones",
             "id": "reader-tap-zones",
             "props": {
-              "enabled": false
-            }
+              "enabled": false,
+              "mode": "horizontal",
+              "previousRatio": 0.26,
+              "controlRatio": 0.48,
+              "nextRatio": 0.26,
+              "previousEnabled": false,
+              "controlEnabled": false,
+              "nextEnabled": false
+            },
+            "bindings": []
           }
         ]
       },
@@ -4130,8 +4208,20 @@
             "type": "TapZones",
             "id": "reader-tap-zones",
             "props": {
-              "enabled": true
-            }
+              "enabled": true,
+              "mode": "horizontal",
+              "previousRatio": 0.26,
+              "controlRatio": 0.48,
+              "nextRatio": 0.26,
+              "previousEnabled": true,
+              "controlEnabled": true,
+              "nextEnabled": true
+            },
+            "bindings": [
+              { "target": "previous", "event": "reader.page.prev", "payload": {}, "trigger": "tap" },
+              { "target": "control", "event": "reader.control.toggle", "payload": { "overlay": "reader-control" }, "trigger": "tap" },
+              { "target": "next", "event": "reader.page.next", "payload": {}, "trigger": "tap" }
+            ]
           }
         ]
       },
@@ -4215,8 +4305,20 @@
             "type": "TapZones",
             "id": "reader-tap-zones",
             "props": {
-              "enabled": true
-            }
+              "enabled": true,
+              "mode": "horizontal",
+              "previousRatio": 0.26,
+              "controlRatio": 0.48,
+              "nextRatio": 0.26,
+              "previousEnabled": true,
+              "controlEnabled": true,
+              "nextEnabled": true
+            },
+            "bindings": [
+              { "target": "previous", "event": "reader.page.prev", "payload": {}, "trigger": "tap" },
+              { "target": "control", "event": "reader.control.toggle", "payload": { "overlay": "reader-control" }, "trigger": "tap" },
+              { "target": "next", "event": "reader.page.next", "payload": {}, "trigger": "tap" }
+            ]
           }
         ]
       },
@@ -4271,8 +4373,19 @@
             "type": "TapZones",
             "id": "reader-tap-zones",
             "props": {
-              "enabled": true
-            }
+              "enabled": true,
+              "mode": "horizontal",
+              "previousRatio": 0.26,
+              "controlRatio": 0.48,
+              "nextRatio": 0.26,
+              "previousEnabled": false,
+              "controlEnabled": true,
+              "nextEnabled": true
+            },
+            "bindings": [
+              { "target": "control", "event": "reader.control.toggle", "payload": { "overlay": "reader-control" }, "trigger": "tap" },
+              { "target": "next", "event": "reader.page.next", "payload": {}, "trigger": "tap" }
+            ]
           }
         ]
       },
@@ -4340,8 +4453,19 @@
             "type": "TapZones",
             "id": "reader-tap-zones",
             "props": {
-              "enabled": true
-            }
+              "enabled": true,
+              "mode": "horizontal",
+              "previousRatio": 0.26,
+              "controlRatio": 0.48,
+              "nextRatio": 0.26,
+              "previousEnabled": true,
+              "controlEnabled": true,
+              "nextEnabled": false
+            },
+            "bindings": [
+              { "target": "previous", "event": "reader.page.prev", "payload": {}, "trigger": "tap" },
+              { "target": "control", "event": "reader.control.toggle", "payload": { "overlay": "reader-control" }, "trigger": "tap" }
+            ]
           }
         ]
       },
@@ -5568,6 +5692,861 @@
               "uiEventTrigger": "tap"
             }
           }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: first-run orientation",
+    "routeId": "onboarding-welcome",
+    "pageState": "default",
+    "context": { "step": 1, "totalSteps": 2 },
+    "components": [
+      {
+        "type": "AppShellStructure",
+        "id": "onboarding-welcome-shell",
+        "props": {
+          "variant": "onboarding-welcome",
+          "title": "欢迎使用 Reader",
+          "description": "先了解本地阅读、书源、同步与平台能力，再按需授权。",
+          "coreSupport": "orientation-only"
+        },
+        "children": [
+          {
+            "type": "Button",
+            "id": "onboarding-welcome-continue",
+            "props": { "label": "继续" },
+            "bindings": [
+              { "target": "continue", "event": "onboarding.continue", "payload": { "nextRouteId": "onboarding-capability-setup" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: first-run capability and permission setup",
+    "routeId": "onboarding-capability-setup",
+    "pageState": "permission",
+    "context": { "step": 2, "totalSteps": 2 },
+    "components": [
+      {
+        "type": "PermissionRequiredPage",
+        "id": "onboarding-capability-page",
+        "props": {
+          "variant": "onboarding",
+          "title": "按需启用平台能力",
+          "permissionScopes": ["storage", "notifications"],
+          "capabilityBasis": ["permission.check", "permission.request", "file.select"],
+          "policy": "request-only-when-triggered",
+          "availability": "host-capability-gated"
+        },
+        "children": [
+          {
+            "type": "Button",
+            "id": "onboarding-open-permission-recovery",
+            "props": { "label": "检查权限" },
+            "bindings": [
+              { "target": "check", "event": "route.push", "payload": { "routeId": "permission-recovery" }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "onboarding-finish",
+            "props": { "label": "稍后设置" },
+            "bindings": [
+              { "target": "finish", "event": "onboarding.capabilitySetup.complete", "payload": { "nextRouteId": "bookshelf", "skippedScopes": ["notifications"] }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: denied/unavailable permission recovery",
+    "routeId": "permission-recovery",
+    "pageState": "permission",
+    "context": { "scope": "storage", "returnRouteId": "local-import" },
+    "components": [
+      {
+        "type": "PermissionRequiredPage",
+        "id": "permission-recovery-page",
+        "props": {
+          "variant": "recovery",
+          "title": "需要文件访问能力",
+          "state": "denied",
+          "capabilityBasis": ["permission.check", "permission.request", "file.select"],
+          "recoveryStates": ["requestable", "settings-required", "capability-unavailable"],
+          "platformDifferenceRequired": true
+        },
+        "children": [
+          {
+            "type": "Button",
+            "id": "permission-recovery-open-settings",
+            "props": { "label": "前往系统设置" },
+            "bindings": [
+              { "target": "settings", "event": "permission.recovery.openSettings", "payload": { "scope": "storage", "returnRouteId": "local-import" }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "permission-recovery-retry",
+            "props": { "label": "重新检查" },
+            "bindings": [
+              { "target": "retry", "event": "permission.recovery.retry", "payload": { "scope": "storage" }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "permission-recovery-cancel",
+            "props": { "label": "取消" },
+            "bindings": [
+              { "target": "cancel", "event": "route.pop", "payload": {}, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: local format negotiation without hard-coded parser claims",
+    "routeId": "local-format-support",
+    "pageState": "default",
+    "context": { "entry": "local-import" },
+    "components": [
+      { "type": "BackTopBar", "id": "local-format-support-topbar", "props": { "title": "本地格式支持" } },
+      {
+        "type": "LocalBookImportPage",
+        "id": "local-format-support-page",
+        "props": {
+          "variant": "format-capabilities",
+          "capabilityBasis": ["file.select", "file.read", "import.parse", "import.persist"],
+          "formatKinds": ["text-document", "ebook-package", "pdf-document", "image-sequence"],
+          "formatAvailability": "runtime-negotiated",
+          "unsupportedBehavior": "fail-closed-with-format-error",
+          "pdfAndMangaCoreSupport": "not-declared"
+        },
+        "bindings": [
+          { "target": "open", "event": "localFormat.open", "payload": { "entry": "local-import" }, "trigger": "appear" }
+        ],
+        "children": [
+          {
+            "type": "Button",
+            "id": "local-format-support-select",
+            "props": { "label": "选择本地文件" },
+            "bindings": [
+              { "target": "select", "event": "localFormat.select", "payload": { "source": "format-support", "allowsMultiple": true }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: PDF is a platform renderer surface, not a fabricated Core parser",
+    "routeId": "pdf-reader",
+    "pageState": "default",
+    "context": { "documentId": "local-pdf-001", "page": 12 },
+    "controlLayerLevel": "L0",
+    "components": [
+      {
+        "type": "ReaderBase",
+        "id": "pdf-reader-base",
+        "props": {
+          "documentKind": "pdf",
+          "executionOwner": "platform-renderer",
+          "coreSupport": "not-declared",
+          "hostBasis": ["file.read", "storage.path"],
+          "availability": "capability-gated"
+        },
+        "bindings": [
+          { "target": "document", "event": "pdf.open", "payload": { "documentId": "local-pdf-001", "page": 12 }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "Content", "id": "pdf-page-surface", "props": { "page": 12, "pageCount": 218, "zoom": 1.0 } },
+          {
+            "type": "TapZones",
+            "id": "pdf-tap-zones",
+            "props": { "enabled": true, "mode": "horizontal" },
+            "bindings": [
+              { "target": "previous", "event": "reader.page.prev", "payload": {}, "trigger": "tap" },
+              { "target": "control", "event": "reader.control.toggle", "payload": { "overlay": "reader-control" }, "trigger": "tap" },
+              { "target": "next", "event": "reader.page.next", "payload": {}, "trigger": "tap" }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "pdf-reader-top-area",
+        "props": { "documentKind": "pdf", "page": 12, "pageCount": 218 }
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: manga is a platform image-sequence renderer surface",
+    "routeId": "manga-reader",
+    "pageState": "default",
+    "context": { "documentId": "local-manga-001", "imageIndex": 6 },
+    "controlLayerLevel": "L0",
+    "components": [
+      {
+        "type": "ReaderBase",
+        "id": "manga-reader-base",
+        "props": {
+          "documentKind": "image-sequence",
+          "executionOwner": "platform-renderer",
+          "coreSupport": "not-declared",
+          "hostBasis": ["file.read", "storage.path"],
+          "availability": "capability-gated"
+        },
+        "bindings": [
+          { "target": "document", "event": "manga.open", "payload": { "documentId": "local-manga-001", "imageIndex": 6 }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "Content", "id": "manga-image-surface", "props": { "imageIndex": 6, "imageCount": 42, "readingDirection": "vertical" } },
+          {
+            "type": "TapZones",
+            "id": "manga-tap-zones",
+            "props": { "enabled": true, "mode": "horizontal" },
+            "bindings": [
+              { "target": "previous", "event": "reader.page.prev", "payload": {}, "trigger": "tap" },
+              { "target": "control", "event": "reader.control.toggle", "payload": { "overlay": "reader-control" }, "trigger": "tap" },
+              { "target": "next", "event": "reader.page.next", "payload": {}, "trigger": "tap" }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "ReaderTopArea",
+        "id": "manga-reader-top-area",
+        "props": { "documentKind": "image-sequence", "imageIndex": 6, "imageCount": 42 }
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: HTTP TTS provider management is app/Host owned",
+    "routeId": "http-tts-management",
+    "pageState": "default",
+    "context": { "selectedProviderId": "http-tts-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "http-tts-management-topbar", "props": { "title": "HTTP TTS" } },
+      {
+        "type": "SettingsGeneralPage",
+        "id": "http-tts-management-page",
+        "props": {
+          "variant": "http-tts-management",
+          "executionOwner": "app-host-orchestration",
+          "coreSupport": "not-declared",
+          "hostBasis": ["http.execute", "credential.get", "credential.set", "persistence.get", "persistence.put"],
+          "playbackSupport": "not-claimed"
+        },
+        "bindings": [
+          { "target": "management", "event": "httpTts.management.open", "payload": {}, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "ListRow", "id": "http-tts-provider-row", "props": { "providerId": "http-tts-001", "name": "示例接口", "state": "untested" } },
+          {
+            "type": "Button",
+            "id": "http-tts-management-edit",
+            "props": { "label": "编辑" },
+            "bindings": [
+              { "target": "edit", "event": "route.push", "payload": { "routeId": "http-tts-editor" }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "http-tts-management-test",
+            "props": { "label": "测试连接" },
+            "bindings": [
+              { "target": "test", "event": "route.push", "payload": { "routeId": "http-tts-test" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: HTTP TTS endpoint editor",
+    "routeId": "http-tts-editor",
+    "pageState": "default",
+    "context": { "providerId": "http-tts-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "http-tts-editor-topbar", "props": { "title": "编辑 HTTP TTS" } },
+      {
+        "type": "SourceFormPage",
+        "id": "http-tts-editor-form",
+        "props": {
+          "variant": "http-tts-provider",
+          "fields": ["name", "endpoint", "method", "headers", "bodyTemplate", "credentialKey"],
+          "secretStorage": "credential-capability",
+          "coreSupport": "not-declared",
+          "hostBasis": ["credential.set", "persistence.put"]
+        },
+        "children": [
+          {
+            "type": "Button",
+            "id": "http-tts-editor-save",
+            "props": { "label": "保存" },
+            "bindings": [
+              { "target": "save", "event": "httpTts.provider.save", "payload": { "providerId": "http-tts-001", "credentialKey": "http-tts-001" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: HTTP TTS test only proves Host HTTP response",
+    "routeId": "http-tts-test",
+    "pageState": "loading",
+    "context": { "providerId": "http-tts-001", "requestId": "http-tts-test-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "http-tts-test-topbar", "props": { "title": "测试 HTTP TTS" } },
+      {
+        "type": "GlobalStatePage",
+        "id": "http-tts-test-state",
+        "props": {
+          "variant": "http-tts-test",
+          "state": "requesting",
+          "effectPlan": ["credential.get", "http.execute"],
+          "successProof": "valid-http-response",
+          "playbackSupport": "not-claimed",
+          "failureStates": ["credential-missing", "offline", "http-error", "invalid-response", "capability-unavailable"]
+        },
+        "bindings": [
+          { "target": "request", "event": "httpTts.test.start", "payload": { "providerId": "http-tts-001", "sampleText": "这是一段测试。" }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "Loading", "id": "http-tts-test-loading", "props": { "label": "正在请求接口" } },
+          {
+            "type": "Button",
+            "id": "http-tts-test-cancel",
+            "props": { "label": "取消测试" },
+            "bindings": [
+              { "target": "cancel", "event": "httpTts.test.cancel", "payload": { "requestId": "http-tts-test-001" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: content edit maps to declared replace pipeline only",
+    "routeId": "content-edit",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "chapterId": "ch-001" },
+    "controlLayerLevel": "L3",
+    "components": [
+      { "type": "ReaderTopArea", "id": "content-edit-top-area", "props": { "title": "编辑正文" } },
+      {
+        "type": "ReaderReplacePanel",
+        "id": "content-edit-panel",
+        "props": {
+          "variant": "direct-content-edit",
+          "coreBasis": ["content.load", "content.replace", "replace.validate", "replace.apply", "replace.persist"],
+          "mutationScope": "replacement-rules-only",
+          "raw-source-mutation": "not-supported"
+        },
+        "bindings": [
+          { "target": "editor", "event": "content.edit.open", "payload": { "bookId": "bk-001", "chapterId": "ch-001" }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "Input", "id": "content-edit-input", "props": { "multiline": true, "value": "雨落在旧城。" } },
+          {
+            "type": "Button",
+            "id": "content-edit-validate",
+            "props": { "label": "校验" },
+            "bindings": [
+              { "target": "validate", "event": "reader.replace.validate", "payload": { "pattern": "雨", "isRegex": false, "scope": ["bk-001", "ch-001"] }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "content-edit-apply",
+            "props": { "label": "应用替换" },
+            "bindings": [
+              { "target": "save", "event": "content.edit.save", "payload": { "bookId": "bk-001", "chapterId": "ch-001", "target": "replacement-rule" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: change cover from a selected local file",
+    "routeId": "book-cover-change",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "book-cover-change-topbar", "props": { "title": "更换封面" } },
+      {
+        "type": "SourceFormPage",
+        "id": "book-cover-change-page",
+        "props": {
+          "variant": "book-cover-change",
+          "coreBasis": ["bookshelf.book.update"],
+          "hostBasis": ["file.select", "file.read"],
+          "states": ["idle", "selecting", "preview", "saving", "error"]
+        },
+        "children": [
+          { "type": "BookCover", "id": "book-cover-change-preview", "props": { "bookId": "bk-001", "state": "preview" } },
+          {
+            "type": "Button",
+            "id": "book-cover-change-select",
+            "props": { "label": "选择图片" },
+            "bindings": [
+              { "target": "select", "event": "book.cover.change", "payload": { "bookId": "bk-001", "selection": "local-file" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: search a remote cover then update the local bookshelf record",
+    "routeId": "book-cover-search",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "query": "长夜余火" },
+    "components": [
+      { "type": "BackTopBar", "id": "book-cover-search-topbar", "props": { "title": "搜索封面" } },
+      {
+        "type": "SearchResultsPage",
+        "id": "book-cover-search-page",
+        "props": {
+          "variant": "cover-search",
+          "executionOwner": "app-host-orchestration",
+          "coreBasis": ["bookshelf.book.update"],
+          "hostBasis": ["http.execute", "network.status"],
+          "remoteProviderRequired": true
+        },
+        "children": [
+          { "type": "SearchInputBox", "id": "book-cover-search-input", "props": { "query": "长夜余火" } },
+          {
+            "type": "Button",
+            "id": "book-cover-search-submit",
+            "props": { "label": "搜索" },
+            "bindings": [
+              { "target": "submit", "event": "book.cover.search", "payload": { "bookId": "bk-001", "query": "长夜余火" }, "trigger": "submit" }
+            ]
+          },
+          { "type": "BookCover", "id": "book-cover-search-result-1", "props": { "resultId": "cover-001", "state": "available" } }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: source-provided chapter reviews remain app/Host owned",
+    "routeId": "chapter-reviews",
+    "pageState": "default",
+    "context": { "bookId": "bk-001", "chapterId": "ch-001", "sourceId": "src-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "chapter-reviews-topbar", "props": { "title": "章节评论" } },
+      {
+        "type": "List",
+        "id": "chapter-reviews-list",
+        "props": {
+          "executionOwner": "app-host-orchestration",
+          "coreSupport": "not-declared",
+          "hostBasis": ["http.execute", "network.status", "cookie.get"],
+          "availability": "source-capability-gated",
+          "states": ["loading", "ready", "empty", "offline", "auth-required", "error"]
+        },
+        "bindings": [
+          { "target": "reviews", "event": "chapter.reviews.open", "payload": { "bookId": "bk-001", "chapterId": "ch-001", "sourceId": "src-001" }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "ListRow", "id": "chapter-review-001", "props": { "author": "读者甲", "body": "这一章节奏很好。", "createdAt": "2026-07-19T10:00:00+08:00" } },
+          {
+            "type": "Button",
+            "id": "chapter-reviews-retry",
+            "props": { "label": "重新加载" },
+            "bindings": [
+              { "target": "retry", "event": "chapter.reviews.retry", "payload": { "bookId": "bk-001", "chapterId": "ch-001", "sourceId": "src-001" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: bookmark management uses declared reader events but does not claim missing Core CRUD",
+    "routeId": "bookmarks-manager",
+    "pageState": "default",
+    "context": { "bookId": "bk-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "bookmarks-manager-topbar", "props": { "title": "书签管理" } },
+      {
+        "type": "ReaderDirectoryPanel",
+        "id": "bookmarks-manager-panel",
+        "props": {
+          "tab": "bookmarks",
+          "executionOwner": "reader-ui-runtime-and-app-store",
+          "coreSupport": "bookmark-crud-not-declared",
+          "syncDataBasis": "sync-conflict.bookmark"
+        },
+        "bindings": [
+          { "target": "manager", "event": "bookmarks.manage.open", "payload": { "bookId": "bk-001" }, "trigger": "appear" }
+        ],
+        "children": [
+          {
+            "type": "ListRow",
+            "id": "bookmark-row-001",
+            "props": { "bookmarkId": "bookmark-001", "chapterId": "ch-001", "label": "雨落在旧城" },
+            "children": [
+              {
+                "type": "Button",
+                "id": "bookmark-row-001-remove",
+                "props": { "label": "删除" },
+                "bindings": [
+                  { "target": "remove", "event": "reader.bookmark.remove", "payload": { "bookmarkId": "bookmark-001", "bookId": "bk-001" }, "trigger": "tap" }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: visible cache-prefetch queue",
+    "routeId": "download-queue",
+    "pageState": "default",
+    "context": { "activeCount": 1, "queuedCount": 1 },
+    "components": [
+      { "type": "BackTopBar", "id": "download-queue-topbar", "props": { "title": "下载队列" } },
+      {
+        "type": "ReaderBookCachePage",
+        "id": "download-queue-page",
+        "props": {
+          "variant": "download-queue",
+          "coreBasis": ["cache.book.prefetch", "cache.book.status", "cache.clear"],
+          "hostBasis": ["background.schedule", "background.cancel", "notification.show", "storage.path"],
+          "states": ["queued", "running", "paused-by-system", "completed", "failed", "cancelled"],
+          "platformDifferenceRequired": true
+        },
+        "bindings": [
+          { "target": "queue", "event": "download.queue.open", "payload": {}, "trigger": "appear" }
+        ],
+        "children": [
+          {
+            "type": "ListRow",
+            "id": "download-task-row-001",
+            "props": { "taskId": "download-001", "bookId": "bk-001", "state": "running", "progress": 0.42 },
+            "children": [
+              {
+                "type": "Button",
+                "id": "download-task-row-001-open",
+                "props": { "label": "查看" },
+                "bindings": [
+                  { "target": "open", "event": "download.task.open", "payload": { "routeId": "download-task-detail", "taskId": "download-001", "bookId": "bk-001" }, "trigger": "tap" }
+                ]
+              }
+            ]
+          },
+          { "type": "ListRow", "id": "download-task-row-002", "props": { "taskId": "download-002", "bookId": "bk-002", "state": "queued", "progress": 0 } }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: cache-prefetch task detail without invented pause/cancel Core command",
+    "routeId": "download-task-detail",
+    "pageState": "default",
+    "context": { "taskId": "download-001", "bookId": "bk-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "download-task-detail-topbar", "props": { "title": "下载任务" } },
+      {
+        "type": "ReaderBookCachePage",
+        "id": "download-task-detail-page",
+        "props": {
+          "variant": "task-detail",
+          "state": "running",
+          "coreBasis": ["cache.book.status"],
+          "hostBasis": ["background.schedule", "notification.show", "storage.path"],
+          "pauseOrCancelCoreSupport": "not-declared"
+        },
+        "children": [
+          { "type": "ProgressBar", "id": "download-task-detail-progress", "props": { "value": 0.42, "completedChapters": 12, "totalChapters": 30 } },
+          {
+            "type": "Button",
+            "id": "download-task-detail-back",
+            "props": { "label": "返回队列" },
+            "bindings": [
+              { "target": "back", "event": "route.pop", "payload": {}, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "download-task-detail-retry",
+            "props": { "label": "重试", "availability": "planned-fail-closed" },
+            "bindings": [
+              { "target": "retry", "event": "download.task.retry", "payload": { "taskId": "download-001", "bookId": "bk-001" }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "download-task-detail-cancel",
+            "props": { "label": "取消任务", "availability": "planned-fail-closed" },
+            "bindings": [
+              { "target": "cancel", "event": "download.task.cancel", "payload": { "taskId": "download-001" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: sandbox storage accounting and cache cleanup",
+    "routeId": "storage-management",
+    "pageState": "default",
+    "context": { "scope": "all" },
+    "components": [
+      { "type": "BackTopBar", "id": "storage-management-topbar", "props": { "title": "存储管理" } },
+      {
+        "type": "GlobalSettingsPage",
+        "id": "storage-management-page",
+        "props": {
+          "variant": "storage-management",
+          "coreBasis": ["cache.book.status", "cache.clear"],
+          "hostBasis": ["storage.path", "file.read", "file.delete"],
+          "scopes": ["cache", "files", "external"],
+          "availability": "host-capability-gated"
+        },
+        "bindings": [
+          { "target": "management", "event": "storage.management.open", "payload": { "scope": "all" }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "SettingsListItem", "id": "storage-cache-row", "props": { "scope": "cache", "usedBytes": 268435456 } },
+          { "type": "SettingsListItem", "id": "storage-books-row", "props": { "scope": "books", "usedBytes": 1073741824 } },
+          {
+            "type": "Button",
+            "id": "storage-clear-cache",
+            "props": { "label": "清理缓存" },
+            "bindings": [
+              { "target": "clear", "event": "storage.cleanup.confirm", "payload": { "scope": "cache" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: generic Host WebView login",
+    "routeId": "webview-login",
+    "pageState": "default",
+    "context": { "sourceId": "src-001", "profileId": "source-src-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "webview-login-topbar", "props": { "title": "网页登录" } },
+      {
+        "type": "WebView",
+        "id": "webview-login-surface",
+        "props": {
+          "url": "https://example.com/login",
+          "profileId": "source-src-001",
+          "hostBasis": ["webview.open", "webview.close", "webview.evaluate", "cookie.get"],
+          "coreSupport": "not-declared",
+          "states": ["opening", "interactive", "captcha", "challenge", "cookie-return", "error"],
+          "requiresUiContext": true
+        },
+        "bindings": [
+          { "target": "login", "event": "webview.login.open", "payload": { "sourceId": "src-001", "profileId": "source-src-001" }, "trigger": "appear" }
+        ]
+      },
+      {
+        "type": "Button",
+        "id": "webview-login-cancel",
+        "props": { "label": "取消登录" },
+        "bindings": [
+          { "target": "cancel", "event": "webview.login.cancel", "payload": { "sourceId": "src-001", "profileId": "source-src-001" }, "trigger": "tap" }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: human verification stays inside the scoped Host WebView",
+    "routeId": "webview-captcha",
+    "pageState": "default",
+    "context": { "sourceId": "src-001", "profileId": "source-src-001" },
+    "components": [
+      { "type": "BackTopBar", "id": "webview-captcha-topbar", "props": { "title": "完成验证" } },
+      {
+        "type": "WebView",
+        "id": "webview-captcha-surface",
+        "props": {
+          "state": "captcha",
+          "hostBasis": ["webview.open", "webview.evaluate", "cookie.get"],
+          "completionSignal": "app-owned-evaluate-result",
+          "coreSupport": "not-declared",
+          "credentialCapture": "forbidden"
+        },
+        "bindings": [
+          { "target": "captcha", "event": "webview.login.open", "payload": { "sourceId": "src-001", "profileId": "source-src-001", "mode": "captcha" }, "trigger": "appear" }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: CHALLENGE_REQUIRED is recoverable only through available WebView capability",
+    "routeId": "webview-challenge",
+    "pageState": "error",
+    "context": { "sourceId": "src-001", "failedRequestId": "source-http-001" },
+    "components": [
+      {
+        "type": "GlobalStatePage",
+        "id": "webview-challenge-state",
+        "props": {
+          "variant": "challenge-required",
+          "errorCode": "CHALLENGE_REQUIRED",
+          "retryable": false,
+          "hostBasis": ["webview.open", "cookie.get"],
+          "fallback": "fail-closed-when-webview-unavailable"
+        },
+        "children": [
+          {
+            "type": "Button",
+            "id": "webview-challenge-continue",
+            "props": { "label": "打开验证页" },
+            "bindings": [
+              { "target": "retry", "event": "webview.challenge.retry", "payload": { "sourceId": "src-001", "failedRequestId": "source-http-001" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: extract scoped cookies and return to the failed operation",
+    "routeId": "webview-cookie-return",
+    "pageState": "loading",
+    "context": { "sourceId": "src-001", "profileId": "source-src-001", "returnRequestId": "source-http-001" },
+    "components": [
+      {
+        "type": "GlobalStatePage",
+        "id": "webview-cookie-return-state",
+        "props": {
+          "variant": "cookie-return",
+          "state": "extracting",
+          "effectPlan": ["webview.evaluate", "cookie.get", "webview.close"],
+          "cookieScope": "profile-and-source",
+          "secretDisplay": "redacted",
+          "failureStates": ["cookie-empty", "profile-mismatch", "capability-unavailable", "evaluation-failed"]
+        },
+        "bindings": [
+          { "target": "cookie", "event": "webview.cookie.return", "payload": { "sourceId": "src-001", "profileId": "source-src-001", "returnRequestId": "source-http-001" }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "Loading", "id": "webview-cookie-return-loading", "props": { "label": "正在读取登录状态" } }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: system TTS settings stay distinct from HTTP TTS",
+    "routeId": "settings-tts",
+    "pageState": "default",
+    "context": { "scope": "system-tts" },
+    "components": [
+      { "type": "BackTopBar", "id": "settings-tts-topbar", "props": { "title": "朗读设置" } },
+      {
+        "type": "SettingsGeneralPage",
+        "id": "settings-tts-page",
+        "props": {
+          "variant": "system-tts",
+          "coreBasis": ["tts.queue.plan", "tts.queue.start", "tts.queue.pause", "tts.queue.resume", "tts.queue.stop", "tts.queue.seek"],
+          "hostBasis": ["tts.system.start", "tts.system.pause", "tts.system.resume", "tts.system.stop"],
+          "states": ["unavailable", "ready", "testing", "speaking", "paused", "interrupted", "error"]
+        },
+        "bindings": [
+          { "target": "settings", "event": "settings.capability.open", "payload": { "scope": "tts" }, "trigger": "appear" }
+        ],
+        "children": [
+          { "type": "Dropdown", "id": "settings-tts-voice", "props": { "label": "语音", "value": "system-default" } },
+          { "type": "Slider", "id": "settings-tts-rate", "props": { "label": "语速", "value": 1.0, "min": 0.1, "max": 4.0 } },
+          {
+            "type": "Button",
+            "id": "settings-tts-test",
+            "props": { "label": "试听" },
+            "bindings": [
+              { "target": "test", "event": "reader.tts.start", "payload": { "voice": "system-default" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: storage settings route into detailed accounting",
+    "routeId": "settings-storage",
+    "pageState": "default",
+    "context": { "scope": "storage" },
+    "components": [
+      { "type": "BackTopBar", "id": "settings-storage-topbar", "props": { "title": "存储设置" } },
+      {
+        "type": "SettingsGeneralPage",
+        "id": "settings-storage-page",
+        "props": {
+          "variant": "storage",
+          "coreBasis": ["cache.book.status", "cache.clear"],
+          "hostBasis": ["storage.path", "file.delete"],
+          "platformDifferenceRequired": true
+        },
+        "bindings": [
+          { "target": "settings", "event": "settings.capability.open", "payload": { "scope": "storage" }, "trigger": "appear" }
+        ],
+        "children": [
+          {
+            "type": "SettingsListItem",
+            "id": "settings-storage-management-entry",
+            "props": { "title": "存储管理", "summary": "查看缓存、本地书与临时文件" },
+            "bindings": [
+              { "target": "open", "event": "route.push", "payload": { "routeId": "storage-management" }, "trigger": "tap" }
+            ]
+          },
+          {
+            "type": "Button",
+            "id": "settings-storage-clear-cache",
+            "props": { "label": "清理缓存" },
+            "bindings": [
+              { "target": "clear", "event": "settings.cache.clear", "payload": { "scope": "cache" }, "trigger": "tap" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "_comment": "Capability closure: accessibility settings expose only declared runtime/Host controls",
+    "routeId": "settings-accessibility",
+    "pageState": "default",
+    "context": { "scope": "accessibility" },
+    "components": [
+      { "type": "BackTopBar", "id": "settings-accessibility-topbar", "props": { "title": "无障碍" } },
+      {
+        "type": "SettingsGeneralPage",
+        "id": "settings-accessibility-page",
+        "props": {
+          "variant": "accessibility",
+          "runtimeBasis": ["reducedMotion"],
+          "hostBasis": ["brightness.get", "brightness.set", "screen.keepAwake", "screen.allowSleep", "haptics.light"],
+          "screenReaderAndTextScale": "platform-setting-only",
+          "platformDifferenceRequired": true
+        },
+        "bindings": [
+          { "target": "settings", "event": "settings.capability.open", "payload": { "scope": "accessibility" }, "trigger": "appear" }
+        ],
+        "children": [
+          {
+            "type": "Toggle",
+            "id": "settings-accessibility-reduced-motion",
+            "props": { "label": "减少动态效果", "value": false },
+            "bindings": [
+              { "target": "enable", "event": "reducedMotion.enable", "payload": {}, "trigger": "change" },
+              { "target": "disable", "event": "reducedMotion.disable", "payload": {}, "trigger": "change" }
+            ]
+          },
+          { "type": "SettingsListItem", "id": "settings-accessibility-screen-reader", "props": { "title": "屏幕阅读器", "availability": "system-managed" } },
+          { "type": "SettingsListItem", "id": "settings-accessibility-text-scale", "props": { "title": "系统文字大小", "availability": "system-managed" } }
         ]
       }
     ]

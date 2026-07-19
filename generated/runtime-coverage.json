@@ -6,22 +6,22 @@
     "ownershipSpec": "ui-spec/runtime-ownership.json"
   },
   "summary": {
-    "canonicalEvents": 270,
-    "implemented": 61,
-    "planned": 202,
+    "canonicalEvents": 300,
+    "implemented": 63,
+    "planned": 230,
     "platform": 7,
     "byWorkflow": {
       "foundation": 53,
       "sync": 22,
-      "W1": 25,
-      "W2": 63,
-      "W3": 60,
-      "W4": 30,
+      "W1": 37,
+      "W2": 76,
+      "W3": 64,
+      "W4": 31,
       "W5": 17
     },
     "byOwner": {
       "platformEphemeral": 7,
-      "runtime": 253,
+      "runtime": 283,
       "split": 10
     }
   },
@@ -190,7 +190,8 @@
       "action": {
         "kind": "readerPageStep",
         "coreSequence": [
-          "reader.location.resolve"
+          "reader.location.resolve",
+          "reader.progress.update"
         ],
         "hostRequest": null
       }
@@ -205,7 +206,8 @@
       "action": {
         "kind": "readerPageStep",
         "coreSequence": [
-          "reader.location.resolve"
+          "reader.location.resolve",
+          "reader.progress.update"
         ],
         "hostRequest": null
       }
@@ -223,10 +225,14 @@
       "event": "reader.control.toggle",
       "workflow": "W2",
       "owner": "runtime",
-      "coverage": "planned",
+      "coverage": "implemented",
       "ownershipRule": "runtime-default",
       "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
-      "action": null
+      "action": {
+        "kind": "toggleReaderControl",
+        "coreSequence": [],
+        "hostRequest": null
+      }
     },
     {
       "event": "reader.control.handlePress",
@@ -295,10 +301,14 @@
       "event": "reader.module.switch",
       "workflow": "W2",
       "owner": "runtime",
-      "coverage": "planned",
+      "coverage": "implemented",
       "ownershipRule": "runtime-default",
       "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
-      "action": null
+      "action": {
+        "kind": "switchReaderModule",
+        "coreSequence": [],
+        "hostRequest": null
+      }
     },
     {
       "event": "reader.appearance.open",
@@ -2757,6 +2767,276 @@
         "coreSequence": [],
         "hostRequest": null
       }
+    },
+    {
+      "event": "onboarding.continue",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "onboarding.capabilitySetup.complete",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "permission.recovery.openSettings",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "permission.recovery.retry",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "localFormat.open",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "localFormat.select",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "pdf.open",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "manga.open",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "httpTts.management.open",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "httpTts.provider.save",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "httpTts.test.start",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "httpTts.test.cancel",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "content.edit.open",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "content.edit.save",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "book.cover.change",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "book.cover.search",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "chapter.reviews.open",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "chapter.reviews.retry",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "bookmarks.manage.open",
+      "workflow": "W2",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "download.queue.open",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "download.task.open",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "download.task.retry",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "download.task.cancel",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "storage.management.open",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "storage.cleanup.confirm",
+      "workflow": "W1",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "webview.login.open",
+      "workflow": "W3",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "webview.login.cancel",
+      "workflow": "W3",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "webview.challenge.retry",
+      "workflow": "W3",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "webview.cookie.return",
+      "workflow": "W3",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
+    },
+    {
+      "event": "settings.capability.open",
+      "workflow": "W4",
+      "owner": "runtime",
+      "coverage": "planned",
+      "ownershipRule": "runtime-default",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
+      "action": null
     }
   ]
 }

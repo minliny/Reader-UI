@@ -32,6 +32,8 @@ const requiredSemantics = [
   "beginPageStep",
   "providePageLayout",
   "acceptPageLocationResult",
+  "acceptPageProgressResult",
+  "acceptPageProgressJSONResult",
   "cancelPageStep",
   "acceptTTSCoreResult",
   "acceptTTSSystemStart",
@@ -41,11 +43,16 @@ const requiredSemantics = [
   "suspendAutoPageForBackground",
   "awaiting-layout",
   "resolving-location",
+  "persisting-progress",
   "awaiting-plan",
   "awaiting-queue-start",
   "awaiting-speech-start",
   "PAGE_TRANSACTION_PENDING",
   "PAGE_LOCATION_INVALID_RESULT",
+  "PAGE_PROGRESS_INVALID_RESULT",
+  "PAGE_PROGRESS_COMMIT_PENDING",
+  "BOOK_OPEN_TRANSACTION_PENDING",
+  "reader.progress.update",
   "timer.foreground.arm",
   "timer.foreground.cancel",
   "timerId",
@@ -55,10 +62,10 @@ const requiredSemantics = [
   "foregroundOnly"
 ];
 
-test("playback implementation locks the current R9 action table byte-for-byte", () => {
+test("playback implementation locks the current action table byte-for-byte", () => {
   const bytes = fs.readFileSync(path.join(root, "ui-spec", "runtime-actions.json"));
   const digest = crypto.createHash("sha256").update(bytes).digest("hex");
-  assert.equal(digest, "0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c");
+  assert.equal(digest, "be48bbf47954980884738599ff29f21af070ba88a5efc865a20b40f08a47cfc4");
 });
 
 test("reference, Swift, Kotlin and ArkTS expose the same playback transaction surface", () => {
@@ -88,9 +95,9 @@ test("all generated HostRequest types include the foreground timer pair", () => 
 test("all runtimes expose recursive JSON payload and result boundaries without scalar stringification", () => {
   const required = {
     reference: ["cloneReaderUIJSONValue", "cloneReaderUIJSONPayload", "cloneReaderUIJSONResult", "jsonPayload", "legacyPayloadIsComplete"],
-    swift: ["ReaderUIJSONValue", "ReaderUIJSONPayload", "ReaderUIJSONResult", "jsonPayload", "acceptPageLocationJSONResult"],
-    kotlin: ["JsonElement", "ReaderUIJSONPayload", "ReaderUIJSONResult", "jsonPayload", "acceptPageLocationJSONResult"],
-    arkts: ["ReaderUIJSONValue", "ReaderUIJSONPayload", "ReaderUIJSONResult", "jsonPayload", "acceptPageLocationJSONResult"]
+    swift: ["ReaderUIJSONValue", "ReaderUIJSONPayload", "ReaderUIJSONResult", "jsonPayload", "acceptPageLocationJSONResult", "acceptPageProgressJSONResult"],
+    kotlin: ["JsonElement", "ReaderUIJSONPayload", "ReaderUIJSONResult", "jsonPayload", "acceptPageLocationJSONResult", "acceptPageProgressJSONResult"],
+    arkts: ["ReaderUIJSONValue", "ReaderUIJSONPayload", "ReaderUIJSONResult", "jsonPayload", "acceptPageLocationJSONResult", "acceptPageProgressJSONResult"]
   };
   for (const [name, relatives] of jsonBoundarySources) {
     const source = relatives.map((relative) => fs.readFileSync(path.join(root, relative), "utf8")).join("\n");

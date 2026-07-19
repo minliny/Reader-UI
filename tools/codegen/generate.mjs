@@ -57,6 +57,11 @@ function kotlinStringLiteral(value) {
   return stringLiteral(value).replace(/\$/g, "\\$");
 }
 
+function kotlinDoubleLiteral(value) {
+  const number = Number(value);
+  return Number.isInteger(number) ? `${number}.0` : String(number);
+}
+
 function swiftMotionIdCase(id) {
   // Preserve punctuation distinctions that are meaningful in canonical ids.
   // In particular, `next-prev` and the legacy alias `next/prev` must not
@@ -363,11 +368,19 @@ public enum ComponentType: String, Codable, CaseIterable, Sendable {
 ${types.map((t) => `    case ${toCamelCase(t)} = "${t}"`).join("\n")}
 }
 
+public struct ViewStateExplicitBinding: Codable, Equatable, Sendable {
+    public let target: String
+    public let event: String
+    public let payload: [String: AnyCodable]
+    public let trigger: String
+}
+
 public struct ViewStateComponent: Codable, Equatable, Sendable {
     public let type: ComponentType
     public var id: String?
     public var props: [String: AnyCodable]?
     public var children: [ViewStateComponent]?
+    public var bindings: [ViewStateExplicitBinding]?
 }
 
 public struct ViewState: Codable, Equatable, Sendable {
@@ -415,6 +428,20 @@ function genSwiftMotion(schema, fixtures) {
   const reducedMotionPolicies = extractEnum(schema, "reducedMotionPolicy");
   const registry = fixtures.map((item) => {
     const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
+    const trigger = Array.isArray(item.trigger) ? swiftStringArray(item.trigger) : "nil";
+    const from = Array.isArray(item.from) ? swiftStringArray(item.from) : "nil";
+    const to = Array.isArray(item.to) ? swiftStringArray(item.to) : "nil";
+    const interrupt = Array.isArray(item.interrupt) ? swiftStringArray(item.interrupt) : "nil";
+    const finalState = item.finalState ? stringLiteral(item.finalState) : "nil";
+    const cleanup = Array.isArray(item.cleanup) ? swiftStringArray(item.cleanup) : "nil";
+    const structuredFields = [
+      Array.isArray(item.trigger) ? `            trigger: ${trigger},` : null,
+      Array.isArray(item.from) ? `            from: ${from},` : null,
+      Array.isArray(item.to) ? `            to: ${to},` : null,
+      Array.isArray(item.interrupt) ? `            interrupt: ${interrupt},` : null,
+      item.finalState ? `            finalState: ${finalState},` : null,
+      Array.isArray(item.cleanup) ? `            cleanup: ${cleanup},` : null,
+    ].filter(Boolean).join("\n");
     const reduced = reducedMotionInfo(item);
     const durationToken = item.tokens?.durationToken ? stringLiteral(item.tokens.durationToken) : "nil";
     const easingToken = item.tokens?.easingToken ? stringLiteral(item.tokens.easingToken) : "nil";
@@ -434,7 +461,7 @@ function genSwiftMotion(schema, fixtures) {
             reducedMotionPolicy: .${item.reducedMotionPolicy},
             tokens: MotionTokens(durationToken: ${durationToken}, easingToken: ${easingToken}),
             guardRules: ${swiftStringArray(guardRules)},
-            reducedMotion: MotionReducedMotion(forceZeroDuration: ${reduced.forceZeroDuration}, directManipulation: ${reduced.directManipulation}, sourceRule: ${sourceRule}),
+${structuredFields ? `${structuredFields}\n` : ""}            reducedMotion: MotionReducedMotion(forceZeroDuration: ${reduced.forceZeroDuration}, directManipulation: ${reduced.directManipulation}, sourceRule: ${sourceRule}),
             loop: ${item.loop ? `MotionLoop(forever: ${item.loop.forever === true ? "true" : "false"}, autoreverses: ${item.loop.autoreverses === true ? "true" : "false"})` : "nil"},
             deprecated: ${item.deprecated === true ? "true" : "false"}
         )`;
@@ -475,6 +502,12 @@ public struct Motion: Codable, Equatable, Sendable {
     public let reducedMotionPolicy: MotionReducedMotionPolicy
     public var tokens: MotionTokens?
     public var guardRules: [String]?
+    public var trigger: [String]?
+    public var from: [String]?
+    public var to: [String]?
+    public var interrupt: [String]?
+    public var finalState: String?
+    public var cleanup: [String]?
     public var reducedMotion: MotionReducedMotion?
     public var loop: MotionLoop?
     public var deprecated: Bool?
@@ -491,6 +524,12 @@ public struct Motion: Codable, Equatable, Sendable {
         reducedMotionPolicy: MotionReducedMotionPolicy,
         tokens: MotionTokens? = nil,
         guardRules: [String]? = nil,
+        trigger: [String]? = nil,
+        from: [String]? = nil,
+        to: [String]? = nil,
+        interrupt: [String]? = nil,
+        finalState: String? = nil,
+        cleanup: [String]? = nil,
         reducedMotion: MotionReducedMotion? = nil,
         loop: MotionLoop? = nil,
         deprecated: Bool? = nil
@@ -506,6 +545,12 @@ public struct Motion: Codable, Equatable, Sendable {
         self.visualPattern = visualPattern
         self.tokens = tokens
         self.guardRules = guardRules
+        self.trigger = trigger
+        self.from = from
+        self.to = to
+        self.interrupt = interrupt
+        self.finalState = finalState
+        self.cleanup = cleanup
         self.reducedMotion = reducedMotion
         self.loop = loop
         self.deprecated = deprecated
@@ -799,11 +844,20 @@ import kotlinx.serialization.json.JsonElement
 ${genKotlinEnum("ComponentType", types)}
 
 @Serializable
+data class ViewStateExplicitBinding(
+    val target: String,
+    val event: String,
+    val payload: Map<String, JsonElement>,
+    val trigger: String
+)
+
+@Serializable
 data class ViewStateComponent(
     val type: ComponentType,
     val id: String? = null,
     val props: Map<String, JsonElement>? = null,
-    val children: List<ViewStateComponent>? = null
+    val children: List<ViewStateComponent>? = null,
+    val bindings: List<ViewStateExplicitBinding>? = null
 )
 
 @Serializable
@@ -827,6 +881,20 @@ function genKotlinMotion(schema, fixtures) {
   const reducedMotionPolicies = extractEnum(schema, "reducedMotionPolicy");
   const registry = fixtures.map((item) => {
     const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
+    const trigger = Array.isArray(item.trigger) ? kotlinStringList(item.trigger) : "null";
+    const from = Array.isArray(item.from) ? kotlinStringList(item.from) : "null";
+    const to = Array.isArray(item.to) ? kotlinStringList(item.to) : "null";
+    const interrupt = Array.isArray(item.interrupt) ? kotlinStringList(item.interrupt) : "null";
+    const finalState = item.finalState ? kotlinStringLiteral(item.finalState) : "null";
+    const cleanup = Array.isArray(item.cleanup) ? kotlinStringList(item.cleanup) : "null";
+    const structuredFields = [
+      Array.isArray(item.trigger) ? `        trigger = ${trigger},` : null,
+      Array.isArray(item.from) ? `        from = ${from},` : null,
+      Array.isArray(item.to) ? `        to = ${to},` : null,
+      Array.isArray(item.interrupt) ? `        interrupt = ${interrupt},` : null,
+      item.finalState ? `        finalState = ${finalState},` : null,
+      Array.isArray(item.cleanup) ? `        cleanup = ${cleanup},` : null,
+    ].filter(Boolean).join("\n");
     const reduced = reducedMotionInfo(item);
     const sourceRule = reduced.sourceRule ? stringLiteral(reduced.sourceRule) : "null";
     const containerRole = item.containerRole ? `MotionContainerRole.${kotlinCase(item.containerRole)}` : "null";
@@ -844,7 +912,7 @@ function genKotlinMotion(schema, fixtures) {
         reducedMotionPolicy = MotionReducedMotionPolicy.${kotlinCase(item.reducedMotionPolicy)},
         tokens = MotionTokens(durationToken = ${item.tokens?.durationToken ? stringLiteral(item.tokens.durationToken) : "null"}, easingToken = ${item.tokens?.easingToken ? stringLiteral(item.tokens.easingToken) : "null"}),
         guardRules = ${kotlinStringList(guardRules)},
-        reducedMotion = MotionReducedMotion(forceZeroDuration = ${reduced.forceZeroDuration}, directManipulation = ${reduced.directManipulation}, sourceRule = ${sourceRule}),
+${structuredFields ? `${structuredFields}\n` : ""}        reducedMotion = MotionReducedMotion(forceZeroDuration = ${reduced.forceZeroDuration}, directManipulation = ${reduced.directManipulation}, sourceRule = ${sourceRule}),
         deprecated = ${item.deprecated === true ? "true" : "false"}
     )`;
   });
@@ -890,6 +958,12 @@ data class Motion(
     val visualPattern: MotionVisualPattern? = null,
     val tokens: MotionTokens? = null,
     val guardRules: List<String>? = null,
+    val trigger: List<String>? = null,
+    val from: List<String>? = null,
+    val to: List<String>? = null,
+    val interrupt: List<String>? = null,
+    val finalState: String? = null,
+    val cleanup: List<String>? = null,
     val reducedMotion: MotionReducedMotion? = null,
     val deprecated: Boolean = false
 )
@@ -1015,6 +1089,8 @@ function genArkTsUiState(schema) {
   const pageStates = extractEnum(schema, "pageState");
   return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
 // Source: contracts/ui-state.schema.json
+import { MainTab } from './Route';
+
 ${genArkTsEnum("ReaderMode", readerModes)}
 
 ${genArkTsEnum("Overlay", overlays)}
@@ -1128,13 +1204,23 @@ function genArkTsViewState(schema) {
   const types = schema.$defs.Component.properties.type.enum || [];
   return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
 // Source: contracts/view-state.schema.json
+import { PageState } from './UiState';
+
 ${genArkTsEnum("ComponentType", types)}
+
+export interface ViewStateExplicitBinding {
+  target: string;
+  event: string;
+  payload: Record<string, object | string | number | boolean | null>;
+  trigger: "tap" | "change" | "submit" | "appear";
+}
 
 export interface ViewStateComponent {
   type: ComponentType;
   id?: string;
   props?: Record<string, object | string | number | boolean | null>;
   children?: ViewStateComponent[];
+  bindings?: ViewStateExplicitBinding[];
 }
 
 export interface ViewState {
@@ -1157,6 +1243,20 @@ function genArkTsMotion(schema, fixtures) {
   const reducedMotionPolicies = extractEnum(schema, "reducedMotionPolicy");
   const registry = fixtures.map((item) => {
     const guardRules = Array.isArray(item.guardRules) ? item.guardRules : [];
+    const trigger = Array.isArray(item.trigger) ? arkTsStringArray(item.trigger) : "undefined";
+    const from = Array.isArray(item.from) ? arkTsStringArray(item.from) : "undefined";
+    const to = Array.isArray(item.to) ? arkTsStringArray(item.to) : "undefined";
+    const interrupt = Array.isArray(item.interrupt) ? arkTsStringArray(item.interrupt) : "undefined";
+    const finalState = item.finalState ? stringLiteral(item.finalState) : "undefined";
+    const cleanup = Array.isArray(item.cleanup) ? arkTsStringArray(item.cleanup) : "undefined";
+    const structuredFields = [
+      Array.isArray(item.trigger) ? `    trigger: ${trigger},` : null,
+      Array.isArray(item.from) ? `    from: ${from},` : null,
+      Array.isArray(item.to) ? `    to: ${to},` : null,
+      Array.isArray(item.interrupt) ? `    interrupt: ${interrupt},` : null,
+      item.finalState ? `    finalState: ${finalState},` : null,
+      Array.isArray(item.cleanup) ? `    cleanup: ${cleanup},` : null,
+    ].filter(Boolean).join("\n");
     const reduced = reducedMotionInfo(item);
     const sourceRule = reduced.sourceRule ? stringLiteral(reduced.sourceRule) : "undefined";
     const containerRole = item.containerRole ? stringLiteral(item.containerRole) : "undefined";
@@ -1174,7 +1274,7 @@ function genArkTsMotion(schema, fixtures) {
     reducedMotionPolicy: ${stringLiteral(item.reducedMotionPolicy)},
     tokens: { durationToken: ${item.tokens?.durationToken ? stringLiteral(item.tokens.durationToken) : "undefined"}, easingToken: ${item.tokens?.easingToken ? stringLiteral(item.tokens.easingToken) : "undefined"} },
     guardRules: ${arkTsStringArray(guardRules)},
-    reducedMotion: { forceZeroDuration: ${reduced.forceZeroDuration}, directManipulation: ${reduced.directManipulation}, sourceRule: ${sourceRule} },
+${structuredFields ? `${structuredFields}\n` : ""}    reducedMotion: { forceZeroDuration: ${reduced.forceZeroDuration}, directManipulation: ${reduced.directManipulation}, sourceRule: ${sourceRule} },
     deprecated: ${item.deprecated === true ? "true" : "false"}
   }`;
   });
@@ -1213,6 +1313,12 @@ export interface Motion {
   visualPattern?: MotionVisualPattern;
   tokens?: MotionTokens;
   guardRules?: string[];
+  trigger?: string[];
+  from?: string[];
+  to?: string[];
+  interrupt?: string[];
+  finalState?: string;
+  cleanup?: string[];
   reducedMotion?: MotionReducedMotion;
   deprecated?: boolean;
 }
@@ -1277,6 +1383,197 @@ export function getToken(name: string): Token | undefined {
   return tokenRegistry[name];
 }
 `;
+}
+
+// --- Reader 2 AppearanceSpec -------------------------------------------------
+// Figma remains the visual authoring source, but hosts consume this checked-in
+// executable contract instead of copying theme/font/select/stepper arrays.
+function genSwiftAppearance(spec) {
+  const themes = spec.themes.map((item) => `        .init(id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, scheme: ${stringLiteral(item.scheme)}, pairId: ${stringLiteral(item.pairId)}, texture: ${stringLiteral(item.texture)}, swatchHex: ${stringLiteral(item.swatchHex)}, backgroundHex: ${stringLiteral(item.backgroundHex)}, inkHex: ${stringLiteral(item.inkHex)})`).join(",\n");
+  const fonts = spec.fonts.map((item) => `        .init(id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, familyRole: ${stringLiteral(item.familyRole)}, webFontStack: ${stringLiteral(item.webFontStack)}, swiftFamily: ${stringLiteral(item.swiftFamily)}, arktsValue: ${stringLiteral(item.arktsValue)}, importAction: ${item.importAction})`).join(",\n");
+  const selects = spec.selects.map((item) => {
+    const options = item.options.map((option) => `.init(value: ${stringLiteral(option.value)}, label: ${stringLiteral(option.label)})`).join(", ");
+    return `        .init(id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, defaultValue: ${stringLiteral(item.defaultValue)}, options: [${options}])`;
+  }).join(",\n");
+  const steppers = spec.steppers.map((item) => `        .init(id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, unit: ${stringLiteral(item.unit)}, defaultValue: ${item.defaultValue}, minimum: ${item.minimum}, maximum: ${item.maximum}, step: ${item.step}, precision: ${item.precision})`).join(",\n");
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
+// Source: contracts/appearance.schema.json + fixtures/appearance.fixtures.json
+import Foundation
+
+public struct ReaderAppearanceSource: Codable, Equatable, Sendable {
+    public let figmaFileKey: String
+    public let nodeId: String
+    public let path: String
+    public let revision: String
+}
+
+public struct ReaderAppearanceDefaults: Codable, Equatable, Sendable {
+    public let dayThemeId: String
+    public let nightThemeId: String
+    public let fontId: String
+}
+
+public struct ReaderAppearanceTheme: Codable, Equatable, Identifiable, Sendable {
+    public let id: String
+    public let label: String
+    public let scheme: String
+    public let pairId: String
+    public let texture: String
+    public let swatchHex: String
+    public let backgroundHex: String
+    public let inkHex: String
+}
+
+public struct ReaderAppearanceFont: Codable, Equatable, Identifiable, Sendable {
+    public let id: String
+    public let label: String
+    public let familyRole: String
+    public let webFontStack: String
+    public let swiftFamily: String
+    public let arktsValue: String
+    public let importAction: Bool
+}
+
+public struct ReaderAppearanceSelectOption: Codable, Equatable, Sendable {
+    public let value: String
+    public let label: String
+}
+
+public struct ReaderAppearanceSelect: Codable, Equatable, Identifiable, Sendable {
+    public let id: String
+    public let label: String
+    public let defaultValue: String
+    public let options: [ReaderAppearanceSelectOption]
+}
+
+public struct ReaderAppearanceStepper: Codable, Equatable, Identifiable, Sendable {
+    public let id: String
+    public let label: String
+    public let unit: String
+    public let defaultValue: Double
+    public let minimum: Double
+    public let maximum: Double
+    public let step: Double
+    public let precision: Int
+}
+
+public enum ReaderAppearanceSpecRegistry {
+    public static let schemaVersion = ${spec.schemaVersion}
+    public static let source = ReaderAppearanceSource(figmaFileKey: ${stringLiteral(spec.source.figmaFileKey)}, nodeId: ${stringLiteral(spec.source.nodeId)}, path: ${stringLiteral(spec.source.path)}, revision: ${stringLiteral(spec.source.revision)})
+    public static let defaults = ReaderAppearanceDefaults(dayThemeId: ${stringLiteral(spec.defaults.dayThemeId)}, nightThemeId: ${stringLiteral(spec.defaults.nightThemeId)}, fontId: ${stringLiteral(spec.defaults.fontId)})
+    public static let themes: [ReaderAppearanceTheme] = [
+${themes}
+    ]
+    public static let fonts: [ReaderAppearanceFont] = [
+${fonts}
+    ]
+    public static let selects: [ReaderAppearanceSelect] = [
+${selects}
+    ]
+    public static let steppers: [ReaderAppearanceStepper] = [
+${steppers}
+    ]
+
+    public static func theme(id: String) -> ReaderAppearanceTheme? { themes.first { $0.id == id } }
+    public static func font(id: String) -> ReaderAppearanceFont? { fonts.first { $0.id == id } }
+    public static func select(id: String) -> ReaderAppearanceSelect? { selects.first { $0.id == id } }
+    public static func stepper(id: String) -> ReaderAppearanceStepper? { steppers.first { $0.id == id } }
+}
+`;
+}
+
+function genKotlinAppearance(spec) {
+  const themes = spec.themes.map((item) => `        ReaderAppearanceTheme(${kotlinStringLiteral(item.id)}, ${kotlinStringLiteral(item.label)}, ${kotlinStringLiteral(item.scheme)}, ${kotlinStringLiteral(item.pairId)}, ${kotlinStringLiteral(item.texture)}, ${kotlinStringLiteral(item.swatchHex)}, ${kotlinStringLiteral(item.backgroundHex)}, ${kotlinStringLiteral(item.inkHex)})`).join(",\n");
+  const fonts = spec.fonts.map((item) => `        ReaderAppearanceFont(${kotlinStringLiteral(item.id)}, ${kotlinStringLiteral(item.label)}, ${kotlinStringLiteral(item.familyRole)}, ${kotlinStringLiteral(item.webFontStack)}, ${kotlinStringLiteral(item.swiftFamily)}, ${kotlinStringLiteral(item.arktsValue)}, ${item.importAction})`).join(",\n");
+  const selects = spec.selects.map((item) => {
+    const options = item.options.map((option) => `ReaderAppearanceSelectOption(${kotlinStringLiteral(option.value)}, ${kotlinStringLiteral(option.label)})`).join(", ");
+    return `        ReaderAppearanceSelect(${kotlinStringLiteral(item.id)}, ${kotlinStringLiteral(item.label)}, ${kotlinStringLiteral(item.defaultValue)}, listOf(${options}))`;
+  }).join(",\n");
+  const steppers = spec.steppers.map((item) => `        ReaderAppearanceStepper(${kotlinStringLiteral(item.id)}, ${kotlinStringLiteral(item.label)}, ${kotlinStringLiteral(item.unit)}, ${kotlinDoubleLiteral(item.defaultValue)}, ${kotlinDoubleLiteral(item.minimum)}, ${kotlinDoubleLiteral(item.maximum)}, ${kotlinDoubleLiteral(item.step)}, ${item.precision})`).join(",\n");
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
+// Source: contracts/appearance.schema.json + fixtures/appearance.fixtures.json
+package io.reader.ui.contract
+
+import kotlinx.serialization.Serializable
+
+@Serializable data class ReaderAppearanceSource(val figmaFileKey: String, val nodeId: String, val path: String, val revision: String)
+@Serializable data class ReaderAppearanceDefaults(val dayThemeId: String, val nightThemeId: String, val fontId: String)
+@Serializable data class ReaderAppearanceTheme(val id: String, val label: String, val scheme: String, val pairId: String, val texture: String, val swatchHex: String, val backgroundHex: String, val inkHex: String)
+@Serializable data class ReaderAppearanceFont(val id: String, val label: String, val familyRole: String, val webFontStack: String, val swiftFamily: String, val arktsValue: String, val importAction: Boolean)
+@Serializable data class ReaderAppearanceSelectOption(val value: String, val label: String)
+@Serializable data class ReaderAppearanceSelect(val id: String, val label: String, val defaultValue: String, val options: List<ReaderAppearanceSelectOption>)
+@Serializable data class ReaderAppearanceStepper(val id: String, val label: String, val unit: String, val defaultValue: Double, val minimum: Double, val maximum: Double, val step: Double, val precision: Int)
+
+object ReaderAppearanceSpecRegistry {
+    const val schemaVersion: Int = ${spec.schemaVersion}
+    val source = ReaderAppearanceSource(${kotlinStringLiteral(spec.source.figmaFileKey)}, ${kotlinStringLiteral(spec.source.nodeId)}, ${kotlinStringLiteral(spec.source.path)}, ${kotlinStringLiteral(spec.source.revision)})
+    val defaults = ReaderAppearanceDefaults(${kotlinStringLiteral(spec.defaults.dayThemeId)}, ${kotlinStringLiteral(spec.defaults.nightThemeId)}, ${kotlinStringLiteral(spec.defaults.fontId)})
+    val themes: List<ReaderAppearanceTheme> = listOf(
+${themes}
+    )
+    val fonts: List<ReaderAppearanceFont> = listOf(
+${fonts}
+    )
+    val selects: List<ReaderAppearanceSelect> = listOf(
+${selects}
+    )
+    val steppers: List<ReaderAppearanceStepper> = listOf(
+${steppers}
+    )
+
+    fun theme(id: String): ReaderAppearanceTheme? = themes.firstOrNull { it.id == id }
+    fun font(id: String): ReaderAppearanceFont? = fonts.firstOrNull { it.id == id }
+    fun select(id: String): ReaderAppearanceSelect? = selects.firstOrNull { it.id == id }
+    fun stepper(id: String): ReaderAppearanceStepper? = steppers.firstOrNull { it.id == id }
+}
+`;
+}
+
+function genArkTsAppearance(spec) {
+  const themes = spec.themes.map((item) => `    { id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, scheme: ${stringLiteral(item.scheme)}, pairId: ${stringLiteral(item.pairId)}, texture: ${stringLiteral(item.texture)}, swatchHex: ${stringLiteral(item.swatchHex)}, backgroundHex: ${stringLiteral(item.backgroundHex)}, inkHex: ${stringLiteral(item.inkHex)} }`).join(",\n");
+  const fonts = spec.fonts.map((item) => `    { id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, familyRole: ${stringLiteral(item.familyRole)}, webFontStack: ${stringLiteral(item.webFontStack)}, swiftFamily: ${stringLiteral(item.swiftFamily)}, arktsValue: ${stringLiteral(item.arktsValue)}, importAction: ${item.importAction} }`).join(",\n");
+  const selects = spec.selects.map((item) => {
+    const options = item.options.map((option) => `{ value: ${stringLiteral(option.value)}, label: ${stringLiteral(option.label)} }`).join(", ");
+    return `    { id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, defaultValue: ${stringLiteral(item.defaultValue)}, options: [${options}] }`;
+  }).join(",\n");
+  const steppers = spec.steppers.map((item) => `    { id: ${stringLiteral(item.id)}, label: ${stringLiteral(item.label)}, unit: ${stringLiteral(item.unit)}, defaultValue: ${item.defaultValue}, minimum: ${item.minimum}, maximum: ${item.maximum}, step: ${item.step}, precision: ${item.precision} }`).join(",\n");
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.
+// Source: contracts/appearance.schema.json + fixtures/appearance.fixtures.json
+export interface ReaderAppearanceSource { figmaFileKey: string; nodeId: string; path: string; revision: string; }
+export interface ReaderAppearanceDefaults { dayThemeId: string; nightThemeId: string; fontId: string; }
+export interface ReaderAppearanceTheme { id: string; label: string; scheme: string; pairId: string; texture: string; swatchHex: string; backgroundHex: string; inkHex: string; }
+export interface ReaderAppearanceFont { id: string; label: string; familyRole: string; webFontStack: string; swiftFamily: string; arktsValue: string; importAction: boolean; }
+export interface ReaderAppearanceSelectOption { value: string; label: string; }
+export interface ReaderAppearanceSelect { id: string; label: string; defaultValue: string; options: ReaderAppearanceSelectOption[]; }
+export interface ReaderAppearanceStepper { id: string; label: string; unit: string; defaultValue: number; minimum: number; maximum: number; step: number; precision: number; }
+
+export class ReaderAppearanceSpecRegistry {
+  static readonly schemaVersion: number = ${spec.schemaVersion};
+  static readonly source: ReaderAppearanceSource = { figmaFileKey: ${stringLiteral(spec.source.figmaFileKey)}, nodeId: ${stringLiteral(spec.source.nodeId)}, path: ${stringLiteral(spec.source.path)}, revision: ${stringLiteral(spec.source.revision)} };
+  static readonly defaults: ReaderAppearanceDefaults = { dayThemeId: ${stringLiteral(spec.defaults.dayThemeId)}, nightThemeId: ${stringLiteral(spec.defaults.nightThemeId)}, fontId: ${stringLiteral(spec.defaults.fontId)} };
+  static readonly themes: ReaderAppearanceTheme[] = [
+${themes}
+  ];
+  static readonly fonts: ReaderAppearanceFont[] = [
+${fonts}
+  ];
+  static readonly selects: ReaderAppearanceSelect[] = [
+${selects}
+  ];
+  static readonly steppers: ReaderAppearanceStepper[] = [
+${steppers}
+  ];
+
+  static theme(id: string): ReaderAppearanceTheme | undefined { return ReaderAppearanceSpecRegistry.themes.find((item: ReaderAppearanceTheme) => item.id === id); }
+  static font(id: string): ReaderAppearanceFont | undefined { return ReaderAppearanceSpecRegistry.fonts.find((item: ReaderAppearanceFont) => item.id === id); }
+  static select(id: string): ReaderAppearanceSelect | undefined { return ReaderAppearanceSpecRegistry.selects.find((item: ReaderAppearanceSelect) => item.id === id); }
+  static stepper(id: string): ReaderAppearanceStepper | undefined { return ReaderAppearanceSpecRegistry.steppers.find((item: ReaderAppearanceStepper) => item.id === id); }
+}
+`;
+}
+
+function genWebAppearance(spec) {
+  return `// AUTO-GENERATED by tools/codegen/generate.mjs. DO NOT EDIT.\n// Source: contracts/appearance.schema.json + fixtures/appearance.fixtures.json\nwindow.ReaderAppearanceSpec = Object.freeze(${JSON.stringify(spec, null, 2)});\n`;
 }
 
 // --- Phase 2: CoreCommand / CoreEvent / HostRequest / ProgressLocation / Content / SyncConflict ---
@@ -2073,6 +2370,16 @@ public struct MotionPolicyMatch: Codable, Equatable, Sendable {
 
 public typealias MotionRequest = MotionPolicyMatch
 
+public struct MotionResolution: Codable, Equatable, Sendable {
+    public let motionId: MotionId?
+    public let diagnostic: String?
+
+    public init(motionId: MotionId?, diagnostic: String? = nil) {
+        self.motionId = motionId
+        self.diagnostic = diagnostic
+    }
+}
+
 public struct MotionPolicy: Codable, Equatable, Sendable {
     public let id: String
     public let priority: Int
@@ -2098,7 +2405,7 @@ ${routeShellMap.join(",\n")}
 }
 
 public enum ReaderMotionResolver {
-    public static func resolve(_ request: MotionRequest) -> MotionId? {
+    public static func resolveWithDiagnostic(_ request: MotionRequest) -> MotionResolution {
         var resolved = request
         if resolved.fromShell == nil, let fr = request.fromRoute {
             resolved.fromShell = RouteShellLookup.shell(for: fr)
@@ -2112,10 +2419,14 @@ public enum ReaderMotionResolver {
         }
         for policy in sorted {
             if policy.match.matches(resolved) {
-                return policy.motionId
+                return MotionResolution(motionId: policy.motionId)
             }
         }
-        return nil
+        return MotionResolution(motionId: nil, diagnostic: "motion.policy.no-match")
+    }
+
+    public static func resolve(_ request: MotionRequest) -> MotionId? {
+        resolveWithDiagnostic(request).motionId
     }
 }
 `;
@@ -2195,6 +2506,12 @@ data class MotionPolicyMatch(
 typealias MotionRequest = MotionPolicyMatch
 
 @Serializable
+data class MotionResolution(
+    val motionId: MotionId? = null,
+    val diagnostic: String? = null
+)
+
+@Serializable
 data class MotionPolicy(
     val id: String,
     val priority: Int,
@@ -2218,7 +2535,7 @@ ${routeShellMap.join(",\n")}
 }
 
 object ReaderMotionResolver {
-    fun resolve(request: MotionRequest): MotionId? {
+    fun resolveWithDiagnostic(request: MotionRequest): MotionResolution {
         var resolved = request
         if (resolved.fromShell == null && request.fromRoute != null) {
             resolved = resolved.copy(fromShell = RouteShellLookup.shell(request.fromRoute!!))
@@ -2231,10 +2548,14 @@ object ReaderMotionResolver {
         )
         for (policy in sorted) {
             if (policy.match.matches(resolved)) {
-                return policy.motionId
+                return MotionResolution(motionId = policy.motionId)
             }
         }
-        return null
+        return MotionResolution(diagnostic = "motion.policy.no-match")
+    }
+
+    fun resolve(request: MotionRequest): MotionId? {
+        return resolveWithDiagnostic(request).motionId
     }
 }
 `;
@@ -2280,6 +2601,11 @@ export interface MotionPolicyMatch {
 }
 
 export type MotionRequest = MotionPolicyMatch;
+
+export interface MotionResolution {
+  motionId?: MotionId;
+  diagnostic?: string;
+}
 
 export interface MotionPolicy {
   id: string;
@@ -2328,7 +2654,7 @@ export function routeShell(routeId: string): RouteShell | undefined {
   return routeShellLookup[routeId];
 }
 
-export function resolveMotion(request: MotionRequest): MotionId | undefined {
+export function resolveMotionWithDiagnostic(request: MotionRequest): MotionResolution {
   const resolved: MotionPolicyMatch = { ...request };
   if (resolved.fromShell === undefined && request.fromRoute !== undefined) {
     resolved.fromShell = routeShell(request.fromRoute);
@@ -2342,10 +2668,14 @@ export function resolveMotion(request: MotionRequest): MotionId | undefined {
   });
   for (const policy of sorted) {
     if (motionPolicyMatchMatches(policy.match, resolved)) {
-      return policy.motionId;
+      return { motionId: policy.motionId };
     }
   }
-  return undefined;
+  return { diagnostic: "motion.policy.no-match" };
+}
+
+export function resolveMotion(request: MotionRequest): MotionId | undefined {
+  return resolveMotionWithDiagnostic(request).motionId;
 }
 `;
 }
@@ -2372,6 +2702,7 @@ function generate() {
   const viewSchema = loadSchema("view-state");
   const motionSchema = loadSchema("motion");
   const tokenSchema = loadSchema("token");
+  const appearanceSchema = loadSchema("appearance");
 
   // Phase 2 schemas
   const coreCmdSchema = loadSchema("core-command");
@@ -2392,6 +2723,10 @@ function generate() {
   const motionFixtures = loadFixtures("motion");
   const tokenFixtures = loadFixtures("token");
   const motionPolicyFixtures = loadFixtures("motion-policy");
+  const appearanceSpec = loadFixtures("appearance");
+  if (!appearanceSpec || Array.isArray(appearanceSpec)) {
+    throw new Error("fixtures/appearance.fixtures.json must contain one ReaderAppearanceSpec object");
+  }
 
   // Swift - Phase 1
   writeFile(join(GENERATED_DIR, "swift", "Route.swift"), genSwiftRoute(routeSchema, routeFixtures));
@@ -2400,6 +2735,7 @@ function generate() {
   writeFile(join(GENERATED_DIR, "swift", "ViewState.swift"), genSwiftViewState(viewSchema));
   writeFile(join(GENERATED_DIR, "swift", "Motion.swift"), genSwiftMotion(motionSchema, motionFixtures));
   writeFile(join(GENERATED_DIR, "swift", "Token.swift"), genSwiftToken(tokenSchema, tokenFixtures));
+  writeFile(join(GENERATED_DIR, "swift", "Appearance.swift"), genSwiftAppearance(appearanceSpec));
 
   // Swift - Phase 2
   writeFile(join(GENERATED_DIR, "swift", "CoreCommand.swift"), genSwiftCoreCommand(coreCmdSchema));
@@ -2422,6 +2758,7 @@ function generate() {
   writeFile(join(GENERATED_DIR, "kotlin", "ViewState.kt"), genKotlinViewState(viewSchema));
   writeFile(join(GENERATED_DIR, "kotlin", "Motion.kt"), genKotlinMotion(motionSchema, motionFixtures));
   writeFile(join(GENERATED_DIR, "kotlin", "Token.kt"), genKotlinToken(tokenSchema, tokenFixtures));
+  writeFile(join(GENERATED_DIR, "kotlin", "Appearance.kt"), genKotlinAppearance(appearanceSpec));
 
   // Kotlin - Phase 2
   writeFile(join(GENERATED_DIR, "kotlin", "CoreCommand.kt"), genKotlinCoreCommand(coreCmdSchema));
@@ -2444,6 +2781,8 @@ function generate() {
   writeFile(join(GENERATED_DIR, "arkts", "ViewState.ets"), genArkTsViewState(viewSchema));
   writeFile(join(GENERATED_DIR, "arkts", "Motion.ets"), genArkTsMotion(motionSchema, motionFixtures));
   writeFile(join(GENERATED_DIR, "arkts", "Token.ets"), genArkTsToken(tokenSchema, tokenFixtures));
+  writeFile(join(GENERATED_DIR, "arkts", "Appearance.ets"), genArkTsAppearance(appearanceSpec));
+  writeFile(join(REPO_ROOT, "frontend-demo-optimized", "appearance-spec.js"), genWebAppearance(appearanceSpec));
 
   // ArkTS - Phase 2
   writeFile(join(GENERATED_DIR, "arkts", "CoreCommand.ets"), genArkTsCoreCommand(coreCmdSchema));
@@ -2462,6 +2801,7 @@ function generate() {
   console.log("[codegen] generated swift / kotlin / arkts types (Phase 1 + Phase 2 + Phase 1 收尾 + Phase 2 Motion Runtime)");
   console.log(`[codegen] Phase 1: route ids=${extractEnum(routeSchema, "id").length}, ui-event types=${extractEnum(eventSchema, "type").length}, motion ids=${extractEnum(motionSchema, "id").length}, token categories=${extractEnum(tokenSchema, "category").length}`);
   console.log(`[codegen] Registries: motion specs=${motionFixtures.length}, tokens=${tokenFixtures.length}`);
+  console.log(`[codegen] AppearanceSpec: themes=${appearanceSpec.themes.length}, fonts=${appearanceSpec.fonts.length}, selects=${appearanceSpec.selects.length}, steppers=${appearanceSpec.steppers.length}, schema=${appearanceSchema.title}`);
   console.log(`[codegen] Phase 2: core-command types=${extractEnum(coreCmdSchema, "type").length}, core-event types=${extractEnum(coreEvtSchema, "type").length}, host-request types=${extractEnum(hostReqSchema, "type").length}`);
   console.log(`[codegen] Phase 1 收尾: state-rule kinds=${extractEnum(stateRuleSchema, "kind").length}, severity=${extractEnum(stateRuleSchema, "severity").length}`);
   console.log(`[codegen] Phase 2 Motion Runtime: motion policies=${motionPolicyFixtures.filter((p) => p.id).length}, route shell lookups=${routeFixtures.filter((r) => r.id && r.shell).length}`);

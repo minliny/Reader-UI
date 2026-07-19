@@ -43,7 +43,12 @@ let totalFixtures = 0;
 let totalErrors = 0;
 
 for (const [name, schema] of Object.entries(schemas)) {
-  const items = fixtures[name] || [];
+  const fixtureDocument = fixtures[name];
+  const items = Array.isArray(fixtureDocument)
+    ? fixtureDocument
+    : fixtureDocument && typeof fixtureDocument === "object"
+      ? [fixtureDocument]
+      : [];
   let fileErrors = 0;
   for (const item of items) {
     const errors = validate(schema, item);
