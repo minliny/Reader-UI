@@ -951,8 +951,8 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 766790,
-      "sha256": "eb8edb521a011d81fb7d0a409317ecf4c18a65abeb1a22a71e79f19d51ae1aec"
+      "byteLength": 766771,
+      "sha256": "4b204bbf7e6e59d70704ef3ed54ba1aa2e3a37d84e33c205fb56e079f0edfe5d"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -1594,8 +1594,8 @@
     {
       "name": "design-runtime",
       "fileCount": 176,
-      "byteLength": 2831062,
-      "sha256": "ec803bf4b086580fbd3277730a45a121f23deb195b9951c6f1a187994aa063bb",
+      "byteLength": 2831043,
+      "sha256": "78299a821d6dc23ff74aefea023d26003d492c55430f3804d33281bae6ab4417",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",

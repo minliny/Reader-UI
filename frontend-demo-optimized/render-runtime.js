@@ -4557,7 +4557,7 @@
     return `
       <section class="fd-ir-tap-zone-layer" data-dev-region="ImmersiveTapZones" aria-label="透明点击热区层">
         <button class="fd-immersive-hotzone fd-hotzone-prev" type="button" aria-label="上一页" data-dev-region="PrevPageHotzone" data-reader-page-action="prev" aria-disabled="${isVertical || pageState.index === 0 ? "true" : "false"}"></button>
-        <button class="fd-immersive-hotzone fd-hotzone-center" type="button" aria-label="打开阅读控制层" data-dev-region="ControlLayerHotzone" data-reader-control-show data-route="reader" data-route-replace></button>
+        <button class="fd-immersive-hotzone fd-hotzone-center" type="button" aria-label="打开阅读控制层" data-dev-region="ControlLayerHotzone" data-reader-control-show data-route="reader"></button>
         <button class="fd-immersive-hotzone fd-hotzone-next" type="button" aria-label="下一页" data-dev-region="NextPageHotzone" data-reader-page-action="next" aria-disabled="${isVertical || pageState.index >= pageState.count - 1 ? "true" : "false"}"></button>
       </section>`;
   }
