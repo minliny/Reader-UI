@@ -1508,3 +1508,190 @@
 .fd-settings-metric-grid strong {
   font-size: var(--fd-settings-metric-value-size);
 }
+
+/* =============================================================================
+   B1 · Settings Operations — Control Identity 补充样式
+   来源：B1 工作包（2026-07-19）
+   作用：
+     1. 为带 data-control-id 的控件提供 focus-visible 可见焦点环
+     2. 为升级后的 button.fd-settings-switch（原生 role="switch"）补充按钮重置
+     3. 为 fd-settings-async-badge 提供 busy/success/error/stale 色调
+     4. 为 data-danger-confirm / data-async-state 提供视觉提示
+   注：基础 .fd-settings-switch 视觉样式在 05-flow-adaptive.css 中定义；
+       这里只补充 B1 升级后的原生 button 形态与交互态。
+   ========================================================================== */
+
+/* --- focus-visible：带 data-control-id 的可操作控件显示可见焦点环 --- */
+.fd-settings-content [data-control-id]:focus-visible,
+.fd-settings-content [data-focus-restore-key]:focus-visible,
+.fd-source-home [data-control-id]:focus-visible,
+.fd-source-batch [data-control-id]:focus-visible,
+.fd-settings-confirm-dialog [data-control-id]:focus-visible {
+  outline: 2px solid var(--fd-primary, #2d4a3e);
+  outline-offset: 2px;
+  border-radius: var(--fd-radius-sm, 4px);
+}
+
+/* 焦点恢复标记：被标记为 last-focused 的控件在重新渲染后短暂高亮 */
+.fd-settings-content [data-was-focused="true"]:not(:focus) {
+  outline: 1px dashed var(--fd-muted, rgba(154, 139, 124, 0.5));
+  outline-offset: 2px;
+}
+
+/* --- 原生 button.fd-settings-switch 重置（升级自 span.fd-settings-switch） --- */
+button.fd-settings-switch {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background-color var(--fd-motion-fast, 120ms) ease;
+}
+
+button.fd-settings-switch[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+button.fd-settings-switch[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+button.fd-settings-switch.is-busy i {
+  animation: fd-settings-switch-busy-pulse 1s ease-in-out infinite;
+}
+
+@keyframes fd-settings-switch-busy-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button.fd-settings-switch.is-busy i {
+    animation: none;
+  }
+  .fd-settings-content [data-was-focused="true"]:not(:focus) {
+    outline-style: solid;
+  }
+}
+
+/* --- fd-settings-async-badge：busy/success/error/stale 色调 --- */
+.fd-settings-async-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: var(--fd-radius-sm, 4px);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.fd-settings-async-badge.is-info {
+  background: rgba(45, 74, 62, 0.08);
+  color: var(--fd-primary-dark, #1f3a2e);
+}
+
+.fd-settings-async-badge.is-good {
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+}
+
+.fd-settings-async-badge.is-warn {
+  background: rgba(183, 28, 28, 0.12);
+  color: #b71c1c;
+}
+
+.fd-settings-async-badge.is-muted {
+  background: rgba(154, 139, 124, 0.16);
+  color: var(--fd-muted, #6b5d4f);
+}
+
+/* --- data-danger-confirm：危险确认控件的视觉警示 --- */
+[data-danger-confirm="true"] {
+  position: relative;
+}
+
+[data-danger-confirm="true"].is-danger,
+button[data-danger-confirm="true"] {
+  color: #b71c1c;
+}
+
+button[data-danger-confirm="true"]:not(.is-danger) {
+  /* 非显式 danger 类的危险按钮：添加左侧色条提示 */
+  border-left: 2px solid rgba(183, 28, 28, 0.6);
+}
+
+/* --- data-async-state：busy 控件整体降饱和度 + progress 光标 --- */
+[data-async-state="busy"]:not([aria-busy="true"]) {
+  cursor: progress;
+}
+
+[data-async-state="error"] {
+  outline: 1px solid rgba(183, 28, 28, 0.4);
+  outline-offset: 1px;
+}
+
+[data-async-state="stale"] {
+  opacity: 0.65;
+}
+
+[data-async-state="success"] {
+  /* 成功态：短暂高亮，由 runtime 在动画结束后移除属性 */
+  background: rgba(46, 125, 50, 0.06);
+}
+
+/* --- data-repeat-tap-guard：busy 时屏蔽指针 --- */
+[data-repeat-tap-guard="true"][aria-busy="true"],
+[data-repeat-tap-guard="true"][data-async-state="busy"] {
+  pointer-events: none;
+}
+
+/* --- data-stale-result：过期结果标记 --- */
+[data-stale-result="true"] {
+  opacity: 0.55;
+  position: relative;
+}
+
+[data-stale-result="true"]::after {
+  content: "已过期";
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  font-size: 10px;
+  color: var(--fd-muted, #6b5d4f);
+  background: rgba(154, 139, 124, 0.12);
+  padding: 1px 6px;
+  border-radius: var(--fd-radius-sm, 4px);
+  pointer-events: none;
+}
+
+/* --- 原生 role="switch" 对齐修复：button 重置后保持原 span 视觉 --- */
+button.fd-settings-switch i {
+  display: block;
+  pointer-events: none;
+}
+
+/* --- 原生 role="combobox" select row 焦点态 --- */
+.fd-setting-row[role="combobox"]:focus-visible {
+  outline: 2px solid var(--fd-primary, #2d4a3e);
+  outline-offset: -2px;
+}
+
+/* --- 原生 role="group" segment/stepper 容器 --- */
+.fd-settings-segment[role="group"],
+.fd-settings-stepper[role="group"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* --- data-b1-route：标记当前 B1 域路由（便于调试与 verify） --- */
+[data-b1-route] {
+  /* 无视觉影响；仅作为 DOM 标记供 verify 测试读取 */
+}

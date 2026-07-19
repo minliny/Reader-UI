@@ -311,8 +311,8 @@
       : ` data-book-source-type="${sourceType.type}"`;
     if (view === "list") {
       return `
-      <article class="fd-book-card is-list-item" data-book-card${focusAttrs} data-book-group="${esc(groupTag)}">
-        <button class="fd-book-cover-frame" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
+      <article class="fd-book-card is-list-item" data-book-card${focusAttrs} data-book-group="${esc(groupTag)}" data-book-index="${esc(String(opts.index || 0))}">
+        <button class="fd-book-cover-frame" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}" data-control-id-family="library.button.bookshelf.default.phone.button.route-immersive-reading" data-control-id="library.button.bookshelf.default.phone.button.route-immersive-reading.row-${esc(String(opts.index || 0))}" data-ui-event="route.push">
           ${coverImg}
           ${sourceBadge}
         </button>
@@ -329,8 +329,8 @@
       </article>`;
     }
     return `
-      <article class="fd-book-card" data-book-card${focusAttrs} data-book-group="${esc(groupTag)}">
-        <button class="fd-book-cover-frame" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
+      <article class="fd-book-card" data-book-card${focusAttrs} data-book-group="${esc(groupTag)}" data-book-index="${esc(String(opts.index || 0))}">
+        <button class="fd-book-cover-frame" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}" data-control-id-family="library.button.bookshelf.default.phone.button.route-immersive-reading" data-control-id="library.button.bookshelf.default.phone.button.route-immersive-reading.row-${esc(String(opts.index || 0))}" data-ui-event="route.push">
           ${coverImg}
           ${sourceBadge}
         </button>
@@ -379,17 +379,25 @@
       { icon: "people", title: "分组管理", meta: "编辑书架分组与归属", route: "group-management" },
       { icon: "book-open", title: "本地书导入", meta: "导入本地文件到书架", route: "local-import" }
     ];
-    return `
-      <section class="fd-bookshelf-more-layer" data-bookshelf-more-layer aria-hidden="true" aria-label="书架更多操作">
-        <button class="fd-bookshelf-more-backdrop" type="button" data-close-bookshelf-more aria-label="关闭书架更多操作"></button>
-        <section class="fd-bookshelf-more-menu" role="dialog" aria-modal="true" aria-label="书架更多操作">
-          <h2>书架更多操作</h2>
-          ${items.map((item) => `
-            <button type="button"${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`}>
+    const moreItemControlId = {
+      "book-batch-management": "library.button.bookshelf.default.phone.button.route-book-batch-management-h-326fea32",
+      "group-management": "library.button.bookshelf.default.phone.button.route-group-management-h-2e1ee42f",
+      "local-import": "library.button.bookshelf.default.phone.button.route-local-import-h-6d77f0cb"
+    };
+    const moreItemsHtml = items.map((item) => {
+      const cid = item.route ? moreItemControlId[item.route] : null;
+      return `
+            <button type="button"${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`}${cid ? ` data-control-id="${cid}"` : ""} data-ui-event="route.push" data-focus-restore-source="bookshelf-more-trigger">
               ${icon(item.icon, "fd-small-icon")}
               <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-            </button>
-          `).join("")}
+            </button>`;
+    }).join("");
+    return `
+      <section class="fd-bookshelf-more-layer" data-bookshelf-more-layer aria-hidden="true" aria-label="书架更多操作" data-sheet-state="closed" data-sheet-role="bookshelf-more" data-sheet-open-trigger="library.button.bookshelf.default.phone.button.top-action-more-h-5fd7b61f">
+        <button class="fd-bookshelf-more-backdrop" type="button" data-close-bookshelf-more aria-label="关闭书架更多操作" data-control-id="library.button.bookshelf.default.phone.button.h-ec1177a8" data-ui-event="dropdown.menu.collapse" data-focus-restore-source="bookshelf-more-trigger"></button>
+        <section class="fd-bookshelf-more-menu" role="dialog" aria-modal="true" aria-label="书架更多操作" aria-live="polite">
+          <h2>书架更多操作</h2>
+          ${moreItemsHtml}
         </section>
       </section>`;
   }
@@ -512,10 +520,10 @@
               <h2>我的书架</h2>
             </div>
             <span class="fd-bookshelf-view-actions">
-              <button class="${bookshelfView === "cover" ? "is-active" : ""}" type="button" aria-label="封面视图" data-bookshelf-view-button="cover" aria-pressed="${bookshelfView === "cover" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("grid", "fd-small-icon")}</button>
-              <button class="${bookshelfView === "list" ? "is-active" : ""}" type="button" aria-label="列表视图" data-bookshelf-view-button="list" aria-pressed="${bookshelfView === "list" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("list", "fd-small-icon")}</button>
-              <button class="${filterActive ? "is-active" : ""}" type="button" aria-label="书架筛选：${esc(state.group)}，${esc(state.sort)}，${esc(state.filter)}" data-bookshelf-filter-toggle aria-expanded="${state.open ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("filter", "fd-small-icon")}</button>
-              <button type="button" aria-label="书架显示设置" data-route="bookshelf-search-settings" data-settings-scope="bookshelf-display">${icon("gear", "fd-small-icon")}</button>
+              <button class="${bookshelfView === "cover" ? "is-active" : ""}" type="button" aria-label="封面视图" data-bookshelf-view-button="cover" aria-pressed="${bookshelfView === "cover" ? "true" : "false"}"${disabled ? " disabled" : ""} data-control-id="library.button.bookshelf.default.phone.button.h-9853c162" data-ui-event="bookshelf.view.switch" data-final-state="${bookshelfView}" data-view-target="cover">${icon("grid", "fd-small-icon")}</button>
+              <button class="${bookshelfView === "list" ? "is-active" : ""}" type="button" aria-label="列表视图" data-bookshelf-view-button="list" aria-pressed="${bookshelfView === "list" ? "true" : "false"}"${disabled ? " disabled" : ""} data-control-id="library.button.bookshelf.default.phone.button.h-101bc6a1" data-ui-event="bookshelf.view.switch" data-final-state="${bookshelfView}" data-view-target="list">${icon("list", "fd-small-icon")}</button>
+              <button class="${filterActive ? "is-active" : ""}" type="button" aria-label="书架筛选：${esc(state.group)}，${esc(state.sort)}，${esc(state.filter)}" data-bookshelf-filter-toggle aria-expanded="${state.open ? "true" : "false"}"${disabled ? " disabled" : ""} data-control-id="library.button.bookshelf.default.phone.button.h-5e688a2b" data-ui-event="dropdown.trigger.press" data-final-state="${state.open ? "open" : "closed"}">${icon("filter", "fd-small-icon")}</button>
+              <button type="button" aria-label="书架显示设置" data-route="bookshelf-search-settings" data-settings-scope="bookshelf-display" data-control-id="library.button.bookshelf.default.phone.button.route-bookshelf-search-settings-h-3170b979" data-ui-event="route.push">${icon("gear", "fd-small-icon")}</button>
             </span>
           </section>`;
   }
@@ -539,16 +547,25 @@
         ? `<div class="fd-bookshelf-state-banner is-error" role="alert">${icon("warning", "fd-small-icon")}<span>书架加载失败，已展示本地缓存。</span><button type="button" data-bookshelf-retry>重试</button></div>`
         : "";
     const hasVisible = visibleBooks.length > 0;
+    const bookshelfTopBarHtml = `
+      <section class="rsk-app-top-bar" data-slot="appTopBar" aria-label="书架顶栏">
+        <h1>书架</h1>
+        <div class="rsk-top-actions">
+          <button class="rsk-icon-button" type="button" data-top-action="search" aria-label="搜索" title="搜索" data-control-id="library.button.bookshelf.default.phone.button.top-action-search-h-1c0d0896" data-ui-event="route.push" data-route="book-search" data-focus-restore-source="bookshelf-search-trigger">${icon("search", "rsk-icon")}</button>
+          <button class="rsk-icon-button" type="button" data-top-action="more" aria-label="更多" title="更多" data-control-id="library.button.bookshelf.default.phone.button.top-action-more-h-5fd7b61f" data-ui-event="dropdown.menu.expand" data-bookshelf-more-trigger>${icon("more", "rsk-icon")}</button>
+        </div>
+      </section>`;
     return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
       data,
       title: "书架",
       activeType: "bookshelf",
       actions: ["search", "more"],
       ariaLabel: "书架",
+      topBarHtml: bookshelfTopBarHtml,
       contentHtml: `
         ${stateBannerHtml}
-        <section class="fd-continue-card" data-recent-index="${esc(String(recentIndex))}">
-          <button class="fd-continue-cover-button" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(recent.title)}" data-book-author="${esc(recent.author)}" data-book-chapter="${esc(recent.chapter)}" data-cover-src="${cover(data, recent.coverKey)}" aria-label="继续阅读 ${esc(recent.title)}">
+        <section class="fd-continue-card" data-recent-index="${esc(String(recentIndex))}" data-loading-state="ready">
+          <button class="fd-continue-cover-button" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(recent.title)}" data-book-author="${esc(recent.author)}" data-book-chapter="${esc(recent.chapter)}" data-cover-src="${cover(data, recent.coverKey)}" aria-label="继续阅读 ${esc(recent.title)}" data-control-id="library.button.bookshelf.default.phone.button.route-immersive-reading-h-470de687" data-ui-event="route.push">
             <img src="${cover(data, recent.coverKey)}" alt="${esc(recent.title)}封面" data-cover-fallback>
           </button>
           <div>
@@ -557,14 +574,14 @@
             <span class="fd-continue-author">${esc(recent.author)}</span>
             ${recent.progress ? `<span class="fd-continue-progress">已读 ${esc(recent.progress)} · ${esc(recent.chapter)}</span>` : `<span class="fd-continue-progress">${esc(recent.chapter)}</span>`}
           </div>
-          <button class="fd-continue-action-button" type="button" data-route="immersive-reading">阅读</button>
+          <button class="fd-continue-action-button" type="button" data-route="immersive-reading" data-control-id="library.button.bookshelf.default.phone.button.route-immersive-reading-h-470de687" data-ui-event="route.push">阅读</button>
         </section>
-        <section class="fd-bookshelf-shelf-section" aria-label="我的书架" data-bookshelf-persist="bookshelfView" data-bookshelf-view-current="${bookshelfView}">
+        <section class="fd-bookshelf-shelf-section" aria-label="我的书架" data-bookshelf-persist="bookshelfView" data-bookshelf-view-current="${bookshelfView}" data-final-state="${bookshelfView}" data-loading-state="ready">
           ${bookshelfSectionHeader(bookshelfView, false, appState)}
           <div class="fd-bookshelf-quick-actions" aria-label="书架快捷操作">
-            <button type="button" data-route="book-batch-management">${icon("check", "fd-small-icon")}<span>批量管理</span></button>
-            <button type="button" data-route="group-management">${icon("people", "fd-small-icon")}<span>分组管理</span></button>
-            <button type="button" data-route="sort-filter">${icon("filter", "fd-small-icon")}<span>排序筛选</span></button>
+            <button type="button" data-route="book-batch-management" data-control-id="library.button.bookshelf.default.phone.button.route-book-batch-management-h-326fea32" data-ui-event="route.push">${icon("check", "fd-small-icon")}<span>批量管理</span></button>
+            <button type="button" data-route="group-management" data-control-id="library.button.bookshelf.default.phone.button.route-group-management-h-2e1ee42f" data-ui-event="route.push">${icon("people", "fd-small-icon")}<span>分组管理</span></button>
+            <button type="button" data-route="sort-filter" data-control-id="library.button.bookshelf.default.phone.button.h-170ddc6b" data-ui-event="dropdown.trigger.press">${icon("filter", "fd-small-icon")}<span>排序筛选</span></button>
           </div>
           ${bookshelfFilterPopover(appState, false)}
           ${hasVisible ? `<section class="fd-book-grid ${bookshelfView === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${bookshelfView}" data-bookshelf-columns="${esc(String(columns))}" style="--fd-book-grid-columns:${esc(String(columns))}" aria-label="${bookshelfView === "list" ? "书籍列表" : "书籍封面网格"}">
@@ -718,8 +735,14 @@
 
   function discoverSourceBar(ctx, expanded, route) {
     const target = expanded ? "discover" : "discover-control";
+    // B3: source bar 接入 canonical controlId（default state）。
+    // 状态变体（error/empty/cache-stale 等）暂复用 default state ID；
+    // 缺口登记在 B3 报告中，待 A2 registry 补齐状态变体条目。
+    const controlId = expanded
+      ? "discover.button.discover-control.default.phone.button.route-discover-h-0f433f80"
+      : "discover.button.discover.default.phone.button.route-discover-control-h-c0f15790";
     return `
-      <button class="fd-discover-source-bar${expanded ? " is-expanded" : ""}" type="button" data-route="${esc(target)}" aria-expanded="${expanded ? "true" : "false"}">
+      <button class="fd-discover-source-bar${expanded ? " is-expanded" : ""}" type="button" data-control-id="${esc(controlId)}" data-ui-event="route.push" data-route="${esc(target)}" aria-expanded="${expanded ? "true" : "false"}">
         <span>${icon("source-stack", "fd-small-icon")}</span>
         <strong>${esc(ctx.source.name)}<small>${esc(ctx.source.meta)}</small></strong>
         ${icon("chevron", "fd-small-icon fd-discover-source-chevron")}
@@ -727,10 +750,22 @@
   }
 
   function discoverEntryChips(ctx) {
+    // B3: 入口 chips 接入 canonical controlId（按语义 slug 映射）。
+    const entryControlIds = {
+      "排行榜": "discover.button.discover.default.phone.button.route-discover-entry-ranking-h-adeeb905",
+      "书源": "discover.button.discover.default.phone.button.route-discover-entry-source-h-3eb72183",
+      "分类": "discover.button.discover.default.phone.button.route-discover-entry-category-h-b685e4b5",
+      "完本": "discover.button.discover.default.phone.button.route-discover-entry-finished-h-dabbea86",
+      "最新": "discover.button.discover.default.phone.button.route-discover-entry-latest-h-b188100a",
+      "书单": "discover.button.discover.default.phone.button.route-discover-entry-booklist-h-76acab55",
+      "畅销": "discover.button.discover.default.phone.button.route-discover-entry-ranking-h-adeeb905",
+      "新书": "discover.button.discover.default.phone.button.route-discover-entry-latest-h-b188100a"
+    };
     return `<nav class="fd-discover-entry-row" aria-label="发现入口">
       ${ctx.entries.map((item) => {
         const active = item === ctx.activeEntry;
-        return `<button class="${active ? "is-active" : ""}" type="button" data-route="${esc(discoverEntryRoute(item))}" data-discover-entry="${esc(item)}"${active ? ' aria-current="page"' : ""}>${esc(item)}</button>`;
+        const cid = entryControlIds[item] || "";
+        return `<button class="${active ? "is-active" : ""}" type="button"${cid ? ` data-control-id="${esc(cid)}" data-ui-event="tab.item.select"` : ""} data-route="${esc(discoverEntryRoute(item))}" data-discover-entry="${esc(item)}"${active ? ' aria-current="page"' : ""}>${esc(item)}</button>`;
       }).join("")}
     </nav>`;
   }
@@ -865,9 +900,9 @@
           <h2>筛选与排序</h2>
           <div class="fd-discover-control-filters">
             <label>${icon("search", "fd-small-icon")}<span>关键词</span></label>
-            <button class="${ctx.activeFilter === "男频" ? "is-active" : ""}" type="button" data-route="${esc(discoverFilterRoute("男频"))}" data-discover-filter="男频">男频</button>
-            <button class="${ctx.activeFilter === "女频" ? "is-active" : ""}" type="button" data-route="${esc(discoverFilterRoute("女频"))}" data-discover-filter="女频">女频</button>
-            <button type="button" data-route="discover-sort" data-discover-sort-toggle aria-expanded="${ctx.sortOpen ? "true" : "false"}">排序：${esc(ctx.sort)}${icon("chevron", "fd-small-icon")}</button>
+            <button class="${ctx.activeFilter === "男频" ? "is-active" : ""}" type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-filter-male-h-265b809d" data-ui-event="filter.apply" data-route="${esc(discoverFilterRoute("男频"))}" data-discover-filter="男频">男频</button>
+            <button class="${ctx.activeFilter === "女频" ? "is-active" : ""}" type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-filter-female-h-43275f40" data-ui-event="filter.apply" data-route="${esc(discoverFilterRoute("女频"))}" data-discover-filter="女频">女频</button>
+            <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-sort-h-6adc507d" data-ui-event="sort.cycle" data-route="discover-sort" data-discover-sort-toggle aria-expanded="${ctx.sortOpen ? "true" : "false"}">排序：${esc(ctx.sort)}${icon("chevron", "fd-small-icon")}</button>
             <button type="button" data-route="discover" data-discover-reset>重置</button>
             <button class="fd-discover-apply-button is-primary" type="button" data-route="discover">${icon("check", "fd-small-icon")}应用</button>
           </div>
@@ -875,11 +910,11 @@
         <section>
           <h2>源操作</h2>
           <div class="fd-discover-action-grid">
-            <button type="button" data-route="discover-switching-source">${icon("refresh", "fd-small-icon")}刷新入口</button>
-            <button type="button" data-route="discover-cache-confirm">${icon("trash", "fd-small-icon")}清缓存</button>
-            <button type="button" data-route="discover-source-login">${icon("shield", "fd-small-icon")}登录</button>
-            <button type="button" data-route="discover-rule-test">${icon("edit", "fd-small-icon")}编辑源</button>
-            <button type="button" data-route="discover-source-bulk">${icon("source", "fd-small-icon")}管理发现源</button>
+            <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-switching-source-h-2b88df49" data-ui-event="route.push" data-route="discover-switching-source">${icon("refresh", "fd-small-icon")}刷新入口</button>
+            <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-cache-confirm-h-6c19d3ba" data-ui-event="route.push" data-route="discover-cache-confirm">${icon("trash", "fd-small-icon")}清缓存</button>
+            <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-source-login-h-9f28109f" data-ui-event="route.push" data-route="discover-source-login">${icon("shield", "fd-small-icon")}登录</button>
+            <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-rule-test-h-5706bebc" data-ui-event="route.push" data-route="discover-rule-test">${icon("edit", "fd-small-icon")}编辑源</button>
+            <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-source-bulk-h-fc79eb67" data-ui-event="route.push" data-route="discover-source-bulk">${icon("source", "fd-small-icon")}管理发现源</button>
           </div>
         </section>
       </section>`;
@@ -910,8 +945,8 @@
         <label class="fd-discover-cache-scope"><input type="radio" name="fd-discover-cache-scope" value="all" data-discover-cache-scope="all"><span>全部发现源</span></label>
         <label class="fd-discover-cache-autorefresh"><input type="checkbox" checked data-discover-cache-autorefresh><span>清除后自动刷新列表</span></label>
         <div>
-          <button type="button" data-route="discover-control">取消</button>
-          <button type="button" data-route="discover-cache-toast" data-discover-cache-confirm>确认清除</button>
+          <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-h-0f433f80" data-ui-event="route.push" data-route="discover-control">取消</button>
+          <button type="button" data-control-id="discover.button.discover-control.default.phone.button.route-discover-cache-confirm-h-6c19d3ba" data-ui-event="route.push" data-route="discover-cache-toast" data-discover-cache-confirm>确认清除</button>
         </div>
       </section>`;
   }
@@ -937,6 +972,7 @@
             <div>${["优书网", "起点导入", "轻小说文库"].map((n) => `<button type="button" data-route="discover-source-bulk" data-discover-recommend-source="${esc(n)}">${esc(n)}</button>`).join("")}</div>
           </article>
           <div><button type="button" data-route="source-management">去书源管理</button><button type="button" data-route="source-import-options">导入书源</button></div>
+          <small data-discover-empty-note>B3 稳定终态：empty · data-empty="true" · reduced-motion-aware</small>
         </section>`;
     }
     if (route === "discover-error") {
@@ -1251,6 +1287,13 @@
   }
 
   function rssModeNav(currentRoute) {
+    // B3: RSS 模式导航接入 canonical controlId。
+    const modeControlIds = {
+      "rss": "rss.button.rss.default.phone.button.route-rss-h-c7ddc5db",
+      "rss-all": "rss.button.rss.default.phone.button.route-rss-all-h-6abc4394",
+      "rss-starred": "rss.button.rss.default.phone.button.route-rss-starred-h-c5cee3a5",
+      "rss-rule-subscription": "rss.button.rss.default.phone.button.route-rss-rule-subscription-h-f1322f55"
+    };
     return `
         <nav class="fd-rss-mode-row" aria-label="RSS 状态入口">
           ${[
@@ -1258,7 +1301,7 @@
             ["全部", "rss-all"],
             ["收藏", "rss-starred"],
             ["规则订阅", "rss-rule-subscription"]
-          ].map(([label, target]) => `<button class="${currentRoute === target ? "is-active" : ""}" type="button" data-route="${esc(target)}">${esc(label)}</button>`).join("")}
+          ].map(([label, target]) => `<button class="${currentRoute === target ? "is-active" : ""}" type="button" data-control-id="${esc(modeControlIds[target] || "")}" data-ui-event="tab.item.select" data-route="${esc(target)}">${esc(label)}</button>`).join("")}
         </nav>`;
   }
 
@@ -1280,7 +1323,7 @@
       <section class="rsk-app-top-bar fd-top-bar fd-rss-top-bar" data-slot="appTopBar" aria-label="RSS 顶部栏">
         <h1>RSS</h1>
         <div class="fd-rss-top-actions">
-          <button class="fd-rss-refresh-pill" type="button" data-route="rss-refreshing" aria-label="刷新当前订阅">
+          <button class="fd-rss-refresh-pill" type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-refreshing-h-e098b611" data-ui-event="refresh.invoke" data-route="rss-refreshing" aria-label="刷新当前订阅">
             <i></i>
             <span class="fd-rss-refresh-text">
               <span class="fd-rss-refresh-enabled">${esc(enabledCount)} 个启用源</span>
@@ -1288,7 +1331,7 @@
             </span>
             ${icon("refresh", "fd-small-icon")}
           </button>
-          <button class="fd-rss-manage-pill" type="button" data-route="rss-subscription-management" aria-label="进入订阅管理">
+          <button class="fd-rss-manage-pill" type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-subscription-management-h-2296df25" data-ui-event="route.push" data-route="rss-subscription-management" aria-label="进入订阅管理">
             ${icon("list", "fd-small-icon")}
             <span>管理</span>
           </button>
@@ -1298,7 +1341,7 @@
 
   function rssSearchEntry() {
     return `
-        <button class="fd-search-entry fd-rss-search" type="button" data-route="rss-search">
+        <button class="fd-search-entry fd-rss-search" type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-search-h-6ed3337c" data-ui-event="route.push" data-route="rss-search">
           ${icon("search", "fd-small-icon")}<span>搜索订阅源、文章标题或分组</span>
         </button>`;
   }
@@ -1352,8 +1395,8 @@
           <header>
             <h2>订阅源</h2>
             <span>
-              <button type="button" data-route="rss-source-import">${icon("upload", "fd-small-icon")}导入</button>
-              <button type="button" data-route="rss-source-edit">${icon("add", "fd-small-icon")}新建</button>
+              <button type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-source-import-h-6e5b86e4" data-ui-event="route.push" data-route="rss-source-import">${icon("upload", "fd-small-icon")}导入</button>
+              <button type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-source-edit-h-bd66e5ad" data-ui-event="route.push" data-route="rss-source-edit">${icon("add", "fd-small-icon")}新建</button>
             </span>
           </header>
           ${filterDisclosure({
@@ -1404,13 +1447,13 @@
         ${rssModeNav("rss")}
         <section class="fd-rss-home-status" aria-label="RSS 刷新状态">
           ${refreshing ? `<i class="fd-rss-spin"></i><span>正在刷新 · 已完成 ${Math.min(enabledSources.length, 2)}/${esc(enabledSources.length)} 个源</span>` : `<span>${icon("clock", "fd-small-icon")}最近刷新 10:18 · ${autoRefresh ? "Wi-Fi 自动刷新" : "手动刷新"}</span><span>${esc(enabledSources.length)} 启用 · ${esc(unreadCount)} 未读</span>`}
-          <button type="button" data-route="rss-refreshing" aria-label="刷新订阅">${icon("refresh", "fd-small-icon")}</button>
+          <button type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-refreshing-h-e098b611" data-ui-event="refresh.invoke" data-route="rss-refreshing" aria-label="刷新订阅">${icon("refresh", "fd-small-icon")}</button>
         </section>
         <section class="fd-rss-health-row" aria-label="订阅源健康度">
           ${rssBadge("正常", "good")}<small>${esc(health.good || 0)} 正常</small>
           ${health.warn ? `${rssBadge("需登录", "warn")}<small>${esc(health.warn)} 需登录</small>` : ""}
           ${health.muted ? `${rssBadge("暂停", "muted")}<small>${esc(health.muted)} 暂停</small>` : ""}
-          <button type="button" data-route="rss-subscription-management" class="fd-rss-health-manage">管理源</button>
+          <button type="button" data-control-id="rss.button.rss.default.phone.button.route-rss-subscription-management-h-2296df25" data-ui-event="route.push" data-route="rss-subscription-management" class="fd-rss-health-manage">管理源</button>
         </section>
         ${rssSourceOverview(sources, appState)}
         <section class="fd-rss-article-section">
@@ -1490,10 +1533,10 @@
           ${rssBadge(source.status, source.tone)}
         </article>
         <section class="fd-rss-source-toolbar">
-          <button type="button" data-route="rss-refreshing">${icon("refresh", "fd-small-icon")}刷新</button>
-          <button type="button" data-route="rss-source-edit">${icon("edit", "fd-small-icon")}编辑源</button>
-          <button type="button" data-route="rss-read-record">${icon("clock", "fd-small-icon")}记录</button>
-          <button type="button" data-route="rss-source-debug">${icon("bug", "fd-small-icon")}调试</button>
+          <button type="button" data-control-id="rss.button.rss-source-feed.default.phone.button.route-rss-refreshing-h-232451d1" data-ui-event="refresh.invoke" data-route="rss-refreshing">${icon("refresh", "fd-small-icon")}刷新</button>
+          <button type="button" data-control-id="rss.button.rss-source-feed.default.phone.button.route-rss-source-edit-h-1bdb8b03" data-ui-event="route.push" data-route="rss-source-edit">${icon("edit", "fd-small-icon")}编辑源</button>
+          <button type="button" data-control-id="rss.button.rss-source-feed.default.phone.button.route-rss-read-record-h-904ebca5" data-ui-event="route.push" data-route="rss-read-record">${icon("clock", "fd-small-icon")}记录</button>
+          <button type="button" data-control-id="rss.button.rss-source-feed.default.phone.button.route-rss-source-debug-h-208fcbe1" data-ui-event="route.push" data-route="rss-source-debug">${icon("bug", "fd-small-icon")}调试</button>
         </section>
         ${filterDisclosure({
           className: "fd-rss-filter-control fd-rss-category-filter-control",
@@ -2930,18 +2973,36 @@
     const requestedSources = appState?.bookSearchRequestedSources || 3;
     const totalSources = appState?.bookSearchTotalSources || 8;
 
-    const scopeChipsHtml = `<nav class="fd-chip-row fd-search-scope-row" aria-label="搜索范围" data-search-scope-row>
-      ${scopeOptions.map((item) => `<button class="${item === scope ? "is-active" : ""}" type="button" data-search-scope="${esc(item)}"${item === scope ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
+    // B2 · search-results control identity (A2 registry, frozen in library-shell.js)
+    const SR = window.ReaderLibraryShell;
+    const srCid = {
+      back: SR.controlId("search-results", "default", "phone", "button", "back"),
+      searchBox: SR.controlId("search-results", "default", "phone", "searchbox", "input"),
+      searchSubmit: SR.controlId("search-results", "default", "phone", "button", "search-submit"),
+      addShelf: SR.controlId("search-results", "default", "phone", "button", "add-shelf"),
+      textBox: SR.controlId("search-results", "default", "phone", "textbox", "input"),
+      closeKeyboard: SR.controlId("search-results", "default", "phone", "button", "close-keyboard"),
+      searchReset: SR.controlId("search-results", "default", "phone", "button", "search-reset"),
+      viewDetail: SR.controlId("search-results", "default", "phone", "button", "view-detail")
+    };
+    const srStateAttr = SR.stateAttr;
+    // search request token (stale result detection)
+    const searchReqToken = appState?.bookSearchReqToken || "sr-001";
+    const latestReqToken = appState?.bookSearchLatestReqToken || searchReqToken;
+    const isStale = searchReqToken !== latestReqToken;
+
+    const scopeChipsHtml = `<nav class="fd-chip-row fd-search-scope-row" aria-label="搜索范围" data-search-scope-row data-control-id-family="library.button.search-results.default.phone.button.search-scope">
+      ${scopeOptions.map((item) => `<button class="${item === scope ? "is-active" : ""}" type="button" data-search-scope="${esc(item)}"${item === scope ? ' aria-current="true"' : ""} data-final-state="${item === scope ? "active" : "idle"}" data-focus-restore-source="search-scope">${esc(item)}</button>`).join("")}
     </nav>`;
 
-    const searchBoxHtml = `<button class="fd-search-entry fd-keyboard-target" type="button" data-open-keyboard data-search-keyword="${esc(keyword)}">
+    const searchBoxHtml = `<button class="fd-search-entry fd-keyboard-target" type="button" data-open-keyboard data-search-keyword="${esc(keyword)}"${srCid.searchBox ? ` data-control-id="${srCid.searchBox}"` : ""} data-ui-event="open.keyboard" aria-label="搜索框 · ${esc(keyword || "请输入关键词")}" data-search-phase="${esc(searchState)}" data-focus-restore-source="search-input">
       ${icon("search", "fd-small-icon")}<span>${keyword ? esc(keyword) : "搜索书名、作者、关键词"}</span>
     </button>`;
 
     let stateHtml = "";
     if (searchState === "loading") {
       stateHtml = `
-        <section class="fd-search-state fd-search-loading" data-search-state="loading" aria-live="polite">
+        <section class="fd-search-state fd-search-loading" data-search-state="loading" data-loading-state="loading" aria-live="polite"${isStale ? ' data-stale-result="true"' : ''}>
           <div class="fd-search-progress">
             <strong>正在搜索"${esc(keyword)}"</strong>
             <span>已请求 ${esc(String(requestedSources))} / ${esc(String(totalSources))} 个书源</span>
@@ -2953,27 +3014,27 @@
         </section>`;
     } else if (searchState === "empty") {
       stateHtml = `
-        <section class="fd-search-state fd-search-empty" data-search-state="empty">
+        <section class="fd-search-state fd-search-empty" data-search-state="empty" data-empty-state="empty" data-stale-result="${isStale ? "true" : "false"}">
           <div class="fd-search-empty-visual">${icon("search", "fd-medium-icon")}</div>
           <h2>没有找到"${esc(keyword)}"相关书籍</h2>
           <p>可调整搜索范围、切换书源或尝试以下建议。</p>
-          <section class="fd-search-suggest" aria-label="搜索建议">
+          <section class="fd-search-suggest" aria-label="搜索建议" data-control-id-family="library.button.search-results.default.phone.button.search-suggest">
             <strong>搜索建议</strong>
-            <div class="fd-chip-row">${suggestions.map((item) => `<button type="button" data-search-suggest="${esc(item)}">${esc(item)}</button>`).join("")}</div>
+            <div class="fd-chip-row">${suggestions.map((item) => `<button type="button" data-search-suggest="${esc(item)}" data-final-state="idle" data-focus-restore-source="search-suggest">${esc(item)}</button>`).join("")}</div>
           </section>
-          <section class="fd-search-suggest" aria-label="热门搜索">
+          <section class="fd-search-suggest" aria-label="热门搜索" data-control-id-family="library.button.search-results.default.phone.button.search-hot">
             <strong>热门搜索</strong>
-            <div class="fd-chip-row">${hotSearch.map((item) => `<button type="button" data-search-suggest="${esc(item)}">${esc(item)}</button>`).join("")}</div>
+            <div class="fd-chip-row">${hotSearch.map((item) => `<button type="button" data-search-suggest="${esc(item)}" data-final-state="idle" data-focus-restore-source="search-hot">${esc(item)}</button>`).join("")}</div>
           </section>
         </section>`;
     } else if (searchState === "error") {
       stateHtml = `
-        <section class="fd-search-state fd-search-error" data-search-state="error" role="alert">
+        <section class="fd-search-state fd-search-error" data-search-state="error" data-error-state="partial" data-stale-result="${isStale ? "true" : "false"}" role="alert">
           <div class="fd-search-error-visual">${icon("warning", "fd-medium-icon")}</div>
           <h2>部分书源搜索失败</h2>
           <p>已返回 ${esc(String(searchResults.length))} 条来自其他书源的结果，以下书源失败可单独重试。</p>
-          <section class="fd-search-error-list" aria-label="失败书源列表">
-            ${failedSources.map((src) => `<article><span><strong>${esc(src.name)}</strong><small>${esc(src.reason)}</small></span><button type="button" data-search-retry-source="${esc(src.name)}">重试</button></article>`).join("")}
+          <section class="fd-search-error-list" aria-label="失败书源列表" data-control-id-family="library.button.search-results.default.phone.button.search-retry-source">
+            ${failedSources.map((src) => `<article><span><strong>${esc(src.name)}</strong><small>${esc(src.reason)}</small></span><button type="button" data-search-retry-source="${esc(src.name)}" data-repeat-tap-guard="search-retry" data-final-state="idle" data-focus-restore-source="search-retry">重试</button></article>`).join("")}
           </section>
           <section class="fd-search-results fd-search-partial" aria-label="部分搜索结果">
             ${searchResults.slice(0, 3).map((book) => `<article class="fd-search-result-row"><img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面"><span class="fd-search-result-main"><strong>${esc(book.title)}</strong><small><b>${esc(book.author)}</b><em>${esc(book.source)}</em></small></span></article>`).join("")}
@@ -2982,25 +3043,25 @@
     } else if (searchState === "after") {
       const sortRowHtml = `<header class="fd-search-section-head fd-search-result-head">
         <h2>搜索结果 <small>${esc(String(searchResults.length))} 个 · 已标注书架状态</small></h2>
-        <div class="fd-search-sort-row" aria-label="结果排序">
-          ${sortOptions.map((item) => `<button class="${item === sort ? "is-active" : ""}" type="button" data-search-sort="${esc(item)}"${item === sort ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
+        <div class="fd-search-sort-row" aria-label="结果排序" data-control-id-family="library.button.search-results.default.phone.button.search-sort">
+          ${sortOptions.map((item) => `<button class="${item === sort ? "is-active" : ""}" type="button" data-search-sort="${esc(item)}"${item === sort ? ' aria-current="true"' : ""} data-final-state="${item === sort ? "active" : "idle"}" data-focus-restore-source="search-sort">${esc(item)}</button>`).join("")}
         </div>
       </header>`;
       stateHtml = `
         <section class="fd-search-results" data-search-state="after">
           ${sortRowHtml}
-          <div class="fd-search-result-list" aria-label="搜索结果列表">
+          <div class="fd-search-result-list" aria-label="搜索结果列表" data-control-id-family="library.button.search-results.default.phone.button.search-result-row" data-stale-result="${isStale ? "true" : "false"}">
             ${searchResults.map((book, index) => {
               const addState = book.inShelf ? "added" : (appState?.bookSearchAddState && appState.bookSearchAddState[index] || "idle");
               const addButton = book.inShelf || addState === "added"
-                ? `<button type="button" class="is-added" data-route="immersive-reading" data-add-state="added">已在书架 · 阅读</button>`
+                ? `<button type="button" class="is-added" data-route="immersive-reading" data-add-state="added"${srCid.addShelf ? ` data-control-id="${srCid.addShelf}"` : ""} data-ui-event="route.push" data-final-state="added" data-book-index="${esc(String(index))}" aria-label="已在书架 · 阅读本书">已在书架 · 阅读</button>`
                 : addState === "loading"
-                  ? `<button type="button" disabled data-add-state="loading">加入中…</button>`
+                  ? `<button type="button" disabled data-add-state="loading"${srCid.addShelf ? ` data-control-id="${srCid.addShelf}"` : ""} data-ui-event="add.shelf" data-repeat-tap-guard="add-shelf-loading" data-final-state="loading" data-book-index="${esc(String(index))}" aria-label="正在加入书架">加入中…</button>`
                   : addState === "failed"
-                    ? `<button type="button" class="is-failed" data-add-search-shelf data-add-state="failed" data-book-index="${esc(String(index))}">失败 · 重试</button>`
-                    : `<button type="button" data-add-search-shelf data-add-state="idle" data-book-index="${esc(String(index))}">加入书架</button>`;
+                    ? `<button type="button" class="is-failed" data-add-search-shelf data-add-state="failed"${srCid.addShelf ? ` data-control-id="${srCid.addShelf}"` : ""} data-ui-event="add.shelf" data-repeat-tap-guard="add-shelf" data-final-state="failed" data-book-index="${esc(String(index))}" aria-label="加入书架失败 · 点击重试">失败 · 重试</button>`
+                    : `<button type="button" data-add-search-shelf data-add-state="idle"${srCid.addShelf ? ` data-control-id="${srCid.addShelf}"` : ""} data-ui-event="add.shelf" data-repeat-tap-guard="add-shelf" data-final-state="idle" data-book-index="${esc(String(index))}" aria-label="加入书架">加入书架</button>`;
               return `
-              <article class="fd-search-result-row" role="button" tabindex="0" data-route="book-detail" data-book-source-type="${book.sourceType}">
+              <article class="fd-search-result-row" role="button" tabindex="0" data-route="book-detail" data-book-source-type="${book.sourceType}"${srCid.viewDetail ? ` data-control-id="${srCid.viewDetail}"` : ""} data-ui-event="route.push" data-book-index="${esc(String(index))}" data-focus-restore-source="search-result">
                 <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面" loading="lazy" data-cover-fallback>
                 <span class="fd-search-result-main">
                   <strong>${esc(book.title)}</strong>
@@ -3019,64 +3080,65 @@
         <section class="fd-search-state fd-search-state-before" data-search-state="before">
           <header class="fd-search-section-head">
             <h2>搜索历史</h2>
-            <button type="button" data-search-clear-history data-open-confirm>清空</button>
+            <button type="button" data-search-clear-history data-open-confirm data-ui-event="dialog.open" data-final-state="idle" aria-label="清空搜索历史" data-focus-restore-source="search-clear-history">清空</button>
           </header>
-          <div class="fd-search-history-list" aria-label="搜索历史" data-search-history>
+          <div class="fd-search-history-list" aria-label="搜索历史" data-search-history data-control-id-family="library.button.search-results.default.phone.button.search-history">
             ${history.map(([kw, meta]) => `
-              <button class="fd-search-history-row" type="button" data-search-submit data-search-keyword="${esc(kw)}">
+              <button class="fd-search-history-row" type="button" data-search-submit data-search-keyword="${esc(kw)}" data-final-state="filled" data-focus-restore-source="search-history">
                 ${icon("clock", "fd-small-icon")}
                 <span><strong>${esc(kw)}</strong><small>${esc(meta)}</small></span>
                 <em>填入</em>
               </button>`).join("")}
           </div>
-          <section class="fd-search-suggest" aria-label="搜索建议">
+          <section class="fd-search-suggest" aria-label="搜索建议" data-control-id-family="library.button.search-results.default.phone.button.search-suggest">
             <strong>搜索建议</strong>
-            <div class="fd-chip-row">${suggestions.map((item) => `<button type="button" data-search-suggest="${esc(item)}">${esc(item)}</button>`).join("")}</div>
+            <div class="fd-chip-row">${suggestions.map((item) => `<button type="button" data-search-suggest="${esc(item)}" data-final-state="idle" data-focus-restore-source="search-suggest">${esc(item)}</button>`).join("")}</div>
           </section>
-          <section class="fd-search-suggest" aria-label="热门搜索">
+          <section class="fd-search-suggest" aria-label="热门搜索" data-control-id-family="library.button.search-results.default.phone.button.search-hot">
             <strong>热门搜索</strong>
-            <div class="fd-chip-row">${hotSearch.map((item) => `<button type="button" data-search-suggest="${esc(item)}">${esc(item)}</button>`).join("")}</div>
+            <div class="fd-chip-row">${hotSearch.map((item) => `<button type="button" data-search-suggest="${esc(item)}" data-final-state="idle" data-focus-restore-source="search-hot">${esc(item)}</button>`).join("")}</div>
           </section>
           <section class="fd-search-recent" aria-label="最近阅读快捷入口">
             <strong>最近阅读</strong>
-            <button type="button" data-route="immersive-reading">${icon("book-open", "fd-small-icon")}<span>继续阅读上次书籍</span></button>
+            <button type="button" data-route="immersive-reading" data-control-id="library.button.search-results.default.phone.button.route-immersive-reading" data-ui-event="route.push" data-final-state="idle" data-focus-restore-source="search-recent">${icon("book-open", "fd-small-icon")}<span>继续阅读上次书籍</span></button>
           </section>
         </section>`;
     }
 
     const bottomActions = searchState === "loading"
-      ? `<button type="button" data-search-cancel data-route="search-home">取消搜索</button>`
+      ? `<button type="button" data-search-cancel data-route="search-home"${srCid.closeKeyboard ? ` data-control-id="${srCid.closeKeyboard}"` : ""} data-ui-event="route.push" data-repeat-tap-guard="search-cancel" data-final-state="idle" aria-label="取消搜索并返回首页">取消搜索</button>`
       : searchState === "empty"
-        ? `<button type="button" data-search-reset data-route="search-home">重新搜索</button><button type="button" data-route="discover">去发现</button>`
+        ? `<button type="button" data-search-reset data-route="search-home"${srCid.searchReset ? ` data-control-id="${srCid.searchReset}"` : ""} data-ui-event="search.reset" data-repeat-tap-guard="search-reset" data-final-state="idle" aria-label="重新搜索">重新搜索</button><button type="button" data-route="discover" data-ui-event="route.push" data-final-state="idle" aria-label="前往发现页">去发现</button>`
         : searchState === "error"
-          ? `<button type="button" data-search-retry data-route="search-loading">全部重试</button><button type="button" data-route="source-management">书源管理</button>`
+          ? `<button type="button" data-search-retry data-route="search-loading"${srCid.searchReset ? ` data-control-id="${srCid.searchReset}"` : ""} data-ui-event="search.retry" data-repeat-tap-guard="search-retry-all" data-final-state="idle" aria-label="重试所有失败书源">全部重试</button><button type="button" data-route="source-management" data-ui-event="route.push" data-final-state="idle" aria-label="打开书源管理">书源管理</button>`
           : searchState === "after"
-            ? `<button type="button" data-search-reset data-route="search-home">重新搜索</button><button type="button" data-route="book-detail">查看详情</button>`
-            : `<button type="button" data-search-submit data-primary-search-submit>开始搜索</button><button type="button" data-search-clear-history>清除历史</button>`;
+            ? `<button type="button" data-search-reset data-route="search-home"${srCid.searchReset ? ` data-control-id="${srCid.searchReset}"` : ""} data-ui-event="search.reset" data-repeat-tap-guard="search-reset" data-final-state="idle" aria-label="重新搜索">重新搜索</button><button type="button" data-route="book-detail"${srCid.viewDetail ? ` data-control-id="${srCid.viewDetail}"` : ""} data-ui-event="route.push" data-repeat-tap-guard="view-detail" data-final-state="idle" aria-label="查看所选书籍详情">查看详情</button>`
+            : `<button type="button" data-search-submit data-primary-search-submit${srCid.searchSubmit ? ` data-control-id="${srCid.searchSubmit}"` : ""} data-ui-event="search.submit" data-repeat-tap-guard="search-submit" data-final-state="idle" aria-label="开始搜索">开始搜索</button><button type="button" data-search-clear-history data-ui-event="dialog.open" data-repeat-tap-guard="clear-history" data-final-state="idle" aria-label="清除搜索历史">清除历史</button>`;
 
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
       data,
       title: "书籍搜索",
       ariaLabel: "书籍搜索",
       topBarClass: "fd-back-bar",
+      topBarHtml: `<section class="rsk-back-top-bar fd-back-bar" data-slot="backTopBar" aria-label="返回顶栏"><button type="button" aria-label="返回书架"${srCid.back ? ` data-control-id="${srCid.back}"` : ""} data-ui-event="route.back" data-focus-restore-source="search-back">${icon("back", "rsk-icon")}</button><h1>书籍搜索</h1><span></span></section>`,
       bottomActionHostClass: "fd-bottom-action-host",
       dialogHostClass: "fd-dialog-host",
       contentHtml: `
         ${searchBoxHtml}
         ${searchState === "before" ? `<nav class="fd-chip-row fd-search-scope-hidden" aria-label="搜索范围" hidden></nav>` : scopeChipsHtml}
         ${stateHtml}
-        ${keyboardLayer()}`,
+        <div data-keyboard-layer-slot data-control-id-family="library.button.search-results.default.phone.button.close-keyboard"${srCid.closeKeyboard ? ` data-close-keyboard-cid="${srCid.closeKeyboard}"` : ""} data-keyboard-state="closed">${keyboardLayer()}</div>`,
       bottomActionHtml: `
         <div class="fd-fixed-action-row">
           ${bottomActions}
         </div>`,
       dialogHtml: `
-        <section class="fd-demo-dialog" aria-hidden="true" data-demo-dialog data-search-clear-dialog>
+        <section class="fd-demo-dialog" aria-hidden="true" data-demo-dialog data-search-clear-dialog data-dialog-state="closed" data-dialog-role="search-clear" data-dialog-open-trigger="search-clear-history">
           <h2>清空搜索历史？</h2>
           <p>将清除全部 ${esc(String(history.length))} 条搜索历史，不影响书架数据。</p>
           <div>
-            <button type="button" data-close-dialog>取消</button>
-            <button class="is-danger" type="button" data-close-dialog data-search-confirm-clear>清空</button>
+            <button type="button" data-close-dialog data-dialog-action="cancel" data-ui-event="dialog.close" data-final-state="cancelled" data-focus-restore-source="search-clear-history">取消</button>
+            <button class="is-danger" type="button" data-close-dialog data-search-confirm-clear data-dialog-action="confirm" data-ui-event="search.clear-history" data-repeat-tap-guard="confirm-clear" data-final-state="cleared" aria-label="确认清空搜索历史">清空</button>
           </div>
         </section>`
     }));
@@ -3090,6 +3152,41 @@
     const isLocal = sourceType.type === "local";
     const isTocPreview = appState?.bookDetailMode === "toc-preview";
     const tocState = appState?.tocState || "ready";
+    // B2 · book-detail page state atom: loading state visually equals default (visual parity),
+    // but the canonical controlIds differ (state atom = "loading" vs "default").
+    const bookDetailState = tocState === "loading" ? "loading" : "default";
+    const bookDetailControlIds = bookDetailState === "loading" ? {
+      back: "library.button.book-detail.loading.phone.button.h-8e013e5e",
+      openSourceSheet: "library.button.book-detail.loading.phone.button.open-sheet-h-dbced97d",
+      fullDirectory: "library.button.book-detail.loading.phone.button.route-book-directory-h-43a5142f",
+      continueReading: "library.button.book-detail.loading.phone.button.route-immersive-reading-h-b8e9c1ea",
+      openRemoveDialog: "library.button.book-detail.loading.phone.button.open-dialog-h-ee4a1410",
+      linkYoushu: "library.button.book-detail.loading.phone.button.h-a00a075e",
+      linkShucang: "library.button.book-detail.loading.phone.button.h-2ba23a0d",
+      localCache: "library.button.book-detail.loading.phone.button.h-7f1a5c43",
+      closeSourceSheet: "library.button.book-detail.loading.phone.button.close-sheet-h-9c70cbb6",
+      dialogCancel: "library.button.book-detail.loading.phone.button.close-dialog-h-52739496",
+      dialogConfirmRemove: "library.button.book-detail.loading.phone.button.close-dialog-h-bab81d89"
+    } : {
+      back: "library.button.book-detail.default.phone.button.h-26b6dc06",
+      openSourceSheet: "library.button.book-detail.default.phone.button.open-sheet-h-89d3856b",
+      fullDirectory: "library.button.book-detail.default.phone.button.route-book-directory-h-61303ebc",
+      continueReading: "library.button.book-detail.default.phone.button.route-immersive-reading-h-6e3349ba",
+      openRemoveDialog: "library.button.book-detail.default.phone.button.open-dialog-h-01b8801a",
+      linkYoushu: "library.button.book-detail.default.phone.button.h-23bde952",
+      linkShucang: "library.button.book-detail.default.phone.button.h-fa2cbba6",
+      localCache: "library.button.book-detail.default.phone.button.h-2070f028",
+      closeSourceSheet: "library.button.book-detail.default.phone.button.close-sheet-h-68d3e051",
+      dialogCancel: "library.button.book-detail.default.phone.button.close-dialog-h-20037587",
+      dialogConfirmRemove: "library.button.book-detail.default.phone.button.close-dialog-h-a5584917"
+    };
+    const cid = bookDetailControlIds;
+    const backTopBarHtml = `
+      <section class="rsk-back-top-bar fd-back-bar" data-slot="backTopBar" aria-label="书籍详情返回栏">
+        <button type="button" aria-label="返回" data-control-id="${cid.back}" data-ui-event="route.back" data-focus-restore-source="bookshelf-entry">${icon("back", "rsk-icon")}</button>
+        <h1>书籍详情</h1>
+        <span></span>
+      </section>`;
     const inShelf = appState?.bookInShelf !== false;
     const book = Object.assign({}, baseBook, {
       latest: baseBook.latest || baseBook.chapter || "—",
@@ -3108,57 +3205,58 @@
     ];
     const tocSectionHtml = (() => {
       if (tocState === "loading") {
-        return `<section class="fd-chapter-list fd-book-chapter-preview is-toc-loading" aria-live="polite">
-          <header><h2>章节信息</h2><button class="fd-inline-route" type="button" data-route="book-directory">${icon("directory", "fd-small-icon")}完整目录</button></header>
-          <div class="fd-toc-skeleton-list">${Array.from({ length: 5 }).map(() => `<article class="fd-toc-skeleton-row"><i class="fd-skeleton-line"></i></article>`).join("")}</div>
+        return `<section class="fd-chapter-list fd-book-chapter-preview is-toc-loading" aria-live="polite" data-toc-state="loading" data-loading-state="loading">
+          <header><h2>章节信息</h2><button class="fd-inline-route" type="button" data-route="book-directory" data-control-id="${cid.fullDirectory}" data-ui-event="route.push" data-loading-state="idle">${icon("directory", "fd-small-icon")}完整目录</button></header>
+          <div class="fd-toc-skeleton-list" aria-label="章节列表加载中">${Array.from({ length: 5 }).map(() => `<article class="fd-toc-skeleton-row"><i class="fd-skeleton-line"></i></article>`).join("")}</div>
         </section>`;
       }
       if (tocState === "error") {
-        return `<section class="fd-chapter-list fd-book-chapter-preview is-toc-error" role="alert">
+        return `<section class="fd-chapter-list fd-book-chapter-preview is-toc-error" role="alert" data-toc-state="error" data-error-state="error" data-stale-result="true">
           <header><h2>章节信息</h2></header>
-          <div class="fd-toc-state-card is-error">${icon("warning", "fd-medium-icon")}<h3>目录加载失败</h3><p>书源请求失败，可重试或更换书源。</p><div class="fd-action-row"><button type="button" data-toc-retry>重试</button>${isLocal ? "" : `<button type="button" data-open-sheet>更换书源</button>`}</div></div>
+          <div class="fd-toc-state-card is-error">${icon("warning", "fd-medium-icon")}<h3>目录加载失败</h3><p>书源请求失败，可重试或更换书源。</p><div class="fd-action-row"><button type="button" data-toc-retry data-loading-state="idle" data-repeat-tap-guard="true" data-ui-event="toc.retry">重试</button>${isLocal ? "" : `<button type="button" data-open-sheet data-control-id="${cid.openSourceSheet}" data-ui-event="sheet.open" data-loading-state="idle">更换书源</button>`}</div></div>
         </section>`;
       }
       if (tocState === "offline") {
-        return `<section class="fd-chapter-list fd-book-chapter-preview is-toc-offline" role="status">
+        return `<section class="fd-chapter-list fd-book-chapter-preview is-toc-offline" role="status" data-toc-state="offline" data-empty-state="partial">
           <header><h2>章节信息</h2></header>
           <div class="fd-toc-state-card is-offline">${icon("offline", "fd-medium-icon")}<h3>离线模式</h3><p>仅展示已缓存章节，网络恢复后可加载完整目录。</p></div>
-          ${data.library.chapters.filter((c) => chapterHasMarker(c, "已缓存")).map((chapter, index) => `<article class="${chapterIsCurrent(chapter) ? "is-current" : ""}" role="button" tabindex="0" data-route="immersive-reading"><span>${esc(chapter.title)}</span>${chapterMarkerSlots(chapter, appState, { book, chapterIndex: index })}</article>`).join("")}
+          ${data.library.chapters.filter((c) => chapterHasMarker(c, "已缓存")).map((chapter, index) => `<article class="${chapterIsCurrent(chapter) ? "is-current" : ""}" role="button" tabindex="0" data-route="immersive-reading" data-control-id-family="library.listrow-action.book-detail.default.phone.button.route-immersive-reading" data-control-id="library.listrow-action.book-detail.default.phone.button.route-immersive-reading.offline-${esc(String(index))}" data-ui-event="route.push"><span>${esc(chapter.title)}</span>${chapterMarkerSlots(chapter, appState, { book, chapterIndex: index })}</article>`).join("")}
         </section>`;
       }
       const previewCount = isTocPreview ? 6 : data.library.chapters.length;
       const chapters = data.library.chapters.slice(0, previewCount);
-      return `<section class="fd-chapter-list fd-book-chapter-preview${isTocPreview ? " is-toc-preview" : ""}">
+      return `<section class="fd-chapter-list fd-book-chapter-preview${isTocPreview ? " is-toc-preview" : ""}" data-toc-state="ready" data-loading-state="ready" data-empty-state="${chapters.length === 0 ? "empty" : "non-empty"}">
         <header>
           <h2>${isTocPreview ? "目录预览" : "章节信息"}</h2>
-          <button class="fd-inline-route" type="button" data-route="book-directory">${icon("directory", "fd-small-icon")}完整目录</button>
+          <button class="fd-inline-route" type="button" data-route="book-directory" data-control-id="${cid.fullDirectory}" data-ui-event="route.push" data-loading-state="idle">${icon("directory", "fd-small-icon")}完整目录</button>
         </header>
         ${chapters.map((chapter, index) => `
-          <article class="${chapterIsCurrent(chapter) ? "is-current" : ""}" role="button" tabindex="0" data-route="immersive-reading" data-chapter-index="${esc(String(index))}">
+          <article class="${chapterIsCurrent(chapter) ? "is-current" : ""}" role="button" tabindex="0" data-route="immersive-reading" data-chapter-index="${esc(String(index))}" data-control-id-family="library.listrow-action.book-detail.default.phone.button.route-immersive-reading" data-control-id="library.listrow-action.book-detail.default.phone.button.route-immersive-reading.row-${esc(String(index))}" data-ui-event="route.push">
             <span>${esc(chapter.title)}</span>
             ${chapterMarkerSlots(chapter, appState, { book, chapterIndex: index })}
           </article>
         `).join("")}
-        ${isTocPreview ? `<button class="fd-toc-preview-more" type="button" data-route="book-directory">查看全部 ${esc(String(data.library.chapters.length))} 章${icon("chevron", "fd-small-icon")}</button>` : ""}
+        ${isTocPreview ? `<button class="fd-toc-preview-more" type="button" data-route="book-directory" data-control-id="${cid.fullDirectory}" data-ui-event="route.push" data-loading-state="idle">查看全部 ${esc(String(data.library.chapters.length))} 章${icon("chevron", "fd-small-icon")}</button>` : ""}
       </section>`;
     })();
     const heroSourceRow = isLocal
       ? `<div class="fd-book-inline-source-row"><span>${icon("folder", "fd-small-icon")}本地文件 · 离线可读</span><span class="fd-book-cache-meta">${esc(book.meta)}</span></div>`
-      : `<div class="fd-book-inline-source-row"><span>书源：${esc(sourceName)}</span><button class="fd-book-inline-source-button" type="button" data-open-sheet>更换书源</button></div>
-         <div class="fd-book-cache-row"><span class="fd-book-source-badge ${sourceType.badgeClass}">${esc(sourceType.badge)}</span><span class="fd-book-cache-meta">${esc(cacheMeta)}</span>${cachedChapters > 0 ? `<button type="button" class="fd-book-cache-manage" data-book-cache-manage>管理缓存</button>` : ""}</div>`;
+      : `<div class="fd-book-inline-source-row"><span>书源：${esc(sourceName)}</span><button class="fd-book-inline-source-button" type="button" data-open-sheet data-control-id="${cid.openSourceSheet}" data-ui-event="sheet.open" data-sheet-state="closed" data-sheet-target="source-sheet" data-stale-result="false" data-focus-restore-source="source-sheet-trigger">更换书源</button></div>
+         <div class="fd-book-cache-row"><span class="fd-book-source-badge ${sourceType.badgeClass}">${esc(sourceType.badge)}</span><span class="fd-book-cache-meta">${esc(cacheMeta)}</span>${cachedChapters > 0 ? `<button type="button" class="fd-book-cache-manage" data-book-cache-manage data-control-id="${cid.localCache}" data-ui-event="route.push" data-loading-state="idle">管理缓存</button>` : ""}</div>`;
     const bottomActions = inShelf
-      ? `<button type="button" data-route="immersive-reading">继续阅读</button>${isLocal ? "" : `<button type="button" data-book-action="cache">缓存本书</button>`}<button class="is-danger" type="button" data-open-dialog>移除书架</button>`
-      : `<button class="is-primary" type="button" data-book-add-shelf data-add-state="idle">加入书架</button><button type="button" data-route="immersive-reading">试读</button>`;
+      ? `<button type="button" data-route="immersive-reading" data-control-id="${cid.continueReading}" data-ui-event="route.push" data-loading-state="idle">继续阅读</button>${isLocal ? "" : `<button type="button" data-book-action="cache" data-loading-state="idle" data-repeat-tap-guard="true">缓存本书</button>`}<button class="is-danger" type="button" data-open-dialog data-control-id="${cid.openRemoveDialog}" data-ui-event="dialog.open" data-dialog-state="closed" data-dialog-target="remove-dialog" data-focus-restore-source="remove-dialog-trigger">移除书架</button>`
+      : `<button class="is-primary" type="button" data-book-add-shelf data-add-state="idle" data-loading-state="idle" data-repeat-tap-guard="true">加入书架</button><button type="button" data-route="immersive-reading" data-control-id="${cid.continueReading}" data-ui-event="route.push" data-loading-state="idle">试读</button>`;
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
       data,
       title: "书籍详情",
       ariaLabel: "书籍详情",
       topBarClass: "fd-back-bar",
+      topBarHtml: backTopBarHtml,
       bottomActionHostClass: "fd-bottom-action-host",
       sheetHostClass: "fd-sheet-host",
       dialogHostClass: "fd-dialog-host",
       contentHtml: `
-        <section class="fd-book-hero fd-book-detail-hero" data-book-detail data-book-source-type="${sourceType.type}">
+        <section class="fd-book-hero fd-book-detail-hero" data-book-detail data-book-source-type="${sourceType.type}" data-loading-state="${tocState === "loading" ? "loading" : "ready"}" data-page-state="${bookDetailState}">
           <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面" data-cover-fallback>
           <div class="fd-book-identity">
             <h2>${esc(book.title)}</h2>
@@ -3170,6 +3268,11 @@
             ${heroSourceRow}
           </div>
         </section>
+        <nav class="fd-book-external-links" aria-label="外部搜索链接" data-link-group="book-external">
+          <button type="button" data-book-external-link="youshu" data-control-id="${cid.linkYoushu}" data-ui-event="route.push" data-loading-state="idle" aria-label="在优书网搜索 ${esc(book.title)}">优书网</button>
+          <button type="button" data-book-external-link="shucang" data-control-id="${cid.linkShucang}" data-ui-event="route.push" data-loading-state="idle" aria-label="在书仓搜索 ${esc(book.title)}">书仓搜索</button>
+          ${isLocal ? `<button type="button" data-book-external-link="local-cache" data-control-id="${cid.localCache}" data-ui-event="route.push" data-loading-state="idle" aria-label="管理本地缓存">本地缓存</button>` : ""}
+        </nav>
         <section class="fd-book-summary-card">
           <h2>简介</h2>
           <p>${esc(intro)}</p>
@@ -3187,13 +3290,13 @@
           <button type="button" data-close-sheet>关闭</button>
         </section>`,
       dialogHtml: `
-        <section class="fd-demo-dialog" aria-hidden="true" data-demo-dialog data-remove-dialog>
+        <section class="fd-demo-dialog" aria-hidden="true" data-demo-dialog data-remove-dialog data-dialog-state="closed" data-dialog-role="remove" data-dialog-open-trigger="open-remove-dialog">
           <h2>移出书架？</h2>
           <p>只从书架移除，不删除本地文件和阅读记录。</p>
           <label class="fd-book-remove-cache"><input type="checkbox" data-remove-cache>同时删除已缓存章节（${esc(String(cachedChapters))} 章 · 约 12 MB）</label>
           <div>
-            <button type="button" data-close-dialog>取消</button>
-            <button class="is-danger" type="button" data-close-dialog data-book-confirm-remove>移除</button>
+            <button type="button" data-close-dialog data-control-id="${cid.dialogCancel}" data-ui-event="dialog.cancel" data-dialog-action="cancel" data-focus-restore-source="remove-dialog-trigger">取消</button>
+            <button class="is-danger" type="button" data-close-dialog data-book-confirm-remove data-control-id="${cid.dialogConfirmRemove}" data-ui-event="dialog.confirm" data-dialog-action="confirm-remove" data-loading-state="idle" data-repeat-tap-guard="true" data-final-state="confirm-remove">移除</button>
           </div>
         </section>`
     }));
@@ -3757,21 +3860,37 @@
       { title: "城南旧事.txt", local: "本地 · 980 KB · 8 章", library: "库内 · 950 KB · 7 章", decision: "keep-both", tone: "warn" }
     ];
     const conflicts = (data && Array.isArray(data.conflicts) && data.conflicts.length) ? data.conflicts : defaultConflicts;
+    // B2 · import-conflict-resolve control identity (A2 registry, frozen in library-shell.js)
+    const ICR = window.ReaderLibraryShell;
+    const icrCid = {
+      back: ICR.controlId("import-conflict-resolve", "default", "phone", "button", "back"),
+      keepLocal: ICR.controlId("import-conflict-resolve", "default", "phone", "button", "keep-local"),
+      overwrite: ICR.controlId("import-conflict-resolve", "default", "phone", "button", "overwrite"),
+      keepBoth: ICR.controlId("import-conflict-resolve", "default", "phone", "button", "keep-both"),
+      rollback: ICR.controlId("import-conflict-resolve", "default", "phone", "button", "rollback")
+    };
+    // Rollback state machine: idle / pending / completed / failed
+    const rollbackState = data?.rollbackState || "idle";
+    // Apply state: idle / applying / applied / failed
+    const applyState = data?.applyState || "idle";
+    // Conflict selection state: undecided / decided / applying
+    const conflictSelectionState = data?.conflictSelectionState || "undecided";
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
       data,
       title: "冲突处理",
       ariaLabel: "导入冲突处理",
       topBarClass: "fd-back-bar",
+      topBarHtml: `<section class="rsk-back-top-bar fd-back-bar" data-slot="backTopBar" aria-label="返回顶栏"><button type="button" aria-label="返回"${icrCid.back ? ` data-control-id="${icrCid.back}"` : ""} data-ui-event="route.back" data-focus-restore-source="import-conflict-back" data-rollback-trigger="true">${icon("back", "rsk-icon")}</button><h1>冲突处理</h1><span></span></section>`,
       bottomActionHostClass: "fd-bottom-action-host",
       contentHtml: `
-        <section class="fd-import-card is-import-conflict-summary">
+        <section class="fd-import-card is-import-conflict-summary" data-conflict-summary data-conflict-count="${esc(String(conflicts.length))}" data-apply-state="${esc(applyState)}" data-rollback-state="${esc(rollbackState)}">
           ${icon("refresh", "fd-medium-icon")}
           <span><strong>${esc(String(conflicts.length))} 处冲突</strong><small>选择覆盖 / 跳过 / 保留两份</small></span>
         </section>
-        <section class="fd-management-list is-import-conflict-list">
+        <section class="fd-management-list is-import-conflict-list" data-conflict-state="${esc(conflictSelectionState)}" data-loading-state="${applyState === "applying" ? "loading" : "idle"}" data-conflict-count="${esc(String(conflicts.length))}" data-rollback-state="${esc(rollbackState)}" data-control-id-family="import.button.import-conflict-resolve.default.phone.button.conflict-row">
           <h2>冲突列表</h2>
           ${conflicts.map((item, index) => `
-            <article class="fd-import-conflict-item is-${esc(item.tone)}">
+            <article class="fd-import-conflict-item is-${esc(item.tone)}" data-conflict-index="${esc(String(index))}" data-decision="${esc(item.decision)}" data-final-state="${item.decision ? "decided" : "undecided"}">
               <div class="fd-import-conflict-head">
                 ${icon("book-open", "fd-small-icon")}
                 <span><strong>${esc(item.title)}</strong></span>
@@ -3782,17 +3901,17 @@
                 <small><strong>库内</strong>${esc(item.library)}</small>
               </div>
               <nav class="fd-import-conflict-actions" aria-label="冲突决策 ${esc(String(index + 1))}">
-                <button class="${item.decision === "overwrite" ? "is-active" : ""}" type="button" data-import-decision="overwrite" data-import-index="${esc(String(index))}">覆盖</button>
-                <button class="${item.decision === "skip" ? "is-active" : ""}" type="button" data-import-decision="skip" data-import-index="${esc(String(index))}">跳过</button>
-                <button class="${item.decision === "keep-both" ? "is-active" : ""}" type="button" data-import-decision="keep-both" data-import-index="${esc(String(index))}">保留两份</button>
+                <button class="${item.decision === "overwrite" ? "is-active" : ""}" type="button" data-import-decision="overwrite" data-import-index="${esc(String(index))}"${icrCid.overwrite ? ` data-control-id="${icrCid.overwrite}"` : ""} data-ui-event="import.conflict.decision" data-repeat-tap-guard="conflict-overwrite" data-final-state="${item.decision === "overwrite" ? "active" : "idle"}" data-focus-restore-source="conflict-overwrite" aria-label="覆盖本地书籍">覆盖</button>
+                <button class="${item.decision === "skip" ? "is-active" : ""}" type="button" data-import-decision="skip" data-import-index="${esc(String(index))}"${icrCid.keepLocal ? ` data-control-id="${icrCid.keepLocal}"` : ""} data-ui-event="import.conflict.decision" data-repeat-tap-guard="conflict-skip" data-final-state="${item.decision === "skip" ? "active" : "idle"}" data-focus-restore-source="conflict-skip" aria-label="跳过·保留本地版本">跳过</button>
+                <button class="${item.decision === "keep-both" ? "is-active" : ""}" type="button" data-import-decision="keep-both" data-import-index="${esc(String(index))}"${icrCid.keepBoth ? ` data-control-id="${icrCid.keepBoth}"` : ""} data-ui-event="import.conflict.decision" data-repeat-tap-guard="conflict-keep-both" data-final-state="${item.decision === "keep-both" ? "active" : "idle"}" data-focus-restore-source="conflict-keep-both" aria-label="保留本地与库内两份">保留两份</button>
               </nav>
             </article>
           `).join("")}
         </section>`,
       bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button" data-route-back>上一步</button>
-          <button type="button" data-route="import-parsing">应用并导入</button>
+        <div class="fd-fixed-action-row" data-rollback-state="${esc(rollbackState)}" data-apply-state="${esc(applyState)}">
+          <button type="button" data-route-back${icrCid.rollback ? ` data-control-id="${icrCid.rollback}"` : ""} data-ui-event="import.rollback" data-repeat-tap-guard="rollback" data-final-state="${rollbackState === "completed" ? "completed" : rollbackState === "failed" ? "failed" : "idle"}" data-rollback-action="true"${rollbackState === "pending" ? " disabled" : ""} aria-label="回滚到上一步">上一步</button>
+          <button type="button" data-route="import-parsing" data-ui-event="import.apply" data-repeat-tap-guard="apply" data-final-state="${applyState === "applied" ? "applied" : applyState === "failed" ? "failed" : "idle"}" data-apply-action="true"${applyState === "applying" ? " disabled" : ""} aria-label="应用决策并导入">应用并导入</button>
         </div>`
     }));
   }
@@ -11486,8 +11605,13 @@
     const speedLabel = /\d/.test(item.speed || "") ? item.speed : (item.speed || "未知");
     // W3: data-source-switch-select 标记候选行支持连续选中切换，不直接跳转，而是更新预览区。
     const selectAttr = canSwitch ? ` data-source-switch-select="${esc(item.source)}"` : "";
+    // B4: 接入 A2 control identity（候选行 controlId 来自 registry，index>10 回退到合成 ID）
+    // 并补 candidate-state 终态：selected / unselected / current / disabled。
+    const candidateId = window.ReaderSourceSwitchControlIds.candidateRowControlId(index);
+    const candidateAttrs = window.ReaderSourceSwitchControlIds.controlIdAttrs(candidateId);
+    const candidateState = isCurrent ? "current" : (isSelected ? "selected" : (canSwitch ? "unselected" : "disabled"));
     return `
-      <article class="fd-source-candidate-row${isCurrent ? " is-current" : ""}${isSelected ? " is-selected" : ""}${canSwitch ? " is-switchable" : " is-muted"}" data-source-index="${index}" data-source-name="${esc(item.source)}"${selectAttr} tabindex="0" role="button" aria-label="选择 ${esc(item.source)}" aria-pressed="${isSelected ? "true" : "false"}">
+      <article class="fd-source-candidate-row${isCurrent ? " is-current" : ""}${isSelected ? " is-selected" : ""}${canSwitch ? " is-switchable" : " is-muted"}" data-source-index="${index}" data-source-name="${esc(item.source)}"${selectAttr}${candidateAttrs} ${window.ReaderSourceSwitchControlIds.DATA_SOURCE_SWITCH_CANDIDATE_STATE}="${candidateState}" tabindex="0" role="button" aria-label="选择 ${esc(item.source)}" aria-pressed="${isSelected ? "true" : "false"}" aria-disabled="${canSwitch ? "false" : "true"}">
         <span class="fd-source-row-main">
           <b>${esc(item.source)}</b>
           <em>${esc(speedLabel)}</em>
@@ -11502,7 +11626,8 @@
 
   function sourceSwitchFlowSessionAttr(appState) {
     const session = (appState && appState.sourceSwitchSession) || "fd-source-switch-session-default";
-    return `data-source-switch-session="${esc(session)}"`;
+    // B4: 默认 reduced-motion=false；interaction 层在 bind 时根据 matchMedia 更新为 true。
+    return `data-source-switch-session="${esc(session)}" data-source-switch-reduced-motion="false"`;
   }
 
   function sourceSwitchReaderStep(data, appState, options) {
@@ -11539,7 +11664,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>暂无可用书源</span>
-            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.EMPTY_CLOSE)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-switch-empty" aria-label="换源空结果提示">
             <span class="fd-source-switch-state-icon">${icon("info", "fd-medium-icon")}</span>
@@ -11548,9 +11673,9 @@
           </div>
         </section>`,
       resultHtml: `
-        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源空结果操作">
-          <button type="button" data-route="source-switch" data-source-switch-select-action="retry">重新加载</button>
-          <button type="button" data-route="reader" data-route-replace>返回阅读</button>
+        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源空结果操作" ${window.ReaderSourceSwitchControlIds.DATA_SOURCE_SWITCH_STALE}="false">
+          <button type="button" data-route="source-switch" data-source-switch-select-action="retry"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.EMPTY_RETRY)} aria-disabled="false">重新加载</button>
+          <button type="button" data-route="reader" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.EMPTY_RETURN_READER)}>返回阅读</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -11574,7 +11699,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>加载失败</span>
-            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.ERROR_CLOSE)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-switch-error" aria-label="换源加载失败提示">
             <span class="fd-source-switch-state-icon">${icon("warn", "fd-medium-icon")}</span>
@@ -11583,9 +11708,9 @@
           </div>
         </section>`,
       resultHtml: `
-        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源加载失败操作">
-          <button type="button" data-route="source-switch" data-source-switch-select-action="retry">重试加载</button>
-          <button type="button" data-route="reader" data-route-replace>返回阅读</button>
+        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源加载失败操作" ${window.ReaderSourceSwitchControlIds.DATA_SOURCE_SWITCH_STALE}="false">
+          <button type="button" data-route="source-switch" data-source-switch-select-action="retry"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.ERROR_RETRY)} aria-disabled="false">重试加载</button>
+          <button type="button" data-route="reader" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.ERROR_RETURN_READER)}>返回阅读</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -11608,7 +11733,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>请求超时</span>
-            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.TIMEOUT_CLOSE)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-switch-timeout" aria-label="换源超时提示">
             <span class="fd-source-switch-state-icon">${icon("clock", "fd-medium-icon")}</span>
@@ -11617,9 +11742,9 @@
           </div>
         </section>`,
       resultHtml: `
-        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源超时操作">
-          <button type="button" data-route="source-switch" data-source-switch-select-action="retry">重试加载</button>
-          <button type="button" data-route="reader" data-route-replace>返回阅读</button>
+        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源超时操作" ${window.ReaderSourceSwitchControlIds.DATA_SOURCE_SWITCH_STALE}="false">
+          <button type="button" data-route="source-switch" data-source-switch-select-action="retry"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.TIMEOUT_RETRY)} aria-disabled="false">重试加载</button>
+          <button type="button" data-route="reader" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.TIMEOUT_RETURN_READER)}>返回阅读</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -11643,7 +11768,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>切换中</span>
-            <button class="fd-source-window-close" type="button" data-route="source-switch-rollback" data-route-replace aria-label="取消切换">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="source-switch-rollback" data-route-replace aria-label="取消切换"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.LOADING_CLOSE)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-switch-loading" aria-label="换源切换中提示">
             <div class="fd-source-switch-loading-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="切换进度">
@@ -11654,8 +11779,8 @@
           </div>
         </section>`,
       resultHtml: `
-        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源切换中操作">
-          <button type="button" data-route="source-switch-rollback" data-route-replace>取消切换</button>
+        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源切换中操作" ${window.ReaderSourceSwitchControlIds.DATA_SOURCE_SWITCH_BUSY}="true">
+          <button type="button" data-route="source-switch-rollback" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.LOADING_CANCEL)} aria-disabled="false">取消切换</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -11680,7 +11805,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>已回滚</span>
-            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.ROLLBACK_CLOSE)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-switch-rollback" aria-label="换源失败回滚提示">
             <span class="fd-source-switch-state-icon">${icon("warn", "fd-medium-icon")}</span>
@@ -11694,9 +11819,9 @@
           </div>
         </section>`,
       resultHtml: `
-        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源回滚操作">
-          <button type="button" data-route="source-switch" data-source-switch-select-action="retry">重新选择书源</button>
-          <button type="button" data-route="reader" data-route-replace>返回阅读</button>
+        <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源回滚操作" ${window.ReaderSourceSwitchControlIds.DATA_SOURCE_SWITCH_STALE}="false">
+          <button type="button" data-route="source-switch" data-source-switch-select-action="retry"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.ROLLBACK_RETRY)} aria-disabled="false">重新选择书源</button>
+          <button type="button" data-route="reader" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.ROLLBACK_RETURN_READER)}>返回阅读</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -11736,7 +11861,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>预览 ${esc(selected.source || "候选书源")}</span>
-            <button class="fd-source-window-close" type="button" data-route="source-switch" data-route-replace aria-label="返回换源列表">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="source-switch" data-route-replace aria-label="返回换源列表"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.PREVIEW_CLOSE)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-switch-preview" aria-label="换源预览信息">
             <header class="fd-source-switch-preview-header">
@@ -11757,8 +11882,8 @@
         </section>`,
       resultHtml: `
         <section class="fd-source-switch-result fd-source-switch-state-actions" aria-label="换源预览操作">
-          <button type="button" data-route="source-switch-loading" data-route-replace>确认换源</button>
-          <button type="button" data-route="source-switch" data-route-replace>返回列表</button>
+          <button type="button" data-route="source-switch-loading" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.PREVIEW_CONFIRM)} aria-disabled="false">确认换源</button>
+          <button type="button" data-route="source-switch" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.PREVIEW_RETURN_LIST)}>返回列表</button>
         </section>`,
       stateHostHtml: ""
     });
@@ -11796,7 +11921,7 @@
             <i>${icon("source-switch", "fd-small-icon")}</i>
             <strong>换源</strong>
             <span>按延迟排序</span>
-            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
+            <button class="fd-source-window-close" type="button" data-route="reader" data-route-replace aria-label="关闭换源窗口"${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.CLOSE_WINDOW_CONTROL_ID)}>${icon("close", "fd-small-icon")}</button>
           </div>
           <div class="fd-source-candidate-list" data-source-switch-candidate-list aria-label="候选书源列表">
             ${candidates.map((item, index) => sourceCandidateRow(item, index, selectedSource)).join("")}
@@ -11809,8 +11934,8 @@
           <small>${esc(selected.state || "当前")} · ${esc(selectedSpeedLabel)} · ${esc(selectedLatestLabel)}</small>
           <p>确认后保持当前阅读位置，仅替换正文来源与章节解析结果。</p>
           <div class="fd-source-switch-result-actions">
-            <button type="button" data-route="source-switch-preview" data-route-replace>预览目录</button>
-            <button type="button" data-route="source-switch-loading" data-route-replace>确认换源</button>
+            <button type="button" data-route="source-switch-preview" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.DEFAULT_PREVIEW)}>预览目录</button>
+            <button type="button" data-route="source-switch-loading" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.DEFAULT_CONFIRM)} aria-disabled="false">确认换源</button>
           </div>
           ${isResultsVariant ? `
             <div class="fd-source-switch-result-toast" role="status" aria-label="换源结果提示"><span>${icon("check", "fd-small-icon")}</span><small>已切换到 ${esc(selected.source || "优书网")}</small></div>
@@ -11819,8 +11944,8 @@
               <small>章节与正文已重载完成</small>
             </div>
             <div class="fd-source-switch-result-actions">
-              <button type="button" data-route="source-switch-error" data-route-replace>查看失败重试</button>
-              <button type="button" data-route="source-switch-rollback" data-route-replace>查看回滚确认</button>
+              <button type="button" data-route="source-switch-error" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.DEFAULT_VIEW_FAILED)}>查看失败重试</button>
+              <button type="button" data-route="source-switch-rollback" data-route-replace${window.ReaderSourceSwitchControlIds.controlIdAttrs(window.ReaderSourceSwitchControlIds.DEFAULT_VIEW_ROLLBACK)}>查看回滚确认</button>
             </div>
           ` : ""}
         </section>`,
@@ -14308,8 +14433,22 @@
     });
 
     screenHost.querySelectorAll("[data-source-name]").forEach((targetEl) => {
+      const isDisabled = targetEl.getAttribute("aria-disabled") === "true";
       const selectSource = () => {
+        if (isDisabled) {
+          return;
+        }
+        // B4: repeat tap 屏蔽 — 当 source-switch 处于 busy（loading 状态）时，
+        // 候选行选择被屏蔽，避免在切换中触发新的 select。
+        const busyHost = screenHost.querySelector("[data-source-switch-busy=\"true\"]");
+        if (busyHost) {
+          return;
+        }
         appState.sourceSwitchSelectedSource = targetEl.getAttribute("data-source-name") || "";
+        // B4: 标记前一次结果为 stale（用户已发起新的选择）
+        screenHost.querySelectorAll("[data-source-switch-stale]").forEach((el) => {
+          el.setAttribute("data-source-switch-stale", "true");
+        });
         renderCurrentRoute();
       };
       targetEl.addEventListener("click", (event) => {
