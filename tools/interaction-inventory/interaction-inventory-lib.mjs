@@ -1034,11 +1034,17 @@ export function checkInteractionInventoryArtifactBytes(artifacts = buildInteract
 // helpers. Does not modify existing IC0 inventory functions; only appends.
 // ===========================================================================
 
-export const CONTROL_ID_SCHEMA_VERSION = "1.0.0";
+export const CONTROL_ID_SCHEMA_VERSION = "1.1.0";
 export const CONTROL_ID_REGISTRY_PATH = "tools/interaction-inventory/generated/control-id-registry.json";
 export const SCREENGRAPH_BINDING_PATH = "tools/interaction-inventory/generated/screengraph-binding.json";
 export const FIGMA_CROSSWALK_PENDING_PATH = "tools/interaction-inventory/generated/figma-crosswalk-pending.json";
 export const DOM_IDENTITY_MAP_PATH = "tools/interaction-inventory/generated/dom-identity-map.json";
+export const NON_INTERACTIVE_CONTAINERS_PATH = "tools/interaction-inventory/generated/nonInteractiveContainers.json";
+
+// ARIA container roles that are not interactive controls. Candidates carrying
+// these roles are excluded from the canonical registry and recorded separately
+// in nonInteractiveContainers.json.
+const NON_INTERACTIVE_ARIA_CONTAINER_ROLES = new Set(["group", "section"]);
 export const CODEGEN_OUTPUT_PATHS = Object.freeze({
   typescriptTypes: "tools/interaction-inventory/generated/control-identity.generated.ts",
   domSelectors: "tools/interaction-inventory/generated/control-dom-selectors.generated.json",
@@ -1213,7 +1219,10 @@ export function buildControlIdForCandidate(control, viewport = "phone") {
   const route = kebabCaseAtom(control.routeId);
   const state = kebabCaseAtom(control.pageState) || "default";
   const role = deriveControlRole(control);
-  const base = `${domain}.${family}.${route}.${state}.${viewport}.${role}`;
+  // R1: controlId is the logical identity and does NOT include viewport.
+  // Phone/Compact/Tablet/Fold share the same logical id; viewport is carried
+  // by the separate `viewport` field on the registry entry.
+  const base = `${domain}.${family}.${route}.${state}.${role}`;
   const slug = deriveSemanticSlug(control);
   const hash = shortHash(controlHashInputs(control));
   const discriminator = slug ? `${slug}-h-${hash}` : `h-${hash}`;
@@ -1366,9 +1375,13 @@ function classifyMapping(control, binding) {
   };
 }
 
-function buildRegistryEntry(control, viewport, binding, generatedAt) {
+function buildRegistryEntry(control, viewport, binding) {
   const idParts = buildControlIdForCandidate(control, viewport);
   const { mappingStatus, mappingNotes } = classifyMapping(control, binding);
+  // R1: per-entry `firstMaterializedAt` and `schemaVersion` are removed.
+  // `schemaVersion` lives on the registry top-level; `firstMaterializedAt`
+  // was a fixed timestamp with no drift value. additionalProperties:false
+  // in the schema now strictly enforces the entry shape.
   return {
     controlId: idParts.controlId,
     domain: idParts.domain,
@@ -1396,8 +1409,7 @@ function buildRegistryEntry(control, viewport, binding, generatedAt) {
     },
     figmaNodeCandidate: null,
     figmaJoinStatus: "pending-figma-join",
-    firstMaterializedAt: generatedAt,
-    schemaVersion: CONTROL_ID_SCHEMA_VERSION,
+    nonInteractiveContainer: null,
   };
 }
 
@@ -1411,15 +1423,29 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
   const screenGraphSha256 = screenGraphIndex.graphSha256;
   const generatedAt = "2026-07-19T00:00:00.000Z"; // A2 baseline; stable for byte-reproducible regeneration
 
-  const candidates = [
+  const allCandidates = [
     ...inventory.semanticControls.map((c) => ({ ...c, semanticStatus: "semantic-control" })),
     ...inventory.suspectedNonSemanticControls.map((c) => ({ ...c, semanticStatus: "suspected-nonsemantic-control" })),
   ];
 
+  // R1: ARIA container roles (group/section) are not interactive controls.
+  // They are excluded from the canonical registry and tracked in
+  // nonInteractiveContainers.json (see buildNonInteractiveContainers).
+  const candidates = [];
+  const excludedContainers = [];
+  for (const control of allCandidates) {
+    const role = deriveControlRole(control);
+    if (NON_INTERACTIVE_ARIA_CONTAINER_ROLES.has(role)) {
+      excludedContainers.push(control);
+    } else {
+      candidates.push(control);
+    }
+  }
+
   const entries = [];
   for (const control of candidates) {
     const binding = bindControlToScreenGraph(control, screenGraphIndex);
-    const entry = buildRegistryEntry(control, viewport, binding, generatedAt);
+    const entry = buildRegistryEntry(control, viewport, binding);
     entries.push(entry);
   }
 
@@ -1440,6 +1466,7 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     ambiguousNeedsReview: entries.filter((e) => e.mappingStatus === "ambiguous-needs-review").length,
     uniqueControlIds: controlIdSet.size,
     pendingFigmaJoin: entries.filter((e) => e.figmaJoinStatus === "pending-figma-join").length,
+    nonInteractiveContainers: excludedContainers.length,
   };
 
   return {
@@ -1453,6 +1480,70 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
       generatorPath: "tools/interaction-inventory/generate-control-ids.mjs",
     },
     totals,
+    entries,
+  };
+}
+
+// R1: ARIA container roles (group/section) are recorded separately so the
+// canonical registry strictly contains interactive controls. The drift test
+// asserts that the registry denominator + nonInteractiveContainers denominator
+// equals the IC0 inventory denominator.
+export function buildNonInteractiveContainers({ viewport = "phone" } = {}) {
+  const inventoryPath = INTERACTION_INVENTORY_PATH;
+  const inventoryRaw = read(inventoryPath);
+  const inventory = JSON.parse(inventoryRaw);
+  const inventorySha256 = createHash("sha256").update(inventoryRaw).digest("hex");
+  const generatedAt = "2026-07-19T00:00:00.000Z";
+
+  const allCandidates = [
+    ...inventory.semanticControls.map((c) => ({ ...c, semanticStatus: "semantic-control" })),
+    ...inventory.suspectedNonSemanticControls.map((c) => ({ ...c, semanticStatus: "suspected-nonsemantic-control" })),
+  ];
+
+  const entries = [];
+  for (const control of allCandidates) {
+    const role = deriveControlRole(control);
+    if (!NON_INTERACTIVE_ARIA_CONTAINER_ROLES.has(role)) continue;
+    entries.push({
+      candidateKey: control.candidateKey,
+      selectorSha256: selectorSha256(control),
+      routeId: control.routeId,
+      state: control.pageState || "default",
+      viewport,
+      role,
+      domTag: control.domTag,
+      label: control.label || null,
+      dataAttributes: control.dataAttributes || {},
+      exclusionReason: "aria-container-role",
+    });
+  }
+
+  entries.sort((a, b) => {
+    if (a.routeId !== b.routeId) return a.routeId.localeCompare(b.routeId);
+    if (a.role !== b.role) return a.role.localeCompare(b.role);
+    return a.candidateKey.localeCompare(b.candidateKey);
+  });
+
+  const byRole = {};
+  const byRoute = {};
+  for (const entry of entries) {
+    byRole[entry.role] = (byRole[entry.role] || 0) + 1;
+    byRoute[entry.routeId] = (byRoute[entry.routeId] || 0) + 1;
+  }
+
+  return {
+    schemaVersion: CONTROL_ID_SCHEMA_VERSION,
+    generatedAt,
+    generatedFrom: {
+      inventoryPath,
+      inventorySha256,
+      generatorPath: "tools/interaction-inventory/generate-control-ids.mjs",
+    },
+    totals: {
+      entries: entries.length,
+      byRole: Object.fromEntries(Object.entries(byRole).sort(([a], [b]) => a.localeCompare(b))),
+      byRoute: Object.fromEntries(Object.entries(byRoute).sort(([a], [b]) => a.localeCompare(b))),
+    },
     entries,
   };
 }
@@ -1497,7 +1588,7 @@ export function buildFigmaCrosswalkPending() {
     schemaVersion: CONTROL_ID_SCHEMA_VERSION,
     generatedAt: registry.generatedAt,
     generatedFrom: registry.generatedFrom,
-    note: "Figma does not currently expose a canonical join key. All entries are pending-figma-join; figmaNodeCandidate fields must be backfilled by a Figma writer with explicit node-id mapping. A2 does not forge Figma bindings.",
+    note: "Figma does not currently expose a canonical join key. All entries are pending-figma-join; figmaNodeCandidate fields must be backfilled by a Figma writer with explicit node-id mapping. R1 does not forge Figma bindings. controlId is the logical identity (no viewport atom).",
     totalPending: registry.entries.length,
     entries: registry.entries.map((entry) => ({
       controlId: entry.controlId,
@@ -1553,11 +1644,13 @@ export function writeControlIdArtifacts() {
   const binding = buildScreenGraphBindingArtifacts();
   const figmaCrosswalk = buildFigmaCrosswalkPending();
   const domIdentity = buildDomIdentityMap();
+  const nonInteractive = buildNonInteractiveContainers();
   const outputs = [
     [CONTROL_ID_REGISTRY_PATH, registry],
     [SCREENGRAPH_BINDING_PATH, binding],
     [FIGMA_CROSSWALK_PENDING_PATH, figmaCrosswalk],
     [DOM_IDENTITY_MAP_PATH, domIdentity],
+    [NON_INTERACTIVE_CONTAINERS_PATH, nonInteractive],
   ];
   for (const [relativePath, value] of outputs) {
     const absolutePath = join(REPO_ROOT, relativePath);
@@ -1572,11 +1665,13 @@ export function checkControlIdArtifactBytes() {
   const binding = buildScreenGraphBindingArtifacts();
   const figmaCrosswalk = buildFigmaCrosswalkPending();
   const domIdentity = buildDomIdentityMap();
+  const nonInteractive = buildNonInteractiveContainers();
   const expected = [
     [CONTROL_ID_REGISTRY_PATH, formatJson(registry)],
     [SCREENGRAPH_BINDING_PATH, formatJson(binding)],
     [FIGMA_CROSSWALK_PENDING_PATH, formatJson(figmaCrosswalk)],
     [DOM_IDENTITY_MAP_PATH, formatJson(domIdentity)],
+    [NON_INTERACTIVE_CONTAINERS_PATH, formatJson(nonInteractive)],
   ];
   for (const [relativePath, expectedJson] of expected) {
     const absolutePath = join(REPO_ROOT, relativePath);
@@ -1594,9 +1689,14 @@ export function validateControlIdRegistry(registry) {
   const warnings = [];
 
   const inventory = JSON.parse(read(INTERACTION_INVENTORY_PATH));
-  const expectedCount = inventory.semanticControls.length + inventory.suspectedNonSemanticControls.length;
+  // R1: the canonical registry denominator excludes ARIA container roles
+  // (group/section). The denominator is the count of IC0 candidates whose
+  // derived role is NOT in {group, section}. The IC0 inventory's
+  // suspectedNonSemanticControls are all group/section, so the canonical
+  // registry denominator equals inventory.semanticControls.length.
+  const expectedCount = countInteractiveCandidates(inventory);
   if (registry.entries.length !== expectedCount) {
-    errors.push(`entry count mismatch: registry=${registry.entries.length} vs inventory=${expectedCount}`);
+    errors.push(`entry count mismatch: registry=${registry.entries.length} vs interactive-candidates=${expectedCount}`);
   }
 
   const seenIds = new Set();
@@ -1625,7 +1725,7 @@ export function validateControlIdRegistry(registry) {
     }
   }
 
-  // Figma join integrity: no forged joins in A2 baseline.
+  // Figma join integrity: no forged joins in R1 baseline.
   const forged = registry.entries.filter((e) => e.figmaJoinStatus !== "pending-figma-join");
   if (forged.length > 0) {
     errors.push(`forged figma join: ${forged.length} entries claim non-pending figma status`);
@@ -1635,11 +1735,28 @@ export function validateControlIdRegistry(registry) {
     errors.push(`forged figma node candidate: ${forgedNode.length} entries carry non-null figmaNodeCandidate`);
   }
 
+  // R1: ARIA container roles (group/section) MUST NOT appear in the canonical
+  // registry; they live in nonInteractiveContainers.json.
+  const leakedContainers = registry.entries.filter((e) => e.role === "group" || e.role === "section");
+  if (leakedContainers.length > 0) {
+    errors.push(`non-interactive container leaked into registry: ${leakedContainers.length} entries with role group/section`);
+  }
+
+  // R1: per-entry firstMaterializedAt and schemaVersion MUST be absent.
+  const staleTimestamp = registry.entries.filter((e) => Object.prototype.hasOwnProperty.call(e, "firstMaterializedAt"));
+  if (staleTimestamp.length > 0) {
+    errors.push(`per-entry firstMaterializedAt must be removed: ${staleTimestamp.length} entries still carry it`);
+  }
+  const staleSchemaVersion = registry.entries.filter((e) => Object.prototype.hasOwnProperty.call(e, "schemaVersion"));
+  if (staleSchemaVersion.length > 0) {
+    errors.push(`per-entry schemaVersion must be removed: ${staleSchemaVersion.length} entries still carry it`);
+  }
+
   // Schema shape sanity
   const requiredFields = [
     "controlId", "domain", "family", "route", "state", "viewport", "role",
     "discriminator", "source", "mappingStatus", "screenGraphBinding",
-    "figmaNodeCandidate", "figmaJoinStatus",
+    "figmaNodeCandidate", "figmaJoinStatus", "nonInteractiveContainer",
   ];
   for (const entry of registry.entries) {
     for (const field of requiredFields) {
@@ -1656,4 +1773,20 @@ export function validateControlIdRegistry(registry) {
     warnings,
     valid: errors.length === 0,
   };
+}
+
+// R1: helper that counts IC0 candidates whose derived role is an interactive
+// role (i.e. NOT group/section). Used by validateControlIdRegistry to compute
+// the canonical registry denominator without re-deriving the full registry.
+function countInteractiveCandidates(inventory) {
+  const all = [
+    ...inventory.semanticControls,
+    ...inventory.suspectedNonSemanticControls,
+  ];
+  let count = 0;
+  for (const control of all) {
+    const role = deriveControlRole(control);
+    if (!NON_INTERACTIVE_ARIA_CONTAINER_ROLES.has(role)) count += 1;
+  }
+  return count;
 }

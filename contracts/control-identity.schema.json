@@ -2,19 +2,19 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/control-identity.schema.json",
   "title": "ControlIdentity",
-  "description": "Reader-UI 交互控件稳定身份契约。controlId 是跨 Figma / ScreenGraph / Web DOM / 三端 runtime 共用的稳定 join key；同输入产生同输出，零重复、零缺失。命名规则：{domain}.{family}.{route}.{state}.{viewport}.{role}[.discriminator]。来源：A2 · Control Identity Foundation 工作包。",
+  "description": "Reader-UI 交互控件稳定身份契约（R1 修复版）。controlId 是逻辑控件身份，命名规则：{domain}.{family}.{route}.{state}.{role}[.discriminator]，不含 viewport。Phone/Compact/Tablet/Fold 共享同一逻辑 controlId；viewport 作为独立字段记录实例所属视口。同输入产生同输出，零重复、零缺失。来源：R1 · Control Identity 修复（基线 e35e739）。",
   "type": "object",
   "additionalProperties": false,
   "required": ["controlId", "domain", "family", "route", "state", "viewport", "role", "discriminator", "source"],
   "properties": {
     "controlId": {
       "type": "string",
-      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$",
-      "description": "Canonical control identity, period-delimited, kebab-case atoms. Pattern: domain.family.route.state.viewport.role[.discriminator].",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Canonical logical control identity, period-delimited, kebab-case atoms. Pattern: domain.family.route.state.role[.discriminator]. Viewport is intentionally excluded so that Phone/Compact/Tablet/Fold share the same logical id.",
       "examples": [
-        "library.button.bookshelf.default.phone.button.top-action-search",
-        "reader.icon-button.reader.default.phone.button.exit",
-        "settings.switch.settings-general.default.phone.switch.toggle"
+        "library.button.bookshelf.default.button.top-action-search-h-1c0d0896",
+        "reader.icon-button.reader.default.button.exit-h-3a2b1c0d",
+        "settings.switch.settings-general.default.switch.toggle-h-7e8f9a0b"
       ]
     },
     "domain": {
@@ -72,12 +72,12 @@
     },
     "viewport": {
       "type": "string",
-      "description": "Target viewport for the control instance. Current inventory is phone-only; compact and tablet atoms are reserved for VC0 multi-viewport expansion.",
+      "description": "Viewport instance for this registry entry. The logical controlId does not include viewport, so the same controlId can carry multiple viewport instances (phone / compact / tablet / fold).",
       "enum": ["phone", "compact", "tablet", "fold"]
     },
     "role": {
       "type": "string",
-      "description": "Semantic role atom; matches the ARIA role or tag-derived role, kebab-cased.",
+      "description": "Semantic role atom; matches the ARIA role or tag-derived role, kebab-cased. ARIA container roles (group/section) are excluded from the registry; they are recorded in nonInteractiveContainers.json when encountered.",
       "enum": [
         "button",
         "checkbox",
@@ -100,7 +100,7 @@
     "discriminator": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
-      "description": "Stable disambiguator within (domain, family, route, state, viewport, role). Either a semantic slug derived from data attributes (e.g. top-action-search) or a deterministic hash fragment (e.g. h-ab12cd34)."
+      "description": "Stable disambiguator within (domain, family, route, state, role). Either a semantic slug derived from data attributes (e.g. top-action-search-h-1c0d0896) or a deterministic hash fragment (e.g. h-ab12cd34)."
     },
     "source": {
       "type": "object",
@@ -170,12 +170,17 @@
     },
     "figmaNodeCandidate": {
       "type": ["string", "null"],
-      "description": "Reserved for Figma node id backfill; always null in the A2 baseline because Figma has no canonical join key yet."
+      "description": "Reserved for Figma node id backfill; always null in the R1 baseline because Figma has no canonical join key yet."
     },
     "figmaJoinStatus": {
       "type": "string",
       "enum": ["pending-figma-join", "joined"],
-      "description": "Figma join status; always 'pending-figma-join' in the A2 baseline."
+      "description": "Figma join status; always 'pending-figma-join' in the R1 baseline."
+    },
+    "nonInteractiveContainer": {
+      "type": ["boolean", "null"],
+      "description": "Optional marker; when true, the candidate was classified as a non-interactive ARIA container (group/section) and excluded from the canonical registry. Always null in the canonical registry; non-null only in nonInteractiveContainers.json records.",
+      "default": null
     }
   }
 }
