@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "capturedOn": "2026-07-19",
+  "worktreeHead": "8f9eea1c31cb4b3328f76a06fd286868ea7b9f13",
+  "purpose": "记录 12 族本批页面族的 Figma / Browser 视觉对照现状。本清单不伪造证据：Figma 截图未采集的族明确标记 missing，不生成同尺寸 comparison 图。",
+  "policy": {
+    "equivalenceClass": "按 renderSha256 与 routeId 判定视觉等价类；同 renderSha256 的 alias route 不重复保留。",
+    "comparisonImagePolicy": "同尺寸 comparison 图需要 Figma 截图与 Browser 裁切图同时存在；任一缺失即标记为 missing-comparison，不生成伪图。",
+    "domBoundsSource": "DOM bounds 来自 docs/audits/vc0-batch-2026-07-19/generated/browser-structure-observations.json 的 rects/scroll/styleSignature 字段；Figma 端 DOM 不可访问。",
+    "structureHashSource": "renderSha256 来自 docs/audits/ic0-2026-07-19/generated/interaction-control-coverage.json；hash 仅覆盖 default ViewState 的 HTML 输出。"
+  },
+  "globalMissing": {
+    "figmaScreenshots": "本批 12 个页面族均未在 docs/audits/vc0-batch-2026-07-19/evidence/ 下采集 Figma 静态截图。Figma 端 Node ID 已在 family-manifest.json 登记，但未导出为 PNG。",
+    "comparisonImages": "因 Figma 截图全部缺失，本批 0 张同尺寸 comparison 图可生成；不伪造。",
+    "domBoundsFigmaSide": "Figma 端 DOM 不可访问；Figma 几何来自 docs/design/FIGMA_HANDOFF_STATUS_2026-07-12.md 与 docs/design/FIGMA_FULL_AUDIT_2026-07-19.md 的静态记录，非本次实页 DOM 实测。"
+  },
+  "families": [
+    {
+      "familyId": "F13-source-management",
+      "routeId": "source-management",
+      "runtimeFamily": "source",
+      "renderSha256": "a593508c2089dca1f43676b26761a17185416d34c5bbe9a200bfbf71d7cf958a",
+      "aliasEquivalenceClass": ["source-management-preview", "source-management-state-matrix"],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-source-management-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失，无法生成同尺寸 comparison" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects(active/demo/host/pageMain) + scroll(active/demo/document) + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F14-webdav-config",
+      "routeId": "webdav-config",
+      "runtimeFamily": "sync",
+      "renderSha256": "52e0d60ec2b8798f3204f6f5ddea99486f3efa8a19d415b6db9309d6e55433bf",
+      "aliasEquivalenceClass": ["sync-backup-state-matrix"],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-webdav-config-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F15-sync-backup",
+      "routeId": "sync-backup",
+      "runtimeFamily": "sync",
+      "renderSha256": "934360978217585a22948edd62a8d896e7f1c81195bf681399a276ea344261ad",
+      "aliasEquivalenceClass": ["sync-backup-preview", "sync-backup-state-matrix"],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-sync-backup-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F16-search-results",
+      "routeId": "search-results",
+      "runtimeFamily": "library",
+      "renderSha256": "4df85621a5704c991d21759978baad4bdae1df33694c88fcced2ab808b6a9aaf",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-search-results-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F17-bookshelf",
+      "routeId": "bookshelf",
+      "runtimeFamily": "library",
+      "renderSha256": "0bf5d7ff15ad577934ce63258402b4ac27c2d814bb1f754b0df640aa86199fa9",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-bookshelf-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": "evidence/browser-raw/browser-bookshelf-compact-raw.png", "available": true },
+        { "viewport": "tablet", "path": "evidence/browser-raw/browser-bookshelf-tablet-raw.png", "available": true }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone / compact / tablet 三视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F18-book-detail",
+      "routeId": "book-detail",
+      "runtimeFamily": "library",
+      "renderSha256": "e2875cad5767cb3a5874e546df50998d01adcffaf163599c4844877d08cc2f66",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-book-detail-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F19-import-conflict-resolve",
+      "routeId": "import-conflict-resolve",
+      "runtimeFamily": "import",
+      "renderSha256": "7f339ce909f5d26ffdebbb8edf32d2c73d4e53661f4fdb3526c92680f8553659",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-import-conflict-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F20-discover",
+      "routeId": "discover",
+      "runtimeFamily": "discover",
+      "renderSha256": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0",
+      "aliasEquivalenceClass": ["discover-home"],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-discover-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F21-rss",
+      "routeId": "rss",
+      "runtimeFamily": "rss",
+      "renderSha256": "c2027ef1ae03e0ba717ce1a2edfb04b0ee2679eedf8344ed58bcae8cb0a0c182",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-rss-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F22-source-switch",
+      "routeId": "source-switch",
+      "runtimeFamily": "source-switch",
+      "renderSha256": "cd7a65c7827db29fa40f049f6fbf50e05baef618d4fe234f82f96d44a6d5cf64",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-source-switch-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": "evidence/browser-raw/browser-source-switch-compact-raw.png", "available": true },
+        { "viewport": "tablet", "path": "evidence/browser-raw/browser-source-switch-tablet-raw.png", "available": true }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone / compact / tablet 三视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F23-about",
+      "routeId": "about",
+      "runtimeFamily": "settings",
+      "renderSha256": "c7aef445fff0d46f81f09f4d7114ff54f834fa6f680d8ff0a467bd1d3660388e",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-about-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone 视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "compact / tablet 视口未采集；控件行级 DOM bounds 未采集"
+    },
+    {
+      "familyId": "F24-restore-preview",
+      "routeId": "restore-preview",
+      "runtimeFamily": "sync",
+      "renderSha256": "4cae76411c4a794d017d54f2542bfd743fb79db1176c1f233f6b1f0bb494578b",
+      "aliasEquivalenceClass": [],
+      "browserRawScreenshots": [
+        { "viewport": "phone", "path": "evidence/browser-raw/browser-restore-preview-phone-raw.png", "available": true },
+        { "viewport": "compact", "path": "evidence/browser-raw/browser-restore-preview-compact-raw.png", "available": true },
+        { "viewport": "tablet", "path": "evidence/browser-raw/browser-restore-preview-tablet-raw.png", "available": true }
+      ],
+      "figmaScreenshots": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图未导出" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图未导出" }
+      ],
+      "comparisonImages": [
+        { "viewport": "phone", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "compact", "path": null, "available": false, "missingReason": "Figma 截图缺失" },
+        { "viewport": "tablet", "path": null, "available": false, "missingReason": "Figma 截图缺失" }
+      ],
+      "domBoundsAvailable": "phone / compact / tablet 三视口的 rects + scroll + styleSignature",
+      "domBoundsMissing": "控件行级 DOM bounds 未采集"
+    }
+  ],
+  "summary": {
+    "familyCount": 12,
+    "browserRawScreenshotsAvailable": 18,
+    "browserRawScreenshotsMissing": 18,
+    "figmaScreenshotsAvailable": 0,
+    "figmaScreenshotsMissing": 36,
+    "comparisonImagesAvailable": 0,
+    "comparisonImagesMissing": 36,
+    "familiesWithAllThreeViewportsRaw": ["F17-bookshelf", "F22-source-switch", "F24-restore-preview"],
+    "familiesWithPhoneOnlyRaw": ["F13-source-management", "F14-webdav-config", "F15-sync-backup", "F16-search-results", "F18-book-detail", "F19-import-conflict-resolve", "F20-discover", "F21-rss", "F23-about"],
+    "familiesWithAliasEquivalence": ["F14-webdav-config", "F15-sync-backup", "F20-discover"]
+  },
+  "nonGoals": [
+    "本清单不伪造 Figma 截图或 comparison 图。",
+    "本清单不主张 12 族视觉对照已完成；视觉对照 completion 需要 Figma 截图与 Browser 裁切同时存在。",
+    "本清单不替代 IC0 的控件级 DOM bounds 审计；控件行级 DOM bounds 仍缺失。"
+  ]
+}

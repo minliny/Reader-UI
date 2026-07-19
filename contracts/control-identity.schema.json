@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/control-identity.schema.json",
+  "title": "ControlIdentity",
+  "description": "Reader-UI 交互控件稳定身份契约。controlId 是跨 Figma / ScreenGraph / Web DOM / 三端 runtime 共用的稳定 join key；同输入产生同输出，零重复、零缺失。命名规则：{domain}.{family}.{route}.{state}.{viewport}.{role}[.discriminator]。来源：A2 · Control Identity Foundation 工作包。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["controlId", "domain", "family", "route", "state", "viewport", "role", "discriminator", "source"],
+  "properties": {
+    "controlId": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "Canonical control identity, period-delimited, kebab-case atoms. Pattern: domain.family.route.state.viewport.role[.discriminator].",
+      "examples": [
+        "library.button.bookshelf.default.phone.button.top-action-search",
+        "reader.icon-button.reader.default.phone.button.exit",
+        "settings.switch.settings-general.default.phone.switch.toggle"
+      ]
+    },
+    "domain": {
+      "type": "string",
+      "description": "Product domain; matches ScreenGraph runtimeFamily.",
+      "enum": [
+        "discover",
+        "import",
+        "library",
+        "onboarding",
+        "reader",
+        "rss",
+        "settings",
+        "source",
+        "source-switch",
+        "sync",
+        "system",
+        "web-auth"
+      ]
+    },
+    "family": {
+      "type": "string",
+      "description": "Component family derived from DOM tag, ARIA role, and class hints; not bound to a specific Figma component set.",
+      "enum": [
+        "button",
+        "icon-button",
+        "link",
+        "switch",
+        "checkbox",
+        "radio",
+        "slider",
+        "textbox",
+        "searchbox",
+        "combobox",
+        "option",
+        "tab",
+        "menuitem",
+        "menuitemcheckbox",
+        "menuitemradio",
+        "summary",
+        "listrow-action",
+        "treeitem",
+        "generic-button"
+      ]
+    },
+    "route": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "ScreenGraph routeId (kebab-case). 260 canonical routes are currently enumerated."
+    },
+    "state": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Variant pageState (kebab-case). Examples: default, loading, error, empty, offline, permission, conflict, result, preview."
+    },
+    "viewport": {
+      "type": "string",
+      "description": "Target viewport for the control instance. Current inventory is phone-only; compact and tablet atoms are reserved for VC0 multi-viewport expansion.",
+      "enum": ["phone", "compact", "tablet", "fold"]
+    },
+    "role": {
+      "type": "string",
+      "description": "Semantic role atom; matches the ARIA role or tag-derived role, kebab-cased.",
+      "enum": [
+        "button",
+        "checkbox",
+        "combobox",
+        "link",
+        "menuitem",
+        "menuitemcheckbox",
+        "menuitemradio",
+        "option",
+        "radio",
+        "searchbox",
+        "slider",
+        "switch",
+        "tab",
+        "textbox",
+        "treeitem",
+        "summary"
+      ]
+    },
+    "discriminator": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Stable disambiguator within (domain, family, route, state, viewport, role). Either a semantic slug derived from data attributes (e.g. top-action-search) or a deterministic hash fragment (e.g. h-ab12cd34)."
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidateKey", "selectorSha256", "semanticStatus"],
+      "properties": {
+        "candidateKey": {
+          "type": "string",
+          "pattern": "^candidate:[a-f0-9]{20}$",
+          "description": "Deterministic IC0 audit candidate key; not canonical, but tracked for drift."
+        },
+        "selectorSha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 of the audit DOM selector; ensures discriminator reproducibility."
+        },
+        "semanticStatus": {
+          "type": "string",
+          "enum": ["semantic-control", "suspected-nonsemantic-control"]
+        },
+        "domTag": {
+          "type": "string",
+          "description": "Original DOM tag from the IC0 inventory record."
+        },
+        "label": {
+          "type": ["string", "null"],
+          "description": "Accessible name resolved by the IC0 audit (may be empty for non-semantic candidates)."
+        },
+        "uiEvent": {
+          "type": ["string", "null"],
+          "description": "Canonical UiEvent hint resolved by the IC0 audit, if any."
+        },
+        "dataAttributes": {
+          "type": "object",
+          "description": "Sorted data-* attribute snapshot from the IC0 audit; never mutated.",
+          "additionalProperties": {"type": "string"}
+        }
+      }
+    },
+    "mappingStatus": {
+      "type": "string",
+      "enum": ["auto-mapped", "needs-manual-mapping", "ambiguous-needs-review"],
+      "description": "Whether the candidate was auto-mapped to a canonical controlId or requires human review."
+    },
+    "mappingNotes": {
+      "type": ["string", "null"],
+      "description": "Optional human-readable explanation of mapping decisions or unresolved ambiguities."
+    },
+    "screenGraphBinding": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["componentInstanceId", "componentType", "bindingStatus"],
+      "properties": {
+        "componentInstanceId": {
+          "type": ["string", "null"],
+          "description": "ScreenGraph component instance id, or null when no candidate instance matches."
+        },
+        "componentType": {
+          "type": ["string", "null"],
+          "description": "ScreenGraph ComponentType name, or null when unresolved."
+        },
+        "bindingStatus": {
+          "type": "string",
+          "enum": ["bound", "unresolved", "pending-figma-join"]
+        }
+      }
+    },
+    "figmaNodeCandidate": {
+      "type": ["string", "null"],
+      "description": "Reserved for Figma node id backfill; always null in the A2 baseline because Figma has no canonical join key yet."
+    },
+    "figmaJoinStatus": {
+      "type": "string",
+      "enum": ["pending-figma-join", "joined"],
+      "description": "Figma join status; always 'pending-figma-join' in the A2 baseline."
+    }
+  }
+}

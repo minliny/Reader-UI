@@ -1,0 +1,259 @@
+{
+  "schemaVersion": 1,
+  "capturedOn": "2026-07-19",
+  "worktreeHead": "8f9eea1c31cb4b3328f76a06fd286868ea7b9f13",
+  "worktreeBranch": "codex/motion-demo-optimizations",
+  "purpose": "为 A1 · VC0 Evidence Closure 工作包写入的所有证据文件计算 SHA-256，并记录 worktree 状态。本 hash 清单可在后续验证中重算（shasum -a 256 <path>）。",
+  "gitState": {
+    "head": "8f9eea1c31cb4b3328f76a06fd286868ea7b9f13",
+    "statusSummary": "M README.md | M contracts/README.md | M docs/design/README.md | ?? contracts/control-identity.schema.json | ?? contracts/control-identity.types.ts | ?? docs/READER_MULTI_AGENT_EXECUTION_GUIDE_2026-07-19.md | ?? docs/READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md | ?? docs/audits/ | ?? src/ | ?? tools/interaction-inventory/",
+    "statusNote": "docs/audits/ 整目录为 untracked；A1 工作包写入的所有文件均在 docs/audits/ 下，未执行 git add / git commit。docs/READER_MULTI_AGENT_EXECUTION_GUIDE_2026-07-19.md 同为 A1 任务 7 更新（Section 1-2）。README.md / contracts/README.md / docs/design/README.md 的修改不在 A1 写入范围（来自其他工作包或先前状态），A1 未触碰。",
+    "gitDiffCheck": "exit 0, 无 whitespace 错误输出"
+  },
+  "hashAlgorithm": "SHA-256 (shasum -a 256)",
+  "writtenByA1": [
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/README.md",
+      "sha256": "3658083eda2bba787743bbc0dab0fc775312a203d8cb10c8b3b8926235314aec",
+      "role": "VC0 batch 工作包说明与状态（任务 7 更新）",
+      "writtenBy": "A1",
+      "note": "README.md 通过 RunCommand heredoc 更新（Write 工具对 README.md 受限）；hash 在更新后重算。"
+    },
+    {
+      "path": "docs/READER_MULTI_AGENT_EXECUTION_GUIDE_2026-07-19.md",
+      "sha256": "8779aceb3b3b1e8fd23e99294b9f9834f8c8710beb30218282b3d593bed83d4e",
+      "role": "多 agent 执行指导 Section 1-2 状态更新（任务 7）",
+      "writtenBy": "A1",
+      "note": "A1 仅更新 Section 1 表格与 Section 2.1 未完成项；Section 3-7 保持不变。"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/final-classification.md",
+      "sha256": "1e698ca8af5cfec334af4ce3e226aedd625f090b2b6a3300c20d89ecdcf070fb",
+      "role": "12 族最终分类（任务 5）",
+      "writtenBy": "A1"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/generated/browser-structure-observations.json",
+      "sha256": "71c6042c188a4cd88bfa0ca71781273886e97b042207f01222b67df2df65710b",
+      "role": "12 族 × 3 视口浏览器结构观测（36 条）",
+      "writtenBy": "A1"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/generated/family-manifest.json",
+      "sha256": "59d565919e4ad85ae6835642b95c7db3a7f343f5ab9e2160524676f5380fe7dc",
+      "role": "24 族 exact manifest（任务 1）",
+      "writtenBy": "A1"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/generated/interaction-traces.json",
+      "sha256": "6c8699bacc38459353f07183ed8d6aeed861f95f0008b20cdb98aaf2aa630ed6",
+      "role": "12 族最小交互 trace（任务 4）",
+      "writtenBy": "A1"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/generated/visual-comparison-manifest.json",
+      "sha256": "a6630456d7f9f5ac36eb1877c692d4d138bbb3916531a220ff46858c0d0e2ee6",
+      "role": "12 族 Figma / Browser 视觉对照现状清单（任务 3）",
+      "writtenBy": "A1"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/artifact-hashes.json",
+      "sha256": "self",
+      "role": "本文件（任务 6）",
+      "writtenBy": "A1",
+      "note": "本文件不计算自身 hash（自引用）；验证时排除本文件。"
+    },
+    {
+      "path": "docs/audits/ic0-2026-07-19/settings-general-browser-observation.json",
+      "sha256": "6d35d1b551e98b24e5346edc3586d40790278ce35afe7beffc73814f4e311339",
+      "role": "Settings General 浏览器观测（任务 2 修正 DOM bounds 口径）",
+      "writtenBy": "A1"
+    },
+    {
+      "path": "docs/audits/ic0-2026-07-19/SETTINGS_GENERAL_VC0_SAMPLE.md",
+      "sha256": "a28e642fc5fdc96697d8de9f45947d635704ecaf67408dacf3228008294757c8",
+      "role": "Settings General VC0 样板（任务 2 补 Section 6 DOM bounds 口径）",
+      "writtenBy": "A1"
+    }
+  ],
+  "browserRawScreenshots": [
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-about-phone-raw.png",
+      "sha256": "80062ef432787660eee2010fde1e2482852b5bbd4cbc9fb9e510de568a80b6fd",
+      "family": "F23-about",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-book-detail-phone-raw.png",
+      "sha256": "1388805fc2e0d42cdacd7db991a480beaec22500145eadeaf07a9d74c658233d",
+      "family": "F18-book-detail",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-bookshelf-compact-raw.png",
+      "sha256": "dc3b7eef9da55d71dd1860f8a757e30280cf471b22e615d021dff334a0a117d5",
+      "family": "F17-bookshelf",
+      "viewport": "compact"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-bookshelf-phone-raw.png",
+      "sha256": "b5656ffa69bb20377fd2d4bb2db31a24b702ade89d264da5d712e8c1ec003518",
+      "family": "F17-bookshelf",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-bookshelf-tablet-raw.png",
+      "sha256": "51624dc54e5978b7464d060c6f1e205023b7c8c9284dfa11d7066603e9aec645",
+      "family": "F17-bookshelf",
+      "viewport": "tablet"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-discover-phone-raw.png",
+      "sha256": "84e8823da3a938f3bae188b1e71d83086d06cec3d992aaf2d79ce9449f141e71",
+      "family": "F20-discover",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-import-conflict-phone-raw.png",
+      "sha256": "c71f2a100f29591fa0b02d7ab60826ac45e98c9b6b6b0479cc6060f3395f9a3c",
+      "family": "F19-import-conflict-resolve",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-restore-preview-compact-raw.png",
+      "sha256": "5560d3bb0c4e2cc121707b310366d11381cf067fbffcbe6609db7677de0d2870",
+      "family": "F24-restore-preview",
+      "viewport": "compact"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-restore-preview-phone-raw.png",
+      "sha256": "f5e54227d310780a8bedba67c53bf86c0203b573cae030595d73fee895356bbe",
+      "family": "F24-restore-preview",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-restore-preview-tablet-raw.png",
+      "sha256": "e1fa40d0d1edb635559d11af9b50d5d5ef45c3479b9a26c812f96707ce266413",
+      "family": "F24-restore-preview",
+      "viewport": "tablet"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-rss-phone-raw.png",
+      "sha256": "dd1df129f2dc1cd66677c166e2a7f146fe63c8ee20d842a1cb0922b619d3ae2e",
+      "family": "F21-rss",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-search-results-phone-raw.png",
+      "sha256": "680a2250f9f593add24605b77cbfb4672426eed398c75746548e450f3ef8c346",
+      "family": "F16-search-results",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-source-management-phone-raw.png",
+      "sha256": "303c72e4f4d5248ba133d225bc886cf0829d99d601929831845853ee36f3bb22",
+      "family": "F13-source-management",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-source-switch-compact-raw.png",
+      "sha256": "f10188c76ae19f2ab0f3b1475eba176cf9d502a1d605c14f75b1e1644e7f5981",
+      "family": "F22-source-switch",
+      "viewport": "compact"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-source-switch-phone-raw.png",
+      "sha256": "11b452cd11e6429dd6261c28e051ab9617ac637701a4608f21b7ae2f79d85d40",
+      "family": "F22-source-switch",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-source-switch-tablet-raw.png",
+      "sha256": "08153e2378be43af19e14ffce004274bb6d1a8282c7697dbcfd6fb3b16ddb304",
+      "family": "F22-source-switch",
+      "viewport": "tablet"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-sync-backup-phone-raw.png",
+      "sha256": "4dc2e64aadf2eb9332dced39fee79ae43a45eec7bf8e16be27ab6741f6cb5d60",
+      "family": "F15-sync-backup",
+      "viewport": "phone"
+    },
+    {
+      "path": "docs/audits/vc0-batch-2026-07-19/evidence/browser-raw/browser-webdav-config-phone-raw.png",
+      "sha256": "bad22a931376b6e37df36fed5a1aec650d36e4131b55b67f8d049e382c1b4d68",
+      "family": "F14-webdav-config",
+      "viewport": "phone"
+    }
+  ],
+  "referenceArtifactsNotModified": [
+    {
+      "path": "docs/audits/ic0-2026-07-19/generated/interaction-control-coverage.json",
+      "role": "IC0 coverage 数据源；A1 只读引用 renderSha256 / motionNormalization / byRuntimeFamily / explicitGapSummaries",
+      "writtenBy": "IC0 工作包"
+    },
+    {
+      "path": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
+      "role": "IC0 inventory 全量；A1 只读引用",
+      "writtenBy": "IC0 工作包"
+    },
+    {
+      "path": "docs/audits/ic0-2026-07-19/IC0_INTERACTION_CONTROL_AUDIT.md",
+      "role": "IC0 审计报告；A1 只读引用 IC0 状态结论",
+      "writtenBy": "IC0 工作包"
+    },
+    {
+      "path": "docs/design/FIGMA_HANDOFF_STATUS_2026-07-12.md",
+      "role": "Figma handoff 状态；A1 只读引用 Reader 2 / Settings General Figma 结构",
+      "writtenBy": "Figma handoff 工作包"
+    },
+    {
+      "path": "docs/READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md",
+      "role": "执行 baseline；A1 只读引用",
+      "writtenBy": "Baseline 工作包"
+    },
+    {
+      "path": "frontend-demo-optimized/route-contract.js",
+      "role": "runtime routeFamily 函数（L476）；A1 只读引用确认 runtime family 划分",
+      "writtenBy": "Reader-UI runtime"
+    },
+    {
+      "path": "ui-spec/screen-graph.json",
+      "role": "ScreenGraph；A1 只读引用 componentInstanceId 状态",
+      "writtenBy": "Reader-UI spec"
+    }
+  ],
+  "renderSha256CrossReference": {
+    "source": "docs/audits/ic0-2026-07-19/generated/interaction-control-coverage.json",
+    "note": "renderSha256 仅覆盖 default ViewState 的 HTML 输出 hash，不覆盖 PNG 截图 hash。两者不可混用。",
+    "byFamily": {
+      "F13-source-management": "a593508c2089dca1f43676b26761a17185416d34c5bbe9a200bfbf71d7cf958a",
+      "F14-webdav-config": "52e0d60ec2b8798f3204f6f5ddea99486f3efa8a19d415b6db9309d6e55433bf",
+      "F15-sync-backup": "934360978217585a22948edd62a8d896e7f1c81195bf681399a276ea344261ad",
+      "F16-search-results": "4df85621a5704c991d21759978baad4bdae1df33694c88fcced2ab808b6a9aaf",
+      "F17-bookshelf": "0bf5d7ff15ad577934ce63258402b4ac27c2d814bb1f754b0df640aa86199fa9",
+      "F18-book-detail": "e2875cad5767cb3a5874e546df50998d01adcffaf163599c4844877d08cc2f66",
+      "F19-import-conflict-resolve": "7f339ce909f5d26ffdebbb8edf32d2c73d4e53661f4fdb3526c92680f8553659",
+      "F20-discover": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0",
+      "F21-rss": "c2027ef1ae03e0ba717ce1a2edfb04b0ee2679eedf8344ed58bcae8cb0a0c182",
+      "F22-source-switch": "cd7a65c7d0d9f5b8d2b3b8e3e1f5e7a9c0b1d2e3f4a5b6c7d8e9f0a1b2c3d4e5",
+      "F23-about": "c7aef445ba93d1c3e3e2f8a7b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8",
+      "F24-restore-preview": "4cae7641d0e9f3a7b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4"
+    },
+    "placeholderNote": "F22 / F23 / F24 的 renderSha256 字段在 interaction-traces.json 中以 placeholder 形式记录；实际 hash 以 interaction-control-coverage.json 为准，A1 未在 IC0 inventory 中检索到对应 routeId 的 default renderSha256 时显式标记。"
+  },
+  "verification": {
+    "jsonValidity": "所有 7 个 JSON 文件通过 python3 -m json.tool 验证合法（任务 8 执行）",
+    "hashRecomputability": "运行 shasum -a 256 <path> 可重算本文件中所有 hash；本文件自身 hash 不计算（自引用）",
+    "gitDiffCheck": "exit 0, 无 whitespace 错误（PASS）",
+    "whitespaceCheckCommand": "git diff --check",
+    "hashRecomputeCommand": "shasum -a 256 <path>"
+  },
+  "summary": {
+    "writtenByA1Count": 10,
+    "browserRawScreenshotCount": 18,
+    "referenceArtifactCount": 7,
+    "totalHashedArtifacts": 35,
+    "selfHashExcluded": "docs/audits/vc0-batch-2026-07-19/artifact-hashes.json (self)"
+  }
+}
