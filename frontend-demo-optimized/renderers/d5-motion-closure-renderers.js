@@ -210,6 +210,17 @@
     MOTION_RUNTIME[motionId] = PILOT_MOTION_SPECS[motionId];
   });
 
+  // Production demo loads the generated canonical registry before this module.
+  // Keep the lightweight table above as a fail-closed loading fallback, but
+  // replace every entry with the exact MotionSpec when the registry is present.
+  var canonicalRegistry = window.ReaderMotionContractRegistry;
+  if (canonicalRegistry && typeof canonicalRegistry.specFor === "function") {
+    Object.keys(MOTION_RUNTIME).forEach(function(motionId) {
+      var canonicalSpec = canonicalRegistry.specFor(motionId);
+      if (canonicalSpec) MOTION_RUNTIME[motionId] = canonicalSpec;
+    });
+  }
+
   // reduced-motion 降级策略映射（按 implementationKind）
   var REDUCED_MOTION_BY_KIND = {
     directManipulation: "keepDirectManipulation",  // 手势跟随不可降级

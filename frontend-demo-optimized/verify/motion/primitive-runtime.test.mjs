@@ -39,6 +39,7 @@ test("primitive families publish canonical exact transactions", () => {
   }
   assert.equal(byId.get("slider.drag.start").durationMs, 0);
   assert.equal(byId.get("slider.drag.update").easing, "none");
+  assert.equal(byId.get("slider.drag.release").reducedMotionPolicy, "keepDirectManipulation");
   assert.ok(byId.get("slider.drag.release").cleanup.includes("slider.pointerOwnership.release"));
   assert.ok(byId.get("card.route").guardRules.includes("asyncGuard:latestIntentWins"));
   assert.equal(byId.get("stepper.value.change").finalState, "stepperLegalValueAndReadoutCommitted");
@@ -56,6 +57,7 @@ test("runtime owns latest primitive transaction, direct slider manipulation, and
   assert.match(runtime, /__readerPrimitiveSliderPointer/);
   assert.match(runtime, /"card\.press\/select\/route"/);
   assert.match(runtime, /"slider\.drag\.start\/update\/release"/);
+  assert.match(runtime, /"slider\.drag\.release": 120/);
   assert.match(runtime, /\[data-restore-scopes\]:not\(\[data-restore-record\]\)/);
   assert.match(runtime, /\[data-source-index\]:not\(\[data-source-name\]\)/);
   assert.match(runtime, /nestedIds\.some\(\(id\) => ids\.includes\(id\)\)/);

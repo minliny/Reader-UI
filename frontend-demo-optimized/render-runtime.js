@@ -7774,7 +7774,7 @@
       "chip.item.select": 120,
       "slider.drag.start": 0,
       "slider.drag.update": 0,
-      "slider.drag.release": reducedMotion ? 0 : 120,
+      "slider.drag.release": 120,
       "stepper.press": 80,
       "stepper.value.change": 120,
       "card.press": 80,

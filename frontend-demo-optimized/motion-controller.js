@@ -1534,6 +1534,10 @@
     if (Number.isFinite(Number(explicitDuration))) {
       return Math.max(0, Number(explicitDuration));
     }
+    const canonicalDuration = window.ReaderMotionContractRegistry?.specFor?.(id)?.durationMs;
+    if (Number.isFinite(Number(canonicalDuration))) {
+      return Math.max(0, Number(canonicalDuration));
+    }
     if (Object.prototype.hasOwnProperty.call(DEFAULT_DURATIONS, id)) {
       return DEFAULT_DURATIONS[id];
     }
@@ -1544,6 +1548,8 @@
   function easingFor(id, explicitEasing) {
     const requested = clean(explicitEasing || "");
     if (requested) return requested;
+    const canonicalEasing = window.ReaderMotionContractRegistry?.specFor?.(id)?.easing;
+    if (canonicalEasing) return clean(canonicalEasing);
     return DEFAULT_EASINGS[id] || "ease";
   }
 
@@ -1664,23 +1670,28 @@
 
     const start = (input) => {
       const details = input || {};
-      const id = normalizeMotionId(details.id || "motion.unknown");
+      const resolution = details.id
+        ? null
+        : window.ReaderMotionContractRegistry?.resolveMotionWithDiagnostic?.(details.request || {});
+      const id = normalizeMotionId(details.id || resolution?.motionId || "motion.unknown");
+      const canonicalSpec = window.ReaderMotionContractRegistry?.specFor?.(id) || null;
       if (active) {
         interrupt(details.interruptReason || "superseded");
       }
       const reducedMotion = reducedFrom(root, details.reducedMotion != null ? details.reducedMotion : reducedOverride);
+      const reduceDuration = reducedMotion && canonicalSpec?.reducedMotionPolicy !== "keepDirectManipulation";
       const baseDuration = durationFor(id, details.duration, false);
       const durationResolution = getRuntimeProfile()?.resolveDuration?.({
         motionId: id,
         baseDuration,
-        reducedMotion
+        reducedMotion: reduceDuration
       }) || {
         baseDuration,
-        speed: reducedMotion ? 0 : 1,
-        effectiveDuration: durationFor(id, details.duration, reducedMotion),
+        speed: reduceDuration ? 0 : 1,
+        effectiveDuration: durationFor(id, details.duration, reduceDuration),
         category: "",
         enabled: false,
-        reducedMotion
+        reducedMotion: reduceDuration
       };
       // Freeze the effective duration at transaction start. Profile changes
       // affect the next transaction and never desynchronise an active timer.
@@ -1688,6 +1699,8 @@
       const transaction = {
         id,
         contract: contractFor(id),
+        canonicalSpec,
+        resolution: resolution || null,
         action: clean(details.action || id),
         from: clean(details.from || ""),
         to: clean(details.to || ""),
@@ -1716,7 +1729,9 @@
         family: transaction.contract ? transaction.contract.family : "",
         stateMachineSource: transaction.contract ? transaction.contract.stateMachineSource : "",
         finalState: transaction.contract && transaction.contract.stateMachine ? transaction.contract.stateMachine.finalState : "",
-        unresolvedContract: transaction.contract ? "false" : "true"
+        unresolvedContract: transaction.contract && transaction.canonicalSpec ? "false" : "true",
+        resolutionDiagnostic: transaction.resolution?.diagnostic || "",
+        resolutionPolicyId: transaction.resolution?.policyId || ""
       });
       if (transaction.duration === 0) {
         settle(transaction, transaction.reducedMotion ? "reduced-motion" : "debug-instant");
@@ -1772,6 +1787,14 @@
   window.ReaderMotionController = {
     create,
     contractFor,
+    resolveMotion(request) {
+      return window.ReaderMotionContractRegistry?.resolveMotion?.(request);
+    },
+    resolveMotionWithDiagnostic(request) {
+      return window.ReaderMotionContractRegistry?.resolveMotionWithDiagnostic?.(request) || {
+        diagnostic: "motion.policy.registry-unavailable"
+      };
+    },
     pressMotionIdFor,
     CONTRACT: Object.freeze({
       version: CONTRACT_VERSION,

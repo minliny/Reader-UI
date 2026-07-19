@@ -926,18 +926,28 @@
     },
     {
       "path": "frontend-demo-optimized/index.html",
-      "byteLength": 4082,
-      "sha256": "afd14f43932850e18da5aca348e96ffe986f5ed0e0e5987577f85128109aea29"
+      "byteLength": 4270,
+      "sha256": "31b1e945c64d0fe28d41bed7d0e7566b10ff7338a098dedbf183c19d894b26a9"
+    },
+    {
+      "path": "frontend-demo-optimized/motion-contract-registry.js",
+      "byteLength": 131129,
+      "sha256": "6c067f415d4fe8219d5d3f4ac2b98abc4b749e3015a37db3c2788d7749c67f69"
     },
     {
       "path": "frontend-demo-optimized/motion-controller.js",
-      "byteLength": 76035,
-      "sha256": "6191cfc46458759d2969a70cd49ebdcd948048fe961df603298809ee1f010bc3"
+      "byteLength": 77349,
+      "sha256": "75af3ba18ccd05818638a5702219a2ec162dacd237a8e1af4d86a07941b1892f"
     },
     {
       "path": "frontend-demo-optimized/motion-runtime-profile.js",
       "byteLength": 14811,
       "sha256": "c6037dd100655aa2159ff6cfbe98552ddd326db85a56425b6265b9002bf50949"
+    },
+    {
+      "path": "frontend-demo-optimized/motion-scenario-harness.js",
+      "byteLength": 8683,
+      "sha256": "fb2aed7246050761e45eb21adfacb0602e399ccdf33a2854f550d194ae2385b0"
     },
     {
       "path": "frontend-demo-optimized/motion-tokens.css",
@@ -951,8 +961,8 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 766771,
-      "sha256": "4b204bbf7e6e59d70704ef3ed54ba1aa2e3a37d84e33c205fb56e079f0edfe5d"
+      "byteLength": 766751,
+      "sha256": "bb626c50992643dfafd191795ff64e33e02e580f437584c551c9abba02a74c1f"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -986,8 +996,8 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
-      "byteLength": 30166,
-      "sha256": "8fcbfa7a43473fd92fc8791e222ff3290c08f068eff77aa9fbd8b7f98a7a17dc"
+      "byteLength": 30749,
+      "sha256": "8f3ba516a221ebf9ce3b6cabdde7c976d3fa2c9f561acdb77f0ed15bdec184b3"
     },
     {
       "path": "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
@@ -1593,9 +1603,9 @@
   "groups": [
     {
       "name": "design-runtime",
-      "fileCount": 176,
-      "byteLength": 2831043,
-      "sha256": "78299a821d6dc23ff74aefea023d26003d492c55430f3804d33281bae6ab4417",
+      "fileCount": 178,
+      "byteLength": 2972920,
+      "sha256": "756b17c17069b40256dc14e074f518b5e43e8f33be7a9d49b4b46c01292731ae",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1734,8 +1744,10 @@
         "frontend-demo-optimized/covers/three-body.png",
         "frontend-demo-optimized/fixture.js",
         "frontend-demo-optimized/index.html",
+        "frontend-demo-optimized/motion-contract-registry.js",
         "frontend-demo-optimized/motion-controller.js",
         "frontend-demo-optimized/motion-runtime-profile.js",
+        "frontend-demo-optimized/motion-scenario-harness.js",
         "frontend-demo-optimized/motion-tokens.css",
         "frontend-demo-optimized/reader-control-transition.js",
         "frontend-demo-optimized/render-runtime.js",

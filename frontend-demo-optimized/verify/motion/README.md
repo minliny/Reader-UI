@@ -7,6 +7,8 @@
 运行：
 
 ```bash
+node tools/motion/generate-demo-motion-registry.mjs --check
+node --test frontend-demo-optimized/verify/motion/*.test.mjs
 node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs
 ```
 
@@ -20,6 +22,8 @@ node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs
 - `frontend-demo-optimized/verify/motion/evidence/*`
 
 当前 `evidence/manifest.json` 是 P0 Motion ID 的第一批代表性浏览器截图证据，覆盖首启、Tab 切换、下拉展开、封面进入、自动翻页胶囊、orientation 和 interrupt。它不是全量录屏闭环，不能替代后续真实设备、折叠屏、reduced-motion 和每个 selector 的媒体证据。
+
+`motion-contract-registry.js` 由 canonical MotionSpec / MotionPolicy / route shell fixtures 生成；`motion-scenario-harness.js` 对十个核心家族执行 normal、rapid-repeat、opposite、interrupt、reduced 五类确定性 trace，并覆盖四种 interrupt policy。该 trace 门禁证明状态收束与 no-match 行为，不等于 WebM 或原生设备画面证据。
 
 命名规则：
 
