@@ -138,8 +138,8 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun generatedTypedPayloadFixturesHaveExactParity() {
-        assertEquals(63, GeneratedRuntimeTypedPayloadContracts.byEvent.size)
-        assertEquals(170, GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.size)
+        assertEquals(67, GeneratedRuntimeTypedPayloadContracts.byEvent.size)
+        assertEquals(190, GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.size)
         GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.forEach { fixture ->
             if (fixture.valid) {
                 requireNotNull(validateReaderUITypedPayload(fixture.event, fixture.payload)) { fixture.id }
@@ -154,7 +154,7 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun generatedTypedResultFixturesHaveExactParity() {
-        assertEquals(154, GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.size)
+        assertEquals(162, GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.size)
         GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.forEach { fixture ->
             if (fixture.valid) {
                 validateReaderUITypedResult(fixture.event, fixture.effectType, fixture.result)

@@ -124,8 +124,8 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testGeneratedTypedPayloadFixturesHaveExactParity() throws {
-        XCTAssertEqual(GeneratedRuntimeTypedPayloadContracts.byEvent.count, 63)
-        XCTAssertEqual(GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.count, 170)
+        XCTAssertEqual(GeneratedRuntimeTypedPayloadContracts.byEvent.count, 67)
+        XCTAssertEqual(GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.count, 190)
         for fixture in GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES {
             if fixture.valid {
                 XCTAssertNotNil(try validateReaderUITypedPayload(event: fixture.event, payload: fixture.payload), fixture.id)
@@ -141,7 +141,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testGeneratedTypedResultFixturesHaveExactParity() throws {
-        XCTAssertEqual(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.count, 154)
+        XCTAssertEqual(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.count, 162)
         for fixture in GENERATED_RUNTIME_TYPED_RESULT_FIXTURES {
             if fixture.valid {
                 XCTAssertNoThrow(

@@ -159,8 +159,8 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('generated typed payload fixtures have exact parity', 0, (): void => {
-      expect(GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.length).assertEqual(170)
-      expect(Object.keys(GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS).length).assertEqual(63)
+      expect(GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.length).assertEqual(190)
+      expect(Object.keys(GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS).length).assertEqual(67)
       GENERATED_RUNTIME_TYPED_PAYLOAD_FIXTURES.forEach((fixture: RuntimeTypedPayloadFixture): void => {
         if (fixture.valid) {
           expect(validateReaderUITypedPayload(fixture.event, fixture.payload) !== undefined).assertTrue()
@@ -177,7 +177,7 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('generated typed result fixtures have exact parity', 0, (): void => {
-      expect(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.length).assertEqual(154)
+      expect(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.length).assertEqual(162)
       GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.forEach((fixture: RuntimeTypedResultFixture): void => {
         if (fixture.valid) {
           expect(validateReaderUITypedResult(fixture.event, fixture.effectType, fixture.result).effectKind.length > 0)

@@ -224,7 +224,7 @@ test("R16C executable action bindings satisfy the R14 typed payload contract", (
     }
   };
   for (const route of graph.routes) for (const variant of route.variants) walk(variant.components);
-  assert.equal(executableBindings, 38);
+  assert.equal(executableBindings, 41);
 });
 
 test("R16D TapZones expose canonical geometry, boundary gating, and semantic targets", () => {

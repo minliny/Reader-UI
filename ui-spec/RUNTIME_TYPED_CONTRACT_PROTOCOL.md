@@ -1,17 +1,17 @@
 # Runtime typed payload and result protocol
 
 `runtime-payload-contracts.json` is the executable, fail-closed contract for
-all 63 entries in `runtime-actions.json`. It is intentionally broader than the
+all 67 entries in `runtime-actions.json`. It is intentionally broader than the
 Core-only DTO registry: navigation, overlay, session, composite, Core and
 ReaderUIRuntime-owned actions all carry an exact descriptor snapshot and an
 explicit payload schema.
 
 Current coverage:
 
-- 63/63 runtime actions: 25 internal, 20 single-Core, 10 composite and 8
+- 67/67 runtime actions: 25 internal, 24 single-Core, 10 composite and 8
   ReaderUIRuntime-owned appearance transactions.
-- 170 payload fixtures.
-- 73 event/effect result mappings across 35 effect types and 154 result
+- 190 payload fixtures.
+- 77 event/effect result mappings across 39 effect types and 162 result
   fixtures.
 - Every internal synchronous action has `resultSchemas: []`; no missing result
   registry entry is interpreted as an untyped success.
@@ -50,6 +50,12 @@ Result schemas describe the normalized callback delivered to
 - `sync.snapshot` maps to Core `sync.merge`; `sync.push` maps to Core
   `sync.webdav.plan`, whose typed result is `{ requests: HostHttpRequest[] }`.
   The old guessed `{ pushed }` result is not accepted.
+- `reader.bookCache.open`, `settings.cache.clear` and `download.task.retry`
+  forward the exact cache DTOs, including `sourceId`, `bookId` and the fixed
+  two-item `chapterRange`; the former task-only retry alias is rejected.
+- `replace.persist` now validates the returned `undoToken`, and
+  `reader.replace.undo` accepts only that complete token shape before emitting
+  `replace.undo`.
 
 Raw Core objects must not be passed directly to a narrower callback projection.
 The Host executor/domain mapper is the explicit normalization boundary.

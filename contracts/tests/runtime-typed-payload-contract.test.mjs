@@ -29,12 +29,12 @@ test("typed payload registry and fixtures pass their machine schemas", () => {
   assertValid(contractSchema, contracts, "runtime-payload-contracts.json");
   assertValid(fixtureSchema, fixtures, "runtime-payload-contract.fixtures.json");
   assertValid(resultFixtureSchema, resultFixtures, "runtime-result-contract.fixtures.json");
-  assert.equal(contracts.contracts.length, 63);
-  assert.equal(new Set(contracts.contracts.map((item) => item.event)).size, 63);
+  assert.equal(contracts.contracts.length, 67);
+  assert.equal(new Set(contracts.contracts.map((item) => item.event)).size, 67);
   assert.deepEqual(new Set(contracts.contracts.map((item) => item.event)), new Set(actions.actions.map((item) => item.event)));
-  assert.equal(fixtures.length, 170);
-  assert.equal(contracts.contracts.reduce((count, item) => count + item.resultSchemas.length, 0), 73);
-  assert.equal(resultFixtures.length, 154);
+  assert.equal(fixtures.length, 190);
+  assert.equal(contracts.contracts.reduce((count, item) => count + item.resultSchemas.length, 0), 77);
+  assert.equal(resultFixtures.length, 162);
   for (const contract of contracts.contracts) {
     assert.ok(Array.isArray(contract.resultSchemas), `${contract.event} must explicitly declare resultSchemas`);
   }
@@ -112,14 +112,14 @@ test("runtime dispatch detects descriptor drift for internal and composite actio
   }
 });
 
-test("the 16 canonical UiEvent fixtures carry executable full Core DTO payloads", () => {
+test("the 20 canonical UiEvent fixtures carry executable full Core DTO payloads", () => {
   const commandByEvent = new Map(contracts.contracts
     .filter((contract) => (contract.dispatchTarget || "core") === "core")
     .map((contract) => [contract.event, contract.coreCommand]));
   const typedEvents = new Set(commandByEvent.keys());
   const canonical = canonicalUiEventFixtures.filter((fixture) => typedEvents.has(fixture.type));
-  assert.equal(canonical.length, 16);
-  assert.equal(new Set(canonical.map((fixture) => fixture.type)).size, 16);
+  assert.equal(canonical.length, 20);
+  assert.equal(new Set(canonical.map((fixture) => fixture.type)).size, 20);
   for (const fixture of canonical) {
     const runtime = new ReaderUIRuntime(actions, initialReaderUIState());
     const transition = runtime.dispatch(fixture.type, fixture.payload, `canonical:${fixture.type}`);

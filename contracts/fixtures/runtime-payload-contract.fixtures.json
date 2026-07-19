@@ -231,6 +231,8 @@
     "valid": true,
     "payload": {
       "operation": "create",
+      "transactionId": "replace-create-41",
+      "undoTtlSeconds": 300,
       "params": {
         "id": 41,
         "name": "rename",
@@ -2091,6 +2093,271 @@
       "remote": {},
       "resolutions": [],
       "__unknown": true
+    }
+  },
+  {
+    "id": "settings-cache-clear-cache-valid",
+    "event": "settings.cache.clear",
+    "valid": true,
+    "payload": {
+      "scope": "cache"
+    }
+  },
+  {
+    "id": "settings-cache-clear-book-valid",
+    "event": "settings.cache.clear",
+    "valid": true,
+    "payload": {
+      "scope": "book",
+      "sourceId": "src-001",
+      "bookId": "bk-001"
+    }
+  },
+  {
+    "id": "settings-cache-clear-book-missing-source",
+    "event": "settings.cache.clear",
+    "valid": false,
+    "payload": {
+      "scope": "book",
+      "bookId": "bk-001"
+    }
+  },
+  {
+    "id": "settings-cache-clear-all-with-selector",
+    "event": "settings.cache.clear",
+    "valid": false,
+    "payload": {
+      "scope": "all",
+      "sourceId": "src-001",
+      "bookId": "bk-001"
+    }
+  },
+  {
+    "id": "reader-book-cache-open-valid",
+    "event": "reader.bookCache.open",
+    "valid": true,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001"
+    }
+  },
+  {
+    "id": "reader-book-cache-open-missing-source",
+    "event": "reader.bookCache.open",
+    "valid": false,
+    "payload": {
+      "bookId": "bk-001"
+    }
+  },
+  {
+    "id": "reader-book-cache-open-blank-book",
+    "event": "reader.bookCache.open",
+    "valid": false,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "   "
+    }
+  },
+  {
+    "id": "reader-book-cache-open-unknown",
+    "event": "reader.bookCache.open",
+    "valid": false,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "taskId": "download-001"
+    }
+  },
+  {
+    "id": "download-task-retry-valid",
+    "event": "download.task.retry",
+    "valid": true,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        30
+      ]
+    }
+  },
+  {
+    "id": "download-task-retry-options-valid",
+    "event": "download.task.retry",
+    "valid": true,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        30
+      ],
+      "priority": 10,
+      "requestedAt": 1900000000
+    }
+  },
+  {
+    "id": "download-task-retry-missing-source",
+    "event": "download.task.retry",
+    "valid": false,
+    "payload": {
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        30
+      ]
+    }
+  },
+  {
+    "id": "download-task-retry-short-range",
+    "event": "download.task.retry",
+    "valid": false,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12
+      ]
+    }
+  },
+  {
+    "id": "download-task-retry-long-range",
+    "event": "download.task.retry",
+    "valid": false,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        20,
+        30
+      ]
+    }
+  },
+  {
+    "id": "download-task-retry-task-alias",
+    "event": "download.task.retry",
+    "valid": false,
+    "payload": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        30
+      ],
+      "taskId": "download-001"
+    }
+  },
+  {
+    "id": "reader-replace-undo-valid",
+    "event": "reader.replace.undo",
+    "valid": true,
+    "payload": {
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-42",
+        "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3",
+        "operation": "update",
+        "ruleId": 41,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300,
+        "before": {
+          "id": 41,
+          "name": "rename",
+          "pattern": "rain",
+          "replacement": "rain",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        },
+        "after": {
+          "id": 41,
+          "name": "rename",
+          "pattern": "rain",
+          "replacement": "sun",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "reader-replace-undo-missing-token",
+    "event": "reader.replace.undo",
+    "valid": false,
+    "payload": {}
+  },
+  {
+    "id": "reader-replace-undo-invalid-revision",
+    "event": "reader.replace.undo",
+    "valid": false,
+    "payload": {
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-42",
+        "revision": "not-a-sha256",
+        "operation": "update",
+        "ruleId": 41,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300
+      }
+    }
+  },
+  {
+    "id": "reader-replace-undo-unknown-token-field",
+    "event": "reader.replace.undo",
+    "valid": false,
+    "payload": {
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-42",
+        "revision": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "operation": "update",
+        "ruleId": 41,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300,
+        "nonce": "invented"
+      }
+    }
+  },
+  {
+    "id": "reader-replace-undo-invalid-operation",
+    "event": "reader.replace.undo",
+    "valid": false,
+    "payload": {
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-42",
+        "revision": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "operation": "restore",
+        "ruleId": 41,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300
+      }
+    }
+  },
+  {
+    "id": "reader-replace-undo-unknown-top-level",
+    "event": "reader.replace.undo",
+    "valid": false,
+    "payload": {
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-42",
+        "revision": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+        "operation": "update",
+        "ruleId": 41,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300
+      },
+      "transactionId": "replace-42"
     }
   }
 ]

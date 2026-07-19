@@ -65,7 +65,7 @@ const requiredSemantics = [
 test("playback implementation locks the current action table byte-for-byte", () => {
   const bytes = fs.readFileSync(path.join(root, "ui-spec", "runtime-actions.json"));
   const digest = crypto.createHash("sha256").update(bytes).digest("hex");
-  assert.equal(digest, "be48bbf47954980884738599ff29f21af070ba88a5efc865a20b40f08a47cfc4");
+  assert.equal(digest, "94151094c1025bd68a57f3201ee5abcd56fe4ff0877f23e8f163b32d81fe9f7a");
 });
 
 test("reference, Swift, Kotlin and ArkTS expose the same playback transaction surface", () => {

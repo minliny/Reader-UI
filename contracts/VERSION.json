@@ -47,7 +47,8 @@
         "本版本只表示 Reader-UI Contract head 完成 MR0 breaking reset；三个 Host consumer lock 仍停留在 2.5.1，尚未证明 Host MotionAdapter 或设备实现已升级。",
         "reader.page.next / reader.page.prev 现在严格串行执行 reader.location.resolve → reader.progress.update；progress effect 使用空 payload，由 Host correlation-scoped DomainContext 绑定真实 Core DTO，stored=true 后才提交可见页。",
         "新增 persisting-progress commit boundary 与 PAGE_PROGRESS_COMMIT_PENDING fail-closed 语义；已发出的 progress mutation 不再被新翻页、auto-page 或 teardown 伪装为 cancellation/rollback，runtime-actions schema 升至 3.0.0。",
-        "reader.control.toggle 与 reader.module.switch 已进入 63-action executable runtime：只在 immersive-reading 的 Reader control overlay family 内原子切换，保持 route identity，不使用可见 null 中转；重复 module 选择为 no-op，show/hide/switch 动效由状态差分派生。"
+        "reader.control.toggle 与 reader.module.switch 已进入当前 67-action executable runtime：只在 immersive-reading 的 Reader control overlay family 内原子切换，保持 route identity，不使用可见 null 中转；重复 module 选择为 no-op，show/hide/switch 动效由状态差分派生。",
+        "reader.bookCache.open、settings.cache.clear、download.task.retry 与 reader.replace.undo 现在分别绑定 cache.book.status、cache.clear、cache.book.prefetch 与 replace.undo；四条动作使用完整 Core DTO 并拒绝 payload-less 或 taskId-only 伪成功。"
       ]
     },
     {

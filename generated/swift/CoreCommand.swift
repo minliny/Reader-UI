@@ -74,6 +74,7 @@ public enum CoreCommandType: String, Codable, CaseIterable, Sendable {
     case replace_apply = "replace.apply"
     case replace_persist = "replace.persist"
     case replace_validate = "replace.validate"
+    case replace_undo = "replace.undo"
 }
 
 public struct CoreCommand: Codable, Equatable, Sendable {

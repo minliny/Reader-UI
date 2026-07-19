@@ -46,6 +46,9 @@
     { "event": "source.switch.cancel", "action": "popRoute" },
     { "event": "sync.run", "action": "emitEffects", "coreSequence": ["sync.snapshot", "sync.push"] },
     { "event": "webdav.config.test", "action": "emitEffects", "coreSequence": ["sync.push"], "hostRequest": "http.execute" },
+    { "event": "reader.bookCache.open", "action": "emitEffects", "requiredPayload": ["sourceId", "bookId"], "coreSequence": ["cache.book.status"], "description": "读取指定 sourceId/bookId 的缓存与下载队列状态；缺少完整书籍键时严格拒绝。" },
+    { "event": "settings.cache.clear", "action": "emitEffects", "requiredPayload": ["scope"], "coreSequence": ["cache.clear"], "description": "按 Core cache.clear DTO 清理缓存；book scope 还必须提供 sourceId/bookId。" },
+    { "event": "download.task.retry", "action": "emitEffects", "requiredPayload": ["sourceId", "bookId", "chapterRange"], "coreSequence": ["cache.book.prefetch"], "description": "以明确的 sourceId/bookId/chapterRange 重新入队章节预取，不接受仅 taskId 的伪成功。" },
 
     { "event": "import.start", "action": "emitEffects", "coreSequence": ["import.parse"], "description": "W1 导入解析。pilot=shadow, exactlyOnce=true, staleResultGuard=true, rollback=true" },
     { "event": "import.apply", "action": "emitEffects", "coreSequence": ["import.persist"], "description": "W1 导入持久化。pilot=shadow, exactlyOnce=true, rollback=true" },
@@ -66,6 +69,7 @@
     { "event": "reader.replace.apply", "action": "emitEffects", "coreSequence": ["replace.apply"], "description": "W5 替换规则应用。pilot=shadow, exactlyOnce=true, staleResultGuard=true, rollback=true" },
     { "event": "reader.replace.create", "action": "emitEffects", "coreSequence": ["replace.persist"], "description": "W5 替换规则持久化。pilot=shadow, exactlyOnce=true, rollback=true" },
     { "event": "reader.replace.validate", "action": "emitEffects", "coreSequence": ["replace.validate"], "description": "W5 替换规则校验。pilot=shadow, exactlyOnce=true, staleResultGuard=true" },
+    { "event": "reader.replace.undo", "action": "emitEffects", "requiredPayload": ["undoToken"], "coreSequence": ["replace.undo"], "description": "W5 使用 Core 签发的完整 undoToken 撤销替换规则持久化；缺失或结构漂移时严格拒绝。" },
 
     { "event": "rss.refresh", "action": "emitEffects", "coreSequence": ["rss.feed.refresh"], "description": "RSS 源刷新。pilot=shadow, exactlyOnce=true, staleResultGuard=true" },
     { "event": "rss.subscription.add", "action": "emitEffects", "coreSequence": ["rss.subscription.persist"], "description": "RSS 订阅新增。pilot=shadow, exactlyOnce=true, rollback=true" },

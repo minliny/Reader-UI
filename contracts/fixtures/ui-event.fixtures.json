@@ -211,6 +211,7 @@
   { "type": "reader.replace.apply", "payload": { "text": "rain", "bookName": "三体", "bookOrigin": "src-001", "target": "chapter" } },
   { "type": "reader.replace.create", "payload": { "operation": "create", "params": { "pattern": "rain", "replacement": "sun", "scopeContent": true, "isRegex": false } } },
   { "type": "reader.replace.validate", "payload": { "pattern": "rain", "isRegex": true, "scope": ["chapter"] } },
+  { "type": "reader.replace.undo", "payload": { "undoToken": { "schemaVersion": 1, "transactionId": "replace-42", "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3", "operation": "update", "ruleId": 41, "issuedAt": 1900000000, "expiresAt": 1900000300, "before": { "id": 41, "name": "rename", "pattern": "rain", "replacement": "rain", "scopeTitle": false, "scopeContent": true, "isEnabled": true, "isRegex": false, "timeoutMillisecond": 3000, "order": 0 }, "after": { "id": 41, "name": "rename", "pattern": "rain", "replacement": "sun", "scopeTitle": false, "scopeContent": true, "isEnabled": true, "isRegex": false, "timeoutMillisecond": 3000, "order": 0 } } } },
   { "type": "import.start", "payload": { "kind": "bookSource", "input": { "sourceId": "source-import", "rules": {}, "bookSource": { "bookSourceName": "Imported Source", "bookSourceUrl": "https://import.test" } } } },
   { "type": "import.apply", "payload": { "transactionId": "tx-source-import", "parsed": { "kind": "bookSource", "preview": { "sourceId": "source-import", "name": "Imported Source", "baseUrl": "https://import.test", "rules": {}, "bookSource": { "bookSourceName": "Imported Source", "bookSourceUrl": "https://import.test" } } } } },
   { "type": "import.cancel", "payload": { "rollbackToken": { "kind": "bookSource", "token": { "transactionId": "tx-source-import", "journal": { "transactionId": "tx-source-import", "sourceId": "source-import", "previousSource": null, "committedSource": { "sourceId": "source-import", "name": "Imported Source", "baseUrl": "https://import.test", "rules": { "search": null, "explore": null, "detail": null, "toc": null, "chapter": null }, "bookSource": { "bookSourceName": "Imported Source", "bookSourceUrl": "https://import.test" } }, "previousMarker": null, "committedMarker": { "key": "reader.ui.import.v1.marker:bookSource:source-import", "payload": "marker" } } } } } },
@@ -238,7 +239,7 @@
   { "type": "bookmarks.manage.open", "payload": { "bookId": "bk-001" } },
   { "type": "download.queue.open", "payload": {} },
   { "type": "download.task.open", "payload": { "taskId": "download-001", "bookId": "bk-001" } },
-  { "type": "download.task.retry", "payload": { "taskId": "download-001", "bookId": "bk-001" } },
+  { "type": "download.task.retry", "payload": { "sourceId": "src-001", "bookId": "bk-001", "chapterRange": [12, 30] } },
   { "type": "download.task.cancel", "payload": { "taskId": "download-001" } },
   { "type": "storage.management.open", "payload": { "scope": "all" } },
   { "type": "storage.cleanup.confirm", "payload": { "scope": "cache" } },
@@ -246,5 +247,7 @@
   { "type": "webview.login.cancel", "payload": { "sourceId": "src-001", "profileId": "source-src-001" } },
   { "type": "webview.challenge.retry", "payload": { "sourceId": "src-001", "failedRequestId": "source-http-001" } },
   { "type": "webview.cookie.return", "payload": { "sourceId": "src-001", "profileId": "source-src-001", "returnRequestId": "source-http-001" } },
-  { "type": "settings.capability.open", "payload": { "scope": "tts" } }
+  { "type": "settings.capability.open", "payload": { "scope": "tts" } },
+  { "type": "reader.bookCache.open", "payload": { "sourceId": "src-001", "bookId": "bk-001" } },
+  { "type": "settings.cache.clear", "payload": { "scope": "cache" } }
 ]

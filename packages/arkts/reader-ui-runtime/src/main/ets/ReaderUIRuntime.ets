@@ -558,6 +558,10 @@ function validateTypedPayloadSchema(
     if (typeof minimum === 'number' && array.length < minimum) {
       invalidTypedPayload(path, `must contain at least ${minimum} items`)
     }
+    const maximum: ReaderUIJSONValue | undefined = schema['maxItems']
+    if (typeof maximum === 'number' && array.length > maximum) {
+      invalidTypedPayload(path, `must contain at most ${maximum} items`)
+    }
     const items: ReaderUIJSONValue | undefined = schema['items']
     if (items === undefined) throw new ReaderUIRuntimeError('INVALID_TYPED_CONTRACT', `${path} array schema has no items`)
     array.forEach((item: ReaderUIJSONValue, index: number): void => {

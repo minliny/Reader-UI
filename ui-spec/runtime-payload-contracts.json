@@ -5,11 +5,11 @@
     "sources": [
       {
         "path": "crates/reader-contract/src/reader_ui.rs",
-        "sha256": "6e646842545c1ff554c7d5389c73696e9745e54ad985655c780b8777aea96bc3"
+        "sha256": "ce2b50a3ffc13ccd8c34f371ab33b1f8c4805ace9246dec8c8eca32856a3eed2"
       },
       {
         "path": "crates/reader-contract/src/remote.rs",
-        "sha256": "512fadde70025a1a49d6eb42bd7bca603919870137c0ec08d312cac32aa8fd22"
+        "sha256": "42d01314b7054b67340d0f47548cd7c3f77cd269a7f7570e7fb719459c54aa9b"
       },
       {
         "path": "crates/reader-sync/src/lib.rs",
@@ -17,7 +17,7 @@
       },
       {
         "path": "crates/reader-storage/src/lib.rs",
-        "sha256": "312c03ef39dbc0a6bec4f745713caa58ccfaef2926134e626f2d5c95a68c8228"
+        "sha256": "1c2fd79a3a5f14a29ef22e7d93e76c0306c462a214146e530be8be7db5d37063"
       }
     ],
     "numericPolicy": "ieee754-safe-integer"
@@ -1336,6 +1336,113 @@
         }
       }
     },
+    "cacheClearAll": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope"
+      ],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "const": "all"
+        }
+      }
+    },
+    "cacheClearCache": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope"
+      ],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "const": "cache"
+        }
+      }
+    },
+    "cacheClearBook": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "sourceId",
+        "bookId"
+      ],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "const": "book"
+        },
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "cacheClear": {
+      "oneOf": [
+        {
+          "$ref": "#/definitions/cacheClearAll"
+        },
+        {
+          "$ref": "#/definitions/cacheClearCache"
+        },
+        {
+          "$ref": "#/definitions/cacheClearBook"
+        }
+      ]
+    },
+    "cacheBookStatus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        }
+      }
+    },
+    "cacheBookPrefetch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "chapterRange"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "chapterRange": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/definitions/u32"
+          }
+        },
+        "priority": {
+          "$ref": "#/definitions/i32"
+        },
+        "requestedAt": {
+          "$ref": "#/definitions/integer"
+        }
+      }
+    },
     "replaceApply": {
       "type": "object",
       "additionalProperties": false,
@@ -1445,6 +1552,83 @@
         },
         "params": {
           "$ref": "#/definitions/replaceRuleCreate"
+        },
+        "transactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "nonBlank": true
+        },
+        "undoTtlSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
+        }
+      }
+    },
+    "replaceUndoToken": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schemaVersion",
+        "transactionId",
+        "revision",
+        "operation",
+        "ruleId",
+        "issuedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        },
+        "transactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "nonBlank": true
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "ruleId": {
+          "$ref": "#/definitions/integer"
+        },
+        "issuedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "expiresAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "before": {
+          "$ref": "#/definitions/replaceRuleResult"
+        },
+        "after": {
+          "$ref": "#/definitions/replaceRuleResult"
+        }
+      }
+    },
+    "replaceUndo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "undoToken"
+      ],
+      "properties": {
+        "undoToken": {
+          "$ref": "#/definitions/replaceUndoToken"
         }
       }
     },
@@ -2871,6 +3055,250 @@
         }
       }
     },
+    "cacheClearResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope",
+        "cacheEntriesRemoved",
+        "chapterEntriesRemoved",
+        "queueEntriesRemoved",
+        "removedContentBytes"
+      ],
+      "properties": {
+        "scope": {
+          "type": "string",
+          "enum": [
+            "all",
+            "cache",
+            "book"
+          ]
+        },
+        "cacheEntriesRemoved": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "chapterEntriesRemoved": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "queueEntriesRemoved": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "removedContentBytes": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        }
+      }
+    },
+    "cacheChapterStatusResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "chapterIndex",
+        "title",
+        "url",
+        "state",
+        "cachedBytes",
+        "attempts",
+        "maxAttempts"
+      ],
+      "properties": {
+        "chapterIndex": {
+          "$ref": "#/definitions/u32"
+        },
+        "title": {
+          "$ref": "#/definitions/string"
+        },
+        "url": {
+          "$ref": "#/definitions/string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "missing",
+            "queued",
+            "inProgress",
+            "cached",
+            "completed",
+            "failed",
+            "cancelled"
+          ]
+        },
+        "cachedBytes": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "attempts": {
+          "$ref": "#/definitions/u32"
+        },
+        "maxAttempts": {
+          "$ref": "#/definitions/u32"
+        },
+        "lastError": {
+          "$ref": "#/definitions/string"
+        }
+      }
+    },
+    "cacheGlobalStatsResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entryCount",
+        "totalContentBytes",
+        "queueEntryCount",
+        "queuedCount",
+        "inProgressCount",
+        "completedCount",
+        "failedCount",
+        "cancelledCount"
+      ],
+      "properties": {
+        "entryCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "totalContentBytes": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "oldestCachedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "newestCachedAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "queueEntryCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "queuedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "inProgressCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "completedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "failedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "cancelledCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        }
+      }
+    },
+    "cacheBookStatusResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "tocAvailable",
+        "chapterCount",
+        "chapters",
+        "cachedCount",
+        "queuedCount",
+        "inProgressCount",
+        "completedCount",
+        "failedCount",
+        "cancelledCount",
+        "missingCount",
+        "globalStats"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "tocAvailable": {
+          "$ref": "#/definitions/boolean"
+        },
+        "chapterCount": {
+          "$ref": "#/definitions/u32"
+        },
+        "chapters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/cacheChapterStatusResult"
+          }
+        },
+        "cachedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "queuedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "inProgressCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "completedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "failedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "cancelledCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "missingCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "globalStats": {
+          "$ref": "#/definitions/cacheGlobalStatsResult"
+        }
+      }
+    },
+    "cacheBookPrefetchResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "chapterRange",
+        "chapterCount",
+        "prefetchedCount",
+        "queuedIndexes",
+        "alreadyQueuedIndexes",
+        "skippedCachedIndexes"
+      ],
+      "properties": {
+        "sourceId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "bookId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "chapterRange": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/definitions/u32"
+          }
+        },
+        "chapterCount": {
+          "$ref": "#/definitions/u32"
+        },
+        "prefetchedCount": {
+          "$ref": "#/definitions/nonNegativeInteger"
+        },
+        "queuedIndexes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/u32"
+          }
+        },
+        "alreadyQueuedIndexes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/u32"
+          }
+        },
+        "skippedCachedIndexes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/u32"
+          }
+        }
+      }
+    },
     "replaceApplyResult": {
       "type": "object",
       "additionalProperties": false,
@@ -2965,7 +3393,8 @@
       "additionalProperties": false,
       "required": [
         "operation",
-        "data"
+        "data",
+        "undoToken"
       ],
       "properties": {
         "operation": {
@@ -2983,6 +3412,52 @@
               "$ref": "#/definitions/replaceRuleResult"
             }
           }
+        },
+        "undoToken": {
+          "$ref": "#/definitions/replaceUndoToken"
+        }
+      }
+    },
+    "replaceUndoResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transactionId",
+        "revision",
+        "operation",
+        "ruleId",
+        "changed",
+        "undoneAt"
+      ],
+      "properties": {
+        "transactionId": {
+          "$ref": "#/definitions/nonBlankString"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 64,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "create",
+            "update",
+            "delete"
+          ]
+        },
+        "ruleId": {
+          "$ref": "#/definitions/integer"
+        },
+        "changed": {
+          "$ref": "#/definitions/boolean"
+        },
+        "undoneAt": {
+          "$ref": "#/definitions/integer"
+        },
+        "restoredRule": {
+          "$ref": "#/definitions/replaceRuleResult"
         }
       }
     },
@@ -4096,6 +4571,75 @@
       ]
     },
     {
+      "event": "reader.bookCache.open",
+      "dispatchTarget": "core",
+      "coreCommand": "cache.book.status",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "cache.book.status"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/cacheBookStatus"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "cache.book.status",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/cacheBookStatusResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "settings.cache.clear",
+      "dispatchTarget": "core",
+      "coreCommand": "cache.clear",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "cache.clear"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/cacheClear"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "cache.clear",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/cacheClearResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "download.task.retry",
+      "dispatchTarget": "core",
+      "coreCommand": "cache.book.prefetch",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "cache.book.prefetch"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/cacheBookPrefetch"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "cache.book.prefetch",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/cacheBookPrefetchResult"
+          }
+        }
+      ]
+    },
+    {
       "event": "import.start",
       "dispatchTarget": "core",
       "coreCommand": "import.parse",
@@ -4521,6 +5065,29 @@
           "effectKind": "core",
           "schema": {
             "$ref": "#/definitions/replaceValidateResult"
+          }
+        }
+      ]
+    },
+    {
+      "event": "reader.replace.undo",
+      "dispatchTarget": "core",
+      "coreCommand": "replace.undo",
+      "descriptor": {
+        "action": "emitEffects",
+        "coreSequence": [
+          "replace.undo"
+        ]
+      },
+      "payloadSchema": {
+        "$ref": "#/definitions/replaceUndo"
+      },
+      "resultSchemas": [
+        {
+          "effectType": "replace.undo",
+          "effectKind": "core",
+          "schema": {
+            "$ref": "#/definitions/replaceUndoResult"
           }
         }
       ]

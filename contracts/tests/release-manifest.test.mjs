@@ -75,7 +75,7 @@ test("release manifest files and groups are sorted, complete, and raw-byte hashe
 test("all six ordered native ABI hashes have exact names, counts, sources, and pointers", () => {
   const expectedCounts = {
     "component-types": 174,
-    "core-commands": 71,
+    "core-commands": 72,
     "core-events": 95,
     "host-requests": 58,
     "motion-ids": 95,

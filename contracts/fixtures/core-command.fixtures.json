@@ -62,6 +62,9 @@
 
   { "_comment": "缓存",
     "type": "cache.clear", "payload": { "scope": "all" }, "correlationId": "c-043", "requestId": "r-043" },
-  { "type": "cache.book.prefetch", "payload": { "bookId": "bk-001", "chapterRange": [0, 5] }, "correlationId": "c-044", "requestId": "r-044" },
-  { "type": "cache.book.status", "payload": { "bookId": "bk-001" }, "correlationId": "c-045", "requestId": "r-045" }
+  { "type": "cache.book.prefetch", "payload": { "sourceId": "src-001", "bookId": "bk-001", "chapterRange": [0, 5] }, "correlationId": "c-044", "requestId": "r-044" },
+  { "type": "cache.book.status", "payload": { "sourceId": "src-001", "bookId": "bk-001" }, "correlationId": "c-045", "requestId": "r-045" },
+
+  { "_comment": "替换规则撤销",
+    "type": "replace.undo", "payload": { "undoToken": { "schemaVersion": 1, "transactionId": "replace-42", "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3", "operation": "update", "ruleId": 41, "issuedAt": 1900000000, "expiresAt": 1900000300, "before": { "id": 41, "name": "rename", "pattern": "rain", "replacement": "rain", "scopeTitle": false, "scopeContent": true, "isEnabled": true, "isRegex": false, "timeoutMillisecond": 3000, "order": 0 }, "after": { "id": 41, "name": "rename", "pattern": "rain", "replacement": "sun", "scopeTitle": false, "scopeContent": true, "isEnabled": true, "isRegex": false, "timeoutMillisecond": 3000, "order": 0 } } }, "correlationId": "c-046", "requestId": "r-046" }
 ]

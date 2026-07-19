@@ -227,6 +227,7 @@ function validateTypedPayloadSchema(schema, value, path) {
     case "array":
       if (!Array.isArray(value)) invalidTypedPayload(path, "must be an array");
       if (schema.minItems !== undefined && value.length < schema.minItems) invalidTypedPayload(path, `must contain at least ${schema.minItems} items`);
+      if (schema.maxItems !== undefined && value.length > schema.maxItems) invalidTypedPayload(path, `must contain at most ${schema.maxItems} items`);
       value.forEach((item, index) => validateTypedPayloadSchema(schema.items, item, `${path}[${index}]`));
       return;
     case "string":

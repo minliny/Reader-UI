@@ -124,6 +124,7 @@
             "pattern": { "type": "string", "minLength": 1 },
             "nonBlank": { "type": "boolean" },
             "minItems": { "type": "integer", "minimum": 0 },
+            "maxItems": { "type": "integer", "minimum": 0 },
             "minimum": { "type": "number" },
             "maximum": { "type": "number" },
             "constraints": {

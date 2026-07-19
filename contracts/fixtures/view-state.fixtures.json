@@ -5462,7 +5462,39 @@
               "label": "reader.replace.undo",
               "uiEvent": "reader.replace.undo",
               "uiEventPayload": {
-                "transactionId": "replace-42"
+                "undoToken": {
+                  "schemaVersion": 1,
+                  "transactionId": "replace-42",
+                  "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3",
+                  "operation": "update",
+                  "ruleId": 41,
+                  "issuedAt": 1900000000,
+                  "expiresAt": 1900000300,
+                  "before": {
+                    "id": 41,
+                    "name": "rename",
+                    "pattern": "rain",
+                    "replacement": "rain",
+                    "scopeTitle": false,
+                    "scopeContent": true,
+                    "isEnabled": true,
+                    "isRegex": false,
+                    "timeoutMillisecond": 3000,
+                    "order": 0
+                  },
+                  "after": {
+                    "id": 41,
+                    "name": "rename",
+                    "pattern": "rain",
+                    "replacement": "sun",
+                    "scopeTitle": false,
+                    "scopeContent": true,
+                    "isEnabled": true,
+                    "isRegex": false,
+                    "timeoutMillisecond": 3000,
+                    "order": 0
+                  }
+                }
               },
               "uiEventTrigger": "tap"
             }
@@ -6253,7 +6285,7 @@
     "_comment": "Capability closure: cache-prefetch task detail without invented pause/cancel Core command",
     "routeId": "download-task-detail",
     "pageState": "default",
-    "context": { "taskId": "download-001", "bookId": "bk-001" },
+    "context": { "taskId": "download-001", "sourceId": "src-001", "bookId": "bk-001" },
     "components": [
       { "type": "BackTopBar", "id": "download-task-detail-topbar", "props": { "title": "下载任务" } },
       {
@@ -6279,9 +6311,9 @@
           {
             "type": "Button",
             "id": "download-task-detail-retry",
-            "props": { "label": "重试", "availability": "planned-fail-closed" },
+            "props": { "label": "重试" },
             "bindings": [
-              { "target": "retry", "event": "download.task.retry", "payload": { "taskId": "download-001", "bookId": "bk-001" }, "trigger": "tap" }
+              { "target": "retry", "event": "download.task.retry", "payload": { "sourceId": "src-001", "bookId": "bk-001", "chapterRange": [12, 30] }, "trigger": "tap" }
             ]
           },
           {

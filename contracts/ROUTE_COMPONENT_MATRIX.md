@@ -149,7 +149,7 @@
 
 ### 1.9 项目能力 intake route（本轮新增 24 项）
 
-以下 route 已进入 Route/ViewState/UiEvent 合同并有 D6 demo 语义展示。新增的 30 个 UiEvent 仍为 planned/fail-closed，runtime action 分母仍为 63；表中登记不等于 Core/Host、原生 renderer 或设备链路已经实现。
+以下 route 已进入 Route/ViewState/UiEvent 合同并有 D6 demo 语义展示。新增的 30 个 UiEvent 中，缓存状态、缓存清理、下载重试与替换撤销 4 项已进入 67-action runtime，其余 26 项仍为 planned/fail-closed；表中登记不等于三端 Core bridge、原生 renderer 或设备链路已经实现。
 
 | RouteId | Shell | 主 PageState | 合同主操作 | 当前边界 |
 | --- | --- | --- | --- | --- |

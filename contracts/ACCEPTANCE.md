@@ -31,7 +31,7 @@ ReaderUIRuntime 持有共享的确定性 UiState 实例；Host 只持有 Ephemer
 - ✓ `token.schema.json` —— 14 个 TokenCategory
 
 **Phase 2 Core bridge 规划契约（7 schema）**：
-- ✓ `core-command.schema.json` —— 71 个 CoreCommandType
+- ✓ `core-command.schema.json` —— 72 个 CoreCommandType
 - ✓ `core-event.schema.json` —— 95 个 CoreEventType
 - ✓ `host-request.schema.json` —— 58 个 strict HostRequestType
 - ✓ `host-result.schema.json` —— 与 HostRequest 同序的 58 个 strict success result
@@ -57,7 +57,7 @@ ReaderUIRuntime 持有共享的确定性 UiState 实例；Host 只持有 Ephemer
 - ✓ `design-delta.schema.json` —— Figma/Reader-UI/Core/Host 变更批次与发布事务
 - ✓ `product-capability.schema.json` —— 项目能力四层交付矩阵
 
-当前合计 21 个 schema、1329 项可扫描 fixtures；其中 platform evidence fixture 是 Slice 0–12 的 planned 空白模板，不增加任何平台完成分子。
+当前合计 21 个 schema、1333 项可扫描 fixtures；其中 platform evidence fixture 是 Slice 0–12 的 planned 空白模板，不增加任何平台完成分子。
 
 **FFI 协议**：
 - ✓ `ffi-protocol-version.md` —— FFI 协议版本 1.0.0
@@ -78,7 +78,7 @@ ReaderUIRuntime 持有共享的确定性 UiState 实例；Host 只持有 Ephemer
 
 **Reader UI 仓库范围内**：已提供 reference/Swift/Kotlin runtime golden tests；ArkTS 通过消费方 HAP harness 执行 parity tests。
 
-Reader UI 提供 `state-rule.fixtures.json`（16 项）与 `runtime-actions.json`（63 条 action，其中 7 Pilot、28 Shadow、28 staging-only）。三端还必须保留本端 renderer/bridge/HostAdapter 测试；Pilot 或 Shadow rollout 不能等同 production authority。
+Reader UI 提供 `state-rule.fixtures.json`（16 项）与 `runtime-actions.json`（67 条 action，其中 7 Pilot、28 Shadow、32 staging-only）。三端还必须保留本端 renderer/bridge/HostAdapter 测试；Pilot 或 Shadow rollout 不能等同 production authority。
 
 当前 `state-rule.fixtures.json` 覆盖：
 - overlay 互斥

@@ -30,10 +30,10 @@
 当前 schema/fixtures 的机器事实与 [ACCEPTANCE.md](./ACCEPTANCE.md) 最近同步基线共同表明：
 
 - `route.schema.json` 与 route fixtures 已扩展为 260 个 `RouteId`，其中 24 个是本轮项目能力 intake route；
-- 300 个 `UiEventType`、174 个 `ComponentType`、95 个 `MotionId`；本轮 intake 新增 30 个 canonical UiEvent，但它们被明确标为 planned/fail-closed，runtime implemented action 仍为 63 个，也没有伪造新的 component 或 motion；
-- 71 个 `CoreCommandType`、95 个 `CoreEventType`、58 个 `HostRequestType` 与 58 个 `HostResultType`；
+- 300 个 `UiEventType`、174 个 `ComponentType`、95 个 `MotionId`；本轮 intake 新增 30 个 canonical UiEvent，其中缓存状态、缓存清理、下载重试与替换撤销 4 项已进入严格 runtime，runtime implemented action 为 67 个，其余仍 planned/fail-closed，也没有伪造新的 component 或 motion；
+- 72 个 `CoreCommandType`、95 个 `CoreEventType`、58 个 `HostRequestType` 与 58 个 `HostResultType`；
 - 当前 190 个 ViewState variant 覆盖 184 个 direct route，另有 76 个 alias；动态 ScreenGraph 语义检查为 260/260 resolvable、0 explicit gap；
-- 以上 260/260 只证明合同结构可解析，30 个新增事件仍 fail-closed；D6 只证明这些 route 有明确的本地展示与禁用边界，不证明 Core/Host 行为、设计代表稿、可执行业务、原生 renderer、真实业务链路或设备验收完成。ScreenGraph、runtime coverage 与说明文档已按新分母重生成，后续门禁会阻止 236/270 旧分母回流。
+- 以上 260/260 只证明合同结构可解析；新增事件中 4 项具备严格 runtime action，其余 26 项仍 fail-closed。D6 只证明这些 route 有明确的本地展示与禁用边界，不证明三端 Core bridge、设计代表稿、原生 renderer、真实业务链路或设备验收完成。ScreenGraph、runtime coverage 与说明文档已按新分母重生成，后续门禁会阻止旧分母回流。
 
 ### 2.2 项目能力全量
 

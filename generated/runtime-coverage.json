@@ -7,8 +7,8 @@
   },
   "summary": {
     "canonicalEvents": 300,
-    "implemented": 63,
-    "planned": 230,
+    "implemented": 67,
+    "planned": 226,
     "platform": 7,
     "byWorkflow": {
       "foundation": 53,
@@ -686,10 +686,16 @@
       "event": "reader.bookCache.open",
       "workflow": "W2",
       "owner": "runtime",
-      "coverage": "planned",
+      "coverage": "implemented",
       "ownershipRule": "runtime-default",
       "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
-      "action": null
+      "action": {
+        "kind": "emitEffects",
+        "coreSequence": [
+          "cache.book.status"
+        ],
+        "hostRequest": null
+      }
     },
     {
       "event": "reader.debugInfo.open",
@@ -1124,10 +1130,16 @@
       "event": "settings.cache.clear",
       "workflow": "W4",
       "owner": "runtime",
-      "coverage": "planned",
+      "coverage": "implemented",
       "ownershipRule": "runtime-default",
       "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
-      "action": null
+      "action": {
+        "kind": "emitEffects",
+        "coreSequence": [
+          "cache.clear"
+        ],
+        "hostRequest": null
+      }
     },
     {
       "event": "settings.sync.open",
@@ -2705,10 +2717,16 @@
       "event": "reader.replace.undo",
       "workflow": "W5",
       "owner": "runtime",
-      "coverage": "planned",
+      "coverage": "implemented",
       "ownershipRule": "runtime-default",
       "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
-      "action": null
+      "action": {
+        "kind": "emitEffects",
+        "coreSequence": [
+          "replace.undo"
+        ],
+        "hostRequest": null
+      }
     },
     {
       "event": "import.start",
@@ -2961,10 +2979,16 @@
       "event": "download.task.retry",
       "workflow": "W1",
       "owner": "runtime",
-      "coverage": "planned",
+      "coverage": "implemented",
       "ownershipRule": "runtime-default",
       "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative.",
-      "action": null
+      "action": {
+        "kind": "emitEffects",
+        "coreSequence": [
+          "cache.book.prefetch"
+        ],
+        "hostRequest": null
+      }
     },
     {
       "event": "download.task.cancel",

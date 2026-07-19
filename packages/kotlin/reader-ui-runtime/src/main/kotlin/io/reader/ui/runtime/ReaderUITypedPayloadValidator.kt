@@ -158,6 +158,8 @@ private fun validateTypedPayloadSchema(rawSchema: JsonElement, value: JsonElemen
             val array = value as? JsonArray ?: invalidTypedPayload(path, "must be an array")
             val minimum = (schema["minItems"] as? JsonPrimitive)?.intOrNull
             if (minimum != null && array.size < minimum) invalidTypedPayload(path, "must contain at least $minimum items")
+            val maximum = (schema["maxItems"] as? JsonPrimitive)?.intOrNull
+            if (maximum != null && array.size > maximum) invalidTypedPayload(path, "must contain at most $maximum items")
             val items = schema["items"]
                 ?: throw ReaderUIRuntimeException("INVALID_TYPED_CONTRACT", "$path array schema has no items")
             array.forEachIndexed { index, item -> validateTypedPayloadSchema(items, item, "$path[$index]") }

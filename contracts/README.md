@@ -49,10 +49,10 @@ Native UI
 | Design intake | design-delta | 冻结 Figma revision、D0-D4 影响集、兼容/回滚、Host 证据和发布要求 |
 | Product capability | product-capability | 项目能力到 Figma、Reader-UI、Core/Host、原生 Host 的分层交付与验收状态 |
 
-### Fixtures（1329 项）
+### Fixtures（1333 项）
 
-- Phase 1：route 260 / ui-event 185 / ui-state 43 / view-state 190 / motion 95 / token 269
-- Phase 2：core-command 48 / core-event 35 / host-request 58 / host-result 58 / progress-location 6 / content 3 / sync-conflict 6
+- Phase 1：route 260 / ui-event 188 / ui-state 43 / view-state 190 / motion 95 / token 269
+- Phase 2：core-command 49 / core-event 35 / host-request 58 / host-result 58 / progress-location 6 / content 3 / sync-conflict 6
 - Phase 1 收尾：state-rule 16
 - Phase 1-2 Motion Runtime：motion-policy 53
 - Reader 2 Appearance：appearance 1
@@ -87,7 +87,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 | state-rule.test.mjs | — | StateRule schema + fixtures + 关键规则 |
 | codegen-consistency.test.mjs | — | 三端 generated enum 一致性 + drift check |
 | codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 48 个 generated 文件幂等性 |
-| screen-graph.test.mjs | 33 | 260-route graph、97 canonical bindings（38 executable runtime payload + 59 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
+| screen-graph.test.mjs | 33 | 260-route graph、97 canonical bindings（41 executable runtime payload + 56 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
 | device-conformance-kit.test.mjs | 9 | 三端 174 项计划、可信 identity/artifact、低 tier/伪证据拒绝 |
 | registry-codegen.test.mjs | 8 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
 | motion-policy.test.mjs | 14 | MotionPolicy schema / fixtures / motionId 引用 / operation 覆盖 / no-match diagnostic / 示例 policy |
@@ -115,7 +115,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 ```text
 contracts/
   *.schema.json          # 21 个契约 schema
-  fixtures/              # 1329 项可被 schema 扫描的 fixtures
+  fixtures/              # 1333 项可被 schema 扫描的 fixtures
   tests/                 # 30 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog

@@ -168,6 +168,9 @@ private func validateTypedPayloadSchema(
         if let minimum = schema["minItems"]?.intValue, array.count < minimum {
             throw invalidTypedPayload(path, "must contain at least \(minimum) items")
         }
+        if let maximum = schema["maxItems"]?.intValue, array.count > maximum {
+            throw invalidTypedPayload(path, "must contain at most \(maximum) items")
+        }
         guard let items = schema["items"] else {
             throw ReaderUIRuntimeFailure(code: "INVALID_TYPED_CONTRACT", message: "\(path) array schema has no items")
         }

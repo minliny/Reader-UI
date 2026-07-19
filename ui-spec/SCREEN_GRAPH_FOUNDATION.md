@@ -60,7 +60,7 @@ R16B 同时增加 `typographyManagePhase = idle/reset/persist`，使 `reader-typ
 
 只有 fixture 明确提供 canonical `uiEvent` 或 `eventId`，且 payload 为对象时，generator 才能生成 typed binding。人类可读按钮文案不能推断成 UiEvent。
 
-当前 graph 有 97 个 canonical action binding 与 19 个非执行 state-event evidence，共 116 条 canonical event evidence。97 个 binding 中 38 个 payload 已逐项通过 63-action R14 runtime contract；其余 59 个引用 canonical 但尚未实现的事件，保持 planned/fail-closed。61 个 binding 使用显式 semantic target；其中原有 TapZones 的 10 个 target 继续把 `previous`、`control`、`next` 分别绑定到 `reader.page.prev`、`reader.control.toggle`、`reader.page.next`，并按 loading / first / last boundary 明确禁用方向。其 26% / 48% / 26% 是可执行设计几何；Host 仍需结合真实分页与边界状态做 admission，不能把 fixture enabled 值提升为运行时权威。
+当前 graph 有 97 个 canonical action binding 与 19 个非执行 state-event evidence，共 116 条 canonical event evidence。97 个 binding 中 41 个 payload 已逐项通过 67-action R14 runtime contract；其余 56 个引用 canonical 但尚未实现的事件，保持 planned/fail-closed。61 个 binding 使用显式 semantic target；其中原有 TapZones 的 10 个 target 继续把 `previous`、`control`、`next` 分别绑定到 `reader.page.prev`、`reader.control.toggle`、`reader.page.next`，并按 loading / first / last boundary 明确禁用方向。其 26% / 48% / 26% 是可执行设计几何；Host 仍需结合真实分页与边界状态做 admission，不能把 fixture enabled 值提升为运行时权威。
 
 从 prop 推导的旧 binding 使用 `target=self`；显式多目标 binding 必须使用非 `self` 的稳定 semantic target。剩余 6 个 `label-without-ui-event` explicit action gap 继续保留；generator 不按按钮文案猜事件。
 

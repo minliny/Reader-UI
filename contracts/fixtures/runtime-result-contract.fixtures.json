@@ -1429,6 +1429,27 @@
           "timeoutMillisecond": 3000,
           "order": 0
         }
+      },
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-create-1",
+        "revision": "cf7f04684f96ccafd6906309a1b07f7ecfa078b837a6f2a39bc3814d3b613ee4",
+        "operation": "create",
+        "ruleId": 1,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300,
+        "after": {
+          "id": 1,
+          "name": "r",
+          "pattern": "a",
+          "replacement": "b",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
       }
     }
   },
@@ -1441,6 +1462,27 @@
       "operation": "create",
       "data": {
         "rule": {
+          "id": 1,
+          "name": "r",
+          "pattern": "a",
+          "replacement": "b",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
+      },
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-create-1",
+        "revision": "cf7f04684f96ccafd6906309a1b07f7ecfa078b837a6f2a39bc3814d3b613ee4",
+        "operation": "create",
+        "ruleId": 1,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300,
+        "after": {
           "id": 1,
           "name": "r",
           "pattern": "a",
@@ -1857,6 +1899,194 @@
           "unreadCount": 0
         }
       }
+    }
+  },
+  {
+    "id": "reader-book-cache-open-status-valid",
+    "event": "reader.bookCache.open",
+    "effectType": "cache.book.status",
+    "valid": true,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "tocAvailable": true,
+      "chapterCount": 30,
+      "chapters": [
+        {
+          "chapterIndex": 12,
+          "title": "第十三章",
+          "url": "https://example.test/chapter/13",
+          "state": "failed",
+          "cachedBytes": 0,
+          "attempts": 2,
+          "maxAttempts": 3,
+          "lastError": "timeout"
+        }
+      ],
+      "cachedCount": 10,
+      "queuedCount": 4,
+      "inProgressCount": 1,
+      "completedCount": 0,
+      "failedCount": 1,
+      "cancelledCount": 0,
+      "missingCount": 14,
+      "globalStats": {
+        "entryCount": 10,
+        "totalContentBytes": 40960,
+        "oldestCachedAt": 1899990000,
+        "newestCachedAt": 1900000000,
+        "queueEntryCount": 6,
+        "queuedCount": 4,
+        "inProgressCount": 1,
+        "completedCount": 0,
+        "failedCount": 1,
+        "cancelledCount": 0
+      }
+    }
+  },
+  {
+    "id": "reader-book-cache-open-status-unknown",
+    "event": "reader.bookCache.open",
+    "effectType": "cache.book.status",
+    "valid": false,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "tocAvailable": false,
+      "chapterCount": 0,
+      "chapters": [],
+      "cachedCount": 0,
+      "queuedCount": 0,
+      "inProgressCount": 0,
+      "completedCount": 0,
+      "failedCount": 0,
+      "cancelledCount": 0,
+      "missingCount": 0,
+      "globalStats": {
+        "entryCount": 0,
+        "totalContentBytes": 0,
+        "queueEntryCount": 0,
+        "queuedCount": 0,
+        "inProgressCount": 0,
+        "completedCount": 0,
+        "failedCount": 0,
+        "cancelledCount": 0
+      },
+      "taskId": "download-001"
+    }
+  },
+  {
+    "id": "settings-cache-clear-valid",
+    "event": "settings.cache.clear",
+    "effectType": "cache.clear",
+    "valid": true,
+    "result": {
+      "scope": "cache",
+      "cacheEntriesRemoved": 4,
+      "chapterEntriesRemoved": 12,
+      "queueEntriesRemoved": 0,
+      "removedContentBytes": 40960
+    }
+  },
+  {
+    "id": "settings-cache-clear-unknown",
+    "event": "settings.cache.clear",
+    "effectType": "cache.clear",
+    "valid": false,
+    "result": {
+      "scope": "cache",
+      "cacheEntriesRemoved": 4,
+      "chapterEntriesRemoved": 12,
+      "queueEntriesRemoved": 0,
+      "removedContentBytes": 40960,
+      "filesDeleted": 12
+    }
+  },
+  {
+    "id": "download-task-retry-prefetch-valid",
+    "event": "download.task.retry",
+    "effectType": "cache.book.prefetch",
+    "valid": true,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        30
+      ],
+      "chapterCount": 30,
+      "prefetchedCount": 16,
+      "queuedIndexes": [
+        12,
+        13
+      ],
+      "alreadyQueuedIndexes": [
+        14
+      ],
+      "skippedCachedIndexes": [
+        15
+      ]
+    }
+  },
+  {
+    "id": "download-task-retry-prefetch-long-range",
+    "event": "download.task.retry",
+    "effectType": "cache.book.prefetch",
+    "valid": false,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        20,
+        30
+      ],
+      "chapterCount": 30,
+      "prefetchedCount": 0,
+      "queuedIndexes": [],
+      "alreadyQueuedIndexes": [],
+      "skippedCachedIndexes": []
+    }
+  },
+  {
+    "id": "reader-replace-undo-result-valid",
+    "event": "reader.replace.undo",
+    "effectType": "replace.undo",
+    "valid": true,
+    "result": {
+      "transactionId": "replace-42",
+      "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3",
+      "operation": "update",
+      "ruleId": 41,
+      "changed": true,
+      "undoneAt": 1900000010,
+      "restoredRule": {
+        "id": 41,
+        "name": "rename",
+        "pattern": "rain",
+        "replacement": "rain",
+        "scopeTitle": false,
+        "scopeContent": true,
+        "isEnabled": true,
+        "isRegex": false,
+        "timeoutMillisecond": 3000,
+        "order": 0
+      }
+    }
+  },
+  {
+    "id": "reader-replace-undo-result-unknown",
+    "event": "reader.replace.undo",
+    "effectType": "replace.undo",
+    "valid": false,
+    "result": {
+      "transactionId": "replace-42",
+      "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3",
+      "operation": "update",
+      "ruleId": 41,
+      "changed": true,
+      "undoneAt": 1900000010,
+      "undoToken": {}
     }
   }
 ]

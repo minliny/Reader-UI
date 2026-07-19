@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "canonicalUiEventCount": 300,
-  "expectedImplementedActions": 63,
+  "expectedImplementedActions": 67,
   "ownershipRules": [
     {
       "id": "raw-reader-gesture",

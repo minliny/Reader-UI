@@ -84,7 +84,8 @@
 
         "replace.apply",
         "replace.persist",
-        "replace.validate"
+        "replace.validate",
+        "replace.undo"
       ],
       "description": "Core 命令类型。新增视为 MINOR，删除视为 MAJOR。"
     },

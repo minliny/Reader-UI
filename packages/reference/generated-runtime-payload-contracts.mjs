@@ -2349,6 +2349,489 @@ export const GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS = Object.freeze({
       "hostRequest": "http.execute"
     }
   },
+  "reader.bookCache.open": {
+    "dispatchTarget": "core",
+    "operation": "cache.book.status",
+    "descriptorAction": "emitEffects",
+    "descriptorCoreSequence": [
+      "cache.book.status"
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1,
+          "nonBlank": true
+        },
+        "bookId": {
+          "type": "string",
+          "minLength": 1,
+          "nonBlank": true
+        }
+      }
+    },
+    "resultSchemas": {
+      "cache.book.status": {
+        "effectKind": "core",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sourceId",
+            "bookId",
+            "tocAvailable",
+            "chapterCount",
+            "chapters",
+            "cachedCount",
+            "queuedCount",
+            "inProgressCount",
+            "completedCount",
+            "failedCount",
+            "cancelledCount",
+            "missingCount",
+            "globalStats"
+          ],
+          "properties": {
+            "sourceId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            },
+            "bookId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            },
+            "tocAvailable": {
+              "type": "boolean"
+            },
+            "chapterCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "chapters": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "chapterIndex",
+                  "title",
+                  "url",
+                  "state",
+                  "cachedBytes",
+                  "attempts",
+                  "maxAttempts"
+                ],
+                "properties": {
+                  "chapterIndex": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string",
+                    "enum": [
+                      "missing",
+                      "queued",
+                      "inProgress",
+                      "cached",
+                      "completed",
+                      "failed",
+                      "cancelled"
+                    ]
+                  },
+                  "cachedBytes": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "attempts": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295
+                  },
+                  "maxAttempts": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 4294967295
+                  },
+                  "lastError": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "cachedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "queuedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "inProgressCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "completedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "failedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "cancelledCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "missingCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "globalStats": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "entryCount",
+                "totalContentBytes",
+                "queueEntryCount",
+                "queuedCount",
+                "inProgressCount",
+                "completedCount",
+                "failedCount",
+                "cancelledCount"
+              ],
+              "properties": {
+                "entryCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "totalContentBytes": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "oldestCachedAt": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "newestCachedAt": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "queueEntryCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "queuedCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "inProgressCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "completedCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "failedCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "cancelledCount": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 9007199254740991
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "descriptor": {
+      "action": "emitEffects",
+      "coreSequence": [
+        "cache.book.status"
+      ]
+    }
+  },
+  "settings.cache.clear": {
+    "dispatchTarget": "core",
+    "operation": "cache.clear",
+    "descriptorAction": "emitEffects",
+    "descriptorCoreSequence": [
+      "cache.clear"
+    ],
+    "schema": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope"
+          ],
+          "properties": {
+            "scope": {
+              "type": "string",
+              "const": "all"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope"
+          ],
+          "properties": {
+            "scope": {
+              "type": "string",
+              "const": "cache"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "sourceId",
+            "bookId"
+          ],
+          "properties": {
+            "scope": {
+              "type": "string",
+              "const": "book"
+            },
+            "sourceId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            },
+            "bookId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            }
+          }
+        }
+      ]
+    },
+    "resultSchemas": {
+      "cache.clear": {
+        "effectKind": "core",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "scope",
+            "cacheEntriesRemoved",
+            "chapterEntriesRemoved",
+            "queueEntriesRemoved",
+            "removedContentBytes"
+          ],
+          "properties": {
+            "scope": {
+              "type": "string",
+              "enum": [
+                "all",
+                "cache",
+                "book"
+              ]
+            },
+            "cacheEntriesRemoved": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "chapterEntriesRemoved": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "queueEntriesRemoved": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "removedContentBytes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          }
+        }
+      }
+    },
+    "descriptor": {
+      "action": "emitEffects",
+      "coreSequence": [
+        "cache.clear"
+      ]
+    }
+  },
+  "download.task.retry": {
+    "dispatchTarget": "core",
+    "operation": "cache.book.prefetch",
+    "descriptorAction": "emitEffects",
+    "descriptorCoreSequence": [
+      "cache.book.prefetch"
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sourceId",
+        "bookId",
+        "chapterRange"
+      ],
+      "properties": {
+        "sourceId": {
+          "type": "string",
+          "minLength": 1,
+          "nonBlank": true
+        },
+        "bookId": {
+          "type": "string",
+          "minLength": 1,
+          "nonBlank": true
+        },
+        "chapterRange": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 4294967295
+          }
+        },
+        "priority": {
+          "type": "integer",
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "requestedAt": {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "resultSchemas": {
+      "cache.book.prefetch": {
+        "effectKind": "core",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sourceId",
+            "bookId",
+            "chapterRange",
+            "chapterCount",
+            "prefetchedCount",
+            "queuedIndexes",
+            "alreadyQueuedIndexes",
+            "skippedCachedIndexes"
+          ],
+          "properties": {
+            "sourceId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            },
+            "bookId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            },
+            "chapterRange": {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              }
+            },
+            "chapterCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4294967295
+            },
+            "prefetchedCount": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            },
+            "queuedIndexes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              }
+            },
+            "alreadyQueuedIndexes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              }
+            },
+            "skippedCachedIndexes": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4294967295
+              }
+            }
+          }
+        }
+      }
+    },
+    "descriptor": {
+      "action": "emitEffects",
+      "coreSequence": [
+        "cache.book.prefetch"
+      ]
+    }
+  },
   "import.start": {
     "dispatchTarget": "core",
     "operation": "import.parse",
@@ -7921,6 +8404,17 @@ export const GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS = Object.freeze({
               "maximum": 9007199254740991
             }
           }
+        },
+        "transactionId": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "nonBlank": true
+        },
+        "undoTtlSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 86400
         }
       }
     },
@@ -7932,7 +8426,8 @@ export const GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS = Object.freeze({
           "additionalProperties": false,
           "required": [
             "operation",
-            "data"
+            "data",
+            "undoToken"
           ],
           "properties": {
             "operation": {
@@ -7947,6 +8442,192 @@ export const GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS = Object.freeze({
               ],
               "properties": {
                 "rule": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "pattern",
+                    "replacement",
+                    "scopeTitle",
+                    "scopeContent",
+                    "isEnabled",
+                    "isRegex",
+                    "timeoutMillisecond",
+                    "order"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "pattern": {
+                      "type": "string"
+                    },
+                    "replacement": {
+                      "type": "string"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "scopeTitle": {
+                      "type": "boolean"
+                    },
+                    "scopeContent": {
+                      "type": "boolean"
+                    },
+                    "excludeScope": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "isRegex": {
+                      "type": "boolean"
+                    },
+                    "timeoutMillisecond": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    "order": {
+                      "type": "integer",
+                      "minimum": -2147483648,
+                      "maximum": 2147483647
+                    }
+                  }
+                }
+              }
+            },
+            "undoToken": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "schemaVersion",
+                "transactionId",
+                "revision",
+                "operation",
+                "ruleId",
+                "issuedAt",
+                "expiresAt"
+              ],
+              "properties": {
+                "schemaVersion": {
+                  "type": "integer",
+                  "const": 1
+                },
+                "transactionId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 128,
+                  "nonBlank": true
+                },
+                "revision": {
+                  "type": "string",
+                  "minLength": 64,
+                  "maxLength": 64,
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "operation": {
+                  "type": "string",
+                  "enum": [
+                    "create",
+                    "update",
+                    "delete"
+                  ]
+                },
+                "ruleId": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "issuedAt": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "expiresAt": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "before": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "name",
+                    "pattern",
+                    "replacement",
+                    "scopeTitle",
+                    "scopeContent",
+                    "isEnabled",
+                    "isRegex",
+                    "timeoutMillisecond",
+                    "order"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "group": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "pattern": {
+                      "type": "string"
+                    },
+                    "replacement": {
+                      "type": "string"
+                    },
+                    "scope": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "scopeTitle": {
+                      "type": "boolean"
+                    },
+                    "scopeContent": {
+                      "type": "boolean"
+                    },
+                    "excludeScope": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "isRegex": {
+                      "type": "boolean"
+                    },
+                    "timeoutMillisecond": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    },
+                    "order": {
+                      "type": "integer",
+                      "minimum": -2147483648,
+                      "maximum": 2147483647
+                    }
+                  }
+                },
+                "after": {
                   "type": "object",
                   "additionalProperties": false,
                   "required": [
@@ -8105,6 +8786,332 @@ export const GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS = Object.freeze({
       "action": "emitEffects",
       "coreSequence": [
         "replace.validate"
+      ]
+    }
+  },
+  "reader.replace.undo": {
+    "dispatchTarget": "core",
+    "operation": "replace.undo",
+    "descriptorAction": "emitEffects",
+    "descriptorCoreSequence": [
+      "replace.undo"
+    ],
+    "schema": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "undoToken"
+      ],
+      "properties": {
+        "undoToken": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "schemaVersion",
+            "transactionId",
+            "revision",
+            "operation",
+            "ruleId",
+            "issuedAt",
+            "expiresAt"
+          ],
+          "properties": {
+            "schemaVersion": {
+              "type": "integer",
+              "const": 1
+            },
+            "transactionId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "nonBlank": true
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "operation": {
+              "type": "string",
+              "enum": [
+                "create",
+                "update",
+                "delete"
+              ]
+            },
+            "ruleId": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "issuedAt": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "expiresAt": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "before": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name",
+                "pattern",
+                "replacement",
+                "scopeTitle",
+                "scopeContent",
+                "isEnabled",
+                "isRegex",
+                "timeoutMillisecond",
+                "order"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "name": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "replacement": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "scopeTitle": {
+                  "type": "boolean"
+                },
+                "scopeContent": {
+                  "type": "boolean"
+                },
+                "excludeScope": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "isEnabled": {
+                  "type": "boolean"
+                },
+                "isRegex": {
+                  "type": "boolean"
+                },
+                "timeoutMillisecond": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "order": {
+                  "type": "integer",
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                }
+              }
+            },
+            "after": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name",
+                "pattern",
+                "replacement",
+                "scopeTitle",
+                "scopeContent",
+                "isEnabled",
+                "isRegex",
+                "timeoutMillisecond",
+                "order"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "name": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "replacement": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "scopeTitle": {
+                  "type": "boolean"
+                },
+                "scopeContent": {
+                  "type": "boolean"
+                },
+                "excludeScope": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "isEnabled": {
+                  "type": "boolean"
+                },
+                "isRegex": {
+                  "type": "boolean"
+                },
+                "timeoutMillisecond": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "order": {
+                  "type": "integer",
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "resultSchemas": {
+      "replace.undo": {
+        "effectKind": "core",
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "transactionId",
+            "revision",
+            "operation",
+            "ruleId",
+            "changed",
+            "undoneAt"
+          ],
+          "properties": {
+            "transactionId": {
+              "type": "string",
+              "minLength": 1,
+              "nonBlank": true
+            },
+            "revision": {
+              "type": "string",
+              "minLength": 64,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "operation": {
+              "type": "string",
+              "enum": [
+                "create",
+                "update",
+                "delete"
+              ]
+            },
+            "ruleId": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "changed": {
+              "type": "boolean"
+            },
+            "undoneAt": {
+              "type": "integer",
+              "minimum": -9007199254740991,
+              "maximum": 9007199254740991
+            },
+            "restoredRule": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name",
+                "pattern",
+                "replacement",
+                "scopeTitle",
+                "scopeContent",
+                "isEnabled",
+                "isRegex",
+                "timeoutMillisecond",
+                "order"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "name": {
+                  "type": "string"
+                },
+                "group": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "pattern": {
+                  "type": "string"
+                },
+                "replacement": {
+                  "type": "string"
+                },
+                "scope": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "scopeTitle": {
+                  "type": "boolean"
+                },
+                "scopeContent": {
+                  "type": "boolean"
+                },
+                "excludeScope": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "isEnabled": {
+                  "type": "boolean"
+                },
+                "isRegex": {
+                  "type": "boolean"
+                },
+                "timeoutMillisecond": {
+                  "type": "integer",
+                  "minimum": -9007199254740991,
+                  "maximum": 9007199254740991
+                },
+                "order": {
+                  "type": "integer",
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "descriptor": {
+      "action": "emitEffects",
+      "coreSequence": [
+        "replace.undo"
       ]
     }
   },

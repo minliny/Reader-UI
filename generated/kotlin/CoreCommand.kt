@@ -149,7 +149,9 @@ enum class CoreCommandType {
     @SerialName("replace.persist")
     ReplacePersist,
     @SerialName("replace.validate")
-    ReplaceValidate
+    ReplaceValidate,
+    @SerialName("replace.undo")
+    ReplaceUndo
 }
 
 @Serializable

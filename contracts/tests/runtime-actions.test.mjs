@@ -209,6 +209,21 @@ test("book.open descriptor declares serial transaction admission semantics", () 
   assert.deepEqual(action.coreSequence, ["source.detail", "chapter.list", "content.load", "reader.location.resolve"]);
 });
 
+test("cache retry, cache status, cache clear and replace undo use deterministic Core DTO effects", () => {
+  for (const [event, requiredPayload, coreSequence] of [
+    ["reader.bookCache.open", ["sourceId", "bookId"], ["cache.book.status"]],
+    ["settings.cache.clear", ["scope"], ["cache.clear"]],
+    ["download.task.retry", ["sourceId", "bookId", "chapterRange"], ["cache.book.prefetch"]],
+    ["reader.replace.undo", ["undoToken"], ["replace.undo"]]
+  ]) {
+    const action = spec.actions.find((item) => item.event === event);
+    assert.ok(action, event);
+    assert.equal(action.action, "emitEffects", event);
+    assert.deepEqual(action.requiredPayload, requiredPayload, event);
+    assert.deepEqual(action.coreSequence, coreSequence, event);
+  }
+});
+
 test("runtime codegen is deterministic for reference and all three hosts", () => {
   const outputs = [
     "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeActions.swift",
@@ -219,8 +234,11 @@ test("runtime codegen is deterministic for reference and all three hosts", () =>
     "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadContracts.kt",
     "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
     "packages/swift/ReaderUIRuntime/Tests/ReaderUIRuntimeTests/GeneratedRuntimeTypedPayloadFixtures.swift",
+    "packages/swift/ReaderUIRuntime/Tests/ReaderUIRuntimeTests/GeneratedRuntimeTypedResultFixtures.swift",
     "packages/kotlin/reader-ui-runtime/src/test/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadFixtures.kt",
-    "packages/arkts/reader-ui-runtime/src/test/GeneratedRuntimeTypedPayloadFixtures.ets"
+    "packages/kotlin/reader-ui-runtime/src/test/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedResultFixtures.kt",
+    "packages/arkts/reader-ui-runtime/src/test/GeneratedRuntimeTypedPayloadFixtures.ets",
+    "packages/arkts/reader-ui-runtime/src/test/GeneratedRuntimeTypedResultFixtures.ets"
   ];
   const before = new Map(outputs.map((file) => [file, fs.readFileSync(path.join(root, file), "utf8")]));
   const result = spawnSync("node", [path.join(root, "tools", "runtime", "generate-runtime.mjs"), "--check"], {

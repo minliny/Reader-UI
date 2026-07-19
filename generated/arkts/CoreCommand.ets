@@ -71,7 +71,8 @@ export type CoreCommandType =
   | "config.savePersisted"
   | "replace.apply"
   | "replace.persist"
-  | "replace.validate";
+  | "replace.validate"
+  | "replace.undo";
 
 export interface CoreCommand {
   type: CoreCommandType;
