@@ -6,6 +6,10 @@
 
 ## 设计基线
 
+- [Reader 全产品设计与交付唯一执行基线 (2026-07-19)](../READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md)：统一项目能力、Figma、Reader-UI、Core、三端、交互控件覆盖、evidence 与发布顺序；本目录的设计状态不得越过该基线外推为产品完成。
+- [Reader 后续多 Agent 执行指导 (2026-07-19)](../READER_MULTI_AGENT_EXECUTION_GUIDE_2026-07-19.md)：当前尚缺内容、12 个页面族预分类、可并行工作包、串行 Figma 边界、可直接转交的 Agent 提示和合并顺序。
+- [IC0 交互控件全量事实审计](../audits/ic0-2026-07-19/IC0_INTERACTION_CONTROL_AUDIT.md) 与 [Settings General VC0 样板](../audits/ic0-2026-07-19/SETTINGS_GENERAL_VC0_SAMPLE.md)：当前控件机器分母、Figma 覆盖边界和首个非 Reader 2 页面族的三视口实页对照；IC0 仍未通过。
+- [VC0 批量审计暂存包](../audits/vc0-batch-2026-07-19/README.md)：12 个剩余非 Reader 页面族的 Figma 结构事实、三视口浏览器结构观测与待补证据；当前仍在收口，不是最终 VC0 结论。
 - [Paper Flow Motion Language](./PAPER_FLOW_MOTION_LANGUAGE.md)：统一动效艺术语言、动效家族、节奏、缓动和阅读纪律。
 - [静态视觉闭环计划 (2026-07-14)](./VISUAL_CLOSURE_PLAN_2026-07-14.md)：把现有 Figma 装配候选经过逐页审计、Figma 修正、Design Delta、Reader-UI 回写和浏览器复验变成可冻结的静态基线；Reader 2 已完成 VC2 / VC3，其他页面族不因此自动关闭。
 - [Reader 2 静态 Design Delta (2026-07-15)](./READER2_STATIC_DESIGN_DELTA_2026-07-15.md)：`15 · Reader 2` 权威节点、唯一原子源、Reader-UI 回写落点、三档冻结值和 VC3 证据。

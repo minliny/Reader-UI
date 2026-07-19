@@ -30,6 +30,7 @@ Primary architecture entries:
 
 - `contracts/ARCHITECTURE.md`
 - `EXECUTABLE_UI_RUNTIME.md`
+- [`docs/READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md`](./docs/READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md) — current cross-repo planning, design, implementation, evidence, and release order; status claims must use its layered vocabulary
 
 Current source directories:
 

@@ -24,6 +24,7 @@ Native UI
 
 ## 规划入口
 
+- [../docs/READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md](../docs/READER_PRODUCT_EXECUTION_BASELINE_2026-07-19.md) —— 全产品、Figma、Reader-UI、Core、三端、evidence 与发布的唯一执行顺序和统一状态口径
 - [ARCHITECTURE.md](./ARCHITECTURE.md)
 - [../EXECUTABLE_UI_RUNTIME.md](../EXECUTABLE_UI_RUNTIME.md)
 - [CONTRACT_FIRST_NATIVE_UI_PLAN.md](./CONTRACT_FIRST_NATIVE_UI_PLAN.md) —— 2.1 以前的历史迁移规划
