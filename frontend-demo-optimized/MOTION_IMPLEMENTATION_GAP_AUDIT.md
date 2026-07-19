@@ -1,10 +1,10 @@
 # 动效实现缺口审计
 
-状态：Draft v0.1
+状态：执行中（2026-07-19 MR3 确定性 trace 已闭合）
 
 范围：基于当前 `frontend-demo-optimized/` 和三份动效规划文档，审计从“完整规划初稿”到“可交给各平台排期实现”的剩余缺口。
 
-结论：当前已有方向、Motion ID、效果描述、平台映射、第一版可执行 registry 和关键 Motion ID 的 contract 层状态机，但仍缺组件级实现状态机、录屏证据、平台测试映射和设备验证。以下缺口全部需要补齐。
+结论：canonical registry 已由 95 个 MotionSpec、53 个 MotionPolicy 和 route-shell lookup 自动生成，89 个 active exact 状态机均可精确解析；十个核心家族的 normal / rapid-repeat / opposite / interrupt / reduced 共 50 条确定性 trace 已闭合。当前剩余缺口集中在真实连续画面/WebM、三档 viewport 动态媒体、平台测试映射和设备验证，不能把 trace 门禁当作视觉或原生 proof。
 
 收束原则：
 
@@ -29,7 +29,7 @@
 |---|---|---|---|
 | Motion token 落地 | 已新增 `frontend-demo-optimized/motion-tokens.css`，并把 `frontend-demo-optimized/styles/` 中裸写的 `160ms`、`220ms`、`0.8s` 替换为 token；通用控件也已接入基础 motion token | 继续做视觉回归，确认 token 替换没有改变既有布局和关键节奏 | `rg "160ms|220ms|0.8s" frontend-demo-optimized/styles` 不命中；关键路径截图/录屏无非预期变化 |
 | Reduced motion 实装 | 已新增 `@media (prefers-reduced-motion: reduce)`、`data-motion-reduced` 和 `?motionReduced=1/0` 测试开关；翻页、loading、通用控件 transition 已降级，当前 D2 搜索页键盘路径已通过 `?reducedMotion=1` 浏览器验证并保持焦点语义 | 补 reduced-motion capture，继续覆盖底表、弹窗、封面进入、控制层、翻页、loading、折叠重排 | 系统 reduced motion 或 `?motionReduced=1` 下移除位移/循环动画，状态反馈仍可辨认 |
-| 可执行 Motion Contract Registry | `motion-controller.js` 已暴露 `ReaderMotionController.CONTRACT`；当前 controller 登记 84 个精确状态机（含 3 个 controlSpace contract-reserved 参考态），canonical fixtures 为 89/95 active exact，coverage 选取 70 个高风险 Motion ID 逐项验证。筛选、批量选择、文本选择、危险确认和 tooling 最后 10 项已逐项闭合；其余 6 个 canonical 条目由门禁固定为 3 deprecated + 3 reserved | 给 dropdown A→B redirect / reposition 补首个真实同屏消费者页面证据 | 当前绑定和 runtime 必需 Motion ID 全部能解析并具备状态机；平台不能照抄 CSS，只能按 registry 的 Motion ID、state fields、state machine、token 和证据要求映射原生实现 |
+| 可执行 Motion Contract Registry | `motion-contract-registry.js` 由 canonical fixtures 生成并登记 95 个 MotionSpec、53 个 MotionPolicy 与 260 route-shell lookup；89 个 active exact 均可解析，其余 6 个严格限定为 3 deprecated + 3 reserved。`motion-scenario-harness.js` 已覆盖十家族 × 5 模式、四类 interrupt policy、request-first no-match 与 reduced direct-manipulation | 给 dropdown A→B redirect / reposition 补首个真实同屏消费者页面证据，并补真实连续媒体 | 当前绑定和 runtime 必需 Motion ID 全部能解析并具备状态机；平台不能照抄 CSS，只能按 registry 的 Motion ID、state fields、state machine、token 和证据要求映射原生实现 |
 | TAB / segmented 状态动效 | 已补 `tab.item.press/select/switch` 和 `segment.item.switch` contract 状态机；主 TAB、阅读模块 TAB 和 segmented control 已接入 `data-motion-tab-*` / `data-motion-segment-*` 状态、`data-motion-press-id`、token 化 pressed/select/switch CSS 和 `reader.module.switch` / `segment.item.switch` 事务 | 补主 TAB / 阅读模块 TAB / segmented control 的录屏证据，并继续确认 indicator/active 层不推动布局 | 按下、单按钮选中、A -> B 切换、重复点击 active 行为可区分；栏尺寸稳定 |
 | 下拉栏统一动效 | `dropdown.trigger.press/menu.expand/menu.collapse/menu.reposition/option.press/option.select` 六项已进入 canonical exact schema / fixture / test / 三端 codegen；demo 已接入 `attachDropdownMotionState`、A→B redirect、placement snapshot/reposition、键盘循环、Escape 关闭、展开后首选项焦点与关闭/选择后的 trigger 回焦。发现筛选页已用浏览器验证展开、Tab/方向键、Escape、单选提交与 reduced-motion；menu/option/trigger/switch target 已 token 化 CSS | 当前 260 个 route 没有双 dropdown 同屏宿主，A→B redirect 与自动 reposition 仅有 adapter/专项测试证据；首个实际消费者出现时必须补同屏录屏与 resize/orientation 页面证据 | 所有下拉展开/收起/点击节奏一致；同层只留一个 open；选择后值/semantics 同步；resize/orientation 可重定位；source/test 证据不能冒充页面验收 |
 | 通用交互组件族纳管 | 已新增 `MOTION_SELECTOR_MATRIX.md`，148 个唯一 `data-*` 入口均已映射到 Motion ID / route / platform component；demo 已通过 `data-motion-id`、`data-motion-component-*`、`is-motion-pressed` 和 token CSS 接入 button、toggle、choice、numeric、input、state、selection、surface 的 normalized 状态字段；当前 coverage 使用的 Motion ID 都有 contract 状态机 | 继续补每个组件族的录屏/截图证据、平台测试文件名和 async pending / focus restore 等深状态 | 所有控件族都有 token、效果、平台映射、reduced-motion、实现代码和验证路径；证据文件可追溯到 Motion ID |
@@ -50,7 +50,7 @@
 
 | 缺口 | 当前状态 | 需要补充 | 验收标准 |
 |---|---|---|---|
-| Motion ID 状态机表 | 已在 `ReaderMotionController.CONTRACT` 中建立 family fallback，并登记 84 个 `from/to/interrupt/finalState/reducedMotion` 精确状态机（含 3 个 controlSpace contract-reserved 参考态）；其中 70 个进入当前高风险 coverage 子集。跨端 canonical fixtures 的完整结构化状态机为 89/95 active exact，其余 6 个为非生产豁免 | 把 active 状态机与真实组件 reducer / platform test 文件持续绑定 | 状态机表能解释所有打断和降级，coverage 能失败提示缺失项 |
+| Motion ID 状态机表 | canonical registry 对 89/95 active exact 状态机执行 request-first 精确解析；D5 runtime 消费完整 exact 集合，legacy family fallback 只保留兼容用途。其余 6 个为 3 deprecated + 3 contract-reserved 非生产豁免 | 把 active 状态机与真实组件 reducer / platform test 文件持续绑定 | 状态机表能解释所有打断和降级，coverage 能失败提示缺失项 |
 | 手势阈值 | Reader handle 已固定 4 drag slop、quick 34 / full 16 commit threshold；Dock 已固定 320ms long press 和 16 安全边距。亮度/进度、底表和 fling 的完整平台阈值仍待补 | 继续定义 slider、velocity、取消阈值和底表拖拽边界，并做 density 映射 | 手势跟手，无 easing 滞后；误触边界明确；跨 density 结果一致 |
 | 性能预算 | 未定义 | 补 FPS、layout shift、动画属性白名单、低端设备降级 | 动画只用 transform/opacity 等优先属性；有性能验收项 |
 | 无障碍/semantics | Web demo 已验证 sheet 初始焦点、dialog Tab 环、keyboard 输入焦点和三类关闭后的 trigger focus restore；原生平台尚无 VoiceOver/TalkBack 证据 | 补 VoiceOver/TalkBack 焦点迁移、原生弹窗焦点陷阱、aria/semantics 更新时机 | 动画期间不会读出隐藏 overlay；返回焦点正确 |
@@ -69,7 +69,7 @@
 
 ## P0 推荐落地顺序
 
-1. 已完成第一版：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/测试开关、selector 总表、基础 `data-motion-id` / pressed state 接入、`ReaderMotionController.CONTRACT` 可执行 registry，以及 controller 84 个（含 3 个 reserved 参考态）/ canonical fixtures 89 个 active 精确状态机；其余 6 个为门禁固定的 deprecated/reserved 非生产条目。
+1. 已完成：`motion-tokens.css`、裸写时长替换、reduced-motion CSS/测试开关、selector 总表、基础 `data-motion-id` / pressed state，以及由 canonical fixtures 生成的 95-spec registry；89 个 active exact 状态机全部可解析，其余 6 个为门禁固定的 3 deprecated + 3 reserved 非生产条目。十家族 × 5 模式的 50 条确定性 trace 已通过；真实连续媒体仍是独立门禁。
 2. 已完成第一版：主 TAB、阅读模块 TAB 和 segmented control 已实现 `tab.item.press/select/switch` / `segment.item.switch` adapter、`reader.module.switch` / `segment.item.switch` 事务和 token 化状态；下一步补录屏证据与 indicator/active 层校验。
 3. 已完成第一版：通用控件族已接入 `data-motion-component-*` normalized adapter，覆盖 button、toggle/switch、chip/filter/segment、slider/stepper/progress、input/search、feedback/state、selection、listRow/card 的 family / role / state / phase / value 字段；下一步补全族录屏、async pending、focus restore 和平台测试文件映射。
 4. 已完成第八批：`dropdown.*` 六项已进入 canonical exact contract，并接入 trigger/menu/option 状态、press-id、焦点进入/回还、键盘循环、A→B redirect、placement snapshot/reposition 与 reduced-motion；发现筛选真实页已完成展开/选择/Escape/回焦验证。下一步是给尚无真实消费者的双 dropdown redirect / 自动 reposition 补首个同屏页面证据。

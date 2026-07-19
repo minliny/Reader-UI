@@ -139,7 +139,8 @@ test("Figma handoff records the current page and Motion Reference state", () => 
   assert.match(figmaHandoff, /M0–M5 仅完成候选装配/);
   assert.match(figmaHandoff, /MR1 Reader Control Motion 样板 \| 已完成自验，待用户确认/);
   assert.match(figmaHandoff, /MR2 十个核心 Motion 家族 \| 进行中/);
-  assert.match(figmaHandoff, /MR3–MR5 demo\/Native\/device Motion 闭环 \| 未完成/);
+  assert.match(figmaHandoff, /MR3 canonical registry \+ 确定性 trace \| 已完成十家族 × 5 模式/);
+  assert.match(figmaHandoff, /MR4–MR5 Native\/device Motion 闭环 \| 未完成/);
 });
 
 test("design index states one VC/MR completion policy", () => {
@@ -149,5 +150,7 @@ test("design index states one VC/MR completion policy", () => {
   assert.match(designIndex, /不会自动替代其他页面族的用户视觉确认、Design Delta 或三档动态复验/);
   assert.match(designIndex, /MR1 控制层完成自验但待用户确认/);
   assert.match(designIndex, /MR2 进行中/);
-  assert.match(designIndex, /十个核心家族及 MR3–MR5 尚未闭环/);
+  assert.match(designIndex, /MR3 的 canonical registry 与十家族 50 条确定性 trace 已完成/);
+  assert.match(designIndex, /真实连续画面\/WebM 与三档 viewport 动态媒体仍待补/);
+  assert.match(designIndex, /MR4–MR5 原生\/设备门禁尚未闭环/);
 });

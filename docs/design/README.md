@@ -22,7 +22,7 @@
 
 Reader 控制层的静态视觉以 Figma `15 · Reader 2` 为唯一输入；`frontend-demo-optimized/` 是 route、state、交互、连续分页与响应式浏览器 proof。`23 · Pages · Final` 只保留为其他页面族的候选装配区。
 
-当前完成口径：M0–M5 只表示物料、参考、master 与候选实例已经装配；Reader 2 静态 VC2 / VC3 已关闭。2026-07-19 已完成 24×3 响应式结构和 25×3 原型引用门禁，并修复 11 个 Compact 母版，但这不会自动替代其他页面族的用户视觉确认、Design Delta 或三档动态复验。Motion 已建立独立 `25 · Motion Reference`，MR1 控制层完成自验但待用户确认，MR2 进行中，十个核心家族及 MR3–MR5 尚未闭环。
+当前完成口径：M0–M5 只表示物料、参考、master 与候选实例已经装配；Reader 2 静态 VC2 / VC3 已关闭。2026-07-19 已完成 24×3 响应式结构和 25×3 原型引用门禁，并修复 11 个 Compact 母版，但这不会自动替代其他页面族的用户视觉确认、Design Delta 或三档动态复验。Motion 已建立独立 `25 · Motion Reference`，MR1 控制层完成自验但待用户确认，MR2 进行中；MR3 的 canonical registry 与十家族 50 条确定性 trace 已完成，真实连续画面/WebM 与三档 viewport 动态媒体仍待补，MR4–MR5 原生/设备门禁尚未闭环。
 
 ## 阅读视口与系统区域
 

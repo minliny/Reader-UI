@@ -38,10 +38,11 @@ Reader 2 权威页：<https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK?node-i
 | 其他页面族本地 demo 浏览器复验 | 未完成 |
 | MR1 Reader Control Motion 样板 | 已完成自验，待用户确认 |
 | MR2 十个核心 Motion 家族 | 进行中；Review artifact 不等于闭环 |
-| MR3–MR5 demo/Native/device Motion 闭环 | 未完成 |
+| MR3 canonical registry + 确定性 trace | 已完成十家族 × 5 模式；动态 WebM / viewport 连续画面未完成 |
+| MR4–MR5 Native/device Motion 闭环 | 未完成 |
 | 三个 Host 最终实现与设备证明 | 未完成 |
 
-Reader 之外的页面族仍按 [静态视觉闭环计划](./VISUAL_CLOSURE_PLAN_2026-07-14.md) 的 VC0–VC3 推进。独立 `25 · Motion Reference` 已存在：MR1 控制层完成自验但待用户确认，MR2 Review Batch 进行中，十个核心家族尚未闭环；后续状态以 [Motion 四层交付规划](./MOTION_DELIVERY_PLAN_2026-07-14.md) 与 [Motion Reference Index](./MOTION_REFERENCE_INDEX_2026-07-15.md) 为准。
+Reader 之外的页面族仍按 [静态视觉闭环计划](./VISUAL_CLOSURE_PLAN_2026-07-14.md) 的 VC0–VC3 推进。独立 `25 · Motion Reference` 已存在：MR1 控制层完成自验但待用户确认，MR2 Review Batch 进行中；十个核心家族的 MR3 确定性 trace 已闭合，但动态媒体、原生实现和设备证据尚未闭合。后续状态以 [Motion 四层交付规划](./MOTION_DELIVERY_PLAN_2026-07-14.md) 与 [Motion Reference Index](./MOTION_REFERENCE_INDEX_2026-07-15.md) 为准。
 
 ## 可复用与不可复用边界
 
