@@ -1,6 +1,6 @@
 // Reader-UI Control Identity TypeScript contract
 // Source of truth: contracts/control-identity.schema.json
-// R1.2 · 显式语义身份修复 (2026-07-20, baseline 5ce233f)
+// A0 · 全局控制面纠偏 (2026-07-20, baseline a6993b4, schema 1.3.0)
 //
 // This file is hand-curated to match the JSON Schema; regenerating it from
 // the schema requires the codegen pipeline (see tools/interaction-inventory/codegen-control-ids.mjs).
@@ -65,9 +65,22 @@ export interface ControlIdentity {
    * attributes (data-instance / data-book-id / data-reader-tts-timer-value /
    * data-rss-source-id / etc.). null when no instance attribute is present.
    * When multiple occurrences of the same (route, state, entityKey) all have
-   * null instanceKey, mappingStatus = pending-instance-disambiguation.
+   * null instanceKey, needsInstanceKey = true.
    */
   instanceKey: string | null;
+  /**
+   * A0 (schema 1.3.0): Independent boolean flag — true when actionKey is null.
+   * Independent of needsInstanceKey; both can be true simultaneously.
+   * mappingStatus is derived from the (needsActionKey, needsInstanceKey) pair.
+   */
+  needsActionKey: boolean;
+  /**
+   * A0 (schema 1.3.0): Independent boolean flag — true when the entry belongs
+   * to a multi-occurrence (route, state, entityKey) group with null instanceKey
+   * and ordinal fallback was applied. Independent of needsActionKey; both can
+   * be true simultaneously. mappingStatus is derived from the pair.
+   */
+  needsInstanceKey: boolean;
   /** Product domain; matches ScreenGraph runtimeFamily. */
   domain: ControlDomain;
   /** Component family derived from DOM tag + ARIA role + class hints. */
@@ -84,7 +97,10 @@ export interface ControlIdentity {
   discriminator: string;
   /** Source audit provenance. */
   source: ControlIdentitySource;
-  /** R1.2: Whether the candidate was auto-mapped, requires manual mapping, or is pending. */
+  /**
+   * A0 (schema 1.3.0): Derived from (needsActionKey, needsInstanceKey).
+   * Read-only — callers MUST set needsActionKey / needsInstanceKey instead.
+   */
   mappingStatus: ControlMappingStatus;
   /** Optional human-readable mapping explanation. */
   mappingNotes: string | null;
@@ -154,11 +170,10 @@ export type ControlRole =
   | "summary";
 
 export type ControlMappingStatus =
-  | "auto-mapped"
-  | "needs-manual-mapping"
-  | "ambiguous-needs-review"
-  | "pending-explicit-semantics"
-  | "pending-instance-disambiguation";
+  | "mapped"
+  | "pending-action-key"
+  | "pending-instance-key"
+  | "pending-action-and-instance-key";
 
 export interface ControlIdentitySource {
   candidateKey: string;
@@ -196,13 +211,14 @@ export interface ControlIdRegistry {
     candidates: number;
     semanticControls: number;
     suspectedNonSemanticControls: number;
-    autoMapped: number;
-    needsManualMapping: number;
-    ambiguousNeedsReview: number;
-    /** R1.2: candidates with no explicit semantic actionKey. */
-    pendingExplicitSemantics: number;
-    /** R1.2: candidates sharing (route, state, entityKey) with null instanceKey. */
-    pendingInstanceDisambiguation: number;
+    /** A0 (1.3.0): both needsActionKey=false and needsInstanceKey=false. */
+    mapped: number;
+    /** A0 (1.3.0): needsActionKey=true, needsInstanceKey=false. */
+    pendingActionKey: number;
+    /** A0 (1.3.0): needsActionKey=false, needsInstanceKey=true. */
+    pendingInstanceKey: number;
+    /** A0 (1.3.0): both needsActionKey=true and needsInstanceKey=true. */
+    pendingActionAndInstanceKey: number;
     uniqueControlIds: number;
     /** R1.1: unique entityKey count (logical entities). */
     uniqueEntityKeys: number;

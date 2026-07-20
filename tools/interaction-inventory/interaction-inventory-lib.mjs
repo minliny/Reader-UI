@@ -1034,7 +1034,7 @@ export function checkInteractionInventoryArtifactBytes(artifacts = buildInteract
 // helpers. Does not modify existing IC0 inventory functions; only appends.
 // ===========================================================================
 
-export const CONTROL_ID_SCHEMA_VERSION = "1.2.0";
+export const CONTROL_ID_SCHEMA_VERSION = "1.3.0";
 export const CONTROL_ID_REGISTRY_PATH = "tools/interaction-inventory/generated/control-id-registry.json";
 export const SCREENGRAPH_BINDING_PATH = "tools/interaction-inventory/generated/screengraph-binding.json";
 export const FIGMA_CROSSWALK_PENDING_PATH = "tools/interaction-inventory/generated/figma-crosswalk-pending.json";
@@ -1284,6 +1284,71 @@ export function deriveInstanceKey(control) {
   }
   if (parts.length === 0) return null;
   return parts.join("-");
+}
+
+/**
+ * A0 (schema 1.3.0): Derive mappingStatus from the independent
+ * (needsActionKey, needsInstanceKey) pair.
+ *   (false, false) -> mapped
+ *   (true,  false) -> pending-action-key
+ *   (false, true)  -> pending-instance-key
+ *   (true,  true)  -> pending-action-and-instance-key
+ */
+export function deriveMappingStatus(needsActionKey, needsInstanceKey) {
+  if (needsActionKey && needsInstanceKey) return "pending-action-and-instance-key";
+  if (needsActionKey) return "pending-action-key";
+  if (needsInstanceKey) return "pending-instance-key";
+  return "mapped";
+}
+
+/**
+ * A0 (schema 1.3.0): The four canonical mappingStatus values. Source of
+ * truth: contracts/control-identity.schema.json `mappingStatus.enum`. This
+ * list MUST stay in sync with src/control-identity/dom-identity.ts
+ * `MAPPING_STATUS_VALUES`.
+ */
+export const MAPPING_STATUS_VALUES = Object.freeze([
+  "mapped",
+  "pending-action-key",
+  "pending-instance-key",
+  "pending-action-and-instance-key",
+]);
+
+/**
+ * A0 (schema 1.3.0): The three pending mappingStatus values. Mirror of
+ * src/control-identity/dom-identity.ts `PENDING_MAPPING_STATUS_VALUES`.
+ */
+export const PENDING_MAPPING_STATUS_VALUES = Object.freeze([
+  "pending-action-key",
+  "pending-instance-key",
+  "pending-action-and-instance-key",
+]);
+
+/**
+ * A0 (schema 1.3.0): Fail-closed guard for `data-control-key` writes.
+ *
+ * Page renderers MUST call this before stamping a controlKey onto the DOM.
+ * Writing a pending controlKey would leak provisional identity into the
+ * runtime, breaking the A0 invariant "禁止 pending identity 写入正式
+ * data-control-key". This .mjs mirror exists so drift tests can exercise
+ * the same fail-closed logic that the runtime TypeScript enforces in
+ * src/control-identity/dom-identity.ts `assertMappingStatusAllowsControlKeyWrite`.
+ *
+ * Throws when mappingStatus is any pending-* value or an unknown value.
+ */
+export function assertMappingStatusAllowsControlKeyWrite(mappingStatus, context) {
+  if (mappingStatus === "mapped") return;
+  const suffix = context ? ` (context: ${context})` : "";
+  if (PENDING_MAPPING_STATUS_VALUES.includes(mappingStatus)) {
+    throw new Error(
+      `assertMappingStatusAllowsControlKeyWrite: refusing to write data-control-key for pending mappingStatus="${mappingStatus}"${suffix}; ` +
+        `resolve the action/instance gap first so mappingStatus becomes "mapped".`,
+    );
+  }
+  throw new Error(
+    `assertMappingStatusAllowsControlKeyWrite: unknown mappingStatus="${mappingStatus}"${suffix}; ` +
+      `expected one of: ${MAPPING_STATUS_VALUES.join(", ")}.`,
+  );
 }
 
 
@@ -1568,41 +1633,42 @@ export function bindControlToScreenGraph(control, index) {
   };
 }
 
-function classifyMapping(control, binding) {
-  if (control.semanticStatus === "suspected-nonsemantic-control") {
-    return {
-      mappingStatus: "needs-manual-mapping",
-      mappingNotes: "Suspected non-semantic control from IC0 audit; needs human review to confirm control identity and ScreenGraph binding.",
-    };
-  }
-  if (!control.uiEvent && binding.bindingStatus !== "bound") {
-    return {
-      mappingStatus: "ambiguous-needs-review",
-      mappingNotes: "No canonical UiEvent and no ScreenGraph binding match; candidate may be navigation chrome, decorative, or duplicate control.",
-    };
-  }
-  return {
-    mappingStatus: "auto-mapped",
-    mappingNotes: null,
-  };
+/**
+ * A0 (schema 1.3.0): Compute the independent (needsActionKey, needsInstanceKey)
+ * pair from control + binding context. These two booleans are the source of
+ * truth; mappingStatus is derived from them via deriveMappingStatus().
+ *
+ * - needsActionKey: true when actionKey is null (no explicit semantic attribute).
+ * - needsInstanceKey: true when the caller signals a multi-occurrence
+ *   null-instanceKey group (instancePending=true). Single-occurrence entries
+ *   with null instanceKey are NOT flagged — only multi-occurrence groups that
+ *   required ordinal fallback need disambiguation.
+ */
+function computeNeedsFlags(control, binding, instancePending) {
+  const idParts = buildControlIdForCandidate(control, binding?.viewport ?? "phone");
+  const needsActionKey = idParts.actionKey === null;
+  const needsInstanceKey = instancePending === true;
+  return { needsActionKey, needsInstanceKey, idParts };
 }
 
-function buildRegistryEntry(control, viewport, binding, controlKeyOverride, mappingStatusOverride) {
+function buildMappingNotes(needsActionKey, needsInstanceKey) {
+  if (needsActionKey && needsInstanceKey) {
+    return "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.";
+  }
+  if (needsActionKey) {
+    return "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.";
+  }
+  if (needsInstanceKey) {
+    return "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.";
+  }
+  return null;
+}
+
+function buildRegistryEntry(control, viewport, binding, controlKeyOverride, instancePending) {
   const idParts = buildControlIdForCandidate(control, viewport);
-  const baseMapping = classifyMapping(control, binding);
-  // R1.2: pending-explicit-semantics takes precedence when actionKey is null.
-  // pending-instance-disambiguation takes precedence when the caller signals
-  // a multi-occurrence null-instanceKey group (via mappingStatusOverride).
-  let mappingStatus = baseMapping.mappingStatus;
-  let mappingNotes = baseMapping.mappingNotes;
-  if (idParts.actionKey === null) {
-    mappingStatus = "pending-explicit-semantics";
-    mappingNotes = "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.";
-  }
-  if (mappingStatusOverride === "pending-instance-disambiguation") {
-    mappingStatus = "pending-instance-disambiguation";
-    mappingNotes = `Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.`;
-  }
+  const { needsActionKey, needsInstanceKey } = computeNeedsFlags(control, { ...binding, viewport }, instancePending);
+  const mappingStatus = deriveMappingStatus(needsActionKey, needsInstanceKey);
+  const mappingNotes = buildMappingNotes(needsActionKey, needsInstanceKey);
   // R1.2: controlKey may be overridden by the caller when ordinal fallback
   // is needed for multi-occurrence null-instanceKey groups.
   const controlKey = controlKeyOverride || idParts.controlKey;
@@ -1612,6 +1678,8 @@ function buildRegistryEntry(control, viewport, binding, controlKeyOverride, mapp
     controlKey,
     actionKey: idParts.actionKey,
     instanceKey: idParts.instanceKey,
+    needsActionKey,
+    needsInstanceKey,
     domain: idParts.domain,
     family: idParts.family,
     route: idParts.route,
@@ -1731,7 +1799,7 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
           );
           const newEntry = buildRegistryEntry(
             items[i].control, viewport, items[i].binding, overrideControlKey,
-            "pending-instance-disambiguation",
+            true,
           );
           entries.push(newEntry);
         }
@@ -1755,7 +1823,7 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
           );
           const newEntry = buildRegistryEntry(
             it.control, viewport, it.binding, overrideControlKey,
-            "pending-instance-disambiguation",
+            true,
           );
           entries.push(newEntry);
         }
@@ -1795,11 +1863,11 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     candidates: entries.length,
     semanticControls: entries.filter((e) => e.source.semanticStatus === "semantic-control").length,
     suspectedNonSemanticControls: entries.filter((e) => e.source.semanticStatus === "suspected-nonsemantic-control").length,
-    autoMapped: entries.filter((e) => e.mappingStatus === "auto-mapped").length,
-    needsManualMapping: entries.filter((e) => e.mappingStatus === "needs-manual-mapping").length,
-    ambiguousNeedsReview: entries.filter((e) => e.mappingStatus === "ambiguous-needs-review").length,
-    pendingExplicitSemantics: entries.filter((e) => e.mappingStatus === "pending-explicit-semantics").length,
-    pendingInstanceDisambiguation: entries.filter((e) => e.mappingStatus === "pending-instance-disambiguation").length,
+    // A0 (schema 1.3.0): buckets derived from independent (needsActionKey, needsInstanceKey) pair.
+    mapped: entries.filter((e) => e.mappingStatus === "mapped").length,
+    pendingActionKey: entries.filter((e) => e.mappingStatus === "pending-action-key").length,
+    pendingInstanceKey: entries.filter((e) => e.mappingStatus === "pending-instance-key").length,
+    pendingActionAndInstanceKey: entries.filter((e) => e.mappingStatus === "pending-action-and-instance-key").length,
     uniqueControlIds: controlIdSet.size,
     uniqueEntityKeys: entityKeySet.size,
     uniqueControlKeys: controlKeySet.size,
@@ -2208,17 +2276,23 @@ export function validateControlIdRegistry(registry) {
   if (uniqControl > uniqControlId) {
     errors.push(`R1.2 invariant violated: uniqueControlKeys(${uniqControl}) > uniqueControlIds(${uniqControlId})`);
   }
-  // R1.2: pending counts must be non-negative and sum consistently.
-  if (registry.totals.pendingExplicitSemantics !== undefined) {
-    const recomputedPending = registry.entries.filter((e) => e.mappingStatus === "pending-explicit-semantics").length;
-    if (registry.totals.pendingExplicitSemantics !== recomputedPending) {
-      errors.push(`pendingExplicitSemantics totals mismatch: ${registry.totals.pendingExplicitSemantics} vs recomputed ${recomputedPending}`);
-    }
+  // A0 (schema 1.3.0): four derived buckets must match entry-level mappingStatus counts.
+  // Buckets: mapped / pending-action-key / pending-instance-key / pending-action-and-instance-key.
+  // The four buckets MUST sum to candidates (no entry is left unclassified).
+  const bucketRecompute = {
+    mapped: registry.entries.filter((e) => e.mappingStatus === "mapped").length,
+    pendingActionKey: registry.entries.filter((e) => e.mappingStatus === "pending-action-key").length,
+    pendingInstanceKey: registry.entries.filter((e) => e.mappingStatus === "pending-instance-key").length,
+    pendingActionAndInstanceKey: registry.entries.filter((e) => e.mappingStatus === "pending-action-and-instance-key").length,
+  };
+  const bucketSum = bucketRecompute.mapped + bucketRecompute.pendingActionKey
+    + bucketRecompute.pendingInstanceKey + bucketRecompute.pendingActionAndInstanceKey;
+  if (bucketSum !== registry.entries.length) {
+    errors.push(`A0 buckets sum mismatch: ${bucketSum} vs entries ${registry.entries.length}`);
   }
-  if (registry.totals.pendingInstanceDisambiguation !== undefined) {
-    const recomputedPending = registry.entries.filter((e) => e.mappingStatus === "pending-instance-disambiguation").length;
-    if (registry.totals.pendingInstanceDisambiguation !== recomputedPending) {
-      errors.push(`pendingInstanceDisambiguation totals mismatch: ${registry.totals.pendingInstanceDisambiguation} vs recomputed ${recomputedPending}`);
+  for (const [field, recomputed] of Object.entries(bucketRecompute)) {
+    if (registry.totals[field] !== recomputed) {
+      errors.push(`${field} totals mismatch: ${registry.totals[field]} vs recomputed ${recomputed}`);
     }
   }
 
@@ -2245,4 +2319,236 @@ function countInteractiveCandidates(inventory) {
     if (!NON_INTERACTIVE_ARIA_CONTAINER_ROLES.has(role)) count += 1;
   }
   return count;
+}
+
+// ============================================================================
+// A0 (schema 1.3.0): canonical resolver + DOM viewport coverage
+// ----------------------------------------------------------------------------
+// A0 entry condition: "测试真实 resolver 和真实 DOM viewport coverage".
+// The TypeScript runtime in src/control-identity/control-id-resolver.ts is the
+// canonical runtime implementation, but .mjs tests cannot import TypeScript
+// directly under `node --test`. To avoid mirroring the contract inline in
+// every test (which would let drift hide), we expose the same canonical
+// resolver + DOM coverage verifier here as the single .mjs source of truth
+// for tooling tests. The TypeScript file remains the runtime consumer entry
+// point; this .mjs mirror is what the drift tests exercise.
+// ============================================================================
+
+export const DATA_CONTROL_ID_ATTRIBUTE = "data-control-id";
+export const DATA_CONTROL_KEY_ATTRIBUTE = "data-control-key";
+export const DATA_ENTITY_KEY_ATTRIBUTE = "data-entity-key";
+export const DATA_VIEWPORT_ATTRIBUTE = "data-viewport";
+
+function cssEscapeAttribute(value) {
+  return String(value).replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+export function querySelectorForControlId(controlId) {
+  if (typeof controlId !== "string" || controlId.length === 0) {
+    throw new Error(`querySelectorForControlId requires a non-empty controlId, received: ${String(controlId)}`);
+  }
+  return `[${DATA_CONTROL_ID_ATTRIBUTE}="${cssEscapeAttribute(controlId)}"]`;
+}
+
+export function querySelectorForControlIdAndViewport(controlId, viewport) {
+  if (typeof controlId !== "string" || controlId.length === 0) {
+    throw new Error(`querySelectorForControlIdAndViewport requires a non-empty controlId, received: ${String(controlId)}`);
+  }
+  if (typeof viewport !== "string" || viewport.length === 0) {
+    throw new Error(`querySelectorForControlIdAndViewport requires a non-empty viewport, received: ${String(viewport)}`);
+  }
+  return `[${DATA_CONTROL_ID_ATTRIBUTE}="${cssEscapeAttribute(controlId)}"][${DATA_VIEWPORT_ATTRIBUTE}="${cssEscapeAttribute(viewport)}"]`;
+}
+
+function getDataControlId(element) {
+  if (!element || typeof element.getAttribute !== "function") return null;
+  return element.getAttribute(DATA_CONTROL_ID_ATTRIBUTE);
+}
+
+function getDataControlKey(element) {
+  if (!element || typeof element.getAttribute !== "function") return null;
+  return element.getAttribute(DATA_CONTROL_KEY_ATTRIBUTE);
+}
+
+function getDataViewport(element) {
+  if (!element || typeof element.getAttribute !== "function") return null;
+  return element.getAttribute(DATA_VIEWPORT_ATTRIBUTE);
+}
+
+/**
+ * Build a runtime resolver from a codegen-produced registry. The resolver
+ * is read-only and immutable; rebuild it when the codegen output changes.
+ *
+ * Invariants enforced at build time:
+ *   - Each (controlId, viewport) pair must be unique (throw on duplicate).
+ *   - Multiple entries with the same (controlKey, viewport) are ALLOWED
+ *     (no throw). Use resolveAllByControlKeyAndViewport to get all matches.
+ */
+export function createControlIdResolver(entries) {
+  const byControlId = new Map();
+  const byControlIdAndViewport = new Map();
+  const byControlKey = new Map();
+  const byControlKeyAndViewport = new Map();
+  const byEntityKey = new Map();
+  const bySelectorSha256 = new Map();
+  for (const entry of entries) {
+    if (byControlIdAndViewport.has(`${entry.controlId}@${entry.viewport}`)) {
+      throw new Error(`duplicate (controlId, viewport) in resolver input: ${entry.controlId}@${entry.viewport}`);
+    }
+    byControlIdAndViewport.set(`${entry.controlId}@${entry.viewport}`, entry);
+    if (!byControlId.has(entry.controlId)) {
+      byControlId.set(entry.controlId, entry);
+    }
+    if (!byControlKey.has(entry.controlKey)) {
+      byControlKey.set(entry.controlKey, []);
+    }
+    byControlKey.get(entry.controlKey).push(entry);
+    const ckVpKey = `${entry.controlKey}@${entry.viewport}`;
+    if (!byControlKeyAndViewport.has(ckVpKey)) {
+      byControlKeyAndViewport.set(ckVpKey, []);
+    }
+    byControlKeyAndViewport.get(ckVpKey).push(entry);
+    if (!byEntityKey.has(entry.entityKey)) {
+      byEntityKey.set(entry.entityKey, []);
+    }
+    byEntityKey.get(entry.entityKey).push(entry);
+    bySelectorSha256.set(entry.selectorSha256, entry);
+  }
+  return {
+    resolveByEntityKey(entityKey) {
+      return byEntityKey.get(entityKey) ?? [];
+    },
+    resolveByControlKey(controlKey) {
+      return byControlKey.get(controlKey) ?? [];
+    },
+    resolveByControlKeyAndViewport(controlKey, viewport) {
+      const matches = byControlKeyAndViewport.get(`${controlKey}@${viewport}`) ?? [];
+      return matches[0] ?? null;
+    },
+    resolveAllByControlKeyAndViewport(controlKey, viewport) {
+      return byControlKeyAndViewport.get(`${controlKey}@${viewport}`) ?? [];
+    },
+    resolveByControlId(controlId) {
+      return byControlId.get(controlId) ?? null;
+    },
+    resolveByControlIdAndViewport(controlId, viewport) {
+      return byControlIdAndViewport.get(`${controlId}@${viewport}`) ?? null;
+    },
+    resolveByDomSelector(selector) {
+      for (const entry of byControlId.values()) {
+        if (entry.domSelector === selector) return entry;
+      }
+      return null;
+    },
+    resolveByElement(element) {
+      const controlId = getDataControlId(element);
+      if (controlId) return byControlId.get(controlId) ?? null;
+      const controlKey = getDataControlKey(element);
+      if (controlKey) {
+        const matches = byControlKey.get(controlKey);
+        if (matches && matches.length > 0) return matches[0];
+      }
+      return null;
+    },
+    resolveByElementAndViewport(element) {
+      const controlId = getDataControlId(element);
+      const viewport = getDataViewport(element);
+      if (controlId) {
+        if (!viewport) return byControlId.get(controlId) ?? null;
+        return byControlIdAndViewport.get(`${controlId}@${viewport}`) ?? null;
+      }
+      const controlKey = getDataControlKey(element);
+      if (controlKey) {
+        if (!viewport) {
+          const matches = byControlKey.get(controlKey);
+          if (matches && matches.length > 0) return matches[0];
+          return null;
+        }
+        const vpMatches = byControlKeyAndViewport.get(`${controlKey}@${viewport}`) ?? [];
+        if (vpMatches.length > 0) return vpMatches[0];
+        return null;
+      }
+      return null;
+    },
+    all() {
+      return Array.from(byControlIdAndViewport.values());
+    },
+  };
+}
+
+/**
+ * Verify that every controlId in the resolver is present exactly once in the
+ * rendered DOM. Returns a list of missing or duplicate controlIds.
+ */
+export function verifyDomCoverage(resolver, root) {
+  const missing = [];
+  const duplicate = [];
+  if (typeof document === "undefined" || !root) {
+    return { missing: resolver.all().map((e) => e.controlId), duplicate: [] };
+  }
+  for (const entry of resolver.all()) {
+    const matches = Array.from(root.querySelectorAll(querySelectorForControlId(entry.controlId)));
+    if (matches.length === 0) {
+      missing.push(entry.controlId);
+    } else if (matches.length > 1) {
+      duplicate.push(entry.controlId);
+    }
+  }
+  return { missing, duplicate };
+}
+
+/**
+ * Verify DOM coverage with viewport awareness. For every entry in the
+ * resolver, check that the DOM contains an element with the matching
+ * data-control-id (and data-viewport when the entry is viewport-scoped).
+ * Also checks for extra DOM elements that carry a data-control-id not known
+ * to the resolver.
+ *
+ * Returns:
+ *   - covered: number of resolver entries that have at least one DOM match.
+ *   - missing: controlIds from the resolver that have NO DOM match.
+ *   - extra: data-control-id values found in the DOM but NOT in the resolver.
+ *   - duplicate: controlIds that appear more than once in the DOM.
+ */
+export function verifyDomCoverageAndViewport(resolver, root) {
+  const missing = [];
+  const duplicate = [];
+  const extra = [];
+  let covered = 0;
+
+  if (typeof document === "undefined" || !root) {
+    return {
+      covered: 0,
+      missing: resolver.all().map((e) => e.controlId),
+      extra: [],
+      duplicate: [],
+    };
+  }
+
+  const knownControlIds = new Set();
+  for (const entry of resolver.all()) {
+    knownControlIds.add(entry.controlId);
+  }
+
+  for (const entry of resolver.all()) {
+    const matches = Array.from(root.querySelectorAll(querySelectorForControlId(entry.controlId)));
+    if (matches.length === 0) {
+      missing.push(entry.controlId);
+    } else {
+      covered += 1;
+      if (matches.length > 1) {
+        duplicate.push(entry.controlId);
+      }
+    }
+  }
+
+  const allDomElements = Array.from(root.querySelectorAll(`[${DATA_CONTROL_ID_ATTRIBUTE}]`));
+  for (const el of allDomElements) {
+    const id = getDataControlId(el);
+    if (id && !knownControlIds.has(id)) {
+      extra.push(id);
+    }
+  }
+
+  return { covered, missing, extra, duplicate };
 }

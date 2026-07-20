@@ -35,6 +35,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
+import { lookupSubcontrolBusinessKey } from "./settings-subcontrol-business-keys.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -128,18 +129,21 @@ const ROUTE_DOMAIN = {
 };
 
 // ---- UiEvent exemption mapping (for null uiEvent registry entries) ----
+// A0 (schema 1.3.0): mappingStatus values are derived from the independent
+// (needsActionKey, needsInstanceKey) pair. The exemption conveys which kind
+// of pending identity blocked the entry from carrying a canonical UiEvent.
 function exemptionForMappingStatus(mappingStatus) {
   switch (mappingStatus) {
-    case "pending-explicit-semantics":
-      return "pending-explicit-semantics";
-    case "pending-instance-disambiguation":
-      return "pending-instance-disambiguation";
-    case "ambiguous-needs-review":
-      return "pending-instance-disambiguation";
-    case "auto-mapped":
-      return "pending-explicit-semantics";
+    case "pending-action-key":
+      return "pending-action-key";
+    case "pending-instance-key":
+      return "pending-instance-key";
+    case "pending-action-and-instance-key":
+      return "pending-action-and-instance-key";
+    case "mapped":
+      return "pending-action-key";
     default:
-      return "pending-explicit-semantics";
+      return "pending-action-key";
   }
 }
 
@@ -165,10 +169,17 @@ for (const e of registryEntries) {
   const routeInfo = dispatchMap.routes[e.route];
   if (!routeInfo) continue;
   const uiEvent = e.source.uiEvent || null;
+  // A0 (schema 1.3.0): declarations 保留 mappingStatus / actionKey / instanceKey /
+  // rendererSlot 四字段。前三个直接从 registry entry 投影；rendererSlot 是
+  // renderer owner 的稳定槽位标识（"renderer@rendererFile"），用于 12 个
+  // renderer-owner family 的归属对账。
   const decl = {
     entityKey: e.entityKey,
     controlKey: e.controlKey,
     controlId: e.controlId,
+    actionKey: e.actionKey,
+    instanceKey: e.instanceKey,
+    mappingStatus: e.mappingStatus,
     uiEvent: uiEvent,
     route: e.route,
     state: e.state,
@@ -177,6 +188,7 @@ for (const e of registryEntries) {
     role: e.role,
     renderer: routeInfo.renderer,
     rendererFile: routeInfo.rendererFile,
+    rendererSlot: `${routeInfo.renderer}@${routeInfo.rendererFile}`,
     pageFamily: routeInfo.pageFamily,
     source: "registry",
     label: e.source.label || null
@@ -197,22 +209,49 @@ const subcontrolRows = nonInteractive.entries
   });
 
 const subcontrolDeclarations = [];
+const missingBusinessKeys = [];
 for (const row of subcontrolRows) {
   const routeInfo = dispatchMap.routes[row.routeId];
   if (!routeInfo) continue;
   const domain = ROUTE_DOMAIN[row.routeId] || routeInfo.pageFamily;
-  const slug = "h-" + hash8(row.candidateKey + ":" + row.selectorSha256);
+  // A0 (schema 1.3.0): subcontrol slug MUST be a business semantic key
+  // from settings-subcontrol-business-keys.mjs, NOT a selector hash. This
+  // satisfies the A0 invariant "50 个设置子控件改用业务语义 key，不再使用
+  // selector hash". When the mapping is missing, fail-closed and report
+  // the drift so the mapping table can be updated.
+  const businessSlug = lookupSubcontrolBusinessKey(row.routeId, row.label);
+  if (!businessSlug) {
+    missingBusinessKeys.push({ routeId: row.routeId, label: row.label });
+    continue;
+  }
+  const slug = businessSlug;
   const route = row.routeId;
   const state = row.state || "default";
   const candidateKey = row.candidateKey;
+
+  // A0 (schema 1.3.0): subcontrol declarations carry the same four identity
+  // fields as registry-backed declarations. actionKey and instanceKey are null
+  // because the subcontrol has not yet been enumerated into the registry (no
+  // DOM attributes to derive from); mappingStatus is therefore
+  // "pending-action-and-instance-key". uiEvent is the predicted event type
+  // from expectedSubcontrolType — it is a planning hint, not a logical
+  // actionKey, until the renderer emits explicit semantic attributes.
+  const subcontrolMappingStatus = "pending-action-and-instance-key";
+  const subcontrolActionKey = null;
+  const subcontrolInstanceKey = null;
+  const subcontrolRendererSlot = `${routeInfo.renderer}@${routeInfo.rendererFile}`;
 
   if (row.expectedSubcontrolType === "switch") {
     const entityKey = `${domain}.switch.switch.${slug}`;
     const controlKey = `${entityKey}@${route}.${state}`;
     subcontrolDeclarations.push({
-      entityKey, controlKey, controlId: null, uiEvent: "toggle.switch",
+      entityKey, controlKey, controlId: null,
+      actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+      mappingStatus: subcontrolMappingStatus,
+      uiEvent: "toggle.switch",
       route, state, domain, family: "switch", role: "switch",
       renderer: routeInfo.renderer, rendererFile: routeInfo.rendererFile,
+      rendererSlot: subcontrolRendererSlot,
       pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
       expectedSubcontrolType: "switch", expectedSubcontrolIndex: 0,
       label: row.label || null, candidateKey,
@@ -222,9 +261,13 @@ for (const row of subcontrolRows) {
     const entityKey = `${domain}.combobox.combobox.${slug}`;
     const controlKey = `${entityKey}@${route}.${state}`;
     subcontrolDeclarations.push({
-      entityKey, controlKey, controlId: null, uiEvent: "dropdown.option.select",
+      entityKey, controlKey, controlId: null,
+      actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+      mappingStatus: subcontrolMappingStatus,
+      uiEvent: "dropdown.option.select",
       route, state, domain, family: "combobox", role: "combobox",
       renderer: routeInfo.renderer, rendererFile: routeInfo.rendererFile,
+      rendererSlot: subcontrolRendererSlot,
       pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
       expectedSubcontrolType: "select", expectedSubcontrolIndex: 0,
       label: row.label || null, candidateKey,
@@ -240,9 +283,13 @@ for (const row of subcontrolRows) {
       const entityKey = `${domain}.button.button.${b.suffix}.${slug}`;
       const controlKey = `${entityKey}@${route}.${state}`;
       subcontrolDeclarations.push({
-        entityKey, controlKey, controlId: null, uiEvent: b.uiEvent,
+        entityKey, controlKey, controlId: null,
+        actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+        mappingStatus: subcontrolMappingStatus,
+        uiEvent: b.uiEvent,
         route, state, domain, family: "button", role: "button",
         renderer: routeInfo.renderer, rendererFile: routeInfo.rendererFile,
+        rendererSlot: subcontrolRendererSlot,
         pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
         expectedSubcontrolType: "stepper", expectedSubcontrolIndex: i,
         label: (row.label || null) ? `${row.label} [${b.labelSuffix}]` : null,
@@ -254,9 +301,13 @@ for (const row of subcontrolRows) {
       const entityKey = `${domain}.button.button.segment-option-${i + 1}.${slug}`;
       const controlKey = `${entityKey}@${route}.${state}`;
       subcontrolDeclarations.push({
-        entityKey, controlKey, controlId: null, uiEvent: "segment.item.switch",
+        entityKey, controlKey, controlId: null,
+        actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+        mappingStatus: subcontrolMappingStatus,
+        uiEvent: "segment.item.switch",
         route, state, domain, family: "button", role: "button",
         renderer: routeInfo.renderer, rendererFile: routeInfo.rendererFile,
+        rendererSlot: subcontrolRendererSlot,
         pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
         expectedSubcontrolType: "segment", expectedSubcontrolIndex: i,
         label: (row.label || null) ? `${row.label} [option-${i + 1}]` : null,
@@ -266,6 +317,21 @@ for (const row of subcontrolRows) {
   } else {
     console.error(`WARNING: unknown expectedSubcontrolType "${row.expectedSubcontrolType}" on route ${row.routeId}`);
   }
+}
+
+// A0 (schema 1.3.0): fail-closed when the business key mapping table is out
+// of sync with the audit. Every subcontrol row MUST have a business semantic
+// slug; selector-hash slugs are forbidden by the A0 invariant.
+if (missingBusinessKeys.length > 0) {
+  console.error("FAIL: subcontrol rows missing business key mapping (selector hash forbidden by A0):");
+  for (const v of missingBusinessKeys.slice(0, 20)) {
+    console.error("  ", `${v.routeId}::${v.label}`);
+  }
+  if (missingBusinessKeys.length > 20) {
+    console.error(`  ... and ${missingBusinessKeys.length - 20} more`);
+  }
+  console.error("Update tools/interaction-inventory/settings-subcontrol-business-keys.mjs to cover these rows.");
+  process.exit(1);
 }
 
 // ---- Combine and sort declarations ----
@@ -356,8 +422,20 @@ function serializeDeclarations(decls, metaObj) {
   lines.push(" * R2.0.1 · Canonical Renderer Control Identity Declarations (GENERATED)");
   lines.push(" * -----------------------------------------------------------------------------");
   lines.push(" * 职责：为 frontend-demo-optimized/ 的 canonical renderer 声明每个渲染控件对应");
-  lines.push(" *       的 entityKey / controlKey / UiEvent 映射，作为 R2a/R2b 接入 DOM 属性");
-  lines.push(" *       （data-entity-key / data-control-key / data-control-id）的前置对账源。");
+  lines.push(" *       的 entityKey / controlKey / UiEvent 映射，作为 R2a/R2b/R3a/VC3-R3b 接入");
+  lines.push(" *       DOM 属性（data-entity-key / data-control-key / data-control-id）的前置");
+  lines.push(" *       对账源。");
+  lines.push(" *");
+  lines.push(" * A0 统一阶段命名（见 DENOMINATOR_RECONCILIATION.md §0）：");
+  lines.push(" *   - R2a：DOM identity instrumentation（renderer 写入 data-* 属性）");
+  lines.push(" *   - R2b：真实交互和状态机（UiEvent / state owner / effect owner）");
+  lines.push(" *   - R3a：Figma 前功能验证（本地 handoff packet，不访问 Figma）");
+  lines.push(" *   - VC3 / R3b：Figma 回写后的最终浏览器验证");
+  lines.push(" *");
+  lines.push(" * A0 三套分母（不混用）：");
+  lines.push(" *   - 13 个视觉/交互验收单元（12 非 Reader 页面族 + Settings General 试点）");
+  lines.push(" *   - 12 个 renderer-owner family（本文件覆盖的 pageFamilies）");
+  lines.push(" *   - 3,752 个 DOM occurrence（registry entries）");
   lines.push(" *");
   lines.push(" * 范围（12 页面族 exact gate）：");
   lines.push(" *   bookshelf / book-detail / search-results / import-conflict-resolve /");
@@ -367,17 +445,24 @@ function serializeDeclarations(decls, metaObj) {
   lines.push(" * 数据来源：");
   lines.push(" *   1. registry-backed 声明：从 R1.2 control-id-registry.json 投影 12 页面族下");
   lines.push(" *      每个 route 的所有 occurrence（route-local 1:1 对账，非全局集合）。");
+  lines.push(" *      A0 (schema 1.3.0): 每个 declaration 携带 mappingStatus / actionKey /");
+  lines.push(" *      instanceKey / rendererSlot 四字段；mappingStatus 派生自独立的");
+  lines.push(" *      (needsActionKey, needsInstanceKey) 二元组（4 桶：mapped /");
+  lines.push(" *      pending-action-key / pending-instance-key / pending-action-and-instance-key）。");
   lines.push(" *   2. r2.0-subcontrol 声明：R1.2 nonInteractiveContainers.json 标记的 46 个");
   lines.push(" *      containsUnenumeratedSubcontrols 设置行子控件，按 expectedSubcontrolCount");
   lines.push(" *      展开：switch→1, select→1, stepper→2 (minus+plus), segment→3。");
+  lines.push(" *      A0: 50 个子控件 slug 来自 settings-subcontrol-business-keys.mjs 业务语义");
+  lines.push(" *      映射表，不再使用 selector hash / ordinal fallback。");
   lines.push(" *");
   lines.push(" * 生成器：tools/interaction-inventory/generate-canonical-declarations.mjs");
-  lines.push(" * 生成基线：commit 5ce233f（R1.2），2026-07-20");
+  lines.push(" * 生成基线：commit 5ce233f（R1.2），2026-07-20；A0 (schema 1.3.0) 增量 2026-07-20");
   lines.push(" *");
-  lines.push(" * 不做的事（R2.0.1 边界）：");
-  lines.push(" *   - 不写 data-control-id / data-entity-key / data-control-key 到渲染输出 HTML（R2b）");
+  lines.push(" * 不做的事（R2.0.1 / A0 边界）：");
+  lines.push(" *   - 不写 data-control-id / data-entity-key / data-control-key 到渲染输出 HTML（R2a 范围）");
   lines.push(" *   - 不重构 renderer 行为（switch 还是 span；segment/stepper 缺事件不补）");
   lines.push(" *   - 不修改 R1.2 冻结的 schema/types/src-control-identity/registry");
+  lines.push(" *   - 不在 mappingStatus 非 \"mapped\" 时写 data-control-key（A0 fail-closed guard）");
   lines.push(" *");
   lines.push(" * 重算：node tools/interaction-inventory/generate-canonical-declarations.mjs");
   lines.push(" * 校验：node tools/interaction-inventory/generate-canonical-declarations.mjs --check");

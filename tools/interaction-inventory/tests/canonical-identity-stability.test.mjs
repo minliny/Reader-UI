@@ -293,9 +293,11 @@ test("R2.0.1 dispatch: declarations' renderer/rendererFile/pageFamily match disp
 
 // ---- Test 16: uiEvent 非空或明确豁免 ----
 test("R2.0.1 uiEvent: every declaration has uiEvent or uiEventExemption with valid type", () => {
+  // A0 (schema 1.3.0): exemption types align with the derived mappingStatus enum.
   const validExemptionTypes = new Set([
-    "pending-explicit-semantics",
-    "pending-instance-disambiguation",
+    "pending-action-key",
+    "pending-instance-key",
+    "pending-action-and-instance-key",
     "decorative",
     "container-only"
   ]);
@@ -336,4 +338,108 @@ test("R2.0.1 generator: --check mode is byte-stable (declarations file is up-to-
     assert.fail(`generator --check failed (declarations file is out of date): ${err.stdout || err.message}`);
   }
   assert.match(result, /OK: declarations up-to-date/, `generator --check should report up-to-date, got: ${result}`);
+});
+
+// ---- Test 19: A0 declarations 携带 mappingStatus / actionKey / instanceKey / rendererSlot ----
+test("A0 declarations: every declaration carries mappingStatus / actionKey / instanceKey / rendererSlot with valid values", () => {
+  const validMappingStatus = new Set([
+    "mapped",
+    "pending-action-key",
+    "pending-instance-key",
+    "pending-action-and-instance-key"
+  ]);
+  for (const d of declarations) {
+    assert.ok(
+      typeof d.mappingStatus === "string" && validMappingStatus.has(d.mappingStatus),
+      `declaration ${d.controlKey} has invalid mappingStatus: ${d.mappingStatus}`
+    );
+    assert.ok(
+      d.actionKey === null || typeof d.actionKey === "string",
+      `declaration ${d.controlKey} has invalid actionKey type: ${typeof d.actionKey}`
+    );
+    assert.ok(
+      d.instanceKey === null || typeof d.instanceKey === "string",
+      `declaration ${d.controlKey} has invalid instanceKey type: ${typeof d.instanceKey}`
+    );
+    assert.ok(
+      typeof d.rendererSlot === "string" && d.rendererSlot.length > 0 && d.rendererSlot.includes("@"),
+      `declaration ${d.controlKey} has invalid rendererSlot: ${d.rendererSlot}`
+    );
+    // A0 invariant (action dimension): mappingStatus's action-key gap must
+    // agree with actionKey presence. The instance dimension is validated at
+    // the registry level (drift test L1414) where needsInstanceKey is the
+    // derived flag, not (instanceKey === null), because needsInstanceKey
+    // captures the ordinal-fallback case for multi-occurrence groups.
+    const actionKeyPending = d.mappingStatus === "pending-action-key"
+      || d.mappingStatus === "pending-action-and-instance-key";
+    if (actionKeyPending) {
+      assert.equal(
+        d.actionKey, null,
+        `declaration ${d.controlKey} mappingStatus=${d.mappingStatus} but actionKey=${d.actionKey} (should be null)`
+      );
+    } else {
+      assert.ok(
+        typeof d.actionKey === "string" && d.actionKey.length > 0,
+        `declaration ${d.controlKey} mappingStatus=${d.mappingStatus} but actionKey is null or empty (should be non-null)`
+      );
+    }
+  }
+});
+
+// ---- Test 20: A0 subcontrol declarations 不依赖 selector hash / ordinal fallback ----
+test("A0 subcontrol declarations: 50 settings subcontrols use business semantic keys (no selector hash, no ordinal fallback)", () => {
+  // A0 invariant: "50 个设置子控件改用业务语义 key，不再使用 selector hash".
+  // The entityKey slug for every r2.0-subcontrol declaration MUST be a
+  // business semantic slug from settings-subcontrol-business-keys.mjs, not
+  // a `h-{selectorSha256前8位}` hash. The controlKey MUST NOT carry the
+  // R1.2 ordinal fallback suffix (n0/n1/n2/...) either — subcontrol
+  // identity is per-(route, state) and unique by business slug, so no
+  // ordinal disambiguation is needed.
+  const sub = declarations.filter((d) => d.source === "r2.0-subcontrol");
+  assert.equal(sub.length, 50, `expected 50 r2.0-subcontrol declarations, got ${sub.length}`);
+  const selectorHashPattern = /h-[0-9a-f]{8}/;
+  const ordinalFallbackPattern = /\.n\d+$/;
+  const failures = [];
+  for (const d of sub) {
+    if (selectorHashPattern.test(d.entityKey)) {
+      failures.push({ kind: "entityKey-has-selector-hash", controlKey: d.controlKey, entityKey: d.entityKey });
+    }
+    if (selectorHashPattern.test(d.controlKey)) {
+      failures.push({ kind: "controlKey-has-selector-hash", controlKey: d.controlKey });
+    }
+    if (ordinalFallbackPattern.test(d.controlKey)) {
+      failures.push({ kind: "controlKey-has-ordinal-fallback", controlKey: d.controlKey });
+    }
+  }
+  if (failures.length > 0) {
+    console.error("A0 subcontrol identity failures (first 10):");
+    for (const f of failures.slice(0, 10)) console.error("  ", JSON.stringify(f));
+    assert.fail(`A0: ${failures.length} subcontrol declarations still use selector hash or ordinal fallback (expected business semantic keys only)`);
+  }
+});
+
+// ---- Test 21: A0 settings-general subcontrol 身份不依赖 ordinal/selector ----
+test("A0 settings-general subcontrol: 8 rows generate identity without ordinal/selector (A0 exit gate)", () => {
+  // A0 退出门槛: "Settings General 范围可以生成不依赖 ordinal/selector 的身份".
+  // Verify the 8 settings-general rows (expanded to 10 declarations: 3 segment
+  // + 3 select + 4 switch) all carry business semantic slugs.
+  const sg = declarations.filter((d) => d.source === "r2.0-subcontrol" && d.route === "settings-general");
+  // 8 rows expand: 1 segment(3) + 3 select(1 each) + 4 switch(1 each) = 10.
+  assert.equal(sg.length, 10, `expected 10 settings-general subcontrol declarations, got ${sg.length}`);
+  const selectorHashPattern = /h-[0-9a-f]{8}/;
+  const ordinalFallbackPattern = /\.n\d+$/;
+  for (const d of sg) {
+    assert.doesNotMatch(
+      d.entityKey, selectorHashPattern,
+      `settings-general subcontrol entityKey must not contain selector hash: ${d.entityKey}`,
+    );
+    assert.doesNotMatch(
+      d.controlKey, selectorHashPattern,
+      `settings-general subcontrol controlKey must not contain selector hash: ${d.controlKey}`,
+    );
+    assert.doesNotMatch(
+      d.controlKey, ordinalFallbackPattern,
+      `settings-general subcontrol controlKey must not carry ordinal fallback: ${d.controlKey}`,
+    );
+  }
 });

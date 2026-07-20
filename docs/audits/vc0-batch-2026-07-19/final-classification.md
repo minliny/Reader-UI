@@ -1,4 +1,4 @@
-# VC0 最终分类（12 族） — 2026-07-19
+# VC0 推荐分类（12 族，待用户确认） — 2026-07-19
 
 > **工作包**：A1 · VC0 Evidence Closure
 > **分支**：`codex/motion-demo-optimizations`
@@ -6,24 +6,26 @@
 > **范围**：12 个非 Reader 页面族（F13-F24）
 > **Figma 文件**：`klhs2jMM4MncaJFqZMfqEK`
 > **执行者**：A1 工作包执行者
-> **状态**：VC0 事实收口完成；IC0 仍因 3,815 / 3,815 controls 缺稳定 join key 未通过
+> **状态**：VC0 事实收口完成；本文件是 A1 的**推荐分类**，**待用户确认后方可进入 R3a / VC3-R3b 串行流程**；IC0 仍因 3,815 / 3,815 controls 缺稳定 join key 未通过
+>
+> **A0 阶段命名对齐**：本文件原使用"VC1 / VC2 / VC3"作为后续阶段标签，A0「全局控制面纠偏」之后统一为 **R2a / R2b / R3a / VC3-R3b**（见 `tools/interaction-inventory/MIGRATION_REPORT.md` §16.1）。下方"VC1 / VC2 / VC3"字样保留为历史引用，等价于 R3a（Figma 前功能验证）/ VC3-R3b（Figma 回写后的最终浏览器验证）的子步骤。
 
 ## 0. 分类口径
 
-本最终分类只回答 VC0 层面的「事实」问题：当前 12 个非 Reader 页面族在静态 DOM / Figma 结构 / IC0 motion normalization 三层的事实证据下，应被分类为以下哪一类。
+本推荐分类只回答 VC0 层面的「事实」问题：当前 12 个非 Reader 页面族在静态 DOM / Figma 结构 / IC0 motion normalization 三层的事实证据下，应被分类为以下哪一类。**这是 A1 的推荐，需要用户确认后才算"最终分类"。**
 
-- **保持（keep）**：当前静态候选与 motion 覆盖证据足以维持现状，进入 VC1 之前仅需补齐全局稳定 ID / crosswalk；不需要 Reader-UI 先修视觉或 Codex 修复 Figma 结构。
+- **保持（keep）**：当前静态候选与 motion 覆盖证据足以维持现状，进入 R3a 之前仅需补齐全局稳定 ID / crosswalk；不需要 Reader-UI 先修视觉或 Codex 修复 Figma 结构。
 - **Codex 修复（codex-fix）**：Figma 结构可以保留，但 Reader-UI 代码层需要补稳定身份 / UiEvent 映射；不需要改 Figma。
 - **两阶段（two-stage）**：Reader-UI 先修（视觉 / 状态 / 控件语义），再在 A2 冻结稳定 ID 后做 Codex 修复；Figma 结构可保留，但当前静态候选在视觉、状态或 motion 覆盖上有缺口。
 - **Figma 修改（figma-modify）**：必须有同状态、同尺寸的当前 Figma / Browser 对照证据，或用户明确改版决定；本批无证据支持此类。
 
 **预分类（来自 `docs/READER_MULTI_AGENT_EXECUTION_GUIDE_2026-07-19.md` 第 3 节）**：keep=2, codex-fix=1, two-stage=9, figma-modify=0。
 
-**本最终分类结论**：保持预分类。无新证据推翻任何一族的预分类。
+**本推荐分类结论**：保持预分类。无新证据推翻任何一族的预分类。**待用户确认后方可称为"最终分类"并进入 R3a / VC3-R3b 串行流程。**
 
 ## 1. 分类汇总表
 
-| 顺序 | familyId | routeId | runtimeFamily | 最终分类 | 下一 owner | 预分类 | 是否变更 |
+| 顺序 | familyId | routeId | runtimeFamily | 推荐分类 | 下一 owner | 预分类 | 是否变更 |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 1 | F13-source-management | `source-management` | source | 两阶段 | Reader-UI 先修 | 两阶段 | 否 |
 | 2 | F14-webdav-config | `webdav-config` | sync | 两阶段 | Reader-UI 先修 | 两阶段 | 否 |
@@ -229,7 +231,7 @@
 
 ## 3. 分类变更说明
 
-无变更。12 族最终分类与预分类一致：
+无变更。12 族推荐分类与预分类一致（**待用户确认后方可称为"最终分类"**）：
 
 - **保持 2**：F23-about、F24-restore-preview。
 - **Codex 修复 1**：F22-source-switch。
@@ -238,13 +240,13 @@
 
 ## 4. 全局缺口与限制
 
-1. **IC0 仍因 3,815 / 3,815 controls 缺稳定 join key 未通过**。本最终分类不解决 IC0 问题；所有 12 族在 A2 冻结稳定 ID 后需要重新跑 IC0 门禁。
+1. **IC0 仍因 3,815 / 3,815 controls 缺稳定 join key 未通过**。本推荐分类不解决 IC0 问题；所有 12 族在 A2 冻结稳定 ID 后需要重新跑 IC0 门禁。
 2. **Figma 截图全部缺失**：12 族均未在 `docs/audits/vc0-batch-2026-07-19/evidence/` 下采集 Figma 静态截图，无法做同尺寸 Figma / Browser 对照。Figma 端 Node ID 已在 family-manifest.json 登记，但未导出为 PNG。
 3. **comparison 图全部缺失**：因 Figma 截图缺失，12 族 0 张同尺寸 comparison 图可生成；不伪造。
 4. **after / focus / console / 稳定终态全部缺失**：未启动浏览器自动化，interaction-traces.json 中 12 族 23 个 trace 的动态字段一律标记为 missing-needs-browser-automation。
 5. **compact / tablet 视口 DOM 部分缺失**：仅 F17-bookshelf / F22-source-switch / F24-restore-preview 三族三视口齐备，其余 9 族仅 phone 视口。
 6. **motionReduced=1 模式采集**：所有 DOM 观测在 motionReduced=1 模式下采集，未在 motionReduced=0 下做对比，无法判断 motionReduced=1 是否掩盖了动效缺陷。
-7. **本分类不替代 VC1 / VC2 / VC3**：每个族在用户确认后仍需依次完成 VC1（视觉对照）、VC2（Figma 写入）、VC3（Figma 冻结）。
+7. **本推荐分类不替代 R3a / VC3-R3b**：每个族在**用户确认推荐分类后**仍需依次完成 R3a（Figma 前功能验证，含视觉对照与本地 handoff packet）→ VC3-R3b（Figma 回写后的最终浏览器验证）。A0 之前的 "VC1 / VC2 / VC3" 命名已统一为 R3a / VC3-R3b（见 `tools/interaction-inventory/MIGRATION_REPORT.md` §16.1）。
 
 ## 5. 退出条件检查
 
@@ -252,7 +254,7 @@
 | --- | --- | --- |
 | 24 族 manifest | 完成 | `generated/family-manifest.json`（24 族，F01-F24） |
 | 12 族事实 | 完成 | `generated/visual-comparison-manifest.json` + `generated/browser-structure-observations.json` + `generated/interaction-traces.json` |
-| 最终分类 | 完成 | 本文件 `final-classification.md` |
+| 推荐分类（待用户确认） | 完成 | 本文件 `final-classification.md`（A1 推荐分类，待用户确认后方可称为"最终分类"并进入 R3a / VC3-R3b） |
 | 证据 hash | 完成 | `artifact-hashes.json`（见同目录） |
 | 证据限制 | 完成 | 本文件第 4 节 + 各 generated JSON 的 limitations / globalMissing 字段 |
 | IC0 状态 | 仍失败 | 3,815 / 3,815 controls 缺稳定 join key（`docs/audits/ic0-2026-07-19/generated/interaction-control-coverage.json` byJoinStatus） |

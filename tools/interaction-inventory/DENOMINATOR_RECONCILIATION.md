@@ -4,7 +4,42 @@
 日期：2026-07-20
 工作包：R1 · Control Identity 修复（基线 commit `e35e739`）
 
-## 1. 对账结论
+## 0. A0 三套分母拆分（2026-07-20 增量）
+
+A0「全局控制面纠偏」要求**分开三套分母**，不得合并表述。三套分母各自承担不同的对账责任，不允许互相替代：
+
+| 分母 | 数量 | 来源 | 责任 | 不允许混入 |
+| --- | ---: | --- | --- | --- |
+| **视觉/交互验收单元** | **13** | 12 个非 Reader 页面族（F13–F24，见 `docs/audits/vc0-batch-2026-07-19/final-classification.md`）+ 1 个 Reader 试点（Settings General，见 `docs/audits/ic0-2026-07-19/SETTINGS_GENERAL_VC0_SAMPLE.md`） | R3a / VC3-R3b 验收对象粒度 | 不允许用 renderer-owner family 或 DOM occurrence 替代 |
+| **renderer-owner family** | **12** | `tools/interaction-inventory/generated/renderer-dispatch-map.json` `pageFamilies`（bookshelf / book-detail / search-results / import-conflict-resolve / discover / rss / source-switch / settings-general / source-management / webdav-config / sync-backup / about-restore-preview） | R2a / R2b 渲染归属与 dispatch 对账 | 不允许用验收单元或 DOM occurrence 替代 |
+| **DOM occurrence** | **3,752** | `tools/interaction-inventory/generated/control-id-registry.json` `entries.length`（仅交互控件；63 个 ARIA 容器在 `nonInteractiveContainers.json` 中单独记录） | R2a DOM identity instrumentation 的稳定身份分母 | 不允许用验收单元或 renderer-owner family 替代 |
+
+### 0.1 三套分母的相互关系
+
+```
+13 验收单元 = 12 非 Reader 页面族 (F13-F24) + 1 Reader 试点 (Settings General)
+             ↓
+             ├─ 12 renderer-owner family（与 12 非 Reader 族基本对齐；
+             │   Settings General 试点归入 settings-general family）
+             ↓
+             └─ 3,752 DOM occurrence（分布在 12 renderer-owner family 下的 67 个路由上）
+                 ├─ mapped: 736
+                 ├─ pending-action-key: 443
+                 ├─ pending-instance-key: 1,114
+                 └─ pending-action-and-instance-key: 1,459
+```
+
+### 0.2 三套分母不变式
+
+- **13 验收单元**：在 R3a / VC3-R3b 中，每个验收单元必须独立通过；不允许用"3,752 DOM occurrence 全绿"或"12 family 全绿"替代。
+- **12 renderer-owner family**：在 R2a / R2b 中，每个 family 的 declarations 与 dispatch map 1:1 对账（route-local occurrence 1:1，见 `canonical-reconciliation.json`）。
+- **3,752 DOM occurrence**：在 R2a 中，每个 DOM occurrence 必须有稳定的 `entityKey` / `controlKey` / `controlId`（见 `control-id-registry.json`）；`mappingStatus="mapped"` 的 736 个可直接写入 `data-control-key`，3 个 pending 桶共 3,016 个必须 fail-closed（见 `assertMappingStatusAllowsControlKeyWrite`）。
+
+### 0.3 历史分母（保留为 R1 §1）
+
+下方 §1 仍保留 R1 时代的 IC0 inventory 分母（3,752 + 63 = 3,815）作为历史记录。A0 之后该分母仅用于 IC0 audit 完整性校验，**不再作为验收/renderer-owner/DOM occurrence 的分母**。
+
+## 1. 对账结论（R1 历史 IC0 inventory 分母）
 
 | 对象 | 数量 | 来源 | 备注 |
 | --- | ---: | --- | --- |

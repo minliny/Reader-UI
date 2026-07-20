@@ -29,7 +29,7 @@ if (!["--write", "--check"].includes(mode) || process.argv.length !== 3) {
   const figma = buildFigmaCrosswalkPending();
   const dom = buildDomIdentityMap();
   console.log(
-    `[control-identity] generated ${registry.totals.candidates} entries / ${registry.totals.uniqueControlIds} unique controlIds / ${registry.totals.autoMapped} auto-mapped / ${registry.totals.needsManualMapping} needs-manual / ${registry.totals.ambiguousNeedsReview} ambiguous / ${binding.totals.bound} bound / ${binding.totals.unresolved} unresolved / ${binding.totals.pendingFigmaJoin} pending-figma-join / ${figma.totalPending} figma-pending / ${dom.totals.entries} dom-entries`,
+    `[control-identity] generated ${registry.totals.candidates} entries / ${registry.totals.uniqueControlIds} unique controlIds / ${registry.totals.mapped} mapped / ${registry.totals.pendingActionKey} pending-action-key / ${registry.totals.pendingInstanceKey} pending-instance-key / ${registry.totals.pendingActionAndInstanceKey} pending-action-and-instance-key / ${binding.totals.bound} bound / ${binding.totals.unresolved} unresolved / ${binding.totals.pendingFigmaJoin} pending-figma-join / ${figma.totalPending} figma-pending / ${dom.totals.entries} dom-entries`,
   );
   for (const path of paths) console.log(`[control-identity] wrote ${path}`);
 } else {

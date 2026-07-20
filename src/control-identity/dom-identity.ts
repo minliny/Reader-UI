@@ -77,6 +77,61 @@ export const DATA_ENTITY_KEY_ATTRIBUTE = "data-entity-key" as const;
 export const DATA_CONTROL_KEY_ATTRIBUTE = "data-control-key" as const;
 
 /**
+ * A0 (schema 1.3.0): The four canonical mappingStatus values, derived from
+ * the independent (needsActionKey, needsInstanceKey) pair. Source of truth:
+ * contracts/control-identity.schema.json `mappingStatus.enum`.
+ */
+export const MAPPING_STATUS_VALUES = Object.freeze([
+  "mapped",
+  "pending-action-key",
+  "pending-instance-key",
+  "pending-action-and-instance-key",
+] as const);
+
+export type ControlMappingStatusValue = (typeof MAPPING_STATUS_VALUES)[number];
+
+/**
+ * A0 (schema 1.3.0): The three pending mappingStatus values. Entries in any
+ * of these states MUST NOT be stamped onto the DOM as `data-control-key` —
+ * the controlKey is provisional until both the action and instance gaps are
+ * resolved (mappingStatus === "mapped").
+ */
+export const PENDING_MAPPING_STATUS_VALUES = Object.freeze([
+  "pending-action-key",
+  "pending-instance-key",
+  "pending-action-and-instance-key",
+] as const);
+
+/**
+ * A0 (schema 1.3.0): Fail-closed guard for `data-control-key` writes.
+ *
+ * Page renderers MUST call this before `setDataControlKey` to assert that
+ * the entry's mappingStatus is "mapped". Writing a pending controlKey to
+ * the DOM would leak provisional identity into the runtime, breaking the
+ * A0 invariant "禁止 pending identity 写入正式 data-control-key".
+ *
+ * Throws when mappingStatus is any pending-* value or an unknown value.
+ */
+export function assertMappingStatusAllowsControlKeyWrite(
+  mappingStatus: string,
+  context?: string,
+): void {
+  if (mappingStatus === "mapped") return;
+  if ((PENDING_MAPPING_STATUS_VALUES as readonly string[]).includes(mappingStatus)) {
+    const suffix = context ? ` (context: ${context})` : "";
+    throw new Error(
+      `assertMappingStatusAllowsControlKeyWrite: refusing to write data-control-key for pending mappingStatus="${mappingStatus}"${suffix}; ` +
+        `resolve the action/instance gap first so mappingStatus becomes "mapped".`,
+    );
+  }
+  const suffix = context ? ` (context: ${context})` : "";
+  throw new Error(
+    `assertMappingStatusAllowsControlKeyWrite: unknown mappingStatus="${mappingStatus}"${suffix}; ` +
+      `expected one of: ${MAPPING_STATUS_VALUES.join(", ")}.`,
+  );
+}
+
+/**
  * Set the canonical logical controlId on a DOM element. Future page renderers
  * MUST call this on the root element of every interactive control.
  *

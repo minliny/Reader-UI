@@ -1,6 +1,6 @@
 # VC0 批量审计暂存包 · 2026-07-19
 
-状态：A1 · VC0 Evidence Closure 工作包已完成 24 族 manifest、12 族 Figma / Browser 对照现状、最小交互 trace、最终分类、artifact SHA-256 与证据限制；IC0 仍因 3,815 / 3,815 controls 缺稳定 join key 未通过，VC0 证据收口不等于 VC0 门禁通过。
+状态：A1 · VC0 Evidence Closure 工作包已完成 24 族 manifest、12 族 Figma / Browser 对照现状、最小交互 trace、推荐分类（待用户确认）、artifact SHA-256 与证据限制；IC0 仍因 3,815 / 3,815 controls 缺稳定 join key 未通过，VC0 证据收口不等于 VC0 门禁通过。
 
 ## 已落盘
 
@@ -10,7 +10,7 @@
 - `generated/visual-comparison-manifest.json`：12 族 Figma / Browser 视觉对照现状清单。18 张 browser raw 截图齐备；Figma 截图 0 张；comparison 图 0 张（不伪造）。
 - `generated/browser-structure-observations.json`：36 条当前浏览器观测（12 族 × 3 视口，部分族仅 phone）。
 - `generated/interaction-traces.json`：12 族 23 个最小交互 trace。before / operationTarget / derivableUiEvent 从静态 DOM 推导；after / focus / console / 稳定终态标记 `missing-needs-browser-automation`。
-- `final-classification.md`：12 族最终分类，保持预分类（keep=2 / codex-fix=1 / two-stage=9 / figma-modify=0）。
+- `final-classification.md`：12 族推荐分类（待用户确认），保持预分类（keep=2 / codex-fix=1 / two-stage=9 / figma-modify=0）。
 - `artifact-hashes.json`：A1 写入的 9 个文件 + 18 张 browser raw 截图 + 8 个引用文件的 SHA-256；worktree HEAD `8f9eea1c31cb4b3328f76a06fd286868ea7b9f13`。
 - `evidence/browser-raw/`：12 个 Phone 原始截图，以及 Bookshelf / Restore Preview / Source Switch 的 Compact、Tablet 原始截图，共 18 张。
 
@@ -27,9 +27,9 @@
 - 本批只处理剩余 12 个非 Reader 页面族；不重审或覆盖 Reader 2。
 - Figma 端 Node ID 已在 `family-manifest.json` 登记，但未导出为 PNG。
 
-## 最终分类结论
+## 推荐分类结论（待用户确认）
 
-| 顺序 | familyId | routeId | 最终分类 | 下一 owner |
+| 顺序 | familyId | routeId | 推荐分类 | 下一 owner |
 | --- | --- | --- | --- | --- |
 | 1 | F13-source-management | `source-management` | 两阶段 | Reader-UI 先修 |
 | 2 | F14-webdav-config | `webdav-config` | 两阶段 | Reader-UI 先修 |
@@ -52,6 +52,6 @@
 2. **Figma 截图全部缺失**：12 族均未采集 Figma 静态截图，无法做同尺寸 Figma / Browser 对照；需要后续工作包补齐或由用户确认跳过。
 3. **浏览器自动化 trace 缺失**：`interaction-traces.json` 中 12 族 23 个 trace 的 after / focus / console / 稳定终态字段一律标记为 `missing-needs-browser-automation`。
 4. **compact / tablet 视口 DOM 部分缺失**：仅 F17-bookshelf / F22-source-switch / F24-restore-preview 三族三视口齐备，其余 9 族仅 phone 视口。
-5. **12 族最终分类待用户确认**：A1 保持预分类，需用户确认后方可进入 VC1 / VC2 / VC3 串行流程。
+5. **12 族推荐分类待用户确认**：A1 保持预分类，**待用户确认后方可称为"最终分类"并进入 R3a / VC3-R3b 串行流程**（A0 统一阶段命名，见 `tools/interaction-inventory/MIGRATION_REPORT.md` §16.1）。
 
 完整施工指导见 [Reader 后续多 agent 执行指导](../../READER_MULTI_AGENT_EXECUTION_GUIDE_2026-07-19.md)。

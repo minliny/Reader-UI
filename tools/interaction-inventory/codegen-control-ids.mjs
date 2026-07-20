@@ -124,8 +124,13 @@ function buildTypescriptArtifact(registry) {
   lines.push(`export const CONTROL_ID_REGISTRY_UNIQUE_CONTROL_KEYS = ${registry.totals.uniqueControlKeys};`);
   lines.push(`export const CONTROL_ID_REGISTRY_UNIQUE_ACTION_KEYS = ${registry.totals.uniqueActionKeys};`);
   lines.push(`export const CONTROL_ID_REGISTRY_UNIQUE_INSTANCE_KEYS = ${registry.totals.uniqueInstanceKeys};`);
-  lines.push(`export const CONTROL_ID_REGISTRY_PENDING_EXPLICIT_SEMANTICS = ${registry.totals.pendingExplicitSemantics};`);
-  lines.push(`export const CONTROL_ID_REGISTRY_PENDING_INSTANCE_DISAMBIGUATION = ${registry.totals.pendingInstanceDisambiguation};`);
+  // A0 (schema 1.3.0): independent (needsActionKey, needsInstanceKey) buckets.
+  // Old pendingExplicitSemantics / pendingInstanceDisambiguation fields are
+  // removed; downstream consumers must use the four derived buckets below.
+  lines.push(`export const CONTROL_ID_REGISTRY_MAPPED = ${registry.totals.mapped};`);
+  lines.push(`export const CONTROL_ID_REGISTRY_PENDING_ACTION_KEY = ${registry.totals.pendingActionKey};`);
+  lines.push(`export const CONTROL_ID_REGISTRY_PENDING_INSTANCE_KEY = ${registry.totals.pendingInstanceKey};`);
+  lines.push(`export const CONTROL_ID_REGISTRY_PENDING_ACTION_AND_INSTANCE_KEY = ${registry.totals.pendingActionAndInstanceKey};`);
   lines.push("");
   lines.push("export function getControlIdEntry(controlId: string): ControlIdRegistryEntry | undefined {");
   lines.push("  return CONTROL_ID_LOOKUP[controlId];");

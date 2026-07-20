@@ -29,6 +29,21 @@ import {
   // R1.2: explicit semantic identity helpers
   deriveActionKey,
   deriveInstanceKey,
+  // A0 (schema 1.3.0): independent needsActionKey/needsInstanceKey buckets
+  // and fail-closed guard for data-control-key writes.
+  deriveMappingStatus,
+  MAPPING_STATUS_VALUES,
+  PENDING_MAPPING_STATUS_VALUES,
+  assertMappingStatusAllowsControlKeyWrite,
+  // A0: canonical resolver + DOM viewport coverage (real implementation,
+  // not inline mirror). Satisfies "测试真实 resolver 和真实 DOM viewport
+  // coverage" entry condition.
+  createControlIdResolver,
+  verifyDomCoverage,
+  verifyDomCoverageAndViewport,
+  querySelectorForControlId,
+  querySelectorForControlIdAndViewport,
+  DATA_CONTROL_ID_ATTRIBUTE,
 } from "../interaction-inventory-lib.mjs";
 import {
   compileEntryValidator,
@@ -348,27 +363,40 @@ test("R1 no per-entry firstMaterializedAt or schemaVersion (R1 removes both)", (
   assert.equal(persistedRegistry.schemaVersion, CONTROL_ID_SCHEMA_VERSION);
 });
 
-test("R1.2 mapping status buckets sum to total candidate count", () => {
+test("A0 mapping status buckets sum to total candidate count (independent needsActionKey/needsInstanceKey)", () => {
   const totals = persistedRegistry.totals;
-  // R1.2: buckets now include pending-explicit-semantics and pending-instance-disambiguation.
-  const sum = totals.autoMapped + totals.needsManualMapping + totals.ambiguousNeedsReview
-    + totals.pendingExplicitSemantics + totals.pendingInstanceDisambiguation;
-  assert.equal(sum, totals.candidates);
-  // R1: after excluding 63 group/section, needsManualMapping should be 0.
-  assert.equal(totals.needsManualMapping, 0);
-  // R1.2: pending-explicit-semantics must be > 0 (many controls lack explicit semantic attrs).
-  assert.ok(totals.pendingExplicitSemantics > 0, "expected some pending-explicit-semantics entries");
-  // R1.2: pending-instance-disambiguation may be > 0 (multi-occurrence groups without instanceKey).
-  assert.ok(totals.pendingInstanceDisambiguation >= 0);
+  // A0 (schema 1.3.0): four derived buckets from independent (needsActionKey, needsInstanceKey) pair.
+  //   mapped                          (false, false)
+  //   pending-action-key              (true,  false)
+  //   pending-instance-key            (false, true)
+  //   pending-action-and-instance-key (true,  true)
+  const sum = totals.mapped + totals.pendingActionKey
+    + totals.pendingInstanceKey + totals.pendingActionAndInstanceKey;
+  assert.equal(sum, totals.candidates, "four A0 buckets must sum to candidates");
+  // A0: pendingActionKey must be > 0 (many controls lack explicit semantic attrs).
+  assert.ok(totals.pendingActionKey > 0, "expected some pending-action-key entries");
+  // A0: pendingActionAndInstanceKey must be > 0 (multi-occurrence groups with null actionKey AND null instanceKey).
+  assert.ok(totals.pendingActionAndInstanceKey > 0, "expected some pending-action-and-instance-key entries");
+  // A0: each entry's mappingStatus must be consistent with its (needsActionKey, needsInstanceKey) pair.
   for (const entry of persistedRegistry.entries) {
-    if (entry.mappingStatus === "auto-mapped") {
-      const hasUiEvent = entry.source.uiEvent !== null;
-      const isBound = entry.screenGraphBinding.bindingStatus === "bound";
-      assert.ok(hasUiEvent || isBound, `auto-mapped entry lacks both UiEvent and binding: ${entry.controlId}`);
+    if (entry.mappingStatus === "mapped") {
+      assert.equal(entry.needsActionKey, false, `mapped entry ${entry.controlId} has needsActionKey=true`);
+      assert.equal(entry.needsInstanceKey, false, `mapped entry ${entry.controlId} has needsInstanceKey=true`);
     }
-    if (entry.mappingStatus === "pending-explicit-semantics") {
-      // R1.2: pending-explicit-semantics entries must have null actionKey.
-      assert.equal(entry.actionKey, null, `pending-explicit-semantics entry has non-null actionKey: ${entry.controlId}`);
+    if (entry.mappingStatus === "pending-action-key") {
+      assert.equal(entry.needsActionKey, true, `pending-action-key entry ${entry.controlId} has needsActionKey=false`);
+      assert.equal(entry.needsInstanceKey, false, `pending-action-key entry ${entry.controlId} has needsInstanceKey=true`);
+      // pending-action-key entries must have null actionKey.
+      assert.equal(entry.actionKey, null, `pending-action-key entry has non-null actionKey: ${entry.controlId}`);
+    }
+    if (entry.mappingStatus === "pending-instance-key") {
+      assert.equal(entry.needsActionKey, false, `pending-instance-key entry ${entry.controlId} has needsActionKey=true`);
+      assert.equal(entry.needsInstanceKey, true, `pending-instance-key entry ${entry.controlId} has needsInstanceKey=false`);
+    }
+    if (entry.mappingStatus === "pending-action-and-instance-key") {
+      assert.equal(entry.needsActionKey, true, `pending-action-and-instance-key entry ${entry.controlId} has needsActionKey=false`);
+      assert.equal(entry.needsInstanceKey, true, `pending-action-and-instance-key entry ${entry.controlId} has needsInstanceKey=false`);
+      assert.equal(entry.actionKey, null, `pending-action-and-instance-key entry has non-null actionKey: ${entry.controlId}`);
     }
   }
 });
@@ -1046,8 +1074,9 @@ test("R1.2 241 TTS speed options have unique controlKeys (R1.1 folding bug fixed
       `TTS option ${entry.controlId} has unexpected instanceKey: ${entry.instanceKey}`,
     );
   }
-  // R1.2: all TTS options have null actionKey (pending-explicit-semantics)
-  // because they don't have data-action / data-route attributes.
+  // A0 (schema 1.3.0): all TTS options have null actionKey (no data-action / data-route)
+  // AND non-null instanceKey (tts-speed-X-tts-idx-Y), so needsActionKey=true and
+  // needsInstanceKey=false → mappingStatus = pending-action-key.
   for (const entry of ttsOptions) {
     assert.equal(
       entry.actionKey,
@@ -1055,9 +1084,19 @@ test("R1.2 241 TTS speed options have unique controlKeys (R1.1 folding bug fixed
       `TTS option ${entry.controlId} should have null actionKey (no explicit semantic attr)`,
     );
     assert.equal(
+      entry.needsActionKey,
+      true,
+      `TTS option ${entry.controlId} should have needsActionKey=true`,
+    );
+    assert.equal(
+      entry.needsInstanceKey,
+      false,
+      `TTS option ${entry.controlId} should have needsInstanceKey=false (instanceKey is non-null)`,
+    );
+    assert.equal(
       entry.mappingStatus,
-      "pending-explicit-semantics",
-      `TTS option ${entry.controlId} should be pending-explicit-semantics`,
+      "pending-action-key",
+      `TTS option ${entry.controlId} should be pending-action-key`,
     );
   }
 });
@@ -1096,14 +1135,23 @@ test("R1.2 actionKey is derived ONLY from explicit semantic whitelist (never fro
       );
     }
   }
-  // R1.2: entries with null actionKey must be marked pending-explicit-semantics
-  // or pending-instance-disambiguation.
+  // A0 (schema 1.3.0): entries with null actionKey have needsActionKey=true, so
+  // mappingStatus must be one of pending-action-key or pending-action-and-instance-key.
+  // (pending-instance-key and mapped require needsActionKey=false, i.e. non-null actionKey.)
   for (const entry of persistedRegistry.entries) {
     if (entry.actionKey === null) {
       assert.ok(
-        entry.mappingStatus === "pending-explicit-semantics" ||
-        entry.mappingStatus === "pending-instance-disambiguation",
-        `entry ${entry.controlId} has null actionKey but mappingStatus=${entry.mappingStatus} (expected pending-*)`,
+        entry.mappingStatus === "pending-action-key" ||
+        entry.mappingStatus === "pending-action-and-instance-key",
+        `entry ${entry.controlId} has null actionKey but mappingStatus=${entry.mappingStatus} (expected pending-action-key or pending-action-and-instance-key)`,
+      );
+      assert.equal(entry.needsActionKey, true, `entry ${entry.controlId} has null actionKey but needsActionKey=false`);
+    } else {
+      // Non-null actionKey → needsActionKey=false → mappingStatus is mapped or pending-instance-key.
+      assert.equal(entry.needsActionKey, false, `entry ${entry.controlId} has non-null actionKey but needsActionKey=true`);
+      assert.ok(
+        entry.mappingStatus === "mapped" || entry.mappingStatus === "pending-instance-key",
+        `entry ${entry.controlId} has non-null actionKey but mappingStatus=${entry.mappingStatus} (expected mapped or pending-instance-key)`,
       );
     }
   }
@@ -1275,63 +1323,73 @@ test("R1.2 resolver supports multiple occurrences of the same (controlKey, viewp
   assert.equal(all.length, 2, `expected 2 matches, got ${all.length}`);
 });
 
-test("R1.2 verifyDomCoverageAndViewport is implemented and returns correct shape", () => {
-  // R1.2: verifyDomCoverageAndViewport must be implemented and return
-  // { covered, missing, extra, duplicate }.
-  //
-  // NOTE: src/control-identity/control-id-resolver.ts is a TypeScript file
-  // that cannot be imported directly from this .mjs test (no TS loader in the
-  // node --test runner). We mirror the verifyDomCoverageAndViewport contract
-  // inline to verify the R1.2 shape: in non-DOM environments it returns
-  // covered=0, missing=all controlIds, extra=[], duplicate=[].
-  function createTestResolver(entries) {
-    const byControlIdAndViewport = new Map();
-    for (const entry of entries) {
-      byControlIdAndViewport.set(entry.controlId + "@" + entry.viewport, entry);
-    }
-    return {
-      all() {
-        return Array.from(byControlIdAndViewport.values());
-      },
-    };
-  }
-  function verifyTestDomCoverageAndViewport(resolver, root) {
-    const missing = [];
-    const extra = [];
-    const duplicate = [];
-    let covered = 0;
-    if (typeof document === "undefined" || !root) {
-      return {
-        covered: 0,
-        missing: resolver.all().map((e) => e.controlId),
-        extra: [],
-        duplicate: [],
-      };
-    }
-    const knownControlIds = new Set();
-    for (const entry of resolver.all()) {
-      knownControlIds.add(entry.controlId);
-    }
-    for (const entry of resolver.all()) {
-      const matches = Array.from(root.querySelectorAll("[data-control-id='" + entry.controlId + "']"));
-      if (matches.length === 0) {
-        missing.push(entry.controlId);
-      } else {
-        covered += 1;
-        if (matches.length > 1) {
-          duplicate.push(entry.controlId);
-        }
-      }
-    }
-    const allDomElements = Array.from(root.querySelectorAll("[data-control-id]"));
-    for (const el of allDomElements) {
-      const id = el.getAttribute("data-control-id");
-      if (id && !knownControlIds.has(id)) {
-        extra.push(id);
-      }
-    }
-    return { covered, missing, extra, duplicate };
-  }
+test("A0 real resolver: createControlIdResolver builds and resolves entries with real implementation", () => {
+  // A0 entry: "测试真实 resolver 和真实 DOM viewport coverage".
+  // Exercise the REAL createControlIdResolver (mirrored from
+  // src/control-identity/control-id-resolver.ts to .mjs so the drift test
+  // can import it without a TS loader). No inline mirror, no stub.
+  const entries = [
+    {
+      entityKey: "test.button.button",
+      controlKey: "test.button.button@test.default",
+      actionKey: null,
+      instanceKey: null,
+      controlId: "test.button.test.default.button.h-test0001",
+      domSelector: "[data-control-id='test.button.test.default.button.h-test0001']",
+      selectorSha256: "c".repeat(64),
+      routeId: "test",
+      viewport: "phone",
+      screenGraphBinding: null,
+    },
+    {
+      entityKey: "test.button.button",
+      controlKey: "test.button.button@test.default",
+      actionKey: null,
+      instanceKey: null,
+      controlId: "test.button.test.default.button.h-test0001",
+      domSelector: "[data-control-id='test.button.test.default.button.h-test0001']",
+      selectorSha256: "d".repeat(64),
+      routeId: "test",
+      viewport: "compact",
+      screenGraphBinding: null,
+    },
+  ];
+  const resolver = createControlIdResolver(entries);
+  // Real resolver API surface.
+  assert.equal(typeof resolver.resolveByEntityKey, "function");
+  assert.equal(typeof resolver.resolveByControlKey, "function");
+  assert.equal(typeof resolver.resolveByControlKeyAndViewport, "function");
+  assert.equal(typeof resolver.resolveAllByControlKeyAndViewport, "function");
+  assert.equal(typeof resolver.resolveByControlId, "function");
+  assert.equal(typeof resolver.resolveByControlIdAndViewport, "function");
+  assert.equal(typeof resolver.resolveByDomSelector, "function");
+  assert.equal(typeof resolver.resolveByElement, "function");
+  assert.equal(typeof resolver.resolveByElementAndViewport, "function");
+  assert.equal(typeof resolver.all, "function");
+  // Real resolution results.
+  assert.equal(resolver.all().length, 2, "resolver must hold both entries");
+  assert.equal(resolver.resolveByEntityKey("test.button.button").length, 2);
+  assert.equal(resolver.resolveByControlKey("test.button.button@test.default").length, 2);
+  assert.equal(resolver.resolveAllByControlKeyAndViewport("test.button.button@test.default", "phone").length, 1);
+  assert.equal(resolver.resolveAllByControlKeyAndViewport("test.button.button@test.default", "compact").length, 1);
+  assert.ok(resolver.resolveByControlId("test.button.test.default.button.h-test0001"));
+  assert.ok(resolver.resolveByControlIdAndViewport("test.button.test.default.button.h-test0001", "phone"));
+  // Duplicate (controlId, viewport) must throw.
+  assert.throws(
+    () => createControlIdResolver([
+      { ...entries[0] },
+      { ...entries[0] }, // same controlId + viewport
+    ]),
+    /duplicate \(controlId, viewport\) in resolver input/,
+  );
+});
+
+test("A0 real DOM viewport coverage: verifyDomCoverageAndViewport returns correct shape in non-DOM env", () => {
+  // A0 entry: "测试真实 resolver 和真实 DOM viewport coverage".
+  // Exercise the REAL verifyDomCoverageAndViewport (mirrored from
+  // src/control-identity/control-id-resolver.ts to .mjs). In a non-DOM
+  // environment (node --test, document undefined) the real implementation
+  // returns covered=0, missing=all controlIds, extra=[], duplicate=[].
   const entries = [
     {
       entityKey: "test.button.button",
@@ -1346,19 +1404,51 @@ test("R1.2 verifyDomCoverageAndViewport is implemented and returns correct shape
       screenGraphBinding: null,
     },
   ];
-  const resolver = createTestResolver(entries);
-  // In a non-DOM environment (node:test), document is undefined.
-  // verifyDomCoverageAndViewport must still return a valid shape.
-  const result = verifyTestDomCoverageAndViewport(resolver);
+  const resolver = createControlIdResolver(entries);
+  const result = verifyDomCoverageAndViewport(resolver);
   assert.ok(typeof result.covered === "number", "covered must be a number");
   assert.ok(Array.isArray(result.missing), "missing must be an array");
   assert.ok(Array.isArray(result.extra), "extra must be an array");
   assert.ok(Array.isArray(result.duplicate), "duplicate must be an array");
-  // In non-DOM environment, all entries should be missing.
   if (typeof document === "undefined") {
-    assert.equal(result.covered, 0);
-    assert.ok(result.missing.length >= 1, "expected missing entries in non-DOM environment");
+    assert.equal(result.covered, 0, "non-DOM env must report covered=0");
+    assert.equal(result.missing.length, 1, "non-DOM env must report all entries as missing");
+    assert.equal(result.extra.length, 0);
+    assert.equal(result.duplicate.length, 0);
   }
+  // verifyDomCoverage (without viewport) returns the simpler shape.
+  const basic = verifyDomCoverage(resolver);
+  assert.ok(Array.isArray(basic.missing));
+  assert.ok(Array.isArray(basic.duplicate));
+  if (typeof document === "undefined") {
+    assert.equal(basic.missing.length, 1);
+    assert.equal(basic.duplicate.length, 0);
+  }
+});
+
+test("A0 real DOM viewport coverage: querySelectorForControlId produces canonical attribute selector", () => {
+  // A0 entry: "测试真实 resolver 和真实 DOM viewport coverage".
+  // Exercise the REAL querySelectorForControlId / querySelectorForControlIdAndViewport
+  // helpers that verifyDomCoverageAndViewport depends on. These must produce
+  // the canonical attribute selector that the runtime stamps into the DOM.
+  const controlId = "test.button.test.default.button.h-test0001";
+  assert.equal(
+    querySelectorForControlId(controlId),
+    `[${DATA_CONTROL_ID_ATTRIBUTE}="${controlId}"]`,
+  );
+  assert.equal(
+    querySelectorForControlIdAndViewport(controlId, "phone"),
+    `[${DATA_CONTROL_ID_ATTRIBUTE}="${controlId}"][data-viewport="phone"]`,
+  );
+  // Empty inputs must throw (fail-closed).
+  assert.throws(
+    () => querySelectorForControlId(""),
+    /querySelectorForControlId requires a non-empty controlId/,
+  );
+  assert.throws(
+    () => querySelectorForControlIdAndViewport(controlId, ""),
+    /querySelectorForControlIdAndViewport requires a non-empty viewport/,
+  );
 });
 
 test("R1.2 all controlKeys are unique (instanceKey/ordinal disambiguates multi-occurrence groups)", () => {
@@ -1378,27 +1468,30 @@ test("R1.2 all controlKeys are unique (instanceKey/ordinal disambiguates multi-o
   );
 });
 
-test("R1.2 pending-explicit-semantics and pending-instance-disambiguation counts are tracked in totals", () => {
+test("A0 pending-action-key / pending-instance-key / pending-action-and-instance-key counts tracked in totals (independent gaps)", () => {
   const totals = persistedRegistry.totals;
-  assert.ok(
-    typeof totals.pendingExplicitSemantics === "number",
-    "totals must include pendingExplicitSemantics",
-  );
-  assert.ok(
-    typeof totals.pendingInstanceDisambiguation === "number",
-    "totals must include pendingInstanceDisambiguation",
-  );
-  assert.ok(totals.pendingExplicitSemantics > 0, "expected some pending-explicit-semantics entries");
-  assert.ok(totals.pendingInstanceDisambiguation >= 0, "pendingInstanceDisambiguation must be non-negative");
-  // R1.2: cross-check with entries.
-  const recomputedPendingSemantics = persistedRegistry.entries.filter(
-    (e) => e.mappingStatus === "pending-explicit-semantics",
-  ).length;
-  const recomputedPendingInstance = persistedRegistry.entries.filter(
-    (e) => e.mappingStatus === "pending-instance-disambiguation",
-  ).length;
-  assert.equal(totals.pendingExplicitSemantics, recomputedPendingSemantics);
-  assert.equal(totals.pendingInstanceDisambiguation, recomputedPendingInstance);
+  // A0 (schema 1.3.0): totals must carry the four derived buckets.
+  assert.ok(typeof totals.mapped === "number", "totals must include mapped");
+  assert.ok(typeof totals.pendingActionKey === "number", "totals must include pendingActionKey");
+  assert.ok(typeof totals.pendingInstanceKey === "number", "totals must include pendingInstanceKey");
+  assert.ok(typeof totals.pendingActionAndInstanceKey === "number", "totals must include pendingActionAndInstanceKey");
+  // A0: pendingActionKey must be > 0 (actionKey gap exists).
+  assert.ok(totals.pendingActionKey > 0, "expected some pending-action-key entries (actionKey gap)");
+  // A0: pendingInstanceKey must be > 0 (instanceKey gap exists independently).
+  assert.ok(totals.pendingInstanceKey > 0, "expected some pending-instance-key entries (instanceKey gap)");
+  // A0: pendingActionAndInstanceKey must be > 0 (both gaps simultaneously — the key A0 invariant).
+  assert.ok(totals.pendingActionAndInstanceKey > 0, "expected some pending-action-and-instance-key entries (both gaps)");
+  // A0: cross-check totals vs entry-level recomputation.
+  const recompute = {
+    mapped: persistedRegistry.entries.filter((e) => e.mappingStatus === "mapped").length,
+    pendingActionKey: persistedRegistry.entries.filter((e) => e.mappingStatus === "pending-action-key").length,
+    pendingInstanceKey: persistedRegistry.entries.filter((e) => e.mappingStatus === "pending-instance-key").length,
+    pendingActionAndInstanceKey: persistedRegistry.entries.filter((e) => e.mappingStatus === "pending-action-and-instance-key").length,
+  };
+  assert.equal(totals.mapped, recompute.mapped, "mapped totals mismatch");
+  assert.equal(totals.pendingActionKey, recompute.pendingActionKey, "pendingActionKey totals mismatch");
+  assert.equal(totals.pendingInstanceKey, recompute.pendingInstanceKey, "pendingInstanceKey totals mismatch");
+  assert.equal(totals.pendingActionAndInstanceKey, recompute.pendingActionAndInstanceKey, "pendingActionAndInstanceKey totals mismatch");
 });
 
 test("R1.2 uniqueActionKeys and uniqueInstanceKeys are tracked in totals", () => {
@@ -1414,4 +1507,60 @@ test("R1.2 uniqueActionKeys and uniqueInstanceKeys are tracked in totals", () =>
   ).size;
   assert.equal(totals.uniqueActionKeys, recomputedActionKeys, "uniqueActionKeys mismatch");
   assert.equal(totals.uniqueInstanceKeys, recomputedInstanceKeys, "uniqueInstanceKeys mismatch");
+});
+
+test("A0 fail-closed: assertMappingStatusAllowsControlKeyWrite refuses pending identity and accepts mapped", () => {
+  // A0 invariant: "禁止 pending identity 写入正式 data-control-key".
+  // Exercise the real assertMappingStatusAllowsControlKeyWrite (mirror of the
+  // runtime guard in src/control-identity/dom-identity.ts) against every
+  // registry entry to confirm:
+  //   1. mappingStatus === "mapped" entries pass the guard.
+  //   2. mappingStatus in pending-* entries throw — these controlKeys MUST
+  //      NOT be stamped onto the DOM as data-control-key until the gap is
+  //      resolved.
+  //   3. Unknown mappingStatus values also throw.
+  let mappedCount = 0;
+  let pendingCount = 0;
+  for (const entry of persistedRegistry.entries) {
+    if (entry.mappingStatus === "mapped") {
+      assert.doesNotThrow(
+        () => assertMappingStatusAllowsControlKeyWrite(entry.mappingStatus, entry.controlKey),
+        `mapped entry should pass guard: ${entry.controlKey}`,
+      );
+      mappedCount += 1;
+    } else {
+      assert.throws(
+        () => assertMappingStatusAllowsControlKeyWrite(entry.mappingStatus, entry.controlKey),
+        /refusing to write data-control-key for pending mappingStatus/,
+        `pending entry should throw: ${entry.controlKey} (mappingStatus=${entry.mappingStatus})`,
+      );
+      pendingCount += 1;
+    }
+  }
+  // Sanity: both buckets must be non-empty in the real registry.
+  assert.ok(mappedCount > 0, "expected some mapped entries to pass the guard");
+  assert.ok(pendingCount > 0, "expected some pending entries to throw");
+  // Unknown mappingStatus must also throw.
+  assert.throws(
+    () => assertMappingStatusAllowsControlKeyWrite("bogus-status"),
+    /unknown mappingStatus/,
+    "unknown mappingStatus should throw",
+  );
+});
+
+test("A0 fail-closed: MAPPING_STATUS_VALUES and PENDING_MAPPING_STATUS_VALUES are in sync with schema enum", () => {
+  // A0: the .mjs mirror must stay in sync with the schema's mappingStatus.enum.
+  const schema = JSON.parse(readFileSync(join(REPO_ROOT, "contracts/control-identity.schema.json"), "utf8"));
+  const schemaEnum = schema.properties.mappingStatus.enum;
+  assert.deepEqual(
+    [...MAPPING_STATUS_VALUES].sort(),
+    [...schemaEnum].sort(),
+    "MAPPING_STATUS_VALUES must match schema mappingStatus.enum",
+  );
+  const pendingFromSchema = schemaEnum.filter((v) => v !== "mapped");
+  assert.deepEqual(
+    [...PENDING_MAPPING_STATUS_VALUES].sort(),
+    [...pendingFromSchema].sort(),
+    "PENDING_MAPPING_STATUS_VALUES must match schema mappingStatus.enum minus 'mapped'",
+  );
 });

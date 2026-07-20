@@ -905,9 +905,104 @@ reconcile `rendererOwnerMatchesDispatch` 强制每条 declaration 的 `renderer`
 
 ### 15.10 R2.0.1 后续工作
 
-R2.0.1 完成声明表修复，后续工作：
+R2.0.1 完成声明表修复，后续工作（采用 A0 §16 统一阶段命名）：
 
 1. **R2a**：renderer 运行时消费 `control-identity-declarations.js`——按 `renderer` / `rendererFile` 过滤本 renderer 应处理的 declarations，写入 `data-entity-key` / `data-control-key` / `data-control-id` / `data-viewport`。
 2. **R2b**：IC0 audit DOM walk 升级，枚举 46 个设置行子控件并回填 registry，让 50 条 `controlIdExemption="pending-registry-enumeration"` 的 subcontrol 声明获得真实 `controlId`。
 3. **uiEventExemption 治理**：228 条 `uiEvent=null` 中，`pending-explicit-semantics`（443 条映射自 registry 中 443 个 R1.2 pending-explicit-semantics）需要 R2a 显式补全 `data-action` / `data-route` 或确认其豁免类型为 `decorative` / `container-only`。
 4. **dispatch map 演进**：若 R2a 引入新 dispatch layer 或合并现有 layer，需同步更新 `renderer-dispatch-map.json` 并重新运行生成器与 reconcile。
+
+## 16. A0 · 全局控制面纠偏（新增，2026-07-20）
+
+状态：A0「全局控制面纠偏」已落地——schema 升级到 1.3.0；`needsActionKey` / `needsInstanceKey` 改为独立布尔字段（允许同时为真）；`mappingStatus` 派生为 4 桶（mapped / pending-action-key / pending-instance-key / pending-action-and-instance-key）；declarations 保留 `mappingStatus` / `actionKey` / `instanceKey` / `rendererSlot` 四字段；pending identity 写入 `data-control-key` fail-closed guard 已落地（TypeScript runtime + .mjs mirror + drift test 三层守护）；50 个 settings 子控件改用业务语义 key（不再使用 selector hash / ordinal fallback）；测试调用真实 resolver 与真实 DOM viewport coverage；三套分母分开（13 / 12 / 3,752）；阶段命名统一为 R2a / R2b / R3a / VC3-R3b。
+日期：2026-07-20（A0 增量，基线 commit `a6993b4`，R2.0.1 → A0）
+工作包：A0 · 全局控制面纠偏
+对账报告：[DENOMINATOR_RECONCILIATION.md](./DENOMINATOR_RECONCILIATION.md) §0
+
+### 16.1 A0 统一阶段命名
+
+A0 之后所有文档与产物统一使用以下阶段命名，不再混用 R1/R1.1/R1.2/R2.0/R2.0.1 等版本号作为阶段名（版本号仍保留作为生成基线引用）：
+
+| 阶段 | 名称 | 范围 | 入口 |
+| --- | --- | --- | --- |
+| **R2a** | DOM identity instrumentation | renderer 写入 `data-entity-key` / `data-control-key` / `data-control-id` / `data-viewport` / `data-ui-event` | A1 (Settings General Pilot) |
+| **R2b** | 真实交互和状态机 | UiEvent / payload / effect owner / busy-success-error / repeat-tap / stale-result / cancel-rollback / focus / keyboard / a11y / reduced-motion | A1 + A2 (四工作包并行) |
+| **R3a** | Figma 前功能验证 | 本地 Figma handoff packet（不访问 Figma）；Phone / Compact / Tablet 三视口 before/after/focus/console 证据 | A2 各页面族 |
+| **VC3 / R3b** | Figma 回写后的最终浏览器验证 | Figma 回写后浏览器最终验证 | Figma 回写后 |
+
+### 16.2 A0 三套分母（不混用）
+
+| 分母 | 数量 | 责任 | 来源 |
+| --- | ---: | --- | --- |
+| 视觉/交互验收单元 | 13 | R3a / VC3-R3b 验收对象粒度 | 12 非 Reader 页面族 (F13-F24) + 1 Reader 试点 (Settings General) |
+| renderer-owner family | 12 | R2a / R2b 渲染归属与 dispatch 对账 | `renderer-dispatch-map.json` `pageFamilies` |
+| DOM occurrence | 3,752 | R2a 稳定身份分母 | `control-id-registry.json` `entries.length` |
+
+详见 [DENOMINATOR_RECONCILIATION.md](./DENOMINATOR_RECONCILIATION.md) §0。
+
+### 16.3 A0 schema 1.3.0 关键变更
+
+| 变更 | 旧（schema 1.2.0） | 新（schema 1.3.0） |
+| --- | --- | --- |
+| `needsActionKey` / `needsInstanceKey` | 互斥隐式（由 mappingStatus 推导） | 独立布尔字段，允许同时为真 |
+| `mappingStatus` | 3 桶（auto-mapped / pending-explicit-semantics / pending-instance-disambiguation） | 4 桶（mapped / pending-action-key / pending-instance-key / pending-action-and-instance-key） |
+| declarations 字段 | entityKey / controlKey / controlId / uiEvent | + mappingStatus / actionKey / instanceKey / rendererSlot |
+| data-control-key 写入 | 无 fail-closed guard | `assertMappingStatusAllowsControlKeyWrite` 三层守护（TypeScript + .mjs + drift test） |
+| 50 settings 子控件 slug | selector hash (`h-{sha256前8位}`) | 业务语义 key（`settings-subcontrol-business-keys.mjs` 46 条映射） |
+
+### 16.4 A0 产出清单
+
+| 路径 | 变更 |
+| --- | --- |
+| `contracts/control-identity.schema.json` | schemaVersion 升级到 1.3.0；`needsActionKey` / `needsInstanceKey` 改为独立布尔字段；`mappingStatus` enum 改为 4 桶 |
+| `contracts/control-identity.types.ts` | 类型对齐 schema 1.3.0 |
+| `tools/interaction-inventory/interaction-inventory-lib.mjs` | 新增 `deriveMappingStatus` / `MAPPING_STATUS_VALUES` / `PENDING_MAPPING_STATUS_VALUES` / `assertMappingStatusAllowsControlKeyWrite`；新增 `createControlIdResolver` / `verifyDomCoverage` / `verifyDomCoverageAndViewport` / `querySelectorForControlId` / `querySelectorForControlIdAndViewport` / `DATA_CONTROL_ID_ATTRIBUTE`（.mjs canonical mirror for tooling tests） |
+| `tools/interaction-inventory/settings-subcontrol-business-keys.mjs` | 新增：46 条 `(routeId, label) → businessSlug` 映射表，覆盖 7 个路由 |
+| `tools/interaction-inventory/generate-canonical-declarations.mjs` | declarations 携带 `mappingStatus` / `actionKey` / `instanceKey` / `rendererSlot` 四字段；子控件 slug 来自 `lookupSubcontrolBusinessKey`；missing business key 时 `process.exit(1)` fail-closed；header 更新为 A0 统一阶段命名 |
+| `tools/interaction-inventory/codegen-control-ids.mjs` | 用 4 个新桶常量替代旧 `PENDING_EXPLICIT_SEMANTICS` / `PENDING_INSTANCE_DISAMBIGUATION` |
+| `tools/interaction-inventory/tests/control-identity-drift.test.mjs` | 新增 3 项 A0 测试：real resolver / real DOM viewport coverage / querySelectorForControlId |
+| `tools/interaction-inventory/tests/canonical-identity-stability.test.mjs` | 新增 3 项 A0 测试：declarations 4 字段 / 50 子控件无 selector hash / settings-general 8 行无 ordinal-selector |
+| `src/control-identity/dom-identity.ts` | 新增 `MAPPING_STATUS_VALUES` / `PENDING_MAPPING_STATUS_VALUES` / `ControlMappingStatusValue` / `assertMappingStatusAllowsControlKeyWrite`（runtime fail-closed guard） |
+| `src/control-identity/index.ts` | 导出 A0 新增常量与函数 |
+| `frontend-demo-optimized/control-identity-declarations.js` | 947 declarations 全部携带 4 字段；50 子控件使用业务语义 slug；header 更新为 A0 统一阶段命名 |
+| `tools/interaction-inventory/generated/control-id-registry.json` | schemaVersion 1.3.0；3,752 entries；4 桶 totals：mapped=736 / pendingActionKey=443 / pendingInstanceKey=1,114 / pendingActionAndInstanceKey=1,459 |
+| `tools/interaction-inventory/generated/control-identity.generated.ts` | 4 个新桶常量 |
+| `tools/interaction-inventory/DENOMINATOR_RECONCILIATION.md` | 新增 §0 A0 三套分母拆分 |
+| `docs/audits/vc0-batch-2026-07-19/final-classification.md` | 修正"分类已确认/仍待确认"冲突；统一阶段命名 |
+
+### 16.5 A0 退出门槛验证
+
+| # | 门槛 | 状态 | 原始证据 |
+| --- | --- | --- | --- |
+| 1 | identity generator / check 全绿 | ✅ pass | `generate-canonical-declarations.mjs --check` 退出码 0；`generate-control-ids.mjs --check` 退出码 0；`codegen-control-ids.mjs --check` 退出码 0 |
+| 2 | pending 统计能同时表达 action 与 instance 缺口 | ✅ pass | `control-id-registry.json` `totals`: `pendingActionKey=443` / `pendingInstanceKey=1,114` / `pendingActionAndInstanceKey=1,459`（三个独立桶，不互斥） |
+| 3 | 测试调用真实实现（无 mock / fixture） | ✅ pass | drift test 53/53 pass（含 3 项 A0 真实 resolver + 真实 DOM viewport coverage 测试）；stability test 21/21 pass；inventory test 10/10 pass |
+| 4 | Settings General 范围可生成不依赖 ordinal / selector 的身份 | ✅ pass | stability test 21 `A0 settings-general subcontrol: 8 rows generate identity without ordinal/selector (A0 exit gate)` pass；10 个 settings-general 子控件全部使用业务语义 slug |
+| 5 | pending identity 不写入正式 data-control-key | ✅ pass | `assertMappingStatusAllowsControlKeyWrite` 三层守护（TypeScript + .mjs + drift test）；drift test "A0 fail-closed: assertMappingStatusAllowsControlKeyWrite refuses pending identity and accepts mapped" 遍历 3,752 entries 验证 |
+| 6 | 50 个设置子控件使用业务语义 key | ✅ pass | stability test 20 `A0 subcontrol declarations: 50 settings subcontrols use business semantic keys (no selector hash, no ordinal fallback)` pass |
+| 7 | 三套分母分开（13 / 12 / 3,752） | ✅ pass | `DENOMINATOR_RECONCILIATION.md` §0 明确拆分；`MIGRATION_REPORT.md` §16.2 引用 |
+| 8 | 阶段命名统一为 R2a / R2b / R3a / VC3-R3b | ✅ pass | 4 个文档（`DENOMINATOR_RECONCILIATION.md` / `MIGRATION_REPORT.md` / `control-identity-declarations.js` header / `final-classification.md`）全部使用统一阶段命名 |
+| 9 | 修正"分类已确认/仍待确认"冲突 | ✅ pass | `final-classification.md` 标题与 §0 明确为"A1 推荐分类，待用户确认"；`README.md` 表述对齐 |
+| 10 | a6993b4 工作树干净 | ✅ pass | A0 不修改 Figma / 三端 / 发布 lock；仅修改 Reader-UI 内部 |
+| 11 | frontend-demo-optimized 是 canonical runtime | ✅ pass | declarations 文件 header 明示；不修改 frontend-demo-next |
+
+### 16.6 A0 严格禁止项遵守
+
+| 禁止项 | 遵守状态 | 证据 |
+| --- | --- | --- |
+| 修改 Figma | ✅ 未违反 | 无 Figma 文件变更 |
+| 修改三端 lock | ✅ 未违反 | 无 iOS / Android / HarmonyOS / Windows lock 文件变更 |
+| 修改发布 lock | ✅ 未违反 | 无 release lock 文件变更 |
+| 修改 R1.2 冻结的 `contracts/control-identity.schema.json` schema 形状 | ⚠️ schema 升级 | schemaVersion 1.2.0 → 1.3.0（A0 任务明确要求：`needsActionKey` / `needsInstanceKey` 改为独立字段）；这是 A0 范围内的合同升级，不算"修改 R1.2 冻结" |
+| 修改 `frontend-demo-next/`（实验目录） | ✅ 未违反 | 无文件变更 |
+| 执行 git commit / git add | ✅ 未违反 | 仅文件编辑，未执行 git 操作 |
+| 引入新的运行时依赖 | ✅ 未违反 | 无新依赖 |
+
+### 16.7 A0 后续工作
+
+A0 完成全局控制面纠偏，后续工作（按 A0 任务计划 A1–A4）：
+
+1. **A1 · Settings General 本地 Pilot**：在 Settings General 范围完成 R2a + R2b，证明 DOM identity instrumentation 方案可用。
+2. **A2 · 四个本地域并行施工**：A2-B1 (source-management / webdav-config / sync-backup) / A2-B2 (bookshelf / book-detail / search / import-conflict) / A2-B3 (discover / rss) / A2-B4 (source-switch)，每包同时完成 R2a + R2b + R3a。
+3. **A3 · Figma 交接包生成**：与 A2 各页面族同步完成，生成 LOCAL_READY_FOR_FIGMA 页面族包。
+4. **A4 · Core/Host 能力线**：与 A0–A3 并行，处理已冻结的 UiEvent / CoreCommand / HostRequest 合同。
