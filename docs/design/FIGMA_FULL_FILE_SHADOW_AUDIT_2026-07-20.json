@@ -106,8 +106,9 @@
   },
   "namedRevisionBlocker": null,
   "scopeGuard": {
-    "f1UserConfirmed": false,
-    "f2QueueAdmitted": false,
+    "f1UserConfirmed": true,
+    "f1UserConfirmedAt": "2026-07-20T11:46:51Z",
+    "f2QueueAdmitted": true,
     "motionReferenceDirectWrite": false,
     "businessFlowChanged": false,
     "uiEventChanged": false

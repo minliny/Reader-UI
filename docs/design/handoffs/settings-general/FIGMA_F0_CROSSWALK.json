@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.2.0",
-  "status": "F1_AWAITING_USER_CONFIRMATION",
+  "status": "F1_COMPLETE",
   "scope": "Settings General",
   "observedAt": "2026-07-20T11:40:25Z",
   "localSource": {
@@ -113,9 +113,12 @@
     "f0Pass": true,
     "f1WriterAdmitted": true,
     "f1TechnicalPass": true,
-    "f1UserConfirmed": false,
-    "f1Exit": false,
-    "f2QueueAdmitted": false,
-    "remainingGate": "User visual confirmation of the F1 Settings General pilot screenshot."
+    "f1UserConfirmed": true,
+    "f1UserConfirmedAt": "2026-07-20T11:46:51Z",
+    "f1ConfirmationRevision": "2378263682617840946",
+    "f1Exit": true,
+    "f2QueueAdmitted": true,
+    "remainingGate": null,
+    "nextWriterFamily": "source-management"
   }
 }

@@ -1,6 +1,6 @@
 # Settings General · F0/F1 现场报告
 
-状态：`F1_AWAITING_USER_CONFIRMATION`。
+状态：`F1_COMPLETE`；F2 writer 队列已准入。
 
 - 本地实现 commit：`3804eb82de7b8f71a8a43e9d8e2037b19d686ca6`
 - 本地 evidence commit：`d0d0c8567f7defff07db6f93c5c768cad6629c13`
@@ -65,11 +65,13 @@
 
 ## 当前门禁
 
-F0 已通过，F1 技术检查已通过。根据用户最新 viewport policy，仍需确认 Phone 与 Tablet 两个 canonical 视觉结果；Landscape 直接继承 Tablet，不再单独验收。确认前：
+用户已于 `2026-07-20T11:46:51Z` 明确确认 revision `2378263682617840946` 的 Phone 与 Tablet canonical 视觉结果；Landscape 直接继承 Tablet，不单独验收。
 
-- `f1Exit=false`
-- `f2QueueAdmitted=false`
-- 不启动其他 12 个页面族，也不进入 Motion Reference。
+- `f1UserConfirmed=true`
+- `f1Exit=true`
+- `f2QueueAdmitted=true`
+- F2 writer 队列下一族为 `source-management`；本次确认事务没有提前写入该页面族。
+- Motion Reference 仍遵守 F3 独立准入条件，不与 F2 混做。
 
 ## Compact 结构全量删除（2026-07-20）
 
