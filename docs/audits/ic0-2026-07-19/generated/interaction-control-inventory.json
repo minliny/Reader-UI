@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "2c3bbbc2fd4b21300579cc75f6b9c6218b52bec27755448c90b00d0668709675"
+    "rendererSourcesSha256": "968cd80533ad96dac2e4973c6609bb51be1ff1b85bbc79a8bf0ffe4dc53938f7"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -57175,8 +57175,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "about.control.about-feedback.default.button.back",
+        "data-control-key": "about.control.button.back@about-feedback.default",
+        "data-entity-key": "about.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -57191,7 +57197,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7876c7e6a16c7feaf001",
+      "candidateKey": "candidate:ff9a21b86cd282ea1007",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57206,11 +57212,16 @@
       "domTag": "article",
       "role": "button",
       "label": "检查更新 已是最新",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"about-version\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-ui-event=\"settings\\.about\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "about-version"
+        "data-control-id": "about.control.about-feedback.default.button.check-update-entry",
+        "data-control-key": "about.control.button.check-update-entry@about-feedback.default",
+        "data-entity-key": "about.control.button.check-update-entry",
+        "data-route": "about-version",
+        "data-settings-key": "check-update-entry",
+        "data-ui-event": "settings.about.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.about.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -57222,7 +57233,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7c394142ce0fd702f64e",
+      "candidateKey": "candidate:7e216b13165505d5599a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57237,23 +57248,30 @@
       "domTag": "article",
       "role": "button",
       "label": "源码仓库 github.com/reader",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"about\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-ui-event=\"settings\\.capability\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "about"
+        "data-control-id": "about.control.about-feedback.default.button.source-repository",
+        "data-control-key": "about.control.button.source-repository@about-feedback.default",
+        "data-entity-key": "about.control.button.source-repository",
+        "data-external-action": "source-repository",
+        "data-restore-focus": "external:source-repository",
+        "data-settings-key": "source-repository",
+        "data-settings-overlay": "external:source-repository",
+        "data-ui-event": "settings.capability.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.capability.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:50d753fd85c763dc92ef",
+      "candidateKey": "candidate:ccfbc929b522d4459c8c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57268,23 +57286,30 @@
       "domTag": "article",
       "role": "button",
       "label": "开源许可",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"about\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-ui-event=\"settings\\.capability\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "about"
+        "data-control-id": "about.control.about-feedback.default.button.open-source-license",
+        "data-control-key": "about.control.button.open-source-license@about-feedback.default",
+        "data-entity-key": "about.control.button.open-source-license",
+        "data-external-action": "open-source-license",
+        "data-restore-focus": "external:open-source-license",
+        "data-settings-key": "open-source-license",
+        "data-settings-overlay": "external:open-source-license",
+        "data-ui-event": "settings.capability.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.capability.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8ab1f5306d6dcf87708e",
+      "candidateKey": "candidate:021e21a862eecdc26549",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57299,23 +57324,30 @@
       "domTag": "article",
       "role": "button",
       "label": "参与贡献",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"feedback\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-ui-event=\"settings\\.capability\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "feedback"
+        "data-control-id": "about.control.about-feedback.default.button.contribute",
+        "data-control-key": "about.control.button.contribute@about-feedback.default",
+        "data-entity-key": "about.control.button.contribute",
+        "data-external-action": "contribute",
+        "data-restore-focus": "external:contribute",
+        "data-settings-key": "contribute",
+        "data-settings-overlay": "external:contribute",
+        "data-ui-event": "settings.capability.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.capability.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ed4bf9feec8e821ad65e",
+      "candidateKey": "candidate:8df1f5b84310e2de74c5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57330,11 +57362,16 @@
       "domTag": "article",
       "role": "button",
       "label": "团队与致谢",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"about\"]:nth-of-type(5)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-ui-event=\"settings\\.about\\.open\"]:nth-of-type(5)",
       "dataAttributes": {
-        "data-route": "about"
+        "data-control-id": "about.control.about-feedback.default.button.team-thanks",
+        "data-control-key": "about.control.button.team-thanks@about-feedback.default",
+        "data-entity-key": "about.control.button.team-thanks",
+        "data-route": "about",
+        "data-settings-key": "team-thanks",
+        "data-ui-event": "settings.about.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.about.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -57346,7 +57383,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d0b0537ff2f5c10ba214",
+      "candidateKey": "candidate:2c7100026c875cb22f65",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57361,23 +57398,29 @@
       "domTag": "article",
       "role": "button",
       "label": "提交反馈问题、建议、功能请求",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-route=\"feedback\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-ui-event=\"settings\\.overlay\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "feedback"
+        "data-control-id": "about.control.about-feedback.default.button.feedback-submit-entry",
+        "data-control-key": "about.control.button.feedback-submit-entry@about-feedback.default",
+        "data-entity-key": "about.control.button.feedback-submit-entry",
+        "data-restore-focus": "feedback-submit-entry",
+        "data-settings-key": "feedback-submit-entry",
+        "data-settings-overlay": "dialog:feedback-entry",
+        "data-ui-event": "settings.overlay.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.overlay.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8532aa59aee7cb8446ad",
+      "candidateKey": "candidate:9adb5d2499dfc906998e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57392,23 +57435,29 @@
       "domTag": "article",
       "role": "button",
       "label": "上报崩溃自动附带日志",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-route=\"feedback\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-ui-event=\"settings\\.overlay\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "feedback"
+        "data-control-id": "about.control.about-feedback.default.button.crash-report-entry",
+        "data-control-key": "about.control.button.crash-report-entry@about-feedback.default",
+        "data-entity-key": "about.control.button.crash-report-entry",
+        "data-restore-focus": "crash-report-entry",
+        "data-settings-key": "crash-report-entry",
+        "data-settings-overlay": "dialog:feedback-entry",
+        "data-ui-event": "settings.overlay.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.overlay.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1e18ce7ce8f61de26420",
+      "candidateKey": "candidate:cb79fdc5cde4611f81ec",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57423,23 +57472,30 @@
       "domTag": "article",
       "role": "button",
       "label": "评分支持在应用商店评分",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-route=\"feedback\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-ui-event=\"settings\\.capability\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "feedback"
+        "data-control-id": "about.control.about-feedback.default.button.rate-app",
+        "data-control-key": "about.control.button.rate-app@about-feedback.default",
+        "data-entity-key": "about.control.button.rate-app",
+        "data-external-action": "rate-app",
+        "data-restore-focus": "external:rate-app",
+        "data-settings-key": "rate-app",
+        "data-settings-overlay": "external:rate-app",
+        "data-ui-event": "settings.capability.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.capability.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:3392516ce8ed99b3bd56",
+      "candidateKey": "candidate:c145bcf3b67d1bc18fe1",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74772,8 +74828,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "about.control.about.default.button.back",
+        "data-control-key": "about.control.button.back@about.default",
+        "data-entity-key": "about.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -74788,7 +74850,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:75bd5b728329d1ec047c",
+      "candidateKey": "candidate:13846812adda7a5fdb57",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74803,11 +74865,16 @@
       "domTag": "article",
       "role": "button",
       "label": "版本 1.4.2 (20260711)",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article[data-route=\"about-version\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article[data-ui-event=\"settings\\.about\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "about-version"
+        "data-control-id": "about.control.about.default.button.version-detail",
+        "data-control-key": "about.control.button.version-detail@about.default",
+        "data-entity-key": "about.control.button.version-detail",
+        "data-route": "about-version",
+        "data-settings-key": "version-detail",
+        "data-ui-event": "settings.about.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.about.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -74819,7 +74886,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:717e9bf18b040c09d1ab",
+      "candidateKey": "candidate:6580e7d9b92803f48d71",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74834,11 +74901,16 @@
       "domTag": "article",
       "role": "button",
       "label": "依赖项目 32 个",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"about-version\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-ui-event=\"settings\\.about\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "about-version"
+        "data-control-id": "about.control.about.default.button.dependency-list",
+        "data-control-key": "about.control.button.dependency-list@about.default",
+        "data-entity-key": "about.control.button.dependency-list",
+        "data-route": "about-version",
+        "data-settings-key": "dependency-list",
+        "data-ui-event": "settings.about.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.about.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -74850,7 +74922,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f763b8114b1b71674c2f",
+      "candidateKey": "candidate:6b60824f5de7947521b3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74865,23 +74937,30 @@
       "domTag": "article",
       "role": "button",
       "label": "开源许可",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-route=\"about-version\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-ui-event=\"settings\\.capability\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "about-version"
+        "data-control-id": "about.control.about.default.button.license-list",
+        "data-control-key": "about.control.button.license-list@about.default",
+        "data-entity-key": "about.control.button.license-list",
+        "data-external-action": "license-list",
+        "data-restore-focus": "external:license-list",
+        "data-settings-key": "license-list",
+        "data-settings-overlay": "external:license-list",
+        "data-ui-event": "settings.capability.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.capability.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4e864c7dfe4ff2591901",
+      "candidateKey": "candidate:c1ad0d06af38d1efc841",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74896,11 +74975,16 @@
       "domTag": "button",
       "role": "button",
       "label": "检查更新",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"about-version\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-ui-event=\"settings\\.about\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "about-version"
+        "data-control-id": "about.control.about.default.button.check-update",
+        "data-control-key": "about.control.button.check-update@about.default",
+        "data-entity-key": "about.control.button.check-update",
+        "data-route": "about-version",
+        "data-settings-key": "check-update",
+        "data-ui-event": "settings.about.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.about.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -74914,7 +74998,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:56d0156ba65bdd482e43",
+      "candidateKey": "candidate:157f64bd31de141191d3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74929,25 +75013,31 @@
       "domTag": "button",
       "role": "button",
       "label": "反馈",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"feedback\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-ui-event=\"settings\\.overlay\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "feedback"
+        "data-control-id": "about.control.about.default.button.feedback-entry",
+        "data-control-key": "about.control.button.feedback-entry@about.default",
+        "data-entity-key": "about.control.button.feedback-entry",
+        "data-restore-focus": "feedback-entry",
+        "data-settings-key": "feedback-entry",
+        "data-settings-overlay": "dialog:feedback-entry",
+        "data-ui-event": "settings.overlay.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.overlay.open",
       "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
+        "button.activate",
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
+        "button.activate",
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d6289d5531f94d32451c",
+      "candidateKey": "candidate:6327553365312fbb92f8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74962,8 +75052,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "about.control.about-version.default.button.back",
+        "data-control-key": "about.control.button.back@about-version.default",
+        "data-entity-key": "about.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -74978,7 +75074,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0a1604f3f96bccb2bf8b",
+      "candidateKey": "candidate:47b99370ea01759ff14c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74993,23 +75089,30 @@
       "domTag": "article",
       "role": "button",
       "label": "查看许可",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(4) > article[data-route=\"about\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(4) > article[data-ui-event=\"settings\\.capability\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "about"
+        "data-control-id": "about.control.about-version.default.button.view-license",
+        "data-control-key": "about.control.button.view-license@about-version.default",
+        "data-entity-key": "about.control.button.view-license",
+        "data-external-action": "view-license",
+        "data-restore-focus": "external:view-license",
+        "data-settings-key": "view-license",
+        "data-settings-overlay": "external:view-license",
+        "data-ui-event": "settings.capability.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.capability.open",
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8fc8ab734f37394525d0",
+      "candidateKey": "candidate:e2f1caf5001f6ca44535",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -75024,11 +75127,16 @@
       "domTag": "button",
       "role": "button",
       "label": "检查更新",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(5) > button[data-settings-overlay=\"dialog\\:check-update\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(5) > button[data-ui-event=\"settings\\.about\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-settings-overlay": "dialog:check-update"
+        "data-control-id": "about.control.about-version.default.button.version-check-update",
+        "data-control-key": "about.control.button.version-check-update@about-version.default",
+        "data-entity-key": "about.control.button.version-check-update",
+        "data-settings-key": "version-check-update",
+        "data-settings-overlay": "dialog:check-update",
+        "data-ui-event": "settings.about.open"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.about.open",
       "rawMotionHints": [
         "button.activate",
         "overlay.dialog.enter/exit"
@@ -75040,10 +75148,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:91e4e97e43109cc9df61",
+      "candidateKey": "candidate:ce47cba77385c05725db",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -75058,11 +75165,17 @@
       "domTag": "button",
       "role": "button",
       "label": "下载最新版",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(5) > button[data-settings-overlay=\"dialog\\:download-latest\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(5) > button[data-ui-event=\"download\\.queue\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-settings-overlay": "dialog:download-latest"
+        "data-control-id": "about.control.about-version.default.button.download-latest",
+        "data-control-key": "about.control.button.download-latest@about-version.default",
+        "data-entity-key": "about.control.button.download-latest",
+        "data-external-action": "download-latest",
+        "data-settings-key": "download-latest",
+        "data-settings-overlay": "dialog:download-latest",
+        "data-ui-event": "download.queue.open"
       },
-      "uiEvent": null,
+      "uiEvent": "download.queue.open",
       "rawMotionHints": [
         "button.activate",
         "overlay.dialog.enter/exit"
@@ -75074,10 +75187,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:cee2ed03f0bfe21d99bd",
+      "candidateKey": "candidate:4d8edf39ef09bfdec148",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

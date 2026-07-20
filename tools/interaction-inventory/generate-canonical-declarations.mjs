@@ -310,6 +310,39 @@ function restorePreviewActionDeclarations() {
   });
 }
 
+function aboutActionDeclarations() {
+  const rendererWindow = {};
+  const source = readFileSync(SYNC_BACKUP_RENDERER_PATH, "utf8");
+  Function("window", "globalThis", source)(rendererWindow, rendererWindow);
+  const specs = rendererWindow.ReaderD2SettingsSyncRenderers?.ABOUT_CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `about.control.button.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.default`,
+      controlId: `about.control.${spec.route}.default.button.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: "default",
+      domain: "about",
+      family: "control",
+      role: "button",
+      renderer: "aboutScreenV2",
+      rendererFile: "renderers/d2-settings-sync-renderers.js",
+      rendererSlot: "aboutScreenV2@renderers/d2-settings-sync-renderers.js",
+      pageFamily: "about-restore-preview",
+      source: "about-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
 // R2a page-family pilots add stable semantic action identities that cannot be
 // recovered from the historical occurrence registry (the registry still
 // contains ordinal keys for these controls). Earlier pilots wrote their
@@ -664,7 +697,8 @@ const allDeclarations = registryDeclarations
   .concat(readerRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())
   .concat(syncBackupActionDeclarations())
-  .concat(restorePreviewActionDeclarations());
+  .concat(restorePreviewActionDeclarations())
+  .concat(aboutActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);

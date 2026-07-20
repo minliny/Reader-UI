@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "ff965aea1d51abb04d8c5aac2c748e19a8b78d33edbeeda1996c5414f11cfd2d",
+    "inventorySha256": "add81fe585c18f8d6ffa3ad46e1875c4860c1535f9a54cbb90c2ee1012767335",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
@@ -13,14 +13,14 @@
     "semanticControls": 3808,
     "suspectedNonSemanticControls": 0,
     "mapped": 796,
-    "pendingActionKey": 449,
-    "pendingInstanceKey": 1044,
-    "pendingActionAndInstanceKey": 1519,
+    "pendingActionKey": 450,
+    "pendingInstanceKey": 1035,
+    "pendingActionAndInstanceKey": 1527,
     "uniqueControlIds": 3808,
     "uniqueEntityKeys": 77,
     "uniqueControlKeys": 3808,
     "uniqueActionKeys": 19,
-    "uniqueInstanceKeys": 475,
+    "uniqueInstanceKeys": 474,
     "pendingFigmaJoin": 3808,
     "nonInteractiveContainers": 45
   },
@@ -107377,7 +107377,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.button.about-feedback.default.button.h-3d4385ab",
+      "controlId": "settings.button.about-feedback.default.button.ui-event-route-pop-h-0a091e1f",
       "entityKey": "settings.button.button",
       "controlKey": "settings.button.button@about-feedback.default",
       "actionKey": null,
@@ -107390,15 +107390,21 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-3d4385ab",
+      "discriminator": "ui-event-route-pop-h-0a091e1f",
       "source": {
-        "candidateKey": "candidate:7876c7e6a16c7feaf001",
-        "selectorSha256": "161366e81677536c7096eddd0ad84fd5e8bc6ea043ae4ed1f980efd786cf497c",
+        "candidateKey": "candidate:ff9a21b86cd282ea1007",
+        "selectorSha256": "520d486c00b7d8f97a37524340d6bda620b2b0daf17c4cf39f5c5c5ec5e0d1d5",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回",
         "uiEvent": "route.pop",
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.back",
+          "data-control-key": "about.control.button.back@about-feedback.default",
+          "data-entity-key": "about.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
       },
       "mappingStatus": "pending-action-key",
       "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
@@ -107412,79 +107418,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.button.about-version.default.button.h-bd6ddb90",
-      "entityKey": "settings.button.button",
-      "controlKey": "settings.button.button@about-version.default.n0",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "button",
-      "route": "about-version",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-bd6ddb90",
-      "source": {
-        "candidateKey": "candidate:0a1604f3f96bccb2bf8b",
-        "selectorSha256": "161366e81677536c7096eddd0ad84fd5e8bc6ea043ae4ed1f980efd786cf497c",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "返回",
-        "uiEvent": "route.pop",
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.button.about-version.default.button.settings-overlay-dialogcheck-update-h-58cb3b00",
-      "entityKey": "settings.button.button",
-      "controlKey": "settings.button.button@about-version.default.n1",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "button",
-      "route": "about-version",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "settings-overlay-dialogcheck-update-h-58cb3b00",
-      "source": {
-        "candidateKey": "candidate:91e4e97e43109cc9df61",
-        "selectorSha256": "6f286248a8f5f81c5e1a55f360061cbec21be7022241c575a0c3b97d944567b1",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "检查更新",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-settings-overlay": "dialog:check-update"
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.button.about-version.default.button.settings-overlay-dialogdownload-latest-h-8269e676",
+      "controlId": "settings.button.about-version.default.button.settings-overlay-dialogcheck-update-h-25640d37",
       "entityKey": "settings.button.button",
       "controlKey": "settings.button.button@about-version.default.n2",
       "actionKey": null,
@@ -107497,16 +107431,21 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogdownload-latest-h-8269e676",
+      "discriminator": "settings-overlay-dialogcheck-update-h-25640d37",
       "source": {
-        "candidateKey": "candidate:cee2ed03f0bfe21d99bd",
-        "selectorSha256": "0b3ded7338b64d31c868bdb41487d5941aaa294220fb15ccea590e4f2d3d75a7",
+        "candidateKey": "candidate:ce47cba77385c05725db",
+        "selectorSha256": "56e63750443adb0fd180aaad8884e3f7fc236d81c2ddfcfd06696cc10f901f7e",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "下载最新版",
-        "uiEvent": null,
+        "label": "检查更新",
+        "uiEvent": "settings.about.open",
         "dataAttributes": {
-          "data-settings-overlay": "dialog:download-latest"
+          "data-control-id": "about.control.about-version.default.button.version-check-update",
+          "data-control-key": "about.control.button.version-check-update@about-version.default",
+          "data-entity-key": "about.control.button.version-check-update",
+          "data-settings-key": "version-check-update",
+          "data-settings-overlay": "dialog:check-update",
+          "data-ui-event": "settings.about.open"
         }
       },
       "mappingStatus": "pending-action-and-instance-key",
@@ -107521,31 +107460,39 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.button.about.default.button.h-78978a34",
+      "controlId": "settings.button.about-version.default.button.settings-overlay-dialogdownload-latest-h-ea98cce8",
       "entityKey": "settings.button.button",
-      "controlKey": "settings.button.button@about.default",
+      "controlKey": "settings.button.button@about-version.default.n1",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "settings",
       "family": "button",
-      "route": "about",
+      "route": "about-version",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-78978a34",
+      "discriminator": "settings-overlay-dialogdownload-latest-h-ea98cce8",
       "source": {
-        "candidateKey": "candidate:75bd5b728329d1ec047c",
-        "selectorSha256": "161366e81677536c7096eddd0ad84fd5e8bc6ea043ae4ed1f980efd786cf497c",
+        "candidateKey": "candidate:4d8edf39ef09bfdec148",
+        "selectorSha256": "78b378035cfaaad47313792143f36737ed2c811ca404a79d08cd90f5a11acb72",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "返回",
-        "uiEvent": "route.pop",
-        "dataAttributes": {}
+        "label": "下载最新版",
+        "uiEvent": "download.queue.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-version.default.button.download-latest",
+          "data-control-key": "about.control.button.download-latest@about-version.default",
+          "data-entity-key": "about.control.button.download-latest",
+          "data-external-action": "download-latest",
+          "data-settings-key": "download-latest",
+          "data-settings-overlay": "dialog:download-latest",
+          "data-ui-event": "download.queue.open"
+        }
       },
-      "mappingStatus": "pending-action-key",
-      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -107556,7 +107503,48 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.button.about.default.button.route-about-version-h-cd34da5d",
+      "controlId": "settings.button.about-version.default.button.ui-event-route-pop-h-4c7bf8c7",
+      "entityKey": "settings.button.button",
+      "controlKey": "settings.button.button@about-version.default.n0",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "button",
+      "route": "about-version",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "ui-event-route-pop-h-4c7bf8c7",
+      "source": {
+        "candidateKey": "candidate:47b99370ea01759ff14c",
+        "selectorSha256": "520d486c00b7d8f97a37524340d6bda620b2b0daf17c4cf39f5c5c5ec5e0d1d5",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回",
+        "uiEvent": "route.pop",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-version.default.button.back",
+          "data-control-key": "about.control.button.back@about-version.default",
+          "data-entity-key": "about.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.button.about.default.button.route-about-version-h-bad3cb56",
       "entityKey": "settings.button.button.route.push",
       "controlKey": "settings.button.button.route.push@about.default.route-about-version",
       "actionKey": "route.push",
@@ -107569,16 +107557,21 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-about-version-h-cd34da5d",
+      "discriminator": "route-about-version-h-bad3cb56",
       "source": {
-        "candidateKey": "candidate:56d0156ba65bdd482e43",
-        "selectorSha256": "40a97e79183ef835f3d9a7a1a5634d5839eb973339aa6f36bc8281cdcf988223",
+        "candidateKey": "candidate:157f64bd31de141191d3",
+        "selectorSha256": "f2613de19646507af72bfb4a5fd2e5088c1cef68a8e3ec1970c11955ac342410",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "检查更新",
-        "uiEvent": "route.push",
+        "uiEvent": "settings.about.open",
         "dataAttributes": {
-          "data-route": "about-version"
+          "data-control-id": "about.control.about.default.button.check-update",
+          "data-control-key": "about.control.button.check-update@about.default",
+          "data-entity-key": "about.control.button.check-update",
+          "data-route": "about-version",
+          "data-settings-key": "check-update",
+          "data-ui-event": "settings.about.open"
         }
       },
       "mappingStatus": "mapped",
@@ -107593,33 +107586,80 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.button.about.default.button.route-feedback-h-b6efdede",
-      "entityKey": "settings.button.button.route.push",
-      "controlKey": "settings.button.button.route.push@about.default.route-feedback",
-      "actionKey": "route.push",
-      "instanceKey": "route-feedback",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
+      "controlId": "settings.button.about.default.button.settings-overlay-dialogfeedback-entry-h-269df9c4",
+      "entityKey": "settings.button.button",
+      "controlKey": "settings.button.button@about.default.n1",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
       "domain": "settings",
       "family": "button",
       "route": "about",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-feedback-h-b6efdede",
+      "discriminator": "settings-overlay-dialogfeedback-entry-h-269df9c4",
       "source": {
-        "candidateKey": "candidate:d6289d5531f94d32451c",
-        "selectorSha256": "caa729d22871f48ce41856b4924c8fa0d3dc3b54d651c8e3f9037d7fcec6988a",
+        "candidateKey": "candidate:6327553365312fbb92f8",
+        "selectorSha256": "5bc88b265a1f80e00eacdf291e2fb3aeb506ae214ed39612a81e97c30a785ce9",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "反馈",
-        "uiEvent": "route.push",
+        "uiEvent": "settings.overlay.open",
         "dataAttributes": {
-          "data-route": "feedback"
+          "data-control-id": "about.control.about.default.button.feedback-entry",
+          "data-control-key": "about.control.button.feedback-entry@about.default",
+          "data-entity-key": "about.control.button.feedback-entry",
+          "data-restore-focus": "feedback-entry",
+          "data-settings-key": "feedback-entry",
+          "data-settings-overlay": "dialog:feedback-entry",
+          "data-ui-event": "settings.overlay.open"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.button.about.default.button.ui-event-route-pop-h-4fbf3529",
+      "entityKey": "settings.button.button",
+      "controlKey": "settings.button.button@about.default.n0",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "button",
+      "route": "about",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "ui-event-route-pop-h-4fbf3529",
+      "source": {
+        "candidateKey": "candidate:13846812adda7a5fdb57",
+        "selectorSha256": "520d486c00b7d8f97a37524340d6bda620b2b0daf17c4cf39f5c5c5ec5e0d1d5",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回",
+        "uiEvent": "route.pop",
+        "dataAttributes": {
+          "data-control-id": "about.control.about.default.button.back",
+          "data-control-key": "about.control.button.back@about.default",
+          "data-entity-key": "about.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -109218,325 +109258,34 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-about-h-9adaf5cb",
+      "controlId": "settings.listrow-action.about-feedback.default.button.route-about-h-3bb5eb92",
       "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n5",
-      "actionKey": "route.push",
-      "instanceKey": "route-about",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-about-h-9adaf5cb",
-      "source": {
-        "candidateKey": "candidate:8ab1f5306d6dcf87708e",
-        "selectorSha256": "a54ea57b69600598da67e60eccbc0b115e9b037f82d724c08df9174556a376fb",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "开源许可",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "about"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-about-h-a18ec8db",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n2",
-      "actionKey": "route.push",
-      "instanceKey": "route-about",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-about-h-a18ec8db",
-      "source": {
-        "candidateKey": "candidate:50d753fd85c763dc92ef",
-        "selectorSha256": "78c0d25c0be6ce7313c74a6931ae6aff58e081c5773972b1c97580417e3ca48c",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "源码仓库 github.com/reader",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "about"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-about-h-c8d98b05",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n6",
-      "actionKey": "route.push",
-      "instanceKey": "route-about",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-about-h-c8d98b05",
-      "source": {
-        "candidateKey": "candidate:d0b0537ff2f5c10ba214",
-        "selectorSha256": "400a5c682c9c33fea5d99f61deca3f78cfc64709903905bb37f25442a4562c6f",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "团队与致谢",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "about"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-about-version-h-dd64c862",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n3",
-      "actionKey": "route.push",
-      "instanceKey": "route-about-version",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-about-version-h-dd64c862",
-      "source": {
-        "candidateKey": "candidate:7c394142ce0fd702f64e",
-        "selectorSha256": "93a0355fbefa582fd5d5515342f62954f0c19f241cb8b7e3707b913613ea930f",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "检查更新 已是最新",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "about-version"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-feedback-h-7cde4b9b",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n1",
-      "actionKey": "route.push",
-      "instanceKey": "route-feedback",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-feedback-h-7cde4b9b",
-      "source": {
-        "candidateKey": "candidate:3392516ce8ed99b3bd56",
-        "selectorSha256": "0c40a0be27a63ed97cf16f7941f882a081967e341b2a837918fb971add0b1a78",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "评分支持在应用商店评分",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "feedback"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-feedback-h-a2c4522c",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n7",
-      "actionKey": "route.push",
-      "instanceKey": "route-feedback",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-feedback-h-a2c4522c",
-      "source": {
-        "candidateKey": "candidate:ed4bf9feec8e821ad65e",
-        "selectorSha256": "9de10056a5dc016a075eee1a3c82815e4c66a3d725939b87c43ebb322a54acbe",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "参与贡献",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "feedback"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-feedback-h-b1c6e029",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n4",
-      "actionKey": "route.push",
-      "instanceKey": "route-feedback",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-feedback-h-b1c6e029",
-      "source": {
-        "candidateKey": "candidate:8532aa59aee7cb8446ad",
-        "selectorSha256": "a5f2da826810b12b132dda3a7df86e9e3b9f64c544aeb2e18aa46ded5ba1e2c1",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "提交反馈问题、建议、功能请求",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "feedback"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-feedback.default.button.route-feedback-h-e8898a6d",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.n0",
-      "actionKey": "route.push",
-      "instanceKey": "route-feedback",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "settings",
-      "family": "listrow-action",
-      "route": "about-feedback",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-feedback-h-e8898a6d",
-      "source": {
-        "candidateKey": "candidate:1e18ce7ce8f61de26420",
-        "selectorSha256": "ddfe071fb8ba9ab0ed2ca7893fdf0a8e63cb4f1bc72de556f5798c176333f961",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "上报崩溃自动附带日志",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "feedback"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "settings.listrow-action.about-version.default.button.route-about-h-c9f1d7cd",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about-version.default.route-about",
+      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.route-about",
       "actionKey": "route.push",
       "instanceKey": "route-about",
       "needsActionKey": false,
       "needsInstanceKey": false,
       "domain": "settings",
       "family": "listrow-action",
-      "route": "about-version",
+      "route": "about-feedback",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-about-h-c9f1d7cd",
+      "discriminator": "route-about-h-3bb5eb92",
       "source": {
-        "candidateKey": "candidate:8fc8ab734f37394525d0",
-        "selectorSha256": "1fdf7457d1626e9db2a056d7229dafcb2c105c7c1e76488d92e907090cd37960",
+        "candidateKey": "candidate:2c7100026c875cb22f65",
+        "selectorSha256": "b69df9bad2216c40aaac954c6c1f45d9534f8608bda0f7a4f987acf5551e87ff",
         "semanticStatus": "semantic-control",
         "domTag": "article",
-        "label": "查看许可",
-        "uiEvent": "route.push",
+        "label": "团队与致谢",
+        "uiEvent": "settings.about.open",
         "dataAttributes": {
-          "data-route": "about"
+          "data-control-id": "about.control.about-feedback.default.button.team-thanks",
+          "data-control-key": "about.control.button.team-thanks@about-feedback.default",
+          "data-entity-key": "about.control.button.team-thanks",
+          "data-route": "about",
+          "data-settings-key": "team-thanks",
+          "data-ui-event": "settings.about.open"
         }
       },
       "mappingStatus": "mapped",
@@ -109551,7 +109300,355 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.listrow-action.about.default.button.route-about-version-h-2f9cb041",
+      "controlId": "settings.listrow-action.about-feedback.default.button.route-about-version-h-1cb83aa8",
+      "entityKey": "settings.listrow-action.button.route.push",
+      "controlKey": "settings.listrow-action.button.route.push@about-feedback.default.route-about-version",
+      "actionKey": "route.push",
+      "instanceKey": "route-about-version",
+      "needsActionKey": false,
+      "needsInstanceKey": false,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-about-version-h-1cb83aa8",
+      "source": {
+        "candidateKey": "candidate:7e216b13165505d5599a",
+        "selectorSha256": "556fdfb2dc9ec2b90bfab73ddad95e4d8ac84ccfe62ead5a466b7a75f4181b51",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "检查更新 已是最新",
+        "uiEvent": "settings.about.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.check-update-entry",
+          "data-control-key": "about.control.button.check-update-entry@about-feedback.default",
+          "data-entity-key": "about.control.button.check-update-entry",
+          "data-route": "about-version",
+          "data-settings-key": "check-update-entry",
+          "data-ui-event": "settings.about.open"
+        }
+      },
+      "mappingStatus": "mapped",
+      "mappingNotes": null,
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-feedback.default.button.settings-overlay-dialogfeedback-entry-h-4a0325fb",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-feedback.default.n2",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-dialogfeedback-entry-h-4a0325fb",
+      "source": {
+        "candidateKey": "candidate:9adb5d2499dfc906998e",
+        "selectorSha256": "47d0792d486ceb6f453d373155a15a17288746627b29cb2d82956c4c750d941e",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "提交反馈问题、建议、功能请求",
+        "uiEvent": "settings.overlay.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.feedback-submit-entry",
+          "data-control-key": "about.control.button.feedback-submit-entry@about-feedback.default",
+          "data-entity-key": "about.control.button.feedback-submit-entry",
+          "data-restore-focus": "feedback-submit-entry",
+          "data-settings-key": "feedback-submit-entry",
+          "data-settings-overlay": "dialog:feedback-entry",
+          "data-ui-event": "settings.overlay.open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-feedback.default.button.settings-overlay-dialogfeedback-entry-h-ab717a00",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-feedback.default.n4",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-dialogfeedback-entry-h-ab717a00",
+      "source": {
+        "candidateKey": "candidate:cb79fdc5cde4611f81ec",
+        "selectorSha256": "d8d28e6ee17db142f2b8670ab0489acec962293e85e9e36cfae3d52dc8f96dcf",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "上报崩溃自动附带日志",
+        "uiEvent": "settings.overlay.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.crash-report-entry",
+          "data-control-key": "about.control.button.crash-report-entry@about-feedback.default",
+          "data-entity-key": "about.control.button.crash-report-entry",
+          "data-restore-focus": "crash-report-entry",
+          "data-settings-key": "crash-report-entry",
+          "data-settings-overlay": "dialog:feedback-entry",
+          "data-ui-event": "settings.overlay.open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-feedback.default.button.settings-overlay-externalcontribute-h-4dbff9f7",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-feedback.default.n1",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-externalcontribute-h-4dbff9f7",
+      "source": {
+        "candidateKey": "candidate:8df1f5b84310e2de74c5",
+        "selectorSha256": "9f20bdfba228f95d00a2f1708521b9f3abb31bc638912e56f8131e444499f862",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "参与贡献",
+        "uiEvent": "settings.capability.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.contribute",
+          "data-control-key": "about.control.button.contribute@about-feedback.default",
+          "data-entity-key": "about.control.button.contribute",
+          "data-external-action": "contribute",
+          "data-restore-focus": "external:contribute",
+          "data-settings-key": "contribute",
+          "data-settings-overlay": "external:contribute",
+          "data-ui-event": "settings.capability.open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-feedback.default.button.settings-overlay-externalopen-source-license-h-7195e40c",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-feedback.default.n0",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-externalopen-source-license-h-7195e40c",
+      "source": {
+        "candidateKey": "candidate:021e21a862eecdc26549",
+        "selectorSha256": "2ec6774a733974420290238d33e20bafa11df3b3ce2c5e28d393e21d644aba27",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "开源许可",
+        "uiEvent": "settings.capability.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.open-source-license",
+          "data-control-key": "about.control.button.open-source-license@about-feedback.default",
+          "data-entity-key": "about.control.button.open-source-license",
+          "data-external-action": "open-source-license",
+          "data-restore-focus": "external:open-source-license",
+          "data-settings-key": "open-source-license",
+          "data-settings-overlay": "external:open-source-license",
+          "data-ui-event": "settings.capability.open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-feedback.default.button.settings-overlay-externalrate-app-h-f0a7f503",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-feedback.default.n3",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-externalrate-app-h-f0a7f503",
+      "source": {
+        "candidateKey": "candidate:c145bcf3b67d1bc18fe1",
+        "selectorSha256": "47ea76ca627a2030653e886693dffdb70c34360bf1984a493e9cdc142d74d7c9",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "评分支持在应用商店评分",
+        "uiEvent": "settings.capability.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.rate-app",
+          "data-control-key": "about.control.button.rate-app@about-feedback.default",
+          "data-entity-key": "about.control.button.rate-app",
+          "data-external-action": "rate-app",
+          "data-restore-focus": "external:rate-app",
+          "data-settings-key": "rate-app",
+          "data-settings-overlay": "external:rate-app",
+          "data-ui-event": "settings.capability.open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-feedback.default.button.settings-overlay-externalsource-repository-h-97cd3d26",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-feedback.default.n5",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-feedback",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-externalsource-repository-h-97cd3d26",
+      "source": {
+        "candidateKey": "candidate:ccfbc929b522d4459c8c",
+        "selectorSha256": "2ea142f446a87b64aa3a79ef3d8c71dfbbfa82f3dff20d3954f7ae3dccbe04c0",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "源码仓库 github.com/reader",
+        "uiEvent": "settings.capability.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-feedback.default.button.source-repository",
+          "data-control-key": "about.control.button.source-repository@about-feedback.default",
+          "data-entity-key": "about.control.button.source-repository",
+          "data-external-action": "source-repository",
+          "data-restore-focus": "external:source-repository",
+          "data-settings-key": "source-repository",
+          "data-settings-overlay": "external:source-repository",
+          "data-ui-event": "settings.capability.open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about-version.default.button.settings-overlay-externalview-license-h-e1c1b02e",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about-version.default",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
+      "domain": "settings",
+      "family": "listrow-action",
+      "route": "about-version",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-externalview-license-h-e1c1b02e",
+      "source": {
+        "candidateKey": "candidate:e2f1caf5001f6ca44535",
+        "selectorSha256": "87161f1ad34d5487cf4c5b898b3348cec6f92331d4b143a3a8cc0c09be358eae",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "查看许可",
+        "uiEvent": "settings.capability.open",
+        "dataAttributes": {
+          "data-control-id": "about.control.about-version.default.button.view-license",
+          "data-control-key": "about.control.button.view-license@about-version.default",
+          "data-entity-key": "about.control.button.view-license",
+          "data-external-action": "view-license",
+          "data-restore-focus": "external:view-license",
+          "data-settings-key": "view-license",
+          "data-settings-overlay": "external:view-license",
+          "data-ui-event": "settings.capability.open"
+        }
+      },
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "settings.listrow-action.about.default.button.route-about-version-h-1124b353",
       "entityKey": "settings.listrow-action.button.route.push",
       "controlKey": "settings.listrow-action.button.route.push@about.default.n1",
       "actionKey": "route.push",
@@ -109564,16 +109661,21 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-about-version-h-2f9cb041",
+      "discriminator": "route-about-version-h-1124b353",
       "source": {
-        "candidateKey": "candidate:717e9bf18b040c09d1ab",
-        "selectorSha256": "ddebffcfa0e9542bf0116874d766e3a79a6edca87c77f5d509f6d30e22ffe2c3",
+        "candidateKey": "candidate:6b60824f5de7947521b3",
+        "selectorSha256": "10e8ab78dbc346097e4775db59a6116db39557daae3f4911d53c99fa70e51f72",
         "semanticStatus": "semantic-control",
         "domTag": "article",
-        "label": "版本 1.4.2 (20260711)",
-        "uiEvent": "route.push",
+        "label": "依赖项目 32 个",
+        "uiEvent": "settings.about.open",
         "dataAttributes": {
-          "data-route": "about-version"
+          "data-control-id": "about.control.about.default.button.dependency-list",
+          "data-control-key": "about.control.button.dependency-list@about.default",
+          "data-entity-key": "about.control.button.dependency-list",
+          "data-route": "about-version",
+          "data-settings-key": "dependency-list",
+          "data-ui-event": "settings.about.open"
         }
       },
       "mappingStatus": "pending-instance-key",
@@ -109588,7 +109690,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.listrow-action.about.default.button.route-about-version-h-b100f87f",
+      "controlId": "settings.listrow-action.about.default.button.route-about-version-h-44b12868",
       "entityKey": "settings.listrow-action.button.route.push",
       "controlKey": "settings.listrow-action.button.route.push@about.default.n0",
       "actionKey": "route.push",
@@ -109601,16 +109703,21 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-about-version-h-b100f87f",
+      "discriminator": "route-about-version-h-44b12868",
       "source": {
-        "candidateKey": "candidate:4e864c7dfe4ff2591901",
-        "selectorSha256": "21a77f9b78eac9b2a0e410ab0b4a56052801ded13d5cd13f04edf802df3c65de",
+        "candidateKey": "candidate:6580e7d9b92803f48d71",
+        "selectorSha256": "0af8d35d159bf2cee0220654e378f077c544f5f74cd9251a522e513ba4cdc833",
         "semanticStatus": "semantic-control",
         "domTag": "article",
-        "label": "开源许可",
-        "uiEvent": "route.push",
+        "label": "版本 1.4.2 (20260711)",
+        "uiEvent": "settings.about.open",
         "dataAttributes": {
-          "data-route": "about-version"
+          "data-control-id": "about.control.about.default.button.version-detail",
+          "data-control-key": "about.control.button.version-detail@about.default",
+          "data-entity-key": "about.control.button.version-detail",
+          "data-route": "about-version",
+          "data-settings-key": "version-detail",
+          "data-ui-event": "settings.about.open"
         }
       },
       "mappingStatus": "pending-instance-key",
@@ -109625,33 +109732,40 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "settings.listrow-action.about.default.button.route-about-version-h-dc8c9d3f",
-      "entityKey": "settings.listrow-action.button.route.push",
-      "controlKey": "settings.listrow-action.button.route.push@about.default.n2",
-      "actionKey": "route.push",
-      "instanceKey": "route-about-version",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
+      "controlId": "settings.listrow-action.about.default.button.settings-overlay-externallicense-list-h-17c6c27c",
+      "entityKey": "settings.listrow-action.button",
+      "controlKey": "settings.listrow-action.button@about.default",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
       "domain": "settings",
       "family": "listrow-action",
       "route": "about",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-about-version-h-dc8c9d3f",
+      "discriminator": "settings-overlay-externallicense-list-h-17c6c27c",
       "source": {
-        "candidateKey": "candidate:f763b8114b1b71674c2f",
-        "selectorSha256": "5f6670d6102a29aab52cc5b168abf45c75d4eb018fd8c0354e9713db0788fe47",
+        "candidateKey": "candidate:c1ad0d06af38d1efc841",
+        "selectorSha256": "47ea76ca627a2030653e886693dffdb70c34360bf1984a493e9cdc142d74d7c9",
         "semanticStatus": "semantic-control",
         "domTag": "article",
-        "label": "依赖项目 32 个",
-        "uiEvent": "route.push",
+        "label": "开源许可",
+        "uiEvent": "settings.capability.open",
         "dataAttributes": {
-          "data-route": "about-version"
+          "data-control-id": "about.control.about.default.button.license-list",
+          "data-control-key": "about.control.button.license-list@about.default",
+          "data-entity-key": "about.control.button.license-list",
+          "data-external-action": "license-list",
+          "data-restore-focus": "external:license-list",
+          "data-settings-key": "license-list",
+          "data-settings-overlay": "external:license-list",
+          "data-ui-event": "settings.capability.open"
         }
       },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,

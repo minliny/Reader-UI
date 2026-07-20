@@ -11203,7 +11203,9 @@
       case "about-feedback":
       case "about":
       case "about-version":
-        return settingsScreen(data, "about-feedback", appState);
+        throw new Error(route + " route is FROZEN to aboutScreenV2 (d2-settings-sync-renderers.js)");
+      case "feedback":
+        throw new Error("feedback route is excluded from About: use the canonical feedback-entry overlay/external action; legacy feedback route is fail-loud");
       case "sync-settings-entry":
       case "backup-settings":
       case "progress-sync":

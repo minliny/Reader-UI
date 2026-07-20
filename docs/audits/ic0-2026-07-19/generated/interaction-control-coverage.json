@@ -40,7 +40,7 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2298,
+    "withUiEvent": 2300,
     "withRawMotionHints": 3719,
     "rawMotionHintOccurrences": 7139,
     "uniqueRawMotionHints": [
@@ -199,7 +199,7 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1510
+      "IC0_UI_EVENT_UNRESOLVED": 1508
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "ff965aea1d51abb04d8c5aac2c748e19a8b78d33edbeeda1996c5414f11cfd2d",
+  "inventorySha256": "add81fe585c18f8d6ffa3ad46e1875c4860c1535f9a54cbb90c2ee1012767335",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1587,7 +1587,7 @@
       "pageState": "default",
       "semanticControls": 9,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "44eee19785012ea62acb842fd5b5efcd65fb91ac6e66631d722badd3a9d7708d"
+      "renderSha256": "d367016692b8f7171be323b0a8f58e8de7b87f9c7dfba1cbd3cc95750eda0c5c"
     },
     {
       "routeId": "sync-backup",
@@ -2027,7 +2027,7 @@
       "pageState": "default",
       "semanticControls": 6,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "276740331ddf8be445161a7a089b143d85cd8ac286698b1cca76d360f4bcb296"
+      "renderSha256": "7da228617b5912641ace8b9d6989b5c38abab3393cba0f844cb02f13f9546d77"
     },
     {
       "routeId": "about-version",
@@ -2038,7 +2038,7 @@
       "pageState": "default",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "962f2261fb1e3f5b6c6e0f0b67250478c6d8f895419dbf4dbadd74287d7e38f8"
+      "renderSha256": "680202ae7aa2db88bb235152d8bf0aa9c870e4c26aa39e2bce13a624d8753819"
     },
     {
       "routeId": "state-error",

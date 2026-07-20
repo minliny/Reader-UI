@@ -3814,20 +3814,103 @@
   }
 
   // ===========================================================================
+  // about R2a/R2b canonical contract and state owner
+  function d2AboutSpecs(route, rows) { return rows.map(function (row) { return { route: route, state: "default", settingsKey: row[0], uiEvent: row[1], label: row[2], role: "button" }; }); }
+  var D2_ABOUT_CONTROL_SPECS = []
+    .concat(d2AboutSpecs("about-feedback", [
+      ["back", "route.pop", "返回"], ["check-update-entry", "settings.about.open", "检查更新"],
+      ["source-repository", "settings.capability.open", "源码仓库"], ["open-source-license", "settings.capability.open", "开源许可"],
+      ["contribute", "settings.capability.open", "参与贡献"], ["team-thanks", "settings.about.open", "团队与致谢"],
+      ["feedback-submit-entry", "settings.overlay.open", "提交反馈"], ["crash-report-entry", "settings.overlay.open", "上报崩溃"],
+      ["rate-app", "settings.capability.open", "评分支持"]
+    ]))
+    .concat(d2AboutSpecs("about", [
+      ["back", "route.pop", "返回"], ["version-detail", "settings.about.open", "版本信息"],
+      ["dependency-list", "settings.about.open", "依赖项目"], ["license-list", "settings.capability.open", "开源许可"],
+      ["check-update", "settings.about.open", "检查更新"], ["feedback-entry", "settings.overlay.open", "反馈入口"]
+    ]))
+    .concat(d2AboutSpecs("about-version", [
+      ["back", "route.pop", "返回"], ["view-license", "settings.capability.open", "查看许可"],
+      ["version-check-update", "settings.about.open", "检查更新"], ["download-latest", "download.queue.open", "下载最新版"]
+    ]));
+
+  var D2_ABOUT_DEFAULT_STATE = { update: { status: "idle", error: null, version: "1.4.2" }, external: { status: "idle", target: null, error: null }, feedbackEntryOpen: false, pending: null, requestEpoch: 0 };
+  var d2AboutState = null;
+  var d2AboutListeners = [];
+  function d2AboutClone(value) { return JSON.parse(JSON.stringify(value)); }
+  function d2AboutDefaultState() { return d2AboutClone(D2_ABOUT_DEFAULT_STATE); }
+  function d2AboutInitState(seed) { d2AboutState = d2AboutReducer(d2AboutDefaultState(), { type: "INJECT_APP_STATE", state: seed || {} }); return d2AboutState; }
+  function d2AboutGetState() { if (!d2AboutState) d2AboutInitState(); return d2AboutState; }
+  function d2AboutReducer(state, action) {
+    state = d2AboutClone(state || D2_ABOUT_DEFAULT_STATE); action = action || {};
+    if (action.type === "INJECT_APP_STATE") return Object.assign(state, action.state || {}, { update: Object.assign(state.update, action.state && action.state.update || {}), external: Object.assign(state.external, action.state && action.state.external || {}) });
+    if (action.type === "FEEDBACK_ENTRY_OPEN") state.feedbackEntryOpen = true;
+    if (action.type === "FEEDBACK_ENTRY_CLOSE") state.feedbackEntryOpen = false;
+    if (action.type === "ASYNC_START") { state.requestEpoch += 1; state.pending = { kind: action.kind, requestId: action.requestId, epoch: state.requestEpoch }; state[action.kind] = Object.assign({}, state[action.kind], { status: "loading", error: null, target: action.target || state[action.kind].target }); }
+    if ((action.type === "ASYNC_SUCCESS" || action.type === "ASYNC_FAILED") && state.pending && state.pending.requestId === action.requestId && state.pending.kind === action.kind) { state[action.kind] = Object.assign({}, state[action.kind], { status: action.type === "ASYNC_SUCCESS" ? "success" : "failed", error: action.error || null }); state.pending = null; }
+    if (action.type === "ASYNC_CANCEL") { state.requestEpoch += 1; if (state.pending) state[state.pending.kind] = Object.assign({}, state[state.pending.kind], { status: "cancelled", error: null }); state.pending = null; }
+    return state;
+  }
+  function d2AboutDispatch(action) { var prev = d2AboutGetState(); d2AboutState = d2AboutReducer(prev, action); d2AboutListeners.slice().forEach(function (fn) { fn(d2AboutState, prev, action); }); return d2AboutState; }
+  function d2AboutSubscribe(fn) { d2AboutListeners.push(fn); return function () { d2AboutListeners = d2AboutListeners.filter(function (item) { return item !== fn; }); }; }
+  function d2ExecuteAboutAsync(kind, target, executor) {
+    var current = d2AboutGetState(); if (current.pending) return Promise.resolve({ status: "duplicate", kind: current.pending.kind });
+    var requestId = kind + "-" + (current.requestEpoch + 1); d2AboutDispatch({ type: "ASYNC_START", kind: kind, requestId: requestId, target: target }); var epoch = d2AboutGetState().requestEpoch;
+    return Promise.resolve().then(function () { return typeof executor === "function" ? executor(target) : true; }).then(function (value) {
+      var latest = d2AboutGetState(); if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", value: value };
+      d2AboutDispatch({ type: "ASYNC_SUCCESS", kind: kind, requestId: requestId }); return { status: "success", value: value };
+    }, function (error) {
+      var latest = d2AboutGetState(); if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", error: error };
+      d2AboutDispatch({ type: "ASYNC_FAILED", kind: kind, requestId: requestId, error: String(error && error.message || error) }); return { status: "failed", error: error };
+    });
+  }
+  function d2CancelAboutAsync() { var hadPending = !!d2AboutGetState().pending; d2AboutDispatch({ type: "ASYNC_CANCEL" }); return { status: hadPending ? "cancelled" : "idle" }; }
+  function d2AboutIdentityAttrs(spec) { var entityKey = "about.control.button." + spec.settingsKey; return ` data-entity-key="${entityKey}" data-control-key="${entityKey}@${spec.route}.default" data-control-id="about.control.${spec.route}.default.button.${spec.settingsKey}" data-ui-event="${spec.uiEvent}" data-settings-key="${spec.settingsKey}"`; }
+  function d2StampAboutControls(html, route) { var specs = D2_ABOUT_CONTROL_SPECS.filter(function (spec) { return spec.route === route; }); var index = 0; return html.replace(/<(button\b[^>]*|article\b[^>]*role="button"[^>]*)>/g, function (tag) { if (tag.indexOf("data-control-key=") >= 0 || index >= specs.length) return tag; var spec = specs[index++]; return tag.slice(0, -1) + d2AboutIdentityAttrs(spec) + ">"; }); }
+
+  // ===========================================================================
   // 7. aboutScreenV2 — 关于 / 版本 / 反馈
   // 覆盖路由：about-feedback / about / about-version / feedback
   // ===========================================================================
+  function d2PrepareAboutPage(page, route, state) {
+    page = d2AboutClone(page);
+    function feedbackOverlay(item) { if (!item) return; item.route = null; item.overlay = "dialog:feedback-entry"; }
+    function externalAction(item, key) { if (!item) return; item.route = null; item.overlay = "external:" + key; }
+    if (route === "about-feedback") {
+      externalAction(page.sections[0].rows[1], "source-repository"); externalAction(page.sections[0].rows[2], "open-source-license"); externalAction(page.sections[0].rows[3], "contribute");
+      feedbackOverlay(page.sections[1].rows[0]); feedbackOverlay(page.sections[1].rows[1]);
+      externalAction(page.sections[1].rows[2], "rate-app");
+    } else if (route === "about") {
+      externalAction(page.sections[2].rows[2], "license-list");
+      feedbackOverlay(page.actions[1]);
+    } else if (route === "about-version") {
+      externalAction(page.sections[2].rows[1], "view-license");
+    }
+    return page;
+  }
   function aboutScreenV2(data, route, appState) {
-    var page = d2AboutPage(route, appState);
+    var state = d2AboutGetState(); if (appState && appState.about) state = d2AboutReducer(state, { type: "INJECT_APP_STATE", state: appState.about });
+    var page = d2PrepareAboutPage(d2AboutPage(route, appState), route, state);
     var contentHtml = `
       ${d2MetricGrid(page.metrics)}
       ${(page.sections || []).map(function (section) {
         return d2Section(section, route, appState);
       }).join("")}
-      ${d2ActionList(page.actions)}`;
-    return d2SettingsShell(data, page.title, contentHtml, {
+      ${d2ActionList(page.actions, route)}`;
+    if (state.feedbackEntryOpen) contentHtml += `<section class="fd-settings-dialog" role="dialog" aria-modal="true" aria-labelledby="about-feedback-dialog-title"><h2 id="about-feedback-dialog-title">反馈入口</h2><p>选择系统邮件或项目反馈渠道继续，反馈表单不在 About 页面族内重复实现。</p></section>`;
+    var html = d2SettingsShell(data, page.title, contentHtml, {
       toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : ""
     });
+    html = d2StampAboutControls(html, route);
+    ["source-repository", "open-source-license", "contribute", "rate-app", "license-list", "view-license", "download-latest"].forEach(function (key) { html = html.replace('data-settings-key="' + key + '"', 'data-settings-key="' + key + '" data-external-action="' + key + '" rel="noopener noreferrer"'); });
+    ["feedback-submit-entry", "crash-report-entry", "feedback-entry"].forEach(function (key) { html = html.replace('data-settings-key="' + key + '"', 'data-settings-key="' + key + '" data-restore-focus="' + key + '"'); });
+    if (state.feedbackEntryOpen) html = html.replace(/data-settings-key="(feedback-submit-entry|feedback-entry)"/, 'data-settings-key="$1" data-dialog-initial-focus="$1"');
+    var updateKey = route === "about-version" ? "version-check-update" : route === "about" ? "check-update" : "check-update-entry";
+    if (state.update.status === "loading") html = html.replace('data-settings-key="' + updateKey + '"', 'data-settings-key="' + updateKey + '" aria-busy="true" disabled');
+    if (state.update.status === "failed") html = html.replace('data-settings-key="' + updateKey + '"', 'data-settings-key="' + updateKey + '" aria-invalid="true" title="' + esc(state.update.error || "更新检查失败") + '"');
+    if (state.external.status === "loading" && state.external.target) html = html.replace('data-settings-key="' + state.external.target + '"', 'data-settings-key="' + state.external.target + '" aria-busy="true" disabled');
+    if (state.external.status === "failed" && state.external.target) html = html.replace('data-settings-key="' + state.external.target + '"', 'data-settings-key="' + state.external.target + '" aria-invalid="true" title="' + esc(state.external.error || "外部操作失败") + '"');
+    return html;
   }
 
   function d2AboutPage(route, appState) {
@@ -4039,8 +4122,7 @@
     // 7. aboutScreenV2 — 关于/版本/反馈
     "about-feedback": "aboutScreenV2",
     "about": "aboutScreenV2",
-    "about-version": "aboutScreenV2",
-    "feedback": "aboutScreenV2"
+    "about-version": "aboutScreenV2"
   };
 
   // ===========================================================================
@@ -4219,6 +4301,20 @@
       scopeChoiceList: d2RestoreScopeChoiceList
     },
     RESTORE_CONTROL_SPECS: D2_RESTORE_CONTROL_SPECS,
+    about: {
+      controlSpecs: D2_ABOUT_CONTROL_SPECS,
+      defaults: D2_ABOUT_DEFAULT_STATE,
+      initState: d2AboutInitState,
+      defaultState: d2AboutDefaultState,
+      reducer: d2AboutReducer,
+      getState: d2AboutGetState,
+      dispatch: d2AboutDispatch,
+      subscribe: d2AboutSubscribe,
+      executeUpdateCheck: function (executor) { return d2ExecuteAboutAsync("update", null, executor); },
+      executeExternalAction: function (target, executor) { return d2ExecuteAboutAsync("external", target, executor); },
+      cancel: d2CancelAboutAsync
+    },
+    ABOUT_CONTROL_SPECS: D2_ABOUT_CONTROL_SPECS,
     // 页面数据生成器（供事件层 / 测试直接访问）
     pages: {
       globalSettings: d2GlobalSettingsPage,
