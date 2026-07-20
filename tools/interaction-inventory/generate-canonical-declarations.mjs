@@ -48,6 +48,7 @@ const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json"
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
 const RSS_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "rss-runtime-contract.js");
+const IMPORT_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "import-runtime-contract.js");
 const SOURCE_SWITCH_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "w3-source-switch-renderers.js");
 const SYNC_BACKUP_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js");
 
@@ -274,6 +275,40 @@ function rssRuntimeActionDeclarations() {
       rendererSlot: "mainTabRss@render-runtime.js",
       pageFamily: "rss",
       source: "rss-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
+function importRuntimeActionDeclarations() {
+  const contractModule = { exports: {} };
+  const contractWindow = {};
+  const source = readFileSync(IMPORT_RUNTIME_CONTRACT_PATH, "utf8");
+  Function("module", "window", "globalThis", source)(contractModule, contractWindow, contractWindow);
+  const specs = contractModule.exports.CONTROL_SPECS || contractWindow.ReaderImportRuntimeContract?.CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `import-conflict-resolve.control.button.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.${spec.state}`,
+      controlId: `import-conflict-resolve.control.${spec.route}.${spec.state}.button.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: spec.state,
+      domain: "import-conflict-resolve",
+      family: "control",
+      role: "button",
+      renderer: dispatchMap.routes[spec.route]?.renderer || "importConflictResolveScreen",
+      rendererFile: "render-runtime.js",
+      rendererSlot: `${dispatchMap.routes[spec.route]?.renderer || "importConflictResolveScreen"}@render-runtime.js`,
+      pageFamily: "import-conflict-resolve",
+      source: "import-conflict-action",
       label: spec.label,
       settingsKey: spec.settingsKey
     };
@@ -767,6 +802,7 @@ const allDeclarations = registryDeclarations
   .concat(searchResultsActionDeclarations())
   .concat(readerRuntimeActionDeclarations())
   .concat(rssRuntimeActionDeclarations())
+  .concat(importRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())
   .concat(syncBackupActionDeclarations())
   .concat(restorePreviewActionDeclarations())

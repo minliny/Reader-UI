@@ -9943,8 +9943,9 @@
   }
 
   function w1ImportStateCard(route, phase, iconName, title, summary, extraHtml, actionsHtml) {
+    const batchId = window.ReaderImportRuntimeContract?.BATCH_ID || "local-book-import-20260721";
     return `
-    <section class="fd-import-state fd-import-state-card" data-route="${esc(route)}" data-import-phase="${esc(phase)}">
+    <section class="fd-import-state fd-import-state-card" data-route="${esc(route)}" data-import-phase="${esc(phase)}" data-import-batch-id="${esc(batchId)}">
       <span class="fd-state-icon">${icon(iconName, "fd-medium-icon")}</span>
       <h2>${esc(title)}</h2>
       <p>${esc(summary)}</p>
@@ -10044,7 +10045,7 @@
     const progress = Math.max(0, Math.min(100, Number(appState?.importParseProgress) || 72));
     const step = appState?.importParseStep || "正在识别章节结构";
     const extraHtml = `
-    <section class="fd-import-parsing-detail" aria-label="解析进度">
+    <section class="fd-import-parsing-detail" role="status" aria-label="解析进度" aria-live="polite" aria-busy="true">
       <article><small>当前文件</small><strong>${esc(fileName)}</strong></article>
       <article><small>当前步骤</small><strong>${esc(step)}</strong></article>
     </section>
@@ -10074,11 +10075,11 @@
     const duplicates = (appState?.importDuplicates && appState.importDuplicates.length)
       ? appState.importDuplicates
       : [
-          { title: "雨夜.epub", meta: "本地已存在 · 同名同作者", size: "1.2 MB" },
-          { title: "旧书扫描.txt", meta: "本地已存在 · 同名不同作者", size: "0.8 MB" }
+          { id: "rain-night", title: "雨夜.epub", meta: "本地已存在 · 同名同作者", size: "1.2 MB" },
+          { id: "old-book-scan", title: "旧书扫描.txt", meta: "本地已存在 · 同名不同作者", size: "0.8 MB" }
         ];
     const listHtml = duplicates.map((item, index) => `
-    <article class="fd-import-duplicate-item" data-duplicate-index="${index}">
+    <article class="fd-import-duplicate-item" data-duplicate-index="${index}"${item.id ? ` data-import-item-id="${esc(item.id)}"` : ""}>
       ${icon("copy", "fd-small-icon")}
       <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
       <em>${esc(item.size || "")}</em>
@@ -10112,12 +10113,12 @@
     const conflicts = (appState?.importConflicts && appState.importConflicts.length)
       ? appState.importConflicts
       : [
-          { field: "书名", local: "雨夜", remote: "雨夜（修订版）" },
-          { field: "作者", local: "佚名", remote: "张三" },
-          { field: "分组", local: "默认分组", remote: "小说" }
+          { id: "title", field: "书名", local: "雨夜", remote: "雨夜（修订版）" },
+          { id: "author", field: "作者", local: "佚名", remote: "张三" },
+          { id: "group", field: "分组", local: "默认分组", remote: "小说" }
         ];
     const listHtml = conflicts.map((item, index) => `
-    <article class="fd-import-conflict-row" data-conflict-index="${index}">
+    <article class="fd-import-conflict-row" data-conflict-index="${index}"${item.id ? ` data-import-conflict-id="${esc(item.id)}"` : ""}>
       <small>${esc(item.field)}</small>
       <div class="fd-import-conflict-values">
         <span class="fd-import-conflict-local"><strong>本地</strong>${esc(item.local)}</span>
@@ -10154,14 +10155,14 @@
     const results = (appState?.importPartialResults && appState.importPartialResults.length)
       ? appState.importPartialResults
       : [
-          { title: "雨夜.epub", status: "成功", tone: "good" },
-          { title: "旧书扫描.txt", status: "失败 · 编码异常", tone: "danger" },
-          { title: "缺失章节.mobi", status: "失败 · 格式不支持", tone: "danger" }
+          { id: "rain-night", title: "雨夜.epub", status: "成功", tone: "good" },
+          { id: "old-book-scan", title: "旧书扫描.txt", status: "失败 · 编码异常", tone: "danger" },
+          { id: "missing-chapters", title: "缺失章节.mobi", status: "失败 · 格式不支持", tone: "danger" }
         ];
     const successCount = results.filter((item) => item.tone === "good").length;
     const failCount = results.length - successCount;
     const listHtml = results.map((item) => `
-    <article class="fd-import-result-item is-${esc(item.tone)}">
+    <article class="fd-import-result-item is-${esc(item.tone)}"${item.id ? ` data-import-item-id="${esc(item.id)}"` : ""}>
       ${icon(item.tone === "danger" ? "warning" : "check", "fd-small-icon")}
       <span><strong>${esc(item.title)}</strong></span>
       <em>${esc(item.status)}</em>
@@ -10196,12 +10197,12 @@
     const results = (appState?.importFullResults && appState.importFullResults.length)
       ? appState.importFullResults
       : [
-          { title: "雨夜.epub", status: "成功", meta: "作者已识别 · 加入默认分组", tone: "good" },
-          { title: "旧书扫描.txt", status: "成功", meta: "编码 UTF-8 · 章节识别完成", tone: "good" },
-          { title: "缺失章节.mobi", status: "失败", meta: "格式不支持 · 已跳过", tone: "danger" }
+          { id: "rain-night", title: "雨夜.epub", status: "成功", meta: "作者已识别 · 加入默认分组", tone: "good" },
+          { id: "old-book-scan", title: "旧书扫描.txt", status: "成功", meta: "编码 UTF-8 · 章节识别完成", tone: "good" },
+          { id: "missing-chapters", title: "缺失章节.mobi", status: "失败", meta: "格式不支持 · 已跳过", tone: "danger" }
         ];
     const listHtml = results.map((item) => `
-    <article class="fd-import-result-item is-${esc(item.tone)}">
+    <article class="fd-import-result-item is-${esc(item.tone)}"${item.id ? ` data-import-item-id="${esc(item.id)}"` : ""}>
       ${icon(item.tone === "danger" ? "warning" : "book-open", "fd-small-icon")}
       <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
       <em>${esc(item.status)}</em>
@@ -10683,6 +10684,11 @@
     });
   }
 
+  function instrumentImportRoute(html, route) {
+    const instrument = window.ReaderImportRuntimeContract?.instrumentHtml;
+    return typeof instrument === "function" ? instrument(html, route) : html;
+  }
+
   function renderRoute(route, data, options, appState) {
     // W3/W4/W5 模块 dispatch hook（在 switch 之前优先分发到自包含模块）
     if (typeof window !== "undefined") {
@@ -11057,21 +11063,21 @@
       case "bookshelf-group-management":
         return groupManagementScreen(data);
       case "import-permission-denied":
-        return importPermissionDeniedScreen(data, appState);
+        return instrumentImportRoute(importPermissionDeniedScreen(data, appState), route);
       case "import-format-unsupported":
-        return importFormatUnsupportedScreen(data, appState);
+        return instrumentImportRoute(importFormatUnsupportedScreen(data, appState), route);
       case "import-empty-file":
-        return importEmptyFileScreen(data, appState);
+        return instrumentImportRoute(importEmptyFileScreen(data, appState), route);
       case "import-parsing":
-        return importParsingScreen(data, appState);
+        return instrumentImportRoute(importParsingScreen(data, appState), route);
       case "import-duplicate":
-        return importDuplicateScreen(data, appState);
+        return instrumentImportRoute(importDuplicateScreen(data, appState), route);
       case "import-conflict-resolve":
-        return importConflictResolveScreen(data, appState);
+        return instrumentImportRoute(importConflictResolveScreen(data, appState), route);
       case "import-partial-success":
-        return importPartialSuccessScreen(data, appState);
+        return instrumentImportRoute(importPartialSuccessScreen(data, appState), route);
       case "import-result-detail":
-        return importResultDetailScreen(data, appState);
+        return instrumentImportRoute(importResultDetailScreen(data, appState), route);
       case "local-import":
         return localImportScreenV2(data, appState);
       case "immersive-reading":

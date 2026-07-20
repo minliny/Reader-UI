@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "72a69971675fdf780584853efa6ba7f41f330bf2d5b7223bba3943dd7114843d",
+    "inventorySha256": "f069e889aeefdbe7da930cb76fe929dbfec9d658365f5b343833bac08a93c802",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
@@ -29035,7 +29035,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-conflict-resolve.default.button.action-conflict-keep-both-h-61694be3",
+      "controlId": "import.button.import-conflict-resolve.default.button.action-conflict-keep-both-h-9d6e9bec",
       "entityKey": "import.button.button.conflict-keep-both",
       "controlKey": "import.button.button.conflict-keep-both@import-conflict-resolve.default",
       "actionKey": "conflict-keep-both",
@@ -29048,31 +29048,37 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-conflict-keep-both-h-61694be3",
+      "discriminator": "action-conflict-keep-both-h-9d6e9bec",
       "source": {
-        "candidateKey": "candidate:b978b72544d694206ae5",
-        "selectorSha256": "c00668ccab371e39237494e6aff21c9ff0c5a1ddb521cae65292b44b50658fa4",
+        "candidateKey": "candidate:d388de65c78f19eac6cd",
+        "selectorSha256": "4e487c59daec903b62401dbe11f2a8fdc5cd15756bbcda2539bf2e4b49aecfa2",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "保留两份",
-        "uiEvent": null,
+        "label": "全部保留两份",
+        "uiEvent": "import.conflict.resolve",
         "dataAttributes": {
-          "data-action": "conflict-keep-both"
+          "data-action": "conflict-keep-both",
+          "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.conflict-keep-both",
+          "data-control-key": "import-conflict-resolve.control.button.conflict-keep-both@import-conflict-resolve.default",
+          "data-entity-key": "import-conflict-resolve.control.button.conflict-keep-both",
+          "data-restore-focus": "import-conflict-resolve.control.button.conflict-keep-both@import-conflict-resolve.default",
+          "data-settings-key": "conflict-keep-both",
+          "data-ui-event": "import.conflict.resolve"
         }
       },
       "mappingStatus": "mapped",
       "mappingNotes": null,
       "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
+        "componentInstanceId": "import_conflict_resolve-action",
+        "componentType": "Button",
+        "bindingStatus": "bound"
       },
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-conflict-resolve.default.button.action-conflict-keep-local-h-216ce734",
+      "controlId": "import.button.import-conflict-resolve.default.button.action-conflict-keep-local-h-3a3f3ebe",
       "entityKey": "import.button.button.conflict-keep-local",
       "controlKey": "import.button.button.conflict-keep-local@import-conflict-resolve.default",
       "actionKey": "conflict-keep-local",
@@ -29085,31 +29091,37 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-conflict-keep-local-h-216ce734",
+      "discriminator": "action-conflict-keep-local-h-3a3f3ebe",
       "source": {
-        "candidateKey": "candidate:91477feed6f7540b8e17",
-        "selectorSha256": "eb50cd0d62c808521fa960ed5b67af09d00d6797e680ac2f2fafec14d94fdf94",
+        "candidateKey": "candidate:aa94d320b9e4e27087e3",
+        "selectorSha256": "d8f87acda217fd2b142c33d685d48fd400b6959f75637c765e862c19d7f99f40",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "保留本地",
-        "uiEvent": null,
+        "label": "全部保留本地",
+        "uiEvent": "import.conflict.resolve",
         "dataAttributes": {
-          "data-action": "conflict-keep-local"
+          "data-action": "conflict-keep-local",
+          "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.conflict-keep-local",
+          "data-control-key": "import-conflict-resolve.control.button.conflict-keep-local@import-conflict-resolve.default",
+          "data-entity-key": "import-conflict-resolve.control.button.conflict-keep-local",
+          "data-restore-focus": "import-conflict-resolve.control.button.conflict-keep-local@import-conflict-resolve.default",
+          "data-settings-key": "conflict-keep-local",
+          "data-ui-event": "import.conflict.resolve"
         }
       },
       "mappingStatus": "mapped",
       "mappingNotes": null,
       "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
+        "componentInstanceId": "import_conflict_resolve-action",
+        "componentType": "Button",
+        "bindingStatus": "bound"
       },
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-conflict-resolve.default.button.action-conflict-overwrite-h-36ec8719",
+      "controlId": "import.button.import-conflict-resolve.default.button.action-conflict-overwrite-h-41792c61",
       "entityKey": "import.button.button.conflict-overwrite",
       "controlKey": "import.button.button.conflict-overwrite@import-conflict-resolve.default",
       "actionKey": "conflict-overwrite",
@@ -29122,31 +29134,37 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-conflict-overwrite-h-36ec8719",
+      "discriminator": "action-conflict-overwrite-h-41792c61",
       "source": {
-        "candidateKey": "candidate:f0d0d946b4cbae754599",
-        "selectorSha256": "7412be853f81e3d1f8258be9e5231ce7910147870a1356595f6989e742aa000d",
+        "candidateKey": "candidate:ad4c066ea764681f3fec",
+        "selectorSha256": "6c4ccf877eb4f2680a13897b3307275ec37875a4b6c325ead10c65672adf286d",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "覆盖本地",
-        "uiEvent": null,
+        "label": "全部覆盖本地",
+        "uiEvent": "import.conflict.resolve",
         "dataAttributes": {
-          "data-action": "conflict-overwrite"
+          "data-action": "conflict-overwrite",
+          "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.conflict-overwrite",
+          "data-control-key": "import-conflict-resolve.control.button.conflict-overwrite@import-conflict-resolve.default",
+          "data-entity-key": "import-conflict-resolve.control.button.conflict-overwrite",
+          "data-restore-focus": "import-conflict-resolve.control.button.conflict-overwrite@import-conflict-resolve.default",
+          "data-settings-key": "conflict-overwrite",
+          "data-ui-event": "import.conflict.resolve"
         }
       },
       "mappingStatus": "mapped",
       "mappingNotes": null,
       "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
+        "componentInstanceId": "import_conflict_resolve-action",
+        "componentType": "Button",
+        "bindingStatus": "bound"
       },
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-conflict-resolve.default.button.action-import-rollback-h-1f9b141d",
+      "controlId": "import.button.import-conflict-resolve.default.button.action-import-rollback-h-6f56d154",
       "entityKey": "import.button.button.import-rollback",
       "controlKey": "import.button.button.import-rollback@import-conflict-resolve.default",
       "actionKey": "import-rollback",
@@ -29159,16 +29177,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-import-rollback-h-1f9b141d",
+      "discriminator": "action-import-rollback-h-6f56d154",
       "source": {
-        "candidateKey": "candidate:7600883ed9511be8be97",
-        "selectorSha256": "efab139e93e5183c181ffc721abb7203bba1b42cc472d66a983aa88ce8ba3adf",
+        "candidateKey": "candidate:b80a2c6883e99e3bf670",
+        "selectorSha256": "3d5fc84663a296fac0095cb2335f9e8314a5c408c2d8431496b6979e1e44da00",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "取消并回滚",
-        "uiEvent": null,
+        "uiEvent": "import.cancel",
         "dataAttributes": {
-          "data-action": "import-rollback"
+          "data-action": "import-rollback",
+          "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.import-rollback",
+          "data-control-key": "import-conflict-resolve.control.button.import-rollback@import-conflict-resolve.default",
+          "data-entity-key": "import-conflict-resolve.control.button.import-rollback",
+          "data-restore-focus": "import-conflict-resolve.control.button.import-rollback@import-conflict-resolve.default",
+          "data-settings-key": "import-rollback",
+          "data-ui-event": "import.cancel"
         }
       },
       "mappingStatus": "mapped",
@@ -29183,7 +29207,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-conflict-resolve.default.button.h-f9ecca4e",
+      "controlId": "import.button.import-conflict-resolve.default.button.ui-event-route-pop-h-e3472557",
       "entityKey": "import.button.button",
       "controlKey": "import.button.button@import-conflict-resolve.default",
       "actionKey": null,
@@ -29196,15 +29220,21 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-f9ecca4e",
+      "discriminator": "ui-event-route-pop-h-e3472557",
       "source": {
-        "candidateKey": "candidate:b5de78822b7c984e2cc4",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
+        "candidateKey": "candidate:e7522ebda92e084fd119",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回",
         "uiEvent": "route.pop",
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-conflict-resolve.default",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
       },
       "mappingStatus": "pending-action-key",
       "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
@@ -29218,7 +29248,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-duplicate.default.button.action-duplicate-overwrite-all-h-e970a64c",
+      "controlId": "import.button.import-duplicate.default.button.action-duplicate-overwrite-all-h-0a370b49",
       "entityKey": "import.button.button.duplicate-overwrite-all",
       "controlKey": "import.button.button.duplicate-overwrite-all@import-duplicate.default",
       "actionKey": "duplicate-overwrite-all",
@@ -29231,16 +29261,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-duplicate-overwrite-all-h-e970a64c",
+      "discriminator": "action-duplicate-overwrite-all-h-0a370b49",
       "source": {
-        "candidateKey": "candidate:0364076a9e679f737abe",
-        "selectorSha256": "72da7d3c09b77a10a8090a7cc49ba8b6975f9590736125e27b57eb5e1d2bd3ae",
+        "candidateKey": "candidate:0b1a5efe28d3d40170cf",
+        "selectorSha256": "d6f5665ace0b438bab7ae99110208cc07bbe82db4d7456aa84dc310c33d41bf5",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "全部覆盖",
-        "uiEvent": null,
+        "uiEvent": "batch.select-all.toggle",
         "dataAttributes": {
-          "data-action": "duplicate-overwrite-all"
+          "data-action": "duplicate-overwrite-all",
+          "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.duplicate-overwrite-all",
+          "data-control-key": "import-conflict-resolve.control.button.duplicate-overwrite-all@import-duplicate.default",
+          "data-entity-key": "import-conflict-resolve.control.button.duplicate-overwrite-all",
+          "data-restore-focus": "import-conflict-resolve.control.button.duplicate-overwrite-all@import-duplicate.default",
+          "data-settings-key": "duplicate-overwrite-all",
+          "data-ui-event": "batch.select-all.toggle"
         }
       },
       "mappingStatus": "mapped",
@@ -29255,7 +29291,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-duplicate.default.button.action-duplicate-review-h-2aab4033",
+      "controlId": "import.button.import-duplicate.default.button.action-duplicate-review-h-791df861",
       "entityKey": "import.button.button.duplicate-review",
       "controlKey": "import.button.button.duplicate-review@import-duplicate.default",
       "actionKey": "duplicate-review",
@@ -29268,16 +29304,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-duplicate-review-h-2aab4033",
+      "discriminator": "action-duplicate-review-h-791df861",
       "source": {
-        "candidateKey": "candidate:b01c794fc3282519d123",
-        "selectorSha256": "7cb7658cc750efd63169f186ee318ac7a0ac3f232dce3a8977afa013ae7f0288",
+        "candidateKey": "candidate:7d88b84ab372d485579f",
+        "selectorSha256": "46e1e7a554e8f92ef338cedd478310ecb58e3843ff48aede866fb239b2a3328b",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "逐项处理",
-        "uiEvent": null,
+        "uiEvent": "selection.item.toggle",
         "dataAttributes": {
-          "data-action": "duplicate-review"
+          "data-action": "duplicate-review",
+          "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.duplicate-review",
+          "data-control-key": "import-conflict-resolve.control.button.duplicate-review@import-duplicate.default",
+          "data-entity-key": "import-conflict-resolve.control.button.duplicate-review",
+          "data-restore-focus": "import-conflict-resolve.control.button.duplicate-review@import-duplicate.default",
+          "data-settings-key": "duplicate-review",
+          "data-ui-event": "selection.item.toggle"
         }
       },
       "mappingStatus": "mapped",
@@ -29292,7 +29334,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-duplicate.default.button.action-duplicate-skip-all-h-673ce60c",
+      "controlId": "import.button.import-duplicate.default.button.action-duplicate-skip-all-h-2e23fd59",
       "entityKey": "import.button.button.duplicate-skip-all",
       "controlKey": "import.button.button.duplicate-skip-all@import-duplicate.default",
       "actionKey": "duplicate-skip-all",
@@ -29305,16 +29347,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-duplicate-skip-all-h-673ce60c",
+      "discriminator": "action-duplicate-skip-all-h-2e23fd59",
       "source": {
-        "candidateKey": "candidate:d3d6638cd7ee22bd12d3",
-        "selectorSha256": "60b381074cdbb2b869ec94d910db4fd5c92b867dbc7594f46426d35d06cafc04",
+        "candidateKey": "candidate:b272abb4bbc5a31e4b1b",
+        "selectorSha256": "00ecfd3e7466bc4ddae9c18f476814c62be4c3fd8e807d6dca2765fb303eeba7",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "全部跳过",
-        "uiEvent": null,
+        "uiEvent": "batch.select-all.toggle",
         "dataAttributes": {
-          "data-action": "duplicate-skip-all"
+          "data-action": "duplicate-skip-all",
+          "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.duplicate-skip-all",
+          "data-control-key": "import-conflict-resolve.control.button.duplicate-skip-all@import-duplicate.default",
+          "data-entity-key": "import-conflict-resolve.control.button.duplicate-skip-all",
+          "data-restore-focus": "import-conflict-resolve.control.button.duplicate-skip-all@import-duplicate.default",
+          "data-settings-key": "duplicate-skip-all",
+          "data-ui-event": "batch.select-all.toggle"
         }
       },
       "mappingStatus": "mapped",
@@ -29329,42 +29377,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-duplicate.default.button.h-ea951dca",
-      "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-duplicate.default",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": false,
-      "domain": "import",
-      "family": "button",
-      "route": "import-duplicate",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-ea951dca",
-      "source": {
-        "candidateKey": "candidate:01a7f4d7506c222704c9",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "返回",
-        "uiEvent": "route.pop",
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-key",
-      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "import.button.import-duplicate.default.button.route-local-import-h-e481656d",
+      "controlId": "import.button.import-duplicate.default.button.route-local-import-h-991cc7d4",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-duplicate.default.route-local-import",
       "actionKey": "route.push",
@@ -29377,16 +29390,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-local-import-h-e481656d",
+      "discriminator": "route-local-import-h-991cc7d4",
       "source": {
-        "candidateKey": "candidate:2e78d973e433738ae6fe",
-        "selectorSha256": "8125921ac3c3ddde149ab4fe85539ed280bc7165da7f8d26e83ea0c6d215829f",
+        "candidateKey": "candidate:849372914bf130a5bd4b",
+        "selectorSha256": "3acdcad24332a6180e977bc99d33d33d928b04d9dad877aa3fab31f55838f49f",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "取消",
-        "uiEvent": "route.push",
+        "label": "取消导入",
+        "uiEvent": "import.cancel",
         "dataAttributes": {
-          "data-route": "local-import"
+          "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.import-cancel",
+          "data-control-key": "import-conflict-resolve.control.button.import-cancel@import-duplicate.default",
+          "data-entity-key": "import-conflict-resolve.control.button.import-cancel",
+          "data-restore-focus": "import-conflict-resolve.control.button.import-cancel@import-duplicate.default",
+          "data-route": "local-import",
+          "data-settings-key": "import-cancel",
+          "data-ui-event": "import.cancel"
         }
       },
       "mappingStatus": "mapped",
@@ -29401,28 +29420,34 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-empty-file.empty.button.h-02f7e2a7",
+      "controlId": "import.button.import-duplicate.default.button.ui-event-route-pop-h-9eaac8a9",
       "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-empty-file.empty",
+      "controlKey": "import.button.button@import-duplicate.default",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
       "needsInstanceKey": false,
       "domain": "import",
       "family": "button",
-      "route": "import-empty-file",
-      "state": "empty",
+      "route": "import-duplicate",
+      "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-02f7e2a7",
+      "discriminator": "ui-event-route-pop-h-9eaac8a9",
       "source": {
-        "candidateKey": "candidate:dbd222d85f490a765074",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
+        "candidateKey": "candidate:bbf891c2383e011424c7",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回",
         "uiEvent": "route.pop",
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-duplicate.default",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
       },
       "mappingStatus": "pending-action-key",
       "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
@@ -29436,7 +29461,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-empty-file.empty.button.route-bookshelf-h-716e3482",
+      "controlId": "import.button.import-empty-file.empty.button.route-bookshelf-h-505d6b4b",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-empty-file.empty.route-bookshelf",
       "actionKey": "route.push",
@@ -29449,16 +29474,22 @@
       "state": "empty",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-bookshelf-h-716e3482",
+      "discriminator": "route-bookshelf-h-505d6b4b",
       "source": {
-        "candidateKey": "candidate:0f61893685923625e70f",
-        "selectorSha256": "f5ffda60f09ce58ca1da81c7d31dde70efe97a78e56cb3be5879d468463ce805",
+        "candidateKey": "candidate:52a7b070a3cf40e85856",
+        "selectorSha256": "cf4c077f787c6a54d22b6e23f6b9069e3dc36ea936ca8b34187cda123d69e48c",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回书架",
-        "uiEvent": "route.push",
+        "uiEvent": "route.popToRoot",
         "dataAttributes": {
-          "data-route": "bookshelf"
+          "data-control-id": "import-conflict-resolve.control.import-empty-file.empty.button.bookshelf-return",
+          "data-control-key": "import-conflict-resolve.control.button.bookshelf-return@import-empty-file.empty",
+          "data-entity-key": "import-conflict-resolve.control.button.bookshelf-return",
+          "data-restore-focus": "import-conflict-resolve.control.button.bookshelf-return@import-empty-file.empty",
+          "data-route": "bookshelf",
+          "data-settings-key": "bookshelf-return",
+          "data-ui-event": "route.popToRoot"
         }
       },
       "mappingStatus": "mapped",
@@ -29473,7 +29504,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-empty-file.empty.button.route-local-import-h-f07b2531",
+      "controlId": "import.button.import-empty-file.empty.button.route-local-import-h-088dbb2e",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-empty-file.empty.route-local-import",
       "actionKey": "route.push",
@@ -29486,16 +29517,22 @@
       "state": "empty",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-local-import-h-f07b2531",
+      "discriminator": "route-local-import-h-088dbb2e",
       "source": {
-        "candidateKey": "candidate:a37714fa869ce08cd57d",
-        "selectorSha256": "b7d4c193f7f9d7e37d83eb2f871c5f6c28180255be1009f84b783e001bba1560",
+        "candidateKey": "candidate:47c8e4e5bcd6191c9ad9",
+        "selectorSha256": "ed192b3e2504e8bf7341be9e88e0224527c88d744d35cffc8a49b41007584565",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "重新选择文件",
         "uiEvent": "route.push",
         "dataAttributes": {
-          "data-route": "local-import"
+          "data-control-id": "import-conflict-resolve.control.import-empty-file.empty.button.file-reselect",
+          "data-control-key": "import-conflict-resolve.control.button.file-reselect@import-empty-file.empty",
+          "data-entity-key": "import-conflict-resolve.control.button.file-reselect",
+          "data-restore-focus": "import-conflict-resolve.control.button.file-reselect@import-empty-file.empty",
+          "data-route": "local-import",
+          "data-settings-key": "file-reselect",
+          "data-ui-event": "route.push"
         }
       },
       "mappingStatus": "mapped",
@@ -29510,65 +29547,34 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-format-unsupported.error.button.action-convert-format-h-4fe881d7",
-      "entityKey": "import.button.button.convert-format",
-      "controlKey": "import.button.button.convert-format@import-format-unsupported.error",
-      "actionKey": "convert-format",
-      "instanceKey": null,
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "domain": "import",
-      "family": "button",
-      "route": "import-format-unsupported",
-      "state": "error",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "action-convert-format-h-4fe881d7",
-      "source": {
-        "candidateKey": "candidate:1b02b511fb5d09c23934",
-        "selectorSha256": "66fba66c63599f415d0a4d505b04eb4e40fa6fe6a07d9b4fec89e93753f2d50f",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "尝试转换",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-action": "convert-format"
-        }
-      },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "import.button.import-format-unsupported.error.button.h-983b68a4",
+      "controlId": "import.button.import-empty-file.empty.button.ui-event-route-pop-h-e002613b",
       "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-format-unsupported.error",
+      "controlKey": "import.button.button@import-empty-file.empty",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
       "needsInstanceKey": false,
       "domain": "import",
       "family": "button",
-      "route": "import-format-unsupported",
-      "state": "error",
+      "route": "import-empty-file",
+      "state": "empty",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-983b68a4",
+      "discriminator": "ui-event-route-pop-h-e002613b",
       "source": {
-        "candidateKey": "candidate:34dba36995c14d93c47d",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
+        "candidateKey": "candidate:95c65e9b97f111f88e16",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回",
         "uiEvent": "route.pop",
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-empty-file.empty.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-empty-file.empty",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
       },
       "mappingStatus": "pending-action-key",
       "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
@@ -29582,7 +29588,50 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-format-unsupported.error.button.route-bookshelf-h-61eb2068",
+      "controlId": "import.button.import-format-unsupported.error.button.action-convert-format-h-d1a8afc9",
+      "entityKey": "import.button.button.convert-format",
+      "controlKey": "import.button.button.convert-format@import-format-unsupported.error",
+      "actionKey": "convert-format",
+      "instanceKey": null,
+      "needsActionKey": false,
+      "needsInstanceKey": false,
+      "domain": "import",
+      "family": "button",
+      "route": "import-format-unsupported",
+      "state": "error",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "action-convert-format-h-d1a8afc9",
+      "source": {
+        "candidateKey": "candidate:5bddc27834bb7f3d8ba4",
+        "selectorSha256": "d4ce936256f58ca4922f4832f69cbc3bf34892653d899625ecb25de15d0e7528",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "尝试转换格式",
+        "uiEvent": "import.format.unsupported",
+        "dataAttributes": {
+          "data-action": "convert-format",
+          "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.format-convert",
+          "data-control-key": "import-conflict-resolve.control.button.format-convert@import-format-unsupported.error",
+          "data-entity-key": "import-conflict-resolve.control.button.format-convert",
+          "data-restore-focus": "import-conflict-resolve.control.button.format-convert@import-format-unsupported.error",
+          "data-settings-key": "format-convert",
+          "data-ui-event": "import.format.unsupported"
+        }
+      },
+      "mappingStatus": "mapped",
+      "mappingNotes": null,
+      "screenGraphBinding": {
+        "componentInstanceId": "import_format_unsupported-state",
+        "componentType": "ErrorState",
+        "bindingStatus": "bound"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "import.button.import-format-unsupported.error.button.route-bookshelf-h-9fb2b2fb",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-format-unsupported.error.route-bookshelf",
       "actionKey": "route.push",
@@ -29595,16 +29644,22 @@
       "state": "error",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-bookshelf-h-61eb2068",
+      "discriminator": "route-bookshelf-h-9fb2b2fb",
       "source": {
-        "candidateKey": "candidate:74f42557a5bcb4456f0e",
-        "selectorSha256": "c387c940b70990d1bf014ed5b913cbc9806aeb1cbdaccfd2185e6042979cb48c",
+        "candidateKey": "candidate:00c6dad2db3b14e26907",
+        "selectorSha256": "6a14c2d71ce7803473084c311da0e3946e759f8122b1a268295b1d8754845233",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "取消",
-        "uiEvent": "route.push",
+        "label": "取消导入",
+        "uiEvent": "import.cancel",
         "dataAttributes": {
-          "data-route": "bookshelf"
+          "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.import-cancel",
+          "data-control-key": "import-conflict-resolve.control.button.import-cancel@import-format-unsupported.error",
+          "data-entity-key": "import-conflict-resolve.control.button.import-cancel",
+          "data-restore-focus": "import-conflict-resolve.control.button.import-cancel@import-format-unsupported.error",
+          "data-route": "bookshelf",
+          "data-settings-key": "import-cancel",
+          "data-ui-event": "import.cancel"
         }
       },
       "mappingStatus": "mapped",
@@ -29619,7 +29674,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-format-unsupported.error.button.route-local-import-h-e0aeefdb",
+      "controlId": "import.button.import-format-unsupported.error.button.route-local-import-h-efff0dd3",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-format-unsupported.error.route-local-import",
       "actionKey": "route.push",
@@ -29632,20 +29687,67 @@
       "state": "error",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-local-import-h-e0aeefdb",
+      "discriminator": "route-local-import-h-efff0dd3",
       "source": {
-        "candidateKey": "candidate:37fdb33dc1d8bb80a475",
-        "selectorSha256": "3ad97132f4c036b1fe87f96d819d3bed3918895a7479be6bbe1e8396e297f88f",
+        "candidateKey": "candidate:67e107bb84007ce7b1aa",
+        "selectorSha256": "bb80d004376f183cef8dd7a157792717f165ca2672749b3f5bb5e1203ca06eea",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "重新选择",
+        "label": "重新选择文件",
         "uiEvent": "route.push",
         "dataAttributes": {
-          "data-route": "local-import"
+          "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.file-reselect",
+          "data-control-key": "import-conflict-resolve.control.button.file-reselect@import-format-unsupported.error",
+          "data-entity-key": "import-conflict-resolve.control.button.file-reselect",
+          "data-restore-focus": "import-conflict-resolve.control.button.file-reselect@import-format-unsupported.error",
+          "data-route": "local-import",
+          "data-settings-key": "file-reselect",
+          "data-ui-event": "route.push"
         }
       },
       "mappingStatus": "mapped",
       "mappingNotes": null,
+      "screenGraphBinding": {
+        "componentInstanceId": "import_format_unsupported-action",
+        "componentType": "Button",
+        "bindingStatus": "bound"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "import.button.import-format-unsupported.error.button.ui-event-route-pop-h-f452a90a",
+      "entityKey": "import.button.button",
+      "controlKey": "import.button.button@import-format-unsupported.error",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
+      "domain": "import",
+      "family": "button",
+      "route": "import-format-unsupported",
+      "state": "error",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "ui-event-route-pop-h-f452a90a",
+      "source": {
+        "candidateKey": "candidate:31007056ceee8aa8c332",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回",
+        "uiEvent": "route.pop",
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-format-unsupported.error",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
+      },
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -29656,7 +29758,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-parsing.loading.button.action-import-cancel-h-9a6904d9",
+      "controlId": "import.button.import-parsing.loading.button.action-import-cancel-h-2a989615",
       "entityKey": "import.button.button.import-cancel",
       "controlKey": "import.button.button.import-cancel@import-parsing.loading",
       "actionKey": "import-cancel",
@@ -29669,16 +29771,22 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-import-cancel-h-9a6904d9",
+      "discriminator": "action-import-cancel-h-2a989615",
       "source": {
-        "candidateKey": "candidate:08d923396cd75ad432db",
-        "selectorSha256": "8ae0d9bab06957e3b604aaaee52d655c47b85368e912dbe181cb1f3d78984f3d",
+        "candidateKey": "candidate:86b68f206ad2aa3a50a9",
+        "selectorSha256": "49faa766d87eb9406a2792970c70f42a9f1a4db1374f2dcdd277e8b69340b4c2",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "取消解析",
-        "uiEvent": null,
+        "uiEvent": "import.cancel",
         "dataAttributes": {
-          "data-action": "import-cancel"
+          "data-action": "import-cancel",
+          "data-control-id": "import-conflict-resolve.control.import-parsing.loading.button.parse-cancel",
+          "data-control-key": "import-conflict-resolve.control.button.parse-cancel@import-parsing.loading",
+          "data-entity-key": "import-conflict-resolve.control.button.parse-cancel",
+          "data-restore-focus": "import-conflict-resolve.control.button.parse-cancel@import-parsing.loading",
+          "data-settings-key": "parse-cancel",
+          "data-ui-event": "import.cancel"
         }
       },
       "mappingStatus": "mapped",
@@ -29693,42 +29801,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-parsing.loading.button.h-35c635ee",
-      "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-parsing.loading",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": false,
-      "domain": "import",
-      "family": "button",
-      "route": "import-parsing",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-35c635ee",
-      "source": {
-        "candidateKey": "candidate:024f712ca38d25f33f82",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "返回",
-        "uiEvent": "route.pop",
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-key",
-      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "import.button.import-parsing.loading.button.route-bookshelf-h-7bfc9e05",
+      "controlId": "import.button.import-parsing.loading.button.route-bookshelf-h-6eae38a7",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-parsing.loading.route-bookshelf",
       "actionKey": "route.push",
@@ -29741,16 +29814,22 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-bookshelf-h-7bfc9e05",
+      "discriminator": "route-bookshelf-h-6eae38a7",
       "source": {
-        "candidateKey": "candidate:8fecc308360edd1a54ff",
-        "selectorSha256": "5fd3827de10f7e09e450e2b839cce7de936498fcffd479ec6b4550140714215e",
+        "candidateKey": "candidate:b6ee179b3fce3777cd8d",
+        "selectorSha256": "7960f0e3e2fa0f6d27b812933e851a8040426cd9270d81c55b3fd6208dcb4f66",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "后台运行",
-        "uiEvent": "route.push",
+        "label": "后台运行并返回书架",
+        "uiEvent": "route.popToRoot",
         "dataAttributes": {
-          "data-route": "bookshelf"
+          "data-control-id": "import-conflict-resolve.control.import-parsing.loading.button.parse-background",
+          "data-control-key": "import-conflict-resolve.control.button.parse-background@import-parsing.loading",
+          "data-entity-key": "import-conflict-resolve.control.button.parse-background",
+          "data-restore-focus": "import-conflict-resolve.control.button.parse-background@import-parsing.loading",
+          "data-route": "bookshelf",
+          "data-settings-key": "parse-background",
+          "data-ui-event": "route.popToRoot"
         }
       },
       "mappingStatus": "mapped",
@@ -29765,7 +29844,48 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-partial-success.default.button.action-import-retry-failed-h-6f00c0d4",
+      "controlId": "import.button.import-parsing.loading.button.ui-event-route-pop-h-3ecec435",
+      "entityKey": "import.button.button",
+      "controlKey": "import.button.button@import-parsing.loading",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
+      "domain": "import",
+      "family": "button",
+      "route": "import-parsing",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "ui-event-route-pop-h-3ecec435",
+      "source": {
+        "candidateKey": "candidate:2716a40057f3388ed0d0",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回",
+        "uiEvent": "route.pop",
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-parsing.loading.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-parsing.loading",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
+      },
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "import.button.import-partial-success.default.button.action-import-retry-failed-h-f834fe5f",
       "entityKey": "import.button.button.import-retry-failed",
       "controlKey": "import.button.button.import-retry-failed@import-partial-success.default",
       "actionKey": "import-retry-failed",
@@ -29778,16 +29898,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-import-retry-failed-h-6f00c0d4",
+      "discriminator": "action-import-retry-failed-h-f834fe5f",
       "source": {
-        "candidateKey": "candidate:f408a1a572bfaa2cbeb7",
-        "selectorSha256": "3b43ed51cf755d0d16a09b9ec944f48ca730bdff9caf37c4f74fe6b9799747be",
+        "candidateKey": "candidate:d522aa6a363467b8c893",
+        "selectorSha256": "bc1c4ec7b3bab85bd0ce44fdf2e426be5b5b1205283683d30511516a6c523a86",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "重试失败项",
-        "uiEvent": null,
+        "uiEvent": "import.retry.failed",
         "dataAttributes": {
-          "data-action": "import-retry-failed"
+          "data-action": "import-retry-failed",
+          "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.retry-failed",
+          "data-control-key": "import-conflict-resolve.control.button.retry-failed@import-partial-success.default",
+          "data-entity-key": "import-conflict-resolve.control.button.retry-failed",
+          "data-restore-focus": "import-conflict-resolve.control.button.retry-failed@import-partial-success.default",
+          "data-settings-key": "retry-failed",
+          "data-ui-event": "import.retry.failed"
         }
       },
       "mappingStatus": "mapped",
@@ -29802,42 +29928,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-partial-success.default.button.h-11b5fbf8",
-      "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-partial-success.default",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": false,
-      "domain": "import",
-      "family": "button",
-      "route": "import-partial-success",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-11b5fbf8",
-      "source": {
-        "candidateKey": "candidate:62470a34c6192698f0fa",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "返回",
-        "uiEvent": "route.pop",
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-key",
-      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "import.button.import-partial-success.default.button.route-bookshelf-h-af5b5196",
+      "controlId": "import.button.import-partial-success.default.button.route-bookshelf-h-a9721afa",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-partial-success.default.route-bookshelf",
       "actionKey": "route.push",
@@ -29850,16 +29941,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-bookshelf-h-af5b5196",
+      "discriminator": "route-bookshelf-h-a9721afa",
       "source": {
-        "candidateKey": "candidate:a0149176a66d033166dd",
-        "selectorSha256": "6836ab371f790e5fa5787df5b1f727e22df585fc04e02b9d1bd07446cfa69bca",
+        "candidateKey": "candidate:fb51806a339fd070c928",
+        "selectorSha256": "c2e4798739815a6a6e7df14dcc510212b3d09c527c9245604aaae95caef94345",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "完成",
-        "uiEvent": "route.push",
+        "label": "完成并返回书架",
+        "uiEvent": "route.popToRoot",
         "dataAttributes": {
-          "data-route": "bookshelf"
+          "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.import-complete",
+          "data-control-key": "import-conflict-resolve.control.button.import-complete@import-partial-success.default",
+          "data-entity-key": "import-conflict-resolve.control.button.import-complete",
+          "data-restore-focus": "import-conflict-resolve.control.button.import-complete@import-partial-success.default",
+          "data-route": "bookshelf",
+          "data-settings-key": "import-complete",
+          "data-ui-event": "route.popToRoot"
         }
       },
       "mappingStatus": "mapped",
@@ -29874,7 +29971,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-partial-success.default.button.route-import-result-detail-h-a43a734a",
+      "controlId": "import.button.import-partial-success.default.button.route-import-result-detail-h-b8afd33a",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-partial-success.default.route-import-result-detail",
       "actionKey": "route.push",
@@ -29887,16 +29984,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-import-result-detail-h-a43a734a",
+      "discriminator": "route-import-result-detail-h-b8afd33a",
       "source": {
-        "candidateKey": "candidate:1565be47db5ab67d4fc0",
-        "selectorSha256": "33a456acb92ebb7732d6cbe8fdbb15ab429a5a2f55d9eee5e27f2c845de091b7",
+        "candidateKey": "candidate:8c42f0f58a92e79765e5",
+        "selectorSha256": "23b202015665923242aa10ccdfcd7dbfe1d77861abb445e3ff2ca92696c6413f",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "查看详情",
+        "label": "查看导入详情",
         "uiEvent": "route.push",
         "dataAttributes": {
-          "data-route": "import-result-detail"
+          "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.result-detail-open",
+          "data-control-key": "import-conflict-resolve.control.button.result-detail-open@import-partial-success.default",
+          "data-entity-key": "import-conflict-resolve.control.button.result-detail-open",
+          "data-restore-focus": "import-conflict-resolve.control.button.result-detail-open@import-partial-success.default",
+          "data-route": "import-result-detail",
+          "data-settings-key": "result-detail-open",
+          "data-ui-event": "route.push"
         }
       },
       "mappingStatus": "mapped",
@@ -29911,7 +30014,48 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-permission-denied.permission.button.action-open-system-settings-h-86251ab8",
+      "controlId": "import.button.import-partial-success.default.button.ui-event-route-pop-h-eb78dc4e",
+      "entityKey": "import.button.button",
+      "controlKey": "import.button.button@import-partial-success.default",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
+      "domain": "import",
+      "family": "button",
+      "route": "import-partial-success",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "ui-event-route-pop-h-eb78dc4e",
+      "source": {
+        "candidateKey": "candidate:5bfc3bcd0b5c02e891ac",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回",
+        "uiEvent": "route.pop",
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-partial-success.default",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
+      },
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "import.button.import-permission-denied.permission.button.action-open-system-settings-h-d07c3983",
       "entityKey": "import.button.button.open-system-settings",
       "controlKey": "import.button.button.open-system-settings@import-permission-denied.permission",
       "actionKey": "open-system-settings",
@@ -29924,16 +30068,22 @@
       "state": "permission",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "action-open-system-settings-h-86251ab8",
+      "discriminator": "action-open-system-settings-h-d07c3983",
       "source": {
-        "candidateKey": "candidate:54326602307b8a625ffb",
-        "selectorSha256": "21123525c99c1a8f70cdc3d59ad3b4df5d1535a94e5d711f501869dfb6a89dfc",
+        "candidateKey": "candidate:e464b03e09b5e7b98774",
+        "selectorSha256": "8d2f7afb5389473d3cef457e823c6757f260c4d7648775e657fa4bd1a227c9fa",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "前往系统设置",
-        "uiEvent": null,
+        "uiEvent": "permission.open-settings",
         "dataAttributes": {
-          "data-action": "open-system-settings"
+          "data-action": "open-system-settings",
+          "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.permission-settings",
+          "data-control-key": "import-conflict-resolve.control.button.permission-settings@import-permission-denied.permission",
+          "data-entity-key": "import-conflict-resolve.control.button.permission-settings",
+          "data-restore-focus": "import-conflict-resolve.control.button.permission-settings@import-permission-denied.permission",
+          "data-settings-key": "permission-settings",
+          "data-ui-event": "permission.open-settings"
         }
       },
       "mappingStatus": "mapped",
@@ -29948,42 +30098,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-permission-denied.permission.button.h-155b11ce",
-      "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-permission-denied.permission",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": false,
-      "domain": "import",
-      "family": "button",
-      "route": "import-permission-denied",
-      "state": "permission",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-155b11ce",
-      "source": {
-        "candidateKey": "candidate:c3c6465d21a89854943b",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "返回",
-        "uiEvent": "route.pop",
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-key",
-      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "import.button.import-permission-denied.permission.button.route-bookshelf-h-e065214d",
+      "controlId": "import.button.import-permission-denied.permission.button.route-bookshelf-h-0d4294f4",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-permission-denied.permission.route-bookshelf",
       "actionKey": "route.push",
@@ -29996,16 +30111,22 @@
       "state": "permission",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-bookshelf-h-e065214d",
+      "discriminator": "route-bookshelf-h-0d4294f4",
       "source": {
-        "candidateKey": "candidate:3171858d59c355daa860",
-        "selectorSha256": "cfd96be48f42db0d5661bdae73f0e693b03f6fc3dfaa0784296bdeebfeab4432",
+        "candidateKey": "candidate:7ccce8d297b4165841f2",
+        "selectorSha256": "da61d1ce3deb6b4c13a2c9e5b4cef14764576981b5042699ce1a5e6ffac94043",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回书架",
-        "uiEvent": "route.push",
+        "uiEvent": "route.popToRoot",
         "dataAttributes": {
-          "data-route": "bookshelf"
+          "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.bookshelf-return",
+          "data-control-key": "import-conflict-resolve.control.button.bookshelf-return@import-permission-denied.permission",
+          "data-entity-key": "import-conflict-resolve.control.button.bookshelf-return",
+          "data-restore-focus": "import-conflict-resolve.control.button.bookshelf-return@import-permission-denied.permission",
+          "data-route": "bookshelf",
+          "data-settings-key": "bookshelf-return",
+          "data-ui-event": "route.popToRoot"
         }
       },
       "mappingStatus": "mapped",
@@ -30020,7 +30141,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-permission-denied.permission.button.route-local-import-h-a23caa72",
+      "controlId": "import.button.import-permission-denied.permission.button.route-local-import-h-83435895",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-permission-denied.permission.route-local-import",
       "actionKey": "route.push",
@@ -30033,89 +30154,64 @@
       "state": "permission",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-local-import-h-a23caa72",
+      "discriminator": "route-local-import-h-83435895",
       "source": {
-        "candidateKey": "candidate:324101c8a9fa585e5b42",
-        "selectorSha256": "7e6835f7f6852437fd7591fe32ab5af540c921f3c6fa49e831c146d688548ccd",
+        "candidateKey": "candidate:889753b8d068defb28e4",
+        "selectorSha256": "f5697dfe5d013c462afde149f404e5ad0776a452c3f8749a181e90aa28f4a7cb",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "重新选择",
-        "uiEvent": "route.push",
+        "label": "重新选择文件",
+        "uiEvent": "permission.recovery.retry",
         "dataAttributes": {
-          "data-route": "local-import"
+          "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.file-reselect",
+          "data-control-key": "import-conflict-resolve.control.button.file-reselect@import-permission-denied.permission",
+          "data-entity-key": "import-conflict-resolve.control.button.file-reselect",
+          "data-restore-focus": "import-conflict-resolve.control.button.file-reselect@import-permission-denied.permission",
+          "data-route": "local-import",
+          "data-settings-key": "file-reselect",
+          "data-ui-event": "permission.recovery.retry"
         }
       },
       "mappingStatus": "mapped",
       "mappingNotes": null,
       "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
+        "componentInstanceId": "import_permission_denied-action",
+        "componentType": "Button",
+        "bindingStatus": "bound"
       },
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-result-detail.default.button.action-export-report-h-571c648a",
-      "entityKey": "import.button.button.export-report",
-      "controlKey": "import.button.button.export-report@import-result-detail.default",
-      "actionKey": "export-report",
-      "instanceKey": null,
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "domain": "import",
-      "family": "button",
-      "route": "import-result-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "action-export-report-h-571c648a",
-      "source": {
-        "candidateKey": "candidate:29be547d20052bfc458e",
-        "selectorSha256": "b980979e064fa013191c391fd98f233e760a055df2d3c6ef75742761342f5aed",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "导出报告",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-action": "export-report"
-        }
-      },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "import.button.import-result-detail.default.button.h-cdce42c9",
+      "controlId": "import.button.import-permission-denied.permission.button.ui-event-route-pop-h-3fc8151f",
       "entityKey": "import.button.button",
-      "controlKey": "import.button.button@import-result-detail.default",
+      "controlKey": "import.button.button@import-permission-denied.permission",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
       "needsInstanceKey": false,
       "domain": "import",
       "family": "button",
-      "route": "import-result-detail",
-      "state": "default",
+      "route": "import-permission-denied",
+      "state": "permission",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-cdce42c9",
+      "discriminator": "ui-event-route-pop-h-3fc8151f",
       "source": {
-        "candidateKey": "candidate:95d5faa9e8d94d9bcb65",
-        "selectorSha256": "a1b99619741ba2057986cf06f555c08f5ec9cbd3cd1370d78cfc480a150f50fa",
+        "candidateKey": "candidate:98c28ab47e566d245979",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "返回",
         "uiEvent": "route.pop",
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-permission-denied.permission",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
       },
       "mappingStatus": "pending-action-key",
       "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
@@ -30129,11 +30225,11 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-result-detail.default.button.route-bookshelf-h-4c551348",
-      "entityKey": "import.button.button.route.push",
-      "controlKey": "import.button.button.route.push@import-result-detail.default.route-bookshelf",
-      "actionKey": "route.push",
-      "instanceKey": "route-bookshelf",
+      "controlId": "import.button.import-result-detail.default.button.action-export-report-h-9e9a03c4",
+      "entityKey": "import.button.button.export-report",
+      "controlKey": "import.button.button.export-report@import-result-detail.default",
+      "actionKey": "export-report",
+      "instanceKey": null,
       "needsActionKey": false,
       "needsInstanceKey": false,
       "domain": "import",
@@ -30142,16 +30238,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-bookshelf-h-4c551348",
+      "discriminator": "action-export-report-h-9e9a03c4",
       "source": {
-        "candidateKey": "candidate:91c1523e212f8518244d",
-        "selectorSha256": "6d3ffe8aa49a5e9c48f8d71e1c15f8deab63b10ae7ffd44db686f26661018daf",
+        "candidateKey": "candidate:a2b30ca4629b3bcd6292",
+        "selectorSha256": "1096daddbe9b7f943c07520d183c44b44e41dca37ec0df16f25a55a0ee1d0ceb",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "返回书架",
-        "uiEvent": "route.push",
+        "label": "导出报告",
+        "uiEvent": "import.apply",
         "dataAttributes": {
-          "data-route": "bookshelf"
+          "data-action": "export-report",
+          "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.report-export",
+          "data-control-key": "import-conflict-resolve.control.button.report-export@import-result-detail.default",
+          "data-entity-key": "import-conflict-resolve.control.button.report-export",
+          "data-restore-focus": "import-conflict-resolve.control.button.report-export@import-result-detail.default",
+          "data-settings-key": "report-export",
+          "data-ui-event": "import.apply"
         }
       },
       "mappingStatus": "mapped",
@@ -30166,7 +30268,50 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "import.button.import-result-detail.default.button.route-local-import-h-576a9408",
+      "controlId": "import.button.import-result-detail.default.button.route-bookshelf-h-e829b1aa",
+      "entityKey": "import.button.button.route.push",
+      "controlKey": "import.button.button.route.push@import-result-detail.default.route-bookshelf",
+      "actionKey": "route.push",
+      "instanceKey": "route-bookshelf",
+      "needsActionKey": false,
+      "needsInstanceKey": false,
+      "domain": "import",
+      "family": "button",
+      "route": "import-result-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-bookshelf-h-e829b1aa",
+      "source": {
+        "candidateKey": "candidate:2d27d2865093565cad6e",
+        "selectorSha256": "86b518b62245d7d1dbb6c31460b019ff1d8650a6b71d5a0e2fa9f19f393470ad",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回书架",
+        "uiEvent": "route.popToRoot",
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.bookshelf-return",
+          "data-control-key": "import-conflict-resolve.control.button.bookshelf-return@import-result-detail.default",
+          "data-entity-key": "import-conflict-resolve.control.button.bookshelf-return",
+          "data-restore-focus": "import-conflict-resolve.control.button.bookshelf-return@import-result-detail.default",
+          "data-route": "bookshelf",
+          "data-settings-key": "bookshelf-return",
+          "data-ui-event": "route.popToRoot"
+        }
+      },
+      "mappingStatus": "mapped",
+      "mappingNotes": null,
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "import.button.import-result-detail.default.button.route-local-import-h-98ff8601",
       "entityKey": "import.button.button.route.push",
       "controlKey": "import.button.button.route.push@import-result-detail.default.route-local-import",
       "actionKey": "route.push",
@@ -30179,16 +30324,22 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-local-import-h-576a9408",
+      "discriminator": "route-local-import-h-98ff8601",
       "source": {
-        "candidateKey": "candidate:9b5815d3f350e3ed43cb",
-        "selectorSha256": "6b8c468f849482b7aae3e443dbf1d223d4267e5e22da7b857a998c772087a92e",
+        "candidateKey": "candidate:c5af74dac48e95f9b884",
+        "selectorSha256": "b7b705e9051eb269a4f3d6e4b8f603b1125a259b5feabf636c1aa31d49b063fd",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "继续导入",
         "uiEvent": "route.push",
         "dataAttributes": {
-          "data-route": "local-import"
+          "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.import-continue",
+          "data-control-key": "import-conflict-resolve.control.button.import-continue@import-result-detail.default",
+          "data-entity-key": "import-conflict-resolve.control.button.import-continue",
+          "data-restore-focus": "import-conflict-resolve.control.button.import-continue@import-result-detail.default",
+          "data-route": "local-import",
+          "data-settings-key": "import-continue",
+          "data-ui-event": "route.push"
         }
       },
       "mappingStatus": "mapped",
@@ -30197,6 +30348,47 @@
         "componentInstanceId": "import_result_detail-action",
         "componentType": "Button",
         "bindingStatus": "bound"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "import.button.import-result-detail.default.button.ui-event-route-pop-h-fa0fc78b",
+      "entityKey": "import.button.button",
+      "controlKey": "import.button.button@import-result-detail.default",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
+      "domain": "import",
+      "family": "button",
+      "route": "import-result-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "ui-event-route-pop-h-fa0fc78b",
+      "source": {
+        "candidateKey": "candidate:d91022a697a79cf397c6",
+        "selectorSha256": "e21e8855d8b626dd1849ba0443733083303b762dab7713b3be64542fdc776c6d",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "返回",
+        "uiEvent": "route.pop",
+        "dataAttributes": {
+          "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.back",
+          "data-control-key": "import-conflict-resolve.control.button.back@import-result-detail.default",
+          "data-entity-key": "import-conflict-resolve.control.button.back",
+          "data-settings-key": "back",
+          "data-ui-event": "route.pop"
+        }
+      },
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
       },
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",

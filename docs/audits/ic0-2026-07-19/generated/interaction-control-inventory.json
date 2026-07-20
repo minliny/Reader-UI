@@ -17,6 +17,7 @@
       "frontend-demo-optimized/fixture.js",
       "frontend-demo-optimized/route-contract.js",
       "frontend-demo-optimized/rss-runtime-contract.js",
+      "frontend-demo-optimized/import-runtime-contract.js",
       "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
       "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
       "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
@@ -28,7 +29,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "33ff9ed6b176e76079fd8f9799c5e50b73451f772b3999080b91f44d068aaefd"
+    "rendererSourcesSha256": "322755f0002dcfb2dd6d7fda8ed5e62a30a08b80cfd089e06345cdda06571c38"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -126421,8 +126422,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-permission-denied.permission",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -126437,7 +126444,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c3c6465d21a89854943b",
+      "candidateKey": "candidate:98c28ab47e566d245979",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126452,11 +126459,17 @@
       "domTag": "button",
       "role": "button",
       "label": "前往系统设置",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"] > div.fd-action-row > button[data-action=\"open-system-settings\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"] > div.fd-action-row > button[data-ui-event=\"permission\\.open-settings\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "open-system-settings"
+        "data-action": "open-system-settings",
+        "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.permission-settings",
+        "data-control-key": "import-conflict-resolve.control.button.permission-settings@import-permission-denied.permission",
+        "data-entity-key": "import-conflict-resolve.control.button.permission-settings",
+        "data-restore-focus": "import-conflict-resolve.control.button.permission-settings@import-permission-denied.permission",
+        "data-settings-key": "permission-settings",
+        "data-ui-event": "permission.open-settings"
       },
-      "uiEvent": null,
+      "uiEvent": "permission.open-settings",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -126466,10 +126479,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:54326602307b8a625ffb",
+      "candidateKey": "candidate:e464b03e09b5e7b98774",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126483,12 +126495,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "重新选择",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"] > div.fd-action-row > button[data-route=\"local-import\"]:nth-of-type(2)",
+      "label": "重新选择文件",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"] > div.fd-action-row > button[data-ui-event=\"permission\\.recovery\\.retry\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.file-reselect",
+        "data-control-key": "import-conflict-resolve.control.button.file-reselect@import-permission-denied.permission",
+        "data-entity-key": "import-conflict-resolve.control.button.file-reselect",
+        "data-restore-focus": "import-conflict-resolve.control.button.file-reselect@import-permission-denied.permission",
+        "data-route": "local-import",
+        "data-settings-key": "file-reselect",
+        "data-ui-event": "permission.recovery.retry"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "permission.recovery.retry",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -126502,7 +126520,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:324101c8a9fa585e5b42",
+      "candidateKey": "candidate:889753b8d068defb28e4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126517,11 +126535,17 @@
       "domTag": "button",
       "role": "button",
       "label": "返回书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"] > div.fd-action-row > button[data-route=\"bookshelf\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"] > div.fd-action-row > button[data-ui-event=\"route\\.popToRoot\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "import-conflict-resolve.control.import-permission-denied.permission.button.bookshelf-return",
+        "data-control-key": "import-conflict-resolve.control.button.bookshelf-return@import-permission-denied.permission",
+        "data-entity-key": "import-conflict-resolve.control.button.bookshelf-return",
+        "data-restore-focus": "import-conflict-resolve.control.button.bookshelf-return@import-permission-denied.permission",
+        "data-route": "bookshelf",
+        "data-settings-key": "bookshelf-return",
+        "data-ui-event": "route.popToRoot"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.popToRoot",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -126535,7 +126559,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:3171858d59c355daa860",
+      "candidateKey": "candidate:7ccce8d297b4165841f2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126550,8 +126574,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-format-unsupported.error",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -126566,7 +126596,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:34dba36995c14d93c47d",
+      "candidateKey": "candidate:31007056ceee8aa8c332",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126580,12 +126610,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "尝试转换",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"] > div.fd-action-row > button[data-action=\"convert-format\"]:nth-of-type(1)",
+      "label": "尝试转换格式",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"] > div.fd-action-row > button[data-ui-event=\"import\\.format\\.unsupported\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "convert-format"
+        "data-action": "convert-format",
+        "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.format-convert",
+        "data-control-key": "import-conflict-resolve.control.button.format-convert@import-format-unsupported.error",
+        "data-entity-key": "import-conflict-resolve.control.button.format-convert",
+        "data-restore-focus": "import-conflict-resolve.control.button.format-convert@import-format-unsupported.error",
+        "data-settings-key": "format-convert",
+        "data-ui-event": "import.format.unsupported"
       },
-      "uiEvent": null,
+      "uiEvent": "import.format.unsupported",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -126595,10 +126631,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1b02b511fb5d09c23934",
+      "candidateKey": "candidate:5bddc27834bb7f3d8ba4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126612,10 +126647,16 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "重新选择",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"] > div.fd-action-row > button[data-route=\"local-import\"]:nth-of-type(2)",
+      "label": "重新选择文件",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"] > div.fd-action-row > button[data-ui-event=\"route\\.push\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.file-reselect",
+        "data-control-key": "import-conflict-resolve.control.button.file-reselect@import-format-unsupported.error",
+        "data-entity-key": "import-conflict-resolve.control.button.file-reselect",
+        "data-restore-focus": "import-conflict-resolve.control.button.file-reselect@import-format-unsupported.error",
+        "data-route": "local-import",
+        "data-settings-key": "file-reselect",
+        "data-ui-event": "route.push"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -126631,7 +126672,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:37fdb33dc1d8bb80a475",
+      "candidateKey": "candidate:67e107bb84007ce7b1aa",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126645,12 +126686,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "取消",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"] > div.fd-action-row > button[data-route=\"bookshelf\"]:nth-of-type(3)",
+      "label": "取消导入",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"] > div.fd-action-row > button[data-ui-event=\"import\\.cancel\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "import-conflict-resolve.control.import-format-unsupported.error.button.import-cancel",
+        "data-control-key": "import-conflict-resolve.control.button.import-cancel@import-format-unsupported.error",
+        "data-entity-key": "import-conflict-resolve.control.button.import-cancel",
+        "data-restore-focus": "import-conflict-resolve.control.button.import-cancel@import-format-unsupported.error",
+        "data-route": "bookshelf",
+        "data-settings-key": "import-cancel",
+        "data-ui-event": "import.cancel"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "import.cancel",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -126664,7 +126711,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:74f42557a5bcb4456f0e",
+      "candidateKey": "candidate:00c6dad2db3b14e26907",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126679,8 +126726,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-empty-file.empty.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-empty-file.empty",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -126695,7 +126748,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:dbd222d85f490a765074",
+      "candidateKey": "candidate:95c65e9b97f111f88e16",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126710,9 +126763,15 @@
       "domTag": "button",
       "role": "button",
       "label": "重新选择文件",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-empty-file\"] > div.fd-action-row > button[data-route=\"local-import\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-empty-file\"] > div.fd-action-row > button[data-ui-event=\"route\\.push\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-control-id": "import-conflict-resolve.control.import-empty-file.empty.button.file-reselect",
+        "data-control-key": "import-conflict-resolve.control.button.file-reselect@import-empty-file.empty",
+        "data-entity-key": "import-conflict-resolve.control.button.file-reselect",
+        "data-restore-focus": "import-conflict-resolve.control.button.file-reselect@import-empty-file.empty",
+        "data-route": "local-import",
+        "data-settings-key": "file-reselect",
+        "data-ui-event": "route.push"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -126728,7 +126787,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a37714fa869ce08cd57d",
+      "candidateKey": "candidate:47c8e4e5bcd6191c9ad9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126743,11 +126802,17 @@
       "domTag": "button",
       "role": "button",
       "label": "返回书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-empty-file\"] > div.fd-action-row > button[data-route=\"bookshelf\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-empty-file\"] > div.fd-action-row > button[data-ui-event=\"route\\.popToRoot\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "import-conflict-resolve.control.import-empty-file.empty.button.bookshelf-return",
+        "data-control-key": "import-conflict-resolve.control.button.bookshelf-return@import-empty-file.empty",
+        "data-entity-key": "import-conflict-resolve.control.button.bookshelf-return",
+        "data-restore-focus": "import-conflict-resolve.control.button.bookshelf-return@import-empty-file.empty",
+        "data-route": "bookshelf",
+        "data-settings-key": "bookshelf-return",
+        "data-ui-event": "route.popToRoot"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.popToRoot",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -126761,7 +126826,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0f61893685923625e70f",
+      "candidateKey": "candidate:52a7b070a3cf40e85856",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126776,8 +126841,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-parsing.loading.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-parsing.loading",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -126792,7 +126863,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:024f712ca38d25f33f82",
+      "candidateKey": "candidate:2716a40057f3388ed0d0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126807,11 +126878,17 @@
       "domTag": "button",
       "role": "button",
       "label": "取消解析",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-parsing\"] > div.fd-action-row:nth-of-type(2) > button[data-action=\"import-cancel\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-parsing\"] > div.fd-action-row:nth-of-type(2) > button[data-ui-event=\"import\\.cancel\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "import-cancel"
+        "data-action": "import-cancel",
+        "data-control-id": "import-conflict-resolve.control.import-parsing.loading.button.parse-cancel",
+        "data-control-key": "import-conflict-resolve.control.button.parse-cancel@import-parsing.loading",
+        "data-entity-key": "import-conflict-resolve.control.button.parse-cancel",
+        "data-restore-focus": "import-conflict-resolve.control.button.parse-cancel@import-parsing.loading",
+        "data-settings-key": "parse-cancel",
+        "data-ui-event": "import.cancel"
       },
-      "uiEvent": null,
+      "uiEvent": "import.cancel",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -126821,10 +126898,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:08d923396cd75ad432db",
+      "candidateKey": "candidate:86b68f206ad2aa3a50a9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126838,12 +126914,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "后台运行",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-parsing\"] > div.fd-action-row:nth-of-type(2) > button[data-route=\"bookshelf\"]:nth-of-type(2)",
+      "label": "后台运行并返回书架",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-parsing\"] > div.fd-action-row:nth-of-type(2) > button[data-ui-event=\"route\\.popToRoot\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "import-conflict-resolve.control.import-parsing.loading.button.parse-background",
+        "data-control-key": "import-conflict-resolve.control.button.parse-background@import-parsing.loading",
+        "data-entity-key": "import-conflict-resolve.control.button.parse-background",
+        "data-restore-focus": "import-conflict-resolve.control.button.parse-background@import-parsing.loading",
+        "data-route": "bookshelf",
+        "data-settings-key": "parse-background",
+        "data-ui-event": "route.popToRoot"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.popToRoot",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -126857,7 +126939,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8fecc308360edd1a54ff",
+      "candidateKey": "candidate:b6ee179b3fce3777cd8d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126872,8 +126954,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-duplicate.default",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -126888,7 +126976,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:01a7f4d7506c222704c9",
+      "candidateKey": "candidate:bbf891c2383e011424c7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126903,11 +126991,17 @@
       "domTag": "button",
       "role": "button",
       "label": "全部跳过",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-action=\"duplicate-skip-all\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-ui-event=\"batch\\.select-all\\.toggle\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "duplicate-skip-all"
+        "data-action": "duplicate-skip-all",
+        "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.duplicate-skip-all",
+        "data-control-key": "import-conflict-resolve.control.button.duplicate-skip-all@import-duplicate.default",
+        "data-entity-key": "import-conflict-resolve.control.button.duplicate-skip-all",
+        "data-restore-focus": "import-conflict-resolve.control.button.duplicate-skip-all@import-duplicate.default",
+        "data-settings-key": "duplicate-skip-all",
+        "data-ui-event": "batch.select-all.toggle"
       },
-      "uiEvent": null,
+      "uiEvent": "batch.select-all.toggle",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -126917,10 +127011,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d3d6638cd7ee22bd12d3",
+      "candidateKey": "candidate:b272abb4bbc5a31e4b1b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126935,11 +127028,17 @@
       "domTag": "button",
       "role": "button",
       "label": "全部覆盖",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-action=\"duplicate-overwrite-all\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-ui-event=\"batch\\.select-all\\.toggle\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-action": "duplicate-overwrite-all"
+        "data-action": "duplicate-overwrite-all",
+        "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.duplicate-overwrite-all",
+        "data-control-key": "import-conflict-resolve.control.button.duplicate-overwrite-all@import-duplicate.default",
+        "data-entity-key": "import-conflict-resolve.control.button.duplicate-overwrite-all",
+        "data-restore-focus": "import-conflict-resolve.control.button.duplicate-overwrite-all@import-duplicate.default",
+        "data-settings-key": "duplicate-overwrite-all",
+        "data-ui-event": "batch.select-all.toggle"
       },
-      "uiEvent": null,
+      "uiEvent": "batch.select-all.toggle",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -126949,10 +127048,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0364076a9e679f737abe",
+      "candidateKey": "candidate:0b1a5efe28d3d40170cf",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126967,11 +127065,17 @@
       "domTag": "button",
       "role": "button",
       "label": "逐项处理",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-action=\"duplicate-review\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-ui-event=\"selection\\.item\\.toggle\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-action": "duplicate-review"
+        "data-action": "duplicate-review",
+        "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.duplicate-review",
+        "data-control-key": "import-conflict-resolve.control.button.duplicate-review@import-duplicate.default",
+        "data-entity-key": "import-conflict-resolve.control.button.duplicate-review",
+        "data-restore-focus": "import-conflict-resolve.control.button.duplicate-review@import-duplicate.default",
+        "data-settings-key": "duplicate-review",
+        "data-ui-event": "selection.item.toggle"
       },
-      "uiEvent": null,
+      "uiEvent": "selection.item.toggle",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -126981,10 +127085,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b01c794fc3282519d123",
+      "candidateKey": "candidate:7d88b84ab372d485579f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -126998,12 +127101,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "取消",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-route=\"local-import\"]:nth-of-type(4)",
+      "label": "取消导入",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"] > div.fd-action-row > button[data-ui-event=\"import\\.cancel\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-control-id": "import-conflict-resolve.control.import-duplicate.default.button.import-cancel",
+        "data-control-key": "import-conflict-resolve.control.button.import-cancel@import-duplicate.default",
+        "data-entity-key": "import-conflict-resolve.control.button.import-cancel",
+        "data-restore-focus": "import-conflict-resolve.control.button.import-cancel@import-duplicate.default",
+        "data-route": "local-import",
+        "data-settings-key": "import-cancel",
+        "data-ui-event": "import.cancel"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "import.cancel",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -127017,7 +127126,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:2e78d973e433738ae6fe",
+      "candidateKey": "candidate:849372914bf130a5bd4b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127032,8 +127141,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-conflict-resolve.default",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -127048,7 +127163,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b5de78822b7c984e2cc4",
+      "candidateKey": "candidate:e7522ebda92e084fd119",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127062,12 +127177,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "保留本地",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-action=\"conflict-keep-local\"]:nth-of-type(1)",
+      "label": "全部保留本地",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-ui-event=\"import\\.conflict\\.resolve\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "conflict-keep-local"
+        "data-action": "conflict-keep-local",
+        "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.conflict-keep-local",
+        "data-control-key": "import-conflict-resolve.control.button.conflict-keep-local@import-conflict-resolve.default",
+        "data-entity-key": "import-conflict-resolve.control.button.conflict-keep-local",
+        "data-restore-focus": "import-conflict-resolve.control.button.conflict-keep-local@import-conflict-resolve.default",
+        "data-settings-key": "conflict-keep-local",
+        "data-ui-event": "import.conflict.resolve"
       },
-      "uiEvent": null,
+      "uiEvent": "import.conflict.resolve",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -127077,10 +127198,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:91477feed6f7540b8e17",
+      "candidateKey": "candidate:aa94d320b9e4e27087e3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127094,12 +127214,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "覆盖本地",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-action=\"conflict-overwrite\"]:nth-of-type(2)",
+      "label": "全部覆盖本地",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-ui-event=\"import\\.conflict\\.resolve\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-action": "conflict-overwrite"
+        "data-action": "conflict-overwrite",
+        "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.conflict-overwrite",
+        "data-control-key": "import-conflict-resolve.control.button.conflict-overwrite@import-conflict-resolve.default",
+        "data-entity-key": "import-conflict-resolve.control.button.conflict-overwrite",
+        "data-restore-focus": "import-conflict-resolve.control.button.conflict-overwrite@import-conflict-resolve.default",
+        "data-settings-key": "conflict-overwrite",
+        "data-ui-event": "import.conflict.resolve"
       },
-      "uiEvent": null,
+      "uiEvent": "import.conflict.resolve",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -127109,10 +127235,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f0d0d946b4cbae754599",
+      "candidateKey": "candidate:ad4c066ea764681f3fec",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127126,12 +127251,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "保留两份",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-action=\"conflict-keep-both\"]:nth-of-type(3)",
+      "label": "全部保留两份",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-ui-event=\"import\\.conflict\\.resolve\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-action": "conflict-keep-both"
+        "data-action": "conflict-keep-both",
+        "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.conflict-keep-both",
+        "data-control-key": "import-conflict-resolve.control.button.conflict-keep-both@import-conflict-resolve.default",
+        "data-entity-key": "import-conflict-resolve.control.button.conflict-keep-both",
+        "data-restore-focus": "import-conflict-resolve.control.button.conflict-keep-both@import-conflict-resolve.default",
+        "data-settings-key": "conflict-keep-both",
+        "data-ui-event": "import.conflict.resolve"
       },
-      "uiEvent": null,
+      "uiEvent": "import.conflict.resolve",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -127141,10 +127272,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b978b72544d694206ae5",
+      "candidateKey": "candidate:d388de65c78f19eac6cd",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127159,11 +127289,17 @@
       "domTag": "button",
       "role": "button",
       "label": "取消并回滚",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-action=\"import-rollback\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"] > div.fd-action-row > button[data-ui-event=\"import\\.cancel\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-action": "import-rollback"
+        "data-action": "import-rollback",
+        "data-control-id": "import-conflict-resolve.control.import-conflict-resolve.default.button.import-rollback",
+        "data-control-key": "import-conflict-resolve.control.button.import-rollback@import-conflict-resolve.default",
+        "data-entity-key": "import-conflict-resolve.control.button.import-rollback",
+        "data-restore-focus": "import-conflict-resolve.control.button.import-rollback@import-conflict-resolve.default",
+        "data-settings-key": "import-rollback",
+        "data-ui-event": "import.cancel"
       },
-      "uiEvent": null,
+      "uiEvent": "import.cancel",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -127173,10 +127309,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7600883ed9511be8be97",
+      "candidateKey": "candidate:b80a2c6883e99e3bf670",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127191,8 +127326,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-partial-success.default",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -127207,7 +127348,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:62470a34c6192698f0fa",
+      "candidateKey": "candidate:5bfc3bcd0b5c02e891ac",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127222,11 +127363,17 @@
       "domTag": "button",
       "role": "button",
       "label": "重试失败项",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"] > div.fd-action-row > button[data-action=\"import-retry-failed\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"] > div.fd-action-row > button[data-ui-event=\"import\\.retry\\.failed\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "import-retry-failed"
+        "data-action": "import-retry-failed",
+        "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.retry-failed",
+        "data-control-key": "import-conflict-resolve.control.button.retry-failed@import-partial-success.default",
+        "data-entity-key": "import-conflict-resolve.control.button.retry-failed",
+        "data-restore-focus": "import-conflict-resolve.control.button.retry-failed@import-partial-success.default",
+        "data-settings-key": "retry-failed",
+        "data-ui-event": "import.retry.failed"
       },
-      "uiEvent": null,
+      "uiEvent": "import.retry.failed",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -127236,10 +127383,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f408a1a572bfaa2cbeb7",
+      "candidateKey": "candidate:d522aa6a363467b8c893",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127253,10 +127399,16 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "查看详情",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"] > div.fd-action-row > button[data-route=\"import-result-detail\"]:nth-of-type(2)",
+      "label": "查看导入详情",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"] > div.fd-action-row > button[data-ui-event=\"route\\.push\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "import-result-detail"
+        "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.result-detail-open",
+        "data-control-key": "import-conflict-resolve.control.button.result-detail-open@import-partial-success.default",
+        "data-entity-key": "import-conflict-resolve.control.button.result-detail-open",
+        "data-restore-focus": "import-conflict-resolve.control.button.result-detail-open@import-partial-success.default",
+        "data-route": "import-result-detail",
+        "data-settings-key": "result-detail-open",
+        "data-ui-event": "route.push"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -127272,7 +127424,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1565be47db5ab67d4fc0",
+      "candidateKey": "candidate:8c42f0f58a92e79765e5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127286,12 +127438,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "完成",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"] > div.fd-action-row > button[data-route=\"bookshelf\"]:nth-of-type(3)",
+      "label": "完成并返回书架",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"] > div.fd-action-row > button[data-ui-event=\"route\\.popToRoot\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "import-conflict-resolve.control.import-partial-success.default.button.import-complete",
+        "data-control-key": "import-conflict-resolve.control.button.import-complete@import-partial-success.default",
+        "data-entity-key": "import-conflict-resolve.control.button.import-complete",
+        "data-restore-focus": "import-conflict-resolve.control.button.import-complete@import-partial-success.default",
+        "data-route": "bookshelf",
+        "data-settings-key": "import-complete",
+        "data-ui-event": "route.popToRoot"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.popToRoot",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -127305,7 +127463,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a0149176a66d033166dd",
+      "candidateKey": "candidate:fb51806a339fd070c928",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127320,8 +127478,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.back",
+        "data-control-key": "import-conflict-resolve.control.button.back@import-result-detail.default",
+        "data-entity-key": "import-conflict-resolve.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -127336,7 +127500,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:95d5faa9e8d94d9bcb65",
+      "candidateKey": "candidate:d91022a697a79cf397c6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127351,11 +127515,17 @@
       "domTag": "button",
       "role": "button",
       "label": "导出报告",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"] > div.fd-action-row > button[data-action=\"export-report\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"] > div.fd-action-row > button[data-ui-event=\"import\\.apply\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-action": "export-report"
+        "data-action": "export-report",
+        "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.report-export",
+        "data-control-key": "import-conflict-resolve.control.button.report-export@import-result-detail.default",
+        "data-entity-key": "import-conflict-resolve.control.button.report-export",
+        "data-restore-focus": "import-conflict-resolve.control.button.report-export@import-result-detail.default",
+        "data-settings-key": "report-export",
+        "data-ui-event": "import.apply"
       },
-      "uiEvent": null,
+      "uiEvent": "import.apply",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -127365,10 +127535,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:29be547d20052bfc458e",
+      "candidateKey": "candidate:a2b30ca4629b3bcd6292",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127383,9 +127552,15 @@
       "domTag": "button",
       "role": "button",
       "label": "继续导入",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"] > div.fd-action-row > button[data-route=\"local-import\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"] > div.fd-action-row > button[data-ui-event=\"route\\.push\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.import-continue",
+        "data-control-key": "import-conflict-resolve.control.button.import-continue@import-result-detail.default",
+        "data-entity-key": "import-conflict-resolve.control.button.import-continue",
+        "data-restore-focus": "import-conflict-resolve.control.button.import-continue@import-result-detail.default",
+        "data-route": "local-import",
+        "data-settings-key": "import-continue",
+        "data-ui-event": "route.push"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -127401,7 +127576,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:9b5815d3f350e3ed43cb",
+      "candidateKey": "candidate:c5af74dac48e95f9b884",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127416,11 +127591,17 @@
       "domTag": "button",
       "role": "button",
       "label": "返回书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"] > div.fd-action-row > button[data-route=\"bookshelf\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"] > div.fd-action-row > button[data-ui-event=\"route\\.popToRoot\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "import-conflict-resolve.control.import-result-detail.default.button.bookshelf-return",
+        "data-control-key": "import-conflict-resolve.control.button.bookshelf-return@import-result-detail.default",
+        "data-entity-key": "import-conflict-resolve.control.button.bookshelf-return",
+        "data-restore-focus": "import-conflict-resolve.control.button.bookshelf-return@import-result-detail.default",
+        "data-route": "bookshelf",
+        "data-settings-key": "bookshelf-return",
+        "data-ui-event": "route.popToRoot"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.popToRoot",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -127434,7 +127615,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:91c1523e212f8518244d",
+      "candidateKey": "candidate:2d27d2865093565cad6e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131289,6 +131470,7 @@
       "label": "导入权限被拒绝 系统未授予存储访问权限，无法读取本地书籍文件。 所需权限存储访问 触发场景本地书导入 · 选择文件阶段 影响范围无法读取或写入本地书籍文件 前往系统设置 重新选择 返回书架",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-permission-denied\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "selecting",
         "data-route": "import-permission-denied"
       },
@@ -131308,7 +131490,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c0f9cb8b46229156d900",
+      "candidateKey": "candidate:54d66a140ed65aa05d16",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131325,6 +131507,7 @@
       "label": "文件格式不支持 当前文件格式（未知格式）暂不支持导入，请转换为支持的格式。 文件名未知文件 检测格式未知格式 支持格式EPUB · TXT · MOBI · AZW3 · PDF 可尝试使用格式转换工具转换为支持的格式后重新导入。 尝试转换 重新选择 取消",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-format-unsupported\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "input",
         "data-route": "import-format-unsupported"
       },
@@ -131344,7 +131527,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ec751b662bd3a5ac14da",
+      "candidateKey": "candidate:1545c49e4d25be6af03b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131361,6 +131544,7 @@
       "label": "文件为空 所选文件没有可导入的内容，请确认文件未损坏后重新选择。 文件名未知文件 文件大小0 KB 检测结果文件内容为空或无法读取 重新选择文件 返回书架",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-empty-file\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "parsing",
         "data-route": "import-empty-file"
       },
@@ -131380,7 +131564,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:72e26b351c43c0868cd3",
+      "candidateKey": "candidate:1713588d052ae9bdb79e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131397,6 +131581,7 @@
       "label": "正在解析书籍 正在解析文件内容、识别章节结构和元数据，请稍候。 当前文件雨夜.epub 当前步骤正在识别章节结构 72% 取消解析 后台运行",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-parsing\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "parsing",
         "data-route": "import-parsing"
       },
@@ -131416,7 +131601,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:10df389ae6bc942f08e9",
+      "candidateKey": "candidate:249b9c8eb51870df92f4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131433,6 +131618,7 @@
       "label": "检测到重复书籍 以下书籍在本地书架已存在，请选择处理方式。 检测到 2 个重复项 雨夜.epub本地已存在 · 同名同作者 1.2 MB 旧书扫描.txt本地已存在 · 同名不同作者 0.8 MB 全部跳过 全部覆盖 逐项处理 取消",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-duplicate\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "preview",
         "data-route": "import-duplicate"
       },
@@ -131452,7 +131638,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b63a86fe94b6514e5a41",
+      "candidateKey": "candidate:a8b5902fe7b822da4214",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131469,6 +131655,7 @@
       "label": "解决导入冲突 导入数据与本地记录存在冲突，请逐项选择处理方式。 字段冲突 书名 本地雨夜 导入雨夜（修订版） 作者 本地佚名 导入张三 分组 本地默认分组 导入小说 选择解决方案后将进入应用阶段，可通过回滚撤销本次导入。 保留本地 覆盖本地 保留两份 取消并回滚",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-conflict-resolve\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "conflict",
         "data-route": "import-conflict-resolve"
       },
@@ -131488,7 +131675,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0293af91f06498285d32",
+      "candidateKey": "candidate:c5040d2b389bf2af3fae",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131505,6 +131692,7 @@
       "label": "部分导入成功 本次导入共 3 项，其中 1 项成功、2 项失败，可重试失败项或查看详情。 成功1 项 失败2 项 总计3 项 雨夜.epub 成功 旧书扫描.txt 失败 · 编码异常 缺失章节.mobi 失败 · 格式不支持 重试失败项 查看详情 完成",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-partial-success\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "result",
         "data-route": "import-partial-success"
       },
@@ -131524,7 +131712,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:548d13520d0b2d293a88",
+      "candidateKey": "candidate:96f03826da70b501de86",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -131541,6 +131729,7 @@
       "label": "导入结果详情 以下是本次导入的完整结果，可导出报告或继续导入其他书籍。 导入时间刚刚 来源本地文件 分组默认分组 雨夜.epub作者已识别 · 加入默认分组 成功 旧书扫描.txt编码 UTF-8 · 章节识别完成 成功 缺失章节.mobi格式不支持 · 已跳过 失败 导出报告 继续导入 返回书架",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-route=\"import-result-detail\"]",
       "dataAttributes": {
+        "data-import-batch-id": "local-book-import-20260721",
         "data-import-phase": "result",
         "data-route": "import-result-detail"
       },
@@ -131560,7 +131749,7 @@
         "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:bc3bcf17c35bc530ad0c",
+      "candidateKey": "candidate:2c0e90d12f4319f1a59d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     }
   ]

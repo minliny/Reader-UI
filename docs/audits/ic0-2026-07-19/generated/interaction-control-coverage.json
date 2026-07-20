@@ -40,7 +40,7 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2315,
+    "withUiEvent": 2327,
     "withRawMotionHints": 3719,
     "rawMotionHintOccurrences": 7136,
     "uniqueRawMotionHints": [
@@ -199,7 +199,7 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1493
+      "IC0_UI_EVENT_UNRESOLVED": 1481
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "72a69971675fdf780584853efa6ba7f41f330bf2d5b7223bba3943dd7114843d",
+  "inventorySha256": "f069e889aeefdbe7da930cb76fe929dbfec9d658365f5b343833bac08a93c802",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -3061,7 +3061,7 @@
       "pageState": "permission",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "a0d7701282eb7f62ce6e3a445960027538af4eed9e461d2f8626389732ba754a"
+      "renderSha256": "2549aee5ec7d79aac7ca88116e33c894b288b7e6ecdaca9161d3eaa0f05904df"
     },
     {
       "routeId": "import-format-unsupported",
@@ -3072,7 +3072,7 @@
       "pageState": "error",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "1cf442345d2c33d0b15ea031c4a46fb07bf7147c98bca82bdd61cbe4b3d61bbe"
+      "renderSha256": "a0157c230c97f441de4faa5e19e5f72d31bbb8342546ac70b6c40cd294366c42"
     },
     {
       "routeId": "import-empty-file",
@@ -3083,7 +3083,7 @@
       "pageState": "empty",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "08eed11710ff0bb4989d6b7ff5ca578e31f34c4016e1c7b0726191abced5fa81"
+      "renderSha256": "eb19575829262e42c266f260eec5f4b193b83f3067b9cfd6836d14f1618a1700"
     },
     {
       "routeId": "import-parsing",
@@ -3094,7 +3094,7 @@
       "pageState": "loading",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "3bcf441c2c742a07bf9ac5679072b6617f85de050a0c01cc9693551a396678ec"
+      "renderSha256": "b7594e7aa871f2a7eeed21e7f74e9e34e7102d6c64541f42e7746ca3568eeb82"
     },
     {
       "routeId": "import-duplicate",
@@ -3105,7 +3105,7 @@
       "pageState": "default",
       "semanticControls": 5,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "c328c3e4cefd8077f1451fa4ca70615faea9f9b9d2974bb1b7e260c052b80d67"
+      "renderSha256": "815b0121f7e603f00d9d265ee9eaff83e64a3b15be9117806a0fd69e81cda1ff"
     },
     {
       "routeId": "import-conflict-resolve",
@@ -3116,7 +3116,7 @@
       "pageState": "default",
       "semanticControls": 5,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "7f339ce909f5d26ffdebbb8edf32d2c73d4e53661f4fdb3526c92680f8553659"
+      "renderSha256": "00778b98ab7718622b28757e850f8ec896abc3fa701bdbd1adb06904e90c0a4f"
     },
     {
       "routeId": "import-partial-success",
@@ -3127,7 +3127,7 @@
       "pageState": "default",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "4b580c93610723dcb4ec9ac53cc0c9631ab3ac7dd132b34241a01cd04cde20cf"
+      "renderSha256": "fb2d474af3b4b6483dfc639110380e436606b9d6d9eec37ebe6a9ca2a16a8d78"
     },
     {
       "routeId": "import-result-detail",
@@ -3138,7 +3138,7 @@
       "pageState": "default",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "09b7cd3a8cd3a9ebf7b904459fd9a13bef867f10597472def077bec7550bcdde"
+      "renderSha256": "34718e7fc7ec20ce97285cd05ae86c93a4068ce6d2a775f35cb40dd6e6812d03"
     },
     {
       "routeId": "onboarding-welcome",
