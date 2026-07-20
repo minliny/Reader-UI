@@ -2,10 +2,11 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "webdav-config",
-  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "status": "F2_COMPLETE",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378327914925297876",
-  "revisionTitle": "F2 · WebDAV Config · Local R3a Pilot",
+  "revision": "2378333433968465691",
+  "revisionTitle": "F2 · WebDAV Config · User Confirmed",
+  "confirmedAt": "2026-07-20T15:48:41Z",
   "localImplementationCommit": "dd61bfd61e6967ccd30064dc03a9a9d66e30bed2",
   "handoffEvidenceCommit": "5146d968b60718bf4f473d3b8c27284ac79890a1",
   "deltas": [
@@ -86,10 +87,13 @@
   ],
   "admission": {
     "figmaWriteTransactionComplete": true,
-    "userConfirmed": false,
-    "f2Exit": false,
+    "userConfirmed": true,
+    "userConfirmedAt": "2026-07-20T15:48:41Z",
+    "f2Exit": true,
     "nextLocalFamily": "bookshelf",
     "nextFigmaWriterReleased": false,
-    "remainingGates": ["User visual confirmation of WebDAV F2"]
+    "nextLocalFamilyReleased": true,
+    "nextFigmaWriterGate": "bookshelf LOCAL_READY_FOR_FIGMA",
+    "remainingGates": []
   }
 }
