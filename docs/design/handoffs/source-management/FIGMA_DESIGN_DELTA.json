@@ -25,8 +25,8 @@
         "pageId": "334:5",
         "componentNodeId": "1994:26598",
         "nodeIds": ["549:54", "1994:26558", "1994:26565", "1994:26572", "1994:26579", "1994:26586", "1994:26593"],
-        "oldValue": "Instances had 15x15 bounds but scaleFactor=1 while canonical icon content remained 24x24, causing clipping and apparent deformation.",
-        "newValue": "All seven SourceRow states use proportional 0.625 scaling from the 24x24 canonical Icon=Source component 546:3 to 15x15."
+        "oldValue": "Figma SourceRow included decorative leading source icons that do not exist in the canonical sourceManagementV2 renderer; proportional scaling alone did not resolve the structural mismatch.",
+        "newValue": "Leading is hidden in all seven SourceRow states. Default/Hover/Pressed/Focus/Disabled/Loading text moves to x=12 with 170px width; Selected retains x=50 for its canonical checkbox."
       }
     ],
     "propagationAudit": {
@@ -35,8 +35,8 @@
       "finalPhone": "943:4281",
       "finalTablet": "943:4745",
       "detachedInstances": 0,
-      "phoneSourceIconCount": 4,
-      "tabletSourceIconCount": 4,
+      "phoneVisibleDecorativeSourceIconCount": 0,
+      "tabletVisibleDecorativeSourceIconCount": 0,
       "groupFolderIconCountPerViewport": 1,
       "screenshotAudit": "PASS"
     }

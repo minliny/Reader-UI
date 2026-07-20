@@ -15,6 +15,7 @@
     "sourceRowComponentSetId": "1994:26598",
     "sourceIconMainComponentId": "546:3",
     "sourceIconVariantNodeIds": ["549:54", "1994:26558", "1994:26565", "1994:26572", "1994:26579", "1994:26586", "1994:26593"],
+    "sourceIconVisibility": "HIDDEN_TO_MATCH_CANONICAL_SOURCE_MANAGEMENT_V2_RENDERER",
     "detachedInstanceCount": 0,
     "note": "Baseline bindings remain valid at revision 2378289787451208100. The visual icon correction exists on live head and must receive a new named revision before final F2 exit."
   },
