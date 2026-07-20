@@ -71,3 +71,13 @@ F0 已通过，F1 技术检查已通过。根据用户最新 viewport policy，�
 - `f1Exit=false`
 - `f2QueueAdmitted=false`
 - 不启动其他 12 个页面族，也不进入 Motion Reference。
+
+## 全文件阴影纠偏补充（2026-07-20）
+
+用户指出此前“全量修复”实际只证明了第 24 页。现已按 29 页完整分母重新审计：初始 22 页共有 1,047 个 active `DROP_SHADOW`；按 canonical component → downstream instance/reference 的顺序处理后，净减少 885 个。
+
+- `23 · Pages · Final`、`24 · Responsive Masters · Phase 4` 及所有静态页面/正文 surface 的 active `DROP_SHADOW` 均为 0。
+- 最终保留 162 个均有显式语义：70 个 Motion Reference（F3 独立 lane，本轮仅审计）、39 个 focus ring、9 个 Overlay/Dialog/BottomSheet、5 个书封、12 个 SessionCapsule、11 个阅读控件图标、4 个 Filter Menu/Apply、12 个 Foundations effect sample。
+- 18 个 page 有直接写入；写入前使用 `readerFullShadow20260720` 保存每页 recovery manifest/backup/result。另有 207 个 effect 因 canonical master 修复由实例继承消失。
+- 29/29 页最终复核完成，读取错误 0；完整逐页数据见 `docs/design/FIGMA_FULL_FILE_SHADOW_AUDIT_2026-07-20.json`。
+- Figma 自动保存已完成；Mac 当前锁屏，因此新的 named revision 与精确 revision ID 仍待解锁后写入。本条不冒充 named revision evidence。
