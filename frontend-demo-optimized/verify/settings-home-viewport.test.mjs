@@ -171,7 +171,11 @@ test("all six settings-home entries render inside the shared bounded SettingsShe
   }
 
   assert.match(d2SettingsShell, /contentClass:\s*["']fd-phone-content fd-settings-content fd-d2-settings-content["']/);
-  assert.doesNotMatch(d2SettingsShell, /bottomActionHtml\s*:/, "the four no-action settings entries must not reserve a phantom fixed action row");
+  // R2a: d2SettingsShell 现在支持 bottomActionHtml / sheetHtml / dialogHtml / trailingHtml
+  // 作为 option（source-management 合法使用 bottom action bar：批量管理 + 新增书源）。
+  // 约束：必须默认空字符串，避免无 action 的页面（settings-general / sync-backup /
+  // about-feedback）预留 phantom fixed action row。
+  assert.match(d2SettingsShell, /bottomActionHtml:\s*options\.bottomActionHtml\s*\|\|\s*["']["']/, "d2SettingsShell bottomActionHtml defaults to empty string (no phantom action row for no-action entries)");
   assert.match(bookshelfSettings, /contentClass:\s*["']fd-phone-content fd-settings-content["']/);
   assert.doesNotMatch(bookshelfSettings, /bottomActionHtml\s*:/, "bookshelf/search settings has no fixed bottom action");
   assert.match(canonicalSettingsScreen, /contentClass:\s*["']fd-phone-content fd-settings-content["']/);

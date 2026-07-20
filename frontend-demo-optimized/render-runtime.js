@@ -11194,9 +11194,17 @@
         return flowScreen(data, appState);
       case "source-switch-results":
         return flowScreen(data, withAppState(appState, { sourceSwitchSelectedSource: "起点导入" }));
+      // R2a-1: source-management 与 source-settings-entry 路由 FROZEN 到
+      // d2-settings-sync-renderers.js 的 sourceSettingsV2 / sourceManagementV2。
+      // 旧 sourceManagementScreen 实现已隔离，不再作为 fallback。
+      // 如果 D2-C dispatch hook 没接管（D2-C 模块未加载），fail-loud 而不是回退。
       case "source-management":
       case "source-settings-entry":
-        return sourceManagementScreen(data, appState);
+        throw new Error(
+          (route) + " route is FROZEN to sourceSettingsV2 (d2-settings-sync-renderers.js). " +
+          "renderRoute switch fallback is disabled; ensure window.ReaderD2SettingsSyncRenderers is loaded " +
+          "before renderRoute is called."
+        );
       case "source-import-options":
         return sourceImportOptionsScreenV2(data, appState);
       case "source-add":

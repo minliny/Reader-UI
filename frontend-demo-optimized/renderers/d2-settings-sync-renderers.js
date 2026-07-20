@@ -903,12 +903,17 @@
       ariaLabel: title,
       topBarClass: "fd-back-bar",
       contentClass: "fd-phone-content fd-settings-content fd-d2-settings-content",
+      bottomActionHostClass: options.bottomActionHostClass || "fd-bottom-action-host",
+      sheetHostClass: options.sheetHostClass || "fd-sheet-host",
       toastHostClass: "fd-toast-host",
       dialogHostClass: "fd-dialog-host",
       stateHostClass: "fd-settings-state-host",
       contentHtml: contentHtml,
+      bottomActionHtml: options.bottomActionHtml || "",
+      sheetHtml: options.sheetHtml || "",
       toastHtml: options.toastHtml || "",
       dialogHtml: options.dialogHtml || "",
+      trailingHtml: options.trailingHtml !== undefined ? options.trailingHtml : undefined,
       // A3: back button 稳定 identity attrs（由调用方通过 options.backButtonAttrs 传入，
       //     由 d2StampIdentityAttrs 生成）。未传时为空字符串，backTopBar 保持原行为。
       backButtonAttrs: options.backButtonAttrs || ""
@@ -1480,8 +1485,508 @@
   // ===========================================================================
   // 3. sourceSettingsV2 — 书源设置增强（书源管理 / 调试 / 导入导出）
   // 覆盖路由：source-settings-entry / source-management / source-debug / source-import-export
+  //
+  // R2a-1: source-management 路由由 sourceManagementV2 完整渲染（列表/搜索/筛选/
+  //   批量/更多菜单/添加 Sheet/删除确认 Dialog/状态矩阵），render-runtime.js 的
+  //   sourceManagementScreen fallback 已 FROZEN（throw Error）。
   // ===========================================================================
+
+  // ---- R2b: source-management 状态 owner ----
+  var D2_SOURCE_MANAGEMENT_STORAGE_KEY = "source-management-values";
+
+  // 4 个书源，settingsKey 与 control-identity-declarations.js switch 声明一致
+  var D2_SOURCE_MANAGEMENT_DEFAULT_SOURCES = [
+    { settingsKey: "source-qidian", title: "起点中文网", domain: "qidian.com", group: "起点导入", status: "可用", tone: "good", enabled: true },
+    { settingsKey: "source-biquge", title: "笔趣阁", domain: "biquge.example", group: "玄幻书源", status: "异常", tone: "warn", enabled: true },
+    { settingsKey: "source-local-import", title: "本地导入源", domain: "本地文件导入", group: "自定义", status: "未检测", tone: "muted", enabled: false },
+    { settingsKey: "source-test", title: "测试书源", domain: "test.example", group: "测试书源", status: "可用", tone: "good", enabled: true }
+  ];
+
+  function d2SourceManagementDefaultState() {
+    return {
+      sources: D2_SOURCE_MANAGEMENT_DEFAULT_SOURCES.map(function (s) { return Object.assign({}, s); }),
+      search: "",
+      statusFilter: "全部",
+      groupFilter: "全部分组",
+      batchMode: false,
+      selectedSources: {},
+      menuOpen: false,
+      addSheetOpen: false,
+      deleteConfirm: { open: false, count: 0, logCleanup: false, status: "idle", error: null }
+    };
+  }
+
+  function d2SourceManagementInitState(appState) {
+    var state = d2SourceManagementDefaultState();
+    var stored = d2Get(D2_SOURCE_MANAGEMENT_STORAGE_KEY, null);
+    if (stored && typeof stored === "object" && stored.sourceEnabled) {
+      state.sources = state.sources.map(function (s) {
+        if (Object.prototype.hasOwnProperty.call(stored.sourceEnabled, s.settingsKey)) {
+          return Object.assign({}, s, { enabled: !!stored.sourceEnabled[s.settingsKey] });
+        }
+        return s;
+      });
+    }
+    if (appState) {
+      if (appState.sourceEnabled) {
+        state.sources = state.sources.map(function (s) {
+          if (Object.prototype.hasOwnProperty.call(appState.sourceEnabled, s.title)) {
+            return Object.assign({}, s, { enabled: !!appState.sourceEnabled[s.title] });
+          }
+          return s;
+        });
+      }
+      if (appState.sourceStatusFilter) state.statusFilter = appState.sourceStatusFilter;
+      if (appState.sourceGroupFilter) state.groupFilter = appState.sourceGroupFilter;
+      if (appState.sourceMenuOpen) state.menuOpen = !!appState.sourceMenuOpen;
+    }
+    return state;
+  }
+
+  function d2SourceManagementReducer(state, action) {
+    if (!state) state = d2SourceManagementDefaultState();
+    if (!action || !action.type) return state;
+    switch (action.type) {
+      case "INIT":
+        return d2SourceManagementInitState(action.appState || {});
+
+      case "TOGGLE_SOURCE": {
+        if (!action.settingsKey) return state;
+        var nextSources = state.sources.map(function (s) {
+          if (s.settingsKey === action.settingsKey) return Object.assign({}, s, { enabled: !!action.value });
+          return s;
+        });
+        return Object.assign({}, state, { sources: nextSources });
+      }
+
+      case "SET_SEARCH":
+        return Object.assign({}, state, { search: action.value || "" });
+
+      case "SET_STATUS_FILTER":
+        return Object.assign({}, state, { statusFilter: action.value || "全部" });
+
+      case "SET_GROUP_FILTER":
+        return Object.assign({}, state, { groupFilter: action.value || "全部分组" });
+
+      case "TOGGLE_MENU":
+        return Object.assign({}, state, { menuOpen: !state.menuOpen });
+      case "CLOSE_MENU":
+        return Object.assign({}, state, { menuOpen: false });
+
+      case "OPEN_ADD_SHEET":
+        return Object.assign({}, state, { addSheetOpen: true, menuOpen: false });
+      case "CLOSE_ADD_SHEET":
+        return Object.assign({}, state, { addSheetOpen: false });
+
+      case "ENTER_BATCH_MODE":
+        return Object.assign({}, state, { batchMode: true, menuOpen: false });
+      case "EXIT_BATCH_MODE":
+        return Object.assign({}, state, { batchMode: false, selectedSources: {} });
+
+      case "TOGGLE_SELECT": {
+        if (!action.settingsKey) return state;
+        var nextSelected = Object.assign({}, state.selectedSources);
+        if (nextSelected[action.settingsKey]) delete nextSelected[action.settingsKey];
+        else nextSelected[action.settingsKey] = true;
+        return Object.assign({}, state, { selectedSources: nextSelected });
+      }
+      case "SELECT_ALL": {
+        var allSelected = {};
+        state.sources.forEach(function (s) { allSelected[s.settingsKey] = true; });
+        return Object.assign({}, state, { selectedSources: allSelected });
+      }
+      case "DESELECT_ALL":
+        return Object.assign({}, state, { selectedSources: {} });
+
+      case "DELETE_CONFIRM_OPEN": {
+        var count = Object.keys(state.selectedSources).length;
+        return Object.assign({}, state, {
+          deleteConfirm: { open: true, count: count, logCleanup: false, status: "confirm", error: null }
+        });
+      }
+      case "DELETE_CONFIRM_CLOSE":
+        return Object.assign({}, state, {
+          deleteConfirm: Object.assign({}, state.deleteConfirm, { open: false, status: "idle" })
+        });
+      case "DELETE_CONFIRM_TOGGLE_LOG":
+        return Object.assign({}, state, {
+          deleteConfirm: Object.assign({}, state.deleteConfirm, { logCleanup: !state.deleteConfirm.logCleanup })
+        });
+      case "DELETE_START":
+        // 重复点击 guard：只有 confirm 状态才能进入 loading
+        if (state.deleteConfirm.status === "loading") return state;
+        return Object.assign({}, state, {
+          deleteConfirm: Object.assign({}, state.deleteConfirm, { status: "loading", error: null })
+        });
+      case "DELETE_SUCCESS": {
+        // stale async result guard：只有 loading 状态才接受 success
+        if (state.deleteConfirm.status !== "loading") return state;
+        var remainingSources = state.sources.filter(function (s) { return !state.selectedSources[s.settingsKey]; });
+        return Object.assign({}, state, {
+          sources: remainingSources,
+          selectedSources: {},
+          batchMode: false,
+          deleteConfirm: { open: false, count: 0, logCleanup: false, status: "success", error: null }
+        });
+      }
+      case "DELETE_FAILED":
+        if (state.deleteConfirm.status !== "loading") return state;
+        return Object.assign({}, state, {
+          deleteConfirm: Object.assign({}, state.deleteConfirm, { status: "failed", error: action.error || "unknown error" })
+        });
+      case "DELETE_RESET":
+        return Object.assign({}, state, {
+          deleteConfirm: { open: false, count: 0, logCleanup: false, status: "idle", error: null }
+        });
+
+      default:
+        return state;
+    }
+  }
+
+  var d2SourceManagementState = null;
+  var d2SourceManagementListeners = [];
+
+  function d2SourceManagementGetState() {
+    if (!d2SourceManagementState) {
+      d2SourceManagementState = d2SourceManagementDefaultState();
+    }
+    return d2SourceManagementState;
+  }
+
+  function d2SourceManagementSubscribe(listener) {
+    d2SourceManagementListeners.push(listener);
+    return function unsubscribe() {
+      d2SourceManagementListeners = d2SourceManagementListeners.filter(function (l) { return l !== listener; });
+    };
+  }
+
+  function d2SourceManagementDispatch(action) {
+    var prev = d2SourceManagementState || d2SourceManagementDefaultState();
+    var next = d2SourceManagementReducer(prev, action);
+    if (next === prev) return;
+    // 持久化 source enabled 状态
+    if (next.sources !== prev.sources) {
+      var sourceEnabled = {};
+      next.sources.forEach(function (s) { sourceEnabled[s.settingsKey] = s.enabled; });
+      d2Set(D2_SOURCE_MANAGEMENT_STORAGE_KEY, { sourceEnabled: sourceEnabled });
+    }
+    d2SourceManagementState = next;
+    for (var i = 0; i < d2SourceManagementListeners.length; i++) {
+      try { d2SourceManagementListeners[i](next, prev, action); } catch (e) { /* ignore listener errors */ }
+    }
+  }
+
+  function d2SourceManagementInjectAppState(appState) {
+    d2SourceManagementState = d2SourceManagementInitState(appState || {});
+    return d2SourceManagementState;
+  }
+
+  // R2b: 删除书源执行函数（事件层 / 测试调用）
+  // 调用方负责在 DELETE_CONFIRM_OPEN 后调用此函数执行实际删除。
+  // demo 环境无真实删除 → 模拟 success / failed / timeout。
+  // stale async guard：reducer 内 DELETE_SUCCESS / DELETE_FAILED 仅在 status=loading 时接受。
+  // duplicate-click guard：reducer 内 DELETE_START 仅在 status=confirm 时接受。
+  function d2ExecuteSourceDelete(options) {
+    options = options || {};
+    d2SourceManagementDispatch({ type: "DELETE_START" });
+    var simulate = options.simulateResult || "success";
+    return new Promise(function (resolve) {
+      var delay = options.delay || 0;
+      setTimeout(function () {
+        if (simulate === "failed") {
+          d2SourceManagementDispatch({
+            type: "DELETE_FAILED",
+            error: options.error || "删除失败，请稍后重试"
+          });
+          resolve("failed");
+        } else {
+          d2SourceManagementDispatch({ type: "DELETE_SUCCESS" });
+          resolve("success");
+        }
+      }, delay);
+    });
+  }
+
+  // ---- R2a/R2b: source-management 完整渲染 ----
+
+  // 辅助：source row more-actions button identity
+  function d2SourceRowMoreAttrs(settingsKey) {
+    var identity = d2ResolveSubcontrolIdentity("source-management", "source-row-more-" + settingsKey);
+    return d2StampIdentityAttrs(identity);
+  }
+
+  // 辅助：source row detect button identity
+  function d2SourceRowDetectAttrs(settingsKey) {
+    var identity = d2ResolveSubcontrolIdentity("source-management", "source-row-detect-" + settingsKey);
+    return d2StampIdentityAttrs(identity);
+  }
+
+  // 辅助：source row checkbox (batch mode) identity
+  function d2SourceRowSelectAttrs(settingsKey) {
+    var identity = d2ResolveSubcontrolIdentity("source-management", "source-row-select-" + settingsKey);
+    return d2StampIdentityAttrs(identity);
+  }
+
+  // 辅助：action button identity stamping (a3-action pattern)
+  function d2SourceActionAttrs(settingsKey) {
+    var identity = d2ResolveSubcontrolIdentity("source-management", settingsKey);
+    return d2StampIdentityAttrs(identity);
+  }
+
+  // 搜索输入
+  function d2SourceSearchInput(state) {
+    var identity = d2ResolveSubcontrolIdentity("source-management", "source-search");
+    var attrs = d2StampIdentityAttrs(identity);
+    return `<label class="fd-source-search">
+      ${icon("search", "fd-small-icon")}
+      <input type="search"${attrs} value="${esc(state.search)}" placeholder="搜索书源名称或域名" aria-label="搜索书源" autocomplete="off">
+    </label>`;
+  }
+
+  // 状态筛选 segment + 分组筛选 select
+  function d2SourceFilters(state) {
+    // status filter segment — 使用 d2Segment（每个 option button 自带 identity，
+    // container 不 stamp，与 settings-general 一致）
+    var statusRow = {
+      settingsKey: "source-status-filter",
+      title: "状态筛选",
+      options: ["全部", "启用", "异常", "未检测", "自定义"],
+      value: state.statusFilter
+    };
+    var statusSegment = d2Segment(statusRow, "source-management");
+
+    // group filter select — <select> 元素 stamp identity
+    var groupIdentity = d2ResolveSubcontrolIdentity("source-management", "source-group-filter");
+    var groupAttrs = d2StampIdentityAttrs(groupIdentity);
+    var groupOptions = ["全部分组", "玄幻书源", "起点导入", "测试书源", "自定义"];
+    var groupSelect = `<label class="fd-source-group-filter">
+      <span>${icon("folder", "fd-small-icon")}<strong>分组</strong></span>
+      <select${groupAttrs} aria-label="分组筛选">
+        ${groupOptions.map(function (g) {
+          return `<option value="${esc(g)}"${state.groupFilter === g ? " selected" : ""}>${esc(g)}</option>`;
+        }).join("")}
+      </select>
+    </label>`;
+
+    var enabledCount = state.sources.filter(function (s) { return s.enabled; }).length;
+    var errorCount = state.sources.filter(function (s) { return s.status === "异常"; }).length;
+    var statLine = `<p class="fd-source-stat-line">${state.sources.length} 个书源 · ${enabledCount} 个启用 · ${errorCount} 个异常 · 10:30 检测</p>`;
+
+    return `${statLine}${statusSegment}${groupSelect}`;
+  }
+
+  // 单行书源
+  function d2SourceRow(row, state) {
+    var isSelected = !!state.selectedSources[row.settingsKey];
+    var rowClass = "fd-source-row" + (isSelected ? " is-selected" : "");
+    var selectAttrs = d2SourceRowSelectAttrs(row.settingsKey);
+    var detectAttrs = d2SourceRowDetectAttrs(row.settingsKey);
+    var moreAttrs = d2SourceRowMoreAttrs(row.settingsKey);
+
+    var checkbox = state.batchMode
+      ? `<button class="fd-source-check${isSelected ? " is-checked" : ""}" type="button"${selectAttrs} aria-label="${esc(row.title)}${isSelected ? "已选择" : "未选择"}" aria-pressed="${isSelected ? "true" : "false"}">${isSelected ? icon("check", "fd-small-icon") : ""}</button>`
+      : "";
+
+    // switch identity uses the existing switch declarations (source-biquge etc.)
+    var switchIdentity = d2ResolveSubcontrolIdentity("source-management", row.settingsKey);
+    var switchAttrs = d2StampIdentityAttrs(switchIdentity);
+    var switchHtml = `<span class="fd-settings-switch${row.enabled ? " is-on" : ""}"${switchAttrs} role="switch" aria-checked="${row.enabled ? "true" : "false"}" tabindex="0" aria-label="${esc(row.title)}${row.enabled ? "已启用，点击禁用" : "已禁用，点击启用"}"><i></i></span>`;
+
+    var detectBtn = state.batchMode ? "" : `<button class="fd-source-row-test" type="button"${detectAttrs} aria-label="检测 ${esc(row.title)}">检测</button>`;
+    var moreBtn = state.batchMode ? "" : `<button class="fd-source-row-more" type="button"${moreAttrs} data-restore-focus="more-${esc(row.settingsKey)}" aria-label="更多操作 ${esc(row.title)}">${icon("more", "fd-small-icon")}</button>`;
+
+    return `<article class="${rowClass}">
+      ${checkbox}
+      <span class="fd-source-row-main"><strong>${esc(row.title)}</strong><small>${esc(row.domain)} · ${esc(row.group)}</small></span>
+      <em class="fd-source-row-state">${d2Badge(row.status, row.tone)}</em>
+      ${detectBtn}
+      <span class="fd-source-row-toggle">${state.batchMode ? "" : switchHtml}</span>
+      ${moreBtn}
+    </article>`;
+  }
+
+  // source list
+  function d2SourceList(state, filteredSources) {
+    if (filteredSources.length === 0) {
+      return `<section class="fd-source-list fd-source-list-empty" aria-label="书源列表">
+        <p class="fd-source-empty">没有匹配的书源</p>
+      </section>`;
+    }
+    return `<section class="fd-source-list" aria-label="书源列表">
+      ${filteredSources.map(function (s) { return d2SourceRow(s, state); }).join("")}
+    </section>`;
+  }
+
+  // batch mode top bar
+  function d2SourceBatchTop(state) {
+    var selectedCount = Object.keys(state.selectedSources).length;
+    var allSelected = selectedCount === state.sources.length && selectedCount > 0;
+    var exitAttrs = d2SourceActionAttrs("batch-exit");
+    var selectAllAttrs = d2SourceActionAttrs("batch-select-all");
+    return `<div class="fd-source-batch-top">
+      <button type="button"${exitAttrs} aria-label="退出批量模式">取消</button>
+      <strong>已选 ${selectedCount} 个</strong>
+      <button type="button"${selectAllAttrs} aria-pressed="${allSelected ? "true" : "false"}" aria-label="${allSelected ? "取消全选" : "全选"}">${allSelected ? "取消全选" : "全选"}</button>
+    </div>`;
+  }
+
+  // home bottom actions (non-batch)
+  function d2SourceHomeActions(state) {
+    var batchAttrs = d2SourceActionAttrs("batch-enter");
+    var addAttrs = d2SourceActionAttrs("source-add");
+    return `<div class="fd-source-bottom-bar is-fixed">
+      <button type="button"${batchAttrs} aria-label="进入批量管理">批量管理</button>
+      <button type="button"${addAttrs} data-restore-focus="source-add" aria-label="新增书源">${icon("add", "fd-small-icon")}新增书源</button>
+    </div>`;
+  }
+
+  // batch bottom actions
+  function d2SourceBatchActions(state) {
+    var selectedCount = Object.keys(state.selectedSources).length;
+    var disabled = selectedCount === 0 ? " disabled" : "";
+    var enableAttrs = d2SourceActionAttrs("batch-enable");
+    var disableAttrs = d2SourceActionAttrs("batch-disable");
+    var detectAttrs = d2SourceActionAttrs("batch-detect");
+    var groupAttrs = d2SourceActionAttrs("batch-group");
+    var deleteAttrs = d2SourceActionAttrs("batch-delete");
+    return `<div class="fd-source-bottom-bar fd-source-batch-actions">
+      <button type="button"${enableAttrs}${disabled} aria-label="启用已选">启用</button>
+      <button type="button"${disableAttrs}${disabled} aria-label="禁用已选">禁用</button>
+      <button type="button"${detectAttrs}${disabled} aria-label="检测已选">检测</button>
+      <button type="button"${groupAttrs}${disabled} aria-label="分组已选">分组</button>
+      <button class="is-danger" type="button"${deleteAttrs}${disabled} data-restore-focus="batch-delete" aria-label="删除已选 ${selectedCount} 个书源">删除</button>
+    </div>`;
+  }
+
+  // more menu overlay
+  function d2SourceMoreMenu(state) {
+    if (!state.menuOpen) return "";
+    var items = [
+      { settingsKey: "menu-import-network", label: "网络导入" },
+      { settingsKey: "menu-import-local", label: "本地导入" },
+      { settingsKey: "menu-create-new", label: "新建书源" },
+      { settingsKey: "menu-batch-manage", label: "批量管理" },
+      { settingsKey: "menu-group-manage", label: "分组管理" },
+      { settingsKey: "menu-detect-selected", label: "校验所选" },
+      { settingsKey: "menu-error-logs", label: "错误日志" }
+    ];
+    return `<nav class="fd-source-more-menu" aria-label="书源更多操作">
+      ${items.map(function (item) {
+        var attrs = d2SourceActionAttrs(item.settingsKey);
+        return `<button type="button"${attrs}>${esc(item.label)}</button>`;
+      }).join("")}
+    </nav>`;
+  }
+
+  // add source sheet overlay
+  function d2SourceAddSheet(state) {
+    if (!state.addSheetOpen) return "";
+    var cancelAttrs = d2SourceActionAttrs("add-sheet-cancel");
+    var items = [
+      { settingsKey: "add-sheet-network", icon: "cloud", title: "网络导入", meta: "从 URL 拉取书源包" },
+      { settingsKey: "add-sheet-local", icon: "folder", title: "本地导入", meta: "选择本地 JSON 或 TXT 文件" },
+      { settingsKey: "add-sheet-clipboard", icon: "file", title: "剪贴板导入", meta: "解析剪贴板中的书源内容" },
+      { settingsKey: "add-sheet-manual", icon: "edit", title: "手动新建", meta: "进入空白书源编辑页" }
+    ];
+    return `<section class="fd-demo-sheet fd-source-bottom-sheet" aria-label="添加书源" aria-hidden="false" data-demo-sheet>
+      <div class="fd-sheet-grabber"></div>
+      <h2>添加书源</h2>
+      ${items.map(function (item) {
+        var attrs = d2SourceActionAttrs(item.settingsKey);
+        return `<button type="button"${attrs}>${icon(item.icon, "fd-small-icon")}<span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>${chevron("fd-small-icon")}</button>`;
+      }).join("")}
+      <button class="is-cancel" type="button"${cancelAttrs} data-sheet-initial-focus aria-label="取消添加书源">取消</button>
+    </section>`;
+  }
+
+  // delete confirm dialog overlay
+  function d2SourceDeleteDialog(state) {
+    if (!state.deleteConfirm.open) return "";
+    var dc = state.deleteConfirm;
+    var cancelAttrs = d2SourceActionAttrs("delete-cancel");
+    var confirmAttrs = d2SourceActionAttrs("delete-confirm");
+    var logAttrs = d2SourceActionAttrs("delete-log-cleanup");
+    var isBusy = dc.status === "loading";
+    var isFailed = dc.status === "failed";
+    var titleAttr = isFailed && dc.error ? ` title="${esc(dc.error)}"` : "";
+    var confirmLabel = isBusy ? "删除中…" : isFailed ? "重试" : "删除";
+    var confirmDisabled = isBusy ? " disabled aria-busy=\"true\"" : "";
+    var confirmInvalid = isFailed ? " aria-invalid=\"true\"" : "";
+    var dialogStatus = isBusy ? " data-delete-status=\"loading\"" : isFailed ? " data-delete-status=\"failed\"" : "";
+    return `<section class="fd-demo-dialog fd-source-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="source-delete-title" aria-describedby="source-delete-desc" aria-hidden="false" data-demo-dialog data-source-delete-dialog${dialogStatus}>
+      <h2 id="source-delete-title">删除书源？</h2>
+      <p id="source-delete-desc">将删除已选 ${dc.count} 个书源。不会删除书架书籍，但这些书源将不再参与搜索、发现和换源。${isFailed && dc.error ? "<br><strong>" + esc(dc.error) + "</strong>" : ""}</p>
+      <label class="fd-source-delete-option"><input type="checkbox"${logAttrs} ${dc.logCleanup ? "checked" : ""}> <span>同时清除相关检测日志</span></label>
+      <div class="fd-source-delete-actions">
+        <button type="button"${cancelAttrs}${isBusy ? " disabled" : ""} data-dialog-initial-focus>取消</button>
+        <button class="is-danger" type="button"${confirmAttrs}${confirmDisabled}${confirmInvalid}${titleAttr}>${confirmLabel}</button>
+      </div>
+    </section>`;
+  }
+
+  // source-management 完整页面内容
+  function d2SourceManagementContent(state) {
+    var filtered = state.sources.filter(function (s) {
+      if (state.search) {
+        var q = state.search.toLowerCase();
+        if (s.title.toLowerCase().indexOf(q) < 0 && s.domain.toLowerCase().indexOf(q) < 0) return false;
+      }
+      if (state.statusFilter === "启用" && !s.enabled) return false;
+      if (state.statusFilter === "异常" && s.status !== "异常") return false;
+      if (state.statusFilter === "未检测" && s.status !== "未检测") return false;
+      if (state.statusFilter === "自定义" && s.group !== "自定义") return false;
+      if (state.groupFilter !== "全部分组" && s.group !== state.groupFilter) return false;
+      return true;
+    });
+
+    var batchTop = state.batchMode ? d2SourceBatchTop(state) : "";
+    var searchInput = state.batchMode ? "" : d2SourceSearchInput(state);
+    var filters = state.batchMode ? "" : d2SourceFilters(state);
+    var moreMenu = d2SourceMoreMenu(state);
+    var list = d2SourceList(state, filtered);
+
+    return `<section class="fd-source-home">
+      ${moreMenu}
+      ${batchTop}
+      ${searchInput}
+      ${filters}
+      ${list}
+    </section>`;
+  }
+
+  // source-management 完整 renderer（R2a-1: 唯一 production renderer）
+  function sourceManagementV2(data, appState) {
+    var state = d2SourceManagementGetState();
+    var selectedCount = Object.keys(state.selectedSources).length;
+    var title = state.batchMode ? "已选 " + selectedCount + " 个" : "书源管理";
+
+    var contentHtml = d2SourceManagementContent(state);
+    var trailingHtml = state.batchMode ? "" : `<button type="button" aria-label="更多"${d2SourceActionAttrs("source-menu-toggle")} data-source-menu-toggle data-restore-focus="source-menu-toggle">${icon("more", "fd-small-icon")}</button>`;
+    var bottomActionHtml = state.batchMode ? d2SourceBatchActions(state) : d2SourceHomeActions(state);
+    var sheetHtml = d2SourceAddSheet(state);
+    var dialogHtml = d2SourceDeleteDialog(state);
+    var backIdentity = d2ResolveSubcontrolIdentity("source-management", "back");
+    var backAttrs = d2StampIdentityAttrs(backIdentity);
+    var frameState = state.addSheetOpen ? " has-sheet" : state.deleteConfirm.open ? " has-dialog" : "";
+
+    return d2SettingsShell(data, title, contentHtml, {
+      trailingHtml: trailingHtml,
+      bottomActionHtml: bottomActionHtml,
+      sheetHtml: sheetHtml,
+      dialogHtml: dialogHtml,
+      backButtonAttrs: backAttrs,
+      bottomActionHostClass: "fd-bottom-action-host fd-source-control-host",
+      sheetHostClass: "fd-sheet-host",
+      frameState: frameState
+    });
+  }
+
   function sourceSettingsV2(data, route, appState) {
+    // R2a-1: source-management 由 sourceManagementV2 完整渲染
+    if (route === "source-management") {
+      return sourceManagementV2(data, appState);
+    }
     var page = d2SourceSettingsPage(route, appState);
     var contentHtml = `
       ${d2MetricGrid(page.metrics)}
@@ -1516,7 +2021,9 @@
           }
         ]
       },
-      // 书源管理（精简增强版，完整版仍由 render-runtime.js sourceManagementScreen 提供）
+      // 书源管理（R2a-1: SUPERSDED — 完整版由 sourceManagementV2 渲染。
+      //   此 page data 仅保留给 source-settings-entry 等其它路由的 link row 引用，
+      //   source-management 路由不再消费此 page data。）
       "source-management": {
         title: "书源管理",
         metrics: [
@@ -2775,6 +3282,25 @@
       requestPermission: d2RequestPermission,
       executeCacheClear: d2ExecuteCacheClear,
       executeResetDefaults: d2ExecuteResetDefaults
+    },
+    // R2a/R2b: source-management 状态 owner / reducer / dispatch
+    // 外部事件层通过此 API 与 source-management 状态交互：
+    //   state = sourceManagement.getState()
+    //   sourceManagement.dispatch({ type: "TOGGLE_SOURCE", settingsKey: "source-biquge", value: false })
+    //   unsubscribe = sourceManagement.subscribe((next, prev, action) => { ... })
+    sourceManagement: {
+      storageKey: D2_SOURCE_MANAGEMENT_STORAGE_KEY,
+      defaultSources: D2_SOURCE_MANAGEMENT_DEFAULT_SOURCES,
+      initState: d2SourceManagementInitState,
+      defaultState: d2SourceManagementDefaultState,
+      reducer: d2SourceManagementReducer,
+      getState: d2SourceManagementGetState,
+      dispatch: d2SourceManagementDispatch,
+      subscribe: d2SourceManagementSubscribe,
+      injectAppState: d2SourceManagementInjectAppState,
+      renderSourceManagement: sourceManagementV2,
+      // R2b 执行函数（事件层 / 测试调用）
+      executeDelete: d2ExecuteSourceDelete
     },
     // 恢复流程数据
     restore: {
