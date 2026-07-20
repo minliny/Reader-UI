@@ -9,6 +9,7 @@
     "implementationCommit": "3804eb82de7b8f71a8a43e9d8e2037b19d686ca6",
     "evidenceCommit": "d0d0c8567f7defff07db6f93c5c768cad6629c13",
     "figmaCorrectionCommit": "22cf95f3585dfe433dc538c73d1894c915ea243d",
+    "compactRemovalCommit": "06d5d4e7cd79154d74a7de5268778c97f85843c2",
     "a2BaseCommit": "f0e315aa85bf1d96e6ff3a1cd1dd784dc484d2f0",
     "localReadyForFigma": true,
     "r2aPass": true,
@@ -51,7 +52,7 @@
     "auditedPageCount": 29,
     "readErrorCount": 0,
     "compactViewportStructureCountAfter": 0,
-    "removedTopLevelNodeCount": 174,
+    "removedTopLevelNodeCount": 175,
     "reflowedComponentSetCount": 26,
     "namedRevision": "2378263682617840946"
   },

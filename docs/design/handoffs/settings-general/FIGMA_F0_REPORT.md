@@ -74,7 +74,7 @@ F0 已通过，F1 技术检查已通过。根据用户最新 viewport policy，�
 ## Compact 结构全量删除（2026-07-20）
 
 - 按 29 页完整分母扫描 `Viewport=Compact`、`CompactLandscape`、844×390 和 Compact prototype/assembly 命名；最终 29/29 页命中 0，读取错误 0。
-- 删除 174 个顶层结构：Page 23 的 49 个 Compact assembly/prototype、Reader 2 的 90 个 CompactLandscape variant 与 4 个 QA/proof、Page 24 的 26 个 Compact/backup/retired component、Page 04 的 Landscape Reference section、Page 22 的 4 个 Compact capture/label。
+- 删除 175 个顶层节点：174 个 Compact viewport 结构，另加 Page 24 已清空的 retired container。分项为 Page 23 的 49 个 Compact assembly/prototype、Reader 2 的 90 个 CompactLandscape variant 与 4 个 QA/proof、Page 24 的 26 个 Compact/backup/retired component 加 1 个空容器、Page 04 的 Landscape Reference section、Page 22 的 4 个 Compact capture/label。
 - Page 24 共 26 个 component set（含 Settings General）已收拢为连续 Phone 390×844 + Tablet 760×960 双列；不存在删除后遗留的第三列空槽。
 - `942:21 / Page/Settings General` 当前只有 `942:18 / Phone` 与 `942:20 / Tablet`；下游只保留 `1995:67305 / Phone` 和 `1995:67777 / Tablet`。
 - 本地 runtime、handoff 与 motion harness 只允许 Phone/Tablet；横屏 844×390 运行时实测为 `tablet-expanded`，不会再发出 `compact-landscape` 或 `fold` viewport atom。

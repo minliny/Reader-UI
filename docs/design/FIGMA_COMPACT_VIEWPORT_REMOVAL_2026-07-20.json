@@ -20,11 +20,16 @@
     "compactViewportStructuresAfter": 0,
     "searchPattern": "Viewport=Compact|CompactLandscape|compact[- ·_/]*landscape|844[ ×x*]390|/ Compact$|/Compact$"
   },
+  "broadCompactNameAudit": {
+    "allNodeNamesContainingCompact": 19,
+    "pageFramePrototypeViewportCandidates": 0,
+    "classification": "18 Reader/Appearance/FontCell variants and 1 Reader/Full/Select variant use Size=Compact as a component-size property; these are not viewport/page structures and are preserved to avoid breaking canonical component APIs and instances."
+  },
   "removals": {
-    "topLevelNodeCount": 174,
+    "topLevelNodeCount": 175,
     "pagesFinal": { "pageId": "834:2", "count": 49, "detail": "25 Compact assemblies and 24 Compact prototype frames" },
     "reader2": { "pageId": "1023:17636", "count": 94, "detail": "90 CompactLandscape variants and 4 QA/proof structures" },
-    "responsiveMasters": { "pageId": "834:3", "count": 26, "detail": "23 current Compact variants, 2 backup Compact variants, and 1 retired Settings master" },
+    "responsiveMasters": { "pageId": "834:3", "count": 27, "detail": "23 current Compact variants, 2 backup Compact variants, 1 retired Settings master, and its empty retired container" },
     "viewports": { "pageId": "259:6", "count": 1, "detail": "Landscape Reference section" },
     "responsiveReference": { "pageId": "624:2", "count": 4, "detail": "Compact landscape captures and labels" }
   },
@@ -51,7 +56,7 @@
       "760x960": { "orientation": "portrait", "viewportClass": "tablet-expanded", "widthClass": "tablet" },
       "390x844": { "orientation": "portrait", "viewportClass": "standard-portrait", "widthClass": "standard" }
     },
-    "implementationCommit": null
+    "implementationCommit": "06d5d4e7cd79154d74a7de5268778c97f85843c2"
   },
   "scopeBoundary": "No UiEvent, state-owner, business-flow, F2 page-family, or F3 Motion Reference changes. Size=Compact component variants are component sizing semantics and are intentionally preserved."
 }
