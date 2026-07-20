@@ -1,0 +1,585 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Source Management",
+  "pageFamily": "source-management",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-20T15:30:00Z",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "b4f9d18bc50042ad21320ac92f0d9450f4c7e741",
+    "baselineCommitSubject": "docs(figma): confirm settings general F1",
+    "implementationCommit": "1c97687c969bc47f27b0aec79c774998455e3326",
+    "implementationCommitSubject": "feat(source-management): R2a/R2b/R3a LOCAL_READY_FOR_FIGMA",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): source-management LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true,
+    "localReadyMarker": "docs/design/handoffs/source-management/LOCAL_READY_FOR_FIGMA.json",
+    "r3aMarker": "docs/design/handoffs/source-management/LOCAL_READY_FOR_FIGMA.json#admission.r3aPass"
+  },
+  "globalAlignment": {
+    "baselineCommit": "b4f9d18bc50042ad21320ac92f0d9450f4c7e741",
+    "figmaRevision": "2378263682617840946",
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true,
+      "independentLandscapeProhibited": true
+    },
+    "compactHistorySnapshotPolicy": "2026-07-19 Compact 截图和三视口统计属于历史审计快照，不可作为当前准入证据；保留原文件，但在新证据中明确标记为已被两视口政策替代。",
+    "familyClassificationStatus": "recommended-pending-user-confirmation",
+    "familyClassificationNote": "当前 12 族分类仍是推荐分类，待用户确认。本地可以继续准备，但送入 Figma writer 前必须把分类确认状态写实。"
+  },
+  "routeFamily": {
+    "primaryRoute": "source-management",
+    "familyRouteCount": 23,
+    "familyRoutes": [
+      "source-management",
+      "source-settings-entry",
+      "source-import-options",
+      "source-add",
+      "source-import-preview",
+      "source-batch",
+      "source-groups",
+      "source-detail",
+      "source-detect",
+      "source-test-result",
+      "source-rule-edit",
+      "source-edit",
+      "source-debug",
+      "source-debug-running",
+      "source-debug-result",
+      "source-debug-search-result",
+      "source-debug-detail-result",
+      "source-debug-catalog-result",
+      "source-debug-content-log",
+      "source-edit-debug",
+      "source-logs",
+      "source-code-view",
+      "source-delete-confirm"
+    ],
+    "routesOwnedByD2C": [
+      "source-management (FROZEN to sourceManagementV2)",
+      "source-settings-entry (FROZEN to sourceSettingsV2 → d2SourceSettingsPage fallback)",
+      "source-debug (mapped to sourceSettingsV2 → d2SourceSettingsPage fallback)"
+    ],
+    "routesStillUsingSpecializedFallback": "20 routes (source-import-options through source-delete-confirm, excluding the 3 D2-C-owned routes) still use specialized fallback renderers in render-runtime.js. These are NOT part of this LOCAL_READY_FOR_FIGMA packet; they will be addressed in subsequent family-level packets or as page exceptions."
+  },
+  "uniqueProductionRenderer": {
+    "route": "source-management",
+    "renderer": "sourceManagementV2",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+    "rendererFunction": "sourceManagementV2(data, appState)",
+    "dispatchEntry": "sourceSettingsV2(data, route, appState) dispatches to sourceManagementV2 when route === 'source-management'",
+    "d2CIntegrationMapEntry": "\"source-management\": \"sourceSettingsV2\"",
+    "fallbackFrozen": true,
+    "fallbackFreezeLocation": "frontend-demo-optimized/render-runtime.js lines 11197-11207",
+    "fallbackFreezePattern": "throw new Error(route + ' route is FROZEN to sourceSettingsV2 (d2-settings-sync-renderers.js). renderRoute switch fallback is disabled; ensure window.ReaderD2SettingsSyncRenderers is loaded before renderRoute is called.')",
+    "legacyIsolation": "sourceManagementScreen function still exists at render-runtime.js:7022 but is dead code for source-management route; no fallback path.",
+    "testCallsRealRenderer": true,
+    "testInlineMirrorProhibited": true
+  },
+  "r2aInstrumentation": {
+    "stageDefinition": "R2a = stable control identity: every operable control has 5 data-* attributes (data-entity-key, data-control-key, data-control-id, data-ui-event, data-settings-key). No ordinal, CSS selector, display text, or array position used as stable identity.",
+    "fiveDataAttrs": [
+      "data-entity-key",
+      "data-control-key",
+      "data-control-id",
+      "data-ui-event",
+      "data-settings-key"
+    ],
+    "viewportAttrStamping": {
+      "attr": "data-viewport",
+      "stampedBy": "render-runtime.js applyViewportClass(root)",
+      "stampedAt": "viewport switch (resize / orientation change)",
+      "notStampedByRenderer": true,
+      "viewportAtoms": ["phone", "tablet"],
+      "widthBreakpoints": {
+        "phone": "width < 600",
+        "tablet": "width >= 600"
+      },
+      "landscapePolicy": "landscape always stamps tablet",
+      "compactLandscapeProhibited": true,
+      "foldProhibited": true
+    },
+    "identityStampingStrategy": {
+      "switch": "stamped on <span class='fd-settings-switch' role='switch'> (the actual toggle element)",
+      "search": "stamped on <input type='search'> (the actual input element)",
+      "select": "stamped on <select> element (group filter)",
+      "segment": "stamped on each <button> option (one identity per option); container does NOT stamp",
+      "actionButton": "stamped on <button> (a3-action source: menu items, batch actions, dialog buttons, sheet items, back, source-row-more, source-row-detect, source-row-select)"
+    },
+    "failClosedGuard": {
+      "function": "d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity)",
+      "rule": "lookup keyed by route::settingsKey; accepts both r2.0-subcontrol and a3-action sources; returns empty attrs if not found"
+    },
+    "identitySourceTypes": ["r2.0-subcontrol", "a3-action"]
+  },
+  "r2bRealInteraction": {
+    "stageDefinition": "R2b = real interaction: state owner + reducer + dispatch + subscribe + persist + UiEvent wiring + async flow + focus return + ARIA. source-management controls actually work end-to-end.",
+    "stateOwner": {
+      "location": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+      "singleton": "d2SourceManagementState",
+      "storageKey": "source-management-values",
+      "api": [
+        "d2SourceManagementDefaultState()",
+        "d2SourceManagementInitState(appState)",
+        "d2SourceManagementReducer(state, action)",
+        "d2SourceManagementDispatch(action)",
+        "d2SourceManagementSubscribe(listener)",
+        "d2SourceManagementGetState()",
+        "d2SourceManagementInjectAppState(appState)",
+        "d2ExecuteSourceDelete(options) — async delete flow helper"
+      ],
+      "stateDomains": {
+        "sources": "4 book sources with settingsKey/title/domain/group/status/tone/enabled; enabled state persisted to localStorage",
+        "search": "transient search query string",
+        "statusFilter": "transient status filter (全部/启用/异常/未检测/自定义)",
+        "groupFilter": "transient group filter (全部分组/...)",
+        "batchMode": "transient boolean",
+        "selectedSources": "transient map of settingsKey → true",
+        "menuOpen": "transient boolean (more menu visibility)",
+        "addSheetOpen": "transient boolean (add source sheet visibility)",
+        "deleteConfirm": "transient { open, count, logCleanup, status, error }; status ∈ idle/confirm/loading/success/failed"
+      },
+      "persistence": {
+        "strategy": "d2Set on TOGGLE_SOURCE (writes sourceEnabled map); other state is transient",
+        "storageKey": "source-management-values",
+        "writesOnActions": ["TOGGLE_SOURCE"],
+        "doesNotWriteOnActions": [
+          "SET_SEARCH", "SET_STATUS_FILTER", "SET_GROUP_FILTER",
+          "TOGGLE_MENU", "CLOSE_MENU", "OPEN_ADD_SHEET", "CLOSE_ADD_SHEET",
+          "ENTER_BATCH_MODE", "EXIT_BATCH_MODE", "TOGGLE_SELECT",
+          "SELECT_ALL", "DESELECT_ALL",
+          "DELETE_CONFIRM_OPEN", "DELETE_CONFIRM_CLOSE",
+          "DELETE_CONFIRM_TOGGLE_LOG", "DELETE_START",
+          "DELETE_SUCCESS", "DELETE_FAILED", "DELETE_RESET"
+        ]
+      },
+      "reducerActions": [
+        "INIT",
+        "TOGGLE_SOURCE",
+        "SET_SEARCH",
+        "SET_STATUS_FILTER",
+        "SET_GROUP_FILTER",
+        "TOGGLE_MENU", "CLOSE_MENU",
+        "OPEN_ADD_SHEET", "CLOSE_ADD_SHEET",
+        "ENTER_BATCH_MODE", "EXIT_BATCH_MODE",
+        "TOGGLE_SELECT", "SELECT_ALL", "DESELECT_ALL",
+        "DELETE_CONFIRM_OPEN", "DELETE_CONFIRM_CLOSE",
+        "DELETE_CONFIRM_TOGGLE_LOG",
+        "DELETE_START", "DELETE_SUCCESS", "DELETE_FAILED", "DELETE_RESET"
+      ],
+      "duplicateClickGuard": "DELETE_START reducer returns same state reference when status === 'loading'; listeners are not notified",
+      "staleAsyncResultGuard": "DELETE_SUCCESS and DELETE_FAILED reducers return same state reference when status !== 'loading'; stale async results are discarded",
+      "deleteFailureRecovery": "DELETE_FAILED preserves sources and selectedSources; dialog stays open with aria-invalid + error title; user can retry via executeDelete()"
+    },
+    "uiEventWiring": {
+      "switch": "data-ui-event='toggle.switch' → TOGGLE_SOURCE action",
+      "search": "data-ui-event='input.search' → SET_SEARCH action",
+      "select": "data-ui-event='dropdown.option.select' → SET_GROUP_FILTER action",
+      "segment": "data-ui-event='segment.item.switch' → SET_STATUS_FILTER action",
+      "menuToggle": "data-ui-event='menu.toggle' → TOGGLE_MENU action",
+      "menuItem": "data-ui-event='menu.item.select' → CLOSE_MENU (or route navigation)",
+      "addSheetOpen": "data-ui-event='sheet.add-source.open' → OPEN_ADD_SHEET action",
+      "addSheetClose": "data-ui-event='sheet.add-source.cancel' → CLOSE_ADD_SHEET action",
+      "batchEnter": "data-ui-event='batch.enter' → ENTER_BATCH_MODE action",
+      "batchExit": "data-ui-event='batch.exit' → EXIT_BATCH_MODE action",
+      "batchSelectAll": "data-ui-event='batch.select-all.toggle' → SELECT_ALL/DESELECT_ALL toggle",
+      "batchSelect": "data-ui-event='batch.select.toggle' → TOGGLE_SELECT action",
+      "batchDelete": "data-ui-event='delete.confirm.open' → DELETE_CONFIRM_OPEN action",
+      "deleteConfirm": "data-ui-event='delete.confirm' → DELETE_START → executeDelete() → DELETE_SUCCESS/DELETE_FAILED",
+      "deleteCancel": "data-ui-event='delete.cancel' → DELETE_CONFIRM_CLOSE action",
+      "deleteLogCleanup": "data-ui-event='delete.log-cleanup.toggle' → DELETE_CONFIRM_TOGGLE_LOG action",
+      "back": "data-ui-event='route.pop' → navigation"
+    },
+    "asyncFlowHelper": {
+      "function": "d2ExecuteSourceDelete(options)",
+      "signature": "options = { simulateResult: 'success'|'failed', delay: ms, error: string }",
+      "behavior": "dispatch DELETE_START → setTimeout(delay) → dispatch DELETE_SUCCESS or DELETE_FAILED → resolve(result)",
+      "staleGuardReliesOnReducer": true,
+      "duplicateGuardReliesOnReducer": true
+    },
+    "focusReturn": {
+      "markers": [
+        "data-restore-focus='source-menu-toggle' on top-bar more button (menu close → focus returns)",
+        "data-restore-focus='source-add' on add button (sheet close → focus returns)",
+        "data-restore-focus='batch-delete' on batch delete button (dialog close → focus returns)",
+        "data-restore-focus='more-{settingsKey}' on each source row more button (menu close → focus returns)"
+      ],
+      "initialFocus": [
+        "data-sheet-initial-focus on add-sheet-cancel button (sheet open → focus cancel)",
+        "data-dialog-initial-focus on delete-cancel button (dialog open → focus cancel)"
+      ]
+    },
+    "rendererFreeze": {
+      "route": "source-management",
+      "frozenRenderer": "sourceManagementV2 (in d2-settings-sync-renderers.js)",
+      "frozenGuard": "render-runtime.js switch case throws Error for source-management and source-settings-entry routes; no fallback to legacy sourceManagementScreen",
+      "legacyIsolation": "legacy sourceManagementScreen implementation remains in render-runtime.js:7022 but no longer serves source-management route"
+    }
+  },
+  "r3aPreFunctionalVerification": {
+    "stageDefinition": "R3a = local admission verification: Phone + Tablet two-viewport automated tests + controlKey consistency + stable terminal state + delete flow tests + focus return evidence + a11y + console error = 0 + no compact-landscape/fold atoms + full regression no degradation",
+    "controlList": [
+      { "settingsKey": "source-qidian", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2SourceManagementState.sources[source-qidian].enabled", "owner": "sourceManagement" },
+      { "settingsKey": "source-biquge", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2SourceManagementState.sources[source-biquge].enabled", "owner": "sourceManagement" },
+      { "settingsKey": "source-local-import", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2SourceManagementState.sources[source-local-import].enabled", "owner": "sourceManagement" },
+      { "settingsKey": "source-test", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2SourceManagementState.sources[source-test].enabled", "owner": "sourceManagement" },
+      { "settingsKey": "source-search", "type": "textbox", "uiEvent": "input.search", "stateOwner": "d2SourceManagementState.search", "owner": "sourceManagement" },
+      { "settingsKey": "source-status-filter-segment-option-1", "type": "segment-option", "uiEvent": "segment.item.switch", "stateOwner": "d2SourceManagementState.statusFilter", "owner": "sourceManagement" },
+      { "settingsKey": "source-status-filter-segment-option-2", "type": "segment-option", "uiEvent": "segment.item.switch", "stateOwner": "d2SourceManagementState.statusFilter", "owner": "sourceManagement" },
+      { "settingsKey": "source-status-filter-segment-option-3", "type": "segment-option", "uiEvent": "segment.item.switch", "stateOwner": "d2SourceManagementState.statusFilter", "owner": "sourceManagement" },
+      { "settingsKey": "source-status-filter-segment-option-4", "type": "segment-option", "uiEvent": "segment.item.switch", "stateOwner": "d2SourceManagementState.statusFilter", "owner": "sourceManagement" },
+      { "settingsKey": "source-status-filter-segment-option-5", "type": "segment-option", "uiEvent": "segment.item.switch", "stateOwner": "d2SourceManagementState.statusFilter", "owner": "sourceManagement" },
+      { "settingsKey": "source-group-filter", "type": "combobox", "uiEvent": "dropdown.option.select", "stateOwner": "d2SourceManagementState.groupFilter", "owner": "sourceManagement" },
+      { "settingsKey": "source-menu-toggle", "type": "a3-action", "uiEvent": "menu.toggle", "stateOwner": "d2SourceManagementState.menuOpen", "owner": "sourceManagement" },
+      { "settingsKey": "batch-enter", "type": "a3-action", "uiEvent": "batch.enter", "stateOwner": "d2SourceManagementState.batchMode", "owner": "sourceManagement" },
+      { "settingsKey": "source-add", "type": "a3-action", "uiEvent": "sheet.add-source.open", "stateOwner": "d2SourceManagementState.addSheetOpen", "owner": "sourceManagement" },
+      { "settingsKey": "back", "type": "a3-action", "uiEvent": "route.pop", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "source-row-more-source-qidian", "type": "a3-action", "uiEvent": "menu.item.select", "stateOwner": "per-row menu", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-more-source-biquge", "type": "a3-action", "uiEvent": "menu.item.select", "stateOwner": "per-row menu", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-more-source-local-import", "type": "a3-action", "uiEvent": "menu.item.select", "stateOwner": "per-row menu", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-more-source-test", "type": "a3-action", "uiEvent": "menu.item.select", "stateOwner": "per-row menu", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-detect-source-qidian", "type": "a3-action", "uiEvent": "source.detect", "stateOwner": "per-row detect", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-detect-source-biquge", "type": "a3-action", "uiEvent": "source.detect", "stateOwner": "per-row detect", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-detect-source-local-import", "type": "a3-action", "uiEvent": "source.detect", "stateOwner": "per-row detect", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-detect-source-test", "type": "a3-action", "uiEvent": "source.detect", "stateOwner": "per-row detect", "owner": "sourceManagement" },
+      { "settingsKey": "batch-exit", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.exit", "stateOwner": "d2SourceManagementState.batchMode", "owner": "sourceManagement" },
+      { "settingsKey": "batch-select-all", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.select-all.toggle", "stateOwner": "d2SourceManagementState.selectedSources", "owner": "sourceManagement" },
+      { "settingsKey": "batch-enable", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.enable", "stateOwner": "selected sources", "owner": "sourceManagement" },
+      { "settingsKey": "batch-disable", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.disable", "stateOwner": "selected sources", "owner": "sourceManagement" },
+      { "settingsKey": "batch-detect", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.detect", "stateOwner": "selected sources", "owner": "sourceManagement" },
+      { "settingsKey": "batch-group", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.group", "stateOwner": "selected sources", "owner": "sourceManagement" },
+      { "settingsKey": "batch-delete", "type": "a3-action (conditional: batch mode)", "uiEvent": "delete.confirm.open", "stateOwner": "d2SourceManagementState.deleteConfirm", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-select-source-qidian", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.select.toggle", "stateOwner": "d2SourceManagementState.selectedSources", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-select-source-biquge", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.select.toggle", "stateOwner": "d2SourceManagementState.selectedSources", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-select-source-local-import", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.select.toggle", "stateOwner": "d2SourceManagementState.selectedSources", "owner": "sourceManagement" },
+      { "settingsKey": "source-row-select-source-test", "type": "a3-action (conditional: batch mode)", "uiEvent": "batch.select.toggle", "stateOwner": "d2SourceManagementState.selectedSources", "owner": "sourceManagement" },
+      { "settingsKey": "add-sheet-cancel", "type": "a3-action (conditional: sheet open)", "uiEvent": "sheet.add-source.cancel", "stateOwner": "d2SourceManagementState.addSheetOpen", "owner": "sourceManagement" },
+      { "settingsKey": "add-sheet-network", "type": "a3-action (conditional: sheet open)", "uiEvent": "sheet.add-source.network", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "add-sheet-local", "type": "a3-action (conditional: sheet open)", "uiEvent": "sheet.add-source.local", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "add-sheet-clipboard", "type": "a3-action (conditional: sheet open)", "uiEvent": "sheet.add-source.clipboard", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "add-sheet-manual", "type": "a3-action (conditional: sheet open)", "uiEvent": "sheet.add-source.manual", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "delete-cancel", "type": "a3-action (conditional: dialog open)", "uiEvent": "delete.cancel", "stateOwner": "d2SourceManagementState.deleteConfirm", "owner": "sourceManagement" },
+      { "settingsKey": "delete-confirm", "type": "a3-action (conditional: dialog open)", "uiEvent": "delete.confirm", "stateOwner": "d2SourceManagementState.deleteConfirm", "owner": "sourceManagement" },
+      { "settingsKey": "delete-log-cleanup", "type": "checkbox (conditional: dialog open)", "uiEvent": "delete.log-cleanup.toggle", "stateOwner": "d2SourceManagementState.deleteConfirm.logCleanup", "owner": "sourceManagement" },
+      { "settingsKey": "menu-import-network", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "menu-import-local", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "menu-create-new", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "menu-batch-manage", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "ENTER_BATCH_MODE", "owner": "sourceManagement" },
+      { "settingsKey": "menu-group-manage", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "navigation", "owner": "router" },
+      { "settingsKey": "menu-detect-selected", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "selected sources detect", "owner": "sourceManagement" },
+      { "settingsKey": "menu-error-logs", "type": "a3-action (conditional: menu open)", "uiEvent": "menu.item.select", "stateOwner": "navigation", "owner": "router" }
+    ],
+    "uiEventCatalog": [
+      "toggle.switch (4 source switches)",
+      "input.search (1 search input)",
+      "dropdown.option.select (1 group filter select)",
+      "segment.item.switch (5 status filter segment options)",
+      "menu.toggle (1 more menu trigger)",
+      "menu.item.select (7 more menu items)",
+      "sheet.add-source.open (1 add trigger)",
+      "sheet.add-source.cancel (1 sheet cancel)",
+      "sheet.add-source.network|local|clipboard|manual (4 sheet items)",
+      "batch.enter (1 batch enter)",
+      "batch.exit (1 batch exit)",
+      "batch.select-all.toggle (1 select-all)",
+      "batch.select.toggle (4 per-row select)",
+      "batch.enable|disable|detect|group (4 batch actions)",
+      "delete.confirm.open (1 delete trigger)",
+      "delete.cancel (1 delete cancel)",
+      "delete.confirm (1 delete confirm)",
+      "delete.log-cleanup.toggle (1 log cleanup checkbox)",
+      "source.detect (4 per-row detect)",
+      "route.pop (1 back button)"
+    ],
+    "stateOwnerCatalog": [
+      "d2SourceManagementState.sources (4 sources, enabled persisted)",
+      "d2SourceManagementState.search (transient)",
+      "d2SourceManagementState.statusFilter (transient)",
+      "d2SourceManagementState.groupFilter (transient)",
+      "d2SourceManagementState.batchMode (transient)",
+      "d2SourceManagementState.selectedSources (transient)",
+      "d2SourceManagementState.menuOpen (transient)",
+      "d2SourceManagementState.addSheetOpen (transient)",
+      "d2SourceManagementState.deleteConfirm (transient: idle/confirm/loading/success/failed + logCleanup + error)"
+    ],
+    "visualResultList": [
+      {
+        "flow": "switch toggle",
+        "initial": "is-on class + aria-checked='true'",
+        "after": "is-on class removed + aria-checked='false'; persisted to localStorage",
+        "terminalState": "no aria-busy, no is-busy class, idempotent render"
+      },
+      {
+        "flow": "search filter",
+        "initial": "all sources visible",
+        "after": "only sources matching title/domain visible; empty state shows '没有匹配的书源'",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "status filter segment",
+        "initial": "option-1 (全部) is-active + aria-pressed='true'",
+        "after": "selected option becomes is-active + aria-pressed='true'; previous loses is-active",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "group filter select",
+        "initial": "全部分组 selected",
+        "after": "selected group shown in <select>",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "more menu open/close",
+        "states": ["closed → open → closed"],
+        "openVisual": "fd-source-more-menu nav visible with 7 menu items",
+        "closeVisual": "menu HTML not rendered",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "add sheet open/close",
+        "states": ["closed → open → closed"],
+        "openVisual": "fd-source-bottom-sheet section visible with 4 items + cancel; data-sheet-initial-focus on cancel",
+        "closeVisual": "sheet HTML not rendered; focus returns to source-add (data-restore-focus)",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "batch mode enter/exit",
+        "states": ["home → batch → home"],
+        "batchVisual": "title shows '已选 N 个'; bottom action bar shows batch-exit/select-all/enable/disable/detect/group/delete; each row shows source-row-select checkbox; search/filter/menu-toggle/batch-enter/source-add hidden",
+        "exitVisual": "title back to '书源管理'; selectedSources cleared; bottom action bar back to batch-enter/source-add",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "batch select toggle",
+        "initial": "source-row-select aria-pressed='false'",
+        "after": "source-row-select aria-pressed='true'; row class 'is-selected'; batch action buttons enabled",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "delete confirm success",
+        "states": ["idle → confirm → loading → success"],
+        "loadingVisual": "delete-confirm button aria-busy='true' + disabled + text '删除中…'; dialog data-delete-status='loading'",
+        "successVisual": "dialog closed; sources reduced; batchMode exited; selectedSources cleared",
+        "terminalState": "no aria-busy, no '删除中…' text; transient NOT persisted"
+      },
+      {
+        "flow": "delete confirm failed",
+        "states": ["idle → confirm → loading → failed"],
+        "failedVisual": "delete-confirm button aria-invalid='true' + title='error' + text '重试'; dialog data-delete-status='failed'; sources preserved; selectedSources preserved",
+        "terminalState": "no aria-busy; dialog still open; retry possible"
+      },
+      {
+        "flow": "delete confirm cancel",
+        "states": ["idle → confirm → idle"],
+        "cancelVisual": "dialog closed; sources preserved; selectedSources preserved (still in batch mode)",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "duplicate delete submit guard",
+        "behavior": "DELETE_START in loading state returns same state reference; no duplicate dispatch",
+        "terminalState": "single loading → single success/failed"
+      },
+      {
+        "flow": "stale async result discard",
+        "behavior": "DELETE_SUCCESS / DELETE_FAILED in non-loading state (idle/confirm/success/failed) returns same state reference; stale results discarded",
+        "terminalState": "state unchanged by stale result"
+      },
+      {
+        "flow": "delete log cleanup toggle",
+        "initial": "checkbox unchecked",
+        "after": "checkbox checked; DELETE_CONFIRM_TOGGLE_LOG toggles",
+        "terminalState": "idempotent render"
+      }
+    ],
+    "ariaCoverage": {
+      "switch": ["role='switch'", "aria-checked", "tabindex='0'", "aria-label"],
+      "search": ["aria-label", "autocomplete='off'", "type='search'"],
+      "select": ["aria-label"],
+      "segment": ["aria-pressed on each option button (true for active)"],
+      "sourceRowSelect": ["aria-pressed (true when selected)", "aria-label"],
+      "sourceRowMore": ["aria-label", "data-restore-focus"],
+      "sourceRowDetect": ["aria-label"],
+      "batchSelectAll": ["aria-pressed (true when all selected)", "aria-label"],
+      "batchActions": ["disabled when 0 selected", "aria-label"],
+      "deleteDialog": ["role='dialog'", "aria-modal='true'", "aria-labelledby", "aria-describedby", "aria-hidden='false'"],
+      "deleteConfirmButton": ["aria-busy='true' + disabled when loading", "aria-invalid='true' + title=error when failed"],
+      "deleteCancelButton": ["disabled when loading", "data-dialog-initial-focus"],
+      "addSheetCancel": ["data-sheet-initial-focus"],
+      "back": ["aria-label"],
+      "focusRestore": "overlay triggers have data-restore-focus attribute"
+    }
+  },
+  "declarationsReference": {
+    "filePath": "frontend-demo-optimized/control-identity-declarations.js",
+    "sourceManagementDeclarations": 48,
+    "sourceManagementDeclarationTypeDistribution": {
+      "switch": 4,
+      "textbox": 1,
+      "combobox": 1,
+      "segment-option": 5,
+      "a3-action": 37
+    },
+    "allSourceManagementDeclarationsHaveControlId": true,
+    "allSourceManagementDeclarationsHaveSettingsKey": true,
+    "allSourceManagementDeclarationsHaveUiEvent": true,
+    "allSourceManagementDeclarationsHaveRenderer": "sourceSettingsV2",
+    "allSourceManagementDeclarationsHaveRendererFile": "renderers/d2-settings-sync-renderers.js",
+    "allSourceManagementDeclarationsHavePageFamily": "source-management"
+  },
+  "viewportVerification": {
+    "r2aVerificationScript": "frontend-demo-optimized/verify/r3a-source-management-identity.test.mjs",
+    "r2bVerificationScript": "frontend-demo-optimized/verify/r3a-source-management-flow.test.mjs",
+    "r3aAriaFocusScript": "frontend-demo-optimized/verify/r3a-source-management-aria-focus.test.mjs",
+    "viewports": ["phone", "tablet"],
+    "landscapeAlias": "tablet",
+    "controlKeySetIdenticalAcrossViewports": true,
+    "rendererOutputIsViewportAgnostic": true,
+    "domNoDuplicateControlKey": true,
+    "domNoOrphanControlKey": true,
+    "uiEventCoverage": "48/48 controls carry non-empty data-ui-event",
+    "fiveDataAttrsCoverage": "48/48 controls carry all 5 data-* attributes",
+    "noCompactLandscapeAtom": true,
+    "noFoldAtom": true,
+    "noCompactViewportClass": true,
+    "stableTerminalState": {
+      "verified": true,
+      "noAriaBusyAfterOperationComplete": true,
+      "noIsBusyClassAfterOperationComplete": true,
+      "noLoadingTextAfterOperationComplete": true,
+      "idempotentRender": true,
+      "valuesPersistedAcrossViewports": true,
+      "transientNotPersistedAcrossViewports": true,
+      "twoViewportsReachIdenticalTerminalState": true
+    },
+    "deleteFlowTests": {
+      "successFlow": true,
+      "failedFlow": true,
+      "cancelFlow": true,
+      "duplicateSubmitGuard": true,
+      "staleAsyncResultDiscard": true,
+      "failureRecoveryAndRetry": true
+    },
+    "focusReturnEvidence": {
+      "dataRestoreFocusOnMenuToggle": true,
+      "dataRestoreFocusOnSourceAdd": true,
+      "dataRestoreFocusOnBatchDelete": true,
+      "dataRestoreFocusOnSourceRowMore": true,
+      "dataDialogInitialFocusOnDeleteCancel": true,
+      "dataSheetInitialFocusOnAddSheetCancel": true
+    },
+    "accessibleNameNonEmpty": true,
+    "consoleErrorCount": 0,
+    "r2aIdentityTestResult": "10/10 tests pass",
+    "r2bFlowTestResult": "16/16 tests pass",
+    "r3aAriaFocusTestResult": "16/16 tests pass",
+    "fullRegressionTestResult": "184/184 tests pass (no degradation)"
+  },
+  "sourceManagementControlInventory": {
+    "defaultStateControls": 23,
+    "batchModeAdditionalControls": 11,
+    "addSheetAdditionalControls": 5,
+    "deleteDialogAdditionalControls": 3,
+    "moreMenuAdditionalControls": 7,
+    "totalUniqueControls": 48,
+    "identityProhibition": {
+      "ordinalKeys": "prohibited",
+      "cssSelectors": "prohibited",
+      "displayText": "prohibited",
+      "arrayPositions": "prohibited"
+    },
+    "identityStrategy": "settingsKey-based: each control has a stable settingsKey declared in control-identity-declarations.js; renderer calls d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity) to stamp 5 data-* attributes"
+  },
+  "sharedComponentSources": {
+    "d2SettingsShell": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (extended to support bottomActionHtml/sheetHtml/dialogHtml/trailingHtml/backButtonAttrs/frameState options)",
+    "d2Segment": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (used for status filter; container does NOT stamp identity, only option buttons do)",
+    "d2Badge": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (used for source status badges)",
+    "shellKit": "frontend-demo-optimized/shared-shell-kit/kit.js (renderSettingsShell, backTopBar with backButtonAttrs support)",
+    "icon": "frontend-demo-optimized/shared-shell-kit/kit.js"
+  },
+  "pageExceptions": [
+    {
+      "route": "source-settings-entry",
+      "exception": "D2-C owned but uses d2SourceSettingsPage fallback (not sourceManagementV2); lists source-management/source-debug/source-import-export as link rows. source-import-export route does not exist in route-contract.js — stale INTEGRATION_MAP entry that should be cleaned up."
+    },
+    {
+      "route": "source-debug",
+      "exception": "D2-C owned but uses d2SourceSettingsPage fallback; will need its own R2a/R2b/R3a pass for debug-specific controls."
+    },
+    {
+      "routes": "source-import-options, source-add, source-import-preview, source-batch, source-groups, source-detail, source-detect, source-test-result, source-rule-edit, source-edit, source-debug-running, source-debug-result, source-debug-search-result, source-debug-detail-result, source-debug-catalog-result, source-debug-content-log, source-edit-debug, source-logs, source-code-view, source-delete-confirm",
+      "exception": "20 sibling routes still use specialized fallback renderers in render-runtime.js. NOT part of this LOCAL_READY_FOR_FIGMA packet. Will be addressed in subsequent family-level packets or as separate page exceptions when Figma writer reaches them."
+    }
+  ],
+  "figmaDecisionIssues": [
+    {
+      "issue": "Bottom action bar layout for source-management",
+      "description": "source-management has a fixed bottom action bar with 2 buttons (batch-enter + source-add). Figma writer needs to decide: (a) use existing SettingsShell bottomActionHost slot, or (b) create a new master. Current local implementation uses (a) — reuses d2SettingsShell's bottomActionHtml option."
+    },
+    {
+      "issue": "More menu overlay master",
+      "description": "source-management has a more-menu overlay (fd-source-more-menu) triggered by the top-bar more button. Figma writer needs to decide: (a) use existing overlay master, or (b) create a new master. Local implementation renders inline HTML."
+    },
+    {
+      "issue": "Add source sheet master",
+      "description": "source-management has an add-source bottom sheet with 4 items + cancel. Figma writer needs to decide: (a) use existing fd-demo-sheet master, or (b) create a new master. Local implementation renders inline HTML."
+    },
+    {
+      "issue": "Delete confirm dialog master",
+      "description": "source-management has a delete-confirm dialog with title/description/checkbox/2 buttons. Figma writer needs to decide: (a) use existing fd-demo-dialog master, or (b) create a new master. Local implementation renders inline HTML with role='dialog' aria-modal='true'."
+    },
+    {
+      "issue": "Source row master",
+      "description": "source-management has a custom source row layout (checkbox + title/domain/group + status badge + detect button + switch + more button). Figma writer needs to decide: (a) use existing Settings/SettingRow master, or (b) create a new SourceRow master. Local implementation renders inline HTML."
+    },
+    {
+      "issue": "Status filter segment master",
+      "description": "source-management uses d2Segment for status filter (5 options). Figma writer needs to decide: (a) use existing Primitive/SegmentedControl master, or (b) create a new master. Local implementation reuses d2Segment building block."
+    },
+    {
+      "issue": "Group filter select master",
+      "description": "source-management uses native <select> for group filter. Figma writer needs to decide: (a) use existing Primitive/Select master, or (b) use native select. Local implementation uses native <select> for simplicity."
+    },
+    {
+      "issue": "Family classification pending user confirmation",
+      "description": "The 12-family classification (including source-management as family #1) is still 'recommended, pending user confirmation'. Figma writer must not proceed until user confirms the classification."
+    }
+  ],
+  "admission": {
+    "localReadyForFigma": true,
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "r2aStageComplete": true,
+    "r2bStageComplete": true,
+    "r3aStageComplete": true,
+    "r3aNote": "R3a complete: 10/10 identity + 16/16 flow + 16/16 aria-focus = 42/42 source-management tests pass; 184/184 full regression tests pass (no degradation). Two-viewport Phone/Tablet controlKey set identical; renderer viewport-agnostic; no compact-landscape/fold atoms; stable terminal state verified for all flows; delete flow covers success/failed/cancel/duplicate-submit/stale-result/failure-recovery; focus return markers verified; accessible names non-empty; console error = 0.",
+    "f1WriterAdmitted": false,
+    "f1WriterAdmissionNote": "LOCAL_READY_FOR_FIGMA = true. F1 writer admission is a separate Figma-side decision that requires: (1) user confirmation of 12-family classification, (2) Figma writer queue scheduling (F2 queue admitted), (3) Figma-side master decisions for the 8 issues listed in figmaDecisionIssues. Local side is unblocked.",
+    "f1BlockersRemaining": [
+      "Figma-side: 8 master decisions pending (see figmaDecisionIssues)",
+      "User-side: 12-family classification confirmation pending"
+    ],
+    "nextWriterFamily": "source-management (this packet), then webdav-config"
+  },
+  "commitStrategy": {
+    "approach": "implementation commit first, then evidence-only commit binding the previous implementation hash (avoid self-reference)",
+    "implementationCommitContent": [
+      "frontend-demo-optimized/control-identity-declarations.js (48 source-management declarations)",
+      "frontend-demo-optimized/render-runtime.js (freeze fallback for source-management + source-settings-entry)",
+      "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (sourceManagementV2 renderer + state owner + d2ExecuteSourceDelete + d2SettingsShell extensions)",
+      "frontend-demo-optimized/verify/settings-home-viewport.test.mjs (update assertion for d2SettingsShell bottomActionHtml option)",
+      "frontend-demo-optimized/verify/r3a-source-management-identity.test.mjs (new)",
+      "frontend-demo-optimized/verify/r3a-source-management-flow.test.mjs (new)",
+      "frontend-demo-optimized/verify/r3a-source-management-aria-focus.test.mjs (new)"
+    ],
+    "evidenceCommitContent": [
+      "docs/design/handoffs/source-management/LOCAL_READY_FOR_FIGMA.json (this file, with implementationCommit hash filled in)"
+    ]
+  }
+}
