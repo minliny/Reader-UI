@@ -36,8 +36,11 @@ test("IC0 enumerates every direct variant and every alias case", () => {
 });
 
 test("IC0 keeps the semantic denominator separate from suspected non-semantic controls", () => {
-  assert.equal(artifacts.coverage.semanticControls, 3752);
-  assert.equal(artifacts.inventory.semanticControls.length, 3752);
+  // A1 (R2a): settings-general segment buttons now carry data-control-key, so
+  // IC0 promotes 3 segment <button> elements from suspected-non-semantic
+  // containers to semantic controls. The denominator grows from 3752 to 3755.
+  assert.equal(artifacts.coverage.semanticControls, 3755);
+  assert.equal(artifacts.inventory.semanticControls.length, 3755);
   assert.equal(
     artifacts.coverage.suspectedNonSemanticControls,
     artifacts.inventory.suspectedNonSemanticControls.length,
@@ -45,7 +48,7 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
     article: 389,
-    button: 3276,
+    button: 3279,
     i: 28,
     input: 47,
     select: 11,
@@ -74,7 +77,7 @@ test("IC0 records required fields without inventing a canonical control id", () 
   assert.equal(artifacts.inventory.identityBoundary.canonicalControlIdAvailable, false);
   assert.equal(artifacts.coverage.semanticControlCoverage.canonicalControlIds, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.joinedControls, 0);
-  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3752);
+  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3755);
 });
 
 test("IC0 accessible names resolve references and labels without treating ordinary input values as names", () => {

@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "9bf65e29353709e2d85d36f5f8930d4df15818ef8c875b0c865469c0e0fbbcb4",
+    "inventorySha256": "c5c74d851ce5612f903db59461ebbbc422f64eb10296dedceb4b395a765d4149",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
   },
   "totals": {
@@ -833,6 +833,24 @@
       "expectedSubcontrolCount": 1
     },
     {
+      "candidateKey": "candidate:8445db9bf0aa0472509c",
+      "selectorSha256": "6d9db4b26700aa81baf0064cf32aaf308d87e89cf973f9a579eeb6e209992812",
+      "routeId": "settings-general",
+      "state": "default",
+      "viewport": "phone",
+      "role": "group",
+      "domTag": "article",
+      "label": "App主题 跟随系统浅色深色",
+      "dataAttributes": {},
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-segment"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "segment",
+      "expectedSubcontrolCount": 3
+    },
+    {
       "candidateKey": "candidate:9a123607bc4ff7ba141e",
       "selectorSha256": "86b8cf8be0930ae57890525a317598d3465d9041be25517280cd473c82e852ab",
       "routeId": "settings-general",
@@ -849,24 +867,6 @@
       "containsUnenumeratedSubcontrols": true,
       "expectedSubcontrolType": "switch",
       "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:b2098bade47edbd77b63",
-      "selectorSha256": "6d9db4b26700aa81baf0064cf32aaf308d87e89cf973f9a579eeb6e209992812",
-      "routeId": "settings-general",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "App主题 跟随系统",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-segment"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "segment",
-      "expectedSubcontrolCount": 3
     },
     {
       "candidateKey": "candidate:cd78214c71c3b3789ad1",

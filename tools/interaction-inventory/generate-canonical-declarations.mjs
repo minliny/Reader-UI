@@ -179,6 +179,8 @@ for (const e of registryEntries) {
     controlId: e.controlId,
     actionKey: e.actionKey,
     instanceKey: e.instanceKey,
+    needsActionKey: e.needsActionKey,
+    needsInstanceKey: e.needsInstanceKey,
     mappingStatus: e.mappingStatus,
     uiEvent: uiEvent,
     route: e.route,
@@ -229,24 +231,31 @@ for (const row of subcontrolRows) {
   const state = row.state || "default";
   const candidateKey = row.candidateKey;
 
-  // A0 (schema 1.3.0): subcontrol declarations carry the same four identity
-  // fields as registry-backed declarations. actionKey and instanceKey are null
-  // because the subcontrol has not yet been enumerated into the registry (no
-  // DOM attributes to derive from); mappingStatus is therefore
-  // "pending-action-and-instance-key". uiEvent is the predicted event type
-  // from expectedSubcontrolType — it is a planning hint, not a logical
-  // actionKey, until the renderer emits explicit semantic attributes.
-  const subcontrolMappingStatus = "pending-action-and-instance-key";
-  const subcontrolActionKey = null;
+  // A1 (R2a): subcontrol declarations are now fully mapped. The business slug
+  // from settings-subcontrol-business-keys.mjs is the actionKey (derived from
+  // data-settings-key whitelist — see schema actionKey.description). Each
+  // subcontrol has exactly one DOM occurrence per (route, state) shared across
+  // viewports, so needsInstanceKey=false. mappingStatus="mapped" allows the
+  // renderer to stamp data-control-key without tripping the fail-closed guard.
+  //
+  // controlId is constructed as {domain}.{family}.{route}.{state}.{role}.{slug}
+  // (or .{slug}-{suffix} for stepper/segment multi-button rows). The slug is a
+  // stable business semantic discriminator, NOT a selector hash — satisfying
+  // the A0 invariant "50 个设置子控件改用业务语义 key".
+  const subcontrolMappingStatus = "mapped";
   const subcontrolInstanceKey = null;
+  const subcontrolNeedsActionKey = false;
+  const subcontrolNeedsInstanceKey = false;
   const subcontrolRendererSlot = `${routeInfo.renderer}@${routeInfo.rendererFile}`;
 
   if (row.expectedSubcontrolType === "switch") {
     const entityKey = `${domain}.switch.switch.${slug}`;
     const controlKey = `${entityKey}@${route}.${state}`;
+    const controlId = `${domain}.switch.${route}.${state}.switch.${slug}`;
     subcontrolDeclarations.push({
-      entityKey, controlKey, controlId: null,
-      actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+      entityKey, controlKey, controlId,
+      actionKey: slug, instanceKey: subcontrolInstanceKey,
+      needsActionKey: subcontrolNeedsActionKey, needsInstanceKey: subcontrolNeedsInstanceKey,
       mappingStatus: subcontrolMappingStatus,
       uiEvent: "toggle.switch",
       route, state, domain, family: "switch", role: "switch",
@@ -255,14 +264,16 @@ for (const row of subcontrolRows) {
       pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
       expectedSubcontrolType: "switch", expectedSubcontrolIndex: 0,
       label: row.label || null, candidateKey,
-      controlIdExemption: "pending-registry-enumeration"
+      settingsKey: slug
     });
   } else if (row.expectedSubcontrolType === "select") {
     const entityKey = `${domain}.combobox.combobox.${slug}`;
     const controlKey = `${entityKey}@${route}.${state}`;
+    const controlId = `${domain}.combobox.${route}.${state}.combobox.${slug}`;
     subcontrolDeclarations.push({
-      entityKey, controlKey, controlId: null,
-      actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+      entityKey, controlKey, controlId,
+      actionKey: slug, instanceKey: subcontrolInstanceKey,
+      needsActionKey: subcontrolNeedsActionKey, needsInstanceKey: subcontrolNeedsInstanceKey,
       mappingStatus: subcontrolMappingStatus,
       uiEvent: "dropdown.option.select",
       route, state, domain, family: "combobox", role: "combobox",
@@ -271,7 +282,7 @@ for (const row of subcontrolRows) {
       pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
       expectedSubcontrolType: "select", expectedSubcontrolIndex: 0,
       label: row.label || null, candidateKey,
-      controlIdExemption: "pending-registry-enumeration"
+      settingsKey: slug
     });
   } else if (row.expectedSubcontrolType === "stepper") {
     const buttons = [
@@ -282,9 +293,11 @@ for (const row of subcontrolRows) {
       const b = buttons[i];
       const entityKey = `${domain}.button.button.${b.suffix}.${slug}`;
       const controlKey = `${entityKey}@${route}.${state}`;
+      const controlId = `${domain}.button.${route}.${state}.button.${slug}-${b.suffix}`;
       subcontrolDeclarations.push({
-        entityKey, controlKey, controlId: null,
-        actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+        entityKey, controlKey, controlId,
+        actionKey: `${slug}.${b.suffix}`, instanceKey: subcontrolInstanceKey,
+        needsActionKey: subcontrolNeedsActionKey, needsInstanceKey: subcontrolNeedsInstanceKey,
         mappingStatus: subcontrolMappingStatus,
         uiEvent: b.uiEvent,
         route, state, domain, family: "button", role: "button",
@@ -293,16 +306,18 @@ for (const row of subcontrolRows) {
         pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
         expectedSubcontrolType: "stepper", expectedSubcontrolIndex: i,
         label: (row.label || null) ? `${row.label} [${b.labelSuffix}]` : null,
-        candidateKey, controlIdExemption: "pending-registry-enumeration"
+        candidateKey, settingsKey: `${slug}-${b.suffix}`
       });
     }
   } else if (row.expectedSubcontrolType === "segment") {
     for (let i = 0; i < 3; i++) {
       const entityKey = `${domain}.button.button.segment-option-${i + 1}.${slug}`;
       const controlKey = `${entityKey}@${route}.${state}`;
+      const controlId = `${domain}.button.${route}.${state}.button.${slug}-segment-option-${i + 1}`;
       subcontrolDeclarations.push({
-        entityKey, controlKey, controlId: null,
-        actionKey: subcontrolActionKey, instanceKey: subcontrolInstanceKey,
+        entityKey, controlKey, controlId,
+        actionKey: `${slug}.segment-option-${i + 1}`, instanceKey: subcontrolInstanceKey,
+        needsActionKey: subcontrolNeedsActionKey, needsInstanceKey: subcontrolNeedsInstanceKey,
         mappingStatus: subcontrolMappingStatus,
         uiEvent: "segment.item.switch",
         route, state, domain, family: "button", role: "button",
@@ -311,7 +326,7 @@ for (const row of subcontrolRows) {
         pageFamily: routeInfo.pageFamily, source: "r2.0-subcontrol",
         expectedSubcontrolType: "segment", expectedSubcontrolIndex: i,
         label: (row.label || null) ? `${row.label} [option-${i + 1}]` : null,
-        candidateKey, controlIdExemption: "pending-registry-enumeration"
+        candidateKey, settingsKey: `${slug}-segment-option-${i + 1}`
       });
     }
   } else {

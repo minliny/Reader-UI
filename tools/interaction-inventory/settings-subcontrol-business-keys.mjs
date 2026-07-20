@@ -29,7 +29,9 @@
  */
 export const SETTINGS_SUBCONTROL_BUSINESS_KEYS = Object.freeze({
   // ---- settings-general (8 rows) ----
-  "settings-general::App主题 跟随系统": "app-theme",
+  // A1 (R2a): segment buttons now carry data-control-key, so IC0 includes
+  // child button text in the article container label ("跟随系统浅色深色").
+  "settings-general::App主题 跟随系统浅色深色": "app-theme",
   "settings-general::语言 简体中文": "language",
   "settings-general::启动时打开 书架": "startup-screen",
   "settings-general::自动检查更新": "auto-check-update",

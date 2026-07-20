@@ -57,12 +57,14 @@
     "actionKey": {
       "type": ["string", "null"],
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$",
-      "description": "R1.2: Explicit semantic action key, derived ONLY from the whitelist: data-action (value is the actionKey), data-route (-> 'route.push'), data-route-replace (-> 'route.replace'), data-route-back (-> 'route.back'), data-demo-back (-> 'route.back'). null when no explicit semantic attribute is present; mappingStatus = pending-explicit-semantics. Never inferred from label / text / class / selector / role.",
+      "description": "R1.2 / A1: Explicit semantic action key, derived ONLY from the whitelist: data-action (value is the actionKey), data-route (-> 'route.push'), data-route-replace (-> 'route.replace'), data-route-back (-> 'route.back'), data-demo-back (-> 'route.back'), data-settings-key (value is the actionKey, for settings subcontrols). null when no explicit semantic attribute is present; needsActionKey=true. Never inferred from label / text / class / selector / role.",
       "examples": [
         "route.push",
         "route.back",
         "tts.set-speed",
         "book.open",
+        "auto-check-update",
+        "app-theme.segment-option-1",
         null
       ]
     },

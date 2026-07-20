@@ -1,0 +1,194 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Settings General",
+  "stage": "A1-R2a",
+  "status": "LOCAL_READY_FOR_FIGMA_R2a_COMPLETE",
+  "generatedAt": "2026-07-20T13:50:00Z",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "577405652fbe7e3608b7d00da3c4684f48c4c588",
+    "baselineCommitSubject": "feat(control-identity): close A0 global control-plane correction",
+    "a1Commit": "PENDING_A1_SINGLE_COHERENT_COMMIT",
+    "worktreeAtRead": "A1-R2a-instrumentation-complete",
+    "localReadyForFigma": true,
+    "localReadyMarker": "docs/design/handoffs/settings-general/LOCAL_READY_FOR_FIGMA.json",
+    "settingsR3aMarker": null,
+    "settingsR3aStatus": "not-in-A1-scope-R3a-is-subsequent-stage"
+  },
+  "r2aInstrumentation": {
+    "stageDefinition": "R2a = DOM identity instrumentation: renderer natively outputs 5 data-* attributes on every settings-general subcontrol DOM element",
+    "fiveDataAttrs": [
+      "data-entity-key",
+      "data-control-key",
+      "data-control-id",
+      "data-ui-event",
+      "data-settings-key"
+    ],
+    "viewportAttrStamping": {
+      "attr": "data-viewport",
+      "stampedBy": "render-runtime.js applyViewportClass(root)",
+      "stampedAt": "viewport switch (resize / orientation change)",
+      "notStampedByRenderer": true,
+      "viewportAtoms": ["compact", "phone", "fold", "tablet"],
+      "widthBreakpoints": {
+        "compact": "width < 360",
+        "phone": "360 <= width < 600",
+        "fold": "600 <= width < 840",
+        "tablet": "width >= 840"
+      }
+    },
+    "identityStampingStrategy": {
+      "switch": "stamped on <span class='fd-settings-switch'> (the actual toggle element)",
+      "select": "stamped on <article> row root (the whole row is clickable)",
+      "stepper": "stamped on each <button> (minus / plus individually)",
+      "segment": "stamped on each <button> (one identity per option)"
+    },
+    "failClosedGuard": {
+      "function": "assertMappingStatusAllowsControlKeyWrite(mappingStatus, context)",
+      "rule": "refuses pending mappingStatus from writing data-control-key; only mappingStatus=mapped is allowed",
+      "allSettingsGeneralSubcontrolsAreMapped": true
+    }
+  },
+  "declarationsReference": {
+    "filePath": "frontend-demo-optimized/control-identity-declarations.js",
+    "totalDeclarations": 950,
+    "settingsGeneralSubcontrolDeclarations": 10,
+    "settingsGeneralSubcontrolTypeDistribution": {
+      "switch": 4,
+      "select": 3,
+      "segment": 3,
+      "stepper": 0
+    },
+    "allSettingsGeneralSubcontrolsMappingStatus": "mapped",
+    "allSettingsGeneralSubcontrolsHaveControlId": true,
+    "allSettingsGeneralSubcontrolsHaveActionKey": true,
+    "allSettingsGeneralSubcontrolsHaveSettingsKey": true,
+    "actionKeyWhitelistSource": "data-settings-key (added to schema actionKey.description in A1)"
+  },
+  "threeViewportVerification": {
+    "verificationScript": "frontend-demo-optimized/verify/a1-settings-general-identity.test.mjs",
+    "viewports": ["phone", "compact", "tablet"],
+    "controlKeySetIdenticalAcrossViewports": true,
+    "rendererOutputIsViewportAgnostic": true,
+    "domNoDuplicateControlKey": true,
+    "domNoOrphanControlKey": true,
+    "domNoExtraSubcontrol": true,
+    "uiEventCoverage": "10/10 subcontrols carry non-empty data-ui-event",
+    "fiveDataAttrsCoverage": "10/10 subcontrols carry all 5 data-* attributes",
+    "testResult": "9/9 tests pass"
+  },
+  "settingsGeneralSubcontrolInventory": [
+    {
+      "settingsKey": "app-theme-segment-option-1",
+      "type": "segment",
+      "controlKey": "settings.button.button.segment-option-1.app-theme@settings-general.default",
+      "controlId": "settings.button.settings-general.default.button.app-theme-segment-option-1",
+      "entityKey": "settings.button.button.segment-option-1.app-theme",
+      "uiEvent": "segment.item.switch",
+      "actionKey": "app-theme.segment-option-1"
+    },
+    {
+      "settingsKey": "app-theme-segment-option-2",
+      "type": "segment",
+      "controlKey": "settings.button.button.segment-option-2.app-theme@settings-general.default",
+      "controlId": "settings.button.settings-general.default.button.app-theme-segment-option-2",
+      "entityKey": "settings.button.button.segment-option-2.app-theme",
+      "uiEvent": "segment.item.switch",
+      "actionKey": "app-theme.segment-option-2"
+    },
+    {
+      "settingsKey": "app-theme-segment-option-3",
+      "type": "segment",
+      "controlKey": "settings.button.button.segment-option-3.app-theme@settings-general.default",
+      "controlId": "settings.button.settings-general.default.button.app-theme-segment-option-3",
+      "entityKey": "settings.button.button.segment-option-3.app-theme",
+      "uiEvent": "segment.item.switch",
+      "actionKey": "app-theme.segment-option-3"
+    },
+    {
+      "settingsKey": "language",
+      "type": "select",
+      "controlKey": "settings.combobox.combobox.language@settings-general.default",
+      "controlId": "settings.combobox.settings-general.default.combobox.language",
+      "entityKey": "settings.combobox.combobox.language",
+      "uiEvent": "dropdown.option.select",
+      "actionKey": "language"
+    },
+    {
+      "settingsKey": "startup-screen",
+      "type": "select",
+      "controlKey": "settings.combobox.combobox.startup-screen@settings-general.default",
+      "controlId": "settings.combobox.settings-general.default.combobox.startup-screen",
+      "entityKey": "settings.combobox.combobox.startup-screen",
+      "uiEvent": "dropdown.option.select",
+      "actionKey": "startup-screen"
+    },
+    {
+      "settingsKey": "animation-effect",
+      "type": "select",
+      "controlKey": "settings.combobox.combobox.animation-effect@settings-general.default",
+      "controlId": "settings.combobox.settings-general.default.combobox.animation-effect",
+      "entityKey": "settings.combobox.combobox.animation-effect",
+      "uiEvent": "dropdown.option.select",
+      "actionKey": "animation-effect"
+    },
+    {
+      "settingsKey": "auto-check-update",
+      "type": "switch",
+      "controlKey": "settings.switch.switch.auto-check-update@settings-general.default",
+      "controlId": "settings.switch.settings-general.default.switch.auto-check-update",
+      "entityKey": "settings.switch.switch.auto-check-update",
+      "uiEvent": "toggle.switch",
+      "actionKey": "auto-check-update"
+    },
+    {
+      "settingsKey": "tap-bottom-scroll-top",
+      "type": "switch",
+      "controlKey": "settings.switch.switch.tap-bottom-scroll-top@settings-general.default",
+      "controlId": "settings.switch.settings-general.default.switch.tap-bottom-scroll-top",
+      "entityKey": "settings.switch.switch.tap-bottom-scroll-top",
+      "uiEvent": "toggle.switch",
+      "actionKey": "tap-bottom-scroll-top"
+    },
+    {
+      "settingsKey": "reduce-motion",
+      "type": "switch",
+      "controlKey": "settings.switch.switch.reduce-motion@settings-general.default",
+      "controlId": "settings.switch.settings-general.default.switch.reduce-motion",
+      "entityKey": "settings.switch.switch.reduce-motion",
+      "uiEvent": "toggle.switch",
+      "actionKey": "reduce-motion"
+    },
+    {
+      "settingsKey": "crash-log",
+      "type": "switch",
+      "controlKey": "settings.switch.switch.crash-log@settings-general.default",
+      "controlId": "settings.switch.settings-general.default.switch.crash-log",
+      "entityKey": "settings.switch.switch.crash-log",
+      "uiEvent": "toggle.switch",
+      "actionKey": "crash-log"
+    }
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2aStageComplete": true,
+    "r3aPass": false,
+    "r3aStageComplete": false,
+    "r3aNote": "R3a (Figma pre-functional verification) is a subsequent stage; A1 only covers R2a DOM identity instrumentation for settings-general.",
+    "f1WriterAdmitted": false,
+    "f1BlockersRemaining": [
+      "Settings R3a marker does not exist; A1 only delivers R2a.",
+      "Provider file revision still unavailable from installed Figma connector.",
+      "Songti SC writer source still unresolved.",
+      "Responsive page masters still bypass canonical Settings/shared primitive components."
+    ],
+    "a1ExitGate": {
+      "phase3RendererEdits": "complete",
+      "phase4ThreeViewportVerification": "complete (9/9 tests pass)",
+      "phase5LocalReadyForFigmaPacket": "complete (this file)",
+      "phase6SingleCoherentCommit": "pending"
+    }
+  }
+}

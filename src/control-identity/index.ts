@@ -6,6 +6,7 @@ export {
   DATA_CONTROL_CANDIDATE_KEY_ATTRIBUTE,
   DATA_CONTROL_KEY_ATTRIBUTE,
   DATA_ENTITY_KEY_ATTRIBUTE,
+  DATA_UI_EVENT_ATTRIBUTE,
   DATA_VIEWPORT_ATTRIBUTE,
   MAPPING_STATUS_VALUES,
   PENDING_MAPPING_STATUS_VALUES,
@@ -14,6 +15,7 @@ export {
   getDataControlId,
   getDataControlKey,
   getDataEntityKey,
+  getDataUiEvent,
   getDataViewport,
   isValidControlIdFormat,
   parseControlId,
@@ -29,6 +31,7 @@ export {
   setDataControlId,
   setDataControlKey,
   setDataEntityKey,
+  setDataUiEvent,
   setDataViewport,
 } from "./dom-identity";
 export type { ParsedControlId, ControlMappingStatusValue } from "./dom-identity";

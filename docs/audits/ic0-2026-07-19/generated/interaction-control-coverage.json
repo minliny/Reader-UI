@@ -36,13 +36,13 @@
   "canonicalRoutes": 260,
   "directVariantCases": 190,
   "aliasCases": 76,
-  "semanticControls": 3752,
+  "semanticControls": 3755,
   "suspectedNonSemanticControls": 63,
   "semanticControlCoverage": {
-    "count": 3752,
+    "count": 3755,
     "withUiEvent": 2271,
-    "withRawMotionHints": 3700,
-    "rawMotionHintOccurrences": 7127,
+    "withRawMotionHints": 3703,
+    "rawMotionHintOccurrences": 7130,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -96,8 +96,8 @@
       "tab.item.switch",
       "toggle.switch"
     ],
-    "withCanonicalMotionIds": 3692,
-    "canonicalMotionIdOccurrences": 7237,
+    "withCanonicalMotionIds": 3695,
+    "canonicalMotionIdOccurrences": 7240,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -158,17 +158,17 @@
     "missingAccessibleNames": 21,
     "canonicalControlIds": 0,
     "joinedControls": 0,
-    "unjoinedControls": 3752,
+    "unjoinedControls": 3755,
     "byTag": {
       "article": 389,
-      "button": 3276,
+      "button": 3279,
       "i": 28,
       "input": 47,
       "select": 11,
       "textarea": 1
     },
     "byRole": {
-      "button": 3409,
+      "button": 3412,
       "checkbox": 1,
       "combobox": 11,
       "option": 241,
@@ -179,7 +179,7 @@
       "textbox": 27
     },
     "byJoinStatus": {
-      "unjoined-no-stable-key": 3752
+      "unjoined-no-stable-key": 3755
     },
     "byRuntimeFamily": {
       "discover": 778,
@@ -188,7 +188,7 @@
       "onboarding": 8,
       "reader": 1189,
       "rss": 417,
-      "settings": 83,
+      "settings": 86,
       "source": 392,
       "source-switch": 173,
       "sync": 113,
@@ -198,9 +198,9 @@
     "gapCodes": {
       "IC0_ACCESSIBLE_LABEL_MISSING": 21,
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 60,
-      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3752,
+      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3755,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 52,
-      "IC0_UI_EVENT_UNRESOLVED": 1481
+      "IC0_UI_EVENT_UNRESOLVED": 1484
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -478,7 +478,7 @@
       ]
     }
   },
-  "inventorySha256": "9bf65e29353709e2d85d36f5f8930d4df15818ef8c875b0c865469c0e0fbbcb4",
+  "inventorySha256": "c5c74d851ce5612f903db59461ebbbc422f64eb10296dedceb4b395a765d4149",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1554,9 +1554,9 @@
       "runtimeFamily": "settings",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 9,
+      "semanticControls": 12,
       "suspectedNonSemanticControls": 8,
-      "renderSha256": "306cbc595fb78a9bc1ec2ba6aeba84355f7240a1d717f52d2c7d36ef9d3f1ab0"
+      "renderSha256": "babb422ee5f746d3399ea98a23e5995b6104657314447f777c4caa9093225b59"
     },
     {
       "routeId": "settings-developer",
@@ -1633,7 +1633,7 @@
       "pageState": "default",
       "semanticControls": 9,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f6ee8783d83b1744e33763b2734b5ca7ce6afb8e8a695ad7b8d8a7a79240f073"
+      "renderSha256": "1ea8ffc88977a22a59cb9695c6d40a3b948b88f2d213aa8d99c909817d34e106"
     },
     {
       "routeId": "restore-preview",
@@ -2656,7 +2656,7 @@
       "pageState": "default",
       "semanticControls": 7,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "bf24108032f3ec1c92abd1fc69a206e10a0c9b71d8497fa8d7949b18a9ea36a6"
+      "renderSha256": "0204a98fde51726f2cbab26e9f1dddb3d2cabb24bf88823be9cd063eb49a2ab8"
     },
     {
       "routeId": "restore-progress",

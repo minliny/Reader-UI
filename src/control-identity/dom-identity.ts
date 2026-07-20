@@ -77,6 +77,18 @@ export const DATA_ENTITY_KEY_ATTRIBUTE = "data-entity-key" as const;
 export const DATA_CONTROL_KEY_ATTRIBUTE = "data-control-key" as const;
 
 /**
+ * A1 (R2a): The DOM attribute used to stamp the canonical UiEvent type onto
+ * an element. Value is a UiEvent type string from contracts/ui-event.schema.json
+ * enum (e.g. "toggle.switch", "route.push", "segment.item.switch").
+ *
+ * Page renderers MUST set this attribute on the root element of every
+ * interactive control so the runtime can dispatch semantic events without
+ * reverse-engineering from class / tag / label. Controls that are inert or
+ * disabled MUST omit this attribute (or set uiEventExemption in declarations).
+ */
+export const DATA_UI_EVENT_ATTRIBUTE = "data-ui-event" as const;
+
+/**
  * A0 (schema 1.3.0): The four canonical mappingStatus values, derived from
  * the independent (needsActionKey, needsInstanceKey) pair. Source of truth:
  * contracts/control-identity.schema.json `mappingStatus.enum`.
@@ -228,6 +240,37 @@ export function setDataControlKey(element: Element | null | undefined, controlKe
 export function getDataControlKey(element: Element | null | undefined): string | null {
   if (!element) return null;
   const value = element.getAttribute(DATA_CONTROL_KEY_ATTRIBUTE);
+  return value && value.length > 0 ? value : null;
+}
+
+/**
+ * A1 (R2a): Set the canonical UiEvent type on a DOM element. Page renderers
+ * MUST call this on the root element of every interactive control alongside
+ * `setDataEntityKey` / `setDataControlKey` / `setDataControlId`. The element
+ * is returned for chaining. No-op when the element is null/undefined.
+ *
+ * Pass null to clear the attribute (for inert / disabled controls).
+ */
+export function setDataUiEvent(element: Element | null | undefined, uiEvent: string | null): Element | null {
+  if (!element) return null;
+  if (uiEvent === null) {
+    element.removeAttribute(DATA_UI_EVENT_ATTRIBUTE);
+    return element;
+  }
+  if (typeof uiEvent !== "string" || uiEvent.length === 0) {
+    throw new Error(`setDataUiEvent requires a non-empty uiEvent or null, received: ${String(uiEvent)}`);
+  }
+  element.setAttribute(DATA_UI_EVENT_ATTRIBUTE, uiEvent);
+  return element;
+}
+
+/**
+ * A1 (R2a): Read the canonical UiEvent type from a DOM element. Returns null
+ * when the attribute is absent (indicates inert / disabled / exempt control).
+ */
+export function getDataUiEvent(element: Element | null | undefined): string | null {
+  if (!element) return null;
+  const value = element.getAttribute(DATA_UI_EVENT_ATTRIBUTE);
   return value && value.length > 0 ? value : null;
 }
 

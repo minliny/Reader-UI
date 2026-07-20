@@ -238,6 +238,21 @@
     root.setAttribute("data-viewport-height", String(snapshot.height));
     root.style.setProperty("--fd-viewport-width", `${snapshot.width}px`);
     root.style.setProperty("--fd-viewport-height", `${snapshot.height}px`);
+    // A1 (R2a): stamp data-viewport onto every control element so the runtime
+    // can resolve (controlKey, viewport) pairs. The viewport atom is derived
+    // from width breakpoints aligned with schema ControlViewport enum:
+    // compact / phone / fold / tablet.
+    const viewportAtom = snapshot.width < 360
+      ? "compact"
+      : snapshot.width < 600
+        ? "phone"
+        : snapshot.width < 840
+          ? "fold"
+          : "tablet";
+    const controlElements = root.querySelectorAll("[data-control-key]");
+    for (let i = 0; i < controlElements.length; i++) {
+      controlElements[i].setAttribute("data-viewport", viewportAtom);
+    }
     return snapshot;
   }
 

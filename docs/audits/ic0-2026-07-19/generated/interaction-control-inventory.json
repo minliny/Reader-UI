@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "8b68fd1567b4ae31a14a302d9968268b826dd0ef9c73eb55db18e266ccc37279"
+    "rendererSourcesSha256": "544346a9aadacf29eef7518813506122d9c2bb5e8a9d0bc8c9e03c6e3dd3b529"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -55761,6 +55761,96 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
       "candidateKey": "candidate:5711201614bc795df690",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "跟随系统",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > button.is-active:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:9b3f861e78fd91989af4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "浅色",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > button:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:18ca73cf01deb03a6fb9",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "深色",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > button:nth-of-type(3)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:7405fdb199e2a6143dd1",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127058,7 +127148,7 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "group",
-      "label": "App主题 跟随系统",
+      "label": "App主题 跟随系统浅色深色",
       "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1)",
       "dataAttributes": {},
       "uiEvent": null,
@@ -127076,7 +127166,7 @@
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
         "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:b2098bade47edbd77b63",
+      "candidateKey": "candidate:8445db9bf0aa0472509c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

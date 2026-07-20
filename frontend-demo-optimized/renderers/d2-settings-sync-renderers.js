@@ -151,36 +151,85 @@
 
   // ============ 通用 UI 块（与 render-runtime.js 风格一致） ============
 
+  // A1 (R2a): Control identity lookup — 从 CANONICAL_CONTROL_DECLARATIONS 构建
+  // settings-general subcontrol 的身份查找表。key = route::settingsKey。
+  // renderer 在输出 subcontrol 时调用 d2ResolveSubcontrolIdentity 查找身份，
+  // 然后 d2StampIdentityAttrs 把 5 个 data-* 属性 stamp 到 HTML。
+  var d2SubcontrolIdentityLookup = null;
+  function d2GetSubcontrolIdentityLookup() {
+    if (d2SubcontrolIdentityLookup) return d2SubcontrolIdentityLookup;
+    d2SubcontrolIdentityLookup = {};
+    var decls = window.CANONICAL_CONTROL_DECLARATIONS || [];
+    for (var i = 0; i < decls.length; i++) {
+      var d = decls[i];
+      if (d.source === "r2.0-subcontrol" && d.settingsKey && d.route) {
+        d2SubcontrolIdentityLookup[d.route + "::" + d.settingsKey] = d;
+      }
+    }
+    return d2SubcontrolIdentityLookup;
+  }
+
+  function d2ResolveSubcontrolIdentity(route, settingsKey) {
+    if (!route || !settingsKey) return null;
+    var lookup = d2GetSubcontrolIdentityLookup();
+    return lookup[route + "::" + settingsKey] || null;
+  }
+
+  // A1 (R2a): stamp 5 个 data-* 属性到 HTML 字符串。
+  // data-viewport 由 render-runtime.js 的 applyViewportClass 在 viewport 切换时
+  // 同步 stamp，renderer 不输出 data-viewport。
+  function d2StampIdentityAttrs(identity) {
+    if (!identity) return "";
+    var attrs = "";
+    if (identity.entityKey) attrs += ` data-entity-key="${esc(identity.entityKey)}"`;
+    if (identity.controlKey) attrs += ` data-control-key="${esc(identity.controlKey)}"`;
+    if (identity.controlId) attrs += ` data-control-id="${esc(identity.controlId)}"`;
+    if (identity.uiEvent) attrs += ` data-ui-event="${esc(identity.uiEvent)}"`;
+    if (identity.settingsKey) attrs += ` data-settings-key="${esc(identity.settingsKey)}"`;
+    return attrs;
+  }
+
   // 状态徽章
   function d2Badge(label, tone) {
     if (!label) return "";
     return `<span class="fd-settings-badge is-${esc(tone || "muted")}" title="${esc(label)}" aria-label="${esc(label)}"><i aria-hidden="true"></i></span>`;
   }
 
-  // 开关
-  function d2Switch(enabled) {
-    return `<span class="fd-settings-switch${enabled ? " is-on" : ""}" aria-hidden="true"><i></i></span>`;
+  // 开关 — A1 (R2a): stamp 5 个 data-* 属性到 switch span
+  function d2Switch(row, route) {
+    var identity = d2ResolveSubcontrolIdentity(route, row.settingsKey);
+    var attrs = d2StampIdentityAttrs(identity);
+    return `<span class="fd-settings-switch${row.enabled ? " is-on" : ""}"${attrs} aria-hidden="true"><i></i></span>`;
   }
 
-  // 段选器（segment control）
-  function d2Segment(row) {
+  // 段选器（segment control） — A1 (R2a): 每个 button stamp 自己的 identity
+  function d2Segment(row, route) {
     if (!row || !row.options || !row.options.length) return "";
     return `
       <span class="fd-settings-segment" aria-label="${esc(row.title)}">
-        ${row.options.map(function (option) {
-          return `<button class="${option === row.value ? "is-active" : ""}" type="button">${esc(option)}</button>`;
+        ${row.options.map(function (option, index) {
+          var settingsKey = (row.settingsKey || "") + "-segment-option-" + (index + 1);
+          var identity = d2ResolveSubcontrolIdentity(route, settingsKey);
+          var attrs = d2StampIdentityAttrs(identity);
+          return `<button class="${option === row.value ? "is-active" : ""}" type="button"${attrs}>${esc(option)}</button>`;
         }).join("")}
       </span>`;
   }
 
-  // 步进器
-  function d2Stepper(row) {
+  // 步进器 — A1 (R2a): minus / plus button 各自 stamp identity
+  function d2Stepper(row, route) {
     if (!row) return "";
+    var minusKey = (row.settingsKey || "") + "-stepper-minus";
+    var plusKey = (row.settingsKey || "") + "-stepper-plus";
+    var minusIdentity = d2ResolveSubcontrolIdentity(route, minusKey);
+    var plusIdentity = d2ResolveSubcontrolIdentity(route, plusKey);
+    var minusAttrs = d2StampIdentityAttrs(minusIdentity);
+    var plusAttrs = d2StampIdentityAttrs(plusIdentity);
     return `
       <span class="fd-settings-stepper" aria-label="${esc(row.title)}">
-        <button type="button">${esc(row.minLabel || "-")}</button>
+        <button type="button"${minusAttrs}>${esc(row.minLabel || "-")}</button>
         <strong>${esc(row.value)}</strong>
-        <button type="button">${esc(row.maxLabel || "+")}</button>
+        <button type="button"${plusAttrs}>${esc(row.maxLabel || "+")}</button>
       </span>`;
   }
 
@@ -195,16 +244,18 @@
       </label>`;
   }
 
-  // 通用设置行（switch / select / link / action / stepper / cache-cleanup）
-  function d2RowSide(row) {
+  // 通用设置行（switch / select / link / action / stepper / cache-cleanup / segment）
+  // A1 (R2a): d2RowSide 接收 route 参数，传递给 d2Switch / d2Stepper / d2Segment
+  function d2RowSide(row, route) {
     var status = d2Badge(row.status, row.statusTone);
-    var stepper = row.type === "stepper" ? d2Stepper(row) : "";
-    var toggle = row.type === "switch" ? d2Switch(row.enabled) : "";
-    var value = row.value && !stepper ? `<strong class="fd-settings-value">${esc(row.value)}</strong>` : "";
+    var segment = row.type === "segment" ? d2Segment(row, route) : "";
+    var stepper = row.type === "stepper" ? d2Stepper(row, route) : "";
+    var toggle = row.type === "switch" ? d2Switch(row, route) : "";
+    var value = row.value && !stepper && !segment ? `<strong class="fd-settings-value">${esc(row.value)}</strong>` : "";
     var actionOverlay = row.type === "cache-cleanup" && row.overlay ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
     var action = row.actionLabel ? `<button class="fd-settings-row-action" type="button"${actionOverlay}>${esc(row.actionLabel)}</button>` : "";
-    var chev = row.options || ["link", "select", "danger"].indexOf(row.type) >= 0 ? `<span class="fd-settings-trailing-icon">${chevron()}</span>` : "";
-    return `${status}${stepper}${value}${action}${toggle}${chev}`;
+    var chev = (row.options && !segment) || ["link", "select", "danger"].indexOf(row.type) >= 0 ? `<span class="fd-settings-trailing-icon">${chevron()}</span>` : "";
+    return `${status}${segment}${stepper}${value}${action}${toggle}${chev}`;
   }
 
   function d2RowSideKind(row) {
@@ -218,15 +269,23 @@
     return "compact";
   }
 
+  // A1 (R2a): d2Row 在 <article> 上 stamp select row 的 identity。
+  // switch / segment / stepper 的 identity 已在子控件（span/button）上 stamp，
+  // 因为 <article> 是 row 容器，子控件才是真正的可交互元素。
+  // select row 的可交互元素是整个 <article>（点击打开选项列表）。
   function d2Row(row, route, appState) {
     if (row.type === "input") return d2InputRow(row);
     var overlayAttr = row.overlay && row.type !== "cache-cleanup" ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
     var routeAttr = row.route ? ` data-route="${esc(row.route)}"` : "";
+    // select row 的 identity stamp 在 <article> 上
+    var selectIdentity = row.type === "select" && row.settingsKey
+      ? d2ResolveSubcontrolIdentity(route, row.settingsKey) : null;
+    var selectAttrs = d2StampIdentityAttrs(selectIdentity);
     return `
-      <article class="fd-setting-row${row.type ? ` is-${esc(row.type)}` : ""}${row.tone === "danger" ? " is-danger" : ""}"${overlayAttr}${routeAttr} role="${overlayAttr || routeAttr ? "button" : "group"}" tabindex="${overlayAttr || routeAttr ? "0" : "-1"}">
+      <article class="fd-setting-row${row.type ? ` is-${esc(row.type)}` : ""}${row.tone === "danger" ? " is-danger" : ""}"${overlayAttr}${routeAttr}${selectAttrs} role="${overlayAttr || routeAttr ? "button" : "group"}" tabindex="${overlayAttr || routeAttr ? "0" : "-1"}">
         <span>${icon(row.icon || "settings", "fd-small-icon")}</span>
         <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
-        <em class="fd-settings-row-side is-${d2RowSideKind(row)}">${d2RowSide(row)}</em>
+        <em class="fd-settings-row-side is-${d2RowSideKind(row)}">${d2RowSide(row, route)}</em>
       </article>`;
   }
 
@@ -493,19 +552,19 @@
           {
             title: "基础偏好",
             rows: [
-              { type: "segment", icon: "palette", title: "App主题", value: "跟随系统", options: ["跟随系统", "浅色", "深色"] },
-              { type: "select", icon: "globe", title: "语言", value: "简体中文", options: ["简体中文", "繁體中文", "English"] },
-              { type: "select", icon: "home", title: "启动时打开", value: "书架", options: ["书架", "发现", "RSS", "设置"] }
+              { type: "segment", icon: "palette", title: "App主题", value: "跟随系统", options: ["跟随系统", "浅色", "深色"], settingsKey: "app-theme" },
+              { type: "select", icon: "globe", title: "语言", value: "简体中文", options: ["简体中文", "繁體中文", "English"], settingsKey: "language" },
+              { type: "select", icon: "home", title: "启动时打开", value: "书架", options: ["书架", "发现", "RSS", "设置"], settingsKey: "startup-screen" }
             ]
           },
           {
             title: "行为与反馈",
             rows: [
-              { type: "switch", icon: "refresh", title: "自动检查更新", enabled: true },
-              { type: "switch", icon: "top", title: "点击当前底栏回顶部", enabled: true },
-              { type: "switch", icon: "motion", title: "减少动态效果", enabled: false },
-              { type: "switch", icon: "bug", title: "崩溃日志", enabled: true, status: "已开启", statusTone: "good" },
-              { type: "select", icon: "play", title: "动画效果", value: "标准", options: ["减少", "标准", "增强"] },
+              { type: "switch", icon: "refresh", title: "自动检查更新", enabled: true, settingsKey: "auto-check-update" },
+              { type: "switch", icon: "top", title: "点击当前底栏回顶部", enabled: true, settingsKey: "tap-bottom-scroll-top" },
+              { type: "switch", icon: "motion", title: "减少动态效果", enabled: false, settingsKey: "reduce-motion" },
+              { type: "switch", icon: "bug", title: "崩溃日志", enabled: true, status: "已开启", statusTone: "good", settingsKey: "crash-log" },
+              { type: "select", icon: "play", title: "动画效果", value: "标准", options: ["减少", "标准", "增强"], settingsKey: "animation-effect" },
               { type: "cache-cleanup", icon: "trash", title: "缓存清理", actionLabel: "清理缓存", overlay: "dialog:cache-clear" }
             ]
           },
