@@ -2070,12 +2070,16 @@
   // 路由分发主入口（render-runtime.js dispatch hook 调用）
   // 返回空字符串表示该路由不属于 D2 模块
   // ===========================================================================
-  function renderD2Route(route, data, appState) {
+  // R2.0：新增 options 参数（携带 pageState / loading / viewState / overlayState），
+  //       透传给底层 V2 renderer。底层 V2 函数签名保持 (data, route, appState)，
+  //       options 作为第 4 参数；当前 V2 实现不消费 options，留给 R2a/R2b 接入
+  //       loading/error 等 ViewState 时使用。不重构现有行为。
+  function renderD2Route(route, data, appState, options) {
     var fnName = INTEGRATION_MAP[route];
     if (!fnName) return "";
     var fn = d2Exports[fnName];
     if (typeof fn !== "function") return "";
-    return fn(data, route, appState);
+    return fn(data, route, appState, options);
   }
 
   // ===========================================================================

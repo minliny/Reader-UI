@@ -10755,8 +10755,12 @@
         }
       }
       // D2-C：设置与同步通过 renderD2Route 分发
+      // R2.0：补传 options（携带 pageState / loading / viewState / overlayState），
+      //       让 D2-C 渲染的 settings/source/webdav/sync/restore/about 路由可以
+      //       感知 loading/error 等 ViewState。底层 V2 函数签名保持
+      //       (data, route, appState)，options 作为第 4 参数透传但不强制消费。
       if (window.ReaderD2SettingsSyncRenderers && window.ReaderD2SettingsSyncRenderers.renderD2Route) {
-        const d2cHtml = window.ReaderD2SettingsSyncRenderers.renderD2Route(route, data, appState);
+        const d2cHtml = window.ReaderD2SettingsSyncRenderers.renderD2Route(route, data, appState, options);
         if (d2cHtml) return d2cHtml;
       }
       // D3：控制层通过 renderD3Route 分发

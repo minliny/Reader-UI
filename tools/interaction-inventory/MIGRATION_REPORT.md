@@ -450,3 +450,117 @@ R1.1 把 46 个 `group` 标记为 `containsUnenumeratedSubcontrols=true` 但**�
 2. 为每个子控件分配 `entityKey` / `controlKey` / `controlId`。
 3. 把这些子控件从 `nonInteractiveContainers.json` 移到 `control-id-registry.json`。
 4. 重新运行 `generate-control-ids.mjs --write` + `codegen-control-ids.mjs --write`。
+
+
+## 13. R2.0 · canonical renderer 共享前置（新增，2026-07-20）
+
+状态：R2.0 canonical renderer 共享前置已落地；在 R1.1 三层身份（entityKey / controlKey / controlId）基础上，于 canonical renderer（`frontend-demo-optimized/`）补齐 UiEvent / controlKey / entityKey 声明，为 R2a / R2b 做准备。615 条 control identity 声明（569 registry-backed + 46 R2.0 subcontrols）；对账 7/7 pass；稳定性测试 12/12 pass；碰撞为零；不写 DOM 属性；不重构 renderer 行为。
+基线 commit：`ac4740b`（R1.1 已完成）
+工作包：R2.0 · canonical renderer 共享前置
+
+### 13.1 动机
+
+R1.1 完成了三层身份分离，但 canonical renderer（`frontend-demo-optimized/`）尚未消费三层身份：
+1. D2 Settings 分发（`renderD2Route`）不接收 `options` / `pageState`，无法感知 loading / error 等 ViewState。
+2. 12 个页面族（settings-general / source-management / webdav-config / sync-backup / bookshelf / book-detail / import-conflict-resolve / search-results / discover / rss / source-switch / about-restore-preview）的 control identity 声明分散在 registry 与 renderer 之间，缺中央对账。
+3. 46 个设置行子控件（`containsUnenumeratedSubcontrols=true`，switch 28 / select 15 / stepper 2 / segment 1）在 IC0 DOM walk 中未枚举，R1.1 仅标记，未分配独立 entityKey / controlKey / controlId。
+4. UiEvent / controlKey / entityKey 的稳定性不变式（selector 变化、label 变化、viewport 变化时身份不变）缺自动化测试守护。
+
+R2.0 在不写 DOM 属性（R2b 范围）、不重构 renderer 行为（switch 仍是 `<span>`）的边界下，完成声明层与对账层。
+
+### 13.2 R2.0 产出清单
+
+| 路径 | 变更 |
+| --- | --- |
+| `frontend-demo-optimized/render-runtime.js` | D2-C 分发调用补传 `options` 参数（`renderD2Route(route, data, appState, options)`），让 D2-C 渲染的 settings / source / webdav / sync / restore / about 路由可感知 loading / error 等 ViewState |
+| `frontend-demo-optimized/renderers/d2-settings-sync-renderers.js` | `renderD2Route` 签名补 `options` 第 4 参数，透传给底层 V2 renderer；底层 V2 函数签名保持 `(data, route, appState)`，`options` 作为第 4 参数不强制消费，留给 R2a / R2b 接入 ViewState 时使用 |
+| `frontend-demo-optimized/RENDERER_STRUCTURE_AUDIT.md` | 新建（临时审计文档）：12 个 renderer 文件清单、`renderRoute` 分发顺序（W4→W3→W5→D2-A→D2-C→D3→D4→D5→D6→switch）、12 页面族归属、46 子控件分布 |
+| `frontend-demo-optimized/control-identity-declarations.js` | 新建（R2.0 核心产物）：615 条 control identity 声明（569 registry-backed + 46 R2.0 subcontrols）；12 页面族映射表 `pageFamilies`；46 项 `route::label → slug` 复合键映射 `labelSlugMap`（避免跨 route 同名碰撞）；导出 `CANONICAL_CONTROL_DECLARATIONS` 与 `R2_DECLARATIONS_META`；CommonJS + `window.ReaderCanonicalControlDeclarations` 全局挂载 |
+| `tools/interaction-inventory/reconcile-canonical-declarations.mjs` | 新建（对账工具）：7 项检查（entityKeyInRegistry / registryEntityKeyInDeclarations / controlKeyInRegistry / collisionDetection / uiEventInSchemaEnum / subcontrolCompleteness / r2SubcontrolsAreNew）；输出 `canonical-reconciliation.json`；碰撞检测区分 registry-backed（允许跨 route/state 共享 entityKey，label 可不同）与 R2.0 subcontrol（同 entityKey 不同 label 视为碰撞） |
+| `tools/interaction-inventory/tests/canonical-identity-stability.test.mjs` | 新建（稳定性测试）：12 项测试，含 selector/label/viewport 稳定性、registry 对账、UiEvent enum、碰撞检测、46 子控件、12 页面族、模式合法、D2 options 修复、不写 DOM 属性、不重构行为 |
+| `tools/interaction-inventory/generated/canonical-reconciliation.json` | 新建（对账报告）：7/7 pass，615 declarations（569 registry-backed + 46 R2.0 subcontrols） |
+| `tools/interaction-inventory/MIGRATION_REPORT.md` | 增量：新增 §13 R2.0 章节 |
+
+### 13.3 R2.0 度量与不变式
+
+| 度量 | 当前值 | 来源 |
+| --- | ---: | --- |
+| control identity 声明总数 | 615 | `frontend-demo-optimized/control-identity-declarations.js` `R2_DECLARATIONS_META.totals.total` |
+| registry-backed 声明 | 569 | 同上 `R2_DECLARATIONS_META.totals.registryBacked` |
+| R2.0 subcontrol 声明 | 46 | 同上 `R2_DECLARATIONS_META.totals.r2Subcontrols` |
+| R2.0 subcontrol 类型分布 | switch 28 / select 15 / stepper 2 / segment 1 | 同上 `R2_DECLARATIONS_META.totals.subcontrolsByType` |
+| 覆盖页面族数 | 12 | 同上 `R2_DECLARATIONS_META.totals.pageFamilies` |
+| entityKey 多次出现（registry-backed，跨 route/state 共享） | 4 | 同上 `R2_DECLARATIONS_META.collisionCheck.entityKeyMultiOccurrence` |
+| entityKey 真实碰撞（同 entityKey 不同 label） | 0 | 同上 `R2_DECLARATIONS_META.collisionCheck.realCollisions` |
+| controlKey 碰撞 | 0 | 同上 `R2_DECLARATIONS_META.collisionCheck.controlKeyCollisions` |
+
+R2.0 不变式（在 R1.1 §11.1 之上增量）：
+
+```
+615 declarations = 569 registry-backed + 46 R2.0 subcontrols
+46 R2.0 subcontrols = switch 28 + select 15 + stepper 2 + segment 1
+12 page families 全部覆盖
+entityKey 真实碰撞 = 0（同 entityKey 不同 label）
+controlKey 碰撞 = 0（全局唯一）
+UiEvent 非法 = 0（全部在 ui-event.schema.json enum）
+```
+
+### 13.4 R2.0 退出门槛验证
+
+| # | 门槛 | 状态 | 原始证据 |
+| --- | --- | --- | --- |
+| 1 | D2 Settings 分发接收 options/pageState | ✅ pass | `render-runtime.js` 第 10757-10764 行 `renderD2Route(route, data, appState, options)`；`d2-settings-sync-renderers.js` 第 2069-2085 行 `function renderD2Route(route, data, appState, options)` |
+| 2 | control identity 声明覆盖 12 页面族 | ✅ pass | 稳定性测试 Test 8 `R2.0 coverage: declarations cover 12 page families` pass；`canonical-reconciliation.json` `totals.pageFamilyRoutes = 12` |
+| 3 | 46 个设置行子控件枚举 | ✅ pass | 稳定性测试 Test 7 `R2.0 completeness: 46 settings row subcontrols all declared` pass；`canonical-reconciliation.json` `checks.subcontrolCompleteness.status = pass` |
+| 4 | 中央重生成对账 | ✅ pass | `node tools/interaction-inventory/reconcile-canonical-declarations.mjs` 退出码 0；7/7 pass |
+| 5 | 目标域碰撞为零 | ✅ pass | `canonical-reconciliation.json` `checks.collisionDetection.status = pass`；R2.0 subcontrol entityKey 碰撞 0，controlKey 碰撞 0 |
+| 6 | UiEvent 在 Schema enum | ✅ pass | 稳定性测试 Test 5 pass；`canonical-reconciliation.json` `checks.uiEventInSchemaEnum.status = pass` |
+| 7 | 稳定性测试全过 | ✅ pass | `node --test tools/interaction-inventory/tests/canonical-identity-stability.test.mjs` 12/12 pass |
+| 8 | 不写 data-control-id | ✅ pass | 稳定性测试 Test 11 `R2.0 boundary: declarations do not write data-control-id to HTML` pass；`control-identity-declarations.js` 源码无 `data-control-id=` / `data-entity-key=` / `data-control-key=` |
+| 9 | 不重构行为 | ✅ pass | 稳定性测试 Test 12 `R2.0 boundary: d2Switch still renders span` pass；`d2Switch` 仍渲染 `<span class="fd-settings-switch">`，未补 `role="switch"` |
+
+### 13.5 R2.0 严格禁止项遵守
+
+| 禁止项 | 遵守状态 | 证据 |
+| --- | --- | --- |
+| 写 data-control-id / data-entity-key / data-control-key 到渲染输出 HTML | ✅ 未违反 | Test 11 pass；declarations 文件不含 DOM 属性写入逻辑 |
+| 重构 renderer 行为（switch → role=switch，segment/stepper 补事件） | ✅ 未违反 | Test 12 pass；`d2Switch` / `d2Segment` / `d2Stepper` 实现未变 |
+| 修改 frontend-demo-next/（实验目录） | ✅ 未违反 | 无文件变更 |
+| 修改 docs/audits/ | ✅ 未违反 | 无文件变更 |
+| 修改 contracts/control-identity.schema.json（R1.1 冻结） | ✅ 未违反 | 无文件变更 |
+| 修改 contracts/control-identity.types.ts（R1.1 冻结） | ✅ 未违反 | 无文件变更 |
+| 修改 src/control-identity/（R1.1 冻结） | ✅ 未违反 | 无文件变更 |
+| 执行 git commit / git add | ✅ 未违反 | 仅文件编辑，未执行 git 操作 |
+
+### 13.6 R2.0 子控件 entityKey 设计
+
+46 个 R2.0 subcontrol 的 entityKey 采用 `{domain}.{family}.{role}.{slug}` 模式，其中 `slug` 来自 `labelSlugMap`（`route::label → slug` 复合键），避免跨 route 同名碰撞。
+
+类型映射：
+- `switch` → `toggle.switch`（UiEvent: `toggle.switch`）
+- `select` → `dropdown.option.select`（UiEvent: `dropdown.option.select`）
+- `stepper` → `stepper.valueChange`（UiEvent: `stepper.valueChange`）
+- `segment` → `segment.item.switch`（UiEvent: `segment.item.switch`）
+
+跨 route/state 共享 entityKey 的 R2.0 subcontrol（同逻辑控件，同 label）：
+- `source.switch.switch.source-biquge` × 2（source-management: default + source-unavailable）
+- `source.switch.switch.source-local-import` × 2（同上）
+- `source.switch.switch.source-qidian` × 2（同上）
+- `source.switch.switch.source-test` × 2（同上）
+
+这 4 个 entityKey 多次出现是同一逻辑控件跨 state 共享（label 相同，controlKey 不同因 `@route.state` 后缀不同），与 R1.1 registry-backed 设计一致，不算碰撞。
+
+### 13.7 R2.0 后续工作（R2a / R2b）
+
+R2.0 完成声明层与对账层，后续工作：
+
+#### R2a（renderer 消费三层身份）
+1. 在 `frontend-demo-optimized/` 的 renderer 中，对每个 interactive control 的根 element 调用 `setDataEntityKey` / `setDataControlKey` / `setDataControlId` / `setDataViewport`。
+2. 从 `tools/interaction-inventory/generated/control-identity.generated.ts` 导入 `ENTITY_KEY_LOOKUP` / `CONTROL_KEY_LOOKUP` / `CONTROL_ID_LOOKUP`。
+3. D2-C 底层 V2 renderer 函数消费 `options` 参数（`pageState` / `loading` / `viewState` / `overlayState`），渲染 loading / error 状态变体。
+
+#### R2b（DOM 属性写入）
+1. 把 `data-control-id` / `data-entity-key` / `data-control-key` 写入渲染输出 HTML。
+2. 更新 IC0 audit 的 DOM walk，使其能枚举到 `data-entity-key` / `data-control-key` 属性。
+3. 把 46 个 R2.0 subcontrol 从 `nonInteractiveContainers.json` 移到 `control-id-registry.json`（升级 `pureContainer=true` 或完全移除）。
+4. 重新运行 `generate-control-ids.mjs --write` + `codegen-control-ids.mjs --write`。

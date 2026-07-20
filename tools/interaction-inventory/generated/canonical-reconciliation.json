@@ -1,0 +1,124 @@
+{
+  "generatedAt": "2026-07-20T00:00:00.000Z",
+  "baselineCommit": "ac4740b",
+  "inputs": {
+    "declarationsPath": "frontend-demo-optimized/control-identity-declarations.js",
+    "registryPath": "tools/interaction-inventory/generated/control-id-registry.json",
+    "nonInteractivePath": "tools/interaction-inventory/generated/nonInteractiveContainers.json",
+    "uiEventSchemaPath": "contracts/ui-event.schema.json"
+  },
+  "totals": {
+    "declarations": 615,
+    "registryBacked": 569,
+    "r2Subcontrols": 46,
+    "registryEntries": 3752,
+    "registryEntityKeys": 414,
+    "registryControlKeys": 2114,
+    "pageFamilyRoutes": 67
+  },
+  "checks": {
+    "entityKeyInRegistry": {
+      "status": "pass",
+      "expected": "all registry-backed declarations' entityKey should be in registry",
+      "missing": []
+    },
+    "registryEntityKeyInDeclarations": {
+      "status": "pass",
+      "expected": "all registry entityKeys for 12 page families should be in renderer declarations",
+      "missing": [],
+      "note": "partial is acceptable if new registry entries were added after declarations were generated"
+    },
+    "controlKeyInRegistry": {
+      "status": "pass",
+      "expected": "all registry-backed declarations' controlKey should be in registry",
+      "missing": []
+    },
+    "collisionDetection": {
+      "status": "pass",
+      "expected": "R2.0 subcontrol entityKey must be unique (no different-label collisions); controlKey must be globally unique",
+      "r2SubcontrolEntityKeyCollisions": [],
+      "controlKeyCollisions": [],
+      "registryBackedEntityKeyMultiOccurrence": 96,
+      "registryBackedEntityKeyMultiOccurrenceSample": [
+        {
+          "entityKey": "library.button.button.top-action-search",
+          "count": 5
+        },
+        {
+          "entityKey": "library.button.button.top-action-more",
+          "count": 5
+        },
+        {
+          "entityKey": "library.button.button.route-immersive-reading",
+          "count": 7
+        },
+        {
+          "entityKey": "library.button.button",
+          "count": 13
+        },
+        {
+          "entityKey": "library.button.button.route-bookshelf-search-settings",
+          "count": 5
+        },
+        {
+          "entityKey": "library.button.button.route-bookshelf-book-more-menu",
+          "count": 4
+        },
+        {
+          "entityKey": "library.button.button.route-book-batch-management",
+          "count": 5
+        },
+        {
+          "entityKey": "library.button.button.route-group-management",
+          "count": 5
+        },
+        {
+          "entityKey": "library.button.button.route-local-import",
+          "count": 5
+        },
+        {
+          "entityKey": "library.button.button.nav-type-bookshelf",
+          "count": 5
+        }
+      ],
+      "note": "registry-backed entityKey multi-occurrence is expected (R1.1 design: same logical control across route/state may have different labels); R2.0 subcontrol entityKey must be unique per slug"
+    },
+    "uiEventInSchemaEnum": {
+      "status": "pass",
+      "expected": "all declared UiEvent must be in contracts/ui-event.schema.json enum",
+      "invalid": []
+    },
+    "subcontrolCompleteness": {
+      "status": "pass",
+      "expected": "46 settings row subcontrols (switch 28 / select 15 / stepper 2 / segment 1) all declared",
+      "expectedCount": 46,
+      "declaredCount": 46,
+      "expectedByType": {
+        "switch": 28,
+        "select": 15,
+        "stepper": 2,
+        "segment": 1
+      },
+      "declaredByType": {
+        "switch": 28,
+        "select": 15,
+        "stepper": 2,
+        "segment": 1
+      }
+    },
+    "r2SubcontrolsAreNew": {
+      "status": "pass",
+      "expected": "R2.0 subcontrols should NOT be in R1.1 registry (they're new declarations for R2a to absorb)",
+      "alreadyInRegistry": [],
+      "newCount": 46
+    }
+  },
+  "overallStatus": "pass",
+  "summary": {
+    "totalChecks": 7,
+    "passed": 7,
+    "failed": 0,
+    "partial": 0,
+    "info": 0
+  }
+}
