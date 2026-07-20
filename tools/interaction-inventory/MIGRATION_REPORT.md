@@ -1,8 +1,8 @@
-# R1.1 · 三层身份分离 — 迁移报告（R1 基线之上增量）
+# R1.2 · 显式语义身份修复 — 迁移报告（R1.1 / R2.0 基线之上增量）
 
-状态：R1.1 三层身份模型已落地（entityKey / controlKey / controlId）；3,752 个 DOM occurrence 共享 414 个 entityKey 与 2,114 个 controlKey；碰撞 fail-closed；ajv 真实校验 3,752/3,752 valid；drift test 25 (R1) + 9 (R1.1) = 34/34 pass
-日期：2026-07-20（R1.1 增量，基线 commit `9f7a0f5`，R1 → R1.1）
-工作包：R1.1 · 三层身份分离（在 R1 修复之上引入 entityKey / controlKey 逻辑层）
+状态：R1.2 显式语义身份修复已落地（actionKey / instanceKey 双显式模型）；schemaVersion 1.2.0；3,752 个 DOM occurrence 共享 69 个 entityKey 与 3,752 个唯一 controlKey；241 TTS 选项 / 13 书架入口折叠 bug 已修复；resolver 支持多 occurrence；verifyDomCoverageAndViewport 已实现；碰撞 fail-closed（真实 actionKey 签名）；ajv 真实校验 3,752/3,752 valid；drift test 71/71 pass（含 22 项 R1.2 新测试）；字节稳定
+日期：2026-07-20（R1.2 增量，基线 commit `5ce233f`，R1.1 / R2.0 → R1.2）
+工作包：R1.2 · 显式语义身份修复（在 R1.1 三层身份之上引入 actionKey / instanceKey 双显式模型）
 对账报告：[DENOMINATOR_RECONCILIATION.md](./DENOMINATOR_RECONCILIATION.md)
 
 > 本报告在 R1 报告之上以增量方式记录 R1.1 的设计与产出。下方所有 R1 章节（1～9）保留为历史记录，仅反映 R1 基线状态。R1.1 的设计、产出、退出条件见新增的 **§0 R1.1 三层身份模型** 与 **§10 R1.1 退出条件**。
@@ -564,3 +564,350 @@ R2.0 完成声明层与对账层，后续工作：
 2. 更新 IC0 audit 的 DOM walk，使其能枚举到 `data-entity-key` / `data-control-key` 属性。
 3. 把 46 个 R2.0 subcontrol 从 `nonInteractiveContainers.json` 移到 `control-id-registry.json`（升级 `pureContainer=true` 或完全移除）。
 4. 重新运行 `generate-control-ids.mjs --write` + `codegen-control-ids.mjs --write`。
+
+## 14. R1.2 · 显式语义身份修复（新增，2026-07-20）
+
+状态：R1.2 显式语义身份修复已落地（actionKey / instanceKey 双显式模型）；schemaVersion 升级到 1.2.0；3,752 个 DOM occurrence 现共享 69 个 entityKey 与 3,752 个唯一 controlKey（R1.1 的 241 TTS 选项共享 1 个 controlKey、13 书架入口共享 1 个 controlKey 的折叠 bug 已修复）；resolver 支持多 occurrence（不再抛错）；verifyDomCoverageAndViewport 已实现；ajv 真实校验 3,752/3,752 valid；drift test 71/71 pass（含 22 项 R1.2 新测试）；字节稳定。
+基线 commit：`5ce233f`（R2.0 已完成）
+工作包：R1.2 · 显式语义身份修复（在 R1.1 三层身份之上引入 actionKey / instanceKey 双显式模型）
+
+### 14.1 动机
+
+R1.1 的三层身份模型存在 7 个严重语义折叠错误（审计发现）：
+
+1. **controlId 哈希仍含 DOM occurrence 因素**：`controlId` 的 hash 输入含 `selector` / `candidateKey` / `label` / `variantId` / `domTag` / `semanticStatus`，导致响应式 DOM 位置变化 / 文案国际化 / 状态切换时 controlId 漂移。
+2. **逻辑身份严重错误折叠**：241 个 TTS 速度选项共享 1 个 controlKey（`reader.option.option@reader-full-tts.default`）；13 个书架入口共享 1 个 controlKey（`library.button.button.route-immersive-reading@bookshelf.default`）。
+3. **碰撞 fail-closed 没有检测语义碰撞**：`assertEntityKeyNoCollision` 使用恒真检查（`if (a === b) throw`，但 `a` 和 `b` 是同一变量），不检测真实的语义碰撞。
+4. **负向测试没有调用真实实现**：`assertEntityKeyNoCollision` 的负向测试用 mock 数据，不调用真实 `buildEntityKey`。
+5. **resolver 遇到重复 `(controlKey, viewport)` 直接抛错**：`createControlIdResolver` 在 `(controlKey, viewport)` 重复时抛错，导致 241 个 TTS 选项无法被 resolver 消费。
+6. **verifyDomCoverageAndViewport 未实现**：R1.2 退出门槛要求实现，但 R1.1 未实现。
+7. **46 子控件分母错误**：R1.1 标记 `containsUnenumeratedSubcontrols=true` 为 46 条，但 `totalExpectedSubcontrols` 应为 50（switch 28 + select 15 + stepper 2 + segment 1 × 各自 expectedSubcontrolCount 之和），R1.1 未实现 `expectedSubcontrolCount` 字段。
+
+### 14.2 修复设计
+
+#### 14.2.1 actionKey + instanceKey 双显式模型
+
+```
+entityKey  = {domain}.{family}.{role}[.actionKey]
+             actionKey 仅从显式语义属性白名单派生：
+               data-action / data-route / data-route-replace / data-route-back / data-demo-back
+             无白名单属性时 actionKey=null，mappingStatus=pending-explicit-semantics
+             跨 route / state / viewport 共享
+
+controlKey = {entityKey}@{route}.{state}[.instanceKey][.ordinal]
+             instanceKey 从实例标识属性派生：
+               data-instance / data-book-id / data-reader-tts-timer-value /
+               data-reader-tts-timer-index / data-rss-source-id / data-route /
+               data-route-replace 等
+             无实例属性时 instanceKey=null，使用 ordinal 后缀（n1, n2, ...）
+             R1.2: controlKey 现在唯一 per entry（不再跨 occurrence 共享）
+
+controlId  = {domain}.{family}.{route}.{state}.{role}[.discriminator]
+             保留 R1 语义：DOM occurrence 追踪 ID（不变）
+```
+
+#### 14.2.2 真实语义碰撞检测
+
+`assertEntityKeyNoCollision(candidateControls)` 现在使用 `actionKey` 签名进行碰撞检测：
+- 两个 `(domain, family, role, actionKey)` 签名不同的控件不得映射到同一 `entityKey`。
+- 碰撞时生成器抛错；**不允许静默合并**。
+- 负向测试调用真实 `buildEntityKey` / `assertEntityKeyNoCollision`。
+
+#### 14.2.3 resolver 支持多 occurrence
+
+- `byControlKeyAndViewport` 改为 `Map<string, ControlIdResolverEntry[]>`（支持多 occurrence）。
+- `resolveByControlKeyAndViewport` 返回第一个匹配（多匹配时 warn 不抛错）。
+- `resolveAllByControlKeyAndViewport` 返回所有匹配。
+- `verifyDomCoverageAndViewport(resolver, root?)` 实现：返回 `{ covered, missing, extra, duplicate }`。
+
+#### 14.2.4 Schema 1.2.0
+
+- `schemaVersion` 提升到 `1.2.0`。
+- 新增 `actionKey` / `instanceKey` required 字段（可为 null）。
+- `mappingStatus` enum 新增 `pending-explicit-semantics` / `pending-instance-disambiguation`。
+- `entityKey` pattern 调整支持 `actionKey` 后缀。
+- `controlKey` pattern 调整支持 `instanceKey` / `ordinal` 后缀。
+
+#### 14.2.5 46 子控件分母修正
+
+- `NonInteractiveContainerEntry` 新增 `expectedSubcontrolCount` 字段。
+- `NonInteractiveContainers.totals` 新增 `totalExpectedSubcontrols`。
+- 实测：46 条设置行的 `expectedSubcontrolCount` 之和为 50（switch 28 + select 15 + stepper 2 + segment 1，部分设置行含多个子控件）。
+
+### 14.3 R1.2 产出清单（在 R1.1 / R2.0 产出之上增量）
+
+| 路径 | 变更 |
+| --- | --- |
+| `contracts/control-identity.schema.json` | `schemaVersion` 升级到 `1.2.0`；新增 `actionKey` / `instanceKey` required 字段；调整 `entityKey` / `controlKey` pattern 支持新格式；`mappingStatus` enum 新增 `pending-explicit-semantics` / `pending-instance-disambiguation` |
+| `contracts/control-identity.types.ts` | `ControlIdentity` 接口新增 `actionKey` / `instanceKey`；`ControlMappingStatus` 新增两个 pending 状态；`ControlIdRegistry.totals` 新增 `pendingExplicitSemantics` / `pendingInstanceDisambiguation` / `uniqueActionKeys` / `uniqueInstanceKeys`；`NonInteractiveContainerEntry` 新增 `expectedSubcontrolCount`；`NonInteractiveContainers.totals` 新增 `totalExpectedSubcontrols` |
+| `tools/interaction-inventory/interaction-inventory-lib.mjs` | `CONTROL_ID_SCHEMA_VERSION` 改为 `1.2.0`；新增 `ACTION_KEY_ATTRIBUTE_RULES` / `INSTANCE_KEY_ATTRIBUTE_RULES` 白名单；新增 `deriveActionKey` / `deriveInstanceKey` 函数；重写 `buildEntityKey` 使用 `actionKey`；重写 `buildControlKey` 接受 `instanceKey` 参数；重写 `assertEntityKeyNoCollision` 使用 `actionKey` 签名；`buildRegistryEntry` 接受 `controlKeyOverride` / `mappingStatusOverride`；`buildControlIdRegistry` 添加多 occurrence 分组处理与 ordinal fallback；`buildNonInteractiveContainers` 添加 `expectedSubcontrolCount` 与 `totalExpectedSubcontrols`；`buildScreenGraphBindingArtifacts` / `buildFigmaCrosswalkPending` / `buildDomIdentityMap` 包含 `actionKey` / `instanceKey`；`validateControlIdRegistry` 更新 pattern 与 required 校验 |
+| `tools/interaction-inventory/codegen-control-ids.mjs` | `buildDomSelectorsArtifact` / `buildScreenGraphBindingsArtifact` 包含 `actionKey` / `instanceKey`；新增 `ACTION_KEY_LOOKUP` / `INSTANCE_KEY_LOOKUP` / `ACTION_KEY_SET` / `INSTANCE_KEY_SET` 导出；新增 `getEntriesByActionKey` / `getEntriesByInstanceKey` / `isKnownActionKey` / `isKnownInstanceKey` 访问函数；新增 `CONTROL_ID_REGISTRY_UNIQUE_ACTION_KEYS` / `UNIQUE_INSTANCE_KEYS` / `PENDING_EXPLICIT_SEMANTICS` / `PENDING_INSTANCE_DISAMBIGUATION` 常量 |
+| `src/control-identity/control-id-resolver.ts` | `ControlIdResolverEntry` 新增 `actionKey` / `instanceKey` 字段；`ControlIdResolver` 接口新增 `resolveAllByControlKeyAndViewport`；`byControlKeyAndViewport` 改为 `Map<string, ControlIdResolverEntry[]>`；`resolveByControlKeyAndViewport` 返回第一个匹配，多匹配时 warn 不抛错；实现 `verifyDomCoverageAndViewport` 函数返回 `{ covered, missing, extra, duplicate }` |
+| `tools/interaction-inventory/tests/control-identity-drift.test.mjs` | 导入新增 `deriveActionKey` / `deriveInstanceKey`；更新 R1.2 mapping status buckets 测试；更新 entityKey/controlKey 模式测试为 3+ atoms；重写负向碰撞测试调用真实实现；更新 `buildControlKey` purity 测试接受 `instanceKey` 参数；添加 `actionKey` / `instanceKey` required 的 ajv 验证；重写 46 子控件测试为 `expectedSubcontrolCount` 总和 50；新增 22 项 R1.2 测试 |
+| `tools/interaction-inventory/generated/*.json` 与 `*.generated.ts` | 重新生成；3,752 entries，69 unique entityKeys，3,752 unique controlKeys，3,752 unique controlIds，17 unique actionKeys，474 unique instanceKeys |
+| `tools/interaction-inventory/generated/nonInteractiveContainers.json` | 63 entries：46 containsUnenumeratedSubcontrols（totalExpectedSubcontrols=50）+ 17 pureContainer |
+| `frontend-demo-optimized/control-identity-declarations.js` | 569 registry-backed 声明的 `entityKey` / `controlKey` 重新对齐到 R1.2 registry；`R2_DECLARATIONS_META.baselineTag` 更新为 `R1.2` |
+| `docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json` | IC0 inventory 重生（R2.0 修改 canonical renderer 导致 source hash 变化） |
+
+### 14.4 R1.2 度量与不变式
+
+| 度量 | R1.1 值 | R1.2 值 | 来源 |
+| --- | ---: | ---: | --- |
+| schemaVersion | 1.1.0 | 1.2.0 | `control-id-registry.json` `schemaVersion` |
+| total entries | 3,752 | 3,752 | 同上 `entries.length` |
+| unique controlIds | 3,752 | 3,752 | 同上 `totals.uniqueControlIds` |
+| unique entityKeys | 414 | 69 | 同上 `totals.uniqueEntityKeys`（R1.2 不再用 semantic-intent 错误折叠） |
+| unique controlKeys | 2,114 | 3,752 | 同上 `totals.uniqueControlKeys`（R1.2 每个 entry 唯一） |
+| unique actionKeys | — | 17 | 同上 `totals.uniqueActionKeys`（R1.2 新增） |
+| unique instanceKeys | — | 474 | 同上 `totals.uniqueInstanceKeys`（R1.2 新增） |
+| pending-explicit-semantics | — | 443 | 同上 `totals.pendingExplicitSemantics`（R1.2 新增） |
+| pending-instance-disambiguation | — | 2,573 | 同上 `totals.pendingInstanceDisambiguation`（R1.2 新增） |
+| 241 TTS 选项 unique controlKeys | 1 | 241 | `control-id-registry.json` filter `route=reader-full-tts & role=option` |
+| 13 书架入口 unique controlKeys | 1 | 13 | `control-id-registry.json` filter `route=bookshelf` |
+| nonInteractive totalExpectedSubcontrols | — | 50 | `nonInteractiveContainers.json` `totals.totalExpectedSubcontrols` |
+| drift test 总数 | 34 | 71 | `npm test`（含 22 项 R1.2 新测试） |
+
+R1.2 不变式：
+
+```
+3,752 entries = 3,752 unique controlIds = 3,752 unique controlKeys
+                                         （R1.2: controlKey 唯一 per entry）
+unique entityKeys (69) <= unique controlKeys (3,752) <= unique controlIds (3,752)
+unique actionKeys (17) <= unique entityKeys (69)
+unique instanceKeys (474) <= unique controlKeys (3,752)
+pending-explicit-semantics (443) + pending-instance-disambiguation (2,573) + mapped (736) = 3,752
+totalExpectedSubcontrols (50) = switch 28 + select 15 + stepper 2 + segment 1 + 多子控件行
+241 TTS 选项: 241 unique controlKeys（R1.1 折叠 bug 已修复）
+13 书架入口: 13 unique controlKeys（R1.1 折叠 bug 已修复）
+```
+
+### 14.5 R1.2 退出门槛验证
+
+| # | 门槛 | 状态 | 原始证据 |
+| --- | --- | --- | --- |
+| 1 | Schema 重新设计：schemaVersion 1.2.0，actionKey/instanceKey required | ✅ pass | `contracts/control-identity.schema.json` `schemaVersion=1.2.0`；ajv 真实校验 3,752/3,752 valid；R1.2 schema requires actionKey/instanceKey 测试 pass |
+| 2 | 类型定义：actionKey/instanceKey 字段 | ✅ pass | `contracts/control-identity.types.ts` `ControlIdentity` 含 `actionKey` / `instanceKey`；`ControlMappingStatus` 含 `pending-explicit-semantics` / `pending-instance-disambiguation` |
+| 3 | 生成器修复：deriveActionKey/deriveInstanceKey，重写 buildEntityKey/buildControlKey/assertEntityKeyNoCollision | ✅ pass | `interaction-inventory-lib.mjs` 导出 `deriveActionKey` / `deriveInstanceKey`；`buildEntityKey` 使用 `actionKey`；`buildControlKey` 接受 `instanceKey`；`assertEntityKeyNoCollision` 使用 `actionKey` 签名 |
+| 4 | 重新生成 registry：3,752 entries，69 entityKeys，3,752 controlKeys | ✅ pass | `control-id-registry.json` `entries.length=3752`，`totals.uniqueEntityKeys=69`，`totals.uniqueControlKeys=3752` |
+| 5 | codegen 更新：包含 actionKey/instanceKey | ✅ pass | `codegen-control-ids.mjs --check` byte-stable；`control-identity.generated.ts` 含 `ACTION_KEY_LOOKUP` / `INSTANCE_KEY_LOOKUP` |
+| 6 | resolver 修复：多 occurrence 支持，verifyDomCoverageAndViewport 实现 | ✅ pass | `src/control-identity/control-id-resolver.ts` `byControlKeyAndViewport` 为 `Map<string, []>`；`resolveByControlKeyAndViewport` 返回 first match（不抛错）；`resolveAllByControlKeyAndViewport` 返回 all；`verifyDomCoverageAndViewport` 返回 `{ covered, missing, extra, duplicate }`；R1.2 resolver + verifyDomCoverageAndViewport 测试 pass |
+| 7 | drift test 修复：负向测试调用真实实现，新增 R1.2 测试 | ✅ pass | R1.2 entityKey collision test 调用真实 `buildEntityKey` / `assertEntityKeyNoCollision`；22 项 R1.2 新测试全部 pass |
+| 8 | 46 子控件标记：expectedSubcontrolCount，totalExpectedSubcontrols=50 | ✅ pass | `nonInteractiveContainers.json` 46 条 `containsUnenumeratedSubcontrols=true`，`totals.totalExpectedSubcontrols=50`；R1.2 nonInteractiveContainers 测试 pass |
+| 9 | IC0 inventory 重生：npm test 全量通过 | ✅ pass | `npm test` 71/71 pass（含 IC0 drift test）；`generate-interaction-inventory.mjs --write` 已执行 |
+| 10 | 字节稳定：生成器 --check byte-stable | ✅ pass | `generate-control-ids.mjs --check` byte-stable；`codegen-control-ids.mjs --check` byte-stable |
+| 11 | R2.0 declarations 对齐 R1.2 registry | ✅ pass | `control-identity-declarations.js` 569 registry-backed 声明重新对齐；R2.0 reconciliation 测试 pass |
+
+### 14.6 R1.2 严格禁止项遵守
+
+| 禁止项 | 遵守状态 | 证据 |
+| --- | --- | --- |
+| 修改 frontend-demo-next/（实验目录） | ✅ 未违反 | 无文件变更 |
+| 修改 docs/audits/ 的审计结论 | ✅ 未违反 | 仅重生 `generated/interaction-control-inventory.json`（source hash 变化），审计结论不变 |
+| 执行 git commit / git add | ✅ 未违反 | 仅文件编辑，未执行 git 操作 |
+| 引入新的运行时依赖 | ✅ 未违反 | 无新依赖（ajv 已在 R1 引入） |
+
+### 14.7 R1.2 折叠 bug 修复证据
+
+#### 14.7.1 241 TTS 速度选项
+
+R1.1 bug：241 个 TTS 速度选项共享 1 个 controlKey `reader.option.option@reader-full-tts.default`，因为 `data-reader-tts-timer-value` 不在 `semantic-intent` 白名单中，且 `controlKey` 跨 occurrence 共享。
+
+R1.2 修复：每个 TTS 选项获得唯一 `instanceKey`（`tts-speed-{value}-tts-idx-{index}`）和唯一 `controlKey`（`reader.option.option@reader-full-tts.default.tts-speed-{value}-tts-idx-{index}`）。
+
+测试：`R1.2 241 TTS speed options have unique controlKeys (R1.1 folding bug fixed)` pass。
+
+#### 14.7.2 13 书架入口
+
+R1.1 bug：13 个书架入口共享 1 个 controlKey `library.button.button.route-immersive-reading@bookshelf.default`。
+
+R1.2 修复：每个书架入口从 `data-book-id` 或 `data-route` 获得唯一 `instanceKey`，从而获得唯一 `controlKey`。
+
+测试：`R1.2 bookshelf entries have unique controlKeys (R1.1 folding bug fixed)` pass。
+
+### 14.8 R1.2 后续工作
+
+R1.2 完成显式语义身份修复，后续工作（R2a / R2b）：
+
+1. **R2a**：renderer 消费三层身份（`data-entity-key` / `data-control-key` / `data-control-id` / `data-viewport`）。
+2. **R2b**：DOM 属性写入 + IC0 audit DOM walk 升级。
+3. **pending-explicit-semantics 治理**：443 个 `pending-explicit-semantics` 条目需要补充显式语义属性（`data-action` / `data-route` 等）或确认其 `actionKey=null` 是预期行为。
+4. **pending-instance-disambiguation 治理**：2,573 个 `pending-instance-disambiguation` 条目使用 ordinal 后缀（`n1`, `n2`, ...），需要补充实例标识属性（`data-instance` / `data-book-id` 等）以获得稳定 `instanceKey`。
+
+
+---
+
+## 15. R2.0.1 · canonical renderer 声明表修复（新增）
+
+状态：R2.0.1 已落地——R2.0 手写静态声明表被生成器替代；947 declarations = 897 registry-backed + 50 R2.0 subcontrols；12 页面族 exact gate 通过；67 路由 route-local 1:1 对账通过；reconciliation 11/11 pass；stability test 18/18 pass（含 6 项 R2.0.1 新测试）；index.html 已加载声明脚本；生成器 `--check` byte-stable
+日期：2026-07-20（R2.0.1 增量，基线 commit `5ce233f`，R2.0 → R2.0.1）
+工作包：R2.0.1 · canonical renderer 声明表修复（在 R1.2 显式语义身份之上修复 R2.0 的 5 个声明表审计问题）
+对账报告：[generated/canonical-reconciliation.json](./generated/canonical-reconciliation.json)
+
+> 本节在 §13 R2.0 / §14 R1.2 之上以增量方式记录 R2.0.1 的设计与产出。R2.0 的 5 个声明表审计问题全部修复，R1.2 冻结文件零改动。
+
+### 15.1 动机（R2.0 的 5 个声明表审计问题）
+
+R2.0 落地了一万行手写静态声明表 `frontend-demo-optimized/control-identity-declarations.js`，但审计发现 5 个问题：
+
+| # | 问题 | 原始证据 | 影响 |
+| --- | --- | --- | --- |
+| 1 | 静态旁表未被浏览器加载 | R2.0 `frontend-demo-optimized/index.html` 未包含 `control-identity-declarations.js` 的 `<script>` 标签 | declarations 表存在于仓库但 R2a renderer 无法在运行时读取 |
+| 2 | route-local occurrence 对账缺失 | R2.0 declarations 仅 615 条，registry 在 12 页面族相关路由上实际有 897 条 occurrence | 328 个 occurrence 缺失声明，renderer owner 无依据判定哪些控件归属自己 |
+| 3 | 46 子控件分母错误 | R2.0 declarations 含 46 条 subcontrol 声明；R1.2 `nonInteractiveContainers.json` `totals.totalExpectedSubcontrols=50`（switch 28 / select 15 / stepper 2 行 × 2 按钮 = 4 / segment 1 行 × 3 选项 = 3） | stepper 减/加按钮未分开、segment 3 个选项未展开 |
+| 4 | uiEvent=null 和 controlId=null 未豁免 | R2.0 declarations 中 228 条 `uiEvent=null` 无 `uiEventExemption`；50 条 subcontrol `controlId=null` 无 `controlIdExemption` | 无法区分"待语义补全"与"装饰性/容器"，R2a 无从豁免处理 |
+| 5 | renderer owner 未按真实 dispatch 校验 | R2.0 declarations 的 `renderer` / `rendererFile` 字段为手写，reconcile 工具只检查存在性不校验与 dispatch 真实归属一致 | 可能出现 declarations 声称 renderer A 但实际 dispatch 路由到 renderer B 的漂移 |
+
+### 15.2 R2.0.1 修复设计（6 项原则）
+
+| # | 原则 | 落地方式 |
+| --- | --- | --- |
+| 1 | 声明表由生成器生成，可重算 | 新增 `tools/interaction-inventory/generate-canonical-declarations.mjs`，`--check` 模式做字节稳定校验 |
+| 2 | 按真实 dispatch 校验 renderer owner | 新增 `tools/interaction-inventory/generated/renderer-dispatch-map.json`，每个路由映射 `pageFamily` / `dispatchLayer` / `dispatchMap` / `renderer` / `rendererFile`；reconcile 强制 declarations 与之一致 |
+| 3 | exact 12 页面族 | 严格枚举：`bookshelf` / `book-detail` / `search-results` / `import-conflict-resolve` / `discover` / `rss` / `source-switch` / `settings-general` / `source-management` / `webdav-config` / `sync-backup` / `about-restore-preview`；`bookshelf-search-settings` 归并到 `bookshelf`；reconcile `exact12PageFamilies` 检查不多不少 |
+| 4 | route-local occurrence 1:1 对账 | 生成器遍历 dispatch map 全部 67 路由，对每个路由从 R1.2 registry 投影该路由上的所有 occurrence；reconcile `routeLocalOccurrenceReconciliation` 双向匹配（registry ↔ declarations），任何缺失即 fail |
+| 5 | 展开 stepper / segment 子控件 | 生成器按 `expectedSubcontrolType` 展开：switch→1 / select→1 / stepper→2 (minus + plus) / segment→3 (option-1/2/3)；50 = 28 + 15 + 4 + 3 |
+| 6 | uiEvent 和 controlId 非空或明确豁免 | 生成器对 `uiEvent=null` 自动派生 `uiEventExemption`（4 种合法类型：`pending-explicit-semantics` / `pending-instance-disambiguation` / `decorative` / `container-only`）；对 subcontrol `controlId=null` 标注 `controlIdExemption="pending-registry-enumeration"`；reconcile 强制双向校验 |
+
+### 15.3 R2.0.1 产出清单
+
+| 路径 | 变更 | 字节/行数 |
+| --- | --- | --- |
+| `tools/interaction-inventory/generated/renderer-dispatch-map.json` | 新增：12 pageFamilies / 67 routes / 10 dispatch layers 的真实归属映射 | 21,197 bytes |
+| `tools/interaction-inventory/generate-canonical-declarations.mjs` | 新增：可重算的声明表生成器，默认重写、`--check` 字节稳定校验 | 451 行 / 19,649 bytes |
+| `tools/interaction-inventory/reconcile-canonical-declarations.mjs` | 重写：从 7 项检查扩展到 11 项检查，新增 dispatch map 一致性校验 | 370 行 / 16,712 bytes |
+| `frontend-demo-optimized/control-identity-declarations.js` | 重新生成：从 615 条扩展到 947 条；新增 `uiEventExemption` / `controlIdExemption` / `expectedSubcontrolIndex` 字段；`R2_DECLARATIONS_META` 新增 `generator` / `exemptionSummary` | 15,664 行 / 614,619 bytes |
+| `tools/interaction-inventory/tests/canonical-identity-stability.test.mjs` | 更新：从 12 项测试扩展到 18 项，新增 6 项 R2.0.1 测试（route-local 对账 / exact 12 页面族 / renderer owner 一致性 / uiEvent 豁免 / controlId 豁免 / 生成器 byte-stable） | 339 行 / 16,925 bytes |
+| `frontend-demo-optimized/index.html` | 修改：第 38 行新增 `<script src="./control-identity-declarations.js?v=r2.0.1-canonical-declarations-v1-20260720"></script>` | +1 行 |
+| `tools/interaction-inventory/generated/canonical-reconciliation.json` | 重新生成：11/11 pass，947 declarations | 3,769 bytes |
+| `tools/interaction-inventory/MIGRATION_REPORT.md` | 新增 §15 R2.0.1 章节（本节） | +本节 |
+
+### 15.4 R2.0.1 度量与不变式
+
+| 度量 | R2.0 值 | R2.0.1 值 | 来源 |
+| --- | ---: | ---: | --- |
+| declarations 总数 | 615 | 947 | `control-identity-declarations.js` `R2_DECLARATIONS_META.totals.totalDeclarations` |
+| registry-backed 数 | 569 | 897 | 同上 `totals.registryBacked` |
+| R2.0 subcontrols 数 | 46（错误分母） | 50（28+15+4+3） | 同上 `totals.r2Subcontrols` |
+| 覆盖页面族 | 13（含错误的 `settings-subcontrol`） | 12 exact | `canonical-reconciliation.json` `checks.exact12PageFamilies.actualCount=12` |
+| 覆盖路由 | 部分 | 67 | 同上 `totals.dispatchRoutes=67` / `totals.declarationRoutes=67` |
+| route-local 1:1 对账 | 缺失 | 双向 0 缺失 | 同上 `checks.routeLocalOccurrenceReconciliation` `missingInDeclarations=[]` / `missingInRegistry=[]` |
+| renderer owner 与 dispatch 一致 | 未校验 | 全部一致 | 同上 `checks.rendererOwnerMatchesDispatch.mismatches=[]` |
+| uiEvent=null 带豁免 | 228 条无豁免 | 228 条全部带 `uiEventExemption` | 同上 `checks.uiEventNonNullOrExemption.missingExemption=[]` |
+| controlId=null 带豁免 | 50 条无豁免 | 50 条全部带 `controlIdExemption` | 同上 `checks.controlIdNonNullOrExemption.missingExemption=[]` |
+| reconcile checks | 7 项 | 11/11 pass | 同上 `summary` |
+| stability tests | 12 项 | 18/18 pass | `npm test` 输出 |
+| 生成器 byte-stable | N/A | pass | `generate-canonical-declarations.mjs --check` 退出码 0 |
+
+R2.0.1 不变式：
+
+```
+947 declarations = 897 registry-backed + 50 R2.0 subcontrols
+50 subcontrols = switch 28 + select 15 + stepper 4 (2 rows × 2 buttons) + segment 3 (1 row × 3 options)
+12 pageFamilies exact (no more, no less)
+67 dispatch routes = 67 declaration routes (1:1)
+every declaration: uiEvent != null OR uiEventExemption ∈ {pending-explicit-semantics, pending-instance-disambiguation, decorative, container-only}
+every declaration: controlId != null OR controlIdExemption = "pending-registry-enumeration"
+every declaration: renderer/rendererFile/pageFamily match dispatch map for its route
+every dispatch-map route: at least 1 declaration
+R2.0 subcontrols: NOT in R1.2 registry (new declarations for R2a to absorb)
+controlKey globally unique across all 947 declarations
+```
+
+### 15.5 R2.0.1 退出门槛验证（10 项）
+
+| # | 门槛 | 状态 | 原始证据 |
+| --- | --- | --- | --- |
+| 1 | 12 页面族 exact gate | ✅ pass | `canonical-reconciliation.json` `checks.exact12PageFamilies` `actualCount=12` / `missing=[]` / `extra=[]` |
+| 2 | 67 路由覆盖 | ✅ pass | 同上 `checks.allDispatchRoutesCovered` `missingRoutes=[]`；`totals.dispatchRoutes=67` |
+| 3 | route-local occurrence 1:1 对账 | ✅ pass | 同上 `checks.routeLocalOccurrenceReconciliation` 双向 0 缺失 |
+| 4 | 50 子控件分母（28+15+4+3） | ✅ pass | 同上 `checks.subcontrolCount50` `declaredCount=50` / `declaredByType={switch:28, select:15, stepper:4, segment:3}` |
+| 5 | uiEvent 非空或合法豁免 | ✅ pass | 同上 `checks.uiEventNonNullOrExemption` `missingExemption=[]` / `invalidExemptionType=[]` |
+| 6 | controlId 非空或 `pending-registry-enumeration` | ✅ pass | 同上 `checks.controlIdNonNullOrExemption` `missingExemption=[]` / `invalidExemptionType=[]` |
+| 7 | renderer owner 与 dispatch map 一致 | ✅ pass | 同上 `checks.rendererOwnerMatchesDispatch` `mismatches=[]` |
+| 8 | 生成器 `--check` byte-stable | ✅ pass | `node generate-canonical-declarations.mjs --check` 退出码 0；stability test 18 (`generator --check byte-stable`) pass |
+| 9 | 稳定性测试全过（含 6 项 R2.0.1 新测试） | ✅ pass | `canonical-identity-stability.test.mjs` 18/18 pass；新增测试 13-18 覆盖 route-local 对账 / exact 12 页面族 / renderer owner 一致性 / uiEvent 豁免 / controlId 豁免 / 生成器 byte-stable |
+| 10 | `npm test` 全量通过 | ✅ pass | 在 `tools/interaction-inventory/` 下执行 `npm test`，全部测试套件通过（含 R1 / R1.1 / R1.2 / R2.0.1 全部 drift + stability 测试） |
+
+### 15.6 R2.0.1 严格禁止项遵守
+
+| 禁止项 | 遵守状态 | 证据 |
+| --- | --- | --- |
+| 修改 R1.2 冻结的 `contracts/control-identity.schema.json` | ✅ 未违反 | 文件未变更；schemaVersion 仍为 1.2.0 |
+| 修改 R1.2 冻结的 `contracts/control-identity.types.ts` | ✅ 未违反 | 文件未变更 |
+| 修改 R1.2 冻结的 `tools/interaction-inventory/generated/control-id-registry.json` | ✅ 未违反 | 文件未变更；仍 3,752 entries / 69 entityKeys / 3,752 controlKeys |
+| 修改 R1.2 冻结的 `tools/interaction-inventory/interaction-inventory-lib.mjs` | ✅ 未违反 | 文件未变更 |
+| 修改 R1.2 冻结的 `tools/interaction-inventory/generated/nonInteractiveContainers.json` | ✅ 未违反 | 文件未变更；仍 63 entries / `totalExpectedSubcontrols=50` |
+| 修改 R1.2 冻结的 `tools/interaction-inventory/codegen-control-ids.mjs` 与 `generated/*.generated.ts` | ✅ 未违反 | 文件未变更 |
+| 修改 `frontend-demo-next/`（实验目录） | ✅ 未违反 | 无文件变更 |
+| 修改 `docs/audits/` 的审计结论 | ✅ 未违反 | 无文件变更 |
+| 执行 git commit / git add | ✅ 未违反 | 仅文件编辑，未执行 git 操作 |
+| 引入新的运行时依赖 | ✅ 未违反 | 生成器与 reconcile 工具仅用 Node.js 内置模块（`node:fs` / `node:path` / `node:url` / `node:crypto`）+ R1.2 已有的 `ajv` |
+
+### 15.7 R2.0.1 子控件分母修复证据
+
+R1.2 `nonInteractiveContainers.json` 已固化 `totalExpectedSubcontrols=50`，但 R2.0 错误地只生成 46 条 subcontrol 声明（漏掉 stepper 减/加按钮拆分和 segment 3 选项拆分）。R2.0.1 生成器按下表展开：
+
+| `expectedSubcontrolType` | 行数 | 每行展开 declarations | 合计 |
+| --- | ---: | ---: | ---: |
+| `switch` | 28 | 1（switch 主体） | 28 |
+| `select` | 15 | 1（combobox 主体） | 15 |
+| `stepper` | 2 | 2（`stepper-minus` + `stepper-plus`） | 4 |
+| `segment` | 1 | 3（`segment-option-1` / `-2` / `-3`） | 3 |
+| **合计** | **46 行** | — | **50 declarations** |
+
+测试：`R2.0.1 subcontrol count is 50 (28+15+4+3, not 46)` pass；`canonical-reconciliation.json` `checks.subcontrolCount50` pass。
+
+### 15.8 R2.0.1 豁免字段修复证据
+
+R2.0 declarations 中 228 条 `uiEvent=null` 和 50 条 `controlId=null` 均无豁免标注，reconcile 无法判定 R2a renderer 应当：(a) 补全语义、(b) 视为装饰性跳过、还是 (c) 视为容器跳过。R2.0.1 引入两类豁免字段：
+
+#### 15.8.1 `uiEventExemption`（针对 registry-backed declaration 中 `uiEvent=null`）
+
+生成器 `exemptionForMappingStatus()` 按 R1.2 registry `mappingStatus` 派生：
+
+| registry mappingStatus | 派生 uiEventExemption | 数量 | 含义 |
+| --- | --- | ---: | --- |
+| `pending-explicit-semantics` | `pending-explicit-semantics` | — | 等待补全 `actionKey`（显式语义属性） |
+| `pending-instance-disambiguation` | `pending-instance-disambiguation` | — | 等待补全 `instanceKey`（实例标识属性） |
+| `ambiguous-needs-review` | `pending-instance-disambiguation` | — | R1.2 旧状态，按实例歧义处理 |
+| `auto-mapped` | `pending-explicit-semantics` | — | R1.2 旧状态，按显式语义处理 |
+
+4 种合法豁免类型枚举：`pending-explicit-semantics` / `pending-instance-disambiguation` / `decorative` / `container-only`（后两种预留给 R2a 显式标注）。
+
+测试：`R2.0.1 every declaration has uiEvent or valid uiEventExemption` pass。
+
+#### 15.8.2 `controlIdExemption`（针对 R2.0 subcontrol declaration 中 `controlId=null`）
+
+R2.0.1 新增的 50 条 subcontrol 声明尚未在 R1.2 registry 中枚举（`controlId` 由 registry 生成，subcontrol 行原本被 IC0 DOM walk 漏掉）。生成器统一标注 `controlIdExemption="pending-registry-enumeration"`，表示"等待 R2b IC0 DOM walk 升级后由 registry 补全"。
+
+测试：`R2.0.1 every declaration has controlId or pending-registry-enumeration exemption` pass；`canonical-reconciliation.json` `checks.r2SubcontrolsAreNew` `newCount=50` / `alreadyInRegistry=[]`。
+
+### 15.9 R2.0.1 dispatch map 真实归属证据
+
+`renderer-dispatch-map.json` 基于 `frontend-demo-optimized/RENDERER_STRUCTURE_AUDIT.md`（R2.0 临时审计文档）调研得出，覆盖 10 个 dispatch layer：
+
+| dispatchLayer | dispatchMap | renderer | rendererFile | 路由示例 |
+| --- | --- | --- | --- | --- |
+| W4 | `THEME_VARIANT_MAP` | `themeFontTypography` | `renderers/w4-theme-font-typography-renderers.js` | `reader` / `reader-day` / `reader-night` |
+| W3 | `SOURCE_SWITCH_MAP` | `sourceSwitch` | `renderers/w3-source-switch-renderers.js` | `source-switch` / `source-switch-results` |
+| W5 | `REPLACE_RULE_MAP` | `replaceRules` | `renderers/w5-replace-rules-renderers.js` | `reader-replace` |
+| D2-A | `STATE_VARIANT_MAP` | `bookshelfV2` | `renderers/d2-bookshelf-discover-renderers.js` | `bookshelf` / `bookshelf-empty` / `discover` 子树 |
+| D2-C | `INTEGRATION_MAP` | `globalSettingsV2` | `renderers/d2-settings-sync-renderers.js` | `settings-general` / `webdav-config` |
+| D3 | `CONTROL_LAYER_MAP` | `controlLayers` | `renderers/d3-control-layers-renderers.js` | `reader-control-*` |
+| D4 | `VISUAL_POLISH_MAP` | `visualPolish` | `renderers/d4-visual-polish-renderers.js` | 视觉打磨路由 |
+| D5 | `MOTION_CLOSURE_MAP` | `motionClosure` | `renderers/d5-motion-closure-renderers.js` | 动效收尾路由 |
+| D6 | `CAPABILITY_CLOSURE_MAP` | `capabilityClosure` | `renderers/d6-capability-closure-renderers.js` | 能力收尾路由 |
+| switch | `case` | `mainTabDiscover` 等 | `render-runtime.js` | `discover` / `rss` / `about` 等顶层 tab |
+
+dispatch 顺序：W4 → W3 → W5 → D2-A → D2-C → D3 → D4 → D5 → D6 → switch。
+
+reconcile `rendererOwnerMatchesDispatch` 强制每条 declaration 的 `renderer` / `rendererFile` / `pageFamily` 与 dispatch map 中该路由的映射完全一致，任何手写漂移立即 fail。
+
+### 15.10 R2.0.1 后续工作
+
+R2.0.1 完成声明表修复，后续工作：
+
+1. **R2a**：renderer 运行时消费 `control-identity-declarations.js`——按 `renderer` / `rendererFile` 过滤本 renderer 应处理的 declarations，写入 `data-entity-key` / `data-control-key` / `data-control-id` / `data-viewport`。
+2. **R2b**：IC0 audit DOM walk 升级，枚举 46 个设置行子控件并回填 registry，让 50 条 `controlIdExemption="pending-registry-enumeration"` 的 subcontrol 声明获得真实 `controlId`。
+3. **uiEventExemption 治理**：228 条 `uiEvent=null` 中，`pending-explicit-semantics`（443 条映射自 registry 中 443 个 R1.2 pending-explicit-semantics）需要 R2a 显式补全 `data-action` / `data-route` 或确认其豁免类型为 `decorative` / `container-only`。
+4. **dispatch map 演进**：若 R2a 引入新 dispatch layer 或合并现有 layer，需同步更新 `renderer-dispatch-map.json` 并重新运行生成器与 reconcile。

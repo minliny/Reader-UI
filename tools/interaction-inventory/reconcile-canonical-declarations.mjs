@@ -1,22 +1,22 @@
 #!/usr/bin/env node
 // =============================================================================
-// R2.0 · Canonical Renderer Declarations ↔ Registry Reconciliation Tool
+// R2.0.1 · Canonical Renderer Declarations ↔ Registry Reconciliation Tool
 // -----------------------------------------------------------------------------
 // 职责：对账 frontend-demo-optimized/control-identity-declarations.js 中的声明
 //       与 tools/interaction-inventory/generated/control-id-registry.json 中的
-//       R1.1 registry，输出差异报告。
+//       R1.2 registry + renderer-dispatch-map.json，输出差异报告。
 //
-// 对账维度：
-//   1. renderer 声明的 entityKey 是否都在 registry 中（registry-backed 部分应全部在）
-//   2. registry 中 12 页面族的 entityKey 是否都在 renderer 声明中
-//   3. renderer 声明的 controlKey 是否都在 registry 中（registry-backed 部分应全部在）
-//   4. 碰撞检测：renderer 声明中不能有 entityKey/controlKey 碰撞
-//   5. UiEvent 校验：所有声明 UiEvent 必须在 ui-event.schema.json enum
-//   6. R2.0 子控件完整性：46 个 containsUnenumeratedSubcontrols 全部声明
+// R2.0.1 新增对账维度：
+//   1. route-local occurrence 1:1 对账（不再是全局 entityKey 集合）
+//   2. exact 12 页面族 gate
+//   3. renderer owner 与 dispatch map 一致
+//   4. uiEvent 非空或明确豁免
+//   5. controlId 非空或明确豁免
+//   6. 子控件数量 = 50（不是 46；stepper 展开 minus+plus，segment 展开 3 个选项）
 //
 // 输出：tools/interaction-inventory/generated/canonical-reconciliation.json
 //
-// 退出码：0 = 对账通过（含预期的 R2.0 子控件差异）；1 = 对账失败（碰撞/缺失/UiEvent 非法）
+// 退出码：0 = 对账通过；1 = 对账失败
 // =============================================================================
 import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -28,17 +28,18 @@ const REPO_ROOT = join(__dirname, "..", "..");
 
 const DECLARATIONS_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const REGISTRY_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "control-id-registry.json");
+const DISPATCH_MAP_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "renderer-dispatch-map.json");
 const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "nonInteractiveContainers.json");
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
 const OUTPUT_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "canonical-reconciliation.json");
 
 // ---- Load inputs ----
-// control-identity-declarations.js is a CommonJS module; load it via dynamic import
 const declarationsModule = await import(`file://${DECLARATIONS_PATH}`);
 const declarations = declarationsModule.CANONICAL_CONTROL_DECLARATIONS;
 const meta = declarationsModule.R2_DECLARATIONS_META;
 
 const registry = JSON.parse(readFileSync(REGISTRY_PATH, "utf8"));
+const dispatchMap = JSON.parse(readFileSync(DISPATCH_MAP_PATH, "utf8"));
 const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = uiEventSchema.properties.type.enum;
@@ -46,31 +47,36 @@ const uiEventEnum = uiEventSchema.properties.type.enum;
 // ---- Build registry indexes ----
 const registryEntityKeys = new Set();
 const registryControlKeys = new Set();
-const registryEntityKeyByRoute = new Map(); // route → Set<entityKey>
-const registryControlKeyByRoute = new Map(); // route → Set<controlKey>
+const registryByRoute = new Map(); // route → Array<entry>
 
 for (const e of registry.entries) {
   registryEntityKeys.add(e.entityKey);
   registryControlKeys.add(e.controlKey);
-  if (!registryEntityKeyByRoute.has(e.route)) registryEntityKeyByRoute.set(e.route, new Set());
-  registryEntityKeyByRoute.get(e.route).add(e.entityKey);
-  if (!registryControlKeyByRoute.has(e.route)) registryControlKeyByRoute.set(e.route, new Set());
-  registryControlKeyByRoute.get(e.route).add(e.controlKey);
+  if (!registryByRoute.has(e.route)) registryByRoute.set(e.route, []);
+  registryByRoute.get(e.route).push(e);
 }
 
-// ---- 12 page families routes (from declarations meta) ----
-const pageFamilyRoutes = new Set();
+// ---- Dispatch map indexes ----
+const dispatchRoutes = Object.keys(dispatchMap.routes);
+const dispatchRouteSet = new Set(dispatchRoutes);
+const dispatchPageFamilies = Object.keys(dispatchMap.pageFamilies);
+
+// ---- Declarations indexes ----
+const declarationsByRoute = new Map(); // route → Array<declaration>
 for (const d of declarations) {
-  pageFamilyRoutes.add(d.route);
+  if (!declarationsByRoute.has(d.route)) declarationsByRoute.set(d.route, []);
+  declarationsByRoute.get(d.route).push(d);
 }
 
 // ---- Reconciliation checks ----
 const report = {
   generatedAt: "2026-07-20T00:00:00.000Z",
-  baselineCommit: "ac4740b",
+  baselineCommit: "5ce233f",
+  baselineTag: "R1.2",
   inputs: {
     declarationsPath: DECLARATIONS_PATH.replace(REPO_ROOT + "/", ""),
     registryPath: REGISTRY_PATH.replace(REPO_ROOT + "/", ""),
+    dispatchMapPath: DISPATCH_MAP_PATH.replace(REPO_ROOT + "/", ""),
     nonInteractivePath: NON_INTERACTIVE_PATH.replace(REPO_ROOT + "/", ""),
     uiEventSchemaPath: UI_EVENT_SCHEMA_PATH.replace(REPO_ROOT + "/", "")
   },
@@ -81,61 +87,191 @@ const report = {
     registryEntries: registry.entries.length,
     registryEntityKeys: registryEntityKeys.size,
     registryControlKeys: registryControlKeys.size,
-    pageFamilyRoutes: pageFamilyRoutes.size
+    dispatchRoutes: dispatchRoutes.length,
+    dispatchPageFamilies: dispatchPageFamilies.length,
+    declarationRoutes: declarationsByRoute.size,
+    declarationPageFamilies: new Set(declarations.map(d => d.pageFamily)).size
   },
   checks: {}
 };
 
-// Check 1: registry-backed declarations' entityKey are in registry
+// ===== Check 1: exact 12 page families gate =====
+const expectedFamilies = [
+  "bookshelf", "book-detail", "search-results", "import-conflict-resolve",
+  "discover", "rss", "source-switch", "settings-general",
+  "source-management", "webdav-config", "sync-backup", "about-restore-preview"
+];
+const declarationFamilies = new Set(declarations.map(d => d.pageFamily));
+const missingFamilies = expectedFamilies.filter(f => !declarationFamilies.has(f));
+const extraFamilies = [...declarationFamilies].filter(f => !expectedFamilies.includes(f));
+report.checks.exact12PageFamilies = {
+  status: missingFamilies.length === 0 && extraFamilies.length === 0 && declarationFamilies.size === 12 ? "pass" : "fail",
+  expected: "exactly 12 page families (no more, no less)",
+  expectedCount: 12,
+  actualCount: declarationFamilies.size,
+  missing: missingFamilies,
+  extra: extraFamilies
+};
+
+// ===== Check 2: route-local occurrence 1:1 reconciliation =====
+// 对 dispatch map 中每个 route：
+//   - registry 在该 route 上的所有 occurrence 都应在 declarations 中（按 controlKey）
+//   - declarations 中所有 registry-backed entry 都应在 registry 中（按 controlKey）
+// 不再检查全局 entityKey 集合
+const routeLocalMissingInDeclarations = []; // registry occurrence 不在 declarations
+const routeLocalMissingInRegistry = [];      // declarations entry 不在 registry
+
+for (const route of dispatchRoutes) {
+  const regEntries = registryByRoute.get(route) || [];
+  const declsOnRoute = (declarationsByRoute.get(route) || []).filter(d => d.source === "registry");
+  const declControlKeys = new Set(declsOnRoute.map(d => d.controlKey));
+  const regControlKeys = new Set(regEntries.map(e => e.controlKey));
+
+  for (const e of regEntries) {
+    if (!declControlKeys.has(e.controlKey)) {
+      routeLocalMissingInDeclarations.push({ route, controlKey: e.controlKey, entityKey: e.entityKey });
+    }
+  }
+  for (const d of declsOnRoute) {
+    if (!regControlKeys.has(d.controlKey)) {
+      routeLocalMissingInRegistry.push({ route, controlKey: d.controlKey, entityKey: d.entityKey });
+    }
+  }
+}
+
+report.checks.routeLocalOccurrenceReconciliation = {
+  status: routeLocalMissingInDeclarations.length === 0 && routeLocalMissingInRegistry.length === 0 ? "pass" : "fail",
+  expected: "for each dispatch-map route, registry occurrences 1:1 match declarations (route-local, not global set)",
+  missingInDeclarations: routeLocalMissingInDeclarations,
+  missingInRegistry: routeLocalMissingInRegistry,
+  missingInDeclarationsCount: routeLocalMissingInDeclarations.length,
+  missingInRegistryCount: routeLocalMissingInRegistry.length
+};
+
+// ===== Check 3: registry-backed declarations' entityKey/controlKey are in registry =====
 const registryBacked = declarations.filter(d => d.source === "registry");
 const entityKeyNotInRegistry = [];
+const controlKeyNotInRegistry = [];
 for (const d of registryBacked) {
   if (!registryEntityKeys.has(d.entityKey)) {
     entityKeyNotInRegistry.push({ entityKey: d.entityKey, controlKey: d.controlKey, route: d.route });
   }
-}
-report.checks.entityKeyInRegistry = {
-  status: entityKeyNotInRegistry.length === 0 ? "pass" : "fail",
-  expected: "all registry-backed declarations' entityKey should be in registry",
-  missing: entityKeyNotInRegistry
-};
-
-// Check 2: registry entityKeys for 12 page families are in renderer declarations
-const declarationEntityKeys = new Set(declarations.map(d => d.entityKey));
-const registryEntityKeysNotInDeclarations = [];
-for (const route of pageFamilyRoutes) {
-  const routeEntityKeys = registryEntityKeyByRoute.get(route) || new Set();
-  for (const ek of routeEntityKeys) {
-    if (!declarationEntityKeys.has(ek)) {
-      registryEntityKeysNotInDeclarations.push({ entityKey: ek, route });
-    }
-  }
-}
-report.checks.registryEntityKeyInDeclarations = {
-  status: registryEntityKeysNotInDeclarations.length === 0 ? "pass" : "partial",
-  expected: "all registry entityKeys for 12 page families should be in renderer declarations",
-  missing: registryEntityKeysNotInDeclarations,
-  note: "partial is acceptable if new registry entries were added after declarations were generated"
-};
-
-// Check 3: registry-backed declarations' controlKey are in registry
-const controlKeyNotInRegistry = [];
-for (const d of registryBacked) {
   if (!registryControlKeys.has(d.controlKey)) {
     controlKeyNotInRegistry.push({ controlKey: d.controlKey, route: d.route });
   }
 }
-report.checks.controlKeyInRegistry = {
-  status: controlKeyNotInRegistry.length === 0 ? "pass" : "fail",
-  expected: "all registry-backed declarations' controlKey should be in registry",
-  missing: controlKeyNotInRegistry
+report.checks.registryBackedKeysInRegistry = {
+  status: entityKeyNotInRegistry.length === 0 && controlKeyNotInRegistry.length === 0 ? "pass" : "fail",
+  expected: "all registry-backed declarations' entityKey AND controlKey should be in registry",
+  entityKeyNotInRegistry,
+  controlKeyNotInRegistry
 };
 
-// Check 4: collision detection
-// - controlKey 必须全局唯一（每个 (entityKey, route, state) 只出现一次）
-// - R2.0 subcontrol 的 entityKey 必须唯一（每个子控件有独立 slug）
-// - registry-backed 的 entityKey 允许跨 route/state 共享（R1.1 设计：同逻辑控件跨上下文）
-//   且可能因上下文不同而有不同 label，这是 R1.1 的预期行为，不算碰撞
+// ===== Check 4: renderer owner matches dispatch map =====
+const rendererMismatches = [];
+for (const d of declarations) {
+  const routeInfo = dispatchMap.routes[d.route];
+  if (!routeInfo) {
+    rendererMismatches.push({ route: d.route, entityKey: d.entityKey, reason: "route not in dispatch map" });
+    continue;
+  }
+  if (d.renderer !== routeInfo.renderer) {
+    rendererMismatches.push({
+      route: d.route, entityKey: d.entityKey,
+      declaredRenderer: d.renderer, dispatchRenderer: routeInfo.renderer,
+      reason: "renderer mismatch"
+    });
+  }
+  if (d.rendererFile !== routeInfo.rendererFile) {
+    rendererMismatches.push({
+      route: d.route, entityKey: d.entityKey,
+      declaredRendererFile: d.rendererFile, dispatchRendererFile: routeInfo.rendererFile,
+      reason: "rendererFile mismatch"
+    });
+  }
+  if (d.pageFamily !== routeInfo.pageFamily) {
+    rendererMismatches.push({
+      route: d.route, entityKey: d.entityKey,
+      declaredPageFamily: d.pageFamily, dispatchPageFamily: routeInfo.pageFamily,
+      reason: "pageFamily mismatch"
+    });
+  }
+}
+report.checks.rendererOwnerMatchesDispatch = {
+  status: rendererMismatches.length === 0 ? "pass" : "fail",
+  expected: "every declaration's renderer/rendererFile/pageFamily must match dispatch map",
+  mismatches: rendererMismatches
+};
+
+// ===== Check 5: uiEvent non-null or has exemption =====
+const uiEventMissing = [];
+const invalidExemptionTypes = [];
+const validExemptionTypes = new Set([
+  "pending-explicit-semantics",
+  "pending-instance-disambiguation",
+  "decorative",
+  "container-only"
+]);
+for (const d of declarations) {
+  if (d.uiEvent === null || d.uiEvent === undefined) {
+    if (!d.uiEventExemption) {
+      uiEventMissing.push({ entityKey: d.entityKey, controlKey: d.controlKey, route: d.route });
+    } else if (!validExemptionTypes.has(d.uiEventExemption)) {
+      invalidExemptionTypes.push({ entityKey: d.entityKey, uiEventExemption: d.uiEventExemption });
+    }
+  }
+}
+report.checks.uiEventNonNullOrExemption = {
+  status: uiEventMissing.length === 0 && invalidExemptionTypes.length === 0 ? "pass" : "fail",
+  expected: "every declaration has uiEvent or uiEventExemption (one of: pending-explicit-semantics, pending-instance-disambiguation, decorative, container-only)",
+  missingExemption: uiEventMissing,
+  invalidExemptionType: invalidExemptionTypes
+};
+
+// ===== Check 6: controlId non-null or has exemption =====
+const controlIdMissing = [];
+const invalidControlIdExemptions = [];
+const validControlIdExemptions = new Set([
+  "pending-registry-enumeration"
+]);
+for (const d of declarations) {
+  if (d.controlId === null || d.controlId === undefined) {
+    if (!d.controlIdExemption) {
+      controlIdMissing.push({ entityKey: d.entityKey, controlKey: d.controlKey, route: d.route });
+    } else if (!validControlIdExemptions.has(d.controlIdExemption)) {
+      invalidControlIdExemptions.push({ entityKey: d.entityKey, controlIdExemption: d.controlIdExemption });
+    }
+  }
+}
+report.checks.controlIdNonNullOrExemption = {
+  status: controlIdMissing.length === 0 && invalidControlIdExemptions.length === 0 ? "pass" : "fail",
+  expected: "every declaration has controlId or controlIdExemption (one of: pending-registry-enumeration)",
+  missingExemption: controlIdMissing,
+  invalidExemptionType: invalidControlIdExemptions
+};
+
+// ===== Check 7: subcontrol count = 50 (28 switch + 15 select + 4 stepper + 3 segment) =====
+const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
+const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
+for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
+const expectedByType = { switch: 28, select: 15, stepper: 4, segment: 3 };
+const expectedSubtotal = 50;
+const subcontrolCountOk =
+  declaredByType.switch === expectedByType.switch &&
+  declaredByType.select === expectedByType.select &&
+  declaredByType.stepper === expectedByType.stepper &&
+  declaredByType.segment === expectedByType.segment &&
+  declaredSubcontrols.length === expectedSubtotal;
+report.checks.subcontrolCount50 = {
+  status: subcontrolCountOk ? "pass" : "fail",
+  expected: "50 subcontrol declarations (switch 28 / select 15 / stepper 4 [2 rows × 2 buttons] / segment 3 [1 row × 3 options])",
+  expectedCount: expectedSubtotal,
+  declaredCount: declaredSubcontrols.length,
+  expectedByType,
+  declaredByType
+};
+
+// ===== Check 8: collision detection (controlKey globally unique) =====
 const ckCounts = new Map();
 for (const d of declarations) {
   ckCounts.set(d.controlKey, (ckCounts.get(d.controlKey) || 0) + 1);
@@ -144,43 +280,13 @@ const ckCollisions = [];
 for (const [ck, count] of ckCounts) {
   if (count > 1) ckCollisions.push({ controlKey: ck, count });
 }
-
-// R2.0 subcontrol entityKey 碰撞检测（必须唯一）
-const r2Subcontrols = declarations.filter(d => d.source === 'r2.0-subcontrol');
-const r2EkCounts = new Map();
-const r2EkLabels = new Map();
-for (const d of r2Subcontrols) {
-  r2EkCounts.set(d.entityKey, (r2EkCounts.get(d.entityKey) || 0) + 1);
-  if (!r2EkLabels.has(d.entityKey)) r2EkLabels.set(d.entityKey, new Set());
-  if (d.label) r2EkLabels.get(d.entityKey).add(d.label);
-}
-const r2EkCollisions = [];
-for (const [ek, labels] of r2EkLabels) {
-  if (r2EkCounts.get(ek) > 1 && labels.size > 1) {
-    r2EkCollisions.push({ entityKey: ek, labels: [...labels] });
-  }
-}
-
-// registry-backed entityKey 多次出现统计（信息项，不算碰撞）
-const registryBackedEkCounts = new Map();
-for (const d of registryBacked) {
-  registryBackedEkCounts.set(d.entityKey, (registryBackedEkCounts.get(d.entityKey) || 0) + 1);
-}
-const registryEkMultiOccurrence = [...registryBackedEkCounts.entries()]
-  .filter(([k, v]) => v > 1)
-  .map(([k, v]) => ({ entityKey: k, count: v }));
-
 report.checks.collisionDetection = {
-  status: r2EkCollisions.length === 0 && ckCollisions.length === 0 ? 'pass' : 'fail',
-  expected: 'R2.0 subcontrol entityKey must be unique (no different-label collisions); controlKey must be globally unique',
-  r2SubcontrolEntityKeyCollisions: r2EkCollisions,
-  controlKeyCollisions: ckCollisions,
-  registryBackedEntityKeyMultiOccurrence: registryEkMultiOccurrence.length,
-  registryBackedEntityKeyMultiOccurrenceSample: registryEkMultiOccurrence.slice(0, 10),
-  note: 'registry-backed entityKey multi-occurrence is expected (R1.1 design: same logical control across route/state may have different labels); R2.0 subcontrol entityKey must be unique per slug'
+  status: ckCollisions.length === 0 ? "pass" : "fail",
+  expected: "controlKey must be globally unique across all declarations",
+  controlKeyCollisions: ckCollisions
 };
 
-// Check 5: UiEvent validation
+// ===== Check 9: UiEvent values in schema enum =====
 const badUiEvents = [];
 for (const d of declarations) {
   if (d.uiEvent && !uiEventEnum.includes(d.uiEvent)) {
@@ -193,43 +299,46 @@ report.checks.uiEventInSchemaEnum = {
   invalid: badUiEvents
 };
 
-// Check 6: R2.0 subcontrol completeness (46 settings row subcontrols)
-const expectedSubcontrols = nonInteractive.entries.filter(e => e.containsUnenumeratedSubcontrols);
-const expectedByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
-for (const e of expectedSubcontrols) expectedByType[e.expectedSubcontrolType]++;
-const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
-const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
-for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType]++;
-const subcontrolCountMatch =
-  expectedByType.switch === declaredByType.switch &&
-  expectedByType.select === declaredByType.select &&
-  expectedByType.stepper === declaredByType.stepper &&
-  expectedByType.segment === declaredByType.segment;
-report.checks.subcontrolCompleteness = {
-  status: subcontrolCountMatch && expectedSubcontrols.length === declaredSubcontrols.length ? "pass" : "fail",
-  expected: "46 settings row subcontrols (switch 28 / select 15 / stepper 2 / segment 1) all declared",
-  expectedCount: expectedSubcontrols.length,
-  declaredCount: declaredSubcontrols.length,
-  expectedByType,
-  declaredByType
+// ===== Check 10: declarations cover all dispatch-map routes =====
+const routesMissingFromDeclarations = [];
+for (const route of dispatchRoutes) {
+  if (!declarationsByRoute.has(route) || declarationsByRoute.get(route).length === 0) {
+    routesMissingFromDeclarations.push(route);
+  }
+}
+report.checks.allDispatchRoutesCovered = {
+  status: routesMissingFromDeclarations.length === 0 ? "pass" : "fail",
+  expected: "every route in dispatch map must have at least one declaration",
+  missingRoutes: routesMissingFromDeclarations
 };
 
-// Check 7: R2.0 subcontrols NOT in registry (expected - they're new)
-const r2SubcontrolsNotInRegistry = [];
+// ===== Check 11: R2.0 subcontrols NOT in registry (expected - they're new) =====
+const r2SubcontrolsAlreadyInRegistry = [];
 for (const d of declaredSubcontrols) {
   if (registryEntityKeys.has(d.entityKey)) {
-    r2SubcontrolsNotInRegistry.push({ entityKey: d.entityKey, status: "already-in-registry" });
+    r2SubcontrolsAlreadyInRegistry.push({ entityKey: d.entityKey, status: "already-in-registry" });
   }
 }
 report.checks.r2SubcontrolsAreNew = {
-  status: r2SubcontrolsNotInRegistry.length === 0 ? "pass" : "info",
-  expected: "R2.0 subcontrols should NOT be in R1.1 registry (they're new declarations for R2a to absorb)",
-  alreadyInRegistry: r2SubcontrolsNotInRegistry,
-  newCount: declaredSubcontrols.length - r2SubcontrolsNotInRegistry.length
+  status: r2SubcontrolsAlreadyInRegistry.length === 0 ? "pass" : "info",
+  expected: "R2.0 subcontrols should NOT be in R1.2 registry (they're new declarations for R2a to absorb)",
+  alreadyInRegistry: r2SubcontrolsAlreadyInRegistry,
+  newCount: declaredSubcontrols.length - r2SubcontrolsAlreadyInRegistry.length
 };
 
 // ---- Overall status ----
-const criticalChecks = ["entityKeyInRegistry", "controlKeyInRegistry", "collisionDetection", "uiEventInSchemaEnum", "subcontrolCompleteness"];
+const criticalChecks = [
+  "exact12PageFamilies",
+  "routeLocalOccurrenceReconciliation",
+  "registryBackedKeysInRegistry",
+  "rendererOwnerMatchesDispatch",
+  "uiEventNonNullOrExemption",
+  "controlIdNonNullOrExemption",
+  "subcontrolCount50",
+  "collisionDetection",
+  "uiEventInSchemaEnum",
+  "allDispatchRoutesCovered"
+];
 const allCriticalPass = criticalChecks.every(name => report.checks[name].status === "pass");
 report.overallStatus = allCriticalPass ? "pass" : "fail";
 report.summary = {
@@ -247,6 +356,8 @@ console.log(`Reconciliation report written to: ${OUTPUT_PATH.replace(REPO_ROOT +
 console.log(`Overall status: ${report.overallStatus}`);
 console.log(`Checks: ${report.summary.passed} pass / ${report.summary.failed} fail / ${report.summary.partial} partial / ${report.summary.info} info`);
 console.log(`Totals: ${report.totals.declarations} declarations (${report.totals.registryBacked} registry-backed + ${report.totals.r2Subcontrols} R2.0 subcontrols)`);
+console.log(`Page families: ${report.totals.declarationPageFamilies} (expected 12)`);
+console.log(`Routes: ${report.totals.declarationRoutes} declarations / ${report.totals.dispatchRoutes} dispatch`);
 
 if (!allCriticalPass) {
   console.error("FAIL: critical checks did not pass");

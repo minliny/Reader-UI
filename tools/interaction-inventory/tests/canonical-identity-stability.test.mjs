@@ -1,14 +1,27 @@
 // =============================================================================
-// R2.0 · Canonical Identity Stability Tests
+// R2.0.1 · Canonical Identity Stability Tests
 // -----------------------------------------------------------------------------
-// 测试 R2.0 control identity declarations 的稳定性不变式：
+// 测试 R2.0.1 control identity declarations 的稳定性不变式：
 //   1. selector 变化时 entityKey 不变
 //   2. 语言/文案变化时 entityKey 不变
 //   3. viewport 变化时 controlKey 不变
-//   4. renderer 声明与 registry 对账（entityKey/controlKey 一致）
-//   5. renderer 声明中 UiEvent 必须在 ui-event.schema.json enum
-//   6. renderer 声明中无 entityKey/controlKey 碰撞
-//   7. 46 个设置行子控件全部声明
+//   4. registry-backed declarations 与 registry entityKey/controlKey 一致
+//   5. UiEvent 必须在 ui-event.schema.json enum
+//   6. 无 controlKey 碰撞
+//   7. 子控件数量 = 50（不是 46；stepper 展开 minus+plus，segment 展开 3 选项）
+//   8. 覆盖 12 页面族
+//   9. R2.0 subcontrol 的 entityKey/controlKey 模式合法
+//  10. D2 Settings dispatch 接收 options
+//  11. 不写 data-control-id 到渲染输出 HTML
+//  12. 不重构 D2 行为（switch 仍是 span）
+//
+// R2.0.1 新增测试：
+//  13. route-local occurrence 1:1 对账
+//  14. exact 12 页面族 gate
+//  15. renderer owner 与 dispatch map 一致
+//  16. uiEvent 非空或明确豁免
+//  17. controlId 非空或明确豁免
+//  18. 生成器 --check byte-stable
 //
 // 运行：node --test tools/interaction-inventory/tests/canonical-identity-stability.test.mjs
 // =============================================================================
@@ -17,6 +30,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
 import {
   buildEntityKey,
@@ -25,27 +39,26 @@ import {
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-// 测试文件位于 tools/interaction-inventory/tests/，需上溯 3 级到 repo root
 const REPO_ROOT = join(__dirname, "..", "..", "..");
 
 const DECLARATIONS_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const REGISTRY_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "control-id-registry.json");
+const DISPATCH_MAP_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "renderer-dispatch-map.json");
 const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "nonInteractiveContainers.json");
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
 
-// Load declarations module
 const declarationsModule = await import(`file://${DECLARATIONS_PATH}`);
 const declarations = declarationsModule.CANONICAL_CONTROL_DECLARATIONS;
 const meta = declarationsModule.R2_DECLARATIONS_META;
 
 const registry = JSON.parse(readFileSync(REGISTRY_PATH, "utf8"));
+const dispatchMap = JSON.parse(readFileSync(DISPATCH_MAP_PATH, "utf8"));
 const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = uiEventSchema.properties.type.enum;
 
 // ---- Test 1: selector 变化时 entityKey 不变 ----
-test("R2.0 stability: entityKey does NOT depend on selector", () => {
-  // 构造两个相同逻辑控件、不同 selector 的候选
+test("R2.0.1 stability: entityKey does NOT depend on selector", () => {
   const baseCandidate = {
     domain: "settings",
     family: "switch",
@@ -61,7 +74,7 @@ test("R2.0 stability: entityKey does NOT depend on selector", () => {
 });
 
 // ---- Test 2: 语言/文案变化时 entityKey 不变 ----
-test("R2.0 stability: entityKey does NOT depend on label / language", () => {
+test("R2.0.1 stability: entityKey does NOT depend on label / language", () => {
   const baseCandidate = {
     domain: "settings",
     family: "switch",
@@ -77,11 +90,10 @@ test("R2.0 stability: entityKey does NOT depend on label / language", () => {
 });
 
 // ---- Test 3: viewport 变化时 controlKey 不变 ----
-test("R2.0 stability: controlKey does NOT depend on viewport", () => {
+test("R2.0.1 stability: controlKey does NOT depend on viewport", () => {
   const entityKey = "settings.switch.switch.auto-check-update";
   const route = "settings-general";
   const state = "default";
-  // buildControlKey 不接受 viewport 参数；同一 (entityKey, route, state) 在任何 viewport 下应产出同一 controlKey
   const ck1 = buildControlKey(entityKey, route, state);
   const ck2 = buildControlKey(entityKey, route, state);
   assert.equal(ck1, ck2, "controlKey must not change across viewport instances");
@@ -89,8 +101,8 @@ test("R2.0 stability: controlKey does NOT depend on viewport", () => {
   assert.ok(ck1.endsWith(`${route}.${state}`), "controlKey must end with route.state");
 });
 
-// ---- Test 4: renderer 声明与 registry 对账（entityKey/controlKey 一致） ----
-test("R2.0 reconciliation: registry-backed declarations match registry entityKey/controlKey", () => {
+// ---- Test 4: registry-backed declarations 与 registry entityKey/controlKey 一致 ----
+test("R2.0.1 reconciliation: registry-backed declarations match registry entityKey/controlKey", () => {
   const registryEntityKeys = new Set(registry.entries.map(e => e.entityKey));
   const registryControlKeys = new Set(registry.entries.map(e => e.controlKey));
   const registryBacked = declarations.filter(d => d.source === "registry");
@@ -107,8 +119,8 @@ test("R2.0 reconciliation: registry-backed declarations match registry entityKey
   }
 });
 
-// ---- Test 5: renderer 声明中 UiEvent 必须在 ui-event.schema.json enum ----
-test("R2.0 schema: all declared UiEvent must be in ui-event.schema.json enum", () => {
+// ---- Test 5: UiEvent 必须在 ui-event.schema.json enum ----
+test("R2.0.1 schema: all declared UiEvent must be in ui-event.schema.json enum", () => {
   for (const d of declarations) {
     if (d.uiEvent !== null && d.uiEvent !== undefined) {
       assert.ok(
@@ -119,77 +131,66 @@ test("R2.0 schema: all declared UiEvent must be in ui-event.schema.json enum", (
   }
 });
 
-// ---- Test 6: renderer 声明中无 entityKey/controlKey 碰撞 ----
-test("R2.0 collision: no entityKey (different labels) or controlKey collisions", () => {
-  // controlKey 必须全局唯一（每个 (entityKey, route, state) 只出现一次）
+// ---- Test 6: 无 controlKey 碰撞 ----
+test("R2.0.1 collision: no controlKey collisions", () => {
   const ckCounts = new Map();
   for (const d of declarations) {
     ckCounts.set(d.controlKey, (ckCounts.get(d.controlKey) || 0) + 1);
   }
   const ckCollisions = [...ckCounts.entries()].filter(([k, v]) => v > 1);
   assert.equal(ckCollisions.length, 0, `controlKey collisions: ${JSON.stringify(ckCollisions)}`);
-
-  // R2.0 subcontrol entityKey 若同一 entityKey 关联多个不同 label，则视为真实碰撞。
-  // registry-backed entityKey 允许跨 route/state 共享且 label 可不同（R1.1 设计：
-  // 同逻辑控件跨上下文，label 由上下文决定，不算碰撞）。
-  // 此规则与对账工具 reconcile-canonical-declarations.mjs Check 4 对齐。
-  const r2Subcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
-  const r2EkLabels = new Map();
-  for (const d of r2Subcontrols) {
-    if (!r2EkLabels.has(d.entityKey)) r2EkLabels.set(d.entityKey, new Set());
-    if (d.label) r2EkLabels.get(d.entityKey).add(d.label);
-  }
-  const r2EkCollisions = [...r2EkLabels.entries()].filter(([k, labels]) => labels.size > 1);
-  assert.equal(r2EkCollisions.length, 0, `R2.0 subcontrol entityKey collisions (different labels): ${JSON.stringify(r2EkCollisions.map(([ek, labels]) => ({ entityKey: ek, labels: [...labels] })))}`);
 });
 
-// ---- Test 7: 46 个设置行子控件全部声明 ----
-test("R2.0 completeness: 46 settings row subcontrols all declared", () => {
-  const expectedSubcontrols = nonInteractive.entries.filter(e => e.containsUnenumeratedSubcontrols);
-  assert.equal(expectedSubcontrols.length, 46, "R1.1 must mark exactly 46 subcontrols");
+// ---- Test 7: 子控件数量 = 50（不是 46） ----
+test("R2.0.1 completeness: 50 subcontrol declarations (28 switch + 15 select + 4 stepper + 3 segment)", () => {
+  const expectedSubcontrolRows = nonInteractive.entries.filter(e => e.containsUnenumeratedSubcontrols);
+  assert.equal(expectedSubcontrolRows.length, 46, "R1.2 must mark exactly 46 subcontrol rows");
 
-  const expectedByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
-  for (const e of expectedSubcontrols) expectedByType[e.expectedSubcontrolType]++;
-  assert.equal(expectedByType.switch, 28, "expected 28 switch subcontrols");
-  assert.equal(expectedByType.select, 15, "expected 15 select subcontrols");
-  assert.equal(expectedByType.stepper, 2, "expected 2 stepper subcontrols");
-  assert.equal(expectedByType.segment, 1, "expected 1 segment subcontrol");
+  const expectedRowsByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
+  for (const e of expectedSubcontrolRows) expectedRowsByType[e.expectedSubcontrolType]++;
+  assert.equal(expectedRowsByType.switch, 28, "expected 28 switch subcontrol rows");
+  assert.equal(expectedRowsByType.select, 15, "expected 15 select subcontrol rows");
+  assert.equal(expectedRowsByType.stepper, 2, "expected 2 stepper subcontrol rows (each expands to 2 buttons)");
+  assert.equal(expectedRowsByType.segment, 1, "expected 1 segment subcontrol row (expands to 3 options)");
 
   const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
-  assert.equal(declaredSubcontrols.length, 46, "must declare exactly 46 R2.0 subcontrols");
+  assert.equal(declaredSubcontrols.length, 50, "must declare exactly 50 R2.0.1 subcontrols (not 46)");
 
   const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
-  for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType]++;
+  for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
   assert.equal(declaredByType.switch, 28, "must declare 28 switch subcontrols");
   assert.equal(declaredByType.select, 15, "must declare 15 select subcontrols");
-  assert.equal(declaredByType.stepper, 2, "must declare 2 stepper subcontrols");
-  assert.equal(declaredByType.segment, 1, "must declare 1 segment subcontrol");
+  assert.equal(declaredByType.stepper, 4, "must declare 4 stepper subcontrols (2 rows × 2 buttons)");
+  assert.equal(declaredByType.segment, 3, "must declare 3 segment subcontrols (1 row × 3 options)");
 });
 
-// ---- Test 8: declarations 覆盖 12 页面族 ----
-test("R2.0 coverage: declarations cover 12 page families", () => {
+// ---- Test 8: declarations 覆盖 12 页面族 (exact gate) ----
+test("R2.0.1 coverage: exactly 12 page families (no more, no less)", () => {
   const expectedFamilies = [
+    "bookshelf",
+    "book-detail",
+    "search-results",
+    "import-conflict-resolve",
+    "discover",
+    "rss",
+    "source-switch",
     "settings-general",
     "source-management",
     "webdav-config",
     "sync-backup",
-    "bookshelf",
-    "book-detail",
-    "import-conflict-resolve",
-    "search-results",
-    "discover",
-    "rss",
-    "source-switch",
     "about-restore-preview"
   ];
-  const declaredFamilies = new Set(declarations.map(d => d.pageFamily));
+  const declaredFamiliesSet = new Set(declarations.map(d => d.pageFamily));
+  assert.equal(declaredFamiliesSet.size, 12, `expected exactly 12 page families, got ${declaredFamiliesSet.size}: ${[...declaredFamiliesSet].join(",")}`);
   for (const fam of expectedFamilies) {
-    assert.ok(declaredFamilies.has(fam), `missing page family: ${fam}`);
+    assert.ok(declaredFamiliesSet.has(fam), `missing page family: ${fam}`);
   }
+  const extra = [...declaredFamiliesSet].filter(f => !expectedFamilies.includes(f));
+  assert.equal(extra.length, 0, `unexpected extra page families: ${extra.join(",")}`);
 });
 
 // ---- Test 9: R2.0 subcontrols 的 entityKey/controlKey 模式合法 ----
-test("R2.0 pattern: subcontrol entityKey/controlKey follow R1.1 patterns", () => {
+test("R2.0.1 pattern: subcontrol entityKey/controlKey follow R1.2 patterns", () => {
   const entityKeyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
   const controlKeyPattern = /^[^@]+@[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
   const subcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
@@ -199,8 +200,8 @@ test("R2.0 pattern: subcontrol entityKey/controlKey follow R1.1 patterns", () =>
   }
 });
 
-// ---- Test 10: D2 Settings dispatch 接收 options（R2.0 修复验证） ----
-test("R2.0 fix: renderD2Route accepts options parameter", () => {
+// ---- Test 10: D2 Settings dispatch 接收 options ----
+test("R2.0.1 fix: renderD2Route accepts options parameter", () => {
   const rendererSrc = readFileSync(join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js"), "utf8");
   assert.match(rendererSrc, /function renderD2Route\s*\(\s*route\s*,\s*data\s*,\s*appState\s*,\s*options\s*\)/, "renderD2Route must accept options as 4th parameter");
   assert.match(rendererSrc, /return fn\(data,\s*route,\s*appState,\s*options\)/, "renderD2Route must pass options to underlying fn");
@@ -210,8 +211,7 @@ test("R2.0 fix: renderD2Route accepts options parameter", () => {
 });
 
 // ---- Test 11: 不写 data-control-id 到渲染输出 HTML ----
-test("R2.0 boundary: declarations do not write data-control-id to HTML", () => {
-  // declarations 文件本身不应包含 data-control-id 写入逻辑
+test("R2.0.1 boundary: declarations do not write data-control-id to HTML", () => {
   const declSrc = readFileSync(DECLARATIONS_PATH, "utf8");
   assert.ok(
     !declSrc.includes("data-control-id=") && !declSrc.includes("data-entity-key=") && !declSrc.includes("data-control-key="),
@@ -219,9 +219,121 @@ test("R2.0 boundary: declarations do not write data-control-id to HTML", () => {
   );
 });
 
-// ---- Test 12: 不重构 D2 行为（switch 仍是 span，无 role=switch） ----
-test("R2.0 boundary: d2Switch still renders span (no behavior refactor)", () => {
+// ---- Test 12: 不重构 D2 行为（switch 仍是 span） ----
+test("R2.0.1 boundary: d2Switch still renders span (no behavior refactor)", () => {
   const rendererSrc = readFileSync(join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js"), "utf8");
-  // d2Switch 仍渲染 span，不补 role="switch"
   assert.match(rendererSrc, /function d2Switch[\s\S]*?return `<span class="fd-settings-switch[^"]*"/, "d2Switch must still render as span (no role=switch refactor)");
+});
+
+// ============================================================================
+// R2.0.1 新增测试
+// ============================================================================
+
+// ---- Test 13: route-local occurrence 1:1 对账 ----
+test("R2.0.1 route-local: registry occurrences 1:1 match declarations on each dispatch-map route", () => {
+  const dispatchRoutes = Object.keys(dispatchMap.routes);
+  const registryByRoute = new Map();
+  for (const e of registry.entries) {
+    if (!registryByRoute.has(e.route)) registryByRoute.set(e.route, []);
+    registryByRoute.get(e.route).push(e);
+  }
+  const declarationsByRoute = new Map();
+  for (const d of declarations) {
+    if (!declarationsByRoute.has(d.route)) declarationsByRoute.set(d.route, []);
+    declarationsByRoute.get(d.route).push(d);
+  }
+
+  for (const route of dispatchRoutes) {
+    const regEntries = registryByRoute.get(route) || [];
+    const declsOnRoute = (declarationsByRoute.get(route) || []).filter(d => d.source === "registry");
+    const declControlKeys = new Set(declsOnRoute.map(d => d.controlKey));
+    const regControlKeys = new Set(regEntries.map(e => e.controlKey));
+
+    // 每个 registry occurrence 都应在 declarations 中
+    for (const e of regEntries) {
+      assert.ok(
+        declControlKeys.has(e.controlKey),
+        `route ${route}: registry occurrence ${e.controlKey} not in declarations (route-local 1:1 violated)`
+      );
+    }
+    // 每个 declaration 都应在 registry 中
+    for (const d of declsOnRoute) {
+      assert.ok(
+        regControlKeys.has(d.controlKey),
+        `route ${route}: declaration ${d.controlKey} not in registry (route-local 1:1 violated)`
+      );
+    }
+  }
+});
+
+// ---- Test 14: exact 12 页面族 gate ----
+test("R2.0.1 gate: dispatch map has exactly 12 page families", () => {
+  const pageFamilies = Object.keys(dispatchMap.pageFamilies);
+  assert.equal(pageFamilies.length, 12, `dispatch map must have exactly 12 page families, got ${pageFamilies.length}`);
+  const expected = new Set([
+    "bookshelf", "book-detail", "search-results", "import-conflict-resolve",
+    "discover", "rss", "source-switch", "settings-general",
+    "source-management", "webdav-config", "sync-backup", "about-restore-preview"
+  ]);
+  for (const fam of pageFamilies) {
+    assert.ok(expected.has(fam), `unexpected page family in dispatch map: ${fam}`);
+  }
+});
+
+// ---- Test 15: renderer owner 与 dispatch map 一致 ----
+test("R2.0.1 dispatch: declarations' renderer/rendererFile/pageFamily match dispatch map", () => {
+  for (const d of declarations) {
+    const routeInfo = dispatchMap.routes[d.route];
+    assert.ok(routeInfo, `declaration route ${d.route} not in dispatch map (entityKey=${d.entityKey})`);
+    assert.equal(d.renderer, routeInfo.renderer, `renderer mismatch on route ${d.route}: declared=${d.renderer}, dispatch=${routeInfo.renderer}`);
+    assert.equal(d.rendererFile, routeInfo.rendererFile, `rendererFile mismatch on route ${d.route}: declared=${d.rendererFile}, dispatch=${routeInfo.rendererFile}`);
+    assert.equal(d.pageFamily, routeInfo.pageFamily, `pageFamily mismatch on route ${d.route}: declared=${d.pageFamily}, dispatch=${routeInfo.pageFamily}`);
+  }
+});
+
+// ---- Test 16: uiEvent 非空或明确豁免 ----
+test("R2.0.1 uiEvent: every declaration has uiEvent or uiEventExemption with valid type", () => {
+  const validExemptionTypes = new Set([
+    "pending-explicit-semantics",
+    "pending-instance-disambiguation",
+    "decorative",
+    "container-only"
+  ]);
+  for (const d of declarations) {
+    if (d.uiEvent === null || d.uiEvent === undefined) {
+      assert.ok(d.uiEventExemption, `declaration ${d.controlKey} has null uiEvent but no uiEventExemption`);
+      assert.ok(
+        validExemptionTypes.has(d.uiEventExemption),
+        `declaration ${d.controlKey} has invalid uiEventExemption: ${d.uiEventExemption}`
+      );
+    }
+  }
+});
+
+// ---- Test 17: controlId 非空或明确豁免 ----
+test("R2.0.1 controlId: every declaration has controlId or controlIdExemption with valid type", () => {
+  const validControlIdExemptions = new Set([
+    "pending-registry-enumeration"
+  ]);
+  for (const d of declarations) {
+    if (d.controlId === null || d.controlId === undefined) {
+      assert.ok(d.controlIdExemption, `declaration ${d.controlKey} has null controlId but no controlIdExemption`);
+      assert.ok(
+        validControlIdExemptions.has(d.controlIdExemption),
+        `declaration ${d.controlKey} has invalid controlIdExemption: ${d.controlIdExemption}`
+      );
+    }
+  }
+});
+
+// ---- Test 18: 生成器 --check byte-stable ----
+test("R2.0.1 generator: --check mode is byte-stable (declarations file is up-to-date)", () => {
+  const generatorPath = join(REPO_ROOT, "tools", "interaction-inventory", "generate-canonical-declarations.mjs");
+  let result;
+  try {
+    result = execSync(`node ${generatorPath} --check`, { encoding: "utf8", cwd: REPO_ROOT });
+  } catch (err) {
+    assert.fail(`generator --check failed (declarations file is out of date): ${err.stdout || err.message}`);
+  }
+  assert.match(result, /OK: declarations up-to-date/, `generator --check should report up-to-date, got: ${result}`);
 });

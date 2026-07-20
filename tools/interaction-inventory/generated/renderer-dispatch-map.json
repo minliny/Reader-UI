@@ -1,0 +1,673 @@
+{
+  "schemaVersion": "1.0.0",
+  "generatedAt": "2026-07-20T00:00:00.000Z",
+  "baselineCommit": "5ce233f",
+  "baselineTag": "R1.2",
+  "description": "R2.0.1 · Canonical renderer dispatch map for the 12 page families. Derived from render-runtime.js renderRoute() dispatch order (W4 -> W3 -> W5 -> D2-A -> D2-C -> D3 -> D4 -> D5 -> D6 -> switch) and the INTEGRATION_MAP / STATE_VARIANT_MAP constants in frontend-demo-optimized/renderers/*.js. Each route maps to the FIRST renderer layer that handles it; the fallback switch case in render-runtime.js is the last resort.",
+  "dispatchOrder": [
+    "W4",
+    "W3",
+    "W5",
+    "D2-A",
+    "D2-C",
+    "D3",
+    "D4",
+    "D5",
+    "D6",
+    "switch"
+  ],
+  "dispatchLayers": {
+    "W4": {
+      "globalObject": "window.ReaderW4ThemeFontTypographyRenderers",
+      "rendererFile": "renderers/w4-theme-font-typography-renderers.js",
+      "entryPoint": "renderW4Route(route, data, options, appState)",
+      "handlesOptions": true
+    },
+    "W3": {
+      "globalObject": "window.ReaderW3SourceSwitchRenderers",
+      "rendererFile": "renderers/w3-source-switch-renderers.js",
+      "entryPoint": "INTEGRATION_MAP[route] -> fn(data, appState)",
+      "handlesOptions": false
+    },
+    "W5": {
+      "globalObject": "window.ReaderW5ReplaceRulesRenderers",
+      "rendererFile": "renderers/w5-replace-rules-renderers.js",
+      "entryPoint": "INTEGRATION_MAP[route] -> fn(data, route, appState)",
+      "handlesOptions": false
+    },
+    "D2-A": {
+      "globalObject": "window.ReaderD2BookshelfDiscoverRenderers",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js",
+      "entryPoint": "INTEGRATION_MAP[route] || STATE_VARIANT_MAP[route] -> fn(data, route, appState)",
+      "handlesOptions": false
+    },
+    "D2-C": {
+      "globalObject": "window.ReaderD2SettingsSyncRenderers",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js",
+      "entryPoint": "renderD2Route(route, data, appState, options)",
+      "handlesOptions": true
+    },
+    "D3": {
+      "globalObject": "window.ReaderD3ControlLayersRenderers",
+      "rendererFile": "renderers/d3-control-layers-renderers.js",
+      "entryPoint": "renderD3Route(route, data, appState)",
+      "handlesOptions": false
+    },
+    "D4": {
+      "globalObject": "window.ReaderD4VisualPolishRenderers",
+      "rendererFile": "renderers/d4-visual-polish-renderers.js",
+      "entryPoint": "renderD4Route(route, data, appState)",
+      "handlesOptions": false
+    },
+    "D5": {
+      "globalObject": "window.ReaderD5MotionClosureRenderers",
+      "rendererFile": "renderers/d5-motion-closure-renderers.js",
+      "entryPoint": "renderD5Route(route, data, appState)",
+      "handlesOptions": false
+    },
+    "D6": {
+      "globalObject": "window.ReaderD6CapabilityClosureRenderers",
+      "rendererFile": "renderers/d6-capability-closure-renderers.js",
+      "entryPoint": "renderD6Route(route, data, appState)",
+      "handlesOptions": false
+    },
+    "switch": {
+      "globalObject": "render-runtime.js::renderRoute",
+      "rendererFile": "render-runtime.js",
+      "entryPoint": "switch (route) { case ...: return fn(...); }",
+      "handlesOptions": true
+    }
+  },
+  "pageFamilies": {
+    "bookshelf": {
+      "routes": [
+        "bookshelf",
+        "bookshelf-empty",
+        "bookshelf-cover-mode",
+        "bookshelf-list-mode",
+        "bookshelf-book-more-menu",
+        "bookshelf-search-settings"
+      ]
+    },
+    "book-detail": {
+      "routes": [
+        "book-detail",
+        "book-detail-toc-preview",
+        "book-directory"
+      ]
+    },
+    "search-results": {
+      "routes": [
+        "search-results",
+        "search-loading",
+        "search-empty",
+        "search-error"
+      ]
+    },
+    "import-conflict-resolve": {
+      "routes": [
+        "import-conflict-resolve",
+        "import-duplicate",
+        "import-empty-file",
+        "import-format-unsupported",
+        "import-parsing",
+        "import-partial-success",
+        "import-permission-denied",
+        "import-result-detail"
+      ]
+    },
+    "discover": {
+      "routes": [
+        "discover",
+        "discover-home",
+        "discover-control",
+        "discover-sort",
+        "discover-entry-bestseller",
+        "discover-entry-booklist",
+        "discover-entry-category",
+        "discover-entry-finished",
+        "discover-entry-latest",
+        "discover-entry-new",
+        "discover-entry-ranking",
+        "discover-entry-source"
+      ]
+    },
+    "rss": {
+      "routes": [
+        "rss",
+        "rss-all",
+        "rss-source-feed",
+        "rss-source-category-novel",
+        "rss-source-category-tech",
+        "rss-source-category-booklist",
+        "rss-refreshing",
+        "rss-source-category-releases",
+        "rss-source-category-issues",
+        "rss-source-category-discussions"
+      ]
+    },
+    "source-switch": {
+      "routes": [
+        "source-switch",
+        "source-switch-results"
+      ]
+    },
+    "settings-general": {
+      "routes": [
+        "global-settings",
+        "settings-general"
+      ]
+    },
+    "source-management": {
+      "routes": [
+        "source-management",
+        "source-debug",
+        "source-settings-entry"
+      ]
+    },
+    "webdav-config": {
+      "routes": [
+        "webdav-config"
+      ]
+    },
+    "sync-backup": {
+      "routes": [
+        "sync-backup",
+        "sync-settings-entry",
+        "backup-settings",
+        "progress-sync",
+        "progress-sync-status",
+        "remote-webdav-books"
+      ]
+    },
+    "about-restore-preview": {
+      "routes": [
+        "about",
+        "about-feedback",
+        "about-version",
+        "restore-confirm",
+        "restore-scopes",
+        "restore-preview",
+        "restore-progress",
+        "restore-running",
+        "restore-conflict",
+        "restore-result"
+      ]
+    }
+  },
+  "routes": {
+    "bookshelf": {
+      "pageFamily": "bookshelf",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookshelfV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "bookshelf-empty": {
+      "pageFamily": "bookshelf",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookshelfEmptyV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "bookshelf-cover-mode": {
+      "pageFamily": "bookshelf",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookshelfV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "bookshelf-list-mode": {
+      "pageFamily": "bookshelf",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookshelfV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "bookshelf-book-more-menu": {
+      "pageFamily": "bookshelf",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "bookshelfBookMoreMenuScreen",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "bookshelf-search-settings": {
+      "pageFamily": "bookshelf",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookshelfSearchSettingsV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "book-detail": {
+      "pageFamily": "book-detail",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookDetailV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "book-detail-toc-preview": {
+      "pageFamily": "book-detail",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookDetailV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "book-directory": {
+      "pageFamily": "book-detail",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookDirectoryV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "search-results": {
+      "pageFamily": "search-results",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookSearchV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "search-loading": {
+      "pageFamily": "search-results",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "searchStateScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "search-empty": {
+      "pageFamily": "search-results",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "searchStateScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "search-error": {
+      "pageFamily": "search-results",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "searchStateScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-conflict-resolve": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importConflictResolveScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-duplicate": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importDuplicateScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-empty-file": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importEmptyFileScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-format-unsupported": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importFormatUnsupportedScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-parsing": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importParsingScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-partial-success": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importPartialSuccessScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-permission-denied": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importPermissionDeniedScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "import-result-detail": {
+      "pageFamily": "import-conflict-resolve",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "importResultDetailScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-home": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-control": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-sort": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-bestseller": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-booklist": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-category": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-finished": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-latest": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-new": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-ranking": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "discover-entry-source": {
+      "pageFamily": "discover",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabDiscover",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-all": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-feed": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-category-novel": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-category-tech": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-category-booklist": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-refreshing": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-category-releases": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-category-issues": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-source-category-discussions": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "source-switch": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "flowScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "source-switch-results": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "flowScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "global-settings": {
+      "pageFamily": "settings-general",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "globalSettingsV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "settings-general": {
+      "pageFamily": "settings-general",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "globalSettingsV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "source-management": {
+      "pageFamily": "source-management",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSettingsV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "source-debug": {
+      "pageFamily": "source-management",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSettingsV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "source-settings-entry": {
+      "pageFamily": "source-management",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSettingsV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "webdav-config": {
+      "pageFamily": "webdav-config",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "webdavConfigV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "sync-backup": {
+      "pageFamily": "sync-backup",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "backupScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "sync-settings-entry": {
+      "pageFamily": "sync-backup",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "backupScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "backup-settings": {
+      "pageFamily": "sync-backup",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "backupScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "progress-sync": {
+      "pageFamily": "sync-backup",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "backupScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "progress-sync-status": {
+      "pageFamily": "sync-backup",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "backupScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "remote-webdav-books": {
+      "pageFamily": "sync-backup",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "backupScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "about": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "aboutScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "about-feedback": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "aboutScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "about-version": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "aboutScreenV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-confirm": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-scopes": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-preview": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-progress": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-running": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-conflict": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "restore-result": {
+      "pageFamily": "about-restore-preview",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "restoreFlowV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    }
+  },
+  "totals": {
+    "pageFamilies": 12,
+    "routes": 67
+  }
+}

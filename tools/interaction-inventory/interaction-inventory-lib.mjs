@@ -1034,7 +1034,7 @@ export function checkInteractionInventoryArtifactBytes(artifacts = buildInteract
 // helpers. Does not modify existing IC0 inventory functions; only appends.
 // ===========================================================================
 
-export const CONTROL_ID_SCHEMA_VERSION = "1.1.0";
+export const CONTROL_ID_SCHEMA_VERSION = "1.2.0";
 export const CONTROL_ID_REGISTRY_PATH = "tools/interaction-inventory/generated/control-id-registry.json";
 export const SCREENGRAPH_BINDING_PATH = "tools/interaction-inventory/generated/screengraph-binding.json";
 export const FIGMA_CROSSWALK_PENDING_PATH = "tools/interaction-inventory/generated/figma-crosswalk-pending.json";
@@ -1127,6 +1127,60 @@ const SLUG_FOR_VALUELESS_ATTRIBUTE = Object.freeze({
   "data-source-select": "source-select",
 });
 
+// ===========================================================================
+// R1.2 · Explicit semantic identity whitelists
+//
+// actionKey is derived ONLY from the explicit semantic attribute whitelist.
+// It is NEVER inferred from label / text / class / selector / role.
+// When no explicit semantic attribute is present, actionKey = null and
+// mappingStatus = pending-explicit-semantics.
+//
+// instanceKey is derived from explicit instance identifier attributes.
+// When no instance attribute is present, instanceKey = null. Multiple
+// occurrences of the same (route, state, entityKey) with null instanceKey
+// are marked pending-instance-disambiguation.
+// ===========================================================================
+
+const ACTION_KEY_ATTRIBUTE_RULES = Object.freeze([
+  // data-action: value IS the actionKey (e.g. "tts.set-speed", "book.open")
+  { attr: "data-action", derive: (value) => (value && value.length > 0 ? value : null) },
+  // data-route: navigation push, actionKey is always "route.push"
+  { attr: "data-route", derive: () => "route.push" },
+  // data-route-replace: navigation replace, actionKey is always "route.replace"
+  { attr: "data-route-replace", derive: () => "route.replace" },
+  // data-route-back: navigation back, actionKey is always "route.back"
+  { attr: "data-route-back", derive: () => "route.back" },
+  // data-demo-back: demo back navigation, actionKey is always "route.back"
+  { attr: "data-demo-back", derive: () => "route.back" },
+]);
+
+const INSTANCE_KEY_ATTRIBUTE_RULES = Object.freeze([
+  // Navigation destination (for route.push / route.replace buttons).
+  // The data-route value IS the instance discriminator for navigation —
+  // two buttons going to different routes are different instances even
+  // if they share the same entityKey (route.push).
+  { attr: "data-route", prefix: "route" },
+  { attr: "data-route-replace", prefix: "route" },
+  // Generic instance ordinal.
+  { attr: "data-instance", prefix: "instance" },
+  // Book identifier (library / bookshelf / reader entry points).
+  { attr: "data-book-id", prefix: "book" },
+  // TTS speed timer value (reader-full-tts speed options).
+  { attr: "data-reader-tts-timer-value", prefix: "tts-speed" },
+  // TTS speed timer index (fallback for TTS options).
+  { attr: "data-reader-tts-timer-index", prefix: "tts-idx" },
+  // RSS source identifier (target of the action, also disambiguates instances).
+  { attr: "data-rss-source-id", prefix: "rss-source" },
+  // Discover entry identifier.
+  { attr: "data-discover-entry", prefix: "discover" },
+  // Reader typography value.
+  { attr: "data-reader-typography-value", prefix: "typography" },
+  // Reader font value.
+  { attr: "data-w4-font-value", prefix: "font" },
+  // Book focus index.
+  { attr: "data-book-focus-index", prefix: "book-focus" },
+]);
+
 function kebabCaseAtom(value) {
   return String(value || "")
     .normalize("NFKC")
@@ -1191,81 +1245,137 @@ export function deriveSemanticSlug(control) {
   return null;
 }
 
+/**
+ * R1.2: Derive the explicit semantic action key from the whitelist.
+ * Returns null when no explicit semantic attribute is present (pending).
+ * NEVER infers from label / text / class / selector / role.
+ */
+export function deriveActionKey(control) {
+  const attrs = control.dataAttributes || {};
+  for (const rule of ACTION_KEY_ATTRIBUTE_RULES) {
+    if (Object.prototype.hasOwnProperty.call(attrs, rule.attr)) {
+      const value = attrs[rule.attr];
+      const actionKey = rule.derive(value);
+      if (actionKey) return actionKey;
+    }
+  }
+  return null;
+}
+
+/**
+ * R1.2: Derive the explicit instance disambiguator from the whitelist.
+ * Collects ALL matching instance attributes and combines them into a
+ * composite instanceKey to ensure uniqueness within (route, state, entityKey)
+ * groups. Returns null when no instance attribute is present.
+ *
+ * Example: a TTS option with data-reader-tts-timer-index="0" and
+ * data-reader-tts-timer-value="13" gets instanceKey "tts-idx-0-tts-speed-13".
+ */
+export function deriveInstanceKey(control) {
+  const attrs = control.dataAttributes || {};
+  const parts = [];
+  for (const rule of INSTANCE_KEY_ATTRIBUTE_RULES) {
+    if (Object.prototype.hasOwnProperty.call(attrs, rule.attr)) {
+      const value = attrs[rule.attr];
+      if (value === undefined || value === null || value === "") continue;
+      const atom = kebabCaseAtom(value);
+      if (atom) parts.push(`${rule.prefix}-${atom}`);
+    }
+  }
+  if (parts.length === 0) return null;
+  return parts.join("-");
+}
+
 
 // ===========================================================================
-// R1.1 · Three-layer identity model
-//   entityKey  = {domain}.{family}.{role}[.semantic-intent]   (logical entity)
-//   controlKey = {entityKey}@{route}.{state}                    (route/state occurrence)
+// R1.2 · Explicit semantic identity model
+//   entityKey  = {domain}.{family}.{role}[.{actionKey}]   (logical entity)
+//   controlKey = {entityKey}@{route}.{state}[.{instanceKey}]  (route/state occurrence)
 //   controlId  = DOM occurrence tracking id (retained from R1; NOT logical identity)
+//
+// R1.2 key change: actionKey is derived ONLY from the explicit semantic
+// attribute whitelist (data-action / data-route / data-route-back / etc.).
+// It is NEVER inferred from label / text / class / selector / role. When no
+// explicit semantic attribute is present, actionKey = null and mappingStatus
+// = pending-explicit-semantics.
+//
+// instanceKey is derived from explicit instance identifier attributes
+// (data-book-id / data-reader-tts-timer-value / etc.). When null and multiple
+// occurrences share (route, state, entityKey), mappingStatus
+// = pending-instance-disambiguation and an ordinal fallback is used.
 //
 // entityKey MUST NOT depend on selector / label / variantId / domTag / viewport
 // / DOM order / candidateKey. It is computed ONLY from:
 //   - domain (runtimeFamily)
 //   - family (derived from domTag + role)
 //   - role (ARIA role or tag-derived role)
-//   - semantic-intent (stable slug from CONTROL_ID_PRIORITY_DATA_ATTRIBUTES)
-//
-// controlKey is shared across multiple DOM occurrences of the same logical
-// control in the same (route, state). When the same entityKey legitimately
-// appears on N candidates in the same (route, state), all N candidates share
-// one controlKey; per-occurrence disambiguation lives in `controlId`.
+//   - actionKey (explicit semantic whitelist; null when absent)
 //
 // Collisions are fail-closed:
 //   - entityKey collision between two controls with different
-//     (domain, family, role, semantic-intent) inputs => throw (logic bug).
-//   - controlKey collision between two candidates with different entityKeys
-//     => impossible by construction (entityKey is part of controlKey), so
-//     no runtime check is needed; the invariant is documented here.
+//     (domain, family, role, actionKey) signatures => throw (logic bug).
+//   - Same entityKey but different non-null actionKey => throw (collision).
+//   - Same entityKey, same actionKey, different label/UiEvent => ALLOWED
+//     (label/UiEvent are DOM-layer, not logical-layer).
 // ===========================================================================
 
 /**
- * R1.1: Build the logical entity key. Depends ONLY on domain / family / role /
- * semantic-intent. Never on selector / label / variantId / domTag / viewport /
- * DOM order / candidateKey.
+ * R1.2: Build the logical entity key. Depends ONLY on domain / family / role /
+ * actionKey (explicit semantic whitelist). Never on selector / label /
+ * variantId / domTag / viewport / DOM order / candidateKey. When actionKey is
+ * null, entityKey = {domain}.{family}.{role} (pending-explicit-semantics).
  */
 export function buildEntityKey(control) {
   const domain = control.runtimeFamily;
   const family = deriveControlFamily(control);
   const role = deriveControlRole(control);
-  const semanticIntent = deriveSemanticSlug(control);
+  const actionKey = deriveActionKey(control);
   const atoms = [domain, family, role];
-  if (semanticIntent && semanticIntent.length > 0) atoms.push(semanticIntent);
+  if (actionKey && actionKey.length > 0) atoms.push(actionKey);
   return atoms.join(".");
 }
 
 /**
- * R1.1: Build the route/state occurrence key. Format: {entityKey}@{route}.{state}.
- * Multiple DOM occurrences of the same logical control in the same (route,
- * state) SHARE the same controlKey; per-occurrence disambiguation is the
- * responsibility of `controlId`.
+ * R1.2: Build the route/state occurrence key. Format:
+ * {entityKey}@{route}.{state}[.{instanceKey}]. When instanceKey is non-null,
+ * it disambiguates multiple occurrences. When null, no instanceKey atom is
+ * appended (ordinal fallback is assigned by the caller for multi-occurrence
+ * groups).
  */
-export function buildControlKey(entityKey, route, state) {
+export function buildControlKey(entityKey, route, state, instanceKey = null) {
   const safeRoute = kebabCaseAtom(route);
   const safeState = kebabCaseAtom(state) || "default";
-  return `${entityKey}@${safeRoute}.${safeState}`;
+  const base = `${entityKey}@${safeRoute}.${safeState}`;
+  if (instanceKey && instanceKey.length > 0) {
+    return `${base}.${instanceKey}`;
+  }
+  return base;
 }
 
 /**
- * R1.1: Verify entityKey uniqueness invariant. Two controls with different
- * (domain, family, role, semantic-intent) inputs must NEVER produce the same
- * entityKey. This is a fail-closed check; a violation indicates a logic bug
- * in buildEntityKey.
+ * R1.2: Verify entityKey uniqueness invariant. Two controls with different
+ * (domain, family, role, actionKey) signatures must NEVER produce the same
+ * entityKey. Additionally, two controls sharing the same entityKey must have
+ * the same actionKey (if non-null) — a mismatch indicates a collision.
+ * This is a fail-closed check; a violation indicates a logic bug in
+ * buildEntityKey or a genuine semantic collision.
  */
 export function assertEntityKeyNoCollision(candidateControls) {
   const byEntityKey = new Map();
   for (const control of candidateControls) {
     const entityKey = buildEntityKey(control);
+    const actionKey = deriveActionKey(control);
     const signature = JSON.stringify({
       domain: control.runtimeFamily,
       family: deriveControlFamily(control),
       role: deriveControlRole(control),
-      semanticIntent: deriveSemanticSlug(control) || null,
+      actionKey,
     });
     if (!byEntityKey.has(entityKey)) {
       byEntityKey.set(entityKey, signature);
     } else if (byEntityKey.get(entityKey) !== signature) {
       throw new Error(
-        `R1.1 entityKey collision: ${entityKey} maps to two different signatures: `
+        `R1.2 entityKey collision: ${entityKey} maps to two different signatures: `
         + `${byEntityKey.get(entityKey)} vs ${signature}`,
       );
     }
@@ -1273,6 +1383,13 @@ export function assertEntityKeyNoCollision(candidateControls) {
   return true;
 }
 
+// R1.2: controlHashInputs feeds the DOM occurrence tracking id (controlId)
+// ONLY. controlId is NOT the logical identity — it is retained from R1 for
+// audit reproducibility and DOM tracking. The DOM occurrence hash
+// intentionally includes selector/label/variantId/domTag/candidateKey so that
+// any DOM-layer change is detectable in the audit trail. The logical identity
+// lives in entityKey / controlKey (derived from actionKey / instanceKey, NOT
+// from this hash).
 function controlHashInputs(control) {
   return JSON.stringify({
     routeId: control.routeId,
@@ -1301,26 +1418,28 @@ export function buildControlIdForCandidate(control, viewport = "phone") {
   const route = kebabCaseAtom(control.routeId);
   const state = kebabCaseAtom(control.pageState) || "default";
   const role = deriveControlRole(control);
-  // R1.1: controlId is the DOM occurrence tracking id (retained from R1).
+  // R1.2: controlId is the DOM occurrence tracking id (retained from R1).
   // It still carries route/state/role/discriminator+hash for audit
-  // reproducibility and DOM tracking, but it is NO LONGER the logical
-  // identity. The logical identity lives in entityKey / controlKey.
+  // reproducibility and DOM tracking, but it is NOT the logical identity.
+  // The logical identity lives in entityKey / controlKey, derived from
+  // actionKey / instanceKey (explicit semantic whitelist).
   const base = `${domain}.${family}.${route}.${state}.${role}`;
   const slug = deriveSemanticSlug(control);
   const hash = shortHash(controlHashInputs(control));
   const discriminator = slug ? `${slug}-h-${hash}` : `h-${hash}`;
-  // R1.1: entityKey is the logical entity (cross route/state/viewport).
-  // controlKey is the route/state occurrence (cross viewport). When the
-  // same entityKey appears multiple times in the same (route, state), the
-  // ordinal discriminator is assigned by `assignControlKeys` (caller-side).
-  // Here we return ordinal=0; callers that need ordinals must use
-  // assignControlKeys instead.
+  // R1.2: actionKey / instanceKey are the explicit semantic identity atoms.
+  const actionKey = deriveActionKey(control);
+  const instanceKey = deriveInstanceKey(control);
   const entityKey = buildEntityKey(control);
-  const controlKey = buildControlKey(entityKey, route, state);
+  // R1.2: controlKey includes instanceKey when present. Ordinal fallback
+  // for multi-occurrence null-instanceKey groups is assigned by the caller.
+  const controlKey = buildControlKey(entityKey, route, state, instanceKey);
   return {
     controlId: `${base}.${discriminator}`,
     entityKey,
     controlKey,
+    actionKey,
+    instanceKey,
     domain,
     family,
     route,
@@ -1468,22 +1587,31 @@ function classifyMapping(control, binding) {
   };
 }
 
-function buildRegistryEntry(control, viewport, binding) {
+function buildRegistryEntry(control, viewport, binding, controlKeyOverride, mappingStatusOverride) {
   const idParts = buildControlIdForCandidate(control, viewport);
-  const { mappingStatus, mappingNotes } = classifyMapping(control, binding);
-  // R1.1: controlKey is shared across DOM occurrences of the same logical
-  // control in the same (route, state). No override needed.
-  const controlKey = idParts.controlKey;
-  // R1: per-entry `firstMaterializedAt` and `schemaVersion` are removed.
-  // `schemaVersion` lives on the registry top-level; `firstMaterializedAt`
-  // was a fixed timestamp with no drift value. additionalProperties:false
-  // in the schema now strictly enforces the entry shape.
-  // R1.1: entry now carries entityKey + controlKey as logical identity;
-  // controlId is retained as the DOM occurrence tracking id.
+  const baseMapping = classifyMapping(control, binding);
+  // R1.2: pending-explicit-semantics takes precedence when actionKey is null.
+  // pending-instance-disambiguation takes precedence when the caller signals
+  // a multi-occurrence null-instanceKey group (via mappingStatusOverride).
+  let mappingStatus = baseMapping.mappingStatus;
+  let mappingNotes = baseMapping.mappingNotes;
+  if (idParts.actionKey === null) {
+    mappingStatus = "pending-explicit-semantics";
+    mappingNotes = "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.";
+  }
+  if (mappingStatusOverride === "pending-instance-disambiguation") {
+    mappingStatus = "pending-instance-disambiguation";
+    mappingNotes = `Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.`;
+  }
+  // R1.2: controlKey may be overridden by the caller when ordinal fallback
+  // is needed for multi-occurrence null-instanceKey groups.
+  const controlKey = controlKeyOverride || idParts.controlKey;
   return {
     controlId: idParts.controlId,
     entityKey: idParts.entityKey,
     controlKey,
+    actionKey: idParts.actionKey,
+    instanceKey: idParts.instanceKey,
     domain: idParts.domain,
     family: idParts.family,
     route: idParts.route,
@@ -1542,17 +1670,101 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     }
   }
 
-  // R1.1: fail-closed entityKey collision check. Two controls with different
-  // (domain, family, role, semantic-intent) inputs must NEVER produce the
-  // same entityKey. This is a logic invariant; throw on violation.
+  // R1.2: fail-closed entityKey collision check. Two controls with different
+  // (domain, family, role, actionKey) signatures must NEVER produce the same
+  // entityKey. This is a logic invariant; throw on violation.
   assertEntityKeyNoCollision(candidates);
 
-  const entries = [];
+  // R1.2: First pass — build entries with actionKey/instanceKey. controlKey
+  // is initially built from instanceKey (no ordinal fallback yet).
+  const firstPassEntries = [];
   for (const control of candidates) {
     const binding = bindControlToScreenGraph(control, screenGraphIndex);
     const entry = buildRegistryEntry(control, viewport, binding);
-    entries.push(entry);
+    firstPassEntries.push({ control, binding, entry });
   }
+
+  // R1.2: Second pass — group by (route, state, entityKey) to detect
+  // multi-occurrence groups that need ordinal fallback. When multiple
+  // occurrences share the same (route, state, entityKey) and all have null
+  // instanceKey, assign ordinal fallback (n0, n1, ... sorted by candidateKey)
+  // and mark pending-instance-disambiguation.
+  const groups = new Map();
+  for (const item of firstPassEntries) {
+    const key = `${item.entry.entityKey}@${item.entry.route}.${item.entry.state}`;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(item);
+  }
+
+  const entries = [];
+  for (const [groupKey, items] of groups) {
+    if (items.length === 1) {
+      // Single occurrence — no disambiguation needed.
+      entries.push(items[0].entry);
+      continue;
+    }
+    // Multiple occurrences in the same (route, state, entityKey).
+    // Sort by candidateKey for deterministic ordinal assignment.
+    items.sort((a, b) => a.control.candidateKey.localeCompare(b.control.candidateKey));
+    // Check if all have non-null instanceKey.
+    const allHaveInstanceKey = items.every((it) => it.entry.instanceKey !== null);
+    if (allHaveInstanceKey) {
+      // All have instanceKey — check for duplicates within the group.
+      // If duplicates exist, fall back to ordinal for ALL entries in the
+      // group and mark pending-instance-disambiguation (cannot reliably
+      // distinguish using the available instance attributes).
+      const seenInstanceKeys = new Set();
+      let hasInstanceKeyDuplicates = false;
+      for (const it of items) {
+        if (seenInstanceKeys.has(it.entry.instanceKey)) {
+          hasInstanceKeyDuplicates = true;
+          break;
+        }
+        seenInstanceKeys.add(it.entry.instanceKey);
+      }
+      if (hasInstanceKeyDuplicates) {
+        // Duplicate instanceKeys within the group — ordinal fallback.
+        for (let i = 0; i < items.length; i += 1) {
+          const ordinalKey = `n${i}`;
+          const overrideControlKey = buildControlKey(
+            items[i].entry.entityKey, items[i].entry.route, items[i].entry.state, ordinalKey,
+          );
+          const newEntry = buildRegistryEntry(
+            items[i].control, viewport, items[i].binding, overrideControlKey,
+            "pending-instance-disambiguation",
+          );
+          entries.push(newEntry);
+        }
+      } else {
+        // All unique instanceKeys — controlKey is already unique.
+        for (const it of items) entries.push(it.entry);
+      }
+    } else {
+      // Some or all have null instanceKey — assign ordinal fallback to the
+      // null-instanceKey entries and mark pending-instance-disambiguation.
+      // Entries with non-null instanceKey keep their instanceKey-based controlKey.
+      let nullOrdinal = 0;
+      for (const it of items) {
+        if (it.entry.instanceKey !== null) {
+          entries.push(it.entry);
+        } else {
+          const ordinalKey = `n${nullOrdinal}`;
+          nullOrdinal += 1;
+          const overrideControlKey = buildControlKey(
+            it.entry.entityKey, it.entry.route, it.entry.state, ordinalKey,
+          );
+          const newEntry = buildRegistryEntry(
+            it.control, viewport, it.binding, overrideControlKey,
+            "pending-instance-disambiguation",
+          );
+          entries.push(newEntry);
+        }
+      }
+    }
+  }
+
+  // Sort entries by controlId for byte-stable output.
+  entries.sort((a, b) => a.controlId.localeCompare(b.controlId));
 
   const controlIdSet = new Set();
   for (const entry of entries) {
@@ -1562,14 +1774,22 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     controlIdSet.add(entry.controlId);
   }
 
-  // R1.1: controlKey is shared across multiple DOM occurrences of the same
-  // logical control in the same (route, state). Sharing is BY DESIGN and
-  // NOT a collision. uniqueControlKeys is therefore <= uniqueControlIds.
-  // The fail-closed collision check at entityKey level (above) guarantees
-  // that two different logical entities never share an entityKey, which
-  // transitively guarantees they never share a controlKey either.
-  const controlKeySet = new Set(entries.map((e) => e.controlKey));
+  // R1.2: controlKey must now be unique per entry (instanceKey or ordinal
+  // fallback disambiguates multi-occurrence groups). Verify no duplicates.
+  const controlKeySet = new Set();
+  for (const entry of entries) {
+    if (controlKeySet.has(entry.controlKey)) {
+      throw new Error(`R1.2 duplicate controlKey generated: ${entry.controlKey}`);
+    }
+    controlKeySet.add(entry.controlKey);
+  }
   const entityKeySet = new Set(entries.map((e) => e.entityKey));
+  const actionKeySet = new Set(
+    entries.filter((e) => e.actionKey !== null).map((e) => e.actionKey),
+  );
+  const instanceKeySet = new Set(
+    entries.filter((e) => e.instanceKey !== null).map((e) => e.instanceKey),
+  );
 
   const totals = {
     candidates: entries.length,
@@ -1578,9 +1798,13 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     autoMapped: entries.filter((e) => e.mappingStatus === "auto-mapped").length,
     needsManualMapping: entries.filter((e) => e.mappingStatus === "needs-manual-mapping").length,
     ambiguousNeedsReview: entries.filter((e) => e.mappingStatus === "ambiguous-needs-review").length,
+    pendingExplicitSemantics: entries.filter((e) => e.mappingStatus === "pending-explicit-semantics").length,
+    pendingInstanceDisambiguation: entries.filter((e) => e.mappingStatus === "pending-instance-disambiguation").length,
     uniqueControlIds: controlIdSet.size,
     uniqueEntityKeys: entityKeySet.size,
     uniqueControlKeys: controlKeySet.size,
+    uniqueActionKeys: actionKeySet.size,
+    uniqueInstanceKeys: instanceKeySet.size,
     pendingFigmaJoin: entries.filter((e) => e.figmaJoinStatus === "pending-figma-join").length,
     nonInteractiveContainers: excludedContainers.length,
   };
@@ -1653,6 +1877,15 @@ export function buildNonInteractiveContainers({ viewport = "phone" } = {}) {
     if (containsUnenumeratedSubcontrols) {
       entry.containsUnenumeratedSubcontrols = true;
       entry.expectedSubcontrolType = expectedSubcontrolType;
+      // R1.2: expectedSubcontrolCount — the actual number of interactive
+      // sub-controls the runtime renderer produces for this settings row.
+      //   is-switch  -> 1 (the switch itself)
+      //   is-select  -> 1 (the combobox)
+      //   is-segment -> 3 (three option buttons)
+      //   is-stepper -> 2 (decrement + increment buttons)
+      // R2.0.1 will enumerate these into the canonical registry.
+      const subcontrolCountByType = { switch: 1, select: 1, segment: 3, stepper: 2 };
+      entry.expectedSubcontrolCount = subcontrolCountByType[expectedSubcontrolType] || 0;
     }
     if (pureContainer) {
       entry.pureContainer = true;
@@ -1673,6 +1906,10 @@ export function buildNonInteractiveContainers({ viewport = "phone" } = {}) {
     byRoute[entry.routeId] = (byRoute[entry.routeId] || 0) + 1;
   }
 
+  const totalExpectedSubcontrols = entries
+    .filter((e) => typeof e.expectedSubcontrolCount === "number")
+    .reduce((sum, e) => sum + e.expectedSubcontrolCount, 0);
+
   return {
     schemaVersion: CONTROL_ID_SCHEMA_VERSION,
     generatedAt,
@@ -1685,6 +1922,7 @@ export function buildNonInteractiveContainers({ viewport = "phone" } = {}) {
       entries: entries.length,
       byRole: Object.fromEntries(Object.entries(byRole).sort(([a], [b]) => a.localeCompare(b))),
       byRoute: Object.fromEntries(Object.entries(byRoute).sort(([a], [b]) => a.localeCompare(b))),
+      totalExpectedSubcontrols,
     },
     entries,
   };
@@ -1694,11 +1932,13 @@ export function buildScreenGraphBindingArtifacts() {
   const registry = buildControlIdRegistry();
   const index = buildScreenGraphBindingIndex();
   const entries = registry.entries.map((entry) => ({
-    // R1.1: include logical identity (entityKey, controlKey) alongside the
-    // DOM occurrence tracking id (controlId). ScreenGraph binding is keyed
-    // by the logical entity, not by the DOM occurrence.
+    // R1.2: include explicit semantic identity (actionKey, instanceKey) alongside
+    // entityKey / controlKey / controlId. ScreenGraph binding is keyed by the
+    // logical entity, not by the DOM occurrence.
     entityKey: entry.entityKey,
     controlKey: entry.controlKey,
+    actionKey: entry.actionKey,
+    instanceKey: entry.instanceKey,
     controlId: entry.controlId,
     candidateKey: entry.source.candidateKey,
     routeId: entry.route,
@@ -1738,9 +1978,12 @@ export function buildFigmaCrosswalkPending() {
     note: "Figma does not currently expose a canonical join key. All entries are pending-figma-join; figmaNodeCandidate fields must be backfilled by a Figma writer with explicit node-id mapping. R1.1 does not forge Figma bindings. entityKey is the logical entity (cross route/state/viewport); controlKey is the route/state occurrence (cross viewport); controlId is the DOM occurrence tracking id (retained from R1 for audit reproducibility).",
     totalPending: registry.entries.length,
     entries: registry.entries.map((entry) => ({
-      // R1.1: logical identity first (entityKey, controlKey), then DOM tracking.
+      // R1.2: explicit semantic identity first (entityKey, controlKey, actionKey,
+      // instanceKey), then DOM tracking.
       entityKey: entry.entityKey,
       controlKey: entry.controlKey,
+      actionKey: entry.actionKey,
+      instanceKey: entry.instanceKey,
       controlId: entry.controlId,
       candidateKey: entry.source.candidateKey,
       routeId: entry.route,
@@ -1769,13 +2012,15 @@ export function buildDomIdentityMap({ viewport = "phone" } = {}) {
   const entries = registry.entries.map((entry) => {
     const selector = selectorByCandidateKey.get(entry.source.candidateKey) || "";
     return {
-      // R1.1: logical identity fields (entityKey, controlKey) plus DOM
-      // occurrence tracking (controlId / dataControlId). The DOM identity
-      // map still stamps data-control-id for backward compatibility with R1
-      // page renderers; R2 renderers will also stamp data-entity-key and
-      // data-control-key via dom-identity.ts.
+      // R1.2: explicit semantic identity (actionKey, instanceKey) plus logical
+      // identity (entityKey, controlKey) plus DOM occurrence tracking
+      // (controlId / dataControlId). The DOM identity map still stamps
+      // data-control-id for backward compatibility with R1 page renderers;
+      // R2 renderers will also stamp data-entity-key and data-control-key.
       entityKey: entry.entityKey,
       controlKey: entry.controlKey,
+      actionKey: entry.actionKey,
+      instanceKey: entry.instanceKey,
       controlId: entry.controlId,
       domSelector: selector,
       selectorSha256: entry.source.selectorSha256,
@@ -1915,9 +2160,10 @@ export function validateControlIdRegistry(registry) {
   // invariant (different signatures => different entityKeys) is enforced at
   // generation time and is the sole fail-closed identity check.
 
-  // R1.1: entityKey pattern sanity (3-4 atoms, kebab-case).
-  const entityKeyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
-  const controlKeyPattern = /^[^@]+@[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  // R1.2: entityKey pattern sanity (3+ atoms, kebab-case; actionKey may contain dots).
+  const entityKeyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*)*$/;
+  // R1.2: controlKey pattern allows optional instanceKey atom (2-3+ atoms after @).
+  const controlKeyPattern = /^[^@]+@[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
   for (const entry of registry.entries) {
     if (!entityKeyPattern.test(entry.entityKey || "")) {
       errors.push(`entry ${entry.controlId || "(unknown)"} has invalid entityKey: ${entry.entityKey}`);
@@ -1929,10 +2175,10 @@ export function validateControlIdRegistry(registry) {
 
   // Schema shape sanity
   const requiredFields = [
-    "controlId", "entityKey", "controlKey", "domain", "family", "route",
-    "state", "viewport", "role", "discriminator", "source", "mappingStatus",
-    "screenGraphBinding", "figmaNodeCandidate", "figmaJoinStatus",
-    "nonInteractiveContainer",
+    "controlId", "entityKey", "controlKey", "actionKey", "instanceKey",
+    "domain", "family", "route", "state", "viewport", "role", "discriminator",
+    "source", "mappingStatus", "screenGraphBinding", "figmaNodeCandidate",
+    "figmaJoinStatus", "nonInteractiveContainer",
   ];
   for (const entry of registry.entries) {
     for (const field of requiredFields) {
@@ -1942,10 +2188,14 @@ export function validateControlIdRegistry(registry) {
     }
   }
 
-  // R1.1: totals consistency — unique entityKey < unique controlKey < unique controlId.
+  // R1.2: totals consistency — unique entityKey <= unique controlKey <= unique controlId.
+  // (R1.2: controlKey is now unique per entry due to instanceKey/ordinal, so
+  // uniqueControlKeys should equal entries.length when all are disambiguated.)
   const uniqEntity = new Set(registry.entries.map((e) => e.entityKey)).size;
   const uniqControl = new Set(registry.entries.map((e) => e.controlKey)).size;
   const uniqControlId = new Set(registry.entries.map((e) => e.controlId)).size;
+  const uniqAction = new Set(registry.entries.filter((e) => e.actionKey !== null).map((e) => e.actionKey)).size;
+  const uniqInstance = new Set(registry.entries.filter((e) => e.instanceKey !== null).map((e) => e.instanceKey)).size;
   if (registry.totals.uniqueEntityKeys !== uniqEntity) {
     errors.push(`uniqueEntityKeys totals mismatch: ${registry.totals.uniqueEntityKeys} vs recomputed ${uniqEntity}`);
   }
@@ -1953,10 +2203,23 @@ export function validateControlIdRegistry(registry) {
     errors.push(`uniqueControlKeys totals mismatch: ${registry.totals.uniqueControlKeys} vs recomputed ${uniqControl}`);
   }
   if (uniqEntity > uniqControl) {
-    errors.push(`R1.1 invariant violated: uniqueEntityKeys(${uniqEntity}) > uniqueControlKeys(${uniqControl})`);
+    errors.push(`R1.2 invariant violated: uniqueEntityKeys(${uniqEntity}) > uniqueControlKeys(${uniqControl})`);
   }
   if (uniqControl > uniqControlId) {
-    errors.push(`R1.1 invariant violated: uniqueControlKeys(${uniqControl}) > uniqueControlIds(${uniqControlId})`);
+    errors.push(`R1.2 invariant violated: uniqueControlKeys(${uniqControl}) > uniqueControlIds(${uniqControlId})`);
+  }
+  // R1.2: pending counts must be non-negative and sum consistently.
+  if (registry.totals.pendingExplicitSemantics !== undefined) {
+    const recomputedPending = registry.entries.filter((e) => e.mappingStatus === "pending-explicit-semantics").length;
+    if (registry.totals.pendingExplicitSemantics !== recomputedPending) {
+      errors.push(`pendingExplicitSemantics totals mismatch: ${registry.totals.pendingExplicitSemantics} vs recomputed ${recomputedPending}`);
+    }
+  }
+  if (registry.totals.pendingInstanceDisambiguation !== undefined) {
+    const recomputedPending = registry.entries.filter((e) => e.mappingStatus === "pending-instance-disambiguation").length;
+    if (registry.totals.pendingInstanceDisambiguation !== recomputedPending) {
+      errors.push(`pendingInstanceDisambiguation totals mismatch: ${registry.totals.pendingInstanceDisambiguation} vs recomputed ${recomputedPending}`);
+    }
   }
 
   return {

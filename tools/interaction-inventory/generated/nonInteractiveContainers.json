@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "df7a7a177ec5286b8d3f7e33df55244263716e3862af208a3eff1a75779a033e",
+    "inventorySha256": "9bf65e29353709e2d85d36f5f8930d4df15818ef8c875b0c865469c0e0fbbcb4",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
   },
   "totals": {
@@ -37,7 +37,8 @@
       "source-debug": 2,
       "source-management": 8,
       "webdav-config": 4
-    }
+    },
+    "totalExpectedSubcontrols": 50
   },
   "entries": [
     {
@@ -55,7 +56,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:432a153136ab706ccdc3",
@@ -72,7 +74,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:488baf28c33dd42bfe64",
@@ -89,7 +92,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:50a6622facc45408e2ce",
@@ -106,7 +110,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:7ac6701df61eb9077a70",
@@ -123,7 +128,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:a2f9416698c77fd2741a",
@@ -140,7 +146,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:a4f6892da2711349d20b",
@@ -157,7 +164,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:b412d28390ac22ed7fe9",
@@ -174,7 +182,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:d1aa5fde0729e853168e",
@@ -191,7 +200,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:d93b4158139404a92633",
@@ -208,7 +218,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:e94360e9e6a23bffdf1f",
@@ -225,7 +236,8 @@
         "settings-control-class:is-stepper"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "stepper"
+      "expectedSubcontrolType": "stepper",
+      "expectedSubcontrolCount": 2
     },
     {
       "candidateKey": "candidate:f26c7a8cfc714cd525f3",
@@ -242,7 +254,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:20ea74ea77bb7e8611b5",
@@ -259,7 +272,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:2854b8b28b060e92a6ae",
@@ -276,7 +290,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:413a8051656d68377344",
@@ -293,7 +308,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:45b8e3faaf5a5f50a3bf",
@@ -310,7 +326,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:6431436bcc5d160ff8db",
@@ -327,7 +344,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:821568425ce3c8eed5b8",
@@ -344,7 +362,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:a18a801d863dc4989209",
@@ -361,7 +380,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:efbb784cccd6880ca53f",
@@ -378,7 +398,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:0293af91f06498285d32",
@@ -547,7 +568,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:972aecb71e83b74fb4e2",
@@ -564,7 +586,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:b88d4ea4d0a7d62e2105",
@@ -581,7 +604,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:d8a5abad5a4553d7cdf6",
@@ -598,7 +622,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:fb83764f64576ebe847d",
@@ -786,7 +811,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:74d3d5e3c4cda38f4d4a",
@@ -803,7 +829,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:9a123607bc4ff7ba141e",
@@ -820,7 +847,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:b2098bade47edbd77b63",
@@ -837,7 +865,8 @@
         "settings-control-class:is-segment"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "segment"
+      "expectedSubcontrolType": "segment",
+      "expectedSubcontrolCount": 3
     },
     {
       "candidateKey": "candidate:cd78214c71c3b3789ad1",
@@ -854,7 +883,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:dae82f3a5b9b1cf94f63",
@@ -871,7 +901,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:e0c4babe5437217b3655",
@@ -888,7 +919,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:ef8d5c847ecc7a2d201b",
@@ -905,7 +937,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:1aa6e20227c8a63303b3",
@@ -922,7 +955,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:343964ae4269b183be30",
@@ -939,7 +973,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:057cb84abcca08c5de3f",
@@ -956,7 +991,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:264bc0dc1d7990b5e5e2",
@@ -973,7 +1009,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:2b256064d1c2839ab6de",
@@ -990,7 +1027,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:4b86e76278efc9a11b5b",
@@ -1007,7 +1045,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:7c983bea2be757936e94",
@@ -1024,7 +1063,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:9226441dfc3b9b9388a1",
@@ -1041,7 +1081,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:9301f8fb6e309d1c9acd",
@@ -1058,7 +1099,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:d85fb46fc1e4e446b5b7",
@@ -1075,7 +1117,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:1db70470e74b28d8e205",
@@ -1092,7 +1135,8 @@
         "settings-control-class:is-select"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select"
+      "expectedSubcontrolType": "select",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:36b2b8e24e4b09d02c21",
@@ -1109,7 +1153,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     },
     {
       "candidateKey": "candidate:4b0e4d63cda5ddb9ed15",
@@ -1126,7 +1171,8 @@
         "settings-control-class:is-stepper"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "stepper"
+      "expectedSubcontrolType": "stepper",
+      "expectedSubcontrolCount": 2
     },
     {
       "candidateKey": "candidate:97143206139d909aa97a",
@@ -1143,7 +1189,8 @@
         "settings-control-class:is-switch"
       ],
       "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch"
+      "expectedSubcontrolType": "switch",
+      "expectedSubcontrolCount": 1
     }
   ]
 }
