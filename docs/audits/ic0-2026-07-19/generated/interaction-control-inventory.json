@@ -16,6 +16,7 @@
       "frontend-demo-optimized/appearance-spec.js",
       "frontend-demo-optimized/fixture.js",
       "frontend-demo-optimized/route-contract.js",
+      "frontend-demo-optimized/rss-runtime-contract.js",
       "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
       "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
       "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
@@ -27,7 +28,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "968cd80533ad96dac2e4973c6609bb51be1ff1b85bbc79a8bf0ffe4dc53938f7"
+    "rendererSourcesSha256": "14fe10c07067dee1347d7ff71fa6805c615210fc70bf98e0bb9b7e82a5650862"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -48674,11 +48675,17 @@
       "domTag": "button",
       "role": "button",
       "label": "刷新当前订阅",
-      "selector": "main[data-shell=\"MainTabShell\"] > section[data-slot=\"appTopBar\"] > div.fd-rss-top-actions > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"MainTabShell\"] > section[data-slot=\"appTopBar\"] > div.fd-rss-top-actions > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48692,7 +48699,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e7ed1245bcb5efcf0bed",
+      "candidateKey": "candidate:1125ead584975210c435",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48707,11 +48714,18 @@
       "domTag": "button",
       "role": "button",
       "label": "进入订阅管理",
-      "selector": "main[data-shell=\"MainTabShell\"] > section[data-slot=\"appTopBar\"] > div.fd-rss-top-actions > button[data-route=\"rss-subscription-management\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"MainTabShell\"] > section[data-slot=\"appTopBar\"] > div.fd-rss-top-actions > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "rss-subscription-management"
+        "data-control-id": "rss.control.rss.default.button.subscription-management",
+        "data-control-key": "rss.control.button.subscription-management@rss.default",
+        "data-entity-key": "rss.control.button.subscription-management",
+        "data-restore-focus": "rss.control.button.subscription-management@rss.default",
+        "data-route": "rss-subscription-management",
+        "data-settings-key": "subscription-management",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48725,7 +48739,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:695e28136a3630cbf49c",
+      "candidateKey": "candidate:ac50fabfd8b0c9780130",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48740,11 +48754,18 @@
       "domTag": "button",
       "role": "button",
       "label": "搜索订阅源、文章标题或分组",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > button[data-route=\"rss-search\"]",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > button[data-ui-event=\"search\\.open\"]",
       "dataAttributes": {
-        "data-route": "rss-search"
+        "data-control-id": "rss.control.rss.default.button.search-open",
+        "data-control-key": "rss.control.button.search-open@rss.default",
+        "data-entity-key": "rss.control.button.search-open",
+        "data-restore-focus": "rss.control.button.search-open@rss.default",
+        "data-route": "rss-search",
+        "data-settings-key": "search-open",
+        "data-ui-event": "search.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48758,7 +48779,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1e3518d11926e894b099",
+      "candidateKey": "candidate:d1303739c1cc55579118",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48773,11 +48794,17 @@
       "domTag": "button",
       "role": "button",
       "label": "源列表",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss"
+        "data-control-id": "rss.control.rss.default.button.mode-sources",
+        "data-control-key": "rss.control.button.mode-sources@rss.default",
+        "data-entity-key": "rss.control.button.mode-sources",
+        "data-route": "rss",
+        "data-settings-key": "mode-sources",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48791,7 +48818,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:77396a25e6480578322d",
+      "candidateKey": "candidate:a6e3e1362f59b60c0156",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48805,12 +48832,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "全部",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-all\"]:nth-of-type(2)",
+      "label": "全部文章",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "rss-all"
+        "data-control-id": "rss.control.rss.default.button.mode-all",
+        "data-control-key": "rss.control.button.mode-all@rss.default",
+        "data-entity-key": "rss.control.button.mode-all",
+        "data-route": "rss-all",
+        "data-settings-key": "mode-all",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48824,7 +48857,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:fff855cf04591597f3d0",
+      "candidateKey": "candidate:93a1f6f93b2c25238376",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48838,12 +48871,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "收藏",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-starred\"]:nth-of-type(3)",
+      "label": "收藏文章",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "rss-starred"
+        "data-control-id": "rss.control.rss.default.button.mode-starred",
+        "data-control-key": "rss.control.button.mode-starred@rss.default",
+        "data-entity-key": "rss.control.button.mode-starred",
+        "data-route": "rss-starred",
+        "data-settings-key": "mode-starred",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48857,7 +48896,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:fb7813804c5bbf9be5eb",
+      "candidateKey": "candidate:5b8474882be84b958ea2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48872,11 +48911,17 @@
       "domTag": "button",
       "role": "button",
       "label": "规则订阅",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-rule-subscription\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-rule-subscription"
+        "data-control-id": "rss.control.rss.default.button.mode-rule-subscription",
+        "data-control-key": "rss.control.button.mode-rule-subscription@rss.default",
+        "data-entity-key": "rss.control.button.mode-rule-subscription",
+        "data-route": "rss-rule-subscription",
+        "data-settings-key": "mode-rule-subscription",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48890,7 +48935,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:985ce1cbdffdf5c59dfb",
+      "candidateKey": "candidate:2d4cf60fb35ad2fcb050",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48904,12 +48949,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "导入",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > header > span > button[data-route=\"rss-source-import\"]:nth-of-type(1)",
+      "label": "导入订阅源",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > header > span > button[data-ui-event=\"source\\.import\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-source-import"
+        "data-control-id": "rss.control.rss.default.button.source-import",
+        "data-control-key": "rss.control.button.source-import@rss.default",
+        "data-entity-key": "rss.control.button.source-import",
+        "data-restore-focus": "rss.control.button.source-import@rss.default",
+        "data-route": "rss-source-import",
+        "data-settings-key": "source-import",
+        "data-ui-event": "source.import.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.import.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48923,7 +48975,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a320f5a26b20275a0ba9",
+      "candidateKey": "candidate:2da3623a19c5d22c90ce",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48937,12 +48989,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "新建",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > header > span > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "新建订阅源",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > header > span > button[data-ui-event=\"rss\\.subscription\\.add\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "rss-source-edit"
+        "data-control-id": "rss.control.rss.default.button.source-create",
+        "data-control-key": "rss.control.button.source-create@rss.default",
+        "data-entity-key": "rss.control.button.source-create",
+        "data-restore-focus": "rss.control.button.source-create@rss.default",
+        "data-route": "rss-source-edit",
+        "data-settings-key": "source-create",
+        "data-ui-event": "rss.subscription.add",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.add",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -48956,7 +49015,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b9f0f479583770cfae7e",
+      "candidateKey": "candidate:f7ea9ef67412fc46f678",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -48970,12 +49029,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "筛选 全部",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-filter-control:nth-of-type(1) > button[data-rss-group-filter-toggle]",
+      "label": "筛选订阅源分组",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-filter-control:nth-of-type(1) > button[data-ui-event=\"rss\\.filter\\.select\"]",
       "dataAttributes": {
-        "data-rss-group-filter-toggle": ""
+        "data-control-id": "rss.control.rss.default.button.group-filter-toggle",
+        "data-control-key": "rss.control.button.group-filter-toggle@rss.default",
+        "data-entity-key": "rss.control.button.group-filter-toggle",
+        "data-rss-group-filter-toggle": "",
+        "data-settings-key": "group-filter-toggle",
+        "data-ui-event": "rss.filter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": null,
+      "uiEvent": "rss.filter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -48987,10 +49052,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:df337e168c4ba7429b04",
+      "candidateKey": "candidate:7a33a1ae6ee811076fb7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49004,13 +49068,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "GitHub Releases 开源项目 · 3 个入口 · 列表 · 默认 RSS 6",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(1)",
+      "label": "打开订阅源 github-releases",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.feed-open-github-releases",
+        "data-control-key": "rss.control.button.feed-open-github-releases@rss.default",
+        "data-entity-key": "rss.control.button.feed-open-github-releases",
+        "data-restore-focus": "rss.control.button.feed-open-github-releases@rss.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "feed-open-github-releases",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49022,7 +49093,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:661acba3ef8c07203a34",
+      "candidateKey": "candidate:8422f014e71193c8daf0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49036,13 +49107,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "阅读器版本讨论 社区 · 4 个入口 · 图文 · 自定义列表 12",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(2)",
+      "label": "打开订阅源 reader-discussions",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.feed-open-reader-discussions",
+        "data-control-key": "rss.control.button.feed-open-reader-discussions@rss.default",
+        "data-entity-key": "rss.control.button.feed-open-reader-discussions",
+        "data-restore-focus": "rss.control.button.feed-open-reader-discussions@rss.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "reader-discussions"
+        "data-rss-source-id": "reader-discussions",
+        "data-settings-key": "feed-open-reader-discussions",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49054,7 +49132,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:5f59355f28999fa8a348",
+      "candidateKey": "candidate:55ff5ab47094320d2afc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49068,13 +49146,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "书源维护公告 维护 · 2 个入口 · 紧凑 · 正文规则 2",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(3)",
+      "label": "打开订阅源 source-maintenance",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.feed-open-source-maintenance",
+        "data-control-key": "rss.control.button.feed-open-source-maintenance@rss.default",
+        "data-entity-key": "rss.control.button.feed-open-source-maintenance",
+        "data-restore-focus": "rss.control.button.feed-open-source-maintenance@rss.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "source-maintenance"
+        "data-rss-source-id": "source-maintenance",
+        "data-settings-key": "feed-open-source-maintenance",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49086,7 +49171,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:069d06e6098ca6835829",
+      "candidateKey": "candidate:014d2944f95448b53cf5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49100,13 +49185,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "本地系统通知 系统 · 1 个入口 · 列表 · 单 URL 0",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(4)",
+      "label": "打开订阅源 local-system",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(1) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.feed-open-local-system",
+        "data-control-key": "rss.control.button.feed-open-local-system@rss.default",
+        "data-entity-key": "rss.control.button.feed-open-local-system",
+        "data-restore-focus": "rss.control.button.feed-open-local-system@rss.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "local-system"
+        "data-rss-source-id": "local-system",
+        "data-settings-key": "feed-open-local-system",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49118,7 +49210,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:81e9755fc42508fb70d5",
+      "candidateKey": "candidate:443df010f43fc1a1b915",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49132,10 +49224,16 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "查看全部",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > header > button[data-route=\"rss-all\"]",
+      "label": "查看全部文章",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-all"
+        "data-control-id": "rss.control.rss.default.button.articles-view-all",
+        "data-control-key": "rss.control.button.articles-view-all@rss.default",
+        "data-entity-key": "rss.control.button.articles-view-all",
+        "data-route": "rss-all",
+        "data-settings-key": "articles-view-all",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -49151,7 +49249,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:9d0943c06e4bac389ad7",
+      "candidateKey": "candidate:c80b38af20360c1d5b9c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49165,13 +49263,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Reader UI 前端输入件更新说明 GitHub Releases · 10:18 · 开源项目 新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(1)",
+      "label": "打开文章 reader-ui-update",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.article-open-reader-ui-update",
+        "data-control-key": "rss.control.button.article-open-reader-ui-update@rss.default",
+        "data-entity-key": "rss.control.button.article-open-reader-ui-update",
+        "data-restore-focus": "rss.control.button.article-open-reader-ui-update@rss.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-ui-update"
+        "data-rss-article-id": "reader-ui-update",
+        "data-settings-key": "article-open-reader-ui-update",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49183,7 +49288,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:45384b1d671da20f0f93",
+      "candidateKey": "candidate:e1784e8f51bcc5ed8c8a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49197,13 +49302,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "订阅源规则解析失败排查 书源维护公告 · 09:52 · 维护 部分订阅源返回 HTML 而不是 XML，已建议检查 Cookie、登录态和正文提取规则。",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(2)",
+      "label": "打开文章 source-rule-debug",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.article-open-source-rule-debug",
+        "data-control-key": "rss.control.button.article-open-source-rule-debug@rss.default",
+        "data-entity-key": "rss.control.button.article-open-source-rule-debug",
+        "data-restore-focus": "rss.control.button.article-open-source-rule-debug@rss.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "source-rule-debug"
+        "data-rss-article-id": "source-rule-debug",
+        "data-settings-key": "article-open-source-rule-debug",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49215,7 +49327,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7728f5db9c45125c6b95",
+      "candidateKey": "candidate:e99b11acc76ceb565db8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49229,13 +49341,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Legado 订阅源配置经验整理 阅读器版本讨论 · 昨天 · 社区 社区整理了单 URL 源、分类入口、文章样式和 WebView 正文处理的常见配置方式。",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(3)",
+      "label": "打开文章 legado-rss-config",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss.default.button.article-open-legado-rss-config",
+        "data-control-key": "rss.control.button.article-open-legado-rss-config@rss.default",
+        "data-entity-key": "rss.control.button.article-open-legado-rss-config",
+        "data-restore-focus": "rss.control.button.article-open-legado-rss-config@rss.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "legado-rss-config"
+        "data-rss-article-id": "legado-rss-config",
+        "data-settings-key": "article-open-legado-rss-config",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49247,7 +49366,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1aa455aece71b0fbfe90",
+      "candidateKey": "candidate:1f6c569db1a1a4440787",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49261,12 +49380,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"bookshelf\"]:nth-of-type(1)",
+      "label": "切换主导航 bookshelf",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-ui-event=\"mainTab\\.select\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-nav-type": "bookshelf"
+        "data-control-id": "rss.control.rss.default.button.main-tab-bookshelf",
+        "data-control-key": "rss.control.button.main-tab-bookshelf@rss.default",
+        "data-entity-key": "rss.control.button.main-tab-bookshelf",
+        "data-nav-type": "bookshelf",
+        "data-settings-key": "main-tab-bookshelf",
+        "data-ui-event": "mainTab.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "tab.item.select",
+      "uiEvent": "mainTab.select",
       "rawMotionHints": [
         "button.activate",
         "tab.item.switch"
@@ -49280,7 +49405,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:385e5cc1b07b6f521b77",
+      "candidateKey": "candidate:32c98c488caa6a6ea009",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49294,12 +49419,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "发现",
-      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"discover\"]:nth-of-type(2)",
+      "label": "切换主导航 discover",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-ui-event=\"mainTab\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-nav-type": "discover"
+        "data-control-id": "rss.control.rss.default.button.main-tab-discover",
+        "data-control-key": "rss.control.button.main-tab-discover@rss.default",
+        "data-entity-key": "rss.control.button.main-tab-discover",
+        "data-nav-type": "discover",
+        "data-settings-key": "main-tab-discover",
+        "data-ui-event": "mainTab.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "tab.item.select",
+      "uiEvent": "mainTab.select",
       "rawMotionHints": [
         "button.activate",
         "tab.item.switch"
@@ -49313,7 +49444,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:cc1837669e65399e8dd8",
+      "candidateKey": "candidate:193a60a43b8964be7ec4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49327,12 +49458,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "RSS",
-      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"rss\"]:nth-of-type(3)",
+      "label": "切换主导航 rss",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-ui-event=\"mainTab\\.select\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-nav-type": "rss"
+        "data-control-id": "rss.control.rss.default.button.main-tab-rss",
+        "data-control-key": "rss.control.button.main-tab-rss@rss.default",
+        "data-entity-key": "rss.control.button.main-tab-rss",
+        "data-nav-type": "rss",
+        "data-settings-key": "main-tab-rss",
+        "data-ui-event": "mainTab.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "tab.item.select",
+      "uiEvent": "mainTab.select",
       "rawMotionHints": [
         "button.activate",
         "tab.item.select",
@@ -49348,7 +49485,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6e6d0f5e3dc3c481f7e3",
+      "candidateKey": "candidate:0c767a85badadf2691c7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49362,12 +49499,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "设置",
-      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"settings\"]:nth-of-type(4)",
+      "label": "切换主导航 settings",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-ui-event=\"mainTab\\.select\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-nav-type": "settings"
+        "data-control-id": "rss.control.rss.default.button.main-tab-settings",
+        "data-control-key": "rss.control.button.main-tab-settings@rss.default",
+        "data-entity-key": "rss.control.button.main-tab-settings",
+        "data-nav-type": "settings",
+        "data-settings-key": "main-tab-settings",
+        "data-ui-event": "mainTab.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "tab.item.select",
+      "uiEvent": "mainTab.select",
       "rawMotionHints": [
         "button.activate",
         "tab.item.switch"
@@ -49381,7 +49524,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:76b8e5adb29e1404fe3b",
+      "candidateKey": "candidate:25646991707861df5a55",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49396,8 +49539,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-all.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -49412,7 +49562,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:72083f02217b8a562b63",
+      "candidateKey": "candidate:2f5ddcfb93bedc2351d7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49427,11 +49577,18 @@
       "domTag": "button",
       "role": "button",
       "label": "搜索订阅源、文章标题或分组",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > button[data-route=\"rss-search\"]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > button[data-ui-event=\"search\\.open\"]",
       "dataAttributes": {
-        "data-route": "rss-search"
+        "data-control-id": "rss.control.rss-all.default.button.search-open",
+        "data-control-key": "rss.control.button.search-open@rss-all.default",
+        "data-entity-key": "rss.control.button.search-open",
+        "data-restore-focus": "rss.control.button.search-open@rss-all.default",
+        "data-route": "rss-search",
+        "data-settings-key": "search-open",
+        "data-ui-event": "search.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49445,7 +49602,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:52d7424892ed9a71667a",
+      "candidateKey": "candidate:f9c89ff3732c930ae6db",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49460,11 +49617,17 @@
       "domTag": "button",
       "role": "button",
       "label": "源列表",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss"
+        "data-control-id": "rss.control.rss-all.default.button.mode-sources",
+        "data-control-key": "rss.control.button.mode-sources@rss-all.default",
+        "data-entity-key": "rss.control.button.mode-sources",
+        "data-route": "rss",
+        "data-settings-key": "mode-sources",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49478,7 +49641,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:489354019f94cda9c5dc",
+      "candidateKey": "candidate:f61ac607a9774de1d296",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49492,12 +49655,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "全部",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-all\"]:nth-of-type(2)",
+      "label": "全部文章",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "rss-all"
+        "data-control-id": "rss.control.rss-all.default.button.mode-all",
+        "data-control-key": "rss.control.button.mode-all@rss-all.default",
+        "data-entity-key": "rss.control.button.mode-all",
+        "data-route": "rss-all",
+        "data-settings-key": "mode-all",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49511,7 +49680,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:36b5c3084dadab0f7c55",
+      "candidateKey": "candidate:b8bfe3207ad63ab9d20f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49525,12 +49694,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "收藏",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-starred\"]:nth-of-type(3)",
+      "label": "收藏文章",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "rss-starred"
+        "data-control-id": "rss.control.rss-all.default.button.mode-starred",
+        "data-control-key": "rss.control.button.mode-starred@rss-all.default",
+        "data-entity-key": "rss.control.button.mode-starred",
+        "data-route": "rss-starred",
+        "data-settings-key": "mode-starred",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49544,7 +49719,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6ec646e45d31349ac41c",
+      "candidateKey": "candidate:429603cb669696256d1f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49559,11 +49734,17 @@
       "domTag": "button",
       "role": "button",
       "label": "规则订阅",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-rule-subscription\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-rule-subscription"
+        "data-control-id": "rss.control.rss-all.default.button.mode-rule-subscription",
+        "data-control-key": "rss.control.button.mode-rule-subscription@rss-all.default",
+        "data-entity-key": "rss.control.button.mode-rule-subscription",
+        "data-route": "rss-rule-subscription",
+        "data-settings-key": "mode-rule-subscription",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49577,7 +49758,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:01e376c4727f1a38ecf5",
+      "candidateKey": "candidate:495ddaa90524ee9477e5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49591,13 +49772,20 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "GitHub Releases 开源项目 · 6 未读",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-route=\"rss-source-feed\"]:nth-of-type(1)",
+      "label": "打开订阅源 github-releases",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.feed-open-github-releases",
+        "data-control-key": "rss.control.button.feed-open-github-releases@rss-all.default",
+        "data-entity-key": "rss.control.button.feed-open-github-releases",
+        "data-restore-focus": "rss.control.button.feed-open-github-releases@rss-all.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "feed-open-github-releases",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49611,7 +49799,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:48808e382ccdd7f81b25",
+      "candidateKey": "candidate:3b49cf0cd55ce76f478a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49625,13 +49813,20 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "阅读器版本讨论 社区 · 12 未读",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-route=\"rss-source-feed\"]:nth-of-type(2)",
+      "label": "打开订阅源 reader-discussions",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.feed-open-reader-discussions",
+        "data-control-key": "rss.control.button.feed-open-reader-discussions@rss-all.default",
+        "data-entity-key": "rss.control.button.feed-open-reader-discussions",
+        "data-restore-focus": "rss.control.button.feed-open-reader-discussions@rss-all.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "reader-discussions"
+        "data-rss-source-id": "reader-discussions",
+        "data-settings-key": "feed-open-reader-discussions",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49645,7 +49840,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ecaff0f6fd44048e44c6",
+      "candidateKey": "candidate:284b7ba5d62dc43ad07b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49659,13 +49854,20 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "书源维护公告 维护 · 2 未读",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-route=\"rss-source-feed\"]:nth-of-type(3)",
+      "label": "打开订阅源 source-maintenance",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.feed-open-source-maintenance",
+        "data-control-key": "rss.control.button.feed-open-source-maintenance@rss-all.default",
+        "data-entity-key": "rss.control.button.feed-open-source-maintenance",
+        "data-restore-focus": "rss.control.button.feed-open-source-maintenance@rss-all.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "source-maintenance"
+        "data-rss-source-id": "source-maintenance",
+        "data-settings-key": "feed-open-source-maintenance",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49679,7 +49881,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e9190d4080389596510f",
+      "candidateKey": "candidate:0e2aa59875d4cc5bb2c6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49693,13 +49895,20 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "本地系统通知 系统 · 无未读",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-route=\"rss-source-feed\"]:nth-of-type(4)",
+      "label": "打开订阅源 local-system",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-strip:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.feed-open-local-system",
+        "data-control-key": "rss.control.button.feed-open-local-system@rss-all.default",
+        "data-entity-key": "rss.control.button.feed-open-local-system",
+        "data-restore-focus": "rss.control.button.feed-open-local-system@rss-all.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "local-system"
+        "data-rss-source-id": "local-system",
+        "data-settings-key": "feed-open-local-system",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49713,7 +49922,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c4b704794015cb6e05ed",
+      "candidateKey": "candidate:7451394dd89a4832497a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49727,12 +49936,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "管理源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > header > button[data-route=\"rss-subscription-management\"]",
+      "label": "管理订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > header > button[data-ui-event=\"rss\\.subscription\\.open\"]",
       "dataAttributes": {
-        "data-route": "rss-subscription-management"
+        "data-control-id": "rss.control.rss-all.default.button.subscription-management",
+        "data-control-key": "rss.control.button.subscription-management@rss-all.default",
+        "data-entity-key": "rss.control.button.subscription-management",
+        "data-restore-focus": "rss.control.button.subscription-management@rss-all.default",
+        "data-route": "rss-subscription-management",
+        "data-settings-key": "subscription-management",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -49746,7 +49962,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c15de3f5536e4b4e4c80",
+      "candidateKey": "candidate:37cf6de2731e925fd605",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49760,13 +49976,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Reader UI 前端输入件更新说明 GitHub Releases · 10:18 · 开源项目 新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(1)",
+      "label": "打开文章 reader-ui-update",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.article-open-reader-ui-update",
+        "data-control-key": "rss.control.button.article-open-reader-ui-update@rss-all.default",
+        "data-entity-key": "rss.control.button.article-open-reader-ui-update",
+        "data-restore-focus": "rss.control.button.article-open-reader-ui-update@rss-all.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-ui-update"
+        "data-rss-article-id": "reader-ui-update",
+        "data-settings-key": "article-open-reader-ui-update",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49778,7 +50001,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:681026ce9ba67870a222",
+      "candidateKey": "candidate:de0d66aace47bd467a89",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49792,13 +50015,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "订阅源规则解析失败排查 书源维护公告 · 09:52 · 维护 部分订阅源返回 HTML 而不是 XML，已建议检查 Cookie、登录态和正文提取规则。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(2)",
+      "label": "打开文章 source-rule-debug",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.article-open-source-rule-debug",
+        "data-control-key": "rss.control.button.article-open-source-rule-debug@rss-all.default",
+        "data-entity-key": "rss.control.button.article-open-source-rule-debug",
+        "data-restore-focus": "rss.control.button.article-open-source-rule-debug@rss-all.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "source-rule-debug"
+        "data-rss-article-id": "source-rule-debug",
+        "data-settings-key": "article-open-source-rule-debug",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49810,7 +50040,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d0b047e5af7f1d523335",
+      "candidateKey": "candidate:2149ff95a36fbd0d1266",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49824,13 +50054,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Legado 订阅源配置经验整理 阅读器版本讨论 · 昨天 · 社区 社区整理了单 URL 源、分类入口、文章样式和 WebView 正文处理的常见配置方式。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(3)",
+      "label": "打开文章 legado-rss-config",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.article-open-legado-rss-config",
+        "data-control-key": "rss.control.button.article-open-legado-rss-config@rss-all.default",
+        "data-entity-key": "rss.control.button.article-open-legado-rss-config",
+        "data-restore-focus": "rss.control.button.article-open-legado-rss-config@rss-all.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "legado-rss-config"
+        "data-rss-article-id": "legado-rss-config",
+        "data-settings-key": "article-open-legado-rss-config",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49842,7 +50079,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:84e1d88dca13ba0b8392",
+      "candidateKey": "candidate:26aeeda302ff3d9777bb",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49856,13 +50093,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "本地导入完成解析 本地系统通知 · 周二 · 系统 本地 OPML 导入完成，4 个订阅源已启用，1 个订阅源需要补全图标。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(4)",
+      "label": "打开文章 local-import-complete",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.article-open-local-import-complete",
+        "data-control-key": "rss.control.button.article-open-local-import-complete@rss-all.default",
+        "data-entity-key": "rss.control.button.article-open-local-import-complete",
+        "data-restore-focus": "rss.control.button.article-open-local-import-complete@rss-all.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "local-import-complete"
+        "data-rss-article-id": "local-import-complete",
+        "data-settings-key": "article-open-local-import-complete",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49874,7 +50118,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:30762a2dd4d23d91c123",
+      "candidateKey": "candidate:405aa40e57f339603a40",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -49888,13 +50132,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "阅读器路线图讨论摘要 阅读器版本讨论 · 周一 · 社区 围绕 RSS 收藏、源分组、正文阅读和同步备份的交互关系做了讨论。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(5)",
+      "label": "打开文章 reader-roadmap",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(2) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(5)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-all.default.button.article-open-reader-roadmap",
+        "data-control-key": "rss.control.button.article-open-reader-roadmap@rss-all.default",
+        "data-entity-key": "rss.control.button.article-open-reader-roadmap",
+        "data-restore-focus": "rss.control.button.article-open-reader-roadmap@rss-all.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-roadmap"
+        "data-rss-article-id": "reader-roadmap",
+        "data-settings-key": "article-open-reader-roadmap",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -49906,7 +50157,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0b4ac2f97e317be2a599",
+      "candidateKey": "candidate:223478cfee548e8d97d6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50281,8 +50532,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-feed.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -50297,7 +50555,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:48183ecfe2953b1da744",
+      "candidateKey": "candidate:e46730c0747c507e7b61",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50311,12 +50569,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-feed.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -50330,7 +50594,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:51f5c46eefa107e18d3c",
+      "candidateKey": "candidate:17449bd396eeab01d4b9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50344,11 +50608,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-feed.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-feed.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:ea92c5b69292df7f803f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-feed",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-feed.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -50364,7 +50674,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0075a494650143aab3ed",
+      "candidateKey": "candidate:a306daf4449b342b53ce",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50378,12 +50688,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-feed.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-feed.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -50397,7 +50714,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c2052964b50cce76d1bc",
+      "candidateKey": "candidate:c6c58ff76775e93a20f0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50411,45 +50728,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-feed.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:97bd4eb5214975723402",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-feed",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 全部",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -50461,10 +50751,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:5363c0b6b031dc625d63",
+      "candidateKey": "candidate:52b4372ded930f3dd6c1",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50478,10 +50767,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-feed.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-feed.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -50497,7 +50793,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0b3886350e5133e04c81",
+      "candidateKey": "candidate:35506201e3c6958907e2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50511,13 +50807,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Reader UI 前端输入件更新说明 GitHub Releases · 10:18 · 开源项目 新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]",
+      "label": "打开文章 reader-ui-update",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-feed.default.button.article-open-reader-ui-update",
+        "data-control-key": "rss.control.button.article-open-reader-ui-update@rss-source-feed.default",
+        "data-entity-key": "rss.control.button.article-open-reader-ui-update",
+        "data-restore-focus": "rss.control.button.article-open-reader-ui-update@rss-source-feed.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-ui-update"
+        "data-rss-article-id": "reader-ui-update",
+        "data-settings-key": "article-open-reader-ui-update",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -50529,7 +50832,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a24427c755b81a30864d",
+      "candidateKey": "candidate:e254af9b72796c179793",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50544,8 +50847,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -50560,7 +50870,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:3c42dcce5c40f9a7ddd2",
+      "candidateKey": "candidate:4c83ec427f49e6ef50ef",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50574,12 +50884,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -50593,7 +50909,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:70caecdf79241a72f355",
+      "candidateKey": "candidate:7ed87da99ca7df48e4e7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50607,11 +50923,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-category-novel.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:0aea14625dad607a658f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-category-novel",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -50627,7 +50989,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6dde5d2436029b3883b5",
+      "candidateKey": "candidate:5b423afbe5c0fcbf2311",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50641,12 +51003,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-category-novel.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -50660,7 +51029,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:9426dc30578435f34f15",
+      "candidateKey": "candidate:8d8a93b037b718c4fbd9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50674,45 +51043,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:5ecfd0aa78a67cd510bf",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-category-novel",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 Novel",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -50724,10 +51066,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ad47aa7056aea393d912",
+      "candidateKey": "candidate:78f1f7daf67604555d41",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50741,10 +51082,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-category-novel.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-category-novel.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-category-novel.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -50760,7 +51108,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:443b0f5456105644f430",
+      "candidateKey": "candidate:fe2b8b58047eaf206e2f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50775,8 +51123,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -50791,7 +51146,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:760a62254c46b6a235c9",
+      "candidateKey": "candidate:604058daabad0a154e0d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50805,12 +51160,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -50824,7 +51185,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:fc5787f083397e5f3aa3",
+      "candidateKey": "candidate:b213b6cb3f2b4a0f1d25",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50838,11 +51199,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-category-tech.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:8bcc02953028464364cb",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-category-tech",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -50858,7 +51265,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:920ef0acae97c3f9fc9d",
+      "candidateKey": "candidate:1470a0920e6e35a0e6c8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50872,12 +51279,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-category-tech.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -50891,7 +51305,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:eeba395a7218947168ef",
+      "candidateKey": "candidate:0e8b0f9b2d60e0655127",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50905,45 +51319,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:6ae7fd279a8cf06d9f65",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-category-tech",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 Tech",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -50955,10 +51342,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:172650b9ddcae1163d10",
+      "candidateKey": "candidate:8fc4df0005de6aa945be",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -50972,10 +51358,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-category-tech.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -50991,7 +51384,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:18204ffa915eb1c45a84",
+      "candidateKey": "candidate:2806ff20ce3ce5d5ec87",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51005,13 +51398,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Reader UI 前端输入件更新说明 GitHub Releases · 10:18 · 开源项目 新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]",
+      "label": "打开文章 reader-ui-update",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-tech.default.button.article-open-reader-ui-update",
+        "data-control-key": "rss.control.button.article-open-reader-ui-update@rss-source-category-tech.default",
+        "data-entity-key": "rss.control.button.article-open-reader-ui-update",
+        "data-restore-focus": "rss.control.button.article-open-reader-ui-update@rss-source-category-tech.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-ui-update"
+        "data-rss-article-id": "reader-ui-update",
+        "data-settings-key": "article-open-reader-ui-update",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51023,7 +51423,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f0548c1d766bcde85478",
+      "candidateKey": "candidate:c3b0db2154e778eaceac",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51038,8 +51438,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -51054,7 +51461,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:eb3739695eb40c0fdec8",
+      "candidateKey": "candidate:2aa113b78c57e0ff10fa",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51068,12 +51475,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51087,7 +51500,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8b555d30e222ebc21b67",
+      "candidateKey": "candidate:b41a23863ea48954aef4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51101,11 +51514,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-category-booklist.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:888330f2ade65baaa130",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-category-booklist",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -51121,7 +51580,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e3fa03cf688e81790b7e",
+      "candidateKey": "candidate:f91ccb1b31c8a02333ad",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51135,12 +51594,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-category-booklist.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51154,7 +51620,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7e59ee0b6de25cd9abb3",
+      "candidateKey": "candidate:d490cf48ef0787d6841f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51168,45 +51634,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:ffe15fca86c28fb59e1a",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-category-booklist",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 Booklist",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -51218,10 +51657,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:fad08287368a02490219",
+      "candidateKey": "candidate:5365aadfbc0a814aae44",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51235,10 +51673,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-category-booklist.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-category-booklist.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-category-booklist.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -51254,7 +51699,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d39d1c5b106bc958e821",
+      "candidateKey": "candidate:b0a2efc15c2ff6014c0d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51269,8 +51714,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -51285,7 +51737,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d1f2b4beb5a07950346d",
+      "candidateKey": "candidate:652bd9e944d6994cfb6f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51300,11 +51752,18 @@
       "domTag": "button",
       "role": "button",
       "label": "搜索订阅源、文章标题或分组",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > button[data-route=\"rss-search\"]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > button[data-ui-event=\"search\\.open\"]",
       "dataAttributes": {
-        "data-route": "rss-search"
+        "data-control-id": "rss.control.rss-refreshing.default.button.search-open",
+        "data-control-key": "rss.control.button.search-open@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.search-open",
+        "data-restore-focus": "rss.control.button.search-open@rss-refreshing.default",
+        "data-route": "rss-search",
+        "data-settings-key": "search-open",
+        "data-ui-event": "search.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51318,7 +51777,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6df9314c34601a351acc",
+      "candidateKey": "candidate:338ad2c658248b770091",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51333,11 +51792,17 @@
       "domTag": "button",
       "role": "button",
       "label": "源列表",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss"
+        "data-control-id": "rss.control.rss-refreshing.default.button.mode-sources",
+        "data-control-key": "rss.control.button.mode-sources@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.mode-sources",
+        "data-route": "rss",
+        "data-settings-key": "mode-sources",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51351,7 +51816,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ae4476a877b2fa990735",
+      "candidateKey": "candidate:651304905cb57b82fa2f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51365,12 +51830,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "全部",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-all\"]:nth-of-type(2)",
+      "label": "全部文章",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "rss-all"
+        "data-control-id": "rss.control.rss-refreshing.default.button.mode-all",
+        "data-control-key": "rss.control.button.mode-all@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.mode-all",
+        "data-route": "rss-all",
+        "data-settings-key": "mode-all",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51384,7 +51855,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:29761242976889dd5ae1",
+      "candidateKey": "candidate:9c860c8564ff879a60c3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51398,12 +51869,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "收藏",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-starred\"]:nth-of-type(3)",
+      "label": "收藏文章",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"tab\\.item\\.select\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "rss-starred"
+        "data-control-id": "rss.control.rss-refreshing.default.button.mode-starred",
+        "data-control-key": "rss.control.button.mode-starred@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.mode-starred",
+        "data-route": "rss-starred",
+        "data-settings-key": "mode-starred",
+        "data-ui-event": "tab.item.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "tab.item.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51417,7 +51894,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f014d5b45e6163a32e46",
+      "candidateKey": "candidate:773dedf648199cc35b63",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51432,11 +51909,17 @@
       "domTag": "button",
       "role": "button",
       "label": "规则订阅",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-route=\"rss-rule-subscription\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > nav.fd-rss-mode-row > button[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-rule-subscription"
+        "data-control-id": "rss.control.rss-refreshing.default.button.mode-rule-subscription",
+        "data-control-key": "rss.control.button.mode-rule-subscription@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.mode-rule-subscription",
+        "data-route": "rss-rule-subscription",
+        "data-settings-key": "mode-rule-subscription",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51450,7 +51933,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:20e7a06d04b4b143c282",
+      "candidateKey": "candidate:2a642a3694f6fb85a8f2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51464,12 +51947,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "导入",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > header > span > button[data-route=\"rss-source-import\"]:nth-of-type(1)",
+      "label": "导入订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > header > span > button[data-ui-event=\"source\\.import\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-source-import"
+        "data-control-id": "rss.control.rss-refreshing.default.button.source-import",
+        "data-control-key": "rss.control.button.source-import@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.source-import",
+        "data-restore-focus": "rss.control.button.source-import@rss-refreshing.default",
+        "data-route": "rss-source-import",
+        "data-settings-key": "source-import",
+        "data-ui-event": "source.import.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.import.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51483,7 +51973,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:cf8446713ba780febc62",
+      "candidateKey": "candidate:639a352bcd9ec1a6b57a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51497,12 +51987,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "新建",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > header > span > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "新建订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > header > span > button[data-ui-event=\"rss\\.subscription\\.add\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "rss-source-edit"
+        "data-control-id": "rss.control.rss-refreshing.default.button.source-create",
+        "data-control-key": "rss.control.button.source-create@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.source-create",
+        "data-restore-focus": "rss.control.button.source-create@rss-refreshing.default",
+        "data-route": "rss-source-edit",
+        "data-settings-key": "source-create",
+        "data-ui-event": "rss.subscription.add",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.add",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -51516,7 +52013,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8209e66fa544b7f73dff",
+      "candidateKey": "candidate:d1001d484502e0addb62",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51530,12 +52027,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "筛选 全部",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-filter-control:nth-of-type(1) > button[data-rss-group-filter-toggle]",
+      "label": "筛选订阅源分组",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-filter-control:nth-of-type(1) > button[data-ui-event=\"rss\\.filter\\.select\"]",
       "dataAttributes": {
-        "data-rss-group-filter-toggle": ""
+        "data-control-id": "rss.control.rss-refreshing.default.button.group-filter-toggle",
+        "data-control-key": "rss.control.button.group-filter-toggle@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.group-filter-toggle",
+        "data-rss-group-filter-toggle": "",
+        "data-settings-key": "group-filter-toggle",
+        "data-ui-event": "rss.filter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": null,
+      "uiEvent": "rss.filter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -51547,10 +52050,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:54ddade51c412203f4bc",
+      "candidateKey": "candidate:961d74ee0c98181c37eb",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51564,13 +52066,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "GitHub Releases 开源项目 · 3 个入口 · 列表 · 默认 RSS 6",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(1)",
+      "label": "打开订阅源 github-releases",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.feed-open-github-releases",
+        "data-control-key": "rss.control.button.feed-open-github-releases@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.feed-open-github-releases",
+        "data-restore-focus": "rss.control.button.feed-open-github-releases@rss-refreshing.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "feed-open-github-releases",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51582,7 +52091,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:aae97e2f37dd6f775c0f",
+      "candidateKey": "candidate:9d93bc5b3e6d7e03fe71",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51596,13 +52105,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "阅读器版本讨论 社区 · 4 个入口 · 图文 · 自定义列表 12",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(2)",
+      "label": "打开订阅源 reader-discussions",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.feed-open-reader-discussions",
+        "data-control-key": "rss.control.button.feed-open-reader-discussions@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.feed-open-reader-discussions",
+        "data-restore-focus": "rss.control.button.feed-open-reader-discussions@rss-refreshing.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "reader-discussions"
+        "data-rss-source-id": "reader-discussions",
+        "data-settings-key": "feed-open-reader-discussions",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51614,7 +52130,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:2f7259626c79ed35fb6f",
+      "candidateKey": "candidate:015e81bfa7fa73d1b85d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51628,13 +52144,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "书源维护公告 维护 · 2 个入口 · 紧凑 · 正文规则 2",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(3)",
+      "label": "打开订阅源 source-maintenance",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.feed-open-source-maintenance",
+        "data-control-key": "rss.control.button.feed-open-source-maintenance@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.feed-open-source-maintenance",
+        "data-restore-focus": "rss.control.button.feed-open-source-maintenance@rss-refreshing.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "source-maintenance"
+        "data-rss-source-id": "source-maintenance",
+        "data-settings-key": "feed-open-source-maintenance",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51646,7 +52169,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:2091805e6e43286a19e7",
+      "candidateKey": "candidate:6f00c86f23f11f8b7dfb",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51660,13 +52183,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "本地系统通知 系统 · 1 个入口 · 列表 · 单 URL 0",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-route=\"rss-source-feed\"]:nth-of-type(4)",
+      "label": "打开订阅源 local-system",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-overview:nth-of-type(2) > section.fd-rss-source-overview-list:nth-of-type(2) > article[data-ui-event=\"rss\\.subscription\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.feed-open-local-system",
+        "data-control-key": "rss.control.button.feed-open-local-system@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.feed-open-local-system",
+        "data-restore-focus": "rss.control.button.feed-open-local-system@rss-refreshing.default",
         "data-route": "rss-source-feed",
-        "data-rss-source-id": "local-system"
+        "data-rss-source-id": "local-system",
+        "data-settings-key": "feed-open-local-system",
+        "data-ui-event": "rss.subscription.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.subscription.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51678,7 +52208,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:baa01cf96c9398577dec",
+      "candidateKey": "candidate:3f08d9abbaf1350a75d1",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51692,10 +52222,16 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "查看全部",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-all\"]",
+      "label": "查看全部文章",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-all"
+        "data-control-id": "rss.control.rss-refreshing.default.button.articles-view-all",
+        "data-control-key": "rss.control.button.articles-view-all@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.articles-view-all",
+        "data-route": "rss-all",
+        "data-settings-key": "articles-view-all",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -51711,7 +52247,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:3398d4e944af325c0f88",
+      "candidateKey": "candidate:00ebeb44213365886ce6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51725,13 +52261,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Reader UI 前端输入件更新说明 GitHub Releases · 10:18 · 开源项目 新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(1)",
+      "label": "打开文章 reader-ui-update",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.article-open-reader-ui-update",
+        "data-control-key": "rss.control.button.article-open-reader-ui-update@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.article-open-reader-ui-update",
+        "data-restore-focus": "rss.control.button.article-open-reader-ui-update@rss-refreshing.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-ui-update"
+        "data-rss-article-id": "reader-ui-update",
+        "data-settings-key": "article-open-reader-ui-update",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51743,7 +52286,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a70595dc97e654d4f38f",
+      "candidateKey": "candidate:cdcc8452ed22c4003b9f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51757,13 +52300,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "订阅源规则解析失败排查 书源维护公告 · 09:52 · 维护 部分订阅源返回 HTML 而不是 XML，已建议检查 Cookie、登录态和正文提取规则。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(2)",
+      "label": "打开文章 source-rule-debug",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.article-open-source-rule-debug",
+        "data-control-key": "rss.control.button.article-open-source-rule-debug@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.article-open-source-rule-debug",
+        "data-restore-focus": "rss.control.button.article-open-source-rule-debug@rss-refreshing.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "source-rule-debug"
+        "data-rss-article-id": "source-rule-debug",
+        "data-settings-key": "article-open-source-rule-debug",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51775,7 +52325,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:da329dab185f71d231d4",
+      "candidateKey": "candidate:6a233e49be2917aba1c5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -51789,13 +52339,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Legado 订阅源配置经验整理 阅读器版本讨论 · 昨天 · 社区 社区整理了单 URL 源、分类入口、文章样式和 WebView 正文处理的常见配置方式。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]:nth-of-type(3)",
+      "label": "打开文章 legado-rss-config",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-refreshing.default.button.article-open-legado-rss-config",
+        "data-control-key": "rss.control.button.article-open-legado-rss-config@rss-refreshing.default",
+        "data-entity-key": "rss.control.button.article-open-legado-rss-config",
+        "data-restore-focus": "rss.control.button.article-open-legado-rss-config@rss-refreshing.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "legado-rss-config"
+        "data-rss-article-id": "legado-rss-config",
+        "data-settings-key": "article-open-legado-rss-config",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -51807,7 +52364,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:874e42a4135b5ec0cdde",
+      "candidateKey": "candidate:99fd4bd53b7bd832fed9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87524,8 +88081,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -87540,7 +88104,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:cff05335f784c9cdd3c8",
+      "candidateKey": "candidate:c43b53048422244e4983",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87554,12 +88118,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -87573,7 +88143,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0c19c935d881a403d491",
+      "candidateKey": "candidate:c894eeac1fcdd7fd8aee",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87587,11 +88157,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-category-releases.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:ed78d4d48f1737f741aa",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-category-releases",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -87607,7 +88223,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e9462d2a97e68e5cb7f1",
+      "candidateKey": "candidate:bb2f8efcca98250f83fb",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87621,12 +88237,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-category-releases.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -87640,7 +88263,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:65e517ff48304acfef0f",
+      "candidateKey": "candidate:c35fd144cc5745dead9a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87654,45 +88277,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:60fa2bac7f98c025f3c3",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-category-releases",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 Releases",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -87704,10 +88300,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:65dc87b391d66c04e3a5",
+      "candidateKey": "candidate:baa4975c6aeb81f70a66",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87721,10 +88316,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-category-releases.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -87740,7 +88342,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:40d3797875c7a0541b66",
+      "candidateKey": "candidate:0c510cc42937ee5ef378",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87754,13 +88356,20 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "Reader UI 前端输入件更新说明 GitHub Releases · 10:18 · 开源项目 新增发现页状态路由、阅读控制层响应式约束，并补充 RSS 页面结构规划。",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-route=\"rss-detail\"]",
+      "label": "打开文章 reader-ui-update",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > section.fd-rss-article-list > article[data-ui-event=\"rss\\.entry\\.open\"]",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-releases.default.button.article-open-reader-ui-update",
+        "data-control-key": "rss.control.button.article-open-reader-ui-update@rss-source-category-releases.default",
+        "data-entity-key": "rss.control.button.article-open-reader-ui-update",
+        "data-restore-focus": "rss.control.button.article-open-reader-ui-update@rss-source-category-releases.default",
         "data-route": "rss-detail",
-        "data-rss-article-id": "reader-ui-update"
+        "data-rss-article-id": "reader-ui-update",
+        "data-settings-key": "article-open-reader-ui-update",
+        "data-ui-event": "rss.entry.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.entry.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -87772,7 +88381,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0cde11b2355e5c3d30a3",
+      "candidateKey": "candidate:1b5de1dc36a1b79b0e84",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87787,8 +88396,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -87803,7 +88419,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:44dbefdd9644fe55bee3",
+      "candidateKey": "candidate:297d3020405511bfb08a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87817,12 +88433,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -87836,7 +88458,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ca8092d25039a3ce24c0",
+      "candidateKey": "candidate:2eb8b958fc8839ae84d7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87850,11 +88472,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-category-issues.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:c7980f5b0bfe96f46730",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-category-issues",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -87870,7 +88538,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:915f0dc1e37058cc39e6",
+      "candidateKey": "candidate:e5b0a5ae32d81de209d6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87884,12 +88552,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-category-issues.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -87903,7 +88578,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:81899de1f3576bc3c7d3",
+      "candidateKey": "candidate:d2920f72cc69a46c89c4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87917,45 +88592,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:a1f15c644c53e60fb39f",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-category-issues",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 Issues",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -87967,10 +88615,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:3804be9612cfeee902b9",
+      "candidateKey": "candidate:4eccd1502ae8d9c8d749",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -87984,10 +88631,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-category-issues.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-category-issues.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-category-issues.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -88003,7 +88657,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d90037d34160e974b2f8",
+      "candidateKey": "candidate:08b4977d9a373d8cb28e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -88018,8 +88672,15 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.back",
+        "data-control-key": "rss.control.button.back@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop",
+        "data-viewport": "phone"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -88034,7 +88695,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a0d52b4c67506cd62e93",
+      "candidateKey": "candidate:192025bf8d5b48cd370d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -88048,12 +88709,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "刷新",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-refreshing\"]:nth-of-type(1)",
+      "label": "刷新订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.refresh\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "rss-refreshing"
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.refresh",
+        "data-control-key": "rss.control.button.refresh@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.refresh",
+        "data-route": "rss-refreshing",
+        "data-settings-key": "refresh",
+        "data-ui-event": "rss.refresh",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "rss.refresh",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -88067,7 +88734,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8d4328ac21f342c0952c",
+      "candidateKey": "candidate:4e6b3aebae41d8f0b24f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -88081,11 +88748,57 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "编辑源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-edit\"]:nth-of-type(2)",
+      "label": "编辑订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"rss\\.subscription\\.edit\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.source-edit",
+        "data-control-key": "rss.control.button.source-edit@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.source-edit",
+        "data-restore-focus": "rss.control.button.source-edit@rss-source-category-discussions.default",
         "data-route": "rss-source-edit",
-        "data-rss-source-id": "github-releases"
+        "data-rss-source-id": "github-releases",
+        "data-settings-key": "source-edit",
+        "data-ui-event": "rss.subscription.edit",
+        "data-viewport": "phone"
+      },
+      "uiEvent": "rss.subscription.edit",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:a8dd4743b81ed3426d23",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "rss-source-category-discussions",
+      "resolvedRouteId": "rss-subscription-management",
+      "aliasFor": "rss-subscription-management",
+      "runtimeFamily": "rss",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "查看阅读记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"route\\.push\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.read-record",
+        "data-control-key": "rss.control.button.read-record@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.read-record",
+        "data-route": "rss-read-record",
+        "data-settings-key": "read-record",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -88101,7 +88814,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ac8b42ac555ff6643930",
+      "candidateKey": "candidate:af311bf0ba52523341a3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -88115,12 +88828,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "记录",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-read-record\"]:nth-of-type(3)",
+      "label": "调试订阅源",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-ui-event=\"source\\.debug\\.open\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-route": "rss-read-record"
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.source-debug",
+        "data-control-key": "rss.control.button.source-debug@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.source-debug",
+        "data-restore-focus": "rss.control.button.source-debug@rss-source-category-discussions.default",
+        "data-route": "rss-source-debug",
+        "data-settings-key": "source-debug",
+        "data-ui-event": "source.debug.open",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.debug.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -88134,7 +88854,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4268c7150df2bd2d399e",
+      "candidateKey": "candidate:7ee445e927eaee82911d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -88148,45 +88868,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "调试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-source-toolbar:nth-of-type(1) > button[data-route=\"rss-source-debug\"]:nth-of-type(4)",
+      "label": "筛选订阅源分类",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-ui-event=\"rss\\.sourceFilter\\.select\"]",
       "dataAttributes": {
-        "data-route": "rss-source-debug"
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.category-filter-toggle",
+        "data-control-key": "rss.control.button.category-filter-toggle@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.category-filter-toggle",
+        "data-rss-category-filter-toggle": "",
+        "data-settings-key": "category-filter-toggle",
+        "data-ui-event": "rss.sourceFilter.select",
+        "data-viewport": "phone"
       },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:db100681ec318072eb0d",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "rss-source-category-discussions",
-      "resolvedRouteId": "rss-subscription-management",
-      "aliasFor": "rss-subscription-management",
-      "runtimeFamily": "rss",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "分类 Discussions",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-filter-control:nth-of-type(2) > button[data-rss-category-filter-toggle]",
-      "dataAttributes": {
-        "data-rss-category-filter-toggle": ""
-      },
-      "uiEvent": null,
+      "uiEvent": "rss.sourceFilter.select",
       "rawMotionHints": [
         "button.activate",
         "dropdown.trigger.press"
@@ -88198,10 +88891,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:9dcbea1ab5241c8ba8a7",
+      "candidateKey": "candidate:f531f8c83afcc75d1401",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -88215,10 +88907,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "源操作",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-route=\"rss-source-actions\"]",
+      "label": "打开订阅源操作",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-rss-article-section:nth-of-type(3) > header > button[data-ui-event=\"route\\.push\"]",
       "dataAttributes": {
-        "data-route": "rss-source-actions"
+        "data-control-id": "rss.control.rss-source-category-discussions.default.button.source-actions",
+        "data-control-key": "rss.control.button.source-actions@rss-source-category-discussions.default",
+        "data-entity-key": "rss.control.button.source-actions",
+        "data-restore-focus": "rss.control.button.source-actions@rss-source-category-discussions.default",
+        "data-route": "rss-source-actions",
+        "data-settings-key": "source-actions",
+        "data-ui-event": "route.push",
+        "data-viewport": "phone"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -88234,7 +88933,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:89c28bfc46f790d65e56",
+      "candidateKey": "candidate:d8ab9a2e4e525fd3eb27",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

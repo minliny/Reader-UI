@@ -40,7 +40,7 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2300,
+    "withUiEvent": 2309,
     "withRawMotionHints": 3719,
     "rawMotionHintOccurrences": 7139,
     "uniqueRawMotionHints": [
@@ -199,7 +199,7 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1508
+      "IC0_UI_EVENT_UNRESOLVED": 1499
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "add81fe585c18f8d6ffa3ad46e1875c4860c1535f9a54cbb90c2ee1012767335",
+  "inventorySha256": "f82edf6cd8edeba060c7b48e9c65b8a86edc0c9f75da90c8da8d48e822a47e68",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1290,7 +1290,7 @@
       "pageState": "default",
       "semanticControls": 22,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "c2027ef1ae03e0ba717ce1a2edfb04b0ee2679eedf8344ed58bcae8cb0a0c182"
+      "renderSha256": "ac7a3e510eca6a88e34729213c47d09c5b1da50de3842e0eccc7f335246d9b36"
     },
     {
       "routeId": "rss-all",
@@ -1301,7 +1301,7 @@
       "pageState": "default",
       "semanticControls": 16,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "9369c0d598a211257e81b38338a8d895989dfece9facf83b1a64e4d377e00370"
+      "renderSha256": "dc0e3daf6d26762208149e5e611e6e5f7ff8ae04f46a5c18539a2e55684c7684"
     },
     {
       "routeId": "rss-starred",
@@ -1323,7 +1323,7 @@
       "pageState": "default",
       "semanticControls": 8,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "bfebd8e123c309e1c0c5dc44228494f8f701c5f401ce0223cc4571de12048ce6"
+      "renderSha256": "f2a5361c665c22d17c970bd73c7967da91d054415a763a3748b14ec3951bbdbc"
     },
     {
       "routeId": "rss-source-category-novel",
@@ -1334,7 +1334,7 @@
       "pageState": "default",
       "semanticControls": 7,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "e936eeb63df096cf448815f51b8a0ce03b90ed0f7e1a61b97f65daa583de20fc"
+      "renderSha256": "c343314b26227f89b98730bf4252e71bf7d056ccebf820885b99c88a4ab9a1eb"
     },
     {
       "routeId": "rss-source-category-tech",
@@ -1345,7 +1345,7 @@
       "pageState": "default",
       "semanticControls": 8,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "248efdf1223845b15a81e37698989cb908401cf1c45634224ed4ea32e588333d"
+      "renderSha256": "a746bbc9019b0642ddf82b545c31fe29bc8fe08c65fe5fb0c05ec01668ff2e5e"
     },
     {
       "routeId": "rss-source-category-booklist",
@@ -1356,7 +1356,7 @@
       "pageState": "default",
       "semanticControls": 7,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3d109d828a10ac6a5ea69bffe7070f5792e0ad559afb739024239c30d1b52b37"
+      "renderSha256": "5eb17a0b982e8996c7bf32b8cf890cf7e719c77962065fee3b27afaa0e7603c2"
     },
     {
       "routeId": "rss-refreshing",
@@ -1367,7 +1367,7 @@
       "pageState": "refreshing",
       "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "8df89ea1419b5da5904333603a595108c594e1cb44facba9a96bc1a56200d64b"
+      "renderSha256": "5a5739d7339e273c37a5d9cad62da441dad86cb112d5f6ce879513f4f234f7cd"
     },
     {
       "routeId": "rss-search",
@@ -2269,7 +2269,7 @@
       "pageState": "default",
       "semanticControls": 8,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3e037c1bbb5e8c3a7137bd0d578cc12527ce285c8cdc210b00cd0f302277fa37"
+      "renderSha256": "4eab70ecd12459b22c41ccb041e5cf5824ef53c5d69b9a5d54dca89b2ef8a425"
     },
     {
       "routeId": "rss-source-category-issues",
@@ -2280,7 +2280,7 @@
       "pageState": "default",
       "semanticControls": 7,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "94386a95634ea744cde5ef221a70d8fabbcbd3faf96d19e31ac0863d09c3cef4"
+      "renderSha256": "998d02b86375ed8283dcb79ecb1d4ee43e422bc24a420d9ee6ab2401d373680a"
     },
     {
       "routeId": "rss-source-category-discussions",
@@ -2291,7 +2291,7 @@
       "pageState": "default",
       "semanticControls": 7,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "c4d814617b3b3c491ea5fb7c781ed97ead35ddcff1d8a5fed785474923eef3e7"
+      "renderSha256": "491721a00fc3103f4495b92916e035111b99d6aa5e8b0586d1d3b32a1edbf74e"
     },
     {
       "routeId": "rss-source-actions",

@@ -47,6 +47,7 @@ const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
+const RSS_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "rss-runtime-contract.js");
 const SOURCE_SWITCH_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "w3-source-switch-renderers.js");
 const SYNC_BACKUP_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js");
 
@@ -204,6 +205,40 @@ function readerRuntimeActionDeclarations() {
       rendererSlot: "ReaderRuntimeContract.instrumentDom@reader-runtime-contract.js",
       pageFamily: "reader-runtime",
       source: "reader-runtime-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
+function rssRuntimeActionDeclarations() {
+  const contractModule = { exports: {} };
+  const contractWindow = {};
+  const source = readFileSync(RSS_RUNTIME_CONTRACT_PATH, "utf8");
+  Function("module", "window", "globalThis", source)(contractModule, contractWindow, contractWindow);
+  const specs = contractModule.exports.CONTROL_SPECS || contractWindow.ReaderRssRuntimeContract?.CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `rss.control.${spec.role}.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.default`,
+      controlId: `rss.control.${spec.route}.default.${spec.role}.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: "default",
+      domain: "rss",
+      family: "control",
+      role: spec.role,
+      renderer: "mainTabRss",
+      rendererFile: "render-runtime.js",
+      rendererSlot: "mainTabRss@render-runtime.js",
+      pageFamily: "rss",
+      source: "rss-action",
       label: spec.label,
       settingsKey: spec.settingsKey
     };
@@ -695,6 +730,7 @@ const allDeclarations = registryDeclarations
   .concat(bookshelfActionDeclarations())
   .concat(bookDetailActionDeclarations())
   .concat(readerRuntimeActionDeclarations())
+  .concat(rssRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())
   .concat(syncBackupActionDeclarations())
   .concat(restorePreviewActionDeclarations())

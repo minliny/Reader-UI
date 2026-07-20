@@ -546,6 +546,7 @@ export function createVmRenderer() {
     `${DEMO_ROOT}/appearance-spec.js`,
     `${DEMO_ROOT}/fixture.js`,
     `${DEMO_ROOT}/route-contract.js`,
+    `${DEMO_ROOT}/rss-runtime-contract.js`,
     ...rendererSourcePaths(),
   ];
   for (const sourcePath of sourcePaths) {

@@ -1375,10 +1375,10 @@
         : rssArticleHubContent(currentRoute, sources, unreadCount, refreshing, appState);
 
     if (currentRoute !== "rss") {
-      return rssLibraryScreen(data, rssSubpageTitle(currentRoute), contentHtml, "", appState);
+      return rssLibraryScreen(data, rssSubpageTitle(currentRoute), contentHtml, "", appState, "", currentRoute);
     }
 
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone fd-rss-phone"), {
+    const screenHtml = shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone fd-rss-phone"), {
       data,
       title: "RSS",
       activeType: "rss",
@@ -1388,14 +1388,15 @@
       contentHtml,
       stateHostHtml: mainTabFeedbackHtml(appState)
     }));
+    return window.ReaderRssRuntimeContract?.instrumentHtml?.(screenHtml, currentRoute) || screenHtml;
   }
 
   function rssShellScreen(data, title, contentHtml, appState) {
     return rssLibraryScreen(data, title, contentHtml, "", appState);
   }
 
-  function rssLibraryScreen(data, title, contentHtml, bottomActionHtml, appState, trailingHtml) {
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
+  function rssLibraryScreen(data, title, contentHtml, bottomActionHtml, appState, trailingHtml, primaryRoute) {
+    const screenHtml = shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-rss-reader-phone"), {
       data,
       title,
       ariaLabel: title,
@@ -1406,6 +1407,9 @@
       bottomActionHtml,
       stateHostHtml: mainTabFeedbackHtml(appState)
     }));
+    return primaryRoute
+      ? window.ReaderRssRuntimeContract?.instrumentHtml?.(screenHtml, primaryRoute) || screenHtml
+      : screenHtml;
   }
 
   function rssDetailScreen(data, appState) {
@@ -11895,6 +11899,7 @@
       screenHost.innerHTML = renderRoute(route, data, options, appState);
       readerRuntimeOwner?.dispatch?.({ type: "ROUTE_COMMIT", route });
       window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
+      window.ReaderRssRuntimeContract?.instrumentDom?.(screenHost, route);
       window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
       if (options?.loading) {
         ensureInlineLoadingIndicator(screenHost);
@@ -11908,6 +11913,7 @@
         syncAppThemeRoot(root, data, appState);
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
+        window.ReaderRssRuntimeContract?.instrumentDom?.(screenHost, route);
         window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
         updateRouteInfo(route, viewState);
       }
