@@ -1165,6 +1165,9 @@ const INSTANCE_KEY_ATTRIBUTE_RULES = Object.freeze([
   { attr: "data-instance", prefix: "instance" },
   // Book identifier (library / bookshelf / reader entry points).
   { attr: "data-book-id", prefix: "book" },
+  // Reader chapter business identifier. This is fixture/contract identity and
+  // must replace DOM ordinal or display-label disambiguation for chapter rows.
+  { attr: "data-reader-chapter-key", prefix: "chapter" },
   // TTS speed timer value (reader-full-tts speed options).
   { attr: "data-reader-tts-timer-value", prefix: "tts-speed" },
   // TTS speed timer index (fallback for TTS options).

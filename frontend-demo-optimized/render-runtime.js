@@ -145,7 +145,7 @@
         ? `${chapter?.title || "章节"} 已下载`
         : `下载 ${chapter?.title || "章节"}`;
     return `
-        <button class="${classes}" type="button" data-reader-chapter-download="${esc(key)}" data-reader-chapter-download-state="${esc(state)}" aria-label="${esc(label)}" aria-busy="${isLoading ? "true" : "false"}" aria-disabled="${isCached || isLoading ? "true" : "false"}" title="${esc(isLoading ? "下载中" : isCached ? "已下载" : "未下载，点击下载")}">
+        <button class="${classes}" type="button" data-action="download.task.open" data-reader-chapter-download="${esc(key)}" data-reader-chapter-download-key="${esc(chapter?.chapterKey || "")}" data-reader-chapter-key="${esc(chapter?.chapterKey || "")}" data-reader-chapter-download-state="${esc(state)}" aria-label="${esc(label)}" aria-busy="${isLoading ? "true" : "false"}" aria-disabled="${isCached || isLoading ? "true" : "false"}" title="${esc(isLoading ? "下载中" : isCached ? "已下载" : "未下载，点击下载")}">
           ${isLoading ? `<i class="fd-chapter-download-spinner" aria-hidden="true"></i>` : icon(isCached ? "check" : "download", "fd-small-icon")}
         </button>`;
   }
@@ -2916,9 +2916,9 @@
     return chapters.length > 0
       ? chapters
       : [
-          { title: "第 31 章 归途", markers: ["已缓存"] },
-          { title: "第 32 章 雨夜", current: true, markers: ["书签"] },
-          { title: "第 33 章 灯塔", markers: [] }
+          { chapterKey: "chapter-31-return", title: "第 31 章 归途", markers: ["已缓存"] },
+          { chapterKey: "chapter-32-rain-night", title: "第 32 章 雨夜", current: true, markers: ["书签"] },
+          { chapterKey: "chapter-33-lighthouse", title: "第 33 章 灯塔", markers: [] }
         ];
   }
 
@@ -4778,13 +4778,13 @@
         if (tocMode === "bookmark") {
           const excerptIndex = Math.max(0, chapterPool.indexOf(chapter));
           return `
-            <article class="fd-reader-quick-bookmark-card" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+            <article class="fd-reader-quick-bookmark-card" role="button" tabindex="0" data-action="reader.chapter.jump" data-reader-directory-index="${chapterIndex}" data-reader-chapter-key="${esc(chapter.chapterKey || "")}">
               <strong>${esc(chapter.title)}</strong>
               <p>${esc(`${quickBookmarkExcerpts[excerptIndex % quickBookmarkExcerpts.length]}${quickBookmarkExcerpts[(excerptIndex + 1) % quickBookmarkExcerpts.length]}`)}</p>
             </article>`;
         }
         return `
-            <article class="fd-reader-toc-row fd-reader-quick-directory-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+            <article class="fd-reader-toc-row fd-reader-quick-directory-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-action="reader.chapter.jump" data-reader-directory-index="${chapterIndex}" data-reader-chapter-key="${esc(chapter.chapterKey || "")}">
               <strong>${esc(chapter.title)}</strong>
               ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
             </article>`;
@@ -4943,7 +4943,7 @@
             <div class="fd-reader-full-bookmark-list">
               ${visibleItems.map((chapter, index) => {
                 const chapterIndex = Math.max(0, chapters.indexOf(chapter));
-                return `<article class="fd-reader-bookmark-card" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+                return `<article class="fd-reader-bookmark-card" role="button" tabindex="0" data-action="reader.chapter.jump" data-reader-directory-index="${chapterIndex}" data-reader-chapter-key="${esc(chapter.chapterKey || "")}">
                   <strong>${esc(chapter.title)}</strong>
                   <p>${esc(`${bookmarkExcerpts[index % bookmarkExcerpts.length]}${bookmarkExcerpts[(index + 1) % bookmarkExcerpts.length]}`)}</p>
                 </article>`;
@@ -4952,7 +4952,7 @@
             <div class="fd-reader-full-toc-list">
               ${visibleItems.map((chapter) => {
                 const chapterIndex = Math.max(0, chapters.indexOf(chapter));
-                return `<article class="fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-reader-directory-index="${chapterIndex}">
+                return `<article class="fd-reader-full-toc-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-action="reader.chapter.jump" data-reader-directory-index="${chapterIndex}" data-reader-chapter-key="${esc(chapter.chapterKey || "")}">
                   <strong>${esc(chapter.title)}</strong>
                   ${chapterMarkerSlots(chapter, appState, { book: data.library.book, chapterIndex })}
                 </article>`;
@@ -11542,6 +11542,8 @@
     const stackSize = target.querySelector("[data-stack-size]");
     const routeStack = ["bookshelf"];
     const appState = initialAppState(data);
+    const readerRuntimeOwner = window.ReaderRuntimeContract?.createOwner?.({ route: "immersive-reading" }) || null;
+    window.__readerRuntimeOwner = readerRuntimeOwner;
     let pendingRouteRequest = null;
     let hasRenderedInitialRoute = false;
     let readerPaginationRefreshFrame = 0;
@@ -11938,6 +11940,8 @@
       }
       syncAppThemeRoot(root, data, appState);
       screenHost.innerHTML = renderRoute(route, data, options, appState);
+      readerRuntimeOwner?.dispatch?.({ type: "ROUTE_COMMIT", route });
+      window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
       if (options?.loading) {
         ensureInlineLoadingIndicator(screenHost);
       }
@@ -11949,6 +11953,7 @@
       if (!options?.loading && updateReaderPagination(screenHost, data, appState)) {
         syncAppThemeRoot(root, data, appState);
         screenHost.innerHTML = renderRoute(route, data, options, appState);
+        window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
         updateRouteInfo(route, viewState);
       }
       restoreReaderScrollSnapshot(screenHost, scrollSnapshot, shouldRestorePanelScroll);
@@ -12520,6 +12525,7 @@
       }
       appState.readerPageIndex = nextIndex;
       appState.readerTurnDirection = action === "next" ? "next" : "prev";
+      readerRuntimeOwner?.dispatch?.({ type: "PAGE_TURN", direction: action });
       renderCurrentRoute();
     };
     const applyReaderChapterAction = (action) => {
@@ -12541,6 +12547,7 @@
       appState.readerChapterProgress = clamp(readerChapterProgressValue(data, appState) + progressDelta, chapterProgressConfig.min, chapterProgressConfig.max);
       appState.readerPageIndex = 0;
       appState.readerTurnDirection = action === "next" ? "next" : "prev";
+      readerRuntimeOwner?.dispatch?.({ type: "CHAPTER_JUMP", chapterKey: chapters[nextIndex]?.chapterKey || "" });
       renderCurrentRoute();
     };
     const applyReaderChapterProgress = (target, clientX, shouldRender) => {
@@ -12796,6 +12803,7 @@
       appState.readerChapterProgress = clamp(Math.round(chapterProgressConfig.min + ((index + 1) / Math.max(1, chapters.length)) * (chapterProgressConfig.max - chapterProgressConfig.min)), chapterProgressConfig.min, chapterProgressConfig.max);
       appState.readerPageIndex = 0;
       appState.readerTurnDirection = "";
+      readerRuntimeOwner?.dispatch?.({ type: "CHAPTER_JUMP", chapterKey: chapters[index]?.chapterKey || "" });
       replaceTopRoute("immersive-reading");
     };
     const applyReaderTtsAction = (action) => {
@@ -12811,6 +12819,7 @@
         tts.playbackError = "";
         appState.readerTtsSession = true;
         tts.playing = !tts.playing;
+        readerRuntimeOwner?.dispatch?.({ type: tts.playing ? "TTS_START" : "SESSION_STOP" });
         tts.sentenceIndex = readerTtsSentenceIndex(data, appState);
         if (tts.playing) {
           appState.readerAutoPageSession = false;
@@ -12829,6 +12838,7 @@
       renderCurrentRoute();
     };
     const stopReaderSession = (type) => {
+      readerRuntimeOwner?.dispatch?.({ type: "SESSION_STOP" });
       appState.readerSettingsExpandedOption = "";
       appState.readerTtsExpandedOption = "";
       if (type === "autoPage") {

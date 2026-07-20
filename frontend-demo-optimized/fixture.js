@@ -197,10 +197,10 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       coverKey: "longNight"
     },
     chapters: [
-      { title: "第 30 章 旧日", markers: ["已缓存"] },
-      { title: "第 31 章 归途", markers: ["已缓存", "书签"] },
-      { title: "第 32 章 雨夜", current: true, markers: ["书签"] },
-      { title: "第 33 章 灯塔", markers: [] }
+      { chapterKey: "chapter-30-old-day", title: "第 30 章 旧日", markers: ["已缓存"] },
+      { chapterKey: "chapter-31-return", title: "第 31 章 归途", markers: ["已缓存", "书签"] },
+      { chapterKey: "chapter-32-rain-night", title: "第 32 章 雨夜", current: true, markers: ["书签"] },
+      { chapterKey: "chapter-33-lighthouse", title: "第 33 章 灯塔", markers: [] }
     ]
   },
   reader: {

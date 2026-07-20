@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "cf4c2d0cf31d031930cf108ffff0693123e3747a9e28edd338a47895382ebd23"
+    "rendererSourcesSha256": "c482dc0c4330dd438f3f51d389e2219fb2ba562c032333cf07437bf2014cb899"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -15821,8 +15821,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 30 章 旧日",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"0\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-30-old-day",
         "data-reader-directory-index": "0"
       },
       "uiEvent": null,
@@ -15838,7 +15840,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:3d4da08f69c79647f84d",
+      "candidateKey": "candidate:fa133eb18579ae48c1c9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -15853,10 +15855,13 @@
       "domTag": "button",
       "role": "button",
       "label": "第 30 章 旧日 已下载",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"0\"]:nth-of-type(1) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"0\\:第\\ 30\\ 章\\ 旧日\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(1) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "0:第 30 章 旧日",
-        "data-reader-chapter-download-state": "cached"
+        "data-reader-chapter-download-key": "chapter-30-old-day",
+        "data-reader-chapter-download-state": "cached",
+        "data-reader-chapter-key": "chapter-30-old-day"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -15873,7 +15878,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:6f722879eb22d6f5ee39",
+      "candidateKey": "candidate:14cac3d3a74f1074ed6f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -15888,8 +15893,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 31 章 归途",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"1\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-31-return",
         "data-reader-directory-index": "1"
       },
       "uiEvent": null,
@@ -15905,7 +15912,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:e0e7480a405537e6fa64",
+      "candidateKey": "candidate:2978caf9c87442626375",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -15920,10 +15927,13 @@
       "domTag": "button",
       "role": "button",
       "label": "第 31 章 归途 已下载",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"1\"]:nth-of-type(2) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"1\\:第\\ 31\\ 章\\ 归途\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(2) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "1:第 31 章 归途",
-        "data-reader-chapter-download-state": "cached"
+        "data-reader-chapter-download-key": "chapter-31-return",
+        "data-reader-chapter-download-state": "cached",
+        "data-reader-chapter-key": "chapter-31-return"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -15940,7 +15950,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:11c07edec54e597d6439",
+      "candidateKey": "candidate:cc4c9044306a0e550f65",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -15955,8 +15965,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 32 章 雨夜",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"2\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-32-rain-night",
         "data-reader-directory-index": "2"
       },
       "uiEvent": null,
@@ -15972,7 +15984,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:ad3b40be579163d5411b",
+      "candidateKey": "candidate:8f007854f2c5c0502ebf",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -15987,10 +15999,13 @@
       "domTag": "button",
       "role": "button",
       "label": "下载 第 32 章 雨夜",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"2\"]:nth-of-type(3) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"2\\:第\\ 32\\ 章\\ 雨夜\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(3) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "2:第 32 章 雨夜",
-        "data-reader-chapter-download-state": "idle"
+        "data-reader-chapter-download-key": "chapter-32-rain-night",
+        "data-reader-chapter-download-state": "idle",
+        "data-reader-chapter-key": "chapter-32-rain-night"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -16007,7 +16022,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:1c51a51dca72680d2036",
+      "candidateKey": "candidate:82376a9bafdcddf5fddc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -16022,8 +16037,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 33 章 灯塔",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"3\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-33-lighthouse",
         "data-reader-directory-index": "3"
       },
       "uiEvent": null,
@@ -16039,7 +16056,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:f3a278759d405e0d3f72",
+      "candidateKey": "candidate:b415e236dabda989dca4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -16054,10 +16071,13 @@
       "domTag": "button",
       "role": "button",
       "label": "下载 第 33 章 灯塔",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"3\"]:nth-of-type(4) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"3\\:第\\ 33\\ 章\\ 灯塔\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(4) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "3:第 33 章 灯塔",
-        "data-reader-chapter-download-state": "idle"
+        "data-reader-chapter-download-key": "chapter-33-lighthouse",
+        "data-reader-chapter-download-state": "idle",
+        "data-reader-chapter-key": "chapter-33-lighthouse"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -16074,7 +16094,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:596e29f5f586a7cc13f5",
+      "candidateKey": "candidate:2c3363afc727b1722f81",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -75973,8 +75993,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 30 章 旧日",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"0\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-30-old-day",
         "data-reader-directory-index": "0"
       },
       "uiEvent": null,
@@ -75990,7 +76012,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:69563320af5f4f3fcb11",
+      "candidateKey": "candidate:8677d700ba6c16701de8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76005,10 +76027,13 @@
       "domTag": "button",
       "role": "button",
       "label": "第 30 章 旧日 已下载",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"0\"]:nth-of-type(1) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"0\\:第\\ 30\\ 章\\ 旧日\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(1) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "0:第 30 章 旧日",
-        "data-reader-chapter-download-state": "cached"
+        "data-reader-chapter-download-key": "chapter-30-old-day",
+        "data-reader-chapter-download-state": "cached",
+        "data-reader-chapter-key": "chapter-30-old-day"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -76025,7 +76050,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c1e62857225b678a5435",
+      "candidateKey": "candidate:e6d3cab7faa7973bd053",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76040,8 +76065,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 31 章 归途",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"1\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-31-return",
         "data-reader-directory-index": "1"
       },
       "uiEvent": null,
@@ -76057,7 +76084,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:942592f487895cb6ce97",
+      "candidateKey": "candidate:5374f5dd72eabe885c64",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76072,10 +76099,13 @@
       "domTag": "button",
       "role": "button",
       "label": "第 31 章 归途 已下载",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"1\"]:nth-of-type(2) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"1\\:第\\ 31\\ 章\\ 归途\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(2) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "1:第 31 章 归途",
-        "data-reader-chapter-download-state": "cached"
+        "data-reader-chapter-download-key": "chapter-31-return",
+        "data-reader-chapter-download-state": "cached",
+        "data-reader-chapter-key": "chapter-31-return"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -76092,7 +76122,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:d4440d2347c38ad22547",
+      "candidateKey": "candidate:eadcdbf1105b525d0c8e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76107,8 +76137,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 32 章 雨夜",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"2\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-32-rain-night",
         "data-reader-directory-index": "2"
       },
       "uiEvent": null,
@@ -76124,7 +76156,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:4164e8f218a8d1019588",
+      "candidateKey": "candidate:29c9fcaefc3bb415cbfc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76139,10 +76171,13 @@
       "domTag": "button",
       "role": "button",
       "label": "下载 第 32 章 雨夜",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"2\"]:nth-of-type(3) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"2\\:第\\ 32\\ 章\\ 雨夜\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(3) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "2:第 32 章 雨夜",
-        "data-reader-chapter-download-state": "idle"
+        "data-reader-chapter-download-key": "chapter-32-rain-night",
+        "data-reader-chapter-download-state": "idle",
+        "data-reader-chapter-key": "chapter-32-rain-night"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -76159,7 +76194,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:4266ca6a84d94ec77740",
+      "candidateKey": "candidate:ff7ac960529b11d56532",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76174,8 +76209,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 33 章 灯塔",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"3\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-33-lighthouse",
         "data-reader-directory-index": "3"
       },
       "uiEvent": null,
@@ -76191,7 +76228,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:ccb42755737b625dad11",
+      "candidateKey": "candidate:0336cb44dae91c16cf60",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -76206,10 +76243,13 @@
       "domTag": "button",
       "role": "button",
       "label": "下载 第 33 章 灯塔",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-reader-directory-index=\"3\"]:nth-of-type(4) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"3\\:第\\ 33\\ 章\\ 灯塔\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderModulePanel\"] > div.fd-reader-quick-directory-workspace > div.fd-reader-toc-list > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(4) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "3:第 33 章 灯塔",
-        "data-reader-chapter-download-state": "idle"
+        "data-reader-chapter-download-key": "chapter-33-lighthouse",
+        "data-reader-chapter-download-state": "idle",
+        "data-reader-chapter-key": "chapter-33-lighthouse"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -76226,7 +76266,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:e34f7211eaa3e15e23a8",
+      "candidateKey": "candidate:d9e7ccb344476eeea76a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94465,8 +94505,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 30 章 旧日",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"0\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-30-old-day",
         "data-reader-directory-index": "0"
       },
       "uiEvent": null,
@@ -94482,7 +94524,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:0ce523387ca2771db386",
+      "candidateKey": "candidate:8f8e3340ff7ec8b35fee",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94497,10 +94539,13 @@
       "domTag": "button",
       "role": "button",
       "label": "第 30 章 旧日 已下载",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"0\"]:nth-of-type(1) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"0\\:第\\ 30\\ 章\\ 旧日\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(1) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "0:第 30 章 旧日",
-        "data-reader-chapter-download-state": "cached"
+        "data-reader-chapter-download-key": "chapter-30-old-day",
+        "data-reader-chapter-download-state": "cached",
+        "data-reader-chapter-key": "chapter-30-old-day"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -94517,7 +94562,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:a61c52c6180544b75b71",
+      "candidateKey": "candidate:672ad2e76773c915f201",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94532,8 +94577,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 31 章 归途",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"1\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-31-return",
         "data-reader-directory-index": "1"
       },
       "uiEvent": null,
@@ -94549,7 +94596,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:8cbcb293e2565256516d",
+      "candidateKey": "candidate:b08d9a77894dbe32b86b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94564,10 +94611,13 @@
       "domTag": "button",
       "role": "button",
       "label": "第 31 章 归途 已下载",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"1\"]:nth-of-type(2) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"1\\:第\\ 31\\ 章\\ 归途\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(2) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "1:第 31 章 归途",
-        "data-reader-chapter-download-state": "cached"
+        "data-reader-chapter-download-key": "chapter-31-return",
+        "data-reader-chapter-download-state": "cached",
+        "data-reader-chapter-key": "chapter-31-return"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -94584,7 +94634,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:87289dd14fc008c86e14",
+      "candidateKey": "candidate:3905af049f8f90d72fef",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94599,8 +94649,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 32 章 雨夜",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"2\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-32-rain-night",
         "data-reader-directory-index": "2"
       },
       "uiEvent": null,
@@ -94616,7 +94668,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:e2f6f2f0d7c95dfcae16",
+      "candidateKey": "candidate:da1c579b6d8b0dcfadb4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94631,10 +94683,13 @@
       "domTag": "button",
       "role": "button",
       "label": "下载 第 32 章 雨夜",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"2\"]:nth-of-type(3) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"2\\:第\\ 32\\ 章\\ 雨夜\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(3) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "2:第 32 章 雨夜",
-        "data-reader-chapter-download-state": "idle"
+        "data-reader-chapter-download-key": "chapter-32-rain-night",
+        "data-reader-chapter-download-state": "idle",
+        "data-reader-chapter-key": "chapter-32-rain-night"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -94651,7 +94706,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:5da844c297907330b1d2",
+      "candidateKey": "candidate:24ff8d84b11bb1239c92",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94666,8 +94721,10 @@
       "domTag": "article",
       "role": "button",
       "label": "第 33 章 灯塔",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"3\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(4)",
       "dataAttributes": {
+        "data-action": "reader.chapter.jump",
+        "data-reader-chapter-key": "chapter-33-lighthouse",
         "data-reader-directory-index": "3"
       },
       "uiEvent": null,
@@ -94683,7 +94740,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:4ee6b8b99b513567c9d8",
+      "candidateKey": "candidate:e67962f8793c54f663ac",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -94698,10 +94755,13 @@
       "domTag": "button",
       "role": "button",
       "label": "下载 第 33 章 灯塔",
-      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-reader-directory-index=\"3\"]:nth-of-type(4) > span.fd-chapter-marker-slots > button[data-reader-chapter-download=\"3\\:第\\ 33\\ 章\\ 灯塔\"]",
+      "selector": "main[data-shell=\"ReaderShell\"] > div[data-slot=\"readerOverlayHost\"]:nth-of-type(1) > div[data-slot=\"bottomSheetHost\"] > section[data-dev-region=\"ReaderExpandedPanel\"] > div.fd-reader-full-content > section.fd-reader-full-section > div.fd-reader-full-directory-body > div.fd-reader-full-toc-list:nth-of-type(2) > article[data-action=\"reader\\.chapter\\.jump\"]:nth-of-type(4) > span.fd-chapter-marker-slots > button[data-action=\"download\\.task\\.open\"]",
       "dataAttributes": {
+        "data-action": "download.task.open",
         "data-reader-chapter-download": "3:第 33 章 灯塔",
-        "data-reader-chapter-download-state": "idle"
+        "data-reader-chapter-download-key": "chapter-33-lighthouse",
+        "data-reader-chapter-download-state": "idle",
+        "data-reader-chapter-key": "chapter-33-lighthouse"
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -94718,7 +94778,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:09185655db91c0084143",
+      "candidateKey": "candidate:f1a726174a9076848296",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

@@ -164,8 +164,8 @@ test("R2.0.1 completeness: 61 stable pilot subcontrol declarations", () => {
   assert.equal(declaredByType.segment, 8, "must declare 8 segment/filter options");
 });
 
-// ---- Test 8: declarations 覆盖 12 页面族 (exact gate) ----
-test("R2.0.1 coverage: exactly 12 page families (no more, no less)", () => {
+// ---- Test 8: 非 Reader exact gate 仍为 12，Reader 运行时作为独立扩展 lane ----
+test("R2.0.1 coverage: exactly 12 non-Reader page families plus reader-runtime extension", () => {
   const expectedFamilies = [
     "bookshelf",
     "book-detail",
@@ -180,13 +180,16 @@ test("R2.0.1 coverage: exactly 12 page families (no more, no less)", () => {
     "sync-backup",
     "about-restore-preview"
   ];
-  const declaredFamiliesSet = new Set(declarations.map(d => d.pageFamily));
-  assert.equal(declaredFamiliesSet.size, 12, `expected exactly 12 page families, got ${declaredFamiliesSet.size}: ${[...declaredFamiliesSet].join(",")}`);
+  const declaredFamiliesSet = new Set(declarations.filter(d => d.source !== "reader-runtime-action").map(d => d.pageFamily));
+  assert.equal(declaredFamiliesSet.size, 12, `expected exactly 12 non-Reader page families, got ${declaredFamiliesSet.size}: ${[...declaredFamiliesSet].join(",")}`);
   for (const fam of expectedFamilies) {
     assert.ok(declaredFamiliesSet.has(fam), `missing page family: ${fam}`);
   }
   const extra = [...declaredFamiliesSet].filter(f => !expectedFamilies.includes(f));
   assert.equal(extra.length, 0, `unexpected extra page families: ${extra.join(",")}`);
+  const readerRuntime = declarations.filter(d => d.source === "reader-runtime-action");
+  assert.ok(readerRuntime.length >= 400, "reader-runtime extension must carry its complete stable identity set");
+  assert.ok(readerRuntime.every(d => d.pageFamily === "reader-runtime"));
 });
 
 // ---- Test 9: R2.0 subcontrols 的 entityKey/controlKey 模式合法 ----
@@ -283,6 +286,12 @@ test("R2.0.1 gate: dispatch map has exactly 12 page families", () => {
 // ---- Test 15: renderer owner 与 dispatch map 一致 ----
 test("R2.0.1 dispatch: declarations' renderer/rendererFile/pageFamily match dispatch map", () => {
   for (const d of declarations) {
+    if (d.source === "reader-runtime-action") {
+      assert.equal(d.renderer, "ReaderRuntimeContract.instrumentDom");
+      assert.equal(d.rendererFile, "reader-runtime-contract.js");
+      assert.equal(d.pageFamily, "reader-runtime");
+      continue;
+    }
     const routeInfo = dispatchMap.routes[d.route];
     assert.ok(routeInfo, `declaration route ${d.route} not in dispatch map (entityKey=${d.entityKey})`);
     assert.equal(d.renderer, routeInfo.renderer, `renderer mismatch on route ${d.route}: declared=${d.renderer}, dispatch=${routeInfo.renderer}`);

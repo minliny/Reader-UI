@@ -478,7 +478,7 @@
       ]
     }
   },
-  "inventorySha256": "edd3229934fa0d0a516fc72c0c0e60911676a61563afa87e4208348d22b13405",
+  "inventorySha256": "e1809c68e3b8df82619aa6117ddabf13df3ffb730af4e01551ecfd9623c89457",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -764,7 +764,7 @@
       "pageState": "default",
       "semanticControls": 21,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "1db2b1d5366d24de6d23bd44e50045879a9f77581e24cda785a1d776dd3ae704"
+      "renderSha256": "7080c31e5ae0dbf2fec4d875070735b686c53bbf783bc46ff4e56d7f13d31335"
     },
     {
       "routeId": "reader-appearance",
@@ -2084,7 +2084,7 @@
       "pageState": "default",
       "semanticControls": 21,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "0672ceb45c66f54d2f541bf3f72b07c7c7e20b9a05e6a929b7bd593c945afd1a"
+      "renderSha256": "6407c37a503cf77b9e02cb314dbe4dc66b0bc1d891c3db815152f4e8cc3d20f1"
     },
     {
       "routeId": "discover-entry-ranking",
@@ -2612,7 +2612,7 @@
       "pageState": "default",
       "semanticControls": 20,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f3eee1fedda774297aaf32525e14eb574c3dbc2a9a615b388bb3602f4c8f2d5e"
+      "renderSha256": "ceb7061d8b66c3e35738afd2feb6ed276dd36b1a2ee08b4d4f36a24b0a0c93a4"
     },
     {
       "routeId": "reader-full-tts",

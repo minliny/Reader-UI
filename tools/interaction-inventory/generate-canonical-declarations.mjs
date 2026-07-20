@@ -46,6 +46,7 @@ const DISPATCH_MAP_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "gen
 const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "nonInteractiveContainers.json");
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
+const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
 
 const CHECK_MODE = process.argv.includes("--check");
 
@@ -171,6 +172,40 @@ function bookDetailActionDeclarations() {
       };
     })
   );
+}
+
+function readerRuntimeActionDeclarations() {
+  const contractModule = { exports: {} };
+  const contractWindow = {};
+  const source = readFileSync(READER_RUNTIME_CONTRACT_PATH, "utf8");
+  Function("module", "window", "globalThis", source)(contractModule, contractWindow, contractWindow);
+  const specs = contractModule.exports.CONTROL_SPECS || contractWindow.ReaderRuntimeContract?.CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `reader.control.${spec.role}.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.default`,
+      controlId: `reader.control.${spec.route}.default.${spec.role}.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: "default",
+      domain: "reader",
+      family: "control",
+      role: spec.role,
+      renderer: "ReaderRuntimeContract.instrumentDom",
+      rendererFile: "reader-runtime-contract.js",
+      rendererSlot: "ReaderRuntimeContract.instrumentDom@reader-runtime-contract.js",
+      pageFamily: "reader-runtime",
+      source: "reader-runtime-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
 }
 
 // R2a page-family pilots add stable semantic action identities that cannot be
@@ -505,7 +540,7 @@ if (missingBusinessKeys.length > 0) {
 
 // ---- Combine and sort declarations ----
 const PAGE_FAMILY_ORDER = [
-  "bookshelf", "book-detail", "search-results", "import-conflict-resolve",
+  "bookshelf", "book-detail", "reader-runtime", "search-results", "import-conflict-resolve",
   "discover", "rss", "source-switch", "settings-general",
   "source-management", "webdav-config", "sync-backup", "about-restore-preview"
 ];
@@ -523,7 +558,8 @@ const allDeclarations = registryDeclarations
   .concat(effectiveSubcontrolDeclarations)
   .concat(preservedPilotActionDeclarations)
   .concat(bookshelfActionDeclarations())
-  .concat(bookDetailActionDeclarations());
+  .concat(bookDetailActionDeclarations())
+  .concat(readerRuntimeActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);
@@ -586,6 +622,7 @@ const meta = {
   totals: {
     registryBacked: registryDeclarations.length,
     r2Subcontrols: effectiveSubcontrolDeclarations.length,
+    readerRuntimeActions: allDeclarations.filter((entry) => entry.source === "reader-runtime-action").length,
     subcontrolsByType: subByType,
     total: allDeclarations.length
   },
