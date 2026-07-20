@@ -1,0 +1,156 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "bookshelf",
+  "status": "F2_AWAITING_NAMED_REVISION_AND_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "revision": null,
+  "revisionTitle": null,
+  "confirmedAt": null,
+  "localImplementationCommit": "003daa7b509505085b35832c43d67b22d58b96d9",
+  "handoffEvidenceCommit": "8dd0bdae30dba3896086a61aac43673f8788910b",
+  "deltas": [
+    {
+      "target": "Page/Bookshelf",
+      "pageId": "834:3",
+      "nodeId": "941:6",
+      "oldValue": "Phone and Tablet masters were flat/manual and contained no component instances.",
+      "newValue": "Both masters retain their original layout and use attached AppTopBar, ContinueReadingCard, SectionHeader, BookCard and BottomNav instances; Page 23 final/prototype instances remain attached."
+    },
+    {
+      "target": "Navigation/MainTabItem and Navigation/BottomNav",
+      "pageId": "259:7",
+      "nodeIds": [
+        "342:175",
+        "344:379"
+      ],
+      "oldValue": "Transparent state and hit-target layers participated in Auto Layout, squeezing icons/labels and creating malformed navigation instances.",
+      "newValue": "State and hit-target layers are absolute overlays; 20 MainTabItem and 8 BottomNav variants preserve normal icon and label geometry and minimum hit targets."
+    },
+    {
+      "target": "Library/SectionAction",
+      "pageId": "259:10",
+      "nodeId": "487:75",
+      "oldValue": "HitTarget/44 and state layers participated in the 34px control Auto Layout and pushed icons outside the component bounds.",
+      "newValue": "All 50 variants use absolute 44px hit targets with centered 34px state layers and 20px icons; the five toolbar controls remain right aligned."
+    },
+    {
+      "target": "Library/BookCard",
+      "pageId": "259:10",
+      "nodeId": "493:196",
+      "oldValue": "Only Phone-sized internal Cover geometry existed, so resizing a Tablet instance left a small cover inside a large card.",
+      "newValue": "The same component set now includes real Viewport=Phone and Viewport=Tablet Cover variants; 11 Tablet instances swap variants without detaching and preserve cover ratio, title and author."
+    },
+    {
+      "target": "Bookshelf conditional controls",
+      "pageId": "259:10",
+      "nodeId": "2236:577",
+      "oldValue": "Filter/group/sort/retry/offline/menu controls had stable local keys but no canonical Figma node coverage.",
+      "newValue": "Library/BookshelfAction supplies real Default controls plus Default/Pressed/Focus/Disabled/Loading/Selected state evidence; all 50 local keys have exact node bindings."
+    },
+    {
+      "target": "Phone/Tablet scrolling contract",
+      "pageId": "834:3",
+      "nodeIds": [
+        "940:3",
+        "859:3"
+      ],
+      "oldValue": "Overflow direction was NONE and the long shelf content had no explicit prototype scroll contract.",
+      "newValue": "Both viewport roots declare VERTICAL overflow; status, topbar and floating bottom navigation have explicit fixed-scroll intent metadata; landscape aliases Tablet and no Compact/Fold master is introduced."
+    }
+  ],
+  "createdCanonicalNodes": [
+    {
+      "nodeId": "2236:527",
+      "name": "F2 · Bookshelf · Canonical + Evidence"
+    },
+    {
+      "nodeId": "2236:577",
+      "name": "Library/BookshelfAction",
+      "variantCount": 27
+    },
+    {
+      "nodeId": "2241:2",
+      "name": "Library/BookCard · Tablet · TitleLines=1"
+    },
+    {
+      "nodeId": "2241:6",
+      "name": "Library/BookCard · Tablet · TitleLines=2"
+    }
+  ],
+  "viewportConstraints": {
+    "phone": {
+      "nodeId": "941:3",
+      "size": "390x844",
+      "contentWidth": 350,
+      "overflow": "VERTICAL"
+    },
+    "tablet": {
+      "nodeId": "941:5",
+      "size": "760x960",
+      "contentWidth": 620,
+      "overflow": "VERTICAL"
+    },
+    "landscape": {
+      "alias": "Tablet",
+      "independentMaster": false
+    },
+    "compact": {
+      "prohibited": true
+    },
+    "fold": {
+      "prohibited": true
+    }
+  },
+  "stateCoverage": {
+    "sharedActionStates": [
+      "Default",
+      "Pressed",
+      "Focus",
+      "Disabled",
+      "Loading",
+      "Selected"
+    ],
+    "bookLayouts": [
+      "Cover",
+      "List"
+    ],
+    "bookViewports": [
+      "Phone",
+      "Tablet"
+    ],
+    "prototypeReactionLayers": {
+      "phone": 17,
+      "tablet": 17
+    },
+    "motionBoundary": "bookshelf.view.switch remains sharedLayoutMorph with redirect interrupt and zeroDuration reduced motion; no F3 work was performed.",
+    "localOwnerBoundary": "Figma does not alter UiEvent, reducer ownership, asynchronous guards, route ownership, or business flow."
+  },
+  "visualAudit": {
+    "beforePhone": "/tmp/bookshelf-before-phone.png",
+    "beforeTablet": "/tmp/bookshelf-before-tablet.png",
+    "afterPhone": "/tmp/bookshelf-final-phone.png",
+    "afterTablet": "/tmp/bookshelf-tablet-variant.png",
+    "controlsRightAligned": true,
+    "phoneDensityPreserved": true,
+    "tabletCoverRatioPreserved": true,
+    "activeDropShadowIntroduced": false,
+    "nonCoverDropShadowCount": 0,
+    "detachedInstanceCount": 0,
+    "result": "PASS_PENDING_USER_CONFIRMATION"
+  },
+  "admission": {
+    "connectorWriteTransactionComplete": true,
+    "namedRevisionComplete": false,
+    "userConfirmed": false,
+    "f2Exit": false,
+    "nextFigmaWriterReleased": false,
+    "nextLocalLane": "reader-runtime",
+    "nextLocalLaneReleased": true,
+    "nextFigmaWriterGate": "Bookshelf named revision + user confirmation",
+    "remainingGates": [
+      "Unlock Figma Desktop and create/read the named revision.",
+      "User confirms Bookshelf Phone and Tablet."
+    ]
+  }
+}
