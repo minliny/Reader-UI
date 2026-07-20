@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "RSS",
+  "pageFamily": "rss",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-21T23:55:00+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "5e182286ddcd0d5a1ce6fe4643fdfbddd5c0a06c",
+    "implementationCommit": "bd99f964ac4932d3fdfd884f1e940504f18fece3",
+    "implementationCommitSubject": "feat(rss): complete local R3a Figma handoff readiness",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): RSS LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true
+  },
+  "denominatorBoundary": {
+    "routeContractRssRouteCount": 53,
+    "currentF2VisualFamilyRouteCount": 10,
+    "excludedSecondaryRouteCount": 43,
+    "policy": "Only the ten Figma/R2 primary routes are admitted to the current RSS F2 visual family. The 43 secondary routes remain valid local product routes but are excluded from this packet and may not be used to claim the complete RSS product is ready or complete."
+  },
+  "routeFamily": {
+    "primaryRoutes": [
+      "rss",
+      "rss-all",
+      "rss-source-feed",
+      "rss-source-category-novel",
+      "rss-source-category-tech",
+      "rss-source-category-booklist",
+      "rss-refreshing",
+      "rss-source-category-releases",
+      "rss-source-category-issues",
+      "rss-source-category-discussions"
+    ],
+    "excludedSecondaryRoutes": [
+      "rss-starred",
+      "rss-search",
+      "rss-detail",
+      "rss-original",
+      "rss-original-browser",
+      "rss-subscription-management",
+      "rss-source-actions",
+      "rss-source-edit",
+      "rss-source-debug",
+      "rss-source-vars",
+      "rss-source-login",
+      "rss-source-login-web",
+      "rss-source-login-cookie",
+      "rss-source-login-clear",
+      "rss-source-groups",
+      "rss-source-group-edit",
+      "rss-source-batch",
+      "rss-source-export",
+      "rss-source-export-detail",
+      "rss-source-export-result",
+      "rss-source-pin",
+      "rss-source-disable",
+      "rss-source-batch-disable",
+      "rss-source-import",
+      "rss-source-import-detail",
+      "rss-source-import-result",
+      "rss-read-record",
+      "rss-record-clear",
+      "rss-rule-subscription",
+      "rss-rule-subscription-detail",
+      "rss-rule-subscription-edit",
+      "rss-rule-subscription-test",
+      "rss-rule-subscription-apply",
+      "rss-favorite-groups",
+      "rss-favorite-group-edit",
+      "rss-favorite-clear",
+      "rss-empty",
+      "rss-error",
+      "rss-source-add",
+      "rss-source-delete-confirm",
+      "rss-rule-subscription-create",
+      "rss-favorite-add",
+      "rss-favorite-remove"
+    ],
+    "uniqueProductionRenderer": "render-runtime.js::mainTabRss(data, appState, route)",
+    "rendererFile": "frontend-demo-optimized/render-runtime.js",
+    "stateOwner": "ReaderRssRuntimeContract.createOwner",
+    "obsoleteRendererPolicy": "frontend-demo-optimized/renderers/d2-rss-renderers.js is obsolete, is not loaded by index.html, and must not be restored or used as a second owner.",
+    "fallbackPolicy": "The ten primary routes dispatch directly to mainTabRss. Secondary routes keep their existing render-runtime implementations but are outside this packet."
+  },
+  "r2aInstrumentation": {
+    "semanticControlCount": 107,
+    "semanticControlSource": "rss-action",
+    "mappingStatus": "107/107 mapped",
+    "controlsByRoute": {
+      "rss": 22,
+      "rss-all": 16,
+      "rss-source-feed": 8,
+      "rss-source-category-novel": 7,
+      "rss-source-category-tech": 8,
+      "rss-source-category-booklist": 7,
+      "rss-refreshing": 17,
+      "rss-source-category-releases": 8,
+      "rss-source-category-issues": 7,
+      "rss-source-category-discussions": 7
+    },
+    "fiveDataAttrs": [
+      "data-entity-key",
+      "data-control-key",
+      "data-control-id",
+      "data-ui-event",
+      "data-settings-key"
+    ],
+    "stableFeedIds": [
+      "github-releases",
+      "reader-discussions",
+      "source-maintenance",
+      "local-system"
+    ],
+    "stableArticleIds": [
+      "reader-ui-update",
+      "source-rule-debug",
+      "legado-rss-config",
+      "local-import-complete",
+      "reader-roadmap"
+    ],
+    "identityPolicy": "Feed/article business IDs and named route actions are the only identity inputs. Labels, selectors, DOM order, ordinal n0-style keys and screenshots are prohibited.",
+    "runtimeEvidence": "The deterministic interaction inventory rendered all ten primary routes and found 107/107 semantic controls carrying data-control-key and the other four canonical attributes."
+  },
+  "r2bRealInteraction": {
+    "stateDomains": [
+      "phase",
+      "selectedFeedId",
+      "selectedArticleId",
+      "request",
+      "requestEpoch",
+      "error",
+      "focusReturnKey"
+    ],
+    "phases": ["ready", "loading", "detail", "empty", "error"],
+    "reducerActions": [
+      "SELECT_FEED",
+      "SELECT_ARTICLE",
+      "DETAIL_CLOSE",
+      "SHOW_EMPTY",
+      "SHOW_ERROR",
+      "REQUEST_START",
+      "REQUEST_SUCCESS",
+      "REQUEST_FAILED",
+      "REQUEST_CANCEL",
+      "RESET"
+    ],
+    "asyncHelpers": ["executeRefresh", "cancelRefresh"],
+    "guards": [
+      "refresh rejects duplicate starts while a request is loading",
+      "completion requires the current requestId and requestEpoch",
+      "cancel increments requestEpoch so later completion resolves stale",
+      "feed selection accepts only the four stable feed IDs",
+      "article detail accepts only the five stable article IDs",
+      "detail/empty/error/loading remain owner states and do not redefine the excluded secondary-route denominator"
+    ]
+  },
+  "ariaAndFocus": {
+    "feedAndArticleEntries": "Native or role=button controls have deterministic accessible labels; article rows are keyboard reachable with tabindex=0.",
+    "focusReturn": "Feed, article, source-edit, management and search launchers expose exact data-restore-focus control keys.",
+    "loading": "role=status, aria-live=polite and aria-busy=true.",
+    "error": "role=alert and aria-live=assertive.",
+    "empty": "role=status and aria-live=polite.",
+    "detail": "role=region with the stable data-rss-detail-id.",
+    "failClosed": "A missing or ambiguous selector receives no control identity."
+  },
+  "viewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactProhibited": true,
+    "foldProhibited": true,
+    "independentLandscapeProhibited": true
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 26,
+      "passed": 26,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-rss-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-rss-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-rss-aria-focus.test.mjs"
+      ]
+    },
+    "frontendRegression": { "tests": 480, "passed": 480, "failed": 0 },
+    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
+    "identityDenominator": 3808,
+    "identityDistribution": {
+      "mapped": 796,
+      "pendingActionKey": 450,
+      "pendingInstanceKey": 1035,
+      "pendingActionAndInstanceKey": 1527
+    },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check",
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check"
+    ]
+  },
+  "figmaReadOnlyBaseline": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "responsiveMasterPage": {
+      "pageId": "834:3",
+      "pageName": "24 · Responsive Masters · Phase 4"
+    },
+    "responsiveMasterSet": "942:13",
+    "phoneMaster": "942:10",
+    "tabletMaster": "942:12",
+    "downstreamFinalPage": {
+      "pageId": "834:2",
+      "pageName": "23 · Pages · Final",
+      "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE"
+    },
+    "knownStructuralGap": "The responsive master subtree was read as INSTANCE=0 during F0 preparation. The serial writer must repair it through canonical RSS components while preserving downstream instances and reactions.",
+    "freshRevisionRequiredBeforeWrite": true,
+    "noForgedBinding": true
+  },
+  "figmaDecisionsRequired": [
+    "Read a fresh official Figma revision after the previous writer transaction before changing any node.",
+    "Update shared RSS source row, article row, filter, refresh, state and navigation components before page masters.",
+    "Repair the Page 24 Phone and Tablet masters through real canonical instances, then let Page 23 downstream instances inherit.",
+    "Preserve stable feed/article semantics and right-align trailing counts, times and actions.",
+    "Use only Phone and Tablet; Landscape inherits Tablet and Compact/Fold structures are prohibited.",
+    "Do not expand this packet to the 43 excluded secondary routes or claim complete RSS product coverage.",
+    "Preserve reactions. Figma may not change UiEvent, state owner, async guards, route ownership or business flow.",
+    "Detached frames and screenshot replacements are prohibited."
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "exactLocalCommit": "bd99f964ac4932d3fdfd884f1e940504f18fece3",
+    "requiresFreshFigmaRevisionRead": true,
+    "requiresSingleWriter": true,
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
+  },
+  "boundaries": {
+    "figmaModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "obsoleteD2RssRendererLoaded": false,
+    "secondaryRoutesClaimedReady": false,
+    "completeRssProductClaimed": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}
