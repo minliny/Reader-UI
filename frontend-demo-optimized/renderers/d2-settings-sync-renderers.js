@@ -457,6 +457,8 @@
   // settings-general subcontrol 的身份查找表。key = route::settingsKey。
   // renderer 在输出 subcontrol 时调用 d2ResolveSubcontrolIdentity 查找身份，
   // 然后 d2StampIdentityAttrs 把 5 个 data-* 属性 stamp 到 HTML。
+  // A3: 扩展 lookup 同时容纳 r2.0-subcontrol（值型 subcontrol）和 a3-action
+  //     （action button / listrow-action / back），二者都用 settingsKey 索引。
   var d2SubcontrolIdentityLookup = null;
   function d2GetSubcontrolIdentityLookup() {
     if (d2SubcontrolIdentityLookup) return d2SubcontrolIdentityLookup;
@@ -464,7 +466,7 @@
     var decls = window.CANONICAL_CONTROL_DECLARATIONS || [];
     for (var i = 0; i < decls.length; i++) {
       var d = decls[i];
-      if (d.source === "r2.0-subcontrol" && d.settingsKey && d.route) {
+      if ((d.source === "r2.0-subcontrol" || d.source === "a3-action") && d.settingsKey && d.route) {
         d2SubcontrolIdentityLookup[d.route + "::" + d.settingsKey] = d;
       }
     }
@@ -562,6 +564,16 @@
     var toggle = row.type === "switch" ? d2Switch(row, route) : "";
     var value = row.value && !stepper && !segment ? `<strong class="fd-settings-value">${esc(row.value)}</strong>` : "";
     var actionOverlay = row.type === "cache-cleanup" && row.overlay ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
+    // A3: cache-cleanup inner button 与 permission inner button 各自 stamp 稳定 identity
+    //     cache-cleanup → settingsKey="cache-clear"
+    //     permission    → settingsKey="permission-action-<name>"
+    var innerActionIdentity = null;
+    if (row.type === "cache-cleanup") {
+      innerActionIdentity = d2ResolveSubcontrolIdentity(route, "cache-clear");
+    } else if (row.type === "link" && row.permissionName) {
+      innerActionIdentity = d2ResolveSubcontrolIdentity(route, "permission-action-" + row.permissionName);
+    }
+    var innerActionAttrs = d2StampIdentityAttrs(innerActionIdentity);
     // A2 Phase 4: cache-cleanup row 根据 cacheStatus 渲染 action button
     // A2 Phase 5: permission row 根据 rawPermissionStatus 渲染 action button
     var action = "";
@@ -571,7 +583,7 @@
         var cacheError = row.cacheError || null;
         var actionClass = "fd-settings-row-action";
         var actionLabel = row.actionLabel;
-        var actionAttrs = actionOverlay;
+        var actionAttrs = actionOverlay + innerActionAttrs;
         var titleAttr = "";
         if (cacheStatus === "loading") {
           actionClass += " is-busy";
@@ -594,7 +606,7 @@
         var permStatus = row.rawPermissionStatus || "prompt";
         var permClass = "fd-settings-row-action";
         var permLabel = row.actionLabel;
-        var permAttrs = actionOverlay;
+        var permAttrs = actionOverlay + innerActionAttrs;
         var permTitle = "";
         if (permStatus === "requesting") {
           permClass += " is-busy";
@@ -647,7 +659,11 @@
     // select row 的 identity stamp 在 <article> 上
     var selectIdentity = row.type === "select" && row.settingsKey
       ? d2ResolveSubcontrolIdentity(route, row.settingsKey) : null;
-    var selectAttrs = d2StampIdentityAttrs(selectIdentity);
+    // A3: permission link row 的 identity 也 stamp 在 <article> 上
+    //     settingsKey="permission-<permissionName>"
+    var permissionIdentity = (row.type === "link" && row.permissionName)
+      ? d2ResolveSubcontrolIdentity(route, "permission-" + row.permissionName) : null;
+    var selectAttrs = d2StampIdentityAttrs(selectIdentity) + d2StampIdentityAttrs(permissionIdentity);
     // A2 Phase 7: ARIA 属性
     var ariaAttrs = "";
     var roleAttr = "group";
@@ -716,18 +732,23 @@
 
   // 操作列表（底部按钮）
   // A2 Phase 6: "恢复默认" action button 反映 resetDefaults.status
-  function d2ActionList(actions) {
+  // A3: reset-defaults button stamp 稳定 identity（settingsKey="reset-defaults"）
+  function d2ActionList(actions, route) {
     if (!actions || !actions.length) return "";
     return `
       <section class="fd-settings-action-list" aria-label="设置操作">
         ${actions.map(function (item) {
           var routeAttr = item.route ? ` data-route="${esc(item.route)}"` : "";
           var overlayAttr = item.overlay ? ` data-settings-overlay="${esc(item.overlay)}"` : "";
+          // A3: stamp 稳定 identity（reset-defaults）
+          var actionIdentity = (item.resetStatus !== undefined)
+            ? d2ResolveSubcontrolIdentity(route, "reset-defaults") : null;
+          var identityAttrs = d2StampIdentityAttrs(actionIdentity);
           // A2 Phase 6: 如果 item 带 resetStatus，根据状态调整 button
           var resetStatus = item.resetStatus || null;
           var buttonClass = item.tone === "danger" ? "is-danger" : "";
           var buttonLabel = item.title;
-          var buttonAttrs = overlayAttr + routeAttr;
+          var buttonAttrs = overlayAttr + routeAttr + identityAttrs;
           if (resetStatus === "submitting") {
             buttonClass += " is-busy";
             buttonLabel = "恢复中…";
@@ -887,7 +908,10 @@
       stateHostClass: "fd-settings-state-host",
       contentHtml: contentHtml,
       toastHtml: options.toastHtml || "",
-      dialogHtml: options.dialogHtml || ""
+      dialogHtml: options.dialogHtml || "",
+      // A3: back button 稳定 identity attrs（由调用方通过 options.backButtonAttrs 传入，
+      //     由 d2StampIdentityAttrs 生成）。未传时为空字符串，backTopBar 保持原行为。
+      backButtonAttrs: options.backButtonAttrs || ""
     }));
   }
 
@@ -916,9 +940,15 @@
         if (section.layout === "backup-list") return d2BackupList(section);
         return d2Section(section, route, appState);
       }).join("")}
-      ${d2ActionList(page.actions)}`;
+      ${d2ActionList(page.actions, route)}`;
+    // A3: back button 稳定 identity — 由 d2ResolveSubcontrolIdentity(route, "back")
+    //     查找 a3-action 声明。settings-general 路由有 back 声明，会 stamp 5 个 data-*；
+    //     其它路由无声明时返回 null，d2StampIdentityAttrs 返回 ""，backTopBar 保持原行为。
+    var backIdentity = d2ResolveSubcontrolIdentity(route, "back");
+    var backAttrs = d2StampIdentityAttrs(backIdentity);
     return d2SettingsShell(data, page.title, contentHtml, {
-      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : ""
+      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : "",
+      backButtonAttrs: backAttrs
     });
   }
 

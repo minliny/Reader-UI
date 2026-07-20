@@ -65,9 +65,14 @@
         ? "<span></span>"
         : `<button type="button" aria-label="${esc(config.trailingLabel || "更多")}">${icon(config.trailingIcon || "more", classList("rsk-icon", config.iconClass))}</button>`;
 
+    // A3: 允许调用方通过 config.backButtonAttrs 向 back <button> 注入稳定 identity
+    //     data-* 属性（data-entity-key / data-control-key / data-control-id /
+    //     data-ui-event / data-settings-key）。未传时保持原行为。
+    const backButtonAttrs = config.backButtonAttrs || "";
+
     return `
       <section class="${classList("rsk-back-top-bar", config.topBarClass)}" data-slot="backTopBar" aria-label="返回顶栏">
-        <button type="button" aria-label="${esc(config.backLabel || "返回")}">${icon("back", classList("rsk-icon", config.iconClass))}</button>
+        <button type="button" aria-label="${esc(config.backLabel || "返回")}"${backButtonAttrs}>${icon("back", classList("rsk-icon", config.iconClass))}</button>
         <h1>${esc(config.title || "")}</h1>
         ${trailing}
       </section>`;

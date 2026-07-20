@@ -89,6 +89,10 @@ const { renderers, declarations } = evaluateSettingsGeneralRenderer();
 const sgSubcontrolDecls = declarations.filter(
   (d) => d.route === "settings-general" && d.source === "r2.0-subcontrol"
 );
+// A3: DOM 现在同时包含 r2.0-subcontrol（10 个值型 subcontrol）和 a3-action
+//     （9 个 action button / listrow-action / back）。A1 只验证 r2.0-subcontrol 范围，
+//     a3-action 由 a3-settings-general-action-identity.test.mjs 验证。
+const sgSubcontrolControlKeySet = new Set(sgSubcontrolDecls.map((d) => d.controlKey));
 
 // ---- 三视口渲染：renderer 输出与视口无关，三次渲染应得到完全相同的 HTML ----
 const PHONE_HTML = renderers.globalSettingsV2({}, "settings-general", {});
@@ -99,21 +103,26 @@ const PHONE_KEYS = extractControlKeys(PHONE_HTML);
 const COMPACT_KEYS = extractControlKeys(COMPACT_HTML);
 const TABLET_KEYS = extractControlKeys(TABLET_HTML);
 
+// A3: 过滤出 r2.0-subcontrol scope 的 controlKey（10 个），a3-action 由 A3 test 验证
+const PHONE_SUBCONTROL_KEYS = PHONE_KEYS.filter((k) => sgSubcontrolControlKeySet.has(k));
+const COMPACT_SUBCONTROL_KEYS = COMPACT_KEYS.filter((k) => sgSubcontrolControlKeySet.has(k));
+const TABLET_SUBCONTROL_KEYS = TABLET_KEYS.filter((k) => sgSubcontrolControlKeySet.has(k));
+
 // =============================================================================
 // 1. 三视口 controlKey 一致性
 // =============================================================================
 test("A1 settings-general: three-viewport controlKey set is identical (renderer output is viewport-agnostic)", () => {
-  assert.equal(PHONE_KEYS.length, sgSubcontrolDecls.length, "phone controlKey count matches decl count");
-  assert.equal(COMPACT_KEYS.length, sgSubcontrolDecls.length, "compact controlKey count matches decl count");
-  assert.equal(TABLET_KEYS.length, sgSubcontrolDecls.length, "tablet controlKey count matches decl count");
+  assert.equal(PHONE_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length, "phone subcontrol controlKey count matches decl count");
+  assert.equal(COMPACT_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length, "compact subcontrol controlKey count matches decl count");
+  assert.equal(TABLET_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length, "tablet subcontrol controlKey count matches decl count");
 
-  const phoneSet = new Set(PHONE_KEYS);
-  const compactSet = new Set(COMPACT_KEYS);
-  const tabletSet = new Set(TABLET_KEYS);
+  const phoneSet = new Set(PHONE_SUBCONTROL_KEYS);
+  const compactSet = new Set(COMPACT_SUBCONTROL_KEYS);
+  const tabletSet = new Set(TABLET_SUBCONTROL_KEYS);
 
-  assert.equal(phoneSet.size, PHONE_KEYS.length, "phone controlKeys are unique");
-  assert.equal(compactSet.size, COMPACT_KEYS.length, "compact controlKeys are unique");
-  assert.equal(tabletSet.size, TABLET_KEYS.length, "tablet controlKeys are unique");
+  assert.equal(phoneSet.size, PHONE_SUBCONTROL_KEYS.length, "phone subcontrol controlKeys are unique");
+  assert.equal(compactSet.size, COMPACT_SUBCONTROL_KEYS.length, "compact subcontrol controlKeys are unique");
+  assert.equal(tabletSet.size, TABLET_SUBCONTROL_KEYS.length, "tablet subcontrol controlKeys are unique");
 
   // 三视口 controlKey 集合完全一致
   for (const key of phoneSet) {
@@ -123,25 +132,25 @@ test("A1 settings-general: three-viewport controlKey set is identical (renderer 
 });
 
 // =============================================================================
-// 2. DOM 无 orphan: DOM 上每个 controlKey 都在 declarations 中
+// 2. DOM 无 orphan: DOM 上每个 r2.0-subcontrol controlKey 都在 declarations 中
 // =============================================================================
-test("A1 settings-general: DOM has zero orphan controlKeys (every DOM controlKey exists in declarations)", () => {
+test("A1 settings-general: DOM has zero orphan controlKeys (every DOM subcontrol controlKey exists in declarations)", () => {
   const declControlKeys = new Set(sgSubcontrolDecls.map((d) => d.controlKey));
-  for (const key of PHONE_KEYS) {
+  for (const key of PHONE_SUBCONTROL_KEYS) {
     assert.ok(declControlKeys.has(key), `orphan controlKey in DOM (not in declarations): ${key}`);
   }
 });
 
 // =============================================================================
-// 3. DOM 无 extra: DOM subcontrol 数 = declarations subcontrol 数
+// 3. DOM 无 extra: DOM r2.0-subcontrol 数 = declarations subcontrol 数
 // =============================================================================
 test("A1 settings-general: DOM subcontrol count matches declarations (no extra, no missing)", () => {
-  assert.equal(PHONE_KEYS.length, sgSubcontrolDecls.length,
-    `DOM has ${PHONE_KEYS.length} subcontrols but declarations has ${sgSubcontrolDecls.length}`);
+  assert.equal(PHONE_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length,
+    `DOM has ${PHONE_SUBCONTROL_KEYS.length} r2.0-subcontrols but declarations has ${sgSubcontrolDecls.length}`);
 });
 
 // =============================================================================
-// 4. DOM 无重复: 每个 controlKey 在 DOM 中只出现一次
+// 4. DOM 无重复: 每个 controlKey 在 DOM 中只出现一次（包含 r2.0-subcontrol + a3-action）
 // =============================================================================
 test("A1 settings-general: DOM has zero duplicate controlKeys", () => {
   const seen = new Set();
@@ -152,12 +161,12 @@ test("A1 settings-general: DOM has zero duplicate controlKeys", () => {
 });
 
 // =============================================================================
-// 5. 5 个 data-* 属性覆盖率：每个 subcontrol 都携带完整 5 个属性
+// 5. 5 个 data-* 属性覆盖率：每个 r2.0-subcontrol 都携带完整 5 个属性
 // =============================================================================
 test("A1 settings-general: every subcontrol DOM element carries all 5 data-* identity attributes", () => {
-  const attrMaps = extractAttrMap(PHONE_HTML);
+  const attrMaps = extractAttrMap(PHONE_HTML).filter((m) => sgSubcontrolControlKeySet.has(m.controlKey));
   assert.equal(attrMaps.length, sgSubcontrolDecls.length,
-    `only ${attrMaps.length} elements carry all 5 attributes (expected ${sgSubcontrolDecls.length})`);
+    `only ${attrMaps.length} r2.0-subcontrol elements carry all 5 attributes (expected ${sgSubcontrolDecls.length})`);
 
   const declByControlKey = new Map(sgSubcontrolDecls.map((d) => [d.controlKey, d]));
   for (const item of attrMaps) {
@@ -171,10 +180,10 @@ test("A1 settings-general: every subcontrol DOM element carries all 5 data-* ide
 });
 
 // =============================================================================
-// 6. UiEvent 覆盖: 每个 subcontrol 都有非空 data-ui-event
+// 6. UiEvent 覆盖: 每个 r2.0-subcontrol 都有非空 data-ui-event
 // =============================================================================
 test("A1 settings-general: every subcontrol has a non-empty data-ui-event", () => {
-  const attrMaps = extractAttrMap(PHONE_HTML);
+  const attrMaps = extractAttrMap(PHONE_HTML).filter((m) => sgSubcontrolControlKeySet.has(m.controlKey));
   for (const item of attrMaps) {
     assert.ok(item.uiEvent && item.uiEvent.length > 0,
       `empty data-ui-event for controlKey=${item.controlKey}`);
