@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Sync & Backup",
+  "pageFamily": "sync-backup",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-21T21:30:00+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "0c8b21698d678f7a61452f24869de89e262b144b",
+    "implementationCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
+    "implementationCommitSubject": "feat(sync-backup): complete LOCAL_READY implementation",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): sync-backup LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true
+  },
+  "routeFamily": {
+    "canonicalRoutes": [
+      "sync-settings-entry",
+      "sync-backup",
+      "backup-settings",
+      "progress-sync",
+      "progress-sync-status",
+      "remote-webdav-books"
+    ],
+    "uniqueProductionRenderer": "backupScreenV2(data, route, appState)",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+    "stateOwner": "ReaderD2SettingsSyncRenderers.syncBackup",
+    "retiredSecondaryRoutes": {
+      "routes": ["backup-manual", "backup-auto", "backup-history"],
+      "policy": "Removed from D2 INTEGRATION_MAP and fail-loud in render-runtime. Manual backup and history are canonical owner states/overlays; automatic backup is part of backup-settings. There is no dual renderer or state owner."
+    },
+    "fallbackFrozen": true
+  },
+  "r2aInstrumentation": {
+    "semanticControlCount": 92,
+    "semanticControlSource": "sync-backup-action",
+    "mappingStatus": "92/92 mapped",
+    "controlsByRouteState": {
+      "sync-settings-entry/default": 8,
+      "sync-backup/default": 13,
+      "sync-backup/loading": 13,
+      "backup-settings/default": 29,
+      "progress-sync/default": 14,
+      "progress-sync-status/default": 3,
+      "remote-webdav-books/default": 12
+    },
+    "fiveDataAttrs": [
+      "data-entity-key",
+      "data-control-key",
+      "data-control-id",
+      "data-ui-event",
+      "data-settings-key"
+    ],
+    "identityPolicy": "All 92 declarations use stable business settingsKey values. Ordinals, selector hashes, labels and DOM order are prohibited. Unknown identity fails closed."
+  },
+  "r2bRealInteraction": {
+    "stateDomains": ["connection", "sync", "manualBackup", "history", "remoteList", "values", "pending", "requestEpoch"],
+    "settingsDomains": ["webdav inputs", "automatic backup", "backup scope", "retention policy", "progress sync policy"],
+    "asyncHelpers": ["executeConnectionTest", "executeSync", "executeManualBackup", "executeHistoryCleanup", "executeRemoteRefresh"],
+    "guards": [
+      "only one async request may be pending; duplicate starts resolve duplicate",
+      "completion requires the current requestId, kind and requestEpoch",
+      "cancel increments requestEpoch, clears pending, and later completion resolves stale",
+      "retention stepper is clamped to 1..30",
+      "manual backup confirmation/history state stay inside the canonical owner"
+    ]
+  },
+  "ariaAndFocus": {
+    "switches": "role=switch, aria-checked, keyboard focus and accessible label",
+    "selects": "aria-haspopup=listbox, aria-expanded and tabindex",
+    "dialogs": "role=dialog, aria-modal, aria-labelledby and deterministic data-dialog-initial-focus",
+    "focusReturn": "overlay triggers retain exact data-restore-focus business keys",
+    "loading": "aria-busy=true and disabled on the submitting control; cancellation remains separately reachable",
+    "error": "aria-invalid=true with the async error exposed as the control title",
+    "remoteAndRestoreRows": "keyboard reachable role=button controls with stable identity"
+  },
+  "viewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactProhibited": true,
+    "foldProhibited": true,
+    "independentLandscapeProhibited": true
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 26,
+      "passed": 26,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-sync-backup-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-sync-backup-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-sync-backup-aria-focus.test.mjs"
+      ]
+    },
+    "frontendRegression": { "tests": 403, "passed": 403, "failed": 0 },
+    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
+    "identityDenominator": 3808,
+    "identityDistribution": {
+      "mapped": 796,
+      "pendingActionKey": 449,
+      "pendingInstanceKey": 1044,
+      "pendingActionAndInstanceKey": 1519
+    },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check",
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check"
+    ]
+  },
+  "figmaReadOnlyBaseline": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "canonicalComponentPage": { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4" },
+    "responsiveMasterSet": "942:41",
+    "phoneMaster": "942:38",
+    "tabletMaster": "942:40",
+    "downstreamFinalPage": { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE" },
+    "knownStructuralGap": "The responsive master subtree was read as INSTANCE=0 during F0 preparation. The serial writer must replace raw internals through canonical component instances, preserve downstream instances/reactions, and record exact Page 23 node ids at the fresh revision.",
+    "freshRevisionRequiredBeforeWrite": true,
+    "noForgedBinding": true
+  },
+  "figmaDecisionsRequired": [
+    "Update shared Switch/Select/Stepper/dialog/loading/error primitives before page masters; all trailing choices and values are right-aligned.",
+    "Repair Phone and Tablet masters only. Landscape inherits Tablet; do not create Compact or Fold structures.",
+    "Represent manual backup/history as states or overlays of the canonical owner; do not recreate the retired routes as a second flow.",
+    "Repair Page 24 masters through real component instances, then let Page 23 instances inherit. Detached frames and screenshots are prohibited.",
+    "Preserve existing reactions and downstream instances. Figma may not change UiEvent, reducer ownership, async guards or business flow."
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "exactLocalCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
+    "requiresFreshFigmaRevisionRead": true,
+    "requiresSingleWriter": true,
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
+  },
+  "boundaries": {
+    "figmaModified": false,
+    "aboutModified": false,
+    "restorePreviewModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}
