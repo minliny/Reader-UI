@@ -6,6 +6,18 @@
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "revision": "2378289787451208100",
   "revisionTitle": "F2 · Source Management · Final Crosswalk",
+  "liveHeadCorrection": {
+    "timestamp": "2026-07-20T13:23:23Z",
+    "revisionStatus": "PENDING_NAMED_REVISION",
+    "groupFilterComponentId": "2173:879",
+    "folderIconInstanceId": "2184:29787",
+    "folderIconMainComponentId": "530:155",
+    "sourceRowComponentSetId": "1994:26598",
+    "sourceIconMainComponentId": "546:3",
+    "sourceIconVariantNodeIds": ["549:54", "1994:26558", "1994:26565", "1994:26572", "1994:26579", "1994:26586", "1994:26593"],
+    "detachedInstanceCount": 0,
+    "note": "Baseline bindings remain valid at revision 2378289787451208100. The visual icon correction exists on live head and must receive a new named revision before final F2 exit."
+  },
   "localSource": {
     "implementationCommit": "1c97687c969bc47f27b0aec79c774998455e3326",
     "handoffEvidenceCommit": "17876aaf6120190e5cb519f088e150ee4ae8db49",
@@ -92,6 +104,9 @@
     "tabletMaster": { "nodeId": "942:28", "size": "760x960" },
     "landscapeAlias": "tablet",
     "userConfirmed": false,
-    "remainingGate": "USER_CONFIRMATION_SOURCE_MANAGEMENT_F2"
+    "remainingGates": [
+      "NAMED_REVISION_FOR_LIVE_HEAD_ICON_CORRECTION",
+      "USER_CONFIRMATION_SOURCE_MANAGEMENT_F2"
+    ]
   }
 }

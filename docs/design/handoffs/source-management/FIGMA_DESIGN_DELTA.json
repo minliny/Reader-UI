@@ -6,6 +6,41 @@
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "revision": "2378289787451208100",
   "revisionTitle": "F2 · Source Management · Final Crosswalk",
+  "liveHeadCorrection": {
+    "timestamp": "2026-07-20T13:23:23Z",
+    "revisionStatus": "PENDING_NAMED_REVISION",
+    "reason": "Figma Desktop could not reconnect to version history (ERR_PROXY_CONNECTION_FAILED -130); do not mislabel the live-head correction as revision 2378289787451208100.",
+    "deltas": [
+      {
+        "target": "SourceManagement/GroupFilter/Icon/Folder",
+        "pageId": "334:5",
+        "componentNodeId": "2173:879",
+        "oldNodeId": "2173:880",
+        "newNodeId": "2184:29787",
+        "oldValue": "18x14 plain rectangle used as a folder placeholder.",
+        "newValue": "15x15 instance of canonical Icon=Folder component 530:155, vertically centered with preserved aspect ratio."
+      },
+      {
+        "target": "SourceManagement/SourceRow/SourceManagement/Icon",
+        "pageId": "334:5",
+        "componentNodeId": "1994:26598",
+        "nodeIds": ["549:54", "1994:26558", "1994:26565", "1994:26572", "1994:26579", "1994:26586", "1994:26593"],
+        "oldValue": "Instances had 15x15 bounds but scaleFactor=1 while canonical icon content remained 24x24, causing clipping and apparent deformation.",
+        "newValue": "All seven SourceRow states use proportional 0.625 scaling from the 24x24 canonical Icon=Source component 546:3 to 15x15."
+      }
+    ],
+    "propagationAudit": {
+      "phoneMaster": "942:26",
+      "tabletMaster": "942:28",
+      "finalPhone": "943:4281",
+      "finalTablet": "943:4745",
+      "detachedInstances": 0,
+      "phoneSourceIconCount": 4,
+      "tabletSourceIconCount": 4,
+      "groupFolderIconCountPerViewport": 1,
+      "screenshotAudit": "PASS"
+    }
+  },
   "localImplementationCommit": "1c97687c969bc47f27b0aec79c774998455e3326",
   "handoffEvidenceCommit": "17876aaf6120190e5cb519f088e150ee4ae8db49",
   "deltas": [
@@ -95,6 +130,9 @@
     "f2Exit": false,
     "nextLocalFamily": "webdav-config",
     "nextLocalFamilyReleased": false,
-    "remainingGate": "USER_CONFIRMATION_SOURCE_MANAGEMENT_F2"
+    "remainingGates": [
+      "NAMED_REVISION_FOR_LIVE_HEAD_ICON_CORRECTION",
+      "USER_CONFIRMATION_SOURCE_MANAGEMENT_F2"
+    ]
   }
 }
