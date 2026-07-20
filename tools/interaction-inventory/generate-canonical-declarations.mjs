@@ -73,6 +73,71 @@ const BOOKSHELF_ACTION_SPECS = [
   ])
 ];
 
+const BOOK_DETAIL_ROUTE_ACTION_SPECS = {
+  "book-detail": [
+    ["back", "route.pop", "返回书架"],
+    ["source-sheet-open", "overlay.sheet.open", "打开快捷书源选择"],
+    ["directory-open", "book.directory.open", "打开完整目录"],
+    ["continue-read", "reader.entry.actionToImmersive", "继续阅读"],
+    ["remove-open", "delete.confirm.open", "打开移除确认"],
+    ["source-option-youshu", "source.switch.select", "选择优书网"],
+    ["source-option-shucang", "source.switch.select", "选择书仓搜索"],
+    ["source-option-local-cache", "source.switch.select", "选择本地缓存"],
+    ["source-sheet-close", "overlay.sheet.close", "关闭快捷书源选择"],
+    ["remove-cancel", "delete.cancel", "取消移除"],
+    ["remove-confirm", "delete.confirm", "确认移除"],
+    ["network-retry", "download.task.retry", "重试联网"],
+    ["toc-retry", "download.task.retry", "重试目录解析"],
+    ["source-switch-inline", "source.switch.open", "从目录错误切换书源"],
+    ["source-switch-bottom", "source.switch.open", "底部切换书源"],
+    ["source-debug", "source.debug.open", "调试当前书源"],
+    ["readd", "book.action", "重新加入书架"],
+    ["return-bookshelf", "route.popToRoot", "返回书架"],
+    ["chapter-30-old-day", "reader.chapter.jump", "第 30 章 旧日"],
+    ["chapter-31-return", "reader.chapter.jump", "第 31 章 归途"],
+    ["chapter-32-rain-night", "reader.chapter.jump", "第 32 章 雨夜"],
+    ["chapter-33-lighthouse", "reader.chapter.jump", "第 33 章 灯塔"]
+  ],
+  "book-detail-toc-preview": [
+    ["back", "route.pop", "返回书籍详情"],
+    ["source-sheet-open", "overlay.sheet.open", "打开快捷书源选择"],
+    ["directory-open", "book.directory.open", "打开完整目录"],
+    ["continue-read", "reader.entry.actionToImmersive", "继续阅读"],
+    ["remove-open", "delete.confirm.open", "打开移除确认"],
+    ["source-option-youshu", "source.switch.select", "选择优书网"],
+    ["source-option-shucang", "source.switch.select", "选择书仓搜索"],
+    ["source-option-local-cache", "source.switch.select", "选择本地缓存"],
+    ["source-sheet-close", "overlay.sheet.close", "关闭快捷书源选择"],
+    ["remove-cancel", "delete.cancel", "取消移除"],
+    ["remove-confirm", "delete.confirm", "确认移除"],
+    ["network-retry", "download.task.retry", "重试联网"],
+    ["toc-retry", "download.task.retry", "重试目录解析"],
+    ["source-switch-inline", "source.switch.open", "从目录错误切换书源"],
+    ["source-switch-bottom", "source.switch.open", "底部切换书源"],
+    ["source-debug", "source.debug.open", "调试当前书源"],
+    ["readd", "book.action", "重新加入书架"],
+    ["return-bookshelf", "route.popToRoot", "返回书架"],
+    ["chapter-30-old-day", "reader.chapter.jump", "第 30 章 旧日"],
+    ["chapter-31-return", "reader.chapter.jump", "第 31 章 归途"],
+    ["chapter-32-rain-night", "reader.chapter.jump", "第 32 章 雨夜"],
+    ["chapter-33-lighthouse", "reader.chapter.jump", "第 33 章 灯塔"]
+  ],
+  "book-directory": [
+    ["back", "route.pop", "返回书籍详情"],
+    ["toc-directory", "tab.item.select", "切换到目录"],
+    ["toc-bookmark", "tab.item.select", "切换到书签"],
+    ["toc-retry", "download.task.retry", "重试目录解析"],
+    ["source-switch", "source.switch.open", "切换书源"],
+    ["chapter-30-old-day", "reader.chapter.jump", "第 30 章 旧日"],
+    ["chapter-31-return", "reader.chapter.jump", "第 31 章 归途"],
+    ["chapter-32-rain-night", "reader.chapter.jump", "第 32 章 雨夜"],
+    ["chapter-33-lighthouse", "reader.chapter.jump", "第 33 章 灯塔"],
+    ["chapter-34-old-map", "reader.chapter.jump", "第 34 章 旧地图"],
+    ["chapter-35-night-walk", "reader.chapter.jump", "第 35 章 夜行"],
+    ["chapter-36-after-lighthouse", "reader.chapter.jump", "第 36 章 灯塔之后"]
+  ]
+};
+
 function bookshelfActionDeclarations() {
   return BOOKSHELF_ACTION_SPECS.map(([settingsKey, uiEvent, label]) => {
     const entityKey = `library.button.button.${settingsKey}`;
@@ -87,6 +152,25 @@ function bookshelfActionDeclarations() {
       pageFamily: "bookshelf", source: "bookshelf-action", label, settingsKey
     };
   });
+}
+
+function bookDetailActionDeclarations() {
+  return Object.entries(BOOK_DETAIL_ROUTE_ACTION_SPECS).flatMap(([route, specs]) =>
+    specs.map(([settingsKey, uiEvent, label]) => {
+      const entityKey = `library.button.button.${settingsKey}`;
+      const renderer = route === "book-directory" ? "bookDirectoryV2" : "bookDetailV2";
+      return {
+        entityKey, controlKey: `${entityKey}@${route}.default`,
+        controlId: `library.button.${route}.default.button.${settingsKey}`,
+        actionKey: settingsKey, instanceKey: null, needsActionKey: false,
+        needsInstanceKey: false, mappingStatus: "mapped", uiEvent,
+        route, state: "default", domain: "library", family: "button", role: "button",
+        renderer, rendererFile: "renderers/d2-bookshelf-discover-renderers.js",
+        rendererSlot: `${renderer}@renderers/d2-bookshelf-discover-renderers.js`,
+        pageFamily: "book-detail", source: "book-detail-action", label, settingsKey
+      };
+    })
+  );
 }
 
 // R2a page-family pilots add stable semantic action identities that cannot be
@@ -438,7 +522,8 @@ const effectiveSubcontrolDeclarations = preservedPilotSubcontrolDeclarations.len
 const allDeclarations = registryDeclarations
   .concat(effectiveSubcontrolDeclarations)
   .concat(preservedPilotActionDeclarations)
-  .concat(bookshelfActionDeclarations());
+  .concat(bookshelfActionDeclarations())
+  .concat(bookDetailActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);

@@ -11102,9 +11102,9 @@
         return searchStateScreen(data, route);
       case "book-detail":
       case "book-detail-toc-preview":
-        return libraryScreen(data, appState);
+        throw new Error(route + " route is FROZEN to bookDetailV2 (d2-bookshelf-discover-renderers.js)");
       case "book-directory":
-        return bookDirectoryScreen(data, appState);
+        throw new Error("book-directory route is FROZEN to bookDirectoryV2 (d2-bookshelf-discover-renderers.js)");
       case "bookshelf-empty":
         throw new Error("bookshelf-empty route is FROZEN to bookshelfEmptyV2 (d2-bookshelf-discover-renderers.js)");
       case "book-batch-management":
@@ -12422,6 +12422,7 @@
   }
 
   function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay) {
+    const bookDetailOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookDetail;
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const dialogFocusableSelector = [
       "button:not([disabled])",
@@ -14267,6 +14268,50 @@
       button.addEventListener("click", (event) => {
         event.preventDefault();
         appState.readerTocMode = button.getAttribute("data-reader-toc-mode") === "bookmark" ? "bookmark" : "directory";
+        bookDetailOwner?.dispatch({ type: "TOC_MODE_SET", value: appState.readerTocMode });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-detail-source]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bookDetailOwner?.dispatch({ type: "SOURCE_SELECT", value: button.getAttribute("data-book-detail-source") || "" });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-detail-remove-confirm]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const request = bookDetailOwner?.executeDelete({ delay: 80 });
+        renderCurrentRoute();
+        request?.then(() => renderCurrentRoute());
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-detail-retry]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const request = bookDetailOwner?.executeNetworkRetry({ delay: 80 });
+        renderCurrentRoute();
+        request?.then(() => renderCurrentRoute());
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-detail-retry-toc], [data-book-directory-retry]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const request = bookDetailOwner?.executeTocRetry({ delay: 80 });
+        renderCurrentRoute();
+        request?.then(() => renderCurrentRoute());
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-detail-readd]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bookDetailOwner?.dispatch({ type: "READD" });
         renderCurrentRoute();
       });
     });
@@ -15134,6 +15179,9 @@
 
     screenHost.querySelectorAll("[data-open-sheet]").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.getAttribute("data-settings-key") === "source-sheet-open") {
+          bookDetailOwner?.dispatch({ type: "SOURCE_SHEET_OPEN" });
+        }
         const phone = button.closest(".fd-phone");
         startOverlayMotion(screenHost, appState, motionController, "sheet", "open", button);
         phone.classList.add("has-sheet");
@@ -15149,6 +15197,9 @@
 
     screenHost.querySelectorAll("[data-close-sheet]").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.getAttribute("data-settings-key") === "source-sheet-close") {
+          bookDetailOwner?.dispatch({ type: "SOURCE_SHEET_CLOSE" });
+        }
         const phone = button.closest(".fd-phone");
         startOverlayMotion(screenHost, appState, motionController, "sheet", "close", button);
         phone.classList.remove("has-sheet");
@@ -15164,6 +15215,9 @@
 
     screenHost.querySelectorAll("[data-open-dialog]").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.getAttribute("data-settings-key") === "remove-open") {
+          bookDetailOwner?.dispatch({ type: "DELETE_DIALOG_OPEN" });
+        }
         const phone = button.closest(".fd-phone");
         startOverlayMotion(screenHost, appState, motionController, "dialog", "open", button);
         phone.classList.add("has-dialog");
@@ -15179,6 +15233,9 @@
 
     screenHost.querySelectorAll("[data-close-dialog]").forEach((button) => {
       button.addEventListener("click", () => {
+        if (button.getAttribute("data-settings-key") === "remove-cancel") {
+          bookDetailOwner?.dispatch({ type: "DELETE_DIALOG_CLOSE" });
+        }
         const phone = button.closest(".fd-phone");
         startOverlayMotion(screenHost, appState, motionController, "dialog", "close", button);
         phone.classList.remove("has-dialog");

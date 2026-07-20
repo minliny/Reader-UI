@@ -42,7 +42,7 @@
     "count": 3808,
     "withUiEvent": 2257,
     "withRawMotionHints": 3719,
-    "rawMotionHintOccurrences": 7142,
+    "rawMotionHintOccurrences": 7157,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -97,7 +97,7 @@
       "toggle.switch"
     ],
     "withCanonicalMotionIds": 3701,
-    "canonicalMotionIdOccurrences": 7242,
+    "canonicalMotionIdOccurrences": 7257,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -160,8 +160,8 @@
     "joinedControls": 0,
     "unjoinedControls": 3808,
     "byTag": {
-      "article": 389,
-      "button": 3295,
+      "article": 371,
+      "button": 3313,
       "i": 28,
       "input": 49,
       "select": 13,
@@ -389,7 +389,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "book-detail",
-          "renderSha256": "e2875cad5767cb3a5874e546df50998d01adcffaf163599c4844877d08cc2f66",
+          "renderSha256": "d44da7ee278b3b159ebce94b7fb96d7f588bdce6bd4b43e841029057ba4dc2d7",
           "count": 2,
           "cases": [
             {
@@ -478,7 +478,7 @@
       ]
     }
   },
-  "inventorySha256": "90147f1acd02507dee9e358cbc0e92d6c6e1e21e40edd0c90049c655991baca0",
+  "inventorySha256": "edd3229934fa0d0a516fc72c0c0e60911676a61563afa87e4208348d22b13405",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -665,7 +665,7 @@
       "pageState": "loading",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "e2875cad5767cb3a5874e546df50998d01adcffaf163599c4844877d08cc2f66"
+      "renderSha256": "d44da7ee278b3b159ebce94b7fb96d7f588bdce6bd4b43e841029057ba4dc2d7"
     },
     {
       "routeId": "book-detail",
@@ -676,7 +676,7 @@
       "pageState": "default",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "e2875cad5767cb3a5874e546df50998d01adcffaf163599c4844877d08cc2f66"
+      "renderSha256": "d44da7ee278b3b159ebce94b7fb96d7f588bdce6bd4b43e841029057ba4dc2d7"
     },
     {
       "routeId": "book-detail-toc-preview",
@@ -687,7 +687,7 @@
       "pageState": "default",
       "semanticControls": 14,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "17180e2900f819bbf71d7711549deb77d078c147a76e3a7673403b254c7eef0e"
+      "renderSha256": "67c5702e51b91883086b9f3c3eb59f53063b88bb2adfc67cdf898c14fab6216d"
     },
     {
       "routeId": "book-directory",
@@ -698,7 +698,7 @@
       "pageState": "default",
       "semanticControls": 10,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "cefb63254eaa8f5202b39bbe6d496455dfd0dac84092bd8be3e2a7af7db5e777"
+      "renderSha256": "035ff8b673102daebdc31f7ef87bad0c096e23324db7506d4fe7c36aeb22e9fa"
     },
     {
       "routeId": "immersive-reading",

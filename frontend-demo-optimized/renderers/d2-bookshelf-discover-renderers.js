@@ -326,6 +326,159 @@
     ].map(function (pair) { return ` ${pair[0]}="${esc(pair[1])}"`; }).join("");
   }
 
+  // ============ Book Detail R2a/R2b：稳定身份 + 单一状态 owner ============
+
+  var D2_BOOK_DETAIL_STATES = ["normal", "loading", "offline", "no-toc", "removed"];
+  var D2_BOOK_DETAIL_TOC_MODES = ["directory", "bookmark"];
+  var d2BookDetailListeners = [];
+
+  function d2BookDetailDefaults() {
+    return {
+      viewState: "normal", tocMode: "directory", sheetOpen: false, dialogOpen: false,
+      selectedSource: null, deleteStatus: "idle", networkStatus: "idle", tocStatus: "idle",
+      error: null, focusReturnKey: null
+    };
+  }
+
+  var d2BookDetailState = d2BookDetailDefaults();
+
+  function d2BookDetailReducer(state, action) {
+    action = action || {};
+    switch (action.type) {
+      case "VIEW_STATE_SET":
+        if (D2_BOOK_DETAIL_STATES.indexOf(action.value) < 0 || state.viewState === action.value) return state;
+        return Object.assign({}, state, { viewState: action.value, error: null });
+      case "TOC_MODE_SET":
+        if (D2_BOOK_DETAIL_TOC_MODES.indexOf(action.value) < 0 || state.tocMode === action.value) return state;
+        return Object.assign({}, state, { tocMode: action.value, focusReturnKey: "toc-" + action.value });
+      case "SOURCE_SHEET_OPEN":
+        if (state.sheetOpen) return state;
+        return Object.assign({}, state, { sheetOpen: true, dialogOpen: false, focusReturnKey: "source-sheet-open" });
+      case "SOURCE_SHEET_CLOSE":
+        if (!state.sheetOpen) return state;
+        return Object.assign({}, state, { sheetOpen: false, focusReturnKey: "source-sheet-open" });
+      case "SOURCE_SELECT":
+        if (["优书网", "书仓搜索", "本地缓存"].indexOf(action.value) < 0) return state;
+        return Object.assign({}, state, { selectedSource: action.value, sheetOpen: false, focusReturnKey: "source-sheet-open" });
+      case "DELETE_DIALOG_OPEN":
+        if (state.dialogOpen) return state;
+        return Object.assign({}, state, { dialogOpen: true, sheetOpen: false, deleteStatus: "confirm", error: null, focusReturnKey: "remove-open" });
+      case "DELETE_DIALOG_CLOSE":
+        if (!state.dialogOpen || state.deleteStatus === "loading") return state;
+        return Object.assign({}, state, { dialogOpen: false, deleteStatus: "idle", error: null, focusReturnKey: "remove-open" });
+      case "DELETE_START":
+        if (!state.dialogOpen || state.deleteStatus === "loading") return state;
+        return Object.assign({}, state, { deleteStatus: "loading", error: null });
+      case "DELETE_SUCCESS":
+        if (state.deleteStatus !== "loading") return state;
+        return Object.assign({}, state, { deleteStatus: "success", dialogOpen: false, viewState: "removed", error: null, focusReturnKey: "readd" });
+      case "DELETE_FAILED":
+        if (state.deleteStatus !== "loading") return state;
+        return Object.assign({}, state, { deleteStatus: "failed", dialogOpen: true, error: String(action.error || "移除失败") });
+      case "NETWORK_RETRY_START":
+        if (state.networkStatus === "loading") return state;
+        return Object.assign({}, state, { networkStatus: "loading", error: null });
+      case "NETWORK_RETRY_SUCCESS":
+        if (state.networkStatus !== "loading") return state;
+        return Object.assign({}, state, { networkStatus: "success", viewState: "normal", error: null });
+      case "NETWORK_RETRY_FAILED":
+        if (state.networkStatus !== "loading") return state;
+        return Object.assign({}, state, { networkStatus: "failed", viewState: "offline", error: String(action.error || "网络连接失败") });
+      case "TOC_RETRY_START":
+        if (state.tocStatus === "loading") return state;
+        return Object.assign({}, state, { tocStatus: "loading", error: null });
+      case "TOC_RETRY_SUCCESS":
+        if (state.tocStatus !== "loading") return state;
+        return Object.assign({}, state, { tocStatus: "success", viewState: "normal", error: null });
+      case "TOC_RETRY_FAILED":
+        if (state.tocStatus !== "loading") return state;
+        return Object.assign({}, state, { tocStatus: "failed", viewState: "no-toc", error: String(action.error || "目录解析失败") });
+      case "READD":
+        if (state.viewState !== "removed") return state;
+        return Object.assign({}, state, { viewState: "normal", focusReturnKey: "continue-read" });
+      case "RESET":
+        return d2BookDetailDefaults();
+      default:
+        return state;
+    }
+  }
+
+  function d2BookDetailDispatch(action) {
+    var next = d2BookDetailReducer(d2BookDetailState, action);
+    if (next === d2BookDetailState) return d2BookDetailState;
+    d2BookDetailState = next;
+    d2BookDetailListeners.slice().forEach(function (listener) { listener(next, action); });
+    return next;
+  }
+
+  function d2BookDetailSubscribe(listener) {
+    if (typeof listener !== "function") return function () {};
+    d2BookDetailListeners.push(listener);
+    return function () { d2BookDetailListeners = d2BookDetailListeners.filter(function (item) { return item !== listener; }); };
+  }
+
+  function d2BookDetailInjectAppState(appState) {
+    if (!appState) return d2BookDetailState;
+    var patch = {};
+    if (D2_BOOK_DETAIL_STATES.indexOf(appState.bookDetailState) >= 0) patch.viewState = appState.bookDetailState;
+    if (appState.bookDirectoryState === "loading") patch.viewState = "loading";
+    if (appState.bookDirectoryState === "error") patch.viewState = "no-toc";
+    if (appState.bookDirectoryState === "offline") patch.viewState = "offline";
+    if (appState.bookDirectoryState === "normal") patch.viewState = "normal";
+    if (D2_BOOK_DETAIL_TOC_MODES.indexOf(appState.readerTocMode) >= 0) patch.tocMode = appState.readerTocMode;
+    d2BookDetailState = Object.assign({}, d2BookDetailState, patch);
+    return d2BookDetailState;
+  }
+
+  function d2ExecuteBookDetailAsync(domain, options) {
+    options = options || {};
+    var config = domain === "delete"
+      ? { status: "deleteStatus", start: "DELETE_START", success: "DELETE_SUCCESS", failed: "DELETE_FAILED" }
+      : domain === "network"
+        ? { status: "networkStatus", start: "NETWORK_RETRY_START", success: "NETWORK_RETRY_SUCCESS", failed: "NETWORK_RETRY_FAILED" }
+        : { status: "tocStatus", start: "TOC_RETRY_START", success: "TOC_RETRY_SUCCESS", failed: "TOC_RETRY_FAILED" };
+    if (d2BookDetailState[config.status] === "loading") return Promise.resolve({ ok: false, duplicate: true });
+    var before = d2BookDetailState;
+    d2BookDetailDispatch({ type: config.start });
+    if (d2BookDetailState === before) return Promise.resolve({ ok: false, rejected: true });
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        var failed = options.simulateResult === "failed";
+        d2BookDetailDispatch(failed ? { type: config.failed, error: options.error } : { type: config.success });
+        resolve({ ok: !failed });
+      }, Number(options.delay) || 0);
+    });
+  }
+
+  function d2BookDetailIdentity(route, settingsKey) {
+    var declarations = window.CANONICAL_CONTROL_DECLARATIONS || [];
+    return declarations.find(function (entry) {
+      return entry.route === route && entry.source === "book-detail-action" &&
+        entry.settingsKey === settingsKey && entry.mappingStatus === "mapped";
+    }) || null;
+  }
+
+  function d2BookDetailIdentityAttrs(route, settingsKey) {
+    var identity = d2BookDetailIdentity(route, settingsKey);
+    if (!identity) return "";
+    return [
+      ["data-entity-key", identity.entityKey], ["data-control-key", identity.controlKey],
+      ["data-control-id", identity.controlId], ["data-ui-event", identity.uiEvent],
+      ["data-settings-key", settingsKey]
+    ].map(function (pair) { return ` ${pair[0]}="${esc(pair[1])}"`; }).join("");
+  }
+
+  var D2_BOOK_DETAIL_CHAPTER_KEYS = {
+    "第 30 章 旧日": "chapter-30-old-day", "第 31 章 归途": "chapter-31-return",
+    "第 32 章 雨夜": "chapter-32-rain-night", "第 33 章 灯塔": "chapter-33-lighthouse",
+    "第 34 章 旧地图": "chapter-34-old-map", "第 35 章 夜行": "chapter-35-night-walk",
+    "第 36 章 灯塔之后": "chapter-36-after-lighthouse"
+  };
+
+  function d2BookDetailChapterKey(chapter) {
+    return chapter && (chapter.identityKey || D2_BOOK_DETAIL_CHAPTER_KEYS[chapter.title]) || null;
+  }
+
   // 取主标签反馈文案
   function mainTabFeedbackHtml(appState) {
     var message = (appState && appState.mainTabFeedback) || "";
@@ -986,8 +1139,9 @@
    */
   function bookDetailV2(data, route, appState) {
     var book = (data && data.library && data.library.book) || { title: "长夜余火", author: "爱潜水的乌贼", coverKey: "longNight" };
-    var detailState = (appState && appState.bookDetailState) || "normal";
-    var sourceName = String(book.source || "").split("·")[0].trim() || "当前书源";
+    var owned = d2BookDetailInjectAppState(appState);
+    var detailState = owned.viewState;
+    var sourceName = owned.selectedSource || String(book.source || "").split("·")[0].trim() || "当前书源";
     var intro = book.intro || "旧世界的余烬尚未冷却，新的秩序已经在废墟之上生长。主角沿着被遗忘的线索追寻真相，也在一次次选择里确认自己想守住的东西。";
     var tocPreview = route === "book-detail-toc-preview";
     var chapters = (data && data.library && data.library.chapters) || [];
@@ -999,8 +1153,9 @@
         title: "书籍详情",
         ariaLabel: "书籍详情加载中",
         topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
         contentHtml: `
-          <section class="fd-book-hero fd-book-detail-hero is-skeleton">
+          <section class="fd-book-hero fd-book-detail-hero is-skeleton" aria-busy="true">
             <i class="fd-book-hero-cover-skeleton"></i>
             <div class="fd-book-identity">
               <h2><b class="fd-skeleton-line"></b></h2>
@@ -1029,6 +1184,7 @@
         title: "书籍详情",
         ariaLabel: "书籍详情离线状态",
         topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
         contentHtml: `
           <section class="fd-book-hero fd-book-detail-hero">
             <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面">
@@ -1043,23 +1199,24 @@
           <section class="fd-book-offline-banner">
             ${icon("offline", "fd-small-icon")}
             <span>当前为离线状态，仅展示已缓存章节，书源信息和最新章节不可用。</span>
-            <button type="button" data-book-detail-retry>重连</button>
+            <button type="button"${d2BookDetailIdentityAttrs(route, "network-retry")} data-book-detail-retry aria-busy="${owned.networkStatus === "loading" ? "true" : "false"}"${owned.networkStatus === "loading" ? " disabled" : ""}>重连</button>
           </section>
           <section class="fd-book-summary-card">
             <h2>简介（缓存）</h2>
             <p>${esc(intro)}</p>
           </section>
-          <section class="fd-chapter-list fd-book-chapter-preview">
+          <section class="fd-chapter-list fd-book-chapter-preview" role="list">
             <header><h2>章节信息（缓存）</h2></header>
             ${chapters.slice(0, 3).map(function (chapter, index) {
-              return `<article role="button" tabindex="0" data-route="immersive-reading">
+              var chapterKey = d2BookDetailChapterKey(chapter);
+              return `<article role="listitem"><button type="button"${chapterKey ? d2BookDetailIdentityAttrs(route, chapterKey) : ""} data-route="immersive-reading" data-chapter-key="${esc(chapterKey || "unmapped")}">
                 <span>${esc(chapter.title)}</span>
                 <em class="fd-book-cache-tag is-cached">${icon("download", "fd-small-icon")}已缓存</em>
-              </article>`;
+              </button></article>`;
             }).join("")}
             <p class="fd-book-detail-offline-meta">已缓存 ${chapters.length} 章 · 联网后可查看完整目录</p>
           </section>`,
-        bottomActionHtml: `<div class="fd-fixed-action-row"><button type="button" data-route="immersive-reading">阅读缓存章节</button></div>`,
+        bottomActionHtml: `<div class="fd-fixed-action-row"><button type="button"${d2BookDetailIdentityAttrs(route, "continue-read")} data-route="immersive-reading">阅读缓存章节</button></div>`,
         stateHostHtml: `<p class="fd-nav-feedback">书籍详情离线 · 已缓存 ${chapters.length} 章</p>`
       }));
     }
@@ -1071,6 +1228,7 @@
         title: "书籍详情",
         ariaLabel: "书籍详情目录解析失败",
         topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
         contentHtml: `
           <section class="fd-book-hero fd-book-detail-hero">
             <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面">
@@ -1090,13 +1248,13 @@
               <h3>目录解析失败</h3>
               <p>当前书源的目录规则未能解析出章节列表。可重试、编辑书源或切换书源。</p>
               <div>
-                <button type="button" data-book-detail-retry-toc>${icon("refresh", "fd-small-icon")}重试解析</button>
-                <button type="button" data-route="source-switch">${icon("source-switch", "fd-small-icon")}切换书源</button>
-                <button type="button" data-route="source-debug">${icon("code", "fd-small-icon")}调试书源</button>
+                <button type="button"${d2BookDetailIdentityAttrs(route, "toc-retry")} data-book-detail-retry-toc aria-busy="${owned.tocStatus === "loading" ? "true" : "false"}"${owned.tocStatus === "loading" ? " disabled" : ""}>${icon("refresh", "fd-small-icon")}重试解析</button>
+                <button type="button"${d2BookDetailIdentityAttrs(route, "source-switch-inline")} data-route="source-switch">${icon("source-switch", "fd-small-icon")}切换书源</button>
+                <button type="button"${d2BookDetailIdentityAttrs(route, "source-debug")} data-route="source-debug">${icon("code", "fd-small-icon")}调试书源</button>
               </div>
             </div>
           </section>`,
-        bottomActionHtml: `<div class="fd-fixed-action-row"><button type="button" data-route="source-switch">换源</button></div>`,
+        bottomActionHtml: `<div class="fd-fixed-action-row"><button type="button"${d2BookDetailIdentityAttrs(route, "source-switch-bottom")} data-route="source-switch">换源</button></div>`,
         stateHostHtml: `<p class="fd-nav-feedback">目录解析失败 · 可重试或换源</p>`
       }));
     }
@@ -1108,6 +1266,7 @@
         title: "书籍详情",
         ariaLabel: "书籍已从书架移除",
         topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
         contentHtml: `
           <section class="fd-book-hero fd-book-detail-hero is-removed">
             <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面">
@@ -1128,8 +1287,8 @@
             <h3>这本书已不在书架</h3>
             <p>阅读记录已保留。可重新加入书架继续阅读，或回到书架选择其他书籍。</p>
             <div>
-              <button class="is-primary" type="button" data-book-detail-readd>${icon("plus", "fd-small-icon")}重新加入书架</button>
-              <button type="button" data-route="bookshelf">${icon("bookshelf", "fd-small-icon")}返回书架</button>
+              <button class="is-primary" type="button"${d2BookDetailIdentityAttrs(route, "readd")} data-book-detail-readd>${icon("plus", "fd-small-icon")}重新加入书架</button>
+              <button type="button"${d2BookDetailIdentityAttrs(route, "return-bookshelf")} data-route="bookshelf">${icon("bookshelf", "fd-small-icon")}返回书架</button>
             </div>
           </section>`,
         stateHostHtml: `<p class="fd-nav-feedback">书籍已移出书架 · 阅读记录保留</p>`
@@ -1142,6 +1301,7 @@
       title: "书籍详情",
       ariaLabel: "书籍详情",
       topBarClass: "fd-back-bar",
+      backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
       bottomActionHostClass: "fd-bottom-action-host",
       sheetHostClass: "fd-sheet-host",
       dialogHostClass: "fd-dialog-host",
@@ -1159,7 +1319,7 @@
             </dl>
             <div class="fd-book-inline-source-row">
               <span>书源：${esc(sourceName)}</span>
-              <button class="fd-book-inline-source-button" type="button" data-open-sheet>更换书源</button>
+              <button class="fd-book-inline-source-button" type="button"${d2BookDetailIdentityAttrs(route, "source-sheet-open")} data-open-sheet aria-expanded="${owned.sheetOpen ? "true" : "false"}">更换书源</button>
             </div>
           </div>
         </section>
@@ -1167,44 +1327,42 @@
           <h2>简介</h2>
           <p>${esc(intro)}</p>
         </section>
-        <section class="fd-chapter-list fd-book-chapter-preview">
+        <section class="fd-chapter-list fd-book-chapter-preview" role="list">
           <header>
             <h2>章节信息</h2>
-            <button class="fd-inline-route" type="button" data-route="book-directory">${icon("directory", "fd-small-icon")}完整目录</button>
+            <button class="fd-inline-route" type="button"${d2BookDetailIdentityAttrs(route, "directory-open")} data-route="book-directory">${icon("directory", "fd-small-icon")}完整目录</button>
           </header>
           ${tocPreview
             ? chapters.slice(0, 3).map(function (chapter, index) {
-              return `<article role="button" tabindex="0" data-route="immersive-reading">
-                <span>${esc(chapter.title)}</span>
-              </article>`;
+              var chapterKey = d2BookDetailChapterKey(chapter);
+              return `<article role="listitem"><button type="button"${chapterKey ? d2BookDetailIdentityAttrs(route, chapterKey) : ""} data-route="immersive-reading" data-chapter-key="${esc(chapterKey || "unmapped")}"><span>${esc(chapter.title)}</span></button></article>`;
             }).join("") + `<p class="fd-book-detail-toc-preview-meta">仅预览前 3 章 · 完整目录共 ${chapters.length} 章</p>`
             : chapters.map(function (chapter, index) {
-              return `<article role="button" tabindex="0" data-route="immersive-reading">
-                <span>${esc(chapter.title)}</span>
-              </article>`;
+              var chapterKey = d2BookDetailChapterKey(chapter);
+              return `<article role="listitem"><button type="button"${chapterKey ? d2BookDetailIdentityAttrs(route, chapterKey) : ""} data-route="immersive-reading" data-chapter-key="${esc(chapterKey || "unmapped")}"><span>${esc(chapter.title)}</span></button></article>`;
             }).join("")}
         </section>`,
       bottomActionHtml: `
         <div class="fd-fixed-action-row">
-          <button type="button" data-route="immersive-reading">继续阅读</button>
-          <button class="is-danger" type="button" data-open-dialog>移除书架</button>
+          <button type="button"${d2BookDetailIdentityAttrs(route, "continue-read")} data-route="immersive-reading">继续阅读</button>
+          <button class="is-danger" type="button"${d2BookDetailIdentityAttrs(route, "remove-open")} data-open-dialog aria-expanded="${owned.dialogOpen ? "true" : "false"}">移除书架</button>
         </div>`,
       sheetHtml: `
-        <section class="fd-demo-sheet" aria-hidden="true" data-demo-sheet>
+        <section class="fd-demo-sheet" role="dialog" aria-modal="true" aria-labelledby="book-detail-source-sheet-title" aria-hidden="${owned.sheetOpen ? "false" : "true"}" data-demo-sheet>
           <div class="fd-sheet-grabber"></div>
-          <h2>更换书源</h2>
-          <button type="button">优书网</button>
-          <button type="button">书仓搜索</button>
-          <button type="button">本地缓存</button>
-          <button type="button" data-close-sheet>关闭</button>
+          <h2 id="book-detail-source-sheet-title">更换书源</h2>
+          <button type="button"${d2BookDetailIdentityAttrs(route, "source-option-youshu")} data-book-detail-source="优书网" data-sheet-initial-focus>优书网</button>
+          <button type="button"${d2BookDetailIdentityAttrs(route, "source-option-shucang")} data-book-detail-source="书仓搜索">书仓搜索</button>
+          <button type="button"${d2BookDetailIdentityAttrs(route, "source-option-local-cache")} data-book-detail-source="本地缓存">本地缓存</button>
+          <button type="button"${d2BookDetailIdentityAttrs(route, "source-sheet-close")} data-close-sheet data-restore-focus="source-sheet-open">关闭</button>
         </section>`,
       dialogHtml: `
-        <section class="fd-demo-dialog" aria-hidden="true" data-demo-dialog>
-          <h2>确认删除？</h2>
-          <p>只从书架移除，不删除本地文件和阅读记录。</p>
+        <section class="fd-demo-dialog" role="dialog" aria-modal="true" aria-labelledby="book-detail-remove-title" aria-describedby="book-detail-remove-desc" aria-hidden="${owned.dialogOpen ? "false" : "true"}"${owned.deleteStatus === "failed" ? " aria-invalid=\"true\"" : ""} data-demo-dialog>
+          <h2 id="book-detail-remove-title">${owned.deleteStatus === "failed" ? "移除失败" : "确认删除？"}</h2>
+          <p id="book-detail-remove-desc">${owned.error ? esc(owned.error) : "只从书架移除，不删除本地文件和阅读记录。"}</p>
           <div>
-            <button type="button" data-close-dialog>取消</button>
-            <button type="button" data-close-dialog>删除</button>
+            <button type="button"${d2BookDetailIdentityAttrs(route, "remove-cancel")} data-close-dialog data-dialog-initial-focus data-restore-focus="remove-open"${owned.deleteStatus === "loading" ? " disabled" : ""}>取消</button>
+            <button type="button"${d2BookDetailIdentityAttrs(route, "remove-confirm")} data-book-detail-remove-confirm aria-busy="${owned.deleteStatus === "loading" ? "true" : "false"}"${owned.deleteStatus === "loading" ? " disabled" : ""}>删除</button>
           </div>
         </section>`
     }));
@@ -1224,11 +1382,15 @@
       { title: "第 35 章 夜行", markers: [] },
       { title: "第 36 章 灯塔之后", markers: ["书签"] }
     ]);
-    var tocMode = (appState && appState.readerTocMode) === "bookmark" ? "bookmark" : "directory";
+    var owned = d2BookDetailInjectAppState(appState);
+    var tocMode = owned.tocMode;
     var visibleChapters = tocMode === "bookmark"
       ? chapters.filter(function (c) { return (c.markers || []).indexOf("书签") >= 0; })
       : chapters;
-    var dirState = (appState && appState.bookDirectoryState) || "normal";
+    var dirState = owned.viewState === "no-toc" ? "error" : owned.viewState;
+    if (dirState === "offline") {
+      visibleChapters = visibleChapters.filter(function (chapter) { return (chapter.markers || []).indexOf("已缓存") >= 0; });
+    }
 
     if (dirState === "loading") {
       return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
@@ -1236,8 +1398,9 @@
         title: "书籍目录",
         ariaLabel: "目录加载中",
         topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
         contentHtml: `
-          <section class="fd-chapter-list fd-directory-full-list is-skeleton">
+          <section class="fd-chapter-list fd-directory-full-list is-skeleton" aria-busy="true">
             <header><strong><b class="fd-skeleton-line"></b></strong></header>
             ${Array.from({ length: 6 }).map(function () {
               return `<article><b class="fd-skeleton-line"></b></article>`;
@@ -1252,6 +1415,7 @@
         title: "书籍目录",
         ariaLabel: "目录解析失败",
         topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
         contentHtml: `
           <section class="fd-chapter-list fd-directory-full-list is-error">
             <header><strong>${esc(book.title)}</strong></header>
@@ -1260,8 +1424,8 @@
               <h2>目录解析失败</h2>
               <p>可重试、换源或调试书源规则。</p>
               <div>
-                <button type="button" data-book-directory-retry>${icon("refresh", "fd-small-icon")}重试</button>
-                <button type="button" data-route="source-switch">${icon("source-switch", "fd-small-icon")}换源</button>
+                <button type="button"${d2BookDetailIdentityAttrs(route, "toc-retry")} data-book-directory-retry aria-busy="${owned.tocStatus === "loading" ? "true" : "false"}"${owned.tocStatus === "loading" ? " disabled" : ""}>${icon("refresh", "fd-small-icon")}重试</button>
+                <button type="button"${d2BookDetailIdentityAttrs(route, "source-switch")} data-route="source-switch">${icon("source-switch", "fd-small-icon")}换源</button>
               </div>
             </div>
           </section>`
@@ -1271,9 +1435,11 @@
     return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
       data: data,
       title: "书籍目录",
-      ariaLabel: "书籍目录",
+      ariaLabel: dirState === "offline" ? "书籍目录离线状态" : "书籍目录",
       topBarClass: "fd-back-bar",
+      backButtonAttrs: d2BookDetailIdentityAttrs(route, "back"),
       contentHtml: `
+        ${dirState === "offline" ? `<section class="fd-book-offline-banner" role="status">${icon("offline", "fd-small-icon")}<span>离线模式仅显示已缓存章节。</span></section>` : ""}
         <section class="fd-chapter-list fd-directory-full-list">
           <header class="fd-directory-full-head">
             <span>
@@ -1282,19 +1448,20 @@
             </span>
           </header>
           <nav class="fd-directory-toc-switch-row" aria-label="目录书签切换">
-            <button class="${tocMode === "directory" ? "is-active" : ""}" type="button" data-reader-toc-mode="directory">目录</button>
-            <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button" data-reader-toc-mode="bookmark">书签</button>
+            <button class="${tocMode === "directory" ? "is-active" : ""}" type="button"${d2BookDetailIdentityAttrs(route, "toc-directory")} data-reader-toc-mode="directory" aria-pressed="${tocMode === "directory" ? "true" : "false"}">目录</button>
+            <button class="${tocMode === "bookmark" ? "is-active" : ""}" type="button"${d2BookDetailIdentityAttrs(route, "toc-bookmark")} data-reader-toc-mode="bookmark" aria-pressed="${tocMode === "bookmark" ? "true" : "false"}">书签</button>
           </nav>
-          <div class="fd-directory-full-rows">
+          <div class="fd-directory-full-rows" role="list">
             ${visibleChapters.length === 0
               ? `<p class="fd-bookshelf-empty-inline">${tocMode === "bookmark" ? "暂无书签章节" : "目录为空"}</p>`
               : visibleChapters.map(function (chapter) {
-                return `<article role="button" tabindex="0" data-route="immersive-reading">
+                var chapterKey = d2BookDetailChapterKey(chapter);
+                return `<article role="listitem"><button type="button"${chapterKey ? d2BookDetailIdentityAttrs(route, chapterKey) : ""} data-route="immersive-reading" data-chapter-key="${esc(chapterKey || "unmapped")}">
                   <span>${esc(chapter.title)}</span>
                   ${(chapter.markers || []).map(function (m) {
                     return `<em class="fd-chapter-marker">${esc(m)}</em>`;
                   }).join("")}
-                </article>`;
+                </button></article>`;
               }).join("")}
           </div>
         </section>`
@@ -2446,6 +2613,19 @@
       executeLoadRetry: d2ExecuteBookshelfLoadRetry,
       executeNetworkRetry: d2ExecuteBookshelfNetworkRetry,
       identityAttrs: d2BookshelfIdentityAttrs
+    },
+    bookDetail: {
+      defaults: d2BookDetailDefaults,
+      reducer: d2BookDetailReducer,
+      dispatch: d2BookDetailDispatch,
+      subscribe: d2BookDetailSubscribe,
+      getState: function () { return d2BookDetailState; },
+      injectAppState: d2BookDetailInjectAppState,
+      executeDelete: function (options) { return d2ExecuteBookDetailAsync("delete", options); },
+      executeNetworkRetry: function (options) { return d2ExecuteBookDetailAsync("network", options); },
+      executeTocRetry: function (options) { return d2ExecuteBookDetailAsync("toc", options); },
+      identityAttrs: d2BookDetailIdentityAttrs,
+      chapterKey: d2BookDetailChapterKey
     },
     // —— 发现 renderer ——
     discoverV2: discoverV2,

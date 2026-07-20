@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "90147f1acd02507dee9e358cbc0e92d6c6e1e21e40edd0c90049c655991baca0",
+    "inventorySha256": "edd3229934fa0d0a516fc72c0c0e60911676a61563afa87e4208348d22b13405",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
@@ -12,9 +12,9 @@
     "candidates": 3808,
     "semanticControls": 3808,
     "suspectedNonSemanticControls": 0,
-    "mapped": 732,
+    "mapped": 726,
     "pendingActionKey": 449,
-    "pendingInstanceKey": 1104,
+    "pendingInstanceKey": 1110,
     "pendingActionAndInstanceKey": 1523,
     "uniqueControlIds": 3808,
     "uniqueEntityKeys": 76,
@@ -31312,7 +31312,46 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail-toc-preview.default.button.close-dialog-h-763645c8",
+      "controlId": "library.button.book-detail-toc-preview.default.button.close-dialog-h-a61e7a6a",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n7",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail-toc-preview",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "close-dialog-h-a61e7a6a",
+      "source": {
+        "candidateKey": "candidate:f33c66fe7158a2624310",
+        "selectorSha256": "f1f71739424eb21d97e6367f057809d6d5717f9d9ace098206578259b08e65db",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "取消",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-close-dialog": "",
+          "data-dialog-initial-focus": "",
+          "data-restore-focus": "remove-open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail-toc-preview.default.button.close-sheet-h-410c2d83",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail-toc-preview.default.n1",
       "actionKey": null,
@@ -31325,90 +31364,17 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "close-dialog-h-763645c8",
+      "discriminator": "close-sheet-h-410c2d83",
       "source": {
-        "candidateKey": "candidate:372706ad4494e1a82292",
-        "selectorSha256": "f1f71739424eb21d97e6367f057809d6d5717f9d9ace098206578259b08e65db",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "取消",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-close-dialog": ""
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail-toc-preview.default.button.close-dialog-h-98d7e539",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n4",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail-toc-preview",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "close-dialog-h-98d7e539",
-      "source": {
-        "candidateKey": "candidate:4a24797ce62722e8dfd9",
-        "selectorSha256": "11ef7b8e50dda31ac2e79807bf979e2e41f7fa76b41673fa9559cbdba026ee2a",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "删除",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-close-dialog": ""
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail-toc-preview.default.button.close-sheet-h-f4c3b990",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n6",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail-toc-preview",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "close-sheet-h-f4c3b990",
-      "source": {
-        "candidateKey": "candidate:bb564b2cfc7378634963",
+        "candidateKey": "candidate:41fdc5a6c07eabcede1e",
         "selectorSha256": "5bf4646157c9611930030e90f4d2098050015ae3f29f34aa44260513f914f081",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "关闭",
         "uiEvent": null,
         "dataAttributes": {
-          "data-close-sheet": ""
+          "data-close-sheet": "",
+          "data-restore-focus": "source-sheet-open"
         }
       },
       "mappingStatus": "pending-action-and-instance-key",
@@ -31423,7 +31389,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail-toc-preview.default.button.h-a5ad5d25",
+      "controlId": "library.button.book-detail-toc-preview.default.button.h-37a1271e",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail-toc-preview.default.n0",
       "actionKey": null,
@@ -31436,15 +31402,18 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-a5ad5d25",
+      "discriminator": "h-37a1271e",
       "source": {
-        "candidateKey": "candidate:2467ab2c4cc324eacabd",
-        "selectorSha256": "716db76955327b1f27cce22569f638f926de7646d844e22cf553d3cad3a49e13",
+        "candidateKey": "candidate:1ea228a054ebbb4c6601",
+        "selectorSha256": "951a7bebd813ec62dc3b847cfa158a360c47e8091fa26a90cd7829b903fb6ed4",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "书仓搜索",
+        "label": "优书网",
         "uiEvent": null,
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-book-detail-source": "优书网",
+          "data-sheet-initial-focus": ""
+        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -31458,9 +31427,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail-toc-preview.default.button.h-c5b0216c",
+      "controlId": "library.button.book-detail-toc-preview.default.button.h-762b837d",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n2",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n3",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -31471,15 +31440,54 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-c5b0216c",
+      "discriminator": "h-762b837d",
       "source": {
-        "candidateKey": "candidate:402e957c6582fe4f7dac",
-        "selectorSha256": "e16fdda34b9df364cb8ed0e046cc4a78afa90002a224a70dab9b4c54bbc7a584",
+        "candidateKey": "candidate:94125859943d36f22322",
+        "selectorSha256": "578e888ad3bfece9a82d9154612b1f5aa66d69ea95aeec29ae7aa522d4f14938",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "本地缓存",
         "uiEvent": null,
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-book-detail-source": "本地缓存"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail-toc-preview.default.button.h-76664ee3",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n8",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail-toc-preview",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "h-76664ee3",
+      "source": {
+        "candidateKey": "candidate:fd16993662202067aa70",
+        "selectorSha256": "346f9b001c2c5c6cefb985e7bfafedcc36546b474c3d7e254db6d86d005c2ad0",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "删除",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-detail-remove-confirm": ""
+        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -31495,7 +31503,7 @@
     {
       "controlId": "library.button.book-detail-toc-preview.default.button.h-d8485a77",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n3",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n2",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -31528,9 +31536,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail-toc-preview.default.button.h-e414284a",
+      "controlId": "library.button.book-detail-toc-preview.default.button.h-ebc04b1c",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n5",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n4",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -31541,15 +31549,17 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-e414284a",
+      "discriminator": "h-ebc04b1c",
       "source": {
-        "candidateKey": "candidate:629c4260c045e2ecbab6",
-        "selectorSha256": "a2a91b83cc5d009d4fd0004d5b422e432674252ec66c19f60c8e5cdc0b77562b",
+        "candidateKey": "candidate:e2603f833ca9128bbc8a",
+        "selectorSha256": "3ad91bc80d032fe9aba38167c698c90ab1fe24a3f046f876c63878cefd8a18eb",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "优书网",
+        "label": "书仓搜索",
         "uiEvent": null,
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-book-detail-source": "书仓搜索"
+        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -31565,7 +31575,7 @@
     {
       "controlId": "library.button.book-detail-toc-preview.default.button.open-dialog-h-dd5de9fa",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n7",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n5",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -31602,7 +31612,7 @@
     {
       "controlId": "library.button.book-detail-toc-preview.default.button.open-sheet-h-549ef63f",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail-toc-preview.default.n8",
+      "controlKey": "library.button.button@book-detail-toc-preview.default.n6",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -31639,11 +31649,11 @@
     {
       "controlId": "library.button.book-detail-toc-preview.default.button.route-book-directory-h-1bac5932",
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.route-book-directory",
+      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.n1",
       "actionKey": "route.push",
       "instanceKey": "route-book-directory",
       "needsActionKey": false,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "library",
       "family": "button",
       "route": "book-detail-toc-preview",
@@ -31662,8 +31672,122 @@
           "data-route": "book-directory"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail-toc-preview.default.button.route-immersive-reading-h-330c72ff",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.n0",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail-toc-preview",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-330c72ff",
+      "source": {
+        "candidateKey": "candidate:175e9aff02e8f571be14",
+        "selectorSha256": "348d650a37bca8c2e4e69bff661342a12d94980beb730cdb470b573a67e2145c",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 31 章 归途",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-31-return",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail-toc-preview.default.button.route-immersive-reading-h-62b69ce0",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.n3",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail-toc-preview",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-62b69ce0",
+      "source": {
+        "candidateKey": "candidate:ba1fe3597a06344eaaae",
+        "selectorSha256": "8e3ac337dfd4efdb94392b0df87abcf51d8bc3f5dfa08be8a195a85c4bce4446",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 32 章 雨夜",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-32-rain-night",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail-toc-preview.default.button.route-immersive-reading-h-7f36549f",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.n4",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail-toc-preview",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-7f36549f",
+      "source": {
+        "candidateKey": "candidate:c3e02372e93986d7bc5f",
+        "selectorSha256": "ec49151a1792ad5c458df8a6e856e9828098b7e2372af137a96a0d711d9cb5a7",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 30 章 旧日",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-30-old-day",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -31676,11 +31800,11 @@
     {
       "controlId": "library.button.book-detail-toc-preview.default.button.route-immersive-reading-h-f47ed1f9",
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.route-immersive-reading",
+      "controlKey": "library.button.button.route.push@book-detail-toc-preview.default.n2",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "needsActionKey": false,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "library",
       "family": "button",
       "route": "book-detail-toc-preview",
@@ -31699,8 +31823,8 @@
           "data-route": "immersive-reading"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -31711,44 +31835,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.default.button.close-dialog-h-20037587",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.default.n5",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "close-dialog-h-20037587",
-      "source": {
-        "candidateKey": "candidate:93faaca95bdf5e2c453c",
-        "selectorSha256": "f1f71739424eb21d97e6367f057809d6d5717f9d9ace098206578259b08e65db",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "取消",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-close-dialog": ""
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail.default.button.close-dialog-h-a5584917",
+      "controlId": "library.button.book-detail.default.button.close-dialog-h-9a50fe4e",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail.default.n6",
       "actionKey": null,
@@ -31761,16 +31848,18 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "close-dialog-h-a5584917",
+      "discriminator": "close-dialog-h-9a50fe4e",
       "source": {
-        "candidateKey": "candidate:9f0d4ed87a1156103cd7",
-        "selectorSha256": "11ef7b8e50dda31ac2e79807bf979e2e41f7fa76b41673fa9559cbdba026ee2a",
+        "candidateKey": "candidate:8ff66d28364734730387",
+        "selectorSha256": "f1f71739424eb21d97e6367f057809d6d5717f9d9ace098206578259b08e65db",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "删除",
+        "label": "取消",
         "uiEvent": null,
         "dataAttributes": {
-          "data-close-dialog": ""
+          "data-close-dialog": "",
+          "data-dialog-initial-focus": "",
+          "data-restore-focus": "remove-open"
         }
       },
       "mappingStatus": "pending-action-and-instance-key",
@@ -31785,7 +31874,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.default.button.close-sheet-h-68d3e051",
+      "controlId": "library.button.book-detail.default.button.close-sheet-h-1b54aaeb",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail.default.n1",
       "actionKey": null,
@@ -31798,16 +31887,17 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "close-sheet-h-68d3e051",
+      "discriminator": "close-sheet-h-1b54aaeb",
       "source": {
-        "candidateKey": "candidate:32151846308e7d8a554c",
+        "candidateKey": "candidate:37c0fd6a3cc5036f3ea2",
         "selectorSha256": "5bf4646157c9611930030e90f4d2098050015ae3f29f34aa44260513f914f081",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "关闭",
         "uiEvent": null,
         "dataAttributes": {
-          "data-close-sheet": ""
+          "data-close-sheet": "",
+          "data-restore-focus": "source-sheet-open"
         }
       },
       "mappingStatus": "pending-action-and-instance-key",
@@ -31822,9 +31912,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.default.button.h-2070f028",
+      "controlId": "library.button.book-detail.default.button.h-0b05298c",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.default.n3",
+      "controlKey": "library.button.button@book-detail.default.n5",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -31835,50 +31925,17 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-2070f028",
+      "discriminator": "h-0b05298c",
       "source": {
-        "candidateKey": "candidate:662ca2285a0a35a914d2",
-        "selectorSha256": "e16fdda34b9df364cb8ed0e046cc4a78afa90002a224a70dab9b4c54bbc7a584",
+        "candidateKey": "candidate:79e74144ce2324c94c71",
+        "selectorSha256": "346f9b001c2c5c6cefb985e7bfafedcc36546b474c3d7e254db6d86d005c2ad0",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "本地缓存",
+        "label": "删除",
         "uiEvent": null,
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail.default.button.h-23bde952",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.default.n7",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-23bde952",
-      "source": {
-        "candidateKey": "candidate:d30508f2427647cd9fc5",
-        "selectorSha256": "a2a91b83cc5d009d4fd0004d5b422e432674252ec66c19f60c8e5cdc0b77562b",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "优书网",
-        "uiEvent": null,
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-book-detail-remove-confirm": ""
+        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -31927,7 +31984,45 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.default.button.h-fa2cbba6",
+      "controlId": "library.button.book-detail.default.button.h-5f043f9f",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail.default.n2",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "h-5f043f9f",
+      "source": {
+        "candidateKey": "candidate:4c5b409d4d890869d0c2",
+        "selectorSha256": "951a7bebd813ec62dc3b847cfa158a360c47e8091fa26a90cd7829b903fb6ed4",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "优书网",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-detail-source": "优书网",
+          "data-sheet-initial-focus": ""
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.default.button.h-7d9032e1",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail.default.n4",
       "actionKey": null,
@@ -31940,15 +32035,54 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-fa2cbba6",
+      "discriminator": "h-7d9032e1",
       "source": {
-        "candidateKey": "candidate:879d936f6503ab1cee84",
-        "selectorSha256": "716db76955327b1f27cce22569f638f926de7646d844e22cf553d3cad3a49e13",
+        "candidateKey": "candidate:6bbe2a0af0a281ed947d",
+        "selectorSha256": "578e888ad3bfece9a82d9154612b1f5aa66d69ea95aeec29ae7aa522d4f14938",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "本地缓存",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-detail-source": "本地缓存"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.default.button.h-da0c187a",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail.default.n8",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "h-da0c187a",
+      "source": {
+        "candidateKey": "candidate:ecfdf13b7969c1844c6a",
+        "selectorSha256": "3ad91bc80d032fe9aba38167c698c90ab1fe24a3f046f876c63878cefd8a18eb",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "书仓搜索",
         "uiEvent": null,
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-book-detail-source": "书仓搜索"
+        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -31964,7 +32098,7 @@
     {
       "controlId": "library.button.book-detail.default.button.open-dialog-h-01b8801a",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.default.n2",
+      "controlKey": "library.button.button@book-detail.default.n3",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -32001,7 +32135,7 @@
     {
       "controlId": "library.button.book-detail.default.button.open-sheet-h-89d3856b",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.default.n8",
+      "controlKey": "library.button.button@book-detail.default.n7",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -32038,11 +32172,11 @@
     {
       "controlId": "library.button.book-detail.default.button.route-book-directory-h-61303ebc",
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@book-detail.default.route-book-directory",
+      "controlKey": "library.button.button.route.push@book-detail.default.n1",
       "actionKey": "route.push",
       "instanceKey": "route-book-directory",
       "needsActionKey": false,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "library",
       "family": "button",
       "route": "book-detail",
@@ -32061,8 +32195,46 @@
           "data-route": "book-directory"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.default.button.route-immersive-reading-h-342a178e",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.default.n0",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-342a178e",
+      "source": {
+        "candidateKey": "candidate:04490fea2739a84188b3",
+        "selectorSha256": "6dda02e92f77a08105ceaa3a6cdb51af01fe5313674bf4702ecd2e0a0570bdd8",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 33 章 灯塔",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-33-lighthouse",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -32075,11 +32247,11 @@
     {
       "controlId": "library.button.book-detail.default.button.route-immersive-reading-h-6e3349ba",
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@book-detail.default.route-immersive-reading",
+      "controlKey": "library.button.button.route.push@book-detail.default.n3",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "needsActionKey": false,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "library",
       "family": "button",
       "route": "book-detail",
@@ -32098,8 +32270,8 @@
           "data-route": "immersive-reading"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -32110,7 +32282,160 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.loading.button.close-dialog-h-52739496",
+      "controlId": "library.button.book-detail.default.button.route-immersive-reading-h-75489ac4",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.default.n5",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-75489ac4",
+      "source": {
+        "candidateKey": "candidate:fa074d6cef55f1682a1a",
+        "selectorSha256": "348d650a37bca8c2e4e69bff661342a12d94980beb730cdb470b573a67e2145c",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 31 章 归途",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-31-return",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.default.button.route-immersive-reading-h-b9cd39f0",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.default.n2",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-b9cd39f0",
+      "source": {
+        "candidateKey": "candidate:910d1cd97c919348119c",
+        "selectorSha256": "ec49151a1792ad5c458df8a6e856e9828098b7e2372af137a96a0d711d9cb5a7",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 30 章 旧日",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-30-old-day",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.default.button.route-immersive-reading-h-e8366a36",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.default.n4",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-e8366a36",
+      "source": {
+        "candidateKey": "candidate:b3844cef2b5eb1651b94",
+        "selectorSha256": "8e3ac337dfd4efdb94392b0df87abcf51d8bc3f5dfa08be8a195a85c4bce4446",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 32 章 雨夜",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-32-rain-night",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.close-dialog-h-e9297b77",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail.loading.n6",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "close-dialog-h-e9297b77",
+      "source": {
+        "candidateKey": "candidate:af0f7045ea69b35ad5ae",
+        "selectorSha256": "f1f71739424eb21d97e6367f057809d6d5717f9d9ace098206578259b08e65db",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "取消",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-close-dialog": "",
+          "data-dialog-initial-focus": "",
+          "data-restore-focus": "remove-open"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.close-sheet-h-29948719",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail.loading.n2",
       "actionKey": null,
@@ -32123,16 +32448,17 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "close-dialog-h-52739496",
+      "discriminator": "close-sheet-h-29948719",
       "source": {
-        "candidateKey": "candidate:3fcba8abc802441a058f",
-        "selectorSha256": "f1f71739424eb21d97e6367f057809d6d5717f9d9ace098206578259b08e65db",
+        "candidateKey": "candidate:3d2d07f140257b873918",
+        "selectorSha256": "5bf4646157c9611930030e90f4d2098050015ae3f29f34aa44260513f914f081",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "取消",
+        "label": "关闭",
         "uiEvent": null,
         "dataAttributes": {
-          "data-close-dialog": ""
+          "data-close-sheet": "",
+          "data-restore-focus": "source-sheet-open"
         }
       },
       "mappingStatus": "pending-action-and-instance-key",
@@ -32147,44 +32473,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.loading.button.close-dialog-h-bab81d89",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.loading.n8",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "close-dialog-h-bab81d89",
-      "source": {
-        "candidateKey": "candidate:eb18ebec151a2fbee7bb",
-        "selectorSha256": "11ef7b8e50dda31ac2e79807bf979e2e41f7fa76b41673fa9559cbdba026ee2a",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "删除",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-close-dialog": ""
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail.loading.button.close-sheet-h-9c70cbb6",
+      "controlId": "library.button.book-detail.loading.button.h-4508e697",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail.loading.n1",
       "actionKey": null,
@@ -32197,87 +32486,17 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "close-sheet-h-9c70cbb6",
+      "discriminator": "h-4508e697",
       "source": {
-        "candidateKey": "candidate:1c1189187745adb0fccb",
-        "selectorSha256": "5bf4646157c9611930030e90f4d2098050015ae3f29f34aa44260513f914f081",
+        "candidateKey": "candidate:3c47e946ca53d1ec3749",
+        "selectorSha256": "346f9b001c2c5c6cefb985e7bfafedcc36546b474c3d7e254db6d86d005c2ad0",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "关闭",
+        "label": "删除",
         "uiEvent": null,
         "dataAttributes": {
-          "data-close-sheet": ""
+          "data-book-detail-remove-confirm": ""
         }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail.loading.button.h-2ba23a0d",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.loading.n5",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-2ba23a0d",
-      "source": {
-        "candidateKey": "candidate:70e30d6ef58b2ec6b4b1",
-        "selectorSha256": "716db76955327b1f27cce22569f638f926de7646d844e22cf553d3cad3a49e13",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "书仓搜索",
-        "uiEvent": null,
-        "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-detail.loading.button.h-7f1a5c43",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.loading.n7",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-7f1a5c43",
-      "source": {
-        "candidateKey": "candidate:9c1956818919c39e66a5",
-        "selectorSha256": "e16fdda34b9df364cb8ed0e046cc4a78afa90002a224a70dab9b4c54bbc7a584",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "本地缓存",
-        "uiEvent": null,
-        "dataAttributes": {}
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -32326,7 +32545,44 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-detail.loading.button.h-a00a075e",
+      "controlId": "library.button.book-detail.loading.button.h-91b86324",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail.loading.n8",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "h-91b86324",
+      "source": {
+        "candidateKey": "candidate:c5798fddc9af6c7bd114",
+        "selectorSha256": "578e888ad3bfece9a82d9154612b1f5aa66d69ea95aeec29ae7aa522d4f14938",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "本地缓存",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-detail-source": "本地缓存"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.h-c5bda222",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-detail.loading.n4",
       "actionKey": null,
@@ -32339,15 +32595,55 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-a00a075e",
+      "discriminator": "h-c5bda222",
       "source": {
-        "candidateKey": "candidate:504adf68d0f9592332fc",
-        "selectorSha256": "a2a91b83cc5d009d4fd0004d5b422e432674252ec66c19f60c8e5cdc0b77562b",
+        "candidateKey": "candidate:5ee9bbe4e6ffa61ecfdf",
+        "selectorSha256": "3ad91bc80d032fe9aba38167c698c90ab1fe24a3f046f876c63878cefd8a18eb",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "书仓搜索",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-detail-source": "书仓搜索"
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.h-f41c2e37",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-detail.loading.n7",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "h-f41c2e37",
+      "source": {
+        "candidateKey": "candidate:ba3fc88866f0e193f910",
+        "selectorSha256": "951a7bebd813ec62dc3b847cfa158a360c47e8091fa26a90cd7829b903fb6ed4",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "优书网",
         "uiEvent": null,
-        "dataAttributes": {}
+        "dataAttributes": {
+          "data-book-detail-source": "优书网",
+          "data-sheet-initial-focus": ""
+        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -32400,7 +32696,7 @@
     {
       "controlId": "library.button.book-detail.loading.button.open-sheet-h-dbced97d",
       "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-detail.loading.n6",
+      "controlKey": "library.button.button@book-detail.loading.n5",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -32437,11 +32733,11 @@
     {
       "controlId": "library.button.book-detail.loading.button.route-book-directory-h-43a5142f",
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@book-detail.loading.route-book-directory",
+      "controlKey": "library.button.button.route.push@book-detail.loading.n5",
       "actionKey": "route.push",
       "instanceKey": "route-book-directory",
       "needsActionKey": false,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "library",
       "family": "button",
       "route": "book-detail",
@@ -32460,8 +32756,122 @@
           "data-route": "book-directory"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.route-immersive-reading-h-5b9bf1b9",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.loading.n4",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-5b9bf1b9",
+      "source": {
+        "candidateKey": "candidate:dcf10f4929417ea9c724",
+        "selectorSha256": "8e3ac337dfd4efdb94392b0df87abcf51d8bc3f5dfa08be8a195a85c4bce4446",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 32 章 雨夜",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-32-rain-night",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.route-immersive-reading-h-7c84dd55",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.loading.n0",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-7c84dd55",
+      "source": {
+        "candidateKey": "candidate:2f1acd7c622c2c29ae65",
+        "selectorSha256": "348d650a37bca8c2e4e69bff661342a12d94980beb730cdb470b573a67e2145c",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 31 章 归途",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-31-return",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.route-immersive-reading-h-88150b84",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.loading.n1",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-88150b84",
+      "source": {
+        "candidateKey": "candidate:75b028e38b5e176d0df1",
+        "selectorSha256": "ec49151a1792ad5c458df8a6e856e9828098b7e2372af137a96a0d711d9cb5a7",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 30 章 旧日",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-30-old-day",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -32474,11 +32884,11 @@
     {
       "controlId": "library.button.book-detail.loading.button.route-immersive-reading-h-b8e9c1ea",
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@book-detail.loading.route-immersive-reading",
+      "controlKey": "library.button.button.route.push@book-detail.loading.n3",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "needsActionKey": false,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
       "domain": "library",
       "family": "button",
       "route": "book-detail",
@@ -32497,8 +32907,46 @@
           "data-route": "immersive-reading"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-detail.loading.button.route-immersive-reading-h-b932a6f3",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-detail.loading.n2",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-detail",
+      "state": "loading",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-b932a6f3",
+      "source": {
+        "candidateKey": "candidate:84eeeab43ccce6e6ea0e",
+        "selectorSha256": "6dda02e92f77a08105ceaa3a6cdb51af01fe5313674bf4702ecd2e0a0570bdd8",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 33 章 灯塔",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-33-lighthouse",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -32608,6 +33056,272 @@
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-11e1dce9",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n6",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-11e1dce9",
+      "source": {
+        "candidateKey": "candidate:ed3a2aef3d3bc54420d0",
+        "selectorSha256": "b3e1706506680ee4e7daffaf2b094810913685096ea8270daf2ce14ab50feca0",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 33 章 灯塔",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-33-lighthouse",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-a89ef581",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n2",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-a89ef581",
+      "source": {
+        "candidateKey": "candidate:0898580eb4c0538808f4",
+        "selectorSha256": "2c17ec769aac659c1048b395b08da676ad7270538b4dc37f7c6c6885d6e0d110",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 34 章 旧地图 已缓存",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-34-old-map",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-ab75008b",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n0",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-ab75008b",
+      "source": {
+        "candidateKey": "candidate:03ae18b1a38ebe02ca65",
+        "selectorSha256": "0c89162bc12978d7772b4964ef81d03521e510067c6cfd3e93151b72bc619b22",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 32 章 雨夜 书签",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-32-rain-night",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-c40f9e20",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n4",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-c40f9e20",
+      "source": {
+        "candidateKey": "candidate:634259221590b242589a",
+        "selectorSha256": "817bce73beff8d547be68b4033744893bb2ffb16168013d05db86e8a7d7d76b0",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 30 章 旧日 已缓存",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-30-old-day",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-cafed1a8",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n5",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-cafed1a8",
+      "source": {
+        "candidateKey": "candidate:9a8199cd2bb3c9df9a5f",
+        "selectorSha256": "5c845cc6e9b8f5002a12f4e645abd5606b22647faab48b2a31eae3c9b7c95829",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 35 章 夜行",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-35-night-walk",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-d5cf43fa",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n1",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-d5cf43fa",
+      "source": {
+        "candidateKey": "candidate:0590e0812deb27ae50c7",
+        "selectorSha256": "894fe534d9f2a28701501e98491b4e72353cad408f82a5a36bdbc7f9bc0e38e4",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 31 章 归途 已缓存书签",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-31-return",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-directory.default.button.route-immersive-reading-h-f7e95140",
+      "entityKey": "library.button.button.route.push",
+      "controlKey": "library.button.button.route.push@book-directory.default.n3",
+      "actionKey": "route.push",
+      "instanceKey": "route-immersive-reading",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-directory",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-immersive-reading-h-f7e95140",
+      "source": {
+        "candidateKey": "candidate:464c952043530b858b68",
+        "selectorSha256": "e905f5ec72b89d18918fbe9718dcedc7c44cff47cf807a8ae8a1670ec7689fd4",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "第 36 章 灯塔之后 书签",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-chapter-key": "chapter-36-after-lighthouse",
+          "data-route": "immersive-reading"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -45255,672 +45969,6 @@
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail-toc-preview.default.button.route-immersive-reading-h-3583df56",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail-toc-preview.default.n1",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail-toc-preview",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-3583df56",
-      "source": {
-        "candidateKey": "candidate:92a6a451b1c0c8ab859d",
-        "selectorSha256": "a2f1b931b3b2f0a294bde2fe9b3eb35ed1c3701c05a54121e1f049ed93b51d90",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 30 章 旧日",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail-toc-preview.default.button.route-immersive-reading-h-39a61d72",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail-toc-preview.default.n0",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail-toc-preview",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-39a61d72",
-      "source": {
-        "candidateKey": "candidate:2bf1efc67d123e182474",
-        "selectorSha256": "d30915115f37f41e41abe6b39d74d63ae1142dbdfe073273266917f5ea61e263",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 32 章 雨夜",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail-toc-preview.default.button.route-immersive-reading-h-74f32e73",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail-toc-preview.default.n2",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail-toc-preview",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-74f32e73",
-      "source": {
-        "candidateKey": "candidate:ab07d8202dcf79c2608d",
-        "selectorSha256": "db991b353c79bcea76e80efd9c7fc13b21dfa9c07bb340ef7fa5102da8bd8e9e",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 31 章 归途",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.default.button.route-immersive-reading-h-01b9c09f",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.default.n2",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-01b9c09f",
-      "source": {
-        "candidateKey": "candidate:a57ae63a8af7f366ad7a",
-        "selectorSha256": "d30915115f37f41e41abe6b39d74d63ae1142dbdfe073273266917f5ea61e263",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 32 章 雨夜",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.default.button.route-immersive-reading-h-22dc64fd",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.default.n3",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-22dc64fd",
-      "source": {
-        "candidateKey": "candidate:ae56411754fbcc3c7663",
-        "selectorSha256": "db991b353c79bcea76e80efd9c7fc13b21dfa9c07bb340ef7fa5102da8bd8e9e",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 31 章 归途",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.default.button.route-immersive-reading-h-7fb487ae",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.default.n0",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-7fb487ae",
-      "source": {
-        "candidateKey": "candidate:2ae9f773a2ec5d243ff6",
-        "selectorSha256": "8795bcc9521d7a5b315c6d98dc0eca71f0217aaf15df6d11740b83ccbd772713",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 33 章 灯塔",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.default.button.route-immersive-reading-h-c22096ad",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.default.n1",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-c22096ad",
-      "source": {
-        "candidateKey": "candidate:3eb49c86267dcc875f4e",
-        "selectorSha256": "a2f1b931b3b2f0a294bde2fe9b3eb35ed1c3701c05a54121e1f049ed93b51d90",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 30 章 旧日",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.loading.button.route-immersive-reading-h-1c1c0bd9",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.loading.n3",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-1c1c0bd9",
-      "source": {
-        "candidateKey": "candidate:d0e50fe8c72f27de5b9e",
-        "selectorSha256": "db991b353c79bcea76e80efd9c7fc13b21dfa9c07bb340ef7fa5102da8bd8e9e",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 31 章 归途",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.loading.button.route-immersive-reading-h-5b35e434",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.loading.n0",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-5b35e434",
-      "source": {
-        "candidateKey": "candidate:36fcd51b2de52e314e4d",
-        "selectorSha256": "d30915115f37f41e41abe6b39d74d63ae1142dbdfe073273266917f5ea61e263",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 32 章 雨夜",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.loading.button.route-immersive-reading-h-dedec476",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.loading.n1",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-dedec476",
-      "source": {
-        "candidateKey": "candidate:ad4f9437e13036eaa385",
-        "selectorSha256": "8795bcc9521d7a5b315c6d98dc0eca71f0217aaf15df6d11740b83ccbd772713",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 33 章 灯塔",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-detail.loading.button.route-immersive-reading-h-e5108db1",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-detail.loading.n2",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-detail",
-      "state": "loading",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-e5108db1",
-      "source": {
-        "candidateKey": "candidate:ba6a6d97225df063f2d4",
-        "selectorSha256": "a2f1b931b3b2f0a294bde2fe9b3eb35ed1c3701c05a54121e1f049ed93b51d90",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 30 章 旧日",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-11895cc5",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n0",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-11895cc5",
-      "source": {
-        "candidateKey": "candidate:1065183a5292f37269fe",
-        "selectorSha256": "6c6024e37d1e85300c63960c0737addbf67c89ba9345f5d68f2cdcd9be4ebf65",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 34 章 旧地图 已缓存",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-21408f5b",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n6",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-21408f5b",
-      "source": {
-        "candidateKey": "candidate:e5b632f9cd2b1c6cc228",
-        "selectorSha256": "87005728c27d535f4524c09e913a9250cd5d35fc2d3f3005199c3c3fe2637b34",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 33 章 灯塔",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-a4c53f74",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n5",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-a4c53f74",
-      "source": {
-        "candidateKey": "candidate:e2c895e91bb14ab1e2d0",
-        "selectorSha256": "f5d0845f3c8b9c7db241544262b8c7136e99fa326d0379720e217c6981499233",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 35 章 夜行",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-cdc5662e",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n4",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-cdc5662e",
-      "source": {
-        "candidateKey": "candidate:757d2a6b05a82d6d5e87",
-        "selectorSha256": "59b6930a56cee65719eeacd728ccd75fcc914e327032e6c70f2a6ae365531e91",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 36 章 灯塔之后 书签",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-d590b504",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n2",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-d590b504",
-      "source": {
-        "candidateKey": "candidate:5d0a05d1449a8697edd4",
-        "selectorSha256": "0169dd946444fe20582d358755f158d09e4342c843827ac43f9b1cf3178c61fb",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 30 章 旧日 已缓存",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-ebbec1cb",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n1",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-ebbec1cb",
-      "source": {
-        "candidateKey": "candidate:5573437ebf1d077b00e3",
-        "selectorSha256": "e4d8f6760fb5ff446aa914d55c33648ead97ddde57ec5792ce4cdd64ace5aa84",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 31 章 归途 已缓存书签",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.listrow-action.book-directory.default.button.route-immersive-reading-h-fd132a08",
-      "entityKey": "library.listrow-action.button.route.push",
-      "controlKey": "library.listrow-action.button.route.push@book-directory.default.n3",
-      "actionKey": "route.push",
-      "instanceKey": "route-immersive-reading",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "listrow-action",
-      "route": "book-directory",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-immersive-reading-h-fd132a08",
-      "source": {
-        "candidateKey": "candidate:739c13ba53198c144a8f",
-        "selectorSha256": "1edff21874acdc2ef6065218b17be549dc312472ccc89a81d6b0694b8e5ed6d7",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "第 32 章 雨夜 书签",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "immersive-reading"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,

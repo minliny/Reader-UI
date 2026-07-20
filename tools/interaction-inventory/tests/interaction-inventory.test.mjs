@@ -47,8 +47,8 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   );
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
-    article: 389,
-    button: 3295,
+    article: 371,
+    button: 3313,
     i: 28,
     input: 49,
     select: 13,
