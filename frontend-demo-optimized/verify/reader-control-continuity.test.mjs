@@ -545,16 +545,11 @@ test("D3, W3, W4, and W5 consume runtime-owned reader continuity fragments", () 
   assert.doesNotMatch(w5ReplaceStyles, /\.fd-w5-overlay-v2-footer/, "deleted replacement footer CSS must not remain as a hidden source");
 });
 
-test("compact landscape source switch keeps the candidate window beside the reader dock", () => {
-  const compactSourceWindow = sourceSection(
-    responsiveCss,
-    '.fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"][data-route-layout="flow-continuity"] .fd-source-reader-continuation .fd-source-window-slot {',
-    ".fd-source-phone-flow .fd-source-row-checks",
-  );
-
-  assert.match(compactSourceWindow, /inset:\s*74px auto 16px 16px;/);
-  assert.match(compactSourceWindow, /width:\s*min\(420px, calc\(54% - 24px\)\);/);
-  assert.doesNotMatch(compactSourceWindow, /bottom:\s*360px;/);
+test("source switch landscape aliases the Tablet contract without a third structure", () => {
+  assert.match(w3Source, /Phone 390x844 and Tablet 760x960 share one structure; landscape aliases Tablet/);
+  assert.doesNotMatch(w3Source, /compact-landscape|foldable|fd-w3-geom-landscape/i);
+  assert.ok(runtimeSource.includes('const viewportAtom = snapshot.orientation === "landscape"'));
+  assert.match(runtimeSource, /const viewportAtom = snapshot\.orientation === "landscape"[\s\S]{0,80}\? "tablet"/);
 });
 
 test("overlay focus and source-switch route motion stay reachable from current renderers", () => {
@@ -566,8 +561,8 @@ test("overlay focus and source-switch route motion stay reachable from current r
   assert.ok(runtimeSource.includes('id: "source.switch.route.push"'), "source switch entry must use the FlowShell push MotionId");
   assert.ok(runtimeSource.includes('id: isSourceSwitchPop ? "source.switch.route.pop"'), "source switch back must use the FlowShell pop MotionId");
   assert.ok(runtimeSource.includes('id: "source.switch.route.replace"'), "source switch state replacement must use the FlowShell replace MotionId");
-  assert.ok(runtimeSource.includes("sourceSwitchRestoreFocus"), "source switch pop must restore the Reader trigger focus");
-  assert.ok(w3Source.includes('comparisonHtml: `${slots.comparisonHtml || ""}${slots.resultHtml || ""}`'), "W3 state actions must be inside the visible FlowShell window");
+  assert.ok(runtimeSource.includes("sourceSwitchRestoreFocusKey"), "source switch pop must restore the exact origin control key");
+  assert.ok(w3Source.includes("data-source-switch-action"), "W3 state actions must be inside the visible FlowShell window");
   assert.match(flowAdaptiveCss, /\.fd-source-reader-continuation\.fd-w3-source-switch \.fd-source-window-slot \{[\s\S]*overflow:\s*auto;/);
   for (const [id, duration] of [
     ["source.switch.route.push", 280],

@@ -39,6 +39,8 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   // A4 reconciliation: Settings/Source/WebDAV pilot controls carrying stable
   // data-control-key are semantic occurrences. The current deterministic
   // inventory denominator is 3,808; containers remain a separate denominator.
+  // Source Switch migrates its 22 candidate rows from role=button articles to
+  // native buttons without changing the semantic denominator.
   assert.equal(artifacts.coverage.semanticControls, 3808);
   assert.equal(artifacts.inventory.semanticControls.length, 3808);
   assert.equal(
@@ -47,8 +49,8 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   );
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
-    article: 371,
-    button: 3313,
+    article: 349,
+    button: 3335,
     i: 28,
     input: 49,
     select: 13,
@@ -166,8 +168,10 @@ test("IC0 route motion normalization follows route push, pop, and replace contro
     (control) => Object.hasOwn(control.dataAttributes, "data-route-replace"),
   );
   const routeReplaceEvents = controls.filter((control) => control.uiEvent === "route.replace");
-  assert.equal(routeReplaceAttributes.length, 117);
-  assert.equal(routeReplaceEvents.length, 133);
+  // Source Switch state actions are reducer-owned UiEvents now; they no longer
+  // masquerade as data-route-replace controls.
+  assert.equal(routeReplaceAttributes.length, 103);
+  assert.equal(routeReplaceEvents.length, 119);
   assert.equal(
     routeReplaceEvents.every((control) => control.canonicalMotionIds.includes("app.route.replace")),
     true,

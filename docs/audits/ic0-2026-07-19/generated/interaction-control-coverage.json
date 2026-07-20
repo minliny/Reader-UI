@@ -40,9 +40,9 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2257,
+    "withUiEvent": 2279,
     "withRawMotionHints": 3719,
-    "rawMotionHintOccurrences": 7157,
+    "rawMotionHintOccurrences": 7142,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -63,7 +63,6 @@
       "input.focus-blur",
       "input.submit",
       "listRow.press",
-      "listRow.select",
       "overlay.dialog.enter",
       "overlay.dialog.enter/exit",
       "overlay.dialog.exit",
@@ -97,7 +96,7 @@
       "toggle.switch"
     ],
     "withCanonicalMotionIds": 3701,
-    "canonicalMotionIdOccurrences": 7257,
+    "canonicalMotionIdOccurrences": 7244,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -118,7 +117,6 @@
       "input.focus",
       "input.focus-blur",
       "input.submit",
-      "listRow.select",
       "overlay.dialog.enter",
       "overlay.dialog.enter-exit",
       "overlay.dialog.exit",
@@ -160,8 +158,8 @@
     "joinedControls": 0,
     "unjoinedControls": 3808,
     "byTag": {
-      "article": 371,
-      "button": 3313,
+      "article": 349,
+      "button": 3335,
       "i": 28,
       "input": 49,
       "select": 13,
@@ -169,10 +167,10 @@
       "textarea": 1
     },
     "byRole": {
-      "button": 3428,
+      "button": 3406,
       "checkbox": 1,
       "combobox": 13,
-      "option": 241,
+      "option": 263,
       "searchbox": 8,
       "slider": 42,
       "switch": 44,
@@ -201,7 +199,7 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1551
+      "IC0_UI_EVENT_UNRESOLVED": 1529
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -478,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "e1809c68e3b8df82619aa6117ddabf13df3ffb730af4e01551ecfd9623c89457",
+  "inventorySha256": "1223595ab85541aaa24fe81fb15b7d3f90d8d8a4ccad48111ff0de1bdb798b59",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -984,7 +982,7 @@
       "pageState": "default",
       "semanticControls": 30,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "045a2ac1ed6bb23f1dc547f5cbb121201e53190f6fabd123523f566ec4ef562e"
+      "renderSha256": "9262766fb1d528f2910f7f35b46c567ca344609c21f58863eade8730ca938c45"
     },
     {
       "routeId": "source-switch-results",
@@ -995,7 +993,7 @@
       "pageState": "default",
       "semanticControls": 30,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "01efff2855f258db7dfd9ce92b807ebc5e7a1927b50349458d48f6bba520588b"
+      "renderSha256": "eec9da43d68cc568c35293e696d7e9cb0d7befe55947f2cc97bad546066bfab9"
     },
     {
       "routeId": "reader-night-state-v2",
@@ -2887,7 +2885,7 @@
       "pageState": "empty",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "7eeb6e8bd8bbeb380f545da397f34a9871f3bb39357e618e7a4e4b9f0155812e"
+      "renderSha256": "d91ec8c2d9e1a8056b161ed5d08f193bc9272e11b934500ef97178e249128161"
     },
     {
       "routeId": "source-switch-error",
@@ -2898,7 +2896,7 @@
       "pageState": "error",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "dbddc187ba4a5d0725480dfa6973003eda10cefb0c56e81b260b333133ede61a"
+      "renderSha256": "8bc2c50d74b129fdac4a3fc8074f1e30cb6b939e7acd91d5d668868842a4d27c"
     },
     {
       "routeId": "source-switch-timeout",
@@ -2909,7 +2907,7 @@
       "pageState": "error",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5fdda22b3bf74c840e5d466a8503350cf645d7692d18f3751aab80c576579177"
+      "renderSha256": "0d3dd5ef1f82315b379789afce652c55945d67ea9a5246cf70cc77e5264b2365"
     },
     {
       "routeId": "source-switch-loading",
@@ -2920,7 +2918,7 @@
       "pageState": "loading",
       "semanticControls": 18,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3d59502e61e2ab36a536b4eeb54a1ccff33e024d11c6d77c80f9c65a0c8f2490"
+      "renderSha256": "4ea55bfcb2ae9afd37d1955ac95643e6450c3f7ddfba2c811448a022a0f3bc93"
     },
     {
       "routeId": "source-switch-rollback",
@@ -2931,7 +2929,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "da0f7a3a23e9c404b932c26026757ca68d337fa0e200a62d5e5638b9f5dfd5ba"
+      "renderSha256": "1b730b2fcbbccaed00b961f9cef3b613736a2f4536ae1d48cbe7d7ba0f5a0d67"
     },
     {
       "routeId": "source-switch-preview",
@@ -2942,7 +2940,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "77acb0430754ce8c81f8cbbb39d3241659012e028e22d20a1e60d0d672eb8095"
+      "renderSha256": "411cfaa747a6cd9b74d1e8ab7fdac6f9a83a77fd46b389db7f9ddce411a04066"
     },
     {
       "routeId": "reader-toc-loading",

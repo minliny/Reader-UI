@@ -47,6 +47,7 @@ const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
+const SOURCE_SWITCH_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "w3-source-switch-renderers.js");
 
 const CHECK_MODE = process.argv.includes("--check");
 
@@ -202,6 +203,40 @@ function readerRuntimeActionDeclarations() {
       rendererSlot: "ReaderRuntimeContract.instrumentDom@reader-runtime-contract.js",
       pageFamily: "reader-runtime",
       source: "reader-runtime-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
+function sourceSwitchActionDeclarations() {
+  const rendererModule = { exports: {} };
+  const rendererWindow = {};
+  const source = readFileSync(SOURCE_SWITCH_RENDERER_PATH, "utf8");
+  Function("module", "window", "globalThis", source)(rendererModule, rendererWindow, rendererWindow);
+  const specs = rendererModule.exports.SOURCE_CONTROL_SPECS || rendererWindow.ReaderW3SourceSwitchRenderers?.SOURCE_CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `source-switch.control.button.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.default`,
+      controlId: `source-switch.control.${spec.route}.default.button.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: "default",
+      domain: "source-switch",
+      family: "control",
+      role: "button",
+      renderer: "sourceSwitchV2",
+      rendererFile: "renderers/w3-source-switch-renderers.js",
+      rendererSlot: "sourceSwitchV2@renderers/w3-source-switch-renderers.js",
+      pageFamily: "source-switch",
+      source: "source-switch-action",
       label: spec.label,
       settingsKey: spec.settingsKey
     };
@@ -559,7 +594,8 @@ const allDeclarations = registryDeclarations
   .concat(preservedPilotActionDeclarations)
   .concat(bookshelfActionDeclarations())
   .concat(bookDetailActionDeclarations())
-  .concat(readerRuntimeActionDeclarations());
+  .concat(readerRuntimeActionDeclarations())
+  .concat(sourceSwitchActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);
@@ -623,6 +659,7 @@ const meta = {
     registryBacked: registryDeclarations.length,
     r2Subcontrols: effectiveSubcontrolDeclarations.length,
     readerRuntimeActions: allDeclarations.filter((entry) => entry.source === "reader-runtime-action").length,
+    sourceSwitchActions: allDeclarations.filter((entry) => entry.source === "source-switch-action").length,
     subcontrolsByType: subByType,
     total: allDeclarations.length
   },

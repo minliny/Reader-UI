@@ -149,7 +149,13 @@
     "source-switch": {
       "routes": [
         "source-switch",
-        "source-switch-results"
+        "source-switch-results",
+        "source-switch-empty",
+        "source-switch-error",
+        "source-switch-timeout",
+        "source-switch-loading",
+        "source-switch-rollback",
+        "source-switch-preview"
       ]
     },
     "settings-general": {
@@ -501,17 +507,59 @@
     },
     "source-switch": {
       "pageFamily": "source-switch",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "flowScreen",
-      "rendererFile": "render-runtime.js"
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
     },
     "source-switch-results": {
       "pageFamily": "source-switch",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "flowScreen",
-      "rendererFile": "render-runtime.js"
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
+    },
+    "source-switch-empty": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
+    },
+    "source-switch-error": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
+    },
+    "source-switch-timeout": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
+    },
+    "source-switch-loading": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
+    },
+    "source-switch-rollback": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
+    },
+    "source-switch-preview": {
+      "pageFamily": "source-switch",
+      "dispatchLayer": "W3",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "sourceSwitchV2",
+      "rendererFile": "renderers/w3-source-switch-renderers.js"
     },
     "global-settings": {
       "pageFamily": "settings-general",

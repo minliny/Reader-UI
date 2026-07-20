@@ -1,0 +1,27 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const source = readFileSync(join(root, "renderers/w3-source-switch-renderers.js"), "utf8");
+const runtime = readFileSync(join(root, "render-runtime.js"), "utf8");
+function fresh() { const window = { setTimeout, ReaderShellKit: { icon:()=>"", renderFlowShell:(o)=>`${o.stepHtml}${o.comparisonHtml}` } }; const ctx=vm.createContext({window,globalThis:window,module:{exports:{}},setTimeout,Promise,Map,Set}); new vm.Script(source).runInContext(ctx); const api=window.ReaderW3SourceSwitchRenderers.sourceSwitch; api.reset(); return api; }
+
+test("R2b OPEN preserves navigation origin, visual context and exact control key separately",()=>{const a=fresh();a.dispatch({type:"OPEN",navigationOriginRoute:"book-detail",visualContextRoute:"reader",originControlKey:"library.button@book-detail"});assert.deepEqual([a.getState().navigationOriginRoute,a.getState().visualContextRoute,a.getState().originControlKey],["book-detail","reader","library.button@book-detail"]);});
+test("R2b SELECT accepts stable available source ids",()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-biquge-mirror"});assert.equal(a.getState().selectedSourceId,"source-biquge-mirror");assert.equal(a.getState().phase,"selected");});
+test("R2b SELECT rejects current, unknown and disabled candidates",()=>{const a=fresh();const s=a.getState();for(const input of [{sourceId:"source-youshu"},{sourceId:"unknown"},{sourceId:"source-biquge-mirror",disabled:true}]){a.dispatch({type:"SELECT",...input});assert.equal(a.getState(),s);}});
+test("R2b check success advances to preview",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-biquge-mirror"});assert.equal((await a.executeCandidateCheck({delay:0})).status,"success");assert.equal(a.getState().phase,"preview");});
+test("R2b check failure advances to error",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-biquge-mirror"});assert.equal((await a.executeCandidateCheck({delay:0,simulateResult:"failed"})).status,"failed");assert.equal(a.getState().phase,"error");});
+test("R2b check timeout advances to timeout",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-biquge-mirror"});assert.equal((await a.executeCandidateCheck({delay:0,simulateResult:"timeout"})).status,"timeout");assert.equal(a.getState().phase,"timeout");});
+test("R2b duplicate check is rejected",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-biquge-mirror"});const pending=a.executeCandidateCheck({delay:5});assert.equal((await a.executeCandidateCheck({delay:0})).status,"duplicate");await pending;});
+test("R2b cancel invalidates an in-flight check as stale",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-biquge-mirror"});const pending=a.executeCandidateCheck({delay:5});a.dispatch({type:"CANCEL"});assert.equal((await pending).status,"stale");assert.equal(a.getState().pendingKind,null);});
+test("R2b commit success settles and updates committed source",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-cloud-library"});assert.equal((await a.executeSwitchCommit({delay:0})).status,"success");assert.equal(a.getState().committedSourceId,"source-cloud-library");});
+test("R2b commit failure opens rollback state",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-cloud-library"});assert.equal((await a.executeSwitchCommit({delay:0,simulateResult:"failed",rollbackToken:"r1"})).status,"failed");assert.equal(a.getState().phase,"rollback");assert.equal(a.getState().rollbackToken,"r1");});
+test("R2b rollback success restores original source",async()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-cloud-library"});await a.executeSwitchCommit({delay:0,simulateResult:"failed",rollbackToken:"r1"});assert.equal((await a.executeRollback({delay:0})).status,"success");assert.equal(a.getState().committedSourceId,"source-youshu");});
+test("R2b stale completion with a different requestId is ignored",()=>{const a=fresh();a.dispatch({type:"SELECT",sourceId:"source-cloud-library"});a.dispatch({type:"CHECK_START",requestId:"check:1"});const loading=a.getState();a.dispatch({type:"CHECK_SUCCESS",requestId:"check:2"});assert.equal(a.getState(),loading);});
+test("R2b subscribers observe accepted actions only",()=>{const a=fresh();let n=0;const off=a.subscribe(()=>n++);a.dispatch({type:"SELECT",sourceId:"unknown"});a.dispatch({type:"SELECT",sourceId:"source-backup-a"});off();a.dispatch({type:"CANCEL"});assert.equal(n,1);});
+test("R3a runtime records book-detail and book-directory origins",()=>{assert.match(runtime,/sourceSwitchNavigationOriginRoute = originRoute/);assert.match(runtime,/sourceSwitchOriginControlKey = originControlKey/);});
+test("R3a successful no-toc commit normalizes the book-detail owner without transferring ownership",()=>{assert.match(runtime,/bookDetailState = "normal"/);assert.match(runtime,/ReaderD2BookshelfDiscoverRenderers\?\.bookDetail\?\.dispatch/);});
+test("R3a focus restore matches exact data-control-key",()=>{assert.match(runtime,/candidate\.getAttribute\("data-control-key"\) === restoreControlKey/);});

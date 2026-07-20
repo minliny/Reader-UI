@@ -400,6 +400,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
     filters: ["全部", "更新快", "已缓存", "可用"],
     candidates: [
       {
+        sourceId: "source-youshu",
         source: "优书网",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -411,6 +412,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-biquge-mirror",
         source: "笔趣阁镜像",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -422,6 +424,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-light-novel",
         source: "轻小说书站",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -433,6 +436,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-cloud-library",
         source: "云端书库",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -444,6 +448,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-aggregate-1",
         source: "聚合书源一",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -455,6 +460,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-aggregate-2",
         source: "聚合书源二",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -466,6 +472,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-backup-a",
         source: "备用线路 A",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -477,6 +484,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-backup-b",
         source: "备用线路 B",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -488,6 +496,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-chapter-sync",
         source: "章节同步源",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -499,6 +508,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-local-cache",
         source: "本地缓存",
         chapter: "第 32 章 雨夜",
         latestChapter: "第 32 章 雨夜",
@@ -510,6 +520,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         checks: ["目录", "章节", "正文"]
       },
       {
+        sourceId: "source-old-backup",
         source: "旧源备份",
         chapter: "第 31 章 归途",
         latestChapter: "第 31 章 归途",

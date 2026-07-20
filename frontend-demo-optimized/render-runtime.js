@@ -9709,70 +9709,8 @@
     root?.setAttribute("data-motion-control-dock-result", result ? `${result.offset.x},${result.offset.y}` : "none");
   }
 
-  function sourceCandidateRow(item, index, selectedSource) {
-    const isCurrent = item.state === "当前";
-    const isSelected = selectedSource ? item.source === selectedSource : isCurrent;
-    const canSwitch = !isCurrent && item.state !== "落后" && item.state !== "失效";
-    const latestChapterLabel = item.latestChapter || item.chapter || item.latest || "章节同步";
-    const speedLabel = /\d/.test(item.speed || "") ? item.speed : (item.speed || "未知");
-    return `
-      <article class="fd-source-candidate-row${isCurrent ? " is-current" : ""}${isSelected ? " is-selected" : ""}${canSwitch ? " is-switchable" : " is-muted"}" data-source-index="${index}" data-source-name="${esc(item.source)}" tabindex="0" role="button" aria-label="选择 ${esc(item.source)}">
-        <span class="fd-source-row-main">
-          <b>${esc(item.source)}</b>
-          <em>${esc(speedLabel)}</em>
-          <strong>${esc(latestChapterLabel)}</strong>
-        </span>
-      </article>`;
-  }
-
   function flowScreen(data, appState) {
-    const flow = data.flow || {};
-    const candidates = (flow.candidates || [])
-      .map((item, index) => Object.assign({ _sourceOrder: index }, item))
-      .sort((left, right) => {
-        const latencyDelta = sourceLatencyRank(left, left._sourceOrder) - sourceLatencyRank(right, right._sourceOrder);
-        return latencyDelta || left._sourceOrder - right._sourceOrder;
-      });
-    const current = candidates.find((item) => item.state === "当前") || candidates[0] || {};
-    const selectedSource = appState?.sourceSwitchSelectedSource || current.source || "";
-    const selected = candidates.find((item) => item.source === selectedSource) || current;
-    const selectedSpeedLabel = selected.speed || selected.latency || "未知";
-    const selectedLatestLabel = selected.latestChapter || selected.chapter || selected.latest || "章节同步";
-    const hasSourceSwitchReaderOrigin = isReaderContinuityOriginRoute(appState?.sourceSwitchOriginRoute);
-    const sourceSwitchOriginRoute = readerContinuityOriginRoute(appState?.sourceSwitchOriginRoute);
-    const sourceSwitchReturnAttributes = hasSourceSwitchReaderOrigin
-      ? "data-route-back"
-      : `data-route="${esc(sourceSwitchOriginRoute)}" data-route-replace`;
-    return shellKit().renderFlowShell({
-      frameClass: "fd-flow-frame fd-source-phone-flow fd-source-reader-continuation",
-      stepClass: "fd-flow-step fd-source-continuity-slot",
-      comparisonClass: "fd-flow-comparison fd-source-window-slot",
-      resultClass: "fd-flow-result fd-source-result-slot",
-      stateHostClass: "fd-source-unused-slot",
-      ariaLabel: "换源",
-      stepHtml: renderReaderContinuityOrigin(data, sourceSwitchOriginRoute, appState),
-      comparisonHtml: `
-        <section class="fd-source-switch-window" data-source-switch-window aria-label="换源窗口">
-          <div class="fd-source-window-info">
-            <i>${icon("source-switch", "fd-small-icon")}</i>
-            <strong>换源</strong>
-            <span>按延迟排序</span>
-            <button class="fd-source-window-close" type="button" ${sourceSwitchReturnAttributes} aria-label="关闭换源窗口">${icon("close", "fd-small-icon")}</button>
-          </div>
-          <div class="fd-source-candidate-list">
-            ${candidates.map((item, index) => sourceCandidateRow(item, index, selectedSource)).join("")}
-          </div>
-        </section>`,
-      resultHtml: `
-        <section class="fd-source-switch-result" aria-label="换源确认">
-          <span>${icon("check", "fd-small-icon")}</span>
-          <strong>${esc(selected.source || "优书网")}</strong>
-          <small>${esc(selected.state || "当前")} · ${esc(selectedSpeedLabel)} · ${esc(selectedLatestLabel)}</small>
-          <p>确认后保持当前阅读位置，仅替换正文来源与章节解析结果。</p>
-          <button type="button" ${sourceSwitchReturnAttributes}>确认换源</button>
-        </section>`,
-      stateHostHtml: ""
-    });
+    throw new Error("flowScreen source-switch fallback is frozen; use ReaderW3SourceSwitchRenderers.sourceSwitchV2");
   }
 
   function sourceStrip(data) {
@@ -10749,11 +10687,11 @@
         const w4Html = window.ReaderW4ThemeFontTypographyRenderers.renderW4Route(route, data, options, appState);
         if (w4Html) return w4Html;
       }
-      // W3：通过 INTEGRATION_MAP 分发（无 renderW3Route，需查映射表）
+      // W3：8 个 source-switch 路由统一由 sourceSwitchV2 接管。
       if (window.ReaderW3SourceSwitchRenderers && window.ReaderW3SourceSwitchRenderers.INTEGRATION_MAP) {
         const w3FnName = window.ReaderW3SourceSwitchRenderers.INTEGRATION_MAP[route];
         if (w3FnName && typeof window.ReaderW3SourceSwitchRenderers[w3FnName] === "function") {
-          return window.ReaderW3SourceSwitchRenderers[w3FnName](data, appState);
+          return window.ReaderW3SourceSwitchRenderers[w3FnName](data, route, appState);
         }
       }
       // W5：通过 INTEGRATION_MAP 分发（函数签名为 data, route, appState）
@@ -11186,9 +11124,17 @@
       case "reader-background-restore":
         return readerBackgroundRestoreScreen(data, appState);
       case "source-switch":
-        return flowScreen(data, appState);
       case "source-switch-results":
-        return flowScreen(data, withAppState(appState, { sourceSwitchSelectedSource: "起点导入" }));
+      case "source-switch-empty":
+      case "source-switch-error":
+      case "source-switch-timeout":
+      case "source-switch-loading":
+      case "source-switch-rollback":
+      case "source-switch-preview":
+        throw new Error(
+          route + " route is FROZEN to sourceSwitchV2 (w3-source-switch-renderers.js). " +
+          "renderRoute switch fallback is disabled; ensure window.ReaderW3SourceSwitchRenderers is loaded before renderRoute is called."
+        );
       // R2a-1: source-management 与 source-settings-entry 路由 FROZEN 到
       // d2-settings-sync-renderers.js 的 sourceSettingsV2 / sourceManagementV2。
       // 旧 sourceManagementScreen 实现已隔离，不再作为 fallback。
@@ -11408,9 +11354,11 @@
       rssBatchSelectedSourceIds: rssSourcesData().slice(0, 2).map((item) => item.id),
       rssRuleUpdateApplied: false,
       rssConfirmOriginRoute: "",
-      sourceSwitchSelectedSource: "",
-      sourceSwitchOriginRoute: "",
-      sourceSwitchRestoreFocus: false,
+      sourceSwitchSelectedSourceId: "",
+      sourceSwitchNavigationOriginRoute: "",
+      sourceSwitchVisualContextRoute: "reader",
+      sourceSwitchOriginControlKey: "",
+      sourceSwitchRestoreFocusKey: "",
       sourceMenuOpen: false,
       sourceStatusFilter: "全部",
       sourceGroupFilter: "全部分组",
@@ -11942,6 +11890,7 @@
       screenHost.innerHTML = renderRoute(route, data, options, appState);
       readerRuntimeOwner?.dispatch?.({ type: "ROUTE_COMMIT", route });
       window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
+      window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
       if (options?.loading) {
         ensureInlineLoadingIndicator(screenHost);
       }
@@ -11954,6 +11903,7 @@
         syncAppThemeRoot(root, data, appState);
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
+        window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
         updateRouteInfo(route, viewState);
       }
       restoreReaderScrollSnapshot(screenHost, scrollSnapshot, shouldRestorePanelScroll);
@@ -12007,10 +11957,13 @@
       });
       attachMotionPressState(screenHost, motionController);
       attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay);
-      if (appState.sourceSwitchRestoreFocus && route === appState.sourceSwitchOriginRoute) {
-        appState.sourceSwitchRestoreFocus = false;
+      if (appState.sourceSwitchRestoreFocusKey && route === appState.sourceSwitchNavigationOriginRoute) {
+        const restoreControlKey = appState.sourceSwitchRestoreFocusKey;
+        appState.sourceSwitchRestoreFocusKey = "";
         window.requestAnimationFrame(() => {
-          const sourceSwitchTrigger = screenHost.querySelector('[data-route="source-switch"]');
+          const sourceSwitchTrigger = Array.from(screenHost.querySelectorAll("[data-control-key]")).find(
+            (candidate) => candidate.getAttribute("data-control-key") === restoreControlKey
+          );
           if (sourceSwitchTrigger && typeof sourceSwitchTrigger.focus === "function") {
             sourceSwitchTrigger.focus({ preventScroll: true });
           }
@@ -12306,8 +12259,8 @@
       routeStack.pop();
       const toRoute = routeStack[routeStack.length - 1];
       const isSourceSwitchPop = String(fromRoute || "").startsWith("source-switch");
-      if (isSourceSwitchPop && toRoute === appState.sourceSwitchOriginRoute) {
-        appState.sourceSwitchRestoreFocus = true;
+      if (isSourceSwitchPop && toRoute === appState.sourceSwitchNavigationOriginRoute) {
+        appState.sourceSwitchRestoreFocusKey = appState.sourceSwitchOriginControlKey;
       }
       appState.settingsOverlay = "";
       appState.settingsExpandedOption = "";
@@ -13386,19 +13339,90 @@
       }, true);
     });
 
-    screenHost.querySelectorAll("[data-source-name]").forEach((targetEl) => {
-      const selectSource = () => {
-        appState.sourceSwitchSelectedSource = targetEl.getAttribute("data-source-name") || "";
-        renderCurrentRoute();
-      };
-      targetEl.addEventListener("click", (event) => {
+    const sourceSwitchApi = window.ReaderW3SourceSwitchRenderers?.sourceSwitch;
+    const sourceSwitchExit = (committed) => {
+      const owned = sourceSwitchApi?.getState?.() || {};
+      const originRoute = owned.navigationOriginRoute || appState.sourceSwitchNavigationOriginRoute || "";
+      appState.sourceSwitchRestoreFocusKey = owned.originControlKey || appState.sourceSwitchOriginControlKey || "";
+      if (committed && ["book-detail", "book-detail-toc-preview", "book-directory"].includes(originRoute)) {
+        appState.bookDetailState = "normal";
+        appState.bookDirectoryState = "normal";
+        window.ReaderD2BookshelfDiscoverRenderers?.bookDetail?.dispatch?.({ type: "VIEW_STATE_SET", value: "normal" });
+      }
+      if (originRoute) {
+        goBack();
+      } else {
+        replaceTopRoute("reader", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "reader" });
+      }
+    };
+    const sourceSwitchCheck = async () => {
+      const promise = sourceSwitchApi?.executeCandidateCheck?.({ delay: motionSearchDelay });
+      if (!promise) return;
+      replaceTopRoute("source-switch-loading", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "source-switch-loading" });
+      const result = await promise;
+      if (result.status === "stale") return;
+      const targetRoute = result.status === "success" ? "source-switch-preview" : result.status === "timeout" ? "source-switch-timeout" : "source-switch-error";
+      replaceTopRoute(targetRoute, { id: "source.switch.route.replace", action: "replace", from: "source-switch-loading", to: targetRoute });
+    };
+    screenHost.querySelectorAll("[data-source-switch-action]").forEach((control) => {
+      control.addEventListener("click", async (event) => {
         event.preventDefault();
-        selectSource();
-      });
-      targetEl.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          selectSource();
+        event.stopPropagation();
+        const action = control.getAttribute("data-source-switch-action") || "";
+        if (action === "select") {
+          const sourceId = control.getAttribute("data-source-id") || "";
+          sourceSwitchApi?.dispatch?.({ type: "SELECT", sourceId, disabled: control.disabled });
+          appState.sourceSwitchSelectedSourceId = sourceSwitchApi?.getState?.().selectedSourceId || "";
+          renderCurrentRoute();
+          return;
+        }
+        if (action === "confirm") {
+          if (currentRoute() === "source-switch") {
+            replaceTopRoute("source-switch-results", { id: "source.switch.route.replace", action: "replace", from: "source-switch", to: "source-switch-results" });
+          } else {
+            await sourceSwitchCheck();
+          }
+          return;
+        }
+        if (action === "retry") {
+          await sourceSwitchCheck();
+          return;
+        }
+        if (action === "commit") {
+          const promise = sourceSwitchApi?.executeSwitchCommit?.({ delay: motionSearchDelay });
+          if (!promise) return;
+          replaceTopRoute("source-switch-loading", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "source-switch-loading" });
+          const result = await promise;
+          if (result.status === "success") sourceSwitchExit(true);
+          else if (result.status !== "stale") replaceTopRoute("source-switch-rollback", { id: "source.switch.route.replace", action: "replace", from: "source-switch-loading", to: "source-switch-rollback" });
+          return;
+        }
+        if (action === "rollback-confirm") {
+          const promise = sourceSwitchApi?.executeRollback?.({ delay: motionSearchDelay });
+          if (!promise) return;
+          replaceTopRoute("source-switch-loading", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "source-switch-loading" });
+          const result = await promise;
+          if (result.status === "success") sourceSwitchExit(false);
+          else if (result.status !== "stale") replaceTopRoute("source-switch-rollback", { id: "source.switch.route.replace", action: "replace", from: "source-switch-loading", to: "source-switch-rollback" });
+          return;
+        }
+        if (action === "rollback-cancel") {
+          sourceSwitchApi?.dispatch?.({ type: "ROLLBACK_CLOSE" });
+          replaceTopRoute("source-switch-preview", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "source-switch-preview" });
+          return;
+        }
+        if (action === "back-to-candidates") {
+          replaceTopRoute("source-switch-results", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "source-switch-results" });
+          return;
+        }
+        if (action === "source-management") {
+          sourceSwitchApi?.dispatch?.({ type: "CANCEL" });
+          goTo("source-management", true, { id: "app.route.push.forward", action: "push", from: currentRoute(), to: "source-management" });
+          return;
+        }
+        if (action === "cancel") {
+          sourceSwitchApi?.dispatch?.({ type: "CANCEL" });
+          sourceSwitchExit(false);
         }
       });
     });
@@ -13723,7 +13747,18 @@
         }
         if (route === "source-switch") {
           const originRoute = currentRoute();
-          appState.sourceSwitchOriginRoute = isReaderContinuityOriginRoute(originRoute) ? originRoute : "";
+          const originControlKey = targetEl.getAttribute("data-control-key") || "";
+          const visualContextRoute = isReaderContinuityOriginRoute(originRoute) ? originRoute : "reader";
+          appState.sourceSwitchNavigationOriginRoute = originRoute;
+          appState.sourceSwitchVisualContextRoute = visualContextRoute;
+          appState.sourceSwitchOriginControlKey = originControlKey;
+          appState.sourceSwitchRestoreFocusKey = "";
+          window.ReaderW3SourceSwitchRenderers?.sourceSwitch?.dispatch?.({
+            type: "OPEN",
+            navigationOriginRoute: originRoute,
+            visualContextRoute,
+            originControlKey
+          });
         }
         if (readerW4OverlayRoutes.has(route)) {
           const originRoute = currentRoute();
@@ -15293,26 +15328,6 @@
       }
     });
 
-    screenHost.querySelectorAll(".fd-flow-comparison article").forEach((card) => {
-      const selectSource = () => {
-        const flow = card.closest(".fd-flow-frame");
-        const source = card.getAttribute("data-source-name") || card.querySelector("strong")?.textContent || "";
-        flow.querySelectorAll(".fd-flow-comparison article").forEach((item) => {
-          item.classList.toggle("is-selected", item === card);
-        });
-        const result = flow.querySelector(".fd-flow-result p");
-        if (result) {
-          result.textContent = `目标书源${source}章节一致，可保留 38% 阅读进度。`;
-        }
-      };
-      card.addEventListener("click", selectSource);
-      card.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          selectSource();
-        }
-      });
-    });
   }
 
   window.ReaderRuntimeSharedFragments = {
@@ -15332,7 +15347,7 @@
       return readerBrightnessRail(data, appState);
     },
     originReaderScreen(data, appState) {
-      return renderReaderContinuityOrigin(data, appState?.sourceSwitchOriginRoute, appState);
+      return renderReaderContinuityOrigin(data, appState?.sourceSwitchVisualContextRoute, appState);
     }
   };
 
