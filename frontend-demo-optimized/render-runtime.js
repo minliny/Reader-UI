@@ -11232,7 +11232,15 @@
         return sourceCodeViewScreen(data);
       case "source-delete-confirm":
         return sourceDeleteConfirmScreen(data, appState);
+      // A2 Phase 1: settings-general 路由冻结到 D2-C globalSettingsV2。
+      // 旧 settingsScreen 实现被隔离，不再作为 fallback。
+      // 如果 dispatch hook 没接管（D2-C 模块未加载），fail-loud 而不是回退。
       case "settings-general":
+        throw new Error(
+          "settings-general route is FROZEN to globalSettingsV2 (d2-settings-sync-renderers.js). " +
+          "renderRoute switch fallback is disabled; ensure window.ReaderD2SettingsSyncRenderers is loaded " +
+          "before renderRoute is called."
+        );
       case "settings-developer":
       case "global-settings":
       case "bookshelf-search-settings":

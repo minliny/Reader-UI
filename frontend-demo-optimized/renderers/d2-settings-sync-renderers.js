@@ -149,6 +149,308 @@
     }
   }
 
+  // ============ A2 Phase 2: settings-general 状态 owner + reducer ============
+  // A2 (R2b): 把 "控件身份已经清楚" 推进为 "控件真的能工作"。
+  // 本段是 settings-general 路由的唯一权威状态 owner：
+  //   - d2SettingsGeneralInitState(appState): 从 localStorage 恢复 + 默认值合并
+  //   - d2SettingsGeneralReducer(state, action): 纯函数 reducer
+  //   - d2SettingsGeneralDispatch(action): dispatch + 持久化 + 通知订阅者
+  //   - d2SettingsGeneralSubscribe(listener): 状态变更订阅
+  //   - d2SettingsGeneralGetState(): 读取当前 state（用于 renderer 读取）
+  //
+  // 状态结构：
+  //   state = {
+  //     values: { "app-theme": ..., "language": ..., ... 8 个 settingsKey },
+  //     cacheClear: { status, lastError, lastClearedAt },
+  //     permissions: { "file-access": ..., "notification": ..., "battery": ... },
+  //     resetDefaults: { status }
+  //   }
+  //
+  // Action types（与 UiEvent schema 对齐）：
+  //   "INIT"                                    — 从 localStorage 恢复
+  //   "TOGGLE_SWITCH"   { settingsKey, value }  — 对应 uiEvent="toggle.switch"
+  //   "SELECT_OPTION"   { settingsKey, value }  — 对应 uiEvent="dropdown.option.select" / "segment.item.switch"
+  //   "CACHE_CLEAR_CONFIRM" / "CACHE_CLEAR_START" / "CACHE_CLEAR_SUCCESS" / "CACHE_CLEAR_FAILED"
+  //   "PERMISSION_REQUEST" { name } / "PERMISSION_RESULT" { name, result }
+  //   "RESET_DEFAULTS_CONFIRM" / "RESET_DEFAULTS_SUBMIT" / "RESET_DEFAULTS_SUCCESS" / "RESET_DEFAULTS_CANCEL"
+  // ---------------------------------------------------------------------------
+
+  // 默认值：与 appearance-spec.js / R1.2 inventory 对齐
+  var D2_SETTINGS_GENERAL_DEFAULTS = {
+    // segment (3 options: 跟随系统 / 浅色 / 深色)
+    "app-theme": "follow-system",
+    // select (3 options: 简体中文 / 繁體中文 / English)
+    "language": "zh-CN",
+    // select (4 options: 书架 / 发现 / 订阅 / 设置)
+    "startup-screen": "bookshelf",
+    // select (3 options: 减少 / 标准 / 增强)
+    "animation-effect": "standard",
+    // switch
+    "auto-check-update": true,
+    "tap-bottom-scroll-top": true,
+    "reduce-motion": false,
+    "crash-log": true
+  };
+
+  // 持久化 key：所有 settings-general 值打包存一个 key，减少 IO
+  var D2_SETTINGS_GENERAL_STORAGE_KEY = "settings-general-values";
+
+  // 3 个权限请求名字
+  var D2_PERMISSION_NAMES = ["file-access", "notification", "battery"];
+
+  function d2SettingsGeneralDefaultState() {
+    return {
+      values: Object.assign({}, D2_SETTINGS_GENERAL_DEFAULTS),
+      cacheClear: { status: "idle", lastError: null, lastClearedAt: null },
+      permissions: {
+        "file-access": "prompt",
+        "notification": "prompt",
+        "battery": "prompt"
+      },
+      resetDefaults: { status: "idle" }
+    };
+  }
+
+  // 从 localStorage 恢复 values，合并到默认值上（防止旧版本 key 缺失）
+  function d2SettingsGeneralInitState(appState) {
+    var state = d2SettingsGeneralDefaultState();
+    var stored = d2Get(D2_SETTINGS_GENERAL_STORAGE_KEY, null);
+    if (stored && typeof stored === "object") {
+      var merged = Object.assign({}, state.values, stored);
+      state.values = merged;
+    }
+    // 兼容 appState 注入（测试 / 路由级 state override）
+    if (appState && appState.settingsGeneralValues) {
+      state.values = Object.assign({}, state.values, appState.settingsGeneralValues);
+    }
+    return state;
+  }
+
+  // 纯函数 reducer
+  function d2SettingsGeneralReducer(state, action) {
+    if (!state) state = d2SettingsGeneralDefaultState();
+    if (!action || !action.type) return state;
+    switch (action.type) {
+      case "INIT":
+        return d2SettingsGeneralInitState(action.appState || {});
+
+      case "TOGGLE_SWITCH": {
+        if (!action.settingsKey) return state;
+        var nextValues = Object.assign({}, state.values);
+        nextValues[action.settingsKey] = !!action.value;
+        return Object.assign({}, state, { values: nextValues });
+      }
+
+      case "SELECT_OPTION": {
+        if (!action.settingsKey) return state;
+        var nextValues2 = Object.assign({}, state.values);
+        nextValues2[action.settingsKey] = action.value;
+        return Object.assign({}, state, { values: nextValues2 });
+      }
+
+      // ---- 清缓存流程：5 个状态 idle / confirm / loading / success / failed ----
+      case "CACHE_CLEAR_CONFIRM":
+        return Object.assign({}, state, {
+          cacheClear: Object.assign({}, state.cacheClear, { status: "confirm", lastError: null })
+        });
+      case "CACHE_CLEAR_START":
+        // 重复点击 guard：只有 confirm 状态才能进入 loading
+        if (state.cacheClear.status === "loading") return state;
+        return Object.assign({}, state, {
+          cacheClear: Object.assign({}, state.cacheClear, { status: "loading", lastError: null })
+        });
+      case "CACHE_CLEAR_SUCCESS":
+        return Object.assign({}, state, {
+          cacheClear: Object.assign({}, state.cacheClear, {
+            status: "success", lastError: null, lastClearedAt: Date.now()
+          })
+        });
+      case "CACHE_CLEAR_FAILED":
+        return Object.assign({}, state, {
+          cacheClear: Object.assign({}, state.cacheClear, {
+            status: "failed", lastError: action.error || "unknown error"
+          })
+        });
+      case "CACHE_CLEAR_RESET":
+        return Object.assign({}, state, {
+          cacheClear: Object.assign({}, state.cacheClear, { status: "idle", lastError: null })
+        });
+
+      // ---- 3 权限请求：5 个状态 prompt / requesting / granted / denied / error ----
+      case "PERMISSION_REQUEST": {
+        if (!action.name || D2_PERMISSION_NAMES.indexOf(action.name) < 0) return state;
+        var nextPerms = Object.assign({}, state.permissions);
+        nextPerms[action.name] = "requesting";
+        return Object.assign({}, state, { permissions: nextPerms });
+      }
+      case "PERMISSION_RESULT": {
+        if (!action.name || D2_PERMISSION_NAMES.indexOf(action.name) < 0) return state;
+        var validResults = ["granted", "denied", "error"];
+        if (validResults.indexOf(action.result) < 0) return state;
+        var nextPerms2 = Object.assign({}, state.permissions);
+        nextPerms2[action.name] = action.result;
+        return Object.assign({}, state, { permissions: nextPerms2 });
+      }
+
+      // ---- 恢复默认流程：5 个状态 idle / confirm / submitting / success / cancelled ----
+      case "RESET_DEFAULTS_CONFIRM":
+        return Object.assign({}, state, {
+          resetDefaults: Object.assign({}, state.resetDefaults, { status: "confirm" })
+        });
+      case "RESET_DEFAULTS_CANCEL":
+        return Object.assign({}, state, {
+          resetDefaults: Object.assign({}, state.resetDefaults, { status: "cancelled" })
+        });
+      case "RESET_DEFAULTS_SUBMIT":
+        // 重复点击 guard：只有 confirm 才能进入 submitting
+        if (state.resetDefaults.status === "submitting") return state;
+        return Object.assign({}, state, {
+          resetDefaults: Object.assign({}, state.resetDefaults, { status: "submitting" })
+        });
+      case "RESET_DEFAULTS_SUCCESS":
+        // 提交成功 → 实际重置 values + 进入 success 状态
+        return Object.assign({}, state, {
+          values: Object.assign({}, D2_SETTINGS_GENERAL_DEFAULTS),
+          resetDefaults: Object.assign({}, state.resetDefaults, { status: "success" })
+        });
+      case "RESET_DEFAULTS_RESET":
+        return Object.assign({}, state, {
+          resetDefaults: Object.assign({}, state.resetDefaults, { status: "idle" })
+        });
+
+      default:
+        return state;
+    }
+  }
+
+  // 当前 state（单例）
+  var d2SettingsGeneralState = null;
+  // 订阅者列表
+  var d2SettingsGeneralListeners = [];
+
+  function d2SettingsGeneralGetState() {
+    if (!d2SettingsGeneralState) {
+      d2SettingsGeneralState = d2SettingsGeneralInitState({});
+    }
+    return d2SettingsGeneralState;
+  }
+
+  function d2SettingsGeneralSubscribe(listener) {
+    if (typeof listener !== "function") return function () { return; };
+    d2SettingsGeneralListeners.push(listener);
+    return function unsubscribe() {
+      var idx = d2SettingsGeneralListeners.indexOf(listener);
+      if (idx >= 0) d2SettingsGeneralListeners.splice(idx, 1);
+    };
+  }
+
+  // dispatch: 跑 reducer → 持久化 values → 通知订阅者
+  // 持久化只对 values 做（cacheClear / permissions / resetDefaults 都是瞬态，不持久化）
+  function d2SettingsGeneralDispatch(action) {
+    var prev = d2SettingsGeneralGetState();
+    var next = d2SettingsGeneralReducer(prev, action);
+    if (next === prev) return prev;
+    d2SettingsGeneralState = next;
+    // 持久化 values
+    if (next.values && action && (action.type === "TOGGLE_SWITCH" || action.type === "SELECT_OPTION" || action.type === "RESET_DEFAULTS_SUCCESS")) {
+      d2Set(D2_SETTINGS_GENERAL_STORAGE_KEY, next.values);
+    }
+    // 通知订阅者
+    for (var i = 0; i < d2SettingsGeneralListeners.length; i++) {
+      try {
+        d2SettingsGeneralListeners[i](next, prev, action);
+      } catch (e) {
+        // 订阅者异常不阻塞 dispatch
+        if (window.console && console.warn) {
+          console.warn("d2SettingsGeneralSubscribe listener error:", e);
+        }
+      }
+    }
+    return next;
+  }
+
+  // 将 state 注入到 appState.settingsGeneral，供 renderer 读取
+  function d2SettingsGeneralInjectAppState(appState) {
+    appState = appState || {};
+    appState.settingsGeneral = d2SettingsGeneralGetState();
+    return appState;
+  }
+
+  // A2 Phase 5: 权限请求桥接函数
+  // 调用 window.ReaderPermissionBridge.request(name) 返回 Promise<result>
+  // result ∈ {"granted", "denied", "error"}
+  // 事件层调用：d2RequestPermission("file-access").then(result => ...)
+  // 如果 window.ReaderPermissionBridge 不存在（demo 环境），返回 "error"
+  function d2RequestPermission(name) {
+    if (D2_PERMISSION_NAMES.indexOf(name) < 0) {
+      return Promise.reject(new Error("unknown permission name: " + name));
+    }
+    d2SettingsGeneralDispatch({ type: "PERMISSION_REQUEST", name: name });
+    var bridge = window.ReaderPermissionBridge;
+    if (!bridge || typeof bridge.request !== "function") {
+      // demo 环境无桥接 → 模拟 error
+      d2SettingsGeneralDispatch({ type: "PERMISSION_RESULT", name: name, result: "error" });
+      return Promise.resolve("error");
+    }
+    // 用 try/catch 包裹同步调用，bridge.request 可能同步抛错
+    var requestPromise;
+    try {
+      requestPromise = Promise.resolve(bridge.request(name));
+    } catch (e) {
+      d2SettingsGeneralDispatch({ type: "PERMISSION_RESULT", name: name, result: "error" });
+      return Promise.resolve("error");
+    }
+    return requestPromise
+      .then(function (result) {
+        var validResults = ["granted", "denied", "error"];
+        var finalResult = validResults.indexOf(result) >= 0 ? result : "error";
+        d2SettingsGeneralDispatch({ type: "PERMISSION_RESULT", name: name, result: finalResult });
+        return finalResult;
+      })
+      .catch(function () {
+        d2SettingsGeneralDispatch({ type: "PERMISSION_RESULT", name: name, result: "error" });
+        return "error";
+      });
+  }
+
+  // A2 Phase 4: 清缓存执行函数（事件层调用）
+  // 调用方负责在 CACHE_CLEAR_CONFIRM 后调用此函数执行实际清理
+  // demo 环境无真实清理 → 模拟成功或失败
+  function d2ExecuteCacheClear(options) {
+    options = options || {};
+    d2SettingsGeneralDispatch({ type: "CACHE_CLEAR_START" });
+    var simulate = options.simulateResult || "success";
+    return new Promise(function (resolve) {
+      var delay = options.delay || 0;
+      setTimeout(function () {
+        if (simulate === "failed") {
+          d2SettingsGeneralDispatch({
+            type: "CACHE_CLEAR_FAILED",
+            error: options.error || "清理失败"
+          });
+          resolve("failed");
+        } else {
+          d2SettingsGeneralDispatch({ type: "CACHE_CLEAR_SUCCESS" });
+          resolve("success");
+        }
+      }, delay);
+    });
+  }
+
+  // A2 Phase 6: 恢复默认执行函数（事件层调用）
+  // 调用方负责在 RESET_DEFAULTS_CONFIRM 后调用此函数执行实际重置
+  function d2ExecuteResetDefaults(options) {
+    options = options || {};
+    d2SettingsGeneralDispatch({ type: "RESET_DEFAULTS_SUBMIT" });
+    return new Promise(function (resolve) {
+      var delay = options.delay || 0;
+      setTimeout(function () {
+        d2SettingsGeneralDispatch({ type: "RESET_DEFAULTS_SUCCESS" });
+        resolve("success");
+      }, delay);
+    });
+  }
+
   // ============ 通用 UI 块（与 render-runtime.js 风格一致） ============
 
   // A1 (R2a): Control identity lookup — 从 CANONICAL_CONTROL_DECLARATIONS 构建
@@ -196,22 +498,27 @@
   }
 
   // 开关 — A1 (R2a): stamp 5 个 data-* 属性到 switch span
+  // A2 Phase 7: 补 role=switch + aria-checked + tabindex=0（移除 aria-hidden）
   function d2Switch(row, route) {
     var identity = d2ResolveSubcontrolIdentity(route, row.settingsKey);
     var attrs = d2StampIdentityAttrs(identity);
-    return `<span class="fd-settings-switch${row.enabled ? " is-on" : ""}"${attrs} aria-hidden="true"><i></i></span>`;
+    var checked = !!row.enabled;
+    return `<span class="fd-settings-switch${checked ? " is-on" : ""}"${attrs} role="switch" aria-checked="${checked ? "true" : "false"}" tabindex="0" aria-label="${esc(row.title || "")}"><i></i></span>`;
   }
 
   // 段选器（segment control） — A1 (R2a): 每个 button stamp 自己的 identity
+  // A2 Phase 7: active button 补 aria-pressed="true"（segment 用 aria-pressed 而非 aria-selected，
+  //   因为 segment 是 button group 而非 listbox/role=option）
   function d2Segment(row, route) {
     if (!row || !row.options || !row.options.length) return "";
     return `
-      <span class="fd-settings-segment" aria-label="${esc(row.title)}">
+      <span class="fd-settings-segment" role="group" aria-label="${esc(row.title)}">
         ${row.options.map(function (option, index) {
           var settingsKey = (row.settingsKey || "") + "-segment-option-" + (index + 1);
           var identity = d2ResolveSubcontrolIdentity(route, settingsKey);
           var attrs = d2StampIdentityAttrs(identity);
-          return `<button class="${option === row.value ? "is-active" : ""}" type="button"${attrs}>${esc(option)}</button>`;
+          var isActive = option === row.value;
+          return `<button class="${isActive ? "is-active" : ""}" type="button"${attrs} aria-pressed="${isActive ? "true" : "false"}">${esc(option)}</button>`;
         }).join("")}
       </span>`;
   }
@@ -246,6 +553,8 @@
 
   // 通用设置行（switch / select / link / action / stepper / cache-cleanup / segment）
   // A1 (R2a): d2RowSide 接收 route 参数，传递给 d2Switch / d2Stepper / d2Segment
+  // A2 (R2b): cache-cleanup row 反映 cacheClear.status（loading/success/failed），
+  //   支持 aria-busy / disabled / 重复点击 guard
   function d2RowSide(row, route) {
     var status = d2Badge(row.status, row.statusTone);
     var segment = row.type === "segment" ? d2Segment(row, route) : "";
@@ -253,7 +562,61 @@
     var toggle = row.type === "switch" ? d2Switch(row, route) : "";
     var value = row.value && !stepper && !segment ? `<strong class="fd-settings-value">${esc(row.value)}</strong>` : "";
     var actionOverlay = row.type === "cache-cleanup" && row.overlay ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
-    var action = row.actionLabel ? `<button class="fd-settings-row-action" type="button"${actionOverlay}>${esc(row.actionLabel)}</button>` : "";
+    // A2 Phase 4: cache-cleanup row 根据 cacheStatus 渲染 action button
+    // A2 Phase 5: permission row 根据 rawPermissionStatus 渲染 action button
+    var action = "";
+    if (row.actionLabel) {
+      if (row.type === "cache-cleanup") {
+        var cacheStatus = row.cacheStatus || "idle";
+        var cacheError = row.cacheError || null;
+        var actionClass = "fd-settings-row-action";
+        var actionLabel = row.actionLabel;
+        var actionAttrs = actionOverlay;
+        var titleAttr = "";
+        if (cacheStatus === "loading") {
+          actionClass += " is-busy";
+          actionLabel = "清理中…";
+          actionAttrs += ' aria-busy="true" disabled';
+        } else if (cacheStatus === "success") {
+          actionClass += " is-success";
+          actionLabel = "已清理";
+        } else if (cacheStatus === "failed") {
+          actionClass += " is-failed";
+          actionLabel = "重试";
+          titleAttr = cacheError ? ` title="${esc(cacheError)}"` : "";
+          actionAttrs += ' aria-invalid="true"';
+        } else if (cacheStatus === "confirm") {
+          actionClass += " is-confirm";
+        }
+        action = `<button class="${actionClass}" type="button"${actionAttrs}${titleAttr}>${esc(actionLabel)}</button>`;
+      } else if (row.type === "link" && row.permissionName) {
+        // A2 Phase 5: 权限 row 的 button 根据 rawPermissionStatus 调整
+        var permStatus = row.rawPermissionStatus || "prompt";
+        var permClass = "fd-settings-row-action";
+        var permLabel = row.actionLabel;
+        var permAttrs = actionOverlay;
+        var permTitle = "";
+        if (permStatus === "requesting") {
+          permClass += " is-busy";
+          permLabel = "请求中…";
+          permAttrs += ' aria-busy="true" disabled';
+        } else if (permStatus === "granted") {
+          permClass += " is-success";
+          permLabel = "已授权";
+          permAttrs += " disabled";
+        } else if (permStatus === "denied") {
+          permClass += " is-denied";
+          permLabel = "去设置";
+        } else if (permStatus === "error") {
+          permClass += " is-failed";
+          permLabel = "重试";
+          permAttrs += ' aria-invalid="true"';
+        }
+        action = `<button class="${permClass}" type="button"${permAttrs}${permTitle}>${esc(permLabel)}</button>`;
+      } else {
+        action = `<button class="fd-settings-row-action" type="button"${actionOverlay}>${esc(row.actionLabel)}</button>`;
+      }
+    }
     var chev = (row.options && !segment) || ["link", "select", "danger"].indexOf(row.type) >= 0 ? `<span class="fd-settings-trailing-icon">${chevron()}</span>` : "";
     return `${status}${segment}${stepper}${value}${action}${toggle}${chev}`;
   }
@@ -273,6 +636,10 @@
   // switch / segment / stepper 的 identity 已在子控件（span/button）上 stamp，
   // 因为 <article> 是 row 容器，子控件才是真正的可交互元素。
   // select row 的可交互元素是整个 <article>（点击打开选项列表）。
+  // A2 Phase 7: select row 补 aria-haspopup="listbox" + aria-expanded="false"
+  //   link row (permission) 补 aria-haspopup="dialog"
+  //   cache-cleanup row 补 aria-haspopup="dialog"
+  //   所有带 overlay 的 row 补 data-restore-focus（焦点恢复锚点）
   function d2Row(row, route, appState) {
     if (row.type === "input") return d2InputRow(row);
     var overlayAttr = row.overlay && row.type !== "cache-cleanup" ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
@@ -281,8 +648,24 @@
     var selectIdentity = row.type === "select" && row.settingsKey
       ? d2ResolveSubcontrolIdentity(route, row.settingsKey) : null;
     var selectAttrs = d2StampIdentityAttrs(selectIdentity);
+    // A2 Phase 7: ARIA 属性
+    var ariaAttrs = "";
+    var roleAttr = "group";
+    var tabindexAttr = "-1";
+    if (row.type === "select") {
+      ariaAttrs = ' aria-haspopup="listbox" aria-expanded="false"';
+      roleAttr = "button";
+      tabindexAttr = "0";
+    } else if (overlayAttr || routeAttr) {
+      ariaAttrs = ' aria-haspopup="dialog"';
+      roleAttr = "button";
+      tabindexAttr = "0";
+    }
+    // focus restore: 带 overlay 的 row 在 dialog 关闭后焦点应回到此 row
+    // A2 Phase 7: 优先用 settingsKey（select），其次 permissionName（权限 row），最后才回退 overlay
+    var restoreFocusAttr = overlayAttr ? ` data-restore-focus="${esc(row.settingsKey || row.permissionName || row.overlay)}"` : "";
     return `
-      <article class="fd-setting-row${row.type ? ` is-${esc(row.type)}` : ""}${row.tone === "danger" ? " is-danger" : ""}"${overlayAttr}${routeAttr}${selectAttrs} role="${overlayAttr || routeAttr ? "button" : "group"}" tabindex="${overlayAttr || routeAttr ? "0" : "-1"}">
+      <article class="fd-setting-row${row.type ? ` is-${esc(row.type)}` : ""}${row.tone === "danger" ? " is-danger" : ""}"${overlayAttr}${routeAttr}${selectAttrs}${ariaAttrs}${restoreFocusAttr} role="${roleAttr}" tabindex="${tabindexAttr}">
         <span>${icon(row.icon || "settings", "fd-small-icon")}</span>
         <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
         <em class="fd-settings-row-side is-${d2RowSideKind(row)}">${d2RowSide(row, route)}</em>
@@ -332,6 +715,7 @@
   }
 
   // 操作列表（底部按钮）
+  // A2 Phase 6: "恢复默认" action button 反映 resetDefaults.status
   function d2ActionList(actions) {
     if (!actions || !actions.length) return "";
     return `
@@ -339,7 +723,25 @@
         ${actions.map(function (item) {
           var routeAttr = item.route ? ` data-route="${esc(item.route)}"` : "";
           var overlayAttr = item.overlay ? ` data-settings-overlay="${esc(item.overlay)}"` : "";
-          return `<button class="${item.tone === "danger" ? "is-danger" : ""}" type="button"${overlayAttr}${routeAttr}>${icon(item.icon || "info", "fd-small-icon")}<span><strong>${esc(item.title)}</strong><small>${esc(item.meta || "")}</small></span>${chevron()}</button>`;
+          // A2 Phase 6: 如果 item 带 resetStatus，根据状态调整 button
+          var resetStatus = item.resetStatus || null;
+          var buttonClass = item.tone === "danger" ? "is-danger" : "";
+          var buttonLabel = item.title;
+          var buttonAttrs = overlayAttr + routeAttr;
+          if (resetStatus === "submitting") {
+            buttonClass += " is-busy";
+            buttonLabel = "恢复中…";
+            buttonAttrs += ' aria-busy="true" disabled';
+          } else if (resetStatus === "success") {
+            buttonClass += " is-success";
+            buttonLabel = "已恢复";
+            buttonAttrs += " disabled";
+          } else if (resetStatus === "confirm") {
+            buttonClass += " is-confirm";
+          } else if (resetStatus === "cancelled") {
+            buttonClass += " is-cancelled";
+          }
+          return `<button class="${buttonClass}" type="button"${buttonAttrs}>${icon(item.icon || "info", "fd-small-icon")}<span><strong>${esc(buttonLabel)}</strong><small>${esc(item.meta || "")}</small></span>${chevron()}</button>`;
         }).join("")}
       </section>`;
   }
@@ -494,8 +896,18 @@
   // 覆盖路由：
   //   global-settings / settings-general
   //   settings-reading-preferences / settings-network / settings-cache / settings-privacy
+  //
+  // A2 Phase 1 FROZEN: 本函数是 settings-general 路由的唯一权威 renderer。
+  // render-runtime.js 的 switch case 已移除 fallback 到 settingsScreen 的路径，
+  // 改为 fail-loud guard。任何对 settings-general DOM 的修改必须通过本函数。
+  // 旧 settingsScreen 实现已被隔离，不再处理 settings-general 路由。
   // ===========================================================================
   function globalSettingsV2(data, route, appState) {
+    if (route === "settings-general") {
+      // A2 Phase 1 invariant: settings-general 必须由 globalSettingsV2 渲染。
+      // 如果 appState 不存在，初始化空对象避免下游 NPE。
+      appState = appState || {};
+    }
     var page = d2GlobalSettingsPage(route, appState);
     var contentHtml = `
       ${d2MetricGrid(page.metrics)}
@@ -508,6 +920,156 @@
     return d2SettingsShell(data, page.title, contentHtml, {
       toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : ""
     });
+  }
+
+  // A2 (R2b): settings-general page data 从 state owner 派生
+  // 把 state.values 里的 raw value（"follow-system" / true 等）映射到 page data
+  // 中的 label（"跟随系统" / enabled=true 等）。state.values 不存在时回落到默认值。
+  var D2_SETTINGS_GENERAL_LABEL_MAP = {
+    "app-theme": {
+      values: ["follow-system", "light", "dark"],
+      labels: ["跟随系统", "浅色", "深色"]
+    },
+    "language": {
+      values: ["zh-CN", "zh-TW", "en"],
+      labels: ["简体中文", "繁體中文", "English"]
+    },
+    "startup-screen": {
+      values: ["bookshelf", "discover", "rss", "settings"],
+      labels: ["书架", "发现", "RSS", "设置"]
+    },
+    "animation-effect": {
+      values: ["reduce", "standard", "enhance"],
+      labels: ["减少", "标准", "增强"]
+    }
+  };
+
+  function d2SettingsGeneralLabelFor(settingsKey, rawValue) {
+    var map = D2_SETTINGS_GENERAL_LABEL_MAP[settingsKey];
+    if (!map) return rawValue;
+    var idx = map.values.indexOf(rawValue);
+    if (idx < 0) return map.labels[0]; // 未知值回落到第一个
+    return map.labels[idx];
+  }
+
+  function d2SettingsGeneralRawFor(settingsKey, labelValue) {
+    var map = D2_SETTINGS_GENERAL_LABEL_MAP[settingsKey];
+    if (!map) return labelValue;
+    var idx = map.labels.indexOf(labelValue);
+    if (idx < 0) return map.values[0];
+    return map.values[idx];
+  }
+
+  // 权限状态 → 中文 label
+  function d2SettingsGeneralPermissionStatus(status) {
+    switch (status) {
+      case "granted": return { status: "已授权", tone: "good" };
+      case "denied": return { status: "已拒绝", tone: "danger" };
+      case "requesting": return { status: "请求中…", tone: "info" };
+      case "error": return { status: "请求失败", tone: "warn" };
+      case "prompt":
+      default: return { status: "未授权", tone: "warn" };
+    }
+  }
+
+  function d2SettingsGeneralPageData() {
+    var state = d2SettingsGeneralGetState();
+    var v = state.values;
+    return {
+      title: "通用设置",
+      sections: [
+        {
+          title: "基础偏好",
+          rows: [
+            {
+              type: "segment", icon: "palette", title: "App主题",
+              value: d2SettingsGeneralLabelFor("app-theme", v["app-theme"]),
+              options: D2_SETTINGS_GENERAL_LABEL_MAP["app-theme"].labels,
+              settingsKey: "app-theme",
+              rawValue: v["app-theme"]
+            },
+            {
+              type: "select", icon: "globe", title: "语言",
+              value: d2SettingsGeneralLabelFor("language", v["language"]),
+              options: D2_SETTINGS_GENERAL_LABEL_MAP["language"].labels,
+              settingsKey: "language",
+              rawValue: v["language"]
+            },
+            {
+              type: "select", icon: "home", title: "启动时打开",
+              value: d2SettingsGeneralLabelFor("startup-screen", v["startup-screen"]),
+              options: D2_SETTINGS_GENERAL_LABEL_MAP["startup-screen"].labels,
+              settingsKey: "startup-screen",
+              rawValue: v["startup-screen"]
+            }
+          ]
+        },
+        {
+          title: "行为与反馈",
+          rows: [
+            {
+              type: "switch", icon: "refresh", title: "自动检查更新",
+              enabled: !!v["auto-check-update"], settingsKey: "auto-check-update"
+            },
+            {
+              type: "switch", icon: "top", title: "点击当前底栏回顶部",
+              enabled: !!v["tap-bottom-scroll-top"], settingsKey: "tap-bottom-scroll-top"
+            },
+            {
+              type: "switch", icon: "motion", title: "减少动态效果",
+              enabled: !!v["reduce-motion"], settingsKey: "reduce-motion"
+            },
+            {
+              type: "switch", icon: "bug", title: "崩溃日志",
+              enabled: !!v["crash-log"], status: v["crash-log"] ? "已开启" : "已关闭",
+              statusTone: v["crash-log"] ? "good" : "warn",
+              settingsKey: "crash-log"
+            },
+            {
+              type: "select", icon: "play", title: "动画效果",
+              value: d2SettingsGeneralLabelFor("animation-effect", v["animation-effect"]),
+              options: D2_SETTINGS_GENERAL_LABEL_MAP["animation-effect"].labels,
+              settingsKey: "animation-effect",
+              rawValue: v["animation-effect"]
+            },
+            {
+              type: "cache-cleanup", icon: "trash", title: "缓存清理",
+              actionLabel: "清理缓存", overlay: "dialog:cache-clear",
+              // A2 Phase 4: 清缓存流程状态从 state owner 派生
+              cacheStatus: state.cacheClear.status,
+              cacheError: state.cacheClear.lastError
+            }
+          ]
+        },
+        {
+          title: "系统权限",
+          rows: [
+            (function () {
+              var raw = state.permissions["file-access"];
+              var s = d2SettingsGeneralPermissionStatus(raw);
+              return { type: "link", icon: "folder", title: "文件访问", status: s.status, statusTone: s.tone, actionLabel: "去设置", overlay: "dialog:file-access-permission", permissionName: "file-access", rawPermissionStatus: raw };
+            })(),
+            (function () {
+              var raw = state.permissions["notification"];
+              var s = d2SettingsGeneralPermissionStatus(raw);
+              return { type: "link", icon: "bell", title: "通知权限", status: s.status, statusTone: s.tone, actionLabel: "去设置", overlay: "dialog:notification-permission", permissionName: "notification", rawPermissionStatus: raw };
+            })(),
+            (function () {
+              var raw = state.permissions["battery"];
+              var s = d2SettingsGeneralPermissionStatus(raw);
+              return { type: "link", icon: "battery", title: "电池优化", status: s.status, statusTone: s.tone, actionLabel: "去设置", overlay: "dialog:battery-permission", permissionName: "battery", rawPermissionStatus: raw };
+            })()
+          ]
+        }
+      ],
+      actions: [
+        {
+          tone: "danger", icon: "refresh", title: "恢复默认", overlay: "dialog",
+          // A2 Phase 6: 恢复默认流程状态从 state owner 派生
+          resetStatus: state.resetDefaults.status
+        }
+      ]
+    };
   }
 
   function d2GlobalSettingsPage(route, appState) {
@@ -546,39 +1108,9 @@
         ]
       },
       // 通用设置（与 render-runtime.js 一致 + 状态变体补全）
-      "settings-general": {
-        title: "通用设置",
-        sections: [
-          {
-            title: "基础偏好",
-            rows: [
-              { type: "segment", icon: "palette", title: "App主题", value: "跟随系统", options: ["跟随系统", "浅色", "深色"], settingsKey: "app-theme" },
-              { type: "select", icon: "globe", title: "语言", value: "简体中文", options: ["简体中文", "繁體中文", "English"], settingsKey: "language" },
-              { type: "select", icon: "home", title: "启动时打开", value: "书架", options: ["书架", "发现", "RSS", "设置"], settingsKey: "startup-screen" }
-            ]
-          },
-          {
-            title: "行为与反馈",
-            rows: [
-              { type: "switch", icon: "refresh", title: "自动检查更新", enabled: true, settingsKey: "auto-check-update" },
-              { type: "switch", icon: "top", title: "点击当前底栏回顶部", enabled: true, settingsKey: "tap-bottom-scroll-top" },
-              { type: "switch", icon: "motion", title: "减少动态效果", enabled: false, settingsKey: "reduce-motion" },
-              { type: "switch", icon: "bug", title: "崩溃日志", enabled: true, status: "已开启", statusTone: "good", settingsKey: "crash-log" },
-              { type: "select", icon: "play", title: "动画效果", value: "标准", options: ["减少", "标准", "增强"], settingsKey: "animation-effect" },
-              { type: "cache-cleanup", icon: "trash", title: "缓存清理", actionLabel: "清理缓存", overlay: "dialog:cache-clear" }
-            ]
-          },
-          {
-            title: "系统权限",
-            rows: [
-              { type: "link", icon: "folder", title: "文件访问", status: "已授权", statusTone: "good", actionLabel: "去设置", overlay: "dialog:file-access-permission" },
-              { type: "link", icon: "bell", title: "通知权限", status: "未授权", statusTone: "warn", actionLabel: "去设置", overlay: "dialog:notification-permission" },
-              { type: "link", icon: "battery", title: "电池优化", status: "受系统管理", statusTone: "info", actionLabel: "去设置", overlay: "dialog:battery-permission" }
-            ]
-          }
-        ],
-        actions: [{ tone: "danger", icon: "refresh", title: "恢复默认", overlay: "dialog" }]
-      },
+      // A2 (R2b): 8 个 subcontrol 的 value/enabled 从 state owner 派生，
+      // 不再是写死的默认值。state owner 是 d2SettingsGeneralGetState()。
+      "settings-general": d2SettingsGeneralPageData(),
       // 阅读偏好分区
       "settings-reading-preferences": {
         title: "阅读偏好",
@@ -2188,6 +2720,31 @@
       get: d2Get,
       set: d2Set,
       remove: d2Remove
+    },
+    // A2 Phase 2: settings-general 状态 owner / reducer / dispatch
+    // 外部事件层（render-runtime.js 的事件 dispatcher）通过此 API 与状态交互：
+    //   state = settingsGeneral.getState()
+    //   settingsGeneral.dispatch({ type: "TOGGLE_SWITCH", settingsKey: "...", value: true })
+    //   unsubscribe = settingsGeneral.subscribe((next, prev, action) => { ... })
+    settingsGeneral: {
+      defaults: D2_SETTINGS_GENERAL_DEFAULTS,
+      labelMap: D2_SETTINGS_GENERAL_LABEL_MAP,
+      permissionNames: D2_PERMISSION_NAMES,
+      initState: d2SettingsGeneralInitState,
+      defaultState: d2SettingsGeneralDefaultState,
+      reducer: d2SettingsGeneralReducer,
+      getState: d2SettingsGeneralGetState,
+      dispatch: d2SettingsGeneralDispatch,
+      subscribe: d2SettingsGeneralSubscribe,
+      injectAppState: d2SettingsGeneralInjectAppState,
+      labelFor: d2SettingsGeneralLabelFor,
+      rawFor: d2SettingsGeneralRawFor,
+      permissionStatus: d2SettingsGeneralPermissionStatus,
+      pageData: d2SettingsGeneralPageData,
+      // A2 Phase 4-6 执行函数（事件层调用）
+      requestPermission: d2RequestPermission,
+      executeCacheClear: d2ExecuteCacheClear,
+      executeResetDefaults: d2ExecuteResetDefaults
     },
     // 恢复流程数据
     restore: {

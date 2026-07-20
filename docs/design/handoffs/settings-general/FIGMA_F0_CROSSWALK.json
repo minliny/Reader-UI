@@ -1,0 +1,243 @@
+{
+  "schemaVersion": "1.0.0",
+  "status": "F0_BLOCKED",
+  "scope": "Settings General",
+  "observedAt": "2026-07-20T03:26:06Z",
+  "localSource": {
+    "repository": "Reader-UI",
+    "commit": "a6993b4e38eb6ef2cbf58fa7d5094dd0812dfda7",
+    "branch": "codex/motion-demo-optimizations",
+    "worktreeAtRead": "clean",
+    "localReadyForFigma": false,
+    "localReadyMarker": null,
+    "settingsR3aMarker": null
+  },
+  "figmaSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "officialFileRevision": null,
+    "officialFileRevisionStatus": "unavailable-from-installed-figma-connector-and-use_figma-runtime",
+    "observationRevision": "f0-live-read-20260720T032606Z",
+    "observationRevisionKind": "timestamped-live-node-observation-not-provider-file-revision",
+    "pageCount": 29,
+    "pages": {
+      "sharedPrimitives": { "id": "259:8", "name": "06 · Components · Shared Primitives" },
+      "settingsComponents": { "id": "259:11", "name": "12 · Components · Settings & About" },
+      "responsiveMasters": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "finalPrototypes": { "id": "834:2", "name": "23 · Pages · Final" }
+    }
+  },
+  "canonicalGraph": {
+    "pageMasterSet": {
+      "id": "942:21",
+      "name": "Page/Settings General",
+      "variants": [
+        { "viewport": "phone", "id": "942:18", "size": "390x844" },
+        { "viewport": "compact", "id": "942:19", "size": "844x390" },
+        { "viewport": "tablet", "id": "942:20", "size": "760x960" }
+      ]
+    },
+    "downstreamPrototypeInstances": [
+      { "viewport": "phone", "frameId": "1995:67304", "instanceId": "1995:67305", "mainComponentId": "942:18" },
+      { "viewport": "compact", "frameId": "1995:67540", "instanceId": "1995:67541", "mainComponentId": "942:19" },
+      { "viewport": "tablet", "frameId": "1995:67776", "instanceId": "1995:67777", "mainComponentId": "942:20" }
+    ],
+    "settingsMasters": [
+      { "id": "535:411", "name": "Settings/GeneralSection", "pageId": "259:11", "reactionCount": 40 },
+      { "id": "534:248", "name": "Settings/SettingRow", "pageId": "259:11", "reactionCount": 90 },
+      { "id": "531:108", "name": "Settings/Switch", "pageId": "259:11", "reactionCount": 10 },
+      { "id": "1994:25736", "name": "Settings/InlineAction", "pageId": "259:11", "reactionCount": 5 },
+      { "id": "1994:25794", "name": "Settings/DangerActionRow", "pageId": "259:11", "reactionCount": 5 },
+      { "id": "530:165", "name": "Settings/GeneralRowIcon", "pageId": "259:11", "variantCount": 12 }
+    ],
+    "sharedPrimitiveMasters": [
+      { "id": "281:122", "name": "Primitive/Button", "pageId": "259:8" },
+      { "id": "282:124", "name": "Primitive/Select", "pageId": "259:8" },
+      { "id": "283:35", "name": "Primitive/Switch", "pageId": "259:8" },
+      { "id": "283:100", "name": "Primitive/SegmentedControl", "pageId": "259:8" },
+      { "id": "358:18", "name": "Control/Stepper", "pageId": "259:8" }
+    ],
+    "graphFinding": "The three responsive page variants are real component masters and the final prototype nodes are real instances, but each responsive master contains only FRAME/TEXT/VECTOR descendants and zero INSTANCE descendants. The page masters therefore bypass the existing Settings and shared primitive canonical component graph."
+  },
+  "sources": {
+    "fonts": {
+      "observedInSettingsMaster": ["Inter", "Songti SC"],
+      "availableToWriter": ["Inter", "Noto Serif SC"],
+      "unavailableToWriter": ["Songti SC"],
+      "writeRule": "Do not mutate text or text-affecting component structure until Songti SC is available or the user approves a font-source decision."
+    },
+    "icons": {
+      "figmaMaster": { "id": "530:165", "name": "Settings/GeneralRowIcon", "description": "Exact Tabler outline icons from the canonical General Settings live route. No hand-drawn substitutes." },
+      "localSource": "frontend-demo-optimized/asset-library/icons.js",
+      "rule": "Reuse semantic icon masters; do not replace with screenshots or hand-drawn decorative symbols."
+    }
+  },
+  "bindings": [
+    {
+      "controlKey": "settings.button.button@settings-general.default.n0",
+      "label": "恢复默认",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:259", "compact": "884:259", "tablet": "887:259" },
+      "canonicalMasterId": "1994:25794",
+      "note": "Exact visible danger row candidate; page-master descendants are raw frames, not instances of the canonical master."
+    },
+    {
+      "controlKey": "settings.button.button@settings-general.default.n1",
+      "label": "清理缓存",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:192", "compact": "884:192", "tablet": "887:192" },
+      "canonicalMasterId": "1994:25736",
+      "note": "Exact inner action candidate; canonical instance consumption is absent in responsive masters."
+    },
+    {
+      "controlKey": "settings.button.button@settings-general.default.n3",
+      "label": "返回",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:28", "compact": "884:28", "tablet": "887:28" },
+      "canonicalMasterId": null,
+      "note": "Exact 44x44 back-control frame candidate."
+    },
+    {
+      "controlKey": "settings.listrow-action.button@settings-general.default.n1",
+      "label": "文件访问 去设置",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:201", "compact": "884:201", "tablet": "887:201" },
+      "canonicalMasterId": "535:411"
+    },
+    {
+      "controlKey": "settings.listrow-action.button@settings-general.default.n2",
+      "label": "通知权限 去设置",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:219", "compact": "884:219", "tablet": "887:219" },
+      "canonicalMasterId": "535:411"
+    },
+    {
+      "controlKey": "settings.listrow-action.button@settings-general.default.n0",
+      "label": "电池优化 去设置",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:238", "compact": "884:238", "tablet": "887:238" },
+      "canonicalMasterId": "535:411"
+    },
+    {
+      "controlKey": "settings.combobox.combobox.h-ae347b3b@settings-general.default",
+      "label": "语言 简体中文",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:73", "compact": "884:73", "tablet": "887:73" },
+      "canonicalMasterId": "282:124",
+      "note": "Current visual is a value/chevron frame, not an instance of Primitive/Select."
+    },
+    {
+      "controlKey": "settings.combobox.combobox.h-cb8f6b5a@settings-general.default",
+      "label": "启动时打开 书架",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:91", "compact": "884:91", "tablet": "887:91" },
+      "canonicalMasterId": "282:124",
+      "note": "Current visual is a value/chevron frame, not an instance of Primitive/Select."
+    },
+    {
+      "controlKey": "settings.combobox.combobox.h-8c5c857b@settings-general.default",
+      "label": "动画效果 标准",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:171", "compact": "884:171", "tablet": "887:171" },
+      "canonicalMasterId": "282:124",
+      "note": "Current visual is a value/chevron frame, not an instance of Primitive/Select."
+    },
+    {
+      "controlKey": "settings.switch.switch.h-3d9aad4f@settings-general.default",
+      "label": "自动检查更新",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:114", "compact": "884:114", "tablet": "887:114" },
+      "canonicalMasterId": "531:108"
+    },
+    {
+      "controlKey": "settings.switch.switch.h-b62ffb21@settings-general.default",
+      "label": "点击当前底栏回顶部",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:128", "compact": "884:128", "tablet": "887:128" },
+      "canonicalMasterId": "531:108"
+    },
+    {
+      "controlKey": "settings.switch.switch.h-4d33c2f9@settings-general.default",
+      "label": "减少动态效果",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:139", "compact": "884:139", "tablet": "887:139" },
+      "canonicalMasterId": "531:108"
+    },
+    {
+      "controlKey": "settings.switch.switch.h-4d8f7fac@settings-general.default",
+      "label": "崩溃日志",
+      "status": "observed-candidate",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
+      "revision": "f0-live-read-20260720T032606Z",
+      "nodes": { "phone": "879:158", "compact": "884:158", "tablet": "887:158" },
+      "canonicalMasterId": "531:108"
+    }
+  ],
+  "unbound": [
+    {
+      "controlKeys": [
+        "settings.button.button.segment-option-1.h-bd99c17b@settings-general.default",
+        "settings.button.button.segment-option-2.h-bd99c17b@settings-general.default",
+        "settings.button.button.segment-option-3.h-bd99c17b@settings-general.default"
+      ],
+      "reason": "Figma has only one aggregate App主题 value row (879:43 / 884:43 / 887:43); no three distinct segment option nodes exist. Binding three local keys to one aggregate node would be forged.",
+      "availableCanonicalMasterId": "283:100"
+    },
+    {
+      "controlKeys": [
+        "settings.button.button@settings-general.default.n2",
+        "settings.button.button@settings-general.default.n4",
+        "settings.button.button@settings-general.default.n5"
+      ],
+      "reason": "The three local controls share the label 去设置 and lack a stable local discriminator tying each inner button to file/notification/battery. Outer list-row controls are mapped; inner button bindings remain intentionally unbound."
+    }
+  ],
+  "admission": {
+    "f0Pass": false,
+    "f1WriterAdmitted": false,
+    "blockers": [
+      "No LOCAL_READY_FOR_FIGMA marker or handoff packet exists for Settings General.",
+      "No Settings R3a marker exists; the current VC0 authority explicitly says the page cannot enter Figma VC1.",
+      "The installed Figma connector does not expose the provider file revision; an observation revision is not a substitute.",
+      "Responsive page masters bypass canonical Settings/shared primitive components and contain zero component instances.",
+      "Songti SC is used by the master but is unavailable to the writer runtime.",
+      "Segment option keys and three inner 去设置 keys cannot be mapped without fabrication."
+    ]
+  }
+}
