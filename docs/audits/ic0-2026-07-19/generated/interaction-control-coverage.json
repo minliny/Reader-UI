@@ -478,7 +478,7 @@
       ]
     }
   },
-  "inventorySha256": "d34368cf21a93dd323e3bb7016d9cc5f1b6e9b369cbeb9d2a64d52565b1d8911",
+  "inventorySha256": "90147f1acd02507dee9e358cbc0e92d6c6e1e21e40edd0c90049c655991baca0",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -489,7 +489,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "0bf5d7ff15ad577934ce63258402b4ac27c2d814bb1f754b0df640aa86199fa9"
+      "renderSha256": "d0d548052a345b6fb067abb2f63d7ce255b77df8d3a1ddfb72c6ae99f9d9c4e8"
     },
     {
       "routeId": "bookshelf-empty",
@@ -500,7 +500,7 @@
       "pageState": "shelf-empty",
       "semanticControls": 20,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "cd95e00a9d4b2fa5e0bd267ea567da2e6ad50761a0546b29463508e912ac759e"
+      "renderSha256": "95bbf5de15cba6383489bb3a22315f9e5234a66c227d532ce943bd0a92873532"
     },
     {
       "routeId": "bookshelf-cover-mode",
@@ -511,7 +511,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ae3f0cf8b133a857142e0b00189baf1ddfeb64afaa2f77659d8232df8a61d899"
+      "renderSha256": "9753432796daa95b569a488e70876bd14e9f0a261db5283d0fa403734a6545a1"
     },
     {
       "routeId": "bookshelf-list-mode",
@@ -522,7 +522,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "644d34c6aa6dfca28c92d4a3123f559884459bc7f1c3e37d500231846361958c"
+      "renderSha256": "96f52fb96c494aca67d2fd277dbdad7a994006bcbc6bc58546ea2b181e3c61be"
     },
     {
       "routeId": "bookshelf-book-more-menu",
@@ -533,7 +533,7 @@
       "pageState": "default",
       "semanticControls": 38,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f30cbea63254374867656fc97f3632e2114b8062c1a1a09054712673a53ca76b"
+      "renderSha256": "74600b94a2f36524f40b5299f79185e922c0ccb89e9e787271301b6eb6195e2e"
     },
     {
       "routeId": "bookshelf-group-management",
@@ -566,7 +566,7 @@
       "pageState": "default",
       "semanticControls": 50,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "82afb83ddc8aeca467e5deb0bb8ab72821165413e59af82c6a66b43524d22a92"
+      "renderSha256": "3de0c040305d20082a2d8cb635657cba6cf9184dd2f2c7b333c78d223fd26d8f"
     },
     {
       "routeId": "group-management",

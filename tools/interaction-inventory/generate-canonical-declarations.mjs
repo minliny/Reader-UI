@@ -56,18 +56,63 @@ const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = new Set(uiEventSchema.properties.type.enum);
 
+const BOOKSHELF_ACTION_SPECS = [
+  ["continue-cover", "route.push", "继续阅读封面"], ["continue-read", "route.push", "继续阅读"],
+  ["view-cover", "bookshelf.view.switch", "封面视图"], ["view-list", "bookshelf.view.switch", "列表视图"],
+  ["sort-filter-toggle", "bookshelf.sortFilter.open", "书架筛选"], ["search-toggle", "search.open", "书架搜索"],
+  ["display-settings", "route.push", "书架显示设置"], ["search-clear", "search.clear", "清除搜索"],
+  ["more-close", "dropdown.collapse", "关闭更多"], ["more-batch", "bookshelf.batchManagement.open", "批量管理"],
+  ["more-group", "bookshelf.groupManagement.open", "分组管理"], ["more-local-import", "bookshelf.localImport.open", "本地导入"],
+  ["more-settings", "route.push", "书架设置"], ["retry-load", "download.task.retry", "重试加载"],
+  ["offline-view", "reader.content.offline", "离线查看"], ["retry-network", "download.task.retry", "重连"],
+  ...["全部", "默认", "本地书", "追更"].map((v) => [`group-${v}`, "bookshelf.group.select", `分组 ${v}`]),
+  ...["最近更新", "阅读进度", "书名", "作者"].map((v) => [`sort-${v}`, "bookshelf.sortFilter.apply", `排序 ${v}`]),
+  ...["全部", "未读", "已完结", "更新失败"].map((v) => [`filter-${v}`, "bookshelf.sortFilter.apply", `筛选 ${v}`]),
+  ...["long-night", "mystery-lord", "ming-dynasty-stories", "three-body", "renjian-cihua", "android-notes", "old-day-echoes", "among-stars", "lighthouse-and-fog", "paper-city", "long-title-layout-sample"].flatMap((id) => [
+    [`book-open-${id}`, "route.push", `打开 ${id}`], [`book-more-${id}`, "route.push", `更多 ${id}`]
+  ])
+];
+
+function bookshelfActionDeclarations() {
+  return BOOKSHELF_ACTION_SPECS.map(([settingsKey, uiEvent, label]) => {
+    const entityKey = `library.button.button.${settingsKey}`;
+    return {
+      entityKey, controlKey: `${entityKey}@bookshelf.default`,
+      controlId: `library.button.bookshelf.default.button.${settingsKey}`,
+      actionKey: settingsKey, instanceKey: null, needsActionKey: false,
+      needsInstanceKey: false, mappingStatus: "mapped", uiEvent,
+      route: "bookshelf", state: "default", domain: "library", family: "button", role: "button",
+      renderer: "bookshelfV2", rendererFile: "renderers/d2-bookshelf-discover-renderers.js",
+      rendererSlot: "bookshelfV2@renderers/d2-bookshelf-discover-renderers.js",
+      pageFamily: "bookshelf", source: "bookshelf-action", label, settingsKey
+    };
+  });
+}
+
 // R2a page-family pilots add stable semantic action identities that cannot be
 // recovered from the historical occurrence registry (the registry still
 // contains ordinal keys for these controls). Earlier pilots wrote their
 // declarations directly into the generated artifact; preserve those entries
 // while the registry migration remains open.
 let preservedPilotActionDeclarations = [];
+let preservedPilotSubcontrolDeclarations = [];
 try {
   const previousModule = { exports: {} };
   const previousSource = readFileSync(OUTPUT_PATH, "utf8");
   Function("module", "window", previousSource)(previousModule, {});
   preservedPilotActionDeclarations = (previousModule.exports.CANONICAL_CONTROL_DECLARATIONS || [])
     .filter((entry) => entry.source === "a3-action")
+    .map((entry) => ({
+      ...entry,
+      actionKey: entry.actionKey ?? entry.settingsKey,
+      instanceKey: entry.instanceKey ?? null,
+      needsActionKey: entry.needsActionKey ?? false,
+      needsInstanceKey: entry.needsInstanceKey ?? false,
+      mappingStatus: entry.mappingStatus ?? "mapped",
+      rendererSlot: entry.rendererSlot ?? `${entry.renderer}@${entry.rendererFile}`
+    }));
+  preservedPilotSubcontrolDeclarations = (previousModule.exports.CANONICAL_CONTROL_DECLARATIONS || [])
+    .filter((entry) => entry.source === "r2.0-subcontrol")
     .map((entry) => ({
       ...entry,
       actionKey: entry.actionKey ?? entry.settingsKey,
@@ -383,9 +428,17 @@ const PAGE_FAMILY_ORDER = [
 
 function sourceRank(s) { return s === "registry" ? 0 : 1; }
 
+// Once a pilot control is stamped it leaves nonInteractiveContainers and moves
+// into the semantic inventory. Keep the original 50 business-key declarations
+// as the stable identity source rather than shrinking the declaration set.
+const effectiveSubcontrolDeclarations = preservedPilotSubcontrolDeclarations.length >= 50
+  ? preservedPilotSubcontrolDeclarations
+  : subcontrolDeclarations;
+
 const allDeclarations = registryDeclarations
-  .concat(subcontrolDeclarations)
-  .concat(preservedPilotActionDeclarations);
+  .concat(effectiveSubcontrolDeclarations)
+  .concat(preservedPilotActionDeclarations)
+  .concat(bookshelfActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);
@@ -435,7 +488,7 @@ if (missingControlIdExemption.length > 0) {
 
 // ---- Compute meta ----
 const subByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
-for (const d of subcontrolDeclarations) {
+for (const d of effectiveSubcontrolDeclarations) {
   subByType[d.expectedSubcontrolType] = (subByType[d.expectedSubcontrolType] || 0) + 1;
 }
 
@@ -447,13 +500,13 @@ const meta = {
   pageFamilies: PAGE_FAMILY_ORDER.slice(),
   totals: {
     registryBacked: registryDeclarations.length,
-    r2Subcontrols: subcontrolDeclarations.length,
+    r2Subcontrols: effectiveSubcontrolDeclarations.length,
     subcontrolsByType: subByType,
     total: allDeclarations.length
   },
   exemptionSummary: {
     registryUiEventNull: registryDeclarations.filter(d => d.uiEvent === null).length,
-    subcontrolControlIdNull: subcontrolDeclarations.filter(d => d.controlId === null).length
+    subcontrolControlIdNull: effectiveSubcontrolDeclarations.filter(d => d.controlId === null).length
   }
 };
 
@@ -573,6 +626,6 @@ if (CHECK_MODE) {
   console.log(`Wrote ${OUTPUT_PATH.replace(REPO_ROOT + "/", "")}`);
   console.log(`  total: ${allDeclarations.length} declarations`);
   console.log(`    registry-backed: ${registryDeclarations.length}`);
-  console.log(`    r2.0-subcontrol: ${subcontrolDeclarations.length} (switch ${subByType.switch} / select ${subByType.select} / stepper ${subByType.stepper} / segment ${subByType.segment})`);
+  console.log(`    r2.0-subcontrol: ${effectiveSubcontrolDeclarations.length} (switch ${subByType.switch} / select ${subByType.select} / stepper ${subByType.stepper} / segment ${subByType.segment})`);
   console.log(`  page families: ${PAGE_FAMILY_ORDER.length}`);
 }

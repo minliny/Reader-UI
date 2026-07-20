@@ -1,0 +1,20 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+const root=join(dirname(fileURLToPath(import.meta.url)),"..");
+const ids=["long-night","mystery-lord"];
+const fixture={covers:{},mainTabs:{books:ids.map((bookId,i)=>({bookId,title:`书${i}`,author:"作者",chapter:"章",coverKey:bookId}))}};
+function fresh(){const window={localStorage:{getItem(){return null},setItem(){}},ReaderShellKit:{icon:()=>"",renderMainTabShell:(c)=>`${c.contentHtml||""}${c.stateHostHtml||""}`,renderSettingsShell:(c)=>c.contentHtml||"",renderLibraryShell:(c)=>c.contentHtml||""}};const ctx=vm.createContext({window,module:{exports:{}},Promise,setTimeout,JSON});for(const f of ["control-identity-declarations.js","renderers/d2-bookshelf-discover-renderers.js"])new vm.Script(readFileSync(join(root,f),"utf8")).runInContext(ctx);return window.ReaderD2BookshelfDiscoverRenderers;}
+test("R3a grid and cards expose list/listitem semantics",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});assert.match(h,/role="list"/);assert.equal((h.match(/role="listitem"/g)||[]).length,2);});
+test("R3a cards expose position and set size",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});assert.match(h,/aria-posinset="1" aria-setsize="2"/);assert.match(h,/aria-posinset="2" aria-setsize="2"/);});
+test("R3a view buttons expose mutually exclusive aria-pressed",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});assert.match(h,/data-bookshelf-view-button="cover" aria-pressed="true"/);assert.match(h,/data-bookshelf-view-button="list" aria-pressed="false"/);});
+test("R3a cover mode removes hidden more buttons from tab order",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});assert.equal((h.match(/data-book-more[^>]+aria-hidden="true" tabindex="-1"/g)||[]).length,2);});
+test("R3a open filter exposes pressed option state",()=>{const a=fresh();a.bookshelf.dispatch({type:"FILTER_TOGGLE"});const h=a.bookshelfV2(fixture,"bookshelf",{});assert.match(h,/data-bookshelf-filter-toggle aria-expanded="true"/);assert.match(h,/data-bookshelf-group-option="全部" aria-pressed="true"/);});
+test("R3a more menu is an aria-modal dialog",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});assert.match(h,/role="dialog" aria-modal="true"/);});
+test("R3a more menu declares deterministic initial focus",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});assert.match(h,/data-dialog-initial-focus="more-batch"/);});
+test("R3a search clear declares focus return",()=>{const a=fresh();a.bookshelf.dispatch({type:"SEARCH_SET",value:"书"});a.bookshelf.dispatch({type:"FILTER_TOGGLE"});const h=a.bookshelfV2(fixture,"bookshelf",{});assert.match(h,/data-bookshelf-search-clear data-restore-focus="search-toggle"/);});
+test("R3a loading retry exposes aria-busy",()=>{const a=fresh();a.bookshelf.dispatch({type:"LOAD_RETRY_START"});a.bookshelf.dispatch({type:"LOAD_RETRY_FAILED"});const h=a.bookshelfV2(fixture,"bookshelf",{});assert.match(h,/data-bookshelf-retry aria-busy="false"/);});
+test("R3a every emitted control key is unique",()=>{const h=fresh().bookshelfV2(fixture,"bookshelf",{});const keys=[...h.matchAll(/data-control-key="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(keys).size,keys.length);});

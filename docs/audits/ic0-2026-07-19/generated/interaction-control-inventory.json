@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "3f190b8dddc383e1c927c26cef02e9599383f870ff5b9ae5cab61d2dff9ed447"
+    "rendererSourcesSha256": "7eb658ddace161c018910f2130b6e8fe960d3562d0378d7ffb73f4c800219da8"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -1294,6 +1294,7 @@
       "label": "批量管理选择多本书后移动或删除",
       "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
         "data-route": "book-batch-management"
       },
       "uiEvent": "route.push",
@@ -1312,7 +1313,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ea5895123bf293177438",
+      "candidateKey": "candidate:1edce6c1d62fa8d22161",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -1968,6 +1969,7 @@
       "label": "批量管理选择多本书后移动或删除",
       "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
         "data-route": "book-batch-management"
       },
       "uiEvent": "route.push",
@@ -1986,7 +1988,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:edae3a4cf1b76f03129a",
+      "candidateKey": "candidate:75bb7e4ee70db12f1ca5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -3487,6 +3489,7 @@
       "label": "批量管理选择多本书后移动或删除",
       "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
         "data-route": "book-batch-management"
       },
       "uiEvent": "route.push",
@@ -3505,7 +3508,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4397faf45b5c24f4a861",
+      "candidateKey": "candidate:a615449eba133c536559",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -5006,6 +5009,7 @@
       "label": "批量管理选择多本书后移动或删除",
       "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
         "data-route": "book-batch-management"
       },
       "uiEvent": "route.push",
@@ -5024,7 +5028,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f56741326d9a3c545ffa",
+      "candidateKey": "candidate:03bfb47c59fe811719d4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -6395,6 +6399,7 @@
       "label": "批量管理选择多本书后移动或删除",
       "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
         "data-route": "book-batch-management"
       },
       "uiEvent": "route.push",
@@ -6413,7 +6418,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7f1c572dc02a860db248",
+      "candidateKey": "candidate:0b1e25c0202a5e22c455",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -9096,6 +9101,7 @@
       "label": "批量管理选择多本书后移动或删除",
       "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
         "data-route": "book-batch-management"
       },
       "uiEvent": "route.push",
@@ -9114,7 +9120,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8cd693b3e3c24bfe69cb",
+      "candidateKey": "candidate:d308685b34b8fc786e2f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

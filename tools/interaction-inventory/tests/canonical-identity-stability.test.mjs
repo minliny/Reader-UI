@@ -142,7 +142,7 @@ test("R2.0.1 collision: no controlKey collisions", () => {
 });
 
 // ---- Test 7: 已完成 instrumentation 的控件进入 semantic denominator；这里只统计剩余容器 ----
-test("R2.0.1 completeness: 32 remaining subcontrol declarations", () => {
+test("R2.0.1 completeness: 61 stable pilot subcontrol declarations", () => {
   const expectedSubcontrolRows = nonInteractive.entries.filter(e => e.containsUnenumeratedSubcontrols);
   assert.equal(expectedSubcontrolRows.length, 28, "current inventory must mark 28 remaining subcontrol rows");
 
@@ -154,14 +154,14 @@ test("R2.0.1 completeness: 32 remaining subcontrol declarations", () => {
   assert.equal(expectedRowsByType.segment, 1, "expected 1 segment subcontrol row (expands to 3 options)");
 
   const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
-  assert.equal(declaredSubcontrols.length, 32, "must declare exactly 32 remaining subcontrols");
+  assert.equal(declaredSubcontrols.length, 61, "must preserve all 61 pilot subcontrol identities");
 
   const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
   for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
-  assert.equal(declaredByType.switch, 20, "must declare 20 switch subcontrols");
-  assert.equal(declaredByType.select, 5, "must declare 5 select subcontrols");
+  assert.equal(declaredByType.switch, 28, "must declare 28 switch subcontrols");
+  assert.equal(declaredByType.select, 16, "must declare 16 select/input subcontrols");
   assert.equal(declaredByType.stepper, 4, "must declare 4 stepper subcontrols (2 rows × 2 buttons)");
-  assert.equal(declaredByType.segment, 3, "must declare 3 segment subcontrols (1 row × 3 options)");
+  assert.equal(declaredByType.segment, 8, "must declare 8 segment/filter options");
 });
 
 // ---- Test 8: declarations 覆盖 12 页面族 (exact gate) ----
@@ -191,7 +191,7 @@ test("R2.0.1 coverage: exactly 12 page families (no more, no less)", () => {
 
 // ---- Test 9: R2.0 subcontrols 的 entityKey/controlKey 模式合法 ----
 test("R2.0.1 pattern: subcontrol entityKey/controlKey follow R1.2 patterns", () => {
-  const entityKeyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
+  const entityKeyPattern = /^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*(?:\.[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)*$/;
   const controlKeyPattern = /^[^@]+@[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
   const subcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
   for (const d of subcontrols) {
@@ -387,7 +387,7 @@ test("A0 declarations: every declaration carries mappingStatus / actionKey / ins
 });
 
 // ---- Test 20: A0 subcontrol declarations 不依赖 selector hash / ordinal fallback ----
-test("A0 remaining settings subcontrols use business semantic keys (no selector hash, no ordinal fallback)", () => {
+test("A0 stable pilot subcontrols use business semantic keys (no selector hash, no ordinal fallback)", () => {
   // A0 invariant: "50 个设置子控件改用业务语义 key，不再使用 selector hash".
   // The entityKey slug for every r2.0-subcontrol declaration MUST be a
   // business semantic slug from settings-subcontrol-business-keys.mjs, not
@@ -396,7 +396,7 @@ test("A0 remaining settings subcontrols use business semantic keys (no selector 
   // identity is per-(route, state) and unique by business slug, so no
   // ordinal disambiguation is needed.
   const sub = declarations.filter((d) => d.source === "r2.0-subcontrol");
-  assert.equal(sub.length, 32, `expected 32 remaining r2.0-subcontrol declarations, got ${sub.length}`);
+  assert.equal(sub.length, 61, `expected 61 stable r2.0-subcontrol declarations, got ${sub.length}`);
   const selectorHashPattern = /h-[0-9a-f]{8}/;
   const ordinalFallbackPattern = /\.n\d+$/;
   const failures = [];
@@ -419,13 +419,13 @@ test("A0 remaining settings subcontrols use business semantic keys (no selector 
 });
 
 // ---- Test 21: A0 settings-general subcontrol 身份不依赖 ordinal/selector ----
-test("A0 settings-general remaining subcontrols generate identity without ordinal/selector", () => {
+test("A0 settings-general subcontrols generate identity without ordinal/selector", () => {
   // A0 退出门槛: "Settings General 范围可以生成不依赖 ordinal/selector 的身份".
   // Verify the 8 settings-general rows (expanded to 10 declarations: 3 segment
   // + 3 select + 4 switch) all carry business semantic slugs.
   const sg = declarations.filter((d) => d.source === "r2.0-subcontrol" && d.route === "settings-general");
   // 8 rows expand: 1 segment(3) + 3 select(1 each) + 4 switch(1 each) = 10.
-  assert.equal(sg.length, 7, `expected 7 remaining settings-general subcontrol declarations, got ${sg.length}`);
+  assert.equal(sg.length, 10, `expected 10 settings-general subcontrol declarations, got ${sg.length}`);
   const selectorHashPattern = /h-[0-9a-f]{8}/;
   const ordinalFallbackPattern = /\.n\d+$/;
   for (const d of sg) {

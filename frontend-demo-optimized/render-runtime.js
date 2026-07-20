@@ -10804,21 +10804,16 @@
     }
     switch (route) {
       case "bookshelf":
-        return mainTabBookshelf(data, appState);
+        throw new Error("bookshelf route is FROZEN to bookshelfV2 (d2-bookshelf-discover-renderers.js)");
       case "bookshelf-cover-mode":
+        throw new Error("bookshelf-cover-mode route is FROZEN to bookshelfV2 (d2-bookshelf-discover-renderers.js)");
       case "app-shell":
       case "main-tabs":
         return mainTabBookshelf(data, withAppState(appState, { bookshelfView: "cover" }));
       case "bookshelf-list-mode":
-        return mainTabBookshelf(data, withAppState(appState, { bookshelfView: "list" }));
+        throw new Error("bookshelf-list-mode route is FROZEN to bookshelfV2 (d2-bookshelf-discover-renderers.js)");
       case "bookshelf-book-more-menu":
-        return contractStaticRouteScreen(data, route, appState, {
-          shell: "MainTabShell",
-          activeType: "bookshelf",
-          icon: "more",
-          summary: "书籍长按或更多菜单的静态合同页；平台实现应展示真实选中书籍上下文、焦点恢复和系统返回行为。",
-          actions: [{ label: "批量管理", route: "book-batch-management" }, { label: "书籍详情", route: "book-detail" }]
-        });
+        throw new Error("bookshelf-book-more-menu route is FROZEN to bookshelfBookMoreMenuScreen (d2-bookshelf-discover-renderers.js)");
       case "discover":
       case "discover-home":
       case "discover-control":
@@ -11111,7 +11106,7 @@
       case "book-directory":
         return bookDirectoryScreen(data, appState);
       case "bookshelf-empty":
-        return bookshelfEmptyScreen(data);
+        throw new Error("bookshelf-empty route is FROZEN to bookshelfEmptyV2 (d2-bookshelf-discover-renderers.js)");
       case "book-batch-management":
         return bookBatchManagementScreen(data);
       case "sort-filter":
@@ -11254,9 +11249,10 @@
         );
       case "settings-developer":
       case "global-settings":
-      case "bookshelf-search-settings":
       case "sync-backup":
         return settingsScreen(data, route, appState);
+      case "bookshelf-search-settings":
+        throw new Error("bookshelf-search-settings route is FROZEN to bookshelfSearchSettingsV2 (d2-bookshelf-discover-renderers.js)");
       case "about-feedback":
       case "about":
       case "about-version":

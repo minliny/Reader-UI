@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "d34368cf21a93dd323e3bb7016d9cc5f1b6e9b369cbeb9d2a64d52565b1d8911",
+    "inventorySha256": "90147f1acd02507dee9e358cbc0e92d6c6e1e21e40edd0c90049c655991baca0",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs",
@@ -13624,11 +13624,11 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n10",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n1",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
-      "controlId": "library.button.bookshelf-book-more-menu.default.button.route-book-batch-management-h-63925395",
-      "candidateKey": "candidate:7f1c572dc02a860db248",
+      "controlId": "library.button.bookshelf-book-more-menu.default.button.route-book-batch-management-h-7cb45669",
+      "candidateKey": "candidate:0b1e25c0202a5e22c455",
       "routeId": "bookshelf-book-more-menu",
       "state": "default",
       "viewport": "phone",
@@ -13639,7 +13639,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n8",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n9",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-book-batch-management-h-b58b690a",
@@ -13669,7 +13669,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n5",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n6",
       "actionKey": "route.push",
       "instanceKey": "route-book-directory",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-book-directory-h-ccebc5a2",
@@ -13699,7 +13699,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n4",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n5",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-three-body-book-focus-3",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-bookshelf-book-more-menu-h-5cfe2c66",
@@ -13729,7 +13729,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n1",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n2",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-android-notes-book-focus-5",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-bookshelf-book-more-menu-h-63279107",
@@ -13759,7 +13759,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n6",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n7",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-mystery-lord-book-focus-1",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-bookshelf-book-more-menu-h-bd3b7c6c",
@@ -13804,7 +13804,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n2",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n3",
       "actionKey": "route.push",
       "instanceKey": "route-group-management",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-group-management-h-147eac9a",
@@ -13819,7 +13819,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n7",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n8",
       "actionKey": "route.push",
       "instanceKey": "route-group-management",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-group-management-h-21092f79",
@@ -13894,7 +13894,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n9",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n10",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-long-night",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-immersive-reading-h-ddf77c86",
@@ -13909,7 +13909,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n3",
+      "controlKey": "library.button.button.route.push@bookshelf-book-more-menu.default.n4",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-android-notes",
       "controlId": "library.button.bookshelf-book-more-menu.default.button.route-immersive-reading-h-f382004a",
@@ -14119,11 +14119,11 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n7",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n17",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
-      "controlId": "library.button.bookshelf-cover-mode.default.button.route-book-batch-management-h-86de9af6",
-      "candidateKey": "candidate:4397faf45b5c24f4a861",
+      "controlId": "library.button.bookshelf-cover-mode.default.button.route-book-batch-management-h-88edc0a2",
+      "candidateKey": "candidate:a615449eba133c536559",
       "routeId": "bookshelf-cover-mode",
       "state": "default",
       "viewport": "phone",
@@ -14239,7 +14239,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n14",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n13",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-paper-city-book-focus-9",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-bookshelf-book-more-menu-h-b2af6b1a",
@@ -14284,7 +14284,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n9",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n8",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-among-stars-book-focus-7",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-bookshelf-book-more-menu-h-dbb9b80a",
@@ -14314,7 +14314,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n12",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n11",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-bookshelf-search-settings-h-ca128cf8",
@@ -14329,7 +14329,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n8",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n7",
       "actionKey": "route.push",
       "instanceKey": "route-group-management",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-group-management-h-d3e82251",
@@ -14344,7 +14344,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n13",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n12",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-long-night",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-immersive-reading-h-02aeb621",
@@ -14389,7 +14389,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n11",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n10",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-immersive-reading-h-2f58725e",
@@ -14419,7 +14419,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n16",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n15",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-among-stars",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-immersive-reading-h-30943d29",
@@ -14464,7 +14464,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n17",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n16",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-three-body",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-immersive-reading-h-4cf6dbe2",
@@ -14494,7 +14494,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n15",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n14",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-lighthouse-and-fog",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-immersive-reading-h-923ad881",
@@ -14539,7 +14539,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n10",
+      "controlKey": "library.button.button.route.push@bookshelf-cover-mode.default.n9",
       "actionKey": "route.push",
       "instanceKey": "route-local-import",
       "controlId": "library.button.bookshelf-cover-mode.default.button.route-local-import-h-8d84d164",
@@ -14719,11 +14719,11 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n8",
+      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n4",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
-      "controlId": "library.button.bookshelf-empty.shelf-empty.button.route-book-batch-management-h-5fb4eb04",
-      "candidateKey": "candidate:edae3a4cf1b76f03129a",
+      "controlId": "library.button.bookshelf-empty.shelf-empty.button.route-book-batch-management-h-3eaa4d25",
+      "candidateKey": "candidate:75bb7e4ee70db12f1ca5",
       "routeId": "bookshelf-empty",
       "state": "shelf-empty",
       "viewport": "phone",
@@ -14749,7 +14749,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n4",
+      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n5",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf-empty.shelf-empty.button.route-bookshelf-search-settings-h-2ceacf2e",
@@ -14764,7 +14764,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n7",
+      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n8",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf-empty.shelf-empty.button.route-bookshelf-search-settings-h-950d05db",
@@ -14809,7 +14809,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n5",
+      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n6",
       "actionKey": "route.push",
       "instanceKey": "route-group-management",
       "controlId": "library.button.bookshelf-empty.shelf-empty.button.route-group-management-h-e563c4cd",
@@ -14824,7 +14824,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n6",
+      "controlKey": "library.button.button.route.push@bookshelf-empty.shelf-empty.n7",
       "actionKey": "route.push",
       "instanceKey": "route-local-import",
       "controlId": "library.button.bookshelf-empty.shelf-empty.button.route-local-import-h-94a5b933",
@@ -15229,11 +15229,11 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n25",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n0",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
-      "controlId": "library.button.bookshelf-list-mode.default.button.route-book-batch-management-h-a9c89cdb",
-      "candidateKey": "candidate:f56741326d9a3c545ffa",
+      "controlId": "library.button.bookshelf-list-mode.default.button.route-book-batch-management-h-0c8cfa1b",
+      "candidateKey": "candidate:03bfb47c59fe811719d4",
       "routeId": "bookshelf-list-mode",
       "state": "default",
       "viewport": "phone",
@@ -15244,7 +15244,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n18",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n19",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-three-body-book-focus-3",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-024f4aba",
@@ -15259,7 +15259,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n15",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n16",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-long-night-book-focus-0",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-04d79ea6",
@@ -15274,7 +15274,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n19",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n20",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-android-notes-book-focus-5",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-3bc86238",
@@ -15289,7 +15289,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n11",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n12",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-paper-city-book-focus-9",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-5b2b7fd2",
@@ -15304,7 +15304,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n8",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n9",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-lighthouse-and-fog-book-focus-8",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-5b6d7a82",
@@ -15319,7 +15319,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n22",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n23",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-among-stars-book-focus-7",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-63bf76d2",
@@ -15349,7 +15349,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n10",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n11",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-long-title-layout-sample-book-focus-10",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-b5355e86",
@@ -15364,7 +15364,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n0",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n1",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-old-day-echoes-book-focus-6",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-c32a7568",
@@ -15379,7 +15379,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n12",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n13",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-ming-dynasty-stories-book-focus-2",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-d953c6e4",
@@ -15394,7 +15394,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n5",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n6",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-mystery-lord-book-focus-1",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-book-more-menu-h-f602168a",
@@ -15409,7 +15409,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n24",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n25",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-search-settings-h-53257eeb",
@@ -15424,7 +15424,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n7",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n8",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-bookshelf-search-settings-h-722c6af4",
@@ -15439,7 +15439,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n6",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n7",
       "actionKey": "route.push",
       "instanceKey": "route-group-management",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-group-management-h-8dac81ba",
@@ -15454,7 +15454,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n1",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n2",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-three-body",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-05cb60d8",
@@ -15469,7 +15469,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n16",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n17",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-long-title-layout-sample",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-0d2764b0",
@@ -15484,7 +15484,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n2",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n3",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-2b3688b5",
@@ -15499,7 +15499,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n14",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n15",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-lighthouse-and-fog",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-37fa99cf",
@@ -15514,7 +15514,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n13",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n14",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-52b000b3",
@@ -15529,7 +15529,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n4",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n5",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-old-day-echoes",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-5be81f0d",
@@ -15544,7 +15544,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n9",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n10",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-paper-city",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-615c547c",
@@ -15559,7 +15559,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n3",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n4",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-mystery-lord",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-67254977",
@@ -15574,7 +15574,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n17",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n18",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-ming-dynasty-stories",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-81e3d161",
@@ -15589,7 +15589,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n23",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n24",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-long-night",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-8ee59f04",
@@ -15604,7 +15604,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n21",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n22",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-among-stars",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-immersive-reading-h-a927ae3c",
@@ -15649,7 +15649,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n20",
+      "controlKey": "library.button.button.route.push@bookshelf-list-mode.default.n21",
       "actionKey": "route.push",
       "instanceKey": "route-local-import",
       "controlId": "library.button.bookshelf-list-mode.default.button.route-local-import-h-6169f676",
@@ -15964,11 +15964,11 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n27",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n3",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
-      "controlId": "library.button.bookshelf.default.button.route-book-batch-management-h-326fea32",
-      "candidateKey": "candidate:ea5895123bf293177438",
+      "controlId": "library.button.bookshelf.default.button.route-book-batch-management-h-c6b5b594",
+      "candidateKey": "candidate:1edce6c1d62fa8d22161",
       "routeId": "bookshelf",
       "state": "default",
       "viewport": "phone",
@@ -15979,7 +15979,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n3",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n4",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-mystery-lord-book-focus-1",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-07cf2dcd",
@@ -15994,7 +15994,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n18",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n19",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-old-day-echoes-book-focus-6",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-1089e744",
@@ -16009,7 +16009,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n5",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n6",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-three-body-book-focus-3",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-38527832",
@@ -16039,7 +16039,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n14",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n15",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-paper-city-book-focus-9",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-4e9932d6",
@@ -16084,7 +16084,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n24",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n25",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-android-notes-book-focus-5",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-6b0b2100",
@@ -16099,7 +16099,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n6",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n7",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-long-night-book-focus-0",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-b104c62d",
@@ -16114,7 +16114,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n9",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n10",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-long-title-layout-sample-book-focus-10",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-b5afcabc",
@@ -16129,7 +16129,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n25",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n26",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-lighthouse-and-fog-book-focus-8",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-book-more-menu-h-d1b2a32b",
@@ -16144,7 +16144,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n8",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n9",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-search-settings-h-3170b979",
@@ -16159,7 +16159,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n26",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n27",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-search-settings",
       "controlId": "library.button.bookshelf.default.button.route-bookshelf-search-settings-h-7489fcdc",
@@ -16174,7 +16174,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n20",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n21",
       "actionKey": "route.push",
       "instanceKey": "route-group-management",
       "controlId": "library.button.bookshelf.default.button.route-group-management-h-2e1ee42f",
@@ -16189,7 +16189,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n10",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n11",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-among-stars",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-03bdb037",
@@ -16204,7 +16204,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n19",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n20",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-paper-city",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-12bcc61b",
@@ -16219,7 +16219,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n23",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n24",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-long-night",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-19f783bc",
@@ -16234,7 +16234,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n13",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n14",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-470de687",
@@ -16249,7 +16249,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n15",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n16",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-renjian-cihua",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-50aaa6d5",
@@ -16264,7 +16264,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n7",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n8",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-three-body",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-65491580",
@@ -16279,7 +16279,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n16",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n17",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-ming-dynasty-stories",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-835ee2f4",
@@ -16294,7 +16294,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n12",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n13",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-long-title-layout-sample",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-8b159eb1",
@@ -16309,7 +16309,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n11",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n12",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-android-notes",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-8e29f56c",
@@ -16339,7 +16339,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n4",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n5",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-d8c8f2fd",
@@ -16354,7 +16354,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n21",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n22",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-lighthouse-and-fog",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-e07b4162",
@@ -16369,7 +16369,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n22",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n23",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-old-day-echoes",
       "controlId": "library.button.bookshelf.default.button.route-immersive-reading-h-f1bcbf25",
@@ -16384,7 +16384,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@bookshelf.default.n17",
+      "controlKey": "library.button.button.route.push@bookshelf.default.n18",
       "actionKey": "route.push",
       "instanceKey": "route-local-import",
       "controlId": "library.button.bookshelf.default.button.route-local-import-h-6d77f0cb",
@@ -17539,11 +17539,11 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@sort-filter.default.n15",
+      "controlKey": "library.button.button.route.push@sort-filter.default.n19",
       "actionKey": "route.push",
       "instanceKey": "route-book-batch-management",
-      "controlId": "library.button.sort-filter.default.button.route-book-batch-management-h-0af6e8c8",
-      "candidateKey": "candidate:8cd693b3e3c24bfe69cb",
+      "controlId": "library.button.sort-filter.default.button.route-book-batch-management-h-670de7b4",
+      "candidateKey": "candidate:d308685b34b8fc786e2f",
       "routeId": "sort-filter",
       "state": "default",
       "viewport": "phone",
@@ -17569,7 +17569,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@sort-filter.default.n16",
+      "controlKey": "library.button.button.route.push@sort-filter.default.n15",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-ming-dynasty-stories-book-focus-2",
       "controlId": "library.button.sort-filter.default.button.route-bookshelf-book-more-menu-h-348e1b2f",
@@ -17584,7 +17584,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@sort-filter.default.n17",
+      "controlKey": "library.button.button.route.push@sort-filter.default.n16",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-long-title-layout-sample-book-focus-10",
       "controlId": "library.button.sort-filter.default.button.route-bookshelf-book-more-menu-h-3b07663d",
@@ -17644,7 +17644,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@sort-filter.default.n19",
+      "controlKey": "library.button.button.route.push@sort-filter.default.n18",
       "actionKey": "route.push",
       "instanceKey": "route-bookshelf-book-more-menu-book-old-day-echoes-book-focus-6",
       "controlId": "library.button.sort-filter.default.button.route-bookshelf-book-more-menu-h-b082eb73",
@@ -17764,7 +17764,7 @@
     },
     {
       "entityKey": "library.button.button.route.push",
-      "controlKey": "library.button.button.route.push@sort-filter.default.n18",
+      "controlKey": "library.button.button.route.push@sort-filter.default.n17",
       "actionKey": "route.push",
       "instanceKey": "route-immersive-reading-book-android-notes",
       "controlId": "library.button.sort-filter.default.button.route-immersive-reading-h-4fea8ed3",
