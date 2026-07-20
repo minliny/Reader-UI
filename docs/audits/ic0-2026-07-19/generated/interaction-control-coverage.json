@@ -40,7 +40,7 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2274,
+    "withUiEvent": 2298,
     "withRawMotionHints": 3719,
     "rawMotionHintOccurrences": 7139,
     "uniqueRawMotionHints": [
@@ -153,7 +153,7 @@
       "toggle.switch"
     ],
     "withRawMotionHintsButNoCanonicalMotionId": 18,
-    "missingAccessibleNames": 29,
+    "missingAccessibleNames": 21,
     "canonicalControlIds": 0,
     "joinedControls": 0,
     "unjoinedControls": 3808,
@@ -195,11 +195,11 @@
       "web-auth": 11
     },
     "gapCodes": {
-      "IC0_ACCESSIBLE_LABEL_MISSING": 29,
+      "IC0_ACCESSIBLE_LABEL_MISSING": 21,
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1534
+      "IC0_UI_EVENT_UNRESOLVED": 1510
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "e76a61238dbb8c510c4b5ebc18b3b2486b8749e5c9793234c433eee2ebe58395",
+  "inventorySha256": "ff965aea1d51abb04d8c5aac2c748e19a8b78d33edbeeda1996c5414f11cfd2d",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1631,7 +1631,7 @@
       "pageState": "default",
       "semanticControls": 13,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "11ddffcfc1b79ccd3e5201aedd4b55bab8a485274697de7398fd1d612dfbe57d"
+      "renderSha256": "8358766898deda1bd2a9c84a42f13995bd808a6038147162ce4617e62f6b2005"
     },
     {
       "routeId": "restore-preview",
@@ -1642,7 +1642,7 @@
       "pageState": "default",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "7818a620178eddb999efdfc8f955a2b9af02d52a2712521afa94f73a57c2956e"
+      "renderSha256": "c7bf45fb143b8530e0e3f77eb8cb3b26948ff4ddff870c0e7f0b81def3f0daf7"
     },
     {
       "routeId": "restore-running",
@@ -1653,7 +1653,7 @@
       "pageState": "loading",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f7d7099d8a3b4547e2d3be3ff99d98cc04f3ed2df6fb52791826bb256b657e7a"
+      "renderSha256": "55ebb34e1c32d264940d41fca1e77a99e2f9547a1c7ce975e5ca42a378b3842e"
     },
     {
       "routeId": "restore-result",
@@ -1664,7 +1664,7 @@
       "pageState": "default",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "e9910c3957feb6a8d09235736644c832e2dd4472a00ece7c4456102b1a852367"
+      "renderSha256": "9200d9886065b6734c6bb537a779b9d5f27b268ddc35f30b668f50e34711d80e"
     },
     {
       "routeId": "source-management",
@@ -2654,7 +2654,7 @@
       "pageState": "default",
       "semanticControls": 11,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "a5c2e8f90a42ad392117757a2ff7d5ea44fa7baece1c219d83eba61e2edde0a8"
+      "renderSha256": "40a87d457534745caa9b3c622185dcaf893db2d4149e2fab78bf04617fc2739e"
     },
     {
       "routeId": "restore-progress",
@@ -2665,7 +2665,7 @@
       "pageState": "loading",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "975a212052716602ebe6619c2b1eefa451f3b5bb956575d863d8663905b3f523"
+      "renderSha256": "4d5dac45664862230e493a626751fd45c3a3beffc45a56d38a85d61d3dd94e3b"
     },
     {
       "routeId": "restore-conflict",
@@ -2676,7 +2676,7 @@
       "pageState": "error",
       "semanticControls": 11,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "eebfa81bc2e0930262dbd286af603fc3cdd99a63e8f447932762aa399190e1bb"
+      "renderSha256": "f167f7694591ed0bbe7141940a36c827b041ba12f8bc016b057368986382088e"
     },
     {
       "routeId": "source-batch",

@@ -277,6 +277,39 @@ function syncBackupActionDeclarations() {
   });
 }
 
+function restorePreviewActionDeclarations() {
+  const rendererWindow = {};
+  const source = readFileSync(SYNC_BACKUP_RENDERER_PATH, "utf8");
+  Function("window", "globalThis", source)(rendererWindow, rendererWindow);
+  const specs = rendererWindow.ReaderD2SettingsSyncRenderers?.RESTORE_CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `restore-preview.control.${spec.role}.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.${spec.state}`,
+      controlId: `restore-preview.control.${spec.route}.${spec.state}.${spec.role}.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: spec.state,
+      domain: "restore-preview",
+      family: "control",
+      role: spec.role,
+      renderer: "restoreFlowV2",
+      rendererFile: "renderers/d2-settings-sync-renderers.js",
+      rendererSlot: "restoreFlowV2@renderers/d2-settings-sync-renderers.js",
+      pageFamily: "about-restore-preview",
+      source: "restore-preview-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
 // R2a page-family pilots add stable semantic action identities that cannot be
 // recovered from the historical occurrence registry (the registry still
 // contains ordinal keys for these controls). Earlier pilots wrote their
@@ -630,7 +663,8 @@ const allDeclarations = registryDeclarations
   .concat(bookDetailActionDeclarations())
   .concat(readerRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())
-  .concat(syncBackupActionDeclarations());
+  .concat(syncBackupActionDeclarations())
+  .concat(restorePreviewActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);

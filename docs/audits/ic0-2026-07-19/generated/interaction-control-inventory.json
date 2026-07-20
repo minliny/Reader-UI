@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "83b35e65436c531feea7f77196e262d3d1cbb212425eecc1cf50f223d03d9f00"
+    "rendererSourcesSha256": "2c3bbbc2fd4b21300579cc75f6b9c6218b52bec27755448c90b00d0668709675"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -58658,8 +58658,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -58674,7 +58680,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:849c977e3bd32bb0870d",
+      "candidateKey": "candidate:cee984154d44f79a99de",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58689,12 +58695,17 @@
       "domTag": "button",
       "role": "button",
       "label": "全量恢复覆盖所有数据",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-d2-restore-mode-buttons > button[data-route=\"restore-preview\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-d2-restore-mode-buttons > button[data-ui-event=\"selection\\.option\\.toggle\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.mode-full",
+        "data-control-key": "restore-preview.control.button.mode-full@restore-scopes.default",
         "data-d2-restore-mode": "full",
-        "data-route": "restore-preview"
+        "data-entity-key": "restore-preview.control.button.mode-full",
+        "data-route": "restore-preview",
+        "data-settings-key": "mode-full",
+        "data-ui-event": "selection.option.toggle"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "selection.option.toggle",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -58708,7 +58719,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0a5566718f9d106ddd92",
+      "candidateKey": "candidate:19b6b08b1e44f5e586ab",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58723,12 +58734,17 @@
       "domTag": "button",
       "role": "button",
       "label": "选择范围自定义恢复项",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-d2-restore-mode-buttons > button[data-route=\"restore-preview\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-d2-restore-mode-buttons > button[data-ui-event=\"selection\\.option\\.toggle\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.mode-partial",
+        "data-control-key": "restore-preview.control.button.mode-partial@restore-scopes.default",
         "data-d2-restore-mode": "partial",
-        "data-route": "restore-preview"
+        "data-entity-key": "restore-preview.control.button.mode-partial",
+        "data-route": "restore-preview",
+        "data-settings-key": "mode-partial",
+        "data-ui-event": "selection.option.toggle"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "selection.option.toggle",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -58742,7 +58758,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0b926a47d570b29ccb68",
+      "candidateKey": "candidate:cbf1a1d8e8a9d2f40f81",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58757,11 +58773,16 @@
       "domTag": "button",
       "role": "button",
       "label": "书架与分组恢复书架书籍、分组和排序",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"bookshelf\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-restore-scope": "bookshelf"
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.scope-bookshelf",
+        "data-control-key": "restore-preview.control.button.scope-bookshelf@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.scope-bookshelf",
+        "data-restore-scope": "bookshelf",
+        "data-settings-key": "scope-bookshelf",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -58773,10 +58794,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e88a2cf7a614ee18c375",
+      "candidateKey": "candidate:c2fedeb82ef36c9f4310",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58790,22 +58810,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"bookshelf\"]:nth-of-type(1) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "书架与分组",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(1) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.switch.scope-bookshelf-switch",
+        "data-control-key": "restore-preview.control.switch.scope-bookshelf-switch@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.switch.scope-bookshelf-switch",
+        "data-settings-key": "scope-bookshelf-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:35b5117eb900bcd07a90",
+      "candidateKey": "candidate:3aa8cf94df996c36336b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58820,11 +58844,16 @@
       "domTag": "button",
       "role": "button",
       "label": "阅读进度恢复章节位置和阅读进度",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"progress\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-restore-scope": "progress"
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.scope-progress",
+        "data-control-key": "restore-preview.control.button.scope-progress@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.scope-progress",
+        "data-restore-scope": "progress",
+        "data-settings-key": "scope-progress",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -58836,10 +58865,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f3384d15f8d8546e6ad4",
+      "candidateKey": "candidate:50396e0ac7ecc17af14e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58853,22 +58881,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"progress\"]:nth-of-type(2) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "阅读进度",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(2) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.switch.scope-progress-switch",
+        "data-control-key": "restore-preview.control.switch.scope-progress-switch@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.switch.scope-progress-switch",
+        "data-settings-key": "scope-progress-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:b5eb58e899300c0c1e13",
+      "candidateKey": "candidate:b5b8b6e30543729a85be",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58883,11 +58915,16 @@
       "domTag": "button",
       "role": "button",
       "label": "阅读与 App 设置恢复主题、排版和通用设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"settings\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-restore-scope": "settings"
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.scope-settings",
+        "data-control-key": "restore-preview.control.button.scope-settings@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.scope-settings",
+        "data-restore-scope": "settings",
+        "data-settings-key": "scope-settings",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -58899,10 +58936,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f4f1200a55f5aef71f3f",
+      "candidateKey": "candidate:8b4612c74f40bd09680e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58916,22 +58952,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"settings\"]:nth-of-type(3) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "阅读与 App 设置",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(3) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.switch.scope-settings-switch",
+        "data-control-key": "restore-preview.control.switch.scope-settings-switch@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.switch.scope-settings-switch",
+        "data-settings-key": "scope-settings-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:2b8d2b79c6497d680640",
+      "candidateKey": "candidate:801aabc4f3b571eeddcb",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58946,11 +58986,16 @@
       "domTag": "button",
       "role": "button",
       "label": "书源配置恢复书源、分组和启用状态",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"sources\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-restore-scope": "sources"
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.scope-sources",
+        "data-control-key": "restore-preview.control.button.scope-sources@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.scope-sources",
+        "data-restore-scope": "sources",
+        "data-settings-key": "scope-sources",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -58962,10 +59007,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e47e858b31a5c80a4e3f",
+      "candidateKey": "candidate:7ee17a45df48f4015ad2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58979,22 +59023,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"sources\"]:nth-of-type(4) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "书源配置",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(4) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-scopes.default.switch.scope-sources-switch",
+        "data-control-key": "restore-preview.control.switch.scope-sources-switch@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.switch.scope-sources-switch",
+        "data-settings-key": "scope-sources-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:1eda588fc18df2258ea1",
+      "candidateKey": "candidate:6d8a8c01bb740e308675",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59009,17 +59057,22 @@
       "domTag": "button",
       "role": "button",
       "label": "上一步",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"restore-confirm\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"route\\.pop\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "restore-confirm"
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.scopes-previous",
+        "data-control-key": "restore-preview.control.button.scopes-previous@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.scopes-previous",
+        "data-route": "restore-confirm",
+        "data-settings-key": "scopes-previous",
+        "data-ui-event": "route.pop"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
+        "app.route.pop.backward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
@@ -59027,7 +59080,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c33e734b4b2634680663",
+      "candidateKey": "candidate:2d8e073a38a3d357aa4f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59042,11 +59095,16 @@
       "domTag": "button",
       "role": "button",
       "label": "下一步：预览",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"restore-preview\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"settings\\.restore\\.preview\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "restore-preview"
+        "data-control-id": "restore-preview.control.restore-scopes.default.button.scopes-next",
+        "data-control-key": "restore-preview.control.button.scopes-next@restore-scopes.default",
+        "data-entity-key": "restore-preview.control.button.scopes-next",
+        "data-route": "restore-preview",
+        "data-settings-key": "scopes-next",
+        "data-ui-event": "settings.restore.preview"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.restore.preview",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -59060,7 +59118,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a56ca51dd8220946962f",
+      "candidateKey": "candidate:0e675c9050f35fd0a225",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59075,8 +59133,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-preview.default.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-preview.default",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -59091,7 +59155,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:05acd6332c9f733d0a20",
+      "candidateKey": "candidate:1b26c23095b6e6e0b851",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59106,17 +59170,22 @@
       "domTag": "button",
       "role": "button",
       "label": "上一步",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(5) > button[data-route=\"restore-scopes\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(5) > button[data-ui-event=\"route\\.pop\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "restore-scopes"
+        "data-control-id": "restore-preview.control.restore-preview.default.button.preview-previous",
+        "data-control-key": "restore-preview.control.button.preview-previous@restore-preview.default",
+        "data-entity-key": "restore-preview.control.button.preview-previous",
+        "data-route": "restore-scopes",
+        "data-settings-key": "preview-previous",
+        "data-ui-event": "route.pop"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
+        "app.route.pop.backward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
@@ -59124,7 +59193,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6ec83d920cee89d684c8",
+      "candidateKey": "candidate:4715e8bbf870e709369a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59139,11 +59208,16 @@
       "domTag": "button",
       "role": "button",
       "label": "开始恢复",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(5) > button[data-route=\"restore-progress\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(5) > button[data-ui-event=\"settings\\.restore\\.run\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "restore-progress"
+        "data-control-id": "restore-preview.control.restore-preview.default.button.restore-commit",
+        "data-control-key": "restore-preview.control.button.restore-commit@restore-preview.default",
+        "data-entity-key": "restore-preview.control.button.restore-commit",
+        "data-route": "restore-progress",
+        "data-settings-key": "restore-commit",
+        "data-ui-event": "settings.restore.run"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "settings.restore.run",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -59157,7 +59231,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6e32c487c612c105eecd",
+      "candidateKey": "candidate:f500d972c00b51168cb8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59172,8 +59246,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-running.loading.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-running.loading",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -59188,7 +59268,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4fe68180211c2bfa2ec9",
+      "candidateKey": "candidate:120ae1f8c2ab85e8fe6e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59203,11 +59283,16 @@
       "domTag": "button",
       "role": "button",
       "label": "查看结果",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"restore-result\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"sync\\.snapshot\\.view\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "restore-result"
+        "data-control-id": "restore-preview.control.restore-running.loading.button.running-result",
+        "data-control-key": "restore-preview.control.button.running-result@restore-running.loading",
+        "data-entity-key": "restore-preview.control.button.running-result",
+        "data-route": "restore-result",
+        "data-settings-key": "running-result",
+        "data-ui-event": "sync.snapshot.view"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "sync.snapshot.view",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -59221,7 +59306,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c5649d7c7ec4a0a8e5fd",
+      "candidateKey": "candidate:10bddd2c6acccba8a3fe",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59236,11 +59321,16 @@
       "domTag": "button",
       "role": "button",
       "label": "取消恢复",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"sync-backup\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"restore\\.cancel\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "sync-backup"
+        "data-control-id": "restore-preview.control.restore-running.loading.button.restore-cancel",
+        "data-control-key": "restore-preview.control.button.restore-cancel@restore-running.loading",
+        "data-entity-key": "restore-preview.control.button.restore-cancel",
+        "data-route": "sync-backup",
+        "data-settings-key": "restore-cancel",
+        "data-ui-event": "restore.cancel"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "restore.cancel",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -59254,7 +59344,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f737be27859561100ca3",
+      "candidateKey": "candidate:da2ac2bbe1e4f199599f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59269,8 +59359,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-result.default.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-result.default",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -59285,7 +59381,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e0a9786aefde200327d9",
+      "candidateKey": "candidate:b5280d399a14bca1426c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59300,9 +59396,14 @@
       "domTag": "button",
       "role": "button",
       "label": "查看日志",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-route=\"source-logs\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-ui-event=\"route\\.push\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "source-logs"
+        "data-control-id": "restore-preview.control.restore-result.default.button.result-log",
+        "data-control-key": "restore-preview.control.button.result-log@restore-result.default",
+        "data-entity-key": "restore-preview.control.button.result-log",
+        "data-route": "source-logs",
+        "data-settings-key": "result-log",
+        "data-ui-event": "route.push"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -59318,7 +59419,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a8ad8b97ccb765ce48a6",
+      "candidateKey": "candidate:76e049ffdd91812b41d3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59333,11 +59434,16 @@
       "domTag": "button",
       "role": "button",
       "label": "返回书架",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-route=\"bookshelf\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-ui-event=\"route\\.popToRoot\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-control-id": "restore-preview.control.restore-result.default.button.result-bookshelf",
+        "data-control-key": "restore-preview.control.button.result-bookshelf@restore-result.default",
+        "data-entity-key": "restore-preview.control.button.result-bookshelf",
+        "data-route": "bookshelf",
+        "data-settings-key": "result-bookshelf",
+        "data-ui-event": "route.popToRoot"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.popToRoot",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -59351,7 +59457,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:fd2a6d419ac7693cff95",
+      "candidateKey": "candidate:100158bcf68807c0f833",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105739,8 +105845,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -105755,7 +105867,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1f2f35200fdcb9f2ff4c",
+      "candidateKey": "candidate:e3cb9814795e2c7a99a2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105770,11 +105882,16 @@
       "domTag": "button",
       "role": "button",
       "label": "书架与分组恢复书架书籍、分组和排序",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"bookshelf\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-restore-scope": "bookshelf"
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.scope-bookshelf",
+        "data-control-key": "restore-preview.control.button.scope-bookshelf@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.scope-bookshelf",
+        "data-restore-scope": "bookshelf",
+        "data-settings-key": "scope-bookshelf",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -105786,10 +105903,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e382e38acee93d84784c",
+      "candidateKey": "candidate:9309142ee7efa431b81c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105803,22 +105919,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"bookshelf\"]:nth-of-type(1) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "书架与分组",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(1) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-confirm.default.switch.scope-bookshelf-switch",
+        "data-control-key": "restore-preview.control.switch.scope-bookshelf-switch@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.switch.scope-bookshelf-switch",
+        "data-settings-key": "scope-bookshelf-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:cd3853bb7e294473758a",
+      "candidateKey": "candidate:522e5ccd94c050b81a49",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105833,11 +105953,16 @@
       "domTag": "button",
       "role": "button",
       "label": "阅读进度恢复章节位置和阅读进度",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"progress\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-restore-scope": "progress"
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.scope-progress",
+        "data-control-key": "restore-preview.control.button.scope-progress@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.scope-progress",
+        "data-restore-scope": "progress",
+        "data-settings-key": "scope-progress",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -105849,10 +105974,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:dd8472a930034aae2b3d",
+      "candidateKey": "candidate:ee55b4ca8d4633bd2b92",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105866,22 +105990,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"progress\"]:nth-of-type(2) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "阅读进度",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(2) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-confirm.default.switch.scope-progress-switch",
+        "data-control-key": "restore-preview.control.switch.scope-progress-switch@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.switch.scope-progress-switch",
+        "data-settings-key": "scope-progress-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:e62c452477d2c2272098",
+      "candidateKey": "candidate:71215e50c0267a458e10",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105896,11 +106024,16 @@
       "domTag": "button",
       "role": "button",
       "label": "阅读与 App 设置恢复主题、排版和通用设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"settings\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-restore-scope": "settings"
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.scope-settings",
+        "data-control-key": "restore-preview.control.button.scope-settings@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.scope-settings",
+        "data-restore-scope": "settings",
+        "data-settings-key": "scope-settings",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -105912,10 +106045,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a4f55284b5676b8e8e3f",
+      "candidateKey": "candidate:28816d4530a9c94e698d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105929,22 +106061,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"settings\"]:nth-of-type(3) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "阅读与 App 设置",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(3) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-confirm.default.switch.scope-settings-switch",
+        "data-control-key": "restore-preview.control.switch.scope-settings-switch@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.switch.scope-settings-switch",
+        "data-settings-key": "scope-settings-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:f017855fe7f595715d02",
+      "candidateKey": "candidate:4417d47d33c79f382129",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105959,11 +106095,16 @@
       "domTag": "button",
       "role": "button",
       "label": "书源配置恢复书源、分组和启用状态",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"sources\"]:nth-of-type(4)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(4)",
       "dataAttributes": {
-        "data-restore-scope": "sources"
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.scope-sources",
+        "data-control-key": "restore-preview.control.button.scope-sources@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.scope-sources",
+        "data-restore-scope": "sources",
+        "data-settings-key": "scope-sources",
+        "data-ui-event": "settings.restore.scopeToggle"
       },
-      "uiEvent": null,
+      "uiEvent": "settings.restore.scopeToggle",
       "rawMotionHints": [
         "button.activate",
         "toggle.switch"
@@ -105975,10 +106116,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1ad309d7eece89f5b049",
+      "candidateKey": "candidate:905782a3180b7540909d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -105992,22 +106132,26 @@
       "componentInstanceId": null,
       "domTag": "span",
       "role": "switch",
-      "label": "",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"sources\"]:nth-of-type(4) > span.fd-settings-switch:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
+      "label": "书源配置",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-ui-event=\"settings\\.restore\\.scopeToggle\"]:nth-of-type(4) > span[data-ui-event=\"toggle\\.switch\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-confirm.default.switch.scope-sources-switch",
+        "data-control-key": "restore-preview.control.switch.scope-sources-switch@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.switch.scope-sources-switch",
+        "data-settings-key": "scope-sources-switch",
+        "data-ui-event": "toggle.switch"
+      },
+      "uiEvent": "toggle.switch",
       "rawMotionHints": [],
       "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:d00dc24a4722dfab7bab",
+      "candidateKey": "candidate:f4ab9d038f8316b0151b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106022,11 +106166,16 @@
       "domTag": "button",
       "role": "button",
       "label": "取消",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"sync-backup\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"restore\\.cancel\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "sync-backup"
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.confirm-cancel",
+        "data-control-key": "restore-preview.control.button.confirm-cancel@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.confirm-cancel",
+        "data-route": "sync-backup",
+        "data-settings-key": "confirm-cancel",
+        "data-ui-event": "restore.cancel"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "restore.cancel",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -106040,7 +106189,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c252a67c5cc9a51e5b26",
+      "candidateKey": "candidate:5134ecd466ab5ff26012",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106055,11 +106204,16 @@
       "domTag": "button",
       "role": "button",
       "label": "下一步：范围",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"restore-scopes\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"restore\\.scopes\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "restore-scopes"
+        "data-control-id": "restore-preview.control.restore-confirm.default.button.confirm-next",
+        "data-control-key": "restore-preview.control.button.confirm-next@restore-confirm.default",
+        "data-entity-key": "restore-preview.control.button.confirm-next",
+        "data-route": "restore-scopes",
+        "data-settings-key": "confirm-next",
+        "data-ui-event": "restore.scopes.select"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "restore.scopes.select",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -106073,7 +106227,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:8dd71fc7a9177a496b3d",
+      "candidateKey": "candidate:0da7c7c7c398f9aca5d8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106088,8 +106242,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-progress.loading.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-progress.loading",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -106104,7 +106264,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:5cc6488a9e45d3aa45e0",
+      "candidateKey": "candidate:288a93583f070d3dddad",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106119,11 +106279,16 @@
       "domTag": "button",
       "role": "button",
       "label": "处理冲突",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-route=\"restore-conflict\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-ui-event=\"sync\\.conflict\\.list\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "restore-conflict"
+        "data-control-id": "restore-preview.control.restore-progress.loading.button.progress-conflict",
+        "data-control-key": "restore-preview.control.button.progress-conflict@restore-progress.loading",
+        "data-entity-key": "restore-preview.control.button.progress-conflict",
+        "data-route": "restore-conflict",
+        "data-settings-key": "progress-conflict",
+        "data-ui-event": "sync.conflict.list"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "sync.conflict.list",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -106137,7 +106302,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:09db9259fd18217245f1",
+      "candidateKey": "candidate:3584a4ddde9e77e1a898",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106152,11 +106317,16 @@
       "domTag": "button",
       "role": "button",
       "label": "查看结果",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-route=\"restore-result\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(3) > button[data-ui-event=\"sync\\.snapshot\\.view\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "restore-result"
+        "data-control-id": "restore-preview.control.restore-progress.loading.button.progress-result",
+        "data-control-key": "restore-preview.control.button.progress-result@restore-progress.loading",
+        "data-entity-key": "restore-preview.control.button.progress-result",
+        "data-route": "restore-result",
+        "data-settings-key": "progress-result",
+        "data-ui-event": "sync.snapshot.view"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "sync.snapshot.view",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -106170,7 +106340,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b87ff49f9f9f13ca6285",
+      "candidateKey": "candidate:fd675e72f599285c6973",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106185,8 +106355,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.back",
+        "data-control-key": "restore-preview.control.button.back@restore-conflict.error",
+        "data-entity-key": "restore-preview.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -106201,7 +106377,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e7ea40154fb25a12d7a6",
+      "candidateKey": "candidate:07ba0131bccbd994498a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106216,12 +106392,17 @@
       "domTag": "button",
       "role": "button",
       "label": "本地 保留本地 42 本 本地较新",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(1) > div.fd-d2-conflict-pair > button[data-d2-conflict-choice=\"local\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(1) > div.fd-d2-conflict-pair > button[data-ui-event=\"sync\\.resolveConflict\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-group-local",
+        "data-control-key": "restore-preview.control.button.conflict-group-local@restore-conflict.error",
         "data-d2-conflict-choice": "local",
-        "data-d2-conflict-id": "group"
+        "data-d2-conflict-id": "group",
+        "data-entity-key": "restore-preview.control.button.conflict-group-local",
+        "data-settings-key": "conflict-group-local",
+        "data-ui-event": "sync.resolveConflict"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolveConflict",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106231,10 +106412,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:31759b44bc4a33b949e3",
+      "candidateKey": "candidate:da014192b4f82089cb5b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106249,12 +106429,17 @@
       "domTag": "button",
       "role": "button",
       "label": "远程 使用备份 46 本 备份较新",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(1) > div.fd-d2-conflict-pair > button[data-d2-conflict-choice=\"remote\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(1) > div.fd-d2-conflict-pair > button[data-ui-event=\"sync\\.resolveConflict\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-group-remote",
+        "data-control-key": "restore-preview.control.button.conflict-group-remote@restore-conflict.error",
         "data-d2-conflict-choice": "remote",
-        "data-d2-conflict-id": "group"
+        "data-d2-conflict-id": "group",
+        "data-entity-key": "restore-preview.control.button.conflict-group-remote",
+        "data-settings-key": "conflict-group-remote",
+        "data-ui-event": "sync.resolveConflict"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolveConflict",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106264,10 +106449,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b327bab1246e8f072219",
+      "candidateKey": "candidate:625032bc23bf4361a75a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106282,12 +106466,17 @@
       "domTag": "button",
       "role": "button",
       "label": "本地 本地第 32 章 落后 3 章",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(2) > div.fd-d2-conflict-pair > button[data-d2-conflict-choice=\"local\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(2) > div.fd-d2-conflict-pair > button[data-ui-event=\"sync\\.resolveConflict\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-progress-local",
+        "data-control-key": "restore-preview.control.button.conflict-progress-local@restore-conflict.error",
         "data-d2-conflict-choice": "local",
-        "data-d2-conflict-id": "progress"
+        "data-d2-conflict-id": "progress",
+        "data-entity-key": "restore-preview.control.button.conflict-progress-local",
+        "data-settings-key": "conflict-progress-local",
+        "data-ui-event": "sync.resolveConflict"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolveConflict",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106297,10 +106486,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d431bac71e01274cf654",
+      "candidateKey": "candidate:a63d92d6f5f442e1248c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106315,12 +106503,17 @@
       "domTag": "button",
       "role": "button",
       "label": "远程 远程第 35 章 领先 3 章",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(2) > div.fd-d2-conflict-pair > button[data-d2-conflict-choice=\"remote\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(2) > div.fd-d2-conflict-pair > button[data-ui-event=\"sync\\.resolveConflict\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-progress-remote",
+        "data-control-key": "restore-preview.control.button.conflict-progress-remote@restore-conflict.error",
         "data-d2-conflict-choice": "remote",
-        "data-d2-conflict-id": "progress"
+        "data-d2-conflict-id": "progress",
+        "data-entity-key": "restore-preview.control.button.conflict-progress-remote",
+        "data-settings-key": "conflict-progress-remote",
+        "data-ui-event": "sync.resolveConflict"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolveConflict",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106330,10 +106523,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d97e12ef35864e8e04cf",
+      "candidateKey": "candidate:a1873de102191aa02f25",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106348,12 +106540,17 @@
       "domTag": "button",
       "role": "button",
       "label": "本地 本机字号 18 字号更大",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(3) > div.fd-d2-conflict-pair > button[data-d2-conflict-choice=\"local\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(3) > div.fd-d2-conflict-pair > button[data-ui-event=\"sync\\.resolveConflict\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-settings-local",
+        "data-control-key": "restore-preview.control.button.conflict-settings-local@restore-conflict.error",
         "data-d2-conflict-choice": "local",
-        "data-d2-conflict-id": "settings"
+        "data-d2-conflict-id": "settings",
+        "data-entity-key": "restore-preview.control.button.conflict-settings-local",
+        "data-settings-key": "conflict-settings-local",
+        "data-ui-event": "sync.resolveConflict"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolveConflict",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106363,10 +106560,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:848c980b5f24fe63a1d4",
+      "candidateKey": "candidate:6c0775a95ecd37b21431",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106381,12 +106577,17 @@
       "domTag": "button",
       "role": "button",
       "label": "远程 备份字号 17 字号更小",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(3) > div.fd-d2-conflict-pair > button[data-d2-conflict-choice=\"remote\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-conflict-list:nth-of-type(2) > article:nth-of-type(3) > div.fd-d2-conflict-pair > button[data-ui-event=\"sync\\.resolveConflict\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-settings-remote",
+        "data-control-key": "restore-preview.control.button.conflict-settings-remote@restore-conflict.error",
         "data-d2-conflict-choice": "remote",
-        "data-d2-conflict-id": "settings"
+        "data-d2-conflict-id": "settings",
+        "data-entity-key": "restore-preview.control.button.conflict-settings-remote",
+        "data-settings-key": "conflict-settings-remote",
+        "data-ui-event": "sync.resolveConflict"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolveConflict",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106396,10 +106597,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a0314ced454bcfab032c",
+      "candidateKey": "candidate:193721c6e5fdcece18e3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106414,11 +106614,16 @@
       "domTag": "button",
       "role": "button",
       "label": "全部保留本地",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-d2-conflict-batch-buttons > button[data-d2-conflict-batch=\"local\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-d2-conflict-batch-buttons > button[data-ui-event=\"sync\\.resolve\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-d2-conflict-batch": "local"
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-all-local",
+        "data-control-key": "restore-preview.control.button.conflict-all-local@restore-conflict.error",
+        "data-d2-conflict-batch": "local",
+        "data-entity-key": "restore-preview.control.button.conflict-all-local",
+        "data-settings-key": "conflict-all-local",
+        "data-ui-event": "sync.resolve"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolve",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106428,10 +106633,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0d569af95ec48662d830",
+      "candidateKey": "candidate:dff22b960febcc9c9e63",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106446,11 +106650,16 @@
       "domTag": "button",
       "role": "button",
       "label": "全部使用备份",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-d2-conflict-batch-buttons > button[data-d2-conflict-batch=\"remote\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-d2-conflict-batch-buttons > button[data-ui-event=\"sync\\.resolve\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-d2-conflict-batch": "remote"
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-all-remote",
+        "data-control-key": "restore-preview.control.button.conflict-all-remote@restore-conflict.error",
+        "data-d2-conflict-batch": "remote",
+        "data-entity-key": "restore-preview.control.button.conflict-all-remote",
+        "data-settings-key": "conflict-all-remote",
+        "data-ui-event": "sync.resolve"
       },
-      "uiEvent": null,
+      "uiEvent": "sync.resolve",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -106460,10 +106669,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:556a90ed6c65337219e5",
+      "candidateKey": "candidate:b8fbb39eec5e3a31b8ef",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106478,17 +106686,22 @@
       "domTag": "button",
       "role": "button",
       "label": "返回进度",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"restore-progress\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"route\\.pop\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "restore-progress"
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-return",
+        "data-control-key": "restore-preview.control.button.conflict-return@restore-conflict.error",
+        "data-entity-key": "restore-preview.control.button.conflict-return",
+        "data-route": "restore-progress",
+        "data-settings-key": "conflict-return",
+        "data-ui-event": "route.pop"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
+        "app.route.pop.backward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
@@ -106496,7 +106709,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a602cf4b15207bc4d5b6",
+      "candidateKey": "candidate:0fb460e0b424d94cc242",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -106511,11 +106724,16 @@
       "domTag": "button",
       "role": "button",
       "label": "应用选择",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-route=\"restore-result\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-actions:nth-of-type(4) > button[data-ui-event=\"sync\\.complete\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "restore-result"
+        "data-control-id": "restore-preview.control.restore-conflict.error.button.conflict-apply",
+        "data-control-key": "restore-preview.control.button.conflict-apply@restore-conflict.error",
+        "data-entity-key": "restore-preview.control.button.conflict-apply",
+        "data-route": "restore-result",
+        "data-settings-key": "conflict-apply",
+        "data-ui-event": "sync.complete"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "sync.complete",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -106529,7 +106747,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:613a69be4b107058f19d",
+      "candidateKey": "candidate:62ed612ea3f4a073ccd8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

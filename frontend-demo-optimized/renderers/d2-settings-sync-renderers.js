@@ -3384,6 +3384,79 @@
   }
 
   // ===========================================================================
+  // restore-preview R2a/R2b canonical contract and state owner
+  function d2RestoreSpecs(route, state, rows) {
+    return rows.map(function (row) { return { route: route, state: state, settingsKey: row[0], uiEvent: row[1], label: row[2], role: row[3] || "button" }; });
+  }
+  function d2RestoreScopeSpecs(route) {
+    return ["bookshelf", "progress", "settings", "sources"].flatMap(function (scope) {
+      return [["scope-" + scope, "settings.restore.scopeToggle", "选择 " + scope], ["scope-" + scope + "-switch", "toggle.switch", "切换 " + scope, "switch"]];
+    });
+  }
+  var D2_RESTORE_CONTROL_SPECS = []
+    .concat(d2RestoreSpecs("restore-confirm", "default", [["back", "route.pop", "返回"]].concat(d2RestoreScopeSpecs("restore-confirm"), [["confirm-cancel", "restore.cancel", "取消"], ["confirm-next", "restore.scopes.select", "下一步：范围"]])))
+    .concat(d2RestoreSpecs("restore-scopes", "default", [["back", "route.pop", "返回"], ["mode-full", "selection.option.toggle", "全量恢复"], ["mode-partial", "selection.option.toggle", "选择范围"]].concat(d2RestoreScopeSpecs("restore-scopes"), [["scopes-previous", "route.pop", "上一步"], ["scopes-next", "settings.restore.preview", "下一步：预览"]])))
+    .concat(d2RestoreSpecs("restore-preview", "default", [["back", "route.pop", "返回"], ["preview-previous", "route.pop", "上一步"], ["restore-commit", "settings.restore.run", "开始恢复"]]))
+    .concat(d2RestoreSpecs("restore-progress", "loading", [["back", "route.pop", "返回"], ["progress-conflict", "sync.conflict.list", "处理冲突"], ["progress-result", "sync.snapshot.view", "查看结果"]]))
+    .concat(d2RestoreSpecs("restore-running", "loading", [["back", "route.pop", "返回"], ["running-result", "sync.snapshot.view", "查看结果"], ["restore-cancel", "restore.cancel", "取消恢复"]]))
+    .concat(d2RestoreSpecs("restore-conflict", "error", [["back", "route.pop", "返回"], ["conflict-group-local", "sync.resolveConflict", "分组保留本地"], ["conflict-group-remote", "sync.resolveConflict", "分组使用备份"], ["conflict-progress-local", "sync.resolveConflict", "进度保留本地"], ["conflict-progress-remote", "sync.resolveConflict", "进度使用备份"], ["conflict-settings-local", "sync.resolveConflict", "设置保留本地"], ["conflict-settings-remote", "sync.resolveConflict", "设置使用备份"], ["conflict-all-local", "sync.resolve", "全部保留本地"], ["conflict-all-remote", "sync.resolve", "全部使用备份"], ["conflict-return", "route.pop", "返回进度"], ["conflict-apply", "sync.complete", "应用选择"]]))
+    .concat(d2RestoreSpecs("restore-result", "default", [["back", "route.pop", "返回"], ["result-log", "route.push", "查看日志"], ["result-bookshelf", "route.popToRoot", "返回书架"]]));
+
+  var D2_RESTORE_DEFAULT_STATE = {
+    mode: "full", selectedScopes: ["bookshelf", "progress", "settings", "sources"],
+    conflictChoices: { group: "remote", progress: "remote", settings: "local" },
+    phase: "confirm", outcome: "success", progress: 0, error: null,
+    confirmOpen: false, pending: null, requestEpoch: 0, selectedRestoreRecord: "WebDAV · 2026-07-11 02:00 · 完整备份"
+  };
+  var d2RestoreState = null;
+  var d2RestoreListeners = [];
+  function d2RestoreClone(value) { return JSON.parse(JSON.stringify(value)); }
+  function d2RestoreDefaultState() { return d2RestoreClone(D2_RESTORE_DEFAULT_STATE); }
+  function d2RestoreInitState(seed) { d2RestoreState = d2RestoreReducer(d2RestoreDefaultState(), { type: "INJECT_APP_STATE", state: seed || {} }); return d2RestoreState; }
+  function d2RestoreGetState() { if (!d2RestoreState) d2RestoreInitState(); return d2RestoreState; }
+  function d2RestoreReducer(state, action) {
+    state = d2RestoreClone(state || D2_RESTORE_DEFAULT_STATE); action = action || {};
+    if (action.type === "INJECT_APP_STATE") { var seed = action.state || {}; return Object.assign(state, seed, { conflictChoices: Object.assign(state.conflictChoices, seed.conflictChoices || {}) }); }
+    if (action.type === "SELECT_MODE" && ["full", "partial"].indexOf(action.mode) >= 0) state.mode = action.mode;
+    if (action.type === "TOGGLE_SCOPE" && D2_RESTORE_DEFAULT_STATE.selectedScopes.indexOf(action.scope) >= 0) { var index = state.selectedScopes.indexOf(action.scope); if (index >= 0 && state.selectedScopes.length > 1) state.selectedScopes.splice(index, 1); else if (index < 0) state.selectedScopes.push(action.scope); }
+    if (action.type === "COMMIT_CONFIRM_OPEN") state.confirmOpen = true;
+    if (action.type === "COMMIT_CONFIRM_CLOSE") state.confirmOpen = false;
+    if (action.type === "CHOOSE_CONFLICT" && Object.prototype.hasOwnProperty.call(state.conflictChoices, action.conflictId) && ["local", "remote"].indexOf(action.choice) >= 0) state.conflictChoices[action.conflictId] = action.choice;
+    if (action.type === "CHOOSE_ALL" && ["local", "remote"].indexOf(action.choice) >= 0) Object.keys(state.conflictChoices).forEach(function (key) { state.conflictChoices[key] = action.choice; });
+    if (action.type === "RESTORE_PROGRESS") state.progress = Math.max(0, Math.min(100, Number(action.progress) || 0));
+    if (action.type === "ASYNC_START") { state.requestEpoch += 1; state.pending = { requestId: action.requestId, epoch: state.requestEpoch }; state.phase = "running"; state.error = null; state.confirmOpen = false; }
+    if ((action.type === "ASYNC_SUCCESS" || action.type === "ASYNC_FAILED") && state.pending && state.pending.requestId === action.requestId) { state.phase = "result"; state.outcome = action.type === "ASYNC_SUCCESS" ? (action.outcome || "success") : "failed"; state.error = action.error || null; state.progress = action.type === "ASYNC_SUCCESS" ? 100 : state.progress; state.pending = null; }
+    if (action.type === "ASYNC_CANCEL") { state.requestEpoch += 1; state.phase = "cancelled"; state.pending = null; state.error = null; }
+    return state;
+  }
+  function d2RestoreDispatch(action) { var prev = d2RestoreGetState(); d2RestoreState = d2RestoreReducer(prev, action); d2RestoreListeners.slice().forEach(function (fn) { fn(d2RestoreState, prev, action); }); return d2RestoreState; }
+  function d2RestoreSubscribe(fn) { d2RestoreListeners.push(fn); return function () { d2RestoreListeners = d2RestoreListeners.filter(function (item) { return item !== fn; }); }; }
+  function d2ExecuteRestore(executor) {
+    var current = d2RestoreGetState(); if (current.pending) return Promise.resolve({ status: "duplicate" });
+    var requestId = "restore-" + (current.requestEpoch + 1); d2RestoreDispatch({ type: "ASYNC_START", requestId: requestId }); var epoch = d2RestoreGetState().requestEpoch;
+    return Promise.resolve().then(function () { return typeof executor === "function" ? executor() : { outcome: "success" }; }).then(function (value) {
+      var latest = d2RestoreGetState(); if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", value: value };
+      var outcome = value && value.outcome || "success"; d2RestoreDispatch({ type: "ASYNC_SUCCESS", requestId: requestId, outcome: outcome }); return { status: outcome, value: value };
+    }, function (error) {
+      var latest = d2RestoreGetState(); if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", error: error };
+      d2RestoreDispatch({ type: "ASYNC_FAILED", requestId: requestId, error: String(error && error.message || error) }); return { status: "failed", error: error };
+    });
+  }
+  function d2CancelRestore() { var hadPending = !!d2RestoreGetState().pending; d2RestoreDispatch({ type: "ASYNC_CANCEL" }); return { status: hadPending ? "cancelled" : "idle" }; }
+
+  function d2RestoreIdentityAttrs(spec) {
+    var entityKey = "restore-preview.control." + spec.role + "." + spec.settingsKey;
+    return ` data-entity-key="${entityKey}" data-control-key="${entityKey}@${spec.route}.${spec.state}" data-control-id="restore-preview.control.${spec.route}.${spec.state}.${spec.role}.${spec.settingsKey}" data-ui-event="${spec.uiEvent}" data-settings-key="${spec.settingsKey}"`;
+  }
+  function d2StampRestoreControls(html, route) {
+    var specs = D2_RESTORE_CONTROL_SPECS.filter(function (spec) { return spec.route === route; }); var index = 0;
+    return html.replace(/<(button\b[^>]*|span\b[^>]*role="switch"[^>]*)>/g, function (tag) {
+      if (tag.indexOf("data-control-key=") >= 0 || index >= specs.length) return tag;
+      var spec = specs[index++]; return tag.slice(0, -1) + d2RestoreIdentityAttrs(spec) + ">";
+    });
+  }
+
+  // ===========================================================================
   // 6. restoreFlowV2 — 恢复流程增强（范围 / 预览 / 进行中 / 冲突 / 结果）
   // 覆盖路由：
   //   restore-confirm / restore-scopes / restore-preview
@@ -3391,8 +3464,12 @@
   //   restore-result / restore-failed / restore-partial
   // ===========================================================================
   function restoreFlowV2(data, route, appState) {
-    var page = d2RestorePage(route, appState);
-    var restoreRecord = (appState && appState.selectedRestoreRecord) || "WebDAV · 2026-07-11 02:00 · 完整备份";
+    var state = d2RestoreGetState();
+    if (appState && appState.restorePreview) state = d2RestoreReducer(state, { type: "INJECT_APP_STATE", state: appState.restorePreview });
+    var visualRoute = route === "restore-result" && state.outcome === "failed" ? "restore-failed" : route === "restore-result" && state.outcome === "partial" ? "restore-partial" : route;
+    var viewState = Object.assign({}, appState || {}, { restoreSelectedScopes: state.selectedScopes, selectedRestoreRecord: state.selectedRestoreRecord });
+    var page = d2RestorePage(visualRoute, viewState);
+    var restoreRecord = state.selectedRestoreRecord;
     var contentHtml = `
       <section class="fd-restore-flow fd-d2-restore-flow" aria-label="${esc(page.title)}">
         <article class="fd-source-detail-head fd-restore-head">
@@ -3401,9 +3478,18 @@
         </article>
         ${page.content}
       </section>`;
-    return d2SettingsShell(data, page.title, contentHtml, {
-      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : ""
+    if (route === "restore-preview" && state.confirmOpen) {
+      contentHtml += `<section class="fd-settings-dialog" role="dialog" aria-modal="true" aria-labelledby="restore-commit-dialog-title"><h2 id="restore-commit-dialog-title">开始恢复</h2><p>恢复前将创建本地快照。确认后开始处理选定范围。</p></section>`;
+    }
+    var html = d2SettingsShell(data, page.title, contentHtml, {
+      toastHtml: page.toast ? `<section class="fd-settings-toast"${state.error ? ' role="alert"' : ""}>${esc(state.error || page.toast)}</section>` : "",
+      backButtonAttrs: ""
     });
+    html = d2StampRestoreControls(html, route);
+    if (state.confirmOpen) html = html.replace('data-settings-key="preview-previous"', 'data-settings-key="preview-previous" data-dialog-initial-focus="preview-previous"').replace('data-settings-key="restore-commit"', 'data-settings-key="restore-commit" data-restore-focus="restore-commit"');
+    if (state.pending && (route === "restore-preview" || route === "restore-progress" || route === "restore-running")) html = html.replace('data-settings-key="restore-commit"', 'data-settings-key="restore-commit" aria-busy="true" disabled').replace('data-settings-key="progress-result"', 'data-settings-key="progress-result" aria-busy="true" disabled').replace('data-settings-key="running-result"', 'data-settings-key="running-result" aria-busy="true" disabled');
+    if (route === "restore-result" && state.outcome === "failed") html = html.replace('class="fd-restore-card is-result is-failed"', 'class="fd-restore-card is-result is-failed" role="alert" aria-invalid="true"');
+    return html;
   }
 
   // 恢复范围目录（与 render-runtime.js restoreScopeCatalog 一致）
@@ -3451,7 +3537,7 @@
               <button class="${isSelected ? "is-selected" : ""}" type="button" data-restore-scope="${esc(item.key)}" aria-pressed="${isSelected ? "true" : "false"}">
                 ${icon(item.icon, "fd-small-icon")}
                 <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-                ${d2Switch(isSelected)}
+                ${d2Switch({ enabled: isSelected, title: item.title }, null)}
               </button>`;
           }).join("")}
         </div>
@@ -3946,8 +4032,9 @@
     "restore-running": "restoreFlowV2",
     "restore-conflict": "restoreFlowV2",
     "restore-result": "restoreFlowV2",
-    "restore-failed": "restoreFlowV2",
-    "restore-partial": "restoreFlowV2",
+    // restore-failed / restore-partial are outcome states of restore-result.
+    // Their legacy route ids are fail-loud in render-runtime to avoid a second
+    // route/state owner outside the 47-control canonical denominator.
 
     // 7. aboutScreenV2 — 关于/版本/反馈
     "about-feedback": "aboutScreenV2",
@@ -4115,12 +4202,23 @@
     SOURCE_CONTROL_SPECS: D2_SYNC_BACKUP_CONTROL_SPECS,
     // 恢复流程数据
     restore: {
+      controlSpecs: D2_RESTORE_CONTROL_SPECS,
+      defaults: D2_RESTORE_DEFAULT_STATE,
+      initState: d2RestoreInitState,
+      defaultState: d2RestoreDefaultState,
+      reducer: d2RestoreReducer,
+      getState: d2RestoreGetState,
+      dispatch: d2RestoreDispatch,
+      subscribe: d2RestoreSubscribe,
+      execute: d2ExecuteRestore,
+      cancel: d2CancelRestore,
       scopeCatalog: d2RestoreScopeCatalog,
       selectedScopes: d2RestoreSelectedScopes,
       scopeLabel: d2RestoreScopeLabel,
       scopeImpact: d2RestoreScopeImpact,
       scopeChoiceList: d2RestoreScopeChoiceList
     },
+    RESTORE_CONTROL_SPECS: D2_RESTORE_CONTROL_SPECS,
     // 页面数据生成器（供事件层 / 测试直接访问）
     pages: {
       globalSettings: d2GlobalSettingsPage,
