@@ -167,7 +167,9 @@
     },
     "webdav-config": {
       "routes": [
-        "webdav-config"
+        "webdav-config",
+        "webdav-test",
+        "webdav-error"
       ]
     },
     "sync-backup": {
@@ -547,6 +549,20 @@
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "webdav-config": {
+      "pageFamily": "webdav-config",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "webdavConfigV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "webdav-test": {
+      "pageFamily": "webdav-config",
+      "dispatchLayer": "D2-C",
+      "dispatchMap": "INTEGRATION_MAP",
+      "renderer": "webdavConfigV2",
+      "rendererFile": "renderers/d2-settings-sync-renderers.js"
+    },
+    "webdav-error": {
       "pageFamily": "webdav-config",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",

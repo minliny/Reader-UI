@@ -56,6 +56,31 @@ const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = new Set(uiEventSchema.properties.type.enum);
 
+// R2a page-family pilots add stable semantic action identities that cannot be
+// recovered from the historical occurrence registry (the registry still
+// contains ordinal keys for these controls). Earlier pilots wrote their
+// declarations directly into the generated artifact; preserve those entries
+// while the registry migration remains open.
+let preservedPilotActionDeclarations = [];
+try {
+  const previousModule = { exports: {} };
+  const previousSource = readFileSync(OUTPUT_PATH, "utf8");
+  Function("module", "window", previousSource)(previousModule, {});
+  preservedPilotActionDeclarations = (previousModule.exports.CANONICAL_CONTROL_DECLARATIONS || [])
+    .filter((entry) => entry.source === "a3-action")
+    .map((entry) => ({
+      ...entry,
+      actionKey: entry.actionKey ?? entry.settingsKey,
+      instanceKey: entry.instanceKey ?? null,
+      needsActionKey: entry.needsActionKey ?? false,
+      needsInstanceKey: entry.needsInstanceKey ?? false,
+      mappingStatus: entry.mappingStatus ?? "mapped",
+      rendererSlot: entry.rendererSlot ?? `${entry.renderer}@${entry.rendererFile}`
+    }));
+} catch (_error) {
+  preservedPilotActionDeclarations = [];
+}
+
 // ---- Route → domain mapping (for subcontrol declarations) ----
 // 12 page families 中的 about-restore-preview 跨 system/sync 两个 domain，所以按 route 单独映射
 const ROUTE_DOMAIN = {
@@ -358,7 +383,9 @@ const PAGE_FAMILY_ORDER = [
 
 function sourceRank(s) { return s === "registry" ? 0 : 1; }
 
-const allDeclarations = registryDeclarations.concat(subcontrolDeclarations);
+const allDeclarations = registryDeclarations
+  .concat(subcontrolDeclarations)
+  .concat(preservedPilotActionDeclarations);
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);

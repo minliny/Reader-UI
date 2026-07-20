@@ -938,7 +938,7 @@ test("R1.2 DOM identity map and ScreenGraph binding carry actionKey + instanceKe
   }
 });
 
-test("R1.2 nonInteractiveContainers marks 46 settings rows with expectedSubcontrolCount summing to 50", () => {
+test("R1.2 nonInteractiveContainers retains 28 unstamped rows summing to 32 subcontrols", () => {
   // R1.2 exit gate: the 46 settings rows must be marked
   // containsUnenumeratedSubcontrols=true and carry expectedSubcontrolType
   // AND expectedSubcontrolCount. The 17 pure ARIA section containers must be
@@ -949,7 +949,7 @@ test("R1.2 nonInteractiveContainers marks 46 settings rows with expectedSubcontr
   const pureContainers = persistedNonInteractive.entries.filter(
     (e) => e.pureContainer === true,
   );
-  assert.equal(settingsRows.length, 46, "expected exactly 46 settings rows with un-enumerated subcontrols");
+  assert.equal(settingsRows.length, 28, "expected exactly 28 remaining settings rows with un-enumerated subcontrols");
   assert.equal(pureContainers.length, 17, "expected exactly 17 pure containers");
   assert.equal(
     settingsRows.length + pureContainers.length,
@@ -983,18 +983,18 @@ test("R1.2 nonInteractiveContainers marks 46 settings rows with expectedSubcontr
     totalSubcontrols += row.expectedSubcontrolCount;
   }
   const distSum = Array.from(dist.values()).reduce((a, b) => a + b, 0);
-  assert.equal(distSum, 46);
-  // R1.2: total expectedSubcontrolCount must be 50 (28+15+4+3).
+  assert.equal(distSum, 28);
+  // Instrumented pilot controls are already semantic; 32 remain un-enumerated.
   assert.equal(
     totalSubcontrols,
-    50,
-    `expected total expectedSubcontrolCount=50, got ${totalSubcontrols}`,
+    32,
+    `expected total expectedSubcontrolCount=32, got ${totalSubcontrols}`,
   );
-  // R1.2: totals.totalExpectedSubcontrols must also be 50.
+  // Persisted totals follow the remaining-container denominator.
   assert.equal(
     persistedNonInteractive.totals.totalExpectedSubcontrols,
-    50,
-    `totals.totalExpectedSubcontrols must be 50, got ${persistedNonInteractive.totals.totalExpectedSubcontrols}`,
+    32,
+    `totals.totalExpectedSubcontrols must be 32, got ${persistedNonInteractive.totals.totalExpectedSubcontrols}`,
   );
   // R1.2: verify per-type expectedSubcontrolCount values.
   for (const row of settingsRows) {

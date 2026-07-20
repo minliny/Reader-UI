@@ -141,25 +141,25 @@ test("R2.0.1 collision: no controlKey collisions", () => {
   assert.equal(ckCollisions.length, 0, `controlKey collisions: ${JSON.stringify(ckCollisions)}`);
 });
 
-// ---- Test 7: 子控件数量 = 50（不是 46） ----
-test("R2.0.1 completeness: 50 subcontrol declarations (28 switch + 15 select + 4 stepper + 3 segment)", () => {
+// ---- Test 7: 已完成 instrumentation 的控件进入 semantic denominator；这里只统计剩余容器 ----
+test("R2.0.1 completeness: 32 remaining subcontrol declarations", () => {
   const expectedSubcontrolRows = nonInteractive.entries.filter(e => e.containsUnenumeratedSubcontrols);
-  assert.equal(expectedSubcontrolRows.length, 46, "R1.2 must mark exactly 46 subcontrol rows");
+  assert.equal(expectedSubcontrolRows.length, 28, "current inventory must mark 28 remaining subcontrol rows");
 
   const expectedRowsByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
   for (const e of expectedSubcontrolRows) expectedRowsByType[e.expectedSubcontrolType]++;
-  assert.equal(expectedRowsByType.switch, 28, "expected 28 switch subcontrol rows");
-  assert.equal(expectedRowsByType.select, 15, "expected 15 select subcontrol rows");
+  assert.equal(expectedRowsByType.switch, 20, "expected 20 switch subcontrol rows");
+  assert.equal(expectedRowsByType.select, 5, "expected 5 select subcontrol rows");
   assert.equal(expectedRowsByType.stepper, 2, "expected 2 stepper subcontrol rows (each expands to 2 buttons)");
   assert.equal(expectedRowsByType.segment, 1, "expected 1 segment subcontrol row (expands to 3 options)");
 
   const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
-  assert.equal(declaredSubcontrols.length, 50, "must declare exactly 50 R2.0.1 subcontrols (not 46)");
+  assert.equal(declaredSubcontrols.length, 32, "must declare exactly 32 remaining subcontrols");
 
   const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
   for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
-  assert.equal(declaredByType.switch, 28, "must declare 28 switch subcontrols");
-  assert.equal(declaredByType.select, 15, "must declare 15 select subcontrols");
+  assert.equal(declaredByType.switch, 20, "must declare 20 switch subcontrols");
+  assert.equal(declaredByType.select, 5, "must declare 5 select subcontrols");
   assert.equal(declaredByType.stepper, 4, "must declare 4 stepper subcontrols (2 rows × 2 buttons)");
   assert.equal(declaredByType.segment, 3, "must declare 3 segment subcontrols (1 row × 3 options)");
 });
@@ -387,7 +387,7 @@ test("A0 declarations: every declaration carries mappingStatus / actionKey / ins
 });
 
 // ---- Test 20: A0 subcontrol declarations 不依赖 selector hash / ordinal fallback ----
-test("A0 subcontrol declarations: 50 settings subcontrols use business semantic keys (no selector hash, no ordinal fallback)", () => {
+test("A0 remaining settings subcontrols use business semantic keys (no selector hash, no ordinal fallback)", () => {
   // A0 invariant: "50 个设置子控件改用业务语义 key，不再使用 selector hash".
   // The entityKey slug for every r2.0-subcontrol declaration MUST be a
   // business semantic slug from settings-subcontrol-business-keys.mjs, not
@@ -396,7 +396,7 @@ test("A0 subcontrol declarations: 50 settings subcontrols use business semantic 
   // identity is per-(route, state) and unique by business slug, so no
   // ordinal disambiguation is needed.
   const sub = declarations.filter((d) => d.source === "r2.0-subcontrol");
-  assert.equal(sub.length, 50, `expected 50 r2.0-subcontrol declarations, got ${sub.length}`);
+  assert.equal(sub.length, 32, `expected 32 remaining r2.0-subcontrol declarations, got ${sub.length}`);
   const selectorHashPattern = /h-[0-9a-f]{8}/;
   const ordinalFallbackPattern = /\.n\d+$/;
   const failures = [];
@@ -419,13 +419,13 @@ test("A0 subcontrol declarations: 50 settings subcontrols use business semantic 
 });
 
 // ---- Test 21: A0 settings-general subcontrol 身份不依赖 ordinal/selector ----
-test("A0 settings-general subcontrol: 8 rows generate identity without ordinal/selector (A0 exit gate)", () => {
+test("A0 settings-general remaining subcontrols generate identity without ordinal/selector", () => {
   // A0 退出门槛: "Settings General 范围可以生成不依赖 ordinal/selector 的身份".
   // Verify the 8 settings-general rows (expanded to 10 declarations: 3 segment
   // + 3 select + 4 switch) all carry business semantic slugs.
   const sg = declarations.filter((d) => d.source === "r2.0-subcontrol" && d.route === "settings-general");
   // 8 rows expand: 1 segment(3) + 3 select(1 each) + 4 switch(1 each) = 10.
-  assert.equal(sg.length, 10, `expected 10 settings-general subcontrol declarations, got ${sg.length}`);
+  assert.equal(sg.length, 7, `expected 7 remaining settings-general subcontrol declarations, got ${sg.length}`);
   const selectorHashPattern = /h-[0-9a-f]{8}/;
   const ordinalFallbackPattern = /\.n\d+$/;
   for (const d of sg) {

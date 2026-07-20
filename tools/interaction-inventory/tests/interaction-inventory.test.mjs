@@ -36,11 +36,11 @@ test("IC0 enumerates every direct variant and every alias case", () => {
 });
 
 test("IC0 keeps the semantic denominator separate from suspected non-semantic controls", () => {
-  // A1 (R2a): settings-general segment buttons now carry data-control-key, so
-  // IC0 promotes 3 segment <button> elements from suspected-non-semantic
-  // containers to semantic controls. The denominator grows from 3752 to 3755.
-  assert.equal(artifacts.coverage.semanticControls, 3755);
-  assert.equal(artifacts.inventory.semanticControls.length, 3755);
+  // A4 reconciliation: Settings/Source/WebDAV pilot controls carrying stable
+  // data-control-key are semantic occurrences. The current deterministic
+  // inventory denominator is 3,808; containers remain a separate denominator.
+  assert.equal(artifacts.coverage.semanticControls, 3808);
+  assert.equal(artifacts.inventory.semanticControls.length, 3808);
   assert.equal(
     artifacts.coverage.suspectedNonSemanticControls,
     artifacts.inventory.suspectedNonSemanticControls.length,
@@ -48,10 +48,11 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
     article: 389,
-    button: 3279,
+    button: 3295,
     i: 28,
-    input: 47,
-    select: 11,
+    input: 49,
+    select: 13,
+    span: 33,
     textarea: 1,
   });
 });
@@ -77,7 +78,7 @@ test("IC0 records required fields without inventing a canonical control id", () 
   assert.equal(artifacts.inventory.identityBoundary.canonicalControlIdAvailable, false);
   assert.equal(artifacts.coverage.semanticControlCoverage.canonicalControlIds, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.joinedControls, 0);
-  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3755);
+  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3808);
 });
 
 test("IC0 accessible names resolve references and labels without treating ordinary input values as names", () => {
@@ -209,13 +210,13 @@ test("IC0 route motion normalization follows route push, pop, and replace contro
   }
 });
 
-test("IC0 suspected scan exposes Settings General switch, select, and segment rows", () => {
+test("IC0 suspected scan retains only unstamped Settings General containers", () => {
   const settingsCandidates = artifacts.inventory.suspectedNonSemanticControls.filter(
     (control) => control.routeId === "settings-general",
   );
   const reasons = settingsCandidates.flatMap((control) => control.suspectedReasons);
   assert.equal(reasons.filter((reason) => reason === "settings-control-class:is-switch").length, 4);
-  assert.equal(reasons.filter((reason) => reason === "settings-control-class:is-select").length, 3);
+  assert.equal(reasons.filter((reason) => reason === "settings-control-class:is-select").length, 0);
   assert.equal(reasons.filter((reason) => reason === "settings-control-class:is-segment").length, 1);
   assert.equal(settingsCandidates.every((control) => control.semanticStatus === "suspected-nonsemantic-control"), true);
 });

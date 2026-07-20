@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "544346a9aadacf29eef7518813506122d9c2bb5e8a9d0bc8c9e03c6e3dd3b529"
+    "rendererSourcesSha256": "3f190b8dddc383e1c927c26cef02e9599383f870ff5b9ae5cab61d2dff9ed447"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -55862,6 +55862,205 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "语言 简体中文",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:087464a2e83ee50015bc",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "启动时打开 书架",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(3)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:7c16d7ece773cd1eba82",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "自动检查更新",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:70fc8614690ce8e23cd7",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "点击当前底栏回顶部",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(2) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:1ac264191cb57b041aad",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "减少动态效果",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(3) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:313c8b3848c676e5a32a",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "崩溃日志",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(4) > em.fd-settings-row-side > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:15a3c20ee500c94e1cd9",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "动画效果 标准",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(5)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:348e6ec7dcef06ad0da7",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "settings-general",
+      "resolvedRouteId": "settings-general",
+      "aliasFor": null,
+      "runtimeFamily": "settings",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
       "label": "清理缓存",
@@ -55899,8 +56098,9 @@
       "domTag": "article",
       "role": "button",
       "label": "文件访问 去设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-settings-overlay=\"dialog\\:file-access-permission\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-restore-focus=\"file-access\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-restore-focus": "file-access",
         "data-settings-overlay": "dialog:file-access-permission"
       },
       "uiEvent": null,
@@ -55916,7 +56116,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c41638ca82dd437783a1",
+      "candidateKey": "candidate:7a42dafd94b2ea6b11cb",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -55931,7 +56131,7 @@
       "domTag": "button",
       "role": "button",
       "label": "去设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-settings-overlay=\"dialog\\:file-access-permission\"]:nth-of-type(1) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-restore-focus=\"file-access\"]:nth-of-type(1) > em.fd-settings-row-side > button.fd-settings-row-action",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -55946,7 +56146,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:4e2c3c2d641923689b5f",
+      "candidateKey": "candidate:d15797e772eae4ec7419",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -55961,8 +56161,9 @@
       "domTag": "article",
       "role": "button",
       "label": "通知权限 去设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-settings-overlay=\"dialog\\:notification-permission\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-restore-focus=\"notification\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-restore-focus": "notification",
         "data-settings-overlay": "dialog:notification-permission"
       },
       "uiEvent": null,
@@ -55978,7 +56179,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:cc817fe9909ad5f27928",
+      "candidateKey": "candidate:2d8a127b6ea73e51d277",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -55993,7 +56194,7 @@
       "domTag": "button",
       "role": "button",
       "label": "去设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-settings-overlay=\"dialog\\:notification-permission\"]:nth-of-type(2) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-restore-focus=\"notification\"]:nth-of-type(2) > em.fd-settings-row-side > button.fd-settings-row-action",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -56008,7 +56209,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:781b1f58417863426226",
+      "candidateKey": "candidate:234e48620dc86116e4d6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -56023,8 +56224,9 @@
       "domTag": "article",
       "role": "button",
       "label": "电池优化 去设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-settings-overlay=\"dialog\\:battery-permission\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-restore-focus=\"battery\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-restore-focus": "battery",
         "data-settings-overlay": "dialog:battery-permission"
       },
       "uiEvent": null,
@@ -56040,7 +56242,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:7545dcfd96889a42dcb5",
+      "candidateKey": "candidate:15c4c0d40343dcc14821",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -56055,7 +56257,7 @@
       "domTag": "button",
       "role": "button",
       "label": "去设置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-settings-overlay=\"dialog\\:battery-permission\"]:nth-of-type(3) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article[data-restore-focus=\"battery\"]:nth-of-type(3) > em.fd-settings-row-side > button.fd-settings-row-action",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -56070,7 +56272,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c983c31821d4e19edd9f",
+      "candidateKey": "candidate:1cd9a01338a0ddbe3db4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58035,8 +58237,9 @@
       "domTag": "button",
       "role": "button",
       "label": "测试网络连通性",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-settings-overlay=\"dialog\\:webdav-test\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"webdav-test-connection\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-restore-focus": "webdav-test-connection",
         "data-settings-overlay": "dialog:webdav-test"
       },
       "uiEvent": null,
@@ -58054,7 +58257,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:cf62aa7b8a52e6c563f5",
+      "candidateKey": "candidate:f6294d0514843eb6f9b2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58069,8 +58272,9 @@
       "domTag": "button",
       "role": "button",
       "label": "保存配置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-settings-overlay=\"dialog\\:webdav-save\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"webdav-save-config\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-restore-focus": "webdav-save-config",
         "data-settings-overlay": "dialog:webdav-save"
       },
       "uiEvent": null,
@@ -58088,7 +58292,35 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:0bb21b3904d59aafc01f",
+      "candidateKey": "candidate:58313bb5d2abbc7c6ef6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "webdav-config",
+      "resolvedRouteId": "webdav-config",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "SSL 证书校验",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:ba608beab802c614fe37",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58160,29 +58392,23 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "取消",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"dialogHost\"]:nth-of-type(5) > section[data-demo-dialog] > div > button[data-close-settings-overlay]:nth-of-type(1)",
-      "dataAttributes": {
-        "data-close-settings-overlay": ""
-      },
+      "domTag": "span",
+      "role": "switch",
+      "label": "仅 Wi-Fi 同步",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(3) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
       "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "overlay.dialog.exit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "overlay.dialog.exit"
-      ],
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:af38d467746ffb02e4e7",
+      "candidateKey": "candidate:cb6010034f64073b1a99",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58194,29 +58420,24 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
-      "domTag": "button",
+      "domTag": "article",
       "role": "button",
-      "label": "开始测试",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"dialogHost\"]:nth-of-type(5) > section[data-demo-dialog] > div > button[data-close-settings-overlay]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-close-settings-overlay": ""
-      },
+      "label": "自动同步 每小时",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(4)",
+      "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
-        "button.activate",
-        "overlay.dialog.exit"
+        "listRow.press"
       ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "overlay.dialog.exit"
-      ],
+      "canonicalMotionIds": [],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
-      "candidateKey": "candidate:a5648bfd17207ef37050",
+      "candidateKey": "candidate:51320b1ce4465460f93a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58361,6 +58582,35 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"bookshelf\"]:nth-of-type(1) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:35b5117eb900bcd07a90",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-scopes",
+      "resolvedRouteId": "restore-scopes",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
       "label": "阅读进度恢复章节位置和阅读进度",
@@ -58384,6 +58634,35 @@
         "IC0_UI_EVENT_UNRESOLVED"
       ],
       "candidateKey": "candidate:f3384d15f8d8546e6ad4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-scopes",
+      "resolvedRouteId": "restore-scopes",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"progress\"]:nth-of-type(2) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:b5eb58e899300c0c1e13",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58429,6 +58708,35 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"settings\"]:nth-of-type(3) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:2b8d2b79c6497d680640",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-scopes",
+      "resolvedRouteId": "restore-scopes",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
       "label": "书源配置恢复书源、分组和启用状态",
@@ -58452,6 +58760,35 @@
         "IC0_UI_EVENT_UNRESOLVED"
       ],
       "candidateKey": "candidate:e47e858b31a5c80a4e3f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-scopes",
+      "resolvedRouteId": "restore-scopes",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(3) > div.fd-restore-scope-list > button[data-restore-scope=\"sources\"]:nth-of-type(4) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:1eda588fc18df2258ea1",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58823,7 +59160,7 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button:nth-of-type(1)",
       "dataAttributes": {},
       "uiEvent": "route.pop",
       "rawMotionHints": [
@@ -58839,38 +59176,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:c764af69d3fcd5e4ac4f",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "检测全部 开始检测",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-detect\"]:nth-of-type(1)",
-      "dataAttributes": {
-        "data-route": "source-detect"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:df4fc513a55e91125a05",
+      "candidateKey": "candidate:626ab2e1b836e7b9860d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58884,8 +59190,71 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "开始检测",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-detect\"]:nth-of-type(1) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "更多",
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-restore-focus=\"source-menu-toggle\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "source-menu-toggle",
+        "data-source-menu-toggle": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate",
+        "dropdown.trigger.press"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "dropdown.trigger.press"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:72b1af63990ab92ff5fa",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "input",
+      "role": "searchbox",
+      "label": "搜索书源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > label.fd-source-search:nth-of-type(1) > input",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:49d64d204b6a19c390b4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "全部",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button.is-active:nth-of-type(1)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -58900,38 +59269,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:51a134816445c7ece7b1",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "导入书源 导入",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-route": "source-import-export"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:8ee31da41b0a5b76d3fa",
+      "candidateKey": "candidate:704e8dbcb586a82b1014",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58945,8 +59283,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "导入",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(2) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "启用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(2)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -58961,38 +59299,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:09e99e0380bc0ac25bb9",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "导出全部 导出",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(3)",
-      "dataAttributes": {
-        "data-route": "source-import-export"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:ee6406df98ae1d39f4a8",
+      "candidateKey": "candidate:2a06ab73ed9f2c3d6988",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59006,8 +59313,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "导出",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(3) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "异常",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(3)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59022,38 +59329,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:e9fbc5a547c68558c502",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "分组管理 管理",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-groups\"]:nth-of-type(4)",
-      "dataAttributes": {
-        "data-route": "source-groups"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:d996389c1123ac7ddb7a",
+      "candidateKey": "candidate:27bbd3d4b40ba1bfbcf1",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59067,8 +59343,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "管理",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-groups\"]:nth-of-type(4) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "未检测",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(4)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59083,38 +59359,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:bcfe15a726fd3092a556",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "错误日志 查看",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-logs\"]:nth-of-type(5)",
-      "dataAttributes": {
-        "data-route": "source-logs"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:99adf00491de53b115d3",
+      "candidateKey": "candidate:7a4d52e9e987764006c5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59128,8 +59373,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "查看",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-logs\"]:nth-of-type(5) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "自定义",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(5)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59144,7 +59389,425 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:4d4ff9261f8bc3d3245b",
+      "candidateKey": "candidate:0220a850a05a38253629",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "select",
+      "role": "combobox",
+      "label": "分组筛选",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > label.fd-source-group-filter:nth-of-type(2) > select",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:4719dd44dcbbb5522424",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 起点中文网",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(1) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:37b630b28d64c0b2e3cc",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "起点中文网已启用，点击禁用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(1) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:df79d40d945296d6a6e4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 起点中文网",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(1) > button[data-restore-focus=\"more-source-qidian\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-qidian"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:d323e87d73a557e69159",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 笔趣阁",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(2) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:9a90ac7e6a0425ff28bc",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "笔趣阁已启用，点击禁用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(2) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:bd42e0b50f36ffd737e4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 笔趣阁",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(2) > button[data-restore-focus=\"more-source-biquge\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-biquge"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:d907dba64c29b11c8859",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 本地导入源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(3) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:7fa6e1afeec615bea944",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "本地导入源已禁用，点击启用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(3) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:8b16a74d54cdbb6dcca2",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 本地导入源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(3) > button[data-restore-focus=\"more-source-local-import\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-local-import"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:a4f545fe1afc0e1b28fe",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 测试书源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(4) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:d4bc777e43ea3fbd5cc6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "测试书源已启用，点击禁用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(4) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:afab18f551641bf392d1",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 测试书源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(4) > button[data-restore-focus=\"more-source-test\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-test"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:4c0927f2e02cbab54a6d",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "进入批量管理",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-source-bottom-bar > button:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:39faa823b47b457ba5c9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59159,58 +59822,24 @@
       "domTag": "button",
       "role": "button",
       "label": "新增书源",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"source-add\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-source-bottom-bar > button[data-restore-focus=\"source-add\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "source-add"
+        "data-restore-focus": "source-add"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:d83eae9f58151e4ccfeb",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "批量删除",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"source-delete-confirm\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-route": "source-delete-confirm"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:9630b24d1d35d154153a",
+      "candidateKey": "candidate:85115f28d7e53dcc1076",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59225,7 +59854,7 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button",
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button:nth-of-type(1)",
       "dataAttributes": {},
       "uiEvent": "route.pop",
       "rawMotionHints": [
@@ -59241,38 +59870,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7bbdc557007e2e582a36",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "检测全部 开始检测",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-detect\"]:nth-of-type(1)",
-      "dataAttributes": {
-        "data-route": "source-detect"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:d686747c28d275800293",
+      "candidateKey": "candidate:896bb5555d974483fc8b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59286,8 +59884,71 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "开始检测",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-detect\"]:nth-of-type(1) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "更多",
+      "selector": "main[data-shell=\"SettingsShell\"] > section[data-slot=\"backTopBar\"] > button[data-restore-focus=\"source-menu-toggle\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "source-menu-toggle",
+        "data-source-menu-toggle": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate",
+        "dropdown.trigger.press"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "dropdown.trigger.press"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:7142e1b471378b7a8301",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "input",
+      "role": "searchbox",
+      "label": "搜索书源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > label.fd-source-search:nth-of-type(1) > input",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:7f7a2b3d75ab3f5f3126",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "全部",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button.is-active:nth-of-type(1)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59302,38 +59963,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:ae83c2ad43b55edcbe9f",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "导入书源 导入",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-route": "source-import-export"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:69ccdc3c982970c49669",
+      "candidateKey": "candidate:842349c142f0d0247593",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59347,8 +59977,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "导入",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(2) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "启用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(2)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59363,38 +59993,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:8db0207bd18807dd72e4",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "导出全部 导出",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(3)",
-      "dataAttributes": {
-        "data-route": "source-import-export"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:cb45f9b4b073bacb87be",
+      "candidateKey": "candidate:c812747cd8d690f744d0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59408,8 +60007,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "导出",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-import-export\"]:nth-of-type(3) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "异常",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(3)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59424,38 +60023,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:8e11f501549b7e35f287",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "分组管理 管理",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-groups\"]:nth-of-type(4)",
-      "dataAttributes": {
-        "data-route": "source-groups"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:120f53252e1c9d7c7597",
+      "candidateKey": "candidate:6a83af284aa66804b64f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59469,8 +60037,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "管理",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-groups\"]:nth-of-type(4) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "未检测",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(4)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59485,38 +60053,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:fcf58ecfafce4b1f9800",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "button",
-      "label": "错误日志 查看",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-logs\"]:nth-of-type(5)",
-      "dataAttributes": {
-        "data-route": "source-logs"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:31ba4e9d7e65a6dcd324",
+      "candidateKey": "candidate:4e69e3ab21c3772e2f87",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59530,8 +60067,8 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "查看",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"source-logs\"]:nth-of-type(5) > em.fd-settings-row-side > button.fd-settings-row-action",
+      "label": "自定义",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(5)",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -59546,7 +60083,425 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:78a7394cb15f3f7fd3cf",
+      "candidateKey": "candidate:9d24f2be9da35b2e6035",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "select",
+      "role": "combobox",
+      "label": "分组筛选",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > label.fd-source-group-filter:nth-of-type(2) > select",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:71da30726a65b4c08b90",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 起点中文网",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(1) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:e6dc4b7a50eb26db3657",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "起点中文网已启用，点击禁用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(1) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:14988345dd7db255abf1",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 起点中文网",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(1) > button[data-restore-focus=\"more-source-qidian\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-qidian"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:9b909dceecab327f42fd",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 笔趣阁",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(2) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:6e1e42cbe1bd1da1a694",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "笔趣阁已启用，点击禁用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(2) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:9d3ec964635309d5bd83",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 笔趣阁",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(2) > button[data-restore-focus=\"more-source-biquge\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-biquge"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:72f567a27e61c8643f12",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 本地导入源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(3) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:8fa35b5578d017fc4210",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "本地导入源已禁用，点击启用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(3) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:ae4f764bb8a926e17094",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 本地导入源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(3) > button[data-restore-focus=\"more-source-local-import\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-local-import"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:9a31244af858ff758139",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "检测 测试书源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(4) > button.fd-source-row-test:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:978ecef1ac7749df79ab",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "测试书源已启用，点击禁用",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(4) > span.fd-source-row-toggle:nth-of-type(2) > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:927acf9ee7914f78ffd1",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多操作 测试书源",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > section.fd-source-list > article.fd-source-row:nth-of-type(4) > button[data-restore-focus=\"more-source-test\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-restore-focus": "more-source-test"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:d0e3922649132bffdbdb",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-management",
+      "resolvedRouteId": "source-management",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "source-unavailable",
+      "pageState": "source-unavailable",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "进入批量管理",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-source-bottom-bar > button:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:a657e6bf2c22396d946e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59561,58 +60516,24 @@
       "domTag": "button",
       "role": "button",
       "label": "新增书源",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"source-add\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-source-bottom-bar > button[data-restore-focus=\"source-add\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "source-add"
+        "data-restore-focus": "source-add"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:234835b218f1878e9900",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "批量删除",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"source-delete-confirm\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-route": "source-delete-confirm"
-      },
-      "uiEvent": "route.push",
-      "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:4e7b78c18fa9f3313514",
+      "candidateKey": "candidate:26a3e881ab6c18608da5",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -64829,6 +65750,64 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
       "candidateKey": "candidate:4a935c4c922e7d292dfc",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-debug",
+      "resolvedRouteId": "source-debug",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "选择书源 笔趣阁",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(1)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:61a4a82d7ebf9e97c595",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "source-debug",
+      "resolvedRouteId": "source-debug",
+      "aliasFor": null,
+      "runtimeFamily": "source",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "调测模块 正文",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:f7c72d7063b81080722c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -72359,6 +73338,260 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "启用自动备份",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:15f0de80c205765839c3",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "备份频率 每天",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:616af64dd496d7ec6967",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "备份时间 02:00",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(3)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:e6ecc72f354b0d0be42f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "仅 Wi-Fi 备份",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(4) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:40da39f7015787b229a6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "书架与分组",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:a9f048418674c1a201f4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "阅读进度",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(2) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:b8a5bfbec70aa7a34c3c",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "App 设置",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(3) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:63efd8f1d23768d12634",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "书源配置",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(4) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:e1234180f20f4b352243",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "搜索历史",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(5) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:74f7efa1a222e7abd4c5",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
       "label": "-",
@@ -72408,6 +73641,63 @@
         "IC0_UI_EVENT_UNRESOLVED"
       ],
       "candidateKey": "candidate:00ad5589a2d7224bb9a6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "保留时长 30 天",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:27b41e0b33111a755c5b",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "backup-settings",
+      "resolvedRouteId": "backup-settings",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "自动清理过期备份",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(3) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:d26c4ea4e7cd8df150ae",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -72505,6 +73795,119 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
       "candidateKey": "candidate:237a17803200e54b0bb1",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "progress-sync",
+      "resolvedRouteId": "progress-sync",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "自动同步阅读进度",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:ae6127fea72149b62170",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "progress-sync",
+      "resolvedRouteId": "progress-sync",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "article",
+      "role": "button",
+      "label": "同步频率 实时",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [
+        "listRow.press"
+      ],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:771a5b3b9b8fe2705e40",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "progress-sync",
+      "resolvedRouteId": "progress-sync",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "仅 Wi-Fi 同步",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(3) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:9da8a7cbc6c730b35079",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "progress-sync",
+      "resolvedRouteId": "progress-sync",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "冲突时询问",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(4) > em.fd-settings-row-side > span.fd-settings-switch",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:34dcc39e0c8896003a69",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -104153,6 +105556,35 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"bookshelf\"]:nth-of-type(1) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:cd3853bb7e294473758a",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-confirm",
+      "resolvedRouteId": "restore-confirm",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
       "label": "阅读进度恢复章节位置和阅读进度",
@@ -104176,6 +105608,35 @@
         "IC0_UI_EVENT_UNRESOLVED"
       ],
       "candidateKey": "candidate:dd8472a930034aae2b3d",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-confirm",
+      "resolvedRouteId": "restore-confirm",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"progress\"]:nth-of-type(2) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:e62c452477d2c2272098",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -104221,6 +105682,35 @@
       "pageState": "default",
       "componentType": null,
       "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"settings\"]:nth-of-type(3) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:f017855fe7f595715d02",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-confirm",
+      "resolvedRouteId": "restore-confirm",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
       "label": "书源配置恢复书源、分组和启用状态",
@@ -104244,6 +105734,35 @@
         "IC0_UI_EVENT_UNRESOLVED"
       ],
       "candidateKey": "candidate:1ad309d7eece89f5b049",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "restore-confirm",
+      "resolvedRouteId": "restore-confirm",
+      "aliasFor": null,
+      "runtimeFamily": "sync",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "span",
+      "role": "switch",
+      "label": "",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-restore-flow > section.fd-restore-card:nth-of-type(2) > div.fd-restore-scope-list > button[data-restore-scope=\"sources\"]:nth-of-type(4) > span.fd-settings-switch:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:d00dc24a4722dfab7bab",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127180,70 +128699,6 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "group",
-      "label": "语言 简体中文",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:cd78214c71c3b3789ad1",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "settings-general",
-      "resolvedRouteId": "settings-general",
-      "aliasFor": null,
-      "runtimeFamily": "settings",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "启动时打开 书架",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(3)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:74d3d5e3c4cda38f4d4a",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "settings-general",
-      "resolvedRouteId": "settings-general",
-      "aliasFor": null,
-      "runtimeFamily": "settings",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
       "label": "自动检查更新",
       "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(1)",
       "dataAttributes": {},
@@ -127359,38 +128814,6 @@
         "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
       "candidateKey": "candidate:9a123607bc4ff7ba141e",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "settings-general",
-      "resolvedRouteId": "settings-general",
-      "aliasFor": null,
-      "runtimeFamily": "settings",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "动画效果 标准",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(5)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:02c5481063fe0493a939",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -127746,358 +129169,6 @@
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
-      "routeId": "webdav-config",
-      "resolvedRouteId": "webdav-config",
-      "aliasFor": null,
-      "runtimeFamily": "sync",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "自动同步 每小时",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(4)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:1db70470e74b28d8e205",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "起点中文网qidian.com · 起点导入",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(1)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:9301f8fb6e309d1c9acd",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "笔趣阁biquge.example · 玄幻书源",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:d85fb46fc1e4e446b5b7",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "本地导入源本地文件 · 自定义",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(3)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:4b86e76278efc9a11b5b",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "测试书源test.example · 测试书源",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(4)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:7c983bea2be757936e94",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "起点中文网qidian.com · 起点导入",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(1)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:2b256064d1c2839ab6de",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "笔趣阁biquge.example · 玄幻书源",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:057cb84abcca08c5de3f",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "本地导入源本地文件 · 自定义",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(3)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:264bc0dc1d7990b5e5e2",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-management",
-      "resolvedRouteId": "source-management",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "source-unavailable",
-      "pageState": "source-unavailable",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "测试书源test.example · 测试书源",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(4)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:9226441dfc3b9b9388a1",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-debug",
-      "resolvedRouteId": "source-debug",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "选择书源 笔趣阁",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(1)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:343964ae4269b183be30",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-debug",
-      "resolvedRouteId": "source-debug",
-      "aliasFor": null,
-      "runtimeFamily": "source",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "调测模块 正文",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:1aa6e20227c8a63303b3",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
       "routeId": "backup-settings",
       "resolvedRouteId": "backup-settings",
       "aliasFor": null,
@@ -128127,70 +129198,6 @@
         "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
       "candidateKey": "candidate:a4f6892da2711349d20b",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "backup-settings",
-      "resolvedRouteId": "backup-settings",
-      "aliasFor": null,
-      "runtimeFamily": "sync",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "备份频率 每天",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:d93b4158139404a92633",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "backup-settings",
-      "resolvedRouteId": "backup-settings",
-      "aliasFor": null,
-      "runtimeFamily": "sync",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "备份时间 02:00",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(3)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:b412d28390ac22ed7fe9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -128428,38 +129435,6 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "group",
-      "label": "保留时长 30 天",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:432a153136ab706ccdc3",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "backup-settings",
-      "resolvedRouteId": "backup-settings",
-      "aliasFor": null,
-      "runtimeFamily": "sync",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
       "label": "自动清理过期备份",
       "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(3) > article.fd-setting-row:nth-of-type(3)",
       "dataAttributes": {},
@@ -128511,38 +129486,6 @@
         "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
       ],
       "candidateKey": "candidate:b88d4ea4d0a7d62e2105",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "progress-sync",
-      "resolvedRouteId": "progress-sync",
-      "aliasFor": null,
-      "runtimeFamily": "sync",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "article",
-      "role": "group",
-      "label": "同步频率 实时",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article.fd-setting-row:nth-of-type(2)",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [],
-      "canonicalMotionIds": [],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "suspected-nonsemantic-control",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "gapCodes": [
-        "IC0_SUSPECTED_INTERACTIVE_WITHOUT_NATIVE_OR_ACTIONABLE_ARIA_SEMANTICS",
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_RAW_MOTION_HINT_UNRESOLVED",
-        "IC0_CANONICAL_MOTION_ID_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:4d5b888de0929ebbe461",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

@@ -3,17 +3,17 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "c5c74d851ce5612f903db59461ebbbc422f64eb10296dedceb4b395a765d4149",
+    "inventorySha256": "d34368cf21a93dd323e3bb7016d9cc5f1b6e9b369cbeb9d2a64d52565b1d8911",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
   },
   "totals": {
-    "entries": 63,
+    "entries": 45,
     "byRole": {
-      "group": 46,
+      "group": 28,
       "section": 17
     },
     "byRoute": {
-      "backup-settings": 12,
+      "backup-settings": 9,
       "bookshelf-search-settings": 8,
       "import-conflict-resolve": 1,
       "import-duplicate": 1,
@@ -23,7 +23,7 @@
       "import-partial-success": 1,
       "import-permission-denied": 1,
       "import-result-detail": 1,
-      "progress-sync": 4,
+      "progress-sync": 3,
       "reader-background-restore": 1,
       "reader-content-error": 1,
       "reader-content-loading": 1,
@@ -33,12 +33,10 @@
       "reader-toc-error": 1,
       "reader-toc-loading": 1,
       "reader-toc-offline": 1,
-      "settings-general": 8,
-      "source-debug": 2,
-      "source-management": 8,
-      "webdav-config": 4
+      "settings-general": 5,
+      "webdav-config": 3
     },
-    "totalExpectedSubcontrols": 50
+    "totalExpectedSubcontrols": 32
   },
   "entries": [
     {
@@ -57,24 +55,6 @@
       ],
       "containsUnenumeratedSubcontrols": true,
       "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:432a153136ab706ccdc3",
-      "selectorSha256": "399e0b303c5be3135ef26a7a48be53cec111fc4bad234e82f814ad6a111594f2",
-      "routeId": "backup-settings",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "保留时长 30 天",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
       "expectedSubcontrolCount": 1
     },
     {
@@ -168,24 +148,6 @@
       "expectedSubcontrolCount": 1
     },
     {
-      "candidateKey": "candidate:b412d28390ac22ed7fe9",
-      "selectorSha256": "9775d917b686524d6d111bf69b3efc697fc04b11de66ffc9bf5b530b71e4d166",
-      "routeId": "backup-settings",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "备份时间 02:00",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
-      "expectedSubcontrolCount": 1
-    },
-    {
       "candidateKey": "candidate:d1aa5fde0729e853168e",
       "selectorSha256": "d1f0855969cc83ab8efd3294ce3fc9e2df42999abc94fd44a1de1b57055ffa76",
       "routeId": "backup-settings",
@@ -201,24 +163,6 @@
       ],
       "containsUnenumeratedSubcontrols": true,
       "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:d93b4158139404a92633",
-      "selectorSha256": "e33c6827bab4dde4fca490dc011b8cbc2ad9ee9df2babcf35b13a756356bf4c3",
-      "routeId": "backup-settings",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "备份频率 每天",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
       "expectedSubcontrolCount": 1
     },
     {
@@ -554,24 +498,6 @@
       "pureContainer": true
     },
     {
-      "candidateKey": "candidate:4d5b888de0929ebbe461",
-      "selectorSha256": "e60b44585ad93a29e1a495207a64ac0c4f3d7f7e6dc90a981d26b3e52e7d6d93",
-      "routeId": "progress-sync",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "同步频率 实时",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
-      "expectedSubcontrolCount": 1
-    },
-    {
       "candidateKey": "candidate:972aecb71e83b74fb4e2",
       "selectorSha256": "86b8cf8be0930ae57890525a317598d3465d9041be25517280cd473c82e852ab",
       "routeId": "progress-sync",
@@ -797,42 +723,6 @@
       "pureContainer": true
     },
     {
-      "candidateKey": "candidate:02c5481063fe0493a939",
-      "selectorSha256": "6dcc891489eb1bbca6beaeb3422b44478f4dd47dfe85d73c3ead4c5ae9e833eb",
-      "routeId": "settings-general",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "动画效果 标准",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:74d3d5e3c4cda38f4d4a",
-      "selectorSha256": "9775d917b686524d6d111bf69b3efc697fc04b11de66ffc9bf5b530b71e4d166",
-      "routeId": "settings-general",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "启动时打开 书架",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
-      "expectedSubcontrolCount": 1
-    },
-    {
       "candidateKey": "candidate:8445db9bf0aa0472509c",
       "selectorSha256": "6d9db4b26700aa81baf0064cf32aaf308d87e89cf973f9a579eeb6e209992812",
       "routeId": "settings-general",
@@ -866,24 +756,6 @@
       ],
       "containsUnenumeratedSubcontrols": true,
       "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:cd78214c71c3b3789ad1",
-      "selectorSha256": "e33c6827bab4dde4fca490dc011b8cbc2ad9ee9df2babcf35b13a756356bf4c3",
-      "routeId": "settings-general",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "语言 简体中文",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
       "expectedSubcontrolCount": 1
     },
     {
@@ -938,204 +810,6 @@
       ],
       "containsUnenumeratedSubcontrols": true,
       "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:1aa6e20227c8a63303b3",
-      "selectorSha256": "e60b44585ad93a29e1a495207a64ac0c4f3d7f7e6dc90a981d26b3e52e7d6d93",
-      "routeId": "source-debug",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "调测模块 正文",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:343964ae4269b183be30",
-      "selectorSha256": "b71a558036e4f4dbd8052012eb7028d9a7a6bfb80b9581e40ade880b0b045d8d",
-      "routeId": "source-debug",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "选择书源 笔趣阁",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:057cb84abcca08c5de3f",
-      "selectorSha256": "399e0b303c5be3135ef26a7a48be53cec111fc4bad234e82f814ad6a111594f2",
-      "routeId": "source-management",
-      "state": "source-unavailable",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "笔趣阁biquge.example · 玄幻书源",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:264bc0dc1d7990b5e5e2",
-      "selectorSha256": "d1f0855969cc83ab8efd3294ce3fc9e2df42999abc94fd44a1de1b57055ffa76",
-      "routeId": "source-management",
-      "state": "source-unavailable",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "本地导入源本地文件 · 自定义",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:2b256064d1c2839ab6de",
-      "selectorSha256": "22c2c6c4d7469e4942f552b07a5019775af77c854373cd9c847056251e2c2954",
-      "routeId": "source-management",
-      "state": "source-unavailable",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "起点中文网qidian.com · 起点导入",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:4b86e76278efc9a11b5b",
-      "selectorSha256": "d1f0855969cc83ab8efd3294ce3fc9e2df42999abc94fd44a1de1b57055ffa76",
-      "routeId": "source-management",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "本地导入源本地文件 · 自定义",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:7c983bea2be757936e94",
-      "selectorSha256": "9603b1c39b7c756ae2f327cc81b74d9693c07b8e90ef7e56948862dcd7507f51",
-      "routeId": "source-management",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "测试书源test.example · 测试书源",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:9226441dfc3b9b9388a1",
-      "selectorSha256": "9603b1c39b7c756ae2f327cc81b74d9693c07b8e90ef7e56948862dcd7507f51",
-      "routeId": "source-management",
-      "state": "source-unavailable",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "测试书源test.example · 测试书源",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:9301f8fb6e309d1c9acd",
-      "selectorSha256": "22c2c6c4d7469e4942f552b07a5019775af77c854373cd9c847056251e2c2954",
-      "routeId": "source-management",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "起点中文网qidian.com · 起点导入",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:d85fb46fc1e4e446b5b7",
-      "selectorSha256": "399e0b303c5be3135ef26a7a48be53cec111fc4bad234e82f814ad6a111594f2",
-      "routeId": "source-management",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "笔趣阁biquge.example · 玄幻书源",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-switch"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "switch",
-      "expectedSubcontrolCount": 1
-    },
-    {
-      "candidateKey": "candidate:1db70470e74b28d8e205",
-      "selectorSha256": "9603b1c39b7c756ae2f327cc81b74d9693c07b8e90ef7e56948862dcd7507f51",
-      "routeId": "webdav-config",
-      "state": "default",
-      "viewport": "phone",
-      "role": "group",
-      "domTag": "article",
-      "label": "自动同步 每小时",
-      "dataAttributes": {},
-      "exclusionReason": "aria-container-role",
-      "suspectedReasons": [
-        "settings-control-class:is-select"
-      ],
-      "containsUnenumeratedSubcontrols": true,
-      "expectedSubcontrolType": "select",
       "expectedSubcontrolCount": 1
     },
     {
