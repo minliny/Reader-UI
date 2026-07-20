@@ -11037,11 +11037,11 @@
       case "search-home":
         return bookSearchScreen(data, withAppState(appState, { bookSearchPhase: "before" }));
       case "search-results":
-        return bookSearchScreen(data, withAppState(appState, { bookSearchPhase: "after" }));
+        throw new Error("search-results route is FROZEN to bookSearchV2 (d2-bookshelf-discover-renderers.js)");
       case "search-loading":
       case "search-empty":
       case "search-error":
-        return searchStateScreen(data, route);
+        throw new Error(route + " route is FROZEN to bookSearchV2 (d2-bookshelf-discover-renderers.js)");
       case "book-detail":
       case "book-detail-toc-preview":
         throw new Error(route + " route is FROZEN to bookDetailV2 (d2-bookshelf-discover-renderers.js)");
@@ -12392,6 +12392,7 @@
 
   function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay) {
     const bookDetailOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookDetail;
+    const bookSearchOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookSearch;
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const dialogFocusableSelector = [
       "button:not([disabled])",
@@ -13067,6 +13068,7 @@
     };
 
     const submitBookSearch = (button) => {
+      if (bookSearchOwner?.getState?.().pending?.status === "loading") return;
       const previousPhase = appState.bookSearchPhase || "before";
       const historyQuery = button.getAttribute("data-search-query");
       if (historyQuery != null) appState.bookSearchQuery = historyQuery;
@@ -13086,6 +13088,8 @@
         timer: null
       };
       appState.bookSearchRequest = request;
+      bookSearchOwner?.dispatch?.({ type: "SET_QUERY", value: query });
+      bookSearchOwner?.dispatch?.({ type: "SEARCH_START", requestId: `runtime-search:${sequence}`, epoch: sequence, kind: "search" });
       motionController?.start?.({
         id: "input.submit",
         action: "submit",
@@ -13097,6 +13101,7 @@
         request.state = "completed";
         request.active = false;
         appState.bookSearchRequest = null;
+        bookSearchOwner?.dispatch?.({ type: "SEARCH_EMPTY", requestId: `runtime-search:${sequence}` });
         replaceBookSearchState(previousPhase, "empty", owner, sequence, button, "empty");
         renderCurrentRoute();
         return;
@@ -13110,6 +13115,12 @@
         request.state = "completed";
         appState.bookSearchRequest = null;
         const terminalState = /^(error|错误|失败)$/i.test(query) ? "error" : "after";
+        bookSearchOwner?.dispatch?.({
+          type: terminalState === "error" ? "SEARCH_FAILED" : "SEARCH_SUCCESS",
+          requestId: `runtime-search:${sequence}`,
+          resultIds: ["long-night", "mystery-lord", "three-body"],
+          error: terminalState === "error" ? "搜索失败" : null
+        });
         replaceBookSearchState("loading", terminalState, owner, sequence, screenHost.querySelector("[data-search-state]"), "complete");
         renderCurrentRoute();
       }, motionSearchDelay);
@@ -13121,6 +13132,7 @@
       appState.bookSearchRequestSequence = (appState.bookSearchRequestSequence || 0) + 1;
       const sequence = appState.bookSearchRequestSequence;
       appState.bookSearchQuery = "";
+      bookSearchOwner?.close?.(button.getAttribute("data-control-key") || null);
       motionController?.start?.({
         id: "input.clear",
         action: "clear",
@@ -13141,6 +13153,33 @@
 
     screenHost.querySelectorAll("[data-search-reset]").forEach((button) => {
       button.addEventListener("click", () => clearBookSearch(button));
+    });
+
+    screenHost.querySelectorAll("[data-search-close]").forEach((button) => {
+      button.addEventListener("click", () => {
+        bookSearchOwner?.close?.(button.getAttribute("data-control-key") || null);
+        cancelBookSearchRequest(appState, "closed-by-user");
+        goBack();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-search-retry]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        if (bookSearchOwner?.getState?.().pending?.status === "loading") return;
+        const pending = bookSearchOwner?.executeRetry?.(() => Promise.resolve(["long-night", "mystery-lord", "three-body"]));
+        replaceTopRoute("search-loading");
+        const result = await pending;
+        if (result?.status === "success") replaceTopRoute("search-results");
+        if (result?.status === "failed") replaceTopRoute("search-error");
+      });
+    });
+
+    screenHost.querySelectorAll("[data-search-result-id][data-route='book-detail']").forEach((row) => {
+      row.addEventListener("click", () => bookSearchOwner?.dispatch?.({
+        type: "SELECT_RESULT",
+        resultId: row.getAttribute("data-search-result-id"),
+        focusReturnKey: row.getAttribute("data-control-key") || null
+      }));
     });
 
     screenHost.querySelectorAll("[data-add-search-shelf]").forEach((button) => {

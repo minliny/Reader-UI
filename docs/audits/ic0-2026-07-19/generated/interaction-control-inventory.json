@@ -28,7 +28,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "14fe10c07067dee1347d7ff71fa6805c615210fc70bf98e0bb9b7e82a5650862"
+    "rendererSourcesSha256": "33ff9ed6b176e76079fd8f9799c5e50b73451f772b3999080b91f44d068aaefd"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -11112,8 +11112,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-results.after.button.back",
+        "data-control-key": "search-results.control.button.back@search-results.after",
+        "data-entity-key": "search-results.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -11128,7 +11134,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:95fd532d00bcc35c6cc6",
+      "candidateKey": "candidate:1add76e9c00ce0b5a53f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11143,12 +11149,18 @@
       "domTag": "input",
       "role": "searchbox",
       "label": "搜索书名、作者或关键词",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > input[data-book-search-input]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > input[data-ui-event=\"input\\.search\"]",
       "dataAttributes": {
         "data-book-search-input": "",
-        "data-open-keyboard": ""
+        "data-control-id": "search-results.control.search-results.after.input.query-input-primary",
+        "data-control-key": "search-results.control.input.query-input-primary@search-results.after",
+        "data-entity-key": "search-results.control.input.query-input-primary",
+        "data-open-keyboard": "",
+        "data-search-query-id": "book-catalog-primary",
+        "data-settings-key": "query-input-primary",
+        "data-ui-event": "input.search"
       },
-      "uiEvent": null,
+      "uiEvent": "input.search",
       "rawMotionHints": [
         "input.focus"
       ],
@@ -11158,10 +11170,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ae4f118bbd0feaacba7a",
+      "candidateKey": "candidate:6c7c31d7f19189d7a129",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11175,13 +11186,19 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > button[data-book-search-submit]",
+      "label": "提交搜索",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > button[data-ui-event=\"search\\.submit\"]",
       "dataAttributes": {
         "data-book-search-submit": "",
-        "data-search-submit": ""
+        "data-control-id": "search-results.control.search-results.after.button.search-submit",
+        "data-control-key": "search-results.control.button.search-submit@search-results.after",
+        "data-entity-key": "search-results.control.button.search-submit",
+        "data-restore-focus": "search-results.control.button.search-submit@search-results.after",
+        "data-search-submit": "",
+        "data-settings-key": "search-submit",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": null,
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -11193,11 +11210,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
-        "IC0_ACCESSIBLE_LABEL_MISSING"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4004f876f751e6d426ef",
+      "candidateKey": "candidate:92138c5e65ac7900fc56",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11211,12 +11226,19 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "长夜余火 爱潜水的乌贼 · 优书网 已在书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-route=\"book-detail\"]:nth-of-type(1)",
+      "label": "打开 长夜余火",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-ui-event=\"search\\.result\\.open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "book-detail"
+        "data-control-id": "search-results.control.search-results.after.button.result-open-long-night",
+        "data-control-key": "search-results.control.button.result-open-long-night@search-results.after",
+        "data-entity-key": "search-results.control.button.result-open-long-night",
+        "data-restore-focus": "search-results.control.button.result-open-long-night@search-results.after",
+        "data-route": "book-detail",
+        "data-search-result-id": "long-night",
+        "data-settings-key": "result-open-long-night",
+        "data-ui-event": "search.result.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.result.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -11228,7 +11250,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:baa191d5fce8e7b1da2b",
+      "candidateKey": "candidate:32c9a75c4503100f0bdc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11242,12 +11264,19 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "诡秘之主 爱潜水的乌贼 · 书仓搜索 已在书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-route=\"book-detail\"]:nth-of-type(2)",
+      "label": "打开 诡秘之主",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-ui-event=\"search\\.result\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "book-detail"
+        "data-control-id": "search-results.control.search-results.after.button.result-open-mystery-lord",
+        "data-control-key": "search-results.control.button.result-open-mystery-lord@search-results.after",
+        "data-entity-key": "search-results.control.button.result-open-mystery-lord",
+        "data-restore-focus": "search-results.control.button.result-open-mystery-lord@search-results.after",
+        "data-route": "book-detail",
+        "data-search-result-id": "mystery-lord",
+        "data-settings-key": "result-open-mystery-lord",
+        "data-ui-event": "search.result.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.result.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -11259,7 +11288,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4e39a27591f30e5368da",
+      "candidateKey": "candidate:f09a6e1e6569ffc1ce94",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11273,12 +11302,19 @@
       "componentInstanceId": null,
       "domTag": "article",
       "role": "button",
-      "label": "三体 刘慈欣 · 起点导入 加入书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-route=\"book-detail\"]:nth-of-type(3)",
+      "label": "打开 三体",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-ui-event=\"search\\.result\\.open\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "book-detail"
+        "data-control-id": "search-results.control.search-results.after.button.result-open-three-body",
+        "data-control-key": "search-results.control.button.result-open-three-body@search-results.after",
+        "data-entity-key": "search-results.control.button.result-open-three-body",
+        "data-restore-focus": "search-results.control.button.result-open-three-body@search-results.after",
+        "data-route": "book-detail",
+        "data-search-result-id": "three-body",
+        "data-settings-key": "result-open-three-body",
+        "data-ui-event": "search.result.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.result.open",
       "rawMotionHints": [
         "app.route.push"
       ],
@@ -11290,7 +11326,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:5b8d2cd1f014969589ae",
+      "candidateKey": "candidate:a94a4cd1c03a2684b334",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11304,12 +11340,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "加入书架",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-route=\"book-detail\"]:nth-of-type(3) > button[data-search-add-to-bookshelf]",
+      "label": "将 三体 加入书架",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"after\"]:nth-of-type(2) > article[data-ui-event=\"search\\.result\\.open\"]:nth-of-type(3) > button[data-ui-event=\"book\\.action\"]",
       "dataAttributes": {
-        "data-search-add-to-bookshelf": ""
+        "data-control-id": "search-results.control.search-results.after.button.result-add-three-body",
+        "data-control-key": "search-results.control.button.result-add-three-body@search-results.after",
+        "data-entity-key": "search-results.control.button.result-add-three-body",
+        "data-search-add-to-bookshelf": "",
+        "data-search-result-id": "three-body",
+        "data-settings-key": "result-add-three-body",
+        "data-ui-event": "book.action"
       },
-      "uiEvent": null,
+      "uiEvent": "book.action",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -11319,10 +11361,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:2b139309950131152a9e",
+      "candidateKey": "candidate:fe77df0bf35ff76f54c3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11337,11 +11378,17 @@
       "domTag": "input",
       "role": "textbox",
       "label": "搜索书籍",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > label > input[data-keyboard-input]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > label > input[data-ui-event=\"input\\.search\"]",
       "dataAttributes": {
-        "data-keyboard-input": ""
+        "data-control-id": "search-results.control.search-results.after.input.query-input-keyboard",
+        "data-control-key": "search-results.control.input.query-input-keyboard@search-results.after",
+        "data-entity-key": "search-results.control.input.query-input-keyboard",
+        "data-keyboard-input": "",
+        "data-search-query-id": "book-catalog-primary",
+        "data-settings-key": "query-input-keyboard",
+        "data-ui-event": "input.search"
       },
-      "uiEvent": null,
+      "uiEvent": "input.search",
       "rawMotionHints": [
         "input.focus-blur"
       ],
@@ -11351,10 +11398,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f5b63b50cb8c308715dd",
+      "candidateKey": "candidate:0edc93ccdbc3d06e7ac0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11368,12 +11414,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "完成",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > button[data-close-keyboard]",
+      "label": "关闭搜索键盘",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > button[data-ui-event=\"overlay\\.keyboard\\.open\"]",
       "dataAttributes": {
-        "data-close-keyboard": ""
+        "data-close-keyboard": "",
+        "data-control-id": "search-results.control.search-results.after.button.keyboard-close",
+        "data-control-key": "search-results.control.button.keyboard-close@search-results.after",
+        "data-entity-key": "search-results.control.button.keyboard-close",
+        "data-restore-focus": "search-results.control.button.keyboard-close@search-results.after",
+        "data-settings-key": "keyboard-close",
+        "data-ui-event": "overlay.keyboard.open"
       },
-      "uiEvent": null,
+      "uiEvent": "overlay.keyboard.open",
       "rawMotionHints": [
         "button.activate",
         "input.blur"
@@ -11385,10 +11437,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e0d323871cea886c6e4b",
+      "candidateKey": "candidate:acf982dc1f34c2e56775",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11403,11 +11454,17 @@
       "domTag": "button",
       "role": "button",
       "label": "重新搜索",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-search-reset]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-ui-event=\"search\\.clear\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-search-reset": ""
+        "data-control-id": "search-results.control.search-results.after.button.search-reset",
+        "data-control-key": "search-results.control.button.search-reset@search-results.after",
+        "data-entity-key": "search-results.control.button.search-reset",
+        "data-restore-focus": "search-results.control.button.search-reset@search-results.after",
+        "data-search-reset": "",
+        "data-settings-key": "search-reset",
+        "data-ui-event": "search.clear"
       },
-      "uiEvent": null,
+      "uiEvent": "search.clear",
       "rawMotionHints": [
         "button.activate",
         "input.clear"
@@ -11419,10 +11476,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:01d4097b4489efbcc57b",
+      "candidateKey": "candidate:89648f3e1399ca4a7b5f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11436,12 +11492,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "查看详情",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-route=\"book-detail\"]:nth-of-type(2)",
+      "label": "查看当前结果详情",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-ui-event=\"search\\.result\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "book-detail"
+        "data-control-id": "search-results.control.search-results.after.button.result-detail-primary",
+        "data-control-key": "search-results.control.button.result-detail-primary@search-results.after",
+        "data-entity-key": "search-results.control.button.result-detail-primary",
+        "data-restore-focus": "search-results.control.button.result-detail-primary@search-results.after",
+        "data-route": "book-detail",
+        "data-settings-key": "result-detail-primary",
+        "data-ui-event": "search.result.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.result.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -11455,7 +11517,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:995cfd11adf9ad4fc03d",
+      "candidateKey": "candidate:c7ff933bbbc8e8a48f99",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11470,8 +11532,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-loading.loading.button.back",
+        "data-control-key": "search-results.control.button.back@search-loading.loading",
+        "data-entity-key": "search-results.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -11486,7 +11554,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:496a97bd083b6a560576",
+      "candidateKey": "candidate:e4ea517f7d49fc85e999",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11500,18 +11568,22 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "取消",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-contract-static-route=\"search-loading\"] > div.fd-action-row > button[data-route=\"search-home\"]",
+      "label": "取消搜索",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"loading\"] > div.fd-action-row > button[data-ui-event=\"search\\.clear\"]",
       "dataAttributes": {
-        "data-route": "search-home"
+        "data-control-id": "search-results.control.search-loading.loading.button.search-cancel",
+        "data-control-key": "search-results.control.button.search-cancel@search-loading.loading",
+        "data-entity-key": "search-results.control.button.search-cancel",
+        "data-restore-focus": "search-results.control.button.search-cancel@search-loading.loading",
+        "data-search-close": "",
+        "data-settings-key": "search-cancel",
+        "data-ui-event": "search.clear"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.clear",
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
@@ -11519,7 +11591,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:9c07ec9725b8404e7f05",
+      "candidateKey": "candidate:42cd2627def62407058f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11534,8 +11606,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-empty.empty.button.back",
+        "data-control-key": "search-results.control.button.back@search-empty.empty",
+        "data-entity-key": "search-results.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -11550,7 +11628,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:823b3a92946d7d4412a3",
+      "candidateKey": "candidate:dab5d43fc66e4054b4c2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11565,17 +11643,21 @@
       "domTag": "button",
       "role": "button",
       "label": "重新搜索",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-contract-static-route=\"search-empty\"] > div.fd-action-row > button[data-route=\"search-home\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"empty\"] > div.fd-action-row > button[data-ui-event=\"search\\.submit\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "search-home"
+        "data-control-id": "search-results.control.search-empty.empty.button.search-retry",
+        "data-control-key": "search-results.control.button.search-retry@search-empty.empty",
+        "data-entity-key": "search-results.control.button.search-retry",
+        "data-restore-focus": "search-results.control.button.search-retry@search-empty.empty",
+        "data-search-retry": "",
+        "data-settings-key": "search-retry",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.submit",
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
@@ -11583,7 +11665,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:2e67fae30f883a0b56e3",
+      "candidateKey": "candidate:97c6ef78eade1aa672ad",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11598,9 +11680,15 @@
       "domTag": "button",
       "role": "button",
       "label": "去发现",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-contract-static-route=\"search-empty\"] > div.fd-action-row > button[data-route=\"discover\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"empty\"] > div.fd-action-row > button[data-ui-event=\"route\\.push\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "discover"
+        "data-control-id": "search-results.control.search-empty.empty.button.discover-open",
+        "data-control-key": "search-results.control.button.discover-open@search-empty.empty",
+        "data-entity-key": "search-results.control.button.discover-open",
+        "data-restore-focus": "search-results.control.button.discover-open@search-empty.empty",
+        "data-route": "discover",
+        "data-settings-key": "discover-open",
+        "data-ui-event": "route.push"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -11616,7 +11704,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:b2d838826a1a9bca4c10",
+      "candidateKey": "candidate:9e30a8b578ecc12db99f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11631,8 +11719,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-error.error.button.back",
+        "data-control-key": "search-results.control.button.back@search-error.error",
+        "data-entity-key": "search-results.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -11647,7 +11741,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:470281c42e509633d6aa",
+      "candidateKey": "candidate:63f25a814333c3656c1a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11661,18 +11755,22 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "重试",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-contract-static-route=\"search-error\"] > div.fd-action-row > button[data-route=\"search-loading\"]:nth-of-type(1)",
+      "label": "重试搜索",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"error\"] > div.fd-action-row > button[data-ui-event=\"search\\.submit\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "search-loading"
+        "data-control-id": "search-results.control.search-error.error.button.search-retry",
+        "data-control-key": "search-results.control.button.search-retry@search-error.error",
+        "data-entity-key": "search-results.control.button.search-retry",
+        "data-restore-focus": "search-results.control.button.search-retry@search-error.error",
+        "data-search-retry": "",
+        "data-settings-key": "search-retry",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "search.submit",
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
@@ -11680,7 +11778,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:f25d147c7088320428cb",
+      "candidateKey": "candidate:cc0c757e052d682b7550",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11694,12 +11792,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "书源管理",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-contract-static-route=\"search-error\"] > div.fd-action-row > button[data-route=\"source-management\"]:nth-of-type(2)",
+      "label": "打开书源管理",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"error\"] > div.fd-action-row > button[data-ui-event=\"source\\.management\\.open\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "source-management"
+        "data-control-id": "search-results.control.search-error.error.button.source-management-open",
+        "data-control-key": "search-results.control.button.source-management-open@search-error.error",
+        "data-entity-key": "search-results.control.button.source-management-open",
+        "data-restore-focus": "search-results.control.button.source-management-open@search-error.error",
+        "data-route": "source-management",
+        "data-settings-key": "source-management-open",
+        "data-ui-event": "source.management.open"
       },
-      "uiEvent": "route.push",
+      "uiEvent": "source.management.open",
       "rawMotionHints": [
         "app.route.push",
         "button.activate"
@@ -11713,7 +11817,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a4dbf3918bf0d6bad189",
+      "candidateKey": "candidate:f0bc36075c2f17a8e136",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

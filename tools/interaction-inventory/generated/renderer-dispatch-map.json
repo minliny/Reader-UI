@@ -276,24 +276,24 @@
     },
     "search-loading": {
       "pageFamily": "search-results",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "searchStateScreen",
-      "rendererFile": "render-runtime.js"
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookSearchV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
     },
     "search-empty": {
       "pageFamily": "search-results",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "searchStateScreen",
-      "rendererFile": "render-runtime.js"
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookSearchV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
     },
     "search-error": {
       "pageFamily": "search-results",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "searchStateScreen",
-      "rendererFile": "render-runtime.js"
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookSearchV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
     },
     "import-conflict-resolve": {
       "pageFamily": "import-conflict-resolve",

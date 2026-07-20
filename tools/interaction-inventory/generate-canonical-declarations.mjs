@@ -177,6 +177,41 @@ function bookDetailActionDeclarations() {
   );
 }
 
+function searchResultsActionDeclarations() {
+  const rendererWindow = {
+    localStorage: { getItem() { return null; }, setItem() {}, removeItem() {} }
+  };
+  const source = readFileSync(join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-bookshelf-discover-renderers.js"), "utf8");
+  Function("window", "globalThis", source)(rendererWindow, rendererWindow);
+  const specs = rendererWindow.ReaderD2BookshelfDiscoverRenderers?.SEARCH_CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `search-results.control.${spec.role}.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.${spec.state}`,
+      controlId: `search-results.control.${spec.route}.${spec.state}.${spec.role}.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: spec.state,
+      domain: "search-results",
+      family: "control",
+      role: spec.role,
+      renderer: "bookSearchV2",
+      rendererFile: "renderers/d2-bookshelf-discover-renderers.js",
+      rendererSlot: "bookSearchV2@renderers/d2-bookshelf-discover-renderers.js",
+      pageFamily: "search-results",
+      source: "search-results-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
 function readerRuntimeActionDeclarations() {
   const contractModule = { exports: {} };
   const contractWindow = {};
@@ -729,6 +764,7 @@ const allDeclarations = registryDeclarations
   .concat(preservedPilotActionDeclarations)
   .concat(bookshelfActionDeclarations())
   .concat(bookDetailActionDeclarations())
+  .concat(searchResultsActionDeclarations())
   .concat(readerRuntimeActionDeclarations())
   .concat(rssRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())

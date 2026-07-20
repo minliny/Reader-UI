@@ -1468,17 +1468,139 @@
     }));
   }
 
-  // ============ 书架搜索 V2 ============
+  // ============ 书架搜索 V2：R2a/R2b 单一 owner ============
 
-  function bookSearchKeyboardLayerV2(query) {
+  var SEARCH_RESULT_BOOKS = Object.freeze([
+    Object.freeze({ id: "long-night", title: "长夜余火", author: "爱潜水的乌贼", coverKey: "longNight", source: "优书网", inShelf: true }),
+    Object.freeze({ id: "mystery-lord", title: "诡秘之主", author: "爱潜水的乌贼", coverKey: "mysteryLord", source: "书仓搜索", inShelf: true }),
+    Object.freeze({ id: "three-body", title: "三体", author: "刘慈欣", coverKey: "threeBody", source: "起点导入", inShelf: false })
+  ]);
+  var SEARCH_PRIMARY_ROUTES = ["search-results", "search-loading", "search-empty", "search-error"];
+  var SEARCH_CONTROL_SPECS = [
+    { route: "search-results", state: "after", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回搜索来源", focusReturn: false },
+    { route: "search-results", state: "after", role: "input", settingsKey: "query-input-primary", uiEvent: "input.search", label: "搜索书名、作者或关键词", focusReturn: false },
+    { route: "search-results", state: "after", role: "button", settingsKey: "search-submit", uiEvent: "search.submit", label: "提交搜索", focusReturn: true },
+    { route: "search-results", state: "after", role: "button", settingsKey: "result-open-long-night", uiEvent: "search.result.open", label: "打开 长夜余火", focusReturn: true },
+    { route: "search-results", state: "after", role: "button", settingsKey: "result-open-mystery-lord", uiEvent: "search.result.open", label: "打开 诡秘之主", focusReturn: true },
+    { route: "search-results", state: "after", role: "button", settingsKey: "result-open-three-body", uiEvent: "search.result.open", label: "打开 三体", focusReturn: true },
+    { route: "search-results", state: "after", role: "button", settingsKey: "result-add-three-body", uiEvent: "book.action", label: "将 三体 加入书架", focusReturn: false },
+    { route: "search-results", state: "after", role: "input", settingsKey: "query-input-keyboard", uiEvent: "input.search", label: "键盘搜索输入", focusReturn: false },
+    { route: "search-results", state: "after", role: "button", settingsKey: "keyboard-close", uiEvent: "overlay.keyboard.open", label: "关闭搜索键盘", focusReturn: true },
+    { route: "search-results", state: "after", role: "button", settingsKey: "search-reset", uiEvent: "search.clear", label: "重新搜索", focusReturn: true },
+    { route: "search-results", state: "after", role: "button", settingsKey: "result-detail-primary", uiEvent: "search.result.open", label: "查看当前结果详情", focusReturn: true },
+    { route: "search-loading", state: "loading", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回搜索来源", focusReturn: false },
+    { route: "search-loading", state: "loading", role: "button", settingsKey: "search-cancel", uiEvent: "search.clear", label: "取消搜索", focusReturn: true },
+    { route: "search-empty", state: "empty", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回搜索来源", focusReturn: false },
+    { route: "search-empty", state: "empty", role: "button", settingsKey: "search-retry", uiEvent: "search.submit", label: "重新搜索", focusReturn: true },
+    { route: "search-empty", state: "empty", role: "button", settingsKey: "discover-open", uiEvent: "route.push", label: "去发现", focusReturn: true },
+    { route: "search-error", state: "error", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回搜索来源", focusReturn: false },
+    { route: "search-error", state: "error", role: "button", settingsKey: "search-retry", uiEvent: "search.submit", label: "重试搜索", focusReturn: true },
+    { route: "search-error", state: "error", role: "button", settingsKey: "source-management-open", uiEvent: "source.management.open", label: "打开书源管理", focusReturn: true }
+  ];
+
+  function d2BookSearchDefaults() {
+    return {
+      phase: "after", query: "三体", queryId: "book-catalog-primary",
+      resultIds: SEARCH_RESULT_BOOKS.map(function (book) { return book.id; }),
+      selectedResultId: null, pending: null, requestEpoch: 0, error: null,
+      focusReturnKey: null, closed: false
+    };
+  }
+  var d2BookSearchState = d2BookSearchDefaults();
+  var d2BookSearchListeners = [];
+  function d2BookSearchReducer(state, action) {
+    var current = state || d2BookSearchDefaults();
+    switch (action && action.type) {
+      case "SET_QUERY":
+        return Object.assign({}, current, { query: String(action.value == null ? "" : action.value), error: null, closed: false });
+      case "SELECT_RESULT":
+        if (SEARCH_RESULT_BOOKS.map(function (book) { return book.id; }).indexOf(action.resultId) < 0) return current;
+        return Object.assign({}, current, { selectedResultId: action.resultId, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
+      case "SEARCH_START":
+        if (current.pending && current.pending.status === "loading") return current;
+        return Object.assign({}, current, { phase: "loading", pending: { id: action.requestId, status: "loading", kind: action.kind || "search" }, requestEpoch: action.epoch, error: null, closed: false });
+      case "SEARCH_SUCCESS":
+        if (!current.pending || current.pending.id !== action.requestId || current.pending.status !== "loading") return current;
+        return Object.assign({}, current, { phase: "after", pending: { id: action.requestId, status: "success", kind: current.pending.kind }, resultIds: Array.isArray(action.resultIds) ? action.resultIds.filter(function (id) { return SEARCH_RESULT_BOOKS.some(function (book) { return book.id === id; }); }) : current.resultIds, error: null });
+      case "SEARCH_EMPTY":
+        if (!current.pending || current.pending.id !== action.requestId || current.pending.status !== "loading") return current;
+        return Object.assign({}, current, { phase: "empty", pending: { id: action.requestId, status: "empty", kind: current.pending.kind }, resultIds: [], error: null });
+      case "SEARCH_FAILED":
+        if (!current.pending || current.pending.id !== action.requestId || current.pending.status !== "loading") return current;
+        return Object.assign({}, current, { phase: "error", pending: { id: action.requestId, status: "failed", kind: current.pending.kind }, error: action.error || "搜索失败" });
+      case "SEARCH_CLOSE":
+        return Object.assign({}, current, { phase: "before", pending: current.pending && current.pending.status === "loading" ? Object.assign({}, current.pending, { status: "cancelled" }) : current.pending, requestEpoch: current.requestEpoch + 1, closed: true, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
+      case "RESET":
+        return d2BookSearchDefaults();
+      default:
+        return current;
+    }
+  }
+  function d2BookSearchDispatch(action) {
+    var previous = d2BookSearchState;
+    var next = d2BookSearchReducer(previous, action);
+    if (next === previous) return previous;
+    d2BookSearchState = next;
+    d2BookSearchListeners.slice().forEach(function (listener) { listener(next, previous, action); });
+    return next;
+  }
+  function d2BookSearchSubscribe(listener) {
+    d2BookSearchListeners.push(listener);
+    return function () { d2BookSearchListeners = d2BookSearchListeners.filter(function (item) { return item !== listener; }); };
+  }
+  function d2BookSearchInitState(overrides) {
+    d2BookSearchState = Object.assign(d2BookSearchDefaults(), overrides || {});
+    return d2BookSearchState;
+  }
+  var d2BookSearchRequestSequence = 0;
+  async function d2ExecuteBookSearch(kind, effect) {
+    if (d2BookSearchState.pending && d2BookSearchState.pending.status === "loading") return { status: "duplicate" };
+    var epoch = d2BookSearchState.requestEpoch + 1;
+    var requestId = `book-search:${++d2BookSearchRequestSequence}`;
+    d2BookSearchDispatch({ type: "SEARCH_START", requestId: requestId, epoch: epoch, kind: kind || "search" });
+    try {
+      var value = await (typeof effect === "function" ? effect({ requestId: requestId, epoch: epoch, query: d2BookSearchState.query }) : Promise.resolve([]));
+      var before = d2BookSearchState;
+      if (!before.pending || before.pending.id !== requestId || before.pending.status !== "loading" || before.requestEpoch !== epoch || before.closed) return { status: "stale", requestId: requestId };
+      var resultIds = Array.isArray(value) ? value : before.resultIds;
+      d2BookSearchDispatch({ type: resultIds.length ? "SEARCH_SUCCESS" : "SEARCH_EMPTY", requestId: requestId, resultIds: resultIds });
+      return { status: resultIds.length ? "success" : "empty", requestId: requestId, value: value };
+    } catch (error) {
+      var failedBefore = d2BookSearchState;
+      if (!failedBefore.pending || failedBefore.pending.id !== requestId || failedBefore.pending.status !== "loading" || failedBefore.requestEpoch !== epoch || failedBefore.closed) return { status: "stale", requestId: requestId };
+      d2BookSearchDispatch({ type: "SEARCH_FAILED", requestId: requestId, error: error && error.message ? error.message : String(error) });
+      return { status: "failed", requestId: requestId };
+    }
+  }
+  function d2CloseBookSearch(focusReturnKey) {
+    if (d2BookSearchState.closed && (!d2BookSearchState.pending || d2BookSearchState.pending.status !== "loading")) return { status: "closed" };
+    d2BookSearchDispatch({ type: "SEARCH_CLOSE", focusReturnKey: focusReturnKey || null });
+    return { status: "cancelled" };
+  }
+  function d2BookSearchIdentity(route, settingsKey) {
+    return SEARCH_CONTROL_SPECS.find(function (spec) { return spec.route === route && spec.settingsKey === settingsKey; }) || null;
+  }
+  function d2BookSearchIdentityAttrs(route, settingsKey, extra) {
+    var spec = d2BookSearchIdentity(route, settingsKey);
+    if (!spec) return "";
+    var entityKey = `search-results.control.${spec.role}.${spec.settingsKey}`;
+    var controlKey = `${entityKey}@${route}.${spec.state}`;
+    var attrs = ` data-entity-key="${esc(entityKey)}" data-control-key="${esc(controlKey)}" data-control-id="${esc(`search-results.control.${route}.${spec.state}.${spec.role}.${spec.settingsKey}`)}" data-ui-event="${esc(spec.uiEvent)}" data-settings-key="${esc(spec.settingsKey)}"`;
+    if (spec.focusReturn) attrs += ` data-restore-focus="${esc(controlKey)}"`;
+    if (extra) attrs += ` ${extra}`;
+    return attrs;
+  }
+
+  function bookSearchKeyboardLayerV2(query, route) {
+    var primaryIdentity = route === "search-results";
     return `
       <section class="fd-demo-keyboard" aria-hidden="true" data-keyboard-host>
         <div class="fd-keyboard-panel">
           <label>
             <span>搜索书籍</span>
-            <input type="text" value="${esc(query == null ? "" : query)}" data-keyboard-input aria-label="搜索书籍" autocomplete="off">
+            <input type="text" value="${esc(query == null ? "" : query)}" data-keyboard-input${primaryIdentity ? ' data-search-query-id="book-catalog-primary"' : ""} aria-label="搜索书籍" autocomplete="off"${d2BookSearchIdentityAttrs(route, "query-input-keyboard")}>
           </label>
-          <button type="button" data-close-keyboard>完成</button>
+          <button type="button" data-close-keyboard${primaryIdentity ? ' aria-label="关闭搜索键盘"' : ""}${d2BookSearchIdentityAttrs(route, "keyboard-close")}>完成</button>
           <div class="fd-keyboard-keys" aria-hidden="true">
             ${["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "A", "S", "D", "F", "G", "H", "J", "K", "L"].map(function (key) {
               return `<i>${key}</i>`;
@@ -1490,9 +1612,23 @@
 
   /**
    * bookSearchV2 - 书架搜索状态变体
-   * 覆盖路由：book-search / search-home / search-results
+   * Primary F2：search-results / search-loading / search-empty / search-error。
+   * book-search / search-home 仅保留为 excluded secondary entry，不计入本族完成分母。
    */
   function bookSearchV2(data, route, appState) {
+    var primaryPhaseByRoute = { "search-results": "after", "search-loading": "loading", "search-empty": "empty", "search-error": "error" };
+    if (route === "search-loading" || route === "search-empty" || route === "search-error") {
+      var stateMeta = {
+        "search-loading": { title: "正在搜索", icon: "refresh", copy: "正在合并本地书架与可用书源；取消会使当前异步结果失效。", role: "status", live: "polite", action: "<button type=\"button\" data-search-close aria-label=\"取消搜索\"" + d2BookSearchIdentityAttrs(route, "search-cancel") + ">取消</button>" },
+        "search-empty": { title: "没有搜索结果", icon: "search", copy: "当前关键词没有匹配书籍，可修改关键词后重试。", role: "status", live: "polite", action: "<button type=\"button\" data-search-retry aria-label=\"重新搜索\"" + d2BookSearchIdentityAttrs(route, "search-retry") + ">重新搜索</button><button type=\"button\" data-route=\"discover\" aria-label=\"去发现\"" + d2BookSearchIdentityAttrs(route, "discover-open") + ">去发现</button>" },
+        "search-error": { title: "搜索失败", icon: "warning", copy: "搜索请求失败；原关键词和来源上下文仍然保留。", role: "alert", live: "assertive", action: "<button type=\"button\" data-search-retry aria-label=\"重试搜索\"" + d2BookSearchIdentityAttrs(route, "search-retry") + ">重试</button><button type=\"button\" data-route=\"source-management\" aria-label=\"打开书源管理\"" + d2BookSearchIdentityAttrs(route, "source-management-open") + ">书源管理</button>" }
+      }[route];
+      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+        data: data, title: stateMeta.title, ariaLabel: stateMeta.title, topBarClass: "fd-back-bar",
+        backButtonAttrs: d2BookSearchIdentityAttrs(route, "back"),
+        contentHtml: `<section class="fd-search-state fd-search-state-${esc(primaryPhaseByRoute[route])}" data-search-state="${esc(primaryPhaseByRoute[route])}" role="${stateMeta.role}" aria-live="${stateMeta.live}"${route === "search-loading" ? ' aria-busy="true"' : ""}><span class="fd-search-state-icon" aria-hidden="true">${icon(stateMeta.icon, "fd-small-icon")}</span><h2>${stateMeta.title}</h2><p>${stateMeta.copy}</p><div class="fd-action-row">${stateMeta.action}</div></section>`
+      }));
+    }
     var phase = route === "search-home" ? "before"
       : route === "search-results" ? "after"
       : (appState && appState.bookSearchPhase) || "before";
@@ -1500,11 +1636,7 @@
     var query = String((appState && appState.bookSearchQuery) || "");
     var history = ["长夜", "诡秘", "三体", "明朝那些事"];
     var suggestions = ["长夜余火", "诡秘之主", "三体", "明朝那些事儿"];
-    var results = [
-      { title: "长夜余火", author: "爱潜水的乌贼", coverKey: "longNight", source: "优书网", inShelf: true },
-      { title: "诡秘之主", author: "爱潜水的乌贼", coverKey: "mysteryLord", source: "书仓搜索", inShelf: true },
-      { title: "三体", author: "刘慈欣", coverKey: "threeBody", source: "起点导入", inShelf: false }
-    ];
+    var results = SEARCH_RESULT_BOOKS;
     var beforeHtml = `
       <section class="fd-search-state fd-search-state-before" data-search-state="before">
         <section class="fd-search-history">
@@ -1547,7 +1679,7 @@
       <section class="fd-search-results" data-search-state="after" role="status" aria-live="polite">
         <h2>搜索结果（${results.length}）</h2>
         ${results.map(function (r) {
-          return `<article class="fd-search-result-row" role="button" tabindex="0" data-route="book-detail">
+          return `<article class="fd-search-result-row" role="button" tabindex="0" data-route="book-detail"${route === "search-results" ? ` data-search-result-id="${esc(r.id)}" aria-label="打开 ${esc(r.title)}"` : ""}${d2BookSearchIdentityAttrs(route, `result-open-${r.id}`)}>
             <img src="${cover(data, r.coverKey)}" alt="${esc(r.title)}封面">
             <span>
               <strong>${esc(r.title)}</strong>
@@ -1555,7 +1687,7 @@
             </span>
             ${r.inShelf
               ? `<em class="fd-book-source-tag is-cached">已在书架</em>`
-              : `<button type="button" data-search-add-to-bookshelf>${icon("plus", "fd-small-icon")}加入书架</button>`}
+              : `<button type="button" data-search-add-to-bookshelf${route === "search-results" ? ` data-search-result-id="${esc(r.id)}" aria-label="将 ${esc(r.title)} 加入书架"` : ""}${d2BookSearchIdentityAttrs(route, `result-add-${r.id}`)}>${icon("plus", "fd-small-icon")}加入书架</button>`}
           </article>`;
         }).join("")}
       </section>`;
@@ -1569,18 +1701,19 @@
       title: "搜索书籍",
       ariaLabel: "搜索书籍",
       topBarClass: "fd-back-bar",
+      backButtonAttrs: d2BookSearchIdentityAttrs(route, "back"),
       bottomActionHostClass: "fd-bottom-action-host",
       contentHtml: `
         <section class="fd-search-bar">
-          <input type="search" placeholder="搜索书名、作者或关键词" value="${esc(query)}" data-book-search-input data-open-keyboard>
-          <button type="button" data-search-submit data-book-search-submit>${icon("search", "fd-small-icon")}</button>
+          <input type="search" placeholder="搜索书名、作者或关键词" value="${esc(query)}" data-book-search-input data-open-keyboard${route === "search-results" ? ' data-search-query-id="book-catalog-primary" aria-label="搜索书名、作者或关键词"' : ""}${d2BookSearchIdentityAttrs(route, "query-input-primary")}>
+          <button type="button" data-search-submit data-book-search-submit${route === "search-results" ? ' aria-label="提交搜索"' : ""}${d2BookSearchIdentityAttrs(route, "search-submit")}>${icon("search", "fd-small-icon")}</button>
         </section>
         ${stateHtml}
-        ${bookSearchKeyboardLayerV2(query)}`,
+        ${bookSearchKeyboardLayerV2(query, route)}`,
       bottomActionHtml: `
         <div class="fd-fixed-action-row">
           ${phase === "after"
-            ? `<button type="button" data-search-reset>重新搜索</button><button type="button" data-route="book-detail">查看详情</button>`
+            ? `<button type="button" data-search-reset aria-label="重新搜索"${d2BookSearchIdentityAttrs(route, "search-reset")}>重新搜索</button><button type="button" data-route="book-detail" aria-label="查看当前结果详情"${d2BookSearchIdentityAttrs(route, "result-detail-primary")}>查看详情</button>`
             : phase === "loading"
               ? `<button type="button" data-search-reset>清空并取消</button><button type="button" data-search-submit data-book-search-submit data-primary-search-submit>用最新输入搜索</button>`
               : phase === "empty" || phase === "error"
@@ -2581,6 +2714,9 @@
     "book-search": "bookSearchV2",
     "search-home": "bookSearchV2",
     "search-results": "bookSearchV2",
+    "search-loading": "bookSearchV2",
+    "search-empty": "bookSearchV2",
+    "search-error": "bookSearchV2",
     "local-import": "localImportV2",
     "bookshelf-search-settings": "bookshelfSearchSettingsV2"
   };
@@ -2601,6 +2737,20 @@
     bookDetailV2: bookDetailV2,
     bookDirectoryV2: bookDirectoryV2,
     bookSearchV2: bookSearchV2,
+    SEARCH_CONTROL_SPECS: SEARCH_CONTROL_SPECS,
+    SEARCH_RESULT_BOOKS: SEARCH_RESULT_BOOKS,
+    bookSearch: {
+      defaults: d2BookSearchDefaults,
+      reducer: d2BookSearchReducer,
+      initState: d2BookSearchInitState,
+      dispatch: d2BookSearchDispatch,
+      subscribe: d2BookSearchSubscribe,
+      getState: function () { return d2BookSearchState; },
+      executeSearch: function (effect) { return d2ExecuteBookSearch("search", effect); },
+      executeRetry: function (effect) { return d2ExecuteBookSearch("retry", effect); },
+      close: d2CloseBookSearch,
+      identityAttrs: d2BookSearchIdentityAttrs
+    },
     localImportV2: localImportV2,
     bookshelfSearchSettingsV2: bookshelfSearchSettingsV2,
     bookshelf: {

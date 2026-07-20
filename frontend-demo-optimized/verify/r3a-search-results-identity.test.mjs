@@ -1,0 +1,79 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const read = (file) => readFileSync(join(root, file), "utf8");
+const rendererSource = read("renderers/d2-bookshelf-discover-renderers.js");
+const declarationSource = read("control-identity-declarations.js");
+const runtimeSource = read("render-runtime.js");
+const sources = ["asset-library/icons.js", "shared-shell-kit/kit.js", "appearance-spec.js", "fixture.js", "control-identity-declarations.js", "renderers/d2-bookshelf-discover-renderers.js"].map(read);
+
+function fresh() {
+  const window = { localStorage: { getItem() { return null; }, setItem() {}, removeItem() {} }, ReaderFrontendDemoDraftRouteContract: { routes: {}, routePresentation: {} } };
+  const context = vm.createContext({ window, module: { exports: {} }, Promise, setTimeout });
+  sources.forEach((source) => new vm.Script(source).runInContext(context));
+  return { api: window.ReaderD2BookshelfDiscoverRenderers, data: window.READER_FRONTEND_DEMO_DRAFT_FIXTURE };
+}
+function values(html, attr) { return [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((match) => match[1]); }
+
+test("R2a search-results declares exactly 19 mapped business controls", () => {
+  const sandbox = { module: { exports: {} }, window: {} }; new vm.Script(declarationSource).runInNewContext(sandbox);
+  const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "search-results-action");
+  assert.equal(rows.length, 19); assert.equal(new Set(rows.map((row) => row.controlKey)).size, 19);
+  assert.ok(rows.every((row) => row.mappingStatus === "mapped" && row.actionKey === row.settingsKey && row.instanceKey === null));
+});
+
+test("R2a four primary routes stamp 11/2/3/3 controls with five attrs", () => {
+  const { api, data } = fresh(); const expected = { "search-results": 11, "search-loading": 2, "search-empty": 3, "search-error": 3 };
+  for (const [route, count] of Object.entries(expected)) {
+    const html = api.bookSearchV2(data, route, {});
+    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, count, `${route} ${attr}`);
+    assert.equal(new Set(values(html, "data-control-key")).size, count);
+  }
+});
+
+test("R2a specs and declarations have zero route/state/key mismatch", () => {
+  const { api } = fresh(); const sandbox = { module: { exports: {} }, window: {} }; new vm.Script(declarationSource).runInNewContext(sandbox);
+  const actual = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "search-results-action").map((entry) => `${entry.route}|${entry.state}|${entry.settingsKey}`).sort();
+  const expected = api.SEARCH_CONTROL_SPECS.map((entry) => `${entry.route}|${entry.state}|${entry.settingsKey}`).sort();
+  assert.equal(JSON.stringify(actual), JSON.stringify(expected));
+});
+
+test("R2a result rows use three stable book IDs", () => {
+  const { api, data } = fresh(); const html = api.bookSearchV2(data, "search-results", {});
+  assert.deepEqual(values(html, "data-search-result-id"), ["long-night", "mystery-lord", "three-body", "three-body"]);
+  assert.ok(api.SEARCH_CONTROL_SPECS.every((spec) => !/\.n\d+|ordinal|selector/i.test(spec.settingsKey)));
+});
+
+test("R2a query inputs use a stable query ID", () => {
+  const { api, data } = fresh(); const html = api.bookSearchV2(data, "search-results", {});
+  assert.deepEqual(values(html, "data-search-query-id"), ["book-catalog-primary", "book-catalog-primary"]);
+});
+
+test("R3a all four primary routes resolve through bookSearchV2", () => {
+  const { api } = fresh();
+  for (const route of ["search-results", "search-loading", "search-empty", "search-error"]) assert.equal(api.STATE_VARIANT_MAP[route], "bookSearchV2");
+});
+
+test("R3a render-runtime fallbacks fail loudly for all four routes", () => {
+  assert.match(runtimeSource, /search-results route is FROZEN to bookSearchV2/);
+  assert.match(runtimeSource, /search-error[\s\S]*FROZEN to bookSearchV2/);
+});
+
+test("R3a search-home and book-search remain excluded secondary entries", () => {
+  const { api, data } = fresh();
+  for (const route of ["search-home", "book-search"]) assert.equal(values(api.bookSearchV2(data, route, {}), "data-control-key").length, 0);
+  assert.match(rendererSource, /excluded secondary entry/);
+});
+
+test("R3a Phone and Tablet reuse identical primary control keys", () => {
+  const { api, data } = fresh(); const keys = values(api.bookSearchV2(data, "search-results", {}), "data-control-key").sort();
+  assert.deepEqual(values(`<main data-viewport="phone">${api.bookSearchV2(data, "search-results", {})}</main>`, "data-control-key").sort(), keys);
+  assert.deepEqual(values(`<main data-viewport="tablet">${api.bookSearchV2(data, "search-results", {})}</main>`, "data-control-key").sort(), keys);
+});
+
+test("R3a search-results owns no Compact Fold or independent Landscape atom", () => assert.doesNotMatch(rendererSource, /compact-landscape|foldable|data-viewport="compact"|data-viewport="fold"/i));

@@ -40,9 +40,9 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2309,
+    "withUiEvent": 2315,
     "withRawMotionHints": 3719,
-    "rawMotionHintOccurrences": 7139,
+    "rawMotionHintOccurrences": 7136,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -96,7 +96,7 @@
       "toggle.switch"
     ],
     "withCanonicalMotionIds": 3701,
-    "canonicalMotionIdOccurrences": 7241,
+    "canonicalMotionIdOccurrences": 7238,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -153,7 +153,7 @@
       "toggle.switch"
     ],
     "withRawMotionHintsButNoCanonicalMotionId": 18,
-    "missingAccessibleNames": 21,
+    "missingAccessibleNames": 20,
     "canonicalControlIds": 0,
     "joinedControls": 0,
     "unjoinedControls": 3808,
@@ -195,11 +195,11 @@
       "web-auth": 11
     },
     "gapCodes": {
-      "IC0_ACCESSIBLE_LABEL_MISSING": 21,
+      "IC0_ACCESSIBLE_LABEL_MISSING": 20,
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1499
+      "IC0_UI_EVENT_UNRESOLVED": 1493
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "f82edf6cd8edeba060c7b48e9c65b8a86edc0c9f75da90c8da8d48e822a47e68",
+  "inventorySha256": "72a69971675fdf780584853efa6ba7f41f330bf2d5b7223bba3943dd7114843d",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -619,7 +619,7 @@
       "pageState": "default",
       "semanticControls": 11,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "4df85621a5704c991d21759978baad4bdae1df33694c88fcced2ab808b6a9aaf"
+      "renderSha256": "4bef9642f7a2f7d58eb3811c273008262a41b41e8e866919b2c3dee208bdcd2b"
     },
     {
       "routeId": "search-loading",
@@ -630,7 +630,7 @@
       "pageState": "loading",
       "semanticControls": 2,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "48f6bb5872ea8966fee64765cf86852610e520467361b96923ccdfe802d1f48a"
+      "renderSha256": "15544a0367c1baf94e5607929dc59e8f2be09d2e15b156018cbaf5d0719d0093"
     },
     {
       "routeId": "search-empty",
@@ -641,7 +641,7 @@
       "pageState": "empty",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ec367875298f1c58afff7733646df2c32e299ea063e0c6468fd5614508a3e9e9"
+      "renderSha256": "7dd13bf2f634b3ec339cdaa89ad413f85ab52e7ad2e4e3b1aec5ab1837da14c9"
     },
     {
       "routeId": "search-error",
@@ -652,7 +652,7 @@
       "pageState": "error",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "90f7897664786efa8eb8009cb5b3c1a0c6af045f6d62e8e54a07b20aa2e7e3e4"
+      "renderSha256": "14f7df82d263dc966b550c9ba2c4ab1e7db6eeba2edb24f3a53100cbffcb6909"
     },
     {
       "routeId": "book-detail",
