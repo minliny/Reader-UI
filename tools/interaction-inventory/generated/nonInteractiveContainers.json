@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "f069e889aeefdbe7da930cb76fe929dbfec9d658365f5b343833bac08a93c802",
+    "inventorySha256": "5d72cf2e6cfa518f853006770432a462f058de6f46dcf94c0b046e1c35de83f2",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
   },
   "totals": {

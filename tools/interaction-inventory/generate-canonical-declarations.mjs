@@ -49,6 +49,7 @@ const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
 const RSS_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "rss-runtime-contract.js");
 const IMPORT_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "import-runtime-contract.js");
+const DISCOVER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "discover-runtime-contract.js");
 const SOURCE_SWITCH_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "w3-source-switch-renderers.js");
 const SYNC_BACKUP_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js");
 
@@ -309,6 +310,40 @@ function importRuntimeActionDeclarations() {
       rendererSlot: `${dispatchMap.routes[spec.route]?.renderer || "importConflictResolveScreen"}@render-runtime.js`,
       pageFamily: "import-conflict-resolve",
       source: "import-conflict-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
+function discoverRuntimeActionDeclarations() {
+  const contractModule = { exports: {} };
+  const contractWindow = {};
+  const source = readFileSync(DISCOVER_RUNTIME_CONTRACT_PATH, "utf8");
+  Function("module", "window", "globalThis", source)(contractModule, contractWindow, contractWindow);
+  const specs = contractModule.exports.CONTROL_SPECS || contractWindow.ReaderDiscoverRuntimeContract?.CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `discover.control.${spec.role}.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.default`,
+      controlId: `discover.control.${spec.route}.default.${spec.role}.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: "default",
+      domain: "discover",
+      family: "control",
+      role: spec.role,
+      renderer: "mainTabDiscover",
+      rendererFile: "render-runtime.js",
+      rendererSlot: "mainTabDiscover@render-runtime.js",
+      pageFamily: "discover",
+      source: "discover-action",
       label: spec.label,
       settingsKey: spec.settingsKey
     };
@@ -803,6 +838,7 @@ const allDeclarations = registryDeclarations
   .concat(readerRuntimeActionDeclarations())
   .concat(rssRuntimeActionDeclarations())
   .concat(importRuntimeActionDeclarations())
+  .concat(discoverRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())
   .concat(syncBackupActionDeclarations())
   .concat(restorePreviewActionDeclarations())

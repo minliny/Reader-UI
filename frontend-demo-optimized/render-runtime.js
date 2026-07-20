@@ -535,8 +535,8 @@
     };
     const switched = route === "discover-switched-source";
     const source = switched
-      ? { name: "起点导入", meta: "正版 · 已启用发现 · 180ms", status: "已启用发现", speed: "180ms" }
-      : { name: "优书网", meta: "默认分组 · 已启用发现 · 120ms", status: "已启用发现", speed: "120ms" };
+      ? { id: "qidian-import", name: "起点导入", meta: "正版 · 已启用发现 · 180ms", status: "已启用发现", speed: "180ms" }
+      : { id: "youshu", name: "优书网", meta: "默认分组 · 已启用发现 · 120ms", status: "已启用发现", speed: "120ms" };
     const entries = switched ? ["畅销", "分类", "新书", "完本"] : ["排行榜", "书源", "分类", "完本", "最新", "书单"];
     const routedEntry = entryRouteMap[route];
     const routedFilter = filterRouteMap[route];
@@ -874,7 +874,7 @@
 
   function mainTabDiscover(data, appState, route) {
     const currentRoute = route || "discover";
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone fd-discover-phone"), {
+    const html = shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone fd-discover-phone"), {
       data,
       title: "发现",
       activeType: "discover",
@@ -884,6 +884,8 @@
       contentHtml: discoverMainContent(data, currentRoute, appState),
       stateHostHtml: mainTabFeedbackHtml(appState)
     }));
+    const instrument = window.ReaderDiscoverRuntimeContract?.instrumentHtml;
+    return typeof instrument === "function" ? instrument(html, currentRoute) : html;
   }
 
   function discoverSourceLoginScreen(data) {

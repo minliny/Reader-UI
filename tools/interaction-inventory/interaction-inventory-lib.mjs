@@ -548,6 +548,7 @@ export function createVmRenderer() {
     `${DEMO_ROOT}/route-contract.js`,
     `${DEMO_ROOT}/rss-runtime-contract.js`,
     `${DEMO_ROOT}/import-runtime-contract.js`,
+    `${DEMO_ROOT}/discover-runtime-contract.js`,
     ...rendererSourcePaths(),
   ];
   for (const sourcePath of sourcePaths) {

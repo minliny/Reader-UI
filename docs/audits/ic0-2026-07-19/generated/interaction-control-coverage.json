@@ -40,7 +40,7 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2327,
+    "withUiEvent": 2355,
     "withRawMotionHints": 3719,
     "rawMotionHintOccurrences": 7136,
     "uniqueRawMotionHints": [
@@ -199,7 +199,7 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1481
+      "IC0_UI_EVENT_UNRESOLVED": 1453
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "f069e889aeefdbe7da930cb76fe929dbfec9d658365f5b343833bac08a93c802",
+  "inventorySha256": "5d72cf2e6cfa518f853006770432a462f058de6f46dcf94c0b046e1c35de83f2",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1015,7 +1015,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0"
+      "renderSha256": "beec193e2f3819f6e6c6ebfa7fa3bcf030d0e4385e9d2fa9ca91fc67d163ba59"
     },
     {
       "routeId": "discover-home",
@@ -1026,7 +1026,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0"
+      "renderSha256": "e778245bcb93a82c28b7764242f6808bf027caacfdd7cd0a2c42d4c3a0c359af"
     },
     {
       "routeId": "discover-control",
@@ -1037,7 +1037,7 @@
       "pageState": "default",
       "semanticControls": 31,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "b3dc00fa3c4b00a24eaf924f54b274a804e6e627940b2a15809a124d8343cd4d"
+      "renderSha256": "641cee974fbc4f19ff631ab6f9792bec410f8bdae70bb013993942d624d6444d"
     },
     {
       "routeId": "discover-sort",
@@ -1048,7 +1048,7 @@
       "pageState": "default",
       "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "45f38c4e3120b1b6b58dd5f2d3d67c6aa913eecbdb564e8a862b6179c6d04f51"
+      "renderSha256": "d4beb37cbd5787179b8482cd479f9bcb674976644b2565c603d8448e753cd6d1"
     },
     {
       "routeId": "discover-entry-category",
@@ -1059,7 +1059,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "e0b333f627a99cc8679c07e12fb8bc3c459b816599bce2d3ab23a1ea5110b229"
+      "renderSha256": "604fb5917ac39d44e7dded17a15a81b4d03fc0a6c862cfb8abdf273415de6a32"
     },
     {
       "routeId": "discover-entry-source",
@@ -1070,7 +1070,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "0ef2b0f3b8f12761b711f05a514a29a19f47d9ca1ff359a269bacd556a07af84"
+      "renderSha256": "da3ec42752eb27f3d28ebd8a6f672d089a4036e05053668b0ec84ec8ccb34255"
     },
     {
       "routeId": "discover-filter-source-type",
@@ -2093,7 +2093,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0"
+      "renderSha256": "100685bcebb7ea387ec42dc5048491e4fde731c15a0680de25a5ddbffa063995"
     },
     {
       "routeId": "discover-entry-bestseller",
@@ -2104,7 +2104,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0"
+      "renderSha256": "6bb1cd3b545c0d3880760368e589036c6a61b886b9dd33eb7641c2a92bd4525e"
     },
     {
       "routeId": "discover-entry-finished",
@@ -2115,7 +2115,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "021d51490eccf53215d26598c31990fe368694d1082938477276c1b73edbe3dc"
+      "renderSha256": "a3dba3aab5594089d34ba6f81b39d5d3bfac6264bdd2dedccd5fc18af4ec6f9a"
     },
     {
       "routeId": "discover-entry-latest",
@@ -2126,7 +2126,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f0ae20d695c404ae5999466a0e11d03272069d6eabf223308741ca25d5142819"
+      "renderSha256": "5939ff387b71474c324af8d829b6688feaba387c8a572ea157b9e2eda80e2b4c"
     },
     {
       "routeId": "discover-entry-new",
@@ -2137,7 +2137,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "690feabf72c955c56a5884066a2b3206ab6409dd2d227827414067b74fa003e0"
+      "renderSha256": "83e03d3ca41de694ab8b98e5877cf6f6b3b0fe765b199717ce99f4328901b0e4"
     },
     {
       "routeId": "discover-entry-booklist",
@@ -2148,7 +2148,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d4a08f3e6a93cd4eb2f7f4ed8217604f68085288a7112d25faec590609398542"
+      "renderSha256": "27423c08434b0203857988357667964f417c7dba83c0bd1d19996f3703b932b1"
     },
     {
       "routeId": "discover-filter-keyword",
