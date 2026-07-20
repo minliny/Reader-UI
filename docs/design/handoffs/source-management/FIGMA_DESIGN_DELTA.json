@@ -2,14 +2,17 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "source-management",
-  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "status": "F2_COMPLETE",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378289787451208100",
-  "revisionTitle": "F2 · Source Management · Final Crosswalk",
+  "revision": "2378300834098665145",
+  "revisionTitle": "F2 · Source Management · User Confirmed",
   "liveHeadCorrection": {
     "timestamp": "2026-07-20T13:23:23Z",
-    "revisionStatus": "PENDING_NAMED_REVISION",
-    "reason": "Figma Desktop could not reconnect to version history (ERR_PROXY_CONNECTION_FAILED -130); do not mislabel the live-head correction as revision 2378289787451208100.",
+    "revisionStatus": "NAMED_REVISION_CREATED",
+    "namedRevision": "2378300834098665145",
+    "namedRevisionTitle": "F2 · Source Management · User Confirmed",
+    "confirmedAt": "2026-07-20T13:47:08Z",
+    "reason": "Figma Desktop was reopened from Home to exit stale version 2378285875260213512; the corrected live head was then saved as a new named revision.",
     "deltas": [
       {
         "target": "SourceManagement/GroupFilter/Icon/Folder",
@@ -77,7 +80,7 @@
       "pageId": "834:2",
       "nodeId": "943:4278",
       "oldValue": "Phone and Tablet instances inherited the pre-R2b source-management body; a residual Compact text label remained after the earlier removal transaction.",
-      "newValue": "Phone and Tablet instances inherit revision 2378289787451208100; residual Compact label is removed and there is no detached instance."
+      "newValue": "Phone and Tablet instances inherit revision 2378300834098665145; residual Compact label is removed and there is no detached instance."
     }
   ],
   "createdCanonicalNodes": [
@@ -126,13 +129,11 @@
   },
   "admission": {
     "figmaWriteTransactionComplete": true,
-    "userConfirmed": false,
-    "f2Exit": false,
+    "userConfirmed": true,
+    "userConfirmedAt": "2026-07-20T13:47:08Z",
+    "f2Exit": true,
     "nextLocalFamily": "webdav-config",
-    "nextLocalFamilyReleased": false,
-    "remainingGates": [
-      "NAMED_REVISION_FOR_LIVE_HEAD_ICON_CORRECTION",
-      "USER_CONFIRMATION_SOURCE_MANAGEMENT_F2"
-    ]
+    "nextLocalFamilyReleased": true,
+    "remainingGates": []
   }
 }
