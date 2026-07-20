@@ -1,8 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_FULL_FILE_SHADOW_AUDIT",
-  "status": "WRITE_COMPLETE_NAMED_REVISION_PENDING_MAC_UNLOCK",
+  "status": "COMPLETE",
   "observedAt": "2026-07-20T09:49:16Z",
+  "verifiedAt": "2026-07-20T11:15:05Z",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "pageDenominator": 29,
   "pagesReadAfterWrite": 29,
@@ -41,6 +42,32 @@
     "foundationEffectSamples": 12,
     "total": 162
   },
+  "localRootCauseClosure": {
+    "canonicalRuntime": "frontend-demo-optimized",
+    "rootCause": "Ambiguous global shadow aliases were available to persistent page, card, settings, and reader surfaces, so later capture or component reuse could regenerate decorative external shadows.",
+    "removedAliases": [
+      "--fd-shadow",
+      "--fd-soft-shadow",
+      "--fd-settings-card-shadow"
+    ],
+    "roleScopedTokens": [
+      "--fd-shadow-overlay",
+      "--fd-shadow-transient",
+      "--fd-shadow-media",
+      "--fd-shadow-floating-control"
+    ],
+    "failClosedGate": "frontend-demo-optimized/verify/shadow-policy.test.mjs",
+    "gatePolicy": "Every active external runtime shadow must resolve to an explicit semantic role; persistent page/body surfaces and deprecated aliases fail the test.",
+    "tests": { "passed": 139, "total": 139 },
+    "browserVerification": {
+      "routeFamilies": 13,
+      "viewports": ["Phone 390x844", "Tablet 760x960"],
+      "checks": 26,
+      "failures": 0,
+      "landscapePolicy": "Landscape aliases Tablet; no independent Compact layout is generated or accepted."
+    },
+    "futureCaptureRecurrenceGuard": true
+  },
   "pageResults": [
     { "page": "00 · Cover", "activeDropShadowEffects": 0 },
     { "page": "01 · Foundations", "activeDropShadowEffects": 12, "exception": "effect samples" },
@@ -72,8 +99,12 @@
     { "page": "27 · Interaction Playground", "activeDropShadowEffects": 1, "exception": "focus ring" },
     { "page": "28 · Project Index & Audit", "activeDropShadowEffects": 0 }
   ],
-  "namedRevision": null,
-  "namedRevisionBlocker": "Mac is locked; Figma Desktop named-version dialog cannot be operated until manual unlock.",
+  "namedRevision": {
+    "id": "2378238571030063779",
+    "title": "F0/F1 · Full File Shadow Policy Closure",
+    "url": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378238571030063779&node-id=1023-17636"
+  },
+  "namedRevisionBlocker": null,
   "scopeGuard": {
     "f1UserConfirmed": false,
     "f2QueueAdmitted": false,

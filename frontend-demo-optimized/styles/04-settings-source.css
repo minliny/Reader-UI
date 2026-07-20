@@ -507,7 +507,7 @@
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
   background: var(--fd-surface);
-  box-shadow: var(--fd-soft-shadow);
+  box-shadow: none;
 }
 
 .fd-filter-panel {
@@ -525,7 +525,7 @@
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
   background: var(--fd-surface);
-  box-shadow: var(--fd-soft-shadow);
+  box-shadow: none;
 }
 
 .fd-batch-summary strong,
@@ -786,7 +786,7 @@
   border: 1px solid rgba(164, 149, 132, 0.42);
   border-radius: var(--fd-radius-xl) var(--fd-radius-xl) 0 0;
   background: rgba(255, 250, 244, 0.97);
-  box-shadow: var(--fd-shadow);
+  box-shadow: var(--fd-shadow-overlay);
   transform: translateY(100%);
   transition:
     transform var(--reader-motion-duration-base) var(--reader-motion-easing-standard),
@@ -863,7 +863,7 @@
   border: 1px solid rgba(164, 149, 132, 0.42);
   border-radius: var(--fd-radius-md);
   background: rgba(255, 252, 248, 0.98);
-  box-shadow: var(--fd-shadow);
+  box-shadow: var(--fd-shadow-overlay);
   opacity: 0;
   transform: translateY(-44%) scale(var(--reader-motion-scale-dialog-enter));
   transition:
@@ -1232,7 +1232,7 @@
   border: 1px solid rgba(180, 166, 151, 0.38);
   border-radius: var(--fd-radius-lg);
   background: rgba(255, 252, 248, 0.92);
-  box-shadow: 0 5px 14px rgba(92, 71, 50, 0.05);
+  box-shadow: none;
 }
 
 .fd-restore-card {
@@ -1491,7 +1491,7 @@
   border: var(--fd-settings-card-border);
   border-radius: var(--fd-settings-card-radius);
   background: var(--fd-surface);
-  box-shadow: var(--fd-settings-card-shadow);
+  box-shadow: none;
 }
 
 .fd-settings-metric-grid article {

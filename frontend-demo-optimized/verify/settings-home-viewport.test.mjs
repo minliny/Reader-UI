@@ -332,14 +332,9 @@ test("page roots and settings surfaces cannot reintroduce decorative shadows", (
     "settings sections must use border and spacing instead of a surface shadow",
   );
 
-  assert.match(
-    foundationCss,
-    /--fd-shadow:\s*var\(--fd-ds-shadow-elevated\)/,
-    "the elevated token remains available for explicit overlays",
-  );
-  assert.match(
-    foundationCss,
-    /--fd-soft-shadow:\s*var\(--fd-ds-shadow-soft\)/,
-    "the soft token remains available for explicit transient surfaces",
-  );
+  assert.match(foundationCss, /--fd-shadow-overlay:\s*var\(--fd-ds-shadow-elevated\)/);
+  assert.match(foundationCss, /--fd-shadow-transient:\s*var\(--fd-ds-shadow-soft\)/);
+  assert.match(foundationCss, /--fd-shadow-media:\s*var\(--fd-ds-shadow-soft\)/);
+  assert.match(foundationCss, /--fd-shadow-floating-control:\s*var\(--fd-ds-shadow-elevated\)/);
+  assert.doesNotMatch(foundationCss, /--fd-shadow\s*:|--fd-soft-shadow\s*:/);
 });

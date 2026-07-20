@@ -12,8 +12,12 @@
   --fd-accent: var(--fd-ds-color-accent);
   --fd-forest: #367a4d;
   --fd-danger: #d62222;
-  --fd-shadow: var(--fd-ds-shadow-elevated);
-  --fd-soft-shadow: var(--fd-ds-shadow-soft);
+  /* Shadow tokens are role-scoped. Persistent page/content surfaces must not
+     consume them; the verification gate rejects ambiguous shadow aliases. */
+  --fd-shadow-overlay: var(--fd-ds-shadow-elevated);
+  --fd-shadow-transient: var(--fd-ds-shadow-soft);
+  --fd-shadow-media: var(--fd-ds-shadow-soft);
+  --fd-shadow-floating-control: var(--fd-ds-shadow-elevated);
   --fd-sans: var(--fd-ds-font-sans);
   --fd-serif: var(--fd-ds-font-serif);
   --fd-radius-xs: 4px;
@@ -127,8 +131,10 @@ button:focus-visible {
   --fd-primary-dark: #7a684f;
   --fd-on-primary: #fffaf4;
   --fd-accent: #d69b5f;
-  --fd-shadow: 0 22px 48px rgba(0, 0, 0, 0.36);
-  --fd-soft-shadow: 0 10px 26px rgba(0, 0, 0, 0.24);
+  --fd-shadow-overlay: 0 22px 48px rgba(0, 0, 0, 0.36);
+  --fd-shadow-transient: 0 10px 26px rgba(0, 0, 0, 0.24);
+  --fd-shadow-media: 0 10px 26px rgba(0, 0, 0, 0.24);
+  --fd-shadow-floating-control: 0 22px 48px rgba(0, 0, 0, 0.36);
   --fd-ds-state-focus: 0 0 0 4px rgba(210, 189, 150, 0.24);
 }
 
@@ -234,7 +240,7 @@ button:focus-visible {
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-pill);
   background: var(--fd-surface);
-  box-shadow: var(--fd-soft-shadow);
+  box-shadow: var(--fd-shadow-transient);
 }
 
 .fd-demo[data-capture-chrome="hidden"] .fd-demo-mode-switch {
@@ -436,7 +442,7 @@ button:focus-visible {
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
   background: var(--fd-surface);
-  box-shadow: var(--fd-soft-shadow);
+  box-shadow: none;
 }
 
 .fd-demo-header dl div {
@@ -592,7 +598,7 @@ button:focus-visible {
   border: 1px solid var(--fd-border);
   border-radius: var(--fd-radius-md);
   background: var(--fd-surface);
-  box-shadow: var(--fd-soft-shadow);
+  box-shadow: none;
 }
 
 .fd-route-panel h2 {
@@ -1223,7 +1229,7 @@ button:focus-visible {
   border: 0;
   border-radius: var(--fd-radius-md);
   background: var(--fd-surface);
-  box-shadow: var(--fd-soft-shadow);
+  box-shadow: var(--fd-shadow-media);
   color: inherit;
 }
 

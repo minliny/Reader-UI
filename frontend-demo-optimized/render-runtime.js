@@ -3201,7 +3201,7 @@
         activeSoft: "rgba(47, 99, 115, 0.08)",
         disabledBg: "rgba(238, 230, 219, 0.56)",
         handle: "#b9ad9f",
-        shadow: "var(--fd-shadow)",
+        shadow: "var(--fd-shadow-floating-control)",
         innerShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 5px 18px rgba(92, 71, 50, 0.05)",
         selectionToolbar: "rgba(48, 42, 35, 0.95)",
         selectionToolbarLine: "rgba(75, 63, 50, 0.24)",

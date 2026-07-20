@@ -1142,7 +1142,7 @@
   border: 0.555556px solid rgba(180, 166, 151, 0.34);
   border-radius: 10px;
   background-color: #fffdf8;
-  box-shadow: 0 1px 3px rgba(89, 70, 50, 0.06);
+  box-shadow: none;
   color: #332c25;
   font: 700 12px/normal "Noto Sans SC", var(--fd-sans);
 }

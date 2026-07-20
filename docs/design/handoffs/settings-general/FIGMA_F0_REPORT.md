@@ -7,7 +7,7 @@
 - 本地 shadow guard commit：`22cf95f3585dfe433dc538c73d1894c915ea243d`
 - Figma fileKey：`klhs2jMM4MncaJFqZMfqEK`
 - F1 base revision：`2377708099597320576`
-- F1 current named revision：`2378233300037352939 / F0/F1 · Page 24 · Zero External Shadows`
+- F1 current named revision：`2378238571030063779 / F0/F1 · Full File Shadow Policy Closure`
 
 ## F0 结论
 
@@ -57,7 +57,7 @@
 
 - 不再维护 `844×390 Compact` 独立视觉方案。Figma component set `942:21` 当前只有 `942:18 / Phone` 与 `942:20 / Tablet`；横屏验收直接引用 Tablet master。
 - 下游 `1995:67541` 已从 `942:19` swap 到 `942:20`，frame 与 instance 均为 760×960；原 Compact master 保留在隐藏 retired section，未删除历史节点。
-- 先前“已完成全量 effect 审计”的结论只覆盖 page root 与 Settings General，属于不完整审计，现由 revision `2378233300037352939` 明确替代。
+- 先前“已完成全量 effect 审计”的结论只覆盖 page root 与 Settings General，属于不完整审计，现由 revision `2378238571030063779` 明确替代。
 - 本次逐节点扫描 `941:2 / Final Responsive Page Masters · 24 Sets` 的所有 effectively-visible canonical descendants：408 个节点仍带 active `DROP_SHADOW`，共 408 个外阴影 effect；整页 24（含 `941:2` 外部节点）复核后 active `DROP_SHADOW` node/effect 均为 0。
 - 根因与本地 token 完全对应：`--fd-ds-shadow-elevated` 被 `.fd-phone/.fd-reader-frame` 消费，`--fd-ds-shadow-soft` 被 `.fd-setting-section` 消费。此前只在 Figma 擦除，下一次同步会再次生成。
 - 已清除上述 408 个 active 外阴影，同时保留 72 个 `INNER_SHADOW`（文本、Dropdown、Button 等内部状态表达）；没有删除或 detached 任何 node、instance、reaction 或手工内容。
@@ -80,4 +80,13 @@ F0 已通过，F1 技术检查已通过。根据用户最新 viewport policy，�
 - 最终保留 162 个均有显式语义：70 个 Motion Reference（F3 独立 lane，本轮仅审计）、39 个 focus ring、9 个 Overlay/Dialog/BottomSheet、5 个书封、12 个 SessionCapsule、11 个阅读控件图标、4 个 Filter Menu/Apply、12 个 Foundations effect sample。
 - 18 个 page 有直接写入；写入前使用 `readerFullShadow20260720` 保存每页 recovery manifest/backup/result。另有 207 个 effect 因 canonical master 修复由实例继承消失。
 - 29/29 页最终复核完成，读取错误 0；完整逐页数据见 `docs/design/FIGMA_FULL_FILE_SHADOW_AUDIT_2026-07-20.json`。
-- Figma 自动保存已完成；Mac 当前锁屏，因此新的 named revision 与精确 revision ID 仍待解锁后写入。本条不冒充 named revision evidence。
+- Figma 自动保存与 named version 固化均已完成：`2378238571030063779 / F0/F1 · Full File Shadow Policy Closure`。
+
+## 阴影根因闭环（2026-07-20）
+
+- 本地根因不是某一页漏删，而是 canonical runtime 长期暴露 `--fd-shadow`、`--fd-soft-shadow`、`--fd-settings-card-shadow` 这类无语义边界的全局别名；普通 page/card/settings/reader surface 可以直接消费它们，因此后续页面复用或再次 capture 会把阴影重新生成。
+- 已移除三个歧义别名，改为四个角色限定 token：`overlay`、`transient`、`media`、`floating-control`。普通内容面统一无外投影；Reader 固定正文/面板只允许无外投影或 inset 表达。
+- 新增 fail-closed gate `frontend-demo-optimized/verify/shadow-policy.test.mjs`：扫描 canonical runtime 全部 CSS 与 renderer 内联 CSS；任何未分类 external `box-shadow`/`drop-shadow`、任何旧别名、任何 persistent page/body surface 外阴影都会直接使测试失败。
+- 全套本地测试 `139/139`；浏览器覆盖 13 个页面族 × Phone 390×844 / Tablet 760×960，共 26 次检查、0 泄漏。Landscape 直接 alias Tablet，不再产生独立 Compact 工作量。
+- Figma 重新逐页读取 29/29、错误 0；每页计数与修复后基线一致，active `DROP_SHADOW` 总数仍为 162，全部属于已记录语义例外，普通正文 surface 为 0。
+- 新 named revision：`2378238571030063779 / F0/F1 · Full File Shadow Policy Closure`。因此本轮同时关闭“存量 Figma 节点”和“未来本地生成源”两条复发路径。

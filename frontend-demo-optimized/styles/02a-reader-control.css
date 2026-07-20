@@ -50,7 +50,7 @@
   border: 1px solid var(--reader-control-line-strong, rgba(164, 149, 132, 0.42));
   border-radius: var(--fd-radius-xl);
   background: var(--reader-control-surface, rgba(255, 250, 244, 0.98));
-  box-shadow: var(--reader-control-shadow, var(--fd-shadow));
+  box-shadow: var(--reader-control-shadow, var(--fd-shadow-overlay));
   overflow: hidden;
 }
 
