@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_COMPACT_VIEWPORT_REMOVAL_EVIDENCE",
-  "status": "PASS",
+  "status": "PASS_WITH_FOLLOWUP_CORRECTION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "namedRevision": {
     "id": "2378263682617840946",
@@ -57,6 +57,24 @@
       "390x844": { "orientation": "portrait", "viewportClass": "standard-portrait", "widthClass": "standard" }
     },
     "implementationCommit": "06d5d4e7cd79154d74a7de5268778c97f85843c2"
+  },
+  "followupCorrection": {
+    "reason": "The original structural filter excluded text-only labels. A later live runtime traversal found 25 residual TEXT nodes named Compact in Page 23 assemblies even though the Compact instances and prototypes had been removed.",
+    "writerAction": {
+      "pageId": "834:2",
+      "deletedTextNodeCount": 25,
+      "renamedNode": {
+        "nodeId": "2019:34179",
+        "oldValue": "02 · Prototype Flows · 25 Routes × 3 Viewports",
+        "newValue": "02 · Prototype Flows · 25 Routes × 2 Viewports"
+      }
+    },
+    "finalVerification": {
+      "revision": "2378289787451208100",
+      "compactNodesOnFinalPage": 0,
+      "componentSizeCompactVariantsPreserved": 19,
+      "note": "The 19 preserved Size=Compact names are component-size API semantics, not viewport/page structures."
+    }
   },
   "scopeBoundary": "No UiEvent, state-owner, business-flow, F2 page-family, or F3 Motion Reference changes. Size=Compact component variants are component sizing semantics and are intentionally preserved."
 }
