@@ -7,7 +7,7 @@
 - 本地 shadow guard commit：`22cf95f3585dfe433dc538c73d1894c915ea243d`
 - Figma fileKey：`klhs2jMM4MncaJFqZMfqEK`
 - F1 base revision：`2377708099597320576`
-- F1 current named revision：`2378229984327606962 / F1 · Settings General · Tablet Landscape Policy + Shadow Guard`
+- F1 current named revision：`2378233300037352939 / F0/F1 · Page 24 · Zero External Shadows`
 
 ## F0 结论
 
@@ -57,10 +57,12 @@
 
 - 不再维护 `844×390 Compact` 独立视觉方案。Figma component set `942:21` 当前只有 `942:18 / Phone` 与 `942:20 / Tablet`；横屏验收直接引用 Tablet master。
 - 下游 `1995:67541` 已从 `942:19` swap 到 `942:20`，frame 与 instance 均为 760×960；原 Compact master 保留在隐藏 retired section，未删除历史节点。
-- 对 `24 · Responsive Masters · Phase 4` 完成全量 effect 审计：发现 540 个 shadow node；其中 156 个使用 `0 18 46 rgba(89,70,50,.16)`，129 个使用 `0 8 26 rgba(89,70,50,.10)`，且 534 个为直接 effect、不是共享 effect style。
+- 先前“已完成全量 effect 审计”的结论只覆盖 page root 与 Settings General，属于不完整审计，现由 revision `2378233300037352939` 明确替代。
+- 本次逐节点扫描 `941:2 / Final Responsive Page Masters · 24 Sets` 的所有 effectively-visible canonical descendants：408 个节点仍带 active `DROP_SHADOW`，共 408 个外阴影 effect；整页 24（含 `941:2` 外部节点）复核后 active `DROP_SHADOW` node/effect 均为 0。
 - 根因与本地 token 完全对应：`--fd-ds-shadow-elevated` 被 `.fd-phone/.fd-reader-frame` 消费，`--fd-ds-shadow-soft` 被 `.fd-setting-section` 消费。此前只在 Figma 擦除，下一次同步会再次生成。
-- 已清除 71 个 active `Main Content` 根节点的大阴影；Settings General canonical subtree 额外清除 8 个 section/action surface shadow，当前 active shadow count 为 0。
-- 本地 canonical CSS 已把 page root 与 settings surface 改为 `box-shadow: none`，并新增回归测试。Overlay、focus、selected、book cover 等明确语义阴影继续保留。
+- 已清除上述 408 个 active 外阴影，同时保留 72 个 `INNER_SHADOW`（文本、Dropdown、Button 等内部状态表达）；没有删除或 detached 任何 node、instance、reaction 或手工内容。
+- 为避免再次出现“修了但无法追溯”，清理前的 408 份 effects 已按 11 个 chunk 写入 section `941:2` 的 shared plugin data：namespace `readerShadowAudit`，keys `manifest`、`backup.0`…`backup.10`、`result`。
+- 本地 canonical CSS 已把 page root 与 settings surface 改为 `box-shadow: none`，并新增回归测试；本地规则与 Figma 整页规则都将 page 24 的 active `DROP_SHADOW` 合法数量固定为 0。
 
 ## 当前门禁
 

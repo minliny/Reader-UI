@@ -5,8 +5,8 @@
   "status": "AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "baseRevision": "2377708099597320576",
-  "newRevision": "2378229984327606962",
-  "versionName": "F1 · Settings General · Tablet Landscape Policy + Shadow Guard",
+  "newRevision": "2378233300037352939",
+  "versionName": "F0/F1 · Page 24 · Zero External Shadows",
   "localCommit": "d0d0c8567f7defff07db6f93c5c768cad6629c13",
   "localCorrectionCommit": "22cf95f3585dfe433dc538c73d1894c915ea243d",
   "backupNode": "2114:17406",
@@ -35,20 +35,29 @@
     { "node": "1995:67777", "oldValue": "mainComponent=942:20", "newValue": "unchanged" }
   ],
   "surfaceShadowAudit": {
-    "scope": "24 · Responsive Masters · Phase 4 plus local canonical CSS consumers",
-    "figmaShadowNodesAudited": 540,
+    "scope": "All effectively-visible canonical descendants of 941:2 plus all page-24 nodes outside 941:2 and local canonical CSS consumers",
+    "supersedesPartialAudit": "The previous 71-root plus 8-Settings cleanup was incomplete and must not be treated as full-page evidence.",
     "rootCause": "Elevated and soft shadow tokens were consumed directly by page roots and settings surfaces, so every later sync recreated shadows previously removed by hand.",
     "forbiddenRootSignature": "DROP_SHADOW y=18 radius=46 rgba(89,70,50,0.16)",
     "forbiddenSettingsSignature": "DROP_SHADOW y=8 radius=26 rgba(89,70,50,0.10)",
-    "figmaRootNodesCleared": 71,
-    "settingsGeneralShadowNodesCleared": 8,
-    "activeSettingsGeneralShadowCountAfter": 0,
+    "activeDropShadowNodesBefore": 408,
+    "activeDropShadowEffectsRemoved": 408,
+    "activePage24DropShadowNodesAfter": 0,
+    "activePage24DropShadowEffectsAfter": 0,
+    "preservedInnerShadowEffects": 72,
+    "recovery": {
+      "sectionNode": "941:2",
+      "namespace": "readerShadowAudit",
+      "manifestKey": "manifest",
+      "backupChunkCount": 11,
+      "resultKey": "result"
+    },
     "localSourceFix": [
       "styles/00-foundation.css: .fd-phone/.fd-reader-frame box-shadow none",
       "styles/00-foundation.css: .fd-setting-section box-shadow none",
       "verify/settings-home-viewport.test.mjs: regression guard"
     ],
-    "preserved": "Overlay, focus, selected, book-cover, and other explicit semantic control-state shadows"
+    "preserved": "All 72 INNER_SHADOW effects, nodes, canonical components, instances, reactions, and manual content"
   },
   "pageExceptions": [
     { "nodes": ["879:28", "887:28"], "reason": "Existing exact 44x44 manual Back controls retained; no semantic canonical icon-button master exists." },
@@ -61,7 +70,9 @@
     "detachedInstanceCountIntroduced": 0,
     "canonicalViewportVariantCount": 2,
     "landscapeAliasesTablet": true,
-    "activeSettingsGeneralShadowCount": 0,
+    "activePage24DropShadowNodeCount": 0,
+    "activePage24DropShadowEffectCount": 0,
+    "preservedPage24InnerShadowEffectCount": 72,
     "userConfirmed": false
   }
 }
