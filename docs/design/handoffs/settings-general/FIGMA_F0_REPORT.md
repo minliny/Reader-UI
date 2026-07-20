@@ -1,99 +1,71 @@
-# Settings General · A3 / F0 现场刷新
+# Settings General · F0/F1 现场报告
 
-状态：`F0_BLOCKED`；本地 R2a/R3a 已通过，Figma 已完成只读刷新，单 writer 尚未准入。剩余门禁同时包含本地 identity 缺口和 Figma 环境/结构缺口，不再统称为“外部阻塞”。
+状态：`F1_AWAITING_USER_CONFIRMATION`。
 
-时间：2026-07-20T07:13:00Z
-本地输入 commit：`f0e315aa85bf1d96e6ff3a1cd1dd784dc484d2f0`
-Figma fileKey：`klhs2jMM4MncaJFqZMfqEK`
-Figma provider revision：`2377708099597320576`（版本历史最新 autosave；界面显示 `2026-07-19 12:39 PM`，provider 未暴露时区）
+- 本地实现 commit：`3804eb82de7b8f71a8a43e9d8e2037b19d686ca6`
+- 本地 evidence commit：`d0d0c8567f7defff07db6f93c5c768cad6629c13`
+- 本地 shadow guard commit：`22cf95f3585dfe433dc538c73d1894c915ea243d`
+- Figma fileKey：`klhs2jMM4MncaJFqZMfqEK`
+- F1 base revision：`2377708099597320576`
+- F1 current named revision：`2378229984327606962 / F1 · Settings General · Tablet Landscape Policy + Shadow Guard`
 
-## 已解除的本地阻塞
+## F0 结论
 
-- `LOCAL_READY_FOR_FIGMA.json` 已提交，`r2aPass=true`、`r3aPass=true`。
-- Settings General 唯一 renderer、真实交互、状态 owner、持久化、缓存、权限、恢复默认、ARIA 和三视口稳定终态均已有本地证据。
-- 三个 App 主题 Segment option 已有稳定业务 key，不再依赖 selector、hash 或 ordinal。
-- 已从 Figma 网页端版本历史读取 provider revision `2377708099597320576`；它与 `f0-live-read-20260720T071300Z` 现场观察时间分开记录。
+- 本地 R2a、R3a、A3 action identity 均通过。
+- Crosswalk 现有 19 个 binding：10 个 subcontrol 加 9 个 action；每项均包含 fileKey、page、Phone/Tablet node 和 provider revision。Landscape 显式 alias 到 Tablet node，不再伪造独立 Compact binding。
+- 三个 App 主题 option 已绑定到真实、独立的 instance child frame，不再绑定 aggregate row。
+- `unbound=[]`，没有 ordinal、selector、截图或伪造 node binding。
+- Songti SC 通过本机 Figma Desktop writer 成功加载 Light/Regular/Black；没有使用 Noto Serif SC、outline 或截图替代。
 
-## 当前 Figma 现场
+## F1 writer 结果
 
-- 文件仍为 29 个 page。
-- responsive master set：`942:21 / Page/Settings General`。
-- Phone `942:18`、Compact `942:19`、Tablet `942:20` 均为真实 component variant。
-- downstream prototype instance 仍为 `1995:67305 → 942:18`、`1995:67541 → 942:19`、`1995:67777 → 942:20`。
-- 三个 responsive master 内部仍是 `123 FRAME + 27 TEXT + 84 VECTOR`，`INSTANCE=0`，未消费 canonical Settings graph。
-- canonical reaction 保持不变：`Settings/Switch=10`、`Settings/SettingRow=90`、`Settings/GeneralSection=40`、`InlineAction=5`、`DangerActionRow=5`。
+本轮采用本机 Figma Desktop 临时插件作为唯一 writer。写入前创建隐藏、可恢复备份：
 
-## Crosswalk 收紧
+- `2114:17406 / __F1_BACKUP/Page/Settings General @2377708099597320576`
 
-[FIGMA_F0_CROSSWALK.json](./FIGMA_F0_CROSSWALK.json) 只保留 7 个使用稳定业务 key 的 candidate：3 个 Select 和 4 个 Switch。每项包含 fileKey、page、三视口 node 和 provider revision；另行保留本次 live observation revision，二者不混用。
+共享组件变化：
 
-以下内容没有伪造绑定：
+- `531:108 / Settings/Switch`：10 → 13 variants，补 Loading 与 Selected。
+- `282:124 / Primitive/Select`：15 → 24 variants，补 Pressed、Loading、Selected 的 SM/MD/LG。
+- `283:100 / Primitive/SegmentedControl`：6 → 15 variants，补 Pressed、Disabled、Loading。
+- `358:18 / Control/Stepper`：2 → 6 variants，补 Pressed、Focus、Loading、Selected。
+- `534:248 / Settings/SettingRow`：36 → 42 variants，补各 trailing 的 Selected。
+- 新建 `2114:20635 / Settings/ThemeSegment`：15 variants；Selected=FollowSystem/Light/Dark，Interaction=Default/Focus/Pressed/Disabled/Loading。
 
-- 三个 Segment option：本地 identity 已稳定，但 Figma 仍只有 `879:43 / 884:43 / 887:43` 三个 aggregate row，没有每个 option 的独立节点。
-- reset、cache、back、三个 permission row 和三个内层"去设置"：A3 已将本地 identity 从 ordinal registry 升级为稳定 `a3-action` 声明（9 个 settingsKey），renderer 已 stamp 5 个 data-* 属性，本地侧可输出正式 binding；Figma 侧 node 仍需在 F1 mutation 时回填。
+页面 master 变化：
 
-## 仍阻止 F1 writer 的事项
+- `942:18 / Phone`：0 → 16 INSTANCE。
+- `942:20 / Tablet`：0 → 16 INSTANCE。
+- 原 `942:19 / Compact 844×390` 已从 canonical component set 移出，隐藏保留在 `2144:56865 / __RETIRED_VIEWPORTS__`，仅用于恢复，不再进入设计或验收。
+- 共替换的 canonical control 仍保留原 node/reaction；当前 canonical viewport 只有 Phone 390×844 与 Tablet 760×960，Landscape 直接引用 Tablet。
+- ThemeSegment 三个 option 均为独立 54×30 frame，并各有 54×44 `Choice/HitTarget`。
 
-1. writer 环境仍没有 `Songti SC`；存在该字体的 text 或 text-affecting component 结构不能安全修改，也不能用 `Noto Serif SC`、截图或 outline 冒充。
-2. 三个 responsive master 仍绕过 canonical instance graph。这个问题属于 F1 要修的目标，但在 font/binding 门禁未关闭前不能开始 mutation。
-3. Figma 缺三个独立 Segment option node。
-4. reset/cache/back/permission actions 和三个内层"去设置"仍缺稳定 action/instance identity。
+下游关系保持：
 
-### Songti SC 来源调研（A3 Step 6）
+- `1995:67305 → 942:18`
+- `1995:67541 → 942:20`（Landscape → Tablet alias，760×960）
+- `1995:67777 → 942:20`
 
-**字体性质**：`Songti SC`（宋体-简）是 Apple 系统字体，随 macOS / iOS 出货，PostScript 名为 `STSongti-SC-Light` / `STSongti-SC-Regular` / `STSongti-SC-Black`。
+原有 component reactions 未删除。Settings/SettingRow 新增 Selected variants 继承了 10 条 reaction；原 90 条仍保留。页面 26 的跨页面中间态已全部归位，最终 leak 为 0。
 
-**本机可用性（已验证）**：
+## 显式页面例外
 
-- 路径：`/System/Library/Fonts/Supplemental/Songti.ttc`（66.9 MB TTC，包含 Songti SC Light/Regular/Black + Songti TC）
-- `fc-list` 确认 Songti SC Regular/Light/Black 均可枚举
-- `system_profiler SPFontsDataType` 确认 STSongti-SC-Black / STSongti-SC-Light 已注册
-- CI 已运行在 `macos-15`（见 `.github/workflows/ui-runtime.yml`），该环境自带 Songti SC
+- Back：`879:28 / 887:28`。保留现有精确 44×44 手工按钮；当前库没有语义等价的 canonical icon-button master。
+- permission outer rows：`879:201/219/238`、`887:201/219/238`。外层状态组合继续保留，三个内层“去设置”均已切换为 `Settings/InlineAction` instance。
 
-**Writer runtime 现状**：
+## 用户复审纠偏：Landscape 与阴影
 
-- writer 是 Figma 侧 agent，本仓库内没有 writer 实现（无 Figma plugin manifest、无 `@figma/*` 依赖、无 tsconfig）
-- writer 字体可用集合记录在 `FIGMA_F0_CROSSWALK.json` 的 `sources.fonts`：`availableToWriter = ["Inter", "Noto Serif SC"]`，`unavailableToWriter = ["Songti SC"]`
-- writeRule 明确：不允许用 `Noto Serif SC` 替代，也不允许用截图或 outline 冒充
+- 不再维护 `844×390 Compact` 独立视觉方案。Figma component set `942:21` 当前只有 `942:18 / Phone` 与 `942:20 / Tablet`；横屏验收直接引用 Tablet master。
+- 下游 `1995:67541` 已从 `942:19` swap 到 `942:20`，frame 与 instance 均为 760×960；原 Compact master 保留在隐藏 retired section，未删除历史节点。
+- 对 `24 · Responsive Masters · Phase 4` 完成全量 effect 审计：发现 540 个 shadow node；其中 156 个使用 `0 18 46 rgba(89,70,50,.16)`，129 个使用 `0 8 26 rgba(89,70,50,.10)`，且 534 个为直接 effect、不是共享 effect style。
+- 根因与本地 token 完全对应：`--fd-ds-shadow-elevated` 被 `.fd-phone/.fd-reader-frame` 消费，`--fd-ds-shadow-soft` 被 `.fd-setting-section` 消费。此前只在 Figma 擦除，下一次同步会再次生成。
+- 已清除 71 个 active `Main Content` 根节点的大阴影；Settings General canonical subtree 额外清除 8 个 section/action surface shadow，当前 active shadow count 为 0。
+- 本地 canonical CSS 已把 page root 与 settings surface 改为 `box-shadow: none`，并新增回归测试。Overlay、focus、selected、book cover 等明确语义阴影继续保留。
 
-**可选来源（按优先级）**：
+## 当前门禁
 
-1. **在 macOS 上运行 writer 的 Figma 会话（推荐）**
-   - Songti SC 是 macOS 系统字体，Figma desktop on macOS 可直接通过 `figma.loadFontAsync({ family: "Songti SC", style: "Regular" })` 加载
-   - 无需复制字体文件，无授权风险——Apple 授权 Songti SC 在 Apple 硬件上使用
-   - 若 writer 当前在非 Mac 环境运行，迁到任意近期 macOS 机器即可解除阻塞
-   - 验证方式：在目标 Mac 上打开 Figma desktop，确认字体选择器中能找到 "Songti SC"
+F0 已通过，F1 技术检查已通过。根据用户最新 viewport policy，仍需确认 Phone 与 Tablet 两个 canonical 视觉结果；Landscape 直接继承 Tablet，不再单独验收。确认前：
 
-2. **在 macOS 上用 Figma web + Figma font helper**
-   - Figma web 通过 font helper 访问本地系统字体
-   - 功能上等同于选项 1，但走浏览器路径
-   - 需在目标 Mac 上安装 Figma desktop（font helper 随其安装）
-
-3. **将 Songti.ttc 复制到非 Mac writer 机器**
-   - 技术上可行：从 Mac 复制 `/System/Library/Fonts/Supplemental/Songti.ttc` 到 Linux/Windows 系统字体目录
-   - **授权风险**：Songti SC 由 Apple 授权仅在 Apple 硬件上使用；在非 Apple 硬件上安装可能违反 Apple Software License Agreement
-   - 需法务 review 后才能采用，**不推荐作为默认路径**
-
-4. **推迟文本变更，先做非文本结构修复**
-   - 不解除 Songti SC 阻塞，先修 INSTANCE graph 和 Segment option node（不涉及 text mutation）
-   - 文本变更留到 Songti SC 可用后再批量处理
-   - 可作为临时策略，但不解除 F1 writer 门禁
-
-**推荐路径**：选项 1。Songti SC 是 macOS 系统字体，writer 在 macOS 上运行 Figma 会话即可获得该字体，无需文件复制、无授权风险。本仓库 CI 已在 `macos-15` 上运行，同一环境即可作为 writer host。
-
-**待确认**：writer 当前实际运行的 Figma 会话在哪台机器/哪种 OS 上？若已在 macOS 上但仍缺 Songti SC，需排查 Figma desktop 的字体扫描是否遗漏了 Supplemental 目录。
-
-### A3 本地 identity 修复（Step 4 / Step 5）
-
-第 4 项阻塞已在 A3 本地侧修复：
-
-- `control-identity-declarations.js` 新增 9 个 `source: "a3-action"` 稳定 identity，替换旧 ordinal registry entries（`.n0`–`.n8`）
-- 9 个 settingsKey：`reset-defaults` / `cache-clear` / `back` / `permission-{battery,file-access,notification}` / `permission-action-{battery,file-access,notification}`
-- `d2-settings-sync-renderers.js` 5 个 stamping 点全部接入：reset button、cache inner button、back button、permission link row article、permission inner button
-- `shared-shell-kit/kit.js` `backTopBar()` 扩展 `config.backButtonAttrs` 透传 identity attrs
-- `a3-settings-general-action-identity.test.mjs` 12/12 通过，`a1-settings-general-identity.test.mjs` 9/9 通过（scope 已收紧到 r2.0-subcontrol）
-- 全套件 135/135 通过，无回归
-
-## 结论
-
-本轮没有修改 Figma，没有 detach、删除、替换页面或 reaction，也没有进入 F2/F3。A3 本地侧已完成：9 个 a3-action 稳定 identity 落地、Songti SC 来源已明确（推荐 writer 在 macOS 上运行 Figma 会话）。F1 writer 继续保持 `false`，直到 Songti SC 在 writer 运行时可用、三个 responsive master 接入 canonical instance graph、Figma 补齐三个独立 Segment option node。
+- `f1Exit=false`
+- `f2QueueAdmitted=false`
+- 不启动其他 12 个页面族，也不进入 Motion Reference。

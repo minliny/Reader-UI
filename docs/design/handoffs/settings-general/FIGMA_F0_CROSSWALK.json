@@ -1,37 +1,27 @@
 {
-  "schemaVersion": "1.1.0",
-  "status": "F0_BLOCKED",
+  "schemaVersion": "1.2.0",
+  "status": "F1_AWAITING_USER_CONFIRMATION",
   "scope": "Settings General",
-  "observedAt": "2026-07-20T07:55:58Z",
+  "observedAt": "2026-07-20T09:04:16Z",
   "localSource": {
     "repository": "Reader-UI",
     "branch": "codex/motion-demo-optimizations",
-    "commit": "3804eb82de7b8f71a8a43e9d8e2037b19d686ca6",
-    "commitSubject": "feat(settings-general): A3 local action identity + Songti SC source + F0 crosswalk refresh",
+    "implementationCommit": "3804eb82de7b8f71a8a43e9d8e2037b19d686ca6",
+    "evidenceCommit": "d0d0c8567f7defff07db6f93c5c768cad6629c13",
+    "figmaCorrectionCommit": "22cf95f3585dfe433dc538c73d1894c915ea243d",
     "a2BaseCommit": "f0e315aa85bf1d96e6ff3a1cd1dd784dc484d2f0",
-    "a3Changes": [
-      "control-identity-declarations.js: 9 new a3-action stable identity declarations (reset-defaults / cache-clear / back / permission-{battery,file-access,notification} / permission-action-{battery,file-access,notification})",
-      "renderers/d2-settings-sync-renderers.js: 5 identity stamping points (reset button, cache inner button, back button, permission link row article, permission inner button)",
-      "shared-shell-kit/kit.js: backTopBar() extended with config.backButtonAttrs pass-through",
-      "verify/a3-settings-general-action-identity.test.mjs: 12/12 new tests",
-      "verify/a1-settings-general-identity.test.mjs: scope tightened to r2.0-subcontrol (9/9 pass)",
-      "FIGMA_F0_CROSSWALK.json + FIGMA_F0_REPORT.md: refreshed with A3 identity bindings and Songti SC source resolution"
-    ],
-    "worktreeAtRead": "clean",
     "localReadyForFigma": true,
-    "localReadyMarker": "docs/design/handoffs/settings-general/LOCAL_READY_FOR_FIGMA.json",
     "r2aPass": true,
     "r3aPass": true,
     "a3ActionIdentityPass": true
   },
   "figmaSource": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-    "officialFileRevision": "2377708099597320576",
-    "officialFileRevisionStatus": "read-from-provider-version-history-latest-autosave",
-    "officialFileRevisionDisplayedAt": "2026-07-19 12:39 PM",
-    "officialFileRevisionDisplayedTimezone": "not-exposed-by-provider-ui",
-    "observationRevision": "f0-live-read-20260720T071300Z",
-    "observationRevisionKind": "timestamped-live-node-observation-not-provider-file-revision",
+    "baseRevision": "2377708099597320576",
+    "officialFileRevision": "2378229984327606962",
+    "officialFileRevisionStatus": "named-version-history-entry",
+    "officialFileRevisionName": "F1 · Settings General · Tablet Landscape Policy + Shadow Guard",
+    "observationRevision": "f1-live-read-20260720T090416Z",
     "pageCount": 29,
     "pages": {
       "sharedPrimitives": { "id": "259:8", "name": "06 · Components · Shared Primitives" },
@@ -40,325 +30,74 @@
       "finalPrototypes": { "id": "834:2", "name": "23 · Pages · Final" }
     }
   },
+  "writer": {
+    "mode": "single-writer-local-figma-desktop-plugin",
+    "temporaryPluginPath": "/private/tmp/reader-figma-local-writer",
+    "songtiScLoaded": ["Light", "Regular", "Black"],
+    "remoteUseFigmaSongtiScAvailable": false,
+    "fontDecision": "Use the local macOS Figma Desktop writer; do not substitute Noto Serif SC, outlines, or screenshots."
+  },
   "canonicalGraph": {
     "pageMasterSet": {
       "id": "942:21",
       "name": "Page/Settings General",
-      "instanceCount": 0,
+      "instanceCount": 32,
       "variants": [
-        { "viewport": "phone", "id": "942:18", "size": "390x844", "instanceCount": 0 },
-        { "viewport": "compact", "id": "942:19", "size": "844x390", "instanceCount": 0 },
-        { "viewport": "tablet", "id": "942:20", "size": "760x960", "instanceCount": 0 }
-      ]
+        { "viewport": "phone", "id": "942:18", "size": "390x844", "instanceCount": 16 },
+        { "viewport": "tablet", "id": "942:20", "size": "760x960", "instanceCount": 16 }
+      ],
+      "viewportPolicy": "landscape-uses-tablet",
+      "retiredCompact": { "id": "942:19", "size": "844x390", "parentId": "2144:56865", "visible": false }
     },
     "downstreamPrototypeInstances": [
-      { "viewport": "phone", "frameId": "1995:67304", "instanceId": "1995:67305", "mainComponentId": "942:18" },
-      { "viewport": "compact", "frameId": "1995:67540", "instanceId": "1995:67541", "mainComponentId": "942:19" },
-      { "viewport": "tablet", "frameId": "1995:67776", "instanceId": "1995:67777", "mainComponentId": "942:20" }
+      { "viewport": "phone", "instanceId": "1995:67305", "mainComponentId": "942:18" },
+      { "viewport": "landscape", "instanceId": "1995:67541", "mainComponentId": "942:20", "policy": "tablet-alias", "size": "760x960" },
+      { "viewport": "tablet", "instanceId": "1995:67777", "mainComponentId": "942:20" }
     ],
-    "settingsMasters": [
-      { "id": "535:411", "name": "Settings/GeneralSection", "pageId": "259:11", "variantCount": 3, "reactionCount": 40 },
-      { "id": "534:248", "name": "Settings/SettingRow", "pageId": "259:11", "variantCount": 36, "reactionCount": 90 },
-      { "id": "531:108", "name": "Settings/Switch", "pageId": "259:11", "variantCount": 10, "reactionCount": 10 },
-      { "id": "1994:25736", "name": "Settings/InlineAction", "pageId": "259:11", "variantCount": 6, "reactionCount": 5 },
-      { "id": "1994:25794", "name": "Settings/DangerActionRow", "pageId": "259:11", "variantCount": 6, "reactionCount": 5 },
-      { "id": "530:165", "name": "Settings/GeneralRowIcon", "pageId": "259:11", "variantCount": 12, "reactionCount": 0 }
-    ],
-    "sharedPrimitiveMasters": [
-      { "id": "281:122", "name": "Primitive/Button", "pageId": "259:8" },
-      { "id": "282:124", "name": "Primitive/Select", "pageId": "259:8" },
-      { "id": "283:35", "name": "Primitive/Switch", "pageId": "259:8" },
-      { "id": "283:100", "name": "Primitive/SegmentedControl", "pageId": "259:8" },
-      { "id": "358:18", "name": "Control/Stepper", "pageId": "259:8" }
-    ],
-    "finding": "The outer responsive masters and downstream prototype instances are valid, but all three responsive master variants still contain only FRAME/TEXT/VECTOR descendants and zero INSTANCE descendants. They bypass the existing canonical Settings and shared primitive graph."
-  },
-  "sources": {
-    "fonts": {
-      "observedInSettingsMaster": ["Inter", "Songti SC"],
-      "availableToWriter": ["Inter", "Noto Serif SC"],
-      "unavailableToWriter": ["Songti SC"],
-      "writeRule": "Do not mutate text or text-affecting component structure. Noto Serif SC is not an accepted visual substitute for Songti SC.",
-      "songtiScSourceResolution": {
-        "investigatedAt": "2026-07-20T07:55:58Z",
-        "fontNature": "Apple system font, ships with macOS / iOS. PostScript names: STSongti-SC-Light / STSongti-SC-Regular / STSongti-SC-Black.",
-        "localMachineVerified": {
-          "path": "/System/Library/Fonts/Supplemental/Songti.ttc",
-          "sizeBytes": 66933080,
-          "weights": ["Songti SC Light", "Songti SC Regular", "Songti SC Black", "Songti TC Light", "Songti TC Regular", "Songti TC Black"],
-          "verifiedVia": "fc-list + system_profiler SPFontsDataType"
-        },
-        "ciEnvironment": "macos-15 (see .github/workflows/ui-runtime.yml) — Songti SC ships with macOS",
-        "recommendedPath": "Run writer's Figma session on macOS. Songti SC is a system font; Figma desktop on macOS can load it via figma.loadFontAsync({ family: 'Songti SC', style: 'Regular' }) with no file copy and no licensing risk.",
-        "alternatives": [
-          { "option": "Figma web + font helper on macOS", "risk": "none", "note": "Functionally equivalent to recommended path" },
-          { "option": "Copy Songti.ttc to non-Mac writer machine", "risk": "licensing", "note": "Apple licenses Songti SC for Apple hardware only; requires legal review" },
-          { "option": "Defer text mutation, proceed with non-text structural changes", "risk": "none", "note": "Temporary; does not unblock F1 writer admission" }
-        ],
-        "pendingConfirmation": "Which machine/OS does the writer's Figma session currently run on? If already macOS but Songti SC missing, check Figma desktop font scan for Supplemental directory coverage."
-      }
+    "backup": {
+      "id": "2114:17406",
+      "name": "__F1_BACKUP/Page/Settings General @2377708099597320576",
+      "parentId": "941:2",
+      "visible": false
     },
-    "icons": {
-      "figmaMaster": { "id": "530:165", "name": "Settings/GeneralRowIcon", "description": "Exact Tabler outline icons from the canonical General Settings live route. No hand-drawn substitutes." },
-      "localSource": "frontend-demo-optimized/asset-library/icons.js"
-    }
+    "masters": [
+      { "id": "531:108", "name": "Settings/Switch", "oldVariantCount": 10, "newVariantCount": 13 },
+      { "id": "282:124", "name": "Primitive/Select", "oldVariantCount": 15, "newVariantCount": 24 },
+      { "id": "283:100", "name": "Primitive/SegmentedControl", "oldVariantCount": 6, "newVariantCount": 15 },
+      { "id": "358:18", "name": "Control/Stepper", "oldVariantCount": 2, "newVariantCount": 6 },
+      { "id": "534:248", "name": "Settings/SettingRow", "oldVariantCount": 36, "newVariantCount": 42 },
+      { "id": "2114:20635", "name": "Settings/ThemeSegment", "oldVariantCount": 0, "newVariantCount": 15 }
+    ]
   },
   "bindings": [
-    {
-      "settingsKey": "language",
-      "controlKey": "settings.combobox.combobox.language@settings-general.default",
-      "uiEvent": "dropdown.option.select",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:73", "compact": "884:73", "tablet": "887:73" },
-      "canonicalMasterId": "282:124",
-      "finding": "The live nodes are raw value/chevron frames, not Primitive/Select instances."
-    },
-    {
-      "settingsKey": "startup-screen",
-      "controlKey": "settings.combobox.combobox.startup-screen@settings-general.default",
-      "uiEvent": "dropdown.option.select",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:91", "compact": "884:91", "tablet": "887:91" },
-      "canonicalMasterId": "282:124",
-      "finding": "The live nodes are raw value/chevron frames, not Primitive/Select instances."
-    },
-    {
-      "settingsKey": "animation-effect",
-      "controlKey": "settings.combobox.combobox.animation-effect@settings-general.default",
-      "uiEvent": "dropdown.option.select",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:171", "compact": "884:171", "tablet": "887:171" },
-      "canonicalMasterId": "282:124",
-      "finding": "The live nodes are raw value/chevron frames, not Primitive/Select instances."
-    },
-    {
-      "settingsKey": "auto-check-update",
-      "controlKey": "settings.switch.switch.auto-check-update@settings-general.default",
-      "uiEvent": "toggle.switch",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:114", "compact": "884:114", "tablet": "887:114" },
-      "canonicalMasterId": "531:108"
-    },
-    {
-      "settingsKey": "tap-bottom-scroll-top",
-      "controlKey": "settings.switch.switch.tap-bottom-scroll-top@settings-general.default",
-      "uiEvent": "toggle.switch",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:128", "compact": "884:128", "tablet": "887:128" },
-      "canonicalMasterId": "531:108"
-    },
-    {
-      "settingsKey": "reduce-motion",
-      "controlKey": "settings.switch.switch.reduce-motion@settings-general.default",
-      "uiEvent": "toggle.switch",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:139", "compact": "884:139", "tablet": "887:139" },
-      "canonicalMasterId": "531:108"
-    },
-    {
-      "settingsKey": "crash-log",
-      "controlKey": "settings.switch.switch.crash-log@settings-general.default",
-      "uiEvent": "toggle.switch",
-      "status": "observed-candidate",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "nodes": { "phone": "879:158", "compact": "884:158", "tablet": "887:158" },
-      "canonicalMasterId": "531:108"
-    },
-    {
-      "settingsKey": "reset-defaults",
-      "controlKey": "settings.button.button.reset-defaults@settings-general.default",
-      "actionKey": "reset-defaults",
-      "instanceKey": null,
-      "uiEvent": "reset-defaults.confirm",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "button",
-      "label": "恢复默认",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n0). Renderer stamps 5 data-* attrs on the reset button in d2ActionList. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "cache-clear",
-      "controlKey": "settings.button.button.cache-clear@settings-general.default",
-      "actionKey": "cache-clear",
-      "instanceKey": null,
-      "uiEvent": "cache-clear.confirm",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "button",
-      "label": "清理缓存",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n1). Renderer stamps 5 data-* attrs on the cache-cleanup inner button in d2RowSide. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "back",
-      "controlKey": "settings.button.button.back@settings-general.default",
-      "actionKey": "route.pop",
-      "instanceKey": "back",
-      "uiEvent": "route.pop",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "button",
-      "label": "返回",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n2). Renderer stamps 5 data-* attrs on the back button via backTopBar() in shared-shell-kit/kit.js. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "permission-battery",
-      "controlKey": "settings.listrow-action.button.permission.battery@settings-general.default",
-      "actionKey": "permission.request",
-      "instanceKey": "permission-battery",
-      "uiEvent": "permission.request",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "listrow-action",
-      "label": "电池优化 去设置",
-      "permissionName": "battery",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n3). Renderer stamps 5 data-* attrs on the permission link row <article> in d2Row. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "permission-file-access",
-      "controlKey": "settings.listrow-action.button.permission.file-access@settings-general.default",
-      "actionKey": "permission.request",
-      "instanceKey": "permission-file-access",
-      "uiEvent": "permission.request",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "listrow-action",
-      "label": "文件访问 去设置",
-      "permissionName": "file-access",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n4). Renderer stamps 5 data-* attrs on the permission link row <article> in d2Row. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "permission-notification",
-      "controlKey": "settings.listrow-action.button.permission.notification@settings-general.default",
-      "actionKey": "permission.request",
-      "instanceKey": "permission-notification",
-      "uiEvent": "permission.request",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "listrow-action",
-      "label": "通知权限 去设置",
-      "permissionName": "notification",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n5). Renderer stamps 5 data-* attrs on the permission link row <article> in d2Row. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "permission-action-battery",
-      "controlKey": "settings.button.button.permission-action.battery@settings-general.default",
-      "actionKey": "permission.open-settings",
-      "instanceKey": "permission-action-battery",
-      "uiEvent": "permission.open-settings",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "button",
-      "label": "去设置",
-      "permissionName": "battery",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n6). Renderer stamps 5 data-* attrs on the inner button inside the battery permission row in d2RowSide. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "permission-action-file-access",
-      "controlKey": "settings.button.button.permission-action.file-access@settings-general.default",
-      "actionKey": "permission.open-settings",
-      "instanceKey": "permission-action-file-access",
-      "uiEvent": "permission.open-settings",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "button",
-      "label": "去设置",
-      "permissionName": "file-access",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n7). Renderer stamps 5 data-* attrs on the inner button inside the file-access permission row in d2RowSide. Figma node ID pending F1 mutation."
-    },
-    {
-      "settingsKey": "permission-action-notification",
-      "controlKey": "settings.button.button.permission-action.notification@settings-general.default",
-      "actionKey": "permission.open-settings",
-      "instanceKey": "permission-action-notification",
-      "uiEvent": "permission.open-settings",
-      "source": "a3-action",
-      "status": "local-identity-stable-figma-node-pending",
-      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-      "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" },
-      "revision": "2377708099597320576",
-      "expectedSubcontrolType": "button",
-      "label": "去设置",
-      "permissionName": "notification",
-      "finding": "A3 stabilized local identity (replaces ordinal registry .n8). Renderer stamps 5 data-* attrs on the inner button inside the notification permission row in d2RowSide. Figma node ID pending F1 mutation."
-    }
+    { "settingsKey": "app-theme-segment-option-1", "controlKey": "settings.button.button.segment-option-1.app-theme@settings-general.default", "uiEvent": "segment.item.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "I2114:18406;2114:20486", "landscape": "I2114:18426;2114:20486", "tablet": "I2114:18426;2114:20486" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "2114:20635" },
+    { "settingsKey": "app-theme-segment-option-2", "controlKey": "settings.button.button.segment-option-2.app-theme@settings-general.default", "uiEvent": "segment.item.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "I2114:18406;2114:20489", "landscape": "I2114:18426;2114:20489", "tablet": "I2114:18426;2114:20489" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "2114:20635" },
+    { "settingsKey": "app-theme-segment-option-3", "controlKey": "settings.button.button.segment-option-3.app-theme@settings-general.default", "uiEvent": "segment.item.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "I2114:18406;2114:20492", "landscape": "I2114:18426;2114:20492", "tablet": "I2114:18426;2114:20492" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "2114:20635" },
+    { "settingsKey": "language", "controlKey": "settings.combobox.combobox.language@settings-general.default", "uiEvent": "dropdown.option.select", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18370", "landscape": "2114:18394", "tablet": "2114:18394" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "282:124" },
+    { "settingsKey": "startup-screen", "controlKey": "settings.combobox.combobox.startup-screen@settings-general.default", "uiEvent": "dropdown.option.select", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18374", "landscape": "2114:18398", "tablet": "2114:18398" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "282:124" },
+    { "settingsKey": "animation-effect", "controlKey": "settings.combobox.combobox.animation-effect@settings-general.default", "uiEvent": "dropdown.option.select", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18378", "landscape": "2114:18402", "tablet": "2114:18402" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "282:124" },
+    { "settingsKey": "auto-check-update", "controlKey": "settings.switch.switch.auto-check-update@settings-general.default", "uiEvent": "toggle.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18322", "landscape": "2114:18354", "tablet": "2114:18354" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "531:108" },
+    { "settingsKey": "tap-bottom-scroll-top", "controlKey": "settings.switch.switch.tap-bottom-scroll-top@settings-general.default", "uiEvent": "toggle.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18326", "landscape": "2114:18358", "tablet": "2114:18358" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "531:108" },
+    { "settingsKey": "reduce-motion", "controlKey": "settings.switch.switch.reduce-motion@settings-general.default", "uiEvent": "toggle.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18330", "landscape": "2114:18362", "tablet": "2114:18362" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "531:108" },
+    { "settingsKey": "crash-log", "controlKey": "settings.switch.switch.crash-log@settings-general.default", "uiEvent": "toggle.switch", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18334", "landscape": "2114:18366", "tablet": "2114:18366" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "531:108" },
+    { "settingsKey": "reset-defaults", "controlKey": "settings.button.button.reset-defaults@settings-general.default", "uiEvent": "reset-defaults.confirm", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18452", "landscape": "2114:18512", "tablet": "2114:18512" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "1994:25794" },
+    { "settingsKey": "cache-clear", "controlKey": "settings.button.button.cache-clear@settings-general.default", "uiEvent": "cache-clear.confirm", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18436", "landscape": "2114:18496", "tablet": "2114:18496" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "1994:25736" },
+    { "settingsKey": "back", "controlKey": "settings.button.button.back@settings-general.default", "uiEvent": "route.pop", "status": "bound-page-exception", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "879:28", "landscape": "887:28", "tablet": "887:28" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "pageException": "Existing exact 44x44 manual Back button retained; no canonical semantic icon-button master exists in the current library." },
+    { "settingsKey": "permission-battery", "controlKey": "settings.listrow-action.button.permission.battery@settings-general.default", "uiEvent": "permission.request", "status": "bound-page-exception", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "879:238", "landscape": "887:238", "tablet": "887:238" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "pageException": "Outer permission row retained; its inner action now consumes Settings/InlineAction." },
+    { "settingsKey": "permission-file-access", "controlKey": "settings.listrow-action.button.permission.file-access@settings-general.default", "uiEvent": "permission.request", "status": "bound-page-exception", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "879:201", "landscape": "887:201", "tablet": "887:201" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "pageException": "Outer permission row retained; its inner action now consumes Settings/InlineAction." },
+    { "settingsKey": "permission-notification", "controlKey": "settings.listrow-action.button.permission.notification@settings-general.default", "uiEvent": "permission.request", "status": "bound-page-exception", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "879:219", "landscape": "887:219", "tablet": "887:219" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "pageException": "Outer permission row retained; its inner action now consumes Settings/InlineAction." },
+    { "settingsKey": "permission-action-battery", "controlKey": "settings.button.button.permission-action.battery@settings-general.default", "uiEvent": "permission.open-settings", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18448", "landscape": "2114:18508", "tablet": "2114:18508" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "1994:25736" },
+    { "settingsKey": "permission-action-file-access", "controlKey": "settings.button.button.permission-action.file-access@settings-general.default", "uiEvent": "permission.open-settings", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18440", "landscape": "2114:18500", "tablet": "2114:18500" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "1994:25736" },
+    { "settingsKey": "permission-action-notification", "controlKey": "settings.button.button.permission-action.notification@settings-general.default", "uiEvent": "permission.open-settings", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18444", "landscape": "2114:18504", "tablet": "2114:18504" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378229984327606962", "canonicalMasterId": "1994:25736" }
   ],
-  "unbound": [
-    {
-      "settingsKeys": ["app-theme-segment-option-1", "app-theme-segment-option-2", "app-theme-segment-option-3"],
-      "controlKeys": [
-        "settings.button.button.segment-option-1.app-theme@settings-general.default",
-        "settings.button.button.segment-option-2.app-theme@settings-general.default",
-        "settings.button.button.segment-option-3.app-theme@settings-general.default"
-      ],
-      "localIdentityStatus": "stable-mapped",
-      "figmaStatus": "missing-distinct-option-nodes",
-      "observedAggregateNodes": { "phone": "879:43", "compact": "884:43", "tablet": "887:43" },
-      "availableCanonicalMasterId": "283:100",
-      "reason": "A2 resolved the three local business identities, but Figma still has one aggregate App theme row. Three stable keys cannot be bound to one aggregate node."
-    }
-  ],
+  "unbound": [],
   "admission": {
-    "f0Pass": false,
-    "f1WriterAdmitted": false,
-    "localGates": { "r2aPass": true, "r3aPass": true, "a3ActionIdentityPass": true },
-    "resolvedSincePreviousObservation": [
-      "LOCAL_READY_FOR_FIGMA packet exists and is committed.",
-      "Settings R3a is complete in A2.",
-      "The three App theme Segment option identities are stable local business keys.",
-      "Provider version history exposes latest autosave revision 2377708099597320576.",
-      "A3 stabilized 9 action identities (reset-defaults / cache-clear / back / 3 permission rows / 3 permission-action buttons) with source=a3-action, replacing ordinal registry entries .n0-.n8.",
-      "A3 renderer stamps 5 data-* attrs on all 9 action elements across 5 stamping points (d2ActionList, d2RowSide cache-cleanup, d2Row permission article, d2RowSide permission inner button, backTopBar back button).",
-      "A3 test suite: a3-settings-general-action-identity.test.mjs 12/12 pass; a1-settings-general-identity.test.mjs 9/9 pass (scope tightened); full suite 135/135 pass.",
-      "A3 clarified Songti SC source: Apple system font at /System/Library/Fonts/Supplemental/Songti.ttc on macOS; recommended running writer's Figma session on macOS to unblock."
-    ],
-    "blockers": [
-      "Songti SC is still unavailable to the writer runtime, so text or text-affecting structural mutation is unsafe. A3 identified the source (macOS system font) and recommended path (run writer Figma session on macOS); pending confirmation of writer's current host OS.",
-      "Responsive masters 942:18 / 942:19 / 942:20 still bypass canonical Settings/shared primitive instances and contain zero INSTANCE descendants.",
-      "Figma still lacks three distinct Segment option nodes."
-    ]
+    "f0Pass": true,
+    "f1WriterAdmitted": true,
+    "f1TechnicalPass": true,
+    "f1UserConfirmed": false,
+    "f1Exit": false,
+    "f2QueueAdmitted": false,
+    "remainingGate": "User visual confirmation of the F1 Settings General pilot screenshot."
   }
 }
