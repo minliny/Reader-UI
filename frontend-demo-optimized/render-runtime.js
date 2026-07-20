@@ -11292,8 +11292,17 @@
       case "restore-conflict":
       case "restore-result":
         return restoreFlowScreen(data, route === "restore-scopes" || route === "restore-preview" ? "restore-confirm" : route === "restore-running" ? "restore-progress" : route, appState);
+      // R2a-1: webdav-config / webdav-test / webdav-error 路由冻结到
+      // webdavConfigV2 (d2-settings-sync-renderers.js)。旧 settingsScreen fallback
+      // 已隔离，不再服务 webdav 路由。如果 D2-C 模块未加载，fail-loud 而不是回退。
       case "webdav-config":
-        return settingsScreen(data, "sync-backup", appState);
+      case "webdav-test":
+      case "webdav-error":
+        throw new Error(
+          route + " route is FROZEN to webdavConfigV2 (d2-settings-sync-renderers.js). " +
+          "renderRoute switch fallback is disabled; ensure window.ReaderD2SettingsSyncRenderers is loaded " +
+          "before renderRoute is called."
+        );
       default:
         return mainTabBookshelf(data, appState);
     }

@@ -543,13 +543,30 @@
   }
 
   // 输入框行
-  function d2InputRow(row) {
+  // R2a (webdav-config): 接收 route + state 用于 stamp identity 和反映 inputErrors。
+  //   - 当 row.settingsKey 存在时，stamp 5 data-* 属性到 <input>。
+  //   - 当 state.inputErrors[settingsKey] 存在时，添加 aria-invalid + aria-describedby。
+  //   - 其它调用方（无 route / 无 settingsKey）保持原行为，向后兼容。
+  function d2InputRow(row, route, state) {
     var inputType = ["text", "url", "password", "number"].indexOf(row.inputType) >= 0 ? row.inputType : "text";
+    var identity = (row.settingsKey && route)
+      ? d2ResolveSubcontrolIdentity(route, row.settingsKey) : null;
+    var identityAttrs = d2StampIdentityAttrs(identity);
+    var errorObj = (state && state.inputErrors && row.settingsKey)
+      ? state.inputErrors[row.settingsKey] : null;
+    var ariaAttrs = "";
+    var describedBy = "";
+    if (errorObj) {
+      var descId = "input-error-" + (row.settingsKey || "generic");
+      ariaAttrs = ' aria-invalid="true" aria-describedby="' + esc(descId) + '"';
+      describedBy = '<small class="fd-settings-input-error" id="' + esc(descId) + '" role="alert">' + esc(errorObj.message || errorObj) + '</small>';
+    }
     return `
       <label class="fd-setting-row is-input-field">
         <span>${icon(row.icon || "settings", "fd-small-icon")}</span>
         <strong>${esc(row.title)}${row.meta ? `<small>${esc(row.meta)}</small>` : ""}</strong>
-        <input type="${esc(inputType)}" value="${esc(row.value || "")}" placeholder="${esc(row.placeholder || "")}" aria-label="${esc(row.title)}" autocomplete="off">
+        <input type="${esc(inputType)}" value="${esc(row.value || "")}" placeholder="${esc(row.placeholder || "")}" aria-label="${esc(row.title)}" autocomplete="off"${identityAttrs}${ariaAttrs}>
+        ${describedBy}
       </label>`;
   }
 
@@ -653,7 +670,7 @@
   //   cache-cleanup row 补 aria-haspopup="dialog"
   //   所有带 overlay 的 row 补 data-restore-focus（焦点恢复锚点）
   function d2Row(row, route, appState) {
-    if (row.type === "input") return d2InputRow(row);
+    if (row.type === "input") return d2InputRow(row, route, appState && appState.webdavConfig ? appState.webdavConfig : null);
     var overlayAttr = row.overlay && row.type !== "cache-cleanup" ? ` data-settings-overlay="${esc(row.overlay)}"` : "";
     var routeAttr = row.route ? ` data-route="${esc(row.route)}"` : "";
     // select row 的 identity stamp 在 <article> 上
@@ -663,7 +680,11 @@
     //     settingsKey="permission-<permissionName>"
     var permissionIdentity = (row.type === "link" && row.permissionName)
       ? d2ResolveSubcontrolIdentity(route, "permission-" + row.permissionName) : null;
-    var selectAttrs = d2StampIdentityAttrs(selectIdentity) + d2StampIdentityAttrs(permissionIdentity);
+    // R2a (webdav-config): link row with settingsKey 也 stamp identity 在 <article> 上
+    //   用于 webdav-error 页面的 "可能原因" 和 "建议操作" 行
+    var linkIdentity = (row.type === "link" && !row.permissionName && row.settingsKey)
+      ? d2ResolveSubcontrolIdentity(route, row.settingsKey) : null;
+    var selectAttrs = d2StampIdentityAttrs(selectIdentity) + d2StampIdentityAttrs(permissionIdentity) + d2StampIdentityAttrs(linkIdentity);
     // A2 Phase 7: ARIA 属性
     var ariaAttrs = "";
     var roleAttr = "group";
@@ -689,6 +710,8 @@
   }
 
   // 设置区块
+  // R2a/R2b (webdav-config): section.actions 支持 identity（item.settingsKey）+
+  //   asyncStatus + 焦点恢复锚点 + dialogInitialFocus。
   function d2Section(section, route, appState) {
     var body = (section.rows || []).map(function (row) { return d2Row(row, route, appState); }).join("");
     var actions = "";
@@ -696,7 +719,34 @@
       actions = `
         <div class="fd-settings-section-actions" aria-label="配置操作">
           ${section.actions.map(function (item) {
-            return `<button type="button" data-settings-overlay="${esc(item.overlay || "dialog")}">${icon(item.icon || "info", "fd-small-icon")}<span><strong>${esc(item.title)}</strong>${item.meta ? `<small>${esc(item.meta)}</small>` : ""}</span></button>`;
+            var overlayAttr = item.overlay ? ` data-settings-overlay="${esc(item.overlay)}"` : "";
+            var routeAttr = item.route ? ` data-route="${esc(item.route)}"` : "";
+            var actionIdentity = item.settingsKey ? d2ResolveSubcontrolIdentity(route, item.settingsKey) : null;
+            var identityAttrs = d2StampIdentityAttrs(actionIdentity);
+            var restoreFocusAttr = item.restoreFocus ? ` data-restore-focus="${esc(item.restoreFocus)}"` : "";
+            var dialogInitialFocusAttr = item.dialogInitialFocus ? ` data-dialog-initial-focus="${esc(item.dialogInitialFocus)}"` : "";
+            var asyncStatus = item.asyncStatus || null;
+            var asyncError = item.asyncError || null;
+            var buttonClass = item.tone === "danger" ? "is-danger" : "";
+            var buttonLabel = item.title;
+            var buttonAttrs = overlayAttr + routeAttr + identityAttrs + restoreFocusAttr + dialogInitialFocusAttr;
+            if (asyncStatus === "loading") {
+              buttonClass += " is-busy";
+              buttonLabel = item.loadingLabel || (item.title + "…");
+              buttonAttrs += ' aria-busy="true" disabled';
+            } else if (asyncStatus === "success") {
+              buttonClass += " is-success";
+              buttonLabel = item.successLabel || "已完成";
+              buttonAttrs += " disabled";
+            } else if (asyncStatus === "failed") {
+              buttonClass += " is-failed";
+              buttonLabel = item.failedLabel || "重试";
+              var titleAttr = asyncError ? ` title="${esc(asyncError)}"` : "";
+              buttonAttrs += ' aria-invalid="true"' + titleAttr;
+            } else if (asyncStatus === "confirm") {
+              buttonClass += " is-confirm";
+            }
+            return `<button class="${buttonClass}" type="button"${buttonAttrs}>${icon(item.icon || "info", "fd-small-icon")}<span><strong>${esc(buttonLabel)}</strong>${item.meta ? `<small>${esc(item.meta)}</small>` : ""}</span></button>`;
           }).join("")}
         </div>`;
     }
@@ -733,6 +783,9 @@
   // 操作列表（底部按钮）
   // A2 Phase 6: "恢复默认" action button 反映 resetDefaults.status
   // A3: reset-defaults button stamp 稳定 identity（settingsKey="reset-defaults"）
+  // R2a/R2b (webdav-config): 支持 item.settingsKey 查找 identity；支持 item.asyncStatus
+  //   反映 loading/success/failed；支持 item.restoreFocus / item.dialogInitialFocus
+  //   作为焦点恢复锚点；支持 item.confirmLabel 在 confirm 状态显示。
   function d2ActionList(actions, route) {
     if (!actions || !actions.length) return "";
     return `
@@ -740,15 +793,27 @@
         ${actions.map(function (item) {
           var routeAttr = item.route ? ` data-route="${esc(item.route)}"` : "";
           var overlayAttr = item.overlay ? ` data-settings-overlay="${esc(item.overlay)}"` : "";
-          // A3: stamp 稳定 identity（reset-defaults）
-          var actionIdentity = (item.resetStatus !== undefined)
-            ? d2ResolveSubcontrolIdentity(route, "reset-defaults") : null;
+          // A3 / R2a: stamp 稳定 identity
+          //   - reset-defaults: 由 item.resetStatus 触发（settings-general 用）
+          //   - 其它: 由 item.settingsKey 显式指定（webdav-config 等用）
+          var actionIdentity = null;
+          if (item.resetStatus !== undefined) {
+            actionIdentity = d2ResolveSubcontrolIdentity(route, "reset-defaults");
+          } else if (item.settingsKey) {
+            actionIdentity = d2ResolveSubcontrolIdentity(route, item.settingsKey);
+          }
           var identityAttrs = d2StampIdentityAttrs(actionIdentity);
+          // 焦点恢复锚点
+          var restoreFocusAttr = item.restoreFocus ? ` data-restore-focus="${esc(item.restoreFocus)}"` : "";
+          var dialogInitialFocusAttr = item.dialogInitialFocus ? ` data-dialog-initial-focus="${esc(item.dialogInitialFocus)}"` : "";
           // A2 Phase 6: 如果 item 带 resetStatus，根据状态调整 button
           var resetStatus = item.resetStatus || null;
+          // R2b: webdav asyncStatus (loading/success/failed/confirm)
+          var asyncStatus = item.asyncStatus || null;
+          var asyncError = item.asyncError || null;
           var buttonClass = item.tone === "danger" ? "is-danger" : "";
           var buttonLabel = item.title;
-          var buttonAttrs = overlayAttr + routeAttr + identityAttrs;
+          var buttonAttrs = overlayAttr + routeAttr + identityAttrs + restoreFocusAttr + dialogInitialFocusAttr;
           if (resetStatus === "submitting") {
             buttonClass += " is-busy";
             buttonLabel = "恢复中…";
@@ -761,6 +826,21 @@
             buttonClass += " is-confirm";
           } else if (resetStatus === "cancelled") {
             buttonClass += " is-cancelled";
+          } else if (asyncStatus === "loading") {
+            buttonClass += " is-busy";
+            buttonLabel = item.loadingLabel || (item.title + "…");
+            buttonAttrs += ' aria-busy="true" disabled';
+          } else if (asyncStatus === "success") {
+            buttonClass += " is-success";
+            buttonLabel = item.successLabel || "已完成";
+            buttonAttrs += " disabled";
+          } else if (asyncStatus === "failed") {
+            buttonClass += " is-failed";
+            buttonLabel = item.failedLabel || "重试";
+            var titleAttr = asyncError ? ` title="${esc(asyncError)}"` : "";
+            buttonAttrs += ' aria-invalid="true"' + titleAttr;
+          } else if (asyncStatus === "confirm") {
+            buttonClass += " is-confirm";
           }
           return `<button class="${buttonClass}" type="button"${buttonAttrs}>${icon(item.icon || "info", "fd-small-icon")}<span><strong>${esc(buttonLabel)}</strong><small>${esc(item.meta || "")}</small></span>${chevron()}</button>`;
         }).join("")}
@@ -2138,79 +2218,565 @@
   // ===========================================================================
   // 4. webdavConfigV2 — WebDAV 配置 + 测试连接 + 错误处理
   // 覆盖路由：webdav-config / webdav-test / webdav-error
+  // R2a/R2b: webdav-config 路由接入完整 state owner + reducer + 异步流程；
+  //   webdav-test / webdav-error 保持静态展示页，但 action button 和 link row
+  //   都有稳定 identity（settingsKey-based）。
   // ===========================================================================
+
+  // ---- R2a/R2b: webdav-config state owner ----
+  var D2_WEBDAV_CONFIG_STORAGE_KEY = "webdav-config-values";
+
+  var D2_WEBDAV_CONFIG_DEFAULTS = {
+    serverUrl: "https://dav.example.com/reader/backup",
+    account: "reader@example.com",
+    password: "reader-demo-password",
+    syncDir: "/ReaderBackup/ReaderAndroid",
+    sslVerify: true,
+    connectTimeout: 15,  // seconds
+    wifiOnly: true,
+    autoSync: "每小时"
+  };
+
+  var D2_WEBDAV_AUTO_SYNC_OPTIONS = ["关闭", "每小时", "每天", "手动"];
+
+  function d2WebdavConfigDefaultState() {
+    return {
+      values: Object.assign({}, D2_WEBDAV_CONFIG_DEFAULTS),
+      inputErrors: {},
+      test: { open: false, status: "idle", error: null, result: null },
+      save: { open: false, status: "idle", error: null },
+      clear: { open: false, status: "idle", error: null }
+    };
+  }
+
+  function d2WebdavConfigInitState(appState) {
+    var state = d2WebdavConfigDefaultState();
+    var stored = d2Get(D2_WEBDAV_CONFIG_STORAGE_KEY, null);
+    if (stored && typeof stored === "object") {
+      state.values = Object.assign({}, state.values, stored);
+    }
+    if (appState && appState.webdavConfigValues) {
+      state.values = Object.assign({}, state.values, appState.webdavConfigValues);
+    }
+    return state;
+  }
+
+  // 输入校验：serverUrl / account / password 必填；syncDir 可空（默认 /ReaderBackup）
+  function d2ValidateWebdavInputs(values) {
+    var errors = {};
+    if (!values.serverUrl || !String(values.serverUrl).trim()) {
+      errors.serverUrl = { message: "服务器地址不能为空" };
+    } else if (!/^https?:\/\//.test(String(values.serverUrl).trim())) {
+      errors.serverUrl = { message: "服务器地址必须以 http:// 或 https:// 开头" };
+    }
+    if (!values.account || !String(values.account).trim()) {
+      errors.account = { message: "账号不能为空" };
+    }
+    if (!values.password || !String(values.password).trim()) {
+      errors.password = { message: "密码不能为空" };
+    }
+    return errors;
+  }
+
+  // 纯函数 reducer
+  // R2b 防重保护：TEST_START / SAVE_START / CLEAR_START 仅在 confirm 状态才接受 → loading
+  // R2b 过期响应保护：TEST_SUCCESS/FAILED / SAVE_SUCCESS/FAILED / CLEAR_SUCCESS/FAILED
+  //   仅在 loading 状态才接受
+  function d2WebdavConfigReducer(state, action) {
+    if (!state) state = d2WebdavConfigDefaultState();
+    if (!action || !action.type) return state;
+    switch (action.type) {
+      case "INIT":
+        return d2WebdavConfigInitState(action.appState || {});
+
+      case "SET_INPUT": {
+        if (!action.settingsKey) return state;
+        var nextValues = Object.assign({}, state.values);
+        nextValues[action.settingsKey] = action.value;
+        // 清除该字段的 inputError
+        var nextErrors = Object.assign({}, state.inputErrors);
+        delete nextErrors[action.settingsKey];
+        return Object.assign({}, state, { values: nextValues, inputErrors: nextErrors });
+      }
+
+      case "TOGGLE_SWITCH": {
+        if (!action.settingsKey) return state;
+        var nextValues2 = Object.assign({}, state.values);
+        nextValues2[action.settingsKey] = !!action.value;
+        return Object.assign({}, state, { values: nextValues2 });
+      }
+
+      case "STEP_TIMEOUT": {
+        // delta = +1 / -1；范围 [5, 60]
+        var nextTimeout = Math.max(5, Math.min(60, Number(state.values.connectTimeout || 15) + (action.delta || 0)));
+        var nextValues3 = Object.assign({}, state.values, { connectTimeout: nextTimeout });
+        return Object.assign({}, state, { values: nextValues3 });
+      }
+
+      case "SELECT_AUTO_SYNC": {
+        if (D2_WEBDAV_AUTO_SYNC_OPTIONS.indexOf(action.value) < 0) return state;
+        var nextValues4 = Object.assign({}, state.values, { autoSync: action.value });
+        return Object.assign({}, state, { values: nextValues4 });
+      }
+
+      case "INPUT_VALIDATE": {
+        var errors = d2ValidateWebdavInputs(state.values);
+        return Object.assign({}, state, { inputErrors: errors });
+      }
+
+      case "INPUT_ERROR_CLEAR": {
+        if (!action.settingsKey) return state;
+        var nextErrors2 = Object.assign({}, state.inputErrors);
+        delete nextErrors2[action.settingsKey];
+        return Object.assign({}, state, { inputErrors: nextErrors2 });
+      }
+
+      // ---- 测试连接流程：idle / confirm / loading / success / failed ----
+      case "TEST_CONFIRM_OPEN":
+        // 同一时间只允许一个 dialog 打开
+        if (state.save.open || state.clear.open) return state;
+        return Object.assign({}, state, {
+          test: Object.assign({}, state.test, { open: true, status: "confirm", error: null, result: null })
+        });
+      case "TEST_CONFIRM_CLOSE":
+        // loading 期间不允许关闭（防重复点击 / 误操作）
+        if (state.test.status === "loading") return state;
+        return Object.assign({}, state, {
+          test: Object.assign({}, state.test, { open: false, status: "idle", error: null, result: null })
+        });
+      case "TEST_START":
+        // 重复点击 guard：只有 confirm 状态才能进入 loading
+        if (state.test.status !== "confirm") return state;
+        return Object.assign({}, state, {
+          test: Object.assign({}, state.test, { status: "loading", error: null, result: null })
+        });
+      case "TEST_SUCCESS":
+        // stale async guard：只有 loading 状态才接受 success
+        if (state.test.status !== "loading") return state;
+        return Object.assign({}, state, {
+          test: Object.assign({}, state.test, { status: "success", error: null, result: action.result || null })
+        });
+      case "TEST_FAILED":
+        if (state.test.status !== "loading") return state;
+        return Object.assign({}, state, {
+          test: Object.assign({}, state.test, { status: "failed", error: action.error || "连接失败" })
+        });
+      case "TEST_RESET":
+        return Object.assign({}, state, {
+          test: { open: false, status: "idle", error: null, result: null }
+        });
+
+      // ---- 保存配置流程：idle / confirm / loading / success / failed ----
+      case "SAVE_CONFIRM_OPEN":
+        if (state.test.open || state.clear.open) return state;
+        return Object.assign({}, state, {
+          save: Object.assign({}, state.save, { open: true, status: "confirm", error: null })
+        });
+      case "SAVE_CONFIRM_CLOSE":
+        if (state.save.status === "loading") return state;
+        return Object.assign({}, state, {
+          save: Object.assign({}, state.save, { open: false, status: "idle", error: null })
+        });
+      case "SAVE_START":
+        if (state.save.status !== "confirm") return state;
+        return Object.assign({}, state, {
+          save: Object.assign({}, state.save, { status: "loading", error: null })
+        });
+      case "SAVE_SUCCESS":
+        if (state.save.status !== "loading") return state;
+        return Object.assign({}, state, {
+          save: Object.assign({}, state.save, { status: "success", error: null })
+        });
+      case "SAVE_FAILED":
+        if (state.save.status !== "loading") return state;
+        return Object.assign({}, state, {
+          save: Object.assign({}, state.save, { status: "failed", error: action.error || "保存失败" })
+        });
+      case "SAVE_RESET":
+        return Object.assign({}, state, {
+          save: { open: false, status: "idle", error: null }
+        });
+
+      // ---- 清除配置流程：idle / confirm / loading / success / failed ----
+      case "CLEAR_CONFIRM_OPEN":
+        if (state.test.open || state.save.open) return state;
+        return Object.assign({}, state, {
+          clear: Object.assign({}, state.clear, { open: true, status: "confirm", error: null })
+        });
+      case "CLEAR_CONFIRM_CLOSE":
+        if (state.clear.status === "loading") return state;
+        return Object.assign({}, state, {
+          clear: Object.assign({}, state.clear, { open: false, status: "idle", error: null })
+        });
+      case "CLEAR_START":
+        if (state.clear.status !== "confirm") return state;
+        return Object.assign({}, state, {
+          clear: Object.assign({}, state.clear, { status: "loading", error: null })
+        });
+      case "CLEAR_SUCCESS":
+        if (state.clear.status !== "loading") return state;
+        // 清除配置成功 → values 回到默认值
+        return Object.assign({}, state, {
+          values: Object.assign({}, D2_WEBDAV_CONFIG_DEFAULTS),
+          inputErrors: {},
+          clear: Object.assign({}, state.clear, { status: "success", error: null })
+        });
+      case "CLEAR_FAILED":
+        if (state.clear.status !== "loading") return state;
+        return Object.assign({}, state, {
+          clear: Object.assign({}, state.clear, { status: "failed", error: action.error || "清除失败" })
+        });
+      case "CLEAR_RESET":
+        return Object.assign({}, state, {
+          clear: { open: false, status: "idle", error: null }
+        });
+
+      default:
+        return state;
+    }
+  }
+
+  var d2WebdavConfigState = null;
+  var d2WebdavConfigListeners = [];
+
+  function d2WebdavConfigGetState() {
+    if (!d2WebdavConfigState) {
+      d2WebdavConfigState = d2WebdavConfigDefaultState();
+    }
+    return d2WebdavConfigState;
+  }
+
+  function d2WebdavConfigSubscribe(listener) {
+    if (typeof listener !== "function") return function () { return; };
+    d2WebdavConfigListeners.push(listener);
+    return function unsubscribe() {
+      var idx = d2WebdavConfigListeners.indexOf(listener);
+      if (idx >= 0) d2WebdavConfigListeners.splice(idx, 1);
+    };
+  }
+
+  function d2WebdavConfigDispatch(action) {
+    var prev = d2WebdavConfigGetState();
+    var next = d2WebdavConfigReducer(prev, action);
+    if (next === prev) return prev;
+    d2WebdavConfigState = next;
+    // 持久化 values（只在 values 变更时写）
+    if (next.values !== prev.values) {
+      d2Set(D2_WEBDAV_CONFIG_STORAGE_KEY, next.values);
+    }
+    for (var i = 0; i < d2WebdavConfigListeners.length; i++) {
+      try { d2WebdavConfigListeners[i](next, prev, action); } catch (e) { /* ignore */ }
+    }
+    return next;
+  }
+
+  function d2WebdavConfigInjectAppState(appState) {
+    appState = appState || {};
+    appState.webdavConfig = d2WebdavConfigGetState();
+    return appState;
+  }
+
+  // R2b: 测试连接执行函数（事件层 / 测试调用）
+  // 调用方负责在 TEST_CONFIRM_OPEN 后调用此函数执行实际测试。
+  // demo 环境无真实连接 → 模拟 success / failed。
+  // stale async guard：reducer 内 TEST_SUCCESS / TEST_FAILED 仅在 status=loading 时接受。
+  // duplicate-click guard：reducer 内 TEST_START 仅在 status=confirm 时接受。
+  function d2ExecuteWebdavTest(options) {
+    options = options || {};
+    d2WebdavConfigDispatch({ type: "TEST_START" });
+    var simulate = options.simulateResult || "success";
+    return new Promise(function (resolve) {
+      var delay = options.delay || 0;
+      setTimeout(function () {
+        if (simulate === "failed") {
+          d2WebdavConfigDispatch({
+            type: "TEST_FAILED",
+            error: options.error || "连接失败，请检查服务器地址和账号"
+          });
+          resolve("failed");
+        } else {
+          d2WebdavConfigDispatch({
+            type: "TEST_SUCCESS",
+            result: options.result || { latencyMs: 286, permission: "读写", dirExists: true }
+          });
+          resolve("success");
+        }
+      }, delay);
+    });
+  }
+
+  // R2b: 保存配置执行函数
+  function d2ExecuteWebdavSave(options) {
+    options = options || {};
+    d2WebdavConfigDispatch({ type: "SAVE_START" });
+    var simulate = options.simulateResult || "success";
+    return new Promise(function (resolve) {
+      var delay = options.delay || 0;
+      setTimeout(function () {
+        if (simulate === "failed") {
+          d2WebdavConfigDispatch({
+            type: "SAVE_FAILED",
+            error: options.error || "保存失败，请稍后重试"
+          });
+          resolve("failed");
+        } else {
+          d2WebdavConfigDispatch({ type: "SAVE_SUCCESS" });
+          resolve("success");
+        }
+      }, delay);
+    });
+  }
+
+  // R2b: 清除配置执行函数
+  function d2ExecuteWebdavClear(options) {
+    options = options || {};
+    d2WebdavConfigDispatch({ type: "CLEAR_START" });
+    var simulate = options.simulateResult || "success";
+    return new Promise(function (resolve) {
+      var delay = options.delay || 0;
+      setTimeout(function () {
+        if (simulate === "failed") {
+          d2WebdavConfigDispatch({
+            type: "CLEAR_FAILED",
+            error: options.error || "清除失败，请稍后重试"
+          });
+          resolve("failed");
+        } else {
+          d2WebdavConfigDispatch({ type: "CLEAR_SUCCESS" });
+          resolve("success");
+        }
+      }, delay);
+    });
+  }
+
+  // ---- webdavConfigV2 main renderer ----
   function webdavConfigV2(data, route, appState) {
-    var page = d2WebdavPage(route, appState);
-    var overlay = appState && appState.settingsOverlay ? appState.settingsOverlay : "";
-    var frameState = overlay === "sheet" ? " has-sheet" : overlay.indexOf("dialog") === 0 ? " has-dialog" : "";
+    // R2a/R2b: webdav-config 路由接入 state owner；其它路由保持静态。
+    var state = (route === "webdav-config") ? d2WebdavConfigGetState() : null;
+    var injectedAppState = state ? d2WebdavConfigInjectAppState(appState || {}) : appState;
+    var page = d2WebdavPage(route, state);
     var contentHtml = `
       ${d2MetricGrid(page.metrics)}
       ${d2StorageCard(page.storage)}
       ${(page.sections || []).map(function (section) {
         if (section.layout === "backup-list") return d2BackupList(section);
-        return d2Section(section, route, appState);
+        return d2Section(section, route, injectedAppState);
       }).join("")}
-      ${d2ActionList(page.actions)}`;
-    var dialogHtml = "";
-    if (page.confirm) {
-      dialogHtml = `
-        <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false" data-demo-dialog data-settings-overlay-panel="dialog">
-          <h2>${esc(page.confirm.title)}</h2>
-          <p>${esc(page.confirm.copy)}</p>
-          <div>
-            <button type="button" data-close-settings-overlay>${esc(page.confirm.cancelLabel || "取消")}</button>
-            <button type="button" data-close-settings-overlay>${esc(page.confirm.confirmLabel || "确认")}</button>
-          </div>
-        </section>`;
+      ${d2ActionList(page.actions, route)}`;
+    var dialogHtml = d2WebdavDialogHtml(route, state);
+    var toastHtml = page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : "";
+    var frameState = "";
+    if (state) {
+      if (state.test.open) frameState = " has-dialog";
+      else if (state.save.open) frameState = " has-dialog";
+      else if (state.clear.open) frameState = " has-dialog";
     }
+    var backIdentity = d2ResolveSubcontrolIdentity(route, "back");
+    var backAttrs = d2StampIdentityAttrs(backIdentity);
     return d2SettingsShell(data, page.title, contentHtml, {
       frameState: frameState,
-      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : "",
-      dialogHtml: dialogHtml
+      toastHtml: toastHtml,
+      dialogHtml: dialogHtml,
+      backButtonAttrs: backAttrs
     });
   }
 
-  function d2WebdavPage(route, appState) {
-    var pages = {
-      // WebDAV 配置
-      "webdav-config": {
+  // 3 个 dialog（test / save / clear）基于 state 渲染，带 ARIA + 焦点恢复。
+  function d2WebdavDialogHtml(route, state) {
+    if (!state) return "";
+    // 测试连接 dialog
+    if (state.test.open) {
+      var testStatus = state.test.status;
+      var testBusy = testStatus === "loading";
+      var testFailed = testStatus === "failed";
+      var testSuccess = testStatus === "success";
+      var testConfirm = testStatus === "confirm";
+      var testError = state.test.error;
+      var testResult = state.test.result;
+      var testTitle = testSuccess ? "测试成功" : testFailed ? "测试失败" : "测试网络连通性";
+      var testCopy = testSuccess
+        ? "连接正常 · 耗时 " + (testResult && testResult.latencyMs ? testResult.latencyMs : "—") + " ms · 权限 " + (testResult && testResult.permission ? testResult.permission : "—")
+        : testFailed
+          ? (testError || "连接失败，请检查服务器地址和账号")
+          : "将使用当前服务器地址和账号发起一次连接验证。";
+      // confirm: 取消 + 开始测试；loading: 关闭按钮 disabled；success/failed: 知道了
+      var testButtons = "";
+      var testConfirmIdentity = d2ResolveSubcontrolIdentity(route, "webdav-test-confirm");
+      var testConfirmAttrs = d2StampIdentityAttrs(testConfirmIdentity);
+      var testCancelIdentity = d2ResolveSubcontrolIdentity(route, "webdav-test-cancel");
+      var testCancelAttrs = d2StampIdentityAttrs(testCancelIdentity);
+      if (testConfirm) {
+        testButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-test-cancel"${testCancelAttrs}>取消</button><button type="button" data-settings-overlay="dialog:webdav-test-execute"${testConfirmAttrs}>开始测试</button>`;
+      } else if (testBusy) {
+        testButtons = `<button type="button" disabled aria-busy="true">测试中…</button>`;
+      } else if (testSuccess) {
+        var testOkIdentity = d2ResolveSubcontrolIdentity(route, "webdav-test-confirm");
+        var testOkAttrs = d2StampIdentityAttrs(testOkIdentity);
+        testButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-test-confirm"${testOkAttrs}>知道了</button>`;
+      } else if (testFailed) {
+        var testRetryIdentity = d2ResolveSubcontrolIdentity(route, "webdav-test-confirm");
+        var testRetryAttrs = d2StampIdentityAttrs(testRetryIdentity);
+        var testCloseIdentity = d2ResolveSubcontrolIdentity(route, "webdav-test-cancel");
+        var testCloseAttrs = d2StampIdentityAttrs(testCloseIdentity);
+        testButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-test-cancel"${testCloseAttrs}>关闭</button><button type="button" data-settings-overlay="dialog:webdav-test-execute" aria-invalid="true"${testRetryAttrs}>重试</button>`;
+      }
+      var testBusyAttr = testBusy ? ' aria-busy="true"' : "";
+      var testInvalidAttr = testFailed ? ' aria-invalid="true"' : "";
+      return `
+        <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false" data-demo-dialog data-settings-overlay-panel="dialog" role="dialog" aria-modal="true" aria-labelledby="webdav-test-dialog-title"${testBusyAttr}${testInvalidAttr}>
+          <h2 id="webdav-test-dialog-title">${esc(testTitle)}</h2>
+          <p>${esc(testCopy)}</p>
+          <div>${testButtons}</div>
+        </section>`;
+    }
+    // 保存配置 dialog
+    if (state.save.open) {
+      var saveStatus = state.save.status;
+      var saveBusy = saveStatus === "loading";
+      var saveFailed = saveStatus === "failed";
+      var saveSuccess = saveStatus === "success";
+      var saveConfirm = saveStatus === "confirm";
+      var saveError = state.save.error;
+      var saveTitle = saveSuccess ? "保存成功" : saveFailed ? "保存失败" : "保存配置";
+      var saveCopy = saveSuccess
+        ? "WebDAV 配置已保存。"
+        : saveFailed
+          ? (saveError || "保存失败，请稍后重试")
+          : "将当前服务器地址、账号和密码保存为 WebDAV 配置。";
+      var saveConfirmIdentity = d2ResolveSubcontrolIdentity(route, "webdav-save-confirm");
+      var saveConfirmAttrs = d2StampIdentityAttrs(saveConfirmIdentity);
+      var saveCancelIdentity = d2ResolveSubcontrolIdentity(route, "webdav-save-cancel");
+      var saveCancelAttrs = d2StampIdentityAttrs(saveCancelIdentity);
+      var saveButtons = "";
+      if (saveConfirm) {
+        saveButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-save-cancel"${saveCancelAttrs}>取消</button><button type="button" data-settings-overlay="dialog:webdav-save-execute"${saveConfirmAttrs}>确认保存</button>`;
+      } else if (saveBusy) {
+        saveButtons = `<button type="button" disabled aria-busy="true">保存中…</button>`;
+      } else if (saveSuccess) {
+        saveButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-save-confirm"${saveConfirmAttrs}>知道了</button>`;
+      } else if (saveFailed) {
+        saveButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-save-cancel"${saveCancelAttrs}>关闭</button><button type="button" data-settings-overlay="dialog:webdav-save-execute" aria-invalid="true"${saveConfirmAttrs}>重试</button>`;
+      }
+      var saveBusyAttr = saveBusy ? ' aria-busy="true"' : "";
+      var saveInvalidAttr = saveFailed ? ' aria-invalid="true"' : "";
+      return `
+        <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false" data-demo-dialog data-settings-overlay-panel="dialog" role="dialog" aria-modal="true" aria-labelledby="webdav-save-dialog-title"${saveBusyAttr}${saveInvalidAttr}>
+          <h2 id="webdav-save-dialog-title">${esc(saveTitle)}</h2>
+          <p>${esc(saveCopy)}</p>
+          <div>${saveButtons}</div>
+        </section>`;
+    }
+    // 清除配置 dialog
+    if (state.clear.open) {
+      var clearStatus = state.clear.status;
+      var clearBusy = clearStatus === "loading";
+      var clearFailed = clearStatus === "failed";
+      var clearSuccess = clearStatus === "success";
+      var clearConfirm = clearStatus === "confirm";
+      var clearError = state.clear.error;
+      var clearTitle = clearSuccess ? "已清除" : clearFailed ? "清除失败" : "清除 WebDAV 配置";
+      var clearCopy = clearSuccess
+        ? "WebDAV 配置已恢复默认值。"
+        : clearFailed
+          ? (clearError || "清除失败，请稍后重试")
+          : "将清除服务器地址、账号、密码等所有 WebDAV 配置，恢复为默认值。此操作不可撤销。";
+      var clearConfirmIdentity = d2ResolveSubcontrolIdentity(route, "webdav-clear-confirm");
+      var clearConfirmAttrs = d2StampIdentityAttrs(clearConfirmIdentity);
+      var clearCancelIdentity = d2ResolveSubcontrolIdentity(route, "webdav-clear-cancel");
+      var clearCancelAttrs = d2StampIdentityAttrs(clearCancelIdentity);
+      var clearButtons = "";
+      if (clearConfirm) {
+        clearButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-clear-cancel"${clearCancelAttrs}>取消</button><button type="button" data-settings-overlay="dialog:webdav-clear-execute" class="is-danger"${clearConfirmAttrs}>确认清除</button>`;
+      } else if (clearBusy) {
+        clearButtons = `<button type="button" disabled aria-busy="true">清除中…</button>`;
+      } else if (clearSuccess) {
+        clearButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-clear-confirm"${clearConfirmAttrs}>知道了</button>`;
+      } else if (clearFailed) {
+        clearButtons = `<button type="button" data-close-settings-overlay data-dialog-initial-focus="webdav-clear-cancel"${clearCancelAttrs}>关闭</button><button type="button" data-settings-overlay="dialog:webdav-clear-execute" class="is-danger" aria-invalid="true"${clearConfirmAttrs}>重试</button>`;
+      }
+      var clearBusyAttr = clearBusy ? ' aria-busy="true"' : "";
+      var clearInvalidAttr = clearFailed ? ' aria-invalid="true"' : "";
+      return `
+        <section class="fd-demo-dialog fd-settings-confirm-dialog" aria-hidden="false" data-demo-dialog data-settings-overlay-panel="dialog" role="dialog" aria-modal="true" aria-labelledby="webdav-clear-dialog-title"${clearBusyAttr}${clearInvalidAttr}>
+          <h2 id="webdav-clear-dialog-title">${esc(clearTitle)}</h2>
+          <p>${esc(clearCopy)}</p>
+          <div>${clearButtons}</div>
+        </section>`;
+    }
+    return "";
+  }
+
+  function d2WebdavPage(route, state) {
+    // ---- webdav-config: state-driven page ----
+    if (route === "webdav-config" && state) {
+      var v = state.values;
+      var testStatus = state.test.status;
+      var saveStatus = state.save.status;
+      var connectionStatus = "未测试";
+      if (testStatus === "success") connectionStatus = "已连接";
+      else if (testStatus === "failed") connectionStatus = "连接失败";
+      else if (testStatus === "loading") connectionStatus = "测试中…";
+      return {
         title: "WebDAV 配置",
         metrics: [
-          { icon: "cloud", label: "连接状态", value: "已连接" },
-          { icon: "clock", label: "最近测试", value: "10:30" },
-          { icon: "folder", label: "远程备份", value: "8 个" },
-          { icon: "download", label: "同步目录", value: "/ReaderBackup" }
+          { icon: "cloud", label: "连接状态", value: connectionStatus },
+          { icon: "clock", label: "连接超时", value: v.connectTimeout + " 秒" },
+          { icon: "wifi", label: "Wi-Fi 限制", value: v.wifiOnly ? "开启" : "关闭" },
+          { icon: "refresh", label: "自动同步", value: v.autoSync }
         ],
         sections: [
           {
             title: "连接信息",
             layout: "webdav-form",
             rows: [
-              { type: "input", inputType: "url", icon: "link", title: "服务器地址", value: "https://dav.example.com/reader/backup", placeholder: "https://example.com/dav" },
-              { type: "input", inputType: "text", icon: "people", title: "账号", value: "reader@example.com", placeholder: "请输入账号" },
-              { type: "input", inputType: "password", icon: "shield", title: "密码", value: "reader-demo-password", placeholder: "请输入密码" },
-              { type: "input", inputType: "text", icon: "folder", title: "同步目录", value: "/ReaderBackup/ReaderAndroid", placeholder: "/ReaderBackup" }
+              { type: "input", inputType: "url", icon: "link", title: "服务器地址", value: v.serverUrl, placeholder: "https://example.com/dav", settingsKey: "serverUrl" },
+              { type: "input", inputType: "text", icon: "people", title: "账号", value: v.account, placeholder: "请输入账号", settingsKey: "account" },
+              { type: "input", inputType: "password", icon: "shield", title: "密码", value: v.password, placeholder: "请输入密码", settingsKey: "password" },
+              { type: "input", inputType: "text", icon: "folder", title: "同步目录", value: v.syncDir, placeholder: "/ReaderBackup", settingsKey: "syncDir" }
             ],
             actions: [
-              { icon: "refresh", title: "测试网络连通性", overlay: "dialog:webdav-test" },
-              { icon: "check", title: "保存配置", overlay: "dialog:webdav-save" }
+              {
+                icon: "refresh",
+                title: "测试网络连通性",
+                overlay: "dialog:webdav-test",
+                settingsKey: "webdav-test-connection",
+                restoreFocus: "webdav-test-connection",
+                asyncStatus: testStatus === "loading" ? "loading" : testStatus === "success" ? "success" : testStatus === "failed" ? "failed" : null,
+                asyncError: state.test.error,
+                loadingLabel: "测试中…",
+                successLabel: "已测试",
+                failedLabel: "重试"
+              },
+              {
+                icon: "check",
+                title: "保存配置",
+                overlay: "dialog:webdav-save",
+                settingsKey: "webdav-save-config",
+                restoreFocus: "webdav-save-config",
+                asyncStatus: saveStatus === "loading" ? "loading" : saveStatus === "success" ? "success" : saveStatus === "failed" ? "failed" : null,
+                asyncError: state.save.error,
+                loadingLabel: "保存中…",
+                successLabel: "已保存",
+                failedLabel: "重试"
+              }
             ]
           },
           {
             title: "高级",
             rows: [
-              { type: "switch", icon: "lock", title: "SSL 证书校验", enabled: true },
-              { type: "stepper", icon: "clock", title: "连接超时", value: "15 秒", minLabel: "-", maxLabel: "+" },
-              { type: "switch", icon: "wifi", title: "仅 Wi-Fi 同步", enabled: true },
-              { type: "select", icon: "refresh", title: "自动同步", value: "每小时", options: ["关闭", "每小时", "每天", "手动"] }
+              { type: "switch", icon: "lock", title: "SSL 证书校验", enabled: v.sslVerify, settingsKey: "sslVerify" },
+              { type: "stepper", icon: "clock", title: "连接超时", value: v.connectTimeout + " 秒", minLabel: "-", maxLabel: "+", settingsKey: "webdav-connect-timeout" },
+              { type: "switch", icon: "wifi", title: "仅 Wi-Fi 同步", enabled: v.wifiOnly, settingsKey: "wifiOnly" },
+              { type: "select", icon: "refresh", title: "自动同步", value: v.autoSync, options: D2_WEBDAV_AUTO_SYNC_OPTIONS, settingsKey: "autoSync" }
             ]
           }
         ],
-        confirm: { title: "测试网络连通性？", copy: "将使用当前服务器地址和账号发起一次连接验证。", confirmLabel: "开始测试", cancelLabel: "取消" },
-        toast: "WebDAV 已连接 · 12.8 MB 可用"
-      },
-      // 测试连接（进行中 + 成功状态）
-      "webdav-test": {
+        toast: testStatus === "success" ? "WebDAV 测试成功" : testStatus === "failed" ? "WebDAV 测试失败" : saveStatus === "success" ? "WebDAV 配置已保存" : saveStatus === "failed" ? "WebDAV 保存失败" : ""
+      };
+    }
+    // ---- webdav-test: static result page (with stable identity on actions) ----
+    if (route === "webdav-test") {
+      return {
         title: "WebDAV 测试连接",
         metrics: [
           { icon: "refresh", label: "测试状态", value: "成功" },
@@ -2240,14 +2806,16 @@
           }
         ],
         actions: [
-          { icon: "refresh", title: "再次测试", overlay: "dialog:webdav-test" },
-          { icon: "check", title: "保存配置", overlay: "dialog:webdav-save" },
-          { icon: "cloud", title: "查看远程备份", route: "remote-webdav-books" }
+          { icon: "refresh", title: "再次测试", overlay: "dialog:webdav-test", settingsKey: "webdav-test-again", restoreFocus: "webdav-test-again" },
+          { icon: "check", title: "保存配置", overlay: "dialog:webdav-save", settingsKey: "webdav-save-config", restoreFocus: "webdav-save-config" },
+          { icon: "cloud", title: "查看远程备份", route: "remote-webdav-books", settingsKey: "webdav-view-remote-backup" }
         ],
         toast: "测试成功 · 286 ms"
-      },
-      // 错误处理
-      "webdav-error": {
+      };
+    }
+    // ---- webdav-error: static error page (with stable identity on actions + link rows) ----
+    if (route === "webdav-error") {
+      return {
         title: "WebDAV 错误处理",
         metrics: [
           { icon: "warning", label: "错误类型", value: "认证失败" },
@@ -2268,30 +2836,41 @@
           {
             title: "可能原因",
             rows: [
-              { type: "link", icon: "people", title: "账号错误", status: "请检查", statusTone: "warn", overlay: "dialog:check-account" },
-              { type: "link", icon: "shield", title: "密码错误", status: "请检查", statusTone: "warn", overlay: "dialog:check-password" },
-              { type: "link", icon: "lock", title: "权限不足", status: "请检查", statusTone: "warn", overlay: "dialog:check-permission" },
-              { type: "link", icon: "folder", title: "目录不存在", status: "可创建", statusTone: "info", overlay: "dialog:create-dir" }
+              { type: "link", icon: "people", title: "账号错误", status: "请检查", statusTone: "warn", overlay: "dialog:check-account", settingsKey: "webdav-check-account" },
+              { type: "link", icon: "shield", title: "密码错误", status: "请检查", statusTone: "warn", overlay: "dialog:check-password", settingsKey: "webdav-check-password" },
+              { type: "link", icon: "lock", title: "权限不足", status: "请检查", statusTone: "warn", overlay: "dialog:check-permission", settingsKey: "webdav-check-permission" },
+              { type: "link", icon: "folder", title: "目录不存在", status: "可创建", statusTone: "info", overlay: "dialog:create-dir", settingsKey: "webdav-create-dir" }
             ]
           },
           {
             title: "建议操作",
             rows: [
-              { type: "link", icon: "edit", title: "重新输入账号密码", route: "webdav-config" },
-              { type: "link", icon: "refresh", title: "重新测试连接", route: "webdav-test" },
-              { type: "link", icon: "log", title: "查看完整日志", route: "source-logs" }
+              { type: "link", icon: "edit", title: "重新输入账号密码", route: "webdav-config", settingsKey: "webdav-edit-config" },
+              { type: "link", icon: "refresh", title: "重新测试连接", route: "webdav-test", settingsKey: "webdav-retry-test" },
+              { type: "link", icon: "log", title: "查看完整日志", route: "source-logs", settingsKey: "webdav-view-log" }
             ]
           }
         ],
         actions: [
-          { icon: "refresh", title: "重试连接", route: "webdav-test" },
-          { icon: "edit", title: "修改配置", route: "webdav-config" },
-          { tone: "danger", icon: "trash", title: "清除配置", overlay: "dialog:webdav-clear" }
+          { icon: "refresh", title: "重试连接", route: "webdav-test", settingsKey: "webdav-retry-connection" },
+          { icon: "edit", title: "修改配置", route: "webdav-config", settingsKey: "webdav-edit-config-action" },
+          { tone: "danger", icon: "trash", title: "清除配置", overlay: "dialog:webdav-clear", settingsKey: "webdav-clear-config", restoreFocus: "webdav-clear-config" }
         ],
         toast: "WebDAV 连接失败 · 401"
-      }
+      };
+    }
+    // 默认回退到 webdav-config 静态结构（无 state）
+    return {
+      title: "WebDAV 配置",
+      metrics: [
+        { icon: "cloud", label: "连接状态", value: "未测试" },
+        { icon: "clock", label: "连接超时", value: "15 秒" },
+        { icon: "wifi", label: "Wi-Fi 限制", value: "开启" },
+        { icon: "refresh", label: "自动同步", value: "每小时" }
+      ],
+      sections: [],
+      toast: ""
     };
-    return pages[route] || pages["webdav-config"];
   }
 
   // ===========================================================================
@@ -3301,6 +3880,35 @@
       renderSourceManagement: sourceManagementV2,
       // R2b 执行函数（事件层 / 测试调用）
       executeDelete: d2ExecuteSourceDelete
+    },
+    // R2a/R2b: webdav-config 状态 owner / reducer / dispatch
+    // 外部事件层通过此 API 与 webdav-config 状态交互：
+    //   state = webdavConfig.getState()
+    //   webdavConfig.dispatch({ type: "SET_INPUT", settingsKey: "serverUrl", value: "https://..." })
+    //   webdavConfig.dispatch({ type: "TOGGLE_SWITCH", settingsKey: "sslVerify", value: false })
+    //   webdavConfig.dispatch({ type: "STEP_TIMEOUT", delta: +1 })
+    //   webdavConfig.dispatch({ type: "SELECT_AUTO_SYNC", value: "每小时" })
+    //   webdavConfig.dispatch({ type: "TEST_CONFIRM_OPEN" }) → executeTest() → TEST_SUCCESS/FAILED
+    //   webdavConfig.dispatch({ type: "SAVE_CONFIRM_OPEN" }) → executeSave() → SAVE_SUCCESS/FAILED
+    //   webdavConfig.dispatch({ type: "CLEAR_CONFIRM_OPEN" }) → executeClear() → CLEAR_SUCCESS/FAILED
+    //   unsubscribe = webdavConfig.subscribe((next, prev, action) => { ... })
+    webdavConfig: {
+      storageKey: D2_WEBDAV_CONFIG_STORAGE_KEY,
+      defaults: D2_WEBDAV_CONFIG_DEFAULTS,
+      autoSyncOptions: D2_WEBDAV_AUTO_SYNC_OPTIONS,
+      initState: d2WebdavConfigInitState,
+      defaultState: d2WebdavConfigDefaultState,
+      reducer: d2WebdavConfigReducer,
+      getState: d2WebdavConfigGetState,
+      dispatch: d2WebdavConfigDispatch,
+      subscribe: d2WebdavConfigSubscribe,
+      injectAppState: d2WebdavConfigInjectAppState,
+      validateInputs: d2ValidateWebdavInputs,
+      renderWebdavConfig: webdavConfigV2,
+      // R2b 执行函数（事件层 / 测试调用）
+      executeTest: d2ExecuteWebdavTest,
+      executeSave: d2ExecuteWebdavSave,
+      executeClear: d2ExecuteWebdavClear
     },
     // 恢复流程数据
     restore: {
