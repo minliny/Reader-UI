@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Discover",
+  "pageFamily": "discover",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-21T02:42:55+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "9b1b5e41da349ca6435b4ca081ae1d1c61cfa4d3",
+    "implementationCommit": "61bab9f31a1284796af2318fb1960fb93c7c8132",
+    "implementationCommitSubject": "feat(discover): complete local R3a readiness",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): bind Discover LOCAL_READY_FOR_FIGMA evidence",
+    "localReadyForFigma": true
+  },
+  "routeDenominator": {
+    "contractRouteCount": 41,
+    "primarySource": "tools/interaction-inventory/generate-canonical-declarations.mjs ROUTE_DOMAIN discover whitelist plus generated control-id-registry measured route denominator",
+    "primaryRoutes": [
+      "discover",
+      "discover-home",
+      "discover-control",
+      "discover-sort",
+      "discover-entry-bestseller",
+      "discover-entry-booklist",
+      "discover-entry-category",
+      "discover-entry-finished",
+      "discover-entry-latest",
+      "discover-entry-new",
+      "discover-entry-ranking",
+      "discover-entry-source"
+    ],
+    "primaryRouteCount": 12,
+    "secondaryExclusions": [
+      "discover-filter-keyword",
+      "discover-filter-male",
+      "discover-filter-female",
+      "discover-sort-popularity",
+      "discover-sort-update",
+      "discover-sort-collection",
+      "discover-sort-finished",
+      "discover-sort-words",
+      "discover-no-results",
+      "discover-loading",
+      "discover-refreshing",
+      "discover-infinite-loading",
+      "discover-page-two",
+      "discover-cache-confirm",
+      "discover-cache-toast",
+      "discover-login-return",
+      "discover-switching-source",
+      "discover-switched-source",
+      "discover-entry-error",
+      "discover-empty",
+      "discover-error",
+      "discover-source-login",
+      "discover-rule-test",
+      "discover-source-bulk",
+      "discover-filter-source-type",
+      "discover-filter-category",
+      "discover-cache-empty",
+      "discover-cache-stale",
+      "discover-cache-fresh"
+    ],
+    "secondaryExclusionCount": 29,
+    "setProof": {
+      "primaryUnionSecondary": 41,
+      "uniqueUnion": 41,
+      "missingFromContract": 0,
+      "extraOutsideContract": 0,
+      "overlap": 0
+    },
+    "scopePolicy": "Only the twelve generator-whitelisted Figma/R2 primary routes are admitted to this handoff. The 29 secondary routes remain valid local product routes but are explicitly excluded. This packet does not claim the complete Discover product is ready or complete."
+  },
+  "rendererOwnership": {
+    "uniqueProductionRenderer": "mainTabDiscover(data, appState, route)",
+    "rendererFile": "frontend-demo-optimized/render-runtime.js",
+    "stateOwner": "ReaderDiscoverRuntimeContract",
+    "dispatchPolicy": "All 12 primary routes pass through render-runtime mainTabDiscover; the primary-only contract instruments the canonical HTML after rendering.",
+    "d2DiscoverFunctionsRetainedButDisabled": true,
+    "d2IntegrationMapContainsDiscover": false,
+    "d2StateVariantMapContainsDiscover": false,
+    "doubleOwner": false
+  },
+  "r2aInstrumentation": {
+    "semanticControlCount": 250,
+    "semanticControlSource": "discover-action",
+    "mappingStatus": "250/250 mapped declarations",
+    "controlsByRoute": {
+      "discover": 19,
+      "discover-home": 19,
+      "discover-control": 31,
+      "discover-sort": 29,
+      "discover-entry-bestseller": 19,
+      "discover-entry-booklist": 19,
+      "discover-entry-category": 19,
+      "discover-entry-finished": 19,
+      "discover-entry-latest": 19,
+      "discover-entry-new": 19,
+      "discover-entry-ranking": 19,
+      "discover-entry-source": 19
+    },
+    "fiveDataAttrs": [
+      "data-entity-key",
+      "data-control-key",
+      "data-control-id",
+      "data-ui-event",
+      "data-settings-key"
+    ],
+    "stableSectionIds": ["source", "entries", "filters", "results"],
+    "stableBookIds": ["long-night", "mystery-lord", "three-body", "ming-dynasty-stories", "paper-city"],
+    "stableSourceIds": ["youshu", "qidian-import", "light-novel-library", "local-aggregate"],
+    "stableEntryIds": ["ranking", "source", "category", "finished", "latest", "booklist", "bestseller", "new"],
+    "identityPolicy": "Section, source, book/card, entry, filter, sort and named action keys are the only identity inputs. Labels, selectors, DOM order, ordinal n0-style keys and screenshots are prohibited.",
+    "runtimeEvidence": "The deterministic production VM rendered all 12 primary routes and found 250/250 controls carrying all five canonical identity attributes.",
+    "secondaryIsolationEvidence": "The primary-only instrumenter leaves all 29 secondary routes unstamped. Generated logical registry differences from the baseline are exactly the 12 primary routes."
+  },
+  "r2bRealInteraction": {
+    "stateDomains": [
+      "phase",
+      "sectionId",
+      "selectedEntryId",
+      "selectedBookId",
+      "selectedSourceId",
+      "selectedFilterId",
+      "selectedSortId",
+      "page",
+      "request",
+      "requestEpoch",
+      "error",
+      "closed",
+      "focusReturnKey"
+    ],
+    "reducerActions": [
+      "ENTRY_SELECT",
+      "BOOK_SELECT",
+      "SOURCE_SELECT",
+      "FILTER_SELECT",
+      "SORT_SELECT",
+      "REQUEST_START",
+      "REQUEST_SUCCESS",
+      "REQUEST_FAILED",
+      "CLOSE",
+      "RESET"
+    ],
+    "asyncHelpers": ["executeRefresh", "executeLoadMore", "executeRetry", "close"],
+    "guards": [
+      "refresh, load-more and retry reject duplicate activation while request.status is loading",
+      "completion requires the current requestId and requestEpoch and an open owner",
+      "close increments requestEpoch and cancels an in-flight request so later completion resolves stale",
+      "repeated close is idempotently reported as closed",
+      "entry, source, filter, sort and book selections accept only stable business IDs",
+      "load-more increments the page only after the current request succeeds"
+    ]
+  },
+  "ariaAndFocus": {
+    "accessibleNames": "All 250 primary controls have explicit accessible names.",
+    "focusReturn": "All route and selection launchers carry exact data-restore-focus control keys; main navigation remains ordinary tab navigation without overlay focus-return semantics.",
+    "bookCards": "Book cards remain role=button, tabindex=0 and carry stable book/card IDs.",
+    "selectionState": "Entry and main navigation use aria-current; primary sort/filter options expose aria-pressed.",
+    "sourceIntent": "Source selection, refresh and filter application use distinct UiEvent values."
+  },
+  "viewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactProhibited": true,
+    "foldProhibited": true,
+    "independentLandscapeProhibited": true
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 25,
+      "passed": 25,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-discover-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-discover-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-discover-aria-focus.test.mjs"
+      ]
+    },
+    "frontendRegression": { "tests": 559, "passed": 559, "failed": 0 },
+    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
+    "identityDenominator": 3808,
+    "identityDistribution": {
+      "mapped": 853,
+      "pendingActionKey": 447,
+      "pendingInstanceKey": 975,
+      "pendingActionAndInstanceKey": 1533
+    },
+    "generatedLogicalDiff": {
+      "routeCount": 12,
+      "matchesPrimarySet": true,
+      "secondaryRouteChanges": 0
+    },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check",
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check"
+    ]
+  },
+  "figmaReadOnlyBaseline": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "responsiveMasterPage": {
+      "pageId": "834:3",
+      "pageName": "24 · Responsive Masters · Phase 4"
+    },
+    "responsiveMasterSet": "REQUIRES_FRESH_READ_BEFORE_WRITE",
+    "phoneMaster": "REQUIRES_FRESH_READ_BEFORE_WRITE",
+    "tabletMaster": "REQUIRES_FRESH_READ_BEFORE_WRITE",
+    "downstreamFinalPage": {
+      "pageId": "834:2",
+      "pageName": "23 · Pages · Final",
+      "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE"
+    },
+    "noForgedBinding": true,
+    "freshRevisionRequiredBeforeWrite": true,
+    "structuralPolicy": "The serial writer must resolve the real Page/Discover component set and downstream instances from a fresh revision, repair canonical components first, and preserve existing reactions. Unknown node IDs are intentionally not guessed."
+  },
+  "figmaDecisionsRequired": [
+    "Read a fresh official Figma revision and resolve the real Discover component set, Phone master, Tablet master and downstream instances before writing.",
+    "Update shared source bar, entry chips, filter/sort disclosure, book cards and navigation components before page masters.",
+    "Keep book/source/entry identity stable and trailing metadata/actions right-aligned.",
+    "Do not pull any of the 29 secondary exclusions into this F2 transaction or claim the full Discover product is complete.",
+    "Use only Phone and Tablet; Landscape inherits Tablet and Compact/Fold structures are prohibited.",
+    "Preserve reactions. Figma may not change UiEvent, state owner, async guards, route ownership or Discover business flow.",
+    "Detached frames and screenshot replacements are prohibited."
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "exactLocalCommit": "61bab9f31a1284796af2318fb1960fb93c7c8132",
+    "requiresFreshFigmaRevisionRead": true,
+    "requiresSingleWriter": true,
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
+  },
+  "boundaries": {
+    "figmaModified": false,
+    "d2DiscoverOverrideEnabled": false,
+    "completeDiscoverProductClaimed": false,
+    "secondaryRoutesModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}
