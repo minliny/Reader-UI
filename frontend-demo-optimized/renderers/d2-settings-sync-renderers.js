@@ -466,17 +466,18 @@
     var decls = window.CANONICAL_CONTROL_DECLARATIONS || [];
     for (var i = 0; i < decls.length; i++) {
       var d = decls[i];
-      if ((d.source === "r2.0-subcontrol" || d.source === "a3-action") && d.settingsKey && d.route) {
+      if ((d.source === "r2.0-subcontrol" || d.source === "a3-action" || d.source === "sync-backup-action") && d.settingsKey && d.route) {
         d2SubcontrolIdentityLookup[d.route + "::" + d.settingsKey] = d;
+        d2SubcontrolIdentityLookup[d.route + "::" + (d.state || "default") + "::" + d.settingsKey] = d;
       }
     }
     return d2SubcontrolIdentityLookup;
   }
 
-  function d2ResolveSubcontrolIdentity(route, settingsKey) {
+  function d2ResolveSubcontrolIdentity(route, settingsKey, state) {
     if (!route || !settingsKey) return null;
     var lookup = d2GetSubcontrolIdentityLookup();
-    return lookup[route + "::" + settingsKey] || null;
+    return lookup[route + "::" + (state || "default") + "::" + settingsKey] || lookup[route + "::" + settingsKey] || null;
   }
 
   // A1 (R2a): stamp 5 个 data-* 属性到 HTML 字符串。
@@ -862,14 +863,15 @@
   }
 
   // 备份卡（恢复记录列表项）
-  function d2BackupCard(backup, options) {
+  function d2BackupCard(backup, options, route) {
     var scopes = (backup.scopes || []).join(",");
     var restoreRecord = backup.restoreRecord || `${backup.source} · ${backup.time} · ${backup.type}`;
     var content = backup.content || backup.includes || backup.type || "";
     var groupLabel = options && options.showGroup && backup.group ? `<h3>${esc(backup.group)}</h3>` : "";
+    var identityAttrs = backup.settingsKey && route ? d2StampIdentityAttrs(d2ResolveSubcontrolIdentity(route, backup.settingsKey)) : "";
     return `
       ${groupLabel}
-      <article class="fd-settings-backup-card" role="button" tabindex="0" data-route="restore-confirm" data-restore-record="${esc(restoreRecord)}" data-restore-scopes="${esc(scopes)}">
+      <article class="fd-settings-backup-card" role="button" tabindex="0" data-route="restore-confirm"${identityAttrs} data-restore-record="${esc(restoreRecord)}" data-restore-scopes="${esc(scopes)}">
         <span>${icon(backup.icon || "cloud", "fd-small-icon")}</span>
         <strong>
           ${esc(backup.source || "")}
@@ -882,7 +884,7 @@
   }
 
   // 备份列表区块
-  function d2BackupList(section) {
+  function d2BackupList(section, route) {
     var backups = section.backups || [];
     var currentGroup = "";
     return `
@@ -891,7 +893,7 @@
         ${backups.map(function (backup) {
           var showGroup = backup.group && backup.group !== currentGroup;
           if (showGroup) currentGroup = backup.group;
-          return d2BackupCard(backup, { showGroup: showGroup });
+          return d2BackupCard(backup, { showGroup: showGroup }, route);
         }).join("")}
       </div>`;
   }
@@ -2874,24 +2876,205 @@
   }
 
   // ===========================================================================
+  // sync-backup R2a/R2b canonical control contract + state owner
+  // ---------------------------------------------------------------------------
+  // The historical inventory contains 92 route/state occurrences.  They are
+  // intentionally declared here as business keys (never ordinal selectors) so
+  // the declaration generator and the production renderer share one source.
+  function d2SyncBackupSpecs(route, state, rows) {
+    return rows.map(function (row) {
+      return { route: route, state: state || "default", settingsKey: row[0], uiEvent: row[1], label: row[2], role: row[3] || "button" };
+    });
+  }
+
+  var D2_SYNC_BACKUP_CONTROL_SPECS = []
+    .concat(d2SyncBackupSpecs("sync-settings-entry", "default", [
+      ["back", "route.pop", "返回"], ["open-webdav-config", "webdav.config.open", "WebDAV 配置"],
+      ["open-progress-sync", "settings.sync.open", "进度同步"], ["open-remote-books", "route.push", "远程 WebDAV 书籍"],
+      ["open-backup-settings", "settings.entry.open", "备份设置"], ["open-manual-backup", "backup.run", "手动备份"],
+      ["open-backup-history", "sync.snapshot.view", "备份历史"], ["open-restore", "settings.restore.preview", "恢复数据"]
+    ]))
+    .concat(d2SyncBackupSpecs("sync-backup", "default", [
+      ["back", "route.pop", "返回"], ["server-url", "webdav.config.save", "服务器地址", "textbox"],
+      ["account", "webdav.config.save", "账号", "textbox"], ["password", "webdav.config.save", "密码", "textbox"],
+      ["sync-directory", "webdav.config.save", "同步目录", "textbox"], ["test-connection", "webdav.config.test", "测试网络连通性"],
+      ["save-config", "webdav.config.save", "保存配置"], ["restore-latest-webdav", "card.select", "最近 WebDAV 备份"],
+      ["restore-latest-local", "card.select", "最近本地备份"], ["restore-nightly", "card.select", "夜间备份"],
+      ["restore-weekly", "card.select", "周备份"], ["restore-progress-snapshot", "card.select", "阅读进度快照"],
+      ["restore-source-snapshot", "card.select", "书源配置备份"]
+    ]))
+    .concat(d2SyncBackupSpecs("sync-backup", "loading", [
+      ["back", "route.pop", "返回"], ["server-url", "webdav.config.save", "服务器地址", "textbox"],
+      ["account", "webdav.config.save", "账号", "textbox"], ["password", "webdav.config.save", "密码", "textbox"],
+      ["sync-directory", "webdav.config.save", "同步目录", "textbox"], ["test-connection", "webdav.config.test", "测试网络连通性"],
+      ["save-config", "webdav.config.save", "保存配置"], ["restore-latest-webdav", "card.select", "最近 WebDAV 备份"],
+      ["restore-latest-local", "card.select", "最近本地备份"], ["restore-nightly", "card.select", "夜间备份"],
+      ["restore-weekly", "card.select", "周备份"], ["restore-progress-snapshot", "card.select", "阅读进度快照"],
+      ["restore-source-snapshot", "card.select", "书源配置备份"]
+    ]))
+    .concat(d2SyncBackupSpecs("backup-settings", "default", [
+      ["back", "route.pop", "返回"], ["auto-enable-row", "settings.entry.open", "启用自动备份行"],
+      ["backup-auto-enable", "toggle.switch", "启用自动备份", "switch"], ["backup-frequency-row", "settings.entry.open", "备份频率行"],
+      ["backup-frequency", "dropdown.option.select", "备份频率"], ["backup-time-row", "settings.entry.open", "备份时间行"],
+      ["backup-time", "dropdown.option.select", "备份时间"], ["wifi-only-row", "settings.entry.open", "仅 Wi-Fi 备份行"],
+      ["backup-wifi-only", "toggle.switch", "仅 Wi-Fi 备份", "switch"], ["bookshelf-groups-row", "settings.entry.open", "书架与分组行"],
+      ["backup-bookshelf-groups", "toggle.switch", "书架与分组", "switch"], ["reading-progress-row", "settings.entry.open", "阅读进度行"],
+      ["backup-reading-progress", "toggle.switch", "阅读进度", "switch"], ["app-settings-row", "settings.entry.open", "App 设置行"],
+      ["backup-app-settings", "toggle.switch", "App 设置", "switch"], ["source-config-row", "settings.entry.open", "书源配置行"],
+      ["backup-source-config", "toggle.switch", "书源配置", "switch"], ["search-history-row", "settings.entry.open", "搜索历史行"],
+      ["backup-search-history", "toggle.switch", "搜索历史", "switch"], ["retain-count-row", "settings.entry.open", "保留备份数行"],
+      ["backup-retain-count-stepper-minus", "stepper.press", "减少保留数量"], ["backup-retain-count-stepper-plus", "stepper.press", "增加保留数量"],
+      ["retain-duration-row", "settings.entry.open", "保留时长行"], ["backup-retain-duration", "dropdown.option.select", "保留时长"],
+      ["auto-cleanup-row", "settings.entry.open", "自动清理行"], ["backup-auto-cleanup", "toggle.switch", "自动清理过期备份", "switch"],
+      ["manual-backup-open", "overlay.dialog.open", "打开手动备份确认"], ["backup-history-open", "sync.snapshot.view", "查看备份历史"],
+      ["manual-backup-cancel", "backup.cancel", "取消手动备份"]
+    ]))
+    .concat(d2SyncBackupSpecs("progress-sync", "default", [
+      ["back", "route.pop", "返回"], ["auto-sync-row", "settings.entry.open", "自动同步行"],
+      ["auto-sync-progress", "toggle.switch", "自动同步阅读进度", "switch"], ["sync-frequency-row", "settings.entry.open", "同步频率行"],
+      ["sync-frequency", "dropdown.option.select", "同步频率"], ["wifi-sync-row", "settings.entry.open", "仅 Wi-Fi 同步行"],
+      ["wifi-only-sync", "toggle.switch", "仅 Wi-Fi 同步", "switch"], ["conflict-ask-row", "settings.entry.open", "冲突询问行"],
+      ["conflict-ask", "toggle.switch", "冲突时询问", "switch"], ["history-today-1030", "sync.snapshot.view", "今天 10:30"],
+      ["history-today-0915", "sync.snapshot.view", "今天 09:15"], ["history-yesterday-2230", "sync.snapshot.view", "昨天 22:30"],
+      ["sync-now", "sync.run", "立即同步"], ["sync-cancel", "motion.interrupt.cancel", "取消同步"]
+    ]))
+    .concat(d2SyncBackupSpecs("progress-sync-status", "default", [
+      ["back", "route.pop", "返回"], ["sync-retry", "sync.run", "重新同步"], ["view-sync-log", "route.push", "查看日志"]
+    ]))
+    .concat(d2SyncBackupSpecs("remote-webdav-books", "default", [
+      ["back", "route.pop", "返回"], ["remote-long-night", "card.select", "长夜余火"], ["remote-three-body", "card.select", "三体"],
+      ["remote-rain-night", "card.select", "雨夜"], ["remote-mystery-island", "card.select", "神秘岛"], ["remote-renjian-cihua", "card.select", "人间词话"],
+      ["remote-liangjian", "card.select", "亮剑"], ["remote-white-night", "card.select", "白夜行"], ["remote-brief-history", "card.select", "时间简史"],
+      ["remote-download-all", "download.queue.open", "下载全部"], ["remote-refresh", "sync.run", "刷新列表"], ["remote-cleanup", "delete.confirm.open", "清理远程"]
+    ]));
+
+  var D2_SYNC_BACKUP_DEFAULT_STATE = {
+    connection: { status: "idle", error: null }, sync: { status: "idle", error: null },
+    manualBackup: { status: "idle", error: null }, history: { status: "summary", error: null },
+    remoteList: { status: "idle", error: null }, pending: null, requestEpoch: 0,
+    values: { serverUrl: "https://dav.example.com/reader/backup", account: "reader@example.com", password: "reader-demo-password", syncDirectory: "/ReaderBackup/ReaderAndroid", autoEnabled: true, frequency: "每天", time: "02:00", wifiOnly: true, bookshelfGroups: true, readingProgress: true, appSettings: true, sourceConfig: true, searchHistory: false, retainCount: 10, retainDuration: "30 天", autoCleanup: true, autoSyncProgress: true, syncFrequency: "实时", wifiOnlySync: true, conflictAsk: true }
+  };
+  var d2SyncBackupState = null;
+  var d2SyncBackupListeners = [];
+  function d2SyncBackupClone(value) { return JSON.parse(JSON.stringify(value)); }
+  function d2SyncBackupDefaultState() { return d2SyncBackupClone(D2_SYNC_BACKUP_DEFAULT_STATE); }
+  function d2SyncBackupInitState(seed) { d2SyncBackupState = d2SyncBackupReducer(d2SyncBackupDefaultState(), { type: "INJECT_APP_STATE", state: seed || {} }); return d2SyncBackupState; }
+  function d2SyncBackupGetState() { if (!d2SyncBackupState) d2SyncBackupInitState(); return d2SyncBackupState; }
+  function d2SyncBackupReducer(state, action) {
+    state = d2SyncBackupClone(state || D2_SYNC_BACKUP_DEFAULT_STATE); action = action || {};
+    if (action.type === "INJECT_APP_STATE") return Object.assign(state, action.state || {}, { values: Object.assign(state.values, (action.state && action.state.values) || {}) });
+    if (action.type === "SET_VALUE" && Object.prototype.hasOwnProperty.call(state.values, action.settingsKey)) state.values[action.settingsKey] = action.value;
+    if (action.type === "TOGGLE_VALUE" && Object.prototype.hasOwnProperty.call(state.values, action.settingsKey)) state.values[action.settingsKey] = action.value === undefined ? !state.values[action.settingsKey] : !!action.value;
+    if (action.type === "STEP_RETAIN") state.values.retainCount = Math.max(1, Math.min(30, state.values.retainCount + (action.delta < 0 ? -1 : 1)));
+    if (action.type === "MANUAL_BACKUP_OPEN") state.manualBackup = { status: "confirm", error: null };
+    if (action.type === "MANUAL_BACKUP_CANCEL") state.manualBackup = { status: "cancelled", error: null };
+    if (action.type === "HISTORY_OPEN") state.history = { status: "history", error: null };
+    if (action.type === "HISTORY_CLOSE") state.history = { status: "summary", error: null };
+    if (action.type === "ASYNC_START") { state.requestEpoch += 1; state.pending = { kind: action.kind, requestId: action.requestId, epoch: state.requestEpoch }; state[action.kind] = { status: "loading", error: null }; }
+    if ((action.type === "ASYNC_SUCCESS" || action.type === "ASYNC_FAILED") && state.pending && state.pending.requestId === action.requestId && state.pending.kind === action.kind) { state[action.kind] = { status: action.type === "ASYNC_SUCCESS" ? "success" : "failed", error: action.error || null }; state.pending = null; }
+    if (action.type === "ASYNC_CANCEL") { state.requestEpoch += 1; if (state.pending) state[state.pending.kind] = { status: "cancelled", error: null }; state.pending = null; }
+    return state;
+  }
+  function d2SyncBackupDispatch(action) { var prev = d2SyncBackupGetState(); d2SyncBackupState = d2SyncBackupReducer(prev, action); d2SyncBackupListeners.slice().forEach(function (fn) { fn(d2SyncBackupState, prev, action); }); return d2SyncBackupState; }
+  function d2SyncBackupSubscribe(fn) { d2SyncBackupListeners.push(fn); return function () { d2SyncBackupListeners = d2SyncBackupListeners.filter(function (item) { return item !== fn; }); }; }
+  function d2SyncBackupInjectAppState(seed) { return d2SyncBackupDispatch({ type: "INJECT_APP_STATE", state: seed || {} }); }
+  function d2ExecuteSyncBackupAsync(kind, executor) {
+    var current = d2SyncBackupGetState();
+    if (current.pending) return Promise.resolve({ status: "duplicate", kind: current.pending.kind });
+    var requestId = kind + "-" + (current.requestEpoch + 1); d2SyncBackupDispatch({ type: "ASYNC_START", kind: kind, requestId: requestId });
+    var epoch = d2SyncBackupGetState().requestEpoch;
+    return Promise.resolve().then(function () { return typeof executor === "function" ? executor() : true; }).then(function (value) {
+      var latest = d2SyncBackupGetState();
+      if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", value: value };
+      d2SyncBackupDispatch({ type: "ASYNC_SUCCESS", kind: kind, requestId: requestId }); return { status: "success", value: value };
+    }, function (error) {
+      var latest = d2SyncBackupGetState();
+      if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", error: error };
+      d2SyncBackupDispatch({ type: "ASYNC_FAILED", kind: kind, requestId: requestId, error: String(error && error.message || error) }); return { status: "failed", error: error };
+    });
+  }
+  function d2CancelSyncBackupAsync() { var hadPending = !!d2SyncBackupGetState().pending; d2SyncBackupDispatch({ type: "ASYNC_CANCEL" }); return { status: hadPending ? "cancelled" : "idle" }; }
+
+  // ===========================================================================
   // 5. backupScreenV2 — 备份管理增强（手动 / 自动 / 历史）
   // 覆盖路由：
   //   sync-settings-entry / sync-backup / backup-settings
   //   backup-manual / backup-auto / backup-history
   //   progress-sync / progress-sync-status / remote-webdav-books
   // ===========================================================================
+  function d2PrepareSyncBackupPage(page, route, state) {
+    page = d2SyncBackupClone(page);
+    var values = state.values;
+    var sections = page.sections || [];
+    function setRowKeys(sectionIndex, keys) {
+      var rows = sections[sectionIndex] && sections[sectionIndex].rows || [];
+      rows.forEach(function (row, index) { if (keys[index]) row.settingsKey = keys[index]; });
+    }
+    if (route === "sync-settings-entry") {
+      setRowKeys(0, ["open-webdav-config", "open-progress-sync", "open-remote-books"]);
+      setRowKeys(1, ["open-backup-settings", "open-manual-backup", "open-backup-history", "open-restore"]);
+      sections[1].rows[1].route = null; sections[1].rows[1].overlay = "dialog:manual-backup"; sections[1].rows[1].restoreFocus = "open-manual-backup";
+      sections[1].rows[2].route = "sync-backup";
+    } else if (route === "sync-backup") {
+      var form = sections[0];
+      ["server-url", "account", "password", "sync-directory"].forEach(function (key, index) { form.rows[index].settingsKey = key; });
+      form.rows[0].value = values.serverUrl; form.rows[1].value = values.account; form.rows[2].value = values.password; form.rows[3].value = values.syncDirectory;
+      form.actions[0].settingsKey = "test-connection"; form.actions[0].restoreFocus = "test-connection"; form.actions[0].asyncStatus = state.connection.status; form.actions[0].asyncError = state.connection.error;
+      form.actions[1].settingsKey = "save-config"; form.actions[1].restoreFocus = "save-config";
+      var backupKeys = ["restore-latest-webdav", "restore-latest-local", "restore-nightly", "restore-weekly", "restore-progress-snapshot", "restore-source-snapshot"];
+      (sections[1].backups || []).forEach(function (backup, index) { backup.settingsKey = backupKeys[index]; });
+    } else if (route === "backup-settings") {
+      var keyGroups = [
+        ["backup-auto-enable", "backup-frequency", "backup-time", "backup-wifi-only"],
+        ["backup-bookshelf-groups", "backup-reading-progress", "backup-app-settings", "backup-source-config", "backup-search-history"],
+        ["backup-retain-count", "backup-retain-duration", "backup-auto-cleanup"]
+      ];
+      keyGroups.forEach(function (keys, sectionIndex) { setRowKeys(sectionIndex, keys); });
+      sections[0].rows[0].enabled = values.autoEnabled; sections[0].rows[1].value = values.frequency; sections[0].rows[2].value = values.time; sections[0].rows[3].enabled = values.wifiOnly;
+      sections[1].rows[0].enabled = values.bookshelfGroups; sections[1].rows[1].enabled = values.readingProgress; sections[1].rows[2].enabled = values.appSettings; sections[1].rows[3].enabled = values.sourceConfig; sections[1].rows[4].enabled = values.searchHistory;
+      sections[2].rows[0].value = values.retainCount + " 个"; sections[2].rows[1].value = values.retainDuration; sections[2].rows[2].enabled = values.autoCleanup;
+      page.actions[0].route = null; page.actions[0].overlay = "dialog:manual-backup"; page.actions[0].settingsKey = "manual-backup-open"; page.actions[0].restoreFocus = "manual-backup-open"; page.actions[0].asyncStatus = state.manualBackup.status === "loading" ? "loading" : null;
+      page.actions[1].route = "sync-backup"; page.actions[1].settingsKey = "backup-history-open";
+    } else if (route === "progress-sync") {
+      setRowKeys(0, ["auto-sync-progress", "sync-frequency", "wifi-only-sync", "conflict-ask"]);
+      sections[0].rows[0].enabled = values.autoSyncProgress; sections[0].rows[1].value = values.syncFrequency; sections[0].rows[2].enabled = values.wifiOnlySync; sections[0].rows[3].enabled = values.conflictAsk;
+      setRowKeys(1, ["history-today-1030", "history-today-0915", "history-yesterday-2230"]);
+      page.actions[0].route = null; page.actions[0].settingsKey = "sync-now"; page.actions[0].restoreFocus = "sync-now"; page.actions[0].asyncStatus = state.sync.status; page.actions[0].asyncError = state.sync.error;
+      page.actions[1].route = null; page.actions[1].settingsKey = "sync-cancel"; page.actions[1].tone = "danger";
+    } else if (route === "progress-sync-status") {
+      page.actions[0].settingsKey = "sync-retry"; page.actions[1].settingsKey = "view-sync-log";
+    } else if (route === "remote-webdav-books") {
+      setRowKeys(0, ["remote-long-night", "remote-three-body", "remote-rain-night", "remote-mystery-island", "remote-renjian-cihua", "remote-liangjian", "remote-white-night", "remote-brief-history"]);
+      page.actions[0].settingsKey = "remote-download-all"; page.actions[0].restoreFocus = "remote-download-all";
+      page.actions[1].route = null; page.actions[1].settingsKey = "remote-refresh"; page.actions[1].asyncStatus = state.remoteList.status; page.actions[1].asyncError = state.remoteList.error;
+      page.actions[2].settingsKey = "remote-cleanup"; page.actions[2].restoreFocus = "remote-cleanup";
+    }
+    return page;
+  }
+
   function backupScreenV2(data, route, appState) {
-    var page = d2BackupPage(route, appState);
+    var state = d2SyncBackupGetState();
+    if (appState && appState.syncBackup) state = d2SyncBackupReducer(state, { type: "INJECT_APP_STATE", state: appState.syncBackup });
+    var page = d2PrepareSyncBackupPage(d2BackupPage(route, appState), route, state);
     var contentHtml = `
       ${d2MetricGrid(page.metrics)}
       ${d2StorageCard(page.storage)}
       ${(page.sections || []).map(function (section) {
-        if (section.layout === "backup-list") return d2BackupList(section);
+        if (section.layout === "backup-list") return d2BackupList(section, route);
         return d2Section(section, route, appState);
       }).join("")}
-      ${d2ActionList(page.actions)}`;
+      ${d2ActionList(page.actions, route)}`;
+    var dialogHtml = "";
+    if (state.manualBackup.status === "confirm") {
+      var cancelAttrs = d2StampIdentityAttrs(d2ResolveSubcontrolIdentity("backup-settings", "manual-backup-cancel"));
+      dialogHtml = `<section class="fd-settings-dialog" role="dialog" aria-modal="true" aria-labelledby="sync-backup-dialog-title"><h2 id="sync-backup-dialog-title">立即备份</h2><p>将按当前范围创建备份。</p><button type="button"${cancelAttrs} data-dialog-initial-focus="manual-backup-cancel">取消</button></section>`;
+    }
+    var backState = route === "sync-backup" && state.connection.status === "loading" ? "loading" : "default";
+    var backAttrs = d2StampIdentityAttrs(d2ResolveSubcontrolIdentity(route, "back", backState));
     return d2SettingsShell(data, page.title, contentHtml, {
-      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : ""
+      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : "",
+      dialogHtml: dialogHtml,
+      backButtonAttrs: backAttrs
     });
   }
 
@@ -3748,9 +3931,9 @@
     "sync-settings-entry": "backupScreenV2",
     "sync-backup": "backupScreenV2",
     "backup-settings": "backupScreenV2",
-    "backup-manual": "backupScreenV2",
-    "backup-auto": "backupScreenV2",
-    "backup-history": "backupScreenV2",
+    // backup-manual / backup-auto / backup-history are retired secondary routes.
+    // Their operations are stateful overlays/views owned by backup-settings and
+    // sync-backup; render-runtime has explicit fail-loud guards for old links.
     "progress-sync": "backupScreenV2",
     "progress-sync-status": "backupScreenV2",
     "remote-webdav-books": "backupScreenV2",
@@ -3910,6 +4093,26 @@
       executeSave: d2ExecuteWebdavSave,
       executeClear: d2ExecuteWebdavClear
     },
+    // R2a/R2b: sync-backup is the sole owner for connection, sync,
+    // automatic/manual backup, history, and the remote WebDAV list.
+    syncBackup: {
+      controlSpecs: D2_SYNC_BACKUP_CONTROL_SPECS,
+      defaults: D2_SYNC_BACKUP_DEFAULT_STATE,
+      initState: d2SyncBackupInitState,
+      defaultState: d2SyncBackupDefaultState,
+      reducer: d2SyncBackupReducer,
+      getState: d2SyncBackupGetState,
+      dispatch: d2SyncBackupDispatch,
+      subscribe: d2SyncBackupSubscribe,
+      injectAppState: d2SyncBackupInjectAppState,
+      executeConnectionTest: function (executor) { return d2ExecuteSyncBackupAsync("connection", executor); },
+      executeSync: function (executor) { return d2ExecuteSyncBackupAsync("sync", executor); },
+      executeManualBackup: function (executor) { return d2ExecuteSyncBackupAsync("manualBackup", executor); },
+      executeHistoryCleanup: function (executor) { return d2ExecuteSyncBackupAsync("history", executor); },
+      executeRemoteRefresh: function (executor) { return d2ExecuteSyncBackupAsync("remoteList", executor); },
+      cancel: d2CancelSyncBackupAsync
+    },
+    SOURCE_CONTROL_SPECS: D2_SYNC_BACKUP_CONTROL_SPECS,
     // 恢复流程数据
     restore: {
       scopeCatalog: d2RestoreScopeCatalog,

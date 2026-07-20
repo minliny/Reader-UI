@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "1223595ab85541aaa24fe81fb15b7d3f90d8d8a4ccad48111ff0de1bdb798b59",
+    "inventorySha256": "e76a61238dbb8c510c4b5ebc18b3b2486b8749e5c9793234c433eee2ebe58395",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
@@ -12,15 +12,15 @@
     "candidates": 3808,
     "semanticControls": 3808,
     "suspectedNonSemanticControls": 0,
-    "mapped": 801,
+    "mapped": 796,
     "pendingActionKey": 449,
     "pendingInstanceKey": 1044,
-    "pendingActionAndInstanceKey": 1514,
+    "pendingActionAndInstanceKey": 1519,
     "uniqueControlIds": 3808,
     "uniqueEntityKeys": 77,
     "uniqueControlKeys": 3808,
     "uniqueActionKeys": 19,
-    "uniqueInstanceKeys": 477,
+    "uniqueInstanceKeys": 475,
     "pendingFigmaJoin": 3808,
     "nonInteractiveContainers": 45
   },
@@ -132681,11 +132681,11 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.backup-settings.default.button.route-backup-history-h-da59121d",
+      "controlId": "sync.button.backup-settings.default.button.route-sync-backup-h-8a83597b",
       "entityKey": "sync.button.button.route.push",
-      "controlKey": "sync.button.button.route.push@backup-settings.default.route-backup-history",
+      "controlKey": "sync.button.button.route.push@backup-settings.default.route-sync-backup",
       "actionKey": "route.push",
-      "instanceKey": "route-backup-history",
+      "instanceKey": "route-sync-backup",
       "needsActionKey": false,
       "needsInstanceKey": false,
       "domain": "sync",
@@ -132694,16 +132694,16 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-backup-history-h-da59121d",
+      "discriminator": "route-sync-backup-h-8a83597b",
       "source": {
-        "candidateKey": "candidate:0eb2982455163fe89f9d",
-        "selectorSha256": "45bc5a454ca4117116455e5fcc94780695487f1a9e6bcd01d76b02f3b5bc0246",
+        "candidateKey": "candidate:d8c911e31f7f314e3a64",
+        "selectorSha256": "aa3068c3a99b001a4e343172d1eb4b1a2126206470fd8cf29b41f945cf59aaff",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "查看历史",
         "uiEvent": "route.push",
         "dataAttributes": {
-          "data-route": "backup-history"
+          "data-route": "sync-backup"
         }
       },
       "mappingStatus": "mapped",
@@ -132718,33 +132718,34 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.backup-settings.default.button.route-backup-manual-h-ecf134b8",
-      "entityKey": "sync.button.button.route.push",
-      "controlKey": "sync.button.button.route.push@backup-settings.default.route-backup-manual",
-      "actionKey": "route.push",
-      "instanceKey": "route-backup-manual",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
+      "controlId": "sync.button.backup-settings.default.button.settings-overlay-dialogmanual-backup-h-bae7c2cd",
+      "entityKey": "sync.button.button",
+      "controlKey": "sync.button.button@backup-settings.default.n3",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
       "domain": "sync",
       "family": "button",
       "route": "backup-settings",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-backup-manual-h-ecf134b8",
+      "discriminator": "settings-overlay-dialogmanual-backup-h-bae7c2cd",
       "source": {
-        "candidateKey": "candidate:bd9ae4e413035dc1672c",
-        "selectorSha256": "3d471ce34ba2125ba76d05ac87ebca8ef54475da249e00abcee567607c926950",
+        "candidateKey": "candidate:aae03e5c849955458c3d",
+        "selectorSha256": "cf77c0eae01712ede12c6c2b46e429d9570d46515c66588ab34f2576923d1aee",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "立即备份",
-        "uiEvent": "route.push",
+        "uiEvent": null,
         "dataAttributes": {
-          "data-route": "backup-manual"
+          "data-restore-focus": "manual-backup-open",
+          "data-settings-overlay": "dialog:manual-backup"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -132864,13 +132865,48 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.progress-sync.default.button.h-e377283c",
+      "controlId": "sync.button.progress-sync.default.button.h-cd2c857c",
       "entityKey": "sync.button.button",
-      "controlKey": "sync.button.button@progress-sync.default",
+      "controlKey": "sync.button.button@progress-sync.default.n1",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
-      "needsInstanceKey": false,
+      "needsInstanceKey": true,
+      "domain": "sync",
+      "family": "button",
+      "route": "progress-sync",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "h-cd2c857c",
+      "source": {
+        "candidateKey": "candidate:728cf28b0778fef65e8c",
+        "selectorSha256": "e122a09795ddefabb110c8fb4c8a831b7f99b1571d1a27fddf0d70aa403bd0f3",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "WebDAV 配置",
+        "uiEvent": null,
+        "dataAttributes": {}
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "sync.button.progress-sync.default.button.h-e377283c",
+      "entityKey": "sync.button.button",
+      "controlKey": "sync.button.button@progress-sync.default.n0",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
       "domain": "sync",
       "family": "button",
       "route": "progress-sync",
@@ -132887,8 +132923,8 @@
         "uiEvent": "route.pop",
         "dataAttributes": {}
       },
-      "mappingStatus": "pending-action-key",
-      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -132899,33 +132935,33 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.progress-sync.default.button.route-progress-sync-status-h-19698f5f",
-      "entityKey": "sync.button.button.route.push",
-      "controlKey": "sync.button.button.route.push@progress-sync.default.route-progress-sync-status",
-      "actionKey": "route.push",
-      "instanceKey": "route-progress-sync-status",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
+      "controlId": "sync.button.progress-sync.default.button.h-ee88e66d",
+      "entityKey": "sync.button.button",
+      "controlKey": "sync.button.button@progress-sync.default.n2",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
       "domain": "sync",
       "family": "button",
       "route": "progress-sync",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-progress-sync-status-h-19698f5f",
+      "discriminator": "h-ee88e66d",
       "source": {
-        "candidateKey": "candidate:be75d65a0a4891d0a9f7",
-        "selectorSha256": "eb36b5ed4e4b7f4c29e9a7b7757498063e73f0aa475f93992621e3fb2534e781",
+        "candidateKey": "candidate:7cbb56a764b9187d2e72",
+        "selectorSha256": "2b4be9ac3778971f08beefac0e43060aaa140d9c094f89272ab0b6d81dce828b",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "立即同步",
-        "uiEvent": "route.push",
+        "uiEvent": null,
         "dataAttributes": {
-          "data-route": "progress-sync-status"
+          "data-restore-focus": "sync-now"
         }
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -132936,33 +132972,31 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.progress-sync.default.button.route-webdav-config-h-6fdfeca7",
-      "entityKey": "sync.button.button.route.push",
-      "controlKey": "sync.button.button.route.push@progress-sync.default.route-webdav-config",
-      "actionKey": "route.push",
-      "instanceKey": "route-webdav-config",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
+      "controlId": "sync.button.remote-webdav-books.default.button.h-3202df6a",
+      "entityKey": "sync.button.button",
+      "controlKey": "sync.button.button@remote-webdav-books.default.n0",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
       "domain": "sync",
       "family": "button",
-      "route": "progress-sync",
+      "route": "remote-webdav-books",
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-webdav-config-h-6fdfeca7",
+      "discriminator": "h-3202df6a",
       "source": {
-        "candidateKey": "candidate:c6cfc913883d9c280533",
-        "selectorSha256": "bacd785bc3f00b86882cb48d24f6e40768a6c772c57b09634e6303824a14f7a3",
+        "candidateKey": "candidate:1046d7d95508c6575f64",
+        "selectorSha256": "89c34fc9976d60221a5344151f2913de566cae8f48cb65486ff48ac666b90412",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "WebDAV 配置",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "webdav-config"
-        }
+        "label": "刷新列表",
+        "uiEvent": null,
+        "dataAttributes": {}
       },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,
@@ -133008,46 +133042,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.remote-webdav-books.default.button.route-remote-webdav-books-h-8a39fd5d",
-      "entityKey": "sync.button.button.route.push",
-      "controlKey": "sync.button.button.route.push@remote-webdav-books.default.route-remote-webdav-books",
-      "actionKey": "route.push",
-      "instanceKey": "route-remote-webdav-books",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "domain": "sync",
-      "family": "button",
-      "route": "remote-webdav-books",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-remote-webdav-books-h-8a39fd5d",
-      "source": {
-        "candidateKey": "candidate:c2eeb7e6461d8909c10d",
-        "selectorSha256": "5d52053c6494295f9675483a38d2a7f913d9a4439114fe121c6011f458177a5e",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "刷新列表",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "remote-webdav-books"
-        }
-      },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "sync.button.remote-webdav-books.default.button.settings-overlay-dialogclear-remote-h-3a0a4fde",
+      "controlId": "sync.button.remote-webdav-books.default.button.settings-overlay-dialogclear-remote-h-043d06f7",
       "entityKey": "sync.button.button",
-      "controlKey": "sync.button.button@remote-webdav-books.default.n0",
+      "controlKey": "sync.button.button@remote-webdav-books.default.n3",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -133058,15 +133055,16 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogclear-remote-h-3a0a4fde",
+      "discriminator": "settings-overlay-dialogclear-remote-h-043d06f7",
       "source": {
-        "candidateKey": "candidate:45b4422c66d5674f1793",
-        "selectorSha256": "7f955d1a5f8f47dcb8be2c4883682593453f823eeb534fa254622a7f2bd0d35c",
+        "candidateKey": "candidate:7efa65f4bbc9c8011c50",
+        "selectorSha256": "d414840908b6c07bc7740488f9bb295137bf53cbe30f035fd87202912ca99f7c",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "清理远程",
         "uiEvent": null,
         "dataAttributes": {
+          "data-restore-focus": "remote-cleanup",
           "data-settings-overlay": "dialog:clear-remote"
         }
       },
@@ -133082,7 +133080,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.remote-webdav-books.default.button.settings-overlay-dialogdownload-all-h-dfba290f",
+      "controlId": "sync.button.remote-webdav-books.default.button.settings-overlay-dialogdownload-all-h-aecad41a",
       "entityKey": "sync.button.button",
       "controlKey": "sync.button.button@remote-webdav-books.default.n2",
       "actionKey": null,
@@ -133095,15 +133093,16 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogdownload-all-h-dfba290f",
+      "discriminator": "settings-overlay-dialogdownload-all-h-aecad41a",
       "source": {
-        "candidateKey": "candidate:9a33efd1b9171c01537c",
-        "selectorSha256": "7aecb34bf19599ca42da1046973becf2c814e30f5b828bc052293fb304309788",
+        "candidateKey": "candidate:64ce87405e38a98b2f1a",
+        "selectorSha256": "dc8e9c351e20b8101441dfe98eb39123ea4398c28f8f87189ee309f93478e67b",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "下载全部",
         "uiEvent": null,
         "dataAttributes": {
+          "data-restore-focus": "remote-download-all",
           "data-settings-overlay": "dialog:download-all"
         }
       },
@@ -134591,7 +134590,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.sync-backup.default.button.settings-overlay-dialogwebdav-save-h-3f09f43c",
+      "controlId": "sync.button.sync-backup.default.button.settings-overlay-dialogwebdav-save-h-0999d1a6",
       "entityKey": "sync.button.button",
       "controlKey": "sync.button.button@sync-backup.default.n1",
       "actionKey": null,
@@ -134604,15 +134603,16 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogwebdav-save-h-3f09f43c",
+      "discriminator": "settings-overlay-dialogwebdav-save-h-0999d1a6",
       "source": {
-        "candidateKey": "candidate:b52aeca1df9eb145e40f",
-        "selectorSha256": "7648826889a0de53875429cacb4b2aada4b010268b468ad7b39535ac2c28b58f",
+        "candidateKey": "candidate:72961e26309ba4b6de8d",
+        "selectorSha256": "09e4a46db4f193a12d6c5a0f51c2e860257e5c74bb228b49e92cd42ea97b46a9",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "保存配置",
         "uiEvent": null,
         "dataAttributes": {
+          "data-restore-focus": "save-config",
           "data-settings-overlay": "dialog:webdav-save"
         }
       },
@@ -134628,7 +134628,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.sync-backup.default.button.settings-overlay-dialogwebdav-test-h-141c8f08",
+      "controlId": "sync.button.sync-backup.default.button.settings-overlay-dialogwebdav-test-h-8f1f97d9",
       "entityKey": "sync.button.button",
       "controlKey": "sync.button.button@sync-backup.default.n0",
       "actionKey": null,
@@ -134641,15 +134641,16 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogwebdav-test-h-141c8f08",
+      "discriminator": "settings-overlay-dialogwebdav-test-h-8f1f97d9",
       "source": {
-        "candidateKey": "candidate:257c73565acd87c51dea",
-        "selectorSha256": "5b7b329832fc0a84264dd345de95e4773082214b2c6751cd5931670f16af46ea",
+        "candidateKey": "candidate:17b2d47fe7a8ec510aa3",
+        "selectorSha256": "826c2d22e5a236eb02b7d0770efed65c25da42b3ce4538091e14b4713af25a26",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "测试网络连通性",
         "uiEvent": null,
         "dataAttributes": {
+          "data-restore-focus": "test-connection",
           "data-settings-overlay": "dialog:webdav-test"
         }
       },
@@ -134667,7 +134668,7 @@
     {
       "controlId": "sync.button.sync-backup.loading.button.h-f4fedfbe",
       "entityKey": "sync.button.button",
-      "controlKey": "sync.button.button@sync-backup.loading.n2",
+      "controlKey": "sync.button.button@sync-backup.loading.n1",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -134700,9 +134701,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.sync-backup.loading.button.settings-overlay-dialogwebdav-save-h-4213ff70",
+      "controlId": "sync.button.sync-backup.loading.button.settings-overlay-dialogwebdav-save-h-29cef31c",
       "entityKey": "sync.button.button",
-      "controlKey": "sync.button.button@sync-backup.loading.n1",
+      "controlKey": "sync.button.button@sync-backup.loading.n2",
       "actionKey": null,
       "instanceKey": null,
       "needsActionKey": true,
@@ -134713,15 +134714,16 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogwebdav-save-h-4213ff70",
+      "discriminator": "settings-overlay-dialogwebdav-save-h-29cef31c",
       "source": {
-        "candidateKey": "candidate:67263f3d6c6e7d8258f4",
-        "selectorSha256": "7648826889a0de53875429cacb4b2aada4b010268b468ad7b39535ac2c28b58f",
+        "candidateKey": "candidate:bbf6cf42939d98b77043",
+        "selectorSha256": "09e4a46db4f193a12d6c5a0f51c2e860257e5c74bb228b49e92cd42ea97b46a9",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "保存配置",
         "uiEvent": null,
         "dataAttributes": {
+          "data-restore-focus": "save-config",
           "data-settings-overlay": "dialog:webdav-save"
         }
       },
@@ -134737,7 +134739,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.button.sync-backup.loading.button.settings-overlay-dialogwebdav-test-h-04e2903c",
+      "controlId": "sync.button.sync-backup.loading.button.settings-overlay-dialogwebdav-test-h-e750af3a",
       "entityKey": "sync.button.button",
       "controlKey": "sync.button.button@sync-backup.loading.n0",
       "actionKey": null,
@@ -134750,15 +134752,16 @@
       "state": "loading",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "settings-overlay-dialogwebdav-test-h-04e2903c",
+      "discriminator": "settings-overlay-dialogwebdav-test-h-e750af3a",
       "source": {
-        "candidateKey": "candidate:5784c3377305278575fd",
-        "selectorSha256": "5b7b329832fc0a84264dd345de95e4773082214b2c6751cd5931670f16af46ea",
+        "candidateKey": "candidate:1817487888acd97ef07a",
+        "selectorSha256": "826c2d22e5a236eb02b7d0770efed65c25da42b3ce4538091e14b4713af25a26",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "测试网络连通性",
         "uiEvent": null,
         "dataAttributes": {
+          "data-restore-focus": "test-connection",
           "data-settings-overlay": "dialog:webdav-test"
         }
       },
@@ -136114,80 +136117,6 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "sync.listrow-action.sync-settings-entry.default.button.route-backup-history-h-78029e1a",
-      "entityKey": "sync.listrow-action.button.route.push",
-      "controlKey": "sync.listrow-action.button.route.push@sync-settings-entry.default.route-backup-history",
-      "actionKey": "route.push",
-      "instanceKey": "route-backup-history",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "domain": "sync",
-      "family": "listrow-action",
-      "route": "sync-settings-entry",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-backup-history-h-78029e1a",
-      "source": {
-        "candidateKey": "candidate:1988278b719721d61196",
-        "selectorSha256": "d2e6d95a423a782a5720dc26eda0c0176fa175352759243cce1ba20ad86c46d8",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "备份历史8 个备份 · 64.5 MB",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "backup-history"
-        }
-      },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "sync.listrow-action.sync-settings-entry.default.button.route-backup-manual-h-64ca44f3",
-      "entityKey": "sync.listrow-action.button.route.push",
-      "controlKey": "sync.listrow-action.button.route.push@sync-settings-entry.default.route-backup-manual",
-      "actionKey": "route.push",
-      "instanceKey": "route-backup-manual",
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "domain": "sync",
-      "family": "listrow-action",
-      "route": "sync-settings-entry",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-backup-manual-h-64ca44f3",
-      "source": {
-        "candidateKey": "candidate:53eca10f83f570c872ae",
-        "selectorSha256": "a00f5c067b059bde4259dc0a2154838ed3c083e5a01466f0d1e7ef625bcf5589",
-        "semanticStatus": "semantic-control",
-        "domTag": "article",
-        "label": "手动备份立即创建备份",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "backup-manual"
-        }
-      },
-      "mappingStatus": "mapped",
-      "mappingNotes": null,
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
       "controlId": "sync.listrow-action.sync-settings-entry.default.button.route-backup-settings-h-a78ccba0",
       "entityKey": "sync.listrow-action.button.route.push",
       "controlKey": "sync.listrow-action.button.route.push@sync-settings-entry.default.route-backup-settings",
@@ -136336,6 +136265,43 @@
       "nonInteractiveContainer": null
     },
     {
+      "controlId": "sync.listrow-action.sync-settings-entry.default.button.route-sync-backup-h-e6662bd3",
+      "entityKey": "sync.listrow-action.button.route.push",
+      "controlKey": "sync.listrow-action.button.route.push@sync-settings-entry.default.route-sync-backup",
+      "actionKey": "route.push",
+      "instanceKey": "route-sync-backup",
+      "needsActionKey": false,
+      "needsInstanceKey": false,
+      "domain": "sync",
+      "family": "listrow-action",
+      "route": "sync-settings-entry",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-sync-backup-h-e6662bd3",
+      "source": {
+        "candidateKey": "candidate:117abe3087958eac9b5b",
+        "selectorSha256": "5319220d24fbdb67f493c20648b04a0c5c5d60731600ab3695696216edc47ce7",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "备份历史8 个备份 · 64.5 MB",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-route": "sync-backup"
+        }
+      },
+      "mappingStatus": "mapped",
+      "mappingNotes": null,
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
       "controlId": "sync.listrow-action.sync-settings-entry.default.button.route-webdav-config-h-1fa6173c",
       "entityKey": "sync.listrow-action.button.route.push",
       "controlKey": "sync.listrow-action.button.route.push@sync-settings-entry.default.route-webdav-config",
@@ -136363,6 +136329,44 @@
       },
       "mappingStatus": "mapped",
       "mappingNotes": null,
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "sync.listrow-action.sync-settings-entry.default.button.settings-overlay-dialogmanual-backup-h-0a8d8c01",
+      "entityKey": "sync.listrow-action.button",
+      "controlKey": "sync.listrow-action.button@sync-settings-entry.default",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": false,
+      "domain": "sync",
+      "family": "listrow-action",
+      "route": "sync-settings-entry",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "settings-overlay-dialogmanual-backup-h-0a8d8c01",
+      "source": {
+        "candidateKey": "candidate:50d43ddf9ae833f72972",
+        "selectorSha256": "3fe357cbac48444921fcaf8f460125bd2436a8e69e206e70b84bda7d580d76ee",
+        "semanticStatus": "semantic-control",
+        "domTag": "article",
+        "label": "手动备份立即创建备份",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-restore-focus": "open-manual-backup",
+          "data-settings-overlay": "dialog:manual-backup"
+        }
+      },
+      "mappingStatus": "pending-action-key",
+      "mappingNotes": "No explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) found; actionKey is null. Needs explicit semantic declaration to resolve logical identity.",
       "screenGraphBinding": {
         "componentInstanceId": null,
         "componentType": null,

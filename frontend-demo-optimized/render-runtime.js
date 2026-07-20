@@ -11195,8 +11195,9 @@
         );
       case "settings-developer":
       case "global-settings":
-      case "sync-backup":
         return settingsScreen(data, route, appState);
+      case "sync-backup":
+        throw new Error("sync-backup route is FROZEN to backupScreenV2 (d2-settings-sync-renderers.js)");
       case "bookshelf-search-settings":
         throw new Error("bookshelf-search-settings route is FROZEN to bookshelfSearchSettingsV2 (d2-bookshelf-discover-renderers.js)");
       case "about-feedback":
@@ -11207,14 +11208,13 @@
       case "backup-settings":
       case "progress-sync":
       case "progress-sync-status":
-        return settingsScreen(data, "sync-backup", appState);
+        throw new Error(route + " route is FROZEN to backupScreenV2 (d2-settings-sync-renderers.js)");
       case "remote-webdav-books":
-        return contractStaticRouteScreen(data, route, appState, {
-          shell: "SettingsShell",
-          icon: "cloud",
-          summary: "远程 WebDAV 书籍列表的静态合同页；平台实现需要接入真实 WebDAV 目录、下载状态和错误恢复。",
-          actions: [{ label: "同步与备份", route: "sync-backup" }, { label: "WebDAV 配置", route: "webdav-config" }]
-        });
+        throw new Error("remote-webdav-books route is FROZEN to backupScreenV2 (d2-settings-sync-renderers.js)");
+      case "backup-manual":
+      case "backup-auto":
+      case "backup-history":
+        throw new Error(route + " is retired: use backup-settings/sync-backup state owner; legacy secondary route is fail-loud");
       case "reading-settings-entry":
         return settingsScreen(data, "settings-general", appState);
       case "global-loading":

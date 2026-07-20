@@ -27,7 +27,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "a4e3386454aec5672c99e87384df7754edba85029a029e5c3c11022c359b9c7d"
+    "rendererSourcesSha256": "83b35e65436c531feea7f77196e262d3d1cbb212425eecc1cf50f223d03d9f00"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -57597,8 +57597,9 @@
       "domTag": "button",
       "role": "button",
       "label": "测试网络连通性",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-settings-overlay=\"dialog\\:webdav-test\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"test-connection\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-restore-focus": "test-connection",
         "data-settings-overlay": "dialog:webdav-test"
       },
       "uiEvent": null,
@@ -57616,7 +57617,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:257c73565acd87c51dea",
+      "candidateKey": "candidate:17b2d47fe7a8ec510aa3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57631,8 +57632,9 @@
       "domTag": "button",
       "role": "button",
       "label": "保存配置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-settings-overlay=\"dialog\\:webdav-save\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"save-config\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-restore-focus": "save-config",
         "data-settings-overlay": "dialog:webdav-save"
       },
       "uiEvent": null,
@@ -57650,7 +57652,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:b52aeca1df9eb145e40f",
+      "candidateKey": "candidate:72961e26309ba4b6de8d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58018,8 +58020,9 @@
       "domTag": "button",
       "role": "button",
       "label": "测试网络连通性",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-settings-overlay=\"dialog\\:webdav-test\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"test-connection\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-restore-focus": "test-connection",
         "data-settings-overlay": "dialog:webdav-test"
       },
       "uiEvent": null,
@@ -58037,7 +58040,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:5784c3377305278575fd",
+      "candidateKey": "candidate:1817487888acd97ef07a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -58052,8 +58055,9 @@
       "domTag": "button",
       "role": "button",
       "label": "保存配置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-settings-overlay=\"dialog\\:webdav-save\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"save-config\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-restore-focus": "save-config",
         "data-settings-overlay": "dialog:webdav-save"
       },
       "uiEvent": null,
@@ -58071,7 +58075,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:67263f3d6c6e7d8258f4",
+      "candidateKey": "candidate:bbf6cf42939d98b77043",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -69062,23 +69066,25 @@
       "domTag": "article",
       "role": "button",
       "label": "手动备份立即创建备份",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"backup-manual\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-restore-focus=\"open-manual-backup\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "backup-manual"
+        "data-restore-focus": "open-manual-backup",
+        "data-settings-overlay": "dialog:manual-backup"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push"
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward"
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:53eca10f83f570c872ae",
+      "candidateKey": "candidate:50d43ddf9ae833f72972",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -69093,9 +69099,9 @@
       "domTag": "article",
       "role": "button",
       "label": "备份历史8 个备份 · 64.5 MB",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"backup-history\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > article[data-route=\"sync-backup\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "backup-history"
+        "data-route": "sync-backup"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -69109,7 +69115,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1988278b719721d61196",
+      "candidateKey": "candidate:117abe3087958eac9b5b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -73914,25 +73920,27 @@
       "domTag": "button",
       "role": "button",
       "label": "立即备份",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"backup-manual\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-restore-focus=\"manual-backup-open\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "backup-manual"
+        "data-restore-focus": "manual-backup-open",
+        "data-settings-overlay": "dialog:manual-backup"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
-        "button.activate"
+        "button.activate",
+        "overlay.dialog.enter/exit"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
-        "button.activate"
+        "button.activate",
+        "overlay.dialog.enter-exit"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:bd9ae4e413035dc1672c",
+      "candidateKey": "candidate:aae03e5c849955458c3d",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -73947,9 +73955,9 @@
       "domTag": "button",
       "role": "button",
       "label": "查看历史",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"backup-history\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"sync-backup\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "backup-history"
+        "data-route": "sync-backup"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -73965,7 +73973,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0eb2982455163fe89f9d",
+      "candidateKey": "candidate:d8c911e31f7f314e3a64",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74217,25 +74225,24 @@
       "domTag": "button",
       "role": "button",
       "label": "立即同步",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"progress-sync-status\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-restore-focus=\"sync-now\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-route": "progress-sync-status"
+        "data-restore-focus": "sync-now"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:be75d65a0a4891d0a9f7",
+      "candidateKey": "candidate:7cbb56a764b9187d2e72",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74250,25 +74257,22 @@
       "domTag": "button",
       "role": "button",
       "label": "WebDAV 配置",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button[data-route=\"webdav-config\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-route": "webdav-config"
-      },
-      "uiEvent": "route.push",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(4) > button.is-danger:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c6cfc913883d9c280533",
+      "candidateKey": "candidate:728cf28b0778fef65e8c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74562,8 +74566,9 @@
       "domTag": "button",
       "role": "button",
       "label": "下载全部",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(3) > button[data-settings-overlay=\"dialog\\:download-all\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(3) > button[data-restore-focus=\"remote-download-all\"]:nth-of-type(1)",
       "dataAttributes": {
+        "data-restore-focus": "remote-download-all",
         "data-settings-overlay": "dialog:download-all"
       },
       "uiEvent": null,
@@ -74581,7 +74586,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:9a33efd1b9171c01537c",
+      "candidateKey": "candidate:64ce87405e38a98b2f1a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74596,25 +74601,22 @@
       "domTag": "button",
       "role": "button",
       "label": "刷新列表",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(3) > button[data-route=\"remote-webdav-books\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-route": "remote-webdav-books"
-      },
-      "uiEvent": "route.push",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(3) > button:nth-of-type(2)",
+      "dataAttributes": {},
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c2eeb7e6461d8909c10d",
+      "candidateKey": "candidate:1046d7d95508c6575f64",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -74629,8 +74631,9 @@
       "domTag": "button",
       "role": "button",
       "label": "清理远程",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(3) > button[data-settings-overlay=\"dialog\\:clear-remote\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-settings-action-list:nth-of-type(3) > button[data-restore-focus=\"remote-cleanup\"]:nth-of-type(3)",
       "dataAttributes": {
+        "data-restore-focus": "remote-cleanup",
         "data-settings-overlay": "dialog:clear-remote"
       },
       "uiEvent": null,
@@ -74648,7 +74651,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:45b4422c66d5674f1793",
+      "candidateKey": "candidate:7efa65f4bbc9c8011c50",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

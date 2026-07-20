@@ -48,6 +48,7 @@ const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json"
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
 const SOURCE_SWITCH_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "w3-source-switch-renderers.js");
+const SYNC_BACKUP_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js");
 
 const CHECK_MODE = process.argv.includes("--check");
 
@@ -237,6 +238,39 @@ function sourceSwitchActionDeclarations() {
       rendererSlot: "sourceSwitchV2@renderers/w3-source-switch-renderers.js",
       pageFamily: "source-switch",
       source: "source-switch-action",
+      label: spec.label,
+      settingsKey: spec.settingsKey
+    };
+  });
+}
+
+function syncBackupActionDeclarations() {
+  const rendererWindow = {};
+  const source = readFileSync(SYNC_BACKUP_RENDERER_PATH, "utf8");
+  Function("window", "globalThis", source)(rendererWindow, rendererWindow);
+  const specs = rendererWindow.ReaderD2SettingsSyncRenderers?.SOURCE_CONTROL_SPECS || [];
+  return specs.map((spec) => {
+    const entityKey = `sync-backup.control.${spec.role}.${spec.settingsKey}`;
+    return {
+      entityKey,
+      controlKey: `${entityKey}@${spec.route}.${spec.state}`,
+      controlId: `sync-backup.control.${spec.route}.${spec.state}.${spec.role}.${spec.settingsKey}`,
+      actionKey: spec.settingsKey,
+      instanceKey: null,
+      needsActionKey: false,
+      needsInstanceKey: false,
+      mappingStatus: "mapped",
+      uiEvent: spec.uiEvent,
+      route: spec.route,
+      state: spec.state,
+      domain: "sync-backup",
+      family: "control",
+      role: spec.role,
+      renderer: "backupScreenV2",
+      rendererFile: "renderers/d2-settings-sync-renderers.js",
+      rendererSlot: "backupScreenV2@renderers/d2-settings-sync-renderers.js",
+      pageFamily: "sync-backup",
+      source: "sync-backup-action",
       label: spec.label,
       settingsKey: spec.settingsKey
     };
@@ -595,7 +629,8 @@ const allDeclarations = registryDeclarations
   .concat(bookshelfActionDeclarations())
   .concat(bookDetailActionDeclarations())
   .concat(readerRuntimeActionDeclarations())
-  .concat(sourceSwitchActionDeclarations());
+  .concat(sourceSwitchActionDeclarations())
+  .concat(syncBackupActionDeclarations());
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);

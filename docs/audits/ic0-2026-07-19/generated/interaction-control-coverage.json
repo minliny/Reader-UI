@@ -40,9 +40,9 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3808,
-    "withUiEvent": 2279,
+    "withUiEvent": 2274,
     "withRawMotionHints": 3719,
-    "rawMotionHintOccurrences": 7142,
+    "rawMotionHintOccurrences": 7139,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -96,7 +96,7 @@
       "toggle.switch"
     ],
     "withCanonicalMotionIds": 3701,
-    "canonicalMotionIdOccurrences": 7244,
+    "canonicalMotionIdOccurrences": 7241,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -199,7 +199,7 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1529
+      "IC0_UI_EVENT_UNRESOLVED": 1534
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -456,7 +456,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "sync-backup",
-          "renderSha256": "b82493fd4fc02a0ef67485b2c3ea108c07d52d6a47a411049502d5ea92212c2d",
+          "renderSha256": "51108af5993c14ce4056cce07d50946fece180d201efd6974aeaff902cfb9f13",
           "count": 2,
           "cases": [
             {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "1223595ab85541aaa24fe81fb15b7d3f90d8d8a4ccad48111ff0de1bdb798b59",
+  "inventorySha256": "e76a61238dbb8c510c4b5ebc18b3b2486b8749e5c9793234c433eee2ebe58395",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1598,7 +1598,7 @@
       "pageState": "default",
       "semanticControls": 13,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "b82493fd4fc02a0ef67485b2c3ea108c07d52d6a47a411049502d5ea92212c2d"
+      "renderSha256": "51108af5993c14ce4056cce07d50946fece180d201efd6974aeaff902cfb9f13"
     },
     {
       "routeId": "sync-backup",
@@ -1609,7 +1609,7 @@
       "pageState": "loading",
       "semanticControls": 13,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "b82493fd4fc02a0ef67485b2c3ea108c07d52d6a47a411049502d5ea92212c2d"
+      "renderSha256": "51108af5993c14ce4056cce07d50946fece180d201efd6974aeaff902cfb9f13"
     },
     {
       "routeId": "webdav-config",
@@ -1862,7 +1862,7 @@
       "pageState": "default",
       "semanticControls": 8,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d6368b612ec4aa5c37e752c3f16d5f627f02ae72e12c2e73fc6378effaf7ff8d"
+      "renderSha256": "1e98a50d6cab8d4059c5867517a49c91abbe44c2c11fccf9b8816a6b016f20ca"
     },
     {
       "routeId": "reading-settings-entry",
@@ -1994,7 +1994,7 @@
       "pageState": "default",
       "semanticControls": 16,
       "suspectedNonSemanticControls": 9,
-      "renderSha256": "937e5aa2bb67d6e90f9762beee417be47ebd3f1582f856f5cb215d7bfbb7c899"
+      "renderSha256": "640b48034dbb1477a0eb45e73dfc2b8f1436b65712aef9ced9ca20564f6310e6"
     },
     {
       "routeId": "progress-sync",
@@ -2005,7 +2005,7 @@
       "pageState": "default",
       "semanticControls": 10,
       "suspectedNonSemanticControls": 3,
-      "renderSha256": "08bb4e2b3715b11b4bf949831b7fd5687f93843c638b66d0dcd5cfb074c14b57"
+      "renderSha256": "67f3e578902bdcad96a459c6c3ca99934a141a57f2d980ae8322870a9b74ca9b"
     },
     {
       "routeId": "remote-webdav-books",
@@ -2016,7 +2016,7 @@
       "pageState": "default",
       "semanticControls": 12,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5b97ab45391721776b1028dd93087be5f4b48639c975c65342b0d4133eb7e7d2"
+      "renderSha256": "41c96f05dcac7ef10188a94f067f810674ca3367949936eb185139bf3b89cf68"
     },
     {
       "routeId": "about",
