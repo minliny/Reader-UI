@@ -1,21 +1,31 @@
 // Reader-UI Control Identity — public entry point
-// R1 · Control Identity 修复 (2026-07-20, baseline e35e739)
+// R1.1 · 三层身份分离 (2026-07-20, baseline 9f7a0f5)
 
 export {
   DATA_CONTROL_ID_ATTRIBUTE,
   DATA_CONTROL_CANDIDATE_KEY_ATTRIBUTE,
+  DATA_CONTROL_KEY_ATTRIBUTE,
+  DATA_ENTITY_KEY_ATTRIBUTE,
   DATA_VIEWPORT_ATTRIBUTE,
   composeControlId,
   getDataControlId,
+  getDataControlKey,
+  getDataEntityKey,
   getDataViewport,
   isValidControlIdFormat,
   parseControlId,
   querySelectorForControlId,
   querySelectorForControlIdAndViewport,
-  resolveAllControlIds,
+  querySelectorForControlKey,
+  querySelectorForEntityKey,
+  resolveAllByControlKey,
+  resolveAllByControlIds,
+  resolveAllByEntityKey,
   resolveControlId,
   resolveControlIdAndViewport,
   setDataControlId,
+  setDataControlKey,
+  setDataEntityKey,
   setDataViewport,
 } from "./dom-identity";
 export type { ParsedControlId } from "./dom-identity";
@@ -24,6 +34,8 @@ export {
   createControlIdResolver,
   queryElementByControlId,
   queryElementByControlIdAndViewport,
+  queryElementsByControlKey,
+  queryElementsByEntityKey,
   verifyDomCoverage,
 } from "./control-id-resolver";
 export type {

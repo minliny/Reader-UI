@@ -1,6 +1,6 @@
 // Reader-UI Control Identity TypeScript contract
 // Source of truth: contracts/control-identity.schema.json
-// R1 · Control Identity 修复 (2026-07-20, baseline e35e739)
+// R1.1 · 三层身份分离 (2026-07-20, baseline 9f7a0f5)
 //
 // This file is hand-curated to match the JSON Schema; regenerating it from
 // the schema requires the codegen pipeline (see tools/interaction-inventory/codegen-control-ids.mjs).
@@ -15,8 +15,30 @@
  * the separate `viewport` field on `ControlIdentity` and on `DomIdentityMapEntry`.
  */
 export interface ControlIdentity {
-  /** Canonical logical control identity string (no viewport atom). */
+  /**
+   * R1.1: DOM occurrence tracking id (NOT the logical identity).
+   * Retained from R1 for audit reproducibility and DOM tracking. The logical
+   * identity is split into `entityKey` (cross-route/state/viewport entity)
+   * and `controlKey` (per route/state occurrence).
+   */
   controlId: string;
+  /**
+   * R1.1: Logical control entity identity (3-4 atoms):
+   * `{domain}.{family}.{role}[.semantic-intent]`. Shared across every
+   * route/state/viewport occurrence of the same logical control. Computed
+   * ONLY from domain / family / role / stable data-* semantic-intent; never
+   * depends on selector / label / variantId / domTag / viewport / DOM order.
+   */
+  entityKey: string;
+  /**
+   * R1.1: Logical control occurrence in (route, state):
+   * `{entityKey}@{route}.{state}[.ordinal]`. Viewport-independent. The
+   * optional `.N` ordinal discriminator is applied only when the same
+   * entityKey appears multiple times in the same (route, state), and is
+   * computed by sorting on semantic-intent then candidateKey (NOT by DOM
+   * order).
+   */
+  controlKey: string;
   /** Product domain; matches ScreenGraph runtimeFamily. */
   domain: ControlDomain;
   /** Component family derived from DOM tag + ARIA role + class hints. */
@@ -151,6 +173,10 @@ export interface ControlIdRegistry {
     needsManualMapping: number;
     ambiguousNeedsReview: number;
     uniqueControlIds: number;
+    /** R1.1: unique entityKey count (logical entities, < uniqueControlIds). */
+    uniqueEntityKeys: number;
+    /** R1.1: unique controlKey count (route/state occurrences, between entityKey and controlId counts). */
+    uniqueControlKeys: number;
     pendingFigmaJoin: number;
     nonInteractiveContainers: number;
   };
@@ -203,6 +229,34 @@ export interface NonInteractiveContainerEntry {
   label: string | null;
   dataAttributes: Record<string, string>;
   exclusionReason: "aria-container-role";
+  /**
+   * R1.1: Suspected-reason snapshot from the IC0 audit. Used to derive
+   * `containsUnenumeratedSubcontrols` and `expectedSubcontrolType` for
+   * settings rows whose real interactive children are rendered at runtime
+   * and are not enumerated by the IC0 DOM walk.
+   */
+  suspectedReasons?: string[];
+  /**
+   * R1.1: True when this group is a settings row (fd-setting-row +
+   * is-switch / is-select / is-segment / is-stepper) that carries real
+   * interactive sub-controls which the IC0 DOM walk did not enumerate
+   * because they are produced by the runtime renderer. R2.0 must enumerate
+   * these sub-controls into the canonical registry.
+   */
+  containsUnenumeratedSubcontrols?: boolean;
+  /**
+   * R1.1: Expected interactive sub-control type for settings rows that
+   * carry un-enumerated sub-controls. Derived from the row's settings
+   * control class: is-switch -> "switch", is-select -> "select",
+   * is-segment -> "segment", is-stepper -> "stepper".
+   */
+  expectedSubcontrolType?: "switch" | "select" | "segment" | "stepper";
+  /**
+   * R1.1: True when this container is a pure ARIA container (e.g. a section
+   * that wraps loading / error state content) with no embedded interactive
+   * sub-controls. R1.1 marks all 17 `section` candidates as pureContainer.
+   */
+  pureContainer?: boolean;
 }
 
 export interface NonInteractiveContainers {

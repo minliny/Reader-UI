@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// A2 · Control Identity Foundation — codegen
+// R1.1 · Three-layer identity codegen (entityKey + controlKey + controlId)
 //
 // Reads tools/interaction-inventory/generated/control-id-registry.json and
 // emits per-platform/per-consumer codegen artifacts:
@@ -64,12 +64,55 @@ function buildTypescriptArtifact(registry) {
   lines.push("");
   lines.push("export const CONTROL_ID_SET: ReadonlySet<string> = Object.freeze(new Set(CONTROL_ID_ENTRIES.map((entry) => entry.controlId)));");
   lines.push("");
+  // R1.1: logical identity lookup maps. entityKey -> entries sharing that
+  // entity (cross route/state/viewport). controlKey -> entries sharing that
+  // controlKey (cross viewport, within a single route/state).
+  lines.push("export const ENTITY_KEY_LOOKUP: Readonly<Record<string, readonly ControlIdRegistryEntry[]>> = Object.freeze(");
+  lines.push("  Object.fromEntries(");
+  lines.push("    Object.entries(");
+  lines.push("      CONTROL_ID_ENTRIES.reduce<Record<string, ControlIdRegistryEntry[]>>((acc, entry) => {");
+  lines.push("        (acc[entry.entityKey] ??= []).push(entry);");
+  lines.push("        return acc;");
+  lines.push("      }, {}),");
+  lines.push("    ).map(([k, v]) => [k, Object.freeze(v)] as const),");
+  lines.push("  ),");
+  lines.push(");");
+  lines.push("export const ENTITY_KEY_SET: ReadonlySet<string> = Object.freeze(new Set(CONTROL_ID_ENTRIES.map((entry) => entry.entityKey)));");
+  lines.push("export const CONTROL_KEY_LOOKUP: Readonly<Record<string, readonly ControlIdRegistryEntry[]>> = Object.freeze(");
+  lines.push("  Object.fromEntries(");
+  lines.push("    Object.entries(");
+  lines.push("      CONTROL_ID_ENTRIES.reduce<Record<string, ControlIdRegistryEntry[]>>((acc, entry) => {");
+  lines.push("        (acc[entry.controlKey] ??= []).push(entry);");
+  lines.push("        return acc;");
+  lines.push("      }, {}),");
+  lines.push("    ).map(([k, v]) => [k, Object.freeze(v)] as const),");
+  lines.push("  ),");
+  lines.push(");");
+  lines.push("export const CONTROL_KEY_SET: ReadonlySet<string> = Object.freeze(new Set(CONTROL_ID_ENTRIES.map((entry) => entry.controlKey)));");
+  lines.push("");
+  lines.push(`export const CONTROL_ID_REGISTRY_UNIQUE_ENTITY_KEYS = ${registry.totals.uniqueEntityKeys};`);
+  lines.push(`export const CONTROL_ID_REGISTRY_UNIQUE_CONTROL_KEYS = ${registry.totals.uniqueControlKeys};`);
+  lines.push("");
   lines.push("export function getControlIdEntry(controlId: string): ControlIdRegistryEntry | undefined {");
   lines.push("  return CONTROL_ID_LOOKUP[controlId];");
   lines.push("}");
   lines.push("");
   lines.push("export function isKnownControlId(controlId: string): boolean {");
   lines.push("  return CONTROL_ID_SET.has(controlId);");
+  lines.push("}");
+  lines.push("");
+  // R1.1: logical identity accessors.
+  lines.push("export function getEntriesByEntityKey(entityKey: string): readonly ControlIdRegistryEntry[] {");
+  lines.push("  return ENTITY_KEY_LOOKUP[entityKey] ?? [];");
+  lines.push("}");
+  lines.push("export function isKnownEntityKey(entityKey: string): boolean {");
+  lines.push("  return ENTITY_KEY_SET.has(entityKey);");
+  lines.push("}");
+  lines.push("export function getEntriesByControlKey(controlKey: string): readonly ControlIdRegistryEntry[] {");
+  lines.push("  return CONTROL_KEY_LOOKUP[controlKey] ?? [];");
+  lines.push("}");
+  lines.push("export function isKnownControlKey(controlKey: string): boolean {");
+  lines.push("  return CONTROL_KEY_SET.has(controlKey);");
   lines.push("}");
   lines.push("");
   return `${lines.join("\n")}\n`;
@@ -80,6 +123,10 @@ function buildDomSelectorsArtifact(registry) {
   for (const entry of registry.entries) {
     if (!byRoute[entry.route]) byRoute[entry.route] = [];
     byRoute[entry.route].push({
+      // R1.1: include logical identity (entityKey, controlKey) alongside
+      // the DOM occurrence tracking id (controlId).
+      entityKey: entry.entityKey,
+      controlKey: entry.controlKey,
       controlId: entry.controlId,
       selectorSha256: entry.source.selectorSha256,
       dataControlId: entry.controlId,
@@ -104,6 +151,8 @@ function buildDomSelectorsArtifact(registry) {
       routes: Object.keys(byRoute).length,
       entries: registry.entries.length,
       uniqueControlIds: registry.totals.uniqueControlIds,
+      uniqueEntityKeys: registry.totals.uniqueEntityKeys,
+      uniqueControlKeys: registry.totals.uniqueControlKeys,
     },
     byRoute,
   };
@@ -111,6 +160,9 @@ function buildDomSelectorsArtifact(registry) {
 
 function buildScreenGraphBindingsArtifact(registry) {
   const entries = registry.entries.map((entry) => ({
+    // R1.1: include logical identity (entityKey, controlKey).
+    entityKey: entry.entityKey,
+    controlKey: entry.controlKey,
     controlId: entry.controlId,
     candidateKey: entry.source.candidateKey,
     routeId: entry.route,

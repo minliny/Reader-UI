@@ -50,7 +50,12 @@
       "domTag": "article",
       "label": "App 设置",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:432a153136ab706ccdc3",
@@ -62,7 +67,12 @@
       "domTag": "article",
       "label": "保留时长 30 天",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:488baf28c33dd42bfe64",
@@ -74,7 +84,12 @@
       "domTag": "article",
       "label": "搜索历史",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:50a6622facc45408e2ce",
@@ -86,7 +101,12 @@
       "domTag": "article",
       "label": "阅读进度",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:7ac6701df61eb9077a70",
@@ -98,7 +118,12 @@
       "domTag": "article",
       "label": "书源配置",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:a2f9416698c77fd2741a",
@@ -110,7 +135,12 @@
       "domTag": "article",
       "label": "书架与分组",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:a4f6892da2711349d20b",
@@ -122,7 +152,12 @@
       "domTag": "article",
       "label": "启用自动备份",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:b412d28390ac22ed7fe9",
@@ -134,7 +169,12 @@
       "domTag": "article",
       "label": "备份时间 02:00",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:d1aa5fde0729e853168e",
@@ -146,7 +186,12 @@
       "domTag": "article",
       "label": "自动清理过期备份",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:d93b4158139404a92633",
@@ -158,7 +203,12 @@
       "domTag": "article",
       "label": "备份频率 每天",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:e94360e9e6a23bffdf1f",
@@ -170,7 +220,12 @@
       "domTag": "article",
       "label": "保留备份数 - 10 个 +",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-stepper"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "stepper"
     },
     {
       "candidateKey": "candidate:f26c7a8cfc714cd525f3",
@@ -182,7 +237,12 @@
       "domTag": "article",
       "label": "仅 Wi-Fi 备份",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:20ea74ea77bb7e8611b5",
@@ -194,7 +254,12 @@
       "domTag": "article",
       "label": "更新失败提醒书架书籍更新失败时显示角标",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:2854b8b28b060e92a6ae",
@@ -206,7 +271,12 @@
       "domTag": "article",
       "label": "缓存策略Wi-Fi 下自动缓存 更改",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:413a8051656d68377344",
@@ -218,7 +288,12 @@
       "domTag": "article",
       "label": "搜索历史保留 20 条 更改",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:45b8e3faaf5a5f50a3bf",
@@ -230,7 +305,12 @@
       "domTag": "article",
       "label": "本地书标识显示本地书来源标识",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:6431436bcc5d160ff8db",
@@ -242,7 +322,12 @@
       "domTag": "article",
       "label": "默认搜索源全部已启用书源 更改",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:821568425ce3c8eed5b8",
@@ -254,7 +339,12 @@
       "domTag": "article",
       "label": "默认视图封面网格 更改",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:a18a801d863dc4989209",
@@ -266,7 +356,12 @@
       "domTag": "article",
       "label": "网络书缓存状态显示缓存/未缓存标识",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:efbb784cccd6880ca53f",
@@ -278,7 +373,12 @@
       "domTag": "article",
       "label": "默认排序最近更新 更改",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:0293af91f06498285d32",
@@ -293,7 +393,11 @@
         "data-import-phase": "conflict",
         "data-route": "import-conflict-resolve"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:b63a86fe94b6514e5a41",
@@ -308,7 +412,11 @@
         "data-import-phase": "preview",
         "data-route": "import-duplicate"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:72e26b351c43c0868cd3",
@@ -323,7 +431,11 @@
         "data-import-phase": "parsing",
         "data-route": "import-empty-file"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:ec751b662bd3a5ac14da",
@@ -338,7 +450,11 @@
         "data-import-phase": "input",
         "data-route": "import-format-unsupported"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:10df389ae6bc942f08e9",
@@ -353,7 +469,11 @@
         "data-import-phase": "parsing",
         "data-route": "import-parsing"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:548d13520d0b2d293a88",
@@ -368,7 +488,11 @@
         "data-import-phase": "result",
         "data-route": "import-partial-success"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:c0f9cb8b46229156d900",
@@ -383,7 +507,11 @@
         "data-import-phase": "selecting",
         "data-route": "import-permission-denied"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:bc3bcf17c35bc530ad0c",
@@ -398,7 +526,11 @@
         "data-import-phase": "result",
         "data-route": "import-result-detail"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:4d5b888de0929ebbe461",
@@ -410,7 +542,12 @@
       "domTag": "article",
       "label": "同步频率 实时",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:972aecb71e83b74fb4e2",
@@ -422,7 +559,12 @@
       "domTag": "article",
       "label": "冲突时询问",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:b88d4ea4d0a7d62e2105",
@@ -434,7 +576,12 @@
       "domTag": "article",
       "label": "自动同步阅读进度",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:d8a5abad5a4553d7cdf6",
@@ -446,7 +593,12 @@
       "domTag": "article",
       "label": "仅 Wi-Fi 同步",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:fb83764f64576ebe847d",
@@ -461,7 +613,11 @@
         "data-reader-variant": "restore",
         "data-route": "reader-background-restore"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:4add159c2871063328d5",
@@ -476,7 +632,11 @@
         "data-reader-variant": "error",
         "data-route": "reader-content-error"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:620f6924e94bd7ba2c43",
@@ -491,7 +651,11 @@
         "data-reader-variant": "loading",
         "data-route": "reader-content-loading"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:3db66283f354ec6b7c79",
@@ -506,7 +670,11 @@
         "data-reader-variant": "offline",
         "data-route": "reader-content-offline"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:b9357061768202d39b8a",
@@ -521,7 +689,11 @@
         "data-reader-variant": "boundary",
         "data-route": "reader-page-boundary-first"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:2aac7ea45cc4afb29462",
@@ -536,7 +708,11 @@
         "data-reader-variant": "boundary",
         "data-route": "reader-page-boundary-last"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:ab85ab26725fa5cb25d1",
@@ -551,7 +727,11 @@
         "data-reader-variant": "error",
         "data-route": "reader-toc-error"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:cb6de2bde861c08da60d",
@@ -566,7 +746,11 @@
         "data-reader-variant": "loading",
         "data-route": "reader-toc-loading"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:197010627b97a911f8ec",
@@ -581,7 +765,11 @@
         "data-reader-variant": "offline",
         "data-route": "reader-toc-offline"
       },
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "actionable-data-attribute:data-route"
+      ],
+      "pureContainer": true
     },
     {
       "candidateKey": "candidate:02c5481063fe0493a939",
@@ -593,7 +781,12 @@
       "domTag": "article",
       "label": "动画效果 标准",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:74d3d5e3c4cda38f4d4a",
@@ -605,7 +798,12 @@
       "domTag": "article",
       "label": "启动时打开 书架",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:9a123607bc4ff7ba141e",
@@ -617,7 +815,12 @@
       "domTag": "article",
       "label": "崩溃日志",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:b2098bade47edbd77b63",
@@ -629,7 +832,12 @@
       "domTag": "article",
       "label": "App主题 跟随系统",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-segment"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "segment"
     },
     {
       "candidateKey": "candidate:cd78214c71c3b3789ad1",
@@ -641,7 +849,12 @@
       "domTag": "article",
       "label": "语言 简体中文",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:dae82f3a5b9b1cf94f63",
@@ -653,7 +866,12 @@
       "domTag": "article",
       "label": "自动检查更新",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:e0c4babe5437217b3655",
@@ -665,7 +883,12 @@
       "domTag": "article",
       "label": "减少动态效果",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:ef8d5c847ecc7a2d201b",
@@ -677,7 +900,12 @@
       "domTag": "article",
       "label": "点击当前底栏回顶部",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:1aa6e20227c8a63303b3",
@@ -689,7 +917,12 @@
       "domTag": "article",
       "label": "调测模块 正文",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:343964ae4269b183be30",
@@ -701,7 +934,12 @@
       "domTag": "article",
       "label": "选择书源 笔趣阁",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:057cb84abcca08c5de3f",
@@ -713,7 +951,12 @@
       "domTag": "article",
       "label": "笔趣阁biquge.example · 玄幻书源",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:264bc0dc1d7990b5e5e2",
@@ -725,7 +968,12 @@
       "domTag": "article",
       "label": "本地导入源本地文件 · 自定义",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:2b256064d1c2839ab6de",
@@ -737,7 +985,12 @@
       "domTag": "article",
       "label": "起点中文网qidian.com · 起点导入",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:4b86e76278efc9a11b5b",
@@ -749,7 +1002,12 @@
       "domTag": "article",
       "label": "本地导入源本地文件 · 自定义",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:7c983bea2be757936e94",
@@ -761,7 +1019,12 @@
       "domTag": "article",
       "label": "测试书源test.example · 测试书源",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:9226441dfc3b9b9388a1",
@@ -773,7 +1036,12 @@
       "domTag": "article",
       "label": "测试书源test.example · 测试书源",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:9301f8fb6e309d1c9acd",
@@ -785,7 +1053,12 @@
       "domTag": "article",
       "label": "起点中文网qidian.com · 起点导入",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:d85fb46fc1e4e446b5b7",
@@ -797,7 +1070,12 @@
       "domTag": "article",
       "label": "笔趣阁biquge.example · 玄幻书源",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:1db70470e74b28d8e205",
@@ -809,7 +1087,12 @@
       "domTag": "article",
       "label": "自动同步 每小时",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-select"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "select"
     },
     {
       "candidateKey": "candidate:36b2b8e24e4b09d02c21",
@@ -821,7 +1104,12 @@
       "domTag": "article",
       "label": "SSL 证书校验",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     },
     {
       "candidateKey": "candidate:4b0e4d63cda5ddb9ed15",
@@ -833,7 +1121,12 @@
       "domTag": "article",
       "label": "连接超时 - 15 秒 +",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-stepper"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "stepper"
     },
     {
       "candidateKey": "candidate:97143206139d909aa97a",
@@ -845,7 +1138,12 @@
       "domTag": "article",
       "label": "仅 Wi-Fi 同步",
       "dataAttributes": {},
-      "exclusionReason": "aria-container-role"
+      "exclusionReason": "aria-container-role",
+      "suspectedReasons": [
+        "settings-control-class:is-switch"
+      ],
+      "containsUnenumeratedSubcontrols": true,
+      "expectedSubcontrolType": "switch"
     }
   ]
 }

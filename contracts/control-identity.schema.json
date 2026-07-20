@@ -2,19 +2,51 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/control-identity.schema.json",
   "title": "ControlIdentity",
-  "description": "Reader-UI 交互控件稳定身份契约（R1 修复版）。controlId 是逻辑控件身份，命名规则：{domain}.{family}.{route}.{state}.{role}[.discriminator]，不含 viewport。Phone/Compact/Tablet/Fold 共享同一逻辑 controlId；viewport 作为独立字段记录实例所属视口。同输入产生同输出，零重复、零缺失。来源：R1 · Control Identity 修复（基线 e35e739）。",
+  "description": "Reader-UI 交互控件稳定身份契约（R1.1 三层身份修复版）。三层身份模型：(1) entityKey 是逻辑控件实体 {domain}.{family}.{role}[.semantic-intent]，跨 route/state/viewport 共享，不含 selector/label/variantId/viewport 等 DOM occurrence 因素；(2) controlKey 是逻辑控件在某 route/state 的出现 {entityKey}@{route}.{state}[.ordinal]，跨 viewport 共享；(3) controlId 是 DOM occurrence 追踪 ID（保留 R1 语义），仍含 hash(selector+variantId+...)，仅用于审计可重算与 DOM 追踪。同输入产生同输出，零重复、零缺失。来源：R1.1 · 三层身份分离（基线 9f7a0f5）。",
   "type": "object",
   "additionalProperties": false,
-  "required": ["controlId", "domain", "family", "route", "state", "viewport", "role", "discriminator", "source"],
+  "required": [
+    "controlId",
+    "entityKey",
+    "controlKey",
+    "domain",
+    "family",
+    "route",
+    "state",
+    "viewport",
+    "role",
+    "discriminator",
+    "source"
+  ],
   "properties": {
     "controlId": {
       "type": "string",
       "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$",
-      "description": "Canonical logical control identity, period-delimited, kebab-case atoms. Pattern: domain.family.route.state.role[.discriminator]. Viewport is intentionally excluded so that Phone/Compact/Tablet/Fold share the same logical id.",
+      "description": "R1.1: DOM occurrence tracking id (NOT the logical identity). Pattern: domain.family.route.state.role[.discriminator]. Kept for audit reproducibility and DOM tracking; the logical identity lives in entityKey / controlKey.",
       "examples": [
         "library.button.bookshelf.default.button.top-action-search-h-1c0d0896",
         "reader.icon-button.reader.default.button.exit-h-3a2b1c0d",
         "settings.switch.settings-general.default.switch.toggle-h-7e8f9a0b"
+      ]
+    },
+    "entityKey": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\\.[a-z0-9]+(?:-[a-z0-9]+)*)*$",
+      "description": "R1.1: Logical control entity identity (3-4 atoms): {domain}.{family}.{role}[.semantic-intent]. semantic-intent is derived ONLY from stable data-* attributes (CONTROL_ID_PRIORITY_DATA_ATTRIBUTES whitelist); it never depends on selector / label / variantId / domTag / viewport / DOM order. The same entityKey is shared across every route/state/viewport where this logical control appears.",
+      "examples": [
+        "library.button.button.top-action-search",
+        "reader.icon-button.button.reader-exit",
+        "settings.switch.switch.toggle"
+      ]
+    },
+    "controlKey": {
+      "type": "string",
+      "pattern": "^[^@]+@[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "R1.1: Logical control occurrence in (route, state): {entityKey}@{route}.{state}. Viewport-independent: Phone / Compact / Tablet / Fold share the same controlKey. Multiple DOM occurrences of the same logical control in the same (route, state) SHARE the same controlKey; the per-occurrence tracking id is `controlId`.",
+      "examples": [
+        "library.button.button.top-action-search@bookshelf.default",
+        "reader.icon-button.button.reader-exit@reader.default",
+        "settings.switch.switch.toggle@settings-general.default"
       ]
     },
     "domain": {
@@ -73,7 +105,12 @@
     "viewport": {
       "type": "string",
       "description": "Viewport instance for this registry entry. The logical controlId does not include viewport, so the same controlId can carry multiple viewport instances (phone / compact / tablet / fold).",
-      "enum": ["phone", "compact", "tablet", "fold"]
+      "enum": [
+        "phone",
+        "compact",
+        "tablet",
+        "fold"
+      ]
     },
     "role": {
       "type": "string",
@@ -105,7 +142,11 @@
     "source": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["candidateKey", "selectorSha256", "semanticStatus"],
+      "required": [
+        "candidateKey",
+        "selectorSha256",
+        "semanticStatus"
+      ],
       "properties": {
         "candidateKey": {
           "type": "string",
@@ -119,66 +160,110 @@
         },
         "semanticStatus": {
           "type": "string",
-          "enum": ["semantic-control", "suspected-nonsemantic-control"]
+          "enum": [
+            "semantic-control",
+            "suspected-nonsemantic-control"
+          ]
         },
         "domTag": {
           "type": "string",
           "description": "Original DOM tag from the IC0 inventory record."
         },
         "label": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Accessible name resolved by the IC0 audit (may be empty for non-semantic candidates)."
         },
         "uiEvent": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Canonical UiEvent hint resolved by the IC0 audit, if any."
         },
         "dataAttributes": {
           "type": "object",
           "description": "Sorted data-* attribute snapshot from the IC0 audit; never mutated.",
-          "additionalProperties": {"type": "string"}
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
     },
     "mappingStatus": {
       "type": "string",
-      "enum": ["auto-mapped", "needs-manual-mapping", "ambiguous-needs-review"],
+      "enum": [
+        "auto-mapped",
+        "needs-manual-mapping",
+        "ambiguous-needs-review"
+      ],
       "description": "Whether the candidate was auto-mapped to a canonical controlId or requires human review."
     },
     "mappingNotes": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Optional human-readable explanation of mapping decisions or unresolved ambiguities."
     },
     "screenGraphBinding": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "additionalProperties": false,
-      "required": ["componentInstanceId", "componentType", "bindingStatus"],
+      "required": [
+        "componentInstanceId",
+        "componentType",
+        "bindingStatus"
+      ],
       "properties": {
         "componentInstanceId": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "ScreenGraph component instance id, or null when no candidate instance matches."
         },
         "componentType": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "ScreenGraph ComponentType name, or null when unresolved."
         },
         "bindingStatus": {
           "type": "string",
-          "enum": ["bound", "unresolved", "pending-figma-join"]
+          "enum": [
+            "bound",
+            "unresolved",
+            "pending-figma-join"
+          ]
         }
       }
     },
     "figmaNodeCandidate": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Reserved for Figma node id backfill; always null in the R1 baseline because Figma has no canonical join key yet."
     },
     "figmaJoinStatus": {
       "type": "string",
-      "enum": ["pending-figma-join", "joined"],
+      "enum": [
+        "pending-figma-join",
+        "joined"
+      ],
       "description": "Figma join status; always 'pending-figma-join' in the R1 baseline."
     },
     "nonInteractiveContainer": {
-      "type": ["boolean", "null"],
+      "type": [
+        "boolean",
+        "null"
+      ],
       "description": "Optional marker; when true, the candidate was classified as a non-interactive ARIA container (group/section) and excluded from the canonical registry. Always null in the canonical registry; non-null only in nonInteractiveContainers.json records.",
       "default": null
     }

@@ -1,9 +1,89 @@
-# R1 · Control Identity 修复 — 迁移报告
+# R1.1 · 三层身份分离 — 迁移报告（R1 基线之上增量）
 
-状态：canonical controlId schema 已重新冻结；3,752 交互控件全部获得稳定逻辑身份；零重复、零缺失、可重算；ajv 真实校验 3,752/3,752 valid；drift test 25/25 pass
-日期：2026-07-20
-工作包：R1 · Control Identity 修复（基线 commit `e35e739`，A2 → R1）
+状态：R1.1 三层身份模型已落地（entityKey / controlKey / controlId）；3,752 个 DOM occurrence 共享 414 个 entityKey 与 2,114 个 controlKey；碰撞 fail-closed；ajv 真实校验 3,752/3,752 valid；drift test 25 (R1) + 9 (R1.1) = 34/34 pass
+日期：2026-07-20（R1.1 增量，基线 commit `9f7a0f5`，R1 → R1.1）
+工作包：R1.1 · 三层身份分离（在 R1 修复之上引入 entityKey / controlKey 逻辑层）
 对账报告：[DENOMINATOR_RECONCILIATION.md](./DENOMINATOR_RECONCILIATION.md)
+
+> 本报告在 R1 报告之上以增量方式记录 R1.1 的设计与产出。下方所有 R1 章节（1～9）保留为历史记录，仅反映 R1 基线状态。R1.1 的设计、产出、退出条件见新增的 **§0 R1.1 三层身份模型** 与 **§10 R1.1 退出条件**。
+
+## 0. R1.1 三层身份模型（新增）
+
+### 0.1 动机
+
+R1 把 `controlId` 当作逻辑身份，但 `controlId` 的 hash 输入含 `selector` / `candidateKey` / `label` / `variantId` / `domTag` / `semanticStatus` 等 DOM occurrence 因素，导致：
+
+1. 响应式 DOM 位置变化 → selector 变 → controlId 漂移。
+2. 文案国际化（label 变化） → controlId 漂移。
+3. 状态切换（state 变化） → controlId 漂移，但其实是同一逻辑控件。
+4. 同一逻辑控件跨视口（Phone / Compact / Tablet / Fold）出现时，R1 通过"controlId 不含 viewport"做了正确合并，但跨 route/state 出现时无合并机制。
+5. IC0 把 3,752 个 DOM occurrence 全部当作 3,752 个逻辑控件；同逻辑控件跨状态/视口复用时应共享 ID。
+6. 63 个 `group` / `section` 分类结论原本一刀切——17 个 `section` 确为纯状态容器，但 46 个 `group` 是设置行（`fd-setting-row` + `is-switch` / `is-select` / `is-segment` / `is-stepper`），承载了真实的 Switch / Select / SegmentedControl / Stepper 子控件，仅因 IC0 DOM walk 未枚举到这些运行时渲染的子控件而被排除。
+
+### 0.2 三层身份定义
+
+```
+entityKey  = {domain}.{family}.{role}[.semantic-intent]
+             仅依赖 domain / family / role / 语义 data-* 属性白名单
+             跨 route / state / viewport 共享
+             不含 selector / label / variantId / domTag / DOM order / candidateKey / viewport
+
+controlKey = {entityKey}@{route}.{state}
+             跨 viewport 共享
+             同 entityKey 在同 (route, state) 的多个 DOM occurrence 共享同一 controlKey
+             不含 ordinal、不含 viewport
+
+controlId  = {domain}.{family}.{route}.{state}.{role}[.discriminator]
+             保留 R1 语义：DOM occurrence 追踪 ID
+             仍含 hash(selector+variantId+...)，仅用于审计可重算与 DOM 追踪
+             不是逻辑身份
+```
+
+### 0.3 semantic-intent 提取规则
+
+`semantic-intent` 仅从 `CONTROL_ID_PRIORITY_DATA_ATTRIBUTES` 白名单中提取：
+
+- 白名单为稳定 data-* 属性（例如 `data-top-action` / `data-reader-action` / `data-settings-key` 等）。
+- **不含** `selector` / `label` / `variantId` / `domTag` / `semanticStatus`。
+- 多个白名单属性按字母序拼接后 kebab-case 化。
+
+### 0.4 碰撞 fail-closed
+
+- `assertEntityKeyNoCollision(candidateControls)` 在生成期验证：两个 (domain, family, role, semantic-intent) 签名不同的控件不得映射到同一 `entityKey`。
+- 一旦碰撞，生成器抛错；**不允许静默合并**。
+- `controlKey` 共享模式：同 `entityKey` 在同 (route, state) 的多个 DOM occurrence 共享一个 `controlKey`；per-occurrence 区分由 `controlId` 负责。
+
+### 0.5 46 个设置行子控件标记
+
+`nonInteractiveContainers.json` 的每个 entry 新增三个字段：
+
+- `suspectedReasons?: string[]` — 来自 IC0 audit 的疑似原因快照。
+- `containsUnenumeratedSubcontrols?: boolean` — 当 group 是设置行（`fd-setting-row` + `is-switch` / `is-select` / `is-segment` / `is-stepper`）时为 true。
+- `expectedSubcontrolType?: "switch" | "select" | "segment" | "stepper"` — 从设置行 control class 派生。
+- `pureContainer?: boolean` — 当 container 是纯 ARIA section（不含子控件）时为 true。
+
+实测分布：
+- `containsUnenumeratedSubcontrols = true`：46 条（switch 28 / select 15 / stepper 2 / segment 1）。
+- `pureContainer = true`：17 条（全部 section）。
+- 合计 63 条，覆盖全部 `nonInteractiveContainers` 记录。
+
+R2.0 必须把这 46 个设置行的运行时子控件枚举进 canonical registry，并赋予独立 entityKey / controlKey / controlId。
+
+### 0.6 R1.1 产出清单（在 R1 产出之上增量）
+
+| 路径 | 变更 |
+| --- | --- |
+| `contracts/control-identity.schema.json` | 新增 `entityKey` / `controlKey` required 字段；保持 `additionalProperties:false` |
+| `contracts/control-identity.types.ts` | `ControlIdentity` 新增 `entityKey` / `controlKey`；`ControlIdRegistry.totals` 新增 `uniqueEntityKeys` / `uniqueControlKeys`；`NonInteractiveContainerEntry` 新增 `suspectedReasons` / `containsUnenumeratedSubcontrols` / `expectedSubcontrolType` / `pureContainer` |
+| `tools/interaction-inventory/interaction-inventory-lib.mjs` | 新增 `buildEntityKey` / `buildControlKey` / `assertEntityKeyNoCollision`；`buildControlIdForCandidate` 返回 `entityKey` / `controlKey`；`buildRegistryEntry` / `buildNonInteractiveContainers` / `buildFigmaCrosswalkPending` / `buildDomIdentityMap` / `buildScreenGraphBindingArtifacts` 全部携带新字段；`validateControlIdRegistry` 新增模式校验、required 校验、不变式 `uniqueEntityKeys <= uniqueControlKeys <= uniqueControlIds` 校验 |
+| `tools/interaction-inventory/codegen-control-ids.mjs` | 新增导出 `ENTITY_KEY_LOOKUP` / `ENTITY_KEY_SET` / `CONTROL_KEY_LOOKUP` / `CONTROL_KEY_SET` / `CONTROL_ID_REGISTRY_UNIQUE_ENTITY_KEYS` / `CONTROL_ID_REGISTRY_UNIQUE_CONTROL_KEYS` / `getEntriesByEntityKey` / `isKnownEntityKey` / `getEntriesByControlKey` / `isKnownControlKey`；所有产物 entry 含 `entityKey` / `controlKey` |
+| `tools/interaction-inventory/generated/*.json` 与 `*.generated.ts` | 重新生成；3,752 entries，414 unique entityKeys，2,114 unique controlKeys，3,752 unique controlIds |
+| `tools/interaction-inventory/generated/nonInteractiveContainers.json` | 63 entries：46 containsUnenumeratedSubcontrols + 17 pureContainer |
+| `tools/interaction-inventory/tests/control-identity-drift.test.mjs` | 新增 9 项 R1.1 drift test（见 §10） |
+| `src/control-identity/dom-identity.ts` | 新增 `DATA_ENTITY_KEY_ATTRIBUTE` / `DATA_CONTROL_KEY_ATTRIBUTE` 常量；新增 `setDataEntityKey` / `getDataEntityKey` / `setDataControlKey` / `getDataControlKey` / `querySelectorForEntityKey` / `querySelectorForControlKey` / `resolveAllByEntityKey` / `resolveAllByControlKey` |
+| `src/control-identity/control-id-resolver.ts` | `ControlIdResolverEntry` 新增 `entityKey` / `controlKey` 字段；`ControlIdResolver` 新增 `resolveByEntityKey` / `resolveByControlKey` / `resolveByControlKeyAndViewport`；`createControlIdResolver` 校验 `(controlKey, viewport)` 唯一性；新增 `queryElementsByEntityKey` / `queryElementsByControlKey` |
+| `src/control-identity/index.ts` | 导出全部 R1.1 API |
+
 
 ## 1. 完成层级与原始证据
 
@@ -292,3 +372,81 @@ cd tools/interaction-inventory && node --test tests/*.test.mjs
 ```
 
 所有产出在相同输入下产生相同字节；`generatedAt` 字段固定为 A2 baseline `2026-07-19T00:00:00.000Z` 以保证可重算。R1 修复不改变 `generatedAt`，只改变 entry 结构与分母分布。
+
+
+## 10. R1.1 退出条件验证（在 R1 §8 之上增量）
+
+| 退出条件 | 状态 | 证据 |
+| --- | --- | --- |
+| entityKey 不依赖 DOM occurrence 因素（selector / label / variantId / domTag / candidateKey / DOM order） | 通过 | drift test "R1.1 entityKey does NOT depend on selector / label / variantId / domTag / DOM order" pass |
+| controlKey 不依赖 viewport（Phone / Compact / Tablet / Fold 共享） | 通过 | drift test "R1.1 controlKey does NOT depend on viewport" pass |
+| controlKey 不含 ordinal、不含 viewport 原子 | 通过 | drift test "R1.1 buildControlKey is a pure function of (entityKey, route, state)" pass |
+| 同 entityKey 在同 (route, state) 的多个 DOM occurrence 共享 controlKey | 通过 | drift test "R1.1 controlKey groups multiple DOM occurrences of the same entity in (route, state)" pass |
+| entityKey 碰撞 fail-closed（不同签名映射到同 entityKey 必须抛错） | 通过 | drift test "R1.1 entityKey collision is fail-closed" pass |
+| 真实 IC0 inventory 零 entityKey 碰撞 | 通过 | drift test "R1.1 assertEntityKeyNoCollision passes on the real IC0 inventory" pass |
+| Schema 合法（ajv 真实校验，全 3,752 entries 含 entityKey / controlKey 通过） | 通过 | drift test "R1.1 registry entries carry entityKey and controlKey on every entry" pass；drift test "R1.1 schema requires entityKey and controlKey (ajv real validation)" pass |
+| Schema 负向（entityKey / controlKey pattern 不匹配、required 缺失均拒绝） | 通过 | drift test "R1.1 schema rejects malformed entityKey / controlKey patterns" pass |
+| 分母可解释（uniqueEntityKeys < uniqueControlKeys < uniqueControlIds） | 通过 | drift test "R1.1 totals carry uniqueEntityKeys and uniqueControlKeys with monotonic invariant" pass；实测 414 < 2,114 < 3,752 |
+| 46 个设置行子控件标记（containsUnenumeratedSubcontrols=true，含 expectedSubcontrolType） | 通过 | drift test "R1.1 nonInteractiveContainers marks 46 settings rows with un-enumerated subcontrols" pass；实测分布 switch 28 / select 15 / stepper 2 / segment 1 |
+| 17 个 pureContainer 标记 | 通过 | drift test "R1.1 nonInteractiveContainers marks 46 settings rows" 中包含 17 pureContainer 断言 pass |
+| DOM identity map / ScreenGraph binding / Figma crosswalk 全部携带 entityKey + controlKey | 通过 | drift test "R1.1 DOM identity map and ScreenGraph binding carry entityKey + controlKey on every entry" pass |
+| 逻辑身份可重算（entityKey + controlKey + controlId 三层均字节稳定） | 通过 | drift test "R1.1 logical identity is reproducible from the same inventory input" pass |
+| 字节稳定（生成器 `--check` 通过） | 通过 | `generate-control-ids.mjs --check` pass；`codegen-control-ids.mjs --check` pass |
+| 无伪造 Figma join | 通过 | 3,752 / 3,752 entries `figmaJoinStatus="pending-figma-join"`（与 R1 一致） |
+| drift test 全过（R1 25 项 + R1.1 9 项 = 34 项） | 通过 | 34 / 34 pass |
+
+## 11. R1.1 三层身份数据快照
+
+| 度量 | 当前值 | 来源 |
+| --- | ---: | --- |
+| 唯一 entityKey（逻辑控件实体） | 414 | `tools/interaction-inventory/generated/control-id-registry.json` `totals.uniqueEntityKeys` |
+| 唯一 controlKey（route/state 出现） | 2,114 | 同上 `totals.uniqueControlKeys` |
+| 唯一 controlId（DOM occurrence 追踪 ID） | 3,752 | 同上 `totals.uniqueControlIds` |
+| containsUnenumeratedSubcontrols（设置行） | 46 | `nonInteractiveContainers.json` |
+| pureContainer（纯 ARIA section） | 17 | 同上 |
+| 非交互容器总数 | 63 | 同上（46 + 17 = 63，与 IC0 suspectedNonSemanticControls 一致） |
+| IC0 候选总数 | 3,815 | `docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json`（3,752 + 63） |
+
+### 11.1 不变式
+
+```
+uniqueEntityKeys (414) <= uniqueControlKeys (2,114) <= uniqueControlIds (3,752) <= IC0 (3,815)
+
+3,815 IC0 = 3,752 canonical registry + 63 nonInteractiveContainers
+          = 3,752 DOM occurrence + 46 设置行 + 17 纯 section
+
+414 entityKey 折叠维度：domain × family × role × semantic-intent
+2,114 controlKey 折叠维度：entityKey × route × state（不含 viewport、不含 ordinal）
+3,752 controlId 折叠维度：domain × family × route × state × role × discriminator+hash8
+```
+
+## 12. R1.1 后续工作包消费指南（在 R1 §9 之上增量）
+
+### R2.0（canonical renderer 接入三层身份）
+
+1. 在每个 interactive control 的根 element 上同时调用：
+   - `setDataEntityKey(element, entityKey)` — 逻辑实体（跨 route/state/viewport 共享）
+   - `setDataControlKey(element, controlKey)` — route/state 出现（跨 viewport 共享）
+   - `setDataControlId(element, controlId)` — DOM occurrence 追踪 ID（保留 R1 语义）
+   - `setDataViewport(element, viewport)` — 实例视口
+2. 从 `tools/interaction-inventory/generated/control-identity.generated.ts` 导入：
+   - `ENTITY_KEY_LOOKUP` / `ENTITY_KEY_SET` / `getEntriesByEntityKey` / `isKnownEntityKey`
+   - `CONTROL_KEY_LOOKUP` / `CONTROL_KEY_SET` / `getEntriesByControlKey` / `isKnownControlKey`
+   - 保留 R1 的 `CONTROL_ID_LOOKUP` / `CONTROL_ID_SET` / `getControlIdEntry` / `isKnownControlId`
+3. 枚举 46 个设置行（`containsUnenumeratedSubcontrols=true`）的运行时子控件：
+   - 为每个子控件分配独立 `entityKey`（例如 `settings.switch.switch.toggle.<settings-key>`）。
+   - 写入 `tools/interaction-inventory/generated/control-id-registry.json`。
+   - 把对应 `nonInteractiveContainers` 条目升级为 `pureContainer=true` 或完全移除。
+4. 测试中：
+   - 跨 route/state/viewport 共享身份的断言用 `resolveByEntityKey(entityKey)`。
+   - 单一 (route, state) 内跨 viewport 共享身份的断言用 `resolveByControlKey(controlKey)`。
+   - 单一 DOM occurrence 追踪用 `resolveByControlId(controlId)`。
+
+### Reader-UI owner（46 设置行子控件枚举）
+
+R1.1 把 46 个 `group` 标记为 `containsUnenumeratedSubcontrols=true` 但**未**枚举其运行时子控件。owner 需：
+
+1. 在 IC0 audit 的 DOM walk 中加入运行时渲染的 Switch / Select / SegmentedControl / Stepper 探测。
+2. 为每个子控件分配 `entityKey` / `controlKey` / `controlId`。
+3. 把这些子控件从 `nonInteractiveContainers.json` 移到 `control-id-registry.json`。
+4. 重新运行 `generate-control-ids.mjs --write` + `codegen-control-ids.mjs --write`。

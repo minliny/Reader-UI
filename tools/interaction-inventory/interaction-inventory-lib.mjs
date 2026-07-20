@@ -1191,6 +1191,88 @@ export function deriveSemanticSlug(control) {
   return null;
 }
 
+
+// ===========================================================================
+// R1.1 · Three-layer identity model
+//   entityKey  = {domain}.{family}.{role}[.semantic-intent]   (logical entity)
+//   controlKey = {entityKey}@{route}.{state}                    (route/state occurrence)
+//   controlId  = DOM occurrence tracking id (retained from R1; NOT logical identity)
+//
+// entityKey MUST NOT depend on selector / label / variantId / domTag / viewport
+// / DOM order / candidateKey. It is computed ONLY from:
+//   - domain (runtimeFamily)
+//   - family (derived from domTag + role)
+//   - role (ARIA role or tag-derived role)
+//   - semantic-intent (stable slug from CONTROL_ID_PRIORITY_DATA_ATTRIBUTES)
+//
+// controlKey is shared across multiple DOM occurrences of the same logical
+// control in the same (route, state). When the same entityKey legitimately
+// appears on N candidates in the same (route, state), all N candidates share
+// one controlKey; per-occurrence disambiguation lives in `controlId`.
+//
+// Collisions are fail-closed:
+//   - entityKey collision between two controls with different
+//     (domain, family, role, semantic-intent) inputs => throw (logic bug).
+//   - controlKey collision between two candidates with different entityKeys
+//     => impossible by construction (entityKey is part of controlKey), so
+//     no runtime check is needed; the invariant is documented here.
+// ===========================================================================
+
+/**
+ * R1.1: Build the logical entity key. Depends ONLY on domain / family / role /
+ * semantic-intent. Never on selector / label / variantId / domTag / viewport /
+ * DOM order / candidateKey.
+ */
+export function buildEntityKey(control) {
+  const domain = control.runtimeFamily;
+  const family = deriveControlFamily(control);
+  const role = deriveControlRole(control);
+  const semanticIntent = deriveSemanticSlug(control);
+  const atoms = [domain, family, role];
+  if (semanticIntent && semanticIntent.length > 0) atoms.push(semanticIntent);
+  return atoms.join(".");
+}
+
+/**
+ * R1.1: Build the route/state occurrence key. Format: {entityKey}@{route}.{state}.
+ * Multiple DOM occurrences of the same logical control in the same (route,
+ * state) SHARE the same controlKey; per-occurrence disambiguation is the
+ * responsibility of `controlId`.
+ */
+export function buildControlKey(entityKey, route, state) {
+  const safeRoute = kebabCaseAtom(route);
+  const safeState = kebabCaseAtom(state) || "default";
+  return `${entityKey}@${safeRoute}.${safeState}`;
+}
+
+/**
+ * R1.1: Verify entityKey uniqueness invariant. Two controls with different
+ * (domain, family, role, semantic-intent) inputs must NEVER produce the same
+ * entityKey. This is a fail-closed check; a violation indicates a logic bug
+ * in buildEntityKey.
+ */
+export function assertEntityKeyNoCollision(candidateControls) {
+  const byEntityKey = new Map();
+  for (const control of candidateControls) {
+    const entityKey = buildEntityKey(control);
+    const signature = JSON.stringify({
+      domain: control.runtimeFamily,
+      family: deriveControlFamily(control),
+      role: deriveControlRole(control),
+      semanticIntent: deriveSemanticSlug(control) || null,
+    });
+    if (!byEntityKey.has(entityKey)) {
+      byEntityKey.set(entityKey, signature);
+    } else if (byEntityKey.get(entityKey) !== signature) {
+      throw new Error(
+        `R1.1 entityKey collision: ${entityKey} maps to two different signatures: `
+        + `${byEntityKey.get(entityKey)} vs ${signature}`,
+      );
+    }
+  }
+  return true;
+}
+
 function controlHashInputs(control) {
   return JSON.stringify({
     routeId: control.routeId,
@@ -1219,15 +1301,26 @@ export function buildControlIdForCandidate(control, viewport = "phone") {
   const route = kebabCaseAtom(control.routeId);
   const state = kebabCaseAtom(control.pageState) || "default";
   const role = deriveControlRole(control);
-  // R1: controlId is the logical identity and does NOT include viewport.
-  // Phone/Compact/Tablet/Fold share the same logical id; viewport is carried
-  // by the separate `viewport` field on the registry entry.
+  // R1.1: controlId is the DOM occurrence tracking id (retained from R1).
+  // It still carries route/state/role/discriminator+hash for audit
+  // reproducibility and DOM tracking, but it is NO LONGER the logical
+  // identity. The logical identity lives in entityKey / controlKey.
   const base = `${domain}.${family}.${route}.${state}.${role}`;
   const slug = deriveSemanticSlug(control);
   const hash = shortHash(controlHashInputs(control));
   const discriminator = slug ? `${slug}-h-${hash}` : `h-${hash}`;
+  // R1.1: entityKey is the logical entity (cross route/state/viewport).
+  // controlKey is the route/state occurrence (cross viewport). When the
+  // same entityKey appears multiple times in the same (route, state), the
+  // ordinal discriminator is assigned by `assignControlKeys` (caller-side).
+  // Here we return ordinal=0; callers that need ordinals must use
+  // assignControlKeys instead.
+  const entityKey = buildEntityKey(control);
+  const controlKey = buildControlKey(entityKey, route, state);
   return {
     controlId: `${base}.${discriminator}`,
+    entityKey,
+    controlKey,
     domain,
     family,
     route,
@@ -1378,12 +1471,19 @@ function classifyMapping(control, binding) {
 function buildRegistryEntry(control, viewport, binding) {
   const idParts = buildControlIdForCandidate(control, viewport);
   const { mappingStatus, mappingNotes } = classifyMapping(control, binding);
+  // R1.1: controlKey is shared across DOM occurrences of the same logical
+  // control in the same (route, state). No override needed.
+  const controlKey = idParts.controlKey;
   // R1: per-entry `firstMaterializedAt` and `schemaVersion` are removed.
   // `schemaVersion` lives on the registry top-level; `firstMaterializedAt`
   // was a fixed timestamp with no drift value. additionalProperties:false
   // in the schema now strictly enforces the entry shape.
+  // R1.1: entry now carries entityKey + controlKey as logical identity;
+  // controlId is retained as the DOM occurrence tracking id.
   return {
     controlId: idParts.controlId,
+    entityKey: idParts.entityKey,
+    controlKey,
     domain: idParts.domain,
     family: idParts.family,
     route: idParts.route,
@@ -1442,6 +1542,11 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     }
   }
 
+  // R1.1: fail-closed entityKey collision check. Two controls with different
+  // (domain, family, role, semantic-intent) inputs must NEVER produce the
+  // same entityKey. This is a logic invariant; throw on violation.
+  assertEntityKeyNoCollision(candidates);
+
   const entries = [];
   for (const control of candidates) {
     const binding = bindControlToScreenGraph(control, screenGraphIndex);
@@ -1457,6 +1562,15 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     controlIdSet.add(entry.controlId);
   }
 
+  // R1.1: controlKey is shared across multiple DOM occurrences of the same
+  // logical control in the same (route, state). Sharing is BY DESIGN and
+  // NOT a collision. uniqueControlKeys is therefore <= uniqueControlIds.
+  // The fail-closed collision check at entityKey level (above) guarantees
+  // that two different logical entities never share an entityKey, which
+  // transitively guarantees they never share a controlKey either.
+  const controlKeySet = new Set(entries.map((e) => e.controlKey));
+  const entityKeySet = new Set(entries.map((e) => e.entityKey));
+
   const totals = {
     candidates: entries.length,
     semanticControls: entries.filter((e) => e.source.semanticStatus === "semantic-control").length,
@@ -1465,6 +1579,8 @@ export function buildControlIdRegistry({ viewport = "phone" } = {}) {
     needsManualMapping: entries.filter((e) => e.mappingStatus === "needs-manual-mapping").length,
     ambiguousNeedsReview: entries.filter((e) => e.mappingStatus === "ambiguous-needs-review").length,
     uniqueControlIds: controlIdSet.size,
+    uniqueEntityKeys: entityKeySet.size,
+    uniqueControlKeys: controlKeySet.size,
     pendingFigmaJoin: entries.filter((e) => e.figmaJoinStatus === "pending-figma-join").length,
     nonInteractiveContainers: excludedContainers.length,
   };
@@ -1504,7 +1620,24 @@ export function buildNonInteractiveContainers({ viewport = "phone" } = {}) {
   for (const control of allCandidates) {
     const role = deriveControlRole(control);
     if (!NON_INTERACTIVE_ARIA_CONTAINER_ROLES.has(role)) continue;
-    entries.push({
+    // R1.1: capture suspectedReasons so we can derive settings-row markers.
+    const suspectedReasons = Array.isArray(control.suspectedReasons)
+      ? [...control.suspectedReasons].sort()
+      : [];
+    // R1.1: settings row carries un-enumerated interactive sub-controls.
+    // Detect via fd-setting-row + is-switch / is-select / is-segment / is-stepper
+    // class hint in suspectedReasons (set by suspectedNonSemanticReasons).
+    const settingsClassMatch = suspectedReasons
+      .map((r) => r.match(/^settings-control-class:(is-(?:switch|select|segment|stepper))$/))
+      .filter(Boolean);
+    const containsUnenumeratedSubcontrols = settingsClassMatch.length > 0;
+    const expectedSubcontrolType = containsUnenumeratedSubcontrols
+      ? settingsClassMatch[0][1].replace("is-", "")
+      : undefined;
+    // R1.1: section containers are pure state containers (loading / error /
+    // offline overlays) with no embedded interactive sub-controls.
+    const pureContainer = role === "section";
+    const entry = {
       candidateKey: control.candidateKey,
       selectorSha256: selectorSha256(control),
       routeId: control.routeId,
@@ -1515,7 +1648,16 @@ export function buildNonInteractiveContainers({ viewport = "phone" } = {}) {
       label: control.label || null,
       dataAttributes: control.dataAttributes || {},
       exclusionReason: "aria-container-role",
-    });
+      suspectedReasons,
+    };
+    if (containsUnenumeratedSubcontrols) {
+      entry.containsUnenumeratedSubcontrols = true;
+      entry.expectedSubcontrolType = expectedSubcontrolType;
+    }
+    if (pureContainer) {
+      entry.pureContainer = true;
+    }
+    entries.push(entry);
   }
 
   entries.sort((a, b) => {
@@ -1552,6 +1694,11 @@ export function buildScreenGraphBindingArtifacts() {
   const registry = buildControlIdRegistry();
   const index = buildScreenGraphBindingIndex();
   const entries = registry.entries.map((entry) => ({
+    // R1.1: include logical identity (entityKey, controlKey) alongside the
+    // DOM occurrence tracking id (controlId). ScreenGraph binding is keyed
+    // by the logical entity, not by the DOM occurrence.
+    entityKey: entry.entityKey,
+    controlKey: entry.controlKey,
     controlId: entry.controlId,
     candidateKey: entry.source.candidateKey,
     routeId: entry.route,
@@ -1588,9 +1735,12 @@ export function buildFigmaCrosswalkPending() {
     schemaVersion: CONTROL_ID_SCHEMA_VERSION,
     generatedAt: registry.generatedAt,
     generatedFrom: registry.generatedFrom,
-    note: "Figma does not currently expose a canonical join key. All entries are pending-figma-join; figmaNodeCandidate fields must be backfilled by a Figma writer with explicit node-id mapping. R1 does not forge Figma bindings. controlId is the logical identity (no viewport atom).",
+    note: "Figma does not currently expose a canonical join key. All entries are pending-figma-join; figmaNodeCandidate fields must be backfilled by a Figma writer with explicit node-id mapping. R1.1 does not forge Figma bindings. entityKey is the logical entity (cross route/state/viewport); controlKey is the route/state occurrence (cross viewport); controlId is the DOM occurrence tracking id (retained from R1 for audit reproducibility).",
     totalPending: registry.entries.length,
     entries: registry.entries.map((entry) => ({
+      // R1.1: logical identity first (entityKey, controlKey), then DOM tracking.
+      entityKey: entry.entityKey,
+      controlKey: entry.controlKey,
       controlId: entry.controlId,
       candidateKey: entry.source.candidateKey,
       routeId: entry.route,
@@ -1619,6 +1769,13 @@ export function buildDomIdentityMap({ viewport = "phone" } = {}) {
   const entries = registry.entries.map((entry) => {
     const selector = selectorByCandidateKey.get(entry.source.candidateKey) || "";
     return {
+      // R1.1: logical identity fields (entityKey, controlKey) plus DOM
+      // occurrence tracking (controlId / dataControlId). The DOM identity
+      // map still stamps data-control-id for backward compatibility with R1
+      // page renderers; R2 renderers will also stamp data-entity-key and
+      // data-control-key via dom-identity.ts.
+      entityKey: entry.entityKey,
+      controlKey: entry.controlKey,
       controlId: entry.controlId,
       domSelector: selector,
       selectorSha256: entry.source.selectorSha256,
@@ -1752,11 +1909,30 @@ export function validateControlIdRegistry(registry) {
     errors.push(`per-entry schemaVersion must be removed: ${staleSchemaVersion.length} entries still carry it`);
   }
 
+  // R1.1: controlKey sharing is allowed (multiple DOM occurrences of the
+  // same logical control in the same (route, state) share one controlKey).
+  // No duplicate-controlKey error is raised here. The entityKey collision
+  // invariant (different signatures => different entityKeys) is enforced at
+  // generation time and is the sole fail-closed identity check.
+
+  // R1.1: entityKey pattern sanity (3-4 atoms, kebab-case).
+  const entityKeyPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*(?:\.[a-z0-9]+(?:-[a-z0-9]+)*)*$/;
+  const controlKeyPattern = /^[^@]+@[a-z0-9]+(?:-[a-z0-9]+)*\.[a-z0-9]+(?:-[a-z0-9]+)*$/;
+  for (const entry of registry.entries) {
+    if (!entityKeyPattern.test(entry.entityKey || "")) {
+      errors.push(`entry ${entry.controlId || "(unknown)"} has invalid entityKey: ${entry.entityKey}`);
+    }
+    if (!controlKeyPattern.test(entry.controlKey || "")) {
+      errors.push(`entry ${entry.controlId || "(unknown)"} has invalid controlKey: ${entry.controlKey}`);
+    }
+  }
+
   // Schema shape sanity
   const requiredFields = [
-    "controlId", "domain", "family", "route", "state", "viewport", "role",
-    "discriminator", "source", "mappingStatus", "screenGraphBinding",
-    "figmaNodeCandidate", "figmaJoinStatus", "nonInteractiveContainer",
+    "controlId", "entityKey", "controlKey", "domain", "family", "route",
+    "state", "viewport", "role", "discriminator", "source", "mappingStatus",
+    "screenGraphBinding", "figmaNodeCandidate", "figmaJoinStatus",
+    "nonInteractiveContainer",
   ];
   for (const entry of registry.entries) {
     for (const field of requiredFields) {
@@ -1764,6 +1940,23 @@ export function validateControlIdRegistry(registry) {
         errors.push(`entry ${entry.controlId || "(unknown)"} missing field: ${field}`);
       }
     }
+  }
+
+  // R1.1: totals consistency — unique entityKey < unique controlKey < unique controlId.
+  const uniqEntity = new Set(registry.entries.map((e) => e.entityKey)).size;
+  const uniqControl = new Set(registry.entries.map((e) => e.controlKey)).size;
+  const uniqControlId = new Set(registry.entries.map((e) => e.controlId)).size;
+  if (registry.totals.uniqueEntityKeys !== uniqEntity) {
+    errors.push(`uniqueEntityKeys totals mismatch: ${registry.totals.uniqueEntityKeys} vs recomputed ${uniqEntity}`);
+  }
+  if (registry.totals.uniqueControlKeys !== uniqControl) {
+    errors.push(`uniqueControlKeys totals mismatch: ${registry.totals.uniqueControlKeys} vs recomputed ${uniqControl}`);
+  }
+  if (uniqEntity > uniqControl) {
+    errors.push(`R1.1 invariant violated: uniqueEntityKeys(${uniqEntity}) > uniqueControlKeys(${uniqControl})`);
+  }
+  if (uniqControl > uniqControlId) {
+    errors.push(`R1.1 invariant violated: uniqueControlKeys(${uniqControl}) > uniqueControlIds(${uniqControlId})`);
   }
 
   return {
