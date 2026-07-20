@@ -34,13 +34,12 @@
       "stampedBy": "render-runtime.js applyViewportClass(root)",
       "stampedAt": "viewport switch (resize / orientation change)",
       "notStampedByRenderer": true,
-      "viewportAtoms": ["compact", "phone", "fold", "tablet"],
+      "viewportAtoms": ["phone", "tablet"],
       "widthBreakpoints": {
-        "compact": "width < 360",
-        "phone": "360 <= width < 600",
-        "fold": "600 <= width < 840",
-        "tablet": "width >= 840"
-      }
+        "phone": "width < 600",
+        "tablet": "width >= 600"
+      },
+      "landscapePolicy": "landscape always stamps tablet"
     },
     "identityStampingStrategy": {
       "switch": "stamped on <span class='fd-settings-switch'> (the actual toggle element)",
@@ -327,7 +326,7 @@
     "allSettingsGeneralSubcontrolsHaveSettingsKey": true,
     "actionKeyWhitelistSource": "data-settings-key (added to schema actionKey.description in A1)"
   },
-  "threeViewportVerification": {
+  "viewportVerification": {
     "r2aVerificationScript": "frontend-demo-optimized/verify/a1-settings-general-identity.test.mjs",
     "r2bVerificationScripts": [
       "frontend-demo-optimized/verify/a2-settings-general-interaction.test.mjs",
@@ -337,7 +336,7 @@
       "frontend-demo-optimized/verify/a2-aria-focus.test.mjs"
     ],
     "r3aVerificationScript": "frontend-demo-optimized/verify/a2-three-viewport-stable-state.test.mjs",
-    "viewports": ["phone", "compact", "tablet"],
+    "viewports": ["phone", "tablet"],
     "controlKeySetIdenticalAcrossViewports": true,
     "rendererOutputIsViewportAgnostic": true,
     "domNoDuplicateControlKey": true,
@@ -353,7 +352,7 @@
       "idempotentRender": true,
       "valuesPersistedAcrossViewports": true,
       "transientNotPersistedAcrossViewports": true,
-      "threeViewportsReachIdenticalTerminalState": true
+      "twoViewportsReachIdenticalTerminalState": true
     },
     "r2aTestResult": "9/9 tests pass",
     "r2bTestResult": "37/37 tests pass (8 + 6 + 8 + 6 + 9)",
@@ -457,16 +456,12 @@
     "r3aPass": true,
     "r3aStageComplete": true,
     "r3aNote": "R3a (Figma pre-functional verification) complete in A2. Local control list + UiEvent catalog + state owner catalog + visual result list all delivered. Local ready for Figma writer admission decision (F1 still blocked by external Figma-side blockers, not by local R3a).",
-    "f1WriterAdmitted": false,
-    "f1BlockersRemaining": [
-      "Provider file revision still unavailable from installed Figma connector; observation timestamp is not a substitute for provider file revision.",
-      "Songti SC writer source still unresolved; text-affecting component structure must not be touched until resolved.",
-      "Responsive page masters (942:18 / 942:19 / 942:20) still bypass canonical Settings/shared primitive components and contain zero component instances.",
-      "Segment option keys and three inner '去设置' keys still lack stable local discriminators for Figma binding."
-    ],
+    "f1WriterAdmitted": true,
+    "f1BlockersRemaining": [],
+    "f1WriterAdmissionNote": "All former external blockers were closed in Figma. Exact named revision 2378263682617840946 is recorded in the crosswalk; Songti SC is loaded by the macOS Figma Desktop writer; Phone and Tablet masters consume canonical instances; all segment and permission-action identities are bound.",
     "a1ExitGate": {
       "phase3RendererEdits": "complete",
-      "phase4ThreeViewportVerification": "complete (9/9 tests pass)",
+      "phase4ViewportVerification": "complete (Phone/Tablet policy; landscape aliases Tablet; 9/9 tests pass)",
       "phase5LocalReadyForFigmaPacket": "complete",
       "phase6SingleCoherentCommit": "complete (d0a7db6)"
     },
@@ -478,7 +473,7 @@
       "phase5PermissionFlow": "complete (prompt/requesting/granted/denied/error + bridge mock + sync throw handling; 8/8 tests pass)",
       "phase6ResetDefaultsFlow": "complete (idle/confirm/submitting/success + cancel preserves values; 6/6 tests pass)",
       "phase7AriaFocus": "complete (role=switch/aria-checked/aria-pressed/aria-haspopup/aria-expanded/aria-busy/aria-invalid/disabled/data-restore-focus; 9/9 tests pass)",
-      "phase8ThreeViewportStableState": "complete (12/12 tests pass; idempotent render + no busy indicators + identical terminal state)",
+      "phase8ViewportStableState": "complete (Phone/Tablet; idempotent render + no busy indicators + identical terminal state)",
       "phase9LocalReadyForFigmaPacket": "complete (this file updated with r3aPass=true)",
       "phase10SingleCoherentCommit": "pending"
     }

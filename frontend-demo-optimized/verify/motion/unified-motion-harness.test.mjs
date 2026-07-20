@@ -40,7 +40,7 @@ test("unified harness registers the exact ten Motion Reference families", () => 
   for (const family of families) {
     assert.ok(window.ReaderMotionContractRegistry.specFor(family.primaryId), family.primaryId);
     assert.ok(window.ReaderMotionContractRegistry.specFor(family.oppositeId), family.oppositeId);
-    assert.deepEqual(JSON.parse(JSON.stringify(family.viewports)), ["phone", "compact", "tablet"]);
+    assert.deepEqual(JSON.parse(JSON.stringify(family.viewports)), ["phone", "tablet"]);
   }
 });
 

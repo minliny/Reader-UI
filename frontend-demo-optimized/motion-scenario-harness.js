@@ -9,7 +9,7 @@
       primaryId: "app.route.push.forward",
       oppositeId: "app.route.pop.backward",
       request: Object.freeze({ operation: "push", containerRole: "appShell" }),
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -24,7 +24,7 @@
         sourceRole: "bookCover",
         targetRole: "readerSurface"
       }),
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -32,7 +32,7 @@
       label: "Page Turn / Chapter Jump",
       primaryId: "reader.page.turn.next-prev",
       oppositeId: "reader.chapter.jump",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -40,7 +40,7 @@
       label: "Reader Control / Module",
       primaryId: "reader.control.show",
       oppositeId: "reader.control.hide",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -48,7 +48,7 @@
       label: "Handle / Dock / Slider",
       primaryId: "slider.drag.update",
       oppositeId: "slider.drag.release",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -56,7 +56,7 @@
       label: "Session Capsule",
       primaryId: "reader.session.capsule.enter",
       oppositeId: "reader.session.capsule.exit",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -64,7 +64,7 @@
       label: "Capsule Anchor Morph (reserved)",
       primaryId: "reader.session.controlSpace.enter",
       oppositeId: "reader.session.controlSpace.exit",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: false
     }),
     Object.freeze({
@@ -72,7 +72,7 @@
       label: "TTS / Auto-page Local State",
       primaryId: "reader.session.tts.start",
       oppositeId: "reader.session.autoPage.start",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -80,7 +80,7 @@
       label: "Edge Tools / Overlay / Source Switch",
       primaryId: "overlay.sheet.enter",
       oppositeId: "overlay.sheet.exit",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     }),
     Object.freeze({
@@ -88,7 +88,7 @@
       label: "Orientation / Interrupt",
       primaryId: "viewport.orientation.reshape",
       oppositeId: "motion.interrupt.redirect",
-      viewports: Object.freeze(["phone", "compact", "tablet"]),
+      viewports: Object.freeze(["phone", "tablet"]),
       production: true
     })
   ]);

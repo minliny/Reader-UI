@@ -1,15 +1,15 @@
-// A2 (R2b + R3a) · Phase 8: Phone/Compact/Tablet 三视口实际操作 + 稳定终态验证
+// A2 (R2b + R3a) · Phase 8: Phone/Tablet 两视口实际操作 + 稳定终态验证
 // -----------------------------------------------------------------------------
 // 验证 settings-general 路由在三个视口下的实际操作和稳定终态：
 //   - 三个视口的渲染输出（控件身份 + ARIA + 状态 owner 派生）完全一致
 //   - 每种操作流（switch / select / segment / cache clear / permission / reset defaults）
 //     在完成后都达到稳定终态：无 aria-busy、无 is-busy/is-loading class、无"…中"文本
 //   - 幂等渲染：不 dispatch 时多次 render() 输出完全一致
-//   - 三视口在完成所有操作后，state owner 终态一致（values 已持久化、transient 已清空）
+//   - 两视口在完成所有操作后，state owner 终态一致（values 已持久化、transient 已清空）
 //
-// 三视口的实现方式：renderer 本身是 viewport-agnostic（不根据 viewport 分支），
+// 两视口的实现方式：renderer 本身是 viewport-agnostic（不根据 viewport 分支），
 // 视口差异完全由外层 .fd-demo[data-viewport-class] CSS 控制。因此本测试通过在
-// 三个独立 sandbox 中分别模拟 phone/compact/tablet 三个 demo-mode 包装来验证。
+// 两个独立 sandbox 中分别模拟 phone/tablet 两个 demo-mode 包装来验证。
 // -----------------------------------------------------------------------------
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -28,7 +28,6 @@ const d2SettingsSource = readFileSync(join(demoRoot, "renderers/d2-settings-sync
 
 const VIEWPORTS = [
   { name: "phone",   viewportClass: "phone-portrait",     sizeHint: "390x844"  },
-  { name: "compact", viewportClass: "compact-landscape",  sizeHint: "844x390"  },
   { name: "tablet",  viewportClass: "tablet-portrait",    sizeHint: "760x960"  },
 ];
 
@@ -48,9 +47,9 @@ function freshSandbox(bridgeImpl) {
   return ctx.window.ReaderD2SettingsSyncRenderers;
 }
 
-// 模拟三视口包装：在外层包一层 div 带 data-viewport-class
+// 模拟两视口包装：在外层包一层 div 带 data-viewport-class
 // 由于 renderer 本身不感知 viewport，这层包装不影响内层 HTML，
-// 但能验证三视口下渲染输出的一致性。
+// 但能验证两视口下渲染输出的一致性。
 function renderInViewport(r, viewportClass) {
   const inner = r.globalSettingsV2({}, "settings-general", {});
   return `<div class="fd-demo" data-demo-mode="regular" data-viewport-class="${viewportClass}">${inner}</div>`;
@@ -61,9 +60,9 @@ function render(r) {
 }
 
 // =============================================================================
-// 1. 三视口渲染输出完全一致（控件身份 + ARIA + 状态派生）
+// 1. 两视口渲染输出完全一致（控件身份 + ARIA + 状态派生）
 // =============================================================================
-test("A2 Phase 8: three-viewport render output is identical (control identity + ARIA + state)", () => {
+test("A2 Phase 8: two-viewport render output is identical (control identity + ARIA + state)", () => {
   const outputs = VIEWPORTS.map(function (vp) {
     const r = freshSandbox();
     return renderInViewport(r, vp.viewportClass);
@@ -75,10 +74,9 @@ test("A2 Phase 8: three-viewport render output is identical (control identity + 
     const m = html.match(/^<div class="fd-demo"[^>]*>([\s\S]*)<\/div>$/);
     return m ? m[1] : html;
   });
-  assert.equal(innerHtmls[0], innerHtmls[1], "phone == compact inner HTML");
-  assert.equal(innerHtmls[0], innerHtmls[2], "phone == tablet inner HTML");
+  assert.equal(innerHtmls[0], innerHtmls[1], "phone == tablet inner HTML");
 
-  // 10 个 subcontrol 的 control-key 都在三视口中存在
+  // 10 个 subcontrol 的 control-key 都在两视口中存在
   const expectedControlKeys = [
     "settings.button.button.segment-option-1.app-theme@settings-general.default",
     "settings.button.button.segment-option-2.app-theme@settings-general.default",
@@ -92,7 +90,7 @@ test("A2 Phase 8: three-viewport render output is identical (control identity + 
     "settings.switch.switch.crash-log@settings-general.default",
   ];
   for (const ck of expectedControlKeys) {
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < VIEWPORTS.length; i++) {
       const escaped = ck.replace(/\./g, "\\.");
       assert.ok(
         innerHtmls[i].includes(`data-control-key="${ck}"`),
@@ -105,7 +103,7 @@ test("A2 Phase 8: three-viewport render output is identical (control identity + 
 // =============================================================================
 // 2. switch 操作流稳定终态：toggle 后无 busy，多次 render 幂等
 // =============================================================================
-test("A2 Phase 8: switch toggle reaches stable terminal state across three viewports", () => {
+test("A2 Phase 8: switch toggle reaches stable terminal state across two viewports", () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -136,7 +134,7 @@ test("A2 Phase 8: switch toggle reaches stable terminal state across three viewp
 // =============================================================================
 // 3. select 操作流稳定终态
 // =============================================================================
-test("A2 Phase 8: select option reaches stable terminal state across three viewports", () => {
+test("A2 Phase 8: select option reaches stable terminal state across two viewports", () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -163,7 +161,7 @@ test("A2 Phase 8: select option reaches stable terminal state across three viewp
 // =============================================================================
 // 4. segment 操作流稳定终态
 // =============================================================================
-test("A2 Phase 8: segment option reaches stable terminal state across three viewports", () => {
+test("A2 Phase 8: segment option reaches stable terminal state across two viewports", () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -187,7 +185,7 @@ test("A2 Phase 8: segment option reaches stable terminal state across three view
 // =============================================================================
 // 5. cache clear 流程稳定终态：confirm → start → success，终态无 loading
 // =============================================================================
-test("A2 Phase 8: cache clear success reaches stable terminal state across three viewports", async () => {
+test("A2 Phase 8: cache clear success reaches stable terminal state across two viewports", async () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -219,7 +217,7 @@ test("A2 Phase 8: cache clear success reaches stable terminal state across three
 // =============================================================================
 // 6. cache clear failed 稳定终态：显示重试按钮，aria-invalid，无 busy
 // =============================================================================
-test("A2 Phase 8: cache clear failed reaches stable terminal state across three viewports", async () => {
+test("A2 Phase 8: cache clear failed reaches stable terminal state across two viewports", async () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -244,7 +242,7 @@ test("A2 Phase 8: cache clear failed reaches stable terminal state across three 
 // =============================================================================
 // 7. permission 流程稳定终态：granted 后 disabled，无 busy
 // =============================================================================
-test("A2 Phase 8: permission granted reaches stable terminal state across three viewports", async () => {
+test("A2 Phase 8: permission granted reaches stable terminal state across two viewports", async () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox(() => Promise.resolve("granted"));
     const sg = r.settingsGeneral;
@@ -275,7 +273,7 @@ test("A2 Phase 8: permission granted reaches stable terminal state across three 
 // =============================================================================
 // 8. permission denied 稳定终态：显示"去设置"，无 busy
 // =============================================================================
-test("A2 Phase 8: permission denied reaches stable terminal state across three viewports", async () => {
+test("A2 Phase 8: permission denied reaches stable terminal state across two viewports", async () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox(() => Promise.resolve("denied"));
     const sg = r.settingsGeneral;
@@ -298,7 +296,7 @@ test("A2 Phase 8: permission denied reaches stable terminal state across three v
 // =============================================================================
 // 9. reset defaults 流程稳定终态：values 全部回到默认，显示"已恢复"
 // =============================================================================
-test("A2 Phase 8: reset defaults reaches stable terminal state across three viewports", async () => {
+test("A2 Phase 8: reset defaults reaches stable terminal state across two viewports", async () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -342,7 +340,7 @@ test("A2 Phase 8: reset defaults reaches stable terminal state across three view
 // =============================================================================
 // 10. reset defaults cancel 保持当前值，无 busy
 // =============================================================================
-test("A2 Phase 8: reset defaults cancel preserves values across three viewports", () => {
+test("A2 Phase 8: reset defaults cancel preserves values across two viewports", () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox();
     const sg = r.settingsGeneral;
@@ -372,7 +370,7 @@ test("A2 Phase 8: reset defaults cancel preserves values across three viewports"
 // =============================================================================
 // 11. 完整用户旅程：toggle + select + cache clear + permission + reset，最终稳定
 // =============================================================================
-test("A2 Phase 8: full user journey reaches stable terminal state across three viewports", async () => {
+test("A2 Phase 8: full user journey reaches stable terminal state across two viewports", async () => {
   for (const vp of VIEWPORTS) {
     const r = freshSandbox(() => Promise.resolve("granted"));
     const sg = r.settingsGeneral;
@@ -432,9 +430,9 @@ test("A2 Phase 8: full user journey reaches stable terminal state across three v
 });
 
 // =============================================================================
-// 12. 三视口最终终态一致：相同操作序列 → 相同 state owner 终态
+// 12. 两视口最终终态一致：相同操作序列 → 相同 state owner 终态
 // =============================================================================
-test("A2 Phase 8: three viewports reach identical terminal state under same operation sequence", async () => {
+test("A2 Phase 8: two viewports reach identical terminal state under same operation sequence", async () => {
   const finalStates = [];
   for (const vp of VIEWPORTS) {
     const r = freshSandbox(() => Promise.resolve("granted"));
@@ -451,18 +449,15 @@ test("A2 Phase 8: three viewports reach identical terminal state under same oper
       cacheClear: {
         status: sg.getState().cacheClear.status,
         lastError: sg.getState().cacheClear.lastError,
-        // 忽略 lastClearedAt 时间戳（三视口执行时间不同）
+        // 忽略 lastClearedAt 时间戳（两视口执行时间不同）
       },
       permissions: JSON.parse(JSON.stringify(sg.getState().permissions)),
       resetDefaults: JSON.parse(JSON.stringify(sg.getState().resetDefaults)),
     });
   }
 
-  // 三个视口的终态完全一致
-  assert.deepEqual(finalStates[0].values, finalStates[1].values, "phone == compact final values");
-  assert.deepEqual(finalStates[0].values, finalStates[2].values, "phone == tablet final values");
-  assert.deepEqual(finalStates[0].cacheClear, finalStates[1].cacheClear, "phone == compact final cacheClear");
-  assert.deepEqual(finalStates[0].cacheClear, finalStates[2].cacheClear, "phone == tablet final cacheClear");
-  assert.deepEqual(finalStates[0].permissions, finalStates[1].permissions, "phone == compact final permissions");
-  assert.deepEqual(finalStates[0].permissions, finalStates[2].permissions, "phone == tablet final permissions");
+  // 两个视口的终态完全一致
+  assert.deepEqual(finalStates[0].values, finalStates[1].values, "phone == tablet final values");
+  assert.deepEqual(finalStates[0].cacheClear, finalStates[1].cacheClear, "phone == tablet final cacheClear");
+  assert.deepEqual(finalStates[0].permissions, finalStates[1].permissions, "phone == tablet final permissions");
 });

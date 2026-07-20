@@ -187,7 +187,9 @@
       Math.round((visualViewport && visualViewport.height) || window.innerHeight || document.documentElement.clientHeight || 0)
     );
     const orientation = width > height ? "landscape" : "portrait";
-    const widthClass = width < 360
+    const widthClass = orientation === "landscape"
+      ? "tablet"
+      : width < 360
       ? "compact"
       : width < 480
         ? "standard"
@@ -196,13 +198,15 @@
           : width < 840
             ? "expanded"
             : "tablet";
-    const heightClass = height < 520
+    const heightClass = orientation === "landscape"
+      ? "regular"
+      : height < 520
       ? "compact"
       : height < 720
         ? "short"
         : "regular";
-    const viewportClass = orientation === "landscape" && height < 520
-      ? "compact-landscape"
+    const viewportClass = orientation === "landscape"
+      ? "tablet-expanded"
       : width >= 840
         ? "tablet-expanded"
         : width >= 600
@@ -240,15 +244,14 @@
     root.style.setProperty("--fd-viewport-height", `${snapshot.height}px`);
     // A1 (R2a): stamp data-viewport onto every control element so the runtime
     // can resolve (controlKey, viewport) pairs. The viewport atom is derived
-    // from width breakpoints aligned with schema ControlViewport enum:
-    // compact / phone / fold / tablet.
-    const viewportAtom = snapshot.width < 360
-      ? "compact"
+    // from the canonical Figma viewport policy: phone / tablet.
+    // Landscape always resolves to tablet and never creates a third master;
+    // portrait canvases at 600px and above are tablet as well.
+    const viewportAtom = snapshot.orientation === "landscape"
+      ? "tablet"
       : snapshot.width < 600
         ? "phone"
-        : snapshot.width < 840
-          ? "fold"
-          : "tablet";
+        : "tablet";
     const controlElements = root.querySelectorAll("[data-control-key]");
     for (let i = 0; i < controlElements.length; i++) {
       controlElements[i].setAttribute("data-viewport", viewportAtom);
@@ -9500,7 +9503,7 @@
     });
   }
 
-  const movableDockViewportClasses = new Set(["expanded-width", "tablet-expanded", "compact-landscape"]);
+  const movableDockViewportClasses = new Set(["expanded-width", "tablet-expanded"]);
 
   function readerControlDockViewportClass(screenHost) {
     return screenHost?.closest?.(".fd-demo")?.getAttribute("data-viewport-class") || "";

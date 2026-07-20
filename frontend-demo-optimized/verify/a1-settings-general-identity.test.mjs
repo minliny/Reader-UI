@@ -1,8 +1,8 @@
-// A1 (R2a) · settings-general 试点 DOM identity 三视口验证
+// A1 (R2a) · settings-general 试点 DOM identity Phone/Tablet 验证
 // -----------------------------------------------------------------------------
 // 职责：验证 settings-general 路由下 renderer 原生输出的 5 个 data-* 属性
 //       (data-entity-key / data-control-key / data-control-id / data-ui-event /
-//        data-settings-key) 在 Phone / Compact / Tablet 三视口下：
+//        data-settings-key) 在 Phone / Tablet 两视口下：
 //         1. controlKey 集合一致（renderer 输出与视口无关）
 //         2. DOM 无重复 controlKey（每个 controlKey 出现次数与 declarations 一致）
 //         3. DOM 无 orphan（DOM 上每个 controlKey 都在 declarations 中）
@@ -11,10 +11,7 @@
 //         6. data-viewport 由 render-runtime.js 的 applyViewportClass 在
 //            viewport 切换时 stamp（renderer 不输出 data-viewport）
 //
-// 视口定义（与 render-runtime.js applyViewportClass 对齐）：
-//   compact : width < 360
-//   phone   : 360 <= width < 600
-//   tablet  : width >= 840
+// Figma 视口定义：Phone / Tablet；Landscape 直接归入 Tablet。
 //
 // 运行：node --test frontend-demo-optimized/verify/a1-settings-general-identity.test.mjs
 // -----------------------------------------------------------------------------
@@ -94,39 +91,32 @@ const sgSubcontrolDecls = declarations.filter(
 //     a3-action 由 a3-settings-general-action-identity.test.mjs 验证。
 const sgSubcontrolControlKeySet = new Set(sgSubcontrolDecls.map((d) => d.controlKey));
 
-// ---- 三视口渲染：renderer 输出与视口无关，三次渲染应得到完全相同的 HTML ----
+// ---- 两视口渲染：renderer 输出与视口无关，两次渲染应得到完全相同的 HTML ----
 const PHONE_HTML = renderers.globalSettingsV2({}, "settings-general", {});
-const COMPACT_HTML = renderers.globalSettingsV2({}, "settings-general", {});
 const TABLET_HTML = renderers.globalSettingsV2({}, "settings-general", {});
 
 const PHONE_KEYS = extractControlKeys(PHONE_HTML);
-const COMPACT_KEYS = extractControlKeys(COMPACT_HTML);
 const TABLET_KEYS = extractControlKeys(TABLET_HTML);
 
 // A3: 过滤出 r2.0-subcontrol scope 的 controlKey（10 个），a3-action 由 A3 test 验证
 const PHONE_SUBCONTROL_KEYS = PHONE_KEYS.filter((k) => sgSubcontrolControlKeySet.has(k));
-const COMPACT_SUBCONTROL_KEYS = COMPACT_KEYS.filter((k) => sgSubcontrolControlKeySet.has(k));
 const TABLET_SUBCONTROL_KEYS = TABLET_KEYS.filter((k) => sgSubcontrolControlKeySet.has(k));
 
 // =============================================================================
-// 1. 三视口 controlKey 一致性
+// 1. 两视口 controlKey 一致性
 // =============================================================================
-test("A1 settings-general: three-viewport controlKey set is identical (renderer output is viewport-agnostic)", () => {
+test("A1 settings-general: Phone/Tablet controlKey set is identical (renderer output is viewport-agnostic)", () => {
   assert.equal(PHONE_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length, "phone subcontrol controlKey count matches decl count");
-  assert.equal(COMPACT_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length, "compact subcontrol controlKey count matches decl count");
   assert.equal(TABLET_SUBCONTROL_KEYS.length, sgSubcontrolDecls.length, "tablet subcontrol controlKey count matches decl count");
 
   const phoneSet = new Set(PHONE_SUBCONTROL_KEYS);
-  const compactSet = new Set(COMPACT_SUBCONTROL_KEYS);
   const tabletSet = new Set(TABLET_SUBCONTROL_KEYS);
 
   assert.equal(phoneSet.size, PHONE_SUBCONTROL_KEYS.length, "phone subcontrol controlKeys are unique");
-  assert.equal(compactSet.size, COMPACT_SUBCONTROL_KEYS.length, "compact subcontrol controlKeys are unique");
   assert.equal(tabletSet.size, TABLET_SUBCONTROL_KEYS.length, "tablet subcontrol controlKeys are unique");
 
-  // 三视口 controlKey 集合完全一致
+  // 两视口 controlKey 集合完全一致
   for (const key of phoneSet) {
-    assert.ok(compactSet.has(key), `compact missing controlKey: ${key}`);
     assert.ok(tabletSet.has(key), `tablet missing controlKey: ${key}`);
   }
 });
@@ -221,11 +211,11 @@ test("A1 settings-general: render-runtime.js applyViewportClass stamps data-view
     "applyViewportClass must query all [data-control-key] elements");
   assert.match(runtimeSource, /setAttribute\("data-viewport", viewportAtom\)/,
     "applyViewportClass must stamp data-viewport with viewportAtom");
-  // 视口 atom 计算必须包含 compact / phone / fold / tablet 四档
-  assert.match(runtimeSource, /"compact"/, "viewportAtom must include compact");
+  // DOM identity atom 仅允许 phone 与 tablet；横屏必须直接归入 tablet。
   assert.match(runtimeSource, /"phone"/, "viewportAtom must include phone");
-  assert.match(runtimeSource, /"fold"/, "viewportAtom must include fold");
+  assert.doesNotMatch(runtimeSource, /\? "fold"/, "viewportAtom must not emit fold");
   assert.match(runtimeSource, /"tablet"/, "viewportAtom must include tablet");
+  assert.match(runtimeSource, /snapshot\.orientation === "landscape"[\s\S]*?\? "tablet"/, "landscape viewportAtom must resolve to tablet");
 });
 
 // =============================================================================

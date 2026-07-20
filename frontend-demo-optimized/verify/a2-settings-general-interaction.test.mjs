@@ -249,9 +249,9 @@ test("A2 Phase 3: label ↔ raw value bidirectional mapping for all 4 select/seg
 });
 
 // =============================================================================
-// 6. 三视口渲染结果一致（renderer 输出与视口无关）
+// 6. Phone / Tablet 渲染结果一致（renderer 输出与视口无关）
 // =============================================================================
-test("A2 Phase 3: three-viewport render output is identical (renderer is viewport-agnostic)", () => {
+test("A2 Phase 3: Phone/Tablet render output is identical (renderer is viewport-agnostic)", () => {
   const r = freshSandbox();
   const sg = r.settingsGeneral;
   // 修改一些值
@@ -259,10 +259,8 @@ test("A2 Phase 3: three-viewport render output is identical (renderer is viewpor
   sg.dispatch({ type: "TOGGLE_SWITCH", settingsKey: "auto-check-update", value: false });
 
   const phone = r.globalSettingsV2({}, "settings-general", {});
-  const compact = r.globalSettingsV2({}, "settings-general", {});
   const tablet = r.globalSettingsV2({}, "settings-general", {});
 
-  assert.equal(phone, compact, "phone === compact");
   assert.equal(phone, tablet, "phone === tablet");
 });
 

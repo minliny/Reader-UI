@@ -7,7 +7,7 @@
 // 验证范围（与 A1 r2.0-subcontrol 互补）：
 //   1. 9 个 a3-action 声明存在且 controlKey 稳定（非 ordinal）
 //   2. DOM 输出 9 个 a3-action 元素，controlKey 与 declarations 一一对应
-//   3. 三视口 controlKey 集合一致（renderer 输出与视口无关）
+//   3. Phone/Tablet controlKey 集合一致（renderer 输出与视口无关）
 //   4. DOM 无 orphan / 无 extra / 无 duplicate
 //   5. 每个元素携带完整 5 个 data-* 属性，值与 declaration 匹配
 //   6. 每个元素的 DOM tag 类型符合预期（button vs article）
@@ -116,17 +116,14 @@ const EXPECTED = [
   { settingsKey: "permission-action-notification",    tag: "button",  actionKey: "permission.open-settings", instanceKey: "permission-action-notification", uiEvent: "permission.open-settings" },
 ];
 
-// ---- 三视口渲染 ----
+// ---- Phone/Tablet 两视口渲染 ----
 const PHONE_HTML = renderers.globalSettingsV2({}, "settings-general", {});
-const COMPACT_HTML = renderers.globalSettingsV2({}, "settings-general", {});
 const TABLET_HTML = renderers.globalSettingsV2({}, "settings-general", {});
 
 const PHONE_KEYS = extractControlKeys(PHONE_HTML);
-const COMPACT_KEYS = extractControlKeys(COMPACT_HTML);
 const TABLET_KEYS = extractControlKeys(TABLET_HTML);
 
 const PHONE_ACTION_KEYS = PHONE_KEYS.filter((k) => sgActionControlKeySet.has(k));
-const COMPACT_ACTION_KEYS = COMPACT_KEYS.filter((k) => sgActionControlKeySet.has(k));
 const TABLET_ACTION_KEYS = TABLET_KEYS.filter((k) => sgActionControlKeySet.has(k));
 
 const PHONE_ACTION_ATTRS = extractAttrMap(PHONE_HTML).filter((m) => sgActionControlKeySet.has(m.controlKey));
@@ -193,22 +190,18 @@ test("A3 settings-general: DOM contains exactly 9 a3-action elements matching de
 });
 
 // =============================================================================
-// 4. 三视口 a3-action controlKey 集合一致
+// 4. Phone/Tablet a3-action controlKey 集合一致
 // =============================================================================
-test("A3 settings-general: three-viewport a3-action controlKey set is identical", () => {
-  assert.equal(COMPACT_ACTION_KEYS.length, 9, "compact a3-action count");
+test("A3 settings-general: Phone/Tablet a3-action controlKey set is identical", () => {
   assert.equal(TABLET_ACTION_KEYS.length, 9, "tablet a3-action count");
 
   const phoneSet = new Set(PHONE_ACTION_KEYS);
-  const compactSet = new Set(COMPACT_ACTION_KEYS);
   const tabletSet = new Set(TABLET_ACTION_KEYS);
 
   assert.equal(phoneSet.size, 9, "phone a3-action controlKeys are unique");
-  assert.equal(compactSet.size, 9, "compact a3-action controlKeys are unique");
   assert.equal(tabletSet.size, 9, "tablet a3-action controlKeys are unique");
 
   for (const key of phoneSet) {
-    assert.ok(compactSet.has(key), `compact missing a3-action controlKey: ${key}`);
     assert.ok(tabletSet.has(key), `tablet missing a3-action controlKey: ${key}`);
   }
 });

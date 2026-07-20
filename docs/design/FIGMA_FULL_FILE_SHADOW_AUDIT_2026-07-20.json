@@ -64,7 +64,7 @@
       "viewports": ["Phone 390x844", "Tablet 760x960"],
       "checks": 26,
       "failures": 0,
-      "landscapePolicy": "Landscape aliases Tablet; no independent Compact layout is generated or accepted."
+      "landscapePolicy": "Landscape aliases Tablet; no independent landscape layout is generated or accepted."
     },
     "futureCaptureRecurrenceGuard": true
   },
