@@ -310,3 +310,36 @@ test("source-debug-content-log keeps its three fixed actions in one explicit row
   assert.match(columns, /^repeat\(3,\s*minmax\(0,\s*1fr\)\)$/);
   assert.doesNotMatch(columns, /repeat\(2/);
 });
+
+test("page roots and settings surfaces cannot reintroduce decorative shadows", () => {
+  const phoneRootRule = cssRule(foundationCss, ".fd-phone");
+  const readerRootRule = cssRule(foundationCss, ".fd-reader-frame");
+  const settingsSurfaceRule = cssRule(foundationCss, ".fd-setting-section");
+
+  assert.equal(
+    declaration(phoneRootRule, "box-shadow"),
+    "none",
+    "application page roots must not render the elevated overlay shadow",
+  );
+  assert.equal(
+    declaration(readerRootRule, "box-shadow"),
+    "none",
+    "reader page roots must not render the elevated overlay shadow",
+  );
+  assert.equal(
+    declaration(settingsSurfaceRule, "box-shadow"),
+    "none",
+    "settings sections must use border and spacing instead of a surface shadow",
+  );
+
+  assert.match(
+    foundationCss,
+    /--fd-shadow:\s*var\(--fd-ds-shadow-elevated\)/,
+    "the elevated token remains available for explicit overlays",
+  );
+  assert.match(
+    foundationCss,
+    /--fd-soft-shadow:\s*var\(--fd-ds-shadow-soft\)/,
+    "the soft token remains available for explicit transient surfaces",
+  );
+});
