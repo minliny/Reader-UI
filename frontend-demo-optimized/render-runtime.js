@@ -1361,7 +1361,7 @@
             }))
           }]
         })}
-        ${rssArticleSection(category.title, articles, "rss-source-actions", "源操作", "more")}
+        ${rssArticleSection(category.title, articles, "rss-source-actions", "源操作", "settings")}
         <section class="fd-rss-bottom-loading"><i></i><span>继续下滑加载下一页</span></section>`;
   }
 

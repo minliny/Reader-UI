@@ -10,6 +10,7 @@ const read = (file) => readFileSync(join(root, file), "utf8");
 const contractSource = read("rss-runtime-contract.js");
 const declarationSource = read("control-identity-declarations.js");
 const runtimeSource = read("render-runtime.js");
+const iconSource = read("asset-library/icons.js");
 const indexSource = read("index.html");
 
 function fresh() {
@@ -98,4 +99,24 @@ test("R3a Phone and Tablet are the only viewport atoms", () => {
   const source = `${contractSource}\n${runtimeSource.slice(runtimeSource.indexOf("function mainTabRss"), runtimeSource.indexOf("function rssShellScreen"))}`;
   assert.match(contractSource, /orientation === "landscape" \|\| width >= 600 \? "tablet" : "phone"/);
   assert.doesNotMatch(source, /compact-landscape|foldable|data-viewport="compact"|data-viewport="fold"/i);
+});
+
+test("R3a RSS visible actions keep their canonical semantic icon keys", () => {
+  assert.match(runtimeSource, /rssArticleSection\(category\.title, articles, "rss-source-actions", "源操作", "settings"\)/);
+  assert.doesNotMatch(runtimeSource, /rssArticleSection\(category\.title, articles, "rss-source-actions", "源操作", "more"\)/);
+  assert.match(runtimeSource, /icon\("refresh", "fd-small-icon"\).*刷新/);
+  assert.match(runtimeSource, /icon\("edit", "fd-small-icon"\).*编辑源/);
+  assert.match(runtimeSource, /icon\("clock", "fd-small-icon"\).*记录/);
+  assert.match(runtimeSource, /icon\("bug", "fd-small-icon"\).*调试/);
+  assert.match(runtimeSource, /icon\("filter", "fd-small-icon"\)/);
+  assert.match(runtimeSource, /"管理源", "source-stack"/);
+  for (const [key, tablerName] of [
+    ["settings", "settings"], ["refresh", "refresh"], ["edit", "edit"],
+    ["clock", "clock"], ["bug", "bug"], ["filter", "filter"],
+    ["source-stack", "stack-2"], ["rss", "file-rss"],
+    ["offline", "cloud-off"], ["bookmark", "bookmark"],
+    ["chevron", "chevron-right"], ["back", "arrow-left"]
+  ]) {
+    assert.match(iconSource, new RegExp(`"${key}": "${tablerName}"`), `${key} must map to Tabler ${tablerName}`);
+  }
 });
