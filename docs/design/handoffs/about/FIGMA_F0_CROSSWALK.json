@@ -1,0 +1,115 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "about",
+  "status": "F2_AWAITING_USER_CONFIRMATION_NO_FABRICATED_BINDINGS",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "259:11",
+  "pageName": "12 · Components · Settings & About",
+  "baselineRevision": "2378509423496063970",
+  "revision": "2378508899485166734",
+  "revisionTitle": "F2 · About · Canonical Control Pilot",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378508899485166734&node-id=2350-4830&p=f",
+  "timestamp": "2026-07-21T23:58:00+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "implementationCommit": "e2086fb91cbe5317df0082dbd12eac02189ba4fe",
+    "handoffEvidenceCommit": "5e182286ddcd0d5a1ce6fe4643fdfbddd5c0a06c",
+    "packet": "docs/design/handoffs/about/LOCAL_READY_FOR_FIGMA.json"
+  },
+  "revisionRead": {
+    "baselineRead": true,
+    "postWriteNamedRevisionCreated": true,
+    "readMethod": "Figma Desktop version history Copy link exposed the exact named version-id.",
+    "blocker": null
+  },
+  "sources": {
+    "fonts": "Existing in-file Noto Sans SC and Inter text runs were preserved; no font substitution occurred.",
+    "icons": "Existing route-specific outline icons were promoted with their exact control masters; no generic or guessed icon replacement was introduced.",
+    "sharedComponents": {
+      "navigationRowSet": "1994:25671",
+      "actionDialogSet": "2222:159",
+      "aboutControlSection": "2354:997"
+    }
+  },
+  "canonicalMasters": {
+    "routeSet": "2350:4830",
+    "routeComponents": {
+      "aboutPhone": "2350:4824",
+      "aboutTablet": "2350:4825",
+      "feedbackPhone": "2350:4826",
+      "feedbackTablet": "2350:4827",
+      "versionPhone": "2350:4828",
+      "versionTablet": "2350:4829"
+    },
+    "controlSection": "2354:997",
+    "controlComponentSets": 19,
+    "externalActionSet": "2351:995",
+    "updateActionSet": "2351:1087",
+    "feedbackEntryDialogSet": "2351:1128",
+    "responsiveMasterSet": "942:25",
+    "phoneMaster": "942:22",
+    "tabletMaster": "942:24"
+  },
+  "downstream": {
+    "pageId": "834:2",
+    "pageName": "23 · Pages · Final",
+    "instances": [
+      { "nodeId": "943:3607", "mainNodeId": "942:22", "detached": false },
+      { "nodeId": "943:4053", "mainNodeId": "942:24", "detached": false },
+      { "nodeId": "1995:56220", "mainNodeId": "942:22", "detached": false },
+      { "nodeId": "1995:56666", "mainNodeId": "942:24", "detached": false }
+    ]
+  },
+  "bindingModel": "Every local controlKey binds to a real route-specific component set plus its exact Phone and Tablet master/instance nodes. The route components contain those attached instances; no descendant ID, screenshot, detached frame, or state occurrence is fabricated.",
+  "bindings": [
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:20", "revision": "2378508899485166734", "route": "about", "controlKey": "about.control.button.back@about.default", "controlId": "about.control.about.default.button.back", "uiEvent": "route.pop", "settingsKey": "back", "phone": { "masterNodeId": "2354:1007", "instanceNodeId": "2354:1008", "routeNodeId": "2350:4824" }, "tablet": { "masterNodeId": "2355:19", "instanceNodeId": "2355:21", "routeNodeId": "2350:4825" } },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:62", "revision": "2378508899485166734", "route": "about", "controlKey": "about.control.button.version-detail@about.default", "controlId": "about.control.about.default.button.version-detail", "uiEvent": "settings.about.open", "settingsKey": "version-detail", "phone": { "masterNodeId": "2354:1042", "instanceNodeId": "2354:1043", "routeNodeId": "2350:4824" }, "tablet": { "masterNodeId": "2355:61", "instanceNodeId": "2355:63", "routeNodeId": "2350:4825" } },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:111", "revision": "2378508899485166734", "route": "about", "controlKey": "about.control.button.dependency-list@about.default", "controlId": "about.control.about.default.button.dependency-list", "uiEvent": "settings.about.open", "settingsKey": "dependency-list", "phone": { "masterNodeId": "2354:1091", "instanceNodeId": "2354:1092", "routeNodeId": "2350:4824" }, "tablet": { "masterNodeId": "2355:110", "instanceNodeId": "2355:112", "routeNodeId": "2350:4825" } },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:156", "revision": "2378508899485166734", "route": "about", "controlKey": "about.control.button.license-list@about.default", "controlId": "about.control.about.default.button.license-list", "uiEvent": "settings.capability.open", "settingsKey": "license-list", "phone": { "masterNodeId": "2354:1138", "instanceNodeId": "2354:1139", "routeNodeId": "2350:4824" }, "tablet": { "masterNodeId": "2355:155", "instanceNodeId": "2355:157", "routeNodeId": "2350:4825" }, "stateModelNodeId": "2351:995" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:193", "revision": "2378508899485166734", "route": "about", "controlKey": "about.control.button.check-update@about.default", "controlId": "about.control.about.default.button.check-update", "uiEvent": "settings.about.open", "settingsKey": "check-update", "phone": { "masterNodeId": "2354:1178", "instanceNodeId": "2354:1179", "routeNodeId": "2350:4824" }, "tablet": { "masterNodeId": "2355:192", "instanceNodeId": "2355:204", "routeNodeId": "2350:4825" }, "stateModelNodeId": "2351:1087" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:227", "revision": "2378508899485166734", "route": "about", "controlKey": "about.control.button.feedback-entry@about.default", "controlId": "about.control.about.default.button.feedback-entry", "uiEvent": "settings.overlay.open", "settingsKey": "feedback-entry", "phone": { "masterNodeId": "2354:1212", "instanceNodeId": "2354:1213", "routeNodeId": "2350:4824" }, "tablet": { "masterNodeId": "2355:226", "instanceNodeId": "2355:228", "routeNodeId": "2350:4825" }, "stateModelNodeId": "2351:1128" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:257", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.back@about-feedback.default", "controlId": "about.control.about-feedback.default.button.back", "uiEvent": "route.pop", "settingsKey": "back", "phone": { "masterNodeId": "2354:1244", "instanceNodeId": "2354:1245", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:256", "instanceNodeId": "2355:258", "routeNodeId": "2350:4827" } },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:297", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.check-update-entry@about-feedback.default", "controlId": "about.control.about-feedback.default.button.check-update-entry", "uiEvent": "settings.about.open", "settingsKey": "check-update-entry", "phone": { "masterNodeId": "2354:1278", "instanceNodeId": "2354:1279", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:296", "instanceNodeId": "2355:298", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:1087" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:345", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.source-repository@about-feedback.default", "controlId": "about.control.about-feedback.default.button.source-repository", "uiEvent": "settings.capability.open", "settingsKey": "source-repository", "phone": { "masterNodeId": "2354:1325", "instanceNodeId": "2354:1326", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:344", "instanceNodeId": "2355:385", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:995" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:416", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.open-source-license@about-feedback.default", "controlId": "about.control.about-feedback.default.button.open-source-license", "uiEvent": "settings.capability.open", "settingsKey": "open-source-license", "phone": { "masterNodeId": "2354:1372", "instanceNodeId": "2354:1373", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:415", "instanceNodeId": "2355:417", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:995" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:445", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.contribute@about-feedback.default", "controlId": "about.control.about-feedback.default.button.contribute", "uiEvent": "settings.capability.open", "settingsKey": "contribute", "phone": { "masterNodeId": "2354:1414", "instanceNodeId": "2354:1415", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:444", "instanceNodeId": "2355:446", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:995" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:475", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.team-thanks@about-feedback.default", "controlId": "about.control.about-feedback.default.button.team-thanks", "uiEvent": "settings.about.open", "settingsKey": "team-thanks", "phone": { "masterNodeId": "2354:1456", "instanceNodeId": "2354:1457", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:474", "instanceNodeId": "2355:476", "routeNodeId": "2350:4827" } },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:525", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.feedback-submit-entry@about-feedback.default", "controlId": "about.control.about-feedback.default.button.feedback-submit-entry", "uiEvent": "settings.overlay.open", "settingsKey": "feedback-submit-entry", "phone": { "masterNodeId": "2354:1504", "instanceNodeId": "2354:1505", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:524", "instanceNodeId": "2355:526", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:1128" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:589", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.crash-report-entry@about-feedback.default", "controlId": "about.control.about-feedback.default.button.crash-report-entry", "uiEvent": "settings.overlay.open", "settingsKey": "crash-report-entry", "phone": { "masterNodeId": "2354:1562", "instanceNodeId": "2354:1563", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:588", "instanceNodeId": "2355:604", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:1128" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:643", "revision": "2378508899485166734", "route": "about-feedback", "controlKey": "about.control.button.rate-app@about-feedback.default", "controlId": "about.control.about-feedback.default.button.rate-app", "uiEvent": "settings.capability.open", "settingsKey": "rate-app", "phone": { "masterNodeId": "2354:1624", "instanceNodeId": "2354:1625", "routeNodeId": "2350:4826" }, "tablet": { "masterNodeId": "2355:642", "instanceNodeId": "2355:644", "routeNodeId": "2350:4827" }, "stateModelNodeId": "2351:995" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:677", "revision": "2378508899485166734", "route": "about-version", "controlKey": "about.control.button.back@about-version.default", "controlId": "about.control.about-version.default.button.back", "uiEvent": "route.pop", "settingsKey": "back", "phone": { "masterNodeId": "2354:1664", "instanceNodeId": "2354:1665", "routeNodeId": "2350:4828" }, "tablet": { "masterNodeId": "2355:676", "instanceNodeId": "2355:678", "routeNodeId": "2350:4829" } },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:715", "revision": "2378508899485166734", "route": "about-version", "controlKey": "about.control.button.view-license@about-version.default", "controlId": "about.control.about-version.default.button.view-license", "uiEvent": "settings.capability.open", "settingsKey": "view-license", "phone": { "masterNodeId": "2354:1697", "instanceNodeId": "2354:1698", "routeNodeId": "2350:4828" }, "tablet": { "masterNodeId": "2355:714", "instanceNodeId": "2355:716", "routeNodeId": "2350:4829" }, "stateModelNodeId": "2351:995" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:752", "revision": "2378508899485166734", "route": "about-version", "controlKey": "about.control.button.version-check-update@about-version.default", "controlId": "about.control.about-version.default.button.version-check-update", "uiEvent": "settings.about.open", "settingsKey": "version-check-update", "phone": { "masterNodeId": "2354:1737", "instanceNodeId": "2354:1738", "routeNodeId": "2350:4828" }, "tablet": { "masterNodeId": "2355:751", "instanceNodeId": "2355:764", "routeNodeId": "2350:4829" }, "stateModelNodeId": "2351:1087" },
+    { "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:11", "nodeId": "2355:788", "revision": "2378508899485166734", "route": "about-version", "controlKey": "about.control.button.download-latest@about-version.default", "controlId": "about.control.about-version.default.button.download-latest", "uiEvent": "download.queue.open", "settingsKey": "download-latest", "phone": { "masterNodeId": "2354:1772", "instanceNodeId": "2354:1773", "routeNodeId": "2350:4828" }, "tablet": { "masterNodeId": "2355:787", "instanceNodeId": "2355:789", "routeNodeId": "2350:4829" }, "stateModelNodeId": "2351:995" }
+  ],
+  "coverage": {
+    "localControls": 19,
+    "boundControls": 19,
+    "physicalControlComponentSets": 19,
+    "phoneInstances": 19,
+    "tabletInstances": 19,
+    "fabricatedBindings": 0,
+    "unbound": 0
+  },
+  "verification": {
+    "routeVariants": 6,
+    "routeDimensions": ["390x844", "760x960"],
+    "routeControlInstances": 38,
+    "hiddenOriginalControlSources": 38,
+    "downstreamInstances": 4,
+    "detachedInstances": 0,
+    "activeRouteDropShadows": 0,
+    "compactFoldStructures": 0,
+    "deviceEdgeRadii": [34, 34, 34, 34],
+    "restorePreviewModified": false
+  },
+  "admission": {
+    "crosswalkHasNoFabricatedBinding": true,
+    "full19ControlCrosswalkComplete": true,
+    "userConfirmed": false,
+    "f2Exit": false,
+    "remainingGate": "USER_VISUAL_CONFIRMATION"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "about",
+  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "259:11",
+  "revision": "2378508899485166734",
+  "revisionTitle": "F2 · About · Canonical Control Pilot",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378508899485166734&node-id=2350-4830&p=f",
+  "localImplementationCommit": "e2086fb91cbe5317df0082dbd12eac02189ba4fe",
+  "localHandoffEvidenceCommit": "5e182286ddcd0d5a1ce6fe4643fdfbddd5c0a06c",
+  "supersedes": {
+    "revision": "2378504884763845705",
+    "revisionTitle": "F2 · About · Local R3a Pilot",
+    "reason": "The same-session pilot established routes and state references; the final revision additionally promotes all 19 semantic controls to real Phone/Tablet component variants and attached instances."
+  },
+  "deltas": [
+    {
+      "target": "Page/About/CanonicalRoute",
+      "nodeId": "2350:4830",
+      "oldValue": "Page/About had Phone and Tablet masters whose internal route content contained no attached canonical instances.",
+      "newValue": "Six canonical variants cover About, Feedback, and Version at Phone 390×844 and Tablet 760×960. All device edges use radius 34; Landscape aliases Tablet; Compact/Fold is absent."
+    },
+    {
+      "target": "About semantic controls",
+      "nodeId": "2354:997",
+      "oldValue": "Nineteen controls were raw imported frames with no component inheritance path.",
+      "newValue": "Nineteen real component sets each expose Viewport=Phone and Viewport=Tablet. All 38 route occurrences are attached instances; the 38 source frames remain preserved hidden for recovery."
+    },
+    {
+      "target": "About action states",
+      "nodeId": "2351:995",
+      "oldValue": "External and update actions had no explicit About-owned interaction-state reference.",
+      "newValue": "ExternalAction and UpdateAction each define Default, Pressed, Focus, Disabled, Loading, and Error. FeedbackEntryDialog defines Confirm, Loading, Success, and Failed without inventing a separate feedback form route."
+    },
+    {
+      "target": "Page/About responsive masters",
+      "nodeId": "942:25",
+      "oldValue": "Phone 942:22 and Tablet 942:24 preserved the legacy appearance but bypassed the canonical About route graph.",
+      "newValue": "Phone and Tablet masters inherit attached route instances from 2350:4824 and 2350:4825. Original raw page sources remain hidden; no detached instance was introduced."
+    },
+    {
+      "target": "Page 23 downstream evidence",
+      "nodeId": "834:2",
+      "oldValue": "Four existing About occurrences pointed at Page/About masters.",
+      "newValue": "All four remain attached to 942:22 or 942:24 and inherit the canonical repair; reactions remain unchanged."
+    },
+    {
+      "target": "Visual integrity policy",
+      "nodeId": "2350:4830",
+      "oldValue": "Potential recurrence risk from raw controls, non-canonical state references, and unverified device wrappers.",
+      "newValue": "Exact existing icons and typography are preserved, trailing values/actions remain right aligned, active route DROP_SHADOW=0, detached=0, Compact/Fold=0, and all four edge radii equal 34."
+    }
+  ],
+  "screenshots": [
+    { "path": "/tmp/about-f2-audit/about-phone-final.png", "size": "390x844", "sha256": "33defa9cc1c9967f078ed44d1b7f6fa1e56057bb21d90302670680532af78700" },
+    { "path": "/tmp/about-f2-audit/about-tablet-final2.png", "size": "760x960", "sha256": "063bf1635a69d6f3ff62a5a304952afd4073ae84d71b2512c725c11a5373646d" },
+    { "path": "/tmp/about-f2-audit/feedback-phone-final.png", "size": "390x844", "sha256": "7ef2bf1f0531481f5a93a416b13853a64fe885e6f77b5c8871639da639b6260d" },
+    { "path": "/tmp/about-f2-audit/feedback-tablet-final.png", "size": "760x960", "sha256": "423d4051aba6c181398d808c4bd2c7cb1a692c846fe75374eb179d829a5b433d" },
+    { "path": "/tmp/about-f2-audit/version-phone-final.png", "size": "390x844", "sha256": "229d7138514f338a4e7cf338a683fc91793da6e83c71b0eebf6aa2e8ac2f213d" },
+    { "path": "/tmp/about-f2-audit/version-tablet-final.png", "size": "760x960", "sha256": "187a62e6c49b63623cc7289c7e93b2fb6446ba818f124ff449ee4b16b842f8ee" }
+  ],
+  "verification": {
+    "localFocusedTests": "25/25 pass",
+    "fullRegression": "603/603 pass",
+    "routeVariants": 6,
+    "controlComponentSets": 19,
+    "routeControlInstances": 38,
+    "hiddenOriginalControlSources": 38,
+    "downstreamAttachedInstances": 4,
+    "detachedInstances": 0,
+    "activeRouteDropShadows": 0,
+    "forbiddenCompactFoldStructures": 0,
+    "deviceEdgeRadii": [34, 34, 34, 34],
+    "result": "PASS_AWAITING_USER_VISUAL_CONFIRMATION"
+  },
+  "boundaries": {
+    "restorePreviewModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "otherPageFamiliesModified": false,
+    "rawManualFramesDeleted": false
+  },
+  "admission": {
+    "connectorWriteTransactionComplete": true,
+    "namedRevisionComplete": true,
+    "userConfirmed": false,
+    "f2Exit": false,
+    "nextFigmaWriterReleased": false,
+    "remainingGate": "USER_VISUAL_CONFIRMATION"
+  }
+}
