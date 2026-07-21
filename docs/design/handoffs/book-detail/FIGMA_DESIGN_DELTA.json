@@ -2,11 +2,14 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "book-detail",
-  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378448207290564677",
-  "revisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378448207290564677",
+  "revision": "2378451733465956551",
+  "revisionTitle": "F2 · Book Detail · User Confirmed",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378451733465956551",
+  "pilotRevision": "2378448207290564677",
+  "pilotRevisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
+  "confirmedAt": "2026-07-21T09:10:44+08:00",
   "localImplementationCommit": "1006d9a7c0d11011b9e36f2e8053e9691621672f",
   "handoffEvidenceCommit": "46df81a2ca26fb139afd747e8da07e8c158d8d06",
   "deltas": [
@@ -92,17 +95,19 @@
     "activePageDropShadowIntroduced": false,
     "semanticDialogShadowExceptions": ["2269:39", "2269:47", "2269:58"],
     "detachedInstanceCount": 0,
-    "result": "PASS_AWAITING_USER_CONFIRMATION"
+    "result": "PASS_USER_CONFIRMED"
   },
   "admission": {
     "connectorWriteTransactionComplete": true,
     "namedRevisionComplete": true,
     "crosswalkComplete": true,
     "bindingCount": 56,
-    "userConfirmed": false,
-    "f2Exit": false,
-    "nextFigmaWriterReleased": false,
-    "nextFigmaWriterGate": "User confirmation of Book Detail F2",
-    "remainingGates": ["User confirmation"]
+    "userConfirmed": true,
+    "f2Exit": true,
+    "nextFigmaWriterReleased": true,
+    "nextLocalLane": "reader-runtime",
+    "nextLocalLaneReleased": true,
+    "nextFigmaWriterGate": null,
+    "remainingGates": []
   }
 }
