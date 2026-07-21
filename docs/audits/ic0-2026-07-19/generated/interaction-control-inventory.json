@@ -30,7 +30,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "df01396065c1dc14f4b52c2652a82314e8b6f0730311a2ae8757559ae731dbde"
+    "rendererSourcesSha256": "16dec9904d4d229ccadddfc98bdacb8d33e267219ad4ab205b7c354be3a99d56"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
