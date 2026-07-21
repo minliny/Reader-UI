@@ -2,12 +2,15 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "rss",
-  "status": "F2_LOCAL_AUTHORIZED_SURFACES_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "baselineRevision": "2378501297946752326",
   "revision": "2378498213623880242",
   "revisionTitle": "F2 · RSS · Full Icon Audit Correction",
   "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378498213623880242&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
+  "confirmationVersionTitle": "F2 · RSS · User Confirmed",
+  "confirmedPilotRevision": "2378498213623880242",
+  "userConfirmedAt": "2026-07-21",
   "localSource": {
     "implementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
     "iconCorrectionCommit": "b5fcca29f95df3a7e4af7a11bf9f2b198b993d9f",
@@ -111,7 +114,7 @@
     "otherVisibleIconMappingsPass": true,
     "existingFigmaSurfacesComplete": true,
     "localAuthorizedSurfacesComplete": true,
-    "f2Exit": false,
-    "remainingGate": "User visual confirmation of revision 2378498213623880242."
+    "f2Exit": true,
+    "remainingGate": null
   }
 }

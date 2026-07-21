@@ -2,13 +2,16 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "rss",
-  "status": "F2_LOCAL_STYLE_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "revision": "2378498213623880242",
   "revisionTitle": "F2 · RSS · Full Icon Audit Correction",
   "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378498213623880242&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
   "localImplementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
   "iconCorrectionCommit": "b5fcca29f95df3a7e4af7a11bf9f2b198b993d9f",
+  "confirmationVersionTitle": "F2 · RSS · User Confirmed",
+  "confirmedPilotRevision": "2378498213623880242",
+  "userConfirmedAt": "2026-07-21",
   "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
   "authorityDecision": "For the eight routes lacking exact legacy Figma surfaces, the user explicitly authorized the local canonical renderer as the visual, structural and interaction-intent source.",
   "deltas": [
@@ -43,5 +46,5 @@
     "otherVisibleIconMappings": "PASS"
   },
   "boundary": "No UiEvent, reducer owner, async guard, route flow, motion contract or non-RSS canonical page family was changed. Existing RSS masters, Page 23 downstream instances and reactions were preserved.",
-  "remainingGate": "User visual confirmation of revision 2378498213623880242."
+  "remainingGate": null
 }
