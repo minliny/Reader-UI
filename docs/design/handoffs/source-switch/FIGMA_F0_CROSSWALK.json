@@ -2,15 +2,17 @@
   "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "source-switch",
-  "status": "F2_CORRECTED_NO_FABRICATED_BINDINGS_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED_NO_FABRICATED_BINDINGS",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "pageId": "259:13",
   "pageName": "16 · Components · Source Switch",
   "baselineRevision": "2378456732819418415",
   "baselineRevisionTitle": "F2 · Reader Runtime · User Confirmed",
-  "revision": "2378474643910668834",
-  "revisionTitle": "F2 · Source Switch · Direct Switch Correction",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378474643910668834&node-id=942-37",
+  "revision": "2378501297946752326",
+  "revisionTitle": "F2 · Source Switch · User Confirmed",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378501297946752326&node-id=942-37",
+  "bindingRevision": "2378474643910668834",
+  "bindingsValidatedAtRevision": "2378501297946752326",
   "supersededRevision": "2378464713948765297",
   "timestamp": "2026-07-21T10:08:05+08:00",
   "localSource": {
@@ -180,7 +182,7 @@
     "directListCrosswalkComplete": true,
     "full35ControlCrosswalkComplete": false,
     "reason": "Eleven operational fallback-state controls remain local-only because the user rejected the invented Figma state matrix. They are reported unbound rather than mapped to fake nodes.",
-    "userConfirmed": false,
-    "f2Exit": false
+    "userConfirmed": true,
+    "f2Exit": true
   }
 }
