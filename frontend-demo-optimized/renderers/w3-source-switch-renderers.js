@@ -23,11 +23,9 @@
   }
   var SOURCE_CONTROL_SPECS = Object.freeze(
     candidateSpecs("source-switch").concat([
-      { route: "source-switch", settingsKey: "close", uiEvent: "source.switch.cancel", label: "关闭换源" },
-      { route: "source-switch", settingsKey: "confirm", uiEvent: "source.switch.confirm", label: "确认候选书源" }
+      { route: "source-switch", settingsKey: "close", uiEvent: "source.switch.cancel", label: "关闭换源" }
     ], candidateSpecs("source-switch-results"), [
       { route: "source-switch-results", settingsKey: "close", uiEvent: "source.switch.cancel", label: "关闭换源" },
-      { route: "source-switch-results", settingsKey: "confirm", uiEvent: "source.switch.confirm", label: "检查并确认换源" },
       { route: "source-switch-empty", settingsKey: "source-management", uiEvent: "source.management.open", label: "前往书源管理" },
       { route: "source-switch-empty", settingsKey: "cancel", uiEvent: "source.switch.cancel", label: "取消换源" },
       { route: "source-switch-error", settingsKey: "retry", uiEvent: "source.switch.confirm", label: "重试换源" },
@@ -243,14 +241,10 @@
   }
   function candidateWindow(data, route, appState, owned) {
     var rows = candidates(data);
-    var selected = selectedCandidate(data, owned);
-    var disabled = !owned.selectedSourceId || owned.selectedSourceId === owned.originalSourceId || owned.pendingKind !== null;
     return '<section class="fd-source-switch-window" role="dialog" aria-modal="true" aria-labelledby="source-switch-title" data-source-switch-window>' +
       '<header class="fd-source-window-info"><i>' + icon("source-switch", "fd-small-icon") + '</i><strong id="source-switch-title">换源</strong><span>按延迟排序</span>' +
       '<button class="fd-source-window-close" type="button"' + identityAttrs(route, "close") + ' data-source-switch-action="cancel" data-restore-focus="' + esc(owned.originControlKey) + '" aria-label="关闭换源窗口">' + icon("close", "fd-small-icon") + '</button></header>' +
-      '<div class="fd-source-candidate-list" role="listbox" aria-label="候选书源" aria-busy="' + (owned.pendingKind ? "true" : "false") + '">' + rows.map(function (item) { return candidateRow(item, route, owned); }).join("") + '</div>' +
-      '<section class="fd-source-switch-result" aria-live="polite"><strong>' + esc(selected.source || "请选择书源") + '</strong><small>' + esc(selected.speed || "") + ' · ' + esc(selected.latestChapter || selected.chapter || "") + '</small>' +
-      '<button type="button"' + identityAttrs(route, "confirm") + ' data-source-switch-action="confirm" aria-busy="' + (owned.pendingKind ? "true" : "false") + '"' + (disabled ? " disabled" : "") + '>' + (route === "source-switch-results" ? "检查并确认" : "继续") + '</button></section></section>';
+      '<div class="fd-source-candidate-list" role="listbox" aria-label="候选书源；点击可用书源立即切换" aria-busy="' + (owned.pendingKind ? "true" : "false") + '">' + rows.map(function (item) { return candidateRow(item, route, owned); }).join("") + '</div></section>';
   }
   function actionButton(route, key, label, action, options) {
     options = options || {};

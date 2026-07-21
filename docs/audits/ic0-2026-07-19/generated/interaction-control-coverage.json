@@ -36,13 +36,13 @@
   "canonicalRoutes": 260,
   "directVariantCases": 190,
   "aliasCases": 76,
-  "semanticControls": 3808,
+  "semanticControls": 3806,
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
-    "count": 3808,
-    "withUiEvent": 2355,
-    "withRawMotionHints": 3719,
-    "rawMotionHintOccurrences": 7136,
+    "count": 3806,
+    "withUiEvent": 2353,
+    "withRawMotionHints": 3717,
+    "rawMotionHintOccurrences": 7134,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -95,8 +95,8 @@
       "tab.item.switch",
       "toggle.switch"
     ],
-    "withCanonicalMotionIds": 3701,
-    "canonicalMotionIdOccurrences": 7238,
+    "withCanonicalMotionIds": 3699,
+    "canonicalMotionIdOccurrences": 7236,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -156,10 +156,10 @@
     "missingAccessibleNames": 20,
     "canonicalControlIds": 0,
     "joinedControls": 0,
-    "unjoinedControls": 3808,
+    "unjoinedControls": 3806,
     "byTag": {
       "article": 349,
-      "button": 3335,
+      "button": 3333,
       "i": 28,
       "input": 49,
       "select": 13,
@@ -167,7 +167,7 @@
       "textarea": 1
     },
     "byRole": {
-      "button": 3406,
+      "button": 3404,
       "checkbox": 1,
       "combobox": 13,
       "option": 263,
@@ -178,7 +178,7 @@
       "textbox": 27
     },
     "byJoinStatus": {
-      "unjoined-no-stable-key": 3808
+      "unjoined-no-stable-key": 3806
     },
     "byRuntimeFamily": {
       "discover": 778,
@@ -189,7 +189,7 @@
       "rss": 417,
       "settings": 93,
       "source": 414,
-      "source-switch": 173,
+      "source-switch": 171,
       "sync": 137,
       "system": 142,
       "web-auth": 11
@@ -197,7 +197,7 @@
     "gapCodes": {
       "IC0_ACCESSIBLE_LABEL_MISSING": 20,
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
-      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3808,
+      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3806,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
       "IC0_UI_EVENT_UNRESOLVED": 1453
     }
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "5d72cf2e6cfa518f853006770432a462f058de6f46dcf94c0b046e1c35de83f2",
+  "inventorySha256": "b28a0a06aa2fc841902f004705c1e9df83c4afaef7aab035c10206dde2a5a2b9",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -980,9 +980,9 @@
       "runtimeFamily": "source-switch",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 30,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "9262766fb1d528f2910f7f35b46c567ca344609c21f58863eade8730ca938c45"
+      "renderSha256": "29e741ad79f5e9a5749f50be2630037958cbd45d8bae36ddd31b9fc21ce6c077"
     },
     {
       "routeId": "source-switch-results",
@@ -991,9 +991,9 @@
       "runtimeFamily": "source-switch",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 30,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "eec9da43d68cc568c35293e696d7e9cb0d7befe55947f2cc97bad546066bfab9"
+      "renderSha256": "0f4bbce8a256215d42711367b5a3c8666c69130dee152bec12569eba856134fe"
     },
     {
       "routeId": "reader-night-state-v2",

@@ -13413,14 +13413,21 @@
         replaceTopRoute("reader", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "reader" });
       }
     };
-    const sourceSwitchCheck = async () => {
+    const sourceSwitchDirectCommit = async () => {
       const promise = sourceSwitchApi?.executeCandidateCheck?.({ delay: motionSearchDelay });
       if (!promise) return;
       replaceTopRoute("source-switch-loading", { id: "source.switch.route.replace", action: "replace", from: currentRoute(), to: "source-switch-loading" });
       const result = await promise;
       if (result.status === "stale") return;
-      const targetRoute = result.status === "success" ? "source-switch-preview" : result.status === "timeout" ? "source-switch-timeout" : "source-switch-error";
-      replaceTopRoute(targetRoute, { id: "source.switch.route.replace", action: "replace", from: "source-switch-loading", to: targetRoute });
+      if (result.status !== "success") {
+        const targetRoute = result.status === "timeout" ? "source-switch-timeout" : "source-switch-error";
+        replaceTopRoute(targetRoute, { id: "source.switch.route.replace", action: "replace", from: "source-switch-loading", to: targetRoute });
+        return;
+      }
+      const commit = await sourceSwitchApi?.executeSwitchCommit?.({ delay: motionSearchDelay });
+      if (!commit || commit.status === "stale") return;
+      if (commit.status === "success") sourceSwitchExit(true);
+      else replaceTopRoute("source-switch-rollback", { id: "source.switch.route.replace", action: "replace", from: "source-switch-loading", to: "source-switch-rollback" });
     };
     screenHost.querySelectorAll("[data-source-switch-action]").forEach((control) => {
       control.addEventListener("click", async (event) => {
@@ -13431,19 +13438,11 @@
           const sourceId = control.getAttribute("data-source-id") || "";
           sourceSwitchApi?.dispatch?.({ type: "SELECT", sourceId, disabled: control.disabled });
           appState.sourceSwitchSelectedSourceId = sourceSwitchApi?.getState?.().selectedSourceId || "";
-          renderCurrentRoute();
-          return;
-        }
-        if (action === "confirm") {
-          if (currentRoute() === "source-switch") {
-            replaceTopRoute("source-switch-results", { id: "source.switch.route.replace", action: "replace", from: "source-switch", to: "source-switch-results" });
-          } else {
-            await sourceSwitchCheck();
-          }
+          await sourceSwitchDirectCommit();
           return;
         }
         if (action === "retry") {
-          await sourceSwitchCheck();
+          await sourceSwitchDirectCommit();
           return;
         }
         if (action === "commit") {

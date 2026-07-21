@@ -36731,28 +36731,6 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     {
       "entityKey": "source-switch.button.button",
       "controlKey": "source-switch.button.button@source-switch.default.n0",
-      "controlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-confirm-h-a6e17138",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "mappingStatus": "pending-action-and-instance-key",
-      "uiEvent": "source.switch.confirm",
-      "route": "source-switch",
-      "state": "default",
-      "domain": "source-switch",
-      "family": "button",
-      "role": "button",
-      "renderer": "sourceSwitchV2",
-      "rendererFile": "renderers/w3-source-switch-renderers.js",
-      "rendererSlot": "sourceSwitchV2@renderers/w3-source-switch-renderers.js",
-      "pageFamily": "source-switch",
-      "source": "registry",
-      "label": "继续"
-    },
-    {
-      "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n1",
       "controlId": "source-switch.button.source-switch.default.button.reader-dismiss-immersive-reading-h-c71ed6e2",
       "actionKey": null,
       "instanceKey": null,
@@ -36775,7 +36753,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n2",
+      "controlKey": "source-switch.button.button@source-switch.default.n1",
       "controlId": "source-switch.button.source-switch.default.button.reader-chapter-action-prev-h-d5ad7f15",
       "actionKey": null,
       "instanceKey": null,
@@ -36798,7 +36776,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n3",
+      "controlKey": "source-switch.button.button@source-switch.default.n2",
       "controlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-cancel-h-2f446a07",
       "actionKey": null,
       "instanceKey": null,
@@ -36820,7 +36798,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n4",
+      "controlKey": "source-switch.button.button@source-switch.default.n3",
       "controlId": "source-switch.button.source-switch.default.button.reader-brightness-auto-h-a865e575",
       "actionKey": null,
       "instanceKey": null,
@@ -36843,7 +36821,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n5",
+      "controlKey": "source-switch.button.button@source-switch.default.n4",
       "controlId": "source-switch.button.source-switch.default.button.reader-exit-h-3ffb0282",
       "actionKey": null,
       "instanceKey": null,
@@ -36865,7 +36843,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n6",
+      "controlKey": "source-switch.button.button@source-switch.default.n5",
       "controlId": "source-switch.button.source-switch.default.button.reader-chapter-action-next-h-28040f4e",
       "actionKey": null,
       "instanceKey": null,
@@ -36888,7 +36866,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n7",
+      "controlKey": "source-switch.button.button@source-switch.default.n6",
       "controlId": "source-switch.button.source-switch.default.button.h-36687359",
       "actionKey": null,
       "instanceKey": null,
@@ -36911,7 +36889,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n8",
+      "controlKey": "source-switch.button.button@source-switch.default.n7",
       "controlId": "source-switch.button.source-switch.default.button.reader-more-toggle-h-924fccea",
       "actionKey": null,
       "instanceKey": null,
@@ -37219,29 +37197,6 @@ var CANONICAL_CONTROL_DECLARATIONS = [
       "source": "source-switch-action",
       "label": "关闭换源",
       "settingsKey": "close"
-    },
-    {
-      "entityKey": "source-switch.control.button.confirm",
-      "controlKey": "source-switch.control.button.confirm@source-switch.default",
-      "controlId": "source-switch.control.source-switch.default.button.confirm",
-      "actionKey": "confirm",
-      "instanceKey": null,
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "mappingStatus": "mapped",
-      "uiEvent": "source.switch.confirm",
-      "route": "source-switch",
-      "state": "default",
-      "domain": "source-switch",
-      "family": "control",
-      "role": "button",
-      "renderer": "sourceSwitchV2",
-      "rendererFile": "renderers/w3-source-switch-renderers.js",
-      "rendererSlot": "sourceSwitchV2@renderers/w3-source-switch-renderers.js",
-      "pageFamily": "source-switch",
-      "source": "source-switch-action",
-      "label": "确认候选书源",
-      "settingsKey": "confirm"
     },
     {
       "entityKey": "source-switch.control.button.source-option-source-aggregate-1",
@@ -39672,28 +39627,6 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     {
       "entityKey": "source-switch.button.button",
       "controlKey": "source-switch.button.button@source-switch-results.default.n6",
-      "controlId": "source-switch.button.source-switch-results.default.button.ui-event-source-switch-confirm-h-957124b5",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "mappingStatus": "pending-action-and-instance-key",
-      "uiEvent": "source.switch.confirm",
-      "route": "source-switch-results",
-      "state": "default",
-      "domain": "source-switch",
-      "family": "button",
-      "role": "button",
-      "renderer": "sourceSwitchV2",
-      "rendererFile": "renderers/w3-source-switch-renderers.js",
-      "rendererSlot": "sourceSwitchV2@renderers/w3-source-switch-renderers.js",
-      "pageFamily": "source-switch",
-      "source": "registry",
-      "label": "检查并确认"
-    },
-    {
-      "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch-results.default.n7",
       "controlId": "source-switch.button.source-switch-results.default.button.reader-chapter-action-next-h-17c3473c",
       "actionKey": null,
       "instanceKey": null,
@@ -39716,7 +39649,7 @@ var CANONICAL_CONTROL_DECLARATIONS = [
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch-results.default.n8",
+      "controlKey": "source-switch.button.button@source-switch-results.default.n7",
       "controlId": "source-switch.button.source-switch-results.default.button.reader-chapter-action-prev-h-3c82e6da",
       "actionKey": null,
       "instanceKey": null,
@@ -40024,29 +39957,6 @@ var CANONICAL_CONTROL_DECLARATIONS = [
       "source": "source-switch-action",
       "label": "关闭换源",
       "settingsKey": "close"
-    },
-    {
-      "entityKey": "source-switch.control.button.confirm",
-      "controlKey": "source-switch.control.button.confirm@source-switch-results.default",
-      "controlId": "source-switch.control.source-switch-results.default.button.confirm",
-      "actionKey": "confirm",
-      "instanceKey": null,
-      "needsActionKey": false,
-      "needsInstanceKey": false,
-      "mappingStatus": "mapped",
-      "uiEvent": "source.switch.confirm",
-      "route": "source-switch-results",
-      "state": "default",
-      "domain": "source-switch",
-      "family": "control",
-      "role": "button",
-      "renderer": "sourceSwitchV2",
-      "rendererFile": "renderers/w3-source-switch-renderers.js",
-      "rendererSlot": "sourceSwitchV2@renderers/w3-source-switch-renderers.js",
-      "pageFamily": "source-switch",
-      "source": "source-switch-action",
-      "label": "检查并确认换源",
-      "settingsKey": "confirm"
     },
     {
       "entityKey": "source-switch.control.button.source-option-source-aggregate-1",
@@ -53444,10 +53354,10 @@ var R2_DECLARATIONS_META = {
       "about-restore-preview"
     ],
     "totals": {
-      "registryBacked": 1066,
+      "registryBacked": 1064,
       "r2Subcontrols": 61,
       "readerRuntimeActions": 439,
-      "sourceSwitchActions": 37,
+      "sourceSwitchActions": 35,
       "subcontrolsByType": {
         "switch": 28,
         "select": 16,
@@ -53456,7 +53366,7 @@ var R2_DECLARATIONS_META = {
         "textbox": 1,
         "input": 4
       },
-      "total": 2346
+      "total": 2342
     },
     "exemptionSummary": {
       "registryUiEventNull": 242,

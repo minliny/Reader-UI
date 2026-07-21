@@ -23,21 +23,22 @@ function fresh() {
 }
 function values(html, attr) { return [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((match) => match[1]); }
 
-test("R2a source-switch declares exactly 37 mapped source-owned controls", () => {
+test("R2a source-switch declares exactly 35 mapped source-owned controls", () => {
   const sandbox = { module: { exports: {} }, window: {} };
   new vm.Script(declarationSource).runInNewContext(sandbox);
   const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "source-switch-action");
-  assert.equal(rows.length, 37);
+  assert.equal(rows.length, 35);
   assert.ok(rows.every((entry) => entry.mappingStatus === "mapped" && entry.instanceKey === null));
-  assert.equal(new Set(rows.map((entry) => entry.controlKey)).size, 37);
+  assert.equal(new Set(rows.map((entry) => entry.controlKey)).size, 35);
 });
 
-test("R2a source-switch and results each stamp 13 controls with five attributes", () => {
+test("R2a source-switch and results each stamp 12 controls with five attributes", () => {
   const api = fresh();
   for (const route of ["source-switch", "source-switch-results"]) {
     api.sourceSwitch.reset();
     const html = api.sourceSwitchV2(fixture, route, {});
-    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, 13, `${route} ${attr}`);
+    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, 12, `${route} ${attr}`);
+    assert.doesNotMatch(html, /data-source-switch-action="confirm"|检查并确认|>继续<|fd-source-switch-result/);
   }
 });
 

@@ -38,11 +38,13 @@ test("IC0 enumerates every direct variant and every alias case", () => {
 test("IC0 keeps the semantic denominator separate from suspected non-semantic controls", () => {
   // A4 reconciliation: Settings/Source/WebDAV pilot controls carrying stable
   // data-control-key are semantic occurrences. The current deterministic
-  // inventory denominator is 3,808; containers remain a separate denominator.
+  // inventory denominator is 3,806 after the two invented Source Switch
+  // confirmation buttons were removed; containers remain a separate denominator.
   // Source Switch migrates its 22 candidate rows from role=button articles to
-  // native buttons without changing the semantic denominator.
-  assert.equal(artifacts.coverage.semanticControls, 3808);
-  assert.equal(artifacts.inventory.semanticControls.length, 3808);
+  // native buttons; the direct-switch correction then removes one false
+  // confirmation occurrence from each candidate-list route.
+  assert.equal(artifacts.coverage.semanticControls, 3806);
+  assert.equal(artifacts.inventory.semanticControls.length, 3806);
   assert.equal(
     artifacts.coverage.suspectedNonSemanticControls,
     artifacts.inventory.suspectedNonSemanticControls.length,
@@ -50,7 +52,7 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
     article: 349,
-    button: 3335,
+    button: 3333,
     i: 28,
     input: 49,
     select: 13,
@@ -80,7 +82,7 @@ test("IC0 records required fields without inventing a canonical control id", () 
   assert.equal(artifacts.inventory.identityBoundary.canonicalControlIdAvailable, false);
   assert.equal(artifacts.coverage.semanticControlCoverage.canonicalControlIds, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.joinedControls, 0);
-  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3808);
+  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3806);
 });
 
 test("IC0 accessible names resolve references and labels without treating ordinary input values as names", () => {

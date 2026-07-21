@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "5d72cf2e6cfa518f853006770432a462f058de6f46dcf94c0b046e1c35de83f2",
+    "inventorySha256": "b28a0a06aa2fc841902f004705c1e9df83c4afaef7aab035c10206dde2a5a2b9",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs",
@@ -11,10 +11,10 @@
   },
   "totals": {
     "routes": 260,
-    "entries": 3808,
-    "uniqueControlIds": 3808,
+    "entries": 3806,
+    "uniqueControlIds": 3806,
     "uniqueEntityKeys": 77,
-    "uniqueControlKeys": 3808
+    "uniqueControlKeys": 3806
   },
   "byRoute": {
     "discover-cache-confirm": [
@@ -42594,7 +42594,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch-results.default.n7",
+        "controlKey": "source-switch.button.button@source-switch-results.default.n6",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch-results.default.button.reader-chapter-action-next-h-17c3473c",
@@ -42608,7 +42608,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch-results.default.n8",
+        "controlKey": "source-switch.button.button@source-switch-results.default.n7",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch-results.default.button.reader-chapter-action-prev-h-3c82e6da",
@@ -42740,20 +42740,6 @@
         "controlId": "source-switch.button.source-switch-results.default.button.ui-event-source-switch-cancel-h-f713cccf",
         "selectorSha256": "b5907ecfec333e72fdc4be6ce5864295b38c893911343aa4236c8684c81112ee",
         "dataControlId": "source-switch.button.source-switch-results.default.button.ui-event-source-switch-cancel-h-f713cccf",
-        "state": "default",
-        "viewport": "phone",
-        "role": "button",
-        "family": "button",
-        "mappingStatus": "pending-action-and-instance-key"
-      },
-      {
-        "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch-results.default.n6",
-        "actionKey": null,
-        "instanceKey": null,
-        "controlId": "source-switch.button.source-switch-results.default.button.ui-event-source-switch-confirm-h-957124b5",
-        "selectorSha256": "5120fb3a9c3ea3f760c5235fecbeecf4559d1bae95ed34289c4a4dfa096bf748",
-        "dataControlId": "source-switch.button.source-switch-results.default.button.ui-event-source-switch-confirm-h-957124b5",
         "state": "default",
         "viewport": "phone",
         "role": "button",
@@ -43468,7 +43454,7 @@
     "source-switch": [
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n7",
+        "controlKey": "source-switch.button.button@source-switch.default.n6",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.h-36687359",
@@ -43538,7 +43524,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n4",
+        "controlKey": "source-switch.button.button@source-switch.default.n3",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.reader-brightness-auto-h-a865e575",
@@ -43552,7 +43538,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n6",
+        "controlKey": "source-switch.button.button@source-switch.default.n5",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.reader-chapter-action-next-h-28040f4e",
@@ -43566,7 +43552,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n2",
+        "controlKey": "source-switch.button.button@source-switch.default.n1",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.reader-chapter-action-prev-h-d5ad7f15",
@@ -43580,7 +43566,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n1",
+        "controlKey": "source-switch.button.button@source-switch.default.n0",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.reader-dismiss-immersive-reading-h-c71ed6e2",
@@ -43594,7 +43580,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n5",
+        "controlKey": "source-switch.button.button@source-switch.default.n4",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.reader-exit-h-3ffb0282",
@@ -43608,7 +43594,7 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n8",
+        "controlKey": "source-switch.button.button@source-switch.default.n7",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.reader-more-toggle-h-924fccea",
@@ -43692,26 +43678,12 @@
       },
       {
         "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n3",
+        "controlKey": "source-switch.button.button@source-switch.default.n2",
         "actionKey": null,
         "instanceKey": null,
         "controlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-cancel-h-2f446a07",
         "selectorSha256": "b5907ecfec333e72fdc4be6ce5864295b38c893911343aa4236c8684c81112ee",
         "dataControlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-cancel-h-2f446a07",
-        "state": "default",
-        "viewport": "phone",
-        "role": "button",
-        "family": "button",
-        "mappingStatus": "pending-action-and-instance-key"
-      },
-      {
-        "entityKey": "source-switch.button.button",
-        "controlKey": "source-switch.button.button@source-switch.default.n0",
-        "actionKey": null,
-        "instanceKey": null,
-        "controlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-confirm-h-a6e17138",
-        "selectorSha256": "5120fb3a9c3ea3f760c5235fecbeecf4559d1bae95ed34289c4a4dfa096bf748",
-        "dataControlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-confirm-h-a6e17138",
         "state": "default",
         "viewport": "phone",
         "role": "button",

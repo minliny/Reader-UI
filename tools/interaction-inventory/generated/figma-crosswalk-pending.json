@@ -3,13 +3,13 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "5d72cf2e6cfa518f853006770432a462f058de6f46dcf94c0b046e1c35de83f2",
+    "inventorySha256": "b28a0a06aa2fc841902f004705c1e9df83c4afaef7aab035c10206dde2a5a2b9",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
   },
   "note": "Figma does not currently expose a canonical join key. All entries are pending-figma-join; figmaNodeCandidate fields must be backfilled by a Figma writer with explicit node-id mapping. R1.1 does not forge Figma bindings. entityKey is the logical entity (cross route/state/viewport); controlKey is the route/state occurrence (cross viewport); controlId is the DOM occurrence tracking id (retained from R1 for audit reproducibility).",
-  "totalPending": 3808,
+  "totalPending": 3806,
   "entries": [
     {
       "entityKey": "discover.button.button",
@@ -54157,7 +54157,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch-results.default.n7",
+      "controlKey": "source-switch.button.button@source-switch-results.default.n6",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch-results.default.button.reader-chapter-action-next-h-17c3473c",
@@ -54175,7 +54175,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch-results.default.n8",
+      "controlKey": "source-switch.button.button@source-switch-results.default.n7",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch-results.default.button.reader-chapter-action-prev-h-3c82e6da",
@@ -54349,24 +54349,6 @@
       "family": "button",
       "label": "关闭换源窗口",
       "uiEvent": "source.switch.cancel",
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "status": "pending-figma-join"
-    },
-    {
-      "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch-results.default.n6",
-      "actionKey": null,
-      "instanceKey": null,
-      "controlId": "source-switch.button.source-switch-results.default.button.ui-event-source-switch-confirm-h-957124b5",
-      "candidateKey": "candidate:e687602bb19e03a5219b",
-      "routeId": "source-switch-results",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "family": "button",
-      "label": "检查并确认",
-      "uiEvent": "source.switch.confirm",
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",
       "status": "pending-figma-join"
@@ -55021,7 +55003,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n7",
+      "controlKey": "source-switch.button.button@source-switch.default.n6",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.h-36687359",
@@ -55111,7 +55093,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n4",
+      "controlKey": "source-switch.button.button@source-switch.default.n3",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.reader-brightness-auto-h-a865e575",
@@ -55129,7 +55111,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n6",
+      "controlKey": "source-switch.button.button@source-switch.default.n5",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.reader-chapter-action-next-h-28040f4e",
@@ -55147,7 +55129,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n2",
+      "controlKey": "source-switch.button.button@source-switch.default.n1",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.reader-chapter-action-prev-h-d5ad7f15",
@@ -55165,7 +55147,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n1",
+      "controlKey": "source-switch.button.button@source-switch.default.n0",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.reader-dismiss-immersive-reading-h-c71ed6e2",
@@ -55183,7 +55165,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n5",
+      "controlKey": "source-switch.button.button@source-switch.default.n4",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.reader-exit-h-3ffb0282",
@@ -55201,7 +55183,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n8",
+      "controlKey": "source-switch.button.button@source-switch.default.n7",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.reader-more-toggle-h-924fccea",
@@ -55309,7 +55291,7 @@
     },
     {
       "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n3",
+      "controlKey": "source-switch.button.button@source-switch.default.n2",
       "actionKey": null,
       "instanceKey": null,
       "controlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-cancel-h-2f446a07",
@@ -55321,24 +55303,6 @@
       "family": "button",
       "label": "关闭换源窗口",
       "uiEvent": "source.switch.cancel",
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "status": "pending-figma-join"
-    },
-    {
-      "entityKey": "source-switch.button.button",
-      "controlKey": "source-switch.button.button@source-switch.default.n0",
-      "actionKey": null,
-      "instanceKey": null,
-      "controlId": "source-switch.button.source-switch.default.button.ui-event-source-switch-confirm-h-a6e17138",
-      "candidateKey": "candidate:6ac99e90f0cd444922a2",
-      "routeId": "source-switch",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "family": "button",
-      "label": "继续",
-      "uiEvent": "source.switch.confirm",
       "figmaNodeCandidate": null,
       "figmaJoinStatus": "pending-figma-join",
       "status": "pending-figma-join"

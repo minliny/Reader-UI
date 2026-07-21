@@ -30,7 +30,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "56e3bbb5d3ba4b295ad426954f6c6cfe2982c6fabb0bc1f28d5a5d03884e5b33"
+    "rendererSourcesSha256": "2e54e907fd50a1e53d39ba11a5afd5e96cb0b764004ca917ba1a4923783afabe"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -31218,42 +31218,6 @@
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
-      "routeId": "source-switch",
-      "resolvedRouteId": "source-switch",
-      "aliasFor": null,
-      "runtimeFamily": "source-switch",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "继续",
-      "selector": "main[data-shell=\"FlowShell\"] > section[data-slot=\"comparisonRegion\"]:nth-of-type(2) > section[data-source-switch-window] > section.fd-source-switch-result > button[data-ui-event=\"source\\.switch\\.confirm\"]",
-      "dataAttributes": {
-        "data-control-id": "source-switch.control.source-switch.default.button.confirm",
-        "data-control-key": "source-switch.control.button.confirm@source-switch.default",
-        "data-entity-key": "source-switch.control.button.confirm",
-        "data-settings-key": "confirm",
-        "data-source-switch-action": "confirm",
-        "data-ui-event": "source.switch.confirm"
-      },
-      "uiEvent": "source.switch.confirm",
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:6ac99e90f0cd444922a2",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
       "routeId": "source-switch-results",
       "resolvedRouteId": "source-switch-results",
       "aliasFor": null,
@@ -32293,42 +32257,6 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
       "candidateKey": "candidate:c1b4fe5de46ddc82eae1",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "source-switch-results",
-      "resolvedRouteId": "source-switch-results",
-      "aliasFor": null,
-      "runtimeFamily": "source-switch",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "检查并确认",
-      "selector": "main[data-shell=\"FlowShell\"] > section[data-slot=\"comparisonRegion\"]:nth-of-type(2) > section[data-source-switch-window] > section.fd-source-switch-result > button[data-ui-event=\"source\\.switch\\.confirm\"]",
-      "dataAttributes": {
-        "data-control-id": "source-switch.control.source-switch-results.default.button.confirm",
-        "data-control-key": "source-switch.control.button.confirm@source-switch-results.default",
-        "data-entity-key": "source-switch.control.button.confirm",
-        "data-settings-key": "confirm",
-        "data-source-switch-action": "confirm",
-        "data-ui-event": "source.switch.confirm"
-      },
-      "uiEvent": "source.switch.confirm",
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
-      ],
-      "candidateKey": "candidate:e687602bb19e03a5219b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
