@@ -5,22 +5,23 @@
   "pageFamily": "rss",
   "stage": "R2a-R2b-R3a",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-21T23:55:00+08:00",
+  "generatedAt": "2026-07-21T10:24:19+08:00",
   "localSource": {
     "repository": "Reader-UI",
     "branch": "codex/motion-demo-optimizations",
     "baselineCommit": "5e182286ddcd0d5a1ce6fe4643fdfbddd5c0a06c",
-    "implementationCommit": "bd99f964ac4932d3fdfd884f1e940504f18fece3",
-    "implementationCommitSubject": "feat(rss): complete local R3a Figma handoff readiness",
+    "implementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+    "implementationCommitSubject": "fix(rss): include all Figma-present states in R3a",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): RSS LOCAL_READY_FOR_FIGMA evidence binding",
     "localReadyForFigma": true
   },
   "denominatorBoundary": {
     "routeContractRssRouteCount": 53,
-    "currentF2VisualFamilyRouteCount": 10,
-    "excludedSecondaryRouteCount": 43,
-    "policy": "Only the ten Figma/R2 primary routes are admitted to the current RSS F2 visual family. The 43 secondary routes remain valid local product routes but are excluded from this packet and may not be used to claim the complete RSS product is ready or complete."
+    "currentF2VisualFamilyRouteCount": 13,
+    "existingFigmaVisualStateCount": 5,
+    "excludedSecondaryRouteCount": 40,
+    "policy": "The thirteen routes backed by the five existing Figma RSS visual states are admitted. The remaining 40 local product routes have no matching Figma state in this packet and remain explicitly excluded."
   },
   "routeFamily": {
     "primaryRoutes": [
@@ -33,12 +34,14 @@
       "rss-refreshing",
       "rss-source-category-releases",
       "rss-source-category-issues",
-      "rss-source-category-discussions"
+      "rss-source-category-discussions",
+      "rss-empty",
+      "rss-error",
+      "rss-detail"
     ],
     "excludedSecondaryRoutes": [
       "rss-starred",
       "rss-search",
-      "rss-detail",
       "rss-original",
       "rss-original-browser",
       "rss-subscription-management",
@@ -72,24 +75,26 @@
       "rss-favorite-groups",
       "rss-favorite-group-edit",
       "rss-favorite-clear",
-      "rss-empty",
-      "rss-error",
       "rss-source-add",
       "rss-source-delete-confirm",
       "rss-rule-subscription-create",
       "rss-favorite-add",
       "rss-favorite-remove"
     ],
-    "uniqueProductionRenderer": "render-runtime.js::mainTabRss(data, appState, route)",
+    "productionRenderers": [
+      "render-runtime.js::mainTabRss(data, appState, route)",
+      "render-runtime.js::rssStateScreen(data, route, appState)",
+      "render-runtime.js::rssDetailScreen(data, appState)"
+    ],
     "rendererFile": "frontend-demo-optimized/render-runtime.js",
     "stateOwner": "ReaderRssRuntimeContract.createOwner",
     "obsoleteRendererPolicy": "frontend-demo-optimized/renderers/d2-rss-renderers.js is obsolete, is not loaded by index.html, and must not be restored or used as a second owner.",
-    "fallbackPolicy": "The ten primary routes dispatch directly to mainTabRss. Secondary routes keep their existing render-runtime implementations but are outside this packet."
+    "fallbackPolicy": "The ten list/category routes dispatch to mainTabRss; the existing Figma empty/error/detail routes dispatch to rssStateScreen/rssDetailScreen. The remaining 40 routes stay outside this packet."
   },
   "r2aInstrumentation": {
-    "semanticControlCount": 107,
+    "semanticControlCount": 123,
     "semanticControlSource": "rss-action",
-    "mappingStatus": "107/107 mapped",
+    "mappingStatus": "123/123 mapped",
     "controlsByRoute": {
       "rss": 22,
       "rss-all": 16,
@@ -100,7 +105,10 @@
       "rss-refreshing": 17,
       "rss-source-category-releases": 8,
       "rss-source-category-issues": 7,
-      "rss-source-category-discussions": 7
+      "rss-source-category-discussions": 7,
+      "rss-empty": 3,
+      "rss-error": 3,
+      "rss-detail": 10
     },
     "fiveDataAttrs": [
       "data-entity-key",
@@ -123,7 +131,7 @@
       "reader-roadmap"
     ],
     "identityPolicy": "Feed/article business IDs and named route actions are the only identity inputs. Labels, selectors, DOM order, ordinal n0-style keys and screenshots are prohibited.",
-    "runtimeEvidence": "The deterministic interaction inventory rendered all ten primary routes and found 107/107 semantic controls carrying data-control-key and the other four canonical attributes."
+    "runtimeEvidence": "The deterministic identity contract covers all thirteen admitted routes and all 123 controls with the five canonical attributes; missing or ambiguous selectors fail closed."
   },
   "r2bRealInteraction": {
     "stateDomains": [
@@ -155,7 +163,7 @@
       "cancel increments requestEpoch so later completion resolves stale",
       "feed selection accepts only the four stable feed IDs",
       "article detail accepts only the five stable article IDs",
-      "detail/empty/error/loading remain owner states and do not redefine the excluded secondary-route denominator"
+      "detail/empty/error/loading remain owner phases while the three matching Figma routes are now admitted to the visual handoff"
     ]
   },
   "ariaAndFocus": {
@@ -177,8 +185,8 @@
   },
   "verification": {
     "focusedR3a": {
-      "tests": 26,
-      "passed": 26,
+      "tests": 29,
+      "passed": 29,
       "failed": 0,
       "files": [
         "frontend-demo-optimized/verify/r3a-rss-identity.test.mjs",
@@ -186,14 +194,14 @@
         "frontend-demo-optimized/verify/r3a-rss-aria-focus.test.mjs"
       ]
     },
-    "frontendRegression": { "tests": 480, "passed": 480, "failed": 0 },
+    "frontendRegression": { "tests": 564, "passed": 564, "failed": 0 },
     "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
-    "identityDenominator": 3808,
+    "identityDenominator": 3806,
     "identityDistribution": {
-      "mapped": 796,
-      "pendingActionKey": 450,
-      "pendingInstanceKey": 1035,
-      "pendingActionAndInstanceKey": 1527
+      "mapped": 853,
+      "pendingActionKey": 447,
+      "pendingInstanceKey": 975,
+      "pendingActionAndInstanceKey": 1531
     },
     "byteStableChecks": [
       "node tools/interaction-inventory/generate-control-ids.mjs --check",
@@ -203,7 +211,18 @@
   },
   "figmaReadOnlyBaseline": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "revision": "2378501297946752326",
+    "revisionTitle": "F2 · Source Switch · User Confirmed",
+    "rssReferencePage": {
+      "pageId": "334:3",
+      "pageName": "10 · Reference · RSS",
+      "phoneReference": "378:2",
+      "liveReferenceSet": "596:2",
+      "refreshing": "594:2",
+      "empty": "592:2",
+      "error": "591:2",
+      "detail": "593:2"
+    },
     "responsiveMasterPage": {
       "pageId": "834:3",
       "pageName": "24 · Responsive Masters · Phase 4"
@@ -214,10 +233,12 @@
     "downstreamFinalPage": {
       "pageId": "834:2",
       "pageName": "23 · Pages · Final",
-      "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE"
+      "nodeIds": ["943:1872", "943:2402", "1995:58735", "1995:59265"]
     },
     "knownStructuralGap": "The responsive master subtree was read as INSTANCE=0 during F0 preparation. The serial writer must repair it through canonical RSS components while preserving downstream instances and reactions.",
-    "freshRevisionRequiredBeforeWrite": true,
+    "freshRevisionRequiredBeforeWrite": false,
+    "fontSource": "Songti SC is available from macOS /System/Library/Fonts/Supplemental/Songti.ttc; the writer must use the Figma desktop session on the same macOS host.",
+    "sharedComponentSource": "Page 10 contains ten preserved Reference/CaptureDerived RSS components; Page 24 Page/RSS remains the responsive master source. Existing archive nodes must not be moved or deleted.",
     "noForgedBinding": true
   },
   "figmaDecisionsRequired": [
@@ -226,7 +247,7 @@
     "Repair the Page 24 Phone and Tablet masters through real canonical instances, then let Page 23 downstream instances inherit.",
     "Preserve stable feed/article semantics and right-align trailing counts, times and actions.",
     "Use only Phone and Tablet; Landscape inherits Tablet and Compact/Fold structures are prohibited.",
-    "Do not expand this packet to the 43 excluded secondary routes or claim complete RSS product coverage.",
+    "Do not expand this packet beyond the thirteen Figma-present routes or claim complete RSS product coverage.",
     "Preserve reactions. Figma may not change UiEvent, state owner, async guards, route ownership or business flow.",
     "Detached frames and screenshot replacements are prohibited."
   ],
@@ -235,8 +256,8 @@
     "r2bPass": true,
     "r3aPass": true,
     "localReadyForFigma": true,
-    "exactLocalCommit": "bd99f964ac4932d3fdfd884f1e940504f18fece3",
-    "requiresFreshFigmaRevisionRead": true,
+    "exactLocalCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+    "requiresFreshFigmaRevisionRead": false,
     "requiresSingleWriter": true,
     "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
   },
