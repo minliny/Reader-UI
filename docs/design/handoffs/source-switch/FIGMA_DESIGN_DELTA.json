@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "source-switch",
+  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "259:13",
+  "revision": "2378464713948765297",
+  "revisionTitle": "F2 · Source Switch · Local R3a Pilot",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378464713948765297&node-id=942-37",
+  "localImplementationCommit": "938b1a67eea2cef6760be8f9cb63528af8b23b4e",
+  "handoffEvidenceCommit": "0c8b21698d678f7a61452f24869de89e262b144b",
+  "deltas": [
+    {
+      "target": "SourceSwitch/CandidateRow",
+      "nodeId": "568:78",
+      "oldValue": "3 semantic states × 6 interaction states; 32px visual row with 44px overlay and text displaced outside component bounds.",
+      "newValue": "4 semantic states (Current/Available/Unavailable/Selected) × 6 interactions; real 44px row, leading source name, right-aligned latency/chapter, persistent Selected press cycle."
+    },
+    {
+      "target": "SourceSwitch/Window",
+      "nodeId": "568:134",
+      "oldValue": "Header plus candidate list only; canonical Overlay rendered blank rows and had no confirm action.",
+      "newValue": "44px header, scrollable canonical CandidateList, and ResultBar Continue/Check variants with real confirm action targets."
+    },
+    {
+      "target": "SourceSwitch/Overlay",
+      "nodeId": "2294:48521",
+      "oldValue": "Phone-only component.",
+      "newValue": "Phone 390×844 and Tablet 760×960 variants; landscape aliases Tablet; no Compact/Fold variant."
+    },
+    {
+      "target": "Page/Source Switch",
+      "nodeId": "942:37",
+      "oldValue": "Phone and Tablet masters used raw frames with INSTANCE=0.",
+      "newValue": "Both masters inherit visible canonical Overlay instances; original raw frames remain hidden as recovery; Page 23 downstream instances stay attached."
+    },
+    {
+      "target": "SourceSwitch/StateCard",
+      "nodeId": "2295:1653",
+      "oldValue": "No canonical evidence for empty/error/timeout/loading/rollback/preview routes.",
+      "newValue": "Six canonical state variants with 11 traceable 44px action targets, progress and preview evidence, and no shadow."
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "/tmp/source-switch-f2-phone.png",
+      "size": "390x844",
+      "sha256": "bde426a3775a2ee25f8080ae205a9c93ec1b8200776a7804e9cd7574b851dd9e"
+    },
+    {
+      "path": "/tmp/source-switch-f2-tablet.png",
+      "size": "760x960",
+      "sha256": "f57ec34ef2a5e4052db2da85a5a553919ea146cd24e63d662fbdac74128913dd"
+    },
+    {
+      "path": "/tmp/source-switch-f2-states.png",
+      "size": "964x484",
+      "sha256": "78a9061d47b882360dfa9c0b45a5a0e2b3112547fc77cdeee5c82e4cccf28d51"
+    }
+  ],
+  "verification": {
+    "localFocusedTests": "37/37 pass",
+    "bindings": "37/37",
+    "candidateList": {
+      "instances": 11,
+      "detached": 0,
+      "reactions": 20,
+      "dropShadows": 0
+    },
+    "overlaySet": {
+      "instances": 104,
+      "detached": 0,
+      "reactions": 76,
+      "dropShadows": 0
+    },
+    "stateSet": {
+      "instances": 12,
+      "detached": 0,
+      "reactions": 0,
+      "dropShadows": 0
+    },
+    "pageSet": {
+      "instances": 106,
+      "detached": 0,
+      "reactions": 76,
+      "dropShadows": 0
+    },
+    "downstreamFinalSection": {
+      "instances": 108,
+      "detached": 0,
+      "reactions": 76,
+      "dropShadows": 0
+    },
+    "forbiddenCompactFoldStructures": 0,
+    "result": "PASS_AWAITING_USER_CONFIRMATION"
+  },
+  "boundaries": {
+    "uiEventModified": false,
+    "stateOwnerModified": false,
+    "bookDetailFlowModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "otherPageFamiliesModified": false,
+    "rawManualFramesDeleted": false
+  },
+  "admission": {
+    "connectorWriteTransactionComplete": true,
+    "namedRevisionComplete": true,
+    "crosswalkComplete": true,
+    "bindingCount": 37,
+    "userConfirmed": false,
+    "f2Exit": false,
+    "nextFigmaWriterReleased": false,
+    "nextFigmaWriterGate": "User confirmation of Source Switch F2",
+    "remainingGates": [
+      "User confirmation"
+    ]
+  }
+}
