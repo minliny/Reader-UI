@@ -2,10 +2,11 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "bookshelf",
-  "status": "F2_AWAITING_NAMED_REVISION_AND_USER_CONFIRMATION",
+  "status": "F2_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": null,
-  "revisionTitle": null,
+  "revision": "2378359202710026522",
+  "revisionTitle": "F2 · Bookshelf · Local R3a Pilot",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378359202710026522",
   "confirmedAt": null,
   "localImplementationCommit": "003daa7b509505085b35832c43d67b22d58b96d9",
   "handoffEvidenceCommit": "8dd0bdae30dba3896086a61aac43673f8788910b",
@@ -129,8 +130,10 @@
   "visualAudit": {
     "beforePhone": "/tmp/bookshelf-before-phone.png",
     "beforeTablet": "/tmp/bookshelf-before-tablet.png",
-    "afterPhone": "/tmp/bookshelf-final-phone.png",
-    "afterTablet": "/tmp/bookshelf-tablet-variant.png",
+    "afterPhone": "/tmp/bookshelf-named-phone.png",
+    "afterTablet": "/tmp/bookshelf-named-tablet.png",
+    "afterPhoneSha256": "7ec6914bcb273ccb2fc89a84196d95140db2e93d2929038ad327679ef2c61683",
+    "afterTabletSha256": "97523f3e16a82e75d48c67aa129c497fe26d460e6a50db651745e0f15eea4659",
     "controlsRightAligned": true,
     "phoneDensityPreserved": true,
     "tabletCoverRatioPreserved": true,
@@ -141,7 +144,7 @@
   },
   "admission": {
     "connectorWriteTransactionComplete": true,
-    "namedRevisionComplete": false,
+    "namedRevisionComplete": true,
     "userConfirmed": false,
     "f2Exit": false,
     "nextFigmaWriterReleased": false,
@@ -149,7 +152,6 @@
     "nextLocalLaneReleased": true,
     "nextFigmaWriterGate": "Bookshelf named revision + user confirmation",
     "remainingGates": [
-      "Unlock Figma Desktop and create/read the named revision.",
       "User confirms Bookshelf Phone and Tablet."
     ]
   }

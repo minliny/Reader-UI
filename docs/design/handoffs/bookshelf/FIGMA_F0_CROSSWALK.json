@@ -2,16 +2,18 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "bookshelf",
-  "status": "F2_AWAITING_NAMED_REVISION_AND_USER_CONFIRMATION",
+  "status": "F2_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "baselineRevision": "2378333433968465691",
   "baselineRevisionTitle": "F2 · WebDAV Config · User Confirmed",
-  "revision": null,
-  "revisionTitle": null,
+  "revision": "2378359202710026522",
+  "revisionTitle": "F2 · Bookshelf · Local R3a Pilot",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378359202710026522",
   "revisionRead": {
     "baselineRead": true,
-    "postWriteNamedRevisionCreated": false,
-    "blocker": "Figma Desktop is locked; connector does not expose official file revision. No revision value is fabricated."
+    "postWriteNamedRevisionCreated": true,
+    "readMethod": "Figma Desktop version history context menu exposed the exact version-id in the selected version URL.",
+    "blocker": null
   },
   "timestamp": "2026-07-20T18:30:00+08:00",
   "confirmedAt": null,
@@ -31,56 +33,56 @@
       "pageId": "834:3",
       "nodeId": "941:6",
       "nodeName": "Page/Bookshelf",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "phone-master",
       "pageId": "834:3",
       "nodeId": "941:3",
       "nodeName": "Viewport=Phone",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "tablet-master",
       "pageId": "834:3",
       "nodeId": "941:5",
       "nodeName": "Viewport=Tablet",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "book-card-set",
       "pageId": "259:10",
       "nodeId": "493:196",
       "nodeName": "Library/BookCard",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "bookshelf-action-set",
       "pageId": "259:10",
       "nodeId": "2236:577",
       "nodeName": "Library/BookshelfAction",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "main-tab-item-set",
       "pageId": "259:7",
       "nodeId": "342:175",
       "nodeName": "Navigation/MainTabItem",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "bottom-nav-set",
       "pageId": "259:7",
       "nodeId": "344:379",
       "nodeName": "Navigation/BottomNav",
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "role": "section-action-set",
       "pageId": "259:10",
       "nodeId": "487:75",
       "nodeName": "Library/SectionAction",
-      "revision": null
+      "revision": "2378359202710026522"
     }
   ],
   "downstreamInstances": [
@@ -89,28 +91,28 @@
       "nodeId": "943:11",
       "mainComponentId": "941:3",
       "detached": false,
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "pageId": "834:2",
       "nodeId": "943:437",
       "mainComponentId": "941:5",
       "detached": false,
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "pageId": "834:2",
       "nodeId": "1995:57619",
       "mainComponentId": "941:3",
       "detached": false,
-      "revision": null
+      "revision": "2378359202710026522"
     },
     {
       "pageId": "834:2",
       "nodeId": "1995:57410",
       "mainComponentId": "941:5",
       "detached": false,
-      "revision": null
+      "revision": "2378359202710026522"
     }
   ],
   "bindings": [
@@ -121,8 +123,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1983;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-among-stars@bookshelf.default",
@@ -131,8 +133,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1322",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-android-notes@bookshelf.default",
@@ -141,8 +143,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1943;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-android-notes@bookshelf.default",
@@ -151,8 +153,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1314",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-lighthouse-and-fog@bookshelf.default",
@@ -161,8 +163,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:2003;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-lighthouse-and-fog@bookshelf.default",
@@ -171,8 +173,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1326",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-long-night@bookshelf.default",
@@ -181,8 +183,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1843;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-long-night@bookshelf.default",
@@ -191,8 +193,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1294",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-long-title-layout-sample@bookshelf.default",
@@ -201,8 +203,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:2043;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-long-title-layout-sample@bookshelf.default",
@@ -211,8 +213,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1334",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-ming-dynasty-stories@bookshelf.default",
@@ -221,8 +223,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1883;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-ming-dynasty-stories@bookshelf.default",
@@ -231,8 +233,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1302",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-mystery-lord@bookshelf.default",
@@ -241,8 +243,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1863;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-mystery-lord@bookshelf.default",
@@ -251,8 +253,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1298",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-old-day-echoes@bookshelf.default",
@@ -261,8 +263,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1963;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-old-day-echoes@bookshelf.default",
@@ -271,8 +273,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1318",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-paper-city@bookshelf.default",
@@ -281,8 +283,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:2023;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-paper-city@bookshelf.default",
@@ -291,8 +293,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1330",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-renjian-cihua@bookshelf.default",
@@ -301,8 +303,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1923;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-renjian-cihua@bookshelf.default",
@@ -311,8 +313,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1310",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-more-three-body@bookshelf.default",
@@ -321,8 +323,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1903;1494:55",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.book-open-three-body@bookshelf.default",
@@ -331,8 +333,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1306",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.continue-cover@bookshelf.default",
@@ -341,8 +343,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1382;493:201",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.continue-read@bookshelf.default",
@@ -351,8 +353,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1382;493:208",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.display-settings@bookshelf.default",
@@ -361,8 +363,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:108",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.filter-全部@bookshelf.default",
@@ -371,8 +373,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:529",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.filter-已完结@bookshelf.default",
@@ -381,8 +383,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:531",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.filter-更新失败@bookshelf.default",
@@ -391,8 +393,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:533",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.filter-未读@bookshelf.default",
@@ -401,8 +403,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:535",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.group-全部@bookshelf.default",
@@ -411,8 +413,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:537",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.group-本地书@bookshelf.default",
@@ -421,8 +423,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:539",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.group-追更@bookshelf.default",
@@ -431,8 +433,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:541",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.group-默认@bookshelf.default",
@@ -441,8 +443,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:543",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.more-batch@bookshelf.default",
@@ -451,8 +453,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:545",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.more-close@bookshelf.default",
@@ -461,8 +463,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:547",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.more-group@bookshelf.default",
@@ -471,8 +473,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:549",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.more-local-import@bookshelf.default",
@@ -481,8 +483,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:551",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.more-settings@bookshelf.default",
@@ -491,8 +493,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:553",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.offline-view@bookshelf.default",
@@ -501,8 +503,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:555",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.retry-load@bookshelf.default",
@@ -511,8 +513,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:557",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.retry-network@bookshelf.default",
@@ -521,8 +523,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:559",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.search-clear@bookshelf.default",
@@ -531,8 +533,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:561",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.search-toggle@bookshelf.default",
@@ -541,8 +543,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:102",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.sort-filter-toggle@bookshelf.default",
@@ -551,8 +553,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:97",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.sort-书名@bookshelf.default",
@@ -561,8 +563,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:563",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.sort-作者@bookshelf.default",
@@ -571,8 +573,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:565",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.sort-最近更新@bookshelf.default",
@@ -581,8 +583,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:567",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.sort-阅读进度@bookshelf.default",
@@ -591,8 +593,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:569",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.view-cover@bookshelf.default",
@@ -601,8 +603,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:79",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     },
     {
       "controlKey": "library.button.button.view-list@bookshelf.default",
@@ -611,8 +613,8 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:87",
-      "revision": null,
-      "revisionState": "pending-named-revision"
+      "revision": "2378359202710026522",
+      "revisionState": "named-revision-read"
     }
   ],
   "exitAudit": {
@@ -620,7 +622,7 @@
     "bindingCount": 50,
     "uniqueBindingCount": 50,
     "fakeBindingCount": 0,
-    "unresolvedRevisionBindingCount": 50,
+    "unresolvedRevisionBindingCount": 0,
     "detachedInstanceCount": 0,
     "pageMasterInternalCanonicalInstanceCount": {
       "phone": 56,
@@ -645,11 +647,10 @@
     "fold": false,
     "nonCoverDropShadowCount": 0,
     "connectorWriteComplete": true,
-    "namedRevisionComplete": false,
+    "namedRevisionComplete": true,
     "userConfirmed": false,
     "f2Exit": false,
     "remainingGates": [
-      "Unlock Figma Desktop and create/read the named revision.",
       "User confirms the Phone and Tablet visual result."
     ]
   }
