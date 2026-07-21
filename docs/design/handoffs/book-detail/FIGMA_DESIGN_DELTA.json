@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "book-detail",
+  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "revision": "2378448207290564677",
+  "revisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378448207290564677",
+  "localImplementationCommit": "1006d9a7c0d11011b9e36f2e8053e9691621672f",
+  "handoffEvidenceCommit": "46df81a2ca26fb139afd747e8da07e8c158d8d06",
+  "deltas": [
+    {
+      "target": "Page/Book Detail",
+      "pageId": "834:3",
+      "nodeId": "941:10",
+      "oldValue": "Phone and Tablet masters contained flat/manual Hero, Summary, Chapter, ActionBar and QuickSourceSheet structures.",
+      "newValue": "Both masters preserve the approved resting layout while inheriting attached Hero, Summary, ChapterSection, ChapterRow, ActionBar and QuickSourceSheet components."
+    },
+    {
+      "target": "Library/BookDetail/ChapterRow",
+      "pageId": "834:3",
+      "nodeId": "2266:66",
+      "oldValue": "Chapter rows had no canonical state matrix and no reusable chapter-label property.",
+      "newValue": "Phone and Tablet provide Default, Pressed, Focus, Disabled, Loading and Selected variants with a real ChapterLabel text property and 44px interaction intent."
+    },
+    {
+      "target": "Library/BookDetail/DeleteDialog and RetryStatus",
+      "pageId": "834:3",
+      "nodeIds": ["2269:66", "2269:101"],
+      "oldValue": "Delete, busy, failed, offline and retry states were only local runtime contracts without Book Detail Figma evidence.",
+      "newValue": "DeleteDialog reuses Overlay/Dialog for Default, Loading and Failed; RetryStatus reuses State/StatusPanel for Loading, Error and Offline without changing local ownership."
+    },
+    {
+      "target": "Library/BookDetail/RecoveryAction",
+      "pageId": "834:3",
+      "nodeId": "2274:211",
+      "oldValue": "Seven conditional local actions had stable identities but no truthful Figma node targets.",
+      "newValue": "Seven intents each expose Default, Pressed, Focus, Disabled, Loading and Selected variants; all use the existing status-action visual source and 44px hit-target height."
+    },
+    {
+      "target": "Book Directory downstream evidence",
+      "pageId": "834:3",
+      "nodeIds": ["942:77", "2275:85", "2275:89", "2275:93"],
+      "oldValue": "Reader Full Directory displayed chapters 30–33 only, while local book-directory also declared stable identities for chapters 34–36.",
+      "newValue": "Reader Full Directory remains untouched downstream evidence; three attached ChapterRow instances provide exact chapter 34–36 crosswalk targets without creating another route owner."
+    },
+    {
+      "target": "Phone/Tablet responsive contract",
+      "pageId": "834:3",
+      "nodeIds": ["941:7", "941:9"],
+      "oldValue": "Responsive layout existed but internal structures did not inherit the new Book Detail canonical component graph.",
+      "newValue": "Phone 390×844 and Tablet 760×960 each contain 9 attached instances; landscape aliases Tablet; no Compact/Fold master or detached instance exists."
+    }
+  ],
+  "createdCanonicalNodes": [
+    { "nodeId": "2260:1417", "name": "F2 · Book Detail · Canonical + Evidence" },
+    { "nodeId": "2260:1460", "name": "Library/BookDetail/Hero", "variantCount": 2 },
+    { "nodeId": "2265:14", "name": "Library/BookDetail/Summary", "variantCount": 2 },
+    { "nodeId": "2265:121", "name": "Library/BookDetail/ChapterSection", "variantCount": 2 },
+    { "nodeId": "2265:188", "name": "Library/BookDetail/ActionBar", "variantCount": 2 },
+    { "nodeId": "2265:225", "name": "Library/BookDetail/QuickSourceSheet", "variantCount": 2 },
+    { "nodeId": "2266:66", "name": "Library/BookDetail/ChapterRow", "variantCount": 12 },
+    { "nodeId": "2269:66", "name": "Library/BookDetail/DeleteDialog", "variantCount": 3 },
+    { "nodeId": "2269:101", "name": "Library/BookDetail/RetryStatus", "variantCount": 3 },
+    { "nodeId": "2274:211", "name": "Library/BookDetail/RecoveryAction", "variantCount": 42 }
+  ],
+  "viewportConstraints": {
+    "phone": { "nodeId": "941:7", "size": "390x844", "attachedInstances": 9 },
+    "tablet": { "nodeId": "941:9", "size": "760x960", "attachedInstances": 9 },
+    "landscape": { "alias": "Tablet", "independentMaster": false },
+    "compact": { "prohibited": true },
+    "fold": { "prohibited": true }
+  },
+  "stateCoverage": {
+    "chapterRow": ["Default", "Pressed", "Focus", "Disabled", "Loading", "Selected"],
+    "recoveryAction": ["Default", "Pressed", "Focus", "Disabled", "Loading", "Selected"],
+    "deleteDialog": ["Default", "Loading", "Failed"],
+    "retryStatus": ["Loading", "Error", "Offline"],
+    "localOwnerBoundary": "Figma does not alter UiEvent, reducer ownership, asynchronous guards, route ownership, focus ownership, or business flow."
+  },
+  "visualAudit": {
+    "beforePhone": "/tmp/book-detail-f2-before-phone.png",
+    "beforeTablet": "/tmp/book-detail-f2-before-tablet.png",
+    "afterPhone": "/tmp/book-detail-f2-final-phone.png",
+    "afterTablet": "/tmp/book-detail-f2-final-tablet.png",
+    "afterPhoneSha256": "2191df9cc4dfb982384418bc4124041d63b459e9375ae6b6e98aa7754415bd1d",
+    "afterTabletSha256": "4fa51b3405d92459f270f150adf25f0e60f6309c9676c2dcd4c5e30f19876766",
+    "changedPixelPercentPhone": 0.4423,
+    "changedPixelPercentTablet": 0.1972,
+    "chapterLabelsRestored": true,
+    "activePageDropShadowIntroduced": false,
+    "semanticDialogShadowExceptions": ["2269:39", "2269:47", "2269:58"],
+    "detachedInstanceCount": 0,
+    "result": "PASS_AWAITING_USER_CONFIRMATION"
+  },
+  "admission": {
+    "connectorWriteTransactionComplete": true,
+    "namedRevisionComplete": true,
+    "crosswalkComplete": true,
+    "bindingCount": 56,
+    "userConfirmed": false,
+    "f2Exit": false,
+    "nextFigmaWriterReleased": false,
+    "nextFigmaWriterGate": "User confirmation of Book Detail F2",
+    "remainingGates": ["User confirmation"]
+  }
+}
