@@ -4,9 +4,9 @@
   "scope": "rss",
   "status": "F2_LOCAL_STYLE_COMPLETE_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378488528982468947",
-  "revisionTitle": "F2 · RSS · Local Style Authorized",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378488528982468947&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
+  "revision": "2378494980056319782",
+  "revisionTitle": "F2 · RSS · Edge Radius Constraint Correction",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378494980056319782&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
   "localImplementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
   "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
   "authorityDecision": "For the eight routes lacking exact legacy Figma surfaces, the user explicitly authorized the local canonical renderer as the visual, structural and interaction-intent source.",
@@ -15,6 +15,7 @@
     {"pageId":"334:3","nodeId":"2305:961","oldValue":"Refreshing, Empty, Error and Detail existed only as preserved Live Reference frames.","newValue":"Exact clones became a four-variant Page/RSS/CanonicalState set; original Live Reference frames remain unchanged."},
     {"pageId":"834:3","nodeId":"942:13","oldValue":"Phone/Tablet masters contained zero instances.","newValue":"Each master contains one attached canonical content instance; original raw nodes remain preserved and hidden. Four Page 23 downstream instances remain attached."},
     {"pageId":"334:3","nodeId":"2328:3975","oldValue":"Eight local RSS list/category routes had no exact Figma surface and were blocked.","newValue":"Added Page/RSS/CanonicalListRoute with Route=All/SourceFeed/Novel/Tech/Booklist/Releases/Issues/Discussions and Viewport=Phone/Tablet, using editable local-renderer captures as the source of truth."},
+    {"pageId":"334:3","nodeId":"2328:3975","oldValue":"The 16 wrapper components used 0px corners; device children retained capture-dependent heights and Vertical=MIN. rss-all Tablet also contained an extra zero-radius wrapper.","newValue":"All 16 wrappers and device children use the local 34px device radius on all four corners, exact 390x844 or 760x960 dimensions, clipsContent=true and horizontal/vertical STRETCH. rss-all Tablet now uses the exact editable device frame."},
     {"pageId":"834:3","nodeId":"2329:4132","oldValue":"No downstream Figma instances existed for the eight local-authorized routes.","newValue":"Added 16 attached instances, one Phone and one Tablet instance per route; no detached frame is used as a deliverable."},
     {"pageId":"259:2","nodeId":"2309:2","oldValue":"No editable provenance existed for the local-authorized routes.","newValue":"All 16 editable capture roots are preserved hidden as __LOCAL_CAPTURE_SOURCE__; they are provenance only, never canonical masters or screenshots."}
   ],
@@ -27,8 +28,11 @@
     "detachedInstanceCount": 0,
     "compactOrFoldCount": 0,
     "canonicalVariantCount": 16,
-    "attachedDownstreamInstanceCount": 16
+    "attachedDownstreamInstanceCount": 16,
+    "canonicalEdgeRadius": 34,
+    "incorrectEdgeRadiusConstraintCount": 0,
+    "edgeConstraintAudit": "16/16 masters and 16/16 attached instances PASS"
   },
   "boundary": "No UiEvent, reducer owner, async guard, route flow, motion contract or non-RSS canonical page family was changed. Existing RSS masters, Page 23 downstream instances and reactions were preserved.",
-  "remainingGate": "User visual confirmation of revision 2378488528982468947."
+  "remainingGate": "User visual confirmation of revision 2378494980056319782."
 }
