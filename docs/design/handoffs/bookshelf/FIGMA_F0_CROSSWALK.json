@@ -2,13 +2,15 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "bookshelf",
-  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "baselineRevision": "2378333433968465691",
   "baselineRevisionTitle": "F2 · WebDAV Config · User Confirmed",
-  "revision": "2378359202710026522",
-  "revisionTitle": "F2 · Bookshelf · Local R3a Pilot",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378359202710026522",
+  "revision": "2378442065521482111",
+  "revisionTitle": "F2 · Bookshelf · User Confirmed",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378442065521482111",
+  "pilotRevision": "2378359202710026522",
+  "pilotRevisionTitle": "F2 · Bookshelf · Local R3a Pilot",
   "revisionRead": {
     "baselineRead": true,
     "postWriteNamedRevisionCreated": true,
@@ -16,7 +18,7 @@
     "blocker": null
   },
   "timestamp": "2026-07-20T18:30:00+08:00",
-  "confirmedAt": null,
+  "confirmedAt": "2026-07-21T08:50:59+08:00",
   "localSource": {
     "implementationCommit": "003daa7b509505085b35832c43d67b22d58b96d9",
     "handoffEvidenceCommit": "8dd0bdae30dba3896086a61aac43673f8788910b",
@@ -33,56 +35,56 @@
       "pageId": "834:3",
       "nodeId": "941:6",
       "nodeName": "Page/Bookshelf",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "phone-master",
       "pageId": "834:3",
       "nodeId": "941:3",
       "nodeName": "Viewport=Phone",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "tablet-master",
       "pageId": "834:3",
       "nodeId": "941:5",
       "nodeName": "Viewport=Tablet",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "book-card-set",
       "pageId": "259:10",
       "nodeId": "493:196",
       "nodeName": "Library/BookCard",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "bookshelf-action-set",
       "pageId": "259:10",
       "nodeId": "2236:577",
       "nodeName": "Library/BookshelfAction",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "main-tab-item-set",
       "pageId": "259:7",
       "nodeId": "342:175",
       "nodeName": "Navigation/MainTabItem",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "bottom-nav-set",
       "pageId": "259:7",
       "nodeId": "344:379",
       "nodeName": "Navigation/BottomNav",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "role": "section-action-set",
       "pageId": "259:10",
       "nodeId": "487:75",
       "nodeName": "Library/SectionAction",
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     }
   ],
   "downstreamInstances": [
@@ -91,28 +93,28 @@
       "nodeId": "943:11",
       "mainComponentId": "941:3",
       "detached": false,
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "pageId": "834:2",
       "nodeId": "943:437",
       "mainComponentId": "941:5",
       "detached": false,
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "pageId": "834:2",
       "nodeId": "1995:57619",
       "mainComponentId": "941:3",
       "detached": false,
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     },
     {
       "pageId": "834:2",
       "nodeId": "1995:57410",
       "mainComponentId": "941:5",
       "detached": false,
-      "revision": "2378359202710026522"
+      "revision": "2378442065521482111"
     }
   ],
   "bindings": [
@@ -123,7 +125,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1983;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -133,7 +135,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1322",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -143,7 +145,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1943;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -153,7 +155,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1314",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -163,7 +165,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:2003;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -173,7 +175,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1326",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -183,7 +185,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1843;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -193,7 +195,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1294",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -203,7 +205,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:2043;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -213,7 +215,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1334",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -223,7 +225,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1883;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -233,7 +235,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1302",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -243,7 +245,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1863;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -253,7 +255,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1298",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -263,7 +265,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1963;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -273,7 +275,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1318",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -283,7 +285,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:2023;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -293,7 +295,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1330",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -303,7 +305,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1923;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -313,7 +315,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1310",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -323,7 +325,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "I2236:1903;1494:55",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -333,7 +335,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "2236:1306",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -343,7 +345,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1382;493:201",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -353,7 +355,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1382;493:208",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -363,7 +365,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:108",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -373,7 +375,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:529",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -383,7 +385,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:531",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -393,7 +395,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:533",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -403,7 +405,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:535",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -413,7 +415,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:537",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -423,7 +425,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:539",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -433,7 +435,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:541",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -443,7 +445,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:543",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -453,7 +455,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:545",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -463,7 +465,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:547",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -473,7 +475,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:549",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -483,7 +485,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:551",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -493,7 +495,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:553",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -503,7 +505,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:555",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -513,7 +515,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:557",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -523,7 +525,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:559",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -533,7 +535,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:561",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -543,7 +545,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:102",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -553,7 +555,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:97",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -563,7 +565,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:563",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -573,7 +575,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:565",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -583,7 +585,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:567",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -593,7 +595,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2236:569",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -603,7 +605,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:79",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     },
     {
@@ -613,7 +615,7 @@
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "834:3",
       "nodeId": "I2236:1406;487:87",
-      "revision": "2378359202710026522",
+      "revision": "2378442065521482111",
       "revisionState": "named-revision-read"
     }
   ],
@@ -648,10 +650,8 @@
     "nonCoverDropShadowCount": 0,
     "connectorWriteComplete": true,
     "namedRevisionComplete": true,
-    "userConfirmed": false,
-    "f2Exit": false,
-    "remainingGates": [
-      "User confirms the Phone and Tablet visual result."
-    ]
+    "userConfirmed": true,
+    "f2Exit": true,
+    "remainingGates": []
   }
 }
