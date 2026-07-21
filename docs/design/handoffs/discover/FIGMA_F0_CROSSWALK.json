@@ -1,0 +1,27 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_F0_CROSSWALK","scope":"discover","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","baselineRevisionTitle":"Restored version: F2 · RSS · User Confirmed","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "revisionUrl":"https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378562033612422730&node-id=942-9",
+  "localSource":{"implementationCommit":"61bab9f31a1284796af2318fb1960fb93c7c8132","handoffEvidenceCommit":"d413f254d84ef2fc5d7ac04c1b49319ad06b1bf6","packet":"docs/design/handoffs/discover/LOCAL_READY_FOR_FIGMA.json"},
+  "canonicalMasters":[
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:9","name":"Page/Discover","revision":"2378562033612422730"},
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"2446:391","name":"Surface/Discover","revision":"2378562033612422730"}
+  ],
+  "bindings":[
+    {"localRoute":"discover","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"942:6","tabletNodeId":"942:8","revision":"2378562033612422730"},
+    {"localRoute":"discover-home","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:759","tabletNodeId":"2446:944","revision":"2378562033612422730"},
+    {"localRoute":"discover-control","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:1128","tabletNodeId":"2446:1388","revision":"2378562033612422730"},
+    {"localRoute":"discover-sort","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:1647","tabletNodeId":"2446:1875","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-bestseller","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:2102","tabletNodeId":"2446:2287","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-booklist","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:2471","tabletNodeId":"2446:2656","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-category","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:2840","tabletNodeId":"2446:3025","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-finished","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:3209","tabletNodeId":"2446:3394","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-latest","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:3578","tabletNodeId":"2446:3763","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-new","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:3947","tabletNodeId":"2446:4132","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-ranking","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:4316","tabletNodeId":"2446:4501","revision":"2378562033612422730"},
+    {"localRoute":"discover-entry-source","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2446:4685","tabletNodeId":"2446:4870","revision":"2378562033612422730"}
+  ],
+  "downstreamEvidence":{"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:2","sectionNodeId":"2460:29364","familyFrameNodeId":"2460:37926","attachedPageInstanceCount":24,"revision":"2378562033612422730"},
+  "viewportPolicy":{"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
+  "exitAudit":{"variantCount":24,"everyPageVariantHasCanonicalInstance":true,"detachedCount":0,"pageRootDropShadowCount":0,"intentionalLocalShadowKinds":["book-cover","filter-apply","sort-menu"],"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION"}
+}

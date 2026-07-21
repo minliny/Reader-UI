@@ -1,0 +1,22 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_F0_CROSSWALK","scope":"restore-preview","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","baselineRevisionTitle":"Restored version: F2 · RSS · User Confirmed","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "revisionUrl":"https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378562033612422730&node-id=942-33",
+  "localSource":{"implementationCommit":"4666da2315e861dd70ceba2a93eeab080ec3ef98","handoffEvidenceCommit":"9598d2e78af3d7566d610b98d23a46474265c853","packet":"docs/design/handoffs/restore-preview/LOCAL_READY_FOR_FIGMA.json"},
+  "canonicalMasters":[
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:33","name":"Page/Restore Preview","revision":"2378562033612422730"},
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"2459:358","name":"Surface/Restore Preview","revision":"2378562033612422730"}
+  ],
+  "bindings":[
+    {"localRoute":"restore-preview","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"942:30","tabletNodeId":"942:32","revision":"2378562033612422730"},
+    {"localRoute":"restore-confirm","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2459:703","tabletNodeId":"2459:849","revision":"2378562033612422730"},
+    {"localRoute":"restore-scopes","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2459:995","tabletNodeId":"2459:1144","revision":"2378562033612422730"},
+    {"localRoute":"restore-progress","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2459:1293","tabletNodeId":"2459:1405","revision":"2378562033612422730"},
+    {"localRoute":"restore-running","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2459:1517","tabletNodeId":"2459:1642","revision":"2378562033612422730"},
+    {"localRoute":"restore-conflict","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2459:1767","tabletNodeId":"2459:1893","revision":"2378562033612422730"},
+    {"localRoute":"restore-result","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2459:2019","tabletNodeId":"2459:2149","revision":"2378562033612422730"}
+  ],
+  "downstreamEvidence":{"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:2","sectionNodeId":"2460:29364","familyFrameNodeId":"2460:46842","attachedPageInstanceCount":14,"revision":"2378562033612422730"},
+  "viewportPolicy":{"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
+  "exitAudit":{"variantCount":14,"everyPageVariantHasCanonicalInstance":true,"detachedCount":0,"pageRootDropShadowCount":0,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION"}
+}

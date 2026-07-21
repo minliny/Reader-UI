@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"search-results","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "localImplementationCommit":"12d73bf1d1f2d785469c0e876fc2717124eeff25","handoffEvidenceCommit":"e7086039a3f69c1cdcde7c99efd4d2f9a0439fe2",
+  "deltas":[
+    {"pageId":"834:3","nodeId":"942:17","oldValue":"Only the Search Results Phone/Tablet base masters existed and contained zero instances.","newValue":"Added Results, Loading, Empty and Error routes x Phone/Tablet; every Page variant inherits Surface/Search Results."},
+    {"pageId":"834:3","nodeId":"2407:154","oldValue":"Loading, Empty and Error had no exact Figma surface.","newValue":"Added editable local-authorized canonical surface variants while preserving the exact existing Results design."},
+    {"pageId":"834:2","nodeId":"2460:34146","oldValue":"No complete downstream state evidence existed.","newValue":"Added 8 attached downstream Page instances."}
+  ],
+  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0},
+  "boundary":"Search Home, Book Search, UiEvent, reducer ownership, motion and non-search page families remain unchanged.","remainingGate":"USER_VISUAL_CONFIRMATION"
+}

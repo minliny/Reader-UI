@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"sync-backup","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "localImplementationCommit":"2b80a2775ed5d910b0f5b2574b70800ea18f4c06","handoffEvidenceCommit":"c1e99a29e686882750f47dd4f1fa578e3dda9de4",
+  "deltas":[
+    {"pageId":"834:3","nodeId":"942:41","oldValue":"Page/Sync Backup contained only raw Phone and Tablet base masters with zero instances.","newValue":"Page/Sync Backup contains 6 routes x Phone/Tablet; every variant inherits one attached Surface/Sync Backup instance."},
+    {"pageId":"834:3","nodeId":"2400:490","oldValue":"No canonical route-level surface set existed.","newValue":"Added 12 editable Surface variants. The exact existing Figma sync-backup visuals are preserved; five missing route surfaces use the user-authorized local canonical renderer."},
+    {"pageId":"834:2","nodeId":"2460:29365","oldValue":"No complete downstream state evidence existed.","newValue":"Added 12 attached downstream Page instances for centralized review."}
+  ],
+  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0},
+  "boundary":"No UiEvent, reducer owner, async guard, motion contract, About page or other page-family master was changed.","remainingGate":"USER_VISUAL_CONFIRMATION"
+}

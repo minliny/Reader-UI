@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"restore-preview","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "localImplementationCommit":"4666da2315e861dd70ceba2a93eeab080ec3ef98","handoffEvidenceCommit":"9598d2e78af3d7566d610b98d23a46474265c853",
+  "deltas":[
+    {"pageId":"834:3","nodeId":"942:33","oldValue":"Only Restore Preview Phone/Tablet existed as raw master content.","newValue":"Added Preview, Confirm, Scopes, Progress, Running, Conflict and Result x Phone/Tablet; every Page variant inherits Surface/Restore Preview."},
+    {"pageId":"834:3","nodeId":"2459:358","oldValue":"Six restore route surfaces were absent.","newValue":"Added editable local-authorized canonical variants while preserving the exact existing Preview base."},
+    {"pageId":"834:2","nodeId":"2460:46842","oldValue":"No complete downstream restore evidence existed.","newValue":"Added 14 attached downstream Page instances; Restore Preview evidence remains separate from About."}
+  ],
+  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0},
+  "boundary":"Restore Preview remains separate evidence even if a renderer is shared. About stays excluded. No UiEvent, state ownership, async guards or motion contract changed.","remainingGate":"USER_VISUAL_CONFIRMATION"
+}

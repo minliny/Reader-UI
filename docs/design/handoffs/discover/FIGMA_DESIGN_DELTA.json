@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"discover","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "localImplementationCommit":"61bab9f31a1284796af2318fb1960fb93c7c8132","handoffEvidenceCommit":"d413f254d84ef2fc5d7ac04c1b49319ad06b1bf6",
+  "deltas":[
+    {"pageId":"834:3","nodeId":"942:9","oldValue":"Only the Discover Phone/Tablet base masters existed and contained zero instances.","newValue":"Added 12 discover routes x Phone/Tablet; all 24 Page variants inherit one attached Surface/Discover instance."},
+    {"pageId":"834:3","nodeId":"2446:391","oldValue":"Control, sort and nine entry-route surfaces were absent.","newValue":"Added editable local-authorized canonical variants while preserving the exact existing Discover base."},
+    {"pageId":"834:2","nodeId":"2460:37926","oldValue":"No complete downstream Discover route evidence existed.","newValue":"Added 24 attached downstream Page instances."}
+  ],
+  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0,"intentionalShadows":"Only local book-cover, filter apply and sort-menu effects; no page/body shadow."},
+  "boundary":"The 29 excluded secondary routes, UiEvent, state ownership, async guards, motion and other page families remain unchanged.","remainingGate":"USER_VISUAL_CONFIRMATION"
+}

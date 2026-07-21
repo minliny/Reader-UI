@@ -1,0 +1,12 @@
+{
+  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"import-conflict-resolve","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
+  "localImplementationCommit":"7aafb34c0ed8df2664e1425d2efd2f2af3e3af97","handoffEvidenceCommit":"9b1b5e41da349ca6435b4ca081ae1d1c61cfa4d3",
+  "deltas":[
+    {"pageId":"834:3","nodeId":"942:5","oldValue":"Only Import Conflict Resolve Phone/Tablet existed as raw master content.","newValue":"Added 8 import-result routes x Phone/Tablet; all 16 Page variants inherit an attached Surface/Import Conflict instance."},
+    {"pageId":"834:3","nodeId":"2423:244","oldValue":"Seven result/error routes had no exact Figma surfaces.","newValue":"Added editable local-authorized canonical surfaces; the exact existing conflict-resolve base remains unchanged."},
+    {"pageId":"834:2","nodeId":"2460:34831","oldValue":"No complete downstream import evidence existed.","newValue":"Added 16 attached downstream Page instances."}
+  ],
+  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0},
+  "boundary":"No import business decision, UiEvent, parser state owner, async guard, motion or non-import page family was changed.","remainingGate":"USER_VISUAL_CONFIRMATION"
+}
