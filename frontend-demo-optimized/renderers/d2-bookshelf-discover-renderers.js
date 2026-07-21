@@ -153,14 +153,18 @@
   var D2_BOOKSHELF_GROUPS = ["全部", "默认", "本地书", "追更"];
   var D2_BOOKSHELF_SORTS = ["最近更新", "阅读进度", "书名", "作者"];
   var D2_BOOKSHELF_FILTERS = ["全部", "未读", "已完结", "更新失败"];
+  var D2_LOCAL_IMPORT_FORMATS = ["epub", "pdf", "txt", "mobi"];
   var d2BookshelfListeners = [];
+  var d2LocalImportEpoch = 0;
 
   function d2BookshelfDefaults() {
     return {
       view: "cover", group: "全部", sort: "最近更新", filter: "全部", search: "",
       filterOpen: false, moreOpen: false, offline: false,
       loadStatus: "idle", networkStatus: "idle", error: null,
-      focusReturnKey: null
+      focusReturnKey: null,
+      localImportOpen: false, localImportPhase: "picker", localImportFiles: [],
+      localImportBatchId: 0, localImportFocusReturnKey: null
     };
   }
 
@@ -222,6 +226,48 @@
       case "MORE_CLOSE":
         if (!state.moreOpen) return state;
         return Object.assign({}, state, { moreOpen: false });
+      case "LOCAL_IMPORT_OPEN":
+        return Object.assign({}, state, {
+          moreOpen: false, filterOpen: false, localImportOpen: true,
+          localImportPhase: "picker", localImportFiles: [],
+          localImportFocusReturnKey: String(action.focusReturnKey || "more-local-import")
+        });
+      case "LOCAL_IMPORT_CANCEL":
+        if (!state.localImportOpen) return state;
+        d2LocalImportEpoch += 1;
+        return Object.assign({}, state, {
+          localImportOpen: false, localImportPhase: "picker", localImportFiles: [],
+          focusReturnKey: state.localImportFocusReturnKey || "more-local-import"
+        });
+      case "LOCAL_IMPORT_START":
+        if (!state.localImportOpen || !Array.isArray(action.files) || !action.files.length) return state;
+        return Object.assign({}, state, {
+          localImportPhase: "result", localImportBatchId: action.batchId,
+          localImportFiles: action.files
+        });
+      case "LOCAL_IMPORT_FILE_SETTLED":
+        if (!state.localImportOpen || state.localImportBatchId !== action.batchId) return state;
+        return Object.assign({}, state, {
+          localImportFiles: state.localImportFiles.map(function (file) {
+            return file.id === action.fileId
+              ? Object.assign({}, file, { status: action.status === "failed" ? "failed" : "success" })
+              : file;
+          })
+        });
+      case "LOCAL_IMPORT_RETRY_START":
+        if (!state.localImportOpen || !state.localImportFiles.some(function (file) { return file.status === "failed"; })) return state;
+        return Object.assign({}, state, {
+          localImportBatchId: action.batchId,
+          localImportFiles: state.localImportFiles.map(function (file) {
+            return file.status === "failed" ? Object.assign({}, file, { status: "processing" }) : file;
+          })
+        });
+      case "LOCAL_IMPORT_FINISH":
+        if (!state.localImportOpen || state.localImportFiles.some(function (file) { return file.status === "processing"; })) return state;
+        return Object.assign({}, state, {
+          localImportOpen: false, localImportPhase: "picker", localImportFiles: [],
+          focusReturnKey: state.localImportFocusReturnKey || "more-local-import"
+        });
       case "OFFLINE_SET":
         return Object.assign({}, state, { offline: Boolean(action.value), networkStatus: "idle", error: null });
       case "LOAD_RETRY_START":
@@ -275,6 +321,7 @@
     if (D2_BOOKSHELF_FILTERS.indexOf(appState.bookshelfFilter) >= 0) patch.filter = appState.bookshelfFilter;
     if (typeof appState.bookshelfSearch === "string") patch.search = appState.bookshelfSearch;
     if (typeof appState.bookshelfFilterOpen === "boolean") patch.filterOpen = appState.bookshelfFilterOpen;
+    if (typeof appState.localImportOpen === "boolean") patch.localImportOpen = appState.localImportOpen;
     if (typeof appState.offline === "boolean") patch.offline = appState.offline;
     if (typeof appState.bookshelfLoadError === "boolean") patch.loadStatus = appState.bookshelfLoadError ? "failed" : d2BookshelfState.loadStatus;
     d2BookshelfState = Object.assign({}, d2BookshelfState, patch);
@@ -307,6 +354,71 @@
         resolve({ ok: !failed });
       }, Number(options.delay) || 0);
     });
+  }
+
+  function d2NormalizeLocalImportFile(file, index) {
+    var name = String(file && file.name || "未命名文件");
+    var extension = (name.split(".").pop() || "file").toLowerCase();
+    var size = Number(file && file.size) || 0;
+    var preferredStatus = file && (file.result || file.status);
+    return {
+      id: "local-import-" + (index + 1) + "-" + name.replace(/[^a-z0-9\u4e00-\u9fff]+/gi, "-").toLowerCase(),
+      name: name, extension: extension, size: size,
+      status: "processing",
+      settleStatus: preferredStatus === "failed" || preferredStatus === "success"
+        ? preferredStatus
+        : (D2_LOCAL_IMPORT_FORMATS.indexOf(extension) >= 0 ? "success" : "failed")
+    };
+  }
+
+  function d2LocalImportNotify(options) {
+    if (options && typeof options.onUpdate === "function") options.onUpdate(d2BookshelfState);
+  }
+
+  function d2ExecuteLocalImport(files, options) {
+    options = options || {};
+    var normalized = Array.prototype.slice.call(files || [], 0, 50).map(d2NormalizeLocalImportFile);
+    if (!normalized.length || !d2BookshelfState.localImportOpen) return Promise.resolve({ ok: false, reason: "empty" });
+    d2LocalImportEpoch += 1;
+    var batchId = d2LocalImportEpoch;
+    d2BookshelfDispatch({ type: "LOCAL_IMPORT_START", batchId: batchId, files: normalized });
+    d2LocalImportNotify(options);
+    var delay = Number.isFinite(Number(options.delay)) ? Math.max(0, Number(options.delay)) : 280;
+    return normalized.reduce(function (chain, file) {
+      return chain.then(function () {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            d2BookshelfDispatch({ type: "LOCAL_IMPORT_FILE_SETTLED", batchId: batchId, fileId: file.id, status: file.settleStatus });
+            d2LocalImportNotify(options);
+            resolve();
+          }, delay);
+        });
+      });
+    }, Promise.resolve()).then(function () {
+      return { ok: d2BookshelfState.localImportBatchId === batchId, batchId: batchId, files: d2BookshelfState.localImportFiles.slice() };
+    });
+  }
+
+  function d2RetryLocalImport(options) {
+    options = options || {};
+    var failed = d2BookshelfState.localImportFiles.filter(function (file) { return file.status === "failed"; });
+    if (!d2BookshelfState.localImportOpen || !failed.length) return Promise.resolve({ ok: false, reason: "no-failed-files" });
+    d2LocalImportEpoch += 1;
+    var batchId = d2LocalImportEpoch;
+    d2BookshelfDispatch({ type: "LOCAL_IMPORT_RETRY_START", batchId: batchId });
+    d2LocalImportNotify(options);
+    var delay = Number.isFinite(Number(options.delay)) ? Math.max(0, Number(options.delay)) : 280;
+    return failed.reduce(function (chain, file) {
+      return chain.then(function () {
+        return new Promise(function (resolve) {
+          setTimeout(function () {
+            d2BookshelfDispatch({ type: "LOCAL_IMPORT_FILE_SETTLED", batchId: batchId, fileId: file.id, status: file.settleStatus });
+            d2LocalImportNotify(options);
+            resolve();
+          }, delay);
+        });
+      });
+    }, Promise.resolve()).then(function () { return { ok: true, batchId: batchId }; });
   }
 
   function d2BookshelfIdentity(settingsKey) {
@@ -678,13 +790,82 @@
             var identityKey = item.route === "book-batch-management" ? "more-batch"
               : item.route === "group-management" ? "more-group"
                 : item.route === "local-import" ? "more-local-import" : "more-settings";
-            return `<button type="button"${d2BookshelfIdentityAttrs(identityKey)}${identityKey === "more-batch" ? ' data-dialog-initial-focus="more-batch"' : ""}${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`}>
+            var actionAttrs = item.route === "local-import"
+              ? ' data-local-import-open data-local-import-origin="top-more"'
+              : item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`;
+            return `<button type="button"${d2BookshelfIdentityAttrs(identityKey)}${identityKey === "more-batch" ? ' data-dialog-initial-focus="more-batch"' : ""}${actionAttrs}>
               ${icon(item.icon, "fd-small-icon")}
               <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
             </button>`;
           }).join("")}
         </section>
       </section>`;
+  }
+
+  function d2LocalImportSizeLabel(size) {
+    var bytes = Number(size) || 0;
+    if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 0 : 1) + " MB";
+    if (bytes >= 1024) return Math.round(bytes / 1024) + " KB";
+    return bytes > 0 ? bytes + " B" : "—";
+  }
+
+  function d2LocalImportResultRow(file) {
+    var isProcessing = file.status === "processing";
+    var isFailed = file.status === "failed";
+    return `<article class="fd-local-import-result-row is-${esc(file.status)}" data-local-import-file-id="${esc(file.id)}">
+      <span class="fd-local-import-file-icon">${icon("log", "fd-small-icon")}</span>
+      <span class="fd-local-import-file-copy">
+        <strong>${esc(file.name)}</strong>
+        <small><em>${esc(file.extension.toUpperCase())}</em><span>${esc(d2LocalImportSizeLabel(file.size))}</span>${isFailed ? '<i>格式不支持</i>' : ""}</small>
+        ${isProcessing ? '<span class="fd-local-import-row-progress" aria-hidden="true"><i></i></span>' : ""}
+      </span>
+      <span class="fd-local-import-file-status" aria-label="${isProcessing ? "正在处理" : isFailed ? "导入失败" : "导入成功"}">${icon(isProcessing ? "progress" : isFailed ? "alert" : "check", "fd-small-icon")}</span>
+    </article>`;
+  }
+
+  function localImportPopupV2() {
+    var state = d2BookshelfState;
+    if (!state.localImportOpen) return "";
+    var files = state.localImportFiles || [];
+    var successCount = files.filter(function (file) { return file.status === "success"; }).length;
+    var failedCount = files.filter(function (file) { return file.status === "failed"; }).length;
+    var processingCount = files.filter(function (file) { return file.status === "processing"; }).length;
+    var isPicker = state.localImportPhase === "picker";
+    return `<section class="fd-local-import-layer" data-local-import-layer>
+      <button class="fd-local-import-backdrop" type="button"${d2BookshelfIdentityAttrs("import-backdrop")} data-local-import-cancel aria-label="关闭导入本地书籍弹窗"></button>
+      <section class="fd-local-import-dialog ${isPicker ? "is-picker" : "is-result"}" role="dialog" aria-modal="true" aria-labelledby="fd-local-import-title">
+        <header><h2 id="fd-local-import-title">${isPicker ? "导入本地书籍" : "导入结果"}</h2></header>
+        ${isPicker ? `<section class="fd-local-import-picker-body">
+          <button class="fd-local-import-dropzone" type="button" data-local-import-choose aria-label="选择本地书文件">
+            <span>${icon("upload", "fd-medium-icon")}</span>
+            <strong>拖拽文件到此处</strong>
+            <small>支持批量选择，单次最多 50 本</small>
+            <i><em>EPUB</em><em>PDF</em><em>TXT</em><em>MOBI</em></i>
+          </button>
+          <p>${icon("folder", "fd-small-icon")}<span>也可从「文件」App、iCloud 云盘或第三方存储中选取。导入后书籍将保存至本地书库。</span></p>
+          <input type="file" data-local-import-file-input multiple accept=".epub,.pdf,.txt,.mobi,application/epub+zip,application/pdf,text/plain" tabindex="-1" aria-hidden="true">
+        </section>
+        <footer>
+          <button class="is-primary" type="button"${d2BookshelfIdentityAttrs("import-choose-files")} data-local-import-choose data-dialog-initial-focus="import-choose-files">${icon("upload", "fd-small-icon")}选择文件</button>
+          <button type="button"${d2BookshelfIdentityAttrs("import-cancel")} data-local-import-cancel>取消</button>
+        </footer>` : `<section class="fd-local-import-result-body">
+          <section class="fd-local-import-summary" aria-live="polite">
+            <span>${icon(failedCount ? "alert" : "check", "fd-small-icon")}</span>
+            <strong>${successCount} 本成功，${failedCount} 本失败<small>共选择 ${files.length} 本${processingCount ? " · " + processingCount + " 本正在处理" : " · 已全部处理"}</small></strong>
+            ${processingCount ? `<i>${icon("progress", "fd-small-icon")}</i>` : ""}
+          </section>
+          <section class="fd-local-import-result-list" aria-label="导入文件列表">${files.map(d2LocalImportResultRow).join("")}</section>
+        </section>
+        <footer>
+          <button class="is-primary" type="button"${d2BookshelfIdentityAttrs("import-finish")} data-local-import-finish${processingCount ? " disabled aria-disabled=\"true\"" : ""}>${icon("check", "fd-small-icon")}完成</button>
+          ${failedCount && !processingCount ? `<button type="button"${d2BookshelfIdentityAttrs("import-retry-failed")} data-local-import-retry>${icon("refresh", "fd-small-icon")}重试失败</button>` : ""}
+        </footer>`}
+      </section>
+    </section>`;
+  }
+
+  function bookshelfStateLayersV2() {
+    return bookshelfMoreLayerV2() + localImportPopupV2();
   }
 
   // ============ 书架主 renderer：状态变体补全 ============
@@ -737,7 +918,7 @@
               <p class="fd-bookshelf-error-meta">已缓存 ${visibleBooks.filter(function (e) { return bookReadable(e.book, e.index, merged).cached; }).length} 本可离线阅读</p>
             </section>
           </section>`,
-        stateHostHtml: `<p class="fd-nav-feedback">书架加载失败 · 已保留视图模式：${esc(view === "list" ? "列表" : "封面")}</p>${bookshelfMoreLayerV2()}`
+        stateHostHtml: `<p class="fd-nav-feedback">书架加载失败 · 已保留视图模式：${esc(view === "list" ? "列表" : "封面")}</p>${bookshelfStateLayersV2()}`
       }));
     }
 
@@ -779,7 +960,7 @@
             </section>
             <p class="fd-bookshelf-offline-meta">已缓存 ${offlineCached.length} 本可离线阅读，其余 ${visibleBooks.length - offlineCached.length} 本需联网后加载。</p>
           </section>`,
-        stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">离线模式 · 视图：${esc(view === "list" ? "列表" : "封面")} · 可读 ${offlineCached.length}/${visibleBooks.length}</p>${bookshelfMoreLayerV2()}`
+        stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">离线模式 · 视图：${esc(view === "list" ? "列表" : "封面")} · 可读 ${offlineCached.length}/${visibleBooks.length}</p>${bookshelfStateLayersV2()}`
       }));
     }
 
@@ -819,7 +1000,7 @@
         </section>`,
       stateHostHtml: `
         <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">当前 Tab：书架 · 视图：${esc(view === "list" ? "列表" : "封面")}${state.group !== "全部" ? " · 分组：" + esc(state.group) : ""}${state.filter !== "全部" ? " · 筛选：" + esc(state.filter) : ""}${viewFeedback ? " · " + viewFeedback : ""}</p>
-        ${bookshelfMoreLayerV2()}`
+        ${bookshelfStateLayersV2()}`
     }));
   }
 
@@ -860,7 +1041,7 @@
                 ${icon("search", "fd-small-icon")}
                 <span><strong>搜索书籍</strong><small>按书名、作者或关键词查找</small></span>
               </button>
-              <button type="button" data-route="local-import">
+              <button type="button"${d2BookshelfIdentityAttrs("empty-local-import")} data-local-import-open data-local-import-origin="empty-local-import">
                 ${icon("folder", "fd-small-icon")}
                 <span><strong>导入本地书</strong><small>添加本机文件到书架</small></span>
               </button>
@@ -868,11 +1049,11 @@
             <section class="fd-bookshelf-empty-hints" aria-label="可选入口">
               <button type="button" data-route="discover">${icon("sparkle", "fd-small-icon")}去发现</button>
               <button type="button" data-route="bookshelf-search-settings">${icon("gear", "fd-small-icon")}书架设置</button>
-              ${reason === "import-failed" ? `<button type="button" data-route="local-import">${icon("refresh", "fd-small-icon")}重试导入</button>` : ""}
+              ${reason === "import-failed" ? `<button type="button"${d2BookshelfIdentityAttrs("retry-local-import")} data-local-import-open data-local-import-origin="retry-local-import">${icon("refresh", "fd-small-icon")}重试导入</button>` : ""}
             </section>
           </section>
         </section>`,
-      stateHostHtml: `<p class="fd-nav-feedback">书架空状态 · 原因：${esc(reason)}</p>${bookshelfMoreLayerV2()}`
+      stateHostHtml: `<p class="fd-nav-feedback">书架空状态 · 原因：${esc(reason)}</p>${bookshelfStateLayersV2()}`
     }));
   }
 
@@ -950,7 +1131,7 @@
         </section>`,
       stateHostHtml: `
         <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">长按菜单 · 选中：${esc(book.title)} · 来源：${isLocal ? "本地" : "网络"} · 焦点恢复到书架</p>
-        ${bookshelfMoreLayerV2()}`
+        ${bookshelfStateLayersV2()}`
     }));
   }
 
@@ -1121,7 +1302,7 @@
           </section>
           <p class="fd-bookshelf-filter-result-meta">分组：${esc(state.group)} · 排序：${esc(state.sort)} · 筛选：${esc(state.filter)}${state.search ? " · 搜索：" + esc(state.search) : ""} · 命中 ${visibleBooks.length}/${books.length}</p>
         </section>`,
-      stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">排序筛选组合 · 命中 ${visibleBooks.length} 本</p>${bookshelfMoreLayerV2()}`
+      stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">排序筛选组合 · 命中 ${visibleBooks.length} 本</p>${bookshelfStateLayersV2()}`
     }));
   }
 
@@ -1731,44 +1912,9 @@
    * 状态变体：选择文件 / 解析中 / 部分成功 / 完成
    */
   function localImportV2(data, route, appState) {
-    var imports = [
-      { title: "雨夜.epub", meta: "作者已识别 · 加入默认分组", state: "可导入", tone: "good" },
-      { title: "旧书扫描.txt", meta: "编码 UTF-8 · 章节识别中", state: "72%", tone: "warn" },
-      { title: "缺失章节.mobi", meta: "格式不支持 · 可移除后重选", state: "失败", tone: "danger" }
-    ];
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data: data,
-      title: "本地书导入",
-      ariaLabel: "本地书导入",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-import-card is-import-entry">
-          ${icon("folder", "fd-medium-icon")}
-          <span><strong>选择本地书文件</strong><small>选择后识别分组并确认导入</small></span>
-          <button type="button">选择</button>
-        </section>
-        <section class="fd-management-list is-import-options">
-          <h2>导入设置</h2>
-          <article>${icon("folder", "fd-small-icon")}<span><strong>导入分组</strong><small>默认分组</small></span><button type="button">更改</button></article>
-          <article>${icon("refresh", "fd-small-icon")}<span><strong>重复书籍</strong><small>保留原书，仅导入新文件</small></span><button type="button">更改</button></article>
-        </section>
-        <section class="fd-management-list is-import-results">
-          <h2>待导入文件</h2>
-          ${imports.map(function (item) {
-            return `<article class="is-${esc(item.tone)}">
-              ${icon(item.tone === "danger" ? "warning" : "book-open", "fd-small-icon")}
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-              <em>${esc(item.state)}</em>
-            </article>`;
-          }).join("")}
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button" data-route="bookshelf">取消</button>
-          <button class="is-primary" type="button" data-local-import-confirm>${icon("check", "fd-small-icon")}确认导入</button>
-        </div>`
-    }));
+    d2BookshelfInjectAppState(Object.assign({}, appState || {}, { localImportOpen: true }));
+    if (d2BookshelfState.localImportPhase !== "result") d2BookshelfState.localImportPhase = "picker";
+    return bookshelfV2(data, "bookshelf", Object.assign({}, appState || {}, { localImportOpen: true }));
   }
 
   // ============ 书架与搜索设置 V2 ============
@@ -2762,6 +2908,8 @@
       injectAppState: d2BookshelfInjectAppState,
       executeLoadRetry: d2ExecuteBookshelfLoadRetry,
       executeNetworkRetry: d2ExecuteBookshelfNetworkRetry,
+      executeLocalImport: d2ExecuteLocalImport,
+      retryLocalImport: d2RetryLocalImport,
       identityAttrs: d2BookshelfIdentityAttrs
     },
     bookDetail: {

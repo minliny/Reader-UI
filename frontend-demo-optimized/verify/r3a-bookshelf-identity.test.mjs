@@ -28,14 +28,14 @@ function fresh() {
 }
 const values = (html, attr) => [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((m) => m[1]);
 
-test("R2a bookshelf declares 50 mapped business controls", () => {
+test("R2a bookshelf declares 57 mapped business controls", () => {
   const api = fresh();
   const d = api.bookshelf;
   assert.ok(d.identityAttrs("view-cover").includes("data-control-key"));
   const sandbox = { module: { exports: {} }, window: {} };
   new vm.Script(declarationsSource).runInNewContext(sandbox);
   const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((x) => x.source === "bookshelf-action");
-  assert.equal(rows.length, 50);
+  assert.equal(rows.length, 57);
   assert.ok(rows.every((x) => x.mappingStatus === "mapped" && x.instanceKey === null));
 });
 

@@ -12399,6 +12399,7 @@
   }
 
   function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay) {
+    const bookshelfOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookshelf;
     const bookDetailOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookDetail;
     const bookSearchOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookSearch;
     const roundTo = (value, digits) => Number(value.toFixed(digits));
@@ -13054,6 +13055,85 @@
 
     screenHost.querySelectorAll("[data-close-bookshelf-more]").forEach((button) => {
       button.addEventListener("click", () => closeBookshelfMore(button.closest(".fd-phone")));
+    });
+
+    const restoreLocalImportFocus = (settingsKey) => {
+      window.requestAnimationFrame(() => {
+        const target = settingsKey === "top-more"
+          ? screenHost.querySelector('[data-top-action="more"]')
+          : screenHost.querySelector(`[data-settings-key="${settingsKey || "empty-local-import"}"]`);
+        target?.focus?.({ preventScroll: true });
+      });
+    };
+
+    screenHost.querySelectorAll("[data-local-import-open]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const origin = button.getAttribute("data-local-import-origin") || button.getAttribute("data-settings-key") || "more-local-import";
+        closeBookshelfMore(button.closest(".fd-phone"));
+        bookshelfOwner?.dispatch?.({ type: "LOCAL_IMPORT_OPEN", focusReturnKey: origin });
+        renderCurrentRoute();
+        window.requestAnimationFrame(() => screenHost.querySelector("[data-local-import-choose][data-dialog-initial-focus]")?.focus?.({ preventScroll: true }));
+      });
+    });
+
+    const startLocalImportFiles = (files) => {
+      if (!files || files.length === 0) return;
+      bookshelfOwner?.executeLocalImport?.(files, { delay: 180, onUpdate: renderCurrentRoute });
+    };
+
+    screenHost.querySelectorAll("[data-local-import-choose]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        button.closest(".fd-local-import-dialog")?.querySelector("[data-local-import-file-input]")?.click();
+      });
+      button.addEventListener("dragover", (event) => {
+        event.preventDefault();
+      });
+      button.addEventListener("drop", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        startLocalImportFiles(Array.from(event.dataTransfer?.files || []));
+      });
+    });
+
+    screenHost.querySelectorAll("[data-local-import-file-input]").forEach((input) => {
+      input.addEventListener("change", () => {
+        startLocalImportFiles(Array.from(input.files || []));
+        input.value = "";
+      });
+    });
+
+    screenHost.querySelectorAll("[data-local-import-cancel]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const origin = bookshelfOwner?.getState?.().localImportFocusReturnKey || "more-local-import";
+        bookshelfOwner?.dispatch?.({ type: "LOCAL_IMPORT_CANCEL" });
+        renderCurrentRoute();
+        restoreLocalImportFocus(origin);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-local-import-finish]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const origin = bookshelfOwner?.getState?.().localImportFocusReturnKey || "more-local-import";
+        bookshelfOwner?.dispatch?.({ type: "LOCAL_IMPORT_FINISH" });
+        renderCurrentRoute();
+        restoreLocalImportFocus(origin);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-local-import-retry]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        bookshelfOwner?.retryLocalImport?.({ delay: 180, onUpdate: renderCurrentRoute });
+      });
     });
 
     const replaceBookSearchState = (from, to, owner, sequence, target, action) => {
