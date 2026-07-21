@@ -4,7 +4,7 @@
   "scope": "About",
   "pageFamily": "about",
   "stage": "R2a-R2b-R3a",
-  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "status": "LOCAL_READY_BUT_FIGMA_EXCLUDED_BY_USER",
   "generatedAt": "2026-07-21T23:05:00+08:00",
   "localSource": {
     "repository": "Reader-UI",
@@ -20,6 +20,13 @@
     "restorePreviewIncluded": false,
     "sharedRendererFamily": "about-restore-preview",
     "policy": "About has its own implementation evidence and handoff. It must not inherit or merge Restore Preview evidence."
+  },
+  "figmaDisposition": {
+    "status": "EXCLUDED_BY_USER",
+    "excludedAt": "2026-07-21T11:56:44+08:00",
+    "queueEligible": false,
+    "writerProhibited": true,
+    "reason": "The About visual design has not been authored by the user. Do not synthesize, infer, capture, componentize, or write an About F2 design. Preserve the original Figma About pages unchanged."
   },
   "routeFamily": {
     "canonicalRoutes": ["about-feedback", "about", "about-version"],
@@ -125,9 +132,11 @@
     "r3aPass": true,
     "localReadyForFigma": true,
     "exactLocalCommit": "e2086fb91cbe5317df0082dbd12eac02189ba4fe",
-    "requiresFreshFigmaRevisionRead": true,
+    "requiresFreshFigmaRevisionRead": false,
     "requiresSingleWriter": true,
-    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": false,
+    "figmaWriterProhibited": true,
+    "exclusionReason": "User explicitly removed About from the Figma queue."
   },
   "boundaries": {
     "figmaModified": false,
