@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "rss",
+  "status": "F2_EXISTING_SURFACES_COMPLETE_AWAITING_MISSING_SURFACE_DECISION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "revision": "2378487928241409681",
+  "revisionTitle": "F2 · RSS · Canonical Components",
+  "localImplementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+  "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
+  "deltas": [
+    {"pageId":"334:3","nodeId":"2305:530","oldValue":"Phone and Tablet RSS content existed only as raw Page 24 master children.","newValue":"Exact clones became Page/RSS/CanonicalContent variants; no pixels, text, icons, alignment, density or effects changed."},
+    {"pageId":"334:3","nodeId":"2305:961","oldValue":"Refreshing, Empty, Error and Detail existed only as preserved Live Reference frames.","newValue":"Exact clones became a four-variant Page/RSS/CanonicalState set; original Live Reference frames remain unchanged."},
+    {"pageId":"834:3","nodeId":"942:13","oldValue":"Phone/Tablet masters contained zero instances.","newValue":"Each master contains one attached canonical content instance; original raw nodes remain preserved and hidden. Four Page 23 downstream instances remain attached."}
+  ],
+  "visualAudit": {"phone":"PASS","tablet":"PASS","states":"PASS","rightAlignedTrailingValues":true,"newShadow":false,"detached":0,"compact":false,"fold":false},
+  "boundary": "No UiEvent, reducer owner, async guard, route flow, motion contract or non-RSS page family was changed.",
+  "blocker": {"missingExactFigmaSurfaces":["rss-all","rss-source-feed","rss-source-category-novel","rss-source-category-tech","rss-source-category-booklist","rss-source-category-releases","rss-source-category-issues","rss-source-category-discussions"],"requiredDecision":"Create exact Figma pages for these eight routes, or declare which of them are intentional visual aliases of the existing main/refreshing surfaces."}
+}

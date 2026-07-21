@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "rss",
+  "status": "F2_EXISTING_SURFACES_COMPLETE_MISSING_SURFACES_BLOCKED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "baselineRevision": "2378501297946752326",
+  "revision": "2378487928241409681",
+  "revisionTitle": "F2 · RSS · Canonical Components",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378487928241409681",
+  "localSource": {
+    "implementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+    "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
+    "packet": "docs/design/handoffs/rss/LOCAL_READY_FOR_FIGMA.json"
+  },
+  "canonicalMasters": [
+    {"pageId":"334:3","nodeId":"2305:530","name":"Page/RSS/CanonicalContent","revision":"2378487928241409681"},
+    {"pageId":"334:3","nodeId":"2305:961","name":"Page/RSS/CanonicalState","revision":"2378487928241409681"},
+    {"pageId":"834:3","nodeId":"942:13","name":"Page/RSS","revision":"2378487928241409681"}
+  ],
+  "surfaceBindings": [
+    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:267","surface":"Phone main","revision":"2378487928241409681"},
+    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:529","surface":"Tablet main","revision":"2378487928241409681"},
+    {"localRoutes":["rss-refreshing"],"pageId":"334:3","nodeId":"2305:738","surface":"Refreshing","revision":"2378487928241409681"},
+    {"localRoutes":["rss-empty"],"pageId":"334:3","nodeId":"2305:789","surface":"Empty","revision":"2378487928241409681"},
+    {"localRoutes":["rss-error"],"pageId":"334:3","nodeId":"2305:849","surface":"Error","revision":"2378487928241409681"},
+    {"localRoutes":["rss-detail"],"pageId":"334:3","nodeId":"2305:960","surface":"Detail","revision":"2378487928241409681"}
+  ],
+  "downstreamInstances": [
+    {"pageId":"834:2","nodeId":"943:1872","mainComponentId":"942:10","detached":false,"revision":"2378487928241409681"},
+    {"pageId":"834:2","nodeId":"943:2402","mainComponentId":"942:12","detached":false,"revision":"2378487928241409681"},
+    {"pageId":"834:2","nodeId":"1995:58735","mainComponentId":"942:10","detached":false,"revision":"2378487928241409681"},
+    {"pageId":"834:2","nodeId":"1995:59265","mainComponentId":"942:12","detached":false,"revision":"2378487928241409681"}
+  ],
+  "missingExactFigmaSurfaces": ["rss-all","rss-source-feed","rss-source-category-novel","rss-source-category-tech","rss-source-category-booklist","rss-source-category-releases","rss-source-category-issues","rss-source-category-discussions"],
+  "controlCoverage": {"totalLocal":123,"exactExistingSurfaceControls":55,"blockedWithoutFigmaSurface":68,"forgedBindings":0},
+  "exitAudit": {"detachedInstanceCount":0,"compactOrFoldCount":0,"activeDropShadowCount":0,"reactionLossCount":0,"existingFigmaSurfacesComplete":true,"f2Exit":false,"blocker":"Eight local RSS list/category routes have no exact Figma page. User direction is required before creating or aliasing those surfaces."}
+}
