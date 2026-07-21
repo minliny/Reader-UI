@@ -2,37 +2,82 @@
   "schemaVersion": "1.0.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "rss",
-  "status": "F2_EXISTING_SURFACES_COMPLETE_MISSING_SURFACES_BLOCKED",
+  "status": "F2_LOCAL_AUTHORIZED_SURFACES_COMPLETE_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "baselineRevision": "2378501297946752326",
-  "revision": "2378487928241409681",
-  "revisionTitle": "F2 · RSS · Canonical Components",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378487928241409681",
+  "revision": "2378488528982468947",
+  "revisionTitle": "F2 · RSS · Local Style Authorized",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378488528982468947&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
   "localSource": {
     "implementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
     "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
-    "packet": "docs/design/handoffs/rss/LOCAL_READY_FOR_FIGMA.json"
+    "packet": "docs/design/handoffs/rss/LOCAL_READY_FOR_FIGMA.json",
+    "styleAuthority": "User authorized the local canonical renderer for the eight routes without exact legacy Figma surfaces on 2026-07-21."
   },
   "canonicalMasters": [
-    {"pageId":"334:3","nodeId":"2305:530","name":"Page/RSS/CanonicalContent","revision":"2378487928241409681"},
-    {"pageId":"334:3","nodeId":"2305:961","name":"Page/RSS/CanonicalState","revision":"2378487928241409681"},
-    {"pageId":"834:3","nodeId":"942:13","name":"Page/RSS","revision":"2378487928241409681"}
+    {"pageId":"334:3","nodeId":"2305:530","name":"Page/RSS/CanonicalContent","revision":"2378488528982468947"},
+    {"pageId":"334:3","nodeId":"2305:961","name":"Page/RSS/CanonicalState","revision":"2378488528982468947"},
+    {"pageId":"334:3","nodeId":"2328:3975","name":"Page/RSS/CanonicalListRoute","revision":"2378488528982468947"},
+    {"pageId":"834:3","nodeId":"942:13","name":"Page/RSS","revision":"2378488528982468947"}
   ],
-  "surfaceBindings": [
-    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:267","surface":"Phone main","revision":"2378487928241409681"},
-    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:529","surface":"Tablet main","revision":"2378487928241409681"},
-    {"localRoutes":["rss-refreshing"],"pageId":"334:3","nodeId":"2305:738","surface":"Refreshing","revision":"2378487928241409681"},
-    {"localRoutes":["rss-empty"],"pageId":"334:3","nodeId":"2305:789","surface":"Empty","revision":"2378487928241409681"},
-    {"localRoutes":["rss-error"],"pageId":"334:3","nodeId":"2305:849","surface":"Error","revision":"2378487928241409681"},
-    {"localRoutes":["rss-detail"],"pageId":"334:3","nodeId":"2305:960","surface":"Detail","revision":"2378487928241409681"}
+  "existingSurfaceBindings": [
+    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:267","surface":"Phone main","revision":"2378488528982468947"},
+    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:529","surface":"Tablet main","revision":"2378488528982468947"},
+    {"localRoutes":["rss-refreshing"],"pageId":"334:3","nodeId":"2305:738","surface":"Refreshing","revision":"2378488528982468947"},
+    {"localRoutes":["rss-empty"],"pageId":"334:3","nodeId":"2305:789","surface":"Empty","revision":"2378488528982468947"},
+    {"localRoutes":["rss-error"],"pageId":"334:3","nodeId":"2305:849","surface":"Error","revision":"2378488528982468947"},
+    {"localRoutes":["rss-detail"],"pageId":"334:3","nodeId":"2305:960","surface":"Detail","revision":"2378488528982468947"}
   ],
-  "downstreamInstances": [
-    {"pageId":"834:2","nodeId":"943:1872","mainComponentId":"942:10","detached":false,"revision":"2378487928241409681"},
-    {"pageId":"834:2","nodeId":"943:2402","mainComponentId":"942:12","detached":false,"revision":"2378487928241409681"},
-    {"pageId":"834:2","nodeId":"1995:58735","mainComponentId":"942:10","detached":false,"revision":"2378487928241409681"},
-    {"pageId":"834:2","nodeId":"1995:59265","mainComponentId":"942:12","detached":false,"revision":"2378487928241409681"}
+  "localAuthorizedSurfaceBindings": [
+    {"localRoute":"rss-all","pageId":"334:3","phoneNodeId":"2328:1989","tabletNodeId":"2328:2165","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-feed","pageId":"334:3","phoneNodeId":"2328:2343","tabletNodeId":"2328:2467","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-category-novel","pageId":"334:3","phoneNodeId":"2328:2591","tabletNodeId":"2328:2702","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-category-tech","pageId":"334:3","phoneNodeId":"2328:2813","tabletNodeId":"2328:2937","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-category-booklist","pageId":"334:3","phoneNodeId":"2328:3061","tabletNodeId":"2328:3172","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-category-releases","pageId":"334:3","phoneNodeId":"2328:3283","tabletNodeId":"2328:3407","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-category-issues","pageId":"334:3","phoneNodeId":"2328:3531","tabletNodeId":"2328:3642","revision":"2378488528982468947"},
+    {"localRoute":"rss-source-category-discussions","pageId":"334:3","phoneNodeId":"2328:3753","tabletNodeId":"2328:3864","revision":"2378488528982468947"}
   ],
-  "missingExactFigmaSurfaces": ["rss-all","rss-source-feed","rss-source-category-novel","rss-source-category-tech","rss-source-category-booklist","rss-source-category-releases","rss-source-category-issues","rss-source-category-discussions"],
-  "controlCoverage": {"totalLocal":123,"exactExistingSurfaceControls":55,"blockedWithoutFigmaSurface":68,"forgedBindings":0},
-  "exitAudit": {"detachedInstanceCount":0,"compactOrFoldCount":0,"activeDropShadowCount":0,"reactionLossCount":0,"existingFigmaSurfacesComplete":true,"f2Exit":false,"blocker":"Eight local RSS list/category routes have no exact Figma page. User direction is required before creating or aliasing those surfaces."}
+  "downstreamInstances": {
+    "preservedFinalPage": [
+      {"pageId":"834:2","nodeId":"943:1872","mainComponentId":"942:10","detached":false,"revision":"2378488528982468947"},
+      {"pageId":"834:2","nodeId":"943:2402","mainComponentId":"942:12","detached":false,"revision":"2378488528982468947"},
+      {"pageId":"834:2","nodeId":"1995:58735","mainComponentId":"942:10","detached":false,"revision":"2378488528982468947"},
+      {"pageId":"834:2","nodeId":"1995:59265","mainComponentId":"942:12","detached":false,"revision":"2378488528982468947"}
+    ],
+    "localAuthorizedBoard": {
+      "pageId": "834:3",
+      "sectionNodeId": "2329:4132",
+      "instanceNodeIds": ["2329:4133","2329:4309","2329:4487","2329:4611","2329:4735","2329:4846","2329:4957","2329:5081","2329:5205","2329:5316","2329:5427","2329:5551","2329:5675","2329:5786","2329:5897","2329:6008"],
+      "detached": false,
+      "revision": "2378488528982468947"
+    }
+  },
+  "sourceArchive": {
+    "pageId": "259:2",
+    "nodeIds": ["2309:2","2311:2","2313:2","2314:2","2315:2","2316:2","2317:2","2318:2","2319:2","2320:2","2321:2","2322:2","2323:2","2324:2","2325:2","2326:2"],
+    "visible": false,
+    "role": "Editable HTML-to-design provenance only; never a canonical master or screenshot substitute."
+  },
+  "missingExactFigmaSurfaces": [],
+  "controlCoverage": {
+    "totalLocal": 123,
+    "surfaceOwnerCovered": 123,
+    "blockedWithoutSurface": 0,
+    "forgedBindings": 0,
+    "bindingGranularity": "Exact route/viewport component owner. No fabricated per-control descendant node binding is claimed."
+  },
+  "viewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
+  "exitAudit": {
+    "canonicalVariantCount": 16,
+    "attachedNewInstanceCount": 16,
+    "detachedInstanceCount": 0,
+    "compactOrFoldCount": 0,
+    "activeDropShadowCountInNewScope": 0,
+    "reactionLossCount": 0,
+    "existingFigmaSurfacesComplete": true,
+    "localAuthorizedSurfacesComplete": true,
+    "f2Exit": false,
+    "remainingGate": "User visual confirmation of revision 2378488528982468947."
+  }
 }
