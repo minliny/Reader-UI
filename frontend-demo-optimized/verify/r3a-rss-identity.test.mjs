@@ -25,23 +25,24 @@ class FakeNode {
   hasAttribute(key) { return this.attrs.has(key); }
 }
 
-test("R2a RSS has exactly 10 primary routes and 107 semantic control specs", () => {
+test("R2a RSS covers all 13 Figma-present routes and 123 semantic control specs", () => {
   const api = fresh();
-  assert.equal(api.PRIMARY_ROUTES.length, 10);
-  assert.equal(api.CONTROL_SPECS.length, 107);
+  assert.equal(api.PRIMARY_ROUTES.length, 13);
+  assert.equal(api.CONTROL_SPECS.length, 123);
   assert.deepEqual(Object.fromEntries(api.PRIMARY_ROUTES.map((route) => [route, api.CONTROL_SPECS.filter((spec) => spec.route === route).length])), {
     rss: 22, "rss-all": 16, "rss-source-feed": 8, "rss-source-category-novel": 7,
     "rss-source-category-tech": 8, "rss-source-category-booklist": 7, "rss-refreshing": 17,
-    "rss-source-category-releases": 8, "rss-source-category-issues": 7, "rss-source-category-discussions": 7
+    "rss-source-category-releases": 8, "rss-source-category-issues": 7, "rss-source-category-discussions": 7,
+    "rss-empty": 3, "rss-error": 3, "rss-detail": 10
   });
 });
 
-test("R2a declarations contain 107 unique mapped RSS action identities", () => {
+test("R2a declarations contain 123 unique mapped RSS action identities", () => {
   const sandbox = { module: { exports: {} }, window: {} };
   new vm.Script(declarationSource).runInNewContext(sandbox);
   const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "rss-action");
-  assert.equal(rows.length, 107);
-  assert.equal(new Set(rows.map((entry) => entry.controlKey)).size, 107);
+  assert.equal(rows.length, 123);
+  assert.equal(new Set(rows.map((entry) => entry.controlKey)).size, 123);
   assert.ok(rows.every((entry) => entry.mappingStatus === "mapped" && entry.actionKey === entry.settingsKey && entry.instanceKey === null));
 });
 
@@ -81,6 +82,11 @@ test("R3a mainTabRss remains the sole canonical owner", () => {
   assert.match(runtimeSource, /function mainTabRss\(data, appState, route\)/);
   assert.match(runtimeSource, /case "rss":[\s\S]*return mainTabRss\(data, appState, route\)/);
   assert.doesNotMatch(indexSource, /d2-rss-renderers\.js/);
+});
+
+test("R3a Figma-present empty, error and detail routes keep their canonical renderers", () => {
+  assert.match(runtimeSource, /case "rss-detail":\s*return rssDetailScreen\(data, appState\)/);
+  assert.match(runtimeSource, /case "rss-empty":\s*case "rss-error":\s*return rssStateScreen\(data, route, appState\)/);
 });
 
 test("R3a runtime invokes RSS instrumentation after each canonical render", () => {

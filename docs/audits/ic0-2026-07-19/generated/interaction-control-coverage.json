@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "b28a0a06aa2fc841902f004705c1e9df83c4afaef7aab035c10206dde2a5a2b9",
+  "inventorySha256": "76ec65b98c4dfc316d54860189a66bd3dccd67592a1376d7b88fc45cb0d48c3d",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -1389,7 +1389,7 @@
       "pageState": "default",
       "semanticControls": 10,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "c1870865d64f7c29a73024b4c6b4e21b7e33b0d0505308fa79ece272a0c09dcd"
+      "renderSha256": "8b294a660d93d161a92a2c12b6b21af3392ce1d7e199a7d8c84b7b6caf7fce7d"
     },
     {
       "routeId": "rss-original",
@@ -1488,7 +1488,7 @@
       "pageState": "default",
       "semanticControls": 12,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "25b766d55c30a4b4df756d0213e34bff007bf22d75da20e8a245da0fb6eb9700"
+      "renderSha256": "dba7a9acc9a1d204b204d33de36e61788a82dc35b79073965b038f2a19365f7e"
     },
     {
       "routeId": "rss-favorite-remove",
@@ -1510,7 +1510,7 @@
       "pageState": "empty",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "a66f116415d6e7e7fbe7c6ac3b95606adec0ad09a1e15943ba5cf880f203d10a"
+      "renderSha256": "75358c89d6fe9914c7d658b35f749946057bb530f48b2900faa5a554343cfa32"
     },
     {
       "routeId": "rss-error",
@@ -1521,7 +1521,7 @@
       "pageState": "error",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "9c7c10050d3069964c95fa7b49e3c350283e20b9fc3f2fae61e67ca8f89ffcc5"
+      "renderSha256": "2d511b9e13053850c303f0f16a803cf8cdc3f866cc184c2bcfa89658cc093fbd"
     },
     {
       "routeId": "settings",

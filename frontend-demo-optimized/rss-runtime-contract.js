@@ -11,7 +11,10 @@
     "rss-refreshing",
     "rss-source-category-releases",
     "rss-source-category-issues",
-    "rss-source-category-discussions"
+    "rss-source-category-discussions",
+    "rss-empty",
+    "rss-error",
+    "rss-detail"
   ]);
 
   const FEED_IDS = Object.freeze([
@@ -126,6 +129,25 @@
   addSourceRoute("rss-source-category-releases", ["reader-ui-update"]);
   addSourceRoute("rss-source-category-issues", []);
   addSourceRoute("rss-source-category-discussions", []);
+
+  function addStateRoute(route, primaryRoute, primaryKey, primaryEvent, primaryLabel) {
+    addBack(route);
+    add(route, `.fd-rss-state-card [data-route='${primaryRoute}']`, primaryKey, primaryEvent, primaryLabel, "button", true);
+    add(route, ".fd-rss-state-card [data-route='rss-subscription-management']", "subscription-management", "rss.subscription.open", "进入订阅管理", "button", true);
+  }
+  addStateRoute("rss-empty", "rss-all", "view-all", "route.push", "查看全部 RSS 条目");
+  addStateRoute("rss-error", "rss-refreshing", "refresh-retry", "rss.refresh", "重试刷新 RSS");
+
+  addBack("rss-detail");
+  add("rss-detail", ".fd-rss-reader-top-actions [data-rss-article-id]", "favorite-toggle-top", "route.push", "切换当前文章收藏", "button", true);
+  add("rss-detail", ".fd-rss-reader-top-actions [data-route='rss-original']", "original-open-top", "route.push", "打开原文");
+  add("rss-detail", ".fd-rss-reader-source [data-route='rss-source-feed']", "source-open", "rss.subscription.open", "查看当前订阅源", "button", true);
+  add("rss-detail", ".fd-rss-reader-inline-actions [data-route='rss']", "mark-read", "route.push", "标记已读并返回 RSS");
+  add("rss-detail", ".fd-rss-reader-inline-actions [data-rss-article-id]", "favorite-toggle-inline", "route.push", "切换当前文章收藏", "button", true);
+  add("rss-detail", ".fd-rss-reader-inline-actions [data-route='rss-subscription-management']", "subscription-management", "rss.subscription.open", "进入订阅管理", "button", true);
+  add("rss-detail", ".fd-rss-original-card [data-route='rss-original']", "original-open-card", "route.push", "从原文卡片打开原文");
+  add("rss-detail", ".fd-rss-reader-bottom-actions [data-route='rss']", "return-list", "route.pop", "返回 RSS 列表");
+  add("rss-detail", ".fd-rss-reader-bottom-actions [data-route='rss-original']", "original-open-bottom", "route.push", "从底部操作打开原文");
 
   const ROUTE_SET = new Set(PRIMARY_ROUTES);
   const SPEC_BY_ROUTE = new Map();

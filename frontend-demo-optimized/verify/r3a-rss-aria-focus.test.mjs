@@ -56,6 +56,19 @@ test("R3a detail state uses stable article ID", () => {
   assert.match(html, /role="region"/); assert.match(html, /data-rss-detail-id="reader-ui-update"/);
 });
 
+test("R3a Figma-present state pages expose stable actions", () => {
+  const api = fresh();
+  assert.equal(stamp(api, "view-all", "rss-empty").getAttribute("data-ui-event"), "route.push");
+  assert.equal(stamp(api, "refresh-retry", "rss-error").getAttribute("data-ui-event"), "rss.refresh");
+  assert.equal(stamp(api, "return-list", "rss-detail").getAttribute("data-ui-event"), "route.pop");
+});
+
+test("R3a canonical markup exposes state announcements and detail region", () => {
+  const runtime = readFileSync(join(root, "render-runtime.js"), "utf8");
+  assert.match(runtime, /fd-rss-reader-page" role="region" aria-label="RSS 文章详情" data-rss-detail-id=/);
+  assert.match(runtime, /fd-rss-state-card[\s\S]*role="\$\{isError \? "alert" : "status"\}"[\s\S]*aria-live=/);
+});
+
 test("R3a ambiguous and missing selectors fail closed", () => {
   const api = fresh(); const spec = api.CONTROL_SPECS.find((item) => item.route === "rss" && item.settingsKey === "refresh");
   const rootNode = new FakeNode("MAIN"); rootNode.querySelectorAll = (selector) => selector === spec.selector ? [new FakeNode(), new FakeNode()] : [];

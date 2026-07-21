@@ -254,6 +254,11 @@ function rssRuntimeActionDeclarations() {
   const source = readFileSync(RSS_RUNTIME_CONTRACT_PATH, "utf8");
   Function("module", "window", "globalThis", source)(contractModule, contractWindow, contractWindow);
   const specs = contractModule.exports.CONTROL_SPECS || contractWindow.ReaderRssRuntimeContract?.CONTROL_SPECS || [];
+  const rendererForRoute = (route) => route === "rss-detail"
+    ? "rssDetailScreen"
+    : route === "rss-empty" || route === "rss-error"
+      ? "rssStateScreen"
+      : "mainTabRss";
   return specs.map((spec) => {
     const entityKey = `rss.control.${spec.role}.${spec.settingsKey}`;
     return {
@@ -271,9 +276,9 @@ function rssRuntimeActionDeclarations() {
       domain: "rss",
       family: "control",
       role: spec.role,
-      renderer: "mainTabRss",
+      renderer: rendererForRoute(spec.route),
       rendererFile: "render-runtime.js",
-      rendererSlot: "mainTabRss@render-runtime.js",
+      rendererSlot: `${rendererForRoute(spec.route)}@render-runtime.js`,
       pageFamily: "rss",
       source: "rss-action",
       label: spec.label,
@@ -566,6 +571,9 @@ const ROUTE_DOMAIN = {
   "rss-source-category-releases": "rss",
   "rss-source-category-issues": "rss",
   "rss-source-category-discussions": "rss",
+  "rss-empty": "rss",
+  "rss-error": "rss",
+  "rss-detail": "rss",
   "source-switch": "source-switch",
   "source-switch-results": "source-switch",
   "global-settings": "settings",

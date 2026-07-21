@@ -143,7 +143,10 @@
         "rss-refreshing",
         "rss-source-category-releases",
         "rss-source-category-issues",
-        "rss-source-category-discussions"
+        "rss-source-category-discussions",
+        "rss-empty",
+        "rss-error",
+        "rss-detail"
       ]
     },
     "source-switch": {
@@ -503,6 +506,27 @@
       "dispatchLayer": "switch",
       "dispatchMap": "case",
       "renderer": "mainTabRss",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-empty": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "rssStateScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-error": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "rssStateScreen",
+      "rendererFile": "render-runtime.js"
+    },
+    "rss-detail": {
+      "pageFamily": "rss",
+      "dispatchLayer": "switch",
+      "dispatchMap": "case",
+      "renderer": "rssDetailScreen",
       "rendererFile": "render-runtime.js"
     },
     "source-switch": {

@@ -30,7 +30,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "2e54e907fd50a1e53d39ba11a5afd5e96cb0b764004ca917ba1a4923783afabe"
+    "rendererSourcesSha256": "df01396065c1dc14f4b52c2652a82314e8b6f0730311a2ae8757559ae731dbde"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -53643,7 +53643,7 @@
       "domTag": "button",
       "role": "button",
       "label": "查看源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > header.fd-rss-reader-source > button[data-route=\"rss-source-feed\"]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > header.fd-rss-reader-source > button[data-route=\"rss-source-feed\"]",
       "dataAttributes": {
         "data-route": "rss-source-feed",
         "data-rss-source-id": "github-releases"
@@ -53662,7 +53662,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:190b75b91b5738b481ef",
+      "candidateKey": "candidate:1e1ba4bc0d9392897c02",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -53677,7 +53677,7 @@
       "domTag": "button",
       "role": "button",
       "label": "已读",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > nav.fd-rss-reader-inline-actions > button[data-route=\"rss\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > nav.fd-rss-reader-inline-actions > button[data-route=\"rss\"]:nth-of-type(1)",
       "dataAttributes": {
         "data-route": "rss"
       },
@@ -53695,7 +53695,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4db733c1f7fa08ee2543",
+      "candidateKey": "candidate:ad7c4b901017c245c89f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -53710,7 +53710,7 @@
       "domTag": "button",
       "role": "button",
       "label": "移除收藏",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-favorite-remove\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-favorite-remove\"]:nth-of-type(2)",
       "dataAttributes": {
         "data-route": "rss-favorite-remove",
         "data-rss-article-id": "reader-ui-update"
@@ -53729,7 +53729,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d379fccc5db66ab1b42a",
+      "candidateKey": "candidate:1645d0fb7da324378ef2",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -53744,7 +53744,7 @@
       "domTag": "button",
       "role": "button",
       "label": "源设置",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-subscription-management\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-subscription-management\"]:nth-of-type(3)",
       "dataAttributes": {
         "data-route": "rss-subscription-management"
       },
@@ -53762,7 +53762,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:783e6e2ed96529857b9f",
+      "candidateKey": "candidate:98186313840a222bb229",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -53777,7 +53777,7 @@
       "domTag": "button",
       "role": "button",
       "label": "打开",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > footer.fd-rss-original-card > button[data-route=\"rss-original\"]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > footer.fd-rss-original-card > button[data-route=\"rss-original\"]",
       "dataAttributes": {
         "data-route": "rss-original"
       },
@@ -53795,7 +53795,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:600b1158ed034de6c8ee",
+      "candidateKey": "candidate:730f89e61d61d61b49a0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -55927,7 +55927,7 @@
       "domTag": "button",
       "role": "button",
       "label": "查看源",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > header.fd-rss-reader-source > button[data-route=\"rss-source-feed\"]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > header.fd-rss-reader-source > button[data-route=\"rss-source-feed\"]",
       "dataAttributes": {
         "data-route": "rss-source-feed",
         "data-rss-source-id": "github-releases"
@@ -55946,7 +55946,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:cbd91af9f1f298e684d1",
+      "candidateKey": "candidate:6a830586ce010bf5f6f3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -55961,7 +55961,7 @@
       "domTag": "button",
       "role": "button",
       "label": "已读",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > nav.fd-rss-reader-inline-actions > button[data-route=\"rss\"]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > nav.fd-rss-reader-inline-actions > button[data-route=\"rss\"]:nth-of-type(1)",
       "dataAttributes": {
         "data-route": "rss"
       },
@@ -55979,7 +55979,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:5cb7ffce29eff4f96bf4",
+      "candidateKey": "candidate:0734ad6b1f8ec644e2f4",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -55994,7 +55994,7 @@
       "domTag": "button",
       "role": "button",
       "label": "移除收藏",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-favorite-remove\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-favorite-remove\"]:nth-of-type(2)",
       "dataAttributes": {
         "data-route": "rss-favorite-remove",
         "data-rss-article-id": "reader-ui-update"
@@ -56013,7 +56013,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:6f3f2d486b034ca4b286",
+      "candidateKey": "candidate:44d931388b92edfa4625",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -56028,7 +56028,7 @@
       "domTag": "button",
       "role": "button",
       "label": "源设置",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-subscription-management\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > nav.fd-rss-reader-inline-actions > button[data-route=\"rss-subscription-management\"]:nth-of-type(3)",
       "dataAttributes": {
         "data-route": "rss-subscription-management"
       },
@@ -56046,7 +56046,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:523c635af4c244de0a34",
+      "candidateKey": "candidate:a73f10f2693d02f3f31c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -56061,7 +56061,7 @@
       "domTag": "button",
       "role": "button",
       "label": "打开",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article.fd-rss-reader-page > footer.fd-rss-original-card > button[data-route=\"rss-original\"]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > article[data-rss-detail-id=\"reader-ui-update\"] > footer.fd-rss-original-card > button[data-route=\"rss-original\"]",
       "dataAttributes": {
         "data-route": "rss-original"
       },
@@ -56079,7 +56079,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:e3643cbbc4976000b060",
+      "candidateKey": "candidate:dbc47034ecb4e871559f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

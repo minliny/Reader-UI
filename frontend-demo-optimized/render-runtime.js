@@ -1430,7 +1430,7 @@
           <button type="button" data-route="rss-original" aria-label="打开原文">${icon("link", "fd-small-icon")}</button>
         </span>`,
       contentHtml: `
-        <article class="fd-rss-reader-page">
+        <article class="fd-rss-reader-page" role="region" aria-label="RSS 文章详情" data-rss-detail-id="${esc(article.id)}">
           <header class="fd-rss-reader-source">
             <span>${icon("rss", "fd-small-icon")}</span>
             <div>
@@ -2170,7 +2170,7 @@
   function rssStateScreen(data, route, appState) {
     const isError = route === "rss-error";
     return rssShellScreen(data, isError ? "RSS 错误" : "RSS 空状态", `
-      <section class="fd-search-state fd-rss-state-card ${isError ? "is-error" : "is-empty"}">
+      <section class="fd-search-state fd-rss-state-card ${isError ? "is-error" : "is-empty"}" role="${isError ? "alert" : "status"}" aria-live="${isError ? "assertive" : "polite"}">
         <span>${icon(isError ? "warning" : "rss", "fd-medium-icon")}</span>
         <h2>${isError ? "订阅刷新失败" : "暂无未读订阅"}</h2>
         <p>${isError ? "2 个订阅源刷新失败，已保留最近缓存条目。可以稍后重试、查看错误源，或进入订阅源管理修复登录态和规则。" : "当前订阅源没有新的未读条目。你可以查看全部、管理订阅源或手动刷新。日常空状态仍保留 RSS 主导航上下文。"}</p>

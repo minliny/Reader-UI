@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "b28a0a06aa2fc841902f004705c1e9df83c4afaef7aab035c10206dde2a5a2b9",
+    "inventorySha256": "76ec65b98c4dfc316d54860189a66bd3dccd67592a1376d7b88fc45cb0d48c3d",
     "screenGraphPath": "ui-spec/screen-graph.json",
     "screenGraphSha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
@@ -94410,9 +94410,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-detail.default.button.route-rss-favorite-remove-h-4029d71f",
+      "controlId": "rss.button.rss-detail.default.button.route-rss-favorite-remove-h-0fa71dfd",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n7",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n0",
       "actionKey": "route.push",
       "instanceKey": "route-rss-favorite-remove",
       "needsActionKey": false,
@@ -94423,10 +94423,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-favorite-remove-h-4029d71f",
+      "discriminator": "route-rss-favorite-remove-h-0fa71dfd",
       "source": {
-        "candidateKey": "candidate:d379fccc5db66ab1b42a",
-        "selectorSha256": "d929dbb369ea8b358bff7953617affab49bf74d411d70261b51d403bddcb0bd3",
+        "candidateKey": "candidate:1645d0fb7da324378ef2",
+        "selectorSha256": "95bca9880fab1fa895a30f496d149af6fe54981809f63b0bccf518347e32255a",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "移除收藏",
@@ -94450,7 +94450,7 @@
     {
       "controlId": "rss.button.rss-detail.default.button.route-rss-h-2b25af31",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n6",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n5",
       "actionKey": "route.push",
       "instanceKey": "route-rss",
       "needsActionKey": false,
@@ -94485,9 +94485,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-detail.default.button.route-rss-h-e1ef609f",
+      "controlId": "rss.button.rss-detail.default.button.route-rss-h-8d983eb9",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n2",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n7",
       "actionKey": "route.push",
       "instanceKey": "route-rss",
       "needsActionKey": false,
@@ -94498,10 +94498,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-h-e1ef609f",
+      "discriminator": "route-rss-h-8d983eb9",
       "source": {
-        "candidateKey": "candidate:4db733c1f7fa08ee2543",
-        "selectorSha256": "58548a6211aa6e6fe952d975a707d428f4d832521117942384b02963c5e57c3e",
+        "candidateKey": "candidate:ad7c4b901017c245c89f",
+        "selectorSha256": "c0c5ed166f9017ddba90d81058008e418f7c751f47ceca6430e8333d6377a32e",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "已读",
@@ -94522,46 +94522,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-detail.default.button.route-rss-original-h-11fe203c",
-      "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n3",
-      "actionKey": "route.push",
-      "instanceKey": "route-rss-original",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "rss",
-      "family": "button",
-      "route": "rss-detail",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-rss-original-h-11fe203c",
-      "source": {
-        "candidateKey": "candidate:600b1158ed034de6c8ee",
-        "selectorSha256": "b06406dde4e70febfee5c2c4692407e3491aaa4918da54d250b3a028ad3303bb",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "打开",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "rss-original"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
       "controlId": "rss.button.rss-detail.default.button.route-rss-original-h-868f34fe",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n1",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n2",
       "actionKey": "route.push",
       "instanceKey": "route-rss-original",
       "needsActionKey": false,
@@ -94596,9 +94559,46 @@
       "nonInteractiveContainer": null
     },
     {
+      "controlId": "rss.button.rss-detail.default.button.route-rss-original-h-8e76f64f",
+      "entityKey": "rss.button.button.route.push",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n3",
+      "actionKey": "route.push",
+      "instanceKey": "route-rss-original",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "rss",
+      "family": "button",
+      "route": "rss-detail",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-rss-original-h-8e76f64f",
+      "source": {
+        "candidateKey": "candidate:730f89e61d61d61b49a0",
+        "selectorSha256": "0f2498f49d1a98f69e1c7084e0b4a040ee5e8245314005e625038a53be70e853",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "打开",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-route": "rss-original"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
       "controlId": "rss.button.rss-detail.default.button.route-rss-original-h-b4441107",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n5",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n4",
       "actionKey": "route.push",
       "instanceKey": "route-rss-original",
       "needsActionKey": false,
@@ -94633,9 +94633,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-detail.default.button.route-rss-source-feed-h-7dc3d086",
+      "controlId": "rss.button.rss-detail.default.button.route-rss-source-feed-h-225172ec",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n0",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n1",
       "actionKey": "route.push",
       "instanceKey": "route-rss-source-feed-rss-source-github-releases",
       "needsActionKey": false,
@@ -94646,10 +94646,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-source-feed-h-7dc3d086",
+      "discriminator": "route-rss-source-feed-h-225172ec",
       "source": {
-        "candidateKey": "candidate:190b75b91b5738b481ef",
-        "selectorSha256": "d7742f35945cd843d082ff9e96df199e2b59d7ca2a059621617c583879e89100",
+        "candidateKey": "candidate:1e1ba4bc0d9392897c02",
+        "selectorSha256": "e1e9cd63903341f7ec4616da20a3068845ed906dcb4abaee53d379edfc833bab",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "查看源",
@@ -94671,9 +94671,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-detail.default.button.route-rss-subscription-management-h-5c501f68",
+      "controlId": "rss.button.rss-detail.default.button.route-rss-subscription-management-h-f98f41e3",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-detail.default.n4",
+      "controlKey": "rss.button.button.route.push@rss-detail.default.n6",
       "actionKey": "route.push",
       "instanceKey": "route-rss-subscription-management",
       "needsActionKey": false,
@@ -94684,10 +94684,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-subscription-management-h-5c501f68",
+      "discriminator": "route-rss-subscription-management-h-f98f41e3",
       "source": {
-        "candidateKey": "candidate:783e6e2ed96529857b9f",
-        "selectorSha256": "c8d6863686b7c9211c5ad8d17aebd5eca4607fc7fdf775cacb3c84647f5994c6",
+        "candidateKey": "candidate:98186313840a222bb229",
+        "selectorSha256": "662f9469091d39c0fc7b92bcc59a1b7136e3c5753dfa077218fc6ec95e227c7b",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "源设置",
@@ -95039,44 +95039,6 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-favorite-remove-h-545954e2",
-      "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n4",
-      "actionKey": "route.push",
-      "instanceKey": "route-rss-favorite-remove",
-      "needsActionKey": false,
-      "needsInstanceKey": true,
-      "domain": "rss",
-      "family": "button",
-      "route": "rss-favorite-add",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "route-rss-favorite-remove-h-545954e2",
-      "source": {
-        "candidateKey": "candidate:6f3f2d486b034ca4b286",
-        "selectorSha256": "d929dbb369ea8b358bff7953617affab49bf74d411d70261b51d403bddcb0bd3",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "移除收藏",
-        "uiEvent": "route.push",
-        "dataAttributes": {
-          "data-route": "rss-favorite-remove",
-          "data-rss-article-id": "reader-ui-update"
-        }
-      },
-      "mappingStatus": "pending-instance-key",
-      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "unresolved"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
       "controlId": "rss.button.rss-favorite-add.default.button.route-rss-favorite-remove-h-8b362e49",
       "entityKey": "rss.button.button.route.push",
       "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n3",
@@ -95115,11 +95077,11 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-h-7435babb",
+      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-favorite-remove-h-ff15e992",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n2",
+      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n1",
       "actionKey": "route.push",
-      "instanceKey": "route-rss",
+      "instanceKey": "route-rss-favorite-remove",
       "needsActionKey": false,
       "needsInstanceKey": true,
       "domain": "rss",
@@ -95128,16 +95090,17 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-h-7435babb",
+      "discriminator": "route-rss-favorite-remove-h-ff15e992",
       "source": {
-        "candidateKey": "candidate:5cb7ffce29eff4f96bf4",
-        "selectorSha256": "58548a6211aa6e6fe952d975a707d428f4d832521117942384b02963c5e57c3e",
+        "candidateKey": "candidate:44d931388b92edfa4625",
+        "selectorSha256": "95bca9880fab1fa895a30f496d149af6fe54981809f63b0bccf518347e32255a",
         "semanticStatus": "semantic-control",
         "domTag": "button",
-        "label": "已读",
+        "label": "移除收藏",
         "uiEvent": "route.push",
         "dataAttributes": {
-          "data-route": "rss"
+          "data-route": "rss-favorite-remove",
+          "data-rss-article-id": "reader-ui-update"
         }
       },
       "mappingStatus": "pending-instance-key",
@@ -95189,7 +95152,44 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-original-h-4a30724f",
+      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-h-d72cb7dd",
+      "entityKey": "rss.button.button.route.push",
+      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n0",
+      "actionKey": "route.push",
+      "instanceKey": "route-rss",
+      "needsActionKey": false,
+      "needsInstanceKey": true,
+      "domain": "rss",
+      "family": "button",
+      "route": "rss-favorite-add",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "route-rss-h-d72cb7dd",
+      "source": {
+        "candidateKey": "candidate:0734ad6b1f8ec644e2f4",
+        "selectorSha256": "c0c5ed166f9017ddba90d81058008e418f7c751f47ceca6430e8333d6377a32e",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "已读",
+        "uiEvent": "route.push",
+        "dataAttributes": {
+          "data-route": "rss"
+        }
+      },
+      "mappingStatus": "pending-instance-key",
+      "mappingNotes": "Multiple DOM occurrences of the same (route, state, entityKey) with null instanceKey; ordinal fallback applied. Needs explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to disambiguate.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "unresolved"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-original-h-6b4685e2",
       "entityKey": "rss.button.button.route.push",
       "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n8",
       "actionKey": "route.push",
@@ -95202,10 +95202,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-original-h-4a30724f",
+      "discriminator": "route-rss-original-h-6b4685e2",
       "source": {
-        "candidateKey": "candidate:e3643cbbc4976000b060",
-        "selectorSha256": "b06406dde4e70febfee5c2c4692407e3491aaa4918da54d250b3a028ad3303bb",
+        "candidateKey": "candidate:dbc47034ecb4e871559f",
+        "selectorSha256": "0f2498f49d1a98f69e1c7084e0b4a040ee5e8245314005e625038a53be70e853",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "打开",
@@ -95228,7 +95228,7 @@
     {
       "controlId": "rss.button.rss-favorite-add.default.button.route-rss-original-h-df427523",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n1",
+      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n2",
       "actionKey": "route.push",
       "instanceKey": "route-rss-original",
       "needsActionKey": false,
@@ -95300,9 +95300,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-source-feed-h-3ba5b010",
+      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-source-feed-h-f1bb89c6",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n7",
+      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n4",
       "actionKey": "route.push",
       "instanceKey": "route-rss-source-feed-rss-source-github-releases",
       "needsActionKey": false,
@@ -95313,10 +95313,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-source-feed-h-3ba5b010",
+      "discriminator": "route-rss-source-feed-h-f1bb89c6",
       "source": {
-        "candidateKey": "candidate:cbd91af9f1f298e684d1",
-        "selectorSha256": "d7742f35945cd843d082ff9e96df199e2b59d7ca2a059621617c583879e89100",
+        "candidateKey": "candidate:6a830586ce010bf5f6f3",
+        "selectorSha256": "e1e9cd63903341f7ec4616da20a3068845ed906dcb4abaee53d379edfc833bab",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "查看源",
@@ -95338,9 +95338,9 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-subscription-management-h-899fcffd",
+      "controlId": "rss.button.rss-favorite-add.default.button.route-rss-subscription-management-h-eba64133",
       "entityKey": "rss.button.button.route.push",
-      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n0",
+      "controlKey": "rss.button.button.route.push@rss-favorite-add.default.n7",
       "actionKey": "route.push",
       "instanceKey": "route-rss-subscription-management",
       "needsActionKey": false,
@@ -95351,10 +95351,10 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "route-rss-subscription-management-h-899fcffd",
+      "discriminator": "route-rss-subscription-management-h-eba64133",
       "source": {
-        "candidateKey": "candidate:523c635af4c244de0a34",
-        "selectorSha256": "c8d6863686b7c9211c5ad8d17aebd5eca4607fc7fdf775cacb3c84647f5994c6",
+        "candidateKey": "candidate:a73f10f2693d02f3f31c",
+        "selectorSha256": "662f9469091d39c0fc7b92bcc59a1b7136e3c5753dfa077218fc6ec95e227c7b",
         "semanticStatus": "semantic-control",
         "domTag": "button",
         "label": "源设置",
