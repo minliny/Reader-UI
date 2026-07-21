@@ -5,11 +5,12 @@
   "status": "F2_LOCAL_AUTHORIZED_SURFACES_COMPLETE_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "baselineRevision": "2378501297946752326",
-  "revision": "2378494980056319782",
-  "revisionTitle": "F2 · RSS · Edge Radius Constraint Correction",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378494980056319782&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
+  "revision": "2378498213623880242",
+  "revisionTitle": "F2 · RSS · Full Icon Audit Correction",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378498213623880242&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
   "localSource": {
     "implementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+    "iconCorrectionCommit": "b5fcca29f95df3a7e4af7a11bf9f2b198b993d9f",
     "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
     "packet": "docs/design/handoffs/rss/LOCAL_READY_FOR_FIGMA.json",
     "styleAuthority": "User authorized the local canonical renderer for the eight routes without exact legacy Figma surfaces on 2026-07-21."
@@ -25,10 +26,25 @@
     "correctedMasterCount": 16,
     "inheritedInstanceCount": 16
   },
+  "iconAuditCorrection": {
+    "scope": "8 RSS routes x Phone/Tablet = 16 rendered surfaces",
+    "reportedIssue": "The visible Source Actions icon was semantically incorrect.",
+    "rootCause": "The local renderer used the more key, and the Figma captures inherited Dots/More even though the labeled control navigates to a dedicated Source Actions settings destination rather than opening an overflow menu.",
+    "oldValue": "Dots/More",
+    "newValue": "Icon/Settings",
+    "canonicalIconMasterNodeId": "271:472",
+    "correctedOccurrenceCount": 14,
+    "correctedNodeIds": ["2338:2","2338:7","2338:12","2338:17","2338:22","2338:27","2338:32","2338:37","2338:42","2338:47","2338:52","2338:57","2338:62","2338:67"],
+    "iconSize": "20x20",
+    "detachedCount": 0,
+    "dotsRemaining": 0,
+    "otherVisibleIconMappings": "PASS",
+    "revision": "2378498213623880242"
+  },
   "canonicalMasters": [
     {"pageId":"334:3","nodeId":"2305:530","name":"Page/RSS/CanonicalContent","revision":"2378494980056319782"},
     {"pageId":"334:3","nodeId":"2305:961","name":"Page/RSS/CanonicalState","revision":"2378494980056319782"},
-    {"pageId":"334:3","nodeId":"2328:3975","name":"Page/RSS/CanonicalListRoute","revision":"2378494980056319782"},
+    {"pageId":"334:3","nodeId":"2328:3975","name":"Page/RSS/CanonicalListRoute","revision":"2378498213623880242"},
     {"pageId":"834:3","nodeId":"942:13","name":"Page/RSS","revision":"2378494980056319782"}
   ],
   "existingSurfaceBindings": [
@@ -40,14 +56,14 @@
     {"localRoutes":["rss-detail"],"pageId":"334:3","nodeId":"2305:960","surface":"Detail","revision":"2378494980056319782"}
   ],
   "localAuthorizedSurfaceBindings": [
-    {"localRoute":"rss-all","pageId":"334:3","phoneNodeId":"2328:1989","tabletNodeId":"2328:2165","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-feed","pageId":"334:3","phoneNodeId":"2328:2343","tabletNodeId":"2328:2467","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-category-novel","pageId":"334:3","phoneNodeId":"2328:2591","tabletNodeId":"2328:2702","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-category-tech","pageId":"334:3","phoneNodeId":"2328:2813","tabletNodeId":"2328:2937","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-category-booklist","pageId":"334:3","phoneNodeId":"2328:3061","tabletNodeId":"2328:3172","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-category-releases","pageId":"334:3","phoneNodeId":"2328:3283","tabletNodeId":"2328:3407","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-category-issues","pageId":"334:3","phoneNodeId":"2328:3531","tabletNodeId":"2328:3642","revision":"2378494980056319782"},
-    {"localRoute":"rss-source-category-discussions","pageId":"334:3","phoneNodeId":"2328:3753","tabletNodeId":"2328:3864","revision":"2378494980056319782"}
+    {"localRoute":"rss-all","pageId":"334:3","phoneNodeId":"2328:1989","tabletNodeId":"2328:2165","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-feed","pageId":"334:3","phoneNodeId":"2328:2343","tabletNodeId":"2328:2467","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-novel","pageId":"334:3","phoneNodeId":"2328:2591","tabletNodeId":"2328:2702","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-tech","pageId":"334:3","phoneNodeId":"2328:2813","tabletNodeId":"2328:2937","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-booklist","pageId":"334:3","phoneNodeId":"2328:3061","tabletNodeId":"2328:3172","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-releases","pageId":"334:3","phoneNodeId":"2328:3283","tabletNodeId":"2328:3407","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-issues","pageId":"334:3","phoneNodeId":"2328:3531","tabletNodeId":"2328:3642","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-discussions","pageId":"334:3","phoneNodeId":"2328:3753","tabletNodeId":"2328:3864","revision":"2378498213623880242"}
   ],
   "downstreamInstances": {
     "preservedFinalPage": [
@@ -61,7 +77,7 @@
       "sectionNodeId": "2329:4132",
       "instanceNodeIds": ["2329:4133","2329:4309","2329:4487","2329:4611","2329:4735","2329:4846","2329:4957","2329:5081","2329:5205","2329:5316","2329:5427","2329:5551","2329:5675","2329:5786","2329:5897","2329:6008"],
       "detached": false,
-      "revision": "2378494980056319782"
+      "revision": "2378498213623880242"
     }
   },
   "sourceArchive": {
@@ -88,9 +104,14 @@
     "incorrectEdgeRadiusConstraintCount": 0,
     "canonicalEdgeRadius": 34,
     "reactionLossCount": 0,
+    "semanticIconDefectClasses": 1,
+    "correctedIconOccurrenceCount": 14,
+    "sourceActionsDetachedCount": 0,
+    "sourceActionsDotsRemaining": 0,
+    "otherVisibleIconMappingsPass": true,
     "existingFigmaSurfacesComplete": true,
     "localAuthorizedSurfacesComplete": true,
     "f2Exit": false,
-    "remainingGate": "User visual confirmation of revision 2378494980056319782."
+    "remainingGate": "User visual confirmation of revision 2378498213623880242."
   }
 }
