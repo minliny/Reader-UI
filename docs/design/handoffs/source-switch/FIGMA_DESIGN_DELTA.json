@@ -1,104 +1,77 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "source-switch",
-  "status": "F2_AWAITING_USER_CONFIRMATION",
+  "status": "F2_CORRECTED_DIRECT_SWITCH_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "pageId": "259:13",
-  "revision": "2378464713948765297",
-  "revisionTitle": "F2 · Source Switch · Local R3a Pilot",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378464713948765297&node-id=942-37",
-  "localImplementationCommit": "938b1a67eea2cef6760be8f9cb63528af8b23b4e",
-  "handoffEvidenceCommit": "0c8b21698d678f7a61452f24869de89e262b144b",
+  "revision": "2378474643910668834",
+  "revisionTitle": "F2 · Source Switch · Direct Switch Correction",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378474643910668834&node-id=942-37",
+  "localImplementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+  "supersedes": {
+    "revision": "2378464713948765297",
+    "revisionTitle": "F2 · Source Switch · Local R3a Pilot",
+    "reason": "The superseded pilot invented a confirmation footer and a component-page state matrix that are not product facts."
+  },
   "deltas": [
-    {
-      "target": "SourceSwitch/CandidateRow",
-      "nodeId": "568:78",
-      "oldValue": "3 semantic states × 6 interaction states; 32px visual row with 44px overlay and text displaced outside component bounds.",
-      "newValue": "4 semantic states (Current/Available/Unavailable/Selected) × 6 interactions; real 44px row, leading source name, right-aligned latency/chapter, persistent Selected press cycle."
-    },
     {
       "target": "SourceSwitch/Window",
       "nodeId": "568:134",
-      "oldValue": "Header plus candidate list only; canonical Overlay rendered blank rows and had no confirm action.",
-      "newValue": "44px header, scrollable canonical CandidateList, and ResultBar Continue/Check variants with real confirm action targets."
+      "oldValue": "WindowHeader + CandidateList + invented ResultBar Continue/Check confirmation footer.",
+      "newValue": "WindowHeader + scrollable CandidateList only. Clicking an available row is the switch action; no second confirmation control exists."
     },
     {
-      "target": "SourceSwitch/Overlay",
-      "nodeId": "2294:48521",
-      "oldValue": "Phone-only component.",
-      "newValue": "Phone 390×844 and Tablet 760×960 variants; landscape aliases Tablet; no Compact/Fold variant."
-    },
-    {
-      "target": "Page/Source Switch",
-      "nodeId": "942:37",
-      "oldValue": "Phone and Tablet masters used raw frames with INSTANCE=0.",
-      "newValue": "Both masters inherit visible canonical Overlay instances; original raw frames remain hidden as recovery; Page 23 downstream instances stay attached."
+      "target": "SourceSwitch/ResultBar",
+      "nodeId": "2292:770",
+      "oldValue": "Invented two-variant canonical component with Continue and Check actions.",
+      "newValue": "Removed from the document tree together with window instance 2292:771. Recoverable only from the superseded Figma version history."
     },
     {
       "target": "SourceSwitch/StateCard",
       "nodeId": "2295:1653",
-      "oldValue": "No canonical evidence for empty/error/timeout/loading/rollback/preview routes.",
-      "newValue": "Six canonical state variants with 11 traceable 44px action targets, progress and preview evidence, and no shadow."
+      "oldValue": "Invented six-variant component-page matrix for Empty/Error/Timeout/Loading/Rollback/Preview.",
+      "newValue": "Removed from the document tree. No state matrix is presented as Source Switch page structure."
+    },
+    {
+      "target": "SourceSwitch/CandidateList",
+      "nodeId": "568:79",
+      "oldValue": "Candidate 02 was shown as persistent Selected evidence awaiting confirmation.",
+      "newValue": "Candidate 02 inherits Available/Default; all 11 rows are 44px and trailing latency/chapter values remain right aligned."
+    },
+    {
+      "target": "SourceSwitch/Overlay and Page masters",
+      "nodeId": "2294:48521",
+      "oldValue": "Correct Phone/Tablet canonical inheritance mixed with the invented footer.",
+      "newValue": "Phone 390×844 and Tablet 760×960 inherit the corrected two-child Window. Landscape aliases Tablet; Compact/Fold absent; Page 23 instances remain attached."
     }
   ],
   "screenshots": [
     {
-      "path": "/tmp/source-switch-f2-phone.png",
+      "path": "/tmp/source-switch-direct-phone.png",
       "size": "390x844",
-      "sha256": "bde426a3775a2ee25f8080ae205a9c93ec1b8200776a7804e9cd7574b851dd9e"
+      "sha256": "d4814e36a5893ef46744eb21987e6793ec7682c27e280732e51a976f51423ba2"
     },
     {
-      "path": "/tmp/source-switch-f2-tablet.png",
+      "path": "/tmp/source-switch-direct-tablet.png",
       "size": "760x960",
-      "sha256": "f57ec34ef2a5e4052db2da85a5a553919ea146cd24e63d662fbdac74128913dd"
-    },
-    {
-      "path": "/tmp/source-switch-f2-states.png",
-      "size": "964x484",
-      "sha256": "78a9061d47b882360dfa9c0b45a5a0e2b3112547fc77cdeee5c82e4cccf28d51"
+      "sha256": "dc941b4ecad8f3b8177b998772be3640e794c4ac2e2ad6b0a34631cd688a9846"
     }
   ],
   "verification": {
-    "localFocusedTests": "37/37 pass",
-    "bindings": "37/37",
-    "candidateList": {
-      "instances": 11,
-      "detached": 0,
-      "reactions": 20,
-      "dropShadows": 0
-    },
-    "overlaySet": {
-      "instances": 104,
-      "detached": 0,
-      "reactions": 76,
-      "dropShadows": 0
-    },
-    "stateSet": {
-      "instances": 12,
-      "detached": 0,
-      "reactions": 0,
-      "dropShadows": 0
-    },
-    "pageSet": {
-      "instances": 106,
-      "detached": 0,
-      "reactions": 76,
-      "dropShadows": 0
-    },
-    "downstreamFinalSection": {
-      "instances": 108,
-      "detached": 0,
-      "reactions": 76,
-      "dropShadows": 0
-    },
+    "localFocusedTests": "39/39 pass",
+    "fullRegression": "645/645 pass",
+    "windowChildren": ["568:135", "568:154"],
+    "candidateRows": 11,
+    "candidateRowHeight": 44,
+    "detachedInstances": 0,
+    "dropShadows": 0,
     "forbiddenCompactFoldStructures": 0,
-    "result": "PASS_AWAITING_USER_CONFIRMATION"
+    "downstreamPhone": { "instance": "943:15215", "main": "942:34" },
+    "downstreamTablet": { "instance": "943:15705", "main": "942:36" },
+    "result": "PASS_CORRECTED_AWAITING_USER_CONFIRMATION"
   },
   "boundaries": {
-    "uiEventModified": false,
-    "stateOwnerModified": false,
-    "bookDetailFlowModified": false,
     "reader2StaticModified": false,
     "motionReferenceModified": false,
     "otherPageFamiliesModified": false,
@@ -107,14 +80,9 @@
   "admission": {
     "connectorWriteTransactionComplete": true,
     "namedRevisionComplete": true,
-    "crosswalkComplete": true,
-    "bindingCount": 37,
     "userConfirmed": false,
     "f2Exit": false,
     "nextFigmaWriterReleased": false,
-    "nextFigmaWriterGate": "User confirmation of Source Switch F2",
-    "remainingGates": [
-      "User confirmation"
-    ]
+    "nextFigmaWriterGate": "User confirmation of corrected direct-switch Source Switch F2"
   }
 }

@@ -5,13 +5,13 @@
   "pageFamily": "source-switch",
   "stage": "R2a-R2b-R3a",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-21T18:30:00+08:00",
+  "generatedAt": "2026-07-21T10:08:05+08:00",
   "localSource": {
     "repository": "Reader-UI",
     "branch": "codex/motion-demo-optimizations",
     "baselineCommit": "da4b3e9d562ba6caf7c0b182f568948de42a7eee",
-    "implementationCommit": "938b1a67eea2cef6760be8f9cb63528af8b23b4e",
-    "implementationCommitSubject": "feat(source-switch): R2a/R2b/R3a LOCAL_READY_FOR_FIGMA",
+    "implementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+    "implementationCommitSubject": "fix(source-switch): switch directly from candidate row",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): source-switch LOCAL_READY_FOR_FIGMA evidence binding",
     "localReadyForFigma": true
@@ -26,9 +26,9 @@
       "independentLandscapeProhibited": true
     },
     "figmaRevisionPolicy": {
-      "revisionAtLocalPreparation": "REQUIRES_FRESH_FIGMA_REVISION_READ",
-      "reason": "The read-only connector used during F0 preparation does not expose the official file revision. The serial writer must read a fresh revision after the previous family transaction; no local packet may forge it.",
-      "freshRevisionRequiredBeforeWrite": true
+      "revisionAtLocalPreparation": "2378474643910668834",
+      "reason": "Figma Desktop version history exposed the exact named corrective revision after the single-writer transaction.",
+      "freshRevisionRequiredBeforeWrite": false
     }
   },
   "routeFamily": {
@@ -52,15 +52,15 @@
     "fallbackPolicy": "All eight render-runtime switch fallbacks fail loudly; the legacy flowScreen implementation also throws and cannot render source-switch."
   },
   "r2aInstrumentation": {
-    "sourceOwnedControlCount": 37,
-    "sourceOwnedMappingStatus": "37/37 mapped",
+    "sourceOwnedControlCount": 35,
+    "sourceOwnedMappingStatus": "35/35 mapped",
     "source": "source-switch-action",
     "readerContinuityOccurrenceCount": 136,
     "readerContinuityPolicy": "The 17 Reader controls visible in each of eight routes are instrumented through ReaderRuntimeContract.instrumentDom against the nested visualContextRoute. They retain reader-runtime ownership and are not duplicated as source-switch declarations.",
-    "familySemanticOccurrenceCount": 173,
+    "familySemanticOccurrenceCount": 171,
     "controlsByRoute": {
-      "source-switch": { "sourceOwned": 13, "readerContinuity": 17, "total": 30 },
-      "source-switch-results": { "sourceOwned": 13, "readerContinuity": 17, "total": 30 },
+      "source-switch": { "sourceOwned": 12, "readerContinuity": 17, "total": 29 },
+      "source-switch-results": { "sourceOwned": 12, "readerContinuity": 17, "total": 29 },
       "source-switch-empty": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
       "source-switch-error": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
       "source-switch-timeout": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
@@ -138,6 +138,7 @@
       "rollback requires a rollbackToken",
       "source-switch does not become the owner of Book Detail state"
     ],
+    "directSwitchPolicy": "Clicking an available candidate row dispatches SELECT and immediately runs check then commit. There is no candidate confirmation footer, no second activation, and no source-switch-results/preview stop on the normal path.",
     "originRecovery": {
       "rootCauseFixed": "The old sourceSwitchOriginRoute accepted Reader routes only, so book-detail/book-detail-toc-preview/book-directory lost their real navigation origin and exact trigger identity.",
       "newContract": "navigationOriginRoute, visualContextRoute and originControlKey are independent fields.",
@@ -158,25 +159,24 @@
   },
   "verification": {
     "focusedR3a": {
-      "tests": 37,
-      "passed": 37,
+      "tests": 39,
+      "passed": 39,
       "files": [
         "frontend-demo-optimized/verify/r3a-source-switch-identity.test.mjs",
         "frontend-demo-optimized/verify/r3a-source-switch-flow.test.mjs",
         "frontend-demo-optimized/verify/r3a-source-switch-aria-focus.test.mjs"
       ]
     },
-    "frontendRegression": { "tests": 377, "passed": 377, "failed": 0 },
-    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
-    "identityDenominator": 3808,
+    "fullRegression": { "tests": 645, "passed": 645, "failed": 0 },
+    "identityDenominator": 3806,
     "identityDistribution": {
-      "mapped": 801,
-      "pendingActionKey": 449,
-      "pendingInstanceKey": 1044,
-      "pendingActionAndInstanceKey": 1514,
+      "mapped": 853,
+      "pendingActionKey": 447,
+      "pendingInstanceKey": 975,
+      "pendingActionAndInstanceKey": 1531,
       "article": 349,
-      "button": 3335,
-      "note": "The 22 candidate rows in source-switch/source-switch-results migrated from role=button articles to native buttons; the 3,808 semantic denominator is unchanged."
+      "button": 3333,
+      "note": "The two invented Source Switch confirmation buttons were removed from the semantic denominator; candidate rows remain native buttons."
     },
     "byteStableChecks": [
       "node tools/interaction-inventory/generate-canonical-declarations.mjs --check",
@@ -186,7 +186,7 @@
   },
   "figmaReadOnlyBaseline": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "revision": "2378474643910668834",
     "canonicalComponentPage": { "pageId": "259:13", "pageName": "16 · Components · Source Switch" },
     "canonicalComponents": {
       "candidateRowSet": "568:78",
@@ -200,15 +200,15 @@
     },
     "responsiveMasterPage": { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "componentSet": "942:37", "phoneMaster": "942:34", "tabletMaster": "942:36" },
     "downstreamFinalPage": { "pageId": "834:2", "pageName": "23 · Pages · Final", "section": "943:15209", "phoneInstance": "943:15215", "tabletInstance": "943:15705" },
-    "knownStructuralGap": "The responsive masters are raw frames with INSTANCE=0. The writer must replace raw internals through canonical SourceSwitch component instances while preserving downstream instances and existing prototype reaction layers.",
+    "knownStructuralGap": null,
     "prototypeReactionPolicy": "Preserve the 42 existing transparent Source Switch hit-layer reactions and the Book Detail entry reactions; retarget only after the local UiEvent owner is accepted."
   },
   "figmaDecisionsRequired": [
-    "Add a Selected state to SourceSwitch/CandidateRow while preserving Default/Hover/Pressed/Focus/Disabled/Loading and at least 44x44 hit targets.",
+    "Selected is a transient interaction visual only, not a selected-awaiting-confirmation product state; preserve Default/Hover/Pressed/Focus/Disabled/Loading and at least 44x44 hit targets.",
     "Update CandidateList, CloseButton, WindowHeader and Window before any page master; trailing values/actions are right-aligned.",
     "Add Phone and Tablet overlay variants only; landscape inherits Tablet and no Compact/Fold structure may be created.",
     "Repair Page/Source Switch masters to real canonical instances, then let Page 23 downstream instances inherit; no detached frame or screenshot replacement.",
-    "Represent empty/error/timeout/loading/rollback/preview through canonical state components or explicit traceable page exceptions.",
+    "Do not create a component-page state matrix for Source Switch; operational error/loading/rollback routes remain local runtime contracts until a real product page node is explicitly approved.",
     "Preserve the Reader backdrop and all existing reactions; do not change UiEvent, state owner, async contract or Book Detail business flow in Figma."
   ],
   "admission": {
@@ -216,13 +216,13 @@
     "r2bPass": true,
     "r3aPass": true,
     "localReadyForFigma": true,
-    "exactLocalCommit": "938b1a67eea2cef6760be8f9cb63528af8b23b4e",
-    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true,
-    "requiresFreshFigmaRevisionRead": true,
+    "exactLocalCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": false,
+    "requiresFreshFigmaRevisionRead": false,
     "requiresSingleWriter": true
   },
   "boundaries": {
-    "figmaModified": false,
+    "figmaModified": true,
     "reader2StaticModified": false,
     "motionReferenceModified": false,
     "nativeRepositoriesModified": false,
