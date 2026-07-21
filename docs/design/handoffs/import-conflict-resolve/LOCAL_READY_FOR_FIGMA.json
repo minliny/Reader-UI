@@ -4,7 +4,7 @@
   "scope": "Import Conflict Resolve",
   "pageFamily": "import-conflict-resolve",
   "stage": "R2a-R2b-R3a",
-  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "status": "FIGMA_SCOPE_EXCLUDED_BY_USER",
   "generatedAt": "2026-07-21T02:27:46+08:00",
   "localSource": {
     "repository": "Reader-UI",
@@ -14,7 +14,7 @@
     "implementationCommitSubject": "feat(import): complete conflict resolution R3a contract",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): bind import-conflict-resolve LOCAL_READY_FOR_FIGMA evidence",
-    "localReadyForFigma": true
+    "localReadyForFigma": false
   },
   "routeFamily": {
     "primaryRoutes": [
@@ -158,6 +158,19 @@
     "freshRevisionRequiredBeforeWrite": true,
     "structuralPolicy": "The serial writer must identify the real canonical import components and downstream instances from a fresh revision, repair canonical components first, and preserve existing reactions. Unknown node IDs are intentionally not guessed."
   },
+  "figmaExclusion": {
+    "excludedByUser": true,
+    "excludedAt": "2026-07-21",
+    "reason": "The import page family is no longer required in Figma.",
+    "deletedRoots": [
+      { "nodeId": "2423:244", "name": "Surface/Import Conflict" },
+      { "nodeId": "942:5", "name": "Page/Import Conflict" },
+      { "nodeId": "2460:34831", "name": "F2 / Import Conflict Resolve" }
+    ],
+    "originalPage08ReferencesPreserved": ["576:198", "577:198", "578:198", "579:198"],
+    "writerQueueAdmission": false,
+    "mustNotRegenerateWithoutNewUserAuthorization": true
+  },
   "figmaDecisionsRequired": [
     "Read a fresh official Figma revision and resolve the real import component set, Phone master, Tablet master and downstream instances before writing.",
     "Update shared progress, duplicate item, conflict row, result row and state/action components before page masters.",
@@ -171,11 +184,11 @@
     "r2aPass": true,
     "r2bPass": true,
     "r3aPass": true,
-    "localReadyForFigma": true,
+    "localReadyForFigma": false,
     "exactLocalCommit": "7aafb34c0ed8df2664e1425d2efd2f2af3e3af97",
     "requiresFreshFigmaRevisionRead": true,
     "requiresSingleWriter": true,
-    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": false
   },
   "boundaries": {
     "figmaModified": false,
