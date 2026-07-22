@@ -1,12 +1,69 @@
 {
-  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"sync-backup","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
-  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
-  "localImplementationCommit":"2b80a2775ed5d910b0f5b2574b70800ea18f4c06","handoffEvidenceCommit":"c1e99a29e686882750f47dd4f1fa578e3dda9de4",
-  "deltas":[
-    {"pageId":"834:3","nodeId":"942:41","oldValue":"Page/Sync Backup contained only raw Phone and Tablet base masters with zero instances.","newValue":"Page/Sync Backup contains 6 routes x Phone/Tablet; every variant inherits one attached Surface/Sync Backup instance."},
-    {"pageId":"834:3","nodeId":"2400:490","oldValue":"No canonical route-level surface set existed.","newValue":"Added 12 editable Surface variants. The exact existing Figma sync-backup visuals are preserved; five missing route surfaces use the user-authorized local canonical renderer."},
-    {"pageId":"834:2","nodeId":"2460:29365","oldValue":"No complete downstream state evidence existed.","newValue":"Added 12 attached downstream Page instances for centralized review."}
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "sync-backup",
+  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "localImplementationCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
+  "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+  "deltas": [
+    {
+      "pageId": "834:3",
+      "nodeId": "942:41",
+      "oldValue": "The historical evidence incorrectly stated that the live Sync Backup family had been withdrawn.",
+      "newValue": "Page/Sync Backup remains a live Phone/Tablet canonical Component Set, backed by the shared Surface/Sync Backup component graph."
+    },
+    {
+      "pageId": "834:3",
+      "nodeId": "2646:26",
+      "oldValue": "The Phone backup history contained four non-chronological cards.",
+      "newValue": "The Phone Backup/History List contains one descending list: 2026-06-21, 2026-06-20, 2026-06-16, 2026-06-12 and 2026-06-06, followed by one Expand action."
+    },
+    {
+      "pageId": "834:3",
+      "nodeId": "2646:136",
+      "oldValue": "The Tablet backup history contained the same four non-chronological cards.",
+      "newValue": "The Tablet Backup/History List inherits the same five-card descending structure and one Expand action."
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "1995:69448",
+      "oldValue": "The Phone prototype carried six loosely aligned restore hit areas after the list was reduced to five cards.",
+      "newValue": "Five transparent restore hit areas align one-for-one with the canonical Phone backup cards; the obsolete sixth hit area is deleted."
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "1995:69928",
+      "oldValue": "The Tablet prototype carried six loosely aligned restore hit areas after the list was reduced to five cards.",
+      "newValue": "Five transparent restore hit areas align one-for-one with the canonical Tablet backup cards; the obsolete sixth hit area is deleted."
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "370:2",
+      "oldValue": "The shared Loading status panel exposed a visible but noninteractive Cancel label.",
+      "newValue": "The loading panel contains only the loading icon, title and body, matching the requested confirm → loading → complete flow."
+    }
   ],
-  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0},
-  "boundary":"No UiEvent, reducer owner, async guard, motion contract, About page or other page-family master was changed.","remainingGate":"USER_VISUAL_CONFIRMATION"
+  "prototype": {
+    "restoreEntry": "Each of the five Phone and five Tablet backup-card hit areas opens Overlay/Restore Backup/Confirm (2564:36726) with a 0.15s dissolve overlay.",
+    "confirm": "Confirm (2564:36753) swaps to Overlay/Restore Backup/Loading (2564:36734) with a 0.15s dissolve.",
+    "settle": "Loading changes to Overlay/Restore Backup/Complete (2564:36745) after 1.2s; Complete closes after 1.5s.",
+    "cancel": "Confirm cancel (2564:36752) closes the overlay.",
+    "exception": "Restore entry hit areas live in the explicit Phone/Tablet prototype wrappers because the scrolling page-instance consumer needs a direct prototype overlay target. They are aligned with, and traceable to, the five canonical list cards; no Restore Preview page is reintroduced."
+  },
+  "visualAudit": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscape": "Tablet alias",
+    "compactOrFoldCount": 0,
+    "phoneHistoryCardCount": 5,
+    "tabletHistoryCardCount": 5,
+    "phoneRestoreHitCount": 5,
+    "tabletRestoreHitCount": 5,
+    "detachedCount": 0
+  },
+  "boundary": "This re-enables the replaced WebDAV/Sync Backup design without restoring the deleted Restore Preview page, inventing new configuration modules, changing UiEvent/state ownership, or touching non-sync page families.",
+  "remainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"
 }

@@ -1,58 +1,38 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "LOCAL_READY_FOR_FIGMA",
   "scope": "Search Results",
   "pageFamily": "search-results",
   "stage": "R2a-R2b-R3a",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-22T00:35:00+08:00",
+  "generatedAt": "2026-07-22T00:00:00+08:00",
   "localSource": {
     "repository": "Reader-UI",
     "branch": "codex/motion-demo-optimizations",
-    "baselineCommit": "ed75736800972d4331edec3789fbc6fd42756695",
-    "implementationCommit": "12d73bf1d1f2d785469c0e876fc2717124eeff25",
-    "implementationCommitSubject": "feat(search): complete search-results local R3a readiness",
+    "baselineImplementationCommit": "12d73bf1d1f2d785469c0e876fc2717124eeff25",
+    "implementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
+    "implementationCommitSubject": "feat(search): align history interaction with Figma",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
-    "evidenceCommitSubject": "docs(handoff): bind search-results LOCAL_READY_FOR_FIGMA evidence",
     "localReadyForFigma": true
   },
   "routeFamily": {
     "primaryRoutes": [
+      "book-search",
+      "search-home",
       "search-results",
       "search-loading",
       "search-empty",
       "search-error"
     ],
-    "primaryRouteCount": 4,
-    "excludedSecondaryRoutes": [
-      "search-home",
-      "book-search"
-    ],
-    "excludedSeparateProductSurfaces": [
-      "bookshelf-search-settings",
-      "rss-search",
-      "source-search",
-      "content-search and Reader content-search overlays",
-      "Settings search entry"
-    ],
-    "exclusionPolicy": "search-home and book-search remain entry/history/suggestion surfaces and receive no search-results-action identity. Other listed search surfaces belong to separate page families. This packet does not claim the complete global search product.",
     "uniqueProductionRenderer": "bookSearchV2(data, route, appState)",
     "rendererFile": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
     "stateOwner": "ReaderD2BookshelfDiscoverRenderers.bookSearch",
-    "dispatchPolicy": "All four primary routes resolve through D2-A STATE_VARIANT_MAP to bookSearchV2 before the render-runtime switch.",
-    "fallbackFrozen": true,
-    "fallbackPolicy": "All four render-runtime switch fallbacks fail loudly instead of invoking bookSearchScreen or searchStateScreen."
+    "fallbackPolicy": "All six search routes resolve through bookSearchV2; the former fallback is frozen and fails loudly."
   },
   "r2aInstrumentation": {
-    "semanticControlCount": 19,
+    "semanticControlCount": 67,
     "semanticControlSource": "search-results-action",
-    "mappingStatus": "19/19 mapped",
-    "controlsByRouteState": {
-      "search-results/after": 11,
-      "search-loading/loading": 2,
-      "search-empty/empty": 3,
-      "search-error/error": 3
-    },
+    "mappingStatus": "67/67 mapped",
     "fiveDataAttrs": [
       "data-entity-key",
       "data-control-key",
@@ -60,77 +40,36 @@
       "data-ui-event",
       "data-settings-key"
     ],
-    "stableQueryId": "book-catalog-primary",
-    "stableResultBookIds": [
-      "long-night",
-      "mystery-lord",
-      "three-body"
-    ],
-    "identityPolicy": "The stable query domain, result book IDs and named search actions are the only identity inputs. Labels, selectors, DOM order, ordinal n0-style keys and screenshots are prohibited.",
-    "runtimeEvidence": "The deterministic interaction inventory rendered the four primary routes and found 19/19 semantic controls carrying all five canonical identity attributes.",
-    "secondaryIsolationEvidence": "Generated registry differences are limited to search-results/search-loading/search-empty/search-error. search-home and book-search registry entries are byte-unchanged from the baseline."
+    "identityPolicy": "Named search and history actions use business keys only; labels, selectors and DOM order are not identity inputs."
   },
   "r2bRealInteraction": {
     "stateDomains": [
       "phase",
       "query",
-      "queryId",
-      "resultIds",
-      "selectedResultId",
+      "history",
+      "historyExpanded",
       "pending",
       "requestEpoch",
-      "error",
-      "focusReturnKey",
-      "closed"
+      "error"
     ],
-    "phases": ["before", "loading", "after", "empty", "error"],
-    "reducerActions": [
-      "SET_QUERY",
-      "SELECT_RESULT",
-      "SEARCH_START",
-      "SEARCH_SUCCESS",
-      "SEARCH_EMPTY",
-      "SEARCH_FAILED",
-      "SEARCH_CLOSE",
-      "RESET"
-    ],
-    "asyncHelpers": ["executeSearch", "executeRetry", "close"],
-    "guards": [
-      "search and retry reject a second start while pending.status is loading",
-      "completion requires the current requestId and requestEpoch",
-      "close increments requestEpoch and marks the request cancelled so later completion resolves stale",
-      "a repeated close is idempotently reported as closed",
-      "result selection accepts only long-night, mystery-lord or three-body",
-      "empty and failure outcomes preserve query ownership and do not transfer to search-home"
-    ],
-    "runtimeWiring": [
-      "submit and reset dispatch through the bookSearch owner",
-      "data-search-close cancels the owner request before navigation back",
-      "data-search-retry uses executeRetry and replaces loading with results/error",
-      "stable result rows dispatch SELECT_RESULT before opening Book Detail"
+    "requiredBehavior": [
+      "A search-history record fills the query field and restores focus without submitting a request.",
+      "Collapsed history shows five records and an expand action; expanded history shows ten records and a collapse action.",
+      "Clear history removes records without changing the active query.",
+      "Submit, retry, loading and stale-request guards remain owned by the existing bookSearch reducer."
     ]
-  },
-  "ariaAndFocus": {
-    "resultRows": "Three result rows are role=button, tabindex=0, explicitly labelled and keyed by stable book ID.",
-    "queryInputs": "Primary and keyboard inputs have explicit accessible names and share the stable query ID.",
-    "loading": "role=status, aria-live=polite and aria-busy=true; cancel remains enabled.",
-    "empty": "role=status and aria-live=polite with real retry and Discover actions.",
-    "error": "role=alert and aria-live=assertive with retry and Source Management recovery.",
-    "focusReturn": "Submit, result rows, keyboard close, reset/retry and outbound recovery launchers carry exact data-restore-focus control keys.",
-    "back": "Every primary state page back button carries mapped route-local identity."
   },
   "viewportPolicy": {
     "phone": "390x844",
     "tablet": "760x960",
     "landscapeAlias": "tablet",
     "compactProhibited": true,
-    "foldProhibited": true,
-    "independentLandscapeProhibited": true
+    "foldProhibited": true
   },
   "verification": {
     "focusedR3a": {
-      "tests": 31,
-      "passed": 31,
+      "tests": 35,
+      "passed": 35,
       "failed": 0,
       "files": [
         "frontend-demo-optimized/verify/r3a-search-results-identity.test.mjs",
@@ -138,14 +77,10 @@
         "frontend-demo-optimized/verify/r3a-search-results-aria-focus.test.mjs"
       ]
     },
-    "frontendRegression": { "tests": 511, "passed": 511, "failed": 0 },
-    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
-    "identityDenominator": 3808,
-    "identityDistribution": {
-      "mapped": 793,
-      "pendingActionKey": 447,
-      "pendingInstanceKey": 1035,
-      "pendingActionAndInstanceKey": 1533
+    "frontendRegression": {
+      "tests": 585,
+      "passed": 585,
+      "failed": 0
     },
     "byteStableChecks": [
       "node tools/interaction-inventory/generate-control-ids.mjs --check",
@@ -153,54 +88,34 @@
       "node tools/interaction-inventory/generate-canonical-declarations.mjs --check"
     ]
   },
-  "figmaReadOnlyBaseline": {
+  "figmaBaseline": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
-    "responsiveMasterPage": {
-      "pageId": "834:3",
-      "pageName": "24 · Responsive Masters · Phase 4"
-    },
-    "responsiveMasterSet": "REQUIRES_FRESH_READ_BEFORE_WRITE",
-    "phoneMaster": "REQUIRES_FRESH_READ_BEFORE_WRITE",
-    "tabletMaster": "REQUIRES_FRESH_READ_BEFORE_WRITE",
-    "downstreamFinalPage": {
-      "pageId": "834:2",
-      "pageName": "23 · Pages · Final",
-      "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE"
-    },
-    "noForgedBinding": true,
-    "freshRevisionRequiredBeforeWrite": true,
-    "structuralPolicy": "The serial writer must identify the real Search Results component set and downstream instances from a fresh revision, repair canonical components first, and preserve existing reactions. Unknown node IDs are intentionally not guessed."
+    "lastReadableRevision": "2378562033612422730",
+    "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+    "canonicalPageId": "2639:2",
+    "canonicalMasterNodeId": "2635:59600",
+    "downstreamPageId": "834:2",
+    "downstreamAssemblyNodeId": "2636:33609",
+    "noForgedBinding": true
   },
-  "figmaDecisionsRequired": [
-    "Read a fresh official Figma revision and resolve the real Search Results component set, Phone master, Tablet master and downstream instances before writing.",
-    "Update shared query field, result row, add-to-bookshelf action and loading/empty/error components before page masters.",
-    "Keep result book identity stable and right-align trailing source/status/actions.",
-    "Represent loading, empty and error through the same canonical page family and preserve exact focus-return intent.",
-    "Do not pull search-home, book-search or any other search surface into this F2 transaction.",
-    "Use only Phone and Tablet; Landscape inherits Tablet and Compact/Fold structures are prohibited.",
-    "Preserve reactions. Figma may not change UiEvent, state owner, async guards, route ownership or Book Detail flow.",
-    "Detached frames and screenshot replacements are prohibited."
-  ],
   "admission": {
     "r2aPass": true,
     "r2bPass": true,
     "r3aPass": true,
     "localReadyForFigma": true,
-    "exactLocalCommit": "12d73bf1d1f2d785469c0e876fc2717124eeff25",
-    "requiresFreshFigmaRevisionRead": true,
-    "requiresSingleWriter": true,
-    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": true
+    "exactLocalCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
+    "requiresSingleWriter": true
   },
   "boundaries": {
-    "figmaModified": false,
-    "searchHomeModified": false,
-    "bookSearchEntryModified": false,
-    "globalSearchProductClaimedComplete": false,
+    "figmaVisualSource": "The user-provided Figma Make Search design is the visual authority.",
+    "figmaMayNotChange": [
+      "UiEvent",
+      "state owner",
+      "async guards",
+      "business flow"
+    ],
     "reader2StaticModified": false,
     "motionReferenceModified": false,
-    "nativeRepositoriesModified": false,
-    "releaseLockModified": false,
-    "otherPageFamiliesClaimedReady": false
+    "nativeRepositoriesModified": false
   }
 }

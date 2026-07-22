@@ -1,27 +1,39 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "sync-backup",
   "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "baselineRevisionTitle": "Restored version: F2 · RSS · User Confirmed",
-  "revision": "2378562033612422730",
-  "revisionTitle": "F2 · Five Remaining Families · Exact Handoff",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378562033612422730&node-id=942-41",
-  "localSource": {"implementationCommit":"2b80a2775ed5d910b0f5b2574b70800ea18f4c06","handoffEvidenceCommit":"c1e99a29e686882750f47dd4f1fa578e3dda9de4","packet":"docs/design/handoffs/sync-backup/LOCAL_READY_FOR_FIGMA.json"},
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "localSource": {
+    "implementationCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
+    "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "packet": "docs/design/handoffs/sync-backup/LOCAL_READY_FOR_FIGMA.json"
+  },
   "canonicalMasters": [
-    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:41","name":"Page/Sync Backup","revision":"2378562033612422730"},
-    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"2400:490","name":"Surface/Sync Backup","revision":"2378562033612422730"}
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:41","name":"Page/Sync Backup","lastReadableRevision":"2378562033612422730"},
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"2400:490","name":"Surface/Sync Backup","lastReadableRevision":"2378562033612422730"}
   ],
   "bindings": [
-    {"localRoute":"sync-backup","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"942:38","tabletNodeId":"942:40","revision":"2378562033612422730"},
-    {"localRoute":"sync-settings-entry","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2400:969","tabletNodeId":"2400:1129","revision":"2378562033612422730"},
-    {"localRoute":"backup-settings","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2400:1289","tabletNodeId":"2400:1510","revision":"2378562033612422730"},
-    {"localRoute":"progress-sync","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2400:1731","tabletNodeId":"2400:1932","revision":"2378562033612422730"},
-    {"localRoute":"progress-sync-status","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2400:2133","tabletNodeId":"2400:2360","revision":"2378562033612422730"},
-    {"localRoute":"remote-webdav-books","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2400:2587","tabletNodeId":"2400:2858","revision":"2378562033612422730"}
+    {"localRoute":"sync-backup","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:38","surfaceNodeId":"2400:2","historyListNodeId":"2646:26","lastReadableRevision":"2378562033612422730"},
+    {"localRoute":"sync-backup","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:40","surfaceNodeId":"2400:241","historyListNodeId":"2646:136","lastReadableRevision":"2378562033612422730"}
   ],
-  "downstreamEvidence": {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:2","sectionNodeId":"2460:29364","familyFrameNodeId":"2460:29365","attachedPageInstanceCount":12,"revision":"2378562033612422730"},
+  "downstreamEvidence": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:2",
+    "assemblyNodeId": "943:4979",
+    "attachedPageInstances": [
+      {"nodeId":"943:4982","mainComponentNodeId":"942:38"},
+      {"nodeId":"943:5462","mainComponentNodeId":"942:40"}
+    ],
+    "prototypeWrappers": [
+      {"nodeId":"1995:69448","viewport":"phone","restoreHitCount":5},
+      {"nodeId":"1995:69928","viewport":"tablet","restoreHitCount":5}
+    ],
+    "restoreOverlays": {"confirm":"2564:36726","loading":"2564:36734","complete":"2564:36745"},
+    "lastReadableRevision": "2378562033612422730"
+  },
   "viewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
-  "exitAudit": {"variantCount":12,"everyPageVariantHasCanonicalInstance":true,"detachedCount":0,"pageRootDropShadowCount":0,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION"}
+  "exitAudit": {"pageVariantCount":2,"surfaceVariantCount":12,"historyCardsPerViewport":5,"restoreHitAreasPerViewport":5,"detachedCount":0,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"}
 }

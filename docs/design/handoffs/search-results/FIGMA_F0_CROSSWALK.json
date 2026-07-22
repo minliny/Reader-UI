@@ -1,19 +1,48 @@
 {
-  "schemaVersion":"1.0.0","kind":"FIGMA_F0_CROSSWALK","scope":"search-results","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
-  "fileKey":"klhs2jMM4MncaJFqZMfqEK","baselineRevisionTitle":"Restored version: F2 · RSS · User Confirmed","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
-  "revisionUrl":"https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378562033612422730&node-id=942-17",
-  "localSource":{"implementationCommit":"12d73bf1d1f2d785469c0e876fc2717124eeff25","handoffEvidenceCommit":"e7086039a3f69c1cdcde7c99efd4d2f9a0439fe2","packet":"docs/design/handoffs/search-results/LOCAL_READY_FOR_FIGMA.json"},
-  "canonicalMasters":[
-    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:17","name":"Page/Search Results","revision":"2378562033612422730"},
-    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"2407:154","name":"Surface/Search Results","revision":"2378562033612422730"}
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "search-results",
+  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "localSource": {
+    "implementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
+    "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "packet": "docs/design/handoffs/search-results/LOCAL_READY_FOR_FIGMA.json"
+  },
+  "canonicalMasters": [
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "2639:2",
+      "nodeId": "2635:59600",
+      "name": "Page/Book Search",
+      "lastReadableRevision": "2378562033612422730"
+    }
   ],
-  "bindings":[
-    {"localRoute":"search-results","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"942:14","tabletNodeId":"942:16","revision":"2378562033612422730"},
-    {"localRoute":"search-loading","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2407:301","tabletNodeId":"2407:345","revision":"2378562033612422730"},
-    {"localRoute":"search-empty","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2407:389","tabletNodeId":"2407:435","revision":"2378562033612422730"},
-    {"localRoute":"search-error","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","phoneNodeId":"2407:481","tabletNodeId":"2407:528","revision":"2378562033612422730"}
+  "bindings": [
+    {"localState":"initial","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:58749","lastReadableRevision":"2378562033612422730"},
+    {"localState":"loading","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:58809","lastReadableRevision":"2378562033612422730"},
+    {"localState":"results","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:58985","lastReadableRevision":"2378562033612422730"},
+    {"localState":"empty","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59076","lastReadableRevision":"2378562033612422730"},
+    {"localState":"error","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59138","lastReadableRevision":"2378562033612422730"},
+    {"localState":"historyExpanded","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2649:59882","lastReadableRevision":"2378562033612422730"},
+    {"localState":"initial","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59195","lastReadableRevision":"2378562033612422730"},
+    {"localState":"loading","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59259","lastReadableRevision":"2378562033612422730"},
+    {"localState":"results","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59440","lastReadableRevision":"2378562033612422730"},
+    {"localState":"empty","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59534","lastReadableRevision":"2378562033612422730"},
+    {"localState":"error","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59599","lastReadableRevision":"2378562033612422730"},
+    {"localState":"historyExpanded","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2649:59936","lastReadableRevision":"2378562033612422730"}
   ],
-  "downstreamEvidence":{"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:2","sectionNodeId":"2460:29364","familyFrameNodeId":"2460:34146","attachedPageInstanceCount":8,"revision":"2378562033612422730"},
-  "viewportPolicy":{"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
-  "exitAudit":{"variantCount":8,"everyPageVariantHasCanonicalInstance":true,"detachedCount":0,"pageRootDropShadowCount":0,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION"}
+  "downstreamEvidence": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:2",
+    "nodeId": "2636:33609",
+    "name": "Book Search · Final Assembly",
+    "attachedInstanceCount": 12,
+    "detachedCount": 0,
+    "lastReadableRevision": "2378562033612422730"
+  },
+  "viewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
+  "exitAudit": {"canonicalVariantCount":12,"everyVariantRepresentedDownstream":true,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"}
 }

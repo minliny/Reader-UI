@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "bookshelf/local-import-popup",
+  "status": "F2_WRITER_COMPLETE_SOURCE_VISUAL_USER_CONFIRMED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "localImplementationCommit": "a13e68e3b69004543f32ff9b9e0fda37628c580c",
+  "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+  "designReference": "https://www.figma.com/make/uD7wNMW6vcQSmUFCkOors7/Design-Import-Popup-State?fullscreen=1&t=Eer0n0AoZMtLSxvD-1&code-node-id=0-9",
+  "deltas": [
+    {
+      "pageId": "259:10",
+      "nodeId": "2547:1597",
+      "oldValue": "Library/LocalImportDialog · Make Source was a user-confirmed editable source frame.",
+      "newValue": "The source frame is preserved unchanged; it remains the direct visual reference."
+    },
+    {
+      "pageId": "259:10",
+      "nodeId": "2657:918",
+      "oldValue": "No canonical component set existed for the approved import popup source.",
+      "newValue": "Library/LocalImportDialog is a two-variant Component Set: File Selection and Import Result."
+    },
+    {
+      "pageId": "259:10",
+      "nodeId": "2657:921",
+      "oldValue": "No attached canonical evidence instance existed for file selection.",
+      "newValue": "An attached File Selection instance verifies inheritance from the canonical master."
+    },
+    {
+      "pageId": "259:10",
+      "nodeId": "2657:965",
+      "oldValue": "No attached canonical evidence instance existed for import result.",
+      "newValue": "An attached Import Result instance verifies inheritance from the canonical master."
+    }
+  ],
+  "prototype": {
+    "fileSelection": "Select Files changes to Import Result with Smart Animate (0.25s).",
+    "completion": "Complete closes the popup.",
+    "runtimeBoundary": "The real system multi-file picker, import processing and success/failure data remain runtime-owned. Figma represents only the approved popup visual states and their state transition."
+  },
+  "visualAudit": {
+    "sourcePreserved": true,
+    "canonicalVariantCount": 2,
+    "attachedInstanceCount": 2,
+    "detachedCount": 0,
+    "deprecatedErrorPageNamedNodes": 0
+  },
+  "boundary": "No locally invented import-error page, screenshot replacement, or additional dialog state was introduced. The user-provided Figma Make source remains visually authoritative.",
+  "remainingGate": "VC3_BACKPORT_FROM_CONFIRMED_FIGMA_SOURCE"
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "bookshelf/local-import-popup",
+  "status": "F2_WRITER_COMPLETE_SOURCE_VISUAL_USER_CONFIRMED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "localSource": {
+    "implementationCommit": "a13e68e3b69004543f32ff9b9e0fda37628c580c",
+    "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "renderer": "localImportV2(data, route, appState)",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js"
+  },
+  "canonicalMasters": [
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2657:918","name":"Library/LocalImportDialog","lastReadableRevision":"2378562033612422730"},
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2657:916","name":"State=File Selection","lastReadableRevision":"2378562033612422730"},
+    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2657:917","name":"State=Import Result","lastReadableRevision":"2378562033612422730"}
+  ],
+  "preservedSource": {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2547:1597","name":"Library/LocalImportDialog · Make Source","lastReadableRevision":"2378562033612422730"},
+  "bindings": [
+    {"controlKey":"library.button.button.import-choose-files@bookshelf.default","uiEvent":"import.start","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2657:790","variantNodeId":"2657:916","lastReadableRevision":"2378562033612422730"},
+    {"controlKey":"library.button.button.import-finish@bookshelf.default","uiEvent":"import.apply","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2657:906","variantNodeId":"2657:917","lastReadableRevision":"2378562033612422730"},
+    {"controlKey":"library.button.button.import-retry-failed@bookshelf.default","uiEvent":"import.retry.failed","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"259:10","nodeId":"2657:911","variantNodeId":"2657:917","lastReadableRevision":"2378562033612422730"}
+  ],
+  "downstreamEvidence": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "259:10",
+    "attachedInstances": [
+      {"nodeId":"2657:921","mainComponentNodeId":"2657:916"},
+      {"nodeId":"2657:965","mainComponentNodeId":"2657:917"}
+    ],
+    "lastReadableRevision": "2378562033612422730"
+  },
+  "exitAudit": {"fabricatedBindingCount":0,"detachedCount":0,"sourcePreserved":true,"deprecatedErrorPageNamedNodes":0,"f2WriterExit":true}
+}

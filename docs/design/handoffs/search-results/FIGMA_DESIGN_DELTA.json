@@ -1,12 +1,43 @@
 {
-  "schemaVersion":"1.0.0","kind":"FIGMA_DESIGN_DELTA","scope":"search-results","status":"F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
-  "fileKey":"klhs2jMM4MncaJFqZMfqEK","revision":"2378562033612422730","revisionTitle":"F2 · Five Remaining Families · Exact Handoff",
-  "localImplementationCommit":"12d73bf1d1f2d785469c0e876fc2717124eeff25","handoffEvidenceCommit":"e7086039a3f69c1cdcde7c99efd4d2f9a0439fe2",
-  "deltas":[
-    {"pageId":"834:3","nodeId":"942:17","oldValue":"Only the Search Results Phone/Tablet base masters existed and contained zero instances.","newValue":"Added Results, Loading, Empty and Error routes x Phone/Tablet; every Page variant inherits Surface/Search Results."},
-    {"pageId":"834:3","nodeId":"2407:154","oldValue":"Loading, Empty and Error had no exact Figma surface.","newValue":"Added editable local-authorized canonical surface variants while preserving the exact existing Results design."},
-    {"pageId":"834:2","nodeId":"2460:34146","oldValue":"No complete downstream state evidence existed.","newValue":"Added 8 attached downstream Page instances."}
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "search-results",
+  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "localImplementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
+  "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+  "designReference": "https://www.figma.com/make/SW2sjgSEPEPuPwyR0TULyP/%E4%B9%A6%E7%B1%8D%E6%90%9C%E7%B4%A2%E9%A1%B5%E8%AE%BE%E8%AE%A1",
+  "deltas": [
+    {
+      "pageId": "2639:2",
+      "nodeId": "2635:59600",
+      "oldValue": "The user-provided Search design existed as an editable source but not as a complete canonical Phone/Tablet state set.",
+      "newValue": "Page/Book Search is a Component Set with Initial, Loading, Results, Empty, Error and History Expanded variants for Phone and Tablet."
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "2636:33609",
+      "oldValue": "The final assembly did not contain the complete current Search state evidence.",
+      "newValue": "Book Search · Final Assembly contains twelve attached instances of the canonical Page/Book Search variants; detached count is zero."
+    }
   ],
-  "visualAudit":{"phone":"PASS · 390x844","tablet":"PASS · 760x960","landscape":"Tablet alias","compactOrFoldCount":0,"detachedCount":0,"pageRootDropShadowCount":0},
-  "boundary":"Search Home, Book Search, UiEvent, reducer ownership, motion and non-search page families remain unchanged.","remainingGate":"USER_VISUAL_CONFIRMATION"
+  "prototype": {
+    "submit": "Initial, Results, Empty, Error and History Expanded submit/retry controls change to the matching Loading variant using Smart Animate (0.2s).",
+    "loading": "Each Loading variant settles to its matching Results variant after 0.65s.",
+    "history": "Collapsed More opens History Expanded; Collapse returns to Initial for the matching viewport.",
+    "runtimeOnlyBehavior": "Selecting a specific history record fills and focuses the query field without submitting. It is implemented by the local reducer; Figma intentionally does not create ten cosmetic query-filled variants."
+  },
+  "visualAudit": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscape": "Tablet alias",
+    "compactOrFoldCount": 0,
+    "canonicalVariantCount": 12,
+    "downstreamAttachedInstanceCount": 12,
+    "detachedCount": 0
+  },
+  "boundary": "This transaction follows the user-provided Figma Make visual source. It does not create a separate search product, alter UiEvent/state ownership, or change non-search page families.",
+  "remainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"
 }
