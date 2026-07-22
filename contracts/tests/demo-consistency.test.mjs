@@ -112,10 +112,6 @@ test("R16B 五个 workflow 的 35 个 direct ViewState route 都有 optimized de
   }
 
   const modularRoutes = {
-    "w3-source-switch-renderers.js": [
-      "source-switch-empty", "source-switch-error", "source-switch-timeout",
-      "source-switch-loading", "source-switch-rollback", "source-switch-preview",
-    ],
     "w4-theme-font-typography-renderers.js": [
       "reader-font-import-confirm", "reader-font-delete-confirm", "reader-font-fallback",
       "reader-theme-new", "reader-theme-delete-confirm", "reader-typography-reset-confirm",
@@ -130,6 +126,9 @@ test("R16B 五个 workflow 的 35 个 direct ViewState route 都有 optimized de
       assert.ok(rendererSources[name].includes(`"${routeId}":`), `${name} 缺少 ${routeId} integration map`);
     }
   }
+  const sourceSwitchRenderer = rendererSources["w3-source-switch-renderers.js"];
+  assert.match(sourceSwitchRenderer, /function candidateWindow\(/);
+  assert.match(sourceSwitchRenderer, /route === "source-switch" \|\| route === "source-switch-results"/);
   assert.match(runtime, /ReaderW3SourceSwitchRenderers\.INTEGRATION_MAP/);
   assert.match(runtime, /ReaderW4ThemeFontTypographyRenderers\.renderW4Route/);
   assert.match(runtime, /ReaderW5ReplaceRulesRenderers\.INTEGRATION_MAP/);

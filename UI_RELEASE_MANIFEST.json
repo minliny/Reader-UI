@@ -247,7 +247,7 @@
     {
       "path": "device-conformance/DEVICE_CONFORMANCE_PLAN.json",
       "byteLength": 155698,
-      "sha256": "8bfa4004dea70f035d8ffc755f059a6946cf1b56d97c8d39941e63f202d7b91a"
+      "sha256": "bcad1dce0461fe89b86bb0e07fe2e7b962bc8c36d342cbb3403a20601f57ead6"
     },
     {
       "path": "frontend-demo-optimized/appearance-spec.js",
@@ -1850,7 +1850,7 @@
       "name": "device-conformance",
       "fileCount": 7,
       "byteLength": 247371,
-      "sha256": "07ad3cf0e27d575fe07b127c6cf6ae535740aac52eb4f610d42ba4c0621ddc4b",
+      "sha256": "8550d6a09cabc1f7a99d651b744de06fcd974ec7379177c7a8dbd873ab495a26",
       "files": [
         "contracts/device-conformance-evidence.schema.json",
         "contracts/device-conformance-plan.schema.json",
