@@ -18,8 +18,8 @@
     ],
     "canonicalComponents": [
       {"nodeId": "534:248", "name": "Settings/SettingRow"},
-      {"nodeId": "531:104", "name": "Control/Switch"},
-      {"nodeId": "282:64", "name": "Control/Select"},
+      {"nodeId": "531:108", "name": "Settings/Switch", "sourceVariantNodeId": "531:104"},
+      {"nodeId": "282:124", "name": "Primitive/Select", "sourceVariantNodeId": "282:64"},
       {"nodeId": "2114:20635", "name": "Settings/ThemeSegment"},
       {"nodeId": "1994:25736", "name": "Control/InlineAction"},
       {"nodeId": "1994:25794", "name": "Settings/ResetAction"}
