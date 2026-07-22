@@ -521,7 +521,11 @@
           var identity = d2ResolveSubcontrolIdentity(route, settingsKey);
           var attrs = d2StampIdentityAttrs(identity);
           var isActive = option === row.value;
-          return `<button class="${isActive ? "is-active" : ""}" type="button"${attrs} aria-pressed="${isActive ? "true" : "false"}">${esc(option)}</button>`;
+          // Figma's visible segment button is 54×30, while its interactive
+          // target is 54×44. Keep the identity on the actual button and use
+          // this neutral wrapper only to supply that target without changing
+          // the visual geometry.
+          return `<span class="fd-settings-segment-hit"><button class="${isActive ? "is-active" : ""}" type="button"${attrs} aria-pressed="${isActive ? "true" : "false"}">${esc(option)}</button></span>`;
         }).join("")}
       </span>`;
   }
@@ -1034,6 +1038,9 @@
     var backIdentity = d2ResolveSubcontrolIdentity(route, "back");
     var backAttrs = d2StampIdentityAttrs(backIdentity);
     return d2SettingsShell(data, page.title, contentHtml, {
+      // Settings General is a 390×844 / 760×960 canonical page. It must not
+      // inherit the generic, taller settings-stack frame used by other flows.
+      frameState: route === "settings-general" ? "fd-settings-general-phone" : "",
       toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : "",
       backButtonAttrs: backAttrs
     });

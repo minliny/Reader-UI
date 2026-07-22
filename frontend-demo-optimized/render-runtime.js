@@ -12400,6 +12400,8 @@
     const bookshelfOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookshelf;
     const bookDetailOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookDetail;
     const bookSearchOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookSearch;
+    const settingsGeneralOwner = window.ReaderD2SettingsSyncRenderers?.settingsGeneral;
+    const demoRoot = screenHost.closest(".fd-demo");
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const dialogFocusableSelector = [
       "button:not([disabled])",
@@ -13334,7 +13336,65 @@
       });
     });
 
+    const isSettingsGeneralRoute = () => demoRoot?.getAttribute("data-current-route") === "settings-general";
+    const updateSettingsGeneral = () => {
+      renderCurrentRoute();
+    };
+
+    // The canonical Settings General master defines direct switch/segment
+    // states, but no Select menu, confirmation dialog, cache dialog, or
+    // permission sheet. Wire only the controls that Figma actually defines;
+    // never route them through the legacy appState.settingsOverlay owner.
+    screenHost.querySelectorAll('[data-ui-event="toggle.switch"][data-settings-key]').forEach((targetEl) => {
+      const toggle = (event) => {
+        if (!isSettingsGeneralRoute() || !settingsGeneralOwner) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const settingsKey = targetEl.getAttribute("data-settings-key") || "";
+        const currentValue = settingsGeneralOwner.getState?.().values?.[settingsKey];
+        if (typeof currentValue !== "boolean") return;
+        settingsGeneralOwner.dispatch?.({
+          type: "TOGGLE_SWITCH",
+          settingsKey,
+          value: !currentValue
+        });
+        updateSettingsGeneral();
+      };
+      targetEl.addEventListener("click", toggle);
+      targetEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") toggle(event);
+      });
+    });
+
+    screenHost.querySelectorAll('[data-ui-event="segment.item.switch"][data-settings-key]').forEach((targetEl) => {
+      const select = (event) => {
+        if (!isSettingsGeneralRoute() || !settingsGeneralOwner) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const optionKey = targetEl.getAttribute("data-settings-key") || "";
+        const settingsKey = optionKey.replace(/-segment-option-\d+$/, "");
+        if (!settingsKey || settingsKey === optionKey) return;
+        const rawValue = settingsGeneralOwner.rawFor?.(settingsKey, String(targetEl.textContent || "").trim());
+        settingsGeneralOwner.dispatch?.({
+          type: "SELECT_OPTION",
+          settingsKey,
+          value: rawValue
+        });
+        updateSettingsGeneral();
+      };
+      targetEl.addEventListener("click", select);
+      targetEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") select(event);
+      });
+    });
+
     const openSettingsOverlay = (trigger) => {
+      if (isSettingsGeneralRoute()) {
+        // Do not synthesize a transient visual surface that is absent from the
+        // canonical Figma page. Select/action follow-up stays intentionally
+        // pending its own Figma design and user confirmation.
+        return;
+      }
       const overlay = trigger.getAttribute("data-settings-overlay") || "";
       if (overlay === "edit" || overlay === "log") {
         const panel = screenHost.querySelector(`.fd-settings-subpanel.is-${overlay}`);
