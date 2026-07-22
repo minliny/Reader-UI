@@ -1,14 +1,16 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "sync-backup",
-  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED_POSTWRITE_RECONCILED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "lastReadableRevision": "2378562033612422730",
-  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
-  "localImplementationCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
-  "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
-  "deltas": [
+  "historicalLastReadableRevision": "2378562033612422730",
+  "historicalRevisionReadStatus": "LAST_READABLE_BEFORE_CURRENT_WRITE",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalImplementationCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
+  "historicalHandoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+  "historicalDeltas": [
     {
       "pageId": "834:3",
       "nodeId": "942:41",
@@ -46,14 +48,14 @@
       "newValue": "The loading panel contains only the loading icon, title and body, matching the requested confirm → loading → complete flow."
     }
   ],
-  "prototype": {
+  "historicalPrototype": {
     "restoreEntry": "Each of the five Phone and five Tablet backup-card hit areas opens Overlay/Restore Backup/Confirm (2564:36726) with a 0.15s dissolve overlay.",
     "confirm": "Confirm (2564:36753) swaps to Overlay/Restore Backup/Loading (2564:36734) with a 0.15s dissolve.",
     "settle": "Loading changes to Overlay/Restore Backup/Complete (2564:36745) after 1.2s; Complete closes after 1.5s.",
     "cancel": "Confirm cancel (2564:36752) closes the overlay.",
     "exception": "Restore entry hit areas live in the explicit Phone/Tablet prototype wrappers because the scrolling page-instance consumer needs a direct prototype overlay target. They are aligned with, and traceable to, the five canonical list cards; no Restore Preview page is reintroduced."
   },
-  "visualAudit": {
+  "historicalVisualAudit": {
     "phone": "390x844",
     "tablet": "760x960",
     "landscape": "Tablet alias",
@@ -64,6 +66,29 @@
     "tabletRestoreHitCount": 5,
     "detachedCount": 0
   },
-  "boundary": "This re-enables the replaced WebDAV/Sync Backup design without restoring the deleted Restore Preview page, inventing new configuration modules, changing UiEvent/state ownership, or touching non-sync page families.",
-  "remainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"
+  "historicalBoundary": "This re-enables the replaced WebDAV/Sync Backup design without restoring the deleted Restore Preview page, inventing new configuration modules, changing UiEvent/state ownership, or touching non-sync page families.",
+  "historicalRemainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT",
+  "postRestorePreviewTombstoneReconciliation": {
+    "scope": "Current live observation after user-approved deletion of the standalone Restore Progress family. This is an evidence correction only; it makes no new Sync Backup visual, reaction, UiEvent, state-owner or business-flow change.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "delta": {
+      "pageId": "834:2",
+      "nodeId": "943:4976",
+      "oldValue": "The Sync Backup final section coexisted with a separate Assembly / Restore Progress descendant, which conflicted with the user's withdrawal of Restore Preview as a page family.",
+      "newValue": "The final section retains only Assembly / Sync Backup (943:4979) and WebDAV Config (943:5701); standalone Restore Progress is absent. The Sync assembly remains attached to Phone master 942:38 and Tablet master 942:40."
+    },
+    "retainedRestoreActionOverlays": {
+      "confirm": "2564:36726",
+      "loading": "2564:36734",
+      "complete": "2564:36745"
+    },
+    "userConfirmation": {
+      "confirmed": true,
+      "scope": "Sync Backup final structure and the retained restore confirm, loading and complete popups"
+    },
+    "evidencePolicy": "This post-write record is a live hierarchy observation, not a fabricated current revision. Historical design deltas and prototype timings remain historical until the writer runtime can read the official current revision.",
+    "remainingGate": "VC3_BACKPORT_REQUIRES_SEPARATE_LOCAL_AND_HOST_ADMISSION"
+  }
 }

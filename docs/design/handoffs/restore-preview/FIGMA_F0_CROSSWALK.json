@@ -2,7 +2,7 @@
   "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "restore-preview",
-  "status": "FIGMA_SCOPE_WITHDRAWN_BY_USER_PENDING_LIVE_RECONCILIATION",
+  "status": "FIGMA_SCOPE_WITHDRAWN_BY_USER_RECONCILED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "currentRevision": null,
   "revisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
@@ -20,10 +20,19 @@
     },
     "localRoutePolicy": "Do not admit restore-preview routes to Figma or native implementation. Route removal/redirect is tracked separately."
   },
-  "liveReadConflict": {
+  "liveReconciliation": {
     "oldMasterNodesAbsent": ["942:30", "942:32", "2460:46842"],
-    "liveNodesNotClaimedAsActiveBindings": ["2648:2", "2648:228", "2649:60847", "2564:36726", "2564:36734", "2564:36745"],
-    "policy": "The remaining live nodes must be reconciled under Sync Backup; this tombstone does not fabricate their deletion or grant permission to delete them."
+    "deletedResidualRestorePreviewNodes": {
+      "page": "2648:736",
+      "progressMasters": ["2648:2", "2648:228"],
+      "downstreamAssembly": "2649:60847",
+      "downstreamInstancesRemovedWithAssembly": ["2649:60850", "2649:60852"]
+    },
+    "retainedSyncBackupEvidence": {
+      "assembly": "943:4979",
+      "overlays": {"confirm": "2564:36726", "loading": "2564:36734", "complete": "2564:36745"}
+    },
+    "policy": "The withdrawn Restore Preview route has no active bindings. Its residual progress page, masters and assembly were deleted by the single writer; the retained confirm -> loading -> complete flow is owned and evidenced only by Sync Backup."
   },
   "localSource": {
     "historicalImplementationCommit": "4666da2315e861dd70ceba2a93eeab080ec3ef98",

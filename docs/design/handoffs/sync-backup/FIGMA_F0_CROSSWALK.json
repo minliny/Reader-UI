@@ -1,39 +1,128 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "sync-backup",
-  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_CONFIRMED_POSTWRITE_RECONCILED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "lastReadableRevision": "2378562033612422730",
-  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
-  "localSource": {
+  "historicalLastReadableRevision": "2378562033612422730",
+  "historicalRevisionReadStatus": "LAST_READABLE_BEFORE_CURRENT_WRITE",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalSource": {
     "implementationCommit": "2b80a2775ed5d910b0f5b2574b70800ea18f4c06",
     "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "packet": "docs/design/handoffs/sync-backup/LOCAL_READY_FOR_FIGMA.json"
   },
-  "canonicalMasters": [
-    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:41","name":"Page/Sync Backup","lastReadableRevision":"2378562033612422730"},
-    {"fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"2400:490","name":"Surface/Sync Backup","lastReadableRevision":"2378562033612422730"}
+  "historicalCanonicalMasters": [
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "942:41",
+      "name": "Page/Sync Backup",
+      "lastReadableRevision": "2378562033612422730"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2400:490",
+      "name": "Surface/Sync Backup",
+      "lastReadableRevision": "2378562033612422730"
+    }
   ],
-  "bindings": [
-    {"localRoute":"sync-backup","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:38","surfaceNodeId":"2400:2","historyListNodeId":"2646:26","lastReadableRevision":"2378562033612422730"},
-    {"localRoute":"sync-backup","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"834:3","nodeId":"942:40","surfaceNodeId":"2400:241","historyListNodeId":"2646:136","lastReadableRevision":"2378562033612422730"}
+  "historicalBindings": [
+    {
+      "localRoute": "sync-backup",
+      "viewport": "phone",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "942:38",
+      "surfaceNodeId": "2400:2",
+      "historyListNodeId": "2646:26",
+      "lastReadableRevision": "2378562033612422730"
+    },
+    {
+      "localRoute": "sync-backup",
+      "viewport": "tablet",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "942:40",
+      "surfaceNodeId": "2400:241",
+      "historyListNodeId": "2646:136",
+      "lastReadableRevision": "2378562033612422730"
+    }
   ],
-  "downstreamEvidence": {
+  "historicalDownstreamEvidence": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
     "pageId": "834:2",
     "assemblyNodeId": "943:4979",
     "attachedPageInstances": [
-      {"nodeId":"943:4982","mainComponentNodeId":"942:38"},
-      {"nodeId":"943:5462","mainComponentNodeId":"942:40"}
+      { "nodeId": "943:4982", "mainComponentNodeId": "942:38" },
+      { "nodeId": "943:5462", "mainComponentNodeId": "942:40" }
     ],
     "prototypeWrappers": [
-      {"nodeId":"1995:69448","viewport":"phone","restoreHitCount":5},
-      {"nodeId":"1995:69928","viewport":"tablet","restoreHitCount":5}
+      { "nodeId": "1995:69448", "viewport": "phone", "restoreHitCount": 5 },
+      { "nodeId": "1995:69928", "viewport": "tablet", "restoreHitCount": 5 }
     ],
-    "restoreOverlays": {"confirm":"2564:36726","loading":"2564:36734","complete":"2564:36745"},
+    "restoreOverlays": {
+      "confirm": "2564:36726",
+      "loading": "2564:36734",
+      "complete": "2564:36745"
+    },
     "lastReadableRevision": "2378562033612422730"
   },
-  "viewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
-  "exitAudit": {"pageVariantCount":2,"surfaceVariantCount":12,"historyCardsPerViewport":5,"restoreHitAreasPerViewport":5,"detachedCount":0,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"}
+  "historicalViewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "Tablet",
+    "compact": false,
+    "fold": false
+  },
+  "historicalExitAudit": {
+    "pageVariantCount": 2,
+    "surfaceVariantCount": 12,
+    "historyCardsPerViewport": 5,
+    "restoreHitAreasPerViewport": 5,
+    "detachedCount": 0,
+    "fabricatedBindingCount": 0,
+    "f2WriterExit": true,
+    "remainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"
+  },
+  "postRestorePreviewTombstoneReconciliation": {
+    "scope": "Current live observation after the user-approved deletion of the standalone Restore Progress family. This records only the retained Sync Backup product flow; it does not recreate Restore Preview or assert an unreadable official revision.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "finalSection": {
+      "pageId": "834:2",
+      "nodeId": "943:4976",
+      "retainedProductChildren": [
+        { "nodeId": "943:4979", "name": "Assembly / Sync Backup" },
+        { "nodeId": "943:5701", "name": "WebDAV Config" }
+      ],
+      "restoreProgressChildCount": 0
+    },
+    "syncBackupAssembly": {
+      "nodeId": "943:4979",
+      "attachedPageInstances": [
+        { "nodeId": "943:4982", "viewport": "phone", "mainComponentNodeId": "942:38" },
+        { "nodeId": "943:5462", "viewport": "tablet", "mainComponentNodeId": "942:40" }
+      ]
+    },
+    "retainedRestoreActionOverlays": {
+      "confirm": "2564:36726",
+      "loading": "2564:36734",
+      "complete": "2564:36745"
+    },
+    "postWriteVerification": {
+      "allFinalInstancesRemainAttached": true,
+      "detachedCount": 0,
+      "standaloneRestoreProgressPresent": false
+    },
+    "userConfirmation": {
+      "confirmed": true,
+      "scope": "Sync Backup final structure and the retained restore confirm, loading and complete popups"
+    },
+    "currentBindingPolicy": "The two live attachment facts above are current hierarchy observations only. Historical per-control bindings and historical revision fields remain audit records; no revision-backed current control binding is claimed until the writer runtime can read the official current revision.",
+    "remainingGate": "VC3_BACKPORT_REQUIRES_SEPARATE_LOCAL_AND_HOST_ADMISSION"
+  }
 }

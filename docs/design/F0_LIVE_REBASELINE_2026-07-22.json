@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "kind": "F0_LIVE_REBASELINE",
-  "status": "PARTIALLY_RECONCILED_RESTORE_EVIDENCE_STILL_PENDING",
+  "status": "PARTIALLY_RECONCILED_SEARCH_REMOVAL_AND_RESTORE_TOMBSTONED",
   "recordedAt": "2026-07-22T00:00:00+08:00",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "writerRuntime": {
@@ -37,6 +37,18 @@
       },
       "observation": "The user explicitly approved deletion of these zero-reaction historical Pilot components. The single writer removed the State Proof assembly first, then the five component targets. The live component parent now contains only SearchField, StatusFilter, GroupFilter and BottomActionBar; final Phone/Tablet instances remain attached and contain no removed-component reference."
     },
+    "searchResults": {
+      "canonicalMaster": { "pageId": "2639:2", "nodeId": "2635:59600", "name": "Page/Book Search" },
+      "finalAssembly": { "pageId": "834:2", "nodeId": "2636:33609", "name": "Book Search · Final Assembly" },
+      "deletedHistoryExpanded": {
+        "canonicalVariants": ["2649:59882", "2649:59936"],
+        "downstreamInstances": ["2651:59704", "2651:59768"]
+      },
+      "retainedCanonicalVariantCount": 10,
+      "retainedFinalInstanceCount": 10,
+      "reactionCount": 0,
+      "observation": "The user-approved single writer deletion removed only the Phone/Tablet History Expanded variants and their one-to-one final instances. Post-write hierarchy verification found exactly the ten retained Initial, Loading, Results, Empty and Error representations; no new Search screen, interaction, state owner or runtime flow was created."
+    },
     "localImport": {
       "canonicalComponentSet": "2657:918",
       "makeSource": "2547:1597",
@@ -45,15 +57,34 @@
     },
     "restore": {
       "withdrawnHistoricalMasterNodes": ["942:30", "942:32", "2460:46842"],
-      "currentlyVisibleProgressMasters": ["2648:2", "2648:228"],
-      "finalAssembly": "2649:60847",
-      "finalInstances": ["2649:60850", "2649:60852"],
-      "overlayNodes": {
-        "confirm": "2564:36726",
-        "loading": "2564:36734",
-        "complete": "2564:36745"
+      "deletedResidualRestorePreviewNodes": {
+        "page": "2648:736",
+        "progressMasters": ["2648:2", "2648:228"],
+        "downstreamAssembly": "2649:60847",
+        "downstreamInstancesRemovedWithAssembly": ["2649:60850", "2649:60852"]
       },
-      "observation": "The user withdrew Restore Preview as an active page family, but the live document still contains restore-progress and restore overlays. Do not claim the live document is fully deleted or reactivate this flow without a dedicated Sync Backup reconciliation."
+      "retainedSyncBackupNodes": {
+        "finalSection": {
+          "pageId": "834:2",
+          "nodeId": "943:4976",
+          "retainedProductChildren": [
+            { "nodeId": "943:4979", "name": "Assembly / Sync Backup" },
+            { "nodeId": "943:5701", "name": "WebDAV Config" }
+          ],
+          "restoreProgressChildCount": 0
+        },
+        "assembly": "943:4979",
+        "canonicalViewportMasters": [
+          { "viewport": "phone", "nodeId": "942:38" },
+          { "viewport": "tablet", "nodeId": "942:40" }
+        ],
+        "overlayNodes": {
+          "confirm": "2564:36726",
+          "loading": "2564:36734",
+          "complete": "2564:36745"
+        }
+      },
+      "observation": "The user withdrew Restore Preview as an active page family. The single writer deleted the residual Page/Restore Progress, its Phone/Tablet progress masters and their Assembly / Restore Progress. The retained Sync Backup flow is Assembly / Sync Backup plus its confirm, loading and complete overlays; Restore Preview remains absent and must not be reactivated."
     },
     "finalScopeAbsences": ["About", "Import Conflict", "Restore Preview"]
   },
@@ -66,10 +97,18 @@
       "requiredAction": "Do not recreate these Pilot components or consume their historical bindings as current product flows."
     },
     {
+      "id": "search-history-expanded-vs-user-scope",
+      "localEvidence": "docs/design/handoffs/search-results/*",
+      "problem": "The historical Search evidence still described Phone and Tablet History Expanded variants, even though the user explicitly withdrew that extra visual state.",
+      "resolution": "RESOLVED_BY_USER_APPROVED_SINGLE_WRITER_DELETION. The writer removed canonical variants 2649:59882 and 2649:59936 plus their only final instances 2651:59704 and 2651:59768. The retained canonical set and final assembly each contain exactly ten Initial, Loading, Results, Empty and Error representations.",
+      "requiredAction": "Keep Search history as content capability only. Do not recreate an expanded-screen variant or its historical prototype transitions without a new user-approved visual source."
+    },
+    {
       "id": "restore-withdrawal-vs-live",
       "localEvidence": "docs/design/handoffs/restore-preview/*",
-      "problem": "The old Restore Preview master is gone, but separate restore-progress masters and backup overlays remain live.",
-      "requiredAction": "Tombstone the local route family now; reconcile any remaining Figma nodes only as part of Sync Backup."
+      "problem": "The old Restore Preview master was gone, while separate restore-progress masters and backup overlays still remained live.",
+      "resolution": "RESOLVED_BY_USER_APPROVED_SINGLE_WRITER_DELETION. The writer removed Page/Restore Progress 2648:736, Phone/Tablet progress masters 2648:2 and 2648:228, and Assembly / Restore Progress 2649:60847. Its nested instances 2649:60850 and 2649:60852 were removed with the assembly. Sync Backup retains only Assembly / Sync Backup 943:4979 and overlays 2564:36726, 2564:36734 and 2564:36745.",
+      "requiredAction": "Keep the Restore Preview tombstone. Do not recreate the deleted route, masters, assembly, scope selection, conflict or result surfaces; maintain the retained confirm -> loading -> complete flow only under Sync Backup."
     }
   ],
   "consumptionPolicy": {

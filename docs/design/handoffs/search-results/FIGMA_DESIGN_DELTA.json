@@ -1,15 +1,17 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "search-results",
-  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_SCOPE_REMOVAL_RECONCILED_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "lastReadableRevision": "2378562033612422730",
-  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
-  "localImplementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
-  "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+  "historicalLastReadableRevision": "2378562033612422730",
+  "historicalRevisionReadStatus": "LAST_READABLE_BEFORE_USER_SCOPE_REMOVAL",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalImplementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
+  "historicalHandoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
   "designReference": "https://www.figma.com/make/SW2sjgSEPEPuPwyR0TULyP/%E4%B9%A6%E7%B1%8D%E6%90%9C%E7%B4%A2%E9%A1%B5%E8%AE%BE%E8%AE%A1",
-  "deltas": [
+  "historicalDeltas": [
     {
       "pageId": "2639:2",
       "nodeId": "2635:59600",
@@ -23,13 +25,13 @@
       "newValue": "Book Search · Final Assembly contains twelve attached instances of the canonical Page/Book Search variants; detached count is zero."
     }
   ],
-  "prototype": {
+  "historicalPrototype": {
     "submit": "Initial, Results, Empty, Error and History Expanded submit/retry controls change to the matching Loading variant using Smart Animate (0.2s).",
     "loading": "Each Loading variant settles to its matching Results variant after 0.65s.",
     "history": "Collapsed More opens History Expanded; Collapse returns to Initial for the matching viewport.",
     "runtimeOnlyBehavior": "Selecting a specific history record fills and focuses the query field without submitting. It is implemented by the local reducer; Figma intentionally does not create ten cosmetic query-filled variants."
   },
-  "visualAudit": {
+  "historicalVisualAudit": {
     "phone": "390x844",
     "tablet": "760x960",
     "landscape": "Tablet alias",
@@ -38,6 +40,38 @@
     "downstreamAttachedInstanceCount": 12,
     "detachedCount": 0
   },
-  "boundary": "This transaction follows the user-provided Figma Make visual source. It does not create a separate search product, alter UiEvent/state ownership, or change non-search page families.",
-  "remainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"
+  "historicalBoundary": "This transaction follows the user-provided Figma Make visual source. It does not create a separate search product, alter UiEvent/state ownership, or change non-search page families.",
+  "historicalRemainingGate": "USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT",
+  "postUserScopeRemoval": {
+    "scope": "User-approved removal of the Search History Expanded canonical variants and their matching final instances. This is a subtraction of an unneeded visual state; it does not add a screen, action, reaction, UiEvent, state owner, or runtime flow.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "removedFromCanvasHierarchy": [
+      {"role":"canonical-variant","pageId":"2639:2","nodeId":"2649:59882","viewport":"phone","formerState":"historyExpanded","name":"Phone History Expanded"},
+      {"role":"canonical-variant","pageId":"2639:2","nodeId":"2649:59936","viewport":"tablet","formerState":"historyExpanded","name":"Tablet History Expanded"},
+      {"role":"final-instance","nodeId":"2651:59704","viewport":"phone","formerState":"historyExpanded"},
+      {"role":"final-instance","nodeId":"2651:59768","viewport":"tablet","formerState":"historyExpanded"}
+    ],
+    "retainedCanonicalStates": [
+      {"viewport":"phone","state":"initial","nodeId":"2635:58749"},
+      {"viewport":"phone","state":"loading","nodeId":"2635:58809"},
+      {"viewport":"phone","state":"results","nodeId":"2635:58985"},
+      {"viewport":"phone","state":"empty","nodeId":"2635:59076"},
+      {"viewport":"phone","state":"error","nodeId":"2635:59138"},
+      {"viewport":"tablet","state":"initial","nodeId":"2635:59195"},
+      {"viewport":"tablet","state":"loading","nodeId":"2635:59259"},
+      {"viewport":"tablet","state":"results","nodeId":"2635:59440"},
+      {"viewport":"tablet","state":"empty","nodeId":"2635:59534"},
+      {"viewport":"tablet","state":"error","nodeId":"2635:59599"}
+    ],
+    "retainedFinalInstanceCount": 10,
+    "reactionCount": 0,
+    "designDelta": {
+      "oldValue": "The historical Page/Book Search set and final assembly each contained twelve state representations, including Phone and Tablet History Expanded.",
+      "newValue": "Only ten representations remain: Phone and Tablet Initial, Loading, Results, Empty, and Error. Search history remains a content capability, not an extra expanded-screen visual state."
+    },
+    "currentPrototypePolicy": "No Figma reaction is asserted for the retained Search states. The removed History Expanded prototype transitions are historical only and must not be reintroduced without a new user-approved visual source.",
+    "currentEvidencePolicy": "Retained state IDs above are a post-write canvas inventory, not a revision-backed current Design Delta. The official current Figma revision is unreadable in the writer runtime."
+  }
 }

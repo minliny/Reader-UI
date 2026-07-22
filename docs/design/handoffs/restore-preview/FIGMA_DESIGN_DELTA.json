@@ -2,11 +2,32 @@
   "schemaVersion": "1.1.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "restore-preview",
-  "status": "F2_WITHDRAWN_BY_USER_PENDING_LIVE_RECONCILIATION",
+  "status": "F2_WITHDRAWN_BY_USER_RECONCILED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "currentRevision": null,
   "historicalNamedRevision": "2378562033612422730",
-  "deltas": [],
+  "deltas": [
+    {
+      "nodeId": "2648:736",
+      "oldValue": "Page/Restore Progress remained live after the separate Restore Preview route was withdrawn.",
+      "newValue": "Deleted by the single writer as part of the user-approved Restore Preview withdrawal."
+    },
+    {
+      "nodeId": "2648:2",
+      "oldValue": "Route=restore-progress, Viewport=Phone remained live as a residual standalone progress master.",
+      "newValue": "Deleted; it is not a Sync Backup canonical component."
+    },
+    {
+      "nodeId": "2648:228",
+      "oldValue": "Route=restore-progress, Viewport=Tablet remained live as a residual standalone progress master.",
+      "newValue": "Deleted; it is not a Sync Backup canonical component."
+    },
+    {
+      "nodeId": "2649:60847",
+      "oldValue": "Assembly / Restore Progress contained the residual Phone and Tablet restore-progress instances.",
+      "newValue": "Deleted with its nested instances 2649:60850 and 2649:60852; Sync Backup retains Assembly / Sync Backup 943:4979 instead."
+    }
+  ],
   "withdrawal": {
     "reason": "User rejected the separately designed Restore Preview flow.",
     "replacementFlow": "Sync Backup: select backup -> confirm -> loading -> complete.",
@@ -18,10 +39,14 @@
       "locally-derived restore state matrix"
     ]
   },
-  "liveReadConflict": {
+  "liveReconciliation": {
     "oldRestorePreviewMastersAbsent": ["942:30", "942:32"],
-    "remainingLiveNodes": ["2648:2", "2648:228", "2649:60847", "2564:36726", "2564:36734", "2564:36745"],
-    "policy": "Do not report these nodes as deleted, canonical Restore Preview, or approved Sync Backup evidence until a single-writer Sync Backup reconciliation completes."
+    "deletedResidualNodes": ["2648:736", "2648:2", "2648:228", "2649:60847"],
+    "retainedSyncBackupEvidence": {
+      "assembly": "943:4979",
+      "overlays": ["2564:36726", "2564:36734", "2564:36745"]
+    },
+    "policy": "Do not recreate or rebind Restore Preview. The retained overlays are Sync Backup evidence, not a reactivated Restore Preview flow."
   },
-  "boundary": "No Figma node was modified by this evidence correction; it only removes an invalid current-completion claim."
+  "boundary": "This evidence records the user-approved single-writer deletion of the residual Restore Preview nodes. It does not introduce a new Restore Preview page, state matrix, UiEvent, state owner or business flow."
 }

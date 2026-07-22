@@ -1,17 +1,19 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "search-results",
-  "status": "F2_WRITER_COMPLETE_AWAITING_USER_CONFIRMATION",
+  "status": "F2_USER_SCOPE_REMOVAL_RECONCILED_AWAITING_USER_CONFIRMATION",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "lastReadableRevision": "2378562033612422730",
-  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
-  "localSource": {
+  "historicalLastReadableRevision": "2378562033612422730",
+  "historicalRevisionReadStatus": "LAST_READABLE_BEFORE_USER_SCOPE_REMOVAL",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalSource": {
     "implementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
     "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "packet": "docs/design/handoffs/search-results/LOCAL_READY_FOR_FIGMA.json"
   },
-  "canonicalMasters": [
+  "historicalCanonicalMasters": [
     {
       "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "2639:2",
@@ -20,7 +22,7 @@
       "lastReadableRevision": "2378562033612422730"
     }
   ],
-  "bindings": [
+  "historicalBindings": [
     {"localState":"initial","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:58749","lastReadableRevision":"2378562033612422730"},
     {"localState":"loading","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:58809","lastReadableRevision":"2378562033612422730"},
     {"localState":"results","viewport":"phone","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:58985","lastReadableRevision":"2378562033612422730"},
@@ -34,7 +36,7 @@
     {"localState":"error","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2635:59599","lastReadableRevision":"2378562033612422730"},
     {"localState":"historyExpanded","viewport":"tablet","fileKey":"klhs2jMM4MncaJFqZMfqEK","pageId":"2639:2","nodeId":"2649:59936","lastReadableRevision":"2378562033612422730"}
   ],
-  "downstreamEvidence": {
+  "historicalDownstreamEvidence": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
     "pageId": "834:2",
     "nodeId": "2636:33609",
@@ -43,6 +45,34 @@
     "detachedCount": 0,
     "lastReadableRevision": "2378562033612422730"
   },
-  "viewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
-  "exitAudit": {"canonicalVariantCount":12,"everyVariantRepresentedDownstream":true,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"}
+  "historicalViewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
+  "historicalExitAudit": {"canonicalVariantCount":12,"everyVariantRepresentedDownstream":true,"fabricatedBindingCount":0,"f2WriterExit":true,"remainingGate":"USER_VISUAL_CONFIRMATION_THEN_VC3_BACKPORT"},
+  "currentBindings": [],
+  "postUserScopeRemoval": {
+    "scope": "User-approved removal of the Search History Expanded state only. No new Search screen, interaction, state owner, or runtime behavior was created in this transaction.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "removedFromCanvasHierarchy": [
+      {"role":"canonical-variant","pageId":"2639:2","nodeId":"2649:59882","viewport":"phone","formerState":"historyExpanded","name":"Phone History Expanded"},
+      {"role":"canonical-variant","pageId":"2639:2","nodeId":"2649:59936","viewport":"tablet","formerState":"historyExpanded","name":"Tablet History Expanded"},
+      {"role":"final-instance","nodeId":"2651:59704","viewport":"phone","formerState":"historyExpanded"},
+      {"role":"final-instance","nodeId":"2651:59768","viewport":"tablet","formerState":"historyExpanded"}
+    ],
+    "retainedCanonicalStates": [
+      {"viewport":"phone","state":"initial","nodeId":"2635:58749"},
+      {"viewport":"phone","state":"loading","nodeId":"2635:58809"},
+      {"viewport":"phone","state":"results","nodeId":"2635:58985"},
+      {"viewport":"phone","state":"empty","nodeId":"2635:59076"},
+      {"viewport":"phone","state":"error","nodeId":"2635:59138"},
+      {"viewport":"tablet","state":"initial","nodeId":"2635:59195"},
+      {"viewport":"tablet","state":"loading","nodeId":"2635:59259"},
+      {"viewport":"tablet","state":"results","nodeId":"2635:59440"},
+      {"viewport":"tablet","state":"empty","nodeId":"2635:59534"},
+      {"viewport":"tablet","state":"error","nodeId":"2635:59599"}
+    ],
+    "retainedFinalInstanceCount": 10,
+    "reactionCount": 0,
+    "currentBindingPolicy": "The retained state inventory is a post-write canvas observation, not a new control crosswalk: current bindings remain empty until a writer runtime can read an official current revision. Historical bindings above must not be treated as current evidence."
+  }
 }
