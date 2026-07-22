@@ -62,15 +62,16 @@ function extractControlKeys(html) {
 
 function extractAttrMap(html) {
   const results = [];
-  const re = /data-entity-key="([^"]*)"\s+data-control-key="([^"]*)"\s+data-control-id="([^"]*)"\s+data-ui-event="([^"]*)"\s+data-settings-key="([^"]*)"/g;
+  const re = /data-entity-key="([^"]*)"\s+data-control-key="([^"]*)"\s+data-control-id="([^"]*)"\s+data-(ui-event|control-token)="([^"]*)"\s+data-settings-key="([^"]*)"/g;
   let m;
   while ((m = re.exec(html)) !== null) {
     results.push({
       entityKey: m[1],
       controlKey: m[2],
       controlId: m[3],
-      uiEvent: m[4],
-      settingsKey: m[5],
+      semanticAttribute: `data-${m[4]}`,
+      semanticValue: m[5],
+      settingsKey: m[6],
     });
   }
   return results;
@@ -127,6 +128,7 @@ const PHONE_ACTION_KEYS = PHONE_KEYS.filter((k) => sgActionControlKeySet.has(k))
 const TABLET_ACTION_KEYS = TABLET_KEYS.filter((k) => sgActionControlKeySet.has(k));
 
 const PHONE_ACTION_ATTRS = extractAttrMap(PHONE_HTML).filter((m) => sgActionControlKeySet.has(m.controlKey));
+const semanticValueFor = (declaration) => declaration.uiEvent || declaration.controlIdentityToken;
 
 // =============================================================================
 // 1. a3-action declarations: 9 个稳定 identity，全部 mapped，无 ordinal controlKey
@@ -142,8 +144,7 @@ test("A3 settings-general: 9 a3-action declarations exist with stable non-ordina
       `${decl.controlKey} has empty actionKey`);
     assert.ok(decl.controlId && decl.controlId.length > 0,
       `${decl.controlKey} has empty controlId`);
-    assert.ok(decl.uiEvent && decl.uiEvent.length > 0,
-      `${decl.controlKey} has empty uiEvent`);
+    assert.ok(semanticValueFor(decl), `${decl.controlKey} has no semantic identity value`);
     // 稳定 controlKey 不应包含 ordinal 段（.n0 / .n1 / ... / .n8）
     assert.ok(!/\.n[0-9]$/.test(decl.controlKey),
       `${decl.controlKey} still uses ordinal suffix (expected stable business key)`);
@@ -165,8 +166,8 @@ test("A3 settings-general: each a3-action declaration has expected actionKey/ins
       `actionKey mismatch for ${exp.settingsKey}: got ${decl.actionKey}, expected ${exp.actionKey}`);
     assert.equal(decl.instanceKey, exp.instanceKey,
       `instanceKey mismatch for ${exp.settingsKey}: got ${decl.instanceKey}, expected ${exp.instanceKey}`);
-    assert.equal(decl.uiEvent, exp.uiEvent,
-      `uiEvent mismatch for ${exp.settingsKey}: got ${decl.uiEvent}, expected ${exp.uiEvent}`);
+    assert.equal(semanticValueFor(decl), exp.uiEvent,
+      `semantic value mismatch for ${exp.settingsKey}: got ${semanticValueFor(decl)}, expected ${exp.uiEvent}`);
   }
 });
 
@@ -218,11 +219,11 @@ test("A3 settings-general: DOM has zero duplicate a3-action controlKeys", () => 
 });
 
 // =============================================================================
-// 6. 每个 a3-action DOM 元素携带完整 5 个 data-* 属性，值与 declaration 匹配
+// 6. 每个 a3-action DOM 元素携带稳定 identity + 互斥 semantic slot，值与 declaration 匹配
 // =============================================================================
-test("A3 settings-general: every a3-action DOM element carries all 5 data-* attributes matching declarations", () => {
+test("A3 settings-general: every a3-action DOM element carries identity plus one semantic slot", () => {
   assert.equal(PHONE_ACTION_ATTRS.length, 9,
-    `only ${PHONE_ACTION_ATTRS.length} a3-action elements carry all 5 attributes (expected 9)`);
+    `only ${PHONE_ACTION_ATTRS.length} a3-action elements carry a semantic slot (expected 9)`);
 
   const declByControlKey = new Map(sgActionDecls.map((d) => [d.controlKey, d]));
   for (const item of PHONE_ACTION_ATTRS) {
@@ -230,7 +231,8 @@ test("A3 settings-general: every a3-action DOM element carries all 5 data-* attr
     assert.ok(decl, `DOM a3-action element with controlKey=${item.controlKey} not found in declarations`);
     assert.equal(item.entityKey, decl.entityKey, `entityKey mismatch for ${item.controlKey}`);
     assert.equal(item.controlId, decl.controlId, `controlId mismatch for ${item.controlKey}`);
-    assert.equal(item.uiEvent, decl.uiEvent, `uiEvent mismatch for ${item.controlKey}`);
+    assert.equal(item.semanticValue, semanticValueFor(decl), `semantic value mismatch for ${item.controlKey}`);
+    assert.equal(item.semanticAttribute, decl.uiEvent ? "data-ui-event" : "data-control-token", `semantic slot mismatch for ${item.controlKey}`);
     assert.equal(item.settingsKey, decl.settingsKey, `settingsKey mismatch for ${item.controlKey}`);
   }
 });

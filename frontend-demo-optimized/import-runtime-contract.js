@@ -70,11 +70,16 @@
   });
   function identityFor(spec) {
     const entityKey = `import-conflict-resolve.control.button.${spec.settingsKey}`;
+    const declaration = (window.CANONICAL_CONTROL_DECLARATIONS || []).find((entry) =>
+      entry.source === "import-conflict-action" && entry.route === spec.route &&
+      entry.state === spec.state && entry.settingsKey === spec.settingsKey
+    ) || null;
     return Object.freeze({
       entityKey,
       controlKey: `${entityKey}@${spec.route}.${spec.state}`,
       controlId: `import-conflict-resolve.control.${spec.route}.${spec.state}.button.${spec.settingsKey}`,
-      uiEvent: spec.uiEvent,
+      uiEvent: declaration?.uiEvent || null,
+      controlIdentityToken: declaration?.controlIdentityToken || null,
       settingsKey: spec.settingsKey
     });
   }
@@ -90,7 +95,10 @@
       const identity = identityFor(spec);
       const aria = /\baria-label=/.test(tag) ? "" : ` aria-label="${spec.label}"`;
       const restore = spec.focusReturn ? ` data-restore-focus="${identity.controlKey}"` : "";
-      return tag.replace(/>$/, `${aria} data-entity-key="${identity.entityKey}" data-control-key="${identity.controlKey}" data-control-id="${identity.controlId}" data-ui-event="${identity.uiEvent}" data-settings-key="${identity.settingsKey}"${restore}>`);
+      const semantic = identity.uiEvent
+        ? ` data-ui-event="${identity.uiEvent}"`
+        : identity.controlIdentityToken ? ` data-control-token="${identity.controlIdentityToken}"` : "";
+      return tag.replace(/>$/, `${aria} data-entity-key="${identity.entityKey}" data-control-key="${identity.controlKey}" data-control-id="${identity.controlId}"${semantic} data-settings-key="${identity.settingsKey}"${restore}>`);
     });
   }
 

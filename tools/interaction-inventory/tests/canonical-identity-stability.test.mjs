@@ -46,6 +46,7 @@ const REGISTRY_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generat
 const DISPATCH_MAP_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "renderer-dispatch-map.json");
 const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "nonInteractiveContainers.json");
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
+const RUNTIME_EVENT_SCOPE_MATRIX_PATH = join(REPO_ROOT, "docs", "audits", "RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json");
 
 const declarationsModule = await import(`file://${DECLARATIONS_PATH}`);
 const declarations = declarationsModule.CANONICAL_CONTROL_DECLARATIONS;
@@ -56,6 +57,12 @@ const dispatchMap = JSON.parse(readFileSync(DISPATCH_MAP_PATH, "utf8"));
 const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = uiEventSchema.properties.type.enum;
+const runtimeEventScopeMatrix = JSON.parse(readFileSync(RUNTIME_EVENT_SCOPE_MATRIX_PATH, "utf8"));
+const identityOnlyTokenSet = new Set(
+  runtimeEventScopeMatrix.rows
+    .filter((row) => row.runtimeEligible === false)
+    .map((row) => row.event),
+);
 
 // ---- Test 1: selector 变化时 entityKey 不变 ----
 test("R2.0.1 stability: entityKey does NOT depend on selector", () => {
@@ -308,7 +315,8 @@ test("R2.0.1 uiEvent: every declaration has uiEvent or uiEventExemption with val
     "pending-instance-key",
     "pending-action-and-instance-key",
     "decorative",
-    "container-only"
+    "container-only",
+    "identity-only-token"
   ]);
   for (const d of declarations) {
     if (d.uiEvent === null || d.uiEvent === undefined) {
@@ -318,6 +326,24 @@ test("R2.0.1 uiEvent: every declaration has uiEvent or uiEventExemption with val
         `declaration ${d.controlKey} has invalid uiEventExemption: ${d.uiEventExemption}`
       );
     }
+  }
+});
+
+// ---- Test 16b: scope-matrix identity tokens cannot become UiEvent again ----
+test("R2.0.1 boundary: identity-only scope tokens never leak into UiEvent", () => {
+  assert.equal(identityOnlyTokenSet.size, 35, "scope matrix must retain the audited 35 identity-only tokens");
+  for (const token of identityOnlyTokenSet) {
+    assert.ok(!uiEventEnum.includes(token), `identity-only token must not be in UiEvent schema: ${token}`);
+  }
+  const tokenDeclarations = declarations.filter((d) => d.controlIdentityToken !== undefined);
+  assert.ok(tokenDeclarations.length > 0, "scope tokens must stay available for stable DOM identity");
+  for (const d of tokenDeclarations) {
+    assert.ok(identityOnlyTokenSet.has(d.controlIdentityToken), `unexpected controlIdentityToken: ${d.controlIdentityToken}`);
+    assert.equal(d.uiEvent, null, `identity-only declaration leaked UiEvent: ${d.controlKey}`);
+    assert.equal(d.uiEventExemption, "identity-only-token", `missing identity-only exemption: ${d.controlKey}`);
+  }
+  for (const d of declarations) {
+    assert.ok(!identityOnlyTokenSet.has(d.uiEvent), `scope token leaked into declaration UiEvent: ${d.controlKey}`);
   }
 });
 

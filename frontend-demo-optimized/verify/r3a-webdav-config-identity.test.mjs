@@ -33,6 +33,7 @@ const kitSource = readFileSync(join(demoRoot, "shared-shell-kit/kit.js"), "utf8"
 const appearanceSpecSource = readFileSync(join(demoRoot, "appearance-spec.js"), "utf8");
 const declarationsSource = readFileSync(join(demoRoot, "control-identity-declarations.js"), "utf8");
 const d2SettingsSource = readFileSync(join(demoRoot, "renderers/d2-settings-sync-renderers.js"), "utf8");
+const renderRuntimeSource = readFileSync(join(demoRoot, "render-runtime.js"), "utf8");
 
 const VIEWPORTS = [
   { name: "phone",  viewportClass: "phone-portrait",  sizeHint: "390x844" },
@@ -117,6 +118,32 @@ test("R3a webdav-config: default state stamps all 12 expected settingsKeys", () 
     assert.ok(settingsKeys.includes(sk), `expected settingsKey "${sk}" missing (actual: ${settingsKeys.join(", ")})`);
   }
   assert.equal(settingsKeys.length, expected.length, `expected ${expected.length} settingsKeys, got ${settingsKeys.length}`);
+});
+
+// =============================================================================
+// 1b. 输入变化是本地身份 token，不是跨端可执行 UiEvent
+// =============================================================================
+test("R3a webdav-config: inputs retain the identity token selector without a UiEvent", () => {
+  const r = freshSandbox();
+  const html = render(r, "webdav-config");
+
+  for (const settingsKey of ["serverUrl", "account", "password", "syncDir"]) {
+    const input = html.match(new RegExp(`<input\\b[^>]*data-settings-key="${settingsKey}"[^>]*>`, "i"))?.[0];
+    assert.ok(input, `${settingsKey}: input present`);
+    assert.match(input, /data-control-token="input\.change"/, `${settingsKey}: identity token is present`);
+    assert.doesNotMatch(input, /data-ui-event=/, `${settingsKey}: no released UiEvent is fabricated`);
+  }
+
+  assert.match(
+    renderRuntimeSource,
+    /\[data-control-token="input\.change"\]\[data-settings-key\]/,
+    "runtime listener follows the identity token selector",
+  );
+  assert.doesNotMatch(
+    renderRuntimeSource,
+    /\[data-ui-event="input\.change"\]\[data-settings-key\]/,
+    "runtime no longer listens for input.change as a UiEvent",
+  );
 });
 
 // =============================================================================

@@ -30,12 +30,13 @@ test("R2a sync-backup declares exactly 92 mapped semantic controls", () => {
   assert.ok(rows.every((entry) => entry.mappingStatus === "mapped" && entry.instanceKey === null && !/\.n\d+|selector|ordinal/.test(entry.settingsKey)));
 });
 
-test("R2a all six canonical routes stamp every visible control with five attributes", () => {
+test("R2a all six canonical routes stamp every visible control with one semantic slot", () => {
   const api = fresh();
   const expected = { "sync-settings-entry": 8, "sync-backup": 13, "backup-settings": 16, "progress-sync": 10, "progress-sync-status": 3, "remote-webdav-books": 12 };
   for (const [route, count] of Object.entries(expected)) {
     const html = api.renderD2Route(route, {}, {});
-    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, count, `${route} ${attr}`);
+    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"]) assert.equal(values(html, attr).length, count, `${route} ${attr}`);
+    assert.equal(values(html, "data-ui-event").length + values(html, "data-control-token").length, count, `${route} semantic-slot`);
   }
 });
 

@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "RUNTIME_EVENT_SCOPE_MATRIX",
-  "status": "NON_DRIVING_POST_SOURCE_TOMBSTONE_RECONCILIATION",
+  "status": "ENFORCED_IDENTITY_TOKEN_BOUNDARY",
   "recordedAt": "2026-07-22T00:00:00+08:00",
   "purpose": "Separate DOM/control identity vocabulary from approved cross-platform runtime actions before changing release coverage.",
   "nonGoals": [
@@ -12,7 +12,7 @@
   "inputs": {
     "uiEventSchema": {
       "path": "contracts/ui-event.schema.json",
-      "eventCount": 335
+      "eventCount": 300
     },
     "runtimeActions": {
       "path": "ui-spec/runtime-actions.json",
@@ -22,7 +22,7 @@
     "runtimeCoverage": {
       "path": "generated/runtime-coverage.json",
       "historicalCanonicalCount": 300,
-      "currentCheck": "FAIL: schema has 335 while runtime ownership still defines 300"
+      "currentCheck": "PASS: schema and runtime ownership both define 300 executable UiEvent values"
     },
     "identityIntroduction": {
       "commit": "06ac0534bc79c84c8b89e776d9a2bde8172db354",
@@ -41,6 +41,15 @@
     "LOCAL_DEMO_PLANNED": "The demo has a local state, but it is not yet aligned to a Host/Core contract or release action.",
     "WITHDRAWN_CANDIDATE": "Only a withdrawn/legacy context currently supplies this event; retain historical identity until route-level tombstone evidence exists.",
     "FIGMA_VISUAL_TOMBSTONED": "The only source-route visual evidence was deliberately removed from the Figma parent/canvas hierarchy; the identity remains historical and no runtime behavior is approved."
+  },
+  "enforcement": {
+    "identityOnlyDeclarationShape": {
+      "uiEvent": null,
+      "controlIdentityToken": "the original vocabulary value",
+      "uiEventExemption": "identity-only-token"
+    },
+    "domRule": "Identity-only declarations write data-control-token, never data-ui-event.",
+    "releaseRule": "The rows below are excluded from contracts/ui-event.schema.json and every generated native UiEvent enum."
   },
   "rows": [
     {

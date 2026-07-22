@@ -9,9 +9,9 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(__dirname, "..", "..");
 const eventSchema = JSON.parse(readFileSync(join(REPO_ROOT, "contracts", "ui-event.schema.json"), "utf8"));
 
-test("Swift UiEvent case names normalize hyphenated event tokens", () => {
-  assert.equal(swiftUiEventCase("batch.select-all.toggle"), "batch_select_all_toggle");
-  assert.equal(swiftUiEventCase("sheet.add-source.open"), "sheet_add_source_open");
+test("Swift identifier normalizer handles arbitrary hyphenated strings", () => {
+  assert.equal(swiftUiEventCase("example-control.activate"), "example_control_activate");
+  assert.equal(swiftUiEventCase("sample-sheet.open"), "sample_sheet_open");
 });
 
 test("every canonical UiEvent maps to a valid Swift identifier", () => {

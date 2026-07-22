@@ -15,6 +15,7 @@ export const REPO_ROOT = join(THIS_DIR, "..", "..");
 
 export const INTERACTION_INVENTORY_PATH = "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json";
 export const INTERACTION_COVERAGE_PATH = "docs/audits/ic0-2026-07-19/generated/interaction-control-coverage.json";
+export const RUNTIME_EVENT_SCOPE_MATRIX_PATH = "docs/audits/RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json";
 
 const DEMO_ROOT = "frontend-demo-optimized";
 const HTML_VOID_ELEMENTS = new Set([
@@ -28,6 +29,7 @@ const INTERACTIVE_ROLES = new Set([
 const EXCLUDED_COMPOSITE_ROLES = new Set(["listbox"]);
 const JOIN_GAP_CODE = "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY";
 const UI_EVENT_GAP_CODE = "IC0_UI_EVENT_UNRESOLVED";
+const CONTROL_IDENTITY_TOKEN_GAP_CODE = "IC0_CONTROL_IDENTITY_TOKEN_UNRESOLVED";
 const RAW_MOTION_GAP_CODE = "IC0_RAW_MOTION_HINT_UNRESOLVED";
 const CANONICAL_MOTION_GAP_CODE = "IC0_CANONICAL_MOTION_ID_UNRESOLVED";
 const LABEL_GAP_CODE = "IC0_ACCESSIBLE_LABEL_MISSING";
@@ -45,7 +47,7 @@ const ACTIONABLE_DATA_ATTRIBUTES = new Set([
   "data-route-back", "data-search-reset", "data-search-submit", "data-search-history-select", "data-search-history-toggle",
   "data-book-search-clear-history", "data-settings-option-choice",
   "data-settings-option-key", "data-settings-option-value", "data-settings-overlay", "data-source-action",
-  "data-source-select", "data-top-action", "data-ui-event",
+  "data-source-select", "data-top-action", "data-ui-event", "data-control-token",
 ]);
 const SETTINGS_CONTROL_CLASSES = new Set(["is-switch", "is-select", "is-segment", "is-stepper"]);
 
@@ -208,6 +210,10 @@ function isControl(node) {
   if (NATIVE_CONTROL_TAGS.has(node.tag)) return node.tag !== "input" || node.attrs.type !== "hidden";
   if (node.tag === "a" && typeof node.attrs.href === "string") return true;
   if (INTERACTIVE_ROLES.has(String(node.attrs.role || "").toLowerCase())) return true;
+  // A declaration-governed identity token denotes an actual control even when
+  // a future renderer has not yet supplied a native tag or ARIA role. Keep it
+  // in the semantic denominator so an invalid token fails closed in the audit.
+  if (typeof node.attrs["data-control-token"] === "string") return true;
   return false;
 }
 
@@ -230,7 +236,7 @@ function dataAttributes(attrs) {
 function preferredDataSelector(attrs) {
   const entries = Object.entries(dataAttributes(attrs));
   const priorities = [
-    "data-ui-event", "data-action", "data-route", "data-nav-type", "data-reader-page-action",
+    "data-ui-event", "data-control-token", "data-action", "data-route", "data-nav-type", "data-reader-page-action",
     "data-reader-module", "data-module", "data-top-action", "data-book-action", "data-settings-action",
   ];
   for (const name of priorities) {
@@ -355,6 +361,20 @@ function inferUiEvent(node, canonicalEvents) {
     || (attrs["data-reader-page-action"] ? `reader.page.${attrs["data-reader-page-action"]}` : null)
     || ((attrs["data-reader-module"] || attrs["data-module"]) ? "reader.module.switch" : null);
   return candidate && canonicalEvents.has(candidate) ? candidate : null;
+}
+
+export function classifyControlIdentityToken(token, identityOnlyTokenSet) {
+  if (typeof token !== "string" || token.length === 0) {
+    return { controlIdentityToken: null, unresolvedControlIdentityToken: null };
+  }
+  if (identityOnlyTokenSet?.has(token)) {
+    return { controlIdentityToken: token, unresolvedControlIdentityToken: null };
+  }
+  return { controlIdentityToken: null, unresolvedControlIdentityToken: token };
+}
+
+function inferControlIdentityToken(node, identityOnlyTokenSet) {
+  return classifyControlIdentityToken(node?.attrs?.["data-control-token"], identityOnlyTokenSet);
 }
 
 function hasAncestorClass(node, className) {
@@ -547,10 +567,15 @@ export function createVmRenderer() {
     `${DEMO_ROOT}/appearance-spec.js`,
     `${DEMO_ROOT}/fixture.js`,
     `${DEMO_ROOT}/route-contract.js`,
+    ...rendererSourcePaths(),
+    // Match index.html's contract order: renderers first, canonical
+    // declarations next, then runtime contracts that consume those
+    // declarations to choose data-ui-event vs data-control-token.
+    `${DEMO_ROOT}/control-identity-declarations.js`,
+    `${DEMO_ROOT}/reader-runtime-contract.js`,
     `${DEMO_ROOT}/rss-runtime-contract.js`,
     `${DEMO_ROOT}/import-runtime-contract.js`,
     `${DEMO_ROOT}/discover-runtime-contract.js`,
-    ...rendererSourcePaths(),
   ];
   for (const sourcePath of sourcePaths) {
     new vm.Script(read(sourcePath), { filename: sourcePath }).runInContext(context, { timeout: 2_000 });
@@ -663,12 +688,13 @@ function suspectedNonSemanticReasons(node) {
   return reasons;
 }
 
-function baseRecord(node, renderCase, runtimeFamily, context, motionRules, canonicalEvents, canonicalMotionIdSet) {
+function baseRecord(node, renderCase, runtimeFamily, context, motionRules, canonicalEvents, identityOnlyTokenSet, canonicalMotionIdSet) {
   const selector = auditSelector(node);
   const attrs = dataAttributes(node.attrs);
   const caseKey = `${renderCase.routeId}/${renderCase.variant.variantId}`;
   const label = controlLabel(node, context);
   const uiEvent = inferUiEvent(node, canonicalEvents);
+  const { controlIdentityToken, unresolvedControlIdentityToken } = inferControlIdentityToken(node, identityOnlyTokenSet);
   const rawMotionHints = inferMotionHints(node, motionRules);
   const canonicalMotionIds = normalizeCanonicalMotionIds(rawMotionHints, canonicalMotionIdSet, { node, uiEvent });
   return {
@@ -686,6 +712,8 @@ function baseRecord(node, renderCase, runtimeFamily, context, motionRules, canon
     selector,
     dataAttributes: attrs,
     uiEvent,
+    controlIdentityToken,
+    unresolvedControlIdentityToken,
     rawMotionHints,
     canonicalMotionIds,
     joinStatus: "unjoined-no-stable-key",
@@ -693,7 +721,7 @@ function baseRecord(node, renderCase, runtimeFamily, context, motionRules, canon
   };
 }
 
-function controlRecord(node, renderCase, runtimeFamily, context, motionRules, canonicalEvents, canonicalMotionIdSet) {
+function controlRecord(node, renderCase, runtimeFamily, context, motionRules, canonicalEvents, identityOnlyTokenSet, canonicalMotionIdSet) {
   const record = baseRecord(
     node,
     renderCase,
@@ -701,10 +729,12 @@ function controlRecord(node, renderCase, runtimeFamily, context, motionRules, ca
     context,
     motionRules,
     canonicalEvents,
+    identityOnlyTokenSet,
     canonicalMotionIdSet,
   );
   const gapCodes = [JOIN_GAP_CODE];
-  if (!record.uiEvent) gapCodes.push(UI_EVENT_GAP_CODE);
+  if (!record.uiEvent && !record.controlIdentityToken) gapCodes.push(UI_EVENT_GAP_CODE);
+  if (record.unresolvedControlIdentityToken) gapCodes.push(CONTROL_IDENTITY_TOKEN_GAP_CODE);
   if (record.rawMotionHints.length === 0) gapCodes.push(RAW_MOTION_GAP_CODE);
   if (record.canonicalMotionIds.length === 0) gapCodes.push(CANONICAL_MOTION_GAP_CODE);
   if (!record.label) gapCodes.push(LABEL_GAP_CODE);
@@ -727,6 +757,7 @@ function suspectedNonSemanticRecord(
   context,
   motionRules,
   canonicalEvents,
+  identityOnlyTokenSet,
   canonicalMotionIdSet,
 ) {
   const record = baseRecord(
@@ -736,10 +767,12 @@ function suspectedNonSemanticRecord(
     context,
     motionRules,
     canonicalEvents,
+    identityOnlyTokenSet,
     canonicalMotionIdSet,
   );
   const gapCodes = [NON_SEMANTIC_GAP_CODE, JOIN_GAP_CODE];
-  if (!record.uiEvent) gapCodes.push(UI_EVENT_GAP_CODE);
+  if (!record.uiEvent && !record.controlIdentityToken) gapCodes.push(UI_EVENT_GAP_CODE);
+  if (record.unresolvedControlIdentityToken) gapCodes.push(CONTROL_IDENTITY_TOKEN_GAP_CODE);
   if (record.rawMotionHints.length === 0) gapCodes.push(RAW_MOTION_GAP_CODE);
   if (record.canonicalMotionIds.length === 0) gapCodes.push(CANONICAL_MOTION_GAP_CODE);
   if (!record.label) gapCodes.push(LABEL_GAP_CODE);
@@ -789,6 +822,9 @@ function aggregateControlCoverage(controls) {
   return {
     count: controls.length,
     withUiEvent: controls.filter((control) => control.uiEvent !== null).length,
+    withControlIdentityToken: controls.filter((control) => control.controlIdentityToken !== null).length,
+    withSemanticIdentity: controls.filter((control) => control.uiEvent !== null || control.controlIdentityToken !== null).length,
+    withUnresolvedControlIdentityToken: controls.filter((control) => control.unresolvedControlIdentityToken !== null).length,
     withRawMotionHints: controls.filter((control) => control.rawMotionHints.length > 0).length,
     rawMotionHintOccurrences,
     uniqueRawMotionHints: [...rawMotionHints].sort(),
@@ -886,6 +922,13 @@ export function buildInteractionInventoryArtifacts() {
   const screenGraphArtifacts = buildScreenGraphArtifacts(screenGraphInputs);
   const graph = screenGraphArtifacts.graph;
   const canonicalEvents = new Set(screenGraphInputs.uiEventSchema.properties.type.enum);
+  const runtimeEventScopeMatrix = JSON.parse(read(RUNTIME_EVENT_SCOPE_MATRIX_PATH));
+  const identityOnlyTokenSet = new Set(
+    (runtimeEventScopeMatrix.rows || [])
+      .filter((row) => row && row.runtimeEligible === false && typeof row.event === "string")
+      .map((row) => row.event),
+  );
+  assert(identityOnlyTokenSet.size > 0, "runtime event scope matrix must define identity-only control tokens");
   const motionSchemaPath = "contracts/motion.schema.json";
   const motionSchema = JSON.parse(read(motionSchemaPath));
   const canonicalMotionIdSet = new Set(motionSchema.properties.id.enum);
@@ -913,6 +956,7 @@ export function buildInteractionInventoryArtifacts() {
           context,
           vmRenderer.motionRules,
           canonicalEvents,
+          identityOnlyTokenSet,
           canonicalMotionIdSet,
         ));
         return;
@@ -927,6 +971,7 @@ export function buildInteractionInventoryArtifacts() {
           context,
           vmRenderer.motionRules,
           canonicalEvents,
+          identityOnlyTokenSet,
           canonicalMotionIdSet,
         ));
       }
@@ -952,6 +997,8 @@ export function buildInteractionInventoryArtifacts() {
       screenGraphSha256: screenGraphArtifacts.coverage.graphSha256,
       motionSchemaPath,
       motionSchemaSha256: sha256(read(motionSchemaPath)),
+      runtimeEventScopeMatrixPath: RUNTIME_EVENT_SCOPE_MATRIX_PATH,
+      runtimeEventScopeMatrixSha256: sha256(read(RUNTIME_EVENT_SCOPE_MATRIX_PATH)),
       rendererMode: "VM-rendered renderRoute with active index.html renderer modules",
       rendererSourcePaths: vmRenderer.sourcePaths,
       rendererSourcesSha256: sha256(vmRenderer.sourcePaths.map((sourcePath) => `${sourcePath}\u0000${read(sourcePath)}`).join("\u0000")),
@@ -960,6 +1007,8 @@ export function buildInteractionInventoryArtifacts() {
       canonicalControlIdAvailable: false,
       candidateKeyCanonical: false,
       note: "candidateKey and selector are deterministic audit locators only; neither is a product control identity or a ScreenGraph join key.",
+      semanticSlotPolicy: "A control may expose a released UiEvent or an allowlisted identity-only control token. Unknown tokens remain unresolved and fail the audit.",
+      identityOnlyTokenCount: identityOnlyTokenSet.size,
     },
     semanticControls,
     suspectedNonSemanticControls,
@@ -968,7 +1017,7 @@ export function buildInteractionInventoryArtifacts() {
   const semanticControlCoverage = aggregateControlCoverage(semanticControls);
   const suspectedNonSemanticControlCoverage = aggregateControlCoverage(suspectedNonSemanticControls);
   const coverage = {
-    schemaVersion: "1.1.0",
+    schemaVersion: "1.2.0",
     controlEnumerationPolicy: {
       nativeTags: [...NATIVE_CONTROL_TAGS].sort(),
       anchorsWithHref: true,
@@ -1038,7 +1087,9 @@ export function checkInteractionInventoryArtifactBytes(artifacts = buildInteract
 // helpers. Does not modify existing IC0 inventory functions; only appends.
 // ===========================================================================
 
-export const CONTROL_ID_SCHEMA_VERSION = "1.3.0";
+// 1.4.0 adds source.controlIdentityToken, an allowlisted DOM-only semantic
+// slot that is deliberately excluded from the cross-platform UiEvent enum.
+export const CONTROL_ID_SCHEMA_VERSION = "1.4.0";
 export const CONTROL_ID_REGISTRY_PATH = "tools/interaction-inventory/generated/control-id-registry.json";
 export const SCREENGRAPH_BINDING_PATH = "tools/interaction-inventory/generated/screengraph-binding.json";
 export const FIGMA_CROSSWALK_PENDING_PATH = "tools/interaction-inventory/generated/figma-crosswalk-pending.json";
@@ -1103,6 +1154,7 @@ const CONTROL_ID_PRIORITY_DATA_ATTRIBUTES = Object.freeze([
   "data-settings-option-choice",
   "data-source-select",
   "data-ui-event",
+  "data-control-token",
 ]);
 
 const SLUG_FOR_VALUELESS_ATTRIBUTE = Object.freeze({
@@ -1707,6 +1759,7 @@ function buildRegistryEntry(control, viewport, binding, controlKeyOverride, inst
       domTag: control.domTag,
       label: control.label || null,
       uiEvent: control.uiEvent || null,
+      controlIdentityToken: control.controlIdentityToken || null,
       dataAttributes: control.dataAttributes || {},
     },
     mappingStatus,

@@ -3,6 +3,7 @@
 
 export {
   DATA_CONTROL_ID_ATTRIBUTE,
+  DATA_CONTROL_TOKEN_ATTRIBUTE,
   DATA_CONTROL_CANDIDATE_KEY_ATTRIBUTE,
   DATA_CONTROL_KEY_ATTRIBUTE,
   DATA_ENTITY_KEY_ATTRIBUTE,
@@ -13,6 +14,7 @@ export {
   assertMappingStatusAllowsControlKeyWrite,
   composeControlId,
   getDataControlId,
+  getDataControlToken,
   getDataControlKey,
   getDataEntityKey,
   getDataUiEvent,
@@ -29,6 +31,7 @@ export {
   resolveControlId,
   resolveControlIdAndViewport,
   setDataControlId,
+  setDataControlToken,
   setDataControlKey,
   setDataEntityKey,
   setDataUiEvent,

@@ -1,9 +1,9 @@
 {
-  "schemaVersion": "1.3.0",
+  "schemaVersion": "1.4.0",
   "generatedAt": "2026-07-19T00:00:00.000Z",
   "generatedFrom": {
     "inventoryPath": "docs/audits/ic0-2026-07-19/generated/interaction-control-inventory.json",
-    "inventorySha256": "2118267d4c6f4a18dac9618a27c3db2af0b524d803b03304f868c738bf37f311",
+    "inventorySha256": "8f6fce1feba000c4043efc9bf070ef2c939ba25b037f6d6fa66d1d523972270b",
     "generatorPath": "tools/interaction-inventory/generate-control-ids.mjs"
   },
   "totals": {

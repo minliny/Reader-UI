@@ -89,6 +89,14 @@ export const DATA_CONTROL_KEY_ATTRIBUTE = "data-control-key" as const;
 export const DATA_UI_EVENT_ATTRIBUTE = "data-ui-event" as const;
 
 /**
+ * The DOM attribute for a stable control identity token that is explicitly
+ * not a cross-platform executable UiEvent. Use this for controls classified
+ * by the runtime event scope matrix as identity-only; never overload
+ * `data-ui-event` with a token that has no released owner or payload.
+ */
+export const DATA_CONTROL_TOKEN_ATTRIBUTE = "data-control-token" as const;
+
+/**
  * A0 (schema 1.3.0): The four canonical mappingStatus values, derived from
  * the independent (needsActionKey, needsInstanceKey) pair. Source of truth:
  * contracts/control-identity.schema.json `mappingStatus.enum`.
@@ -260,6 +268,9 @@ export function setDataUiEvent(element: Element | null | undefined, uiEvent: str
   if (typeof uiEvent !== "string" || uiEvent.length === 0) {
     throw new Error(`setDataUiEvent requires a non-empty uiEvent or null, received: ${String(uiEvent)}`);
   }
+  // The semantic slots are mutually exclusive. A reused DOM node must not
+  // retain an identity-only token after becoming an executable UiEvent.
+  element.removeAttribute(DATA_CONTROL_TOKEN_ATTRIBUTE);
   element.setAttribute(DATA_UI_EVENT_ATTRIBUTE, uiEvent);
   return element;
 }
@@ -271,6 +282,35 @@ export function setDataUiEvent(element: Element | null | undefined, uiEvent: str
 export function getDataUiEvent(element: Element | null | undefined): string | null {
   if (!element) return null;
   const value = element.getAttribute(DATA_UI_EVENT_ATTRIBUTE);
+  return value && value.length > 0 ? value : null;
+}
+
+/**
+ * Set a stable identity-only control token. Passing null removes the token.
+ * An element must use either `data-ui-event` for an executable UiEvent or
+ * `data-control-token` for an identity-only token, never the latter as a
+ * substitute for a released cross-platform action.
+ */
+export function setDataControlToken(element: Element | null | undefined, controlToken: string | null): Element | null {
+  if (!element) return null;
+  if (controlToken === null) {
+    element.removeAttribute(DATA_CONTROL_TOKEN_ATTRIBUTE);
+    return element;
+  }
+  if (typeof controlToken !== "string" || controlToken.length === 0) {
+    throw new Error(`setDataControlToken requires a non-empty token or null, received: ${String(controlToken)}`);
+  }
+  // The semantic slots are mutually exclusive. A reused DOM node must not
+  // retain a stale executable UiEvent after becoming identity-only.
+  element.removeAttribute(DATA_UI_EVENT_ATTRIBUTE);
+  element.setAttribute(DATA_CONTROL_TOKEN_ATTRIBUTE, controlToken);
+  return element;
+}
+
+/** Read an identity-only control token, or null when the attribute is absent. */
+export function getDataControlToken(element: Element | null | undefined): string | null {
+  if (!element) return null;
+  const value = element.getAttribute(DATA_CONTROL_TOKEN_ATTRIBUTE);
   return value && value.length > 0 ? value : null;
 }
 

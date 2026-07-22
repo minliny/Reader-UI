@@ -38,21 +38,22 @@ test("R3a import identity: canonical declarations are mapped 1:1 without ordinal
   for (const spec of contract.CONTROL_SPECS) {
     const match = actual.find((entry) => entry.route === spec.route && entry.settingsKey === spec.settingsKey);
     assert.ok(match, `${spec.route}/${spec.settingsKey}`);
-    assert.equal(match.uiEvent, spec.uiEvent);
+    assert.equal(match.uiEvent || match.controlIdentityToken, spec.uiEvent);
     assert.equal(match.state, spec.state);
   }
 });
 
-test("R3a import identity: real VM renderer stamps all five attributes on all 32 controls", () => {
+test("R3a import identity: real VM renderer stamps identity plus exactly one semantic slot", () => {
   const renderer = createVmRenderer();
   let total = 0;
   for (const [route, count] of expectedCounts) {
     const html = renderer.renderRoute(route);
     const controls = values(html, "data-control-key");
     assert.equal(controls.length, count, route);
-    for (const attribute of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) {
+    for (const attribute of ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"]) {
       assert.equal(values(html, attribute).length, count, `${route}/${attribute}`);
     }
+    assert.equal(values(html, "data-ui-event").length + values(html, "data-control-token").length, count, `${route}/semantic-slot`);
     total += controls.length;
   }
   assert.equal(total, 32);

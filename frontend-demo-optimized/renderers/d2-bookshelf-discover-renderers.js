@@ -428,14 +428,23 @@
     }) || null;
   }
 
+  function d2IdentitySemanticPair(identity) {
+    if (identity && identity.uiEvent) return ["data-ui-event", identity.uiEvent];
+    if (identity && identity.controlIdentityToken) return ["data-control-token", identity.controlIdentityToken];
+    return null;
+  }
+
   function d2BookshelfIdentityAttrs(settingsKey) {
     var identity = d2BookshelfIdentity(settingsKey);
     if (!identity) return "";
-    return [
+    var pairs = [
       ["data-entity-key", identity.entityKey], ["data-control-key", identity.controlKey],
-      ["data-control-id", identity.controlId], ["data-ui-event", identity.uiEvent],
+      ["data-control-id", identity.controlId],
       ["data-settings-key", settingsKey]
-    ].map(function (pair) { return ` ${pair[0]}="${esc(pair[1])}"`; }).join("");
+    ];
+    var semanticPair = d2IdentitySemanticPair(identity);
+    if (semanticPair) pairs.splice(3, 0, semanticPair);
+    return pairs.map(function (pair) { return ` ${pair[0]}="${esc(pair[1])}"`; }).join("");
   }
 
   // ============ Book Detail R2a/R2b：稳定身份 + 单一状态 owner ============
@@ -573,11 +582,14 @@
   function d2BookDetailIdentityAttrs(route, settingsKey) {
     var identity = d2BookDetailIdentity(route, settingsKey);
     if (!identity) return "";
-    return [
+    var pairs = [
       ["data-entity-key", identity.entityKey], ["data-control-key", identity.controlKey],
-      ["data-control-id", identity.controlId], ["data-ui-event", identity.uiEvent],
+      ["data-control-id", identity.controlId],
       ["data-settings-key", settingsKey]
-    ].map(function (pair) { return ` ${pair[0]}="${esc(pair[1])}"`; }).join("");
+    ];
+    var semanticPair = d2IdentitySemanticPair(identity);
+    if (semanticPair) pairs.splice(3, 0, semanticPair);
+    return pairs.map(function (pair) { return ` ${pair[0]}="${esc(pair[1])}"`; }).join("");
   }
 
   var D2_BOOK_DETAIL_CHAPTER_KEYS = {
@@ -1816,7 +1828,14 @@
     if (!spec) return "";
     var entityKey = `search-results.control.${spec.role}.${spec.settingsKey}`;
     var controlKey = `${entityKey}@${route}.${spec.state}`;
-    var attrs = ` data-entity-key="${esc(entityKey)}" data-control-key="${esc(controlKey)}" data-control-id="${esc(`search-results.control.${route}.${spec.state}.${spec.role}.${spec.settingsKey}`)}" data-ui-event="${esc(spec.uiEvent)}" data-settings-key="${esc(spec.settingsKey)}"`;
+    var declarations = window.CANONICAL_CONTROL_DECLARATIONS || [];
+    var identity = declarations.find(function (entry) {
+      return entry.source === "search-results-action" && entry.route === route &&
+        entry.state === spec.state && entry.settingsKey === settingsKey;
+    }) || null;
+    var semanticAttrs = d2IdentitySemanticPair(identity);
+    var semantic = semanticAttrs ? ` ${semanticAttrs[0]}="${esc(semanticAttrs[1])}"` : "";
+    var attrs = ` data-entity-key="${esc(entityKey)}" data-control-key="${esc(controlKey)}" data-control-id="${esc(`search-results.control.${route}.${spec.state}.${spec.role}.${spec.settingsKey}`)}"${semantic} data-settings-key="${esc(spec.settingsKey)}"`;
     if (spec.focusReturn) attrs += ` data-restore-focus="${esc(controlKey)}"`;
     if (extra) attrs += ` ${extra}`;
     return attrs;

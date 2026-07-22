@@ -6,6 +6,7 @@ import {
   accessibleNameForNode,
   buildInteractionInventoryArtifacts,
   buildRenderCases,
+  classifyControlIdentityToken,
   checkInteractionInventoryArtifactBytes,
   INTERACTION_COVERAGE_PATH,
   INTERACTION_INVENTORY_PATH,
@@ -24,6 +25,11 @@ const artifacts = buildInteractionInventoryArtifacts();
 const canonicalEvents = new Set(inputs.uiEventSchema.properties.type.enum);
 const canonicalMotionIds = new Set(
   JSON.parse(readFileSync(new URL("../../../contracts/motion.schema.json", import.meta.url), "utf8")).properties.id.enum,
+);
+const identityOnlyTokens = new Set(
+  JSON.parse(readFileSync(new URL("../../../docs/audits/RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json", import.meta.url), "utf8"))
+    .rows.filter((row) => row.runtimeEligible === false)
+    .map((row) => row.event),
 );
 
 test("IC0 enumerates every direct variant and every alias case", () => {
@@ -61,7 +67,8 @@ test("IC0 records required fields without inventing a canonical control id", () 
   const requiredKeys = [
     "routeId", "resolvedRouteId", "aliasFor", "runtimeFamily", "variantId", "pageState",
     "componentType", "componentInstanceId", "domTag", "role", "label", "selector",
-    "dataAttributes", "uiEvent", "rawMotionHints", "canonicalMotionIds", "joinStatus", "gapCodes",
+    "dataAttributes", "uiEvent", "controlIdentityToken", "unresolvedControlIdentityToken",
+    "rawMotionHints", "canonicalMotionIds", "joinStatus", "gapCodes",
   ];
   const allCandidates = artifacts.inventory.semanticControls.concat(artifacts.inventory.suspectedNonSemanticControls);
   for (const control of allCandidates) {
@@ -79,6 +86,32 @@ test("IC0 records required fields without inventing a canonical control id", () 
   assert.equal(artifacts.coverage.semanticControlCoverage.canonicalControlIds, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.joinedControls, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3847);
+});
+
+test("IC0 treats allowlisted identity tokens as semantic slots and rejects unknown tokens", () => {
+  const controls = artifacts.inventory.semanticControls.concat(artifacts.inventory.suspectedNonSemanticControls);
+  const coverage = artifacts.coverage.semanticControlCoverage;
+  const tokenControls = controls.filter((control) => control.controlIdentityToken !== null);
+
+  assert.ok(identityOnlyTokens.size > 0, "scope matrix must define identity-only tokens");
+  assert.ok(tokenControls.length > 0, "the rendered demo must exercise the identity-token path");
+  assert.equal(coverage.withControlIdentityToken, tokenControls.filter((control) => control.semanticStatus === "semantic-control").length);
+  assert.equal(coverage.withSemanticIdentity, coverage.withUiEvent + coverage.withControlIdentityToken);
+  assert.equal(coverage.withUnresolvedControlIdentityToken, 0, "current DOM must not carry unknown identity tokens");
+  for (const control of tokenControls) {
+    assert.equal(control.uiEvent, null, control.selector);
+    assert.equal(identityOnlyTokens.has(control.controlIdentityToken), true, control.controlIdentityToken);
+    assert.equal(control.dataAttributes["data-control-token"], control.controlIdentityToken);
+  }
+
+  assert.deepEqual(
+    classifyControlIdentityToken("menu.toggle", identityOnlyTokens),
+    { controlIdentityToken: "menu.toggle", unresolvedControlIdentityToken: null },
+  );
+  assert.deepEqual(
+    classifyControlIdentityToken("unapproved.identity.token", identityOnlyTokens),
+    { controlIdentityToken: null, unresolvedControlIdentityToken: "unapproved.identity.token" },
+  );
 });
 
 test("IC0 accessible names resolve references and labels without treating ordinary input values as names", () => {

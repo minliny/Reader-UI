@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "controlEnumerationPolicy": {
     "nativeTags": [
       "button",
@@ -40,7 +40,10 @@
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
     "count": 3847,
-    "withUiEvent": 2408,
+    "withUiEvent": 2544,
+    "withControlIdentityToken": 57,
+    "withSemanticIdentity": 2601,
+    "withUnresolvedControlIdentityToken": 0,
     "withRawMotionHints": 3757,
     "rawMotionHintOccurrences": 7210,
     "uniqueRawMotionHints": [
@@ -199,12 +202,15 @@
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 108,
       "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3847,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 90,
-      "IC0_UI_EVENT_UNRESOLVED": 1439
+      "IC0_UI_EVENT_UNRESOLVED": 1246
     }
   },
   "suspectedNonSemanticControlCoverage": {
     "count": 45,
     "withUiEvent": 17,
+    "withControlIdentityToken": 0,
+    "withSemanticIdentity": 17,
+    "withUnresolvedControlIdentityToken": 0,
     "withRawMotionHints": 17,
     "rawMotionHintOccurrences": 17,
     "uniqueRawMotionHints": [
@@ -387,7 +393,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "book-detail",
-          "renderSha256": "47628ba14ee5c4bf1e1a6d621cc43d43b5b2f5608b1592a35c5a0754aeea353c",
+          "renderSha256": "07e347cf275307002f097696c05e1b2fba9f0efb8cf2a081979b8d860e159706",
           "count": 2,
           "cases": [
             {
@@ -435,7 +441,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "source-management",
-          "renderSha256": "3249937da06816629c0740bd04d8d0097f4600e2e54a62f86ea652e6a8f3478c",
+          "renderSha256": "3c2923d7f0a5312775e90ee18152272fe4b45e3087bee058717dc8adb45cabc7",
           "count": 2,
           "cases": [
             {
@@ -456,7 +462,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "sync-backup",
-          "renderSha256": "51108af5993c14ce4056cce07d50946fece180d201efd6974aeaff902cfb9f13",
+          "renderSha256": "d66a02b25040e817a2979e2cbb21ad4e8d1f18fdd3997649fbf9853f6d838a05",
           "count": 2,
           "cases": [
             {
@@ -476,7 +482,7 @@
       ]
     }
   },
-  "inventorySha256": "2118267d4c6f4a18dac9618a27c3db2af0b524d803b03304f868c738bf37f311",
+  "inventorySha256": "8f6fce1feba000c4043efc9bf070ef2c939ba25b037f6d6fa66d1d523972270b",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -487,7 +493,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "545a717d021da07e4a0e4eace1a279b6be95157c1a149b4d64e64885cea1a3cc"
+      "renderSha256": "4301950a3c2ad10ffe16991de756376072221b8c917e3678ef99904c3bafe5f6"
     },
     {
       "routeId": "bookshelf-empty",
@@ -498,7 +504,7 @@
       "pageState": "shelf-empty",
       "semanticControls": 20,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "4a438232656a33f4d1c8cf9feaee5a8585225b35c7b06acfea6103ed6e440152"
+      "renderSha256": "826779a8e81ffbd9f9ee7e559aacf1547ec26f80c33962380f49bac77767dcaf"
     },
     {
       "routeId": "bookshelf-cover-mode",
@@ -509,7 +515,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3b8bfc78ebb1d332ea04f22b7565daee6943736046df3f68ebebd3d998741c5e"
+      "renderSha256": "c465fef664d39a3689e1638bea173a9b599a53096e3696fcf681f0180e79b42d"
     },
     {
       "routeId": "bookshelf-list-mode",
@@ -520,7 +526,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f27d387418b66e76ea1d99fa65e4d72eaa93092db4f2f24eb77f27f6dc8b8327"
+      "renderSha256": "f1721aa863ce179f05f39c7f9d5cf6796446627bf96d079d8787d394f1674186"
     },
     {
       "routeId": "bookshelf-book-more-menu",
@@ -531,7 +537,7 @@
       "pageState": "default",
       "semanticControls": 38,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "c0c392a39abff831f10bc1c7122aa09c009b092a5fe72afdbb6afc5ef616e2a2"
+      "renderSha256": "64b2ff6dddb4653daf381c0cb3e2fb14453e0e62363a76397f1b73b52795b4c3"
     },
     {
       "routeId": "bookshelf-group-management",
@@ -564,7 +570,7 @@
       "pageState": "default",
       "semanticControls": 50,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "53774d5fb69b5cbbe2eb56bb71f17d4bacf656e193bbd29b0a0777bbce953bdc"
+      "renderSha256": "f7c4881f54bcc17da692839c9254e1b23054c519e89c22de13c0e55db533f2b7"
     },
     {
       "routeId": "group-management",
@@ -586,7 +592,7 @@
       "pageState": "default",
       "semanticControls": 45,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "b2e7c2ddd4cba77ea8d06706af817d7aa9a5fe2a2bb0d1e522683acad7a8921a"
+      "renderSha256": "4698b22db6d8952f800d97d4d81b048c7be036811ca3dd0b555d24bcb560f6ef"
     },
     {
       "routeId": "book-search",
@@ -597,7 +603,7 @@
       "pageState": "default",
       "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "01fc575d897f5c9c5d6049a4024faa892826fc13de5a2f1bc77d6b5323f1fea2"
+      "renderSha256": "c7e5bd0afc7eb3e21cd5af080b2e1ba13e76f3d4427c295b3fa8ef4d1d219b38"
     },
     {
       "routeId": "search-home",
@@ -608,7 +614,7 @@
       "pageState": "default",
       "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "2b5350a49a931216b1f80e5ff22ceded1c0600018b56d79a745c0996a5f78b32"
+      "renderSha256": "8026afce23fe05f3ed14df30035a890d3193a469209d9399aacb61f832171ffb"
     },
     {
       "routeId": "search-results",
@@ -619,7 +625,7 @@
       "pageState": "default",
       "semanticControls": 11,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "4bef9642f7a2f7d58eb3811c273008262a41b41e8e866919b2c3dee208bdcd2b"
+      "renderSha256": "044261dff7453a1c2608237517f36fbd429f9425a0cf5c9a558d4ef77bc0547b"
     },
     {
       "routeId": "search-loading",
@@ -663,7 +669,7 @@
       "pageState": "loading",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "47628ba14ee5c4bf1e1a6d621cc43d43b5b2f5608b1592a35c5a0754aeea353c"
+      "renderSha256": "07e347cf275307002f097696c05e1b2fba9f0efb8cf2a081979b8d860e159706"
     },
     {
       "routeId": "book-detail",
@@ -674,7 +680,7 @@
       "pageState": "default",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "47628ba14ee5c4bf1e1a6d621cc43d43b5b2f5608b1592a35c5a0754aeea353c"
+      "renderSha256": "07e347cf275307002f097696c05e1b2fba9f0efb8cf2a081979b8d860e159706"
     },
     {
       "routeId": "book-detail-toc-preview",
@@ -685,7 +691,7 @@
       "pageState": "default",
       "semanticControls": 14,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "eb9be2220f57d6bbed98989715c2f247f7cd64ead547d5a4d5cedc450de5475d"
+      "renderSha256": "a629e83d42c4cb5116519bceb1f1cc09fb63bc601d7ccabec01de5c9b620b7c8"
     },
     {
       "routeId": "book-directory",
@@ -696,7 +702,7 @@
       "pageState": "default",
       "semanticControls": 10,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "035ff8b673102daebdc31f7ef87bad0c096e23324db7506d4fe7c36aeb22e9fa"
+      "renderSha256": "ddc64e2b3d42abb6768743870565de1bc02b320c0f72aa725123b14fa22f64a5"
     },
     {
       "routeId": "immersive-reading",
@@ -1554,7 +1560,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 5,
-      "renderSha256": "9facd99eb2714489e0292e4d52c1ad00027d216078871c07885e13a3cb839114"
+      "renderSha256": "cd684642a6ee42505eff91f24f33e155e9288651a0e9927e552bfe9ff0e4e148"
     },
     {
       "routeId": "settings-developer",
@@ -1598,7 +1604,7 @@
       "pageState": "default",
       "semanticControls": 13,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "51108af5993c14ce4056cce07d50946fece180d201efd6974aeaff902cfb9f13"
+      "renderSha256": "d66a02b25040e817a2979e2cbb21ad4e8d1f18fdd3997649fbf9853f6d838a05"
     },
     {
       "routeId": "sync-backup",
@@ -1609,7 +1615,7 @@
       "pageState": "loading",
       "semanticControls": 13,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "51108af5993c14ce4056cce07d50946fece180d201efd6974aeaff902cfb9f13"
+      "renderSha256": "d66a02b25040e817a2979e2cbb21ad4e8d1f18fdd3997649fbf9853f6d838a05"
     },
     {
       "routeId": "webdav-config",
@@ -1620,7 +1626,7 @@
       "pageState": "default",
       "semanticControls": 12,
       "suspectedNonSemanticControls": 3,
-      "renderSha256": "2162da8e95c48894a68caaadd7271afd3bfa401b4fbff220073f00f4c46afb36"
+      "renderSha256": "81535796081e25bcaa46945f0df2434fb0a9648cac9fac601568ae3732a37256"
     },
     {
       "routeId": "restore-scopes",
@@ -1675,7 +1681,7 @@
       "pageState": "default",
       "semanticControls": 23,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3249937da06816629c0740bd04d8d0097f4600e2e54a62f86ea652e6a8f3478c"
+      "renderSha256": "3c2923d7f0a5312775e90ee18152272fe4b45e3087bee058717dc8adb45cabc7"
     },
     {
       "routeId": "source-management",
@@ -1686,7 +1692,7 @@
       "pageState": "source-unavailable",
       "semanticControls": 23,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3249937da06816629c0740bd04d8d0097f4600e2e54a62f86ea652e6a8f3478c"
+      "renderSha256": "3c2923d7f0a5312775e90ee18152272fe4b45e3087bee058717dc8adb45cabc7"
     },
     {
       "routeId": "source-import-options",
@@ -1862,7 +1868,7 @@
       "pageState": "default",
       "semanticControls": 8,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "1e98a50d6cab8d4059c5867517a49c91abbe44c2c11fccf9b8816a6b016f20ca"
+      "renderSha256": "d51677a7503e0341f237c722bec505b52ed45bd6608f1734fd78ebb920c58821"
     },
     {
       "routeId": "reading-settings-entry",
@@ -1972,7 +1978,7 @@
       "pageState": "default",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5979bfbf2280c056d20a6ac2f4689278d35c1e066b6ac36f145ed82fcb37bd75"
+      "renderSha256": "9d3016c5e77490d7b4629a3816b1fe63afc1495bed1380128c237f1e03399984"
     },
     {
       "routeId": "sync-error",
@@ -1994,7 +2000,7 @@
       "pageState": "default",
       "semanticControls": 16,
       "suspectedNonSemanticControls": 9,
-      "renderSha256": "640b48034dbb1477a0eb45e73dfc2b8f1436b65712aef9ced9ca20564f6310e6"
+      "renderSha256": "08fba5bbab9c956e269fb040d3b41784c2a106069ada9a30ad0531c914b9c60a"
     },
     {
       "routeId": "progress-sync",
@@ -2005,7 +2011,7 @@
       "pageState": "default",
       "semanticControls": 10,
       "suspectedNonSemanticControls": 3,
-      "renderSha256": "67f3e578902bdcad96a459c6c3ca99934a141a57f2d980ae8322870a9b74ca9b"
+      "renderSha256": "88aea32cdf777f1b49c02c65871153ee77206e57229ff7fcc21a23ce42116f3a"
     },
     {
       "routeId": "remote-webdav-books",
@@ -2016,7 +2022,7 @@
       "pageState": "default",
       "semanticControls": 12,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "41c96f05dcac7ef10188a94f067f810674ca3367949936eb185139bf3b89cf68"
+      "renderSha256": "ac5ca9dcf34d47140da843151c538b63cca57e0517da2fd2ddd6ef6f10b47f34"
     },
     {
       "routeId": "about",
@@ -3061,7 +3067,7 @@
       "pageState": "permission",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "2549aee5ec7d79aac7ca88116e33c894b288b7e6ecdaca9161d3eaa0f05904df"
+      "renderSha256": "36f22a9ea5b361b609d5d994612c60dfe277c9133b9022e45079060e2e90fcfc"
     },
     {
       "routeId": "import-format-unsupported",
@@ -3105,7 +3111,7 @@
       "pageState": "default",
       "semanticControls": 5,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "815b0121f7e603f00d9d265ee9eaff83e64a3b15be9117806a0fd69e81cda1ff"
+      "renderSha256": "623897f73bfbb5c95ae70b5adf6e01250c5fcf725bf7760a40568d5544911c0c"
     },
     {
       "routeId": "import-conflict-resolve",

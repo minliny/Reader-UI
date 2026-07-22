@@ -45,12 +45,13 @@ test("R2a book-detail declares 56 mapped business controls", () => {
   assert.deepEqual([...new Set(rows.map((entry) => entry.route))].sort(), ["book-detail", "book-detail-toc-preview", "book-directory"]);
 });
 
-test("R2a normal detail stamps five identity attributes on 15 controls", () => {
+test("R2a normal detail stamps stable identity plus one semantic slot on 15 controls", () => {
   const html = fresh().bookDetailV2(fixture, "book-detail", {});
   const keys = values(html, "data-control-key");
   assert.equal(keys.length, 15);
   assert.equal(new Set(keys).size, 15);
-  for (const attr of ["data-entity-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, 15);
+  for (const attr of ["data-entity-key", "data-control-id", "data-settings-key"]) assert.equal(values(html, attr).length, 15);
+  assert.equal(values(html, "data-ui-event").length + values(html, "data-control-token").length, 15);
 });
 
 test("R2a TOC preview and full directory stamp their route-local inventories", () => {

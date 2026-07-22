@@ -31,8 +31,8 @@
     },
     {
       "path": "contracts/control-identity.schema.json",
-      "byteLength": 12992,
-      "sha256": "d3762a70691b4403614cd0015747e01b1419c00e800a2262c885ef0164ec3fbe"
+      "byteLength": 13423,
+      "sha256": "feb87a6e66d3005bb85f934fd24ebaa26d685a1b6f869869eb091e1366eef252"
     },
     {
       "path": "contracts/core-command.schema.json",
@@ -231,8 +231,8 @@
     },
     {
       "path": "contracts/ui-event.schema.json",
-      "byteLength": 12182,
-      "sha256": "58ad9c72b22eef4d554a32e8ef3ea6466f398de91ffd211b89077600715c30c7"
+      "byteLength": 11167,
+      "sha256": "9a1b679244ffd4bcd7d7f7e78d9d3ef31f9720c9da1c2e28ed91d32621e98988"
     },
     {
       "path": "contracts/ui-state.schema.json",
@@ -895,6 +895,11 @@
       "sha256": "969775ce97bc77033d31ae14a660a8407db8685a4d10d708ff261fdf31fe8c1d"
     },
     {
+      "path": "frontend-demo-optimized/control-identity-declarations.js",
+      "byteLength": 2256683,
+      "sha256": "ebb105ed51c7136a726bb97617522491485b94240eeec7c04f5ff15eb8553b6c"
+    },
+    {
       "path": "frontend-demo-optimized/covers/android-notes.png",
       "byteLength": 70009,
       "sha256": "ccb2cc33211ab8964ba5c3841cc6c1c4b2c37608b778457874b414a6d84f14a6"
@@ -925,9 +930,19 @@
       "sha256": "09a5a05dc28d4d3f292830bd12d115856a90c6ff79deecde5f20b9cf4f0f84a6"
     },
     {
+      "path": "frontend-demo-optimized/discover-runtime-contract.js",
+      "byteLength": 14304,
+      "sha256": "bb7349979921e665b514ee4bdd490e5a9b93a13825e3113171259f449820a9d1"
+    },
+    {
       "path": "frontend-demo-optimized/fixture.js",
       "byteLength": 22628,
       "sha256": "e160d0d6920cf65baf076b66f5920e37a9067720c78b9adfae2dc2c37b54eb36"
+    },
+    {
+      "path": "frontend-demo-optimized/import-runtime-contract.js",
+      "byteLength": 11404,
+      "sha256": "4db1dbcc3c035ae28f319679d1f8c3a247dc5b607066d87a6f233d0c380ace2c"
     },
     {
       "path": "frontend-demo-optimized/index.html",
@@ -965,9 +980,14 @@
       "sha256": "bcec903a001ad83cd2d141cffae4cc12435c51e6b6739051c99e3ba003a4df4c"
     },
     {
+      "path": "frontend-demo-optimized/reader-runtime-contract.js",
+      "byteLength": 20733,
+      "sha256": "8e977f2c0941f2169eb0c3ca6e8bfc483d569ba866a022b94832bb8f3ab5173b"
+    },
+    {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 795033,
-      "sha256": "b46eb75206eb3a62ef4ee3cfddf1eca8ca434873751a1d3f7c28c2cdadd29139"
+      "byteLength": 795038,
+      "sha256": "3fa4421936dd2b3ebfc2c0ea51ac5579ac7f18f5e8021119e065eb263457a074"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -976,8 +996,8 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
-      "byteLength": 173712,
-      "sha256": "80f190db37f19f8fdebff1dafd13944b0ef79c4d94205c213cdd47076a158b85"
+      "byteLength": 174591,
+      "sha256": "fa90cea4aca89ff7b71ba4a72ecef8a308d59d6f45dceab824fb0c56fb362597"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-rss-renderers.js",
@@ -986,8 +1006,8 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
-      "byteLength": 244862,
-      "sha256": "5f974d426d929d9b8f321054eb26489829268a932f7a19232ed9f950b4691a91"
+      "byteLength": 244973,
+      "sha256": "b941006f09c9820a5a654b8aa1fb4883f25e9aeb4bf0fa0620d0cda8e9a778c8"
     },
     {
       "path": "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
@@ -1038,6 +1058,11 @@
       "path": "frontend-demo-optimized/route-contract.js",
       "byteLength": 46525,
       "sha256": "8035d62ec412a2dfabbf33e450b070edf1f3b26db914b40f8fdbe4106258786c"
+    },
+    {
+      "path": "frontend-demo-optimized/rss-runtime-contract.js",
+      "byteLength": 17127,
+      "sha256": "a4e988d1c59662171d7f377bcac55efa760470974cfe29e4693461e5816a8279"
     },
     {
       "path": "frontend-demo-optimized/shared-shell-kit/kit.css",
@@ -1628,9 +1653,9 @@
   "groups": [
     {
       "name": "design-runtime",
-      "fileCount": 182,
-      "byteLength": 3213856,
-      "sha256": "87b9a651b8030d0c7b8e18a4944f185355a1b9db87ec20a43a65eb16338b6158",
+      "fileCount": 187,
+      "byteLength": 5535102,
+      "sha256": "d429d4a4fe5be3c15ed67761c2d79b2fa6e6eb0e6991427c0e8716bdaed12581",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1761,13 +1786,16 @@
         "frontend-demo-optimized/asset-library/preview.html",
         "frontend-demo-optimized/asset-library/render.js",
         "frontend-demo-optimized/asset-library/tabler-icon-map.json",
+        "frontend-demo-optimized/control-identity-declarations.js",
         "frontend-demo-optimized/covers/android-notes.png",
         "frontend-demo-optimized/covers/bright-moon.png",
         "frontend-demo-optimized/covers/long-night.png",
         "frontend-demo-optimized/covers/mystery-lord.png",
         "frontend-demo-optimized/covers/renjian-cihua.png",
         "frontend-demo-optimized/covers/three-body.png",
+        "frontend-demo-optimized/discover-runtime-contract.js",
         "frontend-demo-optimized/fixture.js",
+        "frontend-demo-optimized/import-runtime-contract.js",
         "frontend-demo-optimized/index.html",
         "frontend-demo-optimized/motion-contract-registry.js",
         "frontend-demo-optimized/motion-controller.js",
@@ -1775,6 +1803,7 @@
         "frontend-demo-optimized/motion-scenario-harness.js",
         "frontend-demo-optimized/motion-tokens.css",
         "frontend-demo-optimized/reader-control-transition.js",
+        "frontend-demo-optimized/reader-runtime-contract.js",
         "frontend-demo-optimized/render-runtime.js",
         "frontend-demo-optimized/render.js",
         "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
@@ -1790,6 +1819,7 @@
         "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
         "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
         "frontend-demo-optimized/route-contract.js",
+        "frontend-demo-optimized/rss-runtime-contract.js",
         "frontend-demo-optimized/shared-shell-kit/kit.css",
         "frontend-demo-optimized/shared-shell-kit/kit.js",
         "frontend-demo-optimized/styles.css",
@@ -1948,8 +1978,8 @@
     {
       "name": "primitive-abi",
       "fileCount": 6,
-      "byteLength": 76776,
-      "sha256": "fc8271cdd24659f7f460c39ebf032d4e006aa68f39eb9f6d0df49ad6abdc6ffe",
+      "byteLength": 75761,
+      "sha256": "2374dd3ee6c0e24e7e56e523e794d6be16d9fb16162b2575b247bc383822953f",
       "files": [
         "contracts/core-command.schema.json",
         "contracts/core-event.schema.json",
@@ -1994,8 +2024,8 @@
     {
       "name": "schemas",
       "fileCount": 29,
-      "byteLength": 325356,
-      "sha256": "b42c2f03a42b3e5c548770c1053d5c98ff5557275be5fcf2f62a634c997fdd7a",
+      "byteLength": 324772,
+      "sha256": "7fb41e818fd44fc4a70480601057a99078a13aae95d98b1d995f7632badc5732",
       "files": [
         "contracts/appearance.schema.json",
         "contracts/content.schema.json",
@@ -2112,9 +2142,9 @@
       "name": "ui-events",
       "source": "contracts/ui-event.schema.json",
       "jsonPointer": "/properties/type/enum",
-      "entryCount": 335,
+      "entryCount": 300,
       "encoding": "ordered-json-array-utf8-lf",
-      "sha256": "575affad74fc4c33162d50d160374a023d1f22448bd1d7599dc8486a124636c2"
+      "sha256": "284e0d880c5f906aca100af69b5cdc1f458cef0865a325948f7b5ada67f9724a"
     }
   ]
 }

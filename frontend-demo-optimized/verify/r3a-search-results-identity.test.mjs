@@ -27,11 +27,12 @@ test("R2a search family declares exactly 53 mapped business controls after histo
   assert.ok(rows.every((row) => row.mappingStatus === "mapped" && row.actionKey === row.settingsKey && row.instanceKey === null));
 });
 
-test("R2a four primary routes stamp 11/2/3/3 controls with five attrs", () => {
+test("R2a four primary routes stamp stable identity plus one semantic slot", () => {
   const { api, data } = fresh(); const expected = { "search-results": 11, "search-loading": 2, "search-empty": 3, "search-error": 3 };
   for (const [route, count] of Object.entries(expected)) {
     const html = api.bookSearchV2(data, route, {});
-    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, count, `${route} ${attr}`);
+    for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"]) assert.equal(values(html, attr).length, count, `${route} ${attr}`);
+    assert.equal(values(html, "data-ui-event").length + values(html, "data-control-token").length, count, `${route} semantic-slot`);
     assert.equal(new Set(values(html, "data-control-key")).size, count);
   }
 });

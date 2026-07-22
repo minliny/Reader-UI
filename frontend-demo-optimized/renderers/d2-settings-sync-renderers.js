@@ -490,6 +490,7 @@
     if (identity.controlKey) attrs += ` data-control-key="${esc(identity.controlKey)}"`;
     if (identity.controlId) attrs += ` data-control-id="${esc(identity.controlId)}"`;
     if (identity.uiEvent) attrs += ` data-ui-event="${esc(identity.uiEvent)}"`;
+    if (identity.controlIdentityToken) attrs += ` data-control-token="${esc(identity.controlIdentityToken)}"`;
     if (identity.settingsKey) attrs += ` data-settings-key="${esc(identity.settingsKey)}"`;
     return attrs;
   }

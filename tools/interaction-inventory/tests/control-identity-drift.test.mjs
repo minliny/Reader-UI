@@ -60,12 +60,17 @@ const persistedBinding = JSON.parse(readFileSync(join(REPO_ROOT, SCREENGRAPH_BIN
 const persistedFigma = JSON.parse(readFileSync(join(REPO_ROOT, FIGMA_CROSSWALK_PENDING_PATH), "utf8"));
 const persistedDom = JSON.parse(readFileSync(join(REPO_ROOT, DOM_IDENTITY_MAP_PATH), "utf8"));
 const persistedNonInteractive = JSON.parse(readFileSync(join(REPO_ROOT, NON_INTERACTIVE_CONTAINERS_PATH), "utf8"));
+const identityOnlyTokens = new Set(
+  JSON.parse(readFileSync(join(REPO_ROOT, "docs/audits/RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json"), "utf8"))
+    .rows.filter((row) => row.runtimeEligible === false)
+    .map((row) => row.event),
+);
 
 // R1: ARIA container roles (group/section) are excluded from the canonical
-// registry and recorded in nonInteractiveContainers.json. The IC0 inventory
-// denominator decomposes as: semantic-controls (3752) + suspected (63, all
-// group/section) = 3815. The canonical registry carries the 3752 interactive
-// candidates; nonInteractiveContainers carries the 63 ARIA container records.
+// registry and recorded in nonInteractiveContainers.json. The IC0 denominator
+// is derived from the current generated inventory rather than a historical
+// fixed count, because renderer coverage and the identity-token boundary can
+// legitimately change the semantic-control denominator.
 const expectedRegistryCount = inventory.semanticControls.length;
 const expectedNonInteractiveCount = inventory.suspectedNonSemanticControls.length;
 
@@ -275,6 +280,16 @@ test("R1 ajv schema validation: all registry entries pass real JSON Schema valid
   assert.equal(result.invalidCount, 0);
   assert.equal(result.errors.length, 0);
   assert.equal(result.firstInvalidEntry, null);
+});
+
+test("R4 identity token sources are schema-valid, allowlisted, and not UiEvents", () => {
+  const tokenEntries = persistedRegistry.entries.filter((entry) => entry.source.controlIdentityToken !== null);
+  assert.ok(tokenEntries.length > 0, "the registry must retain rendered identity-only token controls");
+  for (const entry of tokenEntries) {
+    assert.equal(identityOnlyTokens.has(entry.source.controlIdentityToken), true, entry.source.controlIdentityToken);
+    assert.equal(entry.source.uiEvent, null, entry.controlId);
+    assert.equal(validateEntry(entry).valid, true, entry.controlId);
+  }
 });
 
 test("R1 ajv negative: extra field is rejected by additionalProperties:false", () => {

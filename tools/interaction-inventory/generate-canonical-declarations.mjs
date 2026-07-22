@@ -45,6 +45,7 @@ const REGISTRY_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generat
 const DISPATCH_MAP_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "renderer-dispatch-map.json");
 const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "nonInteractiveContainers.json");
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
+const RUNTIME_EVENT_SCOPE_MATRIX_PATH = join(REPO_ROOT, "docs", "audits", "RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json");
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
 const RSS_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "rss-runtime-contract.js");
@@ -61,6 +62,16 @@ const dispatchMap = JSON.parse(readFileSync(DISPATCH_MAP_PATH, "utf8"));
 const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = new Set(uiEventSchema.properties.type.enum);
+const runtimeEventScopeMatrix = JSON.parse(readFileSync(RUNTIME_EVENT_SCOPE_MATRIX_PATH, "utf8"));
+const identityOnlyTokenSet = new Set(
+  (runtimeEventScopeMatrix.rows || [])
+    .filter((row) => row && row.runtimeEligible === false && typeof row.event === "string")
+    .map((row) => row.event),
+);
+if (identityOnlyTokenSet.size === 0) {
+  console.error("FAIL: runtime event scope matrix must define at least one identity-only token");
+  process.exit(1);
+}
 
 const BOOKSHELF_ACTION_SPECS = [
   ["continue-cover", "route.push", "继续阅读封面"], ["continue-read", "route.push", "继续阅读"],
@@ -858,6 +869,18 @@ const allDeclarations = registryDeclarations
   .concat(syncBackupActionDeclarations())
   .concat(restorePreviewActionDeclarations())
   .concat(aboutActionDeclarations());
+
+// Scope-matrix rows with runtimeEligible=false are stable DOM/control identity
+// vocabulary, not released cross-platform UiEvent values. Apply this after all
+// sources are concatenated so registry, preserved pilot actions, and each
+// runtime-spec declaration share the same fail-closed boundary.
+for (const declaration of allDeclarations) {
+  if (!identityOnlyTokenSet.has(declaration.uiEvent)) continue;
+  declaration.controlIdentityToken = declaration.uiEvent;
+  declaration.uiEvent = null;
+  declaration.uiEventExemption = "identity-only-token";
+}
+
 allDeclarations.sort((a, b) => {
   const fa = PAGE_FAMILY_ORDER.indexOf(a.pageFamily);
   const fb = PAGE_FAMILY_ORDER.indexOf(b.pageFamily);
@@ -870,14 +893,30 @@ allDeclarations.sort((a, b) => {
 
 // ---- Validate ----
 const invalidUiEvents = [];
+const invalidIdentityOnlyTokens = [];
 for (const d of allDeclarations) {
   if (d.uiEvent !== null && !uiEventEnum.has(d.uiEvent)) {
     invalidUiEvents.push({ entityKey: d.entityKey, uiEvent: d.uiEvent });
+  }
+  if (d.controlIdentityToken !== undefined) {
+    if (!identityOnlyTokenSet.has(d.controlIdentityToken) || d.uiEvent !== null || d.uiEventExemption !== "identity-only-token") {
+      invalidIdentityOnlyTokens.push({
+        entityKey: d.entityKey,
+        uiEvent: d.uiEvent,
+        controlIdentityToken: d.controlIdentityToken,
+        uiEventExemption: d.uiEventExemption,
+      });
+    }
   }
 }
 if (invalidUiEvents.length > 0) {
   console.error("FAIL: invalid UiEvent values:");
   for (const v of invalidUiEvents.slice(0, 10)) console.error("  ", v);
+  process.exit(1);
+}
+if (invalidIdentityOnlyTokens.length > 0) {
+  console.error("FAIL: invalid identity-only control token declaration:");
+  for (const value of invalidIdentityOnlyTokens.slice(0, 10)) console.error("  ", value);
   process.exit(1);
 }
 
@@ -912,9 +951,18 @@ for (const d of effectiveSubcontrolDeclarations) {
 }
 
 const meta = {
-  generatedAt: "2026-07-20T00:00:00.000Z",
+  // Static epoch, rather than wall-clock generation time, keeps --check
+  // byte-stable while identifying the current identity-token contract.
+  generatedAt: "2026-07-22T00:00:00.000Z",
+  generationMode: "deterministic-static-epoch",
   baselineCommit: "5ce233f",
   baselineTag: "R1.2",
+  baselineRole: "historical source baseline; not current release evidence",
+  identityTokenBoundary: {
+    scopeMatrixPath: "docs/audits/RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json",
+    identityOnlyTokenCount: identityOnlyTokenSet.size,
+    semanticSlotPolicy: "exactly one of uiEvent or controlIdentityToken for mapped semantic declarations"
+  },
   generator: "tools/interaction-inventory/generate-canonical-declarations.mjs",
   pageFamilies: PAGE_FAMILY_ORDER.slice(),
   totals: {
@@ -927,7 +975,8 @@ const meta = {
   },
   exemptionSummary: {
     registryUiEventNull: registryDeclarations.filter(d => d.uiEvent === null).length,
-    subcontrolControlIdNull: effectiveSubcontrolDeclarations.filter(d => d.controlId === null).length
+    subcontrolControlIdNull: effectiveSubcontrolDeclarations.filter(d => d.controlId === null).length,
+    identityOnlyControlTokens: allDeclarations.filter(d => d.controlIdentityToken !== undefined).length
   }
 };
 
@@ -938,7 +987,7 @@ function serializeDeclarations(decls, metaObj) {
   lines.push(" * R2.0.1 · Canonical Renderer Control Identity Declarations (GENERATED)");
   lines.push(" * -----------------------------------------------------------------------------");
   lines.push(" * 职责：为 frontend-demo-optimized/ 的 canonical renderer 声明每个渲染控件对应");
-  lines.push(" *       的 entityKey / controlKey / UiEvent 映射，作为 R2a/R2b/R3a/VC3-R3b 接入");
+  lines.push(" *       的 entityKey / controlKey / 语义槽（UiEvent 或 identity-only token）映射，作为 R2a/R2b/R3a/VC3-R3b 接入");
   lines.push(" *       DOM 属性（data-entity-key / data-control-key / data-control-id）的前置");
   lines.push(" *       对账源。");
   lines.push(" *");
@@ -951,7 +1000,7 @@ function serializeDeclarations(decls, metaObj) {
   lines.push(" * A0 三套分母（不混用）：");
   lines.push(" *   - 13 个视觉/交互验收单元（12 非 Reader 页面族 + Settings General 试点）");
   lines.push(" *   - 12 个 renderer-owner family（本文件覆盖的 pageFamilies）");
-  lines.push(" *   - 3,752 个 DOM occurrence（registry entries）");
+  lines.push(" *   - 3,847 个 DOM occurrence（registry entries；当前可重算分母）");
   lines.push(" *");
   lines.push(" * 范围（12 页面族 exact gate）：");
   lines.push(" *   bookshelf / book-detail / search-results / import-conflict-resolve /");
@@ -965,19 +1014,18 @@ function serializeDeclarations(decls, metaObj) {
   lines.push(" *      instanceKey / rendererSlot 四字段；mappingStatus 派生自独立的");
   lines.push(" *      (needsActionKey, needsInstanceKey) 二元组（4 桶：mapped /");
   lines.push(" *      pending-action-key / pending-instance-key / pending-action-and-instance-key）。");
-  lines.push(" *   2. r2.0-subcontrol 声明：R1.2 nonInteractiveContainers.json 标记的 46 个");
+  lines.push(" *   2. r2.0-subcontrol 声明：当前 nonInteractiveContainers.json 标记的设置行子控件，");
   lines.push(" *      containsUnenumeratedSubcontrols 设置行子控件，按 expectedSubcontrolCount");
   lines.push(" *      展开：switch→1, select→1, stepper→2 (minus+plus), segment→3。");
-  lines.push(" *      A0: 50 个子控件 slug 来自 settings-subcontrol-business-keys.mjs 业务语义");
+  lines.push(" *      当前共 61 个子控件；slug 来自 settings-subcontrol-business-keys.mjs 业务语义");
   lines.push(" *      映射表，不再使用 selector hash / ordinal fallback。");
   lines.push(" *");
   lines.push(" * 生成器：tools/interaction-inventory/generate-canonical-declarations.mjs");
-  lines.push(" * 生成基线：commit 5ce233f（R1.2），2026-07-20；A0 (schema 1.3.0) 增量 2026-07-20");
+  lines.push(" * 历史来源基线：commit 5ce233f（R1.2）；当前 deterministic epoch：2026-07-22 identity-token boundary。");
   lines.push(" *");
   lines.push(" * 不做的事（R2.0.1 / A0 边界）：");
-  lines.push(" *   - 不写 data-control-id / data-entity-key / data-control-key 到渲染输出 HTML（R2a 范围）");
-  lines.push(" *   - 不重构 renderer 行为（switch 还是 span；segment/stepper 缺事件不补）");
-  lines.push(" *   - 不修改 R1.2 冻结的 schema/types/src-control-identity/registry");
+  lines.push(" *   - 不把 identity-only token 当作跨端 UiEvent 或原生事件");
+  lines.push(" *   - 不重构 renderer 的业务流程；仅按声明选择 data-ui-event 或 data-control-token");
   lines.push(" *   - 不在 mappingStatus 非 \"mapped\" 时写 data-control-key（A0 fail-closed guard）");
   lines.push(" *");
   lines.push(" * 重算：node tools/interaction-inventory/generate-canonical-declarations.mjs");

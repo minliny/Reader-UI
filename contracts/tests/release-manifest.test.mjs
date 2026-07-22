@@ -72,6 +72,18 @@ test("release manifest files and groups are sorted, complete, and raw-byte hashe
   }
 });
 
+test("every local script directly loaded by the demo entrypoint is release-covered", () => {
+  const indexHtml = fs.readFileSync(path.join(root, "frontend-demo-optimized", "index.html"), "utf8");
+  const directRuntimeScripts = [...indexHtml.matchAll(/<script\s+src="\.\/([^"?]+)(?:\?[^\"]*)?"/g)]
+    .map((match) => `frontend-demo-optimized/${match[1]}`);
+  const designRuntime = new Set(manifest.groups.find((group) => group.name === "design-runtime")?.files || []);
+
+  assert.ok(directRuntimeScripts.length > 0, "index.html must load at least one local script");
+  for (const relativePath of directRuntimeScripts) {
+    assert.ok(designRuntime.has(relativePath), `direct runtime script is missing from design-runtime: ${relativePath}`);
+  }
+});
+
 test("all six ordered native ABI hashes have exact names, counts, sources, and pointers", () => {
   const expectedCounts = {
     "component-types": 174,

@@ -1,6 +1,6 @@
 // Reader-UI Control Identity TypeScript contract
 // Source of truth: contracts/control-identity.schema.json
-// A0 · 全局控制面纠偏 (2026-07-20, baseline a6993b4, schema 1.3.0)
+// A0 + identity-token boundary (2026-07-22, baseline a6993b4, schema 1.4.0)
 //
 // This file is hand-curated to match the JSON Schema; regenerating it from
 // the schema requires the codegen pipeline (see tools/interaction-inventory/codegen-control-ids.mjs).
@@ -182,6 +182,8 @@ export interface ControlIdentitySource {
   domTag?: string;
   label?: string | null;
   uiEvent?: string | null;
+  /** Stable DOM-only vocabulary; explicitly not a released cross-platform UiEvent. */
+  controlIdentityToken?: string | null;
   dataAttributes?: Record<string, string>;
 }
 

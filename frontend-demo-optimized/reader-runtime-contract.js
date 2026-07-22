@@ -167,11 +167,19 @@
 
   function identityFor(spec) {
     const entityKey = `reader.control.${spec.role}.${spec.settingsKey}`;
+    const declaration = (window.CANONICAL_CONTROL_DECLARATIONS || []).find((entry) =>
+      entry.source === "reader-runtime-action" && entry.route === spec.route &&
+      entry.settingsKey === spec.settingsKey && entry.state === "default"
+    ) || null;
     return Object.freeze({
       entityKey,
       controlKey: `${entityKey}@${spec.route}.default`,
       controlId: `reader.control.${spec.route}.default.${spec.role}.${spec.settingsKey}`,
-      uiEvent: spec.uiEvent,
+      // Declarations are loaded before this contract in index.html. If that
+      // invariant breaks, omit semantic dispatch metadata rather than leaking
+      // a non-approved identity token back into data-ui-event.
+      uiEvent: declaration?.uiEvent || null,
+      controlIdentityToken: declaration?.controlIdentityToken || null,
       settingsKey: spec.settingsKey
     });
   }
@@ -200,7 +208,12 @@
       node.setAttribute("data-entity-key", identity.entityKey);
       node.setAttribute("data-control-key", identity.controlKey);
       node.setAttribute("data-control-id", identity.controlId);
-      node.setAttribute("data-ui-event", identity.uiEvent);
+      // A node can be reused across route/state instrumentation. Clear both
+      // semantic slots before restoring the declaration-governed one.
+      node.removeAttribute("data-ui-event");
+      node.removeAttribute("data-control-token");
+      if (identity.uiEvent) node.setAttribute("data-ui-event", identity.uiEvent);
+      if (identity.controlIdentityToken) node.setAttribute("data-control-token", identity.controlIdentityToken);
       node.setAttribute("data-settings-key", identity.settingsKey);
       node.setAttribute("data-viewport", viewport);
       if (spec.focusReturn) node.setAttribute("data-restore-focus", identity.controlKey);

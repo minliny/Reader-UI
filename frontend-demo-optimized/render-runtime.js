@@ -13471,7 +13471,7 @@
     };
 
     const webdavInputs = new Set(["serverUrl", "account", "password", "syncDir"]);
-    screenHost.querySelectorAll('[data-ui-event="input.change"][data-settings-key]').forEach((input) => {
+    screenHost.querySelectorAll('[data-control-token="input.change"][data-settings-key]').forEach((input) => {
       input.addEventListener("input", () => {
         if (!isWebdavConfigRoute() || !webdavConfigOwner) return;
         const settingsKey = input.getAttribute("data-settings-key") || "";

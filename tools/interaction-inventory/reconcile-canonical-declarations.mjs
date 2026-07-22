@@ -31,6 +31,7 @@ const REGISTRY_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generat
 const DISPATCH_MAP_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "renderer-dispatch-map.json");
 const NON_INTERACTIVE_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "nonInteractiveContainers.json");
 const UI_EVENT_SCHEMA_PATH = join(REPO_ROOT, "contracts", "ui-event.schema.json");
+const RUNTIME_EVENT_SCOPE_MATRIX_PATH = join(REPO_ROOT, "docs", "audits", "RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json");
 const OUTPUT_PATH = join(REPO_ROOT, "tools", "interaction-inventory", "generated", "canonical-reconciliation.json");
 
 // ---- Load inputs ----
@@ -43,6 +44,12 @@ const dispatchMap = JSON.parse(readFileSync(DISPATCH_MAP_PATH, "utf8"));
 const nonInteractive = JSON.parse(readFileSync(NON_INTERACTIVE_PATH, "utf8"));
 const uiEventSchema = JSON.parse(readFileSync(UI_EVENT_SCHEMA_PATH, "utf8"));
 const uiEventEnum = uiEventSchema.properties.type.enum;
+const runtimeEventScopeMatrix = JSON.parse(readFileSync(RUNTIME_EVENT_SCOPE_MATRIX_PATH, "utf8"));
+const identityOnlyTokenSet = new Set(
+  (runtimeEventScopeMatrix.rows || [])
+    .filter((row) => row && row.runtimeEligible === false && typeof row.event === "string")
+    .map((row) => row.event),
+);
 
 // ---- Build registry indexes ----
 const registryEntityKeys = new Set();
@@ -70,15 +77,21 @@ for (const d of declarations) {
 
 // ---- Reconciliation checks ----
 const report = {
-  generatedAt: "2026-07-20T00:00:00.000Z",
+  // Static epoch preserves deterministic output. It marks the current
+  // identity-token boundary rather than pretending the report is R1.2-era.
+  generatedAt: "2026-07-22T00:00:00.000Z",
+  generationMode: "deterministic-static-epoch",
   baselineCommit: "5ce233f",
   baselineTag: "R1.2",
+  baselineRole: "historical source baseline; not current release evidence",
   inputs: {
     declarationsPath: DECLARATIONS_PATH.replace(REPO_ROOT + "/", ""),
     registryPath: REGISTRY_PATH.replace(REPO_ROOT + "/", ""),
     dispatchMapPath: DISPATCH_MAP_PATH.replace(REPO_ROOT + "/", ""),
     nonInteractivePath: NON_INTERACTIVE_PATH.replace(REPO_ROOT + "/", ""),
-    uiEventSchemaPath: UI_EVENT_SCHEMA_PATH.replace(REPO_ROOT + "/", "")
+    uiEventSchemaPath: UI_EVENT_SCHEMA_PATH.replace(REPO_ROOT + "/", ""),
+    runtimeEventScopeMatrixPath: RUNTIME_EVENT_SCOPE_MATRIX_PATH.replace(REPO_ROOT + "/", ""),
+    declarationsGenerationEpoch: meta?.generatedAt || null
   },
   totals: {
     declarations: declarations.length,
@@ -101,14 +114,17 @@ const expectedFamilies = [
   "discover", "rss", "source-switch", "settings-general",
   "source-management", "webdav-config", "sync-backup", "about-restore-preview"
 ];
-const declarationFamilies = new Set(declarations.map(d => d.pageFamily));
+const nonReaderDeclarations = declarations.filter((d) => d.source !== "reader-runtime-action");
+const declarationFamilies = new Set(nonReaderDeclarations.map(d => d.pageFamily));
 const missingFamilies = expectedFamilies.filter(f => !declarationFamilies.has(f));
 const extraFamilies = [...declarationFamilies].filter(f => !expectedFamilies.includes(f));
+const readerRuntimeDeclarations = declarations.filter((d) => d.source === "reader-runtime-action");
 report.checks.exact12PageFamilies = {
   status: missingFamilies.length === 0 && extraFamilies.length === 0 && declarationFamilies.size === 12 ? "pass" : "fail",
-  expected: "exactly 12 page families (no more, no less)",
+  expected: "exactly 12 non-Reader page families; Reader Runtime is an explicit extension lane",
   expectedCount: 12,
   actualCount: declarationFamilies.size,
+  readerRuntimeExtensionCount: readerRuntimeDeclarations.length,
   missing: missingFamilies,
   extra: extraFamilies
 };
@@ -170,6 +186,23 @@ report.checks.registryBackedKeysInRegistry = {
 // ===== Check 4: renderer owner matches dispatch map =====
 const rendererMismatches = [];
 for (const d of declarations) {
+  if (d.source === "reader-runtime-action") {
+    if (
+      d.renderer !== "ReaderRuntimeContract.instrumentDom"
+      || d.rendererFile !== "reader-runtime-contract.js"
+      || d.pageFamily !== "reader-runtime"
+    ) {
+      rendererMismatches.push({
+        route: d.route,
+        entityKey: d.entityKey,
+        declaredRenderer: d.renderer,
+        declaredRendererFile: d.rendererFile,
+        declaredPageFamily: d.pageFamily,
+        reason: "reader-runtime extension owner mismatch",
+      });
+    }
+    continue;
+  }
   const routeInfo = dispatchMap.routes[d.route];
   if (!routeInfo) {
     rendererMismatches.push({ route: d.route, entityKey: d.entityKey, reason: "route not in dispatch map" });
@@ -207,10 +240,12 @@ report.checks.rendererOwnerMatchesDispatch = {
 const uiEventMissing = [];
 const invalidExemptionTypes = [];
 const validExemptionTypes = new Set([
-  "pending-explicit-semantics",
-  "pending-instance-disambiguation",
+  "pending-action-key",
+  "pending-instance-key",
+  "pending-action-and-instance-key",
   "decorative",
-  "container-only"
+  "container-only",
+  "identity-only-token"
 ]);
 for (const d of declarations) {
   if (d.uiEvent === null || d.uiEvent === undefined) {
@@ -223,7 +258,7 @@ for (const d of declarations) {
 }
 report.checks.uiEventNonNullOrExemption = {
   status: uiEventMissing.length === 0 && invalidExemptionTypes.length === 0 ? "pass" : "fail",
-  expected: "every declaration has uiEvent or uiEventExemption (one of: pending-explicit-semantics, pending-instance-disambiguation, decorative, container-only)",
+  expected: "every declaration has uiEvent or uiEventExemption (including identity-only-token for scope-matrix tokens)",
   missingExemption: uiEventMissing,
   invalidExemptionType: invalidExemptionTypes
 };
@@ -254,17 +289,19 @@ report.checks.controlIdNonNullOrExemption = {
 const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
 const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
 for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
-const expectedByType = { switch: 28, select: 15, stepper: 4, segment: 3 };
-const expectedSubtotal = 50;
+const expectedByType = { switch: 28, select: 16, stepper: 4, segment: 8, textbox: 1, input: 4 };
+const expectedSubtotal = 61;
 const subcontrolCountOk =
   declaredByType.switch === expectedByType.switch &&
   declaredByType.select === expectedByType.select &&
   declaredByType.stepper === expectedByType.stepper &&
   declaredByType.segment === expectedByType.segment &&
+  declaredByType.textbox === expectedByType.textbox &&
+  declaredByType.input === expectedByType.input &&
   declaredSubcontrols.length === expectedSubtotal;
 report.checks.subcontrolCount50 = {
   status: subcontrolCountOk ? "pass" : "fail",
-  expected: "50 subcontrol declarations (switch 28 / select 15 / stepper 4 [2 rows × 2 buttons] / segment 3 [1 row × 3 options])",
+  expected: "61 stable subcontrol declarations (switch 28 / select 16 / stepper 4 / segment 8 / textbox 1 / input 4)",
   expectedCount: expectedSubtotal,
   declaredCount: declaredSubcontrols.length,
   expectedByType,
@@ -299,7 +336,42 @@ report.checks.uiEventInSchemaEnum = {
   invalid: badUiEvents
 };
 
-// ===== Check 10: declarations cover all dispatch-map routes =====
+// ===== Check 10: identity-only tokens never leak back into UiEvent =====
+const identityOnlyTokenViolations = [];
+const declaredIdentityOnlyTokens = new Set();
+for (const d of declarations) {
+  if (d.controlIdentityToken !== undefined) {
+    declaredIdentityOnlyTokens.add(d.controlIdentityToken);
+    if (
+      !identityOnlyTokenSet.has(d.controlIdentityToken)
+      || d.uiEvent !== null
+      || d.uiEventExemption !== "identity-only-token"
+    ) {
+      identityOnlyTokenViolations.push({
+        entityKey: d.entityKey,
+        uiEvent: d.uiEvent,
+        controlIdentityToken: d.controlIdentityToken,
+        uiEventExemption: d.uiEventExemption,
+      });
+    }
+  }
+  if (d.uiEvent && identityOnlyTokenSet.has(d.uiEvent)) {
+    identityOnlyTokenViolations.push({
+      entityKey: d.entityKey,
+      uiEvent: d.uiEvent,
+      reason: "scope-matrix identity-only token leaked into UiEvent",
+    });
+  }
+}
+report.checks.identityOnlyTokenBoundary = {
+  status: identityOnlyTokenViolations.length === 0 ? "pass" : "fail",
+  expected: "scope-matrix runtimeEligible=false values use controlIdentityToken and never uiEvent",
+  scopeMatrixTokenCount: identityOnlyTokenSet.size,
+  declaredTokenCount: declaredIdentityOnlyTokens.size,
+  violations: identityOnlyTokenViolations,
+};
+
+// ===== Check 11: declarations cover all dispatch-map routes =====
 const routesMissingFromDeclarations = [];
 for (const route of dispatchRoutes) {
   if (!declarationsByRoute.has(route) || declarationsByRoute.get(route).length === 0) {
@@ -312,7 +384,7 @@ report.checks.allDispatchRoutesCovered = {
   missingRoutes: routesMissingFromDeclarations
 };
 
-// ===== Check 11: R2.0 subcontrols NOT in registry (expected - they're new) =====
+// ===== Check 12: R2.0 subcontrols NOT in registry (expected - they're new) =====
 const r2SubcontrolsAlreadyInRegistry = [];
 for (const d of declaredSubcontrols) {
   if (registryEntityKeys.has(d.entityKey)) {
@@ -337,6 +409,7 @@ const criticalChecks = [
   "subcontrolCount50",
   "collisionDetection",
   "uiEventInSchemaEnum",
+  "identityOnlyTokenBoundary",
   "allDispatchRoutesCovered"
 ];
 const allCriticalPass = criticalChecks.every(name => report.checks[name].status === "pass");
@@ -356,7 +429,7 @@ console.log(`Reconciliation report written to: ${OUTPUT_PATH.replace(REPO_ROOT +
 console.log(`Overall status: ${report.overallStatus}`);
 console.log(`Checks: ${report.summary.passed} pass / ${report.summary.failed} fail / ${report.summary.partial} partial / ${report.summary.info} info`);
 console.log(`Totals: ${report.totals.declarations} declarations (${report.totals.registryBacked} registry-backed + ${report.totals.r2Subcontrols} R2.0 subcontrols)`);
-console.log(`Page families: ${report.totals.declarationPageFamilies} (expected 12)`);
+console.log(`Page families: ${report.checks.exact12PageFamilies.actualCount} non-Reader (expected 12) + Reader Runtime extension`);
 console.log(`Routes: ${report.totals.declarationRoutes} declarations / ${report.totals.dispatchRoutes} dispatch`);
 
 if (!allCriticalPass) {
