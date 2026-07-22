@@ -1,6 +1,6 @@
 # Executable UI Runtime
 
-状态：Reader-UI Contract head 为 3.1.0；67-action runtime 表。三个 Host consumer lock 仍为 2.5.1，覆盖 35 events（7 Pilot / 28 Shadow），其余 32 actions 仅 staging
+状态：Reader-UI Contract head 为 3.1.1；67-action runtime 表。三个 Host consumer lock 仍为 2.5.1，覆盖 35 events（7 Pilot / 28 Shadow），其余 32 actions 仅 staging
 日期：2026-07-12
 权威架构：[contracts/ARCHITECTURE.md](./contracts/ARCHITECTURE.md)
 
@@ -93,7 +93,7 @@ runtime 立即进入 `immersive-reading`、进入 loading，并以同一 correla
 
 ## 5. 当前覆盖与迁移阶段
 
-Reader-UI 3.1.0 发布 67-action table，覆盖 P0 navigation、main tab、overlay、reader enter/exit/page、TTS/auto-page 互斥、reduced motion、source switch、sync/WebDAV、result-dependent `book.open` 编排，以及 W1/W3/W4/W5/RSS/Sync 的 Core/Host effect plan。三个 Host consumer lock 仍停在 2.5.1，不能据此宣称 Host 已消费 Reader-UI 3.1.0。35 条 covered event 中，directory 2 + `book.open` 1 + TTS 2 + auto-page 2 为 Pilot；page 2 + import 3 + source-switch 6 + replace 3 + RSS 7 + Sync 7 共 28 条保持 Shadow。剩余 32 条 action 仅 staging，不能计入生产接线。
+Reader-UI 3.1.1 发布 67-action table，覆盖 P0 navigation、main tab、overlay、reader enter/exit/page、TTS/auto-page 互斥、reduced motion、source switch、sync/WebDAV、result-dependent `book.open` 编排，以及 W1/W3/W4/W5/RSS/Sync 的 Core/Host effect plan。三个 Host consumer lock 仍停在 2.5.1，不能据此宣称 Host 已消费 Reader-UI 3.1.1。35 条 covered event 中，directory 2 + `book.open` 1 + TTS 2 + auto-page 2 为 Pilot；page 2 + import 3 + source-switch 6 + replace 3 + RSS 7 + Sync 7 共 28 条保持 Shadow。剩余 32 条 action 仅 staging，不能计入生产接线。
 
 generated/runtime-coverage.json 是 300 条 canonical UiEvent 的强制 ownership 报告：当前 67 条已实现、226 条 runtime/split planned、7 条原生 ephemeral。新增的 30 条项目能力事件全部处于 planned/fail-closed，没有运行时 action。该报告由 ui-spec/runtime-ownership.json 生成；canonical event 数或 action 数变化会使 release gate 失败，直到 ownership 和覆盖预期被显式更新。
 

@@ -1,5 +1,5 @@
 {
-  "version": "3.1.0",
+  "version": "3.1.1",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
@@ -26,6 +26,16 @@
     "device-conformance-evidence": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "3.1.1",
+      "date": "2026-07-22",
+      "summary": "PATCH：verified release artifact 下载根目录纠正",
+      "changes": [
+        "GitHub Actions 以 immutable artifact-id 下载时会按 artifact name 建立目录；release workflow 显式启用 merge-multiple，使 dispatch 从已验签 stage 根目录读取 inventory。",
+        "发布自动化测试固定该下载布局，防止 artifact 存在却因根目录错位而在 Host dispatch 前失败。",
+        "UiEvent、CoreCommand、runtime ABI 与业务流程均未改变；Reader UI Contract、Kotlin runtime 与 ArkTS runtime package 同步升至 3.1.1。三个 Host consumer lock 仍须且只能由该版本的不可变 artifact 自动更新。"
+      ]
+    },
     {
       "version": "3.1.0",
       "date": "2026-07-22",

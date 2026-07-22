@@ -1,6 +1,6 @@
 # Runtime Live Shadow Protocol
 
-状态：Reader-UI Contract head 为 3.1.0；Host consumer lock 仍为 2.5.1 mixed rollout（35 covered events：7 Pilot、28 Shadow、0 Authoritative）
+状态：Reader-UI Contract head 为 3.1.1；Host consumer lock 仍为 2.5.1 mixed rollout（35 covered events：7 Pilot、28 Shadow、0 Authoritative）
 
 本文件定义 ReaderUIRuntime 接入真实 App 事件总线时的最小行为。它只允许把 runtime 作为连续状态的观察者，不能把测试 adapter 误写成生产 Pilot。
 
