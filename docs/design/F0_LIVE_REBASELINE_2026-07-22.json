@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "F0_LIVE_REBASELINE",
+  "status": "BLOCKED_ON_EVIDENCE_CONFLICT_SINGLE_WRITER_RECONCILIATION",
+  "recordedAt": "2026-07-22T00:00:00+08:00",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "writerRuntime": {
+    "officialFileRevisionReadable": false,
+    "currentRevision": null,
+    "revisionPolicy": "Do not copy a historical named revision into a current binding. Every current binding remains revision=null until the official revision can be read."
+  },
+  "liveRead": {
+    "finalPage": {
+      "pageId": "834:2",
+      "pageName": "23 · Pages · Final"
+    },
+    "sourceManagement": {
+      "componentPage": { "pageId": "334:5", "pageName": "13 · Components · Source Management" },
+      "canonicalMaster": { "nodeId": "942:29", "name": "Page/Source Management" },
+      "phone": { "nodeId": "942:26", "width": 390, "height": 844 },
+      "tablet": { "nodeId": "942:28", "width": 760, "height": 960 },
+      "finalInstances": ["943:4281", "943:4745"],
+      "directMasterComponents": {
+        "searchField": "2173:819",
+        "statusFilter": "2173:878",
+        "groupFilter": "2173:879",
+        "bottomActionBar": "2173:885",
+        "sourceRow": "1994:26598"
+      },
+      "visibleHistoricalPilotComponents": {
+        "moreMenu": "2173:891",
+        "addSourceSheet": "2173:906",
+        "deleteDialog": "2173:964",
+        "batchToolbar": "2176:845",
+        "batchActionBar": "2176:873",
+        "stateProofAssemblies": "2176:874"
+      },
+      "observation": "The historical Pilot components are currently visible with zero reactions. They must not be treated as deleted, current canonical interaction states, or an authorization to recreate local business flows."
+    },
+    "localImport": {
+      "canonicalComponentSet": "2657:918",
+      "makeSource": "2547:1597",
+      "states": ["2657:916", "2657:917"],
+      "reactionCount": 0
+    },
+    "restore": {
+      "withdrawnHistoricalMasterNodes": ["942:30", "942:32", "2460:46842"],
+      "currentlyVisibleProgressMasters": ["2648:2", "2648:228"],
+      "finalAssembly": "2649:60847",
+      "finalInstances": ["2649:60850", "2649:60852"],
+      "overlayNodes": {
+        "confirm": "2564:36726",
+        "loading": "2564:36734",
+        "complete": "2564:36745"
+      },
+      "observation": "The user withdrew Restore Preview as an active page family, but the live document still contains restore-progress and restore overlays. Do not claim the live document is fully deleted or reactivate this flow without a dedicated Sync Backup reconciliation."
+    },
+    "finalScopeAbsences": ["About", "Import Conflict", "Restore Preview"]
+  },
+  "evidenceConflicts": [
+    {
+      "id": "source-management-subtraction-vs-live",
+      "localEvidence": "docs/design/FIGMA_COMPONENT_SUBTRACTION_2026-07-21.json",
+      "problem": "It records MoreMenu, AddSourceSheet, DeleteDialog, BatchToolbar, BatchActionBar and State Proof Assemblies as removed, while the live Figma read finds those exact nodes visible.",
+      "requiredAction": "Do not delete or consume them automatically. First resolve canonical/downstream references, then make one explicit writer decision."
+    },
+    {
+      "id": "restore-withdrawal-vs-live",
+      "localEvidence": "docs/design/handoffs/restore-preview/*",
+      "problem": "The old Restore Preview master is gone, but separate restore-progress masters and backup overlays remain live.",
+      "requiredAction": "Tombstone the local route family now; reconcile any remaining Figma nodes only as part of Sync Backup."
+    }
+  ],
+  "consumptionPolicy": {
+    "blockedLocalFamilies": ["source-management", "webdav-config", "bookshelf", "book-detail", "rss"],
+    "reason": "Their historical handoff evidence contains component references recorded as removed by the subtraction evidence and must be reread against live Figma before a local or native consumer uses them as current truth.",
+    "safeCurrentWork": ["freeze Figma writes", "remove conflicting local WIP", "tombstone user-withdrawn route families", "prepare the reading-chain action contract"]
+  },
+  "writerPolicy": {
+    "singleWriter": true,
+    "preserveManualPagesComponentsAndReactions": true,
+    "noDetachedFrameOrScreenshotSubstitution": true,
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactAndFoldProhibited": true
+  }
+}
