@@ -1,15 +1,17 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "webdav-config",
-  "status": "F2_COMPLETE",
+  "status": "F2_HISTORICAL_EVIDENCE_PLUS_F0_LIVE_STATIC_RECONCILED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378333433968465691",
-  "revisionTitle": "F2 · WebDAV Config · User Confirmed",
-  "confirmedAt": "2026-07-20T15:48:41Z",
-  "localImplementationCommit": "dd61bfd61e6967ccd30064dc03a9a9d66e30bed2",
-  "handoffEvidenceCommit": "5146d968b60718bf4f473d3b8c27284ac79890a1",
-  "deltas": [
+  "historicalRevision": "2378333433968465691",
+  "historicalRevisionTitle": "F2 · WebDAV Config · User Confirmed",
+  "historicalConfirmedAt": "2026-07-20T15:48:41Z",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalImplementationCommit": "dd61bfd61e6967ccd30064dc03a9a9d66e30bed2",
+  "historicalHandoffEvidenceCommit": "5146d968b60718bf4f473d3b8c27284ac79890a1",
+  "historicalDeltas": [
     {
       "target": "Page/WebDAV Config",
       "pageId": "834:3",
@@ -46,7 +48,7 @@
       "newValue": "Canonical ResultScreen and ErrorScreen masters expose every route action and issue row without screenshots or detached frames."
     }
   ],
-  "createdCanonicalNodes": [
+  "historicalCreatedCanonicalNodes": [
     { "nodeId": "2221:321", "name": "Canonical/WebDAV/StatusGrid", "variants": ["Viewport=Phone", "Viewport=Tablet"] },
     { "nodeId": "2221:448", "name": "Canonical/WebDAV/ConfigForm", "variants": ["Viewport=Phone", "Viewport=Tablet"] },
     { "nodeId": "2221:567", "name": "Canonical/WebDAV/AdvancedSettings", "variants": ["Viewport=Phone", "Viewport=Tablet"] },
@@ -54,20 +56,20 @@
     { "nodeId": "2222:160", "name": "Canonical/WebDAV/ResultScreen" },
     { "nodeId": "2222:176", "name": "Canonical/WebDAV/ErrorScreen" }
   ],
-  "viewportConstraints": {
+  "historicalViewportConstraints": {
     "phone": { "nodeId": "942:42", "size": "390x844", "contentWidth": 350, "overflow": "vertical scroll; advanced rows continue below the viewport" },
     "tablet": { "nodeId": "942:44", "size": "760x960", "contentWidth": 720, "overflow": "full advanced section visible" },
     "landscape": { "alias": "tablet", "independentMaster": false },
     "compact": { "prohibited": true },
     "fold": { "prohibited": true }
   },
-  "stateCoverage": {
+  "historicalStateCoverage": {
     "dialogFlows": ["Test", "Save", "Clear"],
     "dialogStates": ["Confirm", "Loading", "Success", "Failed"],
     "routeMasters": ["webdav-test", "webdav-error"],
     "localOwnerBoundary": "Figma does not alter UiEvent, reducer ownership, asynchronous guards, or business flow."
   },
-  "visualAudit": {
+  "historicalVisualAudit": {
     "phoneScreenshot": "/tmp/webdav-f2-phone.png",
     "tabletScreenshot": "/tmp/webdav-f2-tablet.png",
     "componentLibraryScreenshot": "/tmp/webdav-f2-library.png",
@@ -77,7 +79,7 @@
     "detachedInstanceCount": 0,
     "result": "PASS"
   },
-  "priorityQueueAfterConfirmation": [
+  "historicalPriorityQueueAfterConfirmation": [
     { "order": 1, "lane": "bookshelf", "goal": "Establish the reading entry and book selection path." },
     { "order": 2, "lane": "book-detail", "goal": "Close book detail, import/open and start-reading actions." },
     { "order": 3, "lane": "reader", "goal": "Close Reader 2 static reading and control path before Motion Reference." },
@@ -85,7 +87,7 @@
     { "order": 5, "lane": "rss", "goal": "Complete RSS after core reading flow and settings dependencies." },
     { "order": 6, "lane": "remaining-families", "goal": "Schedule search, discover, source-switch, about and restore-preview by dependency." }
   ],
-  "admission": {
+  "historicalAdmission": {
     "figmaWriteTransactionComplete": true,
     "userConfirmed": true,
     "userConfirmedAt": "2026-07-20T15:48:41Z",
@@ -95,5 +97,47 @@
     "nextLocalFamilyReleased": true,
     "nextFigmaWriterGate": "bookshelf LOCAL_READY_FOR_FIGMA",
     "remainingGates": []
+  },
+  "currentLiveStaticF0": {
+    "observedAt": "2026-07-22T13:38:17Z",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "scope": "Static hierarchy reconciliation only. It does not assert a visual design change, reaction/prototype completion, business flow, UiEvent/state ownership, Motion Reference, or VC3/host completion.",
+    "masterAndFinalAssembly": {
+      "pageMasterNodeId": "942:45",
+      "phoneMasterNodeId": "942:42",
+      "tabletMasterNodeId": "942:44",
+      "finalAssemblyNodeId": "943:5701",
+      "finalPhoneInstance": {
+        "nodeId": "943:5704",
+        "mainComponentId": "942:42",
+        "detached": false
+      },
+      "finalTabletInstance": {
+        "nodeId": "943:6116",
+        "mainComponentId": "942:44",
+        "detached": false
+      },
+      "masterRootReactionCount": 0,
+      "masterInternalCanonicalInstanceCount": 4,
+      "detachedInstanceCount": 0
+    },
+    "canonicalLibraryNodeIds": [
+      "2221:321",
+      "2221:448",
+      "2221:567",
+      "2222:159",
+      "2222:160",
+      "2222:176"
+    ],
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "Tablet",
+      "compact": false,
+      "fold": false
+    },
+    "result": "STATIC_HIERARCHY_RECONCILED_ONLY"
   }
 }

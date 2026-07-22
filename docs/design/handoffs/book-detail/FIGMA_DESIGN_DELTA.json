@@ -1,25 +1,25 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "book-detail",
-  "status": "F2_USER_CONFIRMED",
+  "status": "F0_LIVE_RECONCILED_HISTORICAL_F2_EVIDENCE",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378451733465956551",
-  "revisionTitle": "F2 · Book Detail · User Confirmed",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378451733465956551",
-  "pilotRevision": "2378448207290564677",
-  "pilotRevisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
-  "confirmedAt": "2026-07-21T09:10:44+08:00",
-  "localImplementationCommit": "1006d9a7c0d11011b9e36f2e8053e9691621672f",
-  "handoffEvidenceCommit": "46df81a2ca26fb139afd747e8da07e8c158d8d06",
-  "vc3Backport": {
+  "historicalRevision": "2378451733465956551",
+  "historicalRevisionTitle": "F2 · Book Detail · User Confirmed",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378451733465956551",
+  "historicalPilotRevision": "2378448207290564677",
+  "historicalPilotRevisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
+  "historicalConfirmedAt": "2026-07-21T09:10:44+08:00",
+  "historicalLocalImplementationCommit": "1006d9a7c0d11011b9e36f2e8053e9691621672f",
+  "historicalHandoffEvidenceCommit": "46df81a2ca26fb139afd747e8da07e8c158d8d06",
+  "localVc3BackportEvidence": {
     "status": "VC3_COMPLETE",
     "implementationCommit": "f8a8351d423af07208b865051f0dcb05bb6bfdc5",
     "evidence": "docs/design/handoffs/book-detail/VC3_LOCAL_PARITY.json",
     "figmaLiveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
     "completedAt": "2026-07-22T11:22:56+08:00"
   },
-  "deltas": [
+  "historicalDeltas": [
     {
       "target": "Page/Book Detail",
       "pageId": "834:3",
@@ -63,7 +63,7 @@
       "newValue": "Phone 390×844 and Tablet 760×960 each contain 9 attached instances; landscape aliases Tablet; no Compact/Fold master or detached instance exists."
     }
   ],
-  "createdCanonicalNodes": [
+  "historicalCreatedCanonicalNodes": [
     { "nodeId": "2260:1417", "name": "F2 · Book Detail · Canonical + Evidence" },
     { "nodeId": "2260:1460", "name": "Library/BookDetail/Hero", "variantCount": 2 },
     { "nodeId": "2265:14", "name": "Library/BookDetail/Summary", "variantCount": 2 },
@@ -75,21 +75,21 @@
     { "nodeId": "2269:101", "name": "Library/BookDetail/RetryStatus", "variantCount": 3 },
     { "nodeId": "2274:211", "name": "Library/BookDetail/RecoveryAction", "variantCount": 42 }
   ],
-  "viewportConstraints": {
+  "historicalViewportConstraints": {
     "phone": { "nodeId": "941:7", "size": "390x844", "attachedInstances": 9 },
     "tablet": { "nodeId": "941:9", "size": "760x960", "attachedInstances": 9 },
     "landscape": { "alias": "Tablet", "independentMaster": false },
     "compact": { "prohibited": true },
     "fold": { "prohibited": true }
   },
-  "stateCoverage": {
+  "historicalStateCoverage": {
     "chapterRow": ["Default", "Pressed", "Focus", "Disabled", "Loading", "Selected"],
     "recoveryAction": ["Default", "Pressed", "Focus", "Disabled", "Loading", "Selected"],
     "deleteDialog": ["Default", "Loading", "Failed"],
     "retryStatus": ["Loading", "Error", "Offline"],
     "localOwnerBoundary": "Figma does not alter UiEvent, reducer ownership, asynchronous guards, route ownership, focus ownership, or business flow."
   },
-  "visualAudit": {
+  "historicalVisualAudit": {
     "beforePhone": "/tmp/book-detail-f2-before-phone.png",
     "beforeTablet": "/tmp/book-detail-f2-before-tablet.png",
     "afterPhone": "/tmp/book-detail-f2-final-phone.png",
@@ -104,7 +104,7 @@
     "detachedInstanceCount": 0,
     "result": "PASS_USER_CONFIRMED"
   },
-  "admission": {
+  "historicalAdmission": {
     "connectorWriteTransactionComplete": true,
     "namedRevisionComplete": true,
     "crosswalkComplete": true,
@@ -116,5 +116,21 @@
     "nextLocalLaneReleased": true,
     "nextFigmaWriterGate": null,
     "remainingGates": []
+  },
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentLiveF0Verification": {
+    "scope": "Current live observation records only retained static structure; it does not make a new visual change or assert a reading business flow.",
+    "canonicalMaster": "941:10",
+    "phone": { "nodeId": "941:7", "size": "390x844", "finalRoot": "943:651", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 },
+    "tablet": { "nodeId": "941:9", "size": "760x960", "finalRoot": "943:855", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 },
+    "finalAssembly": "943:648",
+    "defaultFinalPageComposition": ["Hero", "Summary", "ChapterSection", "ChapterRow=Default", "ActionBar", "QuickSourceSheet"],
+    "independentStateEvidence": ["DeleteDialog", "RetryStatus", "RecoveryAction"],
+    "stateEvidenceBoundary": "Delete/retry/recovery are independent state evidence, not default final-page content.",
+    "landscape": { "alias": "Tablet", "independentMaster": false },
+    "compact": { "prohibited": true },
+    "fold": { "prohibited": true },
+    "currentEvidencePolicy": "The historical F2 delta is audit-only until an official current Figma revision can be read."
   }
 }

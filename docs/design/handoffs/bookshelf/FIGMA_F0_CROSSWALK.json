@@ -1,35 +1,35 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "bookshelf",
-  "status": "F2_USER_CONFIRMED",
+  "status": "F0_LIVE_RECONCILED_HISTORICAL_F2_EVIDENCE",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "baselineRevision": "2378333433968465691",
-  "baselineRevisionTitle": "F2 · WebDAV Config · User Confirmed",
-  "revision": "2378442065521482111",
-  "revisionTitle": "F2 · Bookshelf · User Confirmed",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378442065521482111",
-  "pilotRevision": "2378359202710026522",
-  "pilotRevisionTitle": "F2 · Bookshelf · Local R3a Pilot",
-  "revisionRead": {
+  "historicalBaselineRevision": "2378333433968465691",
+  "historicalBaselineRevisionTitle": "F2 · WebDAV Config · User Confirmed",
+  "historicalRevision": "2378442065521482111",
+  "historicalRevisionTitle": "F2 · Bookshelf · User Confirmed",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378442065521482111",
+  "historicalPilotRevision": "2378359202710026522",
+  "historicalPilotRevisionTitle": "F2 · Bookshelf · Local R3a Pilot",
+  "historicalRevisionRead": {
     "baselineRead": true,
     "postWriteNamedRevisionCreated": true,
     "readMethod": "Figma Desktop version history context menu exposed the exact version-id in the selected version URL.",
     "blocker": null
   },
-  "timestamp": "2026-07-20T18:30:00+08:00",
-  "confirmedAt": "2026-07-21T08:50:59+08:00",
-  "localSource": {
+  "historicalTimestamp": "2026-07-20T18:30:00+08:00",
+  "historicalConfirmedAt": "2026-07-21T08:50:59+08:00",
+  "historicalLocalSource": {
     "implementationCommit": "003daa7b509505085b35832c43d67b22d58b96d9",
     "handoffEvidenceCommit": "8dd0bdae30dba3896086a61aac43673f8788910b",
     "packet": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json"
   },
-  "fontSources": {
+  "historicalFontSources": {
     "existingChineseTypography": "Existing Songti SC/Noto Sans SC text styles retained; changed labels cloned from the existing SectionHeader title style.",
     "localSongtiSource": "/System/Library/Fonts/Supplemental/Songti.ttc",
     "replacementPolicy": "No silent font substitution and no title reflow."
   },
-  "canonicalMasters": [
+  "historicalCanonicalMasters": [
     {
       "role": "page-set",
       "pageId": "834:3",
@@ -87,7 +87,7 @@
       "revision": "2378442065521482111"
     }
   ],
-  "downstreamInstances": [
+  "historicalDownstreamInstances": [
     {
       "pageId": "834:2",
       "nodeId": "943:11",
@@ -117,7 +117,7 @@
       "revision": "2378442065521482111"
     }
   ],
-  "bindings": [
+  "historicalBindings": [
     {
       "controlKey": "library.button.button.book-more-among-stars@bookshelf.default",
       "controlId": "library.button.bookshelf.default.button.book-more-among-stars",
@@ -619,7 +619,7 @@
       "revisionState": "named-revision-read"
     }
   ],
-  "exitAudit": {
+  "historicalExitAudit": {
     "localDeclarationCount": 50,
     "bindingCount": 50,
     "uniqueBindingCount": 50,
@@ -653,5 +653,27 @@
     "userConfirmed": true,
     "f2Exit": true,
     "remainingGates": []
+  },
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentBindings": [],
+  "currentLiveF0Verification": {
+    "scope": "Live structural verification of the retained Bookshelf masters and final assembly. It is not a reading-flow, UiEvent, state-owner, or runtime contract.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "canonicalMaster": { "pageId": "834:3", "nodeId": "941:6", "nodeName": "Page/Bookshelf" },
+    "viewports": {
+      "phone": { "nodeId": "941:3", "size": "390x844" },
+      "tablet": { "nodeId": "941:5", "size": "760x960" },
+      "landscape": { "alias": "Tablet", "independentMaster": false },
+      "compact": { "prohibited": true },
+      "fold": { "prohibited": true }
+    },
+    "finalAssembly": { "pageId": "834:2", "nodeId": "943:8" },
+    "finalRoots": [
+      { "nodeId": "943:11", "mainComponentId": "941:3", "attachedCanonicalInstanceCount": 56, "detachedInstanceCount": 0, "internalHoverPressReactionCount": 24 },
+      { "nodeId": "943:437", "mainComponentId": "941:5", "attachedCanonicalInstanceCount": 56, "detachedInstanceCount": 0, "internalHoverPressReactionCount": 24 }
+    ],
+    "reactionBoundary": "The 24 reactions per final root are static component hover/press micro-reactions only. They do not establish a reading business flow or product navigation contract.",
+    "currentBindingPolicy": "No active controlKey-to-node binding is asserted while the writer runtime cannot read an official current Figma revision. Historical bindings remain audit-only."
   }
 }

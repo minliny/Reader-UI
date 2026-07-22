@@ -5,7 +5,9 @@
   "status": "F2_USER_CONFIRMED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "lastReadableRevision": "2378562033612422730",
-  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+  "liveRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
   "localImplementationCommit": "61bab9f31a1284796af2318fb1960fb93c7c8132",
   "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
   "deltas": [
@@ -28,6 +30,31 @@
       "newValue": "F2 / Discover contains 24 attached Page instances (12 routes × Phone/Tablet) under its existing evidence section."
     }
   ],
+  "f0LiveBindingCorrection": {
+    "scope": "Evidence correction after the F0 live hierarchy audit only. It neither writes Figma nor changes design, reaction, UiEvent, state ownership, business flow, or Motion.",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "delta": {
+      "pageId": "834:3",
+      "oldNodeId": "2446:3026",
+      "oldValue": "The Discover entry-category Tablet crosswalk incorrectly pointed to 2446:3026, an inner INSTANCE of Surface/Discover.",
+      "newNodeId": "2446:3025",
+      "newValue": "The crosswalk now points to the real Page/Discover Tablet COMPONENT for discover-entry-category. It belongs to Page/Discover component set 942:9; the shared Surface/Discover set remains 2446:391."
+    },
+    "liveAudit": {
+      "pageDiscoverComponentSetId": "942:9",
+      "pageRouteViewportMasterCount": 24,
+      "surfaceDiscoverComponentSetId": "2446:391",
+      "surfaceVariantCount": 24,
+      "defaultFinalPhone": {"instanceId":"943:1312","mainComponentId":"942:6"},
+      "defaultFinalTablet": {"instanceId":"943:1684","mainComponentId":"942:8"},
+      "f2EvidenceFrameId": "2460:37926",
+      "attachedInstanceCount": 24,
+      "reactionCount": 0,
+      "detachedCount": 0
+    },
+    "evidencePolicy": "2378562033612422730 remains historical last-readable evidence only. The writer runtime cannot read the official current revision, so this correction intentionally records currentRevision as null rather than fabricating a revision."
+  },
   "visualAudit": {
     "phone": "PASS · 390x844",
     "tablet": "PASS · 760x960",

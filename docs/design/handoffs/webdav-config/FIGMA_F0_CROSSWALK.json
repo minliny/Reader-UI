@@ -1,31 +1,33 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "webdav-config",
-  "status": "F2_COMPLETE",
+  "status": "F2_HISTORICAL_EVIDENCE_PLUS_F0_LIVE_STATIC_RECONCILED",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378333433968465691",
-  "revisionTitle": "F2 · WebDAV Config · User Confirmed",
-  "timestamp": "2026-07-20T15:43:17Z",
-  "confirmedAt": "2026-07-20T15:48:41Z",
-  "localSource": {
+  "historicalRevision": "2378333433968465691",
+  "historicalRevisionTitle": "F2 · WebDAV Config · User Confirmed",
+  "historicalRecordedAt": "2026-07-20T15:43:17Z",
+  "historicalConfirmedAt": "2026-07-20T15:48:41Z",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalSource": {
     "implementationCommit": "dd61bfd61e6967ccd30064dc03a9a9d66e30bed2",
     "handoffEvidenceCommit": "5146d968b60718bf4f473d3b8c27284ac79890a1",
     "packet": "docs/design/handoffs/webdav-config/LOCAL_READY_FOR_FIGMA.json"
   },
-  "admissionOverride": {
+  "historicalAdmissionOverride": {
     "source": "user instruction in current task",
     "oldValue": "recommended-pending-user-confirmation; original mechanical F2 family order",
     "newValue": "webdav-config admitted now; after closure prioritize the end-to-end reading flow",
     "reason": "The immutable handoff predates the user's explicit priority correction and is not rewritten."
   },
-  "fontSources": {
+  "historicalFontSources": {
     "existingTitle": "Songti SC Bold is retained without mutation in the page masters.",
     "writerRuntime": "The connector cannot load Songti SC; all newly created or changed text uses existing Inter styles.",
     "localSystemSource": "/System/Library/Fonts/Supplemental/Songti.ttc",
     "replacementPolicy": "No silent font substitution and no title reflow."
   },
-  "canonicalMasters": [
+  "historicalCanonicalMasters": [
     { "role": "page-set", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:45", "nodeName": "Page/WebDAV Config", "revision": "2378333433968465691" },
     { "role": "phone-master", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:42", "nodeName": "Viewport=Phone", "revision": "2378333433968465691" },
     { "role": "tablet-master", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:44", "nodeName": "Viewport=Tablet", "revision": "2378333433968465691" },
@@ -37,13 +39,13 @@
     { "role": "test-result-screen", "pageId": "334:6", "pageName": "14 · Reference · Sync · Backup · Restore", "nodeId": "2222:160", "nodeName": "Canonical/WebDAV/ResultScreen", "revision": "2378333433968465691" },
     { "role": "error-screen", "pageId": "334:6", "pageName": "14 · Reference · Sync · Backup · Restore", "nodeId": "2222:176", "nodeName": "Canonical/WebDAV/ErrorScreen", "revision": "2378333433968465691" }
   ],
-  "downstreamInstances": [
+  "historicalDownstreamInstances": [
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:5704", "mainComponentId": "942:42", "detached": false, "revision": "2378333433968465691" },
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:6116", "mainComponentId": "942:44", "detached": false, "revision": "2378333433968465691" },
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:70170", "mainComponentId": "942:42", "detached": false, "revision": "2378333433968465691" },
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:70582", "mainComponentId": "942:44", "detached": false, "revision": "2378333433968465691" }
   ],
-  "bindings": [
+  "historicalBindings": [
     { "controlKey": "sync.button.button.back@webdav-config.default", "uiEvent": "route.pop", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "903:28", "revision": "2378333433968465691" },
     { "controlKey": "sync.textbox.textbox.serverUrl@webdav-config.default", "uiEvent": "input.change", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "334:6", "nodeId": "2221:335", "revision": "2378333433968465691" },
     { "controlKey": "sync.textbox.textbox.account@webdav-config.default", "uiEvent": "input.change", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "334:6", "nodeId": "2221:347", "revision": "2378333433968465691" },
@@ -78,7 +80,7 @@
     { "controlKey": "sync.button.button.webdav-edit-config-action@webdav-error.default", "uiEvent": "route.push", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "334:6", "nodeId": "2222:206", "revision": "2378333433968465691" },
     { "controlKey": "sync.button.button.webdav-clear-config@webdav-error.default", "uiEvent": "webdav-clear.confirm", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "334:6", "nodeId": "2222:208", "revision": "2378333433968465691" }
   ],
-  "exitAudit": {
+  "historicalExitAudit": {
     "localDeclarationCount": 33,
     "bindingCount": 33,
     "fakeBindingCount": 0,
@@ -95,5 +97,95 @@
     "nextLocalFamily": "bookshelf",
     "nextLocalFamilyReleased": true,
     "remainingGates": []
+  },
+  "currentLiveStaticF0": {
+    "observedAt": "2026-07-22T13:38:17Z",
+    "scope": "Live F0 hierarchy read only. This records static component and attachment facts; it does not certify a business flow, UiEvent/state ownership, asynchronous behavior, prototype reactions, Motion Reference, or VC3/host completion.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "pageMaster": {
+      "pageId": "834:3",
+      "nodeId": "942:45",
+      "name": "Page/WebDAV Config",
+      "rootReactionCount": 0
+    },
+    "viewportMasters": [
+      {
+        "nodeId": "942:42",
+        "viewport": "Phone",
+        "size": "390x844"
+      },
+      {
+        "nodeId": "942:44",
+        "viewport": "Tablet",
+        "size": "760x960"
+      }
+    ],
+    "finalAssembly": {
+      "pageId": "834:2",
+      "nodeId": "943:5701",
+      "attachedInstances": [
+        {
+          "nodeId": "943:5704",
+          "mainComponentId": "942:42",
+          "detached": false
+        },
+        {
+          "nodeId": "943:6116",
+          "mainComponentId": "942:44",
+          "detached": false
+        }
+      ],
+      "detachedInstanceCount": 0
+    },
+    "masterInternalCanonicalInstances": {
+      "count": 4,
+      "attachedCount": 4,
+      "detachedCount": 0
+    },
+    "canonicalLibrary": {
+      "pageId": "334:6",
+      "sectionNodeId": "2221:238",
+      "nodes": [
+        {
+          "nodeId": "2221:321",
+          "name": "Canonical/WebDAV/StatusGrid"
+        },
+        {
+          "nodeId": "2221:448",
+          "name": "Canonical/WebDAV/ConfigForm"
+        },
+        {
+          "nodeId": "2221:567",
+          "name": "Canonical/WebDAV/AdvancedSettings"
+        },
+        {
+          "nodeId": "2222:159",
+          "name": "Canonical/WebDAV/ActionDialog"
+        },
+        {
+          "nodeId": "2222:160",
+          "name": "Canonical/WebDAV/ResultScreen"
+        },
+        {
+          "nodeId": "2222:176",
+          "name": "Canonical/WebDAV/ErrorScreen"
+        }
+      ]
+    },
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "Tablet",
+      "compact": false,
+      "fold": false
+    },
+    "staticHierarchyAudit": {
+      "pageMasterExists": true,
+      "finalAssemblyExists": true,
+      "allReportedInstancesAttached": true,
+      "detachedInstanceCount": 0
+    }
   }
 }

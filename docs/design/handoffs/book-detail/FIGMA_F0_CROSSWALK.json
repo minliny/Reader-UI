@@ -1,42 +1,42 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "book-detail",
-  "status": "F2_USER_CONFIRMED",
+  "status": "F0_LIVE_RECONCILED_HISTORICAL_F2_EVIDENCE",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "baselineRevision": "2378442065521482111",
-  "baselineRevisionTitle": "F2 · Bookshelf · User Confirmed",
-  "revision": "2378451733465956551",
-  "revisionTitle": "F2 · Book Detail · User Confirmed",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378451733465956551",
-  "pilotRevision": "2378448207290564677",
-  "pilotRevisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
-  "earlierPilotRevisions": [
+  "historicalBaselineRevision": "2378442065521482111",
+  "historicalBaselineRevisionTitle": "F2 · Bookshelf · User Confirmed",
+  "historicalRevision": "2378451733465956551",
+  "historicalRevisionTitle": "F2 · Book Detail · User Confirmed",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378451733465956551",
+  "historicalPilotRevision": "2378448207290564677",
+  "historicalPilotRevisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
+  "historicalEarlierPilotRevisions": [
     { "revision": "2378445140684280442", "title": "F2 · Book Detail · Local R3a Pilot" },
     { "revision": "2378453077810565878", "title": "F2 · Book Detail · Local R3a Pilot · Crosswalk Complete" },
     { "revision": "2378448207290564677", "title": "F2 · Book Detail · Final Crosswalk Pilot" }
   ],
-  "revisionRead": {
+  "historicalRevisionRead": {
     "baselineRead": true,
     "postWriteNamedRevisionCreated": true,
     "readMethod": "Figma Desktop version history exposed the exact version-id in the selected version URL.",
     "blocker": null
   },
-  "timestamp": "2026-07-21T09:03:05+08:00",
-  "confirmedAt": "2026-07-21T09:10:44+08:00",
-  "localSource": {
+  "historicalTimestamp": "2026-07-21T09:03:05+08:00",
+  "historicalConfirmedAt": "2026-07-21T09:10:44+08:00",
+  "historicalLocalSource": {
     "implementationCommit": "1006d9a7c0d11011b9e36f2e8053e9691621672f",
     "handoffEvidenceCommit": "46df81a2ca26fb139afd747e8da07e8c158d8d06",
     "packet": "docs/design/handoffs/book-detail/LOCAL_READY_FOR_FIGMA.json",
     "vc3ImplementationCommit": "f8a8351d423af07208b865051f0dcb05bb6bfdc5",
     "vc3Evidence": "docs/design/handoffs/book-detail/VC3_LOCAL_PARITY.json"
   },
-  "fontSources": {
+  "historicalFontSources": {
     "songtiSc": "/System/Library/Fonts/Supplemental/Songti.ttc",
     "recoveryAction": "Noto Sans SC Bold from the existing State/StatusPanel action style",
     "policy": "Existing Songti SC text was preserved through untouched clones; no silent font substitution or text reflow was introduced."
   },
-  "canonicalMasters": [
+  "historicalCanonicalMasters": [
     { "role": "page-set", "pageId": "834:3", "nodeId": "941:10", "nodeName": "Page/Book Detail", "revision": "2378451733465956551" },
     { "role": "phone-master", "pageId": "834:3", "nodeId": "941:7", "nodeName": "Viewport=Phone", "revision": "2378451733465956551" },
     { "role": "tablet-master", "pageId": "834:3", "nodeId": "941:9", "nodeName": "Viewport=Tablet", "revision": "2378451733465956551" },
@@ -50,13 +50,13 @@
     { "role": "retry-status-set", "pageId": "834:3", "nodeId": "2269:101", "nodeName": "Library/BookDetail/RetryStatus", "revision": "2378451733465956551" },
     { "role": "recovery-action-set", "pageId": "834:3", "nodeId": "2274:211", "nodeName": "Library/BookDetail/RecoveryAction", "revision": "2378451733465956551" }
   ],
-  "downstreamInstances": [
+  "historicalDownstreamInstances": [
     { "pageId": "834:2", "nodeId": "943:651", "mainComponentId": "941:7", "detached": false, "revision": "2378451733465956551" },
     { "pageId": "834:2", "nodeId": "943:855", "mainComponentId": "941:9", "detached": false, "revision": "2378451733465956551" },
     { "pageId": "834:2", "nodeId": "1995:56890", "mainComponentId": "941:7", "detached": false, "revision": "2378451733465956551" },
     { "pageId": "834:2", "nodeId": "1995:57094", "mainComponentId": "941:9", "detached": false, "revision": "2378451733465956551" }
   ],
-  "bindings": [
+  "historicalBindings": [
     { "route": "book-detail", "settingsKey": "back", "controlKey": "library.button.button.back@book-detail.default", "bindingKind": "responsive-master-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "860:28", "revision": "2378451733465956551" },
     { "route": "book-detail", "settingsKey": "chapter-30-old-day", "controlKey": "library.button.button.chapter-30-old-day@book-detail.default", "bindingKind": "canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:67", "revision": "2378451733465956551" },
     { "route": "book-detail", "settingsKey": "chapter-31-return", "controlKey": "library.button.button.chapter-31-return@book-detail.default", "bindingKind": "canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:71", "revision": "2378451733465956551" },
@@ -116,7 +116,7 @@
     { "route": "book-directory", "settingsKey": "toc-directory", "controlKey": "library.button.button.toc-directory@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:88", "revision": "2378451733465956551" },
     { "route": "book-directory", "settingsKey": "toc-retry", "controlKey": "library.button.button.toc-retry@book-directory.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:105", "revision": "2378451733465956551" }
   ],
-  "bindingAudit": {
+  "historicalBindingAudit": {
     "expected": 56,
     "actual": 56,
     "missing": 0,
@@ -124,7 +124,7 @@
     "manyToOneSharedRendererBindings": 22,
     "readerFullDirectoryPolicy": "Page/Reader Full Directory is a downstream visual binding only. It does not become a second route owner and was not modified in this transaction."
   },
-  "vc3Backport": {
+  "localVc3BackportEvidence": {
     "status": "VC3_COMPLETE",
     "implementationCommit": "f8a8351d423af07208b865051f0dcb05bb6bfdc5",
     "evidence": "docs/design/handoffs/book-detail/VC3_LOCAL_PARITY.json",
@@ -132,5 +132,29 @@
     "canonicalMasterVerified": "941:10",
     "downstreamDetachedInstances": 0,
     "completedAt": "2026-07-22T11:22:56+08:00"
+  },
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentBindings": [],
+  "currentLiveF0Verification": {
+    "scope": "Live structural verification of the retained Book Detail masters and final assembly. It does not create or assert a UiEvent, state owner, route owner, or reading business flow.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "canonicalMaster": { "pageId": "834:3", "nodeId": "941:10", "nodeName": "Page/Book Detail" },
+    "viewports": {
+      "phone": { "nodeId": "941:7", "size": "390x844" },
+      "tablet": { "nodeId": "941:9", "size": "760x960" },
+      "landscape": { "alias": "Tablet", "independentMaster": false },
+      "compact": { "prohibited": true },
+      "fold": { "prohibited": true }
+    },
+    "finalAssembly": { "pageId": "834:2", "nodeId": "943:648" },
+    "finalRoots": [
+      { "nodeId": "943:651", "mainComponentId": "941:7", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 },
+      { "nodeId": "943:855", "mainComponentId": "941:9", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 }
+    ],
+    "defaultFinalPageComposition": ["Hero", "Summary", "ChapterSection", "ChapterRow=Default", "ActionBar", "QuickSourceSheet"],
+    "independentStateEvidence": ["DeleteDialog", "RetryStatus", "RecoveryAction"],
+    "stateEvidenceBoundary": "Delete, retry, and recovery states are independent state evidence and are not part of the default final page composition.",
+    "currentBindingPolicy": "No active controlKey-to-node binding is asserted while the writer runtime cannot read an official current Figma revision. Historical bindings remain audit-only."
   }
 }
