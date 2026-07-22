@@ -98,6 +98,8 @@
     },
     "search-results": {
       "routes": [
+        "book-search",
+        "search-home",
         "search-results",
         "search-loading",
         "search-empty",
@@ -268,6 +270,20 @@
       "dispatchLayer": "D2-A",
       "dispatchMap": "STATE_VARIANT_MAP",
       "renderer": "bookDirectoryV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "book-search": {
+      "pageFamily": "search-results",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookSearchV2",
+      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "search-home": {
+      "pageFamily": "search-results",
+      "dispatchLayer": "D2-A",
+      "dispatchMap": "STATE_VARIANT_MAP",
+      "renderer": "bookSearchV2",
       "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
     },
     "search-results": {

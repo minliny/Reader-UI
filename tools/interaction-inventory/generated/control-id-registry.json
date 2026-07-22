@@ -35124,6 +35124,80 @@
       "nonInteractiveContainer": null
     },
     {
+      "controlId": "library.button.book-search.default.button.book-search-clear-history-h-0be34d84",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-search.default.n1",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-search",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "book-search-clear-history-h-0be34d84",
+      "source": {
+        "candidateKey": "candidate:1ebf00a2b3188ff16a11",
+        "selectorSha256": "f68dec5158b7d4ba117630c178288a772fe821108d8ce769a964130967f753d5",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "清除历史",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-search-clear-history": ""
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.book-search.default.button.book-search-clear-history-h-a0de1135",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@book-search.default.n13",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "book-search",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "book-search-clear-history-h-a0de1135",
+      "source": {
+        "candidateKey": "candidate:fc3948c78a4809b8ef41",
+        "selectorSha256": "92875e8075549b0eabd889a1582ccabe0776cd9c28e02cd10caa617ad041b63a",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "清除历史",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-book-search-clear-history": ""
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
       "controlId": "library.button.book-search.default.button.close-keyboard-h-6687b297",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-search.default.n4",
@@ -35161,43 +35235,6 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.book-search.default.button.h-0be34d84",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-search.default.n1",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-search",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-0be34d84",
-      "source": {
-        "candidateKey": "candidate:1ebf00a2b3188ff16a11",
-        "selectorSha256": "f68dec5158b7d4ba117630c178288a772fe821108d8ce769a964130967f753d5",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "清除历史",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-book-search-clear-history": ""
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
       "controlId": "library.button.book-search.default.button.h-77d7c59d",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@book-search.default.n11",
@@ -35220,43 +35257,6 @@
         "label": "返回",
         "uiEvent": "route.pop",
         "dataAttributes": {}
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.book-search.default.button.h-a0de1135",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@book-search.default.n13",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "book-search",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "h-a0de1135",
-      "source": {
-        "candidateKey": "candidate:fc3948c78a4809b8ef41",
-        "selectorSha256": "92875e8075549b0eabd889a1582ccabe0776cd9c28e02cd10caa617ad041b63a",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "清除历史",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-book-search-clear-history": ""
-        }
       },
       "mappingStatus": "pending-action-and-instance-key",
       "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
@@ -44981,44 +44981,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.search-home.default.button.close-keyboard-h-1db9cabd",
-      "entityKey": "library.button.button",
-      "controlKey": "library.button.button@search-home.default.n0",
-      "actionKey": null,
-      "instanceKey": null,
-      "needsActionKey": true,
-      "needsInstanceKey": true,
-      "domain": "library",
-      "family": "button",
-      "route": "search-home",
-      "state": "default",
-      "viewport": "phone",
-      "role": "button",
-      "discriminator": "close-keyboard-h-1db9cabd",
-      "source": {
-        "candidateKey": "candidate:064c8b3e7929fa2c1647",
-        "selectorSha256": "c7c4369210f89569c35d527f2d81849e3689ed22569e933bbf13bdf5ee305290",
-        "semanticStatus": "semantic-control",
-        "domTag": "button",
-        "label": "完成",
-        "uiEvent": null,
-        "dataAttributes": {
-          "data-close-keyboard": ""
-        }
-      },
-      "mappingStatus": "pending-action-and-instance-key",
-      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
-      "screenGraphBinding": {
-        "componentInstanceId": null,
-        "componentType": null,
-        "bindingStatus": "pending-figma-join"
-      },
-      "figmaNodeCandidate": null,
-      "figmaJoinStatus": "pending-figma-join",
-      "nonInteractiveContainer": null
-    },
-    {
-      "controlId": "library.button.search-home.default.button.h-c9594a0d",
+      "controlId": "library.button.search-home.default.button.book-search-clear-history-h-c9594a0d",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@search-home.default.n9",
       "actionKey": null,
@@ -45031,7 +44994,7 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-c9594a0d",
+      "discriminator": "book-search-clear-history-h-c9594a0d",
       "source": {
         "candidateKey": "candidate:dd2ffbbff978db17fd70",
         "selectorSha256": "f68dec5158b7d4ba117630c178288a772fe821108d8ce769a964130967f753d5",
@@ -45055,7 +45018,7 @@
       "nonInteractiveContainer": null
     },
     {
-      "controlId": "library.button.search-home.default.button.h-d7681142",
+      "controlId": "library.button.search-home.default.button.book-search-clear-history-h-d7681142",
       "entityKey": "library.button.button",
       "controlKey": "library.button.button@search-home.default.n12",
       "actionKey": null,
@@ -45068,7 +45031,7 @@
       "state": "default",
       "viewport": "phone",
       "role": "button",
-      "discriminator": "h-d7681142",
+      "discriminator": "book-search-clear-history-h-d7681142",
       "source": {
         "candidateKey": "candidate:f46d2d9c7b976d57d84a",
         "selectorSha256": "92875e8075549b0eabd889a1582ccabe0776cd9c28e02cd10caa617ad041b63a",
@@ -45078,6 +45041,43 @@
         "uiEvent": null,
         "dataAttributes": {
           "data-book-search-clear-history": ""
+        }
+      },
+      "mappingStatus": "pending-action-and-instance-key",
+      "mappingNotes": "Both actionKey and instanceKey are pending. Needs explicit semantic attribute (data-action / data-route / data-route-back / data-route-replace / data-demo-back) AND explicit instance attribute (data-instance / data-book-id / data-reader-tts-timer-value / etc.) to resolve.",
+      "screenGraphBinding": {
+        "componentInstanceId": null,
+        "componentType": null,
+        "bindingStatus": "pending-figma-join"
+      },
+      "figmaNodeCandidate": null,
+      "figmaJoinStatus": "pending-figma-join",
+      "nonInteractiveContainer": null
+    },
+    {
+      "controlId": "library.button.search-home.default.button.close-keyboard-h-1db9cabd",
+      "entityKey": "library.button.button",
+      "controlKey": "library.button.button@search-home.default.n0",
+      "actionKey": null,
+      "instanceKey": null,
+      "needsActionKey": true,
+      "needsInstanceKey": true,
+      "domain": "library",
+      "family": "button",
+      "route": "search-home",
+      "state": "default",
+      "viewport": "phone",
+      "role": "button",
+      "discriminator": "close-keyboard-h-1db9cabd",
+      "source": {
+        "candidateKey": "candidate:064c8b3e7929fa2c1647",
+        "selectorSha256": "c7c4369210f89569c35d527f2d81849e3689ed22569e933bbf13bdf5ee305290",
+        "semanticStatus": "semantic-control",
+        "domTag": "button",
+        "label": "完成",
+        "uiEvent": null,
+        "dataAttributes": {
+          "data-close-keyboard": ""
         }
       },
       "mappingStatus": "pending-action-and-instance-key",

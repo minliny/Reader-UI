@@ -1656,7 +1656,46 @@
     Object.freeze({ id: "mystery-lord", title: "诡秘之主", author: "爱潜水的乌贼", coverKey: "mysteryLord", source: "书仓搜索", inShelf: true }),
     Object.freeze({ id: "three-body", title: "三体", author: "刘慈欣", coverKey: "threeBody", source: "起点导入", inShelf: false })
   ]);
-  var SEARCH_PRIMARY_ROUTES = ["search-results", "search-loading", "search-empty", "search-error"];
+  var SEARCH_PRIMARY_ROUTES = ["book-search", "search-home", "search-results", "search-loading", "search-empty", "search-error"];
+  var SEARCH_HISTORY_RECORDS = Object.freeze([
+    Object.freeze({ key: "mystery-lord", value: "诡秘之主" }),
+    Object.freeze({ key: "three-body", value: "三体" }),
+    Object.freeze({ key: "battle-through-the-heavens", value: "斗破苍穹" }),
+    Object.freeze({ key: "ming-dynasty-things", value: "明朝那些事儿" }),
+    Object.freeze({ key: "long-night", value: "长夜余火" }),
+    Object.freeze({ key: "soul-land", value: "斗罗大陆" }),
+    Object.freeze({ key: "the-kings-avatar", value: "全职高手" }),
+    Object.freeze({ key: "heaven-officials-blessing", value: "天官赐福" }),
+    Object.freeze({ key: "perfect-world", value: "完美世界" }),
+    Object.freeze({ key: "a-record-of-a-mortals-journey", value: "凡人修仙传" })
+  ]);
+  var SEARCH_SUGGESTION_RECORDS = Object.freeze([
+    Object.freeze({ key: "long-night", value: "长夜余火" }),
+    Object.freeze({ key: "mystery-lord", value: "诡秘之主" }),
+    Object.freeze({ key: "three-body", value: "三体" }),
+    Object.freeze({ key: "ming-dynasty-things", value: "明朝那些事儿" })
+  ]);
+
+  function searchBeforeControlSpecs(route) {
+    return [
+      { route: route, state: "before", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回书架", focusReturn: false },
+      { route: route, state: "before", role: "input", settingsKey: "query-input-primary", uiEvent: "input.search", label: "搜索书名、作者或关键词", focusReturn: false },
+      { route: route, state: "before", role: "button", settingsKey: "search-submit", uiEvent: "search.submit", label: "提交搜索", focusReturn: true }
+    ].concat(SEARCH_HISTORY_RECORDS.map(function (record) {
+      return { route: route, state: "before", role: "button", settingsKey: `history-select-${record.key}`, uiEvent: "chip.item.select", label: `回填搜索记录 ${record.value}`, focusReturn: false };
+    }), [
+      { route: route, state: "before-collapsed", role: "button", settingsKey: "history-expand", uiEvent: "dropdown.expand", label: "展开全部搜索记录", focusReturn: false },
+      { route: route, state: "before-expanded", role: "button", settingsKey: "history-collapse", uiEvent: "dropdown.collapse", label: "收起搜索记录", focusReturn: false },
+      { route: route, state: "before", role: "button", settingsKey: "history-clear", uiEvent: "search.clear", label: "清除搜索记录", focusReturn: false }
+    ], SEARCH_SUGGESTION_RECORDS.map(function (record) {
+      return { route: route, state: "before", role: "button", settingsKey: `suggestion-select-${record.key}`, uiEvent: "search.submit", label: `搜索热门关键词 ${record.value}`, focusReturn: true };
+    }), [
+      { route: route, state: "before", role: "input", settingsKey: "query-input-keyboard", uiEvent: "input.search", label: "键盘搜索输入", focusReturn: false },
+      { route: route, state: "before", role: "button", settingsKey: "keyboard-close", uiEvent: "overlay.keyboard.open", label: "关闭搜索键盘", focusReturn: true },
+      { route: route, state: "before", role: "button", settingsKey: "search-submit-bottom", uiEvent: "search.submit", label: "开始搜索", focusReturn: true },
+      { route: route, state: "before", role: "button", settingsKey: "history-clear-bottom", uiEvent: "search.clear", label: "清除搜索记录", focusReturn: false }
+    ]);
+  }
   var SEARCH_CONTROL_SPECS = [
     { route: "search-results", state: "after", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回搜索来源", focusReturn: false },
     { route: "search-results", state: "after", role: "input", settingsKey: "query-input-primary", uiEvent: "input.search", label: "搜索书名、作者或关键词", focusReturn: false },
@@ -1677,12 +1716,13 @@
     { route: "search-error", state: "error", role: "button", settingsKey: "back", uiEvent: "route.pop", label: "返回搜索来源", focusReturn: false },
     { route: "search-error", state: "error", role: "button", settingsKey: "search-retry", uiEvent: "search.submit", label: "重试搜索", focusReturn: true },
     { route: "search-error", state: "error", role: "button", settingsKey: "source-management-open", uiEvent: "source.management.open", label: "打开书源管理", focusReturn: true }
-  ];
+  ].concat(searchBeforeControlSpecs("book-search"), searchBeforeControlSpecs("search-home"));
 
   function d2BookSearchDefaults() {
     return {
       phase: "after", query: "三体", queryId: "book-catalog-primary",
       resultIds: SEARCH_RESULT_BOOKS.map(function (book) { return book.id; }),
+      history: SEARCH_HISTORY_RECORDS.map(function (record) { return record.value; }), historyExpanded: false,
       selectedResultId: null, pending: null, requestEpoch: 0, error: null,
       focusReturnKey: null, closed: false
     };
@@ -1694,6 +1734,16 @@
     switch (action && action.type) {
       case "SET_QUERY":
         return Object.assign({}, current, { query: String(action.value == null ? "" : action.value), error: null, closed: false });
+      case "SELECT_HISTORY": {
+        var historyValue = String(action.value == null ? "" : action.value).trim();
+        if (!historyValue || !Array.isArray(current.history) || current.history.indexOf(historyValue) < 0) return current;
+        return Object.assign({}, current, { query: historyValue, phase: "before", error: null, closed: false, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
+      }
+      case "SET_HISTORY_EXPANDED":
+        return Object.assign({}, current, { historyExpanded: Boolean(action.expanded) });
+      case "CLEAR_HISTORY":
+        if (!Array.isArray(current.history) || current.history.length === 0) return current;
+        return Object.assign({}, current, { history: [], historyExpanded: false, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
       case "SELECT_RESULT":
         if (SEARCH_RESULT_BOOKS.map(function (book) { return book.id; }).indexOf(action.resultId) < 0) return current;
         return Object.assign({}, current, { selectedResultId: action.resultId, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
@@ -1773,7 +1823,7 @@
   }
 
   function bookSearchKeyboardLayerV2(query, route) {
-    var primaryIdentity = route === "search-results";
+    var primaryIdentity = ["book-search", "search-home", "search-results"].indexOf(route) >= 0;
     return `
       <section class="fd-demo-keyboard" aria-hidden="true" data-keyboard-host>
         <div class="fd-keyboard-panel">
@@ -1793,8 +1843,7 @@
 
   /**
    * bookSearchV2 - 书架搜索状态变体
-   * Primary F2：search-results / search-loading / search-empty / search-error。
-   * book-search / search-home 仅保留为 excluded secondary entry，不计入本族完成分母。
+   * 搜索入口、结果和异常状态共享一个 owner；搜索记录仅回填输入值，必须由用户显式提交。
    */
   function bookSearchV2(data, route, appState) {
     var primaryPhaseByRoute = { "search-results": "after", "search-loading": "loading", "search-empty": "empty", "search-error": "error" };
@@ -1815,25 +1864,36 @@
       : (appState && appState.bookSearchPhase) || "before";
     if (["before", "loading", "after", "empty", "error"].indexOf(phase) < 0) phase = "before";
     var query = String((appState && appState.bookSearchQuery) || "");
-    var history = ["长夜", "诡秘", "三体", "明朝那些事"];
-    var suggestions = ["长夜余火", "诡秘之主", "三体", "明朝那些事儿"];
+    var persistedHistory = Array.isArray(appState && appState.bookSearchHistory)
+      ? appState.bookSearchHistory
+      : d2BookSearchState.history;
+    var history = SEARCH_HISTORY_RECORDS.filter(function (record) { return persistedHistory.indexOf(record.value) >= 0; });
+    var historyExpanded = typeof (appState && appState.bookSearchHistoryExpanded) === "boolean"
+      ? appState.bookSearchHistoryExpanded
+      : Boolean(d2BookSearchState.historyExpanded);
+    var visibleHistory = historyExpanded ? history : history.slice(0, 5);
     var results = SEARCH_RESULT_BOOKS;
     var beforeHtml = `
       <section class="fd-search-state fd-search-state-before" data-search-state="before">
         <section class="fd-search-history">
           <h2>搜索历史</h2>
           <div>
-            ${history.map(function (h) {
-              return `<button type="button" data-search-submit data-search-query="${esc(h)}">${esc(h)}</button>`;
+            ${visibleHistory.map(function (record) {
+              return `<button type="button" data-search-history-select data-search-query="${esc(record.value)}" aria-label="回填搜索记录 ${esc(record.value)}"${d2BookSearchIdentityAttrs(route, `history-select-${record.key}`)}>${esc(record.value)}</button>`;
             }).join("")}
-            <button type="button" data-book-search-clear-history>清除历史</button>
+            ${history.length > 5
+              ? historyExpanded
+                ? `<button type="button" data-search-history-toggle="collapse" aria-label="收起搜索记录" aria-expanded="true"${d2BookSearchIdentityAttrs(route, "history-collapse")}>收起</button>`
+                : `<button type="button" data-search-history-toggle="expand" aria-label="展开全部搜索记录" aria-expanded="false"${d2BookSearchIdentityAttrs(route, "history-expand")}>${history.length - 5} 条更多</button>`
+              : ""}
+            <button type="button" data-book-search-clear-history aria-label="清除搜索记录"${d2BookSearchIdentityAttrs(route, "history-clear")}>清除历史</button>
           </div>
         </section>
         <section class="fd-search-suggestions">
           <h2>热门搜索</h2>
           <div>
-            ${suggestions.map(function (s) {
-              return `<button type="button" data-search-submit data-search-query="${esc(s)}">${esc(s)}</button>`;
+            ${SEARCH_SUGGESTION_RECORDS.map(function (record) {
+              return `<button type="button" data-search-submit data-search-query="${esc(record.value)}" aria-label="搜索热门关键词 ${esc(record.value)}"${d2BookSearchIdentityAttrs(route, `suggestion-select-${record.key}`)}>${esc(record.value)}</button>`;
             }).join("")}
           </div>
         </section>
@@ -1899,7 +1959,7 @@
               ? `<button type="button" data-search-reset>清空并取消</button><button type="button" data-search-submit data-book-search-submit data-primary-search-submit>用最新输入搜索</button>`
               : phase === "empty" || phase === "error"
                 ? `<button type="button" data-search-reset>清空关键词</button><button type="button" data-search-submit data-book-search-submit data-primary-search-submit>重新搜索</button>`
-                : `<button type="button" data-search-submit data-book-search-submit data-primary-search-submit>开始搜索</button><button type="button" data-book-search-clear-history>清除历史</button>`}
+                : `<button type="button" data-search-submit data-book-search-submit data-primary-search-submit aria-label="开始搜索"${d2BookSearchIdentityAttrs(route, "search-submit-bottom")}>开始搜索</button><button type="button" data-book-search-clear-history aria-label="清除搜索记录"${d2BookSearchIdentityAttrs(route, "history-clear-bottom")}>清除历史</button>`}
         </div>`
     }));
   }

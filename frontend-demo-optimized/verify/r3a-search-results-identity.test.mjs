@@ -20,10 +20,10 @@ function fresh() {
 }
 function values(html, attr) { return [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((match) => match[1]); }
 
-test("R2a search-results declares exactly 19 mapped business controls", () => {
+test("R2a search family declares exactly 67 mapped business controls", () => {
   const sandbox = { module: { exports: {} }, window: {} }; new vm.Script(declarationSource).runInNewContext(sandbox);
   const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "search-results-action");
-  assert.equal(rows.length, 19); assert.equal(new Set(rows.map((row) => row.controlKey)).size, 19);
+  assert.equal(rows.length, 67); assert.equal(new Set(rows.map((row) => row.controlKey)).size, 67);
   assert.ok(rows.every((row) => row.mappingStatus === "mapped" && row.actionKey === row.settingsKey && row.instanceKey === null));
 });
 
@@ -54,20 +54,38 @@ test("R2a query inputs use a stable query ID", () => {
   assert.deepEqual(values(html, "data-search-query-id"), ["book-catalog-primary", "book-catalog-primary"]);
 });
 
-test("R3a all four primary routes resolve through bookSearchV2", () => {
+test("R3a all six Search routes resolve through bookSearchV2", () => {
   const { api } = fresh();
-  for (const route of ["search-results", "search-loading", "search-empty", "search-error"]) assert.equal(api.STATE_VARIANT_MAP[route], "bookSearchV2");
+  for (const route of ["book-search", "search-home", "search-results", "search-loading", "search-empty", "search-error"]) assert.equal(api.STATE_VARIANT_MAP[route], "bookSearchV2");
 });
 
-test("R3a render-runtime fallbacks fail loudly for all four routes", () => {
-  assert.match(runtimeSource, /search-results route is FROZEN to bookSearchV2/);
+test("R3a render-runtime fallbacks fail loudly for all six Search routes", () => {
+  assert.match(runtimeSource, /book-search[\s\S]*search-home[\s\S]*search-results[\s\S]*FROZEN to bookSearchV2/);
   assert.match(runtimeSource, /search-error[\s\S]*FROZEN to bookSearchV2/);
 });
 
-test("R3a search-home and book-search remain excluded secondary entries", () => {
+test("R3a initial Search routes stamp stable controls without Compact or Fold variants", () => {
   const { api, data } = fresh();
-  for (const route of ["search-home", "book-search"]) assert.equal(values(api.bookSearchV2(data, route, {}), "data-control-key").length, 0);
-  assert.match(rendererSource, /excluded secondary entry/);
+  for (const route of ["search-home", "book-search"]) {
+    const html = api.bookSearchV2(data, route, {});
+    assert.equal(values(html, "data-control-key").length, 18);
+    assert.equal(new Set(values(html, "data-control-key")).size, 18);
+  }
+  assert.doesNotMatch(rendererSource, /compact-landscape|foldable|data-viewport="compact"|data-viewport="fold"/i);
+});
+
+test("R3a search history is five collapsed records plus five-more, or ten expanded records plus collapse", () => {
+  const { api, data } = fresh();
+  const collapsed = api.bookSearchV2(data, "book-search", { bookSearchHistoryExpanded: false });
+  const expanded = api.bookSearchV2(data, "book-search", { bookSearchHistoryExpanded: true });
+  const cleared = api.bookSearchV2(data, "book-search", { bookSearchHistory: [] });
+  assert.equal((collapsed.match(/data-search-history-select/g) || []).length, 5);
+  assert.match(collapsed, />5 条更多<\/button>/);
+  assert.equal((expanded.match(/data-search-history-select/g) || []).length, 10);
+  assert.match(expanded, />收起<\/button>/);
+  assert.equal((cleared.match(/data-search-history-select/g) || []).length, 0);
+  assert.doesNotMatch(cleared, /条更多|>收起<\/button>/);
+  assert.doesNotMatch(collapsed, /data-search-history-select[^>]*data-search-submit/);
 });
 
 test("R3a Phone and Tablet reuse identical primary control keys", () => {

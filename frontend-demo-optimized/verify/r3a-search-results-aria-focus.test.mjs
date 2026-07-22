@@ -22,6 +22,17 @@ test("R3a search input and keyboard input have accessible names", () => {
   assert.match(html, /data-keyboard-input[^>]*aria-label="搜索书籍"/);
 });
 
+test("R3a search-history controls are labelled, mapped, and separate from submission", () => {
+  const { api, data } = fresh(); const html = api.bookSearchV2(data, "book-search", {});
+  assert.equal((html.match(/data-search-history-select/g) || []).length, 5);
+  for (const tag of html.match(/<button[^>]*data-search-history-select[^>]*>/g) || []) {
+    assert.match(tag, /aria-label="回填搜索记录 /);
+    assert.match(tag, /data-control-key="search-results\.control\.button\.history-select-/);
+    assert.doesNotMatch(tag, /data-search-submit/);
+  }
+  assert.match(html, /data-search-history-toggle="expand"[^>]*aria-label="展开全部搜索记录"/);
+});
+
 test("R3a submit has accessible name and exact focus return", () => {
   const { api, data } = fresh(); const html = api.bookSearchV2(data, "search-results", {});
   assert.match(html, /data-book-search-submit[^>]*aria-label="提交搜索"[^>]*data-restore-focus=/);
@@ -59,6 +70,9 @@ test("R3a runtime wires close retry and stable result selection to owner", () =>
   assert.match(runtimeSource, /querySelectorAll\("\[data-search-close\]"\)/);
   assert.match(runtimeSource, /bookSearchOwner\?\.executeRetry/);
   assert.match(runtimeSource, /querySelectorAll\("\[data-search-result-id\]\[data-route='book-detail'\]"\)/);
+  assert.match(runtimeSource, /querySelectorAll\("\[data-search-history-select\]"\)/);
+  assert.match(runtimeSource, /type: "SELECT_HISTORY"/);
+  assert.match(runtimeSource, /\[data-book-search-input\].*focus/);
 });
 
 test("R3a every primary control has an accessible label source", () => {

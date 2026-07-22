@@ -11041,11 +11041,9 @@
       case "settings":
         return mainTabSettings(data, appState);
       case "book-search":
-        return bookSearchScreen(data, appState);
       case "search-home":
-        return bookSearchScreen(data, withAppState(appState, { bookSearchPhase: "before" }));
       case "search-results":
-        throw new Error("search-results route is FROZEN to bookSearchV2 (d2-bookshelf-discover-renderers.js)");
+        throw new Error(route + " route is FROZEN to bookSearchV2 (d2-bookshelf-discover-renderers.js)");
       case "search-loading":
       case "search-empty":
       case "search-error":
@@ -13237,6 +13235,56 @@
 
     screenHost.querySelectorAll("[data-search-submit], [data-book-search-submit]").forEach((button) => {
       button.addEventListener("click", () => submitBookSearch(button));
+    });
+
+    const syncBookSearchHistory = () => {
+      const state = bookSearchOwner?.getState?.();
+      if (!state) return;
+      appState.bookSearchHistory = Array.isArray(state?.history) ? state.history.slice() : [];
+      appState.bookSearchHistoryExpanded = Boolean(state?.historyExpanded);
+    };
+
+    screenHost.querySelectorAll("[data-search-history-select]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const query = String(button.getAttribute("data-search-query") || "").trim();
+        if (!query) return;
+        bookSearchOwner?.dispatch?.({ type: "SELECT_HISTORY", value: query, focusReturnKey: button.getAttribute("data-control-key") || null });
+        appState.bookSearchQuery = query;
+        appState.bookSearchPhase = "before";
+        syncBookSearchHistory();
+        renderCurrentRoute();
+        window.requestAnimationFrame(() => {
+          screenHost.querySelector("[data-book-search-input]")?.focus?.({ preventScroll: true });
+        });
+      });
+    });
+
+    screenHost.querySelectorAll("[data-search-history-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const expanded = button.getAttribute("data-search-history-toggle") === "expand";
+        bookSearchOwner?.dispatch?.({ type: "SET_HISTORY_EXPANDED", expanded });
+        appState.bookSearchHistoryExpanded = expanded;
+        syncBookSearchHistory();
+        renderCurrentRoute();
+        window.requestAnimationFrame(() => {
+          screenHost.querySelector("[data-search-history-toggle]")?.focus?.({ preventScroll: true });
+        });
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-search-clear-history]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bookSearchOwner?.dispatch?.({ type: "CLEAR_HISTORY", focusReturnKey: button.getAttribute("data-control-key") || null });
+        appState.bookSearchHistory = [];
+        appState.bookSearchHistoryExpanded = false;
+        renderCurrentRoute();
+        window.requestAnimationFrame(() => {
+          screenHost.querySelector("[data-book-search-input]")?.focus?.({ preventScroll: true });
+        });
+      });
     });
 
     screenHost.querySelectorAll("[data-search-reset]").forEach((button) => {

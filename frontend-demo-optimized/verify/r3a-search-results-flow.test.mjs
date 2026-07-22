@@ -22,6 +22,25 @@ test("R2b query updates are owned and clear old errors", () => {
   assert.equal(owner.getState().query, "长夜"); assert.equal(owner.getState().error, null);
 });
 
+test("R2b selecting a search record only fills the owned query and never starts a request", () => {
+  const owner = fresh();
+  owner.dispatch({ type: "SELECT_HISTORY", value: "诡秘之主", focusReturnKey: "history-select-mystery-lord" });
+  const state = owner.getState();
+  assert.equal(state.query, "诡秘之主");
+  assert.equal(state.phase, "before");
+  assert.equal(state.pending, null);
+  assert.equal(state.focusReturnKey, "history-select-mystery-lord");
+});
+
+test("R2b history toggles and clearing use the same canonical owner", () => {
+  const owner = fresh();
+  owner.dispatch({ type: "SET_HISTORY_EXPANDED", expanded: true });
+  assert.equal(owner.getState().historyExpanded, true);
+  owner.dispatch({ type: "CLEAR_HISTORY" });
+  assert.deepEqual([...owner.getState().history], []);
+  assert.equal(owner.getState().historyExpanded, false);
+});
+
 test("R2b result selection accepts only stable book IDs", () => {
   const owner = fresh(); owner.dispatch({ type: "SELECT_RESULT", resultId: "three-body", focusReturnKey: "result-three-body" });
   assert.equal(owner.getState().selectedResultId, "three-body"); assert.equal(owner.getState().focusReturnKey, "result-three-body");
