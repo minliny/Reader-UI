@@ -20,10 +20,10 @@ function fresh() {
 }
 function values(html, attr) { return [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((match) => match[1]); }
 
-test("R2a search family declares exactly 67 mapped business controls", () => {
+test("R2a search family declares exactly 53 mapped business controls after history simplification", () => {
   const sandbox = { module: { exports: {} }, window: {} }; new vm.Script(declarationSource).runInNewContext(sandbox);
   const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "search-results-action");
-  assert.equal(rows.length, 67); assert.equal(new Set(rows.map((row) => row.controlKey)).size, 67);
+  assert.equal(rows.length, 53); assert.equal(new Set(rows.map((row) => row.controlKey)).size, 53);
   assert.ok(rows.every((row) => row.mappingStatus === "mapped" && row.actionKey === row.settingsKey && row.instanceKey === null));
 });
 
@@ -68,24 +68,21 @@ test("R3a initial Search routes stamp stable controls without Compact or Fold va
   const { api, data } = fresh();
   for (const route of ["search-home", "book-search"]) {
     const html = api.bookSearchV2(data, route, {});
-    assert.equal(values(html, "data-control-key").length, 18);
-    assert.equal(new Set(values(html, "data-control-key")).size, 18);
+    assert.equal(values(html, "data-control-key").length, 17);
+    assert.equal(new Set(values(html, "data-control-key")).size, 17);
   }
   assert.doesNotMatch(rendererSource, /compact-landscape|foldable|data-viewport="compact"|data-viewport="fold"/i);
 });
 
-test("R3a search history is five collapsed records plus five-more, or ten expanded records plus collapse", () => {
+test("R3a search history exposes at most five records with no expand or collapse control", () => {
   const { api, data } = fresh();
-  const collapsed = api.bookSearchV2(data, "book-search", { bookSearchHistoryExpanded: false });
-  const expanded = api.bookSearchV2(data, "book-search", { bookSearchHistoryExpanded: true });
+  const rendered = api.bookSearchV2(data, "book-search", {});
   const cleared = api.bookSearchV2(data, "book-search", { bookSearchHistory: [] });
-  assert.equal((collapsed.match(/data-search-history-select/g) || []).length, 5);
-  assert.match(collapsed, />5 条更多<\/button>/);
-  assert.equal((expanded.match(/data-search-history-select/g) || []).length, 10);
-  assert.match(expanded, />收起<\/button>/);
+  assert.equal((rendered.match(/data-search-history-select/g) || []).length, 5);
+  assert.doesNotMatch(rendered, /data-search-history-toggle|条更多|>收起<\/button>/);
   assert.equal((cleared.match(/data-search-history-select/g) || []).length, 0);
-  assert.doesNotMatch(cleared, /条更多|>收起<\/button>/);
-  assert.doesNotMatch(collapsed, /data-search-history-select[^>]*data-search-submit/);
+  assert.doesNotMatch(cleared, /data-search-history-toggle|条更多|>收起<\/button>/);
+  assert.doesNotMatch(rendered, /data-search-history-select[^>]*data-search-submit/);
 });
 
 test("R3a Phone and Tablet reuse identical primary control keys", () => {

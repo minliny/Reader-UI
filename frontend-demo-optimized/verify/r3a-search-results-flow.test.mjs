@@ -32,13 +32,11 @@ test("R2b selecting a search record only fills the owned query and never starts 
   assert.equal(state.focusReturnKey, "history-select-mystery-lord");
 });
 
-test("R2b history toggles and clearing use the same canonical owner", () => {
+test("R2b history is capped at five records and clearing uses the canonical owner", () => {
   const owner = fresh();
-  owner.dispatch({ type: "SET_HISTORY_EXPANDED", expanded: true });
-  assert.equal(owner.getState().historyExpanded, true);
+  assert.equal(owner.getState().history.length, 5);
   owner.dispatch({ type: "CLEAR_HISTORY" });
   assert.deepEqual([...owner.getState().history], []);
-  assert.equal(owner.getState().historyExpanded, false);
 });
 
 test("R2b result selection accepts only stable book IDs", () => {

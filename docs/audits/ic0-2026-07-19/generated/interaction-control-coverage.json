@@ -36,13 +36,13 @@
   "canonicalRoutes": 260,
   "directVariantCases": 190,
   "aliasCases": 76,
-  "semanticControls": 3806,
+  "semanticControls": 3847,
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
-    "count": 3806,
-    "withUiEvent": 2353,
-    "withRawMotionHints": 3717,
-    "rawMotionHintOccurrences": 7134,
+    "count": 3847,
+    "withUiEvent": 2408,
+    "withRawMotionHints": 3757,
+    "rawMotionHintOccurrences": 7210,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -95,8 +95,8 @@
       "tab.item.switch",
       "toggle.switch"
     ],
-    "withCanonicalMotionIds": 3699,
-    "canonicalMotionIdOccurrences": 7236,
+    "withCanonicalMotionIds": 3739,
+    "canonicalMotionIdOccurrences": 7312,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -153,21 +153,21 @@
       "toggle.switch"
     ],
     "withRawMotionHintsButNoCanonicalMotionId": 18,
-    "missingAccessibleNames": 20,
+    "missingAccessibleNames": 21,
     "canonicalControlIds": 0,
     "joinedControls": 0,
-    "unjoinedControls": 3806,
+    "unjoinedControls": 3847,
     "byTag": {
       "article": 349,
-      "button": 3333,
+      "button": 3373,
       "i": 28,
-      "input": 49,
+      "input": 50,
       "select": 13,
       "span": 33,
       "textarea": 1
     },
     "byRole": {
-      "button": 3404,
+      "button": 3444,
       "checkbox": 1,
       "combobox": 13,
       "option": 263,
@@ -175,15 +175,15 @@
       "slider": 42,
       "switch": 44,
       "tab": 4,
-      "textbox": 27
+      "textbox": 28
     },
     "byJoinStatus": {
-      "unjoined-no-stable-key": 3806
+      "unjoined-no-stable-key": 3847
     },
     "byRuntimeFamily": {
       "discover": 778,
-      "import": 43,
-      "library": 403,
+      "import": 82,
+      "library": 405,
       "onboarding": 8,
       "reader": 1189,
       "rss": 417,
@@ -195,11 +195,11 @@
       "web-auth": 11
     },
     "gapCodes": {
-      "IC0_ACCESSIBLE_LABEL_MISSING": 20,
-      "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 107,
-      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3806,
-      "IC0_RAW_MOTION_HINT_UNRESOLVED": 89,
-      "IC0_UI_EVENT_UNRESOLVED": 1453
+      "IC0_ACCESSIBLE_LABEL_MISSING": 21,
+      "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 108,
+      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3847,
+      "IC0_RAW_MOTION_HINT_UNRESOLVED": 90,
+      "IC0_UI_EVENT_UNRESOLVED": 1439
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -387,7 +387,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "book-detail",
-          "renderSha256": "d44da7ee278b3b159ebce94b7fb96d7f588bdce6bd4b43e841029057ba4dc2d7",
+          "renderSha256": "47628ba14ee5c4bf1e1a6d621cc43d43b5b2f5608b1592a35c5a0754aeea353c",
           "count": 2,
           "cases": [
             {
@@ -435,7 +435,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "source-management",
-          "renderSha256": "5e8574ae266ab793b0691f45b1398b217c4e0cf21fe574865f70f4e259ea7af8",
+          "renderSha256": "3249937da06816629c0740bd04d8d0097f4600e2e54a62f86ea652e6a8f3478c",
           "count": 2,
           "cases": [
             {
@@ -476,7 +476,7 @@
       ]
     }
   },
-  "inventorySha256": "6c34f586406fe9e6b87e4ca088b346ebfb02f5c5fd8ac121bb97458efeba7cf2",
+  "inventorySha256": "2118267d4c6f4a18dac9618a27c3db2af0b524d803b03304f868c738bf37f311",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -487,7 +487,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d0d548052a345b6fb067abb2f63d7ce255b77df8d3a1ddfb72c6ae99f9d9c4e8"
+      "renderSha256": "545a717d021da07e4a0e4eace1a279b6be95157c1a149b4d64e64885cea1a3cc"
     },
     {
       "routeId": "bookshelf-empty",
@@ -498,7 +498,7 @@
       "pageState": "shelf-empty",
       "semanticControls": 20,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "95bbf5de15cba6383489bb3a22315f9e5234a66c227d532ce943bd0a92873532"
+      "renderSha256": "4a438232656a33f4d1c8cf9feaee5a8585225b35c7b06acfea6103ed6e440152"
     },
     {
       "routeId": "bookshelf-cover-mode",
@@ -509,7 +509,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "9753432796daa95b569a488e70876bd14e9f0a261db5283d0fa403734a6545a1"
+      "renderSha256": "3b8bfc78ebb1d332ea04f22b7565daee6943736046df3f68ebebd3d998741c5e"
     },
     {
       "routeId": "bookshelf-list-mode",
@@ -520,7 +520,7 @@
       "pageState": "default",
       "semanticControls": 40,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "96f52fb96c494aca67d2fd277dbdad7a994006bcbc6bc58546ea2b181e3c61be"
+      "renderSha256": "f27d387418b66e76ea1d99fa65e4d72eaa93092db4f2f24eb77f27f6dc8b8327"
     },
     {
       "routeId": "bookshelf-book-more-menu",
@@ -531,7 +531,7 @@
       "pageState": "default",
       "semanticControls": 38,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "74600b94a2f36524f40b5299f79185e922c0ccb89e9e787271301b6eb6195e2e"
+      "renderSha256": "c0c392a39abff831f10bc1c7122aa09c009b092a5fe72afdbb6afc5ef616e2a2"
     },
     {
       "routeId": "bookshelf-group-management",
@@ -564,7 +564,7 @@
       "pageState": "default",
       "semanticControls": 50,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3de0c040305d20082a2d8cb635657cba6cf9184dd2f2c7b333c78d223fd26d8f"
+      "renderSha256": "53774d5fb69b5cbbe2eb56bb71f17d4bacf656e193bbd29b0a0777bbce953bdc"
     },
     {
       "routeId": "group-management",
@@ -584,9 +584,9 @@
       "runtimeFamily": "import",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 6,
+      "semanticControls": 45,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "2e3c8bcb06400283c6c56c4a22c266845c2ace7db33ff8415f0d25f9b8af566c"
+      "renderSha256": "b2e7c2ddd4cba77ea8d06706af817d7aa9a5fe2a2bb0d1e522683acad7a8921a"
     },
     {
       "routeId": "book-search",
@@ -595,9 +595,9 @@
       "runtimeFamily": "library",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 16,
+      "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "604f2ddd821f09d318769d5f228a944930490bd18f38a864038b4d97d56b3e22"
+      "renderSha256": "01fc575d897f5c9c5d6049a4024faa892826fc13de5a2f1bc77d6b5323f1fea2"
     },
     {
       "routeId": "search-home",
@@ -606,9 +606,9 @@
       "runtimeFamily": "library",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 16,
+      "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "604f2ddd821f09d318769d5f228a944930490bd18f38a864038b4d97d56b3e22"
+      "renderSha256": "2b5350a49a931216b1f80e5ff22ceded1c0600018b56d79a745c0996a5f78b32"
     },
     {
       "routeId": "search-results",
@@ -663,7 +663,7 @@
       "pageState": "loading",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d44da7ee278b3b159ebce94b7fb96d7f588bdce6bd4b43e841029057ba4dc2d7"
+      "renderSha256": "47628ba14ee5c4bf1e1a6d621cc43d43b5b2f5608b1592a35c5a0754aeea353c"
     },
     {
       "routeId": "book-detail",
@@ -674,7 +674,7 @@
       "pageState": "default",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d44da7ee278b3b159ebce94b7fb96d7f588bdce6bd4b43e841029057ba4dc2d7"
+      "renderSha256": "47628ba14ee5c4bf1e1a6d621cc43d43b5b2f5608b1592a35c5a0754aeea353c"
     },
     {
       "routeId": "book-detail-toc-preview",
@@ -685,7 +685,7 @@
       "pageState": "default",
       "semanticControls": 14,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "67c5702e51b91883086b9f3c3eb59f53063b88bb2adfc67cdf898c14fab6216d"
+      "renderSha256": "eb9be2220f57d6bbed98989715c2f247f7cd64ead547d5a4d5cedc450de5475d"
     },
     {
       "routeId": "book-directory",
@@ -1554,7 +1554,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 5,
-      "renderSha256": "3f4e9b43ce834952e3548a5e3ebe366e6f5b0d3a66c4ed66be343ce4f71436de"
+      "renderSha256": "9facd99eb2714489e0292e4d52c1ad00027d216078871c07885e13a3cb839114"
     },
     {
       "routeId": "settings-developer",
@@ -1620,7 +1620,7 @@
       "pageState": "default",
       "semanticControls": 12,
       "suspectedNonSemanticControls": 3,
-      "renderSha256": "c04b41d58d4a9ff63549aea4b1238f3eb808dca8955d998be0921f9d28474112"
+      "renderSha256": "2162da8e95c48894a68caaadd7271afd3bfa401b4fbff220073f00f4c46afb36"
     },
     {
       "routeId": "restore-scopes",
@@ -1675,7 +1675,7 @@
       "pageState": "default",
       "semanticControls": 23,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5e8574ae266ab793b0691f45b1398b217c4e0cf21fe574865f70f4e259ea7af8"
+      "renderSha256": "3249937da06816629c0740bd04d8d0097f4600e2e54a62f86ea652e6a8f3478c"
     },
     {
       "routeId": "source-management",
@@ -1686,7 +1686,7 @@
       "pageState": "source-unavailable",
       "semanticControls": 23,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5e8574ae266ab793b0691f45b1398b217c4e0cf21fe574865f70f4e259ea7af8"
+      "renderSha256": "3249937da06816629c0740bd04d8d0097f4600e2e54a62f86ea652e6a8f3478c"
     },
     {
       "routeId": "source-import-options",

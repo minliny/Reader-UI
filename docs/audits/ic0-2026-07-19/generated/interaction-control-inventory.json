@@ -30,7 +30,7 @@
       "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
       "frontend-demo-optimized/render-runtime.js"
     ],
-    "rendererSourcesSha256": "16dec9904d4d229ccadddfc98bdacb8d33e267219ad4ab205b7c354be3a99d56"
+    "rendererSourcesSha256": "3527746f455df685eff7954cca57c29b572f8bae36ffd254e859da8c4e696372"
   },
   "identityBoundary": {
     "canonicalControlIdAvailable": false,
@@ -1366,27 +1366,27 @@
       "domTag": "button",
       "role": "button",
       "label": "本地书导入导入本地文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"local-import\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate",
         "dropdown.option.select"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate",
         "dropdown.option.select"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:8aa75200974b21cb284d",
+      "candidateKey": "candidate:b51596c880ea965874fc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -1837,25 +1837,25 @@
       "domTag": "button",
       "role": "button",
       "label": "导入本地书添加本机文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section > section[data-slot=\"bookshelfEmpty\"]:nth-of-type(2) > div.fd-bookshelf-empty-actions:nth-of-type(2) > button[data-route=\"local-import\"]:nth-of-type(2)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section > section[data-slot=\"bookshelfEmpty\"]:nth-of-type(2) > div.fd-bookshelf-empty-actions:nth-of-type(2) > button[data-local-import-open]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "empty-local-import"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:bd5e5f5fcc2d2d0858ed",
+      "candidateKey": "candidate:72f14a450e88f1a5b385",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -2041,27 +2041,27 @@
       "domTag": "button",
       "role": "button",
       "label": "本地书导入导入本地文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"local-import\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate",
         "dropdown.option.select"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate",
         "dropdown.option.select"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:10e51db4abdda3650aa2",
+      "candidateKey": "candidate:97de0798a57ef2ddfd91",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -3561,27 +3561,27 @@
       "domTag": "button",
       "role": "button",
       "label": "本地书导入导入本地文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"local-import\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate",
         "dropdown.option.select"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate",
         "dropdown.option.select"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:7481c7ae40301e00c515",
+      "candidateKey": "candidate:21ad87bb41d8bba59e6f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -5081,27 +5081,27 @@
       "domTag": "button",
       "role": "button",
       "label": "本地书导入导入本地文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"local-import\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate",
         "dropdown.option.select"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate",
         "dropdown.option.select"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c01046174c28771059aa",
+      "candidateKey": "candidate:c1e17a95aa1253a82dfc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -6471,27 +6471,27 @@
       "domTag": "button",
       "role": "button",
       "label": "本地书导入导入本地文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"local-import\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate",
         "dropdown.option.select"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate",
         "dropdown.option.select"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c3b898b6f81fc52db673",
+      "candidateKey": "candidate:086d06792fbf5f4ff47b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -9173,27 +9173,27 @@
       "domTag": "button",
       "role": "button",
       "label": "本地书导入导入本地文件到书架",
-      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-route=\"local-import\"]:nth-of-type(3)",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer] > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
       "dataAttributes": {
-        "data-route": "local-import"
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
       },
-      "uiEvent": "route.push",
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.push",
         "button.activate",
         "dropdown.option.select"
       ],
       "canonicalMotionIds": [
-        "app.route.push.forward",
         "button.activate",
         "dropdown.option.select"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:85ae651158ca0c141f10",
+      "candidateKey": "candidate:90f9c6a8eea94e2b6f80",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -9835,24 +9835,97 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
-      "uiEvent": "route.pop",
+      "label": "搜索",
+      "selector": "main[data-shell=\"MainTabShell\"] > section[data-slot=\"appTopBar\"] > div.rsk-top-actions > button[data-top-action=\"search\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-top-action": "search"
+      },
+      "uiEvent": null,
       "rawMotionHints": [
-        "app.route.pop",
         "button.activate"
       ],
       "canonicalMotionIds": [
-        "app.route.pop.backward",
         "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:cc6cd8b267ae301d1df0",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "更多",
+      "selector": "main[data-shell=\"MainTabShell\"] > section[data-slot=\"appTopBar\"] > div.rsk-top-actions > button[data-top-action=\"more\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-top-action": "more"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:70693e8981f96ad3838b",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 长夜余火",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-continue-card:nth-of-type(1) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "爱潜水的乌贼",
+        "data-book-chapter": "第 32 章 雨夜",
+        "data-book-cover": "",
+        "data-book-title": "长夜余火",
+        "data-cover-src": "./covers/long-night.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:96b0d3fc7c0c39397c12",
+      "candidateKey": "candidate:ea3557691b411bd78711",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -9866,100 +9939,264 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "选择",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-import-card:nth-of-type(1) > button",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:55431f48980232f4d7f4",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "local-import",
-      "resolvedRouteId": "local-import",
-      "aliasFor": null,
-      "runtimeFamily": "import",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "更改",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-management-list:nth-of-type(2) > article:nth-of-type(1) > button",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:83176151f184ee251005",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "local-import",
-      "resolvedRouteId": "local-import",
-      "aliasFor": null,
-      "runtimeFamily": "import",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "更改",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-management-list:nth-of-type(2) > article:nth-of-type(2) > button",
-      "dataAttributes": {},
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:aa97dd4dcfeb740a308b",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "local-import",
-      "resolvedRouteId": "local-import",
-      "aliasFor": null,
-      "runtimeFamily": "import",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "取消",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-route=\"bookshelf\"]:nth-of-type(1)",
+      "label": "阅读",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-continue-card:nth-of-type(1) > button[data-route=\"immersive-reading\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-route": "bookshelf"
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.actionToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.actionToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:7aee9e9261754971d400",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "封面视图",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section.fd-section-head:nth-of-type(1) > span.fd-bookshelf-view-actions > button[data-bookshelf-view-button=\"cover\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-bookshelf-view-button": "cover"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "bookshelf.view.switch",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "bookshelf.view.switch",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:1265c65ab960e0812ec8",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "列表视图",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section.fd-section-head:nth-of-type(1) > span.fd-bookshelf-view-actions > button[data-bookshelf-view-button=\"list\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-bookshelf-view-button": "list"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "bookshelf.view.switch",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "bookshelf.view.switch",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:0e6d2846eca44629d4f4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "书架筛选：全部，最近更新，全部",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section.fd-section-head:nth-of-type(1) > span.fd-bookshelf-view-actions > button[data-bookshelf-filter-toggle]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-bookshelf-filter-toggle": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate",
+        "dropdown.trigger.press"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "dropdown.trigger.press"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:e5496373d1459ee7645b",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "书架搜索",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section.fd-section-head:nth-of-type(1) > span.fd-bookshelf-view-actions > button[data-bookshelf-search-toggle]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-bookshelf-search-toggle": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:b1d97470b5d959ed6b34",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "书架显示设置",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section.fd-section-head:nth-of-type(1) > span.fd-bookshelf-view-actions > button[data-route=\"bookshelf-search-settings\"]:nth-of-type(5)",
+      "dataAttributes": {
+        "data-route": "bookshelf-search-settings",
+        "data-settings-scope": "bookshelf-display"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "state.content.replace"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "state.content.replace"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:7f4d957a878dd8a9b8d5",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 长夜余火",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(1) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "爱潜水的乌贼",
+        "data-book-chapter": "第 32 章 雨夜",
+        "data-book-cover": "",
+        "data-book-id": "long-night",
+        "data-book-title": "长夜余火",
+        "data-cover-src": "./covers/long-night.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:56cd52b999c83ff9229f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "长夜余火更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(1) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "爱潜水的乌贼",
+        "data-book-chapter": "第 32 章 雨夜",
+        "data-book-focus-index": "0",
+        "data-book-id": "long-night",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "长夜余火",
+        "data-cover-src": "./covers/long-night.png",
+        "data-route": "bookshelf-book-more-menu"
       },
       "uiEvent": "route.push",
       "rawMotionHints": [
@@ -9975,7 +10212,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:d0e5b2e939d5c410edd9",
+      "candidateKey": "candidate:742eb9710262ae2ae00f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -9989,10 +10226,1005 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "确认导入",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-local-import-confirm]:nth-of-type(2)",
+      "label": "打开 诡秘之主",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(2) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-local-import-confirm": ""
+        "data-book-author": "爱潜水的乌贼",
+        "data-book-chapter": "第 1426 章",
+        "data-book-cover": "",
+        "data-book-id": "mystery-lord",
+        "data-book-title": "诡秘之主",
+        "data-cover-src": "./covers/mystery-lord.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:9e0b0c31b25ed6631f96",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "诡秘之主更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(2) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "爱潜水的乌贼",
+        "data-book-chapter": "第 1426 章",
+        "data-book-focus-index": "1",
+        "data-book-id": "mystery-lord",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "诡秘之主",
+        "data-cover-src": "./covers/mystery-lord.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:362e2d71a81f94d2fe3c",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 明朝那些事儿",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(3) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "当年明月",
+        "data-book-chapter": "第 218 章",
+        "data-book-cover": "",
+        "data-book-id": "ming-dynasty-stories",
+        "data-book-title": "明朝那些事儿",
+        "data-cover-src": "./covers/bright-moon.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:785ce2bf524cacb2ed40",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "明朝那些事儿更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(3) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "当年明月",
+        "data-book-chapter": "第 218 章",
+        "data-book-focus-index": "2",
+        "data-book-id": "ming-dynasty-stories",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "明朝那些事儿",
+        "data-cover-src": "./covers/bright-moon.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:35b80d25733096cf739a",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 三体",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(4) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "刘慈欣",
+        "data-book-chapter": "65%",
+        "data-book-cover": "",
+        "data-book-id": "three-body",
+        "data-book-title": "三体",
+        "data-cover-src": "./covers/three-body.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:801898e0c46e410c9f73",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "三体更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(4) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "刘慈欣",
+        "data-book-chapter": "65%",
+        "data-book-focus-index": "3",
+        "data-book-id": "three-body",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "三体",
+        "data-cover-src": "./covers/three-body.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:72ac5b96ded0d71749fb",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 人间词话",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(5) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "王国维",
+        "data-book-chapter": "卷上 · 境界",
+        "data-book-cover": "",
+        "data-book-id": "renjian-cihua",
+        "data-book-title": "人间词话",
+        "data-cover-src": "./covers/renjian-cihua.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:b1501e37b68de5a4620f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "人间词话更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(5) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "王国维",
+        "data-book-chapter": "卷上 · 境界",
+        "data-book-focus-index": "4",
+        "data-book-id": "renjian-cihua",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "人间词话",
+        "data-cover-src": "./covers/renjian-cihua.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:034be8e43bb50055f010",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 Android 开发笔记",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(6) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "本地文档",
+        "data-book-chapter": "Compose Shell 结构",
+        "data-book-cover": "",
+        "data-book-id": "android-notes",
+        "data-book-title": "Android 开发笔记",
+        "data-cover-src": "./covers/android-notes.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:8670c38e4d079256a8ce",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "Android 开发笔记更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(6) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "本地文档",
+        "data-book-chapter": "Compose Shell 结构",
+        "data-book-focus-index": "5",
+        "data-book-id": "android-notes",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "Android 开发笔记",
+        "data-cover-src": "./covers/android-notes.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:b699444874056456e232",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 旧日回响",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(7) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "离线书库",
+        "data-book-chapter": "第 18 章",
+        "data-book-cover": "",
+        "data-book-id": "old-day-echoes",
+        "data-book-title": "旧日回响",
+        "data-cover-src": "./covers/long-night.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:c7a5bcc2a9ad5f7b2ec4",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "旧日回响更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(7) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "离线书库",
+        "data-book-chapter": "第 18 章",
+        "data-book-focus-index": "6",
+        "data-book-id": "old-day-echoes",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "旧日回响",
+        "data-cover-src": "./covers/long-night.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:d17f0f643552221242ec",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 群星之间",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(8) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "本地导入",
+        "data-book-chapter": "第 7 章",
+        "data-book-cover": "",
+        "data-book-id": "among-stars",
+        "data-book-title": "群星之间",
+        "data-cover-src": "./covers/three-body.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:a282f9a89eb684af9a31",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "群星之间更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"true\"]:nth-of-type(8) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "本地导入",
+        "data-book-chapter": "第 7 章",
+        "data-book-focus-index": "7",
+        "data-book-id": "among-stars",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "群星之间",
+        "data-cover-src": "./covers/three-body.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:fbb6288d7e4ac2c3b303",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 灯塔与雾",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(9) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "书源同步",
+        "data-book-chapter": "第 51 章",
+        "data-book-cover": "",
+        "data-book-id": "lighthouse-and-fog",
+        "data-book-title": "灯塔与雾",
+        "data-cover-src": "./covers/bright-moon.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:fe6df5c6546ab3d747e1",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "灯塔与雾更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(9) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "书源同步",
+        "data-book-chapter": "第 51 章",
+        "data-book-focus-index": "8",
+        "data-book-id": "lighthouse-and-fog",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "灯塔与雾",
+        "data-cover-src": "./covers/bright-moon.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:87cdf7a27f7766681580",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 纸上城市",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(10) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "默认分组",
+        "data-book-chapter": "第 12 章",
+        "data-book-cover": "",
+        "data-book-id": "paper-city",
+        "data-book-title": "纸上城市",
+        "data-cover-src": "./covers/mystery-lord.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:1529796cc3e06bc952a8",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "纸上城市更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(10) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "默认分组",
+        "data-book-chapter": "第 12 章",
+        "data-book-focus-index": "9",
+        "data-book-id": "paper-city",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "纸上城市",
+        "data-cover-src": "./covers/mystery-lord.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:0d5bd2bf343350583fd6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "打开 长标题测试：这本书的名字很长需要两行截断",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(11) > button[data-route=\"immersive-reading\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-book-author": "排版样本",
+        "data-book-chapter": "很长的章节名称需要保持单行省略",
+        "data-book-cover": "",
+        "data-book-id": "long-title-layout-sample",
+        "data-book-title": "长标题测试：这本书的名字很长需要两行截断",
+        "data-cover-src": "./covers/renjian-cihua.png",
+        "data-route": "immersive-reading"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "reader.entry.coverToImmersive"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:74925b4b4b0960c223d3",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "长标题测试：这本书的名字很长需要两行截断更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-bookshelf-shelf-section:nth-of-type(2) > section[data-book-grid]:nth-of-type(2) > article[data-book-cached=\"false\"]:nth-of-type(11) > button[data-route=\"bookshelf-book-more-menu\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-book-author": "排版样本",
+        "data-book-chapter": "很长的章节名称需要保持单行省略",
+        "data-book-focus-index": "10",
+        "data-book-id": "long-title-layout-sample",
+        "data-book-list-detail": "",
+        "data-book-more": "",
+        "data-book-title": "长标题测试：这本书的名字很长需要两行截断",
+        "data-cover-src": "./covers/renjian-cihua.png",
+        "data-route": "bookshelf-book-more-menu"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:8938788935d6bbdad989",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "关闭书架更多操作",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer]:nth-of-type(1) > button[data-close-bookshelf-more]",
+      "dataAttributes": {
+        "data-close-bookshelf-more": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate",
+        "dropdown.menu.collapse"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "dropdown.menu.collapse"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:7787040386ba4e15634f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "批量管理选择多本书后移动或删除",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer]:nth-of-type(1) > section.fd-bookshelf-more-menu > button[data-route=\"book-batch-management\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-dialog-initial-focus": "more-batch",
+        "data-route": "book-batch-management"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:fddae8868f430f15d9f1",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "分组管理编辑书架分组与归属",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer]:nth-of-type(1) > section.fd-bookshelf-more-menu > button[data-route=\"group-management\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-route": "group-management"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:a3558dc6e2bd2c0f5acd",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "本地书导入导入本地文件到书架",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer]:nth-of-type(1) > section.fd-bookshelf-more-menu > button[data-local-import-open]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-local-import-open": "",
+        "data-local-import-origin": "top-more"
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:6739aa22c5ef4fad625f",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "书架设置显示、排序与缓存策略",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-bookshelf-more-layer]:nth-of-type(1) > section.fd-bookshelf-more-menu > button[data-route=\"bookshelf-search-settings\"]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-route": "bookshelf-search-settings"
+      },
+      "uiEvent": "route.push",
+      "rawMotionHints": [
+        "app.route.push",
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "canonicalMotionIds": [
+        "app.route.push.forward",
+        "button.activate",
+        "dropdown.option.select"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:00b9b1fbc5ec059ff19a",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "关闭导入本地书籍弹窗",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-local-import-layer]:nth-of-type(2) > button[data-local-import-cancel]",
+      "dataAttributes": {
+        "data-local-import-cancel": ""
       },
       "uiEvent": null,
       "rawMotionHints": [
@@ -10007,7 +11239,269 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:f5f3a378f192036805f9",
+      "candidateKey": "candidate:4b3eaeba7d9172c95f86",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "选择本地书文件",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-local-import-layer]:nth-of-type(2) > section.fd-local-import-dialog > section.fd-local-import-picker-body > button[data-local-import-choose]",
+      "dataAttributes": {
+        "data-local-import-choose": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:a7fbed5946283f40df35",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "input",
+      "role": "textbox",
+      "label": "",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-local-import-layer]:nth-of-type(2) > section.fd-local-import-dialog > section.fd-local-import-picker-body > input[data-local-import-file-input]",
+      "dataAttributes": {
+        "data-local-import-file-input": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [],
+      "canonicalMotionIds": [],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED",
+        "IC0_RAW_MOTION_HINT_UNRESOLVED",
+        "IC0_CANONICAL_MOTION_ID_UNRESOLVED",
+        "IC0_ACCESSIBLE_LABEL_MISSING"
+      ],
+      "candidateKey": "candidate:1d7a808d2d873cc327fb",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "选择文件",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-local-import-layer]:nth-of-type(2) > section.fd-local-import-dialog > footer > button[data-dialog-initial-focus=\"import-choose-files\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-dialog-initial-focus": "import-choose-files",
+        "data-local-import-choose": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:65d500e34cba4032b7c6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "取消",
+      "selector": "main[data-shell=\"MainTabShell\"] > div[data-slot=\"stateHost\"]:nth-of-type(2) > section[data-local-import-layer]:nth-of-type(2) > section.fd-local-import-dialog > footer > button[data-local-import-cancel]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-local-import-cancel": ""
+      },
+      "uiEvent": null,
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
+        "IC0_UI_EVENT_UNRESOLVED"
+      ],
+      "candidateKey": "candidate:6b74e1ade365ed73350e",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "书架",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"bookshelf\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-nav-type": "bookshelf"
+      },
+      "uiEvent": "tab.item.select",
+      "rawMotionHints": [
+        "button.activate",
+        "tab.item.select",
+        "tab.item.switch"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "tab.item.select",
+        "tab.item.switch"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:c93ec64ef2be76479cf9",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "发现",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"discover\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-nav-type": "discover"
+      },
+      "uiEvent": "tab.item.select",
+      "rawMotionHints": [
+        "button.activate",
+        "tab.item.switch"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "tab.item.switch"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:007ee537c1d0a8abd5a5",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "RSS",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"rss\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-nav-type": "rss"
+      },
+      "uiEvent": "tab.item.select",
+      "rawMotionHints": [
+        "button.activate",
+        "tab.item.switch"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "tab.item.switch"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:7daeabe922950bb1cc2b",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "local-import",
+      "resolvedRouteId": "local-import",
+      "aliasFor": null,
+      "runtimeFamily": "import",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "设置",
+      "selector": "main[data-shell=\"MainTabShell\"] > nav[data-slot=\"mainNav\"] > button[data-nav-type=\"settings\"]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-nav-type": "settings"
+      },
+      "uiEvent": "tab.item.select",
+      "rawMotionHints": [
+        "button.activate",
+        "tab.item.switch"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "tab.item.switch"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:84e875aa4ef96d19a230",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10022,8 +11516,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.back",
+        "data-control-key": "search-results.control.button.back@book-search.before",
+        "data-entity-key": "search-results.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -10038,7 +11538,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:dfbe85bfc791ef2cdc96",
+      "candidateKey": "candidate:639b2113a695c10e3332",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10053,12 +11553,17 @@
       "domTag": "input",
       "role": "searchbox",
       "label": "搜索书名、作者或关键词",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > input[data-book-search-input]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > input[data-ui-event=\"input\\.search\"]",
       "dataAttributes": {
         "data-book-search-input": "",
-        "data-open-keyboard": ""
+        "data-control-id": "search-results.control.book-search.before.input.query-input-primary",
+        "data-control-key": "search-results.control.input.query-input-primary@book-search.before",
+        "data-entity-key": "search-results.control.input.query-input-primary",
+        "data-open-keyboard": "",
+        "data-settings-key": "query-input-primary",
+        "data-ui-event": "input.search"
       },
-      "uiEvent": null,
+      "uiEvent": "input.search",
       "rawMotionHints": [
         "input.focus"
       ],
@@ -10068,10 +11573,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:081e32f2d6afbe8dbc1b",
+      "candidateKey": "candidate:e2b2f65e13fe2e289832",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10086,12 +11590,18 @@
       "domTag": "button",
       "role": "button",
       "label": "",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > button[data-book-search-submit]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > button[data-ui-event=\"search\\.submit\"]",
       "dataAttributes": {
         "data-book-search-submit": "",
-        "data-search-submit": ""
+        "data-control-id": "search-results.control.book-search.before.button.search-submit",
+        "data-control-key": "search-results.control.button.search-submit@book-search.before",
+        "data-entity-key": "search-results.control.button.search-submit",
+        "data-restore-focus": "search-results.control.button.search-submit@book-search.before",
+        "data-search-submit": "",
+        "data-settings-key": "search-submit",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": null,
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -10104,10 +11614,9 @@
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_ACCESSIBLE_LABEL_MISSING"
       ],
-      "candidateKey": "candidate:66268ce8e4d3bcecd3b1",
+      "candidateKey": "candidate:075b2904399bd585154c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10121,235 +11630,30 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "长夜",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"长夜\"]:nth-of-type(1)",
+      "label": "回填搜索记录 诡秘之主",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-search-query": "长夜",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:4bb5d15e26f22505d1b6",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "book-search",
-      "resolvedRouteId": "book-search",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "诡秘",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"诡秘\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-search-query": "诡秘",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:22f527e12c4f04f5a2ec",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "book-search",
-      "resolvedRouteId": "book-search",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "三体",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"三体\"]:nth-of-type(3)",
-      "dataAttributes": {
-        "data-search-query": "三体",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:1f865104c0b0ae2437b0",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "book-search",
-      "resolvedRouteId": "book-search",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "明朝那些事",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"明朝那些事\"]:nth-of-type(4)",
-      "dataAttributes": {
-        "data-search-query": "明朝那些事",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:b44f69234598ff14a084",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "book-search",
-      "resolvedRouteId": "book-search",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "清除历史",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-book-search-clear-history]:nth-of-type(5)",
-      "dataAttributes": {
-        "data-book-search-clear-history": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:fc3948c78a4809b8ef41",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "book-search",
-      "resolvedRouteId": "book-search",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "长夜余火",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"长夜余火\"]:nth-of-type(1)",
-      "dataAttributes": {
-        "data-search-query": "长夜余火",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:eb8e79bad8045731d953",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "book-search",
-      "resolvedRouteId": "book-search",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "诡秘之主",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"诡秘之主\"]:nth-of-type(2)",
-      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.history-select-mystery-lord",
+        "data-control-key": "search-results.control.button.history-select-mystery-lord@book-search.before",
+        "data-entity-key": "search-results.control.button.history-select-mystery-lord",
+        "data-search-history-select": "",
         "data-search-query": "诡秘之主",
-        "data-search-submit": ""
+        "data-settings-key": "history-select-mystery-lord",
+        "data-ui-event": "chip.item.select"
       },
-      "uiEvent": null,
+      "uiEvent": "chip.item.select",
       "rawMotionHints": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:a844d7caf70c3ae25164",
+      "candidateKey": "candidate:fe56b5b5e44025a9af6e",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10363,28 +11667,30 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "三体",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"三体\"]:nth-of-type(3)",
+      "label": "回填搜索记录 三体",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.history-select-three-body",
+        "data-control-key": "search-results.control.button.history-select-three-body@book-search.before",
+        "data-entity-key": "search-results.control.button.history-select-three-body",
+        "data-search-history-select": "",
         "data-search-query": "三体",
-        "data-search-submit": ""
+        "data-settings-key": "history-select-three-body",
+        "data-ui-event": "chip.item.select"
       },
-      "uiEvent": null,
+      "uiEvent": "chip.item.select",
       "rawMotionHints": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1c75af024e4a7192792c",
+      "candidateKey": "candidate:c6151ff7ebee02566101",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10398,13 +11704,166 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "明朝那些事儿",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"明朝那些事儿\"]:nth-of-type(4)",
+      "label": "回填搜索记录 斗破苍穹",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-search-query": "明朝那些事儿",
-        "data-search-submit": ""
+        "data-control-id": "search-results.control.book-search.before.button.history-select-battle-through-the-heavens",
+        "data-control-key": "search-results.control.button.history-select-battle-through-the-heavens@book-search.before",
+        "data-entity-key": "search-results.control.button.history-select-battle-through-the-heavens",
+        "data-search-history-select": "",
+        "data-search-query": "斗破苍穹",
+        "data-settings-key": "history-select-battle-through-the-heavens",
+        "data-ui-event": "chip.item.select"
       },
-      "uiEvent": null,
+      "uiEvent": "chip.item.select",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:03ec27775e937cc9c832",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "回填搜索记录 明朝那些事儿",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.history-select-ming-dynasty-things",
+        "data-control-key": "search-results.control.button.history-select-ming-dynasty-things@book-search.before",
+        "data-entity-key": "search-results.control.button.history-select-ming-dynasty-things",
+        "data-search-history-select": "",
+        "data-search-query": "明朝那些事儿",
+        "data-settings-key": "history-select-ming-dynasty-things",
+        "data-ui-event": "chip.item.select"
+      },
+      "uiEvent": "chip.item.select",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:032327828e5cdb4c19f3",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "回填搜索记录 长夜余火",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(5)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.history-select-long-night",
+        "data-control-key": "search-results.control.button.history-select-long-night@book-search.before",
+        "data-entity-key": "search-results.control.button.history-select-long-night",
+        "data-search-history-select": "",
+        "data-search-query": "长夜余火",
+        "data-settings-key": "history-select-long-night",
+        "data-ui-event": "chip.item.select"
+      },
+      "uiEvent": "chip.item.select",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:1d33de4d28b7789a6745",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "清除搜索记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"search\\.clear\"]:nth-of-type(6)",
+      "dataAttributes": {
+        "data-book-search-clear-history": "",
+        "data-control-id": "search-results.control.book-search.before.button.history-clear",
+        "data-control-key": "search-results.control.button.history-clear@book-search.before",
+        "data-entity-key": "search-results.control.button.history-clear",
+        "data-settings-key": "history-clear",
+        "data-ui-event": "search.clear"
+      },
+      "uiEvent": "search.clear",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:23e3a4fb8e3de5af61ea",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 长夜余火",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.suggestion-select-long-night",
+        "data-control-key": "search-results.control.button.suggestion-select-long-night@book-search.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-long-night",
+        "data-restore-focus": "search-results.control.button.suggestion-select-long-night@book-search.before",
+        "data-search-query": "长夜余火",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-long-night",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -10416,10 +11875,129 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:912a60fc2a6a511460fa",
+      "candidateKey": "candidate:cfe2fb0053478de8279a",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 诡秘之主",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.suggestion-select-mystery-lord",
+        "data-control-key": "search-results.control.button.suggestion-select-mystery-lord@book-search.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-mystery-lord",
+        "data-restore-focus": "search-results.control.button.suggestion-select-mystery-lord@book-search.before",
+        "data-search-query": "诡秘之主",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-mystery-lord",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
+      "rawMotionHints": [
+        "button.activate",
+        "input.submit"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "input.submit"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:0ae4065232fd0d9077d6",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 三体",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.suggestion-select-three-body",
+        "data-control-key": "search-results.control.button.suggestion-select-three-body@book-search.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-three-body",
+        "data-restore-focus": "search-results.control.button.suggestion-select-three-body@book-search.before",
+        "data-search-query": "三体",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-three-body",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
+      "rawMotionHints": [
+        "button.activate",
+        "input.submit"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "input.submit"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:d3448c8296038a1b05c5",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "book-search",
+      "resolvedRouteId": "book-search",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 明朝那些事儿",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.book-search.before.button.suggestion-select-ming-dynasty-things",
+        "data-control-key": "search-results.control.button.suggestion-select-ming-dynasty-things@book-search.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-ming-dynasty-things",
+        "data-restore-focus": "search-results.control.button.suggestion-select-ming-dynasty-things@book-search.before",
+        "data-search-query": "明朝那些事儿",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-ming-dynasty-things",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
+      "rawMotionHints": [
+        "button.activate",
+        "input.submit"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "input.submit"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:8d4a00feda5c93d07c8b",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10434,11 +12012,17 @@
       "domTag": "input",
       "role": "textbox",
       "label": "搜索书籍",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > label > input[data-keyboard-input]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > label > input[data-ui-event=\"input\\.search\"]",
       "dataAttributes": {
-        "data-keyboard-input": ""
+        "data-control-id": "search-results.control.book-search.before.input.query-input-keyboard",
+        "data-control-key": "search-results.control.input.query-input-keyboard@book-search.before",
+        "data-entity-key": "search-results.control.input.query-input-keyboard",
+        "data-keyboard-input": "",
+        "data-search-query-id": "book-catalog-primary",
+        "data-settings-key": "query-input-keyboard",
+        "data-ui-event": "input.search"
       },
-      "uiEvent": null,
+      "uiEvent": "input.search",
       "rawMotionHints": [
         "input.focus-blur"
       ],
@@ -10448,10 +12032,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:46df639aef9481c5a316",
+      "candidateKey": "candidate:bdcde4095eec5e4e93a9",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10465,12 +12048,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "完成",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > button[data-close-keyboard]",
+      "label": "关闭搜索键盘",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > button[data-ui-event=\"overlay\\.keyboard\\.open\"]",
       "dataAttributes": {
-        "data-close-keyboard": ""
+        "data-close-keyboard": "",
+        "data-control-id": "search-results.control.book-search.before.button.keyboard-close",
+        "data-control-key": "search-results.control.button.keyboard-close@book-search.before",
+        "data-entity-key": "search-results.control.button.keyboard-close",
+        "data-restore-focus": "search-results.control.button.keyboard-close@book-search.before",
+        "data-settings-key": "keyboard-close",
+        "data-ui-event": "overlay.keyboard.open"
       },
-      "uiEvent": null,
+      "uiEvent": "overlay.keyboard.open",
       "rawMotionHints": [
         "button.activate",
         "input.blur"
@@ -10482,10 +12071,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:496617c3b2dfdff7ee44",
+      "candidateKey": "candidate:91bde1407e3227e6c721",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10500,13 +12088,19 @@
       "domTag": "button",
       "role": "button",
       "label": "开始搜索",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-book-search-submit]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-ui-event=\"search\\.submit\"]:nth-of-type(1)",
       "dataAttributes": {
         "data-book-search-submit": "",
+        "data-control-id": "search-results.control.book-search.before.button.search-submit-bottom",
+        "data-control-key": "search-results.control.button.search-submit-bottom@book-search.before",
+        "data-entity-key": "search-results.control.button.search-submit-bottom",
         "data-primary-search-submit": "",
-        "data-search-submit": ""
+        "data-restore-focus": "search-results.control.button.search-submit-bottom@book-search.before",
+        "data-search-submit": "",
+        "data-settings-key": "search-submit-bottom",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": null,
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -10518,10 +12112,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:7c62922adef206bc85f9",
+      "candidateKey": "candidate:f117cd08c15cd62833ef",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10535,12 +12128,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "清除历史",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-book-search-clear-history]:nth-of-type(2)",
+      "label": "清除搜索记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-ui-event=\"search\\.clear\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-book-search-clear-history": ""
+        "data-book-search-clear-history": "",
+        "data-control-id": "search-results.control.book-search.before.button.history-clear-bottom",
+        "data-control-key": "search-results.control.button.history-clear-bottom@book-search.before",
+        "data-entity-key": "search-results.control.button.history-clear-bottom",
+        "data-settings-key": "history-clear-bottom",
+        "data-ui-event": "search.clear"
       },
-      "uiEvent": null,
+      "uiEvent": "search.clear",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -10550,10 +12148,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:1ebf00a2b3188ff16a11",
+      "candidateKey": "candidate:7d148afffbbaa80f00fc",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10568,8 +12165,14 @@
       "domTag": "button",
       "role": "button",
       "label": "返回",
-      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button",
-      "dataAttributes": {},
+      "selector": "main[data-shell=\"LibraryShell\"] > section[data-slot=\"backTopBar\"] > button[data-ui-event=\"route\\.pop\"]",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.back",
+        "data-control-key": "search-results.control.button.back@search-home.before",
+        "data-entity-key": "search-results.control.button.back",
+        "data-settings-key": "back",
+        "data-ui-event": "route.pop"
+      },
       "uiEvent": "route.pop",
       "rawMotionHints": [
         "app.route.pop",
@@ -10584,7 +12187,7 @@
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:79608d624e3987d35cbe",
+      "candidateKey": "candidate:b691af41709a69ae24e7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10599,12 +12202,17 @@
       "domTag": "input",
       "role": "searchbox",
       "label": "搜索书名、作者或关键词",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > input[data-book-search-input]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > input[data-ui-event=\"input\\.search\"]",
       "dataAttributes": {
         "data-book-search-input": "",
-        "data-open-keyboard": ""
+        "data-control-id": "search-results.control.search-home.before.input.query-input-primary",
+        "data-control-key": "search-results.control.input.query-input-primary@search-home.before",
+        "data-entity-key": "search-results.control.input.query-input-primary",
+        "data-open-keyboard": "",
+        "data-settings-key": "query-input-primary",
+        "data-ui-event": "input.search"
       },
-      "uiEvent": null,
+      "uiEvent": "input.search",
       "rawMotionHints": [
         "input.focus"
       ],
@@ -10614,10 +12222,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:cdb6ba72a8468ce4d603",
+      "candidateKey": "candidate:970f446366f81070cd75",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10632,12 +12239,18 @@
       "domTag": "button",
       "role": "button",
       "label": "",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > button[data-book-search-submit]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section.fd-search-bar:nth-of-type(1) > button[data-ui-event=\"search\\.submit\"]",
       "dataAttributes": {
         "data-book-search-submit": "",
-        "data-search-submit": ""
+        "data-control-id": "search-results.control.search-home.before.button.search-submit",
+        "data-control-key": "search-results.control.button.search-submit@search-home.before",
+        "data-entity-key": "search-results.control.button.search-submit",
+        "data-restore-focus": "search-results.control.button.search-submit@search-home.before",
+        "data-search-submit": "",
+        "data-settings-key": "search-submit",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": null,
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -10650,10 +12263,9 @@
       "semanticStatus": "semantic-control",
       "gapCodes": [
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED",
         "IC0_ACCESSIBLE_LABEL_MISSING"
       ],
-      "candidateKey": "candidate:3134ad3fe0ba3ea3446b",
+      "candidateKey": "candidate:1beea2b558f7f7eccd9f",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10667,235 +12279,30 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "长夜",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"长夜\"]:nth-of-type(1)",
+      "label": "回填搜索记录 诡秘之主",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(1)",
       "dataAttributes": {
-        "data-search-query": "长夜",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:e4b8e4531161e85806d5",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "search-home",
-      "resolvedRouteId": "search-home",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "诡秘",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"诡秘\"]:nth-of-type(2)",
-      "dataAttributes": {
-        "data-search-query": "诡秘",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:2264abff2c69a6ead97b",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "search-home",
-      "resolvedRouteId": "search-home",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "三体",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"三体\"]:nth-of-type(3)",
-      "dataAttributes": {
-        "data-search-query": "三体",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:aab444d7e7cebf541c1d",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "search-home",
-      "resolvedRouteId": "search-home",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "明朝那些事",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-search-query=\"明朝那些事\"]:nth-of-type(4)",
-      "dataAttributes": {
-        "data-search-query": "明朝那些事",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:fc4a89127dc15855801a",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "search-home",
-      "resolvedRouteId": "search-home",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "清除历史",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-book-search-clear-history]:nth-of-type(5)",
-      "dataAttributes": {
-        "data-book-search-clear-history": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate"
-      ],
-      "canonicalMotionIds": [
-        "button.activate"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:f46d2d9c7b976d57d84a",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "search-home",
-      "resolvedRouteId": "search-home",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "长夜余火",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"长夜余火\"]:nth-of-type(1)",
-      "dataAttributes": {
-        "data-search-query": "长夜余火",
-        "data-search-submit": ""
-      },
-      "uiEvent": null,
-      "rawMotionHints": [
-        "button.activate",
-        "input.submit"
-      ],
-      "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
-      ],
-      "joinStatus": "unjoined-no-stable-key",
-      "semanticStatus": "semantic-control",
-      "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
-      ],
-      "candidateKey": "candidate:7570501c532eb4664461",
-      "candidateKeyStatus": "noncanonical-audit-candidate"
-    },
-    {
-      "routeId": "search-home",
-      "resolvedRouteId": "search-home",
-      "aliasFor": null,
-      "runtimeFamily": "library",
-      "variantId": "default",
-      "pageState": "default",
-      "componentType": null,
-      "componentInstanceId": null,
-      "domTag": "button",
-      "role": "button",
-      "label": "诡秘之主",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"诡秘之主\"]:nth-of-type(2)",
-      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.history-select-mystery-lord",
+        "data-control-key": "search-results.control.button.history-select-mystery-lord@search-home.before",
+        "data-entity-key": "search-results.control.button.history-select-mystery-lord",
+        "data-search-history-select": "",
         "data-search-query": "诡秘之主",
-        "data-search-submit": ""
+        "data-settings-key": "history-select-mystery-lord",
+        "data-ui-event": "chip.item.select"
       },
-      "uiEvent": null,
+      "uiEvent": "chip.item.select",
       "rawMotionHints": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:0950728f9c12669c545c",
+      "candidateKey": "candidate:0393ec259a358cd323ef",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10909,28 +12316,30 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "三体",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"三体\"]:nth-of-type(3)",
+      "label": "回填搜索记录 三体",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(2)",
       "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.history-select-three-body",
+        "data-control-key": "search-results.control.button.history-select-three-body@search-home.before",
+        "data-entity-key": "search-results.control.button.history-select-three-body",
+        "data-search-history-select": "",
         "data-search-query": "三体",
-        "data-search-submit": ""
+        "data-settings-key": "history-select-three-body",
+        "data-ui-event": "chip.item.select"
       },
-      "uiEvent": null,
+      "uiEvent": "chip.item.select",
       "rawMotionHints": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "canonicalMotionIds": [
-        "button.activate",
-        "input.submit"
+        "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:3d61300a61cb5486ca79",
+      "candidateKey": "candidate:200a2f0089dcd29b713a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10944,13 +12353,166 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "明朝那些事儿",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-search-query=\"明朝那些事儿\"]:nth-of-type(4)",
+      "label": "回填搜索记录 斗破苍穹",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(3)",
       "dataAttributes": {
-        "data-search-query": "明朝那些事儿",
-        "data-search-submit": ""
+        "data-control-id": "search-results.control.search-home.before.button.history-select-battle-through-the-heavens",
+        "data-control-key": "search-results.control.button.history-select-battle-through-the-heavens@search-home.before",
+        "data-entity-key": "search-results.control.button.history-select-battle-through-the-heavens",
+        "data-search-history-select": "",
+        "data-search-query": "斗破苍穹",
+        "data-settings-key": "history-select-battle-through-the-heavens",
+        "data-ui-event": "chip.item.select"
       },
-      "uiEvent": null,
+      "uiEvent": "chip.item.select",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:7eea4038b606d30c282d",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "回填搜索记录 明朝那些事儿",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.history-select-ming-dynasty-things",
+        "data-control-key": "search-results.control.button.history-select-ming-dynasty-things@search-home.before",
+        "data-entity-key": "search-results.control.button.history-select-ming-dynasty-things",
+        "data-search-history-select": "",
+        "data-search-query": "明朝那些事儿",
+        "data-settings-key": "history-select-ming-dynasty-things",
+        "data-ui-event": "chip.item.select"
+      },
+      "uiEvent": "chip.item.select",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:6e111748ed149894174a",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "回填搜索记录 长夜余火",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"chip\\.item\\.select\"]:nth-of-type(5)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.history-select-long-night",
+        "data-control-key": "search-results.control.button.history-select-long-night@search-home.before",
+        "data-entity-key": "search-results.control.button.history-select-long-night",
+        "data-search-history-select": "",
+        "data-search-query": "长夜余火",
+        "data-settings-key": "history-select-long-night",
+        "data-ui-event": "chip.item.select"
+      },
+      "uiEvent": "chip.item.select",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:a28110a5b9f0bc6890d0",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "清除搜索记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-history:nth-of-type(1) > div > button[data-ui-event=\"search\\.clear\"]:nth-of-type(6)",
+      "dataAttributes": {
+        "data-book-search-clear-history": "",
+        "data-control-id": "search-results.control.search-home.before.button.history-clear",
+        "data-control-key": "search-results.control.button.history-clear@search-home.before",
+        "data-entity-key": "search-results.control.button.history-clear",
+        "data-settings-key": "history-clear",
+        "data-ui-event": "search.clear"
+      },
+      "uiEvent": "search.clear",
+      "rawMotionHints": [
+        "button.activate"
+      ],
+      "canonicalMotionIds": [
+        "button.activate"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:eff7a1d8a9b71560f5ea",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 长夜余火",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(1)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.suggestion-select-long-night",
+        "data-control-key": "search-results.control.button.suggestion-select-long-night@search-home.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-long-night",
+        "data-restore-focus": "search-results.control.button.suggestion-select-long-night@search-home.before",
+        "data-search-query": "长夜余火",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-long-night",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -10962,10 +12524,129 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:dfa743b9be956fc33767",
+      "candidateKey": "candidate:d3e2ad2a143e81c57c85",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 诡秘之主",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(2)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.suggestion-select-mystery-lord",
+        "data-control-key": "search-results.control.button.suggestion-select-mystery-lord@search-home.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-mystery-lord",
+        "data-restore-focus": "search-results.control.button.suggestion-select-mystery-lord@search-home.before",
+        "data-search-query": "诡秘之主",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-mystery-lord",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
+      "rawMotionHints": [
+        "button.activate",
+        "input.submit"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "input.submit"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:bd615a0a7af1a2ea493c",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 三体",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(3)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.suggestion-select-three-body",
+        "data-control-key": "search-results.control.button.suggestion-select-three-body@search-home.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-three-body",
+        "data-restore-focus": "search-results.control.button.suggestion-select-three-body@search-home.before",
+        "data-search-query": "三体",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-three-body",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
+      "rawMotionHints": [
+        "button.activate",
+        "input.submit"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "input.submit"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:3d65c29de35c0547e505",
+      "candidateKeyStatus": "noncanonical-audit-candidate"
+    },
+    {
+      "routeId": "search-home",
+      "resolvedRouteId": "search-home",
+      "aliasFor": null,
+      "runtimeFamily": "library",
+      "variantId": "default",
+      "pageState": "default",
+      "componentType": null,
+      "componentInstanceId": null,
+      "domTag": "button",
+      "role": "button",
+      "label": "搜索热门关键词 明朝那些事儿",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-search-state=\"before\"]:nth-of-type(2) > section.fd-search-suggestions:nth-of-type(2) > div > button[data-ui-event=\"search\\.submit\"]:nth-of-type(4)",
+      "dataAttributes": {
+        "data-control-id": "search-results.control.search-home.before.button.suggestion-select-ming-dynasty-things",
+        "data-control-key": "search-results.control.button.suggestion-select-ming-dynasty-things@search-home.before",
+        "data-entity-key": "search-results.control.button.suggestion-select-ming-dynasty-things",
+        "data-restore-focus": "search-results.control.button.suggestion-select-ming-dynasty-things@search-home.before",
+        "data-search-query": "明朝那些事儿",
+        "data-search-submit": "",
+        "data-settings-key": "suggestion-select-ming-dynasty-things",
+        "data-ui-event": "search.submit"
+      },
+      "uiEvent": "search.submit",
+      "rawMotionHints": [
+        "button.activate",
+        "input.submit"
+      ],
+      "canonicalMotionIds": [
+        "button.activate",
+        "input.submit"
+      ],
+      "joinStatus": "unjoined-no-stable-key",
+      "semanticStatus": "semantic-control",
+      "gapCodes": [
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
+      ],
+      "candidateKey": "candidate:453ace55cccd499ba34a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -10980,11 +12661,17 @@
       "domTag": "input",
       "role": "textbox",
       "label": "搜索书籍",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > label > input[data-keyboard-input]",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > label > input[data-ui-event=\"input\\.search\"]",
       "dataAttributes": {
-        "data-keyboard-input": ""
+        "data-control-id": "search-results.control.search-home.before.input.query-input-keyboard",
+        "data-control-key": "search-results.control.input.query-input-keyboard@search-home.before",
+        "data-entity-key": "search-results.control.input.query-input-keyboard",
+        "data-keyboard-input": "",
+        "data-search-query-id": "book-catalog-primary",
+        "data-settings-key": "query-input-keyboard",
+        "data-ui-event": "input.search"
       },
-      "uiEvent": null,
+      "uiEvent": "input.search",
       "rawMotionHints": [
         "input.focus-blur"
       ],
@@ -10994,10 +12681,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:ead10bce2260af048873",
+      "candidateKey": "candidate:030083119537fa3b9be0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11011,12 +12697,18 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "完成",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > button[data-close-keyboard]",
+      "label": "关闭搜索键盘",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"contentRegion\"]:nth-of-type(1) > section[data-keyboard-host]:nth-of-type(3) > div.fd-keyboard-panel > button[data-ui-event=\"overlay\\.keyboard\\.open\"]",
       "dataAttributes": {
-        "data-close-keyboard": ""
+        "data-close-keyboard": "",
+        "data-control-id": "search-results.control.search-home.before.button.keyboard-close",
+        "data-control-key": "search-results.control.button.keyboard-close@search-home.before",
+        "data-entity-key": "search-results.control.button.keyboard-close",
+        "data-restore-focus": "search-results.control.button.keyboard-close@search-home.before",
+        "data-settings-key": "keyboard-close",
+        "data-ui-event": "overlay.keyboard.open"
       },
-      "uiEvent": null,
+      "uiEvent": "overlay.keyboard.open",
       "rawMotionHints": [
         "button.activate",
         "input.blur"
@@ -11028,10 +12720,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:064c8b3e7929fa2c1647",
+      "candidateKey": "candidate:53a560bd71d27a0b6258",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11046,13 +12737,19 @@
       "domTag": "button",
       "role": "button",
       "label": "开始搜索",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-book-search-submit]:nth-of-type(1)",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-ui-event=\"search\\.submit\"]:nth-of-type(1)",
       "dataAttributes": {
         "data-book-search-submit": "",
+        "data-control-id": "search-results.control.search-home.before.button.search-submit-bottom",
+        "data-control-key": "search-results.control.button.search-submit-bottom@search-home.before",
+        "data-entity-key": "search-results.control.button.search-submit-bottom",
         "data-primary-search-submit": "",
-        "data-search-submit": ""
+        "data-restore-focus": "search-results.control.button.search-submit-bottom@search-home.before",
+        "data-search-submit": "",
+        "data-settings-key": "search-submit-bottom",
+        "data-ui-event": "search.submit"
       },
-      "uiEvent": null,
+      "uiEvent": "search.submit",
       "rawMotionHints": [
         "button.activate",
         "input.submit"
@@ -11064,10 +12761,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:4c0261ac4805d3634088",
+      "candidateKey": "candidate:c2e643a6d5c401a084aa",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -11081,12 +12777,17 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "清除历史",
-      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-book-search-clear-history]:nth-of-type(2)",
+      "label": "清除搜索记录",
+      "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"bottomActionHost\"]:nth-of-type(2) > div.fd-fixed-action-row > button[data-ui-event=\"search\\.clear\"]:nth-of-type(2)",
       "dataAttributes": {
-        "data-book-search-clear-history": ""
+        "data-book-search-clear-history": "",
+        "data-control-id": "search-results.control.search-home.before.button.history-clear-bottom",
+        "data-control-key": "search-results.control.button.history-clear-bottom@search-home.before",
+        "data-entity-key": "search-results.control.button.history-clear-bottom",
+        "data-settings-key": "history-clear-bottom",
+        "data-ui-event": "search.clear"
       },
-      "uiEvent": null,
+      "uiEvent": "search.clear",
       "rawMotionHints": [
         "button.activate"
       ],
@@ -11096,10 +12797,9 @@
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
       "gapCodes": [
-        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
-        "IC0_UI_EVENT_UNRESOLVED"
+        "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY"
       ],
-      "candidateKey": "candidate:dd2ffbbff978db17fd70",
+      "candidateKey": "candidate:2a6d77822705b6f43ac6",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -12312,7 +14012,7 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "删除",
+      "label": "移除",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"dialogHost\"]:nth-of-type(4) > section[data-demo-dialog] > div > button[data-book-detail-remove-confirm]:nth-of-type(2)",
       "dataAttributes": {
         "data-book-detail-remove-confirm": ""
@@ -12330,7 +14030,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:3c47e946ca53d1ec3749",
+      "candidateKey": "candidate:5524fae3cfd3c87afdda",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -12823,7 +14523,7 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "删除",
+      "label": "移除",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"dialogHost\"]:nth-of-type(4) > section[data-demo-dialog] > div > button[data-book-detail-remove-confirm]:nth-of-type(2)",
       "dataAttributes": {
         "data-book-detail-remove-confirm": ""
@@ -12841,7 +14541,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:79e74144ce2324c94c71",
+      "candidateKey": "candidate:4d89167afa638a7e287a",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -13298,7 +14998,7 @@
       "componentInstanceId": null,
       "domTag": "button",
       "role": "button",
-      "label": "删除",
+      "label": "移除",
       "selector": "main[data-shell=\"LibraryShell\"] > div[data-slot=\"dialogHost\"]:nth-of-type(4) > section[data-demo-dialog] > div > button[data-book-detail-remove-confirm]:nth-of-type(2)",
       "dataAttributes": {
         "data-book-detail-remove-confirm": ""
@@ -13316,7 +15016,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:fd16993662202067aa70",
+      "candidateKey": "candidate:26325f13b7bbfa2037a0",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57420,7 +59120,7 @@
       "domTag": "button",
       "role": "button",
       "label": "跟随系统",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > button.is-active:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(1) > button.is-active",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -57435,7 +59135,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:9b3f861e78fd91989af4",
+      "candidateKey": "candidate:33237a149e390a716280",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57450,7 +59150,7 @@
       "domTag": "button",
       "role": "button",
       "label": "浅色",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > button:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(2) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -57465,7 +59165,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:18ca73cf01deb03a6fb9",
+      "candidateKey": "candidate:e46509b6879ec176681c",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -57480,7 +59180,7 @@
       "domTag": "button",
       "role": "button",
       "label": "深色",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > button:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(1) > article.fd-setting-row:nth-of-type(1) > em.fd-settings-row-side > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(3) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -57495,7 +59195,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:7405fdb199e2a6143dd1",
+      "candidateKey": "candidate:e14fcdd77d96d68b35ac",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59945,16 +61645,14 @@
       "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"webdav-test-connection\"]:nth-of-type(1)",
       "dataAttributes": {
         "data-restore-focus": "webdav-test-connection",
-        "data-settings-overlay": "dialog:webdav-test"
+        "data-webdav-config-action": "open-test"
       },
       "uiEvent": null,
       "rawMotionHints": [
-        "button.activate",
-        "overlay.dialog.enter/exit"
+        "button.activate"
       ],
       "canonicalMotionIds": [
-        "button.activate",
-        "overlay.dialog.enter-exit"
+        "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
@@ -59962,7 +61660,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:f6294d0514843eb6f9b2",
+      "candidateKey": "candidate:31d5d30f09f66ee05886",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -59980,16 +61678,14 @@
       "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section[data-slot=\"settingSection\"]:nth-of-type(2) > div.fd-settings-section-actions > button[data-restore-focus=\"webdav-save-config\"]:nth-of-type(2)",
       "dataAttributes": {
         "data-restore-focus": "webdav-save-config",
-        "data-settings-overlay": "dialog:webdav-save"
+        "data-webdav-config-action": "open-save"
       },
       "uiEvent": null,
       "rawMotionHints": [
-        "button.activate",
-        "overlay.dialog.enter/exit"
+        "button.activate"
       ],
       "canonicalMotionIds": [
-        "button.activate",
-        "overlay.dialog.enter-exit"
+        "button.activate"
       ],
       "joinStatus": "unjoined-no-stable-key",
       "semanticStatus": "semantic-control",
@@ -59997,7 +61693,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:58313bb5d2abbc7c6ef6",
+      "candidateKey": "candidate:90e31a2f46c191a7e4ca",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61065,7 +62761,7 @@
       "domTag": "button",
       "role": "button",
       "label": "全部",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button.is-active:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(1) > button.is-active",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61080,7 +62776,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:704e8dbcb586a82b1014",
+      "candidateKey": "candidate:bacc4c4dd94c74a6f9ee",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61095,7 +62791,7 @@
       "domTag": "button",
       "role": "button",
       "label": "启用",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(2) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61110,7 +62806,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:2a06ab73ed9f2c3d6988",
+      "candidateKey": "candidate:77902162ea57f29f8dd8",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61125,7 +62821,7 @@
       "domTag": "button",
       "role": "button",
       "label": "异常",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(3) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61140,7 +62836,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:27bbd3d4b40ba1bfbcf1",
+      "candidateKey": "candidate:03c86b9df19bb6d20ece",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61155,7 +62851,7 @@
       "domTag": "button",
       "role": "button",
       "label": "未检测",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(4)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(4) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61170,7 +62866,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:7a4d52e9e987764006c5",
+      "candidateKey": "candidate:32e86742b74717f31fd3",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61185,7 +62881,7 @@
       "domTag": "button",
       "role": "button",
       "label": "自定义",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(5)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(5) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61200,7 +62896,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:0220a850a05a38253629",
+      "candidateKey": "candidate:595a7253dd51874c2f81",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61759,7 +63455,7 @@
       "domTag": "button",
       "role": "button",
       "label": "全部",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button.is-active:nth-of-type(1)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(1) > button.is-active",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61774,7 +63470,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:842349c142f0d0247593",
+      "candidateKey": "candidate:3b416d6313222da5a8b7",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61789,7 +63485,7 @@
       "domTag": "button",
       "role": "button",
       "label": "启用",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(2)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(2) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61804,7 +63500,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:c812747cd8d690f744d0",
+      "candidateKey": "candidate:85a07c8fe02186973263",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61819,7 +63515,7 @@
       "domTag": "button",
       "role": "button",
       "label": "异常",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(3)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(3) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61834,7 +63530,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:6a83af284aa66804b64f",
+      "candidateKey": "candidate:5c010515ca403dfdc7db",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61849,7 +63545,7 @@
       "domTag": "button",
       "role": "button",
       "label": "未检测",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(4)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(4) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61864,7 +63560,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:4e69e3ab21c3772e2f87",
+      "candidateKey": "candidate:ac68e2193767eb1b3bce",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {
@@ -61879,7 +63575,7 @@
       "domTag": "button",
       "role": "button",
       "label": "自定义",
-      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > button:nth-of-type(5)",
+      "selector": "main[data-shell=\"SettingsShell\"] > div[data-slot=\"settingsContent\"]:nth-of-type(1) > section.fd-source-home > span.fd-settings-segment > span.fd-settings-segment-hit:nth-of-type(5) > button",
       "dataAttributes": {},
       "uiEvent": null,
       "rawMotionHints": [
@@ -61894,7 +63590,7 @@
         "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY",
         "IC0_UI_EVENT_UNRESOLVED"
       ],
-      "candidateKey": "candidate:9d24f2be9da35b2e6035",
+      "candidateKey": "candidate:a7b86be4f1e532cff627",
       "candidateKeyStatus": "noncanonical-audit-candidate"
     },
     {

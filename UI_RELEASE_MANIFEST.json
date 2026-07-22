@@ -30,6 +30,11 @@
       "sha256": "b1895f4fbcf527b89551c6cce12ba0a55e69e01460cd039e73e2149ba67bd717"
     },
     {
+      "path": "contracts/control-identity.schema.json",
+      "byteLength": 12992,
+      "sha256": "d3762a70691b4403614cd0015747e01b1419c00e800a2262c885ef0164ec3fbe"
+    },
+    {
       "path": "contracts/core-command.schema.json",
       "byteLength": 3226,
       "sha256": "fc07442efbf2486be4f1fb2a04d03b4f8a897959aa51fce2a03241477aba8d72"
@@ -226,8 +231,8 @@
     },
     {
       "path": "contracts/ui-event.schema.json",
-      "byteLength": 11167,
-      "sha256": "9a1b679244ffd4bcd7d7f7e78d9d3ef31f9720c9da1c2e28ed91d32621e98988"
+      "byteLength": 12182,
+      "sha256": "58ad9c72b22eef4d554a32e8ef3ea6466f398de91ffd211b89077600715c30c7"
     },
     {
       "path": "contracts/ui-state.schema.json",
@@ -921,13 +926,13 @@
     },
     {
       "path": "frontend-demo-optimized/fixture.js",
-      "byteLength": 22054,
-      "sha256": "5e19d9ec926cc0f30aaa77618396fe3f601f996a02e951d1713dcc1dba0e21fa"
+      "byteLength": 22628,
+      "sha256": "e160d0d6920cf65baf076b66f5920e37a9067720c78b9adfae2dc2c37b54eb36"
     },
     {
       "path": "frontend-demo-optimized/index.html",
-      "byteLength": 4270,
-      "sha256": "31b1e945c64d0fe28d41bed7d0e7566b10ff7338a098dedbf183c19d894b26a9"
+      "byteLength": 4395,
+      "sha256": "1655c15cc58836e4bd197018da2d850038f3ed2f03502bb4b6934a7773e7bdd1"
     },
     {
       "path": "frontend-demo-optimized/motion-contract-registry.js",
@@ -946,8 +951,8 @@
     },
     {
       "path": "frontend-demo-optimized/motion-scenario-harness.js",
-      "byteLength": 8683,
-      "sha256": "fb2aed7246050761e45eb21adfacb0602e399ccdf33a2854f550d194ae2385b0"
+      "byteLength": 8573,
+      "sha256": "edc4b2cee8db7a597db0519de782433877c1bc36e5365dc90996ab84f2a6e1c7"
     },
     {
       "path": "frontend-demo-optimized/motion-tokens.css",
@@ -961,18 +966,18 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 766751,
-      "sha256": "bb626c50992643dfafd191795ff64e33e02e580f437584c551c9abba02a74c1f"
+      "byteLength": 795033,
+      "sha256": "b46eb75206eb3a62ef4ee3cfddf1eca8ca434873751a1d3f7c28c2cdadd29139"
     },
     {
       "path": "frontend-demo-optimized/render.js",
-      "byteLength": 705,
-      "sha256": "df713fdb0c197883d525774232b073331fe6f5c257db86543ca2e82d8e32e321"
+      "byteLength": 442,
+      "sha256": "7ba1351ec2b19fc6453bc5722d8db31d38e8ea837f4bb50436e99cd127699f34"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
-      "byteLength": 121082,
-      "sha256": "96e61a199cd9073a7c9526ff83698de09cfe3943d6e7b42a8c45ec7bc7609ded"
+      "byteLength": 173712,
+      "sha256": "80f190db37f19f8fdebff1dafd13944b0ef79c4d94205c213cdd47076a158b85"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-rss-renderers.js",
@@ -981,8 +986,8 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
-      "byteLength": 113109,
-      "sha256": "7ac4a0305484f05e905f4039ec1ffd0d1c8f1110cc9f3debf04eae5f675bf36e"
+      "byteLength": 244862,
+      "sha256": "5f974d426d929d9b8f321054eb26489829268a932f7a19232ed9f950b4691a91"
     },
     {
       "path": "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
@@ -1016,8 +1021,8 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
-      "byteLength": 25649,
-      "sha256": "ccd211c0e29fa7dead33d764adff5ede5371dbd00ea5df3a1b05160884bd0f0e"
+      "byteLength": 24374,
+      "sha256": "700faec043fb87ed347e09df6f92bcf15171f1d869db5351ee8be0916cac3ffc"
     },
     {
       "path": "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
@@ -1041,33 +1046,33 @@
     },
     {
       "path": "frontend-demo-optimized/shared-shell-kit/kit.js",
-      "byteLength": 10649,
-      "sha256": "1f21f82bcfd1b7fb44107377ff4d6ce090920a4ec255c0e5bf08d1e6ac073f9e"
+      "byteLength": 10982,
+      "sha256": "1d9d5fe3bb7ab0b39777449280084d2747ac5a97c5f5889d0be2a374367eb39e"
     },
     {
       "path": "frontend-demo-optimized/styles.css",
-      "byteLength": 2014,
-      "sha256": "7ceaf9cb98586c9f2dcbdd8c14e43b7df8bffdcf1ea2fd2c3dee92d2f4f992db"
+      "byteLength": 1976,
+      "sha256": "eec3ab4536eb8215d81956721a58961b60f2888f10ae9cf9c935659f928dec71"
     },
     {
       "path": "frontend-demo-optimized/styles/00-foundation.css",
-      "byteLength": 32957,
-      "sha256": "4ab0bd3c7fc9928b99e54d959068c11299616b75221d95d3b14e090d99762476"
+      "byteLength": 33611,
+      "sha256": "c3459ae0e1a7b37ac7bb15195378f03706c41236af1618bdbed6dabf6b6e29ba"
     },
     {
       "path": "frontend-demo-optimized/styles/01-shell-layout.css",
-      "byteLength": 103112,
-      "sha256": "3d2e79606cc5767fce31644906e90f1672385749ff025f6765526e99776c04fa"
+      "byteLength": 102755,
+      "sha256": "a89cc46a96262d4277503e9d1d6f8906261bf95a017bd6dda19c05df5ce0029d"
     },
     {
       "path": "frontend-demo-optimized/styles/02a-reader-control.css",
-      "byteLength": 12591,
-      "sha256": "3b9e42c6fbae812a93182820afd4996e44e94aa98218fd170a52067c9ee75a1a"
+      "byteLength": 12599,
+      "sha256": "a252755e095e16bfc2d622fe3fd6b03a12e478e2fa327516ab6fbbdcf0e6388e"
     },
     {
       "path": "frontend-demo-optimized/styles/02b-reader-toc-module.css",
-      "byteLength": 12534,
-      "sha256": "27062ec3c67ecfb22675feb64d0c5a0699fffa3d327bc0393ee0530ee87d2c51"
+      "byteLength": 12392,
+      "sha256": "0b113ab657df1ac9182cc564e9eff787d3a957e3f5de4c0774b7247804d66470"
     },
     {
       "path": "frontend-demo-optimized/styles/02c-reader-auto-search.css",
@@ -1081,8 +1086,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/03a-reader-appearance.css",
-      "byteLength": 32787,
-      "sha256": "12a244aa2bf91f26be8b16108f121ecf36285f5db221d16454e90da495afdc52"
+      "byteLength": 32759,
+      "sha256": "14d3e26f071caae4bd0d5756948fe74aaefa79b678fc45517903b5cad156b884"
     },
     {
       "path": "frontend-demo-optimized/styles/03b-reader-settings.css",
@@ -1096,8 +1101,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/03d-reader-fullpage.css",
-      "byteLength": 52092,
-      "sha256": "fd85560785b6b4ee69e034f396dfead93a80ee6dd91a99bee3e08d9673e1ac06"
+      "byteLength": 52058,
+      "sha256": "bd47e1cf6e61abcedf506d6c65524a17f682c691ce17fadb83b476188df2411d"
     },
     {
       "path": "frontend-demo-optimized/styles/03e-reader-replace-page.css",
@@ -1106,18 +1111,18 @@
     },
     {
       "path": "frontend-demo-optimized/styles/04-settings-source.css",
-      "byteLength": 32785,
-      "sha256": "de14ce4d4e49662bc4df948ac65497bb6ceea0e761274341bda244ffe5384d21"
+      "byteLength": 37408,
+      "sha256": "9a58868677d819c67567df97bdbc682e9b12223a72ccf3f9302e9454cb81807a"
     },
     {
       "path": "frontend-demo-optimized/styles/05-flow-adaptive.css",
-      "byteLength": 38582,
-      "sha256": "1a2f8275e69f0e67afbc6b6f624648c6f090dc7b412dc3ac456eab3a9a25eac7"
+      "byteLength": 38410,
+      "sha256": "564b36b6ae2cf6b6ef76a2a69e06d5c8556688a37aab1b960a3f64a8740c4f76"
     },
     {
       "path": "frontend-demo-optimized/styles/06-responsive.css",
-      "byteLength": 40251,
-      "sha256": "472ed6a88762fc6136bb025894985e50371f5ba07a09302edd736612ccc1934a"
+      "byteLength": 36538,
+      "sha256": "948840ea6b57135361cdf3e581cb80eb3192251acaf727dab9a68064bf02eb23"
     },
     {
       "path": "frontend-demo-optimized/styles/07-control-primitives.css",
@@ -1128,6 +1133,26 @@
       "path": "frontend-demo-optimized/styles/08-developer-motion-settings.css",
       "byteLength": 2450,
       "sha256": "1ec4cdf7d459cdffece5dc743837d35a82077eafabf15490186a4990cf31f9d8"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/09-import-workflow.css",
+      "byteLength": 18219,
+      "sha256": "4e5ead67e3d935c889c9906289612a372d89bb4a49cec53db191c9a3c296dec9"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/10-settings-general-vc3.css",
+      "byteLength": 6922,
+      "sha256": "d435213f689fe5ffe286bd54ff21e47eaad66644f941c7eb7113045594772db9"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/11-webdav-config-vc3.css",
+      "byteLength": 649,
+      "sha256": "eab926cfc7229a2da3cb0e5e70214155852f58918258a092c6608083191dcdf1"
+    },
+    {
+      "path": "frontend-demo-optimized/styles/12-bookshelf-vc3.css",
+      "byteLength": 2296,
+      "sha256": "90ae3419531aef1c051058f6f1f66e65c5237db053b3d68a1b54b28c642e7954"
     },
     {
       "path": "frontend-demo-optimized/tokens.css",
@@ -1603,9 +1628,9 @@
   "groups": [
     {
       "name": "design-runtime",
-      "fileCount": 178,
-      "byteLength": 2972920,
-      "sha256": "756b17c17069b40256dc14e074f518b5e43e8f33be7a9d49b4b46c01292731ae",
+      "fileCount": 182,
+      "byteLength": 3213856,
+      "sha256": "87b9a651b8030d0c7b8e18a4944f185355a1b9db87ec20a43a65eb16338b6158",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1784,6 +1809,10 @@
         "frontend-demo-optimized/styles/06-responsive.css",
         "frontend-demo-optimized/styles/07-control-primitives.css",
         "frontend-demo-optimized/styles/08-developer-motion-settings.css",
+        "frontend-demo-optimized/styles/09-import-workflow.css",
+        "frontend-demo-optimized/styles/10-settings-general-vc3.css",
+        "frontend-demo-optimized/styles/11-webdav-config-vc3.css",
+        "frontend-demo-optimized/styles/12-bookshelf-vc3.css",
         "frontend-demo-optimized/tokens.css"
       ]
     },
@@ -1919,8 +1948,8 @@
     {
       "name": "primitive-abi",
       "fileCount": 6,
-      "byteLength": 75761,
-      "sha256": "2374dd3ee6c0e24e7e56e523e794d6be16d9fb16162b2575b247bc383822953f",
+      "byteLength": 76776,
+      "sha256": "fc8271cdd24659f7f460c39ebf032d4e006aa68f39eb9f6d0df49ad6abdc6ffe",
       "files": [
         "contracts/core-command.schema.json",
         "contracts/core-event.schema.json",
@@ -1964,12 +1993,13 @@
     },
     {
       "name": "schemas",
-      "fileCount": 28,
-      "byteLength": 311349,
-      "sha256": "426de4064926172165a068864f2eddafb25550fa137af9a88838d6cc01d4748d",
+      "fileCount": 29,
+      "byteLength": 325356,
+      "sha256": "b42c2f03a42b3e5c548770c1053d5c98ff5557275be5fcf2f62a634c997fdd7a",
       "files": [
         "contracts/appearance.schema.json",
         "contracts/content.schema.json",
+        "contracts/control-identity.schema.json",
         "contracts/core-command.schema.json",
         "contracts/core-event.schema.json",
         "contracts/design-delta.schema.json",
@@ -2082,9 +2112,9 @@
       "name": "ui-events",
       "source": "contracts/ui-event.schema.json",
       "jsonPointer": "/properties/type/enum",
-      "entryCount": 300,
+      "entryCount": 335,
       "encoding": "ordered-json-array-utf8-lf",
-      "sha256": "284e0d880c5f906aca100af69b5cdc1f458cef0865a325948f7b5ada67f9724a"
+      "sha256": "575affad74fc4c33162d50d160374a023d1f22448bd1d7599dc8486a124636c2"
     }
   ]
 }

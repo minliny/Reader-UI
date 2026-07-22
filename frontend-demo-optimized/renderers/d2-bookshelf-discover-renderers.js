@@ -1671,12 +1671,7 @@
     Object.freeze({ key: "three-body", value: "三体" }),
     Object.freeze({ key: "battle-through-the-heavens", value: "斗破苍穹" }),
     Object.freeze({ key: "ming-dynasty-things", value: "明朝那些事儿" }),
-    Object.freeze({ key: "long-night", value: "长夜余火" }),
-    Object.freeze({ key: "soul-land", value: "斗罗大陆" }),
-    Object.freeze({ key: "the-kings-avatar", value: "全职高手" }),
-    Object.freeze({ key: "heaven-officials-blessing", value: "天官赐福" }),
-    Object.freeze({ key: "perfect-world", value: "完美世界" }),
-    Object.freeze({ key: "a-record-of-a-mortals-journey", value: "凡人修仙传" })
+    Object.freeze({ key: "long-night", value: "长夜余火" })
   ]);
   var SEARCH_SUGGESTION_RECORDS = Object.freeze([
     Object.freeze({ key: "long-night", value: "长夜余火" }),
@@ -1693,8 +1688,6 @@
     ].concat(SEARCH_HISTORY_RECORDS.map(function (record) {
       return { route: route, state: "before", role: "button", settingsKey: `history-select-${record.key}`, uiEvent: "chip.item.select", label: `回填搜索记录 ${record.value}`, focusReturn: false };
     }), [
-      { route: route, state: "before-collapsed", role: "button", settingsKey: "history-expand", uiEvent: "dropdown.expand", label: "展开全部搜索记录", focusReturn: false },
-      { route: route, state: "before-expanded", role: "button", settingsKey: "history-collapse", uiEvent: "dropdown.collapse", label: "收起搜索记录", focusReturn: false },
       { route: route, state: "before", role: "button", settingsKey: "history-clear", uiEvent: "search.clear", label: "清除搜索记录", focusReturn: false }
     ], SEARCH_SUGGESTION_RECORDS.map(function (record) {
       return { route: route, state: "before", role: "button", settingsKey: `suggestion-select-${record.key}`, uiEvent: "search.submit", label: `搜索热门关键词 ${record.value}`, focusReturn: true };
@@ -1731,7 +1724,7 @@
     return {
       phase: "after", query: "三体", queryId: "book-catalog-primary",
       resultIds: SEARCH_RESULT_BOOKS.map(function (book) { return book.id; }),
-      history: SEARCH_HISTORY_RECORDS.map(function (record) { return record.value; }), historyExpanded: false,
+      history: SEARCH_HISTORY_RECORDS.map(function (record) { return record.value; }),
       selectedResultId: null, pending: null, requestEpoch: 0, error: null,
       focusReturnKey: null, closed: false
     };
@@ -1748,11 +1741,9 @@
         if (!historyValue || !Array.isArray(current.history) || current.history.indexOf(historyValue) < 0) return current;
         return Object.assign({}, current, { query: historyValue, phase: "before", error: null, closed: false, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
       }
-      case "SET_HISTORY_EXPANDED":
-        return Object.assign({}, current, { historyExpanded: Boolean(action.expanded) });
       case "CLEAR_HISTORY":
         if (!Array.isArray(current.history) || current.history.length === 0) return current;
-        return Object.assign({}, current, { history: [], historyExpanded: false, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
+        return Object.assign({}, current, { history: [], focusReturnKey: action.focusReturnKey || current.focusReturnKey });
       case "SELECT_RESULT":
         if (SEARCH_RESULT_BOOKS.map(function (book) { return book.id; }).indexOf(action.resultId) < 0) return current;
         return Object.assign({}, current, { selectedResultId: action.resultId, focusReturnKey: action.focusReturnKey || current.focusReturnKey });
@@ -1877,10 +1868,7 @@
       ? appState.bookSearchHistory
       : d2BookSearchState.history;
     var history = SEARCH_HISTORY_RECORDS.filter(function (record) { return persistedHistory.indexOf(record.value) >= 0; });
-    var historyExpanded = typeof (appState && appState.bookSearchHistoryExpanded) === "boolean"
-      ? appState.bookSearchHistoryExpanded
-      : Boolean(d2BookSearchState.historyExpanded);
-    var visibleHistory = historyExpanded ? history : history.slice(0, 5);
+    var visibleHistory = history.slice(0, 5);
     var results = SEARCH_RESULT_BOOKS;
     var beforeHtml = `
       <section class="fd-search-state fd-search-state-before" data-search-state="before">
@@ -1890,11 +1878,6 @@
             ${visibleHistory.map(function (record) {
               return `<button type="button" data-search-history-select data-search-query="${esc(record.value)}" aria-label="回填搜索记录 ${esc(record.value)}"${d2BookSearchIdentityAttrs(route, `history-select-${record.key}`)}>${esc(record.value)}</button>`;
             }).join("")}
-            ${history.length > 5
-              ? historyExpanded
-                ? `<button type="button" data-search-history-toggle="collapse" aria-label="收起搜索记录" aria-expanded="true"${d2BookSearchIdentityAttrs(route, "history-collapse")}>收起</button>`
-                : `<button type="button" data-search-history-toggle="expand" aria-label="展开全部搜索记录" aria-expanded="false"${d2BookSearchIdentityAttrs(route, "history-expand")}>${history.length - 5} 条更多</button>`
-              : ""}
             <button type="button" data-book-search-clear-history aria-label="清除搜索记录"${d2BookSearchIdentityAttrs(route, "history-clear")}>清除历史</button>
           </div>
         </section>

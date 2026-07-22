@@ -30,7 +30,7 @@ test("R3a search-history controls are labelled, mapped, and separate from submis
     assert.match(tag, /data-control-key="search-results\.control\.button\.history-select-/);
     assert.doesNotMatch(tag, /data-search-submit/);
   }
-  assert.match(html, /data-search-history-toggle="expand"[^>]*aria-label="展开全部搜索记录"/);
+  assert.doesNotMatch(html, /data-search-history-toggle|展开全部搜索记录|>收起<\/button>/);
 });
 
 test("R3a submit has accessible name and exact focus return", () => {

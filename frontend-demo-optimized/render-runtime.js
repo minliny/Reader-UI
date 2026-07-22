@@ -13244,7 +13244,6 @@
       const state = bookSearchOwner?.getState?.();
       if (!state) return;
       appState.bookSearchHistory = Array.isArray(state?.history) ? state.history.slice() : [];
-      appState.bookSearchHistoryExpanded = Boolean(state?.historyExpanded);
     };
 
     screenHost.querySelectorAll("[data-search-history-select]").forEach((button) => {
@@ -13263,26 +13262,11 @@
       });
     });
 
-    screenHost.querySelectorAll("[data-search-history-toggle]").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        const expanded = button.getAttribute("data-search-history-toggle") === "expand";
-        bookSearchOwner?.dispatch?.({ type: "SET_HISTORY_EXPANDED", expanded });
-        appState.bookSearchHistoryExpanded = expanded;
-        syncBookSearchHistory();
-        renderCurrentRoute();
-        window.requestAnimationFrame(() => {
-          screenHost.querySelector("[data-search-history-toggle]")?.focus?.({ preventScroll: true });
-        });
-      });
-    });
-
     screenHost.querySelectorAll("[data-book-search-clear-history]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
         bookSearchOwner?.dispatch?.({ type: "CLEAR_HISTORY", focusReturnKey: button.getAttribute("data-control-key") || null });
         appState.bookSearchHistory = [];
-        appState.bookSearchHistoryExpanded = false;
         renderCurrentRoute();
         window.requestAnimationFrame(() => {
           screenHost.querySelector("[data-book-search-input]")?.focus?.({ preventScroll: true });
