@@ -7,7 +7,7 @@
   "lastReadableRevision": "2378562033612422730",
   "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
   "localSource": {
-    "implementationCommit": "a13e68e3b69004543f32ff9b9e0fda37628c580c",
+    "implementationCommit": "ac0553047bf66b8096b202dfe0788e43962c915b",
     "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "renderer": "localImportV2(data, route, appState)",
     "rendererFile": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js"
@@ -32,5 +32,10 @@
     ],
     "lastReadableRevision": "2378562033612422730"
   },
-  "exitAudit": {"fabricatedBindingCount":0,"detachedCount":0,"sourcePreserved":true,"deprecatedErrorPageNamedNodes":0,"f2WriterExit":true}
+  "exitAudit": {"fabricatedBindingCount":0,"detachedCount":0,"sourcePreserved":true,"deprecatedErrorPageNamedNodes":0,"f2WriterExit":true},
+  "vc3Backport": {
+    "status": "VC3_COMPLETE",
+    "implementationCommit": "ac0553047bf66b8096b202dfe0788e43962c915b",
+    "evidence": "VC3_LOCAL_PARITY.json"
+  }
 }
