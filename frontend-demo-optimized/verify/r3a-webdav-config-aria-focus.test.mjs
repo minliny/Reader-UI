@@ -237,7 +237,7 @@ test("R3a ARIA: test dialog aria-busy during loading + aria-invalid during faile
 
   // loading button 应该 disabled + aria-busy
   const loadingBtn = html.match(/<button[^>]*disabled[^>]*aria-busy="true"[^>]*>[\s\S]*?<\/button>/)[0];
-  assert.match(loadingBtn, /测试中/, "loading button text=测试中");
+  assert.match(loadingBtn, /处理中…/, "loading button text follows Figma ActionDialog");
 
   // failed state
   wc.dispatch({ type: "TEST_FAILED", error: "认证失败" });
@@ -312,12 +312,12 @@ test("R3a ARIA: test-confirm button aria-busy+disabled when loading, aria-invali
   assert.doesNotMatch(confirmBtn, /aria-busy="true"/, "confirm NOT aria-busy in confirm state");
   assert.match(confirmBtn, /开始测试/, "confirm button text=开始测试");
 
-  // loading: button has aria-busy + disabled + text=测试中…
+  // loading: primary button has aria-busy + disabled + Figma text=处理中…
   wc.dispatch({ type: "TEST_START" });
   html = render(r, "webdav-config");
   // loading 状态下按钮 disabled+aria-busy，但不一定有 data-settings-key（loading 用 disabled 占位按钮）
   const loadingBtn = html.match(/<button[^>]*disabled[^>]*aria-busy="true"[^>]*>[\s\S]*?<\/button>/)[0];
-  assert.match(loadingBtn, /测试中/, "loading button text=测试中");
+  assert.match(loadingBtn, /处理中…/, "loading button text follows Figma ActionDialog");
 
   // failed: confirm button has aria-invalid + text=重试
   wc.dispatch({ type: "TEST_FAILED", error: "认证失败" });
@@ -396,24 +396,24 @@ test("R3a ARIA: data-dialog-initial-focus on success/failed state close buttons"
   const r = freshSandbox();
   const wc = r.webdavConfig;
 
-  // test success: 知道了 button (uses webdav-test-confirm identity) has data-dialog-initial-focus
+  // test success: Figma has 关闭 + 完成; initial focus is its first close control.
   wc.dispatch({ type: "TEST_CONFIRM_OPEN" });
   wc.dispatch({ type: "TEST_START" });
   wc.dispatch({ type: "TEST_SUCCESS", result: { latencyMs: 100 } });
   let html = render(r, "webdav-config");
-  let okBtn = html.match(/<button[^>]*data-settings-key="webdav-test-confirm"[^>]*>[\s\S]*?<\/button>/)[0];
-  assert.match(okBtn, /data-dialog-initial-focus="webdav-test-confirm"/, "test success 知道了 has data-dialog-initial-focus");
-  assert.match(okBtn, /知道了/, "success button text=知道了");
+  let okBtn = html.match(/<button[^>]*data-settings-key="webdav-test-cancel"[^>]*>[\s\S]*?<\/button>/)[0];
+  assert.match(okBtn, /data-dialog-initial-focus="webdav-test-cancel"/, "test success 关闭 has data-dialog-initial-focus");
+  assert.match(okBtn, /关闭/, "success first action text=关闭");
 
-  // test failed: 关闭 button (uses webdav-test-cancel identity) has data-dialog-initial-focus
+  // test failed: Figma cancellation control remains the initial focus target.
   wc.dispatch({ type: "TEST_RESET" });
   wc.dispatch({ type: "TEST_CONFIRM_OPEN" });
   wc.dispatch({ type: "TEST_START" });
   wc.dispatch({ type: "TEST_FAILED", error: "超时" });
   html = render(r, "webdav-config");
   const closeBtn = html.match(/<button[^>]*data-settings-key="webdav-test-cancel"[^>]*>[\s\S]*?<\/button>/)[0];
-  assert.match(closeBtn, /data-dialog-initial-focus="webdav-test-cancel"/, "test failed 关闭 has data-dialog-initial-focus");
-  assert.match(closeBtn, /关闭/, "failed close button text=关闭");
+  assert.match(closeBtn, /data-dialog-initial-focus="webdav-test-cancel"/, "test failed 取消 has data-dialog-initial-focus");
+  assert.match(closeBtn, /取消/, "failed first action text=取消");
 });
 
 // =============================================================================

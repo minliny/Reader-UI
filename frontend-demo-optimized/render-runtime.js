@@ -12401,6 +12401,7 @@
     const bookDetailOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookDetail;
     const bookSearchOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookSearch;
     const settingsGeneralOwner = window.ReaderD2SettingsSyncRenderers?.settingsGeneral;
+    const webdavConfigOwner = window.ReaderD2SettingsSyncRenderers?.webdavConfig;
     const demoRoot = screenHost.closest(".fd-demo");
     const roundTo = (value, digits) => Number(value.toFixed(digits));
     const dialogFocusableSelector = [
@@ -13388,11 +13389,177 @@
       });
     });
 
+    // WebDAV's canonical dialog is state-owned by webdavConfig, not by the
+    // legacy appState.settingsOverlay. Keep this binding deliberately narrow:
+    // it wires only the live Figma controls that have concrete DOM identities.
+    const isWebdavConfigRoute = () => demoRoot?.getAttribute("data-current-route") === "webdav-config";
+    const webdavFlows = {
+      test: {
+        open: "TEST_CONFIRM_OPEN",
+        close: "TEST_CONFIRM_CLOSE",
+        execute: "executeTest",
+        returnFocus: "webdav-test-connection"
+      },
+      save: {
+        open: "SAVE_CONFIRM_OPEN",
+        close: "SAVE_CONFIRM_CLOSE",
+        execute: "executeSave",
+        returnFocus: "webdav-save-config"
+      },
+      clear: {
+        open: "CLEAR_CONFIRM_OPEN",
+        close: "CLEAR_CONFIRM_CLOSE",
+        execute: "executeClear",
+        returnFocus: "webdav-clear-config"
+      }
+    };
+    // The live Figma component set explicitly includes Loading variants. The
+    // demo helpers otherwise settle synchronously, so keep each user-triggered
+    // operation in that visible state just long enough to be perceivable. The
+    // owner helpers retain their zero-delay default for reducer/unit tests.
+    const webdavVisibleLoadingDelayMs = 320;
+    const focusWebdavDialog = () => {
+      window.setTimeout(() => {
+        if (!isWebdavConfigRoute()) return;
+        focusInitialDialogControl(screenHost.querySelector("[data-demo-dialog]"));
+      }, 0);
+    };
+    const focusWebdavReturnTarget = (flow) => {
+      const focusKey = webdavFlows[flow]?.returnFocus;
+      if (!focusKey) return;
+      window.setTimeout(() => {
+        if (!isWebdavConfigRoute()) return;
+        screenHost.querySelector('[data-restore-focus="' + focusKey + '"]')?.focus?.({ preventScroll: true });
+      }, 0);
+    };
+    const renderWebdavConfig = () => {
+      if (isWebdavConfigRoute()) renderCurrentRoute();
+    };
+    const openWebdavDialog = (flow, trigger) => {
+      const config = webdavFlows[flow];
+      if (!config || !isWebdavConfigRoute() || !webdavConfigOwner) return;
+      // The only Figma actions exposed on the live WebDAV page are Test and
+      // Save. Reuse the existing input contract before exposing either dialog.
+      if (flow === "test" || flow === "save") {
+        webdavConfigOwner.dispatch?.({ type: "INPUT_VALIDATE" });
+        if (Object.keys(webdavConfigOwner.getState?.().inputErrors || {}).length > 0) {
+          renderWebdavConfig();
+          return;
+        }
+      }
+      const previous = webdavConfigOwner.getState?.();
+      webdavConfigOwner.dispatch?.({ type: config.open });
+      const next = webdavConfigOwner.getState?.();
+      if (!next?.[flow]?.open || next === previous) return;
+      startOverlayMotion(screenHost, appState, motionController, "dialog", "open", trigger);
+      resetToastMotionState(appState, motionController, "webdav-dialog-open");
+      renderWebdavConfig();
+      focusWebdavDialog();
+    };
+    const closeWebdavDialog = (flow, trigger) => {
+      const config = webdavFlows[flow];
+      if (!config || !isWebdavConfigRoute() || !webdavConfigOwner) return;
+      const previous = webdavConfigOwner.getState?.();
+      webdavConfigOwner.dispatch?.({ type: config.close });
+      if (webdavConfigOwner.getState?.() === previous) return;
+      startOverlayMotion(screenHost, appState, motionController, "dialog", "close", trigger);
+      resetToastMotionState(appState, motionController, "webdav-dialog-close");
+      renderWebdavConfig();
+      focusWebdavReturnTarget(flow);
+    };
+    const executeWebdavDialog = (flow, trigger) => {
+      const config = webdavFlows[flow];
+      if (!config || !isWebdavConfigRoute() || !webdavConfigOwner) return;
+      // A retry reuses the existing confirm → start reducer gate instead of
+      // adding a parallel business action.
+      if (webdavConfigOwner.getState?.()?.[flow]?.status === "failed") {
+        webdavConfigOwner.dispatch?.({ type: config.open });
+      }
+      if (webdavConfigOwner.getState?.()?.[flow]?.status !== "confirm") return;
+      const run = webdavConfigOwner[config.execute];
+      if (typeof run !== "function") return;
+      const pending = run.call(webdavConfigOwner, { delay: webdavVisibleLoadingDelayMs });
+      renderWebdavConfig(); // synchronous START → loading state
+      Promise.resolve(pending).then(() => {
+        renderWebdavConfig();
+        focusWebdavDialog();
+      });
+    };
+
+    const webdavInputs = new Set(["serverUrl", "account", "password", "syncDir"]);
+    screenHost.querySelectorAll('[data-ui-event="input.change"][data-settings-key]').forEach((input) => {
+      input.addEventListener("input", () => {
+        if (!isWebdavConfigRoute() || !webdavConfigOwner) return;
+        const settingsKey = input.getAttribute("data-settings-key") || "";
+        if (!webdavInputs.has(settingsKey)) return;
+        // Do not render here: replacing an active input would discard its
+        // caret and violates the form's in-place editing behavior.
+        webdavConfigOwner.dispatch?.({ type: "SET_INPUT", settingsKey, value: input.value });
+      });
+    });
+
+    const webdavSwitches = new Set(["sslVerify", "wifiOnly"]);
+    screenHost.querySelectorAll('[data-ui-event="toggle.switch"][data-settings-key]').forEach((targetEl) => {
+      const toggle = (event) => {
+        if (!isWebdavConfigRoute() || !webdavConfigOwner) return;
+        const settingsKey = targetEl.getAttribute("data-settings-key") || "";
+        if (!webdavSwitches.has(settingsKey)) return;
+        event.preventDefault();
+        event.stopPropagation();
+        const current = webdavConfigOwner.getState?.().values?.[settingsKey];
+        if (typeof current !== "boolean") return;
+        webdavConfigOwner.dispatch?.({ type: "TOGGLE_SWITCH", settingsKey, value: !current });
+        renderWebdavConfig();
+      };
+      targetEl.addEventListener("click", toggle);
+      targetEl.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") toggle(event);
+      });
+    });
+
+    screenHost.querySelectorAll('[data-ui-event="stepper.valueChange"][data-settings-key]').forEach((button) => {
+      button.addEventListener("click", (event) => {
+        if (!isWebdavConfigRoute() || !webdavConfigOwner) return;
+        const settingsKey = button.getAttribute("data-settings-key") || "";
+        const delta = settingsKey === "webdav-connect-timeout-stepper-minus"
+          ? -1
+          : settingsKey === "webdav-connect-timeout-stepper-plus"
+            ? 1
+            : 0;
+        if (!delta) return;
+        event.preventDefault();
+        webdavConfigOwner.dispatch?.({ type: "STEP_TIMEOUT", delta });
+        renderWebdavConfig();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-webdav-config-action]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        if (!isWebdavConfigRoute()) return;
+        const action = button.getAttribute("data-webdav-config-action") || "";
+        event.preventDefault();
+        if (action === "open-test") openWebdavDialog("test", button);
+        if (action === "open-save") openWebdavDialog("save", button);
+        if (action === "test-close") closeWebdavDialog("test", button);
+        if (action === "save-close") closeWebdavDialog("save", button);
+        if (action === "clear-close") closeWebdavDialog("clear", button);
+        if (action === "test-execute") executeWebdavDialog("test", button);
+        if (action === "save-execute") executeWebdavDialog("save", button);
+        if (action === "clear-execute") executeWebdavDialog("clear", button);
+      });
+    });
+
     const openSettingsOverlay = (trigger) => {
       if (isSettingsGeneralRoute()) {
         // Do not synthesize a transient visual surface that is absent from the
         // canonical Figma page. Select/action follow-up stays intentionally
         // pending its own Figma design and user confirmation.
+        return;
+      }
+      if (isWebdavConfigRoute()) {
+        // WebDAV's live Figma page uses its own state-owned canonical
+        // ActionDialog. Never let the legacy overlay owner synthesize a second
+        // transient surface for this route.
         return;
       }
       const overlay = trigger.getAttribute("data-settings-overlay") || "";

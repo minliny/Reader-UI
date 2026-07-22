@@ -927,6 +927,74 @@
   color: #fff;
 }
 
+/* Canonical/WebDAV/ActionDialog · Figma 2222:159
+ * The dialog is a fixed 304×160 component in both Phone and Tablet masters.
+ * Keep its 18px padding / 10px rhythm and shadowless surface isolated from
+ * the broader legacy settings overlay treatment. */
+.fd-settings-phone .fd-demo-dialog.fd-webdav-action-dialog {
+  box-sizing: border-box;
+  /* Motion runtime owns transform during overlay enter/exit. Center with the
+   * positional property instead of translateX so it cannot be overwritten. */
+  left: calc(50% - 152px);
+  right: auto;
+  width: 304px;
+  height: 160px;
+  padding: 18px;
+  gap: 10px;
+  grid-template-rows: 24px 40px 38px;
+  border-radius: 8px;
+  background: rgba(255, 252, 248, 0.98);
+  box-shadow: none;
+  transform: translateY(-44%) scale(var(--reader-motion-scale-dialog-enter));
+}
+
+.fd-settings-phone.has-dialog .fd-demo-dialog.fd-webdav-action-dialog {
+  transform: translateY(-50%) scale(1);
+}
+
+.fd-settings-phone .fd-webdav-action-dialog h2 {
+  height: 24px;
+  color: #1f1b17;
+  font-family: Inter, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 24px;
+}
+
+.fd-settings-phone .fd-webdav-action-dialog p {
+  height: 40px;
+  overflow: hidden;
+  color: #756f69;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 20.15px;
+}
+
+.fd-settings-phone .fd-webdav-action-dialog > div {
+  grid-template-columns: 128px 128px;
+  gap: 10px;
+}
+
+.fd-settings-phone .fd-webdav-action-dialog button {
+  height: 38px;
+  min-height: 38px;
+  padding: 0;
+  border-radius: 8px;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: normal;
+}
+
+.fd-settings-phone .fd-webdav-action-dialog button[disabled]:not([aria-busy="true"]) {
+  opacity: 1;
+}
+
+.fd-settings-phone .fd-webdav-action-dialog button[aria-busy="true"] {
+  opacity: 0.55;
+}
+
 /* Library/BookDetail/DeleteDialog · Figma 2269:66. Overlay/Dialog remains the
  * source for other families; Book Detail has its own approved 306×190 layout. */
 .fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] {
