@@ -48,8 +48,57 @@ const routeNames = Object.keys(routes);
 const schemaRouteIds = routeSchema.properties?.id?.enum || [];
 const schemaRouteIdSet = new Set(schemaRouteIds);
 const routeSet = new Set(routeNames);
+// These names deliberately remain outside the published RouteId contract.
+// Keep them explicit here instead of allowing the switch-case scan to either
+// hide them or mistake them for independent canvases.
+//
+// - legacyFailLoudRouteGuards are compatibility guards only. They must not
+//   regain a renderer, a contract RouteId, or a Figma page.
+// - nonContractStateAliases are component/result states owned by an existing
+//   canonical route. They are not an invitation to add a second route family.
+const legacyFailLoudRouteGuards = Object.freeze({
+  feedback: {
+    ownerRoute: "about-feedback",
+    replacement: "About-owned feedback-entry overlay or external action"
+  },
+  "backup-manual": {
+    ownerRoute: "sync-backup",
+    replacement: "sync-backup manual-backup state/dialog"
+  },
+  "backup-auto": {
+    ownerRoute: "backup-settings",
+    replacement: "backup-settings automatic-backup state"
+  },
+  "backup-history": {
+    ownerRoute: "sync-backup",
+    replacement: "sync-backup backup-list state"
+  },
+  "restore-failed": {
+    ownerRoute: "restore-result",
+    replacement: "restore-result outcome=failed (no Restore Preview route)"
+  },
+  "restore-partial": {
+    ownerRoute: "restore-result",
+    replacement: "restore-result outcome=partial (no Restore Preview route)"
+  }
+});
+const nonContractStateAliases = Object.freeze({
+  "webdav-test": {
+    ownerRoute: "webdav-config",
+    renderer: "webdavConfigV2",
+    componentState: "Canonical/WebDAV/ResultScreen"
+  },
+  "webdav-error": {
+    ownerRoute: "webdav-config",
+    renderer: "webdavConfigV2",
+    componentState: "Canonical/WebDAV/ErrorScreen"
+  }
+});
+const legacyFailLoudRouteIds = Object.keys(legacyFailLoudRouteGuards);
+const nonContractStateAliasIds = Object.keys(nonContractStateAliases);
 const missingSchemaRoutes = schemaRouteIds.filter((route) => !routeSet.has(route));
 const extraContractRoutes = routeNames.filter((route) => !schemaRouteIdSet.has(route));
+const d2IntegrationMap = context.window.ReaderD2SettingsSyncRenderers?.INTEGRATION_MAP || {};
 const modularRenderRoutes = [
   ...Object.keys(context.window.ReaderW3SourceSwitchRenderers?.INTEGRATION_MAP || {}),
   ...Object.keys(context.window.ReaderW4ThemeFontTypographyRenderers?.screenMap || {}),
@@ -62,7 +111,48 @@ const renderCases = [
 ];
 const renderCaseSet = new Set(renderCases);
 const missingCases = routeNames.filter((route) => !renderCaseSet.has(route));
-const extraCases = renderCases.filter((route) => !routeSet.has(route));
+const rawExtraCases = renderCases.filter((route) => !routeSet.has(route));
+const legacyGuardEntries = legacyFailLoudRouteIds.map((route) => ({
+  route,
+  ...legacyFailLoudRouteGuards[route],
+  absentFromSchema: !schemaRouteIdSet.has(route),
+  absentFromRouteContract: !routeSet.has(route),
+  absentFromD2IntegrationMap: !Object.hasOwn(d2IntegrationMap, route),
+  failLoudInRuntime: new RegExp(`case\\s+"${route}"\\s*:[\\s\\S]{0,560}?throw new Error\\(`).test(runtime)
+}));
+const stateAliasEntries = nonContractStateAliasIds.map((route) => {
+  const alias = nonContractStateAliases[route];
+  return {
+    route,
+    ...alias,
+    absentFromSchema: !schemaRouteIdSet.has(route),
+    absentFromRouteContract: !routeSet.has(route),
+    ownerInSchema: schemaRouteIdSet.has(alias.ownerRoute),
+    ownerInRouteContract: routeSet.has(alias.ownerRoute),
+    ownerUsesSameRenderer: d2IntegrationMap[alias.ownerRoute] === alias.renderer,
+    aliasUsesDeclaredRenderer: d2IntegrationMap[route] === alias.renderer,
+    failLoudWithoutD2Module: new RegExp(`case\\s+"${route}"\\s*:[\\s\\S]{0,560}?throw new Error\\(`).test(runtime)
+  };
+});
+const classifiedExtraCases = rawExtraCases.filter((route) => (
+  legacyFailLoudRouteIds.includes(route) || nonContractStateAliasIds.includes(route)
+));
+const extraCases = rawExtraCases.filter((route) => !classifiedExtraCases.includes(route));
+const legacyGuardClassificationValid = legacyGuardEntries.every((entry) => (
+  entry.absentFromSchema &&
+  entry.absentFromRouteContract &&
+  entry.absentFromD2IntegrationMap &&
+  entry.failLoudInRuntime
+));
+const stateAliasClassificationValid = stateAliasEntries.every((entry) => (
+  entry.absentFromSchema &&
+  entry.absentFromRouteContract &&
+  entry.ownerInSchema &&
+  entry.ownerInRouteContract &&
+  entry.ownerUsesSameRenderer &&
+  entry.aliasUsesDeclaredRenderer &&
+  entry.failLoudWithoutD2Module
+));
 
 const bindMatches = [...runtime.matchAll(/bind\("([^"]+)"\s*,\s*"([^"]+)"\)/g)]
   .map(([, selector, motionId]) => ({ selector, motionId }));
@@ -361,8 +451,10 @@ const checks = [
     id: "route.contract.render-coverage",
     passed: extraContractRoutes.length === 0 &&
       missingCases.length === 0 &&
-      extraCases.length === 0,
-    detail: `${routeNames.length}/${schemaRouteIds.length} routes, missingSchema=${missingSchemaRoutes.length}, extraContract=${extraContractRoutes.length}, missingRender=${missingCases.length}, extraRender=${extraCases.length}`
+      extraCases.length === 0 &&
+      legacyGuardClassificationValid &&
+      stateAliasClassificationValid,
+    detail: `${routeNames.length}/${schemaRouteIds.length} routes, missingSchema=${missingSchemaRoutes.length}, extraContract=${extraContractRoutes.length}, missingRender=${missingCases.length}, unclassifiedExtraRender=${extraCases.length}, legacyFailLoud=${legacyGuardEntries.filter((entry) => entry.failLoudInRuntime).length}/${legacyGuardEntries.length}, nonContractStateAlias=${stateAliasEntries.filter((entry) => entry.aliasUsesDeclaredRenderer && entry.ownerUsesSameRenderer).length}/${stateAliasEntries.length}`
   },
   {
     id: "motion.controller.file",
@@ -728,7 +820,20 @@ const report = {
     extraContractRoutes,
     renderCases: renderCases.length,
     missingCases,
-    extraCases
+    // `extraCases` preserves the failure meaning: only unknown, unclassified
+    // switch cases remain here. The two explicit classes below are auditable
+    // non-routes, never silently accepted renderer coverage.
+    extraCases,
+    rawExtraCases,
+    classifiedExtraCases,
+    legacyFailLoudGuards: {
+      valid: legacyGuardClassificationValid,
+      entries: legacyGuardEntries
+    },
+    nonContractStateAliases: {
+      valid: stateAliasClassificationValid,
+      entries: stateAliasEntries
+    }
   },
   selectorCoverage: {
     dataAttributeCount: dataAttributes.length,
