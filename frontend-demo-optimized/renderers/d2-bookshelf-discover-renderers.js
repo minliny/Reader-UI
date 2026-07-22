@@ -837,19 +837,18 @@
         <header><h2 id="fd-local-import-title">${isPicker ? "导入本地书籍" : "导入结果"}</h2></header>
         ${isPicker ? `<section class="fd-local-import-picker-body">
           <button class="fd-local-import-dropzone" type="button" data-local-import-choose aria-label="选择本地书文件">
-            <span>${icon("upload", "fd-medium-icon")}</span>
-            <strong>拖拽文件到此处</strong>
-            <small>支持批量选择，单次最多 50 本</small>
+            <span class="fd-local-import-dropzone-icon">${icon("upload", "fd-medium-icon")}</span>
+            <span class="fd-local-import-dropzone-copy"><strong>拖拽文件到此处</strong><small>支持批量选择，单次最多 50 本</small></span>
             <i><em>EPUB</em><em>PDF</em><em>TXT</em><em>MOBI</em></i>
           </button>
-          <p>${icon("folder", "fd-small-icon")}<span>也可从「文件」App、iCloud 云盘或第三方存储中选取。导入后书籍将保存至本地书库。</span></p>
+          <p class="fd-local-import-picker-note">${icon("folder", "fd-small-icon")}<span>也可从「文件」App、iCloud 云盘或第三方存储中选取。导入后书籍将保存至本地书库。</span></p>
           <input type="file" data-local-import-file-input multiple accept=".epub,.pdf,.txt,.mobi,application/epub+zip,application/pdf,text/plain" tabindex="-1" aria-hidden="true">
         </section>
         <footer>
           <button class="is-primary" type="button"${d2BookshelfIdentityAttrs("import-choose-files")} data-local-import-choose data-dialog-initial-focus="import-choose-files">${icon("upload", "fd-small-icon")}选择文件</button>
           <button type="button"${d2BookshelfIdentityAttrs("import-cancel")} data-local-import-cancel>取消</button>
         </footer>` : `<section class="fd-local-import-result-body">
-          <section class="fd-local-import-summary" aria-live="polite">
+          <section class="fd-local-import-summary ${failedCount ? "has-failures" : "is-success"}" aria-live="polite">
             <span>${icon(failedCount ? "alert" : "check", "fd-small-icon")}</span>
             <strong>${successCount} 本成功，${failedCount} 本失败<small>共选择 ${files.length} 本${processingCount ? " · " + processingCount + " 本正在处理" : " · 已全部处理"}</small></strong>
             ${processingCount ? `<i>${icon("progress", "fd-small-icon")}</i>` : ""}
