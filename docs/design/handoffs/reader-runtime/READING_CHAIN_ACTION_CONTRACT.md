@@ -32,8 +32,8 @@ The current writer runtime cannot read an official file revision. These nodes ar
 
 ## Required implementation order
 
-1. Generate and validate HarmonyOS bindings from Reader-UI Contract 3.0 without changing the consumer lock.
-2. Freeze the Continue policy below, then unify the two existing local-book entry paths so Detail Continue and the shelf Continue card have one declared effect owner.
+1. Keep the current Reader-UI Contract 3.0 and consumer lock unchanged for this narrow HarmonyOS repair; no `book.open` Pilot extension is authorized.
+2. Apply the confirmed Continue policy below by routing both local-book Continue entries through the existing durable-progress recovery owner.
 3. Probe the six real Core/NAPI calls: `bookshelf.list`, `local_book.toc`, `local_book.chapter.content`, `reader.location.resolve`, `reading.progress.update`, and `reading.progress.get`.
 4. Only after steps 1–3 pass, create a verified Reader-UI host release, atomically update the HarmonyOS consumer/package locks, build the HAP, and run the real-device chain.
 
@@ -46,14 +46,20 @@ This is a code-path finding, not a visual-design change:
 
 Therefore, merely sending the bookshelf card through the existing direct-reader flag would preserve the bug: it can open the first TOC row rather than the saved chapter and cannot restore the saved position.
 
-The smallest safe convergence is a transparent resume sub-protocol in the local `book.open` transaction/result: after the real TOC is available, it carries an optional Core-projected resume location (`bookId`, `sourceId`, Core chapter identity, offset/progress, revision) and maps it to the live TOC row. It is not a new UiEvent, Figma reaction, route, screen, dialog, or state owner.
+## Confirmed Continue policy
+
+The user confirmed this policy on 2026-07-22:
+
+- The bookshelf Continue Card remains a direct entry to immersive Reader.
+- It has exactly the same durable recovery semantics as Book Detail Continue: read persisted Core progress, match the Core chapter identity to the live TOC, load that chapter, then restore the measured reading offset/progress.
+- If no valid record exists, or its chapter no longer exists in the TOC, open the first readable chapter without inventing a new Figma surface.
+
+The safe implementation is to remove the card from the current `readerEntry: true + chapterIndex: 0` Pilot path and reuse the existing HarmonyOS `ReaderEffects` recovery chain. This is not a new UiEvent, Figma reaction, route, screen, dialog, state owner, Reader-UI contract change, or consumer-lock update.
 
 ## Outstanding product decisions
 
 Figma currently supplies no visual source for the following. They require an explicit product decision before an agent creates UI for them:
 
-- Continue policy: should the bookshelf Continue card and Book Detail Continue be exactly equivalent — restore the saved chapter and position when the durable record matches; otherwise open the first readable chapter? The recommended policy is **yes**, with a stale/missing chapter falling back silently to the first readable chapter so no new Figma surface is invented.
-- Continue destination: should the bookshelf card continue to enter immersive Reader directly, while a normal book-card selection goes to Book Detail? The current code uses that split; retain it unless explicitly changed.
 - Detail/Reader loading failure and retry presentation.
 - The exact return destination and focus restoration after reader exit.
 - User-visible handling when progress persistence fails.

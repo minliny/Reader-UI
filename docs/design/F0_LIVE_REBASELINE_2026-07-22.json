@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "kind": "F0_LIVE_REBASELINE",
-  "status": "BLOCKED_ON_EVIDENCE_CONFLICT_SINGLE_WRITER_RECONCILIATION",
+  "status": "PARTIALLY_RECONCILED_RESTORE_EVIDENCE_STILL_PENDING",
   "recordedAt": "2026-07-22T00:00:00+08:00",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "writerRuntime": {
@@ -27,7 +27,7 @@
         "bottomActionBar": "2173:885",
         "sourceRow": "1994:26598"
       },
-      "visibleHistoricalPilotComponents": {
+      "userRemovedHistoricalPilotComponents": {
         "moreMenu": "2173:891",
         "addSourceSheet": "2173:906",
         "deleteDialog": "2173:964",
@@ -35,7 +35,7 @@
         "batchActionBar": "2176:873",
         "stateProofAssemblies": "2176:874"
       },
-      "observation": "The historical Pilot components are currently visible with zero reactions. They must not be treated as deleted, current canonical interaction states, or an authorization to recreate local business flows."
+      "observation": "The user explicitly approved deletion of these zero-reaction historical Pilot components. The single writer removed the State Proof assembly first, then the five component targets. The live component parent now contains only SearchField, StatusFilter, GroupFilter and BottomActionBar; final Phone/Tablet instances remain attached and contain no removed-component reference."
     },
     "localImport": {
       "canonicalComponentSet": "2657:918",
@@ -61,8 +61,9 @@
     {
       "id": "source-management-subtraction-vs-live",
       "localEvidence": "docs/design/FIGMA_COMPONENT_SUBTRACTION_2026-07-21.json",
-      "problem": "It records MoreMenu, AddSourceSheet, DeleteDialog, BatchToolbar, BatchActionBar and State Proof Assemblies as removed, while the live Figma read finds those exact nodes visible.",
-      "requiredAction": "Do not delete or consume them automatically. First resolve canonical/downstream references, then make one explicit writer decision."
+      "problem": "It recorded MoreMenu, AddSourceSheet, DeleteDialog, BatchToolbar, BatchActionBar and State Proof Assemblies as removed while an earlier live Figma read still found them visible.",
+      "resolution": "RESOLVED_BY_USER_APPROVED_SINGLE_WRITER_DELETION. The proof assembly 2176:874 and component targets 2173:891, 2173:906, 2173:964, 2176:845 and 2176:873 were removed after the final Phone/Tablet/prototype instances were checked. No final instance referenced a removed target after the write.",
+      "requiredAction": "Do not recreate these Pilot components or consume their historical bindings as current product flows."
     },
     {
       "id": "restore-withdrawal-vs-live",
@@ -72,9 +73,10 @@
     }
   ],
   "consumptionPolicy": {
-    "blockedLocalFamilies": ["source-management", "webdav-config", "bookshelf", "book-detail", "rss"],
-    "reason": "Their historical handoff evidence contains component references recorded as removed by the subtraction evidence and must be reread against live Figma before a local or native consumer uses them as current truth.",
-    "safeCurrentWork": ["freeze Figma writes", "remove conflicting local WIP", "tombstone user-withdrawn route families", "prepare the reading-chain action contract"]
+    "blockedLocalFamilies": ["webdav-config", "bookshelf", "book-detail", "rss"],
+    "sourceManagement": "The Figma component conflict is reconciled. Its local runtime actions remain separately unadmitted; only final-page visual components may be consumed as current visual truth.",
+    "reason": "Other historical handoff evidence still requires a live Figma reread before a local or native consumer uses it as current truth.",
+    "safeCurrentWork": ["single-writer Figma evidence correction", "remove conflicting local WIP", "tombstone user-withdrawn route families", "implement the confirmed Continue-reading recovery policy"]
   },
   "writerPolicy": {
     "singleWriter": true,

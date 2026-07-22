@@ -1,12 +1,14 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "source-management",
-  "status": "F2_COMPLETE",
+  "status": "F2_HISTORICAL_EVIDENCE_RECONCILED_AFTER_USER_SCOPE_REMOVAL",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "revision": "2378300834098665145",
-  "revisionTitle": "F2 · Source Management · User Confirmed",
-  "liveHeadCorrection": {
+  "historicalRevision": "2378300834098665145",
+  "historicalRevisionTitle": "F2 · Source Management · User Confirmed",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLiveHeadCorrection": {
     "timestamp": "2026-07-20T13:23:23Z",
     "revisionStatus": "NAMED_REVISION_CREATED",
     "namedRevision": "2378300834098665145",
@@ -22,32 +24,32 @@
     "detachedInstanceCount": 0,
     "note": "All bindings and the visual correction are verified against named revision 2378300834098665145."
   },
-  "localSource": {
+  "historicalLocalSource": {
     "implementationCommit": "1c97687c969bc47f27b0aec79c774998455e3326",
     "handoffEvidenceCommit": "17876aaf6120190e5cb519f088e150ee4ae8db49",
     "packet": "docs/design/handoffs/source-management/LOCAL_READY_FOR_FIGMA.json"
   },
-  "denominatorCorrection": {
+  "historicalDenominatorCorrection": {
     "packetReportedTotal": 48,
     "packetEnumeratedTotal": 49,
     "arithmetic": "23 default + 11 batch + 5 add-sheet + 3 delete-dialog + 7 more-menu = 49",
     "crosswalkBindingTotal": 49,
     "resolution": "Do not alter the immutable local handoff. Bind every enumerated key and record the discrepancy in FIGMA_DESIGN_DELTA."
   },
-  "canonicalMasters": [
+  "historicalCanonicalMasters": [
     { "role": "page-set", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:29", "nodeName": "Page/Source Management", "revision": "2378300834098665145" },
     { "role": "phone-master", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:26", "nodeName": "Viewport=Phone", "revision": "2378300834098665145" },
     { "role": "tablet-master", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:28", "nodeName": "Viewport=Tablet", "revision": "2378300834098665145" },
     { "role": "source-row-set", "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "1994:26598", "nodeName": "SourceManagement/SourceRow", "revision": "2378300834098665145" },
     { "role": "f2-component-library", "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:816", "nodeName": "F2 · Source Management Pilot Components", "revision": "2378300834098665145" }
   ],
-  "downstreamInstances": [
+  "historicalDownstreamInstances": [
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:4281", "nodeName": "Source Management / Phone", "mainComponentId": "942:26", "detached": false, "revision": "2378300834098665145" },
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:4745", "nodeName": "Source Management / Tablet", "mainComponentId": "942:28", "detached": false, "revision": "2378300834098665145" },
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:68014", "nodeName": "Source Management / Phone", "mainComponentId": "942:26", "detached": false, "revision": "2378300834098665145" },
     { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:68478", "nodeName": "Source Management / Tablet", "mainComponentId": "942:28", "detached": false, "revision": "2378300834098665145" }
   ],
-  "bindings": [
+  "historicalBindings": [
     { "controlKey": "source-qidian", "uiEvent": "toggle.switch", "bindingRole": "phone-master-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "I2174:223;549:62", "revision": "2378300834098665145" },
     { "controlKey": "source-biquge", "uiEvent": "toggle.switch", "bindingRole": "phone-master-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "I2174:254;549:62", "revision": "2378300834098665145" },
     { "controlKey": "source-local-import", "uiEvent": "toggle.switch", "bindingRole": "phone-master-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "I2174:289;549:62", "revision": "2378300834098665145" },
@@ -98,7 +100,8 @@
     { "controlKey": "menu-detect-selected", "uiEvent": "menu.item.select", "bindingRole": "component-master-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:902", "revision": "2378300834098665145" },
     { "controlKey": "menu-error-logs", "uiEvent": "menu.item.select", "bindingRole": "component-master-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:904", "revision": "2378300834098665145" }
   ],
-  "exitAudit": {
+  "currentBindings": [],
+  "historicalExitAudit": {
     "bindingCount": 49,
     "fakeBindingCount": 0,
     "detachedInstanceCount": 0,
@@ -113,5 +116,46 @@
     "nextLocalFamily": "webdav-config",
     "nextLocalFamilyReleased": true,
     "remainingGates": []
+  },
+  "postUserScopeRemoval": {
+    "scope": "User-approved removal of the historical Source Management Pilot only; the final Source Management master and downstream instances were not redrawn or replaced.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "removedFromCanvasHierarchy": [
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2176:874", "nodeName": "SourceManagement/State Proof Assemblies" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:891", "nodeName": "SourceManagement/MoreMenu" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:906", "nodeName": "SourceManagement/AddSourceSheet" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:964", "nodeName": "SourceManagement/DeleteDialog" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2176:845", "nodeName": "SourceManagement/BatchToolbar" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2176:873", "nodeName": "SourceManagement/BatchActionBar" }
+    ],
+    "preservedActiveComponents": [
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:819", "nodeName": "SourceManagement/SearchField" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:878", "nodeName": "SourceManagement/StatusFilter" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:879", "nodeName": "SourceManagement/GroupFilter" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:885", "nodeName": "SourceManagement/BottomActionBar" }
+    ],
+    "preservedFinalMasters": [
+      { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:26", "nodeName": "Viewport=Phone" },
+      { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:28", "nodeName": "Viewport=Tablet" }
+    ],
+    "postWriteVerification": {
+      "pilotParent": {
+        "nodeId": "2173:816",
+        "remainingChildIds": ["2173:817", "2173:818", "2173:819", "2173:878", "2173:879", "2173:885"]
+      },
+      "finalAndPrototypeRoots": [
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:4281", "nodeName": "Source Management / Phone", "mainComponentId": "942:26" },
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:4745", "nodeName": "Source Management / Tablet", "mainComponentId": "942:28" },
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:68014", "nodeName": "Source Management / Phone", "mainComponentId": "942:26" },
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:68478", "nodeName": "Source Management / Tablet", "mainComponentId": "942:28" }
+      ],
+      "allRootsRemainAttached": true,
+      "invalidInstanceCount": 0,
+      "removedComponentReferenceCount": 0,
+      "deletedNodeLookupCaveat": "The writer runtime can retain parent-null component handles after remove(). Deletion is evidenced by removal from the parent/canvas hierarchy and by the zero removed-component references in every final/prototype root; this record does not claim those component IDs resolve null."
+    },
+    "currentBindingPolicy": "No active control binding is asserted until a writer runtime can read an official current revision and recrosswalk the retained final tree. Historical Pilot bindings above are not a product-flow contract."
   }
 }

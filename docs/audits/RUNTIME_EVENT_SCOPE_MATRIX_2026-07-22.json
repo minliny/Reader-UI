@@ -1,7 +1,7 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "RUNTIME_EVENT_SCOPE_MATRIX",
-  "status": "NON_DRIVING_PRE_RECONCILIATION",
+  "status": "NON_DRIVING_POST_SOURCE_TOMBSTONE_RECONCILIATION",
   "recordedAt": "2026-07-22T00:00:00+08:00",
   "purpose": "Separate DOM/control identity vocabulary from approved cross-platform runtime actions before changing release coverage.",
   "nonGoals": [
@@ -39,7 +39,8 @@
     "ROUTE_CONTEXT_REQUIRED": "The event name is reused across surfaces and cannot be approved or withdrawn globally.",
     "IDENTITY_ONLY_PLANNED_FAIL_CLOSED": "A static control has a stable identity; no dialog, permission jump, or runtime owner is authorized.",
     "LOCAL_DEMO_PLANNED": "The demo has a local state, but it is not yet aligned to a Host/Core contract or release action.",
-    "WITHDRAWN_CANDIDATE": "Only a withdrawn/legacy context currently supplies this event; retain historical identity until route-level tombstone evidence exists."
+    "WITHDRAWN_CANDIDATE": "Only a withdrawn/legacy context currently supplies this event; retain historical identity until route-level tombstone evidence exists.",
+    "FIGMA_VISUAL_TOMBSTONED": "The only source-route visual evidence was deliberately removed from the Figma parent/canvas hierarchy; the identity remains historical and no runtime behavior is approved."
   },
   "rows": [
     {
@@ -53,18 +54,18 @@
     {
       "event": "batch.exit",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "Historical Source Management batch Pilot only."
+      "reason": "The only Source Management visual evidence was historical BatchToolbar 2176:845, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "batch.select-all.toggle",
       "contexts": ["source-management", "import-duplicate (withdrawn candidate)"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "WITHDRAWN_CANDIDATE",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "The withdrawn import context must be tombstoned separately; it cannot make Source Management executable."
+      "reason": "Source Management's only visual evidence was historical BatchToolbar 2176:845, now removed by user-approved Figma transaction; the other listed context is already withdrawn, so neither authorizes runtime behavior."
     },
     {
       "event": "batch.select.toggle",
@@ -77,34 +78,34 @@
     {
       "event": "batch.enable",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "Historical Source Management batch Pilot only."
+      "reason": "The only Source Management visual evidence was historical BatchActionBar 2176:873, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "batch.disable",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "Historical Source Management batch Pilot only."
+      "reason": "The only Source Management visual evidence was historical BatchActionBar 2176:873, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "batch.detect",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "Historical Source Management batch Pilot only."
+      "reason": "The only Source Management visual evidence was historical BatchActionBar 2176:873, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "batch.group",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "Historical Source Management batch Pilot only."
+      "reason": "The only Source Management visual evidence was historical BatchActionBar 2176:873, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "menu.item.select",
@@ -141,26 +142,26 @@
     {
       "event": "sheet.add-source.close",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "The visible AddSourceSheet has zero reactions and must not be promoted automatically."
+      "reason": "The only Source Management visual evidence was historical AddSourceSheet 2173:906, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "sheet.add-source.select",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "The visible AddSourceSheet has zero reactions and must not be promoted automatically."
+      "reason": "The only Source Management visual evidence was historical AddSourceSheet 2173:906, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "delete.log-cleanup.toggle",
       "contexts": ["source-management"],
-      "status": "NEEDS_FIGMA_RECONCILIATION_AND_USER_DECISION",
+      "status": "FIGMA_VISUAL_TOMBSTONED",
       "runtimeEligible": false,
       "figma": { "nodeId": null, "reaction": null },
-      "reason": "Historical deletion Pilot only."
+      "reason": "The only Source Management visual evidence was historical DeleteDialog 2173:964, removed by user-approved Figma single-writer transaction; no runtime flow is approved."
     },
     {
       "event": "menu.toggle",
