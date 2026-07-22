@@ -6,6 +6,7 @@
 import { readFileSync, writeFileSync, readdirSync, mkdirSync, existsSync, renameSync } from "node:fs";
 import { dirname, join, basename, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { swiftUiEventCase } from "./swift-identifiers.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -169,7 +170,7 @@ function genSwiftUiEvent(schema, fixtures) {
 import Foundation
 
 public enum UiEventType: String, Codable, CaseIterable, Sendable {
-${types.map((t) => `    case ${t.replace(/\./g, "_")} = "${t}"`).join("\n")}
+${types.map((t) => `    case ${swiftUiEventCase(t)} = "${t}"`).join("\n")}
 }
 
 public struct UiEvent: Codable, Equatable, Sendable {
