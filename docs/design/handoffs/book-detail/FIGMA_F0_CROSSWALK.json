@@ -27,7 +27,9 @@
   "localSource": {
     "implementationCommit": "1006d9a7c0d11011b9e36f2e8053e9691621672f",
     "handoffEvidenceCommit": "46df81a2ca26fb139afd747e8da07e8c158d8d06",
-    "packet": "docs/design/handoffs/book-detail/LOCAL_READY_FOR_FIGMA.json"
+    "packet": "docs/design/handoffs/book-detail/LOCAL_READY_FOR_FIGMA.json",
+    "vc3ImplementationCommit": "f8a8351d423af07208b865051f0dcb05bb6bfdc5",
+    "vc3Evidence": "docs/design/handoffs/book-detail/VC3_LOCAL_PARITY.json"
   },
   "fontSources": {
     "songtiSc": "/System/Library/Fonts/Supplemental/Songti.ttc",
@@ -121,5 +123,14 @@
     "fabricated": 0,
     "manyToOneSharedRendererBindings": 22,
     "readerFullDirectoryPolicy": "Page/Reader Full Directory is a downstream visual binding only. It does not become a second route owner and was not modified in this transaction."
+  },
+  "vc3Backport": {
+    "status": "VC3_COMPLETE",
+    "implementationCommit": "f8a8351d423af07208b865051f0dcb05bb6bfdc5",
+    "evidence": "docs/design/handoffs/book-detail/VC3_LOCAL_PARITY.json",
+    "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+    "canonicalMasterVerified": "941:10",
+    "downstreamDetachedInstances": 0,
+    "completedAt": "2026-07-22T11:22:56+08:00"
   }
 }
