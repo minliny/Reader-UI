@@ -277,7 +277,14 @@
   height: 122px;
   object-fit: cover;
   border-radius: var(--fd-radius-sm);
-  box-shadow: 0 8px 16px rgba(52, 38, 26, 0.18);
+  box-shadow: none;
+}
+
+/* Book Detail is a 390×844 / 760×960 Figma master, not a generic stacked
+ * library canvas. Keep this narrow scope so other library routes retain their
+ * explicitly approved stack height. */
+.fd-book-detail-phone {
+  height: var(--fd-runtime-phone-height);
 }
 
 .fd-book-identity {
@@ -831,6 +838,15 @@
   white-space: nowrap;
 }
 
+/* Library/BookDetail/QuickSourceSheet · Figma 2265:225 */
+.fd-book-detail-phone .fd-demo-sheet {
+  box-sizing: border-box;
+  min-height: 276px;
+  height: 276px;
+  padding: 25px 15px 27px;
+  box-shadow: none;
+}
+
 .fd-demo-sheet button.fd-sheet-danger-action {
   background: rgba(169, 75, 68, 0.1);
   color: var(--fd-danger);
@@ -909,6 +925,90 @@
 .fd-demo-dialog button:last-child {
   background: var(--fd-danger);
   color: #fff;
+}
+
+/* Library/BookDetail/DeleteDialog · Figma 2269:66. Overlay/Dialog remains the
+ * source for other families; Book Detail has its own approved 306×190 layout. */
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] {
+  left: 50%;
+  right: auto;
+  top: 50%;
+  width: 306px;
+  min-height: 190px;
+  height: 190px;
+  display: block;
+  box-sizing: border-box;
+  padding: 0;
+  border-color: var(--fd-border);
+  border-radius: var(--fd-radius-lg);
+  background: var(--fd-surface-solid);
+  box-shadow: 0 18px 23px rgba(89, 70, 50, 0.16);
+  transform: translate(-50%, -44%) scale(var(--reader-motion-scale-dialog-enter));
+}
+
+.fd-book-detail-phone.has-dialog .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"][aria-invalid="true"] {
+  border-color: rgba(191, 31, 31, 0.65);
+}
+
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] h2 {
+  position: absolute;
+  top: 17px;
+  left: 17px;
+  margin: 0;
+  color: var(--fd-ink);
+  font-family: var(--fd-sans);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] p {
+  position: absolute;
+  top: 53px;
+  left: 17px;
+  width: 270px;
+  height: 50px;
+  margin: 0;
+  color: var(--fd-muted);
+  font-family: var(--fd-sans);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] > div {
+  position: absolute;
+  top: 133px;
+  left: 17px;
+  width: 270px;
+  height: 38px;
+  display: grid;
+  grid-template-columns: 130px 130px;
+  gap: 10px;
+}
+
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] button {
+  min-height: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fd-radius-lg);
+  background: var(--fd-surface-panel-soft);
+  color: var(--fd-ink);
+  font-family: var(--fd-sans);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] button:last-child,
+.fd-book-detail-phone .fd-demo-dialog[aria-labelledby="book-detail-remove-title"] button.is-danger {
+  background: var(--fd-ds-color-control-field-border-error, #d7473e);
+  color: var(--fd-surface-solid);
 }
 
 .fd-rss-confirm-dialog small {

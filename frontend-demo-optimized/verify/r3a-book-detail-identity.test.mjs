@@ -9,6 +9,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (path) => readFileSync(join(root, path), "utf8");
 const declarationsSource = read("control-identity-declarations.js");
 const rendererSource = read("renderers/d2-bookshelf-discover-renderers.js");
+const bookDetailStyles = read("styles/04-settings-source.css");
 const kitSource = read("shared-shell-kit/kit.js");
 const runtimeSource = read("render-runtime.js");
 const fixture = {
@@ -102,4 +103,14 @@ test("R3a local canonical targets remain book-directory and immersive-reading", 
   assert.match(html, /data-route="book-directory"/);
   assert.match(html, /data-route="immersive-reading"/);
   assert.doesNotMatch(html, /Reader Full Directory|Reader Control Home/);
+});
+
+test("VC3 Book Detail keeps its approved Figma-sized shell and source-scoped surfaces", () => {
+  const html = fresh().bookDetailV2(fixture, "book-detail", {});
+  assert.match(html, /fd-library-phone fd-book-detail-phone/);
+  assert.match(bookDetailStyles, /\.fd-book-detail-phone\s*\{[\s\S]*height:\s*var\(--fd-runtime-phone-height\)/);
+  assert.match(bookDetailStyles, /\.fd-book-detail-phone \.fd-demo-sheet\s*\{[\s\S]*height:\s*276px[\s\S]*box-shadow:\s*none/);
+  assert.match(bookDetailStyles, /book-detail-remove-title\"\]\s*\{[\s\S]*left:\s*50%[\s\S]*width:\s*306px[\s\S]*height:\s*190px/);
+  assert.match(bookDetailStyles, /fd-book-detail-phone\.has-dialog[\s\S]*translate\(-50%, -50%\) scale\(1\)/);
+  assert.match(bookDetailStyles, /\.fd-book-detail-hero img\s*\{[\s\S]*box-shadow:\s*none/);
 });

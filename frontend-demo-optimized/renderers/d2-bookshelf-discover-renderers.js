@@ -1328,7 +1328,7 @@
 
     // 状态变体：加载中
     if (detailState === "loading") {
-      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-book-detail-phone"), {
         data: data,
         title: "书籍详情",
         ariaLabel: "书籍详情加载中",
@@ -1359,7 +1359,7 @@
 
     // 状态变体：离线
     if (detailState === "offline") {
-      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-book-detail-phone"), {
         data: data,
         title: "书籍详情",
         ariaLabel: "书籍详情离线状态",
@@ -1403,7 +1403,7 @@
 
     // 状态变体：无目录 / 目录解析失败
     if (detailState === "no-toc") {
-      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-book-detail-phone"), {
         data: data,
         title: "书籍详情",
         ariaLabel: "书籍详情目录解析失败",
@@ -1441,7 +1441,7 @@
 
     // 状态变体：已删书 / 不在书架
     if (detailState === "removed") {
-      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+      return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-book-detail-phone"), {
         data: data,
         title: "书籍详情",
         ariaLabel: "书籍已从书架移除",
@@ -1476,7 +1476,17 @@
     }
 
     // 正常状态
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
+    var deleteIsLoading = owned.deleteStatus === "loading";
+    var deleteIsFailed = owned.deleteStatus === "failed";
+    var deleteDialogTitle = deleteIsFailed ? "移除失败" : deleteIsLoading ? "正在移除" : "移除书架";
+    var deleteDialogDescription = deleteIsFailed
+      ? "暂时无法移除，请检查网络后重试。"
+      : deleteIsLoading
+        ? "正在更新书架，请稍候。"
+        : `确认将《${esc(book.title)}》移出书架？阅读记录将保留。`;
+    var deleteDialogActionLabel = deleteIsFailed ? "重试" : deleteIsLoading ? "移除中…" : "移除";
+
+    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-book-detail-phone"), {
       data: data,
       title: "书籍详情",
       ariaLabel: "书籍详情",
@@ -1538,11 +1548,11 @@
         </section>`,
       dialogHtml: `
         <section class="fd-demo-dialog" role="dialog" aria-modal="true" aria-labelledby="book-detail-remove-title" aria-describedby="book-detail-remove-desc" aria-hidden="${owned.dialogOpen ? "false" : "true"}"${owned.deleteStatus === "failed" ? " aria-invalid=\"true\"" : ""} data-demo-dialog>
-          <h2 id="book-detail-remove-title">${owned.deleteStatus === "failed" ? "移除失败" : "确认删除？"}</h2>
-          <p id="book-detail-remove-desc">${owned.error ? esc(owned.error) : "只从书架移除，不删除本地文件和阅读记录。"}</p>
+          <h2 id="book-detail-remove-title">${deleteDialogTitle}</h2>
+          <p id="book-detail-remove-desc">${deleteDialogDescription}</p>
           <div>
-            <button type="button"${d2BookDetailIdentityAttrs(route, "remove-cancel")} data-close-dialog data-dialog-initial-focus data-restore-focus="remove-open"${owned.deleteStatus === "loading" ? " disabled" : ""}>取消</button>
-            <button type="button"${d2BookDetailIdentityAttrs(route, "remove-confirm")} data-book-detail-remove-confirm aria-busy="${owned.deleteStatus === "loading" ? "true" : "false"}"${owned.deleteStatus === "loading" ? " disabled" : ""}>删除</button>
+            <button type="button"${d2BookDetailIdentityAttrs(route, "remove-cancel")} data-close-dialog data-dialog-initial-focus data-restore-focus="remove-open"${deleteIsLoading ? " disabled" : ""}>取消</button>
+            <button type="button"${d2BookDetailIdentityAttrs(route, "remove-confirm")} data-book-detail-remove-confirm aria-busy="${deleteIsLoading ? "true" : "false"}"${deleteIsLoading ? " disabled" : ""}>${deleteDialogActionLabel}</button>
           </div>
         </section>`
     }));
