@@ -1,0 +1,85 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_MOTION_DELTA",
+  "scope": "reader-runtime/mr1",
+  "status": "MR1_WRITER_COMPLETE_AWAITING_USER_RHYTHM_CONFIRMATION",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "lastReadableRevision": "2378562033612422730",
+  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_WRITE",
+  "localVerificationHead": "727367333af96b9ecabd614d880f2c41f4611ba1",
+  "staticSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1023:17636",
+    "nodeId": "1214:10117",
+    "name": "15 · Reader 2 / 03 · Reader 2 · Responsive Masters",
+    "mutated": false
+  },
+  "motionReference": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1246:26829",
+    "sectionNodeId": "1247:2",
+    "name": "MR1 · Production Motion Contract · 非人工审视入口"
+  },
+  "deltas": [
+    {
+      "pageId": "1246:26829",
+      "nodeId": "2672:49089",
+      "oldValue": "MR1 had no traceable panel-expand specification card or explicit link to its existing continuity storyboard.",
+      "newValue": "Spec · reader.panel.expand records the 420ms production token, Review J source (1505:16662), redirect behavior and zero-duration same-terminal reduced-motion rule."
+    },
+    {
+      "pageId": "1246:26829",
+      "nodeId": "2672:49094",
+      "oldValue": "MR1 had no traceable panel-collapse specification card or explicit link to its existing continuity storyboard.",
+      "newValue": "Spec · reader.panel.collapse records the 360ms production token, Review K source (1505:17003), redirect behavior and zero-duration same-terminal reduced-motion rule."
+    },
+    {
+      "pageId": "1246:26829",
+      "nodeId": "1505:16986",
+      "oldValue": "Review J separated start/end/anchor/review timing but did not explicitly state contract, opposite-action interruption or reduced-motion terminal state.",
+      "newValue": "Review J now documents Contract, Interrupt and Reduced annotations alongside its existing editable timeline and start/end/anchor evidence."
+    },
+    {
+      "pageId": "1246:26829",
+      "nodeId": "1505:17327",
+      "oldValue": "Review K separated start/end/anchor/review timing but did not explicitly state contract, opposite-action interruption or reduced-motion terminal state.",
+      "newValue": "Review K now documents Contract, Interrupt and Reduced annotations alongside its existing editable timeline and start/end/anchor evidence."
+    }
+  ],
+  "timelineEvidence": {
+    "productionTokens": {
+      "reader.panel.expand": "420ms / ease-out",
+      "reader.panel.collapse": "360ms / ease-in"
+    },
+    "reviewTimelines": {
+      "1505:16662": "0.7s / Review J / panel expand",
+      "1505:17003": "4.0s / Review K / panel collapse"
+    },
+    "rule": "Review timing is for manual inspection only and must not replace production duration tokens.",
+    "exportVerification": [
+      {"nodeId":"1276:2667","result":"MP4 exported successfully"},
+      {"nodeId":"1505:16662","result":"MP4 exported successfully"}
+    ]
+  },
+  "contract": {
+    "frozenMotionIds": [
+      "reader.control.show",
+      "reader.control.hide",
+      "reader.quick.promote",
+      "reader.module.switch",
+      "reader.panel.expand",
+      "reader.panel.collapse"
+    ],
+    "requiredFields": ["trigger", "from", "to", "interrupt", "finalState", "cleanup", "reducedMotion"],
+    "focusedVerification": {"tests":23,"passed":23,"failed":0},
+    "coverageReconciliation": "verify-motion-coverage 36/36 PASS after classifying six legacy fail-loud guards and two WebDAV non-contract state aliases; raw switch cases remain auditable and unclassifiedExtraRender=0."
+  },
+  "boundaries": {
+    "reader2StaticModified": false,
+    "nonReaderF3Started": false,
+    "motionReferenceOnly": true,
+    "userRhythmConfirmationRequired": true,
+    "mr2OrGlobalF3ClaimedComplete": false
+  },
+  "remainingGate": "USER_RHYTHM_CONFIRMATION_FOR_MR1; MR2/MR3/MR4/MR5_REMAIN_SEPARATE"
+}

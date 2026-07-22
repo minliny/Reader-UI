@@ -1,7 +1,7 @@
 # Reader Motion Reference Index
 
-状态：MR1 控制层完成自验；MR2 Review Batch 进行中，十个核心家族尚未闭环  
-日期：2026-07-16  
+状态：MR1 控制层 F3 证据已补齐，待用户确认审查节奏；MR2 Review Batch 进行中，十个核心家族尚未闭环
+日期：2026-07-22
 静态输入：[`15 · Reader 2`](https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK?node-id=1023-17636)  
 动效参考：[`25 · Motion Reference / MR1 · Reader Control Layer`](https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK?node-id=1247-2)
 
@@ -20,8 +20,12 @@
 | `reader.control.hide` | `1247:489` | ReadingSurface + TopBar + ControlDock | 360ms / ease-in | 正文固定；TopBar 与 Dock 退出后恢复沉浸热区 |
 | `reader.quick.promote` | `1247:627` | ControlHome -> Search quick state | 320ms / ease-out | 快捷面板 12px 轻位移进入；不触发正文重排 |
 | `reader.module.switch` | `1247:1275` | Directory -> TTS module state | 360ms / ease | 模块内容交叉淡化；底部 ModuleNav 几何不移动 |
+| `reader.panel.expand` | `1505:16662`（Review J；MR1 规格 `2672:49089`） | Quick panel -> Full panel | 420ms / ease-out | Review J 的 0.7s 仅供人工审查；正文、焦点、route 与终态以 Contract 为准 |
+| `reader.panel.collapse` | `1505:17003`（Review K；MR1 规格 `2672:49094`） | Full panel -> Quick panel | 360ms / ease-in | Review K 的 4.0s 仅供人工审查；反向动作立即接管到最新终态 |
 
 四个 timeline 已写入可编辑的 Figma Motion Opacity / Position tracks；本轮 Contract / 本地 demo 可观察性校准后的 canonical duration 分别为 `0.42 / 0.36 / 0.32 / 0.36s`，Figma timeline 也必须按本表同步后才能作为同一轮节奏参考。Figma 静态截图只验证 resting composition；动态正确性必须继续由本地 harness 与实际播放验证。
+
+2026-07-22 的 MR1 补充只修改 `25 · Motion Reference`，未触碰 `15 · Reader 2` 静态组件：新增 panel expand/collapse 规格卡，并在 Review J/K 的既有关键帧 storyboard 中标明 Contract、反向动作打断、最终 settle 和 reduced-motion 同终态。Production token 与 Review 计时明确分开：J=`0.7s`、K=`4.0s` 为审查节奏，不替代 `420ms` / `360ms` 的 canonical runtime token。Figma `export_video` 已成功渲染 Review A 与 Review J；导出文件为短期审查产物，不能代替可追溯的本地/设备媒体证据。
 
 本地样板由 `reader-control-transition.js` 统一承接，并复用 `motion-controller.js` 的 canonical duration / easing。控制层过渡只拥有 TopBar、BottomSheet 和 ModuleNav；`ReadingSurface` 不进入 outgoing / incoming clone，也不参与位移或重排。
 
@@ -61,4 +65,4 @@
 
 ## 当前限制
 
-当前 Figma connector 未暴露 `export_video` / `get_motion_context`，因此不能把 resting screenshot 当作动态播放证明。Figma timeline 的节点、动画样式和 duration 已经结构化读取验证；最终动态证据由本地 demo 产出。
+当前 connector 已暴露 `export_video`，可对顶层 review frame 生成短期 MP4 审查产物；它证明 Figma timeline 可渲染，但不替代可追溯的 demo/browser 或设备媒体证据。Figma timeline 的节点、动画样式和 duration 已结构化读取验证；MR1 仍须由用户确认节奏，MR2/MR3/MR4/MR5 的缺口不因此关闭。
