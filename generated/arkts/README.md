@@ -9,7 +9,7 @@
 node tools/codegen/generate.mjs
 ```
 
-当前产物（VERSION.json 3.0.0）：16 个 .ets 文件
+当前产物（VERSION.json 3.1.0）：16 个 .ets 文件
 
 - Route.ets / UiEvent.ets / UiState.ets / ViewState.ets / Motion.ets / Token.ets / Appearance.ets
 - CoreCommand.ets / CoreEvent.ets / HostRequest.ets / ProgressLocation.ets / Content.ets / SyncConflict.ets

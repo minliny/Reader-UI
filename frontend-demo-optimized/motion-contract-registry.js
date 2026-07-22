@@ -3,7 +3,7 @@
 (function attachReaderMotionContractRegistry(window) {
   "use strict";
 
-  const VERSION = "3.0.0";
+  const VERSION = "3.1.0";
   const MOTION_SPECS = [
   {
     "id": "app.firstOpen.enter",

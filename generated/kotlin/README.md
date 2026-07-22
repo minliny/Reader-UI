@@ -9,7 +9,7 @@
 node tools/codegen/generate.mjs
 ```
 
-当前产物（VERSION.json 3.0.0）：16 个 .kt 文件
+当前产物（VERSION.json 3.1.0）：16 个 .kt 文件
 
 - Route.kt / UiEvent.kt / UiState.kt / ViewState.kt / Motion.kt / Token.kt / Appearance.kt
 - CoreCommand.kt / CoreEvent.kt / HostRequest.kt / ProgressLocation.kt / Content.kt / SyncConflict.kt

@@ -4,7 +4,7 @@
 
 runtime-coverage.json 由 canonical UiEvent、runtime-actions.json 与 runtime-ownership.json 生成；它是逐事件 ownership/rollout 清单，不是平台 renderer。
 
-当前产物（VERSION.json 3.0.0）：
+当前产物（VERSION.json 3.1.0）：
 
 ```text
 generated/

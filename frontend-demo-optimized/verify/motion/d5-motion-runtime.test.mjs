@@ -17,6 +17,7 @@ const registrySource = readFileSync(
   "utf8"
 );
 const motionSchema = JSON.parse(readFileSync(join(repoRoot, "contracts", "motion.schema.json"), "utf8"));
+const contractVersion = JSON.parse(readFileSync(join(repoRoot, "contracts", "VERSION.json"), "utf8")).version;
 const motionFixtures = JSON.parse(readFileSync(join(repoRoot, "contracts", "fixtures", "motion.fixtures.json"), "utf8"));
 const fixtureById = new Map(motionFixtures.map((fixture) => [fixture.id, fixture]));
 
@@ -64,7 +65,7 @@ test("browser resolver preserves canonical priority, route-shell lookup, and no-
   vm.runInContext(registrySource, context);
   const registry = context.window.ReaderMotionContractRegistry;
 
-  assert.equal(registry.version, "3.0.0");
+  assert.equal(registry.version, contractVersion);
   assert.equal(registry.specs.length, 95);
   assert.equal(registry.policies.length, 53);
   assert.deepEqual(

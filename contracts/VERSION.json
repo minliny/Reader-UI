@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0",
+  "version": "3.1.0",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
@@ -8,7 +8,7 @@
     "motion": "2.1.0",
     "token": "2.1.0",
     "appearance": "1.0.0",
-    "core-command": "1.0.0",
+    "core-command": "1.1.0",
     "core-event": "1.0.0",
     "host-request": "1.2.0",
     "host-result": "1.0.0",
@@ -26,6 +26,17 @@
     "device-conformance-evidence": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "3.1.0",
+      "date": "2026-07-22",
+      "summary": "MINOR：replace.undo CoreCommand 与 DOM-only control identity token 边界",
+      "changes": [
+        "CoreCommand 新增 replace.undo；这是兼容新增，core-command schema 升至 1.1.0。",
+        "35 个仅用于本地 DOM 身份的词从 UiEvent 中剥离为 data-control-token；它们不属于跨端 UiEvent，也不进入 Swift、Kotlin 或 ArkTS enum。",
+        "ControlIdentity schema 1.4.0 新增 source.controlIdentityToken，fail-closed 限定为 runtime event scope matrix 明确排除的身份词；状态 owner、业务流程和已发布 UiEvent 保持不变。",
+        "Reader UI contract、Kotlin runtime 与 ArkTS runtime package 同步升至 3.1.0；正式消费仍须由精确 commit/tag 的不可变 artifact 驱动。"
+      ]
+    },
     {
       "version": "3.0.0",
       "date": "2026-07-15",
