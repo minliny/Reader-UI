@@ -465,6 +465,7 @@ test("tag workflow installs clean dependencies, uploads only the exact stage, an
   assert.match(workflow, /outputs\.artifact-digest/);
   assert.match(workflow, /actions\/download-artifact@[0-9a-f]{40} # v4/);
   assert.match(workflow, /artifact-ids: \$\{\{ needs\.validate\.outputs\.artifact_id }}/);
+  assert.match(workflow, /merge-multiple: true/);
   assert.match(workflow, /inventory_sha256: \$\{\{ steps\.release-metadata\.outputs\.inventory_sha256 }}/);
   assert.match(workflow, /--artifact-root release-download/);
   assert.match(workflow, /--inventory-sha256 "\$READER_UI_INVENTORY_SHA256"/);

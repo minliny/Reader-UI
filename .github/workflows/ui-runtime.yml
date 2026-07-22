@@ -101,6 +101,9 @@ jobs:
         with:
           artifact-ids: ${{ needs.validate.outputs.artifact_id }}
           path: release-download
+          # artifact-ids is treated as a multi-artifact download by v4; flatten the
+          # single verified stage so dispatch reads its signed inventory at this root.
+          merge-multiple: true
 
       - name: Dispatch verified UI release to configured host repositories
         env:
