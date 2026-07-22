@@ -13,7 +13,8 @@
     "implementationCommitSubject": "feat(reader-runtime): R2a/R2b/R3a LOCAL_READY_FOR_FIGMA",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): reader-runtime LOCAL_READY_FOR_FIGMA evidence binding",
-    "localReadyForFigma": true
+    "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
   },
   "globalAlignment": {
     "lastConfirmedFigmaRevisionAtLocalPreparation": "2378333433968465691",
@@ -63,20 +64,23 @@
       "auto-page": "reader-auto-scroll-overlay-v2",
       "content-replacement": "reader-replace-overlay-v2"
     },
-    "crosswalkRule": "Compatibility routes preserve their local route and UiEvent semantics while sharing the canonical visual surface. Figma labels must not create replacement business routes or a second state owner."
+    "crosswalkRule": "Compatibility routes preserve their local route and declaration-governed semantic-slot contract while sharing the canonical visual surface. Figma labels must not create replacement business routes or a second state owner."
   },
   "r2aInstrumentation": {
     "declarationCount": 439,
     "mappingStatus": "439/439 mapped",
     "source": "reader-runtime-action",
     "productionOwner": "ReaderRuntimeContract.instrumentDom",
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 21,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "viewportAttr": "data-viewport=phone|tablet",
     "renderedPrimaryRouteCounts": {
       "immersive-reading": 3,

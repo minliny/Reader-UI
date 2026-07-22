@@ -16,6 +16,7 @@
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): source-management LOCAL_READY_FOR_FIGMA evidence binding",
     "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1",
     "localReadyMarker": "docs/design/handoffs/source-management/LOCAL_READY_FOR_FIGMA.json",
     "r3aMarker": "docs/design/handoffs/source-management/LOCAL_READY_FOR_FIGMA.json#admission.r3aPass"
   },
@@ -84,14 +85,16 @@
     "testInlineMirrorProhibited": true
   },
   "r2aInstrumentation": {
-    "stageDefinition": "R2a = stable control identity: every operable control has 5 data-* attributes (data-entity-key, data-control-key, data-control-id, data-ui-event, data-settings-key). No ordinal, CSS selector, display text, or array position used as stable identity.",
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "stageDefinition": "R2a = stable control identity: every mapped control has four stable data-* attributes plus exactly one declaration-governed semantic slot. No ordinal, CSS selector, display text, or array position is used as stable identity.",
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "viewportAttrStamping": {
       "attr": "data-viewport",
       "stampedBy": "render-runtime.js applyViewportClass(root)",
@@ -178,24 +181,12 @@
       "staleAsyncResultGuard": "DELETE_SUCCESS and DELETE_FAILED reducers return same state reference when status !== 'loading'; stale async results are discarded",
       "deleteFailureRecovery": "DELETE_FAILED preserves sources and selectedSources; dialog stays open with aria-invalid + error title; user can retry via executeDelete()"
     },
-    "uiEventWiring": {
-      "switch": "data-ui-event='toggle.switch' → TOGGLE_SOURCE action",
-      "search": "data-ui-event='input.search' → SET_SEARCH action",
-      "select": "data-ui-event='dropdown.option.select' → SET_GROUP_FILTER action",
-      "segment": "data-ui-event='segment.item.switch' → SET_STATUS_FILTER action",
-      "menuToggle": "data-ui-event='menu.toggle' → TOGGLE_MENU action",
-      "menuItem": "data-ui-event='menu.item.select' → CLOSE_MENU (or route navigation)",
-      "addSheetOpen": "data-ui-event='sheet.add-source.open' → OPEN_ADD_SHEET action",
-      "addSheetClose": "data-ui-event='sheet.add-source.cancel' → CLOSE_ADD_SHEET action",
-      "batchEnter": "data-ui-event='batch.enter' → ENTER_BATCH_MODE action",
-      "batchExit": "data-ui-event='batch.exit' → EXIT_BATCH_MODE action",
-      "batchSelectAll": "data-ui-event='batch.select-all.toggle' → SELECT_ALL/DESELECT_ALL toggle",
-      "batchSelect": "data-ui-event='batch.select.toggle' → TOGGLE_SELECT action",
-      "batchDelete": "data-ui-event='delete.confirm.open' → DELETE_CONFIRM_OPEN action",
-      "deleteConfirm": "data-ui-event='delete.confirm' → DELETE_START → executeDelete() → DELETE_SUCCESS/DELETE_FAILED",
-      "deleteCancel": "data-ui-event='delete.cancel' → DELETE_CONFIRM_CLOSE action",
-      "deleteLogCleanup": "data-ui-event='delete.log-cleanup.toggle' → DELETE_CONFIRM_TOGGLE_LOG action",
-      "back": "data-ui-event='route.pop' → navigation"
+    "runtimeDomWiring": {
+      "semanticSlotRule": "The generated declaration selects data-ui-event only for released UiEvents; all scope-matrix identity-only values use data-control-token.",
+      "releasedUiEventExamples": ["toggle.switch", "dropdown.option.select", "segment.item.switch", "route.pop"],
+      "identityOnlyControlAreas": ["search", "more menu", "add sheet", "batch actions", "delete dialog"],
+      "stateOwnerRule": "d2SourceManagementState remains the sole reducer/effect owner. Changing the DOM semantic slot does not alter TOGGLE_MENU, CLOSE_ADD_SHEET, batch, delete, or navigation behavior.",
+      "historicalNamingCorrection": "The prior packet named a sheet cancel UiEvent. The current declaration uses the identity-only token sheet.add-source.close; CLOSE_ADD_SHEET remains the reducer action."
     },
     "asyncFlowHelper": {
       "function": "d2ExecuteSourceDelete(options)",
@@ -225,6 +216,7 @@
   },
   "r3aPreFunctionalVerification": {
     "stageDefinition": "R3a = local admission verification: Phone + Tablet two-viewport automated tests + controlKey consistency + stable terminal state + delete flow tests + focus return evidence + a11y + console error = 0 + no compact-landscape/fold atoms + full regression no degradation",
+    "legacySemanticFieldInterpretation": "The historic controlList.uiEvent and uiEventCatalog labels identify local reducer intent only. They are not an assertion that the current DOM writes data-ui-event; the generated declaration now selects data-ui-event or data-control-token under r2aInstrumentation.identityAttributeContract.",
     "controlList": [
       { "settingsKey": "source-qidian", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2SourceManagementState.sources[source-qidian].enabled", "owner": "sourceManagement" },
       { "settingsKey": "source-biquge", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2SourceManagementState.sources[source-biquge].enabled", "owner": "sourceManagement" },
@@ -427,7 +419,8 @@
     },
     "allSourceManagementDeclarationsHaveControlId": true,
     "allSourceManagementDeclarationsHaveSettingsKey": true,
-    "allSourceManagementDeclarationsHaveUiEvent": true,
+    "allSourceManagementDeclarationsHaveSemanticSlot": true,
+    "identityOnlyTokenDeclarationCount": 38,
     "allSourceManagementDeclarationsHaveRenderer": "sourceSettingsV2",
     "allSourceManagementDeclarationsHaveRendererFile": "renderers/d2-settings-sync-renderers.js",
     "allSourceManagementDeclarationsHavePageFamily": "source-management"
@@ -442,8 +435,7 @@
     "rendererOutputIsViewportAgnostic": true,
     "domNoDuplicateControlKey": true,
     "domNoOrphanControlKey": true,
-    "uiEventCoverage": "48/48 controls carry non-empty data-ui-event",
-    "fiveDataAttrsCoverage": "48/48 controls carry all 5 data-* attributes",
+    "semanticSlotCoverage": "48/48 controls carry four stable identity attributes plus exactly one semantic slot; 38 declarations use data-control-token and the remainder use released data-ui-event values.",
     "noCompactLandscapeAtom": true,
     "noFoldAtom": true,
     "noCompactViewportClass": true,
@@ -493,7 +485,7 @@
       "displayText": "prohibited",
       "arrayPositions": "prohibited"
     },
-    "identityStrategy": "settingsKey-based: each control has a stable settingsKey declared in control-identity-declarations.js; renderer calls d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity) to stamp 5 data-* attributes"
+    "identityStrategy": "settingsKey-based: each control has a stable settingsKey declared in control-identity-declarations.js; renderer calls d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity) to stamp four stable attributes plus exactly one declaration-governed semantic slot."
   },
   "sharedComponentSources": {
     "d2SettingsShell": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (extended to support bottomActionHtml/sheetHtml/dialogHtml/trailingHtml/backButtonAttrs/frameState options)",

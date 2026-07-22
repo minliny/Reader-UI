@@ -14,7 +14,8 @@
     "implementationCommitSubject": "feat(sync-backup): complete LOCAL_READY implementation",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): sync-backup LOCAL_READY_FOR_FIGMA evidence binding",
-    "localReadyForFigma": true
+    "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
   },
   "routeFamily": {
     "canonicalRoutes": [
@@ -47,13 +48,16 @@
       "progress-sync-status/default": 3,
       "remote-webdav-books/default": 12
     },
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 1,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "identityPolicy": "All 92 declarations use stable business settingsKey values. Ordinals, selector hashes, labels and DOM order are prohibited. Unknown identity fails closed."
   },
   "r2bRealInteraction": {
@@ -128,7 +132,7 @@
     "Repair Phone and Tablet masters only. Landscape inherits Tablet; do not create Compact or Fold structures.",
     "Represent manual backup/history as states or overlays of the canonical owner; do not recreate the retired routes as a second flow.",
     "Repair Page 24 masters through real component instances, then let Page 23 instances inherit. Detached frames and screenshots are prohibited.",
-    "Preserve existing reactions and downstream instances. Figma may not change UiEvent, reducer ownership, async guards or business flow."
+    "Preserve existing reactions and downstream instances. Figma may not change UiEvent, controlIdentityToken, reducer ownership, async guards or business flow."
   ],
   "admission": {
     "r2aPass": true,

@@ -14,7 +14,8 @@
     "implementationCommitSubject": "feat(import): complete conflict resolution R3a contract",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): bind import-conflict-resolve LOCAL_READY_FOR_FIGMA evidence",
-    "localReadyForFigma": false
+    "localReadyForFigma": false,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
   },
   "routeFamily": {
     "primaryRoutes": [
@@ -50,18 +51,22 @@
       "import-permission-denied/permission": 4,
       "import-result-detail/default": 4
     },
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "identityAttributeContract": {
+      "status": "historical-runtime-evidence-only; Figma scope is excluded by user",
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 6,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "stableBatchId": "local-book-import-20260721",
     "stableItemIds": ["rain-night", "old-book-scan", "missing-chapters"],
     "stableConflictIds": ["title", "author", "group"],
     "identityPolicy": "Only the stable batch, item, conflict and named action keys participate in identity. Labels, selectors, DOM order, ordinal n0-style keys and screenshots are prohibited.",
-    "runtimeEvidence": "The deterministic production VM rendered all eight primary routes and found 32/32 controls carrying all five canonical identity attributes.",
+    "runtimeEvidence": "Historical runtime evidence only: the deterministic production VM rendered all eight primary routes with four stable identity attributes plus exactly one declaration-governed semantic slot. This does not re-admit the withdrawn Figma family.",
     "generatedRegistryIsolation": "Logical registry differences from the baseline are limited to the eight declared primary routes."
   },
   "r2bRealInteraction": {
@@ -177,7 +182,7 @@
     "Preserve stable batch, item and conflict identity and keep trailing metadata/actions right-aligned.",
     "Model parsing, duplicate, conflict, partial-success, permission and error states within this canonical family.",
     "Use only Phone and Tablet; Landscape inherits Tablet and Compact/Fold structures are prohibited.",
-    "Preserve reactions. Figma may not change UiEvent, state owner, async guards, route ownership or import business flow.",
+    "Preserve reactions. Figma may not change UiEvent, controlIdentityToken, state owner, async guards, route ownership or import business flow.",
     "Detached frames and screenshot replacements are prohibited."
   ],
   "admission": {

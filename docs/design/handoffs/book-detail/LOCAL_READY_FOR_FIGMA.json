@@ -13,7 +13,8 @@
     "implementationCommitSubject": "feat(book-detail): R2a/R2b/R3a LOCAL_READY_FOR_FIGMA",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): book-detail LOCAL_READY_FOR_FIGMA evidence binding",
-    "localReadyForFigma": true
+    "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
   },
   "globalAlignment": {
     "lastConfirmedFigmaRevisionAtLocalPreparation": "2378333433968465691",
@@ -51,13 +52,16 @@
     "controlCount": 56,
     "mappingStatus": "56/56 mapped",
     "source": "book-detail-action",
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 6,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "normalRenderedControlCount": 15,
     "tocPreviewRenderedControlCount": 14,
     "directoryRenderedControlCount": 10,

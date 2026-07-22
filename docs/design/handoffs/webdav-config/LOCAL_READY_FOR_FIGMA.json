@@ -16,6 +16,7 @@
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
     "evidenceCommitSubject": "docs(handoff): webdav-config LOCAL_READY_FOR_FIGMA evidence binding",
     "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1",
     "localReadyMarker": "docs/design/handoffs/webdav-config/LOCAL_READY_FOR_FIGMA.json",
     "r3aMarker": "docs/design/handoffs/webdav-config/LOCAL_READY_FOR_FIGMA.json#admission.r3aPass"
   },
@@ -64,14 +65,16 @@
     "testInlineMirrorProhibited": true
   },
   "r2aInstrumentation": {
-    "stageDefinition": "R2a = stable control identity: every operable control has 5 data-* attributes (data-entity-key, data-control-key, data-control-id, data-ui-event, data-settings-key). No ordinal, CSS selector, display text, or array position used as stable identity.",
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "stageDefinition": "R2a = stable control identity: every mapped control has four stable data-* attributes plus exactly one declaration-governed semantic slot. No ordinal, CSS selector, display text, or array position is used as stable identity.",
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "viewportAttrStamping": {
       "attr": "data-viewport",
       "stampedBy": "render-runtime.js applyViewportClass(root)",
@@ -163,25 +166,12 @@
       "loadingCloseGuard": "TEST_CONFIRM_CLOSE / SAVE_CONFIRM_CLOSE / CLEAR_CONFIRM_CLOSE return same state reference when status === 'loading' (cannot close dialog during loading)",
       "clearSuccessSideEffect": "CLEAR_SUCCESS resets values to D2_WEBDAV_CONFIG_DEFAULTS and clears inputErrors"
     },
-    "uiEventWiring": {
-      "switch": "data-ui-event='toggle.switch' → TOGGLE_SWITCH action (sslVerify / wifiOnly)",
-      "input": "data-ui-event='input.change' → SET_INPUT action (serverUrl / account / password / syncDir)",
-      "inputValidate": "INPUT_VALIDATE action triggered on form submission attempts (before TEST_CONFIRM_OPEN / SAVE_CONFIRM_OPEN)",
-      "stepper": "data-ui-event='stepper.valueChange' → STEP_TIMEOUT action (delta=+1/-1)",
-      "select": "data-ui-event='dropdown.option.select' → SELECT_AUTO_SYNC action (only valid options accepted)",
-      "testConnection": "data-ui-event='webdav-test.confirm' → TEST_CONFIRM_OPEN action → TEST_START → d2ExecuteWebdavTest() → TEST_SUCCESS/TEST_FAILED",
-      "saveConfig": "data-ui-event='webdav-save.confirm' → SAVE_CONFIRM_OPEN action → SAVE_START → d2ExecuteWebdavSave() → SAVE_SUCCESS/SAVE_FAILED",
-      "clearConfig": "data-ui-event='webdav-clear.confirm' → CLEAR_CONFIRM_OPEN action → CLEAR_START → d2ExecuteWebdavClear() → CLEAR_SUCCESS/SAVE_FAILED",
-      "testConfirm": "data-ui-event='webdav-test.execute' → TEST_START action",
-      "testCancel": "data-ui-event='webdav-test.cancel' → TEST_CONFIRM_CLOSE action",
-      "saveConfirm": "data-ui-event='webdav-save.execute' → SAVE_START action",
-      "saveCancel": "data-ui-event='webdav-save.cancel' → SAVE_CONFIRM_CLOSE action",
-      "clearConfirm": "data-ui-event='webdav-clear.execute' → CLEAR_START action",
-      "clearCancel": "data-ui-event='webdav-clear.cancel' → CLEAR_CONFIRM_CLOSE action",
-      "testAgain": "data-ui-event='webdav-test.confirm' (webdav-test route) → re-run test",
-      "viewRemoteBackup": "data-ui-event='route.push' → navigate to remote-webdav-books route",
-      "webdavErrorLinkRow": "data-ui-event='overlay.open' / 'route.push' (per-row action)",
-      "back": "data-ui-event='route.pop' → navigation"
+    "runtimeDomWiring": {
+      "semanticSlotRule": "The generated declaration selects data-ui-event only for released UiEvents; all scope-matrix identity-only values use data-control-token.",
+      "releasedUiEventExamples": ["toggle.switch", "stepper.valueChange", "dropdown.option.select", "route.push", "route.pop"],
+      "identityOnlyControlAreas": ["input.change", "test/save/clear confirmation, execution, and cancellation controls"],
+      "localInputBinding": "render-runtime listens on data-control-token='input.change' and dispatches SET_INPUT for serverUrl, account, password, and syncDir.",
+      "stateOwnerRule": "d2WebdavConfigState remains the sole reducer/effect owner; semantic-slot classification does not alter validation, async guards, focus return, or dialog transitions."
     },
     "asyncFlowHelpers": [
       {
@@ -233,6 +223,7 @@
   },
   "r3aPreFunctionalVerification": {
     "stageDefinition": "R3a = local admission verification: Phone + Tablet two-viewport automated tests + controlKey consistency + stable terminal state + 3 async flow tests + input validation + focus return evidence + a11y + console error = 0 + no compact-landscape/fold atoms + full regression no degradation",
+    "legacySemanticFieldInterpretation": "Historic control-list UiEvent labels describe local reducer intent only. They are not an assertion that the current DOM writes data-ui-event; the generated declaration now selects data-ui-event or data-control-token under r2aInstrumentation.identityAttributeContract.",
     "controlList": [
       { "settingsKey": "back", "type": "a3-action", "uiEvent": "route.pop", "stateOwner": "navigation", "owner": "router", "route": "webdav-config" },
       { "settingsKey": "serverUrl", "type": "textbox", "uiEvent": "input.change", "stateOwner": "d2WebdavConfigState.values.serverUrl", "owner": "webdavConfig", "route": "webdav-config" },
@@ -406,7 +397,8 @@
     },
     "allWebdavConfigDeclarationsHaveControlId": true,
     "allWebdavConfigDeclarationsHaveSettingsKey": true,
-    "allWebdavConfigDeclarationsHaveUiEvent": true,
+    "allWebdavConfigDeclarationsHaveSemanticSlot": true,
+    "identityOnlyTokenDeclarationCount": 19,
     "allWebdavConfigDeclarationsHaveRenderer": "webdavConfigV2",
     "allWebdavConfigDeclarationsHaveRendererFile": "renderers/d2-settings-sync-renderers.js",
     "allWebdavConfigDeclarationsHavePageFamily": "webdav-config",
@@ -423,8 +415,7 @@
     "rendererOutputIsViewportAgnostic": true,
     "domNoDuplicateControlKey": true,
     "domNoOrphanControlKey": true,
-    "uiEventCoverage": "33/33 controls carry non-empty data-ui-event",
-    "fiveDataAttrsCoverage": "33/33 controls carry all 5 data-* attributes",
+    "semanticSlotCoverage": "33/33 controls carry four stable identity attributes plus exactly one semantic slot; 19 declarations use data-control-token and the remainder use released data-ui-event values.",
     "noCompactLandscapeAtom": true,
     "noFoldAtom": true,
     "noCompactViewportClass": true,
@@ -489,7 +480,7 @@
       "displayText": "prohibited",
       "arrayPositions": "prohibited"
     },
-    "identityStrategy": "settingsKey-based: each control has a stable settingsKey declared in control-identity-declarations.js; renderer calls d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity) to stamp 5 data-* attributes"
+    "identityStrategy": "settingsKey-based: each control has a stable settingsKey declared in control-identity-declarations.js; renderer calls d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity) to stamp four stable attributes plus exactly one declaration-governed semantic slot."
   },
   "sharedComponentSources": {
     "d2SettingsShell": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (extended to support frameState/toastHtml/dialogHtml/backButtonAttrs options)",

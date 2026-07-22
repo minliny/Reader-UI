@@ -13,7 +13,8 @@
     "implementationCommit": "de1d777160a33bca15f94ab7dcbe3b3dc5895373",
     "implementationCommitSubject": "feat(search): align history interaction with Figma",
     "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
-    "localReadyForFigma": true
+    "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
   },
   "routeFamily": {
     "primaryRoutes": [
@@ -33,13 +34,16 @@
     "semanticControlCount": 67,
     "semanticControlSource": "search-results-action",
     "mappingStatus": "67/67 mapped",
-    "fiveDataAttrs": [
-      "data-entity-key",
-      "data-control-key",
-      "data-control-id",
-      "data-ui-event",
-      "data-settings-key"
-    ],
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 12,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
     "identityPolicy": "Named search and history actions use business keys only; labels, selectors and DOM order are not identity inputs."
   },
   "r2bRealInteraction": {
@@ -110,6 +114,7 @@
     "figmaVisualSource": "The user-provided Figma Make Search design is the visual authority.",
     "figmaMayNotChange": [
       "UiEvent",
+      "controlIdentityToken",
       "state owner",
       "async guards",
       "business flow"
