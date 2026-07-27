@@ -420,7 +420,7 @@
     ]
   },
   {
-    "_comment": "Slice 2: 阅读器控制层 default（live demo reader route）",
+    "_comment": "B5: canonical ReadingSurface only; Reader control-home remains separately quarantined",
     "routeId": "reader",
     "pageState": "default",
     "context": {
@@ -432,28 +432,14 @@
         "type": "ReaderBase",
         "id": "reader-base",
         "props": {
-          "theme": "paper"
+          "theme": "paper",
+          "surfaceContract": "canonical-reading-surface"
         }
-      },
-      {
-        "type": "ReaderTopArea",
-        "id": "reader-top-area",
-        "props": {}
-      },
-      {
-        "type": "ReaderControlSheet",
-        "id": "reader-control-sheet",
-        "props": {}
-      },
-      {
-        "type": "ReaderBottomBar",
-        "id": "reader-bottom-bar",
-        "props": {}
       }
     ]
   },
   {
-    "_comment": "Slice 2: 阅读器 loading",
+    "_comment": "B5: unbound loading uses the admitted paper surface only; no generic loading card",
     "routeId": "reader",
     "pageState": "loading",
     "context": {
@@ -464,23 +450,14 @@
         "type": "ReaderBase",
         "id": "reader-base",
         "props": {
-          "theme": "paper"
+          "theme": "paper",
+          "surfaceContract": "canonical-reading-surface"
         }
-      },
-      {
-        "type": "ReaderTopArea",
-        "id": "reader-top-area",
-        "props": {}
-      },
-      {
-        "type": "Loading",
-        "id": "reader-loading",
-        "props": {}
       }
     ]
   },
   {
-    "_comment": "Slice 2: 阅读器 offline",
+    "_comment": "B5: unbound offline uses the admitted paper surface only; no generic offline card",
     "routeId": "reader",
     "pageState": "offline",
     "context": {
@@ -491,19 +468,8 @@
         "type": "ReaderBase",
         "id": "reader-base",
         "props": {
-          "theme": "paper"
-        }
-      },
-      {
-        "type": "ReaderTopArea",
-        "id": "reader-top-area",
-        "props": {}
-      },
-      {
-        "type": "Offline",
-        "id": "reader-offline",
-        "props": {
-          "message": "网络不可用"
+          "theme": "paper",
+          "surfaceContract": "canonical-reading-surface"
         }
       }
     ]
@@ -1962,7 +1928,8 @@
         "type": "ReaderBase",
         "id": "reader-base",
         "props": {
-          "theme": "paper"
+          "theme": "paper",
+          "surfaceContract": "canonical-reading-surface"
         }
       }
     ]
@@ -1980,7 +1947,8 @@
         "type": "ReaderBase",
         "id": "reader-base",
         "props": {
-          "theme": "paper"
+          "theme": "paper",
+          "surfaceContract": "canonical-reading-surface"
         }
       }
     ]

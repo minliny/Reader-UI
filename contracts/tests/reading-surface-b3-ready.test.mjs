@@ -32,7 +32,7 @@ function handoffHash() {
   return `sha256:${crypto.createHash("sha256").update(entries.join("\n")).digest("hex")}`;
 }
 
-test("B3 releases only reader.reading-surface at the Reader-UI source and leaves HarmonyOS fail-closed", () => {
+test("B3 evidence and B4 promotion keep reader.reading-surface traceable", () => {
   const registry = readJson("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
   const quarantine = readJson("contracts/fixtures/route-reconstruction-quarantine.fixtures.json");
   const handoff = readJson("docs/design/handoffs/reader-runtime/reading-surface/LOCAL_READY_FOR_FIGMA.json");
@@ -43,7 +43,8 @@ test("B3 releases only reader.reading-surface at the Reader-UI source and leaves
   const record = registry.records.find((item) => item.id === "reader.reading-surface");
   assert.ok(record, "reader.reading-surface must remain registered");
   assert.equal(record.local?.status, "implementation-ready");
-  assert.equal(record.harmony?.status, "candidate-backport", "B3 must not consume or activate HarmonyOS");
+  assert.equal(record.harmony?.status, "implementation-ready",
+    "B4 promotion must be the only path that enables the native admission record");
 
   const surfaceEntry = quarantine.entries.find((entry) => entry.recordId === "reader.reading-surface");
   assert.ok(surfaceEntry, "reader.reading-surface source extraction entry is required");
@@ -66,8 +67,12 @@ test("B3 releases only reader.reading-surface at the Reader-UI source and leaves
   assert.equal(handoff.sourceEvidenceHash, handoffHash(), "B3 must bind the exact B2 handoff directory");
   assert.equal(handoff.figma?.registeredRevision, officialRevision.currentRevision);
   assert.equal(record.figma?.revision, officialRevision.currentRevision);
-  assert.equal(ledger.entries.some((entry) => entry.recordId === "reader.reading-surface"), false,
-    "B3 must not write a promotion ledger entry before B4");
+  const promotion = ledger.entries.find((entry) => entry.recordId === "reader.reading-surface");
+  assert.ok(promotion, "B4 must append a tamper-evident promotion ledger entry");
+  assert.equal(promotion.newHarmonyStatus, "implementation-ready");
+  assert.equal(promotion.localStatus, "implementation-ready");
+  assert.deepEqual(promotion.routeIds, record.routeIds);
+  assert.equal(promotion.figma?.revision, officialRevision.currentRevision);
 
   const implementationCommit = handoff.localSource.implementationCommit;
   assert.equal(spawnSync("git", ["cat-file", "-e", `${implementationCommit}^{commit}`], { cwd: repoRoot }).status, 0,
@@ -80,5 +85,19 @@ test("B3 releases only reader.reading-surface at the Reader-UI source and leaves
   ]) {
     assert.equal(spawnSync("git", ["cat-file", "-e", `${implementationCommit}:${sourceFile}`], { cwd: repoRoot }).status, 0,
       `implementation commit must contain ${sourceFile}`);
+  }
+});
+
+test("B5 contracts keep the promoted reading surface separate from quarantined controls and generic states", () => {
+  const viewStates = readJson("contracts/fixtures/view-state.fixtures.json");
+  const surfaceRoutes = new Set(["immersive-reading", "reader", "reader_content"]);
+  const entries = viewStates.filter((entry) => surfaceRoutes.has(entry.routeId));
+
+  assert.equal(entries.length, 5, "the three admitted routes retain their declared default/loading/offline states");
+  for (const entry of entries) {
+    assert.deepEqual(entry.components.map((component) => component.type), ["ReaderBase"],
+      `${entry.routeId}/${entry.pageState} must not revive a sibling reader control or generic state`);
+    assert.equal(entry.components[0].props.surfaceContract, "canonical-reading-surface");
+    assert.equal(entry.components[0].props.theme, "paper");
   }
 });

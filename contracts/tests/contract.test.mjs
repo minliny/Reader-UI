@@ -137,7 +137,7 @@ test("appearance fixture 主题字体控件 exact-set 与默认值闭合", () =>
   );
   assert.deepEqual(
     appearanceFixture.selects.map((item) => [item.label, item.options.find((option) => option.value === item.defaultValue)?.label]),
-    [["缩进", "无"], ["简繁", "简体"], ["翻页动画", "平移"], ["文字对齐", "开启"]]
+    [["缩进", "无"], ["简繁", "简体"], ["翻页动画", "滑动"], ["文字对齐", "开启"]]
   );
   assert.deepEqual(
     appearanceFixture.steppers.map((item) => [item.id, item.defaultValue]),
@@ -379,7 +379,7 @@ test("reader overlay routes keep module nav above bottomSheetHost", () => {
   }
 });
 
-test("非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () => {
+test("未隔离的非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () => {
   const immersiveRoutes = new Set(["immersive-reading", "reader_content"]);
   const readerEntries = viewFixtures.filter((entry) =>
     entry.components.some((component) => component.type === "ReaderBase")
@@ -387,11 +387,14 @@ test("非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () 
 
   for (const entry of readerEntries) {
     const componentTypes = entry.components.map((component) => component.type);
-    if (immersiveRoutes.has(entry.routeId)) {
+    const isCanonicalReadingSurface = entry.components.some((component) =>
+      component.props?.surfaceContract === "canonical-reading-surface"
+    );
+    if (immersiveRoutes.has(entry.routeId) || isCanonicalReadingSurface) {
       assert.equal(
         componentTypes.includes("ReaderTopArea"),
         false,
-        `${entry.routeId}/${entry.pageState} 是沉浸阅读路由，不应显示 ReaderTopArea`
+        `${entry.routeId}/${entry.pageState} 是 canonical ReadingSurface，不应混入 ReaderTopArea`
       );
     } else {
       assert.equal(

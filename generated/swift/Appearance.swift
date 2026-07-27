@@ -87,7 +87,7 @@ public enum ReaderAppearanceSpecRegistry {
     public static let selects: [ReaderAppearanceSelect] = [
         .init(id: "paragraphIndentMode", label: "缩进", defaultValue: "none", options: [.init(value: "none", label: "无"), .init(value: "two-character", label: "2 字符")]),
         .init(id: "textConversion", label: "简繁", defaultValue: "simplified", options: [.init(value: "simplified", label: "简体"), .init(value: "traditional", label: "繁体")]),
-        .init(id: "pageAnimation", label: "翻页动画", defaultValue: "slide", options: [.init(value: "slide", label: "平移"), .init(value: "cover", label: "覆盖"), .init(value: "none", label: "无")]),
+        .init(id: "pageAnimation", label: "翻页动画", defaultValue: "slide", options: [.init(value: "cover", label: "覆盖"), .init(value: "slide", label: "滑动"), .init(value: "simulation", label: "仿真"), .init(value: "scroll", label: "滚动"), .init(value: "none", label: "无动画")]),
         .init(id: "textAlignment", label: "文字对齐", defaultValue: "justify", options: [.init(value: "justify", label: "开启"), .init(value: "leading", label: "关闭")])
     ]
     public static let steppers: [ReaderAppearanceStepper] = [

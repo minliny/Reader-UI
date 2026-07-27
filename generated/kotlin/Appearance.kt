@@ -40,7 +40,7 @@ object ReaderAppearanceSpecRegistry {
     val selects: List<ReaderAppearanceSelect> = listOf(
         ReaderAppearanceSelect("paragraphIndentMode", "缩进", "none", listOf(ReaderAppearanceSelectOption("none", "无"), ReaderAppearanceSelectOption("two-character", "2 字符"))),
         ReaderAppearanceSelect("textConversion", "简繁", "simplified", listOf(ReaderAppearanceSelectOption("simplified", "简体"), ReaderAppearanceSelectOption("traditional", "繁体"))),
-        ReaderAppearanceSelect("pageAnimation", "翻页动画", "slide", listOf(ReaderAppearanceSelectOption("slide", "平移"), ReaderAppearanceSelectOption("cover", "覆盖"), ReaderAppearanceSelectOption("none", "无"))),
+        ReaderAppearanceSelect("pageAnimation", "翻页动画", "slide", listOf(ReaderAppearanceSelectOption("cover", "覆盖"), ReaderAppearanceSelectOption("slide", "滑动"), ReaderAppearanceSelectOption("simulation", "仿真"), ReaderAppearanceSelectOption("scroll", "滚动"), ReaderAppearanceSelectOption("none", "无动画"))),
         ReaderAppearanceSelect("textAlignment", "文字对齐", "justify", listOf(ReaderAppearanceSelectOption("justify", "开启"), ReaderAppearanceSelectOption("leading", "关闭")))
     )
     val steppers: List<ReaderAppearanceStepper> = listOf(
