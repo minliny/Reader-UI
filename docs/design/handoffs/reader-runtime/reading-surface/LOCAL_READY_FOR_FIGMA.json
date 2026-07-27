@@ -8,12 +8,12 @@
   ],
   "stage": "implementation-ready",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-27T07:01:32Z",
+  "generatedAt": "2026-07-27T08:26:34Z",
   "localSource": {
     "repository": "Reader-UI",
     "branch": "main",
-    "implementationCommit": "fefc2dad7e010caf4cc87ff33599b165089308d0",
-    "implementationCommitSubject": "feat(reader-ui): bind reading surface to canonical Figma master",
+    "implementationCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a",
+    "implementationCommitSubject": "feat(reader-ui): convert reading surface from canonical Figma defaults",
     "localReadyForFigma": true
   },
   "figma": {
@@ -27,8 +27,8 @@
     },
     "registeredRevision": "2379851596474967636",
     "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
-    "liveReadReceipt": "docs/PLANNING/READER_READING_SURFACE_FIGMA_FREEZE.json",
-    "freezeDecision": "frozen-live-source-numeric-revision-unavailable",
+    "liveReadReceipt": "docs/design/handoffs/reader-runtime/reading-surface/B2_READER_UI_SOURCE_CONVERSION.json",
+    "freezeDecision": "frozen-current-master-with-official-F0-revision-evidence",
     "noFabricatedRevision": true
   },
   "viewportPolicy": {
@@ -40,35 +40,44 @@
     "independentLandscapeProhibited": true
   },
   "sourceContract": {
-    "staticAuthority": "Reader/Responsive/ReadingSurface (1023:18354) and its Phone/TabletExpanded component variants are the sole visual source.",
-    "contentAuthority": "Reader/Content/ChapterPage remains a local paginator manifest input; viewport variants must not hand-edit or truncate body text.",
-    "overlayRule": "Control layers may overlay the reading surface but cannot alter ReadingContent bounds or body input.",
-    "fontMapping": "Songti SC design intent is mapped to the Figma-specified Noto Serif SC styles used by the canonical master."
+    "staticAuthority": "Reader/Responsive/ReadingSurface (1023:18354) and its Phone/TabletExpanded variants are the sole visual source for this record.",
+    "contentAuthority": "Reader Core owns real chapter text and progress. Figma supplies the reviewed static ChapterPage sample and typography/layout, not a replacement content store.",
+    "stateOwner": "ReaderUiStore owns explicit reader typography and page-space preferences; no saved preference uses the canonical Figma default.",
+    "siblingIsolation": "reader.control-home, reader.module.directory, reader.module.tts, reader.module.appearance, reader.module.settings, and reader.quick.content-search remain active source quarantines."
   },
   "verification": {
     "figmaSourceContract": {
-      "tests": 3,
-      "passed": 3,
-      "failed": 0
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "file": "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs"
     },
     "focusedReaderRegression": {
-      "tests": 58,
-      "passed": 58,
-      "failed": 0
+      "tests": 59,
+      "passed": 59,
+      "failed": 0,
+      "scope": "reading surface, identity, flow, ARIA/focus, continuity, appearance atoms, pagination"
     },
-    "frontendRegression": {
-      "tests": 643,
-      "passed": 643,
-      "failed": 0
+    "sourceQuarantineRelease": {
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "file": "contracts/tests/reading-surface-b3-ready.test.mjs"
+    },
+    "sourceGenerator": {
+      "command": "node tools/codegen/generate.mjs --only-route-reconstruction-quarantine",
+      "status": "generated-current"
     },
     "promotionGate": {
-      "tests": 23,
-      "passed": 23,
-      "failed": 0
+      "command": "node tools/design/promote-family.mjs --check",
+      "status": "consistent-before-promotion"
     },
-    "generator": {
-      "command": "node tools/design/generate-visual-admission-contract.mjs --check",
-      "status": "current-before-source-self-promotion"
+    "harmonyContractGate": {
+      "contractSync": "node scripts/gen_contracts.mjs",
+      "result": "244/260 native routes active; all 16 historical Reader routes remain quarantined because reader.reading-surface harmony.status is still candidate-backport",
+      "executionGate": "12/12 passed",
+      "staticContractTests": "50/50 passed",
+      "note": "This is generated-contract synchronization and negative fail-closed proof only; it did not activate a HarmonyOS route, renderer, build, VM, or device cycle."
     }
   },
   "admission": {
@@ -79,22 +88,26 @@
     "recordIds": [
       "reader.reading-surface"
     ],
-    "exactLocalCommit": "fefc2dad7e010caf4cc87ff33599b165089308d0",
+    "exactLocalCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a",
     "sourceStatus": "implementation-ready",
     "harmonyStatusBeforePromotion": "candidate-backport",
     "promotionRequired": true
   },
-  "sourceEvidenceHash": "sha256:0c4aebdf8871625b8e30510f10727798dfead15ee7e49246accbf1c422fcd87d",
+  "sourceEvidenceHash": "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
   "artifacts": [
+    "B2_READER_UI_SOURCE_CONVERSION.json",
     "FIGMA_DESIGN_DELTA.json",
-    "docs/PLANNING/READER_READING_SURFACE_FIGMA_FREEZE.json",
-    "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs"
+    "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs",
+    "contracts/tests/reading-surface-b3-ready.test.mjs"
   ],
   "boundaries": {
     "figmaVisualOrStructuralMutation": false,
-    "harmonyOSMutation": false,
+    "harmonyOSVisualConsumerMutation": false,
+    "harmonyOSGeneratedContractSyncOnly": true,
+    "harmonyOSRouteActivation": false,
     "deviceOrEmulatorExecuted": false,
     "otherReaderRecordsClaimedReady": false,
-    "noDetachedFrameOrScreenshot": true
+    "noDetachedFrameOrScreenshot": true,
+    "promotionExecuted": false
   }
 }

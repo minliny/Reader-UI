@@ -5,9 +5,9 @@
     {
       "recordId": "reader.reading-surface",
       "routeIds": ["immersive-reading", "reader", "reader_content"],
-      "reason": "A3 source-side route extraction: the historical native ReaderShell must be unreachable until the Figma ReadingSurface family is reconstructed and re-certified.",
+      "reason": "B3 source release: the current Reader-UI conversion is bound to Reader/Responsive/ReadingSurface and its Phone/Tablet variants. The native consumer remains candidate-backport until the separate atomic promotion and consumer transaction completes.",
       "blocksPromotion": true,
-      "status": "active"
+      "status": "released"
     },
     {
       "recordId": "reader.control-home",

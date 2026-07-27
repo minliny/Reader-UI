@@ -4,10 +4,10 @@ package io.reader.ui.contract
 
 object RouteReconstructionQuarantine {
     const val STATUS: String = "active"
-    val RECORD_IDS: List<String> = listOf("reader.reading-surface", "reader.control-home", "reader.module.directory", "reader.module.tts", "reader.module.appearance", "reader.module.settings", "reader.quick.content-search")
-    val ROUTE_IDS: List<String> = listOf("immersive-reading", "reader", "reader_content", "control-layer-base-v2", "reader-directory-overlay-v2", "reader-appearance-overlay-v2", "reader-tts-overlay-v2", "reader-settings-overlay-v2", "reader-auto-scroll-overlay-v2", "reader-search-overlay-v2", "reader-replace-overlay-v2", "toc-bookmarks", "tts", "reader-appearance", "reader-settings", "content-search")
-    val RELEASED_RECORD_IDS: List<String> = emptyList()
-    val RELEASED_ROUTE_IDS: List<String> = emptyList()
+    val RECORD_IDS: List<String> = listOf("reader.control-home", "reader.module.directory", "reader.module.tts", "reader.module.appearance", "reader.module.settings", "reader.quick.content-search")
+    val ROUTE_IDS: List<String> = listOf("control-layer-base-v2", "reader-directory-overlay-v2", "reader-appearance-overlay-v2", "reader-tts-overlay-v2", "reader-settings-overlay-v2", "reader-auto-scroll-overlay-v2", "reader-search-overlay-v2", "reader-replace-overlay-v2", "toc-bookmarks", "tts", "reader-appearance", "reader-settings", "content-search")
+    val RELEASED_RECORD_IDS: List<String> = listOf("reader.reading-surface")
+    val RELEASED_ROUTE_IDS: List<String> = listOf("immersive-reading", "reader", "reader_content")
 
     fun contains(routeId: String): Boolean = STATUS == "active" && ROUTE_IDS.contains(routeId)
 
