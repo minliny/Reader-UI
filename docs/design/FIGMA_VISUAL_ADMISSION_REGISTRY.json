@@ -120,11 +120,9 @@
         ]
       },
       "harmony": {
-        "status": "current-read-unfrozen-static-guard-passed",
+        "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookCard",
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/tokens/FigmaVisualConstraintManifest.ets#bookshelfCoverColumnsTemplate",
-          "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs#bound-source-guard-bookshelf-bookcard"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookCard"
         ]
       },
       "evidence": [
@@ -136,6 +134,10 @@
       "id": "bookshelf.action-sheet",
       "surfaceType": "overlay-component",
       "routeIds": [],
+      "overlayKinds": [
+        "book-action",
+        "dialog"
+      ],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -202,7 +204,7 @@
       "harmony": {
         "status": "enforced-retired",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets#RETIRED_FIGMA_ROUTE_IDS"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -210,10 +212,47 @@
       ]
     },
     {
-      "id": "bookshelf.multi-select",
+      "id": "bookshelf.multi-select-legacy-route",
       "surfaceType": "route-family",
       "routeIds": [
         "book-batch-management"
+      ],
+      "classification": "retired",
+      "deliveryStatus": "retirement-enforced",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "canonicalMasterId": null,
+        "nodeId": null,
+        "viewportNodes": {
+          "phone": null,
+          "tablet": null
+        },
+        "revision": null,
+        "revisionStatus": "legacy-route-replaced-by-in-place-multi-select-overlay"
+      },
+      "local": {
+        "status": "enforced-retired",
+        "targets": [
+          "frontend-demo-optimized/render-runtime.js#book-batch-management"
+        ]
+      },
+      "harmony": {
+        "status": "enforced-retired",
+        "targets": [
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
+        ]
+      },
+      "evidence": [
+        "docs/design/handoffs/bookshelf/multi-select/FIGMA_F0_CROSSWALK.json#canonicalMasters"
+      ]
+    },
+    {
+      "id": "bookshelf.multi-select",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "overlayKinds": [
+        "bookshelf-multiselect"
       ],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
@@ -251,7 +290,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaBookshelfMultiSelect.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#bookshelf-multiselect"
         ]
       },
       "evidence": [
@@ -261,7 +300,8 @@
     {
       "id": "bookshelf.local-import-dialog",
       "surfaceType": "overlay-component",
-      "routeIds": [
+      "routeIds": [],
+      "overlayKinds": [
         "local-import"
       ],
       "classification": "exact-figma-binding",
@@ -299,7 +339,6 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaLocalImportDialog.ets",
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#local-import"
         ]
       },
@@ -446,11 +485,9 @@
         ]
       },
       "harmony": {
-        "status": "current-read-unfrozen-static-guard-passed",
+        "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets#BookChapterList",
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/tokens/FigmaVisualConstraintManifest.ets#bookDetailChapterRowHeight",
-          "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs#bound-source-guard-book-detail-chapter-row"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets#BookChapterList"
         ]
       },
       "evidence": [
@@ -636,7 +673,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderDirectoryPanel"
         ]
       },
       "evidence": [
@@ -683,7 +720,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderTtsPanel"
         ]
       },
       "evidence": [
@@ -730,7 +767,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderAppearancePanel"
         ]
       },
       "evidence": [
@@ -777,7 +814,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderSettingsPanel"
         ]
       },
       "evidence": [
@@ -824,7 +861,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderAutoScrollPanel"
         ]
       },
       "evidence": [
@@ -871,7 +908,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderSearchPanel"
         ]
       },
       "evidence": [
@@ -918,7 +955,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderQuickPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderReplacePanel"
         ]
       },
       "evidence": [
@@ -965,7 +1002,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderFullPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderFullDirectoryPage"
         ]
       },
       "evidence": [
@@ -1012,7 +1049,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderFullPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderFullTtsPage"
         ]
       },
       "evidence": [
@@ -1059,7 +1096,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderFullPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderFullAppearancePage"
         ]
       },
       "evidence": [
@@ -1106,7 +1143,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaReaderFullPanels.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderFullSettingsPage"
         ]
       },
       "evidence": [
@@ -1146,7 +1183,7 @@
       "harmony": {
         "status": "enforced-fail-closed",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -1264,8 +1301,11 @@
         ]
       },
       "harmony": {
-        "status": "not-currently-crosswalked",
-        "targets": []
+        "status": "candidate-backport",
+        "targets": [
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#SourceManagementPage",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/SettingsShell.ets#renderBottomActionBar"
+        ]
       },
       "evidence": [
         "docs/design/handoffs/source-management/FIGMA_F0_CROSSWALK.json#postUserScopeRemoval"
@@ -1298,7 +1338,7 @@
       "harmony": {
         "status": "enforced-retired",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets#RETIRED_FIGMA_COMPONENT_STATE_IDS"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -1341,7 +1381,8 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaWebDavConfigForm.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#WebDavConfigSection",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/SettingsShell.ets#SettingsShell"
         ]
       },
       "evidence": [
@@ -1387,7 +1428,9 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaRestoreBackupOverlay.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#SyncBackupPage",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#RestoreBackupOverlay",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/SettingsShell.ets#SettingsShell"
         ]
       },
       "evidence": [
@@ -1473,7 +1516,8 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaRestoreBackupOverlay.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#RestoreBackupOverlay",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/SettingsShell.ets#SettingsShell"
         ]
       },
       "evidence": [
@@ -1492,6 +1536,22 @@
         "search-empty",
         "search-error"
       ],
+      "stateBindings": {
+        "book-search": [
+          "loading",
+          "empty",
+          "error"
+        ],
+        "search-loading": [
+          "loading"
+        ],
+        "search-empty": [
+          "empty"
+        ],
+        "search-error": [
+          "error"
+        ]
+      },
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen-device-unverified",
       "figma": {
@@ -1530,7 +1590,9 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaBookSearchPage.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#SearchHomePage",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#SearchResultsPage",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/StructuralPageComponents.ets#SearchStatePage"
         ]
       },
       "evidence": [
@@ -1564,7 +1626,7 @@
       "harmony": {
         "status": "enforced-retired",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaBookSearchPage.ets#history-expanded"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -1609,8 +1671,16 @@
         ]
       },
       "harmony": {
-        "status": "not-currently-crosswalked",
-        "targets": []
+        "status": "candidate-backport",
+        "targets": [
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/DiscoverComponents.ets#DiscoverSourceBar",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/DiscoverComponents.ets#DiscoverEntryRow",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/DiscoverComponents.ets#DiscoverFilterTrigger",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/DiscoverComponents.ets#DiscoverListHead",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/DiscoverComponents.ets#DiscoverBookList",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/SharedComponents.ets#AppTopBar",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/MainTabShell.ets#MainTabShell"
+        ]
       },
       "evidence": [
         "docs/design/handoffs/discover/FIGMA_F0_CROSSWALK.json"
@@ -1648,8 +1718,15 @@
         "targets": []
       },
       "harmony": {
-        "status": "not-currently-crosswalked",
-        "targets": []
+        "status": "candidate-backport",
+        "targets": [
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/RssComponents.ets#RssSearchEntry",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/RssComponents.ets#RssModeRow",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/RssComponents.ets#RssSourceOverview",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/RssComponents.ets#RssArticleSection",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/SharedComponents.ets#AppTopBar",
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/MainTabShell.ets#MainTabShell"
+        ]
       },
       "evidence": [
         "docs/design/handoffs/rss/FIGMA_F0_CROSSWALK.json#currentLiveStaticF0"
@@ -1833,6 +1910,7 @@
       "id": "local-import.legacy-error-and-conflict-pages",
       "surfaceType": "route-family",
       "routeIds": [
+        "local-import",
         "import-permission-denied",
         "import-format-unsupported",
         "import-empty-file",
@@ -1865,7 +1943,7 @@
       "harmony": {
         "status": "enforced-retired",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/RetiredLocalImportRouteDisplayPolicy.ets#RETIRED_ROUTE_IDS"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -1936,8 +2014,7 @@
       "harmony": {
         "status": "enforced-retired",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/adapters/ViewportAdapter.ets#classify",
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets#RETIRED_FIGMA_VIEWPORT_POLICY_IDS"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/adapters/ViewportAdapter.ets#classify"
         ]
       },
       "evidence": [
@@ -2001,7 +2078,7 @@
       "harmony": {
         "status": "enforced-retired",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -2048,8 +2125,7 @@
       "harmony": {
         "status": "enforced-fail-closed",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets",
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualStateAdmissionPolicy.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -2109,7 +2185,7 @@
       "harmony": {
         "status": "enforced-fail-closed",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
@@ -2256,8 +2332,7 @@
       "harmony": {
         "status": "enforced-fail-closed",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualRouteAdmissionPolicy.ets",
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/router/FigmaVisualStateAdmissionPolicy.ets"
+          "Reader-for-HarmonyOS/entry/src/main/ets/contract/reader_ui/VisualAdmission.ets#ReaderUiVisualAdmission"
         ]
       },
       "evidence": [
