@@ -140,10 +140,14 @@ function readRouteReconstructionQuarantine() {
     for (const [index, entry] of document.entries.entries()) {
       if (entry === null || Array.isArray(entry) || typeof entry !== 'object' ||
         typeof entry.recordId !== 'string' || entry.recordId.length === 0 ||
-        !Array.isArray(entry.routeIds) || entry.routeIds.length === 0 || entry.blocksPromotion !== true) {
+        !Array.isArray(entry.routeIds) || entry.routeIds.length === 0 || entry.blocksPromotion !== true ||
+        (entry.status !== 'active' && entry.status !== 'released')) {
         return { entries: [], status: 'invalid', errors: [`route reconstruction quarantine entry ${index + 1} is invalid`] };
       }
-      entries.push({ recordId: entry.recordId, routeIds: entry.routeIds });
+      entries.push({ recordId: entry.recordId, routeIds: entry.routeIds, status: entry.status });
+    }
+    if (document.status === 'released' && entries.some((entry) => entry.status === 'active')) {
+      return { entries: [], status: 'invalid', errors: ['a globally released route reconstruction quarantine cannot retain an active entry'] };
     }
     return { entries, status: document.status, errors: [] };
   } catch (error) {
@@ -400,8 +404,10 @@ function runCheck() {
     }
   }
 
-  // 3a. An active source quarantine withdraws both promotion dimensions. This
-  // makes the extraction durable even if a later edit changes a status field.
+  // 3a. Each active source quarantine entry withdraws both promotion
+  // dimensions. A released entry is deliberately narrower: it records that
+  // this record's Reader-UI conversion has completed, but it still requires
+  // this atomic transaction before HarmonyOS becomes implementation-ready.
   if (quarantine.status === 'active') {
     for (const entry of quarantine.entries) {
       const record = registryRecords.get(entry.recordId);
@@ -409,11 +415,15 @@ function runCheck() {
         errors.push(`route reconstruction quarantine references missing record ${entry.recordId}`);
         continue;
       }
-      if (record.local?.status !== 'candidate-backport' || record.harmony?.status !== 'candidate-backport') {
-        errors.push(`route reconstruction quarantine record ${entry.recordId} must be candidate-backport on both local and harmony status (got local=${record.local?.status}, harmony=${record.harmony?.status})`);
-      }
-      if (promotedRecordIds.has(entry.recordId)) {
-        errors.push(`route reconstruction quarantine record ${entry.recordId} has a promotion ledger entry while active`);
+      if (entry.status === 'active') {
+        if (record.local?.status !== 'candidate-backport' || record.harmony?.status !== 'candidate-backport') {
+          errors.push(`active route reconstruction quarantine record ${entry.recordId} must be candidate-backport on both local and harmony status (got local=${record.local?.status}, harmony=${record.harmony?.status})`);
+        }
+        if (promotedRecordIds.has(entry.recordId)) {
+          errors.push(`active route reconstruction quarantine record ${entry.recordId} has a promotion ledger entry`);
+        }
+      } else if (record.local?.status !== 'implementation-ready') {
+        errors.push(`released route reconstruction quarantine record ${entry.recordId} must have local.status implementation-ready before it can await promotion (got ${record.local?.status})`);
       }
       const recordRouteIds = Array.isArray(record.routeIds) ? record.routeIds : [];
       if (JSON.stringify(recordRouteIds) !== JSON.stringify(entry.routeIds)) {
@@ -515,7 +525,7 @@ function promote(recordId) {
   if (quarantine.errors.length > 0) {
     fail(quarantine.errors.join('; '));
   }
-  if (quarantine.status === 'active' && quarantine.entries.some((entry) => entry.recordId === recordId)) {
+  if (quarantine.status === 'active' && quarantine.entries.some((entry) => entry.recordId === recordId && entry.status === 'active')) {
     fail(`record ${recordId} is actively route-quarantined at the Reader-UI source. Complete a new Figma-backed reconstruction and release the source extraction before promotion.`);
   }
 

@@ -39,6 +39,8 @@ test("route reconstruction quarantine is a valid, exact source-side route extrac
     "reader.quick.content-search",
   ];
   assert.deepEqual(quarantine.entries.map((entry) => entry.recordId), expectedRecordIds);
+  assert.ok(quarantine.entries.every((entry) => entry.status === "active" || entry.status === "released"),
+    "each source extraction record must independently declare whether it is still active");
 });
 
 test("an active quarantine withdraws local and Harmony promotion eligibility for every owning record", () => {
@@ -48,9 +50,15 @@ test("an active quarantine withdraws local and Harmony promotion eligibility for
   for (const entry of quarantine.entries) {
     const record = records.get(entry.recordId);
     assert.ok(record, `quarantine references missing registry record: ${entry.recordId}`);
-    assert.equal(record.local?.status, "candidate-backport", `${entry.recordId} local status must be withdrawn while quarantined`);
-    assert.equal(record.harmony?.status, "candidate-backport", `${entry.recordId} Harmony status must be withdrawn while quarantined`);
-    assert.equal(ledgerRecordIds.has(entry.recordId), false, `${entry.recordId} cannot retain a promotion ledger entry while quarantined`);
+    if (quarantine.status === "active" && entry.status === "active") {
+      assert.equal(record.local?.status, "candidate-backport", `${entry.recordId} local status must be withdrawn while quarantined`);
+      assert.equal(record.harmony?.status, "candidate-backport", `${entry.recordId} Harmony status must be withdrawn while quarantined`);
+      assert.equal(ledgerRecordIds.has(entry.recordId), false, `${entry.recordId} cannot retain a promotion ledger entry while quarantined`);
+    } else {
+      assert.equal(record.local?.status, "implementation-ready", `${entry.recordId} must complete Reader-UI conversion before its quarantine can be released`);
+      assert.ok(["candidate-backport", "implementation-ready"].includes(record.harmony?.status),
+        `${entry.recordId} released source may await or complete the separate native promotion`);
+    }
     assert.deepEqual(record.routeIds, entry.routeIds, `${entry.recordId} route set must match the source extraction exactly`);
   }
 });

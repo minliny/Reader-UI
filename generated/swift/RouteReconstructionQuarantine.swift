@@ -6,6 +6,8 @@ public enum RouteReconstructionQuarantine {
     public static let status: String = "active"
     public static let recordIds: [String] = ["reader.reading-surface", "reader.control-home", "reader.module.directory", "reader.module.tts", "reader.module.appearance", "reader.module.settings", "reader.quick.content-search"]
     public static let routeIds: [String] = ["immersive-reading", "reader", "reader_content", "control-layer-base-v2", "reader-directory-overlay-v2", "reader-appearance-overlay-v2", "reader-tts-overlay-v2", "reader-settings-overlay-v2", "reader-auto-scroll-overlay-v2", "reader-search-overlay-v2", "reader-replace-overlay-v2", "toc-bookmarks", "tts", "reader-appearance", "reader-settings", "content-search"]
+    public static let releasedRecordIds: [String] = []
+    public static let releasedRouteIds: [String] = []
 
     public static func contains(routeId: String) -> Bool {
         status == "active" && routeIds.contains(routeId)

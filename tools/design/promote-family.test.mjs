@@ -72,6 +72,7 @@ function makeSandbox() {
     'utf8',
   ));
   quarantine.status = 'released';
+  quarantine.entries = quarantine.entries.map((entry) => ({ ...entry, status: 'released' }));
   fs.writeFileSync(
     path.join(readerUiRoot, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json'),
     JSON.stringify(quarantine, null, 2) + '\n',
@@ -381,6 +382,7 @@ test('promote refuses an actively route-quarantined record before any transactio
       routeIds: ['reader.reading-surface'],
       reason: 'test quarantine',
       blocksPromotion: true,
+      status: 'active',
     }];
     fs.writeFileSync(quarantinePath, JSON.stringify(quarantine, null, 2) + '\n');
 

@@ -6,43 +6,50 @@
       "recordId": "reader.reading-surface",
       "routeIds": ["immersive-reading", "reader", "reader_content"],
       "reason": "A3 source-side route extraction: the historical native ReaderShell must be unreachable until the Figma ReadingSurface family is reconstructed and re-certified.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     },
     {
       "recordId": "reader.control-home",
       "routeIds": ["control-layer-base-v2", "reader-directory-overlay-v2", "reader-appearance-overlay-v2", "reader-tts-overlay-v2", "reader-settings-overlay-v2", "reader-auto-scroll-overlay-v2", "reader-search-overlay-v2", "reader-replace-overlay-v2"],
       "reason": "A3 source-side route extraction: historical Reader control overlays remain unavailable until their own Figma-backed conversion is complete.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     },
     {
       "recordId": "reader.module.directory",
       "routeIds": ["toc-bookmarks"],
       "reason": "A3 source-side route extraction: historical directory route is not a replacement for the registered Figma module.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     },
     {
       "recordId": "reader.module.tts",
       "routeIds": ["tts"],
       "reason": "A3 source-side route extraction: historical TTS route is not an authorized Figma-backed native surface.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     },
     {
       "recordId": "reader.module.appearance",
       "routeIds": ["reader-appearance"],
       "reason": "A3 source-side route extraction: historical appearance route remains isolated pending source reconstruction.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     },
     {
       "recordId": "reader.module.settings",
       "routeIds": ["reader-settings"],
       "reason": "A3 source-side route extraction: historical reader settings route remains isolated pending source reconstruction.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     },
     {
       "recordId": "reader.quick.content-search",
       "routeIds": ["content-search"],
       "reason": "A3 source-side route extraction: historical content-search route remains isolated pending source reconstruction.",
-      "blocksPromotion": true
+      "blocksPromotion": true,
+      "status": "active"
     }
   ]
 }

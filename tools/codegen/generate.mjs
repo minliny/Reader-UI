@@ -172,6 +172,9 @@ function normalizeRouteReconstructionQuarantine(document, routeSchema) {
     if (entry.blocksPromotion !== true) {
       throw new Error(`${label}.blocksPromotion must be true`);
     }
+    if (entry.status !== "active" && entry.status !== "released") {
+      throw new Error(`${label}.status must be 'active' or 'released'`);
+    }
     const routeIds = entry.routeIds.map((routeId) => {
       if (typeof routeId !== "string" || !knownRouteIds.has(routeId)) {
         throw new Error(`${label} references unknown RouteId '${String(routeId)}'`);
@@ -187,14 +190,27 @@ function normalizeRouteReconstructionQuarantine(document, routeSchema) {
       routeIds,
       reason: entry.reason,
       blocksPromotion: true,
+      status: entry.status,
     };
   });
+
+  if (document.status === "released" && entries.some((entry) => entry.status === "active")) {
+    throw new Error("a globally released route reconstruction quarantine cannot retain an active entry");
+  }
+
+  const activeEntries = document.status === "active"
+    ? entries.filter((entry) => entry.status === "active")
+    : [];
+  const releasedEntries = entries.filter((entry) => entry.status === "released");
 
   return {
     status: document.status,
     entries,
-    recordIds: entries.map((entry) => entry.recordId),
-    routeIds: [...seenRouteIds],
+    recordIds: activeEntries.map((entry) => entry.recordId),
+    routeIds: activeEntries.flatMap((entry) => entry.routeIds),
+    releasedRecordIds: releasedEntries.map((entry) => entry.recordId),
+    releasedRouteIds: releasedEntries.flatMap((entry) => entry.routeIds),
+    trackedRouteIds: [...seenRouteIds],
   };
 }
 
@@ -210,6 +226,8 @@ public enum RouteReconstructionQuarantine {
     public static let status: String = ${stringLiteral(quarantine.status)}
     public static let recordIds: [String] = ${swiftStringArray(recordIds)}
     public static let routeIds: [String] = ${swiftStringArray(routeIds)}
+    public static let releasedRecordIds: [String] = ${swiftStringArray(quarantine.releasedRecordIds)}
+    public static let releasedRouteIds: [String] = ${swiftStringArray(quarantine.releasedRouteIds)}
 
     public static func contains(routeId: String) -> Bool {
         status == "active" && routeIds.contains(routeId)
@@ -234,6 +252,8 @@ object RouteReconstructionQuarantine {
     const val STATUS: String = ${kotlinStringLiteral(quarantine.status)}
     val RECORD_IDS: List<String> = ${kotlinStringList(recordIds)}
     val ROUTE_IDS: List<String> = ${kotlinStringList(routeIds)}
+    val RELEASED_RECORD_IDS: List<String> = ${kotlinStringList(quarantine.releasedRecordIds)}
+    val RELEASED_ROUTE_IDS: List<String> = ${kotlinStringList(quarantine.releasedRouteIds)}
 
     fun contains(routeId: String): Boolean = STATUS == "active" && ROUTE_IDS.contains(routeId)
 
@@ -252,6 +272,8 @@ export class RouteReconstructionQuarantine {
   static readonly STATUS: string = ${stringLiteral(quarantine.status)};
   static readonly RECORD_IDS: string[] = ${arkTsStringArray(recordIds)};
   static readonly ROUTE_IDS: string[] = ${arkTsStringArray(routeIds)};
+  static readonly RELEASED_RECORD_IDS: string[] = ${arkTsStringArray(quarantine.releasedRecordIds)};
+  static readonly RELEASED_ROUTE_IDS: string[] = ${arkTsStringArray(quarantine.releasedRouteIds)};
 
   static contains(routeId: string): boolean {
     return RouteReconstructionQuarantine.STATUS === "active" &&
@@ -2836,7 +2858,28 @@ function writeFile(p, content) {
   renameSync(temporaryPath, p);
 }
 
+// A narrow deterministic target lets an isolation/gate repair regenerate its
+// own artifacts without overwriting unrelated, concurrently prepared contract
+// families in a shared worktree. It is still the same canonical generator;
+// callers must never hand-edit generated RouteReconstructionQuarantine files.
+function generateRouteReconstructionQuarantineOnly() {
+  const routeSchema = loadSchema("route");
+  const quarantine = normalizeRouteReconstructionQuarantine(
+    loadFixtures("route-reconstruction-quarantine"),
+    routeSchema,
+  );
+  writeFile(join(GENERATED_DIR, "swift", "RouteReconstructionQuarantine.swift"), genSwiftRouteReconstructionQuarantine(quarantine));
+  writeFile(join(GENERATED_DIR, "kotlin", "RouteReconstructionQuarantine.kt"), genKotlinRouteReconstructionQuarantine(quarantine));
+  writeFile(join(GENERATED_DIR, "arkts", "RouteReconstructionQuarantine.ets"), genArkTsRouteReconstructionQuarantine(quarantine));
+  console.log(`[codegen] Route reconstruction quarantine only: status=${quarantine.status}, active-routes=${quarantine.routeIds.length}, active-records=${quarantine.recordIds.length}, released-records=${quarantine.releasedRecordIds.length}`);
+}
+
 function generate() {
+  if (process.argv.includes("--only-route-reconstruction-quarantine")) {
+    generateRouteReconstructionQuarantineOnly();
+    return;
+  }
+
   const routeSchema = loadSchema("route");
   const eventSchema = loadSchema("ui-event");
   const stateSchema = loadSchema("ui-state");
