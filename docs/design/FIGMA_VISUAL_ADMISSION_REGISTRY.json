@@ -26,7 +26,7 @@
   },
   "routeInventory": {
     "source": "contracts/route.schema.json#/properties/id/enum",
-    "expectedRouteCount": 260,
+    "expectedRouteCount": 247,
     "unclassifiedRoutePolicy": "A route absent from records is not admitted. The verifier reports it and strict mode fails; a renderer/host must fail closed before it can be treated as compliant.",
     "componentPolicy": "A visible component absent from records is not admitted, even when its containing route is listed."
   },
@@ -575,7 +575,7 @@
         ]
       },
       "harmony": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets#ReaderBase"
         ]
@@ -587,16 +587,7 @@
     {
       "id": "reader.control-home",
       "surfaceType": "overlay-component",
-      "routeIds": [
-        "control-layer-base-v2",
-        "reader-directory-overlay-v2",
-        "reader-appearance-overlay-v2",
-        "reader-tts-overlay-v2",
-        "reader-settings-overlay-v2",
-        "reader-auto-scroll-overlay-v2",
-        "reader-search-overlay-v2",
-        "reader-replace-overlay-v2"
-      ],
+      "routeIds": [],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -632,14 +623,26 @@
       },
       "evidence": [
         "docs/design/handoffs/reading-chain/F0_FIGMA_FIRST_CROSSWALK.json#reader-control-home"
-      ]
+      ],
+      "reconstruction": {
+        "status": "pending-source-conversion",
+        "retiredRouteIds": [
+          "control-layer-base-v2",
+          "reader-directory-overlay-v2",
+          "reader-appearance-overlay-v2",
+          "reader-tts-overlay-v2",
+          "reader-settings-overlay-v2",
+          "reader-auto-scroll-overlay-v2",
+          "reader-search-overlay-v2",
+          "reader-replace-overlay-v2"
+        ],
+        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+      }
     },
     {
       "id": "reader.module.directory",
       "surfaceType": "responsive-page-master",
-      "routeIds": [
-        "toc-bookmarks"
-      ],
+      "routeIds": [],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -679,14 +682,19 @@
       },
       "evidence": [
         "Figma live read 2026-07-24: final Page 23 instances 943:9888/943:10196 resolve to Page/Reader Module Directory master 942:61 and Phone/Tablet variants 942:58/942:60"
-      ]
+      ],
+      "reconstruction": {
+        "status": "pending-source-conversion",
+        "retiredRouteIds": [
+          "toc-bookmarks"
+        ],
+        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+      }
     },
     {
       "id": "reader.module.tts",
       "surfaceType": "responsive-page-master",
-      "routeIds": [
-        "tts"
-      ],
+      "routeIds": [],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -726,14 +734,19 @@
       },
       "evidence": [
         "Figma live read 2026-07-24: final Page 23 instances 943:10354/943:10642 resolve to Page/Reader Module TTS master 942:65 and Phone/Tablet variants 942:62/942:64"
-      ]
+      ],
+      "reconstruction": {
+        "status": "pending-source-conversion",
+        "retiredRouteIds": [
+          "tts"
+        ],
+        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+      }
     },
     {
       "id": "reader.module.appearance",
       "surfaceType": "responsive-page-master",
-      "routeIds": [
-        "reader-appearance"
-      ],
+      "routeIds": [],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -773,14 +786,19 @@
       },
       "evidence": [
         "Figma live read 2026-07-24: final Page 23 instances 943:10790/943:11068 resolve to Page/Reader Module Appearance master 942:69 and Phone/Tablet variants 942:66/942:68"
-      ]
+      ],
+      "reconstruction": {
+        "status": "pending-source-conversion",
+        "retiredRouteIds": [
+          "reader-appearance"
+        ],
+        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+      }
     },
     {
       "id": "reader.module.settings",
       "surfaceType": "responsive-page-master",
-      "routeIds": [
-        "reader-settings"
-      ],
+      "routeIds": [],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -820,7 +838,14 @@
       },
       "evidence": [
         "Figma live read 2026-07-24: final Page 23 instances 943:11211/943:11477 resolve to Page/Reader Module Settings master 942:73 and Phone/Tablet variants 942:70/942:72"
-      ]
+      ],
+      "reconstruction": {
+        "status": "pending-source-conversion",
+        "retiredRouteIds": [
+          "reader-settings"
+        ],
+        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+      }
     },
     {
       "id": "reader.quick.auto-page",
@@ -872,9 +897,7 @@
     {
       "id": "reader.quick.content-search",
       "surfaceType": "responsive-page-master",
-      "routeIds": [
-        "content-search"
-      ],
+      "routeIds": [],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -914,7 +937,14 @@
       },
       "evidence": [
         "Figma live read 2026-07-24: final Page 23 instances 943:8625/943:8873 resolve to Page/Reader Quick Search master 942:49 and Phone/Tablet variants 942:46/942:48"
-      ]
+      ],
+      "reconstruction": {
+        "status": "pending-source-conversion",
+        "retiredRouteIds": [
+          "content-search"
+        ],
+        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+      }
     },
     {
       "id": "reader.quick.content-replacement",

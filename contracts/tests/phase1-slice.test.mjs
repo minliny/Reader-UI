@@ -74,11 +74,15 @@ test("ui-event fixtures 覆盖 Slice 1-6", () => {
   }
 });
 
-test("view-state fixtures 覆盖 Slice 1-6", () => {
+test("view-state fixtures 覆盖 Slice 1-6 (Slice 3 retired pending module conversion)", () => {
   const counts = countSlice(viewStateFixtures);
-  for (const s of ["Slice 1", "Slice 2", "Slice 3", "Slice 4", "Slice 5", "Slice 6"]) {
+  // A2 strict physical removal retired the 8 reader overlay routes, so Slice 3
+  // (reader overlay) is intentionally empty until the overlay modules' Figma-
+  // backed native conversion re-adds them. The other 5 slices must stay covered.
+  for (const s of ["Slice 1", "Slice 2", "Slice 4", "Slice 5", "Slice 6"]) {
     assert.ok((counts[s] || 0) > 0, `view-state fixtures 缺少 ${s}`);
   }
+  assert.equal(counts["Slice 3"] || 0, 0, "Slice 3 reader overlay must be retired, not partially present");
 });
 
 // --- 优先链路 1: AppShell ---
@@ -164,10 +168,9 @@ test("优先链路 bookshelf→reader: ui-event Slice 2 含 openBook / pageNext 
 
 // --- 优先链路 4: reader overlay ---
 
-test("优先链路 reader overlay: route.fixtures 含 reader overlay 路由", () => {
+test("优先链路 reader overlay: 8 overlay routes retired from route.fixtures (A2 strict removal)", () => {
   const ids = new Set(routeFixtures.map((r) => r.id));
   const overlayRoutes = [
-    "reader-appearance-overlay-v2",
     "reader-tts-overlay-v2",
     "reader-settings-overlay-v2",
     "reader-search-overlay-v2",
@@ -176,9 +179,13 @@ test("优先链路 reader overlay: route.fixtures 含 reader overlay 路由", ()
     "reader-auto-scroll-overlay-v2",
     "reader-night-state-v2",
   ];
-  let hit = 0;
-  for (const id of overlayRoutes) if (ids.has(id)) hit++;
-  assert.ok(hit >= 4, `route fixtures 至少覆盖 4 个 reader overlay 路由，实际 ${hit}`);
+  // reader-night-state-v2 is NOT retired; the other 7 are. Assert exactly those 7
+  // are gone so they cannot silently return before their module conversion.
+  const retired = overlayRoutes.filter((id) => id !== "reader-night-state-v2");
+  for (const id of retired) {
+    assert.ok(!ids.has(id), `${id} must be retired from route.fixtures`);
+  }
+  assert.ok(ids.has("reader-night-state-v2"), "reader-night-state-v2 is not part of the retirement");
 });
 
 test("优先链路 reader overlay: ui-state Slice 3 含 overlay 非空状态", () => {
@@ -197,9 +204,10 @@ test("优先链路 reader overlay: ui-event Slice 3 含 overlay 开关事件", (
   assert.ok(overlayEvents.length >= 4, `ui-event Slice 3 至少 4 个 overlay 开关事件，实际 ${overlayEvents.length}`);
 });
 
-test("优先链路 reader overlay: view-state Slice 3 含 overlay 组件", () => {
-  const slice3 = viewStateFixtures.filter((v) => sliceOf(v) === "Slice 3");
-  assert.ok(slice3.length >= 4, `view-state Slice 3 至少 4 个 overlay 视图，实际 ${slice3.length}`);
+test("优先链路 reader overlay: view-state Slice 3 retired pending module conversion", () => {
+  const counts = countSlice(viewStateFixtures);
+  assert.equal(counts["Slice 3"] || 0, 0,
+    `Slice 3 reader overlay view-states must be retired (got ${counts["Slice 3"] || 0}), not partially present before module conversion`);
 });
 
 // --- 优先链路 5: session ---
@@ -284,9 +292,9 @@ test("route fixtures 覆盖 6 个优先链路关键节点", () => {
     "app-shell", "main-tabs",          // AppShell
     "bookshelf", "discover", "rss", "settings", // main tabs
     "book-detail", "reader",           // bookshelf → reader
-    "reader-appearance-overlay-v2",    // reader overlay（至少一个 overlay 路由）
-    "tts",                             // session（TTS）
-    "reader-settings",                 // focus 相关
+    // reader overlay / session TTS / focus reader-settings were retired by A2
+    // strict physical removal; their chains are suspended until module
+    // conversion re-adds them.
   ];
   for (const id of required) {
     assert.ok(ids.has(id), `route fixtures 缺少优先链路节点：${id}`);

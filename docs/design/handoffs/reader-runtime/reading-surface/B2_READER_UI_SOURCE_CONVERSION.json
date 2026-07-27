@@ -84,6 +84,16 @@
       "No HarmonyOS renderer, admission state, emulator, device, Core, Host, or release-lock was changed in B2."
     ]
   },
+  "splitPerformed": {
+    "completedAt": "2026-07-27T16:18:00Z",
+    "scope": "reader.reading-surface lineage correction (A2)",
+    "summary": "The 3 shared old reading-page overlay implementations (ReaderDirectoryPanel/ReaderAppearancePanel/ReaderReplacePanel) were split into retained shared primitives (DirectoryPanel/AppearancePanel/ReplacePanel) + retired reading-page implementations (old 3 types now explicit-gap, 0 fixtures, NOT deleted). ReaderBase no longer consumes the 3 old reading-page overlays; 23/23 historical reading-page implementations are fully unreachable.",
+    "sourceSideSplit": "Reader-UI schema enum 177 (174 + 3 new shared-primitive types DirectoryPanel/AppearancePanel/ReplacePanel); 17 surviving route fixtures rebound to new types; 13 retired route fixtures 0 residue; old 3 types now explicit-gap mirroring ReaderTtsPanel/ReaderSettingsPanel.",
+    "consumerSideSplit": "HarmonyOS 3 native structs renamed DirectoryPanel/AppearancePanel/ReplacePanel + reading-page sheet shells retired (ReaderModulePanelShell/ReaderQuickPanelShell wrappers removed, close-Image retired, inert chrome removed); 4 shared @Builder primitives retained; dispatch + CoverageRegistry + tests synchronized.",
+    "reachabilityReport": "docs/audits/reader-reading-surface-historical-reachability-2026-07-27.{md,json}",
+    "noFigmaMutation": true,
+    "noPromotionExecuted": true
+  },
   "behaviorOwnership": {
     "contentAndProgress": "Reader Core",
     "explicitTypographyAndPageSpace": "ReaderUiStore / existing reducer",

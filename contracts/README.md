@@ -52,7 +52,7 @@ Native UI
 
 ### Fixtures（1333 项）
 
-- Phase 1：route 260 / ui-event 188 / ui-state 43 / view-state 190 / motion 95 / token 269
+- Phase 1：route 247 / ui-event 188 / ui-state 43 / view-state 183 / motion 95 / token 269
 - Phase 2：core-command 49 / core-event 35 / host-request 58 / host-result 58 / progress-location 6 / content 3 / sync-conflict 6
 - Phase 1 收尾：state-rule 16
 - Phase 1-2 Motion Runtime：motion-policy 53
@@ -88,7 +88,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 | state-rule.test.mjs | — | StateRule schema + fixtures + 关键规则 |
 | codegen-consistency.test.mjs | — | 三端 generated enum 一致性 + drift check |
 | codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 48 个 generated 文件幂等性 |
-| screen-graph.test.mjs | 33 | 260-route graph、97 canonical bindings（41 executable runtime payload + 56 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
+| screen-graph.test.mjs | 33 | 247-route graph、97 canonical bindings（41 executable runtime payload + 56 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
 | device-conformance-kit.test.mjs | 9 | 三端 174 项计划、可信 identity/artifact、低 tier/伪证据拒绝 |
 | registry-codegen.test.mjs | 8 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
 | motion-policy.test.mjs | 14 | MotionPolicy schema / fixtures / motionId 引用 / operation 覆盖 / no-match diagnostic / 示例 policy |

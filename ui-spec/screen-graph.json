@@ -1208,10 +1208,9 @@
       ],
       "compositionMode": "contract-tree",
       "status": "referenced",
-      "instanceCount": 9,
+      "instanceCount": 8,
       "routeIds": [
         "book-detail",
-        "reader",
         "app-shell",
         "source-switch-loading",
         "reader-toc-loading",
@@ -1273,9 +1272,8 @@
       ],
       "compositionMode": "contract-tree",
       "status": "referenced",
-      "instanceCount": 4,
+      "instanceCount": 3,
       "routeIds": [
-        "reader",
         "state-offline",
         "reader-toc-offline",
         "reader-content-offline"
@@ -1634,15 +1632,11 @@
       ],
       "compositionMode": "host-composite",
       "status": "referenced",
-      "instanceCount": 49,
+      "instanceCount": 42,
       "routeIds": [
         "immersive-reading",
         "reader",
         "reader_content",
-        "toc-bookmarks",
-        "reader-appearance-overlay-v2",
-        "reader-tts-overlay-v2",
-        "reader-settings-overlay-v2",
         "reader-full-font",
         "reader-full-theme",
         "reader-full-theme-edit",
@@ -1650,12 +1644,9 @@
         "reader-full-page-turn",
         "reader-book-cache",
         "reader-debug-info",
-        "reader-auto-scroll-overlay-v2",
-        "reader-search-overlay-v2",
-        "reader-replace-overlay-v2",
+        "auto-page",
+        "content-replacement",
         "reader-night-state-v2",
-        "control-layer-base-v2",
-        "reader-directory-overlay-v2",
         "reader-full-directory",
         "reader-full-tts",
         "reader-full-appearance",
@@ -1695,13 +1686,8 @@
       ],
       "compositionMode": "host-composite",
       "status": "referenced",
-      "instanceCount": 48,
+      "instanceCount": 38,
       "routeIds": [
-        "reader",
-        "toc-bookmarks",
-        "reader-appearance-overlay-v2",
-        "reader-tts-overlay-v2",
-        "reader-settings-overlay-v2",
         "reader-full-font",
         "reader-full-theme",
         "reader-full-theme-edit",
@@ -1709,12 +1695,9 @@
         "reader-full-page-turn",
         "reader-book-cache",
         "reader-debug-info",
-        "reader-auto-scroll-overlay-v2",
-        "reader-search-overlay-v2",
-        "reader-replace-overlay-v2",
+        "auto-page",
+        "content-replacement",
         "reader-night-state-v2",
-        "control-layer-base-v2",
-        "reader-directory-overlay-v2",
         "reader-full-directory",
         "reader-full-tts",
         "reader-full-appearance",
@@ -1752,13 +1735,14 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
-      "status": "referenced",
-      "instanceCount": 2,
-      "routeIds": [
-        "reader",
-        "control-layer-base-v2"
-      ],
-      "gap": null
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
     },
     {
       "type": "ReaderBottomBar",
@@ -1768,19 +1752,11 @@
       ],
       "compositionMode": "host-composite",
       "status": "referenced",
-      "instanceCount": 11,
+      "instanceCount": 3,
       "routeIds": [
-        "reader",
-        "toc-bookmarks",
-        "reader-appearance-overlay-v2",
-        "reader-tts-overlay-v2",
-        "reader-settings-overlay-v2",
-        "reader-auto-scroll-overlay-v2",
-        "reader-search-overlay-v2",
-        "reader-replace-overlay-v2",
-        "reader-night-state-v2",
-        "control-layer-base-v2",
-        "reader-directory-overlay-v2"
+        "auto-page",
+        "content-replacement",
+        "reader-night-state-v2"
       ],
       "gap": null
     },
@@ -1790,11 +1766,24 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
+    },
+    {
+      "type": "DirectoryPanel",
+      "stateAuthorities": [
+        "contract"
+      ],
+      "compositionMode": "contract-tree",
       "status": "referenced",
-      "instanceCount": 6,
+      "instanceCount": 4,
       "routeIds": [
-        "toc-bookmarks",
-        "reader-directory-overlay-v2",
         "reader-toc-loading",
         "reader-toc-offline",
         "reader-toc-error",
@@ -1808,10 +1797,24 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
+    },
+    {
+      "type": "AppearancePanel",
+      "stateAuthorities": [
+        "contract"
+      ],
+      "compositionMode": "contract-tree",
       "status": "referenced",
-      "instanceCount": 7,
+      "instanceCount": 6,
       "routeIds": [
-        "reader-appearance-overlay-v2",
         "reader-font-import-confirm",
         "reader-font-delete-confirm",
         "reader-font-fallback",
@@ -1827,12 +1830,14 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
-      "status": "referenced",
-      "instanceCount": 1,
-      "routeIds": [
-        "reader-tts-overlay-v2"
-      ],
-      "gap": null
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
     },
     {
       "type": "ReaderSettingsPanel",
@@ -1840,12 +1845,14 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
-      "status": "referenced",
-      "instanceCount": 1,
-      "routeIds": [
-        "reader-settings-overlay-v2"
-      ],
-      "gap": null
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
     },
     {
       "type": "ReaderFullDirectoryPage",
@@ -1938,12 +1945,14 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
-      "status": "referenced",
-      "instanceCount": 1,
-      "routeIds": [
-        "reader-search-overlay-v2"
-      ],
-      "gap": null
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
     },
     {
       "type": "ReaderReplacePanel",
@@ -1951,10 +1960,25 @@
         "contract"
       ],
       "compositionMode": "contract-tree",
+      "status": "explicit-gap",
+      "instanceCount": 0,
+      "routeIds": [],
+      "gap": {
+        "kind": "no-view-state-instance",
+        "source": "contracts/fixtures/view-state.fixtures.json",
+        "detail": "The ComponentType is canonical but no current ViewState fixture references it; no synthetic component instance was created."
+      }
+    },
+    {
+      "type": "ReplacePanel",
+      "stateAuthorities": [
+        "contract"
+      ],
+      "compositionMode": "contract-tree",
       "status": "referenced",
       "instanceCount": 7,
       "routeIds": [
-        "reader-replace-overlay-v2",
+        "content-replacement",
         "reader-replace-delete-confirm",
         "reader-replace-apply-result",
         "reader-replace-import-export",
@@ -1973,7 +1997,7 @@
       "status": "referenced",
       "instanceCount": 1,
       "routeIds": [
-        "reader-auto-scroll-overlay-v2"
+        "auto-page"
       ],
       "gap": null
     },
@@ -3255,7 +3279,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 38
+          "viewStateFixtureIndex": 30
         }
       ],
       "gaps": [],
@@ -3263,7 +3287,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 3,
         "viewStateFixtureIndices": [
-          38
+          30
         ]
       }
     },
@@ -3416,7 +3440,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 39
+          "viewStateFixtureIndex": 31
         }
       ],
       "gaps": [],
@@ -3424,7 +3448,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 4,
         "viewStateFixtureIndices": [
-          39
+          31
         ]
       }
     },
@@ -3488,7 +3512,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 40
+          "viewStateFixtureIndex": 32
         }
       ],
       "gaps": [],
@@ -3496,7 +3520,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 6,
         "viewStateFixtureIndices": [
-          40
+          32
         ]
       }
     },
@@ -3543,7 +3567,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 41
+          "viewStateFixtureIndex": 33
         }
       ],
       "gaps": [],
@@ -3551,7 +3575,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 7,
         "viewStateFixtureIndices": [
-          41
+          33
         ]
       }
     },
@@ -3596,15 +3620,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 125
+          "viewStateFixtureIndex": 116
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 113,
+        "routeFixtureIndex": 100,
         "viewStateFixtureIndices": [
-          125
+          116
         ]
       }
     },
@@ -3773,7 +3797,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 123
+          "viewStateFixtureIndex": 114
         }
       ],
       "gaps": [],
@@ -3781,7 +3805,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 8,
         "viewStateFixtureIndices": [
-          123
+          114
         ]
       }
     },
@@ -3828,7 +3852,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 124
+          "viewStateFixtureIndex": 115
         }
       ],
       "gaps": [],
@@ -3836,7 +3860,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 9,
         "viewStateFixtureIndices": [
-          124
+          115
         ]
       }
     },
@@ -3883,7 +3907,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 42
+          "viewStateFixtureIndex": 34
         }
       ],
       "gaps": [],
@@ -3891,7 +3915,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 10,
         "viewStateFixtureIndices": [
-          42
+          34
         ]
       }
     },
@@ -4032,7 +4056,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 27
+          "viewStateFixtureIndex": 19
         }
       ],
       "gaps": [],
@@ -4040,7 +4064,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 12,
         "viewStateFixtureIndices": [
-          27
+          19
         ]
       }
     },
@@ -4087,7 +4111,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 28
+          "viewStateFixtureIndex": 20
         }
       ],
       "gaps": [],
@@ -4095,7 +4119,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 13,
         "viewStateFixtureIndices": [
-          28
+          20
         ]
       }
     },
@@ -4144,7 +4168,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 43
+          "viewStateFixtureIndex": 35
         }
       ],
       "gaps": [],
@@ -4152,7 +4176,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 14,
         "viewStateFixtureIndices": [
-          43
+          35
         ]
       }
     },
@@ -4201,7 +4225,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 29
+          "viewStateFixtureIndex": 21
         }
       ],
       "gaps": [],
@@ -4209,7 +4233,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 15,
         "viewStateFixtureIndices": [
-          29
+          21
         ]
       }
     },
@@ -4266,7 +4290,7 @@
               "reason": "label-without-ui-event"
             }
           ],
-          "viewStateFixtureIndex": 44
+          "viewStateFixtureIndex": 36
         }
       ],
       "gaps": [],
@@ -4274,7 +4298,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 16,
         "viewStateFixtureIndices": [
-          44
+          36
         ]
       }
     },
@@ -4437,7 +4461,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 45
+          "viewStateFixtureIndex": 37
         }
       ],
       "gaps": [],
@@ -4445,7 +4469,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 18,
         "viewStateFixtureIndices": [
-          45
+          37
         ]
       }
     },
@@ -4492,7 +4516,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 126
+          "viewStateFixtureIndex": 117
         }
       ],
       "gaps": [],
@@ -4500,7 +4524,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 19,
         "viewStateFixtureIndices": [
-          126
+          117
         ]
       }
     },
@@ -4530,7 +4554,8 @@
               ],
               "compositionMode": "host-composite",
               "props": {
-                "theme": "paper"
+                "theme": "paper",
+                "surfaceContract": "canonical-reading-surface"
               },
               "children": [],
               "bindings": [],
@@ -4538,7 +4563,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 67
+          "viewStateFixtureIndex": 59
         }
       ],
       "gaps": [],
@@ -4546,7 +4571,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 20,
         "viewStateFixtureIndices": [
-          67
+          59
         ]
       }
     },
@@ -4577,47 +4602,9 @@
               ],
               "compositionMode": "host-composite",
               "props": {
-                "theme": "paper"
+                "theme": "paper",
+                "surfaceContract": "canonical-reading-surface"
               },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderControlSheet",
-              "id": "reader-control-sheet",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
               "children": [],
               "bindings": [],
               "stateEventEvidence": []
@@ -4645,34 +4632,9 @@
               ],
               "compositionMode": "host-composite",
               "props": {
-                "theme": "paper"
+                "theme": "paper",
+                "surfaceContract": "canonical-reading-surface"
               },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "Loading",
-              "id": "reader-loading",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
               "children": [],
               "bindings": [],
               "stateEventEvidence": []
@@ -4700,35 +4662,8 @@
               ],
               "compositionMode": "host-composite",
               "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "Offline",
-              "id": "reader-offline",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {
-                "message": "网络不可用"
+                "theme": "paper",
+                "surfaceContract": "canonical-reading-surface"
               },
               "children": [],
               "bindings": [],
@@ -4777,7 +4712,8 @@
               ],
               "compositionMode": "host-composite",
               "props": {
-                "theme": "paper"
+                "theme": "paper",
+                "surfaceContract": "canonical-reading-surface"
               },
               "children": [],
               "bindings": [],
@@ -4785,7 +4721,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 68
+          "viewStateFixtureIndex": 60
         }
       ],
       "gaps": [],
@@ -4793,389 +4729,7 @@
         "shellSource": "frontend-demo-optimized/route-contract.js",
         "routeFixtureIndex": 22,
         "viewStateFixtureIndices": [
-          68
-        ]
-      }
-    },
-    {
-      "routeId": "toc-bookmarks",
-      "title": "目录与书签（TOC and Bookmarks）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderDirectoryPanel",
-              "id": "directory-panel",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
-          "viewStateFixtureIndex": 69
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 23,
-        "viewStateFixtureIndices": [
-          69
-        ]
-      }
-    },
-    {
-      "routeId": "reader-appearance",
-      "title": "阅读外观（Reading Appearance）",
-      "shell": "ReaderShell",
-      "status": "alias",
-      "aliasFor": "reader-appearance-overlay-v2",
-      "variants": [],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 24,
-        "viewStateFixtureIndices": []
-      }
-    },
-    {
-      "routeId": "reader-appearance-overlay-v2",
-      "title": "阅读外观覆盖层 V2（Reader Appearance Overlay V2）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderAppearancePanel",
-              "id": "appearance-panel",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
-          "viewStateFixtureIndex": 15
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 25,
-        "viewStateFixtureIndices": [
-          15
-        ]
-      }
-    },
-    {
-      "routeId": "tts",
-      "title": "朗读（Read Aloud）",
-      "shell": "ReaderShell",
-      "status": "alias",
-      "aliasFor": "reader-tts-overlay-v2",
-      "variants": [],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 26,
-        "viewStateFixtureIndices": []
-      }
-    },
-    {
-      "routeId": "reader-tts-overlay-v2",
-      "title": "朗读覆盖层 V2（Reader TTS Overlay V2）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTtsPanel",
-              "id": "tts-panel",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
-          "viewStateFixtureIndex": 16
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 27,
-        "viewStateFixtureIndices": [
-          16
-        ]
-      }
-    },
-    {
-      "routeId": "reader-settings",
-      "title": "阅读设置（Reading Settings）",
-      "shell": "ReaderShell",
-      "status": "alias",
-      "aliasFor": "reader-settings-overlay-v2",
-      "variants": [],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 28,
-        "viewStateFixtureIndices": []
-      }
-    },
-    {
-      "routeId": "reader-settings-overlay-v2",
-      "title": "阅读设置覆盖层 V2（Reader Settings Overlay V2）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderSettingsPanel",
-              "id": "settings-panel",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
-          "viewStateFixtureIndex": 17
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 29,
-        "viewStateFixtureIndices": [
-          17
+          60
         ]
       }
     },
@@ -5239,15 +4793,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 70
+          "viewStateFixtureIndex": 61
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 30,
+        "routeFixtureIndex": 23,
         "viewStateFixtureIndices": [
-          70
+          61
         ]
       }
     },
@@ -5311,15 +4865,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 71
+          "viewStateFixtureIndex": 62
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 31,
+        "routeFixtureIndex": 24,
         "viewStateFixtureIndices": [
-          71
+          62
         ]
       }
     },
@@ -5383,15 +4937,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 72
+          "viewStateFixtureIndex": 63
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 32,
+        "routeFixtureIndex": 25,
         "viewStateFixtureIndices": [
-          72
+          63
         ]
       }
     },
@@ -5455,15 +5009,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 73
+          "viewStateFixtureIndex": 64
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 33,
+        "routeFixtureIndex": 26,
         "viewStateFixtureIndices": [
-          73
+          64
         ]
       }
     },
@@ -5527,15 +5081,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 74
+          "viewStateFixtureIndex": 65
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 34,
+        "routeFixtureIndex": 27,
         "viewStateFixtureIndices": [
-          74
+          65
         ]
       }
     },
@@ -5599,15 +5153,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 79
+          "viewStateFixtureIndex": 70
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 35,
+        "routeFixtureIndex": 28,
         "viewStateFixtureIndices": [
-          79
+          70
         ]
       }
     },
@@ -5671,35 +5225,21 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 80
+          "viewStateFixtureIndex": 71
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 36,
+        "routeFixtureIndex": 29,
         "viewStateFixtureIndices": [
-          80
+          71
         ]
       }
     },
     {
       "routeId": "auto-page",
       "title": "自动翻页（Auto Page）",
-      "shell": "ReaderShell",
-      "status": "alias",
-      "aliasFor": "reader-auto-scroll-overlay-v2",
-      "variants": [],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 37,
-        "viewStateFixtureIndices": []
-      }
-    },
-    {
-      "routeId": "reader-auto-scroll-overlay-v2",
-      "title": "自动翻页覆盖层 V2（Reader Auto Scroll Overlay V2）",
       "shell": "ReaderShell",
       "status": "direct",
       "aliasFor": null,
@@ -5770,114 +5310,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 20
+          "viewStateFixtureIndex": 181
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 38,
+        "routeFixtureIndex": 30,
         "viewStateFixtureIndices": [
-          20
-        ]
-      }
-    },
-    {
-      "routeId": "content-search",
-      "title": "内容搜索（Content Search）",
-      "shell": "ReaderShell",
-      "status": "alias",
-      "aliasFor": "reader-search-overlay-v2",
-      "variants": [],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 39,
-        "viewStateFixtureIndices": []
-      }
-    },
-    {
-      "routeId": "reader-search-overlay-v2",
-      "title": "内容搜索覆盖层 V2（Reader Search Overlay V2）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderSearchPanel",
-              "id": "search-panel",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
-          "viewStateFixtureIndex": 18
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 40,
-        "viewStateFixtureIndices": [
-          18
+          181
         ]
       }
     },
@@ -5885,20 +5326,6 @@
       "routeId": "content-replacement",
       "title": "内容替换（Content Replacement）",
       "shell": "ReaderShell",
-      "status": "alias",
-      "aliasFor": "reader-replace-overlay-v2",
-      "variants": [],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 41,
-        "viewStateFixtureIndices": []
-      }
-    },
-    {
-      "routeId": "reader-replace-overlay-v2",
-      "title": "内容替换覆盖层 V2（Reader Replace Overlay V2）",
-      "shell": "ReaderShell",
       "status": "direct",
       "aliasFor": null,
       "variants": [
@@ -5942,7 +5369,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "replace-panel",
               "stateAuthorities": [
                 "contract"
@@ -5968,15 +5395,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 19
+          "viewStateFixtureIndex": 182
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 42,
+        "routeFixtureIndex": 31,
         "viewStateFixtureIndices": [
-          19
+          182
         ]
       }
     },
@@ -6009,15 +5436,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 128
+          "viewStateFixtureIndex": 119
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 43,
+        "routeFixtureIndex": 32,
         "viewStateFixtureIndices": [
-          128
+          119
         ]
       }
     },
@@ -6050,15 +5477,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 31
+          "viewStateFixtureIndex": 23
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 44,
+        "routeFixtureIndex": 33,
         "viewStateFixtureIndices": [
-          31
+          23
         ]
       }
     },
@@ -6135,15 +5562,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 21
+          "viewStateFixtureIndex": 13
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 45,
+        "routeFixtureIndex": 34,
         "viewStateFixtureIndices": [
-          21
+          13
         ]
       }
     },
@@ -6258,7 +5685,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 48,
+        "routeFixtureIndex": 35,
         "viewStateFixtureIndices": [
           4
         ]
@@ -6274,7 +5701,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 49,
+        "routeFixtureIndex": 36,
         "viewStateFixtureIndices": []
       }
     },
@@ -6288,7 +5715,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 82,
+        "routeFixtureIndex": 69,
         "viewStateFixtureIndices": []
       }
     },
@@ -6302,7 +5729,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 105,
+        "routeFixtureIndex": 92,
         "viewStateFixtureIndices": []
       }
     },
@@ -6316,7 +5743,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 86,
+        "routeFixtureIndex": 73,
         "viewStateFixtureIndices": []
       }
     },
@@ -6330,7 +5757,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 92,
+        "routeFixtureIndex": 79,
         "viewStateFixtureIndices": []
       }
     },
@@ -6344,7 +5771,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 98,
+        "routeFixtureIndex": 85,
         "viewStateFixtureIndices": []
       }
     },
@@ -6358,7 +5785,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 94,
+        "routeFixtureIndex": 81,
         "viewStateFixtureIndices": []
       }
     },
@@ -6435,15 +5862,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 113
+          "viewStateFixtureIndex": 104
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 102,
+        "routeFixtureIndex": 89,
         "viewStateFixtureIndices": [
-          113
+          104
         ]
       }
     },
@@ -6508,15 +5935,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 112
+          "viewStateFixtureIndex": 103
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 100,
+        "routeFixtureIndex": 87,
         "viewStateFixtureIndices": [
-          112
+          103
         ]
       }
     },
@@ -6530,7 +5957,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 104,
+        "routeFixtureIndex": 91,
         "viewStateFixtureIndices": []
       }
     },
@@ -6544,7 +5971,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 99,
+        "routeFixtureIndex": 86,
         "viewStateFixtureIndices": []
       }
     },
@@ -6558,7 +5985,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 103,
+        "routeFixtureIndex": 90,
         "viewStateFixtureIndices": []
       }
     },
@@ -6572,7 +5999,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 78,
+        "routeFixtureIndex": 65,
         "viewStateFixtureIndices": []
       }
     },
@@ -6586,7 +6013,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 80,
+        "routeFixtureIndex": 67,
         "viewStateFixtureIndices": []
       }
     },
@@ -6600,7 +6027,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 79,
+        "routeFixtureIndex": 66,
         "viewStateFixtureIndices": []
       }
     },
@@ -6614,7 +6041,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 101,
+        "routeFixtureIndex": 88,
         "viewStateFixtureIndices": []
       }
     },
@@ -6628,7 +6055,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 112,
+        "routeFixtureIndex": 99,
         "viewStateFixtureIndices": []
       }
     },
@@ -6642,7 +6069,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 111,
+        "routeFixtureIndex": 98,
         "viewStateFixtureIndices": []
       }
     },
@@ -6656,7 +6083,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 87,
+        "routeFixtureIndex": 74,
         "viewStateFixtureIndices": []
       }
     },
@@ -6733,15 +6160,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 110
+          "viewStateFixtureIndex": 101
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 83,
+        "routeFixtureIndex": 70,
         "viewStateFixtureIndices": [
-          110
+          101
         ]
       }
     },
@@ -6818,15 +6245,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 111
+          "viewStateFixtureIndex": 102
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 93,
+        "routeFixtureIndex": 80,
         "viewStateFixtureIndices": [
-          111
+          102
         ]
       }
     },
@@ -6871,15 +6298,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 127
+          "viewStateFixtureIndex": 118
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 114,
+        "routeFixtureIndex": 101,
         "viewStateFixtureIndices": [
-          127
+          118
         ]
       }
     },
@@ -6924,15 +6351,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 108
+          "viewStateFixtureIndex": 99
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 170,
+        "routeFixtureIndex": 157,
         "viewStateFixtureIndices": [
-          108
+          99
         ]
       }
     },
@@ -6977,15 +6404,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 109
+          "viewStateFixtureIndex": 100
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 171,
+        "routeFixtureIndex": 158,
         "viewStateFixtureIndices": [
-          109
+          100
         ]
       }
     },
@@ -7088,7 +6515,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 50,
+        "routeFixtureIndex": 37,
         "viewStateFixtureIndices": [
           5
         ]
@@ -7137,15 +6564,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 24
+          "viewStateFixtureIndex": 16
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 51,
+        "routeFixtureIndex": 38,
         "viewStateFixtureIndices": [
-          24
+          16
         ]
       }
     },
@@ -7192,15 +6619,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 116
+          "viewStateFixtureIndex": 107
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 161,
+        "routeFixtureIndex": 148,
         "viewStateFixtureIndices": [
-          116
+          107
         ]
       }
     },
@@ -7214,7 +6641,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 149,
+        "routeFixtureIndex": 136,
         "viewStateFixtureIndices": []
       }
     },
@@ -7228,7 +6655,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 139,
+        "routeFixtureIndex": 126,
         "viewStateFixtureIndices": []
       }
     },
@@ -7242,7 +6669,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 141,
+        "routeFixtureIndex": 128,
         "viewStateFixtureIndices": []
       }
     },
@@ -7256,7 +6683,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 136,
+        "routeFixtureIndex": 123,
         "viewStateFixtureIndices": []
       }
     },
@@ -7303,15 +6730,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 114
+          "viewStateFixtureIndex": 105
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 54,
+        "routeFixtureIndex": 41,
         "viewStateFixtureIndices": [
-          114
+          105
         ]
       }
     },
@@ -7358,15 +6785,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 115
+          "viewStateFixtureIndex": 106
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 131,
+        "routeFixtureIndex": 118,
         "viewStateFixtureIndices": [
-          115
+          106
         ]
       }
     },
@@ -7413,15 +6840,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 25
+          "viewStateFixtureIndex": 17
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 52,
+        "routeFixtureIndex": 39,
         "viewStateFixtureIndices": [
-          25
+          17
         ]
       }
     },
@@ -7468,15 +6895,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 26
+          "viewStateFixtureIndex": 18
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 53,
+        "routeFixtureIndex": 40,
         "viewStateFixtureIndices": [
-          26
+          18
         ]
       }
     },
@@ -7523,15 +6950,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 117
+          "viewStateFixtureIndex": 108
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 122,
+        "routeFixtureIndex": 109,
         "viewStateFixtureIndices": [
-          117
+          108
         ]
       }
     },
@@ -7580,15 +7007,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 46
+          "viewStateFixtureIndex": 38
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 55,
+        "routeFixtureIndex": 42,
         "viewStateFixtureIndices": [
-          46
+          38
         ]
       }
     },
@@ -7635,15 +7062,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 120
+          "viewStateFixtureIndex": 111
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 133,
+        "routeFixtureIndex": 120,
         "viewStateFixtureIndices": [
-          120
+          111
         ]
       }
     },
@@ -7692,15 +7119,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 121
+          "viewStateFixtureIndex": 112
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 145,
+        "routeFixtureIndex": 132,
         "viewStateFixtureIndices": [
-          121
+          112
         ]
       }
     },
@@ -7714,7 +7141,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 143,
+        "routeFixtureIndex": 130,
         "viewStateFixtureIndices": []
       }
     },
@@ -7728,7 +7155,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 127,
+        "routeFixtureIndex": 114,
         "viewStateFixtureIndices": []
       }
     },
@@ -7742,7 +7169,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 129,
+        "routeFixtureIndex": 116,
         "viewStateFixtureIndices": []
       }
     },
@@ -7756,7 +7183,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 117,
+        "routeFixtureIndex": 104,
         "viewStateFixtureIndices": []
       }
     },
@@ -7770,7 +7197,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 121,
+        "routeFixtureIndex": 108,
         "viewStateFixtureIndices": []
       }
     },
@@ -7834,15 +7261,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 47
+          "viewStateFixtureIndex": 39
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 115,
+        "routeFixtureIndex": 102,
         "viewStateFixtureIndices": [
-          47
+          39
         ]
       }
     },
@@ -7898,15 +7325,15 @@
               "reason": "label-without-ui-event"
             }
           ],
-          "viewStateFixtureIndex": 48
+          "viewStateFixtureIndex": 40
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 116,
+        "routeFixtureIndex": 103,
         "viewStateFixtureIndices": [
-          48
+          40
         ]
       }
     },
@@ -7973,7 +7400,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 56,
+        "routeFixtureIndex": 43,
         "viewStateFixtureIndices": [
           6
         ]
@@ -8024,15 +7451,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 54
+          "viewStateFixtureIndex": 46
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 57,
+        "routeFixtureIndex": 44,
         "viewStateFixtureIndices": [
-          54
+          46
         ]
       }
     },
@@ -8077,15 +7504,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 81
+          "viewStateFixtureIndex": 72
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 58,
+        "routeFixtureIndex": 45,
         "viewStateFixtureIndices": [
-          81
+          72
         ]
       }
     },
@@ -8132,15 +7559,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 82
+          "viewStateFixtureIndex": 73
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 59,
+        "routeFixtureIndex": 46,
         "viewStateFixtureIndices": [
-          82
+          73
         ]
       }
     },
@@ -8185,15 +7612,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 85
+          "viewStateFixtureIndex": 76
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 169,
+        "routeFixtureIndex": 156,
         "viewStateFixtureIndices": [
-          85
+          76
         ]
       }
     },
@@ -8238,15 +7665,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 84
+          "viewStateFixtureIndex": 75
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 69,
+        "routeFixtureIndex": 56,
         "viewStateFixtureIndices": [
-          84
+          75
         ]
       }
     },
@@ -8291,7 +7718,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 32
+          "viewStateFixtureIndex": 24
         },
         {
           "variantId": "loading",
@@ -8329,16 +7756,16 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 33
+          "viewStateFixtureIndex": 25
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 64,
+        "routeFixtureIndex": 51,
         "viewStateFixtureIndices": [
-          32,
-          33
+          24,
+          25
         ]
       }
     },
@@ -8383,15 +7810,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 36
+          "viewStateFixtureIndex": 28
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 63,
+        "routeFixtureIndex": 50,
         "viewStateFixtureIndices": [
-          36
+          28
         ]
       }
     },
@@ -8438,15 +7865,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 86
+          "viewStateFixtureIndex": 77
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 65,
+        "routeFixtureIndex": 52,
         "viewStateFixtureIndices": [
-          86
+          77
         ]
       }
     },
@@ -8493,15 +7920,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 89
+          "viewStateFixtureIndex": 80
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 178,
+        "routeFixtureIndex": 165,
         "viewStateFixtureIndices": [
-          89
+          80
         ]
       }
     },
@@ -8553,15 +7980,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 37
+          "viewStateFixtureIndex": 29
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 66,
+        "routeFixtureIndex": 53,
         "viewStateFixtureIndices": [
-          37
+          29
         ]
       }
     },
@@ -8611,15 +8038,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 34
+          "viewStateFixtureIndex": 26
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 67,
+        "routeFixtureIndex": 54,
         "viewStateFixtureIndices": [
-          34
+          26
         ]
       }
     },
@@ -8666,7 +8093,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 49
+          "viewStateFixtureIndex": 41
         },
         {
           "variantId": "source-unavailable",
@@ -8723,16 +8150,16 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 130
+          "viewStateFixtureIndex": 121
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 60,
+        "routeFixtureIndex": 47,
         "viewStateFixtureIndices": [
-          49,
-          130
+          41,
+          121
         ]
       }
     },
@@ -8779,15 +8206,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 52
+          "viewStateFixtureIndex": 44
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 194,
+        "routeFixtureIndex": 181,
         "viewStateFixtureIndices": [
-          52
+          44
         ]
       }
     },
@@ -8832,15 +8259,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 105
+          "viewStateFixtureIndex": 96
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 195,
+        "routeFixtureIndex": 182,
         "viewStateFixtureIndices": [
-          105
+          96
         ]
       }
     },
@@ -8887,15 +8314,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 30
+          "viewStateFixtureIndex": 22
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 61,
+        "routeFixtureIndex": 48,
         "viewStateFixtureIndices": [
-          30
+          22
         ]
       }
     },
@@ -8944,15 +8371,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 51
+          "viewStateFixtureIndex": 43
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 62,
+        "routeFixtureIndex": 49,
         "viewStateFixtureIndices": [
-          51
+          43
         ]
       }
     },
@@ -8999,15 +8426,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 50
+          "viewStateFixtureIndex": 42
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 180,
+        "routeFixtureIndex": 167,
         "viewStateFixtureIndices": [
-          50
+          42
         ]
       }
     },
@@ -9052,15 +8479,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 102
+          "viewStateFixtureIndex": 93
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 191,
+        "routeFixtureIndex": 178,
         "viewStateFixtureIndices": [
-          102
+          93
         ]
       }
     },
@@ -9107,15 +8534,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 107
+          "viewStateFixtureIndex": 98
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 197,
+        "routeFixtureIndex": 184,
         "viewStateFixtureIndices": [
-          107
+          98
         ]
       }
     },
@@ -9162,15 +8589,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 94
+          "viewStateFixtureIndex": 85
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 183,
+        "routeFixtureIndex": 170,
         "viewStateFixtureIndices": [
-          94
+          85
         ]
       }
     },
@@ -9217,15 +8644,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 99
+          "viewStateFixtureIndex": 90
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 188,
+        "routeFixtureIndex": 175,
         "viewStateFixtureIndices": [
-          99
+          90
         ]
       }
     },
@@ -9274,15 +8701,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 98
+          "viewStateFixtureIndex": 89
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 187,
+        "routeFixtureIndex": 174,
         "viewStateFixtureIndices": [
-          98
+          89
         ]
       }
     },
@@ -9329,15 +8756,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 106
+          "viewStateFixtureIndex": 97
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 196,
+        "routeFixtureIndex": 183,
         "viewStateFixtureIndices": [
-          106
+          97
         ]
       }
     },
@@ -9384,15 +8811,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 93
+          "viewStateFixtureIndex": 84
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 182,
+        "routeFixtureIndex": 169,
         "viewStateFixtureIndices": [
-          93
+          84
         ]
       }
     },
@@ -9439,15 +8866,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 101
+          "viewStateFixtureIndex": 92
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 190,
+        "routeFixtureIndex": 177,
         "viewStateFixtureIndices": [
-          101
+          92
         ]
       }
     },
@@ -9494,15 +8921,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 53
+          "viewStateFixtureIndex": 45
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 199,
+        "routeFixtureIndex": 186,
         "viewStateFixtureIndices": [
-          53
+          45
         ]
       }
     },
@@ -9549,15 +8976,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 56
+          "viewStateFixtureIndex": 48
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 198,
+        "routeFixtureIndex": 185,
         "viewStateFixtureIndices": [
-          56
+          48
         ]
       }
     },
@@ -9604,15 +9031,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 57
+          "viewStateFixtureIndex": 49
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 200,
+        "routeFixtureIndex": 187,
         "viewStateFixtureIndices": [
-          57
+          49
         ]
       }
     },
@@ -9659,15 +9086,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 55
+          "viewStateFixtureIndex": 47
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 174,
+        "routeFixtureIndex": 161,
         "viewStateFixtureIndices": [
-          55
+          47
         ]
       }
     },
@@ -9751,7 +9178,7 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 129
+          "viewStateFixtureIndex": 120
         }
       ],
       "gaps": [],
@@ -9760,7 +9187,7 @@
         "routeFixtureIndex": 0,
         "viewStateFixtureIndices": [
           0,
-          129
+          120
         ]
       }
     },
@@ -9879,15 +9306,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 62
+          "viewStateFixtureIndex": 54
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 70,
+        "routeFixtureIndex": 57,
         "viewStateFixtureIndices": [
-          62
+          54
         ]
       }
     },
@@ -9936,15 +9363,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 63
+          "viewStateFixtureIndex": 55
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 71,
+        "routeFixtureIndex": 58,
         "viewStateFixtureIndices": [
-          63
+          55
         ]
       }
     },
@@ -10001,15 +9428,15 @@
               "reason": "label-without-ui-event"
             }
           ],
-          "viewStateFixtureIndex": 64
+          "viewStateFixtureIndex": 56
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 72,
+        "routeFixtureIndex": 59,
         "viewStateFixtureIndices": [
-          64
+          56
         ]
       }
     },
@@ -10057,15 +9484,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 65
+          "viewStateFixtureIndex": 57
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 73,
+        "routeFixtureIndex": 60,
         "viewStateFixtureIndices": [
-          65
+          57
         ]
       }
     },
@@ -10121,15 +9548,15 @@
               "reason": "label-without-ui-event"
             }
           ],
-          "viewStateFixtureIndex": 66
+          "viewStateFixtureIndex": 58
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 74,
+        "routeFixtureIndex": 61,
         "viewStateFixtureIndices": [
-          66
+          58
         ]
       }
     },
@@ -10177,15 +9604,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 60
+          "viewStateFixtureIndex": 52
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 173,
+        "routeFixtureIndex": 160,
         "viewStateFixtureIndices": [
-          60
+          52
         ]
       }
     },
@@ -10233,15 +9660,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 35
+          "viewStateFixtureIndex": 27
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 68,
+        "routeFixtureIndex": 55,
         "viewStateFixtureIndices": [
-          35
+          27
         ]
       }
     },
@@ -10288,15 +9715,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 59
+          "viewStateFixtureIndex": 51
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 168,
+        "routeFixtureIndex": 155,
         "viewStateFixtureIndices": [
-          59
+          51
         ]
       }
     },
@@ -10341,15 +9768,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 91
+          "viewStateFixtureIndex": 82
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 172,
+        "routeFixtureIndex": 159,
         "viewStateFixtureIndices": [
-          91
+          82
         ]
       }
     },
@@ -10396,15 +9823,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 61
+          "viewStateFixtureIndex": 53
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 175,
+        "routeFixtureIndex": 162,
         "viewStateFixtureIndices": [
-          61
+          53
         ]
       }
     },
@@ -10449,15 +9876,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 83
+          "viewStateFixtureIndex": 74
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 166,
+        "routeFixtureIndex": 153,
         "viewStateFixtureIndices": [
-          83
+          74
         ]
       }
     },
@@ -10505,15 +9932,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 58
+          "viewStateFixtureIndex": 50
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 167,
+        "routeFixtureIndex": 154,
         "viewStateFixtureIndices": [
-          58
+          50
         ]
       }
     },
@@ -10549,15 +9976,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 23
+          "viewStateFixtureIndex": 15
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 75,
+        "routeFixtureIndex": 62,
         "viewStateFixtureIndices": [
-          23
+          15
         ]
       }
     },
@@ -10590,183 +10017,13 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 22
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 76,
-        "viewStateFixtureIndices": [
-          22
-        ]
-      }
-    },
-    {
-      "routeId": "control-layer-base-v2",
-      "title": "阅读控制层基线 V2（Control Layer Base V2）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderControlSheet",
-              "id": "reader-control-sheet",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
-          "viewStateFixtureIndex": 13
-        }
-      ],
-      "gaps": [],
-      "evidence": {
-        "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 46,
-        "viewStateFixtureIndices": [
-          13
-        ]
-      }
-    },
-    {
-      "routeId": "reader-directory-overlay-v2",
-      "title": "目录覆盖层 V2（Reader Directory Overlay V2）",
-      "shell": "ReaderShell",
-      "status": "direct",
-      "aliasFor": null,
-      "variants": [
-        {
-          "variantId": "default",
-          "pageState": "default",
-          "context": {
-            "bookId": "bk-001"
-          },
-          "facets": {},
-          "components": [
-            {
-              "type": "ReaderBase",
-              "id": "reader-base",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store",
-                "host-layout"
-              ],
-              "compositionMode": "host-composite",
-              "props": {
-                "theme": "paper"
-              },
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderTopArea",
-              "id": "reader-top-area",
-              "stateAuthorities": [
-                "core",
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderDirectoryPanel",
-              "id": "directory-panel",
-              "stateAuthorities": [
-                "contract"
-              ],
-              "compositionMode": "contract-tree",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            },
-            {
-              "type": "ReaderBottomBar",
-              "id": "reader-bottom-bar",
-              "stateAuthorities": [
-                "reader-ui-runtime",
-                "host-store"
-              ],
-              "compositionMode": "host-composite",
-              "props": {},
-              "children": [],
-              "bindings": [],
-              "stateEventEvidence": []
-            }
-          ],
-          "actionGaps": [],
           "viewStateFixtureIndex": 14
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 47,
+        "routeFixtureIndex": 63,
         "viewStateFixtureIndices": [
           14
         ]
@@ -10782,7 +10039,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 91,
+        "routeFixtureIndex": 78,
         "viewStateFixtureIndices": []
       }
     },
@@ -10796,7 +10053,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 84,
+        "routeFixtureIndex": 71,
         "viewStateFixtureIndices": []
       }
     },
@@ -10810,7 +10067,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 88,
+        "routeFixtureIndex": 75,
         "viewStateFixtureIndices": []
       }
     },
@@ -10824,7 +10081,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 89,
+        "routeFixtureIndex": 76,
         "viewStateFixtureIndices": []
       }
     },
@@ -10838,7 +10095,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 90,
+        "routeFixtureIndex": 77,
         "viewStateFixtureIndices": []
       }
     },
@@ -10852,7 +10109,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 85,
+        "routeFixtureIndex": 72,
         "viewStateFixtureIndices": []
       }
     },
@@ -10866,7 +10123,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 96,
+        "routeFixtureIndex": 83,
         "viewStateFixtureIndices": []
       }
     },
@@ -10880,7 +10137,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 97,
+        "routeFixtureIndex": 84,
         "viewStateFixtureIndices": []
       }
     },
@@ -10894,7 +10151,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 95,
+        "routeFixtureIndex": 82,
         "viewStateFixtureIndices": []
       }
     },
@@ -10908,7 +10165,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 108,
+        "routeFixtureIndex": 95,
         "viewStateFixtureIndices": []
       }
     },
@@ -10922,7 +10179,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 109,
+        "routeFixtureIndex": 96,
         "viewStateFixtureIndices": []
       }
     },
@@ -10936,7 +10193,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 106,
+        "routeFixtureIndex": 93,
         "viewStateFixtureIndices": []
       }
     },
@@ -10950,7 +10207,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 107,
+        "routeFixtureIndex": 94,
         "viewStateFixtureIndices": []
       }
     },
@@ -10964,7 +10221,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 110,
+        "routeFixtureIndex": 97,
         "viewStateFixtureIndices": []
       }
     },
@@ -10978,7 +10235,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 77,
+        "routeFixtureIndex": 64,
         "viewStateFixtureIndices": []
       }
     },
@@ -10992,7 +10249,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 81,
+        "routeFixtureIndex": 68,
         "viewStateFixtureIndices": []
       }
     },
@@ -11006,7 +10263,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 140,
+        "routeFixtureIndex": 127,
         "viewStateFixtureIndices": []
       }
     },
@@ -11020,7 +10277,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 138,
+        "routeFixtureIndex": 125,
         "viewStateFixtureIndices": []
       }
     },
@@ -11034,7 +10291,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 137,
+        "routeFixtureIndex": 124,
         "viewStateFixtureIndices": []
       }
     },
@@ -11048,7 +10305,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 132,
+        "routeFixtureIndex": 119,
         "viewStateFixtureIndices": []
       }
     },
@@ -11062,7 +10319,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 142,
+        "routeFixtureIndex": 129,
         "viewStateFixtureIndices": []
       }
     },
@@ -11076,7 +10333,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 160,
+        "routeFixtureIndex": 147,
         "viewStateFixtureIndices": []
       }
     },
@@ -11090,7 +10347,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 155,
+        "routeFixtureIndex": 142,
         "viewStateFixtureIndices": []
       }
     },
@@ -11104,7 +10361,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 158,
+        "routeFixtureIndex": 145,
         "viewStateFixtureIndices": []
       }
     },
@@ -11118,7 +10375,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 157,
+        "routeFixtureIndex": 144,
         "viewStateFixtureIndices": []
       }
     },
@@ -11132,7 +10389,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 156,
+        "routeFixtureIndex": 143,
         "viewStateFixtureIndices": []
       }
     },
@@ -11177,15 +10434,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 119
+          "viewStateFixtureIndex": 110
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 151,
+        "routeFixtureIndex": 138,
         "viewStateFixtureIndices": [
-          119
+          110
         ]
       }
     },
@@ -11199,7 +10456,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 150,
+        "routeFixtureIndex": 137,
         "viewStateFixtureIndices": []
       }
     },
@@ -11213,7 +10470,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 134,
+        "routeFixtureIndex": 121,
         "viewStateFixtureIndices": []
       }
     },
@@ -11227,7 +10484,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 146,
+        "routeFixtureIndex": 133,
         "viewStateFixtureIndices": []
       }
     },
@@ -11241,7 +10498,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 147,
+        "routeFixtureIndex": 134,
         "viewStateFixtureIndices": []
       }
     },
@@ -11255,7 +10512,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 148,
+        "routeFixtureIndex": 135,
         "viewStateFixtureIndices": []
       }
     },
@@ -11269,7 +10526,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 159,
+        "routeFixtureIndex": 146,
         "viewStateFixtureIndices": []
       }
     },
@@ -11283,7 +10540,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 144,
+        "routeFixtureIndex": 131,
         "viewStateFixtureIndices": []
       }
     },
@@ -11297,7 +10554,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 135,
+        "routeFixtureIndex": 122,
         "viewStateFixtureIndices": []
       }
     },
@@ -11344,15 +10601,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 122
+          "viewStateFixtureIndex": 113
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 152,
+        "routeFixtureIndex": 139,
         "viewStateFixtureIndices": [
-          122
+          113
         ]
       }
     },
@@ -11366,7 +10623,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 153,
+        "routeFixtureIndex": 140,
         "viewStateFixtureIndices": []
       }
     },
@@ -11380,7 +10637,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 154,
+        "routeFixtureIndex": 141,
         "viewStateFixtureIndices": []
       }
     },
@@ -11394,7 +10651,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 123,
+        "routeFixtureIndex": 110,
         "viewStateFixtureIndices": []
       }
     },
@@ -11408,7 +10665,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 124,
+        "routeFixtureIndex": 111,
         "viewStateFixtureIndices": []
       }
     },
@@ -11422,7 +10679,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 125,
+        "routeFixtureIndex": 112,
         "viewStateFixtureIndices": []
       }
     },
@@ -11436,7 +10693,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 128,
+        "routeFixtureIndex": 115,
         "viewStateFixtureIndices": []
       }
     },
@@ -11450,7 +10707,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 130,
+        "routeFixtureIndex": 117,
         "viewStateFixtureIndices": []
       }
     },
@@ -11464,7 +10721,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 126,
+        "routeFixtureIndex": 113,
         "viewStateFixtureIndices": []
       }
     },
@@ -11509,15 +10766,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 118
+          "viewStateFixtureIndex": 109
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 120,
+        "routeFixtureIndex": 107,
         "viewStateFixtureIndices": [
-          118
+          109
         ]
       }
     },
@@ -11531,7 +10788,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 119,
+        "routeFixtureIndex": 106,
         "viewStateFixtureIndices": []
       }
     },
@@ -11545,7 +10802,7 @@
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 118,
+        "routeFixtureIndex": 105,
         "viewStateFixtureIndices": []
       }
     },
@@ -11609,15 +10866,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 76
+          "viewStateFixtureIndex": 67
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 163,
+        "routeFixtureIndex": 150,
         "viewStateFixtureIndices": [
-          76
+          67
         ]
       }
     },
@@ -11681,15 +10938,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 78
+          "viewStateFixtureIndex": 69
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 165,
+        "routeFixtureIndex": 152,
         "viewStateFixtureIndices": [
-          78
+          69
         ]
       }
     },
@@ -11753,15 +11010,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 75
+          "viewStateFixtureIndex": 66
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 162,
+        "routeFixtureIndex": 149,
         "viewStateFixtureIndices": [
-          75
+          66
         ]
       }
     },
@@ -11825,15 +11082,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 77
+          "viewStateFixtureIndex": 68
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 164,
+        "routeFixtureIndex": 151,
         "viewStateFixtureIndices": [
-          77
+          68
         ]
       }
     },
@@ -11878,15 +11135,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 87
+          "viewStateFixtureIndex": 78
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 176,
+        "routeFixtureIndex": 163,
         "viewStateFixtureIndices": [
-          87
+          78
         ]
       }
     },
@@ -11931,15 +11188,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 90
+          "viewStateFixtureIndex": 81
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 179,
+        "routeFixtureIndex": 166,
         "viewStateFixtureIndices": [
-          90
+          81
         ]
       }
     },
@@ -11986,15 +11243,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 88
+          "viewStateFixtureIndex": 79
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 177,
+        "routeFixtureIndex": 164,
         "viewStateFixtureIndices": [
-          88
+          79
         ]
       }
     },
@@ -12039,15 +11296,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 92
+          "viewStateFixtureIndex": 83
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 181,
+        "routeFixtureIndex": 168,
         "viewStateFixtureIndices": [
-          92
+          83
         ]
       }
     },
@@ -12092,15 +11349,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 104
+          "viewStateFixtureIndex": 95
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 193,
+        "routeFixtureIndex": 180,
         "viewStateFixtureIndices": [
-          104
+          95
         ]
       }
     },
@@ -12149,15 +11406,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 100
+          "viewStateFixtureIndex": 91
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 189,
+        "routeFixtureIndex": 176,
         "viewStateFixtureIndices": [
-          100
+          91
         ]
       }
     },
@@ -12206,15 +11463,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 97
+          "viewStateFixtureIndex": 88
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 186,
+        "routeFixtureIndex": 173,
         "viewStateFixtureIndices": [
-          97
+          88
         ]
       }
     },
@@ -12263,15 +11520,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 95
+          "viewStateFixtureIndex": 86
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 184,
+        "routeFixtureIndex": 171,
         "viewStateFixtureIndices": [
-          95
+          86
         ]
       }
     },
@@ -12318,15 +11575,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 96
+          "viewStateFixtureIndex": 87
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 185,
+        "routeFixtureIndex": 172,
         "viewStateFixtureIndices": [
-          96
+          87
         ]
       }
     },
@@ -12375,15 +11632,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 103
+          "viewStateFixtureIndex": 94
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 192,
+        "routeFixtureIndex": 179,
         "viewStateFixtureIndices": [
-          103
+          94
         ]
       }
     },
@@ -12452,7 +11709,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderAppearancePanel",
+              "type": "AppearancePanel",
               "id": "reader_font_import_confirm-panel",
               "stateAuthorities": [
                 "contract"
@@ -12517,15 +11774,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 155
+          "viewStateFixtureIndex": 146
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 225,
+        "routeFixtureIndex": 212,
         "viewStateFixtureIndices": [
-          155
+          146
         ]
       }
     },
@@ -12594,7 +11851,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderAppearancePanel",
+              "type": "AppearancePanel",
               "id": "reader_font_delete_confirm-panel",
               "stateAuthorities": [
                 "contract"
@@ -12655,15 +11912,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 156
+          "viewStateFixtureIndex": 147
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 226,
+        "routeFixtureIndex": 213,
         "viewStateFixtureIndices": [
-          156
+          147
         ]
       }
     },
@@ -12762,7 +12019,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderAppearancePanel",
+              "type": "AppearancePanel",
               "id": "reader_font_fallback-panel",
               "stateAuthorities": [
                 "contract"
@@ -12825,15 +12082,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 157
+          "viewStateFixtureIndex": 148
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 227,
+        "routeFixtureIndex": 214,
         "viewStateFixtureIndices": [
-          157
+          148
         ]
       }
     },
@@ -12902,7 +12159,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderAppearancePanel",
+              "type": "AppearancePanel",
               "id": "reader_theme_new-panel",
               "stateAuthorities": [
                 "contract"
@@ -12977,15 +12234,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 158
+          "viewStateFixtureIndex": 149
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 228,
+        "routeFixtureIndex": 215,
         "viewStateFixtureIndices": [
-          158
+          149
         ]
       }
     },
@@ -13054,7 +12311,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderAppearancePanel",
+              "type": "AppearancePanel",
               "id": "reader_theme_delete_confirm-panel",
               "stateAuthorities": [
                 "contract"
@@ -13115,15 +12372,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 159
+          "viewStateFixtureIndex": 150
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 229,
+        "routeFixtureIndex": 216,
         "viewStateFixtureIndices": [
-          159
+          150
         ]
       }
     },
@@ -13192,7 +12449,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderAppearancePanel",
+              "type": "AppearancePanel",
               "id": "reader_typography_reset_confirm-panel",
               "stateAuthorities": [
                 "contract"
@@ -13249,15 +12506,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 160
+          "viewStateFixtureIndex": 151
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 230,
+        "routeFixtureIndex": 217,
         "viewStateFixtureIndices": [
-          160
+          151
         ]
       }
     },
@@ -13327,7 +12584,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "reader_replace_delete_confirm-panel",
               "stateAuthorities": [
                 "contract"
@@ -13387,15 +12644,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 161
+          "viewStateFixtureIndex": 152
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 231,
+        "routeFixtureIndex": 218,
         "viewStateFixtureIndices": [
-          161
+          152
         ]
       }
     },
@@ -13465,7 +12722,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "reader_replace_apply_result-panel",
               "stateAuthorities": [
                 "contract"
@@ -13589,15 +12846,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 162
+          "viewStateFixtureIndex": 153
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 232,
+        "routeFixtureIndex": 219,
         "viewStateFixtureIndices": [
-          162
+          153
         ]
       }
     },
@@ -13667,7 +12924,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "reader_replace_import_export-panel",
               "stateAuthorities": [
                 "contract"
@@ -13758,15 +13015,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 163
+          "viewStateFixtureIndex": 154
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 233,
+        "routeFixtureIndex": 220,
         "viewStateFixtureIndices": [
-          163
+          154
         ]
       }
     },
@@ -13836,7 +13093,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "reader_replace_preview-panel",
               "stateAuthorities": [
                 "contract"
@@ -13933,15 +13190,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 164
+          "viewStateFixtureIndex": 155
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 234,
+        "routeFixtureIndex": 221,
         "viewStateFixtureIndices": [
-          164
+          155
         ]
       }
     },
@@ -14011,7 +13268,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "reader_replace_page-panel",
               "stateAuthorities": [
                 "contract"
@@ -14085,15 +13342,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 165
+          "viewStateFixtureIndex": 156
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 235,
+        "routeFixtureIndex": 222,
         "viewStateFixtureIndices": [
-          165
+          156
         ]
       }
     },
@@ -14189,15 +13446,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 149
+          "viewStateFixtureIndex": 140
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 219,
+        "routeFixtureIndex": 206,
         "viewStateFixtureIndices": [
-          149
+          140
         ]
       }
     },
@@ -14293,15 +13550,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 150
+          "viewStateFixtureIndex": 141
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 220,
+        "routeFixtureIndex": 207,
         "viewStateFixtureIndices": [
-          150
+          141
         ]
       }
     },
@@ -14399,15 +13656,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 151
+          "viewStateFixtureIndex": 142
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 221,
+        "routeFixtureIndex": 208,
         "viewStateFixtureIndices": [
-          151
+          142
         ]
       }
     },
@@ -14505,15 +13762,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 152
+          "viewStateFixtureIndex": 143
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 222,
+        "routeFixtureIndex": 209,
         "viewStateFixtureIndices": [
-          152
+          143
         ]
       }
     },
@@ -14619,15 +13876,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 153
+          "viewStateFixtureIndex": 144
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 223,
+        "routeFixtureIndex": 210,
         "viewStateFixtureIndices": [
-          153
+          144
         ]
       }
     },
@@ -14769,15 +14026,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 154
+          "viewStateFixtureIndex": 145
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 224,
+        "routeFixtureIndex": 211,
         "viewStateFixtureIndices": [
-          154
+          145
         ]
       }
     },
@@ -14847,7 +14104,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderDirectoryPanel",
+              "type": "DirectoryPanel",
               "id": "reader_toc_loading-surface",
               "stateAuthorities": [
                 "contract"
@@ -14892,15 +14149,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 139
+          "viewStateFixtureIndex": 130
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 209,
+        "routeFixtureIndex": 196,
         "viewStateFixtureIndices": [
-          139
+          130
         ]
       }
     },
@@ -14970,7 +14227,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderDirectoryPanel",
+              "type": "DirectoryPanel",
               "id": "reader_toc_offline-surface",
               "stateAuthorities": [
                 "contract"
@@ -15044,15 +14301,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 140
+          "viewStateFixtureIndex": 131
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 210,
+        "routeFixtureIndex": 197,
         "viewStateFixtureIndices": [
-          140
+          131
         ]
       }
     },
@@ -15122,7 +14379,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderDirectoryPanel",
+              "type": "DirectoryPanel",
               "id": "reader_toc_error-surface",
               "stateAuthorities": [
                 "contract"
@@ -15200,15 +14457,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 141
+          "viewStateFixtureIndex": 132
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 211,
+        "routeFixtureIndex": 198,
         "viewStateFixtureIndices": [
-          141
+          132
         ]
       }
     },
@@ -15364,15 +14621,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 142
+          "viewStateFixtureIndex": 133
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 212,
+        "routeFixtureIndex": 199,
         "viewStateFixtureIndices": [
-          142
+          133
         ]
       }
     },
@@ -15583,15 +14840,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 143
+          "viewStateFixtureIndex": 134
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 213,
+        "routeFixtureIndex": 200,
         "viewStateFixtureIndices": [
-          143
+          134
         ]
       }
     },
@@ -15802,15 +15059,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 144
+          "viewStateFixtureIndex": 135
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 214,
+        "routeFixtureIndex": 201,
         "viewStateFixtureIndices": [
-          144
+          135
         ]
       }
     },
@@ -15981,15 +15238,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 145
+          "viewStateFixtureIndex": 136
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 215,
+        "routeFixtureIndex": 202,
         "viewStateFixtureIndices": [
-          145
+          136
         ]
       }
     },
@@ -16160,15 +15417,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 146
+          "viewStateFixtureIndex": 137
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 216,
+        "routeFixtureIndex": 203,
         "viewStateFixtureIndices": [
-          146
+          137
         ]
       }
     },
@@ -16339,15 +15596,15 @@
               "reason": "label-without-ui-event"
             }
           ],
-          "viewStateFixtureIndex": 147
+          "viewStateFixtureIndex": 138
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 217,
+        "routeFixtureIndex": 204,
         "viewStateFixtureIndices": [
-          147
+          138
         ]
       }
     },
@@ -16480,15 +15737,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 148
+          "viewStateFixtureIndex": 139
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 218,
+        "routeFixtureIndex": 205,
         "viewStateFixtureIndices": [
-          148
+          139
         ]
       }
     },
@@ -16581,15 +15838,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 131
+          "viewStateFixtureIndex": 122
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 201,
+        "routeFixtureIndex": 188,
         "viewStateFixtureIndices": [
-          131
+          122
         ]
       }
     },
@@ -16682,15 +15939,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 132
+          "viewStateFixtureIndex": 123
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 202,
+        "routeFixtureIndex": 189,
         "viewStateFixtureIndices": [
-          132
+          123
         ]
       }
     },
@@ -16783,15 +16040,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 133
+          "viewStateFixtureIndex": 124
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 203,
+        "routeFixtureIndex": 190,
         "viewStateFixtureIndices": [
-          133
+          124
         ]
       }
     },
@@ -16865,15 +16122,15 @@
               "reason": "label-without-ui-event"
             }
           ],
-          "viewStateFixtureIndex": 134
+          "viewStateFixtureIndex": 125
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 204,
+        "routeFixtureIndex": 191,
         "viewStateFixtureIndices": [
-          134
+          125
         ]
       }
     },
@@ -16972,15 +16229,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 135
+          "viewStateFixtureIndex": 126
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 205,
+        "routeFixtureIndex": 192,
         "viewStateFixtureIndices": [
-          135
+          126
         ]
       }
     },
@@ -17063,15 +16320,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 136
+          "viewStateFixtureIndex": 127
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 206,
+        "routeFixtureIndex": 193,
         "viewStateFixtureIndices": [
-          136
+          127
         ]
       }
     },
@@ -17176,15 +16433,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 137
+          "viewStateFixtureIndex": 128
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 207,
+        "routeFixtureIndex": 194,
         "viewStateFixtureIndices": [
-          137
+          128
         ]
       }
     },
@@ -17261,15 +16518,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 138
+          "viewStateFixtureIndex": 129
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 208,
+        "routeFixtureIndex": 195,
         "viewStateFixtureIndices": [
-          138
+          129
         ]
       }
     },
@@ -17333,15 +16590,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 166
+          "viewStateFixtureIndex": 157
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 236,
+        "routeFixtureIndex": 223,
         "viewStateFixtureIndices": [
-          166
+          157
         ]
       }
     },
@@ -17441,15 +16698,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 167
+          "viewStateFixtureIndex": 158
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 237,
+        "routeFixtureIndex": 224,
         "viewStateFixtureIndices": [
-          167
+          158
         ]
       }
     },
@@ -17570,15 +16827,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 168
+          "viewStateFixtureIndex": 159
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 238,
+        "routeFixtureIndex": 225,
         "viewStateFixtureIndices": [
-          168
+          159
         ]
       }
     },
@@ -17678,15 +16935,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 169
+          "viewStateFixtureIndex": 160
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 239,
+        "routeFixtureIndex": 226,
         "viewStateFixtureIndices": [
-          169
+          160
         ]
       }
     },
@@ -17820,15 +17077,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 170
+          "viewStateFixtureIndex": 161
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 240,
+        "routeFixtureIndex": 227,
         "viewStateFixtureIndices": [
-          170
+          161
         ]
       }
     },
@@ -17962,15 +17219,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 171
+          "viewStateFixtureIndex": 162
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 241,
+        "routeFixtureIndex": 228,
         "viewStateFixtureIndices": [
-          171
+          162
         ]
       }
     },
@@ -18102,15 +17359,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 172
+          "viewStateFixtureIndex": 163
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 242,
+        "routeFixtureIndex": 229,
         "viewStateFixtureIndices": [
-          172
+          163
         ]
       }
     },
@@ -18199,15 +17456,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 173
+          "viewStateFixtureIndex": 164
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 243,
+        "routeFixtureIndex": 230,
         "viewStateFixtureIndices": [
-          173
+          164
         ]
       }
     },
@@ -18321,15 +17578,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 174
+          "viewStateFixtureIndex": 165
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 244,
+        "routeFixtureIndex": 231,
         "viewStateFixtureIndices": [
-          174
+          165
         ]
       }
     },
@@ -18368,7 +17625,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderReplacePanel",
+              "type": "ReplacePanel",
               "id": "content-edit-panel",
               "stateAuthorities": [
                 "contract"
@@ -18474,15 +17731,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 175
+          "viewStateFixtureIndex": 166
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 245,
+        "routeFixtureIndex": 232,
         "viewStateFixtureIndices": [
-          175
+          166
         ]
       }
     },
@@ -18586,15 +17843,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 176
+          "viewStateFixtureIndex": 167
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 246,
+        "routeFixtureIndex": 233,
         "viewStateFixtureIndices": [
-          176
+          167
         ]
       }
     },
@@ -18708,15 +17965,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 177
+          "viewStateFixtureIndex": 168
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 247,
+        "routeFixtureIndex": 234,
         "viewStateFixtureIndices": [
-          177
+          168
         ]
       }
     },
@@ -18837,15 +18094,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 178
+          "viewStateFixtureIndex": 169
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 248,
+        "routeFixtureIndex": 235,
         "viewStateFixtureIndices": [
-          178
+          169
         ]
       }
     },
@@ -18879,7 +18136,7 @@
               "stateEventEvidence": []
             },
             {
-              "type": "ReaderDirectoryPanel",
+              "type": "DirectoryPanel",
               "id": "bookmarks-manager-panel",
               "stateAuthorities": [
                 "contract"
@@ -18950,15 +18207,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 179
+          "viewStateFixtureIndex": 170
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 249,
+        "routeFixtureIndex": 236,
         "viewStateFixtureIndices": [
-          179
+          170
         ]
       }
     },
@@ -19098,15 +18355,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 180
+          "viewStateFixtureIndex": 171
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 250,
+        "routeFixtureIndex": 237,
         "viewStateFixtureIndices": [
-          180
+          171
         ]
       }
     },
@@ -19260,15 +18517,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 181
+          "viewStateFixtureIndex": 172
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 251,
+        "routeFixtureIndex": 238,
         "viewStateFixtureIndices": [
-          181
+          172
         ]
       }
     },
@@ -19397,15 +18654,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 182
+          "viewStateFixtureIndex": 173
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 252,
+        "routeFixtureIndex": 239,
         "viewStateFixtureIndices": [
-          182
+          173
         ]
       }
     },
@@ -19508,15 +18765,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 183
+          "viewStateFixtureIndex": 174
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 253,
+        "routeFixtureIndex": 240,
         "viewStateFixtureIndices": [
-          183
+          174
         ]
       }
     },
@@ -19586,15 +18843,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 184
+          "viewStateFixtureIndex": 175
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 254,
+        "routeFixtureIndex": 241,
         "viewStateFixtureIndices": [
-          184
+          175
         ]
       }
     },
@@ -19663,15 +18920,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 185
+          "viewStateFixtureIndex": 176
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 255,
+        "routeFixtureIndex": 242,
         "viewStateFixtureIndices": [
-          185
+          176
         ]
       }
     },
@@ -19749,15 +19006,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 186
+          "viewStateFixtureIndex": 177
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 256,
+        "routeFixtureIndex": 243,
         "viewStateFixtureIndices": [
-          186
+          177
         ]
       }
     },
@@ -19896,15 +19153,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 187
+          "viewStateFixtureIndex": 178
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 257,
+        "routeFixtureIndex": 244,
         "viewStateFixtureIndices": [
-          187
+          178
         ]
       }
     },
@@ -20022,15 +19279,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 188
+          "viewStateFixtureIndex": 179
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 258,
+        "routeFixtureIndex": 245,
         "viewStateFixtureIndices": [
-          188
+          179
         ]
       }
     },
@@ -20162,15 +19419,15 @@
             }
           ],
           "actionGaps": [],
-          "viewStateFixtureIndex": 189
+          "viewStateFixtureIndex": 180
         }
       ],
       "gaps": [],
       "evidence": {
         "shellSource": "frontend-demo-optimized/route-contract.js",
-        "routeFixtureIndex": 259,
+        "routeFixtureIndex": 246,
         "viewStateFixtureIndices": [
-          189
+          180
         ]
       }
     }

@@ -266,7 +266,7 @@ In addition to Section 6's stop conditions, an agent must stop when:
 - A `465/465` emulator pass only proves the ArkTS Hypium suite passed on `127.0.0.1:5555`. It does not prove Figma parity, Reader-UI source-side completion, HarmonyOS consumption, or real-device behavior.
 - No document, report, or commit message may describe the emulator suite as "device tests" or "frontend delivery tests".
 
-### 9.6 Atomic promotion transaction (anti-bypass layer 1)
+### 9.6 Atomic promotion and retraction transactions (anti-bypass layer 1)
 
 Sections 9.1–9.5 defined the two-dimensional gate but left a bypass: an agent could hand-edit `harmony.status` to `implementation-ready` in the registry without completing source-side conversion, and the generator would happily produce `implementation-ready` admission entries because it only read `harmony.status`. The 2026-07-27 audit found 28 records in exactly this state.
 
@@ -280,7 +280,7 @@ The corrected atomic promotion transaction closes all four:
 
 | Rule | Enforcement |
 | --- | --- |
-| `harmony.status` must NEVER be hand-edited to `implementation-ready`. | The ONLY authorized path is `Reader-UI/tools/design/promote-family.mjs <recordId>`. |
+| `harmony.status` must NEVER be hand-edited. | The ONLY authorized path to `implementation-ready` is `Reader-UI/tools/design/promote-family.mjs <recordId>`. If a completed promotion must be withdrawn because a prerequisite later proves false, the ONLY authorized reverse path is `Reader-UI/tools/design/promote-family.mjs --retract <recordId> --reason <reason>`. |
 | `local.status` must be `implementation-ready` BEFORE `harmony.status` is promoted. | `promote-family.mjs` verifies this prerequisite and refuses to run if `local.status` is still `candidate-backport` or `not-currently-crosswalked`. |
 | An active source route-reconstruction quarantine blocks promotion. | `promote-family.mjs` refuses its listed records; `--check` requires both status dimensions to remain `candidate-backport`, requires no ledger entry, and requires its route set to match the registry. |
 | `LOCAL_READY_FOR_FIGMA.json` must exist and declare `admission.localReadyForFigma: true`. | `promote-family.mjs` resolves the handoff directory via an explicit `RECORD_ID_TO_HANDOFF` map (no string-prefix guessing). |
@@ -288,6 +288,7 @@ The corrected atomic promotion transaction closes all four:
 | HarmonyOS consumer target files must exist AND the `#symbol` suffix must be findable. | `promote-family.mjs` splits each `harmony.targets` entry on `#` and word-boundary-matches the symbol in the file. A renamed/deleted component fails promotion. |
 | The promotion must be atomic across FOUR files: registry + upstream artifact + consumer copy + ledger. | `promote-family.mjs` snapshots all four files before mutation, writes the registry FIRST (via temp+rename) so the generator reads the new state, regenerates the upstream artifact, syncs the consumer copy, verifies upstream == consumer (byte-identical SHA-256), appends the ledger entry, and does a final read-back. Any failure rolls back ALL prior writes in the transaction. |
 | Every promotion must be recorded in a tamper-evident ledger. | `Reader-UI/docs/design/PROMOTION_LEDGER.json` is an append-only log with hash-chained entries. Each entry records: recordId, previousHarmonyStatus, localStatus, figma revision, official current revision, registry hash before, upstream artifact hash after, consumer artifact hash after, `artifactsInSync` flag, and a hash of all fields chained to the previous entry. **The ledger is best-effort tamper-evident, NOT a cryptographic signature** — an agent with write access can recompute the chain. The real defense is Layer 3 (CI from a clean checkout). |
+| A promotion discovered to have crossed an unmet prerequisite must be withdrawn without erasing evidence. | `--retract` snapshots and rolls back the same four files on failure; on success it changes only `harmony.status` back to `candidate-backport`, regenerates/syncs `VisualAdmission.ets`, and appends a hash-chained reversal referencing the withdrawn promotion. It never deletes or rewrites the earlier promotion entry, and it preserves `local.status` as source-side history. A later promotion must use a new `LOCAL_READY_FOR_FIGMA` source-evidence hash **and** a new implementation commit; it is not a retry button. |
 
 The HarmonyOS `enforce-implementation-ready-gate.mjs` runs `promote-family.mjs --check` (Gate I) to verify that every `implementation-ready` record has a valid ledger entry, AND compares upstream vs consumer SHA-256 directly (Gate G2) to detect divergence that bypassed the promotion flow.
 
@@ -328,7 +329,7 @@ Local gates (Layers 1–2) can all be bypassed by an agent with write access to 
 
 In addition to Section 9.4's stop conditions, an agent must stop when:
 
-- The agent is about to hand-edit `harmony.status` in `FIGMA_VISUAL_ADMISSION_REGISTRY.json`. This is ALWAYS a protocol violation. Use `promote-family.mjs` instead.
+- The agent is about to hand-edit `harmony.status` in `FIGMA_VISUAL_ADMISSION_REGISTRY.json`. This is ALWAYS a protocol violation. Use `promote-family.mjs` to promote or its `--retract` transaction to withdraw a completed promotion.
 - The agent is about to hand-edit `PROMOTION_LEDGER.json`. The ledger is append-only by `promote-family.mjs`; hand-editing it is tampering.
 - The agent is about to run `npm run build`, `npm run test:arkts-emulator`, `npm run test:device`, or `npm run test:raw` without the gate passing. The pre-hooks and internal preflight will block this, but the agent should not attempt to bypass them.
 - The agent is about to invoke `hvigorw` directly, bypassing the npm scripts. Direct `hvigorw` invocation cannot be gated from inside the repo — the agent must run `npm run build` or `npm run test:raw` instead, which trigger the pre-hooks.

@@ -1,18 +1,27 @@
 #!/usr/bin/env node
-// promote-family.mjs — the ONLY authorized way to set harmony.status to
-// 'implementation-ready' in FIGMA_VISUAL_ADMISSION_REGISTRY.json.
+// promote-family.mjs — the ONLY authorized way to transition
+// harmony.status in FIGMA_VISUAL_ADMISSION_REGISTRY.json.
 //
 // On 2026-07-27 an audit found that 28 records had harmony.status set to
 // 'implementation-ready' while their local.status was still 'candidate-backport'.
 // That is the bypass path this script closes: hand-editing harmony.status
 // directly, without source-side conversion being complete.
 //
-// This script is an atomic promotion transaction. It verifies ALL prerequisites
-// before mutating anything, then atomically:
+// This script contains two atomic, auditable transactions:
+//
+// Promotion verifies ALL prerequisites before mutating anything, then atomically:
 //   1. sets harmony.status = 'implementation-ready' in the registry
 //   2. regenerates Reader-UI generated/arkts/VisualAdmission.ets
 //   3. syncs the regenerated artifact to Reader-for-HarmonyOS consumer copy
 //   4. appends a tamper-evident entry to PROMOTION_LEDGER.json
+//
+// Retraction is the only authorized way to withdraw a prior promotion when a
+// newly-discovered precondition (for example a failed route-isolation audit)
+// means native consumption must stop. It atomically sets harmony.status back
+// to 'candidate-backport', regenerates/syncs the two artifacts, and appends a
+// hash-chained reversal entry. It never deletes or rewrites prior ledger
+// history, and it does not alter local.status: source conversion evidence is
+// retained but must be replaced with fresh evidence before a later promotion.
 //
 // The four-file write (registry + upstream artifact + consumer copy + ledger)
 // is orchestrated as a transaction with backups and rollback. If any step
@@ -30,7 +39,8 @@
 //
 // Usage:
 //   node tools/design/promote-family.mjs <recordId>
-//   node tools/design/promote-family.mjs --check   # verify ledger consistency without promoting
+//   node tools/design/promote-family.mjs --retract <recordId> --reason <reason>
+//   node tools/design/promote-family.mjs --check   # verify ledger consistency without mutating
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -307,6 +317,32 @@ function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
   return errors;
 }
 
+function verifyFreshEvidenceAfterRetraction(recordId, localReady, latestLedgerEntry) {
+  if (!latestLedgerEntry || ledgerEntryOperation(latestLedgerEntry) !== 'retract') return [];
+
+  // A retraction is not a retry button. A later promotion must be bound to a
+  // newly-produced B2/B3 packet, rather than reusing the evidence that was
+  // explicitly withdrawn. Both fields are required so changing a prose-only
+  // file or merely pointing to the same implementation commit cannot reopen
+  // native consumption.
+  const errors = [];
+  const withdrawnHash = latestLedgerEntry.retractedPromotion?.sourceEvidenceHash;
+  const withdrawnCommit = latestLedgerEntry.retractedPromotion?.implementationCommit;
+  const currentHash = localReady.sourceEvidenceHash;
+  const currentCommit = localReady.localSource?.implementationCommit;
+  if (!withdrawnHash || !withdrawnCommit) {
+    errors.push(`latest retraction for ${recordId} lacks withdrawn source evidence metadata — manual review is required before promotion`);
+    return errors;
+  }
+  if (currentHash === withdrawnHash) {
+    errors.push(`sourceEvidenceHash still equals the packet withdrawn by ${latestLedgerEntry.entryId}; complete and certify a new B2/B3 source conversion before re-promoting`);
+  }
+  if (currentCommit === withdrawnCommit) {
+    errors.push(`implementationCommit still equals the commit withdrawn by ${latestLedgerEntry.entryId}; a new source conversion commit is required before re-promoting`);
+  }
+  return errors;
+}
+
 // ─── Ledger: tamper-evident append-only log ───────────────────────────────
 // NOTE: the ledger is a best-effort tamper-evident log, NOT a cryptographic
 // signature. An agent with write access to the working tree can recompute the
@@ -338,9 +374,26 @@ function appendLedgerEntry(ledger, entry) {
   return fullEntry;
 }
 
+function ledgerEntryOperation(entry) {
+  // `kind` was introduced after the first promotion records existed. Treat a
+  // missing kind as the legacy spelling of a promotion so old, valid ledgers
+  // remain checkable without rewriting history.
+  if (entry.kind === undefined || entry.kind === 'promote') return 'promote';
+  if (entry.kind === 'retract') return 'retract';
+  return 'invalid';
+}
+
+function latestLedgerEntriesByRecord(ledger) {
+  const latest = new Map();
+  for (const entry of ledger.entries) latest.set(entry.recordId, entry);
+  return latest;
+}
+
 function verifyLedger(ledger) {
   const errors = [];
   let previousHash = 'genesis';
+  const entriesByHash = new Map();
+  const lastEntryByRecord = new Map();
   for (let index = 0; index < ledger.entries.length; index += 1) {
     const entry = ledger.entries[index];
     if (entry.previousEntryHash !== previousHash) {
@@ -350,6 +403,26 @@ function verifyLedger(ledger) {
     if (entry.entryHash !== recomputed) {
       errors.push(`ledger entry ${index + 1} (${entry.recordId}): entryHash mismatch — entry was tampered with after creation`);
     }
+    const operation = ledgerEntryOperation(entry);
+    if (operation === 'invalid') {
+      errors.push(`ledger entry ${index + 1} (${entry.recordId}): invalid kind '${entry.kind}'`);
+    } else if (operation === 'retract') {
+      const reversed = entriesByHash.get(entry.reversalOf);
+      if (!entry.reversalOf || !reversed) {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): retract must reference an earlier promotion with reversalOf`);
+      } else if (reversed.recordId !== entry.recordId || ledgerEntryOperation(reversed) !== 'promote') {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): reversalOf must reference a promotion for the same record`);
+      } else if (lastEntryByRecord.get(entry.recordId) !== reversed) {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): retract must reverse the record's current promotion, not an older entry`);
+      }
+      if (entry.newHarmonyStatus !== 'candidate-backport') {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): retract newHarmonyStatus must be 'candidate-backport'`);
+      }
+    } else if (entry.newHarmonyStatus !== 'implementation-ready') {
+      errors.push(`ledger entry ${index + 1} (${entry.recordId}): promotion newHarmonyStatus must be 'implementation-ready'`);
+    }
+    entriesByHash.set(entry.entryHash, entry);
+    lastEntryByRecord.set(entry.recordId, entry);
     previousHash = entry.entryHash;
   }
   return errors;
@@ -380,27 +453,34 @@ function runCheck() {
   errors.push(...verifyLedger(ledger));
   errors.push(...quarantine.errors);
 
-  // 2. Every implementation-ready record must have a ledger entry
-  const promotedRecordIds = new Set(ledger.entries.map((entry) => entry.recordId));
+  // 2. The latest ledger entry, rather than any historical entry, is the
+  // authoritative transition state for a record. A valid retract intentionally
+  // leaves a historical promotion in the append-only chain.
+  const latestEntriesByRecord = latestLedgerEntriesByRecord(ledger);
   for (const record of registry.records) {
+    const latestEntry = latestEntriesByRecord.get(record.id);
     if (record.harmony?.status === 'implementation-ready') {
-      if (!promotedRecordIds.has(record.id)) {
+      if (!latestEntry || ledgerEntryOperation(latestEntry) !== 'promote') {
         errors.push(`record ${record.id}: harmony.status is 'implementation-ready' but no promotion ledger entry exists — hand-edited bypass`);
       }
       if (record.local?.status !== 'implementation-ready') {
         errors.push(`record ${record.id}: harmony.status is 'implementation-ready' but local.status is '${record.local?.status}' — source-side conversion not complete`);
       }
+    } else if (latestEntry && ledgerEntryOperation(latestEntry) === 'promote') {
+      errors.push(`record ${record.id}: latest ledger entry is a promotion but harmony.status is '${record.harmony?.status}' — promotion state was changed without an append-only retraction`);
+    } else if (latestEntry && ledgerEntryOperation(latestEntry) === 'retract' && record.harmony?.status !== 'candidate-backport') {
+      errors.push(`record ${record.id}: latest ledger entry is a retraction but harmony.status is '${record.harmony?.status}', not 'candidate-backport'`);
     }
   }
 
-  // 3. Every ledger entry should still correspond to an implementation-ready record
+  // 3. Every ledger entry must correspond to a current record. Whether the
+  // record is promoted or retracted is validated above against its *latest*
+  // entry; historic promotions are deliberately retained for audit.
   const registryRecords = new Map(registry.records.map((record) => [record.id, record]));
   for (const entry of ledger.entries) {
     const record = registryRecords.get(entry.recordId);
     if (!record) {
       errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} no longer exists in registry`);
-    } else if (record.harmony?.status !== 'implementation-ready') {
-      errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} harmony.status is '${record.harmony?.status}' — promoted then demoted without ledger entry`);
     }
   }
 
@@ -419,8 +499,9 @@ function runCheck() {
         if (record.local?.status !== 'candidate-backport' || record.harmony?.status !== 'candidate-backport') {
           errors.push(`active route reconstruction quarantine record ${entry.recordId} must be candidate-backport on both local and harmony status (got local=${record.local?.status}, harmony=${record.harmony?.status})`);
         }
-        if (promotedRecordIds.has(entry.recordId)) {
-          errors.push(`active route reconstruction quarantine record ${entry.recordId} has a promotion ledger entry`);
+        const latestEntry = latestEntriesByRecord.get(entry.recordId);
+        if (latestEntry && ledgerEntryOperation(latestEntry) === 'promote') {
+          errors.push(`active route reconstruction quarantine record ${entry.recordId} has a current promotion ledger entry`);
         }
       } else if (record.local?.status !== 'implementation-ready') {
         errors.push(`released route reconstruction quarantine record ${entry.recordId} must have local.status implementation-ready before it can await promotion (got ${record.local?.status})`);
@@ -489,24 +570,26 @@ function writeViaTemp(target, content) {
 }
 
 // ─── Fault injection (test-only) ──────────────────────────────────────────
-// When PROMOTE_TEST_MODE=1 is set, the caller can inject a fault after any
-// write phase by setting one of:
+// When PROMOTE_TEST_MODE=1 or RETRACT_TEST_MODE=1 is set, the caller can inject
+// a fault after any write phase by setting the corresponding prefix, for
+// example:
 //   PROMOTE_FAULT_AFTER_REGISTRY_WRITE=1
+//   RETRACT_FAULT_AFTER_REGISTRY_WRITE=1
 //   PROMOTE_FAULT_AFTER_GENERATOR=1
 //   PROMOTE_FAULT_AFTER_CONSUMER_SYNC=1
 //   PROMOTE_FAULT_AFTER_LEDGER_WRITE=1
 //   PROMOTE_FAULT_IN_FINAL_VERIFY=1
 // The fault throws an injected error, which the promote() function's catch
-// block catches and rolls back ALL four files. This lets the test suite
-// verify that rollback actually restores the pre-transaction state at every
-// phase, without depending on real disk/process failures.
+// block catches and rolls back ALL four files. This lets the test suite verify
+// that rollback actually restores the pre-transaction state at every phase,
+// without depending on real disk/process failures.
 //
 // Outside PROMOTE_TEST_MODE these env vars are ignored, so a stray env var
 // in a real environment cannot trip the fault.
 
-function faultInject(phase) {
-  if (process.env.PROMOTE_TEST_MODE !== '1') return;
-  const varName = `PROMOTE_FAULT_${phase}`;
+function faultInject(phase, operation = 'PROMOTE') {
+  if (process.env[`${operation}_TEST_MODE`] !== '1') return;
+  const varName = `${operation}_FAULT_${phase}`;
   if (process.env[varName] !== '1') return;
   throw new Error(`injected fault: ${phase}`);
 }
@@ -550,6 +633,21 @@ function promote(recordId) {
   const evidenceErrors = verifyLocalReadyEvidence(record, localReady, localReadyPath);
   if (evidenceErrors.length > 0) {
     fail(`record ${recordId}: LOCAL_READY_FOR_FIGMA.json evidence verification failed:\n${evidenceErrors.map((e) => `    - ${e}`).join('\n')}`);
+  }
+
+  // A previous retraction remains part of the append-only ledger. It is only
+  // safe to promote again after the source evidence has been genuinely
+  // recreated; otherwise this command would merely replay the withdrawn
+  // promotion with the same packet.
+  const existingLedger = loadLedger();
+  const existingLedgerErrors = verifyLedger(existingLedger);
+  if (existingLedgerErrors.length > 0) {
+    fail(`ledger is inconsistent before promotion:\n${existingLedgerErrors.map((e) => `    - ${e}`).join('\n')}`);
+  }
+  const latestEntry = latestLedgerEntriesByRecord(existingLedger).get(recordId);
+  const freshEvidenceErrors = verifyFreshEvidenceAfterRetraction(recordId, localReady, latestEntry);
+  if (freshEvidenceErrors.length > 0) {
+    fail(`record ${recordId}: retraction freshness verification failed:\n${freshEvidenceErrors.map((e) => `    - ${e}`).join('\n')}`);
   }
 
   // Prerequisite 3: Figma binding revision must match the OFFICIAL current
@@ -663,6 +761,7 @@ function promote(recordId) {
     const ledger = loadLedger();
     const entry = {
       entryId: `promote-${String(ledger.entries.length + 1).padStart(3, '0')}`,
+      kind: 'promote',
       timestamp: new Date().toISOString(),
       recordId,
       pageFamily: handoffDir,
@@ -733,16 +832,175 @@ function promote(recordId) {
   console.log(`✓ promote-family: ${recordId} promoted to implementation-ready`);
 }
 
+// ─── Retract mode: atomic, append-only reversal ───────────────────────────
+
+function retract(recordId, reason) {
+  const normalizedReason = typeof reason === 'string' ? reason.trim() : '';
+  if (normalizedReason.length < 8) {
+    fail('retract requires a non-empty --reason of at least 8 characters; the ledger must explain why native admission was withdrawn');
+  }
+
+  const registry = readJson(registryPath);
+  const record = registry.records.find((item) => item.id === recordId);
+  if (!record) fail(`record not found: ${recordId}`);
+  if (record.classification !== 'exact-figma-binding') {
+    fail(`record ${recordId} classification is '${record.classification}', not 'exact-figma-binding' — only exact bindings can be retracted`);
+  }
+  if (record.harmony?.status !== 'implementation-ready') {
+    fail(`record ${recordId}: harmony.status is '${record.harmony?.status}', not 'implementation-ready' — only a current promotion can be retracted`);
+  }
+
+  const ledgerBefore = loadLedger();
+  const ledgerErrors = verifyLedger(ledgerBefore);
+  if (ledgerErrors.length > 0) {
+    fail(`ledger is inconsistent before retraction:\n${ledgerErrors.map((e) => `    - ${e}`).join('\n')}`);
+  }
+  const activePromotion = latestLedgerEntriesByRecord(ledgerBefore).get(recordId);
+  if (!activePromotion || ledgerEntryOperation(activePromotion) !== 'promote') {
+    fail(`record ${recordId}: no current promotion ledger entry exists to retract — refusing to synthesize history`);
+  }
+
+  console.log(`→ promote-family: retract ${recordId}`);
+  console.log(`  ✓ current promotion ${activePromotion.entryId} (${activePromotion.entryHash.slice(0, 20)}...) found`);
+  console.log(`  ✓ reason: ${normalizedReason}`);
+
+  // The same four files as promotion are snapshotted. A safety retraction may
+  // repair a pre-existing artifact mismatch by regenerating from the newly
+  // withdrawn registry; only the final state is required to be byte-identical.
+  const backup = {
+    registry: backupFile(registryPath),
+    upstreamArtifact: backupFile(upstreamArtifactPath),
+    consumerArtifact: backupFile(consumerArtifactPath),
+    ledger: backupFile(ledgerPath),
+  };
+
+  let fullEntry;
+  let upstreamHashAfter;
+  let consumerHashAfter;
+  try {
+    const registryContentBefore = fs.readFileSync(registryPath, 'utf8');
+    const registryHashBefore = sha256(registryContentBefore);
+
+    // Write registry first so the generator emits candidate-backport for the
+    // withdrawn surface. local.status deliberately remains unchanged: it is
+    // historical source-side evidence, not host admission.
+    record.harmony.status = 'candidate-backport';
+    writeViaTemp(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+    faultInject('AFTER_REGISTRY_WRITE', 'RETRACT');
+
+    const generated = spawnSync('node', [generatorPath], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    if (generated.status !== 0) {
+      throw new Error(`generator failed during retraction. Output:\n${generated.stderr?.toString() || generated.stdout?.toString()}`);
+    }
+    if (!fs.existsSync(upstreamArtifactPath)) {
+      throw new Error(`upstream artifact missing after retraction generation: ${upstreamArtifactPath}`);
+    }
+    faultInject('AFTER_GENERATOR', 'RETRACT');
+
+    const upstreamContent = fs.readFileSync(upstreamArtifactPath);
+    if (!fs.existsSync(path.dirname(consumerArtifactPath))) {
+      throw new Error(`HarmonyOS consumer directory does not exist: ${path.dirname(consumerArtifactPath)} — is Reader-for-HarmonyOS checked out?`);
+    }
+    writeViaTemp(consumerArtifactPath, upstreamContent);
+    upstreamHashAfter = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
+    consumerHashAfter = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
+    if (upstreamHashAfter !== consumerHashAfter) {
+      throw new Error(`upstream and consumer artifacts differ after retraction sync: upstream ${upstreamHashAfter.slice(0, 20)}... != consumer ${consumerHashAfter.slice(0, 20)}...`);
+    }
+    faultInject('AFTER_CONSUMER_SYNC', 'RETRACT');
+
+    const ledger = loadLedger();
+    const entry = {
+      entryId: `retract-${String(ledger.entries.length + 1).padStart(3, '0')}`,
+      kind: 'retract',
+      timestamp: new Date().toISOString(),
+      recordId,
+      pageFamily: activePromotion.pageFamily || handoffDirForRecordId(recordId),
+      surfaceType: record.surfaceType || activePromotion.surfaceType || 'unknown',
+      routeIds: record.routeIds || activePromotion.routeIds || [],
+      previousHarmonyStatus: 'implementation-ready',
+      newHarmonyStatus: 'candidate-backport',
+      localStatus: record.local?.status || 'unset',
+      reason: normalizedReason,
+      reversalOf: activePromotion.entryHash,
+      reversalOfEntryId: activePromotion.entryId,
+      retractedPromotion: {
+        entryHash: activePromotion.entryHash,
+        entryId: activePromotion.entryId,
+        sourceEvidenceHash: activePromotion.localReadyForFigma?.sourceEvidenceHash,
+        implementationCommit: activePromotion.localReadyForFigma?.implementationCommit,
+      },
+      registryHashBefore,
+      upstreamArtifactHashAfter: upstreamHashAfter,
+      consumerArtifactHashAfter: consumerHashAfter,
+      artifactsInSync: upstreamHashAfter === consumerHashAfter,
+      retractedBy: 'promote-family.mjs',
+    };
+    fullEntry = appendLedgerEntry(ledger, entry);
+    writeViaTemp(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+    faultInject('AFTER_LEDGER_WRITE', 'RETRACT');
+
+    faultInject('IN_FINAL_VERIFY', 'RETRACT');
+    const finalRegistry = readJson(registryPath);
+    const finalRecord = finalRegistry.records.find((item) => item.id === recordId);
+    if (!finalRecord || finalRecord.harmony?.status !== 'candidate-backport') {
+      throw new Error(`registry read-back did not show ${recordId} as candidate-backport after retraction`);
+    }
+    const finalLedger = loadLedger();
+    const finalEntry = latestLedgerEntriesByRecord(finalLedger).get(recordId);
+    if (!finalEntry || finalEntry.entryHash !== fullEntry.entryHash || ledgerEntryOperation(finalEntry) !== 'retract') {
+      throw new Error(`ledger read-back did not retain the retraction entry for ${recordId}`);
+    }
+    const finalUpstream = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
+    const finalConsumer = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
+    if (finalUpstream !== upstreamHashAfter || finalConsumer !== consumerHashAfter) {
+      throw new Error(`artifact hash drift detected after retraction: upstream ${finalUpstream.slice(0, 20)}... vs ${upstreamHashAfter.slice(0, 20)}..., consumer ${finalConsumer.slice(0, 20)}... vs ${consumerHashAfter.slice(0, 20)}...`);
+    }
+  } catch (err) {
+    console.error(`✗ promote-family: retract ${recordId} transaction failed — rolling back all four files.`);
+    console.error(`  error: ${err.message}`);
+    restoreBackup(backup.registry);
+    restoreBackup(backup.upstreamArtifact);
+    restoreBackup(backup.consumerArtifact);
+    restoreBackup(backup.ledger);
+    process.exit(1);
+  }
+
+  console.log(`  ✓ registry updated (harmony.status: implementation-ready → candidate-backport)`);
+  console.log(`  ✓ VisualAdmission.ets regenerated (${upstreamHashAfter.slice(0, 20)}...)`);
+  console.log(`  ✓ consumer copy synced (${consumerHashAfter.slice(0, 20)}...)`);
+  console.log(`  ✓ reversal ledger entry ${fullEntry.entryId} appended (${fullEntry.entryHash.slice(0, 20)}...)`);
+  console.log(`✓ promote-family: ${recordId} retracted to candidate-backport`);
+}
+
 // ─── CLI ──────────────────────────────────────────────────────────────────
 
-const arg = process.argv[2];
+const args = process.argv.slice(2);
+const arg = args[0];
 if (!arg) {
   console.error('Usage: node tools/design/promote-family.mjs <recordId>');
+  console.error('       node tools/design/promote-family.mjs --retract <recordId> --reason <reason>');
   console.error('       node tools/design/promote-family.mjs --check');
   process.exit(1);
 }
 if (arg === '--check') {
+  if (args.length !== 1) fail('--check does not accept additional arguments');
   runCheck();
+} else if (arg === '--retract') {
+  const recordId = args[1];
+  const reasonIndex = args.indexOf('--reason');
+  const reason = reasonIndex >= 0 ? args.slice(reasonIndex + 1).join(' ') : '';
+  if (!recordId || reasonIndex < 0) {
+    fail('Usage: node tools/design/promote-family.mjs --retract <recordId> --reason <reason>');
+  }
+  if (reasonIndex !== 2) {
+    fail('--reason must follow the recordId in retract mode');
+  }
+  retract(recordId, reason);
 } else {
+  if (args.length !== 1) fail('promotion accepts exactly one recordId');
   promote(arg);
 }

@@ -103,37 +103,6 @@
     }
   },
   {
-    "id": "toc-bookmarks",
-    "shell": "ReaderShell"
-  },
-  {
-    "id": "reader-appearance",
-    "shell": "ReaderShell",
-    "aliasFor": "reader-appearance-overlay-v2"
-  },
-  {
-    "id": "reader-appearance-overlay-v2",
-    "shell": "ReaderShell"
-  },
-  {
-    "id": "tts",
-    "shell": "ReaderShell",
-    "aliasFor": "reader-tts-overlay-v2"
-  },
-  {
-    "id": "reader-tts-overlay-v2",
-    "shell": "ReaderShell"
-  },
-  {
-    "id": "reader-settings",
-    "shell": "ReaderShell",
-    "aliasFor": "reader-settings-overlay-v2"
-  },
-  {
-    "id": "reader-settings-overlay-v2",
-    "shell": "ReaderShell"
-  },
-  {
     "id": "reader-full-font",
     "shell": "ReaderShell"
   },
@@ -163,29 +132,10 @@
   },
   {
     "id": "auto-page",
-    "shell": "ReaderShell",
-    "aliasFor": "reader-auto-scroll-overlay-v2"
-  },
-  {
-    "id": "reader-auto-scroll-overlay-v2",
-    "shell": "ReaderShell"
-  },
-  {
-    "id": "content-search",
-    "shell": "ReaderShell",
-    "aliasFor": "reader-search-overlay-v2"
-  },
-  {
-    "id": "reader-search-overlay-v2",
     "shell": "ReaderShell"
   },
   {
     "id": "content-replacement",
-    "shell": "ReaderShell",
-    "aliasFor": "reader-replace-overlay-v2"
-  },
-  {
-    "id": "reader-replace-overlay-v2",
     "shell": "ReaderShell"
   },
   {
@@ -198,14 +148,6 @@
   },
   {
     "id": "reader-night-state-v2",
-    "shell": "ReaderShell"
-  },
-  {
-    "id": "control-layer-base-v2",
-    "shell": "ReaderShell"
-  },
-  {
-    "id": "reader-directory-overlay-v2",
     "shell": "ReaderShell"
   },
   {

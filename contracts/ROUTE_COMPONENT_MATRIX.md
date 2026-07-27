@@ -5,7 +5,7 @@
 权威源：[route.schema.json](./route.schema.json)、[view-state.schema.json](./view-state.schema.json)、[motion.schema.json](./motion.schema.json)、[token.schema.json](./token.schema.json)、[ui-state.schema.json](./ui-state.schema.json)
 来源：[PAGE_REFERENCE.md](./PAGE_REFERENCE.md)、[MOTION_SPEC.md](./MOTION_SPEC.md)、[TOKEN_SPEC.md](./TOKEN_SPEC.md)
 
-本文是阶段 2"当前合同全量 route/component/state/motion/token 矩阵"。覆盖 [route.schema.json](./route.schema.json) 当前全部 260 个 RouteId × Shell × PageState × Motion × Token 分组，给三端实现提供完整索引。这里的“全量”只表示 Reader-UI 当前合同分母，不代表 [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md) 中的项目能力、Core/Host、三端原生页面或设备证据均已完成。分母变化以 schema/fixtures 和生成门禁为准；P0 链路的详细描述见 [PAGE_REFERENCE.md](./PAGE_REFERENCE.md)。
+本文是阶段 2"当前合同全量 route/component/state/motion/token 矩阵"。覆盖 [route.schema.json](./route.schema.json) 当前全部 247 个 RouteId × Shell × PageState × Motion × Token 分组，给三端实现提供完整索引。这里的“全量”只表示 Reader-UI 当前合同分母，不代表 [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md) 中的项目能力、Core/Host、三端原生页面或设备证据均已完成。分母变化以 schema/fixtures 和生成门禁为准；P0 链路的详细描述见 [PAGE_REFERENCE.md](./PAGE_REFERENCE.md)。
 
 ## 0. 文档边界
 
@@ -22,7 +22,7 @@
 
 ## 1. Route × Shell × mainTab 全量矩阵
 
-来源：[route.schema.json](./route.schema.json) enum（当前 260 项；以 schema 为机器权威）。
+来源：[route.schema.json](./route.schema.json) enum（当前 247 项；以 schema 为机器权威）。
 
 ### 1.1 MainTabShell（4 个主 Tab 根 + AppShell）
 
@@ -180,7 +180,7 @@
 
 ## 2. ComponentType × Shell 归属
 
-来源：[view-state.schema.json](./view-state.schema.json) ComponentType enum（当前 174 项；以 schema 为机器权威）。
+来源：[view-state.schema.json](./view-state.schema.json) ComponentType enum（当前 177 项；以 schema 为机器权威）。
 
 | ComponentType | 主要 Shell | 主要用途 |
 | --- | --- | --- |
@@ -400,5 +400,5 @@ P0 阶段已实现本仓矩阵覆盖检查：`contracts/tests/matrix-coverage.te
 阶段 2 已补齐当前合同分母的 RouteId × Shell × ComponentType × PageState × MotionId × Token 分组索引。剩余缺口：
 - 部分 RouteId（如 `rss-source-export-*` / `rss-source-import-*` 细分链路）的详细组件树未展开，归 P1。
 - 24 个项目能力 intake route 已有显式 D6 demo，但 30 个新增 UiEvent 仍是 planned/fail-closed；必须在 runtime/Core/Host/原生/设备逐层验收后才能升级状态。
-- 完整项目能力缺口、Slice 9–12 与跨仓验收见 [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md)，不得用 260/260 graph 替代。
+- 完整项目能力缺口、Slice 9–12 与跨仓验收见 [FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md](./FULL_PRODUCT_CAPABILITY_DELIVERY_MATRIX.md)，不得用 247/247 graph 替代。
 - 三端源码级矩阵证据归阶段 3 / 各平台仓库。

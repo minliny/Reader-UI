@@ -250,6 +250,28 @@ function runPromote(readerUiRoot, hostRoot, recordId, options = {}) {
   });
 }
 
+function runRetract(readerUiRoot, hostRoot, recordId, options = {}) {
+  const env = {
+    ...process.env,
+    RETRACT_TEST_MODE: '1',
+  };
+  if (options.fault) {
+    env[`RETRACT_FAULT_${options.fault}`] = '1';
+  }
+  const reason = options.reason || 'A2 route-isolation audit is not yet closed';
+  return spawnSync('node', [
+    path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+    '--retract',
+    recordId,
+    '--reason',
+    reason,
+  ], {
+    cwd: readerUiRoot,
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
 // Install a stub generator in the sandbox that produces a minimal but valid
 // VisualAdmission.ets based on the registry. This lets the success-path and
 // fault-injection tests run a real promotion end-to-end without depending on
@@ -1056,4 +1078,173 @@ test('fault injection AFTER_LEDGER_WRITE: all four files rolled back', () => {
 
 test('fault injection IN_FINAL_VERIFY: all four files rolled back', () => {
   runFaultInjectionTest('IN_FINAL_VERIFY');
+});
+
+// ─── Retraction tests ─────────────────────────────────────────────────────
+// A retraction is an audited safety stop, not a mutable edit of an old ledger
+// row. These tests keep the original promotion in history and prove that the
+// same four-file transaction/rollback guarantees apply in the reverse direction.
+
+function setupPromotedSandbox() {
+  const sandbox = setupPromotableSandbox();
+  const promoteResult = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+  assert.equal(
+    promoteResult.status,
+    0,
+    `sandbox precondition promotion failed: ${promoteResult.stderr?.toString()}\n${promoteResult.stdout?.toString()}`,
+  );
+  return sandbox;
+}
+
+test('success path: retraction appends a reversal and restores candidate-backport admission', () => {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(
+      result.status,
+      0,
+      `retract should have succeeded. stderr: ${result.stderr?.toString()}\nstdout: ${result.stdout?.toString()}`,
+    );
+
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const registryAfter = JSON.parse(after.registry.toString());
+    const record = registryAfter.records.find((item) => item.id === 'reader.reading-surface');
+    assert.equal(record.harmony.status, 'candidate-backport');
+    assert.equal(record.local.status, 'implementation-ready', 'retraction must retain source-side evidence status');
+    assert.notDeepEqual(before.registry, after.registry, 'registry should change during retraction');
+
+    assert.deepEqual(after.upstreamArtifact, after.consumerArtifact,
+      'retraction consumer copy should remain byte-identical to upstream');
+
+    const ledgerAfter = JSON.parse(after.ledger.toString());
+    assert.equal(ledgerAfter.entries.length, 2);
+    const [promotion, retraction] = ledgerAfter.entries;
+    assert.equal(retraction.kind, 'retract');
+    assert.equal(retraction.recordId, 'reader.reading-surface');
+    assert.equal(retraction.previousHarmonyStatus, 'implementation-ready');
+    assert.equal(retraction.newHarmonyStatus, 'candidate-backport');
+    assert.equal(retraction.reversalOf, promotion.entryHash);
+    assert.equal(retraction.reversedPromotion, undefined, 'ledger must use the documented retractedPromotion field');
+    assert.equal(retraction.retractedPromotion.entryHash, promotion.entryHash);
+    assert.equal(retraction.previousEntryHash, promotion.entryHash);
+    assert.ok(retraction.entryHash);
+
+    const checkResult = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    assert.equal(checkResult.status, 0,
+      `--check should accept a valid retraction. stderr: ${checkResult.stderr?.toString()}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('retraction refuses without a current promotion and mutates nothing', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /not 'implementation-ready'|only a current promotion/);
+    assert.deepEqual(after, before, 'failed retraction must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('retraction prevents replaying the withdrawn source evidence', () => {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const retractResult = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(retractResult.status, 0, retractResult.stderr?.toString());
+    const beforeReplay = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const replay = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const afterReplay = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    assert.notEqual(replay.status, 0, 'promotion must not replay withdrawn evidence');
+    assert.match(replay.stderr?.toString() || '', /retraction freshness verification failed/);
+    assert.deepEqual(afterReplay, beforeReplay, 'blocked replay must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('a fresh B2/B3 evidence packet can promote after a retraction', () => {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const retractResult = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(retractResult.status, 0, retractResult.stderr?.toString());
+
+    const deltaPath = path.join(
+      sandbox.readerUiRoot,
+      'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'design-delta.md',
+    );
+    fs.appendFileSync(deltaPath, '\nA2 source extraction closed in a new conversion.\n');
+    const addResult = spawnSync('git', ['add', '.'], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    assert.equal(addResult.status, 0, addResult.stderr?.toString());
+    const commitResult = spawnSync('git', ['commit', '-m', 'fresh B2 B3 conversion'], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.equal(commitResult.status, 0, commitResult.stderr?.toString());
+    const freshCommit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: sandbox.readerUiRoot, encoding: 'utf8' }).stdout.trim();
+    writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
+      implementationCommit: freshCommit,
+    });
+
+    const rePromote = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(rePromote.status, 0,
+      `fresh evidence should allow a new promotion. stderr: ${rePromote.stderr?.toString()}\nstdout: ${rePromote.stdout?.toString()}`);
+    const ledgerAfter = JSON.parse(fs.readFileSync(
+      path.join(sandbox.readerUiRoot, 'docs', 'design', 'PROMOTION_LEDGER.json'),
+      'utf8',
+    ));
+    assert.equal(ledgerAfter.entries.length, 3);
+    assert.equal(ledgerAfter.entries[2].kind, 'promote');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+function runRetractFaultInjectionTest(phase) {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface', { fault: phase });
+    assert.notEqual(result.status, 0, `retract should fail when ${phase} is injected`);
+    assert.match(result.stderr?.toString() || '', /injected fault|rolling back/);
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    assert.deepEqual(after, before, `${phase}: all four files must roll back to the promoted snapshot`);
+
+    const checkResult = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    assert.equal(checkResult.status, 0,
+      `${phase}: --check should pass after retract rollback. stderr: ${checkResult.stderr?.toString()}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+}
+
+test('retract fault injection AFTER_REGISTRY_WRITE: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_REGISTRY_WRITE');
+});
+
+test('retract fault injection AFTER_GENERATOR: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_GENERATOR');
+});
+
+test('retract fault injection AFTER_CONSUMER_SYNC: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_CONSUMER_SYNC');
+});
+
+test('retract fault injection AFTER_LEDGER_WRITE: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_LEDGER_WRITE');
+});
+
+test('retract fault injection IN_FINAL_VERIFY: all four files roll back', () => {
+  runRetractFaultInjectionTest('IN_FINAL_VERIFY');
 });

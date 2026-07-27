@@ -32,20 +32,20 @@
     ],
     "note": "Composite listbox containers are excluded from the control denominator; their actionable option descendants are counted."
   },
-  "routeCases": 266,
-  "canonicalRoutes": 260,
-  "directVariantCases": 190,
-  "aliasCases": 76,
-  "semanticControls": 3847,
+  "routeCases": 253,
+  "canonicalRoutes": 247,
+  "directVariantCases": 183,
+  "aliasCases": 70,
+  "semanticControls": 3589,
   "suspectedNonSemanticControls": 45,
   "semanticControlCoverage": {
-    "count": 3847,
-    "withUiEvent": 2544,
+    "count": 3589,
+    "withUiEvent": 2444,
     "withControlIdentityToken": 57,
-    "withSemanticIdentity": 2601,
+    "withSemanticIdentity": 2501,
     "withUnresolvedControlIdentityToken": 0,
-    "withRawMotionHints": 3757,
-    "rawMotionHintOccurrences": 7210,
+    "withRawMotionHints": 3505,
+    "rawMotionHintOccurrences": 6621,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -98,8 +98,8 @@
       "tab.item.switch",
       "toggle.switch"
     ],
-    "withCanonicalMotionIds": 3739,
-    "canonicalMotionIdOccurrences": 7312,
+    "withCanonicalMotionIds": 3487,
+    "canonicalMotionIdOccurrences": 6695,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -159,50 +159,50 @@
     "missingAccessibleNames": 21,
     "canonicalControlIds": 0,
     "joinedControls": 0,
-    "unjoinedControls": 3847,
+    "unjoinedControls": 3589,
     "byTag": {
-      "article": 349,
-      "button": 3373,
-      "i": 28,
-      "input": 50,
-      "select": 13,
+      "article": 341,
+      "button": 3142,
+      "i": 15,
+      "input": 46,
+      "select": 11,
       "span": 33,
       "textarea": 1
     },
     "byRole": {
-      "button": 3444,
+      "button": 3205,
       "checkbox": 1,
-      "combobox": 13,
+      "combobox": 11,
       "option": 263,
-      "searchbox": 8,
-      "slider": 42,
+      "searchbox": 6,
+      "slider": 27,
       "switch": 44,
       "tab": 4,
       "textbox": 28
     },
     "byJoinStatus": {
-      "unjoined-no-stable-key": 3847
+      "unjoined-no-stable-key": 3589
     },
     "byRuntimeFamily": {
       "discover": 778,
       "import": 82,
       "library": 405,
       "onboarding": 8,
-      "reader": 1189,
+      "reader": 950,
       "rss": 417,
       "settings": 93,
       "source": 414,
       "source-switch": 171,
       "sync": 137,
-      "system": 142,
+      "system": 123,
       "web-auth": 11
     },
     "gapCodes": {
       "IC0_ACCESSIBLE_LABEL_MISSING": 21,
-      "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 108,
-      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3847,
-      "IC0_RAW_MOTION_HINT_UNRESOLVED": 90,
-      "IC0_UI_EVENT_UNRESOLVED": 1246
+      "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 102,
+      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3589,
+      "IC0_RAW_MOTION_HINT_UNRESOLVED": 84,
+      "IC0_UI_EVENT_UNRESOLVED": 1088
     }
   },
   "suspectedNonSemanticControlCoverage": {
@@ -414,7 +414,7 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "reader",
-          "renderSha256": "ea3fccce99b1953c8b50bf5d0632d7747a4fc9c7273649f80fb9af22606324d5",
+          "renderSha256": "24db3b6e187017b899fc372c2467a64c3c3e2c5e73af8e0320fafd2e26beece3",
           "count": 3,
           "cases": [
             {
@@ -482,7 +482,7 @@
       ]
     }
   },
-  "inventorySha256": "8f6fce1feba000c4043efc9bf070ef2c939ba25b037f6d6fa66d1d523972270b",
+  "inventorySha256": "2ab1d153f2bcaf1cd7f7247d8ea8ee3dc8a87158ebe462a35f8202213fb5a8b8",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -713,7 +713,7 @@
       "pageState": "default",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "fdb317f8529fb1037adf433ed0fc5e5026664160f5fd415d647b6861c751854d"
+      "renderSha256": "96426cf451e0be6fe1a52589945120ff4e3d70e604536da2aa886a96eccb8115"
     },
     {
       "routeId": "reader",
@@ -724,7 +724,7 @@
       "pageState": "default",
       "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ea3fccce99b1953c8b50bf5d0632d7747a4fc9c7273649f80fb9af22606324d5"
+      "renderSha256": "24db3b6e187017b899fc372c2467a64c3c3e2c5e73af8e0320fafd2e26beece3"
     },
     {
       "routeId": "reader",
@@ -735,7 +735,7 @@
       "pageState": "loading",
       "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ea3fccce99b1953c8b50bf5d0632d7747a4fc9c7273649f80fb9af22606324d5"
+      "renderSha256": "24db3b6e187017b899fc372c2467a64c3c3e2c5e73af8e0320fafd2e26beece3"
     },
     {
       "routeId": "reader",
@@ -746,7 +746,7 @@
       "pageState": "offline",
       "semanticControls": 17,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ea3fccce99b1953c8b50bf5d0632d7747a4fc9c7273649f80fb9af22606324d5"
+      "renderSha256": "24db3b6e187017b899fc372c2467a64c3c3e2c5e73af8e0320fafd2e26beece3"
     },
     {
       "routeId": "reader_content",
@@ -757,84 +757,7 @@
       "pageState": "default",
       "semanticControls": 3,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "e8a5b90e3ed5f4a92d3c789b84c312c9460936caa66d4176f0f38301f61346e8"
-    },
-    {
-      "routeId": "toc-bookmarks",
-      "resolvedRouteId": "toc-bookmarks",
-      "aliasFor": null,
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 21,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "7080c31e5ae0dbf2fec4d875070735b686c53bbf783bc46ff4e56d7f13d31335"
-    },
-    {
-      "routeId": "reader-appearance",
-      "resolvedRouteId": "reader-appearance-overlay-v2",
-      "aliasFor": "reader-appearance-overlay-v2",
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 27,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "8c621a9dec8624a774b405fd6edf0a09bc64dae1dd009e9acee82eb444412356"
-    },
-    {
-      "routeId": "reader-appearance-overlay-v2",
-      "resolvedRouteId": "reader-appearance-overlay-v2",
-      "aliasFor": null,
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 27,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "e97ad196a555f57956eec60f9d86b7a68064ad98c6da3cc432f8aa85b5ffe5bc"
-    },
-    {
-      "routeId": "tts",
-      "resolvedRouteId": "reader-tts-overlay-v2",
-      "aliasFor": "reader-tts-overlay-v2",
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 17,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "914fd19b0c2b2fed3404dcbf94319f90eefaca966164eaccf6af170d03da2cc4"
-    },
-    {
-      "routeId": "reader-tts-overlay-v2",
-      "resolvedRouteId": "reader-tts-overlay-v2",
-      "aliasFor": null,
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 17,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "85fc470aa4850510c55bd2327c0597425123449271c0a631e18fc9367f0d09e4"
-    },
-    {
-      "routeId": "reader-settings",
-      "resolvedRouteId": "reader-settings-overlay-v2",
-      "aliasFor": "reader-settings-overlay-v2",
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 24,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "a285914cdd941bd73352d5cce06cdce572dff85eadf4a8f5156be800f5efb537"
-    },
-    {
-      "routeId": "reader-settings-overlay-v2",
-      "resolvedRouteId": "reader-settings-overlay-v2",
-      "aliasFor": null,
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 24,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "e310fdcd84d7faf2b4ac85f52e5b94421264ad1a6f862ec362025f382dcbb824"
+      "renderSha256": "ef41d16597e8a6599ba306cc8e8d009803b7e50769ff4f8ee7365e7e4246ae42"
     },
     {
       "routeId": "reader-full-font",
@@ -845,7 +768,7 @@
       "pageState": "default",
       "semanticControls": 26,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "563c5d1661416de1a343fca80951c983462b410e7e377b2f77bd93279db61836"
+      "renderSha256": "b67bc0cea9635346e9693202f21d97f959e9725957e66b780b560c20b2f32249"
     },
     {
       "routeId": "reader-full-theme",
@@ -856,7 +779,7 @@
       "pageState": "default",
       "semanticControls": 31,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5b5c9383d9d1d80c3534260e80c53001e2641cfb705072680692fab0dedd5eab"
+      "renderSha256": "ecf8c00fab125d3eacdc553f16241428eec508570fa80770e85f08fa50a3ebb5"
     },
     {
       "routeId": "reader-full-theme-edit",
@@ -867,7 +790,7 @@
       "pageState": "default",
       "semanticControls": 21,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "03ffd317edf1ca9786015f8c8ecec7d52f53c98d1217d475685e2033e3842da1"
+      "renderSha256": "d899a8369cf7ac3d25349a00eb5e977771b682ffd79e5ceef594315636c1f79b"
     },
     {
       "routeId": "reader-full-layout",
@@ -876,9 +799,9 @@
       "runtimeFamily": "reader",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 40,
+      "semanticControls": 42,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "cdfb2f5327e2d50b3394fdf87e6b5d6c1e4c79a433e717bec3258d31a4e3e679"
+      "renderSha256": "eba205bf6cce4be0a9b180cc59ff99e8a8246275c2fb9107c6e2f81243d6fb01"
     },
     {
       "routeId": "reader-full-page-turn",
@@ -889,7 +812,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "180fe272c0dfd137dc9d3ea35dadde9186eb6dd024da53b7bc29bde07c75a2ce"
+      "renderSha256": "e95fa18bd33858407bf1feb9ffc7eafdb0d15ea152a4db49205328cae870a6a3"
     },
     {
       "routeId": "reader-book-cache",
@@ -900,7 +823,7 @@
       "pageState": "default",
       "semanticControls": 13,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ad2185f7d1367073faf23114d8f5e30d95fa7133eea9f0fc95d0e3083d9c2cb5"
+      "renderSha256": "f838a310b12f2410535cc12166309c498958d76dda4301fb3b52352f270b8b53"
     },
     {
       "routeId": "reader-debug-info",
@@ -911,73 +834,29 @@
       "pageState": "default",
       "semanticControls": 9,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "182cdcebdd5f658cd754c828f323bc7bb1652d5ff4448590c2747a269aac1a87"
+      "renderSha256": "9c346a583b91d21320580b969d81ca59d4768b714c64810c030959611caa9d88"
     },
     {
       "routeId": "auto-page",
-      "resolvedRouteId": "reader-auto-scroll-overlay-v2",
-      "aliasFor": "reader-auto-scroll-overlay-v2",
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 18,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "c7ec4349f728dc5478b0c78f11c9b6aa55100664c5e7e8ce6ffc8a4b976be6dd"
-    },
-    {
-      "routeId": "reader-auto-scroll-overlay-v2",
-      "resolvedRouteId": "reader-auto-scroll-overlay-v2",
+      "resolvedRouteId": "auto-page",
       "aliasFor": null,
       "runtimeFamily": "reader",
       "variantId": "default",
       "pageState": "default",
       "semanticControls": 18,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "3b351dfbfb6982b757173e1e5022b5c9e3f0aa276a0948676d96f8e926132dc5"
-    },
-    {
-      "routeId": "content-search",
-      "resolvedRouteId": "reader-search-overlay-v2",
-      "aliasFor": "reader-search-overlay-v2",
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 16,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "b71eac946522571b8802caacf18966c8ad6afa87543c00e1d8f07f16a7d83f24"
-    },
-    {
-      "routeId": "reader-search-overlay-v2",
-      "resolvedRouteId": "reader-search-overlay-v2",
-      "aliasFor": null,
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 16,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "bdcdd6b15d3e334326271f93f83107dbcdd0f2f072740320ed0fe660d2839301"
+      "renderSha256": "7dd0105149932ef052545359d201992f909ac2ab5f99a7feb56d7901709cc3a6"
     },
     {
       "routeId": "content-replacement",
-      "resolvedRouteId": "reader-replace-overlay-v2",
-      "aliasFor": "reader-replace-overlay-v2",
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 15,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "d26c2ec29bc5d9126d6b18751d63e8f4401e454c37972d830ce482e65ef4e061"
-    },
-    {
-      "routeId": "reader-replace-overlay-v2",
-      "resolvedRouteId": "reader-replace-overlay-v2",
+      "resolvedRouteId": "content-replacement",
       "aliasFor": null,
       "runtimeFamily": "reader",
       "variantId": "default",
       "pageState": "default",
       "semanticControls": 15,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d26c2ec29bc5d9126d6b18751d63e8f4401e454c37972d830ce482e65ef4e061"
+      "renderSha256": "e8b1e20b8df3f28e1ebef0593c5d8e76ef80f52ea3142bc6f9158ac7c3cf58b5"
     },
     {
       "routeId": "source-switch",
@@ -988,7 +867,7 @@
       "pageState": "default",
       "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "29e741ad79f5e9a5749f50be2630037958cbd45d8bae36ddd31b9fc21ce6c077"
+      "renderSha256": "a17aa790b68b36bb80a22803a5002a27757b2407c3ba0daf631e99e3a9454bc4"
     },
     {
       "routeId": "source-switch-results",
@@ -999,7 +878,7 @@
       "pageState": "default",
       "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "0f4bbce8a256215d42711367b5a3c8666c69130dee152bec12569eba856134fe"
+      "renderSha256": "449bce5fa16d3fb715b6d7091d342879ad2169965a54c24d5d1fec4270671d77"
     },
     {
       "routeId": "reader-night-state-v2",
@@ -1010,7 +889,7 @@
       "pageState": "default",
       "semanticControls": 27,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "2a435b038f72c8db2ac4039b9b8534cf7c3c41a377c0d26114c4e1db84f52df7"
+      "renderSha256": "cb08741f1038c77b121a2fe63a99063c1046e67c14798cdf59e8dfc88877f86b"
     },
     {
       "routeId": "discover",
@@ -2069,28 +1948,6 @@
       "renderSha256": "8bcb154c38e37c2458948e5372ea1a6bbecdc66ed27195bce638339925e65989"
     },
     {
-      "routeId": "control-layer-base-v2",
-      "resolvedRouteId": "control-layer-base-v2",
-      "aliasFor": null,
-      "runtimeFamily": "system",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 19,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "e084b60b43703fef61d496a015f8bced974fa587230395a2ef160679c37b4bc3"
-    },
-    {
-      "routeId": "reader-directory-overlay-v2",
-      "resolvedRouteId": "reader-directory-overlay-v2",
-      "aliasFor": null,
-      "runtimeFamily": "reader",
-      "variantId": "default",
-      "pageState": "default",
-      "semanticControls": 21,
-      "suspectedNonSemanticControls": 0,
-      "renderSha256": "6407c37a503cf77b9e02cb314dbe4dc66b0bc1d891c3db815152f4e8cc3d20f1"
-    },
-    {
       "routeId": "discover-entry-ranking",
       "resolvedRouteId": "discover",
       "aliasFor": "discover",
@@ -2616,7 +2473,7 @@
       "pageState": "default",
       "semanticControls": 20,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ceb7061d8b66c3e35738afd2feb6ed276dd36b1a2ee08b4d4f36a24b0a0c93a4"
+      "renderSha256": "8a08a55879dcb872844114824bc6d8ddefc44f91a0726ce1d9683c5e64da49d6"
     },
     {
       "routeId": "reader-full-tts",
@@ -2627,7 +2484,7 @@
       "pageState": "default",
       "semanticControls": 261,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "8c7f785f83c7ab130bcd0ba2ec7a9aae2048c3da826fea5f291571267fde69f9"
+      "renderSha256": "630f19583e4e168d85b54e1fa00c86aca050b5f608aeedffb17b4d2a20c238ae"
     },
     {
       "routeId": "reader-full-appearance",
@@ -2638,7 +2495,7 @@
       "pageState": "default",
       "semanticControls": 36,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "fd05f5bc65e446983343564ee29fe86d5763238b3712539f672d73384e5108b9"
+      "renderSha256": "727126b2d4ca4e2ccf3b53595e9fd8622ec8fc12f06722762f5bd62365a2e13e"
     },
     {
       "routeId": "reader-full-settings",
@@ -2649,7 +2506,7 @@
       "pageState": "default",
       "semanticControls": 26,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "bb7a76186d1d2f5557ccdb329bd2755b4584a0800401677fa6d1ade6d83a61eb"
+      "renderSha256": "e9049106ac101744b9eb9556364fe56b55003f2354092168a4a57d50b7c1e05f"
     },
     {
       "routeId": "restore-confirm",
@@ -2770,7 +2627,7 @@
       "pageState": "default",
       "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f64573b4515f2f836962d0571fb6fd93903d718620642f12e989f9e1a75858b8"
+      "renderSha256": "1ac3fe539ab93338aab874279137dda5fbe669610fe35183d24b889dda676803"
     },
     {
       "routeId": "reader-font-delete-confirm",
@@ -2781,7 +2638,7 @@
       "pageState": "default",
       "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "778acef94d0f173ac978cf4fa56093cf46df612ca160da0adf5aa973c9db96df"
+      "renderSha256": "6c6dab4a64529534d4d52848973f0072344f5849aa6d61c372ccc448db08572b"
     },
     {
       "routeId": "reader-font-fallback",
@@ -2792,7 +2649,7 @@
       "pageState": "default",
       "semanticControls": 14,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "7910cc982c0a950ab079185a2ab0f0b157f9e35c719977a0766ea8c575f8025c"
+      "renderSha256": "d7f52e645252aa6cb905558160318e61e8c25128056ebe9f7ae3cb9c1ee5e480"
     },
     {
       "routeId": "reader-theme-new",
@@ -2803,7 +2660,7 @@
       "pageState": "default",
       "semanticControls": 43,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "8071d29a598f602f7c5dd2b9506cffa5dc6066f543b95eca2d91a87772af46e2"
+      "renderSha256": "4bab250f49dba1694f488e58efb07d96892793453924e83a2cbfccfbcdb676f1"
     },
     {
       "routeId": "reader-theme-delete-confirm",
@@ -2814,7 +2671,7 @@
       "pageState": "default",
       "semanticControls": 34,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5f47e6163defdec45a5374ecbb0d3dc1018c2dbf486f4fd66d78708111ea0ea0"
+      "renderSha256": "cf07895ca7a70543c5358619dd705c31ca40c58936450bd4a2f86d00e58e7cfb"
     },
     {
       "routeId": "reader-typography-reset-confirm",
@@ -2823,9 +2680,9 @@
       "runtimeFamily": "reader",
       "variantId": "default",
       "pageState": "default",
-      "semanticControls": 43,
+      "semanticControls": 45,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "70a6ea34d39572e07434112b226fb0cf7d5d2c0800275dc3435d4b60de08cd89"
+      "renderSha256": "13c238f12f23f39278ef6d6b177caf2a8fe1478dac4f00a0a967d01500c167b2"
     },
     {
       "routeId": "reader-replace-delete-confirm",
@@ -2836,7 +2693,7 @@
       "pageState": "default",
       "semanticControls": 7,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "f54f1c83168539ccf0d4e5916281b9e19cf60c44b7edf5abfa807fba36238515"
+      "renderSha256": "851219f57f261614d74690136b933b56f703319aee0d0241ecfebccdfadb46d3"
     },
     {
       "routeId": "reader-replace-apply-result",
@@ -2847,7 +2704,7 @@
       "pageState": "default",
       "semanticControls": 8,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ac00e222551531a9f5f32dab0353b2c2cda619ebf7a7ff4940a3e841ccb73e08"
+      "renderSha256": "379ba61e5ae770755dde913e350a7a2a8ad3002fbcb01af8605d3ae21429fa93"
     },
     {
       "routeId": "reader-replace-import-export",
@@ -2858,7 +2715,7 @@
       "pageState": "default",
       "semanticControls": 12,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "eebbafdf8f4184f35aa767c5124ed7f34b6afa5a9d5d0644ba6bd517fbf6900a"
+      "renderSha256": "9647592f06641c1f83226854892667b4d8b2478393f64fe9b77433a1b16b9440"
     },
     {
       "routeId": "reader-replace-preview",
@@ -2869,7 +2726,7 @@
       "pageState": "default",
       "semanticControls": 9,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "1960a9b41f28fe8cb021700dc490baa4ed980ae4d4c3f217b15bf7849f30303e"
+      "renderSha256": "0eb0b78115dcb52535a26bf60a4d9087aa55b5acfb9a7b0924761964dcb77594"
     },
     {
       "routeId": "reader-replace-page",
@@ -2880,7 +2737,7 @@
       "pageState": "default",
       "semanticControls": 20,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "13242a7563c1dc29908ee86554942174936155e26e1ac9ddb0985c61a13e6a0c"
+      "renderSha256": "4a4fcd7b267bf67a2e3a61b8870ba7426a673cafbf9a052968deb5bb0ec206a9"
     },
     {
       "routeId": "source-switch-empty",
@@ -2891,7 +2748,7 @@
       "pageState": "empty",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "d91ec8c2d9e1a8056b161ed5d08f193bc9272e11b934500ef97178e249128161"
+      "renderSha256": "5be20196bf070994b8c885e6d7c71e26786f0bfe4a83ab4da397254952466c0c"
     },
     {
       "routeId": "source-switch-error",
@@ -2902,7 +2759,7 @@
       "pageState": "error",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "8bc2c50d74b129fdac4a3fc8074f1e30cb6b939e7acd91d5d668868842a4d27c"
+      "renderSha256": "2e6331c9851b695630118ca7a53f25375ad7cbe73e64b6031f998b069efcc758"
     },
     {
       "routeId": "source-switch-timeout",
@@ -2913,7 +2770,7 @@
       "pageState": "error",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "0d3dd5ef1f82315b379789afce652c55945d67ea9a5246cf70cc77e5264b2365"
+      "renderSha256": "1449e3efe59abc2cef345385e05ee578494f406bee3b4bfad13d74c382eabb8f"
     },
     {
       "routeId": "source-switch-loading",
@@ -2924,7 +2781,7 @@
       "pageState": "loading",
       "semanticControls": 18,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "4ea55bfcb2ae9afd37d1955ac95643e6450c3f7ddfba2c811448a022a0f3bc93"
+      "renderSha256": "7ccade3216d9237e218377eed51719729c958ce7d7b3ea44abc3304fc64515ec"
     },
     {
       "routeId": "source-switch-rollback",
@@ -2935,7 +2792,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "1b730b2fcbbccaed00b961f9cef3b613736a2f4536ae1d48cbe7d7ba0f5a0d67"
+      "renderSha256": "8b03ef128ef41a581e5e064e902b8a5bd7fd20b735f998977e316d396f111c08"
     },
     {
       "routeId": "source-switch-preview",
@@ -2946,7 +2803,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "411cfaa747a6cd9b74d1e8ab7fdac6f9a83a77fd46b389db7f9ddce411a04066"
+      "renderSha256": "fa02b75a547770903888a1fb9537f77db2b85cdf97f201db194b1fd7c5852d9e"
     },
     {
       "routeId": "reader-toc-loading",
@@ -2957,7 +2814,7 @@
       "pageState": "loading",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "ac556092055302e102ba5fa9f2cc7a18312d1e526fda5c52113258cd6966fdbc"
+      "renderSha256": "7b6684c6f5fdcd993bc0dea8569998ca190d04d3f26ea90788665bc64d275b4d"
     },
     {
       "routeId": "reader-toc-offline",
@@ -2968,7 +2825,7 @@
       "pageState": "offline",
       "semanticControls": 9,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "6b87aeeb26e584f544e3a1b677f59615e7a322bf07aecfb0920de6effeebf21a"
+      "renderSha256": "69edfe025cb4ce1d62b2a08de7797a41513882dd226b08f5986165ab30584386"
     },
     {
       "routeId": "reader-toc-error",
@@ -2979,7 +2836,7 @@
       "pageState": "error",
       "semanticControls": 6,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "c58a1b96ea6607ed585526a4effe915c3edef461919b22764e9dde4100236d97"
+      "renderSha256": "286a44c75e50f8ff4231c3b58cd3d0a05b66e4a79d4e6c0c152e5832d0022570"
     },
     {
       "routeId": "reader-content-loading",
@@ -2990,7 +2847,7 @@
       "pageState": "loading",
       "semanticControls": 5,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "435de8a5624e78f347b4d8ce047c4ba55fef169367cd877dcd1c11c77d5390f3"
+      "renderSha256": "c04494c840d48ec77c23fde8d152a76089321ce6350e611f1b90ed792d748532"
     },
     {
       "routeId": "reader-content-offline",
@@ -3001,7 +2858,7 @@
       "pageState": "offline",
       "semanticControls": 6,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "6185ea5805a5fcdf4a79b48c17162e7469f0ce30b18b2ed0eace0e293d84749b"
+      "renderSha256": "799118611f623087985b25ac7ecbaea7183bee12ed04518d9bc49e30625e302a"
     },
     {
       "routeId": "reader-content-error",
@@ -3012,7 +2869,7 @@
       "pageState": "error",
       "semanticControls": 6,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "ab38ab8a231c6fbe7cb0ebe2d41731320428506fe6304c51a91e507840769006"
+      "renderSha256": "c11e9c7492401e5c39d3057a252ce13bc049c38ef803578b8dcaf1b33a4517b8"
     },
     {
       "routeId": "reader-page-boundary-first",
@@ -3023,7 +2880,7 @@
       "pageState": "default",
       "semanticControls": 6,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "f439202dd748e7d4b9be890bae22a5389e2c3cf76b2ecce8296d080d36b14404"
+      "renderSha256": "db1c4b780e69e99ed899ac82af0588db568e58981619109fb1bd7cfea051f4db"
     },
     {
       "routeId": "reader-page-boundary-last",
@@ -3034,7 +2891,7 @@
       "pageState": "default",
       "semanticControls": 6,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "aedb24632a59c421133efb0d71f434ca9c9120ba31cab357b33d899a7ed60f01"
+      "renderSha256": "0aa2ac26a292bae17bb052b2205020cb09fc0f4eba36af81afe6ec00191d4305"
     },
     {
       "routeId": "reader-progress-restore",
@@ -3045,7 +2902,7 @@
       "pageState": "default",
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "277ef6578234bd2a9e85ce7f01afb8538ae23af93e117989b377180f5c47f66a"
+      "renderSha256": "bdce85ecbc3e1537b4b19999af2ba1ef210cea81fc09697cc66b3263ad745e07"
     },
     {
       "routeId": "reader-background-restore",
@@ -3056,7 +2913,7 @@
       "pageState": "loading",
       "semanticControls": 4,
       "suspectedNonSemanticControls": 1,
-      "renderSha256": "a7c5fdac753f9f4114083eff0430a57b82316596a37a59c9b40dc747086ab837"
+      "renderSha256": "8d6e272838163b472ff4e2506c3d7201f9bf7b2752e3498859e1f420edbfbaba"
     },
     {
       "routeId": "import-permission-denied",

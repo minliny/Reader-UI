@@ -59,8 +59,8 @@ test("R16A screen graph schema is strict JSON Schema 2020-12", () => {
   assert.equal(schema.$defs.ComponentNode.additionalProperties, false);
   assert.equal(schema.$defs.ComponentCatalogEntry.additionalProperties, false);
   assert.equal(schema.$defs.ActionBinding.additionalProperties, false);
-  assert.equal(schema.$defs.RouteNode.properties.routeId.enum.length, 260);
-  assert.equal(schema.$defs.ComponentNode.properties.type.enum.length, 174);
+  assert.equal(schema.$defs.RouteNode.properties.routeId.enum.length, 247);
+  assert.equal(schema.$defs.ComponentNode.properties.type.enum.length, 177);
   assert.equal(schema.$defs.ActionBinding.properties.event.enum.length, 300);
 });
 
@@ -84,11 +84,46 @@ test("R16A component render semantics are strict and cover only canonical compon
   assert.equal(readerBase.compositionMode, "host-composite");
 });
 
+test("R16A host slot components OverlayHost and StateHost carry no Figma node binding", () => {
+  // OverlayHost and StateHost are native composition slots, not visual surfaces.
+  // They must never be a canonical ComponentType, never enter the componentCatalog,
+  // never be a host-composite override, and never own a Figma node record in the
+  // visual admission registry. They may surface only as native harmony.targets
+  // slots of other records (slots/OverlayHost.ets#... / slots/StateHost.ets#...).
+  const slotTypes = ["OverlayHost", "StateHost"];
+  const componentTypeEnum = inputs.viewStateSchema.$defs.Component.properties.type.enum;
+  const catalogTypes = new Set(graph.componentCatalog.map((entry) => entry.type));
+  for (const slotType of slotTypes) {
+    assert.equal(componentTypeEnum.includes(slotType), false, `${slotType} must not be a canonical ComponentType`);
+    assert.equal(catalogTypes.has(slotType), false, `${slotType} must not be in the componentCatalog`);
+    assert.equal(componentRenderSemantics.overrides[slotType], undefined, `${slotType} must not be a host-composite override`);
+  }
+
+  const registry = loadJson("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
+  const records = registry.records;
+  for (const slotType of slotTypes) {
+    const ownRecord = records.find((record) => record.id === slotType || record.surfaceType === slotType);
+    assert.equal(ownRecord, undefined, `${slotType} must not own a visual admission record with a Figma node`);
+  }
+  for (const record of records) {
+    const targets = (record.harmony && record.harmony.targets) || [];
+    for (const target of targets) {
+      if (/OverlayHost|StateHost/.test(target)) {
+        assert.match(
+          target,
+          /\/ui\/slots\/(OverlayHost|StateHost)\.ets#/,
+          `${record.id} harmony target must be a native slot, not a Figma node: ${target}`,
+        );
+      }
+    }
+  }
+});
+
 test("R16A graph covers every canonical route once in canonical order", () => {
   const canonical = inputs.routeSchema.properties.id.enum;
   assert.deepEqual(graph.routes.map((route) => route.routeId), canonical);
   assert.equal(new Set(graph.routes.map((route) => route.routeId)).size, canonical.length);
-  assert.equal(graph.routes.length, 260);
+  assert.equal(graph.routes.length, 247);
 });
 
 test("R16A preserves direct trees, aliases, and explicit gaps as separate truth", () => {
@@ -99,7 +134,7 @@ test("R16A preserves direct trees, aliases, and explicit gaps as separate truth"
         graph.routes.filter((route) => route.status === status).length,
       ]),
     ),
-    { direct: 184, alias: 76, "explicit-gap": 0 },
+    { direct: 177, alias: 70, "explicit-gap": 0 },
   );
   assert.equal(graph.routes.filter((route) => route.status === "direct").every((route) => route.variants.length > 0), true);
   assert.equal(graph.routes.filter((route) => route.status === "alias").every((route) => route.variants.length === 0 && route.aliasFor), true);
@@ -124,8 +159,8 @@ test("R16A component tree uses canonical ComponentType and never pseudo-covers g
     graph.componentCatalog.map((entry) => entry.type),
     inputs.viewStateSchema.$defs.Component.properties.type.enum,
   );
-  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "referenced").length, 138);
-  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "explicit-gap").length, 36);
+  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "referenced").length, 134);
+  assert.equal(graph.componentCatalog.filter((entry) => entry.status === "explicit-gap").length, 43);
   assert.equal(
     graph.componentCatalog
       .filter((entry) => entry.status === "explicit-gap")
@@ -188,15 +223,15 @@ test("R16D executable bindings, state evidence, and unresolved labels stay separ
 
 test("R16E component fixture evidence exposes data-backed, partial, and type-only renderer gaps", () => {
   assert.deepEqual(coverage.componentFixtureEvidenceSummary, {
-    "data-backed": 72,
-    "type-only": 54,
-    partial: 12,
-    "explicit-gap": 36,
+    "data-backed": 74,
+    "type-only": 50,
+    partial: 10,
+    "explicit-gap": 43,
   });
-  assert.equal(coverage.componentFixtureEvidence.length, 174);
+  assert.equal(coverage.componentFixtureEvidence.length, 177);
   assert.equal(
     coverage.componentFixtureEvidence.filter((entry) => entry.catalogStatus === "referenced").length,
-    138,
+    134,
   );
   const typeOnly = coverage.componentFixtureEvidence.find((entry) => entry.type === "DiscoverSourceBar");
   assert.equal(typeOnly.evidenceClass, "type-only");
@@ -204,7 +239,7 @@ test("R16E component fixture evidence exposes data-backed, partial, and type-onl
   const readerTopArea = coverage.componentFixtureEvidence.find((entry) => entry.type === "ReaderTopArea");
   assert.equal(readerTopArea.evidenceClass, "partial");
   assert.ok(readerTopArea.typeOnlyInstanceCount > 0 && readerTopArea.typeOnlyInstanceCount < readerTopArea.instanceCount);
-  const partial = coverage.componentFixtureEvidence.find((entry) => entry.type === "ReaderAppearancePanel");
+  const partial = coverage.componentFixtureEvidence.find((entry) => entry.type === "ReplacePanel");
   assert.equal(partial.evidenceClass, "partial");
   assert.ok(partial.typeOnlyInstanceCount > 0 && partial.typeOnlyInstanceCount < partial.instanceCount);
   const dataBacked = coverage.componentFixtureEvidence.find((entry) => entry.type === "BookCard");
@@ -373,17 +408,17 @@ test("R16B W5 fails closed when replacement preview loses apply action", () => {
 });
 
 test("R16A coverage report preserves native-renderer and Authoritative boundary", () => {
-  assert.equal(coverage.canonicalRoutes, 260);
-  assert.equal(coverage.resolvableRoutes, 260);
+  assert.equal(coverage.canonicalRoutes, 247);
+  assert.equal(coverage.resolvableRoutes, 247);
   assert.equal(coverage.explicitGapRoutes, 0);
-  assert.equal(coverage.viewStateFixtures, 190);
-  assert.equal(coverage.variants, 190);
+  assert.equal(coverage.viewStateFixtures, 183);
+  assert.equal(coverage.variants, 183);
   assert.equal(coverage.componentInstances, componentInstanceCount());
-  assert.equal(coverage.canonicalComponentTypes, 174);
-  assert.equal(coverage.componentCatalogTypes, 174);
-  assert.equal(coverage.usedComponentTypes, 138);
-  assert.equal(coverage.referencedComponentTypes, 138);
-  assert.equal(coverage.explicitGapComponentTypes, 36);
+  assert.equal(coverage.canonicalComponentTypes, 177);
+  assert.equal(coverage.componentCatalogTypes, 177);
+  assert.equal(coverage.usedComponentTypes, 134);
+  assert.equal(coverage.referencedComponentTypes, 134);
+  assert.equal(coverage.explicitGapComponentTypes, 43);
   assert.deepEqual(coverage.proofBoundary.graphGreenDoesNotMean, [
     "iOS native renderer complete",
     "Android native renderer complete",
@@ -437,8 +472,8 @@ test("R16C native registries embed the complete canonical graph losslessly", () 
     assert.equal(value, expected);
     const decoded = JSON.parse(value);
     assert.deepEqual(decoded, graph);
-    assert.equal(decoded.routes.length, 260);
-    assert.equal(decoded.routes.reduce((count, route) => count + route.variants.length, 0), 190);
+    assert.equal(decoded.routes.length, 247);
+    assert.equal(decoded.routes.reduce((count, route) => count + route.variants.length, 0), 183);
   }
   const expectedHash = createHash("sha256").update(expected).digest("hex");
   assert.equal(swift.includes(`sha256 = "${expectedHash}"`), true);
@@ -528,7 +563,7 @@ test("R16C native generation fails closed on canonical set and recursive binding
   missingRoute.routes.pop();
   assert.throws(
     () => validateNativeRegistryGeneration(missingRoute, inputs),
-    /requires 260 routes/,
+    /requires 247 routes/,
   );
 
   const catalogDrift = structuredClone(graph);

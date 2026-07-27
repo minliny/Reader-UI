@@ -9,7 +9,7 @@
     {
       "label": "route-contract.js route ids",
       "policy": "route",
-      "found": 260,
+      "found": 247,
       "unknown": 0,
       "approvedUnknown": 0,
       "unapproved": 0,
@@ -31,7 +31,7 @@
     {
       "label": "render-runtime.js route refs",
       "policy": "route",
-      "found": 99,
+      "found": 98,
       "unknown": 0,
       "approvedUnknown": 0,
       "unapproved": 0,

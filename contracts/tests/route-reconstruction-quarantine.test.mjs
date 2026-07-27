@@ -25,18 +25,16 @@ test("route reconstruction quarantine is a valid, exact source-side route extrac
 
   const knownRouteIds = new Set(routeSchema.properties.id.enum);
   const routeIds = quarantine.entries.flatMap((entry) => entry.routeIds);
-  assert.equal(routeIds.length, 16, "A2 disposition identifies exactly 16 historical Reader routes for source extraction");
+  // A2 strict physical removal retired the 13 legacy reader control/module
+  // routes (MAJOR). Only reader.reading-surface's 3 canonical routes remain
+  // here, as a released source-conversion record. The 6 sibling source
+  // quarantines were retired because their routes no longer exist.
+  assert.equal(routeIds.length, 3, "only the 3 canonical reading-surface routes remain after A2 removal");
   assert.equal(new Set(routeIds).size, routeIds.length, "a quarantined route must have exactly one owning record");
   for (const routeId of routeIds) assert.ok(knownRouteIds.has(routeId), `unknown quarantined RouteId: ${routeId}`);
 
   const expectedRecordIds = [
     "reader.reading-surface",
-    "reader.control-home",
-    "reader.module.directory",
-    "reader.module.tts",
-    "reader.module.appearance",
-    "reader.module.settings",
-    "reader.quick.content-search",
   ];
   assert.deepEqual(quarantine.entries.map((entry) => entry.recordId), expectedRecordIds);
   assert.ok(quarantine.entries.every((entry) => entry.status === "active" || entry.status === "released"),

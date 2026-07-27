@@ -21,7 +21,6 @@
         "ReaderFullSettingsPage"
       ],
       "routes": [
-        "reader-appearance",
         "reader-full-appearance",
         "reader-full-settings"
       ],

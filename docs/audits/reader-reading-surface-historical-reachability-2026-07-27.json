@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 1,
+  "kind": "READER_READING_SURFACE_HISTORICAL_REACHABILITY_REPORT",
+  "status": "source-side-proof-holds-split-completed",
+  "generatedAt": "2026-07-27",
+  "retractReasonAddressed": "23 historical reader implementations not proven unreachable (PROMOTION_LEDGER retract-002)",
+  "canonicalConsumer": {
+    "file": "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets",
+    "symbol": "ReaderBase",
+    "structLine": 1624,
+    "buildLine": 1643,
+    "composedChildren": [
+      { "symbol": "ReadingBackgroundLayer", "definedAt": "ReaderComponents.ets:66", "calledAt": ":1645" },
+      { "symbol": "ReadingTextFlow", "definedAt": "ReaderComponents.ets:145", "calledAt": ":1646" },
+      { "symbol": "TapZones", "definedAt": "ReaderComponents.ets:1373", "calledAt": ":1654,:1666" },
+      { "symbol": "ControlDismissZone", "definedAt": "ReaderComponents.ets:1607", "calledAt": ":1660" },
+      { "symbol": "ReadingInfoLayer", "definedAt": "ReaderComponents.ets:1073", "calledAt": ":1673" }
+    ],
+    "compositionNote": "ReaderBase build() composes ONLY these 5 children. ReaderTopArea/ReaderBottomBar are dispatched via component.type in ViewStateRenderer.ets for the canonical reader-night-state-v2 route (reachable via canonical route, excluded from unreachable set)."
+  },
+  "retiredRoutes": {
+    "count": 13,
+    "canonicalEnumRouteCount": 247,
+    "allAbsentFromCanonicalEnum": true,
+    "routes": [
+      "control-layer-base-v2",
+      "reader-directory-overlay-v2",
+      "reader-appearance-overlay-v2",
+      "reader-tts-overlay-v2",
+      "reader-settings-overlay-v2",
+      "reader-auto-scroll-overlay-v2",
+      "reader-search-overlay-v2",
+      "reader-replace-overlay-v2",
+      "toc-bookmarks",
+      "tts",
+      "reader-appearance",
+      "reader-settings",
+      "content-search"
+    ]
+  },
+  "canonicalReadingRoutesPresent": ["immersive-reading", "reader", "reader_content"],
+  "historicalImplementations": [
+    { "id": 1, "symbol": "ReaderControlSheet", "file": "ReaderOverlayComponents.ets", "line": 368, "category": "control-layer", "retiredRouteBound": "control-layer-base-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 2, "symbol": "ReaderDirectoryPanel", "file": "ReaderOverlayComponents.ets", "line": 1794, "category": "overlay-component", "retiredRouteBound": "reader-directory-overlay-v2 / toc-bookmarks", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "splitStatus": "explicit-gap-retired", "splitInto": "DirectoryPanel", "splitNote": "Reading-page overlay record retired as status:explicit-gap (0 fixtures, 0 routes, canonical-but-retired NOT deleted). Shared-primitive content retained as DirectoryPanel (referenced by 17 surviving routes)." },
+    { "id": 3, "symbol": "ReaderAppearancePanel", "file": "ReaderOverlayComponents.ets", "line": 1915, "category": "overlay-component", "retiredRouteBound": "reader-appearance-overlay-v2 / reader-appearance", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "splitStatus": "explicit-gap-retired", "splitInto": "AppearancePanel", "splitNote": "Reading-page overlay record retired as status:explicit-gap (0 fixtures, 0 routes, canonical-but-retired NOT deleted). Shared-primitive content retained as AppearancePanel (referenced by 17 surviving routes)." },
+    { "id": 4, "symbol": "ReaderTtsPanel", "file": "ReaderOverlayComponents.ets", "line": 1932, "category": "overlay-component", "retiredRouteBound": "reader-tts-overlay-v2 / tts", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 5, "symbol": "ReaderSettingsPanel", "file": "ReaderOverlayComponents.ets", "line": 2220, "category": "overlay-component", "retiredRouteBound": "reader-settings-overlay-v2 / reader-settings", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 6, "symbol": "ReaderSearchPanel", "file": "ReaderOverlayComponents.ets", "line": 4596, "category": "overlay-component", "retiredRouteBound": "reader-search-overlay-v2 / content-search", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 7, "symbol": "ReaderReplacePanel", "file": "ReaderOverlayComponents.ets", "line": 4784, "category": "overlay-component", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "splitStatus": "explicit-gap-retired", "splitInto": "ReplacePanel", "splitNote": "Reading-page overlay record retired as status:explicit-gap (0 fixtures, 0 routes, canonical-but-retired NOT deleted). Shared-primitive content retained as ReplacePanel (referenced by 17 surviving routes)." },
+    { "id": 8, "symbol": "ReaderAutoScrollPanel", "file": "ReaderOverlayComponents.ets", "line": 4860, "category": "overlay-component", "retiredRouteBound": "reader-auto-scroll-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 9, "symbol": "ReaderControlMotionCoordinator", "file": "ReaderControlMotionCoordinator.ets", "line": 13, "category": "motion-coordinator", "retiredRouteBound": "control-layer-base-v2 + 7 overlay-v2 routes", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "deadCode": true },
+    { "id": 10, "symbol": "ReaderDirectoryToTtsMotionCoordinator", "file": "ReaderDirectoryToTtsMotionCoordinator.ets", "line": 4, "category": "motion-coordinator", "retiredRouteBound": "reader-directory-overlay-v2 / reader-tts-overlay-v2 / tts", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "deadCode": true },
+    { "id": 11, "symbol": "readerControlShowV2", "file": "d3-control-layers-renderers.js", "line": 961, "category": "demo-renderer", "retiredRouteBound": "control-layer-base-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 12, "symbol": "readerControlHideV2", "file": "d3-control-layers-renderers.js", "line": 965, "category": "demo-renderer", "retiredRouteBound": "control-layer-base-v2 motion", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 13, "symbol": "readerModuleSwitchV2", "file": "d3-control-layers-renderers.js", "line": 970, "category": "demo-renderer", "retiredRouteBound": "control-layer-base-v2 motion", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 14, "symbol": "readerDirectoryOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 984, "category": "demo-renderer", "retiredRouteBound": "reader-directory-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 15, "symbol": "readerAppearanceOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 988, "category": "demo-renderer", "retiredRouteBound": "reader-appearance-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 16, "symbol": "readerTtsOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 992, "category": "demo-renderer", "retiredRouteBound": "reader-tts-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 17, "symbol": "readerSettingsOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 996, "category": "demo-renderer", "retiredRouteBound": "reader-settings-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 18, "symbol": "readerAutoScrollOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 1000, "category": "demo-renderer", "retiredRouteBound": "reader-auto-scroll-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 19, "symbol": "readerSearchOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 1004, "category": "demo-renderer", "retiredRouteBound": "reader-search-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 20, "symbol": "readerReplaceOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 1008, "category": "demo-renderer", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 21, "symbol": "readerAppearanceScreen", "file": "w4-theme-font-typography-renderers.js", "line": 1238, "category": "demo-renderer", "retiredRouteBound": "reader-appearance", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 22, "symbol": "readerAppearanceOverlayV2Screen", "file": "w4-theme-font-typography-renderers.js", "line": 1247, "category": "demo-renderer", "retiredRouteBound": "reader-appearance-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 23, "symbol": "readerReplaceOverlayV2Screen", "file": "w5-replace-rules-renderers.js", "line": 910, "category": "demo-renderer", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true }
+  ],
+  "counts": {
+    "total": 23,
+    "fullyUnreachable": 23,
+    "unreachableFromReaderBaseButRetained": 0,
+    "reachableFromReaderBase": 0
+  },
+  "splitPerformed": {
+    "mechanism": "rename-and-explicit-gap",
+    "canonicalComponentTypeEnumCount": 177,
+    "retainedSharedPrimitives": [
+      { "type": "DirectoryPanel", "status": "referenced", "instanceCount": 4, "survivingRoutes": ["reader-toc-loading", "reader-toc-offline", "reader-toc-error", "bookmarks-manager"] },
+      { "type": "AppearancePanel", "status": "referenced", "instanceCount": 6, "survivingRoutes": ["reader-font-import-confirm", "reader-font-delete-confirm", "reader-font-fallback", "reader-theme-new", "reader-theme-delete-confirm", "reader-typography-reset-confirm"] },
+      { "type": "ReplacePanel", "status": "referenced", "instanceCount": 7, "survivingRoutes": ["reader-replace-delete-confirm", "reader-replace-apply-result", "reader-replace-import-export", "reader-replace-preview", "reader-replace-page", "content-edit", "content-replacement"] }
+    ],
+    "retiredReadingPageOverlays": [
+      { "type": "ReaderDirectoryPanel", "status": "explicit-gap", "fixtureCount": 0, "routeCount": 0, "note": "canonical-but-retired record (mirrors ReaderTtsPanel/ReaderSettingsPanel), NOT deleted" },
+      { "type": "ReaderAppearancePanel", "status": "explicit-gap", "fixtureCount": 0, "routeCount": 0, "note": "canonical-but-retired record (mirrors ReaderTtsPanel/ReaderSettingsPanel), NOT deleted" },
+      { "type": "ReaderReplacePanel", "status": "explicit-gap", "fixtureCount": 0, "routeCount": 0, "note": "canonical-but-retired record (mirrors ReaderTtsPanel/ReaderSettingsPanel), NOT deleted" }
+    ]
+  },
+  "consumerSyncStatus": {
+    "canonicalRouteIdEnum": "synced-247",
+    "canonicalViewStateFixtures": "synced",
+    "consumerViewStateTableEts": "synced",
+    "consumerRouteReconstructionQuarantineEts": "synced",
+    "consumerRouteTableEts": "stale-pending-sync",
+    "demoRuntime": "not-synced-demo-side-only"
+  },
+  "spotChecksPerformed": [
+    "ReaderBase build() composition verified at ReaderComponents.ets:1643-1681 (5 children only)",
+    "ReaderControlMotionCoordinator: 0 external call sites in entry/src/main/ets (dead code)",
+    "ReaderDirectoryToTtsMotionCoordinator: 0 external call sites in entry/src/main/ets (dead code)",
+    "componentCatalog: 3 old reader-named types = explicit-gap (0 instances); 3 new shared-primitive types = referenced (4/6/7 instances)",
+    "Canonical ComponentType enum: 177 entries (174 + 3 new shared-primitive types)"
+  ],
+  "conclusion": "Source-side reachability proof holds. All 23 historical reader implementations are fully unreachable from the canonical consumer ReaderComponents.ets#ReaderBase. The 3 previously-retained structs (ReaderDirectoryPanel/ReaderAppearancePanel/ReaderReplacePanel) have been split: shared-primitive content retained as new types (DirectoryPanel/AppearancePanel/ReplacePanel, referenced by 17 surviving routes) + reading-page overlay record retired as status:explicit-gap (0 fixtures/0 routes, canonical-but-retired NOT deleted). The reading surface has a single canonical implementation: ReaderBase."
+}

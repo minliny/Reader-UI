@@ -61,8 +61,8 @@
     },
     {
       "path": "contracts/fixtures/appearance.fixtures.json",
-      "byteLength": 4912,
-      "sha256": "bd0f897c45404562553622cf6295f0a9dd4cb25587bd8b536528603619630892"
+      "byteLength": 5006,
+      "sha256": "fbc701807bbb80283e518c27febb59b74f767b291a55914091b0a201a30f1a1f"
     },
     {
       "path": "contracts/fixtures/content.fixtures.json",
@@ -81,8 +81,8 @@
     },
     {
       "path": "contracts/fixtures/design-delta.fixtures.json",
-      "byteLength": 3523,
-      "sha256": "18ac67e0c50e3d1c78a795cbeff547e9e3d00f538a825dbd03663ddbdd737998"
+      "byteLength": 3494,
+      "sha256": "3d14bd9e59067b494e9b35008b8b27e399ec1a1720d336195b8e60f2eb7f2069"
     },
     {
       "path": "contracts/fixtures/host-request.fixtures.json",
@@ -111,8 +111,8 @@
     },
     {
       "path": "contracts/fixtures/product-capability.fixtures.json",
-      "byteLength": 48689,
-      "sha256": "2a61e9f8a2f651d15098cf758a202cca706ad1c85465e6f6ac428b6094c083a9"
+      "byteLength": 48443,
+      "sha256": "a860476eb7631755a43d3b1a00eafb078f60d3e5642c439c0f9b3cd3fad0e8bb"
     },
     {
       "path": "contracts/fixtures/progress-location.fixtures.json",
@@ -120,9 +120,14 @@
       "sha256": "1ff2398895ecfd3844eaa6e1c291afe1cf42cdd97bcc6f74f07417cf3c110c20"
     },
     {
+      "path": "contracts/fixtures/route-reconstruction-quarantine.fixtures.json",
+      "byteLength": 548,
+      "sha256": "bfcb1b1b70e258c775828b1213a70f5c40538d5ed620766b0f8604616d95f8b5"
+    },
+    {
       "path": "contracts/fixtures/route.fixtures.json",
-      "byteLength": 25340,
-      "sha256": "546e3a84d3f0d9c3e421baa4809bde3c98829958daddf710617a6edaa6bf9672"
+      "byteLength": 24154,
+      "sha256": "c16691fbe7fffbfcbbd4f7d527e10d71ec296b445a9a74b955659730891cc686"
     },
     {
       "path": "contracts/fixtures/runtime-payload-contract.fixtures.json",
@@ -171,8 +176,8 @@
     },
     {
       "path": "contracts/fixtures/view-state.fixtures.json",
-      "byteLength": 170815,
-      "sha256": "a055365332288ad8c233a221a9c24a9dc91ec95bd7d94df4b4b9ae6105925c84"
+      "byteLength": 178290,
+      "sha256": "3e2c528bc66ce3b3111e837fda065222a30442d55380f8fd61f1cec710968949"
     },
     {
       "path": "contracts/host-request.schema.json",
@@ -210,9 +215,14 @@
       "sha256": "43909cca27a5ca4b25dbedce6d93b736d5c06ea824307d1e60837ec27bde5844"
     },
     {
+      "path": "contracts/route-reconstruction-quarantine.schema.json",
+      "byteLength": 1699,
+      "sha256": "8a0f1ea3939f51ef9b41ece54ec826167a95b6d9d8bf0306124852805195f435"
+    },
+    {
       "path": "contracts/route.schema.json",
-      "byteLength": 9845,
-      "sha256": "6e3746c4666ad3571973e5ca3812508abf83dca47646c437608e3b1c50d28de5"
+      "byteLength": 9426,
+      "sha256": "b8390208cb8478bb39ebf5a0065fbac6cb4b16da497a6ec7be2c67227b8cc616"
     },
     {
       "path": "contracts/state-rule.schema.json",
@@ -241,8 +251,8 @@
     },
     {
       "path": "contracts/view-state.schema.json",
-      "byteLength": 10720,
-      "sha256": "65a6a7a8bac825ac432f361ae05f66a72275bc48e40b5bd4000fd06b7f14b0ff"
+      "byteLength": 10809,
+      "sha256": "e60af23c48f1b27213333747a3cba88c5a22199f6096820eeac07772ba801527"
     },
     {
       "path": "device-conformance/DEVICE_CONFORMANCE_PLAN.json",
@@ -251,8 +261,8 @@
     },
     {
       "path": "frontend-demo-optimized/appearance-spec.js",
-      "byteLength": 6606,
-      "sha256": "aefc5c4cbca88fb7e005a86fc8b8754c2c63d3bdcc7fe223789af25af2aaa648"
+      "byteLength": 6772,
+      "sha256": "8a381e0f0d17cadda7e3428f7ddff6161ece7afec9f252ba650318f9dc9da521"
     },
     {
       "path": "frontend-demo-optimized/asset-library/asset-library.css",
@@ -951,8 +961,8 @@
     },
     {
       "path": "frontend-demo-optimized/motion-contract-registry.js",
-      "byteLength": 131129,
-      "sha256": "4ad557310144459f7d815e84e13c775472f04ebfa1a1621e5255260255b2f1da"
+      "byteLength": 130593,
+      "sha256": "d6ea6d1fff12183c9d960af27098b7c79dc0c0e5d3af0eb9ce52bc10f6403bdf"
     },
     {
       "path": "frontend-demo-optimized/motion-controller.js",
@@ -986,8 +996,8 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 795038,
-      "sha256": "3fa4421936dd2b3ebfc2c0ea51ac5579ac7f18f5e8021119e065eb263457a074"
+      "byteLength": 799017,
+      "sha256": "c1bf2c7231dca5527f97f07eefbd1e2211294d48e595c54ccea38e1e7de4b018"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -1056,8 +1066,8 @@
     },
     {
       "path": "frontend-demo-optimized/route-contract.js",
-      "byteLength": 46525,
-      "sha256": "8035d62ec412a2dfabbf33e450b070edf1f3b26db914b40f8fdbe4106258786c"
+      "byteLength": 45088,
+      "sha256": "777f46d62fc376251b2c3588ad0a07d4bfb3a81aa71c8b11f92841a2f6e48691"
     },
     {
       "path": "frontend-demo-optimized/rss-runtime-contract.js",
@@ -1086,8 +1096,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/01-shell-layout.css",
-      "byteLength": 102755,
-      "sha256": "a89cc46a96262d4277503e9d1d6f8906261bf95a017bd6dda19c05df5ce0029d"
+      "byteLength": 105542,
+      "sha256": "70bba056b7a1873da9c008b6595bcc87cb2c8be1f6b1260e8c40b5182d75dab7"
     },
     {
       "path": "frontend-demo-optimized/styles/02a-reader-control.css",
@@ -1121,8 +1131,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/03c-reader-viewport.css",
-      "byteLength": 28353,
-      "sha256": "7ba8d9efd0a90ce763920a5ecc5887cfad899c34750b9713a19a53f36dad9720"
+      "byteLength": 28842,
+      "sha256": "1fde5b51da0a33458b3e797b0c141e3014a153a8b9f30042a2d046978b4c1da2"
     },
     {
       "path": "frontend-demo-optimized/styles/03d-reader-fullpage.css",
@@ -1191,8 +1201,8 @@
     },
     {
       "path": "generated/arkts/Appearance.ets",
-      "byteLength": 6555,
-      "sha256": "226f26239c8ada29976b1aa12b690b8fb74232237b1b23986ab072d078b9859e"
+      "byteLength": 6641,
+      "sha256": "97dabd74e1c6ebd6f7773209645d0cfcff271b1213611ae51b9cd8f8f0a914ca"
     },
     {
       "path": "generated/arkts/Content.ets",
@@ -1221,8 +1231,8 @@
     },
     {
       "path": "generated/arkts/MotionPolicy.ets",
-      "byteLength": 32088,
-      "sha256": "7ac8ec929b1c9d849385ef232a7eb1ad2462bc78c9ee7bd06c197f56c92c1677"
+      "byteLength": 31552,
+      "sha256": "761b20f653cd7291095fd3c8062db8110dba33f4d8039d4118fecf4935d6ba06"
     },
     {
       "path": "generated/arkts/ProgressLocation.ets",
@@ -1236,13 +1246,18 @@
     },
     {
       "path": "generated/arkts/Route.ets",
-      "byteLength": 7082,
-      "sha256": "49b68776a9107fc2aa677140c961615a1b22d3eec9a542250a83f86418913279"
+      "byteLength": 6728,
+      "sha256": "efce544b925fba145dac343981963bda55534b2d446cdb5fcac2b00a31313f86"
+    },
+    {
+      "path": "generated/arkts/RouteReconstructionQuarantine.ets",
+      "byteLength": 921,
+      "sha256": "dadab7d7f11b1fa66500623ff29336219c133b2cf28706f77125dbbc36ed893d"
     },
     {
       "path": "generated/arkts/ScreenGraph.ets",
-      "byteLength": 384622,
-      "sha256": "4631cbb3288f443d90e9da53873c9ac6520c3d4ef6f26c3b85fb51e65acce8d2"
+      "byteLength": 372005,
+      "sha256": "8294fb1c8014582e588d3aa3fdfeef5b1d2b1951830df2675fcb2c46f6133511"
     },
     {
       "path": "generated/arkts/StateRule.ets",
@@ -1271,18 +1286,23 @@
     },
     {
       "path": "generated/arkts/ViewState.ets",
-      "byteLength": 4680,
-      "sha256": "ce8fa0220381afc2a3dec50fbbb1a21629a31d1685dd50d0f91ef8f8848fad41"
+      "byteLength": 4742,
+      "sha256": "debb50eac33284f63cc1872cf639f4dc603261b8bde3fd3f3ed1fb14fe2ac6c0"
     },
     {
       "path": "generated/arkts/VisualAdmission.ets",
-      "byteLength": 91991,
-      "sha256": "196ac4713f39bdc5646c1a5801fbc4403962ced0f9b287b01001b5ade4dfaa3a"
+      "byteLength": 89929,
+      "sha256": "2d26284ffe35dd106933b585b1d6ca02b7f7d6f48efaffa70e405ddd8149b6f3"
+    },
+    {
+      "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
+      "byteLength": 24507,
+      "sha256": "48731961ff45b9309b042e66424dbb2358474eef8cf0deef0ccfa96d26248975"
     },
     {
       "path": "generated/kotlin/Appearance.kt",
-      "byteLength": 5468,
-      "sha256": "0727f65fbc9bf20f7961117a1b9908dd4b390dd544e2b665fcbdc37432b132ab"
+      "byteLength": 5578,
+      "sha256": "835e720455a0b9e4de1e5b242c1460f09560ad18a70b28be0bf8cc170e985eff"
     },
     {
       "path": "generated/kotlin/Content.kt",
@@ -1311,8 +1331,8 @@
     },
     {
       "path": "generated/kotlin/MotionPolicy.kt",
-      "byteLength": 39333,
-      "sha256": "87690e0860d144db98fb1ee808ba5ae3bc056932ebd37d0fd1c114a023dcf2ee"
+      "byteLength": 38628,
+      "sha256": "00769b09513147c97665a033f1fe402fcc33a1498cd9fbd80e14e91999641f44"
     },
     {
       "path": "generated/kotlin/ProgressLocation.kt",
@@ -1326,13 +1346,18 @@
     },
     {
       "path": "generated/kotlin/Route.kt",
-      "byteLength": 16807,
-      "sha256": "ee7831bca95138615b9985afac91df6a0f39fe765139827229ea7ce892021333"
+      "byteLength": 15972,
+      "sha256": "85122adc66a949caa8236e1fb64ca4711b37845c67de4a2dd361052a1f639be9"
+    },
+    {
+      "path": "generated/kotlin/RouteReconstructionQuarantine.kt",
+      "byteLength": 767,
+      "sha256": "a1144c3c31fd6fd5ed6a385cd891d7cad9a8b2ec84f6d0bc2d2e9a3a2aaa2644"
     },
     {
       "path": "generated/kotlin/ScreenGraph.kt",
-      "byteLength": 365886,
-      "sha256": "e63ba29d5fd9cc8714dbe9cf42bb8897b6f4140b2a2238bc8c7e5e4d975a4779"
+      "byteLength": 353543,
+      "sha256": "06e2f513c74b2f650c2b883e07d02f07af9e68d27c8479ea39055599c23a7e53"
     },
     {
       "path": "generated/kotlin/StateRule.kt",
@@ -1361,8 +1386,8 @@
     },
     {
       "path": "generated/kotlin/ViewState.kt",
-      "byteLength": 10809,
-      "sha256": "645508d9bb93189e950806da02926b78bf34c311f8be29a3892c34c7aef7b83b"
+      "byteLength": 10969,
+      "sha256": "b2304a8dc48c8f63843122468b6e01e75d4283798752f494357d1bfc1a6d700e"
     },
     {
       "path": "generated/runtime-coverage.json",
@@ -1371,13 +1396,13 @@
     },
     {
       "path": "generated/screen-graph-coverage.json",
-      "byteLength": 60755,
-      "sha256": "28c92b92e2b3261df7d355345220d7ad3672467e2546e167eef86d29b3f41e92"
+      "byteLength": 61860,
+      "sha256": "c6dd0f7be8070885aded0276136f8582991f72f65b7185d4de9a77c2f9b3c9dc"
     },
     {
       "path": "generated/swift/Appearance.swift",
-      "byteLength": 7279,
-      "sha256": "71b8195423cf780cd8349a85175365ea2ecd525039f0ead7989429699d1b97e9"
+      "byteLength": 7371,
+      "sha256": "b3435014b4a8ddc4e613057798bb1a7c9a19b9d8fd6c14a3902a201fbe53f814"
     },
     {
       "path": "generated/swift/Content.swift",
@@ -1406,8 +1431,8 @@
     },
     {
       "path": "generated/swift/MotionPolicy.swift",
-      "byteLength": 38180,
-      "sha256": "13adb49ad2fd13fa54c0b6c3870f5fd34762d732e16cd49c98c5f5ca681f768d"
+      "byteLength": 37579,
+      "sha256": "a9b4711235eac1f0f40111286dd2a433f4a125cd38ce10d38ccb4b26e16d2860"
     },
     {
       "path": "generated/swift/ProgressLocation.swift",
@@ -1421,13 +1446,18 @@
     },
     {
       "path": "generated/swift/Route.swift",
-      "byteLength": 14064,
-      "sha256": "cbc95e638fdc86a0d7f894469792261b23b5bd367ed3615a118d30ddef51dc36"
+      "byteLength": 13372,
+      "sha256": "a5024ada8adbb4707e8923c32439353190b09b226300ffe9be573c811e48dc78"
+    },
+    {
+      "path": "generated/swift/RouteReconstructionQuarantine.swift",
+      "byteLength": 826,
+      "sha256": "d6e29b43530ca7e97021a5804c63d569713e3f62178d7fee4ecd91ae9ef79401"
     },
     {
       "path": "generated/swift/ScreenGraph.swift",
-      "byteLength": 368772,
-      "sha256": "018889895bb31f90c5323a76a3344e334a5a4d4c26836de0d7aa9e15fab1c668"
+      "byteLength": 356433,
+      "sha256": "86e5fd55e0dc63065aba901bba8fe603bfe9a4de09591b20d2d77c8731a8c033"
     },
     {
       "path": "generated/swift/StateRule.swift",
@@ -1456,8 +1486,8 @@
     },
     {
       "path": "generated/swift/ViewState.swift",
-      "byteLength": 8865,
-      "sha256": "a4d7a06f8249d876100023bdd59c8e79bbe8ce89bd7247904579f5d56bd1f51c"
+      "byteLength": 8992,
+      "sha256": "33c6d5e7713b2e14e379ffddd38cc73e798bce8bcf891f15dc4d1be76e49e312"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -1641,13 +1671,13 @@
     },
     {
       "path": "ui-spec/screen-graph.json",
-      "byteLength": 592929,
-      "sha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b"
+      "byteLength": 572115,
+      "sha256": "ffbae81fb827ecd7f5bcf4f14689d7cd16abcba8a64519d6fb332159f3e14655"
     },
     {
       "path": "ui-spec/screen-graph.schema.json",
-      "byteLength": 86465,
-      "sha256": "8920066bd3068973604e2c82e1f94cf62ae449151e92525ff2ba2134782c2e2f"
+      "byteLength": 84681,
+      "sha256": "767e194c7e7212bc2b351a4bf55e1493b5a42539c6eed7286d7ede753d55bb63"
     },
     {
       "path": "ui-spec/ui-release-manifest.schema.json",
@@ -1659,8 +1689,8 @@
     {
       "name": "design-runtime",
       "fileCount": 187,
-      "byteLength": 5535102,
-      "sha256": "c6677ac9c7e83b6471bbf52d684a44e1a2fc7f067f8ae54301988bad700ca22d",
+      "byteLength": 5540550,
+      "sha256": "d21b60e8e066806d5907f7d52eaa151c0e2eb13d2a6d9b64b1e41443942e567b",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1868,9 +1898,9 @@
     },
     {
       "name": "fixtures",
-      "fileCount": 23,
-      "byteLength": 604731,
-      "sha256": "a1872a062c4db589d1df035a09febd13a4bdb54a8dc732e16f2183803ef1c8ef",
+      "fileCount": 24,
+      "byteLength": 611387,
+      "sha256": "4d1f00cc4f74ada9043c5f6a07b3502c3c624dbb641a35702be854ea17f9d16f",
       "files": [
         "contracts/fixtures/appearance.fixtures.json",
         "contracts/fixtures/content.fixtures.json",
@@ -1884,6 +1914,7 @@
         "contracts/fixtures/platform-evidence-manifest.fixtures.json",
         "contracts/fixtures/product-capability.fixtures.json",
         "contracts/fixtures/progress-location.fixtures.json",
+        "contracts/fixtures/route-reconstruction-quarantine.fixtures.json",
         "contracts/fixtures/route.fixtures.json",
         "contracts/fixtures/runtime-payload-contract.fixtures.json",
         "contracts/fixtures/runtime-payload-contract.fixtures.schema.json",
@@ -1899,9 +1930,9 @@
     },
     {
       "name": "generated",
-      "fileCount": 55,
-      "byteLength": 2272293,
-      "sha256": "a9d092d37a9ceae2379f2078c892fea51ceffe4508fb58f6508061490e9851f2",
+      "fileCount": 59,
+      "byteLength": 2257972,
+      "sha256": "6c9674efb1121c56ce3d6bf89ddfc8db8622f580d383a366a497a7979790cd74",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
@@ -1914,6 +1945,7 @@
         "generated/arkts/ProgressLocation.ets",
         "generated/arkts/README.md",
         "generated/arkts/Route.ets",
+        "generated/arkts/RouteReconstructionQuarantine.ets",
         "generated/arkts/ScreenGraph.ets",
         "generated/arkts/StateRule.ets",
         "generated/arkts/SyncConflict.ets",
@@ -1922,6 +1954,7 @@
         "generated/arkts/UiState.ets",
         "generated/arkts/ViewState.ets",
         "generated/arkts/VisualAdmission.ets",
+        "generated/figma/FIGMA_SOURCE_PLAN.json",
         "generated/kotlin/Appearance.kt",
         "generated/kotlin/Content.kt",
         "generated/kotlin/CoreCommand.kt",
@@ -1932,6 +1965,7 @@
         "generated/kotlin/ProgressLocation.kt",
         "generated/kotlin/README.md",
         "generated/kotlin/Route.kt",
+        "generated/kotlin/RouteReconstructionQuarantine.kt",
         "generated/kotlin/ScreenGraph.kt",
         "generated/kotlin/StateRule.kt",
         "generated/kotlin/SyncConflict.kt",
@@ -1951,6 +1985,7 @@
         "generated/swift/ProgressLocation.swift",
         "generated/swift/README.md",
         "generated/swift/Route.swift",
+        "generated/swift/RouteReconstructionQuarantine.swift",
         "generated/swift/ScreenGraph.swift",
         "generated/swift/StateRule.swift",
         "generated/swift/SyncConflict.swift",
@@ -1984,8 +2019,8 @@
     {
       "name": "primitive-abi",
       "fileCount": 6,
-      "byteLength": 75761,
-      "sha256": "2374dd3ee6c0e24e7e56e523e794d6be16d9fb16162b2575b247bc383822953f",
+      "byteLength": 75850,
+      "sha256": "679f94492499d82b7d297880ad729e7dc068c396e3086163b002b5aed2e61494",
       "files": [
         "contracts/core-command.schema.json",
         "contracts/core-event.schema.json",
@@ -2029,9 +2064,9 @@
     },
     {
       "name": "schemas",
-      "fileCount": 29,
-      "byteLength": 324772,
-      "sha256": "7fb41e818fd44fc4a70480601057a99078a13aae95d98b1d995f7632badc5732",
+      "fileCount": 30,
+      "byteLength": 324357,
+      "sha256": "5301ad7943d21508c86d9c5e8c8a7ecc731f360372fd0696b563189865be9e7c",
       "files": [
         "contracts/appearance.schema.json",
         "contracts/content.schema.json",
@@ -2048,6 +2083,7 @@
         "contracts/platform-evidence-manifest.schema.json",
         "contracts/product-capability.schema.json",
         "contracts/progress-location.schema.json",
+        "contracts/route-reconstruction-quarantine.schema.json",
         "contracts/route.schema.json",
         "contracts/state-rule.schema.json",
         "contracts/sync-conflict.schema.json",
@@ -2067,8 +2103,8 @@
     {
       "name": "screen-graph",
       "fileCount": 7,
-      "byteLength": 813210,
-      "sha256": "3a549c93cfc63979c3cb369a6abd4d070c01e9ca48dc007037c6bbeb7bc60785",
+      "byteLength": 798355,
+      "sha256": "678bd878d027dd425ccf620ba3d799efbb161b269d0c788b8d63fc0291a53dff",
       "files": [
         "contracts/fixtures/route.fixtures.json",
         "contracts/fixtures/view-state.fixtures.json",
@@ -2082,8 +2118,8 @@
     {
       "name": "ui-spec",
       "fileCount": 6,
-      "byteLength": 741731,
-      "sha256": "d551749161e642f939582a14d76d1cccf9a0ff9da5f96ce49aa1ce6d1ab6fd76",
+      "byteLength": 720917,
+      "sha256": "51c28b611def4687d3c2f09e5bf45fd4a63dbdc5be9fab9525e9fe88e0a1c24b",
       "files": [
         "ui-spec/component-render-semantics.json",
         "ui-spec/host-consumers.json",
@@ -2108,9 +2144,9 @@
       "name": "component-types",
       "source": "contracts/view-state.schema.json",
       "jsonPointer": "/$defs/Component/properties/type/enum",
-      "entryCount": 174,
+      "entryCount": 177,
       "encoding": "ordered-json-array-utf8-lf",
-      "sha256": "19cf03771aa766f83667240a4ae5d7f7347648b6c1d7c185aec17a36b7522694"
+      "sha256": "c7498bbb0515cb9a5fb460b8496b8d46331536caf8cbb3ad87b1fe8c7762984f"
     },
     {
       "name": "core-commands",
