@@ -1,0 +1,120 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "reader.reading-surface",
+  "recordIds": [
+    "reader.reading-surface"
+  ],
+  "status": "B2_SOURCE_CONVERSION_COMPLETE",
+  "writtenAt": "2026-07-27T07:01:32Z",
+  "figma": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1023:17636",
+    "canonicalMasterId": "1023:18354",
+    "viewportNodes": {
+      "phone": "1023:18355",
+      "tablet": "1023:18371"
+    },
+    "registeredRevision": "2379851596474967636",
+    "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "liveReadReceipt": "docs/PLANNING/READER_READING_SURFACE_FIGMA_FREEZE.json",
+    "numericCurrentRevision": null,
+    "numericRevisionPolicy": "The connected Figma session resolved the live master and both variants but did not expose a REST numeric current version. This packet retains the registered official revision as historical evidence and never presents it as a new live REST read."
+  },
+  "canonicalGeometry": {
+    "phone": {
+      "outer": "390x844",
+      "paperLayer": {
+        "inset": "0.56px",
+        "size": "388.889x842.882"
+      },
+      "readingContent": {
+        "outerBounds": "left 32.56px, top 72.56px, right 32.544px, bottom 48.549px",
+        "size": "324.896x722.891"
+      }
+    },
+    "tablet": {
+      "outer": "760x960",
+      "paperLayer": {
+        "inset": "0.56px",
+        "size": "758.889x958.889"
+      },
+      "readingContent": {
+        "outerBounds": "left 45px, top 93px, right 45px, bottom 57px",
+        "size": "670x810"
+      }
+    },
+    "typography": {
+      "title": "Noto Serif SC Bold, 23px/28.75px, centered",
+      "titleToBodyGap": "18px",
+      "body": "Noto Serif SC Regular, 18px/35.28px, #2B241D, first-line indent 36px"
+    },
+    "paper": {
+      "asset": "frontend-demo-optimized/assets/figma/reader-paper-layer.png",
+      "sha256": "bfa7f242279d457b7707a7de9116047438c6fb2d437ac143125e8b35c7987a7a",
+      "gradient": "#FBF4E9 → #EFE2D0"
+    }
+  },
+  "sourceConversion": {
+    "implementationCommit": "fefc2dad7e010caf4cc87ff33599b165089308d0",
+    "implementationCommitSubject": "feat(reader-ui): bind reading surface to canonical Figma master",
+    "localTargets": [
+      "frontend-demo-optimized/render-runtime.js#sharedReaderSurface",
+      "frontend-demo-optimized/styles/01-shell-layout.css#reader-reading-surface",
+      "frontend-demo-optimized/styles/03c-reader-viewport.css#reader-reading-surface"
+    ],
+    "changes": [
+      "Replaced synthetic paper noise with the source-exact Figma ReadingPaper asset and its Phone/Tablet gradient and vignette layers.",
+      "Bound default chapter text to the Figma master without locally inferred annotation decoration.",
+      "Corrected Phone and Tablet ReadingContent geometry from the live Figma variants; page-space controls now apply only relative deltas from those defaults.",
+      "Added Figma node trace attributes and a source-bound regression test."
+    ],
+    "notChanged": [
+      "No Figma visual, component, Auto Layout, reaction, or instance structure was changed by this B2 source conversion.",
+      "No HarmonyOS renderer, device, emulator, Core, or release-lock file was changed.",
+      "No sibling Reader control overlay is included in this record."
+    ]
+  },
+  "verification": {
+    "figmaSourceContract": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "file": "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs"
+    },
+    "focusedReaderRegression": {
+      "tests": 58,
+      "passed": 58,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs",
+        "frontend-demo-optimized/verify/r3a-reader-runtime-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-reader-runtime-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-reader-runtime-aria-focus.test.mjs",
+        "frontend-demo-optimized/verify/reader-control-continuity.test.mjs",
+        "frontend-demo-optimized/verify/reader-appearance-atoms.test.mjs",
+        "frontend-demo-optimized/verify/reader-pagination-runtime.test.mjs"
+      ]
+    },
+    "frontendRegression": {
+      "tests": 643,
+      "passed": 643,
+      "failed": 0,
+      "command": "git ls-files 'frontend-demo-optimized/verify/*.test.mjs' | xargs node --test"
+    },
+    "promotionGate": {
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "command": "node --test tools/design/promote-family.test.mjs"
+    }
+  },
+  "boundary": {
+    "localStatusBeforeB3": "candidate-backport",
+    "harmonyStatus": "candidate-backport",
+    "promotionExecuted": false,
+    "deviceOrEmulatorExecuted": false,
+    "noLocalApproximation": true,
+    "noDetachedFrameOrScreenshot": true
+  }
+}

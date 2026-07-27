@@ -46,7 +46,7 @@ function makeSandbox() {
   const hostRoot = path.join(tmpDir, 'Reader-for-HarmonyOS');
 
   // Copy the essential Reader-UI files
-  fs.mkdirSync(path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'generated', 'arkts'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'tools', 'design'), { recursive: true });
 
@@ -55,7 +55,7 @@ function makeSandbox() {
   // LOCAL_READY_FOR_FIGMA.json). Without this, the hash would be null and
   // sourceEvidenceHash verification would be skipped.
   fs.writeFileSync(
-    path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'design-delta.md'),
+    path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'design-delta.md'),
     '# Reader Runtime Design Delta\n\nTest design delta for sandbox.\n',
   );
 
@@ -108,7 +108,10 @@ function writeLedger(readerUiRoot, entries = []) {
 }
 
 function writeLocalReady(readerUiRoot, recordId, family, ready = true, options = {}) {
-  const localReadyPath = path.join(readerUiRoot, 'docs', 'design', 'handoffs', family, 'LOCAL_READY_FOR_FIGMA.json');
+  const handoffFamily = recordId === 'reader.reading-surface'
+    ? path.join(family, 'reading-surface')
+    : family;
+  const localReadyPath = path.join(readerUiRoot, 'docs', 'design', 'handoffs', handoffFamily, 'LOCAL_READY_FOR_FIGMA.json');
   const handoffDir = path.dirname(localReadyPath);
 
   // Compute sourceEvidenceHash from the handoff directory (excluding LOCAL_READY_FOR_FIGMA.json)
@@ -148,7 +151,7 @@ function writeLocalReady(readerUiRoot, recordId, family, ready = true, options =
     kind: 'LOCAL_READY_FOR_FIGMA',
     stage: 'implementation-ready',
     status: 'implementation-ready',
-    admission: { localReadyForFigma: ready },
+    admission: { localReadyForFigma: ready, recordIds: [recordId] },
     localSource: {
       implementationCommit: implCommit,
     },
@@ -381,12 +384,12 @@ test('promote refuses when sourceEvidenceHash is missing (anti-bypass)', () => {
     writeLedger(sandbox.readerUiRoot, []);
 
     // Write LOCAL_READY_FOR_FIGMA.json WITHOUT sourceEvidenceHash
-    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'LOCAL_READY_FOR_FIGMA.json');
+    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'LOCAL_READY_FOR_FIGMA.json');
     fs.writeFileSync(localReadyPath, JSON.stringify({
       kind: 'LOCAL_READY_FOR_FIGMA',
       stage: 'implementation-ready',
       status: 'implementation-ready',
-      admission: { localReadyForFigma: true },
+      admission: { localReadyForFigma: true, recordIds: ['reader.reading-surface'] },
       localSource: { implementationCommit: commitSha },
       verification: { focusedR3a: { tests: 28, passed: 28, failed: 0 } },
       // sourceEvidenceHash intentionally missing
@@ -420,12 +423,12 @@ test('promote refuses when sourceEvidenceHash does not match handoff dir (anti-b
     writeLedger(sandbox.readerUiRoot, []);
 
     // Write LOCAL_READY_FOR_FIGMA.json with a WRONG sourceEvidenceHash
-    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'LOCAL_READY_FOR_FIGMA.json');
+    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'LOCAL_READY_FOR_FIGMA.json');
     fs.writeFileSync(localReadyPath, JSON.stringify({
       kind: 'LOCAL_READY_FOR_FIGMA',
       stage: 'implementation-ready',
       status: 'implementation-ready',
-      admission: { localReadyForFigma: true },
+      admission: { localReadyForFigma: true, recordIds: ['reader.reading-surface'] },
       localSource: { implementationCommit: commitSha },
       verification: { focusedR3a: { tests: 28, passed: 28, failed: 0 } },
       sourceEvidenceHash: 'sha256:fabricated-hash-that-does-not-match',
@@ -443,6 +446,38 @@ test('promote refuses when sourceEvidenceHash does not match handoff dir (anti-b
     );
 
     assert.deepEqual(before.registry, after.registry, 'registry should not have changed');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('promote refuses a reader handoff that names a sibling record (anti-bypass)', () => {
+  const sandbox = makeSandbox();
+  try {
+    const commitSha = initSandboxGit(sandbox.readerUiRoot);
+    assert.ok(commitSha, 'failed to init sandbox git repo');
+
+    const record = makeRecord('reader.reading-surface', { localStatus: 'implementation-ready' });
+    writeRegistry(sandbox.readerUiRoot, [record]);
+    writeLedger(sandbox.readerUiRoot, []);
+    const localReadyPath = writeLocalReady(
+      sandbox.readerUiRoot,
+      'reader.reading-surface',
+      'reader-runtime',
+      true,
+      { implementationCommit: commitSha },
+    );
+    const localReady = JSON.parse(fs.readFileSync(localReadyPath, 'utf8'));
+    localReady.admission.recordIds = ['reader.control-home'];
+    fs.writeFileSync(localReadyPath, JSON.stringify(localReady, null, 2) + '\n');
+
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    assert.notEqual(result.status, 0, 'promote should have failed');
+    assert.match(result.stderr?.toString() || '', /admission\.recordIds.*reader\.reading-surface/);
+    assert.deepEqual(before.registry, after.registry, 'registry should not change when a sibling record is named');
   } finally {
     cleanupSandbox(sandbox);
   }

@@ -64,6 +64,10 @@ const consumerArtifactPath = path.join(
 // `webdav-config`, `settings.*` maps to `settings-general`. String-prefix
 // guessing made it impossible to promote any record in those families.
 const RECORD_ID_TO_HANDOFF = {
+  // Reader is delivered surface-by-surface. The reading canvas cannot share
+  // the historical reader-runtime packet with control overlays: doing so
+  // would let evidence for this completed surface promote a sibling record.
+  'reader.reading-surface': 'reader-runtime/reading-surface',
   'bookshelf': 'bookshelf',
   'book-detail': 'book-detail',
   'source-switch': 'source-switch',
@@ -83,7 +87,7 @@ const RECORD_ID_TO_HANDOFF = {
 function handoffDirForRecordId(recordId) {
   const dot = recordId.indexOf('.');
   const family = dot > 0 ? recordId.slice(0, dot) : recordId;
-  const dir = RECORD_ID_TO_HANDOFF[family];
+  const dir = RECORD_ID_TO_HANDOFF[recordId] || RECORD_ID_TO_HANDOFF[family];
   if (!dir) {
     fail(`record ${recordId}: no explicit handoff mapping for family '${family}'. Add it to RECORD_ID_TO_HANDOFF in promote-family.mjs.`);
   }
@@ -217,6 +221,14 @@ function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
         }
       }
     }
+  }
+
+  // A readiness packet is evidence for the named record only. Family-wide
+  // handoff reuse was a bypass: a completed reading surface could otherwise
+  // be used to promote an unfinished Reader overlay sharing the same prefix.
+  const declaredRecordIds = localReady.admission?.recordIds;
+  if (!Array.isArray(declaredRecordIds) || !declaredRecordIds.includes(recordId)) {
+    errors.push(`admission.recordIds must include '${recordId}' — a handoff packet cannot authorize a sibling record by family prefix alone`);
   }
 
   // Check 2: localSource.implementationCommit must be a real git commit

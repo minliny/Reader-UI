@@ -1,0 +1,100 @@
+{
+  "schemaVersion": "1.3.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Reader Reading Surface",
+  "pageFamily": "reader-runtime/reading-surface",
+  "recordIds": [
+    "reader.reading-surface"
+  ],
+  "stage": "implementation-ready",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-27T07:01:32Z",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "main",
+    "implementationCommit": "fefc2dad7e010caf4cc87ff33599b165089308d0",
+    "implementationCommitSubject": "feat(reader-ui): bind reading surface to canonical Figma master",
+    "localReadyForFigma": true
+  },
+  "figma": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1023:17636",
+    "canonicalMasterId": "1023:18354",
+    "nodeId": "1023:18354",
+    "viewportNodes": {
+      "phone": "1023:18355",
+      "tablet": "1023:18371"
+    },
+    "registeredRevision": "2379851596474967636",
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "liveReadReceipt": "docs/PLANNING/READER_READING_SURFACE_FIGMA_FREEZE.json",
+    "freezeDecision": "frozen-live-source-numeric-revision-unavailable",
+    "noFabricatedRevision": true
+  },
+  "viewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactProhibited": true,
+    "foldProhibited": true,
+    "independentLandscapeProhibited": true
+  },
+  "sourceContract": {
+    "staticAuthority": "Reader/Responsive/ReadingSurface (1023:18354) and its Phone/TabletExpanded component variants are the sole visual source.",
+    "contentAuthority": "Reader/Content/ChapterPage remains a local paginator manifest input; viewport variants must not hand-edit or truncate body text.",
+    "overlayRule": "Control layers may overlay the reading surface but cannot alter ReadingContent bounds or body input.",
+    "fontMapping": "Songti SC design intent is mapped to the Figma-specified Noto Serif SC styles used by the canonical master."
+  },
+  "verification": {
+    "figmaSourceContract": {
+      "tests": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "focusedReaderRegression": {
+      "tests": 58,
+      "passed": 58,
+      "failed": 0
+    },
+    "frontendRegression": {
+      "tests": 643,
+      "passed": 643,
+      "failed": 0
+    },
+    "promotionGate": {
+      "tests": 23,
+      "passed": 23,
+      "failed": 0
+    },
+    "generator": {
+      "command": "node tools/design/generate-visual-admission-contract.mjs --check",
+      "status": "current-before-source-self-promotion"
+    }
+  },
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "recordIds": [
+      "reader.reading-surface"
+    ],
+    "exactLocalCommit": "fefc2dad7e010caf4cc87ff33599b165089308d0",
+    "sourceStatus": "implementation-ready",
+    "harmonyStatusBeforePromotion": "candidate-backport",
+    "promotionRequired": true
+  },
+  "sourceEvidenceHash": "sha256:0c4aebdf8871625b8e30510f10727798dfead15ee7e49246accbf1c422fcd87d",
+  "artifacts": [
+    "FIGMA_DESIGN_DELTA.json",
+    "docs/PLANNING/READER_READING_SURFACE_FIGMA_FREEZE.json",
+    "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs"
+  ],
+  "boundaries": {
+    "figmaVisualOrStructuralMutation": false,
+    "harmonyOSMutation": false,
+    "deviceOrEmulatorExecuted": false,
+    "otherReaderRecordsClaimedReady": false,
+    "noDetachedFrameOrScreenshot": true
+  }
+}
