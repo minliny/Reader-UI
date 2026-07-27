@@ -1,0 +1,406 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE",
+  "status": "LIVE_PLUGIN_EXPORT_CAPTURED_REST_RECONFIRMATION_PENDING",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+  "capture": {
+    "observedOn": "2026-07-26",
+    "source": "figma-plugin-api-through-codex",
+    "api": "node.exportAsync",
+    "format": "SVG_STRING",
+    "readOnlyFigma": true,
+    "figmaWrites": false,
+    "pluginNodeRevision": null,
+    "localBytesMatchedReturnedExport": true,
+    "note": "Assets re-exported read-only from current Figma nodes on 2026-07-26; hashes below are the exact current SVG_STRING bytes."
+  },
+  "rules": [
+    "Every export uses the exact leaf/context node recorded by the revision-pinned export plan.",
+    "The Figma Plugin API does not expose a file revision; the recorded REST revision identifies the source plan and must be reconfirmed before delivery is frozen.",
+    "Screenshots and parent-frame exports are not asset evidence."
+  ],
+  "summary": {
+    "semanticCount": 21,
+    "exportCount": 25,
+    "revision": "2379851596474967636"
+  },
+  "exports": [
+    {
+      "semantic": "back",
+      "state": "default",
+      "canonicalMasterNodeId": "271:37",
+      "exportNodeId": "1023:18383",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_top_back",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_top_back.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "fc2e95e80c2f8eea0349e4720494136a9f76238baa9f5f2f55d489d28a4414cf",
+      "bytes": 646
+    },
+    {
+      "semantic": "source-switch",
+      "state": "default",
+      "canonicalMasterNodeId": "271:532",
+      "exportNodeId": "1023:18389",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_top_source_switch",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_top_source_switch.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "79eff77ff9e3c90376fc193c87e9ab77980348eb1c52bbfe80115ccb0c09d2a7",
+      "bytes": 789
+    },
+    {
+      "semantic": "more",
+      "state": "default",
+      "canonicalMasterNodeId": "271:333",
+      "exportNodeId": "1023:18391",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_top_more",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_top_more.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "20570ce797b402cfdd0841666c8c3741a44af1f05a8065574a7401259678ef63",
+      "bytes": 1730
+    },
+    {
+      "semantic": "search",
+      "state": "default",
+      "canonicalMasterNodeId": "271:430",
+      "exportNodeId": "1023:18416",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_quick_search",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_quick_search.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "08c104f7539b29457865694cb34f65a753ec9204e7e1502f0e701b45470aa995",
+      "bytes": 1240
+    },
+    {
+      "semantic": "auto-page",
+      "state": "default",
+      "canonicalMasterNodeId": "271:418",
+      "exportNodeId": "1023:18419",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_quick_auto_page",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_quick_auto_page.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "cbf3ad73994665d030a8e0b8098495278bb7fb3754c02627cf94000d6ad084c3",
+      "bytes": 567
+    },
+    {
+      "semantic": "replace",
+      "state": "default",
+      "canonicalMasterNodeId": "271:424",
+      "exportNodeId": "1023:18422",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_quick_replace",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_quick_replace.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "dab7a317a5701b370fed340ac15203d7b90450b24043e412e00f15af1811b6ba",
+      "bytes": 1839
+    },
+    {
+      "semantic": "sun",
+      "state": "default",
+      "canonicalMasterNodeId": "271:555",
+      "exportNodeId": "1023:18607",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_brightness_sun",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_brightness_sun.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "da01545fd0d46db1283a364ccbee4c53f522de40552808881ace1898c804b764",
+      "bytes": 1014
+    },
+    {
+      "semantic": "chapter-prev",
+      "state": "default",
+      "canonicalMasterNodeId": "271:124",
+      "exportNodeId": "1023:18444",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_chapter_prev",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_chapter_prev.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "a0df3cb0e71ce6970b5150ef540f8ee546fd8e99d24b7f002623bc0ace00b32e",
+      "bytes": 373
+    },
+    {
+      "semantic": "chapter-next",
+      "state": "default",
+      "canonicalMasterNodeId": "362:15",
+      "exportNodeId": "1023:18446",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_chapter_next",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_chapter_next.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "df73c49c8e50bcf416528b396fd4331893527ccebbab6e4b33c7f41d03eb5e75",
+      "bytes": 372
+    },
+    {
+      "semantic": "directory",
+      "state": "default",
+      "canonicalMasterNodeId": "271:436",
+      "exportNodeId": "1023:17679",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_directory_default",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_directory_default.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "f018a586fdeee7f7223284e0bdfc8e0a9c620f5cdc1a7099d0a7487306d4a7e7",
+      "bytes": 999
+    },
+    {
+      "semantic": "directory",
+      "state": "active",
+      "canonicalMasterNodeId": "271:436",
+      "exportNodeId": "1023:17695",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_directory_active",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_directory_active.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "0302a3ec5d09704f3ae22a77fec0bc33ad2d23f2408d0512df57c26754975bc1",
+      "bytes": 1131
+    },
+    {
+      "semantic": "tts-module",
+      "state": "default",
+      "canonicalMasterNodeId": "271:442",
+      "exportNodeId": "1023:17683",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_tts_default",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_tts_default.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "17e01ba067f64e05d8b91f5113f2ea71de12ff7f6a606ce7148937ff377db5a9",
+      "bytes": 1641
+    },
+    {
+      "semantic": "tts-module",
+      "state": "active",
+      "canonicalMasterNodeId": "271:442",
+      "exportNodeId": "1023:17699",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_tts_active",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_tts_active.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "a57b25aa8a3f30425162dc220c8ee611a9150e105cdbcef139972fbfee731cfe",
+      "bytes": 1707
+    },
+    {
+      "semantic": "appearance",
+      "state": "default",
+      "canonicalMasterNodeId": "271:448",
+      "exportNodeId": "1023:17687",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_appearance_default",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_appearance_default.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "fcaa816090572a62c58af88f5f4142b5cc6e79dc86f777930495f4ad63e8a5da",
+      "bytes": 2573
+    },
+    {
+      "semantic": "appearance",
+      "state": "active",
+      "canonicalMasterNodeId": "271:448",
+      "exportNodeId": "1023:17703",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_appearance_active",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_appearance_active.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "eaddf120e3b5fa5077b9b8f461f33ad0e9f3a0f85df9b4efbda8ff799e4c650e",
+      "bytes": 2661
+    },
+    {
+      "semantic": "settings",
+      "state": "default",
+      "canonicalMasterNodeId": "271:454",
+      "exportNodeId": "1023:17691",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_settings_default",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_settings_default.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "b762bdd29e5422960cdddf4624fbcdddcf2db94969e6a22df2760175e6603113",
+      "bytes": 2634
+    },
+    {
+      "semantic": "settings",
+      "state": "active",
+      "canonicalMasterNodeId": "271:454",
+      "exportNodeId": "1023:17707",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_module_settings_active",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_module_settings_active.svg",
+      "expectedSize": {
+        "width": 24,
+        "height": 24
+      },
+      "sha256": "2ea0ad0ea1c75e9a0393eb301a3780edcc9bcddfb61fe25ce9ebc7e63c729f7d",
+      "bytes": 2678
+    },
+    {
+      "semantic": "tts-playback",
+      "state": "default",
+      "canonicalMasterNodeId": "271:597",
+      "exportNodeId": "271:597",
+      "exportNodeRole": "canonical-icon-master",
+      "resource": "reader_control_tts_playback",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_tts_playback.svg",
+      "expectedSize": {
+        "width": 48,
+        "height": 48
+      },
+      "sha256": "91e9b3d756f745bdeaa0b7a79883d058e33453530a538982a3641fa89fb0a994",
+      "bytes": 1334
+    },
+    {
+      "semantic": "tts-clock",
+      "state": "default",
+      "canonicalMasterNodeId": "271:136",
+      "exportNodeId": "1023:17796",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_tts_clock",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_tts_clock.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "888b4bc24ec9e514bbbf8f3eccd82976ce641e6f55cb2a822edcc6208f055604",
+      "bytes": 1005
+    },
+    {
+      "semantic": "tts-speed",
+      "state": "default",
+      "canonicalMasterNodeId": "271:340",
+      "exportNodeId": "1023:17800",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_tts_speed",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_tts_speed.svg",
+      "expectedSize": {
+        "width": 20,
+        "height": 20
+      },
+      "sha256": "4d342126b812207b12ef4b4027ce015578eb5d6e56b34f84561f1a2bc3b86111",
+      "bytes": 660
+    },
+    {
+      "semantic": "tts-prev",
+      "state": "default",
+      "canonicalMasterNodeId": "271:124",
+      "exportNodeId": "1023:17805",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_compact_prev",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_compact_prev.svg",
+      "expectedSize": {
+        "width": 16,
+        "height": 16
+      },
+      "sha256": "1d9a2174b31de3b79b4bb382f378231d9c7e62492ed7c10289f0e837d176e748",
+      "bytes": 366
+    },
+    {
+      "semantic": "play",
+      "state": "default",
+      "canonicalMasterNodeId": "271:392",
+      "exportNodeId": "1023:17809",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_play",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_play.svg",
+      "expectedSize": {
+        "width": 21,
+        "height": 21
+      },
+      "sha256": "29845d222e33d31fef9f79079a6f3cb93356d73864424891e4edb6c4ecc34e47",
+      "bytes": 387
+    },
+    {
+      "semantic": "tts-stop",
+      "state": "default",
+      "canonicalMasterNodeId": "271:542",
+      "exportNodeId": "1023:17810",
+      "exportNodeRole": "canonical-icon-composite",
+      "resource": "reader_control_tts_stop",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_tts_stop.svg",
+      "expectedSize": {
+        "width": 44,
+        "height": 44
+      },
+      "sha256": "f99297b4ded39e7f249a07d8da29337b3cf252b3341a98ec941a893b62184da4",
+      "bytes": 921
+    },
+    {
+      "semantic": "tts-next",
+      "state": "default",
+      "canonicalMasterNodeId": "362:15",
+      "exportNodeId": "1023:17816",
+      "exportNodeRole": "leaf-icon-instance",
+      "resource": "reader_control_compact_next",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_compact_next.svg",
+      "expectedSize": {
+        "width": 16,
+        "height": 16
+      },
+      "sha256": "2c4f20ced28652e55c68be3f47c9d8c37275d56c44665e81cac0ecfa1c12329a",
+      "bytes": 365
+    },
+    {
+      "semantic": "tts-caret-down",
+      "state": "default",
+      "canonicalMasterNodeId": "750:1055",
+      "exportNodeId": "750:1055",
+      "exportNodeRole": "leaf-vector",
+      "resource": "reader_control_tts_caret_down",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/reader_control_tts_caret_down.svg",
+      "expectedSize": {
+        "width": 7,
+        "height": 4
+      },
+      "sha256": "0570f717c02f1ea135d3682291f5fa80509a6437992cf3370d22236a9e3356db",
+      "bytes": 172
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_SEARCH_RESULT_COVER_ADAPTATION_EVIDENCE",
+  "status": "CURRENT_FIGMA_SOURCE_READ_ONLY",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "recordId": "search.five-state",
+  "source": {
+    "nodeId": "2635:58863",
+    "name": "Container",
+    "format": "SVG",
+    "exportBytes": 12117,
+    "exportSha256": "7f5722e6909ba06c9598b5e092350a62d885a69291227b7bab12a7c86ff304a1",
+    "gradient": {
+      "x1": 12.6795,
+      "y1": 0.00000094847,
+      "x2": 65.8468,
+      "y2": 67.3819,
+      "start": "#FF3D5A4C",
+      "end": "#FF1F3528"
+    },
+    "capture": {
+      "observedOn": "2026-07-26",
+      "source": "figma-plugin-api-through-codex",
+      "api": "figma_download_assets",
+      "readOnlyFigma": true,
+      "figmaWrites": false,
+      "screenshotsUsed": false
+    }
+  },
+  "adaptation": {
+    "reason": "The Figma export contains a static sample book title. HarmonyOS projects the actual title from Core, so only the exact Figma cover path and gradient are retained as the missing-cover background.",
+    "removedFromSourceExport": [
+      "static sample title outline",
+      "off-canvas parent/page wrappers"
+    ]
+  },
+  "localAsset": {
+    "resource": "figma_search_result_cover_placeholder",
+    "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/figma_search_result_cover_placeholder.svg",
+    "sha256": "f93241b58be23890f17a968842b76d053c51b74cb6bcb1984ac7c91438a0baeb",
+    "bytes": 527,
+    "expectedSize": {
+      "width": 60,
+      "height": 82
+    }
+  }
+}

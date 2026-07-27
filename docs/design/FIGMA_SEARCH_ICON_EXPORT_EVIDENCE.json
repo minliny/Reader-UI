@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_SEARCH_ICON_EXPORT_EVIDENCE",
+  "status": "LIVE_PLUGIN_EXPORT_CAPTURED_REST_RECONFIRMATION_PENDING",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "canonicalMasterNodeId": "2635:59600",
+  "viewportNodeId": "2635:58749",
+  "capture": {
+    "observedOn": "2026-07-26",
+    "source": "figma-plugin-api-through-codex",
+    "api": "node.exportAsync",
+    "format": "SVG_STRING",
+    "readOnlyFigma": true,
+    "figmaWrites": false,
+    "screenshotsUsed": false,
+    "note": "Leaf icon resources were exported from the current Figma Search Phone component only; no page or parent export was used."
+  },
+  "exports": [
+    {
+      "resource": "search_page_back",
+      "exportNodeId": "2635:58716",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/search_page_back.svg",
+      "sha256": "b7dd372926030fb8ee156decf8cb6720097c34f91c904a655972d2979af50820",
+      "bytes": 221,
+      "expectedSize": { "width": 20, "height": 20 }
+    },
+    {
+      "resource": "search_page_magnifier",
+      "exportNodeId": "2635:58719",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/search_page_magnifier.svg",
+      "sha256": "4e2ccd4e08a4bfa7c80ca9a5d46cac990ec43d8ec6af2e062546aed7939389fc",
+      "bytes": 380,
+      "expectedSize": { "width": 14, "height": 14 }
+    },
+    {
+      "resource": "search_page_clear",
+      "exportNodeId": "2635:58747",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/search_page_clear.svg",
+      "sha256": "4dea71e11648c52971e5f46bab40d1ff734745b6d6213a56705eba756ec4ab11",
+      "bytes": 343,
+      "expectedSize": { "width": 12, "height": 12 }
+    }
+  ]
+}

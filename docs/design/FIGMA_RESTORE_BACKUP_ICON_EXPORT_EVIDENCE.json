@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_RESTORE_BACKUP_ICON_EXPORT_EVIDENCE",
+  "status": "LIVE_PLUGIN_EXPORT_CAPTURED_REST_RECONFIRMATION_PENDING",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "canonicalMasterNodeId": "2834:32133",
+  "capture": {
+    "observedOn": "2026-07-26",
+    "source": "figma-plugin-api-through-codex",
+    "api": "node.exportAsync",
+    "format": "SVG_STRING",
+    "readOnlyFigma": true,
+    "figmaWrites": false,
+    "screenshotsUsed": false,
+    "note": "Leaf icons were exported from the current Restore Backup Loading and Complete states; the live Core transaction remains the behavior owner. The hashes identify this capture's returned SVG bytes; Figma may allocate different XML clip IDs on a later identical vector export."
+  },
+  "exports": [
+    {
+      "resource": "restore_backup_refresh",
+      "exportNodeId": "I2564:36735;370:3;413:96",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/restore_backup_refresh.svg",
+      "sha256": "5db24a619318308cd8212a5c8e02d1201abf0242f204216310b171572156f896",
+      "bytes": 961,
+      "expectedSize": { "width": 28, "height": 28 }
+    },
+    {
+      "resource": "restore_backup_check",
+      "exportNodeId": "I2564:36746;286:220;411:813",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/restore_backup_check.svg",
+      "sha256": "5b4e4e62647495104f59ddc262b7b96bebaeab4b625c9c6a53ed21d4a1510c77",
+      "bytes": 397,
+      "expectedSize": { "width": 48, "height": 48 }
+    }
+  ]
+}
