@@ -2,19 +2,21 @@
   "schemaVersion": "1.1.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "source-switch",
-  "status": "F2_USER_CONFIRMED",
+  "status": "F0_LIVE_RECONCILED_HISTORICAL_F2_DELTA",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "pageId": "259:13",
-  "revision": "2378501297946752326",
-  "revisionTitle": "F2 · Source Switch · User Confirmed",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378501297946752326&node-id=942-37",
-  "localImplementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
-  "supersedes": {
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalRevision": "2378501297946752326",
+  "historicalRevisionTitle": "F2 · Source Switch · User Confirmed",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378501297946752326&node-id=942-37",
+  "historicalLocalImplementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+  "historicalSupersedes": {
     "revision": "2378464713948765297",
     "revisionTitle": "F2 · Source Switch · Local R3a Pilot",
     "reason": "The superseded pilot invented a confirmation footer and a component-page state matrix that are not product facts."
   },
-  "deltas": [
+  "historicalDeltas": [
     {
       "target": "SourceSwitch/Window",
       "nodeId": "568:134",
@@ -46,7 +48,7 @@
       "newValue": "Phone 390×844 and Tablet 760×960 inherit the corrected two-child Window. Landscape aliases Tablet; Compact/Fold absent; Page 23 instances remain attached."
     }
   ],
-  "screenshots": [
+  "historicalScreenshots": [
     {
       "path": "/tmp/source-switch-direct-phone.png",
       "size": "390x844",
@@ -58,7 +60,7 @@
       "sha256": "dc941b4ecad8f3b8177b998772be3640e794c4ac2e2ad6b0a34631cd688a9846"
     }
   ],
-  "verification": {
+  "historicalVerification": {
     "localFocusedTests": "39/39 pass",
     "fullRegression": "645/645 pass",
     "windowChildren": ["568:135", "568:154"],
@@ -71,18 +73,36 @@
     "downstreamTablet": { "instance": "943:15705", "main": "942:36" },
     "result": "PASS_USER_CONFIRMED"
   },
-  "boundaries": {
+  "historicalBoundaries": {
     "reader2StaticModified": false,
     "motionReferenceModified": false,
     "otherPageFamiliesModified": false,
     "rawManualFramesDeleted": false
   },
-  "admission": {
+  "historicalAdmission": {
     "connectorWriteTransactionComplete": true,
     "namedRevisionComplete": true,
     "userConfirmed": true,
     "f2Exit": true,
     "nextFigmaWriterReleased": true,
     "nextFigmaWriterGate": null
+  },
+  "currentReconciliation": {
+    "scope": "The current native implementation consumes the direct-select Figma Window. This is a reconciliation record, not a new Figma write or a revision-backed screenshot claim.",
+    "canonicalWindow": {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:13",
+      "nodeId": "568:134",
+      "revision": null,
+      "oldValue": "A native bottom QuickSourceSheet plus visible result/rollback state pages could still be reached from historical generated routes.",
+      "newValue": "SourceSwitchFlowPage renders the current 300x385 Window; an available candidate is the direct switch action and historical result/state-matrix routes display-fail-closed to Reader."
+    },
+    "nonFigmaBusinessFacts": {
+      "latency": "Core has no latency field; native shows neutral placeholder rather than a measured result.",
+      "candidateChapter": "Core has no candidate chapter field; native shows neutral placeholder.",
+      "localBook": "No source switch entry is admitted for a local book."
+    },
+    "motion": "No SourceSwitch F3 timeline, interrupt policy or reduced-motion contract has been read from the current Figma master, so no local window animation is claimed.",
+    "noForgedRevisionOrScreenshotEvidence": true
   }
 }

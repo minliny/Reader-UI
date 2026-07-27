@@ -1,57 +1,106 @@
 {
-  "schemaVersion": "1.1.0",
+  "schemaVersion": "1.2.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "bookshelf/local-import-popup",
-  "status": "F2_WRITER_COMPLETE_SOURCE_VISUAL_USER_CONFIRMED",
+  "status": "F2_WRITER_THREE_STATE_STATIC_BACKPORT_VALIDATED_USER_REVIEW_PENDING",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-  "lastReadableRevision": "2378562033612422730",
-  "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
-  "localImplementationCommit": "ac0553047bf66b8096b202dfe0788e43962c915b",
-  "handoffEvidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLastReadableRevision": "2378562033612422730",
+  "localCommit": null,
+  "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_DIRECTION",
+  "historicalLocalImplementationCommit": "ac0553047bf66b8096b202dfe0788e43962c915b",
   "designReference": "https://www.figma.com/make/uD7wNMW6vcQSmUFCkOors7/Design-Import-Popup-State?fullscreen=1&t=Eer0n0AoZMtLSxvD-1&code-node-id=0-9",
+  "revisionPolicy": "The historical readable version is provenance only. Every node in this current writer transaction remains revision=null until the connector exposes the official current revision.",
   "deltas": [
     {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2547:1597",
-      "oldValue": "Library/LocalImportDialog · Make Source was a user-confirmed editable source frame.",
-      "newValue": "The source frame is preserved unchanged; it remains the direct visual reference."
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "The user-provided Make frame was the visual reference.",
+      "newValue": "Library/LocalImportDialog · Make Source remains preserved unchanged; the canonical component is updated in place rather than replacing the source with a detached copy."
     },
     {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
       "nodeId": "2657:918",
-      "oldValue": "No canonical component set existed for the approved import popup source.",
-      "newValue": "Library/LocalImportDialog is a two-variant Component Set: File Selection and Import Result."
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "The earlier current evidence described only File Selection and Import Result, with processing embedded into the result treatment.",
+      "newValue": "Library/LocalImportDialog is an in-place three-variant Component Set: File Selection, Importing, and Import Result."
     },
     {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
-      "nodeId": "2657:921",
-      "oldValue": "No attached canonical evidence instance existed for file selection.",
-      "newValue": "An attached File Selection instance verifies inheritance from the canonical master."
+      "nodeId": "2657:916",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "File Selection copy and badges implied a broad local import flow.",
+      "newValue": "The entry now directs users to the system picker and names only TXT and EPUB as the current V1 format boundary."
     },
     {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
       "pageId": "259:10",
-      "nodeId": "2657:965",
-      "oldValue": "No attached canonical evidence instance existed for import result.",
-      "newValue": "An attached Import Result instance verifies inheritance from the canonical master."
+      "nodeId": "2899:58923",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "Processing appeared inside the result list.",
+      "newValue": "State=Importing is an independent 350×228 dialog with one 56px halo and 32px loading ring; it contains no filenames, rows, progress bar, or failure analysis."
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2657:917",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "Import Result included processing rows, retry, format/size detail, and failure reasoning.",
+      "newValue": "Import Result is a scrollable per-book terminal list with only success/failure labels plus one Complete close action; no retry control or explanation panel remains."
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2657:790",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "The button was documented as a Figma-owned direct file-result transition.",
+      "newValue": "Select Files opens the runtime-owned system picker. Review prototype transitions only describe File Selection → Importing; runtime owns picker result and import completion."
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2657:906",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable",
+      "oldValue": "The former result action coexisted with retry/error treatments.",
+      "newValue": "Complete closes the terminal result dialog. It neither retries files nor creates a separate import page."
     }
   ],
   "prototype": {
-    "fileSelection": "Select Files changes to Import Result with Smart Animate (0.25s).",
-    "completion": "Complete closes the popup.",
-    "runtimeBoundary": "The real system multi-file picker, import processing and success/failure data remain runtime-owned. Figma represents only the approved popup visual states and their state transition."
+    "fileSelectionToImporting": "2657:790 changes to 2899:58923 with Smart Animate at 0.15s for review only.",
+    "importingToResult": "2899:58923 advances to 2657:917 after a 1.0s review timeout with Dissolve at 0.15s. Production completion remains Core/Host-owned and never uses this timeout as business truth.",
+    "completion": "2657:906 closes the dialog.",
+    "runtimeBoundary": "System multi-file selection, actual per-file processing, durable import result, and stale/cancel handling remain outside Figma."
   },
   "visualAudit": {
     "sourcePreserved": true,
-    "canonicalVariantCount": 2,
-    "attachedInstanceCount": 2,
+    "canonicalVariantCount": 3,
+    "attachedInstanceCount": 3,
     "detachedCount": 0,
-    "deprecatedErrorPageNamedNodes": 0
+    "deprecatedErrorPageNamedNodes": 0,
+    "retryBindingCount": 0
   },
-  "boundary": "No locally invented import-error page, screenshot replacement, or additional dialog state was introduced. The user-provided Figma Make source remains visually authoritative.",
-  "vc3Backport": {
-    "status": "VC3_COMPLETE",
-    "implementationCommit": "ac0553047bf66b8096b202dfe0788e43962c915b",
-    "evidence": "VC3_LOCAL_PARITY.json"
+  "staticBackport": {
+    "web": "PASS — current local static verification reported by the implementation transaction; historical test counts are not reused as proof of this delta.",
+    "harmony": "PASS — current Harmony static verification reported by the implementation transaction; device evidence is intentionally absent.",
+    "deviceEvidence": "NOT_RUN_BY_USER_DIRECTION"
   },
-  "remainingGate": null
+  "boundary": "No full-page import route, import-error page, retry action, or screenshot replacement was introduced. This is a current node-ID-backed Figma delta with revision=null, not a frozen revision-backed F2 or F3 completion claim.",
+  "remainingGate": [
+    "current three-state user visual review",
+    "official current Figma revision unavailable from writer runtime",
+    "device evidence not run by user direction",
+    "F3 production motion contract remains separate"
+  ]
 }

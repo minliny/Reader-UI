@@ -12,9 +12,18 @@
   "historicalPilotRevision": "2378448207290564677",
   "historicalPilotRevisionTitle": "F2 · Book Detail · Final Crosswalk Pilot",
   "historicalEarlierPilotRevisions": [
-    { "revision": "2378445140684280442", "title": "F2 · Book Detail · Local R3a Pilot" },
-    { "revision": "2378453077810565878", "title": "F2 · Book Detail · Local R3a Pilot · Crosswalk Complete" },
-    { "revision": "2378448207290564677", "title": "F2 · Book Detail · Final Crosswalk Pilot" }
+    {
+      "revision": "2378445140684280442",
+      "title": "F2 · Book Detail · Local R3a Pilot"
+    },
+    {
+      "revision": "2378453077810565878",
+      "title": "F2 · Book Detail · Local R3a Pilot · Crosswalk Complete"
+    },
+    {
+      "revision": "2378448207290564677",
+      "title": "F2 · Book Detail · Final Crosswalk Pilot"
+    }
   ],
   "historicalRevisionRead": {
     "baselineRead": true,
@@ -37,84 +46,682 @@
     "policy": "Existing Songti SC text was preserved through untouched clones; no silent font substitution or text reflow was introduced."
   },
   "historicalCanonicalMasters": [
-    { "role": "page-set", "pageId": "834:3", "nodeId": "941:10", "nodeName": "Page/Book Detail", "revision": "2378451733465956551" },
-    { "role": "phone-master", "pageId": "834:3", "nodeId": "941:7", "nodeName": "Viewport=Phone", "revision": "2378451733465956551" },
-    { "role": "tablet-master", "pageId": "834:3", "nodeId": "941:9", "nodeName": "Viewport=Tablet", "revision": "2378451733465956551" },
-    { "role": "hero-set", "pageId": "834:3", "nodeId": "2260:1460", "nodeName": "Library/BookDetail/Hero", "revision": "2378451733465956551" },
-    { "role": "summary-set", "pageId": "834:3", "nodeId": "2265:14", "nodeName": "Library/BookDetail/Summary", "revision": "2378451733465956551" },
-    { "role": "chapter-section-set", "pageId": "834:3", "nodeId": "2265:121", "nodeName": "Library/BookDetail/ChapterSection", "revision": "2378451733465956551" },
-    { "role": "action-bar-set", "pageId": "834:3", "nodeId": "2265:188", "nodeName": "Library/BookDetail/ActionBar", "revision": "2378451733465956551" },
-    { "role": "quick-source-sheet-set", "pageId": "834:3", "nodeId": "2265:225", "nodeName": "Library/BookDetail/QuickSourceSheet", "revision": "2378451733465956551" },
-    { "role": "chapter-row-set", "pageId": "834:3", "nodeId": "2266:66", "nodeName": "Library/BookDetail/ChapterRow", "revision": "2378451733465956551" },
-    { "role": "delete-dialog-set", "pageId": "834:3", "nodeId": "2269:66", "nodeName": "Library/BookDetail/DeleteDialog", "revision": "2378451733465956551" },
-    { "role": "retry-status-set", "pageId": "834:3", "nodeId": "2269:101", "nodeName": "Library/BookDetail/RetryStatus", "revision": "2378451733465956551" },
-    { "role": "recovery-action-set", "pageId": "834:3", "nodeId": "2274:211", "nodeName": "Library/BookDetail/RecoveryAction", "revision": "2378451733465956551" }
+    {
+      "role": "page-set",
+      "pageId": "834:3",
+      "nodeId": "941:10",
+      "nodeName": "Page/Book Detail",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "phone-master",
+      "pageId": "834:3",
+      "nodeId": "941:7",
+      "nodeName": "Viewport=Phone",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "tablet-master",
+      "pageId": "834:3",
+      "nodeId": "941:9",
+      "nodeName": "Viewport=Tablet",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "hero-set",
+      "pageId": "834:3",
+      "nodeId": "2260:1460",
+      "nodeName": "Library/BookDetail/Hero",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "summary-set",
+      "pageId": "834:3",
+      "nodeId": "2265:14",
+      "nodeName": "Library/BookDetail/Summary",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "chapter-section-set",
+      "pageId": "834:3",
+      "nodeId": "2265:121",
+      "nodeName": "Library/BookDetail/ChapterSection",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "action-bar-set",
+      "pageId": "834:3",
+      "nodeId": "2265:188",
+      "nodeName": "Library/BookDetail/ActionBar",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "quick-source-sheet-set",
+      "pageId": "834:3",
+      "nodeId": "2265:225",
+      "nodeName": "Library/BookDetail/QuickSourceSheet",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "chapter-row-set",
+      "pageId": "834:3",
+      "nodeId": "2266:66",
+      "nodeName": "Library/BookDetail/ChapterRow",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "delete-dialog-set",
+      "pageId": "834:3",
+      "nodeId": "2269:66",
+      "nodeName": "Library/BookDetail/DeleteDialog",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "retry-status-set",
+      "pageId": "834:3",
+      "nodeId": "2269:101",
+      "nodeName": "Library/BookDetail/RetryStatus",
+      "revision": "2378451733465956551"
+    },
+    {
+      "role": "recovery-action-set",
+      "pageId": "834:3",
+      "nodeId": "2274:211",
+      "nodeName": "Library/BookDetail/RecoveryAction",
+      "revision": "2378451733465956551"
+    }
   ],
   "historicalDownstreamInstances": [
-    { "pageId": "834:2", "nodeId": "943:651", "mainComponentId": "941:7", "detached": false, "revision": "2378451733465956551" },
-    { "pageId": "834:2", "nodeId": "943:855", "mainComponentId": "941:9", "detached": false, "revision": "2378451733465956551" },
-    { "pageId": "834:2", "nodeId": "1995:56890", "mainComponentId": "941:7", "detached": false, "revision": "2378451733465956551" },
-    { "pageId": "834:2", "nodeId": "1995:57094", "mainComponentId": "941:9", "detached": false, "revision": "2378451733465956551" }
+    {
+      "pageId": "834:2",
+      "nodeId": "943:651",
+      "mainComponentId": "941:7",
+      "detached": false,
+      "revision": "2378451733465956551"
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "943:855",
+      "mainComponentId": "941:9",
+      "detached": false,
+      "revision": "2378451733465956551"
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "1995:56890",
+      "mainComponentId": "941:7",
+      "detached": false,
+      "revision": "2378451733465956551"
+    },
+    {
+      "pageId": "834:2",
+      "nodeId": "1995:57094",
+      "mainComponentId": "941:9",
+      "detached": false,
+      "revision": "2378451733465956551"
+    }
   ],
   "historicalBindings": [
-    { "route": "book-detail", "settingsKey": "back", "controlKey": "library.button.button.back@book-detail.default", "bindingKind": "responsive-master-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "860:28", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "chapter-30-old-day", "controlKey": "library.button.button.chapter-30-old-day@book-detail.default", "bindingKind": "canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:67", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "chapter-31-return", "controlKey": "library.button.button.chapter-31-return@book-detail.default", "bindingKind": "canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:71", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "chapter-32-rain-night", "controlKey": "library.button.button.chapter-32-rain-night@book-detail.default", "bindingKind": "canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:75", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "chapter-33-lighthouse", "controlKey": "library.button.button.chapter-33-lighthouse@book-detail.default", "bindingKind": "canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:79", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "continue-read", "controlKey": "library.button.button.continue-read@book-detail.default", "bindingKind": "canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:177", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "directory-open", "controlKey": "library.button.button.directory-open@book-detail.default", "bindingKind": "canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:71", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "network-retry", "controlKey": "library.button.button.network-retry@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:87", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "readd", "controlKey": "library.button.button.readd@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:177", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "remove-cancel", "controlKey": "library.button.button.remove-cancel@book-detail.default", "bindingKind": "canonical-dialog-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "I2269:39;286:238", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "remove-confirm", "controlKey": "library.button.button.remove-confirm@book-detail.default", "bindingKind": "canonical-dialog-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "I2269:39;286:240", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "remove-open", "controlKey": "library.button.button.remove-open@book-detail.default", "bindingKind": "canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:179", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "return-bookshelf", "controlKey": "library.button.button.return-bookshelf@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:195", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-debug", "controlKey": "library.button.button.source-debug@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:159", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-option-local-cache", "controlKey": "library.button.button.source-option-local-cache@book-detail.default", "bindingKind": "canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:208", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-option-shucang", "controlKey": "library.button.button.source-option-shucang@book-detail.default", "bindingKind": "canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:206", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-option-youshu", "controlKey": "library.button.button.source-option-youshu@book-detail.default", "bindingKind": "canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:204", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-sheet-close", "controlKey": "library.button.button.source-sheet-close@book-detail.default", "bindingKind": "canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:210", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-sheet-open", "controlKey": "library.button.button.source-sheet-open@book-detail.default", "bindingKind": "canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2260:1436", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-switch-bottom", "controlKey": "library.button.button.source-switch-bottom@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:141", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "source-switch-inline", "controlKey": "library.button.button.source-switch-inline@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:123", "revision": "2378451733465956551" },
-    { "route": "book-detail", "settingsKey": "toc-retry", "controlKey": "library.button.button.toc-retry@book-detail.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:105", "revision": "2378451733465956551" },
-
-    { "route": "book-detail-toc-preview", "settingsKey": "back", "controlKey": "library.button.button.back@book-detail-toc-preview.default", "bindingKind": "shared-responsive-master-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "860:28", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "chapter-30-old-day", "controlKey": "library.button.button.chapter-30-old-day@book-detail-toc-preview.default", "bindingKind": "shared-canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:67", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "chapter-31-return", "controlKey": "library.button.button.chapter-31-return@book-detail-toc-preview.default", "bindingKind": "shared-canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:71", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "chapter-32-rain-night", "controlKey": "library.button.button.chapter-32-rain-night@book-detail-toc-preview.default", "bindingKind": "shared-canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:75", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "chapter-33-lighthouse", "controlKey": "library.button.button.chapter-33-lighthouse@book-detail-toc-preview.default", "bindingKind": "shared-canonical-attached-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2266:79", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "continue-read", "controlKey": "library.button.button.continue-read@book-detail-toc-preview.default", "bindingKind": "shared-canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:177", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "directory-open", "controlKey": "library.button.button.directory-open@book-detail-toc-preview.default", "bindingKind": "shared-canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:71", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "network-retry", "controlKey": "library.button.button.network-retry@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:87", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "readd", "controlKey": "library.button.button.readd@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:177", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "remove-cancel", "controlKey": "library.button.button.remove-cancel@book-detail-toc-preview.default", "bindingKind": "shared-canonical-dialog-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "I2269:39;286:238", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "remove-confirm", "controlKey": "library.button.button.remove-confirm@book-detail-toc-preview.default", "bindingKind": "shared-canonical-dialog-instance-child", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "I2269:39;286:240", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "remove-open", "controlKey": "library.button.button.remove-open@book-detail-toc-preview.default", "bindingKind": "shared-canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:179", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "return-bookshelf", "controlKey": "library.button.button.return-bookshelf@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:195", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-debug", "controlKey": "library.button.button.source-debug@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:159", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-option-local-cache", "controlKey": "library.button.button.source-option-local-cache@book-detail-toc-preview.default", "bindingKind": "shared-canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:208", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-option-shucang", "controlKey": "library.button.button.source-option-shucang@book-detail-toc-preview.default", "bindingKind": "shared-canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:206", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-option-youshu", "controlKey": "library.button.button.source-option-youshu@book-detail-toc-preview.default", "bindingKind": "shared-canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:204", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-sheet-close", "controlKey": "library.button.button.source-sheet-close@book-detail-toc-preview.default", "bindingKind": "shared-canonical-sheet-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2265:210", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-sheet-open", "controlKey": "library.button.button.source-sheet-open@book-detail-toc-preview.default", "bindingKind": "shared-canonical-control", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2260:1436", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-switch-bottom", "controlKey": "library.button.button.source-switch-bottom@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:141", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "source-switch-inline", "controlKey": "library.button.button.source-switch-inline@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:123", "revision": "2378451733465956551" },
-    { "route": "book-detail-toc-preview", "settingsKey": "toc-retry", "controlKey": "library.button.button.toc-retry@book-detail-toc-preview.default", "bindingKind": "shared-canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:105", "revision": "2378451733465956551" },
-
-    { "route": "book-directory", "settingsKey": "back", "controlKey": "library.button.button.back@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:37", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-30-old-day", "controlKey": "library.button.button.chapter-30-old-day@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:137", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-31-return", "controlKey": "library.button.button.chapter-31-return@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:150", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-32-rain-night", "controlKey": "library.button.button.chapter-32-rain-night@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:163", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-33-lighthouse", "controlKey": "library.button.button.chapter-33-lighthouse@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:178", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-34-old-map", "controlKey": "library.button.button.chapter-34-old-map@book-directory.default", "bindingKind": "canonical-attached-evidence-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2275:85", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-35-night-walk", "controlKey": "library.button.button.chapter-35-night-walk@book-directory.default", "bindingKind": "canonical-attached-evidence-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2275:89", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "chapter-36-after-lighthouse", "controlKey": "library.button.button.chapter-36-after-lighthouse@book-directory.default", "bindingKind": "canonical-attached-evidence-instance", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2275:93", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "source-switch", "controlKey": "library.button.button.source-switch@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:50", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "toc-bookmark", "controlKey": "library.button.button.toc-bookmark@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:92", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "toc-directory", "controlKey": "library.button.button.toc-directory@book-directory.default", "bindingKind": "downstream-reader-full-directory", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "927:88", "revision": "2378451733465956551" },
-    { "route": "book-directory", "settingsKey": "toc-retry", "controlKey": "library.button.button.toc-retry@book-directory.default", "bindingKind": "canonical-state-variant", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "834:3", "nodeId": "2274:105", "revision": "2378451733465956551" }
+    {
+      "route": "book-detail",
+      "settingsKey": "back",
+      "controlKey": "library.button.button.back@book-detail.default",
+      "bindingKind": "responsive-master-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "860:28",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "chapter-30-old-day",
+      "controlKey": "library.button.button.chapter-30-old-day@book-detail.default",
+      "bindingKind": "canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:67",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "chapter-31-return",
+      "controlKey": "library.button.button.chapter-31-return@book-detail.default",
+      "bindingKind": "canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:71",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "chapter-32-rain-night",
+      "controlKey": "library.button.button.chapter-32-rain-night@book-detail.default",
+      "bindingKind": "canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:75",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "chapter-33-lighthouse",
+      "controlKey": "library.button.button.chapter-33-lighthouse@book-detail.default",
+      "bindingKind": "canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:79",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "continue-read",
+      "controlKey": "library.button.button.continue-read@book-detail.default",
+      "bindingKind": "canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:177",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "directory-open",
+      "controlKey": "library.button.button.directory-open@book-detail.default",
+      "bindingKind": "canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:71",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "network-retry",
+      "controlKey": "library.button.button.network-retry@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:87",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "readd",
+      "controlKey": "library.button.button.readd@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:177",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "remove-cancel",
+      "controlKey": "library.button.button.remove-cancel@book-detail.default",
+      "bindingKind": "canonical-dialog-instance-child",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "I2269:39;286:238",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "remove-confirm",
+      "controlKey": "library.button.button.remove-confirm@book-detail.default",
+      "bindingKind": "canonical-dialog-instance-child",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "I2269:39;286:240",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "remove-open",
+      "controlKey": "library.button.button.remove-open@book-detail.default",
+      "bindingKind": "canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:179",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "return-bookshelf",
+      "controlKey": "library.button.button.return-bookshelf@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:195",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-debug",
+      "controlKey": "library.button.button.source-debug@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:159",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-option-local-cache",
+      "controlKey": "library.button.button.source-option-local-cache@book-detail.default",
+      "bindingKind": "canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:208",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-option-shucang",
+      "controlKey": "library.button.button.source-option-shucang@book-detail.default",
+      "bindingKind": "canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:206",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-option-youshu",
+      "controlKey": "library.button.button.source-option-youshu@book-detail.default",
+      "bindingKind": "canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:204",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-sheet-close",
+      "controlKey": "library.button.button.source-sheet-close@book-detail.default",
+      "bindingKind": "canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:210",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-sheet-open",
+      "controlKey": "library.button.button.source-sheet-open@book-detail.default",
+      "bindingKind": "canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2260:1436",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-switch-bottom",
+      "controlKey": "library.button.button.source-switch-bottom@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:141",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "source-switch-inline",
+      "controlKey": "library.button.button.source-switch-inline@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:123",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail",
+      "settingsKey": "toc-retry",
+      "controlKey": "library.button.button.toc-retry@book-detail.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:105",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "back",
+      "controlKey": "library.button.button.back@book-detail-toc-preview.default",
+      "bindingKind": "shared-responsive-master-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "860:28",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "chapter-30-old-day",
+      "controlKey": "library.button.button.chapter-30-old-day@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:67",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "chapter-31-return",
+      "controlKey": "library.button.button.chapter-31-return@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:71",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "chapter-32-rain-night",
+      "controlKey": "library.button.button.chapter-32-rain-night@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:75",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "chapter-33-lighthouse",
+      "controlKey": "library.button.button.chapter-33-lighthouse@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-attached-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2266:79",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "continue-read",
+      "controlKey": "library.button.button.continue-read@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:177",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "directory-open",
+      "controlKey": "library.button.button.directory-open@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:71",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "network-retry",
+      "controlKey": "library.button.button.network-retry@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:87",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "readd",
+      "controlKey": "library.button.button.readd@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:177",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "remove-cancel",
+      "controlKey": "library.button.button.remove-cancel@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-dialog-instance-child",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "I2269:39;286:238",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "remove-confirm",
+      "controlKey": "library.button.button.remove-confirm@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-dialog-instance-child",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "I2269:39;286:240",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "remove-open",
+      "controlKey": "library.button.button.remove-open@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:179",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "return-bookshelf",
+      "controlKey": "library.button.button.return-bookshelf@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:195",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-debug",
+      "controlKey": "library.button.button.source-debug@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:159",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-option-local-cache",
+      "controlKey": "library.button.button.source-option-local-cache@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:208",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-option-shucang",
+      "controlKey": "library.button.button.source-option-shucang@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:206",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-option-youshu",
+      "controlKey": "library.button.button.source-option-youshu@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:204",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-sheet-close",
+      "controlKey": "library.button.button.source-sheet-close@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-sheet-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2265:210",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-sheet-open",
+      "controlKey": "library.button.button.source-sheet-open@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-control",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2260:1436",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-switch-bottom",
+      "controlKey": "library.button.button.source-switch-bottom@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:141",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "source-switch-inline",
+      "controlKey": "library.button.button.source-switch-inline@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:123",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-detail-toc-preview",
+      "settingsKey": "toc-retry",
+      "controlKey": "library.button.button.toc-retry@book-detail-toc-preview.default",
+      "bindingKind": "shared-canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:105",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "back",
+      "controlKey": "library.button.button.back@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:37",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-30-old-day",
+      "controlKey": "library.button.button.chapter-30-old-day@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:137",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-31-return",
+      "controlKey": "library.button.button.chapter-31-return@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:150",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-32-rain-night",
+      "controlKey": "library.button.button.chapter-32-rain-night@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:163",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-33-lighthouse",
+      "controlKey": "library.button.button.chapter-33-lighthouse@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:178",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-34-old-map",
+      "controlKey": "library.button.button.chapter-34-old-map@book-directory.default",
+      "bindingKind": "canonical-attached-evidence-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2275:85",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-35-night-walk",
+      "controlKey": "library.button.button.chapter-35-night-walk@book-directory.default",
+      "bindingKind": "canonical-attached-evidence-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2275:89",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "chapter-36-after-lighthouse",
+      "controlKey": "library.button.button.chapter-36-after-lighthouse@book-directory.default",
+      "bindingKind": "canonical-attached-evidence-instance",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2275:93",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "source-switch",
+      "controlKey": "library.button.button.source-switch@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:50",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "toc-bookmark",
+      "controlKey": "library.button.button.toc-bookmark@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:92",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "toc-directory",
+      "controlKey": "library.button.button.toc-directory@book-directory.default",
+      "bindingKind": "downstream-reader-full-directory",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "927:88",
+      "revision": "2378451733465956551"
+    },
+    {
+      "route": "book-directory",
+      "settingsKey": "toc-retry",
+      "controlKey": "library.button.button.toc-retry@book-directory.default",
+      "bindingKind": "canonical-state-variant",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "834:3",
+      "nodeId": "2274:105",
+      "revision": "2378451733465956551"
+    }
   ],
   "historicalBindingAudit": {
     "expected": 56,
@@ -133,28 +740,249 @@
     "downstreamDetachedInstances": 0,
     "completedAt": "2026-07-22T11:22:56+08:00"
   },
-  "currentRevision": null,
-  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentRevision": "2379851596474967636",
+  "currentRevisionStatus": "OFFICIAL_REST_CURRENT_VERSION_NODE_VERIFIED",
+  "currentRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+  "currentWriterTransaction": {
+    "recordedAt": "2026-07-23T17:14:53Z",
+    "kind": "RETIRE_HISTORICAL_QUICK_SOURCE_SHEET",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "revision": null,
+    "revisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_REQUEST",
+    "oldValue": "Page/Book Detail Phone and Tablet masters contained instances of the retired Library/BookDetail/QuickSourceSheet component set.",
+    "newValue": "The two direct historical instances and their component set were deleted. The active remote-book source-switch visual remains the separately canonical SourceSwitch/Window component.",
+    "removed": {
+      "componentSet": {
+        "nodeId": "2265:225",
+        "name": "Library/BookDetail/QuickSourceSheet"
+      },
+      "directInstances": [
+        {
+          "nodeId": "2265:226",
+          "viewport": "Phone"
+        },
+        {
+          "nodeId": "2265:238",
+          "viewport": "Tablet"
+        }
+      ]
+    },
+    "preserved": {
+      "bookDetailPhoneMaster": "941:7",
+      "bookDetailTabletMaster": "941:9",
+      "bookDetailFinalPhone": "943:651",
+      "bookDetailFinalTablet": "943:855",
+      "sourceSwitchWindow": {
+        "pageId": "259:13",
+        "nodeId": "568:134"
+      }
+    },
+    "postWriteVerification": {
+      "removedNodeIdsResolveToNull": [
+        "2265:225",
+        "2265:226",
+        "2265:238"
+      ],
+      "retainedMasterInstanceDescendantCount": {
+        "phone": 8,
+        "tablet": 8
+      },
+      "retainedQuickSourceSheetNamedChildren": {
+        "phone": 0,
+        "tablet": 0
+      },
+      "finalAssemblyRootsRemainAttached": [
+        "943:651",
+        "943:855"
+      ]
+    }
+  },
   "currentBindings": [],
   "currentLiveF0Verification": {
     "scope": "Live structural verification of the retained Book Detail masters and final assembly. It does not create or assert a UiEvent, state owner, route owner, or reading business flow.",
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
-    "canonicalMaster": { "pageId": "834:3", "nodeId": "941:10", "nodeName": "Page/Book Detail" },
-    "viewports": {
-      "phone": { "nodeId": "941:7", "size": "390x844" },
-      "tablet": { "nodeId": "941:9", "size": "760x960" },
-      "landscape": { "alias": "Tablet", "independentMaster": false },
-      "compact": { "prohibited": true },
-      "fold": { "prohibited": true }
+    "canonicalMaster": {
+      "pageId": "834:3",
+      "nodeId": "941:10",
+      "nodeName": "Page/Book Detail"
     },
-    "finalAssembly": { "pageId": "834:2", "nodeId": "943:648" },
+    "viewports": {
+      "phone": {
+        "nodeId": "941:7",
+        "size": "390x844",
+        "attachedCanonicalInstanceCount": 8
+      },
+      "tablet": {
+        "nodeId": "941:9",
+        "size": "760x960",
+        "attachedCanonicalInstanceCount": 8
+      },
+      "landscape": {
+        "alias": "Tablet",
+        "independentMaster": false
+      },
+      "compact": {
+        "prohibited": true
+      },
+      "fold": {
+        "prohibited": true
+      }
+    },
+    "finalAssembly": {
+      "pageId": "834:2",
+      "nodeId": "943:648"
+    },
     "finalRoots": [
-      { "nodeId": "943:651", "mainComponentId": "941:7", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 },
-      { "nodeId": "943:855", "mainComponentId": "941:9", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 }
+      {
+        "nodeId": "943:651",
+        "mainComponentId": "941:7",
+        "attachedCanonicalInstanceCount": 8,
+        "detachedInstanceCount": 0,
+        "rootReactionCount": 0
+      },
+      {
+        "nodeId": "943:855",
+        "mainComponentId": "941:9",
+        "attachedCanonicalInstanceCount": 8,
+        "detachedInstanceCount": 0,
+        "rootReactionCount": 0
+      }
     ],
-    "defaultFinalPageComposition": ["Hero", "Summary", "ChapterSection", "ChapterRow=Default", "ActionBar", "QuickSourceSheet"],
-    "independentStateEvidence": ["DeleteDialog", "RetryStatus", "RecoveryAction"],
+    "defaultFinalPageComposition": [
+      "Hero",
+      "Summary",
+      "ChapterSection",
+      "ChapterRow=Default",
+      "ActionBar"
+    ],
+    "retiredHistoricalVisual": {
+      "nodeId": "2265:225",
+      "name": "Library/BookDetail/QuickSourceSheet",
+      "status": "DELETED_IN_CURRENT_WRITER_TRANSACTION"
+    },
+    "activeRemoteSourceSwitchVisual": {
+      "pageId": "259:13",
+      "nodeId": "568:134",
+      "name": "SourceSwitch/Window"
+    },
+    "independentStateEvidence": [
+      "DeleteDialog",
+      "RetryStatus",
+      "RecoveryAction"
+    ],
     "stateEvidenceBoundary": "Delete, retry, and recovery states are independent state evidence and are not part of the default final page composition.",
-    "currentBindingPolicy": "No active controlKey-to-node binding is asserted while the writer runtime cannot read an official current Figma revision. Historical bindings remain audit-only."
+    "currentBindingPolicy": "Historical controlKey bindings remain audit-only unless their exact child node is separately resolved at the current revision. The narrow Local/Remote source-type component delta below is revision-backed structural evidence only and does not add a source-switch control binding for local books."
+  },
+  "postWriteLocalBookSourceF0": {
+    "status": "CURRENT_REVISION_RECONCILED_DELIVERY_BLOCKED",
+    "recordedAt": "2026-07-24T17:03:16.032Z",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "revision": "2379851596474967636",
+    "revisionEvidence": {
+      "artifact": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "kind": "FIGMA_CURRENT_REVISION_EVIDENCE",
+      "currentRevision": "2379851596474967636",
+      "observedAt": "2026-07-24T17:57:17.506Z",
+      "source": "figma-rest"
+    },
+    "canonicalPageMaster": {
+      "nodeId": "941:10",
+      "name": "Page/Book Detail",
+      "revision": "2379851596474967636"
+    },
+    "canonicalHeroComponentSet": {
+      "nodeId": "2260:1460",
+      "name": "Library/BookDetail/Hero",
+      "revision": "2379851596474967636",
+      "relationship": "Attached Component Set owning the source-type variants; not a detached page frame or a source-switch business control."
+    },
+    "pageVariants": {
+      "remote": {
+        "phone": {
+          "nodeId": "941:7",
+          "name": "Viewport=Phone, SourceType=Remote",
+          "revision": "2379851596474967636"
+        },
+        "tablet": {
+          "nodeId": "941:9",
+          "name": "Viewport=Tablet, SourceType=Remote",
+          "revision": "2379851596474967636"
+        }
+      },
+      "local": {
+        "phone": {
+          "nodeId": "2987:11445",
+          "name": "Viewport=Phone, SourceType=Local",
+          "revision": "2379851596474967636"
+        },
+        "tablet": {
+          "nodeId": "2987:11517",
+          "name": "Viewport=Tablet, SourceType=Local",
+          "revision": "2379851596474967636"
+        }
+      }
+    },
+    "canonicalHeroComponentVariants": {
+      "remote": {
+        "phone": {
+          "nodeId": "2260:1438",
+          "name": "Viewport=Phone, SourceType=Remote",
+          "revision": "2379851596474967636"
+        },
+        "tablet": {
+          "nodeId": "2260:1459",
+          "name": "Viewport=Tablet, SourceType=Remote",
+          "revision": "2379851596474967636"
+        }
+      },
+      "local": {
+        "phone": {
+          "nodeId": "2987:11403",
+          "name": "Viewport=Phone, SourceType=Local",
+          "revision": "2379851596474967636"
+        },
+        "tablet": {
+          "nodeId": "2987:11424",
+          "name": "Viewport=Tablet, SourceType=Local",
+          "revision": "2379851596474967636"
+        }
+      }
+    },
+    "downstreamComponentInheritance": {
+      "writerRuntimeOnly": true,
+      "localPhoneHeroInstance": {
+        "nodeId": "2987:11478",
+        "mainComponentId": "2987:11403",
+        "detached": false
+      },
+      "localTabletHeroInstance": {
+        "nodeId": "2987:11550",
+        "mainComponentId": "2987:11424",
+        "detached": false
+      },
+      "revisionPolicy": "These are component-inheritance witnesses, not new controlKey bindings. Their parent component variants are the exact REST-resolved current-revision nodes above; no independent child-node revision is fabricated."
+    },
+    "oldValue": "Only Remote Book Detail page/Hero variants existed, showing a source label and source-switch affordance.",
+    "newValue": "Remote and Local variants now coexist. Local removes exactly the source label and source-switch affordance; no detached frame, screenshot substitute, text rewrite, font substitution, or other page/component change was introduced.",
+    "viewportContract": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscape": "Tablet alias",
+      "compact": "prohibited",
+      "fold": "prohibited"
+    },
+    "visualVerification": {
+      "localPhone": "full 390x844 screenshot inspected",
+      "localTablet": "full 760x960 screenshot inspected",
+      "sourceSwitchTextInLocalHero": 0,
+      "detachedInstances": 0
+    },
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_REQUEST",
+    "deliveryBoundary": "This is a revision-backed F0/design-delta record, not user confirmation, frozen F2 delivery, VC3 local parity, HarmonyOS parity, Motion/F3, or device evidence."
   }
 }

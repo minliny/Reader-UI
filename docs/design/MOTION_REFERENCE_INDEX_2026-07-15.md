@@ -51,14 +51,14 @@
 2. redirect：执行中触发新目标，旧 transaction 被接管。
 3. opposite action：show/hide 或快速 A->B->C，最终状态以最后输入为准。
 4. reduced-motion：启动前或运行中开启时立即提交同一终态，时长为 0ms。
-5. responsive：Phone、CompactLandscape、TabletExpanded 下正文 rect 不因控制层动效变化。
+5. responsive：Phone、TabletExpanded（横屏复用 Tablet）下正文 rect 不因控制层动效变化。
 
 ## 2026-07-15 自验结果
 
 | 画布 | viewport class | normal | interrupt / opposite | reduced-motion | 正文与控制层终态 |
 | --- | --- | --- | --- | --- | --- |
 | 390×844 | `standard-portrait` | show / hide / promote / module / expand / collapse 通过 | latest-wins 与 A→B→C 通过 | 立即提交唯一终态 | reading rect 稳定；role / clone 归零；单一 panel / nav |
-| 844×390 | `compact-landscape` | 同上 | 同上 | 同上 | reading rect 稳定；控制层仅悬浮，不切分正文 |
+| 844×390 | `tablet-expanded`（横屏 Tablet 别名） | 同上 | 同上 | 同上 | reading rect 稳定；控制层仅悬浮，不切分正文 |
 | 760×960 | `tablet-expanded` | 同上 | 同上 | 同上 | reading rect 稳定；控制层仅悬浮，不改变分页宽度 |
 
 顶栏返回层级已经实页验证为：主完整控制页先执行 `reader.panel.collapse` 回到对应快捷栏；再次返回执行 `reader.control.hide` 回到沉浸阅读。Control / Module / Replace 的 route-bearing 抓手和主完整页收起入口也已统一接入 panel 事务，不再只触发 handle release 后瞬时换页。自动化回归、canonical Motion fixture coverage 95/95 与 demo contract consistency unknown MotionId=0 共同作为门禁；实时用例总数以测试输出为准。

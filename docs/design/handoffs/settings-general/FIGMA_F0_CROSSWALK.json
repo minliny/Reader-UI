@@ -82,7 +82,7 @@
       { "id": "531:108", "name": "Settings/Switch", "oldVariantCount": 10, "newVariantCount": 13 },
       { "id": "282:124", "name": "Primitive/Select", "oldVariantCount": 15, "newVariantCount": 24 },
       { "id": "283:100", "name": "Primitive/SegmentedControl", "oldVariantCount": 6, "newVariantCount": 15 },
-      { "id": "358:18", "name": "Control/Stepper", "oldVariantCount": 2, "newVariantCount": 6 },
+      { "id": "2506:391", "name": "Control/Stepper", "replacesDeletedNodeId": "358:18", "oldVariantCount": 2, "newVariantCount": 6 },
       { "id": "534:248", "name": "Settings/SettingRow", "oldVariantCount": 36, "newVariantCount": 42 },
       { "id": "2114:20635", "name": "Settings/ThemeSegment", "oldVariantCount": 0, "newVariantCount": 15 }
     ]
@@ -109,6 +109,57 @@
     { "settingsKey": "permission-action-notification", "controlKey": "settings.button.button.permission-action.notification@settings-general.default", "uiEvent": "permission.open-settings", "status": "bound", "fileKey": "klhs2jMM4MncaJFqZMfqEK", "page": { "id": "834:3", "name": "24 · Responsive Masters · Phase 4" }, "nodes": { "phone": "2114:18444", "landscape": "2114:18504", "tablet": "2114:18504" }, "viewportAlias": { "landscape": "tablet" }, "revision": "2378263682617840946", "canonicalMasterId": "1994:25736" }
   ],
   "unbound": [],
+  "currentHarmonyBackport": {
+    "recordedAt": "2026-07-23T17:52:18Z",
+    "scope": "Current HarmonyOS static backport of the confirmed Settings General Phone/Tablet masters. It does not modify the Figma canvas, historical F1 evidence, UiEvent schema, reducer, Core, or Host.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "historicalConfirmedRevision": "2378263682617840946",
+    "historicalRevisionPolicy": "The named F1 revision remains provenance only and is not copied into current-revision fields.",
+    "figmaSources": {
+      "phone": "942:18",
+      "tablet": "942:20",
+      "switch": "531:108",
+      "select": "282:124",
+      "segmentedControl": "283:100",
+      "stepper": "2506:391",
+      "settingRow": "534:248",
+      "themeSegment": "2114:20635"
+    },
+    "runtimeBinding": {
+      "routeId": "settings-general",
+      "renderer": "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaSettingsGeneralPage.ets",
+      "routeIntegration": "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ViewStateRenderer.ets",
+      "viewportPolicy": "Phone and Tablet only; landscape aliases Tablet; no Compact or Fold branch.",
+      "visualRule": "Inter option text, all trailing controls right-aligned, 350x58 row geometry, no page/card shadow, and ThemeSegment selected state is fill plus a 1.25px border."
+    },
+    "admittedExistingOwners": [
+      "appThemeMode via settings-segment-switch",
+      "reducedMotion via toggle-reduced-motion",
+      "cache clear request/confirm/loading via the existing settings-action and cache-clear-confirm flow"
+    ],
+    "disabledWithoutNewOwner": [
+      "language",
+      "startup screen",
+      "automatic update",
+      "tap current bottom bar to scroll top",
+      "crash log",
+      "animation effect",
+      "permission actions",
+      "restore defaults"
+    ],
+    "excluded": "The shared Stepper has a Figma master but is not instantiated by either Settings General master; it is not introduced locally.",
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_DIRECTION",
+    "verification": {
+      "staticContract": "Reader-for-HarmonyOS/scripts/figma_settings_general_static_contract.test.mjs: 4/4 pass",
+      "readingParity": "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs: 23/23 pass",
+      "hapBuild": "./hvigorw assembleHap --no-daemon --no-incremental: BUILD SUCCESSFUL",
+      "deviceEvidence": "NOT_RUN_BY_USER_DIRECTION"
+    }
+  },
   "admission": {
     "f0Pass": true,
     "f1WriterAdmitted": true,

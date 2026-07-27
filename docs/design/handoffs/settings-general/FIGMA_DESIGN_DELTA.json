@@ -17,9 +17,9 @@
     { "node": "531:108", "name": "Settings/Switch", "oldValue": "10 variants; Default/Hover/Pressed/Focus/Disabled", "newValue": "13 variants; adds Loading and Selected" },
     { "node": "282:124", "name": "Primitive/Select", "oldValue": "15 variants", "newValue": "24 variants; Pressed/Loading/Selected across SM/MD/LG" },
     { "node": "283:100", "name": "Primitive/SegmentedControl", "oldValue": "6 variants", "newValue": "15 variants; Pressed/Disabled/Loading added" },
-    { "node": "358:18", "name": "Control/Stepper", "oldValue": "2 variants", "newValue": "6 variants; Pressed/Focus/Loading/Selected added" },
-    { "node": "534:248", "name": "Settings/SettingRow", "oldValue": "36 variants / 90 reactions", "newValue": "42 variants / 100 reactions; 6 Selected variants inherit 10 reactions" },
-    { "node": "2114:20635", "name": "Settings/ThemeSegment", "oldValue": "absent", "newValue": "15 canonical compact control variants; three independent options with 54x44 hit targets" }
+    { "node": "2506:391", "replacesDeletedNode": "358:18", "name": "Control/Stepper", "oldValue": "94x24 variants with overflowing 44x44 hit targets", "newValue": "six rebuilt 132x44 variants; no shadow; existing downstream instance 394:364 swapped to 2506:337" },
+    { "node": "534:248", "name": "Settings/SettingRow", "oldValue": "42 variants sharing duplicate coordinates with trailing content displaced outside 350x58 bounds", "newValue": "42 preserved variant identities arranged as a non-overlapping 6x7 matrix; each variant is 350x58; 12 downstream instances remain attached" },
+    { "node": "2114:20635", "name": "Settings/ThemeSegment", "oldValue": "15 variants with spread-4 selected/focus shadows", "newValue": "15 non-overlapping variants with no shadows; selected state uses fill and 1.25px border; 9 downstream instances remain attached" }
   ],
   "pageDeltas": [
     { "node": "942:18", "viewport": "Phone 390x844", "oldValue": "0 INSTANCE descendants", "newValue": "16 INSTANCE descendants; affected rows remain 58px; no surface shadow" },
@@ -79,5 +79,60 @@
     "confirmationRevision": "2378263682617840946",
     "f1Exit": true,
     "f2QueueAdmitted": true
+  },
+  "liveComponentCorrection20260721": {
+    "revisionStatus": "live-head-read; named Figma revision pending",
+    "oldStepperNodeDeleted": "358:18",
+    "newStepperNode": "2506:391",
+    "stepperDownstreamInstance": "394:364",
+    "settingRowNode": "534:248",
+    "settingRowVariantOverlapCountAfter": 0,
+    "themeSegmentNode": "2114:20635",
+    "themeSegmentActiveDropShadowCountAfter": 0,
+    "typographyAndAlignmentAudit": {
+      "visibleWrongFontOccurrencesBefore": 22,
+      "visibleSelectLeftAlignedOccurrencesBefore": 6,
+      "visibleSelectChevronOutOfBoundsOccurrencesBefore": 6,
+      "canonicalMastersCorrected": ["282:124", "2114:20635", "1994:25736", "1994:25794"],
+      "fontFamilyAfter": "Inter",
+      "optionRightInsetAfter": 12,
+      "visibleWrongFontOccurrencesAfter": 0,
+      "visibleSelectLeftAlignedOccurrencesAfter": 0,
+      "visibleSelectChevronOutOfBoundsOccurrencesAfter": 0
+    },
+    "detachedInstanceCountIntroduced": 0
+  },
+  "currentHarmonyDesignDelta": {
+    "recordedAt": "2026-07-23T17:52:18Z",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_DIRECTION",
+    "deltas": [
+      {
+        "nodeIds": ["942:18", "942:20"],
+        "oldValue": "Harmony settings-general rendered through the legacy generic SettingsGeneralPage body, including explanatory rows and a visual structure outside the confirmed Figma masters.",
+        "newValue": "The actual settings-general route now renders FigmaSettingsGeneralPage as the Phone/Tablet-only Figma visual boundary; landscape reuses Tablet and no compact branch exists."
+      },
+      {
+        "nodeIds": ["534:248", "282:124", "2114:20635"],
+        "oldValue": "Option typography, trailing alignment, and ThemeSegment selection could inherit generic local styling.",
+        "newValue": "Options use Inter, trailing controls are right-aligned, Settings rows are 58px, and ThemeSegment selection uses the Figma fill plus 1.25px border with no shadow."
+      },
+      {
+        "nodeIds": ["531:108", "282:124", "283:100"],
+        "oldValue": "Generic settings rendering could expose controls without an admitted Harmony owner.",
+        "newValue": "Only theme, reduced-motion, and cache-clear retain existing owner/event bindings. Other Figma-visible controls are disabled visual states; no UiEvent, reducer, Core, or Host behavior is inferred."
+      }
+    ],
+    "verification": {
+      "staticContract": "Reader-for-HarmonyOS/scripts/figma_settings_general_static_contract.test.mjs: 4/4 pass",
+      "readingParity": "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs: 23/23 pass",
+      "hapBuild": "./hvigorw assembleHap --no-daemon --no-incremental: BUILD SUCCESSFUL",
+      "deviceEvidence": "NOT_RUN_BY_USER_DIRECTION"
+    },
+    "evidenceRule": "This is a current node-ID-backed local static delta, not a current-revision Figma writer delta. Historical named revision 2378263682617840946 remains historical F1 provenance only."
   }
 }

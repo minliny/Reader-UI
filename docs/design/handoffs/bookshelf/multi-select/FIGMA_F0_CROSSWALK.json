@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "bookshelf/multi-select",
+  "status": "F2_WRITER_STATIC_BACKPORT_VALIDATED_USER_REVIEW_PENDING",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "revisionPolicy": "Every current binding below carries revision=null. No historical named version is used as a current binding or parity claim.",
+  "localSource": {
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_DIRECTION",
+    "readerUi": {
+      "renderer": "bookshelfMultiSelectV2(data, route, appState)",
+      "rendererFile": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js"
+    },
+    "harmony": {
+      "component": "FigmaBookshelfMultiSelect",
+      "file": "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaBookshelfMultiSelect.ets"
+    },
+    "core": {
+      "operation": "bookshelf.removeBatch",
+      "ownership": "Core performs one atomic shelf-record removal transaction; the selected book identities remain sourceId + bookId."
+    }
+  },
+  "canonicalMasters": [
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2956:1266",
+      "name": "Bookshelf/MultiSelect",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2955:1038",
+      "name": "Viewport=Phone, Selection=Entry",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2956:1038",
+      "name": "Viewport=Phone, Selection=AllSelected",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2956:1102",
+      "name": "Viewport=Tablet, Selection=Entry",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2956:1211",
+      "name": "Viewport=Tablet, Selection=AllSelected",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2903:1737",
+      "name": "Library/BookActionSheet",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2269:66",
+      "name": "Library/BookDetail/DeleteDialog",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    }
+  ],
+  "bindings": [
+    {
+      "controlKey": "library.button.button.book-action-multi-select@bookshelf.default",
+      "uiEvent": "book.action",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2935:932",
+      "variantNodeId": "2903:1719",
+      "viewport": "Phone",
+      "prototypeTargetNodeId": "2960:1457",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "controlKey": "library.button.button.book-action-multi-select@bookshelf.default",
+      "uiEvent": "book.action",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2935:934",
+      "variantNodeId": "2903:1728",
+      "viewport": "Tablet",
+      "prototypeTargetNodeId": "2960:1540",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "controlKey": "library.button.button.book-action-info@bookshelf.default",
+      "uiEvent": "book.action",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2903:1722",
+      "variantNodeId": "2903:1719",
+      "viewport": "Phone",
+      "prototypeTargetNodeId": "2961:1463",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "controlKey": "library.button.button.book-action-info@bookshelf.default",
+      "uiEvent": "book.action",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2903:1731",
+      "variantNodeId": "2903:1728",
+      "viewport": "Tablet",
+      "prototypeTargetNodeId": "2961:1634",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "controlKey": "library.button.button.book-action-remove@bookshelf.default",
+      "uiEvent": "book.action",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2903:1724",
+      "variantNodeId": "2903:1719",
+      "viewport": "Phone",
+      "prototypeTargetNodeId": "2960:1623",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    {
+      "controlKey": "library.button.button.book-action-remove@bookshelf.default",
+      "uiEvent": "book.action",
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "2903:1733",
+      "variantNodeId": "2903:1728",
+      "viewport": "Tablet",
+      "prototypeTargetNodeId": "2960:1720",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    }
+  ],
+  "nativeGestureBoundary": {
+    "sourceVisual": {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "pageId": "259:10",
+      "nodeId": "493:196",
+      "name": "Library/BookCard",
+      "revision": null,
+      "revisionStatus": "current-node-read-revision-unavailable"
+    },
+    "gesture": "LONG_PRESS",
+    "rule": "Figma's prototype trigger enumeration does not expose LONG_PRESS. Native owns gesture recognition and passes the exact sourceId/bookId target to the action sheet; no ON_CLICK substitute is asserted."
+  },
+  "downstreamEvidence": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "259:10",
+    "instancesAndReviewFrames": [
+      {"nodeId": "2960:1458", "mainComponentNodeId": "2955:1038", "role": "Phone multi-select instance", "revision": null},
+      {"nodeId": "2960:1541", "mainComponentNodeId": "2956:1102", "role": "Tablet multi-select instance", "revision": null},
+      {"nodeId": "2960:1706", "mainComponentNodeId": "2269:46", "role": "Phone batch-remove confirmation instance", "revision": null},
+      {"nodeId": "2960:1803", "mainComponentNodeId": "2269:46", "role": "Tablet batch-remove confirmation instance", "revision": null},
+      {"nodeId": "2961:1464", "mainComponentNodeId": "941:7", "role": "Phone book-detail prototype instance", "revision": null},
+      {"nodeId": "2961:1635", "mainComponentNodeId": "941:9", "role": "Tablet book-detail prototype instance", "revision": null}
+    ],
+    "detachedCount": 0,
+    "rule": "Review wrapper frames contain attached canonical instances. They are not replacements for the existing final BookShelf or Book Detail masters."
+  },
+  "v1Boundary": {
+    "longPressActions": ["多选", "书籍信息", "移除书架"],
+    "batchActions": ["移除书架"],
+    "cancelledCapabilities": ["分组", "移动至分组", "分组管理", "batch-management route"],
+    "businessOwnership": "Figma supplies visible states and review routes only. ReaderUiStore/ReaderEffects/Core own selection identity, confirmation state, atomic mutation, loading, failure, and stale-result handling."
+  },
+  "exitAudit": {
+    "fabricatedBindingCount": 0,
+    "detachedInstanceCount": 0,
+    "canonicalComponentSetCount": 3,
+    "currentRevisionAvailable": false,
+    "userVisualReview": "PENDING",
+    "f2WriterExit": false
+  }
+}

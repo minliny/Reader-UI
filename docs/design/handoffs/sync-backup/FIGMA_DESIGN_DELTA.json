@@ -80,9 +80,9 @@
       "newValue": "The final section retains only Assembly / Sync Backup (943:4979) and WebDAV Config (943:5701); standalone Restore Progress is absent. The Sync assembly remains attached to Phone master 942:38 and Tablet master 942:40."
     },
     "retainedRestoreActionOverlays": {
-      "confirm": "2564:36726",
-      "loading": "2564:36734",
-      "complete": "2564:36745"
+      "confirm": "2834:32130",
+      "loading": "2834:32131",
+      "complete": "2834:32132"
     },
     "userConfirmation": {
       "confirmed": true,
@@ -90,5 +90,61 @@
     },
     "evidencePolicy": "This post-write record is a live hierarchy observation, not a fabricated current revision. Historical design deltas and prototype timings remain historical until the writer runtime can read the official current revision.",
     "remainingGate": "VC3_BACKPORT_REQUIRES_SEPARATE_LOCAL_AND_HOST_ADMISSION"
+  },
+  "currentLocalReconciliation": {
+    "recordedAt": "2026-07-23T17:39:21Z",
+    "scope": "Current local backport reconciliation against the live Sync Backup hierarchy. This is not a new Figma write or a replacement for historical F2 evidence.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "canonicalPageMasters": [
+      { "pageId": "834:3", "nodeId": "942:38", "viewport": "phone" },
+      { "pageId": "834:3", "nodeId": "942:40", "viewport": "tablet" }
+    ],
+    "implementationDeltas": [
+      {
+        "figmaNodes": ["I2400:491;2619:11088", "I2400:730;2619:11094"],
+        "oldLocalValue": "The Sync Backup route used a generic configuration/action section.",
+        "newLocalValue": "The route renders the canonical WebDAV form with the four real fields (server URL, account, password, sync directory) and the existing Test and Save actions."
+      },
+      {
+        "figmaNodes": ["I2400:491;2646:2", "I2400:730;2646:112"],
+        "oldLocalValue": "Static Figma demonstration values could be mistaken for backed product settings.",
+        "newLocalValue": "Storage target, frequency and scope render as neutral disabled values because no Core/Host data contract exists for them."
+      },
+      {
+        "figmaNodes": ["I2400:491;2646:23", "I2400:730;2646:133"],
+        "oldLocalValue": "Figma's illustrative history cards could be rendered as application data.",
+        "newLocalValue": "Only validated immutable local snapshots are rendered, newest first; at most five are initially visible and Expand appears only when the real list exceeds five."
+      },
+      {
+        "figmaNodes": ["2834:32130", "2834:32131", "2834:32132", "1995:69448", "1995:69928"],
+        "oldLocalValue": "Restore Confirm, Loading, and Complete were static Core-gated overlays; the directly reviewed Confirm-to-Loading dissolve and Complete close were not represented.",
+        "newLocalValue": "FigmaRestoreBackupOverlay applies the reviewed 150ms Confirm-to-Loading dissolve after a real Core restore request and auto-closes Complete after 1.5s only after Core has committed restore-result plus success. The Figma 1.2s demonstration timeout does not decide business success."
+      }
+    ],
+    "remoteWebDavHistory": {
+      "coreProtocol": "directory.list.plan and multistatus.parse are implemented in Reader-Core-Native.",
+      "harmonyIntegration": "NOT_WIRED; remote history remains absent rather than represented by example Figma records."
+    },
+    "motion": {
+      "f3Status": "NOT_STARTED",
+      "prototypePresentation": {
+        "confirmToLoadingDurationMs": 150,
+        "completeAutoCloseDurationMs": 1500,
+        "businessSuccessGate": "Core-owned restore-result plus success only",
+        "staleSafety": "sequence and live route/status re-check before the close callback",
+        "reducedMotionBoundary": "local direct Loading terminal only; no global F3 claim"
+      },
+      "unclaimed": ["independently frozen F3 timeline", "global interrupt contract", "global cleanup contract", "global reduced-motion contract"]
+    },
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_DIRECTION",
+    "verification": {
+      "staticContract": "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs: 23/23 pass",
+      "hapBuild": "./hvigorw assembleHap --no-daemon --no-incremental: BUILD SUCCESSFUL",
+      "deviceEvidence": "NOT_RUN_BY_USER_DIRECTION"
+    },
+    "evidencePolicy": "No current revision, commit, Figma write, or device result is fabricated by this delta. The listed 150ms and 1500ms values are direct retained Figma prototype presentation timings, not a claim that F3 is complete. Historical F2 evidence remains unchanged."
   }
 }

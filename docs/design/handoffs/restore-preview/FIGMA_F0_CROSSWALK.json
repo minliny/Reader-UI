@@ -30,7 +30,7 @@
     },
     "retainedSyncBackupEvidence": {
       "assembly": "943:4979",
-      "overlays": {"confirm": "2564:36726", "loading": "2564:36734", "complete": "2564:36745"}
+      "overlays": {"confirm": "2834:32130", "loading": "2834:32131", "complete": "2834:32132"}
     },
     "policy": "The withdrawn Restore Preview route has no active bindings. Its residual progress page, masters and assembly were deleted by the single writer; the retained confirm -> loading -> complete flow is owned and evidenced only by Sync Backup."
   },

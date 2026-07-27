@@ -2,26 +2,28 @@
   "schemaVersion": "1.1.0",
   "kind": "FIGMA_F0_CROSSWALK",
   "scope": "source-switch",
-  "status": "F2_USER_CONFIRMED_NO_FABRICATED_BINDINGS",
+  "status": "F0_LIVE_RECONCILED_HISTORICAL_F2_EVIDENCE",
   "fileKey": "klhs2jMM4MncaJFqZMfqEK",
   "pageId": "259:13",
   "pageName": "16 · Components · Source Switch",
-  "baselineRevision": "2378456732819418415",
-  "baselineRevisionTitle": "F2 · Reader Runtime · User Confirmed",
-  "revision": "2378501297946752326",
-  "revisionTitle": "F2 · Source Switch · User Confirmed",
-  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378501297946752326&node-id=942-37",
-  "bindingRevision": "2378474643910668834",
-  "bindingsValidatedAtRevision": "2378501297946752326",
-  "supersededRevision": "2378464713948765297",
-  "timestamp": "2026-07-21T10:08:05+08:00",
-  "localSource": {
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalBaselineRevision": "2378456732819418415",
+  "historicalBaselineRevisionTitle": "F2 · Reader Runtime · User Confirmed",
+  "historicalRevision": "2378501297946752326",
+  "historicalRevisionTitle": "F2 · Source Switch · User Confirmed",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378501297946752326&node-id=942-37",
+  "historicalBindingRevision": "2378474643910668834",
+  "historicalBindingsValidatedAtRevision": "2378501297946752326",
+  "historicalSupersededRevision": "2378464713948765297",
+  "historicalTimestamp": "2026-07-21T10:08:05+08:00",
+  "historicalLocalSource": {
     "repository": "Reader-UI",
     "branch": "codex/motion-demo-optimizations",
     "implementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
     "packet": "docs/design/handoffs/source-switch/LOCAL_READY_FOR_FIGMA.json"
   },
-  "revisionRead": {
+  "historicalRevisionRead": {
     "baselineRead": true,
     "postWriteNamedRevisionCreated": true,
     "readMethod": "Figma Desktop version history exposed the exact version-id in the selected version URL.",
@@ -38,7 +40,7 @@
     },
     "sharedComponents": "Existing Reader 2 responsive components plus SourceSwitch canonical masters on page 16."
   },
-  "canonicalMasters": {
+  "historicalCanonicalMasters": {
     "candidateRowSet": "568:78",
     "candidateList": "568:79",
     "windowHeader": "568:47",
@@ -51,20 +53,20 @@
     "removedInventedResultBarSet": "2292:770",
     "removedInventedStateCardSet": "2295:1653"
   },
-  "downstream": {
+  "historicalDownstream": {
     "pageId": "834:2",
     "pageName": "23 · Pages · Final",
     "section": "943:15209",
     "phone": { "instance": "943:15215", "main": "942:34", "detached": false },
     "tablet": { "instance": "943:15705", "main": "942:36", "detached": false }
   },
-  "readerContinuity": {
+  "historicalReaderContinuity": {
     "inheritedReaderOccurrences": 136,
     "policy": "Reader continuity remains owned by reader-runtime and references its confirmed 439-control crosswalk; Source Switch does not duplicate those bindings.",
     "confirmedReaderRuntimeRevision": "2378456732819418415"
   },
-  "bindingModel": "Each physical binding below carries fileKey/pageId/nodeId/revision and lists the two route-local controls that legitimately share that canonical node. No confirmation or state-matrix target is synthesized.",
-  "bindings": [
+  "historicalBindingModel": "Each physical binding below carries fileKey/pageId/nodeId/revision and lists the two route-local controls that legitimately share that canonical node. No confirmation or state-matrix target is synthesized.",
+  "historicalBindings": [
     {
       "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:58", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "canonical-close-target",
       "controls": [
@@ -150,7 +152,7 @@
       ]
     }
   ],
-  "coverage": {
+  "historicalCoverage": {
     "sourceOwnedControls": 35,
     "boundDirectListControls": 24,
     "physicalFigmaTargets": 12,
@@ -158,7 +160,7 @@
     "removedFalseConfirmationControls": 2,
     "operationalStateControlsWithoutApprovedFigmaPageNodes": 11
   },
-  "unbound": [
+  "historicalUnbound": [
     { "route": "source-switch-empty", "settingsKeys": ["source-management", "cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
     { "route": "source-switch-error", "settingsKeys": ["retry", "cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
     { "route": "source-switch-timeout", "settingsKeys": ["retry", "cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
@@ -166,7 +168,7 @@
     { "route": "source-switch-rollback", "settingsKeys": ["rollback-confirm", "rollback-cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
     { "route": "source-switch-preview", "settingsKeys": ["confirm", "back-to-candidates"], "reason": "Normal direct-switch path no longer stops at preview; no approved Figma page node." }
   ],
-  "verification": {
+  "historicalVerification": {
     "windowChildren": ["568:135", "568:154"],
     "candidateRows": 11,
     "candidateRowHeight": 44,
@@ -177,12 +179,75 @@
     "compactFoldStructures": 0,
     "falseComponentsInDocumentTree": 0
   },
-  "admission": {
+  "historicalAdmission": {
     "crosswalkHasNoFabricatedBinding": true,
     "directListCrosswalkComplete": true,
     "full35ControlCrosswalkComplete": false,
     "reason": "Eleven operational fallback-state controls remain local-only because the user rejected the invented Figma state matrix. They are reported unbound rather than mapped to fake nodes.",
     "userConfirmed": true,
     "f2Exit": true
+  },
+  "currentReconciliation": {
+    "scope": "Current read-only Figma and native reconciliation after the user withdrew the old bottom-sheet and result/state-matrix presentation. Historical named revisions above remain audit records only.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "259:13",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "canonicalMaster": {
+      "nodeId": "568:134",
+      "name": "SourceSwitch/Window",
+      "contextNodeIds": {
+        "header": "568:47",
+        "candidateRowSet": "568:78",
+        "candidateList": "568:79",
+        "phoneAssembly": "568:209"
+      },
+      "geometry": "300x385; header 34; column header 20; candidate rows 28; footer 22",
+      "revision": null
+    },
+    "currentBindings": [
+      {
+        "bindingKind": "canonical-window-close",
+        "route": "source-switch",
+        "businessAction": "leave source switch without changing source",
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:13",
+        "nodeId": "568:58",
+        "contextNodeId": "568:134",
+        "revision": null
+      },
+      {
+        "bindingKind": "dynamic-core-candidate-row",
+        "route": "source-switch",
+        "businessAction": "tap an available candidate and switch directly",
+        "localOwner": "SourceSwitchFlowPage / ReaderUiStore.requestSourceSwitch",
+        "identityPolicy": "The candidate ID is a live Core source ID; no static demo source controlKey is promoted to a current Figma binding.",
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:13",
+        "nodeId": "568:78",
+        "contextNodeId": "568:79",
+        "revision": null
+      }
+    ],
+    "responsiveEvidence": {
+      "phoneAssembly": "568:209",
+      "tablet": "NOT_CURRENTLY_READ",
+      "landscapePolicy": "tablet alias only; no compact or fold master"
+    },
+    "retiredVisualRoutes": [
+      "source-switch-results",
+      "source-switch-empty",
+      "source-switch-error",
+      "source-switch-timeout",
+      "source-switch-loading",
+      "source-switch-rollback",
+      "source-switch-preview"
+    ],
+    "explicitExceptions": [
+      "A local book has no remote source identity and is not admitted to source switch.",
+      "No confirmation button, result page, rollback page or state matrix is current Figma UI.",
+      "Core does not expose latency or candidate-chapter data, so the native visual keeps those fields neutral rather than fabricating values."
+    ],
+    "noForgedBinding": true
   }
 }

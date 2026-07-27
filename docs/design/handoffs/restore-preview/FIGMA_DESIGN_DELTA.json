@@ -44,7 +44,7 @@
     "deletedResidualNodes": ["2648:736", "2648:2", "2648:228", "2649:60847"],
     "retainedSyncBackupEvidence": {
       "assembly": "943:4979",
-      "overlays": ["2564:36726", "2564:36734", "2564:36745"]
+      "overlays": ["2834:32130", "2834:32131", "2834:32132"]
     },
     "policy": "Do not recreate or rebind Restore Preview. The retained overlays are Sync Backup evidence, not a reactivated Restore Preview flow."
   },

@@ -109,9 +109,9 @@
       ]
     },
     "retainedRestoreActionOverlays": {
-      "confirm": "2564:36726",
-      "loading": "2564:36734",
-      "complete": "2564:36745"
+      "confirm": "2834:32130",
+      "loading": "2834:32131",
+      "complete": "2834:32132"
     },
     "postWriteVerification": {
       "allFinalInstancesRemainAttached": true,
@@ -124,5 +124,109 @@
     },
     "currentBindingPolicy": "The two live attachment facts above are current hierarchy observations only. Historical per-control bindings and historical revision fields remain audit records; no revision-backed current control binding is claimed until the writer runtime can read the official current revision.",
     "remainingGate": "VC3_BACKPORT_REQUIRES_SEPARATE_LOCAL_AND_HOST_ADMISSION"
+  },
+  "currentLocalReconciliation": {
+    "recordedAt": "2026-07-23T17:39:21Z",
+    "scope": "Current Figma-to-Harmony implementation reconciliation. It does not alter historical evidence or assert an unreadable current Figma revision.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "canonicalPageMasters": [
+      {
+        "pageId": "834:3",
+        "nodeId": "942:38",
+        "viewport": "phone"
+      },
+      {
+        "pageId": "834:3",
+        "nodeId": "942:40",
+        "viewport": "tablet"
+      }
+    ],
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compact": false,
+      "fold": false
+    },
+    "webdavConfiguration": {
+      "figmaInstances": {
+        "phone": {
+          "nodeId": "I2400:491;2619:11088",
+          "canonicalSourceNodeId": "2221:384"
+        },
+        "tablet": {
+          "nodeId": "I2400:730;2619:11094",
+          "canonicalSourceNodeId": "2221:447"
+        }
+      },
+      "fieldBindings": [
+        { "figmaField": "服务器地址", "harmonyStateField": "reader.webdavServerUrl" },
+        { "figmaField": "账号", "harmonyStateField": "reader.webdavUsername" },
+        { "figmaField": "密码", "harmonyStateField": "reader.webdavPassword" },
+        { "figmaField": "同步目录", "harmonyStateField": "reader.webdavSyncDir" }
+      ],
+      "actions": ["Test", "Save"],
+      "localImplementation": "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaWebDavConfigForm.ets"
+    },
+    "automaticBackupSettings": {
+      "figmaInstances": {
+        "phone": "I2400:491;2646:2",
+        "tablet": "I2400:730;2646:112",
+        "canonicalSourceNodeId": "2646:5"
+      },
+      "rows": ["storage target", "frequency", "scope"],
+      "dataContract": "No Core/Host data contract currently exists for these three rows.",
+      "localRendering": "Neutral — values and disabled interaction; Figma demonstration values are not treated as product data."
+    },
+    "localBackupHistory": {
+      "figmaInstances": {
+        "phone": "I2400:491;2646:23",
+        "tablet": "I2400:730;2646:133"
+      },
+      "dataSource": "Validated immutable local Core-storage snapshots, ordered newest first.",
+      "visibleEntryLimit": 5,
+      "expandPolicy": "Render Expand only when the actual verified history contains more than five entries.",
+      "restoreEntryPolicy": "Only an actual snapshot's verified immutable path is sent to restore preparation; Figma demonstration records are never used as data."
+    },
+    "remoteWebDavHistory": {
+      "coreProtocol": "directory.list.plan and multistatus.parse are implemented in Reader-Core-Native.",
+      "harmonyIntegration": "NOT_WIRED; no remote history record is rendered or mocked until the Harmony bridge is connected."
+    },
+    "restoreOverlayPrototypeBackport": {
+      "figmaNodes": {
+        "confirm": "2834:32130",
+        "loading": "2834:32131",
+        "complete": "2834:32132",
+        "phonePrototypeWrapper": "1995:69448",
+        "tabletPrototypeWrapper": "1995:69928"
+      },
+      "presentationBindings": {
+        "backupItemToConfirm": "Phone and Tablet backup-item prototype hits open the retained Confirm overlay with a 0.15s dissolve.",
+        "confirmToLoading": "FigmaRestoreBackupOverlay renders the reviewed 150ms dissolve only after the existing Core restore request has moved to restoring.",
+        "loadingToComplete": "The Figma demonstration 1.2s timeout is never used as a business completion signal. Complete appears only after the existing Core-owned restore-result plus success terminal.",
+        "completeClose": "The retained Complete toast auto-closes after the reviewed 1.5s presentation duration, guarded by a live route/status/sequence re-check."
+      },
+      "localImplementation": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaRestoreBackupOverlay.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/motion/RestoreBackupOverlayMotionCoordinator.ets"
+      ],
+      "ownership": "Presentation-only. Core/Host retains backup validity, atomic apply, success, failure, and durable route ownership.",
+      "staleSafety": "A newer flow, cancel, route leave, or an out-of-date Complete timer cannot close a later transaction.",
+      "reducedMotionBoundary": "The component commits directly to Loading when reader.reducedMotion is true; this is local prototype handling only and does not claim global F3 completion.",
+      "localCommit": null,
+      "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_DIRECTION",
+      "evidence": {
+        "staticContract": "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs: 23/23 pass",
+        "hapBuild": "./hvigorw assembleHap --no-daemon --no-incremental: BUILD SUCCESSFUL",
+        "deviceEvidence": "NOT_RUN_BY_USER_DIRECTION"
+      }
+    },
+    "motion": {
+      "f3Status": "NOT_STARTED",
+      "policy": "The direct Figma prototype presentation above is not F3. No independently frozen F3 actor timeline, global interrupt/cleanup contract, or global reduced-motion contract is claimed by this reconciliation."
+    },
+    "evidencePolicy": "This records current source hierarchy and local implementation boundaries only. It writes no Figma state, changes no historical record, and contains no fabricated revision or commit reference."
   }
 }

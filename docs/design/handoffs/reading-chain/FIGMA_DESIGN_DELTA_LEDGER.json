@@ -1,0 +1,694 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_FIRST_DESIGN_DELTA_LEDGER",
+  "scope": "reading-chain",
+  "status": "CURRENT_REVISION_PARTIALLY_RECONCILED_DELIVERY_BLOCKED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "currentRevision": "2379851596474967636",
+  "currentRevisionStatus": "OFFICIAL_REST_CURRENT_REVISION_READ_ONLY",
+  "currentRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+  "reconciliationRule": "Only a pre-existing current-read-unfrozen entry whose exact page, master, node and every declared variant node are resolved by the official current-revision evidence may be listed below. This records provenance only; it does not freeze a Design Delta or promote delivery.",
+  "reconciledCurrentReadEntries": [
+    {
+      "pendingEntryId": "figma-reading-chain-20260724-local-import-three-state",
+      "registryRecordId": "bookshelf.local-import-dialog",
+      "revision": "2379851596474967636",
+      "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "verifiedNodeIds": [
+        "259:10",
+        "2657:916",
+        "2657:917",
+        "2657:918",
+        "2899:58923"
+      ],
+      "deliveryStatus": "current-read-unfrozen",
+      "frozen": false
+    },
+    {
+      "pendingEntryId": "figma-reading-chain-20260724-bookshelf-multi-select",
+      "registryRecordId": "bookshelf.multi-select",
+      "revision": "2379851596474967636",
+      "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "verifiedNodeIds": [
+        "259:10",
+        "2955:1038",
+        "2956:1038",
+        "2956:1102",
+        "2956:1211",
+        "2956:1266"
+      ],
+      "deliveryStatus": "current-read-unfrozen",
+      "frozen": false
+    },
+    {
+      "pendingEntryId": "figma-reading-chain-20260723-bookshelf-bookcard-cover",
+      "registryRecordId": "bookshelf.book-card",
+      "revision": "2379851596474967636",
+      "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "verifiedNodeIds": [
+        "259:10",
+        "493:196"
+      ],
+      "unverifiedReferencedChildNodes": [
+        "493:192"
+      ],
+      "deliveryStatus": "current-read-unfrozen",
+      "frozen": false,
+      "rule": "This reconciliation covers the BookCard cover master only. It does not confer the current revision on the historical Phone List cover child 493:192."
+    },
+    {
+      "pendingEntryId": "figma-reading-chain-20260725-book-detail-chapter-row-arkui-constraint-fix",
+      "registryRecordId": "book-detail.chapter-row",
+      "revision": "2379851596474967636",
+      "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "verifiedNodeIds": [
+        "834:3",
+        "2266:5",
+        "2266:37",
+        "2266:66"
+      ],
+      "deliveryStatus": "current-read-unfrozen",
+      "frozen": false,
+      "rule": "This reconciliation records the current Phone, Tablet, and ChapterRow component-set nodes only. It does not claim same-size screenshots, user confirmation, production motion, or real-device evidence."
+    },
+    {
+      "pendingEntryId": "figma-reading-chain-20260724-book-detail-local-source-variants",
+      "registryRecordId": "book-detail.page",
+      "revision": "2379851596474967636",
+      "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "verifiedNodeIds": [
+        "834:3",
+        "941:10",
+        "941:7",
+        "941:9",
+        "2260:1438",
+        "2260:1459",
+        "2987:11403",
+        "2987:11424",
+        "2987:11445",
+        "2987:11517"
+      ],
+      "deliveryStatus": "current-read-unfrozen",
+      "frozen": false,
+      "rule": "The official current read proves the page and source-type component variants. It does not promote local/Harmony visual delivery, motion, device evidence, or any source-switch UiEvent."
+    },
+    {
+      "pendingEntryId": "figma-reading-chain-20260723-book-detail-hero-inset",
+      "registryRecordId": "book-detail.page",
+      "revision": "2379851596474967636",
+      "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "verifiedNodeIds": [
+        "834:3",
+        "2260:1460"
+      ],
+      "deliveryStatus": "current-read-unfrozen",
+      "frozen": false,
+      "rule": "The official current read resolves the attached Hero Component Set itself. Its 1px master-border versus 15px visual-child offset is structural visual evidence only; it does not promote local/Harmony parity or any interaction contract."
+    }
+  ],
+  "entries": [],
+  "pendingCurrentReadEntries": [
+    {
+      "id": "figma-reading-chain-20260724-local-import-three-state",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "259:10",
+      "canonicalMasterId": "2657:918",
+      "nodeId": "2657:918",
+      "variantNodes": [
+        "2657:916",
+        "2899:58923",
+        "2657:917"
+      ],
+      "oldValue": {
+        "figma": "Two-state local-import evidence with processing rows, retry wording, and a direct File Selection-to-Result review transition.",
+        "native": "A terminal dialog could retain progress/retry/error-analysis affordances not present in the current source."
+      },
+      "newValue": {
+        "figma": "System-picker entry, independent spinner-only Importing state, and scrollable terminal per-book success/failure result with Complete close.",
+        "native": "FigmaLocalImportDialog renders only loading or result; system picker, batch processing, terminal data, and stale guards remain runtime-owned."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "Figma review transitions are File Selection→Importing Smart Animate 0.15s and an Importing→Result 1.0s review timeout. The timeout never determines production success; global F3 remains open.",
+      "readerUiTargets": [
+        "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#localImportV2",
+        "frontend-demo-optimized/verify/r3a-local-import-popup.test.mjs"
+      ],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaLocalImportDialog.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/store/LocalBookImportBatchCoordinator.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets"
+      ],
+      "stateOwnerImpact": "Figma owns only the visible three states. ReaderEffects/Core/Host own picker, import result, and cancellation; no retry UiEvent is inferred.",
+      "validation": "Official current revision 2379851596474967636 is recorded by reconciledCurrentReadEntries. Local Web/Harmony checks remain static only; same-size parity, production motion, and device evidence remain open."
+    },
+    {
+      "id": "figma-reading-chain-20260724-bookshelf-multi-select",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "259:10",
+      "canonicalMasterId": "2956:1266",
+      "nodeId": "2956:1266",
+      "variantNodes": [
+        "2955:1038",
+        "2956:1038",
+        "2956:1102",
+        "2956:1211"
+      ],
+      "oldValue": {
+        "figma": "Generated batch/group concepts were not constrained to a V1 canonical component set.",
+        "native": "No current Figma-backed multi-select projection or atomic batch-remove request existed."
+      },
+      "newValue": {
+        "figma": "Phone/Tablet Entry and AllSelected variants use canonical BookCard instances; the action sheet has exactly 多选/书籍信息/移除书架 and the batch action is only 移除书架.",
+        "native": "FigmaBookshelfMultiSelect holds exact sourceId+bookId selection and ReaderEffects sends one Core bookshelf.removeBatch request after the existing destructive confirmation lifecycle."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "Figma cannot encode native LONG_PRESS. Review action-sheet routes and DeleteDialog review transitions do not establish production motion, interrupt, cleanup, or reduced-motion closure.",
+      "readerUiTargets": [
+        "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfMultiSelectV2",
+        "frontend-demo-optimized/verify/r3a-bookshelf-multi-select.test.mjs"
+      ],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/FigmaBookshelfMultiSelect.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/store/ReaderEffects.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/bridge/CoreRuntime.ets"
+      ],
+      "stateOwnerImpact": "Figma does not own long-press, selection identity, confirmation state, or Core mutation. Group/move/group-management capabilities remain deliberately absent.",
+      "validation": "Official current revision 2379851596474967636 is recorded by reconciledCurrentReadEntries. Local Web/Harmony checks remain static only; long-press production motion and device evidence remain open."
+    },
+    {
+      "id": "figma-reading-chain-20260723-reader-page-style-contract",
+      "status": "historical-reference-open",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "1023:17636",
+      "canonicalMasterId": "1023:17978",
+      "nodeId": "I1023:17980;739:21",
+      "oldValue": {
+        "readerUi": [
+          "平滑",
+          "覆盖",
+          "无动画"
+        ],
+        "nativeState": "pageAnimation, pageMode and paginationMode could diverge"
+      },
+      "newValue": {
+        "figmaLabels": [
+          "覆盖",
+          "滑动",
+          "仿真",
+          "滚动",
+          "无动画"
+        ],
+        "productBehavior": "滚动 is the only choice that selects vertical Scroll; 覆盖/滑动/仿真/无动画 select horizontal pagination",
+        "migrationRule": "平滑 is accepted only as a legacy input alias for 滑动 and is never emitted"
+      },
+      "viewports": [
+        "phone"
+      ],
+      "motionImpact": "Figma currently supplies quick/full panel and generic dropdown motion, but no per-page-style page-turn track. No local simulated curl or replacement timeline is authorized.",
+      "readerUiTargets": [
+        "contracts/fixtures/appearance.fixtures.json",
+        "frontend-demo-optimized/fixture.js",
+        "frontend-demo-optimized/reader-runtime-contract.js",
+        "frontend-demo-optimized/render-runtime.js"
+      ],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/store/ReaderReducer.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/contract/generated/ReaderControlFigmaTokens.ets",
+        "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs"
+      ],
+      "stateOwnerImpact": "ReaderReducer owns the atomic PageStyle -> paginationMode derivation; Core remains the owner of chapter offset/progress.",
+      "validation": "Contract and static reducer checks only. This historical 1023:17978 reference is not resolved by the official current-revision evidence and cannot authorize the current Quick/Full visual source. A new current-node Design Delta, motion decision, and same-size ArkUI comparison remain required."
+    },
+    {
+      "id": "figma-reading-chain-20260723-bookshelf-bookcard-cover",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "259:10",
+      "canonicalMasterId": "493:196",
+      "nodeId": "493:196",
+      "oldValue": {
+        "arkui": "The cover grid card could shrink to its intrinsic text width, read a local 1–5 column preference, and made the entire card a MotionAdapter card.press target."
+      },
+      "newValue": {
+        "figma": "Current canonical master 493:196 at official revision 2379851596474967636 is the only visual source for this delta.",
+        "arkui": "BookCard fills its Figma-owned grid column, uses the canonical three-column template and 16/30 gaps, preserves the 6vp title-to-author auto-layout gap, and limits short reader entry to the cover while long press keeps the existing action owner.",
+        "coverEffect": "The rounded 2:3 cover retains only Figma's 0 8 26 rgba(89,70,50,.10) effect; no page, section, title, body, or pressed-card shadow was introduced."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "Figma exposes no BookCard press reaction. The local card.press visual effect is removed; long press and reader entry retain their existing behavior owners and still require separate production-motion evidence.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookCard",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/tokens/FigmaVisualConstraintManifest.ets#bookshelfCoverColumnsTemplate",
+        "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs#bound-source-guard-bookshelf-bookcard"
+      ],
+      "stateOwnerImpact": "None; cover/image content remains Core/ReaderUiStore data.",
+      "validation": "Official current revision is recorded in the reconciliation above. Reader-for-HarmonyOS scripts/figma_reading_static_parity.test.mjs passed 29/29 and scripts/figma_visual_constraint_manifest.test.mjs passed 6/6 after the constraint fix (35/35 combined). This is not same-size screenshot, user-confirmation, production-motion, or real-device evidence."
+    },
+    {
+      "id": "figma-reading-chain-20260723-book-detail-hero-inset",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "2260:1460",
+      "nodeId": "2260:1460",
+      "oldValue": {
+        "documentedArkuiPadding": 15,
+        "status": "stale-inference"
+      },
+      "newValue": {
+        "figmaSectionPadding": 14,
+        "figmaVisualChildOffset": 15,
+        "invariant": "The 1px master border accounts for the 15px visual child offset; cover remains 86x122 and content gap remains 14vp."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "None.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets#BookHero"
+      ],
+      "stateOwnerImpact": "None; local-book source-switch guard remains a user-confirmed Core business exception.",
+      "validation": "Current-node source guard only; Songti SC font availability and same-size screenshots remain open."
+    },
+    {
+      "id": "figma-reading-chain-20260723-book-detail-summary-height",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "2265:14",
+      "nodeId": "2265:14",
+      "oldValue": {
+        "phoneHeight": 120,
+        "tabletHeight": 98,
+        "padding": 14
+      },
+      "newValue": {
+        "phoneHeight": 120.313,
+        "tabletHeight": 98.875,
+        "padding": 15
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "None.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets#BookSummaryCard"
+      ],
+      "stateOwnerImpact": "None; summary content stays Core-owned.",
+      "validation": "Current-node source guard only; Figma text clipping/line count and same-size screenshots remain open."
+    },
+    {
+      "id": "figma-reading-chain-20260723-book-detail-chapter-section",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "2265:121",
+      "nodeId": "2265:121",
+      "oldValue": {
+        "composition": "5 preview rows x 46vp in a 280vp card, with an invented current pill."
+      },
+      "newValue": {
+        "composition": "1vp inset + 48vp header + 4 ChapterRow variants x 58vp + 1vp inset = 282vp.",
+        "selected": "3vp #1B3C2D indicator plus rgba(27,60,45,.08) overlay.",
+        "directoryAction": "20px indented-list icon exported directly from Figma node 2265:72 (SHA-256 1393d436b277a55bb9f3bfd48120bbf0fe5245314f7c57094cca4eacc9c1ff3c), 94×30 button, #1F3528 glyph."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "Loading/Focus/Pressed/Disabled visual variants remain unimplemented and must not be represented as complete motion parity.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets#BookChapterList",
+        "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs"
+      ],
+      "stateOwnerImpact": "Core TOC and chapter-load remain unchanged.",
+      "validation": "Current-node source guard and exported directory asset only. Loading/Focus/Pressed/Disabled variants, font availability and same-size screenshots remain open."
+    },
+    {
+      "id": "figma-reading-chain-20260725-book-detail-chapter-row-arkui-constraint-fix",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "2266:66",
+      "nodeId": "2266:66",
+      "variantNodes": [
+        "2266:5",
+        "2266:37"
+      ],
+      "oldValue": {
+        "arkui": "A 58vp row used a local top-only divider, an unconstrained title region, and an invented current-text pill; route-wide loading was available to be mistaken for a per-row visual state."
+      },
+      "newValue": {
+        "figma": "Current canonical component set 2266:66 with Phone 2266:5 and Tablet 2266:37 is bound to official revision 2379851596474967636 by the reconciliation above.",
+        "arkui": "BookChapterList now consumes the Figma row height, insets, title widths, reserved status width, and row gap; it renders the full 1px Figma Button outline, selected overlay plus 3vp current indicator, and only ArkUI-supported focus/disabled visuals.",
+        "stateGuard": "Route-wide loading is not rendered as an invented per-row Loading state; Core remains the owner of TOC and chapter-load data."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "The ChapterRow master does not supply Book Detail navigation motion. The fix removes the local demo route transition from this visual path and does not claim motion, interrupt, cleanup, or reduced-motion closure.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets#BookChapterList",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/tokens/FigmaVisualConstraintManifest.ets#bookDetailChapterRowHeight",
+        "Reader-for-HarmonyOS/scripts/figma_reading_static_parity.test.mjs#bound-source-guard-book-detail-chapter-row"
+      ],
+      "stateOwnerImpact": "None; Core continues to own TOC identity, selected chapter, and chapter-load effects.",
+      "validation": "Official current revision is recorded in the reconciliation above. Reader-for-HarmonyOS scripts/figma_reading_static_parity.test.mjs passed 29/29 and scripts/figma_visual_constraint_manifest.test.mjs passed 6/6 after the constraint fix (35/35 combined). This is not same-size screenshot, user-confirmation, production-motion, or real-device evidence."
+    },
+    {
+      "id": "figma-reading-chain-20260723-book-detail-action-bar",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "2265:188",
+      "nodeId": "2265:188",
+      "oldValue": {
+        "verticalInset": "3vp top + 3vp bottom",
+        "danger": "orange text / generic border and surface"
+      },
+      "newValue": {
+        "verticalInset": "6vp top + host safe-area bottom",
+        "primary": "#1F3528 fill/border with white label",
+        "danger": "#EBFFFCF8 fill, #6BB4A697 border, #D62222 label"
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "No new motion. Continue reading retains the existing Core location recovery contract.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/LibraryShell.ets#BookDetailActionBarButton"
+      ],
+      "stateOwnerImpact": "None; delete and continue actions retain their existing UiEvent/Core owners.",
+      "validation": "Current-node values only; actual Inter font availability and same-size screenshots remain required."
+    },
+    {
+      "id": "figma-reading-chain-20260723-book-detail-delete-dialog",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "2269:66",
+      "nodeId": "2269:66",
+      "variantNodes": [
+        "2269:46",
+        "2269:54",
+        "2269:65"
+      ],
+      "oldValue": {
+        "arkui": "A full-width bottom sheet with local copy and a global page error on Core failure.",
+        "async": "No visible Loading/Failed projection; Back/backdrop could clear an in-flight target."
+      },
+      "newValue": {
+        "visual": "Centered 306×190 dialog, 12px radius, #C1C7CD border, #EBFFFCF8 fill, 0/18/46 rgba(89,70,50,.16) shadow, 130×38 cancel/confirm controls.",
+        "variants": "Default maps to 2269:46; Loading maps to 2269:54 with 5px dots; Failed maps to 2269:65 with retry.",
+        "localOwner": "Existing exact Core sourceId/bookId identity now transitions Default→Loading→Failed/retry with a monotonically increasing epoch. Loading blocks cancellation and stale callbacks."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "Figma exposes no reaction or motion track for this component. No delete-specific animation was invented; the existing generic overlay transition remains a local runtime behavior.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookshelfRemovalConfirm",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/store/ReaderReducer.ets#bookshelfRemovalDialogPhase",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/store/ReaderEffects.ets#removeConfirmedBookshelfBook",
+        "Reader-for-HarmonyOS/entry/src/test/DestructiveFlow.test.ets"
+      ],
+      "stateOwnerImpact": "Figma owns visible variants only. ReaderReducer owns local phase/epoch, ReaderEffects owns the Core request and Core stays owner of bookshelf mutation.",
+      "validation": "ArkTS compilation and reducer lifecycle coverage only. Official revision, font rendering and same-size Phone/Tablet screenshot comparison remain required before any parity claim."
+    },
+    {
+      "id": "figma-reading-chain-20260723-bookshelf-section-actions",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "259:10",
+      "canonicalMasterId": "487:75",
+      "nodeId": "487:75",
+      "contextNodes": [
+        "941:6",
+        "2236:1454"
+      ],
+      "variantNodes": [
+        "487:5",
+        "487:13",
+        "487:23",
+        "487:28",
+        "487:34",
+        "487:40",
+        "487:48",
+        "487:58",
+        "487:63",
+        "487:69"
+      ],
+      "oldValue": {
+        "arkui": "Four hand-authored action controls used generic local icons, persistent rounded/pill chrome and no search action."
+      },
+      "newValue": {
+        "composition": "Five actions Grid/List/Filter/Search/Settings with 34px visible regions and 44px hit targets; current-read Default/Active vectors map to the recorded ten variants.",
+        "colors": "Default outline #756F69; active outline #2D4A3E. Orange is only the Figma InteractionStateLayer: Hover .08 and Pressed .12, not a selected background.",
+        "assetStatus": "All ten local vectors are current-instance variant source-read and local-byte-unverified; no currentExportSha256 is claimed."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "Figma only supplies internal Hover/Pressed Smart Animate durations (120/80ms). It supplies no business navigation reaction, so no UiEvent, state owner or route behavior is inferred from this delta.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#ShelfSectionHeader",
+        "Reader-for-HarmonyOS/entry/src/main/resources/base/media/bookshelf_section_action_*.svg"
+      ],
+      "stateOwnerImpact": "None; existing view/filter/search/settings route ownership stays ReaderUiStore and is not changed by the visual source read.",
+      "validation": "ArkTS compilation and a bound-source guard only. Official revision and same-size Phone/Tablet screenshot comparisons remain required before any parity claim."
+    },
+    {
+      "id": "figma-reading-chain-20260723-bookshelf-bottom-nav-surface",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "259:7",
+      "canonicalMasterId": "344:379",
+      "nodeId": "344:379",
+      "variantNodes": [
+        "343:22",
+        "343:246"
+      ],
+      "oldValue": {
+        "arkui": "Bottom navigation carried a generic 0/8/26 shadow and a non-transparent inactive-tab paper fill."
+      },
+      "newValue": {
+        "phone": "343:22 is a 362×68 surface with white .90 fill and #C1C7CD 1px border; Figma specifies no surface shadow and transparent inactive items.",
+        "tablet": "343:246 is an 82×266 left navigation surface with 8px padding, four 66×58 items and 6px gaps; active treatment is #1F3528 and inactive items are transparent.",
+        "assetStatus": "Main-tab icon resources are source-read local-byte-unverified; exact asset bytes and official revision are not asserted."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "No Figma navigation transition or business route reaction is inferred from the visual component read.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/SharedComponents.ets#BottomNav",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/MainTabShell.ets",
+        "Reader-for-HarmonyOS/entry/src/main/resources/base/media/main_tab_icon_*.svg"
+      ],
+      "stateOwnerImpact": "None; active tab and route stay ReaderUiStore-owned.",
+      "validation": "ArkTS compilation only. Official revision, current icon export byte comparison and same-size screenshots remain open; this is not an exact or visual-parity entry."
+    },
+    {
+      "id": "figma-reading-chain-20260723-bookshelf-phone-list",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "259:10",
+      "canonicalMasterId": "493:196",
+      "nodeId": "493:191",
+      "relatedNodeIds": [
+        "493:192",
+        "271:333"
+      ],
+      "oldValue": {
+        "arkui": "A local minHeight 66 row with padding and top separator, plus a speculative pressed-card visual treatment."
+      },
+      "newValue": {
+        "phoneStructure": "493:191 reads as a 350.903×71.988 row: 48×72 cover, 10px gaps, content column, then a 34×34 More affordance. The row has no local background, padding or separator.",
+        "more": "The local More vector is sourced from Figma icon 271:333 and stays inert because the component has no Figma reaction.",
+        "dataGap": "Source/cache pills are not rendered: Core does not currently expose a source display name or per-book cache state. They are not filled with local placeholder data.",
+        "tablet": "Figma has no Tablet List visual target; it fails closed rather than scaling the Phone structure."
+      },
+      "viewports": [
+        "phone"
+      ],
+      "motionImpact": "Figma has no BookCard press reaction. No pressed-card effect or More-button workflow is introduced; long press retains the separately approved behavior contract.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookListRow",
+        "Reader-for-HarmonyOS/entry/src/main/resources/base/media/bookshelf_bookcard_more.svg"
+      ],
+      "stateOwnerImpact": "None; Core continues to own book identity and list data. The visible source/cache omissions are explicit data-contract gaps, not visual substitutions.",
+      "validation": "ArkTS compilation and bound-source guard only. Same-size Phone screenshot, font validation, current icon export-byte check and official revision remain open."
+    },
+    {
+      "id": "figma-reading-chain-20260723-unbound-generic-shadow-removal",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": null,
+      "canonicalMasterId": null,
+      "nodeId": null,
+      "effectSources": [
+        {
+          "nodeId": "493:196",
+          "target": "BookCard cover",
+          "effect": "0 8 26 rgba(89,70,50,.10)"
+        },
+        {
+          "nodeId": "493:192",
+          "target": "Phone List cover",
+          "effect": "0 6 12 rgba(52,38,26,.12)"
+        },
+        {
+          "nodeId": "2269:66",
+          "target": "Book Detail DeleteDialog",
+          "effect": "0 18 46 rgba(89,70,50,.16)"
+        }
+      ],
+      "oldValue": {
+        "arkui": "A generic DemoAliasTokens shadow could be applied to unbound page, body, section, title, menu and control surfaces, causing recurring accidental upper-left/body shadows."
+      },
+      "newValue": {
+        "policy": "Remove generic unbound demo shadows globally from the reading chain. Retain only the three Figma effect sources listed here; a new allowlist guard rejects any other unbound generic shadow use.",
+        "guard": "Reader-for-HarmonyOS/scripts/check_figma_shadow_allowlist.mjs"
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "None. This is an effect-source constraint, not a motion change.",
+      "readerUiTargets": [],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets",
+        "Reader-for-HarmonyOS/scripts/check_figma_shadow_allowlist.mjs"
+      ],
+      "stateOwnerImpact": "None; shadow removal cannot alter Core, route, UiEvent or state ownership.",
+      "validation": "The allowlist script is a source guard, not visual parity. Each retained effect still needs official revision and same-size screenshot evidence before closure."
+    },
+    {
+      "id": "figma-reading-chain-20260724-book-detail-local-source-variants",
+      "status": "current-read-unfrozen",
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "revision": null,
+      "pageId": "834:3",
+      "canonicalMasterId": "941:10",
+      "nodeId": "941:10",
+      "variantNodes": {
+        "page": {
+          "remote": {
+            "phone": "941:7",
+            "tablet": "941:9"
+          },
+          "local": {
+            "phone": "2987:11445",
+            "tablet": "2987:11517"
+          }
+        },
+        "hero": {
+          "remote": {
+            "phone": "2260:1438",
+            "tablet": "2260:1459"
+          },
+          "local": {
+            "phone": "2987:11403",
+            "tablet": "2987:11424"
+          }
+        }
+      },
+      "oldValue": {
+        "figma": "Book Detail only exposed the Remote page and Hero variants, including a source label and source-switch affordance.",
+        "native": "A local book could inherit a remote-book source-switch affordance if rendering selected the shared visual shape without source-type discrimination."
+      },
+      "newValue": {
+        "figma": "Page/Book Detail and Library/BookDetail/Hero now expose Remote and Local source-type variants for Phone and Tablet. Local Hero retains the original cover, title, author and latest-chapter layout but omits only the source label and source-switch affordance.",
+        "native": "The existing exact local-source guard remains the behavior owner: local books cannot enter source-switch. This Figma delta adds no UiEvent, reducer transition, business flow, or local visual approximation."
+      },
+      "viewports": [
+        "phone",
+        "tablet"
+      ],
+      "motionImpact": "None. The resting visual variants are source-type alternatives; F3 motion, interrupt, cleanup and reduced-motion contracts remain open.",
+      "readerUiTargets": [
+        "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookDetailV2",
+        "frontend-demo-optimized/render-runtime.js#local-book-source-switch-guard"
+      ],
+      "arkuiTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/store/ReaderUiStore.ets#requestSourceSwitchOpen"
+      ],
+      "stateOwnerImpact": "Figma owns the two static source-type renderings only. Core/ReaderUiStore remain the owners of book source identity, routing, source switching and saved reading position.",
+      "validation": "Official REST current revision 2379851596474967636 resolves the page master plus all eight Remote/Local page and Hero component variants through reconciledCurrentReadEntries. This remains unfrozen because no local/Harmony same-size parity, frozen motion decision, or device evidence has been promoted."
+    }
+  ],
+  "entryContract": {
+    "idFormat": "figma-reading-chain-YYYYMMDD",
+    "required": [
+      "id",
+      "status=frozen",
+      "figmaFileKey",
+      "revision",
+      "pageId",
+      "canonicalMasterId",
+      "nodeId",
+      "oldValue",
+      "newValue",
+      "viewports",
+      "motionImpact",
+      "readerUiTargets",
+      "arkuiTargets",
+      "stateOwnerImpact",
+      "validation"
+    ],
+    "rule": "A component can be classified exact only when its designDeltaId references a frozen entry with the same Figma file, page, canonical master, node and current revision."
+  },
+  "prohibitedShortcuts": [
+    "using a historical named Figma version as a current delta revision",
+    "using Pages Final or a screenshot as the canonical master",
+    "editing a local visual because it looks wrong without an entry",
+    "treating a source-code string test as visual parity"
+  ],
+  "nextRequiredEntry": "The official current revision is now available for the Book Detail source-type delta, but no frozen entry may be emitted until the user confirms the exact Local Phone/Tablet variants and same-size local/Harmony screenshots are collected. Separately, the next current-read delta must resolve the Figma-absent Reader More menu visual target or withhold that local dropdown."
+}

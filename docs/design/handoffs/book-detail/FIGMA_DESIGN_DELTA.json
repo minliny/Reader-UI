@@ -37,7 +37,10 @@
     {
       "target": "Library/BookDetail/DeleteDialog and RetryStatus",
       "pageId": "834:3",
-      "nodeIds": ["2269:66", "2269:101"],
+      "nodeIds": [
+        "2269:66",
+        "2269:101"
+      ],
       "oldValue": "Delete, busy, failed, offline and retry states were only local runtime contracts without Book Detail Figma evidence.",
       "newValue": "DeleteDialog reuses Overlay/Dialog for Default, Loading and Failed; RetryStatus reuses State/StatusPanel for Loading, Error and Offline without changing local ownership."
     },
@@ -51,42 +54,126 @@
     {
       "target": "Book Directory downstream evidence",
       "pageId": "834:3",
-      "nodeIds": ["942:77", "2275:85", "2275:89", "2275:93"],
+      "nodeIds": [
+        "942:77",
+        "2275:85",
+        "2275:89",
+        "2275:93"
+      ],
       "oldValue": "Reader Full Directory displayed chapters 30–33 only, while local book-directory also declared stable identities for chapters 34–36.",
       "newValue": "Reader Full Directory remains untouched downstream evidence; three attached ChapterRow instances provide exact chapter 34–36 crosswalk targets without creating another route owner."
     },
     {
       "target": "Phone/Tablet responsive contract",
       "pageId": "834:3",
-      "nodeIds": ["941:7", "941:9"],
+      "nodeIds": [
+        "941:7",
+        "941:9"
+      ],
       "oldValue": "Responsive layout existed but internal structures did not inherit the new Book Detail canonical component graph.",
       "newValue": "Phone 390×844 and Tablet 760×960 each contain 9 attached instances; landscape aliases Tablet; no Compact/Fold master or detached instance exists."
     }
   ],
   "historicalCreatedCanonicalNodes": [
-    { "nodeId": "2260:1417", "name": "F2 · Book Detail · Canonical + Evidence" },
-    { "nodeId": "2260:1460", "name": "Library/BookDetail/Hero", "variantCount": 2 },
-    { "nodeId": "2265:14", "name": "Library/BookDetail/Summary", "variantCount": 2 },
-    { "nodeId": "2265:121", "name": "Library/BookDetail/ChapterSection", "variantCount": 2 },
-    { "nodeId": "2265:188", "name": "Library/BookDetail/ActionBar", "variantCount": 2 },
-    { "nodeId": "2265:225", "name": "Library/BookDetail/QuickSourceSheet", "variantCount": 2 },
-    { "nodeId": "2266:66", "name": "Library/BookDetail/ChapterRow", "variantCount": 12 },
-    { "nodeId": "2269:66", "name": "Library/BookDetail/DeleteDialog", "variantCount": 3 },
-    { "nodeId": "2269:101", "name": "Library/BookDetail/RetryStatus", "variantCount": 3 },
-    { "nodeId": "2274:211", "name": "Library/BookDetail/RecoveryAction", "variantCount": 42 }
+    {
+      "nodeId": "2260:1417",
+      "name": "F2 · Book Detail · Canonical + Evidence"
+    },
+    {
+      "nodeId": "2260:1460",
+      "name": "Library/BookDetail/Hero",
+      "variantCount": 2
+    },
+    {
+      "nodeId": "2265:14",
+      "name": "Library/BookDetail/Summary",
+      "variantCount": 2
+    },
+    {
+      "nodeId": "2265:121",
+      "name": "Library/BookDetail/ChapterSection",
+      "variantCount": 2
+    },
+    {
+      "nodeId": "2265:188",
+      "name": "Library/BookDetail/ActionBar",
+      "variantCount": 2
+    },
+    {
+      "nodeId": "2265:225",
+      "name": "Library/BookDetail/QuickSourceSheet",
+      "variantCount": 2
+    },
+    {
+      "nodeId": "2266:66",
+      "name": "Library/BookDetail/ChapterRow",
+      "variantCount": 12
+    },
+    {
+      "nodeId": "2269:66",
+      "name": "Library/BookDetail/DeleteDialog",
+      "variantCount": 3
+    },
+    {
+      "nodeId": "2269:101",
+      "name": "Library/BookDetail/RetryStatus",
+      "variantCount": 3
+    },
+    {
+      "nodeId": "2274:211",
+      "name": "Library/BookDetail/RecoveryAction",
+      "variantCount": 42
+    }
   ],
   "historicalViewportConstraints": {
-    "phone": { "nodeId": "941:7", "size": "390x844", "attachedInstances": 9 },
-    "tablet": { "nodeId": "941:9", "size": "760x960", "attachedInstances": 9 },
-    "landscape": { "alias": "Tablet", "independentMaster": false },
-    "compact": { "prohibited": true },
-    "fold": { "prohibited": true }
+    "phone": {
+      "nodeId": "941:7",
+      "size": "390x844",
+      "attachedInstances": 9
+    },
+    "tablet": {
+      "nodeId": "941:9",
+      "size": "760x960",
+      "attachedInstances": 9
+    },
+    "landscape": {
+      "alias": "Tablet",
+      "independentMaster": false
+    },
+    "compact": {
+      "prohibited": true
+    },
+    "fold": {
+      "prohibited": true
+    }
   },
   "historicalStateCoverage": {
-    "chapterRow": ["Default", "Pressed", "Focus", "Disabled", "Loading", "Selected"],
-    "recoveryAction": ["Default", "Pressed", "Focus", "Disabled", "Loading", "Selected"],
-    "deleteDialog": ["Default", "Loading", "Failed"],
-    "retryStatus": ["Loading", "Error", "Offline"],
+    "chapterRow": [
+      "Default",
+      "Pressed",
+      "Focus",
+      "Disabled",
+      "Loading",
+      "Selected"
+    ],
+    "recoveryAction": [
+      "Default",
+      "Pressed",
+      "Focus",
+      "Disabled",
+      "Loading",
+      "Selected"
+    ],
+    "deleteDialog": [
+      "Default",
+      "Loading",
+      "Failed"
+    ],
+    "retryStatus": [
+      "Loading",
+      "Error",
+      "Offline"
+    ],
     "localOwnerBoundary": "Figma does not alter UiEvent, reducer ownership, asynchronous guards, route ownership, focus ownership, or business flow."
   },
   "historicalVisualAudit": {
@@ -100,7 +187,11 @@
     "changedPixelPercentTablet": 0.1972,
     "chapterLabelsRestored": true,
     "activePageDropShadowIntroduced": false,
-    "semanticDialogShadowExceptions": ["2269:39", "2269:47", "2269:58"],
+    "semanticDialogShadowExceptions": [
+      "2269:39",
+      "2269:47",
+      "2269:58"
+    ],
     "detachedInstanceCount": 0,
     "result": "PASS_USER_CONFIRMED"
   },
@@ -117,20 +208,184 @@
     "nextFigmaWriterGate": null,
     "remainingGates": []
   },
-  "currentRevision": null,
-  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentRevision": "2379851596474967636",
+  "currentRevisionStatus": "OFFICIAL_REST_CURRENT_VERSION_NODE_VERIFIED",
+  "currentRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+  "currentWriterDesignDelta": {
+    "recordedAt": "2026-07-23T17:14:53Z",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "revision": null,
+    "revisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_REQUEST",
+    "deltas": [
+      {
+        "target": "Library/BookDetail/QuickSourceSheet",
+        "oldNodeIds": [
+          "2265:225",
+          "2265:226",
+          "2265:238"
+        ],
+        "newNodeId": null,
+        "oldValue": "A retired Phone/Tablet QuickSourceSheet component and its two direct master instances remained in the current Book Detail component graph.",
+        "newValue": "The historical component set and both direct instances are deleted. No detached replacement was created; remote-book source switching continues to use SourceSwitch/Window 568:134 outside the Book Detail master.",
+        "preservedNodes": [
+          "941:7",
+          "941:9",
+          "943:651",
+          "943:855",
+          "568:134"
+        ],
+        "postWriteVerification": "Deleted node IDs resolve to null. Phone and Tablet masters each retain eight canonical instance descendants and no QuickSourceSheet-named child."
+      }
+    ]
+  },
   "currentLiveF0Verification": {
-    "scope": "Current live observation records only retained static structure; it does not make a new visual change or assert a reading business flow.",
+    "scope": "Post-cleanup structural verification of retained static structure. The separate currentWriterDesignDelta records the only current writer mutation; neither record asserts a reading business flow.",
     "canonicalMaster": "941:10",
-    "phone": { "nodeId": "941:7", "size": "390x844", "finalRoot": "943:651", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 },
-    "tablet": { "nodeId": "941:9", "size": "760x960", "finalRoot": "943:855", "attachedCanonicalInstanceCount": 9, "detachedInstanceCount": 0, "rootReactionCount": 0 },
+    "phone": {
+      "nodeId": "941:7",
+      "size": "390x844",
+      "finalRoot": "943:651",
+      "attachedCanonicalInstanceCount": 8,
+      "detachedInstanceCount": 0,
+      "rootReactionCount": 0
+    },
+    "tablet": {
+      "nodeId": "941:9",
+      "size": "760x960",
+      "finalRoot": "943:855",
+      "attachedCanonicalInstanceCount": 8,
+      "detachedInstanceCount": 0,
+      "rootReactionCount": 0
+    },
     "finalAssembly": "943:648",
-    "defaultFinalPageComposition": ["Hero", "Summary", "ChapterSection", "ChapterRow=Default", "ActionBar", "QuickSourceSheet"],
-    "independentStateEvidence": ["DeleteDialog", "RetryStatus", "RecoveryAction"],
+    "defaultFinalPageComposition": [
+      "Hero",
+      "Summary",
+      "ChapterSection",
+      "ChapterRow=Default",
+      "ActionBar"
+    ],
+    "retiredHistoricalVisual": {
+      "nodeId": "2265:225",
+      "status": "DELETED_IN_CURRENT_WRITER_TRANSACTION"
+    },
+    "activeRemoteSourceSwitchVisual": {
+      "pageId": "259:13",
+      "nodeId": "568:134",
+      "name": "SourceSwitch/Window"
+    },
+    "independentStateEvidence": [
+      "DeleteDialog",
+      "RetryStatus",
+      "RecoveryAction"
+    ],
     "stateEvidenceBoundary": "Delete/retry/recovery are independent state evidence, not default final-page content.",
-    "landscape": { "alias": "Tablet", "independentMaster": false },
-    "compact": { "prohibited": true },
-    "fold": { "prohibited": true },
-    "currentEvidencePolicy": "The historical F2 delta is audit-only until an official current Figma revision can be read."
+    "landscape": {
+      "alias": "Tablet",
+      "independentMaster": false
+    },
+    "compact": {
+      "prohibited": true
+    },
+    "fold": {
+      "prohibited": true
+    },
+    "currentEvidencePolicy": "The historical F2 delta remains audit-only. The narrow Local/Remote source-type delta below has a separately verified official current Figma revision but stays unfrozen until its own visual confirmation and local/Harmony parity evidence exist."
+  },
+  "postWriteLocalBookSourceDesignDelta": {
+    "status": "CURRENT_READ_UNFROZEN",
+    "recordedAt": "2026-07-24T17:03:16.032Z",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "revision": "2379851596474967636",
+    "revisionEvidence": {
+      "artifact": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+      "kind": "FIGMA_CURRENT_REVISION_EVIDENCE",
+      "currentRevision": "2379851596474967636",
+      "observedAt": "2026-07-24T17:57:17.506Z",
+      "source": "figma-rest"
+    },
+    "canonicalMaster": {
+      "nodeId": "941:10",
+      "name": "Page/Book Detail",
+      "revision": "2379851596474967636"
+    },
+    "canonicalHeroComponentSet": {
+      "nodeId": "2260:1460",
+      "name": "Library/BookDetail/Hero",
+      "revision": "2379851596474967636",
+      "relationship": "Attached Component Set owning the Remote/Local variants; no detached page frame, UiEvent, owner, or business-flow change is implied."
+    },
+    "deltas": [
+      {
+        "target": "Page/Book Detail SourceType variants",
+        "oldNodeIds": [
+          "941:7",
+          "941:9"
+        ],
+        "newNodeIds": [
+          "941:7",
+          "941:9",
+          "2987:11445",
+          "2987:11517"
+        ],
+        "oldValue": "Remote Phone/Tablet were the only page variants.",
+        "newValue": "Phone and Tablet each expose both SourceType=Remote and SourceType=Local variants. Remote nodes are retained; Local nodes are attached canonical component variants, not detached frames."
+      },
+      {
+        "target": "Library/BookDetail/Hero SourceType variants",
+        "oldNodeIds": [
+          "2260:1438",
+          "2260:1459"
+        ],
+        "newNodeIds": [
+          "2260:1438",
+          "2260:1459",
+          "2987:11403",
+          "2987:11424"
+        ],
+        "oldValue": "The existing Hero only represented a remote book and visibly included the source label and source-switch affordance.",
+        "newValue": "The Local variants preserve the existing cover, title, author and latest-chapter hierarchy and omit only source label/switch. No text was edited or font loaded; Songti SC content remains an untouched clone."
+      }
+    ],
+    "viewports": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscape": "Tablet alias",
+      "compact": "prohibited",
+      "fold": "prohibited"
+    },
+    "componentInheritance": {
+      "localPhoneHeroInstance": {
+        "nodeId": "2987:11478",
+        "mainComponentId": "2987:11403",
+        "detached": false
+      },
+      "localTabletHeroInstance": {
+        "nodeId": "2987:11550",
+        "mainComponentId": "2987:11424",
+        "detached": false
+      }
+    },
+    "visualVerification": {
+      "phoneScreenshot": "390x844",
+      "tabletScreenshot": "760x960",
+      "sourceSwitchTextInLocalHero": 0,
+      "detachedInstances": 0
+    },
+    "localCommit": null,
+    "localCommitStatus": "NO_COMMIT_CREATED_BY_USER_REQUEST",
+    "stateOwnerBoundary": "Figma only changes the static source-type rendering. Local/Core/HarmonyOS retain source identity, source-switch eligibility, route behavior and saved-position ownership; no UiEvent or state owner is changed.",
+    "frozen": false,
+    "remainingGates": [
+      "user visual confirmation",
+      "same-size Reader-UI parity",
+      "same-size HarmonyOS parity",
+      "motion/F3 if a source-type transition is introduced",
+      "device evidence"
+    ]
   }
 }
