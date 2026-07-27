@@ -1275,6 +1275,11 @@
       "sha256": "ce8fa0220381afc2a3dec50fbbb1a21629a31d1685dd50d0f91ef8f8848fad41"
     },
     {
+      "path": "generated/arkts/VisualAdmission.ets",
+      "byteLength": 91991,
+      "sha256": "196ac4713f39bdc5646c1a5801fbc4403962ced0f9b287b01001b5ade4dfaa3a"
+    },
+    {
       "path": "generated/kotlin/Appearance.kt",
       "byteLength": 5468,
       "sha256": "0727f65fbc9bf20f7961117a1b9908dd4b390dd544e2b665fcbdc37432b132ab"
@@ -1894,9 +1899,9 @@
     },
     {
       "name": "generated",
-      "fileCount": 54,
-      "byteLength": 2180302,
-      "sha256": "3d320796d6516edd33631455e994c5b3c8a050f7ec7b0533c593855f7907a492",
+      "fileCount": 55,
+      "byteLength": 2272293,
+      "sha256": "a9d092d37a9ceae2379f2078c892fea51ceffe4508fb58f6508061490e9851f2",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
@@ -1916,6 +1921,7 @@
         "generated/arkts/UiEvent.ets",
         "generated/arkts/UiState.ets",
         "generated/arkts/ViewState.ets",
+        "generated/arkts/VisualAdmission.ets",
         "generated/kotlin/Appearance.kt",
         "generated/kotlin/Content.kt",
         "generated/kotlin/CoreCommand.kt",
