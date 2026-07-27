@@ -1,0 +1,172 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "bookshelf",
+  "status": "F0_LIVE_RECONCILED_HISTORICAL_F2_EVIDENCE",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "historicalRevision": "2378442065521482111",
+  "historicalRevisionTitle": "F2 · Bookshelf · User Confirmed",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378442065521482111",
+  "historicalPilotRevision": "2378359202710026522",
+  "historicalPilotRevisionTitle": "F2 · Bookshelf · Local R3a Pilot",
+  "historicalConfirmedAt": "2026-07-21T08:50:59+08:00",
+  "historicalLocalImplementationCommit": "003daa7b509505085b35832c43d67b22d58b96d9",
+  "historicalHandoffEvidenceCommit": "8dd0bdae30dba3896086a61aac43673f8788910b",
+  "historicalDeltas": [
+    {
+      "target": "Page/Bookshelf",
+      "pageId": "834:3",
+      "nodeId": "941:6",
+      "oldValue": "Phone and Tablet masters were flat/manual and contained no component instances.",
+      "newValue": "Both masters retain their original layout and use attached AppTopBar, ContinueReadingCard, SectionHeader, BookCard and BottomNav instances; Page 23 final/prototype instances remain attached."
+    },
+    {
+      "target": "Navigation/MainTabItem and Navigation/BottomNav",
+      "pageId": "259:7",
+      "nodeIds": [
+        "342:175",
+        "344:379"
+      ],
+      "oldValue": "Transparent state and hit-target layers participated in Auto Layout, squeezing icons/labels and creating malformed navigation instances.",
+      "newValue": "State and hit-target layers are absolute overlays; 20 MainTabItem and 8 BottomNav variants preserve normal icon and label geometry and minimum hit targets."
+    },
+    {
+      "target": "Library/SectionAction",
+      "pageId": "259:10",
+      "nodeId": "487:75",
+      "oldValue": "HitTarget/44 and state layers participated in the 34px control Auto Layout and pushed icons outside the component bounds.",
+      "newValue": "All 50 variants use absolute 44px hit targets with centered 34px state layers and 20px icons; the five toolbar controls remain right aligned."
+    },
+    {
+      "target": "Library/BookCard",
+      "pageId": "259:10",
+      "nodeId": "493:196",
+      "oldValue": "Only Phone-sized internal Cover geometry existed, so resizing a Tablet instance left a small cover inside a large card.",
+      "newValue": "The same component set now includes real Viewport=Phone and Viewport=Tablet Cover variants; 11 Tablet instances swap variants without detaching and preserve cover ratio, title and author."
+    },
+    {
+      "target": "Bookshelf conditional controls",
+      "pageId": "259:10",
+      "nodeId": "2236:577",
+      "oldValue": "Filter/group/sort/retry/offline/menu controls had stable local keys but no canonical Figma node coverage.",
+      "newValue": "Library/BookshelfAction supplies real Default controls plus Default/Pressed/Focus/Disabled/Loading/Selected state evidence; all 50 local keys have exact node bindings."
+    },
+    {
+      "target": "Phone/Tablet scrolling contract",
+      "pageId": "834:3",
+      "nodeIds": [
+        "940:3",
+        "859:3"
+      ],
+      "oldValue": "Overflow direction was NONE and the long shelf content had no explicit prototype scroll contract.",
+      "newValue": "Both viewport roots declare VERTICAL overflow; status, topbar and floating bottom navigation have explicit fixed-scroll intent metadata; landscape aliases Tablet and no Compact/Fold master is introduced."
+    }
+  ],
+  "historicalCreatedCanonicalNodes": [
+    {
+      "nodeId": "2236:527",
+      "name": "F2 · Bookshelf · Canonical + Evidence"
+    },
+    {
+      "nodeId": "2236:577",
+      "name": "Library/BookshelfAction",
+      "variantCount": 27
+    },
+    {
+      "nodeId": "2241:2",
+      "name": "Library/BookCard · Tablet · TitleLines=1"
+    },
+    {
+      "nodeId": "2241:6",
+      "name": "Library/BookCard · Tablet · TitleLines=2"
+    }
+  ],
+  "historicalViewportConstraints": {
+    "phone": {
+      "nodeId": "941:3",
+      "size": "390x844",
+      "contentWidth": 350,
+      "overflow": "VERTICAL"
+    },
+    "tablet": {
+      "nodeId": "941:5",
+      "size": "760x960",
+      "contentWidth": 620,
+      "overflow": "VERTICAL"
+    },
+    "landscape": {
+      "alias": "Tablet",
+      "independentMaster": false
+    },
+    "compact": {
+      "prohibited": true
+    },
+    "fold": {
+      "prohibited": true
+    }
+  },
+  "historicalStateCoverage": {
+    "sharedActionStates": [
+      "Default",
+      "Pressed",
+      "Focus",
+      "Disabled",
+      "Loading",
+      "Selected"
+    ],
+    "bookLayouts": [
+      "Cover",
+      "List"
+    ],
+    "bookViewports": [
+      "Phone",
+      "Tablet"
+    ],
+    "prototypeReactionLayers": {
+      "phone": 17,
+      "tablet": 17
+    },
+    "motionBoundary": "bookshelf.view.switch remains sharedLayoutMorph with redirect interrupt and zeroDuration reduced motion; no F3 work was performed.",
+    "localOwnerBoundary": "Figma does not alter UiEvent, reducer ownership, asynchronous guards, route ownership, or business flow."
+  },
+  "historicalVisualAudit": {
+    "beforePhone": "/tmp/bookshelf-before-phone.png",
+    "beforeTablet": "/tmp/bookshelf-before-tablet.png",
+    "afterPhone": "/tmp/bookshelf-named-phone.png",
+    "afterTablet": "/tmp/bookshelf-named-tablet.png",
+    "afterPhoneSha256": "7ec6914bcb273ccb2fc89a84196d95140db2e93d2929038ad327679ef2c61683",
+    "afterTabletSha256": "97523f3e16a82e75d48c67aa129c497fe26d460e6a50db651745e0f15eea4659",
+    "controlsRightAligned": true,
+    "phoneDensityPreserved": true,
+    "tabletCoverRatioPreserved": true,
+    "activeDropShadowIntroduced": false,
+    "nonCoverDropShadowCount": 0,
+    "detachedInstanceCount": 0,
+    "result": "PASS_USER_CONFIRMED"
+  },
+  "historicalAdmission": {
+    "connectorWriteTransactionComplete": true,
+    "namedRevisionComplete": true,
+    "userConfirmed": true,
+    "f2Exit": true,
+    "nextFigmaWriterReleased": true,
+    "nextLocalLane": "reader-runtime",
+    "nextLocalLaneReleased": true,
+    "nextFigmaWriterGate": null,
+    "remainingGates": []
+  },
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "currentLiveF0Verification": {
+    "scope": "Current live observation records only static structural truth; it makes no new Figma visual change and does not claim a reading product flow.",
+    "canonicalMaster": "941:6",
+    "phone": { "nodeId": "941:3", "size": "390x844", "finalRoot": "943:11", "attachedCanonicalInstanceCount": 56, "detachedInstanceCount": 0, "internalHoverPressReactionCount": 24 },
+    "tablet": { "nodeId": "941:5", "size": "760x960", "finalRoot": "943:437", "attachedCanonicalInstanceCount": 56, "detachedInstanceCount": 0, "internalHoverPressReactionCount": 24 },
+    "finalAssembly": "943:8",
+    "landscape": { "alias": "Tablet", "independentMaster": false },
+    "compact": { "prohibited": true },
+    "fold": { "prohibited": true },
+    "reactionBoundary": "All counted reactions are component hover/press micro-reactions. They are not evidence of Reader navigation, progress restore, or another business process.",
+    "currentEvidencePolicy": "The historical F2 delta remains audit-only until an official current Figma revision can be read."
+  }
+}

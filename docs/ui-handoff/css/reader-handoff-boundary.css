@@ -1,8 +1,0 @@
-.handoff-boundary {
-  border: 1px dashed var(--reader-boundary);
-}
-
-.reader-top-area .handoff-boundary,
-.reader-content-layer.handoff-boundary {
-  border-color: rgba(63, 77, 82, 0.12);
-}

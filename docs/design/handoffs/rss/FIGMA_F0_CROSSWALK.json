@@ -1,0 +1,200 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "rss",
+  "status": "F2_HISTORICAL_EVIDENCE_PLUS_F0_LIVE_STATIC_RECONCILED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "historicalBaselineRevision": "2378501297946752326",
+  "historicalRevision": "2378498213623880242",
+  "historicalRevisionTitle": "F2 · RSS · Full Icon Audit Correction",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378498213623880242&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
+  "historicalConfirmationVersionTitle": "F2 · RSS · User Confirmed",
+  "historicalConfirmedPilotRevision": "2378498213623880242",
+  "historicalUserConfirmedAt": "2026-07-21",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLocalSource": {
+    "implementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+    "iconCorrectionCommit": "b5fcca29f95df3a7e4af7a11bf9f2b198b993d9f",
+    "handoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
+    "packet": "docs/design/handoffs/rss/LOCAL_READY_FOR_FIGMA.json",
+    "styleAuthority": "User authorized the local canonical renderer for the eight routes without exact legacy Figma surfaces on 2026-07-21."
+  },
+  "historicalEdgeRadiusCorrection": {
+    "reportedIssue": "The canonical wrapper and device-content edge-radius constraints were incorrect.",
+    "rootCause": "All 16 wrapper components had zero corner radius, while their device children used Vertical=MIN and retained capture heights of 440, 531.140625, 734 or 861.703125 instead of filling the 844/960 viewport. rss-all Tablet also retained an extra zero-radius capture wrapper.",
+    "oldRevision": "2378488528982468947",
+    "newRevision": "2378494980056319782",
+    "canonicalRadius": 34,
+    "radiusSource": "frontend-demo-optimized/styles/00-foundation.css --fd-radius-device",
+    "constraint": "Every wrapper and device child uses 34px on all four corners, clipsContent=true, exact viewport dimensions and horizontal/vertical STRETCH.",
+    "correctedMasterCount": 16,
+    "inheritedInstanceCount": 16
+  },
+  "historicalIconAuditCorrection": {
+    "scope": "8 RSS routes x Phone/Tablet = 16 rendered surfaces",
+    "reportedIssue": "The visible Source Actions icon was semantically incorrect.",
+    "rootCause": "The local renderer used the more key, and the Figma captures inherited Dots/More even though the labeled control navigates to a dedicated Source Actions settings destination rather than opening an overflow menu.",
+    "oldValue": "Dots/More",
+    "newValue": "Icon/Settings",
+    "canonicalIconMasterNodeId": "271:472",
+    "correctedOccurrenceCount": 14,
+    "correctedNodeIds": ["2338:2","2338:7","2338:12","2338:17","2338:22","2338:27","2338:32","2338:37","2338:42","2338:47","2338:52","2338:57","2338:62","2338:67"],
+    "iconSize": "20x20",
+    "detachedCount": 0,
+    "dotsRemaining": 0,
+    "otherVisibleIconMappings": "PASS",
+    "revision": "2378498213623880242"
+  },
+  "historicalCanonicalMasters": [
+    {"pageId":"334:3","nodeId":"2305:530","name":"Page/RSS/CanonicalContent","revision":"2378494980056319782"},
+    {"pageId":"334:3","nodeId":"2305:961","name":"Page/RSS/CanonicalState","revision":"2378494980056319782"},
+    {"pageId":"334:3","nodeId":"2328:3975","name":"Page/RSS/CanonicalListRoute","revision":"2378498213623880242"},
+    {"pageId":"834:3","nodeId":"942:13","name":"Page/RSS","revision":"2378494980056319782"}
+  ],
+  "historicalExistingSurfaceBindings": [
+    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:267","surface":"Phone main","revision":"2378494980056319782"},
+    {"localRoutes":["rss"],"pageId":"334:3","nodeId":"2305:529","surface":"Tablet main","revision":"2378494980056319782"},
+    {"localRoutes":["rss-refreshing"],"pageId":"334:3","nodeId":"2305:738","surface":"Refreshing","revision":"2378494980056319782"},
+    {"localRoutes":["rss-empty"],"pageId":"334:3","nodeId":"2305:789","surface":"Empty","revision":"2378494980056319782"},
+    {"localRoutes":["rss-error"],"pageId":"334:3","nodeId":"2305:849","surface":"Error","revision":"2378494980056319782"},
+    {"localRoutes":["rss-detail"],"pageId":"334:3","nodeId":"2305:960","surface":"Detail","revision":"2378494980056319782"}
+  ],
+  "historicalLocalAuthorizedSurfaceBindings": [
+    {"localRoute":"rss-all","pageId":"334:3","phoneNodeId":"2328:1989","tabletNodeId":"2328:2165","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-feed","pageId":"334:3","phoneNodeId":"2328:2343","tabletNodeId":"2328:2467","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-novel","pageId":"334:3","phoneNodeId":"2328:2591","tabletNodeId":"2328:2702","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-tech","pageId":"334:3","phoneNodeId":"2328:2813","tabletNodeId":"2328:2937","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-booklist","pageId":"334:3","phoneNodeId":"2328:3061","tabletNodeId":"2328:3172","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-releases","pageId":"334:3","phoneNodeId":"2328:3283","tabletNodeId":"2328:3407","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-issues","pageId":"334:3","phoneNodeId":"2328:3531","tabletNodeId":"2328:3642","revision":"2378498213623880242"},
+    {"localRoute":"rss-source-category-discussions","pageId":"334:3","phoneNodeId":"2328:3753","tabletNodeId":"2328:3864","revision":"2378498213623880242"}
+  ],
+  "historicalDownstreamInstances": {
+    "preservedFinalPage": [
+      {"pageId":"834:2","nodeId":"943:1872","mainComponentId":"942:10","detached":false,"revision":"2378494980056319782"},
+      {"pageId":"834:2","nodeId":"943:2402","mainComponentId":"942:12","detached":false,"revision":"2378494980056319782"},
+      {"pageId":"834:2","nodeId":"1995:58735","mainComponentId":"942:10","detached":false,"revision":"2378494980056319782"},
+      {"pageId":"834:2","nodeId":"1995:59265","mainComponentId":"942:12","detached":false,"revision":"2378494980056319782"}
+    ],
+    "localAuthorizedBoard": {
+      "pageId": "834:3",
+      "sectionNodeId": "2329:4132",
+      "instanceNodeIds": ["2329:4133","2329:4309","2329:4487","2329:4611","2329:4735","2329:4846","2329:4957","2329:5081","2329:5205","2329:5316","2329:5427","2329:5551","2329:5675","2329:5786","2329:5897","2329:6008"],
+      "detached": false,
+      "revision": "2378498213623880242"
+    }
+  },
+  "historicalSourceArchive": {
+    "pageId": "259:2",
+    "nodeIds": ["2309:2","2311:2","2313:2","2314:2","2315:2","2316:2","2317:2","2318:2","2319:2","2320:2","2321:2","2322:2","2323:2","2324:2","2325:2","2326:2"],
+    "visible": false,
+    "role": "Editable HTML-to-design provenance only; never a canonical master or screenshot substitute."
+  },
+  "historicalMissingExactFigmaSurfaces": [],
+  "historicalControlCoverage": {
+    "totalLocal": 123,
+    "surfaceOwnerCovered": 123,
+    "blockedWithoutSurface": 0,
+    "forgedBindings": 0,
+    "bindingGranularity": "Exact route/viewport component owner. No fabricated per-control descendant node binding is claimed."
+  },
+  "historicalViewportPolicy": {"phone":"390x844","tablet":"760x960","landscapeAlias":"Tablet","compact":false,"fold":false},
+  "historicalExitAudit": {
+    "canonicalVariantCount": 16,
+    "attachedNewInstanceCount": 16,
+    "detachedInstanceCount": 0,
+    "compactOrFoldCount": 0,
+    "activeDropShadowCountInNewScope": 0,
+    "incorrectEdgeRadiusConstraintCount": 0,
+    "canonicalEdgeRadius": 34,
+    "reactionLossCount": 0,
+    "semanticIconDefectClasses": 1,
+    "correctedIconOccurrenceCount": 14,
+    "sourceActionsDetachedCount": 0,
+    "sourceActionsDotsRemaining": 0,
+    "otherVisibleIconMappingsPass": true,
+    "existingFigmaSurfacesComplete": true,
+    "localAuthorizedSurfacesComplete": true,
+    "f2Exit": true,
+    "remainingGate": null
+  },
+  "currentLiveStaticF0": {
+    "observedAt": "2026-07-22T13:38:17Z",
+    "scope": "Live F0 hierarchy read only. This records static component and attachment facts; it does not certify any business flow, UiEvent/state ownership, prototype reaction, Motion Reference, or VC3/host completion.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "pageMaster": {
+      "pageId": "834:3",
+      "nodeId": "942:13",
+      "name": "Page/RSS",
+      "rootReactionCount": 0
+    },
+    "viewportMasters": [
+      {
+        "nodeId": "942:10",
+        "viewport": "Phone",
+        "size": "390x844"
+      },
+      {
+        "nodeId": "942:12",
+        "viewport": "Tablet",
+        "size": "760x960"
+      }
+    ],
+    "finalAssembly": {
+      "pageId": "834:2",
+      "nodeId": "943:1869",
+      "attachedInstances": [
+        {
+          "nodeId": "943:1872",
+          "mainComponentId": "942:10",
+          "detached": false
+        },
+        {
+          "nodeId": "943:2402",
+          "mainComponentId": "942:12",
+          "detached": false
+        }
+      ],
+      "detachedInstanceCount": 0
+    },
+    "canonicalLibrary": {
+      "pageId": "334:3",
+      "canonicalContent": {
+        "attachedInstanceNodeIds": [
+          "2306:2",
+          "2306:265"
+        ],
+        "detachedInstanceCount": 0
+      },
+      "canonicalState": {
+        "nodeId": "2305:961",
+        "variantCount": 4
+      },
+      "canonicalListRoute": {
+        "nodeId": "2328:3975",
+        "variantCount": 16
+      },
+      "finalEvidence": {
+        "nodeId": "2329:4132",
+        "attachedInstanceCount": 16,
+        "detachedInstanceCount": 0
+      }
+    },
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "Tablet",
+      "compact": false,
+      "fold": false
+    },
+    "staticHierarchyAudit": {
+      "pageMasterExists": true,
+      "finalAssemblyExists": true,
+      "allReportedInstancesAttached": true,
+      "detachedInstanceCount": 0
+    }
+  }
+}

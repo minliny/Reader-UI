@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "VC3_LOCAL_PARITY",
+  "scope": "webdav-config",
+  "status": "APPROVED_STATIC_AND_DIRECT_CONTROL_SCOPE_COMPLETE",
+  "completedAt": "2026-07-22T14:38:50+08:00",
+  "figmaSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "historicalNamedRevision": "2378333433968465691",
+    "historicalNamedRevisionScope": "F2 WebDAV Config user-confirmed revision only; it is not asserted as the current live revision.",
+    "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_NODE_READ",
+    "nodeReadStatus": "CURRENT_CANONICAL_AND_DOWNSTREAM_SOURCE_NODES_RESOLVED",
+    "pageId": "834:3",
+    "canonicalComponentSet": {"nodeId": "942:45", "name": "Page/WebDAV Config"},
+    "viewports": [
+      {"nodeId": "942:42", "name": "Viewport=Phone", "size": "390x844"},
+      {"nodeId": "942:44", "name": "Viewport=Tablet", "size": "760x960"}
+    ],
+    "canonicalComponents": [
+      {"nodeId": "2221:321", "name": "Canonical/WebDAV/StatusGrid"},
+      {"nodeId": "2221:448", "name": "Canonical/WebDAV/ConfigForm"},
+      {"nodeId": "2221:567", "name": "Canonical/WebDAV/AdvancedSettings"},
+      {
+        "nodeId": "2222:159",
+        "name": "Canonical/WebDAV/ActionDialog",
+        "liveVariants": {
+          "test": {"confirm": "2222:37", "loading": "2222:48", "success": "2222:59", "failed": "2222:70"},
+          "save": {"confirm": "2222:81", "loading": "2222:92", "success": "2222:103", "failed": "2222:114"},
+          "clear": {"confirm": "2222:125", "loading": "2222:136", "success": "2222:147", "failed": "2222:158"}
+        }
+      }
+    ],
+    "fontSource": {
+      "title": "Existing Songti SC title style retained without mutation",
+      "localSystemSource": "/System/Library/Fonts/Supplemental/Songti.ttc",
+      "bodyAndControl": "Existing Inter style with the repository CJK fallback; no font download or substitution was introduced"
+    }
+  },
+  "localBackport": {
+    "implementationCommit": "0adf9da774c6615946b80558a56d56cdf4005e16",
+    "renderer": "webdavConfigV2(data, route, appState)",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+    "runtimeEventBridge": "frontend-demo-optimized/render-runtime.js",
+    "filesChanged": [
+      "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+      "frontend-demo-optimized/render-runtime.js",
+      "frontend-demo-optimized/styles/04-settings-source.css",
+      "frontend-demo-optimized/styles/11-webdav-config-vc3.css",
+      "frontend-demo-optimized/styles.css",
+      "frontend-demo-optimized/verify/r3a-webdav-config-aria-focus.test.mjs",
+      "frontend-demo-optimized/verify/webdav-config-figma-dialog-parity.test.mjs"
+    ],
+    "designDelta": [
+      {
+        "figmaNodeId": "942:42",
+        "oldValue": "The local WebDAV Phone shell inherited generic settings geometry and did not explicitly bind the source 390x844 master.",
+        "newValue": "The route uses a scoped 390x844 WebDAV frame without a page-surface shadow.",
+        "codeTarget": "frontend-demo-optimized/styles/11-webdav-config-vc3.css"
+      },
+      {
+        "figmaNodeId": "942:44",
+        "oldValue": "At 760px the local route used the generic expanded-width shell at 760x980 with a nested 560x892 panel.",
+        "newValue": "Only the WebDAV route resolves to the canonical 760x960 Tablet master; landscape remains its Tablet alias.",
+        "codeTarget": "frontend-demo-optimized/styles/11-webdav-config-vc3.css"
+      },
+      {
+        "figmaNodeId": "2221:321",
+        "oldValue": "The local overview exposed timeout, Wi-Fi and schedule values that belong in Advanced settings rather than the Figma source overview.",
+        "newValue": "The overview now follows the source grid: 已连接, 最近测试 10:30, 远程备份 8 个, 同步目录 /ReaderBackup.",
+        "codeTarget": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js"
+      },
+      {
+        "figmaNodeId": "2222:159",
+        "oldValue": "Test/Save actions fell through the generic settings overlay, whose copy, terminal controls and geometry differed from the canonical ActionDialog variants.",
+        "newValue": "The existing WebDAV owner now drives the exact 12 live Figma Test/Save/Clear variants. The 304x160, r8, shadowless dialog has source copy and paired controls.",
+        "codeTarget": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js, frontend-demo-optimized/render-runtime.js and frontend-demo-optimized/styles/04-settings-source.css"
+      },
+      {
+        "figmaNodeIds": ["2222:48", "2222:92"],
+        "oldValue": "The demo helper settled Test and Save in the next event loop, making the existing Figma Loading variants imperceptible after a real click.",
+        "newValue": "A user-triggered Test or Save keeps its already-designed Loading variant visible for 320ms before the existing owner resolves; reducer/unit helper defaults remain unchanged.",
+        "codeTarget": "frontend-demo-optimized/render-runtime.js"
+      }
+    ]
+  },
+  "acceptance": {
+    "viewports": ["Phone 390x844", "Tablet 760x960"],
+    "viewportPolicy": "Landscape aliases Tablet. No Compact, Fold, or independent landscape master was introduced.",
+    "geometryAndTypography": [
+      "Real browser inspection at 390x844: route root and WebDAV frame are exactly 390x844; the settled ActionDialog is x=43, y=342, 304x160.",
+      "Real browser inspection at 760x960: route root and WebDAV frame are exactly 760x960; the settled ActionDialog is x=228, y=400, 304x160.",
+      "The dialog uses 18px padding, 10px rhythm, 24/40/38px content rows, 128px paired controls, r8 and no box-shadow, matching the current canonical component.",
+      "Overview values and their icon intent match the current configured Figma master; advanced controls remain right-aligned in their existing source-backed rows."
+    ],
+    "interaction": [
+      "Real browser click/keyboard checks proved input editing, SSL switch click and Space, timeout stepper, Test and Save opening, visible Loading, Success, closing and deterministic focus return.",
+      "Test and Save first validate the existing four inputs. Invalid input exposes the existing aria-invalid state and does not open a dialog.",
+      "The automatic-sync row deliberately remains inert: current Figma exposes no option list/value nodes, so the local backport does not invent a selector or mutate its value.",
+      "The generic settingsOverlay owner is blocked for webdav-config; the WebDAV owner alone owns its dialog state, guards and async completion."
+    ],
+    "browserVerification": {
+      "result": "PASS",
+      "method": "Headless Chrome direct DOM interaction at Phone and Tablet source sizes",
+      "applicationErrors": 0,
+      "knownExternalConsoleArtifacts": [
+        "fonts.font.im certificate-date error",
+        "one static File not found response"
+      ],
+      "note": "The external artifacts predate this route backport and were not treated as application errors."
+    },
+    "tests": [
+      {"command": "node --check frontend-demo-optimized/renderers/d2-settings-sync-renderers.js && node --check frontend-demo-optimized/render-runtime.js", "result": "pass"},
+      {"command": "node --test frontend-demo-optimized/verify/webdav-config-figma-dialog-parity.test.mjs frontend-demo-optimized/verify/r3a-webdav-config-identity.test.mjs frontend-demo-optimized/verify/r3a-webdav-config-flow.test.mjs frontend-demo-optimized/verify/r3a-webdav-config-aria-focus.test.mjs", "result": "57/57 pass"},
+      {"command": "node --test frontend-demo-optimized/verify/*.test.mjs", "result": "597/597 pass"}
+    ]
+  },
+  "pendingFigmaDesignBoundary": {
+    "notImplemented": [
+      "automatic-sync option list",
+      "a user-facing Clear trigger on the current WebDAV Config page",
+      "activation of historical webdav-test and webdav-error static routes"
+    ],
+    "reason": "The current Figma Config source has no Auto Sync option-list nodes and no Clear trigger. ActionDialog Clear variants are preserved as source-backed component states but remain unbound/test-only. Historical result/error routes are not reactivated or expanded by this local backport.",
+    "rule": "Do not create a transient selector, a Clear button, or a replacement result/error flow until Figma supplies the relevant source nodes and the user confirms them."
+  },
+  "evidenceCommitStrategy": "This evidence-only file binds implementation commit 0adf9da774c6615946b80558a56d56cdf4005e16. It does not overwrite the historical F2 Design Delta or F0 Crosswalk.",
+  "boundary": "This is a local-only backport of the current Figma WebDAV master and directly instantiated ActionDialog variants. It does not write Figma, alter preserved Figma pages/components/reactions, create detached frames, redefine UiEvent/reducer/route ownership, enter Motion Reference, change Search/Sync Backup, or change any native client. The connector cannot expose the official current Figma revision after the live node reads, so no current revision is fabricated."
+}

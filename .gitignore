@@ -1,2 +1,17 @@
 .DS_Store
 _archived_planning_2026-06-24/
+node_modules/
+.build/
+.build-*/
+.hvigor/
+**/build/
+**/oh_modules/
+**/.test/
+**/BuildProfile.ets
+.swiftpm/
+
+# local build / IDE artifacts (not part of contract source)
+.gradle/
+.trae/
+.android-link
+.ios-link

@@ -1,0 +1,188 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_F0_CROSSWALK",
+  "scope": "source-switch",
+  "status": "F2_USER_CONFIRMED_NO_FABRICATED_BINDINGS",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "259:13",
+  "pageName": "16 · Components · Source Switch",
+  "baselineRevision": "2378456732819418415",
+  "baselineRevisionTitle": "F2 · Reader Runtime · User Confirmed",
+  "revision": "2378501297946752326",
+  "revisionTitle": "F2 · Source Switch · User Confirmed",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378501297946752326&node-id=942-37",
+  "bindingRevision": "2378474643910668834",
+  "bindingsValidatedAtRevision": "2378501297946752326",
+  "supersededRevision": "2378464713948765297",
+  "timestamp": "2026-07-21T10:08:05+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "implementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+    "packet": "docs/design/handoffs/source-switch/LOCAL_READY_FOR_FIGMA.json"
+  },
+  "revisionRead": {
+    "baselineRead": true,
+    "postWriteNamedRevisionCreated": true,
+    "readMethod": "Figma Desktop version history exposed the exact version-id in the selected version URL.",
+    "blocker": null
+  },
+  "sources": {
+    "fonts": {
+      "sourceSwitch": "Existing in-file Noto Sans SC Medium/Regular text styles were reused.",
+      "readerBackdrop": "Existing Reader 2 Songti SC instances were preserved; no text or font substitution occurred."
+    },
+    "icons": {
+      "sourceSwitch": { "canonicalNodeId": "271:532", "wrapperSet": "566:67" },
+      "close": { "canonicalNodeId": "271:142", "wrapperSet": "1990:22546" }
+    },
+    "sharedComponents": "Existing Reader 2 responsive components plus SourceSwitch canonical masters on page 16."
+  },
+  "canonicalMasters": {
+    "candidateRowSet": "568:78",
+    "candidateList": "568:79",
+    "windowHeader": "568:47",
+    "window": "568:134",
+    "overlaySet": "2294:48521",
+    "closeButtonSet": "1990:22546",
+    "pageSet": "942:37",
+    "phoneMaster": "942:34",
+    "tabletMaster": "942:36",
+    "removedInventedResultBarSet": "2292:770",
+    "removedInventedStateCardSet": "2295:1653"
+  },
+  "downstream": {
+    "pageId": "834:2",
+    "pageName": "23 · Pages · Final",
+    "section": "943:15209",
+    "phone": { "instance": "943:15215", "main": "942:34", "detached": false },
+    "tablet": { "instance": "943:15705", "main": "942:36", "detached": false }
+  },
+  "readerContinuity": {
+    "inheritedReaderOccurrences": 136,
+    "policy": "Reader continuity remains owned by reader-runtime and references its confirmed 439-control crosswalk; Source Switch does not duplicate those bindings.",
+    "confirmedReaderRuntimeRevision": "2378456732819418415"
+  },
+  "bindingModel": "Each physical binding below carries fileKey/pageId/nodeId/revision and lists the two route-local controls that legitimately share that canonical node. No confirmation or state-matrix target is synthesized.",
+  "bindings": [
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:58", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "canonical-close-target",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.close@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.close", "uiEvent": "source.switch.cancel", "settingsKey": "close" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.close@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.close", "uiEvent": "source.switch.cancel", "settingsKey": "close" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:80", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-youshu@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-youshu", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-youshu" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-youshu@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-youshu", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-youshu" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:84", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-biquge-mirror@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-biquge-mirror", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-biquge-mirror" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-biquge-mirror@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-biquge-mirror", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-biquge-mirror" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:89", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-light-novel@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-light-novel", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-light-novel" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-light-novel@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-light-novel", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-light-novel" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:94", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-cloud-library@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-cloud-library", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-cloud-library" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-cloud-library@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-cloud-library", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-cloud-library" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:99", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-aggregate-1@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-aggregate-1", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-aggregate-1" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-aggregate-1@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-aggregate-1", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-aggregate-1" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:104", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-aggregate-2@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-aggregate-2", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-aggregate-2" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-aggregate-2@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-aggregate-2", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-aggregate-2" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:109", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-backup-a@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-backup-a", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-backup-a" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-backup-a@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-backup-a", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-backup-a" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:114", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-backup-b@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-backup-b", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-backup-b" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-backup-b@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-backup-b", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-backup-b" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:119", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-chapter-sync@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-chapter-sync", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-chapter-sync" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-chapter-sync@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-chapter-sync", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-chapter-sync" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:124", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-local-cache@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-local-cache", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-local-cache" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-local-cache@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-local-cache", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-local-cache" }
+      ]
+    },
+    {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK", "pageId": "259:13", "nodeId": "568:129", "contextNodeId": "568:134", "revision": "2378474643910668834", "bindingKind": "candidate-row-direct-switch",
+      "controls": [
+        { "route": "source-switch", "controlKey": "source-switch.control.button.source-option-source-old-backup@source-switch.default", "controlId": "source-switch.control.source-switch.default.button.source-option-source-old-backup", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-old-backup" },
+        { "route": "source-switch-results", "controlKey": "source-switch.control.button.source-option-source-old-backup@source-switch-results.default", "controlId": "source-switch.control.source-switch-results.default.button.source-option-source-old-backup", "uiEvent": "source.switch.select", "settingsKey": "source-option-source-old-backup" }
+      ]
+    }
+  ],
+  "coverage": {
+    "sourceOwnedControls": 35,
+    "boundDirectListControls": 24,
+    "physicalFigmaTargets": 12,
+    "fabricatedBindings": 0,
+    "removedFalseConfirmationControls": 2,
+    "operationalStateControlsWithoutApprovedFigmaPageNodes": 11
+  },
+  "unbound": [
+    { "route": "source-switch-empty", "settingsKeys": ["source-management", "cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
+    { "route": "source-switch-error", "settingsKeys": ["retry", "cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
+    { "route": "source-switch-timeout", "settingsKeys": ["retry", "cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
+    { "route": "source-switch-loading", "settingsKeys": ["cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
+    { "route": "source-switch-rollback", "settingsKeys": ["rollback-confirm", "rollback-cancel"], "reason": "No approved Source Switch page node; state matrix explicitly removed." },
+    { "route": "source-switch-preview", "settingsKeys": ["confirm", "back-to-candidates"], "reason": "Normal direct-switch path no longer stops at preview; no approved Figma page node." }
+  ],
+  "verification": {
+    "windowChildren": ["568:135", "568:154"],
+    "candidateRows": 11,
+    "candidateRowHeight": 44,
+    "candidateListOverflow": "VERTICAL",
+    "overlayVariants": ["568:209", "2294:48264"],
+    "detachedInstances": 0,
+    "dropShadows": 0,
+    "compactFoldStructures": 0,
+    "falseComponentsInDocumentTree": 0
+  },
+  "admission": {
+    "crosswalkHasNoFabricatedBinding": true,
+    "directListCrosswalkComplete": true,
+    "full35ControlCrosswalkComplete": false,
+    "reason": "Eleven operational fallback-state controls remain local-only because the user rejected the invented Figma state matrix. They are reported unbound rather than mapped to fake nodes.",
+    "userConfirmed": true,
+    "f2Exit": true
+  }
+}

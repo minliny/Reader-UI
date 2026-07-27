@@ -1,0 +1,128 @@
+{
+  "generatedAt": "2026-07-22T00:00:00.000Z",
+  "generationMode": "deterministic-static-epoch",
+  "baselineCommit": "5ce233f",
+  "baselineTag": "R1.2",
+  "baselineRole": "historical source baseline; not current release evidence",
+  "inputs": {
+    "declarationsPath": "frontend-demo-optimized/control-identity-declarations.js",
+    "registryPath": "tools/interaction-inventory/generated/control-id-registry.json",
+    "dispatchMapPath": "tools/interaction-inventory/generated/renderer-dispatch-map.json",
+    "nonInteractivePath": "tools/interaction-inventory/generated/nonInteractiveContainers.json",
+    "uiEventSchemaPath": "contracts/ui-event.schema.json",
+    "runtimeEventScopeMatrixPath": "docs/audits/RUNTIME_EVENT_SCOPE_MATRIX_2026-07-22.json",
+    "declarationsGenerationEpoch": "2026-07-22T00:00:00.000Z"
+  },
+  "totals": {
+    "declarations": 2449,
+    "registryBacked": 1114,
+    "r2Subcontrols": 61,
+    "registryEntries": 3847,
+    "registryEntityKeys": 78,
+    "registryControlKeys": 3847,
+    "dispatchRoutes": 80,
+    "dispatchPageFamilies": 12,
+    "declarationRoutes": 100,
+    "declarationPageFamilies": 13
+  },
+  "checks": {
+    "exact12PageFamilies": {
+      "status": "pass",
+      "expected": "exactly 12 non-Reader page families; Reader Runtime is an explicit extension lane",
+      "expectedCount": 12,
+      "actualCount": 12,
+      "readerRuntimeExtensionCount": 439,
+      "missing": [],
+      "extra": []
+    },
+    "routeLocalOccurrenceReconciliation": {
+      "status": "pass",
+      "expected": "for each dispatch-map route, registry occurrences 1:1 match declarations (route-local, not global set)",
+      "missingInDeclarations": [],
+      "missingInRegistry": [],
+      "missingInDeclarationsCount": 0,
+      "missingInRegistryCount": 0
+    },
+    "registryBackedKeysInRegistry": {
+      "status": "pass",
+      "expected": "all registry-backed declarations' entityKey AND controlKey should be in registry",
+      "entityKeyNotInRegistry": [],
+      "controlKeyNotInRegistry": []
+    },
+    "rendererOwnerMatchesDispatch": {
+      "status": "pass",
+      "expected": "every declaration's renderer/rendererFile/pageFamily must match dispatch map",
+      "mismatches": []
+    },
+    "uiEventNonNullOrExemption": {
+      "status": "pass",
+      "expected": "every declaration has uiEvent or uiEventExemption (including identity-only-token for scope-matrix tokens)",
+      "missingExemption": [],
+      "invalidExemptionType": []
+    },
+    "controlIdNonNullOrExemption": {
+      "status": "pass",
+      "expected": "every declaration has controlId or controlIdExemption (one of: pending-registry-enumeration)",
+      "missingExemption": [],
+      "invalidExemptionType": []
+    },
+    "subcontrolCount50": {
+      "status": "pass",
+      "expected": "61 stable subcontrol declarations (switch 28 / select 16 / stepper 4 / segment 8 / textbox 1 / input 4)",
+      "expectedCount": 61,
+      "declaredCount": 61,
+      "expectedByType": {
+        "switch": 28,
+        "select": 16,
+        "stepper": 4,
+        "segment": 8,
+        "textbox": 1,
+        "input": 4
+      },
+      "declaredByType": {
+        "switch": 28,
+        "select": 16,
+        "stepper": 4,
+        "segment": 8,
+        "textbox": 1,
+        "input": 4
+      }
+    },
+    "collisionDetection": {
+      "status": "pass",
+      "expected": "controlKey must be globally unique across all declarations",
+      "controlKeyCollisions": []
+    },
+    "uiEventInSchemaEnum": {
+      "status": "pass",
+      "expected": "all declared UiEvent must be in contracts/ui-event.schema.json enum",
+      "invalid": []
+    },
+    "identityOnlyTokenBoundary": {
+      "status": "pass",
+      "expected": "scope-matrix runtimeEligible=false values use controlIdentityToken and never uiEvent",
+      "scopeMatrixTokenCount": 35,
+      "declaredTokenCount": 35,
+      "violations": []
+    },
+    "allDispatchRoutesCovered": {
+      "status": "pass",
+      "expected": "every route in dispatch map must have at least one declaration",
+      "missingRoutes": []
+    },
+    "r2SubcontrolsAreNew": {
+      "status": "pass",
+      "expected": "R2.0 subcontrols should NOT be in R1.2 registry (they're new declarations for R2a to absorb)",
+      "alreadyInRegistry": [],
+      "newCount": 61
+    }
+  },
+  "overallStatus": "pass",
+  "summary": {
+    "totalChecks": 12,
+    "passed": 12,
+    "failed": 0,
+    "partial": 0,
+    "info": 0
+  }
+}

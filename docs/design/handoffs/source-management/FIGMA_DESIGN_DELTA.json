@@ -1,0 +1,183 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "source-management",
+  "status": "F2_HISTORICAL_EVIDENCE_RECONCILED_AFTER_USER_SCOPE_REMOVAL",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "historicalRevision": "2378300834098665145",
+  "historicalRevisionTitle": "F2 · Source Management · User Confirmed",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalLiveHeadCorrection": {
+    "timestamp": "2026-07-20T13:23:23Z",
+    "revisionStatus": "NAMED_REVISION_CREATED",
+    "namedRevision": "2378300834098665145",
+    "namedRevisionTitle": "F2 · Source Management · User Confirmed",
+    "confirmedAt": "2026-07-20T13:47:08Z",
+    "reason": "Figma Desktop was reopened from Home to exit stale version 2378285875260213512; the corrected live head was then saved as a new named revision.",
+    "deltas": [
+      {
+        "target": "SourceManagement/GroupFilter/Icon/Folder",
+        "pageId": "334:5",
+        "componentNodeId": "2173:879",
+        "oldNodeId": "2173:880",
+        "newNodeId": "2184:29787",
+        "oldValue": "18x14 plain rectangle used as a folder placeholder.",
+        "newValue": "15x15 instance of canonical Icon=Folder component 530:155, vertically centered with preserved aspect ratio."
+      },
+      {
+        "target": "SourceManagement/SourceRow/SourceManagement/Icon",
+        "pageId": "334:5",
+        "componentNodeId": "1994:26598",
+        "nodeIds": ["549:54", "1994:26558", "1994:26565", "1994:26572", "1994:26579", "1994:26586", "1994:26593"],
+        "oldValue": "Figma SourceRow included decorative leading source icons that do not exist in the canonical sourceManagementV2 renderer; proportional scaling alone did not resolve the structural mismatch.",
+        "newValue": "Leading is hidden in all seven SourceRow states. Default/Hover/Pressed/Focus/Disabled/Loading text moves to x=12 with 170px width; Selected retains x=50 for its canonical checkbox."
+      }
+    ],
+    "propagationAudit": {
+      "phoneMaster": "942:26",
+      "tabletMaster": "942:28",
+      "finalPhone": "943:4281",
+      "finalTablet": "943:4745",
+      "detachedInstances": 0,
+      "phoneVisibleDecorativeSourceIconCount": 0,
+      "tabletVisibleDecorativeSourceIconCount": 0,
+      "groupFolderIconCountPerViewport": 1,
+      "screenshotAudit": "PASS"
+    }
+  },
+  "historicalLocalImplementationCommit": "1c97687c969bc47f27b0aec79c774998455e3326",
+  "historicalHandoffEvidenceCommit": "17876aaf6120190e5cb519f088e150ee4ae8db49",
+  "historicalDeltas": [
+    {
+      "target": "Page/Source Management",
+      "pageId": "834:3",
+      "nodeId": "942:29",
+      "oldValue": "Phone/Tablet masters contained metric grid, bulk action list, enabled-status list and two stacked footer rows.",
+      "newValue": "Phone/Tablet masters inherit SearchField, five-option StatusFilter, GroupFilter, four SourceRow instances and a fixed two-button BottomActionBar."
+    },
+    {
+      "target": "SourceManagement/SourceRow",
+      "pageId": "334:5",
+      "nodeId": "1994:26598",
+      "oldValue": "349.79x57.99 row with leading icon, title/meta and status+switch only.",
+      "newValue": "350x70 canonical row with detect, status+switch and 44px more target; Selected state exposes canonical batch checkbox and hides detect/switch/more. Default/Hover/Pressed/Focus/Disabled/Selected/Loading remain variants."
+    },
+    {
+      "target": "SourceManagement/StatusFilter",
+      "pageId": "334:5",
+      "nodeId": "2173:878",
+      "oldValue": "No five-option source status master; generic Primitive/SegmentedControl supported three options only.",
+      "newValue": "Source-specific canonical set with All/Enabled/Error/Unchecked/Custom selected variants and five individually bindable option nodes."
+    },
+    {
+      "target": "Conditional controls",
+      "pageId": "334:5",
+      "nodeId": "2173:816",
+      "oldValue": "More menu, four-item add sheet, batch toolbar/action bar and delete checkbox/loading/failed states were absent from the source component graph.",
+      "newValue": "Canonical MoreMenu, AddSourceSheet, BatchToolbar, BatchActionBar and DeleteDialog Confirm/Loading/Failed components plus component-based state proof assemblies."
+    },
+    {
+      "target": "Page 23 final instances",
+      "pageId": "834:2",
+      "nodeId": "943:4278",
+      "oldValue": "Phone and Tablet instances inherited the pre-R2b source-management body; a residual Compact text label remained after the earlier removal transaction.",
+      "newValue": "Phone and Tablet instances inherit revision 2378300834098665145; residual Compact label is removed and there is no detached instance."
+    }
+  ],
+  "historicalCreatedCanonicalNodes": [
+    { "nodeId": "2173:819", "name": "SourceManagement/SearchField" },
+    { "nodeId": "2173:878", "name": "SourceManagement/StatusFilter" },
+    { "nodeId": "2173:879", "name": "SourceManagement/GroupFilter" },
+    { "nodeId": "2173:885", "name": "SourceManagement/BottomActionBar" },
+    { "nodeId": "2173:891", "name": "SourceManagement/MoreMenu" },
+    { "nodeId": "2173:906", "name": "SourceManagement/AddSourceSheet" },
+    { "nodeId": "2173:964", "name": "SourceManagement/DeleteDialog" },
+    { "nodeId": "2176:845", "name": "SourceManagement/BatchToolbar" },
+    { "nodeId": "2176:873", "name": "SourceManagement/BatchActionBar" },
+    { "nodeId": "2176:874", "name": "SourceManagement/State Proof Assemblies" }
+  ],
+  "historicalRemovedObsoleteBodyNodes": [
+    { "viewport": "Phone", "nodeIds": ["891:39", "891:89", "891:164", "891:246"] },
+    { "viewport": "Tablet", "nodeIds": ["893:39", "893:89", "893:164", "893:246"] }
+  ],
+  "historicalViewportConstraints": {
+    "phone": { "nodeId": "942:26", "size": "390x844", "contentWidth": 350, "bottomActionPinned": true },
+    "tablet": { "nodeId": "942:28", "size": "760x960", "contentWidth": 720, "statusAndGroupShareRow": true, "bottomActionPinned": true },
+    "landscape": { "alias": "tablet", "independentMaster": false },
+    "compact": { "prohibited": true, "nodeCountOnFinalPage": 0 },
+    "fold": { "prohibited": true }
+  },
+  "historicalStateCoverage": {
+    "sourceRow": ["Default", "Hover", "Pressed", "Focus", "Disabled", "Selected", "Loading"],
+    "statusFilter": ["All", "Enabled", "Error", "Unchecked", "Custom"],
+    "deleteDialog": ["Confirm", "Loading", "Failed"],
+    "proofFrames": [
+      { "nodeId": "2176:891", "state": "MoreMenu/Phone" },
+      { "nodeId": "2176:1205", "state": "AddSheet/Phone" },
+      { "nodeId": "2176:1382", "state": "DeleteConfirm/Phone" },
+      { "nodeId": "2176:1559", "state": "DeleteFailed/Phone" }
+    ]
+  },
+  "historicalFinalAudit": {
+    "sourceComponentPageDetachedInstances": 0,
+    "responsiveMasterPageDetachedInstances": 0,
+    "finalPageDetachedInstances": 0,
+    "sourceMasterActiveDropShadows": 0,
+    "compactNodesOnFinalPage": 0,
+    "crosswalkBindingCount": 49,
+    "crosswalkFakeBindingCount": 0,
+    "localPacketDenominatorIssue": "Packet reports 48 but enumerates 49; Design Delta and crosswalk use 49."
+  },
+  "historicalAdmission": {
+    "figmaWriteTransactionComplete": true,
+    "userConfirmed": true,
+    "userConfirmedAt": "2026-07-20T13:47:08Z",
+    "f2Exit": true,
+    "nextLocalFamily": "webdav-config",
+    "nextLocalFamilyReleased": true,
+    "remainingGates": []
+  },
+  "postUserScopeRemoval": {
+    "scope": "User-approved removal of historical Source Management Pilot components and proof assemblies. This is a scope subtraction only; no retained final master, final instance, or prototype root was redrawn or replaced.",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "removedFromCanvasHierarchy": [
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2176:874", "nodeName": "SourceManagement/State Proof Assemblies" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:891", "nodeName": "SourceManagement/MoreMenu" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:906", "nodeName": "SourceManagement/AddSourceSheet" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:964", "nodeName": "SourceManagement/DeleteDialog" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2176:845", "nodeName": "SourceManagement/BatchToolbar" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2176:873", "nodeName": "SourceManagement/BatchActionBar" }
+    ],
+    "preservedActiveComponents": [
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:819", "nodeName": "SourceManagement/SearchField" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:878", "nodeName": "SourceManagement/StatusFilter" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:879", "nodeName": "SourceManagement/GroupFilter" },
+      { "pageId": "334:5", "pageName": "13 · Components · Source Management", "nodeId": "2173:885", "nodeName": "SourceManagement/BottomActionBar" }
+    ],
+    "preservedFinalMasters": [
+      { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:26", "nodeName": "Viewport=Phone" },
+      { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "nodeId": "942:28", "nodeName": "Viewport=Tablet" }
+    ],
+    "postWriteVerification": {
+      "pilotParent": {
+        "nodeId": "2173:816",
+        "remainingChildIds": ["2173:817", "2173:818", "2173:819", "2173:878", "2173:879", "2173:885"]
+      },
+      "finalAndPrototypeRoots": [
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:4281", "nodeName": "Source Management / Phone", "mainComponentId": "942:26" },
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "943:4745", "nodeName": "Source Management / Tablet", "mainComponentId": "942:28" },
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:68014", "nodeName": "Source Management / Phone", "mainComponentId": "942:26" },
+        { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeId": "1995:68478", "nodeName": "Source Management / Tablet", "mainComponentId": "942:28" }
+      ],
+      "allRootsRemainAttached": true,
+      "invalidInstanceCount": 0,
+      "removedComponentReferenceCount": 0,
+      "deletedNodeLookupCaveat": "The writer runtime can retain parent-null component handles after remove(). Deletion is evidenced by removal from the parent/canvas hierarchy and by the zero removed-component references in every final/prototype root; this record does not claim those component IDs resolve null."
+    },
+    "designDelta": "Historical Pilot components/proof assemblies were removed from the canvas hierarchy. The retained final Source Management visual tree has no additional visual delta in this transaction.",
+    "currentBindingPolicy": "The historical Pilot state coverage is retained only for audit. It must not be consumed as a current interaction or runtime contract until a writer runtime can read an official current revision and recrosswalk the retained final tree."
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "VC3_LOCAL_PARITY",
+  "scope": "bookshelf/local-import-popup",
+  "status": "VC3_COMPLETE",
+  "completedAt": "2026-07-22T10:56:27+08:00",
+  "figmaSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "lastReadableRevision": "2378562033612422730",
+    "liveRevisionStatus": "UNAVAILABLE_FROM_CONNECTOR_AFTER_CURRENT_READ",
+    "pageId": "259:10",
+    "canonicalComponentSet": {"nodeId": "2657:918", "name": "Library/LocalImportDialog"},
+    "variants": [
+      {"nodeId": "2657:916", "name": "State=File Selection"},
+      {"nodeId": "2657:917", "name": "State=Import Result"}
+    ],
+    "preservedMakeSource": {"nodeId": "2547:1597", "name": "Library/LocalImportDialog · Make Source"},
+    "attachedInstances": [
+      {"nodeId": "2657:921", "mainComponentNodeId": "2657:916"},
+      {"nodeId": "2657:965", "mainComponentNodeId": "2657:917"}
+    ]
+  },
+  "localBackport": {
+    "implementationCommit": "ac0553047bf66b8096b202dfe0788e43962c915b",
+    "renderer": "localImportV2(data, route, appState)",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
+    "filesChanged": [
+      "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
+      "frontend-demo-optimized/styles/09-import-workflow.css",
+      "frontend-demo-optimized/styles.css",
+      "frontend-demo-optimized/index.html",
+      "frontend-demo-optimized/verify/r3a-local-import-popup.test.mjs"
+    ],
+    "designDelta": [
+      {
+        "figmaNodeId": "2657:758",
+        "oldValue": "Local picker used a blurred .42 backdrop, 19px title, compressed footer and non-source upload geometry.",
+        "newValue": "Picker now follows the canonical 350x399.75 shell, Songti SC 18px title, 310x186 drop zone, 44px icon well and 84px action footer.",
+        "codeTarget": "styles/09-import-workflow.css"
+      },
+      {
+        "figmaNodeId": "2657:802",
+        "oldValue": "Local result used rounded-14 summary/list, max-height 260 list and generic result footer.",
+        "newValue": "Result now follows the canonical 350x482.75 shell, 318x64 summary, 318x254 scrollable list, 12px radii and 76px action footer.",
+        "codeTarget": "styles/09-import-workflow.css"
+      },
+      {
+        "figmaNodeId": "2657:790",
+        "oldValue": "Picker copy and note lacked source-aligned layout wrappers.",
+        "newValue": "Source-aligned copy and note wrappers were added without changing data attributes, file chooser ownership or control identity.",
+        "codeTarget": "renderers/d2-bookshelf-discover-renderers.js"
+      }
+    ]
+  },
+  "acceptance": {
+    "viewports": ["Phone 390x844", "Tablet 760x960"],
+    "viewportPolicy": "Landscape aliases Tablet; Compact and Fold are not introduced.",
+    "states": ["file-selection", "import-result-with-processing-row"],
+    "geometryAndTypography": [
+      "Phone DOM inspection: picker center is 350x399.75 at the Figma source position; title is Songti SC 18px/24.75px; drop zone is 310x186; footer is 84px.",
+      "Phone DOM inspection: result center is 350x482.75; summary is 318x64; list is 318x254 with overflow:auto; result footer is 76px.",
+      "Tablet DOM inspection: the same 350px dialog remains centered, with the same source-derived dimensions and no Compact viewport atom."
+    ],
+    "interaction": [
+      "Visible Select Files opened the real browser file chooser; chooser.multiple was true.",
+      "Selecting a local .txt test file kept one dialog and transitioned File Selection to Import Result; Complete closed it.",
+      "Processing rows, disabled premature completion, failed-file retry and stale/cancel guards remain owned by the existing Bookshelf reducer; no independent loading page or import route was added."
+    ],
+    "browserConsole": "0 errors and 0 warnings in the inspected in-app Browser session.",
+    "tests": [
+      {"command": "node --test frontend-demo-optimized/verify/r3a-local-import-popup.test.mjs", "result": "12/12 pass"},
+      {"command": "node --test frontend-demo-optimized/verify/*.test.mjs", "result": "587/587 pass"},
+      {"command": "node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs", "result": "pass; route contract 260/260 and no unclassified renderer route"}
+    ]
+  },
+  "boundary": "This records a local backport from the user-confirmed Figma component only. It does not alter the preserved Make source, Figma masters, Figma prototypes, Restore Preview, Import Conflict Resolve, or any native client. Figma Smart Animate remains a review-state transition; system file picking and import outcomes remain runtime-owned."
+}

@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/ui-state.schema.json",
+  "title": "UiState",
+  "description": "ReaderUIRuntime 持有的共享 UI 状态契约。Owner: Reader-UI executable runtime。来源：STATE_OWNERSHIP.md §3、frontend-demo-optimized/render-runtime.js 的 appState.*。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["route", "tab", "readerMode", "overlay", "activeSession", "focusTarget", "loading", "error", "reducedMotion"],
+  "properties": {
+    "route": {
+      "type": "object",
+      "description": "当前路由。route.id 必须存在于 route.schema.json。",
+      "additionalProperties": false,
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string" },
+        "params": { "type": "object", "additionalProperties": { "type": "string" } },
+        "stack": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id"],
+            "properties": {
+              "id": { "type": "string" },
+              "params": { "type": "object", "additionalProperties": { "type": "string" } }
+            }
+          },
+          "description": "路由栈。来源：data-route-stack / data-stack-size。"
+        }
+      }
+    },
+    "tab": {
+      "type": "string",
+      "enum": ["bookshelf", "discover", "rss", "settings"],
+      "description": "当前主 Tab。来源：02-主标签页/00-目录.md。"
+    },
+    "readerMode": {
+      "type": "string",
+      "enum": ["default", "loading", "empty", "error", "offline", "permission"],
+      "description": "阅读模式 / 页面状态枚举。来源：04-阅读链路/沉浸阅读/04-状态规则稿.md。"
+    },
+    "overlay": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "settings",
+        "reader-control",
+        "directory",
+        "tts",
+        "appearance",
+        "auto-page",
+        "content-search",
+        "content-replacement",
+        "source-switch",
+        "book-action",
+        "sort-filter",
+        "group-management",
+        "local-import",
+        "batch-management",
+        "reader-night-state",
+        "reader-debug-info",
+        "reader-book-cache",
+        "keyboard",
+        "dialog",
+        "sheet",
+        "toast"
+      ],
+      "description": "当前 overlay。null 表示无 overlay。"
+    },
+    "activeSession": {
+      "type": ["string", "null"],
+      "enum": [null, "reading", "tts", "auto-page"],
+      "description": "阅读会话类型。"
+    },
+    "focusTarget": {
+      "type": ["string", "null"],
+      "description": "当前焦点目标 id。"
+    },
+    "loading": {
+      "type": "boolean",
+      "description": "全局 loading 标志。"
+    },
+    "error": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["code", "message"],
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" },
+        "retryable": { "type": "boolean", "default": false }
+      },
+      "description": "错误信息。null 表示无错误。"
+    },
+    "reducedMotion": {
+      "type": "boolean",
+      "default": false,
+      "description": "是否启用减少动态效果。来源：MOTION_SOURCE_GLOBAL_AUDIT.md。"
+    },
+    "pageState": {
+      "type": ["string", "null"],
+      "enum": [
+        null,
+        "default",
+        "loading",
+        "empty",
+        "error",
+        "offline",
+        "permission",
+        "cover-mode",
+        "list-mode",
+        "shelf-empty",
+        "no-cover",
+        "long-title",
+        "switching-source-type",
+        "source-empty",
+        "source-unavailable",
+        "network-failed",
+        "refreshing",
+        "no-subscription",
+        "no-unread",
+        "local-data-loading",
+        "no-backup",
+        "permission-missing",
+        "topbar-action"
+      ],
+      "description": "页面级状态枚举。来源：各页 04-状态规则稿.md。"
+    },
+    "bookshelf": {
+      "type": "object",
+      "description": "书架页面派生 UiState。",
+      "additionalProperties": false,
+      "properties": {
+        "viewMode": { "type": "string", "enum": ["cover", "list"] },
+        "selectedGroupId": { "type": ["string", "null"] },
+        "sortKey": { "type": "string" },
+        "sortOrder": { "type": "string", "enum": ["asc", "desc"] },
+        "filterKeys": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "discover": {
+      "type": "object",
+      "description": "发现页面派生 UiState。来源：appState.discoverFilter/discoverSort/discoverSortOpen。",
+      "additionalProperties": false,
+      "properties": {
+        "filter": { "type": "string" },
+        "sort": { "type": "string" },
+        "sortOpen": { "type": "boolean" },
+        "sourceType": { "type": "string", "enum": ["all", "book-source", "subscription-source"] },
+        "sourceEnabled": {
+          "type": "object",
+          "additionalProperties": { "type": "boolean" }
+        }
+      }
+    },
+    "reader": {
+      "type": "object",
+      "description": "阅读器派生 UiState。来源：appState.reader*。",
+      "additionalProperties": false,
+      "properties": {
+        "turnDirection": { "type": "string", "enum": ["next", "prev"] },
+        "pageIndex": { "type": "integer", "minimum": 0 },
+        "chapterIndex": { "type": "integer", "minimum": 0 },
+        "chapterProgress": { "type": "number", "minimum": 0, "maximum": 1 },
+        "chapterDownloads": {
+          "type": "object",
+          "additionalProperties": { "type": "string", "enum": ["loading", "complete", "cached"] }
+        },
+        "tts": { "type": "object", "additionalProperties": true },
+        "settings": { "type": "object", "additionalProperties": true },
+        "typography": { "type": "object", "additionalProperties": true },
+        "textSelectionOpen": { "type": "boolean" },
+        "selectedText": { "type": ["string", "null"] },
+        "sessionCapsuleSnapshot": { "type": ["object", "null"] },
+        "controlSpaceSnapshot": { "type": ["object", "null"] },
+        "autoPageCountdown": { "type": ["number", "null"] },
+        "dockOffsets": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "entryMotion": { "type": ["string", "null"] }
+      }
+    },
+    "settings": {
+      "type": "object",
+      "description": "设置派生 UiState。来源：appState.settingsOverlay/settingsExpandedOption/restoreAvailableScopes/restoreSelectedScopes。",
+      "additionalProperties": false,
+      "properties": {
+        "overlay": { "type": ["string", "null"] },
+        "expandedOption": { "type": ["string", "null"] },
+        "restoreAvailableScopes": { "type": "array", "items": { "type": "string" } },
+        "restoreSelectedScopes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "motion": {
+      "type": "object",
+      "description": "Motion 派生 UiState。来源：appState.motion*/dropdownMotion/segmentMotion/viewportOrientation*/asyncRouteRequest。",
+      "additionalProperties": false,
+      "properties": {
+        "overlaySequence": { "type": ["string", "null"] },
+        "overlayRole": { "type": ["string", "null"] },
+        "overlayAction": { "type": ["string", "null"] },
+        "overlayFocusReturn": { "type": ["string", "null"] },
+        "overlayReturnTarget": { "type": ["string", "null"] },
+        "viewportOrientationMotion": { "type": ["string", "null"] },
+        "viewportOrientationSequence": { "type": ["string", "null"] },
+        "viewportOrientationTimer": { "type": ["number", "null"] },
+        "interruptMotion": { "type": ["string", "null"] },
+        "interruptSequence": { "type": ["string", "null"] },
+        "interruptTimer": { "type": ["number", "null"] },
+        "dropdownMotion": { "type": ["string", "null"] },
+        "dropdownSwitchMotion": { "type": ["string", "null"] },
+        "dropdownSwitchSequence": { "type": ["string", "null"] },
+        "dropdownSwitchTimer": { "type": ["number", "null"] },
+        "segmentMotion": { "type": ["string", "null"] },
+        "asyncRouteRequest": { "type": ["string", "null"] },
+        "asyncResultMotion": { "type": ["string", "null"] },
+        "asyncResultSequence": { "type": ["string", "null"] }
+      }
+    },
+    "firstOpen": {
+      "type": "object",
+      "description": "首次启动派生 UiState。来源：appState.hasPlayedFirstOpen/firstOpenMotionTimer。",
+      "additionalProperties": false,
+      "properties": {
+        "hasPlayed": { "type": "boolean" },
+        "motionTimer": { "type": ["number", "null"] }
+      }
+    },
+    "importState": {
+      "type": "object",
+      "description": "W1 导入流程派生 UiState。来源：appState.importPhase/importConflicts/importPartialResults。",
+      "properties": {
+        "phase": { "type": "string", "enum": ["idle", "selecting", "input", "parsing", "preview", "conflict", "applying", "result"] },
+        "conflicts": { "type": "array" },
+        "partialResults": { "type": "array" },
+        "retryableFailures": { "type": "array" }
+      }
+    },
+    "readerTocState": {
+      "type": "object",
+      "description": "W2 目录加载派生 UiState。来源：appState.readerTocLoading/readerTocOffline/readerTocError。",
+      "properties": {
+        "loading": { "type": "boolean" },
+        "offline": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "chapters": { "type": "array" }
+      }
+    },
+    "readerContentState": {
+      "type": "object",
+      "description": "W2 正文加载派生 UiState。来源：appState.readerContentLoading/readerContentOffline/readerPageBoundary。",
+      "properties": {
+        "loading": { "type": "boolean" },
+        "offline": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "pageIndex": { "type": "integer" },
+        "pageBoundary": { "type": "string", "enum": ["none", "first", "last"] }
+      }
+    },
+    "sourceSwitchState": {
+      "type": "object",
+      "description": "W3 换源流程派生 UiState。来源：appState.sourceSwitchLoading/sourceSwitchError/sourceSwitchSession。",
+      "properties": {
+        "loading": { "type": "boolean" },
+        "error": { "type": ["string", "null"] },
+        "timeout": { "type": "boolean" },
+        "rollback": { "type": "boolean" },
+        "preview": { "type": "object" },
+        "session": { "type": ["string", "null"] }
+      }
+    },
+    "fontManagementState": {
+      "type": "object",
+      "description": "W4 字体管理派生 UiState。来源：appState.readerFonts/readerFontImportConfirm/readerFontFallback。",
+      "properties": {
+        "fonts": { "type": "array" },
+        "importConfirm": { "type": "object" },
+        "deleteConfirm": { "type": "object" },
+        "fallback": { "type": "boolean" },
+        "activeFontId": { "type": ["string", "null"] }
+      }
+    },
+    "themeManagementState": {
+      "type": "object",
+      "description": "W4 主题管理派生 UiState。来源：appState.readerThemes/readerEditingTheme/readerDefaultThemeId。",
+      "properties": {
+        "themes": { "type": "array" },
+        "editingTheme": { "type": "object" },
+        "newTheme": { "type": "boolean" },
+        "deleteConfirm": { "type": "object" },
+        "defaultThemeId": { "type": ["string", "null"] }
+      }
+    },
+    "typographyState": {
+      "type": "object",
+      "description": "W4 排版参数派生 UiState。来源：appState.readerTypography/readerTypographyResetConfirm。",
+      "properties": {
+        "fontSize": { "type": "integer" },
+        "lineHeight": { "type": "number" },
+        "paragraphSpacing": { "type": "number" },
+        "letterSpacing": { "type": "number" },
+        "margins": { "type": "object" },
+        "indent": { "type": "boolean" },
+        "align": { "type": "string", "enum": ["left", "center", "right", "justify"] },
+        "fontFamily": { "type": "string" },
+        "pageTexture": { "type": "string" },
+        "pageTurn": { "type": "string", "enum": ["slide", "scroll", "none"] },
+        "resetConfirm": { "type": "boolean" }
+      }
+    },
+    "replaceRulesState": {
+      "type": "object",
+      "description": "W5 替换规则管理派生 UiState。来源：appState.replaceRules/replaceEditingRule/replaceApplyResult。",
+      "properties": {
+        "rules": { "type": "array" },
+        "editingRule": { "type": "object" },
+        "deleteConfirm": { "type": "object" },
+        "applyResult": { "type": "object" },
+        "importExport": { "type": "object" },
+        "preview": { "type": "object" },
+        "scope": { "type": "string", "enum": ["single", "global"] }
+      }
+    },
+    "configPersistenceState": {
+      "type": "object",
+      "description": "W4 配置持久化派生 UiState。来源：appState.configPersistedAt/configRestarted/configRestoredConfig。",
+      "properties": {
+        "persistedAt": { "type": ["string", "null"] },
+        "restarted": { "type": "boolean" },
+        "restoredConfig": { "type": "object" }
+      }
+    },
+    "controlLayer": {
+      "type": "object",
+      "description": "控制层派生 UiState（L0-L3）。L0=沉浸层（无控制层可见）；L1=基础控制层；L2=模块/快捷面板；L3=完整控制页。来源：D3 控制层 L0-L3 renderer、state-rule.schema.json control-layer-* 规则、view-state.schema.json controlLayerLevel。",
+      "additionalProperties": false,
+      "properties": {
+        "L0": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L0 沉浸层是否可见。" }
+          }
+        },
+        "L1": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L1 基础控制层是否可见。" }
+          }
+        },
+        "L2": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L2 模块/快捷面板是否可见。" }
+          }
+        },
+        "L3": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "visible": { "type": "boolean", "description": "L3 完整控制页是否可见。" }
+          }
+        },
+        "activeLevel": {
+          "type": "string",
+          "enum": ["L0", "L1", "L2", "L3"],
+          "description": "当前激活的控制层层级。与 view-state.schema.json controlLayerLevel 对齐。"
+        }
+      }
+    }
+  }
+}

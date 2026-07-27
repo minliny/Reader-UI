@@ -1,0 +1,19 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+const root = join(dirname(fileURLToPath(import.meta.url)), ".."); const read = (file) => readFileSync(join(root, file), "utf8");
+const rendererSource = read("renderers/d2-settings-sync-renderers.js"), declarationSource = read("control-identity-declarations.js"), runtimeSource = read("render-runtime.js"), kitSource = read("shared-shell-kit/kit.js"), appearanceSource = read("appearance-spec.js");
+function fresh() { const window = { localStorage: { getItem() { return null; }, setItem() {}, removeItem() {} }, ReaderFrontendDemoDraftRouteContract: { routes: {}, routePresentation: {} } }; const context = vm.createContext({ window, module: { exports: {} }, Promise, setTimeout }); [kitSource, appearanceSource, declarationSource, rendererSource].forEach((source) => new vm.Script(source).runInContext(context)); const api = window.ReaderD2SettingsSyncRenderers; api.about.initState(); return api; }
+function values(html, attr) { return [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((match) => match[1]); }
+
+test("R2a About declares exactly 19 mapped semantic controls", () => { const box = { module: { exports: {} }, window: {} }; new vm.Script(declarationSource).runInNewContext(box); const rows = box.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "about-action"); assert.equal(rows.length, 19); assert.equal(new Set(rows.map((entry) => entry.controlKey)).size, 19); assert.ok(rows.every((entry) => entry.mappingStatus === "mapped" && entry.instanceKey === null && !/\.n\d+|selector|ordinal/.test(entry.settingsKey))); });
+test("R2a About three routes stamp 9/6/4 controls with all five attrs", () => { const api = fresh(); for (const [route, count] of Object.entries({ "about-feedback": 9, about: 6, "about-version": 4 })) { const html = api.renderD2Route(route, {}, {}); for (const attr of ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, count, `${route} ${attr}`); } });
+test("R2a specs and declarations have zero mismatch", () => { const api = fresh(); const box = { module: { exports: {} }, window: {} }; new vm.Script(declarationSource).runInNewContext(box); const left = box.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((entry) => entry.source === "about-action").map((entry) => `${entry.route}|${entry.settingsKey}`).sort(); const right = api.ABOUT_CONTROL_SPECS.map((entry) => `${entry.route}|${entry.settingsKey}`).sort(); assert.equal(JSON.stringify(left), JSON.stringify(right)); });
+test("R3a feedback route is explicitly excluded and fail-loud", () => { assert.equal(fresh().renderD2Route("feedback", {}, {}), ""); assert.match(runtimeSource, /legacy feedback route is fail-loud/); });
+test("R3a About legacy fallbacks are frozen", () => assert.match(runtimeSource, /aboutScreenV2 \(d2-settings-sync-renderers\.js\)/));
+test("R3a Phone and Tablet share identical About control keys", () => { const api = fresh(); for (const route of ["about-feedback", "about", "about-version"]) { const html = api.renderD2Route(route, {}, {}); const keys = values(html, "data-control-key").sort(); assert.deepEqual(values(`<main data-viewport="phone">${html}</main>`, "data-control-key").sort(), keys); assert.deepEqual(values(`<main data-viewport="tablet">${html}</main>`, "data-control-key").sort(), keys); } });
+test("R3a About owns no Compact Fold or independent Landscape atom", () => assert.doesNotMatch(rendererSource, /compact-landscape|foldable|data-viewport="compact"|data-viewport="fold"/i));
+test("R3a About render is byte-stable without dispatch", () => { const api = fresh(); assert.equal(api.renderD2Route("about", {}, {}), api.renderD2Route("about", {}, {})); });

@@ -1,0 +1,119 @@
+[
+  {
+    "schemaVersion": 1,
+    "designDeltaId": "reader2-full-appearancecontent-20260717",
+    "status": "frozen",
+    "designRevision": {
+      "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": "Reader 2",
+      "nodeId": "1023:18303",
+      "path": "Reader 2/Full/AppearanceContent",
+      "revision": "reader2-appearance-20260717",
+      "capturedAt": "2026-07-17T00:00:00+08:00"
+    },
+    "changeLevel": "D1",
+    "summary": "统一阅读主题、字体、选择项和排版步进器的跨端可执行配置。",
+    "affected": {
+      "tokens": [],
+      "componentTypes": [
+        "ReaderAppearancePanel",
+        "ReaderFullAppearancePage",
+        "ReaderFullSettingsPage"
+      ],
+      "routes": [
+        "reader-appearance",
+        "reader-full-appearance",
+        "reader-full-settings"
+      ],
+      "states": [
+        { "routeId": "reader-full-appearance", "state": "default" },
+        { "routeId": "reader-full-settings", "state": "default" }
+      ],
+      "motionIds": [
+        "reader.module.switch",
+        "reader.panel.collapse",
+        "reader.panel.expand",
+        "dropdown.option.select"
+      ],
+      "uiEvents": [
+        "reader.appearance.open",
+        "reader.font.import",
+        "reader.font.delete",
+        "reader.font.fallback",
+        "reader.theme.new",
+        "reader.theme.edit",
+        "reader.theme.delete",
+        "reader.theme.duplicate",
+        "reader.theme.setdefault",
+        "reader.typography.reset",
+        "reader.typography.persist"
+      ],
+      "capabilities": [],
+      "files": [
+        "contracts/appearance.schema.json",
+        "contracts/fixtures/appearance.fixtures.json",
+        "tools/codegen/generate.mjs",
+        "frontend-demo-optimized/appearance-spec.js",
+        "generated/swift/Appearance.swift",
+        "generated/kotlin/Appearance.kt",
+        "generated/arkts/Appearance.ets"
+      ]
+    },
+    "compatibility": {
+      "releaseKind": "major",
+      "stableWireIds": true,
+      "migration": "compat-read-one-version",
+      "rollbackArtifactVersion": "2.5.1"
+    },
+    "hostImpact": {
+      "web": {
+        "level": "primitive",
+        "adapters": ["appearance-spec", "reader-appearance-renderer"],
+        "evidence": ["contract", "build", "screenshot"]
+      },
+      "ios": {
+        "level": "primitive",
+        "adapters": ["ReaderAppearanceSpec", "ReaderFullAppearanceContent"],
+        "evidence": ["contract", "build", "simulator"]
+      },
+      "android": {
+        "level": "primitive",
+        "adapters": ["ReaderAppearanceSpec", "ReaderFullAppearanceContent"],
+        "evidence": ["contract", "build", "simulator"]
+      },
+      "harmonyos": {
+        "level": "primitive",
+        "adapters": ["ReaderAppearanceSpec", "ReaderAppearancePanel"],
+        "evidence": ["contract", "build", "simulator"]
+      }
+    },
+    "validation": {
+      "viewports": [
+        "phone-portrait",
+        "phone-landscape",
+        "tablet-portrait",
+        "tablet-landscape"
+      ],
+      "gates": [
+        "contract",
+        "codegen-drift",
+        "web-demo",
+        "screenshot",
+        "motion",
+        "reduced-motion",
+        "host-build",
+        "simulator"
+      ]
+    },
+    "release": {
+      "artifactRequired": true,
+      "consumerLockRequired": true,
+      "featureFlag": false,
+      "rollout": "batch"
+    },
+    "notes": [
+      "持久化只保存稳定 theme.id、font.id 和 select.option.value。",
+      "展示 label 变化不得触发业务数据迁移。"
+    ]
+  }
+]

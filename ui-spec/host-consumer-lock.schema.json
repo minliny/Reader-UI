@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/ui-spec/host-consumer-lock.schema.json",
+  "title": "Reader UI Host Consumer Lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "host",
+    "readerUiVersion",
+    "hostRequestSchemaVersion",
+    "runtimeActionsSchemaVersion",
+    "runtimeActionsSha256",
+    "releaseIdentity",
+    "rollout",
+    "knownDifferences",
+    "blockedProof"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 2 },
+    "host": { "type": "string", "enum": ["ios", "android", "harmonyos"] },
+    "readerUiVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "hostRequestSchemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+    "runtimeActionsSchemaVersion": { "type": "integer", "minimum": 1 },
+    "runtimeActionsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "releaseIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["releaseId", "sourceSha", "manifestSha256", "targetConfigSha256"],
+      "properties": {
+        "releaseId": { "type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64}):[0-9a-f]{64}$" },
+        "sourceSha": { "type": "string", "pattern": "^(?:[0-9a-f]{40}|[0-9a-f]{64})$" },
+        "manifestSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "targetConfigSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "rollout": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "coveredEvents"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["shadow", "pilot", "authoritative"] },
+        "coveredEvents": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "cohorts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "mode", "events"],
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "mode": { "type": "string", "enum": ["shadow", "pilot", "authoritative"] },
+              "evidence": { "type": "string", "minLength": 1 },
+              "rollback": { "type": "string", "minLength": 1 },
+              "effectPolicy": { "type": "string", "enum": ["none", "exactly-once"] },
+              "events": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "knownDifferences": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "owner", "exitCriteria"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "description": { "type": "string", "minLength": 1 },
+          "owner": { "type": "string", "minLength": 1 },
+          "exitCriteria": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "blockedProof": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gate", "reason", "evidence"],
+        "properties": {
+          "gate": { "type": "string", "minLength": 1 },
+          "reason": { "type": "string", "minLength": 1 },
+          "evidence": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

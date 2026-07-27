@@ -1,0 +1,54 @@
+[
+  { "_comment": "book.opened / book.parsed 成功",
+    "type": "book.opened", "payload": { "bookId": "bk-001", "title": "示例书", "author": "示例作者" }, "correlationId": "c-001", "requestId": "r-001" },
+  { "type": "book.parsed", "payload": { "bookId": "bk-001", "chapterCount": 30 }, "correlationId": "c-002", "requestId": "r-002" },
+  { "type": "book.open.failed", "payload": { "bookId": "bk-001", "error": { "code": "SOURCE_DISABLED", "message": "来源失效" } }, "correlationId": "c-001", "requestId": "r-001" },
+  { "type": "book.parse.failed", "payload": { "bookId": "bk-001", "error": { "code": "PARSE_ERROR", "message": "解析失败" } }, "correlationId": "c-002", "requestId": "r-002" },
+
+  { "_comment": "chapter.listed / content.loaded",
+    "type": "chapter.listed", "payload": { "bookId": "bk-001", "chapters": [{ "index": 0, "title": "第一章" }] }, "correlationId": "c-004", "requestId": "r-004" },
+  { "type": "content.loaded", "payload": { "bookId": "bk-001", "chapterId": "ch-001", "chapterIndex": 0, "chapterTitle": "第一章", "cached": false }, "correlationId": "c-006", "requestId": "r-006" },
+  { "type": "content.load.failed", "payload": { "bookId": "bk-001", "chapterId": "ch-001", "error": { "code": "NETWORK_UNAVAILABLE", "message": "网络不可用" } }, "correlationId": "c-006", "requestId": "r-006" },
+
+  { "_comment": "reader.location.resolved / reader.progress.updated",
+    "type": "reader.location.resolved", "payload": { "bookId": "bk-001", "chapterIndex": 0, "locator": { "type": "char-offset", "charOffset": 1024 }, "progress": 0.42 }, "correlationId": "c-009", "requestId": "r-009" },
+  { "type": "reader.progress.updated", "payload": { "bookId": "bk-001", "chapterIndex": 0, "progress": 0.42, "source": "user-read" }, "correlationId": "c-010", "requestId": "r-010" },
+  { "type": "reader.progress.snapshot.ready", "payload": { "bookId": "bk-001", "snapshot": { "chapterIndex": 0, "progress": 0.42 } }, "correlationId": "c-011", "requestId": "r-011" },
+
+  { "_comment": "source.search.completed / source.detail.loaded",
+    "type": "source.search.completed", "payload": { "query": "示例", "results": [{ "bookId": "bk-001", "title": "示例书" }] }, "correlationId": "c-012", "requestId": "r-012" },
+  { "type": "source.listed", "payload": { "sources": [{ "sourceId": "src-001", "name": "示例源", "enabled": true }] }, "correlationId": "c-012a", "requestId": "r-012a" },
+  { "type": "source.changed", "payload": { "bookId": "bk-001", "sourceId": "src-002" }, "correlationId": "c-012b", "requestId": "r-012b" },
+  { "type": "source.detail.loaded", "payload": { "bookId": "bk-001", "title": "示例书", "author": "示例作者" }, "correlationId": "c-013", "requestId": "r-013" },
+  { "type": "source.detected", "payload": { "sourceId": "src-001", "available": true }, "correlationId": "c-014", "requestId": "r-014" },
+
+  { "_comment": "rss.listed / rss.refreshed",
+    "type": "rss.listed", "payload": { "items": [{ "rssId": "rss-001", "title": "示例条目" }] }, "correlationId": "c-018", "requestId": "r-018" },
+  { "type": "rss.item.loaded", "payload": { "rssId": "rss-001", "title": "示例条目", "content": "..." }, "correlationId": "c-019", "requestId": "r-019" },
+  { "type": "rss.refreshed", "payload": { "newCount": 3 }, "correlationId": "c-024", "requestId": "r-024" },
+
+  { "_comment": "tts.queue.planned / tts.queue.progress",
+    "type": "tts.queue.planned", "payload": { "sessionId": "tts-001", "queueSize": 30 }, "correlationId": "c-025", "requestId": "r-025" },
+  { "type": "tts.queue.started", "payload": { "sessionId": "tts-001" }, "correlationId": "c-026", "requestId": "r-026" },
+  { "type": "tts.queue.progress", "payload": { "sessionId": "tts-001", "chapterIndex": 0, "progress": 0.42 }, "correlationId": "c-026", "requestId": "r-026" },
+  { "type": "tts.queue.paused", "payload": { "sessionId": "tts-001" }, "correlationId": "c-027", "requestId": "r-027" },
+  { "type": "tts.queue.stopped", "payload": { "sessionId": "tts-001" }, "correlationId": "c-029", "requestId": "r-029" },
+
+  { "_comment": "sync.snapshot.ready / sync.conflict.detected / sync.conflict.resolved",
+    "type": "sync.snapshot.ready", "payload": { "scope": "progress", "snapshot": {} }, "correlationId": "c-031", "requestId": "r-031" },
+  { "type": "sync.pushed", "payload": { "scope": "progress" }, "correlationId": "c-032", "requestId": "r-032" },
+  { "type": "sync.pulled", "payload": { "scope": "progress", "updatedCount": 2 }, "correlationId": "c-033", "requestId": "r-033" },
+  { "type": "sync.conflict.detected", "payload": { "conflictId": "conf-001", "bookId": "bk-001", "type": "progress" }, "correlationId": "c-033", "requestId": "r-033" },
+  { "type": "sync.conflict.resolved", "payload": { "conflictId": "conf-001", "resolution": "keep-local" }, "correlationId": "c-034", "requestId": "r-034" },
+
+  { "_comment": "bookshelf.listed / bookshelf.book.added",
+    "type": "bookshelf.listed", "payload": { "books": [{ "bookId": "bk-001", "title": "示例书" }] }, "correlationId": "c-035", "requestId": "r-035" },
+  { "type": "bookshelf.group.created", "payload": { "groupId": "g-001", "name": "在读" }, "correlationId": "c-037", "requestId": "r-037" },
+  { "type": "bookshelf.book.added", "payload": { "bookId": "bk-002", "groupId": "g-001" }, "correlationId": "c-040", "requestId": "r-040" },
+  { "type": "bookshelf.book.removed", "payload": { "bookId": "bk-002" }, "correlationId": "c-041", "requestId": "r-041" },
+
+  { "_comment": "cache 操作",
+    "type": "cache.cleared", "payload": { "scope": "all" }, "correlationId": "c-043", "requestId": "r-043" },
+  { "type": "cache.book.prefetched", "payload": { "bookId": "bk-001", "prefetchedCount": 5 }, "correlationId": "c-044", "requestId": "r-044" },
+  { "type": "cache.book.status.updated", "payload": { "bookId": "bk-001", "chapters": { "ch-001": "complete" } }, "correlationId": "c-045", "requestId": "r-045" }
+]

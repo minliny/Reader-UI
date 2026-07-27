@@ -1,0 +1,207 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Import Conflict Resolve",
+  "pageFamily": "import-conflict-resolve",
+  "stage": "R2a-R2b-R3a",
+  "status": "FIGMA_SCOPE_EXCLUDED_BY_USER",
+  "generatedAt": "2026-07-21T02:27:46+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "e7086039a3f69c1cdcde7c99efd4d2f9a0439fe2",
+    "implementationCommit": "7aafb34c0ed8df2664e1425d2efd2f2af3e3af97",
+    "implementationCommitSubject": "feat(import): complete conflict resolution R3a contract",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): bind import-conflict-resolve LOCAL_READY_FOR_FIGMA evidence",
+    "localReadyForFigma": false,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+  },
+  "routeFamily": {
+    "primaryRoutes": [
+      "import-conflict-resolve",
+      "import-duplicate",
+      "import-empty-file",
+      "import-format-unsupported",
+      "import-parsing",
+      "import-partial-success",
+      "import-permission-denied",
+      "import-result-detail"
+    ],
+    "primaryRouteCount": 8,
+    "uniqueProductionRenderer": "eight inline import screen functions dispatched by renderRoute",
+    "rendererFile": "frontend-demo-optimized/render-runtime.js",
+    "stateOwner": "ReaderImportRuntimeContract",
+    "dispatchPolicy": "All eight primary routes remain owned by the existing render-runtime inline canonical functions and are post-render instrumented by ReaderImportRuntimeContract.",
+    "w1MirrorFile": "frontend-demo-optimized/renderers/w1-import-renderers.js",
+    "w1MirrorLoaded": false,
+    "singleOwnerEvidence": "index.html and the deterministic inventory VM do not load w1-import-renderers.js; no W1 dispatch path was enabled, so there is no double owner."
+  },
+  "r2aInstrumentation": {
+    "semanticControlCount": 32,
+    "semanticControlSource": "import-conflict-action",
+    "mappingStatus": "32/32 mapped",
+    "controlsByRouteState": {
+      "import-conflict-resolve/default": 5,
+      "import-duplicate/default": 5,
+      "import-empty-file/empty": 3,
+      "import-format-unsupported/error": 4,
+      "import-parsing/loading": 3,
+      "import-partial-success/default": 4,
+      "import-permission-denied/permission": 4,
+      "import-result-detail/default": 4
+    },
+    "identityAttributeContract": {
+      "status": "historical-runtime-evidence-only; Figma scope is excluded by user",
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 6,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
+    "stableBatchId": "local-book-import-20260721",
+    "stableItemIds": ["rain-night", "old-book-scan", "missing-chapters"],
+    "stableConflictIds": ["title", "author", "group"],
+    "identityPolicy": "Only the stable batch, item, conflict and named action keys participate in identity. Labels, selectors, DOM order, ordinal n0-style keys and screenshots are prohibited.",
+    "runtimeEvidence": "Historical runtime evidence only: the deterministic production VM rendered all eight primary routes with four stable identity attributes plus exactly one declaration-governed semantic slot. This does not re-admit the withdrawn Figma family.",
+    "generatedRegistryIsolation": "Logical registry differences from the baseline are limited to the eight declared primary routes."
+  },
+  "r2bRealInteraction": {
+    "stateDomains": [
+      "batchId",
+      "phase",
+      "selectedItemIds",
+      "conflictChoices",
+      "pending",
+      "requestEpoch",
+      "error",
+      "closed",
+      "focusReturnKey"
+    ],
+    "reducerActions": [
+      "ITEM_TOGGLE",
+      "ITEM_SELECT_ALL",
+      "ITEM_CLEAR_ALL",
+      "CONFLICT_CHOOSE",
+      "CONFLICT_CHOOSE_ALL",
+      "OPERATION_START",
+      "OPERATION_SUCCESS",
+      "OPERATION_FAILED",
+      "CLOSE",
+      "RESET"
+    ],
+    "asyncHelpers": ["executeResolve", "executeCommit", "executeRetry", "close"],
+    "guards": [
+      "resolve, commit and retry reject a second activation while pending.status is loading",
+      "completion requires the current requestId, requestEpoch and an open owner",
+      "close increments requestEpoch and cancels an in-flight operation so later completion resolves stale",
+      "repeated close is idempotently reported as closed",
+      "item selection accepts only the three stable item IDs",
+      "conflict selection accepts only title, author or group and keep-local, overwrite or keep-both"
+    ]
+  },
+  "ariaAndFocus": {
+    "accessibleNames": "All 32 controls have explicit aria-label values after production instrumentation.",
+    "focusReturn": "Every non-back action carries an exact data-restore-focus control key; owner close preserves the initiating focus key.",
+    "parsing": "The parsing detail is role=status with aria-live=polite and aria-busy=true; progressbar values are bounded from 0 to 100.",
+    "permissionRecovery": "System settings, retry and exit preserve distinct UiEvent semantics.",
+    "nativeSemantics": "Existing data-route and data-action attributes survive identity stamping."
+  },
+  "viewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactProhibited": true,
+    "foldProhibited": true,
+    "independentLandscapeProhibited": true
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-import-conflict-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-import-conflict-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-import-conflict-aria-focus.test.mjs"
+      ]
+    },
+    "frontendRegression": { "tests": 534, "passed": 534, "failed": 0 },
+    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
+    "identityDenominator": 3808,
+    "identityDistribution": {
+      "mapped": 793,
+      "pendingActionKey": 447,
+      "pendingInstanceKey": 1035,
+      "pendingActionAndInstanceKey": 1533
+    },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check",
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check"
+    ]
+  },
+  "figmaReadOnlyBaseline": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "responsiveMasterPage": {
+      "pageId": "834:3",
+      "pageName": "24 · Responsive Masters · Phase 4"
+    },
+    "responsiveMasterSet": "REQUIRES_FRESH_READ_BEFORE_WRITE",
+    "phoneMaster": "REQUIRES_FRESH_READ_BEFORE_WRITE",
+    "tabletMaster": "REQUIRES_FRESH_READ_BEFORE_WRITE",
+    "downstreamFinalPage": {
+      "pageId": "834:2",
+      "pageName": "23 · Pages · Final",
+      "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE"
+    },
+    "noForgedBinding": true,
+    "freshRevisionRequiredBeforeWrite": true,
+    "structuralPolicy": "The serial writer must identify the real canonical import components and downstream instances from a fresh revision, repair canonical components first, and preserve existing reactions. Unknown node IDs are intentionally not guessed."
+  },
+  "figmaExclusion": {
+    "excludedByUser": true,
+    "excludedAt": "2026-07-21",
+    "reason": "The import page family is no longer required in Figma.",
+    "deletedRoots": [
+      { "nodeId": "2423:244", "name": "Surface/Import Conflict" },
+      { "nodeId": "942:5", "name": "Page/Import Conflict" },
+      { "nodeId": "2460:34831", "name": "F2 / Import Conflict Resolve" }
+    ],
+    "originalPage08ReferencesPreserved": ["576:198", "577:198", "578:198", "579:198"],
+    "writerQueueAdmission": false,
+    "mustNotRegenerateWithoutNewUserAuthorization": true
+  },
+  "figmaDecisionsRequired": [
+    "Read a fresh official Figma revision and resolve the real import component set, Phone master, Tablet master and downstream instances before writing.",
+    "Update shared progress, duplicate item, conflict row, result row and state/action components before page masters.",
+    "Preserve stable batch, item and conflict identity and keep trailing metadata/actions right-aligned.",
+    "Model parsing, duplicate, conflict, partial-success, permission and error states within this canonical family.",
+    "Use only Phone and Tablet; Landscape inherits Tablet and Compact/Fold structures are prohibited.",
+    "Preserve reactions. Figma may not change UiEvent, controlIdentityToken, state owner, async guards, route ownership or import business flow.",
+    "Detached frames and screenshot replacements are prohibited."
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": false,
+    "exactLocalCommit": "7aafb34c0ed8df2664e1425d2efd2f2af3e3af97",
+    "requiresFreshFigmaRevisionRead": true,
+    "requiresSingleWriter": true,
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": false
+  },
+  "boundaries": {
+    "figmaModified": false,
+    "w1MirrorModifiedOrLoaded": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}

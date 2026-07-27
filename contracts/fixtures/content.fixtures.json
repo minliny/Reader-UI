@@ -1,0 +1,50 @@
+[
+  {
+    "_comment": "标准章节正文（含段落、标题、引用）",
+    "bookId": "bk-001",
+    "chapterId": "ch-001",
+    "chapterIndex": 0,
+    "chapterTitle": "第一章 示例",
+    "blocks": [
+      { "type": "heading", "text": "第一章 示例", "level": 1 },
+      { "type": "paragraph", "text": "这是一段示例正文。" },
+      { "type": "paragraph", "text": "这是第二段正文。" },
+      { "type": "blockquote", "text": "这是一段引用。" },
+      { "type": "divider" },
+      { "type": "paragraph", "text": "分隔线后的段落。" }
+    ],
+    "meta": { "wordCount": 42, "charset": "UTF-8", "sourceUrl": "https://example.com/chapter/1", "fetchedAt": "2026-07-04T10:00:00Z" },
+    "cached": false
+  },
+  {
+    "_comment": "含图片和列表的正文",
+    "bookId": "bk-001",
+    "chapterId": "ch-002",
+    "chapterIndex": 1,
+    "chapterTitle": "第二章 图文",
+    "blocks": [
+      { "type": "heading", "text": "第二章", "level": 1 },
+      { "type": "image", "url": "https://example.com/img/1.png", "alt": "插图" },
+      { "type": "paragraph", "text": "图文混排示例。" },
+      { "type": "list", "ordered": false, "items": ["第一项", "第二项", "第三项"] },
+      { "type": "list", "ordered": true, "items": ["步骤一", "步骤二"] }
+    ],
+    "meta": { "wordCount": 30, "charset": "UTF-8", "sourceUrl": "https://example.com/chapter/2", "fetchedAt": "2026-07-04T10:05:00Z" },
+    "cached": true
+  },
+  {
+    "_comment": "含代码块和空段的正文",
+    "bookId": "bk-002",
+    "chapterId": "ch-001",
+    "chapterIndex": 0,
+    "chapterTitle": null,
+    "blocks": [
+      { "type": "paragraph", "text": "代码示例：" },
+      { "type": "code", "text": "print('hello')", "language": "python" },
+      { "type": "blank" },
+      { "type": "paragraph", "text": "空段之后。" }
+    ],
+    "meta": { "wordCount": 10, "charset": "UTF-8", "sourceUrl": null, "fetchedAt": null },
+    "cached": false
+  }
+]
