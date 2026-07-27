@@ -133,6 +133,116 @@ function targetFileExists(target) {
   return true;
 }
 
+// ─── Source-side evidence verification (anti-bypass layer 1, 2026-07-27 audit
+// finding 3: local.status was a hand-fillable boolean field) ────────────────
+// The 2026-07-27 second audit found that an agent could hand-edit local.status
+// and LOCAL_READY_FOR_FIGMA.json's admission.localReadyForFigma to true without
+// actually completing source-side conversion. These functions verify that the
+// evidence in LOCAL_READY_FOR_FIGMA.json is internally consistent and bound to
+// real artifacts, rather than just trusting the boolean field.
+
+function computeHandoffDirHash(handoffDirPath) {
+  // Recursively hash all files in the handoff directory (excluding
+  // LOCAL_READY_FOR_FIGMA.json itself, since it contains the declared hash).
+  // This binds the promotion to the exact handoff content — if any file in
+  // the handoff directory changes after promotion, the hash will not match
+  // and the next --check will fail.
+  if (!fs.existsSync(handoffDirPath)) {
+    return null;
+  }
+  const entries = [];
+  function walk(dir) {
+    const items = fs.readdirSync(dir, { withFileTypes: true });
+    items.sort((a, b) => a.name.localeCompare(b.name));
+    for (const item of items) {
+      const fullPath = path.join(dir, item.name);
+      if (item.isDirectory()) {
+        walk(fullPath);
+      } else if (item.isFile() && item.name !== 'LOCAL_READY_FOR_FIGMA.json') {
+        const relPath = path.relative(handoffDirPath, fullPath);
+        const content = fs.readFileSync(fullPath);
+        const hash = crypto.createHash('sha256').update(content).digest('hex');
+        entries.push(`${relPath}:${hash}`);
+      }
+    }
+  }
+  walk(handoffDirPath);
+  return `sha256:${crypto.createHash('sha256').update(entries.join('\n')).digest('hex')}`;
+}
+
+function verifyGitCommitExists(commitSha) {
+  if (!commitSha || typeof commitSha !== 'string') {
+    return { ok: false, reason: 'commit SHA is missing or not a string' };
+  }
+  // PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL is a placeholder used during
+  // handoff creation; it must be replaced with a real commit before promotion.
+  if (commitSha.startsWith('PENDING_')) {
+    return { ok: false, reason: `commit SHA is a placeholder: ${commitSha}` };
+  }
+  const result = spawnSync('git', ['cat-file', '-t', commitSha], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (result.status !== 0) {
+    return { ok: false, reason: `git commit not found: ${commitSha}` };
+  }
+  const type = result.stdout.toString().trim();
+  if (type !== 'commit') {
+    return { ok: false, reason: `${commitSha} is a ${type}, not a commit` };
+  }
+  return { ok: true };
+}
+
+function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
+  const recordId = record.id;
+  const errors = [];
+
+  // Check 1: verification field — all test suites must have passed === tests
+  const verification = localReady.verification;
+  if (!verification || typeof verification !== 'object') {
+    errors.push('verification field is missing or not an object');
+  } else {
+    for (const [suiteName, suite] of Object.entries(verification)) {
+      if (suiteName === 'identityDenominator' || suiteName === 'identityDistribution' || suiteName === 'liveDomSmoke' || suiteName === 'byteStableChecks') {
+        // These are metadata fields, not test suites with passed/tests counts.
+        continue;
+      }
+      if (typeof suite !== 'object' || suite === null) continue;
+      if (typeof suite.tests === 'number' && typeof suite.passed === 'number') {
+        if (suite.passed !== suite.tests) {
+          errors.push(`verification.${suiteName}: passed=${suite.passed} but tests=${suite.tests} — source-side tests are not all passing`);
+        }
+        if (suite.failed !== undefined && suite.failed !== 0) {
+          errors.push(`verification.${suiteName}: failed=${suite.failed} — source-side tests have failures`);
+        }
+      }
+    }
+  }
+
+  // Check 2: localSource.implementationCommit must be a real git commit
+  const implCommit = localReady.localSource?.implementationCommit;
+  const commitCheck = verifyGitCommitExists(implCommit);
+  if (!commitCheck.ok) {
+    errors.push(`localSource.implementationCommit: ${commitCheck.reason}`);
+  }
+
+  // Check 3: sourceEvidenceHash must match the actual handoff directory hash
+  // This is the key anti-bypass: if an agent hand-edits LOCAL_READY_FOR_FIGMA.json
+  // to claim readiness, they would also need to compute the correct hash of the
+  // entire handoff directory. While this is computationally possible, it makes
+  // the bypass visible in the diff and binds the promotion to exact content.
+  const handoffDir = path.dirname(localReadyPath);
+  const declaredHash = localReady.sourceEvidenceHash;
+  const actualHash = computeHandoffDirHash(handoffDir);
+  if (!declaredHash) {
+    errors.push('sourceEvidenceHash is missing — LOCAL_READY_FOR_FIGMA.json must declare the SHA-256 of the handoff directory (excluding itself)');
+  } else if (actualHash && declaredHash !== actualHash) {
+    errors.push(`sourceEvidenceHash mismatch: declared '${declaredHash}' but actual handoff dir hash is '${actualHash}' — handoff directory has been modified after the hash was declared, or the hash was fabricated`);
+  }
+
+  return errors;
+}
+
 // ─── Ledger: tamper-evident append-only log ───────────────────────────────
 // NOTE: the ledger is a best-effort tamper-evident log, NOT a cryptographic
 // signature. An agent with write access to the working tree can recompute the
@@ -248,15 +358,30 @@ function runCheck() {
 // ─── Promote mode: atomic transaction with backup/rollback ────────────────
 
 function backupFile(target) {
-  if (!fs.existsSync(target)) return null;
+  // Always return an object so restoreBackup can distinguish "file did not
+  // exist before" (must delete on rollback) from "file existed" (must restore
+  // content on rollback). Returning null for non-existent files made
+  // rollback leave newly-created files behind, breaking transaction atomicity.
+  if (!fs.existsSync(target)) {
+    return { path: target, existed: false, content: null };
+  }
   return {
     path: target,
+    existed: true,
     content: fs.readFileSync(target),
   };
 }
 
 function restoreBackup(backup) {
   if (!backup) return;
+  if (!backup.existed) {
+    // File did not exist before the transaction. If it was created during
+    // the transaction, delete it to restore the pre-transaction state.
+    if (fs.existsSync(backup.path)) {
+      fs.unlinkSync(backup.path);
+    }
+    return;
+  }
   fs.writeFileSync(backup.path, backup.content);
 }
 
@@ -267,6 +392,29 @@ function writeViaTemp(target, content) {
   const tempPath = `${target}.promote-tmp-${process.pid}-${Date.now()}`;
   fs.writeFileSync(tempPath, content);
   fs.renameSync(tempPath, target);
+}
+
+// ─── Fault injection (test-only) ──────────────────────────────────────────
+// When PROMOTE_TEST_MODE=1 is set, the caller can inject a fault after any
+// write phase by setting one of:
+//   PROMOTE_FAULT_AFTER_REGISTRY_WRITE=1
+//   PROMOTE_FAULT_AFTER_GENERATOR=1
+//   PROMOTE_FAULT_AFTER_CONSUMER_SYNC=1
+//   PROMOTE_FAULT_AFTER_LEDGER_WRITE=1
+//   PROMOTE_FAULT_IN_FINAL_VERIFY=1
+// The fault throws an injected error, which the promote() function's catch
+// block catches and rolls back ALL four files. This lets the test suite
+// verify that rollback actually restores the pre-transaction state at every
+// phase, without depending on real disk/process failures.
+//
+// Outside PROMOTE_TEST_MODE these env vars are ignored, so a stray env var
+// in a real environment cannot trip the fault.
+
+function faultInject(phase) {
+  if (process.env.PROMOTE_TEST_MODE !== '1') return;
+  const varName = `PROMOTE_FAULT_${phase}`;
+  if (process.env[varName] !== '1') return;
+  throw new Error(`injected fault: ${phase}`);
 }
 
 function promote(recordId) {
@@ -292,6 +440,14 @@ function promote(recordId) {
   const localReady = readJson(localReadyPath);
   if (!localReady.admission?.localReadyForFigma) {
     fail(`record ${recordId}: ${path.relative(repoRoot, localReadyPath)} admission.localReadyForFigma is not true — source-side has not declared readiness`);
+  }
+
+  // Prerequisite 2a (2026-07-27 audit finding 3): local.status is not a
+  // hand-fillable boolean — verify the evidence in LOCAL_READY_FOR_FIGMA.json
+  // is internally consistent and bound to real artifacts.
+  const evidenceErrors = verifyLocalReadyEvidence(record, localReady, localReadyPath);
+  if (evidenceErrors.length > 0) {
+    fail(`record ${recordId}: LOCAL_READY_FOR_FIGMA.json evidence verification failed:\n${evidenceErrors.map((e) => `    - ${e}`).join('\n')}`);
   }
 
   // Prerequisite 3: Figma binding revision must match the OFFICIAL current
@@ -338,122 +494,134 @@ function promote(recordId) {
     ledger: backupFile(ledgerPath),
   };
 
-  // ── Phase 2: compute pre-mutation registry hash ────────────────────────
-  const registryContentBefore = fs.readFileSync(registryPath, 'utf8');
-  const registryHashBefore = sha256(registryContentBefore);
+  // The transaction body (Phases 2-8) is wrapped in try/catch so ANY error
+  // — expected (generator failure, hash mismatch), injected (PROMOTE_FAULT_*),
+  // or unexpected (disk error, ENOSPC) — triggers a full four-file rollback.
+  // This is the in-process atomicity guarantee: either all four files end up
+  // in the post-transaction state, or all four are restored to the
+  // pre-transaction state. Cross-process crash recovery is documented as a
+  // known limitation (see FIGMA_TO_NATIVE_AGENT_EXECUTION_PROTOCOL.md §9.6);
+  // Layer 3 (CI from a clean checkout) is the backstop for that scenario.
+  let fullEntry;
+  let upstreamHashAfter;
+  let consumerHashAfter;
+  try {
+    // ── Phase 2: compute pre-mutation registry hash ──────────────────────
+    const registryContentBefore = fs.readFileSync(registryPath, 'utf8');
+    const registryHashBefore = sha256(registryContentBefore);
 
-  // ── Phase 3: mutate registry in memory, write FIRST so generator reads
-  //    the new state. The 2026-07-27 audit found the old order (generator
-  //    first, registry write last) produced a stale artifact because the
-  //    generator read the OLD registry from disk. ────────────────────────
-  record.harmony.status = 'implementation-ready';
-  const registryContentAfter = JSON.stringify(registry, null, 2) + '\n';
+    // ── Phase 3: mutate registry in memory, write FIRST so generator reads
+    //    the new state. The 2026-07-27 audit found the old order (generator
+    //    first, registry write last) produced a stale artifact because the
+    //    generator read the OLD registry from disk. ──────────────────────
+    record.harmony.status = 'implementation-ready';
+    const registryContentAfter = JSON.stringify(registry, null, 2) + '\n';
 
-  console.log(`  → writing new registry (atomic via temp + rename)`);
-  writeViaTemp(registryPath, registryContentAfter);
+    console.log(`  → writing new registry (atomic via temp + rename)`);
+    writeViaTemp(registryPath, registryContentAfter);
+    faultInject('AFTER_REGISTRY_WRITE');
 
-  // ── Phase 4: regenerate upstream VisualAdmission.ets ───────────────────
-  // The generator reads the registry from disk (which is now the NEW state).
-  console.log(`  → regenerating upstream VisualAdmission.ets`);
-  const generated = spawnSync('node', [generatorPath], {
-    cwd: repoRoot,
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-  if (generated.status !== 0) {
-    console.error(`✗ record ${recordId}: generator failed during promotion — rolling back registry.`);
-    restoreBackup(backup.registry);
-    fail(`generator output:\n${generated.stderr?.toString() || generated.stdout?.toString()}`);
-  }
+    // ── Phase 4: regenerate upstream VisualAdmission.ets ─────────────────
+    // The generator reads the registry from disk (which is now the NEW state).
+    console.log(`  → regenerating upstream VisualAdmission.ets`);
+    const generated = spawnSync('node', [generatorPath], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    if (generated.status !== 0) {
+      throw new Error(`generator failed during promotion. Output:\n${generated.stderr?.toString() || generated.stdout?.toString()}`);
+    }
+    if (!fs.existsSync(upstreamArtifactPath)) {
+      throw new Error(`upstream artifact missing after generation: ${upstreamArtifactPath}`);
+    }
+    faultInject('AFTER_GENERATOR');
 
-  // ── Phase 5: sync upstream artifact to HarmonyOS consumer copy ─────────
-  // The 2026-07-27 audit found these two files had diverged because the old
-  // promotion flow never synced the consumer copy. gen_contracts.mjs in
-  // Reader-for-HarmonyOS does this sync, but promotion must not depend on a
-  // separate manual step — it must be part of the atomic transaction.
-  if (!fs.existsSync(upstreamArtifactPath)) {
-    console.error(`✗ record ${recordId}: upstream artifact not found after generation — rolling back.`);
-    restoreBackup(backup.registry);
-    restoreBackup(backup.upstreamArtifact);
-    fail(`upstream artifact missing: ${upstreamArtifactPath}`);
-  }
-  const upstreamContent = fs.readFileSync(upstreamArtifactPath);
-  console.log(`  → syncing consumer copy: ${path.relative(repoRoot, consumerArtifactPath)}`);
-  if (!fs.existsSync(path.dirname(consumerArtifactPath))) {
-    console.error(`✗ record ${recordId}: HarmonyOS consumer directory missing — rolling back.`);
-    restoreBackup(backup.registry);
-    restoreBackup(backup.upstreamArtifact);
-    fail(`consumer directory does not exist: ${path.dirname(consumerArtifactPath)} — is Reader-for-HarmonyOS checked out?`);
-  }
-  writeViaTemp(consumerArtifactPath, upstreamContent);
+    // ── Phase 5: sync upstream artifact to HarmonyOS consumer copy ───────
+    // The 2026-07-27 audit found these two files had diverged because the old
+    // promotion flow never synced the consumer copy. gen_contracts.mjs in
+    // Reader-for-HarmonyOS does this sync, but promotion must not depend on a
+    // separate manual step — it must be part of the atomic transaction.
+    const upstreamContent = fs.readFileSync(upstreamArtifactPath);
+    console.log(`  → syncing consumer copy: ${path.relative(repoRoot, consumerArtifactPath)}`);
+    if (!fs.existsSync(path.dirname(consumerArtifactPath))) {
+      throw new Error(`HarmonyOS consumer directory does not exist: ${path.dirname(consumerArtifactPath)} — is Reader-for-HarmonyOS checked out?`);
+    }
+    writeViaTemp(consumerArtifactPath, upstreamContent);
 
-  // ── Phase 6: verify upstream == consumer (byte-identical) ──────────────
-  const upstreamHashAfter = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
-  const consumerHashAfter = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
-  if (upstreamHashAfter !== consumerHashAfter) {
-    console.error(`✗ record ${recordId}: upstream and consumer artifacts differ after sync — rolling back.`);
-    restoreBackup(backup.registry);
-    restoreBackup(backup.upstreamArtifact);
-    restoreBackup(backup.consumerArtifact);
-    fail(`upstream ${upstreamHashAfter.slice(0, 20)}... != consumer ${consumerHashAfter.slice(0, 20)}...`);
-  }
-  console.log(`  ✓ upstream == consumer (${upstreamHashAfter.slice(0, 20)}...)`);
+    // ── Phase 6: verify upstream == consumer (byte-identical) ────────────
+    upstreamHashAfter = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
+    consumerHashAfter = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
+    if (upstreamHashAfter !== consumerHashAfter) {
+      throw new Error(`upstream and consumer artifacts differ after sync: upstream ${upstreamHashAfter.slice(0, 20)}... != consumer ${consumerHashAfter.slice(0, 20)}...`);
+    }
+    console.log(`  ✓ upstream == consumer (${upstreamHashAfter.slice(0, 20)}...)`);
+    faultInject('AFTER_CONSUMER_SYNC');
 
-  // ── Phase 7: append ledger entry ───────────────────────────────────────
-  const ledger = loadLedger();
-  const entry = {
-    entryId: `promote-${String(ledger.entries.length + 1).padStart(3, '0')}`,
-    timestamp: new Date().toISOString(),
-    recordId,
-    pageFamily: handoffDir,
-    surfaceType: record.surfaceType || 'unknown',
-    routeIds: record.routeIds || [],
-    previousHarmonyStatus,
-    newHarmonyStatus: 'implementation-ready',
-    localStatus: record.local.status,
-    localReadyForFigma: {
-      path: path.relative(repoRoot, localReadyPath),
-      stage: localReady.stage,
-      status: localReady.status,
-      localReadyForFigma: true,
-    },
-    figma: {
-      fileKey: record.figma.fileKey,
-      revision: record.figma.revision,
-      officialCurrentRevision: officialRevision,
-      nodeId: record.figma.nodeId,
-      canonicalMasterId: record.figma.canonicalMasterId,
-    },
-    harmonyConsumerTargets: record.harmony.targets,
-    harmonyConsumerTargetsVerified: true,
-    registryHashBefore,
-    upstreamArtifactHashAfter: upstreamHashAfter,
-    consumerArtifactHashAfter: consumerHashAfter,
-    artifactsInSync: upstreamHashAfter === consumerHashAfter,
-    promotedBy: 'promote-family.mjs',
-  };
-  const fullEntry = appendLedgerEntry(ledger, entry);
-  writeViaTemp(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+    // ── Phase 7: append ledger entry ─────────────────────────────────────
+    const ledger = loadLedger();
+    const entry = {
+      entryId: `promote-${String(ledger.entries.length + 1).padStart(3, '0')}`,
+      timestamp: new Date().toISOString(),
+      recordId,
+      pageFamily: handoffDir,
+      surfaceType: record.surfaceType || 'unknown',
+      routeIds: record.routeIds || [],
+      previousHarmonyStatus,
+      newHarmonyStatus: 'implementation-ready',
+      localStatus: record.local.status,
+      localReadyForFigma: {
+        path: path.relative(repoRoot, localReadyPath),
+        stage: localReady.stage,
+        status: localReady.status,
+        localReadyForFigma: true,
+        sourceEvidenceHash: localReady.sourceEvidenceHash,
+        implementationCommit: localReady.localSource?.implementationCommit,
+        verificationSuites: Object.entries(localReady.verification || {})
+          .filter(([_, v]) => v && typeof v.tests === 'number')
+          .map(([k, v]) => ({ suite: k, tests: v.tests, passed: v.passed, failed: v.failed || 0 })),
+      },
+      figma: {
+        fileKey: record.figma.fileKey,
+        revision: record.figma.revision,
+        officialCurrentRevision: officialRevision,
+        nodeId: record.figma.nodeId,
+        canonicalMasterId: record.figma.canonicalMasterId,
+      },
+      harmonyConsumerTargets: record.harmony.targets,
+      harmonyConsumerTargetsVerified: true,
+      registryHashBefore,
+      upstreamArtifactHashAfter: upstreamHashAfter,
+      consumerArtifactHashAfter: consumerHashAfter,
+      artifactsInSync: upstreamHashAfter === consumerHashAfter,
+      promotedBy: 'promote-family.mjs',
+    };
+    fullEntry = appendLedgerEntry(ledger, entry);
+    writeViaTemp(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+    faultInject('AFTER_LEDGER_WRITE');
 
-  // ── Phase 8: final verification (read-back) ────────────────────────────
-  const finalRegistry = readJson(registryPath);
-  const finalRecord = finalRegistry.records.find((item) => item.id === recordId);
-  if (!finalRecord || finalRecord.harmony?.status !== 'implementation-ready') {
-    console.error(`✗ record ${recordId}: final registry read-back failed — rolling back.`);
+    // ── Phase 8: final verification (read-back) ──────────────────────────
+    faultInject('IN_FINAL_VERIFY');
+    const finalRegistry = readJson(registryPath);
+    const finalRecord = finalRegistry.records.find((item) => item.id === recordId);
+    if (!finalRecord || finalRecord.harmony?.status !== 'implementation-ready') {
+      throw new Error(`registry read-back did not show ${recordId} as implementation-ready`);
+    }
+    const finalUpstream = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
+    const finalConsumer = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
+    if (finalUpstream !== upstreamHashAfter || finalConsumer !== consumerHashAfter) {
+      throw new Error(`artifact hash drift detected after commit: upstream ${finalUpstream.slice(0, 20)}... vs ${upstreamHashAfter.slice(0, 20)}..., consumer ${finalConsumer.slice(0, 20)}... vs ${consumerHashAfter.slice(0, 20)}...`);
+    }
+  } catch (err) {
+    // Catch-all: any error in the transaction body triggers full four-file
+    // rollback. This covers expected errors (generator failure, hash mismatch),
+    // injected faults (PROMOTE_FAULT_*), and unexpected errors (disk I/O).
+    console.error(`✗ promote-family: ${recordId} transaction failed — rolling back all four files.`);
+    console.error(`  error: ${err.message}`);
     restoreBackup(backup.registry);
     restoreBackup(backup.upstreamArtifact);
     restoreBackup(backup.consumerArtifact);
     restoreBackup(backup.ledger);
-    fail(`registry read-back did not show ${recordId} as implementation-ready`);
-  }
-  const finalUpstream = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
-  const finalConsumer = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
-  if (finalUpstream !== upstreamHashAfter || finalConsumer !== consumerHashAfter) {
-    console.error(`✗ record ${recordId}: artifact hash changed after commit — rolling back.`);
-    restoreBackup(backup.registry);
-    restoreBackup(backup.upstreamArtifact);
-    restoreBackup(backup.consumerArtifact);
-    restoreBackup(backup.ledger);
-    fail(`hash drift detected: upstream ${finalUpstream.slice(0, 20)}... vs ${upstreamHashAfter.slice(0, 20)}..., consumer ${finalConsumer.slice(0, 20)}... vs ${consumerHashAfter.slice(0, 20)}...`);
+    process.exit(1);
   }
 
   console.log(`  ✓ registry updated (harmony.status: ${previousHarmonyStatus} → implementation-ready)`);
