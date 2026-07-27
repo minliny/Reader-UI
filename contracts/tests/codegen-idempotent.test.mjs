@@ -19,7 +19,15 @@ const REPO_ROOT = join(__dirname, "..", "..");
 const GENERATED_DIR = join(REPO_ROOT, "generated");
 const CODEGEN_ENTRY = join(REPO_ROOT, "tools", "codegen", "generate.mjs");
 
+// generated/ 下非 codegen 产物的文件。这些文件由其他工具链生成（如
+// promote-family.mjs 的原子提升事务），存放在 generated/ 目录用于 consumer
+// 同步，但不是 codegen pipeline 的输出，因此不应计入 codegen 幂等性检查。
+const CODEGEN_EXCLUDED = new Set([
+  "arkts/VisualAdmission.ets",
+]);
+
 // 收集 generated/ 下所有代码文件（.swift / .kt / .ets），排除 README.md
+// 和 CODEGEN_EXCLUDED 中标记的非 codegen 产物。
 function listGeneratedFiles() {
   const result = [];
   for (const platform of ["swift", "kotlin", "arkts"]) {
@@ -27,7 +35,9 @@ function listGeneratedFiles() {
     if (!existsSync(dir)) continue;
     const files = readdirSync(dir).filter((f) => /\.(swift|kt|ets)$/.test(f));
     for (const f of files) {
-      result.push(join(platform, f));
+      const rel = join(platform, f);
+      if (CODEGEN_EXCLUDED.has(rel)) continue;
+      result.push(rel);
     }
   }
   return result;
