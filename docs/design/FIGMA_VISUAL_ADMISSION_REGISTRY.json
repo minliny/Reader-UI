@@ -570,7 +570,8 @@
       "local": {
         "status": "candidate-backport",
         "targets": [
-          "frontend-demo-optimized/renderers/d3-control-layers-renderers.js"
+          "frontend-demo-optimized/render-runtime.js#sharedReaderSurface",
+          "frontend-demo-optimized/styles/01-shell-layout.css#reader-reading-surface"
         ]
       },
       "harmony": {

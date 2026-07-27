@@ -1,4 +1,14 @@
 (function attachReaderFrontendDemoDraft(window) {
+  // This is a trace binding, not a second visual source. Layout and visual
+  // values remain frozen in the canonical Figma master and its two variants.
+  const READER_READING_SURFACE_FIGMA_BINDING = Object.freeze({
+    fileKey: "klhs2jMM4MncaJFqZMfqEK",
+    canonicalMasterId: "1023:18354",
+    phoneNodeId: "1023:18355",
+    tabletNodeId: "1023:18371",
+    paperTextureAsset: "./assets/figma/reader-paper-layer.png"
+  });
+
   function esc(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -3150,6 +3160,12 @@
     const theme = currentReaderTheme(data, appState);
     const isNight = theme.scheme === "night";
     const themeTexture = theme.texture || "plain";
+    // Reader/ReadingPaper/Day (the default paper theme) is the exact source
+    // behind Reader/Responsive/ReadingSurface. Other confirmed theme variants
+    // stay owned by their own Figma-bound appearance surface.
+    const isFigmaReadingPaper = theme.value === "paper";
+    const readingPaperStart = isFigmaReadingPaper ? "#FBF4E9" : theme.paperStart;
+    const readingPaperEnd = isFigmaReadingPaper ? "#EFE2D0" : theme.paperEnd;
     const textureOpacity = Number.isFinite(Number(theme.textureOpacity))
       ? Math.max(0, Math.min(0.08, Number(theme.textureOpacity)))
       : themeTexture === "paper"
@@ -3225,8 +3241,8 @@
       };
     return [
       `--reader-theme-scheme:${esc(theme.scheme || "day")}`,
-      `--reader-paper-start:${esc(theme.paperStart)}`,
-      `--reader-paper-end:${esc(theme.paperEnd)}`,
+      `--reader-paper-start:${esc(readingPaperStart)}`,
+      `--reader-paper-end:${esc(readingPaperEnd)}`,
       `--reader-ink:${esc(theme.ink)}`,
       `--reader-theme-texture:${esc(themeTexture)}`,
       `--reader-theme-texture-opacity:${esc(textureOpacity.toFixed(3))}`,
@@ -3747,11 +3763,15 @@
     const ttsPlaying = Boolean(appState?.readerTts?.playing);
     const ttsIndex = ttsActive ? readerTtsSentenceIndex(data, appState) : 0;
     const ttsSegments = ttsActive ? readerTtsSegments(data) : [];
-    const paragraphHtml = paragraphs.map((line) => ttsActive ? readerTtsParagraphHtml(line, ttsSegments, ttsIndex) : `<p>${readerAnnotationHtml(line)}</p>`).join("");
+    // The frozen default ReadingSurface has unannotated ChapterPage text.
+    // Annotations must not appear merely because a phrase happens to match a
+    // local preset; a separately Figma-bound annotation state is required.
+    const paragraphHtml = paragraphs.map((line) => ttsActive ? readerTtsParagraphHtml(line, ttsSegments, ttsIndex) : `<p>${esc(line)}</p>`).join("");
     const verticalTapAttr = isVerticalMode ? ' data-reader-vertical-tap="reader" tabindex="0"' : "";
+    const figmaSurfaceAttrs = `data-figma-file-key="${READER_READING_SURFACE_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_READING_SURFACE_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_READING_SURFACE_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_READING_SURFACE_FIGMA_BINDING.tabletNodeId}"`;
     return `
-      <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
-      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
+      <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" data-reader-figma-surface="reading-surface" ${figmaSurfaceAttrs} aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
+      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-figma-surface="reading-surface" ${figmaSurfaceAttrs} data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
         ${chapterTitleHtml}
         ${paragraphHtml}
       </article>
@@ -15748,7 +15768,10 @@
   };
 
   window.ReaderRuntimeTestHooks = Object.assign({}, window.ReaderRuntimeTestHooks, {
+    readerReadingSurfaceFigmaBinding: READER_READING_SURFACE_FIGMA_BINDING,
     readerTextBlocks,
+    sharedReaderSurface,
+    readerThemeStyle,
     updateReaderPagination,
     invalidateReaderPagination,
     refreshReaderPaginationForLayout,

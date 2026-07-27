@@ -40,7 +40,11 @@ test("R3a import aria: parsing exposes a polite busy status and bounded progress
 test("R3a import aria: permission recovery keeps settings, retry, and exit semantics distinct", () => {
   const html = renderer.renderRoute("import-permission-denied");
   assert.match(html, /data-settings-key="permission-settings"[^>]*>/);
-  assert.match(html, /data-ui-event="permission\.open-settings"/);
+  // The declaration marks this native settings handoff as identity-only.
+  // It must remain a token until its platform capability contract is owned;
+  // emitting a UiEvent here would silently authorize a withdrawn route.
+  assert.match(html, /data-control-token="permission\.open-settings"/);
+  assert.doesNotMatch(html, /data-ui-event="permission\.open-settings"/);
   assert.match(html, /data-ui-event="permission\.recovery\.retry"/);
   assert.match(html, /data-ui-event="route\.popToRoot"/);
 });
