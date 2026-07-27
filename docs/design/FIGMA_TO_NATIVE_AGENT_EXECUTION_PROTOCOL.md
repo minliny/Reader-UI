@@ -219,7 +219,7 @@ The admission status is derived from these two fields, never set independently:
 | true | false | `candidate-backport` |
 | false | false | `blocked` or `retired` |
 
-`candidate-backport` is a **stop condition**, not a renderable state. A renderer that encounters a `candidate-backport` route must fail closed (render nothing) — it must not draw a generic fallback, a diagnostic card, or the old shell + hand-written component combination.
+`candidate-backport` is a **stop condition**, not a renderable state. A renderer that encounters a `candidate-backport` route must fail closed (render nothing) — it must not draw a generic fallback, a diagnostic card, the old shell + hand-written component combination, or a hidden zero-size placeholder. Where Reader-UI declares an active route-reconstruction quarantine, the host must omit the old generated shell/body mapping entirely.
 
 ### 9.2 Mandatory execution gate chain
 
@@ -245,8 +245,8 @@ The following gates are enforced by test commands, not by documentation. An agen
 
 | Gate | Script | What it enforces |
 | --- | --- | --- |
-| Pre-gate | `scripts/enforce-implementation-ready-gate.mjs` (`pretest` hook) | The generated artifact uses the two-dimensional gate; every entry is internally consistent; all four gate methods check `=== 'implementation-ready'`; all four renderers document `candidate-backport` as fail-closed; all four renderers fail closed with `Column().width(0).height(0)`. |
-| Contract gate | `scripts/test_contracts.mjs` | `admission ↔ implementationReady ↔ sourceBound` consistency; `candidate-backport` fail-closed at every renderer; no `Figma*Root` / `FigmaVisual*Policy` parallel layer; no retired `admitted` status in the generated artifact. |
+| Pre-gate | `scripts/enforce-implementation-ready-gate.mjs` (`pretest` hook) | The generated artifact uses the two-dimensional gate; every entry is internally consistent; all four admission methods check `=== 'implementation-ready'`; active renderers document `candidate-backport` as fail-closed; any active Reader-UI route-reconstruction quarantine is removed from generated RouteTable/ViewStateTable; RouteRenderer/OverlayHost/retired StateHost contain no zero-size hiding fallback. |
+| Contract gate | `scripts/test_contracts.mjs` | `admission ↔ implementationReady ↔ sourceBound` consistency; `candidate-backport` fail-closed without a local substitute; active source quarantine removes all listed native mappings; no `Figma*Root` / `FigmaVisual*Policy` parallel layer; no retired `admitted` status in the generated artifact. |
 | Emulator gate | `scripts/run_ohos_device_tests.mjs` (`test:arkts-emulator`) | ArkTS Hypium suite passes on the local emulator. This is an **emulator behavior test**, not a device delivery test and not a frontend visual delivery test. Its pass count must never be reported as device or frontend completion evidence. |
 
 ### 9.4 Stop conditions specific to enforcement gates
@@ -282,6 +282,7 @@ The corrected atomic promotion transaction closes all four:
 | --- | --- |
 | `harmony.status` must NEVER be hand-edited to `implementation-ready`. | The ONLY authorized path is `Reader-UI/tools/design/promote-family.mjs <recordId>`. |
 | `local.status` must be `implementation-ready` BEFORE `harmony.status` is promoted. | `promote-family.mjs` verifies this prerequisite and refuses to run if `local.status` is still `candidate-backport` or `not-currently-crosswalked`. |
+| An active source route-reconstruction quarantine blocks promotion. | `promote-family.mjs` refuses its listed records; `--check` requires both status dimensions to remain `candidate-backport`, requires no ledger entry, and requires its route set to match the registry. |
 | `LOCAL_READY_FOR_FIGMA.json` must exist and declare `admission.localReadyForFigma: true`. | `promote-family.mjs` resolves the handoff directory via an explicit `RECORD_ID_TO_HANDOFF` map (no string-prefix guessing). |
 | Figma binding revision must match the OFFICIAL current-revision evidence. | `promote-family.mjs` reads `docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json` and compares `record.figma.revision` to `evidence.currentRevision` — not to another registry record. |
 | HarmonyOS consumer target files must exist AND the `#symbol` suffix must be findable. | `promote-family.mjs` splits each `harmony.targets` entry on `#` and word-boundary-matches the symbol in the file. A renamed/deleted component fails promotion. |

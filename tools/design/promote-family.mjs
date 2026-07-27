@@ -46,6 +46,12 @@ const handoffsDir = path.join(repoRoot, 'docs', 'design', 'handoffs');
 const generatorPath = path.join(repoRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs');
 const upstreamArtifactPath = path.join(repoRoot, 'generated', 'arkts', 'VisualAdmission.ets');
 const revisionEvidencePath = path.join(repoRoot, 'docs', 'design', 'F0_FIGMA_CURRENT_REVISION_EVIDENCE.json');
+const routeReconstructionQuarantinePath = path.join(
+  repoRoot,
+  'contracts',
+  'fixtures',
+  'route-reconstruction-quarantine.fixtures.json',
+);
 
 // Host consumer copy of the generated artifact. This must be byte-identical to
 // upstreamArtifactPath after every promotion. The 2026-07-27 audit found these
@@ -109,6 +115,48 @@ function fail(message) {
 
 function readJson(target) {
   return JSON.parse(fs.readFileSync(target, 'utf8'));
+}
+
+// An active source-side quarantine is an explicit route extraction, not a
+// renderer fallback. A record inside it cannot be promoted until its old
+// native route mapping has been replaced by a new Figma-backed conversion.
+// Keep this check in the promotion transaction itself so neither a hand-edited
+// local.status nor a stale handoff packet can leap over the extraction.
+function readRouteReconstructionQuarantine() {
+  if (!fs.existsSync(routeReconstructionQuarantinePath)) {
+    return { entries: [], status: 'missing', errors: [
+      `route reconstruction quarantine is missing: ${path.relative(repoRoot, routeReconstructionQuarantinePath)}`,
+    ] };
+  }
+  try {
+    const document = readJson(routeReconstructionQuarantinePath);
+    if (document === null || Array.isArray(document) || typeof document !== 'object') {
+      return { entries: [], status: 'invalid', errors: ['route reconstruction quarantine must be an object'] };
+    }
+    if (document.schemaVersion !== 1 || (document.status !== 'active' && document.status !== 'released') || !Array.isArray(document.entries)) {
+      return { entries: [], status: 'invalid', errors: ['route reconstruction quarantine has an invalid schemaVersion, status, or entries field'] };
+    }
+    const entries = [];
+    for (const [index, entry] of document.entries.entries()) {
+      if (entry === null || Array.isArray(entry) || typeof entry !== 'object' ||
+        typeof entry.recordId !== 'string' || entry.recordId.length === 0 ||
+        !Array.isArray(entry.routeIds) || entry.routeIds.length === 0 || entry.blocksPromotion !== true) {
+        return { entries: [], status: 'invalid', errors: [`route reconstruction quarantine entry ${index + 1} is invalid`] };
+      }
+      entries.push({ recordId: entry.recordId, routeIds: entry.routeIds });
+    }
+    return { entries, status: document.status, errors: [] };
+  } catch (error) {
+    return { entries: [], status: 'invalid', errors: [
+      `route reconstruction quarantine could not be read: ${error instanceof Error ? error.message : String(error)}`,
+    ] };
+  }
+}
+
+function activeQuarantineEntries() {
+  const quarantine = readRouteReconstructionQuarantine();
+  if (quarantine.errors.length > 0 || quarantine.status !== 'active') return quarantine;
+  return quarantine;
 }
 
 function writeJson(target, value) {
@@ -322,9 +370,11 @@ function runCheck() {
   const registry = readJson(registryPath);
   const ledger = loadLedger();
   const errors = [];
+  const quarantine = activeQuarantineEntries();
 
   // 1. Ledger chain integrity
   errors.push(...verifyLedger(ledger));
+  errors.push(...quarantine.errors);
 
   // 2. Every implementation-ready record must have a ledger entry
   const promotedRecordIds = new Set(ledger.entries.map((entry) => entry.recordId));
@@ -347,6 +397,28 @@ function runCheck() {
       errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} no longer exists in registry`);
     } else if (record.harmony?.status !== 'implementation-ready') {
       errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} harmony.status is '${record.harmony?.status}' — promoted then demoted without ledger entry`);
+    }
+  }
+
+  // 3a. An active source quarantine withdraws both promotion dimensions. This
+  // makes the extraction durable even if a later edit changes a status field.
+  if (quarantine.status === 'active') {
+    for (const entry of quarantine.entries) {
+      const record = registryRecords.get(entry.recordId);
+      if (!record) {
+        errors.push(`route reconstruction quarantine references missing record ${entry.recordId}`);
+        continue;
+      }
+      if (record.local?.status !== 'candidate-backport' || record.harmony?.status !== 'candidate-backport') {
+        errors.push(`route reconstruction quarantine record ${entry.recordId} must be candidate-backport on both local and harmony status (got local=${record.local?.status}, harmony=${record.harmony?.status})`);
+      }
+      if (promotedRecordIds.has(entry.recordId)) {
+        errors.push(`route reconstruction quarantine record ${entry.recordId} has a promotion ledger entry while active`);
+      }
+      const recordRouteIds = Array.isArray(record.routeIds) ? record.routeIds : [];
+      if (JSON.stringify(recordRouteIds) !== JSON.stringify(entry.routeIds)) {
+        errors.push(`route reconstruction quarantine route set for ${entry.recordId} no longer matches the registry record`);
+      }
     }
   }
 
@@ -438,6 +510,14 @@ function promote(recordId) {
   }
 
   console.log(`→ promote-family: ${recordId}`);
+
+  const quarantine = activeQuarantineEntries();
+  if (quarantine.errors.length > 0) {
+    fail(quarantine.errors.join('; '));
+  }
+  if (quarantine.status === 'active' && quarantine.entries.some((entry) => entry.recordId === recordId)) {
+    fail(`record ${recordId} is actively route-quarantined at the Reader-UI source. Complete a new Figma-backed reconstruction and release the source extraction before promotion.`);
+  }
 
   // Prerequisite 1: local.status must already be implementation-ready
   if (record.local?.status !== 'implementation-ready') {

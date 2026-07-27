@@ -568,7 +568,7 @@
         }
       },
       "local": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/render-runtime.js#sharedReaderSurface",
           "frontend-demo-optimized/styles/01-shell-layout.css#reader-reading-surface"

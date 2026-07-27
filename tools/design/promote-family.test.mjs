@@ -49,6 +49,7 @@ function makeSandbox() {
   fs.mkdirSync(path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'generated', 'arkts'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'tools', 'design'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'contracts', 'fixtures'), { recursive: true });
 
   // Place a design-delta file in the handoff directory so that
   // computeHandoffDirHash has at least one file to hash (excluding
@@ -62,6 +63,19 @@ function makeSandbox() {
   // Copy promote-family.mjs and generator
   fs.copyFileSync(PROMOTE_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'));
   fs.copyFileSync(GENERATOR_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs'));
+
+  // The real repository has an active A3 route extraction. Transaction tests
+  // exercise promotion mechanics independently, so their isolated fixture is
+  // explicitly released. A dedicated test below covers the active rejection.
+  const quarantine = JSON.parse(fs.readFileSync(
+    path.join(REPO_ROOT, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json'),
+    'utf8',
+  ));
+  quarantine.status = 'released';
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json'),
+    JSON.stringify(quarantine, null, 2) + '\n',
+  );
 
   // Copy token ledger (generator dependency)
   fs.copyFileSync(
@@ -343,6 +357,40 @@ test('promote refuses when local.status is candidate-backport (anti-bypass)', ()
     // No files should have changed
     assert.deepEqual(before.registry, after.registry, 'registry should not have changed');
     assert.deepEqual(before.ledger, after.ledger, 'ledger should not have changed');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('promote refuses an actively route-quarantined record before any transaction write', () => {
+  const sandbox = makeSandbox();
+  try {
+    const commitSha = initSandboxGit(sandbox.readerUiRoot);
+    assert.ok(commitSha, 'failed to init sandbox git repo');
+    const record = makeRecord('reader.reading-surface', { localStatus: 'implementation-ready' });
+    writeRegistry(sandbox.readerUiRoot, [record]);
+    writeLedger(sandbox.readerUiRoot, []);
+    writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
+      implementationCommit: commitSha,
+    });
+    const quarantinePath = path.join(sandbox.readerUiRoot, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json');
+    const quarantine = JSON.parse(fs.readFileSync(quarantinePath, 'utf8'));
+    quarantine.status = 'active';
+    quarantine.entries = [{
+      recordId: 'reader.reading-surface',
+      routeIds: ['reader.reading-surface'],
+      reason: 'test quarantine',
+      blocksPromotion: true,
+    }];
+    fs.writeFileSync(quarantinePath, JSON.stringify(quarantine, null, 2) + '\n');
+
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    assert.notEqual(result.status, 0, 'promote should have failed');
+    assert.match(result.stderr?.toString() || '', /actively route-quarantined/);
+    assert.deepEqual(before, after, 'an active source quarantine must not mutate any transaction file');
   } finally {
     cleanupSandbox(sandbox);
   }
