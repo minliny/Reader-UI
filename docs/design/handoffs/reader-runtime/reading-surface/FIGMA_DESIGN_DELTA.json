@@ -1,12 +1,13 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_DESIGN_DELTA",
   "scope": "reader.reading-surface",
   "recordIds": [
     "reader.reading-surface"
   ],
-  "status": "B2_SOURCE_CONVERSION_COMPLETE",
-  "writtenAt": "2026-07-27T07:01:32Z",
+  "status": "B2_SOURCE_CONVERSION_COMPLETE_PENDING_B3_EVIDENCE",
+  "writtenAt": "2026-07-27T08:24:03Z",
+  "classification": "D1 + D2",
   "figma": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
     "pageId": "1023:17636",
@@ -16,103 +17,78 @@
       "tablet": "1023:18371"
     },
     "registeredRevision": "2379851596474967636",
-    "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
-    "liveReadReceipt": "docs/PLANNING/READER_READING_SURFACE_FIGMA_FREEZE.json",
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "liveReadReceipt": "docs/design/handoffs/reader-runtime/reading-surface/B2_READER_UI_SOURCE_CONVERSION.json",
     "numericCurrentRevision": null,
-    "numericRevisionPolicy": "The connected Figma session resolved the live master and both variants but did not expose a REST numeric current version. This packet retains the registered official revision as historical evidence and never presents it as a new live REST read."
+    "numericRevisionPolicy": "The B2 Figma MCP read resolved the live canonical master, both variants, both PaperLayers, and both ReadingContent nodes but did not expose a numeric current revision. The registered official revision remains evidence from F0 and is not presented as a new live REST version."
   },
+  "designDelta": [
+    {
+      "field": "default body font",
+      "oldValue": "Reader-UI fallback could resolve to the local serif/宋体 default when no ReaderUiStore preference existed.",
+      "newValue": "Noto Serif SC Regular, matching the current Figma ChapterPage body instance.",
+      "sourceNodeIds": ["I1199:10482;1197:10574", "I1199:10488;1197:10574"]
+    },
+    {
+      "field": "default paragraph spacing",
+      "oldValue": "16px local default.",
+      "newValue": "15.8px, matching the current Figma ChapterPage body instance.",
+      "sourceNodeIds": ["I1199:10482;1197:10574", "I1199:10488;1197:10574"]
+    },
+    {
+      "field": "Figma node trace",
+      "oldValue": "Only master and viewport node IDs were emitted by the runtime.",
+      "newValue": "PaperLayer and ReadingContent node IDs are emitted for both Phone and Tablet, without changing visual source ownership.",
+      "sourceNodeIds": ["1023:18356", "1023:18357", "1023:18372", "1023:18373"]
+    }
+  ],
   "canonicalGeometry": {
     "phone": {
       "outer": "390x844",
-      "paperLayer": {
-        "inset": "0.56px",
-        "size": "388.889x842.882"
-      },
-      "readingContent": {
-        "outerBounds": "left 32.56px, top 72.56px, right 32.544px, bottom 48.549px",
-        "size": "324.896x722.891"
-      }
+      "paperLayer": "x=0.555556,y=0.555556,w=388.888916,h=842.881958",
+      "readingContent": "x=31.996531,y=71.996529,w=324.895844,h=722.890686"
     },
     "tablet": {
       "outer": "760x960",
-      "paperLayer": {
-        "inset": "0.56px",
-        "size": "758.889x958.889"
-      },
-      "readingContent": {
-        "outerBounds": "left 45px, top 93px, right 45px, bottom 57px",
-        "size": "670x810"
-      }
-    },
-    "typography": {
-      "title": "Noto Serif SC Bold, 23px/28.75px, centered",
-      "titleToBodyGap": "18px",
-      "body": "Noto Serif SC Regular, 18px/35.28px, #2B241D, first-line indent 36px"
+      "paperLayer": "x=0.556,y=0.556,w=758.888977,h=958.888977",
+      "readingContent": "x=44.444336,y=92.444,w=670,h=810"
     },
     "paper": {
       "asset": "frontend-demo-optimized/assets/figma/reader-paper-layer.png",
       "sha256": "bfa7f242279d457b7707a7de9116047438c6fb2d437ac143125e8b35c7987a7a",
-      "gradient": "#FBF4E9 → #EFE2D0"
+      "sourceImageHash": "99d77078d4edc59bf6fc0f8d5cf678d7361665e5",
+      "sourceImageScaleMode": "TILE"
     }
   },
-  "sourceConversion": {
-    "implementationCommit": "fefc2dad7e010caf4cc87ff33599b165089308d0",
-    "implementationCommitSubject": "feat(reader-ui): bind reading surface to canonical Figma master",
-    "localTargets": [
-      "frontend-demo-optimized/render-runtime.js#sharedReaderSurface",
-      "frontend-demo-optimized/styles/01-shell-layout.css#reader-reading-surface",
-      "frontend-demo-optimized/styles/03c-reader-viewport.css#reader-reading-surface"
-    ],
-    "changes": [
-      "Replaced synthetic paper noise with the source-exact Figma ReadingPaper asset and its Phone/Tablet gradient and vignette layers.",
-      "Bound default chapter text to the Figma master without locally inferred annotation decoration.",
-      "Corrected Phone and Tablet ReadingContent geometry from the live Figma variants; page-space controls now apply only relative deltas from those defaults.",
-      "Added Figma node trace attributes and a source-bound regression test."
-    ],
-    "notChanged": [
-      "No Figma visual, component, Auto Layout, reaction, or instance structure was changed by this B2 source conversion.",
-      "No HarmonyOS renderer, device, emulator, Core, or release-lock file was changed.",
-      "No sibling Reader control overlay is included in this record."
-    ]
+  "readerUiContractImpact": {
+    "staticSource": "frontend-demo-optimized/render-runtime.js#sharedReaderSurface",
+    "sourceDefault": "Noto Serif SC / 18px / 35.28px / 15.8px / 36px first-line indent",
+    "explicitPreferenceOwner": "ReaderUiStore / existing reducer",
+    "siblingReaderRecords": "remain route-quarantined and are not claimed by this delta"
+  },
+  "nativeImpact": {
+    "HarmonyOS": "none in B2; candidate-backport remains fail-closed until B4 atomic promotion and B5 consumer work",
+    "Android": "none",
+    "iOS": "none"
   },
   "verification": {
-    "figmaSourceContract": {
-      "tests": 3,
-      "passed": 3,
+    "focusedSourceContract": {
+      "tests": 4,
+      "passed": 4,
       "failed": 0,
       "file": "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs"
     },
     "focusedReaderRegression": {
-      "tests": 58,
-      "passed": 58,
-      "failed": 0,
-      "files": [
-        "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs",
-        "frontend-demo-optimized/verify/r3a-reader-runtime-identity.test.mjs",
-        "frontend-demo-optimized/verify/r3a-reader-runtime-flow.test.mjs",
-        "frontend-demo-optimized/verify/r3a-reader-runtime-aria-focus.test.mjs",
-        "frontend-demo-optimized/verify/reader-control-continuity.test.mjs",
-        "frontend-demo-optimized/verify/reader-appearance-atoms.test.mjs",
-        "frontend-demo-optimized/verify/reader-pagination-runtime.test.mjs"
-      ]
+      "tests": 59,
+      "passed": 59,
+      "failed": 0
     },
-    "frontendRegression": {
-      "tests": 643,
-      "passed": 643,
-      "failed": 0,
-      "command": "git ls-files 'frontend-demo-optimized/verify/*.test.mjs' | xargs node --test"
-    },
-    "promotionGate": {
-      "tests": 23,
-      "passed": 23,
-      "failed": 0,
-      "command": "node --test tools/design/promote-family.test.mjs"
-    }
+    "deviceOrEmulatorExecuted": false
   },
   "boundary": {
-    "localStatusBeforeB3": "candidate-backport",
-    "harmonyStatus": "candidate-backport",
+    "figmaVisualOrStructuralMutation": false,
     "promotionExecuted": false,
+    "harmonyOSMutation": false,
     "deviceOrEmulatorExecuted": false,
     "noLocalApproximation": true,
     "noDetachedFrameOrScreenshot": true

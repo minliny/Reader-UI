@@ -6,7 +6,34 @@
     canonicalMasterId: "1023:18354",
     phoneNodeId: "1023:18355",
     tabletNodeId: "1023:18371",
-    paperTextureAsset: "./assets/figma/reader-paper-layer.png"
+    phonePaperLayerId: "1023:18356",
+    phoneReadingContentId: "1023:18357",
+    tabletPaperLayerId: "1023:18372",
+    tabletReadingContentId: "1023:18373",
+    paperTextureAsset: "./assets/figma/reader-paper-layer.png",
+    paperTextureSha256: "bfa7f242279d457b7707a7de9116047438c6fb2d437ac143125e8b35c7987a7a",
+    // Values below are a Reader-UI trace of the frozen default variant, not a
+    // second visual system. Explicit reader settings remain state-owned and
+    // may override them only through their separately bound control records.
+    defaultTypography: Object.freeze({
+      fontFamilyId: "source-han-serif",
+      fontFamily: "Noto Serif SC",
+      fontSize: 18,
+      lineHeight: 1.96,
+      paragraphGap: 15.8,
+      paragraphIndent: 2,
+      letterSpacing: 0,
+      titleFontSize: 23,
+      titleLineHeight: 1.25,
+      titleToBodyGap: 18,
+      ink: "#2B241D"
+    }),
+    defaultPageSpace: Object.freeze({
+      topMargin: 72,
+      sideMargin: 32,
+      paragraphIndent: 2,
+      texture: "paper"
+    })
   });
 
   function esc(value) {
@@ -3009,6 +3036,17 @@
     };
   }
 
+  function canonicalFigmaReadingSurfaceTypography() {
+    const source = READER_READING_SURFACE_FIGMA_BINDING.defaultTypography;
+    return {
+      fontSize: source.fontSize,
+      lineHeight: source.lineHeight,
+      paragraphGap: source.paragraphGap,
+      letterSpacing: source.letterSpacing,
+      fontFamily: source.fontFamilyId
+    };
+  }
+
   function readerTypographyConfig(data) {
     const config = data.reader?.typographyConfig || {};
     const normalizeConfig = (item) => ({
@@ -3106,6 +3144,10 @@
       paragraphIndent: Number.isFinite(Number(pageSpace.paragraphIndent)) ? Number(pageSpace.paragraphIndent) : 2,
       texture: pageSpace.texture || "plain"
     };
+  }
+
+  function canonicalFigmaReadingSurfacePageSpace() {
+    return { ...READER_READING_SURFACE_FIGMA_BINDING.defaultPageSpace };
   }
 
   function readerPageSpaceConfig(data) {
@@ -3744,8 +3786,12 @@
   }
 
   function sharedReaderSurface(data, dismissRoute, appState, options) {
-    const typography = appState?.readerTypography || normalizeReaderTypography(data);
-    const pageSpace = appState?.readerPageSpace || normalizeReaderPageSpace(data);
+    // With no saved state, render the canonical Figma default exactly. A
+    // user-selected typography/page-space value remains a behavior-owned
+    // override and is deliberately not reinterpreted by this static surface.
+    const usesFigmaStaticDefaults = !appState?.readerTypography && !appState?.readerPageSpace;
+    const typography = appState?.readerTypography || canonicalFigmaReadingSurfaceTypography();
+    const pageSpace = appState?.readerPageSpace || canonicalFigmaReadingSurfacePageSpace();
     const pageState = currentReaderPage(data, appState);
     const disableTurnAnimation = Boolean(options && options.disableTurnAnimation);
     const pageMode = appState?.readerPageMode === "vertical" ? "vertical" : "horizontal";
@@ -3770,8 +3816,8 @@
     const verticalTapAttr = isVerticalMode ? ' data-reader-vertical-tap="reader" tabindex="0"' : "";
     const figmaSurfaceAttrs = `data-figma-file-key="${READER_READING_SURFACE_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_READING_SURFACE_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_READING_SURFACE_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_READING_SURFACE_FIGMA_BINDING.tabletNodeId}"`;
     return `
-      <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" data-reader-figma-surface="reading-surface" ${figmaSurfaceAttrs} aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
-      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-figma-surface="reading-surface" ${figmaSurfaceAttrs} data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
+      <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" data-reader-figma-surface="reading-surface" data-figma-phone-paper-layer="${READER_READING_SURFACE_FIGMA_BINDING.phonePaperLayerId}" data-figma-tablet-paper-layer="${READER_READING_SURFACE_FIGMA_BINDING.tabletPaperLayerId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
+      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-figma-surface="reading-surface" data-figma-phone-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.phoneReadingContentId}" data-figma-tablet-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.tabletReadingContentId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
         ${chapterTitleHtml}
         ${paragraphHtml}
       </article>

@@ -36,7 +36,31 @@ test("reading surface is trace-bound to the current canonical Figma master and b
     canonicalMasterId: "1023:18354",
     phoneNodeId: "1023:18355",
     tabletNodeId: "1023:18371",
-    paperTextureAsset: "./assets/figma/reader-paper-layer.png"
+    phonePaperLayerId: "1023:18356",
+    phoneReadingContentId: "1023:18357",
+    tabletPaperLayerId: "1023:18372",
+    tabletReadingContentId: "1023:18373",
+    paperTextureAsset: "./assets/figma/reader-paper-layer.png",
+    paperTextureSha256: "bfa7f242279d457b7707a7de9116047438c6fb2d437ac143125e8b35c7987a7a",
+    defaultTypography: {
+      fontFamilyId: "source-han-serif",
+      fontFamily: "Noto Serif SC",
+      fontSize: 18,
+      lineHeight: 1.96,
+      paragraphGap: 15.8,
+      paragraphIndent: 2,
+      letterSpacing: 0,
+      titleFontSize: 23,
+      titleLineHeight: 1.25,
+      titleToBodyGap: 18,
+      ink: "#2B241D"
+    },
+    defaultPageSpace: {
+      topMargin: 72,
+      sideMargin: 32,
+      paragraphIndent: 2,
+      texture: "paper"
+    }
   });
 
   const record = registry.records.find((item) => item.id === "reader.reading-surface");
@@ -51,13 +75,11 @@ test("reading surface is trace-bound to the current canonical Figma master and b
   ]);
 });
 
-test("default chapter page remains Figma's unannotated source content instead of local preset decoration", () => {
+test("default chapter page retains the canonical Figma typography and unannotated source content", () => {
   const { data, hooks } = loadFixtureAndRuntime();
   const html = hooks.sharedReaderSurface(data, "", {
     readerPageMode: "horizontal",
     readerTheme: "paper",
-    readerTypography: { ...data.reader.typography },
-    readerPageSpace: { topMargin: 72, sideMargin: 32, paragraphIndent: 2, texture: "paper" },
     readerPages: [],
     readerPageIndex: 0
   });
@@ -65,11 +87,39 @@ test("default chapter page remains Figma's unannotated source content instead of
   assert.match(html, /data-figma-canonical-master="1023:18354"/);
   assert.match(html, /data-figma-phone-node="1023:18355"/);
   assert.match(html, /data-figma-tablet-node="1023:18371"/);
+  assert.match(html, /data-figma-phone-paper-layer="1023:18356"/);
+  assert.match(html, /data-figma-tablet-paper-layer="1023:18372"/);
+  assert.match(html, /data-figma-phone-reading-content="1023:18357"/);
+  assert.match(html, /data-figma-tablet-reading-content="1023:18373"/);
+  assert.match(html, /data-reader-figma-default="true"/);
+  assert.match(html, /--reader-font-family:&quot;Noto Serif SC&quot;, serif/);
+  assert.match(html, /--reader-font-size:18px/);
+  assert.match(html, /--reader-line-height:1\.96/);
+  assert.match(html, /--reader-paragraph-gap:15\.8px/);
+  assert.match(html, /--reader-paragraph-indent:2em/);
   assert.match(html, /雨声在窗外连成一片，像无数细小的针/);
   assert.doesNotMatch(html, /fd-reader-annotation/);
   assert.doesNotMatch(html, /title="已标注"/);
   assert.match(hooks.readerThemeStyle(data, { readerTheme: "paper" }), /--reader-paper-start:#FBF4E9/);
   assert.match(hooks.readerThemeStyle(data, { readerTheme: "paper" }), /--reader-paper-end:#EFE2D0/);
+});
+
+test("an explicit reader-owned typography or page-space setting remains an override, not a locally invented Figma default", () => {
+  const { data, hooks } = loadFixtureAndRuntime();
+  const html = hooks.sharedReaderSurface(data, "", {
+    readerPageMode: "horizontal",
+    readerTheme: "paper",
+    readerTypography: { fontSize: 20, lineHeight: 2.1, paragraphGap: 20, letterSpacing: 0.5, fontFamily: "kai" },
+    readerPageSpace: { topMargin: 80, sideMargin: 40, paragraphIndent: 0, texture: "plain" },
+    readerPages: [],
+    readerPageIndex: 0
+  });
+
+  assert.match(html, /data-reader-figma-default="false"/);
+  assert.match(html, /--reader-font-size:20px/);
+  assert.match(html, /--reader-paragraph-gap:20px/);
+  assert.match(html, /--reader-top-margin:80px/);
+  assert.match(html, /--reader-side-margin:40px/);
 });
 
 test("Figma ReadingPaper source asset and Phone/Tablet layout values are retained without a synthetic texture", () => {
