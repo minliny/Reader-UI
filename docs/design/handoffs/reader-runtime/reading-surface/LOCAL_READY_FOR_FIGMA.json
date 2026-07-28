@@ -8,12 +8,12 @@
   ],
   "stage": "implementation-ready",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-27T08:26:34Z",
+  "generatedAt": "2026-07-28T16:18:00Z",
   "localSource": {
     "repository": "Reader-UI",
-    "branch": "main",
-    "implementationCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a",
-    "implementationCommitSubject": "feat(reader-ui): convert reading surface from canonical Figma defaults",
+    "branch": "feat/reading-surface-a2-closure",
+    "implementationCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
+    "implementationCommitSubject": "feat(reader-ui): split reading-surface shared primitives + retire reading-page overlays (A2)",
     "localReadyForFigma": true
   },
   "figma": {
@@ -88,12 +88,12 @@
     "recordIds": [
       "reader.reading-surface"
     ],
-    "exactLocalCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a",
+    "exactLocalCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
     "sourceStatus": "implementation-ready",
     "harmonyStatusBeforePromotion": "candidate-backport",
     "promotionRequired": true
   },
-  "sourceEvidenceHash": "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
+  "sourceEvidenceHash": "sha256:d810fcb72c55f2ecdae7a54da25506ac2be1bbc74c03ecfa8b29047db3c3f272",
   "artifacts": [
     "B2_READER_UI_SOURCE_CONVERSION.json",
     "FIGMA_DESIGN_DELTA.json",
