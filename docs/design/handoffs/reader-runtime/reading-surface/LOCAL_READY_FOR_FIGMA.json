@@ -8,12 +8,12 @@
   ],
   "stage": "implementation-ready",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-28T16:18:00Z",
+  "generatedAt": "2026-07-29T16:49:22Z",
   "localSource": {
     "repository": "Reader-UI",
-    "branch": "feat/reading-surface-a2-closure",
-    "implementationCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
-    "implementationCommitSubject": "feat(reader-ui): split reading-surface shared primitives + retire reading-page overlays (A2)",
+    "branch": "repair/reading-surface-b2b3",
+    "implementationCommit": "4e5e75d802810c4c5b4e2cc8ed64091b418a7e92",
+    "implementationCommitSubject": "fix(reading-surface): reverify B2 source retirement boundary",
     "localReadyForFigma": true
   },
   "figma": {
@@ -43,7 +43,7 @@
     "staticAuthority": "Reader/Responsive/ReadingSurface (1023:18354) and its Phone/TabletExpanded variants are the sole visual source for this record.",
     "contentAuthority": "Reader Core owns real chapter text and progress. Figma supplies the reviewed static ChapterPage sample and typography/layout, not a replacement content store.",
     "stateOwner": "ReaderUiStore owns explicit reader typography and page-space preferences; no saved preference uses the canonical Figma default.",
-    "siblingIsolation": "reader.control-home, reader.module.directory, reader.module.tts, reader.module.appearance, reader.module.settings, and reader.quick.content-search remain active source quarantines."
+    "siblingIsolation": "reader.control-home, reader.module.directory, reader.module.tts, reader.module.appearance, reader.module.settings, and reader.quick.content-search remain registered as candidate-backport with routeIds=[] and reconstruction.status=pending-source-conversion. Their retired route enum entries are physically absent, no active quarantine entry remains, and this B3 packet authorizes none of them."
   },
   "verification": {
     "figmaSourceContract": {
@@ -59,10 +59,37 @@
       "scope": "reading surface, identity, flow, ARIA/focus, continuity, appearance atoms, pagination"
     },
     "sourceQuarantineRelease": {
-      "tests": 1,
-      "passed": 1,
+      "tests": 2,
+      "passed": 2,
       "failed": 0,
       "file": "contracts/tests/reading-surface-b3-ready.test.mjs"
+    },
+    "a2ReaderUiSourceRetirement": {
+      "tests": 5,
+      "passed": 5,
+      "failed": 0,
+      "file": "contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs",
+      "scope": "19 retired Reader-UI source implementations proved unreachable; 2 shared implementations retained; 2 HarmonyOS-only motion coordinators pending consumer proof"
+    },
+    "pageAnimationContract": {
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "file": "contracts/tests/reader-page-animation-contract.test.mjs",
+      "canonicalOptions": [
+        "cover",
+        "slide",
+        "simulation",
+        "scroll",
+        "none"
+      ]
+    },
+    "fullContractSuite": {
+      "tests": 492,
+      "passed": 492,
+      "failed": 0,
+      "runtime": "Node 24",
+      "command": "node --test contracts/tests/*.test.mjs"
     },
     "sourceGenerator": {
       "command": "node tools/codegen/generate.mjs --only-route-reconstruction-quarantine",
@@ -70,14 +97,12 @@
     },
     "promotionGate": {
       "command": "node tools/design/promote-family.mjs --check",
-      "status": "consistent-before-promotion"
+      "status": "B4-only-not-executed-by-B3"
     },
-    "harmonyContractGate": {
-      "contractSync": "node scripts/gen_contracts.mjs",
-      "result": "244/260 native routes active; all 16 historical Reader routes remain quarantined because reader.reading-surface harmony.status is still candidate-backport",
-      "executionGate": "12/12 passed",
-      "staticContractTests": "50/50 passed",
-      "note": "This is generated-contract synchronization and negative fail-closed proof only; it did not activate a HarmonyOS route, renderer, build, VM, or device cycle."
+    "harmonyA2Consumer": {
+      "status": "pending-independent-clean-commit",
+      "requiredBefore": "B4 promotion",
+      "notClaimedByB3": true
     }
   },
   "admission": {
@@ -88,24 +113,31 @@
     "recordIds": [
       "reader.reading-surface"
     ],
-    "exactLocalCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
+    "exactLocalCommit": "4e5e75d802810c4c5b4e2cc8ed64091b418a7e92",
     "sourceStatus": "implementation-ready",
     "harmonyStatusBeforePromotion": "candidate-backport",
     "promotionRequired": true
   },
-  "sourceEvidenceHash": "sha256:d810fcb72c55f2ecdae7a54da25506ac2be1bbc74c03ecfa8b29047db3c3f272",
+  "sourceEvidenceHash": "sha256:b931f2f8ad97623b09c86931cbd48462bd42aef06d1fdb74266b237bad1ded07",
   "artifacts": [
+    "A2_CONTRACT_RETIREMENT_DELTA.json",
     "B2_READER_UI_SOURCE_CONVERSION.json",
     "FIGMA_DESIGN_DELTA.json",
+    "FIGMA_F0_CROSSWALK.json",
     "frontend-demo-optimized/verify/r3a-reader-reading-surface-figma-source.test.mjs",
+    "contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs",
+    "contracts/tests/reader-page-animation-contract.test.mjs",
     "contracts/tests/reading-surface-b3-ready.test.mjs"
   ],
   "boundaries": {
     "figmaVisualOrStructuralMutation": false,
     "harmonyOSVisualConsumerMutation": false,
-    "harmonyOSGeneratedContractSyncOnly": true,
+    "harmonyOSGeneratedContractSyncOnly": false,
+    "harmonyOSA2ConsumerCleanupComplete": false,
     "harmonyOSRouteActivation": false,
     "deviceOrEmulatorExecuted": false,
+    "machineReceiptStage": "B7",
+    "releaseIdentityStage": "B7",
     "otherReaderRecordsClaimedReady": false,
     "noDetachedFrameOrScreenshot": true,
     "promotionExecuted": false
