@@ -8,12 +8,14 @@
 // by the repo realpath). This module is the single shared lock primitive they are
 // intended to contend on (all deriving the SAME path `${resolveRealPath(spec)}.repin.lock`).
 //
-// SCOPE: this commit ships ONLY the lock primitive + its unit tests. The four-tool
-// call-site integration (checker --inspect-lock / --recover, repin, promote,
-// retract) lives in separate, deferred commits - so in THIS commit's tree NO tool
-// imports this module yet. This commit closes the lock-PRIMITIVE race (no
-// programmatic stale-lock clearing); the cross-tool shared-writer P0 is NOT
-// closed until the integration commits land and a clean archive passes full CI.
+// SCOPE: this module ships the lock PRIMITIVE + its unit tests. The checker-side
+// repin/recover path (tools/runtime/check-runtime-payload-source.mjs --inspect-lock
+// / --recover / --source-commit) NOW imports + uses it. The promote/retract
+// call-sites (tools/design/promote-family.mjs) are NOT yet migrated to it - so the
+// cross-tool shared-writer P0 (serialize repin/recover/promote/retract against ONE
+// lock path) is still OPEN until those land + a clean archive passes full CI. This
+// module closes the lock-PRIMITIVE race (no programmatic stale-lock clearing); it
+// does NOT close the cross-tool integration race.
 //
 // Lock file location: `<specPath>.repin.lock` (each tool computes this from the
 // same spec realpath; callers pass the resolved path in).

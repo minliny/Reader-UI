@@ -102,6 +102,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 | product-capability-coverage.test.mjs | 5 | 24 项产品能力分母、Route/UiEvent 引用、四层状态与证据边界 |
 | platform-evidence-manifest.test.mjs | 6 | Slice 0–12 exact-set、三端模板、canonical route、依赖 DAG、template 防冒充与 execution `passed` fail-closed |
 | planning-consistency.test.mjs | 8 | 规划分母、Slice 3/7、正式 Slice 9–12、evidence/README/ACCEPTANCE 与 Figma VC/MR 口径防漂移 |
+| runtime-payload-source-repin-transaction.test.mjs | 34 | repin 事务 journal/recovery、CAS 已知 hash 自动恢复 vs 未知 hash 手工恢复、safeUnlink EACCES/EIO 传播与 ENOENT 吞、rename->mark 窗口真实 SIGKILL、git env 隔离、自包含 Core Git fixture 的只读 CLI 校验 |
 
 ### Demo 一致性校验
 
@@ -117,7 +118,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 contracts/
   *.schema.json          # 23 个契约 schema
   fixtures/              # 1314 项可被 schema 扫描的 fixtures
-  tests/                 # 35 个测试文件 + validate.mjs
+  tests/                 # 36 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 
