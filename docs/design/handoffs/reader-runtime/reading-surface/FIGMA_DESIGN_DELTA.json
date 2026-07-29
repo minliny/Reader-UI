@@ -5,8 +5,9 @@
   "recordIds": [
     "reader.reading-surface"
   ],
-  "status": "B3_CONTRACT_VALIDATION_PASSED_RELEASE_IDENTITY_AND_CLEAN_HANDOFF_PENDING",
+  "status": "B2_SOURCE_CONVERSION_REVALIDATED_B3_EVIDENCE_PENDING",
   "writtenAt": "2026-07-27T08:24:03Z",
+  "revalidatedAt": "2026-07-29T16:43:50Z",
   "classification": "D1 + D2",
   "figma": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
@@ -69,7 +70,7 @@
     "retirementBoundary": "Coverage and route denominator changes are authorized only by the non-visual A2 contract-retirement delta. They are not represented as a Figma visual change."
   },
   "nativeImpact": {
-    "HarmonyOS": "current generated contracts, Screen Graph Gate J, and static contract checks pass; candidate-backport remains fail-closed because no promotion or route activation occurred",
+    "HarmonyOS": "not consumed in B2/B3; candidate-backport remains fail-closed pending an independent A2 consumer cleanup and B4 promotion",
     "Android": "none",
     "iOS": "none"
   },
@@ -85,22 +86,18 @@
       "passed": 59,
       "failed": 0
     },
-    "harmonyValidation": {
-      "status": "passed",
-      "acceptedResults": [
-        "npm run gen:contracts — six consumer files byte-synchronized and five pageAnimation options retained",
-        "node scripts/sync_reader_ui_screen_graph.mjs --check — PASS (247 routes, 183 variants, 580 components, 272 faithful instances, 33 retired runtime instances)",
-        "node scripts/enforce-implementation-ready-gate.mjs — 13/13 PASS including Gate J",
-        "node scripts/test_contracts.mjs — 54/54 PASS"
-      ],
-      "releaseIdentityGate": "BLOCKED: consumer sourceSha 33d5352ee589ccf988852a111309414afc1d7d49 does not equal Reader-UI HEAD 85eda9b4ca1a254d769ba9c62aa4ccdd20c47d02"
+    "downstreamBoundary": {
+      "harmonyStatus": "candidate-backport",
+      "a2HarmonyConsumerCleanup": "pending-independent-clean-commit",
+      "b4Promotion": "not-executed",
+      "b7MachineReceiptAndReleaseIdentity": "not-required-for-this-B2-delta"
     },
     "deviceOrEmulatorExecuted": false
   },
   "boundary": {
     "figmaVisualOrStructuralMutation": false,
     "promotionExecuted": false,
-    "harmonyOSContractAndGateMutationObserved": true,
+    "harmonyOSContractAndGateMutationObserved": false,
     "harmonyOSVisualMutation": false,
     "deviceOrEmulatorExecuted": false,
     "noLocalApproximation": true,

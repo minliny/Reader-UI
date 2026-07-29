@@ -26,6 +26,30 @@ function assertCountDelta(change, label) {
   assert.equal(change.after - change.before, change.delta, `${label} delta must be arithmetic truth`);
 }
 
+function loadRendererIntegrationMap(relativePath, exportName) {
+  const source = fs.readFileSync(path.join(repoRoot, relativePath), "utf8");
+  const window = {
+    localStorage: {
+      getItem() { return null; },
+      setItem() {},
+      removeItem() {},
+    },
+  };
+  const sandbox = {
+    window,
+    document: {},
+    Math, JSON, Date, parseInt, parseFloat, isNaN, isFinite,
+    String, Number, Boolean, Array, Object,
+    setTimeout() { return 0; },
+    clearTimeout() {},
+  };
+  vm.createContext(sandbox);
+  vm.runInContext(source, sandbox, { filename: relativePath });
+  const integrationMap = window[exportName]?.INTEGRATION_MAP;
+  assert.ok(integrationMap, `${relativePath} must export ${exportName}.INTEGRATION_MAP`);
+  return integrationMap;
+}
+
 test("A2 retirement delta is the sole non-visual authorization for the 285 to 272 downstream baseline", () => {
   const delta = JSON.parse(fs.readFileSync(deltaPath, "utf8"));
 
@@ -33,7 +57,7 @@ test("A2 retirement delta is the sole non-visual authorization for the 285 to 27
   assert.equal(delta.kind, "A2_CONTRACT_RETIREMENT_DELTA");
   assert.equal(delta.deltaId, "reader.reading-surface.a2-contract-retirement.1b81644");
   assert.equal(delta.status, "approved-source-retirement");
-  assert.equal(delta.validationStatus, "harmony-screen-graph-and-static-pass-execution-gate-blocked");
+  assert.equal(delta.validationStatus, "reader-ui-source-reverified-harmony-consumer-clean-commit-pending");
   assert.equal(delta.recordId, "reader.reading-surface");
   assert.equal(delta.implementationCommit, "1b81644b322c3305723d5291af2ada6b235778aa");
   assert.equal(delta.classification.visualChange, false);
@@ -313,13 +337,101 @@ test("A2 reachability regression: the live route content-replacement is never bo
   }
 });
 
-test("A2 retirement delta records exact HarmonyOS pass/fail-closed results without claiming release-lock or promotion", () => {
+test("A2 Reader-UI source reachability re-verifies every retired component and demo renderer against live routes", () => {
+  const routeSchema = readJson("contracts/route.schema.json");
+  const liveRouteIds = new Set(routeSchema.properties.id.enum);
+  const viewStates = readJson("contracts/fixtures/view-state.fixtures.json");
+  const coverage = readJson("generated/screen-graph-coverage.json");
+  const reachability = readJson(
+    "docs/audits/reader-reading-surface-historical-reachability-2026-07-27.json",
+  );
+  const evidenceByType = new Map(coverage.componentFixtureEvidence.map((entry) => [entry.type, entry]));
+
+  const integrationMaps = new Map([
+    [
+      "d3-control-layers-renderers.js",
+      loadRendererIntegrationMap(
+        "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
+        "ReaderD3ControlLayersRenderers",
+      ),
+    ],
+    [
+      "w4-theme-font-typography-renderers.js",
+      loadRendererIntegrationMap(
+        "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
+        "ReaderW4ThemeFontTypographyRenderers",
+      ),
+    ],
+    [
+      "w5-replace-rules-renderers.js",
+      loadRendererIntegrationMap(
+        "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
+        "ReaderW5ReplaceRulesRenderers",
+      ),
+    ],
+  ]);
+
+  const retiredComponents = reachability.historicalImplementations
+    .filter((entry) => entry.category === "overlay-component" && entry.fullyUnreachable);
+  assert.deepEqual(
+    retiredComponents.map((entry) => entry.symbol),
+    [
+      "ReaderDirectoryPanel",
+      "ReaderAppearancePanel",
+      "ReaderTtsPanel",
+      "ReaderSettingsPanel",
+      "ReaderSearchPanel",
+      "ReaderReplacePanel",
+    ],
+  );
+  for (const entry of retiredComponents) {
+    assert.equal(
+      viewStates.some((viewState) => viewState.components.some((component) => component.type === entry.symbol)),
+      false,
+      `${entry.symbol} must have no surviving view-state fixture`,
+    );
+    const evidence = evidenceByType.get(entry.symbol);
+    assert.ok(evidence, `${entry.symbol} must remain recorded as a retired identity`);
+    assert.equal(evidence.catalogStatus, "explicit-gap", `${entry.symbol} must be explicit-gap`);
+    assert.equal(evidence.instanceCount, 0, `${entry.symbol} must have zero source instances`);
+  }
+
+  const retiredDemoRenderers = reachability.historicalImplementations
+    .filter((entry) => entry.category === "demo-renderer" && entry.fullyUnreachable);
+  assert.equal(retiredDemoRenderers.length, 13);
+  for (const entry of retiredDemoRenderers) {
+    const integrationMap = integrationMaps.get(entry.file);
+    assert.ok(integrationMap, `${entry.file} must have a checked integration map`);
+    for (const [routeId, renderer] of Object.entries(integrationMap)) {
+      if (renderer !== entry.symbol) continue;
+      assert.equal(
+        liveRouteIds.has(routeId),
+        false,
+        `${entry.symbol} must not be reachable from live route ${routeId}`,
+      );
+    }
+  }
+
+  const harmonyOnlySymbols = reachability.historicalImplementations
+    .filter((entry) => entry.category === "motion-coordinator")
+    .map((entry) => entry.symbol);
+  assert.deepEqual(
+    harmonyOnlySymbols,
+    ["ReaderControlMotionCoordinator", "ReaderDirectoryToTtsMotionCoordinator"],
+    "HarmonyOS-only motion symbols remain an independent A2 consumer-side proof",
+  );
+  assert.equal(reachability.readerUiSourceReverification.verifiedGloballyUnreachableSourceImplementations, 19);
+  assert.equal(reachability.readerUiSourceReverification.retainedSharedImplementations, 2);
+  assert.equal(reachability.readerUiSourceReverification.pendingHarmonyConsumerImplementations, 2);
+});
+
+test("A2 retirement delta keeps historical HarmonyOS results non-authoritative and current consumption pending", () => {
   const delta = JSON.parse(fs.readFileSync(deltaPath, "utf8"));
   assert.equal(delta.status, "approved-source-retirement");
-  assert.equal(delta.validationStatus, "harmony-screen-graph-and-static-pass-execution-gate-blocked");
-  assert.equal(delta.evidence.harmonyValidation.status, "blocked-fail-closed");
+  assert.equal(delta.validationStatus, "reader-ui-source-reverified-harmony-consumer-clean-commit-pending");
+  assert.equal(delta.evidence.harmonyValidation.status, "historical-snapshot-not-current-admission");
 
-  const accepted = delta.evidence.harmonyValidation.acceptedResults;
+  const accepted = delta.evidence.harmonyValidation.historicalAcceptedResults;
   assert.deepEqual(accepted.map((result) => result.command), [
     "npm run gen:contracts",
     "node scripts/sync_reader_ui_screen_graph.mjs --check",
@@ -352,14 +464,19 @@ test("A2 retirement delta records exact HarmonyOS pass/fail-closed results witho
   assert.equal(accepted[3].passed, 55);
   assert.equal(accepted[3].failed, 0);
   assert.deepEqual(delta.evidence.harmonyValidation.machineReceipt, {
-    status: "missing",
-    promotionAuthority: false,
+    status: "not-applicable-to-a2-b3",
+    stage: "B7",
   });
 
-  const releaseGate = delta.evidence.harmonyValidation.remainingNonA2Gate;
-  assert.equal(releaseGate.status, "blocked");
-  assert.equal(releaseGate.consumerReleaseSourceSha, "33d5352ee589ccf988852a111309414afc1d7d49");
-  assert.equal(releaseGate.currentReaderUiHead, "85eda9b4ca1a254d769ba9c62aa4ccdd20c47d02");
-  assert.equal(releaseGate.notClaimedPassed, true);
+  assert.deepEqual(delta.currentClosure.readerUiSource, {
+    status: "passed",
+    test: "contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs",
+    tests: 5,
+    scope: "retired route absence, exact denominators, all retired Reader-UI component identities, and all 13 demo renderer bindings",
+  });
+  assert.equal(delta.currentClosure.harmonyConsumer.status, "pending-independent-clean-commit");
+  assert.equal(delta.currentClosure.promotion.status, "not-executed");
+  assert.equal(delta.currentClosure.promotion.allowedBeforeHarmonyConsumerClosure, false);
+  assert.match(delta.currentClosure.stageBoundary, /B7, not A2\/B2\/B3/);
   assert.ok(delta.authority.doesNotAuthorize.includes("harmony.status promotion"));
 });

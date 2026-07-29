@@ -3,7 +3,7 @@
   "kind": "A2_CONTRACT_RETIREMENT_DELTA",
   "deltaId": "reader.reading-surface.a2-contract-retirement.1b81644",
   "status": "approved-source-retirement",
-  "validationStatus": "harmony-screen-graph-and-static-pass-execution-gate-blocked",
+  "validationStatus": "reader-ui-source-reverified-harmony-consumer-clean-commit-pending",
   "recordId": "reader.reading-surface",
   "capturedAt": "2026-07-28T01:22:27Z",
   "implementationCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
@@ -338,8 +338,8 @@
     "reachabilityReport": "docs/audits/reader-reading-surface-historical-reachability-2026-07-27.json",
     "currentCoverageArtifact": "generated/screen-graph-coverage.json",
     "harmonyValidation": {
-      "status": "blocked-fail-closed",
-      "acceptedResults": [
+      "status": "historical-snapshot-not-current-admission",
+      "historicalAcceptedResults": [
         {
           "command": "npm run gen:contracts",
           "status": "passed",
@@ -383,17 +383,34 @@
         }
       ],
       "machineReceipt": {
-        "status": "missing",
-        "promotionAuthority": false
+        "status": "not-applicable-to-a2-b3",
+        "stage": "B7"
       },
-      "remainingNonA2Gate": {
+      "historicalReleaseGate": {
         "command": "npm run check:reader-ui-consumer",
-        "status": "blocked",
+        "status": "historical-snapshot",
         "reason": "existing Reader UI release identity is older than the current Reader-UI HEAD",
         "consumerReleaseSourceSha": "33d5352ee589ccf988852a111309414afc1d7d49",
         "currentReaderUiHead": "85eda9b4ca1a254d769ba9c62aa4ccdd20c47d02",
         "notClaimedPassed": true
       }
     }
+  },
+  "currentClosure": {
+    "readerUiSource": {
+      "status": "passed",
+      "test": "contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs",
+      "tests": 5,
+      "scope": "retired route absence, exact denominators, all retired Reader-UI component identities, and all 13 demo renderer bindings"
+    },
+    "harmonyConsumer": {
+      "status": "pending-independent-clean-commit",
+      "scope": "ReaderBase composition, ViewStateRenderer dispatch, retired motion coordinators, and zero-size isolation removal"
+    },
+    "promotion": {
+      "status": "not-executed",
+      "allowedBeforeHarmonyConsumerClosure": false
+    },
+    "stageBoundary": "Machine receipt, device proof, motion proof, and release identity belong to B7, not A2/B2/B3."
   }
 }

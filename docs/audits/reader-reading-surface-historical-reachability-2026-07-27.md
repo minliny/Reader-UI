@@ -3,20 +3,21 @@
 - **Date:** 2026-07-27
 - **Scope:** Source-side symbol/call-graph reachability proof for the `reader.reading-surface` lineage correction (A2 closure).
 - **Canonical consumer:** `Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets#ReaderBase`
-- **Status:** Source-side proof holds for `ReaderBase`: 23/23 historical implementations are unreachable from the canonical reading surface. 21/23 are globally unreachable; `ReaderControlSheet` is legitimately reused by `SourceSwitchFlowPage`, and `ReaderAutoScrollPanel` remains canonical for `auto-page`. **Entry #23's `fullyUnreachable` claim was corrected on 2026-07-28** (see §7): a prior false binding of the live route `content-replacement` to `readerReplaceOverlayV2Screen` was removed.
-- **Retract reason addressed:** *"23 historical reader implementations not proven unreachable"* (PROMOTION_LEDGER retract-002).
+- **Status:** Reader-UI source bindings are reproducibly reverified; HarmonyOS consumer reachability still requires an independent clean A2 commit. `ReaderControlSheet` remains a legitimate Source Switch consumer and `ReaderAutoScrollPanel` remains canonical for `auto-page`.
+- **Retract reason status:** the Reader-UI source portion of *"23 historical reader implementations not proven unreachable"* is addressed; the HarmonyOS consumer portion remains open before B4.
 
 ## 1. Executive summary
 
 The 13 retired reading-surface routes were physically removed from the canonical `RouteId` enum (260 → 247). The 3 canonical reading routes (`immersive-reading`, `reader`, `reader_content`) are bound to the Figma `ReaderBase` master and dispatch to the canonical consumer `ReaderComponents.ets#ReaderBase`.
 
-This report enumerates the **23 historical reader implementations** (the code symbols that historically rendered the reading surface for the 13 retired routes) and proves each is **unreachable from `ReaderBase`** at the symbol/call-graph level:
+This report enumerates the **23 historical reader implementations**. Its Reader-UI route, fixture, component-identity, and demo-renderer claims are machine-checked. Claims about `ReaderBase`, `ViewStateRenderer`, and the two ArkTS motion coordinators remain consumer-side facts that must be reverified from a clean HarmonyOS commit:
 
-- **21 of 23 are globally unreachable** after the panel split — no path from `ReaderBase` and no surviving canonical consumer.
-- **2 of 23 are unreachable from `ReaderBase` but intentionally retained elsewhere**: `ReaderControlSheet` is directly composed by `SourceSwitchFlowPage`; `ReaderAutoScrollPanel` remains the canonical `auto-page` component.
+- **19 Reader-UI source implementations are globally unreachable** after the panel split: 6 retired component identities plus 13 retired demo renderers.
+- **2 shared implementations are intentionally retained elsewhere**: `ReaderControlSheet` is directly composed by `SourceSwitchFlowPage`; `ReaderAutoScrollPanel` remains the canonical `auto-page` component.
+- **2 HarmonyOS-only motion coordinators remain pending** the independent A2 consumer proof; this Reader-UI report does not claim their current reachability.
 - **3 reader-named panel identities were split** into retained shared primitives (`DirectoryPanel` / `AppearancePanel` / `ReplacePanel`) and explicit-gap reading-surface identities (`ReaderDirectoryPanel` / `ReaderAppearancePanel` / `ReaderReplacePanel`).
 
-The reading surface therefore has a **single canonical implementation path** (`ReaderBase`). This does not authorize deleting the two shared implementations from their unrelated canonical consumers.
+The intended reading surface has a single canonical implementation path (`ReaderBase`). This report does not by itself prove the current dirty HarmonyOS working tree or authorize deleting the two shared implementations from unrelated canonical consumers.
 
 ## 2. Canonical consumer: `ReaderBase`
 
@@ -108,29 +109,29 @@ The old reader-named types are retained in the `ComponentType` enum as `explicit
 |---|---|---|
 | Canonical `RouteId` enum (247) | `Reader-UI/ui-spec/screen-graph.schema.json` | ✓ SYNCED — 13 retired absent, 3 canonical present |
 | Canonical view-state fixtures | `Reader-UI/contracts/fixtures/view-state.fixtures.json` | ✓ SYNCED — 0 retired-route entries (2 `_comment` refs only) |
-| HarmonyOS screen graph | `Reader-for-HarmonyOS` | ✓ PASSED — 247 routes / 183 variants / 580 components |
-| HarmonyOS static contracts | `Reader-for-HarmonyOS` | ✓ PASSED — 55/55 |
-| HarmonyOS execution gate | `Reader-for-HarmonyOS` | ✗ EXPECTED FAIL-CLOSED — Reader-UI dependency document is currently untracked/dirty |
+| HarmonyOS screen graph | `Reader-for-HarmonyOS` | Historical snapshot only; must be rerun from the independent A2 consumer commit |
+| HarmonyOS static contracts | `Reader-for-HarmonyOS` | Historical snapshot only; not current admission |
+| HarmonyOS execution gate | `Reader-for-HarmonyOS` | Pending; no B4 promotion is authorized |
 
-The source-side proof, screen graph, and static contracts are current. Promotion remains blocked because the execution gate correctly rejects the uncommitted dependency document; no committed machine receipt binds the commands to an exact HarmonyOS commit; and `check:reader-ui-consumer` still reports a stale Reader-UI release identity.
+The Reader-UI source proof is current. HarmonyOS consumption remains pending an independent clean A2 commit. Machine receipt, device proof, motion proof, and release identity belong to B7 and are not A2/B2/B3 prerequisites.
 
 ## 6. Conclusion
 
-The retract reason *"23 historical reader implementations not proven unreachable"* is **resolved at the source level**:
+The Reader-UI portion of the retract reason *"23 historical reader implementations not proven unreachable"* is resolved:
 
 1. All 13 retired routes are absent from the canonical `RouteId` enum (247 routes).
-2. The canonical consumer `ReaderComponents.ets#ReaderBase` composes only `ReadingBackgroundLayer`, `ReadingTextFlow`, `TapZones`, `ControlDismissZone`, `ReadingInfoLayer` — none of the 23 historical implementations appear in its composition tree.
-3. 21 of 23 are globally unreachable after the 3 panel identities were split into retained shared primitives and explicit-gap reading-surface identities.
-4. `ReaderControlSheet` remains directly consumed by `SourceSwitchFlowPage`; `ReaderAutoScrollPanel` remains canonical for `auto-page`. Both are outside the `ReaderBase` composition tree and neither may be globally deleted by this A2 retirement.
+2. All 6 retired Reader component identities are `explicit-gap` with zero source fixtures.
+3. All 13 retired demo renderers are machine-checked against every current integration map and have no live-route binding.
+4. `ReaderControlSheet` and `ReaderAutoScrollPanel` are explicitly retained; their HarmonyOS consumers must be preserved during the consumer-side cleanup.
 
-**The reading surface has a single canonical implementation: `ReaderBase`.** The lineage correction is valid.
+Full A2 closure still requires a clean HarmonyOS proof of `ReaderBase` composition, `ViewStateRenderer` dispatch, retired motion coordinators, and removal of zero-size isolation.
 
 ### Follow-ups (out of A2-closure scope)
 
 - ~~Split the 3 retained shared structs into shared-primitive vs retired-only variants.~~ DONE - see §4.3 (retained: `DirectoryPanel`/`AppearancePanel`/`ReplacePanel`; retired: `ReaderDirectoryPanel`/`ReaderAppearancePanel`/`ReaderReplacePanel` as `explicit-gap`).
-- ~~Run HarmonyOS screen-graph and static-contract checks.~~ DONE — current results are recorded in §5.
-- Commit the repaired dependency document and rerun the HarmonyOS execution gate; do not treat its current fail-closed result as a passed gate.
-- Produce and commit the machine-generated HarmonyOS promotion receipt, then refresh the Reader-UI consumer release identity before B3 promotion readiness can be declared.
+- Produce an independent clean HarmonyOS A2 consumer cleanup commit and rerun its screen-graph/static checks.
+- Keep `harmony.status=candidate-backport`; do not promote until that consumer cleanup and B3 both pass.
+- Defer machine receipt, device/motion proof, and release identity to B7.
 
 ### Verification artifacts
 
@@ -149,4 +150,15 @@ A fifth audit verdict rejected this report's A2 reachability proof for entry #23
 
 - **Regression guard.** `contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs` now asserts (a) the live route `content-replacement` is never bound to `readerReplaceOverlayV2Screen`, and (b) `readerReplaceOverlayV2Screen` is bound only to a route that is absent from the canonical `RouteId` enum — so the false claim cannot recur silently.
 
-- **Scope of this correction.** This fixes the specific cited defect (entry #23). It is **not** a claim that all 21 `fullyUnreachable` entries have been individually re-verified against every live route binding. A full re-isolation of Reader-UI's modified set by A2 / B2 / gate / HarmonyOS-consumption category is the ordered step 4 and remains pending. Until that re-isolation completes, this report's "21/23 globally unreachable" figure should be read as "21/23 claimed, of which #23 is now genuinely verified and the remainder await step-4 re-verification."
+- **Scope of this correction.** This originally fixed only entry #23. Section 8 records the later full Reader-UI source re-verification. HarmonyOS-only reachability remains outside that source-side test and still requires its own clean commit.
+
+## 8. Reader-UI source re-verification (2026-07-30)
+
+`contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs` now machine-checks the complete Reader-UI source boundary:
+
+- all 13 retired routes are absent from the canonical enum;
+- all 6 retired Reader component identities are `explicit-gap` with zero fixtures;
+- all 13 historical demo renderers are checked against the current D3/W4/W5 integration maps and have no live-route binding;
+- `content-replacement` remains bound to `contentReplacementScreen`.
+
+The test deliberately does not claim that `ReaderControlMotionCoordinator`, `ReaderDirectoryToTtsMotionCoordinator`, `ReaderBase`, or `ViewStateRenderer` are closed: those are HarmonyOS consumer facts and remain the next independent A2 step.

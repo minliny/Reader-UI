@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "kind": "READER_READING_SURFACE_HISTORICAL_REACHABILITY_REPORT",
-  "status": "source-side-proof-holds-with-two-shared-consumers-corrected-entry-23-binding",
+  "status": "reader-ui-source-bindings-reverified-harmony-consumer-clean-commit-pending",
   "generatedAt": "2026-07-27",
-  "retractReasonAddressed": "23 historical reader implementations not proven unreachable (PROMOTION_LEDGER retract-002)",
+  "retractReasonAddressed": "Reader-UI source bindings are now reproducibly verified; HarmonyOS consumer reachability remains pending an independent clean A2 commit before B4.",
   "canonicalConsumer": {
     "file": "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets",
     "symbol": "ReaderBase",
@@ -99,8 +99,8 @@
   "consumerSyncStatus": {
     "canonicalRouteIdEnum": "synced-247",
     "canonicalViewStateFixtures": "synced",
-    "harmonyValidation": "blocked-fail-closed-uncommitted-dependency-document",
-    "acceptedResults": [
+    "harmonyValidation": "pending-independent-clean-commit",
+    "historicalAcceptedResults": [
       {
         "command": "npm run gen:contracts",
         "status": "passed",
@@ -128,9 +128,26 @@
         "failed": 0
       }
     ],
-    "promotionReceipt": "missing-committed-machine-receipt",
-    "releaseIdentity": "blocked-stale-reader-ui-source-sha",
-    "boundary": "Screen-graph and static contracts pass, but the execution gate correctly fails closed on the uncommitted dependency document. These report fields do not authorize promotion; a committed machine receipt and current release identity are also missing."
+    "b4Promotion": "not-executed",
+    "b7Evidence": "machine receipt, device proof, motion proof, and release identity are out of A2/B2/B3 scope",
+    "boundary": "The historical command results above are retained as a snapshot, not current admission. HarmonyOS consumption must be re-verified in a clean independent A2 commit before B4."
+  },
+  "readerUiSourceReverification": {
+    "status": "passed",
+    "test": "contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs",
+    "coverage": [
+      "13 retired routes absent from the live route enum",
+      "6 retired Reader component identities are explicit-gap with zero fixtures",
+      "13 retired demo renderers have no binding from a live route",
+      "content-replacement remains bound to contentReplacementScreen"
+    ],
+    "harmonyOnlyPendingSymbols": [
+      "ReaderControlMotionCoordinator",
+      "ReaderDirectoryToTtsMotionCoordinator"
+    ],
+    "verifiedGloballyUnreachableSourceImplementations": 19,
+    "retainedSharedImplementations": 2,
+    "pendingHarmonyConsumerImplementations": 2
   },
   "spotChecksPerformed": [
     "ReaderBase build() composition verified at ReaderComponents.ets:1643-1681 (5 children only)",
@@ -141,5 +158,5 @@
     "componentCatalog: 3 old reader-named types = explicit-gap (0 instances); 3 new shared-primitive types = referenced (4/6/7 instances)",
     "Canonical ComponentType enum: 177 entries (174 + 3 new shared-primitive types)"
   ],
-  "conclusion": "Source-side reachability proof holds for the reading surface: all 23 historical implementations are unreachable from ReaderComponents.ets#ReaderBase. 21 are globally unreachable. ReaderControlSheet remains a legitimate shared implementation directly composed by SourceSwitchFlowPage, and ReaderAutoScrollPanel remains canonical for auto-page; neither may be globally deleted by this retirement. The 3 previously shared reader-named panel types were split into retained primitives (DirectoryPanel/AppearancePanel/ReplacePanel) and explicit-gap reading-surface identities. The reading surface has a single canonical implementation: ReaderBase."
+  "conclusion": "Reader-UI source reachability is now reproducibly verified for retired routes, component identities, and demo renderer bindings. ReaderControlSheet and ReaderAutoScrollPanel remain legitimate shared consumers. Full A2 closure still requires a clean HarmonyOS consumer-side proof for ReaderBase composition, ViewStateRenderer dispatch, retired motion coordinators, and zero-size isolation removal; this report does not authorize B4 promotion."
 }
