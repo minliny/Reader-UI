@@ -129,7 +129,6 @@ function validateLegacyInventoryAndAssetSources({ registry, inventory, historica
     { file: 'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets', pattern: /DemoAliasTokens|ui_icon_list_primary|\.borderRadius\(/ },
     { file: 'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets', pattern: /DemoAliasTokens|reader_control_top_|\.shadow\(/ },
     { file: 'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets', pattern: /DemoAliasTokens|ReaderControlFigmaTokens|reader_control_|\.shadow\(/ },
-    { file: 'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderControlIcon.ets', pattern: /reader_control_/ },
     { file: 'frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js', pattern: /bookshelfV2|bookDetailV2/ },
     { file: 'frontend-demo-optimized/renderers/d3-control-layers-renderers.js', pattern: /readerControlShowV2|readerControlHideV2/ },
     { file: 'frontend-demo-optimized/styles/12-bookshelf-vc3.css', pattern: /./ },
@@ -152,7 +151,6 @@ function validateLegacyInventoryAndAssetSources({ registry, inventory, historica
     'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookDetailComponents.ets',
     'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets',
     'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets',
-    'Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderControlIcon.ets',
   ];
   for (const file of assetReferenceSources) {
     const sourcePath = path.join(workspaceRoot, file);
