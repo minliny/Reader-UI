@@ -12,8 +12,8 @@
   "localSource": {
     "repository": "Reader-UI",
     "branch": "feat/reading-surface-a2-closure",
-    "implementationCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
-    "implementationCommitSubject": "feat(reader-ui): split reading-surface shared primitives + retire reading-page overlays (A2)",
+    "implementationCommit": "0bbf3b1fd5f756d3a730f7102a642b59d6ed530a",
+    "implementationCommitSubject": "feat(reading-surface): B2 implementation - A2 retirement + five page-animation contracts + handoff source",
     "localReadyForFigma": true
   },
   "figma": {
@@ -88,12 +88,12 @@
     "recordIds": [
       "reader.reading-surface"
     ],
-    "exactLocalCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
+    "exactLocalCommit": "0bbf3b1fd5f756d3a730f7102a642b59d6ed530a",
     "sourceStatus": "implementation-ready",
     "harmonyStatusBeforePromotion": "candidate-backport",
     "promotionRequired": true
   },
-  "sourceEvidenceHash": "sha256:d810fcb72c55f2ecdae7a54da25506ac2be1bbc74c03ecfa8b29047db3c3f272",
+  "sourceEvidenceHash": "sha256:343653a6f54beed3a403205f22f8a4f21d5047374e42cb90f660ca68a0a5497f",
   "artifacts": [
     "B2_READER_UI_SOURCE_CONVERSION.json",
     "FIGMA_DESIGN_DELTA.json",

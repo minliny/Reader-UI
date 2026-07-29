@@ -22,8 +22,8 @@
         "stage": "implementation-ready",
         "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
         "localReadyForFigma": true,
-        "sourceEvidenceHash": "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
-        "implementationCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a",
+        "sourceEvidenceHash": "sha256:343653a6f54beed3a403205f22f8a4f21d5047374e42cb90f660ca68a0a5497f",
+        "implementationCommit": "0bbf3b1fd5f756d3a730f7102a642b59d6ed530a",
         "verificationSuites": [
           {
             "suite": "figmaSourceContract",
@@ -62,7 +62,7 @@
       "artifactsInSync": true,
       "promotedBy": "promote-family.mjs",
       "previousEntryHash": "genesis",
-      "entryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41"
+      "entryHash": "sha256:79890ce6da115180bd800dde798a20ca6d7ac23f9aafaac4cf74a38adae5576e"
     },
     {
       "entryId": "retract-002",
@@ -80,21 +80,21 @@
       "newHarmonyStatus": "candidate-backport",
       "localStatus": "implementation-ready",
       "reason": "A2 closure incomplete before promotion: 13 quarantined routes (reader.control-home 8 overlays + reader.module.directory/tts/appearance/settings + reader.quick.content-search) still physically present in source schema/fixtures/generated RouteTable+ViewStateTable; b3-ready test inverted and enforce-implementation-ready-gate.mjs relaxed to compat-type to permit this promotion; consumer lock drift in oh-package-lock.json5+build-profile.json5; 23 historical reader implementations not proven unreachable. Retracting to candidate-backport to redo B2/B3 in correct order.",
-      "reversalOf": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
+      "reversalOf": "sha256:79890ce6da115180bd800dde798a20ca6d7ac23f9aafaac4cf74a38adae5576e",
       "reversalOfEntryId": "promote-001",
       "retractedPromotion": {
-        "entryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
+        "entryHash": "sha256:79890ce6da115180bd800dde798a20ca6d7ac23f9aafaac4cf74a38adae5576e",
         "entryId": "promote-001",
-        "sourceEvidenceHash": "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
-        "implementationCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a"
+        "sourceEvidenceHash": "sha256:343653a6f54beed3a403205f22f8a4f21d5047374e42cb90f660ca68a0a5497f",
+        "implementationCommit": "0bbf3b1fd5f756d3a730f7102a642b59d6ed530a"
       },
       "registryHashBefore": "sha256:0201bf78ec2944efe18e6421668e00b1861224292f829cc9fded683116da49dc",
       "upstreamArtifactHashAfter": "sha256:c71ce43009cbeead632bbab7a778ac657a997e1a41385944aea88c9bfcdf1017",
       "consumerArtifactHashAfter": "sha256:c71ce43009cbeead632bbab7a778ac657a997e1a41385944aea88c9bfcdf1017",
       "artifactsInSync": true,
       "retractedBy": "promote-family.mjs",
-      "previousEntryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
-      "entryHash": "sha256:8e53ea2d59467cc77a5d92feefa696a6d221f78a3af9c219386ea38126888648"
+      "previousEntryHash": "sha256:79890ce6da115180bd800dde798a20ca6d7ac23f9aafaac4cf74a38adae5576e",
+      "entryHash": "sha256:308cf605d9f1fbac75757d5c9dd0b06a7306b88ec837fcae0ff259ad5be6c48b"
     }
   ]
 }
