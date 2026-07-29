@@ -32,21 +32,19 @@ Reader-UI is the **sole authority** for the two-dimensional admission gate. The 
 
    A record with `classification: exact-figma-binding` and `harmony.status: implementation-ready` produces `admission: implementation-ready`. Any other `harmony.status` (including `candidate-backport` or unset) produces `admission: candidate-backport`.
 
-   The **precondition** for setting `harmony.status: implementation-ready` is that the page family has completed Reader-UI source-side conversion, evidenced by a `LOCAL_READY_FOR_FIGMA.json` with `status: LOCAL_READY_FOR_FIGMA_R3a_COMPLETE`. After setting `harmony.status: implementation-ready`, Reader-UI must regenerate the visual-admission artifact and the host must consume it before the surface is considered delivered. Host consumption is a **follow-through requirement**, not a precondition — otherwise the chain in rule 8 could never start.
+   The **B3 precondition** for promoting `harmony.status: implementation-ready` is a committed, clean `LOCAL_READY_FOR_FIGMA.json` bound to the exact B2 implementation commit and current handoff-directory hash. Its R2a/R2b/R3a/local-ready flags must be true, blockers must be empty, and its source suites must pass. A HarmonyOS machine receipt, device proof, motion proof, and release identity are B7 evidence; they must not be moved backward into B3 or used to create a dependency cycle. Never set `harmony.status` directly: B4 uses `tools/design/promote-family.mjs <recordId>` as the sole mutation path after dependency authority, the Core pin, and the shared production-writer lock are ready.
 
-8. A `candidate-backport` page family is a STOP condition for downstream testing. Reader-UI must not claim a page family is `implementation-ready` just because the Figma source is bound. The mandatory execution chain is:
+8. A `candidate-backport` page family is a STOP condition for downstream testing. Reader-UI must not claim a page family is natively consumed just because the Figma source is bound or B3 is complete. The mandatory execution chain is:
 
    1. Figma frozen (current canonical master/revision bound).
-   2. Reader-UI source-side conversion complete — evidenced by `LOCAL_READY_FOR_FIGMA.json` with `status: LOCAL_READY_FOR_FIGMA_R3a_COMPLETE`.
-   3. Reader-UI marks the page family `implementation-ready` (`harmony.status = implementation-ready`).
-   4. Reader-UI regenerates the visual-admission artifact (`sourceBound` + `implementationReady`).
-   5. Host consumes only `implementation-ready` artifacts; removes the route's old generic rendering.
-   6. Compile + static structure check.
-   7. Virtual machine verifies the page family's real interaction and layout.
-   8. Real device provides final device/motion/system-capability evidence.
-   9. Reader-UI freezes the page family as deliverable (`deliveryStatus = current-read-frozen-deliverable`).
+   2. B2: Reader-UI source-side conversion and source tests complete in a clean implementation commit.
+   3. B3: a separate evidence commit binds that B2 commit, the current Figma source, and a newly computed `sourceEvidenceHash`; historical promotion/retraction ledger entries remain untouched.
+   4. B4: dependency authority, Core pin, and the shared production-writer lock pass; `tools/design/promote-family.mjs <recordId>` atomically promotes `harmony.status`, regenerates/syncs the artifact, and appends a new ledger entry. Direct registry or ledger edits are forbidden.
+   5. B5: HarmonyOS consumes only the promoted `implementation-ready` artifact, removes the route's old generic rendering, and passes compile + static structure checks.
+   6. B6: the virtual machine verifies the page family's real interaction and layout.
+   7. B7: the real device provides motion/system-capability evidence and the machine receipt/release identity; Reader-UI then freezes the page family as deliverable (`deliveryStatus = current-read-frozen-deliverable`).
 
-   Marking `implementation-ready` before step 2 is complete is a protocol violation. Steps 4–9 are follow-through obligations triggered by step 3, not preconditions that block step 3.
+   Marking `harmony.status: implementation-ready` before B3 and the B4 prerequisites are complete is a protocol violation. B5–B7 are downstream follow-through; they must not be recast as B3 completion conditions.
 
 9. The generator must never collapse the two dimensions into a single `admitted` flag. If a future edit does this, the host's `enforce-implementation-ready-gate.mjs` pre-gate will fail — but the generator should also self-check: the `admissionForRecord` function must derive admission from `implementationReadyForRecord`, not from `sourceBoundForRecord` alone.
 

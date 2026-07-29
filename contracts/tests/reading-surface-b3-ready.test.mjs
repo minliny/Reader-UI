@@ -43,7 +43,7 @@ function handoffHash() {
   return `sha256:${crypto.createHash("sha256").update(entries.join("\n")).digest("hex")}`;
 }
 
-test("B3 releases reader.reading-surface at the source; B4 promotion is retracted and its evidence withdrawn", () => {
+test("B3 releases fresh reader.reading-surface source evidence while preserving the withdrawn B4 history", () => {
   const registry = readJson("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
   const routeSchema = readJson("contracts/route.schema.json");
   const quarantine = readJson("contracts/fixtures/route-reconstruction-quarantine.fixtures.json");
@@ -114,28 +114,38 @@ test("B3 releases reader.reading-surface at the source; B4 promotion is retracte
   assert.equal(handoff.figma?.registeredRevision, officialRevision.currentRevision);
   assert.equal(record.figma?.revision, officialRevision.currentRevision);
 
-  // ...but that evidence is now WITHDRAWN: retract-002 records the exact
-  // sourceEvidenceHash + implementationCommit as retractedPromotion, so the
-  // freshness check in promote-family.mjs refuses to reuse them. B2/B3 must be
-  // redone (fresh hash + commit) before the single re-promotion.
+  // The historical promotion and retraction are immutable. The current B3
+  // packet must be fresh relative to the exact evidence that retract-002
+  // withdrew; rewriting promote-001/retract-002 to match a later packet would
+  // falsify the append-only ledger and make promote-family's freshness gate
+  // reject the new packet.
   const rsEntries = ledger.entries.filter((e) => e.recordId === "reader.reading-surface");
   assert.ok(rsEntries.length >= 2, "promote-001 and retract-002 must both be preserved");
-  const promote = rsEntries.find((e) => !e.reversalOf);
-  const retract = rsEntries.find((e) => e.kind === "retract");
+  const promote = rsEntries.find((e) => e.entryId === "promote-001");
+  const retract = rsEntries.find((e) => e.entryId === "retract-002");
   assert.ok(promote && retract, "the premature promotion and its atomic reversal must both exist");
   assert.equal(promote.newHarmonyStatus, "implementation-ready");
   assert.equal(retract.newHarmonyStatus, "candidate-backport");
   assert.equal(retract.reversalOf, promote.entryHash, "retract must chain to the promotion it reverses");
-  assert.equal(retract.retractedPromotion.sourceEvidenceHash, handoff.sourceEvidenceHash,
-    "the withdrawn evidence hash must match the handoff, proving it cannot be reused");
-  assert.equal(retract.retractedPromotion.implementationCommit, handoff.localSource.implementationCommit,
-    "the withdrawn implementation commit must match the handoff, proving it cannot be reused");
+  assert.equal(promote.localReadyForFigma.sourceEvidenceHash,
+    "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
+    "promote-001 must retain the exact historical source hash");
+  assert.equal(promote.localReadyForFigma.implementationCommit,
+    "a37b5fc9a758be09f30555730ddacc41c463a55a",
+    "promote-001 must retain the exact historical implementation commit");
+  assert.equal(retract.retractedPromotion.sourceEvidenceHash, promote.localReadyForFigma.sourceEvidenceHash,
+    "retract-002 must preserve the source hash it actually withdrew");
+  assert.equal(retract.retractedPromotion.implementationCommit, promote.localReadyForFigma.implementationCommit,
+    "retract-002 must preserve the implementation commit it actually withdrew");
+  assert.notEqual(handoff.sourceEvidenceHash, retract.retractedPromotion.sourceEvidenceHash,
+    "the new B3 source hash must differ from the withdrawn packet");
+  assert.notEqual(handoff.localSource.implementationCommit, retract.retractedPromotion.implementationCommit,
+    "the new B3 implementation commit must differ from the withdrawn commit");
   assert.equal(rsEntries[rsEntries.length - 1].entryId, retract.entryId,
     "the retract must be the latest ledger entry for the reading surface");
 
-  // The withdrawn implementation commit is still a real, ancestor commit
-  // (the retraction reverses the *promotion*, not the source work). B2/B3 redo
-  // will produce a different commit; this only proves the recorded one is real.
+  // The new implementation commit is a real ancestor and contains the exact
+  // source files named by the B3 packet.
   const implementationCommit = handoff.localSource.implementationCommit;
   assert.equal(spawnSync("git", ["cat-file", "-e", `${implementationCommit}^{commit}`], { cwd: repoRoot }).status, 0,
     "B3 must name a real implementation commit, never a placeholder");
@@ -150,7 +160,7 @@ test("B3 releases reader.reading-surface at the source; B4 promotion is retracte
   }
 });
 
-test("B5 contracts keep the released reading surface separate from retired controls and generic states", () => {
+test("B3 contracts keep the released reading surface separate from retired controls and generic states", () => {
   const viewStates = readJson("contracts/fixtures/view-state.fixtures.json");
   const surfaceRoutes = new Set(["immersive-reading", "reader", "reader_content"]);
   const entries = viewStates.filter((entry) => surfaceRoutes.has(entry.routeId));

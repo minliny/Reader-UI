@@ -209,7 +209,7 @@ A Figma binding is not a delivery. The generated visual-admission artifact must 
 | Field | Meaning | Who sets it |
 | --- | --- | --- |
 | `sourceBound` | A Figma file/node/master/revision is registered for this surface. | Reader-UI registry (`classification: exact-figma-binding`) |
-| `implementationReady` | The page family has completed Reader-UI source-side conversion AND the host has consumed the regenerated artifact. | Reader-UI registry (`harmony.status: implementation-ready`) |
+| `implementationReady` | The page family has completed Reader-UI B2/B3 and the B4 atomic promotion has admitted it for host consumption. Host consumption and runtime proof remain B5–B7 work. | Reader-UI registry (`harmony.status: implementation-ready`) |
 
 The admission status is derived from these two fields, never set independently:
 
@@ -226,18 +226,16 @@ The admission status is derived from these two fields, never set independently:
 Every page family must pass through this chain in order. No step may be skipped or reordered:
 
 ```text
-1. Figma current master/revision frozen
-2. Reader-UI completes the page family's static structure, state, token, interaction contract
-3. Reader-UI marks the page family implementation-ready (harmony.status = implementation-ready)
-4. Reader-UI regenerates the visual-admission artifact (sourceBound + implementationReady)
-5. Host consumes only implementation-ready artifacts; removes the route's old generic rendering
-6. Compile + static structure check
-7. Virtual machine verifies the page family's real interaction and layout
-8. Real device provides final device/motion/system-capability evidence
-9. Reader-UI freezes the page family as deliverable
+1. B1 — Figma current master/revision frozen
+2. B2 — Reader-UI completes the static structure, state, token, and interaction contract in a clean implementation commit
+3. B3 — a separate Reader-UI evidence commit binds the B2 commit, current Figma source, and fresh sourceEvidenceHash
+4. B4 — dependency authority, Core pin, and shared production-writer lock pass; promote-family atomically updates harmony.status, artifacts, and the append-only ledger
+5. B5 — Host consumes only the promoted implementation-ready artifact, removes old generic rendering, then runs compile + static structure checks
+6. B6 — Virtual machine verifies the page family's real interaction and layout
+7. B7 — Real device provides motion/system-capability evidence and the machine receipt/release identity; Reader-UI freezes the family as deliverable
 ```
 
-The virtual machine is not cancelled — it is **gated**. It may run only after step 5 (host consumption of an `implementation-ready` artifact). Running a virtual-machine cycle on a `candidate-backport` page family is a protocol violation, regardless of whether the virtual machine "finds issues" or "passes".
+The virtual machine is not cancelled — it is **gated**. It may run only after B5 host consumption of an `implementation-ready` artifact. Running a virtual-machine cycle on a `candidate-backport` page family is a protocol violation, regardless of whether the virtual machine "finds issues" or "passes". Machine receipts, device proof, motion proof, and release identity belong to B7; they are not B3 evidence and must not be made prerequisites that prevent B4 from ever starting.
 
 ### 9.3 Machine-enforced gates (HarmonyOS)
 
