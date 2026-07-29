@@ -10,9 +10,11 @@
     "sourceOfTruth": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["repository", "sources", "numericPolicy"],
+      "required": ["repository", "commit", "tree", "sources", "numericPolicy"],
       "properties": {
         "repository": { "type": "string", "minLength": 1 },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "tree": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
         "sources": {
           "type": "array",
           "minItems": 1,

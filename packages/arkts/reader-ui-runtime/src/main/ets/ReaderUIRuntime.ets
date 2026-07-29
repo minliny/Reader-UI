@@ -99,6 +99,21 @@ export interface ReaderUIPageLayout {
   fontScale: number
 }
 
+export interface ReaderUICanonicalLocation {
+  bookId: string
+  chapterIndex: number
+  chapterOffset: number
+  chapterProgress: number
+  locationRevision: string
+}
+
+export interface ReaderUILocationReflow {
+  strategy: 'offsetAnchor'
+  primaryAnchor: 'chapterOffset'
+  fallbackAnchor: 'chapterProgress'
+  layoutIndependent: true
+}
+
 export interface ReaderUIPageTransaction {
   correlationId: string
   direction: string
@@ -109,7 +124,8 @@ export interface ReaderUIPageTransaction {
   stage: string
   payload: ReaderUIJSONPayload
   layout?: ReaderUIPageLayout
-  pendingCanonicalLocation?: string
+  pendingCanonicalLocation?: ReaderUICanonicalLocation
+  pendingLocationReflow?: ReaderUILocationReflow
   pendingPageIndex?: number
 }
 
@@ -149,7 +165,8 @@ export interface ReaderUIState {
   loading: boolean
   reducedMotion: boolean
   readerPageIndex: number
-  readerCanonicalLocation?: string
+  readerCanonicalLocation?: ReaderUICanonicalLocation
+  readerLocationReflow?: ReaderUILocationReflow
   focusTarget?: string
   error?: string
   bookOpenTransaction?: ReaderUIBookOpenTransaction
@@ -383,6 +400,72 @@ function optionalJSONResultBoolean(result: ReaderUIJSONResult, key: string): boo
   if (value === undefined || value === null) return undefined
   if (typeof value === 'boolean') return value
   throw new ReaderUIRuntimeError('INVALID_JSON_RESULT', `result.${key} must be a JSON boolean or null`)
+}
+
+function optionalJSONResultCanonicalLocation(
+  result: ReaderUIJSONResult
+): ReaderUICanonicalLocation | undefined {
+  const value: ReaderUIJSONValue | undefined = result['canonicalLocation']
+  if (value === undefined || value === null || typeof value !== 'object' || Array.isArray(value)) return undefined
+  const object: ReaderUIJSONPayload = value as ReaderUIJSONPayload
+  const bookId: string | undefined = jsonString(object, 'bookId')
+  const chapterIndex: number | undefined = jsonInteger(object['chapterIndex'])
+  const chapterOffset: number | undefined = jsonInteger(object['chapterOffset'])
+  const chapterProgressValue: ReaderUIJSONValue | undefined = object['chapterProgress']
+  const chapterProgress: number | undefined =
+    typeof chapterProgressValue === 'number' ? chapterProgressValue : undefined
+  const locationRevision: string | undefined = jsonString(object, 'locationRevision')
+  if (bookId === undefined || bookId.length === 0 || chapterIndex === undefined || chapterIndex < 0 ||
+    chapterOffset === undefined || chapterOffset < 0 || chapterProgress === undefined ||
+    !Number.isFinite(chapterProgress) || chapterProgress < 0 || chapterProgress > 1 ||
+    locationRevision === undefined || locationRevision.length === 0) {
+    return undefined
+  }
+  return { bookId, chapterIndex, chapterOffset, chapterProgress, locationRevision }
+}
+
+function optionalJSONResultLocationReflow(
+  result: ReaderUIJSONResult
+): ReaderUILocationReflow | undefined {
+  const value: ReaderUIJSONValue | undefined = result['reflow']
+  if (value === undefined || value === null || typeof value !== 'object' || Array.isArray(value)) return undefined
+  const object: ReaderUIJSONPayload = value as ReaderUIJSONPayload
+  if (jsonString(object, 'strategy') !== 'offsetAnchor' ||
+    jsonString(object, 'primaryAnchor') !== 'chapterOffset' ||
+    jsonString(object, 'fallbackAnchor') !== 'chapterProgress' ||
+    object['layoutIndependent'] !== true ||
+    result['resolved'] !== true) {
+    return undefined
+  }
+  return {
+    strategy: 'offsetAnchor',
+    primaryAnchor: 'chapterOffset',
+    fallbackAnchor: 'chapterProgress',
+    layoutIndependent: true
+  }
+}
+
+function cloneCanonicalLocation(
+  value?: ReaderUICanonicalLocation
+): ReaderUICanonicalLocation | undefined {
+  if (value === undefined) return undefined
+  return {
+    bookId: value.bookId,
+    chapterIndex: value.chapterIndex,
+    chapterOffset: value.chapterOffset,
+    chapterProgress: value.chapterProgress,
+    locationRevision: value.locationRevision
+  }
+}
+
+function cloneLocationReflow(value?: ReaderUILocationReflow): ReaderUILocationReflow | undefined {
+  if (value === undefined) return undefined
+  return {
+    strategy: 'offsetAnchor',
+    primaryAnchor: 'chapterOffset',
+    fallbackAnchor: 'chapterProgress',
+    layoutIndependent: true
+  }
 }
 
 function invalidTypedPayload(path: string, message: string): never {
@@ -681,7 +764,8 @@ function cloneState(state: ReaderUIState): ReaderUIState {
     loading: state.loading,
     reducedMotion: state.reducedMotion,
     readerPageIndex: state.readerPageIndex,
-    readerCanonicalLocation: state.readerCanonicalLocation,
+    readerCanonicalLocation: cloneCanonicalLocation(state.readerCanonicalLocation),
+    readerLocationReflow: cloneLocationReflow(state.readerLocationReflow),
     focusTarget: state.focusTarget,
     error: state.error,
     bookOpenTransaction: cloneBookOpenTransaction(state.bookOpenTransaction),
@@ -723,7 +807,8 @@ function clonePageTransaction(transaction?: ReaderUIPageTransaction): ReaderUIPa
     generation: transaction.generation,
     stage: transaction.stage,
     payload: clonePayload(transaction.payload),
-    pendingCanonicalLocation: transaction.pendingCanonicalLocation,
+    pendingCanonicalLocation: cloneCanonicalLocation(transaction.pendingCanonicalLocation),
+    pendingLocationReflow: cloneLocationReflow(transaction.pendingLocationReflow),
     pendingPageIndex: transaction.pendingPageIndex
   }
   if (transaction.layout !== undefined) {
@@ -1191,8 +1276,8 @@ export class ReaderUIRuntime {
     coreType: string,
     correlationId: string,
     chapterCount?: number,
-    canonicalLocation?: string,
-    pageIndex?: number,
+    canonicalLocation?: ReaderUICanonicalLocation,
+    reflow?: ReaderUILocationReflow,
     error?: string
   ): ReaderUIAsyncTransition {
     const previous: ReaderUIState = cloneState(this.currentState)
@@ -1222,15 +1307,20 @@ export class ReaderUIRuntime {
       return { accepted: true, previous: previous, state: cloneState(this.currentState), effects: [] }
     }
     if (coreType === 'reader.location.resolve') {
-      if (canonicalLocation === undefined || canonicalLocation.trim().length === 0 ||
-        pageIndex === undefined || !Number.isInteger(pageIndex) || pageIndex < 0) {
+      const expectedBookId: string | undefined = jsonString(transaction.payload, 'bookId')
+      const expectedChapterIndex: number =
+        transaction.selectedChapterIndex ?? transaction.requestedChapterIndex
+      if (canonicalLocation === undefined || reflow === undefined ||
+        canonicalLocation.bookId !== expectedBookId ||
+        canonicalLocation.chapterIndex !== expectedChapterIndex ||
+        canonicalLocation.chapterOffset !== transaction.layout?.chapterOffset) {
         this.currentState.loading = false
         this.currentState.error = 'BOOK_OPEN_LOCATION_INVALID_RESULT'
         this.currentState.bookOpenTransaction = undefined
         return { accepted: true, previous: previous, state: cloneState(this.currentState), effects: [] }
       }
-      this.currentState.readerCanonicalLocation = canonicalLocation
-      this.currentState.readerPageIndex = pageIndex
+      this.currentState.readerCanonicalLocation = cloneCanonicalLocation(canonicalLocation)
+      this.currentState.readerLocationReflow = cloneLocationReflow(reflow)
     }
     const nextStageIndex: number = transaction.stageIndex + 1
     if (nextStageIndex >= transaction.stages.length) {
@@ -1265,8 +1355,8 @@ export class ReaderUIRuntime {
       coreType,
       correlationId,
       optionalJSONResultInteger(validated, 'chapterCount'),
-      optionalJSONResultString(validated, 'canonicalLocation'),
-      optionalJSONResultInteger(validated, 'pageIndex'),
+      optionalJSONResultCanonicalLocation(validated),
+      optionalJSONResultLocationReflow(validated),
       optionalJSONResultString(validated, 'error')
     )
   }
@@ -1332,16 +1422,20 @@ export class ReaderUIRuntime {
       return this.playbackResult(false, previous)
     }
     this.validatePageLayout(layout)
+    const candidate: ReaderUIPageTransaction =
+      clonePageTransaction(transaction) as ReaderUIPageTransaction
+    candidate.layout = layout
+    const locationEffect: ReaderUIEffect = this.pageLocationEffect(candidate)
     transaction.stage = 'resolving-location'
     transaction.layout = layout
     this.currentState.pageTransaction = transaction
-    return this.playbackResult(true, previous, [this.pageLocationEffect(transaction)])
+    return this.playbackResult(true, previous, [locationEffect])
   }
 
   acceptPageLocationResult(
     correlationId: string,
-    canonicalLocation?: string,
-    pageIndex?: number,
+    canonicalLocation?: ReaderUICanonicalLocation,
+    reflow?: ReaderUILocationReflow,
     error?: string
   ): ReaderUIPlaybackTransition {
     const previous: ReaderUIState = cloneState(this.currentState)
@@ -1355,16 +1449,20 @@ export class ReaderUIRuntime {
       this.finishFailedAutoPage(transaction)
       return this.playbackResult(true, previous)
     }
-    if (canonicalLocation === undefined || canonicalLocation.trim().length === 0 ||
-      pageIndex === undefined || !Number.isInteger(pageIndex) || pageIndex < 0) {
+    const expectedBookId: string | undefined = this.currentState.readerCanonicalLocation?.bookId
+    if (canonicalLocation === undefined || reflow === undefined ||
+      canonicalLocation.chapterIndex !== transaction.layout?.chapterIndex ||
+      canonicalLocation.chapterOffset !== transaction.layout?.chapterOffset ||
+      (expectedBookId !== undefined && canonicalLocation.bookId !== expectedBookId)) {
       this.currentState.pageTransaction = undefined
       this.currentState.error = 'PAGE_LOCATION_INVALID_RESULT'
       this.finishFailedAutoPage(transaction)
       return this.playbackResult(true, previous)
     }
     transaction.stage = 'persisting-progress'
-    transaction.pendingCanonicalLocation = canonicalLocation
-    transaction.pendingPageIndex = pageIndex
+    transaction.pendingCanonicalLocation = cloneCanonicalLocation(canonicalLocation)
+    transaction.pendingLocationReflow = cloneLocationReflow(reflow)
+    transaction.pendingPageIndex = transaction.layout?.targetPageIndex
     this.currentState.pageTransaction = transaction
     this.currentState.error = undefined
     return this.playbackResult(true, previous, [this.pageProgressEffect(transaction)])
@@ -1388,13 +1486,14 @@ export class ReaderUIRuntime {
       return this.playbackResult(true, previous)
     }
     if (stored !== true || transaction.pendingCanonicalLocation === undefined ||
-      transaction.pendingCanonicalLocation.trim().length === 0 ||
+      transaction.pendingLocationReflow === undefined ||
       transaction.pendingPageIndex === undefined || transaction.pendingPageIndex < 0) {
       this.currentState.error = 'PAGE_PROGRESS_INVALID_RESULT'
       this.finishFailedAutoPage(transaction)
       return this.playbackResult(true, previous)
     }
-    this.currentState.readerCanonicalLocation = transaction.pendingCanonicalLocation
+    this.currentState.readerCanonicalLocation = cloneCanonicalLocation(transaction.pendingCanonicalLocation)
+    this.currentState.readerLocationReflow = cloneLocationReflow(transaction.pendingLocationReflow)
     this.currentState.readerPageIndex = transaction.pendingPageIndex
     this.currentState.error = undefined
 
@@ -1441,8 +1540,8 @@ export class ReaderUIRuntime {
     validateReaderUITypedResult(transaction.contractEvent, 'reader.location.resolve', validated)
     return this.acceptPageLocationResult(
       correlationId,
-      optionalJSONResultString(validated, 'canonicalLocation'),
-      optionalJSONResultInteger(validated, 'pageIndex'),
+      optionalJSONResultCanonicalLocation(validated),
+      optionalJSONResultLocationReflow(validated),
       optionalJSONResultString(validated, 'error')
     )
   }
@@ -1896,16 +1995,28 @@ export class ReaderUIRuntime {
     if (layout === undefined) {
       throw new ReaderUIRuntimeError('INVALID_PAGE_LAYOUT', 'page transaction has no layout')
     }
-    const payload: ReaderUIJSONPayload = clonePayload(transaction.payload)
-    payload['direction'] = transaction.direction
-    payload['anchor'] = layout.anchor
-    payload['targetPageIndex'] = layout.targetPageIndex
-    payload['chapterIndex'] = layout.chapterIndex
-    payload['chapterOffset'] = layout.chapterOffset
-    payload['chapterProgress'] = layout.chapterProgress
-    payload['viewportWidth'] = layout.viewportWidth
-    payload['viewportHeight'] = layout.viewportHeight
-    payload['fontScale'] = layout.fontScale
+    const currentLocation: ReaderUICanonicalLocation | undefined =
+      this.currentState.readerCanonicalLocation
+    if (currentLocation === undefined || currentLocation.bookId.length === 0) {
+      throw new ReaderUIRuntimeError(
+        'MISSING_CANONICAL_LOCATION',
+        'reader.location.resolve requires the committed Core book identity'
+      )
+    }
+    const payload: ReaderUIJSONPayload = {
+      'bookId': currentLocation.bookId,
+      'chapterIndex': layout.chapterIndex,
+      'anchor': {
+        'chapterOffset': layout.chapterOffset,
+        'chapterProgress': layout.chapterProgress
+      } as ReaderUIJSONPayload,
+      'layout': {
+        'viewportWidth': layout.viewportWidth,
+        'viewportHeight': layout.viewportHeight,
+        'fontScale': layout.fontScale,
+        'pageIndex': layout.targetPageIndex
+      } as ReaderUIJSONPayload
+    }
     return readerUIEffect('core', 'reader.location.resolve', payload, transaction.correlationId)
   }
 
@@ -2320,6 +2431,36 @@ export class ReaderUIRuntime {
 
   private bookOpenEffectPayload(transaction: ReaderUIBookOpenTransaction): ReaderUIJSONPayload {
     const payload: ReaderUIJSONPayload = clonePayload(transaction.payload)
+    if (transaction.stages[transaction.stageIndex] === 'reader.location.resolve') {
+      const layout: ReaderUIBookOpenLayout | undefined = transaction.layout
+      if (layout === undefined) {
+        throw new ReaderUIRuntimeError('INVALID_LAYOUT', 'book.open location resolve requires measured layout')
+      }
+      const bookId: string | undefined = jsonString(payload, 'bookId')
+      if (bookId === undefined || bookId.length === 0) {
+        throw new ReaderUIRuntimeError('MISSING_BOOK_ID', 'book.open location resolve requires bookId')
+      }
+      const anchor: ReaderUIJSONPayload = {
+        'chapterOffset': layout.chapterOffset,
+        'chapterProgress': layout.chapterProgress
+      }
+      const layoutPayload: ReaderUIJSONPayload = {
+        'viewportWidth': layout.viewportWidth,
+        'viewportHeight': layout.viewportHeight,
+        'fontScale': layout.fontScale
+      }
+      const result: ReaderUIJSONPayload = {
+        'bookId': bookId,
+        'chapterIndex': transaction.selectedChapterIndex ?? transaction.requestedChapterIndex,
+        'anchor': anchor,
+        'layout': layoutPayload
+      }
+      const sourceId: string | undefined = jsonString(payload, 'sourceId')
+      if (sourceId !== undefined && sourceId.length > 0) result['sourceId'] = sourceId
+      const chapterTitle: string | undefined = jsonString(payload, 'chapterTitle')
+      if (chapterTitle !== undefined && chapterTitle.length > 0) result['chapterTitle'] = chapterTitle
+      return result
+    }
     payload['sourceKind'] = transaction.sourceKind
     payload['chapterIndex'] = transaction.selectedChapterIndex ?? transaction.requestedChapterIndex
     const layout: ReaderUIBookOpenLayout | undefined = transaction.layout
