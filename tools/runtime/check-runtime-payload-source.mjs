@@ -383,11 +383,9 @@ function casGuard(fsOps, specPath, depsPath, expectedSpecHash, expectedDepsHash)
 }
 
 // The exclusive writer lock is acquired via the shared module
-// (tools/shared/shared-writer-lock.mjs). ONLY the checker-side repin/recover path
-// uses this shared lock today; promote/retract (tools/design/promote-family.mjs) are
-// NOT yet migrated to it, so the cross-tool shared-writer P0 - serializing
-// repin/recover/promote/retract against ONE lock path - is still OPEN. Within the
-// checker side, repin + recover contend on ONE lock path (`<specPath>.repin.lock`)
+// (tools/shared/shared-writer-lock.mjs). The checker-side repin/recover path and
+// promote/retract/check (tools/design/promote-family.mjs) derive the same
+// `<specPath>.repin.lock`, so all authority writers contend on one lock path.
 // and ONE protocol:
 // atomic O_EXCL mutual exclusion (the ONLY atomicity claim), a nonce-stamped PID
 // through the O_EXCL fd (no empty-and-closed double-writer window), and NO
@@ -752,12 +750,11 @@ export function repipeTransaction(sha, opts = {}) {
 
   faultInject("start", crashCtx);
 
-  // 1. Acquire the shared writer lock. ONLY repin/recover (checker-side) use this
-  //    shared lock today; promote/retract are NOT yet migrated to it (cross-tool
-  //    shared-writer P0 is still OPEN), so this lock does NOT yet serialize against
-  //    a concurrent promote/retract. acquireWriterLock does NOT auto-reclaim: a
-  //    dead/unparseable holder is fail-closed (operator quarantines the lock, then
-  //    --recover O_EXCL-creates fresh); a live holder causes refusal.
+  // 1. Acquire the shared writer lock. Repin/recover and
+  //    promote/retract/check derive this same path, so a concurrent authority
+  //    mutation is refused. acquireWriterLock does NOT auto-reclaim: a
+  //    dead/unparseable holder is fail-closed (operator quarantines the lock,
+  //    then --recover O_EXCL-creates fresh); a live holder causes refusal.
   const releaseLock = acquireWriterLock({ lockFile, fsOps, isPidAlive });
 
   try {

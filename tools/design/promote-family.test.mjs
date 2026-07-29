@@ -33,6 +33,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const PROMOTE_SCRIPT = path.join(REPO_ROOT, 'tools', 'design', 'promote-family.mjs');
 const GENERATOR_SCRIPT = path.join(REPO_ROOT, 'tools', 'design', 'generate-visual-admission-contract.mjs');
+const SHARED_WRITER_LOCK = path.join(REPO_ROOT, 'tools', 'shared', 'shared-writer-lock.mjs');
 
 // ─── Test harness: create a sandboxed copy of the registry/handoff/ledger ──
 
@@ -49,7 +50,10 @@ function makeSandbox() {
   fs.mkdirSync(path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'generated', 'arkts'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'tools', 'design'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'tools', 'runtime'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'tools', 'shared'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'contracts', 'fixtures'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'ui-spec'), { recursive: true });
 
   // Place a design-delta file in the handoff directory so that
   // computeHandoffDirHash has at least one file to hash (excluding
@@ -63,6 +67,41 @@ function makeSandbox() {
   // Copy promote-family.mjs and generator
   fs.copyFileSync(PROMOTE_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'));
   fs.copyFileSync(GENERATOR_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs'));
+  fs.copyFileSync(SHARED_WRITER_LOCK, path.join(readerUiRoot, 'tools', 'shared', 'shared-writer-lock.mjs'));
+
+  // Promotion runs the record's two declared B4 runtime checks while holding
+  // the same lock as repin/recover. The transaction sandbox uses executable
+  // stubs so these tests stay focused on admission atomicity rather than
+  // requiring a second Reader-Core-Native checkout.
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'tools', 'runtime', 'check-runtime-payload-source.mjs'),
+    '#!/usr/bin/env node\nconsole.log("[sandbox] runtime source authority verified");\n',
+  );
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'tools', 'runtime', 'generate-runtime.mjs'),
+    '#!/usr/bin/env node\nconsole.log("[sandbox] runtime generator is current");\n',
+  );
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'ui-spec', 'runtime-payload-contracts.json'),
+    JSON.stringify({ schemaVersion: 3, sourceOfTruth: { repository: 'Reader-Core-Native' } }, null, 2) + '\n',
+  );
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'docs', 'design', 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json'),
+    JSON.stringify({
+      schemaVersion: '1.0.0',
+      kind: 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES',
+      sourceAuthorities: [{
+        recordId: 'reader.reading-surface',
+        runtimeContract: {
+          prePromotionChecks: [
+            'node tools/runtime/check-runtime-payload-source.mjs',
+            'node tools/runtime/generate-runtime.mjs --check',
+          ],
+        },
+      }],
+      dependencies: [],
+    }, null, 2) + '\n',
+  );
 
   // The real repository has an active A3 route extraction. Transaction tests
   // exercise promotion mechanics independently, so their isolated fixture is
@@ -229,6 +268,12 @@ function snapshotFiles(readerUiRoot, hostRoot) {
     upstreamArtifact: fs.existsSync(upstreamArtifactPath) ? fs.readFileSync(upstreamArtifactPath) : null,
     consumerArtifact: fs.existsSync(consumerArtifactPath) ? fs.readFileSync(consumerArtifactPath) : null,
   };
+}
+
+function sharedWriterLockPath(readerUiRoot) {
+  return `${fs.realpathSync(
+    path.join(readerUiRoot, 'ui-spec', 'runtime-payload-contracts.json'),
+  )}.repin.lock`;
 }
 
 function runPromote(readerUiRoot, hostRoot, recordId, options = {}) {
@@ -1005,6 +1050,61 @@ test('success path: complete promotion leaves all four files consistent', () => 
     });
     assert.equal(checkResult.status, 0,
       `--check should pass after successful promotion. stderr: ${checkResult.stderr?.toString()}`);
+    assert.equal(fs.existsSync(sharedWriterLockPath(sandbox.readerUiRoot)), false,
+      'successful promotion and follow-up check must release the shared writer lock');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('promotion and repin contend on the same live writer lock', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const lockPath = sharedWriterLockPath(sandbox.readerUiRoot);
+    const liveLock = `${process.pid}\n0123456789abcdef0123456789abcdef\n`;
+    fs.writeFileSync(lockPath, liveLock);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+
+    assert.notEqual(result.status, 0, 'promotion must refuse a live repin/recover lock');
+    assert.match(
+      result.stderr?.toString() || '',
+      /another writer transaction is active|could not acquire shared authority-writer lock/,
+    );
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'lock refusal must happen before any admission mutation');
+    assert.equal(fs.readFileSync(lockPath, 'utf8'), liveLock,
+      'promotion must never delete a foreign writer lock');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('failed runtime Core pre-promotion check leaves admission untouched and releases lock', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    fs.writeFileSync(
+      path.join(sandbox.readerUiRoot, 'tools', 'runtime', 'check-runtime-payload-source.mjs'),
+      '#!/usr/bin/env node\nconsole.error("injected runtime authority drift");\nprocess.exit(7);\n',
+    );
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+
+    assert.notEqual(result.status, 0, 'failed B4 runtime check must block promotion');
+    assert.match(result.stderr?.toString() || '', /B4 pre-promotion check failed/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'failed B4 check must not mutate the four admission transaction files');
+    assert.equal(fs.existsSync(sharedWriterLockPath(sandbox.readerUiRoot)), false,
+      'process.exit failure path must release its own writer lock');
   } finally {
     cleanupSandbox(sandbox);
   }

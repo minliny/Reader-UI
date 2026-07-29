@@ -47,6 +47,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { acquireWriterLock } from '../shared/shared-writer-lock.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
@@ -56,6 +57,20 @@ const handoffsDir = path.join(repoRoot, 'docs', 'design', 'handoffs');
 const generatorPath = path.join(repoRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs');
 const upstreamArtifactPath = path.join(repoRoot, 'generated', 'arkts', 'VisualAdmission.ets');
 const revisionEvidencePath = path.join(repoRoot, 'docs', 'design', 'F0_FIGMA_CURRENT_REVISION_EVIDENCE.json');
+const admissionDependenciesPath = path.join(
+  repoRoot,
+  'docs',
+  'design',
+  'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+);
+const runtimePayloadSpecPath = path.join(repoRoot, 'ui-spec', 'runtime-payload-contracts.json');
+const runtimePayloadSourceCheckerPath = path.join(
+  repoRoot,
+  'tools',
+  'runtime',
+  'check-runtime-payload-source.mjs',
+);
+const runtimeGeneratorPath = path.join(repoRoot, 'tools', 'runtime', 'generate-runtime.mjs');
 const routeReconstructionQuarantinePath = path.join(
   repoRoot,
   'contracts',
@@ -125,6 +140,134 @@ function fail(message) {
 
 function readJson(target) {
   return JSON.parse(fs.readFileSync(target, 'utf8'));
+}
+
+function resolveRealPath(target) {
+  if (!fs.existsSync(target)) return target;
+  try {
+    return fs.realpathSync(target);
+  } catch {
+    return target;
+  }
+}
+
+function transactionLockPath() {
+  // check-runtime-payload-source.mjs derives the repin/recover lock from the
+  // real runtime-payload spec path. Promotion and retraction must contend on
+  // that exact path as well; otherwise a repin can change the dependency
+  // authority while admission is being promoted.
+  return `${resolveRealPath(runtimePayloadSpecPath)}.repin.lock`;
+}
+
+function acquireTransactionLock() {
+  const lockFile = transactionLockPath();
+  try {
+    const release = acquireWriterLock({ lockFile });
+    // Several historical failure paths call process.exit(). Node runs this
+    // synchronous exit listener before terminating, so the lock is released
+    // even when those paths bypass ordinary finally unwinding. release() is
+    // idempotent and the normal finally below remains the primary path.
+    process.once('exit', release);
+    return release;
+  } catch (error) {
+    fail(
+      `could not acquire shared authority-writer lock ${lockFile}: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+  }
+}
+
+function verifyTrackedAndClean(target, label) {
+  const relativePath = path.relative(repoRoot, target);
+  const tracked = spawnSync('git', ['ls-files', '--error-unmatch', '--', relativePath], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (tracked.status !== 0) {
+    return [`${label} is not tracked in HEAD: ${relativePath}`];
+  }
+  const unstaged = spawnSync('git', ['diff', '--quiet', '--', relativePath], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const staged = spawnSync('git', ['diff', '--cached', '--quiet', '--', relativePath], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const errors = [];
+  if (unstaged.status !== 0 || staged.status !== 0) {
+    errors.push(`${label} is not clean relative to HEAD: ${relativePath}`);
+  }
+  return errors;
+}
+
+function runRuntimePrePromotionChecks(recordId) {
+  if (!fs.existsSync(admissionDependenciesPath)) {
+    fail(
+      `record ${recordId}: visual admission dependency document is missing at ` +
+      path.relative(repoRoot, admissionDependenciesPath),
+    );
+  }
+  const dependencies = readJson(admissionDependenciesPath);
+  if (
+    dependencies?.kind !== 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES' ||
+    dependencies?.schemaVersion !== '1.0.0' ||
+    !Array.isArray(dependencies.sourceAuthorities)
+  ) {
+    fail(`record ${recordId}: visual admission dependency document is malformed`);
+  }
+  const runtimeAuthority = dependencies.sourceAuthorities.find(
+    (entry) => entry?.recordId === recordId,
+  )?.runtimeContract;
+  if (!runtimeAuthority) return;
+
+  const expectedChecks = [
+    'node tools/runtime/check-runtime-payload-source.mjs',
+    'node tools/runtime/generate-runtime.mjs --check',
+  ];
+  if (JSON.stringify(runtimeAuthority.prePromotionChecks) !== JSON.stringify(expectedChecks)) {
+    fail(
+      `record ${recordId}: runtime authority must declare the exact two B4 pre-promotion checks`,
+    );
+  }
+
+  const cleanlinessErrors = [
+    ...verifyTrackedAndClean(runtimePayloadSpecPath, 'runtime payload source authority'),
+    ...verifyTrackedAndClean(admissionDependenciesPath, 'visual admission dependency document'),
+  ];
+  if (cleanlinessErrors.length > 0) {
+    fail(
+      `record ${recordId}: runtime authority is not committed and clean:\n` +
+      cleanlinessErrors.map((error) => `    - ${error}`).join('\n'),
+    );
+  }
+
+  const commands = [
+    [runtimePayloadSourceCheckerPath],
+    [runtimeGeneratorPath, '--check'],
+  ];
+  for (const command of commands) {
+    const result = spawnSync(process.execPath, command, {
+      cwd: repoRoot,
+      env: process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    if (result.status !== 0) {
+      const output = result.stderr?.toString().trim() || result.stdout?.toString().trim();
+      const displayCommand = command.map((item) =>
+        path.isAbsolute(item) ? path.relative(repoRoot, item) : item
+      );
+      fail(
+        `record ${recordId}: B4 pre-promotion check failed: ` +
+        `${['node', ...displayCommand].join(' ')}${
+          output ? `\n${output}` : ''
+        }`,
+      );
+    }
+  }
+  console.log(`  ✓ runtime Core authority and generated runtime checks passed`);
 }
 
 // An active source-side quarantine is an explicit route extraction, not a
@@ -686,6 +829,12 @@ function promote(recordId) {
   console.log(`  ✓ ${record.harmony.targets.length} harmony consumer target(s) verified (file + symbol)`);
   console.log(`  ✓ previous harmony.status = ${previousHarmonyStatus}`);
 
+  // B4 dependency/Core authority is verified while holding the same writer
+  // lock used by repin/recover. A successful check outside this critical
+  // section is not sufficient because a concurrent repin could otherwise
+  // change the spec/mirror pair before the admission transaction starts.
+  runRuntimePrePromotionChecks(recordId);
+
   // ── Phase 1: snapshot backups for rollback ─────────────────────────────
   const backup = {
     registry: backupFile(registryPath),
@@ -988,7 +1137,12 @@ if (!arg) {
 }
 if (arg === '--check') {
   if (args.length !== 1) fail('--check does not accept additional arguments');
-  runCheck();
+  const releaseLock = acquireTransactionLock();
+  try {
+    runCheck();
+  } finally {
+    releaseLock();
+  }
 } else if (arg === '--retract') {
   const recordId = args[1];
   const reasonIndex = args.indexOf('--reason');
@@ -999,8 +1153,18 @@ if (arg === '--check') {
   if (reasonIndex !== 2) {
     fail('--reason must follow the recordId in retract mode');
   }
-  retract(recordId, reason);
+  const releaseLock = acquireTransactionLock();
+  try {
+    retract(recordId, reason);
+  } finally {
+    releaseLock();
+  }
 } else {
   if (args.length !== 1) fail('promotion accepts exactly one recordId');
-  promote(arg);
+  const releaseLock = acquireTransactionLock();
+  try {
+    promote(arg);
+  } finally {
+    releaseLock();
+  }
 }

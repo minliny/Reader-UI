@@ -15,3 +15,8 @@ node_modules/
 .trae/
 .android-link
 .ios-link
+
+# fail-closed shared authority-writer runtime state
+*.repin.lock
+*.repin.journal
+*.repin.tmp
