@@ -4,16 +4,60 @@ import XCTest
 final class ReaderUIRuntimeTests: XCTestCase {
     private func activeReaderRuntime(
         pageIndex: Int = 0,
-        canonicalLocation: String? = nil
+        canonicalLocation: ReaderUICanonicalLocation? = nil
     ) -> ReaderUIRuntime {
-        ReaderUIRuntime(
+        let location = canonicalLocation ?? resolvedLocation()
+        return ReaderUIRuntime(
             state: ReaderUIState(
                 routeId: "immersive-reading",
                 routeStack: ["bookshelf"],
                 readerPageIndex: pageIndex,
-                readerCanonicalLocation: canonicalLocation
+                readerCanonicalLocation: location,
+                readerLocationReflow: ReaderUILocationReflow()
             )
         )
+    }
+
+    private func resolvedLocation(
+        bookId: String = "book-1",
+        chapterIndex: Int = 4,
+        chapterOffset: Int = 120,
+        chapterProgress: Double = 0.42
+    ) -> ReaderUICanonicalLocation {
+        ReaderUICanonicalLocation(
+            bookId: bookId,
+            chapterIndex: chapterIndex,
+            chapterOffset: chapterOffset,
+            chapterProgress: chapterProgress,
+            locationRevision: "reader-location-v1:\(bookId):\(chapterIndex):\(chapterOffset)"
+        )
+    }
+
+    private func resolvedLocationJSON(
+        bookId: String = "book-1",
+        chapterIndex: Int = 4,
+        chapterOffset: Int = 120,
+        chapterProgress: Double = 0.42
+    ) -> ReaderUIJSONResult {
+        [
+            "canonicalLocation": .object([
+                "bookId": .string(bookId),
+                "chapterIndex": .number(Double(chapterIndex)),
+                "chapterOffset": .number(Double(chapterOffset)),
+                "chapterProgress": .number(chapterProgress),
+                "locationRevision": .string(
+                    "reader-location-v1:\(bookId):\(chapterIndex):\(chapterOffset)"
+                ),
+            ]),
+            "resolverVersion": .string("reader.location.resolve.v1.reflow"),
+            "resolved": .bool(true),
+            "reflow": .object([
+                "strategy": .string("offsetAnchor"),
+                "primaryAnchor": .string("chapterOffset"),
+                "fallbackAnchor": .string("chapterProgress"),
+                "layoutIndependent": .bool(true),
+            ]),
+        ]
     }
 
     private func measuredPageLayout(targetPageIndex: Int = 5, viewportWidth: Int = 390) -> ReaderUIPageLayout {
@@ -78,7 +122,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testRecursiveJSONResultBoundaryPreservesTypesAndFailsClosed() throws {
-        let runtime = activeReaderRuntime(pageIndex: 2, canonicalLocation: "old")
+        let runtime = activeReaderRuntime(pageIndex: 2)
         _ = try runtime.dispatch(event: "reader.page.next", correlationId: "json-result")
         _ = try runtime.providePageLayout(
             correlationId: "json-result",
@@ -86,10 +130,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
         )
         let accepted = try runtime.acceptPageLocationJSONResult(
             correlationId: "json-result",
-            result: [
-                "canonicalLocation": "chapter-4:p3",
-                "pageIndex": 3,
-            ]
+            result: resolvedLocationJSON()
         )
         XCTAssertTrue(accepted.accepted)
         XCTAssertEqual(accepted.effects.map(\.type), ["reader.progress.update"])
@@ -101,7 +142,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
             ).accepted
         )
         XCTAssertEqual(runtime.state.readerPageIndex, 3)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "chapter-4:p3")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, resolvedLocation())
 
         _ = try runtime.dispatch(event: "reader.page.next", correlationId: "json-result-invalid")
         _ = try runtime.providePageLayout(
@@ -112,15 +153,30 @@ final class ReaderUIRuntimeTests: XCTestCase {
             try runtime.acceptPageLocationJSONResult(
                 correlationId: "json-result-invalid",
                 result: [
-                    "canonicalLocation": "chapter-4:p4",
-                    "pageIndex": 4,
-                    "metadata": ["ratio": .number(.infinity)],
+                    "canonicalLocation": .object([
+                        "bookId": .string("book-1"),
+                        "chapterIndex": .number(4),
+                        "chapterOffset": .number(120),
+                        "chapterProgress": .number(0.42),
+                        "locationRevision": .string("reader-location-v1:book-1:4:120"),
+                    ]),
+                    "resolverVersion": .string("reader.location.resolve.v1.reflow"),
+                    "resolved": .bool(true),
+                    "reflow": .object([
+                        "strategy": .string("offsetAnchor"),
+                        "primaryAnchor": .string("chapterOffset"),
+                        "fallbackAnchor": .string("chapterProgress"),
+                        "layoutIndependent": .bool(true),
+                    ]),
+                    "pageIndex": .number(4),
                 ]
             )
         ) { error in
-            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "INVALID_JSON_RESULT")
+            XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "INVALID_TYPED_RESULT")
         }
         XCTAssertEqual(runtime.state.pageTransaction?.stage, "resolving-location")
+        XCTAssertEqual(runtime.state.readerPageIndex, 3)
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, resolvedLocation())
     }
 
     func testGeneratedTypedPayloadFixturesHaveExactParity() throws {
@@ -141,7 +197,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testGeneratedTypedResultFixturesHaveExactParity() throws {
-        XCTAssertEqual(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.count, 162)
+        XCTAssertEqual(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.count, 165)
         for fixture in GENERATED_RUNTIME_TYPED_RESULT_FIXTURES {
             if fixture.valid {
                 XCTAssertNoThrow(
@@ -185,13 +241,25 @@ final class ReaderUIRuntimeTests: XCTestCase {
         XCTAssertEqual(transition.effects.map(\.type), ["source.detail"])
 
         XCTAssertEqual(
-            runtime.acceptBookOpenResult(coreType: "source.detail", correlationId: "open-1").effects.map(\.type),
+            try runtime.acceptBookOpenResult(
+                coreType: "source.detail",
+                correlationId: "open-1"
+            ).effects.map(\.type),
             ["chapter.list"]
         )
-        let toc = runtime.acceptBookOpenResult(coreType: "chapter.list", correlationId: "open-1", chapterCount: 3)
+        let toc = try runtime.acceptBookOpenResult(
+            coreType: "chapter.list",
+            correlationId: "open-1",
+            chapterCount: 3
+        )
         XCTAssertEqual(toc.effects.map(\.type), ["content.load"])
         XCTAssertEqual(toc.effects.first?.jsonPayload["chapterIndex"], .number(1))
-        XCTAssertTrue(runtime.acceptBookOpenResult(coreType: "content.load", correlationId: "open-1").accepted)
+        XCTAssertTrue(
+            try runtime.acceptBookOpenResult(
+                coreType: "content.load",
+                correlationId: "open-1"
+            ).accepted
+        )
         XCTAssertTrue(runtime.state.bookOpenTransaction?.awaitingLayout == true)
 
         let layout = try runtime.provideBookOpenLayout(
@@ -205,14 +273,35 @@ final class ReaderUIRuntimeTests: XCTestCase {
             )
         )
         XCTAssertEqual(layout.effects.map(\.type), ["reader.location.resolve"])
-        XCTAssertTrue(runtime.acceptBookOpenResult(
+        XCTAssertEqual(layout.effects.first?.jsonPayload, [
+            "bookId": .string("book-1"),
+            "sourceId": .string("source-1"),
+            "chapterIndex": .number(1),
+            "anchor": .object([
+                "chapterOffset": .number(12),
+                "chapterProgress": .number(0.4),
+            ]),
+            "layout": .object([
+                "viewportWidth": .number(390),
+                "viewportHeight": .number(844),
+                "fontScale": .number(1),
+            ]),
+        ])
+        XCTAssertTrue(try runtime.acceptBookOpenResult(
             coreType: "reader.location.resolve",
             correlationId: "open-1",
-            canonicalLocation: "chapter:1:offset:12",
-            pageIndex: 1
+            canonicalLocation: resolvedLocation(
+                chapterIndex: 1,
+                chapterOffset: 12,
+                chapterProgress: 0.4
+            ),
+            reflow: ReaderUILocationReflow()
         ).accepted)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "chapter:1:offset:12")
-        XCTAssertEqual(runtime.state.readerPageIndex, 1)
+        XCTAssertEqual(
+            runtime.state.readerCanonicalLocation,
+            resolvedLocation(chapterIndex: 1, chapterOffset: 12, chapterProgress: 0.4)
+        )
+        XCTAssertEqual(runtime.state.readerPageIndex, 0)
         XCTAssertNil(runtime.state.bookOpenTransaction)
         XCTAssertFalse(runtime.state.loading)
     }
@@ -230,7 +319,12 @@ final class ReaderUIRuntimeTests: XCTestCase {
             correlationId: "open-b"
         )
         XCTAssertEqual(replacement.cancelledCorrelationIds, ["open-a"])
-        XCTAssertFalse(runtime.acceptBookOpenResult(coreType: "source.detail", correlationId: "open-a").accepted)
+        XCTAssertFalse(
+            try runtime.acceptBookOpenResult(
+                coreType: "source.detail",
+                correlationId: "open-a"
+            ).accepted
+        )
         XCTAssertTrue(runtime.cancelBookOpen(correlationId: "open-b").accepted)
         XCTAssertEqual(runtime.state.routeId, "bookshelf")
     }
@@ -243,14 +337,19 @@ final class ReaderUIRuntimeTests: XCTestCase {
             correlationId: "local-open"
         )
         XCTAssertEqual(start.effects.map(\.type), ["chapter.list"])
-        let empty = runtime.acceptBookOpenResult(coreType: "chapter.list", correlationId: "local-open", chapterCount: 0)
+        let empty = try runtime.acceptBookOpenResult(
+            coreType: "chapter.list",
+            correlationId: "local-open",
+            chapterCount: 0
+        )
         XCTAssertTrue(empty.accepted)
         XCTAssertTrue(empty.effects.isEmpty)
         XCTAssertEqual(runtime.state.error, "BOOK_OPEN_EMPTY_TOC")
     }
 
     func testPageCommitsOnlyMatchingCanonicalLocationResult() throws {
-        let runtime = activeReaderRuntime(pageIndex: 4, canonicalLocation: "old-location")
+        let oldLocation = resolvedLocation(chapterOffset: 80)
+        let runtime = activeReaderRuntime(pageIndex: 4, canonicalLocation: oldLocation)
         let start = try runtime.dispatch(event: "reader.page.next", correlationId: "page-1")
         XCTAssertTrue(start.effects.isEmpty)
         XCTAssertEqual(runtime.state.readerPageIndex, 4)
@@ -260,7 +359,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
         ) { error in
             XCTAssertEqual((error as? ReaderUIRuntimeFailure)?.code, "INVALID_PAGE_LAYOUT")
         }
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "old-location")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, oldLocation)
 
         XCTAssertEqual(
             try runtime.providePageLayout(correlationId: "page-1", layout: measuredPageLayout()).effects.map(\.type),
@@ -269,18 +368,18 @@ final class ReaderUIRuntimeTests: XCTestCase {
         XCTAssertFalse(
             runtime.acceptPageLocationResult(
                 correlationId: "other",
-                canonicalLocation: "late",
-                pageIndex: 5
+                canonicalLocation: resolvedLocation(),
+                reflow: ReaderUILocationReflow()
             ).accepted
         )
         XCTAssertTrue(runtime.acceptPageLocationResult(correlationId: "page-1", error: "LOCATION_FAILED").accepted)
         XCTAssertEqual(runtime.state.readerPageIndex, 4)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "old-location")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, oldLocation)
         XCTAssertFalse(
             runtime.acceptPageLocationResult(
                 correlationId: "page-1",
-                canonicalLocation: "late",
-                pageIndex: 5
+                canonicalLocation: resolvedLocation(),
+                reflow: ReaderUILocationReflow()
             ).accepted
         )
 
@@ -292,20 +391,20 @@ final class ReaderUIRuntimeTests: XCTestCase {
         XCTAssertTrue(
             runtime.acceptPageLocationResult(
                 correlationId: "page-invalid",
-                canonicalLocation: "   ",
-                pageIndex: 5
+                canonicalLocation: nil,
+                reflow: nil
             ).accepted
         )
         XCTAssertEqual(runtime.state.error, "PAGE_LOCATION_INVALID_RESULT")
         XCTAssertEqual(runtime.state.readerPageIndex, 4)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "old-location")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, oldLocation)
 
         _ = try runtime.dispatch(event: "reader.page.prev", correlationId: "page-2")
         _ = try runtime.providePageLayout(correlationId: "page-2", layout: measuredPageLayout(targetPageIndex: 3))
         let persisting = runtime.acceptPageLocationResult(
             correlationId: "page-2",
-            canonicalLocation: "canonical-ch4-p3",
-            pageIndex: 3
+            canonicalLocation: resolvedLocation(),
+            reflow: ReaderUILocationReflow()
         )
         XCTAssertTrue(persisting.accepted)
         XCTAssertEqual(persisting.effects.map(\.type), ["reader.progress.update"])
@@ -329,12 +428,12 @@ final class ReaderUIRuntimeTests: XCTestCase {
         }
         XCTAssertTrue(runtime.acceptPageProgressResult(correlationId: "page-2", stored: true).accepted)
         XCTAssertEqual(runtime.state.readerPageIndex, 3)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "canonical-ch4-p3")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, resolvedLocation())
         XCTAssertFalse(
             runtime.acceptPageLocationResult(
                 correlationId: "page-2",
-                canonicalLocation: "duplicate",
-                pageIndex: 9
+                canonicalLocation: resolvedLocation(),
+                reflow: ReaderUILocationReflow()
             ).accepted
         )
 
@@ -345,8 +444,8 @@ final class ReaderUIRuntimeTests: XCTestCase {
         )
         _ = runtime.acceptPageLocationResult(
             correlationId: "page-progress-error",
-            canonicalLocation: "canonical-ch4-p4",
-            pageIndex: 4
+            canonicalLocation: resolvedLocation(),
+            reflow: ReaderUILocationReflow()
         )
         XCTAssertTrue(
             runtime.acceptPageProgressResult(
@@ -355,7 +454,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
             ).accepted
         )
         XCTAssertEqual(runtime.state.readerPageIndex, 3)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "canonical-ch4-p3")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, resolvedLocation())
         XCTAssertEqual(runtime.state.error, "PROGRESS_STORE_FAILED")
     }
 
@@ -377,12 +476,27 @@ final class ReaderUIRuntimeTests: XCTestCase {
             correlationId: "page-explicit",
             layout: measuredPageLayout(targetPageIndex: 0)
         )
-        XCTAssertEqual(resolving.effects.first?.jsonPayload["direction"], .string("explicit"))
-        XCTAssertEqual(resolving.effects.first?.jsonPayload["reason"], .string("chapter-jump"))
+        XCTAssertEqual(resolving.effects.first?.jsonPayload, [
+            "bookId": .string("book-1"),
+            "chapterIndex": .number(4),
+            "anchor": .object([
+                "chapterOffset": .number(120),
+                "chapterProgress": .number(0.42),
+            ]),
+            "layout": .object([
+                "viewportWidth": .number(390),
+                "viewportHeight": .number(844),
+                "fontScale": .number(1),
+                "pageIndex": .number(0),
+            ]),
+        ])
     }
 
     func testProgressCommitBoundaryBlocksExitAndBookReplacementWithoutCrossRouteContamination() throws {
-        let runtime = activeReaderRuntime(pageIndex: 2, canonicalLocation: "book-a-page-2")
+        let runtime = activeReaderRuntime(
+            pageIndex: 2,
+            canonicalLocation: resolvedLocation(bookId: "book-a")
+        )
         _ = try runtime.dispatch(event: "reader.page.next", correlationId: "page-boundary")
         _ = try runtime.providePageLayout(
             correlationId: "page-boundary",
@@ -390,8 +504,8 @@ final class ReaderUIRuntimeTests: XCTestCase {
         )
         _ = runtime.acceptPageLocationResult(
             correlationId: "page-boundary",
-            canonicalLocation: "book-a-page-3",
-            pageIndex: 3
+            canonicalLocation: resolvedLocation(bookId: "book-a"),
+            reflow: ReaderUILocationReflow()
         )
         let pending = runtime.state
 
@@ -436,7 +550,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
         }
         XCTAssertFalse(runtime.acceptPageProgressResult(correlationId: "page-boundary", stored: true).accepted)
         XCTAssertEqual(runtime.state.readerPageIndex, 3)
-        XCTAssertEqual(runtime.state.readerCanonicalLocation, "book-a-page-3")
+        XCTAssertEqual(runtime.state.readerCanonicalLocation, resolvedLocation(bookId: "book-a"))
     }
 
     func testTTSPlanQueueSpeechAndOrderedTeardown() throws {
@@ -479,7 +593,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
     }
 
     func testAutoPageOneShotCommitRearmAndBackgroundInvalidation() throws {
-        let runtime = activeReaderRuntime(pageIndex: 1, canonicalLocation: "page-1")
+        let runtime = activeReaderRuntime(pageIndex: 1)
         let start = try runtime.dispatch(
             event: "reader.autoPage.start",
             payload: ["intervalMs": "5000"],
@@ -505,8 +619,8 @@ final class ReaderUIRuntimeTests: XCTestCase {
         )
         let persisting = runtime.acceptPageLocationResult(
             correlationId: pageCorrelation,
-            canonicalLocation: "page-2",
-            pageIndex: 2
+            canonicalLocation: resolvedLocation(),
+            reflow: ReaderUILocationReflow()
         )
         XCTAssertEqual(persisting.effects.map(\.type), ["reader.progress.update"])
         XCTAssertEqual(runtime.state.readerPageIndex, 1)

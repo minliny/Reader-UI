@@ -18,15 +18,52 @@ import kotlin.test.assertTrue
 class ReaderUIRuntimeTest {
     private fun activeReaderRuntime(
         pageIndex: Int = 0,
-        canonicalLocation: String? = null
+        canonicalLocation: ReaderUICanonicalLocation = resolvedLocation()
     ): ReaderUIRuntime = ReaderUIRuntime(
         ReaderUIState(
             routeId = "immersive-reading",
             routeStack = listOf("bookshelf"),
             readerPageIndex = pageIndex,
-            readerCanonicalLocation = canonicalLocation
+            readerCanonicalLocation = canonicalLocation,
+            readerLocationReflow = ReaderUILocationReflow()
         )
     )
+
+    private fun resolvedLocation(
+        bookId: String = "book-1",
+        chapterIndex: Int = 4,
+        chapterOffset: Int = 120,
+        chapterProgress: Double = 0.42
+    ): ReaderUICanonicalLocation = ReaderUICanonicalLocation(
+        bookId = bookId,
+        chapterIndex = chapterIndex,
+        chapterOffset = chapterOffset,
+        chapterProgress = chapterProgress,
+        locationRevision = "reader-location-v1:$bookId:$chapterIndex:$chapterOffset"
+    )
+
+    private fun resolvedLocationJSON(
+        bookId: String = "book-1",
+        chapterIndex: Int = 4,
+        chapterOffset: Int = 120,
+        chapterProgress: Double = 0.42
+    ): JsonObject = buildJsonObject {
+        put("canonicalLocation", buildJsonObject {
+            put("bookId", bookId)
+            put("chapterIndex", chapterIndex)
+            put("chapterOffset", chapterOffset)
+            put("chapterProgress", chapterProgress)
+            put("locationRevision", "reader-location-v1:$bookId:$chapterIndex:$chapterOffset")
+        })
+        put("resolverVersion", "reader.location.resolve.v1.reflow")
+        put("resolved", true)
+        put("reflow", buildJsonObject {
+            put("strategy", "offsetAnchor")
+            put("primaryAnchor", "chapterOffset")
+            put("fallbackAnchor", "chapterProgress")
+            put("layoutIndependent", true)
+        })
+    }
 
     private fun measuredPageLayout(
         targetPageIndex: Int = 5,
@@ -98,15 +135,12 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun recursiveJSONResultBoundaryPreservesTypesAndFailsClosed() {
-        val runtime = activeReaderRuntime(2, "old")
+        val runtime = activeReaderRuntime(2)
         runtime.dispatch("reader.page.next", correlationId = "json-result")
         runtime.providePageLayout("json-result", measuredPageLayout(targetPageIndex = 3))
         val accepted = runtime.acceptPageLocationJSONResult(
             "json-result",
-            buildJsonObject {
-                put("canonicalLocation", "chapter-4:p3")
-                put("pageIndex", 3)
-            }
+            resolvedLocationJSON()
         )
         assertTrue(accepted.accepted)
         assertEquals(listOf("reader.progress.update"), accepted.effects.map { it.type })
@@ -118,22 +152,85 @@ class ReaderUIRuntimeTest {
             ).accepted
         )
         assertEquals(3, runtime.state.readerPageIndex)
-        assertEquals("chapter-4:p3", runtime.state.readerCanonicalLocation)
+        assertEquals(resolvedLocation(), runtime.state.readerCanonicalLocation)
+        assertEquals(ReaderUILocationReflow(), runtime.state.readerLocationReflow)
 
         runtime.dispatch("reader.page.next", correlationId = "json-result-invalid")
         runtime.providePageLayout("json-result-invalid", measuredPageLayout(targetPageIndex = 4))
         val error = assertFailsWith<ReaderUIRuntimeException> {
             runtime.acceptPageLocationJSONResult(
                 "json-result-invalid",
-                buildJsonObject {
-                    put("canonicalLocation", "chapter-4:p4")
-                    put("pageIndex", 4)
-                    put("metadata", buildJsonObject { put("ratio", JsonPrimitive(Double.NaN)) })
-                }
+                JsonObject(
+                    resolvedLocationJSON() + (
+                        "metadata" to buildJsonObject {
+                            put("ratio", JsonPrimitive(Double.NaN))
+                        }
+                    )
+                )
             )
         }
         assertEquals("INVALID_JSON_RESULT", error.code)
         assertEquals("resolving-location", runtime.state.pageTransaction?.stage)
+    }
+
+    @Test
+    fun readerLocationJSONWireRejectsNonCoreShapesBeforeMutation() {
+        val invalidResults = listOf(
+            "opaque canonical location" to buildJsonObject {
+                put("canonicalLocation", "chapter-4:p3")
+                put("resolverVersion", "reader.location.resolve.v1.reflow")
+                put("resolved", true)
+                put("reflow", resolvedLocationJSON().getValue("reflow"))
+            },
+            "wire pageIndex" to JsonObject(
+                resolvedLocationJSON() + ("pageIndex" to JsonPrimitive(99))
+            ),
+            "missing reflow" to JsonObject(
+                resolvedLocationJSON().filterKeys { it != "reflow" }
+            ),
+            "invalid reflow" to JsonObject(
+                resolvedLocationJSON() + (
+                    "reflow" to buildJsonObject {
+                        put("strategy", "offsetAnchor")
+                        put("primaryAnchor", "chapterOffset")
+                        put("fallbackAnchor", "chapterProgress")
+                        put("layoutIndependent", false)
+                    }
+                )
+            )
+        )
+
+        invalidResults.forEach { (label, result) ->
+            val runtime = activeReaderRuntime(pageIndex = 7)
+            runtime.dispatch("reader.page.next", correlationId = label)
+            runtime.providePageLayout(label, measuredPageLayout(targetPageIndex = 8))
+            val before = runtime.state
+            val error = assertFailsWith<ReaderUIRuntimeException>(label) {
+                runtime.acceptPageLocationJSONResult(label, result)
+            }
+            assertEquals("INVALID_TYPED_RESULT", error.code, label)
+            assertEquals(before, runtime.state, label)
+        }
+    }
+
+    @Test
+    fun readerLocationRejectsCrossBookIdentityWithoutReplacingCommittedPosition() {
+        val committed = resolvedLocation(bookId = "book-a")
+        val runtime = activeReaderRuntime(pageIndex = 7, canonicalLocation = committed)
+        runtime.dispatch("reader.page.next", correlationId = "cross-book")
+        runtime.providePageLayout("cross-book", measuredPageLayout(targetPageIndex = 8))
+
+        val rejected = runtime.acceptPageLocationJSONResult(
+            "cross-book",
+            resolvedLocationJSON(bookId = "book-b")
+        )
+
+        assertTrue(rejected.accepted)
+        assertEquals("PAGE_LOCATION_INVALID_RESULT", runtime.state.error)
+        assertNull(runtime.state.pageTransaction)
+        assertEquals(7, runtime.state.readerPageIndex)
+        assertEquals(committed, runtime.state.readerCanonicalLocation)
+        assertEquals(ReaderUILocationReflow(), runtime.state.readerLocationReflow)
     }
 
     @Test
@@ -154,7 +251,7 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun generatedTypedResultFixturesHaveExactParity() {
-        assertEquals(162, GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.size)
+        assertEquals(165, GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.size)
         GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.forEach { fixture ->
             if (fixture.valid) {
                 validateReaderUITypedResult(fixture.event, fixture.effectType, fixture.result)
@@ -197,14 +294,39 @@ class ReaderUIRuntimeTest {
             ReaderUIBookOpenLayout(12, 0.4, 390, 844, 1.0)
         )
         assertEquals(listOf("reader.location.resolve"), layout.effects.map { it.type })
+        assertEquals(
+            buildJsonObject {
+                put("sourceId", "source-1")
+                put("bookId", "book-1")
+                put("chapterIndex", 1)
+                put("anchor", buildJsonObject {
+                    put("chapterOffset", 12)
+                    put("chapterProgress", 0.4)
+                })
+                put("layout", buildJsonObject {
+                    put("viewportWidth", 390)
+                    put("viewportHeight", 844)
+                    put("fontScale", 1.0)
+                })
+            },
+            JsonObject(layout.effects.single().jsonPayload)
+        )
         assertTrue(runtime.acceptBookOpenResult(
             "reader.location.resolve",
             "open-1",
-            canonicalLocation = "chapter:1:offset:12",
-            pageIndex = 1
+            canonicalLocation = resolvedLocation(
+                chapterIndex = 1,
+                chapterOffset = 12,
+                chapterProgress = 0.4
+            ),
+            reflow = ReaderUILocationReflow()
         ).accepted)
-        assertEquals("chapter:1:offset:12", runtime.state.readerCanonicalLocation)
-        assertEquals(1, runtime.state.readerPageIndex)
+        assertEquals(
+            resolvedLocation(chapterIndex = 1, chapterOffset = 12, chapterProgress = 0.4),
+            runtime.state.readerCanonicalLocation
+        )
+        assertEquals(ReaderUILocationReflow(), runtime.state.readerLocationReflow)
+        assertEquals(0, runtime.state.readerPageIndex)
         assertEquals(null, runtime.state.bookOpenTransaction)
         assertFalse(runtime.state.loading)
     }
@@ -241,7 +363,8 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun pageCommitsOnlyMatchingCanonicalLocationResult() {
-        val runtime = activeReaderRuntime(4, "old-location")
+        val oldLocation = resolvedLocation(chapterOffset = 80)
+        val runtime = activeReaderRuntime(4, oldLocation)
         val start = runtime.dispatch("reader.page.next", correlationId = "page-1")
         assertTrue(start.effects.isEmpty())
         assertEquals(4, runtime.state.readerPageIndex)
@@ -249,28 +372,62 @@ class ReaderUIRuntimeTest {
             runtime.providePageLayout("page-1", measuredPageLayout(viewportWidth = 0))
         }
         assertEquals("INVALID_PAGE_LAYOUT", invalid.code)
-        assertEquals("old-location", runtime.state.readerCanonicalLocation)
+        assertEquals(oldLocation, runtime.state.readerCanonicalLocation)
 
+        val resolving = runtime.providePageLayout("page-1", measuredPageLayout())
         assertEquals(
             listOf("reader.location.resolve"),
-            runtime.providePageLayout("page-1", measuredPageLayout()).effects.map { it.type }
+            resolving.effects.map { it.type }
         )
-        assertFalse(runtime.acceptPageLocationResult("other", "late", 5).accepted)
+        assertEquals(
+            buildJsonObject {
+                put("bookId", "book-1")
+                put("chapterIndex", 4)
+                put("anchor", buildJsonObject {
+                    put("chapterOffset", 120)
+                    put("chapterProgress", 0.42)
+                })
+                put("layout", buildJsonObject {
+                    put("viewportWidth", 390)
+                    put("viewportHeight", 844)
+                    put("fontScale", 1.0)
+                    put("pageIndex", 5)
+                })
+            },
+            JsonObject(resolving.effects.single().jsonPayload)
+        )
+        assertFalse(runtime.acceptPageLocationResult(
+            "other",
+            canonicalLocation = resolvedLocation(),
+            reflow = ReaderUILocationReflow()
+        ).accepted)
         assertTrue(runtime.acceptPageLocationResult("page-1", error = "LOCATION_FAILED").accepted)
         assertEquals(4, runtime.state.readerPageIndex)
-        assertEquals("old-location", runtime.state.readerCanonicalLocation)
-        assertFalse(runtime.acceptPageLocationResult("page-1", "late", 5).accepted)
+        assertEquals(oldLocation, runtime.state.readerCanonicalLocation)
+        assertFalse(runtime.acceptPageLocationResult(
+            "page-1",
+            canonicalLocation = resolvedLocation(),
+            reflow = ReaderUILocationReflow()
+        ).accepted)
 
         runtime.dispatch("reader.page.next", correlationId = "page-invalid")
         runtime.providePageLayout("page-invalid", measuredPageLayout(targetPageIndex = 5))
-        assertTrue(runtime.acceptPageLocationResult("page-invalid", "   ", 5).accepted)
+        assertTrue(runtime.acceptPageLocationResult(
+            "page-invalid",
+            canonicalLocation = resolvedLocation(),
+            reflow = null
+        ).accepted)
         assertEquals("PAGE_LOCATION_INVALID_RESULT", runtime.state.error)
         assertEquals(4, runtime.state.readerPageIndex)
-        assertEquals("old-location", runtime.state.readerCanonicalLocation)
+        assertEquals(oldLocation, runtime.state.readerCanonicalLocation)
 
         runtime.dispatch("reader.page.prev", correlationId = "page-2")
         runtime.providePageLayout("page-2", measuredPageLayout(targetPageIndex = 3))
-        val persisting = runtime.acceptPageLocationResult("page-2", "canonical-ch4-p3", 3)
+        val persisting = runtime.acceptPageLocationResult(
+            "page-2",
+            canonicalLocation = resolvedLocation(),
+            reflow = ReaderUILocationReflow()
+        )
         assertTrue(persisting.accepted)
         assertEquals(listOf("reader.progress.update"), persisting.effects.map { it.type })
         assertTrue(persisting.effects.single().jsonPayload.isEmpty())
@@ -298,12 +455,21 @@ class ReaderUIRuntimeTest {
         )
         assertTrue(runtime.acceptPageProgressResult("page-2", stored = true).accepted)
         assertEquals(3, runtime.state.readerPageIndex)
-        assertEquals("canonical-ch4-p3", runtime.state.readerCanonicalLocation)
-        assertFalse(runtime.acceptPageLocationResult("page-2", "duplicate", 9).accepted)
+        assertEquals(resolvedLocation(), runtime.state.readerCanonicalLocation)
+        assertEquals(ReaderUILocationReflow(), runtime.state.readerLocationReflow)
+        assertFalse(runtime.acceptPageLocationResult(
+            "page-2",
+            canonicalLocation = resolvedLocation(),
+            reflow = ReaderUILocationReflow()
+        ).accepted)
 
         runtime.dispatch("reader.page.next", correlationId = "page-progress-error")
         runtime.providePageLayout("page-progress-error", measuredPageLayout(targetPageIndex = 4))
-        runtime.acceptPageLocationResult("page-progress-error", "canonical-ch4-p4", 4)
+        runtime.acceptPageLocationResult(
+            "page-progress-error",
+            canonicalLocation = resolvedLocation(),
+            reflow = ReaderUILocationReflow()
+        )
         assertTrue(
             runtime.acceptPageProgressResult(
                 "page-progress-error",
@@ -311,7 +477,7 @@ class ReaderUIRuntimeTest {
             ).accepted
         )
         assertEquals(3, runtime.state.readerPageIndex)
-        assertEquals("canonical-ch4-p3", runtime.state.readerCanonicalLocation)
+        assertEquals(resolvedLocation(), runtime.state.readerCanonicalLocation)
         assertEquals("PROGRESS_STORE_FAILED", runtime.state.error)
     }
 
@@ -329,16 +495,36 @@ class ReaderUIRuntimeTest {
         )
         assertEquals(listOf("page-b"), explicit.cancelledCorrelationIds)
         val resolving = runtime.providePageLayout("page-explicit", measuredPageLayout(targetPageIndex = 0))
-        assertEquals(JsonPrimitive("explicit"), resolving.effects.single().jsonPayload["direction"])
-        assertEquals(JsonPrimitive("chapter-jump"), resolving.effects.single().jsonPayload["reason"])
+        assertEquals(
+            buildJsonObject {
+                put("bookId", "book-1")
+                put("chapterIndex", 4)
+                put("anchor", buildJsonObject {
+                    put("chapterOffset", 120)
+                    put("chapterProgress", 0.42)
+                })
+                put("layout", buildJsonObject {
+                    put("viewportWidth", 390)
+                    put("viewportHeight", 844)
+                    put("fontScale", 1.0)
+                    put("pageIndex", 0)
+                })
+            },
+            JsonObject(resolving.effects.single().jsonPayload)
+        )
     }
 
     @Test
     fun progressCommitBoundaryBlocksExitAndBookReplacementWithoutCrossRouteContamination() {
-        val runtime = activeReaderRuntime(2, "book-a-page-2")
+        val bookALocation = resolvedLocation(bookId = "book-a")
+        val runtime = activeReaderRuntime(2, bookALocation)
         runtime.dispatch("reader.page.next", correlationId = "page-boundary")
         runtime.providePageLayout("page-boundary", measuredPageLayout(targetPageIndex = 3))
-        runtime.acceptPageLocationResult("page-boundary", "book-a-page-3", 3)
+        runtime.acceptPageLocationResult(
+            "page-boundary",
+            canonicalLocation = resolvedLocation(bookId = "book-a"),
+            reflow = ReaderUILocationReflow()
+        )
         val pending = runtime.state
 
         assertEquals(
@@ -388,7 +574,7 @@ class ReaderUIRuntimeTest {
         )
         assertFalse(runtime.acceptPageProgressResult("page-boundary", stored = true).accepted)
         assertEquals(3, runtime.state.readerPageIndex)
-        assertEquals("book-a-page-3", runtime.state.readerCanonicalLocation)
+        assertEquals(bookALocation, runtime.state.readerCanonicalLocation)
     }
 
     @Test
@@ -434,7 +620,7 @@ class ReaderUIRuntimeTest {
 
     @Test
     fun autoPageOneShotCommitRearmAndBackgroundInvalidation() {
-        val runtime = activeReaderRuntime(1, "page-1")
+        val runtime = activeReaderRuntime(1)
         val start = runtime.dispatch(
             "reader.autoPage.start",
             mapOf("intervalMs" to "5000"),
@@ -455,7 +641,11 @@ class ReaderUIRuntimeTest {
         val pageCorrelation = requireNotNull(fired.state.pageTransaction).correlationId
         assertFalse(runtime.acceptAutoPageTimerFired("auto-1", generation).accepted)
         runtime.providePageLayout(pageCorrelation, measuredPageLayout(targetPageIndex = 2))
-        val persisting = runtime.acceptPageLocationResult(pageCorrelation, "page-2", 2)
+        val persisting = runtime.acceptPageLocationResult(
+            pageCorrelation,
+            canonicalLocation = resolvedLocation(),
+            reflow = ReaderUILocationReflow()
+        )
         assertEquals(listOf("reader.progress.update"), persisting.effects.map { it.type })
         assertEquals(1, runtime.state.readerPageIndex)
         val committed = runtime.acceptPageProgressResult(pageCorrelation, stored = true)

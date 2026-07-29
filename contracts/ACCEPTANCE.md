@@ -178,4 +178,4 @@ node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs
 
 ## 版本
 
-见 [VERSION.json](./VERSION.json)。当前 Reader-UI Contract head 为 3.1.1；三个 Host consumer lock 仍为 2.5.1。
+见 [VERSION.json](./VERSION.json)。当前 Reader-UI Contract head 为 4.0.0；三个 Host consumer lock 仍为旧 v2/2.5.1，未绑定 typed payload v3，因此保持 fail-closed。

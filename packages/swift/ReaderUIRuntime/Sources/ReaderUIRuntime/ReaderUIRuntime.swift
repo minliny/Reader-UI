@@ -155,6 +155,47 @@ public struct ReaderUIPageLayout: Sendable, Equatable {
     }
 }
 
+public struct ReaderUICanonicalLocation: Sendable, Equatable {
+    public let bookId: String
+    public let chapterIndex: Int
+    public let chapterOffset: Int
+    public let chapterProgress: Double
+    public let locationRevision: String
+
+    public init(
+        bookId: String,
+        chapterIndex: Int,
+        chapterOffset: Int,
+        chapterProgress: Double,
+        locationRevision: String
+    ) {
+        self.bookId = bookId
+        self.chapterIndex = chapterIndex
+        self.chapterOffset = chapterOffset
+        self.chapterProgress = chapterProgress
+        self.locationRevision = locationRevision
+    }
+}
+
+public struct ReaderUILocationReflow: Sendable, Equatable {
+    public let strategy: String
+    public let primaryAnchor: String
+    public let fallbackAnchor: String
+    public let layoutIndependent: Bool
+
+    public init(
+        strategy: String = "offsetAnchor",
+        primaryAnchor: String = "chapterOffset",
+        fallbackAnchor: String = "chapterProgress",
+        layoutIndependent: Bool = true
+    ) {
+        self.strategy = strategy
+        self.primaryAnchor = primaryAnchor
+        self.fallbackAnchor = fallbackAnchor
+        self.layoutIndependent = layoutIndependent
+    }
+}
+
 public struct ReaderUIPageTransaction: Sendable, Equatable {
     public var correlationId: String
     public var direction: String
@@ -165,7 +206,8 @@ public struct ReaderUIPageTransaction: Sendable, Equatable {
     public var stage: String
     public var payload: ReaderUIJSONPayload
     public var layout: ReaderUIPageLayout?
-    public var pendingCanonicalLocation: String?
+    public var pendingCanonicalLocation: ReaderUICanonicalLocation?
+    public var pendingLocationReflow: ReaderUILocationReflow?
     public var pendingPageIndex: Int?
 }
 
@@ -230,7 +272,8 @@ public struct ReaderUIState: Sendable, Equatable {
     public var loading: Bool
     public var reducedMotion: Bool
     public var readerPageIndex: Int
-    public var readerCanonicalLocation: String?
+    public var readerCanonicalLocation: ReaderUICanonicalLocation?
+    public var readerLocationReflow: ReaderUILocationReflow?
     public var focusTarget: String?
     public var error: String?
     public var bookOpenTransaction: ReaderUIBookOpenTransaction?
@@ -252,7 +295,8 @@ public struct ReaderUIState: Sendable, Equatable {
         loading: Bool = false,
         reducedMotion: Bool = false,
         readerPageIndex: Int = 0,
-        readerCanonicalLocation: String? = nil,
+        readerCanonicalLocation: ReaderUICanonicalLocation? = nil,
+        readerLocationReflow: ReaderUILocationReflow? = nil,
         focusTarget: String? = nil,
         error: String? = nil,
         bookOpenTransaction: ReaderUIBookOpenTransaction? = nil,
@@ -274,6 +318,7 @@ public struct ReaderUIState: Sendable, Equatable {
         self.reducedMotion = reducedMotion
         self.readerPageIndex = readerPageIndex
         self.readerCanonicalLocation = readerCanonicalLocation
+        self.readerLocationReflow = readerLocationReflow
         self.focusTarget = focusTarget
         self.error = error
         self.bookOpenTransaction = bookOpenTransaction
@@ -592,7 +637,7 @@ public final class ReaderUIRuntime {
         }
 
         if descriptor.action == "bookOpenSequence", let transaction = state.bookOpenTransaction {
-            effects.append(bookOpenEffect(transaction))
+            effects.append(try bookOpenEffect(transaction))
         } else if descriptor.action == "appearanceTransaction", let transaction = state.appearanceTransaction {
             effects.append(try appearanceInitialEffect(transaction))
         } else {
@@ -763,10 +808,10 @@ public final class ReaderUIRuntime {
         coreType: String,
         correlationId: String,
         chapterCount: Int? = nil,
-        canonicalLocation: String? = nil,
-        pageIndex: Int? = nil,
+        canonicalLocation: ReaderUICanonicalLocation? = nil,
+        reflow: ReaderUILocationReflow? = nil,
         error: String? = nil
-    ) -> ReaderUIAsyncTransition {
+    ) throws -> ReaderUIAsyncTransition {
         let previous = state
         guard var transaction = state.bookOpenTransaction,
               transaction.correlationId == correlationId,
@@ -799,15 +844,18 @@ public final class ReaderUIRuntime {
 
         if coreType == "reader.location.resolve" {
             guard let canonicalLocation,
-                  !canonicalLocation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-                  let pageIndex, pageIndex >= 0 else {
+                  let reflow,
+                  canonicalLocation.bookId == transaction.payload["bookId"]?.stringValue,
+                  canonicalLocation.chapterIndex ==
+                    (transaction.selectedChapterIndex ?? transaction.requestedChapterIndex),
+                  canonicalLocation.chapterOffset == transaction.layout?.chapterOffset else {
                 state.loading = false
                 state.error = "BOOK_OPEN_LOCATION_INVALID_RESULT"
                 state.bookOpenTransaction = nil
                 return ReaderUIAsyncTransition(accepted: true, previous: previous, state: state, effects: [])
             }
             state.readerCanonicalLocation = canonicalLocation
-            state.readerPageIndex = pageIndex
+            state.readerLocationReflow = reflow
         }
 
         let nextStageIndex = transaction.stageIndex + 1
@@ -819,7 +867,12 @@ public final class ReaderUIRuntime {
         }
         transaction.stageIndex = nextStageIndex
         state.bookOpenTransaction = transaction
-        return ReaderUIAsyncTransition(accepted: true, previous: previous, state: state, effects: [bookOpenEffect(transaction)])
+        return ReaderUIAsyncTransition(
+            accepted: true,
+            previous: previous,
+            state: state,
+            effects: [try bookOpenEffect(transaction)]
+        )
     }
 
     /// Lossless JSON result entry point for new Host bridges. The primitive
@@ -834,16 +887,16 @@ public final class ReaderUIRuntime {
               transaction.correlationId == correlationId,
               !transaction.awaitingLayout,
               transaction.stage == coreType else {
-            return acceptBookOpenResult(coreType: coreType, correlationId: correlationId)
+            return try acceptBookOpenResult(coreType: coreType, correlationId: correlationId)
         }
         let result = try validatedJSONResult(result)
         _ = try validateReaderUITypedResult(event: "book.open", effectType: coreType, result: result)
-        return acceptBookOpenResult(
+        return try acceptBookOpenResult(
             coreType: coreType,
             correlationId: correlationId,
             chapterCount: try optionalJSONResultInteger(result, key: "chapterCount"),
-            canonicalLocation: try optionalJSONResultString(result, key: "canonicalLocation"),
-            pageIndex: try optionalJSONResultInteger(result, key: "pageIndex"),
+            canonicalLocation: optionalCanonicalLocation(result),
+            reflow: optionalLocationReflow(result),
             error: try optionalJSONResultString(result, key: "error")
         )
     }
@@ -878,7 +931,12 @@ public final class ReaderUIRuntime {
         transaction.awaitingLayout = false
         transaction.layout = layout
         state.bookOpenTransaction = transaction
-        return ReaderUIAsyncTransition(accepted: true, previous: previous, state: state, effects: [bookOpenEffect(transaction)])
+        return ReaderUIAsyncTransition(
+            accepted: true,
+            previous: previous,
+            state: state,
+            effects: [try bookOpenEffect(transaction)]
+        )
     }
 
     /// Restores the pre-open route and invalidates all subsequent callbacks for
@@ -935,17 +993,18 @@ public final class ReaderUIRuntime {
             return playbackResult(false, previous)
         }
         try validatePageLayout(layout)
-        transaction.stage = "resolving-location"
         transaction.layout = layout
+        let locationEffect = try pageLocationEffect(transaction)
+        transaction.stage = "resolving-location"
         state.pageTransaction = transaction
-        return playbackResult(true, previous, effects: [pageLocationEffect(transaction)])
+        return playbackResult(true, previous, effects: [locationEffect])
     }
 
     @discardableResult
     public func acceptPageLocationResult(
         correlationId: String,
-        canonicalLocation: String? = nil,
-        pageIndex: Int? = nil,
+        canonicalLocation: ReaderUICanonicalLocation? = nil,
+        reflow: ReaderUILocationReflow? = nil,
         error: String? = nil
     ) -> ReaderUIPlaybackTransition {
         let previous = state
@@ -961,8 +1020,11 @@ public final class ReaderUIRuntime {
             return playbackResult(true, previous)
         }
         guard let canonicalLocation,
-              !canonicalLocation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              let pageIndex, pageIndex >= 0 else {
+              let reflow,
+              canonicalLocation.chapterIndex == transaction.layout?.chapterIndex,
+              canonicalLocation.chapterOffset == transaction.layout?.chapterOffset,
+              state.readerCanonicalLocation?.bookId == nil ||
+                canonicalLocation.bookId == state.readerCanonicalLocation?.bookId else {
             state.pageTransaction = nil
             state.error = "PAGE_LOCATION_INVALID_RESULT"
             finishFailedAutoPage(transaction)
@@ -971,7 +1033,8 @@ public final class ReaderUIRuntime {
         var persisting = transaction
         persisting.stage = "persisting-progress"
         persisting.pendingCanonicalLocation = canonicalLocation
-        persisting.pendingPageIndex = pageIndex
+        persisting.pendingLocationReflow = reflow
+        persisting.pendingPageIndex = transaction.layout?.targetPageIndex
         state.pageTransaction = persisting
         state.error = nil
         return playbackResult(true, previous, effects: [pageProgressEffect(persisting)])
@@ -997,7 +1060,7 @@ public final class ReaderUIRuntime {
         }
         guard stored == true,
               let canonicalLocation = transaction.pendingCanonicalLocation,
-              !canonicalLocation.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              let reflow = transaction.pendingLocationReflow,
               let pageIndex = transaction.pendingPageIndex,
               pageIndex >= 0 else {
             state.error = "PAGE_PROGRESS_INVALID_RESULT"
@@ -1005,6 +1068,7 @@ public final class ReaderUIRuntime {
             return playbackResult(true, previous)
         }
         state.readerCanonicalLocation = canonicalLocation
+        state.readerLocationReflow = reflow
         state.readerPageIndex = pageIndex
         state.error = nil
 
@@ -1060,8 +1124,8 @@ public final class ReaderUIRuntime {
         _ = try validateReaderUITypedResult(event: transaction.contractEvent, effectType: "reader.location.resolve", result: result)
         return acceptPageLocationResult(
             correlationId: correlationId,
-            canonicalLocation: try optionalJSONResultString(result, key: "canonicalLocation"),
-            pageIndex: try optionalJSONResultInteger(result, key: "pageIndex"),
+            canonicalLocation: optionalCanonicalLocation(result),
+            reflow: optionalLocationReflow(result),
             error: try optionalJSONResultString(result, key: "error")
         )
     }
@@ -1310,6 +1374,7 @@ public final class ReaderUIRuntime {
             payload: payload,
             layout: nil,
             pendingCanonicalLocation: nil,
+            pendingLocationReflow: nil,
             pendingPageIndex: nil
         )
         state.error = nil
@@ -1556,20 +1621,30 @@ public final class ReaderUIRuntime {
         )
     }
 
-    private func pageLocationEffect(_ transaction: ReaderUIPageTransaction) -> ReaderUIEffect {
+    private func pageLocationEffect(_ transaction: ReaderUIPageTransaction) throws -> ReaderUIEffect {
         guard let layout = transaction.layout else {
-            return ReaderUIEffect(kind: .core, type: "reader.location.resolve", jsonPayload: [:], correlationId: transaction.correlationId)
+            throw failure("INVALID_PAGE_LAYOUT", "page transaction has no layout")
         }
-        var payload = transaction.payload
-        payload["direction"] = .string(transaction.direction)
-        payload["anchor"] = .string(layout.anchor)
-        payload["targetPageIndex"] = .number(Double(layout.targetPageIndex))
-        payload["chapterIndex"] = .number(Double(layout.chapterIndex))
-        payload["chapterOffset"] = .number(Double(layout.chapterOffset))
-        payload["chapterProgress"] = .number(layout.chapterProgress)
-        payload["viewportWidth"] = .number(Double(layout.viewportWidth))
-        payload["viewportHeight"] = .number(Double(layout.viewportHeight))
-        payload["fontScale"] = .number(layout.fontScale)
+        guard let currentLocation = state.readerCanonicalLocation, !currentLocation.bookId.isEmpty else {
+            throw failure(
+                "MISSING_CANONICAL_LOCATION",
+                "reader.location.resolve requires the committed Core book identity"
+            )
+        }
+        let payload: ReaderUIJSONPayload = [
+            "bookId": .string(currentLocation.bookId),
+            "chapterIndex": .number(Double(layout.chapterIndex)),
+            "anchor": .object([
+                "chapterOffset": .number(Double(layout.chapterOffset)),
+                "chapterProgress": .number(layout.chapterProgress),
+            ]),
+            "layout": .object([
+                "viewportWidth": .number(Double(layout.viewportWidth)),
+                "viewportHeight": .number(Double(layout.viewportHeight)),
+                "fontScale": .number(layout.fontScale),
+                "pageIndex": .number(Double(layout.targetPageIndex)),
+            ]),
+        ]
         return ReaderUIEffect(
             kind: .core,
             type: "reader.location.resolve",
@@ -1964,16 +2039,46 @@ public final class ReaderUIRuntime {
         )
     }
 
-    private func bookOpenEffect(_ transaction: ReaderUIBookOpenTransaction) -> ReaderUIEffect {
+    private func bookOpenEffect(_ transaction: ReaderUIBookOpenTransaction) throws -> ReaderUIEffect {
         ReaderUIEffect(
             kind: .core,
             type: transaction.stage,
-            jsonPayload: bookOpenEffectPayload(transaction),
+            jsonPayload: try bookOpenEffectPayload(transaction),
             correlationId: transaction.correlationId
         )
     }
 
-    private func bookOpenEffectPayload(_ transaction: ReaderUIBookOpenTransaction) -> ReaderUIJSONPayload {
+    private func bookOpenEffectPayload(_ transaction: ReaderUIBookOpenTransaction) throws -> ReaderUIJSONPayload {
+        if transaction.stage == "reader.location.resolve" {
+            guard let layout = transaction.layout else {
+                throw failure("INVALID_LAYOUT", "book.open location resolve requires measured layout")
+            }
+            guard let bookId = transaction.payload["bookId"]?.stringValue, !bookId.isEmpty else {
+                throw failure("MISSING_BOOK_ID", "book.open location resolve requires bookId")
+            }
+            var result: ReaderUIJSONPayload = [
+                "bookId": .string(bookId),
+                "chapterIndex": .number(Double(
+                    transaction.selectedChapterIndex ?? transaction.requestedChapterIndex
+                )),
+                "anchor": .object([
+                    "chapterOffset": .number(Double(layout.chapterOffset)),
+                    "chapterProgress": .number(layout.chapterProgress),
+                ]),
+                "layout": .object([
+                    "viewportWidth": .number(Double(layout.viewportWidth)),
+                    "viewportHeight": .number(Double(layout.viewportHeight)),
+                    "fontScale": .number(layout.fontScale),
+                ]),
+            ]
+            if let sourceId = transaction.payload["sourceId"]?.stringValue, !sourceId.isEmpty {
+                result["sourceId"] = .string(sourceId)
+            }
+            if let chapterTitle = transaction.payload["chapterTitle"]?.stringValue, !chapterTitle.isEmpty {
+                result["chapterTitle"] = .string(chapterTitle)
+            }
+            return result
+        }
         var payload = transaction.payload
         payload["sourceKind"] = .string(transaction.sourceKind)
         payload["chapterIndex"] = .number(Double(transaction.selectedChapterIndex ?? transaction.requestedChapterIndex))
@@ -2029,6 +2134,38 @@ public final class ReaderUIRuntime {
             throw failure("INVALID_JSON_RESULT", "result.\(key) must be an integer JSON number or numeric string")
         }
         return integer
+    }
+
+    private func optionalCanonicalLocation(_ result: ReaderUIJSONResult) -> ReaderUICanonicalLocation? {
+        guard case .object(let value)? = result["canonicalLocation"],
+              let bookId = value["bookId"]?.stringValue, !bookId.isEmpty,
+              let chapterIndex = value["chapterIndex"]?.intValue, chapterIndex >= 0,
+              let chapterOffset = value["chapterOffset"]?.intValue, chapterOffset >= 0,
+              let chapterProgress = value["chapterProgress"]?.doubleValue,
+              chapterProgress.isFinite, chapterProgress >= 0, chapterProgress <= 1,
+              let locationRevision = value["locationRevision"]?.stringValue,
+              !locationRevision.isEmpty else {
+            return nil
+        }
+        return ReaderUICanonicalLocation(
+            bookId: bookId,
+            chapterIndex: chapterIndex,
+            chapterOffset: chapterOffset,
+            chapterProgress: chapterProgress,
+            locationRevision: locationRevision
+        )
+    }
+
+    private func optionalLocationReflow(_ result: ReaderUIJSONResult) -> ReaderUILocationReflow? {
+        guard result["resolved"]?.boolValue == true,
+              case .object(let value)? = result["reflow"],
+              value["strategy"]?.stringValue == "offsetAnchor",
+              value["primaryAnchor"]?.stringValue == "chapterOffset",
+              value["fallbackAnchor"]?.stringValue == "chapterProgress",
+              value["layoutIndependent"]?.boolValue == true else {
+            return nil
+        }
+        return ReaderUILocationReflow()
     }
 
     private func checkGuards(_ descriptor: RuntimeActionDescriptor, event: String) throws {

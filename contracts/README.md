@@ -117,7 +117,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 contracts/
   *.schema.json          # 23 个契约 schema
   fixtures/              # 1314 项可被 schema 扫描的 fixtures
-  tests/                 # 34 个测试文件 + validate.mjs
+  tests/                 # 35 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 

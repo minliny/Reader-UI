@@ -11,9 +11,11 @@ import { GENERATED_RUNTIME_TYPED_PAYLOAD_CONTRACTS } from '../main/ets/Generated
 import {
   READER_FOREGROUND_TIMER_ARM,
   READER_FOREGROUND_TIMER_CANCEL,
+  ReaderUICanonicalLocation,
   ReaderUIEffect,
   ReaderUIJSONPayload,
   ReaderUIJSONValue,
+  ReaderUILocationReflow,
   ReaderUIPageLayout,
   ReaderUIRuntime,
   ReaderUIRuntimeError,
@@ -22,7 +24,61 @@ import {
   validateReaderUITypedResult
 } from '../main/ets/ReaderUIRuntime'
 
-function activeReaderRuntime(pageIndex: number = 0, canonicalLocation?: string): ReaderUIRuntime {
+function resolvedLocation(
+  bookId: string = 'book-1',
+  chapterIndex: number = 4,
+  chapterOffset: number = 120,
+  chapterProgress: number = 0.42
+): ReaderUICanonicalLocation {
+  return {
+    bookId: bookId,
+    chapterIndex: chapterIndex,
+    chapterOffset: chapterOffset,
+    chapterProgress: chapterProgress,
+    locationRevision: `reader-location-v1:${bookId}:${chapterIndex}:${chapterOffset}`
+  }
+}
+
+function resolvedReflow(): ReaderUILocationReflow {
+  return {
+    strategy: 'offsetAnchor',
+    primaryAnchor: 'chapterOffset',
+    fallbackAnchor: 'chapterProgress',
+    layoutIndependent: true
+  }
+}
+
+function resolvedLocationJSON(
+  bookId: string = 'book-1',
+  chapterIndex: number = 4,
+  chapterOffset: number = 120,
+  chapterProgress: number = 0.42
+): ReaderUIJSONPayload {
+  const canonicalLocation: ReaderUIJSONPayload = {
+    'bookId': bookId,
+    'chapterIndex': chapterIndex,
+    'chapterOffset': chapterOffset,
+    'chapterProgress': chapterProgress,
+    'locationRevision': `reader-location-v1:${bookId}:${chapterIndex}:${chapterOffset}`
+  }
+  const reflow: ReaderUIJSONPayload = {
+    'strategy': 'offsetAnchor',
+    'primaryAnchor': 'chapterOffset',
+    'fallbackAnchor': 'chapterProgress',
+    'layoutIndependent': true
+  }
+  return {
+    'canonicalLocation': canonicalLocation,
+    'resolverVersion': 'reader.location.resolve.v1.reflow',
+    'resolved': true,
+    'reflow': reflow
+  }
+}
+
+function activeReaderRuntime(
+  pageIndex: number = 0,
+  canonicalLocation: ReaderUICanonicalLocation = resolvedLocation()
+): ReaderUIRuntime {
   const state: ReaderUIState = {
     routeId: 'immersive-reading',
     routeStack: ['bookshelf'],
@@ -30,7 +86,8 @@ function activeReaderRuntime(pageIndex: number = 0, canonicalLocation?: string):
     loading: false,
     reducedMotion: false,
     readerPageIndex: pageIndex,
-    readerCanonicalLocation: canonicalLocation
+    readerCanonicalLocation: canonicalLocation,
+    readerLocationReflow: resolvedReflow()
   }
   return new ReaderUIRuntime(state)
 }
@@ -127,35 +184,38 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('recursive JSON result boundary preserves types and fails closed', 0, (): void => {
-      const runtime: ReaderUIRuntime = activeReaderRuntime(2, 'old')
+      const oldLocation: ReaderUICanonicalLocation = resolvedLocation('book-1', 4, 80, 0.3)
+      const runtime: ReaderUIRuntime = activeReaderRuntime(2, oldLocation)
       runtime.dispatch('reader.page.next', {}, 'json-result')
       runtime.providePageLayout('json-result', measuredPageLayout(3))
 
-      const result: ReaderUIJSONPayload = {
-        'canonicalLocation': 'chapter-4:p3',
-        'pageIndex': 3
-      }
+      const result: ReaderUIJSONPayload = resolvedLocationJSON()
       expect(runtime.acceptPageLocationJSONResult('json-result', result).accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(2)
       expect(runtime.acceptPageProgressJSONResult('json-result', { 'stored': true }).accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(3)
-      expect(runtime.state.readerCanonicalLocation).assertEqual('chapter-4:p3')
+      expect(runtime.state.readerCanonicalLocation?.bookId).assertEqual('book-1')
+      expect(runtime.state.readerCanonicalLocation?.chapterOffset).assertEqual(120)
+      expect(runtime.state.readerLocationReflow?.layoutIndependent).assertTrue()
 
       runtime.dispatch('reader.page.next', {}, 'json-result-invalid')
       runtime.providePageLayout('json-result-invalid', measuredPageLayout(4))
-      const invalidMetadata: ReaderUIJSONPayload = { 'ratio': Number.NaN }
       let invalidCode: string = ''
       try {
         runtime.acceptPageLocationJSONResult('json-result-invalid', {
-          'canonicalLocation': 'chapter-4:p4',
+          'canonicalLocation': resolvedLocation(),
+          'resolverVersion': 'reader.location.resolve.v1.reflow',
+          'resolved': true,
+          'reflow': resolvedReflow(),
           'pageIndex': 4,
-          'metadata': invalidMetadata
         })
       } catch (error) {
         invalidCode = (error as ReaderUIRuntimeError).code
       }
-      expect(invalidCode).assertEqual('INVALID_JSON_RESULT')
+      expect(invalidCode).assertEqual('INVALID_TYPED_RESULT')
       expect(runtime.state.pageTransaction?.stage).assertEqual('resolving-location')
+      expect(runtime.state.readerPageIndex).assertEqual(3)
+      expect(runtime.state.readerCanonicalLocation?.chapterOffset).assertEqual(120)
     })
 
     it('generated typed payload fixtures have exact parity', 0, (): void => {
@@ -177,7 +237,7 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('generated typed result fixtures have exact parity', 0, (): void => {
-      expect(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.length).assertEqual(162)
+      expect(GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.length).assertEqual(165)
       GENERATED_RUNTIME_TYPED_RESULT_FIXTURES.forEach((fixture: RuntimeTypedResultFixture): void => {
         if (fixture.valid) {
           expect(validateReaderUITypedResult(fixture.event, fixture.effectType, fixture.result).effectKind.length > 0)
@@ -195,7 +255,8 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('page commits only matching canonical result and ignores late result', 0, (): void => {
-      const runtime: ReaderUIRuntime = activeReaderRuntime(4, 'old-location')
+      const oldLocation: ReaderUICanonicalLocation = resolvedLocation('book-1', 4, 80, 0.3)
+      const runtime: ReaderUIRuntime = activeReaderRuntime(4, oldLocation)
       const start = runtime.dispatch('reader.page.next', {}, 'page-1')
       expect(start.effects.length).assertEqual(0)
       expect(runtime.state.readerPageIndex).assertEqual(4)
@@ -217,26 +278,57 @@ export default function ReaderUIRuntimePlaybackTests(): void {
       }
       expect(invalidLayoutCode).assertEqual('INVALID_PAGE_LAYOUT')
       expect(runtime.state.pageTransaction?.stage).assertEqual('awaiting-layout')
-      expect(runtime.state.readerCanonicalLocation).assertEqual('old-location')
+      expect(runtime.state.readerCanonicalLocation?.chapterOffset).assertEqual(80)
 
       const resolving = runtime.providePageLayout('page-1', measuredPageLayout())
       expect(effectTypes(resolving.effects)).assertEqual('reader.location.resolve')
-      expect(runtime.acceptPageLocationResult('other', 'late', 5).accepted).assertFalse()
+      const resolvePayload: ReaderUIJSONPayload =
+        resolving.effects[0].jsonPayload as ReaderUIJSONPayload
+      const resolveAnchor: ReaderUIJSONPayload =
+        resolvePayload['anchor'] as ReaderUIJSONPayload
+      const resolveLayout: ReaderUIJSONPayload =
+        resolvePayload['layout'] as ReaderUIJSONPayload
+      expect(resolvePayload['bookId']).assertEqual('book-1')
+      expect(resolvePayload['chapterIndex']).assertEqual(4)
+      expect(resolveAnchor['chapterOffset']).assertEqual(120)
+      expect(resolveAnchor['chapterProgress']).assertEqual(0.42)
+      expect(resolveLayout['viewportWidth']).assertEqual(390)
+      expect(resolveLayout['viewportHeight']).assertEqual(844)
+      expect(resolveLayout['fontScale']).assertEqual(1)
+      expect(resolveLayout['pageIndex']).assertEqual(5)
+      expect(runtime.acceptPageLocationResult(
+        'other',
+        resolvedLocation(),
+        resolvedReflow()
+      ).accepted).assertFalse()
       expect(runtime.acceptPageLocationResult('page-1', undefined, undefined, 'LOCATION_FAILED').accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(4)
-      expect(runtime.state.readerCanonicalLocation).assertEqual('old-location')
-      expect(runtime.acceptPageLocationResult('page-1', 'late', 5).accepted).assertFalse()
+      expect(runtime.state.readerCanonicalLocation?.chapterOffset).assertEqual(80)
+      expect(runtime.acceptPageLocationResult(
+        'page-1',
+        resolvedLocation(),
+        resolvedReflow()
+      ).accepted).assertFalse()
 
       runtime.dispatch('reader.page.next', {}, 'page-invalid')
       runtime.providePageLayout('page-invalid', measuredPageLayout(5))
-      expect(runtime.acceptPageLocationResult('page-invalid', '   ', 5).accepted).assertTrue()
+      expect(runtime.acceptPageLocationResult(
+        'page-invalid',
+        resolvedLocation('other-book'),
+        resolvedReflow()
+      ).accepted).assertTrue()
       expect(runtime.state.error).assertEqual('PAGE_LOCATION_INVALID_RESULT')
       expect(runtime.state.readerPageIndex).assertEqual(4)
-      expect(runtime.state.readerCanonicalLocation).assertEqual('old-location')
+      expect(runtime.state.readerCanonicalLocation?.chapterOffset).assertEqual(80)
 
       runtime.dispatch('reader.page.prev', {}, 'page-2')
       runtime.providePageLayout('page-2', measuredPageLayout(3))
-      const persisting = runtime.acceptPageLocationResult('page-2', 'canonical-ch4-p3', 3)
+      const nextLocation: ReaderUICanonicalLocation = resolvedLocation()
+      const persisting = runtime.acceptPageLocationResult(
+        'page-2',
+        nextLocation,
+        resolvedReflow()
+      )
       expect(persisting.accepted).assertTrue()
       expect(effectTypes(persisting.effects)).assertEqual('reader.progress.update')
       expect(Object.keys(persisting.effects[0].jsonPayload).length).assertEqual(0)
@@ -265,27 +357,44 @@ export default function ReaderUIRuntimePlaybackTests(): void {
       expect(cancelBlockedCode).assertEqual('PAGE_PROGRESS_COMMIT_PENDING')
       expect(runtime.acceptPageProgressResult('page-2', true).accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(3)
-      expect(runtime.state.readerCanonicalLocation).assertEqual('canonical-ch4-p3')
-      expect(runtime.acceptPageLocationResult('page-2', 'duplicate', 9).accepted).assertFalse()
+      expect(runtime.state.readerCanonicalLocation?.locationRevision)
+        .assertEqual(nextLocation.locationRevision)
+      expect(runtime.acceptPageLocationResult(
+        'page-2',
+        resolvedLocation(),
+        resolvedReflow()
+      ).accepted).assertFalse()
 
       runtime.dispatch('reader.page.next', {}, 'page-progress-error')
       runtime.providePageLayout('page-progress-error', measuredPageLayout(4))
-      runtime.acceptPageLocationResult('page-progress-error', 'canonical-ch4-p4', 4)
+      runtime.acceptPageLocationResult(
+        'page-progress-error',
+        resolvedLocation(),
+        resolvedReflow()
+      )
       expect(runtime.acceptPageProgressResult(
         'page-progress-error',
         undefined,
         'PROGRESS_STORE_FAILED'
       ).accepted).assertTrue()
       expect(runtime.state.readerPageIndex).assertEqual(3)
-      expect(runtime.state.readerCanonicalLocation).assertEqual('canonical-ch4-p3')
+      expect(runtime.state.readerCanonicalLocation?.locationRevision)
+        .assertEqual(nextLocation.locationRevision)
       expect(runtime.state.error).assertEqual('PROGRESS_STORE_FAILED')
     })
 
     it('progress commit boundary blocks exit and book replacement without cross-route contamination', 0, (): void => {
-      const runtime: ReaderUIRuntime = activeReaderRuntime(2, 'book-a-page-2')
+      const runtime: ReaderUIRuntime = activeReaderRuntime(
+        2,
+        resolvedLocation('book-a', 4, 80, 0.3)
+      )
       runtime.dispatch('reader.page.next', {}, 'page-boundary')
       runtime.providePageLayout('page-boundary', measuredPageLayout(3))
-      runtime.acceptPageLocationResult('page-boundary', 'book-a-page-3', 3)
+      runtime.acceptPageLocationResult(
+        'page-boundary',
+        resolvedLocation('book-a'),
+        resolvedReflow()
+      )
 
       let exitCode: string = ''
       try {
@@ -346,7 +455,8 @@ export default function ReaderUIRuntimePlaybackTests(): void {
       expect(pageDuringOpenCode).assertEqual('BOOK_OPEN_TRANSACTION_PENDING')
       expect(runtime.acceptPageProgressResult('page-boundary', true).accepted).assertFalse()
       expect(runtime.state.readerPageIndex).assertEqual(3)
-      expect(runtime.state.readerCanonicalLocation).assertEqual('book-a-page-3')
+      expect(runtime.state.readerCanonicalLocation?.bookId).assertEqual('book-a')
+      expect(runtime.state.readerCanonicalLocation?.chapterOffset).assertEqual(120)
     })
 
     it('tts advances plan queue speech exactly once and tears down in order', 0, (): void => {
@@ -379,7 +489,7 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('auto page is one shot and manual page cancels the armed timer', 0, (): void => {
-      const runtime: ReaderUIRuntime = activeReaderRuntime(1, 'page-1')
+      const runtime: ReaderUIRuntime = activeReaderRuntime(1)
       const start = runtime.dispatch('reader.autoPage.start', { 'intervalMs': '5000' }, 'auto-1')
       expect(effectTypes(start.effects)).assertEqual(READER_FOREGROUND_TIMER_ARM)
       const timerPayload: ReaderUIJSONPayload = start.effects[0].jsonPayload as ReaderUIJSONPayload
@@ -397,7 +507,11 @@ export default function ReaderUIRuntimePlaybackTests(): void {
       expect(runtime.acceptAutoPageTimerFired('auto-1', generation).accepted).assertFalse()
       const pageCorrelation: string = runtime.state.pageTransaction?.correlationId ?? ''
       runtime.providePageLayout(pageCorrelation, measuredPageLayout(2))
-      const persisting = runtime.acceptPageLocationResult(pageCorrelation, 'page-2', 2)
+      const persisting = runtime.acceptPageLocationResult(
+        pageCorrelation,
+        resolvedLocation(),
+        resolvedReflow()
+      )
       expect(effectTypes(persisting.effects)).assertEqual('reader.progress.update')
       expect(runtime.state.readerPageIndex).assertEqual(1)
       const committed = runtime.acceptPageProgressResult(pageCorrelation, true)
@@ -421,7 +535,7 @@ export default function ReaderUIRuntimePlaybackTests(): void {
     })
 
     it('auto page rejects overlap and background cancels timer page and generation', 0, (): void => {
-      const runtime: ReaderUIRuntime = activeReaderRuntime(1, 'page-1')
+      const runtime: ReaderUIRuntime = activeReaderRuntime(1)
       runtime.dispatch('reader.autoPage.start', { 'intervalMs': '5000' }, 'auto-bg')
       const generation: number = runtime.state.autoPageTransaction?.generation ?? -1
       expect(runtime.acceptAutoPageTimerFired('auto-bg', generation + 1).accepted).assertFalse()
