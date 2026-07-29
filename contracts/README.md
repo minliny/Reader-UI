@@ -36,7 +36,7 @@ Native UI
 
 ## 已交付清单
 
-### Schema（22 个）
+### Schema（23 个）
 
 | 阶段 | Schema | 说明 |
 |---|---|---|
@@ -50,7 +50,7 @@ Native UI
 | Design intake | design-delta | 冻结 Figma revision、D0-D4 影响集、兼容/回滚、Host 证据和发布要求 |
 | Product capability | product-capability | 项目能力到 Figma、Reader-UI、Core/Host、原生 Host 的分层交付与验收状态 |
 
-### Fixtures（1333 项）
+### Fixtures（1314 项）
 
 - Phase 1：route 247 / ui-event 188 / ui-state 43 / view-state 183 / motion 95 / token 269
 - Phase 2：core-command 49 / core-event 35 / host-request 58 / host-result 58 / progress-location 6 / content 3 / sync-conflict 6
@@ -66,7 +66,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 
 ### Generated（48 个 =（15 个 native-codegen contract + ScreenGraph）× 3 端）
 
-22 个 contract schema 中，R18 的 2 个 device-conformance schema、platform-evidence-manifest、host-result、design-delta、product-capability 与 control-identity 是验证/证据边界；当前原生 enum/model codegen 仍以 15 个 contract schema（含 Reader 2 AppearanceSpec）加 ScreenGraph 为输入。
+23 个 contract schema 中，R18 的 2 个 device-conformance schema、platform-evidence-manifest、host-result、design-delta、product-capability 与 control-identity 是验证/证据边界；当前原生 enum/model codegen 仍以 15 个 contract schema（含 Reader 2 AppearanceSpec）加 ScreenGraph 为输入。
 
 - `generated/swift/` —— 16 个 .swift 文件
 - `generated/kotlin/` —— 16 个 .kt 文件
@@ -115,9 +115,9 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 
 ```text
 contracts/
-  *.schema.json          # 22 个契约 schema
-  fixtures/              # 1333 项可被 schema 扫描的 fixtures
-  tests/                 # 31 个测试文件 + validate.mjs
+  *.schema.json          # 23 个契约 schema
+  fixtures/              # 1314 项可被 schema 扫描的 fixtures
+  tests/                 # 34 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 

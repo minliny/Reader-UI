@@ -57,7 +57,7 @@ ReaderUIRuntime 持有共享的确定性 UiState 实例；Host 只持有 Ephemer
 - ✓ `design-delta.schema.json` —— Figma/Reader-UI/Core/Host 变更批次与发布事务
 - ✓ `product-capability.schema.json` —— 项目能力四层交付矩阵
 
-当前合计 22 个 schema、1333 项可扫描 fixtures；其中 platform evidence fixture 是 Slice 0–12 的 planned 空白模板，不增加任何平台完成分子。
+当前合计 23 个 schema、1314 项可扫描 fixtures；其中 platform evidence fixture 是 Slice 0–12 的 planned 空白模板，不增加任何平台完成分子。
 
 **FFI 协议**：
 - ✓ `ffi-protocol-version.md` —— FFI 协议版本 1.0.0
