@@ -320,7 +320,7 @@
   function sourceSwitchRollbackScreen(data, appState) { return sourceSwitchV2(data, "source-switch-rollback", appState); }
   function sourceSwitchPreviewScreen(data, appState) { return sourceSwitchV2(data, "source-switch-preview", appState); }
   var INTEGRATION_MAP = Object.freeze(ROUTES.reduce(function (map, route) { map[route] = "sourceSwitchV2"; return map; }, {}));
-  window.ReaderW3SourceSwitchRenderers = Object.freeze({
+  var w3Exports = {
     ROUTES: ROUTES, SOURCE_IDS: SOURCE_IDS, SOURCE_CONTROL_SPECS: SOURCE_CONTROL_SPECS, INTEGRATION_MAP: INTEGRATION_MAP,
     sourceSwitchV2: sourceSwitchV2, sourceSwitchEmptyScreen: sourceSwitchEmptyScreen,
     sourceSwitchErrorScreen: sourceSwitchErrorScreen, sourceSwitchTimeoutScreen: sourceSwitchTimeoutScreen,
@@ -328,6 +328,23 @@
     sourceSwitchPreviewScreen: sourceSwitchPreviewScreen,
     identity: identity, identityAttrs: identityAttrs, instrumentDom: instrumentDom,
     sourceSwitch: sourceSwitch
-  });
+  };
+  var w3PublicRouteSpecifications = {
+    sourceSwitchV2: { allowedRoutes: ROUTES, routeIndex: 1 },
+    sourceSwitchEmptyScreen: { allowedRoutes: ["source-switch-empty"], routeIndex: -1, fixedRoute: "source-switch-empty" },
+    sourceSwitchErrorScreen: { allowedRoutes: ["source-switch-error"], routeIndex: -1, fixedRoute: "source-switch-error" },
+    sourceSwitchTimeoutScreen: { allowedRoutes: ["source-switch-timeout"], routeIndex: -1, fixedRoute: "source-switch-timeout" },
+    sourceSwitchLoadingScreen: { allowedRoutes: ["source-switch-loading"], routeIndex: -1, fixedRoute: "source-switch-loading" },
+    sourceSwitchRollbackScreen: { allowedRoutes: ["source-switch-rollback"], routeIndex: -1, fixedRoute: "source-switch-rollback" },
+    sourceSwitchPreviewScreen: { allowedRoutes: ["source-switch-preview"], routeIndex: -1, fixedRoute: "source-switch-preview" }
+  };
+  w3Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(Object.keys(w3PublicRouteSpecifications).reduce(function (result, name) {
+    result[name] = Object.freeze(w3PublicRouteSpecifications[name].allowedRoutes.slice());
+    return result;
+  }, {}));
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    w3Exports = window.ReaderPublicRouteRendererAdmission.guardModule(w3Exports, w3PublicRouteSpecifications);
+  }
+  window.ReaderW3SourceSwitchRenderers = Object.freeze(w3Exports);
   if (typeof module !== "undefined" && module.exports) module.exports = window.ReaderW3SourceSwitchRenderers;
 })(typeof window !== "undefined" ? window : globalThis);

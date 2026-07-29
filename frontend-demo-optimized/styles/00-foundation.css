@@ -1391,32 +1391,8 @@ button:focus-visible {
   color: var(--fd-muted);
 }
 
-.fd-phone.has-book-focus .fd-book-card.is-cover-focused,
-.fd-phone.has-book-focus .fd-continue-cover-button.is-cover-focused {
-  position: relative;
-  z-index: calc(var(--fd-ds-z-dialog) + 1);
-}
-
-.fd-phone.has-book-focus .fd-book-card.is-cover-focused .fd-book-cover-frame,
-.fd-phone.has-book-focus .fd-continue-cover-button.is-cover-focused {
-  outline: 3px solid rgba(45, 74, 62, 0.82);
-  outline-offset: 3px;
-  box-shadow: 0 18px 30px rgba(31, 27, 23, 0.3);
-}
-
-.fd-book-focus-layer[aria-hidden="true"] {
-  display: none;
-}
-
 .fd-bookshelf-more-layer[aria-hidden="true"] {
   display: none;
-}
-
-.fd-book-focus-layer {
-  position: absolute;
-  inset: 0;
-  z-index: calc(var(--fd-ds-z-dialog) - 1);
-  pointer-events: none;
 }
 
 .fd-bookshelf-more-layer {
@@ -1426,35 +1402,11 @@ button:focus-visible {
   pointer-events: none;
 }
 
-.fd-book-focus-backdrop {
-  position: absolute;
-  inset: 0;
-  border-radius: var(--fd-radius-xl);
-  background: rgba(31, 27, 23, 0.34);
-  pointer-events: auto;
-}
-
 .fd-bookshelf-more-backdrop {
   position: absolute;
   inset: 0;
   border-radius: var(--fd-radius-xl);
   background: rgba(31, 27, 23, 0.18);
-  pointer-events: auto;
-}
-
-.fd-book-focus-menu {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: calc(var(--fd-ds-size-main-nav-height) + var(--fd-ds-safe-area-bottom) + 12px);
-  z-index: calc(var(--fd-ds-z-overlay) + 2);
-  display: grid;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid rgba(180, 166, 151, 0.54);
-  border-radius: var(--fd-radius-lg);
-  background: rgba(255, 252, 248, 0.97);
-  box-shadow: 0 22px 46px rgba(31, 27, 23, 0.22);
   pointer-events: auto;
 }
 

@@ -1406,23 +1406,31 @@
   }
 
   // ===== 导出 =====
-  window.ReaderW4ThemeFontTypographyRenderers = {
+  var w4ScreenMap = {
+    "reader-font-import-confirm": readerFontImportConfirmScreen,
+    "reader-font-delete-confirm": readerFontDeleteConfirmScreen,
+    "reader-font-fallback": readerFontFallbackScreen,
+    "reader-theme-new": readerThemeNewScreen,
+    "reader-theme-delete-confirm": readerThemeDeleteConfirmScreen,
+    "reader-typography-reset-confirm": readerTypographyResetConfirmScreen,
+    "reader-full-appearance": readerFullAppearanceScreen,
+    "reader-full-font": readerFullFontScreen,
+    "reader-full-theme": readerFullThemeScreen,
+    "reader-full-theme-edit": readerFullThemeEditScreen,
+    "reader-full-layout": readerFullLayoutScreen
+  };
+  var w4IntegrationMap = Object.keys(w4ScreenMap).reduce(function (result, route) {
+    result[route] = w4ScreenMap[route].name;
+    return result;
+  }, {});
+  var w4PublicRouteSpecifications = {
+    renderW4Route: { allowedRoutes: Object.keys(w4ScreenMap), routeIndex: 0, passthroughUnowned: true }
+  };
+  var w4Exports = {
     // 路由分发主入口
     renderW4Route,
     // 集成映射：route → screen 函数
-    screenMap: {
-      "reader-font-import-confirm": readerFontImportConfirmScreen,
-      "reader-font-delete-confirm": readerFontDeleteConfirmScreen,
-      "reader-font-fallback": readerFontFallbackScreen,
-      "reader-theme-new": readerThemeNewScreen,
-      "reader-theme-delete-confirm": readerThemeDeleteConfirmScreen,
-      "reader-typography-reset-confirm": readerTypographyResetConfirmScreen,
-      "reader-full-appearance": readerFullAppearanceScreen,
-      "reader-full-font": readerFullFontScreen,
-      "reader-full-theme": readerFullThemeScreen,
-      "reader-full-theme-edit": readerFullThemeEditScreen,
-      "reader-full-layout": readerFullLayoutScreen
-    },
+    screenMap: w4ScreenMap,
     // 数据/持久化辅助（供外部事件层调用）
     storage: {
       get: w4Get,
@@ -1451,18 +1459,21 @@
       fontCellFamily: w4FontCellFamily
     },
     // 集成映射（文本形式，供文档/校验）
-    INTEGRATION_MAP: {
-      "reader-font-import-confirm": "readerFontImportConfirmScreen",
-      "reader-font-delete-confirm": "readerFontDeleteConfirmScreen",
-      "reader-font-fallback": "readerFontFallbackScreen",
-      "reader-theme-new": "readerThemeNewScreen",
-      "reader-theme-delete-confirm": "readerThemeDeleteConfirmScreen",
-      "reader-typography-reset-confirm": "readerTypographyResetConfirmScreen",
-      "reader-full-appearance": "readerFullAppearanceScreen",
-      "reader-full-font": "readerFullFontScreen",
-      "reader-full-theme": "readerFullThemeScreen",
-      "reader-full-theme-edit": "readerFullThemeEditScreen",
-      "reader-full-layout": "readerFullLayoutScreen"
-    }
+    INTEGRATION_MAP: w4IntegrationMap
   };
+  w4Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze({
+    renderW4Route: Object.freeze(Object.keys(w4ScreenMap))
+  });
+  if (window.ReaderPublicRouteRendererAdmission) {
+    Object.keys(w4ScreenMap).forEach(function (route) {
+      w4ScreenMap[route] = window.ReaderPublicRouteRendererAdmission.wrap(
+        "screenMap." + w4IntegrationMap[route],
+        w4ScreenMap[route],
+        { allowedRoutes: [route], routeIndex: -1, fixedRoute: route }
+      );
+    });
+    w4Exports = window.ReaderPublicRouteRendererAdmission.guardModule(w4Exports, w4PublicRouteSpecifications);
+    w4Exports.screenMap = w4ScreenMap;
+  }
+  window.ReaderW4ThemeFontTypographyRenderers = w4Exports;
 })(window);

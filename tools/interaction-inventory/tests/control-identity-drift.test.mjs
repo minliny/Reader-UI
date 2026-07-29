@@ -953,7 +953,7 @@ test("R1.2 DOM identity map and ScreenGraph binding carry actionKey + instanceKe
   }
 });
 
-test("R1.2 nonInteractiveContainers retains 28 unstamped rows summing to 32 subcontrols", () => {
+test("R1.2 nonInteractiveContainers retains 20 unstamped rows summing to 24 subcontrols", () => {
   // R1.2 exit gate: the 46 settings rows must be marked
   // containsUnenumeratedSubcontrols=true and carry expectedSubcontrolType
   // AND expectedSubcontrolCount. The 17 pure ARIA section containers must be
@@ -964,8 +964,8 @@ test("R1.2 nonInteractiveContainers retains 28 unstamped rows summing to 32 subc
   const pureContainers = persistedNonInteractive.entries.filter(
     (e) => e.pureContainer === true,
   );
-  assert.equal(settingsRows.length, 28, "expected exactly 28 remaining settings rows with un-enumerated subcontrols");
-  assert.equal(pureContainers.length, 17, "expected exactly 17 pure containers");
+  assert.equal(settingsRows.length, 20, "expected exactly 20 remaining settings rows with un-enumerated subcontrols");
+  assert.equal(pureContainers.length, 9, "expected exactly 9 pure containers");
   assert.equal(
     settingsRows.length + pureContainers.length,
     persistedNonInteractive.entries.length,
@@ -986,11 +986,11 @@ test("R1.2 nonInteractiveContainers retains 28 unstamped rows summing to 32 subc
     );
   }
   // R1.2: expectedSubcontrolCount distribution:
-  //   switch: 1 each (28 rows -> 28)
-  //   select: 1 each (15 rows -> 15)
+  //   switch: 1 each (17 rows -> 17)
+  //   select: none
   //   stepper: 2 each (2 rows -> 4)
   //   segment: 3 each (1 row -> 3)
-  //   Total: 28 + 15 + 4 + 3 = 50
+  //   Total: 17 + 4 + 3 = 24
   const dist = new Map();
   let totalSubcontrols = 0;
   for (const row of settingsRows) {
@@ -998,18 +998,18 @@ test("R1.2 nonInteractiveContainers retains 28 unstamped rows summing to 32 subc
     totalSubcontrols += row.expectedSubcontrolCount;
   }
   const distSum = Array.from(dist.values()).reduce((a, b) => a + b, 0);
-  assert.equal(distSum, 28);
-  // Instrumented pilot controls are already semantic; 32 remain un-enumerated.
+  assert.equal(distSum, 20);
+  // Instrumented pilot controls are already semantic; 24 remain un-enumerated.
   assert.equal(
     totalSubcontrols,
-    32,
-    `expected total expectedSubcontrolCount=32, got ${totalSubcontrols}`,
+    24,
+    `expected total expectedSubcontrolCount=24, got ${totalSubcontrols}`,
   );
   // Persisted totals follow the remaining-container denominator.
   assert.equal(
     persistedNonInteractive.totals.totalExpectedSubcontrols,
-    32,
-    `totals.totalExpectedSubcontrols must be 32, got ${persistedNonInteractive.totals.totalExpectedSubcontrols}`,
+    24,
+    `totals.totalExpectedSubcontrols must be 24, got ${persistedNonInteractive.totals.totalExpectedSubcontrols}`,
   );
   // R1.2: verify per-type expectedSubcontrolCount values.
   for (const row of settingsRows) {

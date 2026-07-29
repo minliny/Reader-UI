@@ -59,10 +59,10 @@ function freshModules({ withPolicy = true } = {}) {
 
 test("public route renderers fail before producing local HTML for unclassified and retired routes", () => {
   const window = freshModules();
+  assert.equal(window.ReaderD2BookshelfDiscoverRenderers.bookshelfSearchSettingsV2, undefined);
+  assert.equal(window.ReaderD2BookshelfDiscoverRenderers.bookBatchManagementV2, undefined);
   const blockedCalls = [
     ["D2 settings dispatcher", () => window.ReaderD2SettingsSyncRenderers.renderD2Route("sync-settings-entry", {}, {}), /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/],
-    ["D2 bookshelf direct renderer", () => window.ReaderD2BookshelfDiscoverRenderers.bookshelfSearchSettingsV2({}, "bookshelf-search-settings", {}), /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/],
-    ["D2 stale alternate batch renderer", () => window.ReaderD2BookshelfDiscoverRenderers.bookBatchManagementV2({}, "book-batch-management", {}), /PUBLIC_RENDERER_ROUTE_UNBOUND/],
     ["W3 direct state renderer", () => window.ReaderW3SourceSwitchRenderers.sourceSwitchV2({}, "source-switch-results", {}), /RETIRED_FIGMA_VISUAL/],
     ["W4 dispatcher", () => window.ReaderW4ThemeFontTypographyRenderers.renderW4Route("reader-font-import-confirm", {}, {}, {}), /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/],
     ["W4 direct screen map", () => window.ReaderW4ThemeFontTypographyRenderers.screenMap["reader-font-import-confirm"]({}, {}), /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/],

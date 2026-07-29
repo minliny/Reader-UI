@@ -31,7 +31,7 @@
     {
       "label": "render-runtime.js route refs",
       "policy": "route",
-      "found": 98,
+      "found": 89,
       "unknown": 0,
       "approvedUnknown": 0,
       "unapproved": 0,

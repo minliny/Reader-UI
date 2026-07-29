@@ -19,7 +19,7 @@
 //   --check：仅比对，不写入；若内容不一致返回非 0 退出码
 //
 // 生成规则：
-//   - 12 页面族 exact gate：严格按 dispatch map 的 12 pageFamilies
+//   - 11 active 页面族 exact gate：严格按 dispatch map 的 11 pageFamilies
 //   - route-local occurrence 1:1：对 dispatch map 中每个 route，registry 在该 route
 //     上的所有 occurrence 都生成 declaration
 //   - renderer owner 来自 dispatch map，不是手写
@@ -49,7 +49,6 @@ const RUNTIME_EVENT_SCOPE_MATRIX_PATH = join(REPO_ROOT, "docs", "audits", "RUNTI
 const OUTPUT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "control-identity-declarations.js");
 const READER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "reader-runtime-contract.js");
 const RSS_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "rss-runtime-contract.js");
-const IMPORT_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "import-runtime-contract.js");
 const DISCOVER_RUNTIME_CONTRACT_PATH = join(REPO_ROOT, "frontend-demo-optimized", "discover-runtime-contract.js");
 const SOURCE_SWITCH_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "w3-source-switch-renderers.js");
 const SYNC_BACKUP_RENDERER_PATH = join(REPO_ROOT, "frontend-demo-optimized", "renderers", "d2-settings-sync-renderers.js");
@@ -77,23 +76,42 @@ const BOOKSHELF_ACTION_SPECS = [
   ["continue-cover", "route.push", "继续阅读封面"], ["continue-read", "route.push", "继续阅读"],
   ["view-cover", "bookshelf.view.switch", "封面视图"], ["view-list", "bookshelf.view.switch", "列表视图"],
   ["sort-filter-toggle", "bookshelf.sortFilter.open", "书架筛选"], ["search-toggle", "search.open", "书架搜索"],
-  ["display-settings", "route.push", "书架显示设置"], ["search-clear", "search.clear", "清除搜索"],
-  ["more-close", "dropdown.collapse", "关闭更多"], ["more-batch", "bookshelf.batchManagement.open", "批量管理"],
-  ["more-group", "bookshelf.groupManagement.open", "分组管理"], ["more-local-import", "bookshelf.localImport.open", "本地导入"],
-  ["more-settings", "route.push", "书架设置"], ["retry-load", "download.task.retry", "重试加载"],
+  ["search-clear", "search.clear", "清除搜索"],
+  ["more-close", "dropdown.collapse", "关闭更多"], ["more-local-import", "bookshelf.localImport.open", "本地导入"],
+  ["retry-load", "download.task.retry", "重试加载"],
   ["offline-view", "reader.content.offline", "离线查看"], ["retry-network", "download.task.retry", "重连"],
   ["empty-local-import", "bookshelf.localImport.open", "空书架本地导入"],
-  ["retry-local-import", "import.retry.failed", "重试本地导入"],
+  ["retry-local-import", "bookshelf.localImport.open", "重新打开本地导入"],
   ["import-backdrop", "import.cancel", "关闭本地导入弹窗"],
   ["import-choose-files", "import.start", "选择本地书文件"],
   ["import-cancel", "import.cancel", "取消本地导入"],
   ["import-finish", "import.apply", "完成本地导入"],
-  ["import-retry-failed", "import.retry.failed", "重试失败文件"],
-  ...["全部", "默认", "本地书", "追更"].map((v) => [`group-${v}`, "bookshelf.group.select", `分组 ${v}`]),
+  ["book-action-multi-select", "book.action", "书籍操作 多选"],
+  ["book-action-info", "book.action", "书籍操作 书籍信息"],
+  ["book-action-remove", "book.action", "书籍操作 移除书架"],
+  ["multi-select-exit", "selection.toolbar.exit", "退出书架多选"],
+  ["multi-select-all", "selection.group.toggle", "书架多选 全选"],
+  ["multi-select-remove", "selection.toolbar.action", "书架多选 移除书架"],
+  ["remove-dialog-cancel", "overlay.dialog.close", "取消移除书架"],
+  ["remove-dialog-confirm", "destructive.confirm.commit", "确认移除书架"],
   ...["最近更新", "阅读进度", "书名", "作者"].map((v) => [`sort-${v}`, "bookshelf.sortFilter.apply", `排序 ${v}`]),
   ...["全部", "未读", "已完结", "更新失败"].map((v) => [`filter-${v}`, "bookshelf.sortFilter.apply", `筛选 ${v}`]),
-  ...["long-night", "mystery-lord", "ming-dynasty-stories", "three-body", "renjian-cihua", "android-notes", "old-day-echoes", "among-stars", "lighthouse-and-fog", "paper-city", "long-title-layout-sample"].flatMap((id) => [
-    [`book-open-${id}`, "route.push", `打开 ${id}`], [`book-more-${id}`, "route.push", `更多 ${id}`]
+  ...[
+    ["source-youshu", "long-night"],
+    ["source-shucang", "mystery-lord"],
+    ["source-youshu", "ming-dynasty-stories"],
+    ["source-shucang", "three-body"],
+    ["source-youshu", "renjian-cihua"],
+    ["local", "android-notes"],
+    ["local", "old-day-echoes"],
+    ["local", "among-stars"],
+    ["source-youshu", "lighthouse-and-fog"],
+    ["source-shucang", "paper-city"],
+    ["source-youshu", "long-title-layout-sample"]
+  ].flatMap(([sourceId, id]) => [
+    [`book-open-${sourceId}--${id}`, "route.push", `打开 ${sourceId}/${id}`],
+    [`book-more-${sourceId}--${id}`, "book.action", `更多 ${sourceId}/${id}`],
+    [`multi-select-${sourceId}--${id}`, "selection.item.toggle", `多选 ${sourceId}/${id}`]
   ])
 ];
 
@@ -305,40 +323,6 @@ function rssRuntimeActionDeclarations() {
   });
 }
 
-function importRuntimeActionDeclarations() {
-  const contractModule = { exports: {} };
-  const contractWindow = {};
-  const source = readFileSync(IMPORT_RUNTIME_CONTRACT_PATH, "utf8");
-  Function("module", "window", "globalThis", source)(contractModule, contractWindow, contractWindow);
-  const specs = contractModule.exports.CONTROL_SPECS || contractWindow.ReaderImportRuntimeContract?.CONTROL_SPECS || [];
-  return specs.map((spec) => {
-    const entityKey = `import-conflict-resolve.control.button.${spec.settingsKey}`;
-    return {
-      entityKey,
-      controlKey: `${entityKey}@${spec.route}.${spec.state}`,
-      controlId: `import-conflict-resolve.control.${spec.route}.${spec.state}.button.${spec.settingsKey}`,
-      actionKey: spec.settingsKey,
-      instanceKey: null,
-      needsActionKey: false,
-      needsInstanceKey: false,
-      mappingStatus: "mapped",
-      uiEvent: spec.uiEvent,
-      route: spec.route,
-      state: spec.state,
-      domain: "import-conflict-resolve",
-      family: "control",
-      role: "button",
-      renderer: dispatchMap.routes[spec.route]?.renderer || "importConflictResolveScreen",
-      rendererFile: "render-runtime.js",
-      rendererSlot: `${dispatchMap.routes[spec.route]?.renderer || "importConflictResolveScreen"}@render-runtime.js`,
-      pageFamily: "import-conflict-resolve",
-      source: "import-conflict-action",
-      label: spec.label,
-      settingsKey: spec.settingsKey
-    };
-  });
-}
-
 function discoverRuntimeActionDeclarations() {
   const contractModule = { exports: {} };
   const contractWindow = {};
@@ -465,41 +449,8 @@ function restorePreviewActionDeclarations() {
       renderer: "restoreFlowV2",
       rendererFile: "renderers/d2-settings-sync-renderers.js",
       rendererSlot: "restoreFlowV2@renderers/d2-settings-sync-renderers.js",
-      pageFamily: "about-restore-preview",
+      pageFamily: "restore-preview",
       source: "restore-preview-action",
-      label: spec.label,
-      settingsKey: spec.settingsKey
-    };
-  });
-}
-
-function aboutActionDeclarations() {
-  const rendererWindow = {};
-  const source = readFileSync(SYNC_BACKUP_RENDERER_PATH, "utf8");
-  Function("window", "globalThis", source)(rendererWindow, rendererWindow);
-  const specs = rendererWindow.ReaderD2SettingsSyncRenderers?.ABOUT_CONTROL_SPECS || [];
-  return specs.map((spec) => {
-    const entityKey = `about.control.button.${spec.settingsKey}`;
-    return {
-      entityKey,
-      controlKey: `${entityKey}@${spec.route}.default`,
-      controlId: `about.control.${spec.route}.default.button.${spec.settingsKey}`,
-      actionKey: spec.settingsKey,
-      instanceKey: null,
-      needsActionKey: false,
-      needsInstanceKey: false,
-      mappingStatus: "mapped",
-      uiEvent: spec.uiEvent,
-      route: spec.route,
-      state: "default",
-      domain: "about",
-      family: "control",
-      role: "button",
-      renderer: "aboutScreenV2",
-      rendererFile: "renderers/d2-settings-sync-renderers.js",
-      rendererSlot: "aboutScreenV2@renderers/d2-settings-sync-renderers.js",
-      pageFamily: "about-restore-preview",
-      source: "about-action",
       label: spec.label,
       settingsKey: spec.settingsKey
     };
@@ -544,14 +495,12 @@ try {
 }
 
 // ---- Route → domain mapping (for subcontrol declarations) ----
-// 12 page families 中的 about-restore-preview 跨 system/sync 两个 domain，所以按 route 单独映射
+// restore-preview keeps its own sync domain while About remains explicitly retired.
 const ROUTE_DOMAIN = {
   "bookshelf": "library",
   "bookshelf-empty": "library",
   "bookshelf-cover-mode": "library",
   "bookshelf-list-mode": "library",
-  "bookshelf-book-more-menu": "library",
-  "bookshelf-search-settings": "library",
   "book-detail": "library",
   "book-detail-toc-preview": "library",
   "book-directory": "library",
@@ -559,14 +508,6 @@ const ROUTE_DOMAIN = {
   "search-loading": "library",
   "search-empty": "library",
   "search-error": "library",
-  "import-conflict-resolve": "import",
-  "import-duplicate": "import",
-  "import-empty-file": "import",
-  "import-format-unsupported": "import",
-  "import-parsing": "import",
-  "import-partial-success": "import",
-  "import-permission-denied": "import",
-  "import-result-detail": "import",
   "discover": "discover",
   "discover-home": "discover",
   "discover-control": "discover",
@@ -606,9 +547,6 @@ const ROUTE_DOMAIN = {
   "progress-sync": "sync",
   "progress-sync-status": "sync",
   "remote-webdav-books": "sync",
-  "about": "system",
-  "about-feedback": "system",
-  "about-version": "system",
   "restore-confirm": "sync",
   "restore-scopes": "sync",
   "restore-preview": "sync",
@@ -645,7 +583,6 @@ function hash8(input) {
 // ---- Build declarations from registry ----
 const targetRoutes = Object.keys(dispatchMap.routes);
 const targetRouteSet = new Set(targetRoutes);
-
 const registryEntries = registry.entries
   .filter(e => targetRouteSet.has(e.route))
   .sort((a, b) => {
@@ -841,9 +778,9 @@ if (missingBusinessKeys.length > 0) {
 
 // ---- Combine and sort declarations ----
 const PAGE_FAMILY_ORDER = [
-  "bookshelf", "book-detail", "reader-runtime", "search-results", "import-conflict-resolve",
+  "bookshelf", "book-detail", "reader-runtime", "search-results",
   "discover", "rss", "source-switch", "settings-general",
-  "source-management", "webdav-config", "sync-backup", "about-restore-preview"
+  "source-management", "webdav-config", "sync-backup", "restore-preview"
 ];
 
 function sourceRank(s) { return s === "registry" ? 0 : 1; }
@@ -851,24 +788,24 @@ function sourceRank(s) { return s === "registry" ? 0 : 1; }
 // Once a pilot control is stamped it leaves nonInteractiveContainers and moves
 // into the semantic inventory. Keep the original 50 business-key declarations
 // as the stable identity source rather than shrinking the declaration set.
-const effectiveSubcontrolDeclarations = preservedPilotSubcontrolDeclarations.length >= 50
-  ? preservedPilotSubcontrolDeclarations
+const activePreservedPilotActionDeclarations = preservedPilotActionDeclarations.filter((entry) => targetRouteSet.has(entry.route));
+const activePreservedPilotSubcontrolDeclarations = preservedPilotSubcontrolDeclarations.filter((entry) => targetRouteSet.has(entry.route));
+const effectiveSubcontrolDeclarations = activePreservedPilotSubcontrolDeclarations.length >= 50
+  ? activePreservedPilotSubcontrolDeclarations
   : subcontrolDeclarations;
 
 const allDeclarations = registryDeclarations
   .concat(effectiveSubcontrolDeclarations)
-  .concat(preservedPilotActionDeclarations)
+  .concat(activePreservedPilotActionDeclarations)
   .concat(bookshelfActionDeclarations())
   .concat(bookDetailActionDeclarations())
   .concat(searchResultsActionDeclarations())
   .concat(readerRuntimeActionDeclarations())
   .concat(rssRuntimeActionDeclarations())
-  .concat(importRuntimeActionDeclarations())
   .concat(discoverRuntimeActionDeclarations())
   .concat(sourceSwitchActionDeclarations())
   .concat(syncBackupActionDeclarations())
-  .concat(restorePreviewActionDeclarations())
-  .concat(aboutActionDeclarations());
+  .concat(restorePreviewActionDeclarations());
 
 // Scope-matrix rows with runtimeEligible=false are stable DOM/control identity
 // vocabulary, not released cross-platform UiEvent values. Apply this after all
@@ -998,17 +935,17 @@ function serializeDeclarations(decls, metaObj) {
   lines.push(" *   - VC3 / R3b：Figma 回写后的最终浏览器验证");
   lines.push(" *");
   lines.push(" * A0 三套分母（不混用）：");
-  lines.push(" *   - 13 个视觉/交互验收单元（12 非 Reader 页面族 + Settings General 试点）");
-  lines.push(" *   - 12 个 renderer-owner family（本文件覆盖的 pageFamilies）");
+  lines.push(" *   - 11 个 active 非 Reader 页面族；standalone import 与 About 已撤回");
+  lines.push(" *   - 11 个 renderer-owner family（本文件覆盖的 pageFamilies）");
   lines.push(" *   - 3,847 个 DOM occurrence（registry entries；当前可重算分母）");
   lines.push(" *");
-  lines.push(" * 范围（12 页面族 exact gate）：");
-  lines.push(" *   bookshelf / book-detail / search-results / import-conflict-resolve /");
+  lines.push(" * 范围（11 active 页面族 exact gate）：");
+  lines.push(" *   bookshelf / book-detail / search-results /");
   lines.push(" *   discover / rss / source-switch / settings-general / source-management /");
-  lines.push(" *   webdav-config / sync-backup / about-restore-preview");
+  lines.push(" *   webdav-config / sync-backup / restore-preview");
   lines.push(" *");
   lines.push(" * 数据来源：");
-  lines.push(" *   1. registry-backed 声明：从 R1.2 control-id-registry.json 投影 12 页面族下");
+  lines.push(" *   1. registry-backed 声明：从 R1.2 control-id-registry.json 投影 11 active 页面族下");
   lines.push(" *      每个 route 的所有 occurrence（route-local 1:1 对账，非全局集合）。");
   lines.push(" *      A0 (schema 1.3.0): 每个 declaration 携带 mappingStatus / actionKey /");
   lines.push(" *      instanceKey / rendererSlot 四字段；mappingStatus 派生自独立的");

@@ -65,10 +65,8 @@ const settingsViewportCss = [foundationCss, shellCss, settingsSourceCss, flowAda
 const settingsHomeEntryRoutes = [
   "settings-general",
   "settings-developer",
-  "bookshelf-search-settings",
   "source-management",
   "sync-backup",
-  "about-feedback",
 ];
 
 test("settings home stays inside the canonical MainTabShell viewport", () => {
@@ -135,7 +133,7 @@ test("settings bottom navigation is anchored independently of list height", () =
   assert.match(declaration(navRule, "z-index"), /--fd-ds-z-main-nav/);
 });
 
-test("all six settings-home entries render inside the shared bounded SettingsShell content region", () => {
+test("four admitted settings-home entries render inside the shared bounded content region", () => {
   const settingsHome = sourceSection(
     runtimeSource,
     "  function mainTabSettings(",
@@ -156,28 +154,27 @@ test("all six settings-home entries render inside the shared bounded SettingsShe
     "  var INTEGRATION_MAP = {",
     "  // ===========================================================================\n  // 路由分发主入口",
   );
-  const bookshelfSettings = sourceSection(
-    bookshelfRendererSource,
-    "  function bookshelfSearchSettingsV2(",
-    "  // ============ 发现数据提取 ============",
-  );
-
   for (const route of settingsHomeEntryRoutes) {
     assert.match(settingsHome, new RegExp(`route:\\s*["']${route}["']`), `${route} must remain a settings-home entry`);
   }
+  assert.doesNotMatch(settingsHome, /route:\s*["'](?:bookshelf-search-settings|about-feedback)["']/);
 
-  for (const route of ["settings-general", "source-management", "sync-backup", "about-feedback"]) {
+  for (const route of ["settings-general", "source-management", "sync-backup"]) {
     assert.match(d2IntegrationMap, new RegExp(`["']${route}["']:\\s*["'][^"']+["']`), `${route} must be owned by the shared D2 SettingsShell renderer`);
   }
+  assert.doesNotMatch(d2IntegrationMap, /["'](?:about|about-feedback|about-version)["']\s*:/);
 
   assert.match(d2SettingsShell, /contentClass:\s*["']fd-phone-content fd-settings-content fd-d2-settings-content["']/);
   // R2a: d2SettingsShell 现在支持 bottomActionHtml / sheetHtml / dialogHtml / trailingHtml
   // 作为 option（source-management 合法使用 bottom action bar：批量管理 + 新增书源）。
-  // 约束：必须默认空字符串，避免无 action 的页面（settings-general / sync-backup /
-  // about-feedback）预留 phantom fixed action row。
+  // 约束：必须默认空字符串，避免无 action 的页面（settings-general / sync-backup）
+  // 预留 phantom fixed action row。
   assert.match(d2SettingsShell, /bottomActionHtml:\s*options\.bottomActionHtml\s*\|\|\s*["']["']/, "d2SettingsShell bottomActionHtml defaults to empty string (no phantom action row for no-action entries)");
-  assert.match(bookshelfSettings, /contentClass:\s*["']fd-phone-content fd-settings-content["']/);
-  assert.doesNotMatch(bookshelfSettings, /bottomActionHtml\s*:/, "bookshelf/search settings has no fixed bottom action");
+  assert.doesNotMatch(
+    bookshelfRendererSource,
+    /bookshelfSearchSettingsV2|bookBatchManagementV2/,
+    "withdrawn Bookshelf settings and batch page renderers must be physically absent",
+  );
   assert.match(canonicalSettingsScreen, /contentClass:\s*["']fd-phone-content fd-settings-content["']/);
   assert.match(runtimeSource, /["']settings-developer["']:\s*\{\s*title:\s*["']开发模式["']/);
 });

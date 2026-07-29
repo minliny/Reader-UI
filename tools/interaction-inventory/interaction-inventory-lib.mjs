@@ -542,7 +542,7 @@ function localStorageStub() {
   };
 }
 
-export function createVmRenderer() {
+export function createVmRenderer(options = {}) {
   const window = {
     innerWidth: 390,
     innerHeight: 844,
@@ -567,6 +567,8 @@ export function createVmRenderer() {
     `${DEMO_ROOT}/appearance-spec.js`,
     `${DEMO_ROOT}/fixture.js`,
     `${DEMO_ROOT}/route-contract.js`,
+    `${DEMO_ROOT}/figma-route-admission-policy.js`,
+    `${DEMO_ROOT}/public-route-renderer-admission.js`,
     ...rendererSourcePaths(),
     // Match index.html's contract order: renderers first, canonical
     // declarations next, then runtime contracts that consume those
@@ -574,11 +576,49 @@ export function createVmRenderer() {
     `${DEMO_ROOT}/control-identity-declarations.js`,
     `${DEMO_ROOT}/reader-runtime-contract.js`,
     `${DEMO_ROOT}/rss-runtime-contract.js`,
-    `${DEMO_ROOT}/import-runtime-contract.js`,
     `${DEMO_ROOT}/discover-runtime-contract.js`,
   ];
   for (const sourcePath of sourcePaths) {
     new vm.Script(read(sourcePath), { filename: sourcePath }).runInContext(context, { timeout: 2_000 });
+    if (
+      options.auditUnadmittedCandidates === true
+      && sourcePath.endsWith("/public-route-renderer-admission.js")
+    ) {
+      const productionGuard = window.ReaderPublicRouteRendererAdmission;
+      window.ReaderPublicRouteRendererAdmission = Object.freeze(Object.assign({}, productionGuard, {
+        wrap(_rendererName, renderer) {
+          return renderer;
+        },
+        wrapMapped(_rendererName, renderer) {
+          return renderer;
+        },
+        guardModule(api) {
+          return api;
+        },
+      }));
+    }
+  }
+  const routeAdmissionPolicy = window.ReaderFigmaRouteAdmissionPolicy;
+  assert(routeAdmissionPolicy, "Figma route admission policy did not load");
+  if (options.auditUnadmittedCandidates === true) {
+    // IC0 is a source-audit tool, not a production renderer. It may inspect
+    // still-unbound local candidates so their identity debt remains visible,
+    // but it may never revive a route that the user explicitly retired.
+    window.ReaderFigmaRouteAdmissionPolicy = Object.freeze(Object.assign({}, routeAdmissionPolicy, {
+      assertRouteRenderable(routeId) {
+        const reason = routeAdmissionPolicy.blockedReason(routeId);
+        if (reason?.code === "RETIRED_FIGMA_VISUAL") {
+          return routeAdmissionPolicy.assertRouteRenderable(routeId);
+        }
+        return true;
+      },
+      assertContractStaticSurfaceNotAllowed() {
+        return true;
+      },
+      assertD6VisualRouteNotAllowed() {
+        return true;
+      },
+    }));
   }
 
   const runtimePath = `${DEMO_ROOT}/render-runtime.js`;
@@ -598,6 +638,7 @@ export function createVmRenderer() {
     motionDeclarations,
     motionRules: motionBindingRules(motionDeclarations),
     routeContract: window.ReaderFrontendDemoDraftRouteContract,
+    routeAdmissionPolicy,
     sourcePaths: [...sourcePaths, runtimePath],
     renderRoute(routeId, options = {}, appState = {}) {
       return String(window.__interactionInventoryRenderRoute(routeId, window.READER_FRONTEND_DEMO_DRAFT_FIXTURE, options, appState));
@@ -932,7 +973,7 @@ export function buildInteractionInventoryArtifacts() {
   const motionSchemaPath = "contracts/motion.schema.json";
   const motionSchema = JSON.parse(read(motionSchemaPath));
   const canonicalMotionIdSet = new Set(motionSchema.properties.id.enum);
-  const vmRenderer = createVmRenderer();
+  const vmRenderer = createVmRenderer({ auditUnadmittedCandidates: true });
   const cases = buildRenderCases(graph);
   const semanticControls = [];
   const suspectedNonSemanticControls = [];
@@ -941,10 +982,49 @@ export function buildInteractionInventoryArtifacts() {
   for (const renderCase of cases) {
     const viewState = viewStateForCase(renderCase);
     const options = { pageState: renderCase.variant.pageState, viewState };
-    const html = vmRenderer.renderRoute(renderCase.routeId, options, appStateForVariant(renderCase.variant));
+    const presentation = vmRenderer.routeContract.resolveRoutePresentation(renderCase.routeId, viewState);
+    const admissionReason = vmRenderer.routeAdmissionPolicy.blockedReason(renderCase.routeId);
+    if (admissionReason?.code === "RETIRED_FIGMA_VISUAL") {
+      caseCoverage.push({
+        routeId: renderCase.routeId,
+        resolvedRouteId: renderCase.resolvedRouteId,
+        aliasFor: renderCase.aliasFor,
+        runtimeFamily: presentation.family,
+        variantId: renderCase.variant.variantId,
+        pageState: renderCase.variant.pageState,
+        visualAdmission: "retired-fail-closed",
+        blockedReason: admissionReason.code,
+        semanticControls: 0,
+        suspectedNonSemanticControls: 0,
+        renderSha256: null,
+      });
+      continue;
+    }
+    let html;
+    try {
+      html = vmRenderer.renderRoute(renderCase.routeId, options, appStateForVariant(renderCase.variant));
+    } catch (error) {
+      const message = String(error instanceof Error ? error.message : error);
+      if (!/retired|no current exact Figma|UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL|PUBLIC_RENDERER_ROUTE_UNBOUND|GENERIC_CONTRACT_STATIC_RENDERER|D6.*NO_FIGMA_VISUAL/i.test(message)) {
+        throw error;
+      }
+      caseCoverage.push({
+        routeId: renderCase.routeId,
+        resolvedRouteId: renderCase.resolvedRouteId,
+        aliasFor: renderCase.aliasFor,
+        runtimeFamily: presentation.family,
+        variantId: renderCase.variant.variantId,
+        pageState: renderCase.variant.pageState,
+        visualAdmission: "audit-unavailable-fail-closed",
+        blockedReason: admissionReason?.code || "LOCAL_RENDERER_UNAVAILABLE",
+        semanticControls: 0,
+        suspectedNonSemanticControls: 0,
+        renderSha256: null,
+      });
+      continue;
+    }
     const root = parseHtmlFragment(html);
     const context = accessibilityContext(root);
-    const presentation = vmRenderer.routeContract.resolveRoutePresentation(renderCase.routeId, viewState);
     const semanticBefore = semanticControls.length;
     const suspectedBefore = suspectedNonSemanticControls.length;
     walkElements(root, (node) => {
@@ -983,6 +1063,8 @@ export function buildInteractionInventoryArtifacts() {
       runtimeFamily: presentation.family,
       variantId: renderCase.variant.variantId,
       pageState: renderCase.variant.pageState,
+      visualAdmission: admissionReason ? "audit-only-unbound" : "exact-figma-admitted",
+      blockedReason: admissionReason?.code || null,
       semanticControls: semanticControls.length - semanticBefore,
       suspectedNonSemanticControls: suspectedNonSemanticControls.length - suspectedBefore,
       renderSha256: sha256(html),
@@ -999,7 +1081,7 @@ export function buildInteractionInventoryArtifacts() {
       motionSchemaSha256: sha256(read(motionSchemaPath)),
       runtimeEventScopeMatrixPath: RUNTIME_EVENT_SCOPE_MATRIX_PATH,
       runtimeEventScopeMatrixSha256: sha256(read(RUNTIME_EVENT_SCOPE_MATRIX_PATH)),
-      rendererMode: "VM-rendered renderRoute with active index.html renderer modules",
+      rendererMode: "VM source audit with production modules; exact routes render normally, unbound candidates are audit-only, retired routes emit zero controls",
       rendererSourcePaths: vmRenderer.sourcePaths,
       rendererSourcesSha256: sha256(vmRenderer.sourcePaths.map((sourcePath) => `${sourcePath}\u0000${read(sourcePath)}`).join("\u0000")),
     },
@@ -1026,6 +1108,10 @@ export function buildInteractionInventoryArtifacts() {
       note: "Composite listbox containers are excluded from the control denominator; their actionable option descendants are counted.",
     },
     routeCases: cases.length,
+    exactFigmaAdmittedCases: caseCoverage.filter((item) => item.visualAdmission === "exact-figma-admitted").length,
+    auditOnlyUnboundCases: caseCoverage.filter((item) => item.visualAdmission === "audit-only-unbound").length,
+    retiredFailClosedCases: caseCoverage.filter((item) => item.visualAdmission === "retired-fail-closed").length,
+    auditUnavailableFailClosedCases: caseCoverage.filter((item) => item.visualAdmission === "audit-unavailable-fail-closed").length,
     canonicalRoutes: graph.routes.length,
     directVariantCases: graph.routes.filter((route) => route.status === "direct").reduce((total, route) => total + route.variants.length, 0),
     aliasCases: graph.routes.filter((route) => route.status === "alias").length,
@@ -1040,8 +1126,9 @@ export function buildInteractionInventoryArtifacts() {
     inventorySha256: sha256(formatJson(inventory)),
     cases: caseCoverage,
     proofBoundary: {
-      coverageMeans: "Every canonical direct ScreenGraph variant and every alias route can be VM-rendered; semantic controls and heuristic non-semantic interaction candidates are enumerated separately and deterministically.",
+      coverageMeans: "Every ScreenGraph case is classified. Exact routes render normally; unbound candidates are inspected only in the Node audit VM; explicitly retired routes emit zero controls.",
       coverageDoesNotMean: [
+        "Audit-only unbound candidates are admitted production visuals",
         "Controls are joined to canonical ScreenGraph component instances",
         "The heuristic suspected-nonsemantic scan proves that every visually clickable element was found",
         "Figma interactions match the Web renderer",

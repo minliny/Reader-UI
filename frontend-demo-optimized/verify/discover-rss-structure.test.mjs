@@ -44,6 +44,7 @@ function dataActionNames(source) {
 const indexSource = readDemoFile("index.html");
 const runtimeSource = readDemoFile("render-runtime.js");
 const routeContractSource = readDemoFile("route-contract.js");
+const admissionPolicySource = readDemoFile("figma-route-admission-policy.js");
 const d2BookshelfSource = readDemoFile("renderers/d2-bookshelf-discover-renderers.js");
 const d2RssSource = readDemoFile("renderers/d2-rss-renderers.js");
 
@@ -61,7 +62,7 @@ function evaluateRuntimeForStructureTest() {
     `  window.__renderRouteForStructureTest = renderRoute;\n  window.__discoverSortRouteForStructureTest = discoverSortRoute;\n\n${exportMarker}`,
   );
   return evaluateWindowScript(
-    instrumentedRuntime,
+    `${admissionPolicySource}\n${instrumentedRuntime}`,
     "render-runtime.js",
     {
       ReaderFrontendDemoDraftRouteContract: routeContract,
@@ -235,48 +236,34 @@ test("canonical RSS keeps its top bar, source, article, reader, and Library subp
   );
 });
 
-test("rss-refreshing contract and rendered shell are both LibraryShell", () => {
+test("rss-refreshing remains a contract route but cannot render without an exact Figma binding", () => {
   assert.equal(routeContract.routes["rss-refreshing"]?.shell, "LibraryShell");
   const runtimeWindow = evaluateRuntimeForStructureTest();
-
-  const html = runtimeWindow.__renderRouteForStructureTest(
-    "rss-refreshing",
-    {},
-    {},
-    {},
+  assert.throws(
+    () => runtimeWindow.__renderRouteForStructureTest("rss-refreshing", {}, {}, {}),
+    /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/,
   );
-  assert.match(html, /data-test-shell="LibraryShell"/);
-  assert.match(html, /data-test-title="刷新订阅"/);
-  assert.doesNotMatch(html, /data-test-shell="MainTabShell"/);
 });
 
-test("Discover sort selection resolves and replaces the current route with its deep sort route", () => {
+test("Discover sort selection stays inside the single admitted discover-sort page", () => {
   const runtimeWindow = evaluateRuntimeForStructureTest();
-  const sortRoutes = new Map([
-    ["人气", "discover-sort-popularity"],
-    ["更新", "discover-sort-update"],
-    ["收藏", "discover-sort-collection"],
-    ["完本", "discover-sort-finished"],
-    ["字数", "discover-sort-words"],
-  ]);
-
-  for (const [label, route] of sortRoutes) {
+  for (const label of ["人气", "更新", "收藏", "完本", "字数"]) {
     assert.equal(
       runtimeWindow.__discoverSortRouteForStructureTest(label),
-      route,
-      `${label} must resolve to ${route}`,
+      "discover-sort",
+      `${label} must remain in discover-sort`,
     );
     const html = runtimeWindow.__renderRouteForStructureTest(
-      route,
+      "discover-sort",
       {},
       {},
-      { discoverFilterOpen: true },
+      { discoverFilterOpen: true, discoverSort: label },
     );
     assert.match(html, new RegExp(`<em>[^<]*${label}</em>`));
     assert.match(
       html,
       new RegExp(`<button class="is-active"[^>]*data-discover-sort-option="${label}"`),
-      `${route} must render ${label} as the selected sort option`,
+      `discover-sort must render ${label} as the selected sort option`,
     );
   }
 
@@ -288,40 +275,24 @@ test("Discover sort selection resolves and replaces the current route with its d
   assert.match(
     sortInteraction,
     /replaceTopRoute\(\s*discoverSortRoute\(/,
-    "choosing a sort option must replace the open discover-sort route with the selected deep route",
+    "choosing a sort option must replace the stack top with the admitted discover-sort route",
   );
 });
 
-test("all ten RSS confirmation routes retain their canonical origin under a modal overlay", () => {
+test("unbound RSS confirmation routes fail closed instead of fabricating modal overlays", () => {
   const runtimeWindow = evaluateRuntimeForStructureTest();
-  const confirmOrigins = new Map([
-    ["rss-source-delete-confirm", "fd-rss-action-source-card"],
-    ["rss-source-login-clear", "fd-rss-action-grid-compact"],
-    ["rss-source-pin", "fd-rss-action-source-card"],
-    ["rss-source-disable", "fd-rss-action-source-card"],
-    ["rss-source-batch-disable", "fd-rss-batch-list"],
-    ["rss-record-clear", "fd-rss-record-list"],
-    ["rss-rule-subscription-apply", "fd-rss-import-list"],
-    ["rss-favorite-add", "fd-rss-reader-page"],
-    ["rss-favorite-remove", "fd-rss-favorite-filter-control"],
-    ["rss-favorite-clear", "fd-rss-favorite-filter-control"],
-  ]);
-
-  assert.equal(confirmOrigins.size, 10);
-  for (const [route, originClass] of confirmOrigins) {
-    const html = runtimeWindow.__renderRouteForStructureTest(route, {}, {}, {});
-    assert.match(
-      html,
-      new RegExp(`class="[^"]*${originClass}[^"]*"`),
-      `${route} must retain its canonical origin page`,
+  const routes = [
+    "rss-source-delete-confirm", "rss-source-login-clear", "rss-source-pin",
+    "rss-source-disable", "rss-source-batch-disable", "rss-record-clear",
+    "rss-rule-subscription-apply", "rss-favorite-add", "rss-favorite-remove",
+    "rss-favorite-clear",
+  ];
+  for (const route of routes) {
+    assert.throws(
+      () => runtimeWindow.__renderRouteForStructureTest(route, {}, {}, {}),
+      /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/,
+      route,
     );
-    assert.match(
-      html,
-      /class="[^"]*fd-rss-confirm-(?:card|dialog)[^"]*"/,
-      `${route} must append an RSS confirmation overlay`,
-    );
-    assert.match(html, /role="dialog"/, `${route} confirmation must have dialog semantics`);
-    assert.match(html, /aria-modal="true"/, `${route} confirmation must be modal`);
   }
 });
 
@@ -349,7 +320,7 @@ test("RSS source and article rows expose stable context ids", () => {
   assert.ok(articleIds.every(Boolean), "article context ids must not be empty");
 });
 
-test("RSS group, management, and favorite list renderers consume their filter state", () => {
+test("RSS root consumes its bound filter state while unbound management pages fail closed", () => {
   const runtimeWindow = evaluateRuntimeForStructureTest();
 
   const groupedHome = runtimeWindow.__renderRouteForStructureTest(
@@ -366,33 +337,24 @@ test("RSS group, management, and favorite list renderers consume their filter st
   assert.match(groupedSources, /阅读器版本讨论/);
   assert.doesNotMatch(groupedSources, /GitHub Releases|书源维护公告|本地系统通知/);
 
-  const pausedManagement = runtimeWindow.__renderRouteForStructureTest(
-    "rss-subscription-management",
-    {},
-    {},
-    { rssManageFilter: "暂停" },
+  assert.throws(
+    () => runtimeWindow.__renderRouteForStructureTest(
+      "rss-subscription-management",
+      {},
+      {},
+      { rssManageFilter: "暂停" },
+    ),
+    /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/,
   );
-  const managedSources = sourceSection(
-    pausedManagement,
-    '<section class="fd-rss-source-list"',
-    "</section>",
+  assert.throws(
+    () => runtimeWindow.__renderRouteForStructureTest(
+      "rss-starred",
+      {},
+      {},
+      { rssFavoriteFilter: "社区" },
+    ),
+    /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/,
   );
-  assert.match(managedSources, /本地系统通知/);
-  assert.doesNotMatch(managedSources, /GitHub Releases|阅读器版本讨论|书源维护公告/);
-
-  const communityFavorites = runtimeWindow.__renderRouteForStructureTest(
-    "rss-starred",
-    {},
-    {},
-    { rssFavoriteFilter: "社区" },
-  );
-  const favoriteArticles = sourceSection(
-    communityFavorites,
-    '<section class="fd-rss-article-list"',
-    "</section>",
-  );
-  assert.match(favoriteArticles, /阅读器路线图讨论摘要/);
-  assert.doesNotMatch(favoriteArticles, /Reader UI 前端输入件更新说明/);
 });
 
 test("unbound D2-only RSS actions cannot leak back into canonical Discover or RSS", () => {

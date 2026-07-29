@@ -1,0 +1,165 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "READER_UI_SOURCE_CONVERSION",
+  "phase": "B2",
+  "scope": "bookshelf",
+  "recordIds": [
+    "bookshelf.page",
+    "bookshelf.book-card",
+    "bookshelf.action-sheet",
+    "bookshelf.multi-select",
+    "bookshelf.local-import-dialog"
+  ],
+  "capturedAt": "2026-07-30T00:00:00+08:00",
+  "figmaSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "officialRevision": "2379851596474967636",
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "page": {
+      "pageId": "834:3",
+      "canonicalMasterId": "941:6",
+      "phoneNodeId": "941:3",
+      "tabletNodeId": "941:5"
+    },
+    "bookCard": {
+      "pageId": "259:10",
+      "canonicalMasterId": "493:196"
+    },
+    "bookActionSheet": {
+      "pageId": "259:10",
+      "canonicalMasterId": "2903:1737",
+      "actions": [
+        "多选",
+        "书籍信息",
+        "移除书架"
+      ]
+    },
+    "multiSelect": {
+      "pageId": "259:10",
+      "canonicalMasterId": "2956:1266",
+      "variantNodeIds": [
+        "2955:1038",
+        "2956:1038",
+        "2956:1102",
+        "2956:1211"
+      ],
+      "v1Boundary": "进入时只预选长按书籍；只提供选择、全选、取消和移除书架，不提供分组。"
+    },
+    "localImport": {
+      "pageId": "259:10",
+      "canonicalMasterId": "2657:918",
+      "variantNodeIds": [
+        "2657:916",
+        "2899:58923",
+        "2657:917"
+      ],
+      "flow": "系统多选 TXT/EPUB -> 单一加载动画 -> 可滚动逐书成功/失败结果 -> 确认关闭",
+      "prohibited": [
+        "独立导入页面",
+        "进度条",
+        "失败原因分析",
+        "重试按钮"
+      ]
+    },
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true
+    },
+    "noFabricatedRevision": true
+  },
+  "readerUiConversion": {
+    "targets": [
+      "frontend-demo-optimized/fixture.js",
+      "frontend-demo-optimized/render-runtime.js",
+      "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
+      "frontend-demo-optimized/styles/09-import-workflow.css",
+      "frontend-demo-optimized/styles/12-bookshelf-vc3.css"
+    ],
+    "identity": "Every canonical book carries sourceId, sourceType, and bookId. Runtime identity and navigation use the exact sourceId::bookId pair; title, author, ordinal, selector, and DOM position are not identity sources.",
+    "interaction": {
+      "coverTap": "open the reader directly with the exact source/book pair",
+      "coverLongPress": "open the in-place Figma BookActionSheet",
+      "bookInformation": "open book detail with the exact source/book pair",
+      "multiSelect": "render the in-place Figma MultiSelect state; preselect only the long-pressed book",
+      "remove": "confirm -> loading -> success/failed with duplicate-click and stale-result guards",
+      "localImport": "system multi-select -> importing spinner -> per-book result -> close",
+      "localBookSourceSwitch": "fail closed; a local book never renders or enters source switching"
+    },
+    "retiredVisuals": [
+      "bookshelf-book-more-menu route",
+      "book-batch-management route",
+      "group-management routes",
+      "standalone local-import page",
+      "legacy import error/conflict pages",
+      "bookshelf-search-settings without a current exact Figma binding",
+      "tablet list mode because its exact Figma visual is absent"
+    ],
+    "globalAdmissionCleanup": "Historical locally-authored About, Source Management Pilot overlays, and unbound Discover/RSS branches are denied at the public renderer boundary. This cleanup prevents a non-Figma fallback but does not claim those page families implementation-ready."
+  },
+  "behaviorOwnership": {
+    "bookContentAndProgress": "Reader Core",
+    "filePickerAndImportResult": "Host/Core",
+    "bookshelfTransientState": "ReaderD2BookshelfDiscoverRenderers.bookshelf",
+    "staticVisualAuthority": "current registered Figma nodes at revision 2379851596474967636"
+  },
+  "verification": {
+    "focusedBookshelf": {
+      "tests": 61,
+      "passed": 61,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/bookshelf-view-structure.test.mjs",
+        "frontend-demo-optimized/verify/r3a-bookshelf-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-bookshelf-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-bookshelf-aria-focus.test.mjs",
+        "frontend-demo-optimized/verify/r3a-bookshelf-multi-select.test.mjs",
+        "frontend-demo-optimized/verify/r3a-local-import-popup.test.mjs"
+      ]
+    },
+    "frontendRegression": {
+      "tests": 577,
+      "passed": 577,
+      "failed": 0
+    },
+    "identityInventoryRegression": {
+      "tests": 87,
+      "passed": 87,
+      "failed": 0
+    },
+    "contractRegressionExcludingReleaseAndDeviceEvidence": {
+      "tests": 471,
+      "passed": 471,
+      "failed": 0,
+      "excludedSuites": [
+        "contracts/tests/device-conformance-kit.test.mjs",
+        "contracts/tests/release-manifest.test.mjs"
+      ],
+      "reason": "Those suites validate B7 device/release evidence and the intentionally unreleased UI manifest; B2 neither updates nor claims them."
+    },
+    "generatedArtifacts": {
+      "status": "byte-stable",
+      "semanticControls": 3208,
+      "canonicalDeclarations": 2151,
+      "reconciliation": "12/12 pass"
+    },
+    "notExecuted": [
+      "promotion",
+      "HarmonyOS consumer mutation",
+      "HarmonyOS build",
+      "virtual machine",
+      "real device",
+      "release manifest refresh"
+    ]
+  },
+  "boundaries": {
+    "figmaMutation": false,
+    "harmonyOSMutation": false,
+    "promotionExecuted": false,
+    "machineReceiptStage": "B7",
+    "releaseIdentityStage": "B7",
+    "otherPageFamiliesClaimedReady": false
+  }
+}

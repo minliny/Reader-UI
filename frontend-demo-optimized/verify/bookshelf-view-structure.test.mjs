@@ -43,8 +43,8 @@ function rendererWindow() {
 }
 
 const books = [
-  { bookId: "long-night", title: "长夜余火", author: "爱潜水的乌贼", chapter: "第 32 章 雨夜", coverKey: "longNight" },
-  { bookId: "android-notes", title: "Android 开发笔记", author: "本地文档", chapter: "Compose Shell 结构", coverKey: "androidNotes" },
+  { sourceId: "source-youshu", sourceType: "network", bookId: "long-night", title: "长夜余火", author: "爱潜水的乌贼", chapter: "第 32 章 雨夜", coverKey: "longNight" },
+  { sourceId: "local", sourceType: "local", bookId: "android-notes", title: "Android 开发笔记", author: "本地文档", chapter: "Compose Shell 结构", coverKey: "androidNotes" },
 ];
 
 const fixture = {
@@ -79,21 +79,24 @@ test("bookshelf cover and list modes render the same persistent BookItem identit
   assert.match(listHtml, /<section class="fd-book-grid[^>]*role="list"/);
   for (const tag of coverItems) {
     const bookId = attribute(tag, "data-book-id");
+    const sourceId = attribute(tag, "data-book-source-id");
     assert.equal(attribute(tag, "role"), "listitem");
-    assert.equal(attribute(tag, "data-motion-actor-key"), `bookshelf.book.${bookId}`);
+    assert.equal(attribute(tag, "data-motion-actor-key"), `bookshelf.book.${sourceId}::${bookId}`);
   }
   assert.deepEqual(coverItems.map((tag) => attribute(tag, "aria-posinset")), ["1", "2"]);
   assert.ok(coverItems.every((tag) => attribute(tag, "aria-setsize") === "2"));
 });
 
-test("canonical bookshelf fixture publishes eleven explicit unique book ids", () => {
+test("canonical bookshelf fixture publishes eleven explicit unique source/book identities", () => {
   const fixtureWindow = evaluateWindowScript(fixtureBundleSource, "appearance-spec+fixture.js");
   const fixtureBooks = fixtureWindow.READER_FRONTEND_DEMO_DRAFT_FIXTURE.mainTabs.books;
   const ids = fixtureBooks.map((book) => book.bookId);
+  const keys = fixtureBooks.map((book) => `${book.sourceId}::${book.bookId}`);
 
   assert.equal(fixtureBooks.length, 11);
   assert.ok(ids.every(Boolean));
-  assert.equal(new Set(ids).size, fixtureBooks.length);
+  assert.ok(fixtureBooks.every((book) => book.sourceId && book.sourceType));
+  assert.equal(new Set(keys).size, fixtureBooks.length);
 });
 
 test("the shipped stylesheet keeps the unified list row at the 72px static endpoint", () => {
@@ -116,7 +119,7 @@ test("each BookItem owns list metadata and a sibling more action without nested 
   assert.equal((html.match(/data-book-source-type=/g) || []).length, books.length);
   assert.equal((html.match(/data-book-cached=/g) || []).length, books.length);
   assert.equal((html.match(/data-book-more/g) || []).length, books.length);
-  assert.equal((html.match(/data-route="bookshelf-book-more-menu"/g) || []).length, books.length);
+  assert.equal((html.match(/data-route="bookshelf-book-more-menu"/g) || []).length, 0);
   assert.match(html, /data-book-list-detail[^>]*aria-hidden="true"/);
 });
 
@@ -335,23 +338,22 @@ test("each more action carries its source index and the runtime opens that book 
     Array.from(data.mainTabs.books, (book) => book.bookId),
   );
 
-  const routeBindingStart = runtimeSource.indexOf('screenHost.querySelectorAll("[data-route]")');
-  const routeBindingEnd = runtimeSource.indexOf('screenHost.querySelectorAll("[data-book-cover]")', routeBindingStart);
-  const routeBinding = runtimeSource.slice(routeBindingStart, routeBindingEnd);
-  assert.match(routeBinding, /targetEl\.hasAttribute\("data-book-focus-index"\)/);
-  assert.match(routeBinding, /appState\.bookFocusIndex\s*=/);
-  assert.match(routeBinding, /appState\.bookshelfFocusBookId\s*=/);
-  assert.match(runtimeSource, /focusTarget\.focus\(\{ preventScroll: true \}\)/);
+  assert.match(runtimeSource, /screenHost\.querySelectorAll\("\[data-book-more\]"\)/);
+  assert.match(runtimeSource, /bookshelfOwner\.dispatch\(\{ type: "BOOK_ACTION_OPEN", bookKey \}\)/);
+  assert.match(runtimeSource, /dispatch\?\.\(\{ type: "MULTI_SELECT_OPEN", bookKey \}\)/);
+  assert.doesNotMatch(runtimeSource, /goTo\("book-batch-management", true\)/);
   assert.match(runtimeSource, /route === "bookshelf-list-mode"[\s\S]*appState\.bookshelfView = "list"/);
   assert.match(runtimeSource, /route === "bookshelf-cover-mode"[\s\S]*appState\.bookshelfView = "cover"/);
-  assert.match(rendererSource, /<button type="button" data-route-back>[^<]*\$\{icon\("chevron-left"/);
-  assert.doesNotMatch(rendererSource, /data-close-book-focus data-route="bookshelf"/);
-  assert.match(rendererSource, /fd-book-focus-menu[^>]*data-demo-dialog aria-hidden="false"/);
-  assert.match(rendererSource, /actionIndex === 0 \? " data-dialog-initial-focus"/);
+  assert.doesNotMatch(rendererSource, /fd-book-focus-menu|data-route="book-batch-management"|data-route="group-management"/);
 
   const focusIndex = 5;
   const focusedBook = data.mainTabs.books[focusIndex];
-  const menuHtml = api.bookshelfBookMoreMenuScreen(data, "bookshelf-book-more-menu", { bookFocusIndex: focusIndex });
-  assert.match(menuHtml, new RegExp(`<strong data-focus-title>${focusedBook.title}</strong>`));
-  assert.match(menuHtml, new RegExp(`data-book-focus-index="${focusIndex}"`));
+  api.bookshelf.dispatch({ type: "BOOK_ACTION_OPEN", bookKey: `${encodeURIComponent(focusedBook.sourceId)}::${encodeURIComponent(focusedBook.bookId)}` });
+  const menuHtml = api.bookActionSheetV2(data);
+  assert.match(menuHtml, new RegExp(`aria-label="${focusedBook.title}操作"`));
+  assert.equal((menuHtml.match(/data-book-action=/g) || []).length, 3);
+  assert.match(menuHtml, /data-book-action="multi-select"[\s\S]*>多选<\/button>/);
+  assert.match(menuHtml, /data-book-action="info"[\s\S]*>书籍信息<\/button>/);
+  assert.match(menuHtml, /data-book-action="remove"[\s\S]*>移除书架<\/button>/);
+  assert.doesNotMatch(menuHtml, /分组|移动至分组|缓存所选|标记已读/);
 });

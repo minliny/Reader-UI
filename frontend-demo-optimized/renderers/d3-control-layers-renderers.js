@@ -1081,5 +1081,28 @@
     icon: icon
   };
 
+  var d3PublicRouteSpecifications = {
+    renderD3Route: { allowedRoutes: Object.keys(INTEGRATION_MAP), routeIndex: 0, passthroughUnowned: true },
+    readerControlShowV2: { allowedRoutes: ["control-layer-base-v2"], routeIndex: -1, fixedRoute: "control-layer-base-v2" },
+    readerControlHideV2: { allowedRoutes: ["reader-control-hide"], routeIndex: -1, fixedRoute: "reader-control-hide" },
+    readerModuleSwitchV2: { allowedRoutes: ["reader-module-switch"], routeIndex: -1, fixedRoute: "reader-module-switch" },
+    readerDirectoryOverlayV2Enhanced: { allowedRoutes: ["reader-directory-overlay-v2"], routeIndex: -1, fixedRoute: "reader-directory-overlay-v2" },
+    readerAppearanceOverlayV2Enhanced: { allowedRoutes: ["reader-appearance-overlay-v2"], routeIndex: -1, fixedRoute: "reader-appearance-overlay-v2" },
+    readerTtsOverlayV2Enhanced: { allowedRoutes: ["reader-tts-overlay-v2"], routeIndex: -1, fixedRoute: "reader-tts-overlay-v2" },
+    readerSettingsOverlayV2Enhanced: { allowedRoutes: ["reader-settings-overlay-v2"], routeIndex: -1, fixedRoute: "reader-settings-overlay-v2" },
+    readerAutoScrollOverlayV2Enhanced: { allowedRoutes: ["reader-auto-scroll-overlay-v2"], routeIndex: -1, fixedRoute: "reader-auto-scroll-overlay-v2" },
+    readerSearchOverlayV2Enhanced: { allowedRoutes: ["reader-search-overlay-v2"], routeIndex: -1, fixedRoute: "reader-search-overlay-v2" },
+    readerReplaceOverlayV2Enhanced: { allowedRoutes: ["reader-replace-overlay-v2"], routeIndex: -1, fixedRoute: "reader-replace-overlay-v2" },
+    readerFullDirectoryV3: { allowedRoutes: ["reader-full-directory"], routeIndex: -1, fixedRoute: "reader-full-directory" },
+    readerFullTtsV3: { allowedRoutes: ["reader-full-tts"], routeIndex: -1, fixedRoute: "reader-full-tts" },
+    readerFullSettingsV3: { allowedRoutes: ["reader-full-settings"], routeIndex: -1, fixedRoute: "reader-full-settings" }
+  };
+  d3Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(Object.keys(d3PublicRouteSpecifications).reduce(function (result, name) {
+    result[name] = Object.freeze(d3PublicRouteSpecifications[name].allowedRoutes.slice());
+    return result;
+  }, {}));
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    d3Exports = window.ReaderPublicRouteRendererAdmission.guardModule(d3Exports, d3PublicRouteSpecifications);
+  }
   window.ReaderD3ControlLayersRenderers = d3Exports;
 })(window);

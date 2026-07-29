@@ -21,12 +21,13 @@ const runtimeSource = readFileSync(join(demoRoot, "render-runtime.js"), "utf8");
 const indexSource = readFileSync(join(demoRoot, "index.html"), "utf8");
 const bootstrapSource = readFileSync(join(demoRoot, "render.js"), "utf8");
 
-// This test intentionally owns only the nine open retirement records named
+// This test intentionally owns only the ten open retirement records named
 // in the current writer scope.  The registry also retains an already-enforced
 // historical Source Management compatibility record whose wider route union
 // must not be reclassified or changed by this transaction.
 const RETIREMENT_ENFORCEMENT_SCOPE_IDS = new Set([
   "bookshelf.book-more-menu-legacy-route",
+  "bookshelf.multi-select-legacy-route",
   "source-management.historical-pilot",
   "restore-preview.withdrawn",
   "search.history-expanded",

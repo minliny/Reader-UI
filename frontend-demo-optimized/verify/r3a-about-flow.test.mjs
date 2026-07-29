@@ -3,16 +3,18 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import vm from "node:vm";
-const root = join(dirname(fileURLToPath(import.meta.url)), ".."); const sources = ["shared-shell-kit/kit.js", "appearance-spec.js", "control-identity-declarations.js", "renderers/d2-settings-sync-renderers.js"].map((file) => readFileSync(join(root, file), "utf8"));
-function fresh() { const window = { localStorage: { getItem() { return null; }, setItem() {}, removeItem() {} }, ReaderFrontendDemoDraftRouteContract: { routes: {}, routePresentation: {} } }; const context = vm.createContext({ window, module: { exports: {} }, Promise, setTimeout }); sources.forEach((source) => new vm.Script(source).runInContext(context)); const api = window.ReaderD2SettingsSyncRenderers; api.about.initState(); return api; }
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const rendererSource = readFileSync(join(root, "renderers/d2-settings-sync-renderers.js"), "utf8");
+const declarationSource = readFileSync(join(root, "control-identity-declarations.js"), "utf8");
 
-test("R2b About owns update external and feedback entry state", () => { const state = fresh().about.getState(); for (const key of ["update", "external", "feedbackEntryOpen", "pending", "requestEpoch"]) assert.ok(Object.prototype.hasOwnProperty.call(state, key)); });
-test("R2b feedback entry opens and closes inside About owner", () => { const api = fresh(); api.about.dispatch({ type: "FEEDBACK_ENTRY_OPEN" }); assert.equal(api.about.getState().feedbackEntryOpen, true); assert.match(api.renderD2Route("about", {}, {}), /role="dialog"/); api.about.dispatch({ type: "FEEDBACK_ENTRY_CLOSE" }); assert.equal(api.about.getState().feedbackEntryOpen, false); });
-test("R2b update check completes successfully", async () => { const api = fresh(); const result = await api.about.executeUpdateCheck(() => ({ version: "1.4.2" })); assert.equal(result.status, "success"); assert.equal(api.about.getState().update.status, "success"); });
-test("R2b external action keeps its explicit target", async () => { const api = fresh(); const result = await api.about.executeExternalAction("source-repository", (target) => target); assert.equal(result.status, "success"); assert.equal(result.value, "source-repository"); assert.equal(api.about.getState().external.target, "source-repository"); });
-test("R2b duplicate async action is rejected", async () => { const api = fresh(); let release; const pending = api.about.executeUpdateCheck(() => new Promise((resolve) => { release = resolve; })); await Promise.resolve(); const duplicate = await api.about.executeExternalAction("rate-app", () => true); assert.equal(duplicate.status, "duplicate"); release(true); assert.equal((await pending).status, "success"); });
-test("R2b cancellation makes later completion stale", async () => { const api = fresh(); let release; const pending = api.about.executeExternalAction("download-latest", () => new Promise((resolve) => { release = resolve; })); await Promise.resolve(); assert.equal(api.about.cancel().status, "cancelled"); release(true); assert.equal((await pending).status, "stale"); assert.equal(api.about.getState().external.status, "cancelled"); });
-test("R2b update failure retains deterministic error state", async () => { const api = fresh(); const result = await api.about.executeUpdateCheck(() => { throw new Error("update offline"); }); assert.equal(result.status, "failed"); assert.equal(api.about.getState().update.error, "update offline"); });
-test("R2b external failure retains target and error", async () => { const api = fresh(); await api.about.executeExternalAction("rate-app", () => { throw new Error("store unavailable"); }); assert.equal(api.about.getState().external.target, "rate-app"); assert.equal(api.about.getState().external.error, "store unavailable"); });
-test("R2b subscribers observe the canonical dispatch stream", () => { const api = fresh(); const actions = []; const stop = api.about.subscribe((_next, _prev, action) => actions.push(action.type)); api.about.dispatch({ type: "FEEDBACK_ENTRY_OPEN" }); stop(); api.about.dispatch({ type: "FEEDBACK_ENTRY_CLOSE" }); assert.deepEqual(actions, ["FEEDBACK_ENTRY_OPEN"]); });
+test("withdrawn About family has no R2b state owner or async executor", () => {
+  assert.doesNotMatch(rendererSource, /d2About|D2_ABOUT_|executeUpdateCheck|executeExternalAction/);
+});
+
+test("withdrawn About family has no renderer or integration-map owner", () => {
+  assert.doesNotMatch(rendererSource, /aboutScreenV2|["']about(?:-feedback|-version)?["']\s*:\s*["']aboutScreenV2/);
+});
+
+test("withdrawn About family contributes no canonical control declarations", () => {
+  assert.doesNotMatch(declarationSource, /source:\s*["']about-action["']|about\.control\./);
+});

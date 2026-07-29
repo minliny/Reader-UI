@@ -34,25 +34,27 @@ function fresh() {
 
 test("Figma multi-select starts from the exact long-pressed book and exposes only removal", () => {
   const api = fresh();
-  api.bookshelf.dispatch({ type: "MULTI_SELECT_OPEN", bookId: "mystery-lord" });
+  api.bookshelf.dispatch({ type: "MULTI_SELECT_OPEN", bookKey: "source-youshu::mystery-lord" });
   const html = api.bookshelfMultiSelectV2(fixture, "book-batch-management", {});
   assert.match(html, /已选择 1 本/);
-  assert.match(html, /data-multi-select-book-id="mystery-lord" aria-pressed="true"/);
+  assert.match(html, /data-multi-select-book-key="source-youshu::mystery-lord"[^>]+aria-pressed="true"/);
   assert.match(html, /移除书架/);
   assert.doesNotMatch(html, /移动分组|分组管理|缓存所选|标记已读/);
 });
 
-test("long-press action navigates only to the Figma-bound multi-select route", () => {
+test("long-press action opens the Figma-bound in-place state without a retired route", () => {
   const runtime = read("render-runtime.js");
-  assert.match(runtime, /goTo\("book-batch-management", true\)/);
-  assert.doesNotMatch(runtime, /goTo\("bookshelf-multiselect", true\)/);
+  assert.match(runtime, /dispatch\(\{ type: "BOOK_ACTION_OPEN", bookKey \}\)/);
+  assert.match(runtime, /dispatch\?\.\(\{ type: "MULTI_SELECT_OPEN", bookKey \}\)/);
+  assert.doesNotMatch(runtime, /goTo\("(?:book-batch-management|bookshelf-multiselect)", true\)/);
+  assert.match(runtime, /book-batch-management is retired: use the in-place Figma Bookshelf\/MultiSelect state/);
 });
 
 test("Figma multi-select supports select all then one atomic removal", async () => {
   const api = fresh();
-  api.bookshelf.dispatch({ type: "MULTI_SELECT_OPEN", bookId: "long-night" });
-  api.bookshelf.dispatch({ type: "MULTI_SELECT_SET_ALL", bookIds: ["long-night", "mystery-lord", "three-body"] });
-  assert.equal(api.bookshelf.getState().multiSelectSelectedBookIds.length, 3);
+  api.bookshelf.dispatch({ type: "MULTI_SELECT_OPEN", bookKey: "source-youshu::long-night" });
+  api.bookshelf.dispatch({ type: "MULTI_SELECT_SET_ALL", bookKeys: ["source-youshu::long-night", "source-youshu::mystery-lord", "source-youshu::three-body"] });
+  assert.equal(api.bookshelf.getState().multiSelectSelectedBookKeys.length, 3);
   api.bookshelf.dispatch({ type: "MULTI_SELECT_REMOVE_OPEN" });
   const first = api.bookshelf.executeBatchRemove({ delay: 5 });
   const duplicate = await api.bookshelf.executeBatchRemove({ delay: 0 });
@@ -60,19 +62,19 @@ test("Figma multi-select supports select all then one atomic removal", async () 
   assert.equal(duplicate.reason, "empty-or-loading");
   const result = await first;
   assert.equal(result.ok, true);
-  assert.deepEqual(Array.from(api.bookshelf.getState().removedBookIds).sort(), ["long-night", "mystery-lord", "three-body"]);
-  assert.equal(api.bookshelf.getState().multiSelectSelectedBookIds.length, 0);
+  assert.deepEqual(Array.from(api.bookshelf.getState().removedBookKeys).sort(), ["source-youshu::long-night", "source-youshu::mystery-lord", "source-youshu::three-body"]);
+  assert.equal(api.bookshelf.getState().multiSelectSelectedBookKeys.length, 0);
 });
 
 test("Single removal shares confirmation/loading/failure guards without reviving a group route", async () => {
   const api = fresh();
-  api.bookshelf.dispatch({ type: "BOOK_ACTION_REMOVE_OPEN", bookId: "long-night" });
+  api.bookshelf.dispatch({ type: "BOOK_ACTION_REMOVE_OPEN", bookKey: "source-youshu::long-night" });
   const start = api.bookshelf.executeSingleRemove({ delay: 5 });
   const duplicate = await api.bookshelf.executeSingleRemove({ delay: 0 });
   assert.equal(duplicate.ok, false);
   assert.equal(duplicate.reason, "empty-or-loading");
   assert.equal((await start).ok, true);
-  assert.ok(Array.from(api.bookshelf.getState().removedBookIds).includes("long-night"));
+  assert.ok(Array.from(api.bookshelf.getState().removedBookKeys).includes("source-youshu::long-night"));
   const shelf = api.bookshelfV2(fixture, "bookshelf", {});
   assert.doesNotMatch(shelf, /data-book-id="long-night"/);
   assert.match(shelf, /fd-continue-card[\s\S]*data-book-id="mystery-lord"/);
@@ -81,8 +83,8 @@ test("Single removal shares confirmation/loading/failure guards without reviving
 
 test("Continue reading disappears once no shelf book remains", async () => {
   const api = fresh();
-  api.bookshelf.dispatch({ type: "MULTI_SELECT_OPEN", bookId: "long-night" });
-  api.bookshelf.dispatch({ type: "MULTI_SELECT_SET_ALL", bookIds: ["long-night", "mystery-lord", "three-body"] });
+  api.bookshelf.dispatch({ type: "MULTI_SELECT_OPEN", bookKey: "source-youshu::long-night" });
+  api.bookshelf.dispatch({ type: "MULTI_SELECT_SET_ALL", bookKeys: ["source-youshu::long-night", "source-youshu::mystery-lord", "source-youshu::three-body"] });
   api.bookshelf.dispatch({ type: "MULTI_SELECT_REMOVE_OPEN" });
   assert.equal((await api.bookshelf.executeBatchRemove({ delay: 1 })).ok, true);
   const shelf = api.bookshelfV2(fixture, "bookshelf", {});
@@ -91,7 +93,7 @@ test("Continue reading disappears once no shelf book remains", async () => {
 
 test("Multi-select controls are mapped business identities", () => {
   const source = read("control-identity-declarations.js");
-  for (const key of ["book-action-multi-select", "book-action-info", "book-action-remove", "multi-select-exit", "multi-select-all", "multi-select-remove", "multi-select-long-night"]) {
+  for (const key of ["book-action-multi-select", "book-action-info", "book-action-remove", "multi-select-exit", "multi-select-all", "multi-select-remove", "multi-select-source-youshu--long-night"]) {
     assert.match(source, new RegExp(`"settingsKey": "${key}"`));
   }
 });

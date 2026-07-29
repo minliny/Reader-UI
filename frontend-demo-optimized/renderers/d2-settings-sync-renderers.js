@@ -1230,8 +1230,7 @@
           {
             title: "快速操作",
             rows: [
-              { type: "link", icon: "refresh", title: "通用设置", meta: "主题、语言、行为与权限", route: "settings-general" },
-              { type: "link", icon: "info", title: "关于与反馈", meta: "版本、源码、许可、反馈", route: "about-feedback" }
+              { type: "link", icon: "refresh", title: "通用设置", meta: "主题、语言、行为与权限", route: "settings-general" }
             ]
           }
         ]
@@ -1580,13 +1579,20 @@
   // 3. sourceSettingsV2 — 书源设置增强（书源管理 / 调试 / 导入导出）
   // 覆盖路由：source-settings-entry / source-management / source-debug / source-import-export
   //
-  // R2a-1: source-management 路由由 sourceManagementV2 完整渲染（列表/搜索/筛选/
-  //   批量/更多菜单/添加 Sheet/删除确认 Dialog/状态矩阵），render-runtime.js 的
-  //   sourceManagementScreen fallback 已 FROZEN（throw Error）。
+  // source-management 只渲染当前 Figma final master 中仍存在的列表、搜索、
+  // 筛选、分组和 BottomActionBar。历史 Pilot 的菜单、批量状态、添加 Sheet、
+  // 删除 Dialog 已由用户从 Figma 删除，不能在本地恢复。
   // ===========================================================================
 
   // ---- R2b: source-management 状态 owner ----
   var D2_SOURCE_MANAGEMENT_STORAGE_KEY = "source-management-values";
+  var D2_SOURCE_MANAGEMENT_RETIRED_VISUAL_ACTIONS = [
+    "TOGGLE_MENU", "CLOSE_MENU", "OPEN_ADD_SHEET", "CLOSE_ADD_SHEET",
+    "ENTER_BATCH_MODE", "EXIT_BATCH_MODE", "TOGGLE_SELECT", "SELECT_ALL",
+    "DESELECT_ALL", "DELETE_CONFIRM_OPEN", "DELETE_CONFIRM_CLOSE",
+    "DELETE_CONFIRM_TOGGLE_LOG", "DELETE_START", "DELETE_SUCCESS",
+    "DELETE_FAILED", "DELETE_RESET"
+  ];
 
   // 4 个书源，settingsKey 与 control-identity-declarations.js switch 声明一致
   var D2_SOURCE_MANAGEMENT_DEFAULT_SOURCES = [
@@ -1601,12 +1607,7 @@
       sources: D2_SOURCE_MANAGEMENT_DEFAULT_SOURCES.map(function (s) { return Object.assign({}, s); }),
       search: "",
       statusFilter: "全部",
-      groupFilter: "全部分组",
-      batchMode: false,
-      selectedSources: {},
-      menuOpen: false,
-      addSheetOpen: false,
-      deleteConfirm: { open: false, count: 0, logCleanup: false, status: "idle", error: null }
+      groupFilter: "全部分组"
     };
   }
 
@@ -1632,7 +1633,6 @@
       }
       if (appState.sourceStatusFilter) state.statusFilter = appState.sourceStatusFilter;
       if (appState.sourceGroupFilter) state.groupFilter = appState.sourceGroupFilter;
-      if (appState.sourceMenuOpen) state.menuOpen = !!appState.sourceMenuOpen;
     }
     return state;
   }
@@ -1640,6 +1640,9 @@
   function d2SourceManagementReducer(state, action) {
     if (!state) state = d2SourceManagementDefaultState();
     if (!action || !action.type) return state;
+    if (D2_SOURCE_MANAGEMENT_RETIRED_VISUAL_ACTIONS.indexOf(action.type) >= 0) {
+      return state;
+    }
     switch (action.type) {
       case "INIT":
         return d2SourceManagementInitState(action.appState || {});
@@ -1661,77 +1664,6 @@
 
       case "SET_GROUP_FILTER":
         return Object.assign({}, state, { groupFilter: action.value || "全部分组" });
-
-      case "TOGGLE_MENU":
-        return Object.assign({}, state, { menuOpen: !state.menuOpen });
-      case "CLOSE_MENU":
-        return Object.assign({}, state, { menuOpen: false });
-
-      case "OPEN_ADD_SHEET":
-        return Object.assign({}, state, { addSheetOpen: true, menuOpen: false });
-      case "CLOSE_ADD_SHEET":
-        return Object.assign({}, state, { addSheetOpen: false });
-
-      case "ENTER_BATCH_MODE":
-        return Object.assign({}, state, { batchMode: true, menuOpen: false });
-      case "EXIT_BATCH_MODE":
-        return Object.assign({}, state, { batchMode: false, selectedSources: {} });
-
-      case "TOGGLE_SELECT": {
-        if (!action.settingsKey) return state;
-        var nextSelected = Object.assign({}, state.selectedSources);
-        if (nextSelected[action.settingsKey]) delete nextSelected[action.settingsKey];
-        else nextSelected[action.settingsKey] = true;
-        return Object.assign({}, state, { selectedSources: nextSelected });
-      }
-      case "SELECT_ALL": {
-        var allSelected = {};
-        state.sources.forEach(function (s) { allSelected[s.settingsKey] = true; });
-        return Object.assign({}, state, { selectedSources: allSelected });
-      }
-      case "DESELECT_ALL":
-        return Object.assign({}, state, { selectedSources: {} });
-
-      case "DELETE_CONFIRM_OPEN": {
-        var count = Object.keys(state.selectedSources).length;
-        return Object.assign({}, state, {
-          deleteConfirm: { open: true, count: count, logCleanup: false, status: "confirm", error: null }
-        });
-      }
-      case "DELETE_CONFIRM_CLOSE":
-        return Object.assign({}, state, {
-          deleteConfirm: Object.assign({}, state.deleteConfirm, { open: false, status: "idle" })
-        });
-      case "DELETE_CONFIRM_TOGGLE_LOG":
-        return Object.assign({}, state, {
-          deleteConfirm: Object.assign({}, state.deleteConfirm, { logCleanup: !state.deleteConfirm.logCleanup })
-        });
-      case "DELETE_START":
-        // 重复点击 guard：只有 confirm 状态才能进入 loading
-        if (state.deleteConfirm.status === "loading") return state;
-        return Object.assign({}, state, {
-          deleteConfirm: Object.assign({}, state.deleteConfirm, { status: "loading", error: null })
-        });
-      case "DELETE_SUCCESS": {
-        // stale async result guard：只有 loading 状态才接受 success
-        if (state.deleteConfirm.status !== "loading") return state;
-        var remainingSources = state.sources.filter(function (s) { return !state.selectedSources[s.settingsKey]; });
-        return Object.assign({}, state, {
-          sources: remainingSources,
-          selectedSources: {},
-          batchMode: false,
-          deleteConfirm: { open: false, count: 0, logCleanup: false, status: "success", error: null }
-        });
-      }
-      case "DELETE_FAILED":
-        if (state.deleteConfirm.status !== "loading") return state;
-        return Object.assign({}, state, {
-          deleteConfirm: Object.assign({}, state.deleteConfirm, { status: "failed", error: action.error || "unknown error" })
-        });
-      case "DELETE_RESET":
-        return Object.assign({}, state, {
-          deleteConfirm: { open: false, count: 0, logCleanup: false, status: "idle", error: null }
-        });
 
       default:
         return state;
@@ -1776,32 +1708,6 @@
     return d2SourceManagementState;
   }
 
-  // R2b: 删除书源执行函数（事件层 / 测试调用）
-  // 调用方负责在 DELETE_CONFIRM_OPEN 后调用此函数执行实际删除。
-  // demo 环境无真实删除 → 模拟 success / failed / timeout。
-  // stale async guard：reducer 内 DELETE_SUCCESS / DELETE_FAILED 仅在 status=loading 时接受。
-  // duplicate-click guard：reducer 内 DELETE_START 仅在 status=confirm 时接受。
-  function d2ExecuteSourceDelete(options) {
-    options = options || {};
-    d2SourceManagementDispatch({ type: "DELETE_START" });
-    var simulate = options.simulateResult || "success";
-    return new Promise(function (resolve) {
-      var delay = options.delay || 0;
-      setTimeout(function () {
-        if (simulate === "failed") {
-          d2SourceManagementDispatch({
-            type: "DELETE_FAILED",
-            error: options.error || "删除失败，请稍后重试"
-          });
-          resolve("failed");
-        } else {
-          d2SourceManagementDispatch({ type: "DELETE_SUCCESS" });
-          resolve("success");
-        }
-      }, delay);
-    });
-  }
-
   // ---- R2a/R2b: source-management 完整渲染 ----
 
   // 辅助：source row more-actions button identity
@@ -1813,12 +1719,6 @@
   // 辅助：source row detect button identity
   function d2SourceRowDetectAttrs(settingsKey) {
     var identity = d2ResolveSubcontrolIdentity("source-management", "source-row-detect-" + settingsKey);
-    return d2StampIdentityAttrs(identity);
-  }
-
-  // 辅助：source row checkbox (batch mode) identity
-  function d2SourceRowSelectAttrs(settingsKey) {
-    var identity = d2ResolveSubcontrolIdentity("source-management", "source-row-select-" + settingsKey);
     return d2StampIdentityAttrs(identity);
   }
 
@@ -1872,30 +1772,22 @@
 
   // 单行书源
   function d2SourceRow(row, state) {
-    var isSelected = !!state.selectedSources[row.settingsKey];
-    var rowClass = "fd-source-row" + (isSelected ? " is-selected" : "");
-    var selectAttrs = d2SourceRowSelectAttrs(row.settingsKey);
     var detectAttrs = d2SourceRowDetectAttrs(row.settingsKey);
     var moreAttrs = d2SourceRowMoreAttrs(row.settingsKey);
-
-    var checkbox = state.batchMode
-      ? `<button class="fd-source-check${isSelected ? " is-checked" : ""}" type="button"${selectAttrs} aria-label="${esc(row.title)}${isSelected ? "已选择" : "未选择"}" aria-pressed="${isSelected ? "true" : "false"}">${isSelected ? icon("check", "fd-small-icon") : ""}</button>`
-      : "";
 
     // switch identity uses the existing switch declarations (source-biquge etc.)
     var switchIdentity = d2ResolveSubcontrolIdentity("source-management", row.settingsKey);
     var switchAttrs = d2StampIdentityAttrs(switchIdentity);
     var switchHtml = `<span class="fd-settings-switch${row.enabled ? " is-on" : ""}"${switchAttrs} role="switch" aria-checked="${row.enabled ? "true" : "false"}" tabindex="0" aria-label="${esc(row.title)}${row.enabled ? "已启用，点击禁用" : "已禁用，点击启用"}"><i></i></span>`;
 
-    var detectBtn = state.batchMode ? "" : `<button class="fd-source-row-test" type="button"${detectAttrs} aria-label="检测 ${esc(row.title)}">检测</button>`;
-    var moreBtn = state.batchMode ? "" : `<button class="fd-source-row-more" type="button"${moreAttrs} data-restore-focus="more-${esc(row.settingsKey)}" aria-label="更多操作 ${esc(row.title)}">${icon("more", "fd-small-icon")}</button>`;
+    var detectBtn = `<button class="fd-source-row-test" type="button"${detectAttrs} aria-label="检测 ${esc(row.title)}">检测</button>`;
+    var moreBtn = `<button class="fd-source-row-more" type="button"${moreAttrs} data-component-state="figma-visual-unavailable" aria-label="更多操作 ${esc(row.title)}">${icon("more", "fd-small-icon")}</button>`;
 
-    return `<article class="${rowClass}">
-      ${checkbox}
+    return `<article class="fd-source-row">
       <span class="fd-source-row-main"><strong>${esc(row.title)}</strong><small>${esc(row.domain)} · ${esc(row.group)}</small></span>
       <em class="fd-source-row-state">${d2Badge(row.status, row.tone)}</em>
       ${detectBtn}
-      <span class="fd-source-row-toggle">${state.batchMode ? "" : switchHtml}</span>
+      <span class="fd-source-row-toggle">${switchHtml}</span>
       ${moreBtn}
     </article>`;
   }
@@ -1912,111 +1804,15 @@
     </section>`;
   }
 
-  // batch mode top bar
-  function d2SourceBatchTop(state) {
-    var selectedCount = Object.keys(state.selectedSources).length;
-    var allSelected = selectedCount === state.sources.length && selectedCount > 0;
-    var exitAttrs = d2SourceActionAttrs("batch-exit");
-    var selectAllAttrs = d2SourceActionAttrs("batch-select-all");
-    return `<div class="fd-source-batch-top">
-      <button type="button"${exitAttrs} aria-label="退出批量模式">取消</button>
-      <strong>已选 ${selectedCount} 个</strong>
-      <button type="button"${selectAllAttrs} aria-pressed="${allSelected ? "true" : "false"}" aria-label="${allSelected ? "取消全选" : "全选"}">${allSelected ? "取消全选" : "全选"}</button>
-    </div>`;
-  }
-
-  // home bottom actions (non-batch)
+  // 当前 Figma final master 保留 BottomActionBar 的静态视觉，但对应 Pilot
+  // 页面/弹窗已删除；按钮事件必须保持 fail-closed。
   function d2SourceHomeActions(state) {
     var batchAttrs = d2SourceActionAttrs("batch-enter");
     var addAttrs = d2SourceActionAttrs("source-add");
-    return `<div class="fd-source-bottom-bar is-fixed">
+    return `<div class="fd-source-bottom-bar is-fixed" data-component-state="figma-visual-unavailable">
       <button type="button"${batchAttrs} aria-label="进入批量管理">批量管理</button>
       <button type="button"${addAttrs} data-restore-focus="source-add" aria-label="新增书源">${icon("add", "fd-small-icon")}新增书源</button>
     </div>`;
-  }
-
-  // batch bottom actions
-  function d2SourceBatchActions(state) {
-    var selectedCount = Object.keys(state.selectedSources).length;
-    var disabled = selectedCount === 0 ? " disabled" : "";
-    var enableAttrs = d2SourceActionAttrs("batch-enable");
-    var disableAttrs = d2SourceActionAttrs("batch-disable");
-    var detectAttrs = d2SourceActionAttrs("batch-detect");
-    var groupAttrs = d2SourceActionAttrs("batch-group");
-    var deleteAttrs = d2SourceActionAttrs("batch-delete");
-    return `<div class="fd-source-bottom-bar fd-source-batch-actions">
-      <button type="button"${enableAttrs}${disabled} aria-label="启用已选">启用</button>
-      <button type="button"${disableAttrs}${disabled} aria-label="禁用已选">禁用</button>
-      <button type="button"${detectAttrs}${disabled} aria-label="检测已选">检测</button>
-      <button type="button"${groupAttrs}${disabled} aria-label="分组已选">分组</button>
-      <button class="is-danger" type="button"${deleteAttrs}${disabled} data-restore-focus="batch-delete" aria-label="删除已选 ${selectedCount} 个书源">删除</button>
-    </div>`;
-  }
-
-  // more menu overlay
-  function d2SourceMoreMenu(state) {
-    if (!state.menuOpen) return "";
-    var items = [
-      { settingsKey: "menu-import-network", label: "网络导入" },
-      { settingsKey: "menu-import-local", label: "本地导入" },
-      { settingsKey: "menu-create-new", label: "新建书源" },
-      { settingsKey: "menu-batch-manage", label: "批量管理" },
-      { settingsKey: "menu-group-manage", label: "分组管理" },
-      { settingsKey: "menu-detect-selected", label: "校验所选" },
-      { settingsKey: "menu-error-logs", label: "错误日志" }
-    ];
-    return `<nav class="fd-source-more-menu" aria-label="书源更多操作">
-      ${items.map(function (item) {
-        var attrs = d2SourceActionAttrs(item.settingsKey);
-        return `<button type="button"${attrs}>${esc(item.label)}</button>`;
-      }).join("")}
-    </nav>`;
-  }
-
-  // add source sheet overlay
-  function d2SourceAddSheet(state) {
-    if (!state.addSheetOpen) return "";
-    var cancelAttrs = d2SourceActionAttrs("add-sheet-cancel");
-    var items = [
-      { settingsKey: "add-sheet-network", icon: "cloud", title: "网络导入", meta: "从 URL 拉取书源包" },
-      { settingsKey: "add-sheet-local", icon: "folder", title: "本地导入", meta: "选择本地 JSON 或 TXT 文件" },
-      { settingsKey: "add-sheet-clipboard", icon: "file", title: "剪贴板导入", meta: "解析剪贴板中的书源内容" },
-      { settingsKey: "add-sheet-manual", icon: "edit", title: "手动新建", meta: "进入空白书源编辑页" }
-    ];
-    return `<section class="fd-demo-sheet fd-source-bottom-sheet" aria-label="添加书源" aria-hidden="false" data-demo-sheet>
-      <div class="fd-sheet-grabber"></div>
-      <h2>添加书源</h2>
-      ${items.map(function (item) {
-        var attrs = d2SourceActionAttrs(item.settingsKey);
-        return `<button type="button"${attrs}>${icon(item.icon, "fd-small-icon")}<span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>${chevron("fd-small-icon")}</button>`;
-      }).join("")}
-      <button class="is-cancel" type="button"${cancelAttrs} data-sheet-initial-focus aria-label="取消添加书源">取消</button>
-    </section>`;
-  }
-
-  // delete confirm dialog overlay
-  function d2SourceDeleteDialog(state) {
-    if (!state.deleteConfirm.open) return "";
-    var dc = state.deleteConfirm;
-    var cancelAttrs = d2SourceActionAttrs("delete-cancel");
-    var confirmAttrs = d2SourceActionAttrs("delete-confirm");
-    var logAttrs = d2SourceActionAttrs("delete-log-cleanup");
-    var isBusy = dc.status === "loading";
-    var isFailed = dc.status === "failed";
-    var titleAttr = isFailed && dc.error ? ` title="${esc(dc.error)}"` : "";
-    var confirmLabel = isBusy ? "删除中…" : isFailed ? "重试" : "删除";
-    var confirmDisabled = isBusy ? " disabled aria-busy=\"true\"" : "";
-    var confirmInvalid = isFailed ? " aria-invalid=\"true\"" : "";
-    var dialogStatus = isBusy ? " data-delete-status=\"loading\"" : isFailed ? " data-delete-status=\"failed\"" : "";
-    return `<section class="fd-demo-dialog fd-source-delete-dialog" role="dialog" aria-modal="true" aria-labelledby="source-delete-title" aria-describedby="source-delete-desc" aria-hidden="false" data-demo-dialog data-source-delete-dialog${dialogStatus}>
-      <h2 id="source-delete-title">删除书源？</h2>
-      <p id="source-delete-desc">将删除已选 ${dc.count} 个书源。不会删除书架书籍，但这些书源将不再参与搜索、发现和换源。${isFailed && dc.error ? "<br><strong>" + esc(dc.error) + "</strong>" : ""}</p>
-      <label class="fd-source-delete-option"><input type="checkbox"${logAttrs} ${dc.logCleanup ? "checked" : ""}> <span>同时清除相关检测日志</span></label>
-      <div class="fd-source-delete-actions">
-        <button type="button"${cancelAttrs}${isBusy ? " disabled" : ""} data-dialog-initial-focus>取消</button>
-        <button class="is-danger" type="button"${confirmAttrs}${confirmDisabled}${confirmInvalid}${titleAttr}>${confirmLabel}</button>
-      </div>
-    </section>`;
   }
 
   // source-management 完整页面内容
@@ -2034,15 +1830,11 @@
       return true;
     });
 
-    var batchTop = state.batchMode ? d2SourceBatchTop(state) : "";
-    var searchInput = state.batchMode ? "" : d2SourceSearchInput(state);
-    var filters = state.batchMode ? "" : d2SourceFilters(state);
-    var moreMenu = d2SourceMoreMenu(state);
+    var searchInput = d2SourceSearchInput(state);
+    var filters = d2SourceFilters(state);
     var list = d2SourceList(state, filtered);
 
     return `<section class="fd-source-home">
-      ${moreMenu}
-      ${batchTop}
       ${searchInput}
       ${filters}
       ${list}
@@ -2052,27 +1844,15 @@
   // source-management 完整 renderer（R2a-1: 唯一 production renderer）
   function sourceManagementV2(data, appState) {
     var state = d2SourceManagementGetState();
-    var selectedCount = Object.keys(state.selectedSources).length;
-    var title = state.batchMode ? "已选 " + selectedCount + " 个" : "书源管理";
-
     var contentHtml = d2SourceManagementContent(state);
-    var trailingHtml = state.batchMode ? "" : `<button type="button" aria-label="更多"${d2SourceActionAttrs("source-menu-toggle")} data-source-menu-toggle data-restore-focus="source-menu-toggle">${icon("more", "fd-small-icon")}</button>`;
-    var bottomActionHtml = state.batchMode ? d2SourceBatchActions(state) : d2SourceHomeActions(state);
-    var sheetHtml = d2SourceAddSheet(state);
-    var dialogHtml = d2SourceDeleteDialog(state);
     var backIdentity = d2ResolveSubcontrolIdentity("source-management", "back");
     var backAttrs = d2StampIdentityAttrs(backIdentity);
-    var frameState = state.addSheetOpen ? " has-sheet" : state.deleteConfirm.open ? " has-dialog" : "";
 
-    return d2SettingsShell(data, title, contentHtml, {
-      trailingHtml: trailingHtml,
-      bottomActionHtml: bottomActionHtml,
-      sheetHtml: sheetHtml,
-      dialogHtml: dialogHtml,
+    return d2SettingsShell(data, "书源管理", contentHtml, {
+      bottomActionHtml: d2SourceHomeActions(state),
       backButtonAttrs: backAttrs,
       bottomActionHostClass: "fd-bottom-action-host fd-source-control-host",
-      sheetHostClass: "fd-sheet-host",
-      frameState: frameState
+      frameState: ""
     });
   }
 
@@ -3855,260 +3635,6 @@
   }
 
   // ===========================================================================
-  // about R2a/R2b canonical contract and state owner
-  function d2AboutSpecs(route, rows) { return rows.map(function (row) { return { route: route, state: "default", settingsKey: row[0], uiEvent: row[1], label: row[2], role: "button" }; }); }
-  var D2_ABOUT_CONTROL_SPECS = []
-    .concat(d2AboutSpecs("about-feedback", [
-      ["back", "route.pop", "返回"], ["check-update-entry", "settings.about.open", "检查更新"],
-      ["source-repository", "settings.capability.open", "源码仓库"], ["open-source-license", "settings.capability.open", "开源许可"],
-      ["contribute", "settings.capability.open", "参与贡献"], ["team-thanks", "settings.about.open", "团队与致谢"],
-      ["feedback-submit-entry", "settings.overlay.open", "提交反馈"], ["crash-report-entry", "settings.overlay.open", "上报崩溃"],
-      ["rate-app", "settings.capability.open", "评分支持"]
-    ]))
-    .concat(d2AboutSpecs("about", [
-      ["back", "route.pop", "返回"], ["version-detail", "settings.about.open", "版本信息"],
-      ["dependency-list", "settings.about.open", "依赖项目"], ["license-list", "settings.capability.open", "开源许可"],
-      ["check-update", "settings.about.open", "检查更新"], ["feedback-entry", "settings.overlay.open", "反馈入口"]
-    ]))
-    .concat(d2AboutSpecs("about-version", [
-      ["back", "route.pop", "返回"], ["view-license", "settings.capability.open", "查看许可"],
-      ["version-check-update", "settings.about.open", "检查更新"], ["download-latest", "download.queue.open", "下载最新版"]
-    ]));
-
-  var D2_ABOUT_DEFAULT_STATE = { update: { status: "idle", error: null, version: "1.4.2" }, external: { status: "idle", target: null, error: null }, feedbackEntryOpen: false, pending: null, requestEpoch: 0 };
-  var d2AboutState = null;
-  var d2AboutListeners = [];
-  function d2AboutClone(value) { return JSON.parse(JSON.stringify(value)); }
-  function d2AboutDefaultState() { return d2AboutClone(D2_ABOUT_DEFAULT_STATE); }
-  function d2AboutInitState(seed) { d2AboutState = d2AboutReducer(d2AboutDefaultState(), { type: "INJECT_APP_STATE", state: seed || {} }); return d2AboutState; }
-  function d2AboutGetState() { if (!d2AboutState) d2AboutInitState(); return d2AboutState; }
-  function d2AboutReducer(state, action) {
-    state = d2AboutClone(state || D2_ABOUT_DEFAULT_STATE); action = action || {};
-    if (action.type === "INJECT_APP_STATE") return Object.assign(state, action.state || {}, { update: Object.assign(state.update, action.state && action.state.update || {}), external: Object.assign(state.external, action.state && action.state.external || {}) });
-    if (action.type === "FEEDBACK_ENTRY_OPEN") state.feedbackEntryOpen = true;
-    if (action.type === "FEEDBACK_ENTRY_CLOSE") state.feedbackEntryOpen = false;
-    if (action.type === "ASYNC_START") { state.requestEpoch += 1; state.pending = { kind: action.kind, requestId: action.requestId, epoch: state.requestEpoch }; state[action.kind] = Object.assign({}, state[action.kind], { status: "loading", error: null, target: action.target || state[action.kind].target }); }
-    if ((action.type === "ASYNC_SUCCESS" || action.type === "ASYNC_FAILED") && state.pending && state.pending.requestId === action.requestId && state.pending.kind === action.kind) { state[action.kind] = Object.assign({}, state[action.kind], { status: action.type === "ASYNC_SUCCESS" ? "success" : "failed", error: action.error || null }); state.pending = null; }
-    if (action.type === "ASYNC_CANCEL") { state.requestEpoch += 1; if (state.pending) state[state.pending.kind] = Object.assign({}, state[state.pending.kind], { status: "cancelled", error: null }); state.pending = null; }
-    return state;
-  }
-  function d2AboutDispatch(action) { var prev = d2AboutGetState(); d2AboutState = d2AboutReducer(prev, action); d2AboutListeners.slice().forEach(function (fn) { fn(d2AboutState, prev, action); }); return d2AboutState; }
-  function d2AboutSubscribe(fn) { d2AboutListeners.push(fn); return function () { d2AboutListeners = d2AboutListeners.filter(function (item) { return item !== fn; }); }; }
-  function d2ExecuteAboutAsync(kind, target, executor) {
-    var current = d2AboutGetState(); if (current.pending) return Promise.resolve({ status: "duplicate", kind: current.pending.kind });
-    var requestId = kind + "-" + (current.requestEpoch + 1); d2AboutDispatch({ type: "ASYNC_START", kind: kind, requestId: requestId, target: target }); var epoch = d2AboutGetState().requestEpoch;
-    return Promise.resolve().then(function () { return typeof executor === "function" ? executor(target) : true; }).then(function (value) {
-      var latest = d2AboutGetState(); if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", value: value };
-      d2AboutDispatch({ type: "ASYNC_SUCCESS", kind: kind, requestId: requestId }); return { status: "success", value: value };
-    }, function (error) {
-      var latest = d2AboutGetState(); if (!latest.pending || latest.pending.requestId !== requestId || latest.requestEpoch !== epoch) return { status: "stale", error: error };
-      d2AboutDispatch({ type: "ASYNC_FAILED", kind: kind, requestId: requestId, error: String(error && error.message || error) }); return { status: "failed", error: error };
-    });
-  }
-  function d2CancelAboutAsync() { var hadPending = !!d2AboutGetState().pending; d2AboutDispatch({ type: "ASYNC_CANCEL" }); return { status: hadPending ? "cancelled" : "idle" }; }
-  function d2AboutIdentityAttrs(spec) { var entityKey = "about.control.button." + spec.settingsKey; return ` data-entity-key="${entityKey}" data-control-key="${entityKey}@${spec.route}.default" data-control-id="about.control.${spec.route}.default.button.${spec.settingsKey}" data-ui-event="${spec.uiEvent}" data-settings-key="${spec.settingsKey}"`; }
-  function d2StampAboutControls(html, route) { var specs = D2_ABOUT_CONTROL_SPECS.filter(function (spec) { return spec.route === route; }); var index = 0; return html.replace(/<(button\b[^>]*|article\b[^>]*role="button"[^>]*)>/g, function (tag) { if (tag.indexOf("data-control-key=") >= 0 || index >= specs.length) return tag; var spec = specs[index++]; return tag.slice(0, -1) + d2AboutIdentityAttrs(spec) + ">"; }); }
-
-  // ===========================================================================
-  // 7. aboutScreenV2 — 关于 / 版本 / 反馈
-  // 覆盖路由：about-feedback / about / about-version / feedback
-  // ===========================================================================
-  function d2PrepareAboutPage(page, route, state) {
-    page = d2AboutClone(page);
-    function feedbackOverlay(item) { if (!item) return; item.route = null; item.overlay = "dialog:feedback-entry"; }
-    function externalAction(item, key) { if (!item) return; item.route = null; item.overlay = "external:" + key; }
-    if (route === "about-feedback") {
-      externalAction(page.sections[0].rows[1], "source-repository"); externalAction(page.sections[0].rows[2], "open-source-license"); externalAction(page.sections[0].rows[3], "contribute");
-      feedbackOverlay(page.sections[1].rows[0]); feedbackOverlay(page.sections[1].rows[1]);
-      externalAction(page.sections[1].rows[2], "rate-app");
-    } else if (route === "about") {
-      externalAction(page.sections[2].rows[2], "license-list");
-      feedbackOverlay(page.actions[1]);
-    } else if (route === "about-version") {
-      externalAction(page.sections[2].rows[1], "view-license");
-    }
-    return page;
-  }
-  function aboutScreenV2(data, route, appState) {
-    var state = d2AboutGetState(); if (appState && appState.about) state = d2AboutReducer(state, { type: "INJECT_APP_STATE", state: appState.about });
-    var page = d2PrepareAboutPage(d2AboutPage(route, appState), route, state);
-    var contentHtml = `
-      ${d2MetricGrid(page.metrics)}
-      ${(page.sections || []).map(function (section) {
-        return d2Section(section, route, appState);
-      }).join("")}
-      ${d2ActionList(page.actions, route)}`;
-    if (state.feedbackEntryOpen) contentHtml += `<section class="fd-settings-dialog" role="dialog" aria-modal="true" aria-labelledby="about-feedback-dialog-title"><h2 id="about-feedback-dialog-title">反馈入口</h2><p>选择系统邮件或项目反馈渠道继续，反馈表单不在 About 页面族内重复实现。</p></section>`;
-    var html = d2SettingsShell(data, page.title, contentHtml, {
-      toastHtml: page.toast ? `<section class="fd-settings-toast">${esc(page.toast)}</section>` : ""
-    });
-    html = d2StampAboutControls(html, route);
-    ["source-repository", "open-source-license", "contribute", "rate-app", "license-list", "view-license", "download-latest"].forEach(function (key) { html = html.replace('data-settings-key="' + key + '"', 'data-settings-key="' + key + '" data-external-action="' + key + '" rel="noopener noreferrer"'); });
-    ["feedback-submit-entry", "crash-report-entry", "feedback-entry"].forEach(function (key) { html = html.replace('data-settings-key="' + key + '"', 'data-settings-key="' + key + '" data-restore-focus="' + key + '"'); });
-    if (state.feedbackEntryOpen) html = html.replace(/data-settings-key="(feedback-submit-entry|feedback-entry)"/, 'data-settings-key="$1" data-dialog-initial-focus="$1"');
-    var updateKey = route === "about-version" ? "version-check-update" : route === "about" ? "check-update" : "check-update-entry";
-    if (state.update.status === "loading") html = html.replace('data-settings-key="' + updateKey + '"', 'data-settings-key="' + updateKey + '" aria-busy="true" disabled');
-    if (state.update.status === "failed") html = html.replace('data-settings-key="' + updateKey + '"', 'data-settings-key="' + updateKey + '" aria-invalid="true" title="' + esc(state.update.error || "更新检查失败") + '"');
-    if (state.external.status === "loading" && state.external.target) html = html.replace('data-settings-key="' + state.external.target + '"', 'data-settings-key="' + state.external.target + '" aria-busy="true" disabled');
-    if (state.external.status === "failed" && state.external.target) html = html.replace('data-settings-key="' + state.external.target + '"', 'data-settings-key="' + state.external.target + '" aria-invalid="true" title="' + esc(state.external.error || "外部操作失败") + '"');
-    return html;
-  }
-
-  function d2AboutPage(route, appState) {
-    var pages = {
-      // 关于与反馈（增强版）
-      "about-feedback": {
-        title: "关于与反馈",
-        metrics: [
-          { icon: "info", label: "版本", value: "1.4.2" },
-          { icon: "code", label: "构建", value: "20260711" },
-          { icon: "refresh", label: "更新", value: "已是最新" },
-          { icon: "people", label: "团队", value: "Reader" }
-        ],
-        sections: [
-          {
-            title: "项目信息",
-            rows: [
-              { type: "link", icon: "refresh", title: "检查更新", value: "已是最新", route: "about-version" },
-              { type: "link", icon: "code", title: "源码仓库", value: "github.com/reader", route: "about" },
-              { type: "link", icon: "link", title: "开源许可", route: "about" },
-              { type: "link", icon: "mail", title: "参与贡献", route: "feedback" },
-              { type: "link", icon: "people", title: "团队与致谢", route: "about" }
-            ]
-          },
-          {
-            title: "反馈",
-            rows: [
-              { type: "link", icon: "feedback", title: "提交反馈", meta: "问题、建议、功能请求", route: "feedback" },
-              { type: "link", icon: "bug", title: "上报崩溃", meta: "自动附带日志", route: "feedback" },
-              { type: "link", icon: "star", title: "评分支持", meta: "在应用商店评分", route: "feedback" }
-            ]
-          },
-          {
-            title: "社区",
-            rows: [
-              { type: "link", icon: "people", title: "用户群", value: "QQ 群 · 123456" },
-              { type: "link", icon: "bell", title: "订阅更新", value: "已订阅", status: "已开启", statusTone: "good" }
-            ]
-          }
-        ]
-      },
-      // 关于
-      "about": {
-        title: "关于",
-        sections: [
-          {
-            title: "项目介绍",
-            rows: [
-              { type: "link", icon: "book", title: "应用名称", value: "Reader" },
-              { type: "link", icon: "info", title: "版本", value: "1.4.2 (20260711)", route: "about-version" },
-              { type: "link", icon: "people", title: "开发者", value: "Reader 团队" },
-              { type: "link", icon: "globe", title: "官网", value: "reader.example.com" }
-            ]
-          },
-          {
-            title: "团队与致谢",
-            rows: [
-              { type: "link", icon: "people", title: "核心团队", value: "8 人" },
-              { type: "link", icon: "heart", title: "致谢", value: "开源社区" },
-              { type: "link", icon: "code", title: "依赖项目", value: "32 个", route: "about-version" }
-            ]
-          },
-          {
-            title: "法律",
-            rows: [
-              { type: "link", icon: "shield", title: "隐私政策" },
-              { type: "link", icon: "file", title: "用户协议" },
-              { type: "link", icon: "link", title: "开源许可", route: "about-version" }
-            ]
-          }
-        ],
-        actions: [
-          { icon: "refresh", title: "检查更新", route: "about-version" },
-          { icon: "mail", title: "反馈", route: "feedback" }
-        ]
-      },
-      // 关于版本
-      "about-version": {
-        title: "版本信息",
-        metrics: [
-          { icon: "info", label: "当前版本", value: "1.4.2" },
-          { icon: "code", label: "构建号", value: "20260711" },
-          { icon: "refresh", label: "更新状态", value: "最新" },
-          { icon: "clock", label: "发布时间", value: "2026-07-11" }
-        ],
-        sections: [
-          {
-            title: "版本详情",
-            rows: [
-              { type: "link", icon: "info", title: "版本号", value: "1.4.2" },
-              { type: "link", icon: "code", title: "构建号", value: "20260711" },
-              { type: "link", icon: "clock", title: "发布日期", value: "2026-07-11" },
-              { type: "link", icon: "phone", title: "适配版本", value: "Android 8.0+" },
-              { type: "link", icon: "download", title: "安装包大小", value: "12.4 MB" }
-            ]
-          },
-          {
-            title: "更新日志",
-            rows: [
-              { type: "link", icon: "refresh", title: "1.4.2", meta: "新增备份设置分区 · 修复进度同步冲突 · 优化书源调试", status: "当前", statusTone: "good" },
-              { type: "link", icon: "history", title: "1.4.1", meta: "修复夜间模式亮度 · 增强导入冲突处理" },
-              { type: "link", icon: "history", title: "1.4.0", meta: "新增书源调试 · 改进 WebDAV 错误处理" },
-              { type: "link", icon: "history", title: "1.3.8", meta: "性能优化 · 修复若干崩溃" }
-            ]
-          },
-          {
-            title: "依赖",
-            rows: [
-              { type: "link", icon: "code", title: "开源依赖", value: "32 个" },
-              { type: "link", icon: "link", title: "查看许可", route: "about" }
-            ]
-          }
-        ],
-        actions: [
-          { icon: "refresh", title: "检查更新", overlay: "dialog:check-update" },
-          { icon: "download", title: "下载最新版", overlay: "dialog:download-latest" }
-        ],
-        toast: "当前已是最新版本"
-      },
-      // 反馈
-      "feedback": {
-        title: "反馈",
-        sections: [
-          {
-            title: "反馈类型",
-            rows: [
-              { type: "segment", icon: "feedback", title: "类型", value: "功能建议", options: ["问题反馈", "功能建议", "崩溃上报", "其它"] }
-            ]
-          },
-          {
-            title: "反馈内容",
-            rows: [
-              { type: "input", inputType: "text", icon: "edit", title: "标题", value: "", placeholder: "简短描述" },
-              { type: "input", inputType: "text", icon: "file", title: "详情", value: "", placeholder: "详细描述（可填遇到的问题、期待的功能等）" },
-              { type: "input", inputType: "url", icon: "link", title: "相关链接", value: "", placeholder: "可选" }
-            ]
-          },
-          {
-            title: "附加信息",
-            rows: [
-              { type: "switch", icon: "bug", title: "附带日志", enabled: true, status: "已开启", statusTone: "good" },
-              { type: "switch", icon: "info", title: "附带设备信息", enabled: true },
-              { type: "switch", icon: "bookshelf", title: "附带书架快照", enabled: false, meta: "不含书源" },
-              { type: "link", icon: "mail", title: "联系方式", value: "reader@example.com" }
-            ]
-          }
-        ],
-        actions: [
-          { icon: "check", title: "提交反馈", overlay: "dialog:submit-feedback" },
-          { icon: "log", title: "查看历史反馈", route: "source-logs" }
-        ]
-      }
-    };
-    return pages[route] || pages["about-feedback"];
-  }
-
-  // ===========================================================================
   // 集成映射：route → renderer 函数名
   // ===========================================================================
   var INTEGRATION_MAP = {
@@ -4160,10 +3686,6 @@
     // Their legacy route ids are fail-loud in render-runtime to avoid a second
     // route/state owner outside the 47-control canonical denominator.
 
-    // 7. aboutScreenV2 — 关于/版本/反馈
-    "about-feedback": "aboutScreenV2",
-    "about": "aboutScreenV2",
-    "about-version": "aboutScreenV2"
   };
 
   // ===========================================================================
@@ -4197,7 +3719,6 @@
     webdavConfigV2: webdavConfigV2,
     backupScreenV2: backupScreenV2,
     restoreFlowV2: restoreFlowV2,
-    aboutScreenV2: aboutScreenV2,
     // 通用 UI 块（供外部事件层或测试调用）
     ui: {
       esc: esc,
@@ -4270,9 +3791,7 @@
       dispatch: d2SourceManagementDispatch,
       subscribe: d2SourceManagementSubscribe,
       injectAppState: d2SourceManagementInjectAppState,
-      renderSourceManagement: sourceManagementV2,
-      // R2b 执行函数（事件层 / 测试调用）
-      executeDelete: d2ExecuteSourceDelete
+      renderSourceManagement: sourceManagementV2
     },
     // R2a/R2b: webdav-config 状态 owner / reducer / dispatch
     // 外部事件层通过此 API 与 webdav-config 状态交互：
@@ -4342,20 +3861,6 @@
       scopeChoiceList: d2RestoreScopeChoiceList
     },
     RESTORE_CONTROL_SPECS: D2_RESTORE_CONTROL_SPECS,
-    about: {
-      controlSpecs: D2_ABOUT_CONTROL_SPECS,
-      defaults: D2_ABOUT_DEFAULT_STATE,
-      initState: d2AboutInitState,
-      defaultState: d2AboutDefaultState,
-      reducer: d2AboutReducer,
-      getState: d2AboutGetState,
-      dispatch: d2AboutDispatch,
-      subscribe: d2AboutSubscribe,
-      executeUpdateCheck: function (executor) { return d2ExecuteAboutAsync("update", null, executor); },
-      executeExternalAction: function (target, executor) { return d2ExecuteAboutAsync("external", target, executor); },
-      cancel: d2CancelAboutAsync
-    },
-    ABOUT_CONTROL_SPECS: D2_ABOUT_CONTROL_SPECS,
     // 页面数据生成器（供事件层 / 测试直接访问）
     pages: {
       globalSettings: d2GlobalSettingsPage,
@@ -4363,10 +3868,25 @@
       sourceSettings: d2SourceSettingsPage,
       webdav: d2WebdavPage,
       backup: d2BackupPage,
-      restore: d2RestorePage,
-      about: d2AboutPage
+      restore: d2RestorePage
     }
   };
 
+  var d2PublicRouteSpecifications = {
+    renderD2Route: { allowedRoutes: Object.keys(INTEGRATION_MAP), routeIndex: 0, passthroughUnowned: true },
+    globalSettingsV2: { allowedRoutes: Object.keys(INTEGRATION_MAP).filter(function (route) { return INTEGRATION_MAP[route] === "globalSettingsV2"; }), routeIndex: 1 },
+    readingSettingsV2: { allowedRoutes: Object.keys(INTEGRATION_MAP).filter(function (route) { return INTEGRATION_MAP[route] === "readingSettingsV2"; }), routeIndex: 1 },
+    sourceSettingsV2: { allowedRoutes: Object.keys(INTEGRATION_MAP).filter(function (route) { return INTEGRATION_MAP[route] === "sourceSettingsV2"; }), routeIndex: 1 },
+    webdavConfigV2: { allowedRoutes: Object.keys(INTEGRATION_MAP).filter(function (route) { return INTEGRATION_MAP[route] === "webdavConfigV2"; }), routeIndex: 1 },
+    backupScreenV2: { allowedRoutes: Object.keys(INTEGRATION_MAP).filter(function (route) { return INTEGRATION_MAP[route] === "backupScreenV2"; }), routeIndex: 1 },
+    restoreFlowV2: { allowedRoutes: Object.keys(INTEGRATION_MAP).filter(function (route) { return INTEGRATION_MAP[route] === "restoreFlowV2"; }), routeIndex: 1 }
+  };
+  d2Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(Object.keys(d2PublicRouteSpecifications).reduce(function (result, name) {
+    result[name] = Object.freeze(d2PublicRouteSpecifications[name].allowedRoutes.slice());
+    return result;
+  }, {}));
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    d2Exports = window.ReaderPublicRouteRendererAdmission.guardModule(d2Exports, d2PublicRouteSpecifications);
+  }
   window.ReaderD2SettingsSyncRenderers = d2Exports;
 })(window);

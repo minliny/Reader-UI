@@ -983,7 +983,7 @@
     "reader-replace-overlay-v2": "readerReplaceOverlayV2Screen"
   };
 
-  window.ReaderW5ReplaceRulesRenderers = {
+  var w5Exports = {
     // 集成映射：路由 → renderer 函数名
     INTEGRATION_MAP: INTEGRATION_MAP,
     // 7 个 renderer 函数
@@ -1011,4 +1011,21 @@
     applyRuleToText: applyRuleToText,
     readerParagraphs: readerParagraphs
   };
+  var w5PublicRouteSpecifications = {
+    readerReplaceDeleteConfirmScreen: { allowedRoutes: ["reader-replace-delete-confirm"], routeIndex: 1 },
+    readerReplaceApplyResultScreen: { allowedRoutes: ["reader-replace-apply-result"], routeIndex: 1 },
+    readerReplaceImportExportScreen: { allowedRoutes: ["reader-replace-import-export"], routeIndex: 1 },
+    readerReplacePreviewScreen: { allowedRoutes: ["reader-replace-preview"], routeIndex: 1 },
+    readerReplacePageScreen: { allowedRoutes: ["reader-replace-page"], routeIndex: 1 },
+    contentReplacementScreen: { allowedRoutes: ["content-replacement"], routeIndex: 1 },
+    readerReplaceOverlayV2Screen: { allowedRoutes: ["reader-replace-overlay-v2"], routeIndex: 1 }
+  };
+  w5Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(Object.keys(w5PublicRouteSpecifications).reduce(function (result, name) {
+    result[name] = Object.freeze(w5PublicRouteSpecifications[name].allowedRoutes.slice());
+    return result;
+  }, {}));
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    w5Exports = window.ReaderPublicRouteRendererAdmission.guardModule(w5Exports, w5PublicRouteSpecifications);
+  }
+  window.ReaderW5ReplaceRulesRenderers = w5Exports;
 })(window);

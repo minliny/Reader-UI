@@ -10,9 +10,21 @@ const read = (file) => readFileSync(join(root, file), "utf8");
 const declarationSource = read("control-identity-declarations.js");
 const rendererSource = read("renderers/d2-bookshelf-discover-renderers.js");
 const runtimeSource = read("render-runtime.js");
+const cssSource = read("styles/09-import-workflow.css");
 const fixture = {
   covers: {},
-  mainTabs: { books: [{ bookId: "long-night", title: "长夜余火", author: "爱潜水的乌贼", chapter: "第一章", coverKey: "longNight" }] }
+  mainTabs: {
+    books: [
+      {
+        sourceId: "source-youshu",
+        bookId: "long-night",
+        title: "长夜余火",
+        author: "爱潜水的乌贼",
+        chapter: "第一章",
+        coverKey: "longNight"
+      }
+    ]
+  }
 };
 
 function fresh() {
@@ -31,126 +43,120 @@ function fresh() {
   return window.ReaderD2BookshelfDiscoverRenderers;
 }
 
-test("R2a local import adds seven mapped business identities", () => {
+test("R2a local import exposes only the confirmed three-state controls", () => {
   const sandbox = { module: { exports: {} }, window: {} };
   new vm.Script(declarationSource).runInNewContext(sandbox);
   const keys = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS
     .filter((entry) => entry.source === "bookshelf-action")
     .map((entry) => entry.settingsKey);
-  for (const key of ["empty-local-import", "retry-local-import", "import-backdrop", "import-choose-files", "import-cancel", "import-finish", "import-retry-failed"]) {
+  for (const key of [
+    "empty-local-import",
+    "retry-local-import",
+    "import-backdrop",
+    "import-choose-files",
+    "import-cancel",
+    "import-finish"
+  ]) {
     assert.ok(keys.includes(key), `missing ${key}`);
   }
+  assert.equal(keys.includes("import-retry-failed"), false);
 });
 
-test("Figma Make picker is a dialog on Bookshelf with a multiple file input", () => {
+test("selection state is the confirmed Bookshelf dialog with a system multi-file input", () => {
   const api = fresh();
   api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN", focusReturnKey: "top-more" });
   const html = api.bookshelfV2(fixture, "bookshelf", {});
-  assert.match(html, /class="fd-local-import-dialog is-picker" role="dialog" aria-modal="true"/);
+  assert.match(html, /class="fd-local-import-dialog is-selection" role="dialog" aria-modal="true"/);
   assert.match(html, /<h2 id="fd-local-import-title">导入本地书籍<\/h2>/);
-  assert.match(html, /fd-local-import-dropzone-copy/);
-  assert.match(html, /fd-local-import-picker-note/);
-  assert.match(html, /data-local-import-file-input multiple accept="\.epub,\.pdf,\.txt,\.mobi/);
-  assert.match(html, /支持批量选择，单次最多 50 本/);
+  assert.match(html, /从系统文件中选择/);
+  assert.match(html, /支持多选 TXT、EPUB 文件/);
+  assert.match(html, /data-local-import-file-input multiple accept="\.txt,\.epub,text\/plain,application\/epub\+zip"/);
+  assert.doesNotMatch(html, /PDF|MOBI|最多 50|导入设置|分组/);
 });
 
 test("Bookshelf entry controls open the dialog instead of routing to a standalone import page", () => {
   const api = fresh();
   const bookshelf = api.bookshelfV2(fixture, "bookshelf", {});
   const empty = api.bookshelfEmptyV2(fixture, "bookshelf-empty", {});
-  assert.match(bookshelf, /data-settings-key="more-local-import" data-local-import-open/);
-  assert.match(empty, /data-settings-key="empty-local-import" data-local-import-open/);
+  assert.match(bookshelf, /data-settings-key="more-local-import"[^>]*data-local-import-open/);
+  assert.match(empty, /data-settings-key="empty-local-import"[^>]*data-local-import-open/);
   assert.doesNotMatch(bookshelf + empty, /data-route="local-import"/);
 });
 
-test("R2b selection transitions continuously into a result list", async () => {
+test("importing state contains one spinner and no progress, filenames, result or cancel action", () => {
   const api = fresh();
   api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN" });
-  const outcome = await api.bookshelf.executeLocalImport([
-    { name: "活着.epub", size: 1258291 },
-    { name: "百年孤独.pdf", size: 8493465 },
-    { name: "平凡的世界.doc", size: 3565158 }
-  ], { delay: 0 });
-  assert.equal(outcome.ok, true);
-  const state = api.bookshelf.getState();
-  assert.equal(state.localImportPhase, "result");
-  assert.deepEqual(Array.from(state.localImportFiles, (file) => file.status), ["success", "success", "failed"]);
+  api.bookshelf.dispatch({
+    type: "LOCAL_IMPORT_START",
+    batchId: 7,
+    files: [
+      { id: "book-a", name: "三体.epub", extension: "epub", status: "processing", settleStatus: "success" },
+      { id: "book-b", name: "活着.txt", extension: "txt", status: "processing", settleStatus: "success" }
+    ]
+  });
   const html = api.bookshelfV2(fixture, "bookshelf", {});
+  assert.match(html, /class="fd-local-import-dialog is-importing" role="dialog" aria-modal="true" aria-label="正在导入"/);
+  assert.equal((html.match(/fd-local-import-spinner-halo/g) || []).length, 1);
+  assert.match(html, /<strong>正在导入<\/strong>[\s\S]*<small>请稍候<\/small>/);
+  assert.doesNotMatch(html, /progress|%|三体\.epub|活着\.txt|data-local-import-cancel|导入结果/);
+});
+
+test("selection transitions continuously to a per-book success/failure result", async () => {
+  const api = fresh();
+  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN" });
+  const files = [
+    { name: "长夜余火.epub" },
+    { name: "诡秘之主.epub" },
+    { name: "三体.txt" },
+    { name: "活着.epub" },
+    { name: "围城.txt" },
+    { name: "平凡的世界.epub" },
+    { name: "百年孤独.txt" },
+    { name: "错误样本.doc" },
+    { name: "损坏样本.mobi" }
+  ];
+  const outcome = await api.bookshelf.executeLocalImport(files, { delay: 0 });
+  assert.equal(outcome.ok, true);
+  assert.equal(api.bookshelf.getState().localImportPhase, "result");
+  const html = api.bookshelfV2(fixture, "bookshelf", {});
+  assert.match(html, /class="fd-local-import-dialog is-result"/);
   assert.match(html, /<h2 id="fd-local-import-title">导入结果<\/h2>/);
-  assert.match(html, /2 本成功，1 本失败/);
-  assert.match(html, /活着\.epub/);
-  assert.match(html, /格式不支持/);
-  assert.match(html, /data-local-import-retry/);
+  assert.match(html, /7 本已导入 · 2 本失败/);
+  assert.equal((html.match(/fd-local-import-result-row /g) || []).length, 9);
+  assert.match(html, /长夜余火\.epub[\s\S]*成功/);
+  assert.match(html, /错误样本\.doc[\s\S]*失败/);
+  assert.doesNotMatch(html, /格式不支持|失败原因|重试|data-local-import-retry|正在处理|progress/);
 });
 
-test("R2b retry keeps failed files in the same result dialog", async () => {
-  const api = fresh();
-  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN" });
-  await api.bookshelf.executeLocalImport([{ name: "不支持的格式.doc", size: 1024 }], { delay: 0 });
-  const before = api.bookshelfV2(fixture, "bookshelf", {});
-  assert.match(before, /class="fd-local-import-dialog is-result"/);
-  assert.match(before, /data-local-import-retry/);
-  const outcome = await api.bookshelf.retryLocalImport({ delay: 0 });
-  assert.equal(outcome.ok, true);
-  const state = api.bookshelf.getState();
-  assert.equal(state.localImportPhase, "result");
-  assert.equal(state.localImportFiles[0].status, "failed");
-  const after = api.bookshelfV2(fixture, "bookshelf", {});
-  assert.match(after, /class="fd-local-import-dialog is-result"/);
-  assert.match(after, /data-local-import-retry/);
-});
-
-test("R2b processing rows remain in the same dialog and block premature finish", () => {
-  const api = fresh();
-  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN" });
-  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_START", batchId: 7, files: [{ id: "a", name: "三体.epub", extension: "epub", size: 12, status: "processing", settleStatus: "success" }] });
-  const before = api.bookshelf.getState();
-  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_FINISH" });
-  assert.equal(api.bookshelf.getState(), before);
-  const html = api.bookshelfV2(fixture, "bookshelf", {});
-  assert.equal((html.match(/fd-local-import-dialog/g) || []).length, 1);
-  assert.match(html, /1 本正在处理/);
-  assert.match(html, /data-local-import-finish disabled aria-disabled="true"/);
-  assert.doesNotMatch(html, /is-loading|local-import-loading|data-route="local-import-loading"/);
-});
-
-test("R2b import caps a single selection at fifty files", async () => {
-  const api = fresh();
-  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN" });
-  await api.bookshelf.executeLocalImport(Array.from({ length: 54 }, (_, index) => ({ name: `书${index}.epub` })), { delay: 0 });
-  assert.equal(api.bookshelf.getState().localImportFiles.length, 50);
-});
-
-test("R2b cancel invalidates pending async updates and restores the recorded origin", async () => {
+test("result completion closes the same dialog and restores the invoking control", async () => {
   const api = fresh();
   api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN", focusReturnKey: "empty-local-import" });
-  const pending = api.bookshelf.executeLocalImport([{ name: "长篇.epub" }], { delay: 5 });
-  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_CANCEL" });
-  await pending;
+  await api.bookshelf.executeLocalImport([{ name: "三体.epub" }], { delay: 0 });
+  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_FINISH" });
   const state = api.bookshelf.getState();
   assert.equal(state.localImportOpen, false);
   assert.equal(state.localImportFiles.length, 0);
   assert.equal(state.focusReturnKey, "empty-local-import");
 });
 
-test("VC3 Figma popup shell and result geometry match the confirmed canonical component", () => {
-  const css = read("styles/09-import-workflow.css");
-  assert.match(css, /\.fd-local-import-backdrop[\s\S]*background: rgba\(31, 27, 23, 0\.4\);/);
-  assert.doesNotMatch(css, /\.fd-local-import-backdrop[\s\S]*backdrop-filter:/);
-  assert.match(css, /\.fd-local-import-dialog\.is-picker[\s\S]*height: 399\.75px;/);
-  assert.match(css, /\.fd-local-import-dialog\.is-result[\s\S]*height: 482\.75px;/);
-  assert.match(css, /\.fd-local-import-result-list[\s\S]*height: 254px;[\s\S]*overflow: auto;/);
-  assert.match(css, /\.fd-local-import-result-row \{[\s\S]*min-height: 61px;/);
-  assert.match(css, /\.fd-local-import-result-row\.is-processing[\s\S]*min-height: 69px;/);
-  assert.match(css, /\.fd-local-import-dialog\.is-picker > footer[\s\S]*height: 84px;/);
-  assert.match(css, /\.fd-local-import-dialog\.is-result > footer[\s\S]*height: 76px;/);
+test("the file chooser does not impose an invented fifty-book presentation cap", async () => {
+  const api = fresh();
+  api.bookshelf.dispatch({ type: "LOCAL_IMPORT_OPEN" });
+  const files = Array.from({ length: 64 }, (_, index) => ({ name: `书${index + 1}.epub` }));
+  await api.bookshelf.executeLocalImport(files, { delay: 0 });
+  assert.equal(api.bookshelf.getState().localImportFiles.length, 64);
 });
 
-test("R3a result list is scrollable and uses the project icon registry", () => {
-  const css = read("styles/09-import-workflow.css");
-  assert.match(css, /\.fd-local-import-result-list[\s\S]*height: 254px;[\s\S]*overflow: auto;/);
-  assert.doesNotMatch(rendererSource, /<svg/);
-  assert.match(rendererSource, /icon\("log", "fd-small-icon"\)/);
+test("VC3 local import geometry and scrolling match the three current Figma states", () => {
+  assert.match(cssSource, /\.fd-local-import-backdrop[\s\S]*background: rgba\(31, 27, 23, 0\.4\);/);
+  assert.doesNotMatch(cssSource, /\.fd-local-import-backdrop[\s\S]*backdrop-filter:/);
+  assert.match(cssSource, /\.fd-local-import-dialog\.is-selection[\s\S]*height: 399\.75px;/);
+  assert.match(cssSource, /\.fd-local-import-dialog\.is-importing[\s\S]*height: 228px;/);
+  assert.match(cssSource, /\.fd-local-import-dialog\.is-result[\s\S]*height: min\(636px, calc\(100% - 40px\)\);/);
+  assert.match(cssSource, /\.fd-local-import-result-list[\s\S]*height: 410px;[\s\S]*overflow: auto;/);
+  assert.match(cssSource, /\.fd-local-import-result-row \{[\s\S]*min-height: 61px;/);
+  assert.match(cssSource, /\.fd-local-import-spinner-halo > i[\s\S]*animation: fd-local-import-spin 0\.9s linear infinite;/);
+  assert.doesNotMatch(cssSource, /fd-local-import-progress|fd-local-import-row-progress/);
 });
 
 test("R3a browser wiring opens a real multi-file chooser and handles change", () => {
@@ -159,8 +165,9 @@ test("R3a browser wiring opens a real multi-file chooser and handles change", ()
   assert.match(runtimeSource, /executeLocalImport/);
 });
 
-test("Legacy local-import route renders the Bookshelf dialog rather than the old settings page", () => {
-  const html = fresh().localImportV2(fixture, "local-import", {});
-  assert.match(html, /fd-local-import-dialog is-picker/);
-  assert.doesNotMatch(html, /fd-import-card|导入设置|确认导入/);
+test("retired full-page local import cannot be called through the public renderer", () => {
+  const api = fresh();
+  assert.equal("localImportV2" in api, false);
+  assert.doesNotMatch(rendererSource, /function localImportV2|fd-import-card|导入设置|确认导入/);
+  assert.match(runtimeSource, /local-import route is retired: open the canonical in-place local import dialog/);
 });

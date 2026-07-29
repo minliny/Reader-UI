@@ -110,11 +110,27 @@
     });
   }
 
+  function guardModule(api, specifications) {
+    var guarded = Object.assign({}, api || {});
+    var bindings = {};
+    Object.keys(specifications || {}).forEach(function (rendererName) {
+      var config = specifications[rendererName] || {};
+      var allowedRoutes = routeList(config.allowedRoutes);
+      bindings[rendererName] = allowedRoutes;
+      guarded[rendererName] = wrap(rendererName, guarded[rendererName], Object.assign({}, config, {
+        allowedRoutes: allowedRoutes
+      }));
+    });
+    guarded.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(bindings);
+    return guarded;
+  }
+
   window.ReaderPublicRouteRendererAdmission = Object.freeze({
     routeList: routeList,
     routesForRenderer: routesForRenderer,
     wrap: wrap,
     wrapMapped: wrapMapped,
-    reject: reject
+    reject: reject,
+    guardModule: guardModule
   });
 })(window);
