@@ -1276,6 +1276,7 @@ export class ReaderUIRuntime {
     coreType: string,
     correlationId: string,
     chapterCount?: number,
+    selectedChapterIndex?: number,
     canonicalLocation?: ReaderUICanonicalLocation,
     reflow?: ReaderUILocationReflow,
     error?: string
@@ -1299,7 +1300,14 @@ export class ReaderUIRuntime {
         this.currentState.bookOpenTransaction = undefined
         return { accepted: true, previous: previous, state: cloneState(this.currentState), effects: [] }
       }
-      transaction.selectedChapterIndex = Math.min(transaction.requestedChapterIndex, chapterCount - 1)
+      if (selectedChapterIndex === undefined || !Number.isSafeInteger(selectedChapterIndex) ||
+        selectedChapterIndex < 0) {
+        this.currentState.loading = false
+        this.currentState.error = 'BOOK_OPEN_INVALID_CHAPTER_IDENTITY'
+        this.currentState.bookOpenTransaction = undefined
+        return { accepted: true, previous: previous, state: cloneState(this.currentState), effects: [] }
+      }
+      transaction.selectedChapterIndex = selectedChapterIndex
     }
     if (coreType === 'content.load') {
       transaction.awaitingLayout = true
@@ -1355,6 +1363,7 @@ export class ReaderUIRuntime {
       coreType,
       correlationId,
       optionalJSONResultInteger(validated, 'chapterCount'),
+      optionalJSONResultInteger(validated, 'selectedChapterIndex'),
       optionalJSONResultCanonicalLocation(validated),
       optionalJSONResultLocationReflow(validated),
       optionalJSONResultString(validated, 'error')

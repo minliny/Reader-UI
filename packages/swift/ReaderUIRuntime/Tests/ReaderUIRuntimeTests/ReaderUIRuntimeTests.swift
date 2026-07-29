@@ -250,10 +250,11 @@ final class ReaderUIRuntimeTests: XCTestCase {
         let toc = try runtime.acceptBookOpenResult(
             coreType: "chapter.list",
             correlationId: "open-1",
-            chapterCount: 3
+            chapterCount: 3,
+            selectedChapterIndex: 9
         )
         XCTAssertEqual(toc.effects.map(\.type), ["content.load"])
-        XCTAssertEqual(toc.effects.first?.jsonPayload["chapterIndex"], .number(1))
+        XCTAssertEqual(toc.effects.first?.jsonPayload["chapterIndex"], .number(9))
         XCTAssertTrue(
             try runtime.acceptBookOpenResult(
                 coreType: "content.load",
@@ -276,7 +277,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
         XCTAssertEqual(layout.effects.first?.jsonPayload, [
             "bookId": .string("book-1"),
             "sourceId": .string("source-1"),
-            "chapterIndex": .number(1),
+            "chapterIndex": .number(9),
             "anchor": .object([
                 "chapterOffset": .number(12),
                 "chapterProgress": .number(0.4),
@@ -291,7 +292,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
             coreType: "reader.location.resolve",
             correlationId: "open-1",
             canonicalLocation: resolvedLocation(
-                chapterIndex: 1,
+                chapterIndex: 9,
                 chapterOffset: 12,
                 chapterProgress: 0.4
             ),
@@ -299,7 +300,7 @@ final class ReaderUIRuntimeTests: XCTestCase {
         ).accepted)
         XCTAssertEqual(
             runtime.state.readerCanonicalLocation,
-            resolvedLocation(chapterIndex: 1, chapterOffset: 12, chapterProgress: 0.4)
+            resolvedLocation(chapterIndex: 9, chapterOffset: 12, chapterProgress: 0.4)
         )
         XCTAssertEqual(runtime.state.readerPageIndex, 0)
         XCTAssertNil(runtime.state.bookOpenTransaction)
@@ -340,7 +341,8 @@ final class ReaderUIRuntimeTests: XCTestCase {
         let empty = try runtime.acceptBookOpenResult(
             coreType: "chapter.list",
             correlationId: "local-open",
-            chapterCount: 0
+            chapterCount: 0,
+            selectedChapterIndex: 0
         )
         XCTAssertTrue(empty.accepted)
         XCTAssertTrue(empty.effects.isEmpty)

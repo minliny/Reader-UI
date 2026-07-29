@@ -12,8 +12,8 @@ export interface RuntimeTypedResultFixture {
 export const GENERATED_RUNTIME_TYPED_RESULT_FIXTURES: RuntimeTypedResultFixture[] = [
   { id: "book-open-source-detail-valid", event: "book.open", effectType: "source.detail", valid: true, result: JSON.parse("{}") as ReaderUIJSONResult },
   { id: "book-open-source-detail-unknown", event: "book.open", effectType: "source.detail", valid: false, result: JSON.parse("{\"__unknown\":true}") as ReaderUIJSONResult },
-  { id: "book-open-chapter-list-valid", event: "book.open", effectType: "chapter.list", valid: true, result: JSON.parse("{\"chapterCount\":3}") as ReaderUIJSONResult },
-  { id: "book-open-chapter-list-unknown", event: "book.open", effectType: "chapter.list", valid: false, result: JSON.parse("{\"chapterCount\":3,\"__unknown\":true}") as ReaderUIJSONResult },
+  { id: "book-open-chapter-list-valid", event: "book.open", effectType: "chapter.list", valid: true, result: JSON.parse("{\"chapterCount\":3,\"selectedChapterIndex\":9}") as ReaderUIJSONResult },
+  { id: "book-open-chapter-list-unknown", event: "book.open", effectType: "chapter.list", valid: false, result: JSON.parse("{\"chapterCount\":3,\"selectedChapterIndex\":9,\"__unknown\":true}") as ReaderUIJSONResult },
   { id: "book-open-content-load-valid", event: "book.open", effectType: "content.load", valid: true, result: JSON.parse("{}") as ReaderUIJSONResult },
   { id: "book-open-content-load-unknown", event: "book.open", effectType: "content.load", valid: false, result: JSON.parse("{\"__unknown\":true}") as ReaderUIJSONResult },
   { id: "book-open-reader-location-resolve-valid", event: "book.open", effectType: "reader.location.resolve", valid: true, result: JSON.parse("{\"canonicalLocation\":{\"bookId\":\"book-1\",\"chapterIndex\":1,\"chapterOffset\":0,\"chapterProgress\":0,\"locationRevision\":\"reader-location-v1:book-1:1:0\"},\"resolverVersion\":\"reader.location.resolve.v1.reflow\",\"resolved\":true,\"reflow\":{\"strategy\":\"offsetAnchor\",\"primaryAnchor\":\"chapterOffset\",\"fallbackAnchor\":\"chapterProgress\",\"layoutIndependent\":true}}") as ReaderUIJSONResult },

@@ -749,6 +749,7 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         coreType: String,
         correlationId: String,
         chapterCount: Int? = null,
+        selectedChapterIndex: Int? = null,
         canonicalLocation: ReaderUICanonicalLocation? = null,
         reflow: ReaderUILocationReflow? = null,
         error: String? = null
@@ -767,7 +768,15 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
                 state = state.copy(loading = false, error = "BOOK_OPEN_EMPTY_TOC", bookOpenTransaction = null)
                 return ReaderUIAsyncTransition(true, previous, state, emptyList())
             }
-            transaction = transaction.copy(selectedChapterIndex = minOf(transaction.requestedChapterIndex, chapterCount - 1))
+            if (selectedChapterIndex == null || selectedChapterIndex < 0) {
+                state = state.copy(
+                    loading = false,
+                    error = "BOOK_OPEN_INVALID_CHAPTER_IDENTITY",
+                    bookOpenTransaction = null
+                )
+                return ReaderUIAsyncTransition(true, previous, state, emptyList())
+            }
+            transaction = transaction.copy(selectedChapterIndex = selectedChapterIndex)
         }
         if (coreType == "content.load") {
             transaction = transaction.copy(awaitingLayout = true)
@@ -813,6 +822,7 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             coreType = coreType,
             correlationId = correlationId,
             chapterCount = validated.optionalResultInt("chapterCount"),
+            selectedChapterIndex = validated.optionalResultInt("selectedChapterIndex"),
             canonicalLocation = validated.optionalCanonicalLocation(),
             reflow = validated.optionalLocationReflow(),
             error = validated.optionalResultString("error")

@@ -21,7 +21,8 @@
     "effectType": "chapter.list",
     "valid": true,
     "result": {
-      "chapterCount": 3
+      "chapterCount": 3,
+      "selectedChapterIndex": 9
     }
   },
   {
@@ -31,6 +32,7 @@
     "valid": false,
     "result": {
       "chapterCount": 3,
+      "selectedChapterIndex": 9,
       "__unknown": true
     }
   },

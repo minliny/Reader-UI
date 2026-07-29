@@ -283,9 +283,11 @@ class ReaderUIRuntimeTest {
         assertEquals(listOf("source.detail"), transition.effects.map { it.type })
 
         assertEquals(listOf("chapter.list"), runtime.acceptBookOpenResult("source.detail", "open-1").effects.map { it.type })
-        val toc = runtime.acceptBookOpenResult("chapter.list", "open-1", chapterCount = 3)
+        val toc = runtime.acceptBookOpenResult(
+            "chapter.list", "open-1", chapterCount = 3, selectedChapterIndex = 9
+        )
         assertEquals(listOf("content.load"), toc.effects.map { it.type })
-        assertEquals(JsonPrimitive(1), toc.effects.single().jsonPayload["chapterIndex"])
+        assertEquals(JsonPrimitive(9), toc.effects.single().jsonPayload["chapterIndex"])
         assertTrue(runtime.acceptBookOpenResult("content.load", "open-1").accepted)
         assertTrue(requireNotNull(runtime.state.bookOpenTransaction).awaitingLayout)
 
@@ -298,7 +300,7 @@ class ReaderUIRuntimeTest {
             buildJsonObject {
                 put("sourceId", "source-1")
                 put("bookId", "book-1")
-                put("chapterIndex", 1)
+                put("chapterIndex", 9)
                 put("anchor", buildJsonObject {
                     put("chapterOffset", 12)
                     put("chapterProgress", 0.4)
@@ -315,14 +317,14 @@ class ReaderUIRuntimeTest {
             "reader.location.resolve",
             "open-1",
             canonicalLocation = resolvedLocation(
-                chapterIndex = 1,
+                chapterIndex = 9,
                 chapterOffset = 12,
                 chapterProgress = 0.4
             ),
             reflow = ReaderUILocationReflow()
         ).accepted)
         assertEquals(
-            resolvedLocation(chapterIndex = 1, chapterOffset = 12, chapterProgress = 0.4),
+            resolvedLocation(chapterIndex = 9, chapterOffset = 12, chapterProgress = 0.4),
             runtime.state.readerCanonicalLocation
         )
         assertEquals(ReaderUILocationReflow(), runtime.state.readerLocationReflow)
@@ -355,7 +357,9 @@ class ReaderUIRuntimeTest {
             "local-open"
         )
         assertEquals(listOf("chapter.list"), start.effects.map { it.type })
-        val empty = runtime.acceptBookOpenResult("chapter.list", "local-open", chapterCount = 0)
+        val empty = runtime.acceptBookOpenResult(
+            "chapter.list", "local-open", chapterCount = 0, selectedChapterIndex = 0
+        )
         assertTrue(empty.accepted)
         assertTrue(empty.effects.isEmpty())
         assertEquals("BOOK_OPEN_EMPTY_TOC", runtime.state.error)

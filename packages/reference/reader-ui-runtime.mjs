@@ -935,6 +935,7 @@ export class ReaderUIRuntime {
     const result = cloneReaderUIJSONResult(jsonResult);
     validateReaderUITypedResult("book.open", coreType, result);
     const chapterCount = readerUIJSONResultInteger(result, "chapterCount");
+    const selectedChapterIndex = readerUIJSONResultInteger(result, "selectedChapterIndex");
     const error = readerUIJSONResultString(result, "error");
     if (error) {
       this.state.loading = false;
@@ -950,7 +951,13 @@ export class ReaderUIRuntime {
         this.state.bookOpenTransaction = null;
         return { accepted: true, previous, state: structuredClone(this.state), effects: [] };
       }
-      transaction.selectedChapterIndex = Math.min(transaction.requestedChapterIndex, chapterCount - 1);
+      if (!Number.isSafeInteger(selectedChapterIndex) || selectedChapterIndex < 0) {
+        this.state.loading = false;
+        this.state.error = "BOOK_OPEN_INVALID_CHAPTER_IDENTITY";
+        this.state.bookOpenTransaction = null;
+        return { accepted: true, previous, state: structuredClone(this.state), effects: [] };
+      }
+      transaction.selectedChapterIndex = selectedChapterIndex;
     }
 
     if (coreType === "content.load") {

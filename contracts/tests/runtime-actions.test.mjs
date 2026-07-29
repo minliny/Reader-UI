@@ -407,10 +407,12 @@ test("book.open is a serial result-dependent Core transaction", () => {
   assert.equal(detail.accepted, true);
   assert.deepEqual(detail.effects.map((effect) => effect.type), ["chapter.list"]);
 
-  const toc = runtime.acceptBookOpenResult("chapter.list", "open-1", { chapterCount: 3 });
+  const toc = runtime.acceptBookOpenResult(
+    "chapter.list", "open-1", { chapterCount: 3, selectedChapterIndex: 9 }
+  );
   assert.equal(toc.accepted, true);
   assert.deepEqual(toc.effects.map((effect) => effect.type), ["content.load"]);
-  assert.equal(toc.effects[0].jsonPayload.chapterIndex, 1);
+  assert.equal(toc.effects[0].jsonPayload.chapterIndex, 9);
 
   const content = runtime.acceptBookOpenResult("content.load", "open-1");
   assert.equal(content.accepted, true);
@@ -442,7 +444,7 @@ test("book.open is a serial result-dependent Core transaction", () => {
   assert.deepEqual(layout.effects[0].jsonPayload, {
     sourceId: "source-1",
     bookId: "book-1",
-    chapterIndex: 1,
+    chapterIndex: 9,
     anchor: {
       chapterOffset: 12,
       chapterProgress: 0.4,
@@ -457,7 +459,7 @@ test("book.open is a serial result-dependent Core transaction", () => {
   const complete = runtime.acceptBookOpenResult("reader.location.resolve", "open-1", {
     ...resolvedLocation({
       bookId: "book-1",
-      chapterIndex: 1,
+      chapterIndex: 9,
       chapterOffset: 12,
       chapterProgress: 0.4,
     }),
@@ -466,7 +468,7 @@ test("book.open is a serial result-dependent Core transaction", () => {
   assert.equal(runtime.state.loading, false);
   assert.deepEqual(runtime.state.readerCanonicalLocation, resolvedLocation({
     bookId: "book-1",
-    chapterIndex: 1,
+    chapterIndex: 9,
     chapterOffset: 12,
     chapterProgress: 0.4,
   }).canonicalLocation);
@@ -497,7 +499,9 @@ test("local book.open skips detail and never loads an empty TOC", () => {
     "local-open"
   );
   assert.deepEqual(start.effects.map((effect) => effect.type), ["chapter.list"]);
-  const empty = runtime.acceptBookOpenResult("chapter.list", "local-open", { chapterCount: 0 });
+  const empty = runtime.acceptBookOpenResult(
+    "chapter.list", "local-open", { chapterCount: 0, selectedChapterIndex: 0 }
+  );
   assert.equal(empty.accepted, true);
   assert.deepEqual(empty.effects, []);
   assert.equal(runtime.state.error, "BOOK_OPEN_EMPTY_TOC");

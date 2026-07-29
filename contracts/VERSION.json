@@ -18,7 +18,7 @@
     "state-rule": "1.1.0",
     "motion-policy": "2.0.0",
     "runtime-actions": "3.0.0",
-    "runtime-payload-contracts": "3.0.0",
+    "runtime-payload-contracts": "4.0.0",
     "host-consumer-lock": "3.0.0",
     "runtime-ownership": "1.0.0",
     "screen-graph": "1.2.0",
@@ -33,7 +33,7 @@
       "summary": "MAJOR：阅读位置结果改为可重排 Core DTO，并将 typed payload contract 纳入三端 release lock",
       "changes": [
         "reader.location.resolve 结果删除不稳定的 opaque canonicalLocation 字符串与 Core pageIndex，改为必填 canonicalLocation 结构、resolverVersion、resolved 和 reflow；视觉 pageIndex 只能由当前 Host 实测布局派生。",
-        "runtime-payload-contracts schemaVersion 2 升至 3；Swift、Kotlin、ArkTS 与 reference runtime 统一校验 bookId、chapterIndex、chapterOffset、chapterProgress、locationRevision 和 offsetAnchor reflow。",
+        "runtime-payload-contracts schemaVersion 2 升至 4；v3 统一校验可重排位置 DTO，v4 要求 chapter.list 返回 Host 从真实 Core TOC 选出的 selectedChapterIndex，禁止用列表位置冒充稀疏章节身份。",
         "host-consumer-lock schemaVersion 2 升至 3，新增 runtimePayloadContractsSchemaVersion 与 runtimePayloadContractsSha256；release metadata、dispatch、verified release、lock updater 和 consumer checker 全链路绑定 typed contract。",
         "旧 v2 Host consumer lock 不会被手工覆写；各 Host 必须通过本版本不可变 verified release 生成 v3 lock，否则 fail-closed。",
         "翻页动画继续保留覆盖、滑动、仿真、滚动、无动画五项静态语义；Figma F3 尚未提供的 page-turn timeline 不由 Reader-UI 自行发明。"

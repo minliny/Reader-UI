@@ -15,8 +15,8 @@ data class RuntimeTypedResultFixture(
 val GENERATED_RUNTIME_TYPED_RESULT_FIXTURES: List<RuntimeTypedResultFixture> = listOf(
     RuntimeTypedResultFixture("book-open-source-detail-valid", "book.open", "source.detail", true, Json.parseToJsonElement("{}").jsonObject),
     RuntimeTypedResultFixture("book-open-source-detail-unknown", "book.open", "source.detail", false, Json.parseToJsonElement("{\"__unknown\":true}").jsonObject),
-    RuntimeTypedResultFixture("book-open-chapter-list-valid", "book.open", "chapter.list", true, Json.parseToJsonElement("{\"chapterCount\":3}").jsonObject),
-    RuntimeTypedResultFixture("book-open-chapter-list-unknown", "book.open", "chapter.list", false, Json.parseToJsonElement("{\"chapterCount\":3,\"__unknown\":true}").jsonObject),
+    RuntimeTypedResultFixture("book-open-chapter-list-valid", "book.open", "chapter.list", true, Json.parseToJsonElement("{\"chapterCount\":3,\"selectedChapterIndex\":9}").jsonObject),
+    RuntimeTypedResultFixture("book-open-chapter-list-unknown", "book.open", "chapter.list", false, Json.parseToJsonElement("{\"chapterCount\":3,\"selectedChapterIndex\":9,\"__unknown\":true}").jsonObject),
     RuntimeTypedResultFixture("book-open-content-load-valid", "book.open", "content.load", true, Json.parseToJsonElement("{}").jsonObject),
     RuntimeTypedResultFixture("book-open-content-load-unknown", "book.open", "content.load", false, Json.parseToJsonElement("{\"__unknown\":true}").jsonObject),
     RuntimeTypedResultFixture("book-open-reader-location-resolve-valid", "book.open", "reader.location.resolve", true, Json.parseToJsonElement("{\"canonicalLocation\":{\"bookId\":\"book-1\",\"chapterIndex\":1,\"chapterOffset\":0,\"chapterProgress\":0,\"locationRevision\":\"reader-location-v1:book-1:1:0\"},\"resolverVersion\":\"reader.location.resolve.v1.reflow\",\"resolved\":true,\"reflow\":{\"strategy\":\"offsetAnchor\",\"primaryAnchor\":\"chapterOffset\",\"fallbackAnchor\":\"chapterProgress\",\"layoutIndependent\":true}}").jsonObject),

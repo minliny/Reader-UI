@@ -30,8 +30,8 @@ test("typed payload registry and fixtures pass their machine schemas", () => {
   assertValid(contractSchema, contracts, "runtime-payload-contracts.json");
   assertValid(fixtureSchema, fixtures, "runtime-payload-contract.fixtures.json");
   assertValid(resultFixtureSchema, resultFixtures, "runtime-result-contract.fixtures.json");
-  assert.equal(contracts.schemaVersion, 3);
-  assert.equal(versionManifest.schema["runtime-payload-contracts"], "3.0.0");
+  assert.equal(contracts.schemaVersion, 4);
+  assert.equal(versionManifest.schema["runtime-payload-contracts"], "4.0.0");
   assert.equal(contracts.contracts.length, 67);
   assert.equal(new Set(contracts.contracts.map((item) => item.event)).size, 67);
   assert.deepEqual(new Set(contracts.contracts.map((item) => item.event)), new Set(actions.actions.map((item) => item.event)));

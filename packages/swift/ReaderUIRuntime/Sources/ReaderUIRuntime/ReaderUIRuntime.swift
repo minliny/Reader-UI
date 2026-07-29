@@ -808,6 +808,7 @@ public final class ReaderUIRuntime {
         coreType: String,
         correlationId: String,
         chapterCount: Int? = nil,
+        selectedChapterIndex: Int? = nil,
         canonicalLocation: ReaderUICanonicalLocation? = nil,
         reflow: ReaderUILocationReflow? = nil,
         error: String? = nil
@@ -833,7 +834,13 @@ public final class ReaderUIRuntime {
                 state.bookOpenTransaction = nil
                 return ReaderUIAsyncTransition(accepted: true, previous: previous, state: state, effects: [])
             }
-            transaction.selectedChapterIndex = min(transaction.requestedChapterIndex, chapterCount - 1)
+            guard let selectedChapterIndex, selectedChapterIndex >= 0 else {
+                state.loading = false
+                state.error = "BOOK_OPEN_INVALID_CHAPTER_IDENTITY"
+                state.bookOpenTransaction = nil
+                return ReaderUIAsyncTransition(accepted: true, previous: previous, state: state, effects: [])
+            }
+            transaction.selectedChapterIndex = selectedChapterIndex
         }
 
         if coreType == "content.load" {
@@ -895,6 +902,7 @@ public final class ReaderUIRuntime {
             coreType: coreType,
             correlationId: correlationId,
             chapterCount: try optionalJSONResultInteger(result, key: "chapterCount"),
+            selectedChapterIndex: try optionalJSONResultInteger(result, key: "selectedChapterIndex"),
             canonicalLocation: optionalCanonicalLocation(result),
             reflow: optionalLocationReflow(result),
             error: try optionalJSONResultString(result, key: "error")

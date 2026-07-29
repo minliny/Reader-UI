@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "sourceOfTruth": {
     "repository": "Reader-Core-Native",
     "commit": "5a892ad9e05ec41e9cdf846da966d44f5624436d",
@@ -2397,10 +2397,14 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "chapterCount"
+            "chapterCount",
+            "selectedChapterIndex"
           ],
           "properties": {
             "chapterCount": {
+              "$ref": "#/definitions/nonNegativeInteger"
+            },
+            "selectedChapterIndex": {
               "$ref": "#/definitions/nonNegativeInteger"
             }
           }
