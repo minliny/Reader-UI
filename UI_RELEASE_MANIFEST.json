@@ -1291,8 +1291,8 @@
     },
     {
       "path": "generated/arkts/VisualAdmission.ets",
-      "byteLength": 89929,
-      "sha256": "2d26284ffe35dd106933b585b1d6ca02b7f7d6f48efaffa70e405ddd8149b6f3"
+      "byteLength": 89932,
+      "sha256": "642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7"
     },
     {
       "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
@@ -1662,7 +1662,7 @@
     {
       "path": "ui-spec/runtime-payload-contracts.json",
       "byteLength": 129746,
-      "sha256": "12e59e69142f78594c3934c956c66624d5c182ee96b5241a6346ca542dcf83e3"
+      "sha256": "8a49864f3c78ed1cf88cddb9919106653b286ebcdb8763f502b113ab6ffcb007"
     },
     {
       "path": "ui-spec/runtime-payload-contracts.schema.json",
@@ -1931,8 +1931,8 @@
     {
       "name": "generated",
       "fileCount": 59,
-      "byteLength": 2257972,
-      "sha256": "6c9674efb1121c56ce3d6bf89ddfc8db8622f580d383a366a497a7979790cd74",
+      "byteLength": 2257975,
+      "sha256": "2e25f581750b6a83329f3af40d3ed75623df4fc3a257e45dd3efad1c9faf76c0",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
@@ -2119,7 +2119,7 @@
       "name": "ui-spec",
       "fileCount": 6,
       "byteLength": 722947,
-      "sha256": "fd10b9cd470432ec0adcc4b749addb7007606d35a4262cb2b50de15bc81b75f7",
+      "sha256": "1f12cfe032c2b9eb3fb599da64e31b01a88d2970d72e4eeeb29601d3b4e5be92",
       "files": [
         "ui-spec/component-render-semantics.json",
         "ui-spec/host-consumers.json",

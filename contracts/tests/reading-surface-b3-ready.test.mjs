@@ -43,7 +43,7 @@ function handoffHash() {
   return `sha256:${crypto.createHash("sha256").update(entries.join("\n")).digest("hex")}`;
 }
 
-test("B3 releases fresh reader.reading-surface source evidence while preserving the withdrawn B4 history", () => {
+test("B3 evidence remains fresh after B4 appends the authorized reading-surface promotion", () => {
   const registry = readJson("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
   const routeSchema = readJson("contracts/route.schema.json");
   const quarantine = readJson("contracts/fixtures/route-reconstruction-quarantine.fixtures.json");
@@ -77,15 +77,15 @@ test("B3 releases fresh reader.reading-surface source evidence while preserving 
       `${id} must remain fail-closed, not silently promotable`);
   }
 
-  // B3: reader.reading-surface source release is intact and Figma-bound, but B4
-  // has been retracted - harmony is candidate-backport, not implementation-ready.
+  // B3 source evidence remains intact and Figma-bound. B4 may activate only
+  // this completed surface; the six sibling records remain fail-closed.
   const record = registry.records.find((item) => item.id === "reader.reading-surface");
   assert.ok(record, "reader.reading-surface must remain registered");
   assert.deepEqual(record.routeIds, ["immersive-reading", "reader", "reader_content"],
     "the 3 canonical reading routes are the legitimate surface, never retired");
   assert.equal(record.local?.status, "implementation-ready");
-  assert.equal(record.harmony?.status, "candidate-backport",
-    "B4 must not consume or activate HarmonyOS; the premature promotion is retracted");
+  assert.equal(record.harmony?.status, "implementation-ready",
+    "B4 must activate only after the fresh B3 packet and A2 consumer cleanup");
 
   const surfaceEntry = quarantine.entries.find((entry) => entry.recordId === "reader.reading-surface");
   assert.ok(surfaceEntry, "reader.reading-surface source extraction entry is required");
@@ -114,16 +114,17 @@ test("B3 releases fresh reader.reading-surface source evidence while preserving 
   assert.equal(handoff.figma?.registeredRevision, officialRevision.currentRevision);
   assert.equal(record.figma?.revision, officialRevision.currentRevision);
 
-  // The historical promotion and retraction are immutable. The current B3
-  // packet must be fresh relative to the exact evidence that retract-002
-  // withdrew; rewriting promote-001/retract-002 to match a later packet would
-  // falsify the append-only ledger and make promote-family's freshness gate
-  // reject the new packet.
+  // The historical promotion and retraction remain immutable. promote-003
+  // must append the current packet instead of rewriting promote-001 or
+  // retract-002.
   const rsEntries = ledger.entries.filter((e) => e.recordId === "reader.reading-surface");
-  assert.ok(rsEntries.length >= 2, "promote-001 and retract-002 must both be preserved");
+  assert.equal(rsEntries.length, 3,
+    "the reading surface must retain promote-001 + retract-002 and append promote-003");
   const promote = rsEntries.find((e) => e.entryId === "promote-001");
   const retract = rsEntries.find((e) => e.entryId === "retract-002");
-  assert.ok(promote && retract, "the premature promotion and its atomic reversal must both exist");
+  const currentPromotion = rsEntries.find((e) => e.entryId === "promote-003");
+  assert.ok(promote && retract && currentPromotion,
+    "historical promotion/retraction and the authorized current promotion must all exist");
   assert.equal(promote.newHarmonyStatus, "implementation-ready");
   assert.equal(retract.newHarmonyStatus, "candidate-backport");
   assert.equal(retract.reversalOf, promote.entryHash, "retract must chain to the promotion it reverses");
@@ -141,8 +142,17 @@ test("B3 releases fresh reader.reading-surface source evidence while preserving 
     "the new B3 source hash must differ from the withdrawn packet");
   assert.notEqual(handoff.localSource.implementationCommit, retract.retractedPromotion.implementationCommit,
     "the new B3 implementation commit must differ from the withdrawn commit");
-  assert.equal(rsEntries[rsEntries.length - 1].entryId, retract.entryId,
-    "the retract must be the latest ledger entry for the reading surface");
+  assert.equal(currentPromotion.previousEntryHash, retract.entryHash,
+    "promote-003 must append after retract-002 without rewriting history");
+  assert.equal(currentPromotion.previousHarmonyStatus, "candidate-backport");
+  assert.equal(currentPromotion.newHarmonyStatus, "implementation-ready");
+  assert.equal(currentPromotion.localReadyForFigma.sourceEvidenceHash, handoff.sourceEvidenceHash,
+    "promote-003 must bind the current B3 source hash");
+  assert.equal(currentPromotion.localReadyForFigma.implementationCommit,
+    handoff.localSource.implementationCommit,
+    "promote-003 must bind the current B2 implementation commit");
+  assert.equal(rsEntries[rsEntries.length - 1].entryId, currentPromotion.entryId,
+    "promote-003 must be the latest ledger entry for the reading surface");
 
   // The new implementation commit is a real ancestor and contains the exact
   // source files named by the B3 packet.
