@@ -95,6 +95,86 @@
       "retractedBy": "promote-family.mjs",
       "previousEntryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
       "entryHash": "sha256:8e53ea2d59467cc77a5d92feefa696a6d221f78a3af9c219386ea38126888648"
+    },
+    {
+      "entryId": "promote-003",
+      "kind": "promote",
+      "timestamp": "2026-07-29T17:13:18.765Z",
+      "recordId": "reader.reading-surface",
+      "pageFamily": "reader-runtime/reading-surface",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "immersive-reading",
+        "reader",
+        "reader_content"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/reader-runtime/reading-surface/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:b931f2f8ad97623b09c86931cbd48462bd42aef06d1fdb74266b237bad1ded07",
+        "implementationCommit": "4e5e75d802810c4c5b4e2cc8ed64091b418a7e92",
+        "verificationSuites": [
+          {
+            "suite": "figmaSourceContract",
+            "tests": 4,
+            "passed": 4,
+            "failed": 0
+          },
+          {
+            "suite": "focusedReaderRegression",
+            "tests": 59,
+            "passed": 59,
+            "failed": 0
+          },
+          {
+            "suite": "sourceQuarantineRelease",
+            "tests": 2,
+            "passed": 2,
+            "failed": 0
+          },
+          {
+            "suite": "a2ReaderUiSourceRetirement",
+            "tests": 5,
+            "passed": 5,
+            "failed": 0
+          },
+          {
+            "suite": "pageAnimationContract",
+            "tests": 4,
+            "passed": 4,
+            "failed": 0
+          },
+          {
+            "suite": "fullContractSuite",
+            "tests": 492,
+            "passed": 492,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "1023:18354",
+        "canonicalMasterId": "1023:18354"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets#ReaderBase"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2ce37cf59ec6f4f6a092822cd205a6a62c0baf79f5e429604c33d9c05d389302",
+      "upstreamArtifactHashAfter": "sha256:642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7",
+      "consumerArtifactHashAfter": "sha256:642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:8e53ea2d59467cc77a5d92feefa696a6d221f78a3af9c219386ea38126888648",
+      "entryHash": "sha256:292c76bfefa6f384eea01febc2697b5c8dfd043a828b6df9ee016a4ef920671d"
     }
   ]
 }
