@@ -167,7 +167,7 @@
   "boundaries": {
     "figmaVisualOrStructuralMutation": false,
     "harmonyOSVisualConsumerMutation": false,
-    "harmonyOSGeneratedContractSyncOnly": true,
+    "harmonyOSGeneratedContractSyncOnly": false,
     "harmonyOSA2ConsumerCleanupComplete": false,
     "harmonyOSRouteActivation": false,
     "deviceOrEmulatorExecuted": false,
