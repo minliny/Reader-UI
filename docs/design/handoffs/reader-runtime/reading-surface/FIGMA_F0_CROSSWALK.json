@@ -1,0 +1,19 @@
+{
+  "kind": "FIGMA_F0_EXACT_CROSSWALK",
+  "schemaVersion": "1.0.0",
+  "status": "resolved-current",
+  "recordId": "reader.reading-surface",
+  "binding": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1023:17636",
+    "nodeId": "1023:18354",
+    "canonicalMasterId": "1023:18354",
+    "viewportNodes": {
+      "phone": "1023:18355",
+      "tablet": "1023:18371"
+    },
+    "revision": "2379851596474967636",
+    "revisionStatus": "official-rest-current-version-node-verified",
+    "bindingStatus": "resolved-current"
+  }
+}

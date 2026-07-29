@@ -972,7 +972,14 @@
     "reader-replace-import-export": "readerReplaceImportExportScreen",
     "reader-replace-preview": "readerReplacePreviewScreen",
     "reader-replace-page": "readerReplacePageScreen",
-    "content-replacement": "readerReplaceOverlayV2Screen",
+    // The LIVE route `content-replacement` MUST dispatch to contentReplacementScreen
+    // (the L2 replace-rules overlay), matching the file-header intent above. Binding it
+    // to readerReplaceOverlayV2Screen (the retired-route demo renderer) made that demo
+    // renderer reachable via a surviving route, which falsified its `fullyUnreachable`
+    // claim in the A2 historical-reachability evidence. readerReplaceOverlayV2Screen is
+    // now bound ONLY to the retired route `reader-replace-overlay-v2`, so it is
+    // genuinely unreachable from the canonical (live) reading surface.
+    "content-replacement": "contentReplacementScreen",
     "reader-replace-overlay-v2": "readerReplaceOverlayV2Screen"
   };
 

@@ -79,7 +79,7 @@
     "staticDefaultRule": "When ReaderUiStore has no explicit typography or page-space preference, sharedReaderSurface uses the live Figma default Noto Serif SC / 18px / 1.96 line-height / 15.8px paragraph gap / 2em indent and the Figma 72px/32px page space. An explicit ReaderUiStore value remains a behavior-owned override.",
     "traceability": "The rendered PaperLayer and ReadingContent carry their exact Phone/Tablet Figma node IDs. This is trace metadata only; it does not make DOM attributes a visual authority.",
     "excluded": [
-      "Reader control home, quick modules, full modules, TTS, directory, settings, and content search remain independently route-quarantined.",
+      "Reader control home, quick modules, full modules, TTS, directory, settings, and content search remain separate candidate-backport records whose retired routeIds are physically absent; they are pending independent source conversion and are not active quarantine entries.",
       "No Figma node, component, reaction, token, or asset was written or recreated.",
       "No HarmonyOS renderer, admission state, emulator, device, Core, Host, or release-lock was changed in B2."
     ]
@@ -87,9 +87,11 @@
   "splitPerformed": {
     "completedAt": "2026-07-27T16:18:00Z",
     "scope": "reader.reading-surface lineage correction (A2)",
-    "summary": "The 3 shared old reading-page overlay implementations (ReaderDirectoryPanel/ReaderAppearancePanel/ReaderReplacePanel) were split into retained shared primitives (DirectoryPanel/AppearancePanel/ReplacePanel) + retired reading-page implementations (old 3 types now explicit-gap, 0 fixtures, NOT deleted). ReaderBase no longer consumes the 3 old reading-page overlays; 23/23 historical reading-page implementations are fully unreachable.",
+    "implementationCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
+    "summary": "The 3 shared old reading-page overlay identities (ReaderDirectoryPanel/ReaderAppearancePanel/ReaderReplacePanel) were split into retained shared primitives (DirectoryPanel/AppearancePanel/ReplacePanel) and retired reading-surface identities (explicit-gap, 0 fixtures). All 23 audited historical implementations are unreachable from ReaderBase. 21 are globally unreachable; ReaderControlSheet remains directly reused by SourceSwitchFlowPage and ReaderAutoScrollPanel remains canonical for auto-page.",
     "sourceSideSplit": "Reader-UI schema enum 177 (174 + 3 new shared-primitive types DirectoryPanel/AppearancePanel/ReplacePanel); 17 surviving route fixtures rebound to new types; 13 retired route fixtures 0 residue; old 3 types now explicit-gap mirroring ReaderTtsPanel/ReaderSettingsPanel.",
-    "consumerSideSplit": "HarmonyOS 3 native structs renamed DirectoryPanel/AppearancePanel/ReplacePanel + reading-page sheet shells retired (ReaderModulePanelShell/ReaderQuickPanelShell wrappers removed, close-Image retired, inert chrome removed); 4 shared @Builder primitives retained; dispatch + CoverageRegistry + tests synchronized.",
+    "consumerSideSplit": "HarmonyOS current screen-graph and static-contract checks pass, but the execution gate now correctly fails closed because the Reader-UI dependency document is untracked/dirty. No committed machine receipt exists. This does not promote harmony.status, activate a route, or satisfy release identity.",
+    "contractRetirementDelta": "docs/design/handoffs/reader-runtime/reading-surface/A2_CONTRACT_RETIREMENT_DELTA.json",
     "reachabilityReport": "docs/audits/reader-reading-surface-historical-reachability-2026-07-27.{md,json}",
     "noFigmaMutation": true,
     "noPromotionExecuted": true
@@ -112,9 +114,70 @@
       "passed": 59,
       "failed": 0
     },
+    "a2ContractRetirementDelta": {
+      "command": "node --test contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0
+    },
+    "pageAnimationContract": {
+      "command": "node --test contracts/tests/reader-page-animation-contract.test.mjs",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "canonicalOptions": [
+        "cover",
+        "slide",
+        "simulation",
+        "scroll",
+        "none"
+      ],
+      "note": "The source fixture and generated ArkTS/Kotlin/Swift contracts preserve 覆盖/滑动/仿真/滚动/无动画 in exact order. A three-option rewrite cannot pass this gate."
+    },
+    "harmonyValidation": {
+      "status": "blocked-fail-closed",
+      "acceptedResults": [
+        {
+          "command": "npm run gen:contracts",
+          "status": "passed",
+          "result": "six consumer files byte-synchronized; five pageAnimation options retained"
+        },
+        {
+          "command": "node scripts/sync_reader_ui_screen_graph.mjs --check",
+          "status": "passed",
+          "routes": 247,
+          "variants": 183,
+          "components": 580,
+          "faithfulInstances": 272,
+          "retiredRuntimeInstances": 33
+        },
+        {
+          "command": "node scripts/enforce-implementation-ready-gate.mjs",
+          "status": "blocked-fail-closed",
+          "reasonCode": "READER_UI_DEPENDENCY_DOCUMENT_UNCOMMITTED_OR_DIRTY",
+          "note": "The failure is the intended enforcement result while the repaired dependency document is not committed and clean."
+        },
+        {
+          "command": "node scripts/test_contracts.mjs",
+          "status": "passed",
+          "tests": 55,
+          "passed": 55,
+          "failed": 0
+        }
+      ],
+      "machineReceipt": {
+        "status": "missing",
+        "promotionAuthority": false
+      },
+      "releaseIdentityGate": {
+        "command": "npm run check:reader-ui-consumer",
+        "status": "blocked",
+        "consumerReleaseSourceSha": "33d5352ee589ccf988852a111309414afc1d7d49",
+        "currentReaderUiHead": "85eda9b4ca1a254d769ba9c62aa4ccdd20c47d02"
+      }
+    },
     "notExecuted": [
       "promotion",
-      "HarmonyOS consumption",
       "build",
       "virtual machine",
       "real device"

@@ -5,7 +5,7 @@
   "recordIds": [
     "reader.reading-surface"
   ],
-  "status": "B2_SOURCE_CONVERSION_COMPLETE_PENDING_B3_EVIDENCE",
+  "status": "B3_CONTRACT_VALIDATION_PASSED_RELEASE_IDENTITY_AND_CLEAN_HANDOFF_PENDING",
   "writtenAt": "2026-07-27T08:24:03Z",
   "classification": "D1 + D2",
   "figma": {
@@ -64,10 +64,12 @@
     "staticSource": "frontend-demo-optimized/render-runtime.js#sharedReaderSurface",
     "sourceDefault": "Noto Serif SC / 18px / 35.28px / 15.8px / 36px first-line indent",
     "explicitPreferenceOwner": "ReaderUiStore / existing reducer",
-    "siblingReaderRecords": "remain route-quarantined and are not claimed by this delta"
+    "siblingReaderRecords": "The 13 historical sibling routes are physically retired from the canonical route schema and are not claimed by this visual delta.",
+    "nonVisualRetirementDelta": "docs/design/handoffs/reader-runtime/reading-surface/A2_CONTRACT_RETIREMENT_DELTA.json",
+    "retirementBoundary": "Coverage and route denominator changes are authorized only by the non-visual A2 contract-retirement delta. They are not represented as a Figma visual change."
   },
   "nativeImpact": {
-    "HarmonyOS": "none in B2; candidate-backport remains fail-closed until B4 atomic promotion and B5 consumer work",
+    "HarmonyOS": "current generated contracts, Screen Graph Gate J, and static contract checks pass; candidate-backport remains fail-closed because no promotion or route activation occurred",
     "Android": "none",
     "iOS": "none"
   },
@@ -83,12 +85,23 @@
       "passed": 59,
       "failed": 0
     },
+    "harmonyValidation": {
+      "status": "passed",
+      "acceptedResults": [
+        "npm run gen:contracts — six consumer files byte-synchronized and five pageAnimation options retained",
+        "node scripts/sync_reader_ui_screen_graph.mjs --check — PASS (247 routes, 183 variants, 580 components, 272 faithful instances, 33 retired runtime instances)",
+        "node scripts/enforce-implementation-ready-gate.mjs — 13/13 PASS including Gate J",
+        "node scripts/test_contracts.mjs — 54/54 PASS"
+      ],
+      "releaseIdentityGate": "BLOCKED: consumer sourceSha 33d5352ee589ccf988852a111309414afc1d7d49 does not equal Reader-UI HEAD 85eda9b4ca1a254d769ba9c62aa4ccdd20c47d02"
+    },
     "deviceOrEmulatorExecuted": false
   },
   "boundary": {
     "figmaVisualOrStructuralMutation": false,
     "promotionExecuted": false,
-    "harmonyOSMutation": false,
+    "harmonyOSContractAndGateMutationObserved": true,
+    "harmonyOSVisualMutation": false,
     "deviceOrEmulatorExecuted": false,
     "noLocalApproximation": true,
     "noDetachedFrameOrScreenshot": true

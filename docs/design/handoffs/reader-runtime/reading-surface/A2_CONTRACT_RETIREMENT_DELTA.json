@@ -1,0 +1,399 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "A2_CONTRACT_RETIREMENT_DELTA",
+  "deltaId": "reader.reading-surface.a2-contract-retirement.1b81644",
+  "status": "approved-source-retirement",
+  "validationStatus": "harmony-screen-graph-and-static-pass-execution-gate-blocked",
+  "recordId": "reader.reading-surface",
+  "capturedAt": "2026-07-28T01:22:27Z",
+  "implementationCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
+  "retiredRouteIds": [
+    "control-layer-base-v2",
+    "reader-directory-overlay-v2",
+    "reader-appearance-overlay-v2",
+    "reader-tts-overlay-v2",
+    "reader-settings-overlay-v2",
+    "reader-auto-scroll-overlay-v2",
+    "reader-search-overlay-v2",
+    "reader-replace-overlay-v2",
+    "toc-bookmarks",
+    "tts",
+    "reader-appearance",
+    "reader-settings",
+    "content-search"
+  ],
+  "coverageBefore": {
+    "faithfulInstanceFloor": 285,
+    "partialInstanceCeiling": 52,
+    "Loading": 9,
+    "Offline": 4,
+    "ReaderBase": 49,
+    "ReaderTopArea": 48,
+    "ReaderBottomBar": 11,
+    "TapZones": 7,
+    "readerBaseEmptySignature": 26,
+    "readerBasePropKeys": [
+      "availability",
+      "coreSupport",
+      "documentKind",
+      "executionOwner",
+      "hostBasis",
+      "theme"
+    ]
+  },
+  "coverageAfter": {
+    "faithfulInstanceFloor": 272,
+    "partialInstanceCeiling": 45,
+    "Loading": 8,
+    "Offline": 3,
+    "ReaderBase": 42,
+    "ReaderTopArea": 38,
+    "ReaderBottomBar": 3,
+    "TapZones": 7,
+    "readerBaseEmptySignature": 19,
+    "readerBasePropKeys": [
+      "availability",
+      "coreSupport",
+      "documentKind",
+      "executionOwner",
+      "hostBasis",
+      "surfaceContract",
+      "theme"
+    ]
+  },
+  "classification": {
+    "visualChange": false,
+    "figmaDesignDelta": false,
+    "contractCompatibility": "major-retirement",
+    "reason": "This artifact records source-contract retirement and downstream denominator reconciliation. It does not authorize a Figma visual, component, token, layout, interaction, or motion change."
+  },
+  "authority": {
+    "sourceRepository": "Reader-UI",
+    "sourceArtifact": "generated/screen-graph-coverage.json",
+    "downstreamRepository": "Reader-for-HarmonyOS",
+    "downstreamConsumer": "scripts/sync_reader_ui_screen_graph.mjs",
+    "authorizationMode": "exact-values-only",
+    "rule": "A downstream quality baseline may adopt only the exact after-values listed in this artifact and only while the source implementation commit and retired route set match. A hard-coded decrease without this artifact must fail closed.",
+    "doesNotAuthorize": [
+      "Figma mutation",
+      "harmony.status promotion",
+      "PROMOTION_LEDGER mutation",
+      "native route activation",
+      "build, emulator, or device execution",
+      "deliveryStatus freeze"
+    ]
+  },
+  "retirement": {
+    "routeCount": 13,
+    "retiredRouteIds": [
+      "control-layer-base-v2",
+      "reader-directory-overlay-v2",
+      "reader-appearance-overlay-v2",
+      "reader-tts-overlay-v2",
+      "reader-settings-overlay-v2",
+      "reader-auto-scroll-overlay-v2",
+      "reader-search-overlay-v2",
+      "reader-replace-overlay-v2",
+      "toc-bookmarks",
+      "tts",
+      "reader-appearance",
+      "reader-settings",
+      "content-search"
+    ],
+    "canonicalReadingRoutesRetained": [
+      "immersive-reading",
+      "reader",
+      "reader_content"
+    ],
+    "routeSchema": {
+      "before": 260,
+      "after": 247,
+      "delta": -13
+    },
+    "viewStateFixtures": {
+      "before": 190,
+      "after": 183,
+      "delta": -7
+    },
+    "variants": {
+      "before": 190,
+      "after": 183,
+      "delta": -7
+    }
+  },
+  "componentSplit": [
+    {
+      "retiredReadingSurfaceType": "ReaderDirectoryPanel",
+      "retainedSharedPrimitive": "DirectoryPanel",
+      "retiredTypeStatus": "explicit-gap",
+      "retiredTypeFixtureCount": 0,
+      "retainedPrimitiveInstanceCount": 4
+    },
+    {
+      "retiredReadingSurfaceType": "ReaderAppearancePanel",
+      "retainedSharedPrimitive": "AppearancePanel",
+      "retiredTypeStatus": "explicit-gap",
+      "retiredTypeFixtureCount": 0,
+      "retainedPrimitiveInstanceCount": 6
+    },
+    {
+      "retiredReadingSurfaceType": "ReaderReplacePanel",
+      "retainedSharedPrimitive": "ReplacePanel",
+      "retiredTypeStatus": "explicit-gap",
+      "retiredTypeFixtureCount": 0,
+      "retainedPrimitiveInstanceCount": 7
+    }
+  ],
+  "reachability": {
+    "historicalImplementationCount": 23,
+    "unreachableFromReaderBase": 23,
+    "globallyUnreachable": 21,
+    "retainedSharedConsumers": [
+      {
+        "symbol": "ReaderControlSheet",
+        "consumer": "SourceSwitchFlowPage",
+        "routes": [
+          "source-switch",
+          "source-switch-results",
+          "source-switch-empty",
+          "source-switch-error",
+          "source-switch-timeout",
+          "source-switch-loading",
+          "source-switch-rollback",
+          "source-switch-preview"
+        ],
+        "policy": "Retire only the obsolete ViewStateRenderer ReaderControlSheet branch; do not delete the shared Source Switch implementation."
+      },
+      {
+        "symbol": "ReaderAutoScrollPanel",
+        "consumer": "auto-page",
+        "routes": [
+          "auto-page"
+        ],
+        "policy": "Retain the canonical auto-page component and dispatch; retirement applies only to reader-auto-scroll-overlay-v2."
+      }
+    ]
+  },
+  "downstreamDispatchRetirement": {
+    "viewStateRendererTypes": [
+      "ReaderControlSheet",
+      "ReaderTtsPanel",
+      "ReaderSettingsPanel",
+      "ReaderSearchPanel"
+    ],
+    "scope": "Remove obsolete zero-instance ViewStateRenderer dispatch branches only.",
+    "retainedSharedUse": "ReaderControlSheet remains a shared Source Switch implementation until that independently bound page family replaces it; this delta does not authorize global deletion. ReaderAutoScrollPanel remains canonical for auto-page and is not in this retirement list."
+  },
+  "coverage": {
+    "qualityBaseline": {
+      "faithfulInstanceFloor": {
+        "before": 285,
+        "after": 272,
+        "delta": -13
+      },
+      "partialInstanceCeiling": {
+        "before": 52,
+        "after": 45,
+        "delta": -7
+      },
+      "partialInstanceComposition": {
+        "before": {
+          "ReaderBase": 49,
+          "SearchInputBox": 2,
+          "BookshelfEmptyPage": 1,
+          "total": 52
+        },
+        "after": {
+          "ReaderBase": 42,
+          "SearchInputBox": 2,
+          "BookshelfEmptyPage": 1,
+          "total": 45
+        },
+        "rule": "The partial ceiling is the exact sum of ReaderBase, SearchInputBox, and BookshelfEmptyPage instances. It may decrease only through an approved source delta and must not admit a partial-instance rebound."
+      }
+    },
+    "screenGraph": {
+      "componentInstances": {
+        "before": 615,
+        "after": 580,
+        "delta": -35
+      },
+      "canonicalComponentTypes": {
+        "before": 174,
+        "after": 177,
+        "delta": 3
+      },
+      "referencedComponentTypes": {
+        "before": 138,
+        "after": 134,
+        "delta": -4
+      },
+      "explicitGapComponentTypes": {
+        "before": 36,
+        "after": 43,
+        "delta": 7
+      },
+      "fixtureEvidenceClasses": {
+        "dataBacked": {
+          "before": 72,
+          "after": 74,
+          "delta": 2
+        },
+        "typeOnly": {
+          "before": 54,
+          "after": 50,
+          "delta": -4
+        },
+        "partial": {
+          "before": 12,
+          "after": 10,
+          "delta": -2
+        },
+        "explicitGap": {
+          "before": 36,
+          "after": 43,
+          "delta": 7
+        }
+      }
+    },
+    "hostCompositeInstanceCounts": {
+      "ReaderBase": {
+        "before": 49,
+        "after": 42,
+        "delta": -7
+      },
+      "ReaderTopArea": {
+        "before": 48,
+        "after": 38,
+        "delta": -10
+      },
+      "ReaderBottomBar": {
+        "before": 11,
+        "after": 3,
+        "delta": -8
+      },
+      "TapZones": {
+        "before": 7,
+        "after": 7,
+        "delta": 0
+      }
+    },
+    "stateComponentDenominators": {
+      "Loading": {
+        "instanceCount": {
+          "before": 9,
+          "after": 8,
+          "delta": -1
+        },
+        "stateEventEvidence": {
+          "before": 3,
+          "after": 3,
+          "delta": 0
+        }
+      },
+      "Offline": {
+        "instanceCount": {
+          "before": 4,
+          "after": 3,
+          "delta": -1
+        },
+        "stateEventEvidence": {
+          "before": 2,
+          "after": 2,
+          "delta": 0
+        }
+      },
+      "ErrorState": {
+        "instanceCount": {
+          "before": 5,
+          "after": 5,
+          "delta": 0
+        },
+        "stateEventEvidence": {
+          "before": 5,
+          "after": 5,
+          "delta": 0
+        }
+      }
+    },
+    "readerBaseOwnership": {
+      "instanceCount": {
+        "before": 49,
+        "after": 42,
+        "delta": -7
+      },
+      "emptyPropsSignatureCount": {
+        "before": 26,
+        "after": 19,
+        "delta": -7
+      },
+      "propKeysAdded": [
+        "surfaceContract"
+      ]
+    }
+  },
+  "evidence": {
+    "beforeCommit": "a37b5fc",
+    "afterCommit": "1b81644b322c3305723d5291af2ada6b235778aa",
+    "reachabilityReport": "docs/audits/reader-reading-surface-historical-reachability-2026-07-27.json",
+    "currentCoverageArtifact": "generated/screen-graph-coverage.json",
+    "harmonyValidation": {
+      "status": "blocked-fail-closed",
+      "acceptedResults": [
+        {
+          "command": "npm run gen:contracts",
+          "status": "passed",
+          "result": "six Reader-UI consumer files are byte-synchronized; pageAnimation retains cover/slide/simulation/scroll/none"
+        },
+        {
+          "command": "node scripts/sync_reader_ui_screen_graph.mjs --check",
+          "status": "passed",
+          "screenGraph": {
+            "routes": 247,
+            "variants": 183,
+            "components": 580
+          },
+          "coverage": {
+            "faithful": 67,
+            "generic": 55,
+            "partial": 3,
+            "insufficient": 0,
+            "unbound": 4
+          },
+          "instances": {
+            "faithful": 272,
+            "generic": 216,
+            "partial": 45,
+            "insufficient": 0,
+            "unbound": 14
+          },
+          "retiredRuntimeInstances": 33
+        },
+        {
+          "command": "node scripts/enforce-implementation-ready-gate.mjs",
+          "status": "blocked-fail-closed",
+          "reasonCode": "READER_UI_DEPENDENCY_DOCUMENT_UNCOMMITTED_OR_DIRTY"
+        },
+        {
+          "command": "node scripts/test_contracts.mjs",
+          "status": "passed",
+          "tests": 55,
+          "passed": 55,
+          "failed": 0
+        }
+      ],
+      "machineReceipt": {
+        "status": "missing",
+        "promotionAuthority": false
+      },
+      "remainingNonA2Gate": {
+        "command": "npm run check:reader-ui-consumer",
+        "status": "blocked",
+        "reason": "existing Reader UI release identity is older than the current Reader-UI HEAD",
+        "consumerReleaseSourceSha": "33d5352ee589ccf988852a111309414afc1d7d49",
+        "currentReaderUiHead": "85eda9b4ca1a254d769ba9c62aa4ccdd20c47d02",
+        "notClaimedPassed": true
+      }
+    }
+  }
+}

@@ -946,8 +946,8 @@
     },
     {
       "path": "frontend-demo-optimized/fixture.js",
-      "byteLength": 22628,
-      "sha256": "e160d0d6920cf65baf076b66f5920e37a9067720c78b9adfae2dc2c37b54eb36"
+      "byteLength": 22542,
+      "sha256": "27639e4d77ddbb38d0dfbdf1c6cdca50976199edd3f2bb8b773b7a49841190d3"
     },
     {
       "path": "frontend-demo-optimized/import-runtime-contract.js",
@@ -996,8 +996,8 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 799017,
-      "sha256": "c1bf2c7231dca5527f97f07eefbd1e2211294d48e595c54ccea38e1e7de4b018"
+      "byteLength": 806073,
+      "sha256": "f1c7c4ccc14190da38c34c579b444c9401012ac08a92027b57788fe17dc77beb"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -1021,8 +1021,8 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
-      "byteLength": 55661,
-      "sha256": "8ceb7bbb9cb5bb0faf3ebb8c9a034d4fa13a8a3fd8b667815f6ab057acd4470e"
+      "byteLength": 55673,
+      "sha256": "bf5ad6a8969eecf26ea89e0cc8fda9759338218620dbd0fda1e524be70e43244"
     },
     {
       "path": "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
@@ -1056,13 +1056,13 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
-      "byteLength": 77092,
-      "sha256": "500c7e13bfa1d79d06d0c5091ee78d987cfbea9214f181ea09ffb1ef516f2aca"
+      "byteLength": 77050,
+      "sha256": "90adc95bd19819c4430bbe5f03e798d7612b2144b3c0387499d6d8311c730c6c"
     },
     {
       "path": "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
-      "byteLength": 53739,
-      "sha256": "73a61da5f4deebc15ed80c3bdadb035e0ed947d07fefac2929dbf14d77227bc6"
+      "byteLength": 54328,
+      "sha256": "dea61583e2176e60e5b0fd2882ba418321870813a4b7caa0fd4664b6d2ea02c6"
     },
     {
       "path": "frontend-demo-optimized/route-contract.js",
@@ -1096,8 +1096,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/01-shell-layout.css",
-      "byteLength": 105542,
-      "sha256": "70bba056b7a1873da9c008b6595bcc87cb2c8be1f6b1260e8c40b5182d75dab7"
+      "byteLength": 104754,
+      "sha256": "318f51d8b2f4ba69a3388932883ead31a832449dec4a8180bcfc92bc6d627d18"
     },
     {
       "path": "frontend-demo-optimized/styles/02a-reader-control.css",
@@ -1689,8 +1689,8 @@
     {
       "name": "design-runtime",
       "fileCount": 187,
-      "byteLength": 5540550,
-      "sha256": "d21b60e8e066806d5907f7d52eaa151c0e2eb13d2a6d9b64b1e41443942e567b",
+      "byteLength": 5547291,
+      "sha256": "cd3d4e876df005f5f33ab5ec2f534f85677666cf949b3c305a8d5f2c8d0ffe6a",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",

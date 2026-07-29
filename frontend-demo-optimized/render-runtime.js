@@ -3456,23 +3456,183 @@
     };
   }
 
-  // 翻页模式 / 翻页动画：中文标签 ↔ CSS 值映射
-  const readerPageModeCssByLabel = {
-    "横向翻页": "horizontal",
-    "竖向翻页": "vertical"
-  };
+  // pageAnimation is the sole user-owned setting. "滚动" derives the
+  // vertical continuous-reading layout; the other four values stay in the
+  // horizontal page layout. There is deliberately no independent pageMode
+  // control that can contradict the selected animation.
   const readerPageAnimationCssByLabel = {
     "覆盖": "cover",
-    "滑动": "smooth",
-    "仿真": "curl",
+    "滑动": "slide",
+    "仿真": "simulation",
     "滚动": "scroll",
     "无动画": "none"
   };
-  function readerPageModeCssValue(label) {
-    return readerPageModeCssByLabel[label] || "horizontal";
+  const readerPageAnimationLabelByValue = {
+    cover: "覆盖",
+    slide: "滑动",
+    smooth: "滑动",
+    simulation: "仿真",
+    scroll: "滚动",
+    none: "无动画"
+  };
+  function readerPageAnimationLabel(value) {
+    if (Object.prototype.hasOwnProperty.call(readerPageAnimationCssByLabel, value)) return value;
+    return readerPageAnimationLabelByValue[value] || "";
   }
   function readerPageAnimationCssValue(label) {
-    return readerPageAnimationCssByLabel[label] || "smooth";
+    return readerPageAnimationCssByLabel[readerPageAnimationLabel(label)] || "slide";
+  }
+  function readerPageModeForAnimation(label) {
+    return readerPageAnimationLabel(label) === "滚动" ? "vertical" : "horizontal";
+  }
+
+  function readerCoreCharacterAnchor(appState) {
+    const location = appState?.readerCanonicalLocation;
+    const reflow = appState?.readerLocationReflow;
+    const locationKeys = location && typeof location === "object" ? Object.keys(location).sort() : [];
+    const reflowKeys = reflow && typeof reflow === "object" ? Object.keys(reflow).sort() : [];
+    const charOffset = Number(location?.chapterOffset);
+    const chapterProgress = Number(location?.chapterProgress);
+    if (
+      locationKeys.join(",") === "bookId,chapterIndex,chapterOffset,chapterProgress,locationRevision" &&
+      reflowKeys.join(",") === "fallbackAnchor,layoutIndependent,primaryAnchor,strategy" &&
+      typeof location?.bookId === "string" &&
+      location.bookId.length > 0 &&
+      typeof location.locationRevision === "string" &&
+      location.locationRevision.length > 0 &&
+      Number.isSafeInteger(Number(location.chapterIndex)) &&
+      Number(location.chapterIndex) >= 0 &&
+      Number.isSafeInteger(charOffset) &&
+      charOffset >= 0 &&
+      Number.isFinite(chapterProgress) &&
+      chapterProgress >= 0 &&
+      chapterProgress <= 1 &&
+      reflow?.strategy === "offsetAnchor" &&
+      reflow.primaryAnchor === "chapterOffset" &&
+      reflow.fallbackAnchor === "chapterProgress" &&
+      reflow.layoutIndependent === true
+    ) {
+      return {
+        bookId: location.bookId,
+        chapterIndex: Number(location.chapterIndex),
+        charOffset,
+        chapterProgress,
+        source: "core"
+      };
+    }
+    return null;
+  }
+
+  function readerCharacterAnchor(appState) {
+    return readerCoreCharacterAnchor(appState);
+  }
+
+  function readerPageIndexForCharacterAnchor(pages, anchor) {
+    const charOffset = Number(anchor?.charOffset);
+    if (!Array.isArray(pages) || pages.length === 0 || !Number.isInteger(charOffset) || charOffset < 0) {
+      return null;
+    }
+    const matchedIndex = pages.findIndex((page, index) => {
+      const start = Number(page.characterStart);
+      const end = Number(page.characterEnd);
+      if (!Number.isInteger(start) || !Number.isInteger(end)) return false;
+      return charOffset >= start && (charOffset < end || (index === pages.length - 1 && charOffset === end));
+    });
+    return matchedIndex >= 0 ? matchedIndex : (charOffset < Number(pages[0]?.characterStart || 0) ? 0 : pages.length - 1);
+  }
+
+  function applyReaderPageAnimationSetting(appState, value) {
+    const label = readerPageAnimationLabel(value);
+    if (!appState || !label) {
+      return false;
+    }
+    const nextPageMode = readerPageModeForAnimation(label);
+    const modeChanged = appState.readerPageMode !== nextPageMode;
+    const anchor = modeChanged ? readerCharacterAnchor(appState) : null;
+    // A horizontal/vertical mode change is a semantic reflow. Without a
+    // durable Core character anchor, preserve the current setting and layout
+    // instead of guessing from the transient layout page index.
+    if (modeChanged && !anchor) {
+      return false;
+    }
+    appState.readerSettings = appState.readerSettings || {};
+    appState.readerSettings.pageAnimation = label;
+    appState.readerPageAnimation = readerPageAnimationCssValue(label);
+    if (modeChanged) {
+      appState.readerReflowAnchor = anchor;
+      appState.readerPages = [];
+      appState.readerPaginationKey = "";
+    }
+    appState.readerPageMode = nextPageMode;
+    return true;
+  }
+
+  function applyReaderRuntimeResult(appState, runtimeResult) {
+    if (!appState || runtimeResult?.accepted !== true || !runtimeResult.state) {
+      return false;
+    }
+    const canonicalLocation = runtimeResult.state.readerCanonicalLocation;
+    const locationReflow = runtimeResult.state.readerLocationReflow;
+    const anchor = readerCoreCharacterAnchor({
+      readerCanonicalLocation: canonicalLocation,
+      readerLocationReflow: locationReflow
+    });
+    if (!anchor) {
+      return false;
+    }
+    const currentBookId = appState.readerCanonicalLocation?.bookId;
+    if (typeof currentBookId === "string" && currentBookId.length > 0 && currentBookId !== anchor.bookId) {
+      return false;
+    }
+    appState.readerCanonicalLocation = Object.assign({}, canonicalLocation);
+    appState.readerLocationReflow = Object.assign({}, locationReflow);
+    appState.readerReflowAnchor = anchor;
+    const pageIndex = Number(runtimeResult.state.readerPageIndex);
+    if (Number.isInteger(pageIndex) && pageIndex >= 0) {
+      appState.readerPageIndex = pageIndex;
+    }
+    return true;
+  }
+
+  let activeReaderRuntimeResultConsumer = null;
+  const readerRuntimeResultConsumerApi = Object.freeze({
+    bind(appState, onCommit) {
+      const consumer = Object.freeze({
+        accept(runtimeResult) {
+          const accepted = applyReaderRuntimeResult(appState, runtimeResult);
+          if (accepted && typeof onCommit === "function") onCommit();
+          return accepted;
+        }
+      });
+      activeReaderRuntimeResultConsumer = consumer;
+      return consumer;
+    },
+    accept(runtimeResult) {
+      return activeReaderRuntimeResultConsumer?.accept(runtimeResult) === true;
+    }
+  });
+
+  function applyReaderW4AppearanceSetting(appState, key, rawValue, storage) {
+    if (!appState) return false;
+    if (key === "pageAnimation") {
+      return applyReaderPageAnimationSetting(appState, rawValue);
+    }
+    if (!["firstLineIndent", "script", "alignment", "texture"].includes(key)) {
+      return false;
+    }
+    const value = key === "firstLineIndent" ? rawValue === true || rawValue === "true" : rawValue;
+    appState.readerTypography = appState.readerTypography || {};
+    appState.readerTypography[key] = value;
+    try {
+      const stored = JSON.parse(storage?.getItem?.("reader-w4-typography") || "null") || {};
+      storage?.setItem?.(
+        "reader-w4-typography",
+        JSON.stringify(Object.assign({}, stored, appState.readerTypography, { [key]: value }))
+      );
+    } catch (_) {
+      // The live state still updates when demo persistence is unavailable.
+    }
+    return true;
   }
 
   function readerSettingDropdownHtml(key, label, settings, settingDefaults, options, appState) {
@@ -3793,11 +3953,9 @@
     const typography = appState?.readerTypography || canonicalFigmaReadingSurfaceTypography();
     const pageSpace = appState?.readerPageSpace || canonicalFigmaReadingSurfacePageSpace();
     const pageState = currentReaderPage(data, appState);
-    const disableTurnAnimation = Boolean(options && options.disableTurnAnimation);
     const pageMode = appState?.readerPageMode === "vertical" ? "vertical" : "horizontal";
-    const pageAnimation = appState?.readerPageAnimation || "smooth";
+    const pageAnimation = appState?.readerPageAnimation || "slide";
     const isVerticalMode = pageMode === "vertical";
-    const turnDirection = !disableTurnAnimation && !isVerticalMode && appState?.readerTurnDirection ? ` fd-reader-page-turn-${esc(appState.readerTurnDirection)}` : "";
     const paragraphs = isVerticalMode
       ? readerTextBlocks(data)
       : (pageState.page.paragraphs.length > 0 ? pageState.page.paragraphs : readerTextBlocks(data));
@@ -3817,7 +3975,7 @@
     const figmaSurfaceAttrs = `data-figma-file-key="${READER_READING_SURFACE_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_READING_SURFACE_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_READING_SURFACE_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_READING_SURFACE_FIGMA_BINDING.tabletNodeId}"`;
     return `
       <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" data-reader-figma-surface="reading-surface" data-figma-phone-paper-layer="${READER_READING_SURFACE_FIGMA_BINDING.phonePaperLayerId}" data-figma-tablet-paper-layer="${READER_READING_SURFACE_FIGMA_BINDING.tabletPaperLayerId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
-      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-figma-surface="reading-surface" data-figma-phone-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.phoneReadingContentId}" data-figma-tablet-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.tabletReadingContentId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
+      <article class="fd-ir-reading-layer" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-figma-surface="reading-surface" data-figma-phone-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.phoneReadingContentId}" data-figma-tablet-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.tabletReadingContentId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
         ${chapterTitleHtml}
         ${paragraphHtml}
       </article>
@@ -4957,7 +5115,7 @@
         <section class="fd-reader-module-panel fd-reader-settings-panel" data-dev-region="ReaderModulePanel" aria-label="阅读设置">
           <div class="fd-reader-quick-screen-settings">
             ${quickSetting("screenOrientation", "屏幕方向")}
-            ${quickSetting("pageAnimation", "翻页样式")}
+            ${quickSetting("pageAnimation", "翻页动画")}
             ${quickSetting("screenTimeout", "屏幕超时")}
           </div>
         </section>`;
@@ -5358,7 +5516,7 @@
           <header><strong>屏幕样式</strong></header>
           <div class="fd-reader-settings-group-body">
             ${optionRow("screenOrientation", "屏幕方向")}
-            ${optionRow("pageAnimation", "翻页样式")}
+            ${optionRow("pageAnimation", "翻页动画")}
             ${optionRow("screenTimeout", "屏幕超时")}
           </div>
         </section>
@@ -5531,9 +5689,9 @@
     ];
     return `
       <section class="fd-reader-full-section fd-reader-full-page-turn" aria-label="翻页完整设置">
-        ${["pageMode", "tapMode", "pageAnimation"].map((key) => `
+        ${["tapMode", "pageAnimation"].map((key) => `
           <section class="fd-reader-full-setting-block">
-            <header><strong>${esc(key === "pageMode" ? "翻页模式" : key === "tapMode" ? "点击翻页方式" : "翻页动画")}</strong><em>${esc(current(key))}</em></header>
+            <header><strong>${esc(key === "tapMode" ? "点击翻页方式" : "翻页动画")}</strong><em>${esc(current(key))}</em></header>
             <div class="fd-reader-full-choice-grid">
               ${readerChoiceButtons(options[key] || [], current(key), (value) => `data-reader-setting-option="${esc(key)}" data-reader-setting-value="${esc(value)}"`)}
             </div>
@@ -6019,12 +6177,25 @@
       return best > 0 ? readerSplitIndex(text, best) : 0;
     };
 
+    const sourceBlockStarts = [];
+    let sourceCharacterCount = 0;
+    sourceBlocks.forEach((block) => {
+      sourceBlockStarts.push(sourceCharacterCount);
+      sourceCharacterCount += String(block || "").length;
+    });
+    const currentCharacterOffset = (index, characterOffset) => (
+      index >= sourceBlocks.length
+        ? sourceCharacterCount
+        : (sourceBlockStarts[index] || 0) + characterOffset
+    );
+    const anchor = readerCharacterAnchor(appState);
     const pages = [];
     let blockIndex = 0;
     let offset = 0;
     while (blockIndex < sourceBlocks.length) {
       const includeTitle = pages.length === 0;
       const pageParagraphs = [];
+      const characterStart = currentCharacterOffset(blockIndex, offset);
       let madeProgress = false;
 
       while (blockIndex < sourceBlocks.length) {
@@ -6065,7 +6236,12 @@
       }
 
       if (pageParagraphs.length > 0) {
-        pages.push({ progress: "", paragraphs: pageParagraphs });
+        pages.push({
+          progress: "",
+          paragraphs: pageParagraphs,
+          characterStart,
+          characterEnd: currentCharacterOffset(blockIndex, offset)
+        });
       } else {
         break;
       }
@@ -6086,7 +6262,13 @@
     });
     appState.readerPages = pages;
     appState.readerPaginationKey = key;
-    appState.readerPageIndex = Math.max(0, Math.min(Number(appState.readerPageIndex) || 0, pages.length - 1));
+    const anchoredPageIndex = readerPageIndexForCharacterAnchor(pages, anchor);
+    appState.readerPageIndex = anchoredPageIndex === null
+      ? Math.max(0, Math.min(Number(appState.readerPageIndex) || 0, pages.length - 1))
+      : anchoredPageIndex;
+    if (anchoredPageIndex !== null && appState.readerReflowAnchor?.charOffset === anchor?.charOffset) {
+      appState.readerReflowAnchor = null;
+    }
     return true;
   }
 
@@ -7668,7 +7850,6 @@
     bind("[data-module]", "reader.module.switch");
     bind("[data-module].is-active", "tab.item.select");
     bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value]:not([data-reader-setting-option]), [data-reader-tts-value]:not([data-reader-tts-option]), [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
-    bind("[data-reader-page-action]", "reader.page.turn.next-prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
     bind("[data-reader-dismiss]", "reader.control.hide");
     bind("[data-reader-control-show]", "reader.control.show");
@@ -11367,8 +11548,11 @@
       readerPaginationKey: "",
       readerPageIndex: 0,
       readerTurnDirection: "",
-      readerPageMode: readerPageModeCssValue(settingDefaults.pageMode),
+      readerPageMode: readerPageModeForAnimation(settingDefaults.pageAnimation),
       readerPageAnimation: readerPageAnimationCssValue(settingDefaults.pageAnimation),
+      readerCanonicalLocation: null,
+      readerLocationReflow: null,
+      readerReflowAnchor: null,
       readerMoreOpen: false,
       readerQuickExpanded: "",
       readerModalOriginRoute: "",
@@ -11960,7 +12144,6 @@
       } else if (route === "bookshelf-cover-mode") {
         appState.bookshelfView = "cover";
       }
-      const renderedTurnDirection = appState.readerTurnDirection;
       const previousRenderedRoute = root.getAttribute("data-current-route") || "";
       const scrollSnapshot = captureReaderScrollSnapshot(screenHost);
       const shouldRestorePanelScroll = previousRenderedRoute === route;
@@ -12067,24 +12250,16 @@
         });
       }
       scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute);
-      if (renderedTurnDirection) {
-        const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
-        const clearTurnClass = () => {
-          if (readingLayer) {
-            readingLayer.classList.remove("fd-reader-page-turn-next", "fd-reader-page-turn-prev");
-          }
-        };
-        if (readingLayer) {
-          readingLayer.addEventListener("animationend", clearTurnClass, { once: true });
-          window.setTimeout(clearTurnClass, 260);
-        }
-      }
       appState.readerTurnDirection = "";
     };
 
     const renderCurrentRoute = () => {
       renderActiveRoute(routeStack[routeStack.length - 1]);
     };
+    readerRuntimeResultConsumerApi.bind(appState, () => {
+      invalidateReaderPagination(appState);
+      renderCurrentRoute();
+    });
 
     const syncReaderQuickExpansionForRoute = (route) => {
       const preserveForOverlay = route === "reader-progress-restore" || String(route || "").startsWith("source-switch");
@@ -12947,16 +13122,10 @@
     const applyReaderSettingOption = (key, value) => {
       const options = readerControlSettingsConfig(data).options;
       if (!options[key] || !options[key].includes(value)) return;
-      appState.readerSettings[key] = value;
-      // 翻页模式 / 翻页动画：同步 CSS 值到 appState，供 data-page-mode / data-page-animation 使用
-      if (key === "pageMode") {
-        appState.readerPageMode = readerPageModeCssValue(value);
-        // 切换模式时重置分页，避免竖向全段落渲染残留干扰横向分页
-        appState.readerPages = [];
-        appState.readerPaginationKey = "";
-        appState.readerPageIndex = 0;
-      } else if (key === "pageAnimation") {
-        appState.readerPageAnimation = readerPageAnimationCssValue(value);
+      if (key === "pageAnimation") {
+        applyReaderPageAnimationSetting(appState, value);
+      } else {
+        appState.readerSettings[key] = value;
       }
       appState.readerSettingsExpandedOption = "";
       renderCurrentRoute();
@@ -15235,13 +15404,17 @@
         const key = select.getAttribute("data-w4-appearance-select") || "";
         if (!["firstLineIndent", "script", "pageAnimation", "alignment"].includes(key)) return;
         const value = key === "firstLineIndent" ? select.value === "true" : select.value;
-        appState.readerTypography[key] = value;
-        try {
-          const stored = JSON.parse(window.localStorage.getItem("reader-w4-typography") || "null") || {};
-          window.localStorage.setItem("reader-w4-typography", JSON.stringify(Object.assign({}, stored, appState.readerTypography, { [key]: value })));
-        } catch (_) {
-          // The live state still updates when demo persistence is unavailable.
-        }
+        if (!window.ReaderPageAnimationController?.applyAppearanceSetting?.(appState, key, value, window.localStorage)) return;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w4-layout-set]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const key = button.getAttribute("data-w4-layout-set") || "";
+        const value = button.getAttribute("data-w4-value") || "";
+        if (!window.ReaderPageAnimationController?.applyAppearanceSetting?.(appState, key, value, window.localStorage)) return;
         renderCurrentRoute();
       });
     });
@@ -15813,11 +15986,24 @@
     }
   };
 
+  window.ReaderRuntimeResultConsumer = readerRuntimeResultConsumerApi;
+  window.ReaderPageAnimationController = Object.freeze({
+    applySetting: applyReaderPageAnimationSetting,
+    applyAppearanceSetting: applyReaderW4AppearanceSetting
+  });
+
   window.ReaderRuntimeTestHooks = Object.assign({}, window.ReaderRuntimeTestHooks, {
     readerReadingSurfaceFigmaBinding: READER_READING_SURFACE_FIGMA_BINDING,
     readerTextBlocks,
     sharedReaderSurface,
     readerThemeStyle,
+    readerPageModeForAnimation,
+    readerCoreCharacterAnchor,
+    readerCharacterAnchor,
+    readerPageIndexForCharacterAnchor,
+    applyReaderPageAnimationSetting,
+    applyReaderRuntimeResult,
+    applyReaderW4AppearanceSetting,
     updateReaderPagination,
     invalidateReaderPagination,
     refreshReaderPaginationForLayout,

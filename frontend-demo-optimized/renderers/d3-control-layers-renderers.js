@@ -803,15 +803,15 @@
       { key: "statusInfo", label: "页脚进度信息", icon: "progress" },
       { key: "tapToTurn", label: "点击翻页", icon: "reader-content-search" }
     ];
-    var pageTurnModes = ["平滑", "仿真", "滑动", "无动画"];
-    var currentMode = settings.pageTurnMode || "平滑";
+    var pageTurnModes = ["覆盖", "滑动", "仿真", "滚动", "无动画"];
+    var currentMode = settings.pageAnimation || "滑动";
     return `
       <section class="fd-reader-full-section fd-reader-full-settings" aria-label="完整阅读设置">
         <section class="fd-reader-full-setting-block">
-          <header><strong>翻页方式</strong></header>
+          <header><strong>翻页动画</strong></header>
           <div class="fd-reader-full-choice-grid">
             ${pageTurnModes.map(function(mode) {
-              return `<button class="${mode === currentMode ? "is-active" : ""}" type="button" data-reader-setting-option="pageTurnMode" data-reader-setting-value="${esc(mode)}">${esc(mode)}</button>`;
+              return `<button class="${mode === currentMode ? "is-active" : ""}" type="button" data-reader-setting-option="pageAnimation" data-reader-setting-value="${esc(mode)}">${esc(mode)}</button>`;
             }).join("")}
           </div>
         </section>

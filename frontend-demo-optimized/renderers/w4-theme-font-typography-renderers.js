@@ -168,7 +168,6 @@
   function w4TypographyDefaults() {
     const indent = appearanceSelect("paragraphIndentMode");
     const script = appearanceSelect("textConversion");
-    const pageAnimation = appearanceSelect("pageAnimation");
     const alignment = appearanceSelect("textAlignment");
     return {
       fontSize: appearanceStepper("fontSize").defaultValue,
@@ -179,8 +178,6 @@
       alignment: alignment.defaultValue,
       firstLineIndent: indent.defaultValue !== "none",
       script: script.defaultValue,
-      pageMode: "horizontal",
-      pageAnimation: pageAnimation.defaultValue,
       topMargin: 72,
       sideMargin: 32,
       bottomMargin: 72,
@@ -201,9 +198,27 @@
     }, stored || {});
     if (normalized.script === "简体") normalized.script = "simplified";
     if (normalized.script === "繁體" || normalized.script === "繁体") normalized.script = "traditional";
-    if (normalized.pageAnimation === "smooth") normalized.pageAnimation = "slide";
+    // pageAnimation is owned by readerSettings and intentionally ignored when
+    // found in legacy W4 typography storage.
+    delete normalized.pageAnimation;
     if (normalized.alignment === "left") normalized.alignment = "leading";
     return normalized;
+  }
+
+  function w4CurrentPageAnimation(appState) {
+    const canonicalByLabel = {
+      "覆盖": "cover",
+      "滑动": "slide",
+      "仿真": "simulation",
+      "滚动": "scroll",
+      "无动画": "none"
+    };
+    const select = appearanceSelect("pageAnimation");
+    const candidate = canonicalByLabel[appState?.readerSettings?.pageAnimation]
+      || appState?.readerSettings?.pageAnimation;
+    return select.options.some((option) => option.value === candidate)
+      ? candidate
+      : select.defaultValue;
   }
 
   function w4TypographyConfig(data) {
@@ -798,7 +813,11 @@
   }
 
   function readerFullAppearanceBody(data, appState) {
-    const typography = appState?.readerTypography || w4NormalizeTypography(data);
+    const typography = Object.assign(
+      {},
+      appState?.readerTypography || w4NormalizeTypography(data),
+      { pageAnimation: w4CurrentPageAnimation(appState) }
+    );
     const activeTheme = w4CurrentTheme(data, appState);
     const themes = w4AllThemes().slice(0, 8);
     const fonts = w4AllFonts(data);
@@ -1078,7 +1097,7 @@
   // ====================================================================
   // 11. reader-full-layout：完整排版配置页（L3 控制页）
   // 字号 / 行距 / 段距 / 字距 / 上下边距 / 左右边距 / 首行缩进 / 对齐方式
-  // 字体 / 页面纹理 / 翻页方式 / 恢复默认
+  // 字体 / 页面纹理 / 翻页动画 / 恢复默认
   // ====================================================================
   function readerFullLayoutScreen(data, appState) {
     const title = routeTitle("reader-full-layout");
@@ -1087,7 +1106,11 @@
   }
 
   function readerFullLayoutBody(data, appState) {
-    const typography = appState?.readerTypography || w4NormalizeTypography(data);
+    const typography = Object.assign(
+      {},
+      appState?.readerTypography || w4NormalizeTypography(data),
+      { pageAnimation: w4CurrentPageAnimation(appState) }
+    );
     const config = w4TypographyConfig(data);
     const fonts = w4AllFonts(data);
     const textureOptions = [
@@ -1096,10 +1119,6 @@
       { value: "soft", label: "柔和" }
     ];
     const alignmentOptions = appearanceSelect("textAlignment").options;
-    const pageModeOptions = [
-      { value: "horizontal", label: "横向翻页" },
-      { value: "vertical", label: "纵向滚动" }
-    ];
     const pageAnimationOptions = appearanceSelect("pageAnimation").options;
     return `
       <section class="fd-reader-full-section fd-reader-full-layout" aria-label="版式完整设置">
@@ -1141,15 +1160,7 @@
           </div>
         </section>
         <section class="fd-reader-full-setting-block">
-          <header><strong>翻页方式</strong><em>${esc(pageModeOptions.find((p) => p.value === typography.pageMode)?.label || "横向翻页")}</em></header>
-          <div class="fd-reader-full-choice-grid">
-            ${pageModeOptions.map((p) => `
-              <button class="${typography.pageMode === p.value ? "is-active" : ""}" type="button" data-w4-layout-set="pageMode" data-w4-value="${esc(p.value)}">${esc(p.label)}</button>
-            `).join("")}
-          </div>
-        </section>
-        <section class="fd-reader-full-setting-block">
-          <header><strong>翻页动画</strong><em>${esc(pageAnimationOptions.find((p) => p.value === typography.pageAnimation)?.label || "平滑")}</em></header>
+          <header><strong>翻页动画</strong><em>${esc(pageAnimationOptions.find((p) => p.value === typography.pageAnimation)?.label || "滑动")}</em></header>
           <div class="fd-reader-full-choice-grid">
             ${pageAnimationOptions.map((p) => `
               <button class="${typography.pageAnimation === p.value ? "is-active" : ""}" type="button" data-w4-layout-set="pageAnimation" data-w4-value="${esc(p.value)}">${esc(p.label)}</button>

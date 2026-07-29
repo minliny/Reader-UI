@@ -359,8 +359,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         autoPage: false,
         tapMode: "左右区域",
         volumePage: true,
-        pageMode: "横向翻页",
-        pageAnimation: "平滑",
+        pageAnimation: "滑动",
         screenOrientation: "跟随系统",
         screenTimeout: "5 分钟",
         landscapeLock: false,
@@ -378,7 +377,6 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       options: {
         tapMode: ["左右区域", "上下区域", "整屏翻页"],
-        pageMode: ["横向翻页", "竖向翻页"],
         pageAnimation: ["覆盖", "滑动", "仿真", "滚动", "无动画"],
         screenOrientation: ["跟随系统", "竖屏", "横屏"],
         screenTimeout: ["跟随系统", "1 分钟", "5 分钟", "10 分钟", "始终开启"]

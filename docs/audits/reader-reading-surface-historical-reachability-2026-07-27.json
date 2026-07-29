@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "kind": "READER_READING_SURFACE_HISTORICAL_REACHABILITY_REPORT",
-  "status": "source-side-proof-holds-split-completed",
+  "status": "source-side-proof-holds-with-two-shared-consumers-corrected-entry-23-binding",
   "generatedAt": "2026-07-27",
   "retractReasonAddressed": "23 historical reader implementations not proven unreachable (PROMOTION_LEDGER retract-002)",
   "canonicalConsumer": {
@@ -40,14 +40,14 @@
   },
   "canonicalReadingRoutesPresent": ["immersive-reading", "reader", "reader_content"],
   "historicalImplementations": [
-    { "id": 1, "symbol": "ReaderControlSheet", "file": "ReaderOverlayComponents.ets", "line": 368, "category": "control-layer", "retiredRouteBound": "control-layer-base-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 1, "symbol": "ReaderControlSheet", "file": "ReaderOverlayComponents.ets", "line": 368, "category": "control-layer", "retiredRouteBound": "control-layer-base-v2", "reachableFromReaderBase": false, "reachableViaRoute": true, "reachableViaRoutes": ["source-switch", "source-switch-results", "source-switch-empty", "source-switch-error", "source-switch-timeout", "source-switch-loading", "source-switch-rollback", "source-switch-preview"], "reachableViaConsumer": "SourceSwitchFlowPage", "fullyUnreachable": false, "retainedSharedUse": "SourceSwitchFlowPage directly composes ReaderControlSheet. Only the obsolete zero-instance ViewStateRenderer dispatch branch is retired." },
     { "id": 2, "symbol": "ReaderDirectoryPanel", "file": "ReaderOverlayComponents.ets", "line": 1794, "category": "overlay-component", "retiredRouteBound": "reader-directory-overlay-v2 / toc-bookmarks", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "splitStatus": "explicit-gap-retired", "splitInto": "DirectoryPanel", "splitNote": "Reading-page overlay record retired as status:explicit-gap (0 fixtures, 0 routes, canonical-but-retired NOT deleted). Shared-primitive content retained as DirectoryPanel (referenced by 17 surviving routes)." },
     { "id": 3, "symbol": "ReaderAppearancePanel", "file": "ReaderOverlayComponents.ets", "line": 1915, "category": "overlay-component", "retiredRouteBound": "reader-appearance-overlay-v2 / reader-appearance", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "splitStatus": "explicit-gap-retired", "splitInto": "AppearancePanel", "splitNote": "Reading-page overlay record retired as status:explicit-gap (0 fixtures, 0 routes, canonical-but-retired NOT deleted). Shared-primitive content retained as AppearancePanel (referenced by 17 surviving routes)." },
     { "id": 4, "symbol": "ReaderTtsPanel", "file": "ReaderOverlayComponents.ets", "line": 1932, "category": "overlay-component", "retiredRouteBound": "reader-tts-overlay-v2 / tts", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
     { "id": 5, "symbol": "ReaderSettingsPanel", "file": "ReaderOverlayComponents.ets", "line": 2220, "category": "overlay-component", "retiredRouteBound": "reader-settings-overlay-v2 / reader-settings", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
     { "id": 6, "symbol": "ReaderSearchPanel", "file": "ReaderOverlayComponents.ets", "line": 4596, "category": "overlay-component", "retiredRouteBound": "reader-search-overlay-v2 / content-search", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
     { "id": 7, "symbol": "ReaderReplacePanel", "file": "ReaderOverlayComponents.ets", "line": 4784, "category": "overlay-component", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "splitStatus": "explicit-gap-retired", "splitInto": "ReplacePanel", "splitNote": "Reading-page overlay record retired as status:explicit-gap (0 fixtures, 0 routes, canonical-but-retired NOT deleted). Shared-primitive content retained as ReplacePanel (referenced by 17 surviving routes)." },
-    { "id": 8, "symbol": "ReaderAutoScrollPanel", "file": "ReaderOverlayComponents.ets", "line": 4860, "category": "overlay-component", "retiredRouteBound": "reader-auto-scroll-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
+    { "id": 8, "symbol": "ReaderAutoScrollPanel", "file": "ReaderOverlayComponents.ets", "line": 4860, "category": "overlay-component", "retiredRouteBound": "reader-auto-scroll-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": true, "reachableViaRoutes": ["auto-page"], "reachableViaConsumer": "ViewStateRenderer", "fullyUnreachable": false, "retainedSharedUse": "The historical reader-auto-scroll-overlay-v2 route is retired, but ReaderAutoScrollPanel remains the canonical component for auto-page." },
     { "id": 9, "symbol": "ReaderControlMotionCoordinator", "file": "ReaderControlMotionCoordinator.ets", "line": 13, "category": "motion-coordinator", "retiredRouteBound": "control-layer-base-v2 + 7 overlay-v2 routes", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "deadCode": true },
     { "id": 10, "symbol": "ReaderDirectoryToTtsMotionCoordinator", "file": "ReaderDirectoryToTtsMotionCoordinator.ets", "line": 4, "category": "motion-coordinator", "retiredRouteBound": "reader-directory-overlay-v2 / reader-tts-overlay-v2 / tts", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "deadCode": true },
     { "id": 11, "symbol": "readerControlShowV2", "file": "d3-control-layers-renderers.js", "line": 961, "category": "demo-renderer", "retiredRouteBound": "control-layer-base-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
@@ -62,12 +62,24 @@
     { "id": 20, "symbol": "readerReplaceOverlayV2Enhanced", "file": "d3-control-layers-renderers.js", "line": 1008, "category": "demo-renderer", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
     { "id": 21, "symbol": "readerAppearanceScreen", "file": "w4-theme-font-typography-renderers.js", "line": 1238, "category": "demo-renderer", "retiredRouteBound": "reader-appearance", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
     { "id": 22, "symbol": "readerAppearanceOverlayV2Screen", "file": "w4-theme-font-typography-renderers.js", "line": 1247, "category": "demo-renderer", "retiredRouteBound": "reader-appearance-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true },
-    { "id": 23, "symbol": "readerReplaceOverlayV2Screen", "file": "w5-replace-rules-renderers.js", "line": 910, "category": "demo-renderer", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true }
+    { "id": 23, "symbol": "readerReplaceOverlayV2Screen", "file": "w5-replace-rules-renderers.js", "line": 910, "category": "demo-renderer", "retiredRouteBound": "reader-replace-overlay-v2", "reachableFromReaderBase": false, "reachableViaRoute": false, "fullyUnreachable": true, "reachabilityProof": "Bound ONLY via w5 INTEGRATION_MAP:983 to the retired route reader-replace-overlay-v2 (absent from the 247-route canonical enum), so it is genuinely unreachable from the canonical reading surface. The prior w5 INTEGRATION_MAP:975 also bound the LIVE route content-replacement to this demo renderer, which falsified this fullyUnreachable claim; that binding was corrected (content-replacement now dispatches to contentReplacementScreen at w5:982, the L2 replace-rules overlay intended by the file header). A contract regression test now asserts content-replacement is never re-bound to readerReplaceOverlayV2Screen." }
+  ],
+  "corrections": [
+    {
+      "date": "2026-07-28",
+      "scope": "A2 historical-reachability entry #23 (readerReplaceOverlayV2Screen) misclassification",
+      "priorFalseClaim": "Entry #23 was marked reachableViaRoute:false / fullyUnreachable:true while the live route content-replacement was bound to readerReplaceOverlayV2Screen at w5-replace-rules-renderers.js INTEGRATION_MAP:975. The MD report's parenthetical at line 84 further asserted the binding did not target this demo renderer, contradicting the actual source.",
+      "rootCause": "The w5 INTEGRATION_MAP bound a surviving route to the retired-route demo renderer instead of to contentReplacementScreen (the L2 overlay renderer declared by the file header at w5:18 and exported at w5:988).",
+      "fixApplied": "Unbound content-replacement from readerReplaceOverlayV2Screen; content-replacement now dispatches to contentReplacementScreen (w5:982). readerReplaceOverlayV2Screen is now bound ONLY to the retired route reader-replace-overlay-v2 (w5:983). Counts unchanged (total 23, fullyUnreachable 21) because #23 transitions from a false fullyUnreachable claim to a genuine one.",
+      "regressionGuard": "contracts/tests/reader-reading-surface-contract-retirement-delta.test.mjs now asserts the live route content-replacement is never bound to readerReplaceOverlayV2Screen, and that readerReplaceOverlayV2Screen is bound only to a retired route absent from the canonical enum.",
+      "notAClaimOfFullReaudit": "This corrects the specific cited defect (entry #23). A full re-verification of every fullyUnreachable demo-renderer entry against all live route bindings is part of the ordered step-4 isolation, not this step-3 correction."
+    }
   ],
   "counts": {
     "total": 23,
-    "fullyUnreachable": 23,
-    "unreachableFromReaderBaseButRetained": 0,
+    "unreachableFromReaderBase": 23,
+    "fullyUnreachable": 21,
+    "unreachableFromReaderBaseButRetained": 2,
     "reachableFromReaderBase": 0
   },
   "splitPerformed": {
@@ -87,17 +99,47 @@
   "consumerSyncStatus": {
     "canonicalRouteIdEnum": "synced-247",
     "canonicalViewStateFixtures": "synced",
-    "consumerViewStateTableEts": "synced",
-    "consumerRouteReconstructionQuarantineEts": "synced",
-    "consumerRouteTableEts": "stale-pending-sync",
-    "demoRuntime": "not-synced-demo-side-only"
+    "harmonyValidation": "blocked-fail-closed-uncommitted-dependency-document",
+    "acceptedResults": [
+      {
+        "command": "npm run gen:contracts",
+        "status": "passed",
+        "result": "six Reader-UI consumer files byte-synchronized; pageAnimation retains cover/slide/simulation/scroll/none"
+      },
+      {
+        "command": "node scripts/sync_reader_ui_screen_graph.mjs --check",
+        "status": "passed",
+        "routes": 247,
+        "variants": 183,
+        "components": 580,
+        "faithfulInstances": 272,
+        "retiredRuntimeInstances": 33
+      },
+      {
+        "command": "node scripts/enforce-implementation-ready-gate.mjs",
+        "status": "blocked-fail-closed",
+        "reasonCode": "READER_UI_DEPENDENCY_DOCUMENT_UNCOMMITTED_OR_DIRTY"
+      },
+      {
+        "command": "node scripts/test_contracts.mjs",
+        "status": "passed",
+        "tests": 55,
+        "passed": 55,
+        "failed": 0
+      }
+    ],
+    "promotionReceipt": "missing-committed-machine-receipt",
+    "releaseIdentity": "blocked-stale-reader-ui-source-sha",
+    "boundary": "Screen-graph and static contracts pass, but the execution gate correctly fails closed on the uncommitted dependency document. These report fields do not authorize promotion; a committed machine receipt and current release identity are also missing."
   },
   "spotChecksPerformed": [
     "ReaderBase build() composition verified at ReaderComponents.ets:1643-1681 (5 children only)",
+    "SourceSwitchFlowPage directly composes ReaderControlSheet; the shared Source Switch use is retained",
+    "auto-page retains one canonical ReaderAutoScrollPanel fixture and ViewStateRenderer dispatch",
     "ReaderControlMotionCoordinator: 0 external call sites in entry/src/main/ets (dead code)",
     "ReaderDirectoryToTtsMotionCoordinator: 0 external call sites in entry/src/main/ets (dead code)",
     "componentCatalog: 3 old reader-named types = explicit-gap (0 instances); 3 new shared-primitive types = referenced (4/6/7 instances)",
     "Canonical ComponentType enum: 177 entries (174 + 3 new shared-primitive types)"
   ],
-  "conclusion": "Source-side reachability proof holds. All 23 historical reader implementations are fully unreachable from the canonical consumer ReaderComponents.ets#ReaderBase. The 3 previously-retained structs (ReaderDirectoryPanel/ReaderAppearancePanel/ReaderReplacePanel) have been split: shared-primitive content retained as new types (DirectoryPanel/AppearancePanel/ReplacePanel, referenced by 17 surviving routes) + reading-page overlay record retired as status:explicit-gap (0 fixtures/0 routes, canonical-but-retired NOT deleted). The reading surface has a single canonical implementation: ReaderBase."
+  "conclusion": "Source-side reachability proof holds for the reading surface: all 23 historical implementations are unreachable from ReaderComponents.ets#ReaderBase. 21 are globally unreachable. ReaderControlSheet remains a legitimate shared implementation directly composed by SourceSwitchFlowPage, and ReaderAutoScrollPanel remains canonical for auto-page; neither may be globally deleted by this retirement. The 3 previously shared reader-named panel types were split into retained primitives (DirectoryPanel/AppearancePanel/ReplacePanel) and explicit-gap reading-surface identities. The reading surface has a single canonical implementation: ReaderBase."
 }
