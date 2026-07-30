@@ -1247,6 +1247,75 @@
       "promotedBy": "promote-family.mjs",
       "previousEntryHash": "sha256:4bff1c3a61671ecf9a3b42c7c54c6fb48011b4edfe0480abf7030b2a7bc560d1",
       "entryHash": "sha256:f258d67dea0a30935af1461ca97a3773aee9af3f6603d2cbc76958dab4ad9506"
+    },
+    {
+      "entryId": "promote-021",
+      "kind": "promote",
+      "timestamp": "2026-07-30T11:10:27.875Z",
+      "transactionId": "promotion-group-a3b509c7068f25b5e398",
+      "transactionRecordIds": [
+        "reader.module.directory"
+      ],
+      "recordId": "reader.module.directory",
+      "pageFamily": "reader-runtime/directory",
+      "surfaceType": "responsive-page-master",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/reader-runtime/directory/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:b19c61d98ab72661bb0d60f19853de89b40a9c0ad49232ac0146634eead57ec6",
+        "implementationCommit": "15a7c9381423c8441509ba8efae4cc4024bc0a5f",
+        "verificationSuites": [
+          {
+            "suite": "focusedReaderDirectoryRegression",
+            "tests": 63,
+            "passed": 63,
+            "failed": 0
+          },
+          {
+            "suite": "fullFrontendRegression",
+            "tests": 592,
+            "passed": 592,
+            "failed": 0
+          },
+          {
+            "suite": "fullContractSuite",
+            "tests": 497,
+            "passed": 497,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "942:61",
+        "canonicalMasterId": "942:61"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderDirectoryPanel"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "a2PrePromotionReceipt": {
+        "path": "docs/design/native-consumer-receipts/reader-runtime/directory/15a7c9381423c8441509ba8efae4cc4024bc0a5f/A2_PRE_PROMOTION_CONSUMER_RECEIPT.json",
+        "sha256": "sha256:4c4d1fe9dc687ef14b94ce49bff788cb5b42eb5f631246f435d1aff7528c6129",
+        "status": "a2-consumer-closed",
+        "mode": "pre-promotion",
+        "cleanupCommit": "869f6a1c5f224017b81e59b7250d9e960bc2049b"
+      },
+      "registryHashBefore": "sha256:3e2e0b62e3e79dded6ca8c9505349e583e7f43b9738756d534a39bed04a21a44",
+      "upstreamArtifactHashAfter": "sha256:31f175acf6950959ae6903bb2e67368f13840a8aef91ed575eae2b14795c5692",
+      "consumerArtifactHashAfter": "sha256:31f175acf6950959ae6903bb2e67368f13840a8aef91ed575eae2b14795c5692",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:f258d67dea0a30935af1461ca97a3773aee9af3f6603d2cbc76958dab4ad9506",
+      "entryHash": "sha256:3b4f27f9b8e860357598be7391cea0d8a216538c161b30f5405a43c3a80f3b51"
     }
   ]
 }
