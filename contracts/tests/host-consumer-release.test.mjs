@@ -476,6 +476,11 @@ test("host release workflows use exact SHA, cross-repository artifact evidence, 
     assert.ok([...workflow.matchAll(/persist-credentials:\s*false/g)].length >= 2);
     assert.match(workflow, /Host-owned postcondition protects rollout and repository scope/);
     assert.match(workflow, /protected lock field changed/);
+    assert.match(workflow, /runtimePayloadContractsSchemaVersion/);
+    assert.match(workflow, /runtimePayloadContractsSha256/);
+    assert.match(workflow, /runtime-payload-contracts\.json/);
+    assert.match(workflow, /after\.schemaVersion !== 3/);
+    assert.doesNotMatch(workflow, /lock v2 contract/);
     assert.match(workflow, /verify-host-release\.mjs/);
     assert.match(workflow, /update-host-consumer-lock\.mjs/);
     assert.match(workflow, /publish-host-bump-pr\.mjs/);
