@@ -1,0 +1,108 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "READER_UI_SOURCE_CONVERSION",
+  "phase": "B2",
+  "scope": "reader.module.directory",
+  "recordIds": [
+    "reader.module.directory"
+  ],
+  "capturedAt": "2026-07-30T10:23:53Z",
+  "figmaSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "834:3",
+    "canonicalMasterId": "942:61",
+    "viewportNodes": {
+      "phone": "942:58",
+      "tablet": "942:60"
+    },
+    "finalAssemblyNodes": {
+      "phone": "943:9888",
+      "tablet": "943:10196"
+    },
+    "registeredOfficialRevision": "2379851596474967636",
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "liveReadReceipt": "docs/design/handoffs/reader-runtime/directory/B1_FIGMA_LIVE_READ.json",
+    "numericRevisionExposedByConnector": false,
+    "noFabricatedRevision": true
+  },
+  "sourceConversion": {
+    "overlayKind": "directory",
+    "routeIds": [],
+    "productionTarget": "frontend-demo-optimized/render-runtime.js#readerDirectoryOverlay",
+    "stateOwner": "frontend-demo-optimized/reader-runtime-contract.js#DIRECTORY_OVERLAY",
+    "trigger": "reader.module.switch",
+    "dismissTrigger": "reader.control.toggle",
+    "routeIdentityRule": "opening, selecting, and dismissing Directory keep the current canonical reading route unchanged",
+    "composition": [
+      "ReaderTopBar",
+      "ReaderDirectoryPanel",
+      "BrightnessRail",
+      "ModuleNav",
+      "ReadingSurface"
+    ],
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true
+    },
+    "retirementBoundary": {
+      "routeIds": [
+        "toc-bookmarks",
+        "reader-directory-overlay-v2"
+      ],
+      "status": "physically-absent-from-route-schema",
+      "mustNotReturn": true
+    },
+    "siblingBoundary": {
+      "recordId": "reader.full.directory",
+      "routeId": "reader-full-directory",
+      "policy": "independent candidate-backport record; this B2 conversion does not claim or promote it"
+    }
+  },
+  "verification": {
+    "focusedReaderDirectoryRegression": {
+      "command": "node --test frontend-demo-optimized/verify/r3a-reader-directory-figma-source.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-identity.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-flow.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-aria-focus.test.mjs frontend-demo-optimized/verify/reader-control-continuity.test.mjs frontend-demo-optimized/verify/reader-appearance-atoms.test.mjs frontend-demo-optimized/verify/reader-pagination-runtime.test.mjs",
+      "tests": 62,
+      "passed": 62,
+      "failed": 0,
+      "status": "passed"
+    },
+    "fullFrontendRegression": {
+      "command": "node --test --test-reporter=tap frontend-demo-optimized/verify/*.test.mjs",
+      "tests": 591,
+      "passed": 591,
+      "failed": 0,
+      "status": "passed"
+    },
+    "fullContractSuite": {
+      "command": "node --test --test-reporter=dot contracts/tests/*.test.mjs",
+      "tests": 497,
+      "passed": 497,
+      "failed": 0,
+      "status": "passed"
+    },
+    "visualAdmissionGenerator": {
+      "command": "node tools/design/generate-visual-admission-contract.mjs --check",
+      "status": "current"
+    },
+    "releaseManifest": {
+      "command": "node tools/release/generate-ui-release-manifest.mjs --check",
+      "status": "current-development-manifest",
+      "releaseTagCreated": false
+    }
+  },
+  "boundaries": {
+    "figmaMutation": false,
+    "harmonyMutation": false,
+    "promotionExecuted": false,
+    "buildExecuted": false,
+    "emulatorExecuted": false,
+    "deviceExecuted": false,
+    "fullDirectoryClaimedReady": false,
+    "siblingReaderModuleClaimedReady": false,
+    "noDetachedFrameOrScreenshot": true,
+    "noGenericVisualFallback": true
+  }
+}

@@ -1161,6 +1161,7 @@ test('shared explicit handoff mapping covers all expected families', () => {
   }
   assert.ok(source.includes("'reader.reading-surface': 'reader-runtime/reading-surface'"));
   assert.ok(source.includes("'reader.control-home': 'reader-runtime/control-home'"));
+  assert.ok(source.includes("'reader.module.directory': 'reader-runtime/directory'"));
 });
 
 test('promote-family.mjs writes registry BEFORE calling generator (write order fix)', () => {

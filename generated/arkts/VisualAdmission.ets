@@ -727,7 +727,7 @@ export class ReaderUiVisualTokens {
 export class ReaderUiVisualAdmission {
   static readonly SOURCE_FILE_KEY: string = 'klhs2jMM4MncaJFqZMfqEK';
   static readonly SOURCE_REVISION: string = '2379851596474967636';
-  static readonly REGISTRY_SHA256: string = 'f783f4a9536ffd6306fddbce1655d093257583469809c2409ccd8a1b037354e5';
+  static readonly REGISTRY_SHA256: string = '9089072bff74afa33c2ca38e5ca2790cadb56994d87ae2b08cd22a0d65cf069d';
   static readonly RECORD_ADMISSIONS: ReaderUiVisualRecordAdmissionEntry[] = [
     { recordId: 'about.withdrawn', admission: 'retired', sourceBound: false, implementationReady: false },
     { recordId: 'book-detail.chapter-row', admission: 'candidate-backport', sourceBound: true, implementationReady: false },
@@ -1030,6 +1030,7 @@ export class ReaderUiVisualAdmission {
     { overlayKind: 'book-action', admission: 'implementation-ready', sourceBound: true, implementationReady: true, recordIds: ['bookshelf.action-sheet'] },
     { overlayKind: 'bookshelf-multiselect', admission: 'implementation-ready', sourceBound: true, implementationReady: true, recordIds: ['bookshelf.multi-select'] },
     { overlayKind: 'dialog', admission: 'implementation-ready', sourceBound: true, implementationReady: true, recordIds: ['bookshelf.action-sheet'] },
+    { overlayKind: 'directory', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['reader.module.directory'] },
     { overlayKind: 'local-import', admission: 'implementation-ready', sourceBound: true, implementationReady: true, recordIds: ['bookshelf.local-import-dialog'] },
     { overlayKind: 'reader-control', admission: 'implementation-ready', sourceBound: true, implementationReady: true, recordIds: ['reader.control-home'] },
   ];

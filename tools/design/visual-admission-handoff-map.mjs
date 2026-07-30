@@ -7,6 +7,7 @@
 export const VISUAL_ADMISSION_HANDOFF_DIR_BY_RECORD_OR_FAMILY = Object.freeze({
   'reader.reading-surface': 'reader-runtime/reading-surface',
   'reader.control-home': 'reader-runtime/control-home',
+  'reader.module.directory': 'reader-runtime/directory',
   'bookshelf': 'bookshelf',
   'book-detail': 'book-detail',
   'source-switch': 'source-switch',

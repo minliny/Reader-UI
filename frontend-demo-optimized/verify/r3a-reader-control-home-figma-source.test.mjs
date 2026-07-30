@@ -34,13 +34,13 @@ test("B1 control-home binding resolves the exact live Phone and Tablet nodes", (
   assert.equal(receipt.revision.noFabricatedRevision, true);
 });
 
-test("B2 registry admits only the semantic control-home overlay source", () => {
+test("registry keeps only the promoted semantic control-home overlay source", () => {
   const registry = json("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
   const record = registry.records.find((entry) => entry.id === "reader.control-home");
   assert.deepEqual(record.routeIds, []);
   assert.deepEqual(record.overlayKinds, ["reader-control"]);
   assert.equal(record.local.status, "implementation-ready");
-  assert.equal(record.harmony.status, "candidate-backport");
+  assert.equal(record.harmony.status, "implementation-ready");
   assert.deepEqual(record.local.targets, [
     "frontend-demo-optimized/render-runtime.js#readerControlHomeOverlay",
   ]);

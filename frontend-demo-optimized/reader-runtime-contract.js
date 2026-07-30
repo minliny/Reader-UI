@@ -2,6 +2,7 @@
   "use strict";
 
   const CONTROL_HOME_OVERLAY = "reader-control";
+  const DIRECTORY_OVERLAY = "directory";
 
   const PRIMARY_ROUTES = Object.freeze([
     "immersive-reading",
@@ -250,6 +251,28 @@
     });
   }
 
+  function instrumentDirectoryDom(root, sourceRoute) {
+    if (!root || typeof root.querySelectorAll !== "function") {
+      return Object.freeze({ overlay: DIRECTORY_OVERLAY, stamped: 0, missing: 0, ambiguous: 0 });
+    }
+    const routeIdentityCount = root.getAttribute?.("data-reader-runtime-identity-count");
+    const report = instrumentDom(root, "reader-directory-overlay-v2");
+    root.setAttribute("data-reader-runtime-route", sourceRoute || "immersive-reading");
+    if (routeIdentityCount == null) {
+      root.removeAttribute("data-reader-runtime-identity-count");
+    } else {
+      root.setAttribute("data-reader-runtime-identity-count", routeIdentityCount);
+    }
+    root.setAttribute("data-reader-runtime-overlay", DIRECTORY_OVERLAY);
+    root.setAttribute("data-reader-runtime-overlay-identity-count", String(report.stamped));
+    return Object.freeze({
+      overlay: DIRECTORY_OVERLAY,
+      stamped: report.stamped,
+      missing: report.missing,
+      ambiguous: report.ambiguous
+    });
+  }
+
   const INITIAL_STATE = Object.freeze({
     route: "immersive-reading",
     mode: "immersive",
@@ -296,14 +319,24 @@
       }
       case "CONTROL_TOGGLE": {
         if (input.overlay !== CONTROL_HOME_OVERLAY) return current;
+        return current.overlay
+          ? Object.assign({}, current, routeState(current.route), { overlay: null })
+          : Object.assign({}, current, { overlay: CONTROL_HOME_OVERLAY });
+      }
+      case "CONTROL_HIDE": {
+        if (!current.overlay) return current;
+        return Object.assign({}, current, routeState(current.route), { overlay: null });
+      }
+      case "MODULE_SWITCH": {
+        if (input.module !== DIRECTORY_OVERLAY) return current;
+        if (current.overlay === DIRECTORY_OVERLAY) return current;
         return Object.assign({}, current, {
-          overlay: current.overlay === CONTROL_HOME_OVERLAY ? null : CONTROL_HOME_OVERLAY
+          mode: "module",
+          overlay: DIRECTORY_OVERLAY,
+          module: DIRECTORY_OVERLAY,
+          panel: "quick"
         });
       }
-      case "CONTROL_HIDE":
-        return current.overlay === CONTROL_HOME_OVERLAY
-          ? Object.assign({}, current, { overlay: null })
-          : current;
       case "PAGE_TURN": {
         if (input.direction !== "prev" && input.direction !== "next") return current;
         return Object.assign({}, current, { pageIndex: Math.max(0, current.pageIndex + (input.direction === "next" ? 1 : -1)), error: null });
@@ -389,6 +422,7 @@
 
   const api = Object.freeze({
     CONTROL_HOME_OVERLAY,
+    DIRECTORY_OVERLAY,
     PRIMARY_ROUTES,
     COMPATIBILITY_ROUTE_CROSSWALK,
     ALL_ROUTES,
@@ -399,6 +433,7 @@
     createOwner,
     instrumentDom,
     instrumentControlHomeDom,
+    instrumentDirectoryDom,
     executeContentRetry: (owner, effect) => executeRequest(owner, "content", effect),
     executeTocRetry: (owner, effect) => executeRequest(owner, "toc", effect)
   });

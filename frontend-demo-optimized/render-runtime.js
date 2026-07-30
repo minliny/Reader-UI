@@ -48,6 +48,20 @@
     overlayKind: "reader-control"
   });
 
+  // Trace-only binding for the frozen directory module master. The visual
+  // structure remains owned by Figma; Reader-UI supplies state, chapter
+  // identity, and semantic overlay behavior without recreating a route page.
+  const READER_DIRECTORY_FIGMA_BINDING = Object.freeze({
+    fileKey: "klhs2jMM4MncaJFqZMfqEK",
+    pageId: "834:3",
+    canonicalMasterId: "942:61",
+    phoneNodeId: "942:58",
+    tabletNodeId: "942:60",
+    phoneFinalAssemblyId: "943:9888",
+    tabletFinalAssemblyId: "943:10196",
+    overlayKind: "directory"
+  });
+
   function esc(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -4654,7 +4668,7 @@
             </article>`;
       }).join("");
       return `
-        <section class="fd-reader-module-panel fd-reader-toc-panel" data-dev-region="ReaderModulePanel" aria-label="目录与书签">
+        <section class="fd-reader-module-panel fd-reader-toc-panel" data-dev-region="ReaderModulePanel" data-reader-figma-overlay="${READER_DIRECTORY_FIGMA_BINDING.overlayKind}" data-figma-file-key="${READER_DIRECTORY_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_DIRECTORY_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_DIRECTORY_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_DIRECTORY_FIGMA_BINDING.tabletNodeId}" aria-label="目录与书签">
           <div class="fd-reader-quick-directory-workspace is-${esc(tocMode)}">
             ${readerTocSwitchHtml(tocMode, "fd-reader-full-directory-tabs fd-reader-quick-directory-tabs")}
             <div class="${tocMode === "bookmark" ? "fd-reader-quick-bookmark-list" : "fd-reader-toc-list fd-reader-quick-directory-list"}">
@@ -4759,12 +4773,19 @@
 
   function readerModuleNavHtml(data, activeType) {
     const normalizedType = activeType || "";
-    return `<span class="fd-reader-module-nav-trace" data-reader-figma-overlay="control-home" data-figma-canonical-master="${READER_CONTROL_HOME_FIGMA_BINDING.canonicalMasterId}" aria-hidden="true"></span>${data.reader.modules.map((item) => `
-      <button class="fd-reader-module${item.type === normalizedType ? " is-active" : ""}" type="button" data-route="${esc(readerModuleRoutes[item.type] || "reader")}" data-module="${esc(item.type)}"${item.type === normalizedType ? ' aria-current="page"' : ""}>
+    const traceBinding = normalizedType === READER_DIRECTORY_FIGMA_BINDING.overlayKind
+      ? READER_DIRECTORY_FIGMA_BINDING
+      : READER_CONTROL_HOME_FIGMA_BINDING;
+    return `<span class="fd-reader-module-nav-trace" data-reader-figma-overlay="${esc(traceBinding.overlayKind)}" data-figma-canonical-master="${traceBinding.canonicalMasterId}" aria-hidden="true"></span>${data.reader.modules.map((item) => {
+      const navigationAttributes = item.type === READER_DIRECTORY_FIGMA_BINDING.overlayKind
+        ? `data-reader-module-switch="${READER_DIRECTORY_FIGMA_BINDING.overlayKind}"`
+        : `data-route="${esc(readerModuleRoutes[item.type] || "reader")}"`;
+      return `
+      <button class="fd-reader-module${item.type === normalizedType ? " is-active" : ""}" type="button" ${navigationAttributes} data-module="${esc(item.type)}"${item.type === normalizedType ? ' aria-current="page"' : ""}>
         <span>${icon(item.icon || item.type, "fd-medium-icon")}</span>
         <small>${esc(item.label)}</small>
-      </button>
-    `).join("")}`;
+      </button>`;
+    }).join("")}`;
   }
 
   function readerChoiceButtons(values, current, dataAttrs) {
@@ -5590,6 +5611,21 @@
     });
   }
 
+  function readerDirectoryOverlay(data, appState, route, isLoading) {
+    const state = {
+      mode: "module",
+      module: READER_DIRECTORY_FIGMA_BINDING.overlayKind,
+      panel: "quick"
+    };
+    return Object.freeze({
+      state,
+      accessoryHtml: readerBrightnessRail(data, appState),
+      overlayHtml: readerTopOverlay(data, appState),
+      bottomSheetHtml: readerBottomSheetHtml(data, state, route, Boolean(isLoading), appState),
+      moduleNavHtml: readerModuleNavHtml(data, READER_DIRECTORY_FIGMA_BINDING.overlayKind)
+    });
+  }
+
   function readerQuickFullPagePanel(type, appState, data) {
     const meta = type === "search"
       ? { title: "内容搜索", iconName: "reader-content-search" }
@@ -5687,9 +5723,15 @@
     const controlHome = controlHomeVisible
       ? readerControlHomeOverlay(data, appState, route, isLoading)
       : null;
-    const state = controlHome?.state || baseState;
-    const isImmersive = baseState.mode === "immersive" && !controlHomeVisible && !isLoading;
-    const activeModule = baseState.mode === "module" ? baseState.module : "";
+    const directoryVisible = baseState.mode === "immersive" &&
+      appState?.readerControlOverlay === READER_DIRECTORY_FIGMA_BINDING.overlayKind;
+    const directoryOverlay = directoryVisible
+      ? readerDirectoryOverlay(data, appState, route, isLoading)
+      : null;
+    const semanticOverlay = controlHome || directoryOverlay;
+    const state = semanticOverlay?.state || baseState;
+    const isImmersive = baseState.mode === "immersive" && !semanticOverlay && !isLoading;
+    const activeModule = semanticOverlay?.state?.module || (baseState.mode === "module" ? baseState.module : "");
     const frameMode = isImmersive ? "immersive" : state.mode;
     const pageModeClass = appState?.readerPageMode === "vertical" ? " fd-reader-page-mode-vertical" : " fd-reader-page-mode-horizontal";
     return shellKit().renderReaderShell({
@@ -5700,14 +5742,14 @@
       bottomSheetHostClass: isImmersive ? "fd-reader-sheet fd-reader-sheet-empty" : "fd-reader-sheet",
       moduleNavClass: isImmersive ? "fd-reader-module-nav fd-reader-module-nav-empty" : "fd-reader-module-nav",
       accessoryHostClass: "fd-reader-accessory-host",
-      accessoryHtml: controlHome?.accessoryHtml || (isImmersive ? "" : readerBrightnessRail(data, appState)),
+      accessoryHtml: semanticOverlay?.accessoryHtml || (isImmersive ? "" : readerBrightnessRail(data, appState)),
       stateHostClass: "fd-reader-state-host",
       stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`,
       ariaLabel: (routes[route] || routes.reader).title,
-      readingSurfaceHtml: sharedReaderSurface(data, isImmersive ? "" : controlHomeVisible ? "reader-control" : "immersive-reading", appState),
-      overlayHtml: controlHome?.overlayHtml || (isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : readerTopOverlay(data, appState)),
-      bottomSheetHtml: controlHome?.bottomSheetHtml || readerBottomSheetHtml(data, state, route, isLoading, appState),
-      moduleNavHtml: controlHome?.moduleNavHtml || (isImmersive ? "" : readerModuleNavHtml(data, activeModule))
+      readingSurfaceHtml: sharedReaderSurface(data, isImmersive ? "" : semanticOverlay ? "reader-control" : "immersive-reading", appState),
+      overlayHtml: semanticOverlay?.overlayHtml || (isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : readerTopOverlay(data, appState)),
+      bottomSheetHtml: semanticOverlay?.bottomSheetHtml || readerBottomSheetHtml(data, state, route, isLoading, appState),
+      moduleNavHtml: semanticOverlay?.moduleNavHtml || (isImmersive ? "" : readerModuleNavHtml(data, activeModule))
     });
   }
 
@@ -11456,7 +11498,8 @@
         normalizeReaderTtsQuickTimerState(appState);
       }
       syncAppThemeRoot(root, data, appState);
-      if (!isReaderStateRoute(route)) {
+      const committedReaderState = isReaderStateRoute(route) ? readerRouteState(route) : null;
+      if (!committedReaderState || committedReaderState.mode !== "immersive") {
         readerRuntimeOwner?.dispatch?.({ type: "CONTROL_HIDE" });
       }
       const readerRuntimeState = readerRuntimeOwner?.dispatch?.({ type: "ROUTE_COMMIT", route });
@@ -11465,6 +11508,8 @@
       window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
       if (appState.readerControlOverlay === READER_CONTROL_HOME_FIGMA_BINDING.overlayKind) {
         window.ReaderRuntimeContract?.instrumentControlHomeDom?.(screenHost, route);
+      } else if (appState.readerControlOverlay === READER_DIRECTORY_FIGMA_BINDING.overlayKind) {
+        window.ReaderRuntimeContract?.instrumentDirectoryDom?.(screenHost, route);
       }
       window.ReaderRssRuntimeContract?.instrumentDom?.(screenHost, route);
       window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
@@ -11482,6 +11527,8 @@
         window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
         if (appState.readerControlOverlay === READER_CONTROL_HOME_FIGMA_BINDING.overlayKind) {
           window.ReaderRuntimeContract?.instrumentControlHomeDom?.(screenHost, route);
+        } else if (appState.readerControlOverlay === READER_DIRECTORY_FIGMA_BINDING.overlayKind) {
+          window.ReaderRuntimeContract?.instrumentDirectoryDom?.(screenHost, route);
         }
         window.ReaderRssRuntimeContract?.instrumentDom?.(screenHost, route);
         window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
@@ -12516,6 +12563,20 @@
 
     const currentRoute = () => screenHost.closest(".fd-demo")?.getAttribute("data-current-route") || "";
 
+    screenHost.querySelectorAll("[data-reader-module-switch]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const module = button.getAttribute("data-reader-module-switch") || "";
+        if (module !== READER_DIRECTORY_FIGMA_BINDING.overlayKind || !readerRuntimeOwner) {
+          return;
+        }
+        const nextState = readerRuntimeOwner.dispatch?.({ type: "MODULE_SWITCH", module });
+        appState.readerControlOverlay = nextState?.overlay || "";
+        renderCurrentRoute();
+      });
+    });
+
     screenHost.querySelectorAll("[data-reader-control-toggle]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
@@ -12524,7 +12585,7 @@
         if (overlay !== READER_CONTROL_HOME_FIGMA_BINDING.overlayKind || !readerRuntimeOwner) {
           return;
         }
-        const showing = readerRuntimeOwner.getState?.().overlay !== overlay;
+        const showing = !readerRuntimeOwner.getState?.().overlay;
         const commit = () => {
           const nextState = readerRuntimeOwner.dispatch?.({ type: "CONTROL_TOGGLE", overlay });
           appState.readerControlOverlay = nextState?.overlay || "";
@@ -15411,6 +15472,8 @@
     readerReadingSurfaceFigmaBinding: READER_READING_SURFACE_FIGMA_BINDING,
     readerControlHomeFigmaBinding: READER_CONTROL_HOME_FIGMA_BINDING,
     readerControlHomeOverlay,
+    readerDirectoryFigmaBinding: READER_DIRECTORY_FIGMA_BINDING,
+    readerDirectoryOverlay,
     readerTextBlocks,
     sharedReaderSurface,
     readerThemeStyle,

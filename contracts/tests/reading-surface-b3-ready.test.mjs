@@ -61,12 +61,10 @@ test("B3 evidence remains fresh after B4 appends the authorized reading-surface 
   assert.equal(registry.routeInventory.expectedRouteCount, enumRoutes.size,
     "routeInventory.expectedRouteCount must match the post-removal schema enum");
 
-  // The 6 sibling records that owned the 13 routes keep their identity + Figma
-  // binding + harmony targets, but their routeIds are cleared pending their own
-  // source conversion. They must not be deleted (breaks registry binding) and
-  // must not keep retired routeIds (validator line 158 rejects unknown routes).
-  const siblingRecordIds = ["reader.module.directory", "reader.module.tts",
-    "reader.module.appearance", "reader.module.settings", "reader.quick.content-search"];
+  // Sibling records whose source conversion has not landed keep their identity,
+  // Figma binding, and native target, but remain fail-closed.
+  const siblingRecordIds = ["reader.module.tts", "reader.module.appearance",
+    "reader.module.settings", "reader.quick.content-search"];
   for (const id of siblingRecordIds) {
     const sibling = registry.records.find((r) => r.id === id);
     assert.ok(sibling, `${id} record must remain registered pending its own conversion`);
@@ -76,6 +74,17 @@ test("B3 evidence remains fresh after B4 appends the authorized reading-surface 
     assert.equal(sibling.harmony?.status, "candidate-backport",
       `${id} must remain fail-closed, not silently promotable`);
   }
+  const directory = registry.records.find((r) => r.id === "reader.module.directory");
+  assert.ok(directory, "reader.module.directory must remain independently registered");
+  assert.deepEqual(directory.routeIds, [], "quick directory must remain route-independent");
+  assert.deepEqual(directory.overlayKinds, ["directory"]);
+  assert.equal(directory.reconstruction?.status, "source-conversion-complete");
+  assert.equal(directory.local?.status, "implementation-ready");
+  assert.equal(directory.harmony?.status, "candidate-backport",
+    "directory stays fail-closed until its own A2 receipt and B4 promotion");
+  assert.deepEqual(directory.local?.targets, [
+    "frontend-demo-optimized/render-runtime.js#readerDirectoryOverlay",
+  ]);
   const controlHome = registry.records.find((r) => r.id === "reader.control-home");
   assert.ok(controlHome, "reader.control-home must remain independently registered");
   assert.deepEqual(controlHome.routeIds, [], "control home must remain route-independent");

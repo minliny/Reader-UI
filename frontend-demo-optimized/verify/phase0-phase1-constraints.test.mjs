@@ -101,7 +101,7 @@ test("ReaderShell owns one explicit accessory slot outside panel content", () =>
   const bottomSheetEnd = runtimeSource.indexOf("  function readerControlHomeOverlay(", bottomSheetStart);
   const bottomSheetSource = runtimeSource.slice(bottomSheetStart, bottomSheetEnd);
   assert.doesNotMatch(bottomSheetSource, /readerBrightnessRail\s*\(/);
-  assert.match(runtimeSource, /accessoryHtml:\s*controlHome\?\.accessoryHtml\s*\|\|\s*\(isImmersive\s*\?\s*["']["']\s*:\s*readerBrightnessRail/);
+  assert.match(runtimeSource, /accessoryHtml:\s*semanticOverlay\?\.accessoryHtml\s*\|\|\s*\(isImmersive\s*\?\s*["']["']\s*:\s*readerBrightnessRail/);
 });
 
 test("the product has one immersive session capsule and no duplicate control-space DOM", () => {
