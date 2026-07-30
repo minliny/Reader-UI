@@ -14,7 +14,7 @@ import {
 } from "./manifest-lib.mjs";
 
 export const RELEASE_EVENT_TYPE = "reader-ui-updated";
-export const RELEASE_METADATA_SCHEMA_VERSION = 1;
+export const RELEASE_METADATA_SCHEMA_VERSION = 2;
 export const RELEASE_ARTIFACT_INVENTORY_SCHEMA_VERSION = 1;
 export const RELEASE_DISPATCH_PLAN_SCHEMA_VERSION = 1;
 export const RELEASE_METADATA_PATH = "UI_RELEASE_METADATA.json";
@@ -175,6 +175,8 @@ export function assertReleaseMetadata(value) {
       "manifestSha256",
       "releaseId",
       "runtimeActionsSha256",
+      "runtimePayloadContractsSchemaVersion",
+      "runtimePayloadContractsSha256",
       "schemaVersion",
       "source",
       "tag",
@@ -196,6 +198,18 @@ export function assertReleaseMetadata(value) {
     throw new Error(`release metadata tag must be v${metadata.version}`);
   }
   assertSha256(metadata.runtimeActionsSha256, "release metadata runtimeActionsSha256");
+  if (
+    !Number.isSafeInteger(metadata.runtimePayloadContractsSchemaVersion) ||
+    metadata.runtimePayloadContractsSchemaVersion < 1
+  ) {
+    throw new Error(
+      "release metadata runtimePayloadContractsSchemaVersion must be a positive safe integer",
+    );
+  }
+  assertSha256(
+    metadata.runtimePayloadContractsSha256,
+    "release metadata runtimePayloadContractsSha256",
+  );
   assertSha256(metadata.manifestSha256, "release metadata manifestSha256");
   assertSha256(metadata.targetConfigSha256, "release metadata targetConfigSha256");
 
@@ -281,6 +295,32 @@ export function buildReleaseMetadata(root, context) {
   if (!runtimeManifestEntry || runtimeManifestEntry.sha256 !== runtimeActionsSha256) {
     throw new Error(`${runtimeActionsPath} is not locked by ${RELEASE_MANIFEST_PATH}`);
   }
+  const runtimePayloadContractsPath = "ui-spec/runtime-payload-contracts.json";
+  const runtimePayloadContractsBytes = fs.readFileSync(
+    path.join(root, runtimePayloadContractsPath),
+  );
+  const runtimePayloadContractsSha256 = sha256(runtimePayloadContractsBytes);
+  const runtimePayloadContracts = readJsonBytes(
+    runtimePayloadContractsBytes,
+    runtimePayloadContractsPath,
+  );
+  if (
+    !Number.isSafeInteger(runtimePayloadContracts.schemaVersion) ||
+    runtimePayloadContracts.schemaVersion < 1
+  ) {
+    throw new Error(`${runtimePayloadContractsPath} schemaVersion is invalid`);
+  }
+  const runtimePayloadManifestEntry = result.actual.files.find(
+    (entry) => entry.path === runtimePayloadContractsPath,
+  );
+  if (
+    !runtimePayloadManifestEntry ||
+    runtimePayloadManifestEntry.sha256 !== runtimePayloadContractsSha256
+  ) {
+    throw new Error(
+      `${runtimePayloadContractsPath} is not locked by ${RELEASE_MANIFEST_PATH}`,
+    );
+  }
   const targetConfig = readReleaseHostTargets(root);
   const manifestSha256 = sha256(manifestBytes);
   const metadata = {
@@ -290,6 +330,8 @@ export function buildReleaseMetadata(root, context) {
     tag: context.tag,
     releaseId: `${context.sourceSha}:${manifestSha256}`,
     runtimeActionsSha256,
+    runtimePayloadContractsSchemaVersion: runtimePayloadContracts.schemaVersion,
+    runtimePayloadContractsSha256,
     manifestSha256,
     targetConfigSha256: sha256(targetConfig.rawBytes),
     source: {
@@ -576,6 +618,9 @@ export function buildRepositoryDispatchDocument(metadataValue, artifactEvidenceV
       tag: metadata.tag,
       releaseId: metadata.releaseId,
       runtimeActionsSha256: metadata.runtimeActionsSha256,
+      runtimePayloadContractsSchemaVersion:
+        metadata.runtimePayloadContractsSchemaVersion,
+      runtimePayloadContractsSha256: metadata.runtimePayloadContractsSha256,
       manifestSha256: metadata.manifestSha256,
       targetConfigSha256: metadata.targetConfigSha256,
       source: { ...metadata.source },

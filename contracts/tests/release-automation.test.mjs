@@ -52,6 +52,8 @@ function fixtureMetadata() {
     tag: "v2.5.1",
     releaseId: `${sourceSha}:${manifestSha256}`,
     runtimeActionsSha256: "a".repeat(64),
+    runtimePayloadContractsSchemaVersion: 4,
+    runtimePayloadContractsSha256: "d".repeat(64),
     manifestSha256,
     targetConfigSha256: "e".repeat(64),
     source: {
@@ -196,6 +198,15 @@ test("release preparation materializes an exact manifest-backed artifact stage w
   const stageRoot = path.join(temporaryRoot, "release-stage");
   const staged = writeReleaseArtifactStage(temporaryRoot, stageRoot, release);
   assert.equal(staged.metadata.version, version);
+  assert.equal(staged.metadata.runtimePayloadContractsSchemaVersion, 4);
+  assert.equal(
+    staged.metadata.runtimePayloadContractsSha256,
+    sha256(
+      fs.readFileSync(
+        path.join(temporaryRoot, "ui-spec", "runtime-payload-contracts.json"),
+      ),
+    ),
+  );
   assert.equal(staged.inventory.sourceFileCount, manifest.files.length);
   assert.equal(staged.inventory.files.length, manifest.files.length + 3);
   assert.equal(staged.inventorySha256, sha256(fs.readFileSync(path.join(stageRoot, RELEASE_ARTIFACT_INVENTORY_PATH))));
@@ -252,6 +263,8 @@ test("repository_dispatch carries immutable source, artifact inventory, manifest
     "manifestSha256",
     "releaseId",
     "runtimeActionsSha256",
+    "runtimePayloadContractsSchemaVersion",
+    "runtimePayloadContractsSha256",
     "source",
     "tag",
     "targetConfigSha256",
@@ -259,6 +272,14 @@ test("repository_dispatch carries immutable source, artifact inventory, manifest
   ]);
   assert.equal(document.client_payload.releaseId, metadata.releaseId);
   assert.equal(document.client_payload.runtimeActionsSha256, metadata.runtimeActionsSha256);
+  assert.equal(
+    document.client_payload.runtimePayloadContractsSchemaVersion,
+    metadata.runtimePayloadContractsSchemaVersion,
+  );
+  assert.equal(
+    document.client_payload.runtimePayloadContractsSha256,
+    metadata.runtimePayloadContractsSha256,
+  );
   assert.equal(document.client_payload.manifestSha256, metadata.manifestSha256);
   assert.equal(document.client_payload.targetConfigSha256, metadata.targetConfigSha256);
   assert.deepEqual(document.client_payload.source, metadata.source);

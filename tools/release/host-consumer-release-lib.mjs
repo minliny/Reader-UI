@@ -11,8 +11,8 @@ import {
   verifyReleaseArtifactStage,
 } from "./release-automation-lib.mjs";
 
-export const HOST_CONSUMER_LOCK_SCHEMA_VERSION = 2;
-export const VERIFIED_HOST_RELEASE_SCHEMA_VERSION = 1;
+export const HOST_CONSUMER_LOCK_SCHEMA_VERSION = 3;
+export const VERIFIED_HOST_RELEASE_SCHEMA_VERSION = 2;
 export const HOST_CONSUMER_LOCK_PATH = "READER_UI_CONSUMER.json";
 
 const HOSTS = new Set(["android", "harmonyos", "ios"]);
@@ -133,6 +133,8 @@ export function assertVerifiedHostRelease(value) {
       "releaseId",
       "runtimeActionsSchemaVersion",
       "runtimeActionsSha256",
+      "runtimePayloadContractsSchemaVersion",
+      "runtimePayloadContractsSha256",
       "schemaVersion",
       "sourceSha",
       "tag",
@@ -164,6 +166,18 @@ export function assertVerifiedHostRelease(value) {
   if (!Number.isSafeInteger(verified.runtimeActionsSchemaVersion) || verified.runtimeActionsSchemaVersion < 1) {
     throw new Error("verified host release runtimeActionsSchemaVersion must be a positive safe integer");
   }
+  if (
+    !Number.isSafeInteger(verified.runtimePayloadContractsSchemaVersion) ||
+    verified.runtimePayloadContractsSchemaVersion < 1
+  ) {
+    throw new Error(
+      "verified host release runtimePayloadContractsSchemaVersion must be a positive safe integer",
+    );
+  }
+  digest(
+    verified.runtimePayloadContractsSha256,
+    "verified host release runtimePayloadContractsSha256",
+  );
   if (typeof verified.hostRequestSchemaVersion !== "string" || !SEMVER_PATTERN.test(verified.hostRequestSchemaVersion)) {
     throw new Error("verified host release hostRequestSchemaVersion must be strict semantic versioning");
   }
@@ -284,12 +298,36 @@ export async function verifyHostRelease({
   const versionDocument = readJsonFile(path.join(sourceRoot, "contracts", "VERSION.json"), "Reader UI contracts/VERSION.json");
   const runtimeActionsBytes = fs.readFileSync(path.join(sourceRoot, "ui-spec", "runtime-actions.json"));
   const runtimeActions = JSON.parse(runtimeActionsBytes.toString("utf8"));
+  const runtimePayloadContractsBytes = fs.readFileSync(
+    path.join(sourceRoot, "ui-spec", "runtime-payload-contracts.json"),
+  );
+  const runtimePayloadContracts = JSON.parse(
+    runtimePayloadContractsBytes.toString("utf8"),
+  );
   if (versionDocument.version !== staged.metadata.version) throw new Error("Reader UI VERSION.json version does not match release metadata");
   if (sha256(runtimeActionsBytes) !== staged.metadata.runtimeActionsSha256) {
     throw new Error("Reader UI runtime-actions.json does not match release metadata");
   }
   if (!Number.isSafeInteger(runtimeActions.schemaVersion) || runtimeActions.schemaVersion < 1) {
     throw new Error("Reader UI runtime-actions.json schemaVersion is invalid");
+  }
+  if (
+    sha256(runtimePayloadContractsBytes) !==
+    staged.metadata.runtimePayloadContractsSha256
+  ) {
+    throw new Error(
+      "Reader UI runtime-payload-contracts.json does not match release metadata",
+    );
+  }
+  if (
+    !Number.isSafeInteger(runtimePayloadContracts.schemaVersion) ||
+    runtimePayloadContracts.schemaVersion < 1 ||
+    runtimePayloadContracts.schemaVersion !==
+      staged.metadata.runtimePayloadContractsSchemaVersion
+  ) {
+    throw new Error(
+      "Reader UI runtime-payload-contracts.json schemaVersion does not match release metadata",
+    );
   }
   const hostRequestSchemaVersion = versionDocument.schema?.["host-request"];
   if (typeof hostRequestSchemaVersion !== "string" || !SEMVER_PATTERN.test(hostRequestSchemaVersion)) {
@@ -310,6 +348,9 @@ export async function verifyHostRelease({
     hostRequestSchemaVersion,
     runtimeActionsSchemaVersion: runtimeActions.schemaVersion,
     runtimeActionsSha256: staged.metadata.runtimeActionsSha256,
+    runtimePayloadContractsSchemaVersion: runtimePayloadContracts.schemaVersion,
+    runtimePayloadContractsSha256:
+      staged.metadata.runtimePayloadContractsSha256,
     artifact: {
       id: checkedPayload.artifact.id,
       name: checkedPayload.artifact.name,
@@ -335,14 +376,37 @@ function assertCurrentHostLock(value) {
     "runtimeActionsSha256",
     "schemaVersion",
   ];
-  if (lock.schemaVersion === HOST_CONSUMER_LOCK_SCHEMA_VERSION) schemaKeys.push("releaseIdentity");
-  else if (lock.schemaVersion !== 1) throw new Error("host consumer lock schemaVersion must be 1 or 2");
+  if (lock.schemaVersion === 2) {
+    schemaKeys.push("releaseIdentity");
+  } else if (lock.schemaVersion === HOST_CONSUMER_LOCK_SCHEMA_VERSION) {
+    schemaKeys.push(
+      "releaseIdentity",
+      "runtimePayloadContractsSchemaVersion",
+      "runtimePayloadContractsSha256",
+    );
+  } else if (lock.schemaVersion !== 1) {
+    throw new Error("host consumer lock schemaVersion must be 1, 2, or 3");
+  }
   exactKeys(lock, schemaKeys, "host consumer lock");
   hostName(lock.host, "host consumer lock host");
   plainObject(lock.rollout, "host consumer lock rollout");
   if (!Array.isArray(lock.knownDifferences)) throw new Error("host consumer lock knownDifferences must be an array");
   if (!Array.isArray(lock.blockedProof)) throw new Error("host consumer lock blockedProof must be an array");
-  if (lock.schemaVersion === HOST_CONSUMER_LOCK_SCHEMA_VERSION) assertReleaseIdentity(lock.releaseIdentity);
+  if (lock.schemaVersion >= 2) assertReleaseIdentity(lock.releaseIdentity);
+  if (lock.schemaVersion === HOST_CONSUMER_LOCK_SCHEMA_VERSION) {
+    if (
+      !Number.isSafeInteger(lock.runtimePayloadContractsSchemaVersion) ||
+      lock.runtimePayloadContractsSchemaVersion < 1
+    ) {
+      throw new Error(
+        "host consumer lock runtimePayloadContractsSchemaVersion must be a positive safe integer",
+      );
+    }
+    digest(
+      lock.runtimePayloadContractsSha256,
+      "host consumer lock runtimePayloadContractsSha256",
+    );
+  }
   return lock;
 }
 
@@ -358,6 +422,10 @@ export function updateHostConsumerLock(lockValue, verifiedValue) {
       current.hostRequestSchemaVersion === verified.hostRequestSchemaVersion &&
       current.runtimeActionsSchemaVersion === verified.runtimeActionsSchemaVersion &&
       current.runtimeActionsSha256 === verified.runtimeActionsSha256 &&
+      current.runtimePayloadContractsSchemaVersion ===
+        verified.runtimePayloadContractsSchemaVersion &&
+      current.runtimePayloadContractsSha256 ===
+        verified.runtimePayloadContractsSha256 &&
       sameJson(current.releaseIdentity, {
         releaseId: verified.releaseId,
         sourceSha: verified.sourceSha,
@@ -374,6 +442,9 @@ export function updateHostConsumerLock(lockValue, verifiedValue) {
     hostRequestSchemaVersion: verified.hostRequestSchemaVersion,
     runtimeActionsSchemaVersion: verified.runtimeActionsSchemaVersion,
     runtimeActionsSha256: verified.runtimeActionsSha256,
+    runtimePayloadContractsSchemaVersion:
+      verified.runtimePayloadContractsSchemaVersion,
+    runtimePayloadContractsSha256: verified.runtimePayloadContractsSha256,
     releaseIdentity: {
       releaseId: verified.releaseId,
       sourceSha: verified.sourceSha,

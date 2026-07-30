@@ -32,12 +32,14 @@ function metadata() {
   const sourceSha = "1".repeat(40);
   const manifestSha256 = "2".repeat(64);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     eventType: "reader-ui-updated",
     version: "2.5.1",
     tag: "v2.5.1",
     releaseId: `${sourceSha}:${manifestSha256}`,
     runtimeActionsSha256: "3".repeat(64),
+    runtimePayloadContractsSchemaVersion: 4,
+    runtimePayloadContractsSha256: "7".repeat(64),
     manifestSha256,
     targetConfigSha256: "4".repeat(64),
     source: {
@@ -66,7 +68,7 @@ function artifactEvidence() {
 function verifiedRelease(overrides = {}) {
   const releaseMetadata = metadata();
   const value = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     host: "android",
     hostRepository: "minliny/Reader-for-Android",
     releaseId: releaseMetadata.releaseId,
@@ -79,6 +81,10 @@ function verifiedRelease(overrides = {}) {
     hostRequestSchemaVersion: "1.1.0",
     runtimeActionsSchemaVersion: 2,
     runtimeActionsSha256: releaseMetadata.runtimeActionsSha256,
+    runtimePayloadContractsSchemaVersion:
+      releaseMetadata.runtimePayloadContractsSchemaVersion,
+    runtimePayloadContractsSha256:
+      releaseMetadata.runtimePayloadContractsSha256,
     artifact: {
       id: artifactEvidence().id,
       name: releaseMetadata.artifact.name,
@@ -155,7 +161,7 @@ test("deterministic bump branch is stable per releaseId and rejects malformed id
   assert.throws(() => deterministicHostBumpBranch("latest"), /source SHA and manifest SHA-256/);
 });
 
-test("lock v2 updater changes only release/version/hash identity and is byte-idempotent", () => {
+test("lock v3 updater binds typed payload contracts and preserves host-owned fields", () => {
   const current = v1Lock();
   const protectedSnapshot = JSON.stringify({
     host: current.host,
@@ -165,8 +171,13 @@ test("lock v2 updater changes only release/version/hash identity and is byte-ide
   });
   const first = updateHostConsumerLock(current, verifiedRelease());
   assert.equal(first.changed, true);
-  assert.equal(first.lock.schemaVersion, 2);
+  assert.equal(first.lock.schemaVersion, 3);
   assert.equal(first.lock.readerUiVersion, "2.5.1");
+  assert.equal(first.lock.runtimePayloadContractsSchemaVersion, 4);
+  assert.equal(
+    first.lock.runtimePayloadContractsSha256,
+    metadata().runtimePayloadContractsSha256,
+  );
   assert.equal(first.lock.releaseIdentity.releaseId, metadata().releaseId);
   assert.equal(
     JSON.stringify({
@@ -187,6 +198,12 @@ test("same releaseId with conflicting identity or hashes fails closed", () => {
   const conflict = structuredClone(first);
   conflict.releaseIdentity.targetConfigSha256 = "9".repeat(64);
   assert.throws(() => updateHostConsumerLock(conflict, verifiedRelease()), /conflicting version, hash, or identity/);
+  const payloadConflict = structuredClone(first);
+  payloadConflict.runtimePayloadContractsSha256 = "8".repeat(64);
+  assert.throws(
+    () => updateHostConsumerLock(payloadConflict, verifiedRelease()),
+    /conflicting version, hash, or identity/,
+  );
   const unknown = { ...v1Lock(), unexpected: true };
   assert.throws(() => updateHostConsumerLock(unknown, verifiedRelease()), /keys must be exactly/);
 });

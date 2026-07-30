@@ -65,6 +65,8 @@ try {
         `inventory_sha256=${staged.inventorySha256}`,
         `manifest_sha256=${release.metadata.manifestSha256}`,
         `runtime_actions_sha256=${release.metadata.runtimeActionsSha256}`,
+        `runtime_payload_contracts_schema_version=${release.metadata.runtimePayloadContractsSchemaVersion}`,
+        `runtime_payload_contracts_sha256=${release.metadata.runtimePayloadContractsSha256}`,
         `version=${release.metadata.version}`,
         "",
       ].join("\n"),
