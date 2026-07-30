@@ -299,6 +299,14 @@ export function buildVisualAdmissionArtifact(registrySource, tokenLedgerSource) 
     .map((entry) => ({ ...entry, routeId: entry.id }));
   const overlayEntries = collectSimpleAdmissions(registry, 'overlayKinds', false)
     .map((entry) => ({ ...entry, overlayKind: entry.id }));
+  const recordEntries = registry.records
+    .map((record) => ({
+      recordId: record.id,
+      admission: admissionForRecord(record),
+      sourceBound: sourceBoundForRecord(record),
+      implementationReady: implementationReadyForRecord(record),
+    }))
+    .sort((left, right) => compare(left.recordId, right.recordId));
   const stateEntries = collectStateAdmissions(registry);
   const viewportRouteEntries = collectViewportRouteAdmissions(registry);
   const exactRevisions = [...new Set(registry.records
@@ -319,6 +327,13 @@ export function buildVisualAdmissionArtifact(registrySource, tokenLedgerSource) 
     '// REGISTRY_SHA256 binds the canonical visual/admission projection; Reader-UI-only B3 evidence is excluded.',
     '',
     "export type ReaderUiVisualAdmissionStatus = 'implementation-ready' | 'candidate-backport' | 'blocked' | 'retired';",
+    '',
+    'export interface ReaderUiVisualRecordAdmissionEntry {',
+    '  recordId: string;',
+    '  admission: ReaderUiVisualAdmissionStatus;',
+    '  sourceBound: boolean;',
+    '  implementationReady: boolean;',
+    '}',
     '',
     'export interface ReaderUiVisualRouteAdmissionEntry {',
     '  routeId: string;',
@@ -368,6 +383,10 @@ export function buildVisualAdmissionArtifact(registrySource, tokenLedgerSource) 
     `  static readonly SOURCE_FILE_KEY: string = '${quote(registry.authority.fileKey)}';`,
     `  static readonly SOURCE_REVISION: string = '${quote(exactRevisions[0] ?? '')}';`,
     `  static readonly REGISTRY_SHA256: string = '${registrySha}';`,
+    '  static readonly RECORD_ADMISSIONS: ReaderUiVisualRecordAdmissionEntry[] = [',
+    ...recordEntries.map((entry) =>
+      `    { recordId: '${quote(entry.recordId)}', admission: '${entry.admission}', sourceBound: ${entry.sourceBound}, implementationReady: ${entry.implementationReady} },`),
+    '  ];',
     '  static readonly ROUTE_ADMISSIONS: ReaderUiVisualRouteAdmissionEntry[] = [',
     ...routeEntries.map((entry) =>
       `    { routeId: '${quote(entry.routeId)}', admission: '${entry.admission}', sourceBound: ${entry.sourceBound}, implementationReady: ${entry.implementationReady}, recordIds: ${recordIds(entry.recordIds)} },`),
@@ -384,6 +403,26 @@ export function buildVisualAdmissionArtifact(registrySource, tokenLedgerSource) 
     ...stateEntries.map((entry) =>
       `    { routeId: '${quote(entry.routeId)}', stateId: '${quote(entry.stateId)}', admission: '${entry.admission}', sourceBound: ${entry.sourceBound}, implementationReady: ${entry.implementationReady}, recordIds: ${recordIds(entry.recordIds)} },`),
     '  ];',
+    '',
+    '  static admissionForRecord(recordId: string): ReaderUiVisualAdmissionStatus {',
+    '    for (let index = 0; index < ReaderUiVisualAdmission.RECORD_ADMISSIONS.length; index += 1) {',
+    '      const entry = ReaderUiVisualAdmission.RECORD_ADMISSIONS[index];',
+    '      if (entry.recordId === recordId) return entry.admission;',
+    '    }',
+    "    return 'blocked';",
+    '  }',
+    '',
+    '  static isRecordAdmitted(recordId: string): boolean {',
+    "    return ReaderUiVisualAdmission.admissionForRecord(recordId) === 'implementation-ready';",
+    '  }',
+    '',
+    '  static isRecordSourceBound(recordId: string): boolean {',
+    '    for (let index = 0; index < ReaderUiVisualAdmission.RECORD_ADMISSIONS.length; index += 1) {',
+    '      const entry = ReaderUiVisualAdmission.RECORD_ADMISSIONS[index];',
+    '      if (entry.recordId === recordId) return entry.sourceBound;',
+    '    }',
+    '    return false;',
+    '  }',
     '',
     '  static admissionForRoute(routeId: string): ReaderUiVisualAdmissionStatus {',
     '    for (let index = 0; index < ReaderUiVisualAdmission.ROUTE_ADMISSIONS.length; index += 1) {',

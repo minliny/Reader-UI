@@ -58,6 +58,31 @@ test('Harmony admission changes remain visible in the generated entries and dige
   );
 });
 
+test('record-level gates preserve component families without native allowlists', () => {
+  assert.match(
+    baseline,
+    /recordId: 'reader\.control-home', admission: 'implementation-ready', sourceBound: true, implementationReady: true/,
+  );
+  for (const recordId of [
+    'reader.module.directory',
+    'reader.module.tts',
+    'reader.module.appearance',
+    'reader.module.settings',
+  ]) {
+    assert.match(
+      baseline,
+      new RegExp(
+        `recordId: '${recordId.replaceAll('.', '\\.')}', admission: 'candidate-backport', ` +
+        'sourceBound: true, implementationReady: false',
+      ),
+    );
+  }
+  assert.match(
+    baseline,
+    /static isRecordAdmitted\(recordId: string\): boolean/,
+  );
+});
+
 test('registry whitespace and object-key formatting do not change the artifact', () => {
   assert.equal(
     buildVisualAdmissionArtifact(JSON.stringify(registry), tokenLedgerSource),
