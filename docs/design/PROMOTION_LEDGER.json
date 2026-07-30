@@ -543,6 +543,193 @@
       "promotedBy": "promote-family.mjs",
       "previousEntryHash": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471",
       "entryHash": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712"
+    },
+    {
+      "entryId": "retract-009",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.page",
+      "pageFamily": "bookshelf",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-empty",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:f2d45adb55de1677e626c691d7156c35ad024b8d9e5c477b888e039a53dc54ad",
+      "reversalOfEntryId": "promote-004",
+      "retractedPromotion": {
+        "entryHash": "sha256:f2d45adb55de1677e626c691d7156c35ad024b8d9e5c477b888e039a53dc54ad",
+        "entryId": "promote-004",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712",
+      "entryHash": "sha256:1bbc700b69d8010af8352c635be2122d278d14e2b4699428396a0659bc87dffb"
+    },
+    {
+      "entryId": "retract-010",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.book-card",
+      "pageFamily": "bookshelf",
+      "surfaceType": "component",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:72d9e21771a933b43fbc803ad30d94b7d346508adcb2c6be10e94f3e1d3d20df",
+      "reversalOfEntryId": "promote-005",
+      "retractedPromotion": {
+        "entryHash": "sha256:72d9e21771a933b43fbc803ad30d94b7d346508adcb2c6be10e94f3e1d3d20df",
+        "entryId": "promote-005",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:1bbc700b69d8010af8352c635be2122d278d14e2b4699428396a0659bc87dffb",
+      "entryHash": "sha256:d88f61115be6e51abc375f4173efa0dee3b34f225602de5779049d071aa2a14d"
+    },
+    {
+      "entryId": "retract-011",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.action-sheet",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:6c8dd2227e99d4fe8cfce57b57f470b91d5e04e29035b74e0e1209ff1d454301",
+      "reversalOfEntryId": "promote-006",
+      "retractedPromotion": {
+        "entryHash": "sha256:6c8dd2227e99d4fe8cfce57b57f470b91d5e04e29035b74e0e1209ff1d454301",
+        "entryId": "promote-006",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:d88f61115be6e51abc375f4173efa0dee3b34f225602de5779049d071aa2a14d",
+      "entryHash": "sha256:336ca4178a8f6fbe0eb86c39a4f08a3c41b01c253d653095591c2956283d7497"
+    },
+    {
+      "entryId": "retract-012",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.multi-select",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471",
+      "reversalOfEntryId": "promote-007",
+      "retractedPromotion": {
+        "entryHash": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471",
+        "entryId": "promote-007",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:336ca4178a8f6fbe0eb86c39a4f08a3c41b01c253d653095591c2956283d7497",
+      "entryHash": "sha256:e9c015ab1f5e2b43ecd46690a31859b4164a6716ed2f2aeb08d092c8f285811b"
+    },
+    {
+      "entryId": "retract-013",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.local-import-dialog",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712",
+      "reversalOfEntryId": "promote-008",
+      "retractedPromotion": {
+        "entryHash": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712",
+        "entryId": "promote-008",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:e9c015ab1f5e2b43ecd46690a31859b4164a6716ed2f2aeb08d092c8f285811b",
+      "entryHash": "sha256:e9bb6e78d16e3367f34ea0f3134001e5237b5fdce967f35090886c8a63a9f5eb"
     }
   ]
 }
