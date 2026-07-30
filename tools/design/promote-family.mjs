@@ -51,6 +51,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { acquireWriterLock } from '../shared/shared-writer-lock.mjs';
 import { verifyA2PrePromotionReceipt } from './native-consumer-receipts.mjs';
+import { handoffDirForVisualAdmissionRecord } from './visual-admission-handoff-map.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
@@ -91,42 +92,12 @@ const consumerArtifactPath = path.join(
   'entry/src/main/ets/contract/reader_ui/VisualAdmission.ets',
 );
 
-// ─── Explicit recordId → handoff directory mapping ────────────────────────
-// The 2026-07-27 audit found that deriving the handoff directory from the
-// recordId prefix was wrong: `reader.*` maps to `handoffs/reader-runtime`
-// (not `reader`), `search.*` maps to `search-results`, `webdav.*` maps to
-// `webdav-config`, `settings.*` maps to `settings-general`. String-prefix
-// guessing made it impossible to promote any record in those families.
-const RECORD_ID_TO_HANDOFF = {
-  // Reader is delivered surface-by-surface. The reading canvas cannot share
-  // the historical reader-runtime packet with control overlays: doing so
-  // would let evidence for this completed surface promote a sibling record.
-  'reader.reading-surface': 'reader-runtime/reading-surface',
-  'reader.control-home': 'reader-runtime/control-home',
-  'bookshelf': 'bookshelf',
-  'book-detail': 'book-detail',
-  'source-switch': 'source-switch',
-  'reader': 'reader-runtime',
-  'settings': 'settings-general',
-  'source-management': 'source-management',
-  'webdav': 'webdav-config',
-  'sync-backup': 'sync-backup',
-  'search': 'search-results',
-  'discover': 'discover',
-  'rss': 'rss',
-  'about': 'about',
-  'import-conflict-resolve': 'import-conflict-resolve',
-  'restore-preview': 'restore-preview',
-};
-
 function handoffDirForRecordId(recordId) {
-  const dot = recordId.indexOf('.');
-  const family = dot > 0 ? recordId.slice(0, dot) : recordId;
-  const dir = RECORD_ID_TO_HANDOFF[recordId] || RECORD_ID_TO_HANDOFF[family];
-  if (!dir) {
-    fail(`record ${recordId}: no explicit handoff mapping for family '${family}'. Add it to RECORD_ID_TO_HANDOFF in promote-family.mjs.`);
+  try {
+    return handoffDirForVisualAdmissionRecord(recordId);
+  } catch (error) {
+    fail(error instanceof Error ? error.message : String(error));
   }
-  return dir;
 }
 
 function localReadyForFigmaPath(recordId) {

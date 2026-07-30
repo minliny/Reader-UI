@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { handoffDirForVisualAdmissionRecord } from './visual-admission-handoff-map.mjs';
 
 const MODULE_DIR = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_REPO_ROOT = path.resolve(MODULE_DIR, '..', '..');
@@ -569,13 +570,16 @@ export function checkCurrentNativeConsumerReceipts({
   const activeRecords = registry.records.filter(
     (record) => record.harmony?.status === 'implementation-ready',
   );
+  const errors = [];
   const groups = new Map();
   for (const record of activeRecords) {
-    const handoffDir = record.id === 'reader.reading-surface'
-      ? 'reader-runtime/reading-surface'
-      : record.id.split('.')[0] === 'bookshelf'
-        ? 'bookshelf'
-        : record.id.split('.')[0];
+    let handoffDir;
+    try {
+      handoffDir = handoffDirForVisualAdmissionRecord(record.id);
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+      continue;
+    }
     const localReadyPath = path.join(
       repoRoot,
       'docs',
@@ -589,7 +593,6 @@ export function checkCurrentNativeConsumerReceipts({
     groups.get(key).records.push(record);
   }
 
-  const errors = [];
   const verified = [];
   for (const group of groups.values()) {
     if (!fs.existsSync(group.localReadyPath)) {
