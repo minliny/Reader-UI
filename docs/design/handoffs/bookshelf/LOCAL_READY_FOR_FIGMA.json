@@ -8,7 +8,8 @@
     "bookshelf.book-card",
     "bookshelf.action-sheet",
     "bookshelf.multi-select",
-    "bookshelf.local-import-dialog"
+    "bookshelf.local-import-dialog",
+    "bookshelf.list-mode"
   ],
   "stage": "implementation-ready",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
@@ -16,8 +17,8 @@
   "localSource": {
     "repository": "Reader-UI",
     "branch": "repair/bookshelf-b2b3",
-    "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
-    "implementationCommitSubject": "feat(reader-ui): rebuild bookshelf from frozen Figma source",
+    "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+    "implementationCommitSubject": "feat(bookshelf): rebuild exact Figma list and overlays",
     "localReadyForFigma": true
   },
   "figma": {
@@ -38,6 +39,18 @@
       "pageId": "259:10",
       "canonicalMasterId": "493:196",
       "nodeId": "493:196"
+    },
+    "phoneList": {
+      "pageId": "259:10",
+      "canonicalMasterId": "493:196",
+      "revisionBoundNodeId": "493:196",
+      "liveChildNodeId": "493:191",
+      "liveNodeEvidence": "docs/design/handoffs/bookshelf/FIGMA_LIVE_NODE_READ_2026-07-30.json",
+      "viewportNodes": {
+        "phone": "493:191",
+        "tablet": null
+      },
+      "viewportPolicy": "Phone is source-bound; Tablet remains fail-closed because no Tablet List master exists."
     },
     "bookActionSheet": {
       "pageId": "259:10",
@@ -82,16 +95,18 @@
   "sourceContract": {
     "visualAuthority": "The registered Figma masters at revision 2379851596474967636 are the sole visual source.",
     "bookIdentity": "sourceId::bookId is the only runtime identity used by open, continue, information, multi-select, removal, and source switching.",
-    "bookActionSheet": "Exactly three actions: 多选, 书籍信息, 移除书架.",
+    "bookActionSheet": "Exact Phone/Tablet bottom sheet with title 书籍操作 and exactly three actions: 多选, 书籍信息, 移除书架.",
     "multiSelect": "In-place Phone/Tablet overlay; entry preselects only the long-pressed book; V1 provides selection and removal only, with no group management.",
     "localImport": "System multi-select TXT/EPUB -> spinner-only importing -> scrollable per-book success/failed result -> confirm close.",
+    "listMode": "Phone uses live child node 493:191 under revision-bound component set 493:196; the visible More vector has zero Figma reactions and is not promoted as an invented button.",
+    "cacheState": "Source/cache labels must come from executable source identity and Core cache status; fixture ordinal and DOM position are prohibited.",
     "localBookBoundary": "Local books never expose or enter source switching.",
-    "retirementBoundary": "Legacy book-more and batch routes, group management, standalone import/error pages, unbound bookshelf settings, and Figma-absent Tablet list remain fail-closed or enforced-retired."
+    "retirementBoundary": "Legacy book-more and batch routes, group management, standalone import/error pages, and unbound bookshelf settings remain fail-closed or enforced-retired. Tablet list viewport remains fail-closed without retiring the source-bound Phone list."
   },
   "verification": {
     "focusedBookshelf": {
-      "tests": 61,
-      "passed": 61,
+      "tests": 62,
+      "passed": 62,
       "failed": 0,
       "files": [
         "frontend-demo-optimized/verify/bookshelf-view-structure.test.mjs",
@@ -103,8 +118,8 @@
       ]
     },
     "frontendRegression": {
-      "tests": 577,
-      "passed": 577,
+      "tests": 578,
+      "passed": 578,
       "failed": 0
     },
     "identityInventoryRegression": {
@@ -123,8 +138,8 @@
       "reason": "B7 device/release evidence is not a B3 prerequisite and was not rewritten or claimed."
     },
     "identityDenominator": {
-      "semanticControls": 3208,
-      "canonicalDeclarations": 2151,
+      "semanticControls": 3142,
+      "canonicalDeclarations": 2107,
       "reconciliation": "12/12 pass"
     },
     "promotionGate": {
@@ -132,7 +147,8 @@
       "status": "B4-only-not-executed-by-B3"
     },
     "harmonyA2Consumer": {
-      "status": "pending-independent-clean-commit",
+      "status": "complete-independent-clean-commit",
+      "commit": "658a32e9dea79ba95fa3ebec11d444ba655824f7",
       "requiredBefore": "B4 promotion",
       "notClaimedByB3": true
     }
@@ -147,16 +163,18 @@
       "bookshelf.book-card",
       "bookshelf.action-sheet",
       "bookshelf.multi-select",
-      "bookshelf.local-import-dialog"
+      "bookshelf.local-import-dialog",
+      "bookshelf.list-mode"
     ],
-    "exactLocalCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
+    "exactLocalCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
     "sourceStatus": "implementation-ready",
     "harmonyStatusBeforePromotion": "candidate-backport",
     "promotionRequired": true
   },
-  "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+  "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
   "artifacts": [
     "B2_READER_UI_SOURCE_CONVERSION.json",
+    "FIGMA_LIVE_NODE_READ_2026-07-30.json",
     "FIGMA_DESIGN_DELTA.json",
     "FIGMA_F0_CROSSWALK.json",
     "multi-select/FIGMA_DESIGN_DELTA.json",
@@ -168,7 +186,7 @@
     "figmaVisualOrStructuralMutation": false,
     "harmonyOSVisualConsumerMutation": false,
     "harmonyOSGeneratedContractSyncOnly": false,
-    "harmonyOSA2ConsumerCleanupComplete": false,
+    "harmonyOSA2ConsumerCleanupComplete": true,
     "harmonyOSRouteActivation": false,
     "deviceOrEmulatorExecuted": false,
     "machineReceiptStage": "B7",

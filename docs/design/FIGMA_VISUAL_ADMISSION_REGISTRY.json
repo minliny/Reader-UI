@@ -67,7 +67,7 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "frontend-demo-optimized/render-runtime.js#bookshelf",
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfV2",
@@ -114,7 +114,7 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfV2"
         ]
@@ -160,7 +160,7 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookActionSheetV2"
         ]
@@ -282,7 +282,7 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfMultiSelectV2"
         ]
@@ -331,7 +331,7 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#localImportV2"
         ]
@@ -374,7 +374,7 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfV2"
         ]
