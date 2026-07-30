@@ -31,25 +31,31 @@ const revision = readJson("docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json")
 const latestLedgerByRecord = new Map();
 for (const entry of ledger.entries) latestLedgerByRecord.set(entry.recordId, entry);
 
-test("native A2 closure index exactly covers every current implementation-ready B3 record set", () => {
+test("native A2 closure index covers active records and bounded pre-promotion candidates", () => {
   assert.equal(dependencies.schemaVersion, "1.1.0");
   assert.ok(Array.isArray(dependencies.nativeA2ConsumerClosures));
 
   const readyRecords = registry.records.filter(
     (record) => record.harmony?.status === "implementation-ready",
   );
-  assert.equal(readyRecords.length, 7);
-
   const indexedRecords = dependencies.nativeA2ConsumerClosures.flatMap(
     (closure) => closure.recordIds,
   );
   assert.equal(new Set(indexedRecords).size, indexedRecords.length);
-  assert.ok(
-    sameSet(
-      new Set(indexedRecords),
-      new Set(readyRecords.map((record) => record.id)),
-    ),
-  );
+  const indexedRecordIds = new Set(indexedRecords);
+  for (const record of readyRecords) {
+    assert.ok(indexedRecordIds.has(record.id), `${record.id} must have a native A2 closure`);
+  }
+  for (const recordId of indexedRecords) {
+    const record = registry.records.find((candidate) => candidate.id === recordId);
+    assert.ok(record, `${recordId} must remain a real registry record`);
+    assert.equal(record.local?.status, "implementation-ready");
+    assert.ok(
+      record.harmony?.status === "implementation-ready" ||
+        record.harmony?.status === "candidate-backport",
+      `${recordId} must be active or awaiting its atomic promotion`,
+    );
+  }
 });
 
 for (const closure of dependencies.nativeA2ConsumerClosures) {
@@ -58,12 +64,20 @@ for (const closure of dependencies.nativeA2ConsumerClosures) {
     assert.ok(!closure.postPromotionReceipt.includes("/handoffs/"));
 
     const pre = readJson(closure.prePromotionReceipt);
-    const post = readJson(closure.postPromotionReceipt);
     const b3 = readJson(pre.sourceEvidence.b3PacketPath);
+    const closureRecords = closure.recordIds.map((recordId) =>
+      registry.records.find((record) => record.id === recordId),
+    );
+    const isActive = closureRecords.every(
+      (record) => record?.harmony?.status === "implementation-ready",
+    );
 
     assert.equal(pre.kind, "A2_PRE_PROMOTION_CONSUMER_RECEIPT");
     assert.equal(pre.status, "a2-consumer-closed");
-    assert.equal(pre.ordering.mode, "historical-bootstrap");
+    assert.ok(
+      pre.ordering.mode === "historical-bootstrap" ||
+        pre.ordering.mode === "pre-promotion",
+    );
     assert.equal(pre.figmaRevision, revision);
     assert.ok(sameSet(new Set(pre.recordIds), new Set(closure.recordIds)));
     assert.equal(
@@ -83,18 +97,34 @@ for (const closure of dependencies.nativeA2ConsumerClosures) {
       sha256File(pre.sourceEvidence.a2DeltaPath),
     );
 
-    const activeEntries = new Map(
-      pre.ordering.activePromotionEntries.map((entry) => [entry.recordId, entry]),
-    );
-    for (const recordId of closure.recordIds) {
-      const latest = latestLedgerByRecord.get(recordId);
-      const declared = activeEntries.get(recordId);
-      assert.ok(latest);
-      assert.equal(latest.kind ?? "promote", "promote");
-      assert.equal(declared.entryId, latest.entryId);
-      assert.equal(declared.entryHash, latest.entryHash);
+    if (pre.ordering.mode === "historical-bootstrap") {
+      const activeEntries = new Map(
+        pre.ordering.activePromotionEntries.map((entry) => [entry.recordId, entry]),
+      );
+      for (const recordId of closure.recordIds) {
+        const latest = latestLedgerByRecord.get(recordId);
+        const declared = activeEntries.get(recordId);
+        assert.ok(latest);
+        assert.equal(latest.kind ?? "promote", "promote");
+        assert.equal(declared.entryId, latest.entryId);
+        assert.equal(declared.entryHash, latest.entryHash);
+      }
+    } else {
+      assert.equal(pre.ordering.activePromotionEntries, undefined);
     }
 
+    if (!isActive) {
+      assert.ok(
+        closureRecords.every(
+          (record) => record?.harmony?.status === "candidate-backport",
+        ),
+      );
+      assert.equal(pre.ordering.mode, "pre-promotion");
+      assert.equal(fs.existsSync(path.join(ROOT, closure.postPromotionReceipt)), false);
+      return;
+    }
+
+    const post = readJson(closure.postPromotionReceipt);
     assert.equal(post.kind, "B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT");
     assert.equal(post.status, "visual-admission-consumed");
     assert.equal(post.scope.fullB5ReleaseLockClaimed, false);

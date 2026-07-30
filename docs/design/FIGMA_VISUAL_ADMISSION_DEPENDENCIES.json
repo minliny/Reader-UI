@@ -75,6 +75,13 @@
       ],
       "prePromotionReceipt": "docs/design/native-consumer-receipts/bookshelf/b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f/A2_PRE_PROMOTION_CONSUMER_RECEIPT.json",
       "postPromotionReceipt": "docs/design/native-consumer-receipts/bookshelf/b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f/B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT.json"
+    },
+    {
+      "recordIds": [
+        "reader.control-home"
+      ],
+      "prePromotionReceipt": "docs/design/native-consumer-receipts/reader-runtime/control-home/d4cd31e28869b6bee10f2df5f6e3de7d2a1aef35/A2_PRE_PROMOTION_CONSUMER_RECEIPT.json",
+      "postPromotionReceipt": "docs/design/native-consumer-receipts/reader-runtime/control-home/d4cd31e28869b6bee10f2df5f6e3de7d2a1aef35/B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT.json"
     }
   ],
   "dependencies": [

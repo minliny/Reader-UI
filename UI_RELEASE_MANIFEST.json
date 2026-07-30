@@ -1296,8 +1296,8 @@
     },
     {
       "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
-      "byteLength": 26505,
-      "sha256": "b241ddf66e0a52a57571c4bdd7657b6e8b07b1aa85a0fe8aa6ad01aa06fa78f3"
+      "byteLength": 26512,
+      "sha256": "8bbe7de2d705307b51403fb2b7d3884f468bc06b33da7471debc451ed16d9e46"
     },
     {
       "path": "generated/kotlin/Appearance.kt",
@@ -1931,8 +1931,8 @@
     {
       "name": "generated",
       "fileCount": 59,
-      "byteLength": 2260249,
-      "sha256": "9c7f326ada0fc55b908fcfe6af863cdc7de7c7ca4f1b89dc62f65f147c095b92",
+      "byteLength": 2260256,
+      "sha256": "beb860a35e08b609ac55316651b9d3a4bdf120c58b89f0f7e1d3f3f18d498e4f",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",

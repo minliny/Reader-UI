@@ -1,7 +1,7 @@
 {
   "kind": "FIGMA_SOURCE_PLAN",
   "schemaVersion": "1.0.0",
-  "registrySha256": "e7ebf1f3e4f803a8218ea1ed0fdb7eb54640413b3032a287961d66075c1dc338",
+  "registrySha256": "868b76d2e2029de19a74635f961ae5cf5c5700235d1878cb5e5de864d1404c31",
   "classification": "exact-figma-binding",
   "source": {
     "fileKey": "klhs2jMM4MncaJFqZMfqEK",
@@ -282,7 +282,7 @@
       "variantNodeIds": {},
       "deliveryStatus": "current-read-unfrozen",
       "harmonyTargets": [
-        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderControlSheet"
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderControlHomeOverlay.ets#ReaderControlHomeOverlay"
       ]
     },
     {

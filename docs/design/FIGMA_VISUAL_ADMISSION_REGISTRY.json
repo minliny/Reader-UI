@@ -630,7 +630,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderControlSheet"
+          "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderControlHomeOverlay.ets#ReaderControlHomeOverlay"
         ]
       },
       "evidence": [
