@@ -691,7 +691,7 @@
         ]
       },
       "harmony": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderOverlayComponents.ets#ReaderDirectoryPanel"
         ]

@@ -1316,6 +1316,38 @@
       "promotedBy": "promote-family.mjs",
       "previousEntryHash": "sha256:f258d67dea0a30935af1461ca97a3773aee9af3f6603d2cbc76958dab4ad9506",
       "entryHash": "sha256:3b4f27f9b8e860357598be7391cea0d8a216538c161b30f5405a43c3a80f3b51"
+    },
+    {
+      "entryId": "retract-022",
+      "kind": "retract",
+      "timestamp": "2026-07-30T13:54:37.035Z",
+      "transactionId": "retraction-group-995cd481175a45a5ef0e",
+      "transactionRecordIds": [
+        "reader.module.directory"
+      ],
+      "recordId": "reader.module.directory",
+      "pageFamily": "reader-runtime/directory",
+      "surfaceType": "responsive-page-master",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "B6 exposed a partial-panel native binding for a complete Figma page and missing chapter-row visual states; withdraw admission before full-root reconstruction",
+      "reversalOf": "sha256:3b4f27f9b8e860357598be7391cea0d8a216538c161b30f5405a43c3a80f3b51",
+      "reversalOfEntryId": "promote-021",
+      "retractedPromotion": {
+        "entryHash": "sha256:3b4f27f9b8e860357598be7391cea0d8a216538c161b30f5405a43c3a80f3b51",
+        "entryId": "promote-021",
+        "sourceEvidenceHash": "sha256:b19c61d98ab72661bb0d60f19853de89b40a9c0ad49232ac0146634eead57ec6",
+        "implementationCommit": "15a7c9381423c8441509ba8efae4cc4024bc0a5f"
+      },
+      "registryHashBefore": "sha256:1dfab0239811997ef857cdc72b15bd578d52d9fe48f4a0c6c7f6abbebbd92d0e",
+      "upstreamArtifactHashAfter": "sha256:9e8eb3646eb051b6b424423161defbefe2b62c772cab328d44fe607ad25575df",
+      "consumerArtifactHashAfter": "sha256:9e8eb3646eb051b6b424423161defbefe2b62c772cab328d44fe607ad25575df",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:3b4f27f9b8e860357598be7391cea0d8a216538c161b30f5405a43c3a80f3b51",
+      "entryHash": "sha256:008378fcb8d490088cfa8ece1663bda215f53ebea79415898f439e1b18f92ec6"
     }
   ]
 }
