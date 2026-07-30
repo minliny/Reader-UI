@@ -168,7 +168,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#book-action-sheet"
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookActionSheet"
         ]
       },
       "evidence": [
@@ -290,7 +290,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#bookshelf-multiselect"
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookshelfMultiSelect"
         ]
       },
       "evidence": [
@@ -339,7 +339,7 @@
       "harmony": {
         "status": "candidate-backport",
         "targets": [
-          "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#local-import"
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderLocalImportDialog"
         ]
       },
       "evidence": [
