@@ -1,0 +1,95 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "A2_PRE_PROMOTION_CONSUMER_RECEIPT",
+  "status": "a2-consumer-closed",
+  "handoffDir": "bookshelf",
+  "recordIds": [
+    "bookshelf.page",
+    "bookshelf.book-card",
+    "bookshelf.action-sheet",
+    "bookshelf.multi-select",
+    "bookshelf.local-import-dialog",
+    "bookshelf.list-mode"
+  ],
+  "figmaRevision": "2379851596474967636",
+  "sourceEvidence": {
+    "a2DeltaPath": "docs/design/native-disposition/bookshelf/A2_NATIVE_RETIREMENT_DELTA.json",
+    "a2DeltaSha256": "sha256:88f855324546fbfdc34c287f2b3441779b4d3bf099e167c0f47172440525cc85",
+    "b2ImplementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+    "b3PacketPath": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+    "b3PacketSha256": "sha256:c3383100ff20d90c15d4347b9a798788be95b81df92d0477825c2e4060379988",
+    "b3EvidenceCommit": "7ecdd27c6f360a7a05358af6affac429ea746cdf",
+    "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+    "lineageBridge": {
+      "a2OriginallyBoundB2": "8c984963344307d2cd58afa26be63ce285a56c9d",
+      "a2OriginallyBoundB3": "7994b78c490aa62dafbc8fbf7e23d9733b039937",
+      "currentB2": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+      "currentB3": "7ecdd27c6f360a7a05358af6affac429ea746cdf",
+      "retirementProjectionReverifiedBy": "node scripts/sync_reader_ui_screen_graph.mjs --check"
+    }
+  },
+  "harmonyConsumer": {
+    "repository": "Reader-for-HarmonyOS",
+    "cleanupCommit": "658a32e9dea79ba95fa3ebec11d444ba655824f7",
+    "cleanupTree": "c64fe0e430197a3fa480279c5d3fec01b1698be3",
+    "cleanupCommitSubject": "refactor(bookshelf): retire superseded native routes",
+    "changedPaths": [
+      "entry/src/main/ets/ui/components/BookshelfComponents.ets",
+      "entry/src/main/ets/ui/components/ContractComponents.ets",
+      "entry/src/main/ets/ui/components/ViewStateRenderer.ets",
+      "entry/src/main/ets/ui/fixtures/DemoViewState.ets",
+      "entry/src/main/ets/ui/router/ReaderUIScreenGraphCoverage.ets",
+      "entry/src/main/ets/ui/router/ReaderUIScreenGraphRetirementRegistry.ets",
+      "scripts/sync_reader_ui_screen_graph.mjs",
+      "scripts/test_contracts.mjs"
+    ],
+    "verification": {
+      "command": "node scripts/sync_reader_ui_screen_graph.mjs --check",
+      "expectedMarker": "[screen-graph-consumer] PASS"
+    }
+  },
+  "ordering": {
+    "requiredBefore": "B4 promotion",
+    "mode": "historical-bootstrap",
+    "reason": "Backfilled without rewriting the immutable B3 packet or append-only promotion ledger. The cleanup commit already preceded the active group promotion.",
+    "activePromotionEntries": [
+      {
+        "recordId": "bookshelf.page",
+        "entryId": "promote-014",
+        "entryHash": "sha256:eac84c201606e0dcc23ed4af625f06356cfa7a61f927d1d0fb0520db56d229be"
+      },
+      {
+        "recordId": "bookshelf.book-card",
+        "entryId": "promote-015",
+        "entryHash": "sha256:bcdabb39ce3c2bda17059664db621f5d47f566c4ec5a034700b24afba68a6d2b"
+      },
+      {
+        "recordId": "bookshelf.action-sheet",
+        "entryId": "promote-016",
+        "entryHash": "sha256:457f001e6578c828224bc8cabba267fa21de351da0bd2462038b46cf3feaaa56"
+      },
+      {
+        "recordId": "bookshelf.multi-select",
+        "entryId": "promote-017",
+        "entryHash": "sha256:10e3133341246531cd06fe69930917b5aca0cedd6e3c4070c60213c110daffcf"
+      },
+      {
+        "recordId": "bookshelf.local-import-dialog",
+        "entryId": "promote-018",
+        "entryHash": "sha256:8b06b5859389c088cc87c83811e332e13ddef21e10d3d9b8f9ea45b9f6935f1c"
+      },
+      {
+        "recordId": "bookshelf.list-mode",
+        "entryId": "promote-019",
+        "entryHash": "sha256:4bff1c3a61671ecf9a3b42c7c54c6fb48011b4edfe0480abf7030b2a7bc560d1"
+      }
+    ]
+  },
+  "doesNotClaim": [
+    "a new promotion authorization",
+    "Reader-UI 4.0 runtime release-lock consumption",
+    "B6 virtual-machine current-release evidence",
+    "B7 device, motion, machine receipt, or release identity",
+    "a Tablet list-mode Figma master"
+  ]
+}

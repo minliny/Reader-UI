@@ -425,7 +425,7 @@ test("A2 Reader-UI source reachability re-verifies every retired component and d
   assert.equal(reachability.readerUiSourceReverification.pendingHarmonyConsumerImplementations, 2);
 });
 
-test("A2 retirement delta keeps historical HarmonyOS results non-authoritative and current consumption pending", () => {
+test("A2 retirement delta preserves the immutable B3-time pending snapshot without claiming current consumer state", () => {
   const delta = JSON.parse(fs.readFileSync(deltaPath, "utf8"));
   assert.equal(delta.status, "approved-source-retirement");
   assert.equal(delta.validationStatus, "reader-ui-source-reverified-harmony-consumer-clean-commit-pending");

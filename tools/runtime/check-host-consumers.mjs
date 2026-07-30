@@ -13,6 +13,16 @@ const hostRequestSchemaVersion = versionManifest.schema?.["host-request"];
 const actionsSource = fs.readFileSync(path.join(root, "ui-spec", "runtime-actions.json"));
 const actions = JSON.parse(actionsSource.toString("utf8"));
 const actionHash = crypto.createHash("sha256").update(actionsSource).digest("hex");
+const runtimePayloadContractsSource = fs.readFileSync(
+  path.join(root, "ui-spec", "runtime-payload-contracts.json"),
+);
+const runtimePayloadContracts = JSON.parse(
+  runtimePayloadContractsSource.toString("utf8"),
+);
+const runtimePayloadContractsHash = crypto
+  .createHash("sha256")
+  .update(runtimePayloadContractsSource)
+  .digest("hex");
 const canonicalEvents = new Set(actions.actions.map((item) => item.event));
 const actionByEvent = new Map(actions.actions.map((item) => [item.event, item]));
 const manifest = JSON.parse(fs.readFileSync(path.join(root, "ui-spec", "host-consumers.json"), "utf8"));
@@ -95,7 +105,7 @@ for (const consumer of manifest.hosts) {
     failures.push(`${consumer.host}: invalid lock JSON: ${error.message}`);
     continue;
   }
-  if (lock.schemaVersion !== 2) failures.push(`${consumer.host}: lock schemaVersion must be 2`);
+  if (lock.schemaVersion !== 3) failures.push(`${consumer.host}: lock schemaVersion must be 3`);
   const lockKeys = Object.keys(lock).sort();
   const expectedLockKeys = [
     "blockedProof",
@@ -107,10 +117,12 @@ for (const consumer of manifest.hosts) {
     "rollout",
     "runtimeActionsSchemaVersion",
     "runtimeActionsSha256",
+    "runtimePayloadContractsSchemaVersion",
+    "runtimePayloadContractsSha256",
     "schemaVersion"
   ];
   if (!sameOrderedValues(lockKeys, expectedLockKeys)) {
-    failures.push(`${consumer.host}: lock keys must exactly match host-consumer-lock schema v2`);
+    failures.push(`${consumer.host}: lock keys must exactly match host-consumer-lock schema v3`);
   }
   if (lock.host !== consumer.host) failures.push(`${consumer.host}: lock host is ${lock.host}`);
   if (lock.readerUiVersion !== version) failures.push(`${consumer.host}: Reader UI ${lock.readerUiVersion}, expected ${version}`);
@@ -121,6 +133,19 @@ for (const consumer of manifest.hosts) {
     failures.push(`${consumer.host}: runtime schema ${lock.runtimeActionsSchemaVersion}, expected ${actions.schemaVersion}`);
   }
   if (lock.runtimeActionsSha256 !== actionHash) failures.push(`${consumer.host}: runtime action hash drift`);
+  if (
+    lock.runtimePayloadContractsSchemaVersion !==
+    runtimePayloadContracts.schemaVersion
+  ) {
+    failures.push(
+      `${consumer.host}: runtime payload schema ` +
+      `${lock.runtimePayloadContractsSchemaVersion}, expected ` +
+      `${runtimePayloadContracts.schemaVersion}`,
+    );
+  }
+  if (lock.runtimePayloadContractsSha256 !== runtimePayloadContractsHash) {
+    failures.push(`${consumer.host}: runtime payload contract hash drift`);
+  }
   const identity = lock.releaseIdentity;
   if (!identity || typeof identity !== "object" || Array.isArray(identity)) {
     failures.push(`${consumer.host}: releaseIdentity must be an object`);
@@ -304,7 +329,13 @@ if (requestedHost && results.length === 0 && !failures.some((item) => item.start
   failures.push(`unknown host ${requestedHost}`);
 }
 if (failures.length > 0) {
-  console.error(`[host-consumers] FAIL version=${version} hash=${actionHash}\n${failures.join("\n")}`);
+  console.error(
+    `[host-consumers] FAIL version=${version} actions=${actionHash} ` +
+    `payloads=${runtimePayloadContractsHash}\n${failures.join("\n")}`,
+  );
   process.exit(1);
 }
-console.log(`[host-consumers] PASS version=${version} hash=${actionHash} ${results.join(" ")}`);
+console.log(
+  `[host-consumers] PASS version=${version} actions=${actionHash} ` +
+  `payloads=${runtimePayloadContractsHash} ${results.join(" ")}`,
+);

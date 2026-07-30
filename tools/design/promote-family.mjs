@@ -50,6 +50,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { acquireWriterLock } from '../shared/shared-writer-lock.mjs';
+import { verifyA2PrePromotionReceipt } from './native-consumer-receipts.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
@@ -210,21 +211,27 @@ function verifyTrackedAndClean(target, label) {
   return errors;
 }
 
-function runRuntimePrePromotionChecks(recordId) {
+function readAdmissionDependencies() {
   if (!fs.existsSync(admissionDependenciesPath)) {
     fail(
-      `record ${recordId}: visual admission dependency document is missing at ` +
+      `visual admission dependency document is missing at ` +
       path.relative(repoRoot, admissionDependenciesPath),
     );
   }
   const dependencies = readJson(admissionDependenciesPath);
   if (
     dependencies?.kind !== 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES' ||
-    dependencies?.schemaVersion !== '1.0.0' ||
-    !Array.isArray(dependencies.sourceAuthorities)
+    dependencies?.schemaVersion !== '1.1.0' ||
+    !Array.isArray(dependencies.sourceAuthorities) ||
+    !Array.isArray(dependencies.nativeA2ConsumerClosures) ||
+    !Array.isArray(dependencies.dependencies)
   ) {
-    fail(`record ${recordId}: visual admission dependency document is malformed`);
+    fail(`visual admission dependency document is malformed or not schemaVersion 1.1.0`);
   }
+  return dependencies;
+}
+
+function runRuntimePrePromotionChecks(recordId, dependencies) {
   const runtimeAuthority = dependencies.sourceAuthorities.find(
     (entry) => entry?.recordId === recordId,
   )?.runtimeContract;
@@ -276,6 +283,71 @@ function runRuntimePrePromotionChecks(recordId) {
     }
   }
   console.log(`  ✓ runtime Core authority and generated runtime checks passed`);
+}
+
+function nativeA2ClosureForRecordIds(dependencies, recordIds) {
+  const requested = new Set(recordIds);
+  const matches = dependencies.nativeA2ConsumerClosures.filter((entry) => {
+    if (!Array.isArray(entry?.recordIds) || entry.recordIds.length !== requested.size) {
+      return false;
+    }
+    return sameStringSet(new Set(entry.recordIds), requested);
+  });
+  if (matches.length !== 1) {
+    fail(
+      `record set [${recordIds.join(', ')}]: expected exactly one ` +
+      `nativeA2ConsumerClosures entry, found ${matches.length}`,
+    );
+  }
+  const closure = matches[0];
+  if (
+    typeof closure.prePromotionReceipt !== 'string' ||
+    closure.prePromotionReceipt.length === 0 ||
+    typeof closure.postPromotionReceipt !== 'string' ||
+    closure.postPromotionReceipt.length === 0
+  ) {
+    fail(`record set [${recordIds.join(', ')}]: native A2 closure paths are incomplete`);
+  }
+  return closure;
+}
+
+function dependencyErrorsForRecords(registry, recordIds, dependencies, prospectivePromotion) {
+  const errors = [];
+  const promotedSet = new Set(recordIds);
+  const recordsById = new Map(registry.records.map((record) => [record.id, record]));
+  for (const recordId of recordIds) {
+    const dependency = dependencies.dependencies.find((entry) => entry?.recordId === recordId);
+    if (!dependency) continue;
+    if (!Array.isArray(dependency.requires)) {
+      errors.push(`record ${recordId}: dependency entry has no requires array`);
+      continue;
+    }
+    for (const requirement of dependency.requires) {
+      const requiredRecord = recordsById.get(requirement.recordId);
+      if (!requiredRecord) {
+        errors.push(`record ${recordId}: required record ${requirement.recordId} does not exist`);
+        continue;
+      }
+      const observedLocal = requiredRecord.local?.status;
+      const observedHarmony =
+        prospectivePromotion && promotedSet.has(requirement.recordId)
+          ? 'implementation-ready'
+          : requiredRecord.harmony?.status;
+      if (observedLocal !== requirement.localStatus) {
+        errors.push(
+          `record ${recordId}: dependency ${requirement.recordId} local.status ` +
+          `is '${observedLocal}', expected '${requirement.localStatus}'`,
+        );
+      }
+      if (observedHarmony !== requirement.harmonyStatus) {
+        errors.push(
+          `record ${recordId}: dependency ${requirement.recordId} harmony.status ` +
+          `is '${observedHarmony}', expected '${requirement.harmonyStatus}'`,
+        );
+      }
+    }
+  }
+  return errors;
 }
 
 // An active source-side quarantine is an explicit route extraction, not a
@@ -449,6 +521,21 @@ function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
   const commitCheck = verifyGitCommitExists(implCommit);
   if (!commitCheck.ok) {
     errors.push(`localSource.implementationCommit: ${commitCheck.reason}`);
+  } else {
+    const ancestor = spawnSync('git', ['merge-base', '--is-ancestor', implCommit, 'HEAD'], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    if (ancestor.status !== 0) {
+      errors.push(
+        `localSource.implementationCommit ${implCommit} is not an ancestor of current HEAD`,
+      );
+    }
+  }
+  if (localReady.admission?.exactLocalCommit !== implCommit) {
+    errors.push(
+      `admission.exactLocalCommit must equal localSource.implementationCommit (${implCommit})`,
+    );
   }
 
   // Check 3: sourceEvidenceHash must match the actual handoff directory hash
@@ -464,6 +551,8 @@ function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
   } else if (actualHash && declaredHash !== actualHash) {
     errors.push(`sourceEvidenceHash mismatch: declared '${declaredHash}' but actual handoff dir hash is '${actualHash}' — handoff directory has been modified after the hash was declared, or the hash was fabricated`);
   }
+
+  errors.push(...verifyTrackedAndClean(localReadyPath, 'LOCAL_READY_FOR_FIGMA packet'));
 
   return errors;
 }
@@ -573,6 +662,22 @@ function verifyLedger(ledger) {
     } else if (entry.newHarmonyStatus !== 'implementation-ready') {
       errors.push(`ledger entry ${index + 1} (${entry.recordId}): promotion newHarmonyStatus must be 'implementation-ready'`);
     }
+    if (entry.a2PrePromotionReceipt !== undefined) {
+      const receipt = entry.a2PrePromotionReceipt;
+      if (
+        receipt === null ||
+        typeof receipt !== 'object' ||
+        typeof receipt.path !== 'string' ||
+        typeof receipt.sha256 !== 'string' ||
+        typeof receipt.cleanupCommit !== 'string' ||
+        receipt.status !== 'a2-consumer-closed' ||
+        receipt.mode !== 'pre-promotion'
+      ) {
+        errors.push(
+          `ledger entry ${index + 1} (${entry.recordId}): invalid a2PrePromotionReceipt metadata`,
+        );
+      }
+    }
 
     const hasTransactionId =
       typeof entry.transactionId === 'string' && entry.transactionId.length > 0;
@@ -659,10 +764,17 @@ function runCheck() {
   const ledger = loadLedger();
   const errors = [];
   const quarantine = activeQuarantineEntries();
+  const dependencies = readAdmissionDependencies();
 
   // 1. Ledger chain integrity
   errors.push(...verifyLedger(ledger));
   errors.push(...quarantine.errors);
+  errors.push(
+    ...verifyTrackedAndClean(
+      admissionDependenciesPath,
+      'visual admission dependency document',
+    ),
+  );
 
   // 2. The latest ledger entry, rather than any historical entry, is the
   // authoritative transition state for a record. A valid retract intentionally
@@ -692,6 +804,103 @@ function runCheck() {
     const record = registryRecords.get(entry.recordId);
     if (!record) {
       errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} no longer exists in registry`);
+    }
+  }
+
+  // 3b. Current implementation-ready records must still satisfy their
+  // declared admission dependencies. `dependencies[]` used to be documentary
+  // only, so a record could be promoted even when a required composition
+  // remained candidate-backport.
+  const implementationReadyRecordIds = registry.records
+    .filter((record) => record.harmony?.status === 'implementation-ready')
+    .map((record) => record.id);
+  errors.push(
+    ...dependencyErrorsForRecords(
+      registry,
+      implementationReadyRecordIds,
+      dependencies,
+      false,
+    ),
+  );
+
+  // 3c. A2 consumer cleanup is a cross-repository prerequisite, not a B3
+  // field. Verify each active packet's immutable receipt without rewriting
+  // the B3 packet or historical ledger. Historical bootstrap receipts are
+  // accepted only when they bind the exact active ledger entry/entries.
+  const receiptGroups = new Map();
+  for (const record of registry.records) {
+    if (record.harmony?.status !== 'implementation-ready') continue;
+    const localReadyPath = localReadyForFigmaPath(record.id);
+    if (!receiptGroups.has(localReadyPath)) {
+      receiptGroups.set(localReadyPath, { localReadyPath, records: [] });
+    }
+    receiptGroups.get(localReadyPath).records.push(record);
+  }
+  const officialRevision = readOfficialCurrentRevision();
+  for (const group of receiptGroups.values()) {
+    if (!fs.existsSync(group.localReadyPath)) {
+      errors.push(
+        `implementation-ready receipt group is missing ${path.relative(repoRoot, group.localReadyPath)}`,
+      );
+      continue;
+    }
+    const localReady = readJson(group.localReadyPath);
+    const recordIds = localReady.admission?.recordIds;
+    if (!Array.isArray(recordIds) || recordIds.length === 0) {
+      errors.push(
+        `${path.relative(repoRoot, group.localReadyPath)} has no admission.recordIds`,
+      );
+      continue;
+    }
+    const closureMatches = dependencies.nativeA2ConsumerClosures.filter((entry) =>
+      Array.isArray(entry?.recordIds) &&
+      entry.recordIds.length === recordIds.length &&
+      sameStringSet(new Set(entry.recordIds), new Set(recordIds))
+    );
+    if (closureMatches.length !== 1) {
+      errors.push(
+        `record set [${recordIds.join(', ')}] must have exactly one native A2 consumer closure`,
+      );
+      continue;
+    }
+    const handoffDir = handoffDirForRecordId(recordIds[0]);
+    const receipt = verifyA2PrePromotionReceipt({
+      repoRoot,
+      hostRepoRoot,
+      handoffDir,
+      recordIds,
+      localReadyPath: group.localReadyPath,
+      localReady,
+      officialRevision,
+      latestLedgerEntries: latestEntriesByRecord,
+      mode: 'check',
+      receiptRelativePath: closureMatches[0].prePromotionReceipt,
+    });
+    errors.push(
+      ...receipt.errors.map((error) => `record set [${recordIds.join(', ')}]: ${error}`),
+    );
+    if (!receipt.metadata) continue;
+    for (const recordId of recordIds) {
+      const latestEntry = latestEntriesByRecord.get(recordId);
+      if (!latestEntry || ledgerEntryOperation(latestEntry) !== 'promote') continue;
+      if (latestEntry.a2PrePromotionReceipt === undefined) {
+        if (receipt.metadata.mode !== 'historical-bootstrap') {
+          errors.push(
+            `record ${recordId}: active promotion lacks a2PrePromotionReceipt ledger metadata`,
+          );
+        }
+        continue;
+      }
+      if (
+        latestEntry.a2PrePromotionReceipt.path !== receipt.metadata.path ||
+        latestEntry.a2PrePromotionReceipt.sha256 !== receipt.metadata.sha256 ||
+        latestEntry.a2PrePromotionReceipt.cleanupCommit !==
+          receipt.metadata.cleanupCommit
+      ) {
+        errors.push(
+          `record ${recordId}: ledger A2 receipt metadata does not match current receipt`,
+        );
+      }
     }
   }
 
@@ -940,6 +1149,7 @@ function promoteRecords(recordIds) {
   }
   const latestLedgerEntries = latestLedgerEntriesByRecord(existingLedger);
   const officialRevision = readOfficialCurrentRevision();
+  const dependencies = readAdmissionDependencies();
 
   console.log(`→ promote-family: ${recordIds.join(', ')}`);
   const contexts = recordIds.map((recordId) =>
@@ -972,11 +1182,50 @@ function promoteRecords(recordIds) {
     }
   }
 
+  const dependencyErrors = dependencyErrorsForRecords(
+    registry,
+    recordIds,
+    dependencies,
+    true,
+  );
+  if (dependencyErrors.length > 0) {
+    fail(
+      `record set dependency verification failed:\n` +
+      dependencyErrors.map((error) => `    - ${error}`).join('\n'),
+    );
+  }
+
+  const closure = nativeA2ClosureForRecordIds(dependencies, recordIds);
+  const a2Receipt = verifyA2PrePromotionReceipt({
+    repoRoot,
+    hostRepoRoot,
+    handoffDir: contexts[0].handoffDir,
+    recordIds,
+    localReadyPath: contexts[0].localReadyPath,
+    localReady: contexts[0].localReady,
+    officialRevision,
+    latestLedgerEntries,
+    mode: 'promotion',
+    receiptRelativePath: closure.prePromotionReceipt,
+  });
+  if (a2Receipt.errors.length > 0 || !a2Receipt.metadata) {
+    fail(
+      `A2 pre-promotion consumer receipt verification failed:\n` +
+      a2Receipt.errors.map((error) => `    - ${error}`).join('\n'),
+    );
+  }
+  console.log(
+    `  ✓ A2 consumer receipt verified (${a2Receipt.metadata.path}, ` +
+    `${a2Receipt.metadata.cleanupCommit.slice(0, 12)})`,
+  );
+
   // B4 dependency/Core authority is verified while holding the same writer
   // lock used by repin/recover. A successful check outside this critical
   // section is not sufficient because a concurrent repin could otherwise
   // change the spec/mirror pair before the admission transaction starts.
-  for (const context of contexts) runRuntimePrePromotionChecks(context.recordId);
+  for (const context of contexts) {
+    runRuntimePrePromotionChecks(context.recordId, dependencies);
+  }
 
   // ── Phase 1: snapshot backups for rollback ─────────────────────────────
   const backup = {
@@ -1092,6 +1341,7 @@ function promoteRecords(recordIds) {
         },
         harmonyConsumerTargets: record.harmony.targets,
         harmonyConsumerTargetsVerified: true,
+        a2PrePromotionReceipt: a2Receipt.metadata,
         registryHashBefore,
         upstreamArtifactHashAfter: upstreamHashAfter,
         consumerArtifactHashAfter: consumerHashAfter,

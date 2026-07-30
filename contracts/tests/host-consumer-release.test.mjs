@@ -32,12 +32,14 @@ function metadata() {
   const sourceSha = "1".repeat(40);
   const manifestSha256 = "2".repeat(64);
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     eventType: "reader-ui-updated",
     version: "2.5.1",
     tag: "v2.5.1",
     releaseId: `${sourceSha}:${manifestSha256}`,
     runtimeActionsSha256: "3".repeat(64),
+    runtimePayloadContractsSchemaVersion: 4,
+    runtimePayloadContractsSha256: "7".repeat(64),
     manifestSha256,
     targetConfigSha256: "4".repeat(64),
     source: {
@@ -66,7 +68,7 @@ function artifactEvidence() {
 function verifiedRelease(overrides = {}) {
   const releaseMetadata = metadata();
   const value = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     host: "android",
     hostRepository: "minliny/Reader-for-Android",
     releaseId: releaseMetadata.releaseId,
@@ -79,6 +81,10 @@ function verifiedRelease(overrides = {}) {
     hostRequestSchemaVersion: "1.1.0",
     runtimeActionsSchemaVersion: 2,
     runtimeActionsSha256: releaseMetadata.runtimeActionsSha256,
+    runtimePayloadContractsSchemaVersion:
+      releaseMetadata.runtimePayloadContractsSchemaVersion,
+    runtimePayloadContractsSha256:
+      releaseMetadata.runtimePayloadContractsSha256,
     artifact: {
       id: artifactEvidence().id,
       name: releaseMetadata.artifact.name,
@@ -155,7 +161,7 @@ test("deterministic bump branch is stable per releaseId and rejects malformed id
   assert.throws(() => deterministicHostBumpBranch("latest"), /source SHA and manifest SHA-256/);
 });
 
-test("lock v2 updater changes only release/version/hash identity and is byte-idempotent", () => {
+test("lock v3 updater binds typed payload contracts and preserves host-owned fields", () => {
   const current = v1Lock();
   const protectedSnapshot = JSON.stringify({
     host: current.host,
@@ -165,8 +171,13 @@ test("lock v2 updater changes only release/version/hash identity and is byte-ide
   });
   const first = updateHostConsumerLock(current, verifiedRelease());
   assert.equal(first.changed, true);
-  assert.equal(first.lock.schemaVersion, 2);
+  assert.equal(first.lock.schemaVersion, 3);
   assert.equal(first.lock.readerUiVersion, "2.5.1");
+  assert.equal(first.lock.runtimePayloadContractsSchemaVersion, 4);
+  assert.equal(
+    first.lock.runtimePayloadContractsSha256,
+    metadata().runtimePayloadContractsSha256,
+  );
   assert.equal(first.lock.releaseIdentity.releaseId, metadata().releaseId);
   assert.equal(
     JSON.stringify({
@@ -187,6 +198,12 @@ test("same releaseId with conflicting identity or hashes fails closed", () => {
   const conflict = structuredClone(first);
   conflict.releaseIdentity.targetConfigSha256 = "9".repeat(64);
   assert.throws(() => updateHostConsumerLock(conflict, verifiedRelease()), /conflicting version, hash, or identity/);
+  const payloadConflict = structuredClone(first);
+  payloadConflict.runtimePayloadContractsSha256 = "8".repeat(64);
+  assert.throws(
+    () => updateHostConsumerLock(payloadConflict, verifiedRelease()),
+    /conflicting version, hash, or identity/,
+  );
   const unknown = { ...v1Lock(), unexpected: true };
   assert.throws(() => updateHostConsumerLock(unknown, verifiedRelease()), /keys must be exactly/);
 });
@@ -390,8 +407,8 @@ test("end-to-end host verification binds committed source, full stage, payload, 
   const payload = buildRepositoryDispatchDocument(release.metadata, evidence).client_payload;
   const verified = await verifyHostRelease({
     artifactRoot,
-    host: "android",
-    hostRepository: "minliny/Reader-for-Android",
+    host: "harmonyos",
+    hostRepository: "minliny/Reader-for-HarmonyOS",
     payload,
     sourceRoot: fixture.temporaryRoot,
     token: "test-token",
@@ -411,8 +428,22 @@ test("end-to-end host verification binds committed source, full stage, payload, 
   });
   assert.equal(verified.releaseId, release.metadata.releaseId);
   assert.equal(verified.sourceSha, fixture.sourceSha);
-  assert.equal(verified.hostRepository, "minliny/Reader-for-Android");
-  assert.match(verified.proofBoundary, /assembleDebug/);
+  assert.equal(verified.hostRepository, "minliny/Reader-for-HarmonyOS");
+  assert.match(verified.proofBoundary, /Static consumer validation/);
+  await assert.rejects(
+    verifyHostRelease({
+      artifactRoot,
+      host: "android",
+      hostRepository: "minliny/Reader-for-Android",
+      payload,
+      sourceRoot: fixture.temporaryRoot,
+      token: "test-token",
+      fetchImpl: async () => {
+        throw new Error("deferred host must fail before artifact API verification");
+      },
+    }),
+    /release host target android does not authorize/,
+  );
 });
 
 test("host release CLIs fail closed when required invocation context is absent", () => {
@@ -459,6 +490,11 @@ test("host release workflows use exact SHA, cross-repository artifact evidence, 
     assert.ok([...workflow.matchAll(/persist-credentials:\s*false/g)].length >= 2);
     assert.match(workflow, /Host-owned postcondition protects rollout and repository scope/);
     assert.match(workflow, /protected lock field changed/);
+    assert.match(workflow, /runtimePayloadContractsSchemaVersion/);
+    assert.match(workflow, /runtimePayloadContractsSha256/);
+    assert.match(workflow, /runtime-payload-contracts\.json/);
+    assert.match(workflow, /after\.schemaVersion !== 3/);
+    assert.doesNotMatch(workflow, /lock v2 contract/);
     assert.match(workflow, /verify-host-release\.mjs/);
     assert.match(workflow, /update-host-consumer-lock\.mjs/);
     assert.match(workflow, /publish-host-bump-pr\.mjs/);

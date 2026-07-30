@@ -1,17 +1,23 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "targets": [
     {
       "host": "android",
-      "repository": "minliny/Reader-for-Android"
+      "repository": "minliny/Reader-for-Android",
+      "releaseStatus": "deferred",
+      "reason": "The default branch does not yet contain the verified Reader UI consumer baseline."
     },
     {
       "host": "harmonyos",
-      "repository": "minliny/Reader-for-HarmonyOS"
+      "repository": "minliny/Reader-for-HarmonyOS",
+      "releaseStatus": "active",
+      "reason": "The current B4 to B7 delivery lane targets HarmonyOS."
     },
     {
       "host": "ios",
-      "repository": "minliny/Reader-for-iOS"
+      "repository": "minliny/Reader-for-iOS",
+      "releaseStatus": "deferred",
+      "reason": "The default branch does not yet contain the verified Reader UI consumer baseline."
     }
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "kind": "FIGMA_VISUAL_ADMISSION_DEPENDENCIES",
   "sourceAuthorities": [
     {
@@ -54,6 +54,27 @@
           "node tools/runtime/generate-runtime.mjs --check"
         ]
       }
+    }
+  ],
+  "nativeA2ConsumerClosures": [
+    {
+      "recordIds": [
+        "reader.reading-surface"
+      ],
+      "prePromotionReceipt": "docs/design/native-consumer-receipts/reader-runtime/reading-surface/4e5e75d802810c4c5b4e2cc8ed64091b418a7e92/A2_PRE_PROMOTION_CONSUMER_RECEIPT.json",
+      "postPromotionReceipt": "docs/design/native-consumer-receipts/reader-runtime/reading-surface/4e5e75d802810c4c5b4e2cc8ed64091b418a7e92/B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT.json"
+    },
+    {
+      "recordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "prePromotionReceipt": "docs/design/native-consumer-receipts/bookshelf/b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f/A2_PRE_PROMOTION_CONSUMER_RECEIPT.json",
+      "postPromotionReceipt": "docs/design/native-consumer-receipts/bookshelf/b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f/B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT.json"
     }
   ],
   "dependencies": [

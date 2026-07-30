@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT",
+  "status": "visual-admission-consumed",
+  "handoffDir": "reader-runtime/reading-surface",
+  "recordIds": [
+    "reader.reading-surface"
+  ],
+  "figmaRevision": "2379851596474967636",
+  "implementationCommit": "4e5e75d802810c4c5b4e2cc8ed64091b418a7e92",
+  "sourceEvidenceHash": "sha256:b931f2f8ad97623b09c86931cbd48462bd42aef06d1fdb74266b237bad1ded07",
+  "prePromotionReceipt": {
+    "path": "docs/design/native-consumer-receipts/reader-runtime/reading-surface/4e5e75d802810c4c5b4e2cc8ed64091b418a7e92/A2_PRE_PROMOTION_CONSUMER_RECEIPT.json",
+    "sha256": "sha256:94c622474647a08620aafba7ad4c2ffd8c913923f9147e3270942c73374c7f5e"
+  },
+  "promotion": {
+    "readerUiPromotionCommit": "0a3d89d863880bf908f3fe82df7b640c29097625",
+    "ledgerEntries": [
+      {
+        "recordId": "reader.reading-surface",
+        "entryId": "promote-003",
+        "entryHash": "sha256:292c76bfefa6f384eea01febc2697b5c8dfd043a828b6df9ee016a4ef920671d"
+      }
+    ]
+  },
+  "harmonyConsumer": {
+    "admissionConsumptionCommit": "fe4d8bd408031f20acd429b37c697b244d7bf662",
+    "admissionConsumptionTree": "3a5595dd348c4e126a40b663f7c1de14d6962936",
+    "admissionConsumptionSubject": "chore(harmony): consume reading-surface promotion",
+    "visualAdmissionSha256AtConsumption": "sha256:642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7",
+    "runtimeConsumptionCommit": "75c7cf2e3d452898461f525075552254b38b91fd",
+    "runtimeConsumptionTree": "11361f7b2c74b3106427b3d7ed58f895d617fa58",
+    "runtimeConsumptionSubject": "fix(reader): consume promoted reading surface runtime"
+  },
+  "scope": {
+    "visualAdmissionConsumed": true,
+    "oldRendererRetired": true,
+    "runtimeSourceWiringPresent": true,
+    "fullB5ReleaseLockClaimed": false
+  },
+  "explicitlyPending": [
+    "runtimeReleaseLock",
+    "B6VirtualMachineCurrentReleaseEvidence",
+    "B7DeviceMotionMachineReceiptReleaseIdentity"
+  ]
+}

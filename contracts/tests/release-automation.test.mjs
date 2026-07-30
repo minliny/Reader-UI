@@ -17,6 +17,7 @@ import {
   dispatchRepositoryUpdates,
   parseConfiguredTargetRepositories,
   parseTargetRepositories,
+  readReleaseHostTargets,
   RELEASE_ARTIFACT_HOST_TARGETS_PATH,
   RELEASE_ARTIFACT_INVENTORY_PATH,
   RELEASE_ARTIFACT_MANIFEST_PATH,
@@ -52,6 +53,8 @@ function fixtureMetadata() {
     tag: "v2.5.1",
     releaseId: `${sourceSha}:${manifestSha256}`,
     runtimeActionsSha256: "a".repeat(64),
+    runtimePayloadContractsSchemaVersion: 4,
+    runtimePayloadContractsSha256: "d".repeat(64),
     manifestSha256,
     targetConfigSha256: "e".repeat(64),
     source: {
@@ -97,29 +100,43 @@ function copyReleaseTools(destinationRoot) {
   });
 }
 
-test("target configuration must exactly match the tracked iOS, Android, and HarmonyOS authority set", () => {
-  const exact = "minliny/Reader-for-iOS,minliny/Reader-for-Android,minliny/Reader-for-HarmonyOS";
-  assert.deepEqual(parseConfiguredTargetRepositories(root, exact), [
+test("target configuration retains all host authorities but dispatches only active hosts", () => {
+  const exact = "minliny/Reader-for-HarmonyOS";
+  const targets = readReleaseHostTargets(root);
+  assert.deepEqual(parseConfiguredTargetRepositories(root, exact), [exact]);
+  assert.deepEqual(
+    targets.config.targets.map(({ host, releaseStatus }) => ({ host, releaseStatus })),
+    [
+      { host: "android", releaseStatus: "deferred" },
+      { host: "harmonyos", releaseStatus: "active" },
+      { host: "ios", releaseStatus: "deferred" },
+    ],
+  );
+  assert.deepEqual(targets.repositories, [exact]);
+  assert.deepEqual(targets.allRepositories, [
     "minliny/Reader-for-Android",
     "minliny/Reader-for-HarmonyOS",
     "minliny/Reader-for-iOS",
   ]);
   assert.throws(() => parseConfiguredTargetRepositories(root, ""), /is required/);
   assert.throws(
-    () => parseConfiguredTargetRepositories(root, "minliny/Reader-for-iOS,minliny/Reader-for-Android"),
+    () => parseConfiguredTargetRepositories(root, "minliny/Reader-for-Android"),
     /missing=minliny\/Reader-for-HarmonyOS/,
   );
   assert.throws(
-    () => parseConfiguredTargetRepositories(root, `${exact},minliny/Reader-for-Windows`),
-    /extra=minliny\/Reader-for-Windows/,
+    () => parseConfiguredTargetRepositories(
+      root,
+      `${exact},minliny/Reader-for-Android,minliny/Reader-for-iOS`,
+    ),
+    /extra=minliny\/Reader-for-Android/,
   );
   assert.throws(
-    () => parseConfiguredTargetRepositories(root, exact.replace("Reader-for-iOS", "reader-for-ios")),
-    /missing=minliny\/Reader-for-iOS/,
+    () => parseConfiguredTargetRepositories(root, exact.replace("Reader-for-HarmonyOS", "reader-for-harmonyos")),
+    /missing=minliny\/Reader-for-HarmonyOS/,
   );
   assert.throws(
-    () => parseConfiguredTargetRepositories(root, exact.replace("Reader-for-iOS", "Reader-for-Windows")),
-    /missing=minliny\/Reader-for-iOS/,
+    () => parseConfiguredTargetRepositories(root, exact.replace("Reader-for-HarmonyOS", "Reader-for-Windows")),
+    /missing=minliny\/Reader-for-HarmonyOS/,
   );
 });
 
@@ -196,6 +213,15 @@ test("release preparation materializes an exact manifest-backed artifact stage w
   const stageRoot = path.join(temporaryRoot, "release-stage");
   const staged = writeReleaseArtifactStage(temporaryRoot, stageRoot, release);
   assert.equal(staged.metadata.version, version);
+  assert.equal(staged.metadata.runtimePayloadContractsSchemaVersion, 4);
+  assert.equal(
+    staged.metadata.runtimePayloadContractsSha256,
+    sha256(
+      fs.readFileSync(
+        path.join(temporaryRoot, "ui-spec", "runtime-payload-contracts.json"),
+      ),
+    ),
+  );
   assert.equal(staged.inventory.sourceFileCount, manifest.files.length);
   assert.equal(staged.inventory.files.length, manifest.files.length + 3);
   assert.equal(staged.inventorySha256, sha256(fs.readFileSync(path.join(stageRoot, RELEASE_ARTIFACT_INVENTORY_PATH))));
@@ -252,6 +278,8 @@ test("repository_dispatch carries immutable source, artifact inventory, manifest
     "manifestSha256",
     "releaseId",
     "runtimeActionsSha256",
+    "runtimePayloadContractsSchemaVersion",
+    "runtimePayloadContractsSha256",
     "source",
     "tag",
     "targetConfigSha256",
@@ -259,6 +287,14 @@ test("repository_dispatch carries immutable source, artifact inventory, manifest
   ]);
   assert.equal(document.client_payload.releaseId, metadata.releaseId);
   assert.equal(document.client_payload.runtimeActionsSha256, metadata.runtimeActionsSha256);
+  assert.equal(
+    document.client_payload.runtimePayloadContractsSchemaVersion,
+    metadata.runtimePayloadContractsSchemaVersion,
+  );
+  assert.equal(
+    document.client_payload.runtimePayloadContractsSha256,
+    metadata.runtimePayloadContractsSha256,
+  );
   assert.equal(document.client_payload.manifestSha256, metadata.manifestSha256);
   assert.equal(document.client_payload.targetConfigSha256, metadata.targetConfigSha256);
   assert.deepEqual(document.client_payload.source, metadata.source);
@@ -346,8 +382,7 @@ test("dispatch CLI emits the verified dry-run plan without a token or network ca
       GITHUB_SHA: sourceSha,
       GITHUB_RUN_ID: workflowRunId,
       READER_UI_ARTIFACT_NAME: artifactName,
-      READER_HOST_SYNC_REPOSITORIES:
-        "minliny/Reader-for-Android,minliny/Reader-for-HarmonyOS,minliny/Reader-for-iOS",
+      READER_HOST_SYNC_REPOSITORIES: "minliny/Reader-for-HarmonyOS",
       READER_HOST_SYNC_TOKEN: "",
     },
   });
@@ -356,11 +391,11 @@ test("dispatch CLI emits the verified dry-run plan without a token or network ca
   const plan = JSON.parse(result.stdout);
   assert.deepEqual(
     plan,
-    buildReleaseDispatchPlan(release.metadata, evidence, [
-      "minliny/Reader-for-Android",
-      "minliny/Reader-for-HarmonyOS",
-      "minliny/Reader-for-iOS",
-    ]),
+    buildReleaseDispatchPlan(
+      release.metadata,
+      evidence,
+      ["minliny/Reader-for-HarmonyOS"],
+    ),
   );
 });
 

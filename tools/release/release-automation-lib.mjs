@@ -14,7 +14,7 @@ import {
 } from "./manifest-lib.mjs";
 
 export const RELEASE_EVENT_TYPE = "reader-ui-updated";
-export const RELEASE_METADATA_SCHEMA_VERSION = 1;
+export const RELEASE_METADATA_SCHEMA_VERSION = 2;
 export const RELEASE_ARTIFACT_INVENTORY_SCHEMA_VERSION = 1;
 export const RELEASE_DISPATCH_PLAN_SCHEMA_VERSION = 1;
 export const RELEASE_METADATA_PATH = "UI_RELEASE_METADATA.json";
@@ -116,31 +116,51 @@ export function parseTargetRepositories(rawValue) {
 function parseReleaseHostTargets(rawBytes, label) {
   const config = assertPlainObject(readJsonBytes(rawBytes, label), label);
   assertExactKeys(config, ["schemaVersion", "targets"], label);
-  if (config.schemaVersion !== 1) throw new Error(`${label} schemaVersion must be 1`);
+  if (config.schemaVersion !== 2) throw new Error(`${label} schemaVersion must be 2`);
   if (!Array.isArray(config.targets)) throw new Error(`${label} targets must be an array`);
   const expectedHosts = Object.keys(REQUIRED_HOST_REPOSITORIES).sort();
   const hosts = [];
-  const repositories = [];
+  const allRepositories = [];
+  const activeRepositories = [];
   for (const [index, value] of config.targets.entries()) {
     const target = assertPlainObject(value, `${label} target ${index + 1}`);
-    assertExactKeys(target, ["host", "repository"], `${label} target ${index + 1}`);
+    assertExactKeys(
+      target,
+      ["host", "reason", "releaseStatus", "repository"],
+      `${label} target ${index + 1}`,
+    );
     const host = assertString(target.host, `${label} target ${index + 1}.host`);
     const repository = assertRepository(target.repository, `${label} target ${index + 1}.repository`);
+    const releaseStatus = assertString(
+      target.releaseStatus,
+      `${label} target ${index + 1}.releaseStatus`,
+    );
+    assertString(target.reason, `${label} target ${index + 1}.reason`);
+    if (releaseStatus !== "active" && releaseStatus !== "deferred") {
+      throw new Error(`${label} target ${index + 1}.releaseStatus must be active or deferred`);
+    }
     const requiredName = REQUIRED_HOST_REPOSITORIES[host];
     if (!requiredName) throw new Error(`${label} contains unsupported host ${host}`);
     if (repository.split("/")[1] !== requiredName) {
       throw new Error(`${label} host ${host} must target repository ${requiredName}`);
     }
     hosts.push(host);
-    repositories.push(repository);
+    allRepositories.push(repository);
+    if (releaseStatus === "active") activeRepositories.push(repository);
   }
   if (hosts.length !== expectedHosts.length || hosts.some((host, index) => host !== expectedHosts[index])) {
     throw new Error(`${label} hosts must be exactly ${expectedHosts.join(", ")} in canonical order`);
   }
-  if (new Set(repositories.map((repository) => repository.toLowerCase())).size !== repositories.length) {
+  if (
+    new Set(allRepositories.map((repository) => repository.toLowerCase())).size !==
+    allRepositories.length
+  ) {
     throw new Error(`${label} contains duplicate repositories`);
   }
-  return { config, repositories };
+  if (activeRepositories.length === 0) {
+    throw new Error(`${label} must contain at least one active release target`);
+  }
+  return { config, repositories: activeRepositories, allRepositories };
 }
 
 export function readReleaseHostTargets(root) {
@@ -175,6 +195,8 @@ export function assertReleaseMetadata(value) {
       "manifestSha256",
       "releaseId",
       "runtimeActionsSha256",
+      "runtimePayloadContractsSchemaVersion",
+      "runtimePayloadContractsSha256",
       "schemaVersion",
       "source",
       "tag",
@@ -196,6 +218,18 @@ export function assertReleaseMetadata(value) {
     throw new Error(`release metadata tag must be v${metadata.version}`);
   }
   assertSha256(metadata.runtimeActionsSha256, "release metadata runtimeActionsSha256");
+  if (
+    !Number.isSafeInteger(metadata.runtimePayloadContractsSchemaVersion) ||
+    metadata.runtimePayloadContractsSchemaVersion < 1
+  ) {
+    throw new Error(
+      "release metadata runtimePayloadContractsSchemaVersion must be a positive safe integer",
+    );
+  }
+  assertSha256(
+    metadata.runtimePayloadContractsSha256,
+    "release metadata runtimePayloadContractsSha256",
+  );
   assertSha256(metadata.manifestSha256, "release metadata manifestSha256");
   assertSha256(metadata.targetConfigSha256, "release metadata targetConfigSha256");
 
@@ -281,6 +315,32 @@ export function buildReleaseMetadata(root, context) {
   if (!runtimeManifestEntry || runtimeManifestEntry.sha256 !== runtimeActionsSha256) {
     throw new Error(`${runtimeActionsPath} is not locked by ${RELEASE_MANIFEST_PATH}`);
   }
+  const runtimePayloadContractsPath = "ui-spec/runtime-payload-contracts.json";
+  const runtimePayloadContractsBytes = fs.readFileSync(
+    path.join(root, runtimePayloadContractsPath),
+  );
+  const runtimePayloadContractsSha256 = sha256(runtimePayloadContractsBytes);
+  const runtimePayloadContracts = readJsonBytes(
+    runtimePayloadContractsBytes,
+    runtimePayloadContractsPath,
+  );
+  if (
+    !Number.isSafeInteger(runtimePayloadContracts.schemaVersion) ||
+    runtimePayloadContracts.schemaVersion < 1
+  ) {
+    throw new Error(`${runtimePayloadContractsPath} schemaVersion is invalid`);
+  }
+  const runtimePayloadManifestEntry = result.actual.files.find(
+    (entry) => entry.path === runtimePayloadContractsPath,
+  );
+  if (
+    !runtimePayloadManifestEntry ||
+    runtimePayloadManifestEntry.sha256 !== runtimePayloadContractsSha256
+  ) {
+    throw new Error(
+      `${runtimePayloadContractsPath} is not locked by ${RELEASE_MANIFEST_PATH}`,
+    );
+  }
   const targetConfig = readReleaseHostTargets(root);
   const manifestSha256 = sha256(manifestBytes);
   const metadata = {
@@ -290,6 +350,8 @@ export function buildReleaseMetadata(root, context) {
     tag: context.tag,
     releaseId: `${context.sourceSha}:${manifestSha256}`,
     runtimeActionsSha256,
+    runtimePayloadContractsSchemaVersion: runtimePayloadContracts.schemaVersion,
+    runtimePayloadContractsSha256,
     manifestSha256,
     targetConfigSha256: sha256(targetConfig.rawBytes),
     source: {
@@ -576,6 +638,9 @@ export function buildRepositoryDispatchDocument(metadataValue, artifactEvidenceV
       tag: metadata.tag,
       releaseId: metadata.releaseId,
       runtimeActionsSha256: metadata.runtimeActionsSha256,
+      runtimePayloadContractsSchemaVersion:
+        metadata.runtimePayloadContractsSchemaVersion,
+      runtimePayloadContractsSha256: metadata.runtimePayloadContractsSha256,
       manifestSha256: metadata.manifestSha256,
       targetConfigSha256: metadata.targetConfigSha256,
       source: { ...metadata.source },
