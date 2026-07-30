@@ -1291,8 +1291,8 @@
     },
     {
       "path": "generated/arkts/VisualAdmission.ets",
-      "byteLength": 97250,
-      "sha256": "9e8eb3646eb051b6b424423161defbefe2b62c772cab328d44fe607ad25575df"
+      "byteLength": 97252,
+      "sha256": "31f175acf6950959ae6903bb2e67368f13840a8aef91ed575eae2b14795c5692"
     },
     {
       "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
@@ -1931,8 +1931,8 @@
     {
       "name": "generated",
       "fileCount": 59,
-      "byteLength": 2267298,
-      "sha256": "5a8b06460323ebe6a9ccdf74ed75f6e36c6def1e25a8c6b570b6d2a51e8c3015",
+      "byteLength": 2267300,
+      "sha256": "17f948c3a61c4bed43947a1299313752f2ffc346837b77d27e3161fa929b4d14",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
