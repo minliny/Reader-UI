@@ -161,12 +161,24 @@ function writeLedger(readerUiRoot, entries = []) {
   return ledgerPath;
 }
 
+function rehashLedgerEntries(entries) {
+  let previousEntryHash = 'genesis';
+  return entries.map((entry) => {
+    const next = { ...entry, previousEntryHash };
+    delete next.entryHash;
+    next.entryHash = sha256(JSON.stringify(next, null, 2));
+    previousEntryHash = next.entryHash;
+    return next;
+  });
+}
+
 function writeLocalReady(readerUiRoot, recordId, family, ready = true, options = {}) {
   const handoffFamily = recordId === 'reader.reading-surface'
     ? path.join(family, 'reading-surface')
     : family;
   const localReadyPath = path.join(readerUiRoot, 'docs', 'design', 'handoffs', handoffFamily, 'LOCAL_READY_FOR_FIGMA.json');
   const handoffDir = path.dirname(localReadyPath);
+  fs.mkdirSync(handoffDir, { recursive: true });
 
   // Compute sourceEvidenceHash from the handoff directory (excluding LOCAL_READY_FOR_FIGMA.json)
   // This matches the logic in promote-family.mjs computeHandoffDirHash()
@@ -205,7 +217,10 @@ function writeLocalReady(readerUiRoot, recordId, family, ready = true, options =
     kind: 'LOCAL_READY_FOR_FIGMA',
     stage: 'implementation-ready',
     status: 'implementation-ready',
-    admission: { localReadyForFigma: ready, recordIds: [recordId] },
+    admission: {
+      localReadyForFigma: ready,
+      recordIds: options.recordIds || [recordId],
+    },
     localSource: {
       implementationCommit: implCommit,
     },
@@ -295,6 +310,25 @@ function runPromote(readerUiRoot, hostRoot, recordId, options = {}) {
   });
 }
 
+function runPromoteGroup(readerUiRoot, anchorRecordId, options = {}) {
+  const env = {
+    ...process.env,
+    PROMOTE_TEST_MODE: '1',
+  };
+  if (options.fault) {
+    env[`PROMOTE_FAULT_${options.fault}`] = '1';
+  }
+  return spawnSync('node', [
+    path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+    '--group',
+    anchorRecordId,
+  ], {
+    cwd: readerUiRoot,
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
 function runRetract(readerUiRoot, hostRoot, recordId, options = {}) {
   const env = {
     ...process.env,
@@ -308,6 +342,28 @@ function runRetract(readerUiRoot, hostRoot, recordId, options = {}) {
     path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
     '--retract',
     recordId,
+    '--reason',
+    reason,
+  ], {
+    cwd: readerUiRoot,
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+function runRetractGroup(readerUiRoot, anchorRecordId, options = {}) {
+  const env = {
+    ...process.env,
+    RETRACT_TEST_MODE: '1',
+  };
+  if (options.fault) {
+    env[`RETRACT_FAULT_${options.fault}`] = '1';
+  }
+  const reason = options.reason || 'Bookshelf group promotion requires atomic withdrawal';
+  return spawnSync('node', [
+    path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+    '--retract-group',
+    anchorRecordId,
     '--reason',
     reason,
   ], {
@@ -340,11 +396,18 @@ const lines = [
   '// SOURCE_FILE_KEY: \\'klhs2jMM4MncaJFqZMfqEK\\'',
   'export struct VisualAdmission {',
 ];
+const routeAdmissions = new Map();
 for (const record of registry.records) {
   if (record.classification !== 'exact-figma-binding') continue;
   const admission = record.harmony?.status === 'implementation-ready' ? 'implementation-ready' : 'candidate-backport';
   const implementationReady = admission === 'implementation-ready';
   for (const routeId of (record.routeIds || [])) {
+    const prior = routeAdmissions.get(routeId);
+    if (prior !== undefined && prior !== admission) {
+      console.error('contradictory route admission for ' + routeId + ': ' + prior + ' vs ' + admission);
+      process.exit(1);
+    }
+    routeAdmissions.set(routeId, admission);
     lines.push('  // ' + JSON.stringify({ routeId, admission, sourceBound: true, implementationReady, recordIds: [record.id] }));
   }
 }
@@ -1052,6 +1115,250 @@ test('success path: complete promotion leaves all four files consistent', () => 
       `--check should pass after successful promotion. stderr: ${checkResult.stderr?.toString()}`);
     assert.equal(fs.existsSync(sharedWriterLockPath(sandbox.readerUiRoot)), false,
       'successful promotion and follow-up check must release the shared writer lock');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+function setupPromotableGroupSandbox() {
+  const sandbox = makeSandbox();
+  const commitSha = initSandboxGit(sandbox.readerUiRoot);
+  assert.ok(commitSha, 'failed to init sandbox git repo');
+  installStubGenerator(sandbox.readerUiRoot);
+  installHarmonyTarget(sandbox.hostRoot, 'RouteRenderer');
+
+  const recordIds = ['bookshelf.page', 'bookshelf.book-card'];
+  const records = recordIds.map((recordId) => {
+    const record = makeRecord(recordId, {
+      localStatus: 'implementation-ready',
+      harmonyStatus: 'candidate-backport',
+    });
+    record.routeIds = ['bookshelf'];
+    return record;
+  });
+  writeRegistry(sandbox.readerUiRoot, records);
+  writeLedger(sandbox.readerUiRoot, []);
+
+  const handoffDir = path.join(
+    sandbox.readerUiRoot,
+    'docs',
+    'design',
+    'handoffs',
+    'bookshelf',
+  );
+  fs.mkdirSync(handoffDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(handoffDir, 'design-delta.md'),
+    '# Bookshelf Design Delta\n\nShared-route group-promotion fixture.\n',
+  );
+  writeLocalReady(sandbox.readerUiRoot, 'bookshelf.page', 'bookshelf', true, {
+    implementationCommit: commitSha,
+    recordIds,
+  });
+
+  return { ...sandbox, recordIds };
+}
+
+test('group promotion atomically promotes every record sharing one route and packet', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const result = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    const stderr = result.stderr?.toString() || '';
+    const stdout = result.stdout?.toString() || '';
+    assert.equal(result.status, 0,
+      `group promotion should succeed. stderr: ${stderr}\nstdout: ${stdout}`);
+
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const registry = JSON.parse(after.registry.toString());
+    for (const recordId of sandbox.recordIds) {
+      assert.equal(
+        registry.records.find((record) => record.id === recordId)?.harmony?.status,
+        'implementation-ready',
+        `${recordId} must be promoted in the same registry write`,
+      );
+    }
+    assert.deepEqual(after.upstreamArtifact, after.consumerArtifact,
+      'group promotion must leave upstream and consumer byte-identical');
+
+    const ledger = JSON.parse(after.ledger.toString());
+    assert.equal(ledger.entries.length, 2, 'group promotion must append one entry per record');
+    assert.deepEqual(ledger.entries.map((entry) => entry.recordId), sandbox.recordIds);
+    assert.equal(ledger.entries[0].transactionId, ledger.entries[1].transactionId,
+      'all group ledger entries must share one transaction identity');
+    assert.deepEqual(ledger.entries[0].transactionRecordIds, sandbox.recordIds);
+    assert.deepEqual(ledger.entries[1].transactionRecordIds, sandbox.recordIds);
+
+    const check = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.equal(check.status, 0,
+      `--check must pass after group promotion: ${check.stderr?.toString() || ''}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('single-record promotion refuses a B3 packet that declares an atomic group', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'bookshelf.page');
+    assert.notEqual(result.status, 0,
+      'single-record promotion must fail when the B3 packet names multiple records');
+    assert.match(
+      `${result.stderr?.toString() || ''}\n${result.stdout?.toString() || ''}`,
+      /atomic admission set; use --group/,
+    );
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'refused partial group promotion must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('group promotion rolls back all records and ledger entries on a late fault', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page', {
+      fault: 'AFTER_LEDGER_WRITE',
+    });
+    assert.notEqual(result.status, 0, 'injected group fault must fail');
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'group rollback must restore registry, both artifacts, and ledger byte-exactly');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('ledger check rejects a hash-valid group transaction with a missing member', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0,
+      `group promotion prerequisite failed: ${promoted.stderr?.toString() || ''}`);
+
+    const ledgerPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'PROMOTION_LEDGER.json',
+    );
+    const registryPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'FIGMA_VISUAL_ADMISSION_REGISTRY.json',
+    );
+    const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+    ledger.entries = rehashLedgerEntries([ledger.entries[0]]);
+    fs.writeFileSync(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+
+    // Make the per-record registry/ledger relationship internally plausible.
+    // Without transaction-set verification this forged partial group would
+    // pass: one member remains promoted, the removed member is set back to
+    // candidate-backport, and the surviving entry has a valid hash chain.
+    const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+    registry.records.find((record) => record.id === 'bookshelf.book-card')
+      .harmony.status = 'candidate-backport';
+    fs.writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+
+    const check = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.notEqual(check.status, 0,
+      '--check must reject a hash-valid transaction missing one declared member');
+    assert.match(
+      check.stderr?.toString() || '',
+      /expected exactly one entry for each/,
+    );
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('group retraction atomically reverses every record in the promotion transaction', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0,
+      `group promotion prerequisite failed: ${promoted.stderr?.toString() || ''}`);
+
+    const retracted = runRetractGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(retracted.status, 0,
+      `group retraction should succeed: ${retracted.stderr?.toString() || ''}`);
+
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const registry = JSON.parse(after.registry.toString());
+    for (const recordId of sandbox.recordIds) {
+      assert.equal(
+        registry.records.find((record) => record.id === recordId)?.harmony?.status,
+        'candidate-backport',
+        `${recordId} must be withdrawn in the same registry write`,
+      );
+    }
+    const ledger = JSON.parse(after.ledger.toString());
+    assert.equal(ledger.entries.length, 4);
+    const promotions = ledger.entries.slice(0, 2);
+    const reversals = ledger.entries.slice(2);
+    assert.deepEqual(reversals.map((entry) => entry.recordId), sandbox.recordIds);
+    assert.equal(reversals[0].transactionId, reversals[1].transactionId);
+    assert.equal(reversals[0].reversalOf, promotions[0].entryHash);
+    assert.equal(reversals[1].reversalOf, promotions[1].entryHash);
+    assert.deepEqual(after.upstreamArtifact, after.consumerArtifact);
+
+    const check = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.equal(check.status, 0,
+      `--check must pass after group retraction: ${check.stderr?.toString() || ''}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('single-record retraction refuses a record owned by an active group transaction', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'bookshelf.page');
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /use --retract-group/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'refused partial retraction must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('group retraction restores the promoted state byte-exactly on a late fault', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    const result = runRetractGroup(sandbox.readerUiRoot, 'bookshelf.page', {
+      fault: 'AFTER_LEDGER_WRITE',
+    });
+    assert.notEqual(result.status, 0);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'failed group retraction must restore the full promoted snapshot');
   } finally {
     cleanupSandbox(sandbox);
   }
