@@ -75,7 +75,7 @@
         ]
       },
       "harmony": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/MainTabShell.ets",
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookshelfShelfSection"
@@ -120,7 +120,7 @@
         ]
       },
       "harmony": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookCard"
         ]
@@ -166,7 +166,7 @@
         ]
       },
       "harmony": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookActionSheet"
         ]
@@ -288,7 +288,7 @@
         ]
       },
       "harmony": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookshelfMultiSelect"
         ]
@@ -337,7 +337,7 @@
         ]
       },
       "harmony": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderLocalImportDialog"
         ]
@@ -380,7 +380,7 @@
         ]
       },
       "harmony": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookList"
         ]
