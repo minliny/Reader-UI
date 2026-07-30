@@ -8,12 +8,12 @@
   ],
   "stage": "implementation-ready",
   "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
-  "generatedAt": "2026-07-30T10:34:27Z",
+  "generatedAt": "2026-07-30T10:52:40Z",
   "localSource": {
     "repository": "Reader-UI",
     "branch": "feat/reader-module-directory-b2",
-    "implementationCommit": "204bad3cbc99a8e28e71208ca4037eb213b1dc92",
-    "implementationCommitSubject": "feat(reader-ui): convert reader directory to semantic overlay",
+    "implementationCommit": "15a7c9381423c8441509ba8efae4cc4024bc0a5f",
+    "implementationCommitSubject": "fix(reader-ui): fail closed unbound directory bookmark state",
     "localReadyForFigma": true
   },
   "figma": {
@@ -51,17 +51,18 @@
     "figmaAuthority": "Reader Directory canonical component set 942:61, Phone/Tablet variants 942:58/942:60, and final instances 943:9888/943:10196 are the sole visual source.",
     "legacyRoutePolicy": "toc-bookmarks and reader-directory-overlay-v2 remain physically absent from route.schema.json.",
     "fullDirectoryIsolation": "reader.full.directory and reader-full-directory remain an independent candidate-backport record and route.",
+    "bookmarkStatePolicy": "The canonical bookmark label is retained, but it has no action because the live Phone and Tablet masters contain no bookmark state node, bookmark card, hidden variant, or prototype reaction.",
     "siblingIsolation": "TTS, appearance, settings, quick actions, and other full panels remain independent records and are not claimed ready by this packet."
   },
   "verification": {
     "focusedReaderDirectoryRegression": {
-      "tests": 62,
-      "passed": 62,
+      "tests": 63,
+      "passed": 63,
       "failed": 0
     },
     "fullFrontendRegression": {
-      "tests": 591,
-      "passed": 591,
+      "tests": 592,
+      "passed": 592,
       "failed": 0
     },
     "fullContractSuite": {
@@ -97,12 +98,12 @@
     "recordIds": [
       "reader.module.directory"
     ],
-    "exactLocalCommit": "204bad3cbc99a8e28e71208ca4037eb213b1dc92",
+    "exactLocalCommit": "15a7c9381423c8441509ba8efae4cc4024bc0a5f",
     "sourceStatus": "implementation-ready",
     "harmonyStatusBeforePromotion": "candidate-backport",
     "promotionRequired": true
   },
-  "sourceEvidenceHash": "sha256:39ab8f9f99a9e32f891563745cb2ee1ba23c332091b0c95b7450325ea2851936",
+  "sourceEvidenceHash": "sha256:b19c61d98ab72661bb0d60f19853de89b40a9c0ad49232ac0146634eead57ec6",
   "artifacts": [
     "B1_FIGMA_LIVE_READ.json",
     "B2_READER_UI_SOURCE_CONVERSION.json",
