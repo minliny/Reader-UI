@@ -407,8 +407,8 @@ test("end-to-end host verification binds committed source, full stage, payload, 
   const payload = buildRepositoryDispatchDocument(release.metadata, evidence).client_payload;
   const verified = await verifyHostRelease({
     artifactRoot,
-    host: "android",
-    hostRepository: "minliny/Reader-for-Android",
+    host: "harmonyos",
+    hostRepository: "minliny/Reader-for-HarmonyOS",
     payload,
     sourceRoot: fixture.temporaryRoot,
     token: "test-token",
@@ -428,8 +428,22 @@ test("end-to-end host verification binds committed source, full stage, payload, 
   });
   assert.equal(verified.releaseId, release.metadata.releaseId);
   assert.equal(verified.sourceSha, fixture.sourceSha);
-  assert.equal(verified.hostRepository, "minliny/Reader-for-Android");
-  assert.match(verified.proofBoundary, /assembleDebug/);
+  assert.equal(verified.hostRepository, "minliny/Reader-for-HarmonyOS");
+  assert.match(verified.proofBoundary, /Static consumer validation/);
+  await assert.rejects(
+    verifyHostRelease({
+      artifactRoot,
+      host: "android",
+      hostRepository: "minliny/Reader-for-Android",
+      payload,
+      sourceRoot: fixture.temporaryRoot,
+      token: "test-token",
+      fetchImpl: async () => {
+        throw new Error("deferred host must fail before artifact API verification");
+      },
+    }),
+    /release host target android does not authorize/,
+  );
 });
 
 test("host release CLIs fail closed when required invocation context is absent", () => {

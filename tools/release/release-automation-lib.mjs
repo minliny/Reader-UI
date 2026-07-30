@@ -116,31 +116,51 @@ export function parseTargetRepositories(rawValue) {
 function parseReleaseHostTargets(rawBytes, label) {
   const config = assertPlainObject(readJsonBytes(rawBytes, label), label);
   assertExactKeys(config, ["schemaVersion", "targets"], label);
-  if (config.schemaVersion !== 1) throw new Error(`${label} schemaVersion must be 1`);
+  if (config.schemaVersion !== 2) throw new Error(`${label} schemaVersion must be 2`);
   if (!Array.isArray(config.targets)) throw new Error(`${label} targets must be an array`);
   const expectedHosts = Object.keys(REQUIRED_HOST_REPOSITORIES).sort();
   const hosts = [];
-  const repositories = [];
+  const allRepositories = [];
+  const activeRepositories = [];
   for (const [index, value] of config.targets.entries()) {
     const target = assertPlainObject(value, `${label} target ${index + 1}`);
-    assertExactKeys(target, ["host", "repository"], `${label} target ${index + 1}`);
+    assertExactKeys(
+      target,
+      ["host", "reason", "releaseStatus", "repository"],
+      `${label} target ${index + 1}`,
+    );
     const host = assertString(target.host, `${label} target ${index + 1}.host`);
     const repository = assertRepository(target.repository, `${label} target ${index + 1}.repository`);
+    const releaseStatus = assertString(
+      target.releaseStatus,
+      `${label} target ${index + 1}.releaseStatus`,
+    );
+    assertString(target.reason, `${label} target ${index + 1}.reason`);
+    if (releaseStatus !== "active" && releaseStatus !== "deferred") {
+      throw new Error(`${label} target ${index + 1}.releaseStatus must be active or deferred`);
+    }
     const requiredName = REQUIRED_HOST_REPOSITORIES[host];
     if (!requiredName) throw new Error(`${label} contains unsupported host ${host}`);
     if (repository.split("/")[1] !== requiredName) {
       throw new Error(`${label} host ${host} must target repository ${requiredName}`);
     }
     hosts.push(host);
-    repositories.push(repository);
+    allRepositories.push(repository);
+    if (releaseStatus === "active") activeRepositories.push(repository);
   }
   if (hosts.length !== expectedHosts.length || hosts.some((host, index) => host !== expectedHosts[index])) {
     throw new Error(`${label} hosts must be exactly ${expectedHosts.join(", ")} in canonical order`);
   }
-  if (new Set(repositories.map((repository) => repository.toLowerCase())).size !== repositories.length) {
+  if (
+    new Set(allRepositories.map((repository) => repository.toLowerCase())).size !==
+    allRepositories.length
+  ) {
     throw new Error(`${label} contains duplicate repositories`);
   }
-  return { config, repositories };
+  if (activeRepositories.length === 0) {
+    throw new Error(`${label} must contain at least one active release target`);
+  }
+  return { config, repositories: activeRepositories, allRepositories };
 }
 
 export function readReleaseHostTargets(root) {

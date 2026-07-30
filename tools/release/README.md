@@ -16,7 +16,7 @@ repositories. It never auto-merges a pull request.
 3. `dispatch-ui-release.mjs` verifies the downloaded artifact again and sends
    the same source SHA, tag, version, manifest/ABI hash, runtime action hash,
    typed-payload identity, artifact identity, and target-authority hash to all
-   three configured repositories.
+   currently active configured repositories.
 4. Each Host checks out the exact source SHA, verifies the cross-repository
    artifact record, updates only `READER_UI_CONSUMER.json`, runs its available
    consumer/build gates, and creates or reuses one deterministic draft PR.
@@ -31,7 +31,7 @@ After `prepare-ui-release.mjs` has produced a release stage, the dispatch comman
 can emit the exact deterministic request plan without a token or network call:
 
 ```sh
-READER_HOST_SYNC_REPOSITORIES='minliny/Reader-for-Android,minliny/Reader-for-HarmonyOS,minliny/Reader-for-iOS' \
+READER_HOST_SYNC_REPOSITORIES='minliny/Reader-for-HarmonyOS' \
 GITHUB_REPOSITORY='minliny/Reader-UI' \
 GITHUB_REF='refs/tags/vX.Y.Z' \
 GITHUB_SHA='<tag-commit-sha>' \
@@ -53,10 +53,10 @@ requests cannot drift from live requests.
 
 - Reader UI environment `reader-ui-release`:
   - secret `READER_HOST_SYNC_TOKEN`, authorized to create repository dispatches
-    in the exact three Host repositories;
+    in every currently active Host repository;
   - variable `READER_HOST_SYNC_REPOSITORIES`, exactly matching
-    `tools/release/release-host-targets.json` (no missing or additional
-    repository).
+    the `active` entries in `tools/release/release-host-targets.json` (no
+    missing, deferred, or additional repository).
 - Each Host repository:
   - secret `READER_UI_REPO_TOKEN`, with Reader UI Contents read and Actions
     artifact read access;

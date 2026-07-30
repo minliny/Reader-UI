@@ -290,7 +290,11 @@ export async function verifyHostRelease({
   assertMetadataMatchesRepository(path.resolve(sourceRoot), staged.metadata, staged.manifestBytes);
 
   const target = staged.hostTargets.find((item) => item.host === checkedHost);
-  if (!target || target.repository !== checkedHostRepository) {
+  if (
+    !target ||
+    target.repository !== checkedHostRepository ||
+    target.releaseStatus !== "active"
+  ) {
     throw new Error(`release host target ${checkedHost} does not authorize repository ${checkedHostRepository}`);
   }
   await verifyGitHubArtifactRecord({ payload: checkedPayload, token, fetchImpl });
