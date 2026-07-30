@@ -102,6 +102,7 @@ const RECORD_ID_TO_HANDOFF = {
   // the historical reader-runtime packet with control overlays: doing so
   // would let evidence for this completed surface promote a sibling record.
   'reader.reading-surface': 'reader-runtime/reading-surface',
+  'reader.control-home': 'reader-runtime/control-home',
   'bookshelf': 'bookshelf',
   'book-detail': 'book-detail',
   'source-switch': 'source-switch',

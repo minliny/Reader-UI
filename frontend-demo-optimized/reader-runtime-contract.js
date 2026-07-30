@@ -1,6 +1,8 @@
 (function attachReaderRuntimeContract(window) {
   "use strict";
 
+  const CONTROL_HOME_OVERLAY = "reader-control";
+
   const PRIMARY_ROUTES = Object.freeze([
     "immersive-reading",
     "reader",
@@ -226,9 +228,32 @@
     return Object.freeze({ route, stamped, missing, ambiguous });
   }
 
+  function instrumentControlHomeDom(root, sourceRoute) {
+    if (!root || typeof root.querySelectorAll !== "function") {
+      return Object.freeze({ overlay: CONTROL_HOME_OVERLAY, stamped: 0, missing: 0, ambiguous: 0 });
+    }
+    const routeIdentityCount = root.getAttribute?.("data-reader-runtime-identity-count");
+    const report = instrumentDom(root, "reader");
+    root.setAttribute("data-reader-runtime-route", sourceRoute || "immersive-reading");
+    if (routeIdentityCount == null) {
+      root.removeAttribute("data-reader-runtime-identity-count");
+    } else {
+      root.setAttribute("data-reader-runtime-identity-count", routeIdentityCount);
+    }
+    root.setAttribute("data-reader-runtime-overlay", CONTROL_HOME_OVERLAY);
+    root.setAttribute("data-reader-runtime-overlay-identity-count", String(report.stamped));
+    return Object.freeze({
+      overlay: CONTROL_HOME_OVERLAY,
+      stamped: report.stamped,
+      missing: report.missing,
+      ambiguous: report.ambiguous
+    });
+  }
+
   const INITIAL_STATE = Object.freeze({
     route: "immersive-reading",
     mode: "immersive",
+    overlay: null,
     module: null,
     panel: "closed",
     pageIndex: 0,
@@ -244,7 +269,10 @@
   function routeState(route) {
     const canonical = COMPATIBILITY_ROUTE_CROSSWALK[route] || route;
     if (canonical === "immersive-reading") return { mode: "immersive", module: null, panel: "closed" };
-    if (canonical === "reader") return { mode: "control", module: null, panel: "quick" };
+    // `reader` is a canonical reading-surface route, not a second page that
+    // owns the control UI. The control home is a semantic overlay and must not
+    // mutate route identity when it is shown or hidden.
+    if (canonical === "reader") return { mode: "immersive", module: null, panel: "closed" };
     if (canonical.startsWith("reader-full-")) return { mode: "full", module: canonical.replace("reader-full-", ""), panel: "full" };
     const moduleMap = {
       "reader-directory-overlay-v2": "directory",
@@ -266,6 +294,16 @@
         if (!ROUTE_SET.has(input.route)) return current;
         return Object.assign({}, current, routeState(input.route), { route: input.route, focusReturnKey: input.focusReturnKey || current.focusReturnKey });
       }
+      case "CONTROL_TOGGLE": {
+        if (input.overlay !== CONTROL_HOME_OVERLAY) return current;
+        return Object.assign({}, current, {
+          overlay: current.overlay === CONTROL_HOME_OVERLAY ? null : CONTROL_HOME_OVERLAY
+        });
+      }
+      case "CONTROL_HIDE":
+        return current.overlay === CONTROL_HOME_OVERLAY
+          ? Object.assign({}, current, { overlay: null })
+          : current;
       case "PAGE_TURN": {
         if (input.direction !== "prev" && input.direction !== "next") return current;
         return Object.assign({}, current, { pageIndex: Math.max(0, current.pageIndex + (input.direction === "next" ? 1 : -1)), error: null });
@@ -350,6 +388,7 @@
   }
 
   const api = Object.freeze({
+    CONTROL_HOME_OVERLAY,
     PRIMARY_ROUTES,
     COMPATIBILITY_ROUTE_CROSSWALK,
     ALL_ROUTES,
@@ -359,6 +398,7 @@
     reducer,
     createOwner,
     instrumentDom,
+    instrumentControlHomeDom,
     executeContentRetry: (owner, effect) => executeRequest(owner, "content", effect),
     executeTocRetry: (owner, effect) => executeRequest(owner, "toc", effect)
   });

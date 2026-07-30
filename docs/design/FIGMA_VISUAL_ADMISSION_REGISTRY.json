@@ -597,6 +597,9 @@
       "id": "reader.control-home",
       "surfaceType": "overlay-component",
       "routeIds": [],
+      "overlayKinds": [
+        "reader-control"
+      ],
       "classification": "exact-figma-binding",
       "deliveryStatus": "current-read-unfrozen",
       "figma": {
@@ -619,9 +622,9 @@
         }
       },
       "local": {
-        "status": "candidate-backport",
+        "status": "implementation-ready",
         "targets": [
-          "frontend-demo-optimized/renderers/d3-control-layers-renderers.js#readerControlShowV2"
+          "frontend-demo-optimized/render-runtime.js#readerControlHomeOverlay"
         ]
       },
       "harmony": {
@@ -631,10 +634,12 @@
         ]
       },
       "evidence": [
-        "docs/design/handoffs/reading-chain/F0_FIGMA_FIRST_CROSSWALK.json#reader-control-home"
+        "docs/design/handoffs/reading-chain/F0_FIGMA_FIRST_CROSSWALK.json#reader-control-home",
+        "docs/design/handoffs/reader-runtime/control-home/FIGMA_F0_CROSSWALK.json",
+        "docs/design/handoffs/reader-runtime/control-home/B2_READER_UI_SOURCE_CONVERSION.json"
       ],
       "reconstruction": {
-        "status": "pending-source-conversion",
+        "status": "source-conversion-complete",
         "retiredRouteIds": [
           "control-layer-base-v2",
           "reader-directory-overlay-v2",
@@ -645,7 +650,7 @@
           "reader-search-overlay-v2",
           "reader-replace-overlay-v2"
         ],
-        "reason": "A2 strict physical removal (MAJOR): 13 legacy reader control/module routes retired from route.schema.json until each module's Figma-backed native conversion lands. Record + harmony.targets preserved so future conversion can re-bind routes without breaking registry identity."
+        "reason": "The control home is converted as the route-independent reader-control overlay. Its retired control-layer-base-v2 route remains absent; sibling module routes stay independently fail-closed."
       }
     },
     {

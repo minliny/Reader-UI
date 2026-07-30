@@ -65,7 +65,7 @@ test("B3 evidence remains fresh after B4 appends the authorized reading-surface 
   // binding + harmony targets, but their routeIds are cleared pending their own
   // source conversion. They must not be deleted (breaks registry binding) and
   // must not keep retired routeIds (validator line 158 rejects unknown routes).
-  const siblingRecordIds = ["reader.control-home", "reader.module.directory", "reader.module.tts",
+  const siblingRecordIds = ["reader.module.directory", "reader.module.tts",
     "reader.module.appearance", "reader.module.settings", "reader.quick.content-search"];
   for (const id of siblingRecordIds) {
     const sibling = registry.records.find((r) => r.id === id);
@@ -76,6 +76,14 @@ test("B3 evidence remains fresh after B4 appends the authorized reading-surface 
     assert.equal(sibling.harmony?.status, "candidate-backport",
       `${id} must remain fail-closed, not silently promotable`);
   }
+  const controlHome = registry.records.find((r) => r.id === "reader.control-home");
+  assert.ok(controlHome, "reader.control-home must remain independently registered");
+  assert.deepEqual(controlHome.routeIds, [], "control home must remain route-independent");
+  assert.deepEqual(controlHome.overlayKinds, ["reader-control"]);
+  assert.equal(controlHome.reconstruction?.status, "source-conversion-complete");
+  assert.equal(controlHome.local?.status, "implementation-ready");
+  assert.equal(controlHome.harmony?.status, "candidate-backport",
+    "the completed source conversion must remain native fail-closed until its own promotion");
 
   // B3 source evidence remains intact and Figma-bound. B4 may activate only
   // this completed surface; the six sibling records remain fail-closed.

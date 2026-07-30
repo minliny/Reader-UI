@@ -14,14 +14,27 @@ function fresh() {
   return sandbox.module.exports;
 }
 
-test("R2b route commits derive canonical modes without changing route owners", () => {
+test("R2b route commits keep the canonical reader route immersive", () => {
   const api = fresh();
   let state = api.reducer(undefined, { type: "ROUTE_COMMIT", route: "reader" });
-  assert.equal(state.mode, "control");
+  assert.equal(state.mode, "immersive");
   state = api.reducer(state, { type: "ROUTE_COMMIT", route: "reader-appearance-overlay-v2" });
   assert.equal(state.module, "appearance");
   state = api.reducer(state, { type: "ROUTE_COMMIT", route: "reader-full-settings" });
   assert.equal(state.panel, "full");
+});
+
+test("R2b control home toggles a semantic overlay without changing route identity", () => {
+  const api = fresh();
+  const initial = api.reducer(undefined, { type: "ROUTE_COMMIT", route: "reader" });
+  const shown = api.reducer(initial, { type: "CONTROL_TOGGLE", overlay: api.CONTROL_HOME_OVERLAY });
+  assert.equal(shown.route, "reader");
+  assert.equal(shown.mode, "immersive");
+  assert.equal(shown.overlay, "reader-control");
+  const hidden = api.reducer(shown, { type: "CONTROL_TOGGLE", overlay: api.CONTROL_HOME_OVERLAY });
+  assert.equal(hidden.route, "reader");
+  assert.equal(hidden.overlay, null);
+  assert.equal(api.reducer(hidden, { type: "CONTROL_TOGGLE", overlay: "invented-overlay" }), hidden);
 });
 
 test("R2b compatibility routes keep their local UiEvent surface", () => {

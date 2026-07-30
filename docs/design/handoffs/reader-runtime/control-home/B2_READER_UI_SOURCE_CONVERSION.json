@@ -1,0 +1,97 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "READER_UI_SOURCE_CONVERSION",
+  "phase": "B2",
+  "scope": "reader.control-home",
+  "recordIds": [
+    "reader.control-home"
+  ],
+  "capturedAt": "2026-07-30T08:32:00Z",
+  "figmaSource": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1023:17636",
+    "canonicalMasterId": "1023:18737",
+    "viewportNodes": {
+      "phone": "1023:18737",
+      "tablet": "1023:18745"
+    },
+    "registeredOfficialRevision": "2379851596474967636",
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "liveReadReceipt": "docs/design/handoffs/reader-runtime/control-home/B1_FIGMA_LIVE_READ.json",
+    "numericRevisionExposedByConnector": false,
+    "noFabricatedRevision": true
+  },
+  "sourceConversion": {
+    "overlayKind": "reader-control",
+    "routeIds": [],
+    "productionTarget": "frontend-demo-optimized/render-runtime.js#readerControlHomeOverlay",
+    "stateOwner": "frontend-demo-optimized/reader-runtime-contract.js#CONTROL_HOME_OVERLAY",
+    "trigger": "reader.control.toggle",
+    "routeIdentityRule": "show and hide keep the current canonical reading route unchanged",
+    "composition": [
+      "ReaderTopBar",
+      "BrightnessRail",
+      "QuickActionPanel",
+      "ChapterProgress",
+      "ControlSheet",
+      "ModuleNav"
+    ],
+    "viewportPolicy": {
+      "phone": "390x844 bottom dock",
+      "tablet": "760x960 right-bottom dock",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true
+    },
+    "retirementBoundary": {
+      "routeId": "control-layer-base-v2",
+      "status": "physically-absent",
+      "mustNotReturn": true
+    },
+    "figmaAbsentBoundary": {
+      "recordId": "reader.more-menu",
+      "policy": "no menu content is rendered because no exact Figma-bound menu exists"
+    }
+  },
+  "verification": {
+    "focusedReaderControlRegression": {
+      "command": "node --test frontend-demo-optimized/verify/r3a-reader-control-home-figma-source.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-identity.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-flow.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-aria-focus.test.mjs frontend-demo-optimized/verify/reader-control-continuity.test.mjs frontend-demo-optimized/verify/reader-appearance-atoms.test.mjs frontend-demo-optimized/verify/reader-pagination-runtime.test.mjs",
+      "tests": 62,
+      "passed": 62,
+      "failed": 0
+    },
+    "fullFrontendRegression": {
+      "command": "node --test --test-reporter=tap frontend-demo-optimized/verify/*.test.mjs",
+      "tests": 585,
+      "passed": 585,
+      "failed": 0
+    },
+    "fullContractSuite": {
+      "command": "node --test --test-reporter=dot contracts/tests/*.test.mjs",
+      "tests": 496,
+      "passed": 496,
+      "failed": 0,
+      "runtime": "Node 24"
+    },
+    "visualAdmissionGenerator": {
+      "command": "node tools/design/generate-visual-admission-contract.mjs --check",
+      "status": "current"
+    },
+    "releaseManifest": {
+      "command": "node tools/release/generate-ui-release-manifest.mjs --check",
+      "status": "current-development-manifest",
+      "releaseTagCreated": false
+    }
+  },
+  "boundaries": {
+    "figmaMutation": false,
+    "harmonyMutation": false,
+    "promotionExecuted": false,
+    "buildExecuted": false,
+    "emulatorExecuted": false,
+    "deviceExecuted": false,
+    "siblingReaderModuleClaimedReady": false,
+    "noDetachedFrameOrScreenshot": true,
+    "noGenericVisualFallback": true
+  }
+}

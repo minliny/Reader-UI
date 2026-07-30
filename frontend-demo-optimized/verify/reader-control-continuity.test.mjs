@@ -68,8 +68,9 @@ test("session capsule is rendered and scheduled only by the immersive reader", (
   assert.match(readerInfoOverlay, /readerImmersiveStatusCapsule\(appState\)/);
   assert.match(
     readerStateScreen,
-    /overlayHtml:\s*isImmersive\s*\?[\s\S]*readerInfoOverlay\(data,\s*appState\)[\s\S]*:\s*readerTopOverlay\(data,\s*appState\)/,
+    /overlayHtml:\s*controlHome\?\.overlayHtml\s*\|\|\s*\(isImmersive\s*\?[\s\S]*readerInfoOverlay\(data,\s*appState\)[\s\S]*:\s*readerTopOverlay\(data,\s*appState\)\)/,
   );
+  assert.match(readerStateScreen, /controlHomeVisible[\s\S]*readerControlHomeOverlay\(data,\s*appState,\s*route,\s*isLoading\)/);
   assert.doesNotMatch(
     readerStateScreen,
     /readerSessionControlSpaceHtml/,
@@ -88,16 +89,16 @@ test("reader loading keeps the base mode and ReaderShell owns one brightness acc
   const bottomSheet = sourceSection(
     runtimeSource,
     "  function readerBottomSheetHtml(",
-    "  function readerQuickFullPagePanel(",
+    "  function readerControlHomeOverlay(",
   );
 
-  assert.match(readerStateScreen, /const state\s*=\s*baseState\s*;/);
+  assert.match(readerStateScreen, /const state\s*=\s*controlHome\?\.state\s*\|\|\s*baseState\s*;/);
   assert.doesNotMatch(readerStateScreen, /mode\s*:\s*["']loading["']/);
   assert.match(readerStateScreen, /fd-reader-mode-\$\{esc\(frameMode\)\}[\s\S]*is-reader-loading/);
   assert.match(bottomSheet, /if\s*\(isLoading\)\s*\{[\s\S]*readerLoadingPanel\(route\)/);
   assert.match(bottomSheet, /else if\s*\(state\.mode\s*===\s*["']quick["']\)/);
   assert.doesNotMatch(bottomSheet, /readerBrightnessRail\s*\(/, "panels must not create shell accessories");
-  assert.match(readerStateScreen, /accessoryHtml:\s*isImmersive\s*\?\s*["']["']\s*:\s*readerBrightnessRail\(data,\s*appState\)/);
+  assert.match(readerStateScreen, /accessoryHtml:\s*controlHome\?\.accessoryHtml\s*\|\|\s*\(isImmersive\s*\?\s*["']["']\s*:\s*readerBrightnessRail\(data,\s*appState\)\)/);
   assert.match(shellKitSource, /data-slot="readerAccessoryHost"/);
 });
 

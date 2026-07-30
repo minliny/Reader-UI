@@ -996,13 +996,13 @@
     },
     {
       "path": "frontend-demo-optimized/reader-runtime-contract.js",
-      "byteLength": 20733,
-      "sha256": "8e977f2c0941f2169eb0c3ca6e8bfc483d569ba866a022b94832bb8f3ab5173b"
+      "byteLength": 22494,
+      "sha256": "d16e916ac310d2ccc8c0fcd726bb686e60b95dc0911fa87d56b26a5b4559d8a6"
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 769114,
-      "sha256": "54af5b6d6ff71cc056367f3f355dde33f23d850fdde8bd3add7ca5a8088a26af"
+      "byteLength": 773511,
+      "sha256": "a07116dc17ebbd4c52fbfc9aceb88b9c79105407d998b13c8ff8593b3c52ad42"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -1291,13 +1291,13 @@
     },
     {
       "path": "generated/arkts/VisualAdmission.ets",
-      "byteLength": 90053,
-      "sha256": "a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee"
+      "byteLength": 90208,
+      "sha256": "2157769c6a068e38af5b83166bf6852ac5f444147b79ab8a71e20b03493e4f0b"
     },
     {
       "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
-      "byteLength": 24507,
-      "sha256": "48731961ff45b9309b042e66424dbb2358474eef8cf0deef0ccfa96d26248975"
+      "byteLength": 26505,
+      "sha256": "b241ddf66e0a52a57571c4bdd7657b6e8b07b1aa85a0fe8aa6ad01aa06fa78f3"
     },
     {
       "path": "generated/kotlin/Appearance.kt",
@@ -1689,8 +1689,8 @@
     {
       "name": "design-runtime",
       "fileCount": 187,
-      "byteLength": 5141588,
-      "sha256": "fecb67fcc130d4110c6b235043c8be93d09f61f003fe6d8fdb44272bf1712f5a",
+      "byteLength": 5147746,
+      "sha256": "150feb52724d5df685740e075998e5d8cbc345a3e8e164fa338e9ae9128c7db4",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1931,8 +1931,8 @@
     {
       "name": "generated",
       "fileCount": 59,
-      "byteLength": 2258096,
-      "sha256": "24daf2369414657364621be243e3aae18305aac41c42cda9f3e78de27da90a5f",
+      "byteLength": 2260249,
+      "sha256": "9c7f326ada0fc55b908fcfe6af863cdc7de7c7ca4f1b89dc62f65f147c095b92",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
