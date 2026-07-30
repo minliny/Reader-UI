@@ -29,30 +29,29 @@ function fresh() {
 }
 const values = (html, attr) => [...html.matchAll(new RegExp(`${attr}="([^"]+)"`, "g"))].map((m) => m[1]);
 
-test("R2a bookshelf declares 67 mapped business controls", () => {
+test("R2a bookshelf declares 56 mapped business controls", () => {
   const api = fresh();
   const d = api.bookshelf;
   assert.ok(d.identityAttrs("view-cover").includes("data-control-key"));
   const sandbox = { module: { exports: {} }, window: {} };
   new vm.Script(declarationsSource).runInNewContext(sandbox);
   const rows = sandbox.module.exports.CANONICAL_CONTROL_DECLARATIONS.filter((x) => x.source === "bookshelf-action");
-  assert.equal(rows.length, 67);
+  assert.equal(rows.length, 56);
   assert.ok(rows.every((x) => x.mappingStatus === "mapped" && x.instanceKey === null));
 });
 
-test("R2a default bookshelf stamps five identity attributes on 33 controls", () => {
+test("R2a default bookshelf stamps five identity attributes on 22 real controls", () => {
   const html = fresh().bookshelfV2(fixture, "bookshelf", {});
   const keys = values(html, "data-control-key");
-  assert.equal(keys.length, 33);
-  assert.equal(new Set(keys).size, 33);
-  for (const attr of ["data-entity-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, 33);
+  assert.equal(keys.length, 22);
+  assert.equal(new Set(keys).size, 22);
+  for (const attr of ["data-entity-key", "data-control-id", "data-ui-event", "data-settings-key"]) assert.equal(values(html, attr).length, 22);
 });
 
 test("R2a all eleven books use exact source/book business identities, not ordinals", () => {
   const html = fresh().bookshelfV2(fixture, "bookshelf", {});
   for (const [index, id] of ids.entries()) {
     assert.ok(values(html, "data-settings-key").includes(`book-open-${sourceIds[index]}--${id}`));
-    assert.ok(values(html, "data-settings-key").includes(`book-more-${sourceIds[index]}--${id}`));
   }
   assert.doesNotMatch(values(html, "data-control-key").join("\n"), /\.n\d+$/m);
 });

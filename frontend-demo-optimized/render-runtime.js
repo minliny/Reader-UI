@@ -11517,8 +11517,7 @@
           const item = Array.from(screenHost.querySelectorAll("[data-book-item][data-book-id]")).find(
             (candidate) => bookContextMatchesElement(focusBookContext, candidate)
           );
-          const focusTarget = item?.querySelector("[data-book-more]:not([tabindex='-1'])")
-            || item?.querySelector("[data-book-cover]");
+          const focusTarget = item?.querySelector("[data-book-cover]");
           if (focusTarget && typeof focusTarget.focus === "function") {
             focusTarget.focus({ preventScroll: true });
             appState.bookshelfFocusBookContext = null;
@@ -11874,9 +11873,6 @@
         item.setAttribute("aria-setsize", String(items.length));
         item.querySelectorAll("[data-book-list-detail]").forEach((detail) => {
           detail.setAttribute("aria-hidden", view === "list" ? "false" : "true");
-        });
-        item.querySelectorAll("[data-book-more]").forEach((button) => {
-          button.setAttribute("tabindex", view === "list" ? "0" : "-1");
         });
       });
     }
@@ -12417,9 +12413,7 @@
         const item = Array.from(screenHost.querySelectorAll("[data-book-item][data-book-id]")).find(
           (candidate) => bookContextMatchesElement(focusBookContext, candidate)
         );
-        const target = appState.bookshelfView === "list"
-          ? item?.querySelector("[data-book-more]")
-          : item?.querySelector("[data-book-cover]");
+        const target = item?.querySelector("[data-book-cover]");
         target?.focus?.({ preventScroll: true });
       });
     };
@@ -12554,14 +12548,6 @@
 
     screenHost.querySelectorAll("[data-close-bookshelf-more]").forEach((button) => {
       button.addEventListener("click", () => closeBookshelfMore(button.closest(".fd-phone")));
-    });
-
-    screenHost.querySelectorAll("[data-book-more]").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        openBookFocus(button);
-      });
     });
 
     screenHost.querySelectorAll("[data-book-action='multi-select']").forEach((button) => {

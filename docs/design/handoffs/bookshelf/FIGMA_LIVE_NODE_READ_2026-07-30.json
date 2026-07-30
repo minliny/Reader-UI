@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_LIVE_NODE_READ_EVIDENCE",
+  "observedAt": "2026-07-30T00:00:00+08:00",
+  "readOnly": true,
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "259:10",
+  "canonicalMasterId": "493:196",
+  "source": "figma-use-read-only",
+  "nodes": [
+    {
+      "nodeId": "493:191",
+      "role": "phone-list-variant",
+      "width": 350.903,
+      "height": 71.988,
+      "cover": {
+        "nodeId": "493:192",
+        "width": 48,
+        "height": 72
+      },
+      "moreIconSourceNodeId": "271:333",
+      "reactionCount": 0
+    }
+  ],
+  "revisionBoundary": {
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "officialRevision": "2379851596474967636",
+    "revisionBoundNodeId": "493:196",
+    "note": "The official REST artifact resolves the canonical component set. This separate read-only Figma runtime observation identifies its Phone List child and does not pretend to be REST revision evidence."
+  },
+  "viewportDecision": {
+    "phone": "consume child 493:191 from canonical component set 493:196",
+    "tablet": "blocked because no Tablet List variant exists"
+  }
+}

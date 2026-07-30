@@ -16,6 +16,7 @@ const appearanceSpecSource = readDemo("appearance-spec.js");
 const fixtureSource = readDemo("fixture.js");
 const fixtureBundleSource = `${appearanceSpecSource}\n${fixtureSource}`;
 const foundationSource = readDemo("styles/00-foundation.css");
+const bookshelfVc3Source = readDemo("styles/12-bookshelf-vc3.css");
 const stylesEntrySource = readDemo("styles.css");
 const indexSource = readDemo("index.html");
 
@@ -107,6 +108,22 @@ test("the shipped stylesheet keeps the unified list row at the 72px static endpo
   assert.match(indexSource, /styles\.css\?v=[^"\n]*bookshelf-bookitem-v2-20260716/);
 });
 
+test("current Figma bookshelf overlays keep their exact Phone and Tablet geometry", () => {
+  assert.match(bookshelfVc3Source, /\.fd-book-action-sheet\s*\{[^}]*right:\s*12px;[^}]*left:\s*12px;[^}]*height:\s*224px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-book-action-sheet\s*\{[^}]*border-radius:\s*24px 24px 0 0;[^}]*box-shadow:\s*0 18px 46px/s);
+  assert.match(bookshelfVc3Source, /\.fd-book-action-handle\s*\{[^}]*width:\s*42px;[^}]*height:\s*4px;[^}]*margin:\s*9px auto 21px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-book-action-sheet > h2\s*\{[^}]*font-size:\s*17px;[^}]*font-weight:\s*700;/s);
+  assert.match(bookshelfVc3Source, /\.fd-book-action-sheet > button\s*\{[^}]*height:\s*40px;[^}]*padding:\s*0 12px;[^}]*font-size:\s*13px;[^}]*text-align:\s*left;/s);
+  assert.match(bookshelfVc3Source, /@media \(min-width: 700px\)[\s\S]*\.fd-book-action-sheet\s*\{[^}]*right:\s*20px;[^}]*left:\s*20px;/s);
+
+  assert.match(bookshelfVc3Source, /\.fd-bookshelf-multi-select\s*\{[^}]*grid-template-rows:\s*39px 56px minmax\(0, 1fr\) 82px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-bookshelf-multi-select-topbar h1\s*\{[^}]*font-size:\s*24px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-bookshelf-multi-select-content\s*\{[^}]*padding:\s*12px 19px 20px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-bookshelf-multi-select-grid\s*\{[^}]*row-gap:\s*12px;[^}]*column-gap:\s*30px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-bookshelf-multi-select-check\s*\{[^}]*right:\s*4px;[^}]*bottom:\s*4px;[^}]*width:\s*22px;[^}]*height:\s*22px;/s);
+  assert.match(bookshelfVc3Source, /\.fd-bookshelf-multi-select-footer\s*\{[^}]*height:\s*82px;/s);
+});
+
 test("each BookItem owns list metadata and a sibling more action without nested row semantics", () => {
   const api = rendererWindow().ReaderD2BookshelfDiscoverRenderers;
   const html = api.bookshelfV2(fixture, "bookshelf", { bookshelfView: "cover" });
@@ -118,7 +135,8 @@ test("each BookItem owns list metadata and a sibling more action without nested 
   assert.equal((html.match(/class="fd-book-list-meta"/g) || []).length, books.length);
   assert.equal((html.match(/data-book-source-type=/g) || []).length, books.length);
   assert.equal((html.match(/data-book-cached=/g) || []).length, books.length);
-  assert.equal((html.match(/data-book-more/g) || []).length, books.length);
+  assert.equal((html.match(/class="fd-book-list-more"/g) || []).length, books.length);
+  assert.equal((html.match(/data-book-more/g) || []).length, 0);
   assert.equal((html.match(/data-route="bookshelf-book-more-menu"/g) || []).length, 0);
   assert.match(html, /data-book-list-detail[^>]*aria-hidden="true"/);
 });
@@ -171,8 +189,8 @@ test("view application updates aria state and preserves the first visible book a
   const items = ["book-a", "book-b", "book-c"].map((bookId, index) => {
     const item = new FakeNode({ "data-book-id": bookId });
     const detail = new FakeNode({ "data-book-list-detail": "" });
-    const more = new FakeNode({ "data-book-more": "" });
-    item.querySelectorAll = (selector) => selector === "[data-book-more]" ? [more] : [detail, more];
+    const more = new FakeNode({ "data-book-list-detail": "" });
+    item.querySelectorAll = (selector) => selector === "[data-book-list-detail]" ? [detail, more] : [];
     item.getBoundingClientRect = () => {
       const top = positions[grid.getAttribute("data-bookshelf-view")][index];
       return { top, bottom: top + 72 };
@@ -215,7 +233,7 @@ test("view application updates aria state and preserves the first visible book a
   assert.equal(items[1].getAttribute("data-bookshelf-item-view"), "list");
   assert.equal(items[1].detail.getAttribute("aria-hidden"), "false");
   assert.equal(items[1].more.getAttribute("aria-hidden"), "false");
-  assert.equal(items[1].more.getAttribute("tabindex"), "0");
+  assert.equal(items[1].more.getAttribute("tabindex"), null);
 
   const reverseResult = applyBookshelfViewState(screenHost, appState, "cover");
 
@@ -229,7 +247,7 @@ test("view application updates aria state and preserves the first visible book a
     assert.equal(item.getAttribute("data-bookshelf-item-view"), "cover");
     assert.equal(item.detail.getAttribute("aria-hidden"), "true");
     assert.equal(item.more.getAttribute("aria-hidden"), "true");
-    assert.equal(item.more.getAttribute("tabindex"), "-1");
+    assert.equal(item.more.getAttribute("tabindex"), null);
   }
 });
 
@@ -321,24 +339,18 @@ test("an unscrollable layout is treated as top rather than scroll end", () => {
   assert.equal(scrollHost.scrollTop, 0);
 });
 
-test("each more action carries its source index and the runtime opens that book context", () => {
+test("Phone List More remains the exact visual-only Figma node while long press owns book actions", () => {
   const fixtureWindow = evaluateWindowScript(fixtureBundleSource, "appearance-spec+fixture.js");
   const data = fixtureWindow.READER_FRONTEND_DEMO_DRAFT_FIXTURE;
   const api = rendererWindow().ReaderD2BookshelfDiscoverRenderers;
   const html = api.bookshelfV2(data, "bookshelf", { bookshelfView: "list" });
-  const moreTags = [...html.matchAll(/<button class="fd-book-list-more"[^>]+>/g)].map((match) => match[0]);
+  const moreTags = [...html.matchAll(/<span class="fd-book-list-more"[^>]*>/g)].map((match) => match[0]);
 
   assert.equal(moreTags.length, data.mainTabs.books.length);
-  assert.deepEqual(
-    moreTags.map((tag) => Number(attribute(tag, "data-book-focus-index"))),
-    Array.from(data.mainTabs.books, (_, index) => index),
-  );
-  assert.deepEqual(
-    moreTags.map((tag) => attribute(tag, "data-book-id")),
-    Array.from(data.mainTabs.books, (book) => book.bookId),
-  );
+  assert.ok(moreTags.every((tag) => attribute(tag, "aria-hidden") === "true"));
+  assert.doesNotMatch(html, /data-book-more|data-book-focus-index/);
 
-  assert.match(runtimeSource, /screenHost\.querySelectorAll\("\[data-book-more\]"\)/);
+  assert.doesNotMatch(runtimeSource, /querySelectorAll\("\[data-book-more\]"\)/);
   assert.match(runtimeSource, /bookshelfOwner\.dispatch\(\{ type: "BOOK_ACTION_OPEN", bookKey \}\)/);
   assert.match(runtimeSource, /dispatch\?\.\(\{ type: "MULTI_SELECT_OPEN", bookKey \}\)/);
   assert.doesNotMatch(runtimeSource, /goTo\("book-batch-management", true\)/);
@@ -350,7 +362,8 @@ test("each more action carries its source index and the runtime opens that book 
   const focusedBook = data.mainTabs.books[focusIndex];
   api.bookshelf.dispatch({ type: "BOOK_ACTION_OPEN", bookKey: `${encodeURIComponent(focusedBook.sourceId)}::${encodeURIComponent(focusedBook.bookId)}` });
   const menuHtml = api.bookActionSheetV2(data);
-  assert.match(menuHtml, new RegExp(`aria-label="${focusedBook.title}操作"`));
+  assert.match(menuHtml, /aria-labelledby="fd-book-action-title"/);
+  assert.match(menuHtml, /<h2 id="fd-book-action-title">书籍操作<\/h2>/);
   assert.equal((menuHtml.match(/data-book-action=/g) || []).length, 3);
   assert.match(menuHtml, /data-book-action="multi-select"[\s\S]*>多选<\/button>/);
   assert.match(menuHtml, /data-book-action="info"[\s\S]*>书籍信息<\/button>/);

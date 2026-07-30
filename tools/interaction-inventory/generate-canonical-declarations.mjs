@@ -110,7 +110,6 @@ const BOOKSHELF_ACTION_SPECS = [
     ["source-youshu", "long-title-layout-sample"]
   ].flatMap(([sourceId, id]) => [
     [`book-open-${sourceId}--${id}`, "route.push", `打开 ${sourceId}/${id}`],
-    [`book-more-${sourceId}--${id}`, "book.action", `更多 ${sourceId}/${id}`],
     [`multi-select-${sourceId}--${id}`, "selection.item.toggle", `多选 ${sourceId}/${id}`]
   ])
 ];

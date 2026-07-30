@@ -755,7 +755,10 @@
       return { offline: true, cached: true, label: "离线可读" };
     }
     var offline = Boolean(appState && appState.offline);
-    var cached = Boolean(book && book.cached) || index < 3;
+    // Cache state is executable data, not a visual default. Never infer it
+    // from fixture order or DOM position; native consumers resolve the same
+    // value from Core `cache.book.status`.
+    var cached = Boolean(book && book.cached);
     return {
       offline: offline,
       cached: cached,
@@ -859,7 +862,7 @@
             <i class="fd-book-cache-tag ${readable.cached ? "is-cached" : "is-missing"}">${esc(cacheLabel)}</i>
           </div>
         </div>
-        <button class="fd-book-list-more" type="button"${d2BookshelfIdentityAttrs("book-more-" + identityKey)} data-book-list-detail data-book-more data-book-focus-index="${index}" data-book-id="${esc(bookId)}" data-book-source-id="${esc(sourceId)}" data-book-key="${esc(bookKey)}" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-hidden="${listView ? "false" : "true"}" tabindex="${listView ? "0" : "-1"}" aria-label="${esc(book.title)}更多操作">${icon("more", "fd-small-icon")}</button>
+        <span class="fd-book-list-more" data-book-list-detail aria-hidden="true">${icon("more", "fd-small-icon")}</span>
       </article>`;
   }
 
@@ -1007,8 +1010,9 @@
     var hidden = !entry;
     return `<section class="fd-book-action-layer" data-book-focus-layer aria-hidden="${hidden ? "true" : "false"}" aria-label="书籍操作">
       <button class="fd-book-action-backdrop" type="button" data-close-book-focus aria-label="关闭书籍操作"></button>
-      <section class="fd-book-action-sheet" role="dialog" aria-modal="true" aria-label="${entry ? esc(entry.book.title) + "操作" : "书籍操作"}" data-demo-sheet>
+      <section class="fd-book-action-sheet" role="dialog" aria-modal="true" aria-labelledby="fd-book-action-title" data-demo-sheet>
         <span class="fd-book-action-handle" aria-hidden="true"></span>
+        <h2 id="fd-book-action-title">书籍操作</h2>
         <button type="button"${d2BookshelfIdentityAttrs("book-action-multi-select")} data-book-action="multi-select" data-book-id="${esc(entry ? entry.bookId : "")}" data-book-source-id="${esc(entry ? entry.sourceId : "")}" data-book-key="${esc(bookKey || "")}" data-sheet-initial-focus>多选</button>
         <button type="button"${d2BookshelfIdentityAttrs("book-action-info")} data-book-action="info" data-book-id="${esc(entry ? entry.bookId : "")}" data-book-source-id="${esc(entry ? entry.sourceId : "")}" data-book-key="${esc(bookKey || "")}">书籍信息</button>
         <button class="is-danger" type="button"${d2BookshelfIdentityAttrs("book-action-remove")} data-book-action="remove" data-book-id="${esc(entry ? entry.bookId : "")}" data-book-source-id="${esc(entry ? entry.sourceId : "")}" data-book-key="${esc(bookKey || "")}">移除书架</button>
@@ -1284,7 +1288,10 @@
         </section>
       </section>
       <footer class="fd-bookshelf-multi-select-footer">
-        <button class="is-danger" type="button"${d2BookshelfIdentityAttrs("multi-select-remove")} data-multi-select-remove${selectedKeys.length ? "" : " disabled"}>移除书架</button>
+        <button class="is-danger" type="button"${d2BookshelfIdentityAttrs("multi-select-remove")} data-multi-select-remove${selectedKeys.length ? "" : " disabled"}>
+          ${icon("trash", "fd-small-icon")}
+          <span>移除书架</span>
+        </button>
       </footer>
       ${bookshelfRemoveDialogV2(data)}
     </main>`;

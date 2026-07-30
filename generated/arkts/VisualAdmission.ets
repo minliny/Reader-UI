@@ -720,7 +720,7 @@ export class ReaderUiVisualTokens {
 export class ReaderUiVisualAdmission {
   static readonly SOURCE_FILE_KEY: string = 'klhs2jMM4MncaJFqZMfqEK';
   static readonly SOURCE_REVISION: string = '2379851596474967636';
-  static readonly REGISTRY_SHA256: string = '8f52a84a0fe1ae761433b167ca06b38c3d47ecde7513275f692d985d2f6e4c37';
+  static readonly REGISTRY_SHA256: string = 'b66b0df96b946e40b906626865d405765c9bc844b73a111060efd3e42389aea6';
   static readonly ROUTE_ADMISSIONS: ReaderUiVisualRouteAdmissionEntry[] = [
     { routeId: 'about', admission: 'retired', sourceBound: false, implementationReady: false, recordIds: ['about.withdrawn'] },
     { routeId: 'about-feedback', admission: 'retired', sourceBound: false, implementationReady: false, recordIds: ['about.withdrawn'] },
@@ -741,7 +741,7 @@ export class ReaderUiVisualAdmission {
     { routeId: 'bookshelf-cover-mode', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['bookshelf.book-card', 'bookshelf.page'] },
     { routeId: 'bookshelf-empty', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['bookshelf.page'] },
     { routeId: 'bookshelf-group-management', admission: 'retired', sourceBound: false, implementationReady: false, recordIds: ['bookshelf.group-management.withdrawn'] },
-    { routeId: 'bookshelf-list-mode', admission: 'blocked', sourceBound: false, implementationReady: false, recordIds: ['bookshelf.tablet-list'] },
+    { routeId: 'bookshelf-list-mode', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['bookshelf.list-mode'] },
     { routeId: 'bookshelf-search-settings', admission: 'blocked', sourceBound: false, implementationReady: false, recordIds: ['figma-unbound.needs-page-or-user-decision'] },
     { routeId: 'chapter-reviews', admission: 'blocked', sourceBound: false, implementationReady: false, recordIds: ['figma-absent.d6-capability-contract-routes'] },
     { routeId: 'content-edit', admission: 'blocked', sourceBound: false, implementationReady: false, recordIds: ['figma-absent.d6-capability-contract-routes'] },
@@ -977,8 +977,8 @@ export class ReaderUiVisualAdmission {
     { overlayKind: 'local-import', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['bookshelf.local-import-dialog'] },
   ];
   static readonly VIEWPORT_ROUTE_ADMISSIONS: ReaderUiVisualViewportRouteAdmissionEntry[] = [
-    { routeId: 'bookshelf-list-mode', viewport: 'phone', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['bookshelf.tablet-list'] },
-    { routeId: 'bookshelf-list-mode', viewport: 'tablet', admission: 'blocked', sourceBound: false, implementationReady: false, recordIds: ['bookshelf.tablet-list'] },
+    { routeId: 'bookshelf-list-mode', viewport: 'phone', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['bookshelf.list-mode'] },
+    { routeId: 'bookshelf-list-mode', viewport: 'tablet', admission: 'blocked', sourceBound: false, implementationReady: false, recordIds: ['bookshelf.list-mode'] },
   ];
   static readonly STATE_ADMISSIONS: ReaderUiVisualStateAdmissionEntry[] = [
     { routeId: 'book-search', stateId: 'empty', admission: 'candidate-backport', sourceBound: true, implementationReady: false, recordIds: ['search.five-state'] },

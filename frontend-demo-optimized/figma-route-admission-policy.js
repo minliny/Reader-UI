@@ -35,6 +35,7 @@
     "bookshelf",
     "bookshelf-cover-mode",
     "bookshelf-empty",
+    "bookshelf-list-mode",
     "content-replacement",
     "discover",
     "discover-control",

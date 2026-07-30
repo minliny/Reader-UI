@@ -67,7 +67,7 @@
         }
       },
       "local": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/render-runtime.js#bookshelf",
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfV2",
@@ -114,7 +114,7 @@
         }
       },
       "local": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfV2"
         ]
@@ -160,7 +160,7 @@
         }
       },
       "local": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookActionSheetV2"
         ]
@@ -282,7 +282,7 @@
         }
       },
       "local": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfMultiSelectV2"
         ]
@@ -331,7 +331,7 @@
         }
       },
       "local": {
-        "status": "implementation-ready",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#localImportV2"
         ]
@@ -347,39 +347,48 @@
       ]
     },
     {
-      "id": "bookshelf.tablet-list",
+      "id": "bookshelf.list-mode",
       "surfaceType": "viewport-exception",
       "routeIds": [
         "bookshelf-list-mode"
       ],
-      "classification": "figma-absent-fail-closed",
-      "deliveryStatus": "enforcement-open",
+      "classification": "exact-figma-binding",
+      "deliveryStatus": "current-read-unfrozen",
       "figma": {
         "fileKey": "klhs2jMM4MncaJFqZMfqEK",
         "pageId": "259:10",
         "canonicalMasterId": "493:196",
-        "nodeId": null,
+        "nodeId": "493:196",
         "viewportNodes": {
-          "phone": "493:191",
+          "phone": "493:196",
           "tablet": null
         },
-        "revision": null,
-        "revisionStatus": "current-tablet-list-visual-absent"
+        "revision": "2379851596474967636",
+        "revisionStatus": "official-rest-current-component-set-and-live-node-read",
+        "revisionEvidence": {
+          "artifact": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+          "kind": "FIGMA_CURRENT_REVISION_EVIDENCE",
+          "currentRevision": "2379851596474967636",
+          "observedAt": "2026-07-24T17:57:17.506Z",
+          "source": "figma-rest"
+        }
       },
       "local": {
-        "status": "enforced-fail-closed",
+        "status": "candidate-backport",
         "targets": [
           "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js#bookshelfV2"
         ]
       },
       "harmony": {
-        "status": "enforced-fail-closed",
+        "status": "candidate-backport",
         "targets": [
           "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookList"
         ]
       },
       "evidence": [
-        "docs/design/handoffs/reading-chain/F0_FIGMA_FIRST_CROSSWALK.json#bookshelf-book-list"
+        "docs/design/handoffs/reading-chain/F0_FIGMA_FIRST_CROSSWALK.json#bookshelf-book-list",
+        "docs/design/handoffs/bookshelf/B2_READER_UI_SOURCE_CONVERSION.json#phoneList",
+        "docs/design/handoffs/bookshelf/FIGMA_LIVE_NODE_READ_2026-07-30.json"
       ]
     },
     {

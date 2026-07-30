@@ -8,7 +8,8 @@
     "bookshelf.book-card",
     "bookshelf.action-sheet",
     "bookshelf.multi-select",
-    "bookshelf.local-import-dialog"
+    "bookshelf.local-import-dialog",
+    "bookshelf.list-mode"
   ],
   "capturedAt": "2026-07-30T00:00:00+08:00",
   "figmaSource": {
@@ -24,6 +25,18 @@
     "bookCard": {
       "pageId": "259:10",
       "canonicalMasterId": "493:196"
+    },
+    "phoneList": {
+      "pageId": "259:10",
+      "canonicalMasterId": "493:196",
+      "nodeId": "493:191",
+      "canonicalRevisionBoundNodeId": "493:196",
+      "liveNodeEvidence": "docs/design/handoffs/bookshelf/FIGMA_LIVE_NODE_READ_2026-07-30.json",
+      "viewportNodes": {
+        "phone": "493:191",
+        "tablet": null
+      },
+      "viewportPolicy": "Phone is exact and eligible for promotion; Tablet remains fail-closed because no Tablet List master exists."
     },
     "bookActionSheet": {
       "pageId": "259:10",
@@ -76,12 +89,15 @@
       "frontend-demo-optimized/render-runtime.js",
       "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
       "frontend-demo-optimized/styles/09-import-workflow.css",
-      "frontend-demo-optimized/styles/12-bookshelf-vc3.css"
+      "frontend-demo-optimized/styles/12-bookshelf-vc3.css",
+      "frontend-demo-optimized/verify/bookshelf-view-structure.test.mjs"
     ],
     "identity": "Every canonical book carries sourceId, sourceType, and bookId. Runtime identity and navigation use the exact sourceId::bookId pair; title, author, ordinal, selector, and DOM position are not identity sources.",
     "interaction": {
       "coverTap": "open the reader directly with the exact source/book pair",
       "coverLongPress": "open the in-place Figma BookActionSheet",
+      "phoneListMore": "render the current 20px More vector without inventing a click reaction; long press remains the only Figma-confirmed book-action entry",
+      "phoneListCacheState": "render source type from the real book identity and cache state only from explicit executable data; never infer cached state from ordinal or fixture position",
       "bookInformation": "open book detail with the exact source/book pair",
       "multiSelect": "render the in-place Figma MultiSelect state; preselect only the long-pressed book",
       "remove": "confirm -> loading -> success/failed with duplicate-click and stale-result guards",
@@ -94,9 +110,9 @@
       "group-management routes",
       "standalone local-import page",
       "legacy import error/conflict pages",
-      "bookshelf-search-settings without a current exact Figma binding",
-      "tablet list mode because its exact Figma visual is absent"
+      "bookshelf-search-settings without a current exact Figma binding"
     ],
+    "viewportException": "bookshelf-list-mode is source-bound by Phone node 493:191. Its Tablet viewport is explicitly blocked by the generated viewport admission instead of scaling the Phone row.",
     "globalAdmissionCleanup": "Historical locally-authored About, Source Management Pilot overlays, and unbound Discover/RSS branches are denied at the public renderer boundary. This cleanup prevents a non-Figma fallback but does not claim those page families implementation-ready."
   },
   "behaviorOwnership": {
@@ -107,8 +123,8 @@
   },
   "verification": {
     "focusedBookshelf": {
-      "tests": 61,
-      "passed": 61,
+      "tests": 62,
+      "passed": 62,
       "failed": 0,
       "files": [
         "frontend-demo-optimized/verify/bookshelf-view-structure.test.mjs",
@@ -120,8 +136,8 @@
       ]
     },
     "frontendRegression": {
-      "tests": 577,
-      "passed": 577,
+      "tests": 578,
+      "passed": 578,
       "failed": 0
     },
     "identityInventoryRegression": {
@@ -141,8 +157,8 @@
     },
     "generatedArtifacts": {
       "status": "byte-stable",
-      "semanticControls": 3208,
-      "canonicalDeclarations": 2151,
+      "semanticControls": 3142,
+      "canonicalDeclarations": 2107,
       "reconciliation": "12/12 pass"
     },
     "notExecuted": [

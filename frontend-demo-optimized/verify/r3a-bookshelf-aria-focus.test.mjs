@@ -47,11 +47,12 @@ test("R3a grid and cards expose list/listitem semantics and stable positions", (
   assert.match(html, /aria-posinset="2" aria-setsize="2"/);
 });
 
-test("R3a view controls are mutually exclusive and hidden list actions leave the tab order", () => {
+test("R3a view controls are mutually exclusive and visual-only More nodes never enter the tab order", () => {
   const html = fresh().bookshelfV2(fixture, "bookshelf", {});
   assert.match(html, /data-bookshelf-view-button="cover" aria-pressed="true"/);
   assert.match(html, /data-bookshelf-view-button="list" aria-pressed="false"/);
-  assert.equal((html.match(/data-book-more[^>]+aria-hidden="true" tabindex="-1"/g) || []).length, 2);
+  assert.equal((html.match(/class="fd-book-list-more"[^>]+aria-hidden="true"/g) || []).length, 2);
+  assert.doesNotMatch(html, /data-book-more|data-book-focus-index/);
 });
 
 test("R3a filter discloses only sort and filter, never cancelled grouping", () => {
@@ -76,7 +77,8 @@ test("R3a action sheet keeps exact target and exactly three Figma actions", () =
   const api = fresh();
   api.bookshelf.dispatch({ type: "BOOK_ACTION_OPEN", bookKey: "source-youshu::mystery-lord" });
   const html = api.bookActionSheetV2(fixture);
-  assert.match(html, /role="dialog" aria-modal="true" aria-label="书2操作"/);
+  assert.match(html, /role="dialog" aria-modal="true" aria-labelledby="fd-book-action-title"/);
+  assert.match(html, /<h2 id="fd-book-action-title">书籍操作<\/h2>/);
   assert.match(html, /data-book-action="multi-select" data-book-id="mystery-lord" data-book-source-id="source-youshu" data-book-key="source-youshu::mystery-lord" data-sheet-initial-focus/);
   assert.equal((html.match(/data-book-action=/g) || []).length, 3);
   assert.doesNotMatch(html, /分组|缓存|分享|更换书源/);

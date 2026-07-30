@@ -38,8 +38,8 @@ test("IC0 enumerates every direct variant and every alias case", () => {
   assert.equal(artifacts.coverage.routeCases, 253);
   assert.equal(artifacts.coverage.directVariantCases, 183);
   assert.equal(artifacts.coverage.aliasCases, 70);
-  assert.equal(artifacts.coverage.exactFigmaAdmittedCases, 47);
-  assert.equal(artifacts.coverage.auditOnlyUnboundCases, 172);
+  assert.equal(artifacts.coverage.exactFigmaAdmittedCases, 48);
+  assert.equal(artifacts.coverage.auditOnlyUnboundCases, 171);
   assert.equal(artifacts.coverage.retiredFailClosedCases, 24);
   assert.equal(artifacts.coverage.auditUnavailableFailClosedCases, 10);
   assert.equal(new Set(cases.map((item) => `${item.routeId}/${item.variant.variantId}`)).size, cases.length);
@@ -48,8 +48,8 @@ test("IC0 enumerates every direct variant and every alias case", () => {
 test("IC0 keeps the semantic denominator separate from suspected non-semantic controls", () => {
   // Retired routes emit zero controls. Unbound candidates remain visible only
   // to this Node audit and cannot pass the production Figma admission policy.
-  assert.equal(artifacts.coverage.semanticControls, 3208);
-  assert.equal(artifacts.inventory.semanticControls.length, 3208);
+  assert.equal(artifacts.coverage.semanticControls, 3142);
+  assert.equal(artifacts.inventory.semanticControls.length, 3142);
   assert.equal(
     artifacts.coverage.suspectedNonSemanticControls,
     artifacts.inventory.suspectedNonSemanticControls.length,
@@ -57,7 +57,7 @@ test("IC0 keeps the semantic denominator separate from suspected non-semantic co
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
     article: 326,
-    button: 2784,
+    button: 2718,
     i: 8,
     input: 45,
     select: 11,
@@ -88,7 +88,7 @@ test("IC0 records required fields without inventing a canonical control id", () 
   assert.equal(artifacts.inventory.identityBoundary.canonicalControlIdAvailable, false);
   assert.equal(artifacts.coverage.semanticControlCoverage.canonicalControlIds, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.joinedControls, 0);
-  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3208);
+  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3142);
 });
 
 test("IC0 treats allowlisted identity tokens as semantic slots and rejects unknown tokens", () => {

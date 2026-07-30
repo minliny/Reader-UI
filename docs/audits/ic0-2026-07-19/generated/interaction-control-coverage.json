@@ -33,23 +33,23 @@
     "note": "Composite listbox containers are excluded from the control denominator; their actionable option descendants are counted."
   },
   "routeCases": 253,
-  "exactFigmaAdmittedCases": 47,
-  "auditOnlyUnboundCases": 172,
+  "exactFigmaAdmittedCases": 48,
+  "auditOnlyUnboundCases": 171,
   "retiredFailClosedCases": 24,
   "auditUnavailableFailClosedCases": 10,
   "canonicalRoutes": 247,
   "directVariantCases": 183,
   "aliasCases": 70,
-  "semanticControls": 3208,
+  "semanticControls": 3142,
   "suspectedNonSemanticControls": 29,
   "semanticControlCoverage": {
-    "count": 3208,
-    "withUiEvent": 2179,
+    "count": 3142,
+    "withUiEvent": 2113,
     "withControlIdentityToken": 52,
-    "withSemanticIdentity": 2231,
+    "withSemanticIdentity": 2165,
     "withUnresolvedControlIdentityToken": 0,
-    "withRawMotionHints": 3125,
-    "rawMotionHintOccurrences": 5719,
+    "withRawMotionHints": 3059,
+    "rawMotionHintOccurrences": 5653,
     "uniqueRawMotionHints": [
       "app.route.pop",
       "app.route.push",
@@ -101,8 +101,8 @@
       "tab.item.switch",
       "toggle.switch"
     ],
-    "withCanonicalMotionIds": 3107,
-    "canonicalMotionIdOccurrences": 5763,
+    "withCanonicalMotionIds": 3041,
+    "canonicalMotionIdOccurrences": 5697,
     "uniqueCanonicalMotionIds": [
       "app.route.pop.backward",
       "app.route.push.forward",
@@ -161,10 +161,10 @@
     "missingAccessibleNames": 14,
     "canonicalControlIds": 0,
     "joinedControls": 0,
-    "unjoinedControls": 3208,
+    "unjoinedControls": 3142,
     "byTag": {
       "article": 326,
-      "button": 2784,
+      "button": 2718,
       "i": 8,
       "input": 45,
       "select": 11,
@@ -172,7 +172,7 @@
       "textarea": 1
     },
     "byRole": {
-      "button": 2843,
+      "button": 2777,
       "checkbox": 1,
       "combobox": 11,
       "option": 252,
@@ -183,12 +183,12 @@
       "textbox": 27
     },
     "byJoinStatus": {
-      "unjoined-no-stable-key": 3208
+      "unjoined-no-stable-key": 3142
     },
     "byRuntimeFamily": {
       "discover": 778,
       "import": 5,
-      "library": 265,
+      "library": 232,
       "onboarding": 8,
       "reader": 955,
       "rss": 417,
@@ -196,13 +196,13 @@
       "source": 412,
       "source-switch": 29,
       "sync": 131,
-      "system": 126,
+      "system": 93,
       "web-auth": 11
     },
     "gapCodes": {
       "IC0_ACCESSIBLE_LABEL_MISSING": 14,
       "IC0_CANONICAL_MOTION_ID_UNRESOLVED": 101,
-      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3208,
+      "IC0_NO_STABLE_COMPONENT_DOM_JOIN_KEY": 3142,
       "IC0_RAW_MOTION_HINT_UNRESOLVED": 83,
       "IC0_UI_EVENT_UNRESOLVED": 977
     }
@@ -372,19 +372,19 @@
           "gapCode": "IC0_VARIANT_CASES_RENDER_IDENTICALLY",
           "classification": "explicit-gap-review",
           "routeId": "app-shell",
-          "renderSha256": "5b8b83170040dea37754d8d3419dcb584098e2321a951f7408b07d6beb6e263b",
+          "renderSha256": "d7fbcf1349164821a06aad040c49d33c9f05cf3ad2b49b468fe46d02459888b2",
           "count": 2,
           "cases": [
             {
               "variantId": "loading",
               "pageState": "loading",
-              "semanticControls": 40,
+              "semanticControls": 29,
               "suspectedNonSemanticControls": 0
             },
             {
               "variantId": "default",
               "pageState": "default",
-              "semanticControls": 40,
+              "semanticControls": 29,
               "suspectedNonSemanticControls": 0
             }
           ]
@@ -482,7 +482,7 @@
       ]
     }
   },
-  "inventorySha256": "4e84c835556c813cf478145b48ca580acac557b19d7f0d3f15c106e6482aa1ef",
+  "inventorySha256": "c7c14807aa4086f010fb88db98ec6abc739729e0911a448baed4cb3b3fad22dd",
   "cases": [
     {
       "routeId": "bookshelf",
@@ -493,9 +493,9 @@
       "pageState": "default",
       "visualAdmission": "exact-figma-admitted",
       "blockedReason": null,
-      "semanticControls": 40,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5b8b83170040dea37754d8d3419dcb584098e2321a951f7408b07d6beb6e263b"
+      "renderSha256": "d7fbcf1349164821a06aad040c49d33c9f05cf3ad2b49b468fe46d02459888b2"
     },
     {
       "routeId": "bookshelf-empty",
@@ -508,7 +508,7 @@
       "blockedReason": null,
       "semanticControls": 19,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "09537e256cd555f4bab0ca838100043d979325c0e6c774d03482abb2f3281b23"
+      "renderSha256": "b7387e9de3f452d0a54db67fd604b4321a31c1c7b97858813a99317258ca8ced"
     },
     {
       "routeId": "bookshelf-cover-mode",
@@ -519,9 +519,9 @@
       "pageState": "default",
       "visualAdmission": "exact-figma-admitted",
       "blockedReason": null,
-      "semanticControls": 40,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "c4b3abe0f5479499f6f533c45daa4177dcf34f20bb915e1935b461c4523ed598"
+      "renderSha256": "9ed129a9f27d4229b0a3d12e2ec7de8a082a7d51a1e1892dede29d63eff6c317"
     },
     {
       "routeId": "bookshelf-list-mode",
@@ -530,11 +530,11 @@
       "runtimeFamily": "library",
       "variantId": "default",
       "pageState": "default",
-      "visualAdmission": "audit-only-unbound",
-      "blockedReason": "UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL",
-      "semanticControls": 38,
+      "visualAdmission": "exact-figma-admitted",
+      "blockedReason": null,
+      "semanticControls": 27,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "ba499d081b9eedb7582620983f24badfb69798b3039aa683c98834d3aa79232c"
+      "renderSha256": "14b3d54411894618fa1f8081ca88a354928af912d6fd3f007af80ac8e80668ed"
     },
     {
       "routeId": "bookshelf-book-more-menu",
@@ -2001,9 +2001,9 @@
       "pageState": "loading",
       "visualAdmission": "audit-only-unbound",
       "blockedReason": "UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL",
-      "semanticControls": 40,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5b8b83170040dea37754d8d3419dcb584098e2321a951f7408b07d6beb6e263b"
+      "renderSha256": "d7fbcf1349164821a06aad040c49d33c9f05cf3ad2b49b468fe46d02459888b2"
     },
     {
       "routeId": "app-shell",
@@ -2014,9 +2014,9 @@
       "pageState": "default",
       "visualAdmission": "audit-only-unbound",
       "blockedReason": "UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL",
-      "semanticControls": 40,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5b8b83170040dea37754d8d3419dcb584098e2321a951f7408b07d6beb6e263b"
+      "renderSha256": "d7fbcf1349164821a06aad040c49d33c9f05cf3ad2b49b468fe46d02459888b2"
     },
     {
       "routeId": "main-tabs",
@@ -2027,9 +2027,9 @@
       "pageState": "default",
       "visualAdmission": "audit-only-unbound",
       "blockedReason": "UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL",
-      "semanticControls": 40,
+      "semanticControls": 29,
       "suspectedNonSemanticControls": 0,
-      "renderSha256": "5b8b83170040dea37754d8d3419dcb584098e2321a951f7408b07d6beb6e263b"
+      "renderSha256": "d7fbcf1349164821a06aad040c49d33c9f05cf3ad2b49b468fe46d02459888b2"
     },
     {
       "routeId": "global-loading",
