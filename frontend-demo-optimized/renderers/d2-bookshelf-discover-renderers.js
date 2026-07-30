@@ -2,12 +2,12 @@
  * D2-A 书架与发现产品化缺口补全 renderer 函数模块
  * -----------------------------------------------------------------------------
  * 职责：
- *   1. 为书架 17 路由补全状态变体与交互闭环：
+ *   1. 按当前 Figma 真源补全书架页面族：
  *      - 封面/列表模式切换的真实上下文（书架视图状态 + 焦点恢复）
- *      - 长按菜单真实上下文（替换 bookshelf-book-more-menu 的 contractStatic）
- *      - 批量选择与批量操作闭环（全选/移动分组/删除/取消）
- *      - 分组 CRUD 和排序（新建/重命名/删除/拖拽排序）
- *      - 筛选、排序、搜索组合状态
+ *      - 长按书籍打开 Figma Library/BookActionSheet 三按钮状态
+ *      - 页内 Bookshelf/MultiSelect（进入时仅选中长按书籍）
+ *      - V1 多选只允许移除书架；分组能力与旧批量路由保持退休
+ *      - 筛选、排序、搜索组合状态（不含分组）
  *      - 空书架、离线、加载失败状态变体
  *      - 本地书与网络书差异展示（来源标识、缓存状态、可读性）
  *      - book-detail 状态变体补全（加载中/离线/无目录/已删书）
@@ -36,26 +36,17 @@
  *       }
  *     }
  *
- * INTEGRATION_MAP（替换 contractStatic / 新增 schema-only renderer）：
- *   bookshelf-book-more-menu        → bookshelfBookMoreMenuScreen
- *
  * STATE_VARIANT_MAP（已审计路由的状态变体增强）：
  *   bookshelf                       → bookshelfV2
  *   bookshelf-cover-mode            → bookshelfV2
  *   bookshelf-list-mode             → bookshelfV2
  *   bookshelf-empty                 → bookshelfEmptyV2
- *   book-batch-management           → bookBatchManagementV2
- *   group-management                → groupManagementV2
- *   bookshelf-group-management      → groupManagementV2
- *   sort-filter                     → sortFilterV2
  *   book-detail                     → bookDetailV2
  *   book-detail-toc-preview         → bookDetailV2
  *   book-directory                  → bookDirectoryV2
  *   book-search                     → bookSearchV2
  *   search-home                     → bookSearchV2
  *   search-results                  → bookSearchV2
- *   local-import                    → localImportV2
- *   bookshelf-search-settings       → bookshelfSearchSettingsV2
  *   discover                        → discoverV2
  *   discover-home                   → discoverV2
  *   discover-control                → discoverV2
@@ -115,11 +106,6 @@
     return esc((data && data.covers && data.covers[coverKey]) || "");
   }
 
-  function coverCss(data, coverKey) {
-    var src = String((data && data.covers && data.covers[coverKey]) || "").replace(/^\.\//, "../");
-    return esc(src);
-  }
-
   // 手机壳 class 集合（与 render-runtime.js 的 phoneShellClasses 保持一致）
   function phoneShellClasses(extra) {
     return {
@@ -150,20 +136,25 @@
   // ============ Bookshelf R2a/R2b：稳定身份 + 单一状态 owner ============
 
   var D2_BOOKSHELF_STORAGE_KEY = "reader-bookshelf-state-v1";
-  var D2_BOOKSHELF_GROUPS = ["全部", "默认", "本地书", "追更"];
   var D2_BOOKSHELF_SORTS = ["最近更新", "阅读进度", "书名", "作者"];
   var D2_BOOKSHELF_FILTERS = ["全部", "未读", "已完结", "更新失败"];
-  var D2_LOCAL_IMPORT_FORMATS = ["epub", "pdf", "txt", "mobi"];
+  var D2_LOCAL_IMPORT_FORMATS = ["epub", "txt"];
   var d2BookshelfListeners = [];
   var d2LocalImportEpoch = 0;
+  var d2BookshelfRemoveEpoch = 0;
 
   function d2BookshelfDefaults() {
     return {
-      view: "cover", group: "全部", sort: "最近更新", filter: "全部", search: "",
+      view: "cover", sort: "最近更新", filter: "全部", search: "",
       filterOpen: false, moreOpen: false, offline: false,
       loadStatus: "idle", networkStatus: "idle", error: null,
       focusReturnKey: null,
-      localImportOpen: false, localImportPhase: "picker", localImportFiles: [],
+      bookActionBookKey: null,
+      multiSelectOpen: false, multiSelectSelectedBookKeys: [],
+      removedBookKeys: [],
+      removeDialogOpen: false, removeTarget: null, removeBookKeys: [],
+      removeStatus: "idle", removeError: null, removeRequestId: 0,
+      localImportOpen: false, localImportPhase: "selection", localImportFiles: [],
       localImportBatchId: 0, localImportFocusReturnKey: null
     };
   }
@@ -175,7 +166,6 @@
       if (!value || typeof value !== "object") return {};
       return {
         view: value.view === "list" ? "list" : "cover",
-        group: D2_BOOKSHELF_GROUPS.indexOf(value.group) >= 0 ? value.group : "全部",
         sort: D2_BOOKSHELF_SORTS.indexOf(value.sort) >= 0 ? value.sort : "最近更新",
         filter: D2_BOOKSHELF_FILTERS.indexOf(value.filter) >= 0 ? value.filter : "全部",
         search: typeof value.search === "string" ? value.search : ""
@@ -191,10 +181,18 @@
     try {
       if (!window.localStorage) return;
       window.localStorage.setItem(D2_BOOKSHELF_STORAGE_KEY, JSON.stringify({
-        view: state.view, group: state.group, sort: state.sort,
+        view: state.view, sort: state.sort,
         filter: state.filter, search: state.search
       }));
     } catch (_error) {}
+  }
+
+  function d2UniqueBookKeys(values) {
+    return (Array.isArray(values) ? values : []).map(function (value) {
+      return String(value || "");
+    }).filter(function (value, index, all) {
+      return value && all.indexOf(value) === index;
+    });
   }
 
   function d2BookshelfReducer(state, action) {
@@ -206,9 +204,6 @@
         return Object.assign({}, state, { view: action.view, focusReturnKey: "view-" + action.view });
       case "FILTER_TOGGLE":
         return Object.assign({}, state, { filterOpen: !state.filterOpen, moreOpen: false, focusReturnKey: "sort-filter-toggle" });
-      case "GROUP_SELECT":
-        if (D2_BOOKSHELF_GROUPS.indexOf(action.value) < 0) return state;
-        return Object.assign({}, state, { group: action.value, filterOpen: true });
       case "SORT_SELECT":
         if (D2_BOOKSHELF_SORTS.indexOf(action.value) < 0) return state;
         return Object.assign({}, state, { sort: action.value, filterOpen: true });
@@ -226,23 +221,138 @@
       case "MORE_CLOSE":
         if (!state.moreOpen) return state;
         return Object.assign({}, state, { moreOpen: false });
+      case "BOOK_ACTION_OPEN": {
+        var actionBookKey = String(action.bookKey || "");
+        if (!actionBookKey || state.removedBookKeys.indexOf(actionBookKey) >= 0) return state;
+        return Object.assign({}, state, {
+          bookActionBookKey: actionBookKey,
+          multiSelectOpen: false,
+          filterOpen: false,
+          moreOpen: false,
+          focusReturnKey: "book-more-" + actionBookKey
+        });
+      }
+      case "BOOK_ACTION_CLOSE":
+        if (!state.bookActionBookKey) return state;
+        return Object.assign({}, state, { bookActionBookKey: null });
+      case "MULTI_SELECT_OPEN": {
+        var entryBookKey = String(action.bookKey || "");
+        if (!entryBookKey || state.removedBookKeys.indexOf(entryBookKey) >= 0) return state;
+        return Object.assign({}, state, {
+          bookActionBookKey: null,
+          multiSelectOpen: true,
+          multiSelectSelectedBookKeys: [entryBookKey],
+          removeDialogOpen: false,
+          removeTarget: null,
+          removeBookKeys: [],
+          removeStatus: "idle",
+          removeError: null,
+          focusReturnKey: "book-more-" + entryBookKey
+        });
+      }
+      case "MULTI_SELECT_CLOSE":
+        if (!state.multiSelectOpen || state.removeStatus === "loading") return state;
+        return Object.assign({}, state, {
+          multiSelectOpen: false,
+          multiSelectSelectedBookKeys: [],
+          removeDialogOpen: false,
+          removeTarget: null,
+          removeBookKeys: [],
+          removeStatus: "idle",
+          removeError: null
+        });
+      case "MULTI_SELECT_TOGGLE": {
+        var toggledBookKey = String(action.bookKey || "");
+        if (!state.multiSelectOpen || !toggledBookKey || state.removedBookKeys.indexOf(toggledBookKey) >= 0) return state;
+        var selected = state.multiSelectSelectedBookKeys.slice();
+        var selectedIndex = selected.indexOf(toggledBookKey);
+        if (selectedIndex >= 0) selected.splice(selectedIndex, 1);
+        else selected.push(toggledBookKey);
+        return Object.assign({}, state, { multiSelectSelectedBookKeys: selected });
+      }
+      case "MULTI_SELECT_SET_ALL":
+        if (!state.multiSelectOpen) return state;
+        return Object.assign({}, state, {
+          multiSelectSelectedBookKeys: d2UniqueBookKeys(action.bookKeys).filter(function (bookKey) {
+            return state.removedBookKeys.indexOf(bookKey) < 0;
+          })
+        });
+      case "MULTI_SELECT_REMOVE_OPEN": {
+        var batchBookKeys = d2UniqueBookKeys(state.multiSelectSelectedBookKeys);
+        if (!state.multiSelectOpen || !batchBookKeys.length || state.removeStatus === "loading") return state;
+        return Object.assign({}, state, {
+          removeDialogOpen: true,
+          removeTarget: "batch",
+          removeBookKeys: batchBookKeys,
+          removeStatus: "confirm",
+          removeError: null
+        });
+      }
+      case "BOOK_ACTION_REMOVE_OPEN": {
+        var removeBookKey = String(action.bookKey || state.bookActionBookKey || "");
+        if (!removeBookKey || state.removedBookKeys.indexOf(removeBookKey) >= 0 || state.removeStatus === "loading") return state;
+        return Object.assign({}, state, {
+          bookActionBookKey: null,
+          removeDialogOpen: true,
+          removeTarget: "single",
+          removeBookKeys: [removeBookKey],
+          removeStatus: "confirm",
+          removeError: null
+        });
+      }
+      case "REMOVE_CANCEL":
+        if (!state.removeDialogOpen || state.removeStatus === "loading") return state;
+        return Object.assign({}, state, {
+          removeDialogOpen: false,
+          removeTarget: null,
+          removeBookKeys: [],
+          removeStatus: "idle",
+          removeError: null
+        });
+      case "REMOVE_START":
+        if (!state.removeDialogOpen || state.removeStatus === "loading" || !state.removeBookKeys.length) return state;
+        if (action.target && action.target !== state.removeTarget) return state;
+        return Object.assign({}, state, {
+          removeStatus: "loading",
+          removeError: null,
+          removeRequestId: Number(action.requestId) || 0
+        });
+      case "REMOVE_SUCCESS":
+        if (state.removeStatus !== "loading" || state.removeRequestId !== Number(action.requestId)) return state;
+        return Object.assign({}, state, {
+          bookActionBookKey: null,
+          multiSelectOpen: false,
+          multiSelectSelectedBookKeys: [],
+          removedBookKeys: d2UniqueBookKeys(state.removedBookKeys.concat(state.removeBookKeys)),
+          removeDialogOpen: false,
+          removeTarget: null,
+          removeBookKeys: [],
+          removeStatus: "success",
+          removeError: null
+        });
+      case "REMOVE_FAILED":
+        if (state.removeStatus !== "loading" || state.removeRequestId !== Number(action.requestId)) return state;
+        return Object.assign({}, state, {
+          removeStatus: "failed",
+          removeError: String(action.error || "移除失败，请重试")
+        });
       case "LOCAL_IMPORT_OPEN":
         return Object.assign({}, state, {
           moreOpen: false, filterOpen: false, localImportOpen: true,
-          localImportPhase: "picker", localImportFiles: [],
+          localImportPhase: "selection", localImportFiles: [],
           localImportFocusReturnKey: String(action.focusReturnKey || "more-local-import")
         });
       case "LOCAL_IMPORT_CANCEL":
-        if (!state.localImportOpen) return state;
+        if (!state.localImportOpen || state.localImportPhase === "importing") return state;
         d2LocalImportEpoch += 1;
         return Object.assign({}, state, {
-          localImportOpen: false, localImportPhase: "picker", localImportFiles: [],
+          localImportOpen: false, localImportPhase: "selection", localImportFiles: [],
           focusReturnKey: state.localImportFocusReturnKey || "more-local-import"
         });
       case "LOCAL_IMPORT_START":
         if (!state.localImportOpen || !Array.isArray(action.files) || !action.files.length) return state;
         return Object.assign({}, state, {
-          localImportPhase: "result", localImportBatchId: action.batchId,
+          localImportPhase: "importing", localImportBatchId: action.batchId,
           localImportFiles: action.files
         });
       case "LOCAL_IMPORT_FILE_SETTLED":
@@ -254,18 +364,14 @@
               : file;
           })
         });
-      case "LOCAL_IMPORT_RETRY_START":
-        if (!state.localImportOpen || !state.localImportFiles.some(function (file) { return file.status === "failed"; })) return state;
-        return Object.assign({}, state, {
-          localImportBatchId: action.batchId,
-          localImportFiles: state.localImportFiles.map(function (file) {
-            return file.status === "failed" ? Object.assign({}, file, { status: "processing" }) : file;
-          })
-        });
+      case "LOCAL_IMPORT_COMPLETE":
+        if (!state.localImportOpen || state.localImportBatchId !== action.batchId ||
+            state.localImportFiles.some(function (file) { return file.status === "processing"; })) return state;
+        return Object.assign({}, state, { localImportPhase: "result" });
       case "LOCAL_IMPORT_FINISH":
-        if (!state.localImportOpen || state.localImportFiles.some(function (file) { return file.status === "processing"; })) return state;
+        if (!state.localImportOpen || state.localImportPhase !== "result") return state;
         return Object.assign({}, state, {
-          localImportOpen: false, localImportPhase: "picker", localImportFiles: [],
+          localImportOpen: false, localImportPhase: "selection", localImportFiles: [],
           focusReturnKey: state.localImportFocusReturnKey || "more-local-import"
         });
       case "OFFLINE_SET":
@@ -299,7 +405,7 @@
     var next = d2BookshelfReducer(d2BookshelfState, action);
     if (next === d2BookshelfState) return d2BookshelfState;
     d2BookshelfState = next;
-    if (/^(VIEW_SET|GROUP_SELECT|SORT_SELECT|FILTER_SELECT|SEARCH_SET|SEARCH_CLEAR|RESET)$/.test(action.type || "")) {
+    if (/^(VIEW_SET|SORT_SELECT|FILTER_SELECT|SEARCH_SET|SEARCH_CLEAR|RESET)$/.test(action.type || "")) {
       d2BookshelfPersist(next);
     }
     d2BookshelfListeners.slice().forEach(function (listener) { listener(next, action); });
@@ -316,7 +422,6 @@
     if (!appState) return d2BookshelfState;
     var patch = {};
     if (appState.bookshelfView === "cover" || appState.bookshelfView === "list") patch.view = appState.bookshelfView;
-    if (D2_BOOKSHELF_GROUPS.indexOf(appState.bookshelfGroup) >= 0) patch.group = appState.bookshelfGroup;
     if (D2_BOOKSHELF_SORTS.indexOf(appState.bookshelfSort) >= 0) patch.sort = appState.bookshelfSort;
     if (D2_BOOKSHELF_FILTERS.indexOf(appState.bookshelfFilter) >= 0) patch.filter = appState.bookshelfFilter;
     if (typeof appState.bookshelfSearch === "string") patch.search = appState.bookshelfSearch;
@@ -326,6 +431,39 @@
     if (typeof appState.bookshelfLoadError === "boolean") patch.loadStatus = appState.bookshelfLoadError ? "failed" : d2BookshelfState.loadStatus;
     d2BookshelfState = Object.assign({}, d2BookshelfState, patch);
     return d2BookshelfState;
+  }
+
+  function d2BookshelfNotify(options) {
+    if (options && typeof options.onUpdate === "function") options.onUpdate(d2BookshelfState);
+  }
+
+  function d2ExecuteBookshelfRemove(target, options) {
+    options = options || {};
+    if (!d2BookshelfState.removeDialogOpen ||
+        d2BookshelfState.removeTarget !== target ||
+        d2BookshelfState.removeStatus === "loading" ||
+        !d2BookshelfState.removeBookKeys.length) {
+      return Promise.resolve({ ok: false, reason: "empty-or-loading" });
+    }
+    d2BookshelfRemoveEpoch += 1;
+    var requestId = d2BookshelfRemoveEpoch;
+    d2BookshelfDispatch({ type: "REMOVE_START", target: target, requestId: requestId });
+    d2BookshelfNotify(options);
+    var delay = Number.isFinite(Number(options.delay)) ? Math.max(0, Number(options.delay)) : 180;
+    return new Promise(function (resolve) {
+      setTimeout(function () {
+        if (d2BookshelfState.removeRequestId !== requestId || d2BookshelfState.removeStatus !== "loading") {
+          resolve({ ok: false, reason: "stale-result" });
+          return;
+        }
+        var failed = options.simulateResult === "failed";
+        d2BookshelfDispatch(failed
+          ? { type: "REMOVE_FAILED", requestId: requestId, error: options.error }
+          : { type: "REMOVE_SUCCESS", requestId: requestId });
+        d2BookshelfNotify(options);
+        resolve({ ok: !failed, removedBookKeys: failed ? [] : d2BookshelfState.removedBookKeys.slice() });
+      }, delay);
+    });
   }
 
   function d2ExecuteBookshelfLoadRetry(options) {
@@ -377,7 +515,7 @@
 
   function d2ExecuteLocalImport(files, options) {
     options = options || {};
-    var normalized = Array.prototype.slice.call(files || [], 0, 50).map(d2NormalizeLocalImportFile);
+    var normalized = Array.prototype.slice.call(files || []).map(d2NormalizeLocalImportFile);
     if (!normalized.length || !d2BookshelfState.localImportOpen) return Promise.resolve({ ok: false, reason: "empty" });
     d2LocalImportEpoch += 1;
     var batchId = d2LocalImportEpoch;
@@ -389,36 +527,15 @@
         return new Promise(function (resolve) {
           setTimeout(function () {
             d2BookshelfDispatch({ type: "LOCAL_IMPORT_FILE_SETTLED", batchId: batchId, fileId: file.id, status: file.settleStatus });
-            d2LocalImportNotify(options);
             resolve();
           }, delay);
         });
       });
     }, Promise.resolve()).then(function () {
+      d2BookshelfDispatch({ type: "LOCAL_IMPORT_COMPLETE", batchId: batchId });
+      d2LocalImportNotify(options);
       return { ok: d2BookshelfState.localImportBatchId === batchId, batchId: batchId, files: d2BookshelfState.localImportFiles.slice() };
     });
-  }
-
-  function d2RetryLocalImport(options) {
-    options = options || {};
-    var failed = d2BookshelfState.localImportFiles.filter(function (file) { return file.status === "failed"; });
-    if (!d2BookshelfState.localImportOpen || !failed.length) return Promise.resolve({ ok: false, reason: "no-failed-files" });
-    d2LocalImportEpoch += 1;
-    var batchId = d2LocalImportEpoch;
-    d2BookshelfDispatch({ type: "LOCAL_IMPORT_RETRY_START", batchId: batchId });
-    d2LocalImportNotify(options);
-    var delay = Number.isFinite(Number(options.delay)) ? Math.max(0, Number(options.delay)) : 280;
-    return failed.reduce(function (chain, file) {
-      return chain.then(function () {
-        return new Promise(function (resolve) {
-          setTimeout(function () {
-            d2BookshelfDispatch({ type: "LOCAL_IMPORT_FILE_SETTLED", batchId: batchId, fileId: file.id, status: file.settleStatus });
-            d2LocalImportNotify(options);
-            resolve();
-          }, delay);
-        });
-      });
-    }, Promise.resolve()).then(function () { return { ok: true, batchId: batchId }; });
   }
 
   function d2BookshelfIdentity(settingsKey) {
@@ -611,22 +728,25 @@
 
   // ============ 书架数据提取与差异标识 ============
 
-  // 书架书籍分组归属（与 render-runtime.js bookshelfBookGroup 行为一致）
-  function bookshelfBookGroup(book, index) {
-    var title = String((book && book.title) || "");
-    var author = String((book && book.author) || "");
-    if (/本地|离线|导入|文档/.test(author)) {
-      return "本地书";
+  // 书籍来源身份只能来自显式事实；不得从标题、作者或展示文案推断业务。
+  function bookshelfSourceId(book) {
+    var explicit = String((book && book.sourceId) || "").trim();
+    if (explicit) return explicit;
+    var sourceType = String((book && (book.sourceType || book.kind || book.storageType)) || "").toLowerCase();
+    if (book && (book.isLocal === true || book.filePath || book.localUri) || /(^|[-_])(local|file|import)([-_]|$)/.test(sourceType)) {
+      return "local";
     }
-    if (index < 4 || /书源|同步/.test(author) || /灯塔与雾/.test(title)) {
-      return "追更";
-    }
-    return "默认";
+    return "unknown-source";
   }
 
-  // 书籍来源类型：local（本地书）/ network（网络书）
-  function bookSourceType(book, index) {
-    return bookshelfBookGroup(book, index) === "本地书" ? "local" : "network";
+  function bookSourceType(book) {
+    var sourceId = bookshelfSourceId(book).toLowerCase();
+    var explicit = String((book && (book.sourceType || book.kind || book.storageType)) || "").toLowerCase();
+    return (book && (book.isLocal === true || book.filePath || book.localUri)) ||
+      /(^|[-_])(local|file|import)([-_]|$)/.test(sourceId) ||
+      /(^|[-_])(local|file|import)([-_]|$)/.test(explicit)
+      ? "local"
+      : "network";
   }
 
   // 书籍可读性：本地书始终离线可读；网络书根据缓存状态判断
@@ -635,7 +755,10 @@
       return { offline: true, cached: true, label: "离线可读" };
     }
     var offline = Boolean(appState && appState.offline);
-    var cached = Boolean(book && book.cached) || index < 3;
+    // Cache state is executable data, not a visual default. Never infer it
+    // from fixture order or DOM position; native consumers resolve the same
+    // value from Core `cache.book.status`.
+    var cached = Boolean(book && book.cached);
     return {
       offline: offline,
       cached: cached,
@@ -658,10 +781,18 @@
     return "book-" + (hash >>> 0).toString(36);
   }
 
+  function bookshelfBookKey(book) {
+    return encodeURIComponent(bookshelfSourceId(book)) + "::" + encodeURIComponent(bookshelfBookId(book));
+  }
+
+  function bookshelfIdentityKey(book) {
+    return bookshelfSourceId(book).replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase() +
+      "--" + bookshelfBookId(book).replace(/[^a-z0-9]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase();
+  }
+
   // 书架排序/筛选/分组状态
   function bookshelfState(appState) {
     return {
-      group: (appState && appState.bookshelfGroup) || "全部",
       sort: (appState && appState.bookshelfSort) || "最近更新",
       filter: (appState && appState.bookshelfFilter) || "全部",
       view: (appState && appState.bookshelfView) === "list" ? "list" : "cover",
@@ -677,9 +808,15 @@
   function bookshelfVisibleBooks(books, appState) {
     var state = bookshelfState(appState);
     return books.map(function (book, index) {
-      return { book: book, index: index, group: bookshelfBookGroup(book, index) };
+      return {
+        book: book,
+        index: index,
+        bookId: bookshelfBookId(book),
+        sourceId: bookshelfSourceId(book),
+        bookKey: bookshelfBookKey(book)
+      };
     }).filter(function (entry) {
-      return state.group === "全部" || entry.group === state.group;
+      return d2BookshelfState.removedBookKeys.indexOf(entry.bookKey) < 0;
     }).filter(function (entry) {
       if (state.filter === "全部") return true;
       if (state.filter === "未读") return !entry.book.read;
@@ -703,14 +840,17 @@
     var sourceLabel = isLocal ? "本地书" : "网络书";
     var cacheLabel = isLocal ? "离线可读" : (readable.cached ? "已缓存" : "未缓存");
     var bookId = bookshelfBookId(book);
+    var sourceId = bookshelfSourceId(book);
+    var bookKey = bookshelfBookKey(book);
+    var identityKey = bookshelfIdentityKey(book);
     var listView = Boolean(appState && appState.view === "list") || bookshelfState(appState).view === "list";
     var ariaPosition = Number.isFinite(listPosition) ? listPosition : index + 1;
     var ariaSize = Number.isFinite(listSize)
       ? listSize
       : (((data && data.mainTabs && data.mainTabs.books) || []).length || ariaPosition);
     return `
-      <article class="fd-book-card fd-book-item" role="listitem" aria-posinset="${ariaPosition}" aria-setsize="${ariaSize}" data-book-card data-book-item data-book-id="${esc(bookId)}" data-motion-actor-key="bookshelf.book.${esc(bookId)}" data-bookshelf-item-view="${listView ? "list" : "cover"}" data-book-source-type="${esc(sourceType)}" data-book-cached="${readable.cached ? "true" : "false"}" data-book-title="${esc(book.title)}">
-        <button class="fd-book-cover-frame" type="button"${d2BookshelfIdentityAttrs("book-open-" + bookId)} data-book-cover data-book-id="${esc(bookId)}" data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
+      <article class="fd-book-card fd-book-item" role="listitem" aria-posinset="${ariaPosition}" aria-setsize="${ariaSize}" data-book-card data-book-item data-book-id="${esc(bookId)}" data-book-source-id="${esc(sourceId)}" data-book-key="${esc(bookKey)}" data-motion-actor-key="bookshelf.book.${esc(bookKey)}" data-bookshelf-item-view="${listView ? "list" : "cover"}" data-book-source-type="${esc(sourceType)}" data-book-cached="${readable.cached ? "true" : "false"}" data-book-title="${esc(book.title)}">
+        <button class="fd-book-cover-frame" type="button"${d2BookshelfIdentityAttrs("book-open-" + identityKey)} data-book-cover data-book-id="${esc(bookId)}" data-book-source-id="${esc(sourceId)}" data-book-key="${esc(bookKey)}" data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
           <img src="${coverSrc}" alt="${esc(book.title)}封面">
         </button>
         <div class="fd-book-item-content">
@@ -722,42 +862,32 @@
             <i class="fd-book-cache-tag ${readable.cached ? "is-cached" : "is-missing"}">${esc(cacheLabel)}</i>
           </div>
         </div>
-        <button class="fd-book-list-more" type="button"${d2BookshelfIdentityAttrs("book-more-" + bookId)} data-book-list-detail data-book-more data-route="bookshelf-book-more-menu" data-book-focus-index="${index}" data-book-id="${esc(bookId)}" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-hidden="${listView ? "false" : "true"}" tabindex="${listView ? "0" : "-1"}" aria-label="${esc(book.title)}更多操作">${icon("more", "fd-small-icon")}</button>
+        <span class="fd-book-list-more" data-book-list-detail aria-hidden="true">${icon("more", "fd-small-icon")}</span>
       </article>`;
   }
 
   // 书架区段头（封面/列表切换 + 筛选入口 + 搜索）
   function bookshelfSectionHeaderV2(state, disabled) {
-    var filterActive = state.group !== "全部" || state.sort !== "最近更新" || state.filter !== "全部" || state.search;
+    var filterActive = state.sort !== "最近更新" || state.filter !== "全部" || state.search;
     return `
       <section class="fd-section-head fd-bookshelf-section-head">
         <h2>我的书架</h2>
         <span class="fd-bookshelf-view-actions">
           <button class="${state.view === "cover" ? "is-active" : ""}" type="button"${d2BookshelfIdentityAttrs("view-cover")} aria-label="封面视图" data-bookshelf-view-button="cover" aria-pressed="${state.view === "cover" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("grid", "fd-small-icon")}</button>
           <button class="${state.view === "list" ? "is-active" : ""}" type="button"${d2BookshelfIdentityAttrs("view-list")} aria-label="列表视图" data-bookshelf-view-button="list" aria-pressed="${state.view === "list" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("list", "fd-small-icon")}</button>
-          <button class="${filterActive ? "is-active" : ""}" type="button"${d2BookshelfIdentityAttrs("sort-filter-toggle")} aria-label="书架筛选：${esc(state.group)}，${esc(state.sort)}，${esc(state.filter)}${state.search ? "，搜索 " + esc(state.search) : ""}" data-bookshelf-filter-toggle aria-expanded="${state.open ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("filter", "fd-small-icon")}</button>
+          <button class="${filterActive ? "is-active" : ""}" type="button"${d2BookshelfIdentityAttrs("sort-filter-toggle")} aria-label="书架筛选：${esc(state.sort)}，${esc(state.filter)}${state.search ? "，搜索 " + esc(state.search) : ""}" data-bookshelf-filter-toggle aria-expanded="${state.open ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("filter", "fd-small-icon")}</button>
           <button type="button"${d2BookshelfIdentityAttrs("search-toggle")} aria-label="书架搜索" data-bookshelf-search-toggle${disabled ? " disabled" : ""}>${icon("search", "fd-small-icon")}</button>
-          <button type="button"${d2BookshelfIdentityAttrs("display-settings")} aria-label="书架显示设置" data-route="bookshelf-search-settings" data-settings-scope="bookshelf-display"${disabled ? " disabled" : ""}>${icon("gear", "fd-small-icon")}</button>
         </span>
       </section>`;
   }
 
-  // 书架筛选/排序/分组弹层（组合状态）
+  // 书架筛选/排序弹层；V1 已明确取消分组能力。
   function bookshelfFilterPopoverV2(state) {
     if (!state.open) return "";
-    var groupOptions = ["全部", "默认", "本地书", "追更"];
     var sortOptions = ["最近更新", "阅读进度", "书名", "作者"];
     var filterOptions = ["全部", "未读", "已完结", "更新失败"];
     return `
       <section class="fd-bookshelf-filter-popover" aria-label="书架排序与筛选选项">
-        <article>
-          <strong>分组</strong>
-          <div>
-            ${groupOptions.map(function (item) {
-              return `<button class="${item === state.group ? "is-active" : ""}" type="button"${d2BookshelfIdentityAttrs("group-" + item)} data-bookshelf-group-option="${esc(item)}" aria-pressed="${item === state.group ? "true" : "false"}">${esc(item)}</button>`;
-            }).join("")}
-          </div>
-        </article>
         <article>
           <strong>排序</strong>
           <div>
@@ -785,53 +915,30 @@
       </section>`;
   }
 
-  // 书架更多操作浮层（批量管理 / 分组管理 / 本地导入 / 设置）
+  // 书架更多操作只保留已确认的本地导入入口。
   function bookshelfMoreLayerV2() {
-    var items = [
-      { icon: "check", title: "批量管理", meta: "选择多本书后移动或删除", route: "book-batch-management" },
-      { icon: "people", title: "分组管理", meta: "编辑书架分组与归属", route: "group-management" },
-      { icon: "book-open", title: "本地书导入", meta: "导入本地文件到书架", route: "local-import" },
-      { icon: "gear", title: "书架设置", meta: "显示、排序与缓存策略", route: "bookshelf-search-settings" }
-    ];
     return `
       <section class="fd-bookshelf-more-layer" data-bookshelf-more-layer aria-hidden="true" aria-label="书架更多操作">
         <button class="fd-bookshelf-more-backdrop" type="button"${d2BookshelfIdentityAttrs("more-close")} data-close-bookshelf-more aria-label="关闭书架更多操作"></button>
         <section class="fd-bookshelf-more-menu" role="dialog" aria-modal="true" aria-label="书架更多操作">
           <h2>书架更多操作</h2>
-          ${items.map(function (item) {
-            var identityKey = item.route === "book-batch-management" ? "more-batch"
-              : item.route === "group-management" ? "more-group"
-                : item.route === "local-import" ? "more-local-import" : "more-settings";
-            var actionAttrs = item.route === "local-import"
-              ? ' data-local-import-open data-local-import-origin="top-more"'
-              : item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`;
-            return `<button type="button"${d2BookshelfIdentityAttrs(identityKey)}${identityKey === "more-batch" ? ' data-dialog-initial-focus="more-batch"' : ""}${actionAttrs}>
-              ${icon(item.icon, "fd-small-icon")}
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-            </button>`;
-          }).join("")}
+          <button type="button"${d2BookshelfIdentityAttrs("more-local-import")} data-dialog-initial-focus="more-local-import" data-local-import-open data-local-import-origin="top-more">
+            ${icon("book-open", "fd-small-icon")}
+            <span><strong>本地书导入</strong><small>从系统文件选择器批量选择书籍</small></span>
+          </button>
         </section>
       </section>`;
   }
 
-  function d2LocalImportSizeLabel(size) {
-    var bytes = Number(size) || 0;
-    if (bytes >= 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(bytes >= 10 * 1024 * 1024 ? 0 : 1) + " MB";
-    if (bytes >= 1024) return Math.round(bytes / 1024) + " KB";
-    return bytes > 0 ? bytes + " B" : "—";
-  }
-
   function d2LocalImportResultRow(file) {
-    var isProcessing = file.status === "processing";
     var isFailed = file.status === "failed";
     return `<article class="fd-local-import-result-row is-${esc(file.status)}" data-local-import-file-id="${esc(file.id)}">
       <span class="fd-local-import-file-icon">${icon("log", "fd-small-icon")}</span>
       <span class="fd-local-import-file-copy">
         <strong>${esc(file.name)}</strong>
-        <small><em>${esc(file.extension.toUpperCase())}</em><span>${esc(d2LocalImportSizeLabel(file.size))}</span>${isFailed ? '<i>格式不支持</i>' : ""}</small>
-        ${isProcessing ? '<span class="fd-local-import-row-progress" aria-hidden="true"><i></i></span>' : ""}
+        <small><em>${isFailed ? "失败" : "成功"}</em></small>
       </span>
-      <span class="fd-local-import-file-status" aria-label="${isProcessing ? "正在处理" : isFailed ? "导入失败" : "导入成功"}">${icon(isProcessing ? "progress" : isFailed ? "alert" : "check", "fd-small-icon")}</span>
+      <span class="fd-local-import-file-status" aria-label="${isFailed ? "导入失败" : "导入成功"}">${icon(isFailed ? "alert" : "check", "fd-small-icon")}</span>
     </article>`;
   }
 
@@ -841,42 +948,125 @@
     var files = state.localImportFiles || [];
     var successCount = files.filter(function (file) { return file.status === "success"; }).length;
     var failedCount = files.filter(function (file) { return file.status === "failed"; }).length;
-    var processingCount = files.filter(function (file) { return file.status === "processing"; }).length;
-    var isPicker = state.localImportPhase === "picker";
+    var isSelection = state.localImportPhase === "selection";
+    var isImporting = state.localImportPhase === "importing";
     return `<section class="fd-local-import-layer" data-local-import-layer>
-      <button class="fd-local-import-backdrop" type="button"${d2BookshelfIdentityAttrs("import-backdrop")} data-local-import-cancel aria-label="关闭导入本地书籍弹窗"></button>
-      <section class="fd-local-import-dialog ${isPicker ? "is-picker" : "is-result"}" role="dialog" aria-modal="true" aria-labelledby="fd-local-import-title">
-        <header><h2 id="fd-local-import-title">${isPicker ? "导入本地书籍" : "导入结果"}</h2></header>
-        ${isPicker ? `<section class="fd-local-import-picker-body">
+      ${isImporting
+        ? '<span class="fd-local-import-backdrop" aria-hidden="true"></span>'
+        : `<button class="fd-local-import-backdrop" type="button"${d2BookshelfIdentityAttrs("import-backdrop")} data-local-import-cancel aria-label="关闭导入本地书籍弹窗"></button>`}
+      <section class="fd-local-import-dialog ${isSelection ? "is-selection" : isImporting ? "is-importing" : "is-result"}" role="dialog" aria-modal="true"${isImporting ? ' aria-label="正在导入"' : ' aria-labelledby="fd-local-import-title"'}>
+        ${isSelection ? `<header><h2 id="fd-local-import-title">导入本地书籍</h2></header>
+        <section class="fd-local-import-picker-body">
           <button class="fd-local-import-dropzone" type="button" data-local-import-choose aria-label="选择本地书文件">
             <span class="fd-local-import-dropzone-icon">${icon("upload", "fd-medium-icon")}</span>
-            <span class="fd-local-import-dropzone-copy"><strong>拖拽文件到此处</strong><small>支持批量选择，单次最多 50 本</small></span>
-            <i><em>EPUB</em><em>PDF</em><em>TXT</em><em>MOBI</em></i>
+            <span class="fd-local-import-dropzone-copy"><strong>从系统文件中选择</strong><small>支持多选 TXT、EPUB 文件</small></span>
+            <i><em>TXT</em><em>EPUB</em></i>
           </button>
-          <p class="fd-local-import-picker-note">${icon("folder", "fd-small-icon")}<span>也可从「文件」App、iCloud 云盘或第三方存储中选取。导入后书籍将保存至本地书库。</span></p>
-          <input type="file" data-local-import-file-input multiple accept=".epub,.pdf,.txt,.mobi,application/epub+zip,application/pdf,text/plain" tabindex="-1" aria-hidden="true">
+          <p class="fd-local-import-picker-note">${icon("folder", "fd-small-icon")}<span>支持从系统文件中多选 TXT、EPUB。导入后书籍将保存至本地书库。</span></p>
+          <input type="file" data-local-import-file-input multiple accept=".txt,.epub,text/plain,application/epub+zip" tabindex="-1" aria-hidden="true">
         </section>
         <footer>
           <button class="is-primary" type="button"${d2BookshelfIdentityAttrs("import-choose-files")} data-local-import-choose data-dialog-initial-focus="import-choose-files">${icon("upload", "fd-small-icon")}选择文件</button>
           <button type="button"${d2BookshelfIdentityAttrs("import-cancel")} data-local-import-cancel>取消</button>
-        </footer>` : `<section class="fd-local-import-result-body">
+        </footer>` : isImporting ? `<section class="fd-local-import-importing" aria-live="polite" aria-busy="true">
+          <span class="fd-local-import-spinner-halo" aria-hidden="true"><i></i></span>
+          <strong>正在导入</strong>
+          <small>请稍候</small>
+        </section>` : `<header><h2 id="fd-local-import-title">导入结果</h2></header>
+        <section class="fd-local-import-result-body">
           <section class="fd-local-import-summary ${failedCount ? "has-failures" : "is-success"}" aria-live="polite">
             <span>${icon(failedCount ? "alert" : "check", "fd-small-icon")}</span>
-            <strong>${successCount} 本成功，${failedCount} 本失败<small>共选择 ${files.length} 本${processingCount ? " · " + processingCount + " 本正在处理" : " · 已全部处理"}</small></strong>
-            ${processingCount ? `<i>${icon("progress", "fd-small-icon")}</i>` : ""}
+            <strong>导入完成<small>${successCount} 本已导入 · ${failedCount} 本失败</small></strong>
           </section>
           <section class="fd-local-import-result-list" aria-label="导入文件列表">${files.map(d2LocalImportResultRow).join("")}</section>
         </section>
         <footer>
-          <button class="is-primary" type="button"${d2BookshelfIdentityAttrs("import-finish")} data-local-import-finish${processingCount ? " disabled aria-disabled=\"true\"" : ""}>${icon("check", "fd-small-icon")}完成</button>
-          ${failedCount && !processingCount ? `<button type="button"${d2BookshelfIdentityAttrs("import-retry-failed")} data-local-import-retry>${icon("refresh", "fd-small-icon")}重试失败</button>` : ""}
+          <button class="is-primary" type="button"${d2BookshelfIdentityAttrs("import-finish")} data-local-import-finish>${icon("check", "fd-small-icon")}完成</button>
         </footer>`}
       </section>
     </section>`;
   }
 
-  function bookshelfStateLayersV2() {
-    return bookshelfMoreLayerV2() + localImportPopupV2();
+  function d2BookshelfBookEntry(data, bookKey) {
+    var books = (data && data.mainTabs && data.mainTabs.books) || [];
+    for (var index = 0; index < books.length; index += 1) {
+      if (bookshelfBookKey(books[index]) === bookKey) {
+        return {
+          book: books[index],
+          index: index,
+          bookId: bookshelfBookId(books[index]),
+          sourceId: bookshelfSourceId(books[index]),
+          bookKey: bookKey
+        };
+      }
+    }
+    return null;
+  }
+
+  // Figma Library/BookActionSheet (2903:1737): exactly three text actions.
+  function bookActionSheetV2(data) {
+    var bookKey = d2BookshelfState.bookActionBookKey;
+    var entry = bookKey ? d2BookshelfBookEntry(data, bookKey) : null;
+    var hidden = !entry;
+    return `<section class="fd-book-action-layer" data-book-focus-layer aria-hidden="${hidden ? "true" : "false"}" aria-label="书籍操作">
+      <button class="fd-book-action-backdrop" type="button" data-close-book-focus aria-label="关闭书籍操作"></button>
+      <section class="fd-book-action-sheet" role="dialog" aria-modal="true" aria-labelledby="fd-book-action-title" data-demo-sheet>
+        <span class="fd-book-action-handle" aria-hidden="true"></span>
+        <h2 id="fd-book-action-title">书籍操作</h2>
+        <button type="button"${d2BookshelfIdentityAttrs("book-action-multi-select")} data-book-action="multi-select" data-book-id="${esc(entry ? entry.bookId : "")}" data-book-source-id="${esc(entry ? entry.sourceId : "")}" data-book-key="${esc(bookKey || "")}" data-sheet-initial-focus>多选</button>
+        <button type="button"${d2BookshelfIdentityAttrs("book-action-info")} data-book-action="info" data-book-id="${esc(entry ? entry.bookId : "")}" data-book-source-id="${esc(entry ? entry.sourceId : "")}" data-book-key="${esc(bookKey || "")}">书籍信息</button>
+        <button class="is-danger" type="button"${d2BookshelfIdentityAttrs("book-action-remove")} data-book-action="remove" data-book-id="${esc(entry ? entry.bookId : "")}" data-book-source-id="${esc(entry ? entry.sourceId : "")}" data-book-key="${esc(bookKey || "")}">移除书架</button>
+      </section>
+    </section>`;
+  }
+
+  function bookshelfRemoveDialogV2(data) {
+    var state = d2BookshelfState;
+    if (!state.removeDialogOpen) return "";
+    var titles = state.removeBookKeys.map(function (bookKey) {
+      var entry = d2BookshelfBookEntry(data, bookKey);
+      return entry ? entry.book.title : "";
+    }).filter(Boolean);
+    var isBatch = state.removeTarget === "batch";
+    var isLoading = state.removeStatus === "loading";
+    var isFailed = state.removeStatus === "failed";
+    var description = isBatch
+      ? `确认将选中的 ${state.removeBookKeys.length} 本书移出书架吗？`
+      : `确认将《${esc(titles[0] || "这本书")}》移出书架吗？`;
+    return `<section class="fd-bookshelf-remove-layer" data-bookshelf-remove-layer>
+      <button class="fd-bookshelf-remove-backdrop" type="button"${d2BookshelfIdentityAttrs("remove-dialog-cancel")} data-bookshelf-remove-cancel aria-label="关闭移除确认"></button>
+      <section class="fd-demo-dialog fd-bookshelf-remove-dialog" role="dialog" aria-modal="true" aria-labelledby="bookshelf-remove-title" aria-describedby="bookshelf-remove-desc"${isFailed ? ' aria-invalid="true"' : ""} data-demo-dialog data-bookshelf-remove-dialog>
+        <h2 id="bookshelf-remove-title">${isFailed ? "移除失败" : isLoading ? "正在移除" : "移除书架"}</h2>
+        <p id="bookshelf-remove-desc">${isFailed ? esc(state.removeError || "移除失败，请重试") : description}</p>
+        <div>
+          <button type="button"${d2BookshelfIdentityAttrs("remove-dialog-cancel")} data-bookshelf-remove-cancel data-dialog-initial-focus${isLoading ? " disabled" : ""}>取消</button>
+          <button class="is-danger" type="button"${d2BookshelfIdentityAttrs("remove-dialog-confirm")} data-bookshelf-remove-confirm aria-busy="${isLoading ? "true" : "false"}"${isLoading ? " disabled" : ""}>${isLoading ? "正在移除…" : isFailed ? "重试" : "确认移除"}</button>
+        </div>
+      </section>
+    </section>`;
+  }
+
+  function bookshelfStateLayersV2(data) {
+    return bookshelfMoreLayerV2() + localImportPopupV2() + bookActionSheetV2(data) + bookshelfRemoveDialogV2(data);
+  }
+
+  function continueReadingCardV2(data, entry, view) {
+    if (!entry || view !== "cover") return "";
+    var book = entry.book;
+    var bookId = bookshelfBookId(book);
+    var sourceId = bookshelfSourceId(book);
+    var bookKey = bookshelfBookKey(book);
+    return `<section class="fd-continue-card" data-book-id="${esc(bookId)}" data-book-source-id="${esc(sourceId)}" data-book-key="${esc(bookKey)}">
+      <button class="fd-continue-cover-button" type="button"${d2BookshelfIdentityAttrs("continue-cover")} data-book-cover data-book-id="${esc(bookId)}" data-book-source-id="${esc(sourceId)}" data-book-key="${esc(bookKey)}" data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${cover(data, book.coverKey)}" aria-label="打开 ${esc(book.title)}">
+        <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面">
+      </button>
+      <div>
+        <h2>继续阅读</h2>
+        <strong>${esc(book.title)}</strong>
+        <span class="fd-continue-author">${esc(book.author)}</span>
+      </div>
+      <button class="fd-continue-action-button" type="button"${d2BookshelfIdentityAttrs("continue-read")} data-book-id="${esc(bookId)}" data-book-source-id="${esc(sourceId)}" data-book-key="${esc(bookKey)}" data-route="immersive-reading">阅读</button>
+    </section>`;
   }
 
   // ============ 书架主 renderer：状态变体补全 ============
@@ -896,16 +1086,19 @@
     var view = route === "bookshelf-list-mode" ? "list"
       : route === "bookshelf-cover-mode" ? "cover"
       : owned.view;
+    if (owned.multiSelectOpen) {
+      return bookshelfMultiSelectV2(data, route, appState);
+    }
     var merged = withAppState(appState, {
-      bookshelfView: view, bookshelfGroup: owned.group, bookshelfSort: owned.sort,
+      bookshelfView: view, bookshelfSort: owned.sort,
       bookshelfFilter: owned.filter, bookshelfSearch: owned.search,
       bookshelfFilterOpen: owned.filterOpen, offline: owned.offline,
       bookshelfLoadError: owned.loadStatus === "failed"
     });
     var state = bookshelfState(merged);
     var books = (data && data.mainTabs && data.mainTabs.books) || [];
-    var first = books[0] || { title: "长夜余火", author: "爱潜水的乌贼", chapter: "第 32 章 雨夜", coverKey: "longNight" };
     var visibleBooks = bookshelfVisibleBooks(books, merged);
+    var firstVisible = visibleBooks[0] || null;
 
     // 状态变体：加载失败
     if (state.loadError) {
@@ -929,7 +1122,7 @@
               <p class="fd-bookshelf-error-meta">已缓存 ${visibleBooks.filter(function (e) { return bookReadable(e.book, e.index, merged).cached; }).length} 本可离线阅读</p>
             </section>
           </section>`,
-        stateHostHtml: `<p class="fd-nav-feedback">书架加载失败 · 已保留视图模式：${esc(view === "list" ? "列表" : "封面")}</p>${bookshelfStateLayersV2()}`
+        stateHostHtml: `<p class="fd-nav-feedback">书架加载失败 · 已保留视图模式：${esc(view === "list" ? "列表" : "封面")}</p>${bookshelfStateLayersV2(data)}`
       }));
     }
 
@@ -948,17 +1141,7 @@
             <span>当前为离线模式，仅展示已缓存书籍，网络书更新将暂停。</span>
             <button type="button"${d2BookshelfIdentityAttrs("retry-network")} data-bookshelf-retry-network aria-busy="${owned.networkStatus === "loading" ? "true" : "false"}">重连</button>
           </section>
-          <section class="fd-continue-card">
-            <button class="fd-continue-cover-button" type="button"${d2BookshelfIdentityAttrs("continue-cover")} data-book-cover data-route="immersive-reading" data-book-title="${esc(first.title)}" data-book-author="${esc(first.author)}" data-book-chapter="${esc(first.chapter)}" data-cover-src="${cover(data, first.coverKey)}" aria-label="打开 ${esc(first.title)}">
-              <img src="${cover(data, first.coverKey)}" alt="${esc(first.title)}封面">
-            </button>
-            <div>
-              <h2>继续阅读</h2>
-              <strong>${esc(first.title)}</strong>
-              <span class="fd-continue-author">${esc(first.author)}</span>
-            </div>
-            <button class="fd-continue-action-button" type="button"${d2BookshelfIdentityAttrs("continue-read")} data-route="immersive-reading">阅读</button>
-          </section>
+          ${continueReadingCardV2(data, offlineCached[0] || null, state.view)}
           <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
             ${bookshelfSectionHeaderV2(state, false)}
             ${bookshelfFilterPopoverV2(state)}
@@ -971,7 +1154,7 @@
             </section>
             <p class="fd-bookshelf-offline-meta">已缓存 ${offlineCached.length} 本可离线阅读，其余 ${visibleBooks.length - offlineCached.length} 本需联网后加载。</p>
           </section>`,
-        stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">离线模式 · 视图：${esc(view === "list" ? "列表" : "封面")} · 可读 ${offlineCached.length}/${visibleBooks.length}</p>${bookshelfStateLayersV2()}`
+        stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">离线模式 · 视图：${esc(view === "list" ? "列表" : "封面")} · 可读 ${offlineCached.length}/${visibleBooks.length}</p>${bookshelfStateLayersV2(data)}`
       }));
     }
 
@@ -986,17 +1169,7 @@
       actions: ["search", "more"],
       ariaLabel: "书架",
       contentHtml: `
-        <section class="fd-continue-card">
-          <button class="fd-continue-cover-button" type="button"${d2BookshelfIdentityAttrs("continue-cover")} data-book-cover data-route="immersive-reading" data-book-title="${esc(first.title)}" data-book-author="${esc(first.author)}" data-book-chapter="${esc(first.chapter)}" data-cover-src="${cover(data, first.coverKey)}" aria-label="打开 ${esc(first.title)}">
-            <img src="${cover(data, first.coverKey)}" alt="${esc(first.title)}封面">
-          </button>
-          <div>
-            <h2>继续阅读</h2>
-            <strong>${esc(first.title)}</strong>
-            <span class="fd-continue-author">${esc(first.author)}</span>
-          </div>
-          <button class="fd-continue-action-button" type="button"${d2BookshelfIdentityAttrs("continue-read")} data-route="immersive-reading">阅读</button>
-        </section>
+        ${continueReadingCardV2(data, firstVisible, state.view)}
         <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
           ${bookshelfSectionHeaderV2(state, false)}
           ${bookshelfFilterPopoverV2(state)}
@@ -1010,8 +1183,8 @@
           ${state.search ? `<p class="fd-bookshelf-search-result-meta">搜索"${esc(state.search)}" · 命中 ${visibleBooks.length} 本</p>` : ""}
         </section>`,
       stateHostHtml: `
-        <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">当前 Tab：书架 · 视图：${esc(view === "list" ? "列表" : "封面")}${state.group !== "全部" ? " · 分组：" + esc(state.group) : ""}${state.filter !== "全部" ? " · 筛选：" + esc(state.filter) : ""}${viewFeedback ? " · " + viewFeedback : ""}</p>
-        ${bookshelfStateLayersV2()}`
+        <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">当前 Tab：书架 · 视图：${esc(view === "list" ? "列表" : "封面")}${state.filter !== "全部" ? " · 筛选：" + esc(state.filter) : ""}${viewFeedback ? " · " + viewFeedback : ""}</p>
+        ${bookshelfStateLayersV2(data)}`
     }));
   }
 
@@ -1059,265 +1232,100 @@
             </div>
             <section class="fd-bookshelf-empty-hints" aria-label="可选入口">
               <button type="button" data-route="discover">${icon("sparkle", "fd-small-icon")}去发现</button>
-              <button type="button" data-route="bookshelf-search-settings">${icon("gear", "fd-small-icon")}书架设置</button>
               ${reason === "import-failed" ? `<button type="button"${d2BookshelfIdentityAttrs("retry-local-import")} data-local-import-open data-local-import-origin="retry-local-import">${icon("refresh", "fd-small-icon")}重试导入</button>` : ""}
             </section>
           </section>
         </section>`,
-      stateHostHtml: `<p class="fd-nav-feedback">书架空状态 · 原因：${esc(reason)}</p>${bookshelfStateLayersV2()}`
+      stateHostHtml: `<p class="fd-nav-feedback">书架空状态 · 原因：${esc(reason)}</p>${bookshelfStateLayersV2(data)}`
     }));
   }
 
-  // ============ 长按菜单真实上下文（替换 contractStatic） ============
+  // ============ Figma Bookshelf/MultiSelect：书架内状态，不是独立路由 ============
 
-  /**
-   * bookshelfBookMoreMenuScreen - 真实长按菜单（替换 bookshelf-book-more-menu 的 contractStatic）
-   * 展示真实选中书籍上下文（封面/书名/作者/章节/来源/缓存状态），
-   * 提供书籍级操作（详情、批量、分组移动、删除、缓存、换源），
-   * 并明确焦点恢复和系统返回行为。
-   */
-  function bookshelfBookMoreMenuScreen(data, route, appState) {
-    var books = (data && data.mainTabs && data.mainTabs.books) || [];
-    var focusIndex = Math.max(0, Math.min(books.length - 1, Number((appState && appState.bookFocusIndex) || 0)));
-    var book = books[focusIndex] || { title: "长夜余火", author: "爱潜水的乌贼", chapter: "第 32 章 雨夜", coverKey: "longNight" };
-    var sourceType = bookSourceType(book, focusIndex);
-    var readable = bookReadable(book, focusIndex, appState);
-    var isLocal = sourceType === "local";
-
-    var actions = [
-      { icon: "info", title: "书籍详情", meta: "查看简介、目录与书源信息", route: "book-detail" },
-      { icon: "check", title: "多选模式", meta: "进入批量管理并选中当前书籍", route: "book-batch-management" },
-      { icon: "people", title: "移动分组", meta: "把当前书籍移到其他分组", route: "group-management" },
-      isLocal
-        ? { icon: "folder", title: "本地文件信息", meta: "查看导入文件路径与格式", route: "book-detail" }
-        : { icon: "source-switch", title: "换源", meta: "切换该书的其他书源", route: "source-switch" },
-      readable.cached
-        ? { icon: "trash", title: "清除缓存", meta: "删除已缓存章节，保留阅读进度", action: "clear-cache" }
-        : { icon: "download", title: "缓存章节", meta: "缓存当前书籍章节供离线阅读", action: "cache" },
-      { icon: "bookmark", title: "管理书签", meta: "查看与新增该书书签", route: "book-directory" },
-      { icon: "share", title: "分享", meta: "分享书籍信息或当前章节", action: "share" },
-      { icon: "trash", title: "移出书架", meta: "只移出书架，保留本地文件和阅读记录", action: "delete", danger: true }
-    ];
-
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
-      data: data,
-      title: "书籍操作",
-      activeType: "bookshelf",
-      actions: ["search", "more"],
-      ariaLabel: "书籍更多操作",
-      contentHtml: `
-        <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
-          ${bookshelfSectionHeaderV2(bookshelfState(appState), false)}
-          <section class="fd-book-grid ${((appState && appState.bookshelfView) === "list" ? "is-list-view" : "is-cover-view")}" role="list" data-book-grid data-bookshelf-view="${(appState && appState.bookshelfView) === "list" ? "list" : "cover"}" aria-label="${(appState && appState.bookshelfView) === "list" ? "书籍列表" : "书籍封面网格"}">
-            ${books.slice(0, 6).map(function (b, i, visible) {
-              return bookItemV2(data, b, i, appState, i + 1, visible.length);
-            }).join("")}
-          </section>
-        </section>
-        <section class="fd-book-focus-layer is-inline is-open" data-book-focus-layer data-book-focus-index="${focusIndex}" aria-label="书籍操作菜单">
-          <button class="fd-book-focus-backdrop" type="button" data-close-book-focus aria-label="关闭书籍操作层"></button>
-          <section class="fd-book-focus-menu" role="dialog" aria-modal="true" aria-label="${esc(book.title)}操作" data-demo-dialog aria-hidden="false">
-            <header>
-              <span class="fd-book-focus-cover" data-focus-cover aria-hidden="true" style="--focus-cover:url('${coverCss(data, book.coverKey)}')"></span>
-              <strong data-focus-title>${esc(book.title)}</strong>
-              <small data-focus-meta>${esc(book.author)} · ${esc(book.chapter)}</small>
-              <div class="fd-book-focus-meta-row" aria-label="书籍来源与可读性">
-                <em class="fd-book-source-tag ${isLocal ? "is-local" : "is-network"}">${isLocal ? "本地书" : "网络书"}</em>
-                <i class="fd-book-cache-tag ${readable.cached ? "is-cached" : "is-missing"}">${readable.label}</i>
-              </div>
-            </header>
-            <div>
-              ${actions.map(function (item, actionIndex) {
-                return `<button class="${item.danger ? "is-danger" : ""}" type="button"${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`} data-book-focus-action${actionIndex === 0 ? " data-dialog-initial-focus" : ""}>
-                  ${icon(item.icon, "fd-small-icon")}
-                  <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-                </button>`;
-              }).join("")}
-            </div>
-            <footer>
-              <button type="button" data-route-back>${icon("chevron-left", "fd-small-icon")}返回书架</button>
-              <span class="fd-book-focus-hint">系统返回将关闭菜单并恢复书架焦点</span>
-            </footer>
-          </section>
-        </section>`,
-      stateHostHtml: `
-        <p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">长按菜单 · 选中：${esc(book.title)} · 来源：${isLocal ? "本地" : "网络"} · 焦点恢复到书架</p>
-        ${bookshelfStateLayersV2()}`
-    }));
-  }
-
-  // ============ 批量管理 V2：批量选择与批量操作闭环 ============
-
-  /**
-   * bookBatchManagementV2 - 批量管理增强
-   * 覆盖路由：book-batch-management
-   * 与原 bookBatchManagementScreen 相比：
-   *   - 真实选择状态（全选/反选/单选）
-   *   - 批量操作闭环：移动分组 / 删除 / 缓存 / 标记已读
-   *   - 本地书与网络书差异标识
-   *   - 操作确认与结果反馈
-   */
-  function bookBatchManagementV2(data, route, appState) {
-    var books = ((data && data.mainTabs && data.mainTabs.books) || []).slice(0, 6).map(function (book, index) {
-      var group = index % 3 === 0 ? "追更" : index % 3 === 1 ? "默认" : "本地书";
-      var selected = (appState && appState.batchSelected && appState.batchSelected.indexOf(index) >= 0) || index < 3;
-      return Object.assign({}, book, {
-        selected: selected,
-        group: group,
-        sourceType: bookSourceType(book, index),
-        readable: bookReadable(book, index, appState)
-      });
-    });
-    var selectedCount = books.filter(function (b) { return b.selected; }).length;
-    var allSelected = selectedCount === books.length;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data: data,
-      title: "批量管理",
-      ariaLabel: "书籍批量管理",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-batch-summary" aria-label="批量选择状态">
-          <strong>已选 ${selectedCount} 本</strong>
-          <span>长按书籍或从更多菜单进入，选择后统一移动分组、删除或取消选择。</span>
-          <button type="button" data-batch-select-all aria-pressed="${allSelected ? "true" : "false"}">${allSelected ? "取消全选" : "全选"}</button>
-        </section>
-        <section class="fd-management-list is-book-batch">
-          <h2>书架书籍</h2>
-          ${books.map(function (book) {
-            return `<article class="${book.selected ? "is-selected" : ""}" data-batch-book data-batch-index="${books.indexOf(book)}">
-              <button class="fd-book-select-toggle" type="button" aria-pressed="${book.selected ? "true" : "false"}" data-batch-toggle>${book.selected ? icon("check", "fd-small-icon") : ""}</button>
-              <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面">
-              <span>
-                <strong>${esc(book.title)}</strong>
-                <small>${esc(book.author)} · ${esc(book.chapter)}</small>
-                <div class="fd-book-list-meta">
-                  <em class="fd-book-source-tag ${book.sourceType === "local" ? "is-local" : "is-network"}">${book.sourceType === "local" ? "本地" : "网络"}</em>
-                  <i class="fd-book-cache-tag ${book.readable.cached ? "is-cached" : "is-missing"}">${book.readable.label}</i>
-                </div>
-              </span>
-              <em>${esc(book.group)}</em>
-            </article>`;
-          }).join("")}
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button" data-route="group-management" ${selectedCount === 0 ? " disabled" : ""}>${icon("people", "fd-small-icon")}移动分组</button>
-          <button type="button" data-batch-cache ${selectedCount === 0 ? " disabled" : ""}>${icon("download", "fd-small-icon")}缓存所选</button>
-          <button type="button" data-batch-mark-read ${selectedCount === 0 ? " disabled" : ""}>${icon("check", "fd-small-icon")}标记已读</button>
-          <button class="is-danger" type="button" data-batch-delete ${selectedCount === 0 ? " disabled" : ""}>${icon("trash", "fd-small-icon")}删除所选</button>
-        </div>`
-    }));
-  }
-
-  // ============ 分组管理 V2：CRUD 和排序 ============
-
-  /**
-   * groupManagementV2 - 分组管理增强
-   * 覆盖路由：group-management / bookshelf-group-management
-   * 与原 groupManagementScreen 相比：
-   *   - 完整 CRUD：新建 / 重命名 / 删除（带确认）
-   *   - 拖拽排序（data-group-drag）
-   *   - 分组内书籍数量与可读性统计
-   *   - 书籍归属可拖拽移动
-   */
-  function groupManagementV2(data, route, appState) {
-    var groups = [
-      { name: "默认分组", meta: "8 本 · 当前分组", count: 8, action: "管理", canDelete: false, canRename: true },
-      { name: "追更", meta: "5 本 · 置顶显示", count: 5, action: "管理", canDelete: true, canRename: true },
-      { name: "本地书", meta: "2 本 · 导入书籍", count: 2, action: "管理", canDelete: true, canRename: true },
-      { name: "资料", meta: "3 本 · 可重命名", count: 3, action: "管理", canDelete: true, canRename: true }
-    ];
-    var books = (data && data.mainTabs && data.mainTabs.books) || [];
-    var assignments = books.slice(0, 6).map(function (book, index) {
-      var group = bookshelfBookGroup(book, index);
+  function bookshelfMultiSelectV2(data) {
+    var state = d2BookshelfState;
+    var books = ((data && data.mainTabs && data.mainTabs.books) || []).map(function (book, index) {
       return {
-        title: book.title,
-        author: book.author,
-        chapter: book.chapter,
-        meta: book.author + " · 当前分组",
-        group: group,
-        sourceType: bookSourceType(book, index)
+        book: book,
+        index: index,
+        bookId: bookshelfBookId(book),
+        sourceId: bookshelfSourceId(book),
+        bookKey: bookshelfBookKey(book),
+        identityKey: bookshelfIdentityKey(book)
       };
+    }).filter(function (entry) {
+      return state.removedBookKeys.indexOf(entry.bookKey) < 0;
     });
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data: data,
-      title: "分组管理",
-      ariaLabel: "分组管理",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-management-list is-group-flow">
-          <h2>分组列表（可拖拽排序）</h2>
-          ${groups.map(function (group, index) {
-            return `<article data-group-row data-group-name="${esc(group.name)}" draggable="true">
-              ${icon("drag", "fd-small-icon fd-group-drag-handle")}
-              <span>
-                <strong>${esc(group.name)}</strong>
-                <small>${esc(group.meta)}</small>
-              </span>
-              <button type="button" data-group-manage data-group-target="${esc(group.name)}">${esc(group.action)}</button>
-              ${group.canRename ? `<button class="is-plain" type="button" data-group-rename data-group-target="${esc(group.name)}" aria-label="重命名分组">${icon("edit", "fd-small-icon")}</button>` : ""}
-              ${group.canDelete ? `<button class="is-plain" type="button" data-group-delete data-group-target="${esc(group.name)}" aria-label="删除分组">${icon("trash", "fd-small-icon")}</button>` : ""}
+    var selectedKeys = state.multiSelectSelectedBookKeys.filter(function (bookKey) {
+      return books.some(function (entry) { return entry.bookKey === bookKey; });
+    });
+    var allSelected = books.length > 0 && selectedKeys.length === books.length;
+    var kit = shellKit();
+    var shellClasses = phoneShellClasses("fd-bookshelf-multi-select");
+    var statusBarHtml = typeof kit.statusBar === "function" ? kit.statusBar(data || {}, shellClasses) : "";
+    return `<main class="rsk-phone fd-phone fd-bookshelf-multi-select" data-shell="BookshelfMultiSelect" data-slot="stackFrame" aria-label="书架多选">
+      ${statusBarHtml}
+      <header class="fd-bookshelf-multi-select-topbar">
+        <button type="button"${d2BookshelfIdentityAttrs("multi-select-exit")} data-multi-select-exit>取消</button>
+        <h1>已选择 ${selectedKeys.length} 本</h1>
+        <button type="button"${d2BookshelfIdentityAttrs("multi-select-all")} data-multi-select-all aria-pressed="${allSelected ? "true" : "false"}">${allSelected ? "取消全选" : "全选"}</button>
+      </header>
+      <section class="fd-bookshelf-multi-select-content" aria-label="选择书籍">
+        <section class="fd-bookshelf-multi-select-grid" role="list">
+          ${books.map(function (entry, position) {
+            var selected = selectedKeys.indexOf(entry.bookKey) >= 0;
+            return `<article class="fd-bookshelf-multi-select-card${selected ? " is-selected" : ""}" role="listitem" aria-posinset="${position + 1}" aria-setsize="${books.length}" data-book-id="${esc(entry.bookId)}" data-book-source-id="${esc(entry.sourceId)}" data-book-key="${esc(entry.bookKey)}">
+              <button type="button"${d2BookshelfIdentityAttrs("multi-select-" + entry.identityKey)} data-multi-select-book-key="${esc(entry.bookKey)}" data-book-id="${esc(entry.bookId)}" data-book-source-id="${esc(entry.sourceId)}" data-book-key="${esc(entry.bookKey)}" aria-pressed="${selected ? "true" : "false"}" aria-label="${selected ? "取消选择" : "选择"}${esc(entry.book.title)}">
+                <span class="fd-bookshelf-multi-select-cover">
+                  <img src="${cover(data, entry.book.coverKey)}" alt="${esc(entry.book.title)}封面">
+                  <i class="fd-bookshelf-multi-select-check" aria-hidden="true">${selected ? "✓" : ""}</i>
+                </span>
+                <strong>${esc(entry.book.title)}</strong>
+                <small>${esc(entry.book.author)}</small>
+              </button>
             </article>`;
           }).join("")}
         </section>
-        <section class="fd-management-list is-assignment-flow">
-          <h2>书籍归属（可拖拽到其他分组）</h2>
-          ${assignments.map(function (item) {
-            return `<article data-assignment-row data-assignment-group="${esc(item.group)}">
-              ${icon("book-open", "fd-small-icon")}
-              <span>
-                <strong>${esc(item.title)}</strong>
-                <small>${esc(item.author)} · ${esc(item.chapter)}</small>
-              </span>
-              <em class="fd-book-source-tag ${item.sourceType === "local" ? "is-local" : "is-network"}">${esc(item.group)}</em>
-            </article>`;
-          }).join("")}
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button" data-group-create>${icon("plus", "fd-small-icon")}新建分组</button>
-          <button type="button" data-route-back>完成</button>
-        </div>`
-    }));
-  }
-
-  // ============ 排序筛选 V2：组合状态 ============
-
-  /**
-   * sortFilterV2 - 书架排序筛选弹层组合状态
-   * 覆盖路由：sort-filter
-   * 展示分组/排序/筛选/搜索的组合状态，并显示当前命中数量。
-   */
-  function sortFilterV2(data, route, appState) {
-    var state = bookshelfState(Object.assign({}, appState, { bookshelfFilterOpen: true }));
-    var books = (data && data.mainTabs && data.mainTabs.books) || [];
-    var visibleBooks = bookshelfVisibleBooks(books, state);
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
-      data: data,
-      title: "书架",
-      activeType: "bookshelf",
-      actions: ["search", "more"],
-      ariaLabel: "书架排序筛选",
-      contentHtml: `
-        <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
-          ${bookshelfSectionHeaderV2(state, false)}
-          ${bookshelfFilterPopoverV2(state)}
-          <section class="fd-book-grid ${state.view === "list" ? "is-list-view" : "is-cover-view"}" role="list" data-book-grid data-bookshelf-view="${state.view}" aria-label="${state.view === "list" ? "书籍列表" : "书籍封面网格"}">
-            ${visibleBooks.length === 0
-              ? `<p class="fd-bookshelf-empty-inline">当前组合条件下没有书籍，请重置筛选或搜索。</p>`
-              : visibleBooks.map(function (entry, position) {
-                return bookItemV2(data, entry.book, entry.index, state, position + 1, visibleBooks.length);
-              }).join("")}
-          </section>
-          <p class="fd-bookshelf-filter-result-meta">分组：${esc(state.group)} · 排序：${esc(state.sort)} · 筛选：${esc(state.filter)}${state.search ? " · 搜索：" + esc(state.search) : ""} · 命中 ${visibleBooks.length}/${books.length}</p>
-        </section>`,
-      stateHostHtml: `<p class="fd-nav-feedback" data-bookshelf-view-feedback aria-live="polite">排序筛选组合 · 命中 ${visibleBooks.length} 本</p>${bookshelfStateLayersV2()}`
-    }));
+      </section>
+      <footer class="fd-bookshelf-multi-select-footer">
+        <button class="is-danger" type="button"${d2BookshelfIdentityAttrs("multi-select-remove")} data-multi-select-remove${selectedKeys.length ? "" : " disabled"}>
+          ${icon("trash", "fd-small-icon")}
+          <span>移除书架</span>
+        </button>
+      </footer>
+      ${bookshelfRemoveDialogV2(data)}
+    </main>`;
   }
 
   // ============ 书籍详情 V2：状态变体补全 ============
+
+  function d2BookDetailSelectedBook(data, appState) {
+    var libraryBook = (data && data.library && data.library.book) || null;
+    var selected = appState && appState.selectedBookContext;
+    if (!selected || !selected.sourceId || !selected.bookId) {
+      return libraryBook || { title: "书籍信息不可用", author: "", coverKey: "longNight" };
+    }
+    var books = (data && data.mainTabs && data.mainTabs.books) || [];
+    var matched = books.find(function (book) {
+      return bookshelfSourceId(book) === String(selected.sourceId) &&
+        bookshelfBookId(book) === String(selected.bookId);
+    });
+    if (!matched) {
+      return {
+        sourceId: String(selected.sourceId),
+        bookId: String(selected.bookId),
+        sourceType: String(selected.sourceId).toLowerCase() === "local" ? "local" : "network",
+        title: "书籍信息不可用",
+        author: "",
+        chapter: "",
+        coverKey: "longNight"
+      };
+    }
+    var libraryMatches = libraryBook &&
+      bookshelfSourceId(libraryBook) === bookshelfSourceId(matched) &&
+      bookshelfBookId(libraryBook) === bookshelfBookId(matched);
+    return libraryMatches ? Object.assign({}, libraryBook, matched) : matched;
+  }
 
   /**
    * bookDetailV2 - 书籍详情状态变体补全
@@ -1330,9 +1338,10 @@
    *   - 已删书显示重新加入书架入口
    */
   function bookDetailV2(data, route, appState) {
-    var book = (data && data.library && data.library.book) || { title: "长夜余火", author: "爱潜水的乌贼", coverKey: "longNight" };
+    var book = d2BookDetailSelectedBook(data, appState);
     var owned = d2BookDetailInjectAppState(appState);
     var detailState = owned.viewState;
+    var isLocalBook = bookSourceType(book) === "local";
     var sourceName = owned.selectedSource || String(book.source || "").split("·")[0].trim() || "当前书源";
     var intro = book.intro || "旧世界的余烬尚未冷却，新的秩序已经在废墟之上生长。主角沿着被遗忘的线索追寻真相，也在一次次选择里确认自己想守住的东西。";
     var tocPreview = route === "book-detail-toc-preview";
@@ -1438,16 +1447,16 @@
             <div class="fd-book-detail-toc-error">
               ${icon("warning", "fd-medium-icon")}
               <h3>目录解析失败</h3>
-              <p>当前书源的目录规则未能解析出章节列表。可重试、编辑书源或切换书源。</p>
+              <p>${isLocalBook ? "当前本地文件未能解析出章节列表，可重试解析。" : "当前书源的目录规则未能解析出章节列表。可重试、编辑书源或切换书源。"}</p>
               <div>
                 <button type="button"${d2BookDetailIdentityAttrs(route, "toc-retry")} data-book-detail-retry-toc aria-busy="${owned.tocStatus === "loading" ? "true" : "false"}"${owned.tocStatus === "loading" ? " disabled" : ""}>${icon("refresh", "fd-small-icon")}重试解析</button>
-                <button type="button"${d2BookDetailIdentityAttrs(route, "source-switch-inline")} data-route="source-switch">${icon("source-switch", "fd-small-icon")}切换书源</button>
-                <button type="button"${d2BookDetailIdentityAttrs(route, "source-debug")} data-route="source-debug">${icon("code", "fd-small-icon")}调试书源</button>
+                ${isLocalBook ? "" : `<button type="button"${d2BookDetailIdentityAttrs(route, "source-switch-inline")} data-route="source-switch">${icon("source-switch", "fd-small-icon")}切换书源</button>
+                <button type="button"${d2BookDetailIdentityAttrs(route, "source-debug")} data-route="source-debug">${icon("code", "fd-small-icon")}调试书源</button>`}
               </div>
             </div>
           </section>`,
-        bottomActionHtml: `<div class="fd-fixed-action-row"><button type="button"${d2BookDetailIdentityAttrs(route, "source-switch-bottom")} data-route="source-switch">换源</button></div>`,
-        stateHostHtml: `<p class="fd-nav-feedback">目录解析失败 · 可重试或换源</p>`
+        bottomActionHtml: isLocalBook ? "" : `<div class="fd-fixed-action-row"><button type="button"${d2BookDetailIdentityAttrs(route, "source-switch-bottom")} data-route="source-switch">换源</button></div>`,
+        stateHostHtml: `<p class="fd-nav-feedback">${isLocalBook ? "本地文件目录解析失败 · 可重试" : "目录解析失败 · 可重试或换源"}</p>`
       }));
     }
 
@@ -1520,8 +1529,10 @@
               </div>
             </dl>
             <div class="fd-book-inline-source-row">
-              <span>书源：${esc(sourceName)}</span>
-              <button class="fd-book-inline-source-button" type="button"${d2BookDetailIdentityAttrs(route, "source-sheet-open")} data-open-sheet aria-expanded="${owned.sheetOpen ? "true" : "false"}">更换书源</button>
+              ${isLocalBook
+                ? `<span>本地书籍 · 离线可读</span>`
+                : `<span>书源：${esc(sourceName)}</span>
+              <button class="fd-book-inline-source-button" type="button"${d2BookDetailIdentityAttrs(route, "source-sheet-open")} data-open-sheet aria-expanded="${owned.sheetOpen ? "true" : "false"}">更换书源</button>`}
             </div>
           </div>
         </section>
@@ -1549,7 +1560,7 @@
           <button type="button"${d2BookDetailIdentityAttrs(route, "continue-read")} data-route="immersive-reading">继续阅读</button>
           <button class="is-danger" type="button"${d2BookDetailIdentityAttrs(route, "remove-open")} data-open-dialog aria-expanded="${owned.dialogOpen ? "true" : "false"}">移除书架</button>
         </div>`,
-      sheetHtml: `
+      sheetHtml: isLocalBook ? "" : `
         <section class="fd-demo-sheet" role="dialog" aria-modal="true" aria-labelledby="book-detail-source-sheet-title" aria-hidden="${owned.sheetOpen ? "false" : "true"}" data-demo-sheet>
           <div class="fd-sheet-grabber"></div>
           <h2 id="book-detail-source-sheet-title">更换书源</h2>
@@ -1578,7 +1589,8 @@
    * 状态变体：正常 / 加载中 / 离线 / 解析失败
    */
   function bookDirectoryV2(data, route, appState) {
-    var book = (data && data.library && data.library.book) || { title: "长夜余火", author: "爱潜水的乌贼" };
+    var book = d2BookDetailSelectedBook(data, appState);
+    var isLocalBook = bookSourceType(book) === "local";
     var chapters = ((data && data.library && data.library.chapters) || []).concat([
       { title: "第 34 章 旧地图", markers: ["已缓存"] },
       { title: "第 35 章 夜行", markers: [] },
@@ -1624,10 +1636,10 @@
             <div class="fd-book-detail-toc-error">
               ${icon("warning", "fd-medium-icon")}
               <h2>目录解析失败</h2>
-              <p>可重试、换源或调试书源规则。</p>
+              <p>${isLocalBook ? "本地文件目录解析失败，可重试解析。" : "可重试、换源或调试书源规则。"}</p>
               <div>
                 <button type="button"${d2BookDetailIdentityAttrs(route, "toc-retry")} data-book-directory-retry aria-busy="${owned.tocStatus === "loading" ? "true" : "false"}"${owned.tocStatus === "loading" ? " disabled" : ""}>${icon("refresh", "fd-small-icon")}重试</button>
-                <button type="button"${d2BookDetailIdentityAttrs(route, "source-switch")} data-route="source-switch">${icon("source-switch", "fd-small-icon")}换源</button>
+                ${isLocalBook ? "" : `<button type="button"${d2BookDetailIdentityAttrs(route, "source-switch")} data-route="source-switch">${icon("source-switch", "fd-small-icon")}换源</button>`}
               </div>
             </div>
           </section>`
@@ -1972,84 +1984,6 @@
                 ? `<button type="button" data-search-reset>清空关键词</button><button type="button" data-search-submit data-book-search-submit data-primary-search-submit>重新搜索</button>`
                 : `<button type="button" data-search-submit data-book-search-submit data-primary-search-submit aria-label="开始搜索"${d2BookSearchIdentityAttrs(route, "search-submit-bottom")}>开始搜索</button><button type="button" data-book-search-clear-history aria-label="清除搜索记录"${d2BookSearchIdentityAttrs(route, "history-clear-bottom")}>清除历史</button>`}
         </div>`
-    }));
-  }
-
-  // ============ 本地导入 V2 ============
-
-  /**
-   * localImportV2 - 本地导入状态变体
-   * 覆盖路由：local-import
-   * 状态变体：选择文件 / 解析中 / 部分成功 / 完成
-   */
-  function localImportV2(data, route, appState) {
-    d2BookshelfInjectAppState(Object.assign({}, appState || {}, { localImportOpen: true }));
-    if (d2BookshelfState.localImportPhase !== "result") d2BookshelfState.localImportPhase = "picker";
-    return bookshelfV2(data, "bookshelf", Object.assign({}, appState || {}, { localImportOpen: true }));
-  }
-
-  // ============ 书架与搜索设置 V2 ============
-
-  /**
-   * bookshelfSearchSettingsV2 - 书架与搜索设置状态变体
-   * 覆盖路由：bookshelf-search-settings
-   */
-  function bookshelfSearchSettingsV2(data, route, appState) {
-    return shellKit().renderSettingsShell(Object.assign(phoneShellClasses("fd-settings-phone"), {
-      data: data,
-      title: "书架与搜索设置",
-      ariaLabel: "书架与搜索设置",
-      topBarClass: "fd-back-bar",
-      contentClass: "fd-phone-content fd-settings-content",
-      contentHtml: `<section class="fd-setting-section">
-          <h2>书架显示</h2>
-          <article class="fd-setting-row is-select" role="group" tabindex="-1">
-            <span>${icon("grid", "fd-small-icon")}</span>
-            <strong>默认视图<small>封面网格</small></strong>
-            <em class="fd-settings-row-side is-action"><button class="fd-settings-row-action" type="button" data-settings-option="bookshelf-default-view">更改</button></em>
-          </article>
-          <article class="fd-setting-row is-select" role="group" tabindex="-1">
-            <span>${icon("filter", "fd-small-icon")}</span>
-            <strong>默认排序<small>最近更新</small></strong>
-            <em class="fd-settings-row-side is-action"><button class="fd-settings-row-action" type="button" data-settings-option="bookshelf-default-sort">更改</button></em>
-          </article>
-          <article class="fd-setting-row is-select" role="group" tabindex="-1">
-            <span>${icon("download", "fd-small-icon")}</span>
-            <strong>缓存策略<small>Wi-Fi 下自动缓存</small></strong>
-            <em class="fd-settings-row-side is-action"><button class="fd-settings-row-action" type="button" data-settings-option="bookshelf-cache-policy">更改</button></em>
-          </article>
-        </section>
-        <section class="fd-setting-section">
-          <h2>本地书与网络书</h2>
-          <article class="fd-setting-row is-switch" role="group" tabindex="-1">
-            <span>${icon("folder", "fd-small-icon")}</span>
-            <strong>本地书标识<small>显示本地书来源标识</small></strong>
-            <em class="fd-settings-row-side is-switch"><button class="fd-settings-switch is-on" type="button" data-settings-toggle="show-local-badge" aria-pressed="true" aria-label="本地书标识"><i></i></button></em>
-          </article>
-          <article class="fd-setting-row is-switch" role="group" tabindex="-1">
-            <span>${icon("source-stack", "fd-small-icon")}</span>
-            <strong>网络书缓存状态<small>显示缓存/未缓存标识</small></strong>
-            <em class="fd-settings-row-side is-switch"><button class="fd-settings-switch is-on" type="button" data-settings-toggle="show-cache-badge" aria-pressed="true" aria-label="网络书缓存状态"><i></i></button></em>
-          </article>
-          <article class="fd-setting-row is-switch" role="group" tabindex="-1">
-            <span>${icon("warning", "fd-small-icon")}</span>
-            <strong>更新失败提醒<small>书架书籍更新失败时显示角标</small></strong>
-            <em class="fd-settings-row-side is-switch"><button class="fd-settings-switch" type="button" data-settings-toggle="show-update-failed" aria-pressed="false" aria-label="更新失败提醒"><i></i></button></em>
-          </article>
-        </section>
-        <section class="fd-setting-section">
-          <h2>搜索</h2>
-          <article class="fd-setting-row is-select" role="group" tabindex="-1">
-            <span>${icon("search", "fd-small-icon")}</span>
-            <strong>默认搜索源<small>全部已启用书源</small></strong>
-            <em class="fd-settings-row-side is-action"><button class="fd-settings-row-action" type="button" data-settings-option="search-default-sources">更改</button></em>
-          </article>
-          <article class="fd-setting-row is-select" role="group" tabindex="-1">
-            <span>${icon("history", "fd-small-icon")}</span>
-            <strong>搜索历史<small>保留 20 条</small></strong>
-            <em class="fd-settings-row-side is-action"><button class="fd-settings-row-action" type="button" data-settings-option="search-history-limit">更改</button></em>
-          </article>
-        </section>`
     }));
   }
 
@@ -2907,24 +2841,17 @@
 
   // ============ 集成映射 ============
 
-  // INTEGRATION_MAP：替换 contractStatic / 新增 schema-only renderer
-  // 这些路由原本走 contractStaticRouteScreen 或没有专用 renderer，现在由本模块提供完整实现
-  var INTEGRATION_MAP = {
-    "bookshelf-book-more-menu": "bookshelfBookMoreMenuScreen"
-  };
+  // 退休路由不得通过旧 integration map 重新进入生产路径。
+  var INTEGRATION_MAP = {};
 
   // STATE_VARIANT_MAP：已审计路由的状态变体增强
   // 这些路由已有 renderer，本模块提供产品化缺口补全的状态变体
   var STATE_VARIANT_MAP = {
-    // —— 书架 17 路由 ——
+    // —— 书架当前 Figma 绑定 ——
     "bookshelf": "bookshelfV2",
     "bookshelf-cover-mode": "bookshelfV2",
     "bookshelf-list-mode": "bookshelfV2",
     "bookshelf-empty": "bookshelfEmptyV2",
-    "book-batch-management": "bookBatchManagementV2",
-    "group-management": "groupManagementV2",
-    "bookshelf-group-management": "groupManagementV2",
-    "sort-filter": "sortFilterV2",
     "book-detail": "bookDetailV2",
     "book-detail-toc-preview": "bookDetailV2",
     "book-directory": "bookDirectoryV2",
@@ -2933,24 +2860,20 @@
     "search-results": "bookSearchV2",
     "search-loading": "bookSearchV2",
     "search-empty": "bookSearchV2",
-    "search-error": "bookSearchV2",
-    "local-import": "localImportV2",
-    "bookshelf-search-settings": "bookshelfSearchSettingsV2"
+    "search-error": "bookSearchV2"
   };
 
   // ============ 暴露到 window ============
 
-  window.ReaderD2BookshelfDiscoverRenderers = {
+  var d2BookshelfExports = {
     // 集成映射
     INTEGRATION_MAP: INTEGRATION_MAP,
     STATE_VARIANT_MAP: STATE_VARIANT_MAP,
     // —— 书架 renderer ——
     bookshelfV2: bookshelfV2,
     bookshelfEmptyV2: bookshelfEmptyV2,
-    bookshelfBookMoreMenuScreen: bookshelfBookMoreMenuScreen,
-    bookBatchManagementV2: bookBatchManagementV2,
-    groupManagementV2: groupManagementV2,
-    sortFilterV2: sortFilterV2,
+    bookActionSheetV2: bookActionSheetV2,
+    bookshelfMultiSelectV2: bookshelfMultiSelectV2,
     bookDetailV2: bookDetailV2,
     bookDirectoryV2: bookDirectoryV2,
     bookSearchV2: bookSearchV2,
@@ -2968,8 +2891,6 @@
       close: d2CloseBookSearch,
       identityAttrs: d2BookSearchIdentityAttrs
     },
-    localImportV2: localImportV2,
-    bookshelfSearchSettingsV2: bookshelfSearchSettingsV2,
     bookshelf: {
       defaults: d2BookshelfDefaults,
       reducer: d2BookshelfReducer,
@@ -2979,8 +2900,9 @@
       injectAppState: d2BookshelfInjectAppState,
       executeLoadRetry: d2ExecuteBookshelfLoadRetry,
       executeNetworkRetry: d2ExecuteBookshelfNetworkRetry,
+      executeSingleRemove: function (options) { return d2ExecuteBookshelfRemove("single", options); },
+      executeBatchRemove: function (options) { return d2ExecuteBookshelfRemove("batch", options); },
       executeLocalImport: d2ExecuteLocalImport,
-      retryLocalImport: d2RetryLocalImport,
       identityAttrs: d2BookshelfIdentityAttrs
     },
     bookDetail: {
@@ -3010,4 +2932,31 @@
     discoverRuleTestV2: discoverRuleTestV2,
     discoverSourceBulkV2: discoverSourceBulkV2
   };
+  var d2BookshelfPublicRouteSpecifications = {
+    bookshelfV2: { allowedRoutes: ["bookshelf", "bookshelf-cover-mode"], routeIndex: 1 },
+    bookshelfEmptyV2: { allowedRoutes: ["bookshelf-empty"], routeIndex: 1 },
+    bookDetailV2: { allowedRoutes: ["book-detail", "book-detail-toc-preview"], routeIndex: 1 },
+    bookDirectoryV2: { allowedRoutes: ["book-directory"], routeIndex: 1 },
+    bookSearchV2: { allowedRoutes: ["book-search", "search-home", "search-results", "search-loading", "search-empty", "search-error"], routeIndex: 1 },
+    discoverV2: { allowedRoutes: ["discover", "discover-home", "discover-control", "discover-sort", "discover-entry-ranking", "discover-entry-bestseller", "discover-entry-category", "discover-entry-source", "discover-entry-finished", "discover-entry-latest", "discover-entry-new", "discover-entry-booklist"], routeIndex: 1 },
+    discoverNoResultsV2: { allowedRoutes: ["discover-no-results"], routeIndex: 1 },
+    discoverLoadingV2: { allowedRoutes: ["discover-loading"], routeIndex: 1 },
+    discoverRefreshingV2: { allowedRoutes: ["discover-refreshing"], routeIndex: 1 },
+    discoverInfiniteV2: { allowedRoutes: ["discover-infinite-loading"], routeIndex: 1 },
+    discoverCacheV2: { allowedRoutes: ["discover-cache-empty", "discover-cache-stale", "discover-cache-fresh", "discover-cache-confirm", "discover-cache-toast"], routeIndex: 1 },
+    discoverLoginReturnV2: { allowedRoutes: ["discover-login-return"], routeIndex: 1 },
+    discoverSwitchingV2: { allowedRoutes: ["discover-switching-source", "discover-switched-source"], routeIndex: 1 },
+    discoverErrorV2: { allowedRoutes: ["discover-entry-error", "discover-empty", "discover-error"], routeIndex: 1 },
+    discoverSourceLoginV2: { allowedRoutes: ["discover-source-login"], routeIndex: 1 },
+    discoverRuleTestV2: { allowedRoutes: ["discover-rule-test"], routeIndex: 1 },
+    discoverSourceBulkV2: { allowedRoutes: ["discover-source-bulk"], routeIndex: 1 }
+  };
+  d2BookshelfExports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(Object.keys(d2BookshelfPublicRouteSpecifications).reduce(function (result, name) {
+    result[name] = Object.freeze(d2BookshelfPublicRouteSpecifications[name].allowedRoutes.slice());
+    return result;
+  }, {}));
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    d2BookshelfExports = window.ReaderPublicRouteRendererAdmission.guardModule(d2BookshelfExports, d2BookshelfPublicRouteSpecifications);
+  }
+  window.ReaderD2BookshelfDiscoverRenderers = d2BookshelfExports;
 })(window);

@@ -209,7 +209,7 @@ A Figma binding is not a delivery. The generated visual-admission artifact must 
 | Field | Meaning | Who sets it |
 | --- | --- | --- |
 | `sourceBound` | A Figma file/node/master/revision is registered for this surface. | Reader-UI registry (`classification: exact-figma-binding`) |
-| `implementationReady` | The page family has completed Reader-UI source-side conversion AND the host has consumed the regenerated artifact. | Reader-UI registry (`harmony.status: implementation-ready`) |
+| `implementationReady` | The page family has completed Reader-UI B2/B3 and the B4 atomic promotion has admitted it for host consumption. Host consumption and runtime proof remain B5–B7 work. | Reader-UI registry (`harmony.status: implementation-ready`) |
 
 The admission status is derived from these two fields, never set independently:
 
@@ -219,25 +219,23 @@ The admission status is derived from these two fields, never set independently:
 | true | false | `candidate-backport` |
 | false | false | `blocked` or `retired` |
 
-`candidate-backport` is a **stop condition**, not a renderable state. A renderer that encounters a `candidate-backport` route must fail closed (render nothing) — it must not draw a generic fallback, a diagnostic card, or the old shell + hand-written component combination.
+`candidate-backport` is a **stop condition**, not a renderable state. A renderer that encounters a `candidate-backport` route must fail closed (render nothing) — it must not draw a generic fallback, a diagnostic card, the old shell + hand-written component combination, or a hidden zero-size placeholder. Where Reader-UI declares an active route-reconstruction quarantine, the host must omit the old generated shell/body mapping entirely.
 
 ### 9.2 Mandatory execution gate chain
 
 Every page family must pass through this chain in order. No step may be skipped or reordered:
 
 ```text
-1. Figma current master/revision frozen
-2. Reader-UI completes the page family's static structure, state, token, interaction contract
-3. Reader-UI marks the page family implementation-ready (harmony.status = implementation-ready)
-4. Reader-UI regenerates the visual-admission artifact (sourceBound + implementationReady)
-5. Host consumes only implementation-ready artifacts; removes the route's old generic rendering
-6. Compile + static structure check
-7. Virtual machine verifies the page family's real interaction and layout
-8. Real device provides final device/motion/system-capability evidence
-9. Reader-UI freezes the page family as deliverable
+1. B1 — Figma current master/revision frozen
+2. B2 — Reader-UI completes the static structure, state, token, and interaction contract in a clean implementation commit
+3. B3 — a separate Reader-UI evidence commit binds the B2 commit, current Figma source, and fresh sourceEvidenceHash
+4. B4 — dependency authority, Core pin, and shared production-writer lock pass; promote-family atomically updates harmony.status, artifacts, and the append-only ledger
+5. B5 — Host consumes only the promoted implementation-ready artifact, removes old generic rendering, then runs compile + static structure checks
+6. B6 — Virtual machine verifies the page family's real interaction and layout
+7. B7 — Real device provides motion/system-capability evidence and the machine receipt/release identity; Reader-UI freezes the family as deliverable
 ```
 
-The virtual machine is not cancelled — it is **gated**. It may run only after step 5 (host consumption of an `implementation-ready` artifact). Running a virtual-machine cycle on a `candidate-backport` page family is a protocol violation, regardless of whether the virtual machine "finds issues" or "passes".
+The virtual machine is not cancelled — it is **gated**. It may run only after B5 host consumption of an `implementation-ready` artifact. Running a virtual-machine cycle on a `candidate-backport` page family is a protocol violation, regardless of whether the virtual machine "finds issues" or "passes". Machine receipts, device proof, motion proof, and release identity belong to B7; they are not B3 evidence and must not be made prerequisites that prevent B4 from ever starting.
 
 ### 9.3 Machine-enforced gates (HarmonyOS)
 
@@ -245,8 +243,8 @@ The following gates are enforced by test commands, not by documentation. An agen
 
 | Gate | Script | What it enforces |
 | --- | --- | --- |
-| Pre-gate | `scripts/enforce-implementation-ready-gate.mjs` (`pretest` hook) | The generated artifact uses the two-dimensional gate; every entry is internally consistent; all four gate methods check `=== 'implementation-ready'`; all four renderers document `candidate-backport` as fail-closed; all four renderers fail closed with `Column().width(0).height(0)`. |
-| Contract gate | `scripts/test_contracts.mjs` | `admission ↔ implementationReady ↔ sourceBound` consistency; `candidate-backport` fail-closed at every renderer; no `Figma*Root` / `FigmaVisual*Policy` parallel layer; no retired `admitted` status in the generated artifact. |
+| Pre-gate | `scripts/enforce-implementation-ready-gate.mjs` (`pretest` hook) | The generated artifact uses the two-dimensional gate; every entry is internally consistent; all four admission methods check `=== 'implementation-ready'`; active renderers document `candidate-backport` as fail-closed; any active Reader-UI route-reconstruction quarantine is removed from generated RouteTable/ViewStateTable; RouteRenderer/OverlayHost/retired StateHost contain no zero-size hiding fallback. |
+| Contract gate | `scripts/test_contracts.mjs` | `admission ↔ implementationReady ↔ sourceBound` consistency; `candidate-backport` fail-closed without a local substitute; active source quarantine removes all listed native mappings; no `Figma*Root` / `FigmaVisual*Policy` parallel layer; no retired `admitted` status in the generated artifact. |
 | Emulator gate | `scripts/run_ohos_device_tests.mjs` (`test:arkts-emulator`) | ArkTS Hypium suite passes on the local emulator. This is an **emulator behavior test**, not a device delivery test and not a frontend visual delivery test. Its pass count must never be reported as device or frontend completion evidence. |
 
 ### 9.4 Stop conditions specific to enforcement gates
@@ -266,7 +264,7 @@ In addition to Section 6's stop conditions, an agent must stop when:
 - A `465/465` emulator pass only proves the ArkTS Hypium suite passed on `127.0.0.1:5555`. It does not prove Figma parity, Reader-UI source-side completion, HarmonyOS consumption, or real-device behavior.
 - No document, report, or commit message may describe the emulator suite as "device tests" or "frontend delivery tests".
 
-### 9.6 Atomic promotion transaction (anti-bypass layer 1)
+### 9.6 Atomic promotion and retraction transactions (anti-bypass layer 1)
 
 Sections 9.1–9.5 defined the two-dimensional gate but left a bypass: an agent could hand-edit `harmony.status` to `implementation-ready` in the registry without completing source-side conversion, and the generator would happily produce `implementation-ready` admission entries because it only read `harmony.status`. The 2026-07-27 audit found 28 records in exactly this state.
 
@@ -280,13 +278,17 @@ The corrected atomic promotion transaction closes all four:
 
 | Rule | Enforcement |
 | --- | --- |
-| `harmony.status` must NEVER be hand-edited to `implementation-ready`. | The ONLY authorized path is `Reader-UI/tools/design/promote-family.mjs <recordId>`. |
+| `harmony.status` must NEVER be hand-edited. | The ONLY authorized path to `implementation-ready` is `Reader-UI/tools/design/promote-family.mjs <recordId>` for an independent record, or `Reader-UI/tools/design/promote-family.mjs --group <anchorRecordId>` when one B3 packet names an atomic record set. The corresponding reverse paths are `--retract` and `--retract-group`; a member of an active group transaction cannot be retracted alone. |
 | `local.status` must be `implementation-ready` BEFORE `harmony.status` is promoted. | `promote-family.mjs` verifies this prerequisite and refuses to run if `local.status` is still `candidate-backport` or `not-currently-crosswalked`. |
+| B3 Reader-UI evidence must not force an early native artifact copy. | `VisualAdmission.ets` hashes the canonical visual/admission projection (Figma identity, route/overlay/state membership, classification, delivery state, and `harmony.status`) instead of the entire registry file. A B3-only `local.status`, handoff, or evidence-link change therefore leaves the native artifact byte-stable. Figma binding or Harmony admission changes still change the digest. |
+| An active source route-reconstruction quarantine blocks promotion. | `promote-family.mjs` refuses its listed records; `--check` requires both status dimensions to remain `candidate-backport`, requires no ledger entry, and requires its route set to match the registry. |
 | `LOCAL_READY_FOR_FIGMA.json` must exist and declare `admission.localReadyForFigma: true`. | `promote-family.mjs` resolves the handoff directory via an explicit `RECORD_ID_TO_HANDOFF` map (no string-prefix guessing). |
 | Figma binding revision must match the OFFICIAL current-revision evidence. | `promote-family.mjs` reads `docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json` and compares `record.figma.revision` to `evidence.currentRevision` — not to another registry record. |
 | HarmonyOS consumer target files must exist AND the `#symbol` suffix must be findable. | `promote-family.mjs` splits each `harmony.targets` entry on `#` and word-boundary-matches the symbol in the file. A renamed/deleted component fails promotion. |
 | The promotion must be atomic across FOUR files: registry + upstream artifact + consumer copy + ledger. | `promote-family.mjs` snapshots all four files before mutation, writes the registry FIRST (via temp+rename) so the generator reads the new state, regenerates the upstream artifact, syncs the consumer copy, verifies upstream == consumer (byte-identical SHA-256), appends the ledger entry, and does a final read-back. Any failure rolls back ALL prior writes in the transaction. |
+| Records sharing a route/overlay/state admission must not be promoted one at a time. | `--group <anchorRecordId>` derives the complete set from `LOCAL_READY_FOR_FIGMA.json admission.recordIds`, requires every member to share the same packet, evidence hash, and implementation commit, validates every member before mutation, changes all statuses in one registry write, generates once, and records one hash-chained ledger entry per record with a shared transaction ID. An incomplete set is refused. `--retract-group` applies the same boundary in reverse. |
 | Every promotion must be recorded in a tamper-evident ledger. | `Reader-UI/docs/design/PROMOTION_LEDGER.json` is an append-only log with hash-chained entries. Each entry records: recordId, previousHarmonyStatus, localStatus, figma revision, official current revision, registry hash before, upstream artifact hash after, consumer artifact hash after, `artifactsInSync` flag, and a hash of all fields chained to the previous entry. **The ledger is best-effort tamper-evident, NOT a cryptographic signature** — an agent with write access can recompute the chain. The real defense is Layer 3 (CI from a clean checkout). |
+| A promotion discovered to have crossed an unmet prerequisite must be withdrawn without erasing evidence. | `--retract` snapshots and rolls back the same four files on failure; on success it changes only `harmony.status` back to `candidate-backport`, regenerates/syncs `VisualAdmission.ets`, and appends a hash-chained reversal referencing the withdrawn promotion. It never deletes or rewrites the earlier promotion entry, and it preserves `local.status` as source-side history. A later promotion must use a new `LOCAL_READY_FOR_FIGMA` source-evidence hash **and** a new implementation commit; it is not a retry button. |
 
 The HarmonyOS `enforce-implementation-ready-gate.mjs` runs `promote-family.mjs --check` (Gate I) to verify that every `implementation-ready` record has a valid ledger entry, AND compares upstream vs consumer SHA-256 directly (Gate G2) to detect divergence that bypassed the promotion flow.
 
@@ -327,7 +329,7 @@ Local gates (Layers 1–2) can all be bypassed by an agent with write access to 
 
 In addition to Section 9.4's stop conditions, an agent must stop when:
 
-- The agent is about to hand-edit `harmony.status` in `FIGMA_VISUAL_ADMISSION_REGISTRY.json`. This is ALWAYS a protocol violation. Use `promote-family.mjs` instead.
+- The agent is about to hand-edit `harmony.status` in `FIGMA_VISUAL_ADMISSION_REGISTRY.json`. This is ALWAYS a protocol violation. Use `promote-family.mjs` to promote or its `--retract` transaction to withdraw a completed promotion.
 - The agent is about to hand-edit `PROMOTION_LEDGER.json`. The ledger is append-only by `promote-family.mjs`; hand-editing it is tampering.
 - The agent is about to run `npm run build`, `npm run test:arkts-emulator`, `npm run test:device`, or `npm run test:raw` without the gate passing. The pre-hooks and internal preflight will block this, but the agent should not attempt to bypass them.
 - The agent is about to invoke `hvigorw` directly, bypassing the npm scripts. Direct `hvigorw` invocation cannot be gated from inside the repo — the agent must run `npm run build` or `npm run test:raw` instead, which trigger the pre-hooks.

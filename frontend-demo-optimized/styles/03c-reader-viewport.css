@@ -520,7 +520,14 @@
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="expanded-width"] .fd-ir-reading-layer,
 .fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-ir-reading-layer {
-  inset: 92px 44px 56px;
+  /* Reader/Responsive/ReadingSurface · Viewport=TabletExpanded (1023:18371):
+   * outer ReadingContent bounds are 45 / 93 / 45 / 57. Retain page-space as
+   * a delta from the Phone setting baseline so a user adjustment remains real
+   * without rewriting the Figma master defaults. */
+  top: calc(93px + (var(--reader-top-margin, 72px) - 72px));
+  right: calc(45px + (var(--reader-side-margin, 32px) - 32px));
+  bottom: 57px;
+  left: calc(45px + (var(--reader-side-margin, 32px) - 32px));
 }
 
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-ir-reading-layer {
@@ -644,5 +651,5 @@
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-page-mode-vertical.fd-reader-mode-module .fd-ir-reading-layer,
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-page-mode-vertical.fd-reader-mode-quick .fd-ir-reading-layer,
 .fd-demo[data-demo-mode="regular"][data-viewport-class="compact-landscape"] .fd-reader-page-mode-vertical.fd-reader-mode-full .fd-ir-reading-layer {
-  right: var(--reader-side-margin, 44px);
+  right: calc(45px + (var(--reader-side-margin, 32px) - 32px));
 }

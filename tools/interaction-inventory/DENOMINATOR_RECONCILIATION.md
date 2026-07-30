@@ -11,7 +11,7 @@ A0「全局控制面纠偏」要求**分开三套分母**，不得合并表述�
 | 分母 | 数量 | 来源 | 责任 | 不允许混入 |
 | --- | ---: | --- | --- | --- |
 | **视觉/交互验收单元** | **13** | 12 个非 Reader 页面族（F13–F24，见 `docs/audits/vc0-batch-2026-07-19/final-classification.md`）+ 1 个 Reader 试点（Settings General，见 `docs/audits/ic0-2026-07-19/SETTINGS_GENERAL_VC0_SAMPLE.md`） | R3a / VC3-R3b 验收对象粒度 | 不允许用 renderer-owner family 或 DOM occurrence 替代 |
-| **renderer-owner family** | **12** | `tools/interaction-inventory/generated/renderer-dispatch-map.json` `pageFamilies`（bookshelf / book-detail / search-results / import-conflict-resolve / discover / rss / source-switch / settings-general / source-management / webdav-config / sync-backup / about-restore-preview） | R2a / R2b 渲染归属与 dispatch 对账 | 不允许用验收单元或 DOM occurrence 替代 |
+| **active renderer-owner family** | **11** | `tools/interaction-inventory/generated/renderer-dispatch-map.json` `pageFamilies`（bookshelf / book-detail / search-results / discover / rss / source-switch / settings-general / source-management / webdav-config / sync-backup / restore-preview）；standalone import 与 About 已撤回 | R2a / R2b 渲染归属与 dispatch 对账 | 不允许用已撤回页面或 DOM occurrence 补足分母 |
 | **DOM occurrence** | **3,752** | `tools/interaction-inventory/generated/control-id-registry.json` `entries.length`（仅交互控件；63 个 ARIA 容器在 `nonInteractiveContainers.json` 中单独记录） | R2a DOM identity instrumentation 的稳定身份分母 | 不允许用验收单元或 renderer-owner family 替代 |
 
 ### 0.1 三套分母的相互关系

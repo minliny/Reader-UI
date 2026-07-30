@@ -51,20 +51,6 @@ enum class RouteId {
     Reader,
     @SerialName("reader_content")
     ReaderContent,
-    @SerialName("toc-bookmarks")
-    TocBookmarks,
-    @SerialName("reader-appearance")
-    ReaderAppearance,
-    @SerialName("reader-appearance-overlay-v2")
-    ReaderAppearanceOverlayV2,
-    @SerialName("tts")
-    Tts,
-    @SerialName("reader-tts-overlay-v2")
-    ReaderTtsOverlayV2,
-    @SerialName("reader-settings")
-    ReaderSettings,
-    @SerialName("reader-settings-overlay-v2")
-    ReaderSettingsOverlayV2,
     @SerialName("reader-full-font")
     ReaderFullFont,
     @SerialName("reader-full-theme")
@@ -81,16 +67,8 @@ enum class RouteId {
     ReaderDebugInfo,
     @SerialName("auto-page")
     AutoPage,
-    @SerialName("reader-auto-scroll-overlay-v2")
-    ReaderAutoScrollOverlayV2,
-    @SerialName("content-search")
-    ContentSearch,
-    @SerialName("reader-search-overlay-v2")
-    ReaderSearchOverlayV2,
     @SerialName("content-replacement")
     ContentReplacement,
-    @SerialName("reader-replace-overlay-v2")
-    ReaderReplaceOverlayV2,
     @SerialName("source-switch")
     SourceSwitch,
     @SerialName("source-switch-results")
@@ -283,10 +261,6 @@ enum class RouteId {
     StateError,
     @SerialName("state-offline")
     StateOffline,
-    @SerialName("control-layer-base-v2")
-    ControlLayerBaseV2,
-    @SerialName("reader-directory-overlay-v2")
-    ReaderDirectoryOverlayV2,
     @SerialName("discover-entry-ranking")
     DiscoverEntryRanking,
     @SerialName("discover-entry-bestseller")

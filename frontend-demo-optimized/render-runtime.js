@@ -1,4 +1,41 @@
 (function attachReaderFrontendDemoDraft(window) {
+  // This is a trace binding, not a second visual source. Layout and visual
+  // values remain frozen in the canonical Figma master and its two variants.
+  const READER_READING_SURFACE_FIGMA_BINDING = Object.freeze({
+    fileKey: "klhs2jMM4MncaJFqZMfqEK",
+    canonicalMasterId: "1023:18354",
+    phoneNodeId: "1023:18355",
+    tabletNodeId: "1023:18371",
+    phonePaperLayerId: "1023:18356",
+    phoneReadingContentId: "1023:18357",
+    tabletPaperLayerId: "1023:18372",
+    tabletReadingContentId: "1023:18373",
+    paperTextureAsset: "./assets/figma/reader-paper-layer.png",
+    paperTextureSha256: "bfa7f242279d457b7707a7de9116047438c6fb2d437ac143125e8b35c7987a7a",
+    // Values below are a Reader-UI trace of the frozen default variant, not a
+    // second visual system. Explicit reader settings remain state-owned and
+    // may override them only through their separately bound control records.
+    defaultTypography: Object.freeze({
+      fontFamilyId: "source-han-serif",
+      fontFamily: "Noto Serif SC",
+      fontSize: 18,
+      lineHeight: 1.96,
+      paragraphGap: 15.8,
+      paragraphIndent: 2,
+      letterSpacing: 0,
+      titleFontSize: 23,
+      titleLineHeight: 1.25,
+      titleToBodyGap: 18,
+      ink: "#2B241D"
+    }),
+    defaultPageSpace: Object.freeze({
+      topMargin: 72,
+      sideMargin: 32,
+      paragraphIndent: 2,
+      texture: "paper"
+    })
+  });
+
   function esc(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -303,203 +340,12 @@
     };
   });
 
-  function bookCard(data, book) {
-    const coverSrc = cover(data, book.coverKey);
-    return `
-      <article class="fd-book-card" data-book-card>
-        <button class="fd-book-cover-frame" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(book.title)}" data-book-author="${esc(book.author)}" data-book-chapter="${esc(book.chapter)}" data-cover-src="${coverSrc}" aria-label="打开 ${esc(book.title)}">
-          <img src="${coverSrc}" alt="${esc(book.title)}封面">
-        </button>
-        <strong>${esc(book.title)}</strong>
-        <span>${esc(book.author)}</span>
-      </article>`;
-  }
-
-  function bookFocusLayer(data) {
-    const first = data.mainTabs.books[0] || {};
-    return `
-      <section class="fd-book-focus-layer" data-book-focus-layer aria-hidden="true" aria-label="书籍封面操作层">
-        <button class="fd-book-focus-backdrop" type="button" data-close-book-focus aria-label="关闭书籍操作层"></button>
-        <section class="fd-book-focus-menu" role="dialog" aria-modal="true" aria-label="书籍操作">
-          <header>
-            <span class="fd-book-focus-cover" data-focus-cover aria-hidden="true" style="--focus-cover:url('${coverCss(data, first.coverKey)}')"></span>
-            <strong data-focus-title>${esc(first.title || "长夜余火")}</strong>
-            <small data-focus-meta>${esc(first.author || "爱潜水的乌贼")} · ${esc(first.chapter || "第 32 章 雨夜")}</small>
-          </header>
-          <div>
-            <button type="button" data-route="book-batch-management">${icon("check", "fd-small-icon")}<span>多选</span></button>
-            <button type="button" data-book-action="branch" data-route="group-management">${icon("people", "fd-small-icon")}<span>分支</span></button>
-            <button type="button" data-route="book-detail">${icon("info", "fd-small-icon")}<span>书籍详情</span></button>
-            <button class="is-danger" type="button" data-book-action="delete">${icon("trash", "fd-small-icon")}<span>删除</span></button>
-          </div>
-        </section>
-      </section>`;
-  }
-
-  function bookshelfMoreLayer() {
-    const items = [
-      { icon: "check", title: "批量管理", meta: "选择多本书后移动或删除", route: "book-batch-management" },
-      { icon: "people", title: "分组管理", meta: "编辑书架分组与归属", route: "group-management" },
-      { icon: "book-open", title: "本地书导入", meta: "导入本地文件到书架", route: "local-import" }
-    ];
-    return `
-      <section class="fd-bookshelf-more-layer" data-bookshelf-more-layer aria-hidden="true" aria-label="书架更多操作">
-        <button class="fd-bookshelf-more-backdrop" type="button" data-close-bookshelf-more aria-label="关闭书架更多操作"></button>
-        <section class="fd-bookshelf-more-menu" role="dialog" aria-modal="true" aria-label="书架更多操作">
-          <h2>书架更多操作</h2>
-          ${items.map((item) => `
-            <button type="button"${item.route ? ` data-route="${esc(item.route)}"` : ` data-book-action="${esc(item.action)}"`}>
-              ${icon(item.icon, "fd-small-icon")}
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-            </button>
-          `).join("")}
-        </section>
-      </section>`;
-  }
-
-  function bookshelfSortFilterState(appState) {
-    return {
-      group: appState?.bookshelfGroup || "全部",
-      sort: appState?.bookshelfSort || "最近更新",
-      filter: appState?.bookshelfFilter || "全部",
-      open: Boolean(appState?.bookshelfFilterOpen)
-    };
-  }
-
-  function bookshelfFilterPopover(appState, disabled) {
-    const state = bookshelfSortFilterState(appState);
-    if (disabled || !state.open) {
-      return "";
-    }
-    const groupOptions = ["全部", "默认", "本地书", "追更"];
-    const sortOptions = ["最近更新", "阅读进度", "书名", "作者"];
-    const filterOptions = ["全部", "未读", "已完结", "更新失败"];
-    return `
-          <section class="fd-bookshelf-filter-popover" aria-label="书架排序与筛选选项">
-            <article>
-              <strong>分组</strong>
-              <div>
-                ${groupOptions.map((item) => `<button class="${item === state.group ? "is-active" : ""}" type="button" data-bookshelf-group-option="${esc(item)}"${item === state.group ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
-              </div>
-            </article>
-            <article>
-              <strong>排序</strong>
-              <div>
-                ${sortOptions.map((item) => `<button class="${item === state.sort ? "is-active" : ""}" type="button" data-bookshelf-sort-option="${esc(item)}"${item === state.sort ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
-              </div>
-            </article>
-            <article>
-              <strong>筛选</strong>
-              <div>
-                ${filterOptions.map((item) => `<button class="${item === state.filter ? "is-active" : ""}" type="button" data-bookshelf-filter-option="${esc(item)}"${item === state.filter ? ' aria-current="true"' : ""}>${esc(item)}</button>`).join("")}
-              </div>
-            </article>
-          </section>`;
-  }
-
-  function bookshelfBookGroup(book, index) {
-    const title = String(book?.title || "");
-    const author = String(book?.author || "");
-    if (/本地|离线|导入|文档/.test(author)) {
-      return "本地书";
-    }
-    if (index < 4 || /书源|同步/.test(author) || /灯塔与雾/.test(title)) {
-      return "追更";
-    }
-    return "默认";
-  }
-
-  function bookshelfBookMatchesGroup(book, index, group) {
-    return group === "全部" || bookshelfBookGroup(book, index) === group;
-  }
-
-  function bookshelfBookMatchesFilter(book, index, filter) {
-    const progress = Number.parseInt(String(book.progress || "0").replace("%", ""), 10) || 0;
-    const title = String(book.title || "");
-    const author = String(book.author || "");
-    if (filter === "未读") {
-      return progress < 20;
-    }
-    if (filter === "已完结") {
-      return /三体|人间词话/.test(title);
-    }
-    if (filter === "更新失败") {
-      return /长标题测试|书源同步/.test(title) || /书源同步/.test(author);
-    }
-    return true;
-  }
-
-  function bookshelfSortedBooks(books, appState) {
-    const state = bookshelfSortFilterState(appState);
-    const normalized = (books || [])
-      .map((book, index) => ({ book, index }))
-      .filter(({ book, index }) => bookshelfBookMatchesGroup(book, index, state.group))
-      .filter(({ book, index }) => bookshelfBookMatchesFilter(book, index, state.filter));
-    if (state.sort === "阅读进度") {
-      normalized.sort((left, right) => {
-        const leftProgress = Number.parseInt(String(left.book.progress || "0").replace("%", ""), 10) || 0;
-        const rightProgress = Number.parseInt(String(right.book.progress || "0").replace("%", ""), 10) || 0;
-        return rightProgress - leftProgress || left.index - right.index;
-      });
-    } else if (state.sort === "书名") {
-      normalized.sort((left, right) => String(left.book.title || "").localeCompare(String(right.book.title || ""), "zh-Hans") || left.index - right.index);
-    } else if (state.sort === "作者") {
-      normalized.sort((left, right) => String(left.book.author || "").localeCompare(String(right.book.author || ""), "zh-Hans") || left.index - right.index);
-    }
-    return normalized.map(({ book }) => book);
-  }
-
-  function bookshelfSectionHeader(bookshelfView, disabled, appState) {
-    const state = bookshelfSortFilterState(appState);
-    const filterActive = state.open || state.group !== "全部" || state.sort !== "最近更新" || state.filter !== "全部";
-    return `
-          <section class="fd-section-head fd-bookshelf-section-head">
-            <div>
-              <h2>我的书架</h2>
-            </div>
-            <span class="fd-bookshelf-view-actions">
-              <button class="${bookshelfView === "cover" ? "is-active" : ""}" type="button" aria-label="封面视图" data-bookshelf-view-button="cover" aria-pressed="${bookshelfView === "cover" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("grid", "fd-small-icon")}</button>
-              <button class="${bookshelfView === "list" ? "is-active" : ""}" type="button" aria-label="列表视图" data-bookshelf-view-button="list" aria-pressed="${bookshelfView === "list" ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("list", "fd-small-icon")}</button>
-              <button class="${filterActive ? "is-active" : ""}" type="button" aria-label="书架筛选：${esc(state.group)}，${esc(state.sort)}，${esc(state.filter)}" data-bookshelf-filter-toggle aria-expanded="${state.open ? "true" : "false"}"${disabled ? " disabled" : ""}>${icon("filter", "fd-small-icon")}</button>
-              <button type="button" aria-label="书架显示设置" data-route="bookshelf-search-settings" data-settings-scope="bookshelf-display">${icon("gear", "fd-small-icon")}</button>
-            </span>
-          </section>`;
-  }
-
   function mainTabBookshelf(data, appState) {
-    const first = data.mainTabs.books[0];
-    const bookshelfView = appState?.bookshelfView === "list" ? "list" : "cover";
-    const visibleBooks = bookshelfSortedBooks(data.mainTabs.books, appState);
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
-      data,
-      title: "书架",
-      activeType: "bookshelf",
-      actions: ["search", "more"],
-      ariaLabel: "书架",
-      contentHtml: `
-        <section class="fd-continue-card">
-          <button class="fd-continue-cover-button" type="button" data-book-cover data-route="immersive-reading" data-book-title="${esc(first.title)}" data-book-author="${esc(first.author)}" data-book-chapter="${esc(first.chapter)}" data-cover-src="${cover(data, first.coverKey)}" aria-label="打开 ${esc(first.title)}">
-            <img src="${cover(data, first.coverKey)}" alt="${esc(first.title)}封面">
-          </button>
-          <div>
-            <h2>继续阅读</h2>
-            <strong>${esc(first.title)}</strong>
-            <span class="fd-continue-author">${esc(first.author)}</span>
-          </div>
-          <button class="fd-continue-action-button" type="button" data-route="immersive-reading">阅读</button>
-        </section>
-        <section class="fd-bookshelf-shelf-section" aria-label="我的书架">
-          ${bookshelfSectionHeader(bookshelfView, false, appState)}
-          ${bookshelfFilterPopover(appState, false)}
-          <section class="fd-book-grid ${bookshelfView === "list" ? "is-list-view" : "is-cover-view"}" data-book-grid data-bookshelf-view="${bookshelfView}" aria-label="${bookshelfView === "list" ? "书籍列表" : "书籍封面网格"}">
-            ${visibleBooks.map((book) => bookCard(data, book)).join("")}
-          </section>
-        </section>`,
-      stateHostHtml: `
-        <p class="fd-nav-feedback">当前 Tab：书架</p>
-        ${bookFocusLayer(data)}
-        ${bookshelfMoreLayer()}`
-    }));
+    const renderer = window.ReaderD2BookshelfDiscoverRenderers?.bookshelfV2;
+    if (typeof renderer !== "function") {
+      throw new Error("Canonical bookshelfV2 renderer is required; legacy local bookshelf fallback is retired");
+    }
+    return renderer(data, "bookshelf", appState);
   }
 
   function mainTabFeedbackHtml(appState) {
@@ -608,14 +454,8 @@
     }[item] || "discover";
   }
 
-  function discoverSortRoute(item) {
-    return {
-      "人气": "discover-sort-popularity",
-      "更新": "discover-sort-update",
-      "收藏": "discover-sort-collection",
-      "完本": "discover-sort-finished",
-      "字数": "discover-sort-words"
-    }[item] || "discover";
+  function discoverSortRoute() {
+    return "discover-sort";
   }
 
   function discoverBooks(data, route) {
@@ -2188,10 +2028,8 @@
         title: "设置",
         rows: [
           { icon: "gear", title: "通用设置", route: "settings-general" },
-          { icon: "bookshelf", title: "书架与搜索设置", route: "bookshelf-search-settings" },
           { icon: "source-stack", title: "书源管理", route: "source-management" },
-          { icon: "sync", title: "同步与备份", route: "sync-backup" },
-          { icon: "info", title: "关于与反馈", route: "about-feedback" }
+          { icon: "sync", title: "同步与备份", route: "sync-backup" }
         ]
       },
       {
@@ -2449,43 +2287,11 @@
   }
 
   function bookshelfEmptyScreen(data) {
-    return shellKit().renderMainTabShell(Object.assign(phoneShellClasses("fd-main-tab-phone"), {
-      data,
-      title: "书架",
-      activeType: "bookshelf",
-      actions: ["search", "more"],
-      ariaLabel: "书架空状态",
-      contentHtml: `
-        <section class="fd-bookshelf-shelf-section is-empty" aria-label="我的书架">
-          ${bookshelfSectionHeader("cover", true, null)}
-          <section class="fd-bookshelf-empty-state" data-slot="bookshelfEmpty" aria-label="书架空状态">
-            <div class="fd-bookshelf-empty-visual" aria-hidden="true">
-              <span>${icon("bookshelf", "fd-medium-icon")}</span>
-              <i></i>
-              <i></i>
-            </div>
-            <h2>书架还是空的</h2>
-            <p>添加网络书籍或导入本地文件后，会在这里显示继续阅读和书架内容。</p>
-            <div class="fd-bookshelf-empty-actions">
-              <button class="is-primary" type="button" data-route="book-search">
-                ${icon("search", "fd-small-icon")}
-                <span><strong>搜索书籍</strong><small>按书名、作者或关键词查找</small></span>
-              </button>
-              <button type="button" data-route="local-import">
-                ${icon("folder", "fd-small-icon")}
-                <span><strong>导入本地书</strong><small>添加本机文件到书架</small></span>
-              </button>
-            </div>
-            <section class="fd-bookshelf-empty-hints" aria-label="可选入口">
-              <button type="button" data-route="discover">${icon("sparkle", "fd-small-icon")}去发现</button>
-              <button type="button" data-route="bookshelf-search-settings">${icon("gear", "fd-small-icon")}书架设置</button>
-            </section>
-          </section>
-        </section>`,
-      stateHostHtml: `
-        <p class="fd-nav-feedback">当前 Tab：书架</p>
-        ${bookshelfMoreLayer()}`
-    }));
+    const renderer = window.ReaderD2BookshelfDiscoverRenderers?.bookshelfEmptyV2;
+    if (typeof renderer !== "function") {
+      throw new Error("Canonical bookshelfEmptyV2 renderer is required; legacy local empty bookshelf fallback is retired");
+    }
+    return renderer(data, "bookshelf-empty", {});
   }
 
   function bookDirectoryScreen(data, appState) {
@@ -2526,138 +2332,6 @@
             }).join("")}
           </div>
         </section>`
-    }));
-  }
-
-  function sortFilterScreen(data, appState) {
-    const filterState = Object.assign({}, appState, {
-      bookshelfFilterOpen: appState?.bookshelfFilterOpen !== false
-    });
-    return mainTabBookshelf(data, filterState);
-  }
-
-  function bookBatchManagementScreen(data) {
-    const books = data.mainTabs.books.slice(0, 6).map((book, index) => Object.assign({}, book, {
-      selected: index < 3,
-      group: index % 3 === 0 ? "追更" : index % 3 === 1 ? "默认" : "本地书"
-    }));
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data,
-      title: "批量管理",
-      ariaLabel: "书籍批量管理",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-batch-summary" aria-label="批量选择状态">
-          <strong>已选 3 本</strong>
-          <span>长按书籍或从更多菜单进入，选择后统一移动分组、删除或取消选择。</span>
-          <button type="button">全选</button>
-        </section>
-        <section class="fd-management-list is-book-batch">
-          <h2>书架书籍</h2>
-          ${books.map((book) => `
-            <article class="${book.selected ? "is-selected" : ""}">
-              <button class="fd-book-select-toggle" type="button" aria-pressed="${book.selected ? "true" : "false"}">${book.selected ? icon("check", "fd-small-icon") : ""}</button>
-              <img src="${cover(data, book.coverKey)}" alt="${esc(book.title)}封面">
-              <span><strong>${esc(book.title)}</strong><small>${esc(book.author)} · ${esc(book.chapter)}</small></span>
-              <em>${esc(book.group)}</em>
-            </article>
-          `).join("")}
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button" data-route="group-management">移动分组</button>
-          <button class="is-danger" type="button">删除所选</button>
-        </div>`
-    }));
-  }
-
-  function groupManagementScreen(data) {
-    const groups = [
-      { name: "默认分组", meta: "8 本 · 当前分组", action: "管理" },
-      { name: "追更", meta: "5 本 · 置顶显示", action: "管理" },
-      { name: "本地书", meta: "2 本 · 导入书籍", action: "管理" },
-      { name: "资料", meta: "3 本 · 可重命名", action: "管理" }
-    ];
-    const assignments = data.mainTabs.books.slice(0, 4).map((book, index) => ({
-      title: book.title,
-      meta: `${book.author} · 当前分组`,
-      group: groups[index % groups.length].name
-    }));
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data,
-      title: "分组管理",
-      ariaLabel: "分组管理",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-management-list is-group-flow">
-          <h2>分组列表</h2>
-          ${groups.map((group, index) => `
-            <article>
-              ${icon("drag", "fd-small-icon")}
-              <span><strong>${esc(group.name)}</strong><small>${esc(group.meta)}</small></span>
-              <button type="button">${esc(group.action)}</button>
-              ${index > 0 ? `<button class="is-plain" type="button">${icon("trash", "fd-small-icon")}</button>` : ""}
-            </article>
-          `).join("")}
-        </section>
-        <section class="fd-management-list is-assignment-flow">
-          <h2>书籍归属</h2>
-          ${assignments.map((item) => `
-            <article>
-              ${icon("book-open", "fd-small-icon")}
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-              <em>${esc(item.group)}</em>
-            </article>
-          `).join("")}
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button">新建分组</button>
-          <button type="button" data-route-back>完成</button>
-        </div>`
-    }));
-  }
-
-  function localImportScreen(data) {
-    const imports = [
-      { title: "雨夜.epub", meta: "作者已识别 · 加入默认分组", state: "可导入", tone: "good" },
-      { title: "旧书扫描.txt", meta: "编码 UTF-8 · 章节识别中", state: "72%", tone: "warn" },
-      { title: "缺失章节.mobi", meta: "格式不支持 · 可移除后重选", state: "失败", tone: "danger" }
-    ];
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone"), {
-      data,
-      title: "本地书导入",
-      ariaLabel: "本地书导入",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml: `
-        <section class="fd-import-card is-import-entry">
-          ${icon("folder", "fd-medium-icon")}
-          <span><strong>选择本地书文件</strong><small>选择后识别分组并确认导入</small></span>
-          <button type="button">选择</button>
-        </section>
-        <section class="fd-management-list is-import-options">
-          <h2>导入设置</h2>
-          <article>${icon("folder", "fd-small-icon")}<span><strong>导入分组</strong><small>默认分组</small></span><button type="button">更改</button></article>
-          <article>${icon("refresh", "fd-small-icon")}<span><strong>重复书籍</strong><small>保留原书，仅导入新文件</small></span><button type="button">更改</button></article>
-        </section>
-        <section class="fd-management-list is-import-results">
-          <h2>待导入文件</h2>
-          ${imports.map((item) => `
-            <article class="is-${esc(item.tone)}">
-              ${icon(item.tone === "danger" ? "warning" : "book-open", "fd-small-icon")}
-              <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-              <em>${esc(item.state)}</em>
-            </article>
-          `).join("")}
-        </section>`,
-      bottomActionHtml: `
-        <div class="fd-fixed-action-row">
-          <button type="button">继续选择</button>
-          <button type="button" data-route-back>完成导入</button>
-        </div>`
     }));
   }
 
@@ -2999,6 +2673,17 @@
     };
   }
 
+  function canonicalFigmaReadingSurfaceTypography() {
+    const source = READER_READING_SURFACE_FIGMA_BINDING.defaultTypography;
+    return {
+      fontSize: source.fontSize,
+      lineHeight: source.lineHeight,
+      paragraphGap: source.paragraphGap,
+      letterSpacing: source.letterSpacing,
+      fontFamily: source.fontFamilyId
+    };
+  }
+
   function readerTypographyConfig(data) {
     const config = data.reader?.typographyConfig || {};
     const normalizeConfig = (item) => ({
@@ -3098,6 +2783,10 @@
     };
   }
 
+  function canonicalFigmaReadingSurfacePageSpace() {
+    return { ...READER_READING_SURFACE_FIGMA_BINDING.defaultPageSpace };
+  }
+
   function readerPageSpaceConfig(data) {
     const config = data.reader?.pageSpaceConfig || {};
     const normalizeConfig = (item, fallback) => ({
@@ -3150,6 +2839,12 @@
     const theme = currentReaderTheme(data, appState);
     const isNight = theme.scheme === "night";
     const themeTexture = theme.texture || "plain";
+    // Reader/ReadingPaper/Day (the default paper theme) is the exact source
+    // behind Reader/Responsive/ReadingSurface. Other confirmed theme variants
+    // stay owned by their own Figma-bound appearance surface.
+    const isFigmaReadingPaper = theme.value === "paper";
+    const readingPaperStart = isFigmaReadingPaper ? "#FBF4E9" : theme.paperStart;
+    const readingPaperEnd = isFigmaReadingPaper ? "#EFE2D0" : theme.paperEnd;
     const textureOpacity = Number.isFinite(Number(theme.textureOpacity))
       ? Math.max(0, Math.min(0.08, Number(theme.textureOpacity)))
       : themeTexture === "paper"
@@ -3225,8 +2920,8 @@
       };
     return [
       `--reader-theme-scheme:${esc(theme.scheme || "day")}`,
-      `--reader-paper-start:${esc(theme.paperStart)}`,
-      `--reader-paper-end:${esc(theme.paperEnd)}`,
+      `--reader-paper-start:${esc(readingPaperStart)}`,
+      `--reader-paper-end:${esc(readingPaperEnd)}`,
       `--reader-ink:${esc(theme.ink)}`,
       `--reader-theme-texture:${esc(themeTexture)}`,
       `--reader-theme-texture-opacity:${esc(textureOpacity.toFixed(3))}`,
@@ -3398,23 +3093,183 @@
     };
   }
 
-  // 翻页模式 / 翻页动画：中文标签 ↔ CSS 值映射
-  const readerPageModeCssByLabel = {
-    "横向翻页": "horizontal",
-    "竖向翻页": "vertical"
-  };
+  // pageAnimation is the sole user-owned setting. "滚动" derives the
+  // vertical continuous-reading layout; the other four values stay in the
+  // horizontal page layout. There is deliberately no independent pageMode
+  // control that can contradict the selected animation.
   const readerPageAnimationCssByLabel = {
     "覆盖": "cover",
-    "滑动": "smooth",
-    "仿真": "curl",
+    "滑动": "slide",
+    "仿真": "simulation",
     "滚动": "scroll",
     "无动画": "none"
   };
-  function readerPageModeCssValue(label) {
-    return readerPageModeCssByLabel[label] || "horizontal";
+  const readerPageAnimationLabelByValue = {
+    cover: "覆盖",
+    slide: "滑动",
+    smooth: "滑动",
+    simulation: "仿真",
+    scroll: "滚动",
+    none: "无动画"
+  };
+  function readerPageAnimationLabel(value) {
+    if (Object.prototype.hasOwnProperty.call(readerPageAnimationCssByLabel, value)) return value;
+    return readerPageAnimationLabelByValue[value] || "";
   }
   function readerPageAnimationCssValue(label) {
-    return readerPageAnimationCssByLabel[label] || "smooth";
+    return readerPageAnimationCssByLabel[readerPageAnimationLabel(label)] || "slide";
+  }
+  function readerPageModeForAnimation(label) {
+    return readerPageAnimationLabel(label) === "滚动" ? "vertical" : "horizontal";
+  }
+
+  function readerCoreCharacterAnchor(appState) {
+    const location = appState?.readerCanonicalLocation;
+    const reflow = appState?.readerLocationReflow;
+    const locationKeys = location && typeof location === "object" ? Object.keys(location).sort() : [];
+    const reflowKeys = reflow && typeof reflow === "object" ? Object.keys(reflow).sort() : [];
+    const charOffset = Number(location?.chapterOffset);
+    const chapterProgress = Number(location?.chapterProgress);
+    if (
+      locationKeys.join(",") === "bookId,chapterIndex,chapterOffset,chapterProgress,locationRevision" &&
+      reflowKeys.join(",") === "fallbackAnchor,layoutIndependent,primaryAnchor,strategy" &&
+      typeof location?.bookId === "string" &&
+      location.bookId.length > 0 &&
+      typeof location.locationRevision === "string" &&
+      location.locationRevision.length > 0 &&
+      Number.isSafeInteger(Number(location.chapterIndex)) &&
+      Number(location.chapterIndex) >= 0 &&
+      Number.isSafeInteger(charOffset) &&
+      charOffset >= 0 &&
+      Number.isFinite(chapterProgress) &&
+      chapterProgress >= 0 &&
+      chapterProgress <= 1 &&
+      reflow?.strategy === "offsetAnchor" &&
+      reflow.primaryAnchor === "chapterOffset" &&
+      reflow.fallbackAnchor === "chapterProgress" &&
+      reflow.layoutIndependent === true
+    ) {
+      return {
+        bookId: location.bookId,
+        chapterIndex: Number(location.chapterIndex),
+        charOffset,
+        chapterProgress,
+        source: "core"
+      };
+    }
+    return null;
+  }
+
+  function readerCharacterAnchor(appState) {
+    return readerCoreCharacterAnchor(appState);
+  }
+
+  function readerPageIndexForCharacterAnchor(pages, anchor) {
+    const charOffset = Number(anchor?.charOffset);
+    if (!Array.isArray(pages) || pages.length === 0 || !Number.isInteger(charOffset) || charOffset < 0) {
+      return null;
+    }
+    const matchedIndex = pages.findIndex((page, index) => {
+      const start = Number(page.characterStart);
+      const end = Number(page.characterEnd);
+      if (!Number.isInteger(start) || !Number.isInteger(end)) return false;
+      return charOffset >= start && (charOffset < end || (index === pages.length - 1 && charOffset === end));
+    });
+    return matchedIndex >= 0 ? matchedIndex : (charOffset < Number(pages[0]?.characterStart || 0) ? 0 : pages.length - 1);
+  }
+
+  function applyReaderPageAnimationSetting(appState, value) {
+    const label = readerPageAnimationLabel(value);
+    if (!appState || !label) {
+      return false;
+    }
+    const nextPageMode = readerPageModeForAnimation(label);
+    const modeChanged = appState.readerPageMode !== nextPageMode;
+    const anchor = modeChanged ? readerCharacterAnchor(appState) : null;
+    // A horizontal/vertical mode change is a semantic reflow. Without a
+    // durable Core character anchor, preserve the current setting and layout
+    // instead of guessing from the transient layout page index.
+    if (modeChanged && !anchor) {
+      return false;
+    }
+    appState.readerSettings = appState.readerSettings || {};
+    appState.readerSettings.pageAnimation = label;
+    appState.readerPageAnimation = readerPageAnimationCssValue(label);
+    if (modeChanged) {
+      appState.readerReflowAnchor = anchor;
+      appState.readerPages = [];
+      appState.readerPaginationKey = "";
+    }
+    appState.readerPageMode = nextPageMode;
+    return true;
+  }
+
+  function applyReaderRuntimeResult(appState, runtimeResult) {
+    if (!appState || runtimeResult?.accepted !== true || !runtimeResult.state) {
+      return false;
+    }
+    const canonicalLocation = runtimeResult.state.readerCanonicalLocation;
+    const locationReflow = runtimeResult.state.readerLocationReflow;
+    const anchor = readerCoreCharacterAnchor({
+      readerCanonicalLocation: canonicalLocation,
+      readerLocationReflow: locationReflow
+    });
+    if (!anchor) {
+      return false;
+    }
+    const currentBookId = appState.readerCanonicalLocation?.bookId;
+    if (typeof currentBookId === "string" && currentBookId.length > 0 && currentBookId !== anchor.bookId) {
+      return false;
+    }
+    appState.readerCanonicalLocation = Object.assign({}, canonicalLocation);
+    appState.readerLocationReflow = Object.assign({}, locationReflow);
+    appState.readerReflowAnchor = anchor;
+    const pageIndex = Number(runtimeResult.state.readerPageIndex);
+    if (Number.isInteger(pageIndex) && pageIndex >= 0) {
+      appState.readerPageIndex = pageIndex;
+    }
+    return true;
+  }
+
+  let activeReaderRuntimeResultConsumer = null;
+  const readerRuntimeResultConsumerApi = Object.freeze({
+    bind(appState, onCommit) {
+      const consumer = Object.freeze({
+        accept(runtimeResult) {
+          const accepted = applyReaderRuntimeResult(appState, runtimeResult);
+          if (accepted && typeof onCommit === "function") onCommit();
+          return accepted;
+        }
+      });
+      activeReaderRuntimeResultConsumer = consumer;
+      return consumer;
+    },
+    accept(runtimeResult) {
+      return activeReaderRuntimeResultConsumer?.accept(runtimeResult) === true;
+    }
+  });
+
+  function applyReaderW4AppearanceSetting(appState, key, rawValue, storage) {
+    if (!appState) return false;
+    if (key === "pageAnimation") {
+      return applyReaderPageAnimationSetting(appState, rawValue);
+    }
+    if (!["firstLineIndent", "script", "alignment", "texture"].includes(key)) {
+      return false;
+    }
+    const value = key === "firstLineIndent" ? rawValue === true || rawValue === "true" : rawValue;
+    appState.readerTypography = appState.readerTypography || {};
+    appState.readerTypography[key] = value;
+    try {
+      const stored = JSON.parse(storage?.getItem?.("reader-w4-typography") || "null") || {};
+      storage?.setItem?.(
+        "reader-w4-typography",
+        JSON.stringify(Object.assign({}, stored, appState.readerTypography, { [key]: value }))
+      );
+    } catch (_) {
+      // The live state still updates when demo persistence is unavailable.
+    }
+    return true;
   }
 
   function readerSettingDropdownHtml(key, label, settings, settingDefaults, options, appState) {
@@ -3728,14 +3583,16 @@
   }
 
   function sharedReaderSurface(data, dismissRoute, appState, options) {
-    const typography = appState?.readerTypography || normalizeReaderTypography(data);
-    const pageSpace = appState?.readerPageSpace || normalizeReaderPageSpace(data);
+    // With no saved state, render the canonical Figma default exactly. A
+    // user-selected typography/page-space value remains a behavior-owned
+    // override and is deliberately not reinterpreted by this static surface.
+    const usesFigmaStaticDefaults = !appState?.readerTypography && !appState?.readerPageSpace;
+    const typography = appState?.readerTypography || canonicalFigmaReadingSurfaceTypography();
+    const pageSpace = appState?.readerPageSpace || canonicalFigmaReadingSurfacePageSpace();
     const pageState = currentReaderPage(data, appState);
-    const disableTurnAnimation = Boolean(options && options.disableTurnAnimation);
     const pageMode = appState?.readerPageMode === "vertical" ? "vertical" : "horizontal";
-    const pageAnimation = appState?.readerPageAnimation || "smooth";
+    const pageAnimation = appState?.readerPageAnimation || "slide";
     const isVerticalMode = pageMode === "vertical";
-    const turnDirection = !disableTurnAnimation && !isVerticalMode && appState?.readerTurnDirection ? ` fd-reader-page-turn-${esc(appState.readerTurnDirection)}` : "";
     const paragraphs = isVerticalMode
       ? readerTextBlocks(data)
       : (pageState.page.paragraphs.length > 0 ? pageState.page.paragraphs : readerTextBlocks(data));
@@ -3747,11 +3604,15 @@
     const ttsPlaying = Boolean(appState?.readerTts?.playing);
     const ttsIndex = ttsActive ? readerTtsSentenceIndex(data, appState) : 0;
     const ttsSegments = ttsActive ? readerTtsSegments(data) : [];
-    const paragraphHtml = paragraphs.map((line) => ttsActive ? readerTtsParagraphHtml(line, ttsSegments, ttsIndex) : `<p>${readerAnnotationHtml(line)}</p>`).join("");
+    // The frozen default ReadingSurface has unannotated ChapterPage text.
+    // Annotations must not appear merely because a phrase happens to match a
+    // local preset; a separately Figma-bound annotation state is required.
+    const paragraphHtml = paragraphs.map((line) => ttsActive ? readerTtsParagraphHtml(line, ttsSegments, ttsIndex) : `<p>${esc(line)}</p>`).join("");
     const verticalTapAttr = isVerticalMode ? ' data-reader-vertical-tap="reader" tabindex="0"' : "";
+    const figmaSurfaceAttrs = `data-figma-file-key="${READER_READING_SURFACE_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_READING_SURFACE_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_READING_SURFACE_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_READING_SURFACE_FIGMA_BINDING.tabletNodeId}"`;
     return `
-      <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
-      <article class="fd-ir-reading-layer${turnDirection}" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
+      <div class="fd-ir-background-layer" data-dev-region="ReadingBackground" data-reader-figma-surface="reading-surface" data-figma-phone-paper-layer="${READER_READING_SURFACE_FIGMA_BINDING.phonePaperLayerId}" data-figma-tablet-paper-layer="${READER_READING_SURFACE_FIGMA_BINDING.tabletPaperLayerId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} aria-hidden="true" style="${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}"></div>
+      <article class="fd-ir-reading-layer" aria-label="正文排版层" data-dev-region="ReadingTextLayer" data-reader-figma-surface="reading-surface" data-figma-phone-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.phoneReadingContentId}" data-figma-tablet-reading-content="${READER_READING_SURFACE_FIGMA_BINDING.tabletReadingContentId}" data-reader-figma-default="${usesFigmaStaticDefaults ? "true" : "false"}" ${figmaSurfaceAttrs} data-reader-pagination="${esc(paginationMode)}" data-reader-surface-signature="${esc(chapterTitle)}" data-reader-page-index="${esc(pageState.index)}" data-reader-page-count="${esc(pageState.count)}" data-reader-tts-active="${ttsActive ? "true" : "false"}" data-reader-tts-playing="${ttsPlaying ? "true" : "false"}" data-reader-tts-index="${esc(ttsIndex)}" data-page-mode="${esc(pageMode)}" data-page-animation="${esc(pageAnimation)}"${verticalTapAttr} style="${readerTypographyStyle(data, typography)};${readerThemeStyle(data, appState)};${readerPageSpaceStyle(data, pageSpace)}">
         ${chapterTitleHtml}
         ${paragraphHtml}
       </article>
@@ -4586,23 +4447,8 @@
       </section>`;
   }
 
-  function readerMoreMenuHtml(appState) {
-    if (!appState?.readerMoreOpen) return "";
-    const items = [
-      { title: "刷新本章", desc: "重新拉取当前章节正文" },
-      { title: "刷新目录", desc: "更新章节目录和缓存状态" },
-      { title: "打开来源页", desc: "查看当前书源详情", route: "source-detail" },
-      { title: "复制本章链接", desc: "复制当前章节来源地址" },
-      { title: "书籍缓存", desc: "管理当前书籍缓存", route: "reader-book-cache" },
-      { title: "调试信息", desc: "打开阅读调试信息", route: "reader-debug-info" }
-    ];
-    return `
-      <div class="fd-reader-more-layer" data-reader-more-layer>
-        <button class="fd-reader-more-backdrop" type="button" data-reader-more-close aria-label="关闭阅读更多菜单"></button>
-        <section class="fd-reader-more-menu" role="menu" aria-label="阅读更多菜单">
-          ${items.map((item) => `<button type="button" role="menuitem" data-reader-more-action="${esc(item.title)}"${item.route ? ` data-route="${esc(item.route)}"` : ""}><strong>${esc(item.title)}</strong><small>${esc(item.desc)}</small></button>`).join("")}
-        </section>
-      </div>`;
+  function readerMoreMenuHtml() {
+    return "";
   }
 
   function readerTopOverlay(data, appState) {
@@ -4611,9 +4457,9 @@
         <button type="button" aria-label="返回" data-reader-exit>${icon("back", "fd-icon")}</button>
         <span><strong>${esc(data.reader.title)}</strong><small>${esc(data.reader.sourceLine)}</small></span>
         <button type="button" data-route="source-switch">${icon("source-switch", "fd-small-icon")}换源</button>
-        <button type="button" aria-label="更多" data-reader-more-toggle aria-expanded="${appState?.readerMoreOpen ? "true" : "false"}">${icon("more", "fd-small-icon")}</button>
+        <button type="button" aria-label="更多" data-reader-more-toggle aria-expanded="false">${icon("more", "fd-small-icon")}</button>
       </section>
-      ${readerMoreMenuHtml(appState)}`;
+      ${readerMoreMenuHtml()}`;
   }
 
   function readerAutoPageControlHtml(data, appState, options = {}) {
@@ -4891,7 +4737,7 @@
         <section class="fd-reader-module-panel fd-reader-settings-panel" data-dev-region="ReaderModulePanel" aria-label="阅读设置">
           <div class="fd-reader-quick-screen-settings">
             ${quickSetting("screenOrientation", "屏幕方向")}
-            ${quickSetting("pageAnimation", "翻页样式")}
+            ${quickSetting("pageAnimation", "翻页动画")}
             ${quickSetting("screenTimeout", "屏幕超时")}
           </div>
         </section>`;
@@ -5292,7 +5138,7 @@
           <header><strong>屏幕样式</strong></header>
           <div class="fd-reader-settings-group-body">
             ${optionRow("screenOrientation", "屏幕方向")}
-            ${optionRow("pageAnimation", "翻页样式")}
+            ${optionRow("pageAnimation", "翻页动画")}
             ${optionRow("screenTimeout", "屏幕超时")}
           </div>
         </section>
@@ -5465,9 +5311,9 @@
     ];
     return `
       <section class="fd-reader-full-section fd-reader-full-page-turn" aria-label="翻页完整设置">
-        ${["pageMode", "tapMode", "pageAnimation"].map((key) => `
+        ${["tapMode", "pageAnimation"].map((key) => `
           <section class="fd-reader-full-setting-block">
-            <header><strong>${esc(key === "pageMode" ? "翻页模式" : key === "tapMode" ? "点击翻页方式" : "翻页动画")}</strong><em>${esc(current(key))}</em></header>
+            <header><strong>${esc(key === "tapMode" ? "点击翻页方式" : "翻页动画")}</strong><em>${esc(current(key))}</em></header>
             <div class="fd-reader-full-choice-grid">
               ${readerChoiceButtons(options[key] || [], current(key), (value) => `data-reader-setting-option="${esc(key)}" data-reader-setting-value="${esc(value)}"`)}
             </div>
@@ -5953,12 +5799,25 @@
       return best > 0 ? readerSplitIndex(text, best) : 0;
     };
 
+    const sourceBlockStarts = [];
+    let sourceCharacterCount = 0;
+    sourceBlocks.forEach((block) => {
+      sourceBlockStarts.push(sourceCharacterCount);
+      sourceCharacterCount += String(block || "").length;
+    });
+    const currentCharacterOffset = (index, characterOffset) => (
+      index >= sourceBlocks.length
+        ? sourceCharacterCount
+        : (sourceBlockStarts[index] || 0) + characterOffset
+    );
+    const anchor = readerCharacterAnchor(appState);
     const pages = [];
     let blockIndex = 0;
     let offset = 0;
     while (blockIndex < sourceBlocks.length) {
       const includeTitle = pages.length === 0;
       const pageParagraphs = [];
+      const characterStart = currentCharacterOffset(blockIndex, offset);
       let madeProgress = false;
 
       while (blockIndex < sourceBlocks.length) {
@@ -5999,7 +5858,12 @@
       }
 
       if (pageParagraphs.length > 0) {
-        pages.push({ progress: "", paragraphs: pageParagraphs });
+        pages.push({
+          progress: "",
+          paragraphs: pageParagraphs,
+          characterStart,
+          characterEnd: currentCharacterOffset(blockIndex, offset)
+        });
       } else {
         break;
       }
@@ -6020,7 +5884,13 @@
     });
     appState.readerPages = pages;
     appState.readerPaginationKey = key;
-    appState.readerPageIndex = Math.max(0, Math.min(Number(appState.readerPageIndex) || 0, pages.length - 1));
+    const anchoredPageIndex = readerPageIndexForCharacterAnchor(pages, anchor);
+    appState.readerPageIndex = anchoredPageIndex === null
+      ? Math.max(0, Math.min(Number(appState.readerPageIndex) || 0, pages.length - 1))
+      : anchoredPageIndex;
+    if (anchoredPageIndex !== null && appState.readerReflowAnchor?.charOffset === anchor?.charOffset) {
+      appState.readerReflowAnchor = null;
+    }
     return true;
   }
 
@@ -6141,54 +6011,6 @@
                 title: "恢复 1× 速度",
                 meta: "保留开发模式开关，清除全部分类覆盖"
               }
-            ]
-          }
-        ]
-      },
-      "bookshelf-search-settings": {
-        title: "书架与搜索",
-        sections: [
-          {
-            title: "书架",
-            rows: [
-              { type: "segment", icon: "grid", title: "默认展示", value: "封面", options: ["封面", "列表"] },
-              { type: "stepper", icon: "columns", title: "封面列数", value: "3列", minLabel: "-", maxLabel: "+" },
-              { type: "select", icon: "folder", title: "默认分组", value: "全部", options: ["全部", "长篇追读", "资料", "未分组"] },
-              { type: "switch", icon: "badge", title: "显示更新标记", enabled: true }
-            ]
-          },
-          {
-            title: "排序与筛选",
-            rows: [
-              { type: "select", icon: "sort", title: "书架排序", value: "最近更新", options: ["最近更新", "最近阅读", "书名", "作者"] },
-              { type: "select", icon: "list", title: "展示范围", value: "全部", options: ["全部", "追更", "本地书", "未读", "已完结", "更新失败"] },
-              { type: "select", icon: "refresh", title: "更新状态", value: "不限", options: ["不限", "有更新", "更新失败"] }
-            ]
-          },
-          {
-            title: "搜索",
-            rows: [
-              { type: "select", icon: "search", title: "搜索范围", value: "全局", options: ["当前分组", "书架", "全局"] },
-              { type: "select", icon: "sort", title: "结果排序", value: "相关度", options: ["相关度", "最近阅读", "最近更新"] },
-              { type: "switch", icon: "people", title: "合并同名同作者", enabled: true },
-              { type: "switch", icon: "clock", title: "搜索历史", enabled: true },
-              { type: "select", icon: "list", title: "搜索历史数量", value: "20条", options: ["10条", "20条", "50条"] }
-            ]
-          }
-        ],
-        actions: [{ tone: "danger", icon: "trash", title: "清空搜索历史", overlay: "dialog" }],
-        confirm: { title: "清空搜索历史？", copy: "清空后无法恢复，已保存的搜索关键词会被移除。", confirmLabel: "确认清空" }
-      },
-      "about-feedback": {
-        title: "关于与反馈",
-        sections: [
-          {
-            title: "项目信息",
-            rows: [
-              { type: "link", icon: "refresh", title: "检查更新", value: "已是最新" },
-              { type: "link", icon: "code", title: "源码仓库" },
-              { type: "link", icon: "link", title: "开源许可" },
-              { type: "link", icon: "mail", title: "参与贡献" }
             ]
           }
         ]
@@ -7553,10 +7375,11 @@
     bind("[data-nav-type].is-active", "tab.item.select");
     bind("[data-bookshelf-view-button], [data-book-grid], [data-bookshelf-view]", "bookshelf.view.switch");
     bind("[data-bookshelf-filter-toggle]", "dropdown.trigger.press");
-    bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option]", "dropdown.option.select");
+    bind("[data-bookshelf-sort-option], [data-bookshelf-filter-option]", "dropdown.option.select");
     bind("[data-book-card]", "card.press/select/route");
     bind("[data-book-cover]", "reader.entry.coverToImmersive");
-    bind("[data-close-book-focus], [data-book-focus-layer], [data-focus-cover], [data-focus-title], [data-focus-meta]", "card.select");
+    bind("[data-close-book-focus], [data-book-focus-layer]", "card.select");
+    bind("[data-book-action], [data-multi-select-book-key], [data-multi-select-all], [data-multi-select-exit], [data-multi-select-remove]", "button.activate");
     bind("[data-bookshelf-more-layer]", "dropdown.menu.expand");
     bind("[data-close-bookshelf-more]", "dropdown.menu.collapse");
     bind("[data-open-keyboard]", "input.focus");
@@ -7578,8 +7401,8 @@
     bind("[data-discover-filter], [data-rss-group-filter], [data-rss-manage-filter], [data-rss-category-filter], [data-rss-favorite-filter], [data-source-status-filter], [data-source-group-filter]", "filter.item.toggle");
     bind("[data-discover-reset], [data-filter-close]", "filter.apply.commit");
     bind("[data-filter-toggle], [data-bookshelf-filter-toggle], [data-discover-filter-toggle], [data-discover-sort-toggle], [data-rss-group-filter-toggle], [data-rss-manage-filter-toggle], [data-rss-category-filter-toggle], [data-rss-favorite-filter-toggle], [data-source-filter-toggle], [data-source-menu-toggle], [data-reader-more-toggle], [data-settings-option-key], [data-reader-setting-option-key], [data-reader-tts-option-key]", "dropdown.trigger.press");
-    bind("[data-bookshelf-group-option], [data-bookshelf-sort-option], [data-bookshelf-filter-option], [data-discover-sort-option], [data-settings-option-choice], [data-settings-option-value], [data-reader-setting-option], [data-reader-tts-option], [data-reader-more-action], .fd-source-more-menu button, .fd-bookshelf-more-menu button, .fd-book-focus-menu button", "dropdown.option.select");
-    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-discover-sort], .fd-discover-sort-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer], [data-bookshelf-more-layer], .fd-source-more-menu, .fd-bookshelf-more-menu, .fd-book-focus-menu", "dropdown.menu.expand");
+    bind("[data-bookshelf-sort-option], [data-bookshelf-filter-option], [data-discover-sort-option], [data-settings-option-choice], [data-settings-option-value], [data-reader-setting-option], [data-reader-tts-option], [data-reader-more-action], .fd-source-more-menu button, .fd-bookshelf-more-menu button", "dropdown.option.select");
+    bind(".fd-filter-menu, .fd-bookshelf-filter-popover, [data-discover-sort], .fd-discover-sort-popover, [data-settings-option-dropdown], [data-reader-setting-dropdown], [data-reader-tts-dropdown], [data-reader-more-layer], [data-bookshelf-more-layer], .fd-source-more-menu, .fd-bookshelf-more-menu", "dropdown.menu.expand");
     bind("[data-settings-overlay]", "overlay.dialog.enter/exit");
     bind("[data-close-settings-overlay]", "overlay.dialog.exit");
     bind(".fd-settings-toast, .fd-discover-toast, [data-main-tab-feedback]", "feedback.toast.enter");
@@ -7602,7 +7425,6 @@
     bind("[data-module]", "reader.module.switch");
     bind("[data-module].is-active", "tab.item.select");
     bind("[data-reader-typography-value], [data-reader-page-space-value], [data-reader-setting-value]:not([data-reader-setting-option]), [data-reader-tts-value]:not([data-reader-tts-option]), [data-reader-page-count], [data-reader-page-index], [data-reader-page-readout], [data-reader-pagination], [data-reader-current-chapter]", "state.content.replace");
-    bind("[data-reader-page-action]", "reader.page.turn.next-prev");
     bind("[data-reader-chapter-action], [data-reader-directory-index]", "reader.chapter.jump");
     bind("[data-reader-dismiss]", "reader.control.hide");
     bind("[data-reader-control-show]", "reader.control.show");
@@ -8837,12 +8659,10 @@
     "[data-reader-more-layer]",
     "[data-bookshelf-more-layer]",
     ".fd-source-more-menu",
-    ".fd-bookshelf-more-menu",
-    ".fd-book-focus-menu"
+    ".fd-bookshelf-more-menu"
   ].join(",");
 
   const dropdownOptionSelector = [
-    "[data-bookshelf-group-option]",
     "[data-bookshelf-sort-option]",
     "[data-bookshelf-filter-option]",
     "[data-discover-sort-option]",
@@ -8858,8 +8678,7 @@
     "[data-source-status-filter]",
     "[data-source-group-filter]",
     ".fd-source-more-menu button",
-    ".fd-bookshelf-more-menu button",
-    ".fd-book-focus-menu button"
+    ".fd-bookshelf-more-menu button"
   ].join(",");
 
   function dropdownGroupKey(element) {
@@ -8879,7 +8698,6 @@
       ["data-settings-option-dropdown", "settings-option"],
       ["data-settings-option-choice", "settings-option"],
       ["data-bookshelf-filter-toggle", "bookshelf-filter"],
-      ["data-bookshelf-group-option", "bookshelf-filter"],
       ["data-bookshelf-sort-option", "bookshelf-filter"],
       ["data-bookshelf-filter-option", "bookshelf-filter"],
       ["data-discover-filter-toggle", "discover-filter"],
@@ -8917,7 +8735,6 @@
     if (element.classList?.contains("fd-discover-sort-popover")) return "discover-sort";
     if (element.classList?.contains("fd-source-more-menu")) return "source-menu";
     if (element.classList?.contains("fd-bookshelf-more-menu")) return "bookshelf-more";
-    if (element.classList?.contains("fd-book-focus-menu")) return "book-focus-menu";
     return element.getAttribute("aria-label") || element.className || "dropdown";
   }
 
@@ -8928,7 +8745,6 @@
       "data-reader-setting-value",
       "data-reader-tts-value",
       "data-discover-sort-option",
-      "data-bookshelf-group-option",
       "data-bookshelf-sort-option",
       "data-bookshelf-filter-option",
       "data-rss-group-filter",
@@ -9796,6 +9612,11 @@
   }
 
   function contractStaticRouteScreen(data, route, appState, options) {
+    window.ReaderFigmaRouteAdmissionPolicy?.assertContractStaticSurfaceNotAllowed(route);
+    throw new Error(
+      `Route "${String(route || "")}" is FROZEN (GENERIC_CONTRACT_STATIC_RENDERER). No local visual fallback is rendered.`
+    );
+    /* c8 ignore start -- unreachable contract reference retained for migration-only source archaeology. */
     const meta = routes[route] || {};
     const shell = options?.shell || meta.shell || "LibraryShell";
     const title = options?.title || routeTitle(route);
@@ -9849,6 +9670,7 @@
       bottomActionHostClass: "fd-bottom-action-host",
       contentHtml
     }));
+    /* c8 ignore stop */
   }
 
   function searchStateScreen(data, route) {
@@ -9921,318 +9743,6 @@
       });
   }
 
-  // =============================================================================
-  // W1 导入工作流 renderer 函数（从 w1-import-renderers.js 集成）
-  // =============================================================================
-
-  function w1ImportPhaseBreadcrumb(currentPhase) {
-    const phases = [
-      ["selecting", "选择"],
-      ["input", "输入"],
-      ["parsing", "解析"],
-      ["preview", "预览"],
-      ["conflict", "冲突"],
-      ["applying", "应用"],
-      ["result", "结果"]
-    ];
-    const items = phases.map(([key, label]) => {
-      const isActive = key === currentPhase;
-      const isPast = phases.findIndex(([k]) => k === currentPhase) > phases.findIndex(([k]) => k === key);
-      const stateClass = isActive ? " is-active" : (isPast ? " is-done" : "");
-      return `<li class="fd-import-phase-item${stateClass}" data-phase="${esc(key)}"><span>${esc(label)}</span></li>`;
-    }).join("");
-    return `<ol class="fd-import-phase-breadcrumb" aria-label="导入流程阶段">${items}</ol>`;
-  }
-
-  function w1ImportStateCard(route, phase, iconName, title, summary, extraHtml, actionsHtml) {
-    const batchId = window.ReaderImportRuntimeContract?.BATCH_ID || "local-book-import-20260721";
-    return `
-    <section class="fd-import-state fd-import-state-card" data-route="${esc(route)}" data-import-phase="${esc(phase)}" data-import-batch-id="${esc(batchId)}">
-      <span class="fd-state-icon">${icon(iconName, "fd-medium-icon")}</span>
-      <h2>${esc(title)}</h2>
-      <p>${esc(summary)}</p>
-      ${extraHtml || ""}
-      ${actionsHtml ? `<div class="fd-action-row">${actionsHtml}</div>` : ""}
-    </section>`;
-  }
-
-  function importPermissionDeniedScreen(data, appState) {
-    const phase = "selecting";
-    const permission = appState?.importPermission || "storage";
-    const reason = appState?.importPermissionReason || "系统未授予存储访问权限，无法读取本地书籍文件。";
-    const extraHtml = `
-    <section class="fd-import-permission-detail" aria-label="权限说明">
-      <article><small>所需权限</small><strong>${esc(permission === "storage" ? "存储访问" : "文件访问")}</strong></article>
-      <article><small>触发场景</small><strong>本地书导入 · 选择文件阶段</strong></article>
-      <article><small>影响范围</small><strong>无法读取或写入本地书籍文件</strong></article>
-    </section>`;
-    const actionsHtml = `
-    <button type="button" data-action="open-system-settings">前往系统设置</button>
-    <button type="button" data-route="local-import">重新选择</button>
-    <button type="button" data-route="bookshelf">返回书架</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-permission-denied", phase, "lock", "导入权限被拒绝", reason, extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "导入权限被拒绝",
-      ariaLabel: "导入权限被拒绝",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importFormatUnsupportedScreen(data, appState) {
-    const phase = "input";
-    const fileName = appState?.importFileName || "未知文件";
-    const fileFormat = appState?.importFileFormat || "未知格式";
-    const supported = ["EPUB", "TXT", "MOBI", "AZW3", "PDF"];
-    const extraHtml = `
-    <section class="fd-import-format-detail" aria-label="格式信息">
-      <article><small>文件名</small><strong>${esc(fileName)}</strong></article>
-      <article><small>检测格式</small><strong>${esc(fileFormat)}</strong></article>
-      <article><small>支持格式</small><strong>${supported.join(" · ")}</strong></article>
-    </section>
-    <p class="fd-import-hint">可尝试使用格式转换工具转换为支持的格式后重新导入。</p>`;
-    const actionsHtml = `
-    <button type="button" data-action="convert-format">尝试转换</button>
-    <button type="button" data-route="local-import">重新选择</button>
-    <button type="button" data-route="bookshelf">取消</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-format-unsupported", phase, "file-warning", "文件格式不支持", `当前文件格式（${esc(fileFormat)}）暂不支持导入，请转换为支持的格式。`, extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "格式不支持",
-      ariaLabel: "文件格式不支持",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importEmptyFileScreen(data, appState) {
-    const phase = "parsing";
-    const fileName = appState?.importFileName || "未知文件";
-    const fileSize = appState?.importFileSize || "0 KB";
-    const extraHtml = `
-    <section class="fd-import-empty-detail" aria-label="文件信息">
-      <article><small>文件名</small><strong>${esc(fileName)}</strong></article>
-      <article><small>文件大小</small><strong>${esc(fileSize)}</strong></article>
-      <article><small>检测结果</small><strong>文件内容为空或无法读取</strong></article>
-    </section>`;
-    const actionsHtml = `
-    <button type="button" data-route="local-import">重新选择文件</button>
-    <button type="button" data-route="bookshelf">返回书架</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-empty-file", phase, "file", "文件为空", "所选文件没有可导入的内容，请确认文件未损坏后重新选择。", extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "空文件",
-      ariaLabel: "导入文件为空",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importParsingScreen(data, appState) {
-    const phase = "parsing";
-    const fileName = appState?.importFileName || "雨夜.epub";
-    const progress = Math.max(0, Math.min(100, Number(appState?.importParseProgress) || 72));
-    const step = appState?.importParseStep || "正在识别章节结构";
-    const extraHtml = `
-    <section class="fd-import-parsing-detail" role="status" aria-label="解析进度" aria-live="polite" aria-busy="true">
-      <article><small>当前文件</small><strong>${esc(fileName)}</strong></article>
-      <article><small>当前步骤</small><strong>${esc(step)}</strong></article>
-    </section>
-    <div class="fd-import-progress" role="progressbar" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100" aria-label="解析进度">
-      <div class="fd-import-progress-bar" style="width: ${progress}%"></div>
-      <span class="fd-import-progress-text">${progress}%</span>
-    </div>`;
-    const actionsHtml = `
-    <button type="button" data-action="import-cancel">取消解析</button>
-    <button type="button" data-route="bookshelf">后台运行</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-parsing", phase, "refresh", "正在解析书籍", "正在解析文件内容、识别章节结构和元数据，请稍候。", extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "解析中",
-      ariaLabel: "导入解析中",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importDuplicateScreen(data, appState) {
-    const phase = "preview";
-    const duplicates = (appState?.importDuplicates && appState.importDuplicates.length)
-      ? appState.importDuplicates
-      : [
-          { id: "rain-night", title: "雨夜.epub", meta: "本地已存在 · 同名同作者", size: "1.2 MB" },
-          { id: "old-book-scan", title: "旧书扫描.txt", meta: "本地已存在 · 同名不同作者", size: "0.8 MB" }
-        ];
-    const listHtml = duplicates.map((item, index) => `
-    <article class="fd-import-duplicate-item" data-duplicate-index="${index}"${item.id ? ` data-import-item-id="${esc(item.id)}"` : ""}>
-      ${icon("copy", "fd-small-icon")}
-      <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-      <em>${esc(item.size || "")}</em>
-    </article>`).join("");
-    const extraHtml = `
-    <section class="fd-import-duplicate-list" aria-label="重复项列表">
-      <h3>检测到 ${duplicates.length} 个重复项</h3>
-      ${listHtml}
-    </section>`;
-    const actionsHtml = `
-    <button type="button" data-action="duplicate-skip-all">全部跳过</button>
-    <button type="button" data-action="duplicate-overwrite-all">全部覆盖</button>
-    <button type="button" data-action="duplicate-review">逐项处理</button>
-    <button type="button" data-route="local-import">取消</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-duplicate", phase, "copy", "检测到重复书籍", "以下书籍在本地书架已存在，请选择处理方式。", extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "重复检测",
-      ariaLabel: "导入重复检测",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importConflictResolveScreen(data, appState) {
-    const phase = "conflict";
-    const conflicts = (appState?.importConflicts && appState.importConflicts.length)
-      ? appState.importConflicts
-      : [
-          { id: "title", field: "书名", local: "雨夜", remote: "雨夜（修订版）" },
-          { id: "author", field: "作者", local: "佚名", remote: "张三" },
-          { id: "group", field: "分组", local: "默认分组", remote: "小说" }
-        ];
-    const listHtml = conflicts.map((item, index) => `
-    <article class="fd-import-conflict-row" data-conflict-index="${index}"${item.id ? ` data-import-conflict-id="${esc(item.id)}"` : ""}>
-      <small>${esc(item.field)}</small>
-      <div class="fd-import-conflict-values">
-        <span class="fd-import-conflict-local"><strong>本地</strong>${esc(item.local)}</span>
-        <span class="fd-import-conflict-remote"><strong>导入</strong>${esc(item.remote)}</span>
-      </div>
-    </article>`).join("");
-    const extraHtml = `
-    <section class="fd-import-conflict-list" aria-label="冲突详情">
-      <h3>字段冲突</h3>
-      ${listHtml}
-    </section>
-    <p class="fd-import-hint">选择解决方案后将进入应用阶段，可通过回滚撤销本次导入。</p>`;
-    const actionsHtml = `
-    <button type="button" data-action="conflict-keep-local">保留本地</button>
-    <button type="button" data-action="conflict-overwrite">覆盖本地</button>
-    <button type="button" data-action="conflict-keep-both">保留两份</button>
-    <button type="button" data-action="import-rollback">取消并回滚</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-conflict-resolve", phase, "warning", "解决导入冲突", "导入数据与本地记录存在冲突，请逐项选择处理方式。", extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "解决冲突",
-      ariaLabel: "导入冲突解决",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importPartialSuccessScreen(data, appState) {
-    const phase = "result";
-    const results = (appState?.importPartialResults && appState.importPartialResults.length)
-      ? appState.importPartialResults
-      : [
-          { id: "rain-night", title: "雨夜.epub", status: "成功", tone: "good" },
-          { id: "old-book-scan", title: "旧书扫描.txt", status: "失败 · 编码异常", tone: "danger" },
-          { id: "missing-chapters", title: "缺失章节.mobi", status: "失败 · 格式不支持", tone: "danger" }
-        ];
-    const successCount = results.filter((item) => item.tone === "good").length;
-    const failCount = results.length - successCount;
-    const listHtml = results.map((item) => `
-    <article class="fd-import-result-item is-${esc(item.tone)}"${item.id ? ` data-import-item-id="${esc(item.id)}"` : ""}>
-      ${icon(item.tone === "danger" ? "warning" : "check", "fd-small-icon")}
-      <span><strong>${esc(item.title)}</strong></span>
-      <em>${esc(item.status)}</em>
-    </article>`).join("");
-    const extraHtml = `
-    <section class="fd-import-partial-summary" aria-label="导入结果摘要">
-      <article><small>成功</small><strong class="is-good">${successCount} 项</strong></article>
-      <article><small>失败</small><strong class="is-danger">${failCount} 项</strong></article>
-      <article><small>总计</small><strong>${results.length} 项</strong></article>
-    </section>
-    <section class="fd-import-result-list" aria-label="结果明细">${listHtml}</section>`;
-    const actionsHtml = `
-    <button type="button" data-action="import-retry-failed">重试失败项</button>
-    <button type="button" data-route="import-result-detail">查看详情</button>
-    <button type="button" data-route="bookshelf">完成</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-partial-success", phase, "check-partial", "部分导入成功", `本次导入共 ${results.length} 项，其中 ${successCount} 项成功、${failCount} 项失败，可重试失败项或查看详情。`, extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "部分导入成功",
-      ariaLabel: "导入部分成功",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
-
-  function importResultDetailScreen(data, appState) {
-    const phase = "result";
-    const results = (appState?.importFullResults && appState.importFullResults.length)
-      ? appState.importFullResults
-      : [
-          { id: "rain-night", title: "雨夜.epub", status: "成功", meta: "作者已识别 · 加入默认分组", tone: "good" },
-          { id: "old-book-scan", title: "旧书扫描.txt", status: "成功", meta: "编码 UTF-8 · 章节识别完成", tone: "good" },
-          { id: "missing-chapters", title: "缺失章节.mobi", status: "失败", meta: "格式不支持 · 已跳过", tone: "danger" }
-        ];
-    const listHtml = results.map((item) => `
-    <article class="fd-import-result-item is-${esc(item.tone)}"${item.id ? ` data-import-item-id="${esc(item.id)}"` : ""}>
-      ${icon(item.tone === "danger" ? "warning" : "book-open", "fd-small-icon")}
-      <span><strong>${esc(item.title)}</strong><small>${esc(item.meta)}</small></span>
-      <em>${esc(item.status)}</em>
-    </article>`).join("");
-    const extraHtml = `
-    <section class="fd-import-result-detail-summary" aria-label="结果统计">
-      <article><small>导入时间</small><strong>${esc(appState?.importTimestamp || "刚刚")}</strong></article>
-      <article><small>来源</small><strong>${esc(appState?.importSource || "本地文件")}</strong></article>
-      <article><small>分组</small><strong>${esc(appState?.importGroup || "默认分组")}</strong></article>
-    </section>
-    <section class="fd-import-result-list" aria-label="完整结果">${listHtml}</section>`;
-    const actionsHtml = `
-    <button type="button" data-action="export-report">导出报告</button>
-    <button type="button" data-route="local-import">继续导入</button>
-    <button type="button" data-route="bookshelf">返回书架</button>`;
-    const contentHtml = `
-    ${w1ImportPhaseBreadcrumb(phase)}
-    ${w1ImportStateCard("import-result-detail", phase, "info", "导入结果详情", "以下是本次导入的完整结果，可导出报告或继续导入其他书籍。", extraHtml, actionsHtml)}`;
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "导入结果详情",
-      ariaLabel: "导入结果详情",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
-  }
 
   function w1ImportVariantCard(route, variant, iconName, title, summary, actionsHtml) {
     return `
@@ -10313,37 +9823,6 @@
     <button type="button" data-route="rss-subscription-management">查看管理</button>`;
     const contentHtml = w1ImportVariantCard("rss-source-import-result", variant, iconName, title, summary, actionsHtml);
     return rssLibraryScreen(data, "导入结果", contentHtml, "", appState);
-  }
-
-  function localImportScreenV2(data, appState) {
-    const variant = appState?.importLoading ? "loading"
-      : appState?.importOffline ? "offline"
-      : appState?.importError ? "error"
-      : appState?.importEmpty ? "empty"
-      : "";
-    if (!variant) {
-      return localImportScreen(data);
-    }
-    const states = {
-      loading: ["refresh", "正在扫描本地文件", "正在扫描本地存储中的可导入书籍文件，请稍候。"],
-      empty: ["info", "未选择文件", "尚未选择要导入的本地书籍文件，点击下方按钮开始选择。"],
-      error: ["warning", "扫描失败", "本地文件扫描失败，可能是存储权限变更或读取异常，可重试或检查权限。"],
-      offline: ["offline", "存储不可用", "本地存储当前不可用，无法扫描或读取文件，请确认存储已挂载后重试。"]
-    };
-    const [iconName, title, summary] = states[variant];
-    const actionsHtml = `
-    <button type="button" data-route="local-import">${variant === "loading" ? "取消" : variant === "empty" ? "选择文件" : "重试"}</button>
-    <button type="button" data-route="bookshelf">返回书架</button>`;
-    const contentHtml = w1ImportVariantCard("local-import", variant, iconName, title, summary, actionsHtml);
-    return shellKit().renderLibraryShell(Object.assign(phoneShellClasses("fd-library-phone fd-import-phone"), {
-      data,
-      title: "本地书导入",
-      ariaLabel: "本地书导入",
-      topBarClass: "fd-back-bar",
-      bottomActionHostClass: "fd-bottom-action-host",
-      contentHtml,
-      stateHostHtml: mainTabFeedbackHtml(appState)
-    }));
   }
 
   function sourceImportOptionsScreenV2(data, appState) {
@@ -10686,12 +10165,26 @@
     });
   }
 
-  function instrumentImportRoute(html, route) {
-    const instrument = window.ReaderImportRuntimeContract?.instrumentHtml;
-    return typeof instrument === "function" ? instrument(html, route) : html;
+  function assertFigmaRouteAdmission(route) {
+    const admissionPolicy = window.ReaderFigmaRouteAdmissionPolicy;
+    if (!admissionPolicy || typeof admissionPolicy.assertRouteRenderable !== "function") {
+      throw new Error(
+        `Route "${String(route || "")}" is FROZEN (UNADMITTED_OR_NO_RENDERER). ` +
+        "ReaderFigmaRouteAdmissionPolicy is required. No local visual fallback is rendered."
+      );
+    }
+    const frozenReason = admissionPolicy.blockedReason?.(route);
+    if (frozenReason) {
+      admissionPolicy.assertRouteRenderable(route);
+    }
+    return true;
   }
 
   function renderRoute(route, data, options, appState) {
+    assertFigmaRouteAdmission(route);
+    if (isSourceSwitchRoute(route) && isLocalSelectedBook(appState)) {
+      throw new Error(LOCAL_BOOK_SOURCE_SWITCH_FORBIDDEN);
+    }
     // W3/W4/W5 模块 dispatch hook（在 switch 之前优先分发到自包含模块）
     if (typeof window !== "undefined") {
       // W4：有 renderW4Route 分发函数
@@ -10763,7 +10256,7 @@
       case "bookshelf-list-mode":
         throw new Error("bookshelf-list-mode route is FROZEN to bookshelfV2 (d2-bookshelf-discover-renderers.js)");
       case "bookshelf-book-more-menu":
-        throw new Error("bookshelf-book-more-menu route is FROZEN to bookshelfBookMoreMenuScreen (d2-bookshelf-discover-renderers.js)");
+        throw new Error("bookshelf-book-more-menu is retired: use the in-place Figma Library/BookActionSheet state");
       case "discover":
       case "discover-home":
       case "discover-control":
@@ -11056,30 +10549,23 @@
       case "bookshelf-empty":
         throw new Error("bookshelf-empty route is FROZEN to bookshelfEmptyV2 (d2-bookshelf-discover-renderers.js)");
       case "book-batch-management":
-        return bookBatchManagementScreen(data);
+        throw new Error("book-batch-management is retired: use the in-place Figma Bookshelf/MultiSelect state");
       case "sort-filter":
-        return sortFilterScreen(data, appState);
+        throw new Error("sort-filter has no current exact Figma route binding and is fail-closed");
       case "group-management":
       case "bookshelf-group-management":
-        return groupManagementScreen(data);
+        throw new Error(route + " group management is out of V1 scope and remains retired");
       case "import-permission-denied":
-        return instrumentImportRoute(importPermissionDeniedScreen(data, appState), route);
       case "import-format-unsupported":
-        return instrumentImportRoute(importFormatUnsupportedScreen(data, appState), route);
       case "import-empty-file":
-        return instrumentImportRoute(importEmptyFileScreen(data, appState), route);
       case "import-parsing":
-        return instrumentImportRoute(importParsingScreen(data, appState), route);
       case "import-duplicate":
-        return instrumentImportRoute(importDuplicateScreen(data, appState), route);
       case "import-conflict-resolve":
-        return instrumentImportRoute(importConflictResolveScreen(data, appState), route);
       case "import-partial-success":
-        return instrumentImportRoute(importPartialSuccessScreen(data, appState), route);
       case "import-result-detail":
-        return instrumentImportRoute(importResultDetailScreen(data, appState), route);
+        throw new Error(route + " is retired: local import uses the canonical in-place dialog states only");
       case "local-import":
-        return localImportScreenV2(data, appState);
+        throw new Error("local-import route is retired: open the canonical in-place local import dialog");
       case "immersive-reading":
       case "reader_content":
       case "reader":
@@ -11209,13 +10695,13 @@
       case "sync-backup":
         throw new Error("sync-backup route is FROZEN to backupScreenV2 (d2-settings-sync-renderers.js)");
       case "bookshelf-search-settings":
-        throw new Error("bookshelf-search-settings route is FROZEN to bookshelfSearchSettingsV2 (d2-bookshelf-discover-renderers.js)");
+        throw new Error("bookshelf-search-settings has no current exact Figma binding and is fail-closed");
       case "about-feedback":
       case "about":
       case "about-version":
-        throw new Error(route + " route is FROZEN to aboutScreenV2 (d2-settings-sync-renderers.js)");
+        throw new Error(route + " was explicitly withdrawn and has no production renderer");
       case "feedback":
-        throw new Error("feedback route is excluded from About: use the canonical feedback-entry overlay/external action; legacy feedback route is fail-loud");
+        throw new Error("feedback route was explicitly withdrawn with the About page family");
       case "sync-settings-entry":
       case "backup-settings":
       case "progress-sync":
@@ -11261,7 +10747,10 @@
           "before renderRoute is called."
         );
       default:
-        return mainTabBookshelf(data, appState);
+        throw new Error(
+          `Route "${String(route || "")}" is FROZEN (UNADMITTED_OR_NO_RENDERER). ` +
+          "No exact Figma-backed renderer is registered. No local visual fallback is rendered."
+        );
     }
   }
 
@@ -11272,10 +10761,44 @@
     }).join("");
   }
 
+  const LOCAL_BOOK_SOURCE_SWITCH_FORBIDDEN = "LOCAL_BOOK_SOURCE_SWITCH_FORBIDDEN";
+
+  function isSourceSwitchRoute(route) {
+    return String(route || "").startsWith("source-switch");
+  }
+
+  function setSelectedBookContext(appState, targetEl) {
+    if (!appState || !targetEl) return null;
+    const sourceId = targetEl.getAttribute("data-book-source-id") || "";
+    const bookId = targetEl.getAttribute("data-book-id") || "";
+    if (!sourceId || !bookId) return null;
+    const context = {
+      sourceId,
+      bookId,
+      bookKey: targetEl.getAttribute("data-book-key") || `${encodeURIComponent(sourceId)}::${encodeURIComponent(bookId)}`
+    };
+    appState.selectedBookContext = context;
+    appState.bookshelfFocusBookContext = context;
+    return context;
+  }
+
+  function isLocalSelectedBook(appState) {
+    const selected = appState?.selectedBookContext;
+    return String(selected?.sourceId || "").toLowerCase() === "local";
+  }
+
+  function bookContextMatchesElement(context, element) {
+    if (!context || !element) return false;
+    return element.getAttribute("data-book-id") === context.bookId &&
+      element.getAttribute("data-book-source-id") === context.sourceId;
+  }
+
   function initialAppState(data) {
     const settingDefaults = readerControlSettingsConfig(data).defaults;
     return {
       bookshelfView: "cover",
+      selectedBookContext: null,
+      bookshelfFocusBookContext: null,
       bookSearchPhase: "before",
       bookSearchQuery: "三体",
       bookSearchRequest: null,
@@ -11301,8 +10824,11 @@
       readerPaginationKey: "",
       readerPageIndex: 0,
       readerTurnDirection: "",
-      readerPageMode: readerPageModeCssValue(settingDefaults.pageMode),
+      readerPageMode: readerPageModeForAnimation(settingDefaults.pageAnimation),
       readerPageAnimation: readerPageAnimationCssValue(settingDefaults.pageAnimation),
+      readerCanonicalLocation: null,
+      readerLocationReflow: null,
+      readerReflowAnchor: null,
       readerMoreOpen: false,
       readerQuickExpanded: "",
       readerModalOriginRoute: "",
@@ -11894,7 +11420,6 @@
       } else if (route === "bookshelf-cover-mode") {
         appState.bookshelfView = "cover";
       }
-      const renderedTurnDirection = appState.readerTurnDirection;
       const previousRenderedRoute = root.getAttribute("data-current-route") || "";
       const scrollSnapshot = captureReaderScrollSnapshot(screenHost);
       const shouldRestorePanelScroll = previousRenderedRoute === route;
@@ -11986,39 +11511,30 @@
           }
         });
       }
-      if (appState.bookshelfFocusBookId && route !== "bookshelf-book-more-menu") {
-        const focusBookId = appState.bookshelfFocusBookId;
+      if (appState.bookshelfFocusBookContext) {
+        const focusBookContext = appState.bookshelfFocusBookContext;
         window.requestAnimationFrame(() => {
           const item = Array.from(screenHost.querySelectorAll("[data-book-item][data-book-id]")).find(
-            (candidate) => candidate.getAttribute("data-book-id") === focusBookId
+            (candidate) => bookContextMatchesElement(focusBookContext, candidate)
           );
-          const focusTarget = item?.querySelector("[data-book-more]:not([tabindex='-1'])")
-            || item?.querySelector("[data-book-cover]");
+          const focusTarget = item?.querySelector("[data-book-cover]");
           if (focusTarget && typeof focusTarget.focus === "function") {
             focusTarget.focus({ preventScroll: true });
-            appState.bookshelfFocusBookId = "";
+            appState.bookshelfFocusBookContext = null;
           }
         });
       }
       scheduleReaderSessionCapsuleTick(screenHost, appState, data, renderCurrentRoute);
-      if (renderedTurnDirection) {
-        const readingLayer = screenHost.querySelector(".fd-ir-reading-layer");
-        const clearTurnClass = () => {
-          if (readingLayer) {
-            readingLayer.classList.remove("fd-reader-page-turn-next", "fd-reader-page-turn-prev");
-          }
-        };
-        if (readingLayer) {
-          readingLayer.addEventListener("animationend", clearTurnClass, { once: true });
-          window.setTimeout(clearTurnClass, 260);
-        }
-      }
       appState.readerTurnDirection = "";
     };
 
     const renderCurrentRoute = () => {
       renderActiveRoute(routeStack[routeStack.length - 1]);
     };
+    readerRuntimeResultConsumerApi.bind(appState, () => {
+      invalidateReaderPagination(appState);
+      renderCurrentRoute();
+    });
 
     const syncReaderQuickExpansionForRoute = (route) => {
       const preserveForOverlay = route === "reader-progress-restore" || String(route || "").startsWith("source-switch");
@@ -12357,9 +11873,6 @@
         item.setAttribute("aria-setsize", String(items.length));
         item.querySelectorAll("[data-book-list-detail]").forEach((detail) => {
           detail.setAttribute("aria-hidden", view === "list" ? "false" : "true");
-        });
-        item.querySelectorAll("[data-book-more]").forEach((button) => {
-          button.setAttribute("tabindex", view === "list" ? "0" : "-1");
         });
       });
     }
@@ -12881,61 +12394,48 @@
     const applyReaderSettingOption = (key, value) => {
       const options = readerControlSettingsConfig(data).options;
       if (!options[key] || !options[key].includes(value)) return;
-      appState.readerSettings[key] = value;
-      // 翻页模式 / 翻页动画：同步 CSS 值到 appState，供 data-page-mode / data-page-animation 使用
-      if (key === "pageMode") {
-        appState.readerPageMode = readerPageModeCssValue(value);
-        // 切换模式时重置分页，避免竖向全段落渲染残留干扰横向分页
-        appState.readerPages = [];
-        appState.readerPaginationKey = "";
-        appState.readerPageIndex = 0;
-      } else if (key === "pageAnimation") {
-        appState.readerPageAnimation = readerPageAnimationCssValue(value);
+      if (key === "pageAnimation") {
+        applyReaderPageAnimationSetting(appState, value);
+      } else {
+        appState.readerSettings[key] = value;
       }
       appState.readerSettingsExpandedOption = "";
       renderCurrentRoute();
     };
 
-    const closeBookFocus = (phone) => {
-      if (!phone) {
-        return;
-      }
-      phone.classList.remove("has-book-focus");
-      phone.querySelectorAll(".is-cover-focused").forEach((item) => item.classList.remove("is-cover-focused"));
-      const layer = phone.querySelector("[data-book-focus-layer]");
-      if (layer) {
-        layer.setAttribute("aria-hidden", "true");
-      }
+    const closeBookFocus = () => {
+      const bookKey = bookshelfOwner?.getState?.().bookActionBookKey || "";
+      const focusBookContext = appState.bookshelfFocusBookContext;
+      if (!bookKey) return;
+      bookshelfOwner.dispatch({ type: "BOOK_ACTION_CLOSE" });
+      renderCurrentRoute();
+      window.requestAnimationFrame(() => {
+        const item = Array.from(screenHost.querySelectorAll("[data-book-item][data-book-id]")).find(
+          (candidate) => bookContextMatchesElement(focusBookContext, candidate)
+        );
+        const target = item?.querySelector("[data-book-cover]");
+        target?.focus?.({ preventScroll: true });
+      });
     };
 
     const openBookFocus = (button) => {
-      const phone = button.closest(".fd-phone");
-      const layer = phone?.querySelector("[data-book-focus-layer]");
-      if (!phone || !layer) {
-        return;
-      }
-      closeBookFocus(phone);
-      phone.classList.add("has-book-focus");
-      const focusTarget = button.closest("[data-book-card]") || button;
-      focusTarget.classList.add("is-cover-focused");
-      const title = button.getAttribute("data-book-title") || "长夜余火";
-      const author = button.getAttribute("data-book-author") || "爱潜水的乌贼";
-      const chapter = button.getAttribute("data-book-chapter") || "第 32 章 雨夜";
-      const coverSrc = button.getAttribute("data-cover-src") || "";
-      const titleHost = layer.querySelector("[data-focus-title]");
-      const metaHost = layer.querySelector("[data-focus-meta]");
-      const coverHost = layer.querySelector("[data-focus-cover]");
-      if (titleHost) {
-        titleHost.textContent = title;
-      }
-      if (metaHost) {
-        metaHost.textContent = `${author} · ${chapter}`;
-      }
-      if (coverHost) {
-        coverHost.style.setProperty("--focus-cover", `url("${stylesheetRelativeAsset(coverSrc)}")`);
-      }
-      layer.setAttribute("aria-hidden", "false");
-      layer.querySelector(".fd-book-focus-menu button")?.focus({ preventScroll: true });
+      const bookId = button.getAttribute("data-book-id") || "";
+      const bookSourceId = button.getAttribute("data-book-source-id") || "";
+      const bookKey = button.getAttribute("data-book-key") || "";
+      if (!bookId || !bookSourceId || !bookKey || !bookshelfOwner?.dispatch) return;
+      setSelectedBookContext(appState, button);
+      const focusIndex = Number.parseInt(button.getAttribute("data-book-focus-index") || "0", 10);
+      appState.bookFocusIndex = Number.isFinite(focusIndex) ? Math.max(0, focusIndex) : 0;
+      bookshelfOwner.dispatch({ type: "BOOK_ACTION_OPEN", bookKey });
+      renderCurrentRoute();
+      window.requestAnimationFrame(() => {
+        screenHost.querySelectorAll("[data-book-action]").forEach((action) => {
+          action.setAttribute("data-book-id", bookId);
+          action.setAttribute("data-book-source-id", bookSourceId);
+          action.setAttribute("data-book-key", bookKey);
+        });
+        screenHost.querySelector("[data-book-action='multi-select']")?.focus?.({ preventScroll: true });
+      });
     };
 
     const applyBookshelfView = (mode) => applyBookshelfViewState(screenHost, appState, mode);
@@ -12948,14 +12448,6 @@
       button.addEventListener("click", () => {
         appState.bookshelfFilterOpen = button.getAttribute("aria-expanded") !== "true";
         closeFilterDisclosures("bookshelfFilterOpen");
-        renderCurrentRoute();
-      });
-    });
-
-    screenHost.querySelectorAll("[data-bookshelf-group-option]").forEach((button) => {
-      button.addEventListener("click", () => {
-        appState.bookshelfGroup = button.getAttribute("data-bookshelf-group-option") || "全部";
-        appState.bookshelfFilterOpen = true;
         renderCurrentRoute();
       });
     });
@@ -12999,7 +12491,7 @@
       const action = button.getAttribute("data-top-action") || button.getAttribute("aria-label") || "";
       const route = currentRoute();
       if (action === "search") {
-        if (route === "bookshelf" || route === "bookshelf-empty" || route === "sort-filter" || route === "discover") {
+        if (route === "bookshelf" || route === "bookshelf-empty" || route === "discover") {
           appState.bookSearchPhase = "before";
           goTo("book-search", true);
           return;
@@ -13014,7 +12506,7 @@
         }
       }
       if (action === "more") {
-        if (route === "bookshelf" || route === "bookshelf-empty" || route === "sort-filter") {
+        if (route === "bookshelf" || route === "bookshelf-empty") {
           const phone = button.closest(".fd-phone");
           const layer = phone?.querySelector("[data-bookshelf-more-layer]");
           if (layer) {
@@ -13056,6 +12548,96 @@
 
     screenHost.querySelectorAll("[data-close-bookshelf-more]").forEach((button) => {
       button.addEventListener("click", () => closeBookshelfMore(button.closest(".fd-phone")));
+    });
+
+    screenHost.querySelectorAll("[data-book-action='multi-select']").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const bookKey = button.getAttribute("data-book-key") || "";
+        setSelectedBookContext(appState, button);
+        bookshelfOwner?.dispatch?.({ type: "MULTI_SELECT_OPEN", bookKey });
+        renderCurrentRoute();
+        window.requestAnimationFrame(() => screenHost.querySelector("[data-multi-select-exit]")?.focus?.({ preventScroll: true }));
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-action='info']").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedBookContext(appState, button);
+        bookshelfOwner?.dispatch?.({ type: "BOOK_ACTION_CLOSE" });
+        goTo("book-detail", true);
+      });
+    });
+
+    screenHost.querySelectorAll("[data-book-action='remove']").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setSelectedBookContext(appState, button);
+        bookshelfOwner?.dispatch?.({ type: "BOOK_ACTION_REMOVE_OPEN", bookKey: button.getAttribute("data-book-key") || "" });
+        renderCurrentRoute();
+        window.requestAnimationFrame(() => screenHost.querySelector("[data-bookshelf-remove-cancel][data-dialog-initial-focus]")?.focus?.({ preventScroll: true }));
+      });
+    });
+
+    screenHost.querySelectorAll("[data-multi-select-exit]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bookshelfOwner?.dispatch?.({ type: "MULTI_SELECT_CLOSE" });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-multi-select-book-key]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bookshelfOwner?.dispatch?.({ type: "MULTI_SELECT_TOGGLE", bookKey: button.getAttribute("data-multi-select-book-key") || "" });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-multi-select-all]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const bookKeys = Array.from(screenHost.querySelectorAll("[data-multi-select-book-key]"))
+          .map((item) => item.getAttribute("data-multi-select-book-key") || "")
+          .filter(Boolean);
+        const selectedCount = bookshelfOwner?.getState?.().multiSelectSelectedBookKeys?.length || 0;
+        bookshelfOwner?.dispatch?.({ type: "MULTI_SELECT_SET_ALL", bookKeys: selectedCount === bookKeys.length ? [] : bookKeys });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-multi-select-remove]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        bookshelfOwner?.dispatch?.({ type: "MULTI_SELECT_REMOVE_OPEN" });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-bookshelf-remove-cancel]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        bookshelfOwner?.dispatch?.({ type: "REMOVE_CANCEL" });
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-bookshelf-remove-confirm]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const target = bookshelfOwner?.getState?.().removeTarget;
+        const execute = target === "batch"
+          ? bookshelfOwner?.executeBatchRemove
+          : bookshelfOwner?.executeSingleRemove;
+        execute?.({ delay: 180, onUpdate: renderCurrentRoute });
+      });
     });
 
     const restoreLocalImportFocus = (settingsKey) => {
@@ -13126,14 +12708,6 @@
         bookshelfOwner?.dispatch?.({ type: "LOCAL_IMPORT_FINISH" });
         renderCurrentRoute();
         restoreLocalImportFocus(origin);
-      });
-    });
-
-    screenHost.querySelectorAll("[data-local-import-retry]").forEach((button) => {
-      button.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        bookshelfOwner?.retryLocalImport?.({ delay: 180, onUpdate: renderCurrentRoute });
       });
     });
 
@@ -13677,8 +13251,7 @@
     screenHost.querySelectorAll("[data-reader-more-toggle]").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
-        appState.readerMoreOpen = !appState.readerMoreOpen;
-        renderCurrentRoute();
+        appState.readerMoreOpen = false;
       });
     });
 
@@ -14121,10 +13694,16 @@
           event.stopPropagation();
         }
         const route = targetEl.getAttribute("data-route");
+        if (targetEl.hasAttribute("data-book-id") && targetEl.hasAttribute("data-book-source-id")) {
+          setSelectedBookContext(appState, targetEl);
+        }
+        if (isSourceSwitchRoute(route) && isLocalSelectedBook(appState)) {
+          return;
+        }
         if (targetEl.hasAttribute("data-book-focus-index")) {
           const bookFocusIndex = Number.parseInt(targetEl.getAttribute("data-book-focus-index") || "0", 10);
           appState.bookFocusIndex = Number.isFinite(bookFocusIndex) ? Math.max(0, bookFocusIndex) : 0;
-          appState.bookshelfFocusBookId = targetEl.getAttribute("data-book-id") || "";
+          setSelectedBookContext(appState, targetEl);
         }
         if (rssConfirmRoutes.has(route)) {
           appState.rssConfirmOriginRoute = currentRoute();
@@ -14639,6 +14218,7 @@
           return;
         }
         closeBookFocus(button.closest(".fd-phone"));
+        setSelectedBookContext(appState, button);
         const targetRoute = button.getAttribute("data-route") || "immersive-reading";
         appState.readerEntryMotion = readerEntryMotionFromElement(button, screenHost, currentRoute(), targetRoute, "cover");
         goTo(button.getAttribute("data-route") || "immersive-reading", true, {
@@ -14653,6 +14233,7 @@
         if (event.key === "Enter") {
           event.preventDefault();
           closeBookFocus(button.closest(".fd-phone"));
+          setSelectedBookContext(appState, button);
           const targetRoute = button.getAttribute("data-route") || "immersive-reading";
           appState.readerEntryMotion = readerEntryMotionFromElement(button, screenHost, currentRoute(), targetRoute, "cover");
           goTo(targetRoute, true, {
@@ -15169,13 +14750,17 @@
         const key = select.getAttribute("data-w4-appearance-select") || "";
         if (!["firstLineIndent", "script", "pageAnimation", "alignment"].includes(key)) return;
         const value = key === "firstLineIndent" ? select.value === "true" : select.value;
-        appState.readerTypography[key] = value;
-        try {
-          const stored = JSON.parse(window.localStorage.getItem("reader-w4-typography") || "null") || {};
-          window.localStorage.setItem("reader-w4-typography", JSON.stringify(Object.assign({}, stored, appState.readerTypography, { [key]: value })));
-        } catch (_) {
-          // The live state still updates when demo persistence is unavailable.
-        }
+        if (!window.ReaderPageAnimationController?.applyAppearanceSetting?.(appState, key, value, window.localStorage)) return;
+        renderCurrentRoute();
+      });
+    });
+
+    screenHost.querySelectorAll("[data-w4-layout-set]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        const key = button.getAttribute("data-w4-layout-set") || "";
+        const value = button.getAttribute("data-w4-value") || "";
+        if (!window.ReaderPageAnimationController?.applyAppearanceSetting?.(appState, key, value, window.localStorage)) return;
         renderCurrentRoute();
       });
     });
@@ -15747,8 +15332,24 @@
     }
   };
 
+  window.ReaderRuntimeResultConsumer = readerRuntimeResultConsumerApi;
+  window.ReaderPageAnimationController = Object.freeze({
+    applySetting: applyReaderPageAnimationSetting,
+    applyAppearanceSetting: applyReaderW4AppearanceSetting
+  });
+
   window.ReaderRuntimeTestHooks = Object.assign({}, window.ReaderRuntimeTestHooks, {
+    readerReadingSurfaceFigmaBinding: READER_READING_SURFACE_FIGMA_BINDING,
     readerTextBlocks,
+    sharedReaderSurface,
+    readerThemeStyle,
+    readerPageModeForAnimation,
+    readerCoreCharacterAnchor,
+    readerCharacterAnchor,
+    readerPageIndexForCharacterAnchor,
+    applyReaderPageAnimationSetting,
+    applyReaderRuntimeResult,
+    applyReaderW4AppearanceSetting,
     updateReaderPagination,
     invalidateReaderPagination,
     refreshReaderPaginationForLayout,

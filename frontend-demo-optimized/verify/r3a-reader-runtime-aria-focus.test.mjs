@@ -19,6 +19,7 @@ function fresh() {
 class FakeNode {
   constructor(attrs = {}) { this.attrs = new Map(Object.entries(attrs)); }
   setAttribute(key, value) { this.attrs.set(key, String(value)); }
+  removeAttribute(key) { this.attrs.delete(key); }
   getAttribute(key) { return this.attrs.has(key) ? this.attrs.get(key) : null; }
   hasAttribute(key) { return this.attrs.has(key); }
 }

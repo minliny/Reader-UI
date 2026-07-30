@@ -137,7 +137,7 @@ test("appearance fixture 主题字体控件 exact-set 与默认值闭合", () =>
   );
   assert.deepEqual(
     appearanceFixture.selects.map((item) => [item.label, item.options.find((option) => option.value === item.defaultValue)?.label]),
-    [["缩进", "无"], ["简繁", "简体"], ["翻页动画", "平移"], ["文字对齐", "开启"]]
+    [["缩进", "无"], ["简繁", "简体"], ["翻页动画", "滑动"], ["文字对齐", "开启"]]
   );
   assert.deepEqual(
     appearanceFixture.steppers.map((item) => [item.id, item.defaultValue]),
@@ -284,22 +284,18 @@ test("book-detail view-state 使用详情页复合结构", () => {
   );
 });
 
-test("control-layer-base-v2 对齐 frontend-demo-optimized live 控制层结构", () => {
-  const control = viewFixtures.find((item) => item.routeId === "control-layer-base-v2" && item.pageState === "default");
-  assert.ok(control, "control-layer-base-v2/default fixture 应存在");
-
-  assert.deepEqual(
-    control.components.map((component) => component.type),
-    ["ReaderBase", "ReaderTopArea", "ReaderControlSheet", "ReaderBottomBar"]
+test("control-layer-base-v2 is retired from contract fixtures (A2 strict removal)", () => {
+  // A2 strict physical removal retired control-layer-base-v2 (MAJOR). It must
+  // not keep a view-state fixture, and it must be absent from the route schema.
+  // Its frontend-demo-optimized live renderer mapping is a separate historical
+  // leak (see F0_FIGMA_FIRST_GAP_MATRIX) and is not re-admitted here.
+  assert.equal(
+    viewFixtures.some((item) => item.routeId === "control-layer-base-v2"),
+    false,
+    "control-layer-base-v2 must not keep a view-state fixture after retirement"
   );
-
-  for (const staleType of ["FloatingBrightness", "FloatingQuickActions", "FloatingPageControl"]) {
-    assert.equal(
-      control.components.some((component) => component.type === staleType),
-      false,
-      `control-layer-base-v2 不应回退到旧浮动控制结构：${staleType}`
-    );
-  }
+  assert.ok(!routeSchema.properties.id.enum.includes("control-layer-base-v2"),
+    "control-layer-base-v2 must be absent from route.schema.json after retirement");
 });
 
 test("control-layer-base-v2 真相源固定为 frontend-demo-optimized live renderer", () => {
@@ -357,29 +353,31 @@ test("reader full/utility routes 对齐 frontend-demo-optimized live 全屏控�
   }
 });
 
-test("reader overlay routes keep module nav above bottomSheetHost", () => {
-  const expected = new Map([
-    ["reader-directory-overlay-v2", "ReaderDirectoryPanel"],
-    ["reader-appearance-overlay-v2", "ReaderAppearancePanel"],
-    ["reader-tts-overlay-v2", "ReaderTtsPanel"],
-    ["reader-settings-overlay-v2", "ReaderSettingsPanel"],
-    ["reader-search-overlay-v2", "ReaderSearchPanel"],
-    ["reader-replace-overlay-v2", "ReaderReplacePanel"],
-    ["reader-auto-scroll-overlay-v2", "ReaderAutoScrollPanel"]
-  ]);
-
-  for (const [routeId, panelType] of expected) {
-    const entry = viewFixtures.find((item) => item.routeId === routeId && item.pageState === "default");
-    assert.ok(entry, `${routeId}/default fixture 应存在`);
-    assert.deepEqual(
-      entry.components.map((component) => component.type),
-      ["ReaderBase", "ReaderTopArea", panelType, "ReaderBottomBar"],
-      `${routeId} 必须先渲染 bottomSheetHost 面板，再渲染 readerModuleNav，否则 ArkUI 全屏 wrapper 会遮住底部导航`
+test("reader overlay routes are retired from contract fixtures (A2 strict removal)", () => {
+  // A2 strict physical removal retired the 7 reader overlay routes (MAJOR).
+  // They must not keep view-state fixtures and must be absent from the route
+  // schema until their Figma-backed native conversion re-adds them.
+  const retiredOverlays = [
+    "reader-directory-overlay-v2",
+    "reader-appearance-overlay-v2",
+    "reader-tts-overlay-v2",
+    "reader-settings-overlay-v2",
+    "reader-search-overlay-v2",
+    "reader-replace-overlay-v2",
+    "reader-auto-scroll-overlay-v2",
+  ];
+  for (const routeId of retiredOverlays) {
+    assert.equal(
+      viewFixtures.some((item) => item.routeId === routeId),
+      false,
+      `${routeId} must not keep a view-state fixture after retirement`
     );
+    assert.ok(!routeSchema.properties.id.enum.includes(routeId),
+      `${routeId} must be absent from route.schema.json after retirement`);
   }
 });
 
-test("非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () => {
+test("未隔离的非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () => {
   const immersiveRoutes = new Set(["immersive-reading", "reader_content"]);
   const readerEntries = viewFixtures.filter((entry) =>
     entry.components.some((component) => component.type === "ReaderBase")
@@ -387,11 +385,14 @@ test("非沉浸 Reader 路由把 ReaderTopArea 作为 overlay 组件声明", () 
 
   for (const entry of readerEntries) {
     const componentTypes = entry.components.map((component) => component.type);
-    if (immersiveRoutes.has(entry.routeId)) {
+    const isCanonicalReadingSurface = entry.components.some((component) =>
+      component.props?.surfaceContract === "canonical-reading-surface"
+    );
+    if (immersiveRoutes.has(entry.routeId) || isCanonicalReadingSurface) {
       assert.equal(
         componentTypes.includes("ReaderTopArea"),
         false,
-        `${entry.routeId}/${entry.pageState} 是沉浸阅读路由，不应显示 ReaderTopArea`
+        `${entry.routeId}/${entry.pageState} 是 canonical ReadingSurface，不应混入 ReaderTopArea`
       );
     } else {
       assert.equal(

@@ -68,16 +68,17 @@ test("codegen 入口存在且可执行", () => {
   assert.ok(existsSync(CODEGEN_ENTRY), `codegen 入口不存在：${CODEGEN_ENTRY}`);
 });
 
-test("generated/ 下存在 48 个代码文件（15 schema + ScreenGraph × 3 端）", () => {
+test("generated/ 下存在 51 个代码文件（15 schema + ScreenGraph + route quarantine × 3 端）", () => {
   const files = listGeneratedFiles();
-  assert.equal(files.length, 48, `expected 48 generated files, got ${files.length}`);
-  // 每端各 16 个：15 个 contract schema 产物（含 AppearanceSpec）+ 1 个 R16 ScreenGraph 产物。
+  assert.equal(files.length, 51, `expected 51 generated files, got ${files.length}`);
+  // 每端各 17 个：15 个 contract schema 产物（含 AppearanceSpec）+ R16
+  // ScreenGraph + source-side route reconstruction quarantine。
   const swift = files.filter((f) => f.startsWith("swift/")).length;
   const kotlin = files.filter((f) => f.startsWith("kotlin/")).length;
   const arkts = files.filter((f) => f.startsWith("arkts/")).length;
-  assert.equal(swift, 16, `swift 端文件数应为 16，实际 ${swift}`);
-  assert.equal(kotlin, 16, `kotlin 端文件数应为 16，实际 ${kotlin}`);
-  assert.equal(arkts, 16, `arkts 端文件数应为 16，实际 ${arkts}`);
+  assert.equal(swift, 17, `swift 端文件数应为 17，实际 ${swift}`);
+  assert.equal(kotlin, 17, `kotlin 端文件数应为 17，实际 ${kotlin}`);
+  assert.equal(arkts, 17, `arkts 端文件数应为 17，实际 ${arkts}`);
 });
 
 test("codegen 退出码为 0", () => {
@@ -87,7 +88,7 @@ test("codegen 退出码为 0", () => {
 
 test("codegen 幂等性：跑前后所有文件 byte-for-byte 一致", () => {
   const files = listGeneratedFiles();
-  assert.ok(files.length === 48, "generated 文件数应为 48");
+  assert.ok(files.length === 51, "generated 文件数应为 51");
 
   // 1. 读 baseline
   const before = new Map();

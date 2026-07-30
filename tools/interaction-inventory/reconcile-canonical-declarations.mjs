@@ -8,7 +8,7 @@
 //
 // R2.0.1 新增对账维度：
 //   1. route-local occurrence 1:1 对账（不再是全局 entityKey 集合）
-//   2. exact 12 页面族 gate
+//   2. exact 11 active page-family gate
 //   3. renderer owner 与 dispatch map 一致
 //   4. uiEvent 非空或明确豁免
 //   5. controlId 非空或明确豁免
@@ -108,21 +108,21 @@ const report = {
   checks: {}
 };
 
-// ===== Check 1: exact 12 page families gate =====
+// ===== Check 1: exact 11 active page families gate =====
 const expectedFamilies = [
-  "bookshelf", "book-detail", "search-results", "import-conflict-resolve",
+  "bookshelf", "book-detail", "search-results",
   "discover", "rss", "source-switch", "settings-general",
-  "source-management", "webdav-config", "sync-backup", "about-restore-preview"
+  "source-management", "webdav-config", "sync-backup", "restore-preview"
 ];
 const nonReaderDeclarations = declarations.filter((d) => d.source !== "reader-runtime-action");
 const declarationFamilies = new Set(nonReaderDeclarations.map(d => d.pageFamily));
 const missingFamilies = expectedFamilies.filter(f => !declarationFamilies.has(f));
 const extraFamilies = [...declarationFamilies].filter(f => !expectedFamilies.includes(f));
 const readerRuntimeDeclarations = declarations.filter((d) => d.source === "reader-runtime-action");
-report.checks.exact12PageFamilies = {
-  status: missingFamilies.length === 0 && extraFamilies.length === 0 && declarationFamilies.size === 12 ? "pass" : "fail",
-  expected: "exactly 12 non-Reader page families; Reader Runtime is an explicit extension lane",
-  expectedCount: 12,
+report.checks.exact11ActivePageFamilies = {
+  status: missingFamilies.length === 0 && extraFamilies.length === 0 && declarationFamilies.size === 11 ? "pass" : "fail",
+  expected: "exactly 11 active non-Reader page families; withdrawn standalone import and About families are absent; Reader Runtime is an explicit extension lane",
+  expectedCount: 11,
   actualCount: declarationFamilies.size,
   readerRuntimeExtensionCount: readerRuntimeDeclarations.length,
   missing: missingFamilies,
@@ -285,12 +285,12 @@ report.checks.controlIdNonNullOrExemption = {
   invalidExemptionType: invalidControlIdExemptions
 };
 
-// ===== Check 7: subcontrol count = 50 (28 switch + 15 select + 4 stepper + 3 segment) =====
+// ===== Check 7: active stable subcontrol denominator =====
 const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
 const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
 for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
-const expectedByType = { switch: 28, select: 16, stepper: 4, segment: 8, textbox: 1, input: 4 };
-const expectedSubtotal = 61;
+const expectedByType = { switch: 25, select: 11, stepper: 4, segment: 8, textbox: 1, input: 4 };
+const expectedSubtotal = 53;
 const subcontrolCountOk =
   declaredByType.switch === expectedByType.switch &&
   declaredByType.select === expectedByType.select &&
@@ -301,7 +301,7 @@ const subcontrolCountOk =
   declaredSubcontrols.length === expectedSubtotal;
 report.checks.subcontrolCount50 = {
   status: subcontrolCountOk ? "pass" : "fail",
-  expected: "61 stable subcontrol declarations (switch 28 / select 16 / stepper 4 / segment 8 / textbox 1 / input 4)",
+  expected: "53 active stable subcontrol declarations (switch 25 / select 11 / stepper 4 / segment 8 / textbox 1 / input 4); withdrawn Bookshelf settings controls are absent",
   expectedCount: expectedSubtotal,
   declaredCount: declaredSubcontrols.length,
   expectedByType,
@@ -400,7 +400,7 @@ report.checks.r2SubcontrolsAreNew = {
 
 // ---- Overall status ----
 const criticalChecks = [
-  "exact12PageFamilies",
+  "exact11ActivePageFamilies",
   "routeLocalOccurrenceReconciliation",
   "registryBackedKeysInRegistry",
   "rendererOwnerMatchesDispatch",
@@ -429,7 +429,7 @@ console.log(`Reconciliation report written to: ${OUTPUT_PATH.replace(REPO_ROOT +
 console.log(`Overall status: ${report.overallStatus}`);
 console.log(`Checks: ${report.summary.passed} pass / ${report.summary.failed} fail / ${report.summary.partial} partial / ${report.summary.info} info`);
 console.log(`Totals: ${report.totals.declarations} declarations (${report.totals.registryBacked} registry-backed + ${report.totals.r2Subcontrols} R2.0 subcontrols)`);
-console.log(`Page families: ${report.checks.exact12PageFamilies.actualCount} non-Reader (expected 12) + Reader Runtime extension`);
+console.log(`Page families: ${report.checks.exact11ActivePageFamilies.actualCount} active non-Reader (expected 11) + Reader Runtime extension`);
 console.log(`Routes: ${report.totals.declarationRoutes} declarations / ${report.totals.dispatchRoutes} dispatch`);
 
 if (!allCriticalPass) {

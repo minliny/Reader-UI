@@ -433,5 +433,14 @@
     verifyClosureChecklist: verifyClosureChecklist
   };
 
+  var d5PublicRouteSpecifications = {
+    renderD5Route: { allowedRoutes: Object.keys(INTEGRATION_MAP), routeIndex: 0, passthroughUnowned: true }
+  };
+  d5Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze({
+    renderD5Route: Object.freeze(Object.keys(INTEGRATION_MAP))
+  });
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    d5Exports = window.ReaderPublicRouteRendererAdmission.guardModule(d5Exports, d5PublicRouteSpecifications);
+  }
   window.ReaderD5MotionClosureRenderers = d5Exports;
 })(window);

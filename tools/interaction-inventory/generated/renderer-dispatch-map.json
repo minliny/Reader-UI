@@ -3,7 +3,7 @@
   "generatedAt": "2026-07-20T00:00:00.000Z",
   "baselineCommit": "5ce233f",
   "baselineTag": "R1.2",
-  "description": "R2.0.1 · Canonical renderer dispatch map for the 12 page families. Derived from render-runtime.js renderRoute() dispatch order (W4 -> W3 -> W5 -> D2-A -> D2-C -> D3 -> D4 -> D5 -> D6 -> switch) and the INTEGRATION_MAP / STATE_VARIANT_MAP constants in frontend-demo-optimized/renderers/*.js. Each route maps to the FIRST renderer layer that handles it; the fallback switch case in render-runtime.js is the last resort.",
+  "description": "R2.0.1 · Canonical renderer dispatch map for the 11 active non-Reader page families. Withdrawn standalone import, About, Bookshelf settings, and legacy book-more routes are intentionally absent. Derived from render-runtime.js renderRoute() dispatch order (W4 -> W3 -> W5 -> D2-A -> D2-C -> D3 -> D4 -> D5 -> D6 -> switch) and the INTEGRATION_MAP / STATE_VARIANT_MAP constants in frontend-demo-optimized/renderers/*.js. Each route maps to the FIRST renderer layer that handles it; the fallback switch case in render-runtime.js is the last resort.",
   "dispatchOrder": [
     "W4",
     "W3",
@@ -84,9 +84,7 @@
         "bookshelf",
         "bookshelf-empty",
         "bookshelf-cover-mode",
-        "bookshelf-list-mode",
-        "bookshelf-book-more-menu",
-        "bookshelf-search-settings"
+        "bookshelf-list-mode"
       ]
     },
     "book-detail": {
@@ -104,18 +102,6 @@
         "search-loading",
         "search-empty",
         "search-error"
-      ]
-    },
-    "import-conflict-resolve": {
-      "routes": [
-        "import-conflict-resolve",
-        "import-duplicate",
-        "import-empty-file",
-        "import-format-unsupported",
-        "import-parsing",
-        "import-partial-success",
-        "import-permission-denied",
-        "import-result-detail"
       ]
     },
     "discover": {
@@ -193,11 +179,8 @@
         "remote-webdav-books"
       ]
     },
-    "about-restore-preview": {
+    "restore-preview": {
       "routes": [
-        "about",
-        "about-feedback",
-        "about-version",
         "restore-confirm",
         "restore-scopes",
         "restore-preview",
@@ -235,20 +218,6 @@
       "dispatchLayer": "D2-A",
       "dispatchMap": "STATE_VARIANT_MAP",
       "renderer": "bookshelfV2",
-      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
-    },
-    "bookshelf-book-more-menu": {
-      "pageFamily": "bookshelf",
-      "dispatchLayer": "D2-A",
-      "dispatchMap": "INTEGRATION_MAP",
-      "renderer": "bookshelfBookMoreMenuScreen",
-      "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
-    },
-    "bookshelf-search-settings": {
-      "pageFamily": "bookshelf",
-      "dispatchLayer": "D2-A",
-      "dispatchMap": "STATE_VARIANT_MAP",
-      "renderer": "bookshelfSearchSettingsV2",
       "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
     },
     "book-detail": {
@@ -313,62 +282,6 @@
       "dispatchMap": "STATE_VARIANT_MAP",
       "renderer": "bookSearchV2",
       "rendererFile": "renderers/d2-bookshelf-discover-renderers.js"
-    },
-    "import-conflict-resolve": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importConflictResolveScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-duplicate": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importDuplicateScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-empty-file": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importEmptyFileScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-format-unsupported": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importFormatUnsupportedScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-parsing": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importParsingScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-partial-success": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importPartialSuccessScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-permission-denied": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importPermissionDeniedScreen",
-      "rendererFile": "render-runtime.js"
-    },
-    "import-result-detail": {
-      "pageFamily": "import-conflict-resolve",
-      "dispatchLayer": "switch",
-      "dispatchMap": "case",
-      "renderer": "importResultDetailScreen",
-      "rendererFile": "render-runtime.js"
     },
     "discover": {
       "pageFamily": "discover",
@@ -699,71 +612,50 @@
       "renderer": "backupScreenV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
-    "about": {
-      "pageFamily": "about-restore-preview",
-      "dispatchLayer": "D2-C",
-      "dispatchMap": "INTEGRATION_MAP",
-      "renderer": "aboutScreenV2",
-      "rendererFile": "renderers/d2-settings-sync-renderers.js"
-    },
-    "about-feedback": {
-      "pageFamily": "about-restore-preview",
-      "dispatchLayer": "D2-C",
-      "dispatchMap": "INTEGRATION_MAP",
-      "renderer": "aboutScreenV2",
-      "rendererFile": "renderers/d2-settings-sync-renderers.js"
-    },
-    "about-version": {
-      "pageFamily": "about-restore-preview",
-      "dispatchLayer": "D2-C",
-      "dispatchMap": "INTEGRATION_MAP",
-      "renderer": "aboutScreenV2",
-      "rendererFile": "renderers/d2-settings-sync-renderers.js"
-    },
     "restore-confirm": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "restore-scopes": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "restore-preview": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "restore-progress": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "restore-running": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "restore-conflict": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
       "rendererFile": "renderers/d2-settings-sync-renderers.js"
     },
     "restore-result": {
-      "pageFamily": "about-restore-preview",
+      "pageFamily": "restore-preview",
       "dispatchLayer": "D2-C",
       "dispatchMap": "INTEGRATION_MAP",
       "renderer": "restoreFlowV2",
@@ -771,7 +663,7 @@
     }
   },
   "totals": {
-    "pageFamilies": 12,
+    "pageFamilies": 11,
     "routes": 67
   }
 }

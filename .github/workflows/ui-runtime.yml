@@ -20,6 +20,11 @@ jobs:
       inventory_sha256: ${{ steps.release-metadata.outputs.inventory_sha256 }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # B3/A2 evidence binds historical implementation commits and verifies
+          # that they are ancestors of the candidate HEAD. A depth-1 checkout
+          # makes valid evidence indistinguishable from a missing commit.
+          fetch-depth: 0
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:

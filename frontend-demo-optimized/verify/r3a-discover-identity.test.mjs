@@ -76,7 +76,11 @@ test("R3a Discover identity: stable section, source, book, and card IDs are rend
 test("R3a Discover identity: secondary routes remain explicit exclusions and are not falsely stamped", () => {
   const renderer = createVmRenderer();
   for (const route of contract.SECONDARY_ROUTES) {
-    assert.equal(values(renderer.renderRoute(route), "data-control-key").filter((key) => key.startsWith("discover.control.")).length, 0, route);
+    assert.throws(
+      () => renderer.renderRoute(route),
+      /UNCLASSIFIED_ROUTE_NO_FIGMA_VISUAL/,
+      route,
+    );
   }
 });
 

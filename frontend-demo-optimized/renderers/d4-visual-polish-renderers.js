@@ -657,5 +657,19 @@
     icon: icon
   };
 
+  var d4PublicRouteSpecifications = {
+    renderD4Route: { allowedRoutes: Object.keys(INTEGRATION_MAP), routeIndex: 0, passthroughUnowned: true },
+    settingsThemeScreen: { allowedRoutes: ["settings-theme"], routeIndex: -1, fixedRoute: "settings-theme" },
+    settingsThemeEditScreen: { allowedRoutes: ["settings-theme-edit"], routeIndex: -1, fixedRoute: "settings-theme-edit" },
+    settingsFontScreen: { allowedRoutes: ["settings-font"], routeIndex: -1, fixedRoute: "settings-font" },
+    settingsDisplayScreen: { allowedRoutes: ["settings-display"], routeIndex: -1, fixedRoute: "settings-display" }
+  };
+  d4Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze(Object.keys(d4PublicRouteSpecifications).reduce(function (result, name) {
+    result[name] = Object.freeze(d4PublicRouteSpecifications[name].allowedRoutes.slice());
+    return result;
+  }, {}));
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    d4Exports = window.ReaderPublicRouteRendererAdmission.guardModule(d4Exports, d4PublicRouteSpecifications);
+  }
   window.ReaderD4VisualPolishRenderers = d4Exports;
 })(window);

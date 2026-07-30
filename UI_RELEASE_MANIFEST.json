@@ -1,7 +1,7 @@
 {
   "$schema": "ui-spec/ui-release-manifest.schema.json",
   "schemaVersion": 1,
-  "version": "3.1.1",
+  "version": "4.0.0",
   "hashAlgorithm": "sha256",
   "files": [
     {
@@ -16,8 +16,8 @@
     },
     {
       "path": "contracts/VERSION.json",
-      "byteLength": 34548,
-      "sha256": "6fd19f4bebfb1b30ad726c9ab43e30419185c77f18c1e1e442031c463b9e1f73"
+      "byteLength": 35893,
+      "sha256": "4486741f33fc07a99a1fdedeaaab280e60532945b476091c7ea814e49dadc499"
     },
     {
       "path": "contracts/appearance.schema.json",
@@ -61,8 +61,8 @@
     },
     {
       "path": "contracts/fixtures/appearance.fixtures.json",
-      "byteLength": 4912,
-      "sha256": "bd0f897c45404562553622cf6295f0a9dd4cb25587bd8b536528603619630892"
+      "byteLength": 5006,
+      "sha256": "fbc701807bbb80283e518c27febb59b74f767b291a55914091b0a201a30f1a1f"
     },
     {
       "path": "contracts/fixtures/content.fixtures.json",
@@ -81,8 +81,8 @@
     },
     {
       "path": "contracts/fixtures/design-delta.fixtures.json",
-      "byteLength": 3523,
-      "sha256": "18ac67e0c50e3d1c78a795cbeff547e9e3d00f538a825dbd03663ddbdd737998"
+      "byteLength": 3494,
+      "sha256": "3d14bd9e59067b494e9b35008b8b27e399ec1a1720d336195b8e60f2eb7f2069"
     },
     {
       "path": "contracts/fixtures/host-request.fixtures.json",
@@ -111,8 +111,8 @@
     },
     {
       "path": "contracts/fixtures/product-capability.fixtures.json",
-      "byteLength": 48689,
-      "sha256": "2a61e9f8a2f651d15098cf758a202cca706ad1c85465e6f6ac428b6094c083a9"
+      "byteLength": 48443,
+      "sha256": "a860476eb7631755a43d3b1a00eafb078f60d3e5642c439c0f9b3cd3fad0e8bb"
     },
     {
       "path": "contracts/fixtures/progress-location.fixtures.json",
@@ -120,9 +120,14 @@
       "sha256": "1ff2398895ecfd3844eaa6e1c291afe1cf42cdd97bcc6f74f07417cf3c110c20"
     },
     {
+      "path": "contracts/fixtures/route-reconstruction-quarantine.fixtures.json",
+      "byteLength": 548,
+      "sha256": "bfcb1b1b70e258c775828b1213a70f5c40538d5ed620766b0f8604616d95f8b5"
+    },
+    {
       "path": "contracts/fixtures/route.fixtures.json",
-      "byteLength": 25340,
-      "sha256": "546e3a84d3f0d9c3e421baa4809bde3c98829958daddf710617a6edaa6bf9672"
+      "byteLength": 24154,
+      "sha256": "c16691fbe7fffbfcbbd4f7d527e10d71ec296b445a9a74b955659730891cc686"
     },
     {
       "path": "contracts/fixtures/runtime-payload-contract.fixtures.json",
@@ -136,8 +141,8 @@
     },
     {
       "path": "contracts/fixtures/runtime-result-contract.fixtures.json",
-      "byteLength": 49171,
-      "sha256": "16a3197099b0552568df405c0736ae17f30f1754ec55ad7c2f34092c746e52f6"
+      "byteLength": 54880,
+      "sha256": "8880cdb41b8f5fb41357df25b58da6829ac3d81381507bb820a8630f17126538"
     },
     {
       "path": "contracts/fixtures/runtime-result-contract.fixtures.schema.json",
@@ -171,8 +176,8 @@
     },
     {
       "path": "contracts/fixtures/view-state.fixtures.json",
-      "byteLength": 170815,
-      "sha256": "a055365332288ad8c233a221a9c24a9dc91ec95bd7d94df4b4b9ae6105925c84"
+      "byteLength": 178290,
+      "sha256": "3e2c528bc66ce3b3111e837fda065222a30442d55380f8fd61f1cec710968949"
     },
     {
       "path": "contracts/host-request.schema.json",
@@ -210,9 +215,14 @@
       "sha256": "43909cca27a5ca4b25dbedce6d93b736d5c06ea824307d1e60837ec27bde5844"
     },
     {
+      "path": "contracts/route-reconstruction-quarantine.schema.json",
+      "byteLength": 1699,
+      "sha256": "8a0f1ea3939f51ef9b41ece54ec826167a95b6d9d8bf0306124852805195f435"
+    },
+    {
       "path": "contracts/route.schema.json",
-      "byteLength": 9845,
-      "sha256": "6e3746c4666ad3571973e5ca3812508abf83dca47646c437608e3b1c50d28de5"
+      "byteLength": 9426,
+      "sha256": "b8390208cb8478bb39ebf5a0065fbac6cb4b16da497a6ec7be2c67227b8cc616"
     },
     {
       "path": "contracts/state-rule.schema.json",
@@ -241,18 +251,18 @@
     },
     {
       "path": "contracts/view-state.schema.json",
-      "byteLength": 10720,
-      "sha256": "65a6a7a8bac825ac432f361ae05f66a72275bc48e40b5bd4000fd06b7f14b0ff"
+      "byteLength": 10809,
+      "sha256": "e60af23c48f1b27213333747a3cba88c5a22199f6096820eeac07772ba801527"
     },
     {
       "path": "device-conformance/DEVICE_CONFORMANCE_PLAN.json",
       "byteLength": 155698,
-      "sha256": "543ca2e3b196acf4399a10f613bd22e7d63c75600ee466013c2f280ddab1ffd9"
+      "sha256": "521a8498cf90436f7f28c51ecc109be4c087e44a82f514e6d7bf98f27ded5b7c"
     },
     {
       "path": "frontend-demo-optimized/appearance-spec.js",
-      "byteLength": 6606,
-      "sha256": "aefc5c4cbca88fb7e005a86fc8b8754c2c63d3bdcc7fe223789af25af2aaa648"
+      "byteLength": 6772,
+      "sha256": "8a381e0f0d17cadda7e3428f7ddff6161ece7afec9f252ba650318f9dc9da521"
     },
     {
       "path": "frontend-demo-optimized/asset-library/asset-library.css",
@@ -896,8 +906,8 @@
     },
     {
       "path": "frontend-demo-optimized/control-identity-declarations.js",
-      "byteLength": 2256683,
-      "sha256": "ebb105ed51c7136a726bb97617522491485b94240eeec7c04f5ff15eb8553b6c"
+      "byteLength": 1939113,
+      "sha256": "aa4f3382f1faded83b7584806fc5b0dd3cc4fd85e6617dd09c1b49d100d09b7a"
     },
     {
       "path": "frontend-demo-optimized/covers/android-notes.png",
@@ -935,24 +945,24 @@
       "sha256": "bb7349979921e665b514ee4bdd490e5a9b93a13825e3113171259f449820a9d1"
     },
     {
-      "path": "frontend-demo-optimized/fixture.js",
-      "byteLength": 22628,
-      "sha256": "e160d0d6920cf65baf076b66f5920e37a9067720c78b9adfae2dc2c37b54eb36"
+      "path": "frontend-demo-optimized/figma-route-admission-policy.js",
+      "byteLength": 10834,
+      "sha256": "6ef0ca46de78db81c870e663941fa539ee53c1bf894bc4207692186804393a9d"
     },
     {
-      "path": "frontend-demo-optimized/import-runtime-contract.js",
-      "byteLength": 11404,
-      "sha256": "4db1dbcc3c035ae28f319679d1f8c3a247dc5b607066d87a6f233d0c380ace2c"
+      "path": "frontend-demo-optimized/fixture.js",
+      "byteLength": 23331,
+      "sha256": "4d18e67c9858ea2d90ead40a6f0a4634710d802edbcb624e98aecdf8fe5004fc"
     },
     {
       "path": "frontend-demo-optimized/index.html",
-      "byteLength": 4395,
-      "sha256": "1655c15cc58836e4bd197018da2d850038f3ed2f03502bb4b6934a7773e7bdd1"
+      "byteLength": 4515,
+      "sha256": "c0292c270156031902a85c63caa2a80b1d2aa1cdfaac60221e9861da0c808db3"
     },
     {
       "path": "frontend-demo-optimized/motion-contract-registry.js",
-      "byteLength": 131129,
-      "sha256": "4ad557310144459f7d815e84e13c775472f04ebfa1a1621e5255260255b2f1da"
+      "byteLength": 130593,
+      "sha256": "d6ea6d1fff12183c9d960af27098b7c79dc0c0e5d3af0eb9ce52bc10f6403bdf"
     },
     {
       "path": "frontend-demo-optimized/motion-controller.js",
@@ -975,6 +985,11 @@
       "sha256": "46948b3f8385e55adb6b9f127423528cb69995efd8c8dc44cdb90a351e835555"
     },
     {
+      "path": "frontend-demo-optimized/public-route-renderer-admission.js",
+      "byteLength": 5511,
+      "sha256": "1bea83e0e0cb47179856c19407cf2e99129459aa60298f849adf82b34851818f"
+    },
+    {
       "path": "frontend-demo-optimized/reader-control-transition.js",
       "byteLength": 13184,
       "sha256": "bcec903a001ad83cd2d141cffae4cc12435c51e6b6739051c99e3ba003a4df4c"
@@ -986,18 +1001,18 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 795038,
-      "sha256": "3fa4421936dd2b3ebfc2c0ea51ac5579ac7f18f5e8021119e065eb263457a074"
+      "byteLength": 769114,
+      "sha256": "54af5b6d6ff71cc056367f3f355dde33f23d850fdde8bd3add7ca5a8088a26af"
     },
     {
       "path": "frontend-demo-optimized/render.js",
-      "byteLength": 442,
-      "sha256": "7ba1351ec2b19fc6453bc5722d8db31d38e8ea837f4bb50436e99cd127699f34"
+      "byteLength": 459,
+      "sha256": "786668eb0555e53b24ce0eb15413c8f0eeb077778a696adc8dbff608e1545d2c"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
-      "byteLength": 174591,
-      "sha256": "fa90cea4aca89ff7b71ba4a72ecef8a308d59d6f45dceab824fb0c56fb362597"
+      "byteLength": 168529,
+      "sha256": "0ab083e22d28c9c968e509b2bc6bc65d8ab4c00cb79071980907c1171eafa5dc"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-rss-renderers.js",
@@ -1006,33 +1021,28 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
-      "byteLength": 244973,
-      "sha256": "b941006f09c9820a5a654b8aa1fb4883f25e9aeb4bf0fa0620d0cda8e9a778c8"
+      "byteLength": 216172,
+      "sha256": "e9c6f00be0af4a49d610746cbf94b9d24b4a5502523535b8edbf5dafbbf182b5"
     },
     {
       "path": "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
-      "byteLength": 55661,
-      "sha256": "8ceb7bbb9cb5bb0faf3ebb8c9a034d4fa13a8a3fd8b667815f6ab057acd4470e"
+      "byteLength": 58062,
+      "sha256": "60bf80c1a928d6cd67ebe965a7843a6d48782fcf661c8acea682b5744f9c7d06"
     },
     {
       "path": "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
-      "byteLength": 32236,
-      "sha256": "24a601bf50bcab3b897c1db4f41ee84a02b648f6e7770dc6cae674c364b3e41c"
+      "byteLength": 33343,
+      "sha256": "7b655337a904fe4fd53c04d764a0b2ae23453c1e78b80460714ae7dedbcb12c9"
     },
     {
       "path": "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
-      "byteLength": 30749,
-      "sha256": "8f3ba516a221ebf9ce3b6cabdde7c976d3fa2c9f561acdb77f0ed15bdec184b3"
+      "byteLength": 31275,
+      "sha256": "a763843f5636e8d34433fb3cc9301e675c39729806f0bb3cfa596020307e82b4"
     },
     {
       "path": "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
-      "byteLength": 22285,
-      "sha256": "efab6b9df9a3a7e59a596cea3096b5265d173192e4b643734719dc10e4319169"
-    },
-    {
-      "path": "frontend-demo-optimized/renderers/w1-import-renderers.js",
-      "byteLength": 35319,
-      "sha256": "065b6fb915f756c2628c9c6edc17b6bddcdd98ad45829217bfd5552bea0fee52"
+      "byteLength": 22929,
+      "sha256": "3728d318194d7798cb1eeded1c819cbcf4ebea8910e80afa8812e6a5cb0bc20b"
     },
     {
       "path": "frontend-demo-optimized/renderers/w2-reading-renderers.js",
@@ -1041,23 +1051,23 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
-      "byteLength": 24374,
-      "sha256": "700faec043fb87ed347e09df6f92bcf15171f1d869db5351ee8be0916cac3ffc"
+      "byteLength": 25777,
+      "sha256": "090a0ef728335de5dac83bc14fe1df2ca12ea49b962d273c7c9655b0b0659b40"
     },
     {
       "path": "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
-      "byteLength": 77092,
-      "sha256": "500c7e13bfa1d79d06d0c5091ee78d987cfbea9214f181ea09ffb1ef516f2aca"
+      "byteLength": 77353,
+      "sha256": "bfc0bb936089a0ede1b810c5267622410e623afa52bb39ae003a508e5e5eb662"
     },
     {
       "path": "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
-      "byteLength": 53739,
-      "sha256": "73a61da5f4deebc15ed80c3bdadb035e0ed947d07fefac2929dbf14d77227bc6"
+      "byteLength": 55583,
+      "sha256": "ee1031071494e568f4bacc8a524f02808dbb9aadc37b18d4115d7c0a866371f7"
     },
     {
       "path": "frontend-demo-optimized/route-contract.js",
-      "byteLength": 46525,
-      "sha256": "8035d62ec412a2dfabbf33e450b070edf1f3b26db914b40f8fdbe4106258786c"
+      "byteLength": 45088,
+      "sha256": "777f46d62fc376251b2c3588ad0a07d4bfb3a81aa71c8b11f92841a2f6e48691"
     },
     {
       "path": "frontend-demo-optimized/rss-runtime-contract.js",
@@ -1076,18 +1086,18 @@
     },
     {
       "path": "frontend-demo-optimized/styles.css",
-      "byteLength": 1976,
-      "sha256": "eec3ab4536eb8215d81956721a58961b60f2888f10ae9cf9c935659f928dec71"
+      "byteLength": 1993,
+      "sha256": "b04b03bbfb4a2a5fc66ea3ff98fbace135dc36cace0dba3dc84b72136412ccf1"
     },
     {
       "path": "frontend-demo-optimized/styles/00-foundation.css",
-      "byteLength": 33611,
-      "sha256": "c3459ae0e1a7b37ac7bb15195378f03706c41236af1618bdbed6dabf6b6e29ba"
+      "byteLength": 32335,
+      "sha256": "e0665adbe9642792f08e5063a1db79831994f8c22af014f036c27bbdcafa1165"
     },
     {
       "path": "frontend-demo-optimized/styles/01-shell-layout.css",
-      "byteLength": 102755,
-      "sha256": "a89cc46a96262d4277503e9d1d6f8906261bf95a017bd6dda19c05df5ce0029d"
+      "byteLength": 103313,
+      "sha256": "18a58a04752af73ef9967c9ba7c3cbb55ea70eb47d34c48d0437fd6a9f008ce3"
     },
     {
       "path": "frontend-demo-optimized/styles/02a-reader-control.css",
@@ -1121,8 +1131,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/03c-reader-viewport.css",
-      "byteLength": 28353,
-      "sha256": "7ba8d9efd0a90ce763920a5ecc5887cfad899c34750b9713a19a53f36dad9720"
+      "byteLength": 28842,
+      "sha256": "1fde5b51da0a33458b3e797b0c141e3014a153a8b9f30042a2d046978b4c1da2"
     },
     {
       "path": "frontend-demo-optimized/styles/03d-reader-fullpage.css",
@@ -1161,8 +1171,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/09-import-workflow.css",
-      "byteLength": 18219,
-      "sha256": "4e5ead67e3d935c889c9906289612a372d89bb4a49cec53db191c9a3c296dec9"
+      "byteLength": 18272,
+      "sha256": "cf0bb922f89710ba2992e9ccae8c9e0125d72d3a7c793956b86145f0ae97dff6"
     },
     {
       "path": "frontend-demo-optimized/styles/10-settings-general-vc3.css",
@@ -1176,8 +1186,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/12-bookshelf-vc3.css",
-      "byteLength": 2296,
-      "sha256": "90ae3419531aef1c051058f6f1f66e65c5237db053b3d68a1b54b28c642e7954"
+      "byteLength": 10457,
+      "sha256": "0f2baea2caab33181f8433b9a23359bec4bcb8f47b62e92ce6d958a885724486"
     },
     {
       "path": "frontend-demo-optimized/tokens.css",
@@ -1191,8 +1201,8 @@
     },
     {
       "path": "generated/arkts/Appearance.ets",
-      "byteLength": 6555,
-      "sha256": "226f26239c8ada29976b1aa12b690b8fb74232237b1b23986ab072d078b9859e"
+      "byteLength": 6641,
+      "sha256": "97dabd74e1c6ebd6f7773209645d0cfcff271b1213611ae51b9cd8f8f0a914ca"
     },
     {
       "path": "generated/arkts/Content.ets",
@@ -1221,8 +1231,8 @@
     },
     {
       "path": "generated/arkts/MotionPolicy.ets",
-      "byteLength": 32088,
-      "sha256": "7ac8ec929b1c9d849385ef232a7eb1ad2462bc78c9ee7bd06c197f56c92c1677"
+      "byteLength": 31552,
+      "sha256": "761b20f653cd7291095fd3c8062db8110dba33f4d8039d4118fecf4935d6ba06"
     },
     {
       "path": "generated/arkts/ProgressLocation.ets",
@@ -1236,13 +1246,18 @@
     },
     {
       "path": "generated/arkts/Route.ets",
-      "byteLength": 7082,
-      "sha256": "49b68776a9107fc2aa677140c961615a1b22d3eec9a542250a83f86418913279"
+      "byteLength": 6728,
+      "sha256": "efce544b925fba145dac343981963bda55534b2d446cdb5fcac2b00a31313f86"
+    },
+    {
+      "path": "generated/arkts/RouteReconstructionQuarantine.ets",
+      "byteLength": 921,
+      "sha256": "dadab7d7f11b1fa66500623ff29336219c133b2cf28706f77125dbbc36ed893d"
     },
     {
       "path": "generated/arkts/ScreenGraph.ets",
-      "byteLength": 384622,
-      "sha256": "4631cbb3288f443d90e9da53873c9ac6520c3d4ef6f26c3b85fb51e65acce8d2"
+      "byteLength": 372005,
+      "sha256": "8294fb1c8014582e588d3aa3fdfeef5b1d2b1951830df2675fcb2c46f6133511"
     },
     {
       "path": "generated/arkts/StateRule.ets",
@@ -1271,18 +1286,23 @@
     },
     {
       "path": "generated/arkts/ViewState.ets",
-      "byteLength": 4680,
-      "sha256": "ce8fa0220381afc2a3dec50fbbb1a21629a31d1685dd50d0f91ef8f8848fad41"
+      "byteLength": 4742,
+      "sha256": "debb50eac33284f63cc1872cf639f4dc603261b8bde3fd3f3ed1fb14fe2ac6c0"
     },
     {
       "path": "generated/arkts/VisualAdmission.ets",
-      "byteLength": 91991,
-      "sha256": "196ac4713f39bdc5646c1a5801fbc4403962ced0f9b287b01001b5ade4dfaa3a"
+      "byteLength": 90053,
+      "sha256": "a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee"
+    },
+    {
+      "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
+      "byteLength": 24507,
+      "sha256": "48731961ff45b9309b042e66424dbb2358474eef8cf0deef0ccfa96d26248975"
     },
     {
       "path": "generated/kotlin/Appearance.kt",
-      "byteLength": 5468,
-      "sha256": "0727f65fbc9bf20f7961117a1b9908dd4b390dd544e2b665fcbdc37432b132ab"
+      "byteLength": 5578,
+      "sha256": "835e720455a0b9e4de1e5b242c1460f09560ad18a70b28be0bf8cc170e985eff"
     },
     {
       "path": "generated/kotlin/Content.kt",
@@ -1311,8 +1331,8 @@
     },
     {
       "path": "generated/kotlin/MotionPolicy.kt",
-      "byteLength": 39333,
-      "sha256": "87690e0860d144db98fb1ee808ba5ae3bc056932ebd37d0fd1c114a023dcf2ee"
+      "byteLength": 38628,
+      "sha256": "00769b09513147c97665a033f1fe402fcc33a1498cd9fbd80e14e91999641f44"
     },
     {
       "path": "generated/kotlin/ProgressLocation.kt",
@@ -1326,13 +1346,18 @@
     },
     {
       "path": "generated/kotlin/Route.kt",
-      "byteLength": 16807,
-      "sha256": "ee7831bca95138615b9985afac91df6a0f39fe765139827229ea7ce892021333"
+      "byteLength": 15972,
+      "sha256": "85122adc66a949caa8236e1fb64ca4711b37845c67de4a2dd361052a1f639be9"
+    },
+    {
+      "path": "generated/kotlin/RouteReconstructionQuarantine.kt",
+      "byteLength": 767,
+      "sha256": "a1144c3c31fd6fd5ed6a385cd891d7cad9a8b2ec84f6d0bc2d2e9a3a2aaa2644"
     },
     {
       "path": "generated/kotlin/ScreenGraph.kt",
-      "byteLength": 365886,
-      "sha256": "e63ba29d5fd9cc8714dbe9cf42bb8897b6f4140b2a2238bc8c7e5e4d975a4779"
+      "byteLength": 353543,
+      "sha256": "06e2f513c74b2f650c2b883e07d02f07af9e68d27c8479ea39055599c23a7e53"
     },
     {
       "path": "generated/kotlin/StateRule.kt",
@@ -1361,8 +1386,8 @@
     },
     {
       "path": "generated/kotlin/ViewState.kt",
-      "byteLength": 10809,
-      "sha256": "645508d9bb93189e950806da02926b78bf34c311f8be29a3892c34c7aef7b83b"
+      "byteLength": 10969,
+      "sha256": "b2304a8dc48c8f63843122468b6e01e75d4283798752f494357d1bfc1a6d700e"
     },
     {
       "path": "generated/runtime-coverage.json",
@@ -1371,13 +1396,13 @@
     },
     {
       "path": "generated/screen-graph-coverage.json",
-      "byteLength": 60755,
-      "sha256": "28c92b92e2b3261df7d355345220d7ad3672467e2546e167eef86d29b3f41e92"
+      "byteLength": 61860,
+      "sha256": "c6dd0f7be8070885aded0276136f8582991f72f65b7185d4de9a77c2f9b3c9dc"
     },
     {
       "path": "generated/swift/Appearance.swift",
-      "byteLength": 7279,
-      "sha256": "71b8195423cf780cd8349a85175365ea2ecd525039f0ead7989429699d1b97e9"
+      "byteLength": 7371,
+      "sha256": "b3435014b4a8ddc4e613057798bb1a7c9a19b9d8fd6c14a3902a201fbe53f814"
     },
     {
       "path": "generated/swift/Content.swift",
@@ -1406,8 +1431,8 @@
     },
     {
       "path": "generated/swift/MotionPolicy.swift",
-      "byteLength": 38180,
-      "sha256": "13adb49ad2fd13fa54c0b6c3870f5fd34762d732e16cd49c98c5f5ca681f768d"
+      "byteLength": 37579,
+      "sha256": "a9b4711235eac1f0f40111286dd2a433f4a125cd38ce10d38ccb4b26e16d2860"
     },
     {
       "path": "generated/swift/ProgressLocation.swift",
@@ -1421,13 +1446,18 @@
     },
     {
       "path": "generated/swift/Route.swift",
-      "byteLength": 14064,
-      "sha256": "cbc95e638fdc86a0d7f894469792261b23b5bd367ed3615a118d30ddef51dc36"
+      "byteLength": 13372,
+      "sha256": "a5024ada8adbb4707e8923c32439353190b09b226300ffe9be573c811e48dc78"
+    },
+    {
+      "path": "generated/swift/RouteReconstructionQuarantine.swift",
+      "byteLength": 826,
+      "sha256": "d6e29b43530ca7e97021a5804c63d569713e3f62178d7fee4ecd91ae9ef79401"
     },
     {
       "path": "generated/swift/ScreenGraph.swift",
-      "byteLength": 368772,
-      "sha256": "018889895bb31f90c5323a76a3344e334a5a4d4c26836de0d7aa9e15fab1c668"
+      "byteLength": 356433,
+      "sha256": "86e5fd55e0dc63065aba901bba8fe603bfe9a4de09591b20d2d77c8731a8c033"
     },
     {
       "path": "generated/swift/StateRule.swift",
@@ -1456,8 +1486,8 @@
     },
     {
       "path": "generated/swift/ViewState.swift",
-      "byteLength": 8865,
-      "sha256": "a4d7a06f8249d876100023bdd59c8e79bbe8ce89bd7247904579f5d56bd1f51c"
+      "byteLength": 8992,
+      "sha256": "33c6d5e7713b2e14e379ffddd38cc73e798bce8bcf891f15dc4d1be76e49e312"
     },
     {
       "path": "gradle/wrapper/gradle-wrapper.jar",
@@ -1492,7 +1522,7 @@
     {
       "path": "packages/arkts/reader-ui-runtime/oh-package.json5",
       "byteLength": 219,
-      "sha256": "83c46a78ce383d581bd462cc32a174e4307eaa0613a14be5ebd93594259c1424"
+      "sha256": "7827ff0a8df23d984eaf21247c61c1da4532ed424dadf814b7e58b8def9706bb"
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
@@ -1501,8 +1531,8 @@
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
-      "byteLength": 146925,
-      "sha256": "fbf75574bdf06b0ed6764df017b99ab65ba34165dcdd48197a7df1d341561e9d"
+      "byteLength": 151091,
+      "sha256": "1d388d5abe0cfd9ebb12bf5d076a3a212f14ee0b0cea1d738ef7c5e8ccab445b"
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/Index.ets",
@@ -1511,8 +1541,8 @@
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/ReaderUIRuntime.ets",
-      "byteLength": 102442,
-      "sha256": "400a1419f76fccc2779aa52df477612f85085ea04bf1e3be5e496b9c0a48849b"
+      "byteLength": 109327,
+      "sha256": "01dcbcfe8237429e2fe7c5be378566614abb34cb524373eaf79c3b6c1658067a"
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/module.json5",
@@ -1522,7 +1552,7 @@
     {
       "path": "packages/kotlin/reader-ui-runtime/build.gradle.kts",
       "byteLength": 720,
-      "sha256": "e91286a252006aaa82d9d03c7020330df8ed7b0d6967356e4ad40faf6501849a"
+      "sha256": "1febe175b9fa192d0834bce5e813ee870c7313356ba5954a09500c197d96d9b1"
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeActions.kt",
@@ -1531,13 +1561,13 @@
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadContracts.kt",
-      "byteLength": 148125,
-      "sha256": "dc83079648dd6aeee538435b5706794e58d5726d8c07c3f53c7918c71030b1eb"
+      "byteLength": 152297,
+      "sha256": "46313386da898d6170cf25e627f66803315f41c4f46a6fe60004db124ea92d08"
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUIRuntime.kt",
-      "byteLength": 82856,
-      "sha256": "8d0e47f99f604d1c5105e2fe1afda8057b01699d72c597348ddb25fe2733a401"
+      "byteLength": 88277,
+      "sha256": "abb0962a7232afb35cdac628ec406f891ade09d2654bbc6b42082bd59823d063"
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUITypedPayloadValidator.kt",
@@ -1546,13 +1576,13 @@
     },
     {
       "path": "packages/reference/generated-runtime-payload-contracts.mjs",
-      "byteLength": 323640,
-      "sha256": "3b4f9d8b7164280a1b7c9451f01f486046cc8c875c062c6caaca021169384797"
+      "byteLength": 333084,
+      "sha256": "9b94c4fa57bbe18ff99439999ff1b882d6b91c4578518bd967a25f4121083c85"
     },
     {
       "path": "packages/reference/reader-ui-runtime.mjs",
-      "byteLength": 68822,
-      "sha256": "3f9611058a9be0d3da6fb3936d7d83668722725052002783460e93057cf95ec0"
+      "byteLength": 72411,
+      "sha256": "9b9fbc2c018ad0afe74dfabac7506feff051c0412d2ffca597471b80d8156254"
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeActions.swift",
@@ -1561,8 +1591,8 @@
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeTypedPayloadContracts.swift",
-      "byteLength": 148065,
-      "sha256": "b5f602215de95cbbcdead365bdb0174d0a47ae7e6cb87d2fe4c760674c5ebf9b"
+      "byteLength": 152237,
+      "sha256": "5307f50fd2efb83ca946388ab26f93a659991378d2280c26a280483faa768f8d"
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIJSONValue.swift",
@@ -1571,8 +1601,8 @@
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIRuntime.swift",
-      "byteLength": 89132,
-      "sha256": "bd2b66dc5cee1706bef14fcdbf994f4b0f02bb665d812124e8a67b8606819947"
+      "byteLength": 95227,
+      "sha256": "7884ca55609794b847515ace330aa3eb64218398bd1695b71acd70828d4802c8"
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUITypedPayloadValidator.swift",
@@ -1582,7 +1612,7 @@
     {
       "path": "reader-ui-contract/build.gradle.kts",
       "byteLength": 840,
-      "sha256": "3dbb9f42712e9dfa263ed3f56fc5d671ce53eaadaa5e198717b9b749b285a496"
+      "sha256": "4ffdbf60ad086e486cf1c4c9ac463e24794fdef44b648e1cd0db51246a98ac72"
     },
     {
       "path": "settings.gradle.kts",
@@ -1601,8 +1631,8 @@
     },
     {
       "path": "ui-spec/host-consumer-lock.schema.json",
-      "byteLength": 3511,
-      "sha256": "b85c8e36cd7275f6cedc9a7b01a85766ea1382b264ff1fe266b40307fe62044c"
+      "byteLength": 3761,
+      "sha256": "b26ad575004b9e2f4c83244180e2d0a3df1a5df8d6fd23d2ed9ed2a5396ff170"
     },
     {
       "path": "ui-spec/host-consumers.json",
@@ -1631,23 +1661,23 @@
     },
     {
       "path": "ui-spec/runtime-payload-contracts.json",
-      "byteLength": 127716,
-      "sha256": "32c85754a747ea579a5270247922edfbfdf38d9ba08da1ef32de24cc73b65767"
+      "byteLength": 129892,
+      "sha256": "5254d7a40e15bace95d72df6941de6f3c2f638382ebdf9c6d76d38a05fac2409"
     },
     {
       "path": "ui-spec/runtime-payload-contracts.schema.json",
-      "byteLength": 6264,
-      "sha256": "0a5d6b66c7a00cbc6d602557c88ce4eeb64887494f4c4ea906e07928a16ef5c2"
+      "byteLength": 6418,
+      "sha256": "ec48f4d615eac2c78c031a5dcdd612ed09d66c06fd821e3800f1c34e762d3c64"
     },
     {
       "path": "ui-spec/screen-graph.json",
-      "byteLength": 592929,
-      "sha256": "159f5434ecd5ee919588db23fa70d5fe8fbc62d9f079000bcb23b3f99e499d1b"
+      "byteLength": 572115,
+      "sha256": "ffbae81fb827ecd7f5bcf4f14689d7cd16abcba8a64519d6fb332159f3e14655"
     },
     {
       "path": "ui-spec/screen-graph.schema.json",
-      "byteLength": 86465,
-      "sha256": "8920066bd3068973604e2c82e1f94cf62ae449151e92525ff2ba2134782c2e2f"
+      "byteLength": 84681,
+      "sha256": "767e194c7e7212bc2b351a4bf55e1493b5a42539c6eed7286d7ede753d55bb63"
     },
     {
       "path": "ui-spec/ui-release-manifest.schema.json",
@@ -1659,8 +1689,8 @@
     {
       "name": "design-runtime",
       "fileCount": 187,
-      "byteLength": 5535102,
-      "sha256": "c6677ac9c7e83b6471bbf52d684a44e1a2fc7f067f8ae54301988bad700ca22d",
+      "byteLength": 5141588,
+      "sha256": "fecb67fcc130d4110c6b235043c8be93d09f61f003fe6d8fdb44272bf1712f5a",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1799,14 +1829,15 @@
         "frontend-demo-optimized/covers/renjian-cihua.png",
         "frontend-demo-optimized/covers/three-body.png",
         "frontend-demo-optimized/discover-runtime-contract.js",
+        "frontend-demo-optimized/figma-route-admission-policy.js",
         "frontend-demo-optimized/fixture.js",
-        "frontend-demo-optimized/import-runtime-contract.js",
         "frontend-demo-optimized/index.html",
         "frontend-demo-optimized/motion-contract-registry.js",
         "frontend-demo-optimized/motion-controller.js",
         "frontend-demo-optimized/motion-runtime-profile.js",
         "frontend-demo-optimized/motion-scenario-harness.js",
         "frontend-demo-optimized/motion-tokens.css",
+        "frontend-demo-optimized/public-route-renderer-admission.js",
         "frontend-demo-optimized/reader-control-transition.js",
         "frontend-demo-optimized/reader-runtime-contract.js",
         "frontend-demo-optimized/render-runtime.js",
@@ -1818,7 +1849,6 @@
         "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
         "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
         "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
-        "frontend-demo-optimized/renderers/w1-import-renderers.js",
         "frontend-demo-optimized/renderers/w2-reading-renderers.js",
         "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
         "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
@@ -1855,7 +1885,7 @@
       "name": "device-conformance",
       "fileCount": 7,
       "byteLength": 247371,
-      "sha256": "32b9397835cab28bcf2fbe3293d1bd7a1b166be7ec9ee713c16321823e968284",
+      "sha256": "04679539e2cf793440ba40b7c739246906627f31e82728334df4852c6c1ae1bc",
       "files": [
         "contracts/device-conformance-evidence.schema.json",
         "contracts/device-conformance-plan.schema.json",
@@ -1868,9 +1898,9 @@
     },
     {
       "name": "fixtures",
-      "fileCount": 23,
-      "byteLength": 604731,
-      "sha256": "a1872a062c4db589d1df035a09febd13a4bdb54a8dc732e16f2183803ef1c8ef",
+      "fileCount": 24,
+      "byteLength": 617096,
+      "sha256": "1a10f0bc3401bce68aabe04ba83c4a75fe553b2058f014c061a79431dd53ef16",
       "files": [
         "contracts/fixtures/appearance.fixtures.json",
         "contracts/fixtures/content.fixtures.json",
@@ -1884,6 +1914,7 @@
         "contracts/fixtures/platform-evidence-manifest.fixtures.json",
         "contracts/fixtures/product-capability.fixtures.json",
         "contracts/fixtures/progress-location.fixtures.json",
+        "contracts/fixtures/route-reconstruction-quarantine.fixtures.json",
         "contracts/fixtures/route.fixtures.json",
         "contracts/fixtures/runtime-payload-contract.fixtures.json",
         "contracts/fixtures/runtime-payload-contract.fixtures.schema.json",
@@ -1899,9 +1930,9 @@
     },
     {
       "name": "generated",
-      "fileCount": 55,
-      "byteLength": 2272293,
-      "sha256": "a9d092d37a9ceae2379f2078c892fea51ceffe4508fb58f6508061490e9851f2",
+      "fileCount": 59,
+      "byteLength": 2258096,
+      "sha256": "24daf2369414657364621be243e3aae18305aac41c42cda9f3e78de27da90a5f",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
@@ -1914,6 +1945,7 @@
         "generated/arkts/ProgressLocation.ets",
         "generated/arkts/README.md",
         "generated/arkts/Route.ets",
+        "generated/arkts/RouteReconstructionQuarantine.ets",
         "generated/arkts/ScreenGraph.ets",
         "generated/arkts/StateRule.ets",
         "generated/arkts/SyncConflict.ets",
@@ -1922,6 +1954,7 @@
         "generated/arkts/UiState.ets",
         "generated/arkts/ViewState.ets",
         "generated/arkts/VisualAdmission.ets",
+        "generated/figma/FIGMA_SOURCE_PLAN.json",
         "generated/kotlin/Appearance.kt",
         "generated/kotlin/Content.kt",
         "generated/kotlin/CoreCommand.kt",
@@ -1932,6 +1965,7 @@
         "generated/kotlin/ProgressLocation.kt",
         "generated/kotlin/README.md",
         "generated/kotlin/Route.kt",
+        "generated/kotlin/RouteReconstructionQuarantine.kt",
         "generated/kotlin/ScreenGraph.kt",
         "generated/kotlin/StateRule.kt",
         "generated/kotlin/SyncConflict.kt",
@@ -1951,6 +1985,7 @@
         "generated/swift/ProgressLocation.swift",
         "generated/swift/README.md",
         "generated/swift/Route.swift",
+        "generated/swift/RouteReconstructionQuarantine.swift",
         "generated/swift/ScreenGraph.swift",
         "generated/swift/StateRule.swift",
         "generated/swift/SyncConflict.swift",
@@ -1964,7 +1999,7 @@
       "name": "package-entrypoints",
       "fileCount": 13,
       "byteLength": 60397,
-      "sha256": "0bcbf51b36803c9d1d1bb09a69539d6bafa93ea7d9cc10b16ed4088a337fc3f7",
+      "sha256": "06a9a550705677397ecbbe751eeb581ed1f25db270e45c79751dea86efed8f1e",
       "files": [
         "Package.swift",
         "build.gradle.kts",
@@ -1984,8 +2019,8 @@
     {
       "name": "primitive-abi",
       "fileCount": 6,
-      "byteLength": 75761,
-      "sha256": "2374dd3ee6c0e24e7e56e523e794d6be16d9fb16162b2575b247bc383822953f",
+      "byteLength": 75850,
+      "sha256": "679f94492499d82b7d297880ad729e7dc068c396e3086163b002b5aed2e61494",
       "files": [
         "contracts/core-command.schema.json",
         "contracts/core-event.schema.json",
@@ -2007,8 +2042,8 @@
     {
       "name": "runtime-packages",
       "fileCount": 15,
-      "byteLength": 1175391,
-      "sha256": "0c2f25d7ddd99f7b3a839498ce75b5e2a5f9695179579d44f58add2a00181921",
+      "byteLength": 1219335,
+      "sha256": "c9908220dcbe1f1f1b7277e74830958eb43b2b7c489be4cf6d18b5b738e4fab2",
       "files": [
         "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
         "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
@@ -2029,9 +2064,9 @@
     },
     {
       "name": "schemas",
-      "fileCount": 29,
-      "byteLength": 324772,
-      "sha256": "7fb41e818fd44fc4a70480601057a99078a13aae95d98b1d995f7632badc5732",
+      "fileCount": 30,
+      "byteLength": 324761,
+      "sha256": "ac7971b4533c768ae3886deb5200847b5536e3524d165578ef0d96d407704510",
       "files": [
         "contracts/appearance.schema.json",
         "contracts/content.schema.json",
@@ -2048,6 +2083,7 @@
         "contracts/platform-evidence-manifest.schema.json",
         "contracts/product-capability.schema.json",
         "contracts/progress-location.schema.json",
+        "contracts/route-reconstruction-quarantine.schema.json",
         "contracts/route.schema.json",
         "contracts/state-rule.schema.json",
         "contracts/sync-conflict.schema.json",
@@ -2067,8 +2103,8 @@
     {
       "name": "screen-graph",
       "fileCount": 7,
-      "byteLength": 813210,
-      "sha256": "3a549c93cfc63979c3cb369a6abd4d070c01e9ca48dc007037c6bbeb7bc60785",
+      "byteLength": 798355,
+      "sha256": "678bd878d027dd425ccf620ba3d799efbb161b269d0c788b8d63fc0291a53dff",
       "files": [
         "contracts/fixtures/route.fixtures.json",
         "contracts/fixtures/view-state.fixtures.json",
@@ -2082,8 +2118,8 @@
     {
       "name": "ui-spec",
       "fileCount": 6,
-      "byteLength": 741731,
-      "sha256": "d551749161e642f939582a14d76d1cccf9a0ff9da5f96ce49aa1ce6d1ab6fd76",
+      "byteLength": 723093,
+      "sha256": "41b3bbd63ae17cf917eaa1b3635753708adcf73c26105226c4204534b489716f",
       "files": [
         "ui-spec/component-render-semantics.json",
         "ui-spec/host-consumers.json",
@@ -2096,8 +2132,8 @@
     {
       "name": "version",
       "fileCount": 1,
-      "byteLength": 34548,
-      "sha256": "edb566355324626bbc5e2c135e7c04002d5086aa6da1b66abbc1b8a71468f45b",
+      "byteLength": 35893,
+      "sha256": "ac4c22d58fd8b6ab26ef840e4f9aabb02cc68668df7af7a9411f7073c30d696e",
       "files": [
         "contracts/VERSION.json"
       ]
@@ -2108,9 +2144,9 @@
       "name": "component-types",
       "source": "contracts/view-state.schema.json",
       "jsonPointer": "/$defs/Component/properties/type/enum",
-      "entryCount": 174,
+      "entryCount": 177,
       "encoding": "ordered-json-array-utf8-lf",
-      "sha256": "19cf03771aa766f83667240a4ae5d7f7347648b6c1d7c185aec17a36b7522694"
+      "sha256": "c7498bbb0515cb9a5fb460b8496b8d46331536caf8cbb3ad87b1fe8c7762984f"
     },
     {
       "name": "core-commands",

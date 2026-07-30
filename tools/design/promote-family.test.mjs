@@ -33,6 +33,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const PROMOTE_SCRIPT = path.join(REPO_ROOT, 'tools', 'design', 'promote-family.mjs');
 const GENERATOR_SCRIPT = path.join(REPO_ROOT, 'tools', 'design', 'generate-visual-admission-contract.mjs');
+const SHARED_WRITER_LOCK = path.join(REPO_ROOT, 'tools', 'shared', 'shared-writer-lock.mjs');
 
 // ─── Test harness: create a sandboxed copy of the registry/handoff/ledger ──
 
@@ -46,22 +47,75 @@ function makeSandbox() {
   const hostRoot = path.join(tmpDir, 'Reader-for-HarmonyOS');
 
   // Copy the essential Reader-UI files
-  fs.mkdirSync(path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'generated', 'arkts'), { recursive: true });
   fs.mkdirSync(path.join(readerUiRoot, 'tools', 'design'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'tools', 'runtime'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'tools', 'shared'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'contracts', 'fixtures'), { recursive: true });
+  fs.mkdirSync(path.join(readerUiRoot, 'ui-spec'), { recursive: true });
 
   // Place a design-delta file in the handoff directory so that
   // computeHandoffDirHash has at least one file to hash (excluding
   // LOCAL_READY_FOR_FIGMA.json). Without this, the hash would be null and
   // sourceEvidenceHash verification would be skipped.
   fs.writeFileSync(
-    path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'design-delta.md'),
+    path.join(readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'design-delta.md'),
     '# Reader Runtime Design Delta\n\nTest design delta for sandbox.\n',
   );
 
   // Copy promote-family.mjs and generator
   fs.copyFileSync(PROMOTE_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'));
   fs.copyFileSync(GENERATOR_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs'));
+  fs.copyFileSync(SHARED_WRITER_LOCK, path.join(readerUiRoot, 'tools', 'shared', 'shared-writer-lock.mjs'));
+
+  // Promotion runs the record's two declared B4 runtime checks while holding
+  // the same lock as repin/recover. The transaction sandbox uses executable
+  // stubs so these tests stay focused on admission atomicity rather than
+  // requiring a second Reader-Core-Native checkout.
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'tools', 'runtime', 'check-runtime-payload-source.mjs'),
+    '#!/usr/bin/env node\nconsole.log("[sandbox] runtime source authority verified");\n',
+  );
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'tools', 'runtime', 'generate-runtime.mjs'),
+    '#!/usr/bin/env node\nconsole.log("[sandbox] runtime generator is current");\n',
+  );
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'ui-spec', 'runtime-payload-contracts.json'),
+    JSON.stringify({ schemaVersion: 3, sourceOfTruth: { repository: 'Reader-Core-Native' } }, null, 2) + '\n',
+  );
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'docs', 'design', 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json'),
+    JSON.stringify({
+      schemaVersion: '1.0.0',
+      kind: 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES',
+      sourceAuthorities: [{
+        recordId: 'reader.reading-surface',
+        runtimeContract: {
+          prePromotionChecks: [
+            'node tools/runtime/check-runtime-payload-source.mjs',
+            'node tools/runtime/generate-runtime.mjs --check',
+          ],
+        },
+      }],
+      dependencies: [],
+    }, null, 2) + '\n',
+  );
+
+  // The real repository has an active A3 route extraction. Transaction tests
+  // exercise promotion mechanics independently, so their isolated fixture is
+  // explicitly released. A dedicated test below covers the active rejection.
+  const quarantine = JSON.parse(fs.readFileSync(
+    path.join(REPO_ROOT, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json'),
+    'utf8',
+  ));
+  quarantine.status = 'released';
+  quarantine.entries = quarantine.entries.map((entry) => ({ ...entry, status: 'released' }));
+  fs.writeFileSync(
+    path.join(readerUiRoot, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json'),
+    JSON.stringify(quarantine, null, 2) + '\n',
+  );
 
   // Copy token ledger (generator dependency)
   fs.copyFileSync(
@@ -107,9 +161,24 @@ function writeLedger(readerUiRoot, entries = []) {
   return ledgerPath;
 }
 
+function rehashLedgerEntries(entries) {
+  let previousEntryHash = 'genesis';
+  return entries.map((entry) => {
+    const next = { ...entry, previousEntryHash };
+    delete next.entryHash;
+    next.entryHash = sha256(JSON.stringify(next, null, 2));
+    previousEntryHash = next.entryHash;
+    return next;
+  });
+}
+
 function writeLocalReady(readerUiRoot, recordId, family, ready = true, options = {}) {
-  const localReadyPath = path.join(readerUiRoot, 'docs', 'design', 'handoffs', family, 'LOCAL_READY_FOR_FIGMA.json');
+  const handoffFamily = recordId === 'reader.reading-surface'
+    ? path.join(family, 'reading-surface')
+    : family;
+  const localReadyPath = path.join(readerUiRoot, 'docs', 'design', 'handoffs', handoffFamily, 'LOCAL_READY_FOR_FIGMA.json');
   const handoffDir = path.dirname(localReadyPath);
+  fs.mkdirSync(handoffDir, { recursive: true });
 
   // Compute sourceEvidenceHash from the handoff directory (excluding LOCAL_READY_FOR_FIGMA.json)
   // This matches the logic in promote-family.mjs computeHandoffDirHash()
@@ -148,7 +217,10 @@ function writeLocalReady(readerUiRoot, recordId, family, ready = true, options =
     kind: 'LOCAL_READY_FOR_FIGMA',
     stage: 'implementation-ready',
     status: 'implementation-ready',
-    admission: { localReadyForFigma: ready },
+    admission: {
+      localReadyForFigma: ready,
+      recordIds: options.recordIds || [recordId],
+    },
     localSource: {
       implementationCommit: implCommit,
     },
@@ -213,6 +285,12 @@ function snapshotFiles(readerUiRoot, hostRoot) {
   };
 }
 
+function sharedWriterLockPath(readerUiRoot) {
+  return `${fs.realpathSync(
+    path.join(readerUiRoot, 'ui-spec', 'runtime-payload-contracts.json'),
+  )}.repin.lock`;
+}
+
 function runPromote(readerUiRoot, hostRoot, recordId, options = {}) {
   // promote-family.mjs resolves hostRepoRoot as path.resolve(repoRoot, '..', 'Reader-for-HarmonyOS')
   // We need to set up the directory structure so that resolves correctly.
@@ -226,6 +304,69 @@ function runPromote(readerUiRoot, hostRoot, recordId, options = {}) {
     env[`PROMOTE_FAULT_${options.fault}`] = '1';
   }
   return spawnSync('node', [path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'), recordId], {
+    cwd: readerUiRoot,
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+function runPromoteGroup(readerUiRoot, anchorRecordId, options = {}) {
+  const env = {
+    ...process.env,
+    PROMOTE_TEST_MODE: '1',
+  };
+  if (options.fault) {
+    env[`PROMOTE_FAULT_${options.fault}`] = '1';
+  }
+  return spawnSync('node', [
+    path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+    '--group',
+    anchorRecordId,
+  ], {
+    cwd: readerUiRoot,
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+function runRetract(readerUiRoot, hostRoot, recordId, options = {}) {
+  const env = {
+    ...process.env,
+    RETRACT_TEST_MODE: '1',
+  };
+  if (options.fault) {
+    env[`RETRACT_FAULT_${options.fault}`] = '1';
+  }
+  const reason = options.reason || 'A2 route-isolation audit is not yet closed';
+  return spawnSync('node', [
+    path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+    '--retract',
+    recordId,
+    '--reason',
+    reason,
+  ], {
+    cwd: readerUiRoot,
+    env,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+}
+
+function runRetractGroup(readerUiRoot, anchorRecordId, options = {}) {
+  const env = {
+    ...process.env,
+    RETRACT_TEST_MODE: '1',
+  };
+  if (options.fault) {
+    env[`RETRACT_FAULT_${options.fault}`] = '1';
+  }
+  const reason = options.reason || 'Bookshelf group promotion requires atomic withdrawal';
+  return spawnSync('node', [
+    path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+    '--retract-group',
+    anchorRecordId,
+    '--reason',
+    reason,
+  ], {
     cwd: readerUiRoot,
     env,
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -255,11 +396,18 @@ const lines = [
   '// SOURCE_FILE_KEY: \\'klhs2jMM4MncaJFqZMfqEK\\'',
   'export struct VisualAdmission {',
 ];
+const routeAdmissions = new Map();
 for (const record of registry.records) {
   if (record.classification !== 'exact-figma-binding') continue;
   const admission = record.harmony?.status === 'implementation-ready' ? 'implementation-ready' : 'candidate-backport';
   const implementationReady = admission === 'implementation-ready';
   for (const routeId of (record.routeIds || [])) {
+    const prior = routeAdmissions.get(routeId);
+    if (prior !== undefined && prior !== admission) {
+      console.error('contradictory route admission for ' + routeId + ': ' + prior + ' vs ' + admission);
+      process.exit(1);
+    }
+    routeAdmissions.set(routeId, admission);
     lines.push('  // ' + JSON.stringify({ routeId, admission, sourceBound: true, implementationReady, recordIds: [record.id] }));
   }
 }
@@ -345,6 +493,41 @@ test('promote refuses when local.status is candidate-backport (anti-bypass)', ()
   }
 });
 
+test('promote refuses an actively route-quarantined record before any transaction write', () => {
+  const sandbox = makeSandbox();
+  try {
+    const commitSha = initSandboxGit(sandbox.readerUiRoot);
+    assert.ok(commitSha, 'failed to init sandbox git repo');
+    const record = makeRecord('reader.reading-surface', { localStatus: 'implementation-ready' });
+    writeRegistry(sandbox.readerUiRoot, [record]);
+    writeLedger(sandbox.readerUiRoot, []);
+    writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
+      implementationCommit: commitSha,
+    });
+    const quarantinePath = path.join(sandbox.readerUiRoot, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json');
+    const quarantine = JSON.parse(fs.readFileSync(quarantinePath, 'utf8'));
+    quarantine.status = 'active';
+    quarantine.entries = [{
+      recordId: 'reader.reading-surface',
+      routeIds: ['reader.reading-surface'],
+      reason: 'test quarantine',
+      blocksPromotion: true,
+      status: 'active',
+    }];
+    fs.writeFileSync(quarantinePath, JSON.stringify(quarantine, null, 2) + '\n');
+
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    assert.notEqual(result.status, 0, 'promote should have failed');
+    assert.match(result.stderr?.toString() || '', /actively route-quarantined/);
+    assert.deepEqual(before, after, 'an active source quarantine must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
 test('promote refuses when LOCAL_READY_FOR_FIGMA.json is missing', () => {
   const sandbox = makeSandbox();
   try {
@@ -381,12 +564,12 @@ test('promote refuses when sourceEvidenceHash is missing (anti-bypass)', () => {
     writeLedger(sandbox.readerUiRoot, []);
 
     // Write LOCAL_READY_FOR_FIGMA.json WITHOUT sourceEvidenceHash
-    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'LOCAL_READY_FOR_FIGMA.json');
+    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'LOCAL_READY_FOR_FIGMA.json');
     fs.writeFileSync(localReadyPath, JSON.stringify({
       kind: 'LOCAL_READY_FOR_FIGMA',
       stage: 'implementation-ready',
       status: 'implementation-ready',
-      admission: { localReadyForFigma: true },
+      admission: { localReadyForFigma: true, recordIds: ['reader.reading-surface'] },
       localSource: { implementationCommit: commitSha },
       verification: { focusedR3a: { tests: 28, passed: 28, failed: 0 } },
       // sourceEvidenceHash intentionally missing
@@ -420,12 +603,12 @@ test('promote refuses when sourceEvidenceHash does not match handoff dir (anti-b
     writeLedger(sandbox.readerUiRoot, []);
 
     // Write LOCAL_READY_FOR_FIGMA.json with a WRONG sourceEvidenceHash
-    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'LOCAL_READY_FOR_FIGMA.json');
+    const localReadyPath = path.join(sandbox.readerUiRoot, 'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'LOCAL_READY_FOR_FIGMA.json');
     fs.writeFileSync(localReadyPath, JSON.stringify({
       kind: 'LOCAL_READY_FOR_FIGMA',
       stage: 'implementation-ready',
       status: 'implementation-ready',
-      admission: { localReadyForFigma: true },
+      admission: { localReadyForFigma: true, recordIds: ['reader.reading-surface'] },
       localSource: { implementationCommit: commitSha },
       verification: { focusedR3a: { tests: 28, passed: 28, failed: 0 } },
       sourceEvidenceHash: 'sha256:fabricated-hash-that-does-not-match',
@@ -443,6 +626,38 @@ test('promote refuses when sourceEvidenceHash does not match handoff dir (anti-b
     );
 
     assert.deepEqual(before.registry, after.registry, 'registry should not have changed');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('promote refuses a reader handoff that names a sibling record (anti-bypass)', () => {
+  const sandbox = makeSandbox();
+  try {
+    const commitSha = initSandboxGit(sandbox.readerUiRoot);
+    assert.ok(commitSha, 'failed to init sandbox git repo');
+
+    const record = makeRecord('reader.reading-surface', { localStatus: 'implementation-ready' });
+    writeRegistry(sandbox.readerUiRoot, [record]);
+    writeLedger(sandbox.readerUiRoot, []);
+    const localReadyPath = writeLocalReady(
+      sandbox.readerUiRoot,
+      'reader.reading-surface',
+      'reader-runtime',
+      true,
+      { implementationCommit: commitSha },
+    );
+    const localReady = JSON.parse(fs.readFileSync(localReadyPath, 'utf8'));
+    localReady.admission.recordIds = ['reader.control-home'];
+    fs.writeFileSync(localReadyPath, JSON.stringify(localReady, null, 2) + '\n');
+
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    assert.notEqual(result.status, 0, 'promote should have failed');
+    assert.match(result.stderr?.toString() || '', /admission\.recordIds.*reader\.reading-surface/);
+    assert.deepEqual(before.registry, after.registry, 'registry should not change when a sibling record is named');
   } finally {
     cleanupSandbox(sandbox);
   }
@@ -898,6 +1113,305 @@ test('success path: complete promotion leaves all four files consistent', () => 
     });
     assert.equal(checkResult.status, 0,
       `--check should pass after successful promotion. stderr: ${checkResult.stderr?.toString()}`);
+    assert.equal(fs.existsSync(sharedWriterLockPath(sandbox.readerUiRoot)), false,
+      'successful promotion and follow-up check must release the shared writer lock');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+function setupPromotableGroupSandbox() {
+  const sandbox = makeSandbox();
+  const commitSha = initSandboxGit(sandbox.readerUiRoot);
+  assert.ok(commitSha, 'failed to init sandbox git repo');
+  installStubGenerator(sandbox.readerUiRoot);
+  installHarmonyTarget(sandbox.hostRoot, 'RouteRenderer');
+
+  const recordIds = ['bookshelf.page', 'bookshelf.book-card'];
+  const records = recordIds.map((recordId) => {
+    const record = makeRecord(recordId, {
+      localStatus: 'implementation-ready',
+      harmonyStatus: 'candidate-backport',
+    });
+    record.routeIds = ['bookshelf'];
+    return record;
+  });
+  writeRegistry(sandbox.readerUiRoot, records);
+  writeLedger(sandbox.readerUiRoot, []);
+
+  const handoffDir = path.join(
+    sandbox.readerUiRoot,
+    'docs',
+    'design',
+    'handoffs',
+    'bookshelf',
+  );
+  fs.mkdirSync(handoffDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(handoffDir, 'design-delta.md'),
+    '# Bookshelf Design Delta\n\nShared-route group-promotion fixture.\n',
+  );
+  writeLocalReady(sandbox.readerUiRoot, 'bookshelf.page', 'bookshelf', true, {
+    implementationCommit: commitSha,
+    recordIds,
+  });
+
+  return { ...sandbox, recordIds };
+}
+
+test('group promotion atomically promotes every record sharing one route and packet', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const result = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    const stderr = result.stderr?.toString() || '';
+    const stdout = result.stdout?.toString() || '';
+    assert.equal(result.status, 0,
+      `group promotion should succeed. stderr: ${stderr}\nstdout: ${stdout}`);
+
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const registry = JSON.parse(after.registry.toString());
+    for (const recordId of sandbox.recordIds) {
+      assert.equal(
+        registry.records.find((record) => record.id === recordId)?.harmony?.status,
+        'implementation-ready',
+        `${recordId} must be promoted in the same registry write`,
+      );
+    }
+    assert.deepEqual(after.upstreamArtifact, after.consumerArtifact,
+      'group promotion must leave upstream and consumer byte-identical');
+
+    const ledger = JSON.parse(after.ledger.toString());
+    assert.equal(ledger.entries.length, 2, 'group promotion must append one entry per record');
+    assert.deepEqual(ledger.entries.map((entry) => entry.recordId), sandbox.recordIds);
+    assert.equal(ledger.entries[0].transactionId, ledger.entries[1].transactionId,
+      'all group ledger entries must share one transaction identity');
+    assert.deepEqual(ledger.entries[0].transactionRecordIds, sandbox.recordIds);
+    assert.deepEqual(ledger.entries[1].transactionRecordIds, sandbox.recordIds);
+
+    const check = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.equal(check.status, 0,
+      `--check must pass after group promotion: ${check.stderr?.toString() || ''}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('single-record promotion refuses a B3 packet that declares an atomic group', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'bookshelf.page');
+    assert.notEqual(result.status, 0,
+      'single-record promotion must fail when the B3 packet names multiple records');
+    assert.match(
+      `${result.stderr?.toString() || ''}\n${result.stdout?.toString() || ''}`,
+      /atomic admission set; use --group/,
+    );
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'refused partial group promotion must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('group promotion rolls back all records and ledger entries on a late fault', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page', {
+      fault: 'AFTER_LEDGER_WRITE',
+    });
+    assert.notEqual(result.status, 0, 'injected group fault must fail');
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'group rollback must restore registry, both artifacts, and ledger byte-exactly');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('ledger check rejects a hash-valid group transaction with a missing member', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0,
+      `group promotion prerequisite failed: ${promoted.stderr?.toString() || ''}`);
+
+    const ledgerPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'PROMOTION_LEDGER.json',
+    );
+    const registryPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'FIGMA_VISUAL_ADMISSION_REGISTRY.json',
+    );
+    const ledger = JSON.parse(fs.readFileSync(ledgerPath, 'utf8'));
+    ledger.entries = rehashLedgerEntries([ledger.entries[0]]);
+    fs.writeFileSync(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+
+    // Make the per-record registry/ledger relationship internally plausible.
+    // Without transaction-set verification this forged partial group would
+    // pass: one member remains promoted, the removed member is set back to
+    // candidate-backport, and the surviving entry has a valid hash chain.
+    const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+    registry.records.find((record) => record.id === 'bookshelf.book-card')
+      .harmony.status = 'candidate-backport';
+    fs.writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+
+    const check = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.notEqual(check.status, 0,
+      '--check must reject a hash-valid transaction missing one declared member');
+    assert.match(
+      check.stderr?.toString() || '',
+      /expected exactly one entry for each/,
+    );
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('group retraction atomically reverses every record in the promotion transaction', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0,
+      `group promotion prerequisite failed: ${promoted.stderr?.toString() || ''}`);
+
+    const retracted = runRetractGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(retracted.status, 0,
+      `group retraction should succeed: ${retracted.stderr?.toString() || ''}`);
+
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const registry = JSON.parse(after.registry.toString());
+    for (const recordId of sandbox.recordIds) {
+      assert.equal(
+        registry.records.find((record) => record.id === recordId)?.harmony?.status,
+        'candidate-backport',
+        `${recordId} must be withdrawn in the same registry write`,
+      );
+    }
+    const ledger = JSON.parse(after.ledger.toString());
+    assert.equal(ledger.entries.length, 4);
+    const promotions = ledger.entries.slice(0, 2);
+    const reversals = ledger.entries.slice(2);
+    assert.deepEqual(reversals.map((entry) => entry.recordId), sandbox.recordIds);
+    assert.equal(reversals[0].transactionId, reversals[1].transactionId);
+    assert.equal(reversals[0].reversalOf, promotions[0].entryHash);
+    assert.equal(reversals[1].reversalOf, promotions[1].entryHash);
+    assert.deepEqual(after.upstreamArtifact, after.consumerArtifact);
+
+    const check = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.equal(check.status, 0,
+      `--check must pass after group retraction: ${check.stderr?.toString() || ''}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('single-record retraction refuses a record owned by an active group transaction', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'bookshelf.page');
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /use --retract-group/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'refused partial retraction must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('group retraction restores the promoted state byte-exactly on a late fault', () => {
+  const sandbox = setupPromotableGroupSandbox();
+  try {
+    const promoted = runPromoteGroup(sandbox.readerUiRoot, 'bookshelf.page');
+    assert.equal(promoted.status, 0);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    const result = runRetractGroup(sandbox.readerUiRoot, 'bookshelf.page', {
+      fault: 'AFTER_LEDGER_WRITE',
+    });
+    assert.notEqual(result.status, 0);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'failed group retraction must restore the full promoted snapshot');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('promotion and repin contend on the same live writer lock', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const lockPath = sharedWriterLockPath(sandbox.readerUiRoot);
+    const liveLock = `${process.pid}\n0123456789abcdef0123456789abcdef\n`;
+    fs.writeFileSync(lockPath, liveLock);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+
+    assert.notEqual(result.status, 0, 'promotion must refuse a live repin/recover lock');
+    assert.match(
+      result.stderr?.toString() || '',
+      /another writer transaction is active|could not acquire shared authority-writer lock/,
+    );
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'lock refusal must happen before any admission mutation');
+    assert.equal(fs.readFileSync(lockPath, 'utf8'), liveLock,
+      'promotion must never delete a foreign writer lock');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('failed runtime Core pre-promotion check leaves admission untouched and releases lock', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    fs.writeFileSync(
+      path.join(sandbox.readerUiRoot, 'tools', 'runtime', 'check-runtime-payload-source.mjs'),
+      '#!/usr/bin/env node\nconsole.error("injected runtime authority drift");\nprocess.exit(7);\n',
+    );
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+
+    assert.notEqual(result.status, 0, 'failed B4 runtime check must block promotion');
+    assert.match(result.stderr?.toString() || '', /B4 pre-promotion check failed/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before,
+      'failed B4 check must not mutate the four admission transaction files');
+    assert.equal(fs.existsSync(sharedWriterLockPath(sandbox.readerUiRoot)), false,
+      'process.exit failure path must release its own writer lock');
   } finally {
     cleanupSandbox(sandbox);
   }
@@ -971,4 +1485,173 @@ test('fault injection AFTER_LEDGER_WRITE: all four files rolled back', () => {
 
 test('fault injection IN_FINAL_VERIFY: all four files rolled back', () => {
   runFaultInjectionTest('IN_FINAL_VERIFY');
+});
+
+// ─── Retraction tests ─────────────────────────────────────────────────────
+// A retraction is an audited safety stop, not a mutable edit of an old ledger
+// row. These tests keep the original promotion in history and prove that the
+// same four-file transaction/rollback guarantees apply in the reverse direction.
+
+function setupPromotedSandbox() {
+  const sandbox = setupPromotableSandbox();
+  const promoteResult = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+  assert.equal(
+    promoteResult.status,
+    0,
+    `sandbox precondition promotion failed: ${promoteResult.stderr?.toString()}\n${promoteResult.stdout?.toString()}`,
+  );
+  return sandbox;
+}
+
+test('success path: retraction appends a reversal and restores candidate-backport admission', () => {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(
+      result.status,
+      0,
+      `retract should have succeeded. stderr: ${result.stderr?.toString()}\nstdout: ${result.stdout?.toString()}`,
+    );
+
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const registryAfter = JSON.parse(after.registry.toString());
+    const record = registryAfter.records.find((item) => item.id === 'reader.reading-surface');
+    assert.equal(record.harmony.status, 'candidate-backport');
+    assert.equal(record.local.status, 'implementation-ready', 'retraction must retain source-side evidence status');
+    assert.notDeepEqual(before.registry, after.registry, 'registry should change during retraction');
+
+    assert.deepEqual(after.upstreamArtifact, after.consumerArtifact,
+      'retraction consumer copy should remain byte-identical to upstream');
+
+    const ledgerAfter = JSON.parse(after.ledger.toString());
+    assert.equal(ledgerAfter.entries.length, 2);
+    const [promotion, retraction] = ledgerAfter.entries;
+    assert.equal(retraction.kind, 'retract');
+    assert.equal(retraction.recordId, 'reader.reading-surface');
+    assert.equal(retraction.previousHarmonyStatus, 'implementation-ready');
+    assert.equal(retraction.newHarmonyStatus, 'candidate-backport');
+    assert.equal(retraction.reversalOf, promotion.entryHash);
+    assert.equal(retraction.reversedPromotion, undefined, 'ledger must use the documented retractedPromotion field');
+    assert.equal(retraction.retractedPromotion.entryHash, promotion.entryHash);
+    assert.equal(retraction.previousEntryHash, promotion.entryHash);
+    assert.ok(retraction.entryHash);
+
+    const checkResult = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    assert.equal(checkResult.status, 0,
+      `--check should accept a valid retraction. stderr: ${checkResult.stderr?.toString()}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('retraction refuses without a current promotion and mutates nothing', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /not 'implementation-ready'|only a current promotion/);
+    assert.deepEqual(after, before, 'failed retraction must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('retraction prevents replaying the withdrawn source evidence', () => {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const retractResult = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(retractResult.status, 0, retractResult.stderr?.toString());
+    const beforeReplay = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const replay = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    const afterReplay = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    assert.notEqual(replay.status, 0, 'promotion must not replay withdrawn evidence');
+    assert.match(replay.stderr?.toString() || '', /retraction freshness verification failed/);
+    assert.deepEqual(afterReplay, beforeReplay, 'blocked replay must not mutate any transaction file');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('a fresh B2/B3 evidence packet can promote after a retraction', () => {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const retractResult = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(retractResult.status, 0, retractResult.stderr?.toString());
+
+    const deltaPath = path.join(
+      sandbox.readerUiRoot,
+      'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'design-delta.md',
+    );
+    fs.appendFileSync(deltaPath, '\nA2 source extraction closed in a new conversion.\n');
+    const addResult = spawnSync('git', ['add', '.'], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    assert.equal(addResult.status, 0, addResult.stderr?.toString());
+    const commitResult = spawnSync('git', ['commit', '-m', 'fresh B2 B3 conversion'], {
+      cwd: sandbox.readerUiRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    assert.equal(commitResult.status, 0, commitResult.stderr?.toString());
+    const freshCommit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: sandbox.readerUiRoot, encoding: 'utf8' }).stdout.trim();
+    writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
+      implementationCommit: freshCommit,
+    });
+
+    const rePromote = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
+    assert.equal(rePromote.status, 0,
+      `fresh evidence should allow a new promotion. stderr: ${rePromote.stderr?.toString()}\nstdout: ${rePromote.stdout?.toString()}`);
+    const ledgerAfter = JSON.parse(fs.readFileSync(
+      path.join(sandbox.readerUiRoot, 'docs', 'design', 'PROMOTION_LEDGER.json'),
+      'utf8',
+    ));
+    assert.equal(ledgerAfter.entries.length, 3);
+    assert.equal(ledgerAfter.entries[2].kind, 'promote');
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+function runRetractFaultInjectionTest(phase) {
+  const sandbox = setupPromotedSandbox();
+  try {
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runRetract(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface', { fault: phase });
+    assert.notEqual(result.status, 0, `retract should fail when ${phase} is injected`);
+    assert.match(result.stderr?.toString() || '', /injected fault|rolling back/);
+    const after = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    assert.deepEqual(after, before, `${phase}: all four files must roll back to the promoted snapshot`);
+
+    const checkResult = spawnSync('node', [
+      path.join(sandbox.readerUiRoot, 'tools', 'design', 'promote-family.mjs'),
+      '--check',
+    ], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
+    assert.equal(checkResult.status, 0,
+      `${phase}: --check should pass after retract rollback. stderr: ${checkResult.stderr?.toString()}`);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+}
+
+test('retract fault injection AFTER_REGISTRY_WRITE: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_REGISTRY_WRITE');
+});
+
+test('retract fault injection AFTER_GENERATOR: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_GENERATOR');
+});
+
+test('retract fault injection AFTER_CONSUMER_SYNC: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_CONSUMER_SYNC');
+});
+
+test('retract fault injection AFTER_LEDGER_WRITE: all four files roll back', () => {
+  runRetractFaultInjectionTest('AFTER_LEDGER_WRITE');
+});
+
+test('retract fault injection IN_FINAL_VERIFY: all four files roll back', () => {
+  runRetractFaultInjectionTest('IN_FINAL_VERIFY');
 });

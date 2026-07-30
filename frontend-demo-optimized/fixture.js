@@ -94,6 +94,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
     books: [
       {
         bookId: "long-night",
+        sourceId: "source-youshu",
+        sourceType: "network",
         title: "长夜余火",
         author: "爱潜水的乌贼",
         chapter: "第 32 章 雨夜",
@@ -102,6 +104,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "mystery-lord",
+        sourceId: "source-shucang",
+        sourceType: "network",
         title: "诡秘之主",
         author: "爱潜水的乌贼",
         chapter: "第 1426 章",
@@ -110,6 +114,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "ming-dynasty-stories",
+        sourceId: "source-youshu",
+        sourceType: "network",
         title: "明朝那些事儿",
         author: "当年明月",
         chapter: "第 218 章",
@@ -118,6 +124,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "three-body",
+        sourceId: "source-shucang",
+        sourceType: "network",
         title: "三体",
         author: "刘慈欣",
         chapter: "65%",
@@ -126,6 +134,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "renjian-cihua",
+        sourceId: "source-youshu",
+        sourceType: "network",
         title: "人间词话",
         author: "王国维",
         chapter: "卷上 · 境界",
@@ -134,6 +144,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "android-notes",
+        sourceId: "local",
+        sourceType: "local",
         title: "Android 开发笔记",
         author: "本地文档",
         chapter: "Compose Shell 结构",
@@ -142,6 +154,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "old-day-echoes",
+        sourceId: "local",
+        sourceType: "local",
         title: "旧日回响",
         author: "离线书库",
         chapter: "第 18 章",
@@ -150,6 +164,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "among-stars",
+        sourceId: "local",
+        sourceType: "local",
         title: "群星之间",
         author: "本地导入",
         chapter: "第 7 章",
@@ -158,6 +174,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "lighthouse-and-fog",
+        sourceId: "source-youshu",
+        sourceType: "network",
         title: "灯塔与雾",
         author: "书源同步",
         chapter: "第 51 章",
@@ -166,6 +184,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "paper-city",
+        sourceId: "source-shucang",
+        sourceType: "network",
         title: "纸上城市",
         author: "默认分组",
         chapter: "第 12 章",
@@ -174,6 +194,8 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       {
         bookId: "long-title-layout-sample",
+        sourceId: "source-youshu",
+        sourceType: "network",
         title: "长标题测试：这本书的名字很长需要两行截断",
         author: "排版样本",
         chapter: "很长的章节名称需要保持单行省略",
@@ -189,6 +211,9 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
   },
   library: {
     book: {
+      bookId: "long-night",
+      sourceId: "source-youshu",
+      sourceType: "network",
       title: "长夜余火",
       author: "爱潜水的乌贼",
       meta: "科幻 · 连载 · 83.6 万字",
@@ -359,8 +384,7 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
         autoPage: false,
         tapMode: "左右区域",
         volumePage: true,
-        pageMode: "横向翻页",
-        pageAnimation: "平滑",
+        pageAnimation: "滑动",
         screenOrientation: "跟随系统",
         screenTimeout: "5 分钟",
         landscapeLock: false,
@@ -378,7 +402,6 @@ window.READER_FRONTEND_DEMO_DRAFT_FIXTURE = {
       },
       options: {
         tapMode: ["左右区域", "上下区域", "整屏翻页"],
-        pageMode: ["横向翻页", "竖向翻页"],
         pageAnimation: ["覆盖", "滑动", "仿真", "滚动", "无动画"],
         screenOrientation: ["跟随系统", "竖屏", "横屏"],
         screenTimeout: ["跟随系统", "1 分钟", "5 分钟", "10 分钟", "始终开启"]

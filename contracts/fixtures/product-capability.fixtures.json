@@ -375,7 +375,7 @@
       "readerUI": {
         "required": true,
         "status": "registered",
-        "routes": ["content-search", "content-replacement", "content-edit"],
+        "routes": ["content-replacement", "content-edit"],
         "events": ["reader.contentSearch.open", "reader.contentReplacement.open", "content.edit.open", "content.edit.save"],
         "evidence": ["contracts/route.schema.json", "contracts/ui-event.schema.json", "contracts/fixtures/view-state.fixtures.json"],
         "acceptance": "内容编辑入口仅登记；需补编辑 transaction、原文恢复、runtime action、demo 及与替换规则的冲突处理。"
@@ -585,7 +585,7 @@
       "readerUI": {
         "required": true,
         "status": "partial",
-        "routes": ["control-layer-base-v2", "reader-appearance-overlay-v2", "reader-settings-overlay-v2", "reader-full-font", "reader-full-theme", "reader-full-layout", "reader-full-page-turn"],
+        "routes": ["reader-full-font", "reader-full-theme", "reader-full-layout", "reader-full-page-turn"],
         "events": ["reader.control.toggle", "reader.module.switch", "reader.appearance.open", "reader.settings.open", "reader.config.persist", "reader.typography.persist"],
         "evidence": ["contracts/route.schema.json", "contracts/ui-event.schema.json", "frontend-demo-optimized/route-contract.js"],
         "acceptance": "配置变更必须经 canonical event 持久化，浏览器验证跨视口、重启、撤销和 overlay 返回。"
@@ -655,7 +655,7 @@
       "readerUI": {
         "required": true,
         "status": "partial",
-        "routes": ["tts", "reader-tts-overlay-v2", "reader-full-tts"],
+        "routes": ["reader-full-tts"],
         "events": ["reader.tts.start", "reader.tts.stop", "tts.queue.start", "tts.queue.stop", "reader.session.ttsStart"],
         "evidence": ["contracts/route.schema.json", "contracts/ui-event.schema.json", "contracts/motion.schema.json"],
         "acceptance": "runtime 验证启动、暂停、停止、队列、位置、中断、切章、会话互斥与 reduced-motion 最终态。"
@@ -830,7 +830,7 @@
       "readerUI": {
         "required": true,
         "status": "partial",
-        "routes": ["control-layer-base-v2", "reader-tts-overlay-v2", "reader-auto-scroll-overlay-v2", "reader-search-overlay-v2"],
+        "routes": [],
         "events": ["motion.interrupt.cancel", "motion.interrupt.redirect", "motion.interrupt.completeThenReplace", "reducedMotion.enable", "reducedMotion.disable"],
         "evidence": ["contracts/motion.schema.json", "contracts/motion-policy.schema.json", "docs/design/MOTION_DELIVERY_PLAN_2026-07-14.md"],
         "acceptance": "浏览器对每个 motion family 验证 normal、repeat、opposite、interrupt、reduced-motion 和视口变化后的最终态。"

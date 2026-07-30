@@ -9,7 +9,7 @@
 //   5. UiEvent 必须在 ui-event.schema.json enum
 //   6. 无 controlKey 碰撞
 //   7. 子控件数量 = 50（不是 46；stepper 展开 minus+plus，segment 展开 3 选项）
-//   8. 覆盖 12 页面族
+//   8. 覆盖 11 个 active 页面族
 //   9. R2.0 subcontrol 的 entityKey/controlKey 模式合法
 //  10. D2 Settings dispatch 接收 options
 //  11. 不写 data-control-id 到渲染输出 HTML
@@ -17,7 +17,7 @@
 //
 // R2.0.1 新增测试：
 //  13. route-local occurrence 1:1 对账
-//  14. exact 12 页面族 gate
+//  14. exact 11 active 页面族 gate
 //  15. renderer owner 与 dispatch map 一致
 //  16. uiEvent 非空或明确豁免
 //  17. controlId 非空或明确豁免
@@ -149,35 +149,37 @@ test("R2.0.1 collision: no controlKey collisions", () => {
 });
 
 // ---- Test 7: 已完成 instrumentation 的控件进入 semantic denominator；这里只统计剩余容器 ----
-test("R2.0.1 completeness: 61 stable pilot subcontrol declarations", () => {
+test("R2.0.1 completeness: 53 active stable pilot subcontrol declarations", () => {
   const expectedSubcontrolRows = nonInteractive.entries.filter(e => e.containsUnenumeratedSubcontrols);
-  assert.equal(expectedSubcontrolRows.length, 28, "current inventory must mark 28 remaining subcontrol rows");
+  assert.equal(expectedSubcontrolRows.length, 20, "current inventory must mark 20 remaining subcontrol rows");
 
   const expectedRowsByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
   for (const e of expectedSubcontrolRows) expectedRowsByType[e.expectedSubcontrolType]++;
-  assert.equal(expectedRowsByType.switch, 20, "expected 20 switch subcontrol rows");
-  assert.equal(expectedRowsByType.select, 5, "expected 5 select subcontrol rows");
+  assert.equal(expectedRowsByType.switch, 17, "expected 17 switch subcontrol rows");
+  assert.equal(expectedRowsByType.select, 0, "no select rows remain outside semantic inventory");
   assert.equal(expectedRowsByType.stepper, 2, "expected 2 stepper subcontrol rows (each expands to 2 buttons)");
   assert.equal(expectedRowsByType.segment, 1, "expected 1 segment subcontrol row (expands to 3 options)");
 
   const declaredSubcontrols = declarations.filter(d => d.source === "r2.0-subcontrol");
-  assert.equal(declaredSubcontrols.length, 61, "must preserve all 61 pilot subcontrol identities");
+  assert.equal(declaredSubcontrols.length, 53, "must preserve the 53 active pilot subcontrol identities and drop withdrawn Bookshelf settings controls");
 
   const declaredByType = { switch: 0, select: 0, stepper: 0, segment: 0 };
   for (const d of declaredSubcontrols) declaredByType[d.expectedSubcontrolType] = (declaredByType[d.expectedSubcontrolType] || 0) + 1;
-  assert.equal(declaredByType.switch, 28, "must declare 28 switch subcontrols");
-  assert.equal(declaredByType.select, 16, "must declare 16 select/input subcontrols");
+  assert.equal(declaredByType.switch, 25, "must declare 25 active switch subcontrols");
+  assert.equal(declaredByType.select, 11, "must declare 11 active select subcontrols");
   assert.equal(declaredByType.stepper, 4, "must declare 4 stepper subcontrols (2 rows × 2 buttons)");
   assert.equal(declaredByType.segment, 8, "must declare 8 segment/filter options");
+  assert.equal(declaredByType.textbox, 1, "must declare the active search textbox identity");
+  assert.equal(declaredByType.input, 4, "must declare the four active input identities");
+  assert.equal(declaredSubcontrols.filter(d => d.route === "bookshelf-search-settings").length, 0);
 });
 
-// ---- Test 8: 非 Reader exact gate 仍为 12，Reader 运行时作为独立扩展 lane ----
-test("R2.0.1 coverage: exactly 12 non-Reader page families plus reader-runtime extension", () => {
+// ---- Test 8: 已撤回 import-conflict-resolve 不再占用 active identity 分母 ----
+test("R2.0.1 coverage: 11 active non-Reader page families plus reader-runtime extension", () => {
   const expectedFamilies = [
     "bookshelf",
     "book-detail",
     "search-results",
-    "import-conflict-resolve",
     "discover",
     "rss",
     "source-switch",
@@ -185,10 +187,10 @@ test("R2.0.1 coverage: exactly 12 non-Reader page families plus reader-runtime e
     "source-management",
     "webdav-config",
     "sync-backup",
-    "about-restore-preview"
+    "restore-preview"
   ];
   const declaredFamiliesSet = new Set(declarations.filter(d => d.source !== "reader-runtime-action").map(d => d.pageFamily));
-  assert.equal(declaredFamiliesSet.size, 12, `expected exactly 12 non-Reader page families, got ${declaredFamiliesSet.size}: ${[...declaredFamiliesSet].join(",")}`);
+  assert.equal(declaredFamiliesSet.size, 11, `expected exactly 11 non-Reader page families, got ${declaredFamiliesSet.size}: ${[...declaredFamiliesSet].join(",")}`);
   for (const fam of expectedFamilies) {
     assert.ok(declaredFamiliesSet.has(fam), `missing page family: ${fam}`);
   }
@@ -197,6 +199,7 @@ test("R2.0.1 coverage: exactly 12 non-Reader page families plus reader-runtime e
   const readerRuntime = declarations.filter(d => d.source === "reader-runtime-action");
   assert.ok(readerRuntime.length >= 400, "reader-runtime extension must carry its complete stable identity set");
   assert.ok(readerRuntime.every(d => d.pageFamily === "reader-runtime"));
+  assert.equal(declarations.filter(d => d.pageFamily === "import-conflict-resolve").length, 0);
 });
 
 // ---- Test 9: R2.0 subcontrols 的 entityKey/controlKey 模式合法 ----
@@ -276,14 +279,14 @@ test("R2.0.1 route-local: registry occurrences 1:1 match declarations on each di
   }
 });
 
-// ---- Test 14: exact 12 页面族 gate ----
-test("R2.0.1 gate: dispatch map has exactly 12 page families", () => {
+// ---- Test 14: exact 11 active 页面族 gate ----
+test("R2.0.1 gate: dispatch map has exactly 11 active page families", () => {
   const pageFamilies = Object.keys(dispatchMap.pageFamilies);
-  assert.equal(pageFamilies.length, 12, `dispatch map must have exactly 12 page families, got ${pageFamilies.length}`);
+  assert.equal(pageFamilies.length, 11, `dispatch map must have exactly 11 active page families, got ${pageFamilies.length}`);
   const expected = new Set([
-    "bookshelf", "book-detail", "search-results", "import-conflict-resolve",
+    "bookshelf", "book-detail", "search-results",
     "discover", "rss", "source-switch", "settings-general",
-    "source-management", "webdav-config", "sync-backup", "about-restore-preview"
+    "source-management", "webdav-config", "sync-backup", "restore-preview"
   ]);
   for (const fam of pageFamilies) {
     assert.ok(expected.has(fam), `unexpected page family in dispatch map: ${fam}`);
@@ -423,7 +426,7 @@ test("A0 declarations: every declaration carries mappingStatus / actionKey / ins
 
 // ---- Test 20: A0 subcontrol declarations 不依赖 selector hash / ordinal fallback ----
 test("A0 stable pilot subcontrols use business semantic keys (no selector hash, no ordinal fallback)", () => {
-  // A0 invariant: "50 个设置子控件改用业务语义 key，不再使用 selector hash".
+  // A0 invariant: active settings subcontrols use business semantic keys.
   // The entityKey slug for every r2.0-subcontrol declaration MUST be a
   // business semantic slug from settings-subcontrol-business-keys.mjs, not
   // a `h-{selectorSha256前8位}` hash. The controlKey MUST NOT carry the
@@ -431,7 +434,8 @@ test("A0 stable pilot subcontrols use business semantic keys (no selector hash, 
   // identity is per-(route, state) and unique by business slug, so no
   // ordinal disambiguation is needed.
   const sub = declarations.filter((d) => d.source === "r2.0-subcontrol");
-  assert.equal(sub.length, 61, `expected 61 stable r2.0-subcontrol declarations, got ${sub.length}`);
+  assert.equal(sub.length, 53, `expected 53 active stable r2.0-subcontrol declarations, got ${sub.length}`);
+  assert.equal(sub.filter((entry) => entry.route === "bookshelf-search-settings").length, 0);
   const selectorHashPattern = /h-[0-9a-f]{8}/;
   const ordinalFallbackPattern = /\.n\d+$/;
   const failures = [];

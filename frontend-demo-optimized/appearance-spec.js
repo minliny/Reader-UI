@@ -215,16 +215,24 @@ window.ReaderAppearanceSpec = Object.freeze({
       "defaultValue": "slide",
       "options": [
         {
-          "value": "slide",
-          "label": "平移"
-        },
-        {
           "value": "cover",
           "label": "覆盖"
         },
         {
+          "value": "slide",
+          "label": "滑动"
+        },
+        {
+          "value": "simulation",
+          "label": "仿真"
+        },
+        {
+          "value": "scroll",
+          "label": "滚动"
+        },
+        {
           "value": "none",
-          "label": "无"
+          "label": "无动画"
         }
       ]
     },

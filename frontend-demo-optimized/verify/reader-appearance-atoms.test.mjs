@@ -130,7 +130,7 @@ test("D2 reading preference and typography pages project the generated Appearanc
   assert.deepEqual(Array.from(row(preferences, "默认字体").options), fontLabels);
   assert.equal(row(preferences, "默认字号").value, "18");
   assert.equal(row(preferences, "默认行距").value, "1.96");
-  assert.deepEqual(Array.from(row(preferences, "默认翻页动画").options), ["平移", "覆盖", "无"]);
+  assert.deepEqual(Array.from(row(preferences, "默认翻页动画").options), ["覆盖", "滑动", "仿真", "滚动", "无动画"]);
   assert.deepEqual(Array.from(row(preferences, "夜间配色").options), ["夜间", "暖夜", "夜纹", "林夜纹"]);
 
   assert.deepEqual(Array.from(row(typography, "默认字体").options), fontLabels);
@@ -139,7 +139,7 @@ test("D2 reading preference and typography pages project the generated Appearanc
   assert.equal(row(typography, "段距").value, "16");
   assert.deepEqual(Array.from(row(typography, "文字对齐").options), ["开启", "关闭"]);
   assert.deepEqual(Array.from(row(typography, "缩进").options), ["无", "2 字符"]);
-  assert.deepEqual(Array.from(row(pageTurn, "翻页动画").options), ["平移", "覆盖", "无"]);
+  assert.deepEqual(Array.from(row(pageTurn, "翻页动画").options), ["覆盖", "滑动", "仿真", "滚动", "无动画"]);
 
   assert.doesNotMatch(d2SettingsSource, /\["系统默认",\s*"思源宋体",\s*"思源黑体",\s*"霞鹜文楷"\]/);
   assert.doesNotMatch(d2SettingsSource, /\["日间",\s*"夜间",\s*"纸纹",\s*"暖白",\s*"青绿",\s*"雾蓝"\]/);

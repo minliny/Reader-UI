@@ -60,9 +60,9 @@ export const R16B_WORKFLOW_ROUTE_EXPECTATIONS = Object.freeze({
     ["import-result-detail", "default", "result", ["Content", "Button"], ["source.import.open"]],
   ]),
   ...workflowExpectations("W2", "ReaderShell", "readerTocPhase", [
-    ["reader-toc-loading", "loading", "loading", ["ReaderDirectoryPanel", "Loading"], ["reader.toc.load"]],
-    ["reader-toc-offline", "offline", "offline", ["ReaderDirectoryPanel", "Offline", "Button"], ["reader.toc.offline", "reader.toc.load"]],
-    ["reader-toc-error", "error", "error", ["ReaderDirectoryPanel", "ErrorState", "Button"], ["reader.toc.error", "reader.toc.load"]],
+    ["reader-toc-loading", "loading", "loading", ["DirectoryPanel", "Loading"], ["reader.toc.load"]],
+    ["reader-toc-offline", "offline", "offline", ["DirectoryPanel", "Offline", "Button"], ["reader.toc.offline", "reader.toc.load"]],
+    ["reader-toc-error", "error", "error", ["DirectoryPanel", "ErrorState", "Button"], ["reader.toc.error", "reader.toc.load"]],
   ]),
   ...workflowExpectations("W2", "ReaderShell", "readerContentPhase", [
     ["reader-content-loading", "loading", "loading", ["ReadingTextFlow", "Loading"], ["reader.content.load"]],
@@ -82,23 +82,23 @@ export const R16B_WORKFLOW_ROUTE_EXPECTATIONS = Object.freeze({
     ["source-switch-preview", "default", "preview", ["SourceSwitchFlowPage", "SourceSwitchResultsPanel", "Button"], ["source.switch.preview", "source.switch.confirm"]],
   ]),
   ...workflowExpectations("W4", "ReaderShell", "fontManagePhase", [
-    ["reader-font-import-confirm", "default", "importing", ["ReaderAppearancePanel", "Dialog", "Button"], ["reader.font.import"]],
-    ["reader-font-delete-confirm", "default", "deleting", ["ReaderAppearancePanel", "Dialog", "Button"], ["reader.font.delete"]],
-    ["reader-font-fallback", "default", "fallback", ["ReaderAppearancePanel", "Toast", "Button"], ["reader.font.fallback"]],
+    ["reader-font-import-confirm", "default", "importing", ["AppearancePanel", "Dialog", "Button"], ["reader.font.import"]],
+    ["reader-font-delete-confirm", "default", "deleting", ["AppearancePanel", "Dialog", "Button"], ["reader.font.delete"]],
+    ["reader-font-fallback", "default", "fallback", ["AppearancePanel", "Toast", "Button"], ["reader.font.fallback"]],
   ]),
   ...workflowExpectations("W4", "ReaderShell", "themeManagePhase", [
-    ["reader-theme-new", "default", "new", ["ReaderAppearancePanel", "FormSection", "Button"], ["reader.theme.new"]],
-    ["reader-theme-delete-confirm", "default", "delete", ["ReaderAppearancePanel", "Dialog", "Button"], ["reader.theme.delete"]],
+    ["reader-theme-new", "default", "new", ["AppearancePanel", "FormSection", "Button"], ["reader.theme.new"]],
+    ["reader-theme-delete-confirm", "default", "delete", ["AppearancePanel", "Dialog", "Button"], ["reader.theme.delete"]],
   ]),
   ...workflowExpectations("W4", "ReaderShell", "typographyManagePhase", [
-    ["reader-typography-reset-confirm", "default", "reset", ["ReaderAppearancePanel", "Dialog", "Button"], ["reader.typography.reset"]],
+    ["reader-typography-reset-confirm", "default", "reset", ["AppearancePanel", "Dialog", "Button"], ["reader.typography.reset"]],
   ]),
   ...workflowExpectations("W5", "ReaderShell", "replaceRulePhase", [
-    ["reader-replace-delete-confirm", "default", "delete", ["ReaderReplacePanel", "Dialog", "Button"], ["reader.replace.delete"]],
-    ["reader-replace-apply-result", "default", "apply", ["ReaderReplacePanel", "Content", "Button"], ["reader.replace.undo"]],
-    ["reader-replace-import-export", "default", "import", ["ReaderReplacePanel", "FormSection", "Button"], ["reader.replace.import", "reader.replace.export"]],
-    ["reader-replace-preview", "default", "preview", ["ReaderReplacePanel", "Content", "Button"], ["reader.replace.preview", "reader.replace.apply"]],
-    ["reader-replace-page", "default", "idle", ["ReaderReplacePanel", "List", "Button"], ["reader.replace.create"]],
+    ["reader-replace-delete-confirm", "default", "delete", ["ReplacePanel", "Dialog", "Button"], ["reader.replace.delete"]],
+    ["reader-replace-apply-result", "default", "apply", ["ReplacePanel", "Content", "Button"], ["reader.replace.undo"]],
+    ["reader-replace-import-export", "default", "import", ["ReplacePanel", "FormSection", "Button"], ["reader.replace.import", "reader.replace.export"]],
+    ["reader-replace-preview", "default", "preview", ["ReplacePanel", "Content", "Button"], ["reader.replace.preview", "reader.replace.apply"]],
+    ["reader-replace-page", "default", "idle", ["ReplacePanel", "List", "Button"], ["reader.replace.create"]],
   ]),
 });
 

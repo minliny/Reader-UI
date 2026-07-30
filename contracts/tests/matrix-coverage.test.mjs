@@ -68,15 +68,9 @@ const P0_ROUTES = [
   "immersive-reading",
   "reader",
   "reader_content",
-  "control-layer-base-v2",
-  "reader-appearance-overlay-v2",
-  "reader-tts-overlay-v2",
-  "reader-settings-overlay-v2",
-  "reader-search-overlay-v2",
-  "reader-replace-overlay-v2",
-  "reader-directory-overlay-v2",
-  "reader-auto-scroll-overlay-v2",
-  "tts",
+  // A2 strict physical removal retired the 8 reader control/overlay routes and
+  // the legacy tts module route (MAJOR); they are no longer P0 until their
+  // Figma-backed native conversion re-adds them to route.schema.json.
   "auto-page",
   "source-switch",
   "source-switch-results",

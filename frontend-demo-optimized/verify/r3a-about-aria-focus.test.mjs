@@ -3,15 +3,19 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import vm from "node:vm";
-const root = join(dirname(fileURLToPath(import.meta.url)), ".."); const sources = ["shared-shell-kit/kit.js", "appearance-spec.js", "control-identity-declarations.js", "renderers/d2-settings-sync-renderers.js"].map((file) => readFileSync(join(root, file), "utf8"));
-function fresh() { const window = { localStorage: { getItem() { return null; }, setItem() {}, removeItem() {} }, ReaderFrontendDemoDraftRouteContract: { routes: {}, routePresentation: {} } }; const context = vm.createContext({ window, module: { exports: {} }, Promise, setTimeout }); sources.forEach((source) => new vm.Script(source).runInContext(context)); const api = window.ReaderD2SettingsSyncRenderers; api.about.initState(); return api; }
+const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+const rendererSource = readFileSync(join(root, "renderers/d2-settings-sync-renderers.js"), "utf8");
+const runtimeSource = readFileSync(join(root, "render-runtime.js"), "utf8");
 
-test("R3a external controls explicitly declare safe external semantics", () => { const api = fresh(); const html = api.renderD2Route("about-feedback", {}, {}) + api.renderD2Route("about", {}, {}) + api.renderD2Route("about-version", {}, {}); for (const key of ["source-repository", "open-source-license", "contribute", "rate-app", "license-list", "view-license", "download-latest"]) assert.match(html, new RegExp(`data-settings-key="${key}"[^>]*data-external-action="${key}" rel="noopener noreferrer"`)); });
-test("R3a feedback entries use overlay semantics and focus-return markers", () => { const api = fresh(); for (const route of ["about-feedback", "about"]) { const html = api.renderD2Route(route, {}, {}); assert.match(html, /data-settings-overlay="dialog:feedback-entry"/); assert.match(html, /data-restore-focus="(feedback-submit-entry|feedback-entry)"/); } });
-test("R3a feedback dialog is modal labelled and has deterministic initial focus", () => { const api = fresh(); api.about.dispatch({ type: "FEEDBACK_ENTRY_OPEN" }); const html = api.renderD2Route("about", {}, {}); assert.match(html, /role="dialog" aria-modal="true" aria-labelledby="about-feedback-dialog-title"/); assert.match(html, /data-dialog-initial-focus="feedback-entry"/); });
-test("R3a update loading exposes busy and disabled", async () => { const api = fresh(); let release; const pending = api.about.executeUpdateCheck(() => new Promise((resolve) => { release = resolve; })); await Promise.resolve(); assert.match(api.renderD2Route("about-version", {}, {}), /data-settings-key="version-check-update" aria-busy="true" disabled/); release(true); await pending; });
-test("R3a update failure exposes invalid and error title", async () => { const api = fresh(); await api.about.executeUpdateCheck(() => { throw new Error("offline"); }); assert.match(api.renderD2Route("about", {}, {}), /data-settings-key="check-update" aria-invalid="true" title="offline"/); });
-test("R3a external loading only disables the target action", async () => { const api = fresh(); let release; const pending = api.about.executeExternalAction("download-latest", () => new Promise((resolve) => { release = resolve; })); await Promise.resolve(); const html = api.renderD2Route("about-version", {}, {}); assert.match(html, /data-settings-key="download-latest"[^>]*aria-busy="true" disabled/); assert.doesNotMatch(html, /data-settings-key="view-license"[^>]*disabled/); release(true); await pending; });
-test("R3a external failure exposes accessible error state", async () => { const api = fresh(); await api.about.executeExternalAction("rate-app", () => { throw new Error("store down"); }); assert.match(api.renderD2Route("about-feedback", {}, {}), /data-settings-key="rate-app"[^>]*aria-invalid="true" title="store down"/); });
-test("R3a every stamped control has a business key accessible-name source", () => { const api = fresh(); for (const route of ["about-feedback", "about", "about-version"]) { const html = api.renderD2Route(route, {}, {}); for (const tag of html.match(/<(?:button|article)[^>]*data-control-key=[^>]*>/g) || []) assert.match(tag, /aria-label=|data-settings-key=/); } });
+test("withdrawn About family exposes no focusable or external-action surface", () => {
+  assert.doesNotMatch(rendererSource, /data-external-action|about-feedback-dialog-title|feedback-submit-entry|version-check-update/);
+});
+
+test("withdrawn About family is absent from settings navigation", () => {
+  assert.doesNotMatch(runtimeSource, /title:\s*["']关于与反馈["']|route:\s*["']about-feedback["']/);
+});
+
+test("withdrawn About routes remain named fail-closed cases", () => {
+  assert.match(runtimeSource, /case ["']about-feedback["']:/);
+  assert.match(runtimeSource, /was explicitly withdrawn and has no production renderer/);
+});

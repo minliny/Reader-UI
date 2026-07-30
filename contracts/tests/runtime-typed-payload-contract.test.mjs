@@ -24,17 +24,20 @@ const resultFixtureSchema = JSON.parse(fs.readFileSync(path.join(root, "contract
 const resultFixtures = JSON.parse(fs.readFileSync(path.join(root, "contracts", "fixtures", "runtime-result-contract.fixtures.json"), "utf8"));
 const canonicalUiEventFixtures = JSON.parse(fs.readFileSync(path.join(root, "contracts", "fixtures", "ui-event.fixtures.json"), "utf8"));
 const consumers = JSON.parse(fs.readFileSync(path.join(root, "ui-spec", "host-consumers.json"), "utf8"));
+const versionManifest = JSON.parse(fs.readFileSync(path.join(root, "contracts", "VERSION.json"), "utf8"));
 
 test("typed payload registry and fixtures pass their machine schemas", () => {
   assertValid(contractSchema, contracts, "runtime-payload-contracts.json");
   assertValid(fixtureSchema, fixtures, "runtime-payload-contract.fixtures.json");
   assertValid(resultFixtureSchema, resultFixtures, "runtime-result-contract.fixtures.json");
+  assert.equal(contracts.schemaVersion, 4);
+  assert.equal(versionManifest.schema["runtime-payload-contracts"], "4.0.0");
   assert.equal(contracts.contracts.length, 67);
   assert.equal(new Set(contracts.contracts.map((item) => item.event)).size, 67);
   assert.deepEqual(new Set(contracts.contracts.map((item) => item.event)), new Set(actions.actions.map((item) => item.event)));
   assert.equal(fixtures.length, 190);
   assert.equal(contracts.contracts.reduce((count, item) => count + item.resultSchemas.length, 0), 77);
-  assert.equal(resultFixtures.length, 162);
+  assert.equal(resultFixtures.length, 165);
   for (const contract of contracts.contracts) {
     assert.ok(Array.isArray(contract.resultSchemas), `${contract.event} must explicitly declare resultSchemas`);
   }

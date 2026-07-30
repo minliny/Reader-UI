@@ -212,8 +212,12 @@ enum class ComponentType {
     ReaderBottomBar,
     @SerialName("ReaderDirectoryPanel")
     ReaderDirectoryPanel,
+    @SerialName("DirectoryPanel")
+    DirectoryPanel,
     @SerialName("ReaderAppearancePanel")
     ReaderAppearancePanel,
+    @SerialName("AppearancePanel")
+    AppearancePanel,
     @SerialName("ReaderTtsPanel")
     ReaderTtsPanel,
     @SerialName("ReaderSettingsPanel")
@@ -234,6 +238,8 @@ enum class ComponentType {
     ReaderSearchPanel,
     @SerialName("ReaderReplacePanel")
     ReaderReplacePanel,
+    @SerialName("ReplacePanel")
+    ReplacePanel,
     @SerialName("ReaderAutoScrollPanel")
     ReaderAutoScrollPanel,
     @SerialName("FloatingBrightness")

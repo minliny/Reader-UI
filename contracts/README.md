@@ -36,7 +36,7 @@ Native UI
 
 ## 已交付清单
 
-### Schema（22 个）
+### Schema（23 个）
 
 | 阶段 | Schema | 说明 |
 |---|---|---|
@@ -50,9 +50,9 @@ Native UI
 | Design intake | design-delta | 冻结 Figma revision、D0-D4 影响集、兼容/回滚、Host 证据和发布要求 |
 | Product capability | product-capability | 项目能力到 Figma、Reader-UI、Core/Host、原生 Host 的分层交付与验收状态 |
 
-### Fixtures（1333 项）
+### Fixtures（1314 项）
 
-- Phase 1：route 260 / ui-event 188 / ui-state 43 / view-state 190 / motion 95 / token 269
+- Phase 1：route 247 / ui-event 188 / ui-state 43 / view-state 183 / motion 95 / token 269
 - Phase 2：core-command 49 / core-event 35 / host-request 58 / host-result 58 / progress-location 6 / content 3 / sync-conflict 6
 - Phase 1 收尾：state-rule 16
 - Phase 1-2 Motion Runtime：motion-policy 53
@@ -66,7 +66,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 
 ### Generated（48 个 =（15 个 native-codegen contract + ScreenGraph）× 3 端）
 
-22 个 contract schema 中，R18 的 2 个 device-conformance schema、platform-evidence-manifest、host-result、design-delta、product-capability 与 control-identity 是验证/证据边界；当前原生 enum/model codegen 仍以 15 个 contract schema（含 Reader 2 AppearanceSpec）加 ScreenGraph 为输入。
+23 个 contract schema 中，R18 的 2 个 device-conformance schema、platform-evidence-manifest、host-result、design-delta、product-capability 与 control-identity 是验证/证据边界；当前原生 enum/model codegen 仍以 15 个 contract schema（含 Reader 2 AppearanceSpec）加 ScreenGraph 为输入。
 
 - `generated/swift/` —— 16 个 .swift 文件
 - `generated/kotlin/` —— 16 个 .kt 文件
@@ -88,7 +88,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 | state-rule.test.mjs | — | StateRule schema + fixtures + 关键规则 |
 | codegen-consistency.test.mjs | — | 三端 generated enum 一致性 + drift check |
 | codegen-idempotent.test.mjs | 6 | codegen 可执行性 + 48 个 generated 文件幂等性 |
-| screen-graph.test.mjs | 33 | 260-route graph、97 canonical bindings（41 executable runtime payload + 56 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
+| screen-graph.test.mjs | 33 | 247-route graph、97 canonical bindings（41 executable runtime payload + 56 planned/fail-closed，61 explicit target）/ 19 state evidence / 6 action gaps、authority/composition semantics、三语言 registry 与 fail-closed |
 | device-conformance-kit.test.mjs | 9 | 三端 174 项计划、可信 identity/artifact、低 tier/伪证据拒绝 |
 | registry-codegen.test.mjs | 8 | MotionSpecRegistry / TokenRegistry 三端输出、fixture 关键项、token refs、guardRules、reducedMotion、value registry 覆盖 |
 | motion-policy.test.mjs | 14 | MotionPolicy schema / fixtures / motionId 引用 / operation 覆盖 / no-match diagnostic / 示例 policy |
@@ -102,6 +102,7 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 | product-capability-coverage.test.mjs | 5 | 24 项产品能力分母、Route/UiEvent 引用、四层状态与证据边界 |
 | platform-evidence-manifest.test.mjs | 6 | Slice 0–12 exact-set、三端模板、canonical route、依赖 DAG、template 防冒充与 execution `passed` fail-closed |
 | planning-consistency.test.mjs | 8 | 规划分母、Slice 3/7、正式 Slice 9–12、evidence/README/ACCEPTANCE 与 Figma VC/MR 口径防漂移 |
+| runtime-payload-source-repin-transaction.test.mjs | 34 | repin 事务 journal/recovery、CAS 已知 hash 自动恢复 vs 未知 hash 手工恢复、safeUnlink EACCES/EIO 传播与 ENOENT 吞、rename->mark 窗口真实 SIGKILL、git env 隔离、自包含 Core Git fixture 的只读 CLI 校验 |
 
 ### Demo 一致性校验
 
@@ -115,9 +116,9 @@ Slice 覆盖：业务 fixtures 按 `_comment` 标注 Slice 1–6，覆盖 6 个�
 
 ```text
 contracts/
-  *.schema.json          # 22 个契约 schema
-  fixtures/              # 1333 项可被 schema 扫描的 fixtures
-  tests/                 # 31 个测试文件 + validate.mjs
+  *.schema.json          # 23 个契约 schema
+  fixtures/              # 1314 项可被 schema 扫描的 fixtures
+  tests/                 # 38 个测试文件 + validate.mjs
   ACCEPTANCE.md          # §10 合并门槛 7 问
   VERSION.json           # 语义版本与 changelog
 

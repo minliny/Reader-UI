@@ -52,3 +52,395 @@
   align-content: center;
   grid-template-rows: 32px 16px;
 }
+
+/* Library/BookActionSheet · canonical component 2903:1737. */
+.fd-book-action-layer[aria-hidden="true"] {
+  display: none;
+}
+
+.fd-book-action-layer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--fd-ds-z-dialog);
+  pointer-events: none;
+}
+
+.fd-book-action-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.fd-book-action-sheet {
+  position: absolute;
+  z-index: 1;
+  right: 12px;
+  bottom: 0;
+  left: 12px;
+  height: 224px;
+  box-sizing: border-box;
+  padding: 0 14px;
+  border: 1px solid #c1c7cd;
+  border-radius: 24px 24px 0 0;
+  background: rgba(255, 252, 248, 0.92);
+  box-shadow: 0 18px 46px rgba(89, 70, 50, 0.16);
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  pointer-events: auto;
+}
+
+.fd-book-action-handle {
+  width: 42px;
+  height: 4px;
+  display: block;
+  margin: 9px auto 21px;
+  border-radius: var(--fd-radius-pill);
+  background: #756f69;
+}
+
+.fd-book-action-sheet > h2 {
+  height: 20px;
+  margin: 0 0 16px;
+  color: #1f1b17;
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.fd-book-action-sheet > button {
+  width: 100%;
+  height: 40px;
+  min-width: 0;
+  min-height: 40px;
+  margin: 0 0 6px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 12px;
+  background: rgba(45, 74, 62, 0.09);
+  color: #1f1b17;
+  font: inherit;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.fd-book-action-sheet > button:last-child {
+  margin-bottom: 0;
+}
+
+.fd-book-action-sheet > button.is-danger {
+  background: rgba(214, 71, 61, 0.1);
+  color: #d7473e;
+}
+
+.fd-book-action-sheet > button:focus-visible {
+  outline: 2px solid #2d4a3e;
+  outline-offset: 2px;
+}
+
+/* Bookshelf/MultiSelect · component set 2956:1266. */
+.fd-bookshelf-multi-select {
+  position: relative;
+  width: var(--fd-runtime-phone-width, 390px);
+  height: var(--fd-runtime-phone-height, 844px);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 39px 56px minmax(0, 1fr) 82px;
+  border: 0;
+  border-radius: 0;
+  background: #f8f4ec;
+  color: #1f1b17;
+}
+
+.fd-bookshelf-multi-select > .fd-status-bar {
+  position: static;
+  grid-row: 1;
+}
+
+.fd-bookshelf-multi-select-topbar {
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 60px minmax(0, 1fr) 60px;
+  align-items: center;
+  padding: 6px 20px;
+  border-bottom: 0;
+}
+
+.fd-bookshelf-multi-select-topbar h1 {
+  margin: 0;
+  font-family: "Noto Serif SC", "Songti SC", var(--fd-serif, serif);
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.fd-bookshelf-multi-select-topbar button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #2d4a3e;
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.fd-bookshelf-multi-select-topbar button:first-child {
+  justify-self: start;
+}
+
+.fd-bookshelf-multi-select-topbar button:last-child {
+  justify-self: end;
+}
+
+.fd-bookshelf-multi-select-content {
+  grid-row: 3;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 12px 19px 20px;
+  scrollbar-width: thin;
+}
+
+.fd-bookshelf-multi-select-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  row-gap: 12px;
+  column-gap: 30px;
+}
+
+.fd-bookshelf-multi-select-card,
+.fd-bookshelf-multi-select-card > button {
+  min-width: 0;
+}
+
+.fd-bookshelf-multi-select-card > button {
+  width: 100%;
+  display: grid;
+  grid-template-rows: auto 18.3px 15px;
+  gap: 3px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #1f1b17;
+  text-align: left;
+}
+
+.fd-bookshelf-multi-select-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #ede6db;
+  margin-bottom: 3px;
+}
+
+.fd-bookshelf-multi-select-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.fd-bookshelf-multi-select-check {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 22px;
+  height: 22px;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+  border: 1px solid #b3b3b3;
+  border-radius: var(--fd-radius-circle);
+  background: rgba(255, 255, 255, 0.85);
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  font-family: Inter, var(--fd-sans, sans-serif);
+  font-size: 14px;
+  line-height: 1;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.fd-bookshelf-multi-select-card.is-selected .fd-bookshelf-multi-select-check {
+  border-color: #f58517;
+  background: #f58517;
+}
+
+.fd-bookshelf-multi-select-card strong,
+.fd-bookshelf-multi-select-card small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fd-bookshelf-multi-select-card strong {
+  font-family: "Noto Serif SC", "Songti SC", var(--fd-serif, serif);
+  font-size: 15px;
+  line-height: 18.3px;
+  font-weight: 700;
+}
+
+.fd-bookshelf-multi-select-card small {
+  color: #756f69;
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 400;
+}
+
+.fd-bookshelf-multi-select-footer {
+  grid-row: 4;
+  display: grid;
+  align-items: center;
+  height: 82px;
+  box-sizing: border-box;
+  padding: 0;
+  border-top: 1px solid rgba(193, 199, 205, 0.72);
+  background: rgba(255, 252, 248, 0.96);
+}
+
+.fd-bookshelf-multi-select-footer button {
+  width: 100%;
+  height: 82px;
+  min-height: 82px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: #d7473e;
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.fd-bookshelf-multi-select-footer button svg {
+  width: 22px;
+  height: 22px;
+}
+
+.fd-bookshelf-multi-select-footer button span {
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.fd-bookshelf-multi-select-footer button:disabled {
+  opacity: 0.42;
+}
+
+/* Existing canonical DeleteDialog state family (2269:66). */
+.fd-bookshelf-remove-layer {
+  position: absolute;
+  inset: 0;
+  z-index: var(--fd-ds-z-dialog);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.fd-bookshelf-remove-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  background: rgba(31, 27, 23, 0.4);
+}
+
+.fd-bookshelf-remove-dialog {
+  position: relative;
+  z-index: 1;
+  width: min(306px, 100%);
+  min-height: 190px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto minmax(44px, 1fr) 44px;
+  gap: 12px;
+  padding: 20px;
+  border: 1px solid #c1c7cd;
+  border-radius: 18px;
+  background: #fffcf8;
+  box-shadow: 0 18px 40px rgba(89, 70, 50, 0.16);
+}
+
+.fd-bookshelf-remove-dialog h2,
+.fd-bookshelf-remove-dialog p {
+  margin: 0;
+}
+
+.fd-bookshelf-remove-dialog h2 {
+  font-family: "Noto Serif SC", "Songti SC", var(--fd-serif, serif);
+  font-size: 18px;
+  line-height: 26px;
+}
+
+.fd-bookshelf-remove-dialog p {
+  color: #756f69;
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  font-size: 12px;
+  line-height: 18px;
+}
+
+.fd-bookshelf-remove-dialog > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.fd-bookshelf-remove-dialog button {
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--fd-radius-pill);
+  background: rgba(237, 230, 219, 0.64);
+  color: #1f1b17;
+  font-family: "Noto Sans SC", Inter, var(--fd-sans, sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fd-bookshelf-remove-dialog button.is-danger {
+  background: #d7473e;
+  color: #fff;
+}
+
+@media (min-width: 700px) {
+  .fd-book-action-sheet {
+    right: 20px;
+    bottom: 0;
+    left: 20px;
+    width: auto;
+    border-radius: 24px 24px 0 0;
+  }
+
+  .fd-bookshelf-multi-select-content {
+    width: 622px;
+    box-sizing: border-box;
+    justify-self: center;
+    padding: 12px 0 20px;
+  }
+
+  .fd-bookshelf-multi-select-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 12px;
+    column-gap: 30px;
+  }
+}

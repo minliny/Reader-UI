@@ -8,6 +8,7 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.doubleOrNull
 import kotlinx.serialization.json.intOrNull
 
 /** Canonical recursive JSON representation shared with generated contracts. */
@@ -99,6 +100,38 @@ private fun ReaderUIJSONResult.optionalResultBoolean(key: String): Boolean? {
     if (value == null || value === JsonNull) return null
     return (value as? JsonPrimitive)?.takeIf { !it.isString }?.booleanOrNull
         ?: throw ReaderUIRuntimeException("INVALID_JSON_RESULT", "result.$key must be a JSON boolean or null")
+}
+
+private fun ReaderUIJSONResult.optionalCanonicalLocation(): ReaderUICanonicalLocation? {
+    val value = this["canonicalLocation"] ?: return null
+    val objectValue = value as? JsonObject ?: return null
+    val bookId = objectValue.stringValue("bookId")?.takeIf { it.isNotBlank() } ?: return null
+    val chapterIndex = jsonInt(objectValue["chapterIndex"])?.takeIf { it >= 0 } ?: return null
+    val chapterOffset = jsonInt(objectValue["chapterOffset"])?.takeIf { it >= 0 } ?: return null
+    val chapterProgress = (objectValue["chapterProgress"] as? JsonPrimitive)
+        ?.takeIf { !it.isString }?.doubleOrNull
+        ?.takeIf { it.isFinite() && it in 0.0..1.0 } ?: return null
+    val locationRevision = objectValue.stringValue("locationRevision")?.takeIf { it.isNotBlank() } ?: return null
+    return ReaderUICanonicalLocation(
+        bookId = bookId,
+        chapterIndex = chapterIndex,
+        chapterOffset = chapterOffset,
+        chapterProgress = chapterProgress,
+        locationRevision = locationRevision
+    )
+}
+
+private fun ReaderUIJSONResult.optionalLocationReflow(): ReaderUILocationReflow? {
+    val value = this["reflow"] ?: return null
+    val objectValue = value as? JsonObject ?: return null
+    if (objectValue.stringValue("strategy") != "offsetAnchor" ||
+        objectValue.stringValue("primaryAnchor") != "chapterOffset" ||
+        objectValue.stringValue("fallbackAnchor") != "chapterProgress" ||
+        (objectValue["layoutIndependent"] as? JsonPrimitive)?.booleanOrNull != true ||
+        (this["resolved"] as? JsonPrimitive)?.booleanOrNull != true) {
+        return null
+    }
+    return ReaderUILocationReflow()
 }
 
 enum class ReaderUIEffectKind { CORE, HOST }
@@ -217,6 +250,21 @@ data class ReaderUIPageLayout(
     val fontScale: Double
 )
 
+data class ReaderUICanonicalLocation(
+    val bookId: String,
+    val chapterIndex: Int,
+    val chapterOffset: Int,
+    val chapterProgress: Double,
+    val locationRevision: String
+)
+
+data class ReaderUILocationReflow(
+    val strategy: String = "offsetAnchor",
+    val primaryAnchor: String = "chapterOffset",
+    val fallbackAnchor: String = "chapterProgress",
+    val layoutIndependent: Boolean = true
+)
+
 data class ReaderUIPageTransaction(
     val correlationId: String,
     val direction: String,
@@ -227,7 +275,8 @@ data class ReaderUIPageTransaction(
     val stage: String = "awaiting-layout",
     val payload: ReaderUIJSONPayload = emptyMap(),
     val layout: ReaderUIPageLayout? = null,
-    val pendingCanonicalLocation: String? = null,
+    val pendingCanonicalLocation: ReaderUICanonicalLocation? = null,
+    val pendingLocationReflow: ReaderUILocationReflow? = null,
     val pendingPageIndex: Int? = null
 )
 
@@ -294,7 +343,8 @@ data class ReaderUIState(
     val loading: Boolean = false,
     val reducedMotion: Boolean = false,
     val readerPageIndex: Int = 0,
-    val readerCanonicalLocation: String? = null,
+    val readerCanonicalLocation: ReaderUICanonicalLocation? = null,
+    val readerLocationReflow: ReaderUILocationReflow? = null,
     val focusTarget: String? = null,
     val error: String? = null,
     val bookOpenTransaction: ReaderUIBookOpenTransaction? = null,
@@ -699,8 +749,9 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         coreType: String,
         correlationId: String,
         chapterCount: Int? = null,
-        canonicalLocation: String? = null,
-        pageIndex: Int? = null,
+        selectedChapterIndex: Int? = null,
+        canonicalLocation: ReaderUICanonicalLocation? = null,
+        reflow: ReaderUILocationReflow? = null,
         error: String? = null
     ): ReaderUIAsyncTransition {
         val previous = state
@@ -717,7 +768,15 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
                 state = state.copy(loading = false, error = "BOOK_OPEN_EMPTY_TOC", bookOpenTransaction = null)
                 return ReaderUIAsyncTransition(true, previous, state, emptyList())
             }
-            transaction = transaction.copy(selectedChapterIndex = minOf(transaction.requestedChapterIndex, chapterCount - 1))
+            if (selectedChapterIndex == null || selectedChapterIndex < 0) {
+                state = state.copy(
+                    loading = false,
+                    error = "BOOK_OPEN_INVALID_CHAPTER_IDENTITY",
+                    bookOpenTransaction = null
+                )
+                return ReaderUIAsyncTransition(true, previous, state, emptyList())
+            }
+            transaction = transaction.copy(selectedChapterIndex = selectedChapterIndex)
         }
         if (coreType == "content.load") {
             transaction = transaction.copy(awaitingLayout = true)
@@ -725,11 +784,16 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             return ReaderUIAsyncTransition(true, previous, state, emptyList())
         }
         if (coreType == "reader.location.resolve") {
-            if (canonicalLocation.isNullOrBlank() || pageIndex == null || pageIndex < 0) {
+            val expectedBookId = transaction.payload.stringValue("bookId")
+            val expectedChapterIndex = transaction.selectedChapterIndex ?: transaction.requestedChapterIndex
+            if (canonicalLocation == null || reflow == null ||
+                canonicalLocation.bookId != expectedBookId ||
+                canonicalLocation.chapterIndex != expectedChapterIndex ||
+                canonicalLocation.chapterOffset != transaction.layout?.chapterOffset) {
                 state = state.copy(loading = false, error = "BOOK_OPEN_LOCATION_INVALID_RESULT", bookOpenTransaction = null)
                 return ReaderUIAsyncTransition(true, previous, state, emptyList())
             }
-            state = state.copy(readerCanonicalLocation = canonicalLocation, readerPageIndex = pageIndex)
+            state = state.copy(readerCanonicalLocation = canonicalLocation, readerLocationReflow = reflow)
         }
         val nextStageIndex = transaction.stageIndex + 1
         if (nextStageIndex >= transaction.stages.size) {
@@ -758,8 +822,9 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             coreType = coreType,
             correlationId = correlationId,
             chapterCount = validated.optionalResultInt("chapterCount"),
-            canonicalLocation = validated.optionalResultString("canonicalLocation"),
-            pageIndex = validated.optionalResultInt("pageIndex"),
+            selectedChapterIndex = validated.optionalResultInt("selectedChapterIndex"),
+            canonicalLocation = validated.optionalCanonicalLocation(),
+            reflow = validated.optionalLocationReflow(),
             error = validated.optionalResultString("error")
         )
     }
@@ -827,15 +892,17 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             return playbackResult(false, previous)
         }
         validatePageLayout(layout)
-        val updated = transaction.copy(stage = "resolving-location", layout = layout)
+        val candidate = transaction.copy(layout = layout)
+        val locationEffect = pageLocationEffect(candidate)
+        val updated = candidate.copy(stage = "resolving-location")
         state = state.copy(pageTransaction = updated)
-        return playbackResult(true, previous, effects = listOf(pageLocationEffect(updated)))
+        return playbackResult(true, previous, effects = listOf(locationEffect))
     }
 
     fun acceptPageLocationResult(
         correlationId: String,
-        canonicalLocation: String? = null,
-        pageIndex: Int? = null,
+        canonicalLocation: ReaderUICanonicalLocation? = null,
+        reflow: ReaderUILocationReflow? = null,
         error: String? = null
     ): ReaderUIPlaybackTransition {
         val previous = state
@@ -849,7 +916,11 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             finishFailedAutoPage(transaction)
             return playbackResult(true, previous)
         }
-        if (canonicalLocation.isNullOrBlank() || pageIndex == null || pageIndex < 0) {
+        val expectedBookId = state.readerCanonicalLocation?.bookId
+        if (canonicalLocation == null || reflow == null ||
+            canonicalLocation.chapterIndex != transaction.layout?.chapterIndex ||
+            canonicalLocation.chapterOffset != transaction.layout?.chapterOffset ||
+            (expectedBookId != null && canonicalLocation.bookId != expectedBookId)) {
             state = state.copy(pageTransaction = null)
             state = state.copy(error = "PAGE_LOCATION_INVALID_RESULT")
             finishFailedAutoPage(transaction)
@@ -859,7 +930,8 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             pageTransaction = transaction.copy(
                 stage = "persisting-progress",
                 pendingCanonicalLocation = canonicalLocation,
-                pendingPageIndex = pageIndex
+                pendingLocationReflow = reflow,
+                pendingPageIndex = transaction.layout?.targetPageIndex
             ),
             error = null
         )
@@ -883,14 +955,16 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             return playbackResult(true, previous)
         }
         val canonicalLocation = transaction.pendingCanonicalLocation
+        val reflow = transaction.pendingLocationReflow
         val pageIndex = transaction.pendingPageIndex
-        if (stored != true || canonicalLocation.isNullOrBlank() || pageIndex == null || pageIndex < 0) {
+        if (stored != true || canonicalLocation == null || reflow == null || pageIndex == null || pageIndex < 0) {
             state = state.copy(error = "PAGE_PROGRESS_INVALID_RESULT")
             finishFailedAutoPage(transaction)
             return playbackResult(true, previous)
         }
         state = state.copy(
             readerCanonicalLocation = canonicalLocation,
+            readerLocationReflow = reflow,
             readerPageIndex = pageIndex,
             error = null
         )
@@ -938,8 +1012,8 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
         validateReaderUITypedResult(transaction.contractEvent, "reader.location.resolve", validated)
         return acceptPageLocationResult(
             correlationId = correlationId,
-            canonicalLocation = validated.optionalResultString("canonicalLocation"),
-            pageIndex = validated.optionalResultInt("pageIndex"),
+            canonicalLocation = validated.optionalCanonicalLocation(),
+            reflow = validated.optionalLocationReflow(),
             error = validated.optionalResultString("error")
         )
     }
@@ -1345,17 +1419,21 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
 
     private fun pageLocationEffect(transaction: ReaderUIPageTransaction): ReaderUIEffect {
         val layout = requireNotNull(transaction.layout)
+        val currentLocation = state.readerCanonicalLocation
+            ?: fail("MISSING_CANONICAL_LOCATION", "reader.location.resolve requires the committed Core book identity")
         val payload = buildMap {
-            putAll(transaction.payload)
-            put("direction", JsonPrimitive(transaction.direction))
-            put("anchor", JsonPrimitive(layout.anchor))
-            put("targetPageIndex", JsonPrimitive(layout.targetPageIndex))
+            put("bookId", JsonPrimitive(currentLocation.bookId))
             put("chapterIndex", JsonPrimitive(layout.chapterIndex))
-            put("chapterOffset", JsonPrimitive(layout.chapterOffset))
-            put("chapterProgress", JsonPrimitive(layout.chapterProgress))
-            put("viewportWidth", JsonPrimitive(layout.viewportWidth))
-            put("viewportHeight", JsonPrimitive(layout.viewportHeight))
-            put("fontScale", JsonPrimitive(layout.fontScale))
+            put("anchor", JsonObject(mapOf(
+                "chapterOffset" to JsonPrimitive(layout.chapterOffset),
+                "chapterProgress" to JsonPrimitive(layout.chapterProgress)
+            )))
+            put("layout", JsonObject(mapOf(
+                "viewportWidth" to JsonPrimitive(layout.viewportWidth),
+                "viewportHeight" to JsonPrimitive(layout.viewportHeight),
+                "fontScale" to JsonPrimitive(layout.fontScale),
+                "pageIndex" to JsonPrimitive(layout.targetPageIndex)
+            )))
         }
         return readerUIEffect(ReaderUIEffectKind.CORE, "reader.location.resolve", payload, transaction.correlationId)
     }
@@ -1697,8 +1775,34 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
             transaction.correlationId
         )
 
-    private fun bookOpenEffectPayload(transaction: ReaderUIBookOpenTransaction): ReaderUIJSONPayload =
-        buildMap {
+    private fun bookOpenEffectPayload(transaction: ReaderUIBookOpenTransaction): ReaderUIJSONPayload {
+        if (transaction.stage == "reader.location.resolve") {
+            val layout = transaction.layout
+                ?: fail("INVALID_LAYOUT", "book.open location resolve requires measured layout")
+            val bookId = transaction.payload.stringValue("bookId")
+                ?.takeIf { it.isNotBlank() }
+                ?: fail("MISSING_BOOK_ID", "book.open location resolve requires bookId")
+            return buildMap {
+                put("bookId", JsonPrimitive(bookId))
+                put("chapterIndex", JsonPrimitive(
+                    transaction.selectedChapterIndex ?: transaction.requestedChapterIndex
+                ))
+                put("anchor", JsonObject(mapOf(
+                    "chapterOffset" to JsonPrimitive(layout.chapterOffset),
+                    "chapterProgress" to JsonPrimitive(layout.chapterProgress)
+                )))
+                put("layout", JsonObject(mapOf(
+                    "viewportWidth" to JsonPrimitive(layout.viewportWidth),
+                    "viewportHeight" to JsonPrimitive(layout.viewportHeight),
+                    "fontScale" to JsonPrimitive(layout.fontScale)
+                )))
+                transaction.payload.stringValue("sourceId")
+                    ?.takeIf { it.isNotBlank() }?.let { put("sourceId", JsonPrimitive(it)) }
+                transaction.payload.stringValue("chapterTitle")
+                    ?.takeIf { it.isNotBlank() }?.let { put("chapterTitle", JsonPrimitive(it)) }
+            }
+        }
+        return buildMap {
             putAll(transaction.payload)
             put("sourceKind", JsonPrimitive(transaction.sourceKind))
             put("chapterIndex", JsonPrimitive(transaction.selectedChapterIndex ?: transaction.requestedChapterIndex))
@@ -1710,6 +1814,7 @@ class ReaderUIRuntime(initialState: ReaderUIState = ReaderUIState()) {
                 put("fontScale", JsonPrimitive(layout.fontScale))
             }
         }
+    }
 
     private fun restoreBookOpenStart(
         transaction: ReaderUIBookOpenTransaction,

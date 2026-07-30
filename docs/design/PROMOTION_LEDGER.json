@@ -2,5 +2,1182 @@
   "kind": "PROMOTION_LEDGER",
   "version": "1.0.0",
   "description": "Tamper-evident append-only log of every harmony.status → implementation-ready promotion. Each entry is chained to the previous entry's hash. An agent MUST NOT hand-edit this file; entries are only appended by promote-family.mjs. The HarmonyOS enforce-implementation-ready-gate.mjs verifies that every implementation-ready registry record has a corresponding ledger entry with a valid chain — this is what makes 'hand-editing harmony.status to green' a detectable bypass.",
-  "entries": []
+  "entries": [
+    {
+      "entryId": "promote-001",
+      "timestamp": "2026-07-27T09:01:20.112Z",
+      "recordId": "reader.reading-surface",
+      "pageFamily": "reader-runtime/reading-surface",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "immersive-reading",
+        "reader",
+        "reader_content"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/reader-runtime/reading-surface/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
+        "implementationCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a",
+        "verificationSuites": [
+          {
+            "suite": "figmaSourceContract",
+            "tests": 4,
+            "passed": 4,
+            "failed": 0
+          },
+          {
+            "suite": "focusedReaderRegression",
+            "tests": 59,
+            "passed": 59,
+            "failed": 0
+          },
+          {
+            "suite": "sourceQuarantineRelease",
+            "tests": 1,
+            "passed": 1,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "1023:18354",
+        "canonicalMasterId": "1023:18354"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets#ReaderBase"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:d46b3b328019a2f428d187551ab5c90d34207dce92cb2244e305966b21e9050c",
+      "upstreamArtifactHashAfter": "sha256:f01ae1eff10f07324ecd4ba21acee6d417d504997f419d4c5b68020585b13cc9",
+      "consumerArtifactHashAfter": "sha256:f01ae1eff10f07324ecd4ba21acee6d417d504997f419d4c5b68020585b13cc9",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "genesis",
+      "entryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41"
+    },
+    {
+      "entryId": "retract-002",
+      "kind": "retract",
+      "timestamp": "2026-07-27T11:45:37.470Z",
+      "recordId": "reader.reading-surface",
+      "pageFamily": "reader-runtime/reading-surface",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "immersive-reading",
+        "reader",
+        "reader_content"
+      ],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "A2 closure incomplete before promotion: 13 quarantined routes (reader.control-home 8 overlays + reader.module.directory/tts/appearance/settings + reader.quick.content-search) still physically present in source schema/fixtures/generated RouteTable+ViewStateTable; b3-ready test inverted and enforce-implementation-ready-gate.mjs relaxed to compat-type to permit this promotion; consumer lock drift in oh-package-lock.json5+build-profile.json5; 23 historical reader implementations not proven unreachable. Retracting to candidate-backport to redo B2/B3 in correct order.",
+      "reversalOf": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
+      "reversalOfEntryId": "promote-001",
+      "retractedPromotion": {
+        "entryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
+        "entryId": "promote-001",
+        "sourceEvidenceHash": "sha256:a32a6bd5b9343489ab6f050cdac0749db6ecaa2741e894fac26f11b8e01eb852",
+        "implementationCommit": "a37b5fc9a758be09f30555730ddacc41c463a55a"
+      },
+      "registryHashBefore": "sha256:0201bf78ec2944efe18e6421668e00b1861224292f829cc9fded683116da49dc",
+      "upstreamArtifactHashAfter": "sha256:c71ce43009cbeead632bbab7a778ac657a997e1a41385944aea88c9bfcdf1017",
+      "consumerArtifactHashAfter": "sha256:c71ce43009cbeead632bbab7a778ac657a997e1a41385944aea88c9bfcdf1017",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:33426f4f40fa7a34a3cc4b7ad9290498809da43a509fa54093d4dc2e765c7b41",
+      "entryHash": "sha256:8e53ea2d59467cc77a5d92feefa696a6d221f78a3af9c219386ea38126888648"
+    },
+    {
+      "entryId": "promote-003",
+      "kind": "promote",
+      "timestamp": "2026-07-29T17:13:18.765Z",
+      "recordId": "reader.reading-surface",
+      "pageFamily": "reader-runtime/reading-surface",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "immersive-reading",
+        "reader",
+        "reader_content"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/reader-runtime/reading-surface/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:b931f2f8ad97623b09c86931cbd48462bd42aef06d1fdb74266b237bad1ded07",
+        "implementationCommit": "4e5e75d802810c4c5b4e2cc8ed64091b418a7e92",
+        "verificationSuites": [
+          {
+            "suite": "figmaSourceContract",
+            "tests": 4,
+            "passed": 4,
+            "failed": 0
+          },
+          {
+            "suite": "focusedReaderRegression",
+            "tests": 59,
+            "passed": 59,
+            "failed": 0
+          },
+          {
+            "suite": "sourceQuarantineRelease",
+            "tests": 2,
+            "passed": 2,
+            "failed": 0
+          },
+          {
+            "suite": "a2ReaderUiSourceRetirement",
+            "tests": 5,
+            "passed": 5,
+            "failed": 0
+          },
+          {
+            "suite": "pageAnimationContract",
+            "tests": 4,
+            "passed": 4,
+            "failed": 0
+          },
+          {
+            "suite": "fullContractSuite",
+            "tests": 492,
+            "passed": 492,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "1023:18354",
+        "canonicalMasterId": "1023:18354"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/ReaderComponents.ets#ReaderBase"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2ce37cf59ec6f4f6a092822cd205a6a62c0baf79f5e429604c33d9c05d389302",
+      "upstreamArtifactHashAfter": "sha256:642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7",
+      "consumerArtifactHashAfter": "sha256:642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:8e53ea2d59467cc77a5d92feefa696a6d221f78a3af9c219386ea38126888648",
+      "entryHash": "sha256:292c76bfefa6f384eea01febc2697b5c8dfd043a828b6df9ee016a4ef920671d"
+    },
+    {
+      "entryId": "promote-004",
+      "kind": "promote",
+      "timestamp": "2026-07-30T00:34:01.707Z",
+      "transactionId": "promotion-group-c113bf4e79e2f56658bf",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.page",
+      "pageFamily": "bookshelf",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-empty",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 61,
+            "passed": 61,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 577,
+            "passed": 577,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "941:6",
+        "canonicalMasterId": "941:6"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/MainTabShell.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookshelfShelfSection"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:e1173f60392748b1035792374b55ef9e57702f90ced4adbd5fedbdbfb3d996f1",
+      "upstreamArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "consumerArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:292c76bfefa6f384eea01febc2697b5c8dfd043a828b6df9ee016a4ef920671d",
+      "entryHash": "sha256:f2d45adb55de1677e626c691d7156c35ad024b8d9e5c477b888e039a53dc54ad"
+    },
+    {
+      "entryId": "promote-005",
+      "kind": "promote",
+      "timestamp": "2026-07-30T00:34:01.707Z",
+      "transactionId": "promotion-group-c113bf4e79e2f56658bf",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.book-card",
+      "pageFamily": "bookshelf",
+      "surfaceType": "component",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 61,
+            "passed": 61,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 577,
+            "passed": 577,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "493:196",
+        "canonicalMasterId": "493:196"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookCard"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:e1173f60392748b1035792374b55ef9e57702f90ced4adbd5fedbdbfb3d996f1",
+      "upstreamArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "consumerArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:f2d45adb55de1677e626c691d7156c35ad024b8d9e5c477b888e039a53dc54ad",
+      "entryHash": "sha256:72d9e21771a933b43fbc803ad30d94b7d346508adcb2c6be10e94f3e1d3d20df"
+    },
+    {
+      "entryId": "promote-006",
+      "kind": "promote",
+      "timestamp": "2026-07-30T00:34:01.707Z",
+      "transactionId": "promotion-group-c113bf4e79e2f56658bf",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.action-sheet",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 61,
+            "passed": 61,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 577,
+            "passed": 577,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "2903:1737",
+        "canonicalMasterId": "2903:1737"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookActionSheet"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:e1173f60392748b1035792374b55ef9e57702f90ced4adbd5fedbdbfb3d996f1",
+      "upstreamArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "consumerArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:72d9e21771a933b43fbc803ad30d94b7d346508adcb2c6be10e94f3e1d3d20df",
+      "entryHash": "sha256:6c8dd2227e99d4fe8cfce57b57f470b91d5e04e29035b74e0e1209ff1d454301"
+    },
+    {
+      "entryId": "promote-007",
+      "kind": "promote",
+      "timestamp": "2026-07-30T00:34:01.707Z",
+      "transactionId": "promotion-group-c113bf4e79e2f56658bf",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.multi-select",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 61,
+            "passed": 61,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 577,
+            "passed": 577,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "2956:1266",
+        "canonicalMasterId": "2956:1266"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookshelfMultiSelect"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:e1173f60392748b1035792374b55ef9e57702f90ced4adbd5fedbdbfb3d996f1",
+      "upstreamArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "consumerArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:6c8dd2227e99d4fe8cfce57b57f470b91d5e04e29035b74e0e1209ff1d454301",
+      "entryHash": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471"
+    },
+    {
+      "entryId": "promote-008",
+      "kind": "promote",
+      "timestamp": "2026-07-30T00:34:01.707Z",
+      "transactionId": "promotion-group-c113bf4e79e2f56658bf",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.local-import-dialog",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 61,
+            "passed": 61,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 577,
+            "passed": 577,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "2657:918",
+        "canonicalMasterId": "2657:918"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderLocalImportDialog"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:e1173f60392748b1035792374b55ef9e57702f90ced4adbd5fedbdbfb3d996f1",
+      "upstreamArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "consumerArtifactHashAfter": "sha256:50116e98acbd2774930b7dfc224ac50fa0254579eb8158d96f791664cbdbe52e",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471",
+      "entryHash": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712"
+    },
+    {
+      "entryId": "retract-009",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.page",
+      "pageFamily": "bookshelf",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-empty",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:f2d45adb55de1677e626c691d7156c35ad024b8d9e5c477b888e039a53dc54ad",
+      "reversalOfEntryId": "promote-004",
+      "retractedPromotion": {
+        "entryHash": "sha256:f2d45adb55de1677e626c691d7156c35ad024b8d9e5c477b888e039a53dc54ad",
+        "entryId": "promote-004",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712",
+      "entryHash": "sha256:1bbc700b69d8010af8352c635be2122d278d14e2b4699428396a0659bc87dffb"
+    },
+    {
+      "entryId": "retract-010",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.book-card",
+      "pageFamily": "bookshelf",
+      "surfaceType": "component",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:72d9e21771a933b43fbc803ad30d94b7d346508adcb2c6be10e94f3e1d3d20df",
+      "reversalOfEntryId": "promote-005",
+      "retractedPromotion": {
+        "entryHash": "sha256:72d9e21771a933b43fbc803ad30d94b7d346508adcb2c6be10e94f3e1d3d20df",
+        "entryId": "promote-005",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:1bbc700b69d8010af8352c635be2122d278d14e2b4699428396a0659bc87dffb",
+      "entryHash": "sha256:d88f61115be6e51abc375f4173efa0dee3b34f225602de5779049d071aa2a14d"
+    },
+    {
+      "entryId": "retract-011",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.action-sheet",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:6c8dd2227e99d4fe8cfce57b57f470b91d5e04e29035b74e0e1209ff1d454301",
+      "reversalOfEntryId": "promote-006",
+      "retractedPromotion": {
+        "entryHash": "sha256:6c8dd2227e99d4fe8cfce57b57f470b91d5e04e29035b74e0e1209ff1d454301",
+        "entryId": "promote-006",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:d88f61115be6e51abc375f4173efa0dee3b34f225602de5779049d071aa2a14d",
+      "entryHash": "sha256:336ca4178a8f6fbe0eb86c39a4f08a3c41b01c253d653095591c2956283d7497"
+    },
+    {
+      "entryId": "retract-012",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.multi-select",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471",
+      "reversalOfEntryId": "promote-007",
+      "retractedPromotion": {
+        "entryHash": "sha256:720adf23f21be517d18c0cb88cfcf073f4f5243899d57d54c56932523ac7b471",
+        "entryId": "promote-007",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:336ca4178a8f6fbe0eb86c39a4f08a3c41b01c253d653095591c2956283d7497",
+      "entryHash": "sha256:e9c015ab1f5e2b43ecd46690a31859b4164a6716ed2f2aeb08d092c8f285811b"
+    },
+    {
+      "entryId": "retract-013",
+      "kind": "retract",
+      "timestamp": "2026-07-30T00:52:50.281Z",
+      "transactionId": "retraction-group-97bce165c2d74b80b622",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog"
+      ],
+      "recordId": "bookshelf.local-import-dialog",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "implementation-ready",
+      "newHarmonyStatus": "candidate-backport",
+      "localStatus": "implementation-ready",
+      "reason": "direct Figma audit found stale Reader-UI action-sheet and multi-select geometry plus misclassified Phone list admission",
+      "reversalOf": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712",
+      "reversalOfEntryId": "promote-008",
+      "retractedPromotion": {
+        "entryHash": "sha256:79a6d8ab2cb476ab30cd23498706630086e6dd679c5a90bf865b64164fa5f712",
+        "entryId": "promote-008",
+        "sourceEvidenceHash": "sha256:e7a9d5e7be50a97eb99ac01386fe3cb6eee482061d412c0d5a8e32d3f7e21945",
+        "implementationCommit": "8c984963344307d2cd58afa26be63ce285a56c9d"
+      },
+      "registryHashBefore": "sha256:7af66a2f97b22083df7e31c7a6951708a8e0ac2fdf61ebcc0e9ff6e948f5ed82",
+      "upstreamArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "consumerArtifactHashAfter": "sha256:4fab7ab2c71dadd99eb2474dfa3574e0af5f107872eee386f12026732ea8fbb3",
+      "artifactsInSync": true,
+      "retractedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:e9c015ab1f5e2b43ecd46690a31859b4164a6716ed2f2aeb08d092c8f285811b",
+      "entryHash": "sha256:e9bb6e78d16e3367f34ea0f3134001e5237b5fdce967f35090886c8a63a9f5eb"
+    },
+    {
+      "entryId": "promote-014",
+      "kind": "promote",
+      "timestamp": "2026-07-30T01:15:02.912Z",
+      "transactionId": "promotion-group-dd5668ca631f8233ead1",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "recordId": "bookshelf.page",
+      "pageFamily": "bookshelf",
+      "surfaceType": "route-family",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-empty",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+        "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 62,
+            "passed": 62,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 578,
+            "passed": 578,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "941:6",
+        "canonicalMasterId": "941:6"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/shells/MainTabShell.ets",
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookshelfShelfSection"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2200c88bc5e3590bf620835b6ac9e5a43dfccb8591406922cd1787f27437adec",
+      "upstreamArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "consumerArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:e9bb6e78d16e3367f34ea0f3134001e5237b5fdce967f35090886c8a63a9f5eb",
+      "entryHash": "sha256:eac84c201606e0dcc23ed4af625f06356cfa7a61f927d1d0fb0520db56d229be"
+    },
+    {
+      "entryId": "promote-015",
+      "kind": "promote",
+      "timestamp": "2026-07-30T01:15:02.912Z",
+      "transactionId": "promotion-group-dd5668ca631f8233ead1",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "recordId": "bookshelf.book-card",
+      "pageFamily": "bookshelf",
+      "surfaceType": "component",
+      "routeIds": [
+        "bookshelf",
+        "bookshelf-cover-mode"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+        "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 62,
+            "passed": 62,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 578,
+            "passed": 578,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "493:196",
+        "canonicalMasterId": "493:196"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookCard"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2200c88bc5e3590bf620835b6ac9e5a43dfccb8591406922cd1787f27437adec",
+      "upstreamArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "consumerArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:eac84c201606e0dcc23ed4af625f06356cfa7a61f927d1d0fb0520db56d229be",
+      "entryHash": "sha256:bcdabb39ce3c2bda17059664db621f5d47f566c4ec5a034700b24afba68a6d2b"
+    },
+    {
+      "entryId": "promote-016",
+      "kind": "promote",
+      "timestamp": "2026-07-30T01:15:02.912Z",
+      "transactionId": "promotion-group-dd5668ca631f8233ead1",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "recordId": "bookshelf.action-sheet",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+        "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 62,
+            "passed": 62,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 578,
+            "passed": 578,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "2903:1737",
+        "canonicalMasterId": "2903:1737"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookActionSheet"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2200c88bc5e3590bf620835b6ac9e5a43dfccb8591406922cd1787f27437adec",
+      "upstreamArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "consumerArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:bcdabb39ce3c2bda17059664db621f5d47f566c4ec5a034700b24afba68a6d2b",
+      "entryHash": "sha256:457f001e6578c828224bc8cabba267fa21de351da0bd2462038b46cf3feaaa56"
+    },
+    {
+      "entryId": "promote-017",
+      "kind": "promote",
+      "timestamp": "2026-07-30T01:15:02.912Z",
+      "transactionId": "promotion-group-dd5668ca631f8233ead1",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "recordId": "bookshelf.multi-select",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+        "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 62,
+            "passed": 62,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 578,
+            "passed": 578,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "2956:1266",
+        "canonicalMasterId": "2956:1266"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderBookshelfMultiSelect"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2200c88bc5e3590bf620835b6ac9e5a43dfccb8591406922cd1787f27437adec",
+      "upstreamArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "consumerArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:457f001e6578c828224bc8cabba267fa21de351da0bd2462038b46cf3feaaa56",
+      "entryHash": "sha256:10e3133341246531cd06fe69930917b5aca0cedd6e3c4070c60213c110daffcf"
+    },
+    {
+      "entryId": "promote-018",
+      "kind": "promote",
+      "timestamp": "2026-07-30T01:15:02.912Z",
+      "transactionId": "promotion-group-dd5668ca631f8233ead1",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "recordId": "bookshelf.local-import-dialog",
+      "pageFamily": "bookshelf",
+      "surfaceType": "overlay-component",
+      "routeIds": [],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+        "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 62,
+            "passed": 62,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 578,
+            "passed": 578,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "2657:918",
+        "canonicalMasterId": "2657:918"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/slots/OverlayHost.ets#renderLocalImportDialog"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2200c88bc5e3590bf620835b6ac9e5a43dfccb8591406922cd1787f27437adec",
+      "upstreamArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "consumerArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:10e3133341246531cd06fe69930917b5aca0cedd6e3c4070c60213c110daffcf",
+      "entryHash": "sha256:8b06b5859389c088cc87c83811e332e13ddef21e10d3d9b8f9ea45b9f6935f1c"
+    },
+    {
+      "entryId": "promote-019",
+      "kind": "promote",
+      "timestamp": "2026-07-30T01:15:02.912Z",
+      "transactionId": "promotion-group-dd5668ca631f8233ead1",
+      "transactionRecordIds": [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode"
+      ],
+      "recordId": "bookshelf.list-mode",
+      "pageFamily": "bookshelf",
+      "surfaceType": "viewport-exception",
+      "routeIds": [
+        "bookshelf-list-mode"
+      ],
+      "previousHarmonyStatus": "candidate-backport",
+      "newHarmonyStatus": "implementation-ready",
+      "localStatus": "implementation-ready",
+      "localReadyForFigma": {
+        "path": "docs/design/handoffs/bookshelf/LOCAL_READY_FOR_FIGMA.json",
+        "stage": "implementation-ready",
+        "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+        "localReadyForFigma": true,
+        "sourceEvidenceHash": "sha256:4e854cb474bb1f3ed5806c5d7dc910c171c42b392fff1282bc95910226451369",
+        "implementationCommit": "b8cf1a785e48571e321a2bef1bc3f330e6e1fc1f",
+        "verificationSuites": [
+          {
+            "suite": "focusedBookshelf",
+            "tests": 62,
+            "passed": 62,
+            "failed": 0
+          },
+          {
+            "suite": "frontendRegression",
+            "tests": 578,
+            "passed": 578,
+            "failed": 0
+          },
+          {
+            "suite": "identityInventoryRegression",
+            "tests": 87,
+            "passed": 87,
+            "failed": 0
+          },
+          {
+            "suite": "contractRegressionExcludingReleaseAndDeviceEvidence",
+            "tests": 471,
+            "passed": 471,
+            "failed": 0
+          }
+        ]
+      },
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "revision": "2379851596474967636",
+        "officialCurrentRevision": "2379851596474967636",
+        "nodeId": "493:196",
+        "canonicalMasterId": "493:196"
+      },
+      "harmonyConsumerTargets": [
+        "Reader-for-HarmonyOS/entry/src/main/ets/ui/components/BookshelfComponents.ets#BookList"
+      ],
+      "harmonyConsumerTargetsVerified": true,
+      "registryHashBefore": "sha256:2200c88bc5e3590bf620835b6ac9e5a43dfccb8591406922cd1787f27437adec",
+      "upstreamArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "consumerArtifactHashAfter": "sha256:a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee",
+      "artifactsInSync": true,
+      "promotedBy": "promote-family.mjs",
+      "previousEntryHash": "sha256:8b06b5859389c088cc87c83811e332e13ddef21e10d3d9b8f9ea45b9f6935f1c",
+      "entryHash": "sha256:4bff1c3a61671ecf9a3b42c7c54c6fb48011b4edfe0480abf7030b2a7bc560d1"
+    }
+  ]
 }

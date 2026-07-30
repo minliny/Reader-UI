@@ -34,30 +34,33 @@ const identityOnlyTokens = new Set(
 
 test("IC0 enumerates every direct variant and every alias case", () => {
   const cases = buildRenderCases(graph);
-  assert.equal(cases.length, 266);
-  assert.equal(artifacts.coverage.routeCases, 266);
-  assert.equal(artifacts.coverage.directVariantCases, 190);
-  assert.equal(artifacts.coverage.aliasCases, 76);
+  assert.equal(cases.length, 253);
+  assert.equal(artifacts.coverage.routeCases, 253);
+  assert.equal(artifacts.coverage.directVariantCases, 183);
+  assert.equal(artifacts.coverage.aliasCases, 70);
+  assert.equal(artifacts.coverage.exactFigmaAdmittedCases, 48);
+  assert.equal(artifacts.coverage.auditOnlyUnboundCases, 171);
+  assert.equal(artifacts.coverage.retiredFailClosedCases, 24);
+  assert.equal(artifacts.coverage.auditUnavailableFailClosedCases, 10);
   assert.equal(new Set(cases.map((item) => `${item.routeId}/${item.variant.variantId}`)).size, cases.length);
 });
 
 test("IC0 keeps the semantic denominator separate from suspected non-semantic controls", () => {
-  // The current deterministic denominator is 3,847. It includes the confirmed
-  // bookshelf-hosted local-import dialog and keeps only five search-history
-  // records; containers remain a separate denominator.
-  assert.equal(artifacts.coverage.semanticControls, 3847);
-  assert.equal(artifacts.inventory.semanticControls.length, 3847);
+  // Retired routes emit zero controls. Unbound candidates remain visible only
+  // to this Node audit and cannot pass the production Figma admission policy.
+  assert.equal(artifacts.coverage.semanticControls, 3142);
+  assert.equal(artifacts.inventory.semanticControls.length, 3142);
   assert.equal(
     artifacts.coverage.suspectedNonSemanticControls,
     artifacts.inventory.suspectedNonSemanticControls.length,
   );
   assert.ok(artifacts.coverage.suspectedNonSemanticControls > 0);
   assert.deepEqual(artifacts.coverage.semanticControlCoverage.byTag, {
-    article: 349,
-    button: 3373,
-    i: 28,
-    input: 50,
-    select: 13,
+    article: 326,
+    button: 2718,
+    i: 8,
+    input: 45,
+    select: 11,
     span: 33,
     textarea: 1,
   });
@@ -85,7 +88,7 @@ test("IC0 records required fields without inventing a canonical control id", () 
   assert.equal(artifacts.inventory.identityBoundary.canonicalControlIdAvailable, false);
   assert.equal(artifacts.coverage.semanticControlCoverage.canonicalControlIds, 0);
   assert.equal(artifacts.coverage.semanticControlCoverage.joinedControls, 0);
-  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3847);
+  assert.equal(artifacts.coverage.semanticControlCoverage.unjoinedControls, 3142);
 });
 
 test("IC0 treats allowlisted identity tokens as semantic slots and rejects unknown tokens", () => {
@@ -201,8 +204,8 @@ test("IC0 route motion normalization follows route push, pop, and replace contro
   const routeReplaceEvents = controls.filter((control) => control.uiEvent === "route.replace");
   // Source Switch state actions are reducer-owned UiEvents now; they no longer
   // masquerade as data-route-replace controls.
-  assert.equal(routeReplaceAttributes.length, 103);
-  assert.equal(routeReplaceEvents.length, 119);
+  assert.equal(routeReplaceAttributes.length, 84);
+  assert.equal(routeReplaceEvents.length, 100);
   assert.equal(
     routeReplaceEvents.every((control) => control.canonicalMotionIds.includes("app.route.replace")),
     true,

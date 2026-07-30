@@ -23,6 +23,9 @@ const coreCommandSchema = JSON.parse(fs.readFileSync(path.join(root, "contracts"
 const hostRequestSchema = JSON.parse(fs.readFileSync(path.join(root, "contracts", "host-request.schema.json"), "utf8"));
 const hostRequestFixtures = JSON.parse(fs.readFileSync(path.join(root, "contracts", "fixtures", "host-request.fixtures.json"), "utf8"));
 const consumerLockSchema = JSON.parse(fs.readFileSync(path.join(root, "ui-spec", "host-consumer-lock.schema.json"), "utf8"));
+const runtimePayloadContracts = JSON.parse(
+  fs.readFileSync(path.join(root, "ui-spec", "runtime-payload-contracts.json"), "utf8"),
+);
 const consumers = JSON.parse(fs.readFileSync(path.join(root, "ui-spec", "host-consumers.json"), "utf8"));
 const versionManifest = JSON.parse(fs.readFileSync(path.join(root, "contracts", "VERSION.json"), "utf8"));
 const ownershipSchema = JSON.parse(fs.readFileSync(path.join(root, "ui-spec", "runtime-ownership.schema.json"), "utf8"));
@@ -34,6 +37,8 @@ function activeReaderRuntime(overrides = {}) {
     ...initialReaderUIState(),
     routeId: "immersive-reading",
     routeStack: ["bookshelf"],
+    readerCanonicalLocation: resolvedLocation().canonicalLocation,
+    readerLocationReflow: resolvedLocation().reflow,
     ...overrides
   });
 }
@@ -49,6 +54,31 @@ function measuredPageLayout(overrides = {}) {
     viewportHeight: 844,
     fontScale: 1,
     ...overrides
+  };
+}
+
+function resolvedLocation({
+  bookId = "book-1",
+  chapterIndex = 4,
+  chapterOffset = 120,
+  chapterProgress = 0.42,
+} = {}) {
+  return {
+    canonicalLocation: {
+      bookId,
+      chapterIndex,
+      chapterOffset,
+      chapterProgress,
+      locationRevision: `reader-location-v1:${bookId}:${chapterIndex}:${chapterOffset}`,
+    },
+    resolverVersion: "reader.location.resolve.v1.reflow",
+    resolved: true,
+    reflow: {
+      strategy: "offsetAnchor",
+      primaryAnchor: "chapterOffset",
+      fallbackAnchor: "chapterProgress",
+      layoutIndependent: true,
+    },
   };
 }
 
@@ -144,12 +174,14 @@ test("host consumer manifest is complete and lock schema accepts the canonical s
     "reader.autoPage.stop"
   ]);
   assertValid(consumerLockSchema, {
-    schemaVersion: 2,
+    schemaVersion: 3,
     host: "ios",
     readerUiVersion: "2.5.1",
     hostRequestSchemaVersion: "1.1.0",
     runtimeActionsSchemaVersion: spec.schemaVersion,
     runtimeActionsSha256: "0".repeat(64),
+    runtimePayloadContractsSchemaVersion: runtimePayloadContracts.schemaVersion,
+    runtimePayloadContractsSha256: "4".repeat(64),
     releaseIdentity: {
       releaseId: `${"1".repeat(40)}:${"2".repeat(64)}`,
       sourceSha: "1".repeat(40),
@@ -329,8 +361,7 @@ test("runtime payloads preserve recursive JSON types and reject non-JSON values"
 
 test("runtime results preserve recursive JSON types and reject invalid result values", () => {
   const result = {
-    canonicalLocation: "chapter-4:p3",
-    pageIndex: 3,
+    ...resolvedLocation(),
     metadata: {
       cached: true,
       ratio: 0.42,
@@ -352,8 +383,7 @@ test("runtime results preserve recursive JSON types and reject invalid result va
   runtime.dispatch("reader.page.next", {}, "json-result");
   runtime.providePageLayout("json-result", measuredPageLayout({ targetPageIndex: 3 }));
   const accepted = runtime.acceptPageLocationResult("json-result", {
-    canonicalLocation: "chapter-4:p3",
-    pageIndex: 3
+    ...resolvedLocation({ chapterOffset: 120 }),
   });
   assert.equal(accepted.accepted, true);
   assert.deepEqual(accepted.effects.map((effect) => effect.type), ["reader.progress.update"]);
@@ -377,10 +407,12 @@ test("book.open is a serial result-dependent Core transaction", () => {
   assert.equal(detail.accepted, true);
   assert.deepEqual(detail.effects.map((effect) => effect.type), ["chapter.list"]);
 
-  const toc = runtime.acceptBookOpenResult("chapter.list", "open-1", { chapterCount: 3 });
+  const toc = runtime.acceptBookOpenResult(
+    "chapter.list", "open-1", { chapterCount: 3, selectedChapterIndex: 9 }
+  );
   assert.equal(toc.accepted, true);
   assert.deepEqual(toc.effects.map((effect) => effect.type), ["content.load"]);
-  assert.equal(toc.effects[0].jsonPayload.chapterIndex, 1);
+  assert.equal(toc.effects[0].jsonPayload.chapterIndex, 9);
 
   const content = runtime.acceptBookOpenResult("content.load", "open-1");
   assert.equal(content.accepted, true);
@@ -409,16 +441,38 @@ test("book.open is a serial result-dependent Core transaction", () => {
   });
   assert.equal(layout.accepted, true);
   assert.deepEqual(layout.effects.map((effect) => effect.type), ["reader.location.resolve"]);
-  assert.equal(layout.effects[0].jsonPayload.viewportWidth, 390);
+  assert.deepEqual(layout.effects[0].jsonPayload, {
+    sourceId: "source-1",
+    bookId: "book-1",
+    chapterIndex: 9,
+    anchor: {
+      chapterOffset: 12,
+      chapterProgress: 0.4,
+    },
+    layout: {
+      viewportWidth: 390,
+      viewportHeight: 844,
+      fontScale: 1,
+    },
+  });
 
   const complete = runtime.acceptBookOpenResult("reader.location.resolve", "open-1", {
-    canonicalLocation: "chapter:2:offset:120",
-    pageIndex: 2
+    ...resolvedLocation({
+      bookId: "book-1",
+      chapterIndex: 9,
+      chapterOffset: 12,
+      chapterProgress: 0.4,
+    }),
   });
   assert.equal(complete.accepted, true);
   assert.equal(runtime.state.loading, false);
-  assert.equal(runtime.state.readerCanonicalLocation, "chapter:2:offset:120");
-  assert.equal(runtime.state.readerPageIndex, 2);
+  assert.deepEqual(runtime.state.readerCanonicalLocation, resolvedLocation({
+    bookId: "book-1",
+    chapterIndex: 9,
+    chapterOffset: 12,
+    chapterProgress: 0.4,
+  }).canonicalLocation);
+  assert.equal(runtime.state.readerPageIndex, 0, "Core result must not invent a visual pageIndex");
   assert.equal(runtime.state.bookOpenTransaction, null);
 });
 
@@ -445,18 +499,21 @@ test("local book.open skips detail and never loads an empty TOC", () => {
     "local-open"
   );
   assert.deepEqual(start.effects.map((effect) => effect.type), ["chapter.list"]);
-  const empty = runtime.acceptBookOpenResult("chapter.list", "local-open", { chapterCount: 0 });
+  const empty = runtime.acceptBookOpenResult(
+    "chapter.list", "local-open", { chapterCount: 0, selectedChapterIndex: 0 }
+  );
   assert.equal(empty.accepted, true);
   assert.deepEqual(empty.effects, []);
   assert.equal(runtime.state.error, "BOOK_OPEN_EMPTY_TOC");
 });
 
 test("page transaction commits only a matching canonical location result", () => {
-  const runtime = activeReaderRuntime({ readerPageIndex: 4, readerCanonicalLocation: "old-location" });
+  const oldLocation = resolvedLocation({ chapterOffset: 80 }).canonicalLocation;
+  const runtime = activeReaderRuntime({ readerPageIndex: 4, readerCanonicalLocation: oldLocation });
   const start = runtime.dispatch("reader.page.next", {}, "page-1");
   assert.deepEqual(start.effects, []);
   assert.equal(start.state.readerPageIndex, 4);
-  assert.equal(start.state.readerCanonicalLocation, "old-location");
+  assert.deepEqual(start.state.readerCanonicalLocation, oldLocation);
 
   const beforeInvalid = runtime.state;
   assert.throws(
@@ -468,29 +525,31 @@ test("page transaction commits only a matching canonical location result", () =>
   const resolving = runtime.providePageLayout("page-1", measuredPageLayout());
   assert.deepEqual(resolving.effects.map((effect) => effect.type), ["reader.location.resolve"]);
   assert.equal(runtime.state.readerPageIndex, 4);
-  assert.equal(runtime.acceptPageLocationResult("other", { canonicalLocation: "late", pageIndex: 5 }).accepted, false);
+  assert.equal(runtime.acceptPageLocationResult("other", resolvedLocation()).accepted, false);
 
   const failed = runtime.acceptPageLocationResult("page-1", { error: "LOCATION_FAILED" });
   assert.equal(failed.accepted, true);
   assert.equal(runtime.state.readerPageIndex, 4);
-  assert.equal(runtime.state.readerCanonicalLocation, "old-location");
-  assert.equal(runtime.acceptPageLocationResult("page-1", { canonicalLocation: "late", pageIndex: 5 }).accepted, false);
+  assert.deepEqual(runtime.state.readerCanonicalLocation, oldLocation);
+  assert.equal(runtime.acceptPageLocationResult("page-1", resolvedLocation()).accepted, false);
 
   runtime.dispatch("reader.page.next", {}, "page-invalid");
   runtime.providePageLayout("page-invalid", measuredPageLayout());
   assert.throws(
-    () => runtime.acceptPageLocationResult("page-invalid", { canonicalLocation: "   ", pageIndex: 5 }),
+    () => runtime.acceptPageLocationResult("page-invalid", {
+      ...resolvedLocation(),
+      pageIndex: 5,
+    }),
     (error) => error instanceof ReaderUIRuntimeError && error.code === "INVALID_TYPED_RESULT"
   );
   assert.equal(runtime.state.error, null);
   assert.equal(runtime.state.readerPageIndex, 4);
-  assert.equal(runtime.state.readerCanonicalLocation, "old-location");
+  assert.deepEqual(runtime.state.readerCanonicalLocation, oldLocation);
 
   runtime.dispatch("reader.page.prev", {}, "page-2");
   runtime.providePageLayout("page-2", measuredPageLayout({ targetPageIndex: 3 }));
   const persisting = runtime.acceptPageLocationResult("page-2", {
-    canonicalLocation: "canonical-ch4-p3",
-    pageIndex: 3
+    ...resolvedLocation(),
   });
   assert.equal(persisting.accepted, true);
   assert.deepEqual(persisting.effects.map((effect) => effect.type), ["reader.progress.update"]);
@@ -512,21 +571,20 @@ test("page transaction commits only a matching canonical location result", () =>
   const committed = runtime.acceptPageProgressResult("page-2", { stored: true });
   assert.equal(committed.accepted, true);
   assert.equal(runtime.state.readerPageIndex, 3);
-  assert.equal(runtime.state.readerCanonicalLocation, "canonical-ch4-p3");
-  assert.equal(runtime.acceptPageLocationResult("page-2", { canonicalLocation: "duplicate", pageIndex: 9 }).accepted, false);
+  assert.deepEqual(runtime.state.readerCanonicalLocation, resolvedLocation().canonicalLocation);
+  assert.equal(runtime.acceptPageLocationResult("page-2", resolvedLocation()).accepted, false);
 
   runtime.dispatch("reader.page.next", {}, "page-progress-error");
   runtime.providePageLayout("page-progress-error", measuredPageLayout({ targetPageIndex: 4 }));
   runtime.acceptPageLocationResult("page-progress-error", {
-    canonicalLocation: "canonical-ch4-p4",
-    pageIndex: 4
+    ...resolvedLocation(),
   });
   const progressFailed = runtime.acceptPageProgressResult("page-progress-error", {
     error: "PROGRESS_STORE_FAILED"
   });
   assert.equal(progressFailed.accepted, true);
   assert.equal(runtime.state.readerPageIndex, 3);
-  assert.equal(runtime.state.readerCanonicalLocation, "canonical-ch4-p3");
+  assert.deepEqual(runtime.state.readerCanonicalLocation, resolvedLocation().canonicalLocation);
   assert.equal(runtime.state.error, "PROGRESS_STORE_FAILED");
 });
 
@@ -540,17 +598,31 @@ test("page intents supersede exactly once and explicit location shares the same 
   const explicit = runtime.beginPageStep("explicit", "page-explicit", { reason: "chapter-jump" });
   assert.deepEqual(explicit.cancelledCorrelationIds, ["page-b"]);
   const resolving = runtime.providePageLayout("page-explicit", measuredPageLayout({ targetPageIndex: 0 }));
-  assert.equal(resolving.effects[0].jsonPayload.direction, "explicit");
-  assert.equal(resolving.effects[0].jsonPayload.reason, "chapter-jump");
+  assert.deepEqual(resolving.effects[0].jsonPayload, {
+    bookId: "book-1",
+    chapterIndex: 4,
+    anchor: {
+      chapterOffset: 120,
+      chapterProgress: 0.42,
+    },
+    layout: {
+      viewportWidth: 390,
+      viewportHeight: 844,
+      fontScale: 1,
+      pageIndex: 0,
+    },
+  });
 });
 
 test("progress commit boundary blocks reader exit and book replacement without cross-route contamination", () => {
-  const runtime = activeReaderRuntime({ readerPageIndex: 2, readerCanonicalLocation: "book-a-page-2" });
+  const runtime = activeReaderRuntime({
+    readerPageIndex: 2,
+    readerCanonicalLocation: resolvedLocation({ bookId: "book-a" }).canonicalLocation,
+  });
   runtime.dispatch("reader.page.next", {}, "page-boundary");
   runtime.providePageLayout("page-boundary", measuredPageLayout({ targetPageIndex: 3 }));
   runtime.acceptPageLocationResult("page-boundary", {
-    canonicalLocation: "book-a-page-3",
-    pageIndex: 3
+    ...resolvedLocation({ bookId: "book-a" }),
   });
   const pending = runtime.state;
 
@@ -593,7 +665,7 @@ test("progress commit boundary blocks reader exit and book replacement without c
   );
   assert.equal(runtime.acceptPageProgressResult("page-boundary", { stored: true }).accepted, false);
   assert.equal(runtime.state.readerPageIndex, 3);
-  assert.equal(runtime.state.readerCanonicalLocation, "book-a-page-3");
+  assert.deepEqual(runtime.state.readerCanonicalLocation, resolvedLocation({ bookId: "book-a" }).canonicalLocation);
 });
 
 test("TTS advances plan then queue then system speech one effect at a time", () => {
@@ -637,7 +709,10 @@ test("TTS system-start failure tears down system before Core queue and drops lat
 });
 
 test("auto-page uses non-overlapping foreground one-shot timers and rearms only after commit", () => {
-  const runtime = activeReaderRuntime({ readerPageIndex: 1, readerCanonicalLocation: "page-1" });
+  const runtime = activeReaderRuntime({
+    readerPageIndex: 1,
+    readerCanonicalLocation: resolvedLocation().canonicalLocation,
+  });
   const start = runtime.dispatch("reader.autoPage.start", { intervalMs: "5000" }, "auto-1");
   assert.deepEqual(start.effects.map((effect) => effect.type), [READER_FOREGROUND_TIMER_ARM]);
   assert.ok(new Set(hostRequestSchema.properties.type.enum).has(start.effects[0].type));
@@ -659,15 +734,14 @@ test("auto-page uses non-overlapping foreground one-shot timers and rearms only 
 
   runtime.providePageLayout(pageCorrelation, measuredPageLayout({ targetPageIndex: 2 }));
   const persisting = runtime.acceptPageLocationResult(pageCorrelation, {
-    canonicalLocation: "page-2",
-    pageIndex: 2
+    ...resolvedLocation(),
   });
   assert.deepEqual(persisting.effects.map((effect) => effect.type), ["reader.progress.update"]);
   assert.equal(runtime.state.readerPageIndex, 1);
   const committed = runtime.acceptPageProgressResult(pageCorrelation, { stored: true });
   assert.deepEqual(committed.effects.map((effect) => effect.type), [READER_FOREGROUND_TIMER_ARM]);
   assert.equal(runtime.state.readerPageIndex, 2);
-  assert.equal(runtime.acceptPageLocationResult(pageCorrelation, { canonicalLocation: "late", pageIndex: 9 }).accepted, false);
+  assert.equal(runtime.acceptPageLocationResult(pageCorrelation, resolvedLocation()).accepted, false);
 
   const secondFire = runtime.acceptAutoPageTimerFired("auto-1", generation);
   const secondPage = secondFire.state.pageTransaction.correlationId;

@@ -1,7 +1,9 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 4,
   "sourceOfTruth": {
     "repository": "Reader-Core-Native",
+    "commit": "5a892ad9e05ec41e9cdf846da966d44f5624436d",
+    "tree": "1d8158e4ad04fe92059395302b6d1b40c1f8622e",
     "sources": [
       {
         "path": "crates/reader-contract/src/reader_ui.rs",
@@ -9,7 +11,7 @@
       },
       {
         "path": "crates/reader-contract/src/remote.rs",
-        "sha256": "42d01314b7054b67340d0f47548cd7c3f77cd269a7f7570e7fb719459c54aa9b"
+        "sha256": "5f2fd3457b478b7d4e2e5bc36878419568dce736f3439c2406602adf9b57fbd9"
       },
       {
         "path": "crates/reader-sync/src/lib.rs",
@@ -17,7 +19,7 @@
       },
       {
         "path": "crates/reader-storage/src/lib.rs",
-        "sha256": "1c2fd79a3a5f14a29ef22e7d93e76c0306c462a214146e530be8be7db5d37063"
+        "sha256": "27bfa6cd42929777578425c8addb36a17fa52cc72be41df64824cb25829b7e3b"
       }
     ],
     "numericPolicy": "ieee754-safe-integer"
@@ -2395,10 +2397,14 @@
           "type": "object",
           "additionalProperties": false,
           "required": [
-            "chapterCount"
+            "chapterCount",
+            "selectedChapterIndex"
           ],
           "properties": {
             "chapterCount": {
+              "$ref": "#/definitions/nonNegativeInteger"
+            },
+            "selectedChapterIndex": {
               "$ref": "#/definitions/nonNegativeInteger"
             }
           }
@@ -2415,14 +2421,76 @@
           "additionalProperties": false,
           "required": [
             "canonicalLocation",
-            "pageIndex"
+            "resolverVersion",
+            "resolved",
+            "reflow"
           ],
           "properties": {
             "canonicalLocation": {
-              "$ref": "#/definitions/nonBlankString"
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "bookId",
+                "chapterIndex",
+                "chapterOffset",
+                "chapterProgress",
+                "locationRevision"
+              ],
+              "properties": {
+                "bookId": {
+                  "$ref": "#/definitions/nonBlankString"
+                },
+                "chapterIndex": {
+                  "$ref": "#/definitions/u32"
+                },
+                "chapterOffset": {
+                  "$ref": "#/definitions/nonNegativeInteger"
+                },
+                "chapterProgress": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "locationRevision": {
+                  "$ref": "#/definitions/nonBlankString"
+                }
+              }
             },
-            "pageIndex": {
-              "$ref": "#/definitions/nonNegativeInteger"
+            "resolverVersion": {
+              "type": "string",
+              "const": "reader.location.resolve.v1.reflow"
+            },
+            "resolved": {
+              "type": "boolean",
+              "const": true
+            },
+            "reflow": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "strategy",
+                "primaryAnchor",
+                "fallbackAnchor",
+                "layoutIndependent"
+              ],
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "offsetAnchor"
+                },
+                "primaryAnchor": {
+                  "type": "string",
+                  "const": "chapterOffset"
+                },
+                "fallbackAnchor": {
+                  "type": "string",
+                  "const": "chapterProgress"
+                },
+                "layoutIndependent": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
             }
           }
         },

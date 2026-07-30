@@ -86,7 +86,7 @@ test("every local script directly loaded by the demo entrypoint is release-cover
 
 test("all six ordered native ABI hashes have exact names, counts, sources, and pointers", () => {
   const expectedCounts = {
-    "component-types": 174,
+    "component-types": 177,
     "core-commands": 72,
     "core-events": 95,
     "host-requests": 58,

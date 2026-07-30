@@ -21,7 +21,8 @@
     "effectType": "chapter.list",
     "valid": true,
     "result": {
-      "chapterCount": 3
+      "chapterCount": 3,
+      "selectedChapterIndex": 9
     }
   },
   {
@@ -31,6 +32,7 @@
     "valid": false,
     "result": {
       "chapterCount": 3,
+      "selectedChapterIndex": 9,
       "__unknown": true
     }
   },
@@ -56,8 +58,21 @@
     "effectType": "reader.location.resolve",
     "valid": true,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      }
     }
   },
   {
@@ -66,8 +81,21 @@
     "effectType": "reader.location.resolve",
     "valid": false,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1,
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      },
       "__unknown": true
     }
   },
@@ -193,8 +221,21 @@
     "effectType": "reader.location.resolve",
     "valid": true,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      }
     }
   },
   {
@@ -203,8 +244,21 @@
     "effectType": "reader.location.resolve",
     "valid": false,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1,
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      },
       "__unknown": true
     }
   },
@@ -274,8 +328,21 @@
     "effectType": "reader.location.resolve",
     "valid": true,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      }
     }
   },
   {
@@ -284,8 +351,21 @@
     "effectType": "reader.location.resolve",
     "valid": false,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1,
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      },
       "__unknown": true
     }
   },
@@ -582,8 +662,21 @@
     "effectType": "reader.location.resolve",
     "valid": true,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      }
     }
   },
   {
@@ -592,8 +685,21 @@
     "effectType": "reader.location.resolve",
     "valid": false,
     "result": {
-      "canonicalLocation": "chapter:1:offset:0",
-      "pageIndex": 1,
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      },
       "__unknown": true
     }
   },
@@ -1874,13 +1980,94 @@
     }
   },
   {
-    "id": "reader-page-next-unsafe-integer",
+    "id": "reader-page-next-rejects-wire-page-index",
     "event": "reader.page.next",
     "effectType": "reader.location.resolve",
     "valid": false,
     "result": {
-      "canonicalLocation": "chapter:1",
-      "pageIndex": 9007199254740992
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      },
+      "pageIndex": 1
+    }
+  },
+  {
+    "id": "reader-page-next-rejects-opaque-location-string",
+    "event": "reader.page.next",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      }
+    }
+  },
+  {
+    "id": "reader-page-next-rejects-independent-locator",
+    "event": "reader.page.next",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v1.reflow",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      },
+      "locator": {
+        "type": "char-offset",
+        "charOffset": 0
+      }
+    }
+  },
+  {
+    "id": "reader-page-next-rejects-wrong-resolver-version",
+    "event": "reader.page.next",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": {
+        "bookId": "book-1",
+        "chapterIndex": 1,
+        "chapterOffset": 0,
+        "chapterProgress": 0,
+        "locationRevision": "reader-location-v1:book-1:1:0"
+      },
+      "resolverVersion": "reader.location.resolve.v0.legacy",
+      "resolved": true,
+      "reflow": {
+        "strategy": "offsetAnchor",
+        "primaryAnchor": "chapterOffset",
+        "fallbackAnchor": "chapterProgress",
+        "layoutIndependent": true
+      }
     }
   },
   {

@@ -1,18 +1,27 @@
 #!/usr/bin/env node
-// promote-family.mjs — the ONLY authorized way to set harmony.status to
-// 'implementation-ready' in FIGMA_VISUAL_ADMISSION_REGISTRY.json.
+// promote-family.mjs — the ONLY authorized way to transition
+// harmony.status in FIGMA_VISUAL_ADMISSION_REGISTRY.json.
 //
 // On 2026-07-27 an audit found that 28 records had harmony.status set to
 // 'implementation-ready' while their local.status was still 'candidate-backport'.
 // That is the bypass path this script closes: hand-editing harmony.status
 // directly, without source-side conversion being complete.
 //
-// This script is an atomic promotion transaction. It verifies ALL prerequisites
-// before mutating anything, then atomically:
+// This script contains two atomic, auditable transactions:
+//
+// Promotion verifies ALL prerequisites before mutating anything, then atomically:
 //   1. sets harmony.status = 'implementation-ready' in the registry
 //   2. regenerates Reader-UI generated/arkts/VisualAdmission.ets
 //   3. syncs the regenerated artifact to Reader-for-HarmonyOS consumer copy
 //   4. appends a tamper-evident entry to PROMOTION_LEDGER.json
+//
+// Retraction is the only authorized way to withdraw a prior promotion when a
+// newly-discovered precondition (for example a failed route-isolation audit)
+// means native consumption must stop. It atomically sets harmony.status back
+// to 'candidate-backport', regenerates/syncs the two artifacts, and appends a
+// hash-chained reversal entry. It never deletes or rewrites prior ledger
+// history, and it does not alter local.status: source conversion evidence is
+// retained but must be replaced with fresh evidence before a later promotion.
 //
 // The four-file write (registry + upstream artifact + consumer copy + ledger)
 // is orchestrated as a transaction with backups and rollback. If any step
@@ -30,13 +39,17 @@
 //
 // Usage:
 //   node tools/design/promote-family.mjs <recordId>
-//   node tools/design/promote-family.mjs --check   # verify ledger consistency without promoting
+//   node tools/design/promote-family.mjs --group <anchorRecordId>
+//   node tools/design/promote-family.mjs --retract <recordId> --reason <reason>
+//   node tools/design/promote-family.mjs --retract-group <anchorRecordId> --reason <reason>
+//   node tools/design/promote-family.mjs --check   # verify ledger consistency without mutating
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
+import { acquireWriterLock } from '../shared/shared-writer-lock.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..', '..');
@@ -46,6 +59,26 @@ const handoffsDir = path.join(repoRoot, 'docs', 'design', 'handoffs');
 const generatorPath = path.join(repoRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs');
 const upstreamArtifactPath = path.join(repoRoot, 'generated', 'arkts', 'VisualAdmission.ets');
 const revisionEvidencePath = path.join(repoRoot, 'docs', 'design', 'F0_FIGMA_CURRENT_REVISION_EVIDENCE.json');
+const admissionDependenciesPath = path.join(
+  repoRoot,
+  'docs',
+  'design',
+  'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+);
+const runtimePayloadSpecPath = path.join(repoRoot, 'ui-spec', 'runtime-payload-contracts.json');
+const runtimePayloadSourceCheckerPath = path.join(
+  repoRoot,
+  'tools',
+  'runtime',
+  'check-runtime-payload-source.mjs',
+);
+const runtimeGeneratorPath = path.join(repoRoot, 'tools', 'runtime', 'generate-runtime.mjs');
+const routeReconstructionQuarantinePath = path.join(
+  repoRoot,
+  'contracts',
+  'fixtures',
+  'route-reconstruction-quarantine.fixtures.json',
+);
 
 // Host consumer copy of the generated artifact. This must be byte-identical to
 // upstreamArtifactPath after every promotion. The 2026-07-27 audit found these
@@ -64,6 +97,10 @@ const consumerArtifactPath = path.join(
 // `webdav-config`, `settings.*` maps to `settings-general`. String-prefix
 // guessing made it impossible to promote any record in those families.
 const RECORD_ID_TO_HANDOFF = {
+  // Reader is delivered surface-by-surface. The reading canvas cannot share
+  // the historical reader-runtime packet with control overlays: doing so
+  // would let evidence for this completed surface promote a sibling record.
+  'reader.reading-surface': 'reader-runtime/reading-surface',
   'bookshelf': 'bookshelf',
   'book-detail': 'book-detail',
   'source-switch': 'source-switch',
@@ -83,7 +120,7 @@ const RECORD_ID_TO_HANDOFF = {
 function handoffDirForRecordId(recordId) {
   const dot = recordId.indexOf('.');
   const family = dot > 0 ? recordId.slice(0, dot) : recordId;
-  const dir = RECORD_ID_TO_HANDOFF[family];
+  const dir = RECORD_ID_TO_HANDOFF[recordId] || RECORD_ID_TO_HANDOFF[family];
   if (!dir) {
     fail(`record ${recordId}: no explicit handoff mapping for family '${family}'. Add it to RECORD_ID_TO_HANDOFF in promote-family.mjs.`);
   }
@@ -98,6 +135,12 @@ function sha256(content) {
   return `sha256:${crypto.createHash('sha256').update(content).digest('hex')}`;
 }
 
+function sameStringSet(left, right) {
+  if (left.size !== right.size) return false;
+  for (const value of left) if (!right.has(value)) return false;
+  return true;
+}
+
 function fail(message) {
   console.error(`✗ promote-family: ${message}`);
   process.exit(1);
@@ -105,6 +148,180 @@ function fail(message) {
 
 function readJson(target) {
   return JSON.parse(fs.readFileSync(target, 'utf8'));
+}
+
+function resolveRealPath(target) {
+  if (!fs.existsSync(target)) return target;
+  try {
+    return fs.realpathSync(target);
+  } catch {
+    return target;
+  }
+}
+
+function transactionLockPath() {
+  // check-runtime-payload-source.mjs derives the repin/recover lock from the
+  // real runtime-payload spec path. Promotion and retraction must contend on
+  // that exact path as well; otherwise a repin can change the dependency
+  // authority while admission is being promoted.
+  return `${resolveRealPath(runtimePayloadSpecPath)}.repin.lock`;
+}
+
+function acquireTransactionLock() {
+  const lockFile = transactionLockPath();
+  try {
+    const release = acquireWriterLock({ lockFile });
+    // Several historical failure paths call process.exit(). Node runs this
+    // synchronous exit listener before terminating, so the lock is released
+    // even when those paths bypass ordinary finally unwinding. release() is
+    // idempotent and the normal finally below remains the primary path.
+    process.once('exit', release);
+    return release;
+  } catch (error) {
+    fail(
+      `could not acquire shared authority-writer lock ${lockFile}: ${
+        error instanceof Error ? error.message : String(error)
+      }`,
+    );
+  }
+}
+
+function verifyTrackedAndClean(target, label) {
+  const relativePath = path.relative(repoRoot, target);
+  const tracked = spawnSync('git', ['ls-files', '--error-unmatch', '--', relativePath], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (tracked.status !== 0) {
+    return [`${label} is not tracked in HEAD: ${relativePath}`];
+  }
+  const unstaged = spawnSync('git', ['diff', '--quiet', '--', relativePath], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const staged = spawnSync('git', ['diff', '--cached', '--quiet', '--', relativePath], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  const errors = [];
+  if (unstaged.status !== 0 || staged.status !== 0) {
+    errors.push(`${label} is not clean relative to HEAD: ${relativePath}`);
+  }
+  return errors;
+}
+
+function runRuntimePrePromotionChecks(recordId) {
+  if (!fs.existsSync(admissionDependenciesPath)) {
+    fail(
+      `record ${recordId}: visual admission dependency document is missing at ` +
+      path.relative(repoRoot, admissionDependenciesPath),
+    );
+  }
+  const dependencies = readJson(admissionDependenciesPath);
+  if (
+    dependencies?.kind !== 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES' ||
+    dependencies?.schemaVersion !== '1.0.0' ||
+    !Array.isArray(dependencies.sourceAuthorities)
+  ) {
+    fail(`record ${recordId}: visual admission dependency document is malformed`);
+  }
+  const runtimeAuthority = dependencies.sourceAuthorities.find(
+    (entry) => entry?.recordId === recordId,
+  )?.runtimeContract;
+  if (!runtimeAuthority) return;
+
+  const expectedChecks = [
+    'node tools/runtime/check-runtime-payload-source.mjs',
+    'node tools/runtime/generate-runtime.mjs --check',
+  ];
+  if (JSON.stringify(runtimeAuthority.prePromotionChecks) !== JSON.stringify(expectedChecks)) {
+    fail(
+      `record ${recordId}: runtime authority must declare the exact two B4 pre-promotion checks`,
+    );
+  }
+
+  const cleanlinessErrors = [
+    ...verifyTrackedAndClean(runtimePayloadSpecPath, 'runtime payload source authority'),
+    ...verifyTrackedAndClean(admissionDependenciesPath, 'visual admission dependency document'),
+  ];
+  if (cleanlinessErrors.length > 0) {
+    fail(
+      `record ${recordId}: runtime authority is not committed and clean:\n` +
+      cleanlinessErrors.map((error) => `    - ${error}`).join('\n'),
+    );
+  }
+
+  const commands = [
+    [runtimePayloadSourceCheckerPath],
+    [runtimeGeneratorPath, '--check'],
+  ];
+  for (const command of commands) {
+    const result = spawnSync(process.execPath, command, {
+      cwd: repoRoot,
+      env: process.env,
+      stdio: ['ignore', 'pipe', 'pipe'],
+      maxBuffer: 64 * 1024 * 1024,
+    });
+    if (result.status !== 0) {
+      const output = result.stderr?.toString().trim() || result.stdout?.toString().trim();
+      const displayCommand = command.map((item) =>
+        path.isAbsolute(item) ? path.relative(repoRoot, item) : item
+      );
+      fail(
+        `record ${recordId}: B4 pre-promotion check failed: ` +
+        `${['node', ...displayCommand].join(' ')}${
+          output ? `\n${output}` : ''
+        }`,
+      );
+    }
+  }
+  console.log(`  ✓ runtime Core authority and generated runtime checks passed`);
+}
+
+// An active source-side quarantine is an explicit route extraction, not a
+// renderer fallback. A record inside it cannot be promoted until its old
+// native route mapping has been replaced by a new Figma-backed conversion.
+// Keep this check in the promotion transaction itself so neither a hand-edited
+// local.status nor a stale handoff packet can leap over the extraction.
+function readRouteReconstructionQuarantine() {
+  if (!fs.existsSync(routeReconstructionQuarantinePath)) {
+    return { entries: [], status: 'missing', errors: [
+      `route reconstruction quarantine is missing: ${path.relative(repoRoot, routeReconstructionQuarantinePath)}`,
+    ] };
+  }
+  try {
+    const document = readJson(routeReconstructionQuarantinePath);
+    if (document === null || Array.isArray(document) || typeof document !== 'object') {
+      return { entries: [], status: 'invalid', errors: ['route reconstruction quarantine must be an object'] };
+    }
+    if (document.schemaVersion !== 1 || (document.status !== 'active' && document.status !== 'released') || !Array.isArray(document.entries)) {
+      return { entries: [], status: 'invalid', errors: ['route reconstruction quarantine has an invalid schemaVersion, status, or entries field'] };
+    }
+    const entries = [];
+    for (const [index, entry] of document.entries.entries()) {
+      if (entry === null || Array.isArray(entry) || typeof entry !== 'object' ||
+        typeof entry.recordId !== 'string' || entry.recordId.length === 0 ||
+        !Array.isArray(entry.routeIds) || entry.routeIds.length === 0 || entry.blocksPromotion !== true ||
+        (entry.status !== 'active' && entry.status !== 'released')) {
+        return { entries: [], status: 'invalid', errors: [`route reconstruction quarantine entry ${index + 1} is invalid`] };
+      }
+      entries.push({ recordId: entry.recordId, routeIds: entry.routeIds, status: entry.status });
+    }
+    if (document.status === 'released' && entries.some((entry) => entry.status === 'active')) {
+      return { entries: [], status: 'invalid', errors: ['a globally released route reconstruction quarantine cannot retain an active entry'] };
+    }
+    return { entries, status: document.status, errors: [] };
+  } catch (error) {
+    return { entries: [], status: 'invalid', errors: [
+      `route reconstruction quarantine could not be read: ${error instanceof Error ? error.message : String(error)}`,
+    ] };
+  }
+}
+
+function activeQuarantineEntries() {
+  const quarantine = readRouteReconstructionQuarantine();
+  if (quarantine.errors.length > 0 || quarantine.status !== 'active') return quarantine;
+  return quarantine;
 }
 
 function writeJson(target, value) {
@@ -219,6 +436,14 @@ function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
     }
   }
 
+  // A readiness packet is evidence for the named record only. Family-wide
+  // handoff reuse was a bypass: a completed reading surface could otherwise
+  // be used to promote an unfinished Reader overlay sharing the same prefix.
+  const declaredRecordIds = localReady.admission?.recordIds;
+  if (!Array.isArray(declaredRecordIds) || !declaredRecordIds.includes(recordId)) {
+    errors.push(`admission.recordIds must include '${recordId}' — a handoff packet cannot authorize a sibling record by family prefix alone`);
+  }
+
   // Check 2: localSource.implementationCommit must be a real git commit
   const implCommit = localReady.localSource?.implementationCommit;
   const commitCheck = verifyGitCommitExists(implCommit);
@@ -240,6 +465,32 @@ function verifyLocalReadyEvidence(record, localReady, localReadyPath) {
     errors.push(`sourceEvidenceHash mismatch: declared '${declaredHash}' but actual handoff dir hash is '${actualHash}' — handoff directory has been modified after the hash was declared, or the hash was fabricated`);
   }
 
+  return errors;
+}
+
+function verifyFreshEvidenceAfterRetraction(recordId, localReady, latestLedgerEntry) {
+  if (!latestLedgerEntry || ledgerEntryOperation(latestLedgerEntry) !== 'retract') return [];
+
+  // A retraction is not a retry button. A later promotion must be bound to a
+  // newly-produced B2/B3 packet, rather than reusing the evidence that was
+  // explicitly withdrawn. Both fields are required so changing a prose-only
+  // file or merely pointing to the same implementation commit cannot reopen
+  // native consumption.
+  const errors = [];
+  const withdrawnHash = latestLedgerEntry.retractedPromotion?.sourceEvidenceHash;
+  const withdrawnCommit = latestLedgerEntry.retractedPromotion?.implementationCommit;
+  const currentHash = localReady.sourceEvidenceHash;
+  const currentCommit = localReady.localSource?.implementationCommit;
+  if (!withdrawnHash || !withdrawnCommit) {
+    errors.push(`latest retraction for ${recordId} lacks withdrawn source evidence metadata — manual review is required before promotion`);
+    return errors;
+  }
+  if (currentHash === withdrawnHash) {
+    errors.push(`sourceEvidenceHash still equals the packet withdrawn by ${latestLedgerEntry.entryId}; complete and certify a new B2/B3 source conversion before re-promoting`);
+  }
+  if (currentCommit === withdrawnCommit) {
+    errors.push(`implementationCommit still equals the commit withdrawn by ${latestLedgerEntry.entryId}; a new source conversion commit is required before re-promoting`);
+  }
   return errors;
 }
 
@@ -274,9 +525,27 @@ function appendLedgerEntry(ledger, entry) {
   return fullEntry;
 }
 
+function ledgerEntryOperation(entry) {
+  // `kind` was introduced after the first promotion records existed. Treat a
+  // missing kind as the legacy spelling of a promotion so old, valid ledgers
+  // remain checkable without rewriting history.
+  if (entry.kind === undefined || entry.kind === 'promote') return 'promote';
+  if (entry.kind === 'retract') return 'retract';
+  return 'invalid';
+}
+
+function latestLedgerEntriesByRecord(ledger) {
+  const latest = new Map();
+  for (const entry of ledger.entries) latest.set(entry.recordId, entry);
+  return latest;
+}
+
 function verifyLedger(ledger) {
   const errors = [];
   let previousHash = 'genesis';
+  const entriesByHash = new Map();
+  const lastEntryByRecord = new Map();
+  const transactionGroups = new Map();
   for (let index = 0; index < ledger.entries.length; index += 1) {
     const entry = ledger.entries[index];
     if (entry.previousEntryHash !== previousHash) {
@@ -286,7 +555,86 @@ function verifyLedger(ledger) {
     if (entry.entryHash !== recomputed) {
       errors.push(`ledger entry ${index + 1} (${entry.recordId}): entryHash mismatch — entry was tampered with after creation`);
     }
+    const operation = ledgerEntryOperation(entry);
+    if (operation === 'invalid') {
+      errors.push(`ledger entry ${index + 1} (${entry.recordId}): invalid kind '${entry.kind}'`);
+    } else if (operation === 'retract') {
+      const reversed = entriesByHash.get(entry.reversalOf);
+      if (!entry.reversalOf || !reversed) {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): retract must reference an earlier promotion with reversalOf`);
+      } else if (reversed.recordId !== entry.recordId || ledgerEntryOperation(reversed) !== 'promote') {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): reversalOf must reference a promotion for the same record`);
+      } else if (lastEntryByRecord.get(entry.recordId) !== reversed) {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): retract must reverse the record's current promotion, not an older entry`);
+      }
+      if (entry.newHarmonyStatus !== 'candidate-backport') {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): retract newHarmonyStatus must be 'candidate-backport'`);
+      }
+    } else if (entry.newHarmonyStatus !== 'implementation-ready') {
+      errors.push(`ledger entry ${index + 1} (${entry.recordId}): promotion newHarmonyStatus must be 'implementation-ready'`);
+    }
+
+    const hasTransactionId =
+      typeof entry.transactionId === 'string' && entry.transactionId.length > 0;
+    const hasTransactionRecordIds = Array.isArray(entry.transactionRecordIds);
+    if (hasTransactionId !== hasTransactionRecordIds) {
+      errors.push(`ledger entry ${index + 1} (${entry.recordId}): transactionId and transactionRecordIds must either both be present or both be absent`);
+    } else if (hasTransactionId) {
+      const declaredRecordIds = entry.transactionRecordIds;
+      const declaredSet = new Set(declaredRecordIds);
+      if (
+        declaredRecordIds.length === 0 ||
+        declaredSet.size !== declaredRecordIds.length ||
+        declaredRecordIds.some((recordId) => typeof recordId !== 'string' || recordId.length === 0)
+      ) {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): transactionRecordIds must be a non-empty unique string list`);
+      }
+      if (!declaredSet.has(entry.recordId)) {
+        errors.push(`ledger entry ${index + 1} (${entry.recordId}): transactionRecordIds does not include its own recordId`);
+      }
+
+      const signature = [...declaredSet].sort().join('\u0000');
+      const group = transactionGroups.get(entry.transactionId);
+      if (!group) {
+        transactionGroups.set(entry.transactionId, {
+          operation,
+          signature,
+          timestamp: entry.timestamp,
+          declaredRecordIds: [...declaredSet],
+          entries: [entry],
+        });
+      } else {
+        group.entries.push(entry);
+        if (group.operation !== operation) {
+          errors.push(`ledger transaction ${entry.transactionId}: mixes '${group.operation}' and '${operation}' entries`);
+        }
+        if (group.signature !== signature) {
+          errors.push(`ledger transaction ${entry.transactionId}: members declare different transactionRecordIds sets`);
+        }
+        if (group.timestamp !== entry.timestamp) {
+          errors.push(`ledger transaction ${entry.transactionId}: members have different timestamps`);
+        }
+      }
+    }
+
+    entriesByHash.set(entry.entryHash, entry);
+    lastEntryByRecord.set(entry.recordId, entry);
     previousHash = entry.entryHash;
+  }
+
+  for (const [transactionId, group] of transactionGroups) {
+    const actualRecordIds = group.entries.map((entry) => entry.recordId);
+    const actualSet = new Set(actualRecordIds);
+    const declaredSet = new Set(group.declaredRecordIds);
+    if (
+      actualSet.size !== actualRecordIds.length ||
+      !sameStringSet(actualSet, declaredSet)
+    ) {
+      errors.push(
+        `ledger transaction ${transactionId}: expected exactly one entry for each of ` +
+        `[${group.declaredRecordIds.join(', ')}], got [${actualRecordIds.join(', ')}]`,
+      );
+    }
   }
   return errors;
 }
@@ -310,31 +658,69 @@ function runCheck() {
   const registry = readJson(registryPath);
   const ledger = loadLedger();
   const errors = [];
+  const quarantine = activeQuarantineEntries();
 
   // 1. Ledger chain integrity
   errors.push(...verifyLedger(ledger));
+  errors.push(...quarantine.errors);
 
-  // 2. Every implementation-ready record must have a ledger entry
-  const promotedRecordIds = new Set(ledger.entries.map((entry) => entry.recordId));
+  // 2. The latest ledger entry, rather than any historical entry, is the
+  // authoritative transition state for a record. A valid retract intentionally
+  // leaves a historical promotion in the append-only chain.
+  const latestEntriesByRecord = latestLedgerEntriesByRecord(ledger);
   for (const record of registry.records) {
+    const latestEntry = latestEntriesByRecord.get(record.id);
     if (record.harmony?.status === 'implementation-ready') {
-      if (!promotedRecordIds.has(record.id)) {
+      if (!latestEntry || ledgerEntryOperation(latestEntry) !== 'promote') {
         errors.push(`record ${record.id}: harmony.status is 'implementation-ready' but no promotion ledger entry exists — hand-edited bypass`);
       }
       if (record.local?.status !== 'implementation-ready') {
         errors.push(`record ${record.id}: harmony.status is 'implementation-ready' but local.status is '${record.local?.status}' — source-side conversion not complete`);
       }
+    } else if (latestEntry && ledgerEntryOperation(latestEntry) === 'promote') {
+      errors.push(`record ${record.id}: latest ledger entry is a promotion but harmony.status is '${record.harmony?.status}' — promotion state was changed without an append-only retraction`);
+    } else if (latestEntry && ledgerEntryOperation(latestEntry) === 'retract' && record.harmony?.status !== 'candidate-backport') {
+      errors.push(`record ${record.id}: latest ledger entry is a retraction but harmony.status is '${record.harmony?.status}', not 'candidate-backport'`);
     }
   }
 
-  // 3. Every ledger entry should still correspond to an implementation-ready record
+  // 3. Every ledger entry must correspond to a current record. Whether the
+  // record is promoted or retracted is validated above against its *latest*
+  // entry; historic promotions are deliberately retained for audit.
   const registryRecords = new Map(registry.records.map((record) => [record.id, record]));
   for (const entry of ledger.entries) {
     const record = registryRecords.get(entry.recordId);
     if (!record) {
       errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} no longer exists in registry`);
-    } else if (record.harmony?.status !== 'implementation-ready') {
-      errors.push(`ledger entry ${entry.entryHash.slice(0, 16)}: record ${entry.recordId} harmony.status is '${record.harmony?.status}' — promoted then demoted without ledger entry`);
+    }
+  }
+
+  // 3a. Each active source quarantine entry withdraws both promotion
+  // dimensions. A released entry is deliberately narrower: it records that
+  // this record's Reader-UI conversion has completed, but it still requires
+  // this atomic transaction before HarmonyOS becomes implementation-ready.
+  if (quarantine.status === 'active') {
+    for (const entry of quarantine.entries) {
+      const record = registryRecords.get(entry.recordId);
+      if (!record) {
+        errors.push(`route reconstruction quarantine references missing record ${entry.recordId}`);
+        continue;
+      }
+      if (entry.status === 'active') {
+        if (record.local?.status !== 'candidate-backport' || record.harmony?.status !== 'candidate-backport') {
+          errors.push(`active route reconstruction quarantine record ${entry.recordId} must be candidate-backport on both local and harmony status (got local=${record.local?.status}, harmony=${record.harmony?.status})`);
+        }
+        const latestEntry = latestEntriesByRecord.get(entry.recordId);
+        if (latestEntry && ledgerEntryOperation(latestEntry) === 'promote') {
+          errors.push(`active route reconstruction quarantine record ${entry.recordId} has a current promotion ledger entry`);
+        }
+      } else if (record.local?.status !== 'implementation-ready') {
+        errors.push(`released route reconstruction quarantine record ${entry.recordId} must have local.status implementation-ready before it can await promotion (got ${record.local?.status})`);
+      }
+      const recordRouteIds = Array.isArray(record.routeIds) ? record.routeIds : [];
+      if (JSON.stringify(recordRouteIds) !== JSON.stringify(entry.routeIds)) {
+        errors.push(`route reconstruction quarantine route set for ${entry.recordId} no longer matches the registry record`);
+      }
     }
   }
 
@@ -395,37 +781,46 @@ function writeViaTemp(target, content) {
 }
 
 // ─── Fault injection (test-only) ──────────────────────────────────────────
-// When PROMOTE_TEST_MODE=1 is set, the caller can inject a fault after any
-// write phase by setting one of:
+// When PROMOTE_TEST_MODE=1 or RETRACT_TEST_MODE=1 is set, the caller can inject
+// a fault after any write phase by setting the corresponding prefix, for
+// example:
 //   PROMOTE_FAULT_AFTER_REGISTRY_WRITE=1
+//   RETRACT_FAULT_AFTER_REGISTRY_WRITE=1
 //   PROMOTE_FAULT_AFTER_GENERATOR=1
 //   PROMOTE_FAULT_AFTER_CONSUMER_SYNC=1
 //   PROMOTE_FAULT_AFTER_LEDGER_WRITE=1
 //   PROMOTE_FAULT_IN_FINAL_VERIFY=1
 // The fault throws an injected error, which the promote() function's catch
-// block catches and rolls back ALL four files. This lets the test suite
-// verify that rollback actually restores the pre-transaction state at every
-// phase, without depending on real disk/process failures.
+// block catches and rolls back ALL four files. This lets the test suite verify
+// that rollback actually restores the pre-transaction state at every phase,
+// without depending on real disk/process failures.
 //
 // Outside PROMOTE_TEST_MODE these env vars are ignored, so a stray env var
 // in a real environment cannot trip the fault.
 
-function faultInject(phase) {
-  if (process.env.PROMOTE_TEST_MODE !== '1') return;
-  const varName = `PROMOTE_FAULT_${phase}`;
+function faultInject(phase, operation = 'PROMOTE') {
+  if (process.env[`${operation}_TEST_MODE`] !== '1') return;
+  const varName = `${operation}_FAULT_${phase}`;
   if (process.env[varName] !== '1') return;
   throw new Error(`injected fault: ${phase}`);
 }
 
-function promote(recordId) {
-  const registry = readJson(registryPath);
+function validatePromotionContext(
+  registry,
+  recordId,
+  quarantine,
+  latestLedgerEntries,
+  officialRevision,
+) {
   const record = registry.records.find((item) => item.id === recordId);
   if (!record) fail(`record not found: ${recordId}`);
   if (record.classification !== 'exact-figma-binding') {
     fail(`record ${recordId} classification is '${record.classification}', not 'exact-figma-binding' — only exact bindings can be promoted`);
   }
 
-  console.log(`→ promote-family: ${recordId}`);
+  if (quarantine.status === 'active' && quarantine.entries.some((entry) => entry.recordId === recordId && entry.status === 'active')) {
+    fail(`record ${recordId} is actively route-quarantined at the Reader-UI source. Complete a new Figma-backed reconstruction and release the source extraction before promotion.`);
+  }
 
   // Prerequisite 1: local.status must already be implementation-ready
   if (record.local?.status !== 'implementation-ready') {
@@ -450,11 +845,20 @@ function promote(recordId) {
     fail(`record ${recordId}: LOCAL_READY_FOR_FIGMA.json evidence verification failed:\n${evidenceErrors.map((e) => `    - ${e}`).join('\n')}`);
   }
 
+  // A previous retraction remains part of the append-only ledger. It is only
+  // safe to promote again after the source evidence has been genuinely
+  // recreated; otherwise this command would merely replay the withdrawn
+  // promotion with the same packet.
+  const latestEntry = latestLedgerEntries.get(recordId);
+  const freshEvidenceErrors = verifyFreshEvidenceAfterRetraction(recordId, localReady, latestEntry);
+  if (freshEvidenceErrors.length > 0) {
+    fail(`record ${recordId}: retraction freshness verification failed:\n${freshEvidenceErrors.map((e) => `    - ${e}`).join('\n')}`);
+  }
+
   // Prerequisite 3: Figma binding revision must match the OFFICIAL current
   // revision evidence, not just the first registry record's revision. The
   // 2026-07-27 audit found the old check compared against "the first exact
   // record's revision" which could itself be stale.
-  const officialRevision = readOfficialCurrentRevision();
   if (record.figma?.revision !== officialRevision) {
     fail(`record ${recordId}: figma.revision is '${record.figma?.revision}', official current revision (from F0_FIGMA_CURRENT_REVISION_EVIDENCE.json) is '${officialRevision}' — binding is stale`);
   }
@@ -486,6 +890,94 @@ function promote(recordId) {
   console.log(`  ✓ ${record.harmony.targets.length} harmony consumer target(s) verified (file + symbol)`);
   console.log(`  ✓ previous harmony.status = ${previousHarmonyStatus}`);
 
+  return {
+    recordId,
+    record,
+    localReadyPath,
+    localReady,
+    previousHarmonyStatus,
+    handoffDir,
+    officialRevision,
+  };
+}
+
+function promotionGroupRecordIds(anchorRecordId) {
+  const localReadyPath = localReadyForFigmaPath(anchorRecordId);
+  if (!fs.existsSync(localReadyPath)) {
+    fail(`record ${anchorRecordId}: LOCAL_READY_FOR_FIGMA.json not found at ${path.relative(repoRoot, localReadyPath)}`);
+  }
+  const localReady = readJson(localReadyPath);
+  const recordIds = localReady.admission?.recordIds;
+  if (!Array.isArray(recordIds) || recordIds.length === 0) {
+    fail(`record ${anchorRecordId}: admission.recordIds is missing or empty — group promotion requires an explicit source packet`);
+  }
+  if (!recordIds.includes(anchorRecordId)) {
+    fail(`record ${anchorRecordId}: group anchor is not named by its LOCAL_READY_FOR_FIGMA admission.recordIds`);
+  }
+  if (new Set(recordIds).size !== recordIds.length) {
+    fail(`record ${anchorRecordId}: admission.recordIds contains duplicates`);
+  }
+  return recordIds;
+}
+
+function promoteRecords(recordIds) {
+  if (!Array.isArray(recordIds) || recordIds.length === 0) {
+    fail('promotion requires at least one recordId');
+  }
+  if (new Set(recordIds).size !== recordIds.length) {
+    fail('promotion recordIds must be unique');
+  }
+
+  const registry = readJson(registryPath);
+  const quarantine = activeQuarantineEntries();
+  if (quarantine.errors.length > 0) {
+    fail(quarantine.errors.join('; '));
+  }
+  const existingLedger = loadLedger();
+  const existingLedgerErrors = verifyLedger(existingLedger);
+  if (existingLedgerErrors.length > 0) {
+    fail(`ledger is inconsistent before promotion:\n${existingLedgerErrors.map((e) => `    - ${e}`).join('\n')}`);
+  }
+  const latestLedgerEntries = latestLedgerEntriesByRecord(existingLedger);
+  const officialRevision = readOfficialCurrentRevision();
+
+  console.log(`→ promote-family: ${recordIds.join(', ')}`);
+  const contexts = recordIds.map((recordId) =>
+    validatePromotionContext(
+      registry,
+      recordId,
+      quarantine,
+      latestLedgerEntries,
+      officialRevision,
+    ));
+
+  const declaredRecordIds = contexts[0].localReady.admission?.recordIds || [];
+  if (contexts.length === 1 && declaredRecordIds.length > 1) {
+    fail(
+      `record ${contexts[0].recordId}: its B3 packet declares a ${declaredRecordIds.length}-record ` +
+      `atomic admission set; use --group ${contexts[0].recordId}`,
+    );
+  }
+  if (contexts.length > 1) {
+    const handoffPaths = new Set(contexts.map((context) => context.localReadyPath));
+    const evidenceHashes = new Set(contexts.map((context) => context.localReady.sourceEvidenceHash));
+    const implementationCommits = new Set(
+      contexts.map((context) => context.localReady.localSource?.implementationCommit),
+    );
+    if (handoffPaths.size !== 1 || evidenceHashes.size !== 1 || implementationCommits.size !== 1) {
+      fail('group promotion requires every record to share one exact handoff packet, evidence hash, and implementation commit');
+    }
+    if (!sameStringSet(new Set(declaredRecordIds), new Set(recordIds))) {
+      fail('group promotion must include the complete admission.recordIds set from LOCAL_READY_FOR_FIGMA.json');
+    }
+  }
+
+  // B4 dependency/Core authority is verified while holding the same writer
+  // lock used by repin/recover. A successful check outside this critical
+  // section is not sufficient because a concurrent repin could otherwise
+  // change the spec/mirror pair before the admission transaction starts.
+  for (const context of contexts) runRuntimePrePromotionChecks(context.recordId);
+
   // ── Phase 1: snapshot backups for rollback ─────────────────────────────
   const backup = {
     registry: backupFile(registryPath),
@@ -502,7 +994,7 @@ function promote(recordId) {
   // pre-transaction state. Cross-process crash recovery is documented as a
   // known limitation (see FIGMA_TO_NATIVE_AGENT_EXECUTION_PROTOCOL.md §9.6);
   // Layer 3 (CI from a clean checkout) is the backstop for that scenario.
-  let fullEntry;
+  const fullEntries = [];
   let upstreamHashAfter;
   let consumerHashAfter;
   try {
@@ -514,7 +1006,7 @@ function promote(recordId) {
     //    the new state. The 2026-07-27 audit found the old order (generator
     //    first, registry write last) produced a stale artifact because the
     //    generator read the OLD registry from disk. ──────────────────────
-    record.harmony.status = 'implementation-ready';
+    for (const context of contexts) context.record.harmony.status = 'implementation-ready';
     const registryContentAfter = JSON.stringify(registry, null, 2) + '\n';
 
     console.log(`  → writing new registry (atomic via temp + rename)`);
@@ -558,53 +1050,67 @@ function promote(recordId) {
     faultInject('AFTER_CONSUMER_SYNC');
 
     // ── Phase 7: append ledger entry ─────────────────────────────────────
-    const ledger = loadLedger();
-    const entry = {
-      entryId: `promote-${String(ledger.entries.length + 1).padStart(3, '0')}`,
-      timestamp: new Date().toISOString(),
-      recordId,
-      pageFamily: handoffDir,
-      surfaceType: record.surfaceType || 'unknown',
-      routeIds: record.routeIds || [],
-      previousHarmonyStatus,
-      newHarmonyStatus: 'implementation-ready',
-      localStatus: record.local.status,
-      localReadyForFigma: {
-        path: path.relative(repoRoot, localReadyPath),
-        stage: localReady.stage,
-        status: localReady.status,
-        localReadyForFigma: true,
-        sourceEvidenceHash: localReady.sourceEvidenceHash,
-        implementationCommit: localReady.localSource?.implementationCommit,
-        verificationSuites: Object.entries(localReady.verification || {})
-          .filter(([_, v]) => v && typeof v.tests === 'number')
-          .map(([k, v]) => ({ suite: k, tests: v.tests, passed: v.passed, failed: v.failed || 0 })),
-      },
-      figma: {
-        fileKey: record.figma.fileKey,
-        revision: record.figma.revision,
-        officialCurrentRevision: officialRevision,
-        nodeId: record.figma.nodeId,
-        canonicalMasterId: record.figma.canonicalMasterId,
-      },
-      harmonyConsumerTargets: record.harmony.targets,
-      harmonyConsumerTargetsVerified: true,
+    const ledger = existingLedger;
+    const timestamp = new Date().toISOString();
+    const transactionId = `promotion-group-${sha256(JSON.stringify({
+      timestamp,
+      recordIds,
       registryHashBefore,
-      upstreamArtifactHashAfter: upstreamHashAfter,
-      consumerArtifactHashAfter: consumerHashAfter,
-      artifactsInSync: upstreamHashAfter === consumerHashAfter,
-      promotedBy: 'promote-family.mjs',
-    };
-    fullEntry = appendLedgerEntry(ledger, entry);
+    })).replace(/^sha256:/, '').slice(0, 20)}`;
+    for (const context of contexts) {
+      const { record, recordId, handoffDir, localReadyPath, localReady, previousHarmonyStatus } = context;
+      const entry = {
+        entryId: `promote-${String(ledger.entries.length + 1).padStart(3, '0')}`,
+        kind: 'promote',
+        timestamp,
+        transactionId,
+        transactionRecordIds: recordIds,
+        recordId,
+        pageFamily: handoffDir,
+        surfaceType: record.surfaceType || 'unknown',
+        routeIds: record.routeIds || [],
+        previousHarmonyStatus,
+        newHarmonyStatus: 'implementation-ready',
+        localStatus: record.local.status,
+        localReadyForFigma: {
+          path: path.relative(repoRoot, localReadyPath),
+          stage: localReady.stage,
+          status: localReady.status,
+          localReadyForFigma: true,
+          sourceEvidenceHash: localReady.sourceEvidenceHash,
+          implementationCommit: localReady.localSource?.implementationCommit,
+          verificationSuites: Object.entries(localReady.verification || {})
+            .filter(([_, v]) => v && typeof v.tests === 'number')
+            .map(([k, v]) => ({ suite: k, tests: v.tests, passed: v.passed, failed: v.failed || 0 })),
+        },
+        figma: {
+          fileKey: record.figma.fileKey,
+          revision: record.figma.revision,
+          officialCurrentRevision: context.officialRevision,
+          nodeId: record.figma.nodeId,
+          canonicalMasterId: record.figma.canonicalMasterId,
+        },
+        harmonyConsumerTargets: record.harmony.targets,
+        harmonyConsumerTargetsVerified: true,
+        registryHashBefore,
+        upstreamArtifactHashAfter: upstreamHashAfter,
+        consumerArtifactHashAfter: consumerHashAfter,
+        artifactsInSync: upstreamHashAfter === consumerHashAfter,
+        promotedBy: 'promote-family.mjs',
+      };
+      fullEntries.push(appendLedgerEntry(ledger, entry));
+    }
     writeViaTemp(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
     faultInject('AFTER_LEDGER_WRITE');
 
     // ── Phase 8: final verification (read-back) ──────────────────────────
     faultInject('IN_FINAL_VERIFY');
     const finalRegistry = readJson(registryPath);
-    const finalRecord = finalRegistry.records.find((item) => item.id === recordId);
-    if (!finalRecord || finalRecord.harmony?.status !== 'implementation-ready') {
-      throw new Error(`registry read-back did not show ${recordId} as implementation-ready`);
+    for (const recordId of recordIds) {
+      const finalRecord = finalRegistry.records.find((item) => item.id === recordId);
+      if (!finalRecord || finalRecord.harmony?.status !== 'implementation-ready') {
+        throw new Error(`registry read-back did not show ${recordId} as implementation-ready`);
+      }
     }
     const finalUpstream = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
     const finalConsumer = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
@@ -615,7 +1121,7 @@ function promote(recordId) {
     // Catch-all: any error in the transaction body triggers full four-file
     // rollback. This covers expected errors (generator failure, hash mismatch),
     // injected faults (PROMOTE_FAULT_*), and unexpected errors (disk I/O).
-    console.error(`✗ promote-family: ${recordId} transaction failed — rolling back all four files.`);
+    console.error(`✗ promote-family: ${recordIds.join(', ')} transaction failed — rolling back all four files.`);
     console.error(`  error: ${err.message}`);
     restoreBackup(backup.registry);
     restoreBackup(backup.upstreamArtifact);
@@ -624,23 +1130,296 @@ function promote(recordId) {
     process.exit(1);
   }
 
-  console.log(`  ✓ registry updated (harmony.status: ${previousHarmonyStatus} → implementation-ready)`);
+  for (const context of contexts) {
+    console.log(`  ✓ ${context.recordId}: harmony.status ${context.previousHarmonyStatus} → implementation-ready`);
+  }
   console.log(`  ✓ VisualAdmission.ets regenerated (${upstreamHashAfter.slice(0, 20)}...)`);
   console.log(`  ✓ consumer copy synced (${consumerHashAfter.slice(0, 20)}...)`);
-  console.log(`  ✓ ledger entry ${fullEntry.entryId} appended (${fullEntry.entryHash.slice(0, 20)}...)`);
-  console.log(`✓ promote-family: ${recordId} promoted to implementation-ready`);
+  for (const fullEntry of fullEntries) {
+    console.log(`  ✓ ledger entry ${fullEntry.entryId} appended (${fullEntry.entryHash.slice(0, 20)}...)`);
+  }
+  console.log(`✓ promote-family: ${recordIds.length} record(s) promoted to implementation-ready`);
+}
+
+function promote(recordId) {
+  promoteRecords([recordId]);
+}
+
+// ─── Retract mode: atomic, append-only reversal ───────────────────────────
+
+function retractionGroupRecordIds(anchorRecordId) {
+  const ledger = loadLedger();
+  const ledgerErrors = verifyLedger(ledger);
+  if (ledgerErrors.length > 0) {
+    fail(`ledger is inconsistent before group retraction:\n${ledgerErrors.map((error) => `    - ${error}`).join('\n')}`);
+  }
+  const activePromotion = latestLedgerEntriesByRecord(ledger).get(anchorRecordId);
+  if (!activePromotion || ledgerEntryOperation(activePromotion) !== 'promote') {
+    fail(`record ${anchorRecordId}: no current promotion ledger entry exists to retract`);
+  }
+  const recordIds = activePromotion.transactionRecordIds;
+  if (!Array.isArray(recordIds) || recordIds.length === 0) {
+    return [anchorRecordId];
+  }
+  if (!recordIds.includes(anchorRecordId) || new Set(recordIds).size !== recordIds.length) {
+    fail(`record ${anchorRecordId}: active promotion has malformed transactionRecordIds`);
+  }
+  return recordIds;
+}
+
+function retractRecords(recordIds, reason) {
+  const normalizedReason = typeof reason === 'string' ? reason.trim() : '';
+  if (normalizedReason.length < 8) {
+    fail('retract requires a non-empty --reason of at least 8 characters; the ledger must explain why native admission was withdrawn');
+  }
+  if (!Array.isArray(recordIds) || recordIds.length === 0 || new Set(recordIds).size !== recordIds.length) {
+    fail('retraction recordIds must be a non-empty unique list');
+  }
+
+  const registry = readJson(registryPath);
+  const ledgerBefore = loadLedger();
+  const ledgerErrors = verifyLedger(ledgerBefore);
+  if (ledgerErrors.length > 0) {
+    fail(`ledger is inconsistent before retraction:\n${ledgerErrors.map((e) => `    - ${e}`).join('\n')}`);
+  }
+  const latestEntries = latestLedgerEntriesByRecord(ledgerBefore);
+  const contexts = recordIds.map((recordId) => {
+    const record = registry.records.find((item) => item.id === recordId);
+    if (!record) fail(`record not found: ${recordId}`);
+    if (record.classification !== 'exact-figma-binding') {
+      fail(`record ${recordId} classification is '${record.classification}', not 'exact-figma-binding' — only exact bindings can be retracted`);
+    }
+    if (record.harmony?.status !== 'implementation-ready') {
+      fail(`record ${recordId}: harmony.status is '${record.harmony?.status}', not 'implementation-ready' — only a current promotion can be retracted`);
+    }
+    const activePromotion = latestEntries.get(recordId);
+    if (!activePromotion || ledgerEntryOperation(activePromotion) !== 'promote') {
+      fail(`record ${recordId}: no current promotion ledger entry exists to retract — refusing to synthesize history`);
+    }
+    return { recordId, record, activePromotion };
+  });
+
+  if (contexts.length === 1) {
+    const activeGroup = contexts[0].activePromotion.transactionRecordIds;
+    if (Array.isArray(activeGroup) && activeGroup.length > 1) {
+      fail(`record ${contexts[0].recordId}: promotion belongs to a ${activeGroup.length}-record transaction; use --retract-group to avoid a contradictory partial retraction`);
+    }
+  } else {
+    const transactionIds = new Set(contexts.map((context) => context.activePromotion.transactionId));
+    if (transactionIds.size !== 1 || transactionIds.has(undefined)) {
+      fail('group retraction requires every record to belong to the same active promotion transaction');
+    }
+    for (const context of contexts) {
+      if (!sameStringSet(
+        new Set(context.activePromotion.transactionRecordIds || []),
+        new Set(recordIds),
+      )) {
+        fail(`record ${context.recordId}: active promotion transaction set does not match the requested retraction group`);
+      }
+    }
+  }
+
+  console.log(`→ promote-family: retract ${recordIds.join(', ')}`);
+  for (const context of contexts) {
+    console.log(`  ✓ current promotion ${context.activePromotion.entryId} (${context.activePromotion.entryHash.slice(0, 20)}...) found`);
+  }
+  console.log(`  ✓ reason: ${normalizedReason}`);
+
+  // The same four files as promotion are snapshotted. A safety retraction may
+  // repair a pre-existing artifact mismatch by regenerating from the newly
+  // withdrawn registry; only the final state is required to be byte-identical.
+  const backup = {
+    registry: backupFile(registryPath),
+    upstreamArtifact: backupFile(upstreamArtifactPath),
+    consumerArtifact: backupFile(consumerArtifactPath),
+    ledger: backupFile(ledgerPath),
+  };
+
+  const fullEntries = [];
+  let upstreamHashAfter;
+  let consumerHashAfter;
+  try {
+    const registryContentBefore = fs.readFileSync(registryPath, 'utf8');
+    const registryHashBefore = sha256(registryContentBefore);
+
+    // Write registry first so the generator emits candidate-backport for the
+    // withdrawn surface. local.status deliberately remains unchanged: it is
+    // historical source-side evidence, not host admission.
+    for (const context of contexts) context.record.harmony.status = 'candidate-backport';
+    writeViaTemp(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+    faultInject('AFTER_REGISTRY_WRITE', 'RETRACT');
+
+    const generated = spawnSync('node', [generatorPath], {
+      cwd: repoRoot,
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    if (generated.status !== 0) {
+      throw new Error(`generator failed during retraction. Output:\n${generated.stderr?.toString() || generated.stdout?.toString()}`);
+    }
+    if (!fs.existsSync(upstreamArtifactPath)) {
+      throw new Error(`upstream artifact missing after retraction generation: ${upstreamArtifactPath}`);
+    }
+    faultInject('AFTER_GENERATOR', 'RETRACT');
+
+    const upstreamContent = fs.readFileSync(upstreamArtifactPath);
+    if (!fs.existsSync(path.dirname(consumerArtifactPath))) {
+      throw new Error(`HarmonyOS consumer directory does not exist: ${path.dirname(consumerArtifactPath)} — is Reader-for-HarmonyOS checked out?`);
+    }
+    writeViaTemp(consumerArtifactPath, upstreamContent);
+    upstreamHashAfter = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
+    consumerHashAfter = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
+    if (upstreamHashAfter !== consumerHashAfter) {
+      throw new Error(`upstream and consumer artifacts differ after retraction sync: upstream ${upstreamHashAfter.slice(0, 20)}... != consumer ${consumerHashAfter.slice(0, 20)}...`);
+    }
+    faultInject('AFTER_CONSUMER_SYNC', 'RETRACT');
+
+    const ledger = ledgerBefore;
+    const timestamp = new Date().toISOString();
+    const transactionId = `retraction-group-${sha256(JSON.stringify({
+      timestamp,
+      recordIds,
+      registryHashBefore,
+    })).replace(/^sha256:/, '').slice(0, 20)}`;
+    for (const context of contexts) {
+      const { recordId, record, activePromotion } = context;
+      const entry = {
+        entryId: `retract-${String(ledger.entries.length + 1).padStart(3, '0')}`,
+        kind: 'retract',
+        timestamp,
+        transactionId,
+        transactionRecordIds: recordIds,
+        recordId,
+        pageFamily: activePromotion.pageFamily || handoffDirForRecordId(recordId),
+        surfaceType: record.surfaceType || activePromotion.surfaceType || 'unknown',
+        routeIds: record.routeIds || activePromotion.routeIds || [],
+        previousHarmonyStatus: 'implementation-ready',
+        newHarmonyStatus: 'candidate-backport',
+        localStatus: record.local?.status || 'unset',
+        reason: normalizedReason,
+        reversalOf: activePromotion.entryHash,
+        reversalOfEntryId: activePromotion.entryId,
+        retractedPromotion: {
+          entryHash: activePromotion.entryHash,
+          entryId: activePromotion.entryId,
+          sourceEvidenceHash: activePromotion.localReadyForFigma?.sourceEvidenceHash,
+          implementationCommit: activePromotion.localReadyForFigma?.implementationCommit,
+        },
+        registryHashBefore,
+        upstreamArtifactHashAfter: upstreamHashAfter,
+        consumerArtifactHashAfter: consumerHashAfter,
+        artifactsInSync: upstreamHashAfter === consumerHashAfter,
+        retractedBy: 'promote-family.mjs',
+      };
+      fullEntries.push(appendLedgerEntry(ledger, entry));
+    }
+    writeViaTemp(ledgerPath, `${JSON.stringify(ledger, null, 2)}\n`);
+    faultInject('AFTER_LEDGER_WRITE', 'RETRACT');
+
+    faultInject('IN_FINAL_VERIFY', 'RETRACT');
+    const finalRegistry = readJson(registryPath);
+    for (const recordId of recordIds) {
+      const finalRecord = finalRegistry.records.find((item) => item.id === recordId);
+      if (!finalRecord || finalRecord.harmony?.status !== 'candidate-backport') {
+        throw new Error(`registry read-back did not show ${recordId} as candidate-backport after retraction`);
+      }
+    }
+    const finalLedger = loadLedger();
+    const finalEntries = latestLedgerEntriesByRecord(finalLedger);
+    for (let index = 0; index < recordIds.length; index += 1) {
+      const recordId = recordIds[index];
+      const finalEntry = finalEntries.get(recordId);
+      if (!finalEntry || finalEntry.entryHash !== fullEntries[index].entryHash ||
+        ledgerEntryOperation(finalEntry) !== 'retract') {
+        throw new Error(`ledger read-back did not retain the retraction entry for ${recordId}`);
+      }
+    }
+    const finalUpstream = sha256(fs.readFileSync(upstreamArtifactPath, 'utf8'));
+    const finalConsumer = sha256(fs.readFileSync(consumerArtifactPath, 'utf8'));
+    if (finalUpstream !== upstreamHashAfter || finalConsumer !== consumerHashAfter) {
+      throw new Error(`artifact hash drift detected after retraction: upstream ${finalUpstream.slice(0, 20)}... vs ${upstreamHashAfter.slice(0, 20)}..., consumer ${finalConsumer.slice(0, 20)}... vs ${consumerHashAfter.slice(0, 20)}...`);
+    }
+  } catch (err) {
+    console.error(`✗ promote-family: retract ${recordIds.join(', ')} transaction failed — rolling back all four files.`);
+    console.error(`  error: ${err.message}`);
+    restoreBackup(backup.registry);
+    restoreBackup(backup.upstreamArtifact);
+    restoreBackup(backup.consumerArtifact);
+    restoreBackup(backup.ledger);
+    process.exit(1);
+  }
+
+  for (const context of contexts) {
+    console.log(`  ✓ ${context.recordId}: harmony.status implementation-ready → candidate-backport`);
+  }
+  console.log(`  ✓ VisualAdmission.ets regenerated (${upstreamHashAfter.slice(0, 20)}...)`);
+  console.log(`  ✓ consumer copy synced (${consumerHashAfter.slice(0, 20)}...)`);
+  for (const fullEntry of fullEntries) {
+    console.log(`  ✓ reversal ledger entry ${fullEntry.entryId} appended (${fullEntry.entryHash.slice(0, 20)}...)`);
+  }
+  console.log(`✓ promote-family: ${recordIds.length} record(s) retracted to candidate-backport`);
+}
+
+function retract(recordId, reason) {
+  retractRecords([recordId], reason);
 }
 
 // ─── CLI ──────────────────────────────────────────────────────────────────
 
-const arg = process.argv[2];
+const args = process.argv.slice(2);
+const arg = args[0];
 if (!arg) {
   console.error('Usage: node tools/design/promote-family.mjs <recordId>');
+  console.error('       node tools/design/promote-family.mjs --group <anchorRecordId>');
+  console.error('       node tools/design/promote-family.mjs --retract <recordId> --reason <reason>');
+  console.error('       node tools/design/promote-family.mjs --retract-group <anchorRecordId> --reason <reason>');
   console.error('       node tools/design/promote-family.mjs --check');
   process.exit(1);
 }
 if (arg === '--check') {
-  runCheck();
+  if (args.length !== 1) fail('--check does not accept additional arguments');
+  const releaseLock = acquireTransactionLock();
+  try {
+    runCheck();
+  } finally {
+    releaseLock();
+  }
+} else if (arg === '--retract' || arg === '--retract-group') {
+  const recordId = args[1];
+  const reasonIndex = args.indexOf('--reason');
+  const reason = reasonIndex >= 0 ? args.slice(reasonIndex + 1).join(' ') : '';
+  if (!recordId || reasonIndex < 0) {
+    fail(`Usage: node tools/design/promote-family.mjs ${arg} <recordId> --reason <reason>`);
+  }
+  if (reasonIndex !== 2) {
+    fail('--reason must follow the recordId in retract mode');
+  }
+  const releaseLock = acquireTransactionLock();
+  try {
+    if (arg === '--retract-group') {
+      retractRecords(retractionGroupRecordIds(recordId), reason);
+    } else {
+      retract(recordId, reason);
+    }
+  } finally {
+    releaseLock();
+  }
+} else if (arg === '--group') {
+  const anchorRecordId = args[1];
+  if (!anchorRecordId || args.length !== 2) {
+    fail('Usage: node tools/design/promote-family.mjs --group <anchorRecordId>');
+  }
+  const releaseLock = acquireTransactionLock();
+  try {
+    promoteRecords(promotionGroupRecordIds(anchorRecordId));
+  } finally {
+    releaseLock();
+  }
 } else {
-  promote(arg);
+  if (args.length !== 1) fail('promotion accepts exactly one recordId');
+  const releaseLock = acquireTransactionLock();
+  try {
+    promote(arg);
+  } finally {
+    releaseLock();
+  }
 }

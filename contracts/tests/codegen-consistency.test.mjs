@@ -40,34 +40,37 @@ const syncConflictSchema = loadJson("sync-conflict.schema.json");
 // Phase 1 收尾 schema
 const stateRuleSchema = loadJson("state-rule.schema.json");
 
-test("generated/swift 16 个文件全部存在", () => {
+test("generated/swift 17 个文件全部存在", () => {
   for (const f of [
     "Route.swift", "UiEvent.swift", "UiState.swift", "ViewState.swift", "Motion.swift", "Token.swift",
     "CoreCommand.swift", "CoreEvent.swift", "HostRequest.swift",
     "ProgressLocation.swift", "Content.swift", "SyncConflict.swift",
-    "StateRule.swift", "MotionPolicy.swift", "Appearance.swift", "ScreenGraph.swift"
+    "StateRule.swift", "MotionPolicy.swift", "Appearance.swift", "ScreenGraph.swift",
+    "RouteReconstructionQuarantine.swift"
   ]) {
     ensureExists(join("swift", f));
   }
 });
 
-test("generated/kotlin 16 个文件全部存在", () => {
+test("generated/kotlin 17 个文件全部存在", () => {
   for (const f of [
     "Route.kt", "UiEvent.kt", "UiState.kt", "ViewState.kt", "Motion.kt", "Token.kt",
     "CoreCommand.kt", "CoreEvent.kt", "HostRequest.kt",
     "ProgressLocation.kt", "Content.kt", "SyncConflict.kt",
-    "StateRule.kt", "MotionPolicy.kt", "Appearance.kt", "ScreenGraph.kt"
+    "StateRule.kt", "MotionPolicy.kt", "Appearance.kt", "ScreenGraph.kt",
+    "RouteReconstructionQuarantine.kt"
   ]) {
     ensureExists(join("kotlin", f));
   }
 });
 
-test("generated/arkts 16 个文件全部存在", () => {
+test("generated/arkts 17 个文件全部存在", () => {
   for (const f of [
     "Route.ets", "UiEvent.ets", "UiState.ets", "ViewState.ets", "Motion.ets", "Token.ets",
     "CoreCommand.ets", "CoreEvent.ets", "HostRequest.ets",
     "ProgressLocation.ets", "Content.ets", "SyncConflict.ets",
-    "StateRule.ets", "MotionPolicy.ets", "Appearance.ets", "ScreenGraph.ets"
+    "StateRule.ets", "MotionPolicy.ets", "Appearance.ets", "ScreenGraph.ets",
+    "RouteReconstructionQuarantine.ets"
   ]) {
     ensureExists(join("arkts", f));
   }

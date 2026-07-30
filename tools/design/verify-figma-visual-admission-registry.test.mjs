@@ -50,24 +50,30 @@ test('report mode cannot be combined with a fail-closed delivery mode', () => {
 test('Reader quick/module/full bindings name their canonical masters and final Phone/Tablet assemblies', () => {
   const registry = JSON.parse(readFileSync(registryPath, 'utf8'));
   const currentRevisionEvidence = JSON.parse(readFileSync(currentRevisionEvidencePath, 'utf8'));
-  const expected = {
-    'toc-bookmarks': ['942:61', '942:58', '942:60', '943:9888', '943:10196'],
-    'tts': ['942:65', '942:62', '942:64', '943:10354', '943:10642'],
-    'reader-appearance': ['942:69', '942:66', '942:68', '943:10790', '943:11068'],
-    'reader-settings': ['942:73', '942:70', '942:72', '943:11211', '943:11477'],
+  // A2 strict physical removal split the responsive-page-master records in two:
+  // BOUND records still carry their native routeIds; PENDING records had their
+  // 5 legacy module routes (toc-bookmarks/tts/reader-appearance/reader-settings/
+  // content-search) physically retired (MAJOR) and now wait for their own Figma-
+  // backed native conversion. Both groups keep the exact same canonical Figma
+  // master + Phone/Tablet viewport + final assembly binding.
+  const bound = {
     'auto-page': ['942:53', '942:50', '942:52', '943:9001', '943:9301'],
-    'content-search': ['942:49', '942:46', '942:48', '943:8625', '943:8873'],
     'content-replacement': ['942:57', '942:54', '942:56', '943:9455', '943:9741'],
     'reader-full-directory': ['942:77', '942:74', '942:76', '943:11617', '943:11949'],
     'reader-full-tts': ['942:81', '942:78', '942:80', '943:12119', '943:13483'],
     'reader-full-appearance': ['942:85', '942:82', '942:84', '943:14169', '943:14553'],
     'reader-full-settings': ['942:89', '942:86', '942:88', '943:14749', '943:15055'],
   };
+  const pending = {
+    'reader.module.directory': ['942:61', '942:58', '942:60', '943:9888', '943:10196'],
+    'reader.module.tts': ['942:65', '942:62', '942:64', '943:10354', '943:10642'],
+    'reader.module.appearance': ['942:69', '942:66', '942:68', '943:10790', '943:11068'],
+    'reader.module.settings': ['942:73', '942:70', '942:72', '943:11211', '943:11477'],
+    'reader.quick.content-search': ['942:49', '942:46', '942:48', '943:8625', '943:8873'],
+  };
   const records = registry.records.filter((record) => record.surfaceType === 'responsive-page-master');
   assert.equal(records.length, 11);
-  for (const [routeId, [master, phone, tablet, phoneAssembly, tabletAssembly]] of Object.entries(expected)) {
-    const record = records.find((candidate) => candidate.routeIds.includes(routeId));
-    assert.ok(record, `${routeId} must have a dedicated responsive master binding`);
+  function assertFigmaBinding(record, [master, phone, tablet, phoneAssembly, tabletAssembly]) {
     assert.equal(record.classification, 'exact-figma-binding');
     assert.equal(record.figma.pageId, '834:3');
     assert.equal(record.figma.canonicalMasterId, master);
@@ -79,6 +85,21 @@ test('Reader quick/module/full bindings name their canonical masters and final P
     assert.equal(record.figma.revision, currentRevisionEvidence.currentRevision);
     assert.equal(record.figma.revisionStatus, 'official-rest-current-version-node-verified');
     assert.equal(record.figma.revisionEvidence.artifact, 'docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json');
+  }
+  for (const [routeId, nodes] of Object.entries(bound)) {
+    const record = records.find((candidate) => candidate.routeIds.includes(routeId));
+    assert.ok(record, `${routeId} must have a dedicated responsive master binding`);
+    assertFigmaBinding(record, nodes);
+  }
+  for (const [recordId, nodes] of Object.entries(pending)) {
+    const record = records.find((candidate) => candidate.id === recordId);
+    assert.ok(record, `${recordId} must remain registered pending its native conversion`);
+    assert.deepEqual(record.routeIds, [], `${recordId} must not keep retired routeIds`);
+    assert.equal(record.reconstruction?.status, 'pending-source-conversion',
+      `${recordId} must record why its routeIds are empty`);
+    assert.equal(record.harmony?.status, 'candidate-backport',
+      `${recordId} must remain fail-closed while pending`);
+    assertFigmaBinding(record, nodes);
   }
   const unresolved = registry.records.find((record) => record.id === 'reader.quick-and-full-unbound-options');
   assert.deepEqual(unresolved.routeIds, [

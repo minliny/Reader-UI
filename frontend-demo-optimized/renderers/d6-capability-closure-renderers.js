@@ -404,11 +404,23 @@
     return INTEGRATION_MAP[route] ? renderCapabilityRoute(route, data, appState) : null;
   }
 
-  window.ReaderD6CapabilityClosureRenderers = {
+  var d6Exports = {
     CAPABILITY_ROUTES: CAPABILITY_ROUTES,
     ROUTE_CONFIG: ROUTE_CONFIG,
     INTEGRATION_MAP: INTEGRATION_MAP,
     renderCapabilityRoute: renderCapabilityRoute,
     renderD6Route: renderD6Route
   };
+  var d6PublicRouteSpecifications = {
+    renderCapabilityRoute: { allowedRoutes: CAPABILITY_ROUTES, routeIndex: 0 },
+    renderD6Route: { allowedRoutes: CAPABILITY_ROUTES, routeIndex: 0, passthroughUnowned: true }
+  };
+  d6Exports.PUBLIC_ROUTE_RENDERER_BINDINGS = Object.freeze({
+    renderCapabilityRoute: CAPABILITY_ROUTES,
+    renderD6Route: CAPABILITY_ROUTES
+  });
+  if (window.ReaderPublicRouteRendererAdmission && typeof window.ReaderPublicRouteRendererAdmission.guardModule === "function") {
+    d6Exports = window.ReaderPublicRouteRendererAdmission.guardModule(d6Exports, d6PublicRouteSpecifications);
+  }
+  window.ReaderD6CapabilityClosureRenderers = d6Exports;
 })(window);

@@ -24,79 +24,6 @@
   line-height: 1.2;
 }
 
-.fd-book-focus-menu header {
-  min-width: 0;
-  display: grid;
-  grid-template-columns: 42px minmax(0, 1fr);
-  grid-template-areas:
-    "cover title"
-    "cover meta";
-  align-items: center;
-  column-gap: 10px;
-}
-
-.fd-book-focus-cover {
-  grid-area: cover;
-  width: 42px;
-  aspect-ratio: 2 / 3;
-  border-radius: var(--fd-radius-xs);
-  background: var(--focus-cover) center / contain no-repeat rgba(255, 255, 255, 0.78);
-  box-shadow: 0 8px 14px rgba(52, 38, 26, 0.16);
-}
-
-.fd-book-focus-menu strong,
-.fd-book-focus-menu small {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.fd-book-focus-menu strong {
-  grid-area: title;
-  font-family: var(--fd-serif);
-  font-size: 16px;
-  line-height: 1.2;
-}
-
-.fd-book-focus-menu small {
-  grid-area: meta;
-  color: var(--fd-muted);
-  font-size: 11px;
-  line-height: 1.2;
-}
-
-.fd-book-focus-menu div {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 7px;
-}
-
-.fd-book-focus-menu button {
-  min-width: 0;
-  min-height: 54px;
-  display: grid;
-  place-items: center;
-  gap: 4px;
-  padding: 6px;
-  border-radius: var(--fd-radius-md);
-  background: rgba(238, 232, 223, 0.86);
-  color: #2b251f;
-  font-size: 11px;
-  font-weight: 900;
-}
-
-.fd-book-focus-menu button span {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.fd-book-focus-menu button.is-danger {
-  background: rgba(180, 61, 48, 0.1);
-  color: #9f3126;
-}
-
 .fd-main-nav {
   position: absolute;
   z-index: var(--fd-ds-z-main-nav);
@@ -2582,13 +2509,29 @@
 
 .fd-ir-background-layer {
   position: absolute;
-  inset: 0;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.28 0 0 0 0 0.20 0 0 0 0.3 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") 0 0 / 200px 200px,
-    repeating-linear-gradient(0deg, rgb(var(--reader-texture-color-rgb, 145 120 86) / var(--reader-theme-texture-opacity, var(--reader-page-texture-opacity, 0))) 0 1px, transparent 1px 7px),
-    linear-gradient(180deg, var(--reader-paper-start, rgba(255, 249, 242, 0.94)), var(--reader-paper-end, rgba(248, 236, 222, 0.96))),
-    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.7), transparent 42%),
-    radial-gradient(ellipse at 50% 50%, transparent 56%, rgba(89, 70, 50, 0.10) 100%);
+  inset: 0.56px;
+  overflow: hidden;
+  border-radius: inherit;
+  background-position: top left;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+  background-size: 100px 100px, auto, auto, auto;
+  background-image:
+    url("../assets/figma/reader-paper-layer.png"),
+    linear-gradient(180deg, var(--reader-paper-start, #FBF4E9) 0%, var(--reader-paper-end, #EFE2D0) 100%),
+    url("data:image/svg+xml;utf8,<svg viewBox='0 0 388.89 842.88' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%25' width='100%25' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0 -71.799 -71.799 0 194.44 151.72)'><stop stop-color='rgba(255,255,255,0.7)' offset='0'/><stop stop-color='rgba(191,191,191,0.525)' offset='0.105'/><stop stop-color='rgba(128,128,128,0.35)' offset='0.21'/><stop stop-color='rgba(64,64,64,0.175)' offset='0.315'/><stop stop-color='rgba(0,0,0,0)' offset='0.42'/></radialGradient></defs></svg>"),
+    url("data:image/svg+xml;utf8,<svg viewBox='0 0 388.89 842.88' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%25' width='100%25' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0 -59.601 -27.499 0 194.44 421.44)'><stop stop-color='rgba(0,0,0,0)' offset='0.56'/><stop stop-color='rgba(89,70,50,0.1)' offset='1'/></radialGradient></defs></svg>");
+}
+
+/* Canonical Figma TabletExpanded variant: 760×960 outer surface, 758.89×958.89
+ * paper layer, and its own light/vignette transform. Landscape resolves to
+ * tablet-expanded in render-runtime; no compact reader master exists. */
+.fd-demo[data-demo-mode="regular"][data-viewport-class="tablet-expanded"] .fd-ir-background-layer,
+.fd-demo[data-demo-mode="regular"][data-viewport-class="expanded-width"] .fd-ir-background-layer {
+  background-image:
+    url("../assets/figma/reader-paper-layer.png"),
+    linear-gradient(180deg, var(--reader-paper-start, #FBF4E9) 0%, var(--reader-paper-end, #EFE2D0) 100%),
+    url("data:image/svg+xml;utf8,<svg viewBox='0 0 758.89 958.89' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%25' width='100%25' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0 -81.681 -140.11 0 379.44 172.6)'><stop stop-color='rgba(255,255,255,0.7)' offset='0'/><stop stop-color='rgba(191,191,191,0.525)' offset='0.105'/><stop stop-color='rgba(128,128,128,0.35)' offset='0.21'/><stop stop-color='rgba(64,64,64,0.175)' offset='0.315'/><stop stop-color='rgba(0,0,0,0)' offset='0.42'/></radialGradient></defs></svg>"),
+    url("data:image/svg+xml;utf8,<svg viewBox='0 0 758.89 958.89' xmlns='http://www.w3.org/2000/svg' preserveAspectRatio='none'><rect x='0' y='0' height='100%25' width='100%25' fill='url(%23grad)' opacity='1'/><defs><radialGradient id='grad' gradientUnits='userSpaceOnUse' cx='0' cy='0' r='10' gradientTransform='matrix(0 -67.804 -53.662 0 379.44 479.44)'><stop stop-color='rgba(0,0,0,0)' offset='0.56'/><stop stop-color='rgba(89,70,50,0.1)' offset='1'/></radialGradient></defs></svg>");
 }
 
 /* 夜读氛围 signature moment：极光光晕 + 星点 + 暗角（白天 opacity:0 不显示） */
@@ -2625,7 +2568,14 @@
 
 .fd-ir-reading-layer {
   position: absolute;
-  inset: var(--reader-top-margin, 72px) var(--reader-side-margin, 32px) 48px;
+  /* Reader/Responsive/ReadingSurface · Viewport=Phone (1023:18355).
+   * ReadingContent begins inside the 0.56px PaperLayer inset. Page-space
+   * controls apply deltas from the canonical Figma defaults, rather than
+   * replacing the responsive master geometry. */
+  top: calc(72.56px + (var(--reader-top-margin, 72px) - 72px));
+  right: calc(32.544px + (var(--reader-side-margin, 32px) - 32px));
+  bottom: 48.549px;
+  left: calc(32.56px + (var(--reader-side-margin, 32px) - 32px));
   z-index: var(--fd-ds-z-content);
   display: block;
   overflow: hidden;
@@ -2640,16 +2590,8 @@
   box-shadow: none;
 }
 
-.fd-ir-reading-layer.fd-reader-page-turn-next {
-  animation: fd-reader-page-next var(--fd-motion-effective-page-turn) var(--reader-motion-easing-enter);
-}
-
-.fd-ir-reading-layer.fd-reader-page-turn-prev {
-  animation: fd-reader-page-prev var(--fd-motion-effective-page-turn) var(--reader-motion-easing-enter);
-}
-
 .fd-ir-reading-layer h1 {
-  margin: 0 0 24px;
+  margin: 0 0 18px;
   color: var(--reader-ink, #2b241d);
   font-family: inherit;
   font-size: calc(var(--reader-font-size, 18px) + 5px);
@@ -3125,28 +3067,6 @@
   cursor: pointer;
 }
 
-@keyframes fd-reader-page-next {
-  from {
-    opacity: 0;
-    transform: translateX(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes fd-reader-page-prev {
-  from {
-    opacity: 0;
-    transform: translateX(-16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
 /* ===== 翻页模式：竖向滚动（连续阅读） ===== */
 .fd-ir-reading-layer[data-page-mode="vertical"] {
   overflow-x: hidden;
@@ -3197,40 +3117,19 @@
   display: none;
 }
 
-/* ===== 翻页动画：仿真模式（3D curl） ===== */
-@keyframes fd-reader-page-next-curl {
-  from {
-    opacity: 0;
-    transform: perspective(1200px) rotateY(-18deg) translateX(20px);
-    transform-origin: left center;
-  }
-  to {
-    opacity: 1;
-    transform: perspective(1200px) rotateY(0) translateX(0);
-  }
-}
-
-@keyframes fd-reader-page-prev-curl {
-  from {
-    opacity: 0;
-    transform: perspective(1200px) rotateY(18deg) translateX(-20px);
-    transform-origin: right center;
-  }
-  to {
-    opacity: 1;
-    transform: perspective(1200px) rotateY(0) translateX(0);
-  }
-}
-
-.fd-ir-reading-layer[data-page-animation="curl"].fd-reader-page-turn-next {
-  animation: fd-reader-page-next-curl var(--fd-motion-effective-page-turn) var(--reader-motion-easing-enter);
-}
-
-.fd-ir-reading-layer[data-page-animation="curl"].fd-reader-page-turn-prev {
-  animation: fd-reader-page-prev-curl var(--fd-motion-effective-page-turn) var(--reader-motion-easing-enter);
-}
-
-/* 无动画模式 */
+/*
+ * F3 motion is not frozen for cover, slide, or simulation. Keep their
+ * distinct five-value product semantics and horizontal mode, but fail closed
+ * instead of inventing any local page-turn timeline. The explicit no-motion
+ * branch also prevents a generic selector from accidentally animating these
+ * states before Figma supplies MotionIds.
+ */
+.fd-ir-reading-layer[data-page-animation="cover"].fd-reader-page-turn-next,
+.fd-ir-reading-layer[data-page-animation="cover"].fd-reader-page-turn-prev,
+.fd-ir-reading-layer[data-page-animation="slide"].fd-reader-page-turn-next,
+.fd-ir-reading-layer[data-page-animation="slide"].fd-reader-page-turn-prev,
+.fd-ir-reading-layer[data-page-animation="simulation"].fd-reader-page-turn-next,
+.fd-ir-reading-layer[data-page-animation="simulation"].fd-reader-page-turn-prev,
 .fd-ir-reading-layer[data-page-animation="none"].fd-reader-page-turn-next,
 .fd-ir-reading-layer[data-page-animation="none"].fd-reader-page-turn-prev {
   animation: none;

@@ -462,7 +462,7 @@ R1.1 把 46 个 `group` 标记为 `containsUnenumeratedSubcontrols=true` 但**�
 
 R1.1 完成了三层身份分离，但 canonical renderer（`frontend-demo-optimized/`）尚未消费三层身份：
 1. D2 Settings 分发（`renderD2Route`）不接收 `options` / `pageState`，无法感知 loading / error 等 ViewState。
-2. 12 个页面族（settings-general / source-management / webdav-config / sync-backup / bookshelf / book-detail / import-conflict-resolve / search-results / discover / rss / source-switch / about-restore-preview）的 control identity 声明分散在 registry 与 renderer 之间，缺中央对账。
+2. 12 个页面族（settings-general / source-management / webdav-config / sync-backup / bookshelf / book-detail / import-conflict-resolve / search-results / discover / rss / source-switch / restore-preview）的 control identity 声明分散在 registry 与 renderer 之间，缺中央对账。
 3. 46 个设置行子控件（`containsUnenumeratedSubcontrols=true`，switch 28 / select 15 / stepper 2 / segment 1）在 IC0 DOM walk 中未枚举，R1.1 仅标记，未分配独立 entityKey / controlKey / controlId。
 4. UiEvent / controlKey / entityKey 的稳定性不变式（selector 变化、label 变化、viewport 变化时身份不变）缺自动化测试守护。
 
@@ -763,7 +763,7 @@ R2.0 落地了一万行手写静态声明表 `frontend-demo-optimized/control-id
 | --- | --- | --- |
 | 1 | 声明表由生成器生成，可重算 | 新增 `tools/interaction-inventory/generate-canonical-declarations.mjs`，`--check` 模式做字节稳定校验 |
 | 2 | 按真实 dispatch 校验 renderer owner | 新增 `tools/interaction-inventory/generated/renderer-dispatch-map.json`，每个路由映射 `pageFamily` / `dispatchLayer` / `dispatchMap` / `renderer` / `rendererFile`；reconcile 强制 declarations 与之一致 |
-| 3 | exact 12 页面族 | 严格枚举：`bookshelf` / `book-detail` / `search-results` / `import-conflict-resolve` / `discover` / `rss` / `source-switch` / `settings-general` / `source-management` / `webdav-config` / `sync-backup` / `about-restore-preview`；`bookshelf-search-settings` 归并到 `bookshelf`；reconcile `exact12PageFamilies` 检查不多不少 |
+| 3 | exact 12 页面族 | 严格枚举：`bookshelf` / `book-detail` / `search-results` / `import-conflict-resolve` / `discover` / `rss` / `source-switch` / `settings-general` / `source-management` / `webdav-config` / `sync-backup` / `restore-preview`；`bookshelf-search-settings` 归并到 `bookshelf`；reconcile `exact12PageFamilies` 检查不多不少 |
 | 4 | route-local occurrence 1:1 对账 | 生成器遍历 dispatch map 全部 67 路由，对每个路由从 R1.2 registry 投影该路由上的所有 occurrence；reconcile `routeLocalOccurrenceReconciliation` 双向匹配（registry ↔ declarations），任何缺失即 fail |
 | 5 | 展开 stepper / segment 子控件 | 生成器按 `expectedSubcontrolType` 展开：switch→1 / select→1 / stepper→2 (minus + plus) / segment→3 (option-1/2/3)；50 = 28 + 15 + 4 + 3 |
 | 6 | uiEvent 和 controlId 非空或明确豁免 | 生成器对 `uiEvent=null` 自动派生 `uiEventExemption`（4 种合法类型：`pending-explicit-semantics` / `pending-instance-disambiguation` / `decorative` / `container-only`）；对 subcontrol `controlId=null` 标注 `controlIdExemption="pending-registry-enumeration"`；reconcile 强制双向校验 |
