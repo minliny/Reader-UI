@@ -642,7 +642,6 @@
         "status": "source-conversion-complete",
         "retiredRouteIds": [
           "control-layer-base-v2",
-          "reader-directory-overlay-v2",
           "reader-appearance-overlay-v2",
           "reader-tts-overlay-v2",
           "reader-settings-overlay-v2",
