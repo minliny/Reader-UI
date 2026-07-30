@@ -1,10 +1,9 @@
 # Runtime Live Shadow Protocol
 
-状态规则：Reader-UI Contract head 为 4.0.0。任何 Host consumer lock
+状态规则：Reader-UI Contract head 为 4.0.1。任何 Host consumer lock
 若未同时绑定 `runtime-payload-contracts` schema 4 和当前 payload SHA-256，
-都必须 fail-closed。2026-07-30 核验时 HarmonyOS 仍锁定 Reader-UI 3.1.1
-的 schema-v2 consumer record，因此完整 4.0 runtime 消费尚未闭环；不得用
-VisualAdmission 已同步替代 runtime release-lock 证明。
+都必须 fail-closed。4.0.1 发布前 HarmonyOS 仍锁定 Reader-UI 4.0.0；
+不得用 VisualAdmission 已同步替代本轮 runtime release-lock 证明。
 
 本文件定义 ReaderUIRuntime 接入真实 App 事件总线时的最小行为。它只允许把 runtime 作为连续状态的观察者，不能把测试 adapter 误写成生产 Pilot。
 
