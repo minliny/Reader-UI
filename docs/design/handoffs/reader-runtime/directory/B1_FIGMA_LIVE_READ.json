@@ -63,7 +63,16 @@
     "foldVariantPresent": false,
     "componentInstancesPreserved": true,
     "detachedFinalAssemblyInstances": 0,
-    "reactionMutationPerformed": false
+    "reactionMutationPerformed": false,
+    "bookmarkStateAudit": {
+      "observedAt": "2026-07-30T10:52:40Z",
+      "phoneTabLabelNodeId": "915:77",
+      "tabletTabLabelNodeId": "917:73",
+      "prototypeReactionCount": 0,
+      "hiddenBookmarkStateNodeCount": 0,
+      "bookmarkCardNodeCount": 0,
+      "decision": "The bookmark label remains visible because it belongs to the canonical master. No bookmark state, card, or reaction may be implemented until an exact Figma node is bound."
+    }
   },
   "revision": {
     "numericRevisionExposedByConnector": false,

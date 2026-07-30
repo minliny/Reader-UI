@@ -28,6 +28,11 @@
       "field": "canonical renderer",
       "oldValue": "The registry pointed at an unreachable D3 directory renderer.",
       "newValue": "The registry points at render-runtime.js#readerDirectoryOverlay, bound to the live Phone and Tablet component variants and final instances."
+    },
+    {
+      "field": "bookmark state",
+      "oldValue": "The local quick panel synthesized bookmark cards and demo excerpts without a Figma state node.",
+      "newValue": "The canonical bookmark label is preserved, but the interaction fails closed until an exact Figma bookmark state and reaction are bound."
     }
   ],
   "boundary": {

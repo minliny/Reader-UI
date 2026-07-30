@@ -1001,8 +1001,8 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 776941,
-      "sha256": "00c42e121104adedbc767a5c65b7a858a02a29ef5db6e3ed596ee3a3ee56d62c"
+      "byteLength": 776169,
+      "sha256": "e6f18e46d0d76ee83e312fb2a4e84480c272d2d5ca38a1dde08d9be43132706e"
     },
     {
       "path": "frontend-demo-optimized/render.js",
@@ -1106,8 +1106,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/02b-reader-toc-module.css",
-      "byteLength": 12392,
-      "sha256": "0b113ab657df1ac9182cc564e9eff787d3a957e3f5de4c0774b7247804d66470"
+      "byteLength": 11332,
+      "sha256": "2dc35510163b8af5f92679d44b71ef3e93a41097a816350d526bbac218678401"
     },
     {
       "path": "frontend-demo-optimized/styles/02c-reader-auto-search.css",
@@ -1689,8 +1689,8 @@
     {
       "name": "design-runtime",
       "fileCount": 187,
-      "byteLength": 5152688,
-      "sha256": "8b0ec212de7a274422ac89cccc1b5bbf3268a5c7c3b0a0be34865e54b3e326b8",
+      "byteLength": 5150856,
+      "sha256": "b3c7469cd7b0a7df40da011dc2c0fa1e785172380be9cfd5b7d3a13c1b3822c3",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",

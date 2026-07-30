@@ -24,6 +24,21 @@
     "overlayKind": "directory",
     "routeMutation": false,
     "localTarget": "frontend-demo-optimized/render-runtime.js#readerDirectoryOverlay",
+    "resolvedStates": [
+      "directory"
+    ],
+    "unboundStates": [
+      {
+        "name": "bookmark",
+        "visibleLabelNodeIds": [
+          "915:77",
+          "917:73"
+        ],
+        "stateNodeId": null,
+        "reactionCount": 0,
+        "policy": "label-preserved-interaction-fail-closed"
+      }
+    ],
     "legacyRouteIds": [
       "toc-bookmarks",
       "reader-directory-overlay-v2"

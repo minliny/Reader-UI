@@ -33,6 +33,12 @@
     "trigger": "reader.module.switch",
     "dismissTrigger": "reader.control.toggle",
     "routeIdentityRule": "opening, selecting, and dismissing Directory keep the current canonical reading route unchanged",
+    "stateBoundary": {
+      "resolvedState": "directory",
+      "bookmarkLabel": "preserved from canonical master",
+      "bookmarkInteraction": "fail-closed",
+      "reason": "Live read found no bookmark state node, bookmark card, hidden variant, or prototype reaction in either Phone or Tablet master."
+    },
     "composition": [
       "ReaderTopBar",
       "ReaderDirectoryPanel",
@@ -64,15 +70,15 @@
   "verification": {
     "focusedReaderDirectoryRegression": {
       "command": "node --test frontend-demo-optimized/verify/r3a-reader-directory-figma-source.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-identity.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-flow.test.mjs frontend-demo-optimized/verify/r3a-reader-runtime-aria-focus.test.mjs frontend-demo-optimized/verify/reader-control-continuity.test.mjs frontend-demo-optimized/verify/reader-appearance-atoms.test.mjs frontend-demo-optimized/verify/reader-pagination-runtime.test.mjs",
-      "tests": 62,
-      "passed": 62,
+      "tests": 63,
+      "passed": 63,
       "failed": 0,
       "status": "passed"
     },
     "fullFrontendRegression": {
       "command": "node --test --test-reporter=tap frontend-demo-optimized/verify/*.test.mjs",
-      "tests": 591,
-      "passed": 591,
+      "tests": 592,
+      "passed": 592,
       "failed": 0,
       "status": "passed"
     },
@@ -102,6 +108,8 @@
     "deviceExecuted": false,
     "fullDirectoryClaimedReady": false,
     "siblingReaderModuleClaimedReady": false,
+    "unboundBookmarkStateRendered": false,
+    "localDemoBookmarkExcerptRendered": false,
     "noDetachedFrameOrScreenshot": true,
     "noGenericVisualFallback": true
   }

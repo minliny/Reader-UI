@@ -3340,6 +3340,14 @@
       </nav>`;
   }
 
+  function readerQuickDirectoryTabsHtml() {
+    return `
+      <nav class="fd-reader-full-directory-tabs fd-reader-quick-directory-tabs" aria-label="目录书签切换">
+        <button class="is-active" type="button" aria-current="page">目录</button>
+        <button type="button" aria-disabled="true" tabindex="-1" data-reader-figma-unbound-state="bookmark">书签</button>
+      </nav>`;
+  }
+
   function typographyNumber(value, fractionDigits) {
     return Number(value).toFixed(fractionDigits).replace(/\.?0+$/, "");
   }
@@ -4641,26 +4649,12 @@
 
   function readerModulePanel(type, appState, data) {
     if (type === "directory") {
-      const tocMode = readerTocMode(appState);
       const currentChapterState = currentReaderChapter(data, appState);
       const chapters = readerChapters(data);
-      const chapterPool = tocMode === "bookmark" ? chapters.filter((chapter) => chapterHasMarker(chapter, "书签")) : chapters;
-      const currentPoolIndex = Math.max(0, chapterPool.indexOf(currentChapterState.chapter));
-      const visibleItems = chapterPool.slice(Math.max(0, currentPoolIndex - 2), Math.min(chapterPool.length, currentPoolIndex + 4));
-      const quickBookmarkExcerpts = [
-        "雨声在窗外连成一片，密密地刺在玻璃上，汇成朦胧的水幕。",
-        "他站在窗前，手里握着那封被雨水润湿的信，字迹依旧清晰。"
-      ];
+      const currentPoolIndex = Math.max(0, chapters.indexOf(currentChapterState.chapter));
+      const visibleItems = chapters.slice(Math.max(0, currentPoolIndex - 2), Math.min(chapters.length, currentPoolIndex + 4));
       const listHtml = visibleItems.map((chapter) => {
         const chapterIndex = Math.max(0, chapters.indexOf(chapter));
-        if (tocMode === "bookmark") {
-          const excerptIndex = Math.max(0, chapterPool.indexOf(chapter));
-          return `
-            <article class="fd-reader-quick-bookmark-card" role="button" tabindex="0" data-action="reader.chapter.jump" data-reader-directory-index="${chapterIndex}" data-reader-chapter-key="${esc(chapter.chapterKey || "")}">
-              <strong>${esc(chapter.title)}</strong>
-              <p>${esc(`${quickBookmarkExcerpts[excerptIndex % quickBookmarkExcerpts.length]}${quickBookmarkExcerpts[(excerptIndex + 1) % quickBookmarkExcerpts.length]}`)}</p>
-            </article>`;
-        }
         return `
             <article class="fd-reader-toc-row fd-reader-quick-directory-row${chapterIndex === currentChapterState.index ? " is-current" : ""}" role="button" tabindex="0" data-action="reader.chapter.jump" data-reader-directory-index="${chapterIndex}" data-reader-chapter-key="${esc(chapter.chapterKey || "")}">
               <strong>${esc(chapter.title)}</strong>
@@ -4669,9 +4663,9 @@
       }).join("");
       return `
         <section class="fd-reader-module-panel fd-reader-toc-panel" data-dev-region="ReaderModulePanel" data-reader-figma-overlay="${READER_DIRECTORY_FIGMA_BINDING.overlayKind}" data-figma-file-key="${READER_DIRECTORY_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_DIRECTORY_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_DIRECTORY_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_DIRECTORY_FIGMA_BINDING.tabletNodeId}" aria-label="目录与书签">
-          <div class="fd-reader-quick-directory-workspace is-${esc(tocMode)}">
-            ${readerTocSwitchHtml(tocMode, "fd-reader-full-directory-tabs fd-reader-quick-directory-tabs")}
-            <div class="${tocMode === "bookmark" ? "fd-reader-quick-bookmark-list" : "fd-reader-toc-list fd-reader-quick-directory-list"}">
+          <div class="fd-reader-quick-directory-workspace is-directory">
+            ${readerQuickDirectoryTabsHtml()}
+            <div class="fd-reader-toc-list fd-reader-quick-directory-list">
               ${listHtml}
             </div>
           </div>

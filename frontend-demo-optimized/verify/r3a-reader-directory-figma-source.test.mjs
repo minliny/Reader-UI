@@ -95,6 +95,26 @@ test("B2 production renderer composes the frozen Phone and Tablet Directory mast
   assert.equal(receipt.observations.foldVariantPresent, false);
 });
 
+test("B2 quick Directory emits only the Figma-resolved directory state", () => {
+  const tabsStart = runtimeSource.indexOf("function readerQuickDirectoryTabsHtml()");
+  const tabsEnd = runtimeSource.indexOf("function typographyNumber", tabsStart);
+  const tabsSource = runtimeSource.slice(tabsStart, tabsEnd);
+  const panelStart = runtimeSource.indexOf("function readerModulePanel(type, appState, data)");
+  const panelEnd = runtimeSource.indexOf('if (type === "tts")', panelStart);
+  const directorySource = runtimeSource.slice(panelStart, panelEnd);
+  const receipt = json("docs/design/handoffs/reader-runtime/directory/B1_FIGMA_LIVE_READ.json");
+
+  assert.ok(tabsStart >= 0 && tabsEnd > tabsStart && panelStart >= 0 && panelEnd > panelStart);
+  assert.match(tabsSource, /data-reader-figma-unbound-state="bookmark"/);
+  assert.match(tabsSource, /aria-disabled="true"/);
+  assert.doesNotMatch(tabsSource, /data-reader-toc-mode="bookmark"/);
+  assert.doesNotMatch(directorySource, /fd-reader-quick-bookmark-card/);
+  assert.doesNotMatch(directorySource, /quickBookmarkExcerpts/);
+  assert.equal(receipt.observations.bookmarkStateAudit.prototypeReactionCount, 0);
+  assert.equal(receipt.observations.bookmarkStateAudit.hiddenBookmarkStateNodeCount, 0);
+  assert.equal(receipt.observations.bookmarkStateAudit.bookmarkCardNodeCount, 0);
+});
+
 test("B2 keeps retired quick-directory routes absent and Full Directory independent", () => {
   const routeSchema = json("contracts/route.schema.json");
   const registry = json("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
