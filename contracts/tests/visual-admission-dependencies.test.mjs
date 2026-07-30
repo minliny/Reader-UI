@@ -15,8 +15,32 @@ test("visual admission dependency graph binds Source Switch to both reader prere
   const dependencies = readJson("docs/design/FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json");
   const registry = readJson("docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json");
 
-  assert.equal(dependencies.schemaVersion, "1.0.0");
+  assert.equal(dependencies.schemaVersion, "1.1.0");
   assert.equal(dependencies.kind, "FIGMA_VISUAL_ADMISSION_DEPENDENCIES");
+  assert.deepEqual(
+    dependencies.nativeA2ConsumerClosures.map((closure) => closure.recordIds),
+    [
+      ["reader.reading-surface"],
+      [
+        "bookshelf.page",
+        "bookshelf.book-card",
+        "bookshelf.action-sheet",
+        "bookshelf.multi-select",
+        "bookshelf.local-import-dialog",
+        "bookshelf.list-mode",
+      ],
+    ],
+  );
+  for (const closure of dependencies.nativeA2ConsumerClosures) {
+    assert.match(
+      closure.prePromotionReceipt,
+      /^docs\/design\/native-consumer-receipts\/.+\/A2_PRE_PROMOTION_CONSUMER_RECEIPT\.json$/,
+    );
+    assert.match(
+      closure.postPromotionReceipt,
+      /^docs\/design\/native-consumer-receipts\/.+\/B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT\.json$/,
+    );
+  }
   assert.equal(dependencies.dependencies.length, 1);
 
   const sourceSwitch = dependencies.dependencies[0];

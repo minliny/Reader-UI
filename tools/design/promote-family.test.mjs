@@ -33,6 +33,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
 const PROMOTE_SCRIPT = path.join(REPO_ROOT, 'tools', 'design', 'promote-family.mjs');
 const GENERATOR_SCRIPT = path.join(REPO_ROOT, 'tools', 'design', 'generate-visual-admission-contract.mjs');
+const NATIVE_CONSUMER_RECEIPTS = path.join(
+  REPO_ROOT,
+  'tools',
+  'design',
+  'native-consumer-receipts.mjs',
+);
 const SHARED_WRITER_LOCK = path.join(REPO_ROOT, 'tools', 'shared', 'shared-writer-lock.mjs');
 
 // ─── Test harness: create a sandboxed copy of the registry/handoff/ledger ──
@@ -67,6 +73,10 @@ function makeSandbox() {
   // Copy promote-family.mjs and generator
   fs.copyFileSync(PROMOTE_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'promote-family.mjs'));
   fs.copyFileSync(GENERATOR_SCRIPT, path.join(readerUiRoot, 'tools', 'design', 'generate-visual-admission-contract.mjs'));
+  fs.copyFileSync(
+    NATIVE_CONSUMER_RECEIPTS,
+    path.join(readerUiRoot, 'tools', 'design', 'native-consumer-receipts.mjs'),
+  );
   fs.copyFileSync(SHARED_WRITER_LOCK, path.join(readerUiRoot, 'tools', 'shared', 'shared-writer-lock.mjs'));
 
   // Promotion runs the record's two declared B4 runtime checks while holding
@@ -88,7 +98,7 @@ function makeSandbox() {
   fs.writeFileSync(
     path.join(readerUiRoot, 'docs', 'design', 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json'),
     JSON.stringify({
-      schemaVersion: '1.0.0',
+      schemaVersion: '1.1.0',
       kind: 'FIGMA_VISUAL_ADMISSION_DEPENDENCIES',
       sourceAuthorities: [{
         recordId: 'reader.reading-surface',
@@ -99,6 +109,7 @@ function makeSandbox() {
           ],
         },
       }],
+      nativeA2ConsumerClosures: [],
       dependencies: [],
     }, null, 2) + '\n',
   );
@@ -220,6 +231,7 @@ function writeLocalReady(readerUiRoot, recordId, family, ready = true, options =
     admission: {
       localReadyForFigma: ready,
       recordIds: options.recordIds || [recordId],
+      exactLocalCommit: implCommit,
     },
     localSource: {
       implementationCommit: implCommit,
@@ -231,6 +243,36 @@ function writeLocalReady(readerUiRoot, recordId, family, ready = true, options =
     sourceEvidenceHash,
   }, null, 2) + '\n');
   return localReadyPath;
+}
+
+function commitSandbox(repoRoot, message) {
+  spawnSync('git', ['add', '.'], { cwd: repoRoot, stdio: 'ignore' });
+  const result = spawnSync('git', ['commit', '-m', message], {
+    cwd: repoRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (result.status !== 0) return null;
+  return spawnSync('git', ['rev-parse', 'HEAD'], {
+    cwd: repoRoot,
+    encoding: 'utf8',
+  }).stdout.trim();
+}
+
+function initHostGit(hostRoot) {
+  const init = spawnSync('git', ['init'], {
+    cwd: hostRoot,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  if (init.status !== 0) return null;
+  spawnSync('git', ['config', 'user.email', 'test@example.com'], {
+    cwd: hostRoot,
+    stdio: 'ignore',
+  });
+  spawnSync('git', ['config', 'user.name', 'Test'], {
+    cwd: hostRoot,
+    stdio: 'ignore',
+  });
+  return commitSandbox(hostRoot, 'test harmony A2 cleanup');
 }
 
 function initSandboxGit(readerUiRoot) {
@@ -430,6 +472,136 @@ function installHarmonyTarget(hostRoot, symbol = 'RouteRenderer') {
     path.join(targetDir, 'RouteRenderer.ets'),
     `export struct ${symbol} {}\n`,
   );
+  const scriptsDir = path.join(hostRoot, 'scripts');
+  fs.mkdirSync(scriptsDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(scriptsDir, 'sync_reader_ui_screen_graph.mjs'),
+    '#!/usr/bin/env node\nconsole.log("[screen-graph-consumer] PASS sandbox");\n',
+  );
+}
+
+function writeA2Delta(readerUiRoot, handoffDir) {
+  const relativePath = handoffDir === 'bookshelf'
+    ? path.join('docs', 'design', 'native-disposition', 'bookshelf', 'A2_NATIVE_RETIREMENT_DELTA.json')
+    : path.join(
+      'docs',
+      'design',
+      'handoffs',
+      'reader-runtime',
+      'reading-surface',
+      'A2_CONTRACT_RETIREMENT_DELTA.json',
+    );
+  const target = path.join(readerUiRoot, relativePath);
+  fs.mkdirSync(path.dirname(target), { recursive: true });
+  fs.writeFileSync(
+    target,
+    `${JSON.stringify({
+      schemaVersion: '1.0.0',
+      kind: handoffDir === 'bookshelf'
+        ? 'A2_NATIVE_RETIREMENT_DELTA'
+        : 'A2_CONTRACT_RETIREMENT_DELTA',
+      status: 'approved-source-retirement',
+    }, null, 2)}\n`,
+  );
+  return relativePath;
+}
+
+function writeA2PrePromotionReceipt({
+  readerUiRoot,
+  hostRoot,
+  handoffDir,
+  recordIds,
+  implementationCommit,
+  b3EvidenceCommit,
+  localReadyPath,
+  a2DeltaPath,
+  mode = 'pre-promotion',
+  activePromotionEntries,
+}) {
+  const hostCommit = spawnSync('git', ['rev-parse', 'HEAD'], {
+    cwd: hostRoot,
+    encoding: 'utf8',
+  }).stdout.trim();
+  const hostTree = spawnSync('git', ['show', '-s', '--format=%T', hostCommit], {
+    cwd: hostRoot,
+    encoding: 'utf8',
+  }).stdout.trim();
+  const hostSubject = spawnSync('git', ['show', '-s', '--format=%s', hostCommit], {
+    cwd: hostRoot,
+    encoding: 'utf8',
+  }).stdout.trim();
+  const changedPaths = spawnSync(
+    'git',
+    ['diff-tree', '--root', '--no-commit-id', '--name-only', '-r', hostCommit],
+    { cwd: hostRoot, encoding: 'utf8' },
+  ).stdout.split('\n').map((item) => item.trim()).filter(Boolean).sort();
+  const localReady = JSON.parse(fs.readFileSync(localReadyPath, 'utf8'));
+  const relativeLocalReady = path.relative(readerUiRoot, localReadyPath);
+  const receiptRelativePath = path.join(
+    'docs',
+    'design',
+    'native-consumer-receipts',
+    handoffDir,
+    implementationCommit,
+    'A2_PRE_PROMOTION_CONSUMER_RECEIPT.json',
+  );
+  const receiptPath = path.join(readerUiRoot, receiptRelativePath);
+  fs.mkdirSync(path.dirname(receiptPath), { recursive: true });
+  fs.writeFileSync(
+    receiptPath,
+    `${JSON.stringify({
+      schemaVersion: '1.0.0',
+      kind: 'A2_PRE_PROMOTION_CONSUMER_RECEIPT',
+      status: 'a2-consumer-closed',
+      handoffDir,
+      recordIds,
+      figmaRevision: '2379851596474967636',
+      sourceEvidence: {
+        a2DeltaPath,
+        a2DeltaSha256: sha256(fs.readFileSync(path.join(readerUiRoot, a2DeltaPath))),
+        b2ImplementationCommit: implementationCommit,
+        b3PacketPath: relativeLocalReady,
+        b3PacketSha256: sha256(fs.readFileSync(localReadyPath)),
+        b3EvidenceCommit,
+        sourceEvidenceHash: localReady.sourceEvidenceHash,
+      },
+      harmonyConsumer: {
+        repository: 'Reader-for-HarmonyOS',
+        cleanupCommit: hostCommit,
+        cleanupTree: hostTree,
+        cleanupCommitSubject: hostSubject,
+        changedPaths,
+        verification: {
+          command: 'node scripts/sync_reader_ui_screen_graph.mjs --check',
+          expectedMarker: '[screen-graph-consumer] PASS',
+        },
+      },
+      ordering: {
+        requiredBefore: 'B4 promotion',
+        mode,
+        ...(activePromotionEntries ? { activePromotionEntries } : {}),
+      },
+      doesNotClaim: ['B5', 'B6', 'B7'],
+    }, null, 2)}\n`,
+  );
+
+  const dependencyPath = path.join(
+    readerUiRoot,
+    'docs',
+    'design',
+    'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+  );
+  const dependencies = JSON.parse(fs.readFileSync(dependencyPath, 'utf8'));
+  dependencies.nativeA2ConsumerClosures = [{
+    recordIds,
+    prePromotionReceipt: receiptRelativePath,
+    postPromotionReceipt: path.join(
+      path.dirname(receiptRelativePath),
+      'B4_B5_POST_PROMOTION_CONSUMPTION_RECEIPT.json',
+    ),
+  }];
+  fs.writeFileSync(dependencyPath, `${JSON.stringify(dependencies, null, 2)}\n`);
+  return receiptPath;
 }
 
 // ─── Tests ────────────────────────────────────────────────────────────────
@@ -439,6 +611,8 @@ test('promote-family --check passes on empty ledger with no implementation-ready
   try {
     writeRegistry(sandbox.readerUiRoot, []);
     writeLedger(sandbox.readerUiRoot, []);
+    const commitSha = initSandboxGit(sandbox.readerUiRoot);
+    assert.ok(commitSha, 'failed to commit empty-ledger sandbox');
     // No generator run yet — no artifact. --check should still pass for ledger
     // consistency (0 entries, 0 implementation-ready records).
     const result = spawnSync('node', [
@@ -504,6 +678,7 @@ test('promote refuses an actively route-quarantined record before any transactio
     writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
       implementationCommit: commitSha,
     });
+    assert.ok(commitSandbox(sandbox.readerUiRoot, 'track stale-revision B3 packet'));
     const quarantinePath = path.join(sandbox.readerUiRoot, 'contracts', 'fixtures', 'route-reconstruction-quarantine.fixtures.json');
     const quarantine = JSON.parse(fs.readFileSync(quarantinePath, 'utf8'));
     quarantine.status = 'active';
@@ -745,6 +920,7 @@ test('promote refuses when figma.revision does not match official evidence', () 
     writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
       implementationCommit: commitSha,
     });
+    assert.ok(commitSandbox(sandbox.readerUiRoot, 'track missing-target B3 packet'));
 
     const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
     const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
@@ -783,6 +959,7 @@ test('promote refuses when harmony target symbol does not exist in file', () => 
     writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
       implementationCommit: commitSha,
     });
+    assert.ok(commitSandbox(sandbox.readerUiRoot, 'track idempotent B3 packet'));
 
     const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
     const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
@@ -825,6 +1002,7 @@ test('promote refuses idempotently when already implementation-ready', () => {
     writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
       implementationCommit: commitSha,
     });
+    assert.ok(commitSandbox(sandbox.readerUiRoot, 'track idempotent B3 packet'));
 
     const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
     const result = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
@@ -1027,8 +1205,8 @@ test('promote-family.mjs has backup/restore for all four files', () => {
 
 function setupPromotableSandbox() {
   const sandbox = makeSandbox();
-  const commitSha = initSandboxGit(sandbox.readerUiRoot);
-  assert.ok(commitSha, 'failed to init sandbox git repo');
+  const implementationCommit = initSandboxGit(sandbox.readerUiRoot);
+  assert.ok(implementationCommit, 'failed to init sandbox git repo');
 
   // Install the stub generator so we don't depend on the real generator's
   // many dependencies (token ledger, live source snapshot, etc.).
@@ -1036,6 +1214,8 @@ function setupPromotableSandbox() {
 
   // Install the harmony consumer target file with the expected symbol.
   installHarmonyTarget(sandbox.hostRoot, 'RouteRenderer');
+  const harmonyCleanupCommit = initHostGit(sandbox.hostRoot);
+  assert.ok(harmonyCleanupCommit, 'failed to init sandbox HarmonyOS git repo');
 
   // Create a record that passes ALL prerequisites:
   // - local.status = implementation-ready
@@ -1048,15 +1228,42 @@ function setupPromotableSandbox() {
   });
   writeRegistry(sandbox.readerUiRoot, [record]);
   writeLedger(sandbox.readerUiRoot, []);
+  const a2DeltaPath = writeA2Delta(
+    sandbox.readerUiRoot,
+    'reader-runtime/reading-surface',
+  );
 
   // Write LOCAL_READY_FOR_FIGMA.json with valid evidence:
   // - implementationCommit is a real git commit (from initSandboxGit)
   // - verification shows all tests passing
   // - sourceEvidenceHash is computed from the actual handoff directory
   //   (writeLocalReady does this automatically)
-  writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
-    implementationCommit: commitSha,
+  const localReadyPath = writeLocalReady(
+    sandbox.readerUiRoot,
+    'reader.reading-surface',
+    'reader-runtime',
+    true,
+    {
+      implementationCommit,
+    },
+  );
+  const b3EvidenceCommit = commitSandbox(sandbox.readerUiRoot, 'test B3 evidence');
+  assert.ok(b3EvidenceCommit, 'failed to commit sandbox B3 evidence');
+  writeA2PrePromotionReceipt({
+    readerUiRoot: sandbox.readerUiRoot,
+    hostRoot: sandbox.hostRoot,
+    handoffDir: 'reader-runtime/reading-surface',
+    recordIds: ['reader.reading-surface'],
+    implementationCommit,
+    b3EvidenceCommit,
+    localReadyPath,
+    a2DeltaPath,
   });
+  const receiptCommit = commitSandbox(
+    sandbox.readerUiRoot,
+    'test A2 pre-promotion receipt',
+  );
+  assert.ok(receiptCommit, 'failed to commit sandbox A2 receipt');
 
   return sandbox;
 }
@@ -1098,6 +1305,20 @@ test('success path: complete promotion leaves all four files consistent', () => 
     assert.equal(ledgerAfter.entries[0].previousHarmonyStatus, 'candidate-backport');
     assert.equal(ledgerAfter.entries[0].artifactsInSync, true,
       'ledger entry should record artifactsInSync=true');
+    assert.equal(
+      ledgerAfter.entries[0].a2PrePromotionReceipt.status,
+      'a2-consumer-closed',
+      'ledger entry must bind the verified A2 consumer receipt',
+    );
+    assert.equal(
+      ledgerAfter.entries[0].a2PrePromotionReceipt.mode,
+      'pre-promotion',
+      'new promotions must never use a historical-bootstrap receipt',
+    );
+    assert.match(
+      ledgerAfter.entries[0].a2PrePromotionReceipt.path,
+      /A2_PRE_PROMOTION_CONSUMER_RECEIPT\.json$/,
+    );
     assert.ok(ledgerAfter.entries[0].entryHash,
       'ledger entry must have an entryHash');
     assert.equal(ledgerAfter.entries[0].previousEntryHash, 'genesis',
@@ -1120,12 +1341,163 @@ test('success path: complete promotion leaves all four files consistent', () => 
   }
 });
 
+test('promotion fails closed when the indexed A2 consumer receipt is missing', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const dependencies = JSON.parse(fs.readFileSync(
+      path.join(
+        sandbox.readerUiRoot,
+        'docs',
+        'design',
+        'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+      ),
+      'utf8',
+    ));
+    const receiptPath = path.join(
+      sandbox.readerUiRoot,
+      dependencies.nativeA2ConsumerClosures[0].prePromotionReceipt,
+    );
+    fs.rmSync(receiptPath);
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /consumer receipt is missing/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('promotion refuses a dirty A2 consumer receipt before transaction writes', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const dependencies = JSON.parse(fs.readFileSync(
+      path.join(
+        sandbox.readerUiRoot,
+        'docs',
+        'design',
+        'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+      ),
+      'utf8',
+    ));
+    const receiptPath = path.join(
+      sandbox.readerUiRoot,
+      dependencies.nativeA2ConsumerClosures[0].prePromotionReceipt,
+    );
+    fs.appendFileSync(receiptPath, '\n');
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /receipt is not clean relative to HEAD/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('historical-bootstrap receipt cannot authorize a new promotion', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const dependencyPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+    );
+    const dependencies = JSON.parse(fs.readFileSync(dependencyPath, 'utf8'));
+    const receiptPath = path.join(
+      sandbox.readerUiRoot,
+      dependencies.nativeA2ConsumerClosures[0].prePromotionReceipt,
+    );
+    const receipt = JSON.parse(fs.readFileSync(receiptPath, 'utf8'));
+    receipt.ordering.mode = 'historical-bootstrap';
+    receipt.ordering.activePromotionEntries = [];
+    fs.writeFileSync(receiptPath, `${JSON.stringify(receipt, null, 2)}\n`);
+    assert.ok(commitSandbox(sandbox.readerUiRoot, 'historical receipt fixture'));
+
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(
+      result.stderr?.toString() || '',
+      /historical-bootstrap receipt cannot authorize/,
+    );
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
+test('declared admission dependency blocks promotion while a required record is not ready', () => {
+  const sandbox = setupPromotableSandbox();
+  try {
+    const registryPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'FIGMA_VISUAL_ADMISSION_REGISTRY.json',
+    );
+    const registry = JSON.parse(fs.readFileSync(registryPath, 'utf8'));
+    registry.records.push(makeRecord('reader.control-home', {
+      localStatus: 'candidate-backport',
+      harmonyStatus: 'candidate-backport',
+    }));
+    fs.writeFileSync(registryPath, `${JSON.stringify(registry, null, 2)}\n`);
+
+    const dependencyPath = path.join(
+      sandbox.readerUiRoot,
+      'docs',
+      'design',
+      'FIGMA_VISUAL_ADMISSION_DEPENDENCIES.json',
+    );
+    const dependencies = JSON.parse(fs.readFileSync(dependencyPath, 'utf8'));
+    dependencies.dependencies.push({
+      recordId: 'reader.reading-surface',
+      requires: [{
+        recordId: 'reader.control-home',
+        localStatus: 'implementation-ready',
+        harmonyStatus: 'implementation-ready',
+      }],
+      reason: 'test dependency',
+    });
+    fs.writeFileSync(dependencyPath, `${JSON.stringify(dependencies, null, 2)}\n`);
+    assert.ok(commitSandbox(sandbox.readerUiRoot, 'dependency gate fixture'));
+
+    const before = snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot);
+    const result = runPromote(
+      sandbox.readerUiRoot,
+      sandbox.hostRoot,
+      'reader.reading-surface',
+    );
+    assert.notEqual(result.status, 0);
+    assert.match(result.stderr?.toString() || '', /dependency verification failed/);
+    assert.match(result.stderr?.toString() || '', /reader\.control-home/);
+    assert.deepEqual(snapshotFiles(sandbox.readerUiRoot, sandbox.hostRoot), before);
+  } finally {
+    cleanupSandbox(sandbox);
+  }
+});
+
 function setupPromotableGroupSandbox() {
   const sandbox = makeSandbox();
-  const commitSha = initSandboxGit(sandbox.readerUiRoot);
-  assert.ok(commitSha, 'failed to init sandbox git repo');
+  const implementationCommit = initSandboxGit(sandbox.readerUiRoot);
+  assert.ok(implementationCommit, 'failed to init sandbox git repo');
   installStubGenerator(sandbox.readerUiRoot);
   installHarmonyTarget(sandbox.hostRoot, 'RouteRenderer');
+  const harmonyCleanupCommit = initHostGit(sandbox.hostRoot);
+  assert.ok(harmonyCleanupCommit, 'failed to init sandbox HarmonyOS git repo');
 
   const recordIds = ['bookshelf.page', 'bookshelf.book-card'];
   const records = recordIds.map((recordId) => {
@@ -1151,10 +1523,34 @@ function setupPromotableGroupSandbox() {
     path.join(handoffDir, 'design-delta.md'),
     '# Bookshelf Design Delta\n\nShared-route group-promotion fixture.\n',
   );
-  writeLocalReady(sandbox.readerUiRoot, 'bookshelf.page', 'bookshelf', true, {
-    implementationCommit: commitSha,
+  const a2DeltaPath = writeA2Delta(sandbox.readerUiRoot, 'bookshelf');
+  const localReadyPath = writeLocalReady(
+    sandbox.readerUiRoot,
+    'bookshelf.page',
+    'bookshelf',
+    true,
+    {
+    implementationCommit,
     recordIds,
+    },
+  );
+  const b3EvidenceCommit = commitSandbox(sandbox.readerUiRoot, 'test group B3 evidence');
+  assert.ok(b3EvidenceCommit, 'failed to commit sandbox group B3 evidence');
+  writeA2PrePromotionReceipt({
+    readerUiRoot: sandbox.readerUiRoot,
+    hostRoot: sandbox.hostRoot,
+    handoffDir: 'bookshelf',
+    recordIds,
+    implementationCommit,
+    b3EvidenceCommit,
+    localReadyPath,
+    a2DeltaPath,
   });
+  const receiptCommit = commitSandbox(
+    sandbox.readerUiRoot,
+    'test group A2 pre-promotion receipt',
+  );
+  assert.ok(receiptCommit, 'failed to commit sandbox group A2 receipt');
 
   return { ...sandbox, recordIds };
 }
@@ -1589,17 +1985,45 @@ test('a fresh B2/B3 evidence packet can promote after a retraction', () => {
       'docs', 'design', 'handoffs', 'reader-runtime', 'reading-surface', 'design-delta.md',
     );
     fs.appendFileSync(deltaPath, '\nA2 source extraction closed in a new conversion.\n');
-    const addResult = spawnSync('git', ['add', '.'], { cwd: sandbox.readerUiRoot, stdio: ['ignore', 'pipe', 'pipe'] });
-    assert.equal(addResult.status, 0, addResult.stderr?.toString());
-    const commitResult = spawnSync('git', ['commit', '-m', 'fresh B2 B3 conversion'], {
-      cwd: sandbox.readerUiRoot,
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
-    assert.equal(commitResult.status, 0, commitResult.stderr?.toString());
-    const freshCommit = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: sandbox.readerUiRoot, encoding: 'utf8' }).stdout.trim();
-    writeLocalReady(sandbox.readerUiRoot, 'reader.reading-surface', 'reader-runtime', true, {
+    const freshCommit = commitSandbox(
+      sandbox.readerUiRoot,
+      'fresh B2 source conversion',
+    );
+    assert.ok(freshCommit, 'fresh B2 source commit failed');
+    const localReadyPath = writeLocalReady(
+      sandbox.readerUiRoot,
+      'reader.reading-surface',
+      'reader-runtime',
+      true,
+      { implementationCommit: freshCommit },
+    );
+    const freshB3Commit = commitSandbox(
+      sandbox.readerUiRoot,
+      'fresh B3 evidence',
+    );
+    assert.ok(freshB3Commit, 'fresh B3 evidence commit failed');
+    const a2DeltaPath = path.join(
+      'docs',
+      'design',
+      'handoffs',
+      'reader-runtime',
+      'reading-surface',
+      'A2_CONTRACT_RETIREMENT_DELTA.json',
+    );
+    writeA2PrePromotionReceipt({
+      readerUiRoot: sandbox.readerUiRoot,
+      hostRoot: sandbox.hostRoot,
+      handoffDir: 'reader-runtime/reading-surface',
+      recordIds: ['reader.reading-surface'],
       implementationCommit: freshCommit,
+      b3EvidenceCommit: freshB3Commit,
+      localReadyPath,
+      a2DeltaPath,
     });
+    assert.ok(
+      commitSandbox(sandbox.readerUiRoot, 'fresh A2 pre-promotion receipt'),
+      'fresh A2 receipt commit failed',
+    );
 
     const rePromote = runPromote(sandbox.readerUiRoot, sandbox.hostRoot, 'reader.reading-surface');
     assert.equal(rePromote.status, 0,

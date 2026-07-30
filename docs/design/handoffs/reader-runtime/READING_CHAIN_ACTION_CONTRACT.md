@@ -1,6 +1,10 @@
 # Reading Chain Action Contract — draft v1
 
-Status: `PREPARED_FROM_LIVE_FIGMA_AND_CURRENT_CORE_BOUNDARY`; it is not a Figma visual delta and does not authorize new Figma screens, reactions, or native error surfaces.
+Status: historical narrow-slice decision record. The visual/product boundary remains
+valid, but its pre-4.0 release assumptions are superseded by the current
+Reader-UI 4.0 typed runtime contract and B1–B7 execution protocol. It is not a
+Figma visual delta and does not authorize new Figma screens, reactions, or
+native error surfaces.
 
 ## Scope
 
@@ -18,7 +22,11 @@ Local import, source switching, WebDAV, backup restore, RSS, and all Reader cont
 | Book Detail | `24 · Responsive Masters` / `Page/Book Detail` `941:10`; Phone `941:7`; Tablet `941:9` | Phone/Tablet static layout only; the master has zero reactions. |
 | Reader | `15 · Reader 2` `1023:17636`; ReadingSurface `1023:18354`; Reader responsive master `1214:10117` | Reading/control visual states only; its reactions are component-internal visual changes. |
 
-The current writer runtime cannot read an official file revision. These nodes are therefore bound to `revision=null` in the F0 live-rebaseline record; no historical version ID may be presented as their current revision.
+At the time of this draft the writer runtime could not read an official file
+revision, so the draft recorded `revision=null`. Current work must instead use
+`F0_FIGMA_CURRENT_REVISION_EVIDENCE.json` and the visual-admission registry;
+the checked-in official revision is `2379851596474967636`. This historical
+paragraph must not override that current evidence.
 
 ## Action boundary
 
@@ -32,7 +40,10 @@ The current writer runtime cannot read an official file revision. These nodes ar
 
 ## Required implementation order
 
-1. Keep the current Reader-UI Contract 3.0 and consumer lock unchanged for this narrow HarmonyOS repair; no `book.open` Pilot extension is authorized.
+1. Use the current Reader-UI Contract 4.0 typed runtime payload and a verified
+   host consumer lock that binds its schema/hash. A stale v2 lock or a lock
+   without the 4.0 payload hash remains fail-closed. No additional
+   `book.open` Pilot extension is authorized by this product policy.
 2. Apply the confirmed Continue policy below by routing both local-book Continue entries through the existing durable-progress recovery owner.
 3. Probe the six real Core/NAPI calls: `bookshelf.list`, `local_book.toc`, `local_book.chapter.content`, `reader.location.resolve`, `reading.progress.update`, and `reading.progress.get`.
 4. Only after steps 1–3 pass, create a verified Reader-UI host release, atomically update the HarmonyOS consumer/package locks, build the HAP, and run the real-device chain.
@@ -54,7 +65,13 @@ The user confirmed this policy on 2026-07-22:
 - It has exactly the same durable recovery semantics as Book Detail Continue: read persisted Core progress, match the Core chapter identity to the live TOC, load that chapter, then restore the measured reading offset/progress.
 - If no valid record exists, or its chapter no longer exists in the TOC, open the first readable chapter without inventing a new Figma surface.
 
-The safe implementation is to remove the card from the current `readerEntry: true + chapterIndex: 0` Pilot path and reuse the existing HarmonyOS `ReaderEffects` recovery chain. This is not a new UiEvent, Figma reaction, route, screen, dialog, state owner, Reader-UI contract change, or consumer-lock update.
+The safe implementation is to remove the card from the current
+`readerEntry: true + chapterIndex: 0` Pilot path and reuse the existing
+HarmonyOS `ReaderEffects` recovery chain. The product decision does not add a
+UiEvent, Figma reaction, route, screen, dialog, or state owner. Its current
+implementation is nevertheless governed by the Reader-UI 4.0 structured
+location/result contract and therefore requires a matching verified consumer
+lock.
 
 ## Outstanding product decisions
 
