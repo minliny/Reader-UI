@@ -16,8 +16,8 @@
     },
     {
       "path": "contracts/VERSION.json",
-      "byteLength": 35880,
-      "sha256": "6c9a8938c9461ae8a667d9bba1a148003c1b2d6b47cb633785ff8468174ca0be"
+      "byteLength": 35893,
+      "sha256": "4486741f33fc07a99a1fdedeaaab280e60532945b476091c7ea814e49dadc499"
     },
     {
       "path": "contracts/appearance.schema.json",
@@ -141,8 +141,8 @@
     },
     {
       "path": "contracts/fixtures/runtime-result-contract.fixtures.json",
-      "byteLength": 54814,
-      "sha256": "1cbf02d797b41faab13ffc9ca12dff27ea6397448e71a6bbdc65ef516256712d"
+      "byteLength": 54880,
+      "sha256": "8880cdb41b8f5fb41357df25b58da6829ac3d81381507bb820a8630f17126538"
     },
     {
       "path": "contracts/fixtures/runtime-result-contract.fixtures.schema.json",
@@ -257,7 +257,7 @@
     {
       "path": "device-conformance/DEVICE_CONFORMANCE_PLAN.json",
       "byteLength": 155698,
-      "sha256": "9e7fdaf5cdec6c2684f212aba230d8a05ef3c3606e53bbe386be3fde64fd5663"
+      "sha256": "521a8498cf90436f7f28c51ecc109be4c087e44a82f514e6d7bf98f27ded5b7c"
     },
     {
       "path": "frontend-demo-optimized/appearance-spec.js",
@@ -906,8 +906,8 @@
     },
     {
       "path": "frontend-demo-optimized/control-identity-declarations.js",
-      "byteLength": 2256683,
-      "sha256": "ebb105ed51c7136a726bb97617522491485b94240eeec7c04f5ff15eb8553b6c"
+      "byteLength": 1939113,
+      "sha256": "aa4f3382f1faded83b7584806fc5b0dd3cc4fd85e6617dd09c1b49d100d09b7a"
     },
     {
       "path": "frontend-demo-optimized/covers/android-notes.png",
@@ -945,19 +945,19 @@
       "sha256": "bb7349979921e665b514ee4bdd490e5a9b93a13825e3113171259f449820a9d1"
     },
     {
-      "path": "frontend-demo-optimized/fixture.js",
-      "byteLength": 22542,
-      "sha256": "27639e4d77ddbb38d0dfbdf1c6cdca50976199edd3f2bb8b773b7a49841190d3"
+      "path": "frontend-demo-optimized/figma-route-admission-policy.js",
+      "byteLength": 10834,
+      "sha256": "6ef0ca46de78db81c870e663941fa539ee53c1bf894bc4207692186804393a9d"
     },
     {
-      "path": "frontend-demo-optimized/import-runtime-contract.js",
-      "byteLength": 11404,
-      "sha256": "4db1dbcc3c035ae28f319679d1f8c3a247dc5b607066d87a6f233d0c380ace2c"
+      "path": "frontend-demo-optimized/fixture.js",
+      "byteLength": 23331,
+      "sha256": "4d18e67c9858ea2d90ead40a6f0a4634710d802edbcb624e98aecdf8fe5004fc"
     },
     {
       "path": "frontend-demo-optimized/index.html",
-      "byteLength": 4395,
-      "sha256": "1655c15cc58836e4bd197018da2d850038f3ed2f03502bb4b6934a7773e7bdd1"
+      "byteLength": 4515,
+      "sha256": "c0292c270156031902a85c63caa2a80b1d2aa1cdfaac60221e9861da0c808db3"
     },
     {
       "path": "frontend-demo-optimized/motion-contract-registry.js",
@@ -985,6 +985,11 @@
       "sha256": "46948b3f8385e55adb6b9f127423528cb69995efd8c8dc44cdb90a351e835555"
     },
     {
+      "path": "frontend-demo-optimized/public-route-renderer-admission.js",
+      "byteLength": 5511,
+      "sha256": "1bea83e0e0cb47179856c19407cf2e99129459aa60298f849adf82b34851818f"
+    },
+    {
       "path": "frontend-demo-optimized/reader-control-transition.js",
       "byteLength": 13184,
       "sha256": "bcec903a001ad83cd2d141cffae4cc12435c51e6b6739051c99e3ba003a4df4c"
@@ -996,18 +1001,18 @@
     },
     {
       "path": "frontend-demo-optimized/render-runtime.js",
-      "byteLength": 806073,
-      "sha256": "f1c7c4ccc14190da38c34c579b444c9401012ac08a92027b57788fe17dc77beb"
+      "byteLength": 769114,
+      "sha256": "54af5b6d6ff71cc056367f3f355dde33f23d850fdde8bd3add7ca5a8088a26af"
     },
     {
       "path": "frontend-demo-optimized/render.js",
-      "byteLength": 442,
-      "sha256": "7ba1351ec2b19fc6453bc5722d8db31d38e8ea837f4bb50436e99cd127699f34"
+      "byteLength": 459,
+      "sha256": "786668eb0555e53b24ce0eb15413c8f0eeb077778a696adc8dbff608e1545d2c"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-bookshelf-discover-renderers.js",
-      "byteLength": 174591,
-      "sha256": "fa90cea4aca89ff7b71ba4a72ecef8a308d59d6f45dceab824fb0c56fb362597"
+      "byteLength": 168529,
+      "sha256": "0ab083e22d28c9c968e509b2bc6bc65d8ab4c00cb79071980907c1171eafa5dc"
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-rss-renderers.js",
@@ -1016,33 +1021,28 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
-      "byteLength": 244973,
-      "sha256": "b941006f09c9820a5a654b8aa1fb4883f25e9aeb4bf0fa0620d0cda8e9a778c8"
+      "byteLength": 216172,
+      "sha256": "e9c6f00be0af4a49d610746cbf94b9d24b4a5502523535b8edbf5dafbbf182b5"
     },
     {
       "path": "frontend-demo-optimized/renderers/d3-control-layers-renderers.js",
-      "byteLength": 55673,
-      "sha256": "bf5ad6a8969eecf26ea89e0cc8fda9759338218620dbd0fda1e524be70e43244"
+      "byteLength": 58062,
+      "sha256": "60bf80c1a928d6cd67ebe965a7843a6d48782fcf661c8acea682b5744f9c7d06"
     },
     {
       "path": "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
-      "byteLength": 32236,
-      "sha256": "24a601bf50bcab3b897c1db4f41ee84a02b648f6e7770dc6cae674c364b3e41c"
+      "byteLength": 33343,
+      "sha256": "7b655337a904fe4fd53c04d764a0b2ae23453c1e78b80460714ae7dedbcb12c9"
     },
     {
       "path": "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
-      "byteLength": 30749,
-      "sha256": "8f3ba516a221ebf9ce3b6cabdde7c976d3fa2c9f561acdb77f0ed15bdec184b3"
+      "byteLength": 31275,
+      "sha256": "a763843f5636e8d34433fb3cc9301e675c39729806f0bb3cfa596020307e82b4"
     },
     {
       "path": "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
-      "byteLength": 22285,
-      "sha256": "efab6b9df9a3a7e59a596cea3096b5265d173192e4b643734719dc10e4319169"
-    },
-    {
-      "path": "frontend-demo-optimized/renderers/w1-import-renderers.js",
-      "byteLength": 35319,
-      "sha256": "065b6fb915f756c2628c9c6edc17b6bddcdd98ad45829217bfd5552bea0fee52"
+      "byteLength": 22929,
+      "sha256": "3728d318194d7798cb1eeded1c819cbcf4ebea8910e80afa8812e6a5cb0bc20b"
     },
     {
       "path": "frontend-demo-optimized/renderers/w2-reading-renderers.js",
@@ -1051,18 +1051,18 @@
     },
     {
       "path": "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
-      "byteLength": 24374,
-      "sha256": "700faec043fb87ed347e09df6f92bcf15171f1d869db5351ee8be0916cac3ffc"
+      "byteLength": 25777,
+      "sha256": "090a0ef728335de5dac83bc14fe1df2ca12ea49b962d273c7c9655b0b0659b40"
     },
     {
       "path": "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
-      "byteLength": 77050,
-      "sha256": "90adc95bd19819c4430bbe5f03e798d7612b2144b3c0387499d6d8311c730c6c"
+      "byteLength": 77353,
+      "sha256": "bfc0bb936089a0ede1b810c5267622410e623afa52bb39ae003a508e5e5eb662"
     },
     {
       "path": "frontend-demo-optimized/renderers/w5-replace-rules-renderers.js",
-      "byteLength": 54328,
-      "sha256": "dea61583e2176e60e5b0fd2882ba418321870813a4b7caa0fd4664b6d2ea02c6"
+      "byteLength": 55583,
+      "sha256": "ee1031071494e568f4bacc8a524f02808dbb9aadc37b18d4115d7c0a866371f7"
     },
     {
       "path": "frontend-demo-optimized/route-contract.js",
@@ -1086,18 +1086,18 @@
     },
     {
       "path": "frontend-demo-optimized/styles.css",
-      "byteLength": 1976,
-      "sha256": "eec3ab4536eb8215d81956721a58961b60f2888f10ae9cf9c935659f928dec71"
+      "byteLength": 1993,
+      "sha256": "b04b03bbfb4a2a5fc66ea3ff98fbace135dc36cace0dba3dc84b72136412ccf1"
     },
     {
       "path": "frontend-demo-optimized/styles/00-foundation.css",
-      "byteLength": 33611,
-      "sha256": "c3459ae0e1a7b37ac7bb15195378f03706c41236af1618bdbed6dabf6b6e29ba"
+      "byteLength": 32335,
+      "sha256": "e0665adbe9642792f08e5063a1db79831994f8c22af014f036c27bbdcafa1165"
     },
     {
       "path": "frontend-demo-optimized/styles/01-shell-layout.css",
-      "byteLength": 104754,
-      "sha256": "318f51d8b2f4ba69a3388932883ead31a832449dec4a8180bcfc92bc6d627d18"
+      "byteLength": 103313,
+      "sha256": "18a58a04752af73ef9967c9ba7c3cbb55ea70eb47d34c48d0437fd6a9f008ce3"
     },
     {
       "path": "frontend-demo-optimized/styles/02a-reader-control.css",
@@ -1171,8 +1171,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/09-import-workflow.css",
-      "byteLength": 18219,
-      "sha256": "4e5ead67e3d935c889c9906289612a372d89bb4a49cec53db191c9a3c296dec9"
+      "byteLength": 18272,
+      "sha256": "cf0bb922f89710ba2992e9ccae8c9e0125d72d3a7c793956b86145f0ae97dff6"
     },
     {
       "path": "frontend-demo-optimized/styles/10-settings-general-vc3.css",
@@ -1186,8 +1186,8 @@
     },
     {
       "path": "frontend-demo-optimized/styles/12-bookshelf-vc3.css",
-      "byteLength": 2296,
-      "sha256": "90ae3419531aef1c051058f6f1f66e65c5237db053b3d68a1b54b28c642e7954"
+      "byteLength": 10457,
+      "sha256": "0f2baea2caab33181f8433b9a23359bec4bcb8f47b62e92ce6d958a885724486"
     },
     {
       "path": "frontend-demo-optimized/tokens.css",
@@ -1291,8 +1291,8 @@
     },
     {
       "path": "generated/arkts/VisualAdmission.ets",
-      "byteLength": 89932,
-      "sha256": "642c145d925ebae11aba812e9d878eb1765056141ef217de31dfacb8509ad8f7"
+      "byteLength": 90053,
+      "sha256": "a5f542ee3aa8e5534bb55f8775c81ca71dbfa1cedb63dfa7ee771da8d33675ee"
     },
     {
       "path": "generated/figma/FIGMA_SOURCE_PLAN.json",
@@ -1531,8 +1531,8 @@
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
-      "byteLength": 150975,
-      "sha256": "bbd2cd7055caab6ea5546be1b0e6c194014ffdf0595b2bcc9812d76460db0c3d"
+      "byteLength": 151091,
+      "sha256": "1d388d5abe0cfd9ebb12bf5d076a3a212f14ee0b0cea1d738ef7c5e8ccab445b"
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/Index.ets",
@@ -1541,8 +1541,8 @@
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/ets/ReaderUIRuntime.ets",
-      "byteLength": 108850,
-      "sha256": "a9dc933bcf65a6002a168a73f4d78af081e92de3e30f414c04d1d0cdef6e1140"
+      "byteLength": 109327,
+      "sha256": "01dcbcfe8237429e2fe7c5be378566614abb34cb524373eaf79c3b6c1658067a"
     },
     {
       "path": "packages/arkts/reader-ui-runtime/src/main/module.json5",
@@ -1561,13 +1561,13 @@
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadContracts.kt",
-      "byteLength": 152181,
-      "sha256": "22e2d88451e7965ece9b59e5d2ec90ff501869ef81854f63515cd020df5a6ed9"
+      "byteLength": 152297,
+      "sha256": "46313386da898d6170cf25e627f66803315f41c4f46a6fe60004db124ea92d08"
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUIRuntime.kt",
-      "byteLength": 87807,
-      "sha256": "ae1d040120fb27fb602a3f9910a12fbb39a5a24245fe27ad73365a5b53d5ce82"
+      "byteLength": 88277,
+      "sha256": "abb0962a7232afb35cdac628ec406f891ade09d2654bbc6b42082bd59823d063"
     },
     {
       "path": "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/ReaderUITypedPayloadValidator.kt",
@@ -1576,13 +1576,13 @@
     },
     {
       "path": "packages/reference/generated-runtime-payload-contracts.mjs",
-      "byteLength": 332868,
-      "sha256": "088df36940b0f1b4fe4a13eb8821974b6fe889a311d5ac66044cc5a4c5613cfd"
+      "byteLength": 333084,
+      "sha256": "9b94c4fa57bbe18ff99439999ff1b882d6b91c4578518bd967a25f4121083c85"
     },
     {
       "path": "packages/reference/reader-ui-runtime.mjs",
-      "byteLength": 72025,
-      "sha256": "735f16ac0c7e968535bdbe7e47d1cf93f8bbbdc3b4d7f8c8d4c7b3aa3b79aa42"
+      "byteLength": 72411,
+      "sha256": "9b9fbc2c018ad0afe74dfabac7506feff051c0412d2ffca597471b80d8156254"
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeActions.swift",
@@ -1591,8 +1591,8 @@
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeTypedPayloadContracts.swift",
-      "byteLength": 152121,
-      "sha256": "fdf42255e223b8f5e12ed4fb4a14df0fd7c4602f9498276155c932a6eb8bf3ca"
+      "byteLength": 152237,
+      "sha256": "5307f50fd2efb83ca946388ab26f93a659991378d2280c26a280483faa768f8d"
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIJSONValue.swift",
@@ -1601,8 +1601,8 @@
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUIRuntime.swift",
-      "byteLength": 94765,
-      "sha256": "7412f70bd1f9dd3fa94c02a909794c7a1a8bada393199c98e966057b4b1ddafe"
+      "byteLength": 95227,
+      "sha256": "7884ca55609794b847515ace330aa3eb64218398bd1695b71acd70828d4802c8"
     },
     {
       "path": "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/ReaderUITypedPayloadValidator.swift",
@@ -1661,8 +1661,8 @@
     },
     {
       "path": "ui-spec/runtime-payload-contracts.json",
-      "byteLength": 129746,
-      "sha256": "8a49864f3c78ed1cf88cddb9919106653b286ebcdb8763f502b113ab6ffcb007"
+      "byteLength": 129892,
+      "sha256": "5254d7a40e15bace95d72df6941de6f3c2f638382ebdf9c6d76d38a05fac2409"
     },
     {
       "path": "ui-spec/runtime-payload-contracts.schema.json",
@@ -1689,8 +1689,8 @@
     {
       "name": "design-runtime",
       "fileCount": 187,
-      "byteLength": 5547291,
-      "sha256": "cd3d4e876df005f5f33ab5ec2f534f85677666cf949b3c305a8d5f2c8d0ffe6a",
+      "byteLength": 5141588,
+      "sha256": "fecb67fcc130d4110c6b235043c8be93d09f61f003fe6d8fdb44272bf1712f5a",
       "files": [
         "frontend-demo-optimized/appearance-spec.js",
         "frontend-demo-optimized/asset-library/asset-library.css",
@@ -1829,14 +1829,15 @@
         "frontend-demo-optimized/covers/renjian-cihua.png",
         "frontend-demo-optimized/covers/three-body.png",
         "frontend-demo-optimized/discover-runtime-contract.js",
+        "frontend-demo-optimized/figma-route-admission-policy.js",
         "frontend-demo-optimized/fixture.js",
-        "frontend-demo-optimized/import-runtime-contract.js",
         "frontend-demo-optimized/index.html",
         "frontend-demo-optimized/motion-contract-registry.js",
         "frontend-demo-optimized/motion-controller.js",
         "frontend-demo-optimized/motion-runtime-profile.js",
         "frontend-demo-optimized/motion-scenario-harness.js",
         "frontend-demo-optimized/motion-tokens.css",
+        "frontend-demo-optimized/public-route-renderer-admission.js",
         "frontend-demo-optimized/reader-control-transition.js",
         "frontend-demo-optimized/reader-runtime-contract.js",
         "frontend-demo-optimized/render-runtime.js",
@@ -1848,7 +1849,6 @@
         "frontend-demo-optimized/renderers/d4-visual-polish-renderers.js",
         "frontend-demo-optimized/renderers/d5-motion-closure-renderers.js",
         "frontend-demo-optimized/renderers/d6-capability-closure-renderers.js",
-        "frontend-demo-optimized/renderers/w1-import-renderers.js",
         "frontend-demo-optimized/renderers/w2-reading-renderers.js",
         "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
         "frontend-demo-optimized/renderers/w4-theme-font-typography-renderers.js",
@@ -1885,7 +1885,7 @@
       "name": "device-conformance",
       "fileCount": 7,
       "byteLength": 247371,
-      "sha256": "d7d2092057b1a6e86e5daa325891918cd117ba240e8b545399b689208bb3c82a",
+      "sha256": "04679539e2cf793440ba40b7c739246906627f31e82728334df4852c6c1ae1bc",
       "files": [
         "contracts/device-conformance-evidence.schema.json",
         "contracts/device-conformance-plan.schema.json",
@@ -1899,8 +1899,8 @@
     {
       "name": "fixtures",
       "fileCount": 24,
-      "byteLength": 617030,
-      "sha256": "ce3036d5dc62afdf79d36df340b6f094a01d6eca571341fcc487ac8ed2b8939e",
+      "byteLength": 617096,
+      "sha256": "1a10f0bc3401bce68aabe04ba83c4a75fe553b2058f014c061a79431dd53ef16",
       "files": [
         "contracts/fixtures/appearance.fixtures.json",
         "contracts/fixtures/content.fixtures.json",
@@ -1931,8 +1931,8 @@
     {
       "name": "generated",
       "fileCount": 59,
-      "byteLength": 2257975,
-      "sha256": "2e25f581750b6a83329f3af40d3ed75623df4fc3a257e45dd3efad1c9faf76c0",
+      "byteLength": 2258096,
+      "sha256": "24daf2369414657364621be243e3aae18305aac41c42cda9f3e78de27da90a5f",
       "files": [
         "generated/README.md",
         "generated/arkts/Appearance.ets",
@@ -2042,8 +2042,8 @@
     {
       "name": "runtime-packages",
       "fileCount": 15,
-      "byteLength": 1216976,
-      "sha256": "8fd91ff3da9aa0c396a4d56b66c36b80f7989f053aced3a57b7210aa185ca2e3",
+      "byteLength": 1219335,
+      "sha256": "c9908220dcbe1f1f1b7277e74830958eb43b2b7c489be4cf6d18b5b738e4fab2",
       "files": [
         "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
         "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
@@ -2118,8 +2118,8 @@
     {
       "name": "ui-spec",
       "fileCount": 6,
-      "byteLength": 722947,
-      "sha256": "1f12cfe032c2b9eb3fb599da64e31b01a88d2970d72e4eeeb29601d3b4e5be92",
+      "byteLength": 723093,
+      "sha256": "41b3bbd63ae17cf917eaa1b3635753708adcf73c26105226c4204534b489716f",
       "files": [
         "ui-spec/component-render-semantics.json",
         "ui-spec/host-consumers.json",
@@ -2132,8 +2132,8 @@
     {
       "name": "version",
       "fileCount": 1,
-      "byteLength": 35880,
-      "sha256": "a7f62794254708ce9a47e7d7378a545e80c9eede33384e33896a11a52e366f7d",
+      "byteLength": 35893,
+      "sha256": "ac4c22d58fd8b6ab26ef840e4f9aabb02cc68668df7af7a9411f7073c30d696e",
       "files": [
         "contracts/VERSION.json"
       ]
