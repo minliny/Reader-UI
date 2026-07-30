@@ -178,4 +178,6 @@ node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs
 
 ## 版本
 
-见 [VERSION.json](./VERSION.json)。当前 Reader-UI Contract head 为 4.0.0；三个 Host consumer lock 仍为旧 v2/2.5.1，未绑定 typed payload v3，因此保持 fail-closed。
+见 [VERSION.json](./VERSION.json)。当前 Reader-UI Contract head 为 4.0.1；Host
+只有消费该精确 tag 的不可变 artifact 与自动生成的 v3 consumer lock 后，才能
+把本轮阅读控制栏视为正式运行时输入，任何旧 lock 都必须 fail-closed。

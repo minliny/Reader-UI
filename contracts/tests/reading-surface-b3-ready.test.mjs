@@ -65,7 +65,7 @@ test("B3 evidence remains fresh after B4 appends the authorized reading-surface 
   // binding + harmony targets, but their routeIds are cleared pending their own
   // source conversion. They must not be deleted (breaks registry binding) and
   // must not keep retired routeIds (validator line 158 rejects unknown routes).
-  const siblingRecordIds = ["reader.control-home", "reader.module.directory", "reader.module.tts",
+  const siblingRecordIds = ["reader.module.directory", "reader.module.tts",
     "reader.module.appearance", "reader.module.settings", "reader.quick.content-search"];
   for (const id of siblingRecordIds) {
     const sibling = registry.records.find((r) => r.id === id);
@@ -76,9 +76,23 @@ test("B3 evidence remains fresh after B4 appends the authorized reading-surface 
     assert.equal(sibling.harmony?.status, "candidate-backport",
       `${id} must remain fail-closed, not silently promotable`);
   }
+  const controlHome = registry.records.find((r) => r.id === "reader.control-home");
+  assert.ok(controlHome, "reader.control-home must remain independently registered");
+  assert.deepEqual(controlHome.routeIds, [], "control home must remain route-independent");
+  assert.deepEqual(controlHome.overlayKinds, ["reader-control"]);
+  assert.equal(controlHome.reconstruction?.status, "source-conversion-complete");
+  assert.equal(controlHome.local?.status, "implementation-ready");
+  assert.equal(controlHome.harmony?.status, "implementation-ready",
+    "control home may activate only through its independent promotion");
+  const controlEntries = ledger.entries.filter((entry) => entry.recordId === "reader.control-home");
+  assert.equal(controlEntries.length, 1);
+  assert.equal(controlEntries[0].entryId, "promote-020");
+  assert.equal(controlEntries[0].kind, "promote");
+  assert.equal(controlEntries[0].a2PrePromotionReceipt?.mode, "pre-promotion");
 
-  // B3 source evidence remains intact and Figma-bound. B4 may activate only
-  // this completed surface; the six sibling records remain fail-closed.
+  // B3 source evidence remains intact and Figma-bound. The reading surface and
+  // independently promoted control home are active; module destinations remain
+  // fail-closed until their own source conversions and promotions.
   const record = registry.records.find((item) => item.id === "reader.reading-surface");
   assert.ok(record, "reader.reading-surface must remain registered");
   assert.deepEqual(record.routeIds, ["immersive-reading", "reader", "reader_content"],

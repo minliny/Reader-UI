@@ -29,6 +29,7 @@ test("visual admission dependency graph binds Source Switch to both reader prere
         "bookshelf.local-import-dialog",
         "bookshelf.list-mode",
       ],
+      ["reader.control-home"],
     ],
   );
   for (const closure of dependencies.nativeA2ConsumerClosures) {

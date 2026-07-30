@@ -39,6 +39,12 @@ const NATIVE_CONSUMER_RECEIPTS = path.join(
   'design',
   'native-consumer-receipts.mjs',
 );
+const HANDOFF_MAP = path.join(
+  REPO_ROOT,
+  'tools',
+  'design',
+  'visual-admission-handoff-map.mjs',
+);
 const SHARED_WRITER_LOCK = path.join(REPO_ROOT, 'tools', 'shared', 'shared-writer-lock.mjs');
 
 // ─── Test harness: create a sandboxed copy of the registry/handoff/ledger ──
@@ -76,6 +82,10 @@ function makeSandbox() {
   fs.copyFileSync(
     NATIVE_CONSUMER_RECEIPTS,
     path.join(readerUiRoot, 'tools', 'design', 'native-consumer-receipts.mjs'),
+  );
+  fs.copyFileSync(
+    HANDOFF_MAP,
+    path.join(readerUiRoot, 'tools', 'design', 'visual-admission-handoff-map.mjs'),
   );
   fs.copyFileSync(SHARED_WRITER_LOCK, path.join(readerUiRoot, 'tools', 'shared', 'shared-writer-lock.mjs'));
 
@@ -1125,9 +1135,8 @@ test('ledger chain integrity: broken chain is detected by --check', () => {
   }
 });
 
-test('explicit RECORD_ID_TO_HANDOFF mapping covers all expected families', () => {
-  // Read the promote-family.mjs source and verify the mapping is complete
-  const source = fs.readFileSync(PROMOTE_SCRIPT, 'utf8');
+test('shared explicit handoff mapping covers all expected families', () => {
+  const source = fs.readFileSync(HANDOFF_MAP, 'utf8');
   const expectedFamilies = [
     'bookshelf',
     'book-detail',
@@ -1147,9 +1156,11 @@ test('explicit RECORD_ID_TO_HANDOFF mapping covers all expected families', () =>
   for (const family of expectedFamilies) {
     assert.ok(
       source.includes(`'${family}':`),
-      `RECORD_ID_TO_HANDOFF missing family '${family}'`,
+      `shared handoff mapping missing family '${family}'`,
     );
   }
+  assert.ok(source.includes("'reader.reading-surface': 'reader-runtime/reading-surface'"));
+  assert.ok(source.includes("'reader.control-home': 'reader-runtime/control-home'"));
 });
 
 test('promote-family.mjs writes registry BEFORE calling generator (write order fix)', () => {

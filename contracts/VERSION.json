@@ -1,5 +1,5 @@
 {
-  "version": "4.0.0",
+  "version": "4.0.1",
   "schema": {
     "route": "1.0.0",
     "ui-event": "1.0.0",
@@ -27,6 +27,16 @@
     "device-conformance-evidence": "1.0.0"
   },
   "changelog": [
+    {
+      "version": "4.0.1",
+      "date": "2026-07-30",
+      "summary": "PATCH：发布 Figma 绑定的阅读控制栏语义覆盖层与逐记录准入门",
+      "changes": [
+        "reader.control-home 以独立 B2/B3 证据、A2 原生处置收据和 promote-020 原子事务提升；中心点击只切换 reader-control 语义覆盖层，不再跳转或复制阅读路由。",
+        "VisualAdmission 新增由唯一 registry 生成的 record-level 查询，HarmonyOS 可按 reader.module.* 的真实 promotion 状态自动 fail-closed，禁止原生端维护第二份模块白名单。",
+        "目录、朗读、界面和设置模块仍为 candidate-backport；本版本只发布 control-home，不把相邻模块、B6 虚拟机证据或 B7 真机与动效证据伪装为已完成。"
+      ]
+    },
     {
       "version": "4.0.0",
       "date": "2026-07-28",

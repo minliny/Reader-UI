@@ -5,7 +5,10 @@ import path from 'node:path';
 export const FIGMA_SOURCE_PLAN_KIND = 'FIGMA_SOURCE_PLAN';
 export const FIGMA_SOURCE_PLAN_SCHEMA_VERSION = '1.0.0';
 export const EXACT_FIGMA_BINDING = 'exact-figma-binding';
-export const EXPECTED_EXACT_BINDING_COUNT = 30;
+// bookshelf.list-mode is an independent exact binding, so the current
+// registry contains 31 records. Keep this denominator machine-checked instead
+// of silently omitting the late-added exact record from the source plan.
+export const EXPECTED_EXACT_BINDING_COUNT = 31;
 
 const NODE_ID_PATTERN = /^\d+:\d+$/;
 
@@ -63,13 +66,23 @@ export function exactFigmaBindingRecords(registry) {
   return registry.records.filter((record) => record?.classification === EXACT_FIGMA_BINDING);
 }
 
-function requireViewportNodeIds(figma, recordId, allowNull) {
+function requireViewportNodeIds(figma, recordId, allowNull, allowPartial) {
   assert(
     figma.viewportNodes && typeof figma.viewportNodes === 'object' && !Array.isArray(figma.viewportNodes),
     `${recordId}.viewportNodes must be an object`,
   );
   const phoneValue = figma.viewportNodes.phone;
   const tabletValue = figma.viewportNodes.tablet;
+  if (allowPartial) {
+    assert(
+      phoneValue !== null || tabletValue !== null,
+      `${recordId}.viewportNodes must provide at least one exact viewport node`,
+    );
+    return {
+      phone: phoneValue === null ? null : requireNodeId(phoneValue, `${recordId}.viewportNodes.phone`),
+      tablet: tabletValue === null ? null : requireNodeId(tabletValue, `${recordId}.viewportNodes.tablet`),
+    };
+  }
   if (allowNull && phoneValue === null && tabletValue === null) {
     return { phone: null, tablet: null };
   }
@@ -175,10 +188,12 @@ export function buildFigmaSourcePlan({
     const routeIds = requireUniqueStringArray(record.routeIds, `${recordId}.routeIds`);
     const usesRouteVariants = surfaceType === 'route-variant-family';
     const usesOverlayStates = surfaceType === 'overlay-state-family';
+    const usesViewportException = surfaceType === 'viewport-exception';
     const viewportNodeIdsForRecord = requireViewportNodeIds(
       figma,
       recordId,
       usesRouteVariants || usesOverlayStates,
+      usesViewportException,
     );
     const variantNodeIdsForRecord = requireVariantNodeIds(figma, recordId, routeIds, surfaceType);
     const deliveryStatus = requireNonEmptyString(record.deliveryStatus, `${recordId}.deliveryStatus`);

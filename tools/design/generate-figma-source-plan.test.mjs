@@ -22,7 +22,7 @@ const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'
 const generator = path.join(repoRoot, 'tools/design/generate-figma-source-plan.mjs');
 const currentRegistryPath = path.join(repoRoot, 'docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json');
 
-function makeRegistry(count = 30) {
+function makeRegistry(count = 31) {
   const records = [];
   for (let index = count - 1; index >= 0; index -= 1) {
     const base = index * 10 + 1;
@@ -69,12 +69,12 @@ function clone(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
-test('current registry builds all 30 exact bindings without admitting non-exact records', () => {
+test('current registry builds all 31 exact bindings without admitting non-exact records', () => {
   const registrySource = readFileSync(currentRegistryPath, 'utf8');
   const registry = JSON.parse(registrySource);
-  assert.equal(exactFigmaBindingRecords(registry).length, 30);
+  assert.equal(exactFigmaBindingRecords(registry).length, 31);
   assert.ok(exactFigmaBindingRecords(registry).every((record) => record.classification === 'exact-figma-binding'));
-  assert.equal(buildFigmaSourcePlan({ registrySource }).recordCount, 30);
+  assert.equal(buildFigmaSourcePlan({ registrySource }).recordCount, 31);
 });
 
 test('build creates a deterministic, sorted plan and hashes the exact registry bytes', () => {
@@ -83,7 +83,7 @@ test('build creates a deterministic, sorted plan and hashes the exact registry b
   const second = buildFigmaSourcePlan({ registrySource });
 
   assert.deepEqual(first, second);
-  assert.equal(first.recordCount, 30);
+  assert.equal(first.recordCount, 31);
   assert.equal(first.records[0].recordId, 'record.00');
   assert.deepEqual(first.records[0].routeIds, ['route.a', 'route.z']);
   assert.deepEqual(first.records[0].harmonyTargets, ['target/a', 'target/z']);
@@ -202,6 +202,23 @@ test('overlay-state families require one explicit variant node per route and all
   );
 });
 
+test('viewport exceptions preserve one exact viewport and never invent the missing peer', () => {
+  const registry = makeRegistry();
+  const record = registry.records[0];
+  record.surfaceType = 'viewport-exception';
+  record.figma.viewportNodes = { phone: '904:1', tablet: null };
+  const plan = buildFigmaSourcePlan({ registrySource: sourceFor(registry) });
+  const projected = plan.records.find((candidate) => candidate.recordId === record.id);
+  assert.deepEqual(projected.viewportNodeIds, { phone: '904:1', tablet: null });
+  assert.ok(plan.nodeIds.viewports.includes('904:1'));
+
+  record.figma.viewportNodes = { phone: null, tablet: null };
+  assert.throws(
+    () => buildFigmaSourcePlan({ registrySource: sourceFor(registry) }),
+    /must provide at least one exact viewport node/,
+  );
+});
+
 test('CLI defaults to check and compares exact rendered bytes without running write mode', () => {
   const temporary = mkdtempSync(path.join(tmpdir(), 'figma-source-plan-'));
   try {
@@ -221,7 +238,7 @@ test('CLI defaults to check and compares exact rendered bytes without running wr
       encoding: 'utf8',
     });
     assert.equal(result.status, 0, result.stderr);
-    assert.match(result.stdout, /Figma source plan current: 30 exact bindings/);
+    assert.match(result.stdout, /Figma source plan current: 31 exact bindings/);
 
     writeFileSync(outputPath, `${rendered} `, 'utf8');
     const stale = spawnSync(process.execPath, [

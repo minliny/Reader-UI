@@ -36,6 +36,18 @@
     })
   });
 
+  // Trace-only binding for the frozen control-home component. The Figma
+  // component remains the sole visual authority; these IDs only make the
+  // rendered semantic overlay auditable.
+  const READER_CONTROL_HOME_FIGMA_BINDING = Object.freeze({
+    fileKey: "klhs2jMM4MncaJFqZMfqEK",
+    pageId: "1023:17636",
+    canonicalMasterId: "1023:18737",
+    phoneNodeId: "1023:18737",
+    tabletNodeId: "1023:18745",
+    overlayKind: "reader-control"
+  });
+
   function esc(value) {
     return String(value == null ? "" : value)
       .replace(/&/g, "&amp;")
@@ -2442,7 +2454,7 @@
   const readerStateByRoute = {
     "immersive-reading": { mode: "immersive" },
     reader_content: { mode: "immersive" },
-    reader: { mode: "control" },
+    reader: { mode: "immersive" },
     "toc-bookmarks": { mode: "module", module: "directory" },
     "reader-directory-overlay-v2": { mode: "module", module: "directory" },
     tts: { mode: "module", module: "tts" },
@@ -3617,7 +3629,7 @@
         ${paragraphHtml}
       </article>
       <div class="fd-reader-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>
-      ${dismissRoute ? `<button class="fd-reader-dismiss-zone" type="button" data-dev-region="ControlDismissZone" data-reader-dismiss="${esc(dismissRoute)}" aria-label="隐藏阅读控制层"></button>` : ""}`;
+      ${dismissRoute ? `<button class="fd-reader-dismiss-zone" type="button" data-dev-region="ControlDismissZone" data-reader-dismiss="${esc(dismissRoute)}"${dismissRoute === READER_CONTROL_HOME_FIGMA_BINDING.overlayKind ? ` data-reader-control-toggle="${READER_CONTROL_HOME_FIGMA_BINDING.overlayKind}"` : ""} aria-label="隐藏阅读控制层"></button>` : ""}`;
   }
 
   function readerInfoOverlay(data, appState) {
@@ -4442,7 +4454,7 @@
     return `
       <section class="fd-ir-tap-zone-layer" data-dev-region="ImmersiveTapZones" aria-label="透明点击热区层">
         <button class="fd-immersive-hotzone fd-hotzone-prev" type="button" aria-label="上一页" data-dev-region="PrevPageHotzone" data-reader-page-action="prev" aria-disabled="${isVertical || pageState.index === 0 ? "true" : "false"}"></button>
-        <button class="fd-immersive-hotzone fd-hotzone-center" type="button" aria-label="打开阅读控制层" data-dev-region="ControlLayerHotzone" data-reader-control-show data-route="reader"></button>
+        <button class="fd-immersive-hotzone fd-hotzone-center" type="button" aria-label="打开阅读控制层" data-dev-region="ControlLayerHotzone" data-reader-control-show data-reader-control-toggle="${READER_CONTROL_HOME_FIGMA_BINDING.overlayKind}"></button>
         <button class="fd-immersive-hotzone fd-hotzone-next" type="button" aria-label="下一页" data-dev-region="NextPageHotzone" data-reader-page-action="next" aria-disabled="${isVertical || pageState.index >= pageState.count - 1 ? "true" : "false"}"></button>
       </section>`;
   }
@@ -4453,7 +4465,7 @@
 
   function readerTopOverlay(data, appState) {
     return `
-      <section class="fd-reader-top" data-dev-region="ReaderTopBar">
+      <section class="fd-reader-top" data-dev-region="ReaderTopBar" data-reader-figma-overlay="control-home" data-figma-file-key="${READER_CONTROL_HOME_FIGMA_BINDING.fileKey}" data-figma-canonical-master="${READER_CONTROL_HOME_FIGMA_BINDING.canonicalMasterId}" data-figma-phone-node="${READER_CONTROL_HOME_FIGMA_BINDING.phoneNodeId}" data-figma-tablet-node="${READER_CONTROL_HOME_FIGMA_BINDING.tabletNodeId}">
         <button type="button" aria-label="返回" data-reader-exit>${icon("back", "fd-icon")}</button>
         <span><strong>${esc(data.reader.title)}</strong><small>${esc(data.reader.sourceLine)}</small></span>
         <button type="button" data-route="source-switch">${icon("source-switch", "fd-small-icon")}换源</button>
@@ -4747,12 +4759,12 @@
 
   function readerModuleNavHtml(data, activeType) {
     const normalizedType = activeType || "";
-    return data.reader.modules.map((item) => `
+    return `<span class="fd-reader-module-nav-trace" data-reader-figma-overlay="control-home" data-figma-canonical-master="${READER_CONTROL_HOME_FIGMA_BINDING.canonicalMasterId}" aria-hidden="true"></span>${data.reader.modules.map((item) => `
       <button class="fd-reader-module${item.type === normalizedType ? " is-active" : ""}" type="button" data-route="${esc(readerModuleRoutes[item.type] || "reader")}" data-module="${esc(item.type)}"${item.type === normalizedType ? ' aria-current="page"' : ""}>
         <span>${icon(item.icon || item.type, "fd-medium-icon")}</span>
         <small>${esc(item.label)}</small>
       </button>
-    `).join("");
+    `).join("")}`;
   }
 
   function readerChoiceButtons(values, current, dataAttrs) {
@@ -5493,7 +5505,7 @@
     const isAuto = Boolean(appState?.readerBrightnessAuto);
     const value = readerBrightnessValue(data, appState);
     return `
-      <aside class="fd-brightness-rail" aria-label="亮度控制" data-dev-region="BrightnessRail" style="--brightness:${esc(value)}%">
+      <aside class="fd-brightness-rail" aria-label="亮度控制" data-dev-region="BrightnessRail" data-reader-figma-overlay="control-home" data-figma-canonical-master="${READER_CONTROL_HOME_FIGMA_BINDING.canonicalMasterId}" style="--brightness:${esc(value)}%">
         ${icon("sun", "fd-small-icon")}
         <i data-reader-brightness-track role="slider" aria-label="调整亮度" aria-orientation="vertical" aria-valuemin="${esc(brightnessConfig.min)}" aria-valuemax="${esc(brightnessConfig.max)}" aria-valuenow="${esc(value)}" tabindex="0"><b></b></i>
         <button class="fd-brightness-auto-toggle${isAuto ? " is-active" : ""}" type="button" data-reader-brightness-auto aria-pressed="${isAuto ? "true" : "false"}" aria-label="${esc(brightness.autoText || "自动亮度")}">${esc(brightness.autoLabel || "A")}</button>
@@ -5508,7 +5520,7 @@
     const chapterTitle = chapterState.chapter.title || chapter.title || "第 32 章 雨夜";
     const totalChapterCount = readerTotalChapterCount(data, chapterState.count);
     return `
-      <div class="fd-reader-control-main" data-dev-region="BottomControlPanel">
+      <div class="fd-reader-control-main" data-dev-region="BottomControlPanel" data-reader-figma-overlay="control-home" data-figma-canonical-master="${READER_CONTROL_HOME_FIGMA_BINDING.canonicalMasterId}">
         <nav class="fd-reader-actions" aria-label="快捷操作">
           ${data.reader.quickActions.map((item) => `
             <button type="button" data-route="${esc(item.type === "search" ? "content-search" : item.type === "auto-page" ? "auto-page" : "content-replacement")}" data-quick-action="${esc(item.type)}">${icon(readerQuickActionIconMap[item.type] || item.type, "fd-medium-icon")}<span>${esc(item.label)}</span></button>
@@ -5565,6 +5577,17 @@
     return `
       <button class="fd-reader-grabber" type="button" ${grabberAttributes} aria-label="展开完整控制页"></button>
       ${bodyHtml}`;
+  }
+
+  function readerControlHomeOverlay(data, appState, route, isLoading) {
+    const state = { mode: "control", module: null, panel: "quick" };
+    return Object.freeze({
+      state,
+      accessoryHtml: readerBrightnessRail(data, appState),
+      overlayHtml: readerTopOverlay(data, appState),
+      bottomSheetHtml: readerBottomSheetHtml(data, state, route, Boolean(isLoading), appState),
+      moduleNavHtml: readerModuleNavHtml(data, "")
+    });
   }
 
   function readerQuickFullPagePanel(type, appState, data) {
@@ -5659,8 +5682,13 @@
     ) {
       return readerQuickFullPageScreen(data, route, baseState.quick, appState);
     }
-    const state = baseState;
-    const isImmersive = baseState.mode === "immersive" && !isLoading;
+    const controlHomeVisible = baseState.mode === "immersive" &&
+      appState?.readerControlOverlay === READER_CONTROL_HOME_FIGMA_BINDING.overlayKind;
+    const controlHome = controlHomeVisible
+      ? readerControlHomeOverlay(data, appState, route, isLoading)
+      : null;
+    const state = controlHome?.state || baseState;
+    const isImmersive = baseState.mode === "immersive" && !controlHomeVisible && !isLoading;
     const activeModule = baseState.mode === "module" ? baseState.module : "";
     const frameMode = isImmersive ? "immersive" : state.mode;
     const pageModeClass = appState?.readerPageMode === "vertical" ? " fd-reader-page-mode-vertical" : " fd-reader-page-mode-horizontal";
@@ -5672,14 +5700,14 @@
       bottomSheetHostClass: isImmersive ? "fd-reader-sheet fd-reader-sheet-empty" : "fd-reader-sheet",
       moduleNavClass: isImmersive ? "fd-reader-module-nav fd-reader-module-nav-empty" : "fd-reader-module-nav",
       accessoryHostClass: "fd-reader-accessory-host",
-      accessoryHtml: isImmersive ? "" : readerBrightnessRail(data, appState),
+      accessoryHtml: controlHome?.accessoryHtml || (isImmersive ? "" : readerBrightnessRail(data, appState)),
       stateHostClass: "fd-reader-state-host",
       stateHostHtml: `<div class="fd-reader-global-brightness-dim" data-reader-brightness-dim aria-hidden="true" style="${readerBrightnessStyle(data, appState)}"></div>`,
       ariaLabel: (routes[route] || routes.reader).title,
-      readingSurfaceHtml: sharedReaderSurface(data, isImmersive ? "" : "immersive-reading", appState),
-      overlayHtml: isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : readerTopOverlay(data, appState),
-      bottomSheetHtml: readerBottomSheetHtml(data, state, route, isLoading, appState),
-      moduleNavHtml: isImmersive ? "" : readerModuleNavHtml(data, activeModule)
+      readingSurfaceHtml: sharedReaderSurface(data, isImmersive ? "" : controlHomeVisible ? "reader-control" : "immersive-reading", appState),
+      overlayHtml: controlHome?.overlayHtml || (isImmersive ? `${readerInfoOverlay(data, appState)}${readerTextSelectionLayer(appState)}${readerTapZones(data, appState)}` : readerTopOverlay(data, appState)),
+      bottomSheetHtml: controlHome?.bottomSheetHtml || readerBottomSheetHtml(data, state, route, isLoading, appState),
+      moduleNavHtml: controlHome?.moduleNavHtml || (isImmersive ? "" : readerModuleNavHtml(data, activeModule))
     });
   }
 
@@ -10826,6 +10854,7 @@
       readerTurnDirection: "",
       readerPageMode: readerPageModeForAnimation(settingDefaults.pageAnimation),
       readerPageAnimation: readerPageAnimationCssValue(settingDefaults.pageAnimation),
+      readerControlOverlay: "",
       readerCanonicalLocation: null,
       readerLocationReflow: null,
       readerReflowAnchor: null,
@@ -11427,9 +11456,16 @@
         normalizeReaderTtsQuickTimerState(appState);
       }
       syncAppThemeRoot(root, data, appState);
+      if (!isReaderStateRoute(route)) {
+        readerRuntimeOwner?.dispatch?.({ type: "CONTROL_HIDE" });
+      }
+      const readerRuntimeState = readerRuntimeOwner?.dispatch?.({ type: "ROUTE_COMMIT", route });
+      appState.readerControlOverlay = readerRuntimeState?.overlay || "";
       screenHost.innerHTML = renderRoute(route, data, options, appState);
-      readerRuntimeOwner?.dispatch?.({ type: "ROUTE_COMMIT", route });
       window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
+      if (appState.readerControlOverlay === READER_CONTROL_HOME_FIGMA_BINDING.overlayKind) {
+        window.ReaderRuntimeContract?.instrumentControlHomeDom?.(screenHost, route);
+      }
       window.ReaderRssRuntimeContract?.instrumentDom?.(screenHost, route);
       window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
       if (options?.loading) {
@@ -11444,6 +11480,9 @@
         syncAppThemeRoot(root, data, appState);
         screenHost.innerHTML = renderRoute(route, data, options, appState);
         window.ReaderRuntimeContract?.instrumentDom?.(screenHost, route);
+        if (appState.readerControlOverlay === READER_CONTROL_HOME_FIGMA_BINDING.overlayKind) {
+          window.ReaderRuntimeContract?.instrumentControlHomeDom?.(screenHost, route);
+        }
         window.ReaderRssRuntimeContract?.instrumentDom?.(screenHost, route);
         window.ReaderW3SourceSwitchRenderers?.instrumentDom?.(screenHost, route);
         updateRouteInfo(route, viewState);
@@ -11498,7 +11537,7 @@
         }
       });
       attachMotionPressState(screenHost, motionController);
-      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay);
+      attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay, readerRuntimeOwner);
       if (appState.sourceSwitchRestoreFocusKey && route === appState.sourceSwitchNavigationOriginRoute) {
         const restoreControlKey = appState.sourceSwitchRestoreFocusKey;
         appState.sourceSwitchRestoreFocusKey = "";
@@ -11909,7 +11948,7 @@
     return { view, anchorBookId: anchor?.bookId || "" };
   }
 
-  function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay) {
+  function attachScreenInteractions(screenHost, goTo, goBack, goTab, replaceTopRoute, exitReader, appState, data, renderCurrentRoute, motionController, readerControlTransition, motionSearchDelay, readerRuntimeOwner) {
     const bookshelfOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookshelf;
     const bookDetailOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookDetail;
     const bookSearchOwner = window.ReaderD2BookshelfDiscoverRenderers?.bookSearch;
@@ -12476,6 +12515,36 @@
     };
 
     const currentRoute = () => screenHost.closest(".fd-demo")?.getAttribute("data-current-route") || "";
+
+    screenHost.querySelectorAll("[data-reader-control-toggle]").forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const overlay = button.getAttribute("data-reader-control-toggle") || "";
+        if (overlay !== READER_CONTROL_HOME_FIGMA_BINDING.overlayKind || !readerRuntimeOwner) {
+          return;
+        }
+        const showing = readerRuntimeOwner.getState?.().overlay !== overlay;
+        const commit = () => {
+          const nextState = readerRuntimeOwner.dispatch?.({ type: "CONTROL_TOGGLE", overlay });
+          appState.readerControlOverlay = nextState?.overlay || "";
+          renderCurrentRoute();
+        };
+        const motionId = showing ? "reader.control.show" : "reader.control.hide";
+        if (readerControlTransition?.accepts?.(motionId)) {
+          readerControlTransition.run({
+            id: motionId,
+            action: showing ? "show-control-layer" : "hide-control-layer",
+            from: currentRoute(),
+            to: currentRoute(),
+            target: button,
+            commit
+          });
+        } else {
+          commit();
+        }
+      });
+    });
     const filterOpenKeys = ["bookshelfFilterOpen", "discoverFilterOpen", "rssGroupFilterOpen", "rssManageFilterOpen", "rssCategoryFilterOpen", "rssFavoriteFilterOpen", "sourceFilterOpen"];
     const closeFilterDisclosures = (exceptKey) => {
       filterOpenKeys.forEach((key) => {
@@ -14267,7 +14336,7 @@
       button.addEventListener("click", goBack);
     });
 
-    screenHost.querySelectorAll("[data-reader-dismiss]").forEach((button) => {
+    screenHost.querySelectorAll("[data-reader-dismiss]:not([data-reader-control-toggle])").forEach((button) => {
       button.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -15340,6 +15409,8 @@
 
   window.ReaderRuntimeTestHooks = Object.assign({}, window.ReaderRuntimeTestHooks, {
     readerReadingSurfaceFigmaBinding: READER_READING_SURFACE_FIGMA_BINDING,
+    readerControlHomeFigmaBinding: READER_CONTROL_HOME_FIGMA_BINDING,
+    readerControlHomeOverlay,
     readerTextBlocks,
     sharedReaderSurface,
     readerThemeStyle,
