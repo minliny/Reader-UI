@@ -1,8 +1,0 @@
-{
-  "name": "reader_ui_runtime",
-  "version": "4.0.1",
-  "description": "Executable Reader UI state machine and effect descriptors",
-  "main": "src/main/ets/Index.ets",
-  "author": "Reader",
-  "license": "UNLICENSED"
-}
