@@ -27,6 +27,8 @@
 
 ## 3. 当前仍存缺口
 
+> 本节条目若与 §7 用户范围决策冲突，以 §7 为准：Discover/RSS 占位-only 已撤出；`N-COVER-HERO-01`、`H-NOTE-1`、`B-BOOKSHELF-LIST-02`、`S-SEARCH-EMPTY-HISTORY-01` 已按决策关闭；`R-COMPACT-01` 折叠屏降级 out-of-scope。
+
 ### 3.1 动效与翻页类 —— 用户已指示暂时搁置
 
 下列「动效类」缺口在本次审计中**不展开、不求解、不推进**，统一搁置等待 Figma 补齐。搁置期间不实现任何作用域内动效，静态终态与业务不暂停。
@@ -67,7 +69,7 @@
 ### 3.3 响应式类（详细）
 
 1. **`R-COMPACT-01` Compact 视口缺失**：重读 `24 · Responsive Masters · Phase 4`（`834:3`）确认 21 个页面 Master 全部只提供 **Phone 与 Tablet**（ReadingSurface 的 Tablet 名为 TabletExpanded），均无 Compact 变体。Compact 的可见布局、字体/网格/抽屉位置、切换阈值、与 Phone/Tablet 的约束仍不存在。→ 影响所有 Compact 页面实现与验收。**禁止从 Phone/Tablet 推导 Compact。**
-2. **`R-TOC-READING-01` Tablet 目录打开时正文宽度（状态有待确认）**：重读确认 `Reader Module Directory / Tablet`（`942:60`）目录打开时 `Article - 正文排版层` 为 x44、y92、**w314**、h810；而 canonical `ReadingContent`（`1023:18373`）为 x44.444、y92.444、**w670**、h810。两者是"目录打开（正文压缩到 314）"与"目录关闭全宽阅读（670）"两个不同状态，**不再是同屏互相排斥的冲突**，但目录关闭后恢复 670 的切换规则/状态说明仍需确认。→ 影响 Tablet 目录打开时的正文布局、分页度量、阅读位置恢复。目录打开时按 314 实现，但切换规则未确认前不做最终判定。
+2. **`R-TOC-READING-01` 已关闭（2026-08-05）**：实时 Figma 已将 `Reader Module Directory / Tablet`（`942:60`）的 `Article - 正文排版层`（`917:7`）恢复为 canonical `ReadingContent`（`1023:18373`）的 x44.444、y92.444、**w670**、h810；标题与五个段落容器均为 670 宽，五段正文恢复为 `FILL × HUG`。目录是覆盖层，**不压缩正文**；本地 overlay 也不需额外宽度逻辑。
 
 ### 3.4 元数据类剩余（详细）
 
@@ -156,12 +158,12 @@ FIGMA_VISUAL_GAP
 
 FIGMA_VISUAL_GAP
 - ID：`SS-SOURCE-SWITCH-01`
-- Figma 文件 / 页面 / 节点：`23 · Pages · Final` `943:15215`（Source Switch/Phone）、`943:15705`（Source Switch/Tablet）；节点 = `SourceSwitch/Overlay`（`3572:41345`）。
-- 缺失内容：Source Switch 是换源 overlay，需从远程书详情/阅读页的"换源"触发。远程书详情/阅读链路未交付（`change.bookSource` 需远程书上下文），换源 overlay 的触发与返回规则未确认。
-- 影响范围：Source Switch overlay 未交付。
-- 不能推断的原因：不能从本地书阅读推断远程换源触发；换源结果各状态未定义。
-- 需要补充到 Figma 的内容：Source Switch 的触发入口、返回规则、换源结果状态。
-- 当前应用行为：未接入换源入口（远程书详情链路未交付）。
+- Figma 文件 / 页面 / 节点：`23 · Pages · Final` `943:15215`（Source Switch/Phone）、`943:15705`（Source Switch/Tablet）；节点 = `SourceSwitch/Window`（`568:134`，实例 `3572:41345`）。
+- 缺失内容：Source Switch 是换源 overlay，需从远程书详情/阅读页的"换源"触发。**代码已定义（2026-08-05）**：触发入口 = 完整目录顶栏「换源」按钮（`ReaderFullDirectory`）；返回规则 = ✕ 关闭 / 遮罩点击 / 系统返回；结果状态 = discovering/candidates/empty/discoveryError/switching/success/failure（`SourceSwitchPanel`）；本地书置灰规则 = `sourceId === 'local'` → 按钮 opacity 0.4 不可点。但 **Figma 仍缺**：换源按钮 Disabled（置灰）变体、overlay 各结果态画稿、返回规则。
+- 影响范围：overlay 结果态视觉未交付到 Figma；代码以规则临时定义，待 Figma 补齐后对齐。
+- 不能推断的原因：Figma 只画了 Window 的 candidates 就绪态（`SourceSwitch/CandidateList`），未画切换中/成功/失败/发现失败等结果态；「延迟」与「当前章节」两列无 Core 数据契约（`change.bookSource` 候选只返回 sourceId/bookUrl/bookName/author/coverUrl），代码按用户决定（2026-08-05）以"—"占位。
+- 需要补充到 Figma 的内容：换源按钮 Disabled 变体；`SourceSwitch/Window` 结果态变体（Discovering/Switching/Success/Failure/Empty/DiscoveryError）；延迟与当前章节列数据契约（已定"—"占位为终态）。建画提示词已交 codex（2026-08-05）。
+- 当前应用行为：本地书 → 换源按钮置灰不可点（VM 已验证）；远程书 → 唤起 overlay 全状态（`SourceSwitchGateway` 已按 Core 契约接通 `change.bookSource`/`book.toc`/`source.switch.commit`/`source.switch.rollback`；真实切换链路待远程书架条目 + 在线阅读路径交付，`http.execute` host 已由在线书工作注册）。
 - 已继续完成的无关页面族：Search、RSS、Settings、Source Management、Sync/Backup。
 
 FIGMA_VISUAL_GAP
@@ -191,17 +193,17 @@ FIGMA_VISUAL_GAP
 - 影响范围：Full Directory 选章→正文的 Figma 视觉合同未闭合（代码选章链路已接通，但无 Figma 字段映射）。
 - 不能推断的原因：选章回调与字段映射需 Figma 定义；不能从目录视觉推断。
 - 需要补充到 Figma 的内容：Full Directory 的本地目录动态字段、章行→正文目标、顶部返回/收起路由。
-- 当前应用行为：章节行 `onSelectChapter` 已接通（`FullDirectoryPanel.chapterRow.onClick`→`onSelectChapter`→`LocalReadingExperience.onRequestedChapterChanged`→`openChapter`，含 `chapterSelectionToken` 防过期加载 + 过期 catch 不失败当前流）；顶部返回/收起接通到当前阅读路径回退。Reader Control Home 仍按 `RC-READER-CONTROL-01` 阻塞。审计认定：选章代码路径存在、竞态部分修复，Figma 视觉合同/设备回归未闭合。
+- 当前应用行为：章节行 `onSelectChapter` 已接通（`FullDirectoryPanel.chapterRow.onClick`→`onSelectChapter`→`LocalReadingExperience.onRequestedChapterChanged`→`openChapter`，含 `chapterSelectionToken` 防过期加载 + 过期 catch 不失败当前流）；顶部返回/收起接通到当前阅读路径回退。2026-08-05 当前 HAP 在 VM 新导入 Gutenberg EPUB `18174` 后，选择 `I. THE WOODLANDS IN JANUARY` 已进入该 fragment 的真实正文，退出后恢复同章位置。Reader Control Home 仍按 `RC-READER-CONTROL-01` 阻塞；Figma 视觉合同（动态字段/原型）仍未闭合。
 - 已继续完成的无关页面族：Search、RSS、Settings、Source Management、Sync。
 
 FIGMA_VISUAL_GAP
 - ID：`SS-SOURCE-TOGGLE-01`
 - Figma 文件 / 页面 / 节点：`23 · Pages · Final` `943:4281`（Source Management，源行带开关）。
-- 缺失内容：Core 协议无 `source.update` 命令（仅 `source.list/import/export/delete/check`）。书源启用/禁用没有 Core 持久化能力；源码开关无法真实改变书源状态。
-- 影响范围：Source Management 开关不能持久化；书源启用/禁用不可交付。
-- 不能推断的原因：不能用 `source.delete`+`source.import` 推断原子开关；无 Core 命令映射。
+- 缺失内容：~~Core 协议无 `source.update` 命令（仅 `source.list/import/export/delete/check`）。书源启用/禁用没有 Core 持久化能力；源码开关无法真实改变书源状态。~~ **已闭环（2026-08-05）**：Core 新增 `source.update {sourceId, enabled}`，幂等、只改写 `bookSource.enabled` 并保留规则与未知 Legado 字段；`bookSource` 非 object 的 V1-only 源 fail closed。
+- 影响范围：~~Source Management 开关不能持久化；书源启用/禁用不可交付。~~ 已交付：开关经真实 `source.update` RPC 持久化，成功后重载列表，维持不乐观切换。
+- 不能推断的原因：~~不能用 `source.delete`+`source.import` 推断原子开关；无 Core 命令映射。~~ 已按 §7.3 关闭途径①实现（`source.update` + 快照持久化）。
 - 需要补充到 Figma 的内容：书源启停的 Core 命令映射；或书源启停的视觉-only 规则。
-- 当前应用行为：开关可点击但**不乐观切换**（避免未持久化假状态），点击记录 `SS-SOURCE-TOGGLE-01` 缺口，不发出不存在的 RPC。禁用/阻塞态须有 Figma 状态，不自行补。
+- 当前应用行为：开关可点击、**不乐观切换**：点击发 `source.update` RPC，成功（含快照持久化确认）后重载列表，失败保持行原状并记录日志。`book.search` / `source.explore` 对 disabled 书源拒绝执行（本地搜索、RSS、`source.check` / `source.check.run` / `source.debug` 不受影响）。
 - 已继续完成的无关页面族：Search、RSS、Settings、Sync。
 
 FIGMA_VISUAL_GAP
@@ -213,3 +215,44 @@ FIGMA_VISUAL_GAP
 - 需要补充到 Figma 的内容：BookDetail Hero 的 NoCover 变体（或明确空封面槽规则）。
 - 当前应用行为：Hero 无封面时不渲染封面图像，保留文字列；登记缺口。
 - 已继续完成的无关页面族：Search、RSS、Settings、Source、Sync。
+
+## 7. 2026-08-05 用户范围决策（拍板记录）
+
+下列为设计/产品侧已拍板的范围决定，视觉与规则以本表为准，**不再要求补画**。
+
+### 7.1 全局约束：Discover 与 RSS 为占位-only
+
+Discover 与 RSS 在设计初期已定为「暂时不做，仅保留占位」：RSS 现有「视觉壳 + 缓存数据」即占位本身；Discover 底部导航入口保持 inert。**不推进两页的真实实现**（`rss.subscription.refresh`、`source.explore` 等需 `http.execute` 的能力不在本范围）。覆盖矩阵中两页的 `⊘Core阻塞（http）` / `⊘缺口` 记录以此条为准（out-of-scope 占位，非待补齐缺口）。
+
+### 7.2 逐项决策
+
+| 登记号 | 决策 | 结果 |
+| --- | --- | --- |
+| `S-SEARCH-EMPTY-HISTORY-01` | 空历史时**整体隐藏**最近搜索区 | 已关闭（代码已如此） |
+| `N-COVER-HERO-01` | Hero 无封面**复用书架卡 NoCover `3612:1796` 缩放至 86×122** | 已关闭（代码已改 `LocalBookDetail.ets`，待编译/VM 验证） |
+| `H-NOTE-1` | Tablet 空书架**复用** Phone 空态组件 | 已关闭（规则化） |
+| `B-BOOKSHELF-LIST-02` | Tablet List 与 Phone 样式**保持一致** | 已关闭（规则化） |
+| `D-DISCOVER-STATES-01` | Discover 并入 7.1 占位-only，不再推进 | 已关闭（out-of-scope） |
+| `R-COMPACT-01` | 折叠屏模式**降级，暂时不做** | 已关闭（out-of-scope） |
+| `S-SEARCH-RESULT-COVER-01` | 无封面结果卡用**单一占位色**（不做逐书渐变映射） | 已关闭（规则化；代码现为单一固定渐变占位，是否改纯色待实施确认） |
+| `RC-READER-CONTROL-01`（触发/返回部分） | 控制层**点击沉浸阅读页中间竖栏唤起**（区域大小不写死，待测试微调）；唤起态**返回按钮 / 系统返回 / 点击正文**退出 | 已关闭（契约已定）；面板装配、Quick↔Module↔Full 切换契约、动效暂停项仍开放 |
+| `R-TOC-READING-01` | **目录开关不影响正文渲染**，正文恒为 canonical w670；`942:60` 的错误 w314 画稿已恢复为 w670，并采用 canonical 正文 `FILL × HUG` 约束 | 已关闭（实时 Figma 修正并节点属性复核） |
+| `SS-SOURCE-TOGGLE-01` | 书源启停走 **Core `source.update {sourceId, enabled}`** 真实 RPC（幂等、只改 `bookSource.enabled`、保留规则/未知字段；V1-only 源 fail closed）；执行门控：`book.search` / `source.explore` 拒绝 disabled，`source.check(.run)` / `source.debug` / 本地搜索 / RSS 不受影响；开关不乐观切换，成功后重载列表 | 已关闭（2026-08-05 Core 命令 + HarmonyOS RPC，详见 §7.3） |
+
+**仍开放**：
+- `R-LOCAL-TOC-01`：本地目录动态字段 + 章行→正文映射（代码选章链路已通，Figma 合同 + 当前构建设备回归未闭合）。
+- `SS-SOURCE-SWITCH-01`：触发入口（完整目录顶栏「换源」按钮）、返回规则与 overlay 结果态已由代码定义（2026-08-05）；Figma 仍缺换源按钮 Disabled 变体 + overlay 结果态画稿 + 延迟/当前章节数据契约；远程书阅读链路未交付（在线书能力开发中，`http.execute` host 已注册）。
+- `B-BOOKSHELF-LIST-01`：Phone List 无 Final 静态页（Review 转场帧不可提升）。
+- `B-BOOKSHELF-LIST-03`：List 行元数据映射规则。**List 与 Cover 模式为同一套 ShelfBook 数据、仅展示样式区分（已确认），代码侧复用同一数据管线换行布局。**
+- Book Detail 局部状态（无独立登记号）：Hero/Summary 页面级 loading/empty/error 装配、Summary 空态、长内容溢出（长书名/作者/简介/多章节截断省略）。
+- Hero 非基准缩放实例：62×93 / Tablet 缩放无 Figma 比例规则（`N-COVER-HERO-01` 只覆盖 86×122 基准）。
+
+Search/Sync/WebDAV 为**真实功能**（非占位），完成仍需 `http.execute`。
+
+### 7.3 `SS-SOURCE-TOGGLE-01` Core 侧详情（2026-08-05 实现确认）
+
+- 书源条目**有** `enabled: bool` 字段，但它是 `Source.book_source`（Legado 原始 JSON）里的键，不是 `Source` 结构体的一等字段；`source.list` 返回该字段并支持 `enabled_only` 过滤。`remote.rs:169` 的 `enabled` 是 **Host 快照持久化开关**，不是书源字段（勿混淆）。
+- Core 书源命令面现含：`list / import / export / delete / update / check / check.run / debug / imageRequest / explore / getKey / getVariable / setVariable / switch.commit / switch.rollback`。
+- **已实现**：`source.update {sourceId, enabled}`——幂等；未知 `sourceId` 返回 `INVALID_PARAMS`；只改写 `bookSource.enabled`，保留规则与未知 Legado 字段；`bookSource` 非 JSON object 的 V1-only 源 **fail closed**（不补最小 Legado JSON，避免改变 `book_source_semantics()` 路径与 V1 `rules` 解析）。已加入 `remote_method_mutates_storage`，Host 快照启用时成功结果等待 `persistence.put` 确认。
+- 执行门控（产品边界，2026-08-05 拍板）：disabled 书源 **书源搜索/探索不可用**（`book.search` / `source.explore` 拒绝，返回空结果、不发 Host 请求；inline source 无 persisted enabled 概念、不门控）；**检测可用性与调试仍可用**（`source.check` / `source.check.run` / `source.debug` 不拦 disabled）；本地书籍搜索与 RSS 订阅不受影响。
+- `enabledExplore` 暂不暴露（`source.list` 缺失值默认 `true`、领域投影默认 `false`，且 explore 流程目前不读它——先冻结语义再开放）。
