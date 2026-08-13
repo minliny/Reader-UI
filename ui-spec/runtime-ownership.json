@@ -1,0 +1,127 @@
+{
+  "schemaVersion": 1,
+  "canonicalUiEventCount": 300,
+  "expectedImplementedActions": 67,
+  "ownershipRules": [
+    {
+      "id": "raw-reader-gesture",
+      "events": [
+        "reader.control.handlePress",
+        "reader.control.handleRelease",
+        "reader.control.handleDrag",
+        "reader.control.dockDrag",
+        "reader.control.dockLongPress",
+        "reader.control.dockRelease",
+        "reader.control.dockRebound"
+      ],
+      "owner": "platformEphemeral",
+      "coverage": "platform",
+      "rationale": "Pointer sampling, drag offsets, hit-testing and spring measurements remain native renderer ephemeral state. A semantic result event can be added later without serialising raw gesture frames."
+    },
+    {
+      "id": "selection-and-input",
+      "events": [
+        "reader.textSelection.change",
+        "reader.textSelection.clear",
+        "input.focus",
+        "input.blur"
+      ],
+      "owner": "split",
+      "coverage": "planned",
+      "rationale": "Native renderers own selected ranges and platform focus handles; runtime owns the semantic selection/focus target once a stable cross-platform payload is defined."
+    },
+    {
+      "id": "slider-and-viewport",
+      "events": [
+        "slider.drag.start",
+        "slider.drag.update",
+        "slider.drag.release",
+        "viewport.orientation.prepare",
+        "viewport.orientation.reshape",
+        "viewport.orientation.settle"
+      ],
+      "owner": "split",
+      "coverage": "planned",
+      "rationale": "Native renderers own continuous measurement and layout, while runtime owns committed values, interruption policy and route/session guards."
+    },
+    {
+      "id": "runtime-default",
+      "fallback": true,
+      "owner": "runtime",
+      "coverage": "planned",
+      "rationale": "All remaining canonical events require a shared deterministic transition or Core/Host effect plan before a workflow can become authoritative."
+    }
+  ],
+  "workflowRules": [
+    {
+      "id": "replace-rules",
+      "prefixes": ["reader.contentReplacement.", "reader.replace."],
+      "workflow": "W5"
+    },
+    {
+      "id": "source-and-discovery",
+      "prefixes": [
+        "reader.sourceSwitch.",
+        "source.",
+        "discover.",
+        "rss.",
+        "search.",
+        "webview."
+      ],
+      "workflow": "W3"
+    },
+    {
+      "id": "settings-and-style",
+      "prefixes": [
+        "settings.",
+        "reducedMotion.",
+        "tooling.mode.",
+        "reader.font.",
+        "reader.theme.",
+        "reader.typography.",
+        "reader.config."
+      ],
+      "workflow": "W4"
+    },
+    {
+      "id": "sync-and-backup",
+      "prefixes": ["sync.", "webdav.", "backup.", "restore."],
+      "workflow": "sync"
+    },
+    {
+      "id": "reader",
+      "prefixes": [
+        "book.",
+        "reader.",
+        "tts.",
+        "httpTts.",
+        "pdf.",
+        "manga.",
+        "content.",
+        "chapter.",
+        "bookmarks."
+      ],
+      "workflow": "W2"
+    },
+    {
+      "id": "import-and-library",
+      "prefixes": [
+        "import.",
+        "bookshelf.",
+        "mainTab.",
+        "app.firstOpen.",
+        "onboarding.",
+        "permission.",
+        "localFormat.",
+        "download.",
+        "storage."
+      ],
+      "workflow": "W1"
+    },
+    {
+      "id": "foundation",
+      "fallback": true,
+      "workflow": "foundation"
+    }
+  ]
+}

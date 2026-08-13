@@ -1,0 +1,150 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "About",
+  "pageFamily": "about",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_BUT_FIGMA_EXCLUDED_BY_USER",
+  "generatedAt": "2026-07-21T23:05:00+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "9598d2e78af3d7566d610b98d23a46474265c853",
+    "implementationCommit": "e2086fb91cbe5317df0082dbd12eac02189ba4fe",
+    "implementationCommitSubject": "feat(about): complete LOCAL_READY implementation",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): about LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true
+  },
+  "evidenceIsolation": {
+    "restorePreviewIncluded": false,
+    "sharedRendererFamily": "about-restore-preview",
+    "policy": "About has its own implementation evidence and handoff. It must not inherit or merge Restore Preview evidence."
+  },
+  "figmaDisposition": {
+    "status": "EXCLUDED_BY_USER",
+    "excludedAt": "2026-07-21T11:56:44+08:00",
+    "queueEligible": false,
+    "writerProhibited": true,
+    "reason": "The About visual design has not been authored by the user. Do not synthesize, infer, capture, componentize, or write an About F2 design. Preserve the original Figma About pages unchanged."
+  },
+  "routeFamily": {
+    "canonicalRoutes": ["about-feedback", "about", "about-version"],
+    "uniqueProductionRenderer": "aboutScreenV2(data, route, appState)",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+    "stateOwner": "ReaderD2SettingsSyncRenderers.about",
+    "feedbackRoutePolicy": {
+      "route": "feedback",
+      "status": "explicitly excluded and fail-loud",
+      "replacement": "About-owned feedback-entry overlay and explicit external-action contract",
+      "reason": "The 19-control About denominator contains feedback entry controls, not a second form renderer/state owner."
+    },
+    "fallbackFrozen": true
+  },
+  "r2aInstrumentation": {
+    "semanticControlCount": 19,
+    "semanticControlSource": "about-action",
+    "mappingStatus": "19/19 mapped",
+    "controlsByRouteState": {
+      "about-feedback/default": 9,
+      "about/default": 6,
+      "about-version/default": 4
+    },
+    "fiveDataAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-ui-event", "data-settings-key"],
+    "identityPolicy": "All controls use version, update, repository, license, contribution, team, feedback and rating business keys. Ordinals, selector hashes, labels and DOM position are prohibited."
+  },
+  "r2bRealInteraction": {
+    "stateDomains": ["update", "external", "feedbackEntryOpen", "pending", "requestEpoch"],
+    "asyncHelpers": ["executeUpdateCheck", "executeExternalAction"],
+    "guards": [
+      "one pending operation at a time; duplicate starts resolve duplicate",
+      "completion requires current requestId, kind and requestEpoch",
+      "cancel increments requestEpoch and later completion resolves stale",
+      "external action retains an explicit target business key",
+      "feedback entry stays inside the About owner without reviving the excluded feedback route"
+    ]
+  },
+  "externalActionSemantics": {
+    "targets": ["source-repository", "open-source-license", "contribute", "rate-app", "license-list", "view-license", "download-latest"],
+    "attributes": ["data-external-action", "rel=noopener noreferrer"],
+    "loading": "Only the active external target is aria-busy and disabled.",
+    "failure": "The target exposes aria-invalid and a deterministic error title."
+  },
+  "ariaAndFocus": {
+    "feedbackEntry": "About-owned modal dialog with aria-modal, labelled title, exact restore-focus and deterministic initial focus",
+    "updateLoading": "aria-busy=true and disabled",
+    "updateError": "aria-invalid=true with error title",
+    "externalActions": "explicit safe external-action target; loading and error remain target-local",
+    "controlNames": "every stamped button/row retains a data-settings-key accessible-name source"
+  },
+  "viewportPolicy": {
+    "phone": "390x844",
+    "tablet": "760x960",
+    "landscapeAlias": "tablet",
+    "compactProhibited": true,
+    "foldProhibited": true,
+    "independentLandscapeProhibited": true
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 25,
+      "passed": 25,
+      "failed": 0,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-about-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-about-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-about-aria-focus.test.mjs"
+      ]
+    },
+    "frontendRegression": { "tests": 454, "passed": 454, "failed": 0 },
+    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
+    "identityDenominator": 3808,
+    "identityDistribution": { "mapped": 796, "pendingActionKey": 450, "pendingInstanceKey": 1035, "pendingActionAndInstanceKey": 1527 },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check",
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check"
+    ]
+  },
+  "figmaReadOnlyBaseline": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "REQUIRES_FRESH_FIGMA_REVISION_READ",
+    "responsiveMasterPage": { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4" },
+    "responsiveMasterSet": "942:25",
+    "phoneMaster": "942:22",
+    "tabletMaster": "942:24",
+    "downstreamFinalPage": { "pageId": "834:2", "pageName": "23 · Pages · Final", "nodeIds": "REQUIRES_FRESH_READ_BEFORE_WRITE" },
+    "knownStructuralGap": "The responsive master subtree was read as INSTANCE=0 during F0 preparation. The serial writer must repair it through canonical components while preserving downstream instances and reactions.",
+    "freshRevisionRequiredBeforeWrite": true,
+    "noForgedBinding": true
+  },
+  "figmaDecisionsRequired": [
+    "Update shared About row, external-link action, update-state and feedback-entry dialog components before page masters.",
+    "Preserve clear external-link semantics and right-align trailing values/actions.",
+    "Do not create a separate feedback form or revive the excluded feedback route in this page family.",
+    "Repair Phone and Tablet masters only; Landscape inherits Tablet and Compact/Fold are prohibited.",
+    "Repair Page 24 masters through real components, then let Page 23 instances inherit. Detached frames and screenshots are prohibited.",
+    "Preserve reactions. Figma may not change UiEvent, state owner, async guards or external-action contract."
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "exactLocalCommit": "e2086fb91cbe5317df0082dbd12eac02189ba4fe",
+    "requiresFreshFigmaRevisionRead": false,
+    "requiresSingleWriter": true,
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": false,
+    "figmaWriterProhibited": true,
+    "exclusionReason": "User explicitly removed About from the Figma queue."
+  },
+  "boundaries": {
+    "figmaModified": false,
+    "restorePreviewModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}

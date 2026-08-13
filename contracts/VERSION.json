@@ -1,0 +1,334 @@
+{
+  "version": "3.1.1",
+  "schema": {
+    "route": "1.0.0",
+    "ui-event": "1.0.0",
+    "ui-state": "1.0.0",
+    "view-state": "1.1.0",
+    "motion": "2.1.0",
+    "token": "2.1.0",
+    "appearance": "1.0.0",
+    "core-command": "1.1.0",
+    "core-event": "1.0.0",
+    "host-request": "1.2.0",
+    "host-result": "1.0.0",
+    "progress-location": "1.0.0",
+    "content": "1.0.0",
+    "sync-conflict": "1.0.0",
+    "state-rule": "1.1.0",
+    "motion-policy": "2.0.0",
+    "runtime-actions": "3.0.0",
+    "host-consumer-lock": "1.1.0",
+    "runtime-ownership": "1.0.0",
+    "screen-graph": "1.2.0",
+    "component-render-semantics": "1.0.0",
+    "device-conformance-plan": "1.0.0",
+    "device-conformance-evidence": "1.0.0"
+  },
+  "changelog": [
+    {
+      "version": "3.1.1",
+      "date": "2026-07-22",
+      "summary": "PATCH：verified release artifact 下载根目录纠正",
+      "changes": [
+        "GitHub Actions 以 immutable artifact-id 下载时会按 artifact name 建立目录；release workflow 显式启用 merge-multiple，使 dispatch 从已验签 stage 根目录读取 inventory。",
+        "发布自动化测试固定该下载布局，防止 artifact 存在却因根目录错位而在 Host dispatch 前失败。",
+        "UiEvent、CoreCommand、runtime ABI 与业务流程均未改变；Reader UI Contract、Kotlin runtime 与 ArkTS runtime package 同步升至 3.1.1。三个 Host consumer lock 仍须且只能由该版本的不可变 artifact 自动更新。"
+      ]
+    },
+    {
+      "version": "3.1.0",
+      "date": "2026-07-22",
+      "summary": "MINOR：replace.undo CoreCommand 与 DOM-only control identity token 边界",
+      "changes": [
+        "CoreCommand 新增 replace.undo；这是兼容新增，core-command schema 升至 1.1.0。",
+        "35 个仅用于本地 DOM 身份的词从 UiEvent 中剥离为 data-control-token；它们不属于跨端 UiEvent，也不进入 Swift、Kotlin 或 ArkTS enum。",
+        "ControlIdentity schema 1.4.0 新增 source.controlIdentityToken，fail-closed 限定为 runtime event scope matrix 明确排除的身份词；状态 owner、业务流程和已发布 UiEvent 保持不变。",
+        "Reader UI contract、Kotlin runtime 与 ArkTS runtime package 同步升至 3.1.0；正式消费仍须由精确 commit/tag 的不可变 artifact 驱动。"
+      ]
+    },
+    {
+      "version": "3.0.0",
+      "date": "2026-07-15",
+      "summary": "MAJOR：MR0 App Route / Tab、Reader 控制层与书架布局 Motion Contract truth reset",
+      "changes": [
+        "canonical MotionId 从 93 增至 95，新增 reader.panel.expand / reader.panel.collapse；95 条 MotionSpec fixture 与三端 generated registry 保持一一对应。",
+        "Reader 控制层六个 MR0 pilot 与 bookshelf.view.switch 对 trigger / from / to / interrupt / finalState / cleanup 改为条件必填；书架布局新增 sharedLayoutMorph 视觉模式，因此 motion schema 升至 2.1.0。",
+        "App First Open / Route、Tab / Segment、dropdown、书架、Reader 控制层、Reader 进入/翻页/章节跳转、handle / Dock、真实 TTS / 自动翻页与单一 Session Capsule、Orientation / Interrupt、换源 FlowShell、Overlay、inline loading / Toast、input/search/content replace、基础交互原语，以及筛选/选择/危险确认/tooling 已提升为 canonical 精确状态机；当前 89/95 active exact，其余 6 项严格封闭为 3 个 deprecated 兼容 ID 与 3 个 contract-reserved controlSpace ID。P0 47 项已有 45 项 exact；阅读退出明确复用 app.route.pop.backward，不新增重复 Motion ABI 或重复胶囊 DOM。",
+        "MotionPolicy 从 50 条收敛为 53 条显式规则，禁止空 match fallback；未知请求返回 motion.policy.no-match diagnostic，不再伪装成 motion.interrupt.redirect，因此 motion-policy schema 升至 2.0.0。",
+        "Swift / Kotlin / ArkTS 新增可选的精确状态机字段与 MotionResolution diagnostic，保留 resolve 便捷入口，并重新生成 Motion / MotionPolicy 产物。",
+        "Reader 控制层新增 controlEnter / controlExit / quickPromote / moduleSwitch 四个专属 duration token，六个控制层 pilot 校准为 420 / 360 / 320 / 360ms 节奏；书架新增 layoutSwitch=320ms；换源 FlowShell 新增 routePop=240ms / routeReplace=200ms，避免与 route=280ms 发生 durationMs/token 漂移；token registry 从 262 增至 269，token schema 版本升至 2.1.0。",
+        "新增 appearance schema 1.0.0 与单一 AppearanceSpec fixture，冻结 Reader 2/Full/AppearanceContent 的 8 个主题、9 个字体、4 个选择项和 4 个步进器，并生成 Web / Swift / Kotlin / ArkTS 消费源。",
+        "bookshelf.view.switch 固定为 stateReplace + mainTabShell + replace + sharedLayoutMorph，cover/list 继续复用同一 BookCard canonical type，并以 semanticRole=BookItem、稳定 bookId/id 和 book-collection 表达跨布局 identity。",
+        "route-bearing Control / Module / Replace 抓手与主完整控制页收起入口统一接入 reader.panel.expand / reader.panel.collapse；抓手的 handle.release 只保留直接操控释放语义，不再绕过面板过渡事务。",
+        "Reader UI contract 与 Kotlin / ArkTS 本地消费包统一升级为 3.0.0；release manifest 在全部源码稳定后单独重新生成。",
+        "ViewState 1.1.0 与 ScreenGraph 1.2.0 新增多目标显式 binding、stateAuthorities 和 compositionMode；ReaderBase 等 Host 复合组件不再被通用 renderer 递归重复渲染，TapZones 明确输出 previous/control/next 目标事件。",
+        "新增 component-render-semantics 1.0.0，机器区分 contract、Core、ReaderUIRuntime、Host Store 与 Host Layout authority；正文、分页、anchor、主题运行值继续留在其真实 owner，不进入静态 ScreenGraph。",
+        "三端 ScreenGraphRegistry 的 schemaVersion admission 由 canonical graph 版本动态生成，并通过回归断言固定为 1.2.0，避免生成 asset 已升级但 loader 仍拒绝新版本。",
+        "本版本只表示 Reader-UI Contract head 完成 MR0 breaking reset；三个 Host consumer lock 仍停留在 2.5.1，尚未证明 Host MotionAdapter 或设备实现已升级。",
+        "reader.page.next / reader.page.prev 现在严格串行执行 reader.location.resolve → reader.progress.update；progress effect 使用空 payload，由 Host correlation-scoped DomainContext 绑定真实 Core DTO，stored=true 后才提交可见页。",
+        "新增 persisting-progress commit boundary 与 PAGE_PROGRESS_COMMIT_PENDING fail-closed 语义；已发出的 progress mutation 不再被新翻页、auto-page 或 teardown 伪装为 cancellation/rollback，runtime-actions schema 升至 3.0.0。",
+        "reader.control.toggle 与 reader.module.switch 已进入当前 67-action executable runtime：只在 immersive-reading 的 Reader control overlay family 内原子切换，保持 route identity，不使用可见 null 中转；重复 module 选择为 no-op，show/hide/switch 动效由状态差分派生。",
+        "reader.bookCache.open、settings.cache.clear、download.task.retry 与 reader.replace.undo 现在分别绑定 cache.book.status、cache.clear、cache.book.prefetch 与 replace.undo；四条动作使用完整 Core DTO 并拒绝 payload-less 或 taskId-only 伪成功。"
+      ]
+    },
+    {
+      "version": "2.5.1",
+      "date": "2026-07-12",
+      "summary": "PATCH：ViewState presentation resolver 与 UI/Figma/Host truth correction",
+      "changes": [
+        "frontend-demo-optimized 不再由 RouteId 单独决定当前 page/overlay/state surface；resolveRoutePresentation 统一根据 pageState、overlayState 与组件树解析，并以 165 条 ViewState fixture 做穷举门禁。",
+        "Phase 0/1 固化 Shell 几何、ReaderShell 六槽与共享亮度控件边界；Phase 3/4 Figma 仅保留可编辑组件库和三个代表视口，不把 235-route runnable demo 伪装成可自动回写的设计源。",
+        "修正 rollout 文档与三端状态口径：当前 35 covered events 为 7 Pilot、28 Shadow、0 Authoritative；120/120 静态链路矩阵、单元/构建通过与历史设备证据都不能替代 fresh physical-device proof。",
+        "修正 R16D ScreenGraph 组件实例计数为 519，并保留 235 routes、165 variants、36 executable bindings、19 state-event evidence 与 6 action gaps 的机器事实。"
+      ]
+    },
+    {
+      "version": "2.5.0",
+      "date": "2026-07-11",
+      "summary": "MINOR：61-action runtime、7/28 rollout truth 与 immutable release manifest",
+      "changes": [
+        "Reader UI 统一为 2.5.0；runtime-actions.json 扩展至 61 条，当前 raw-byte SHA-256 为 0ac249341d8de651314687d8352bc1c3f62d3778371ff500f1f0a025a64be82c。",
+        "host-request schema 升至 1.2.0：58 个 type 全部改为 type-discriminated strict payload，正式加入 ReaderUIRuntime appearance aggregate 所需的 persistence.get/put CAS 与 font.unregisterFile；W4 不再伪装为 Core 业务命令。新增 host-result 1.0.0，以同一 58-type 集合约束成功结果并固定 appearance CAS/font 不变量。",
+        "三端 rollout allowlist 精确覆盖 35 条：directory、book.open、TTS、auto-page 共 7 条 Pilot；page、import、source-switch、replace、RSS、Sync 共 28 条保持默认 Shadow。",
+        "Host consumer checker 强制 exact covered/pilot policy、动态 effectful event 分类、timer handler 注册证明与 HarmonyOS oh-package lock 版本一致。",
+        "R14 为 61/61 action 建立 strict lossless payload/result contract，并为 Swift/Kotlin/ArkTS 生成递归 JSONValue 边界；nested object/array 不再降级为字符串 map。",
+        "R16D ScreenGraph 1.1.0 覆盖 235 routes / 165 variants / 519 component instances，并把 55 条事件证据拆成 36 条明确 trigger 的 executable bindings 与 19 条不可执行 state-event evidence，另保留 6 条显式 action gaps。",
+        "R18 生成 iOS/Android/HarmonyOS 各 58 项的 device conformance plan，全部 deviceVerified 默认 false，只有绑定可信 release identity 与逐项 artifact 的真实证据才能转为 true。",
+        "新增 187 文件 / 12 组的 UI_RELEASE_MANIFEST.json（含 R18 device-conformance plan）与 6 组 ordered ABI hash；JSON Schema 校验切换到 Ajv 2020-12 并覆盖 oneOf/allOf/not/conditional/format。",
+        "当前 HostRequest 权威计数为 58；其余计数由生成报告与测试输出给出，避免在变更中的手工快照冒充最新验收结果。"
+      ]
+    },
+    {
+      "version": "2.4.0",
+      "date": "2026-07-11",
+      "summary": "MINOR：book.open result-dependent serial transaction",
+      "changes": [
+        "book.open 不再并发发出四个 Core effect：remote 串行执行 source.detail → chapter.list → content.load → awaiting-layout → reader.location.resolve，local 从 chapter.list 开始。",
+        "book.open canonical input 新增必填 sourceKind=remote|local，并直接进入 immersive-reading；book.detail.open 继续独立表示详情页导航。",
+        "reference、Swift、Kotlin、ArkTS runtime 新增 correlation/stage ledger、requested chapter clamp、delayed layout handoff、stale/duplicate ignore、cancel restore 与 latest-intent supersede。",
+        "新增 RUNTIME_BOOK_OPEN_TRANSACTION_PROTOCOL.md，固定 Host typed DomainStore、request-scoped cancel、local Core identity、继续阅读 chapterIndex 与 Pilot admission 边界。",
+        "directory open/close 仍是唯一 Pilot cohort；book.open 在三端完成无损 Core DTO、cancel handle、真实 layout 与旧 native executor 去重前保持 Shadow。"
+      ]
+    },
+    {
+      "version": "2.3.0",
+      "date": "2026-07-10",
+      "summary": "MINOR：R7 runtime ownership inventory 与 directory cohort safety",
+      "changes": [
+        "新增 runtime-ownership spec 与生成的 213-event coverage report；release gate 强制声明每个 canonical UiEvent 的 runtime、split 或 platform ephemeral ownership。",
+        "runtime action schema 升级到 2：reader.directory.close 改为 conditional clearOverlayIfMatches，关闭旧 directory 不会错误清除后来替换的 overlay。",
+        "Swift、Kotlin、ArkTS 和 reference runtime 均实现 conditional overlay close，并增加 JS/Swift/Kotlin regression tests。",
+        "Host consumer lock 支持可选的逐事件 cohorts，使同一 Host 可让 directory 进入 Pilot 而 book.open、TTS、auto-page 继续 Shadow。",
+        "本版本仍未将任何生产 workflow 切为 authoritative；下一步是三端 live-shadow coordinator 与目录 pair Pilot。"
+      ]
+    },
+    {
+      "version": "2.2.0",
+      "date": "2026-07-10",
+      "summary": "MINOR：Executable UI Spec 与三端 ReaderUIRuntime 包起点",
+      "changes": [
+        "新增 ui-spec/runtime-actions.schema.json 与 runtime-actions.json，将 33 条 P0 路由、overlay、reader session、source switch、sync 交互从说明文档升级为可执行 action descriptor。",
+        "新增 packages/reference/reader-ui-runtime.mjs，作为跨端 reducer/effect 语义的可执行参考实现；unsupported event、缺少 payload、async/overlay guard 均 fail closed。",
+        "新增 Swift ReaderUIRuntime、Kotlin reader-ui-runtime、ArkTS HAR `reader_ui_runtime` 三个原生可消费包；action table 统一由 tools/runtime/generate-runtime.mjs 生成。",
+        "book.open 明确采用 reducer-managed sequence：source.detail -> chapter.list -> content.load -> reader.location.resolve，不向 Core 添加伪原子命令。",
+        "新增 JS 11 项、Swift 4 项、Kotlin 4 项 runtime 测试，覆盖 schema、consumer lock、canonical command/request 引用、codegen drift、book.open、session 互斥、overlay guard 与 fail-closed。",
+        "ArkTS runtime 采用可被 hvigor 识别的 HAR/source module 结构，package/module 统一命名为 reader_ui_runtime；行为测试由消费它的 HAP test harness 执行，避免 HAR TestAbility runner 缺失导致假失败。",
+        "新增三端 READER_UI_CONSUMER.json lock 规范与 check-host-consumers.mjs，锁定 UI 版本、runtime schema、spec SHA-256、covered events 与 rollout 差异。",
+        "架构从仅共享静态 Contract 升级为 Executable UI Spec + Native Renderer：Reader-UI 共享确定性 UiState transition/effects，Host 保留 native renderer、EphemeralState 与 Host Adapter。"
+      ]
+    },
+    {
+      "version": "2.1.0",
+      "date": "2026-07-09",
+      "summary": "MINOR：source-switch FlowShell route 化 motion-policy + state-rule routeIds 扩展（Phase 1 Contract 闭环）",
+      "changes": [
+        "P0 修复：source-switch view-state 已 route 化，但 motion-policy 仍缺 FlowShell route policy，遗留 reader.sourceSwitch.open-close 为 overlay 语义。本版补齐 FlowShell route 化 motion-policy，消除 route view-state + overlay motion 的混合状态。",
+        "motion.schema.json / motion-policy.schema.json：新增 3 个 routeTransition motionId（source.switch.route.push / source.switch.route.pop / source.switch.route.replace），motion schema 版本 1.1.0 → 1.2.0，motion-policy schema 版本 1.0.0 → 1.1.0。",
+        "motion.fixtures.json：标记 reader.sourceSwitch.open-close 为 deprecated:true（保留向后兼容），新增 3 条 routeTransition MotionSpec（containerRole=flowShell, implementationKind=routeTransition, visualPattern=nativeStackForward/nativeStackBackward/fadeReplace）。",
+        "motion-policy.fixtures.json：新增 7 条 policy（flow-shell-route-push/pop/replace priority=200, library-shell-route-push/pop priority=150, settings-shell-route-push/pop priority=150），覆盖 FlowShell/LibraryShell/SettingsShell 三类 shell 的 route transition。",
+        "state-rule.schema.json：target.properties 新增 routeIds 字段（数组，规则生效的 routeId，与 slices 取交集），state-rule schema 版本 1.0.0 → 1.1.0。",
+        "state-rule.fixtures.json：新增 3 条规则（source-switch-loading-guard async-guard routeIds=[source-switch,source-switch-results], book-detail-error-requires-error-pagestate required-with routeIds=[book-detail], settings-overlay-guard-tab-switch async-guard routeIds=[settings,settings-general,global-settings]）。",
+        "token.fixtures.json：新增 --fd-ds-motion-duration-route token（category=motion-duration, value=280ms）供 source.switch.route.* durationToken 引用。",
+        "motion-resolver.test.mjs：新增 4 项 route-event 覆盖测试（FlowShell route lookup, FlowShell push/pop/replace 解析, LibraryShell/SettingsShell push/pop 解析, deprecated 标记校验）。",
+        "三端 generated Motion.{swift,kt,ets} / MotionPolicy.{swift,kt,ets} / Token.{swift,kt,ets} 由 tools/codegen/generate.mjs 重新生成：87 motionIds, 50 policies, 130 tokens, 200 route shell lookups。",
+        "验收全部通过：contracts/tests npm test 234/234 pass, validate.mjs 923 fixtures 0 errors, verify-demo-contract-consistency.mjs PASS (515 found, 111 unknown approved), verify-motion-coverage.mjs PASS。",
+        "依据：P0_CHAIN_MATRIX.md 阶段 0 审计发现 source-switch contract 不一致（route 化 view-state + overlay motion），本版为阶段 1 Contract 闭环交付。"
+      ]
+    },
+    {
+      "version": "2.0.0",
+      "date": "2026-07-09",
+      "summary": "MAJOR：token 前缀迁移 --reader-ds-* → --fd-ds-* + 颜色值对齐 frontend-demo-optimized",
+      "changes": [
+        "MAJOR 破坏性变更：token.fixtures.json 全量前缀迁移 --reader-ds-* → --fd-ds-*，对齐 frontend-demo-optimized/tokens.css 真源。token.schema.json name.pattern 从 ^--reader-ds- 改为 ^--fd-ds-。",
+        "颜色值对齐 optimized demo：color-primary #366179（蓝）→ #2d4a3e（墨绿）、color-primary-dark #274f66 → #1f3528、state-focus rgba(54,97,121,0.22) → rgba(45,74,62,0.22)（绿色调）。shadow-elevated / shadow-soft 已是绿色调 rgba(89,70,50,*) 无需变更。",
+        "字体值对齐 optimized demo：font-sans 新增 \"Noto Sans SC\" / \"Source Han Sans SC\"；font-serif \"Noto Serif CJK SC\" → \"Noto Serif SC\"。",
+        "z-index token 已在前版本补齐 5 个（flow-window 36 / settings-dropdown 42 / dev-overlay 95 / dev-region 96 / demo-switch 100），本版无新增。",
+        "TOKEN_SPEC.md / MOTION_SPEC.md 全量前缀替换；contract.test.mjs / token-group.test.mjs / motion-guard.test.mjs / registry-codegen.test.mjs 同步更新前缀校验。",
+        "VERSION.json token schema 从 1.0.0 升至 2.0.0 反映前缀迁移破坏性变更。",
+        "三端 generated Token.{swift,kt,ets} 由 tools/codegen/generate.mjs 重新生成，TokenRegistry 包含迁移后的 --fd-ds-* 名称与新颜色值。",
+        "依据：用户裁定以 frontend-demo-optimized 为准，三端统一迁移到 --fd-ds-* 前缀与墨绿 primary 色。"
+      ]
+    },
+    {
+      "version": "1.5.0",
+      "date": "2026-07-05",
+      "summary": "Phase 1-2 Motion Runtime：MotionSpec 结构化字段 + MotionPolicy + ReaderMotionResolver",
+      "changes": [
+        "Phase 1：motion.schema.json 为每条 MotionSpec 新增 6 个结构化字段（implementationKind / containerRole / operation / visualPattern / interruptPolicy / reducedMotionPolicy），motion.schema.json required 扩展，motion.fixtures.json 84 条 fixture 全部补齐",
+        "Phase 2：新增 motion-policy.schema.json + motion-policy.fixtures.json（28 条 policy + 13 条注释），覆盖全部 12 个 operation，包含用户规格要求的 5 个示例 policy（route-push-default / route-pop-default / main-tab-switch / bookshelf-cover-to-reader / reader-overlay-sheet-enter）",
+        "tools/codegen/generate.mjs 新增 genSwiftMotionPolicy / genKotlinMotionPolicy / genArkTsMotionPolicy，生成 MotionPolicyMatch + specificity + matches + MotionPolicyRegistry（28 条）+ RouteShellLookup（76 条 route→shell）+ ReaderMotionResolver.resolve 纯函数",
+        "三端各新增 MotionPolicy.swift / MotionPolicy.kt / MotionPolicy.ets，与 MotionSpecRegistry 配合提供完整 Motion Runtime 契约",
+        "新增 motion-policy.test.mjs（13 项）：schema 校验、id 唯一、motionId 引用合法、覆盖全部 12 operation、用户规格 5 个示例 policy 存在且正确",
+        "新增 motion-resolver.test.mjs（21 项）：JS 移植 resolver 逻辑验证 route push/pop、tab switch、bookshelf-cover-to-reader、reader overlay sheet/dialog、dropdown、reader page turn、chapter jump、slider drag、session capsule、orientation reshape/settle、高优先级优先、空 request 命中兜底、resolver 纯函数不修改输入",
+        "motion-guard.test.mjs 扩展 8 项 Phase 1 字段守卫：6 字段存在性、interruptPolicy 与 guardRules 一致、reducedMotionPolicy 与 guardRules 一致、enum 值合法、directManipulation 对应 keepDirectManipulation",
+        "codegen-idempotent.test.mjs 文件计数从 39 改为 42（14 schema × 3 端），codegen-consistency.test.mjs 三端文件存在性检查从 13 个改为 14 个",
+        "MOTION_SPEC.md 扩展：新增 §2 文档化 6 个结构化字段 enum 与派生规则，新增 §7 文档化 MotionPolicy + ReaderMotionResolver 接口与三端生成产物，§8 新增/废弃流程补充 motion-policy 同步步骤，§9 缺口与下一步更新",
+        "VERSION.json schema 映射新增 motion-policy 1.0.0，motion schema 版本从 1.0.0 升至 1.1.0 反映 6 个新字段",
+        "Reader UI contract tests 当前 215/215 pass，drift check 46 个文件通过"
+      ]
+    },
+    {
+      "version": "1.4.5",
+      "date": "2026-07-05",
+      "summary": "frontend-demo 200/200 route closure and contract readiness gate",
+      "changes": [
+        "frontend-demo/route-contract.js 与 renderRoute() 补齐至 route.schema.json 的 200/200 RouteId，新增搜索、发现缓存、RSS 细分类、reader full/overlay、restore/progress/about/global state、source debug 等长尾静态页渲染入口",
+        "verify-demo-contract-consistency.mjs 改为执行 route-contract.js 读取实际 routes，当前 baseline 为 found=515 / unknown=111 / approved=111 / unapproved=0，route/token unknown 仍为 0",
+        "verify-motion-coverage.mjs 使用 route.schema.json 作为 route coverage 基准，当前 route coverage 为 200/200，selector data coverage 为 151/184",
+        "contract readiness gate 当前允许 contract-only Package.swift（ReaderUIContract + generated/swift + no executable target），其他生产入口仍失败",
+        "更新 frontend readiness / complete app gap / closure work breakdown 文档，明确 Reader UI demo 是完整 contract reference，不等同于 Android/iOS/HarmonyOS native delivery proof"
+      ]
+    },
+    {
+      "version": "1.4.4",
+      "date": "2026-07-04",
+      "summary": "MotionSpec registry canonical 84/84 覆盖",
+      "changes": [
+        "motion.fixtures.json 从 56 项扩展到 84 项，补齐 schema 中剩余 28 个 canonical MotionId 的 MotionSpec fixture",
+        "为既有 11 条缺少 guardRules 的 motion fixtures 补齐 reduced-motion / direct-manipulation / interrupt 消费守卫",
+        "重新生成 Swift/Kotlin/ArkTS MotionSpecRegistry，当前 motion specs=84，TokenRegistry 仍为 117 项 token fixtures",
+        "motion-guard.test.mjs 扩展到 7 项，强制 motion.schema.json 与 motion.fixtures.json 1:1、token refs 合法、guardRules 不为空，并校验 reduced-motion / direct-manipulation / interrupt 语义",
+        "更新 README、ACCEPTANCE、MOTION_SPEC、COMPLETE_APP_CLOSURE_WORKBREAKDOWN、FRONTEND_COMPLETE_APP_GAP_MATRIX，明确 RUI-03 合同侧完成；平台 MotionAdapter、native animation proof 和 device evidence 仍归三端仓库",
+        "frontend-demo/verify/motion/verify-motion-coverage.mjs 新增 motion.contract.fixture-registry 检查并刷新 motion-coverage-report.json；当前 motion coverage 30/30，demo runtime/selector alias resolution 仍为 83/83，canonical contract 覆盖以 84/84 fixture + generated registry 为准",
+        "Reader UI contract tests 当前 171/171 pass"
+      ]
+    },
+    {
+      "version": "1.4.3",
+      "date": "2026-07-04",
+      "summary": "MotionSpecRegistry / TokenRegistry codegen 起点",
+      "changes": [
+        "tools/codegen/generate.mjs 读取 motion/token fixtures，在现有三端 Motion.* / Token.* 生成文件内追加 registry，保留原有 enum 生成",
+        "MotionSpecRegistry / motionSpecRegistry 覆盖当前 56 条 motion fixtures，包含 id、durationMs、easing、duration/easing token refs、guardRules 和 reducedMotion 派生信息",
+        "TokenRegistry / tokenRegistry 覆盖当前 117 条 token fixtures，包含 name、category、value、platforms、deprecated",
+        "新增 registry-codegen.test.mjs 6 项，校验三端 registry 输出、关键 fixture 项、token refs、guardRules、reducedMotion 和 token value 覆盖",
+        "更新 README、MOTION_SPEC、TOKEN_SPEC、COMPLETE_APP_CLOSURE_WORKBREAKDOWN，明确 RUI-03/RUI-04 registry 起点已完成，但 full 84/84 MotionSpec fixture 与三端 TokenAdapter / MotionAdapter 仍未完成"
+      ]
+    },
+    {
+      "version": "1.4.2",
+      "date": "2026-07-04",
+      "summary": "Demo/schema strict exception gate 起点",
+      "changes": [
+        "新增 frontend-demo/verify/contract/demo-contract-exceptions.json：route/token unknown 必须为 0，motion unknown 只能来自 explicit alias/deprecated/exception policy",
+        "verify-demo-contract-consistency.mjs 不再使用宽松 unknown 阈值，1.4.2 当时 baseline 为 found=433 / unknown=111 / approved=111 / unapproved=0",
+        "motion-controller.js 增加首批 MotionId alias：reader.session.capsule.control.press/toggle -> reader.session.capsule.control.press-toggle，reader.page.turn.next/prev -> reader.page.turn.next-prev，tab.item.switch -> tab.switch",
+        "demo-consistency.test.mjs 扩展为 6 项，校验 baseline unapproved=0 与 exception policy 结构",
+        "Reader UI contract tests 在 1.4.2 当时为 162/162 pass"
+      ]
+    },
+    {
+      "version": "1.4.1",
+      "date": "2026-07-04",
+      "summary": "Reader UI P0 防漂移门禁补齐",
+      "changes": [
+        "新增 matrix-coverage.test.mjs：校验 P0 route 在 ROUTE_COMPONENT_MATRIX.md 中有 token/motion 映射，且矩阵只引用 schema 中的 MotionId 与 TOKEN_SPEC 语义分组",
+        "新增 motion-guard.test.mjs：校验 MOTION_SPEC.md 中 40 个 P0 MotionId 全部有 motion fixture、token refs 与 guardRules",
+        "新增 token-group.test.mjs：校验 TOKEN_SPEC.md 语义分组、token fixtures 引用、Route × Token 分组一致性",
+        "新增 core-host-boundary.test.mjs：校验 CORE_HOST_BOUNDARY.md 中业务域归属、UiEvent/CoreCommand/HostRequest 引用一致性和 initiator 规则",
+        "motion.fixtures.json 从 47 项扩展到 56 项，补齐 P0 缺失的 9 个 motion fixtures，并为 P0 fixtures 增加 guardRules",
+        "ROUTE_COMPONENT_MATRIX.md 统一 token 分组命名，补齐 global-settings 与 offline-state 的 token 映射，并标记本仓矩阵检查已实现",
+        "CORE_HOST_BOUNDARY.md 将缩写事件名收敛为 schema 中的完整 UiEvent 名称",
+        "demo baseline 更新为 found=432 / unknown=111；unknown 仍可追踪但不阻塞",
+        "Reader UI contract tests 从 143 项扩展到 161 项，当前 161/161 pass"
+      ]
+    },
+    {
+      "version": "1.4.0",
+      "date": "2026-07-04",
+      "summary": "Reader UI 三类补全：P0 可执行参考规格 + 完整矩阵 + 验收和防漂移机制",
+      "changes": [
+        "新增 PAGE_REFERENCE.md：Slice 1-6 P0 route 的页面结构、组件树、状态归属 [C]/[R]/[E]、入口返回 overlay keyboard 行为、与当前 demo / fixtures 对齐说明",
+        "新增 TOKEN_SPEC.md：10 个语义 token 分组（reading-theme / reading-typography / card / list / button / tab / overlay / night-mode / rss-status / motion）+ 三端 TokenAdapter 映射规则（SwiftUI / Compose / ArkUI）+ 禁止 raw color/spacing/radius/duration 的检查口径 + fixtures platforms 字段补全策略",
+        "新增 MOTION_SPEC.md：40 个 P0 MotionId 的触发条件 / 结束状态 / 打断规则 / reduced-motion 降级 + 手势阈值表 + 拖拽边界 + 焦点恢复 + system back 等价表 + 键盘 inset + safe area / fold posture + demo 等价性边界（区分 demo proof 与 platform implementation）",
+        "新增 CORE_HOST_BOUNDARY.md：业务域归属表（14 业务域 + 平台持久化禁令）+ UiEvent→CoreCommand 映射（6 业务域：路由 / 书架 / 阅读 / TTS / 发现-RSS-搜索 / 设置-同步-备份）+ HostRequest 能力清单（30 项含 initiator 归属）+ 异常处理 + async guard",
+        "新增 ROUTE_COMPONENT_MATRIX.md：全量 RouteId（200+）× Shell × mainTab 矩阵 + ComponentType（64 项）× Shell 归属 + PageState × Route 集合 + Route × MotionId 关键链路映射 + Route × Token 分组映射 + 防漂移检查口径",
+        "新增 SLICE_PLAN.md：Slice 0-8 启动顺序 + 每个 slice 输入文档清单 + 每端 iOS/Android/HarmonyOS 必须产出的源码/测试/截图/录屏/设备证据 + 并行/串行约束 + Core bridge 串行依赖 + 三端禁止项",
+        "新增 PLATFORM_EVIDENCE_SPEC.md：每端 evidence 要求（源码/测试/截图/录屏/设备证据）+ 防漂移本仓层检查 + 三端层检查（generated 编译 / raw 值 grep / TokenAdapter coverage / reducer golden / demo baseline）+ contract 变更传导流程 + evidence 提交格式与命名规范 + 防漂移机制汇总表",
+        "更新 ACCEPTANCE.md：补 P0 可执行参考规格文档清单 + 完成度汇总扩展到 7 个新文档",
+        "本次未修改任何 schema / fixtures / generated types，仅补文档层规格；测试保持通过"
+      ]
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-07-04",
+      "summary": "Reader UI 收尾：StateRule schema + Slice 5-6 fixtures + demo 一致性校验 + 验收门槛文档",
+      "changes": [
+        "StateRule schema 完整化：5 种 kind（mutex / async-guard / required-with / forbidden-with / transition-guard），13 项 fixtures 覆盖 Slice 1-6 关键规则",
+        "Slice 5-6 fixtures 扩展：ui-state 27→43 / ui-event 87→143 / view-state 21→35 / route 新增 7 个 RSS/restore/sync 节点（rss-all / rss-original / rss-refreshing / restore-scopes / restore-running / restore-result / sync-error）",
+        "ui-event schema enum 扩展 30 个新事件（sync.conflict.* / webdav.config.* / backup.* / restore.scopes.* / search.* / rss.search.* / source.search.* / source.switch.*）",
+        "view-state schema ComponentType enum 新增 5 个（BackTopBar / List / FilterBar / Content / WebView）",
+        "phase1-slice.test.mjs 扩展 25→40 项：覆盖 Slice 1-6 链路 + RSS / source 搜索 / source 换源 / sync / restore 链路 + Slice 5→6 过渡",
+        "新增 demo 一致性校验：frontend-demo/verify/contract/verify-demo-contract-consistency.mjs + demo-contract-baseline.json + demo-consistency.test.mjs（5 项）",
+        "demo baseline 策略：unknown 可追踪但不阻塞（退出码恒为 0）",
+        "新增 ACCEPTANCE.md：§10 合并门槛 7 问逐项回答 + 当前完成度汇总 + 测试入口",
+        "更新 README.md：加入 schema / fixtures / generated / tests 已交付清单与目录结构",
+        "新增 codegen-idempotent.test.mjs（6 项）：校验 codegen 可执行、39 个 generated 文件存在、byte-for-byte 幂等、无多余文件产生",
+        "明确 CoreCommand / CoreEvent 是 Reader UI 侧 Core bridge 规划契约，不等于 Reader-Core-Native 当前协议已完全对齐；后续仍需 Core bridge mapping / 协议收敛",
+        "fixtures 与 contract tests 均通过 validate/test 校验"
+      ]
+    },
+    {
+      "version": "1.2.0",
+      "date": "2026-07-04",
+      "summary": "Phase 1.5 Contract Release Hygiene：state-rule 纳入版本映射 + npm test 路径修正 + generated README 滞后描述清理",
+      "changes": [
+        "state-rule.schema.json 纳入 VERSION.json schema 映射（之前遗漏）",
+        "修正 contracts/tests/package.json 的 test 脚本路径（./tests/*.test.mjs → ./*.test.mjs），npm test 现可正常执行",
+        "npm test 现跑出 132 tests / 132 pass / 0 fail（含 state-rule.test.mjs 17 项）",
+        "generated 三端各 13 个文件确认（Swift/Kotlin/ArkTS × 13 schema，含 StateRule.*）",
+        "更新 generated/README.md 与三端 generated README，删除\"暂不提交/未来生成\"滞后描述",
+        "加强 codegen-consistency.test.mjs，明确检查 StateRule 三端 generated",
+        "新增 generated drift check：codegen 后必须无 diff"
+      ]
+    },
+    {
+      "version": "1.1.0",
+      "date": "2026-07-04",
+      "summary": "Phase 2 Core 协议收敛 + Phase 1 优先链路覆盖验证",
+      "changes": [
+        "新增 core-command / core-event / host-request / progress-location / content / sync-conflict schema",
+        "新增 ffi-protocol-version.md（FFI 协议版本 1.0.0）",
+        "新增 Phase 2 fixtures 共 124 项（core-command 45 / core-event 33 / host-request 31 / progress-location 6 / content 3 / sync-conflict 6）",
+        "codegen 扩展支持 Phase 2，生成 18 个新类型文件（Swift / Kotlin / ArkTS × 6 schema）",
+        "新增 phase2-contract.test.mjs（32 项：schema 自检 + fixtures 校验 + §5/§7 对齐 + 命名约定 + 唯一性）",
+        "新增 phase1-slice.test.mjs（25 项：6 优先链路覆盖 + Slice 1-4 过渡连续性）",
+        "扩展 codegen-consistency.test.mjs 至 22 项，覆盖 Phase 2 三端 enum 一致性",
+        "Phase 1 fixtures 按 Slice 1-4 标注扩展，覆盖 AppShell / main tabs / bookshelf→reader / reader overlay / session / focus"
+      ]
+    },
+    {
+      "version": "1.0.0",
+      "date": "2026-07-04",
+      "summary": "Phase 0 / Phase 1 初始冻结",
+      "changes": [
+        "新增 ARCHITECTURE.md / BOUNDARY_RULES.md / STATE_OWNERSHIP.md / CONTRACT_VERSIONING.md",
+        "新增 route / ui-event / ui-state / view-state / motion / token schema",
+        "新增 fixtures 与 contract tests",
+        "新增 codegen 与 generated Swift / Kotlin / ArkTS 类型"
+      ]
+    }
+  ]
+}

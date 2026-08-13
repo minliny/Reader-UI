@@ -1,0 +1,98 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "rss",
+  "status": "F2_HISTORICAL_EVIDENCE_PLUS_F0_LIVE_STATIC_RECONCILED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "historicalRevision": "2378498213623880242",
+  "historicalRevisionTitle": "F2 · RSS · Full Icon Audit Correction",
+  "historicalRevisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378498213623880242&node-id=259-2&p=f&viewport=-32%2C155%2C1&t=2DiRYaaAGcsTHFdA-0",
+  "historicalLocalImplementationCommit": "ea5fe13361cfb8d2d316f868937e4f0ffb2198a0",
+  "historicalIconCorrectionCommit": "b5fcca29f95df3a7e4af7a11bf9f2b198b993d9f",
+  "historicalConfirmationVersionTitle": "F2 · RSS · User Confirmed",
+  "historicalConfirmedPilotRevision": "2378498213623880242",
+  "historicalUserConfirmedAt": "2026-07-21",
+  "historicalHandoffEvidenceCommit": "ad5655d9452a10f3af0de803bac4135ce51e2dbd",
+  "currentRevision": null,
+  "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+  "historicalAuthorityDecision": "For the eight routes lacking exact legacy Figma surfaces, the user explicitly authorized the local canonical renderer as the visual, structural and interaction-intent source.",
+  "historicalDeltas": [
+    {"pageId":"334:3","nodeId":"2305:530","oldValue":"Phone and Tablet RSS content existed only as raw Page 24 master children.","newValue":"Exact clones became Page/RSS/CanonicalContent variants; no pixels, text, icons, alignment, density or effects changed."},
+    {"pageId":"334:3","nodeId":"2305:961","oldValue":"Refreshing, Empty, Error and Detail existed only as preserved Live Reference frames.","newValue":"Exact clones became a four-variant Page/RSS/CanonicalState set; original Live Reference frames remain unchanged."},
+    {"pageId":"834:3","nodeId":"942:13","oldValue":"Phone/Tablet masters contained zero instances.","newValue":"Each master contains one attached canonical content instance; original raw nodes remain preserved and hidden. Four Page 23 downstream instances remain attached."},
+    {"pageId":"334:3","nodeId":"2328:3975","oldValue":"Eight local RSS list/category routes had no exact Figma surface and were blocked.","newValue":"Added Page/RSS/CanonicalListRoute with Route=All/SourceFeed/Novel/Tech/Booklist/Releases/Issues/Discussions and Viewport=Phone/Tablet, using editable local-renderer captures as the source of truth."},
+    {"pageId":"334:3","nodeId":"2328:3975","oldValue":"The 16 wrapper components used 0px corners; device children retained capture-dependent heights and Vertical=MIN. rss-all Tablet also contained an extra zero-radius wrapper.","newValue":"All 16 wrappers and device children use the local 34px device radius on all four corners, exact 390x844 or 760x960 dimensions, clipsContent=true and horizontal/vertical STRETCH. rss-all Tablet now uses the exact editable device frame."},
+    {"pageId":"834:3","nodeId":"2329:4132","oldValue":"No downstream Figma instances existed for the eight local-authorized routes.","newValue":"Added 16 attached instances, one Phone and one Tablet instance per route; no detached frame is used as a deliverable."},
+    {"pageId":"259:2","nodeId":"2309:2","oldValue":"No editable provenance existed for the local-authorized routes.","newValue":"All 16 editable capture roots are preserved hidden as __LOCAL_CAPTURE_SOURCE__; they are provenance only, never canonical masters or screenshots."},
+    {"pageId":"334:3","nodeId":"2328:3975","oldValue":"Fourteen visible Source Actions controls across seven routes and two viewports used Dots/More, which incorrectly implied an overflow menu.","newValue":"All 14 controls use attached 20x20 Icon/Settings instances from canonical master 271:472. No Dots/More icon remains in Source Actions."}
+  ],
+  "historicalVisualAudit": {
+    "phone": "PASS · 390x844",
+    "tablet": "PASS · 760x960",
+    "landscape": "Tablet alias",
+    "rightAlignedTrailingValues": true,
+    "newScopeActiveDropShadowCount": 0,
+    "detachedInstanceCount": 0,
+    "compactOrFoldCount": 0,
+    "canonicalVariantCount": 16,
+    "attachedDownstreamInstanceCount": 16,
+    "canonicalEdgeRadius": 34,
+    "incorrectEdgeRadiusConstraintCount": 0,
+    "edgeConstraintAudit": "16/16 masters and 16/16 attached instances PASS",
+    "iconAuditScope": "8 routes x Phone/Tablet = 16 rendered surfaces",
+    "semanticIconDefectClasses": 1,
+    "correctedIconOccurrenceCount": 14,
+    "sourceActionsCanonicalIconMaster": "271:472",
+    "sourceActionsDetachedCount": 0,
+    "sourceActionsDotsRemaining": 0,
+    "otherVisibleIconMappings": "PASS"
+  },
+  "historicalBoundary": "No UiEvent, reducer owner, async guard, route flow, motion contract or non-RSS canonical page family was changed. Existing RSS masters, Page 23 downstream instances and reactions were preserved.",
+  "historicalRemainingGate": null,
+  "currentLiveStaticF0": {
+    "observedAt": "2026-07-22T13:38:17Z",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "currentRevision": null,
+    "currentRevisionStatus": "NOT_READABLE_IN_WRITER_RUNTIME",
+    "scope": "Static hierarchy reconciliation only. It does not assert a visual design change, reaction/prototype completion, business flow, UiEvent/state ownership, Motion Reference, or VC3/host completion.",
+    "masterAndFinalAssembly": {
+      "pageMasterNodeId": "942:13",
+      "phoneMasterNodeId": "942:10",
+      "tabletMasterNodeId": "942:12",
+      "finalAssemblyNodeId": "943:1869",
+      "finalPhoneInstance": {
+        "nodeId": "943:1872",
+        "mainComponentId": "942:10",
+        "detached": false
+      },
+      "finalTabletInstance": {
+        "nodeId": "943:2402",
+        "mainComponentId": "942:12",
+        "detached": false
+      },
+      "masterRootReactionCount": 0,
+      "detachedInstanceCount": 0
+    },
+    "canonicalLibrary": {
+      "canonicalContentAttachedInstanceNodeIds": [
+        "2306:2",
+        "2306:265"
+      ],
+      "canonicalStateNodeId": "2305:961",
+      "canonicalStateVariantCount": 4,
+      "canonicalListRouteNodeId": "2328:3975",
+      "canonicalListRouteVariantCount": 16,
+      "finalEvidenceNodeId": "2329:4132",
+      "finalEvidenceAttachedInstanceCount": 16,
+      "detachedInstanceCount": 0
+    },
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "Tablet",
+      "compact": false,
+      "fold": false
+    },
+    "result": "STATIC_HIERARCHY_RECONCILED_ONLY"
+  }
+}

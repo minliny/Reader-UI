@@ -1,0 +1,6 @@
+{
+  "kind": "PROMOTION_LEDGER",
+  "version": "1.0.0",
+  "description": "Tamper-evident append-only log of every harmony.status → implementation-ready promotion. Each entry is chained to the previous entry's hash. An agent MUST NOT hand-edit this file; entries are only appended by promote-family.mjs. The HarmonyOS enforce-implementation-ready-gate.mjs verifies that every implementation-ready registry record has a corresponding ledger entry with a valid chain — this is what makes 'hand-editing harmony.status to green' a detectable bypass.",
+  "entries": []
+}

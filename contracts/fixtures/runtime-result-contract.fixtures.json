@@ -1,0 +1,2092 @@
+[
+  {
+    "id": "book-open-source-detail-valid",
+    "event": "book.open",
+    "effectType": "source.detail",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "book-open-source-detail-unknown",
+    "event": "book.open",
+    "effectType": "source.detail",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book-open-chapter-list-valid",
+    "event": "book.open",
+    "effectType": "chapter.list",
+    "valid": true,
+    "result": {
+      "chapterCount": 3
+    }
+  },
+  {
+    "id": "book-open-chapter-list-unknown",
+    "event": "book.open",
+    "effectType": "chapter.list",
+    "valid": false,
+    "result": {
+      "chapterCount": 3,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book-open-content-load-valid",
+    "event": "book.open",
+    "effectType": "content.load",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "book-open-content-load-unknown",
+    "event": "book.open",
+    "effectType": "content.load",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book-open-reader-location-resolve-valid",
+    "event": "book.open",
+    "effectType": "reader.location.resolve",
+    "valid": true,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1
+    }
+  },
+  {
+    "id": "book-open-reader-location-resolve-unknown",
+    "event": "book.open",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book-open-tts-system-stop-valid",
+    "event": "book.open",
+    "effectType": "tts.system.stop",
+    "valid": true,
+    "result": {
+      "acknowledged": true
+    }
+  },
+  {
+    "id": "book-open-tts-system-stop-unknown",
+    "event": "book.open",
+    "effectType": "tts.system.stop",
+    "valid": false,
+    "result": {
+      "acknowledged": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book-open-tts-queue-stop-valid",
+    "event": "book.open",
+    "effectType": "tts.queue.stop",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "book-open-tts-queue-stop-unknown",
+    "event": "book.open",
+    "effectType": "tts.queue.stop",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "book-open-timer-foreground-cancel-valid",
+    "event": "book.open",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "book-open-timer-foreground-cancel-unknown",
+    "event": "book.open",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-exit-tts-system-stop-valid",
+    "event": "reader.exit",
+    "effectType": "tts.system.stop",
+    "valid": true,
+    "result": {
+      "acknowledged": true
+    }
+  },
+  {
+    "id": "reader-exit-tts-system-stop-unknown",
+    "event": "reader.exit",
+    "effectType": "tts.system.stop",
+    "valid": false,
+    "result": {
+      "acknowledged": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-exit-tts-queue-stop-valid",
+    "event": "reader.exit",
+    "effectType": "tts.queue.stop",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "reader-exit-tts-queue-stop-unknown",
+    "event": "reader.exit",
+    "effectType": "tts.queue.stop",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-exit-timer-foreground-cancel-valid",
+    "event": "reader.exit",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-exit-timer-foreground-cancel-unknown",
+    "event": "reader.exit",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-next-reader-location-resolve-valid",
+    "event": "reader.page.next",
+    "effectType": "reader.location.resolve",
+    "valid": true,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1
+    }
+  },
+  {
+    "id": "reader-page-next-reader-location-resolve-unknown",
+    "event": "reader.page.next",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-valid",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "stored": true
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-error",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "error": "PROGRESS_STORE_FAILED"
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-false",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": false
+    }
+  },
+  {
+    "id": "reader-page-next-reader-progress-update-unknown",
+    "event": "reader.page.next",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-next-timer-foreground-cancel-valid",
+    "event": "reader.page.next",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-page-next-timer-foreground-cancel-unknown",
+    "event": "reader.page.next",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-location-resolve-valid",
+    "event": "reader.page.prev",
+    "effectType": "reader.location.resolve",
+    "valid": true,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-location-resolve-unknown",
+    "event": "reader.page.prev",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-valid",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "stored": true
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-error",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "error": "PROGRESS_STORE_FAILED"
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-false",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": false
+    }
+  },
+  {
+    "id": "reader-page-prev-reader-progress-update-unknown",
+    "event": "reader.page.prev",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-prev-timer-foreground-cancel-valid",
+    "event": "reader.page.prev",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-page-prev-timer-foreground-cancel-unknown",
+    "event": "reader.page.prev",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-queue-plan-valid",
+    "event": "reader.tts.start",
+    "effectType": "tts.queue.plan",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "reader-tts-start-tts-queue-plan-unknown",
+    "event": "reader.tts.start",
+    "effectType": "tts.queue.plan",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-queue-start-valid",
+    "event": "reader.tts.start",
+    "effectType": "tts.queue.start",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "reader-tts-start-tts-queue-start-unknown",
+    "event": "reader.tts.start",
+    "effectType": "tts.queue.start",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-system-start-valid",
+    "event": "reader.tts.start",
+    "effectType": "tts.system.start",
+    "valid": true,
+    "result": {
+      "started": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-system-start-unknown",
+    "event": "reader.tts.start",
+    "effectType": "tts.system.start",
+    "valid": false,
+    "result": {
+      "started": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-system-stop-valid",
+    "event": "reader.tts.start",
+    "effectType": "tts.system.stop",
+    "valid": true,
+    "result": {
+      "acknowledged": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-system-stop-unknown",
+    "event": "reader.tts.start",
+    "effectType": "tts.system.stop",
+    "valid": false,
+    "result": {
+      "acknowledged": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-start-tts-queue-stop-valid",
+    "event": "reader.tts.start",
+    "effectType": "tts.queue.stop",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "reader-tts-start-tts-queue-stop-unknown",
+    "event": "reader.tts.start",
+    "effectType": "tts.queue.stop",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-start-timer-foreground-cancel-valid",
+    "event": "reader.tts.start",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-tts-start-timer-foreground-cancel-unknown",
+    "event": "reader.tts.start",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-stop-tts-system-stop-valid",
+    "event": "reader.tts.stop",
+    "effectType": "tts.system.stop",
+    "valid": true,
+    "result": {
+      "acknowledged": true
+    }
+  },
+  {
+    "id": "reader-tts-stop-tts-system-stop-unknown",
+    "event": "reader.tts.stop",
+    "effectType": "tts.system.stop",
+    "valid": false,
+    "result": {
+      "acknowledged": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-tts-stop-tts-queue-stop-valid",
+    "event": "reader.tts.stop",
+    "effectType": "tts.queue.stop",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "reader-tts-stop-tts-queue-stop-unknown",
+    "event": "reader.tts.stop",
+    "effectType": "tts.queue.stop",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-timer-foreground-arm-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "timer.foreground.arm",
+    "valid": true,
+    "result": {
+      "armed": true,
+      "replaced": false,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-autoPage-start-timer-foreground-arm-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "timer.foreground.arm",
+    "valid": false,
+    "result": {
+      "armed": true,
+      "replaced": false,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-timer-foreground-cancel-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-autoPage-start-timer-foreground-cancel-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-tts-system-stop-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "tts.system.stop",
+    "valid": true,
+    "result": {
+      "acknowledged": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-tts-system-stop-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "tts.system.stop",
+    "valid": false,
+    "result": {
+      "acknowledged": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-tts-queue-stop-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "tts.queue.stop",
+    "valid": true,
+    "result": {}
+  },
+  {
+    "id": "reader-autoPage-start-tts-queue-stop-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "tts.queue.stop",
+    "valid": false,
+    "result": {
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-location-resolve-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.location.resolve",
+    "valid": true,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-location-resolve-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": "chapter:1:offset:0",
+      "pageIndex": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-valid",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "stored": true
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-error",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": true,
+    "result": {
+      "error": "PROGRESS_STORE_FAILED"
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-false",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": false
+    }
+  },
+  {
+    "id": "reader-autoPage-start-reader-progress-update-unknown",
+    "event": "reader.autoPage.start",
+    "effectType": "reader.progress.update",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-autoPage-stop-timer-foreground-cancel-valid",
+    "event": "reader.autoPage.stop",
+    "effectType": "timer.foreground.cancel",
+    "valid": true,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1
+    }
+  },
+  {
+    "id": "reader-autoPage-stop-timer-foreground-cancel-unknown",
+    "event": "reader.autoPage.stop",
+    "effectType": "timer.foreground.cancel",
+    "valid": false,
+    "result": {
+      "cancelled": true,
+      "timerId": "timer-1",
+      "generation": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-run-sync-snapshot-valid",
+    "event": "sync.run",
+    "effectType": "sync.snapshot",
+    "valid": true,
+    "result": {
+      "snapshot": {},
+      "conflicts": []
+    }
+  },
+  {
+    "id": "sync-run-sync-snapshot-unknown",
+    "event": "sync.run",
+    "effectType": "sync.snapshot",
+    "valid": false,
+    "result": {
+      "snapshot": {},
+      "conflicts": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-run-sync-push-valid",
+    "event": "sync.run",
+    "effectType": "sync.push",
+    "valid": true,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ]
+    }
+  },
+  {
+    "id": "sync-run-sync-push-unknown",
+    "event": "sync.run",
+    "effectType": "sync.push",
+    "valid": false,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "webdav-config-test-sync-push-valid",
+    "event": "webdav.config.test",
+    "effectType": "sync.push",
+    "valid": true,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ]
+    }
+  },
+  {
+    "id": "webdav-config-test-sync-push-unknown",
+    "event": "webdav.config.test",
+    "effectType": "sync.push",
+    "valid": false,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "webdav-config-test-http-execute-valid",
+    "event": "webdav.config.test",
+    "effectType": "http.execute",
+    "valid": true,
+    "result": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "content-type": "text/plain"
+      }
+    }
+  },
+  {
+    "id": "webdav-config-test-http-execute-unknown",
+    "event": "webdav.config.test",
+    "effectType": "http.execute",
+    "valid": false,
+    "result": {
+      "status": 200,
+      "body": "ok",
+      "headers": {
+        "content-type": "text/plain"
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "import-start-import-parse-valid",
+    "event": "import.start",
+    "effectType": "import.parse",
+    "valid": true,
+    "result": {
+      "kind": "rssSource",
+      "preview": {
+        "subscriptionId": "feed-1",
+        "feedUrl": "https://feed.test/rss",
+        "title": "Feed",
+        "enabled": true
+      }
+    }
+  },
+  {
+    "id": "import-start-import-parse-unknown",
+    "event": "import.start",
+    "effectType": "import.parse",
+    "valid": false,
+    "result": {
+      "kind": "rssSource",
+      "preview": {
+        "subscriptionId": "feed-1",
+        "feedUrl": "https://feed.test/rss",
+        "title": "Feed",
+        "enabled": true
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "import-apply-import-persist-valid",
+    "event": "import.apply",
+    "effectType": "import.persist",
+    "valid": true,
+    "result": {
+      "persisted": {
+        "kind": "rssSource",
+        "data": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "https://feed.test/rss",
+          "title": "Feed",
+          "enabled": true
+        }
+      },
+      "rollbackToken": {
+        "kind": "rssSource",
+        "token": {
+          "transactionId": "tx-1",
+          "journal": {
+            "transactionId": "tx-1",
+            "subscriptionId": "feed-1",
+            "previousSubscription": null,
+            "previousEntryCache": null,
+            "committedSubscription": {
+              "subscriptionId": "feed-1",
+              "feedUrl": "https://feed.test/rss",
+              "title": "Feed",
+              "enabled": true,
+              "unreadCount": 0
+            },
+            "committedEntryCache": {
+              "key": "entries",
+              "payload": "{}"
+            },
+            "previousMarker": null,
+            "committedMarker": {
+              "key": "marker",
+              "payload": "hash"
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "import-apply-import-persist-unknown",
+    "event": "import.apply",
+    "effectType": "import.persist",
+    "valid": false,
+    "result": {
+      "persisted": {
+        "kind": "rssSource",
+        "data": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "https://feed.test/rss",
+          "title": "Feed",
+          "enabled": true
+        }
+      },
+      "rollbackToken": {
+        "kind": "rssSource",
+        "token": {
+          "transactionId": "tx-1",
+          "journal": {
+            "transactionId": "tx-1",
+            "subscriptionId": "feed-1",
+            "previousSubscription": null,
+            "previousEntryCache": null,
+            "committedSubscription": {
+              "subscriptionId": "feed-1",
+              "feedUrl": "https://feed.test/rss",
+              "title": "Feed",
+              "enabled": true,
+              "unreadCount": 0
+            },
+            "committedEntryCache": {
+              "key": "entries",
+              "payload": "{}"
+            },
+            "previousMarker": null,
+            "committedMarker": {
+              "key": "marker",
+              "payload": "hash"
+            }
+          }
+        }
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "import-cancel-import-rollback-valid",
+    "event": "import.cancel",
+    "effectType": "import.rollback",
+    "valid": true,
+    "result": {
+      "kind": "rssSource",
+      "data": {
+        "subscriptionId": "feed-1",
+        "restored": true
+      }
+    }
+  },
+  {
+    "id": "import-cancel-import-rollback-unknown",
+    "event": "import.cancel",
+    "effectType": "import.rollback",
+    "valid": false,
+    "result": {
+      "kind": "rssSource",
+      "data": {
+        "subscriptionId": "feed-1",
+        "restored": true
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "source-switch-confirm-source-switch-commit-valid",
+    "event": "source.switch.confirm",
+    "effectType": "source.switch.commit",
+    "valid": true,
+    "result": {
+      "book": {
+        "sourceId": "source-new",
+        "bookId": "book-new",
+        "addedAt": 1
+      },
+      "matchedChapter": {
+        "chapterId": "c1",
+        "chapterTitle": "One",
+        "chapterUrl": "u",
+        "order": 0
+      },
+      "strategy": "exactTitleMatch",
+      "rollbackToken": {
+        "oldBook": {
+          "sourceId": "source-old",
+          "bookId": "book-old",
+          "addedAt": 1
+        },
+        "committedBook": {
+          "sourceId": "source-new",
+          "bookId": "book-new",
+          "addedAt": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "source-switch-confirm-source-switch-commit-unknown",
+    "event": "source.switch.confirm",
+    "effectType": "source.switch.commit",
+    "valid": false,
+    "result": {
+      "book": {
+        "sourceId": "source-new",
+        "bookId": "book-new",
+        "addedAt": 1
+      },
+      "matchedChapter": {
+        "chapterId": "c1",
+        "chapterTitle": "One",
+        "chapterUrl": "u",
+        "order": 0
+      },
+      "strategy": "exactTitleMatch",
+      "rollbackToken": {
+        "oldBook": {
+          "sourceId": "source-old",
+          "bookId": "book-old",
+          "addedAt": 1
+        },
+        "committedBook": {
+          "sourceId": "source-new",
+          "bookId": "book-new",
+          "addedAt": 1
+        }
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "source-switch-rollback-source-switch-rollback-valid",
+    "event": "source.switch.rollback",
+    "effectType": "source.switch.rollback",
+    "valid": true,
+    "result": {
+      "restoredBook": {
+        "sourceId": "source-old",
+        "bookId": "book-old",
+        "addedAt": 1
+      }
+    }
+  },
+  {
+    "id": "source-switch-rollback-source-switch-rollback-unknown",
+    "event": "source.switch.rollback",
+    "effectType": "source.switch.rollback",
+    "valid": false,
+    "result": {
+      "restoredBook": {
+        "sourceId": "source-old",
+        "bookId": "book-old",
+        "addedAt": 1
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-import-font-registerFile-valid",
+    "event": "reader.font.import",
+    "effectType": "font.registerFile",
+    "valid": true,
+    "result": {
+      "registered": true,
+      "path": "/fonts/a.ttf",
+      "familyName": "Reader Serif",
+      "fontNames": [
+        "Reader Serif"
+      ]
+    }
+  },
+  {
+    "id": "reader-font-import-font-registerFile-unknown",
+    "event": "reader.font.import",
+    "effectType": "font.registerFile",
+    "valid": false,
+    "result": {
+      "registered": true,
+      "path": "/fonts/a.ttf",
+      "familyName": "Reader Serif",
+      "fontNames": [
+        "Reader Serif"
+      ],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-import-persistence-get-valid",
+    "event": "reader.font.import",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-font-import-persistence-get-unknown",
+    "event": "reader.font.import",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-import-persistence-put-valid",
+    "event": "reader.font.import",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-font-import-persistence-put-unknown",
+    "event": "reader.font.import",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-import-font-unregisterFile-valid",
+    "event": "reader.font.import",
+    "effectType": "font.unregisterFile",
+    "valid": true,
+    "result": {
+      "logicalUnregistered": true,
+      "physicallyUnregistered": false,
+      "restartRequired": true
+    }
+  },
+  {
+    "id": "reader-font-import-font-unregisterFile-unknown",
+    "event": "reader.font.import",
+    "effectType": "font.unregisterFile",
+    "valid": false,
+    "result": {
+      "logicalUnregistered": true,
+      "physicallyUnregistered": false,
+      "restartRequired": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-delete-persistence-get-valid",
+    "event": "reader.font.delete",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-font-delete-persistence-get-unknown",
+    "event": "reader.font.delete",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-delete-persistence-put-valid",
+    "event": "reader.font.delete",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-font-delete-persistence-put-unknown",
+    "event": "reader.font.delete",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-font-delete-font-unregisterFile-valid",
+    "event": "reader.font.delete",
+    "effectType": "font.unregisterFile",
+    "valid": true,
+    "result": {
+      "logicalUnregistered": true,
+      "physicallyUnregistered": false,
+      "restartRequired": true
+    }
+  },
+  {
+    "id": "reader-font-delete-font-unregisterFile-unknown",
+    "event": "reader.font.delete",
+    "effectType": "font.unregisterFile",
+    "valid": false,
+    "result": {
+      "logicalUnregistered": true,
+      "physicallyUnregistered": false,
+      "restartRequired": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-theme-new-persistence-get-valid",
+    "event": "reader.theme.new",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-theme-new-persistence-get-unknown",
+    "event": "reader.theme.new",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-theme-new-persistence-put-valid",
+    "event": "reader.theme.new",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-theme-new-persistence-put-unknown",
+    "event": "reader.theme.new",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-theme-edit-persistence-get-valid",
+    "event": "reader.theme.edit",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-theme-edit-persistence-get-unknown",
+    "event": "reader.theme.edit",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-theme-edit-persistence-put-valid",
+    "event": "reader.theme.edit",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-theme-edit-persistence-put-unknown",
+    "event": "reader.theme.edit",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-theme-delete-persistence-get-valid",
+    "event": "reader.theme.delete",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-theme-delete-persistence-get-unknown",
+    "event": "reader.theme.delete",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-theme-delete-persistence-put-valid",
+    "event": "reader.theme.delete",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-theme-delete-persistence-put-unknown",
+    "event": "reader.theme.delete",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-typography-persist-persistence-get-valid",
+    "event": "reader.typography.persist",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-typography-persist-persistence-get-unknown",
+    "event": "reader.typography.persist",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-typography-persist-persistence-put-valid",
+    "event": "reader.typography.persist",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-typography-persist-persistence-put-unknown",
+    "event": "reader.typography.persist",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-config-restart-simulate-persistence-get-valid",
+    "event": "reader.config.restart.simulate",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-config-restart-simulate-persistence-get-unknown",
+    "event": "reader.config.restart.simulate",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-config-persist-persistence-get-valid",
+    "event": "reader.config.persist",
+    "effectType": "persistence.get",
+    "valid": true,
+    "result": {
+      "found": false
+    }
+  },
+  {
+    "id": "reader-config-persist-persistence-get-unknown",
+    "event": "reader.config.persist",
+    "effectType": "persistence.get",
+    "valid": false,
+    "result": {
+      "found": false,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-config-persist-persistence-put-valid",
+    "event": "reader.config.persist",
+    "effectType": "persistence.put",
+    "valid": true,
+    "result": {
+      "stored": true,
+      "revision": "1"
+    }
+  },
+  {
+    "id": "reader-config-persist-persistence-put-unknown",
+    "event": "reader.config.persist",
+    "effectType": "persistence.put",
+    "valid": false,
+    "result": {
+      "stored": true,
+      "revision": "1",
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-replace-apply-replace-apply-valid",
+    "event": "reader.replace.apply",
+    "effectType": "replace.apply",
+    "valid": true,
+    "result": {
+      "text": "after",
+      "changed": true,
+      "target": "chapter",
+      "storedRuleCount": 1,
+      "enabledRuleCount": 1
+    }
+  },
+  {
+    "id": "reader-replace-apply-replace-apply-unknown",
+    "event": "reader.replace.apply",
+    "effectType": "replace.apply",
+    "valid": false,
+    "result": {
+      "text": "after",
+      "changed": true,
+      "target": "chapter",
+      "storedRuleCount": 1,
+      "enabledRuleCount": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-replace-create-replace-persist-valid",
+    "event": "reader.replace.create",
+    "effectType": "replace.persist",
+    "valid": true,
+    "result": {
+      "operation": "create",
+      "data": {
+        "rule": {
+          "id": 1,
+          "name": "r",
+          "pattern": "a",
+          "replacement": "b",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
+      },
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-create-1",
+        "revision": "cf7f04684f96ccafd6906309a1b07f7ecfa078b837a6f2a39bc3814d3b613ee4",
+        "operation": "create",
+        "ruleId": 1,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300,
+        "after": {
+          "id": 1,
+          "name": "r",
+          "pattern": "a",
+          "replacement": "b",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "reader-replace-create-replace-persist-unknown",
+    "event": "reader.replace.create",
+    "effectType": "replace.persist",
+    "valid": false,
+    "result": {
+      "operation": "create",
+      "data": {
+        "rule": {
+          "id": 1,
+          "name": "r",
+          "pattern": "a",
+          "replacement": "b",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
+      },
+      "undoToken": {
+        "schemaVersion": 1,
+        "transactionId": "replace-create-1",
+        "revision": "cf7f04684f96ccafd6906309a1b07f7ecfa078b837a6f2a39bc3814d3b613ee4",
+        "operation": "create",
+        "ruleId": 1,
+        "issuedAt": 1900000000,
+        "expiresAt": 1900000300,
+        "after": {
+          "id": 1,
+          "name": "r",
+          "pattern": "a",
+          "replacement": "b",
+          "scopeTitle": false,
+          "scopeContent": true,
+          "isEnabled": true,
+          "isRegex": false,
+          "timeoutMillisecond": 3000,
+          "order": 0
+        }
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-replace-validate-replace-validate-valid",
+    "event": "reader.replace.validate",
+    "effectType": "replace.validate",
+    "valid": true,
+    "result": {
+      "valid": true,
+      "issues": []
+    }
+  },
+  {
+    "id": "reader-replace-validate-replace-validate-unknown",
+    "event": "reader.replace.validate",
+    "effectType": "replace.validate",
+    "valid": false,
+    "result": {
+      "valid": true,
+      "issues": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-refresh-rss-feed-refresh-valid",
+    "event": "rss.refresh",
+    "effectType": "rss.feed.refresh",
+    "valid": true,
+    "result": {
+      "subscription": {
+        "subscriptionId": "feed-1",
+        "feedUrl": "https://feed.test/rss",
+        "title": "Feed",
+        "enabled": true,
+        "unreadCount": 1
+      },
+      "items": [],
+      "count": 0,
+      "unreadCount": 1,
+      "newCount": 0,
+      "fetched": true,
+      "notModified": false,
+      "evaluatedAt": 1
+    }
+  },
+  {
+    "id": "rss-refresh-rss-feed-refresh-unknown",
+    "event": "rss.refresh",
+    "effectType": "rss.feed.refresh",
+    "valid": false,
+    "result": {
+      "subscription": {
+        "subscriptionId": "feed-1",
+        "feedUrl": "https://feed.test/rss",
+        "title": "Feed",
+        "enabled": true,
+        "unreadCount": 1
+      },
+      "items": [],
+      "count": 0,
+      "unreadCount": 1,
+      "newCount": 0,
+      "fetched": true,
+      "notModified": false,
+      "evaluatedAt": 1,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-subscription-add-rss-subscription-persist-valid",
+    "event": "rss.subscription.add",
+    "effectType": "rss.subscription.persist",
+    "valid": true,
+    "result": {
+      "operation": "create",
+      "data": {
+        "subscription": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "https://feed.test/rss",
+          "title": "Feed",
+          "enabled": true,
+          "unreadCount": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "rss-subscription-add-rss-subscription-persist-unknown",
+    "event": "rss.subscription.add",
+    "effectType": "rss.subscription.persist",
+    "valid": false,
+    "result": {
+      "operation": "create",
+      "data": {
+        "subscription": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "https://feed.test/rss",
+          "title": "Feed",
+          "enabled": true,
+          "unreadCount": 0
+        }
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-subscription-delete-rss-subscription-remove-valid",
+    "event": "rss.subscription.delete",
+    "effectType": "rss.subscription.remove",
+    "valid": true,
+    "result": {
+      "subscriptionId": "feed-1",
+      "deleted": true
+    }
+  },
+  {
+    "id": "rss-subscription-delete-rss-subscription-remove-unknown",
+    "event": "rss.subscription.delete",
+    "effectType": "rss.subscription.remove",
+    "valid": false,
+    "result": {
+      "subscriptionId": "feed-1",
+      "deleted": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-subscription-edit-rss-subscription-persist-valid",
+    "event": "rss.subscription.edit",
+    "effectType": "rss.subscription.persist",
+    "valid": true,
+    "result": {
+      "operation": "create",
+      "data": {
+        "subscription": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "https://feed.test/rss",
+          "title": "Feed",
+          "enabled": true,
+          "unreadCount": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "rss-subscription-edit-rss-subscription-persist-unknown",
+    "event": "rss.subscription.edit",
+    "effectType": "rss.subscription.persist",
+    "valid": false,
+    "result": {
+      "operation": "create",
+      "data": {
+        "subscription": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "https://feed.test/rss",
+          "title": "Feed",
+          "enabled": true,
+          "unreadCount": 0
+        }
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-entry-open-rss-entry-read-valid",
+    "event": "rss.entry.open",
+    "effectType": "rss.entry.read",
+    "valid": true,
+    "result": {
+      "marked": true,
+      "guid": "g1",
+      "read": true,
+      "subscriptionId": "feed-1",
+      "unreadCount": 0
+    }
+  },
+  {
+    "id": "rss-entry-open-rss-entry-read-unknown",
+    "event": "rss.entry.open",
+    "effectType": "rss.entry.read",
+    "valid": false,
+    "result": {
+      "marked": true,
+      "guid": "g1",
+      "read": true,
+      "subscriptionId": "feed-1",
+      "unreadCount": 0,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-favorite-add-rss-favorite-persist-valid",
+    "event": "rss.favorite.add",
+    "effectType": "rss.favorite.persist",
+    "valid": true,
+    "result": {
+      "created": true,
+      "favorite": {
+        "subscriptionId": "feed-1",
+        "guid": "g1",
+        "feedUrl": "https://feed.test/rss",
+        "subscriptionTitle": "Feed",
+        "title": "Entry",
+        "firstSeenAt": 1,
+        "addedAt": 2
+      }
+    }
+  },
+  {
+    "id": "rss-favorite-add-rss-favorite-persist-unknown",
+    "event": "rss.favorite.add",
+    "effectType": "rss.favorite.persist",
+    "valid": false,
+    "result": {
+      "created": true,
+      "favorite": {
+        "subscriptionId": "feed-1",
+        "guid": "g1",
+        "feedUrl": "https://feed.test/rss",
+        "subscriptionTitle": "Feed",
+        "title": "Entry",
+        "firstSeenAt": 1,
+        "addedAt": 2
+      },
+      "__unknown": true
+    }
+  },
+  {
+    "id": "rss-favorite-remove-rss-favorite-remove-valid",
+    "event": "rss.favorite.remove",
+    "effectType": "rss.favorite.remove",
+    "valid": true,
+    "result": {
+      "subscriptionId": "feed-1",
+      "guid": "g1",
+      "removed": true
+    }
+  },
+  {
+    "id": "rss-favorite-remove-rss-favorite-remove-unknown",
+    "event": "rss.favorite.remove",
+    "effectType": "rss.favorite.remove",
+    "valid": false,
+    "result": {
+      "subscriptionId": "feed-1",
+      "guid": "g1",
+      "removed": true,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-start-sync-snapshot-valid",
+    "event": "sync.start",
+    "effectType": "sync.snapshot",
+    "valid": true,
+    "result": {
+      "snapshot": {},
+      "conflicts": []
+    }
+  },
+  {
+    "id": "sync-start-sync-snapshot-unknown",
+    "event": "sync.start",
+    "effectType": "sync.snapshot",
+    "valid": false,
+    "result": {
+      "snapshot": {},
+      "conflicts": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-progress-sync-push-valid",
+    "event": "sync.progress",
+    "effectType": "sync.push",
+    "valid": true,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ]
+    }
+  },
+  {
+    "id": "sync-progress-sync-push-unknown",
+    "event": "sync.progress",
+    "effectType": "sync.push",
+    "valid": false,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-complete-sync-push-valid",
+    "event": "sync.complete",
+    "effectType": "sync.push",
+    "valid": true,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ]
+    }
+  },
+  {
+    "id": "sync-complete-sync-push-unknown",
+    "event": "sync.complete",
+    "effectType": "sync.push",
+    "valid": false,
+    "result": {
+      "requests": [
+        {
+          "url": "https://dav.test/reader",
+          "method": "PROPFIND",
+          "headers": {}
+        }
+      ],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-conflict-sync-conflict-detect-valid",
+    "event": "sync.conflict",
+    "effectType": "sync.conflict.detect",
+    "valid": true,
+    "result": {
+      "snapshot": {},
+      "conflicts": []
+    }
+  },
+  {
+    "id": "sync-conflict-sync-conflict-detect-unknown",
+    "event": "sync.conflict",
+    "effectType": "sync.conflict.detect",
+    "valid": false,
+    "result": {
+      "snapshot": {},
+      "conflicts": [],
+      "__unknown": true
+    }
+  },
+  {
+    "id": "sync-resolve-sync-conflict-resolve-valid",
+    "event": "sync.resolve",
+    "effectType": "sync.conflict.resolve",
+    "valid": true,
+    "result": {
+      "snapshot": {},
+      "resolvedCount": 1,
+      "autoResolvedCount": 0
+    }
+  },
+  {
+    "id": "sync-resolve-sync-conflict-resolve-unknown",
+    "event": "sync.resolve",
+    "effectType": "sync.conflict.resolve",
+    "valid": false,
+    "result": {
+      "snapshot": {},
+      "resolvedCount": 1,
+      "autoResolvedCount": 0,
+      "__unknown": true
+    }
+  },
+  {
+    "id": "reader-page-next-unsafe-integer",
+    "event": "reader.page.next",
+    "effectType": "reader.location.resolve",
+    "valid": false,
+    "result": {
+      "canonicalLocation": "chapter:1",
+      "pageIndex": 9007199254740992
+    }
+  },
+  {
+    "id": "rss-persist-wrong-variant",
+    "event": "rss.subscription.add",
+    "effectType": "rss.subscription.persist",
+    "valid": false,
+    "result": {
+      "operation": "delete",
+      "data": {
+        "subscription": {
+          "subscriptionId": "feed-1",
+          "feedUrl": "u",
+          "title": "Feed",
+          "enabled": true,
+          "unreadCount": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "reader-book-cache-open-status-valid",
+    "event": "reader.bookCache.open",
+    "effectType": "cache.book.status",
+    "valid": true,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "tocAvailable": true,
+      "chapterCount": 30,
+      "chapters": [
+        {
+          "chapterIndex": 12,
+          "title": "第十三章",
+          "url": "https://example.test/chapter/13",
+          "state": "failed",
+          "cachedBytes": 0,
+          "attempts": 2,
+          "maxAttempts": 3,
+          "lastError": "timeout"
+        }
+      ],
+      "cachedCount": 10,
+      "queuedCount": 4,
+      "inProgressCount": 1,
+      "completedCount": 0,
+      "failedCount": 1,
+      "cancelledCount": 0,
+      "missingCount": 14,
+      "globalStats": {
+        "entryCount": 10,
+        "totalContentBytes": 40960,
+        "oldestCachedAt": 1899990000,
+        "newestCachedAt": 1900000000,
+        "queueEntryCount": 6,
+        "queuedCount": 4,
+        "inProgressCount": 1,
+        "completedCount": 0,
+        "failedCount": 1,
+        "cancelledCount": 0
+      }
+    }
+  },
+  {
+    "id": "reader-book-cache-open-status-unknown",
+    "event": "reader.bookCache.open",
+    "effectType": "cache.book.status",
+    "valid": false,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "tocAvailable": false,
+      "chapterCount": 0,
+      "chapters": [],
+      "cachedCount": 0,
+      "queuedCount": 0,
+      "inProgressCount": 0,
+      "completedCount": 0,
+      "failedCount": 0,
+      "cancelledCount": 0,
+      "missingCount": 0,
+      "globalStats": {
+        "entryCount": 0,
+        "totalContentBytes": 0,
+        "queueEntryCount": 0,
+        "queuedCount": 0,
+        "inProgressCount": 0,
+        "completedCount": 0,
+        "failedCount": 0,
+        "cancelledCount": 0
+      },
+      "taskId": "download-001"
+    }
+  },
+  {
+    "id": "settings-cache-clear-valid",
+    "event": "settings.cache.clear",
+    "effectType": "cache.clear",
+    "valid": true,
+    "result": {
+      "scope": "cache",
+      "cacheEntriesRemoved": 4,
+      "chapterEntriesRemoved": 12,
+      "queueEntriesRemoved": 0,
+      "removedContentBytes": 40960
+    }
+  },
+  {
+    "id": "settings-cache-clear-unknown",
+    "event": "settings.cache.clear",
+    "effectType": "cache.clear",
+    "valid": false,
+    "result": {
+      "scope": "cache",
+      "cacheEntriesRemoved": 4,
+      "chapterEntriesRemoved": 12,
+      "queueEntriesRemoved": 0,
+      "removedContentBytes": 40960,
+      "filesDeleted": 12
+    }
+  },
+  {
+    "id": "download-task-retry-prefetch-valid",
+    "event": "download.task.retry",
+    "effectType": "cache.book.prefetch",
+    "valid": true,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        30
+      ],
+      "chapterCount": 30,
+      "prefetchedCount": 16,
+      "queuedIndexes": [
+        12,
+        13
+      ],
+      "alreadyQueuedIndexes": [
+        14
+      ],
+      "skippedCachedIndexes": [
+        15
+      ]
+    }
+  },
+  {
+    "id": "download-task-retry-prefetch-long-range",
+    "event": "download.task.retry",
+    "effectType": "cache.book.prefetch",
+    "valid": false,
+    "result": {
+      "sourceId": "src-001",
+      "bookId": "bk-001",
+      "chapterRange": [
+        12,
+        20,
+        30
+      ],
+      "chapterCount": 30,
+      "prefetchedCount": 0,
+      "queuedIndexes": [],
+      "alreadyQueuedIndexes": [],
+      "skippedCachedIndexes": []
+    }
+  },
+  {
+    "id": "reader-replace-undo-result-valid",
+    "event": "reader.replace.undo",
+    "effectType": "replace.undo",
+    "valid": true,
+    "result": {
+      "transactionId": "replace-42",
+      "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3",
+      "operation": "update",
+      "ruleId": 41,
+      "changed": true,
+      "undoneAt": 1900000010,
+      "restoredRule": {
+        "id": 41,
+        "name": "rename",
+        "pattern": "rain",
+        "replacement": "rain",
+        "scopeTitle": false,
+        "scopeContent": true,
+        "isEnabled": true,
+        "isRegex": false,
+        "timeoutMillisecond": 3000,
+        "order": 0
+      }
+    }
+  },
+  {
+    "id": "reader-replace-undo-result-unknown",
+    "event": "reader.replace.undo",
+    "effectType": "replace.undo",
+    "valid": false,
+    "result": {
+      "transactionId": "replace-42",
+      "revision": "40bcc58c1d465c597efdd35bd5227498c66163938cfef4f4f0d08fcab241f5f3",
+      "operation": "update",
+      "ruleId": 41,
+      "changed": true,
+      "undoneAt": 1900000010,
+      "undoToken": {}
+    }
+  }
+]

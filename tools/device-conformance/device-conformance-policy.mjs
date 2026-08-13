@@ -1,0 +1,71 @@
+// R18 proof policy. Source order is intentionally the HostRequest ABI order.
+//
+// `destructive` means that the operation can remove or replace durable/user
+// state. `externalSideEffect` means that it can mutate state outside the
+// reducer process, trigger an OS/user-visible action, or perform network I/O.
+// Read-only host calls may therefore be external without having a side effect
+// and remain `false` here.
+export const DEVICE_CONFORMANCE_POLICY = Object.freeze({
+  "http.execute": policy("http", "simulator", false, true),
+  "http.cancel": policy("http", "simulator", false, true),
+  "webview.open": policy("webview", "simulator", false, true),
+  "webview.close": policy("webview", "simulator", false, true),
+  "webview.evaluate": policy("webview", "simulator", false, true),
+  "cookie.get": policy("cookie", "simulator", false, false),
+  "cookie.set": policy("cookie", "simulator", false, true),
+  "cookie.clear": policy("cookie", "simulator", true, true),
+  "file.read": policy("file", "simulator", false, false),
+  "file.write": policy("file", "simulator", true, true),
+  "file.delete": policy("file", "simulator", true, true),
+  "storage.path": policy("storage", "simulator", false, false),
+  "persistence.get": policy("persistence", "unit", false, false),
+  "persistence.put": policy("persistence", "unit", true, true),
+  "credential.get": policy("credential", "simulator", false, false),
+  "credential.set": policy("credential", "simulator", true, true),
+  "credential.delete": policy("credential", "simulator", true, true),
+  "tts.system.start": policy("tts", "manual", false, true),
+  "tts.system.stop": policy("tts", "physical", false, true),
+  "tts.system.pause": policy("tts", "physical", false, true),
+  "tts.system.resume": policy("tts", "physical", false, true),
+  "permission.request": policy("permission", "manual", false, true),
+  "permission.check": policy("permission", "physical", false, false),
+  "background.schedule": policy("background", "physical", false, true),
+  "background.cancel": policy("background", "physical", false, true),
+  "timer.foreground.arm": policy("timer", "unit", false, true),
+  "timer.foreground.cancel": policy("timer", "unit", false, true),
+  "notification.show": policy("notification", "manual", false, true),
+  "notification.cancel": policy("notification", "physical", false, true),
+  "share.invoke": policy("share", "manual", false, true),
+  "clipboard.copy": policy("clipboard", "manual", true, true),
+  "clipboard.paste": policy("clipboard", "manual", false, false),
+  "device.vibrate": policy("device", "manual", false, true),
+  "device.screen.keep-on": policy("device", "physical", false, true),
+  "device.screen.release": policy("device", "physical", false, true),
+  "file.select": policy("file", "manual", false, true),
+  "font.registerFile": policy("font", "physical", false, true),
+  "font.unregisterFile": policy("font", "physical", true, true),
+  "clipboard.read": policy("clipboard", "manual", false, false),
+  "clipboard.write": policy("clipboard", "manual", true, true),
+  "tts.start": policy("tts", "manual", false, true),
+  "tts.stop": policy("tts", "physical", false, true),
+  "tts.pause": policy("tts", "physical", false, true),
+  "brightness.set": policy("brightness", "manual", false, true),
+  "brightness.get": policy("brightness", "physical", false, false),
+  "screen.keepAwake": policy("screen", "physical", false, true),
+  "screen.allowSleep": policy("screen", "physical", false, true),
+  "haptics.light": policy("haptics", "manual", false, true),
+  "haptics.medium": policy("haptics", "manual", false, true),
+  "haptics.heavy": policy("haptics", "manual", false, true),
+  "network.status": policy("network", "physical", false, false),
+  "webdav.connect": policy("webdav", "physical", false, true),
+  "webdav.backup": policy("webdav", "physical", false, true),
+  "webdav.restore": policy("webdav", "manual", true, true),
+  "share.text": policy("share", "manual", false, true),
+  "share.file": policy("share", "manual", false, true),
+  "background.task.start": policy("background", "physical", false, true),
+  "background.task.end": policy("background", "physical", false, true),
+});
+
+function policy(capability, minimumProofTier, destructive, externalSideEffect) {
+  return Object.freeze({ capability, minimumProofTier, destructive, externalSideEffect });
+}

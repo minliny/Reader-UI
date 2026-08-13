@@ -1,0 +1,572 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "WebDAV Config",
+  "pageFamily": "webdav-config",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-20T22:30:00Z",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "b4f9d18bc50042ad21320ac92f0d9450f4c7e741",
+    "baselineCommitSubject": "docs(figma): confirm settings general F1",
+    "implementationCommit": "dd61bfd61e6967ccd30064dc03a9a9d66e30bed2",
+    "implementationCommitSubject": "feat(webdav-config): R2a/R2b/R3a LOCAL_READY_FOR_FIGMA",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): webdav-config LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1",
+    "localReadyMarker": "docs/design/handoffs/webdav-config/LOCAL_READY_FOR_FIGMA.json",
+    "r3aMarker": "docs/design/handoffs/webdav-config/LOCAL_READY_FOR_FIGMA.json#admission.r3aPass"
+  },
+  "globalAlignment": {
+    "baselineCommit": "b4f9d18bc50042ad21320ac92f0d9450f4c7e741",
+    "figmaRevision": "2378263682617840946",
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true,
+      "independentLandscapeProhibited": true
+    },
+    "compactHistorySnapshotPolicy": "2026-07-19 Compact 截图和三视口统计属于历史审计快照，不可作为当前准入证据；保留原文件，但在新证据中明确标记为已被两视口政策替代。",
+    "familyClassificationStatus": "recommended-pending-user-confirmation",
+    "familyClassificationNote": "当前 12 族分类仍是推荐分类，待用户确认。本地可以继续准备，但送入 Figma writer 前必须把分类确认状态写实。"
+  },
+  "routeFamily": {
+    "primaryRoute": "webdav-config",
+    "familyRouteCount": 3,
+    "familyRoutes": [
+      "webdav-config",
+      "webdav-test",
+      "webdav-error"
+    ],
+    "routesOwnedByD2C": [
+      "webdav-config (FROZEN to webdavConfigV2)",
+      "webdav-test (FROZEN to webdavConfigV2, static result page)",
+      "webdav-error (FROZEN to webdavConfigV2, static error page)"
+    ],
+    "routesStillUsingSpecializedFallback": "None. All 3 webdav routes are FROZEN to webdavConfigV2; render-runtime.js switch fallback throws Error for these routes."
+  },
+  "uniqueProductionRenderer": {
+    "route": "webdav-config",
+    "renderer": "webdavConfigV2",
+    "rendererFile": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+    "rendererFunction": "webdavConfigV2(data, route, appState)",
+    "dispatchEntry": "renderRoute() checks window.ReaderD2SettingsSyncRenderers.renderD2Route(route, data, appState) before falling to switch-case fallback; renderD2Route() looks up INTEGRATION_MAP['webdav-config'] = 'webdavConfigV2'",
+    "d2CIntegrationMapEntry": "\"webdav-config\": \"webdavConfigV2\"",
+    "fallbackFrozen": true,
+    "fallbackFreezeLocation": "frontend-demo-optimized/render-runtime.js lines 11298-11305",
+    "fallbackFreezePattern": "throw new Error(route + ' route is FROZEN to webdavConfigV2 (d2-settings-sync-renderers.js). renderRoute switch fallback is disabled; ensure window.ReaderD2SettingsSyncRenderers is loaded before renderRoute is called.')",
+    "legacyIsolation": "Legacy settingsScreen function still exists in render-runtime.js but is dead code for webdav-config/webdav-test/webdav-error routes; no fallback path.",
+    "testCallsRealRenderer": true,
+    "testInlineMirrorProhibited": true
+  },
+  "r2aInstrumentation": {
+    "stageDefinition": "R2a = stable control identity: every mapped control has four stable data-* attributes plus exactly one declaration-governed semantic slot. No ordinal, CSS selector, display text, or array position is used as stable identity.",
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
+    "viewportAttrStamping": {
+      "attr": "data-viewport",
+      "stampedBy": "render-runtime.js applyViewportClass(root)",
+      "stampedAt": "viewport switch (resize / orientation change)",
+      "notStampedByRenderer": true,
+      "viewportAtoms": ["phone", "tablet"],
+      "widthBreakpoints": {
+        "phone": "width < 600",
+        "tablet": "width >= 600"
+      },
+      "landscapePolicy": "landscape always stamps tablet",
+      "compactLandscapeProhibited": true,
+      "foldProhibited": true
+    },
+    "identityStampingStrategy": {
+      "switch": "stamped on <span class='fd-settings-switch' role='switch'> (the actual toggle element)",
+      "input": "stamped on <input> element (the actual input element; receives aria-invalid + aria-describedby on validation error)",
+      "stepper": "stamped on each <button> (minus / plus); container <span> does NOT stamp identity, only has aria-label on group",
+      "select": "stamped on <article> row (click opens options list); role='button' + aria-haspopup='listbox' + aria-expanded='false' + tabindex='0'",
+      "sectionAction": "stamped on <button> in section.actions (测试网络连通性 / 保存配置)",
+      "bottomAction": "stamped on <button> in page.actions (重试连接 / 修改配置 / 清除配置 in webdav-error)",
+      "dialogButton": "stamped on <button> in dialog (confirm/cancel/重试/知道了/关闭)",
+      "linkRow": "stamped on <article> for webdav-error link rows with settingsKey (可能原因 + 建议操作)"
+    },
+    "failClosedGuard": {
+      "function": "d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity)",
+      "rule": "lookup keyed by route::settingsKey; accepts both r2.0-subcontrol and a3-action sources; returns empty attrs if not found"
+    },
+    "identitySourceTypes": ["r2.0-subcontrol", "a3-action"]
+  },
+  "r2bRealInteraction": {
+    "stageDefinition": "R2b = real interaction: state owner + reducer + dispatch + subscribe + persist + UiEvent wiring + 3 async flows + focus return + ARIA + input validation. webdav-config controls actually work end-to-end.",
+    "stateOwner": {
+      "location": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+      "singleton": "d2WebdavConfigState",
+      "storageKey": "webdav-config-values",
+      "api": [
+        "d2WebdavConfigDefaultState()",
+        "d2WebdavConfigInitState(appState)",
+        "d2WebdavConfigReducer(state, action) — 22 actions",
+        "d2WebdavConfigDispatch(action)",
+        "d2WebdavConfigSubscribe(listener)",
+        "d2WebdavConfigGetState()",
+        "d2WebdavConfigInjectAppState(appState)",
+        "d2ValidateWebdavInputs(values) — serverUrl/account/password validation",
+        "d2ExecuteWebdavTest(options) — async test connection helper",
+        "d2ExecuteWebdavSave(options) — async save config helper",
+        "d2ExecuteWebdavClear(options) — async clear config helper"
+      ],
+      "stateDomains": {
+        "values": "{ serverUrl, account, password, syncDir, sslVerify, connectTimeout, wifiOnly, autoSync }; persisted to localStorage on change",
+        "inputErrors": "transient map of settingsKey → { message }; cleared on SET_INPUT for that field or cleared entirely on CLEAR_SUCCESS",
+        "test": "transient { open, status, error, result }; status ∈ idle/confirm/loading/success/failed",
+        "save": "transient { open, status, error }; status ∈ idle/confirm/loading/success/failed",
+        "clear": "transient { open, status, error }; status ∈ idle/confirm/loading/success/failed"
+      },
+      "persistence": {
+        "strategy": "d2Set on SET_INPUT / TOGGLE_SWITCH / STEP_TIMEOUT / SELECT_AUTO_SYNC / CLEAR_SUCCESS (writes values object); other state is transient",
+        "storageKey": "webdav-config-values",
+        "writesOnActions": ["SET_INPUT", "TOGGLE_SWITCH", "STEP_TIMEOUT", "SELECT_AUTO_SYNC", "CLEAR_SUCCESS"],
+        "doesNotWriteOnActions": [
+          "INPUT_VALIDATE", "INPUT_ERROR_CLEAR",
+          "TEST_CONFIRM_OPEN", "TEST_CONFIRM_CLOSE", "TEST_START",
+          "TEST_SUCCESS", "TEST_FAILED", "TEST_RESET",
+          "SAVE_CONFIRM_OPEN", "SAVE_CONFIRM_CLOSE", "SAVE_START",
+          "SAVE_SUCCESS", "SAVE_FAILED", "SAVE_RESET",
+          "CLEAR_CONFIRM_OPEN", "CLEAR_CONFIRM_CLOSE", "CLEAR_START",
+          "CLEAR_FAILED", "CLEAR_RESET"
+        ]
+      },
+      "reducerActions": [
+        "INIT",
+        "SET_INPUT",
+        "TOGGLE_SWITCH",
+        "STEP_TIMEOUT",
+        "SELECT_AUTO_SYNC",
+        "INPUT_VALIDATE",
+        "INPUT_ERROR_CLEAR",
+        "TEST_CONFIRM_OPEN", "TEST_CONFIRM_CLOSE",
+        "TEST_START", "TEST_SUCCESS", "TEST_FAILED", "TEST_RESET",
+        "SAVE_CONFIRM_OPEN", "SAVE_CONFIRM_CLOSE",
+        "SAVE_START", "SAVE_SUCCESS", "SAVE_FAILED", "SAVE_RESET",
+        "CLEAR_CONFIRM_OPEN", "CLEAR_CONFIRM_CLOSE",
+        "CLEAR_START", "CLEAR_SUCCESS", "CLEAR_FAILED", "CLEAR_RESET"
+      ],
+      "duplicateClickGuard": "TEST_START / SAVE_START / CLEAR_START reducers return same state reference when status !== 'confirm'; listeners are not notified",
+      "staleAsyncResultGuard": "TEST_SUCCESS / TEST_FAILED, SAVE_SUCCESS / SAVE_FAILED, CLEAR_SUCCESS / CLEAR_FAILED reducers return same state reference when status !== 'loading'; stale async results are discarded",
+      "mutualExclusionGuard": "TEST_CONFIRM_OPEN / SAVE_CONFIRM_OPEN / CLEAR_CONFIRM_OPEN return same state reference when another dialog is already open",
+      "loadingCloseGuard": "TEST_CONFIRM_CLOSE / SAVE_CONFIRM_CLOSE / CLEAR_CONFIRM_CLOSE return same state reference when status === 'loading' (cannot close dialog during loading)",
+      "clearSuccessSideEffect": "CLEAR_SUCCESS resets values to D2_WEBDAV_CONFIG_DEFAULTS and clears inputErrors"
+    },
+    "runtimeDomWiring": {
+      "semanticSlotRule": "The generated declaration selects data-ui-event only for released UiEvents; all scope-matrix identity-only values use data-control-token.",
+      "releasedUiEventExamples": ["toggle.switch", "stepper.valueChange", "dropdown.option.select", "route.push", "route.pop"],
+      "identityOnlyControlAreas": ["input.change", "test/save/clear confirmation, execution, and cancellation controls"],
+      "localInputBinding": "render-runtime listens on data-control-token='input.change' and dispatches SET_INPUT for serverUrl, account, password, and syncDir.",
+      "stateOwnerRule": "d2WebdavConfigState remains the sole reducer/effect owner; semantic-slot classification does not alter validation, async guards, focus return, or dialog transitions."
+    },
+    "asyncFlowHelpers": [
+      {
+        "function": "d2ExecuteWebdavTest(options)",
+        "signature": "options = { simulateResult: 'success'|'failed', delay: ms, error: string, result: { latencyMs, permission, dirExists } }",
+        "behavior": "dispatch TEST_START → setTimeout(delay) → dispatch TEST_SUCCESS or TEST_FAILED → resolve(result)",
+        "staleGuardReliesOnReducer": true,
+        "duplicateGuardReliesOnReducer": true
+      },
+      {
+        "function": "d2ExecuteWebdavSave(options)",
+        "signature": "options = { simulateResult: 'success'|'failed', delay: ms, error: string }",
+        "behavior": "dispatch SAVE_START → setTimeout(delay) → dispatch SAVE_SUCCESS or SAVE_FAILED → resolve(result)",
+        "staleGuardReliesOnReducer": true,
+        "duplicateGuardReliesOnReducer": true
+      },
+      {
+        "function": "d2ExecuteWebdavClear(options)",
+        "signature": "options = { simulateResult: 'success'|'failed', delay: ms, error: string }",
+        "behavior": "dispatch CLEAR_START → setTimeout(delay) → dispatch CLEAR_SUCCESS or CLEAR_FAILED → resolve(result); CLEAR_SUCCESS resets values to defaults",
+        "staleGuardReliesOnReducer": true,
+        "duplicateGuardReliesOnReducer": true,
+        "sideEffectOnSuccess": "values reset to D2_WEBDAV_CONFIG_DEFAULTS; inputErrors cleared"
+      }
+    ],
+    "focusReturn": {
+      "markers": [
+        "data-restore-focus='webdav-test-connection' on 测试网络连通性 button (test dialog close → focus returns)",
+        "data-restore-focus='webdav-save-config' on 保存配置 button (save dialog close → focus returns)",
+        "data-restore-focus='webdav-clear-config' on 清除配置 bottom action in webdav-error (clear dialog close → focus returns)",
+        "data-restore-focus on 4 webdav-error overlay link rows (check-account / check-password / check-permission / create-dir)"
+      ],
+      "initialFocus": [
+        "data-dialog-initial-focus='webdav-test-cancel' on test dialog 取消 button (confirm state)",
+        "data-dialog-initial-focus='webdav-test-confirm' on test dialog 知道了 button (success state)",
+        "data-dialog-initial-focus='webdav-test-cancel' on test dialog 关闭 button (failed state)",
+        "data-dialog-initial-focus='webdav-save-cancel' on save dialog 取消 / 关闭 button",
+        "data-dialog-initial-focus='webdav-save-confirm' on save dialog 知道了 button (success state)",
+        "data-dialog-initial-focus='webdav-clear-cancel' on clear dialog 取消 / 关闭 button",
+        "data-dialog-initial-focus='webdav-clear-confirm' on clear dialog 知道了 button (success state)"
+      ]
+    },
+    "rendererFreeze": {
+      "route": "webdav-config / webdav-test / webdav-error",
+      "frozenRenderer": "webdavConfigV2 (in d2-settings-sync-renderers.js)",
+      "frozenGuard": "render-runtime.js switch case throws Error for all 3 webdav routes; no fallback to legacy settingsScreen",
+      "legacyIsolation": "legacy settingsScreen implementation remains in render-runtime.js but no longer serves any webdav route"
+    }
+  },
+  "r3aPreFunctionalVerification": {
+    "stageDefinition": "R3a = local admission verification: Phone + Tablet two-viewport automated tests + controlKey consistency + stable terminal state + 3 async flow tests + input validation + focus return evidence + a11y + console error = 0 + no compact-landscape/fold atoms + full regression no degradation",
+    "legacySemanticFieldInterpretation": "Historic control-list UiEvent labels describe local reducer intent only. They are not an assertion that the current DOM writes data-ui-event; the generated declaration now selects data-ui-event or data-control-token under r2aInstrumentation.identityAttributeContract.",
+    "controlList": [
+      { "settingsKey": "back", "type": "a3-action", "uiEvent": "route.pop", "stateOwner": "navigation", "owner": "router", "route": "webdav-config" },
+      { "settingsKey": "serverUrl", "type": "textbox", "uiEvent": "input.change", "stateOwner": "d2WebdavConfigState.values.serverUrl", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "account", "type": "textbox", "uiEvent": "input.change", "stateOwner": "d2WebdavConfigState.values.account", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "password", "type": "textbox", "uiEvent": "input.change", "stateOwner": "d2WebdavConfigState.values.password", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "syncDir", "type": "textbox", "uiEvent": "input.change", "stateOwner": "d2WebdavConfigState.values.syncDir", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "sslVerify", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2WebdavConfigState.values.sslVerify", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-connect-timeout-stepper-minus", "type": "stepper", "uiEvent": "stepper.valueChange", "stateOwner": "d2WebdavConfigState.values.connectTimeout", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-connect-timeout-stepper-plus", "type": "stepper", "uiEvent": "stepper.valueChange", "stateOwner": "d2WebdavConfigState.values.connectTimeout", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "wifiOnly", "type": "switch", "uiEvent": "toggle.switch", "stateOwner": "d2WebdavConfigState.values.wifiOnly", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "autoSync", "type": "combobox", "uiEvent": "dropdown.option.select", "stateOwner": "d2WebdavConfigState.values.autoSync", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-test-connection", "type": "a3-action", "uiEvent": "webdav-test.confirm", "stateOwner": "d2WebdavConfigState.test", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-save-config", "type": "a3-action", "uiEvent": "webdav-save.confirm", "stateOwner": "d2WebdavConfigState.save", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-test-confirm", "type": "a3-action (conditional: test dialog open)", "uiEvent": "webdav-test.execute", "stateOwner": "d2WebdavConfigState.test", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-test-cancel", "type": "a3-action (conditional: test dialog open)", "uiEvent": "webdav-test.cancel", "stateOwner": "d2WebdavConfigState.test", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-save-confirm", "type": "a3-action (conditional: save dialog open)", "uiEvent": "webdav-save.execute", "stateOwner": "d2WebdavConfigState.save", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-save-cancel", "type": "a3-action (conditional: save dialog open)", "uiEvent": "webdav-save.cancel", "stateOwner": "d2WebdavConfigState.save", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-clear-confirm", "type": "a3-action (conditional: clear dialog open)", "uiEvent": "webdav-clear.execute", "stateOwner": "d2WebdavConfigState.clear", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "webdav-clear-cancel", "type": "a3-action (conditional: clear dialog open)", "uiEvent": "webdav-clear.cancel", "stateOwner": "d2WebdavConfigState.clear", "owner": "webdavConfig", "route": "webdav-config" },
+      { "settingsKey": "back", "type": "a3-action", "uiEvent": "route.pop", "stateOwner": "navigation", "owner": "router", "route": "webdav-test" },
+      { "settingsKey": "webdav-test-again", "type": "a3-action", "uiEvent": "webdav-test.confirm", "stateOwner": "navigation (re-run test)", "owner": "webdavConfig", "route": "webdav-test" },
+      { "settingsKey": "webdav-save-config", "type": "a3-action", "uiEvent": "webdav-save.confirm", "stateOwner": "navigation (go to webdav-config + save)", "owner": "webdavConfig", "route": "webdav-test" },
+      { "settingsKey": "webdav-view-remote-backup", "type": "a3-action", "uiEvent": "route.push", "stateOwner": "navigation (remote-webdav-books)", "owner": "router", "route": "webdav-test" },
+      { "settingsKey": "back", "type": "a3-action", "uiEvent": "route.pop", "stateOwner": "navigation", "owner": "router", "route": "webdav-error" },
+      { "settingsKey": "webdav-check-account", "type": "a3-action (link row)", "uiEvent": "overlay.open", "stateOwner": "navigation (check-account dialog)", "owner": "webdavConfig", "route": "webdav-error" },
+      { "settingsKey": "webdav-check-password", "type": "a3-action (link row)", "uiEvent": "overlay.open", "stateOwner": "navigation (check-password dialog)", "owner": "webdavConfig", "route": "webdav-error" },
+      { "settingsKey": "webdav-check-permission", "type": "a3-action (link row)", "uiEvent": "overlay.open", "stateOwner": "navigation (check-permission dialog)", "owner": "webdavConfig", "route": "webdav-error" },
+      { "settingsKey": "webdav-create-dir", "type": "a3-action (link row)", "uiEvent": "overlay.open", "stateOwner": "navigation (create-dir dialog)", "owner": "webdavConfig", "route": "webdav-error" },
+      { "settingsKey": "webdav-edit-config", "type": "a3-action (link row)", "uiEvent": "route.push", "stateOwner": "navigation (webdav-config)", "owner": "router", "route": "webdav-error" },
+      { "settingsKey": "webdav-retry-test", "type": "a3-action (link row)", "uiEvent": "route.push", "stateOwner": "navigation (webdav-test)", "owner": "router", "route": "webdav-error" },
+      { "settingsKey": "webdav-view-log", "type": "a3-action (link row)", "uiEvent": "route.push", "stateOwner": "navigation (source-logs)", "owner": "router", "route": "webdav-error" },
+      { "settingsKey": "webdav-retry-connection", "type": "a3-action", "uiEvent": "route.push", "stateOwner": "navigation (webdav-test)", "owner": "router", "route": "webdav-error" },
+      { "settingsKey": "webdav-edit-config-action", "type": "a3-action", "uiEvent": "route.push", "stateOwner": "navigation (webdav-config)", "owner": "router", "route": "webdav-error" },
+      { "settingsKey": "webdav-clear-config", "type": "a3-action", "uiEvent": "webdav-clear.confirm", "stateOwner": "navigation (webdav-config + clear)", "owner": "webdavConfig", "route": "webdav-error" }
+    ],
+    "uiEventCatalog": [
+      "route.pop (3 back buttons across 3 routes)",
+      "input.change (4 webdav-config inputs)",
+      "toggle.switch (2 webdav-config switches)",
+      "stepper.valueChange (2 webdav-config stepper buttons)",
+      "dropdown.option.select (1 webdav-config select)",
+      "webdav-test.confirm (1 test-connection trigger)",
+      "webdav-save.confirm (1 save-config trigger)",
+      "webdav-test.execute (1 test-confirm button)",
+      "webdav-test.cancel (1 test-cancel button)",
+      "webdav-save.execute (1 save-confirm button)",
+      "webdav-save.cancel (1 save-cancel button)",
+      "webdav-clear.execute (1 clear-confirm button)",
+      "webdav-clear.cancel (1 clear-cancel button)",
+      "route.push (1 view-remote-backup in webdav-test, 3 link rows in webdav-error)",
+      "overlay.open (4 webdav-error link rows)"
+    ],
+    "stateOwnerCatalog": [
+      "d2WebdavConfigState.values (persisted: serverUrl, account, password, syncDir, sslVerify, connectTimeout, wifiOnly, autoSync)",
+      "d2WebdavConfigState.inputErrors (transient)",
+      "d2WebdavConfigState.test (transient: idle/confirm/loading/success/failed + error + result)",
+      "d2WebdavConfigState.save (transient: idle/confirm/loading/success/failed + error)",
+      "d2WebdavConfigState.clear (transient: idle/confirm/loading/success/failed + error)"
+    ],
+    "visualResultList": [
+      {
+        "flow": "switch toggle",
+        "initial": "is-on class + aria-checked='true'",
+        "after": "is-on class removed + aria-checked='false'; persisted to localStorage",
+        "terminalState": "no aria-busy, no is-busy class, idempotent render"
+      },
+      {
+        "flow": "input change",
+        "initial": "value reflects state.values[settingsKey]",
+        "after": "value updated; inputError cleared for that field; persisted to localStorage",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "input validation error",
+        "initial": "no aria-invalid, no aria-describedby",
+        "after": "aria-invalid='true' + aria-describedby='input-error-<settingsKey>'; <small role='alert'> with error message appears",
+        "clearOnNewInput": "SET_INPUT for that field clears inputError; aria-invalid + aria-describedby removed",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "stepper timeout",
+        "initial": "value reflects state.values.connectTimeout (default 15)",
+        "after": "STEP_TIMEOUT clamps to [5, 60]; persisted",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "select auto sync",
+        "initial": "value reflects state.values.autoSync (default '每小时')",
+        "after": "SELECT_AUTO_SYNC only accepts valid options (关闭/每小时/每天/手动); invalid rejected; persisted",
+        "terminalState": "idempotent render"
+      },
+      {
+        "flow": "test connection confirm → loading → success",
+        "states": ["idle → confirm → loading → success"],
+        "loadingVisual": "test dialog aria-busy='true'; confirm button disabled+aria-busy; text='测试中…'",
+        "successVisual": "dialog shows success title; 知道了 button replaces confirm; data-dialog-initial-focus='webdav-test-confirm'",
+        "terminalState": "no aria-busy after close; transient NOT persisted"
+      },
+      {
+        "flow": "test connection confirm → loading → failed",
+        "states": ["idle → confirm → loading → failed"],
+        "failedVisual": "test dialog aria-invalid='true'; confirm button aria-invalid + title=error + text='重试'; close button has data-dialog-initial-focus",
+        "terminalState": "dialog still open; retry possible via executeTest()"
+      },
+      {
+        "flow": "save config confirm → loading → success",
+        "states": ["idle → confirm → loading → success"],
+        "loadingVisual": "save dialog aria-busy='true'; button disabled+aria-busy; text='保存中…'",
+        "successVisual": "dialog shows success title; 知道了 button replaces confirm",
+        "terminalState": "no aria-busy after close; transient NOT persisted"
+      },
+      {
+        "flow": "clear config confirm → loading → success",
+        "states": ["idle → confirm → loading → success"],
+        "loadingVisual": "clear dialog aria-busy='true'; button disabled+aria-busy; text='清除中…'",
+        "successVisual": "dialog shows success title; values reset to defaults; inputErrors cleared",
+        "terminalState": "values reverted to D2_WEBDAV_CONFIG_DEFAULTS; persisted to localStorage"
+      },
+      {
+        "flow": "duplicate submit guard",
+        "behavior": "TEST_START / SAVE_START / CLEAR_START in non-confirm state returns same state reference; no duplicate dispatch",
+        "terminalState": "single loading → single success/failed"
+      },
+      {
+        "flow": "stale async result discard",
+        "behavior": "TEST_SUCCESS / TEST_FAILED / SAVE_* / CLEAR_* in non-loading state returns same state reference; stale results discarded",
+        "terminalState": "state unchanged by stale result"
+      },
+      {
+        "flow": "mutual exclusion",
+        "behavior": "TEST_CONFIRM_OPEN / SAVE_CONFIRM_OPEN / CLEAR_CONFIRM_OPEN returns same state reference when another dialog is already open",
+        "terminalState": "only one dialog open at a time"
+      },
+      {
+        "flow": "loading close rejection",
+        "behavior": "TEST_CONFIRM_CLOSE / SAVE_CONFIRM_CLOSE / CLEAR_CONFIRM_CLOSE returns same state reference when status === 'loading'",
+        "terminalState": "dialog stays open during loading"
+      }
+    ],
+    "ariaCoverage": {
+      "switch": ["role='switch'", "aria-checked", "tabindex='0'", "aria-label"],
+      "input": ["aria-label", "autocomplete='off'", "type (url/text/password)", "aria-invalid='true' on error", "aria-describedby='input-error-<sk>' on error"],
+      "inputError": ["role='alert'", "id='input-error-<settingsKey>'"],
+      "select": ["aria-haspopup='listbox'", "aria-expanded='false'", "tabindex='0'", "role='button'"],
+      "stepper": ["aria-label on group span"],
+      "testDialog": ["role='dialog'", "aria-modal='true'", "aria-labelledby='webdav-test-dialog-title'", "aria-hidden='false'", "aria-busy='true' during loading", "aria-invalid='true' during failed"],
+      "saveDialog": ["role='dialog'", "aria-modal='true'", "aria-labelledby='webdav-save-dialog-title'", "aria-hidden='false'", "aria-busy='true' during loading", "aria-invalid='true' during failed"],
+      "clearDialog": ["role='dialog'", "aria-modal='true'", "aria-labelledby='webdav-clear-dialog-title'", "aria-hidden='false'", "aria-busy='true' during loading", "aria-invalid='true' during failed"],
+      "confirmButton": ["aria-busy='true' + disabled when loading", "aria-invalid='true' + title=error when failed"],
+      "cancelButton": ["disabled when loading", "data-dialog-initial-focus"],
+      "overlayLinkRow": ["aria-haspopup='dialog'", "tabindex='0'", "role='button'", "data-restore-focus"],
+      "routeLinkRow": ["role='button'", "tabindex='0'"],
+      "back": ["aria-label"],
+      "focusRestore": "overlay triggers have data-restore-focus attribute"
+    }
+  },
+  "declarationsReference": {
+    "filePath": "frontend-demo-optimized/control-identity-declarations.js",
+    "webdavConfigDeclarations": 33,
+    "webdavConfigDeclarationTypeDistribution": {
+      "switch": 2,
+      "textbox": 4,
+      "combobox": 1,
+      "stepper": 2,
+      "a3-action": 24
+    },
+    "webdavConfigDeclarationRouteDistribution": {
+      "webdav-config": 18,
+      "webdav-test": 4,
+      "webdav-error": 11
+    },
+    "allWebdavConfigDeclarationsHaveControlId": true,
+    "allWebdavConfigDeclarationsHaveSettingsKey": true,
+    "allWebdavConfigDeclarationsHaveSemanticSlot": true,
+    "identityOnlyTokenDeclarationCount": 19,
+    "allWebdavConfigDeclarationsHaveRenderer": "webdavConfigV2",
+    "allWebdavConfigDeclarationsHaveRendererFile": "renderers/d2-settings-sync-renderers.js",
+    "allWebdavConfigDeclarationsHavePageFamily": "webdav-config",
+    "ordinalKeysRemoved": "All 16 ordinal-based declarations (7 ordinal buttons n0-n6 + 4 ordinal textboxes n0-n3 + 2 stepper + 1 combobox + 2 switches) have been replaced with 33 settingsKey-based stable-identity declarations.",
+    "totalDeclarationsInFile": 1021
+  },
+  "viewportVerification": {
+    "r2aVerificationScript": "frontend-demo-optimized/verify/r3a-webdav-config-identity.test.mjs",
+    "r2bVerificationScript": "frontend-demo-optimized/verify/r3a-webdav-config-flow.test.mjs",
+    "r3aAriaFocusScript": "frontend-demo-optimized/verify/r3a-webdav-config-aria-focus.test.mjs",
+    "viewports": ["phone", "tablet"],
+    "landscapeAlias": "tablet",
+    "controlKeySetIdenticalAcrossViewports": true,
+    "rendererOutputIsViewportAgnostic": true,
+    "domNoDuplicateControlKey": true,
+    "domNoOrphanControlKey": true,
+    "semanticSlotCoverage": "33/33 controls carry four stable identity attributes plus exactly one semantic slot; 19 declarations use data-control-token and the remainder use released data-ui-event values.",
+    "noCompactLandscapeAtom": true,
+    "noFoldAtom": true,
+    "noCompactViewportClass": true,
+    "stableTerminalState": {
+      "verified": true,
+      "noAriaBusyAfterOperationComplete": true,
+      "noIsBusyClassAfterOperationComplete": true,
+      "noLoadingTextAfterOperationComplete": true,
+      "idempotentRender": true,
+      "valuesPersistedAcrossViewports": true,
+      "transientNotPersistedAcrossViewports": true,
+      "twoViewportsReachIdenticalTerminalState": true
+    },
+    "asyncFlowTests": {
+      "testSuccessFlow": true,
+      "testFailedFlow": true,
+      "saveSuccessFlow": true,
+      "saveFailedFlow": true,
+      "clearSuccessFlow": true,
+      "clearFailedFlow": true,
+      "duplicateSubmitGuard": true,
+      "staleAsyncResultDiscard": true,
+      "mutualExclusion": true,
+      "loadingCloseRejection": true
+    },
+    "inputValidationTests": {
+      "requiredFields": true,
+      "urlPrefixValidation": true,
+      "setInputClearsError": true,
+      "stepTimeoutClamp": true,
+      "selectAutoSyncValidation": true
+    },
+    "focusReturnEvidence": {
+      "dataRestoreFocusOnTestConnection": true,
+      "dataRestoreFocusOnSaveConfig": true,
+      "dataRestoreFocusOnClearConfig": true,
+      "dataRestoreFocusOnWebdavErrorOverlayLinkRows": true,
+      "dataDialogInitialFocusOnTestCancelConfirm": true,
+      "dataDialogInitialFocusOnTestConfirmSuccess": true,
+      "dataDialogInitialFocusOnTestCancelFailed": true,
+      "dataDialogInitialFocusOnSaveCancelConfirm": true,
+      "dataDialogInitialFocusOnSaveConfirmSuccess": true,
+      "dataDialogInitialFocusOnClearCancelConfirm": true,
+      "dataDialogInitialFocusOnClearConfirmSuccess": true
+    },
+    "accessibleNameNonEmpty": true,
+    "consoleErrorCount": 0,
+    "r2aIdentityTestResult": "13/13 tests pass",
+    "r2bFlowTestResult": "22/22 tests pass",
+    "r3aAriaFocusTestResult": "18/18 tests pass",
+    "fullRegressionTestResult": "224/224 tests pass (no degradation)"
+  },
+  "webdavConfigControlInventory": {
+    "webdavConfigDefaultStateControls": 12,
+    "webdavConfigConditionalDialogControls": 6,
+    "webdavTestControls": 4,
+    "webdavErrorControls": 11,
+    "totalUniqueControls": 33,
+    "identityProhibition": {
+      "ordinalKeys": "prohibited",
+      "cssSelectors": "prohibited",
+      "displayText": "prohibited",
+      "arrayPositions": "prohibited"
+    },
+    "identityStrategy": "settingsKey-based: each control has a stable settingsKey declared in control-identity-declarations.js; renderer calls d2ResolveSubcontrolIdentity(route, settingsKey) → d2StampIdentityAttrs(identity) to stamp four stable attributes plus exactly one declaration-governed semantic slot."
+  },
+  "sharedComponentSources": {
+    "d2SettingsShell": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (extended to support frameState/toastHtml/dialogHtml/backButtonAttrs options)",
+    "d2InputRow": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (extended to accept route + state for identity stamping and inputErrors reflection)",
+    "d2Switch": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (stamps identity on span)",
+    "d2Stepper": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (stamps identity on minus/plus buttons)",
+    "d2Section": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (stamps identity + asyncStatus on section.actions)",
+    "d2ActionList": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (stamps identity + asyncStatus/restoreFocus on bottom actions)",
+    "d2WebdavDialogHtml": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (new: 3 dialogs with ARIA + focus return + identity)",
+    "d2WebdavPage": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (new: state-driven webdav-config page + static webdav-test + static webdav-error)",
+    "shellKit": "frontend-demo-optimized/shared-shell-kit/kit.js (renderSettingsShell, backTopBar with backButtonAttrs support)",
+    "icon": "frontend-demo-optimized/shared-shell-kit/kit.js"
+  },
+  "pageExceptions": [
+    {
+      "route": "webdav-test",
+      "exception": "D2-C owned by webdavConfigV2 but uses static result page (no state owner). All 4 actions (back / webdav-test-again / webdav-save-config / webdav-view-remote-backup) have stable identity. Figma writer may render this as a static success page; no live state needed."
+    },
+    {
+      "route": "webdav-error",
+      "exception": "D2-C owned by webdavConfigV2 but uses static error page (no state owner). All 11 actions (back / 4 overlay link rows / 3 route link rows / 3 bottom actions) have stable identity. Figma writer may render this as a static error page; overlay dialogs for check-account/check-password/check-permission/create-dir are local-only hints, not full state flows."
+    }
+  ],
+  "figmaDecisionIssues": [
+    {
+      "issue": "WebDAV form input master",
+      "description": "webdav-config has 4 inputs (serverUrl / account / password / syncDir) with icons + labels. Figma writer needs to decide: (a) use existing Settings/SettingRow input master, or (b) create a new WebDAV-specific input master. Local implementation reuses d2InputRow building block."
+    },
+    {
+      "issue": "WebDAV dialog master (3 variants: test/save/clear)",
+      "description": "webdav-config has 3 confirm dialogs with title/description/2 buttons (confirm+cancel), and state variants (confirm/loading/success/failed). Figma writer needs to decide: (a) use existing fd-demo-dialog master with variants, or (b) create 3 new masters. Local implementation renders inline HTML with role='dialog' aria-modal='true'."
+    },
+    {
+      "issue": "Stepper master for connect-timeout",
+      "description": "webdav-config uses d2Stepper for connect-timeout (minus/value/plus). Figma writer needs to decide: (a) use existing Primitive/Stepper master, or (b) create a new master. Local implementation reuses d2Stepper building block."
+    },
+    {
+      "issue": "Select master for auto-sync",
+      "description": "webdav-config uses native <article role='button' aria-haspopup='listbox'> pattern for autoSync. Figma writer needs to decide: (a) use existing Primitive/Select master, or (b) use native select. Local implementation uses custom <article> pattern matching other Settings rows."
+    },
+    {
+      "issue": "WebDAV metric grid master",
+      "description": "webdav-config / webdav-test / webdav-error all use d2MetricGrid (4 metrics per page). Figma writer needs to decide: (a) use existing MetricGrid master, or (b) create a new master. Local implementation reuses d2MetricGrid building block."
+    },
+    {
+      "issue": "WebDAV error page link row master",
+      "description": "webdav-error uses d2Row with link rows (4 overlay + 3 route). Figma writer needs to decide: (a) use existing Settings/LinkRow master, or (b) create a new WebDAV error row master. Local implementation reuses d2Row building block."
+    },
+    {
+      "issue": "Toast / banner for status messages",
+      "description": "webdav-config renders a toast section at the bottom showing test/save status. Figma writer needs to decide: (a) use existing Toast/Banner master, or (b) create a new master. Local implementation renders inline HTML."
+    },
+    {
+      "issue": "Family classification pending user confirmation",
+      "description": "The 12-family classification (including webdav-config as family #2) is still 'recommended, pending user confirmation'. Figma writer must not proceed until user confirms the classification."
+    }
+  ],
+  "admission": {
+    "localReadyForFigma": true,
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "r2aStageComplete": true,
+    "r2bStageComplete": true,
+    "r3aStageComplete": true,
+    "r3aNote": "R3a complete: 13/13 identity + 22/22 flow + 18/18 aria-focus = 53/53 webdav-config tests pass; 224/224 full regression tests pass (no degradation). Two-viewport Phone/Tablet controlKey set identical; renderer viewport-agnostic; no compact-landscape/fold atoms; stable terminal state verified for all flows; 3 async flows (test/save/clear) cover success/failed/duplicate-submit/stale-result/mutual-exclusion/loading-close-rejection; input validation covers required fields + URL prefix + clear-on-new-input + stepper clamp + select option validation; focus return markers verified on 3 overlay triggers + 4 webdav-error link rows; initial focus markers verified on cancel/confirm/close/知道了 buttons across confirm/success/failed states; accessible names non-empty; console error = 0.",
+    "f1WriterAdmitted": false,
+    "f1WriterAdmissionNote": "LOCAL_READY_FOR_FIGMA = true. F1 writer admission is a separate Figma-side decision that requires: (1) user confirmation of 12-family classification, (2) Figma writer queue scheduling (F2 queue admitted after source-management), (3) Figma-side master decisions for the 8 issues listed in figmaDecisionIssues. Local side is unblocked.",
+    "f1BlockersRemaining": [
+      "Figma-side: 8 master decisions pending (see figmaDecisionIssues)",
+      "User-side: 12-family classification confirmation pending"
+    ],
+    "nextWriterFamily": "webdav-config (this packet), then sync-backup"
+  },
+  "commitStrategy": {
+    "approach": "implementation commit first, then evidence-only commit binding the previous implementation hash (avoid self-reference)",
+    "implementationCommitContent": [
+      "frontend-demo-optimized/control-identity-declarations.js (33 webdav-config family declarations replacing 16 ordinal-based ones)",
+      "frontend-demo-optimized/render-runtime.js (freeze fallback for webdav-config / webdav-test / webdav-error routes)",
+      "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js (webdavConfigV2 renderer + d2WebdavConfigState owner + 22-action reducer + 3 async helpers + d2WebdavDialogHtml + d2WebdavPage + ARIA/focus)",
+      "frontend-demo-optimized/verify/r3a-webdav-config-identity.test.mjs (new, 13 tests)",
+      "frontend-demo-optimized/verify/r3a-webdav-config-flow.test.mjs (new, 22 tests)",
+      "frontend-demo-optimized/verify/r3a-webdav-config-aria-focus.test.mjs (new, 18 tests)"
+    ],
+    "evidenceCommitContent": [
+      "docs/design/handoffs/webdav-config/LOCAL_READY_FOR_FIGMA.json (this file, with implementationCommit hash filled in)"
+    ]
+  }
+}

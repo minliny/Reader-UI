@@ -1,0 +1,198 @@
+{
+  "audit": "source-global-motion-audit",
+  "date": "2026-06-29",
+  "scope": "frontend-demo source only",
+  "excludedAsEvidence": [
+    "frontend-demo/MOTION_*.md",
+    "deleted legacy design exports",
+    "screenshots",
+    "prior planning docs"
+  ],
+  "sourceInputs": [
+    "frontend-demo/index.html",
+    "frontend-demo/render.js",
+    "frontend-demo/render-runtime.js",
+    "frontend-demo/route-contract.js",
+    "frontend-demo/shared-shell-kit/kit.js",
+    "frontend-demo/styles.css",
+    "frontend-demo/styles/*.css",
+    "frontend-demo/tokens.css",
+    "frontend-demo/motion-tokens.css"
+  ],
+  "routeCoverage": {
+    "totalRoutes": 131,
+    "renderRouteCases": 131,
+    "missingCases": [],
+    "extraCases": [],
+    "shellCounts": {
+      "MainTabShell": 35,
+      "LibraryShell": 52,
+      "SettingsShell": 28,
+      "ReaderShell": 15,
+      "FlowShell": 1
+    },
+    "prefixCounts": {
+      "bookshelf": 3,
+      "discover": 34,
+      "rss": 45,
+      "settings": 2,
+      "book": 4,
+      "sort": 1,
+      "group": 1,
+      "local": 1,
+      "immersive": 1,
+      "reader": 9,
+      "toc": 1,
+      "tts": 1,
+      "auto": 1,
+      "content": 2,
+      "source": 18,
+      "about": 1,
+      "sync": 1,
+      "webdav": 1,
+      "restore": 4
+    }
+  },
+  "selectorCoverage": {
+    "dataAttributeScope": "index/render/render-runtime/route-contract/shared-shell-kit combined, excluding motion adapter attributes",
+    "dataAttributeCount": 171,
+    "bindCallCount": 77,
+    "motionIdCount": 63,
+    "directMappedDataAttributeCount": 149,
+    "unmappedDataAttributes": [
+      "data-adaptive-runtime",
+      "data-book-author",
+      "data-book-chapter",
+      "data-book-title",
+      "data-cover-src",
+      "data-current-page",
+      "data-current-route",
+      "data-current-shell",
+      "data-dev-region",
+      "data-dialog-initial-focus",
+      "data-icon-missing",
+      "data-page-space-row",
+      "data-reader-brightness-dim",
+      "data-reader-footer-status",
+      "data-reader-surface-signature",
+      "data-route-replace",
+      "data-route-stack",
+      "data-screen-host",
+      "data-shell",
+      "data-slot",
+      "data-stack-size",
+      "data-typography-row"
+    ]
+  },
+  "runtimeEventCounts": {
+    "click": 70,
+    "keydown": 11,
+    "pointerdown": 6,
+    "pointerup": 5,
+    "pointercancel": 5,
+    "pointermove": 3,
+    "resize": 2,
+    "keyup": 1,
+    "animationend": 1,
+    "change": 1,
+    "contextmenu": 2,
+    "mouseup": 1,
+    "pointerleave": 1
+  },
+  "manualFeatureAssessment": {
+    "reducedMotionRuntimeAndCss": "implemented",
+    "motionIdAdapter": "implemented",
+    "minimumMotionController": "implemented",
+    "appFirstOpenLifecycle": "implemented first pass with cold-start firstOpenMotion state, root/screen-host data-motion-first-open-* attributes, tokenized enter CSS, automatic settle, and reduced-motion immediate settle; media and background-resume proof still missing",
+    "genericPressState": "implemented",
+    "readerPageTurnAnimation": "implemented",
+    "readerLoadingSpin": "implemented",
+    "globalMotionStateController": "minimum transaction controller only; visual lifecycle still missing",
+    "routePushPopMotionLifecycle": "controller transaction implemented; visual enter/exit still missing",
+    "tabIndicatorMotionLifecycle": "main tab, reader module tab, and segmented control data-state adapters implemented; media evidence still missing",
+    "dropdownMotionController": "trigger/menu/option state adapter implemented; collapse persistence, A-to-B media evidence, and resize/orientation reposition evidence still missing",
+    "coverToImmersiveSharedTransition": "source/target state adapter and cover snapshot implemented; detail/chapter coverage and media evidence still missing",
+    "readerControlHandleDrag": "press/drag/release adapter implemented for control and full-page grabbers; media evidence and real-device long-path drag proof still missing",
+    "readerGrabberLongPressDrag": "implemented first pass for wide fixed-width dock; media, real-device touch, and fold proof still missing",
+    "readerControlDockBoundsAndPersistence": "implemented first pass with frame/group bounds, viewport-class saved offsets, and resize clamp/rebound; fold pane and safe-area device proof still missing",
+    "readerSessionStartTransaction": "implemented for TTS and auto-page",
+    "readerSessionCapsuleEnterExitTickVoicePulse": "implemented first pass with capsule state adapter, tokenized enter/update/switch/tick/voice CSS, and local auto-page countdown updates; media and stop/exit interruption proof still missing",
+    "capsuleRunPauseMorph": "implemented first pass for local play/pause button state and control-layer running space; full matched morph media evidence still missing",
+    "motionInterruptLifecycle": "implemented first pass with motion.interrupt.cancel/redirect/completeThenReplace contract IDs, startMotionInterrupt root/screen-host data-motion-interrupt-* attributes, transient pressed/drag/dropdown cleanup, route/tab/viewport/loading/dock-drag/pointer-cancel entrypoints, tokenized interrupt settle CSS, and coverage gate; overlay close, dropdown A-to-B, async result priority, focus restore, and media proof still missing",
+    "orientationPrepareReshapeSettleLifecycle": "implemented first pass with startViewportOrientationMotion, root/screen-host data-motion-orientation-* attributes, route/session/overlay/focus/dock metadata, tokenized reshape/anchor-settle CSS, reduced-motion immediate settle, dropdown reanchor, and wide dock clamp; real rotation media, fold posture, text-anchor repagination, and focus automation proof still missing"
+  },
+  "componentFamilies": [
+    {
+      "family": "app.firstOpen",
+      "source": "render(), captureRoute initialization, goTo(initialRoute)",
+      "currentState": "Cold-start first render now exposes app.firstOpen.enter transaction, firstOpenMotion one-shot state, root/screen-host data-motion-first-open-* attributes, tokenized 280ms enter CSS, automatic settle, and reduced-motion immediate settle; default/deep-link media evidence and background-resume proof remain missing.",
+      "requiredOwner": "app motion host"
+    },
+    {
+      "family": "app.route",
+      "source": "data-route, data-route-back, data-demo-back",
+      "currentState": "Motion ID and controller transaction exist, but render is still immediate innerHTML replacement except Reader inline loading.",
+      "requiredOwner": "motion controller"
+    },
+    {
+      "family": "tab",
+      "source": ".fd-main-nav-item and module/segment tab buttons",
+      "currentState": "Main tab, reader module tab, and segmented control now expose data-motion-tab-* / data-motion-segment-* state, tab.item.press/select/switch and segment.item.switch press IDs, and reader.module.switch / segment.item.switch transactions; media evidence remains missing.",
+      "requiredOwner": "tab motion controller"
+    },
+    {
+      "family": "button",
+      "source": "button, role=button, data-route",
+      "currentState": "Generic pressed state exists; semantic activate/commit feedback is not complete for plain business buttons.",
+      "requiredOwner": "common component motion"
+    },
+    {
+      "family": "chip/filter/segment",
+      "source": "data-discover-entry, data-*filter, data-reader-*set",
+      "currentState": "Motion IDs exist for many selectors; selection-switch state machine is not unified.",
+      "requiredOwner": "common component motion"
+    },
+    {
+      "family": "dropdown",
+      "source": "filterDisclosure, settings option dropdown, reader more/tts/settings dropdowns",
+      "currentState": "Trigger, menu, and option elements now expose data-motion-dropdown-* state, dropdown.option.press press IDs, tokenized CSS, and expand/select controller transactions; collapse persistence, A-to-B media evidence, and resize/orientation reposition proof remain missing.",
+      "requiredOwner": "dropdown motion controller"
+    },
+    {
+      "family": "reader.entry",
+      "source": "data-book-cover",
+      "currentState": "Cover and action entries now expose data-motion-entry-* state, cover snapshot, target reader reveal, and reduced-motion fallback; detail/chapter coverage, repeated-click interruption, and media evidence remain missing.",
+      "requiredOwner": "reader entry motion"
+    },
+    {
+      "family": "reader.control.dock",
+      "source": ".fd-reader-grabber in fixed-width reader layouts",
+      "currentState": "Wide fixed-width dock now exposes long-press, drag, release, and rebound state, moves the sheet + module nav dock by transform, persists offset by viewport class, clamps against ReaderFrame/group bounds, and clears transforms outside movable layouts; media, real-device touch, fold-pane, and rotation interruption evidence remain missing.",
+      "requiredOwner": "reader control dock motion"
+    },
+    {
+      "family": "reader.session.capsule",
+      "source": "data-reader-immersive-status, data-reader-tts-action, data-reader-setting-toggle=autoPage",
+      "currentState": "TTS and auto-page session start transactions now drive a first-pass immersive capsule adapter with data-motion-session-capsule-* states, enter/update/switch/exit IDs, local countdown tick scheduling, control button press/toggle state, and TTS voice active pulse; media, stop/exit interruption, reduced-motion capture, and matched morph proof remain missing.",
+      "requiredOwner": "reader session motion"
+    },
+    {
+      "family": "reader.session.controlSpace",
+      "source": "data-reader-control-space, data-reader-control-space-control, data-reader-control-space-countdown, data-reader-control-space-voice",
+      "currentState": "Reader control layer now exposes a first-pass running space for active TTS/auto-page sessions with data-motion-control-space-* states, enter/update/exit IDs, countdown/voice/control subroles, continued auto-page tick scheduling, and reduced-motion token fallback; matched capsule-to-space media evidence and stop/exit interruption proof remain missing.",
+      "requiredOwner": "reader session motion"
+    },
+    {
+      "family": "motion.interrupt",
+      "source": "startMotionInterrupt, route/Tab/viewport/loading/dock drag/pointer cancel entrypoints, data-motion-interrupt-*",
+      "currentState": "Interrupt now exposes a first-pass adapter for cancel, redirect, and completeThenReplace with root/screen-host state, transient pressed/drag/dropdown cleanup, tokenized interrupt settle CSS, and coverage gate; overlay close, dropdown A-to-B, async result priority, focus restore, and media evidence remain missing.",
+      "requiredOwner": "motion interrupt reducer"
+    },
+    {
+      "family": "viewport",
+      "source": "data-orientation, data-viewport-class, resize listeners, data-motion-orientation-*",
+      "currentState": "Viewport/orientation now exposes a first-pass prepare/reshape/settle adapter with root and screen-host data-motion-orientation-* state, route/session/overlay/focus/dock metadata, tokenized reshape/anchor-settle CSS, reduced-motion immediate settle, dropdown reanchor, and wide dock clamp; real rotation media, fold posture, text-anchor repagination, overlay/focus automation, and platform-device proof remain missing.",
+      "requiredOwner": "viewport motion controller"
+    }
+  ]
+}

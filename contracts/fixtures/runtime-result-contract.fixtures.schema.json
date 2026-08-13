@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/fixtures/runtime-result-contract.fixtures.schema.json",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": ["id", "event", "effectType", "valid", "result"],
+    "properties": {
+      "id": { "type": "string", "minLength": 1 },
+      "event": { "type": "string", "minLength": 1 },
+      "effectType": { "type": "string", "minLength": 1 },
+      "valid": { "type": "boolean" },
+      "result": { "type": "object" }
+    }
+  }
+}

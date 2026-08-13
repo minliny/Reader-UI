@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 1,
+  "capturedOn": "2026-07-19",
+  "routeId": "settings-general",
+  "url": "http://127.0.0.1:5177/frontend-demo-optimized/?captureRoute=settings-general&captureChrome=0&motionReduced=1",
+  "renderer": {
+    "active": "globalSettingsV2",
+    "module": "frontend-demo-optimized/renderers/d2-settings-sync-renderers.js",
+    "legacyFallback": "settingsScreen",
+    "legacyFallbackReached": false
+  },
+  "viewports": [
+    {
+      "id": "phone",
+      "productCanvas": { "width": 390, "height": 844 },
+      "mainSurface": { "width": 390, "x": 0 },
+      "evidence": "browser-settings-general-phone.png"
+    },
+    {
+      "id": "compact",
+      "productCanvas": { "width": 844, "height": 390 },
+      "mainSurface": { "width": 390, "height": 390, "x": 227 },
+      "evidence": "browser-settings-general-compact.png"
+    },
+    {
+      "id": "tablet",
+      "productCanvas": { "width": 760, "height": 960 },
+      "mainSurface": { "width": 760, "height": 960, "x": 0, "y": 0 },
+      "evidence": "browser-settings-general-tablet.png"
+    }
+  ],
+  "domBoundsCaliber": {
+    "summary": "本 JSON 只证明 productCanvas 与 mainSurface 的视口外框；标题、区块、控件行、滚动范围等 DOM bounds 未采集，不能视为完整 DOM geometry。",
+    "availableBounds": [
+      { "scope": "viewport productCanvas", "fields": ["width", "height"], "coverage": "phone / compact / tablet 三档" },
+      { "scope": "viewport mainSurface", "fields": ["width", "height", "x"], "coverage": "phone / compact / tablet 三档；compact 含 390×390 居中 surface x=227" }
+    ],
+    "missingBounds": [
+      { "scope": "title / BackTopBar", "fields": ["x", "y", "width", "height"], "reason": "未记录 BackTopBar(title=通用设置) 的 DOM bounding rect" },
+      { "scope": "section header (基础偏好 / 行为与反馈 / 系统权限)", "fields": ["x", "y", "width", "height"], "reason": "未记录三段 section header 的位置" },
+      { "scope": "setting row", "fields": ["x", "y", "width", "height"], "reason": "controlObservations 只记录 tag / role / class / result，未记录每行 bounding rect" },
+      { "scope": "control inner switch / icon / value", "fields": ["x", "y", "width", "height"], "reason": "Settings/Switch 44×24 / thumb 20×20 / 状态点 24×18×7 等 Figma 几何未与 DOM 实测对齐" },
+      { "scope": "scroll range", "fields": ["scrollHeight", "clientHeight", "scrollTop", "scrollRange"], "reason": "未记录可滚动容器的滚动范围" },
+      { "scope": "safe area / tab bar", "fields": ["top", "bottom", "left", "right"], "reason": "未记录安全区域或底部 Tab 高度对内容区的影响" },
+      { "scope": "focus ring / hit target", "fields": ["x", "y", "width", "height"], "reason": "未记录 focus-visible 或 hit target 的 bounding rect" }
+    ],
+    "nonGoals": [
+      "本字段不主张完整 DOM geometry；任何引用本 JSON 不能写成“DOM bounds 已完整”。",
+      "若后续需要完整 DOM geometry，必须重新采集并写入新的 evidence 字段，不在此 JSON 内反向补全。"
+    ]
+  },
+  "controlObservations": [
+    {
+      "label": "App主题",
+      "tag": "ARTICLE",
+      "role": "group",
+      "class": "fd-setting-row is-segment",
+      "dataSettingsOptionKey": null,
+      "result": "click-no-visible-or-dom-state-change"
+    },
+    {
+      "label": "自动检查更新",
+      "tag": "ARTICLE",
+      "role": "group",
+      "class": "fd-setting-row is-switch",
+      "nestedSwitchRole": null,
+      "nestedAriaChecked": null,
+      "nestedVisual": "span.fd-settings-switch.is-on[aria-hidden=true]",
+      "result": "click-inner-html-and-class-unchanged"
+    },
+    {
+      "label": "语言 / 启动时打开 / 动画效果",
+      "tag": "ARTICLE",
+      "role": "group",
+      "dataSettingsOptionKey": null,
+      "result": "runtime-option-handler-has-no-target"
+    },
+    {
+      "label": "清理缓存",
+      "tag": "BUTTON",
+      "dataSettingsOverlay": "dialog:cache-clear",
+      "result": "click-accessible-dom-unchanged-no-visible-dialog-or-toast"
+    },
+    {
+      "label": "文件访问",
+      "tag": "ARTICLE",
+      "role": "button",
+      "dataSettingsOverlay": "dialog:file-access-permission",
+      "result": "click-accessible-dom-unchanged-no-visible-dialog"
+    },
+    {
+      "label": "恢复默认",
+      "tag": "BUTTON",
+      "dataSettingsOverlay": "dialog",
+      "result": "click-accessible-dom-unchanged-no-visible-confirmation"
+    }
+  ],
+  "missingStates": [
+    "preference-loading",
+    "preference-error",
+    "preference-disabled",
+    "persistence-success",
+    "persistence-rollback",
+    "cache-clear-confirm",
+    "cache-clear-busy",
+    "cache-clear-success",
+    "cache-clear-error",
+    "permission-pending",
+    "permission-system-return",
+    "permission-denied",
+    "permission-error",
+    "restore-default-confirm",
+    "restore-default-success",
+    "restore-default-error"
+  ],
+  "classification": "two-stage",
+  "nextOwner": "Reader-UI runtime before Figma VC1"
+}

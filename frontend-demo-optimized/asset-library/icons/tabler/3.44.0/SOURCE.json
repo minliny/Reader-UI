@@ -1,0 +1,12 @@
+{
+  "package": "@tabler/icons",
+  "version": "3.44.0",
+  "license": "MIT",
+  "homepage": "https://tabler.io/icons",
+  "repository": "https://github.com/tabler/tabler-icons",
+  "npmTarball": "https://registry.npmjs.org/@tabler/icons/-/icons-3.44.0.tgz",
+  "npmTarballSha256": "b76aeb9161e56e8ebf812c5e53dcd10ce169e6ef2dbe4dfb16d70ff75ce67e9a",
+  "licenseSha256": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db",
+  "outlineFiles": 110,
+  "filledFiles": 10
+}

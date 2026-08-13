@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DESIGN_DELTA",
+  "scope": "reader-runtime",
+  "status": "F2_USER_CONFIRMED",
+  "result": "NO_VISUAL_DELTA_CROSSWALK_ONLY",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "1023:17636",
+  "revision": "2378456732819418415",
+  "revisionTitle": "F2 · Reader Runtime · User Confirmed",
+  "revisionUrl": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378456732819418415",
+  "pilotRevision": "2378450136292145844",
+  "pilotRevisionTitle": "F2 · Reader Runtime · Crosswalk Only Pilot",
+  "confirmedAt": "2026-07-21T09:31:34+08:00",
+  "localImplementationCommit": "06fc096e1ad294b41b9b924354d72d2ce61640d0",
+  "handoffEvidenceCommit": "da4b3e9d562ba6caf7c0b182f568948de42a7eee",
+  "deltas": [
+    {
+      "target": "15 · Reader 2 frozen static source",
+      "nodeId": "1023:17636",
+      "oldValue": "Reader 2 static VC2/VC3 canonical source already frozen.",
+      "newValue": "No visual change. Added only a local 439-control crosswalk against existing canonical nodes, shared components with context, and explicit state evidence."
+    },
+    {
+      "target": "Page 23 Reader downstream evidence",
+      "nodeIds": [
+        "943:6848",
+        "943:8028",
+        "1995:59529",
+        "1995:59835"
+      ],
+      "oldValue": "Control Home inherits Reader 2; Quick/Module/Full retain 11 Page24 historical-flat sets.",
+      "newValue": "Unchanged and explicitly documented. No instance was repointed, detached, promoted, deleted, or rebuilt."
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "/tmp/reader-runtime-f0-phone.png",
+      "size": "390x844",
+      "sha256": "62019ab1edd5f523335a4b8dee3288e75d28f3711e0b97e673433d001b250ee1"
+    },
+    {
+      "path": "/tmp/reader-runtime-f0-tablet.png",
+      "size": "760x960",
+      "sha256": "1b60adb5a2332e9984bc37e18dfba2985095a43d098234282e731ad2a5ec8bb8"
+    },
+    {
+      "path": "/tmp/reader-runtime-f0-states.png",
+      "size": "1641x2400",
+      "sha256": "a8882c897635caabc2addfbb82cab7d9d43f9ee2f0a9bf4ae10570476de66174"
+    }
+  ],
+  "boundaries": {
+    "reader2StaticModified": false,
+    "page24Modified": false,
+    "motionReferenceModified": false,
+    "uiEventModified": false,
+    "stateOwnerModified": false,
+    "reactionsModified": false
+  },
+  "admission": {
+    "connectorWriteTransactionComplete": true,
+    "namedRevisionComplete": true,
+    "crosswalkComplete": true,
+    "bindingCount": 439,
+    "userConfirmed": true,
+    "f2Exit": true,
+    "nextFigmaWriterReleased": true,
+    "nextLocalLane": "source-switch",
+    "nextLocalLaneReleased": true,
+    "nextFigmaWriterGate": null,
+    "remainingGates": []
+  }
+}
