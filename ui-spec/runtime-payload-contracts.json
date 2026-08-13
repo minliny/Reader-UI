@@ -1,7 +1,9 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "sourceOfTruth": {
     "repository": "Reader-Core-Native",
+    "commit": "7a0718a4fb083a2cadfba061536ab82edb49d614",
+    "tree": "8dd15df38c0d5931b2681e0d7792193574f5522c",
     "sources": [
       {
         "path": "crates/reader-contract/src/reader_ui.rs",
@@ -2415,14 +2417,76 @@
           "additionalProperties": false,
           "required": [
             "canonicalLocation",
-            "pageIndex"
+            "resolverVersion",
+            "resolved",
+            "reflow"
           ],
           "properties": {
             "canonicalLocation": {
-              "$ref": "#/definitions/nonBlankString"
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "bookId",
+                "chapterIndex",
+                "chapterOffset",
+                "chapterProgress",
+                "locationRevision"
+              ],
+              "properties": {
+                "bookId": {
+                  "$ref": "#/definitions/nonBlankString"
+                },
+                "chapterIndex": {
+                  "$ref": "#/definitions/u32"
+                },
+                "chapterOffset": {
+                  "$ref": "#/definitions/nonNegativeInteger"
+                },
+                "chapterProgress": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "locationRevision": {
+                  "$ref": "#/definitions/nonBlankString"
+                }
+              }
             },
-            "pageIndex": {
-              "$ref": "#/definitions/nonNegativeInteger"
+            "resolverVersion": {
+              "type": "string",
+              "const": "reader.location.resolve.v1.reflow"
+            },
+            "resolved": {
+              "type": "boolean",
+              "const": true
+            },
+            "reflow": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "strategy",
+                "primaryAnchor",
+                "fallbackAnchor",
+                "layoutIndependent"
+              ],
+              "properties": {
+                "strategy": {
+                  "type": "string",
+                  "const": "offsetAnchor"
+                },
+                "primaryAnchor": {
+                  "type": "string",
+                  "const": "chapterOffset"
+                },
+                "fallbackAnchor": {
+                  "type": "string",
+                  "const": "chapterProgress"
+                },
+                "layoutIndependent": {
+                  "type": "boolean",
+                  "const": true
+                }
+              }
             }
           }
         },

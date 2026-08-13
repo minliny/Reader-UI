@@ -11,18 +11,22 @@
     "hostRequestSchemaVersion",
     "runtimeActionsSchemaVersion",
     "runtimeActionsSha256",
+    "runtimePayloadContractsSchemaVersion",
+    "runtimePayloadContractsSha256",
     "releaseIdentity",
     "rollout",
     "knownDifferences",
     "blockedProof"
   ],
   "properties": {
-    "schemaVersion": { "const": 2 },
+    "schemaVersion": { "const": 3 },
     "host": { "type": "string", "enum": ["ios", "android", "harmonyos"] },
     "readerUiVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
     "hostRequestSchemaVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
     "runtimeActionsSchemaVersion": { "type": "integer", "minimum": 1 },
     "runtimeActionsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "runtimePayloadContractsSchemaVersion": { "type": "integer", "minimum": 1 },
+    "runtimePayloadContractsSha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
     "releaseIdentity": {
       "type": "object",
       "additionalProperties": false,

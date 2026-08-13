@@ -1,0 +1,77 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_VISUAL_ADMISSION_DEPENDENCIES",
+  "sourceAuthorities": [
+    {
+      "recordId": "reader.reading-surface",
+      "runtimeContract": {
+        "inputs": [
+          "tools/runtime/generate-runtime.mjs",
+          "tools/runtime/check-runtime-payload-source.mjs",
+          "ui-spec/runtime-actions.json",
+          "ui-spec/runtime-payload-contracts.json",
+          "contracts/fixtures/runtime-payload-contract.fixtures.json",
+          "contracts/fixtures/runtime-result-contract.fixtures.json"
+        ],
+        "generatedOutputs": [
+          "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeActions.swift",
+          "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeActions.kt",
+          "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeActions.ets",
+          "packages/reference/generated-runtime-payload-contracts.mjs",
+          "packages/swift/ReaderUIRuntime/Sources/ReaderUIRuntime/GeneratedRuntimeTypedPayloadContracts.swift",
+          "packages/kotlin/reader-ui-runtime/src/main/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadContracts.kt",
+          "packages/arkts/reader-ui-runtime/src/main/ets/GeneratedRuntimeTypedPayloadContracts.ets",
+          "packages/swift/ReaderUIRuntime/Tests/ReaderUIRuntimeTests/GeneratedRuntimeTypedPayloadFixtures.swift",
+          "packages/kotlin/reader-ui-runtime/src/test/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedPayloadFixtures.kt",
+          "packages/arkts/reader-ui-runtime/src/test/GeneratedRuntimeTypedPayloadFixtures.ets",
+          "packages/swift/ReaderUIRuntime/Tests/ReaderUIRuntimeTests/GeneratedRuntimeTypedResultFixtures.swift",
+          "packages/kotlin/reader-ui-runtime/src/test/kotlin/io/reader/ui/runtime/GeneratedRuntimeTypedResultFixtures.kt",
+          "packages/arkts/reader-ui-runtime/src/test/GeneratedRuntimeTypedResultFixtures.ets"
+        ],
+        "externalSourceRepository": "Reader-Core-Native",
+        "externalSourceCommit": "7a0718a4fb083a2cadfba061536ab82edb49d614",
+        "externalSourceTree": "8dd15df38c0d5931b2681e0d7792193574f5522c",
+        "externalSources": [
+          {
+            "path": "crates/reader-contract/src/reader_ui.rs",
+            "sha256": "ce2b50a3ffc13ccd8c34f371ab33b1f8c4805ace9246dec8c8eca32856a3eed2"
+          },
+          {
+            "path": "crates/reader-contract/src/remote.rs",
+            "sha256": "42d01314b7054b67340d0f47548cd7c3f77cd269a7f7570e7fb719459c54aa9b"
+          },
+          {
+            "path": "crates/reader-sync/src/lib.rs",
+            "sha256": "5496b4af978dfa18e619d949a5797d9155a3945380118e9e6ddc5818b59708d8"
+          },
+          {
+            "path": "crates/reader-storage/src/lib.rs",
+            "sha256": "1c2fd79a3a5f14a29ef22e7d93e76c0306c462a214146e530be8be7db5d37063"
+          }
+        ],
+        "prePromotionChecks": [
+          "node tools/runtime/check-runtime-payload-source.mjs",
+          "node tools/runtime/generate-runtime.mjs --check"
+        ]
+      }
+    }
+  ],
+  "dependencies": [
+    {
+      "recordId": "source-switch.window",
+      "requires": [
+        {
+          "recordId": "reader.reading-surface",
+          "localStatus": "implementation-ready",
+          "harmonyStatus": "implementation-ready"
+        },
+        {
+          "recordId": "reader.control-home",
+          "localStatus": "implementation-ready",
+          "harmonyStatus": "implementation-ready"
+        }
+      ],
+      "reason": "SourceSwitchFlowPage directly composes ReaderControlSheet. The Source Switch page family cannot be exposed until both the canonical reading surface and the reader control-home composition are admitted by HarmonyOS."
+    }
+  ]
+}

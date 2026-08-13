@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "io.reader.ui"
-version = "3.1.1"
+version = "4.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
