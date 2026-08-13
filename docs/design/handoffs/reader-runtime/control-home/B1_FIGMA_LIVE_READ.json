@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_LIVE_READ_RECEIPT",
+  "phase": "B1",
+  "recordId": "reader.control-home",
+  "observedAt": "2026-07-30T08:10:13Z",
+  "source": "figma-connector/get_design_context",
+  "readOnly": true,
+  "mutationPerformed": false,
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageId": "1023:17636",
+  "canonicalMasterId": "1023:18737",
+  "resolvedNodes": [
+    {
+      "nodeId": "1023:18737",
+      "viewport": "phone",
+      "viewportSize": "390x844",
+      "assembly": [
+        "TopBar",
+        "ControlDock",
+        "ControlSheet",
+        "ModuleNav",
+        "QuickActionPanel",
+        "ChapterProgress",
+        "BrightnessRail"
+      ]
+    },
+    {
+      "nodeId": "1023:18745",
+      "viewport": "tablet",
+      "viewportSize": "760x960",
+      "assembly": [
+        "TopBar",
+        "ControlDock",
+        "ControlSheet",
+        "ModuleNav",
+        "QuickActionPanel",
+        "ChapterProgress",
+        "BrightnessRail"
+      ]
+    }
+  ],
+  "canonicalComponentNodes": {
+    "topBar": "1023:18380",
+    "controlSheet": "1023:18713",
+    "controlDock": "1023:18726",
+    "quickActionPanel": "1023:18552",
+    "chapterProgress": "1023:18565",
+    "brightnessRail": "1023:18605",
+    "moduleNav": "1023:18627",
+    "phoneControlSheet": "1023:18714",
+    "tabletControlSheet": "1023:18722"
+  },
+  "observations": {
+    "phonePlacement": "bottom-dock",
+    "tabletPlacement": "right-bottom-dock",
+    "moduleCount": 4,
+    "brightnessRail": "sun + vertical track + auto A button",
+    "iconSource": "Tabler Icons 3.44.0",
+    "componentInstancesPreserved": true,
+    "reactionsPreserved": true
+  },
+  "revision": {
+    "numericRevisionExposedByConnector": false,
+    "registeredOfficialRevision": "2379851596474967636",
+    "officialRevisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+    "noFabricatedRevision": true
+  }
+}

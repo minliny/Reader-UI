@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1180, initial-scale=1">
+  <title>共享 Shell Kit（Shared Shell Kit）</title>
+  <link rel="stylesheet" href="./kit.css">
+  <link rel="stylesheet" href="./preview.css">
+</head>
+<body>
+  <div id="shared-shell-kit-preview"></div>
+  <script src="../asset-library/icons.js"></script>
+  <script src="./kit.js"></script>
+  <script src="./fixture.js"></script>
+  <script src="./preview-render.js"></script>
+  <script>
+    window.ReaderSharedShellKitPreview.render(
+      document.getElementById("shared-shell-kit-preview"),
+      window.READER_SHARED_SHELL_KIT_FIXTURE
+    );
+  </script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="zh-CN" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>阅读 - 书架 (更多菜单)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-tint": "#39637b", "on-secondary-container": "#79503c", "on-primary-fixed-variant": "#1e4b62", surface: "#fff8f4", secondary: "#7f5441", "on-tertiary-container": "#f7fff2", "on-surface-variant": "#41484c", primary: "#366179", "surface-container-highest": "#eae1da", "primary-fixed": "#c4e7ff", "primary-fixed-dim": "#a1cce8", "secondary-fixed-dim": "#f2baa2", "inverse-on-surface": "#f8efe8", "primary-container": "#507a92", tertiary: "#436443", "on-primary-fixed": "#001e2c", "surface-variant": "#eae1da", "on-background": "#1f1b17", "outline-variant": "#c1c7cd", "on-primary": "#ffffff", "on-tertiary-fixed": "#022108", "inverse-surface": "#34302b", "on-primary-container": "#fcfcff", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "on-surface": "#1f1b17", "on-tertiary-fixed-variant": "#2e4e30", "surface-container-high": "#efe7e0", error: "#ba1a1a", "on-secondary-fixed-variant": "#643d2b", "error-container": "#ffdad6", "on-secondary-fixed": "#301305", "tertiary-fixed-dim": "#abd0a8", "surface-container-low": "#fbf2eb", "surface-container": "#f5ece6", "inverse-primary": "#a1cce8", outline: "#72787d", "secondary-container": "#fec5ad", "tertiary-fixed": "#c7ecc3", "secondary-fixed": "#ffdbcc", "surface-dim": "#e1d8d2", "surface-bright": "#fff8f4", "tertiary-container": "#5b7d5a", background: "#fff8f4", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "on-error": "#ffffff"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {base: "4px", lg: "48px", "max-content-width": "720px", xl: "80px", md: "24px", sm: "12px", gutter: "24px", xs: "8px", "touch-target": "48px", "sidebar-width": "320px"}, fontFamily: {"body-md": ["Inter"], "headline-lg-mobile": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-md": ["Inter"]}, fontSize: {"body-md": ["16px", {lineHeight: "26px", fontWeight: "400"}], "headline-lg-mobile": ["28px", {lineHeight: "36px", fontWeight: "600"}], "display-lg": ["40px", {lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700"}], "body-lg": ["18px", {lineHeight: "30px", fontWeight: "400"}], "headline-md": ["24px", {lineHeight: "32px", fontWeight: "600"}], "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600"}], "label-md": ["14px", {lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "500"}]}}}};</script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased overflow-hidden">
+<!-- Faded Background Content -->
+<div class="relative w-full min-h-screen max-w-max-content-width mx-auto bg-surface flex flex-col opacity-30 filter blur-[2px] pointer-events-none">
+<!-- TopAppBar (Background) -->
+<header class="sticky top-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-surface shadow-sm">
+<button aria-label="Menu" class="text-on-surface-variant p-2 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-md text-headline-md font-semibold text-primary">阅读</h1>
+<button aria-label="Search" class="text-on-surface-variant p-2 flex items-center justify-center rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">search</span>
+</button>
+</header>
+<!-- Main Content Area (Background) -->
+<main class="flex-1 w-full px-4 py-6 overflow-y-auto">
+<div class="grid grid-cols-3 md:grid-cols-4 gap-4">
+<!-- Book Covers Dummy Data -->
+<div class="flex flex-col gap-2">
+<div class="aspect-[2/3] w-full bg-surface-container-high rounded-md shadow-sm"></div>
+<div class="h-4 w-3/4 bg-surface-container-high rounded mt-1"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="aspect-[2/3] w-full bg-surface-container-high rounded-md shadow-sm"></div>
+<div class="h-4 w-5/6 bg-surface-container-high rounded mt-1"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="aspect-[2/3] w-full bg-surface-container-high rounded-md shadow-sm"></div>
+<div class="h-4 w-2/3 bg-surface-container-high rounded mt-1"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="aspect-[2/3] w-full bg-surface-container-high rounded-md shadow-sm"></div>
+<div class="h-4 w-full bg-surface-container-high rounded mt-1"></div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Background) -->
+<nav class="fixed bottom-0 w-full max-w-max-content-width flex justify-around items-center px-4 py-2 bg-surface shadow-[0_-4px_16px_rgba(27,28,28,0.06)] md:hidden">
+<button aria-label="书架" class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-3 py-1 scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: &quot;FILL&quot; 1;">auto_stories</span>
+<span class="font-label-md text-label-md mt-1">书架</span>
+</button>
+<button aria-label="发现" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-md text-label-md mt-1">发现</span>
+</button>
+<button aria-label="RSS" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">rss_feed</span>
+<span class="font-label-md text-label-md mt-1">RSS</span>
+</button>
+<button aria-label="设置" class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md mt-1">设置</span>
+</button>
+</nav>
+</div>
+<!-- Overlay / Bottom Sheet -->
+<div class="fixed inset-0 z-50 flex items-end justify-center bg-on-background/20 backdrop-blur-sm sm:items-center">
+<!-- Sheet Container -->
+<div class="w-full max-w-md bg-surface-container-lowest rounded-t-[28px] sm:rounded-[28px] shadow-lg flex flex-col max-h-[90dvh] overflow-hidden transform transition-transform translate-y-0">
+<!-- Handle for mobile -->
+<div class="w-full flex justify-center pt-3 pb-1 sm:hidden">
+<div class="w-8 h-1.5 bg-outline-variant/60 rounded-full"></div>
+</div>
+<!-- Header -->
+<div class="px-6 py-4 flex items-center justify-between border-b border-surface-container-highest">
+<h2 class="font-headline-md text-headline-md text-on-surface">更多</h2>
+<button aria-label="Close menu" class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Menu List -->
+<div class="flex-1 overflow-y-auto py-4 px-4">
+<ul class="flex flex-col space-y-1">
+<!-- Group 1: General Actions -->
+<li>
+<button class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-surface-container-low transition-colors text-left text-on-surface active:bg-primary-container/10">
+<span class="material-symbols-outlined text-on-surface-variant">refresh</span>
+<span class="font-body-lg text-body-lg">刷新目录</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-surface-container-low transition-colors text-left text-on-surface active:bg-primary-container/10">
+<span class="material-symbols-outlined text-on-surface-variant">grid_view</span>
+<span class="font-body-lg text-body-lg">书架布局与排序</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-surface-container-low transition-colors text-left text-on-surface active:bg-primary-container/10">
+<span class="material-symbols-outlined text-on-surface-variant">folder_managed</span>
+<span class="font-body-lg text-body-lg">分组管理</span>
+</button>
+</li>
+<!-- Separator -->
+<li class="my-2 px-4">
+<div class="border-t border-surface-container-highest w-full"></div>
+</li>
+<!-- Group 2: Library Management -->
+<li>
+<button class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-surface-container-low transition-colors text-left text-on-surface active:bg-primary-container/10">
+<span class="material-symbols-outlined text-on-surface-variant">file_upload</span>
+<span class="font-body-lg text-body-lg">导入本地书</span>
+</button>
+</li>
+<li>
+<button class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-surface-container-low transition-colors text-left text-on-surface active:bg-primary-container/10">
+<span class="material-symbols-outlined text-on-surface-variant">cloud_download</span>
+<span class="font-body-lg text-body-lg">下载 / 缓存</span>
+</button>
+</li>
+<!-- Separator -->
+<li class="my-2 px-4">
+<div class="border-t border-surface-container-highest w-full"></div>
+</li>
+<!-- Group 3: System/Info -->
+<li>
+<button class="w-full flex items-center gap-4 px-4 py-3.5 rounded-xl hover:bg-surface-container-low transition-colors text-left text-on-surface active:bg-primary-container/10">
+<span class="material-symbols-outlined text-on-surface-variant">history_edu</span>
+<span class="font-body-lg text-body-lg">日志</span>
+</button>
+</li>
+</ul>
+</div>
+<!-- Extra space for bottom safe area on mobile if needed -->
+<div class="h-4 sm:hidden"></div>
+</div>
+</div>
+</body></html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=835, initial-scale=1">
+  <title>缓存管理前端输入件</title>
+  <link rel="stylesheet" href="./components.css">
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../../shared-settings-kit/kit.js"></script>
+  <script src="./fixture.js"></script>
+  <script src="./render.js"></script>
+  <script>
+    window.CacheManagementInput.renderCacheManagement(
+      document.getElementById("app"),
+      window.CACHE_MANAGEMENT_FIXTURE
+    );
+  </script>
+</body>
+</html>

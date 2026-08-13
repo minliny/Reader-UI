@@ -1,0 +1,456 @@
+[
+  {
+    "routeId": "local-import",
+    "workflow": "W1-import",
+    "renderer": "localImportScreen",
+    "rendererLine": "2406",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少权限拒绝页面：未演示存储权限被拒后的兜底（去设置开启/退出导入）",
+      "缺少文件格式不支持状态的独立处理：仅在静态 imports 数组中标注'格式不支持 · 可移除后重选'，无独立状态页和重选交互",
+      "缺少空文件状态：未演示选中文件解析后内容为空的提示与重选",
+      "缺少解析中 loading 状态：仅有一个静态'72%'示例条目，无全屏解析中骨架/进度",
+      "缺少重复项独立处理页：导入设置区只写'保留原书，仅导入新文件'，无重复项列表与逐项决策",
+      "缺少冲突选择页：未演示本地与库内同名书籍的冲突解决（覆盖/跳过/保留两份）",
+      "缺少选择导入范围交互：待导入文件列表只读，无勾选/反选/全选",
+      "缺少部分成功状态：完成导入直接 data-route-back，无'3 成功 1 失败'的中间结果页",
+      "缺少可重试失败状态：失败条目无重试按钮",
+      "缺少导入结果详情页：无成功/失败/跳过明细列表",
+      "缺少返回目标列表并刷新的演示：完成导入直接返回，无书架刷新动效/Toast",
+      "数据为静态硬编码 imports 数组，无 appState 持久化，重启后导入历史丢失"
+    ]
+  },
+  {
+    "routeId": "source-import-options",
+    "workflow": "W1-import",
+    "renderer": "sourceImportOptionsScreen",
+    "rendererLine": "6027",
+    "classification": "real-product",
+    "workflowGaps": [
+      "仅是入口 bottom sheet，缺少完整动作流：解析中→预览→重复项和冲突处理→选择导入范围→应用→部分成功/全部成功/失败→返回刷新",
+      "缺少权限拒绝页面：本地导入选项未演示存储权限被拒兜底",
+      "缺少 URL 输入与校验交互：网络导入直接跳 source-import-preview，无 URL 输入框/格式校验/无效 URL 提示",
+      "缺少剪贴板内容校验：剪贴板导入直接跳预览，无空剪贴板/格式不支持/非书源 JSON 的提示",
+      "缺少解析中 loading 状态：选完导入方式后无解析进度",
+      "缺少文件格式不支持状态：本地导入未演示非 JSON/TXT 文件的拒绝",
+      "sheet 取消后无 Toast 反馈，无法区分'已取消'与'导入失败'"
+    ]
+  },
+  {
+    "routeId": "source-import-preview",
+    "workflow": "W1-import",
+    "renderer": "sourceImportPreviewScreen",
+    "rendererLine": "6045",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少解析中 loading 状态：进入预览页直接展示静态列表，无骨架/进度",
+      "缺少冲突处理的逐项选择：冲突处理只有全局 segment（跳过重复/覆盖旧源/保留两份），无逐条冲突的保留/覆盖/跳过决策",
+      "缺少导入范围选择：预览列表只读，无全选/反选/按状态（新增/重复/异常）筛选",
+      "缺少部分成功状态：确认导入直接跳 source-management，无'18 成功 4 跳过 2 异常'的中间结果页",
+      "缺少可重试失败状态：异常条目（失效示例源）无重试或查看错误入口",
+      "缺少导入结果详情页：无成功/失败/跳过明细列表",
+      "缺少返回书源管理列表并刷新的演示：确认导入直接跳转，无刷新动效",
+      "数据为静态硬编码 rows 数组（7 条固定示例），无 appState 持久化"
+    ]
+  },
+  {
+    "routeId": "rss-source-import",
+    "workflow": "W1-import",
+    "renderer": "rssSourceImportScreen",
+    "rendererLine": "1705",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少权限拒绝页面：剪贴板/本地导入变体未演示权限被拒兜底",
+      "缺少文件格式不支持状态：URL 输入为静态 label，无格式校验/非 JSON 提示",
+      "缺少空文件状态：未演示解析后内容为空的提示",
+      "缺少解析中 loading 状态：直接展示预览列表，无骨架/进度",
+      "缺少重复项独立处理：预览列表只展示 checked 状态，无逐项重复决策",
+      "缺少冲突选择：导入选项只有全局'保留名称/保留分组/保留启用状态'，无逐条冲突解决",
+      "缺少选择导入范围交互：列表项点击只跳详情页，无勾选/反选",
+      "缺少部分成功状态：导入 N 个直接跳 rss-source-import-result，无部分成功中间页",
+      "缺少可重试失败状态：无失败项重试入口",
+      "缺少导入结果详情：跳 rssConfirmScreen 通用确认页，无明细",
+      "URL 输入为静态 label（https://example.com/rss-source.json），无真实输入与校验"
+    ]
+  },
+  {
+    "routeId": "rss-source-import-detail",
+    "workflow": "W1-import",
+    "renderer": "rssSourceImportDetailScreen",
+    "rendererLine": "1728",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少逐项冲突解决交互：冲突处理只展示文字摘要'保留本地名称和分组，覆盖规则、请求头和分类入口'，无保留/覆盖/跳过三选一按钮",
+      "缺少规则差异 diff 展示：只有文字摘要'正文规则从 content:encoded 改为 article.content'，无字段级 diff",
+      "缺少原文 vs 新规则效果对比预览：无正文解析效果对比",
+      "缺少登录态导入选项：只警告'不导入 Cookie'，无'导入后重新授权'入口",
+      "缺少版本差异明细：只写'规则版本更高'，无版本号对比",
+      "数据为静态硬编码（书源维护公告固定文案），无 appState 持久化"
+    ]
+  },
+  {
+    "routeId": "rss-source-import-result",
+    "workflow": "W1-import",
+    "renderer": "rssConfirmScreen",
+    "rendererLine": "8431",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "共享 rssConfirmScreen 通用确认屏，无专用导入结果 UI",
+      "缺少成功/失败/跳过计数：只写'已导入 2 个订阅源'，无分项统计",
+      "缺少失败项重试入口：无失败列表与重试按钮",
+      "缺少部分成功状态区分：无法区分全部成功/部分成功/全部失败",
+      "缺少导入结果详情页：无逐条结果明细",
+      "缺少返回订阅管理列表并刷新的演示：确认后跳 rss-subscription-management，无刷新动效/Toast"
+    ]
+  },
+  {
+    "routeId": "immersive-reading",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少搜索/书架/详情/目录不同入口的上下文差异：所有入口共用同一 data.reader，无'从书架进入 vs 从搜索进入 vs 从详情进入'的上下文区分",
+      "缺少本地书与网络书入口差异：未演示本地 epub 与网络连载书的渲染/缓存/书源差异",
+      "缺少 TOC/content 加载中状态：sharedReaderSurface 直接渲染正文，无骨架/加载",
+      "缺少 TOC/content 离线状态：无离线提示与重试",
+      "缺少 TOC/content 解析错误状态：无解析失败提示与重试",
+      "缺少翻页边界提示：首章/末章无'已是第一章/最后一章'视觉提示",
+      "缺少章节跳转动画/确认：点击搜索结果跳转无过渡动画",
+      "缺少阅读进度恢复演示：无冷启动后恢复到上次阅读位置的演示",
+      "文本选择工具栏存在但依赖 appState.readerTextSelectionOpen，无独立路由触发，复制/划线/笔记/搜索无真实交互闭环",
+      "缺少书签增删入口：沉浸层无书签按钮，需退出到 toc-bookmarks",
+      "缺少退出阅读后来源页面恢复：data-reader-exit 只返回，无来源页面（书架/搜索/详情）状态恢复演示",
+      "缺少旋转/resize 后字符锚点重分页演示：data-reader-pagination 有 signature 但无旋转重分页动效",
+      "缺少后台恢复演示：无从后台返回后恢复阅读位置/重载正文的演示"
+    ]
+  },
+  {
+    "routeId": "reader",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 immersive-reading 共享 readerStateScreen，通过 readerStateByRoute.reader={mode:'control'} 区分控制层模式",
+      "缺少搜索/书架/详情/目录入口的上下文差异：共用同一 data.reader",
+      "缺少本地书与网络书入口差异",
+      "翻页边界 aria-disabled 已设置但缺少视觉提示（首章/末章灰色禁用样式未明确）",
+      "缺少章节跳转确认：上/下一章按钮直接跳转，无过渡动画",
+      "缺少阅读进度恢复演示：进度条 data-reader-chapter-progress 可调，但无冷启动恢复",
+      "缺少书签增删入口：需进 toc-bookmarks 或 reader-full-directory",
+      "缺少退出阅读后来源页面恢复：data-reader-exit 只返回",
+      "缺少旋转/resize 后字符锚点重分页演示",
+      "缺少后台恢复演示"
+    ]
+  },
+  {
+    "routeId": "reader_content",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 immersive-reading 共享 readerStateScreen，readerStateByRoute.reader_content={mode:'immersive'}，渲染结果与 immersive-reading 完全相同",
+      "应作为 immersive-reading 的别名或状态变体，不应独立路由",
+      "同 immersive-reading 的所有缺口：缺少入口上下文差异、本地/网络书差异、TOC loading/error/离线、翻页边界、章节跳转、进度恢复、文本选择工具栏闭环、书签增删、退出后来源恢复、旋转重分页、后台恢复"
+    ]
+  },
+  {
+    "routeId": "toc-bookmarks",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 immersive-reading 共享 readerStateScreen，通过 mode=module/module=directory 区分",
+      "缺少书签增删交互：chapterMarkerSlots 只展示已有标记，无添加/删除书签按钮",
+      "缺少 TOC 加载中状态：目录列表直接渲染，无骨架",
+      "缺少 TOC 离线状态：无离线提示",
+      "缺少 TOC 解析错误状态：无解析失败提示与重试",
+      "缺少章节跳转动画：data-reader-directory-index 点击后无过渡",
+      "缺少章节搜索：无搜索框筛选章节",
+      "目录列表只 slice(0,6) 展示前 6 个，缺少全文滚动加载",
+      "缺少书签编辑：无书签备注/跳转/删除操作"
+    ]
+  },
+  {
+    "routeId": "reader-full-directory",
+    "workflow": "W2-reading",
+    "renderer": "readerFullPageScreen",
+    "rendererLine": "4947",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "共享 readerFullPageScreen，通过 readerFullTypeByRoute 映射 type=directory 调用 readerFullDirectoryPage",
+      "缺少书签增删交互：chapterMarkerSlots 只展示标记，无添加/删除按钮",
+      "缺少 TOC 加载中状态：完整目录直接渲染，无骨架",
+      "缺少 TOC 离线状态：无离线提示",
+      "缺少 TOC 解析错误状态：无解析失败提示与重试",
+      "缺少章节搜索：无搜索框筛选章节",
+      "缺少章节跳转动画：data-reader-directory-index 点击后无过渡",
+      "缺少目录排序：无按章节号/按阅读进度/按书签排序切换"
+    ]
+  },
+  {
+    "routeId": "content-search",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 immersive-reading 共享 readerStateScreen，通过 mode=quick/quick=search 调用 readerQuickActionPanel('search')",
+      "缺少搜索加载中状态：直接展示静态 2 个结果，无骨架/进度",
+      "缺少搜索无结果状态：无空结果提示",
+      "缺少搜索错误状态：无搜索失败提示与重试",
+      "缺少搜索历史：无历史关键词/清空历史",
+      "缺少搜索范围切换：无当前章/全书/指定章节范围",
+      "缺少结果跳转后返回恢复搜索上下文：跳 immersive-reading 后返回无搜索状态保留",
+      "数据为静态硬编码 2 个结果（第 32 章雨夜/第 33 章灯塔），无真实搜索"
+    ]
+  },
+  {
+    "routeId": "reader-search-overlay-v2",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 content-search 共享 readerStateScreen，readerStateByRoute 映射同为 mode=quick/quick=search，渲染结果完全相同",
+      "应作为 content-search 的 overlay 变体，不应独立路由",
+      "同 content-search 的所有缺口：缺少搜索 loading/空结果/错误/历史/范围切换/返回恢复上下文"
+    ]
+  },
+  {
+    "routeId": "reader-book-cache",
+    "workflow": "W2-reading",
+    "renderer": "readerUtilityScreen",
+    "rendererLine": "4928",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少缓存加载中状态：缓存列表直接渲染，无骨架",
+      "缺少缓存失败状态：无下载失败提示与重试",
+      "缺少缓存进度：每个章节只有'已缓存/尚未缓存'二态，无下载百分比",
+      "缺少缓存大小限制警告：只展示 128 MB，无接近上限警告",
+      "缺少缓存清理确认：清理本书缓存按钮无确认弹窗",
+      "缺少离线缓存验证：无离线可用性检查",
+      "缓存动作按钮无 data-action 属性，无真实交互闭环"
+    ]
+  },
+  {
+    "routeId": "reader-debug-info",
+    "workflow": "W2-reading",
+    "renderer": "readerUtilityScreen",
+    "rendererLine": "4928",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 reader-book-cache 共享 readerUtilityScreen，通过 route 参数区分 isCache 分支",
+      "缺少实时调试信息更新：调试统计为静态快照，无实时刷新",
+      "缺少调试日志导出：导出阅读日志按钮无 data-action，无真实导出",
+      "缺少书源请求详情：只展示书源行，无请求/响应/耗时明细",
+      "缺少分页测量详情：只展示分页状态，无测量过程日志",
+      "调试动作按钮无 data-action 属性，无真实交互闭环"
+    ]
+  },
+  {
+    "routeId": "reader-night-state-v2",
+    "workflow": "W2-reading",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 reader-appearance 共享 readerStateScreen，readerStateByRoute 映射同为 mode=module/module=appearance，渲染结果与 reader-appearance 完全相同",
+      "应作为夜间状态变体，但未演示夜间模式专属设置（亮度/色温/对比度/背景遮罩）",
+      "缺少日间→夜间切换动画演示",
+      "缺少跟随系统切换演示（data-reader-theme-scheme 有但无系统切换触发）",
+      "缺少夜间阅读进度恢复演示"
+    ]
+  },
+  {
+    "routeId": "source-switch",
+    "workflow": "W3-source-switch",
+    "renderer": "flowScreen",
+    "rendererLine": "7989",
+    "classification": "real-product",
+    "workflowGaps": [
+      "缺少空结果状态：无候选书源为空时的提示与重试",
+      "缺少失败状态：加载候选失败无错误提示与重试",
+      "缺少超时状态：加载候选超时无超时提示",
+      "缺少连续选择不同书源的演示：选中一个候选后无法继续切换另一个进行对比",
+      "缺少请求过期结果不能覆盖当前选择的保护：无并发请求过期校验",
+      "缺少预览目录或最新章节：result 区只展示 selectedLatestLabel 单行，无完整目录/最新章节预览",
+      "缺少切换中 loading 状态：确认换源直接跳 reader，无切换中骨架/进度",
+      "缺少成功后重载章节和正文演示：跳 reader 后无章节/正文重载动效",
+      "缺少失败回滚旧书源演示：无切换失败后回滚确认",
+      "缺少手机 sheet/横屏分栏/平板 dock 三套几何：当前只有一套 FlowShell 三栏布局，无响应式几何切换",
+      "底部阅读控制仍可操作：step 区有 readerTopOverlay + readerBottomSheetHtml，但缺少'换源时控制层仍可操作'的交互演示（点击控制层是否被遮挡）",
+      "关闭窗口使用 data-route-replace，但缺少'关闭不污染返回栈'的明确演示与验证"
+    ]
+  },
+  {
+    "routeId": "source-switch-results",
+    "workflow": "W3-source-switch",
+    "renderer": "flowScreen",
+    "rendererLine": "8574",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 source-switch 共享 flowScreen，通过 withAppState 注入 sourceSwitchSelectedSource:'起点导入' 区分，无独立结果页 UI",
+      "缺少独立结果页：成功/失败/回滚共用换源窗口布局，无结果专属展示",
+      "缺少失败重试入口：无失败后重试按钮",
+      "缺少回滚旧书源确认：无回滚操作",
+      "缺少重载章节进度：无切换后章节重载进度演示",
+      "缺少切换成功 Toast/动效"
+    ]
+  },
+  {
+    "routeId": "reader-appearance",
+    "workflow": "W4-theme-font",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 immersive-reading 共享 readerStateScreen，通过 mode=module/module=appearance 调用 readerModulePanel('appearance')",
+      "缺少自定义字体管理入口：无跳转 reader-full-font 的按钮",
+      "缺少自定义主题 CRUD 入口：无跳转 reader-full-theme/reader-full-theme-edit 的按钮",
+      "缺少排版完整配置入口：quickTypographyPanelRows 只提供字号/行距等部分项，无跳转 reader-full-layout",
+      "缺少页面空间/边距配置：无边距/缩进调整",
+      "缺少页面纹理配置",
+      "缺少翻页方式配置入口",
+      "缺少持久化演示：主题/排版只存 appState，无重启恢复演示"
+    ]
+  },
+  {
+    "routeId": "reader-appearance-overlay-v2",
+    "workflow": "W4-theme-font",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "shared-screen",
+    "workflowGaps": [
+      "与 reader-appearance 共享 readerStateScreen，readerStateByRoute 映射同为 mode=module/module=appearance，渲染结果与 reader-appearance 完全相同",
+      "应作为 reader-appearance 的 overlay 变体，不应独立路由",
+      "同 reader-appearance 的所有缺口：缺少自定义字体管理入口、自定义主题 CRUD 入口、排版完整配置入口、页面空间/边距、页面纹理、翻页方式、持久化演示"
+    ]
+  },
+  {
+    "routeId": "reader-full-appearance",
+    "workflow": "W4-theme-font",
+    "renderer": "readerFullPageScreen",
+    "rendererLine": "4947",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "共享 readerFullPageScreen，通过 type=appearance 调用 readerFullAppearancePage，只有预设主题色块网格、排版行、页面空间行",
+      "缺少自定义字体管理入口：无跳转 reader-full-font 的按钮",
+      "缺少自定义主题 CRUD 入口：无跳转 reader-full-theme/reader-full-theme-edit 的按钮",
+      "缺少排版完整配置入口：typographyPanelRows 提供字号/行距/段距/字距，但无首行缩进/对齐方式",
+      "缺少页面纹理配置：readerPageSpaceRows 提供边距/缩进，但无纹理选择",
+      "缺少翻页方式配置入口：无跳转 reader-full-page-turn 的按钮",
+      "缺少持久化演示：readerTypography/readerPageSpace 只存 appState，无重启恢复演示",
+      "缺少恢复默认按钮"
+    ]
+  },
+  {
+    "routeId": "reader-full-font",
+    "workflow": "W4-theme-font",
+    "renderer": "readerFullPageScreen",
+    "rendererLine": "4947",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "共享 readerFullPageScreen，通过 route=reader-full-font 调用 readerFullFontPage",
+      "缺少字体列表管理：appState.readerImportedFonts 只用于追加 fontOptions，无已导入字体列表的独立管理区（重命名/删除/启用）",
+      "缺少文件校验：input accept='.ttf,.otf,.ttc' 但无格式/大小/损坏校验，readerFontImportStatus 为静态文本",
+      "缺少字体预览：字体族按钮只设置 font-family，无实际渲染效果预览区",
+      "缺少启用/禁用切换：字体族按钮只有 is-active，无启用/禁用开关",
+      "缺少重命名：已导入字体无重命名入口",
+      "缺少正在使用时删除确认：已导入字体无删除按钮",
+      "缺少字体失效回退演示：无字体加载失败后回退系统字体的演示",
+      "缺少系统字体/导入字体分类：fontOptions 直接 concat，无分类展示",
+      "持久化只在 appState.readerImportedFonts，无重启恢复演示，且静态提示'字体只保存在当前 demo 会话'"
+    ]
+  },
+  {
+    "routeId": "reader-full-theme",
+    "workflow": "W4-theme-font",
+    "renderer": "readerFullPageScreen",
+    "rendererLine": "4947",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "共享 readerFullPageScreen，通过 route=reader-full-theme 调用 readerFullThemePage",
+      "缺少新建主题入口：只有'编辑自定义主题'跳 reader-full-theme-edit，无'新建'独立入口",
+      "缺少复制主题：预设/自定义主题无复制按钮",
+      "缺少删除自定义主题：自定义主题列表无删除按钮",
+      "缺少恢复默认主题：无恢复系统预设按钮",
+      "缺少设默认演示：data-reader-theme-default 有'设为日间/夜间'按钮，但无设默认后的 Toast/确认",
+      "缺少日间夜间配对：默认日/夜主题展示为两个 article，但无配对切换演示",
+      "缺少实时预览：主题切换无实时应用到正文预览",
+      "持久化只在 appState.readerCustomThemes/readerDefaultDayTheme/readerDefaultNightTheme，无重启恢复演示"
+    ]
+  },
+  {
+    "routeId": "reader-full-theme-edit",
+    "workflow": "W4-theme-font",
+    "renderer": "readerFullPageScreen",
+    "rendererLine": "4947",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "共享 readerFullPageScreen，通过 route=reader-full-theme-edit 调用 readerFullThemeEditPage",
+      "缺少控制层颜色配置：只有背景色/文字色，无控制层（顶栏/底栏/按钮）颜色配置",
+      "缺少纹理透明度：有 backgroundOverlay 滑块（文字遮罩），但无独立纹理透明度配置",
+      "缺少日间夜间配对：scheme 只有'白天/夜间'单选，无日间夜间配对保存",
+      "缺少实时预览：无预览区，编辑后无法看到效果",
+      "缺少保存后设默认：保存按钮只 data-reader-theme-edit-save，无'保存并设为默认'选项",
+      "缺少删除/恢复：已保存自定义主题列表无删除/恢复入口",
+      "缺少名称重复校验：只有 error 展示位，无实时名称重复校验",
+      "缺少背景图片裁剪/缩放：input type=file 只接受图片，无裁剪/缩放处理",
+      "持久化只在 appState.readerThemeEditDraft/readerCustomThemes，无重启恢复演示"
+    ]
+  },
+  {
+    "routeId": "reader-full-layout",
+    "workflow": "W4-theme-font",
+    "renderer": "readerFullPageScreen",
+    "rendererLine": "4947",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "共享 readerFullPageScreen，通过 route=reader-full-layout 调用 readerFullLayoutPage",
+      "缺少字号/行距/段距/字距配置：只有页面空间和页面纹理，排版项需跳 reader-full-font 或 reader-full-appearance",
+      "缺少首行缩进：readerPageSpaceRows 无首行缩进调整",
+      "缺少对齐方式：无左对齐/两端对齐/居中选择",
+      "缺少字体选择：无字体族切换",
+      "缺少翻页方式：无翻页模式/动画配置",
+      "缺少恢复默认按钮：无恢复默认版式按钮",
+      "持久化只在 appState.readerPageSpace，无重启恢复演示"
+    ]
+  },
+  {
+    "routeId": "content-replacement",
+    "workflow": "W5-replace-rules",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "与 immersive-reading 共享 readerStateScreen，通过 mode=quick/quick=replace 调用 readerQuickActionPanel('replace')",
+      "缺少删除确认：data-reader-replace-rule-delete 直接删除，无确认弹窗",
+      "缺少排序：规则列表无拖拽/上移下移排序",
+      "缺少正则校验：input data-reader-replace-form-field='pattern' 无实时正则校验，只有 error 展示位",
+      "缺少原文/替换后预览：规则行只展示 pattern→replacement 文本，无原文对比预览区",
+      "缺少单书/全局作用范围：scope 只有 chapter/title/toc/bookmark（作用层级），无单书/全局作用范围切换",
+      "缺少导入/导出：无规则导入/导出入口",
+      "缺少应用到当前正文演示：无'应用到当前正文'按钮与效果展示",
+      "缺少错误与撤销：无应用失败提示与撤销操作",
+      "预设规则不可删除：只有 rule.custom 才显示删除按钮，4 个预设规则无删除入口",
+      "缺少规则排序优先级说明：多规则同时启用时的应用顺序未说明",
+      "持久化只在 appState.replaceRules/readerReplacementRules，无重启恢复演示"
+    ]
+  },
+  {
+    "routeId": "reader-replace-overlay-v2",
+    "workflow": "W5-replace-rules",
+    "renderer": "readerStateScreen",
+    "rendererLine": "4967",
+    "classification": "scaffold",
+    "workflowGaps": [
+      "与 content-replacement 共享 readerStateScreen，readerStateByRoute 映射同为 mode=quick/quick=replace，渲染结果与 content-replacement 完全相同",
+      "应作为 content-replacement 的 overlay 变体，不应独立路由",
+      "同 content-replacement 的所有缺口：缺少删除确认、排序、正则校验、原文/替换后预览、单书/全局作用范围、导入/导出、应用到当前正文、错误与撤销、预设规则不可删除、排序优先级说明、持久化演示"
+    ]
+  }
+]

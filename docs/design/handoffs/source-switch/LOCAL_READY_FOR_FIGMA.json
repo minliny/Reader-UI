@@ -1,0 +1,232 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Source Switch",
+  "pageFamily": "source-switch",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-21T10:08:05+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "baselineCommit": "da4b3e9d562ba6caf7c0b182f568948de42a7eee",
+    "implementationCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+    "implementationCommitSubject": "fix(source-switch): switch directly from candidate row",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): source-switch LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true
+  },
+  "globalAlignment": {
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true,
+      "independentLandscapeProhibited": true
+    },
+    "figmaRevisionPolicy": {
+      "revisionAtLocalPreparation": "2378474643910668834",
+      "reason": "Figma Desktop version history exposed the exact named corrective revision after the single-writer transaction.",
+      "freshRevisionRequiredBeforeWrite": false
+    }
+  },
+  "routeFamily": {
+    "primaryRoute": "source-switch",
+    "familyRouteCount": 8,
+    "familyRoutes": [
+      "source-switch",
+      "source-switch-results",
+      "source-switch-empty",
+      "source-switch-error",
+      "source-switch-timeout",
+      "source-switch-loading",
+      "source-switch-rollback",
+      "source-switch-preview"
+    ],
+    "uniqueProductionRenderer": "sourceSwitchV2(data, route, appState)",
+    "rendererFile": "frontend-demo-optimized/renderers/w3-source-switch-renderers.js",
+    "stateOwner": "ReaderW3SourceSwitchRenderers.sourceSwitch",
+    "dispatchPolicy": "All eight routes resolve through W3 INTEGRATION_MAP to sourceSwitchV2 before the render-runtime switch.",
+    "fallbackFrozen": true,
+    "fallbackPolicy": "All eight render-runtime switch fallbacks fail loudly; the legacy flowScreen implementation also throws and cannot render source-switch."
+  },
+  "r2aInstrumentation": {
+    "sourceOwnedControlCount": 35,
+    "sourceOwnedMappingStatus": "35/35 mapped",
+    "source": "source-switch-action",
+    "readerContinuityOccurrenceCount": 136,
+    "readerContinuityPolicy": "The 17 Reader controls visible in each of eight routes are instrumented through ReaderRuntimeContract.instrumentDom against the nested visualContextRoute. They retain reader-runtime ownership and are not duplicated as source-switch declarations.",
+    "familySemanticOccurrenceCount": 171,
+    "controlsByRoute": {
+      "source-switch": { "sourceOwned": 12, "readerContinuity": 17, "total": 29 },
+      "source-switch-results": { "sourceOwned": 12, "readerContinuity": 17, "total": 29 },
+      "source-switch-empty": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
+      "source-switch-error": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
+      "source-switch-timeout": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
+      "source-switch-loading": { "sourceOwned": 1, "readerContinuity": 17, "total": 18 },
+      "source-switch-rollback": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 },
+      "source-switch-preview": { "sourceOwned": 2, "readerContinuity": 17, "total": 19 }
+    },
+    "fiveDataAttrs": [
+      "data-entity-key",
+      "data-control-key",
+      "data-control-id",
+      "data-ui-event",
+      "data-settings-key"
+    ],
+    "stableSourceIds": [
+      "source-youshu",
+      "source-biquge-mirror",
+      "source-light-novel",
+      "source-cloud-library",
+      "source-aggregate-1",
+      "source-aggregate-2",
+      "source-backup-a",
+      "source-backup-b",
+      "source-chapter-sync",
+      "source-local-cache",
+      "source-old-backup"
+    ],
+    "identityPolicy": "Candidate identity comes only from fixture sourceId business keys; source display name, index, selector, ordinal and DOM position are prohibited.",
+    "unknownIdentityPolicy": "Fail closed; an unknown route/settingsKey or missing candidate sourceId emits no controlKey and the renderer rejects an unstable candidate."
+  },
+  "r2bRealInteraction": {
+    "stateDomains": [
+      "phase",
+      "selectedSourceId",
+      "originalSourceId",
+      "committedSourceId",
+      "navigationOriginRoute",
+      "visualContextRoute",
+      "originControlKey",
+      "focusReturnKey",
+      "requestId",
+      "pendingKind",
+      "error",
+      "rollbackToken",
+      "interruptSequence"
+    ],
+    "reducerActions": [
+      "OPEN",
+      "SELECT",
+      "CHECK_START",
+      "CHECK_SUCCESS",
+      "CHECK_FAILED",
+      "CHECK_TIMEOUT",
+      "COMMIT_START",
+      "COMMIT_SUCCESS",
+      "COMMIT_FAILED",
+      "CANCEL",
+      "ROLLBACK_OPEN",
+      "ROLLBACK_START",
+      "ROLLBACK_SUCCESS",
+      "ROLLBACK_FAILED",
+      "ROLLBACK_CLOSE",
+      "RESET"
+    ],
+    "asyncHelpers": [
+      "executeCandidateCheck",
+      "executeSwitchCommit",
+      "executeRollback"
+    ],
+    "guards": [
+      "duplicate async start is rejected while pendingKind is non-null",
+      "completion is accepted only for the current requestId and pending kind",
+      "CANCEL clears requestId/pendingKind so later completion resolves stale",
+      "current, unavailable, disabled and unknown source selections are rejected",
+      "rollback requires a rollbackToken",
+      "source-switch does not become the owner of Book Detail state"
+    ],
+    "directSwitchPolicy": "Clicking an available candidate row dispatches SELECT and immediately runs check then commit. There is no candidate confirmation footer, no second activation, and no source-switch-results/preview stop on the normal path.",
+    "originRecovery": {
+      "rootCauseFixed": "The old sourceSwitchOriginRoute accepted Reader routes only, so book-detail/book-detail-toc-preview/book-directory lost their real navigation origin and exact trigger identity.",
+      "newContract": "navigationOriginRoute, visualContextRoute and originControlKey are independent fields.",
+      "cancel": "Returns to the exact navigation origin and restores focus by exact data-control-key; direct entry safely replaces to reader.",
+      "successfulNoTocCommit": "Normalizes the existing Book Detail owner to normal and returns to the original detail/directory route; source-switch does not own or redefine Book Detail flow."
+    }
+  },
+  "ariaAndFocus": {
+    "candidateWindow": "role=dialog, aria-modal=true and labelled title",
+    "candidateCollection": "role=listbox with 11 native button role=option descendants",
+    "selection": "aria-selected reflects selectedSourceId; current/unavailable candidates expose aria-disabled and disabled",
+    "loading": "role=status, aria-live=polite and aria-busy=true; cancel remains enabled",
+    "error": "role=alert",
+    "rollback": "role=dialog, aria-modal=true; safe cancel owns deterministic initial focus",
+    "focusReturn": "Exact origin data-control-key, not a generic data-route selector",
+    "hitTargets": "Candidate rows and close control have interaction hosts of at least 44x44 CSS pixels",
+    "alignment": "Source name remains leading; latency/latest chapter and trailing controls remain right-side columns."
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 39,
+      "passed": 39,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-source-switch-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-source-switch-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-source-switch-aria-focus.test.mjs"
+      ]
+    },
+    "fullRegression": { "tests": 645, "passed": 645, "failed": 0 },
+    "identityDenominator": 3806,
+    "identityDistribution": {
+      "mapped": 853,
+      "pendingActionKey": 447,
+      "pendingInstanceKey": 975,
+      "pendingActionAndInstanceKey": 1531,
+      "article": 349,
+      "button": 3333,
+      "note": "The two invented Source Switch confirmation buttons were removed from the semantic denominator; candidate rows remain native buttons."
+    },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check",
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check"
+    ]
+  },
+  "figmaReadOnlyBaseline": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "2378474643910668834",
+    "canonicalComponentPage": { "pageId": "259:13", "pageName": "16 · Components · Source Switch" },
+    "canonicalComponents": {
+      "candidateRowSet": "568:78",
+      "candidateList": "568:79",
+      "windowHeader": "568:47",
+      "window": "568:134",
+      "overlay": "568:209",
+      "closeButtonSet": "1990:22546",
+      "sourceSwitchIcon": "271:532",
+      "closeIcon": "271:142"
+    },
+    "responsiveMasterPage": { "pageId": "834:3", "pageName": "24 · Responsive Masters · Phase 4", "componentSet": "942:37", "phoneMaster": "942:34", "tabletMaster": "942:36" },
+    "downstreamFinalPage": { "pageId": "834:2", "pageName": "23 · Pages · Final", "section": "943:15209", "phoneInstance": "943:15215", "tabletInstance": "943:15705" },
+    "knownStructuralGap": null,
+    "prototypeReactionPolicy": "Preserve the 42 existing transparent Source Switch hit-layer reactions and the Book Detail entry reactions; retarget only after the local UiEvent owner is accepted."
+  },
+  "figmaDecisionsRequired": [
+    "Selected is a transient interaction visual only, not a selected-awaiting-confirmation product state; preserve Default/Hover/Pressed/Focus/Disabled/Loading and at least 44x44 hit targets.",
+    "Update CandidateList, CloseButton, WindowHeader and Window before any page master; trailing values/actions are right-aligned.",
+    "Add Phone and Tablet overlay variants only; landscape inherits Tablet and no Compact/Fold structure may be created.",
+    "Repair Page/Source Switch masters to real canonical instances, then let Page 23 downstream instances inherit; no detached frame or screenshot replacement.",
+    "Do not create a component-page state matrix for Source Switch; operational error/loading/rollback routes remain local runtime contracts until a real product page node is explicitly approved.",
+    "Preserve the Reader backdrop and all existing reactions; do not change UiEvent, state owner, async contract or Book Detail business flow in Figma."
+  ],
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "exactLocalCommit": "fbfd6cb3882bd56a002c43eb1fcc11fc0124cc08",
+    "figmaWriterMayStartAfterFreshRevisionReadAndQueueAdmission": false,
+    "requiresFreshFigmaRevisionRead": false,
+    "requiresSingleWriter": true
+  },
+  "boundaries": {
+    "figmaModified": true,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}

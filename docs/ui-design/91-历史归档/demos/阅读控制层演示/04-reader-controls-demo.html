@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>04-2 阅读控制层 Demo</title>
+  <style>
+    :root {
+      --reader-paper: #f8f1e7;
+      --reader-paper-shadow: #ede2d3;
+      --surface-primary: #fffcf7;
+      --surface-secondary: #fffcf8;
+      --surface-icon: #f4f2ed;
+      --surface-pill: #faf6ef;
+      --text-primary: #11100e;
+      --text-secondary: #585149;
+      --text-muted: #756c62;
+      --icon-primary: #0d0d0c;
+      --border-outer: #d5c8b8;
+      --border-inner: #e5dacb;
+      --track-inactive: #ded8ce;
+      --accent-blue: #087ead;
+      --drag-handle: #b9b0a4;
+      --font-reader: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+      --font-control: "PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+      --font-latin: "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #2b2a28;
+      color: var(--text-primary);
+    }
+
+    .phone {
+      position: relative;
+      width: min(390px, 100vw, calc(100vh * 390 / 884));
+      aspect-ratio: 390 / 884;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 25% 20%, rgba(255,255,255,0.6), transparent 32%),
+        radial-gradient(circle at 70% 78%, rgba(232,216,190,0.34), transparent 38%),
+        linear-gradient(90deg, rgba(90,65,32,0.035), transparent 18%, rgba(94,68,42,0.035) 49%, transparent 80%),
+        var(--reader-paper);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+      container-type: inline-size;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.34;
+      background:
+        linear-gradient(90deg, transparent 0, rgba(84, 64, 38, 0.06) 48%, transparent 51%),
+        repeating-linear-gradient(90deg, rgba(120, 85, 40, 0.018) 0 1px, transparent 1px 17px);
+      mix-blend-mode: multiply;
+    }
+
+    .status {
+      position: absolute;
+      top: 2.04%;
+      left: 5.64%;
+      right: 5.64%;
+      height: 2.26%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-control);
+      font-size: clamp(12px, 3.59cqw, 14px);
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--text-secondary);
+      letter-spacing: 0;
+      z-index: 2;
+    }
+
+    .top-card {
+      position: absolute;
+      top: 4.86%;
+      left: 3.33%;
+      right: 3.33%;
+      height: 6.67%;
+      display: grid;
+      grid-template-columns: 12.73fr 65.76fr 13.64fr 7.87fr;
+      align-items: center;
+      padding: 0 4.67%;
+      border: 1px solid var(--border-outer);
+      border-radius: min(3.59cqw, 14px);
+      background: var(--surface-primary);
+      box-shadow: 0 7px 19px rgba(78, 59, 39, 0.16);
+      z-index: 4;
+      font-family: var(--font-control);
+    }
+
+    .icon-svg {
+      display: block;
+      color: var(--icon-primary);
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: 0 0 auto;
+    }
+
+    .icon-back { width: min(7.18cqw, 28px); height: min(7.18cqw, 28px); stroke-width: 2.4; }
+    .icon-source { width: min(6.41cqw, 25px); height: min(6.41cqw, 25px); stroke-width: 2.2; }
+    .icon-search { stroke-width: 2.3; }
+    .icon-auto { stroke-width: 2.2; }
+    .icon-replace { stroke-width: 2.2; }
+    .icon-directory { stroke-width: 2.2; }
+    .icon-voice { stroke-width: 2.4; }
+    .icon-settings { stroke-width: 2.3; }
+    .icon-sun { stroke-width: 2; }
+
+    .book-title {
+      display: flex;
+      flex-direction: column;
+      gap: 5.08%;
+      min-width: 0;
+    }
+
+    .book-title strong {
+      font-size: clamp(18px, 5.13cqw, 20px);
+      line-height: 1.2;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .book-title span {
+      font-size: clamp(12px, 3.33cqw, 13px);
+      line-height: 1.38;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .source {
+      display: grid;
+      justify-items: center;
+      gap: 1.7%;
+      font-size: clamp(12px, 3.33cqw, 13px);
+      line-height: 1.38;
+      color: var(--text-primary);
+    }
+
+    .kebab-icon {
+      justify-self: end;
+      width: min(6.41cqw, 25px);
+      height: min(6.41cqw, 25px);
+      fill: var(--icon-primary);
+      stroke: none;
+    }
+
+    .reader-text {
+      position: absolute;
+      top: 14.25%;
+      left: 8.72%;
+      right: 8.72%;
+      font-family: var(--font-reader);
+      font-size: clamp(17px, 4.62cqw, 19px);
+      font-weight: 400;
+      line-height: 2;
+      letter-spacing: 0;
+      color: var(--text-primary);
+      z-index: 1;
+    }
+
+    .reader-text p {
+      margin: 0 0 0.95em;
+      text-indent: 2em;
+    }
+
+    .reader-text p:first-child {
+      text-indent: 2em;
+    }
+
+    .control-sheet {
+      position: absolute;
+      left: 1.28%;
+      right: 1.28%;
+      bottom: 1.13%;
+      height: 39.14%;
+      border: 1px solid var(--border-outer);
+      border-radius: min(4.62cqw, 18px);
+      background: var(--surface-primary);
+      box-shadow: 0 -5px 27px rgba(78, 59, 39, 0.13);
+      z-index: 5;
+      padding: 9.55% 2.63% 4.21%;
+      font-family: var(--font-control);
+    }
+
+    .grabber {
+      position: absolute;
+      top: 3.09%;
+      left: 50%;
+      width: 10%;
+      height: 1.12%;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: var(--drag-handle);
+    }
+
+    .left-controls {
+      width: 79.94%;
+      height: 100%;
+      display: grid;
+      grid-template-rows: 31.45fr 32.7fr 25.79fr;
+      row-gap: 3.14%;
+    }
+
+    .quick-row,
+    .chapter-card,
+    .tabs {
+      border: 1px solid var(--border-inner);
+      background: var(--surface-secondary);
+      border-radius: min(3.08cqw, 12px);
+      box-shadow: 0 2px 8px rgba(90, 68, 43, 0.045);
+    }
+
+    .quick-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      align-items: center;
+      padding: 4% 3.3% 3%;
+    }
+
+    .action {
+      display: grid;
+      justify-items: center;
+      gap: 8%;
+      font-size: clamp(13px, 3.59cqw, 14px);
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--text-primary);
+    }
+
+    .icon-box {
+      width: min(42%, 42px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border-inner);
+      border-radius: 23.81%;
+      background: var(--surface-icon);
+    }
+
+    .icon-box .icon-svg {
+      width: 64.29%;
+      height: 64.29%;
+    }
+
+    .icon-svg .solid {
+      fill: var(--icon-primary);
+      stroke: none;
+    }
+
+    .chapter-card {
+      padding: min(3.59cqw, 14px) 4.2% min(2.82cqw, 11px);
+      display: grid;
+      align-content: start;
+      gap: min(2.56cqw, 10px);
+    }
+
+    .chapter-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2%;
+    }
+
+    .chapter-top strong {
+      font-size: clamp(17px, 4.62cqw, 18px);
+      font-weight: 600;
+      line-height: 1.33;
+      letter-spacing: 0;
+      color: var(--text-primary);
+    }
+
+    .chapter-actions {
+      display: flex;
+      width: 41%;
+      justify-content: flex-end;
+      gap: 8%;
+    }
+
+    .pill {
+      border: 1px solid var(--border-inner);
+      background: var(--surface-pill);
+      border-radius: 999px;
+      width: 46%;
+      min-width: 0;
+      padding: 5% 2%;
+      text-align: center;
+      font-size: clamp(12px, 3.33cqw, 13px);
+      font-weight: 400;
+      line-height: 1.38;
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .progress {
+      height: 19.23%;
+      min-height: 18px;
+      position: relative;
+    }
+
+    .progress .track {
+      position: absolute;
+      top: 40%;
+      left: 0;
+      right: 0;
+      height: 20%;
+      min-height: 3px;
+      border-radius: 999px;
+      background: var(--track-inactive);
+    }
+
+    .progress .fill {
+      position: absolute;
+      top: 40%;
+      left: 0;
+      width: 38%;
+      height: 20%;
+      min-height: 3px;
+      border-radius: 999px;
+      background: var(--accent-blue);
+    }
+
+    .progress .thumb {
+      position: absolute;
+      top: 0;
+      left: calc(38% - 3.2%);
+      width: 6.4%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 4px solid var(--surface-secondary);
+      box-shadow: 0 0 0 1px rgba(15, 101, 139, 0.3);
+    }
+
+    .chapter-percent {
+      justify-self: start;
+      margin-left: 34%;
+      font-size: clamp(12px, 3.33cqw, 13px);
+      font-weight: 400;
+      line-height: 1.38;
+      color: var(--text-secondary);
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      align-items: center;
+      padding: 4% 2.3% 3%;
+    }
+
+    .small-action {
+      display: grid;
+      justify-items: center;
+      gap: 8.54%;
+      font-size: clamp(13px, 3.59cqw, 14px);
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--text-primary);
+    }
+
+    .small-icon {
+      width: min(51.22%, 42px);
+      aspect-ratio: 1;
+      border: 1px solid var(--border-inner);
+      border-radius: 23.81%;
+      background: var(--surface-icon);
+      display: grid;
+      place-items: center;
+      font-size: clamp(20px, 5.9cqw, 23px);
+      font-weight: 400;
+      line-height: 1;
+      color: var(--icon-primary);
+      font-family: var(--font-latin);
+    }
+
+    .small-icon .icon-svg {
+      width: 64.29%;
+      height: 64.29%;
+    }
+
+    .brightness {
+      position: absolute;
+      top: 9.55%;
+      right: 2.63%;
+      width: 17.28%;
+      bottom: 4.21%;
+      border: 1px solid var(--border-inner);
+      border-radius: min(3.08cqw, 12px);
+      background: var(--surface-secondary);
+      display: grid;
+      grid-template-rows: 8.52fr 13.88fr 43.53fr 13.88fr 9.15fr;
+      justify-items: center;
+      align-items: center;
+      padding: min(2.56cqw, 10px) 0 min(2.82cqw, 11px);
+      font-size: clamp(13px, 3.59cqw, 14px);
+      font-weight: 400;
+      line-height: 1.43;
+      color: var(--text-primary);
+    }
+
+    .brightness .icon-svg {
+      width: min(40.3%, 27px);
+      aspect-ratio: 1;
+    }
+
+    .vertical-slider {
+      position: relative;
+      width: 29.85%;
+      height: 83%;
+    }
+
+    .vertical-slider::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 5.97%;
+      min-width: 3px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: var(--track-inactive);
+    }
+
+    .vertical-slider::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 0;
+      width: 5.97%;
+      min-width: 3px;
+      height: 52.6%;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: var(--accent-blue);
+    }
+
+    .v-thumb {
+      position: absolute;
+      left: 50%;
+      bottom: calc(52.6% - 14.925%);
+      width: 100%;
+      aspect-ratio: 1;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 5px solid var(--surface-secondary);
+      box-shadow: 0 2px 7px rgba(0,0,0,0.16);
+      z-index: 2;
+    }
+
+    .system-a {
+      width: 58.21%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--surface-pill);
+      border: 1px solid var(--border-inner);
+      display: grid;
+      place-items: center;
+      font-size: clamp(20px, 5.64cqw, 22px);
+      font-weight: 400;
+      line-height: 1.27;
+      color: var(--text-primary);
+      font-family: var(--font-latin);
+    }
+
+    .brightness strong {
+      font-size: inherit;
+      font-weight: 500;
+      line-height: inherit;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="phone" aria-label="04-2 阅读控制层前端复刻 demo">
+    <div class="status">
+      <span>长夜余火 · 第 32 章</span>
+      <span>10:30</span>
+    </div>
+
+    <section class="top-card" aria-label="顶部阅读栏">
+      <svg class="icon-svg icon-back" aria-hidden="true" viewBox="0 0 24 24">
+        <path d="M19 12H5"></path>
+        <path d="m12 19-7-7 7-7"></path>
+      </svg>
+      <div class="book-title">
+        <strong>长夜余火</strong>
+        <span>起点中文网 · 第 32 章</span>
+      </div>
+      <div class="source">
+        <svg class="icon-svg icon-source" aria-hidden="true" viewBox="0 0 24 24">
+          <path d="M16 3h5v5"></path>
+          <path d="M4 7h4c4 0 5 10 9 10h4"></path>
+          <path d="M21 16v5h-5"></path>
+          <path d="M4 17h4c1.6 0 2.8-1.6 4-3.6"></path>
+          <path d="M15 7.8C15.7 7.3 16.3 7 17 7h4"></path>
+        </svg>
+        <span>换源</span>
+      </div>
+      <svg class="kebab-icon" aria-hidden="true" viewBox="0 0 24 24">
+        <circle cx="12" cy="5" r="2"></circle>
+        <circle cx="12" cy="12" r="2"></circle>
+        <circle cx="12" cy="19" r="2"></circle>
+      </svg>
+    </section>
+
+    <article class="reader-text" aria-label="阅读正文">
+      <p>雨，下了一整夜。</p>
+      <p>城市像是被泼了一盆凉水，街灯昏黄，水面反着光，连呼吸都带着潮气。</p>
+      <p>他站在巷口，手里攥着那封信。纸已经被雨水润湿，边角微微卷起，字迹却依旧清晰。</p>
+      <p>“等你回来。”</p>
+      <p>没有署名，只有短短四个字。</p>
+      <p>他笑了笑，笑得很轻，像是自言自语。然后转身，沿着雨声走进夜里。</p>
+    </article>
+
+    <section class="control-sheet" aria-label="阅读控制层">
+      <div class="grabber" aria-hidden="true"></div>
+      <div class="left-controls">
+        <div class="quick-row" aria-label="快捷功能">
+          <div class="action">
+            <div class="icon-box">
+              <svg class="icon-svg icon-search" aria-hidden="true" viewBox="0 0 24 24">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m20 20-4.5-4.5"></path>
+              </svg>
+            </div>
+            <span>搜索</span>
+          </div>
+          <div class="action">
+            <div class="icon-box">
+              <svg class="icon-svg icon-auto" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M18.5 8.5A7.5 7.5 0 1 0 18 16"></path>
+                <path d="M18.5 4.5v4h-4"></path>
+                <path class="solid" d="M10 8.5v7l5.5-3.5L10 8.5Z"></path>
+              </svg>
+            </div>
+            <span>自动翻页</span>
+          </div>
+          <div class="action">
+            <div class="icon-box">
+              <svg class="icon-svg icon-replace" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m17 2 4 4-4 4"></path>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <path d="m7 22-4-4 4-4"></path>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+              </svg>
+            </div>
+            <span>替换</span>
+          </div>
+        </div>
+
+        <div class="chapter-card" aria-label="章节进度">
+          <div class="chapter-top">
+            <strong>第 32 章 雨夜</strong>
+            <div class="chapter-actions">
+              <span class="pill">上一章</span>
+              <span class="pill">下一章</span>
+            </div>
+          </div>
+          <div class="progress" aria-hidden="true">
+            <span class="track"></span>
+            <span class="fill"></span>
+            <span class="thumb"></span>
+          </div>
+          <span class="chapter-percent">本章 38%</span>
+        </div>
+
+        <div class="tabs" aria-label="阅读控制主按钮">
+          <div class="small-action">
+            <div class="small-icon">
+              <svg class="icon-svg icon-directory" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M8 6h13"></path>
+                <path d="M8 12h13"></path>
+                <path d="M8 18h13"></path>
+                <circle class="solid" cx="4" cy="6" r="1.7"></circle>
+                <circle class="solid" cx="4" cy="12" r="1.7"></circle>
+                <circle class="solid" cx="4" cy="18" r="1.7"></circle>
+              </svg>
+            </div>
+            <span>目录</span>
+          </div>
+          <div class="small-action">
+            <div class="small-icon">
+              <svg class="icon-svg icon-voice" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M5 10v4"></path>
+                <path d="M9 7v10"></path>
+                <path d="M13 4v16"></path>
+                <path d="M17 8v8"></path>
+                <path d="M21 11v2"></path>
+              </svg>
+            </div>
+            <span>朗读</span>
+          </div>
+          <div class="small-action">
+            <div class="small-icon">Aa</div>
+            <span>界面</span>
+          </div>
+          <div class="small-action">
+            <div class="small-icon">
+              <svg class="icon-svg icon-settings" aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M12 2 20 7v10l-8 5-8-5V7Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </div>
+            <span>设置</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="brightness" aria-label="亮度">
+        <strong>亮度</strong>
+        <svg class="icon-svg icon-sun" aria-hidden="true" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2"></path>
+          <path d="M12 20v2"></path>
+          <path d="m4.93 4.93 1.42 1.42"></path>
+          <path d="m17.65 17.65 1.42 1.42"></path>
+          <path d="M2 12h2"></path>
+          <path d="M20 12h2"></path>
+          <path d="m4.93 19.07 1.42-1.42"></path>
+          <path d="m17.65 6.35 1.42-1.42"></path>
+        </svg>
+        <div class="vertical-slider"><span class="v-thumb"></span></div>
+        <div class="system-a">A</div>
+        <span>系统</span>
+      </aside>
+    </section>
+
+  </main>
+</body>
+</html>

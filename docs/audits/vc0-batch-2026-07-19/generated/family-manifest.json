@@ -1,0 +1,762 @@
+{
+  "schemaVersion": 1,
+  "capturedOn": "2026-07-19",
+  "worktreeHead": "8f9eea1c31cb4b3328f76a06fd286868ea7b9f13",
+  "worktreeBranch": "codex/motion-demo-optimizations",
+  "figmaFileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "purpose": "24 族 exact manifest。本 manifest 不把 Figma 24 Set、25 原型 route 和 Reader-UI runtime family 混成一个分母；每个 familyId 明确指向一个 Figma 来源和一个 Reader-UI route/state，不跨层合并。",
+  "denominatorPolicy": {
+    "figma24StaticSets": "24 · Responsive Masters · Phase 4 的 24 个 Component Set / 72 variants / 0 reaction；只用于 12 个本批页面族 + 1 个 Settings 样板的静态视觉源。",
+    "figma25PrototypeRoutes": "23 · Pages · Final 的 25 个 family × 3 个 viewport prototype frame；其中 11 个 Reader 候选已统一指向 15 · Reader 2，不再单独传播；本 manifest 不把 prototype route 当作产品 route 分母。",
+    "readerUiRuntimeFamily": "frontend-demo-optimized/route-contract.js routeFamily() 的 11 个 runtime family（reader/library/settings/source/source-switch/discover/rss/import/sync/system）；本 manifest 显式记录每族的 runtimeFamily，但不与 Figma 24 Set 合并。",
+    "reader2FrozenSource": "15 · Reader 2 (1023:17636) 是 Reader 控制层唯一静态源；11 个 Reader 历史候选统一指向它，不再消费旧 15 · Reader、819:11132 或 23 · Pages · Final 内的 Reader 候选。"
+  },
+  "viewports": [
+    { "id": "phone", "width": 390, "height": 844 },
+    { "id": "compact", "width": 844, "height": 390 },
+    { "id": "tablet", "width": 760, "height": 960 }
+  ],
+  "families": [
+    {
+      "familyId": "F01-reader-appearance",
+      "group": "reader-historical",
+      "routeOrState": "reader-appearance / reader-appearance-overlay-v2",
+      "readerUiRouteId": "reader-appearance",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-appearance",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F02-reader-tts",
+      "group": "reader-historical",
+      "routeOrState": "tts / reader-tts-overlay-v2",
+      "readerUiRouteId": "tts",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "tts",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F03-reader-settings",
+      "group": "reader-historical",
+      "routeOrState": "reader-settings / reader-settings-overlay-v2",
+      "readerUiRouteId": "reader-settings",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-settings",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F04-reader-auto-scroll",
+      "group": "reader-historical",
+      "routeOrState": "auto-page / reader-auto-scroll-overlay-v2",
+      "readerUiRouteId": "auto-page",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "auto-page",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F05-reader-search",
+      "group": "reader-historical",
+      "routeOrState": "content-search / reader-search-overlay-v2",
+      "readerUiRouteId": "content-search",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "content-search",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F06-reader-replace",
+      "group": "reader-historical",
+      "routeOrState": "content-replacement / reader-replace-overlay-v2",
+      "readerUiRouteId": "content-replacement",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "content-replacement",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F07-reader-night-state",
+      "group": "reader-historical",
+      "routeOrState": "reader-night-state-v2",
+      "readerUiRouteId": "reader-night-state-v2",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18314",
+        "assemblyRole": "state-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-night-state-v2",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F08-reader-full-font",
+      "group": "reader-historical",
+      "routeOrState": "reader-full-font",
+      "readerUiRouteId": "reader-full-font",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18294",
+        "assemblyRole": "full-page-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-full-font",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F09-reader-full-theme",
+      "group": "reader-historical",
+      "routeOrState": "reader-full-theme / reader-full-theme-edit",
+      "readerUiRouteId": "reader-full-theme",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18294",
+        "assemblyRole": "full-page-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-full-theme",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F10-reader-full-layout",
+      "group": "reader-historical",
+      "routeOrState": "reader-full-layout",
+      "readerUiRouteId": "reader-full-layout",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18294",
+        "assemblyRole": "full-page-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-full-layout",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F11-reader-full-page-turn",
+      "group": "reader-historical",
+      "routeOrState": "reader-full-page-turn",
+      "readerUiRouteId": "reader-full-page-turn",
+      "runtimeFamily": "reader",
+      "figmaSource": {
+        "page": "15 · Reader 2",
+        "pageNodeId": "1023:17636",
+        "assemblyNode": "1023:18294",
+        "assemblyRole": "full-page-set",
+        "frozenSource": "Reader 2",
+        "phoneMaster": "1023:18737",
+        "compactMaster": "1023:18741",
+        "tabletMaster": "1023:18745"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "reader-full-page-turn",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "1023:18737", "browserEvidence": null },
+        { "viewport": "compact", "figmaMasterId": "1023:18741", "browserEvidence": null },
+        { "viewport": "tablet", "figmaMasterId": "1023:18745", "browserEvidence": null }
+      ],
+      "classificationSource": "reader-2-frozen-vc3",
+      "notes": "Reader 2 已通过 VC2/VC3；本 manifest 只登记指向，不重复 VC0。"
+    },
+    {
+      "familyId": "F12-settings-general",
+      "group": "settings-sample",
+      "routeOrState": "settings-general",
+      "readerUiRouteId": "settings-general",
+      "runtimeFamily": "settings",
+      "figmaSource": {
+        "page": "12 · Settings & About",
+        "pageNodeId": "259:11",
+        "assemblyNode": "941:2",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Settings General VC0 sample",
+        "phonePrototypeFrame": "1995:67304",
+        "phonePageInstance": "1995:67305",
+        "phoneMainComponent": "942:18",
+        "compactPrototypeFrame": "1995:67540",
+        "compactPageInstance": "1995:67541",
+        "compactMainComponent": "942:19",
+        "tabletPrototypeFrame": "1995:67776",
+        "tabletPageInstance": "1995:67777",
+        "tabletMainComponent": "942:20"
+      },
+      "readerUiComponentInstance": {
+        "shell": "SettingsShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "settings-general",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false,
+        "rendererNote": "renderRoute D2 hook 由 globalSettingsV2 接管；legacy settingsScreen 仍存在但未触达。"
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "942:18", "browserEvidence": "ic0-2026-07-19/browser-settings-general-phone.png" },
+        { "viewport": "compact", "figmaMasterId": "942:19", "browserEvidence": "ic0-2026-07-19/browser-settings-general-compact.png" },
+        { "viewport": "tablet", "figmaMasterId": "942:20", "browserEvidence": "ic0-2026-07-19/browser-settings-general-tablet.png" }
+      ],
+      "classificationSource": "ic0-settings-general-sample",
+      "notes": "IC0 样板已完成 VC0；分类为 two-stage。DOM bounds 证据口径见 docs/audits/ic0-2026-07-19/SETTINGS_GENERAL_VC0_SAMPLE.md。"
+    },
+    {
+      "familyId": "F13-source-management",
+      "group": "batch-12",
+      "routeOrState": "source-management",
+      "readerUiRouteId": "source-management",
+      "runtimeFamily": "source",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Source Management",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "SettingsShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "source-management",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Source Management/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-source-management-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Source Management/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Source Management/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F14-webdav-config",
+      "group": "batch-12",
+      "routeOrState": "webdav-config",
+      "readerUiRouteId": "webdav-config",
+      "runtimeFamily": "sync",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/WebDAV Config",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "SettingsShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "webdav-config",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/WebDAV Config/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-webdav-config-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/WebDAV Config/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/WebDAV Config/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F15-sync-backup",
+      "group": "batch-12",
+      "routeOrState": "sync-backup",
+      "readerUiRouteId": "sync-backup",
+      "runtimeFamily": "sync",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Sync Backup",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "SettingsShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "sync-backup",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Sync Backup/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-sync-backup-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Sync Backup/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Sync Backup/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F16-search-results",
+      "group": "batch-12",
+      "routeOrState": "search-results",
+      "readerUiRouteId": "search-results",
+      "runtimeFamily": "library",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Search Results",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "MainTabShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "search-results",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Search Results/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-search-results-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Search Results/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Search Results/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F17-bookshelf",
+      "group": "batch-12",
+      "routeOrState": "bookshelf",
+      "readerUiRouteId": "bookshelf",
+      "runtimeFamily": "library",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Bookshelf",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "MainTabShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "bookshelf",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Bookshelf/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-bookshelf-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Bookshelf/compact", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-bookshelf-compact-raw.png" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Bookshelf/tablet", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-bookshelf-tablet-raw.png" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "三视口原始截图均已采集。"
+    },
+    {
+      "familyId": "F18-book-detail",
+      "group": "batch-12",
+      "routeOrState": "book-detail",
+      "readerUiRouteId": "book-detail",
+      "runtimeFamily": "library",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Book Detail",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "MainTabShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "book-detail",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Book Detail/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-book-detail-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Book Detail/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Book Detail/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F19-import-conflict-resolve",
+      "group": "batch-12",
+      "routeOrState": "import-conflict-resolve",
+      "readerUiRouteId": "import-conflict-resolve",
+      "runtimeFamily": "import",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Import Conflict",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "MainTabShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "import-conflict-resolve",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Import Conflict/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-import-conflict-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Import Conflict/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Import Conflict/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F20-discover",
+      "group": "batch-12",
+      "routeOrState": "discover",
+      "readerUiRouteId": "discover",
+      "runtimeFamily": "discover",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Discover",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "MainTabShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "discover",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Discover/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-discover-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Discover/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Discover/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F21-rss",
+      "group": "batch-12",
+      "routeOrState": "rss",
+      "readerUiRouteId": "rss",
+      "runtimeFamily": "rss",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/RSS",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "MainTabShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "rss",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/RSS/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-rss-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/RSS/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/RSS/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "two-stage",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。"
+    },
+    {
+      "familyId": "F22-source-switch",
+      "group": "batch-12",
+      "routeOrState": "source-switch",
+      "readerUiRouteId": "source-switch",
+      "runtimeFamily": "source-switch",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Source Switch",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选",
+        "candidateRowChain": "568:79 / 568:134 / 568:209"
+      },
+      "readerUiComponentInstance": {
+        "shell": "ReaderShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "source-switch",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Source Switch/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-source-switch-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Source Switch/compact", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-source-switch-compact-raw.png" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Source Switch/tablet", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-source-switch-tablet-raw.png" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "codex-fix",
+      "notes": "三视口原始截图均已采集。Figma CandidateRow / Window / Overlay 组件链可保留；Codex 修复稳定身份与 UiEvent。"
+    },
+    {
+      "familyId": "F23-about",
+      "group": "batch-12",
+      "routeOrState": "about",
+      "readerUiRouteId": "about",
+      "runtimeFamily": "settings",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/About",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "SettingsShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "about",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/About/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-about-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/About/compact", "browserEvidence": null, "missingReason": "本批未采集 Compact 原始截图" },
+        { "viewport": "tablet", "figmaMasterId": "Page/About/tablet", "browserEvidence": null, "missingReason": "本批未采集 Tablet 原始截图" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "keep",
+      "notes": "Phone 已有原始截图；Compact/Tablet 缺采集。保持仅指当前静态候选，仍需全局 ID / crosswalk。"
+    },
+    {
+      "familyId": "F24-restore-preview",
+      "group": "batch-12",
+      "routeOrState": "restore-preview",
+      "readerUiRouteId": "restore-preview",
+      "runtimeFamily": "sync",
+      "figmaSource": {
+        "page": "24 · Responsive Masters · Phase 4",
+        "pageNodeId": "941:2",
+        "assemblyNode": "Page/Restore Preview",
+        "assemblyRole": "page-level-master-set",
+        "frozenSource": "Figma 24 Set 静态候选"
+      },
+      "readerUiComponentInstance": {
+        "shell": "SettingsShell",
+        "defaultVariant": "default",
+        "screenGraphNodeId": "restore-preview",
+        "componentInstanceBinding": "unjoined-no-stable-key",
+        "controlIdAvailable": false
+      },
+      "viewportEvidence": [
+        { "viewport": "phone", "figmaMasterId": "Page/Restore Preview/phone", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-restore-preview-phone-raw.png" },
+        { "viewport": "compact", "figmaMasterId": "Page/Restore Preview/compact", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-restore-preview-compact-raw.png" },
+        { "viewport": "tablet", "figmaMasterId": "Page/Restore Preview/tablet", "browserEvidence": "vc0-batch-2026-07-19/evidence/browser-raw/browser-restore-preview-tablet-raw.png" }
+      ],
+      "classificationSource": "vc0-batch-pre-classification",
+      "preClassification": "keep",
+      "notes": "三视口原始截图均已采集。保持宽屏结构；仍需全局 ID / crosswalk。"
+    }
+  ],
+  "familyCount": 24,
+  "groupCounts": {
+    "reader-historical": 11,
+    "settings-sample": 1,
+    "batch-12": 12
+  },
+  "boundaryNotes": [
+    "11 个 Reader 历史候选统一指向 15 · Reader 2 (1023:17636)；不再消费旧 15 · Reader、819:11132 或 23 · Pages · Final 内的 Reader 候选。",
+    "1 个 Settings 样板指向 12 · Settings & About (259:11)；其 VC0 已在 IC0 审计目录完成。",
+    "12 个本批页面族指向 24 · Responsive Masters · Phase 4 (941:2) 的 Page/* Component Set；本批只采集 Phone 视口原始截图，仅 Bookshelf / Source Switch / Restore Preview 三族补采了 Compact / Tablet。",
+    "本 manifest 不把 Figma 24 Set、25 原型 route 和 Reader-UI runtime family 合并为同一分母；runtimeFamily 字段记录 routeContract.resolveRoutePresentation 的结果，仅作分类参考。",
+    "所有 familyId 的 Reader-UI component instance binding 均为 unjoined-no-stable-key；IC0 仍因 3,815 / 3,815 候选缺稳定跨层 join key 未通过。"
+  ]
+}

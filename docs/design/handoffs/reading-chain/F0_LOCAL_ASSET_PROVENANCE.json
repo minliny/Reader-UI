@@ -1,0 +1,1657 @@
+{
+  "schemaVersion": "2.0.0",
+  "kind": "READING_CHAIN_FIGMA_ASSET_PROVENANCE_CATALOG",
+  "status": "MIXED_HISTORICAL_CATALOG_WITH_CURRENT_READER_ICON_EXPORTS",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "revision": "2379851596474967636",
+  "revisionStatus": "reader-control exports captured at live nodes; REST reconfirmation pending",
+  "assets": [
+    {
+      "resource": "book_detail_directory_indent_list",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "941:10",
+        "iconMasterId": "2265:71",
+        "nodeId": "2265:72",
+        "currentRevision": null,
+        "currentExportSha256": "1393d436b277a55bb9f3bfd48120bbf0fe5245314f7c57094cca4eacc9c1ff3c",
+        "status": "current-instance-export-adopted-revision-unavailable"
+      }
+    },
+    {
+      "resource": "bookshelf_bookcard_more",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": "271:333",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_book_open_dark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": null,
+        "currentRevision": null,
+        "status": "unbound-local-resource"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_filter_dark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": "271:220",
+        "currentRevision": null,
+        "status": "current-master-export-hash-recorded-local-byte-unverified",
+        "currentExportSha256": "8d9db89d0cca26f994e361babdefbf5fd215cea6afad77ec6e9d09f23f218859"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_gear_dark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": "271:239",
+        "currentRevision": null,
+        "status": "current-master-export-hash-recorded-local-byte-unverified",
+        "currentExportSha256": "d686fb44415ea4064937477a36f49449fe7101ccd171d1a6160b58747120970c"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_grid_primary",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": "271:262",
+        "currentRevision": null,
+        "status": "current-master-export-hash-recorded-local-byte-unverified",
+        "currentExportSha256": "c6416038daceb5d5be8e19b6bed1125754c4f36bf0286cd259c47227e3b1180a"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_list_dark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": "271:303",
+        "currentRevision": null,
+        "status": "current-master-export-hash-recorded-local-byte-unverified",
+        "currentExportSha256": "070fb0a11dd909b2e61bc9e51cce3e7bd22936b2095895aff94127aa4a46f744"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_people_dark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": null,
+        "currentRevision": null,
+        "status": "unbound-local-resource"
+      }
+    },
+    {
+      "resource": "bookshelf_icon_search_dark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": "271:466",
+        "currentRevision": null,
+        "status": "current-master-export-hash-recorded-local-byte-unverified",
+        "currentExportSha256": "bcce89d28c6d34746732043ab3f80513083505e1c53c795cf0cc62f6645e8d8e"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_filter_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:58",
+        "nodeId": "487:59",
+        "variant": {
+          "Action": "Filter",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_filter_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:23",
+        "nodeId": "487:24",
+        "variant": {
+          "Action": "Filter",
+          "State": "Default"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_grid_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:40",
+        "nodeId": "487:41",
+        "variant": {
+          "Action": "Grid",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_grid_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:5",
+        "nodeId": "487:6",
+        "variant": {
+          "Action": "Grid",
+          "State": "Default"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_list_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:48",
+        "nodeId": "487:49",
+        "variant": {
+          "Action": "List",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_list_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:13",
+        "nodeId": "487:14",
+        "variant": {
+          "Action": "List",
+          "State": "Default"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_search_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:63",
+        "nodeId": "487:64",
+        "variant": {
+          "Action": "Search",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_search_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:28",
+        "nodeId": "487:29",
+        "variant": {
+          "Action": "Search",
+          "State": "Default"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_settings_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:69",
+        "nodeId": "487:70",
+        "variant": {
+          "Action": "Settings",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "bookshelf_section_action_settings_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:10",
+        "iconMasterId": "487:75",
+        "variantNodeId": "487:34",
+        "nodeId": "487:35",
+        "variant": {
+          "Action": "Settings",
+          "State": "Default"
+        },
+        "currentRevision": null,
+        "status": "current-instance-variant-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_bookmark",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:73",
+        "nodeId": "I1023:18277;781:2315;1023:18061;1023:18045",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2315;1023:18061;1023:18045",
+          "sourcePath": "Directory > ChapterList > MarkerButton Bookmark Default",
+          "scope": "Reader Phone Full Directory default bookmark"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_bookmark_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:73",
+        "nodeId": "I1023:18277;781:2327;1023:18065;1023:18047",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2327;1023:18065;1023:18047",
+          "sourcePath": "Directory > ChapterList > MarkerButton Bookmark Active",
+          "scope": "Reader Phone Full Directory active bookmark"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_bottom",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:87",
+        "nodeId": "I1023:18277;781:2298",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2298",
+          "sourcePath": "Directory > DirectoryToolbar > Action/Bottom",
+          "scope": "Reader Phone Full Directory bottom action"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_check",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:109",
+        "nodeId": "I1023:18277;781:2315;1023:18060;1023:18043",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2315;1023:18060;1023:18043",
+          "sourcePath": "Directory > ChapterList > MarkerButton Download Complete",
+          "scope": "Reader Phone Full Directory downloaded chapter marker"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_download",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:195",
+        "nodeId": "I1023:18277;781:2339;1023:18074;1023:18041",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2339;1023:18074;1023:18041",
+          "sourcePath": "Directory > ChapterList > MarkerButton Download Default",
+          "scope": "Reader Phone Full Directory chapter download marker"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_search",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:466",
+        "nodeId": "I1023:18277;781:2277",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2277",
+          "sourcePath": "Directory > DirectoryToolbar > SearchField",
+          "scope": "Reader Phone Full Directory search-field icon"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_sort_asc",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:499",
+        "nodeId": "I1023:18277;781:2306",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2306",
+          "sourcePath": "Directory > DirectoryToolbar > Action/Sort",
+          "scope": "Reader Phone Full Directory sort action"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_directory_top",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:580",
+        "nodeId": "I1023:18277;781:2290",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "exactSourceNodePath": "I1023:18277;781:2290",
+          "sourcePath": "Directory > DirectoryToolbar > Action/Top",
+          "scope": "Reader Phone Full Directory top action"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_header_appearance",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:448",
+        "nodeId": "I1023:18288;772:2077",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18284",
+          "fullHeaderInstanceId": "1023:18288",
+          "exactSourceNodePath": "I1023:18288;772:2077",
+          "sourcePath": "Appearance > Reader/Full/Header > Leading > HeaderIcon",
+          "scope": "Reader Phone Full Appearance header"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_header_directory",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:436",
+        "nodeId": "I1023:18278;772:2077",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18274",
+          "fullHeaderInstanceId": "1023:18278",
+          "exactSourceNodePath": "I1023:18278;772:2077",
+          "sourcePath": "Directory > Reader/Full/Header > Leading > HeaderIcon",
+          "scope": "Reader Phone Full Directory header"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_header_settings",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:454",
+        "nodeId": "I1023:18293;772:2077",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18289",
+          "fullHeaderInstanceId": "1023:18293",
+          "exactSourceNodePath": "I1023:18293;772:2077",
+          "sourcePath": "Settings > Reader/Full/Header > Leading > HeaderIcon",
+          "scope": "Reader Phone Full Settings header"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_header_tts",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:442",
+        "nodeId": "I1023:18283;772:2077",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18279",
+          "fullHeaderInstanceId": "1023:18283",
+          "exactSourceNodePath": "I1023:18283;772:2077",
+          "sourcePath": "TTS > Reader/Full/Header > Leading > HeaderIcon",
+          "scope": "Reader Phone Full TTS header"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_tts_next",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "362:15",
+        "nodeId": "I1023:18282;1138:10277;785:2669;1023:18124",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18279",
+          "exactSourceNodePath": "I1023:18282;1138:10277;785:2669;1023:18124",
+          "sourcePath": "TTS > Playback > TransportButton Next",
+          "scope": "Reader Phone Full TTS next transport"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_tts_play",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:392",
+        "nodeId": "I1023:18282;1138:10277;785:2659;1023:18120",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18279",
+          "exactSourceNodePath": "I1023:18282;1138:10277;785:2659;1023:18120",
+          "sourcePath": "TTS > Playback > TransportButton Play",
+          "scope": "Reader Phone Full TTS play transport"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_tts_previous",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:124",
+        "nodeId": "I1023:18282;1138:10277;785:2654;1023:18118",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18279",
+          "exactSourceNodePath": "I1023:18282;1138:10277;785:2654;1023:18118",
+          "sourcePath": "TTS > Playback > TransportButton Previous",
+          "scope": "Reader Phone Full TTS previous transport"
+        }
+      }
+    },
+    {
+      "resource": "figma_reader_full_tts_stop",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "iconMasterId": "271:542",
+        "nodeId": "I1023:18282;1138:10277;785:2664;1023:18122",
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified",
+        "currentReadContext": {
+          "fullPanelMasterId": "1023:18279",
+          "exactSourceNodePath": "I1023:18282;1138:10277;785:2664;1023:18122",
+          "sourcePath": "TTS > Playback > TransportButton Stop",
+          "scope": "Reader Phone Full TTS stop transport"
+        }
+      }
+    },
+    {
+      "resource": "main_tab_icon_bookshelf_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:335",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "Library",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_bookshelf_muted",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:335",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "Library",
+          "State": "Muted"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_discover_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:345",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "Compass",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_discover_muted",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:345",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "Compass",
+          "State": "Muted"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_rss_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:355",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "FileRss",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_rss_muted",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:355",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "FileRss",
+          "State": "Muted"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_settings_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeId": "445:363",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "variant": {
+          "Tab": "Settings",
+          "State": "Active"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "main_tab_icon_settings_muted",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:7",
+        "iconMasterId": "344:379",
+        "nodeRole": "current-bottom-nav-component-instance-candidate",
+        "nodeId": "445:363",
+        "variant": {
+          "Tab": "Settings",
+          "State": "Muted"
+        },
+        "currentRevision": null,
+        "status": "current-instance-source-read-local-byte-unverified"
+      }
+    },
+    {
+      "resource": "reader_control_brightness_sun",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:555",
+        "nodeId": "1023:18607",
+        "exportNodeId": "1023:18607",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18607",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone"
+            }
+          },
+          {
+            "nodeId": "1023:18621",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "6be373e218e5122c3b3173e40537656ac2ca7072644c69aa3c97b72603b56ce9",
+        "exportBytes": 1087,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_chapter_next",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "362:15",
+        "nodeId": "1023:18446",
+        "exportNodeId": "1023:18446",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18446",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone",
+              "Direction": "Next",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:18454",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded",
+              "Direction": "Next",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "0b0260957a4017870b87b88e3ce88a42da0dc79dcbb74081d38bb9f51c9cdd1f",
+        "exportBytes": 442,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_chapter_prev",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:124",
+        "nodeId": "1023:18444",
+        "exportNodeId": "1023:18444",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18444",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone",
+              "Direction": "Previous",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:18452",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded",
+              "Direction": "Previous",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "424308d3135d1f0d9ce754a426a8a25bfd749d967eb3ea320ac4ba5fd197bcd3",
+        "exportBytes": 442,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_compact_next",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "362:15",
+        "nodeId": "1023:17816",
+        "exportNodeId": "1023:17816",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17816",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Action": "Next",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 16,
+          "height": 16
+        },
+        "exportSha256": "4556e7747141394fe1355e44bd0cd74287a509f626bca3417c6a6969e12d3b06",
+        "exportBytes": 435,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_compact_prev",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:124",
+        "nodeId": "1023:17805",
+        "exportNodeId": "1023:17805",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17805",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Action": "Previous",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 16,
+          "height": 16
+        },
+        "exportSha256": "9e9ef8b76c6a73c5cf498eec27004ba15103dab08809cea9d3fe027b32f61eaa",
+        "exportBytes": 435,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_appearance_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:448",
+        "nodeId": "1023:17703",
+        "exportNodeId": "1023:17703",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17687",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Appearance",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17703",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Appearance",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "0870209bab05c7da28895852e2e3b79e8ff58dda72ccff5f591d55041d0d9ea5",
+        "exportBytes": 2773,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_appearance_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:448",
+        "nodeId": "1023:17687",
+        "exportNodeId": "1023:17687",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17687",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Appearance",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17703",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Appearance",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "119c9e4a1941fccfee4540bc0202ff4b4ac1dd3f91e3e2190a08d813634de7ba",
+        "exportBytes": 2685,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_directory_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:436",
+        "nodeId": "1023:17695",
+        "exportNodeId": "1023:17695",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17679",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Directory",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17695",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Directory",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "19bb8e5335677a8d2ab8cd5bc2d5755a971300f58ba12a222fb46bfff0862119",
+        "exportBytes": 1267,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_directory_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:436",
+        "nodeId": "1023:17679",
+        "exportNodeId": "1023:17679",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17679",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Directory",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17695",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Directory",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "c95990a4a331ad9e4714615c7343189ce489c0aedd6ea37ac01eb43be131482a",
+        "exportBytes": 1135,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_settings_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:454",
+        "nodeId": "1023:17707",
+        "exportNodeId": "1023:17707",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17691",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Settings",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17707",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Settings",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "31aa21852102b6d6d5a09bd978bba5c3677366d251c77040c1f1308c9163f110",
+        "exportBytes": 2761,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_settings_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:454",
+        "nodeId": "1023:17691",
+        "exportNodeId": "1023:17691",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17691",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Settings",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17707",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "Settings",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "36f7711602a18c93f16a4e6e3097303420a90c0eb9f76b2d1796e281b704320b",
+        "exportBytes": 2717,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_tts_active",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:442",
+        "nodeId": "1023:17699",
+        "exportNodeId": "1023:17699",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17683",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "TTS",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17699",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "TTS",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "63dc3ce09aa14ec36eb3fd5c43d521f1564b4e9a6df281716687308b134f8681",
+        "exportBytes": 1801,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_module_tts_default",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:442",
+        "nodeId": "1023:17683",
+        "exportNodeId": "1023:17683",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17683",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "TTS",
+              "State": "Default",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:17699",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Module": "TTS",
+              "State": "Active",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "274ff76c99da22450f38b3b9b051651c3c386e4b87a3a8bdd9be1531f9474a04",
+        "exportBytes": 1735,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_play",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:392",
+        "nodeId": "1023:17809",
+        "exportNodeId": "1023:17809",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17809",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Action": "Play",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 21,
+          "height": 21
+        },
+        "exportSha256": "7776f2d623f22b409f41160ec837cbd7c89700c84d53b23e01124d4467eb9e68",
+        "exportBytes": 455,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_quick_auto_page",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:418",
+        "nodeId": "1023:18419",
+        "exportNodeId": "1023:18419",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18419",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone",
+              "Action": "AutoPage",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:18437",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded",
+              "Action": "AutoPage",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "1a577a1b947dde048f39fb40958f73525d3ebf29ba7cae9d1625b6b39bca601d",
+        "exportBytes": 655,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_quick_replace",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:424",
+        "nodeId": "1023:18422",
+        "exportNodeId": "1023:18422",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18422",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone",
+              "Action": "Replace",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:18440",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded",
+              "Action": "Replace",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "3e335b57c387f72c03333e2129358f83f95cdd0b8cadac273d0adc06542de35a",
+        "exportBytes": 1948,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_quick_search",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:430",
+        "nodeId": "1023:18416",
+        "exportNodeId": "1023:18416",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18416",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone",
+              "Action": "Search",
+              "Interaction": "Default"
+            }
+          },
+          {
+            "nodeId": "1023:18434",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded",
+              "Action": "Search",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "1dda8f698a86f196e6380c108fde152a12247fdaef33f60a092f821b4dd46d15",
+        "exportBytes": 1319,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_top_back",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:37",
+        "nodeId": "1023:18383",
+        "exportNodeId": "1023:18383",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18383",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone"
+            }
+          },
+          {
+            "nodeId": "1023:18405",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 24,
+          "height": 24
+        },
+        "exportSha256": "16545b524202c4508744de31e0ff7e3ff208285b64540570105065a54cac7a5c",
+        "exportBytes": 741,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_top_more",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:333",
+        "nodeId": "1023:18391",
+        "exportNodeId": "1023:18391",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18391",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone"
+            }
+          },
+          {
+            "nodeId": "1023:18413",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "0bbeee853825e3f616ddc2043cd95fdf1587c785573c778d17e67c9295c5ea5c",
+        "exportBytes": 1819,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_top_source_switch",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:532",
+        "nodeId": "1023:18389",
+        "exportNodeId": "1023:18389",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:18389",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "Phone",
+            "variant": {
+              "Viewport": "Phone"
+            }
+          },
+          {
+            "nodeId": "1023:18411",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": "TabletExpanded",
+            "variant": {
+              "Viewport": "TabletExpanded"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "789c2fe20f8c552ee0d959164fed9dfbcf5ba86bfa1d61b6ac26ba5b18487632",
+        "exportBytes": 913,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_tts_caret_down",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "750:1055",
+        "nodeId": "750:1055",
+        "exportNodeId": "750:1055",
+        "exportNodeRole": "leaf-vector",
+        "contexts": [
+          {
+            "nodeId": "750:1055",
+            "nodeRole": "leaf-vector",
+            "viewport": null,
+            "variant": null
+          }
+        ],
+        "expectedSize": {
+          "width": 7,
+          "height": 4
+        },
+        "exportSha256": "563d36b34fcff9e82b0801fc6f0dfd80daf0374196c98e6070e1e653afd35497",
+        "exportBytes": 238,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_tts_clock",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:136",
+        "nodeId": "1023:17796",
+        "exportNodeId": "1023:17796",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17796",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Type": "Timer"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "32d2a663eb82c822e0e9aecd5da1570aa62043b079e0344730ed543c2f82982a",
+        "exportBytes": 1082,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_tts_playback",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:597",
+        "nodeId": "271:597",
+        "exportNodeId": "271:597",
+        "exportNodeRole": "canonical-icon-master",
+        "contexts": [
+          {
+            "nodeId": "1023:17792",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Type": "Playback"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 48,
+          "height": 48
+        },
+        "exportSha256": "b4d038f09191b6a11d07ccbdffedb243f6aee1bddf40d69906cec65b0ed09f27",
+        "exportBytes": 1428,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_tts_speed",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:340",
+        "nodeId": "1023:17800",
+        "exportNodeId": "1023:17800",
+        "exportNodeRole": "leaf-icon-instance",
+        "contexts": [
+          {
+            "nodeId": "1023:17800",
+            "nodeRole": "leaf-icon-instance",
+            "viewport": null,
+            "variant": {
+              "Type": "Speed"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 20,
+          "height": 20
+        },
+        "exportSha256": "6477587d80ab97385f1a009804b0a2791bd56590e1fd08a42bd25a5f9c7ec5ea",
+        "exportBytes": 727,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "reader_control_tts_stop",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "1023:17636",
+        "currentRevision": "2379851596474967636",
+        "revisionStatus": "official-rest-source-plan-plugin-export-rest-reconfirmation-pending",
+        "status": "current-exact-plugin-svg-exported-rest-reconfirmation-pending",
+        "canonicalMasterId": "271:542",
+        "nodeId": "1023:17810",
+        "exportNodeId": "1023:17810",
+        "exportNodeRole": "canonical-icon-composite",
+        "contexts": [
+          {
+            "nodeId": "1023:17810",
+            "nodeRole": "canonical-icon-composite",
+            "viewport": null,
+            "variant": {
+              "Action": "Stop",
+              "Interaction": "Default"
+            }
+          }
+        ],
+        "expectedSize": {
+          "width": 44,
+          "height": 44
+        },
+        "exportSha256": "e8b382ff4cfd799ad6780afedad3c2d51d4152acd1a563bc673ecb2924720063",
+        "exportBytes": 1101,
+        "exportEvidence": "docs/design/FIGMA_READER_CONTROL_ICON_EXPORT_EVIDENCE.json"
+      }
+    },
+    {
+      "resource": "ui_icon_list_primary",
+      "figma": {
+        "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+        "pageId": "259:4",
+        "iconMasterId": "270:2",
+        "nodeId": null,
+        "currentRevision": null,
+        "status": "unbound-local-resource"
+      }
+    }
+  ],
+  "rule": "Current Reader control resources must match their exact clean SVG_STRING export evidence. Other catalog entries retain their own status and do not inherit this revision or parity claim.",
+  "recordedAt": "2026-07-23T07:13:56Z"
+}

@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "A2_PRE_PROMOTION_CONSUMER_RECEIPT",
+  "status": "a2-consumer-closed",
+  "handoffDir": "reader-runtime/reading-surface",
+  "recordIds": [
+    "reader.reading-surface"
+  ],
+  "figmaRevision": "2379851596474967636",
+  "sourceEvidence": {
+    "a2DeltaPath": "docs/design/handoffs/reader-runtime/reading-surface/A2_CONTRACT_RETIREMENT_DELTA.json",
+    "a2DeltaSha256": "sha256:be07eb0c04322e32f8d57200ce9adf57515721273f1cdb4ec4f1ca523b7928aa",
+    "b2ImplementationCommit": "4e5e75d802810c4c5b4e2cc8ed64091b418a7e92",
+    "b3PacketPath": "docs/design/handoffs/reader-runtime/reading-surface/LOCAL_READY_FOR_FIGMA.json",
+    "b3PacketSha256": "sha256:fd5f923ce63b1c3781229ca6dcc81cfd4fa1319c425c4cc7792a96d5b8ae930e",
+    "b3EvidenceCommit": "4c1d8225dfe26d6032e30773b0b56c6ca96310a6",
+    "sourceEvidenceHash": "sha256:b931f2f8ad97623b09c86931cbd48462bd42aef06d1fdb74266b237bad1ded07"
+  },
+  "harmonyConsumer": {
+    "repository": "Reader-for-HarmonyOS",
+    "cleanupCommit": "9c81f750ff5d7a61dfd2ef0fc121ded44c1d140d",
+    "cleanupTree": "2205c6f7e92da02cf9fb56ec71a842abb12a9c4b",
+    "cleanupCommitSubject": "fix(harmony): close reading-surface A2 consumer retirement",
+    "changedPaths": [
+      "entry/src/main/ets/ui/components/ViewStateRenderer.ets",
+      "entry/src/main/ets/ui/router/ReaderUIScreenGraphCoverage.ets",
+      "entry/src/test/ReaderOverlayViewState.test.ets",
+      "scripts/sync_reader_ui_screen_graph.mjs",
+      "scripts/test_contracts.mjs"
+    ],
+    "verification": {
+      "command": "node scripts/sync_reader_ui_screen_graph.mjs --check",
+      "expectedMarker": "[screen-graph-consumer] PASS"
+    }
+  },
+  "ordering": {
+    "requiredBefore": "B4 promotion",
+    "mode": "historical-bootstrap",
+    "reason": "Backfilled without rewriting the immutable B3 packet or append-only promotion ledger. The cleanup commit already preceded the active promotion.",
+    "activePromotionEntries": [
+      {
+        "recordId": "reader.reading-surface",
+        "entryId": "promote-003",
+        "entryHash": "sha256:292c76bfefa6f384eea01febc2697b5c8dfd043a828b6df9ee016a4ef920671d"
+      }
+    ]
+  },
+  "doesNotClaim": [
+    "a new promotion authorization",
+    "Reader-UI 4.0 runtime release-lock consumption",
+    "B6 virtual-machine current-release evidence",
+    "B7 device, motion, machine receipt, or release identity"
+  ]
+}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reader 阅读页文本选择</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary-fixed-dim": "#f2baa2",
+                        "on-secondary-container": "#79503c",
+                        "on-tertiary-fixed-variant": "#2e4e30",
+                        "on-tertiary-container": "#f7fff2",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#507a92",
+                        "surface-container-low": "#fbf2eb",
+                        "tertiary-fixed-dim": "#abd0a8",
+                        "surface-bright": "#fff8f4",
+                        "on-primary-fixed": "#001e2c",
+                        "surface-dim": "#e1d8d2",
+                        "tertiary-container": "#5b7d5a",
+                        "on-background": "#1f1b17",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed-variant": "#1e4b62",
+                        "inverse-surface": "#34302b",
+                        "secondary-fixed": "#ffdbcc",
+                        "inverse-on-surface": "#f8efe8",
+                        "surface-tint": "#39637b",
+                        "on-error": "#ffffff",
+                        "background": "#fff8f4",
+                        "surface-container-highest": "#eae1da",
+                        "surface-container": "#f5ece6",
+                        "on-tertiary": "#ffffff",
+                        "tertiary": "#436443",
+                        "error": "#ba1a1a",
+                        "outline-variant": "#c1c7cd",
+                        "on-tertiary-fixed": "#022108",
+                        "surface-container-high": "#efe7e0",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#fec5ad",
+                        "on-surface": "#1f1b17",
+                        "primary": "#366179",
+                        "inverse-primary": "#a1cce8",
+                        "on-secondary-fixed-variant": "#643d2b",
+                        "secondary": "#7f5441",
+                        "on-secondary-fixed": "#301305",
+                        "on-primary-container": "#fcfcff",
+                        "primary-fixed": "#c4e7ff",
+                        "surface-variant": "#eae1da",
+                        "on-surface-variant": "#41484c",
+                        "outline": "#72787d",
+                        "on-primary": "#ffffff",
+                        "surface": "#fff8f4",
+                        "on-error-container": "#93000a",
+                        "primary-fixed-dim": "#a1cce8",
+                        "tertiary-fixed": "#c7ecc3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "48px",
+                        "md": "24px",
+                        "base": "4px",
+                        "xs": "8px",
+                        "touch-target": "48px",
+                        "sidebar-width": "320px",
+                        "max-content-width": "720px",
+                        "sm": "12px",
+                        "xl": "80px"
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .reading-view {
+            font-family: "Noto Serif SC", "Source Han Serif SC", "PingFang SC", serif;
+        }
+        .text-selection-highlight {
+            background-color: #537D9633; /* 主色 20% 透明度 */
+            border-bottom: 2px solid #366179;
+            position: relative;
+        }
+        .selection-handle {
+            width: 12px;
+            height: 12px;
+            background-color: #366179;
+            border-radius: 50%;
+            position: absolute;
+            z-index: 10;
+        }
+        .handle-start { top: -6px; left: -6px; }
+        .handle-end { bottom: -6px; right: -6px; }
+        .selection-menu-shadow {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface flex flex-col min-h-screen">
+<!-- 阅读页背景层 (沉浸模式下四角信息) -->
+<div class="fixed inset-0 p-md flex flex-col justify-between pointer-events-none select-none z-0">
+<div class="flex justify-between items-start">
+<span class="text-on-surface-variant text-sm font-medium">《活着》余华</span>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">battery_5_bar</span>
+<span class="text-on-surface-variant text-sm">78%</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<span class="text-on-surface-variant text-sm max-w-[60%] truncate">第一章 往事如烟</span>
+<span class="text-on-surface-variant text-sm">14:32</span>
+</div>
+</div>
+<!-- 阅读正文容器 (模拟选区状态) -->
+<main class="flex-1 max-w-max-content-width mx-auto px-md py-xl z-10 relative">
+<div class="reading-view text-body-lg text-on-surface leading-loose tracking-wide">
+<p class="mb-lg">
+                我决定写下这些文字，并不是因为我有什么了不起的故事要讲，而是因为我觉得如果不把这些东西记下来，它们就会像烟雾一样，随着时间的流逝而慢慢消散。
+            </p>
+<p class="mb-lg">
+                那是四十多年前的一个下午，阳光斜斜地照进老房子的院子里。我坐在一张摇晃的竹椅上，看着爷爷在院子角落里忙碌。爷爷是一个沉默寡言的人，他的一生都在
+                <span class="text-selection-highlight">
+                    这块土地上辛勤耕耘，他的手像老树皮一样粗糙，
+                    <span class="selection-handle handle-start"></span>
+<span class="selection-handle handle-end"></span>
+</span>
+                却有着一种让人心安的力量。
+            </p>
+<!-- 动态跟随菜单 (模拟跟随选区上方) -->
+<div class="absolute top-[280px] left-1/2 -translate-x-1/2 -mt-16 z-50">
+<div class="flex items-center bg-surface-container-lowest border border-outline-variant rounded-xl selection-menu-shadow py-1 px-1">
+<button class="flex flex-col items-center justify-center w-14 h-14 hover:bg-surface-container-low rounded-lg gap-1 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">content_copy</span>
+<span class="text-[11px] font-medium text-on-surface">复制</span>
+</button>
+<div class="w-[1px] h-6 bg-outline-variant mx-1"></div>
+<button class="flex flex-col items-center justify-center w-14 h-14 hover:bg-surface-container-low rounded-lg gap-1 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">search</span>
+<span class="text-[11px] font-medium text-on-surface">查询</span>
+</button>
+<button class="flex flex-col items-center justify-center w-14 h-14 hover:bg-surface-container-low rounded-lg gap-1 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">find_replace</span>
+<span class="text-[11px] font-medium text-on-surface">替换</span>
+</button>
+<div class="w-[1px] h-6 bg-outline-variant mx-1"></div>
+<button class="flex flex-col items-center justify-center w-14 h-14 hover:bg-surface-container-low rounded-lg gap-1 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">select_all</span>
+<span class="text-[11px] font-medium text-on-surface">全选</span>
+</button>
+<button class="flex flex-col items-center justify-center w-14 h-14 hover:bg-surface-container-low rounded-lg gap-1 transition-colors">
+<span class="material-symbols-outlined text-error" style="font-size: 20px;">close</span>
+<span class="text-[11px] font-medium text-error">取消</span>
+</button>
+</div>
+<!-- 菜单小尖角 -->
+<div class="w-3 h-3 bg-surface-container-lowest border-r border-b border-outline-variant rotate-45 mx-auto -mt-1.5 selection-menu-shadow"></div>
+</div>
+<p class="mb-lg">
+                那时候我还不懂得什么是生活，总觉得日子长得看不到尽头。爷爷偶尔会抬起头，眯着眼睛看一眼天边的云彩，然后轻轻叹一口气。那声叹息里包含了太多我当时无法理解的情感。
+            </p>
+<p class="mb-lg">
+                后来我才明白，生活其实就像这院子里的老槐树，春天发芽，夏天茂盛，秋天落叶，冬天枯萎。每一个季节都有它存在的意义，每一个阶段都有它必须承受的苦难与欢乐。
+            </p>
+</div>
+</main>
+<!-- 侧边亮度条 (控制层的一部分，虽然在选择状态下应弱化或隐藏，此处展示其位置) -->
+<div class="fixed right-md top-1/2 -translate-y-1/2 z-20 flex flex-col items-center gap-4 opacity-20 pointer-events-none">
+<div class="w-12 h-12 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center">
+<span class="text-on-surface font-bold">A</span>
+</div>
+<div class="w-3 h-48 bg-surface-container border border-outline-variant rounded-full relative">
+<div class="absolute bottom-0 w-full bg-primary rounded-full" style="height: 60%;"></div>
+</div>
+<div class="w-12 h-12 rounded-full bg-surface-container border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined">swap_horiz</span>
+</div>
+</div>
+<!-- 交互提示：点击空白处退出文本选择 -->
+<div class="fixed inset-0 z-0 bg-on-surface/5"></div>
+<!-- 底部控制区 (占位，展示在控制层状态下的结构) -->
+<div class="fixed bottom-0 inset-x-0 bg-surface-container border-t border-outline-variant p-sm flex flex-col gap-4 transform translate-y-full">
+<!-- 快捷操作 -->
+<div class="grid grid-cols-4 w-full">
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">search</span>
+<span class="text-[10px]">搜索</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">auto_stories</span>
+<span class="text-[10px]">自动翻页</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">find_replace</span>
+<span class="text-[10px]">内容替换</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface" data-weight="fill">dark_mode</span>
+<span class="text-[10px]">夜间模式</span>
+</button>
+</div>
+<!-- 进度条 -->
+<div class="flex items-center gap-4 px-md">
+<span class="text-sm font-medium">上一章</span>
+<div class="flex-1 h-1.5 bg-outline-variant rounded-full overflow-hidden">
+<div class="w-1/3 h-full bg-primary"></div>
+</div>
+<span class="text-sm font-medium">下一章</span>
+</div>
+<!-- 主功能 -->
+<div class="grid grid-cols-4 w-full border-t border-outline-variant pt-sm">
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">list</span>
+<span class="text-sm">目录</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">record_voice_over</span>
+<span class="text-sm">朗读</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">format_size</span>
+<span class="text-sm">界面</span>
+</button>
+<button class="flex flex-col items-center gap-1">
+<span class="material-symbols-outlined text-on-surface">settings</span>
+<span class="text-sm">设置</span>
+</button>
+</div>
+</div>
+</body></html>

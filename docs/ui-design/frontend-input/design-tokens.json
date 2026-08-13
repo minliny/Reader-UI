@@ -1,0 +1,418 @@
+{
+  "version": "2026-06-21-local",
+  "cssSource": "docs/ui-design/frontend-input/tokens.css",
+  "composeSources": {
+    "colors": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderColors.kt",
+    "spacing": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderSpacing.kt",
+    "typography": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderTypography.kt",
+    "shapes": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderShapes.kt",
+    "elevation": "app/src/main/kotlin/com/reader/android/ui/theme/ReaderElevation.kt"
+  },
+  "runtimeCriticalCssVars": [
+    "--reader-ds-color-paper",
+    "--reader-ds-color-ink",
+    "--reader-ds-color-primary",
+    "--reader-ds-space-screen-padding",
+    "--reader-ds-safe-area-top",
+    "--reader-ds-safe-area-bottom",
+    "--reader-ds-size-phone-width",
+    "--reader-ds-size-phone-height",
+    "--reader-ds-size-main-nav-height",
+    "--reader-ds-size-reader-bottom-sheet-min-height",
+    "--reader-ds-z-main-nav",
+    "--reader-ds-z-bottom-sheet",
+    "--reader-ds-z-reader-module-nav",
+    "--reader-ds-z-dialog",
+    "--reader-ds-z-keyboard",
+    "--reader-ds-text-title-lines",
+    "--reader-ds-type-page-title-size",
+    "--reader-ds-radius-card",
+    "--reader-ds-state-focus"
+  ],
+  "tokens": {
+    "colors": {
+      "paperBg": {
+        "css": "--reader-ds-color-paper",
+        "cssValue": "#fff8f4",
+        "composeField": "paperBg",
+        "composeValue": "0xFFFFF8F4"
+      },
+      "paperBright": {
+        "css": "--reader-ds-color-paper-bright",
+        "cssValue": "#fff8f1"
+      },
+      "surface": {
+        "css": "--reader-ds-color-surface",
+        "cssValue": "rgba(255, 255, 255, 0.88)"
+      },
+      "surfaceSoft": {
+        "css": "--reader-ds-color-surface-soft",
+        "cssValue": "rgba(255, 252, 248, 0.72)"
+      },
+      "bodyText": {
+        "css": "--reader-ds-color-ink",
+        "cssValue": "#1f1b17",
+        "composeField": "bodyText",
+        "composeValue": "0xFF1F1B17"
+      },
+      "controlInk": {
+        "css": "--reader-ds-color-control-ink",
+        "cssValue": "#41484c",
+        "composeField": "controlInk",
+        "composeValue": "0xFF41484C"
+      },
+      "muted": {
+        "css": "--reader-ds-color-muted",
+        "cssValue": "#756f69"
+      },
+      "border": {
+        "css": "--reader-ds-color-border",
+        "cssValue": "#c1c7cd",
+        "composeField": "controlBorder",
+        "composeValue": "0xFFC1C7CD"
+      },
+      "primary": {
+        "css": "--reader-ds-color-primary",
+        "cssValue": "#366179",
+        "composeField": "primary",
+        "composeValue": "0xFF366179"
+      },
+      "primaryDark": {
+        "css": "--reader-ds-color-primary-dark",
+        "cssValue": "#274f66"
+      },
+      "accent": {
+        "css": "--reader-ds-color-accent",
+        "cssValue": "#f48b13"
+      },
+      "bottomBarBg": {
+        "css": "--reader-ds-color-bottom-bar-bg",
+        "cssValue": "#fbf2eb",
+        "composeField": "bottomBarBg",
+        "composeValue": "0xFFFBF2EB"
+      },
+      "floatingControlBg": {
+        "css": "--reader-ds-color-floating-control-bg",
+        "cssValue": "#fbf2eb",
+        "composeField": "floatingControlBg",
+        "composeValue": "0xFFFBF2EB"
+      },
+      "floatingControlBgAlt": {
+        "css": "--reader-ds-color-floating-control-bg-alt",
+        "cssValue": "#eae1da",
+        "composeField": "floatingControlBgAlt",
+        "composeValue": "0xFFEAE1DA"
+      },
+      "metaBg": {
+        "css": "--reader-ds-color-meta-bg",
+        "cssValue": "#f5ece6",
+        "composeField": "metaBg",
+        "composeValue": "0xFFF5ECE6"
+      }
+    },
+    "spacing": {
+      "xs": {
+        "css": "--reader-ds-space-xs",
+        "cssValue": "8px",
+        "composeField": "xs",
+        "composeValue": "8.dp"
+      },
+      "sm": {
+        "css": "--reader-ds-space-sm",
+        "cssValue": "12px",
+        "composeField": "sm",
+        "composeValue": "12.dp"
+      },
+      "md": {
+        "css": "--reader-ds-space-md",
+        "cssValue": "16px",
+        "composeField": "md",
+        "composeValue": "16.dp"
+      },
+      "lg": {
+        "css": "--reader-ds-space-lg",
+        "cssValue": "24px",
+        "composeField": "lg",
+        "composeValue": "24.dp"
+      },
+      "xl": {
+        "css": "--reader-ds-space-xl",
+        "cssValue": "48px",
+        "composeField": "xl",
+        "composeValue": "48.dp"
+      },
+      "screenPadding": {
+        "css": "--reader-ds-space-screen-padding",
+        "cssValue": "16px",
+        "composeField": "screenPadding",
+        "composeValue": "16.dp"
+      },
+      "cardPadding": {
+        "css": "--reader-ds-space-card-padding",
+        "cssValue": "14px",
+        "composeField": "cardPadding",
+        "composeValue": "14.dp"
+      },
+      "bottomBarHeight": {
+        "css": "--reader-ds-size-bottom-bar-height",
+        "cssValue": "68px",
+        "composeField": "bottomBarHeight",
+        "composeValue": "68.dp"
+      },
+      "safeAreaTop": {
+        "css": "--reader-ds-safe-area-top",
+        "cssValue": "24px",
+        "composeField": "safeAreaTop",
+        "composeValue": "24.dp"
+      },
+      "safeAreaBottom": {
+        "css": "--reader-ds-safe-area-bottom",
+        "cssValue": "14px",
+        "composeField": "safeAreaBottom",
+        "composeValue": "14.dp"
+      },
+      "safeAreaHorizontal": {
+        "css": "--reader-ds-safe-area-horizontal",
+        "cssValue": "16px",
+        "composeField": "safeAreaHorizontal",
+        "composeValue": "16.dp"
+      },
+      "topBarHeight": {
+        "css": "--reader-ds-size-top-bar-height",
+        "cssValue": "58px",
+        "composeField": "topBarHeight",
+        "composeValue": "58.dp"
+      },
+      "mainNavHeight": {
+        "css": "--reader-ds-size-main-nav-height",
+        "cssValue": "68px",
+        "composeField": "mainNavHeight",
+        "composeValue": "68.dp"
+      },
+      "readerBottomSheetMinHeight": {
+        "css": "--reader-ds-size-reader-bottom-sheet-min-height",
+        "cssValue": "284px",
+        "composeField": "readerBottomSheetMinHeight",
+        "composeValue": "284.dp"
+      },
+      "readerModuleNavHeight": {
+        "css": "--reader-ds-size-reader-module-nav-height",
+        "cssValue": "82px",
+        "composeField": "readerModuleNavHeight",
+        "composeValue": "82.dp"
+      },
+      "keyboardHeight": {
+        "css": "--reader-ds-size-keyboard-height",
+        "cssValue": "320px",
+        "composeField": "keyboardHeight",
+        "composeValue": "320.dp"
+      },
+      "keyboardGap": {
+        "css": "--reader-ds-space-keyboard-gap",
+        "cssValue": "12px",
+        "composeField": "keyboardGap",
+        "composeValue": "12.dp"
+      }
+    },
+    "frame": {
+      "phoneWidth": {
+        "css": "--reader-ds-size-phone-width",
+        "cssValue": "390px"
+      },
+      "phoneHeight": {
+        "css": "--reader-ds-size-phone-height",
+        "cssValue": "844px"
+      },
+      "stackPhoneHeight": {
+        "css": "--reader-ds-size-stack-phone-height",
+        "cssValue": "878px"
+      },
+      "flowWidth": {
+        "css": "--reader-ds-size-flow-width",
+        "cssValue": "1284px"
+      },
+      "flowMinHeight": {
+        "css": "--reader-ds-size-flow-min-height",
+        "cssValue": "520px"
+      }
+    },
+    "radii": {
+      "small": {
+        "css": "--reader-ds-radius-small",
+        "cssValue": "4px",
+        "composeField": "small",
+        "composeValue": "4.dp"
+      },
+      "medium": {
+        "css": "--reader-ds-radius-medium",
+        "cssValue": "6px",
+        "composeField": "medium",
+        "composeValue": "6.dp"
+      },
+      "large": {
+        "css": "--reader-ds-radius-large",
+        "cssValue": "8px",
+        "composeField": "large",
+        "composeValue": "8.dp"
+      },
+      "card": {
+        "css": "--reader-ds-radius-card",
+        "cssValue": "4px",
+        "composeField": "card",
+        "composeValue": "4.dp"
+      },
+      "chip": {
+        "css": "--reader-ds-radius-chip",
+        "cssValue": "2px",
+        "composeField": "chip",
+        "composeValue": "2.dp"
+      },
+      "bottomSheet": {
+        "css": "--reader-ds-radius-bottom-sheet",
+        "cssValue": "8px",
+        "composeField": "bottomSheet",
+        "composeValue": "8.dp"
+      },
+      "control": {
+        "css": "--reader-ds-radius-control",
+        "cssValue": "999px"
+      }
+    },
+    "typography": {
+      "appTitle": {
+        "css": "--reader-ds-type-app-title-size",
+        "cssValue": "20px",
+        "composeField": "appTitle",
+        "composeValue": "20.sp"
+      },
+      "pageTitle": {
+        "css": "--reader-ds-type-page-title-size",
+        "cssValue": "20px",
+        "composeField": "pageTitle",
+        "composeValue": "20.sp"
+      },
+      "sectionTitle": {
+        "css": "--reader-ds-type-section-title-size",
+        "cssValue": "15px",
+        "composeField": "sectionTitle",
+        "composeValue": "15.sp"
+      },
+      "bookTitle": {
+        "css": "--reader-ds-type-book-title-size",
+        "cssValue": "14px",
+        "composeField": "bookTitle",
+        "composeValue": "14.sp"
+      },
+      "bookMeta": {
+        "css": "--reader-ds-type-book-meta-size",
+        "cssValue": "12px",
+        "composeField": "bookMeta",
+        "composeValue": "12.sp"
+      },
+      "readerBody": {
+        "css": "--reader-ds-type-reader-body-size",
+        "cssValue": "18px",
+        "composeField": "readerBody",
+        "composeValue": "18.sp"
+      },
+      "readerControlLabel": {
+        "css": "--reader-ds-type-reader-control-label-size",
+        "cssValue": "12px",
+        "composeField": "readerControlLabel",
+        "composeValue": "12.sp"
+      }
+    },
+    "elevation": {
+      "none": {
+        "css": "--reader-ds-elevation-none",
+        "cssValue": "0px",
+        "composeField": "none",
+        "composeValue": "0.dp"
+      },
+      "subtle": {
+        "css": "--reader-ds-elevation-subtle",
+        "cssValue": "1px",
+        "composeField": "subtle",
+        "composeValue": "1.dp"
+      },
+      "card": {
+        "css": "--reader-ds-elevation-card",
+        "cssValue": "2px",
+        "composeField": "card",
+        "composeValue": "2.dp"
+      },
+      "overlay": {
+        "css": "--reader-ds-elevation-overlay",
+        "cssValue": "2px",
+        "composeField": "overlay",
+        "composeValue": "2.dp"
+      }
+    },
+    "shadows": {
+      "elevated": {
+        "css": "--reader-ds-shadow-elevated",
+        "cssValue": "0 18px 46px rgba(89, 70, 50, 0.16)"
+      },
+      "soft": {
+        "css": "--reader-ds-shadow-soft",
+        "cssValue": "0 8px 26px rgba(89, 70, 50, 0.1)"
+      },
+      "focus": {
+        "css": "--reader-ds-state-focus",
+        "cssValue": "0 0 0 4px rgba(54, 97, 121, 0.22)"
+      }
+    },
+    "zIndex": {
+      "content": {
+        "css": "--reader-ds-z-content",
+        "cssValue": "0"
+      },
+      "overlay": {
+        "css": "--reader-ds-z-overlay",
+        "cssValue": "10"
+      },
+      "mainNav": {
+        "css": "--reader-ds-z-main-nav",
+        "cssValue": "20"
+      },
+      "bottomSheet": {
+        "css": "--reader-ds-z-bottom-sheet",
+        "cssValue": "30"
+      },
+      "readerModuleNav": {
+        "css": "--reader-ds-z-reader-module-nav",
+        "cssValue": "40"
+      },
+      "dialog": {
+        "css": "--reader-ds-z-dialog",
+        "cssValue": "60"
+      },
+      "keyboard": {
+        "css": "--reader-ds-z-keyboard",
+        "cssValue": "70"
+      }
+    },
+    "textLimits": {
+      "navLabelLines": {
+        "css": "--reader-ds-text-nav-label-lines",
+        "cssValue": "1"
+      },
+      "titleLines": {
+        "css": "--reader-ds-text-title-lines",
+        "cssValue": "1"
+      },
+      "bookTitleLines": {
+        "css": "--reader-ds-text-book-title-lines",
+        "cssValue": "2"
+      },
+      "readerLineLength": {
+        "css": "--reader-ds-text-reader-line-length",
+        "cssValue": "31ch"
+      },
+      "actionLabelLines": {
+        "css": "--reader-ds-text-action-label-lines",
+        "cssValue": "1"
+      }
+    }
+  }
+}

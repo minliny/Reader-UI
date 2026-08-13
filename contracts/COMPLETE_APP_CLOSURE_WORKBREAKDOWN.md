@@ -1,0 +1,102 @@
+# Complete App Closure Work Breakdown
+
+> **历史拆分提示（2026-07-10）**：RUI-01..05 保留追溯；2.2 后新增 Executable UI Runtime 与 Host consumer lock，以 [ARCHITECTURE.md](./ARCHITECTURE.md) 和 [../EXECUTABLE_UI_RUNTIME.md](../EXECUTABLE_UI_RUNTIME.md) 为准。
+
+状态：P0 Reader UI gates split and Motion Runtime contract filled
+日期：2026-07-05
+
+本文把“完整可用前端应用”剩余工作拆到对应仓库。Reader UI 负责契约和可验证参考，不负责三端生产 UI、Core 真实协议实现或设备证据。
+
+## 1. 当前 Reader UI 已补齐
+
+Reader UI 本仓当前已闭合：
+
+- P0 页面参考：[PAGE_REFERENCE.md](./PAGE_REFERENCE.md)
+- 完整矩阵：[ROUTE_COMPONENT_MATRIX.md](./ROUTE_COMPONENT_MATRIX.md)
+- 动效规范：[MOTION_SPEC.md](./MOTION_SPEC.md)
+- token 规范：[TOKEN_SPEC.md](./TOKEN_SPEC.md)
+- Core/Host 边界：[CORE_HOST_BOUNDARY.md](./CORE_HOST_BOUNDARY.md)
+- 三端切片：[SLICE_PLAN.md](./SLICE_PLAN.md)
+- evidence 规格：[PLATFORM_EVIDENCE_SPEC.md](./PLATFORM_EVIDENCE_SPEC.md)
+- 本仓防漂移门禁：
+  - `matrix-coverage.test.mjs`
+  - `motion-guard.test.mjs`
+  - `motion-policy.test.mjs`
+  - `motion-resolver.test.mjs`
+  - `token-group.test.mjs`
+  - `core-host-boundary.test.mjs`
+  - `registry-codegen.test.mjs`
+
+当前验证入口：
+
+```bash
+node --test contracts/tests/*.test.mjs
+```
+
+当前结果以各命令的即时输出为准；不要把历史测试总数当成当前 release proof。Swift / Kotlin runtime 与三个 Host 的结果分别由对应命令和仓库证据确认。
+
+## 2. Reader UI 剩余任务
+
+| ID | 任务 | 当前状态 | 完成标准 |
+| --- | --- | --- | --- |
+| RUI-01 | demo/schema unknown 收敛 | strict/exception gate 已建立；route/token unknown 为 0，motion unknown 必须列入 `demo-contract-exceptions.json`，即时计数以 machine report 为准 | strict gate 或 explicit alias/deprecated exception list；route/token unknown 必须为 0，motion unknown 必须为 0 或列入例外 |
+| RUI-02 | MotionId 归一化 | 已建立首批 alias 表：`reader.session.capsule.control.press/toggle` -> `reader.session.capsule.control.press-toggle`、`reader.page.turn.next/prev` -> `reader.page.turn.next-prev`、`tab.item.switch` -> `tab.switch`；demo 中仍有历史/内部 motion id 例外 | schema、demo runtime、fixtures、generated 使用同一 canonical MotionId；旧 id 只通过 deprecated alias 表存在 |
+| RUI-03 | 全量 MotionSpec registry + MotionPolicy resolver | 合同基础已完成：Swift/Kotlin/ArkTS 生成 registry 覆盖 95/95 canonical MotionId fixtures；53 条显式 policy 通过 `RouteShellLookup`、`MotionPolicyRegistry` 与 resolver 输出匹配结果或 `motion.policy.no-match` diagnostic，不再用空 match fallback。当前 canonical exact 为 89/95；其余 6 项已封闭为 3 个 contract-reserved `controlSpace.*` 与 3 个 deprecated 兼容 ID，不再存在未分类的 active MotionSpec。Reader 外观、亮度、书架、Discover、筛选、选择、危险确认、tooling、同步恢复与换源真实页已具备逐项状态契约；恢复卡片和书源候选行的 selector 覆盖冲突已修复。当前真实页面仍没有双 dropdown 同屏宿主，A→B redirect / reposition 需在首个实际消费者页面补验收证据 | Reader-UI 补首个双 dropdown/reposition 页面证据；平台仓分别实现 MotionAdapter、reduced-motion、native animation、navigator/back stack 与 device evidence，不能把本仓 generated resolver 当作 Host 完成证明 |
+| RUI-04 | TokenRegistry value codegen | registry 起点已完成：Swift/Kotlin/ArkTS 生成文件内已有 `TokenRegistry` / `tokenRegistry`，覆盖当前 117 条 token fixtures 的 name/category/value/platforms/deprecated；平台 TokenAdapter 实现仍归三端仓库 | 生成 Swift/Kotlin/ArkTS token value registry；三端 TokenAdapter 可直接消费或映射 |
+| RUI-05 | contract release gate | 当前以 codegen、contract tests、drift check 和 motion coverage 作为本仓可执行门禁；旧设计导出门禁已移除 | `node tools/codegen/generate.mjs` + `npm test --prefix contracts/tests` + `node tools/codegen/check-drift.mjs` + `node frontend-demo-optimized/verify/motion/verify-motion-coverage.mjs` |
+
+这些任务完成后，Reader UI 才能从“P0 可控开发参考”升级到“强门禁 contract release source”。
+
+## 3. Reader-Core-Native 任务
+
+| ID | 任务 | 输入 | 完成标准 |
+| --- | --- | --- | --- |
+| CORE-01 | P0 CoreCommand mapping | [CORE_HOST_BOUNDARY.md](./CORE_HOST_BOUNDARY.md), `core-command.schema.json` | `book.open` / `chapter.list` / `content.load` / `reader.location.resolve` / `reader.progress.update` 映射真实 Rust protocol |
+| CORE-02 | DomainState 事实源证明 | [STATE_OWNERSHIP.md](./STATE_OWNERSHIP.md), Core bridge matrix | bookshelf、RSS、search history、content、progress、TTS queue、sync conflict 不由平台持久化 |
+| CORE-03 | CoreEvent/error/stale 结果 | `core-event.schema.json`, `sync-conflict.schema.json` | success / failed / cancelled / stale result 都有协议测试 |
+| CORE-04 | HostRequest host bus 对齐 | `host-request.schema.json` | HTTP、Cookie、file、credential、system TTS、storage path 等 HostRequest 有真实边界和测试 |
+
+Core 任务完成前，三端可以做 Slice 0/1 骨架，但不能声称真实业务链路完成。
+
+## 4. 三端平台任务
+
+三端统一按 [SLICE_PLAN.md](./SLICE_PLAN.md) 推进。
+
+| Slice | Android | iOS | HarmonyOS | 依赖 |
+| --- | --- | --- | --- | --- |
+| Slice 0 | generated Kotlin 接入、Reducer/ViewModel/CoreBridge/HostAdapter 骨架 | generated Swift 接入、Reducer/Coordinator/CoreBridge/HostAdapter 骨架 | generated ArkTS 接入、Store/Reducer/NAPI bridge/HostAdapter 骨架 | Reader UI generated |
+| Slice 1 | Compose AppShell + 4 tabs + reducer golden | SwiftUI AppShell + 4 tabs + reducer golden | ArkUI AppShell + 4 tabs + reducer golden | Slice 0 |
+| Slice 2 | bookshelf -> reader surface + Core bridge smoke | 同左 | 同左 | Core `book.open/content.load/progress` mapping |
+| Slice 3 | reader control layer + overlay/focus tests | 同左 | 同左 | Slice 2 |
+| Slice 4 | TTS/auto-page session capsule | 同左 | 同左 | Core TTS queue + Host TTS |
+| Slice 5 | RSS/source/search | 同左 | 同左 | Core RSS/source/search |
+| Slice 6 | sync/conflict/offline | 同左 | 同左 | Core sync/conflict |
+| Slice 7 | Host Adapter capability completion | 同左 | 同左 | HostRequest matrix |
+| Slice 8 | device smoke + accessibility + performance | 同左 | HarmonyOS 真机优先 | Slice 1-7 |
+
+每端完成一个 slice 必须提交：
+
+- 本仓源码路径
+- 测试命令和输出
+- reducer golden test
+- TokenAdapter / MotionAdapter 覆盖证据
+- 截图或录屏
+- device/simulator evidence manifest
+
+## 5. 执行顺序
+
+1. Reader UI 保持 P0 gates 绿：`node --test contracts/tests/*.test.mjs`。
+2. 三端同时做 Slice 0，仅允许接入 generated 和建立骨架。
+3. Core 做 CORE-01 到 CORE-03，给 Slice 2 提供真实业务链路。
+4. 三端进入 Slice 1；Slice 1 不依赖真实 Core 数据，可用 contract fixtures 证明 AppShell/reducer。
+5. Core P0 bridge 可用后，三端进入 Slice 2。
+6. Slice 3-6 只按 Core/Host 能力成熟度推进，不能用平台本地假仓库替代 DomainState。
+7. Slice 8 前必须完成三端 raw token 检查、TokenAdapter coverage、MotionAdapter coverage、reducer golden test、device smoke。
+
+## 6. 禁止事项
+
+- 不允许把 `frontend-demo-optimized/` 放进 WebView 当生产 UI。
+- 不允许三端直接写 bookshelf / RSS / search history / progress / sync conflict 持久化。
+- 不允许绕过 generated types 手写 RouteId / MotionId / Token enum。
+- 不允许用截图相似度替代 reducer / Core / Host evidence。
+- 不允许单端无限向前做长尾页面，必须按 slice 对齐。

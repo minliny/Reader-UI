@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>阅读控制层状态矩阵</title>
+  <link rel="stylesheet" href="../../../frontend-input/shared-shell-kit/kit.css">
+  <link rel="stylesheet" href="./components.css">
+  <style>
+    html,
+    body {
+      width: auto;
+      min-width: 928px;
+      min-height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="reader-control-state-matrix"></div>
+  <script src="../../../frontend-input/asset-library/icons.js"></script>
+  <script src="../../../frontend-input/shared-shell-kit/kit.js"></script>
+  <script src="./fixture.js"></script>
+  <script src="./render.js"></script>
+  <script>
+    window.ReaderControlInput.renderReaderControlStateMatrix(
+      document.getElementById("reader-control-state-matrix"),
+      window.READER_CONTROL_FIXTURE
+    );
+  </script>
+</body>
+</html>

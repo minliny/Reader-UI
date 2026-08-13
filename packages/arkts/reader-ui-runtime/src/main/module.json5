@@ -1,0 +1,12 @@
+{
+  "module": {
+    "name": "reader_ui_runtime",
+    "type": "har",
+    "description": "Reader UI executable state and effect runtime",
+    "deviceTypes": [
+      "phone",
+      "tablet",
+      "2in1"
+    ]
+  }
+}

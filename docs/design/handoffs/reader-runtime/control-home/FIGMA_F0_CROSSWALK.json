@@ -1,0 +1,26 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_F0_EXACT_CROSSWALK",
+  "status": "resolved-current",
+  "recordId": "reader.control-home",
+  "binding": {
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "pageId": "1023:17636",
+    "nodeId": "1023:18737",
+    "canonicalMasterId": "1023:18737",
+    "viewportNodes": {
+      "phone": "1023:18737",
+      "tablet": "1023:18745"
+    },
+    "revision": "2379851596474967636",
+    "revisionStatus": "official-rest-current-version-node-verified",
+    "bindingStatus": "resolved-current"
+  },
+  "semanticBinding": {
+    "overlayKind": "reader-control",
+    "routeMutation": false,
+    "localTarget": "frontend-demo-optimized/render-runtime.js#readerControlHomeOverlay",
+    "legacyDetachedRoute": "control-layer-base-v2",
+    "legacyDetachedRoutePolicy": "must-remain-absent"
+  }
+}

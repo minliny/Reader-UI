@@ -1,0 +1,161 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#1f1b17",
+                        "tertiary-fixed": "#c7ecc3",
+                        "surface-tint": "#39637b",
+                        "surface-container-highest": "#eae1da",
+                        "tertiary": "#436443",
+                        "on-error": "#ffffff",
+                        "on-secondary-fixed-variant": "#643d2b",
+                        "inverse-surface": "#34302b",
+                        "error": "#ba1a1a",
+                        "secondary": "#7f5441",
+                        "on-surface-variant": "#41484c",
+                        "on-tertiary-container": "#f7fff2",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#022108",
+                        "on-secondary-container": "#79503c",
+                        "surface-container-high": "#efe7e0",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "background": "#fff8f4",
+                        "tertiary-fixed-dim": "#abd0a8",
+                        "secondary-container": "#fec5ad",
+                        "on-primary-container": "#fcfcff",
+                        "primary": "#366179",
+                        "on-error-container": "#93000a",
+                        "surface": "#fff8f4",
+                        "surface-bright": "#fff8f4",
+                        "on-background": "#1f1b17",
+                        "primary-fixed": "#c4e7ff",
+                        "on-primary-fixed-variant": "#1e4b62",
+                        "secondary-fixed": "#ffdbcc",
+                        "on-primary-fixed": "#001e2c",
+                        "surface-variant": "#eae1da",
+                        "primary-container": "#507a92",
+                        "surface-container-low": "#fbf2eb",
+                        "surface-container": "#f5ece6",
+                        "outline": "#72787d",
+                        "surface-dim": "#e1d8d2",
+                        "outline-variant": "#c1c7cd",
+                        "primary-fixed-dim": "#a1cce8",
+                        "inverse-on-surface": "#f8efe8",
+                        "inverse-primary": "#a1cce8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "24px",
+                        "xl": "80px",
+                        "max-content-width": "720px",
+                        "xs": "8px",
+                        "sm": "12px",
+                        "touch-target": "48px",
+                        "base": "4px",
+                        "sidebar-width": "320px",
+                        "lg": "48px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #fff8f4; /* background color from theme */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md text-body-md">
+<!-- TopAppBar - Based on Shared Component JSON -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface dark:bg-surface border-b border-outline-variant dark:border-outline h-touch-target flex items-center justify-between px-md w-full">
+<div class="flex items-center">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform p-2 rounded-full" data-icon="arrow_back">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+</div>
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface dark:text-on-surface">分组管理</h1>
+<div class="flex items-center">
+<button class="material-symbols-outlined text-primary dark:text-primary-fixed-dim hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors active:scale-95 transition-transform p-2 rounded-full" data-icon="add">
+<span class="material-symbols-outlined">add</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-center px-md pt-xl">
+<div class="max-w-max-content-width w-full flex flex-col items-center text-center">
+<!-- Weakened Book Icon Area -->
+<div class="mb-lg opacity-20 text-on-surface-variant">
+<div class="w-32 h-32 flex items-center justify-center bg-surface-container-high rounded-xl">
+<span class="material-symbols-outlined text-[80px]" style="font-variation-settings: 'wght' 200;">auto_stories</span>
+</div>
+</div>
+<!-- Empty State Typography -->
+<div class="space-y-sm mb-xl">
+<h2 class="font-headline-md text-headline-md text-on-surface">暂无自定义分组</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-[320px] mx-auto">
+                    还没有自定义分组，你可以新建分组，用来整理书架中的书籍。
+                </p>
+</div>
+<!-- Action Area: Seal Blue Button -->
+<button class="group relative flex items-center justify-center gap-xs bg-primary text-on-primary px-xl py-sm rounded-full font-label-md text-label-md hover:brightness-110 active:scale-95 transition-all shadow-sm">
+<span class="material-symbols-outlined" data-icon="create_new_folder">create_new_folder</span>
+<span class="">新增分组</span>
+</button>
+</div>
+</main>
+<!-- Decorative Bottom Detail (Minimalist layout doesn't require footer nav here for management screen) -->
+<div class="h-md w-full"></div>
+<!-- Background Texture/Visual Context Image (Subtle) -->
+<div class="fixed inset-0 -z-10 opacity-[0.03] pointer-events-none overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A serene and tranquil overhead shot of an open, old-fashioned book resting on a rustic wooden table under soft, diffused morning light. The scene is captured in a minimalist, high-key style with warm ivory and soft beige tones, creating a calm and intellectual digital sanctuary atmosphere. The visual composition is clean and uncluttered, emphasizing texture and a sense of quietude in a light-mode aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzj8xNnyHiID9Ch7yU7gNn0IbbKdJgqbkDZ8SP1fYADTG8GEJoULbm0iMIFE2WYy0elu9hgYtzglPMHD6TheTpuz1_TU7egYBhL_8lZVJbXBHhJQHmU4U79xn-l840jc73S0qLh7B8hI_S9UAwVvnanOqZPFZUHHFwzxg4lgybKivYhNWwzFMGYRJZKiUcq-5r6ZcWI6RsZ3lfqSJBkhM_8P5r5cdZg5VdKB7S2vCewwr-JlcU4Bbf3u58VdqWWLrTpxkTDtGb0sZm">
+</div>
+
+
+</body></html>

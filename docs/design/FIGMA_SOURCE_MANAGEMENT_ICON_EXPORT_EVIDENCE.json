@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_SOURCE_MANAGEMENT_ICON_EXPORT_EVIDENCE",
+  "status": "LIVE_PLUGIN_EXPORT_CAPTURED_REST_RECONFIRMATION_PENDING",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "canonicalMasterNodeId": "942:29",
+  "capture": {
+    "observedOn": "2026-07-26",
+    "source": "figma-plugin-api-through-codex",
+    "api": "node.exportAsync",
+    "format": "SVG_STRING",
+    "readOnlyFigma": true,
+    "figmaWrites": false,
+    "screenshotsUsed": false,
+    "note": "Leaf icon resources were exported from the current Source Management Phone component only; no page or parent export was used."
+  },
+  "exports": [
+    {
+      "resource": "source_management_search_ring",
+      "exportNodeId": "I2174:200;2173:820",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/source_management_search_ring.svg",
+      "sha256": "eacdcf40a547a307234ead4693dda5dae6fb88b25c05a6b7fdf9e9d0e3c192df",
+      "bytes": 198,
+      "expectedSize": { "width": 13, "height": 13 }
+    },
+    {
+      "resource": "source_management_search_handle",
+      "exportNodeId": "I2174:200;2173:821",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/source_management_search_handle.svg",
+      "sha256": "487e8ba76a2ff08385e745a444cbd1e6b68647ee80e2f112bf903163d48fbd04",
+      "bytes": 220,
+      "expectedSize": { "width": 6, "height": 6 }
+    },
+    {
+      "resource": "source_management_group_folder",
+      "exportNodeId": "I2174:216;2184:29787",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/source_management_group_folder.svg",
+      "sha256": "a7cfdae2cc64eb6a296acd71775bdb04b92b6a57a51fd40869756895e8552882",
+      "bytes": 681,
+      "expectedSize": { "width": 15, "height": 15 }
+    }
+  ]
+}

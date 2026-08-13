@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_FULL_FILE_SHADOW_AUDIT",
+  "status": "COMPLETE",
+  "observedAt": "2026-07-20T09:49:16Z",
+  "verifiedAt": "2026-07-20T11:15:05Z",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "pageDenominator": 29,
+  "pagesReadAfterWrite": 29,
+  "readErrorsAfterWrite": 0,
+  "before": {
+    "pagesWithActiveDropShadow": 22,
+    "activeDropShadowNodes": 1047,
+    "activeDropShadowEffects": 1047,
+    "elevatedSignatureCount": 276,
+    "softSignatureCount": 234
+  },
+  "write": {
+    "uniquePagesDirectlyChanged": 18,
+    "directDropShadowEffectsRemoved": 678,
+    "inheritedDropShadowEffectsRemoved": 207,
+    "netDropShadowEffectReduction": 885,
+    "order": "canonical components first, downstream instances and reference pages second",
+    "recoveryNamespace": "readerFullShadow20260720",
+    "recoveryPolicy": "Every directly changed page stores manifest, backup chunks, and result before or after the mutation as appropriate."
+  },
+  "after": {
+    "pagesWithActiveDropShadow": 16,
+    "activeDropShadowNodes": 162,
+    "activeDropShadowEffects": 162,
+    "activeInnerShadowEffects": 431,
+    "staticPageOrBodySurfaceDropShadowEffects": 0
+  },
+  "preservedActiveDropShadowEffects": {
+    "motionReferencePage25": 70,
+    "focusRings": 39,
+    "filterMenusAndApplyControls": 4,
+    "overlaysDialogsAndBottomSheets": 9,
+    "bookCovers": 5,
+    "readerSessionCapsules": 12,
+    "readerControlIcons": 11,
+    "foundationEffectSamples": 12,
+    "total": 162
+  },
+  "localRootCauseClosure": {
+    "canonicalRuntime": "frontend-demo-optimized",
+    "rootCause": "Ambiguous global shadow aliases were available to persistent page, card, settings, and reader surfaces, so later capture or component reuse could regenerate decorative external shadows.",
+    "removedAliases": [
+      "--fd-shadow",
+      "--fd-soft-shadow",
+      "--fd-settings-card-shadow"
+    ],
+    "roleScopedTokens": [
+      "--fd-shadow-overlay",
+      "--fd-shadow-transient",
+      "--fd-shadow-media",
+      "--fd-shadow-floating-control"
+    ],
+    "failClosedGate": "frontend-demo-optimized/verify/shadow-policy.test.mjs",
+    "gatePolicy": "Every active external runtime shadow must resolve to an explicit semantic role; persistent page/body surfaces and deprecated aliases fail the test.",
+    "tests": { "passed": 139, "total": 139 },
+    "browserVerification": {
+      "routeFamilies": 13,
+      "viewports": ["Phone 390x844", "Tablet 760x960"],
+      "checks": 26,
+      "failures": 0,
+      "landscapePolicy": "Landscape aliases Tablet; no independent landscape layout is generated or accepted."
+    },
+    "futureCaptureRecurrenceGuard": true
+  },
+  "pageResults": [
+    { "page": "00 · Cover", "activeDropShadowEffects": 0 },
+    { "page": "01 · Foundations", "activeDropShadowEffects": 12, "exception": "effect samples" },
+    { "page": "02 · Assets · Icons", "activeDropShadowEffects": 0 },
+    { "page": "03 · Assets · Covers", "activeDropShadowEffects": 0 },
+    { "page": "04 · Viewports", "activeDropShadowEffects": 0 },
+    { "page": "05 · Components · Navigation & Shells", "activeDropShadowEffects": 0 },
+    { "page": "06 · Components · Shared Primitives", "activeDropShadowEffects": 37, "exception": "33 focus rings and 4 filter-menu/apply controls" },
+    { "page": "07 · Components · States & Overlays", "activeDropShadowEffects": 4, "exception": "Dialog and BottomSheet masters" },
+    { "page": "08 · Components · Library & Import", "activeDropShadowEffects": 5, "exception": "book covers" },
+    { "page": "09 · Reference · Discover", "activeDropShadowEffects": 1, "exception": "cache-confirm Dialog" },
+    { "page": "10 · Reference · RSS", "activeDropShadowEffects": 2, "exception": "focus rings" },
+    { "page": "11 · Reference · Search", "activeDropShadowEffects": 0 },
+    { "page": "12 · Components · Settings & About", "activeDropShadowEffects": 3, "exception": "focus rings" },
+    { "page": "13 · Components · Source Management", "activeDropShadowEffects": 0 },
+    { "page": "14 · Reference · Sync · Backup · Restore", "activeDropShadowEffects": 0 },
+    { "page": "15 · Reader 2", "activeDropShadowEffects": 12, "exception": "SessionCapsule" },
+    { "page": "16 · Components · Source Switch", "activeDropShadowEffects": 4, "exception": "two overlays and two reader-control icons" },
+    { "page": "17 · Reference · Reader Baseline", "activeDropShadowEffects": 2, "exception": "reader-control icons" },
+    { "page": "18 · Assets · Reader Seeds", "activeDropShadowEffects": 1, "exception": "reader-control icon" },
+    { "page": "19 · Reference · Phone", "activeDropShadowEffects": 2, "exception": "reader-control icons" },
+    { "page": "20 · Reference · States", "activeDropShadowEffects": 2, "exception": "Dialog and BottomSheet" },
+    { "page": "21 · Inventory", "activeDropShadowEffects": 0 },
+    { "page": "22 · Reference · Responsive", "activeDropShadowEffects": 4, "exception": "reader-control icons" },
+    { "page": "23 · Pages · Final", "activeDropShadowEffects": 0 },
+    { "page": "24 · Responsive Masters · Phase 4", "activeDropShadowEffects": 0 },
+    { "page": "25 · Motion Reference", "activeDropShadowEffects": 70, "exception": "audited but not directly edited because F3 is a separate writer lane" },
+    { "page": "26 · Reader Control Continuity", "activeDropShadowEffects": 0 },
+    { "page": "27 · Interaction Playground", "activeDropShadowEffects": 1, "exception": "focus ring" },
+    { "page": "28 · Project Index & Audit", "activeDropShadowEffects": 0 }
+  ],
+  "namedRevision": {
+    "id": "2378238571030063779",
+    "title": "F0/F1 · Full File Shadow Policy Closure",
+    "url": "https://www.figma.com/design/klhs2jMM4MncaJFqZMfqEK/Reader-UI-%C2%B7-Phase-2-Design-System---Redraw?version-id=2378238571030063779&node-id=1023-17636"
+  },
+  "namedRevisionBlocker": null,
+  "scopeGuard": {
+    "f1UserConfirmed": true,
+    "f1UserConfirmedAt": "2026-07-20T11:46:51Z",
+    "f2QueueAdmitted": true,
+    "motionReferenceDirectWrite": false,
+    "businessFlowChanged": false,
+    "uiEventChanged": false
+  }
+}

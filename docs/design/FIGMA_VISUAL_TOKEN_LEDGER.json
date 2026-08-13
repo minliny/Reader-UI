@@ -1,0 +1,5539 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_VISUAL_TOKEN_LEDGER",
+  "authority": {
+    "registry": "docs/design/FIGMA_VISUAL_ADMISSION_REGISTRY.json",
+    "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+    "revision": "2379851596474967636",
+    "rule": "Each value is read from a current canonical Figma node already admitted by the registry. HarmonyOS may consume only the generated Reader-UI artifact; it must not maintain a second token table."
+  },
+  "tokens": [
+    {
+      "id": "bookshelfCoverShadow",
+      "type": "color",
+      "value": "#1A594632",
+      "recordId": "bookshelf.book-card",
+      "nodeId": "493:188",
+      "property": "effects[0].color",
+      "note": "Cover layout / Phone cover drop shadow."
+    },
+    {
+      "id": "bookshelfListCoverShadow",
+      "type": "color",
+      "value": "#1F34261A",
+      "recordId": "bookshelf.book-card",
+      "nodeId": "493:192",
+      "property": "effects[0].color",
+      "note": "List layout / Phone cover drop shadow."
+    },
+    {
+      "id": "bookDetailActionBarGradientOpaque",
+      "type": "color",
+      "value": "#FFF9F0E6",
+      "recordId": "book-detail.page",
+      "nodeId": "860:105",
+      "property": "fills[0].gradientStops[2].color"
+    },
+    {
+      "id": "bookDetailActionBarGradientTranslucent",
+      "type": "color",
+      "value": "#F5F9F0E6",
+      "recordId": "book-detail.page",
+      "nodeId": "860:105",
+      "property": "fills[0].gradientStops[1].color"
+    },
+    {
+      "id": "bookDetailActionBarGradientTransparent",
+      "type": "color",
+      "value": "#00F9F0E6",
+      "recordId": "book-detail.page",
+      "nodeId": "860:105",
+      "property": "fills[0].gradientStops[0].color"
+    },
+    {
+      "id": "bookDetailActionPrimary",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:177",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailActionPrimaryLabel",
+      "type": "color",
+      "value": "#FFFFFFFF",
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:178",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailActionSecondaryBorder",
+      "type": "color",
+      "value": "#6BB4A697",
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:179",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookDetailActionSecondarySurface",
+      "type": "color",
+      "value": "#EBFFFCF8",
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:179",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailActionBarButtonHeight",
+      "type": "number",
+      "value": 46,
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:177",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "bookDetailActionBarButtonGap",
+      "type": "number",
+      "value": 10,
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:179",
+      "property": "derived:absoluteBoundingBox.x - previousButton.right"
+    },
+    {
+      "id": "bookDetailActionBarHeight",
+      "type": "number",
+      "value": 52,
+      "recordId": "book-detail.page",
+      "nodeId": "2265:189",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "bookDetailActionBarContentTopInset",
+      "type": "number",
+      "value": 6,
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:176",
+      "property": "paddingTop"
+    },
+    {
+      "id": "bookDetailActionBarOuterHeight",
+      "type": "number",
+      "value": 62,
+      "recordId": "book-detail.page",
+      "nodeId": "860:105",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "bookDetailActionBarTopInset",
+      "type": "number",
+      "value": 10,
+      "recordId": "book-detail.page",
+      "nodeId": "860:105",
+      "property": "paddingTop"
+    },
+    {
+      "id": "bookDetailContentHorizontalInset",
+      "type": "number",
+      "value": 20,
+      "recordId": "book-detail.page",
+      "nodeId": "860:38",
+      "property": "derived:content.absoluteBoundingBox.x - viewport.absoluteBoundingBox.x"
+    },
+    {
+      "id": "bookDetailChapterDivider",
+      "type": "color",
+      "value": "#47B4A697",
+      "recordId": "book-detail.chapter-row",
+      "nodeId": "I2265:122;2266:67;2266:2",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookDetailChapterCurrentIndicator",
+      "type": "color",
+      "value": "#FF1B3C2D",
+      "recordId": "book-detail.chapter-row",
+      "nodeId": "2266:33",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailChapterSelectedSurface",
+      "type": "color",
+      "value": "#141B3C2D",
+      "recordId": "book-detail.chapter-row",
+      "nodeId": "2266:32",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:35;2265:4",
+      "property": "fontName.family"
+    },
+    {
+      "id": "bookDetailDanger",
+      "type": "color",
+      "value": "#FFD62222",
+      "recordId": "book-detail.page",
+      "nodeId": "I2265:189;2265:180",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1422",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1425",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "book-detail.page",
+      "nodeId": "860:3",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailSectionBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1418",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookDetailSectionSurface",
+      "type": "color",
+      "value": "#E6FFFCF8",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1418",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailSourceSwitchInk",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1437",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailSourceSwitchSurface",
+      "type": "color",
+      "value": "#1A2379A4",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1436",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookDetailTitleFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "book-detail.page",
+      "nodeId": "I2260:1461;2260:1422",
+      "property": "fontName.family"
+    },
+    {
+      "id": "bookshelfActionLabel",
+      "type": "color",
+      "value": "#FFFFFAF4",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1382;493:208;493:199",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfActionPrimary",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1382;493:208",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfBookTitleFontFamily",
+      "type": "font",
+      "value": "Noto Serif SC",
+      "recordId": "bookshelf.book-card",
+      "nodeId": "493:189",
+      "property": "fontName.family"
+    },
+    {
+      "id": "bookshelfBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1382",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookshelfControlFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1406;487:77",
+      "property": "fontName.family"
+    },
+    {
+      "id": "bookshelfInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1406;487:77",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfMainNavActive",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfMainNavInactiveLabel",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:45;342:10",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfMainNavLabelFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23;342:19",
+      "property": "fontName.family"
+    },
+    {
+      "id": "bookshelfMainNavSurface",
+      "type": "color",
+      "value": "#E6FFFCF8",
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1583",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1382;493:207",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "bookshelf.page",
+      "nodeId": "940:3",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfSectionSurface",
+      "type": "color",
+      "value": "#E0FFFFFF",
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1382",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfEmptyActionHeight",
+      "type": "number",
+      "value": 52,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:144",
+      "property": "absoluteBoundingBox.height",
+      "note": "State/BookshelfEmpty primary and secondary action height."
+    },
+    {
+      "id": "bookshelfEmptyActionHorizontalInset",
+      "type": "number",
+      "value": 18,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:144",
+      "property": "relativeTransform[0][2]",
+      "note": "State/BookshelfEmpty action left/right inset."
+    },
+    {
+      "id": "bookshelfEmptyActionRadius",
+      "type": "number",
+      "value": 12,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:144",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "bookshelfEmptyBodyInk",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:143",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfEmptyBodySize",
+      "type": "number",
+      "value": 13,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:143",
+      "property": "fontSize"
+    },
+    {
+      "id": "bookshelfEmptyBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:31",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookshelfEmptyHeight",
+      "type": "number",
+      "value": 350,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:31",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "bookshelfEmptyIconShellRadius",
+      "type": "number",
+      "value": 16,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:35",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "bookshelfEmptyIconShellSize",
+      "type": "number",
+      "value": 62,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:35",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "bookshelfEmptyIconShellSoft",
+      "type": "color",
+      "value": "#172D4A3E",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:35",
+      "property": "fills[0].color+opacity"
+    },
+    {
+      "id": "bookshelfEmptyIconShellStroke",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:35",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookshelfEmptyPrimaryLabel",
+      "type": "color",
+      "value": "#EBFFFDF8",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:145",
+      "property": "fills[0].color+opacity"
+    },
+    {
+      "id": "bookshelfEmptyPrimarySurface",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:144",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfEmptyRadius",
+      "type": "number",
+      "value": 12,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:31",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "bookshelfEmptySecondaryInk",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:147",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfEmptySecondarySurface",
+      "type": "color",
+      "value": "#172D4A3E",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:146",
+      "property": "fills[0].color+opacity"
+    },
+    {
+      "id": "bookshelfEmptySecondaryStroke",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:146",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "bookshelfEmptySurface",
+      "type": "color",
+      "value": "#EBFFFDF8",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:31",
+      "property": "fills[0].color+opacity"
+    },
+    {
+      "id": "bookshelfEmptyTitleInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "bookshelf.page",
+      "nodeId": "286:142",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "bookshelfEmptyTitleSize",
+      "type": "number",
+      "value": 19,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:142",
+      "property": "fontSize"
+    },
+    {
+      "id": "bookshelfEmptyVisualHeight",
+      "type": "number",
+      "value": 92,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:32",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "bookshelfEmptyVisualWidth",
+      "type": "number",
+      "value": 112,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:32",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "bookshelfEmptyWidth",
+      "type": "number",
+      "value": 352,
+      "recordId": "bookshelf.page",
+      "nodeId": "286:31",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationBackActionSize",
+      "type": "number",
+      "value": 44,
+      "recordId": "book-detail.page",
+      "nodeId": "860:28",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationBackIconSize",
+      "type": "number",
+      "value": 24,
+      "recordId": "book-detail.page",
+      "nodeId": "860:29",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationBackTitleGap",
+      "type": "number",
+      "value": 10,
+      "recordId": "book-detail.page",
+      "nodeId": "860:34",
+      "property": "derived:absoluteBoundingBox.x - backAction.right"
+    },
+    {
+      "id": "navigationBackTitleSize",
+      "type": "number",
+      "value": 24,
+      "recordId": "book-detail.page",
+      "nodeId": "860:35",
+      "property": "fontSize"
+    },
+    {
+      "id": "navigationHeaderHeight",
+      "type": "number",
+      "value": 58,
+      "recordId": "bookshelf.page",
+      "nodeId": "461:440",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "navigationHeaderHorizontalInset",
+      "type": "number",
+      "value": 20,
+      "recordId": "bookshelf.page",
+      "nodeId": "461:440",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "navigationHeaderTopInset",
+      "type": "number",
+      "value": 6,
+      "recordId": "bookshelf.page",
+      "nodeId": "461:440",
+      "property": "paddingTop"
+    },
+    {
+      "id": "navigationMainNavIconSize",
+      "type": "number",
+      "value": 24,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1726;343:247;342:31",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationMainNavComponentPadding",
+      "type": "number",
+      "value": 8,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1583",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "navigationMainNavItemGap",
+      "type": "number",
+      "value": 2,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "navigationMainNavLabelLineHeight",
+      "type": "number",
+      "value": 18,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23;342:19",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "navigationMainNavLabelSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23;342:19",
+      "property": "fontSize"
+    },
+    {
+      "id": "navigationMainNavPhoneBottomInset",
+      "type": "number",
+      "value": 15,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1583",
+      "property": "derived:phoneViewport.bottom - absoluteBoundingBox.bottom"
+    },
+    {
+      "id": "navigationMainNavPhoneHorizontalInset",
+      "type": "number",
+      "value": 15,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1583",
+      "property": "derived:absoluteBoundingBox.x - phoneViewport.x"
+    },
+    {
+      "id": "navigationMainNavPhoneHeight",
+      "type": "number",
+      "value": 68,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1583",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "navigationMainNavPhoneIconShellSize",
+      "type": "number",
+      "value": 30,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23;342:12",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationMainNavPhoneItemHeight",
+      "type": "number",
+      "value": 54,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "navigationMainNavPhoneVisualInset",
+      "type": "number",
+      "value": 7,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1583;343:23",
+      "property": "derived:absoluteBoundingBox.y - bottomNav.absoluteBoundingBox.y"
+    },
+    {
+      "id": "navigationMainNavRadius",
+      "type": "number",
+      "value": 24,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1583",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "navigationMainNavTabletHeight",
+      "type": "number",
+      "value": 268,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1726",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "navigationMainNavTabletHorizontalInset",
+      "type": "number",
+      "value": 17,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1726",
+      "property": "derived:absoluteBoundingBox.x - tabletViewport.x"
+    },
+    {
+      "id": "navigationMainNavTabletIconShellSize",
+      "type": "number",
+      "value": 32,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1726;343:247;342:30",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationMainNavTabletItemGap",
+      "type": "number",
+      "value": 6,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1726",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "navigationMainNavTabletItemHeight",
+      "type": "number",
+      "value": 58,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1726;343:247",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "navigationMainNavTabletRailFootprint",
+      "type": "number",
+      "value": 100,
+      "recordId": "bookshelf.page",
+      "nodeId": "859:250",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "navigationMainNavTabletVisualInset",
+      "type": "number",
+      "value": 9,
+      "recordId": "bookshelf.page",
+      "nodeId": "I2236:1726;343:247",
+      "property": "derived:absoluteBoundingBox.y - bottomNav.absoluteBoundingBox.y"
+    },
+    {
+      "id": "navigationMainNavTabletWidth",
+      "type": "number",
+      "value": 82,
+      "recordId": "bookshelf.page",
+      "nodeId": "2236:1726",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationPageContentGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "bookshelf.page",
+      "nodeId": "940:47",
+      "property": "paddingTop"
+    },
+    {
+      "id": "navigationTopBarActionGap",
+      "type": "number",
+      "value": 18,
+      "recordId": "bookshelf.page",
+      "nodeId": "461:442",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "navigationTopBarActionSize",
+      "type": "number",
+      "value": 44,
+      "recordId": "bookshelf.page",
+      "nodeId": "461:443",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "navigationTopBarTitleSize",
+      "type": "number",
+      "value": 29,
+      "recordId": "bookshelf.page",
+      "nodeId": "461:441",
+      "property": "fontSize"
+    },
+    {
+      "id": "actionSheetSurface",
+      "type": "color",
+      "value": "#EBFFFCF8",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1719",
+      "property": "fills[0].color",
+      "note": "Book action sheet phone surface; 92% opaque."
+    },
+    {
+      "id": "actionSheetBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1719",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "actionSheetShadow",
+      "type": "color",
+      "value": "#29594632",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1719",
+      "property": "effects[0].color",
+      "note": "Also used by the shared current Restore and delete-dialog instances."
+    },
+    {
+      "id": "actionSheetHandle",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1720",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "actionSheetControlFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1721",
+      "property": "fontName.family"
+    },
+    {
+      "id": "actionDangerLabel",
+      "type": "color",
+      "value": "#FFD7473E",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1725",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "actionSheetDialogCancelSurface",
+      "type": "color",
+      "value": "#A3EDE6DB",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "I2269:39;286:238",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "actionSheetDialogDanger",
+      "type": "color",
+      "value": "#FFD7473E",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "I2269:39;286:240",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "actionPrimarySoft",
+      "type": "color",
+      "value": "#172D4A3E",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1722",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "actionDangerSoft",
+      "type": "color",
+      "value": "#1AD6473D",
+      "recordId": "bookshelf.action-sheet",
+      "nodeId": "2903:1724",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "multiSelectSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2955:1038",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "multiSelectBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2955:1038",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "multiSelectSelectedFill",
+      "type": "color",
+      "value": "#FFF58517",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2914:58964",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "multiSelectUnselectedSurface",
+      "type": "color",
+      "value": "#D9FFFFFF",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2914:58967",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "multiSelectCheckboxBorder",
+      "type": "color",
+      "value": "#FFB3B3B3",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2914:58967",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "multiSelectCheckboxShadow",
+      "type": "color",
+      "value": "#26000000",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2914:58964",
+      "property": "effects[0].color"
+    },
+    {
+      "id": "multiSelectCheckboxLabel",
+      "type": "color",
+      "value": "#FFFFFFFF",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2914:59066",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "multiSelectTitleFontFamily",
+      "type": "font",
+      "value": "Noto Serif SC",
+      "recordId": "bookshelf.multi-select",
+      "nodeId": "2914:58959",
+      "property": "fontName.family"
+    },
+    {
+      "id": "localImportScrim",
+      "type": "color",
+      "value": "#661F1B17",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:916",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "localImportDialogSurface",
+      "type": "color",
+      "value": "#FFFFFCF8",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:758",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "localImportInsetSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:763",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "localImportBorder",
+      "type": "color",
+      "value": "#FFE8E2D9",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:759",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "localImportDialogShadow",
+      "type": "color",
+      "value": "#40000000",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:758",
+      "property": "effects[0].color"
+    },
+    {
+      "id": "localImportSpinnerHalo",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2899:59038",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "localImportSpinnerTrack",
+      "type": "color",
+      "value": "#FFE8E2D9",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2899:59039",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "localImportTitleFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:805",
+      "property": "fontName.family"
+    },
+    {
+      "id": "localImportControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2899:59041",
+      "property": "fontName.family"
+    },
+    {
+      "id": "localImportFailureBadge",
+      "type": "color",
+      "value": "#FF5A4A2A",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:895",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "localImportFailureIcon",
+      "type": "color",
+      "value": "#FFC0392B",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:902",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "localImportSummaryWarningSurface",
+      "type": "color",
+      "value": "#FFFDECEA",
+      "recordId": "bookshelf.local-import-dialog",
+      "nodeId": "2657:808",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlSurface",
+      "type": "color",
+      "value": "#FAFFFAF4",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18714",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlTranslucentSurface",
+      "type": "color",
+      "value": "#9EFFFCF8",
+      "recordId": "reader.control-home",
+      "nodeId": "I1023:18716;1023:18705",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlQuickActionSurface",
+      "type": "color",
+      "value": "#BDFFFCF8",
+      "recordId": "reader.control-home",
+      "nodeId": "I1023:18716;1023:18705;1023:18554",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlModuleSurface",
+      "type": "color",
+      "value": "#FAFFFCF8",
+      "recordId": "reader.control-home",
+      "nodeId": "I1023:18740;1023:18729",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlBorder",
+      "type": "color",
+      "value": "#57B4A697",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18714",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerControlGrabber",
+      "type": "color",
+      "value": "#FFB9AD9F",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18715",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlStepSurface",
+      "type": "color",
+      "value": "#8FEDE6DB",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18570",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlProgressTrack",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18575",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlProgressFill",
+      "type": "color",
+      "value": "#FFF48B13",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18576",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18385",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlMuted",
+      "type": "color",
+      "value": "#FF5B5046",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18386",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlModuleInactiveSurface",
+      "type": "color",
+      "value": "#142F6373",
+      "recordId": "reader.control-home",
+      "nodeId": "I1023:18629;1023:18457",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlModuleInactiveLabel",
+      "type": "color",
+      "value": "#FF4D463F",
+      "recordId": "reader.control-home",
+      "nodeId": "I1023:18629;1023:18459",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlModuleActive",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.control-home",
+      "nodeId": "I1023:18634;1023:18473",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerControlTopFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18385",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "reader.control-home",
+      "nodeId": "1023:18417",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerModuleDivider",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "reader.module.directory",
+      "nodeId": "915:71",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerModuleSelectedSurface",
+      "type": "color",
+      "value": "#142F6373",
+      "recordId": "reader.module.directory",
+      "nodeId": "915:107",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerModuleStatusSurface",
+      "type": "color",
+      "value": "#A3EEE6DB",
+      "recordId": "reader.module.directory",
+      "nodeId": "915:90",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerModuleActive",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.module.directory",
+      "nodeId": "915:73",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerTtsStop",
+      "type": "color",
+      "value": "#FFD7473E",
+      "recordId": "reader.module.tts",
+      "nodeId": "918:93",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerTtsStopIcon",
+      "type": "color",
+      "value": "#E0FFFFFF",
+      "recordId": "reader.module.tts",
+      "nodeId": "918:96",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerTtsDropdownSurface",
+      "type": "color",
+      "value": "#C7FFF8EF",
+      "recordId": "reader.module.tts",
+      "nodeId": "918:112",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerQuickSearchInputSurface",
+      "type": "color",
+      "value": "#94FFFFFF",
+      "recordId": "reader.quick.content-search",
+      "nodeId": "906:81",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerQuickSearchInputBorder",
+      "type": "color",
+      "value": "#59BEAE9C",
+      "recordId": "reader.quick.content-search",
+      "nodeId": "906:81",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerAutoStop",
+      "type": "color",
+      "value": "#FF8C3D36",
+      "recordId": "reader.quick.auto-page",
+      "nodeId": "909:119",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerReplaceInactiveToggle",
+      "type": "color",
+      "value": "#FFC9C5BE",
+      "recordId": "reader.quick.content-replacement",
+      "nodeId": "912:98",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerAppearanceDivider",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "reader.module.appearance",
+      "nodeId": "921:96",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerAppearanceSelectedSurface",
+      "type": "color",
+      "value": "#1A2F6373",
+      "recordId": "reader.module.appearance",
+      "nodeId": "921:88",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerAppearanceSelectedStroke",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.module.appearance",
+      "nodeId": "921:88",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerAppearanceNightTileSurface",
+      "type": "color",
+      "value": "#8FEEE6DB",
+      "recordId": "reader.module.appearance",
+      "nodeId": "921:84",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerAppearanceSwatchBorder",
+      "type": "color",
+      "value": "#1F5B5046",
+      "recordId": "reader.module.appearance",
+      "nodeId": "921:81",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerAppearanceFontSelectedSurface",
+      "type": "color",
+      "value": "#1A2D4A3E",
+      "recordId": "reader.module.appearance",
+      "nodeId": "921:105",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerImmersiveMetaInk",
+      "type": "color",
+      "value": "#FF766C61",
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:24",
+      "property": "fills[0].color",
+      "note": "Reader/ImmersiveInfo meta text."
+    },
+    {
+      "id": "readerImmersiveMetaFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:24",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerImmersiveMetaSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:24",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerImmersiveMetaLineHeight",
+      "type": "number",
+      "value": 14.4,
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:24",
+      "property": "lineHeightPx"
+    },
+    {
+      "id": "readerImmersiveInset",
+      "type": "number",
+      "value": 24.55,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1169:10293",
+      "property": "absoluteBoundingBox.x",
+      "note": "Phone immersive-info outer inset; tablet follows the component constraint."
+    },
+    {
+      "id": "readerImmersiveFooterBottom",
+      "type": "number",
+      "value": 23,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1169:10371",
+      "property": "derivedBottomInset",
+      "note": "Proof-matrix footer bottom anchor, shared by Phone and Tablet."
+    },
+    {
+      "id": "readerImmersiveStatusHeight",
+      "type": "number",
+      "value": 15,
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:23",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerImmersiveStatusIconSize",
+      "type": "number",
+      "value": 11.997,
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:26",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerImmersiveStatusIconGap",
+      "type": "number",
+      "value": 3.993,
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:33",
+      "property": "relativeOffset.x"
+    },
+    {
+      "id": "readerImmersiveStatusIconTop",
+      "type": "number",
+      "value": 1.5,
+      "recordId": "reader.reading-surface",
+      "nodeId": "697:25",
+      "property": "relativeOffset.y"
+    },
+    {
+      "id": "readerSessionCapsuleAutoWidth",
+      "type": "number",
+      "value": 96,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerSessionCapsuleTtsWidth",
+      "type": "number",
+      "value": 94,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10246",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerSessionCapsuleHeight",
+      "type": "number",
+      "value": 24,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerSessionCapsuleHorizontalPadding",
+      "type": "number",
+      "value": 6,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "readerSessionCapsuleGap",
+      "type": "number",
+      "value": 4,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "readerSessionCapsuleRadius",
+      "type": "number",
+      "value": 999,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerSessionCapsuleSurface",
+      "type": "color",
+      "value": "#FAFFFAF4",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerSessionCapsuleBorder",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerSessionCapsuleShadow",
+      "type": "color",
+      "value": "#12463423",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10227",
+      "property": "effects[0].color"
+    },
+    {
+      "id": "readerSessionCapsulePrimary",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10228",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerSessionCapsulePrimaryInk",
+      "type": "color",
+      "value": "#FFFFFAF4",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10229",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerSessionCapsuleInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10230",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerSessionCapsuleFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10230",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerSessionCapsuleLabelSize",
+      "type": "number",
+      "value": 10,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10230",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerSessionCapsuleLabelLineHeight",
+      "type": "number",
+      "value": 12.5,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10230",
+      "property": "lineHeightPx"
+    },
+    {
+      "id": "readerSessionCapsuleCountdownSize",
+      "type": "number",
+      "value": 8,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10229",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerSessionCapsuleCountdownWidth",
+      "type": "number",
+      "value": 18,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10228",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerSessionCapsuleCountdownHeight",
+      "type": "number",
+      "value": 16,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10228",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerSessionCapsuleActionSize",
+      "type": "number",
+      "value": 16,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10231",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerSessionCapsuleActionIconSize",
+      "type": "number",
+      "value": 8,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10232",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerSessionCapsuleTtsIconSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1164:10248",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerImmersiveFooterGap",
+      "type": "number",
+      "value": 5,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1169:10371",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "readerContentInk",
+      "type": "color",
+      "value": "#FF2B241D",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "fills[0].color",
+      "note": "Shared chapter-page text ink in the current ReadingSurface master."
+    },
+    {
+      "id": "readerContentBodyFontFamily",
+      "type": "font",
+      "value": "Noto Serif SC",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10574",
+      "property": "fontName.family",
+      "note": "Figma maps the ReadingSurface Songti role to the local Noto Serif SC face."
+    },
+    {
+      "id": "readerContentBodySize",
+      "type": "number",
+      "value": 18,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10574",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerContentBodyLineHeight",
+      "type": "number",
+      "value": 35.28,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10574",
+      "property": "lineHeightPx"
+    },
+    {
+      "id": "readerContentParagraphIndent",
+      "type": "number",
+      "value": 36,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10574",
+      "property": "textIndent"
+    },
+    {
+      "id": "readerContentParagraphGap",
+      "type": "number",
+      "value": 15.8,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10574",
+      "property": "paragraphMarginBottom"
+    },
+    {
+      "id": "readerContentSectionGap",
+      "type": "number",
+      "value": 18,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1199:10482",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "readerContentTitleSize",
+      "type": "number",
+      "value": 23,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10573",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerContentTitleLineHeight",
+      "type": "number",
+      "value": 28.75,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1197:10573",
+      "property": "lineHeightPx"
+    },
+    {
+      "id": "readerContentPhoneLeft",
+      "type": "number",
+      "value": 32,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "absoluteBoundingBox.x"
+    },
+    {
+      "id": "readerContentPhoneTop",
+      "type": "number",
+      "value": 72,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "absoluteBoundingBox.y"
+    },
+    {
+      "id": "readerContentPhoneWidth",
+      "type": "number",
+      "value": 324.896,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerContentPhoneHeight",
+      "type": "number",
+      "value": 722.891,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerContentPhoneRight",
+      "type": "number",
+      "value": 33.104,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "derivedRightInset",
+      "note": "390 - left 32 - width 324.896."
+    },
+    {
+      "id": "readerContentPhoneBottom",
+      "type": "number",
+      "value": 49.109,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18357",
+      "property": "derivedBottomInset",
+      "note": "844 - top 72 - height 722.891."
+    },
+    {
+      "id": "readerContentTabletLeft",
+      "type": "number",
+      "value": 44.44,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18373",
+      "property": "absoluteBoundingBox.x"
+    },
+    {
+      "id": "readerContentTabletTop",
+      "type": "number",
+      "value": 92.44,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18373",
+      "property": "absoluteBoundingBox.y"
+    },
+    {
+      "id": "readerContentTabletWidth",
+      "type": "number",
+      "value": 670,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18373",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerContentTabletHeight",
+      "type": "number",
+      "value": 810,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18373",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerContentTabletRight",
+      "type": "number",
+      "value": 45.56,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18373",
+      "property": "derivedRightInset",
+      "note": "760 - left 44.44 - width 670."
+    },
+    {
+      "id": "readerContentTabletBottom",
+      "type": "number",
+      "value": 57.56,
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18373",
+      "property": "derivedBottomInset",
+      "note": "960 - top 92.44 - height 810."
+    },
+    {
+      "id": "readerPaperBaseStart",
+      "type": "color",
+      "value": "#FFFBF4E9",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18356",
+      "property": "fills[2].gradientStops[0].color"
+    },
+    {
+      "id": "readerPaperBaseEnd",
+      "type": "color",
+      "value": "#FFEFE2D0",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18356",
+      "property": "fills[2].gradientStops[1].color"
+    },
+    {
+      "id": "readerPaperVignetteTransparent",
+      "type": "color",
+      "value": "#00594632",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18356",
+      "property": "fills[0].gradientStops[0].color"
+    },
+    {
+      "id": "readerPaperVignette",
+      "type": "color",
+      "value": "#1A594632",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18356",
+      "property": "fills[0].gradientStops[1].color"
+    },
+    {
+      "id": "readerPaperHighlight",
+      "type": "color",
+      "value": "#B3FFFFFF",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18356",
+      "property": "fills[1].gradientStops[0].color"
+    },
+    {
+      "id": "readerPaperHighlightTransparent",
+      "type": "color",
+      "value": "#00FFFFFF",
+      "recordId": "reader.reading-surface",
+      "nodeId": "1023:18356",
+      "property": "fills[1].gradientStops[1].color"
+    },
+    {
+      "id": "readerFullPanelPhoneLeft",
+      "type": "number",
+      "value": 13,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "absoluteBoundingBox.x",
+      "note": "Phone expanded Reader panel left inset."
+    },
+    {
+      "id": "readerFullPanelTop",
+      "type": "number",
+      "value": 89,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "absoluteBoundingBox.y",
+      "note": "Phone expanded Reader panel top inset."
+    },
+    {
+      "id": "readerFullPanelPhoneWidth",
+      "type": "number",
+      "value": 364,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerFullPanelPhoneHeight",
+      "type": "number",
+      "value": 736,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerFullPanelTabletLeft",
+      "type": "number",
+      "value": 27,
+      "recordId": "reader.full.directory",
+      "nodeId": "929:62",
+      "property": "absoluteBoundingBox.x"
+    },
+    {
+      "id": "readerFullPanelTabletWidth",
+      "type": "number",
+      "value": 720,
+      "recordId": "reader.full.directory",
+      "nodeId": "929:62",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerFullPanelTabletHeight",
+      "type": "number",
+      "value": 852,
+      "recordId": "reader.full.directory",
+      "nodeId": "929:62",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerFullPanelSurface",
+      "type": "color",
+      "value": "#FAFFFCF8",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullPanelBorder",
+      "type": "color",
+      "value": "#57B4A697",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerFullPanelRadius",
+      "type": "number",
+      "value": 24,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:66",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerFullGrabber",
+      "type": "color",
+      "value": "#FFB9AD9F",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:67",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullGrabberWidth",
+      "type": "number",
+      "value": 42,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:67",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerFullHeaderInsetX",
+      "type": "number",
+      "value": 13,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:69",
+      "property": "absoluteBoundingBox.x"
+    },
+    {
+      "id": "readerFullHeaderTop",
+      "type": "number",
+      "value": 19,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:69",
+      "property": "absoluteBoundingBox.y"
+    },
+    {
+      "id": "readerFullHeaderHeight",
+      "type": "number",
+      "value": 30,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:69",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerFullHeaderFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:80",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerFullHeaderInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:80",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullHeaderTitleSize",
+      "type": "number",
+      "value": 14,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:80",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerFullCollapseSurface",
+      "type": "color",
+      "value": "#A3EDE6DB",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:82",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullCollapseInk",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:83",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullContentTop",
+      "type": "number",
+      "value": 57,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:85",
+      "property": "absoluteBoundingBox.y"
+    },
+    {
+      "id": "readerFullContentPhoneWidth",
+      "type": "number",
+      "value": 338,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:85",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerFullContentPhoneHeight",
+      "type": "number",
+      "value": 666,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:85",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerFullContentTabletWidth",
+      "type": "number",
+      "value": 694,
+      "recordId": "reader.full.directory",
+      "nodeId": "929:81",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerFullContentTabletHeight",
+      "type": "number",
+      "value": 782,
+      "recordId": "reader.full.directory",
+      "nodeId": "929:81",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerFullContentSurface",
+      "type": "color",
+      "value": "#9EFFFDF8",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:85",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullContentBorder",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "reader.full.directory",
+      "nodeId": "927:85",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerFullContentRadius",
+      "type": "number",
+      "value": 12,
+      "recordId": "reader.full.directory",
+      "nodeId": "927:85",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerFullTtsPhoneWidth",
+      "type": "number",
+      "value": 364,
+      "recordId": "reader.full.tts",
+      "nodeId": "942:78",
+      "property": "absoluteBoundingBox.width",
+      "note": "Phone full TTS panel width."
+    },
+    {
+      "id": "readerFullTtsPhoneHeight",
+      "type": "number",
+      "value": 736,
+      "recordId": "reader.full.tts",
+      "nodeId": "930:66",
+      "property": "absoluteBoundingBox.height",
+      "note": "Phone full TTS panel height."
+    },
+    {
+      "id": "readerFullTtsPanelSurface",
+      "type": "color",
+      "value": "#FAFFFCF8",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:66",
+      "property": "fills[0].color",
+      "note": "Full TTS panel surface at 98% opacity."
+    },
+    {
+      "id": "readerFullTtsPanelBorder",
+      "type": "color",
+      "value": "#57B4A697",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:66",
+      "property": "strokes[0].color",
+      "note": "Full TTS panel border at 34% opacity."
+    },
+    {
+      "id": "readerFullTtsContentSurface",
+      "type": "color",
+      "value": "#9EFFFDF8",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:82",
+      "property": "fills[0].color",
+      "note": "Full TTS content container surface."
+    },
+    {
+      "id": "readerFullTtsContentBorder",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:82",
+      "property": "strokes[0].color",
+      "note": "Full TTS content container border."
+    },
+    {
+      "id": "readerFullTtsSectionSurface",
+      "type": "color",
+      "value": "#B8FFFDF8",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:118",
+      "property": "fills[0].color",
+      "note": "Timer and detail section inset surface."
+    },
+    {
+      "id": "readerFullTtsSectionBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:118",
+      "property": "strokes[0].color",
+      "note": "Timer and detail section inset border."
+    },
+    {
+      "id": "readerFullTtsTransportSurface",
+      "type": "color",
+      "value": "#D1FFF8EF",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:84",
+      "property": "children[2].fills[0].color",
+      "note": "Previous and next transport control surface."
+    },
+    {
+      "id": "readerFullTtsPrimary",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:84",
+      "property": "children[3].fills[0].color",
+      "note": "Play transport control surface."
+    },
+    {
+      "id": "readerFullTtsStopBorder",
+      "type": "color",
+      "value": "#FFD7473E",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:84",
+      "property": "children[4].strokes[0].color",
+      "note": "Stop transport outline."
+    },
+    {
+      "id": "readerFullTtsInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:87",
+      "property": "fills[0].color",
+      "note": "Full TTS section-title ink."
+    },
+    {
+      "id": "readerFullTtsMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:90",
+      "property": "fills[0].color",
+      "note": "Full TTS secondary-label ink."
+    },
+    {
+      "id": "readerFullTtsControlInk",
+      "type": "color",
+      "value": "#FF41484C",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:902",
+      "property": "fills[0].color",
+      "note": "TTS configuration-row label ink."
+    },
+    {
+      "id": "readerFullTtsFieldSurface",
+      "type": "color",
+      "value": "#C7FFF8EF",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:904",
+      "property": "fills[0].color",
+      "note": "TTS dropdown field surface."
+    },
+    {
+      "id": "readerFullTtsFieldRadius",
+      "type": "number",
+      "value": 6,
+      "recordId": "reader.full.tts",
+      "nodeId": "930:904",
+      "property": "cornerRadius",
+      "note": "TTS dropdown and inset card corner radius."
+    },
+    {
+      "id": "readerFullTtsSwitchActive",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:910",
+      "property": "fills[0].color",
+      "note": "TTS detail switch active track."
+    },
+    {
+      "id": "readerFullTtsSwitchInactive",
+      "type": "color",
+      "value": "#FFAAA39A",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:922",
+      "property": "fills[0].color",
+      "note": "TTS detail switch inactive track."
+    },
+    {
+      "id": "readerFullTtsSwitchKnob",
+      "type": "color",
+      "value": "#BDFFFCF8",
+      "recordId": "reader.full.tts",
+      "nodeId": "930:911",
+      "property": "fills[0].color",
+      "note": "TTS detail switch knob."
+    },
+    {
+      "id": "readerFullTtsSectionRadius",
+      "type": "number",
+      "value": 6,
+      "recordId": "reader.full.tts",
+      "nodeId": "930:118",
+      "property": "cornerRadius",
+      "note": "TTS timer and configuration inset radius."
+    },
+    {
+      "id": "settingsPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "settings.general",
+      "nodeId": "887:3",
+      "property": "fills[0].color",
+      "note": "Settings General Tablet main-content surface; Phone uses the same canonical page treatment."
+    },
+    {
+      "id": "settingsSectionSurface",
+      "type": "color",
+      "value": "#E5FFFCF8",
+      "recordId": "settings.general",
+      "nodeId": "879:101",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsSectionBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "settings.general",
+      "nodeId": "879:101",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "settingsRowDivider",
+      "type": "color",
+      "value": "#38B4A697",
+      "recordId": "settings.general",
+      "nodeId": "879:117",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "settingsIconSurface",
+      "type": "color",
+      "value": "#172379A4",
+      "recordId": "settings.general",
+      "nodeId": "879:118",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsSegmentSurface",
+      "type": "color",
+      "value": "#FFF2EDE5",
+      "recordId": "settings.general",
+      "nodeId": "2114:18406",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsSegmentBorder",
+      "type": "color",
+      "value": "#FFD1C9BD",
+      "recordId": "settings.general",
+      "nodeId": "2114:18406",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "settingsSegmentSelectedSurface",
+      "type": "color",
+      "value": "#FFFBFAF6",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20486",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsSegmentSelectedBorder",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20486",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "settingsSegmentSelectedInk",
+      "type": "color",
+      "value": "#FF21382E",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20487",
+      "property": "fills[0].color",
+      "note": "Selected App theme segment label from the current Phone instance."
+    },
+    {
+      "id": "settingsSegmentInactiveInk",
+      "type": "color",
+      "value": "#FF6E665C",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20490",
+      "property": "fills[0].color",
+      "note": "Unselected App theme segment label from the current Phone instance."
+    },
+    {
+      "id": "settingsSelectSurface",
+      "type": "color",
+      "value": "#D1FFF8EF",
+      "recordId": "settings.general",
+      "nodeId": "2114:18378",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsSelectInk",
+      "type": "color",
+      "value": "#FF41484C",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18370;282:65",
+      "property": "fills[0].color",
+      "note": "Select value and chevron color from the current Phone instance."
+    },
+    {
+      "id": "settingsSwitchOn",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "settings.general",
+      "nodeId": "2114:18322",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsSwitchOff",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "settings.general",
+      "nodeId": "2114:18330",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsInlineActionSurface",
+      "type": "color",
+      "value": "#1A2379A4",
+      "recordId": "settings.general",
+      "nodeId": "2114:18444",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsInlineActionInk",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18444;531:117",
+      "property": "fills[0].color",
+      "note": "Inline permission action label from the current Phone instance."
+    },
+    {
+      "id": "settingsDangerText",
+      "type": "color",
+      "value": "#FFD62222",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18452;535:418",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsResetSurface",
+      "type": "color",
+      "value": "#E0FFFFFF",
+      "recordId": "settings.general",
+      "nodeId": "2114:18452",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsWarningBadgeSurface",
+      "type": "color",
+      "value": "#24B0661D",
+      "recordId": "settings.general",
+      "nodeId": "879:229",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsNeutralBadgeSurface",
+      "type": "color",
+      "value": "#212379A4",
+      "recordId": "settings.general",
+      "nodeId": "879:247",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "settings.general",
+      "nodeId": "879:52",
+      "property": "fontName.family"
+    },
+    {
+      "id": "settingsContentHorizontalInset",
+      "type": "number",
+      "value": 19,
+      "recordId": "settings.general",
+      "nodeId": "879:38",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "settingsContentTopInset",
+      "type": "number",
+      "value": 8,
+      "recordId": "settings.general",
+      "nodeId": "879:38",
+      "property": "paddingTop"
+    },
+    {
+      "id": "settingsContentBottomInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "settings.general",
+      "nodeId": "879:38",
+      "property": "paddingBottom"
+    },
+    {
+      "id": "settingsSectionGap",
+      "type": "number",
+      "value": 12,
+      "recordId": "settings.general",
+      "nodeId": "879:38",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "settingsSectionRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "settings.general",
+      "nodeId": "879:101",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "settingsSectionHeaderTopInset",
+      "type": "number",
+      "value": 9,
+      "recordId": "settings.general",
+      "nodeId": "879:101",
+      "property": "paddingTop"
+    },
+    {
+      "id": "settingsSectionHeaderInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "settings.general",
+      "nodeId": "879:102",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "settingsRowHeight",
+      "type": "number",
+      "value": 58,
+      "recordId": "settings.general",
+      "nodeId": "879:117",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsRowHorizontalInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "settings.general",
+      "nodeId": "879:117",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "settingsIconSize",
+      "type": "number",
+      "value": 28,
+      "recordId": "settings.general",
+      "nodeId": "879:118",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsIconGlyphSize",
+      "type": "number",
+      "value": 15,
+      "recordId": "settings.general",
+      "nodeId": "879:45",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsIconRadius",
+      "type": "number",
+      "value": 14,
+      "recordId": "settings.general",
+      "nodeId": "879:118",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "settingsSegmentWidth",
+      "type": "number",
+      "value": 168,
+      "recordId": "settings.general",
+      "nodeId": "2114:18406",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsSegmentHeight",
+      "type": "number",
+      "value": 36,
+      "recordId": "settings.general",
+      "nodeId": "2114:18406",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsSegmentInset",
+      "type": "number",
+      "value": 3,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20486",
+      "property": "x"
+    },
+    {
+      "id": "settingsSegmentItemWidth",
+      "type": "number",
+      "value": 54,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20486",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsSegmentItemHeight",
+      "type": "number",
+      "value": 30,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18406;2114:20486",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsSelectHeight",
+      "type": "number",
+      "value": 28,
+      "recordId": "settings.general",
+      "nodeId": "2114:18378",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsControlRadius",
+      "type": "number",
+      "value": 6,
+      "recordId": "settings.general",
+      "nodeId": "2114:18378",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "settingsSelectHorizontalInset",
+      "type": "number",
+      "value": 10,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18370;282:65",
+      "property": "x"
+    },
+    {
+      "id": "settingsSelectChevronWidth",
+      "type": "number",
+      "value": 12,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18370;282:66",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsSelectChevronHeight",
+      "type": "number",
+      "value": 8,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18370;282:66",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsSwitchWidth",
+      "type": "number",
+      "value": 44,
+      "recordId": "settings.general",
+      "nodeId": "2114:18322",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsSwitchHeight",
+      "type": "number",
+      "value": 24,
+      "recordId": "settings.general",
+      "nodeId": "2114:18322",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsSwitchThumbSize",
+      "type": "number",
+      "value": 20,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18322;531:105",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsSwitchThumbSurface",
+      "type": "color",
+      "value": "#E0FFFFFF",
+      "recordId": "settings.general",
+      "nodeId": "I2114:18322;531:105",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsInlineActionWidth",
+      "type": "number",
+      "value": 55,
+      "recordId": "settings.general",
+      "nodeId": "2114:18444",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsInlineActionHeight",
+      "type": "number",
+      "value": 34,
+      "recordId": "settings.general",
+      "nodeId": "2114:18444",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsResetChevronWidth",
+      "type": "number",
+      "value": 16,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18452;535:419",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "settingsResetChevronHeight",
+      "type": "number",
+      "value": 14,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18452;535:419",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "settingsSectionTitleSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "settings.general",
+      "nodeId": "879:41",
+      "property": "fontSize"
+    },
+    {
+      "id": "settingsRowLabelSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "settings.general",
+      "nodeId": "879:52",
+      "property": "fontSize"
+    },
+    {
+      "id": "settingsControlValueSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18370;282:65",
+      "property": "fontSize"
+    },
+    {
+      "id": "settingsInlineActionLabelSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18436;531:117",
+      "property": "fontSize"
+    },
+    {
+      "id": "settingsDangerLabelSize",
+      "type": "number",
+      "value": 16,
+      "recordId": "settings.general",
+      "nodeId": "I2114:18452;535:418",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerQuickSettingsFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:73",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerQuickSettingsPanelHeight",
+      "type": "number",
+      "value": 160,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:70",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerQuickSettingsGroupGap",
+      "type": "number",
+      "value": 7,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:70",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "readerQuickSettingsGroupHeight",
+      "type": "number",
+      "value": 47,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:71",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerQuickSettingsInternalGap",
+      "type": "number",
+      "value": 5,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:71",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "readerQuickSettingsLabelSize",
+      "type": "number",
+      "value": 10,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:73",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerQuickSettingsChoiceSize",
+      "type": "number",
+      "value": 9,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:76",
+      "property": "children[0].fontSize"
+    },
+    {
+      "id": "readerQuickSettingsSegmentHeight",
+      "type": "number",
+      "value": 30,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:75",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerQuickSettingsSegmentInset",
+      "type": "number",
+      "value": 3,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:75",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "readerQuickSettingsChoiceHeight",
+      "type": "number",
+      "value": 24,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:76",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerQuickSettingsSegmentRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:75",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerQuickSettingsChoiceRadius",
+      "type": "number",
+      "value": 6,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:76",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerQuickSettingsSegmentSurface",
+      "type": "color",
+      "value": "#8FEEE6DB",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:75",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerQuickSettingsSelectedSurface",
+      "type": "color",
+      "value": "#BDFFFCF8",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:76",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:86",
+      "property": "fontName.family"
+    },
+    {
+      "id": "readerFullSettingsTitleSize",
+      "type": "number",
+      "value": 14,
+      "recordId": "reader.full.settings",
+      "nodeId": "936:76",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerFullSettingsSectionTitleSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "reader.full.settings",
+      "nodeId": "936:86",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerFullSettingsRowLabelSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "reader.full.settings",
+      "nodeId": "936:91",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerFullSettingsSegmentSurface",
+      "type": "color",
+      "value": "#A3EEE6DB",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:93",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsSelectedSurface",
+      "type": "color",
+      "value": "#BDFFFCF8",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:94",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsChoiceInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:98",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsChoiceActive",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:95",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsChoiceSize",
+      "type": "number",
+      "value": 9,
+      "recordId": "reader.full.settings",
+      "nodeId": "936:95",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerFullSettingsSegmentHeight",
+      "type": "number",
+      "value": 33,
+      "recordId": "reader.full.settings",
+      "nodeId": "936:93",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerFullSettingsSwitchInactive",
+      "type": "color",
+      "value": "#FFAAA39A",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:153",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsSwitchActive",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:177",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullSettingsSwitchKnob",
+      "type": "color",
+      "value": "#BDFFFCF8",
+      "recordId": "reader.full.settings",
+      "nodeId": "936:178",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFieldSurface",
+      "type": "color",
+      "value": "#C7FFF8EF",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:155",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFieldBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:155",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFieldInk",
+      "type": "color",
+      "value": "#FF2B241D",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:153",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFieldLabelSize",
+      "type": "number",
+      "value": 10,
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:153",
+      "property": "fontSize"
+    },
+    {
+      "id": "readerFullAppearanceStepperSurface",
+      "type": "color",
+      "value": "#A3EEE6DB",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:177",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFontSelectedSurface",
+      "type": "color",
+      "value": "#1A2D4A3E",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:241",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFontSelectedStroke",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:241",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerFullAppearanceFontBorder",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "reader.full.appearance",
+      "nodeId": "933:238",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerBrightnessRailWidth",
+      "type": "number",
+      "value": 38,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:125",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerBrightnessRailHeight",
+      "type": "number",
+      "value": 190,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:125",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerBrightnessRailRadius",
+      "type": "number",
+      "value": 999,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:125",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerBrightnessRailTopInset",
+      "type": "number",
+      "value": 13,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:126",
+      "property": "absoluteBoundingBox.y"
+    },
+    {
+      "id": "readerBrightnessRailContentGap",
+      "type": "number",
+      "value": 14,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:125",
+      "property": "childVerticalGapDerived"
+    },
+    {
+      "id": "readerBrightnessRailSurface",
+      "type": "color",
+      "value": "#9EFFFDF8",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:125",
+      "property": "fills[0]"
+    },
+    {
+      "id": "readerBrightnessRailBorder",
+      "type": "color",
+      "value": "#57B4A697",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:125",
+      "property": "strokes[0]"
+    },
+    {
+      "id": "readerBrightnessIconInk",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:128",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "readerBrightnessIconSize",
+      "type": "number",
+      "value": 20,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:126",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerBrightnessTrackWidth",
+      "type": "number",
+      "value": 8,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:130",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerBrightnessTrackHeight",
+      "type": "number",
+      "value": 92,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:130",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerBrightnessTrackSurface",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:130",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerBrightnessTrackSelected",
+      "type": "color",
+      "value": "#FF2F6373",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:131",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "readerBrightnessAutoHitWidth",
+      "type": "number",
+      "value": 24,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:132",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerBrightnessAutoHeight",
+      "type": "number",
+      "value": 20,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:132",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "readerBrightnessAutoVisualWidth",
+      "type": "number",
+      "value": 20,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:133",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "readerBrightnessAutoRadius",
+      "type": "number",
+      "value": 10,
+      "recordId": "reader.module.settings",
+      "nodeId": "924:133",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "readerBrightnessAutoSurface",
+      "type": "color",
+      "value": "#BDFFFDF8",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:133",
+      "property": "fills[0]"
+    },
+    {
+      "id": "readerBrightnessAutoBorder",
+      "type": "color",
+      "value": "#57B4A697",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:133",
+      "property": "strokes[0]"
+    },
+    {
+      "id": "readerBrightnessAutoInnerHighlight",
+      "type": "color",
+      "value": "#C2FFFFFF",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:133",
+      "property": "effects[0].color"
+    },
+    {
+      "id": "readerBrightnessAutoInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "reader.module.settings",
+      "nodeId": "924:134",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceManagementPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "source-management.final",
+      "nodeId": "942:26",
+      "property": "fills[0].color",
+      "note": "Phone page surface"
+    },
+    {
+      "id": "sourceManagementPageBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "source-management.final",
+      "nodeId": "942:26",
+      "property": "strokes[0].color",
+      "note": "Phone page border"
+    },
+    {
+      "id": "sourceManagementInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "source-management.final",
+      "nodeId": "891:35",
+      "property": "fills[0].color",
+      "note": "Header and row ink"
+    },
+    {
+      "id": "sourceManagementMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "source-management.final",
+      "nodeId": "2174:204",
+      "property": "fills[0].color",
+      "note": "Search placeholder and status metadata"
+    },
+    {
+      "id": "sourceManagementPrimary",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:824",
+      "property": "fills[0].color",
+      "note": "Selected status filter and primary add action"
+    },
+    {
+      "id": "sourceManagementSearchSurface",
+      "type": "color",
+      "value": "#D1FFFDF8",
+      "recordId": "source-management.final",
+      "nodeId": "2174:200",
+      "property": "fills[0] with opacity 0.82",
+      "note": "Search field surface"
+    },
+    {
+      "id": "sourceManagementFieldSurface",
+      "type": "color",
+      "value": "#FFFFFDF8",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:216;2173:882",
+      "property": "fills[0].color",
+      "note": "Group select and secondary action surface"
+    },
+    {
+      "id": "sourceManagementInactiveControlSurface",
+      "type": "color",
+      "value": "#E6FFFDF8",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:826",
+      "property": "fills[0] with opacity 0.9",
+      "note": "Inactive status filter surface"
+    },
+    {
+      "id": "sourceManagementFieldBorder",
+      "type": "color",
+      "value": "#75B4A697",
+      "recordId": "source-management.final",
+      "nodeId": "2174:200",
+      "property": "strokes[0] with opacity 0.46",
+      "note": "Search and bottom secondary border"
+    },
+    {
+      "id": "sourceManagementControlBorder",
+      "type": "color",
+      "value": "#85B4A697",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:826",
+      "property": "strokes[0] with opacity 0.52",
+      "note": "Filter, group select, and detect border"
+    },
+    {
+      "id": "sourceManagementRowDivider",
+      "type": "color",
+      "value": "#38B4A697",
+      "recordId": "source-management.final",
+      "nodeId": "2174:223",
+      "property": "strokes[0] with opacity 0.22",
+      "note": "Source row divider"
+    },
+    {
+      "id": "sourceManagementSwitchThumb",
+      "type": "color",
+      "value": "#E0FFFFFF",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:62;549:39;531:105",
+      "property": "fills[0] with opacity 0.88",
+      "note": "Enabled source switch thumb"
+    },
+    {
+      "id": "sourceManagementStatusBadgeSurface",
+      "type": "color",
+      "value": "#212B895C",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:62;549:37",
+      "property": "fills[0] with opacity 0.13",
+      "note": "Enabled source status badge"
+    },
+    {
+      "id": "sourceManagementStatusDot",
+      "type": "color",
+      "value": "#FF28704E",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:62;549:37;531:110",
+      "property": "fills[0].color",
+      "note": "Enabled source status dot"
+    },
+    {
+      "id": "sourceManagementOnPrimary",
+      "type": "color",
+      "value": "#FFFFFFFF",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:355;2173:890",
+      "property": "fills[0].color",
+      "note": "Selected filter and add action label"
+    },
+    {
+      "id": "sourceManagementTitleFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "source-management.final",
+      "nodeId": "891:35",
+      "property": "fontName.family",
+      "note": "Figma page heading; Harmony may use platform fallback if unavailable"
+    },
+    {
+      "id": "sourceManagementControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:200;2173:822",
+      "property": "fontName.family",
+      "note": "Search, metadata, and select value"
+    },
+    {
+      "id": "sourceManagementCjkFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:60",
+      "property": "fontName.family",
+      "note": "CJK row and action labels"
+    },
+    {
+      "id": "sourceManagementTitleSize",
+      "type": "number",
+      "value": 24,
+      "recordId": "source-management.final",
+      "nodeId": "891:35",
+      "property": "fontSize",
+      "note": "Page heading"
+    },
+    {
+      "id": "sourceManagementSearchTextSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:200;2173:822",
+      "property": "fontSize",
+      "note": "Search placeholder"
+    },
+    {
+      "id": "sourceManagementStatsTextSize",
+      "type": "number",
+      "value": 10,
+      "recordId": "source-management.final",
+      "nodeId": "2174:204",
+      "property": "fontSize",
+      "note": "Status summary"
+    },
+    {
+      "id": "sourceManagementFilterLabelSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:825",
+      "property": "fontSize",
+      "note": "Status filter label"
+    },
+    {
+      "id": "sourceManagementGroupLabelSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:216;2173:881",
+      "property": "fontSize",
+      "note": "Group label"
+    },
+    {
+      "id": "sourceManagementGroupValueSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:216;2173:883",
+      "property": "fontSize",
+      "note": "Group value"
+    },
+    {
+      "id": "sourceManagementRowTitleSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:60",
+      "property": "fontSize",
+      "note": "Source row title"
+    },
+    {
+      "id": "sourceManagementRowMetaSize",
+      "type": "number",
+      "value": 10,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:61",
+      "property": "fontSize",
+      "note": "Source row metadata"
+    },
+    {
+      "id": "sourceManagementDetectLabelSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;2173:28291",
+      "property": "fontSize",
+      "note": "Detect action"
+    },
+    {
+      "id": "sourceManagementBottomActionLabelSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:355;2173:887",
+      "property": "fontSize",
+      "note": "Bottom action labels"
+    },
+    {
+      "id": "sourceManagementContentHorizontalInset",
+      "type": "number",
+      "value": 19,
+      "recordId": "source-management.final",
+      "nodeId": "891:38",
+      "property": "absoluteBoundingBox.x",
+      "note": "Phone and tablet content inset"
+    },
+    {
+      "id": "sourceManagementContentTopInset",
+      "type": "number",
+      "value": 8,
+      "recordId": "source-management.final",
+      "nodeId": "891:38",
+      "property": "paddingTop"
+    },
+    {
+      "id": "sourceManagementContentBottomInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "source-management.final",
+      "nodeId": "891:38",
+      "property": "paddingBottom"
+    },
+    {
+      "id": "sourceManagementBottomActionBottomInset",
+      "type": "number",
+      "value": 43,
+      "recordId": "source-management.final",
+      "nodeId": "2174:355",
+      "property": "derived:phoneViewport.bottom - absoluteBoundingBox.bottom"
+    },
+    {
+      "id": "sourceManagementSearchHeight",
+      "type": "number",
+      "value": 38,
+      "recordId": "source-management.final",
+      "nodeId": "2174:200",
+      "property": "absoluteBoundingBox.height",
+      "note": "Search field"
+    },
+    {
+      "id": "sourceManagementSearchRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "source-management.final",
+      "nodeId": "2174:200",
+      "property": "cornerRadius",
+      "note": "Search field"
+    },
+    {
+      "id": "sourceManagementFilterHeight",
+      "type": "number",
+      "value": 32,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:824",
+      "property": "absoluteBoundingBox.height",
+      "note": "Status filter"
+    },
+    {
+      "id": "sourceManagementFilterRadius",
+      "type": "number",
+      "value": 16,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:824",
+      "property": "cornerRadius",
+      "note": "Status filter"
+    },
+    {
+      "id": "sourceManagementFilterNarrowWidth",
+      "type": "number",
+      "value": 58,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:824",
+      "property": "absoluteBoundingBox.width",
+      "note": "All/enabled/error filter"
+    },
+    {
+      "id": "sourceManagementFilterWideWidth",
+      "type": "number",
+      "value": 72,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:205;2173:830",
+      "property": "absoluteBoundingBox.width",
+      "note": "Unchecked/custom filter"
+    },
+    {
+      "id": "sourceManagementFilterGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "source-management.final",
+      "nodeId": "2174:205",
+      "property": "derived child horizontal gap",
+      "note": "Status filter gap"
+    },
+    {
+      "id": "sourceManagementGroupHeight",
+      "type": "number",
+      "value": 36,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:216",
+      "property": "absoluteBoundingBox.height",
+      "note": "Group filter"
+    },
+    {
+      "id": "sourceManagementGroupRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:216;2173:882",
+      "property": "cornerRadius",
+      "note": "Group select"
+    },
+    {
+      "id": "sourceManagementTabletFilterGroupGap",
+      "type": "number",
+      "value": 20,
+      "recordId": "source-management.final",
+      "nodeId": "893:38",
+      "property": "derived filter to group gap",
+      "note": "Tablet status/group gap"
+    },
+    {
+      "id": "sourceManagementRowHeight",
+      "type": "number",
+      "value": 70,
+      "recordId": "source-management.final",
+      "nodeId": "2174:223",
+      "property": "absoluteBoundingBox.height",
+      "note": "Source row"
+    },
+    {
+      "id": "sourceManagementRowHorizontalInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:59",
+      "property": "absoluteBoundingBox.x",
+      "note": "Source row left inset"
+    },
+    {
+      "id": "sourceManagementDetectWidth",
+      "type": "number",
+      "value": 44,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;2173:28290",
+      "property": "absoluteBoundingBox.width",
+      "note": "Detect action"
+    },
+    {
+      "id": "sourceManagementDetectHeight",
+      "type": "number",
+      "value": 28,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;2173:28290",
+      "property": "absoluteBoundingBox.height",
+      "note": "Detect action"
+    },
+    {
+      "id": "sourceManagementDetectRadius",
+      "type": "number",
+      "value": 7,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;2173:28290",
+      "property": "cornerRadius",
+      "note": "Detect action"
+    },
+    {
+      "id": "sourceManagementSwitchWidth",
+      "type": "number",
+      "value": 44,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:62;549:39",
+      "property": "absoluteBoundingBox.width",
+      "note": "Source switch"
+    },
+    {
+      "id": "sourceManagementSwitchHeight",
+      "type": "number",
+      "value": 24,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:62;549:39",
+      "property": "absoluteBoundingBox.height",
+      "note": "Source switch"
+    },
+    {
+      "id": "sourceManagementSwitchThumbSize",
+      "type": "number",
+      "value": 20,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;549:62;549:39;531:105",
+      "property": "absoluteBoundingBox.width",
+      "note": "Source switch thumb"
+    },
+    {
+      "id": "sourceManagementBottomActionHeight",
+      "type": "number",
+      "value": 44,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:355;2173:886",
+      "property": "absoluteBoundingBox.height",
+      "note": "Bottom action"
+    },
+    {
+      "id": "sourceManagementBottomActionRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:355;2173:886",
+      "property": "cornerRadius",
+      "note": "Bottom action"
+    },
+    {
+      "id": "sourceManagementBottomActionGap",
+      "type": "number",
+      "value": 10,
+      "recordId": "source-management.final",
+      "nodeId": "2174:355",
+      "property": "derived child horizontal gap",
+      "note": "Bottom action gap"
+    },
+    {
+      "id": "sourceManagementMoreHitSize",
+      "type": "number",
+      "value": 44,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;2173:28292",
+      "property": "absoluteBoundingBox.width",
+      "note": "More hit area"
+    },
+    {
+      "id": "sourceManagementMoreDotSize",
+      "type": "number",
+      "value": 3,
+      "recordId": "source-management.final",
+      "nodeId": "I2174:223;2173:28293",
+      "property": "absoluteBoundingBox.width",
+      "note": "More dot"
+    },
+    {
+      "id": "searchPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58749",
+      "property": "fills[0].color",
+      "note": "Phone initial page surface"
+    },
+    {
+      "id": "searchInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58698",
+      "property": "fills[0].color",
+      "note": "Status, input, and result title ink"
+    },
+    {
+      "id": "searchMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58732",
+      "property": "fills[0].color",
+      "note": "History action and secondary text"
+    },
+    {
+      "id": "searchIntro",
+      "type": "color",
+      "value": "#FF9A948E",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58874",
+      "property": "fills[0].color",
+      "note": "Search result summary"
+    },
+    {
+      "id": "searchBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58713",
+      "property": "strokes[0].color",
+      "note": "Header, chip, and result-row divider"
+    },
+    {
+      "id": "searchInputSurface",
+      "type": "color",
+      "value": "#121F1B17",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58718",
+      "property": "fills[0].color",
+      "note": "Search field surface"
+    },
+    {
+      "id": "searchInputPlaceholder",
+      "type": "color",
+      "value": "#801F1B17",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58723",
+      "property": "fills[0].color",
+      "note": "Search placeholder"
+    },
+    {
+      "id": "searchPrimary",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58843",
+      "property": "fills[0].color",
+      "note": "Active search controls"
+    },
+    {
+      "id": "searchPrimaryDisabled",
+      "type": "color",
+      "value": "#382D4A3E",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58724",
+      "property": "fills[0].color",
+      "note": "Initial disabled search control"
+    },
+    {
+      "id": "searchOnPrimary",
+      "type": "color",
+      "value": "#FFFFFAF4",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58725",
+      "property": "fills[0].color",
+      "note": "Primary action label"
+    },
+    {
+      "id": "searchChipSurface",
+      "type": "color",
+      "value": "#E5FFFCF8",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58793",
+      "property": "fills[0].color",
+      "note": "Inactive source and history chip surface"
+    },
+    {
+      "id": "searchControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "search.five-state",
+      "nodeId": "2635:58723",
+      "property": "fontName.family",
+      "note": "Input and controls"
+    },
+    {
+      "id": "searchSerifFontFamily",
+      "type": "font",
+      "value": "Noto Serif SC",
+      "recordId": "search.five-state",
+      "nodeId": "2635:59047",
+      "property": "fontName.family",
+      "note": "Empty-state and result titles"
+    },
+    {
+      "id": "searchPhoneHeaderHeight",
+      "type": "number",
+      "value": 52,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58714",
+      "property": "absoluteBoundingBox.height",
+      "note": "Phone header inner height"
+    },
+    {
+      "id": "searchTabletHeaderHeight",
+      "type": "number",
+      "value": 56,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59159",
+      "property": "absoluteBoundingBox.height",
+      "note": "Tablet header inner height"
+    },
+    {
+      "id": "searchTabletHeaderWidth",
+      "type": "number",
+      "value": 620,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59159",
+      "property": "absoluteBoundingBox.width",
+      "note": "Centered Tablet header container"
+    },
+    {
+      "id": "searchPhoneHeaderInset",
+      "type": "number",
+      "value": 16,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58715",
+      "property": "absoluteBoundingBox.x relative to page",
+      "note": "Phone header horizontal inset"
+    },
+    {
+      "id": "searchTabletHeaderInset",
+      "type": "number",
+      "value": 20,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59160",
+      "property": "absoluteBoundingBox.x relative to header container",
+      "note": "Tablet header horizontal inset"
+    },
+    {
+      "id": "searchBackHitSize",
+      "type": "number",
+      "value": 32,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58715",
+      "property": "absoluteBoundingBox.width",
+      "note": "Back control hit size"
+    },
+    {
+      "id": "searchHeaderFieldPhoneHeight",
+      "type": "number",
+      "value": 36,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58718",
+      "property": "absoluteBoundingBox.height",
+      "note": "Phone search field and action height"
+    },
+    {
+      "id": "searchHeaderFieldTabletHeight",
+      "type": "number",
+      "value": 40,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59163",
+      "property": "absoluteBoundingBox.height",
+      "note": "Tablet search field and action height"
+    },
+    {
+      "id": "searchHeaderPhoneActionWidth",
+      "type": "number",
+      "value": 54,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58724",
+      "property": "absoluteBoundingBox.width",
+      "note": "Phone search action width"
+    },
+    {
+      "id": "searchHeaderLoadingPhoneActionWidth",
+      "type": "number",
+      "value": 73,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58783",
+      "property": "absoluteBoundingBox.width",
+      "note": "Phone loading search action width"
+    },
+    {
+      "id": "searchHeaderTabletActionWidth",
+      "type": "number",
+      "value": 64,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59169",
+      "property": "absoluteBoundingBox.width",
+      "note": "Tablet search action width"
+    },
+    {
+      "id": "searchHeaderRadius",
+      "type": "number",
+      "value": 999,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58718",
+      "property": "cornerRadius",
+      "note": "Search field and pill actions"
+    },
+    {
+      "id": "searchHeaderGap",
+      "type": "number",
+      "value": 10,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58715;2635:58718",
+      "property": "derived sibling horizontal gap",
+      "note": "Header control gap"
+    },
+    {
+      "id": "searchContentPhoneInset",
+      "type": "number",
+      "value": 18,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58728",
+      "property": "absoluteBoundingBox.x relative to page",
+      "note": "Phone body inset"
+    },
+    {
+      "id": "searchContentTabletWidth",
+      "type": "number",
+      "value": 620,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59173",
+      "property": "absoluteBoundingBox.width",
+      "note": "Centered Tablet body container"
+    },
+    {
+      "id": "searchContentTabletInset",
+      "type": "number",
+      "value": 20,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59174",
+      "property": "absoluteBoundingBox.x relative to body container",
+      "note": "Tablet body inner inset"
+    },
+    {
+      "id": "searchHistoryTopInset",
+      "type": "number",
+      "value": 28,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58728",
+      "property": "absoluteBoundingBox.y relative to body",
+      "note": "Initial history header top inset"
+    },
+    {
+      "id": "searchHistoryChipHeight",
+      "type": "number",
+      "value": 34.5,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58735",
+      "property": "absoluteBoundingBox.height",
+      "note": "History chip height"
+    },
+    {
+      "id": "searchHistoryChipGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58735;2635:58737",
+      "property": "derived sibling horizontal gap",
+      "note": "History chip gap"
+    },
+    {
+      "id": "searchSourceTabsHeight",
+      "type": "number",
+      "value": 41,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58790",
+      "property": "absoluteBoundingBox.height",
+      "note": "Source tab strip inner height"
+    },
+    {
+      "id": "searchSourceChipHeight",
+      "type": "number",
+      "value": 23,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58791",
+      "property": "absoluteBoundingBox.height",
+      "note": "Source tab chip height"
+    },
+    {
+      "id": "searchSourceChipGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58791;2635:58793",
+      "property": "derived sibling horizontal gap",
+      "note": "Source tab chip gap"
+    },
+    {
+      "id": "searchResultStatusHeight",
+      "type": "number",
+      "value": 29,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58858",
+      "property": "absoluteBoundingBox.height",
+      "note": "Result count strip height"
+    },
+    {
+      "id": "searchResultRowHeight",
+      "type": "number",
+      "value": 145,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58862",
+      "property": "absoluteBoundingBox.height",
+      "note": "Search result row height"
+    },
+    {
+      "id": "searchResultHorizontalInset",
+      "type": "number",
+      "value": 18,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58863",
+      "property": "absoluteBoundingBox.x relative to page",
+      "note": "Search result row content inset"
+    },
+    {
+      "id": "searchResultCoverWidth",
+      "type": "number",
+      "value": 60,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58863",
+      "property": "absoluteBoundingBox.width",
+      "note": "Result cover width"
+    },
+    {
+      "id": "searchResultCoverHeight",
+      "type": "number",
+      "value": 82,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58863",
+      "property": "absoluteBoundingBox.height",
+      "note": "Result cover height"
+    },
+    {
+      "id": "searchResultCoverRadius",
+      "type": "number",
+      "value": 6,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58863",
+      "property": "cornerRadius",
+      "note": "Result cover radius"
+    },
+    {
+      "id": "searchResultGap",
+      "type": "number",
+      "value": 12,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58863;2635:58866",
+      "property": "derived cover to content gap",
+      "note": "Result cover/content gap"
+    },
+    {
+      "id": "searchResultTitleSize",
+      "type": "number",
+      "value": 15,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58868",
+      "property": "fontSize",
+      "note": "Result title"
+    },
+    {
+      "id": "searchResultAuthorSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58870",
+      "property": "fontSize",
+      "note": "Result author"
+    },
+    {
+      "id": "searchResultLatestSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58872",
+      "property": "fontSize",
+      "note": "Result latest chapter"
+    },
+    {
+      "id": "searchResultIntroSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58874",
+      "property": "fontSize",
+      "note": "Result summary"
+    },
+    {
+      "id": "searchResultSourceSize",
+      "type": "number",
+      "value": 10,
+      "recordId": "search.five-state",
+      "nodeId": "2635:58877",
+      "property": "fontSize",
+      "note": "Result source tag"
+    },
+    {
+      "id": "searchEmptyTitleSize",
+      "type": "number",
+      "value": 17,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59047",
+      "property": "fontSize",
+      "note": "Empty and error title"
+    },
+    {
+      "id": "searchStateActionHeight",
+      "type": "number",
+      "value": 40,
+      "recordId": "search.five-state",
+      "nodeId": "2635:59135",
+      "property": "absoluteBoundingBox.height",
+      "note": "Error retry action height"
+    },
+    {
+      "id": "webdavPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "webdav.config",
+      "nodeId": "903:3",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavPanelSurface",
+      "type": "color",
+      "value": "#E6FFFCF8",
+      "recordId": "webdav.config",
+      "nodeId": "2222:632",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavPanelBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "webdav.config",
+      "nodeId": "2222:632",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavFieldSurface",
+      "type": "color",
+      "value": "#B3FFFCF8",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:326",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavFieldBorder",
+      "type": "color",
+      "value": "#4DB4A698",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:326",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavInputSurface",
+      "type": "color",
+      "value": "#D1FFF8EF",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:335",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavInputBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:335",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavSoftActionSurface",
+      "type": "color",
+      "value": "#14236179",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:369",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavSoftActionBorder",
+      "type": "color",
+      "value": "#38236179",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:369",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavActionPrimary",
+      "type": "color",
+      "value": "#FF243D30",
+      "recordId": "webdav.config",
+      "nodeId": "I2400:491;2615:57578;2221:377",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavActionInk",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:372",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:325",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:336",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "syncSectionMuted",
+      "type": "color",
+      "value": "#FF9C9488",
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:4",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "syncPanelSurface",
+      "type": "color",
+      "value": "#FFFFFCF8",
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:5",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "syncPanelBorder",
+      "type": "color",
+      "value": "#FFD8D0C3",
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:5",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "syncBadgeSurface",
+      "type": "color",
+      "value": "#FFEFE7DB",
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:28",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "syncValue",
+      "type": "color",
+      "value": "#FF5C564E",
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:30",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "restoreDialogSurface",
+      "type": "color",
+      "value": "#EBFFFDF8",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36727",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "restoreDialogBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36727",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "restoreDialogCancelSurface",
+      "type": "color",
+      "value": "#A3EEE6DB",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36727;286:231",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "restoreDialogPrimary",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36727;286:233",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "restoreToastSurface",
+      "type": "color",
+      "value": "#DB2B261F",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36746",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "restoreToastText",
+      "type": "color",
+      "value": "#FFFFFFFF",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36746;286:223",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:325",
+      "property": "fontName.family"
+    },
+    {
+      "id": "restoreFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36727;286:229",
+      "property": "fontName.family"
+    },
+    {
+      "id": "webdavContentPhoneInset",
+      "type": "number",
+      "value": 19,
+      "recordId": "webdav.config",
+      "nodeId": "903:38",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "webdavContentBottomInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "webdav.config",
+      "nodeId": "903:38",
+      "property": "paddingBottom"
+    },
+    {
+      "id": "webdavPanelRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "webdav.config",
+      "nodeId": "2222:632",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "webdavFieldHeight",
+      "type": "number",
+      "value": 76.3281021118164,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:326",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "webdavInputHeight",
+      "type": "number",
+      "value": 36,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:335",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "webdavActionHeight",
+      "type": "number",
+      "value": 42,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:369",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "webdavActionPhoneWidth",
+      "type": "number",
+      "value": 160,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:369",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "webdavFieldIconShellSize",
+      "type": "number",
+      "value": 28,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:327",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "webdavAdvancedRowHeight",
+      "type": "number",
+      "value": 58,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:756;2221:464",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "webdavMetricsCardHeight",
+      "type": "number",
+      "value": 56,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:552;2221:240",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "webdavMetricsGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:552;2221:240;I2222:552;2221:249",
+      "property": "derived sibling gap"
+    },
+    {
+      "id": "webdavSectionTitleSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:325",
+      "property": "fontSize"
+    },
+    {
+      "id": "webdavFieldLabelSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:334",
+      "property": "fontSize"
+    },
+    {
+      "id": "webdavInputTextSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:336",
+      "property": "fontSize"
+    },
+    {
+      "id": "webdavActionLabelSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:375",
+      "property": "fontSize"
+    },
+    {
+      "id": "syncContentPhoneInset",
+      "type": "number",
+      "value": 19,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2400:34",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "syncPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2400:3",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "syncContentBottomInset",
+      "type": "number",
+      "value": 18,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2400:34",
+      "property": "paddingBottom"
+    },
+    {
+      "id": "syncSectionGap",
+      "type": "number",
+      "value": 16,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2400:34",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "syncAutoPanelRadius",
+      "type": "number",
+      "value": 13,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:5",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "syncAutoRowHeight",
+      "type": "number",
+      "value": 50,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:6",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "syncHistoryRowHeight",
+      "type": "number",
+      "value": 85,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:27",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "syncHistoryRowGap",
+      "type": "number",
+      "value": 9,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:26",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "syncHistoryBadgeHeight",
+      "type": "number",
+      "value": 24,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:28",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "syncHistoryExpandHeight",
+      "type": "number",
+      "value": 26,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2660:11584",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "syncSectionTitleSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:4",
+      "property": "fontSize"
+    },
+    {
+      "id": "syncRowLabelSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:7",
+      "property": "fontSize"
+    },
+    {
+      "id": "syncHistoryTextSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "sync-backup.page-and-restore-overlay",
+      "nodeId": "I2400:491;2646:30",
+      "property": "fontSize"
+    },
+    {
+      "id": "restoreDialogConfirmWidth",
+      "type": "number",
+      "value": 306,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36727",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "restoreDialogConfirmHeight",
+      "type": "number",
+      "value": 190,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36727",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "restoreDialogActionHeight",
+      "type": "number",
+      "value": 38,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36727;286:231",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "restoreDialogRadius",
+      "type": "number",
+      "value": 12,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36727",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "restoreLoadingWidth",
+      "type": "number",
+      "value": 352,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36735",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "restoreLoadingHeight",
+      "type": "number",
+      "value": 180,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36735",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "restoreToastWidth",
+      "type": "number",
+      "value": 280,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36746",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "restoreToastHeight",
+      "type": "number",
+      "value": 32,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36746",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "restoreToastRadius",
+      "type": "number",
+      "value": 999,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "2564:36746",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "restoreDialogTitleSize",
+      "type": "number",
+      "value": 17,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36727;286:229",
+      "property": "fontSize"
+    },
+    {
+      "id": "restoreDialogBodySize",
+      "type": "number",
+      "value": 13,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36727;286:230",
+      "property": "fontSize"
+    },
+    {
+      "id": "restoreLoadingTitleSize",
+      "type": "number",
+      "value": 16,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36735;370:6",
+      "property": "fontSize"
+    },
+    {
+      "id": "restoreLoadingBodySize",
+      "type": "number",
+      "value": 12,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36735;370:7",
+      "property": "fontSize"
+    },
+    {
+      "id": "restoreToastLabelSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "sync-backup.restore-backup-overlay",
+      "nodeId": "I2564:36746;286:223",
+      "property": "fontSize"
+    },
+    {
+      "id": "webdavIconShellSurface",
+      "type": "color",
+      "value": "#172373A4",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:632;2221:327",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavMetricBorder",
+      "type": "color",
+      "value": "#61B4A698",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:552;2221:240",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavSwitchKnob",
+      "type": "color",
+      "value": "#E0FFFFFF",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:756;2221:463",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavSwitchOff",
+      "type": "color",
+      "value": "#99EEE8DE",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:756;2221:474",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavStepperSurface",
+      "type": "color",
+      "value": "#E6EDE8DF",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:756;2221:474",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "webdavRowDivider",
+      "type": "color",
+      "value": "#38B4A698",
+      "recordId": "webdav.config",
+      "nodeId": "I2222:756;2221:464",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "webdavActionOnPrimary",
+      "type": "color",
+      "value": "#EBFFFDF8",
+      "recordId": "webdav.config",
+      "nodeId": "I2400:491;2615:57578;2221:377",
+      "property": "derived action label color"
+    },
+    {
+      "id": "discoverPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:3",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverHeaderFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:27",
+      "property": "fontName.family"
+    },
+    {
+      "id": "discoverHeaderTitleSize",
+      "type": "number",
+      "value": 29,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:27",
+      "property": "fontSize"
+    },
+    {
+      "id": "discoverHeaderInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:27",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:51",
+      "property": "fontName.family"
+    },
+    {
+      "id": "discoverContentInset",
+      "type": "number",
+      "value": 19,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:33",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "discoverSourceCardHeight",
+      "type": "number",
+      "value": 58,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:34",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "discoverSourceCardSurface",
+      "type": "color",
+      "value": "#FFFCF8EB",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:34",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverSourceCardBorder",
+      "type": "color",
+      "value": "#5CB4A697",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:34",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "discoverSourceIconSurface",
+      "type": "color",
+      "value": "#1A2D4A3E",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:35",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverPrimary",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:50",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverOnPrimary",
+      "type": "color",
+      "value": "#FFFFFFFF",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:51",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverInactiveChipSurface",
+      "type": "color",
+      "value": "#D1EEE8DF",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:52",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverInactiveChipInk",
+      "type": "color",
+      "value": "#FF3F372F",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:53",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverChipHeight",
+      "type": "number",
+      "value": 32,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:50",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "discoverChipGap",
+      "type": "number",
+      "value": 7,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:49",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "discoverFilterHeight",
+      "type": "number",
+      "value": 34,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:63",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "discoverFilterFieldWidth",
+      "type": "number",
+      "value": 273,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:63",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "discoverFilterActionWidth",
+      "type": "number",
+      "value": 70,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:75",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "discoverFilterContentInset",
+      "type": "number",
+      "value": 11,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:64",
+      "property": "absoluteBoundingBox.x"
+    },
+    {
+      "id": "discoverFilterFieldTrailingInset",
+      "type": "number",
+      "value": 5,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:71",
+      "property": "computedRightInset"
+    },
+    {
+      "id": "discoverFilterLabelGap",
+      "type": "number",
+      "value": 3,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:67",
+      "property": "computedLabelGapFromIcon"
+    },
+    {
+      "id": "discoverFilterActionLabelGap",
+      "type": "number",
+      "value": 4,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:79",
+      "property": "computedLabelGapFromCheckIcon"
+    },
+    {
+      "id": "discoverFilterSelectionWidth",
+      "type": "number",
+      "value": 176,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:69",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "discoverFilterAffordanceGap",
+      "type": "number",
+      "value": 7,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:71",
+      "property": "computedHorizontalGap"
+    },
+    {
+      "id": "discoverFilterSurface",
+      "type": "color",
+      "value": "#E5FFFCF8",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:63",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverFilterBorder",
+      "type": "color",
+      "value": "#7AB4A697",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:63",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "discoverFilterActionStart",
+      "type": "color",
+      "value": "#FF436F88",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:75",
+      "property": "fills[0].gradientStops[0].color"
+    },
+    {
+      "id": "discoverFilterActionEnd",
+      "type": "color",
+      "value": "#FF315F78",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:75",
+      "property": "fills[0].gradientStops[1].color"
+    },
+    {
+      "id": "discoverFilterActionBorder",
+      "type": "color",
+      "value": "#C72D5D76",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:75",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "discoverResultsSurface",
+      "type": "color",
+      "value": "#E5FFFCF8",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:83",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverResultsBorder",
+      "type": "color",
+      "value": "#57B4A697",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:83",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "discoverResultRadius",
+      "type": "number",
+      "value": 8,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:83",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "discoverCoverWidth",
+      "type": "number",
+      "value": 52,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:85",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "discoverCoverHeight",
+      "type": "number",
+      "value": 74,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:85",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "discoverCoverRadius",
+      "type": "number",
+      "value": 4,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:85",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "discoverTitleSize",
+      "type": "number",
+      "value": 15,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:88",
+      "property": "fontSize"
+    },
+    {
+      "id": "discoverMetaSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:90",
+      "property": "fontSize"
+    },
+    {
+      "id": "discoverBodySize",
+      "type": "number",
+      "value": 12,
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:94",
+      "property": "fontSize"
+    },
+    {
+      "id": "discoverBodyInk",
+      "type": "color",
+      "value": "#FF5C554D",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:94",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:44",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "discoverResultIndicator",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "discover.page",
+      "nodeId": "I2446:392;2446:95",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssPageSurface",
+      "type": "color",
+      "value": "#FFF8F4EC",
+      "recordId": "rss.page",
+      "nodeId": "2306:2",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssHeaderFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:28",
+      "property": "fontName.family"
+    },
+    {
+      "id": "rssHeaderTitleSize",
+      "type": "number",
+      "value": 29,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:28",
+      "property": "fontSize"
+    },
+    {
+      "id": "rssHeaderInk",
+      "type": "color",
+      "value": "#FF1F3528",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:28",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssControlFontFamily",
+      "type": "font",
+      "value": "Inter",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:34",
+      "property": "fontName.family"
+    },
+    {
+      "id": "rssContentInset",
+      "type": "number",
+      "value": 19,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:52",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "rssStatusSurface",
+      "type": "color",
+      "value": "#DBFFFCF8",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:30",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssSoftBorder",
+      "type": "color",
+      "value": "#6BB4A697",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:30",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "rssSearchSurface",
+      "type": "color",
+      "value": "#94FFFFFF",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:53",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssSearchBorder",
+      "type": "color",
+      "value": "#FFC1C7CD",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:53",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "rssSearchPlaceholder",
+      "type": "color",
+      "value": "#FF817A72",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:59",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssPrimary",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:61",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssOnPrimary",
+      "type": "color",
+      "value": "#FFFFFFFF",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:62",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssInactiveChipSurface",
+      "type": "color",
+      "value": "#D6EEE8DF",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:63",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssInactiveChipInk",
+      "type": "color",
+      "value": "#FF564D44",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:64",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssSearchHeight",
+      "type": "number",
+      "value": 44,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:53",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "rssModeHeight",
+      "type": "number",
+      "value": 30,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:61",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "rssCardSurface",
+      "type": "color",
+      "value": "#EBFFFCF8",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:70",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssCardBorder",
+      "type": "color",
+      "value": "#4DB4A697",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:70",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "rssFieldSurface",
+      "type": "color",
+      "value": "#E5FFFCF8",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:88",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssFieldBorder",
+      "type": "color",
+      "value": "#7AB4A697",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:88",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "rssSourceIconSurface",
+      "type": "color",
+      "value": "#1F2D4A3E",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:102",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssSourceStatusGood",
+      "type": "color",
+      "value": "#FF2F6B52",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:118",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssSourceStatusWarn",
+      "type": "color",
+      "value": "#FF8B5829",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:154",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssMuted",
+      "type": "color",
+      "value": "#FF756F69",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:169",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssUnreadIndicator",
+      "type": "color",
+      "value": "#FF2D4A3E",
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:186",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "rssTitleSize",
+      "type": "number",
+      "value": 15,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:72",
+      "property": "fontSize"
+    },
+    {
+      "id": "rssSourceTitleSize",
+      "type": "number",
+      "value": 13,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:112",
+      "property": "fontSize"
+    },
+    {
+      "id": "rssMetaSize",
+      "type": "number",
+      "value": 11,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:95",
+      "property": "fontSize"
+    },
+    {
+      "id": "rssControlLabelSize",
+      "type": "number",
+      "value": 12,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:62",
+      "property": "fontSize"
+    },
+    {
+      "id": "rssHeaderControlGap",
+      "type": "number",
+      "value": 6,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:29",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "rssHeaderManageIconSize",
+      "type": "number",
+      "value": 16,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:42",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "rssHeaderManageLabelGap",
+      "type": "number",
+      "value": 5,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:50",
+      "property": "derived:absoluteBoundingBox.x - icon.right"
+    },
+    {
+      "id": "rssHeaderManageRadius",
+      "type": "number",
+      "value": 12,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:41",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "rssHeaderManageWidth",
+      "type": "number",
+      "value": 64,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:41",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "rssHeaderRefreshIconSize",
+      "type": "number",
+      "value": 18,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:37",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "rssHeaderStatusDotSize",
+      "type": "number",
+      "value": 9,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:31",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "rssHeaderStatusHeight",
+      "type": "number",
+      "value": 34,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:30",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "rssHeaderStatusPaddingLeft",
+      "type": "number",
+      "value": 10,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:30",
+      "property": "paddingLeft"
+    },
+    {
+      "id": "rssHeaderStatusPaddingRight",
+      "type": "number",
+      "value": 8,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:30",
+      "property": "paddingRight"
+    },
+    {
+      "id": "rssHeaderStatusTextGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:32",
+      "property": "derived:absoluteBoundingBox.x - statusDot.right"
+    },
+    {
+      "id": "rssSourceHeaderHeight",
+      "type": "number",
+      "value": 48,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:70",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "rssSourceRowHeight",
+      "type": "number",
+      "value": 62,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:101",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "rssSourceIconSize",
+      "type": "number",
+      "value": 32,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:102",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "rssSectionGap",
+      "type": "number",
+      "value": 8,
+      "recordId": "rss.page",
+      "nodeId": "I2306:2;2305:52",
+      "property": "itemSpacing"
+    },
+    {
+      "id": "sourceSwitchWindowSurface",
+      "type": "color",
+      "value": "#FFFFFCF8",
+      "recordId": "source-switch.window",
+      "nodeId": "568:656",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchWindowBorder",
+      "type": "color",
+      "value": "#3D9B8466",
+      "recordId": "source-switch.window",
+      "nodeId": "568:656",
+      "property": "strokes[0].color"
+    },
+    {
+      "id": "sourceSwitchWindowWidth",
+      "type": "number",
+      "value": 300,
+      "recordId": "source-switch.window",
+      "nodeId": "568:656",
+      "property": "absoluteBoundingBox.width"
+    },
+    {
+      "id": "sourceSwitchWindowHeight",
+      "type": "number",
+      "value": 385,
+      "recordId": "source-switch.window",
+      "nodeId": "568:656",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "sourceSwitchWindowRadius",
+      "type": "number",
+      "value": 20,
+      "recordId": "source-switch.window",
+      "nodeId": "568:656",
+      "property": "cornerRadius"
+    },
+    {
+      "id": "sourceSwitchPhoneTop",
+      "type": "number",
+      "value": 92,
+      "recordId": "source-switch.window",
+      "nodeId": "I2294:48522;568:656",
+      "property": "absoluteBoundingBox.y"
+    },
+    {
+      "id": "sourceSwitchTabletRightInset",
+      "type": "number",
+      "value": 12,
+      "recordId": "source-switch.window",
+      "nodeId": "I2294:48766;2294:48417",
+      "property": "viewport.width - absoluteBoundingBox.right"
+    },
+    {
+      "id": "sourceSwitchHeaderHeight",
+      "type": "number",
+      "value": 34,
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:135",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "sourceSwitchColumnHeaderHeight",
+      "type": "number",
+      "value": 20,
+      "recordId": "source-switch.window",
+      "nodeId": "2633:1893",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "sourceSwitchFooterHeight",
+      "type": "number",
+      "value": 22,
+      "recordId": "source-switch.window",
+      "nodeId": "2633:1898",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "sourceSwitchCandidateHeight",
+      "type": "number",
+      "value": 28,
+      "recordId": "source-switch.window",
+      "nodeId": "568:80",
+      "property": "absoluteBoundingBox.height"
+    },
+    {
+      "id": "sourceSwitchHeaderSurface",
+      "type": "color",
+      "value": "#0D9B8466",
+      "recordId": "source-switch.window",
+      "nodeId": "2633:1858",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchSortSurface",
+      "type": "color",
+      "value": "#1A9B8466",
+      "recordId": "source-switch.window",
+      "nodeId": "2633:1856",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchCloseSurface",
+      "type": "color",
+      "value": "#6BEEE6DB",
+      "recordId": "source-switch.window",
+      "nodeId": "568:58",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchDivider",
+      "type": "color",
+      "value": "#2E9B8466",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:65",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchSelectedSurface",
+      "type": "color",
+      "value": "#142D4A3E",
+      "recordId": "source-switch.window",
+      "nodeId": "568:80",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchInk",
+      "type": "color",
+      "value": "#FF2B241D",
+      "recordId": "source-switch.window",
+      "nodeId": "568:67",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchHeaderInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:56",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchMuted",
+      "type": "color",
+      "value": "#FF8D8378",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:57",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchFooterMuted",
+      "type": "color",
+      "value": "#FFC8BFB5",
+      "recordId": "source-switch.window",
+      "nodeId": "I2633:1898;2633:1863",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchChapterInk",
+      "type": "color",
+      "value": "#FF332C25",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:69",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchSelectedInk",
+      "type": "color",
+      "value": "#FF2A7A5A",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:80;568:67",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchStatusGood",
+      "type": "color",
+      "value": "#FF2A7A5A",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:80;2630:1579;2630:1538",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "sourceSwitchControlFontFamily",
+      "type": "font",
+      "value": "Noto Sans SC",
+      "recordId": "source-switch.window",
+      "nodeId": "I568:656;568:56",
+      "property": "fontName.family"
+    },
+    {
+      "id": "settingsTitleFontFamily",
+      "type": "font",
+      "value": "Songti SC",
+      "recordId": "settings.general",
+      "nodeId": "879:35",
+      "property": "fontName.family"
+    },
+    {
+      "id": "settingsTitleInk",
+      "type": "color",
+      "value": "#FF1F1B17",
+      "recordId": "settings.general",
+      "nodeId": "879:35",
+      "property": "fills[0].color"
+    },
+    {
+      "id": "settingsTitleSize",
+      "type": "number",
+      "value": 24,
+      "recordId": "settings.general",
+      "nodeId": "879:35",
+      "property": "fontSize"
+    },
+    {
+      "id": "settingsBackBarHeight",
+      "type": "number",
+      "value": 58,
+      "recordId": "settings.general",
+      "nodeId": "879:27",
+      "property": "absoluteBoundingBox.height"
+    }
+  ]
+}

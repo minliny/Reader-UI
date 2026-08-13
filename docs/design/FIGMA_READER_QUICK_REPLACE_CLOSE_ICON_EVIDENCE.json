@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_READER_QUICK_REPLACE_CLOSE_ICON_EVIDENCE",
+  "status": "READ_ONLY_PLUGIN_EXPORT_VERIFIED",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+  "binding": {
+    "recordId": "reader.quick.content-replacement",
+    "canonicalMasterNodeId": "942:57",
+    "phoneViewportNodeId": "942:54",
+    "exportNodeId": "912:75",
+    "exportNodeRole": "Button - 关闭覆盖层"
+  },
+  "capture": {
+    "observedOn": "2026-07-26",
+    "source": "figma-plugin-api-through-codex",
+    "api": "node.exportAsync",
+    "format": "SVG_STRING",
+    "readOnlyFigma": true,
+    "figmaWrites": false,
+    "pluginNodeRevision": null
+  },
+  "export": {
+    "resource": "figma_reader_replace_close",
+    "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/figma_reader_replace_close.svg",
+    "expectedSize": {
+      "width": 28,
+      "height": 28
+    },
+    "sha256": "65fbb0b56af11dcbf64644c2761d0566e711cd4b3e93193805bf65915117bb4a",
+    "bytes": 524
+  }
+}

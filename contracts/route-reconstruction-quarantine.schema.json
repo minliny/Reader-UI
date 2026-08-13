@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/route-reconstruction-quarantine.schema.json",
+  "title": "RouteReconstructionQuarantine",
+  "description": "源端明确摘除尚未完成 Figma 到原生重建的旧路由消费路径。该清单不修改 Figma binding，也不授予任何视觉或业务能力。顶层 active 表示隔离机制生效；每一条 entry 必须独立标记 active 或 released，避免一个已重建页面族解除其余旧路由的隔离。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "status", "entries"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "status": { "enum": ["active", "released"] },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Entry" }
+    }
+  },
+  "$defs": {
+    "Entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["recordId", "routeIds", "reason", "blocksPromotion", "status"],
+      "properties": {
+        "recordId": { "type": "string", "minLength": 1 },
+        "routeIds": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "reason": { "type": "string", "minLength": 1 },
+        "blocksPromotion": { "const": true },
+        "status": {
+          "enum": ["active", "released"],
+          "description": "active blocks the historical route mapping and promotion; released records a completed Reader-UI source conversion only. Native consumption still requires the separate atomic promotion transaction."
+        }
+      }
+    }
+  }
+}

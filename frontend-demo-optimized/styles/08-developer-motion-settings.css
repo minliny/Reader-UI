@@ -1,0 +1,124 @@
+.fd-motion-developer-intro {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--fd-border);
+  border-radius: var(--fd-radius-md);
+  background: var(--fd-surface);
+}
+
+.fd-motion-developer-intro strong,
+.fd-motion-developer-intro p,
+.fd-motion-developer-intro dl,
+.fd-motion-developer-intro dt,
+.fd-motion-developer-intro dd {
+  margin: 0;
+}
+
+.fd-motion-developer-intro strong {
+  color: var(--fd-ink);
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.fd-motion-developer-intro p {
+  margin-top: 4px;
+  color: var(--fd-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.fd-motion-developer-intro dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.fd-motion-developer-intro dl > div {
+  display: grid;
+  gap: 3px;
+  padding: 8px 10px;
+  border-radius: var(--fd-radius-sm);
+  background: rgba(35, 121, 164, 0.07);
+}
+
+.fd-motion-developer-intro dt {
+  color: var(--fd-muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.fd-motion-developer-intro dd {
+  color: var(--fd-ink);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.fd-motion-developer-intro dd.is-active {
+  color: var(--fd-primary);
+}
+
+.fd-motion-developer-intro dd.is-reduced {
+  color: var(--fd-danger);
+}
+
+.fd-motion-developer-switch {
+  display: grid;
+  padding: 0;
+  border: 0;
+  border-radius: var(--fd-radius-pill);
+  background: transparent;
+}
+
+.fd-motion-developer-switch:focus-visible {
+  outline: none;
+  box-shadow: var(--fd-ds-state-focus);
+}
+
+.fd-setting-row.is-motion-speed {
+  min-height: 68px;
+  grid-template-columns: var(--fd-settings-row-icon-box) minmax(0, 1fr) minmax(112px, 34%);
+}
+
+.fd-setting-row.is-motion-speed.is-disabled {
+  opacity: 0.58;
+}
+
+.fd-motion-speed-control {
+  width: 100%;
+  min-width: 112px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  align-items: center;
+  gap: 7px;
+  color: var(--fd-muted);
+  font-style: normal;
+}
+
+.fd-motion-speed-control input[type="range"] {
+  grid-column: 1;
+  grid-row: 1;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  accent-color: var(--fd-primary);
+}
+
+.fd-motion-speed-control output {
+  grid-column: 2;
+  grid-row: 1;
+  color: var(--fd-primary);
+  font-size: 12px;
+  font-weight: 900;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fd-motion-speed-control input[type="range"]:focus-visible {
+  outline: none;
+  filter: drop-shadow(0 0 0.22rem rgba(35, 121, 164, 0.28));
+}
+
+.fd-setting-row.is-motion-reset .fd-settings-row-action {
+  min-width: 58px;
+}

@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0.0",
+  "default": {
+    "stateAuthorities": ["contract"],
+    "compositionMode": "contract-tree",
+    "notes": "Props, children and explicit bindings form the executable rendering contract."
+  },
+  "overrides": {
+    "ReaderBase": {
+      "stateAuthorities": ["core", "reader-ui-runtime", "host-store", "host-layout"],
+      "compositionMode": "host-composite",
+      "notes": "The Host composes the live reader from Core content, ReaderUIRuntime state, persisted appearance and measured layout. Canonical children are anatomy evidence and must not be recursively duplicated."
+    },
+    "ReadingBackgroundLayer": {
+      "stateAuthorities": ["host-store"],
+      "compositionMode": "contract-tree",
+      "notes": "The live theme is resolved by the Host appearance store; fixture theme values are design-state evidence only."
+    },
+    "ReadingTextFlow": {
+      "stateAuthorities": ["core", "host-layout"],
+      "compositionMode": "contract-tree",
+      "notes": "Core owns content identity and blocks; the Host owns pagination and layout measurements."
+    },
+    "ReadingInfoLayer": {
+      "stateAuthorities": ["core", "reader-ui-runtime"],
+      "compositionMode": "contract-tree",
+      "notes": "Canonical location comes from Core while display progress and session projection are derived by ReaderUIRuntime."
+    },
+    "TapZones": {
+      "stateAuthorities": ["reader-ui-runtime", "host-layout"],
+      "compositionMode": "host-composite",
+      "notes": "ReaderUIRuntime owns event intent; the Host gates it using measured pagination mode and current boundaries."
+    },
+    "ReaderTopArea": {
+      "stateAuthorities": ["core", "reader-ui-runtime", "host-store"],
+      "compositionMode": "host-composite",
+      "notes": "Book/source identity, overlay state and appearance are projected into one native top area."
+    },
+    "ReaderBottomBar": {
+      "stateAuthorities": ["reader-ui-runtime", "host-store"],
+      "compositionMode": "host-composite",
+      "notes": "Module selection and overlay state are runtime-owned and rendered as one native control surface."
+    }
+  }
+}

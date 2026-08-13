@@ -1,0 +1,129 @@
+<!DOCTYPE html><html lang="zh"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Bookshelf List Mode</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">tailwind.config = {darkMode: "class", theme: {extend: {colors: {"surface-tint": "#39637b", "on-secondary-container": "#79503c", "on-primary-fixed-variant": "#1e4b62", surface: "#fff8f4", secondary: "#7f5441", "on-tertiary-container": "#f7fff2", "on-surface-variant": "#41484c", primary: "#366179", "surface-container-highest": "#eae1da", "primary-fixed": "#c4e7ff", "primary-fixed-dim": "#a1cce8", "secondary-fixed-dim": "#f2baa2", "inverse-on-surface": "#f8efe8", "primary-container": "#507a92", tertiary: "#436443", "on-primary-fixed": "#001e2c", "surface-variant": "#eae1da", "on-background": "#1f1b17", "outline-variant": "#c1c7cd", "on-primary": "#ffffff", "on-tertiary-fixed": "#022108", "inverse-surface": "#34302b", "on-primary-container": "#fcfcff", "on-error-container": "#93000a", "surface-container-lowest": "#ffffff", "on-surface": "#1f1b17", "on-tertiary-fixed-variant": "#2e4e30", "surface-container-high": "#efe7e0", error: "#ba1a1a", "on-secondary-fixed-variant": "#643d2b", "error-container": "#ffdad6", "on-secondary-fixed": "#301305", "tertiary-fixed-dim": "#abd0a8", "surface-container-low": "#fbf2eb", "surface-container": "#f5ece6", "inverse-primary": "#a1cce8", outline: "#72787d", "secondary-container": "#fec5ad", "tertiary-fixed": "#c7ecc3", "secondary-fixed": "#ffdbcc", "surface-dim": "#e1d8d2", "surface-bright": "#fff8f4", "tertiary-container": "#5b7d5a", background: "#fff8f4", "on-secondary": "#ffffff", "on-tertiary": "#ffffff", "on-error": "#ffffff"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}, spacing: {base: "4px", lg: "48px", "max-content-width": "720px", xl: "80px", md: "24px", sm: "12px", gutter: "24px", xs: "8px", "touch-target": "48px", "sidebar-width": "320px"}, fontFamily: {"body-md": ["Inter"], "headline-lg-mobile": ["Inter"], "display-lg": ["Inter"], "body-lg": ["Inter"], "headline-md": ["Inter"], "headline-lg": ["Inter"], "label-md": ["Inter"]}, fontSize: {"body-md": ["16px", {lineHeight: "26px", fontWeight: "400"}], "headline-lg-mobile": ["28px", {lineHeight: "36px", fontWeight: "600"}], "display-lg": ["40px", {lineHeight: "48px", letterSpacing: "-0.02em", fontWeight: "700"}], "body-lg": ["18px", {lineHeight: "30px", fontWeight: "400"}], "headline-md": ["24px", {lineHeight: "32px", fontWeight: "600"}], "headline-lg": ["32px", {lineHeight: "40px", letterSpacing: "-0.01em", fontWeight: "600"}], "label-md": ["14px", {lineHeight: "20px", letterSpacing: "0.02em", fontWeight: "500"}]}}}};</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen">
+<div class="max-w-max-content-width mx-auto bg-surface pb-24 relative shadow-[0_0_24px_rgba(44,44,44,0.03)] min-h-screen">
+<!-- TopAppBar Shared Component -->
+<header class="sticky top-0 w-full z-40 flex justify-between items-center px-4 py-3 bg-surface shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-opacity cursor-pointer">menu_book</span>
+<h1 class="font-headline-md text-headline-md font-semibold text-primary">阅读</h1>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-opacity cursor-pointer">search</span>
+<span class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-low transition-opacity cursor-pointer">more_vert</span>
+</div>
+</header>
+<!-- Scrollable Tabs Group -->
+<nav class="flex overflow-x-auto px-4 py-3 gap-6 border-b border-surface-variant/50 sticky top-[56px] bg-surface/95 backdrop-blur z-30 hide-scrollbar">
+<button class="whitespace-nowrap font-label-md text-label-md text-primary border-b-2 border-primary pb-1">全部</button>
+<button class="whitespace-nowrap font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-1 transition-colors">默认</button>
+<button class="whitespace-nowrap font-label-md text-label-md text-on-surface-variant hover:text-on-surface pb-1 transition-colors">本地书</button>
+</nav>
+<!-- Main Content: Book List -->
+<main class="px-4 py-6 flex flex-col gap-6">
+<!-- Book Item 1 -->
+<article class="flex items-start gap-4 group cursor-pointer">
+<div class="shrink-0 w-[72px] h-[104px] bg-surface-container-low rounded-DEFAULT overflow-hidden shadow-[0_4px_12px_rgba(44,44,44,0.08)]">
+<img alt="Book cover" class="w-full h-full object-cover" data-alt="A minimalist and abstract book cover design featuring calm, warm paper tones and a subtle geometric pattern in deep seal blue. The lighting is soft and ambient, suggesting an intellectual and focused reading environment free from distractions. The overall aesthetic is clean, modern, and highly legible, reflecting a digital sanctuary for deep work." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0gKt3lU9vWkW3Fx-VJfTIH0cqp2e07f1FkwvvC-uBjI-HyT8P6K_IgMY2LHocIBO1EJgMx5-rHijgt2kDPphJGs2I1gHmc56ExcWchIYvnnqsBn3WP2Qmpl525wG1wLfWJzOTXvsUvJQR2RNCGrEjykPCe5fp6pIX5V25kep6PsejMAs3ecLQNEvKyQHjoe5ITsU_5XENxyTqNF7kIjZLsBe452J0ejwBrsEqv0XbtQUmRNu_OrrYfcxw4pcvv-YpIeY6yBSkfgKR">
+</div>
+<div class="flex-1 min-w-0 py-1">
+<h2 class="font-body-lg text-body-lg font-semibold text-on-surface truncate group-hover:text-primary transition-colors">人类简史</h2>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">尤瓦尔·赫拉利</p>
+<div class="flex items-center gap-3 mt-3">
+<div class="flex-1 h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[45%]"></div>
+</div>
+<span class="font-label-md text-label-md text-primary min-w-[3ch]">45%</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1 text-xs truncate">上次阅读: 第十章 农业革命</p>
+</div>
+<button class="p-2 text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity self-center">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</article>
+<!-- Book Item 2 -->
+<article class="flex items-start gap-4 group cursor-pointer">
+<div class="shrink-0 w-[72px] h-[104px] bg-surface-container-low rounded-DEFAULT overflow-hidden shadow-[0_4px_12px_rgba(44,44,44,0.08)]">
+<img alt="Book cover" class="w-full h-full object-cover" data-alt="A stark, minimalist book cover with a deep ink black background and a single, elegant white line drawing of classical architecture. The composition is highly balanced and calming, evoking a sense of ancient wisdom and deliberate focus. The light mode aesthetic is maintained through high contrast and sharp, clean edges, fitting perfectly into a distraction-free digital library." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCaXeMdynxVpTiGvRVp6Ipfz1YJOaFOWKuojpAZfnjUhW7D1QOdgJZqO9X5rYiLGerv72urf8U9fsN80jIwshd_AAsbqlvDVWrsGNyHPMLM0Z5fu5AT5mzXrvwrncIrr9eoJFPFcDXypEocH5gjK3R0KIIGcQ-08ucQfen7jxSQ9iIcQr4IulcgQYWhGht96dsAgR4H1wUVONilyMBLMQ2B2GZXn9ZS81P4Bm6S1_PA_En4f_YLd-6AUy_tLG8IIbjk00w76U89Zwyg">
+</div>
+<div class="flex-1 min-w-0 py-1">
+<h2 class="font-body-lg text-body-lg font-semibold text-on-surface truncate group-hover:text-primary transition-colors">沉思录</h2>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">马可·奥勒留</p>
+<div class="flex items-center gap-3 mt-3">
+<div class="flex-1 h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[12%]"></div>
+</div>
+<span class="font-label-md text-label-md text-primary min-w-[3ch]">12%</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1 text-xs truncate">上次阅读: 卷三</p>
+</div>
+<button class="p-2 text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity self-center">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</article>
+<!-- Book Item 3 -->
+<article class="flex items-start gap-4 group cursor-pointer">
+<div class="shrink-0 w-[72px] h-[104px] bg-surface-container-low rounded-DEFAULT overflow-hidden shadow-[0_4px_12px_rgba(44,44,44,0.08)]">
+<img alt="Book cover" class="w-full h-full object-cover" data-alt="An abstract, intellectual book cover featuring intricate, interlocking geometric patterns reminiscent of an Escher drawing, rendered in subtle tones of warm grey and seal blue. The surface appears tactile, like high-quality digital paper, with extremely soft ambient shadows. The mood is complex yet serene, designed to stimulate deep thought without visual noise." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo7t5bsms6V3TxrBBsiAwRjCDVQAacvNSonXovnuitvrk4okSdpDI4OBjkpkEVC9tsYBupcaamTxkge3jM2cVf0HEkRwAfeTz38JIhsfM3vrDp6LdZFeAeLKKPJY8h91qy6xGlZ7SwKrw2YDoFm6TMNhrdHjCninykHlGC5FOx3eQNa7qAIXhMQFXT9x8rqudNQa6iPlWEouEqGexRYSOc2VKeFMS-FZ0xYgG4kHhE4O2g36La8iv4os2vdN7QmCIwVV74NgGPz3Yp">
+</div>
+<div class="flex-1 min-w-0 py-1">
+<h2 class="font-body-lg text-body-lg font-semibold text-on-surface truncate group-hover:text-primary transition-colors">哥德尔、艾舍尔、巴赫</h2>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">侯世达</p>
+<div class="flex items-center gap-3 mt-3">
+<div class="flex-1 h-1 bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[89%]"></div>
+</div>
+<span class="font-label-md text-label-md text-primary min-w-[3ch]">89%</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1 text-xs truncate">上次阅读: 第二十章 奇异循环</p>
+</div>
+<button class="p-2 text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity self-center">
+<span class="material-symbols-outlined text-sm">more_horiz</span>
+</button>
+</article>
+</main>
+<!-- BottomNavBar Shared Component -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center px-4 py-2 bg-surface shadow-[0_-4px_16px_rgba(27,28,28,0.06)] max-w-max-content-width md:hidden">
+<!-- Active: 书架 -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl px-4 py-1 hover:text-primary transition-colors duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-md text-[11px] leading-[16px] mt-1 font-medium tracking-wide">书架</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">explore</span>
+<span class="font-label-md text-[11px] leading-[16px] mt-1 font-medium tracking-wide">发现</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">rss_feed</span>
+<span class="font-label-md text-[11px] leading-[16px] mt-1 font-medium tracking-wide">RSS</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant px-4 py-1 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-[11px] leading-[16px] mt-1 font-medium tracking-wide">设置</span>
+</button>
+</nav>
+</div>
+</body></html>

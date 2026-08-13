@@ -1,0 +1,30 @@
+@import "../../shared-settings-kit/kit.css";
+
+html,
+body {
+  width: 833px;
+  min-height: 1888px;
+}
+
+.gs-page-frame.sk-page-frame {
+  width: 833px;
+  min-height: 1888px;
+}
+
+.gs-page-frame .sk-content {
+  gap: 26px;
+  padding-inline: 34px;
+}
+
+.gs-page-frame .sk-action-row.is-danger {
+  justify-content: center;
+  grid-template-columns: 62px minmax(0, 1fr) 34px;
+}
+
+.gs-state-workbench.sk-state-workbench {
+  min-height: 3600px;
+}
+
+.gs-state-workbench .sk-state-card {
+  border-radius: 8px;
+}

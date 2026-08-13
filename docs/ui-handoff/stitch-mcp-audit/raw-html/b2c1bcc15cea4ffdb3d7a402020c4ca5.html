@@ -1,0 +1,213 @@
+<!DOCTYPE html><html lang="zh-CN"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Reader 书架分组管理</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface": "#1f1b17",
+                    "tertiary-fixed": "#c7ecc3",
+                    "surface-tint": "#39637b",
+                    "surface-container-highest": "#eae1da",
+                    "tertiary": "#436443",
+                    "on-error": "#ffffff",
+                    "on-secondary-fixed-variant": "#643d2b",
+                    "inverse-surface": "#34302b",
+                    "error": "#ba1a1a",
+                    "secondary": "#7f5441",
+                    "on-surface-variant": "#41484c",
+                    "on-tertiary-container": "#f7fff2",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#022108",
+                    "on-secondary-container": "#79503c",
+                    "surface-container-high": "#efe7e0",
+                    "on-tertiary": "#ffffff",
+                    "on-primary": "#ffffff",
+                    "background": "#fff8f4",
+                    "tertiary-fixed-dim": "#abd0a8",
+                    "secondary-container": "#fec5ad",
+                    "on-primary-container": "#fcfcff",
+                    "primary": "#366179",
+                    "on-error-container": "#93000a",
+                    "surface": "#fff8f4",
+                    "surface-bright": "#fff8f4",
+                    "on-background": "#1f1b17",
+                    "primary-fixed": "#c4e7ff",
+                    "on-primary-fixed-variant": "#1e4b62",
+                    "secondary-fixed": "#ffdbcc",
+                    "on-primary-fixed": "#001e2c",
+                    "surface-variant": "#eae1da",
+                    "primary-container": "#507a92",
+                    "surface-container-low": "#fbf2eb",
+                    "surface-container": "#f5ece6",
+                    "outline": "#72787d",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed": "#301305",
+                    "on-tertiary-fixed-variant": "#2e4e30",
+                    "secondary-fixed-dim": "#f2baa2",
+                    "error-container": "#ffdad6",
+                    "tertiary-container": "#5b7d5a",
+                    "surface-dim": "#e1d8d2",
+                    "outline-variant": "#c1c7cd",
+                    "primary-fixed-dim": "#a1cce8",
+                    "inverse-on-surface": "#f8efe8",
+                    "inverse-primary": "#a1cce8",
+                    "seal-blue": "#537d96"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "24px",
+                    "xl": "80px",
+                    "max-content-width": "720px",
+                    "xs": "8px",
+                    "sm": "12px",
+                    "touch-target": "48px",
+                    "base": "4px",
+                    "sidebar-width": "320px",
+                    "lg": "48px"
+            },
+            "fontFamily": {
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "label-md": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                    "display-lg": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "30px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "26px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body {
+            background-color: #fff8f4;
+            color: #1f1b17;
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+<div class="relative w-full max-w-[412px] min-h-[892px] bg-surface overflow-hidden shadow-2xl flex flex-col">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-surface flex items-center justify-between px-md w-full h-touch-target border-b border-outline-variant z-10">
+<div class="flex items-center">
+<span class="material-symbols-outlined text-seal-blue cursor-pointer active:scale-95 transition-transform" data-icon="arrow_back">arrow_back</span>
+</div>
+<h1 class="font-headline-md text-headline-md font-semibold text-on-surface">分组管理</h1>
+<div class="flex items-center">
+<span class="material-symbols-outlined text-seal-blue cursor-pointer active:scale-95 transition-transform" data-icon="add">add</span>
+</div>
+</header>
+<!-- Main Content: Vertical List -->
+<main class="flex-1 overflow-y-auto">
+<div class="flex flex-col">
+<!-- System Group 1 -->
+<div class="flex items-center h-[64px] px-md border-b border-outline-variant/30 active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline-variant mr-md cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-body-md text-body-md text-on-surface flex-1">全部</span>
+<span class="font-label-md text-label-md text-on-surface-variant mr-sm">200 本</span>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<!-- System Group 2 -->
+<div class="flex items-center h-[64px] px-md border-b border-outline-variant/30 active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline-variant mr-md cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-body-md text-body-md text-on-surface flex-1">默认分组</span>
+<span class="font-label-md text-label-md text-on-surface-variant mr-sm">156 本</span>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="push_pin" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+</div>
+<!-- Custom Group 1 (Selected/Active for bottom sheet context) -->
+<div class="flex items-center h-[64px] px-md border-b border-outline-variant/30 bg-surface-container-low active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline-variant mr-md cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-body-md text-body-md text-on-surface flex-1 font-semibold">玄幻</span>
+<span class="font-label-md text-label-md text-on-surface-variant mr-sm">24 本</span>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Custom Group 2 -->
+<div class="flex items-center h-[64px] px-md border-b border-outline-variant/30 active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline-variant mr-md cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-body-md text-body-md text-on-surface flex-1">科幻</span>
+<span class="font-label-md text-label-md text-on-surface-variant mr-sm">12 本</span>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="chevron_right">chevron_right</span>
+</div>
+<!-- Custom Group 3 -->
+<div class="flex items-center h-[64px] px-md border-b border-outline-variant/30 active:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-outline-variant mr-md cursor-grab" data-icon="drag_indicator">drag_indicator</span>
+<span class="font-body-md text-body-md text-on-surface flex-1">都市</span>
+<span class="font-label-md text-label-md text-on-surface-variant mr-sm">8 本</span>
+<span class="material-symbols-outlined text-outline text-[20px]" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+</main>
+<!-- Bottom Sheet Overlay -->
+<div class="absolute inset-0 bg-on-surface/40 flex flex-col justify-end z-20">
+<!-- Semi-transparent touch dismiss area -->
+<div class="flex-1 w-full cursor-pointer"></div>
+<!-- Bottom Sheet Content -->
+<div class="bg-surface-container-lowest rounded-t-[28px] w-full pb-xl flex flex-col items-center">
+<!-- Drag Indicator -->
+<div class="w-8 h-1 bg-outline-variant rounded-full mt-sm mb-md"></div>
+<!-- Title Section -->
+<div class="w-full px-md mb-sm flex flex-col items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface">玄幻</h2>
+<div class="h-[1px] w-full bg-outline-variant mt-md opacity-30"></div>
+</div>
+<!-- Action List -->
+<div class="w-full">
+<!-- Rename -->
+<button class="w-full h-touch-target px-md flex items-center gap-md hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="edit">edit</span>
+<span class="font-body-md text-body-md text-on-surface">重命名</span>
+</button>
+<!-- View Books -->
+<button class="w-full h-touch-target px-md flex items-center gap-md hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="menu_book">menu_book</span>
+<span class="font-body-md text-body-md text-on-surface">查看书籍</span>
+</button>
+<!-- Set as Default -->
+<button class="w-full h-touch-target px-md flex items-center gap-md hover:bg-surface-container-high transition-colors active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="star">star</span>
+<span class="font-body-md text-body-md text-on-surface">设为默认进入分组</span>
+</button>
+<div class="mx-md my-xs h-[1px] bg-outline-variant opacity-20"></div>
+<!-- Delete Group -->
+<button class="w-full h-touch-target px-md flex items-center gap-md hover:bg-error/5 transition-colors active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-error" data-icon="delete">delete</span>
+<span class="font-body-md text-body-md text-error">删除分组</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+
+
+</body></html>

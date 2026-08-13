@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://reader-ui/contracts/state-rule.schema.json",
+  "title": "StateRule",
+  "description": "UiState 互斥规则与 async guard 契约。Owner: ReaderUIRuntime；Host shadow/pilot 用同一规则做 parity。本 schema 不描述业务事实源（Core 侧）约束。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ruleId", "kind", "target", "constraint"],
+  "properties": {
+    "ruleId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "规则唯一 id。kebab-case。"
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["mutex", "async-guard", "required-with", "forbidden-with", "transition-guard"],
+      "description": "规则类型。mutex: 字段互斥（同一时刻只能取其一）；async-guard: 异步操作进行中时禁止某些状态变更；required-with: 字段 A 非空时字段 B 必须非空；forbidden-with: 字段 A 非空时字段 B 必须为空；transition-guard: 状态转移限制（from -> to）。"
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fields"],
+      "properties": {
+        "fields": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" },
+          "description": "规则作用的 UiState 字段路径。如 'overlay'、'activeSession'、'reader.textSelectionOpen'、'loading'。"
+        },
+        "slices": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["slice-1", "slice-2", "slice-3", "slice-4", "slice-5", "slice-6", "controlLayer", "reader", "overlay"] },
+          "description": "规则生效的 slice。空数组或缺失表示全局生效。controlLayer/reader/overlay 为 W1-W5 新增 slice。"
+        },
+        "routeIds": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "规则生效的 routeId。空数组或缺失表示对所有 route 生效。与 slices 取交集（两者都匹配才生效）。Phase 1 Contract 闭环新增。"
+        }
+      }
+    },
+    "constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "约束细节。结构因 kind 而异。",
+      "properties": {
+        "maxNonNull": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "mutex: target.fields 中最多 N 个字段同时非 null/非 false。默认 1。"
+        },
+        "guardField": {
+          "type": "string",
+          "description": "async-guard: 守卫字段路径（如 'loading'）。当 guardField=true 时禁止 target.fields 变更。"
+        },
+        "guardValue": {
+          "description": "async-guard: 触发守卫的 guardField 取值。boolean true 或字符串值。"
+        },
+        "requiredField": {
+          "type": "string",
+          "description": "required-with: 当 target.fields[0] 非空时，requiredField 必须非空。"
+        },
+        "forbiddenField": {
+          "type": "string",
+          "description": "forbidden-with: 当 target.fields[0] 非空时，forbiddenField 必须为空。"
+        },
+        "fromStates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "transition-guard: 允许的起始状态值。空数组表示任意起始状态。"
+        },
+        "toStates": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "transition-guard: 允许的目标状态值。"
+        },
+        "description": {
+          "type": "string",
+          "description": "人类可读的规则说明。"
+        }
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["error", "warn"],
+      "default": "error",
+      "description": "违反规则时的严重程度。error: reducer 测试失败；warn: 仅记录日志。"
+    },
+    "deprecated": {
+      "type": "boolean",
+      "default": false,
+      "description": "是否已废弃。废弃规则保留用于历史对照，reducer 不再强制执行。"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "control-layer-l1-l2-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["controlLayer.L1.visible"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "forbiddenField": "controlLayer.L2.visible",
+        "description": "L1.visible forbidden-with L2.visible"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "control-layer-l1-l3-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["controlLayer.L1.visible"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "forbiddenField": "controlLayer.L3.visible",
+        "description": "L1.visible forbidden-with L3.visible"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "control-layer-l2-l3-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["controlLayer.L2.visible"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "forbiddenField": "controlLayer.L3.visible",
+        "description": "L2.visible forbidden-with L3.visible"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "tts-auto-page-mutex",
+      "kind": "forbidden-with",
+      "target": {
+        "fields": ["reader.tts.running"],
+        "slices": ["reader"]
+      },
+      "constraint": {
+        "forbiddenField": "reader.autoPage.running",
+        "description": "tts.running forbidden-with autoPage.running"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "overlay-session-required",
+      "kind": "required-with",
+      "target": {
+        "fields": ["overlay.active"],
+        "slices": ["overlay"]
+      },
+      "constraint": {
+        "requiredField": "session.id",
+        "description": "overlay.active required-with session.id"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "overlay-dismiss-guard",
+      "kind": "transition-guard",
+      "target": {
+        "fields": ["overlay.dismiss"],
+        "slices": ["overlay"]
+      },
+      "constraint": {
+        "fromStates": ["overlay.active"],
+        "toStates": ["overlay.inactive"],
+        "description": "overlay.dismiss transition-guard overlay.active"
+      },
+      "severity": "error"
+    },
+    {
+      "ruleId": "control-layer-show-interrupt",
+      "kind": "transition-guard",
+      "target": {
+        "fields": ["controlLayer.show"],
+        "slices": ["controlLayer"]
+      },
+      "constraint": {
+        "fromStates": ["routeChange", "orientationPrepare", "sessionStart"],
+        "toStates": ["controlLayer.visible"],
+        "description": "controlLayer.show interrupt routeChange, orientationPrepare, sessionStart"
+      },
+      "severity": "error"
+    }
+  ]
+}

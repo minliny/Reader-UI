@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "A2_PRE_PROMOTION_CONSUMER_RECEIPT",
+  "status": "a2-consumer-closed",
+  "handoffDir": "reader-runtime/directory",
+  "recordIds": [
+    "reader.module.directory"
+  ],
+  "figmaRevision": "2379851596474967636",
+  "sourceEvidence": {
+    "a2DeltaPath": "docs/design/native-disposition/reader-directory/A2_NATIVE_CONSUMER_DELTA.json",
+    "a2DeltaSha256": "sha256:84a6436af0972b69819df1c691afb21d83dfc46348f05e81a4993ae5e7db1233",
+    "b2ImplementationCommit": "15a7c9381423c8441509ba8efae4cc4024bc0a5f",
+    "b3PacketPath": "docs/design/handoffs/reader-runtime/directory/LOCAL_READY_FOR_FIGMA.json",
+    "b3PacketSha256": "sha256:fd78b5f91325ad46b8e44163d773539a6fedffd8947df4de454f6e6acaa74e9f",
+    "b3EvidenceCommit": "a99f4e22fa37eeb517fd319a8a5c16efe5acfb5b",
+    "sourceEvidenceHash": "sha256:b19c61d98ab72661bb0d60f19853de89b40a9c0ad49232ac0146634eead57ec6"
+  },
+  "harmonyConsumer": {
+    "repository": "Reader-for-HarmonyOS",
+    "cleanupCommit": "869f6a1c5f224017b81e59b7250d9e960bc2049b",
+    "cleanupTree": "c96bbed48f2bb23a35006172b79d4be133a840a6",
+    "cleanupCommitSubject": "refactor(reader): prepare exact directory overlay composition",
+    "changedPaths": [
+      "entry/src/main/ets/ui/components/ReaderDirectoryOverlay.ets",
+      "entry/src/main/ets/ui/components/ReaderOverlayComponents.ets",
+      "entry/src/main/ets/ui/slots/OverlayHost.ets",
+      "scripts/reader_directory_a2.test.mjs"
+    ],
+    "verification": {
+      "command": "node scripts/sync_reader_ui_screen_graph.mjs --check",
+      "expectedMarker": "[screen-graph-consumer] PASS"
+    }
+  },
+  "ordering": {
+    "requiredBefore": "B4 promotion",
+    "mode": "pre-promotion",
+    "reason": "The independent HarmonyOS A2 consumer preparation commit follows the immutable B3 source-evidence commit and precedes B4 promotion."
+  },
+  "doesNotClaim": [
+    "harmony.status mutation",
+    "VisualAdmission consumer sync",
+    "production reader.module.switch consumption",
+    "B5 build or static delivery closure",
+    "B6 virtual-machine evidence",
+    "B7 device, motion, machine receipt, release identity, or delivery freeze"
+  ]
+}

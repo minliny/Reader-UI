@@ -1,0 +1,239 @@
+{
+  "pageClass": "sm-page-frame",
+  "stateClass": "sm-state-workbench",
+  "topBar": {
+    "title": "书源管理",
+    "backLabel": "返回"
+  },
+  "metrics": [
+    {
+      "icon": "source",
+      "label": "个书源",
+      "value": "12"
+    },
+    {
+      "icon": "check",
+      "label": "个启用",
+      "value": "8"
+    },
+    {
+      "icon": "warning",
+      "label": "个异常",
+      "value": "4"
+    },
+    {
+      "icon": "clock",
+      "label": "刚刚检测",
+      "value": "10:30"
+    }
+  ],
+  "searchBox": {
+    "placeholder": "搜索框：搜索书源名称或域名"
+  },
+  "filters": [
+    {
+      "label": "全部",
+      "active": true
+    },
+    {
+      "label": "已启用",
+      "active": false
+    },
+    {
+      "label": "异常",
+      "active": false
+    },
+    {
+      "label": "未检测",
+      "active": false
+    },
+    {
+      "label": "自定义",
+      "active": false
+    }
+  ],
+  "groups": [
+    {
+      "label": "全部分组",
+      "active": true
+    },
+    {
+      "label": "玄幻书源",
+      "active": false
+    },
+    {
+      "label": "起点导入",
+      "active": false
+    },
+    {
+      "label": "测试书源",
+      "active": false
+    }
+  ],
+  "sections": [
+    {
+      "title": "批量操作",
+      "rows": [
+        {
+          "type": "link",
+          "icon": "refresh",
+          "title": "检测",
+          "meta": "检测全部启用书源的可用状态",
+          "actionLabel": "开始检测"
+        },
+        {
+          "type": "link",
+          "icon": "info",
+          "title": "详情",
+          "meta": "查看书源状态、分组和检测入口"
+        },
+        {
+          "type": "link",
+          "icon": "edit",
+          "title": "编辑",
+          "meta": "进入书源详情后可编辑规则配置"
+        },
+        {
+          "type": "link",
+          "icon": "log",
+          "title": "错误日志",
+          "meta": "查看最近一次检测失败原因"
+        },
+        {
+          "type": "switch",
+          "icon": "source",
+          "title": "启用开关",
+          "meta": "控制选中书源是否参与搜索与换源",
+          "enabled": true
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "title": "起点中文网",
+      "meta": "qidian.com · 起点导入",
+      "status": "可用",
+      "tone": "good",
+      "enabled": true
+    },
+    {
+      "title": "笔趣阁",
+      "meta": "biquge.example · 玄幻书源",
+      "status": "异常",
+      "tone": "warn",
+      "enabled": true
+    },
+    {
+      "title": "本地导入源",
+      "meta": "本地文件导入 · 自定义",
+      "status": "未检测",
+      "tone": "muted",
+      "enabled": false
+    },
+    {
+      "title": "测试书源",
+      "meta": "test.example · 测试书源",
+      "status": "可用",
+      "tone": "good",
+      "enabled": true
+    }
+  ],
+  "fab": {
+    "icon": "add",
+    "label": "新增"
+  },
+  "form": {
+    "title": "SourceEditForm · 新增书源",
+    "fields": [
+      {
+        "label": "书源名称",
+        "value": "测试书源"
+      },
+      {
+        "label": "域名",
+        "value": "test.example"
+      },
+      {
+        "label": "分组",
+        "value": "测试书源"
+      }
+    ],
+    "saveLabel": "保存"
+  },
+  "log": {
+    "title": "LogPanel · 错误日志",
+    "items": [
+      {
+        "level": "ERROR",
+        "copy": "笔趣阁目录解析失败，返回字段缺失。"
+      },
+      {
+        "level": "WARN",
+        "copy": "本地导入源尚未检测，可手动点击检测。"
+      }
+    ]
+  },
+  "confirm": {
+    "title": "禁用书源？",
+    "copy": "禁用后该书源不会参与搜索、发现和阅读中换源。",
+    "cancelLabel": "取消",
+    "confirmLabel": "确认禁用"
+  },
+  "empty": {
+    "title": "暂无书源",
+    "copy": "当前筛选条件下没有书源，可以新增或切换筛选。",
+    "primaryAction": "新增书源"
+  },
+  "toast": {
+    "success": "保存成功",
+    "error": "加载失败，请重试",
+    "offline": "网络不可用，请稍后重试",
+    "permission": "需要网络权限"
+  },
+  "states": [
+    {
+      "key": "default",
+      "title": "书源管理默认态",
+      "desc": "概览、搜索、筛选、书源列表和新增入口可见。"
+    },
+    {
+      "key": "edit",
+      "title": "书源编辑态",
+      "desc": "SourceEditForm 展示新增和编辑字段。"
+    },
+    {
+      "key": "log",
+      "title": "错误日志态",
+      "desc": "LogPanel 展示检测失败日志。"
+    },
+    {
+      "key": "loading",
+      "title": "书源加载态",
+      "desc": "读取书源列表时保留骨架和筛选结构。"
+    },
+    {
+      "key": "empty",
+      "title": "无书源态",
+      "desc": "筛选无结果时提供新增入口。"
+    },
+    {
+      "key": "error",
+      "title": "加载失败态",
+      "desc": "加载失败保留上下文并提供重试。"
+    },
+    {
+      "key": "default",
+      "toast": "offline",
+      "title": "离线检测态",
+      "desc": "离线时阻断检测，不影响查看已缓存书源。"
+    },
+    {
+      "key": "permission",
+      "toast": "permission",
+      "title": "网络权限态",
+      "desc": "检测书源需要网络权限。"
+    }
+  ],
+  "stateSummary": "用于核对书源列表、搜索筛选、启用、检测、详情、编辑、错误日志和权限状态。"
+}

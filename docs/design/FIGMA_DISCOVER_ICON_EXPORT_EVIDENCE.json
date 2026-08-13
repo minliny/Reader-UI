@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_DISCOVER_ICON_EXPORT_EVIDENCE",
+  "status": "LIVE_PLUGIN_EXPORT_CAPTURED_REST_RECONFIRMATION_PENDING",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "officialFileRevision": "2379851596474967636",
+  "canonicalMasterNodeId": "942:9",
+  "viewportNodeId": "942:6",
+  "capture": {
+    "observedOn": "2026-07-26",
+    "source": "figma-plugin-api-through-codex",
+    "api": "node.exportAsync",
+    "format": "SVG_STRING",
+    "readOnlyFigma": true,
+    "figmaWrites": false,
+    "screenshotsUsed": false,
+    "note": "The 20px layered source icon was exported from the current Discover Phone source-card component; no screenshot or recreated vector was used."
+  },
+  "exports": [
+    {
+      "resource": "discover_source_layers",
+      "exportNodeId": "I2446:392;2446:36",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/discover_source_layers.svg",
+      "sha256": "b8aaa887127c9909b8ca796f66673159297c5eb419415875b8c37a5ab4ef0245",
+      "bytes": 712,
+      "expectedSize": { "width": 20, "height": 20 }
+    },
+    {
+      "resource": "discover_filter",
+      "exportNodeId": "I2446:392;2446:64",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/discover_filter.svg",
+      "sha256": "11999456b5a144ad7a920673cb272e0082ba09e2d43feb6401edacdaaa683d02",
+      "bytes": 544,
+      "expectedSize": { "width": 20, "height": 20 }
+    },
+    {
+      "resource": "discover_filter_caret",
+      "exportNodeId": "I2446:392;2446:72",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/discover_filter_caret.svg",
+      "sha256": "06d85c7768425622c4d642dc867ea18fd4f5d06a1954e217a8cd5a49075b7157",
+      "bytes": 400,
+      "expectedSize": { "width": 20, "height": 20 }
+    },
+    {
+      "resource": "discover_filter_apply_check",
+      "exportNodeId": "I2446:392;2446:76",
+      "localFile": "Reader-for-HarmonyOS/entry/src/main/resources/base/media/discover_filter_apply_check.svg",
+      "sha256": "258260e5c7c652c1b2f2c90ff1e93a9f566985cc4aea349b54281a46ec2739a3",
+      "bytes": 391,
+      "expectedSize": { "width": 20, "height": 20 }
+    }
+  ]
+}

@@ -1,0 +1,158 @@
+{
+  "schemaVersion": "1.0.0",
+  "kind": "FIGMA_READING_CHAIN_DELIVERY_EVIDENCE_REGISTER",
+  "status": "CURRENT_REVISION_EVIDENCE_OPEN",
+  "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+  "currentRevision": "2379851596474967636",
+  "revisionEvidence": "docs/design/F0_FIGMA_CURRENT_REVISION_EVIDENCE.json",
+  "rule": "This register separates static parity, production motion, and real-device proof. An open lane is not evidence. A deliveryStatus may be promoted only after static is verified, motion is verified or explicitly not required, and device is verified. It never creates a Design Delta, screenshot, motion track, or device result.",
+  "records": [
+    {
+      "registryRecordId": "bookshelf.page",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Phone and Tablet same-size local and Harmony render comparisons are not recorded." },
+      "motion": { "status": "not-required", "reason": "This route-shell record covers resting layout only; a future interaction Motion Delta must register separately." },
+      "device": { "status": "open", "openReason": "No real-device bookshelf scroll, cover/list, and safe-area evidence is recorded." }
+    },
+    {
+      "registryRecordId": "bookshelf.book-card",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Constraint guards are not same-size visual comparison evidence." },
+      "motion": { "status": "not-required", "reason": "Figma supplies no BookCard press reaction; no local substitute is authorized by this resting-card record." },
+      "device": { "status": "open", "openReason": "Cover tap and long-press behavior have not been recorded on a device." }
+    },
+    {
+      "registryRecordId": "bookshelf.action-sheet",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Phone and Tablet action-sheet geometry has no linked same-size proof." },
+      "motion": { "status": "not-required", "reason": "No canonical action-sheet motion track is registered for this visual component." },
+      "device": { "status": "open", "openReason": "Long-press entry, focus, dismissal, and action behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "bookshelf.multi-select",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Entry and AllSelected Phone/Tablet variants lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Native long-press, destructive confirmation, interruption, cleanup, and reduced-motion behavior require a production contract." },
+      "device": { "status": "open", "openReason": "Long-press, selection, batch removal, and destructive confirmation lack device evidence." }
+    },
+    {
+      "registryRecordId": "bookshelf.local-import-dialog",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "The three visible states lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Figma review timing is not a frozen production transition, interrupt, cleanup, or reduced-motion contract." },
+      "device": { "status": "open", "openReason": "System multi-file picker, importing, terminal rows, and completion close lack device proof." }
+    },
+    {
+      "registryRecordId": "book-detail.page",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Remote and Local Phone/Tablet source-type variants lack same-size local and Harmony comparisons." },
+      "motion": { "status": "not-required", "reason": "This page record is a resting Remote/Local visual variant; reader-entry motion is separately scoped." },
+      "device": { "status": "open", "openReason": "Open, continue-reading, and local-book no-source-switch behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "book-detail.chapter-row",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "The constraint test is not a Phone/Tablet same-size visual comparison." },
+      "motion": { "status": "not-required", "reason": "The ChapterRow master supplies no navigation motion and this record must not invent one." },
+      "device": { "status": "open", "openReason": "Chapter selection, focus, and visible density are not device-verified." }
+    },
+    {
+      "registryRecordId": "source-switch.window",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Phone and Tablet window layouts lack same-size local and Harmony comparisons." },
+      "motion": { "status": "not-required", "reason": "The canonical source window uses direct candidate selection and has no current Figma transition track." },
+      "device": { "status": "open", "openReason": "Direct source selection and return-to-reader behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.reading-surface",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Reader typography, long-text geometry, and Phone/Tablet surface comparisons are not recorded." },
+      "motion": { "status": "open", "openReason": "Page-turn and vertical-scroll behavior need a frozen actor, interruption, cleanup, and reduced-motion contract." },
+      "device": { "status": "open", "openReason": "Long-text scrolling, five page styles, and saved-position recovery lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.control-home",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Phone and Tablet top-bar/control-dock parity has no same-size comparison." },
+      "motion": { "status": "open", "openReason": "Reader control show/hide requires device playback for actors, cancellation, cleanup, and reduced motion." },
+      "device": { "status": "open", "openReason": "Reader control open, hide, and focus behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.module.directory",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical module and final Phone/Tablet instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Module switch and panel lifecycle motion remain unfrozen for device playback." },
+      "device": { "status": "open", "openReason": "Directory navigation, focus, and close behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.module.tts",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical module and final Phone/Tablet instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Module switch and panel lifecycle motion remain unfrozen for device playback." },
+      "device": { "status": "open", "openReason": "System TTS launch, return, controls, and lifecycle behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.module.appearance",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical module and final Phone/Tablet instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Module switch and panel lifecycle motion remain unfrozen for device playback." },
+      "device": { "status": "open", "openReason": "Theme, font, and appearance changes lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.module.settings",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical module and final Phone/Tablet instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Module switch and panel lifecycle motion remain unfrozen for device playback." },
+      "device": { "status": "open", "openReason": "Settings controls, focus, and dismissal lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.quick.auto-page",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical quick module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Quick-panel enter, replace, interruption, cleanup, and reduced-motion behavior remain unfrozen." },
+      "device": { "status": "open", "openReason": "Auto-page controls and reading-state effects lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.quick.content-search",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical quick module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "The incoming Quick Search actor is not sufficient to close the complete lifecycle on device." },
+      "device": { "status": "open", "openReason": "Search input, result focus, cancellation, and close behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.quick.content-replacement",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical quick module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Quick-panel enter, replace, interruption, cleanup, and reduced-motion behavior remain unfrozen." },
+      "device": { "status": "open", "openReason": "Replacement controls and state updates lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.full.directory",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical full module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Expand/collapse trigger, actor map, interruption, cleanup, and reduced-motion behavior remain unfrozen." },
+      "device": { "status": "open", "openReason": "Full directory entry, focus, close, and back behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.full.tts",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical full module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Expand/collapse trigger, actor map, interruption, cleanup, and reduced-motion behavior remain unfrozen." },
+      "device": { "status": "open", "openReason": "System TTS handoff and full-panel behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.full.appearance",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical full module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Expand/collapse trigger, actor map, interruption, cleanup, and reduced-motion behavior remain unfrozen." },
+      "device": { "status": "open", "openReason": "Theme/font selection, focus, and return behavior lack device proof." }
+    },
+    {
+      "registryRecordId": "reader.full.settings",
+      "deliveryStatus": "current-read-unfrozen",
+      "static": { "status": "open", "openReason": "Canonical full module and final instances lack same-size local and Harmony comparisons." },
+      "motion": { "status": "open", "openReason": "Expand/collapse trigger, actor map, interruption, cleanup, and reduced-motion behavior remain unfrozen." },
+      "device": { "status": "open", "openReason": "Settings selection, focus, and return behavior lack device proof." }
+    }
+  ]
+}

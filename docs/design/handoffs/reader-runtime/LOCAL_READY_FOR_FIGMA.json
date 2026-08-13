@@ -1,0 +1,199 @@
+{
+  "schemaVersion": "1.1.0",
+  "kind": "LOCAL_READY_FOR_FIGMA",
+  "scope": "Reader Runtime",
+  "pageFamily": "reader-runtime",
+  "stage": "R2a-R2b-R3a",
+  "status": "LOCAL_READY_FOR_FIGMA_R3a_COMPLETE",
+  "generatedAt": "2026-07-21T11:30:00+08:00",
+  "localSource": {
+    "repository": "Reader-UI",
+    "branch": "codex/motion-demo-optimizations",
+    "implementationCommit": "06fc096e1ad294b41b9b924354d72d2ce61640d0",
+    "implementationCommitSubject": "feat(reader-runtime): R2a/R2b/R3a LOCAL_READY_FOR_FIGMA",
+    "evidenceCommit": "PENDING_EVIDENCE_COMMIT_SELF_REFERENTIAL",
+    "evidenceCommitSubject": "docs(handoff): reader-runtime LOCAL_READY_FOR_FIGMA evidence binding",
+    "localReadyForFigma": true,
+    "identityTokenBoundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+  },
+  "globalAlignment": {
+    "lastConfirmedFigmaRevisionAtLocalPreparation": "2378333433968465691",
+    "lastConfirmedFigmaRevisionTitle": "F2 · WebDAV Config · User Confirmed",
+    "freshFigmaRevisionRequiredBeforeWrite": true,
+    "reader2StaticAuthority": {
+      "fileKey": "klhs2jMM4MncaJFqZMfqEK",
+      "page": "15 · Reader 2",
+      "pageNodeId": "1023:17636",
+      "policy": "Existing canonical static components and visual geometry are frozen. This packet supplies runtime identity and interaction evidence; it does not authorize redraw."
+    },
+    "viewportPolicy": {
+      "phone": "390x844",
+      "tablet": "760x960",
+      "landscapeAlias": "tablet",
+      "compactProhibited": true,
+      "foldProhibited": true,
+      "independentLandscapeProhibited": true
+    }
+  },
+  "routeFamily": {
+    "primaryRouteCount": 13,
+    "primaryRoutes": [
+      "immersive-reading",
+      "reader",
+      "reader-directory-overlay-v2",
+      "reader-tts-overlay-v2",
+      "reader-appearance-overlay-v2",
+      "reader-settings-overlay-v2",
+      "reader-search-overlay-v2",
+      "reader-auto-scroll-overlay-v2",
+      "reader-replace-overlay-v2",
+      "reader-full-directory",
+      "reader-full-tts",
+      "reader-full-appearance",
+      "reader-full-settings"
+    ],
+    "figmaPrimaryVisualStateCount": 12,
+    "figmaPrimaryVisualStates": "Reader Control Home + seven canonical overlay states + four full panel states. immersive-reading is the runtime no-control surface and continuity origin.",
+    "compatibilityRouteCount": 7,
+    "compatibilityCrosswalk": {
+      "toc-bookmarks": "reader-directory-overlay-v2",
+      "tts": "reader-tts-overlay-v2",
+      "reader-appearance": "reader-appearance-overlay-v2",
+      "reader-settings": "reader-settings-overlay-v2",
+      "content-search": "reader-search-overlay-v2",
+      "auto-page": "reader-auto-scroll-overlay-v2",
+      "content-replacement": "reader-replace-overlay-v2"
+    },
+    "crosswalkRule": "Compatibility routes preserve their local route and declaration-governed semantic-slot contract while sharing the canonical visual surface. Figma labels must not create replacement business routes or a second state owner."
+  },
+  "r2aInstrumentation": {
+    "declarationCount": 439,
+    "mappingStatus": "439/439 mapped",
+    "source": "reader-runtime-action",
+    "productionOwner": "ReaderRuntimeContract.instrumentDom",
+    "identityAttributeContract": {
+      "stableAttrs": ["data-entity-key", "data-control-key", "data-control-id", "data-settings-key"],
+      "semanticSlot": {
+        "exactlyOneOf": ["data-ui-event", "data-control-token"],
+        "dataUiEvent": "released executable UiEvent only",
+        "dataControlToken": "identity-only token; excluded from UiEvent schema and native enums"
+      },
+      "identityOnlyTokenDeclarationCount": 21,
+      "boundaryImplementationCommit": "8c7effb3aaeb67f27af2f78fcad6291476890ec1"
+    },
+    "viewportAttr": "data-viewport=phone|tablet",
+    "renderedPrimaryRouteCounts": {
+      "immersive-reading": 3,
+      "reader": 16,
+      "reader-directory-overlay-v2": 20,
+      "reader-tts-overlay-v2": 16,
+      "reader-appearance-overlay-v2": 26,
+      "reader-settings-overlay-v2": 23,
+      "reader-search-overlay-v2": 12,
+      "reader-auto-scroll-overlay-v2": 16,
+      "reader-replace-overlay-v2": 13,
+      "reader-full-directory": 18,
+      "reader-full-tts": 10,
+      "reader-full-appearance": 29,
+      "reader-full-settings": 26
+    },
+    "conditionalInventoryPolicy": "The declaration set includes route aliases and conditional/full-state controls that are not simultaneously rendered. Every rendered primary-route set was verified with zero duplicate controlKey and zero empty chapter business key on Phone and Tablet.",
+    "chapterIdentityPolicy": "Fixture chapters carry explicit chapterKey values. Reader directory rows and chapter downloads emit data-action plus data-reader-chapter-key; ordinal, selector hash and display-label fallback are prohibited.",
+    "unknownIdentityPolicy": "Unknown routes, missing selectors and ambiguous selectors fail closed and do not receive data-control-key."
+  },
+  "r2bRealInteraction": {
+    "stateOwner": "ReaderRuntimeContract.createOwner",
+    "stateDomains": [
+      "route", "mode", "module", "panel", "pageIndex", "chapterKey", "session",
+      "contentRequest", "tocRequest", "error", "focusReturnKey", "interruptSequence"
+    ],
+    "reducerActions": [
+      "ROUTE_COMMIT", "PAGE_TURN", "CHAPTER_JUMP", "TTS_START", "AUTO_PAGE_START",
+      "SESSION_STOP", "REQUEST_START", "REQUEST_SUCCESS", "REQUEST_FAILED", "INTERRUPT", "RESET"
+    ],
+    "asyncHelpers": ["executeContentRetry", "executeTocRetry"],
+    "productionWiring": [
+      "Every primary/compatibility route commit updates the reader-runtime owner without replacing the existing UiEvent owner.",
+      "Page turn, chapter jump, TTS start and session stop update both the established runtime state and the contract owner.",
+      "Both initial render and pagination rerender reapply fail-closed identity instrumentation."
+    ],
+    "guards": [
+      "unknown route, page direction and chapter key return the same state",
+      "TTS and auto-page share one mutually exclusive session owner",
+      "duplicate content/TOC request starts return duplicate",
+      "stale async completions do not change settled state",
+      "interrupt cancels pending requests, stops sessions and advances interruptSequence"
+    ],
+    "ariaAndFocus": [
+      "immersive reading hotzones remain native buttons with explicit names",
+      "role=button chapter rows remain keyboard reachable by Enter and Space",
+      "chapter downloads expose aria-busy and aria-disabled",
+      "overlay/module/full-panel triggers receive deterministic data-restore-focus markers",
+      "all stamped controls without an accessible name receive their explicit contract label"
+    ]
+  },
+  "verification": {
+    "focusedR3a": {
+      "tests": 28,
+      "passed": 28,
+      "files": [
+        "frontend-demo-optimized/verify/r3a-reader-runtime-identity.test.mjs",
+        "frontend-demo-optimized/verify/r3a-reader-runtime-flow.test.mjs",
+        "frontend-demo-optimized/verify/r3a-reader-runtime-aria-focus.test.mjs"
+      ]
+    },
+    "frontendRegression": { "tests": 340, "passed": 340, "failed": 0 },
+    "identityInventoryRegression": { "tests": 84, "passed": 84, "failed": 0 },
+    "identityDenominator": 3808,
+    "identityDistribution": {
+      "mapped": 750,
+      "pendingActionKey": 449,
+      "pendingInstanceKey": 1110,
+      "pendingActionAndInstanceKey": 1499
+    },
+    "liveDomSmoke": {
+      "viewports": ["Phone 390x844", "Tablet policy via 900x1000 outer viewport / 760x960 internal canvas"],
+      "primaryRoutes": 13,
+      "duplicateControlKeys": 0,
+      "emptyChapterBusinessKeys": 0
+    },
+    "byteStableChecks": [
+      "node tools/interaction-inventory/generate-canonical-declarations.mjs --check",
+      "node tools/interaction-inventory/generate-control-ids.mjs --check",
+      "node tools/interaction-inventory/codegen-control-ids.mjs --check"
+    ]
+  },
+  "figmaCrosswalkRequired": {
+    "mode": "F0 read and crosswalk first; static redraw is prohibited unless a new Design Delta is explicitly approved.",
+    "canonicalTargets": [
+      { "figmaLabel": "Reader Control Home", "localRoute": "reader" },
+      { "figmaLabel": "seven canonical overlay states", "localRoutes": "reader-*-overlay-v2" },
+      { "figmaLabel": "four full panel states", "localRoutes": "reader-full-directory|reader-full-tts|reader-full-appearance|reader-full-settings" },
+      { "figmaLabel": "reading surface / control hidden", "localRoute": "immersive-reading" }
+    ],
+    "requiredBindingFields": ["fileKey", "pageId", "nodeId", "revision", "controlKey"],
+    "noFabrication": true,
+    "noDetachedReplacement": true,
+    "preserveExistingComponentsAndReactions": true
+  },
+  "admission": {
+    "r2aPass": true,
+    "r2bPass": true,
+    "r3aPass": true,
+    "localReadyForFigma": true,
+    "exactLocalCommit": "06fc096e1ad294b41b9b924354d72d2ce61640d0",
+    "figmaWriterMayStart": true,
+    "requiresFreshFigmaRevisionRead": true,
+    "requiresSingleWriter": true,
+    "expectedFigmaTransaction": "Crosswalk and evidence update against the frozen Reader 2 canonical static source; no visual mutation when no drift exists."
+  },
+  "boundaries": {
+    "figmaModified": false,
+    "reader2StaticModified": false,
+    "motionReferenceModified": false,
+    "bookshelfViewSwitchMotionModified": false,
+    "nativeRepositoriesModified": false,
+    "releaseLockModified": false,
+    "otherPageFamiliesClaimedReady": false
+  }
+}

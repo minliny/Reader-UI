@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "status": "active",
+  "entries": [
+    {
+      "recordId": "reader.reading-surface",
+      "routeIds": [
+        "immersive-reading",
+        "reader",
+        "reader_content"
+      ],
+      "reason": "B3 source release: the current Reader-UI conversion is bound to Reader/Responsive/ReadingSurface and its Phone/Tablet variants. The native consumer remains candidate-backport until the separate atomic promotion and consumer transaction completes.",
+      "blocksPromotion": true,
+      "status": "released"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+:root {
+  --reader-paper-bg: #fff8f4;
+  --reader-body-text: #53433f;
+  --reader-control-ink: #3f4d52;
+  --reader-primary: #366179;
+  --reader-bottom-bar-bg: #e9ded6;
+  --reader-floating-control-bg: #efe2d8;
+  --reader-floating-control-bg-alt: #eadbd0;
+  --reader-quick-button-bg: #f7ebe1;
+  --reader-boundary: rgba(63, 77, 82, 0.18);
+  --reader-control-border: rgba(63, 77, 82, 0.12);
+  --reader-muted-track: rgba(63, 77, 82, 0.16);
+  --reader-soft-top-bg: rgba(255, 248, 244, 0.92);
+  --reader-meta-bg: rgba(251, 242, 235, 0.94);
+  --reader-control-shadow: 0 2px 8px rgba(63, 77, 82, 0.12);
+
+  --reader-top-bar-height: 56px;
+  --reader-meta-row-height: 48px;
+  --reader-bottom-bar-height: 68px;
+  --reader-bottom-safe-gap: 8px;
+  --reader-floating-page-control-height: 52px;
+  --reader-floating-page-control-bottom: calc(var(--reader-bottom-bar-height) + var(--reader-bottom-safe-gap) + 10px);
+  --reader-quick-circle-size: 48px;
+  --reader-quick-actions-bottom: calc(var(--reader-floating-page-control-bottom) + var(--reader-floating-page-control-height) + 10px);
+  --reader-quick-circle-gap: 20px;
+  --reader-brightness-left: 12px;
+  --reader-control-layer-z-index: 50;
+}

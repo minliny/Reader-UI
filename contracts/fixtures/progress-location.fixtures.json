@@ -1,0 +1,74 @@
+[
+  {
+    "_comment": "char-offset 定位（最常用）",
+    "bookId": "bk-001",
+    "chapterIndex": 0,
+    "chapterId": "ch-001",
+    "locator": { "type": "char-offset", "charOffset": 1024 },
+    "progress": 0.42,
+    "pageIndex": 1,
+    "updatedAt": "2026-07-04T10:00:00Z",
+    "source": "user-read"
+  },
+  {
+    "_comment": "paragraph-index 定位",
+    "bookId": "bk-001",
+    "chapterIndex": 0,
+    "chapterId": "ch-001",
+    "locator": { "type": "paragraph-index", "paragraphIndex": 12 },
+    "progress": 0.35,
+    "pageIndex": null,
+    "updatedAt": "2026-07-04T10:05:00Z",
+    "source": "chapter-jump"
+  },
+  {
+    "_comment": "selector 定位（用于复杂正文）",
+    "bookId": "bk-001",
+    "chapterIndex": 3,
+    "chapterId": "ch-004",
+    "locator": { "type": "selector", "selector": "#p-42" },
+    "progress": null,
+    "pageIndex": null,
+    "updatedAt": "2026-07-04T10:10:00Z",
+    "source": "search-jump"
+  },
+  {
+    "_comment": "range 定位（选择范围）",
+    "bookId": "bk-001",
+    "chapterIndex": 0,
+    "chapterId": "ch-001",
+    "locator": {
+      "type": "range",
+      "range": {
+        "start": { "type": "char-offset", "charOffset": 100 },
+        "end": { "type": "char-offset", "charOffset": 200 }
+      }
+    },
+    "progress": null,
+    "pageIndex": null,
+    "updatedAt": "2026-07-04T10:15:00Z",
+    "source": "user-read"
+  },
+  {
+    "_comment": "TTS 跟读产生的进度",
+    "bookId": "bk-001",
+    "chapterIndex": 0,
+    "chapterId": "ch-001",
+    "locator": { "type": "char-offset", "charOffset": 512 },
+    "progress": 0.21,
+    "pageIndex": 0,
+    "updatedAt": "2026-07-04T10:20:00Z",
+    "source": "tts-follow"
+  },
+  {
+    "_comment": "同步恢复产生的进度",
+    "bookId": "bk-001",
+    "chapterIndex": 5,
+    "chapterId": "ch-006",
+    "locator": { "type": "char-offset", "charOffset": 0 },
+    "progress": 0.0,
+    "pageIndex": null,
+    "updatedAt": "2026-07-04T10:25:00Z",
+    "source": "sync-restore"
+  }
+]

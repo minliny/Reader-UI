@@ -1,0 +1,37 @@
+.lk-stack-frame {
+  position: relative;
+  overflow: hidden;
+}
+
+.lk-stack-frame,
+.lk-stack-frame * {
+  box-sizing: border-box;
+}
+
+.lk-back-top-bar.is-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.lk-bottom-action-host,
+.lk-sheet-host,
+.lk-dialog-host,
+.lk-state-host {
+  display: contents;
+}
+
+.lk-icon {
+  display: block;
+  width: 42px;
+  height: 42px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

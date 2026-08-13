@@ -1,0 +1,80 @@
+[
+  {
+    "_comment": "进度冲突 - 未解决",
+    "conflictId": "conf-001",
+    "bookId": "bk-001",
+    "type": "progress",
+    "local": { "chapterIndex": 0, "progress": 0.42, "locator": { "type": "char-offset", "charOffset": 1024 } },
+    "remote": { "chapterIndex": 1, "progress": 0.0, "locator": { "type": "char-offset", "charOffset": 0 } },
+    "localUpdatedAt": "2026-07-04T10:00:00Z",
+    "remoteUpdatedAt": "2026-07-04T09:00:00Z",
+    "resolution": null,
+    "mergeHint": null,
+    "detectedAt": "2026-07-04T10:30:00Z"
+  },
+  {
+    "_comment": "进度冲突 - 用户选择 keep-local",
+    "conflictId": "conf-002",
+    "bookId": "bk-001",
+    "type": "progress",
+    "local": { "chapterIndex": 0, "progress": 0.42 },
+    "remote": { "chapterIndex": 1, "progress": 0.0 },
+    "localUpdatedAt": "2026-07-04T10:00:00Z",
+    "remoteUpdatedAt": "2026-07-04T09:00:00Z",
+    "resolution": "keep-local",
+    "mergeHint": null,
+    "detectedAt": "2026-07-04T10:30:00Z"
+  },
+  {
+    "_comment": "进度冲突 - 用户选择 keep-remote",
+    "conflictId": "conf-003",
+    "bookId": "bk-002",
+    "type": "progress",
+    "local": { "chapterIndex": 0, "progress": 0.1 },
+    "remote": { "chapterIndex": 5, "progress": 0.5 },
+    "localUpdatedAt": "2026-07-04T08:00:00Z",
+    "remoteUpdatedAt": "2026-07-04T10:00:00Z",
+    "resolution": "keep-remote",
+    "mergeHint": null,
+    "detectedAt": "2026-07-04T10:30:00Z"
+  },
+  {
+    "_comment": "书架冲突 - 合并",
+    "conflictId": "conf-004",
+    "bookId": "bk-003",
+    "type": "bookshelf",
+    "local": { "groupId": "g-001", "addedAt": "2026-07-04T10:00:00Z" },
+    "remote": { "groupId": "g-002", "addedAt": "2026-07-04T09:00:00Z" },
+    "localUpdatedAt": "2026-07-04T10:00:00Z",
+    "remoteUpdatedAt": "2026-07-04T09:00:00Z",
+    "resolution": "merge",
+    "mergeHint": { "strategy": "keep-both-groups" },
+    "detectedAt": "2026-07-04T10:30:00Z"
+  },
+  {
+    "_comment": "书签冲突 - 保留两者",
+    "conflictId": "conf-005",
+    "bookId": "bk-001",
+    "type": "bookmark",
+    "local": { "bookmarkId": "bm-001", "chapterIndex": 0, "locator": { "type": "char-offset", "charOffset": 100 } },
+    "remote": { "bookmarkId": "bm-002", "chapterIndex": 1, "locator": { "type": "char-offset", "charOffset": 200 } },
+    "localUpdatedAt": "2026-07-04T10:00:00Z",
+    "remoteUpdatedAt": "2026-07-04T09:00:00Z",
+    "resolution": "keep-both",
+    "mergeHint": null,
+    "detectedAt": "2026-07-04T10:30:00Z"
+  },
+  {
+    "_comment": "书源配置冲突 - 跳过",
+    "conflictId": "conf-006",
+    "bookId": "bk-001",
+    "type": "source-config",
+    "local": { "sourceId": "src-001", "version": 2 },
+    "remote": { "sourceId": "src-001", "version": 3 },
+    "localUpdatedAt": "2026-07-04T10:00:00Z",
+    "remoteUpdatedAt": "2026-07-04T09:00:00Z",
+    "resolution": "skip",
+    "mergeHint": null,
+    "detectedAt": "2026-07-04T10:30:00Z"
+  }
+]

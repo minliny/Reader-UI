@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 3,
+  "actions": [
+    { "event": "route.push", "action": "pushRoute", "requiredPayload": ["routeId"], "guards": ["loadingFalse"] },
+    { "event": "route.replace", "action": "replaceRoute", "requiredPayload": ["routeId"], "guards": ["loadingFalse"] },
+    { "event": "route.pop", "action": "popRoute", "guards": ["loadingFalse"] },
+    { "event": "route.popToRoot", "action": "popToRoot", "guards": ["loadingFalse"] },
+    { "event": "mainTab.select", "action": "selectTab", "requiredPayload": ["tab"], "guards": ["loadingFalse", "overlayEmpty"] },
+
+    { "event": "overlay.dialog.open", "action": "setOverlay", "value": "dialog" },
+    { "event": "overlay.dialog.close", "action": "clearOverlay" },
+    { "event": "overlay.sheet.open", "action": "setOverlay", "value": "sheet" },
+    { "event": "overlay.sheet.close", "action": "clearOverlay" },
+    { "event": "overlay.keyboard.open", "action": "setOverlay", "value": "keyboard" },
+    { "event": "overlay.keyboard.close", "action": "clearOverlay" },
+    { "event": "reader.control.toggle", "action": "toggleReaderControl", "requiredPayload": ["overlay"], "description": "Atomically toggles the Reader control overlay family without changing route identity." },
+    { "event": "reader.module.switch", "action": "switchReaderModule", "requiredPayload": ["module"], "description": "Atomically selects one Reader module overlay; repeated selection is a semantic no-op and motion is derived from the state delta." },
+    { "event": "reader.directory.open", "action": "setOverlay", "value": "directory" },
+    { "event": "reader.directory.close", "action": "clearOverlayIfMatches", "value": "directory" },
+    { "event": "reader.appearance.open", "action": "setOverlay", "value": "appearance" },
+    { "event": "reader.settings.open", "action": "setOverlay", "value": "settings" },
+    { "event": "reader.settings.close", "action": "clearOverlay" },
+    { "event": "reader.sourceSwitch.open", "action": "setOverlay", "value": "source-switch" },
+    { "event": "reader.sourceSwitch.close", "action": "clearOverlay" },
+
+    {
+      "event": "book.open",
+      "action": "bookOpenSequence",
+      "requiredPayload": ["bookId", "sourceId", "sourceKind"],
+      "coreSequence": ["source.detail", "chapter.list", "content.load", "reader.location.resolve"],
+      "description": "book.open is a result-dependent serial transaction; remote starts at source.detail, local starts at chapter.list, and reader.location.resolve waits for measured layout."
+    },
+    { "event": "reader.enter", "action": "pushRoute", "value": "immersive-reading", "guards": ["loadingFalse"] },
+    { "event": "reader.exit", "action": "popRoute" },
+    { "event": "reader.page.next", "action": "readerPageStep", "value": "1", "coreSequence": ["reader.location.resolve", "reader.progress.update"], "description": "Resolve the proposed page, persist the correlation-scoped canonical progress through Host DomainContext, then commit the visible page." },
+    { "event": "reader.page.prev", "action": "readerPageStep", "value": "-1", "coreSequence": ["reader.location.resolve", "reader.progress.update"], "description": "Resolve the proposed page, persist the correlation-scoped canonical progress through Host DomainContext, then commit the visible page." },
+
+    { "event": "reader.tts.start", "action": "startSession", "value": "tts", "coreSequence": ["tts.queue.start"], "hostRequest": "tts.system.start" },
+    { "event": "reader.tts.stop", "action": "stopSession", "coreSequence": ["tts.queue.stop"], "hostRequest": "tts.system.stop" },
+    { "event": "reader.autoPage.start", "action": "startSession", "value": "auto-page" },
+    { "event": "reader.autoPage.stop", "action": "stopSession" },
+    { "event": "reducedMotion.enable", "action": "setReducedMotion", "value": "true" },
+    { "event": "reducedMotion.disable", "action": "setReducedMotion", "value": "false" },
+
+    { "event": "source.switch.open", "action": "pushRoute", "value": "source-switch", "guards": ["loadingFalse"] },
+    { "event": "source.switch.cancel", "action": "popRoute" },
+    { "event": "sync.run", "action": "emitEffects", "coreSequence": ["sync.snapshot", "sync.push"] },
+    { "event": "webdav.config.test", "action": "emitEffects", "coreSequence": ["sync.push"], "hostRequest": "http.execute" },
+    { "event": "reader.bookCache.open", "action": "emitEffects", "requiredPayload": ["sourceId", "bookId"], "coreSequence": ["cache.book.status"], "description": "读取指定 sourceId/bookId 的缓存与下载队列状态；缺少完整书籍键时严格拒绝。" },
+    { "event": "settings.cache.clear", "action": "emitEffects", "requiredPayload": ["scope"], "coreSequence": ["cache.clear"], "description": "按 Core cache.clear DTO 清理缓存；book scope 还必须提供 sourceId/bookId。" },
+    { "event": "download.task.retry", "action": "emitEffects", "requiredPayload": ["sourceId", "bookId", "chapterRange"], "coreSequence": ["cache.book.prefetch"], "description": "以明确的 sourceId/bookId/chapterRange 重新入队章节预取，不接受仅 taskId 的伪成功。" },
+
+    { "event": "import.start", "action": "emitEffects", "coreSequence": ["import.parse"], "description": "W1 导入解析。pilot=shadow, exactlyOnce=true, staleResultGuard=true, rollback=true" },
+    { "event": "import.apply", "action": "emitEffects", "coreSequence": ["import.persist"], "description": "W1 导入持久化。pilot=shadow, exactlyOnce=true, rollback=true" },
+    { "event": "import.cancel", "action": "emitEffects", "coreSequence": ["import.rollback"], "description": "W1 导入回滚。pilot=shadow, exactlyOnce=true" },
+
+    { "event": "source.switch.confirm", "action": "emitEffects", "coreSequence": ["source.switch.commit"], "description": "W3 换源提交。pilot=shadow, exactlyOnce=true, staleResultGuard=true, rollback=true" },
+    { "event": "source.switch.rollback", "action": "emitEffects", "coreSequence": ["source.switch.rollback"], "description": "W3 换源回滚。pilot=shadow, exactlyOnce=true" },
+
+    { "event": "reader.font.import", "action": "appearanceTransaction", "value": "font.register", "description": "W4 Host 字体注册成功后以 persistence.get/put CAS 写入 ReaderUIRuntime appearance aggregate。production=shadow, exactlyOnce=true, rollback=true" },
+    { "event": "reader.font.delete", "action": "appearanceTransaction", "value": "font.unregister", "description": "W4 先从 appearance aggregate 原子移除，再调用 Host logical/physical unregister；无法物理卸载时必须返回 restartRequired。production=shadow" },
+    { "event": "reader.theme.new", "action": "appearanceTransaction", "value": "theme.create", "description": "W4 ReaderUIRuntime versioned appearance aggregate 主题创建，persistence.get -> CAS put。production=shadow" },
+    { "event": "reader.theme.edit", "action": "appearanceTransaction", "value": "theme.update", "description": "W4 ReaderUIRuntime versioned appearance aggregate 主题更新，persistence.get -> CAS put。production=shadow" },
+    { "event": "reader.theme.delete", "action": "appearanceTransaction", "value": "theme.delete", "description": "W4 ReaderUIRuntime versioned appearance aggregate 主题删除，persistence.get -> CAS put。production=shadow" },
+    { "event": "reader.typography.persist", "action": "appearanceTransaction", "value": "typography.persist", "description": "W4 ReaderUIRuntime 排版持久化，persistence.get -> CAS put。production=shadow" },
+    { "event": "reader.config.restart.simulate", "action": "appearanceTransaction", "value": "config.loadPersisted", "description": "W4 从 Host 原子偏好存储加载、严格校验并 rehydrate ReaderUIRuntime appearance aggregate。production=shadow" },
+    { "event": "reader.config.persist", "action": "appearanceTransaction", "value": "config.savePersisted", "description": "W4 严格校验完整 appearance aggregate 后以 revision CAS 原子保存。production=shadow" },
+
+    { "event": "reader.replace.apply", "action": "emitEffects", "coreSequence": ["replace.apply"], "description": "W5 替换规则应用。pilot=shadow, exactlyOnce=true, staleResultGuard=true, rollback=true" },
+    { "event": "reader.replace.create", "action": "emitEffects", "coreSequence": ["replace.persist"], "description": "W5 替换规则持久化。pilot=shadow, exactlyOnce=true, rollback=true" },
+    { "event": "reader.replace.validate", "action": "emitEffects", "coreSequence": ["replace.validate"], "description": "W5 替换规则校验。pilot=shadow, exactlyOnce=true, staleResultGuard=true" },
+    { "event": "reader.replace.undo", "action": "emitEffects", "requiredPayload": ["undoToken"], "coreSequence": ["replace.undo"], "description": "W5 使用 Core 签发的完整 undoToken 撤销替换规则持久化；缺失或结构漂移时严格拒绝。" },
+
+    { "event": "rss.refresh", "action": "emitEffects", "coreSequence": ["rss.feed.refresh"], "description": "RSS 源刷新。pilot=shadow, exactlyOnce=true, staleResultGuard=true" },
+    { "event": "rss.subscription.add", "action": "emitEffects", "coreSequence": ["rss.subscription.persist"], "description": "RSS 订阅新增。pilot=shadow, exactlyOnce=true, rollback=true" },
+    { "event": "rss.subscription.delete", "action": "emitEffects", "coreSequence": ["rss.subscription.remove"], "description": "RSS 订阅删除。pilot=shadow, exactlyOnce=true, rollback=true" },
+    { "event": "rss.subscription.edit", "action": "emitEffects", "coreSequence": ["rss.subscription.persist"], "description": "RSS 订阅更新。pilot=shadow, exactlyOnce=true" },
+    { "event": "rss.entry.open", "action": "emitEffects", "coreSequence": ["rss.entry.read"], "description": "RSS 文章打开。pilot=shadow, exactlyOnce=true" },
+    { "event": "rss.favorite.add", "action": "emitEffects", "coreSequence": ["rss.favorite.persist"], "description": "RSS 收藏添加。pilot=shadow, exactlyOnce=true" },
+    { "event": "rss.favorite.remove", "action": "emitEffects", "coreSequence": ["rss.favorite.remove"], "description": "RSS 收藏移除。pilot=shadow, exactlyOnce=true" },
+
+    { "event": "sync.start", "action": "emitEffects", "coreSequence": ["sync.snapshot"], "description": "同步启动。pilot=shadow, exactlyOnce=true, staleResultGuard=true" },
+    { "event": "sync.progress", "action": "emitEffects", "coreSequence": ["sync.push"], "description": "同步进度。pilot=shadow, exactlyOnce=true" },
+    { "event": "sync.complete", "action": "emitEffects", "coreSequence": ["sync.push"], "description": "同步完成。pilot=shadow, exactlyOnce=true" },
+    { "event": "sync.conflict", "action": "emitEffects", "coreSequence": ["sync.conflict.detect"], "description": "同步冲突检测。pilot=shadow, exactlyOnce=true, staleResultGuard=true" },
+    { "event": "sync.resolve", "action": "emitEffects", "coreSequence": ["sync.conflict.resolve"], "description": "同步冲突解决。pilot=shadow, exactlyOnce=true, rollback=true" }
+  ]
+}
