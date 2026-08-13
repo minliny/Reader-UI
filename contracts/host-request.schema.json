@@ -1,9 +1,9 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/host-request.schema.json",
-  "$comment": "Hermetic Reader-UI 3.0 HostRequest type snapshot for Core ownership drift checks; no release artifact digest is asserted.",
+  "$comment": "Hermetic Reader-UI 3.2 HostRequest type snapshot for Core ownership drift checks; no release artifact digest is asserted.",
   "x-reader-ui-contract": {
-    "version": "3.0.0",
+    "version": "3.2.0",
     "hostRequestCount": 58
   },
   "type": "object",

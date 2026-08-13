@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+<style type="text/tailwindcss">
+  @theme {
+    --color-ink: #171717;
+    --color-paper: #fafafa;
+    --color-line: #e5e5e5;
+    --color-dim: #737373;
+    --color-faint: #a3a3a3;
+  }
+  * { -webkit-tap-highlight-color: transparent; }
+  .screen {
+    position: absolute; inset: 0;
+    background: var(--color-paper);
+    display: none;
+    overflow-y: auto;
+  }
+  .screen.active { display: flex; flex-direction: column; }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { scrollbar-width: none; }
+</style>
+</head>
+<body class="bg-neutral-300 flex items-center justify-center min-h-screen">
+
+<div id="phone" class="relative w-[375px] h-[812px] bg-paper shadow-[0_0_50px_rgba(0,0,0,0.15)] overflow-hidden">
+
+  <!-- ============ 书架 Bookshelf ============ -->
+  <section id="shelf" class="screen active">
+    <header class="px-6 pt-14 pb-4 flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-ink">书架</h1>
+      <div class="flex items-center gap-5">
+        <i data-lucide="search" class="w-5 h-5 text-ink"></i>
+        <i data-lucide="filter" class="w-5 h-5 text-ink"></i>
+      </div>
+    </header>
+    <div class="px-6 pb-2 flex items-center gap-2 text-xs text-dim">
+      <span>共 6 本</span>
+      <span class="w-px h-3 bg-line"></span>
+      <span>1 本更新</span>
+    </div>
+
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-24">
+      <div class="grid grid-cols-3 gap-4">
+        <!-- 卡片 ×6 -->
+        <button onclick="go('detail')" class="text-left">
+          <div class="aspect-[3/4] bg-neutral-200 rounded-lg flex items-center justify-center">
+            <i data-lucide="book-open" class="w-8 h-8 text-faint"></i>
+          </div>
+          <p class="mt-2 text-sm text-ink leading-tight">大江大河</p>
+          <p class="text-xs text-dim mt-1">第 245 章</p>
+        </button>
+        <button onclick="go('detail')" class="text-left">
+          <div class="aspect-[3/4] bg-neutral-200 rounded-lg flex items-center justify-center">
+            <i data-lucide="book-open" class="w-8 h-8 text-faint"></i>
+          </div>
+          <p class="mt-2 text-sm text-ink leading-tight">三体 · 全集</p>
+          <p class="text-xs text-dim mt-1">已读完</p>
+        </button>
+        <button onclick="go('detail')" class="text-left">
+          <div class="aspect-[3/4] bg-neutral-200 rounded-lg flex items-center justify-center">
+            <i data-lucide="book-open" class="w-8 h-8 text-faint"></i>
+          </div>
+          <p class="mt-2 text-sm text-ink leading-tight">置身事内</p>
+          <p class="text-xs text-dim mt-1">第 12 章</p>
+        </button>
+        <button onclick="go('detail')" class="text-left">
+          <div class="aspect-[3/4] bg-neutral-200 rounded-lg flex items-center justify-center">
+            <i data-lucide="book-open" class="w-8 h-8 text-faint"></i>
+          </div>
+          <p class="mt-2 text-sm text-ink leading-tight">人类简史</p>
+          <p class="text-xs text-dim mt-1">第 88 章</p>
+        </button>
+        <button onclick="go('detail')" class="text-left">
+          <div class="aspect-[3/4] bg-neutral-200 rounded-lg flex items-center justify-center">
+            <i data-lucide="book-open" class="w-8 h-8 text-faint"></i>
+          </div>
+          <p class="mt-2 text-sm text-ink leading-tight">活着</p>
+          <p class="text-xs text-dim mt-1">第 3 章</p>
+        </button>
+        <button onclick="go('detail')" class="text-left">
+          <div class="aspect-[3/4] bg-neutral-200 rounded-lg flex items-center justify-center">
+            <i data-lucide="book-open" class="w-8 h-8 text-faint"></i>
+          </div>
+          <p class="mt-2 text-sm text-ink leading-tight">乡土中国</p>
+          <p class="text-xs text-dim mt-1">第 40 章</p>
+        </button>
+      </div>
+    </div>
+    <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-2 pt-2 pb-6 grid grid-cols-4">
+      <button onclick="tab('shelf')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="library" class="w-6 h-6 text-ink"></i>
+        <span class="text-xs text-ink">书架</span>
+      </button>
+      <button onclick="tab('discover')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="compass" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">发现</span>
+      </button>
+      <button onclick="tab('rss')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="rss" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">订阅</span>
+      </button>
+      <button onclick="tab('settings')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="settings" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">设置</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ============ 发现 Discover ============ -->
+  <section id="discover" class="screen">
+    <header class="px-6 pt-14 pb-4 flex items-center justify-between">
+      <h1 class="text-2xl font-semibold text-ink">发现</h1>
+      <i data-lucide="search" class="w-5 h-5 text-ink"></i>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-24">
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+        <span class="shrink-0 px-3 py-2 rounded-full bg-ink text-white text-sm">推荐</span>
+        <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">榜单</span>
+        <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">分类</span>
+        <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">完本</span>
+      </div>
+      <div class="mt-4 space-y-4">
+        <div class="flex gap-3">
+          <div class="w-16 h-24 bg-neutral-200 rounded shrink-0"></div>
+          <div class="flex flex-col justify-center gap-1">
+            <p class="text-ink font-medium">长安的荔枝</p>
+            <p class="text-xs text-dim">马伯庸 · 历史</p>
+            <p class="text-xs text-dim line-clamp-2">一骑红尘妃子笑，层层剥开底下的代价与挣扎。</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-16 h-24 bg-neutral-200 rounded shrink-0"></div>
+          <div class="flex flex-col justify-center gap-1">
+            <p class="text-ink font-medium">置身事内</p>
+            <p class="text-xs text-dim">兰小欢 · 经济</p>
+            <p class="text-xs text-dim line-clamp-2">读懂中国政府经济发展，理解现实逻辑。</p>
+          </div>
+        </div>
+        <div class="flex gap-3">
+          <div class="w-16 h-24 bg-neutral-200 rounded shrink-0"></div>
+          <div class="flex flex-col justify-center gap-1">
+            <p class="text-ink font-medium">三体</p>
+            <p class="text-xs text-dim">刘慈欣 · 科幻</p>
+            <p class="text-xs text-dim line-clamp-2">宇宙社会学与黑暗森林法则的宏大叙事。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-2 pt-2 pb-6 grid grid-cols-4">
+      <button onclick="tab('shelf')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="library" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">书架</span>
+      </button>
+      <button onclick="tab('discover')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="compass" class="w-6 h-6 text-ink"></i>
+        <span class="text-xs text-ink">发现</span>
+      </button>
+      <button onclick="tab('rss')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="rss" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">订阅</span>
+      </button>
+      <button onclick="tab('settings')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="settings" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">设置</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ============ 订阅 RSS ============ -->
+  <section id="rss" class="screen">
+    <header class="px-6 pt-14 pb-4">
+      <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-semibold text-ink">订阅</h1>
+        <div class="flex items-center gap-5">
+          <i data-lucide="refresh-cw" class="w-5 h-5 text-ink"></i>
+          <i data-lucide="plus" class="w-5 h-5 text-ink"></i>
+        </div>
+      </div>
+      <div class="mt-4 flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <span class="shrink-0 px-3 py-2 rounded-full bg-ink text-white text-sm">全部</span>
+        <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">未读</span>
+        <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">收藏</span>
+        <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">规则</span>
+      </div>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-24 space-y-1">
+      <div class="flex items-center gap-3 py-3 border-b border-line">
+        <div class="w-9 h-9 rounded-full bg-neutral-200 flex items-center justify-center">
+          <i data-lucide="github" class="w-4 h-4 text-dim"></i>
+        </div>
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">GitHub Releases</p>
+          <p class="text-xs text-dim">开源项目 · 6 未读</p>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+      </div>
+      <div class="flex items-center gap-3 py-3 border-b border-line">
+        <div class="w-9 h-9 rounded-full bg-neutral-200 flex items-center justify-center">
+          <i data-lucide="message-circle" class="w-4 h-4 text-dim"></i>
+        </div>
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">阅读器版本讨论</p>
+          <p class="text-xs text-dim">社区 · 12 未读</p>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+      </div>
+      <div class="flex items-center gap-3 py-3 border-b border-line">
+        <div class="w-9 h-9 rounded-full bg-neutral-200 flex items-center justify-center">
+          <i data-lucide="wrench" class="w-4 h-4 text-dim"></i>
+        </div>
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">书源维护公告</p>
+          <p class="text-xs text-dim">维护 · 2 未读</p>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+      </div>
+      <div class="flex items-center gap-3 py-3 border-b border-line">
+        <div class="w-9 h-9 rounded-full bg-neutral-200 flex items-center justify-center">
+          <i data-lucide="bell" class="w-4 h-4 text-dim"></i>
+        </div>
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">本地系统通知</p>
+          <p class="text-xs text-dim">系统 · 无未读</p>
+        </div>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+      </div>
+    </div>
+    <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-2 pt-2 pb-6 grid grid-cols-4">
+      <button onclick="tab('shelf')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="library" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">书架</span>
+      </button>
+      <button onclick="tab('discover')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="compass" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">发现</span>
+      </button>
+      <button onclick="tab('rss')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="rss" class="w-6 h-6 text-ink"></i>
+        <span class="text-xs text-ink">订阅</span>
+      </button>
+      <button onclick="tab('settings')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="settings" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">设置</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ============ 设置首页 Settings Home ============ -->
+  <section id="settings" class="screen">
+    <header class="px-6 pt-14 pb-4">
+      <h1 class="text-2xl font-semibold text-ink">设置</h1>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-24">
+      <div class="bg-white border border-line rounded-xl overflow-hidden divide-y divide-line">
+        <button onclick="go('settings-general')" class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">通用设置</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+        <button onclick="go('settings-general')" class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="library" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">书架与搜索设置</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+        <button onclick="go('source-mgmt')" class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="database" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">书源管理</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+        <button onclick="go('sync')" class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="refresh-cw" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">同步与备份</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+        <button class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="info" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">关于与反馈</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+      </div>
+    </div>
+    <nav class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-2 pt-2 pb-6 grid grid-cols-4">
+      <button onclick="tab('shelf')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="library" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">书架</span>
+      </button>
+      <button onclick="tab('discover')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="compass" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">发现</span>
+      </button>
+      <button onclick="tab('rss')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="rss" class="w-6 h-6 text-dim"></i>
+        <span class="text-xs text-dim">订阅</span>
+      </button>
+      <button onclick="tab('settings')" class="flex flex-col items-center gap-1" data-tab>
+        <i data-lucide="settings" class="w-6 h-6 text-ink"></i>
+        <span class="text-xs text-ink">设置</span>
+      </button>
+    </nav>
+  </section>
+
+  <!-- ============ 通用设置 Settings General ============ -->
+  <section id="settings-general" class="screen">
+    <header class="px-6 pt-14 pb-4 flex items-center gap-3">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink">通用设置</h1>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10 space-y-6">
+      <div class="bg-white border border-line rounded-xl divide-y divide-line">
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">字体</span>
+          <span class="text-dim text-sm">系统默认</span>
+        </div>
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">字号</span>
+          <span class="text-dim text-sm">16</span>
+        </div>
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">主题</span>
+          <span class="text-dim text-sm">跟随系统</span>
+        </div>
+      </div>
+      <div class="bg-white border border-line rounded-xl divide-y divide-line">
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">自动翻页</span>
+          <div class="w-11 h-6 rounded-full bg-neutral-200 relative">
+            <div class="absolute top-1 right-1 w-4 h-4 rounded-full bg-white"></div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">夜间模式</span>
+          <div class="w-11 h-6 rounded-full bg-neutral-200 relative">
+            <div class="absolute top-1 right-1 w-4 h-4 rounded-full bg-white"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 书籍详情 Book Detail ============ -->
+  <section id="detail" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <div class="flex-1"></div>
+      <i data-lucide="more-horizontal" class="w-6 h-6 text-ink"></i>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10">
+      <div class="flex gap-5">
+        <div class="w-28 h-40 bg-neutral-200 rounded-lg shrink-0 flex items-center justify-center">
+          <i data-lucide="book-open" class="w-10 h-10 text-faint"></i>
+        </div>
+        <div class="flex flex-col justify-center gap-2">
+          <h2 class="text-xl font-semibold text-ink">大江大河</h2>
+          <p class="text-sm text-dim">阿耐 · 现实</p>
+          <p class="text-sm text-dim">已读 245 章 / 共 612 章</p>
+          <div class="flex items-center gap-1 text-xs text-dim">
+            <i data-lucide="star" class="w-4 h-4 fill-dim"></i>
+            <span>8.9</span>
+            <span class="w-px h-3 bg-line mx-1"></span>
+            <span>12.4 万人追读</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex gap-3">
+        <button onclick="go('reader')" class="flex-1 bg-ink text-white rounded-lg py-3 text-sm font-medium">继续阅读</button>
+        <button onclick="go('source-switch')" class="flex-1 bg-neutral-100 text-ink rounded-lg py-3 text-sm font-medium">换源</button>
+      </div>
+
+      <div class="mt-6">
+        <p class="text-sm text-ink font-medium mb-2">简介</p>
+        <p class="text-sm text-dim leading-6">宋运辉、雷东宝、杨巡等人，在改革开放的大潮中各自奋斗，书写属于他们的时代篇章。</p>
+      </div>
+
+      <div class="mt-6">
+        <p class="text-sm text-ink font-medium mb-2">目录</p>
+        <button onclick="go('reader-full-directory')" class="flex items-center justify-between w-full py-3 border-b border-line">
+          <span class="text-sm text-ink">第 245 章 新的方向</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 阅读器控制层 Reader Control Home ============ -->
+  <section id="reader" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。比起东海之滨的腥咸，他更记得金州化工厂里那股挥之不去的机油味。</p>
+      <p class="mb-4">这几年的路，他走得不算平顺，但每一步都实实在在。从基层技术员做起，他比谁都清楚，机会从来不是等来的。</p>
+      <p class="mb-4">远处传来汽笛声，他收回目光，从口袋里掏出那封已经磨边了的信。</p>
+    </div>
+
+    <!-- 顶栏 Overlay -->
+    <div class="absolute top-0 left-0 right-0 flex items-center justify-between px-6 pt-14">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <span class="text-sm text-dim">大江大河 · 第 245 章</span>
+      <i data-lucide="more-horizontal" class="w-6 h-6 text-ink"></i>
+    </div>
+
+    <!-- 底部控制层 -->
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line">
+      <div class="px-6 pt-4">
+        <div class="relative h-1 bg-neutral-200 rounded-full">
+          <div class="absolute left-0 top-0 h-1 w-1/3 bg-ink rounded-full"></div>
+        </div>
+        <div class="flex items-center justify-between pt-2 text-xs text-dim">
+          <span>40%</span>
+          <span>245 / 612</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 px-6 py-4 gap-2">
+        <button onclick="go('reader-quick-search')" class="flex flex-col items-center gap-2">
+          <i data-lucide="search" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">搜索</span>
+        </button>
+        <button onclick="go('reader-quick-autopage')" class="flex flex-col items-center gap-2">
+          <i data-lucide="play" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">自动</span>
+        </button>
+        <button onclick="go('reader-quick-replace')" class="flex flex-col items-center gap-2">
+          <i data-lucide="replace" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">替换</span>
+        </button>
+        <button onclick="go('reader-module-directory')" class="flex flex-col items-center gap-2">
+          <i data-lucide="list" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">目录</span>
+        </button>
+      </div>
+      <div class="grid grid-cols-4 px-6 pb-6 gap-2">
+        <button onclick="go('reader-module-tts')" class="flex flex-col items-center gap-2">
+          <i data-lucide="audio-lines" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">语音</span>
+        </button>
+        <button onclick="go('reader-module-appearance')" class="flex flex-col items-center gap-2">
+          <i data-lucide="sun" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">外观</span>
+        </button>
+        <button onclick="go('reader-module-settings')" class="flex flex-col items-center gap-2">
+          <i data-lucide="settings" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">设置</span>
+        </button>
+        <button onclick="go('source-switch')" class="flex flex-col items-center gap-2">
+          <i data-lucide="repeat" class="w-5 h-5 text-ink"></i>
+          <span class="text-xs text-dim">换源</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 阅读器底栏子页（复用骨架） ============ -->
+  <!-- 快捷搜索 -->
+  <section id="reader-quick-search" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-6 pt-4 pb-10">
+      <div class="flex items-center gap-2 bg-neutral-100 rounded-lg px-3 py-3 mb-4">
+        <i data-lucide="search" class="w-4 h-4 text-dim"></i>
+        <input placeholder="搜索本章内容" class="bg-transparent flex-1 text-sm outline-none placeholder:text-faint">
+      </div>
+      <div class="flex items-center justify-between py-3 border-b border-line">
+        <span class="text-sm text-ink">定位到「码头」第 2 次</span>
+        <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+      </div>
+      <button onclick="closeReader('reader-quick-search')" class="w-full mt-4 bg-ink text-white rounded-lg py-3 text-sm">完成</button>
+    </div>
+  </section>
+
+  <!-- 自动翻页 -->
+  <section id="reader-quick-autopage" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-6 pt-4 pb-10">
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-ink">自动翻页</span>
+        <div class="w-11 h-6 rounded-full bg-ink relative">
+          <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-ink text-sm">翻页速度</span>
+        <span class="text-dim text-sm">4 秒 / 页</span>
+      </div>
+      <div class="relative h-1 bg-neutral-200 rounded-full mb-6">
+        <div class="absolute left-0 top-0 h-1 w-1/2 bg-ink rounded-full"></div>
+      </div>
+      <button onclick="closeReader('reader-quick-autopage')" class="w-full bg-ink text-white rounded-lg py-3 text-sm">开始</button>
+    </div>
+  </section>
+
+  <!-- 替换 -->
+  <section id="reader-quick-replace" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-6 pt-4 pb-10">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-ink font-medium">替换规则</span>
+        <span class="text-dim text-sm">3 条生效</span>
+      </div>
+      <div class="space-y-3 mb-6">
+        <div class="flex items-center gap-3 bg-neutral-100 rounded-lg px-3 py-3">
+          <i data-lucide="arrow-right" class="w-4 h-4 text-dim"></i>
+          <span class="text-sm text-ink">繁体 → 简体</span>
+        </div>
+        <div class="flex items-center gap-3 bg-neutral-100 rounded-lg px-3 py-3">
+          <i data-lucide="arrow-right" class="w-4 h-4 text-dim"></i>
+          <span class="text-sm text-ink">「\u201c」→ 引号</span>
+        </div>
+      </div>
+      <button onclick="closeReader('reader-quick-replace')" class="w-full bg-ink text-white rounded-lg py-3 text-sm">完成</button>
+    </div>
+  </section>
+
+  <!-- 目录 Module -->
+  <section id="reader-module-directory" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <!-- 底部 Sheet -->
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line h-96 flex flex-col">
+      <div class="px-6 pt-4 pb-2 flex items-center justify-between">
+        <span class="text-ink font-medium">目录</span>
+        <div class="flex items-center gap-4">
+          <i data-lucide="search" class="w-5 h-5 text-dim"></i>
+          <i data-lucide="shuffle" class="w-5 h-5 text-dim"></i>
+        </div>
+      </div>
+      <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-4">
+        <button onclick="expandFull('reader-full-directory')" class="text-left w-full py-3 border-b border-line">
+          <span class="text-sm text-ink">第 244 章 转折</span>
+        </button>
+        <button onclick="expandFull('reader-full-directory')" class="text-left w-full py-3 border-b border-line">
+          <span class="text-sm text-ink font-medium">第 245 章 新的方向</span>
+        </button>
+        <button onclick="expandFull('reader-full-directory')" class="text-left w-full py-3 border-b border-line">
+          <span class="text-sm text-dim">第 246 章 重逢</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TTS Module -->
+  <section id="reader-module-tts" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-6 pt-4 pb-10">
+      <div class="flex items-center justify-between mb-5">
+        <span class="text-ink font-medium">语音朗读</span>
+        <button onclick="expandFull('reader-full-tts')"><i data-lucide="expand" class="w-5 h-5 text-dim"></i></button>
+      </div>
+      <div class="flex items-center gap-3 mb-5">
+        <div class="flex-1 h-1 bg-neutral-200 rounded-full relative">
+          <div class="absolute left-0 top-0 h-1 w-1/2 bg-ink rounded-full"></div>
+        </div>
+        <span class="text-xs text-dim">02:14 / 05:20</span>
+      </div>
+      <div class="flex items-center justify-center gap-8">
+        <i data-lucide="skip-back" class="w-6 h-6 text-ink"></i>
+        <i data-lucide="pause" class="w-10 h-10 text-ink"></i>
+        <i data-lucide="skip-forward" class="w-6 h-6 text-ink"></i>
+      </div>
+      <button onclick="closeReader('reader-module-tts')" class="w-full mt-5 bg-ink text-white rounded-lg py-3 text-sm">停止朗读</button>
+    </div>
+  </section>
+
+  <!-- 外观 Module -->
+  <section id="reader-module-appearance" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-6 pt-4 pb-10">
+      <div class="flex items-center justify-between mb-5">
+        <span class="text-ink font-medium">外观</span>
+        <button onclick="expandFull('reader-full-appearance')"><i data-lucide="expand" class="w-5 h-5 text-dim"></i></button>
+      </div>
+      <div class="flex gap-3 mb-5">
+        <div class="w-8 h-8 rounded-full bg-paper border border-line"></div>
+        <div class="w-8 h-8 rounded-full bg-neutral-200 border border-line"></div>
+        <div class="w-8 h-8 rounded-full bg-ink border border-ink ring-2 ring-ink ring-offset-2"></div>
+      </div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-dim">字号</span>
+        <span class="text-sm text-ink">16</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <i data-lucide="minus" class="w-4 h-4 text-dim"></i>
+        <div class="flex-1 h-1 bg-neutral-200 rounded-full relative">
+          <div class="absolute left-0 top-0 h-1 w-1/2 bg-ink rounded-full"></div>
+        </div>
+        <i data-lucide="plus" class="w-4 h-4 text-dim"></i>
+      </div>
+      <button onclick="closeReader('reader-module-appearance')" class="w-full mt-5 bg-ink text-white rounded-lg py-3 text-sm">完成</button>
+    </div>
+  </section>
+
+  <!-- 设置 Module -->
+  <section id="reader-module-settings" class="screen">
+    <div class="flex-1 bg-paper px-8 pt-20 leading-8 text-ink/90 text-[17px]">
+      <p class="mb-4">宋运辉站在码头边，海风带着咸味扑面而来。</p>
+    </div>
+    <div class="absolute bottom-0 left-0 right-0 bg-white border-t border-line px-6 pt-4 pb-10">
+      <div class="flex items-center justify-between mb-5">
+        <span class="text-ink font-medium">阅读设置</span>
+        <button onclick="expandFull('reader-full-settings')"><i data-lucide="expand" class="w-5 h-5 text-dim"></i></button>
+      </div>
+      <div class="divide-y divide-line">
+        <div class="flex items-center justify-between py-3">
+          <span class="text-sm text-ink">翻页方式</span>
+          <span class="text-sm text-dim">仿真</span>
+        </div>
+        <div class="flex items-center justify-between py-3">
+          <span class="text-sm text-ink">行距</span>
+          <span class="text-sm text-dim">标准</span>
+        </div>
+        <div class="flex items-center justify-between py-3">
+          <span class="text-sm text-ink">屏幕常亮</span>
+          <div class="w-11 h-6 rounded-full bg-ink relative">
+            <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+          </div>
+        </div>
+      </div>
+      <button onclick="closeReader('reader-module-settings')" class="w-full mt-5 bg-ink text-white rounded-lg py-3 text-sm">完成</button>
+    </div>
+  </section>
+
+  <!-- ============ 阅读器全屏页（复用骨架） ============ -->
+  <section id="reader-full-directory" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="backToReader()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">目录</h1>
+      <i data-lucide="search" class="w-5 h-5 text-ink"></i>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10 divide-y divide-line">
+      <div class="flex items-center justify-between py-3">
+        <span class="text-sm text-dim">第 244 章 转折</span>
+        <span class="text-xs text-faint">已读</span>
+      </div>
+      <div class="flex items-center justify-between py-3">
+        <span class="text-sm text-ink font-medium">第 245 章 新的方向</span>
+        <span class="text-xs text-ink">当前</span>
+      </div>
+      <div class="flex items-center justify-between py-3">
+        <span class="text-sm text-dim">第 246 章 重逢</span>
+        <span class="text-xs text-faint">420 评论</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="reader-full-tts" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="backToReader()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">语音朗读</h1>
+    </header>
+    <div class="flex-1 px-6 pb-10 flex flex-col items-center justify-center gap-8">
+      <div class="w-20 h-20 rounded-full bg-neutral-100 flex items-center justify-center">
+        <i data-lucide="audio-lines" class="w-9 h-9 text-ink"></i>
+      </div>
+      <div class="w-full relative h-1 bg-neutral-200 rounded-full">
+        <div class="absolute left-0 top-0 h-1 w-1/2 bg-ink rounded-full"></div>
+      </div>
+      <div class="flex items-center justify-center gap-8">
+        <i data-lucide="skip-back" class="w-7 h-7 text-ink"></i>
+        <i data-lucide="pause" class="w-12 h-12 text-ink"></i>
+        <i data-lucide="skip-forward" class="w-7 h-7 text-ink"></i>
+      </div>
+    </div>
+  </section>
+
+  <section id="reader-full-appearance" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="backToReader()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">外观</h1>
+    </header>
+    <div class="flex-1 px-6 pb-10">
+      <div class="flex gap-3 mb-8">
+        <div class="w-10 h-10 rounded-full bg-paper border border-line"></div>
+        <div class="w-10 h-10 rounded-full bg-neutral-200 border border-line"></div>
+        <div class="w-10 h-10 rounded-full bg-ink border border-ink ring-2 ring-ink ring-offset-2"></div>
+      </div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm text-dim">字号</span>
+        <span class="text-sm text-ink">16</span>
+      </div>
+      <div class="flex items-center gap-3 mb-8">
+        <i data-lucide="minus" class="w-4 h-4 text-dim"></i>
+        <div class="flex-1 h-1 bg-neutral-200 rounded-full relative">
+          <div class="absolute left-0 top-0 h-1 w-1/2 bg-ink rounded-full"></div>
+        </div>
+        <i data-lucide="plus" class="w-4 h-4 text-dim"></i>
+      </div>
+      <div class="flex items-center justify-between py-3 border-b border-line">
+        <span class="text-sm text-ink">行距</span>
+        <span class="text-sm text-dim">标准</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="reader-full-settings" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="backToReader()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">阅读设置</h1>
+    </header>
+    <div class="flex-1 px-6 pb-10 divide-y divide-line">
+      <div class="flex items-center justify-between py-4">
+        <span class="text-ink">翻页方式</span>
+        <span class="text-dim text-sm">仿真</span>
+      </div>
+      <div class="flex items-center justify-between py-4">
+        <span class="text-ink">行距</span>
+        <span class="text-dim text-sm">标准</span>
+      </div>
+      <div class="flex items-center justify-between py-4">
+        <span class="text-ink">屏幕常亮</span>
+        <div class="w-11 h-6 rounded-full bg-ink relative">
+          <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 换源 Source Switch ============ -->
+  <section id="source-switch" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">换源</h1>
+      <i data-lucide="x" class="w-6 h-6 text-ink"></i>
+    </header>
+    <div class="px-6 pt-2 pb-2 flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <span class="shrink-0 px-3 py-2 rounded-full bg-ink text-white text-sm">可用</span>
+      <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">超时</span>
+      <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">错误</span>
+    </div>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10 divide-y divide-line">
+      <button onclick="closeReader('source-switch')" class="flex items-center gap-3 py-4 w-full">
+        <div class="flex-1 text-left">
+          <p class="text-ink text-sm font-medium">起点书源</p>
+          <p class="text-xs text-dim mt-1">延迟 120ms · 28 万本</p>
+        </div>
+        <span class="text-xs text-dim">选中</span>
+      </button>
+      <button onclick="closeReader('source-switch')" class="flex items-center gap-3 py-4 w-full">
+        <div class="flex-1 text-left">
+          <p class="text-ink text-sm">笔趣阁聚合</p>
+          <p class="text-xs text-dim mt-1">延迟 340ms · 15 万本</p>
+        </div>
+      </button>
+      <button onclick="closeReader('source-switch')" class="flex items-center gap-3 py-4 w-full">
+        <div class="flex-1 text-left">
+          <p class="text-ink text-sm">追书神器</p>
+          <p class="text-xs text-dim mt-1">延迟 480ms · 9 万本</p>
+        </div>
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ 书源管理 Source Management ============ -->
+  <section id="source-mgmt" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">书源管理</h1>
+      <i data-lucide="plus" class="w-6 h-6 text-ink"></i>
+    </header>
+    <div class="px-6 pt-2 pb-2 flex items-center gap-2 overflow-x-auto no-scrollbar">
+      <span class="shrink-0 px-3 py-2 rounded-full bg-ink text-white text-sm">全部</span>
+      <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">启用</span>
+      <span class="shrink-0 px-3 py-2 rounded-full bg-neutral-100 text-dim text-sm">禁用</span>
+    </div>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10 divide-y divide-line">
+      <div class="flex items-center gap-3 py-4">
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">起点书源</p>
+          <p class="text-xs text-dim mt-1">最后更新 2 天前</p>
+        </div>
+        <div class="w-11 h-6 rounded-full bg-ink relative">
+          <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 py-4">
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">笔趣阁聚合</p>
+          <p class="text-xs text-dim mt-1">最后更新 5 天前</p>
+        </div>
+        <div class="w-11 h-6 rounded-full bg-ink relative">
+          <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 py-4">
+        <div class="flex-1">
+          <p class="text-ink text-sm font-medium">追书神器</p>
+          <p class="text-xs text-dim mt-1">最后更新 1 周前</p>
+        </div>
+        <div class="w-11 h-6 rounded-full bg-neutral-200 relative">
+          <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 同步备份 Sync Backup ============ -->
+  <section id="sync" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">同步与备份</h1>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10">
+      <div class="bg-white border border-line rounded-xl divide-y divide-line mb-6">
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">自动同步</span>
+          <div class="w-11 h-6 rounded-full bg-ink relative">
+            <div class="absolute top-1 left-1 w-4 h-4 rounded-full bg-white"></div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between px-4 py-4">
+          <span class="text-ink">同步间隔</span>
+          <span class="text-dim text-sm">30 分钟</span>
+        </div>
+      </div>
+      <div class="bg-white border border-line rounded-xl divide-y divide-line">
+        <button onclick="go('webdav')" class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="cloud" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">WebDAV 配置</span>
+          <i data-lucide="chevron-right" class="w-4 h-4 text-faint"></i>
+        </button>
+        <button class="flex items-center gap-3 px-4 py-4 w-full">
+          <div class="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center">
+            <i data-lucide="download" class="w-4 h-4 text-ink"></i>
+          </div>
+          <span class="flex-1 text-left text-ink">立即备份</span>
+          <span class="text-xs text-dim">上次 2 天前</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ WebDAV 配置 ============ -->
+  <section id="webdav" class="screen">
+    <header class="px-6 pt-14 pb-2 flex items-center gap-3">
+      <button onclick="back()"><i data-lucide="chevron-left" class="w-6 h-6 text-ink"></i></button>
+      <h1 class="text-xl font-semibold text-ink flex-1">WebDAV 配置</h1>
+    </header>
+    <div class="flex-1 overflow-y-auto no-scrollbar px-6 pb-10 space-y-4">
+      <div>
+        <label class="text-sm text-dim">服务器地址</label>
+        <div class="mt-2 bg-white border border-line rounded-lg px-3 py-3">
+          <input placeholder="https://dav.example.com" class="w-full text-sm outline-none placeholder:text-faint">
+        </div>
+      </div>
+      <div>
+        <label class="text-sm text-dim">用户名</label>
+        <div class="mt-2 bg-white border border-line rounded-lg px-3 py-3">
+          <input placeholder="username" class="w-full text-sm outline-none placeholder:text-faint">
+        </div>
+      </div>
+      <div>
+        <label class="text-sm text-dim">密码</label>
+        <div class="mt-2 bg-white border border-line rounded-lg px-3 py-3">
+          <input type="password" placeholder="••••••" class="w-full text-sm outline-none placeholder:text-faint">
+        </div>
+      </div>
+      <button onclick="back()" class="w-full bg-ink text-white rounded-lg py-3 text-sm">保存并测试</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  // ---- 状态机 ----
+  const stack = [];
+
+  function show(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.getElementById(id).scrollTop = 0;
+  }
+
+  // Tab: 主导航，重置栈
+  function tab(id) {
+    stack.length = 0;
+    show(id);
+  }
+
+  // 普通页面跳转（进栈）
+  function go(id) { stack.push(id); show(id); }
+
+  // 返回上一页
+  function back() {
+    if (stack.length) { const to = stack.pop(); show(to); }
+    else show('shelf');
+  }
+
+  // 阅读器子层：关闭后回阅读器
+  function closeReader(id) {
+    if (stack.length && stack[stack.length - 1] === id) stack.pop();
+    show('reader');
+  }
+
+  // Module → Full 展开
+  function expandFull(id) {
+    stack.push(id);
+    show(id);
+  }
+  function backToReader() {
+    while (stack.length && stack[stack.length - 1] !== 'reader') stack.pop();
+    show('reader');
+  }
+
+  // 初始化 Lucide 图标
+  lucide.createIcons();
+</script>
+
+</body>
+</html>

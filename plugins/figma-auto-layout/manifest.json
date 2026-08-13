@@ -1,0 +1,8 @@
+{
+  "name": "Reader Auto Layout F0",
+  "id": "reader-auto-layout-f0",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "networkAccess": { "allowedDomains": ["none"] }
+}

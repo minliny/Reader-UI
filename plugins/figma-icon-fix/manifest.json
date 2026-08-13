@@ -1,0 +1,14 @@
+{
+  "name": "Reader Icon Crop Fix",
+  "id": "reader-icon-crop-fix",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": [
+    "figma"
+  ],
+  "networkAccess": {
+    "allowedDomains": [
+      "http://127.0.0.1:8899"
+    ]
+  }
+}

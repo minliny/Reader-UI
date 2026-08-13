@@ -1,10 +1,9 @@
-# Reader UI
+# Reader-UI
 
-唯一视觉设计来源：Figma 文件 klhs2jMM4MncaJFqZMfqEK。
+本仓当前只保存三份 JSON 契约快照、字体与少量设计工具；没有可运行应用或独立构建产物。实际产品
+UI 在 `Reader-for-HarmonyOS`，业务协议在 `Reader-Core-Native`。
 
-本仓库不保留本地设计稿、导出物、生成器、演示、验证产物或前端实现。
-唯一例外是 `contracts/`：它是与 Reader-Core-Native 同步的 Reader-UI 3.0.0
-命令 / 事件 / 主机请求契约，作为 Core 端 hermetic 快照的权威源，供
-`Reader-Core-Native/tools/reader-ui-contract-drift/contract_drift_check.py`
-门禁消费。改动契约须保持与 Core 内 `tests/fixtures/contracts/` 快照字节一致，
-并同步重算 mapping 中的 `sourceSha256` / `eventSourceSha256` / `hostRequestSourceSha256`。
+三份契约当前声明 Core command 76、Host request 58、UI event 300；JSON 有效，但 2026-08-12
+源码审计检查点的严格 Core drift 有 16 个未映射方法，最终 dirty 协议增为 17 个。因此契约只能
+作为待校准快照，不能单独证明产品实现或发布就绪。不要在本仓新增状态文档；统一结论见
+[`../AUDIT_2026-08-12.md`](../AUDIT_2026-08-12.md)。
