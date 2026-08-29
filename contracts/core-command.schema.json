@@ -4,7 +4,7 @@
   "$comment": "Snapshot of the Reader-UI 3.2 CoreCommand enum. Used by tools/reader-ui-contract-drift/contract_drift_check.py for the hermetic CI drift gate; no release artifact digest is asserted.",
   "x-reader-ui-contract": {
     "version": "3.2.0",
-    "commandCount": 76
+    "commandCount": 77
   },
   "title": "CoreCommand",
   "description": "Platform Interaction Reducer 发送给 Reader-Core-Native 的命令契约。Owner: Reader-Core-Native。来源：CONTRACT_FIRST_NATIVE_UI_PLAN.md §5。命名一经发布不得改名。",
@@ -92,6 +92,7 @@
         "config.savePersisted",
 
         "replace.apply",
+        "replace.preview",
         "replace.persist",
         "replace.validate",
         "replace.undo"
