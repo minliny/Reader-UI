@@ -39,7 +39,6 @@
 | `M-PANEL-01` | 阅读面板展开/收起动画 | MR1 已新增 `Spec · reader.panel.expand/collapse` 框架节点（`2672:49089` / `2672:49094`，含 MotionId/State/Timing/Reduced 字段），但值未填、无逐轨关键帧/缓动 |
 | `PT-INPUT-01` | 全部 `reader.page.turn.*` 前端 | 无 prototype reaction：触发/拖动/阈值/取消/提交/反向/重排恢复 |
 | `PT-SLIDE-COVER-01` | slide、cover | 仅 review-only、仅 next、仅 Phone |
-| `PT-SIMULATION-01` | simulation | 仅 13 帧视频回放，非真实 3D；产品未定目标 |
 | `M-REVIEW-01` | 其余 Review 动效（AutoPage/TTS/书架切换等） | 无生产 MotionId/轨迹，正式 Motion Contract 仅 6 项 |
 
 > 记录：`M-REVIEW-01` 中 Phone 已完整定义的 4 项阅读控制动效（`reader.control.show/hide`、`reader.quick.promote`、`reader.module.switch`）在搁置期也不实现，统一等 Figma 补齐后再恢复。
