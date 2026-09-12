@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://reader-ui/contracts/core-command.schema.json",
-  "$comment": "Snapshot of the Reader-UI 3.2 CoreCommand enum. Used by tools/reader-ui-contract-drift/contract_drift_check.py for the hermetic CI drift gate; no release artifact digest is asserted.",
+  "$comment": "Snapshot of the Reader-UI 3.3 CoreCommand enum. Used by tools/reader-ui-contract-drift/contract_drift_check.py for the hermetic CI drift gate; no release artifact digest is asserted.",
   "x-reader-ui-contract": {
-    "version": "3.2.0",
-    "commandCount": 77
+    "version": "3.3.0",
+    "commandCount": 78
   },
   "title": "CoreCommand",
   "description": "Platform Interaction Reducer 发送给 Reader-Core-Native 的命令契约。Owner: Reader-Core-Native。来源：CONTRACT_FIRST_NATIVE_UI_PLAN.md §5。命名一经发布不得改名。",
@@ -78,6 +78,7 @@
         "import.parse",
         "import.persist",
         "import.rollback",
+        "import.finalize",
 
         "source.switch.commit",
         "source.switch.rollback",
