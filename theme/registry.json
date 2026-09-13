@@ -8399,6 +8399,261 @@
         "a": 1
       },
       "provenance": "Current features/bookshelf/BookshelfSettingsPage.ets:modeOption; approved App action on-primary; preserve Day white, Night warm white on dark action fill"
+    },
+    "app.icon.rc_autopage.332C25": {
+      "day": {
+        "r": 51,
+        "g": 44,
+        "b": 37,
+        "a": 1
+      },
+      "night": {
+        "r": 234,
+        "g": 223,
+        "b": 206,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG rc_autopage; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.rc_replace.332C25": {
+      "day": {
+        "r": 51,
+        "g": 44,
+        "b": 37,
+        "a": 1
+      },
+      "night": {
+        "r": 234,
+        "g": 223,
+        "b": 206,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG rc_replace; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.rc_headphones.2F6373": {
+      "day": {
+        "r": 47,
+        "g": 99,
+        "b": 115,
+        "a": 1
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG rc_headphones; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.rc_palette.2F6373": {
+      "day": {
+        "r": 47,
+        "g": 99,
+        "b": 115,
+        "a": 1
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG rc_palette; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.rc_settings.2F6373": {
+      "day": {
+        "r": 47,
+        "g": 99,
+        "b": 115,
+        "a": 1
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG rc_settings; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.reader_directory_list_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 28,
+        "g": 26,
+        "b": 24,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG reader_directory_list_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.reader_tts_nav_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 28,
+        "g": 26,
+        "b": 24,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG reader_tts_nav_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.reader_appearance_nav_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 28,
+        "g": 26,
+        "b": 24,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG reader_appearance_nav_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.reader_settings_nav_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 28,
+        "g": 26,
+        "b": 24,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG reader_settings_nav_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_library_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_library_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_library_outline.756F69": {
+      "day": {
+        "r": 117,
+        "g": 111,
+        "b": 105,
+        "a": 1
+      },
+      "night": {
+        "r": 186,
+        "g": 173,
+        "b": 156,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_library_outline; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_compass_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_compass_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_compass_outline.756F69": {
+      "day": {
+        "r": 117,
+        "g": 111,
+        "b": 105,
+        "a": 1
+      },
+      "night": {
+        "r": 186,
+        "g": 173,
+        "b": 156,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_compass_outline; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_rss_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_rss_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_rss_outline.756F69": {
+      "day": {
+        "r": 117,
+        "g": 111,
+        "b": 105,
+        "a": 1
+      },
+      "night": {
+        "r": 186,
+        "g": 173,
+        "b": 156,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_rss_outline; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_settings_active.FFFAF4": {
+      "day": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "night": {
+        "r": 255,
+        "g": 250,
+        "b": 244,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_settings_active; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_settings_outline.756F69": {
+      "day": {
+        "r": 117,
+        "g": 111,
+        "b": 105,
+        "a": 1
+      },
+      "night": {
+        "r": 186,
+        "g": 173,
+        "b": 156,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_settings_outline; same path and alpha, §2 App role mapping"
     }
   },
   "reader": {
