@@ -8654,6 +8654,21 @@
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_settings_outline; same path and alpha, §2 App role mapping"
+    },
+    "TOK_PRIMARY_TEXT": {
+      "day": {
+        "r": 31,
+        "g": 53,
+        "b": 40,
+        "a": 1
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 1
+      },
+      "provenance": "READER_REPAIR_SPEC §2 emphasis text/outline uses Night primary; Day current foreground TOK_PRIMARY_DARK #1F3528 retained. Night reuses Figma App Color primary #D2BD96; foreground only, primaryDark fills unchanged. VM r9509 book-info mismatch audited 2026-09-14."
     }
   },
   "reader": {
