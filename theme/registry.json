@@ -8669,6 +8669,96 @@
         "a": 1
       },
       "provenance": "READER_REPAIR_SPEC §2 emphasis text/outline uses Night primary; Day current foreground TOK_PRIMARY_DARK #1F3528 retained. Night reuses Figma App Color primary #D2BD96; foreground only, primaryDark fills unchanged. VM r9509 book-info mismatch audited 2026-09-14."
+    },
+    "app.toggle.offTrack": {
+      "day": {
+        "r": 193,
+        "g": 199,
+        "b": 205,
+        "a": 1.0
+      },
+      "night": {
+        "r": 226,
+        "g": 209,
+        "b": 185,
+        "a": 0.3411764705882353
+      },
+      "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
+    },
+    "app.appearance.selectFill": {
+      "day": {
+        "r": 180,
+        "g": 166,
+        "b": 151,
+        "a": 0.12156862745098039
+      },
+      "night": {
+        "r": 226,
+        "g": 209,
+        "b": 185,
+        "a": 0.12156862745098039
+      },
+      "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
+    },
+    "app.appearance.selectOpenFill": {
+      "day": {
+        "r": 47,
+        "g": 99,
+        "b": 115,
+        "a": 0.10980392156862745
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 0.10980392156862745
+      },
+      "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
+    },
+    "app.appearance.selectSurface": {
+      "day": {
+        "r": 255,
+        "g": 253,
+        "b": 248,
+        "a": 1.0
+      },
+      "night": {
+        "r": 44,
+        "g": 40,
+        "b": 36,
+        "a": 1.0
+      },
+      "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
+    },
+    "app.appearance.selectBorder": {
+      "day": {
+        "r": 155,
+        "g": 132,
+        "b": 102,
+        "a": 0.2784313725490196
+      },
+      "night": {
+        "r": 226,
+        "g": 209,
+        "b": 185,
+        "a": 0.2784313725490196
+      },
+      "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
+    },
+    "app.appearance.selectSelected": {
+      "day": {
+        "r": 238,
+        "g": 230,
+        "b": 219,
+        "a": 0.7215686274509804
+      },
+      "night": {
+        "r": 44,
+        "g": 40,
+        "b": 36,
+        "a": 0.7215686274509804
+      },
+      "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
     }
   },
   "reader": {
