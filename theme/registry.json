@@ -8769,15 +8769,15 @@
       "order": 0,
       "roles": {
         "paperStart": {
-          "r": 252,
-          "g": 248,
-          "b": 240,
+          "r": 247,
+          "g": 243,
+          "b": 234,
           "a": 1
         },
         "paperEnd": {
-          "r": 252,
-          "g": 248,
-          "b": 240,
+          "r": 247,
+          "g": 243,
+          "b": 234,
           "a": 1
         },
         "ink": {
@@ -8793,9 +8793,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 252,
-          "g": 248,
-          "b": 240,
+          "r": 247,
+          "g": 243,
+          "b": 234,
           "a": 1
         },
         "statusForeground": {
@@ -8805,9 +8805,9 @@
           "a": 1
         },
         "swatch": {
-          "r": 252,
-          "g": 248,
-          "b": 240,
+          "r": 247,
+          "g": 243,
+          "b": 234,
           "a": 1
         },
         "selection": {
@@ -8817,9 +8817,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 252,
-          "g": 248,
-          "b": 240,
+          "r": 247,
+          "g": 243,
+          "b": 234,
           "a": 1
         },
         "turnShadow": {
@@ -8833,7 +8833,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
+      "provenance": "Make V9 / PH43 original base #FCF8F0; user-approved PH67 2026-09-14 changes the five reading background roles to #F7F3EA; existing ink, texture, App colors, theme identity and linkage retained",
       "displayName": "日间"
     },
     "warm": {
@@ -8843,15 +8843,15 @@
       "order": 1,
       "roles": {
         "paperStart": {
-          "r": 244,
-          "g": 227,
-          "b": 191,
+          "r": 242,
+          "g": 232,
+          "b": 211,
           "a": 1
         },
         "paperEnd": {
-          "r": 244,
-          "g": 227,
-          "b": 191,
+          "r": 242,
+          "g": 232,
+          "b": 211,
           "a": 1
         },
         "ink": {
@@ -8867,9 +8867,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 244,
-          "g": 227,
-          "b": 191,
+          "r": 242,
+          "g": 232,
+          "b": 211,
           "a": 1
         },
         "statusForeground": {
@@ -8879,9 +8879,9 @@
           "a": 1
         },
         "swatch": {
-          "r": 244,
-          "g": 227,
-          "b": 191,
+          "r": 242,
+          "g": 232,
+          "b": 211,
           "a": 1
         },
         "selection": {
@@ -8891,9 +8891,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 244,
-          "g": 227,
-          "b": 191,
+          "r": 242,
+          "g": 232,
+          "b": 211,
           "a": 1
         },
         "turnShadow": {
@@ -8907,7 +8907,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
+      "provenance": "Make V9 / PH43 original base #F4E3BF; user-approved PH67 2026-09-14 changes the five reading background roles to #F2E8D3; existing ink, texture, App colors, theme identity and linkage retained",
       "displayName": "暖白"
     },
     "paper": {
@@ -8917,15 +8917,15 @@
       "order": 4,
       "roles": {
         "paperStart": {
-          "r": 235,
-          "g": 218,
-          "b": 187,
+          "r": 238,
+          "g": 228,
+          "b": 208,
           "a": 1
         },
         "paperEnd": {
-          "r": 235,
-          "g": 218,
-          "b": 187,
+          "r": 238,
+          "g": 228,
+          "b": 208,
           "a": 1
         },
         "ink": {
@@ -8941,9 +8941,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 235,
-          "g": 218,
-          "b": 187,
+          "r": 238,
+          "g": 228,
+          "b": 208,
           "a": 1
         },
         "statusForeground": {
@@ -8953,9 +8953,9 @@
           "a": 1
         },
         "swatch": {
-          "r": 235,
-          "g": 218,
-          "b": 187,
+          "r": 238,
+          "g": 228,
+          "b": 208,
           "a": 1
         },
         "selection": {
@@ -8965,9 +8965,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 235,
-          "g": 218,
-          "b": 187,
+          "r": 238,
+          "g": 228,
+          "b": 208,
           "a": 1
         },
         "turnShadow": {
@@ -8981,7 +8981,7 @@
         "paperTexture": true,
         "sourcePaperLighting": true
       },
-      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
+      "provenance": "Make V9 / PH43 original base #EBDABB; user-approved PH67 2026-09-14 changes the five reading background roles to #EEE4D0; existing ink, texture, App colors, theme identity and linkage retained",
       "displayName": "纸纹"
     },
     "green": {
@@ -8991,15 +8991,15 @@
       "order": 5,
       "roles": {
         "paperStart": {
-          "r": 215,
-          "g": 232,
-          "b": 207,
+          "r": 227,
+          "g": 235,
+          "b": 221,
           "a": 1
         },
         "paperEnd": {
-          "r": 215,
-          "g": 232,
-          "b": 207,
+          "r": 227,
+          "g": 235,
+          "b": 221,
           "a": 1
         },
         "ink": {
@@ -9015,9 +9015,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 215,
-          "g": 232,
-          "b": 207,
+          "r": 227,
+          "g": 235,
+          "b": 221,
           "a": 1
         },
         "statusForeground": {
@@ -9027,9 +9027,9 @@
           "a": 1
         },
         "swatch": {
-          "r": 215,
-          "g": 232,
-          "b": 207,
+          "r": 227,
+          "g": 235,
+          "b": 221,
           "a": 1
         },
         "selection": {
@@ -9039,9 +9039,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 215,
-          "g": 232,
-          "b": 207,
+          "r": 227,
+          "g": 235,
+          "b": 221,
           "a": 1
         },
         "turnShadow": {
@@ -9055,7 +9055,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
+      "provenance": "Make V9 / PH43 original base #D7E8CF; user-approved PH67 2026-09-14 changes the five reading background roles to #E3EBDD; existing ink, texture, App colors, theme identity and linkage retained",
       "displayName": "青叶纹"
     },
     "night": {
