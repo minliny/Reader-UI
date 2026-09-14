@@ -8769,15 +8769,15 @@
       "order": 0,
       "roles": {
         "paperStart": {
-          "r": 255,
-          "g": 255,
-          "b": 255,
+          "r": 252,
+          "g": 248,
+          "b": 240,
           "a": 1
         },
         "paperEnd": {
-          "r": 255,
-          "g": 255,
-          "b": 255,
+          "r": 252,
+          "g": 248,
+          "b": 240,
           "a": 1
         },
         "ink": {
@@ -8793,9 +8793,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 255,
-          "g": 255,
-          "b": 255,
+          "r": 252,
+          "g": 248,
+          "b": 240,
           "a": 1
         },
         "statusForeground": {
@@ -8817,9 +8817,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 255,
-          "g": 255,
-          "b": 255,
+          "r": 252,
+          "g": 248,
+          "b": 240,
           "a": 1
         },
         "turnShadow": {
@@ -8833,7 +8833,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "日间"
     },
     "warm": {
@@ -8843,15 +8843,15 @@
       "order": 1,
       "roles": {
         "paperStart": {
-          "r": 255,
-          "g": 246,
-          "b": 233,
+          "r": 244,
+          "g": 227,
+          "b": 191,
           "a": 1
         },
         "paperEnd": {
-          "r": 255,
-          "g": 246,
-          "b": 233,
+          "r": 244,
+          "g": 227,
+          "b": 191,
           "a": 1
         },
         "ink": {
@@ -8867,9 +8867,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 255,
-          "g": 246,
-          "b": 233,
+          "r": 244,
+          "g": 227,
+          "b": 191,
           "a": 1
         },
         "statusForeground": {
@@ -8891,9 +8891,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 255,
-          "g": 246,
-          "b": 233,
+          "r": 244,
+          "g": 227,
+          "b": 191,
           "a": 1
         },
         "turnShadow": {
@@ -8907,7 +8907,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "暖白"
     },
     "paper": {
@@ -8917,15 +8917,15 @@
       "order": 4,
       "roles": {
         "paperStart": {
-          "r": 251,
-          "g": 244,
-          "b": 233,
+          "r": 235,
+          "g": 218,
+          "b": 187,
           "a": 1
         },
         "paperEnd": {
-          "r": 239,
-          "g": 226,
-          "b": 208,
+          "r": 235,
+          "g": 218,
+          "b": 187,
           "a": 1
         },
         "ink": {
@@ -8941,9 +8941,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 251,
-          "g": 244,
-          "b": 233,
+          "r": 235,
+          "g": 218,
+          "b": 187,
           "a": 1
         },
         "statusForeground": {
@@ -8965,9 +8965,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 239,
-          "g": 226,
-          "b": 208,
+          "r": 235,
+          "g": 218,
+          "b": 187,
           "a": 1
         },
         "turnShadow": {
@@ -8981,7 +8981,7 @@
         "paperTexture": true,
         "sourcePaperLighting": true
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "纸纹"
     },
     "green": {
@@ -8991,15 +8991,15 @@
       "order": 5,
       "roles": {
         "paperStart": {
-          "r": 238,
-          "g": 245,
-          "b": 232,
+          "r": 215,
+          "g": 232,
+          "b": 207,
           "a": 1
         },
         "paperEnd": {
-          "r": 238,
-          "g": 245,
-          "b": 232,
+          "r": 215,
+          "g": 232,
+          "b": 207,
           "a": 1
         },
         "ink": {
@@ -9015,9 +9015,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 238,
-          "g": 245,
-          "b": 232,
+          "r": 215,
+          "g": 232,
+          "b": 207,
           "a": 1
         },
         "statusForeground": {
@@ -9039,9 +9039,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 238,
-          "g": 245,
-          "b": 232,
+          "r": 215,
+          "g": 232,
+          "b": 207,
           "a": 1
         },
         "turnShadow": {
@@ -9055,7 +9055,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "青叶纹"
     },
     "night": {
@@ -9065,15 +9065,15 @@
       "order": 2,
       "roles": {
         "paperStart": {
-          "r": 38,
-          "g": 35,
-          "b": 31,
+          "r": 43,
+          "g": 40,
+          "b": 35,
           "a": 1
         },
         "paperEnd": {
-          "r": 38,
-          "g": 35,
-          "b": 31,
+          "r": 43,
+          "g": 40,
+          "b": 35,
           "a": 1
         },
         "ink": {
@@ -9089,9 +9089,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 38,
-          "g": 35,
-          "b": 31,
+          "r": 43,
+          "g": 40,
+          "b": 35,
           "a": 1
         },
         "statusForeground": {
@@ -9113,9 +9113,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 38,
-          "g": 35,
-          "b": 31,
+          "r": 43,
+          "g": 40,
+          "b": 35,
           "a": 1
         },
         "turnShadow": {
@@ -9129,7 +9129,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "夜间"
     },
     "warmNight": {
@@ -9139,15 +9139,15 @@
       "order": 3,
       "roles": {
         "paperStart": {
-          "r": 39,
-          "g": 35,
-          "b": 31,
+          "r": 65,
+          "g": 48,
+          "b": 32,
           "a": 1
         },
         "paperEnd": {
-          "r": 39,
-          "g": 35,
-          "b": 31,
+          "r": 65,
+          "g": 48,
+          "b": 32,
           "a": 1
         },
         "ink": {
@@ -9163,9 +9163,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 39,
-          "g": 35,
-          "b": 31,
+          "r": 65,
+          "g": 48,
+          "b": 32,
           "a": 1
         },
         "statusForeground": {
@@ -9187,9 +9187,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 39,
-          "g": 35,
-          "b": 31,
+          "r": 65,
+          "g": 48,
+          "b": 32,
           "a": 1
         },
         "turnShadow": {
@@ -9203,7 +9203,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "暖夜"
     },
     "paperNight": {
@@ -9213,15 +9213,15 @@
       "order": 6,
       "roles": {
         "paperStart": {
-          "r": 48,
-          "g": 43,
-          "b": 38,
+          "r": 38,
+          "g": 49,
+          "b": 63,
           "a": 1
         },
         "paperEnd": {
-          "r": 33,
-          "g": 31,
-          "b": 28,
+          "r": 38,
+          "g": 49,
+          "b": 63,
           "a": 1
         },
         "ink": {
@@ -9237,9 +9237,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 48,
-          "g": 43,
-          "b": 38,
+          "r": 38,
+          "g": 49,
+          "b": 63,
           "a": 1
         },
         "statusForeground": {
@@ -9261,9 +9261,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 33,
-          "g": 31,
-          "b": 28,
+          "r": 38,
+          "g": 49,
+          "b": 63,
           "a": 1
         },
         "turnShadow": {
@@ -9277,7 +9277,7 @@
         "paperTexture": true,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "靛夜"
     },
     "greenNight": {
@@ -9287,15 +9287,15 @@
       "order": 7,
       "roles": {
         "paperStart": {
-          "r": 32,
-          "g": 43,
-          "b": 38,
+          "r": 36,
+          "g": 56,
+          "b": 44,
           "a": 1
         },
         "paperEnd": {
-          "r": 32,
-          "g": 43,
-          "b": 38,
+          "r": 36,
+          "g": 56,
+          "b": 44,
           "a": 1
         },
         "ink": {
@@ -9311,9 +9311,9 @@
           "a": 1
         },
         "statusBackground": {
-          "r": 32,
-          "g": 43,
-          "b": 38,
+          "r": 36,
+          "g": 56,
+          "b": 44,
           "a": 1
         },
         "statusForeground": {
@@ -9335,9 +9335,9 @@
           "a": 0.2
         },
         "paperBack": {
-          "r": 32,
-          "g": 43,
-          "b": 38,
+          "r": 36,
+          "g": 56,
+          "b": 44,
           "a": 1
         },
         "turnShadow": {
@@ -9351,7 +9351,7 @@
         "paperTexture": false,
         "sourcePaperLighting": false
       },
-      "provenance": "existing ReaderAppearanceRenderStyle; Figma reading palette",
+      "provenance": "Make V9 original swatch; user PH43 correction 2026-09-14 applies its base to reading backgrounds; existing ink and texture effects retained",
       "displayName": "林夜纹"
     }
   },
