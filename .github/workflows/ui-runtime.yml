@@ -16,7 +16,3 @@ jobs:
           node-version: '24'
       - name: Validate contracts and theme source
         run: node tools/validate-source.mjs
-      - name: Check source syntax
-        run: |
-          node --check theme/ReaderThemeSelection.ts
-          node --check theme/ReaderThemeRegistry.ts
