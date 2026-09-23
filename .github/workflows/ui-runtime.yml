@@ -1,0 +1,22 @@
+name: Reader UI source validation
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Validate contracts and theme source
+        run: node tools/validate-source.mjs
+      - name: Check source syntax
+        run: |
+          node --check theme/ReaderThemeSelection.ts
+          node --check theme/ReaderThemeRegistry.ts
