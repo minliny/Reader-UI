@@ -1,0 +1,19 @@
+name: Validate UI contracts
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m pip install -r tools/requirements.txt
+      - run: python tools/validate.py
+      - run: find plugins -name '*.js' -print0 | xargs -0 -n1 node --check
