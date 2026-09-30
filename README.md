@@ -11,3 +11,7 @@ drift 门禁会把直接 UI 命令、显式映射和 Core/Host 内部编排分�
 本地校验：在隔离 Python 环境安装 `tools/requirements.txt` 后执行 `python tools/validate.py`。
 GitHub 的 `UI CI / ui-source-gate` 使用同一校验工具检查 JSON Schema、枚举数量、颜色范围和插件入口语法，
 并运行字体完整性、主题生成副本和源码卫生检查；全部检查只使用本仓源码与资产。
+
+`figma-auto-layout` 插件保留 `code.ts` 源码；修改后先执行 `npm ci --ignore-scripts` 和
+`npm run build:plugins`，再用 `npm run check:plugins` 校验 `code.js` 与固定 TypeScript 5.9.3
+编译器生成结果一致。插件清单仍使用 JavaScript 入口；这项检查不代表 Figma 运行验收。
