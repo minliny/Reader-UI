@@ -1,15 +1,49 @@
-name: UI Contracts
+name: UI CI
 on:
   push:
-    branches: [main, 'codex/**']
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ui-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
-  validate:
-    name: validate
+  assets:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 22.23.3
+      - name: Standalone schemas and font integrity
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ui-validate"
+          "$RUNNER_TEMP/ui-validate/bin/pip" install -r scripts/ci-requirements.txt
+          "$RUNNER_TEMP/ui-validate/bin/python" scripts/check-assets.py
+          node --test scripts/check-theme.test.mjs
+      - uses: ./.github/actions/source-hygiene
+        if: always()
+        with:
+          directory: .
+          base: ${{ github.event.pull_request.base.sha || github.event.before }}
+  compatibility:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Reject untrusted forks before integration
+        env:
+          FORK: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+        run: |
+          if [ "$FORK" = true ]; then
+            echo 'Compatibility validation requires a reviewed trusted branch.'
+            exit 1
+          fi
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           path: Reader-UI
@@ -17,6 +51,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           repository: minliny/Reader-Core-Native
+          # Existing dependency; do not add cross-repository credentials here.
           ref: 562f5ee4c44fb6a24adda6cad7e737698cc8f612
           path: Reader-Core-Native
           persist-credentials: false
@@ -51,3 +86,14 @@ jobs:
             --mapping Reader-Core-Native/tools/reader-ui-contract-drift/mapping.json --strict
       - name: Theme validation and generated-copy drift
         run: node Reader-for-HarmonyOS/tools/generate-theme-registry.mjs --check
+  validate:
+    name: validate
+    if: always()
+    needs: [assets, compatibility]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - env:
+          ASSETS: ${{ needs.assets.result }}
+          COMPATIBILITY: ${{ needs.compatibility.result }}
+        run: test "$ASSETS" = success && test "$COMPATIBILITY" = success
