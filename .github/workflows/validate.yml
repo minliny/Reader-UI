@@ -1,53 +1,42 @@
-name: UI Contracts
+name: UI CI
 on:
   push:
-    branches: [main, 'codex/**']
+    branches: [main]
   pull_request:
+  workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: ui-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 jobs:
-  validate:
-    name: validate
+  assets:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          path: Reader-UI
-          persist-credentials: false
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          repository: minliny/Reader-Core-Native
-          ref: 562f5ee4c44fb6a24adda6cad7e737698cc8f612
-          path: Reader-Core-Native
-          persist-credentials: false
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-        with:
-          repository: minliny/Reader-for-HarmonyOS
-          ref: 0b5343a5329cc354650afd7a92ef22bb8b88eed0
-          path: Reader-for-HarmonyOS
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 22.23.3
-      - name: Validate actual contract schemas
+      - name: Standalone schemas and font integrity
         run: |
-          python3 -m venv "$RUNNER_TEMP/schema-venv"
-          "$RUNNER_TEMP/schema-venv/bin/pip" install jsonschema==4.25.1
-          "$RUNNER_TEMP/schema-venv/bin/python" - <<'PY'
-          import json
-          from pathlib import Path
-          from jsonschema.validators import validator_for
-          paths = list(Path('Reader-UI/contracts').glob('*.schema.json'))
-          assert len(paths) == 3
-          for path in paths:
-              schema = json.loads(path.read_text())
-              validator_for(schema).check_schema(schema)
-          PY
-      - name: Cross-repository command drift
-        run: |
-          python3 Reader-Core-Native/tools/reader-ui-contract-drift/contract_drift_check.py \
-            --core Reader-Core-Native/protocol/reader-command.schema.json \
-            --rui Reader-UI/contracts/core-command.schema.json \
-            --mapping Reader-Core-Native/tools/reader-ui-contract-drift/mapping.json --strict
-      - name: Theme validation and generated-copy drift
-        run: node Reader-for-HarmonyOS/tools/generate-theme-registry.mjs --check
+          python3 -m venv "$RUNNER_TEMP/ui-validate"
+          "$RUNNER_TEMP/ui-validate/bin/pip" install -r scripts/ci-requirements.txt
+          "$RUNNER_TEMP/ui-validate/bin/python" scripts/check-assets.py
+          node --test scripts/check-theme.test.mjs
+      - uses: ./.github/actions/source-hygiene
+        if: always()
+        with:
+          directory: .
+  ui-source-gate:
+    name: ui-source-gate
+    if: always()
+    needs: assets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - env:
+          RESULT: ${{ needs.assets.result }}
+        run: test "$RESULT" = success
