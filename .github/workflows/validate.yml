@@ -25,7 +25,9 @@ jobs:
           python3 -m venv "$RUNNER_TEMP/ui-validate"
           "$RUNNER_TEMP/ui-validate/bin/pip" install -r scripts/ci-requirements.txt
           "$RUNNER_TEMP/ui-validate/bin/python" scripts/check-assets.py
+          "$RUNNER_TEMP/ui-validate/bin/python" tools/validate.py
           node --test scripts/check-theme.test.mjs
+          find plugins -name '*.js' -print0 | xargs -0 -n1 node --check
       - uses: ./.github/actions/source-hygiene
         if: always()
         with:
