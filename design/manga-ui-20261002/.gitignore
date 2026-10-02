@@ -1,0 +1,7 @@
+prototype/node_modules/
+prototype/dist/
+prototype/test-results/
+prototype/playwright-report/
+prototype/.vite/
+replay-output/
+__pycache__/
