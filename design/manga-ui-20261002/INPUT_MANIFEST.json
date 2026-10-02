@@ -11,7 +11,7 @@
   "sourceRoot": "/Users/minliny/Documents/Reader/evidence/2026-10-02-manga-ui-demo",
   "archiveRoot": "Reader-UI/design/manga-ui-20261002",
   "sourcePreview": "http://127.0.0.1:4197/",
-  "uiBaseCommit": "2c3e4e45595a33e08e93a602ec86a3cbea7555ad",
+  "uiBaseCommit": "0f385ab67076c0b01c6c1539febf13d1f85c9c49",
   "hashAlgorithm": "SHA-256",
   "files": [
     {
@@ -582,5 +582,6 @@
     "Generic shell/component architecture stays with the shared integration lane; manga implementation consumes those contracts.",
     "No TTS, text replacement, text typography, in-book text search, text bookmark metadata or TXT directory rules are introduced.",
     "No HAP/package/install/device acceptance claim follows from this archive."
-  ]
+  ],
+  "observedUiMainCommit": "2c3e4e45595a33e08e93a602ec86a3cbea7555ad"
 }
