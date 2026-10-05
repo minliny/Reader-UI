@@ -99,8 +99,8 @@
       },
       "night": {
         "r": 234,
-        "g": 223,
-        "b": 206,
+        "g": 231,
+        "b": 222,
         "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
@@ -113,9 +113,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
@@ -143,9 +143,9 @@
         "a": 1
       },
       "night": {
-        "r": 36,
-        "g": 33,
-        "b": 30,
+        "r": 28,
+        "g": 30,
+        "b": 26,
         "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
@@ -173,10 +173,10 @@
         "a": 0.9019607843137255
       },
       "night": {
-        "r": 42,
-        "g": 38,
-        "b": 34,
-        "a": 0.9019607843137255
+        "r": 40,
+        "g": 44,
+        "b": 37,
+        "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
     },
@@ -188,10 +188,10 @@
         "a": 0.9215686274509803
       },
       "night": {
-        "r": 42,
-        "g": 38,
-        "b": 34,
-        "a": 0.9215686274509803
+        "r": 40,
+        "g": 44,
+        "b": 37,
+        "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
     },
@@ -353,9 +353,9 @@
         "a": 1
       },
       "night": {
-        "r": 226,
-        "g": 209,
-        "b": 185,
+        "r": 65,
+        "g": 72,
+        "b": 59,
         "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
@@ -368,10 +368,10 @@
         "a": 0.2196078431372549
       },
       "night": {
-        "r": 226,
-        "g": 209,
-        "b": 185,
-        "a": 0.1803921568627451
+        "r": 65,
+        "g": 72,
+        "b": 59,
+        "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
     },
@@ -383,10 +383,10 @@
         "a": 0.1803921568627451
       },
       "night": {
-        "r": 226,
-        "g": 209,
-        "b": 185,
-        "a": 0.1803921568627451
+        "r": 65,
+        "g": 72,
+        "b": 59,
+        "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
     },
@@ -1163,9 +1163,9 @@
         "a": 1
       },
       "night": {
-        "r": 36,
-        "g": 33,
-        "b": 30,
+        "r": 28,
+        "g": 30,
+        "b": 26,
         "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
@@ -1179,8 +1179,8 @@
       },
       "night": {
         "r": 234,
-        "g": 223,
-        "b": 206,
+        "g": 231,
+        "b": 222,
         "a": 1
       },
       "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
@@ -4838,9 +4838,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_grid_outline; same path and alpha, §2 App role mapping"
@@ -4853,9 +4853,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_list; same path and alpha, §2 App role mapping"
@@ -4868,9 +4868,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_filter; same path and alpha, §2 App role mapping"
@@ -4883,9 +4883,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_settings; same path and alpha, §2 App role mapping"
@@ -5018,9 +5018,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_compass; same path and alpha, §2 App role mapping"
@@ -5033,9 +5033,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_rss; same path and alpha, §2 App role mapping"
@@ -8558,9 +8558,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_library_outline; same path and alpha, §2 App role mapping"
@@ -8588,9 +8588,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_compass_outline; same path and alpha, §2 App role mapping"
@@ -8618,9 +8618,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_rss_outline; same path and alpha, §2 App role mapping"
@@ -8648,9 +8648,9 @@
         "a": 1
       },
       "night": {
-        "r": 186,
-        "g": 173,
-        "b": 156,
+        "r": 171,
+        "g": 169,
+        "b": 159,
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG bookshelf_settings_outline; same path and alpha, §2 App role mapping"
@@ -8675,7 +8675,7 @@
         "r": 193,
         "g": 199,
         "b": 205,
-        "a": 1.0
+        "a": 1
       },
       "night": {
         "r": 226,
@@ -8720,13 +8720,13 @@
         "r": 255,
         "g": 253,
         "b": 248,
-        "a": 1.0
+        "a": 1
       },
       "night": {
         "r": 44,
         "g": 40,
         "b": 36,
-        "a": 1.0
+        "a": 1
       },
       "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
     },

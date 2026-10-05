@@ -1,0 +1,14 @@
+{
+  "sourceId": "manga-fixture",
+  "bookId": "book-1",
+  "chapterTitle": "Chapter 1",
+  "pages": [
+    {
+      "url": "https://images.example.test/1.jpg",
+      "requestRule": "https://images.example.test/1.jpg,{\"method\":\"POST\",\"body\":\"page=1\",\"headers\":{\"Referer\":\"https://books.example.test/chapter/1\"}}",
+      "headers": { "Referer": "https://books.example.test/chapter/1" }
+    },
+    { "url": "https://images.example.test/2.jpg" },
+    { "url": "https://images.example.test/2.jpg" }
+  ]
+}
