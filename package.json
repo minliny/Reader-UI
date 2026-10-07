@@ -6,6 +6,7 @@
     "check:plugins": "node scripts/build-plugins.mjs --check"
   },
   "devDependencies": {
+    "postcss": "8.5.29",
     "typescript": "5.9.3"
   }
 }
