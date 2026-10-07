@@ -8759,6 +8759,246 @@
         "a": 0.7215686274509804
       },
       "provenance": "PH33/PH37 user physical review 2026-09-14: preserve existing Make Day value and alpha; Night reuses approved App bright, primary, or border RGB. Component-specific role, no global border mutation."
+    },
+    "TOK_DOWNLOAD_PAPER": {
+      "day": {
+        "r": 248,
+        "g": 244,
+        "b": 236,
+        "a": 1
+      },
+      "night": {
+        "r": 28,
+        "g": 30,
+        "b": 26,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --paper"
+    },
+    "TOK_DOWNLOAD_SURFACE": {
+      "day": {
+        "r": 255,
+        "g": 252,
+        "b": 248,
+        "a": 1
+      },
+      "night": {
+        "r": 40,
+        "g": 44,
+        "b": 37,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --surface"
+    },
+    "TOK_DOWNLOAD_INK": {
+      "day": {
+        "r": 31,
+        "g": 27,
+        "b": 23,
+        "a": 1
+      },
+      "night": {
+        "r": 234,
+        "g": 231,
+        "b": 222,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --ink"
+    },
+    "TOK_DOWNLOAD_MUTED": {
+      "day": {
+        "r": 117,
+        "g": 111,
+        "b": 105,
+        "a": 1
+      },
+      "night": {
+        "r": 171,
+        "g": 169,
+        "b": 159,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --muted"
+    },
+    "TOK_DOWNLOAD_LINE": {
+      "day": {
+        "r": 231,
+        "g": 224,
+        "b": 213,
+        "a": 1
+      },
+      "night": {
+        "r": 59,
+        "g": 64,
+        "b": 54,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --line"
+    },
+    "TOK_DOWNLOAD_SOFT": {
+      "day": {
+        "r": 240,
+        "g": 236,
+        "b": 227,
+        "a": 1
+      },
+      "night": {
+        "r": 48,
+        "g": 52,
+        "b": 45,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --soft"
+    },
+    "TOK_DOWNLOAD_GREEN": {
+      "day": {
+        "r": 31,
+        "g": 53,
+        "b": 40,
+        "a": 1
+      },
+      "night": {
+        "r": 185,
+        "g": 206,
+        "b": 177,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --green"
+    },
+    "TOK_DOWNLOAD_GREEN_INK": {
+      "day": {
+        "r": 255,
+        "g": 252,
+        "b": 248,
+        "a": 1
+      },
+      "night": {
+        "r": 28,
+        "g": 30,
+        "b": 26,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --green-ink"
+    },
+    "TOK_DOWNLOAD_SOFT_GREEN": {
+      "day": {
+        "r": 232,
+        "g": 237,
+        "b": 223,
+        "a": 1
+      },
+      "night": {
+        "r": 51,
+        "g": 63,
+        "b": 45,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --soft-green"
+    },
+    "TOK_DOWNLOAD_DANGER": {
+      "day": {
+        "r": 165,
+        "g": 61,
+        "b": 50,
+        "a": 1
+      },
+      "night": {
+        "r": 239,
+        "g": 180,
+        "b": 168,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --danger"
+    },
+    "TOK_DOWNLOAD_SCRIM": {
+      "day": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.3411764705882353
+      },
+      "night": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.5019607843137255
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --scrim"
+    },
+    "TOK_DOWNLOAD_SHADOW": {
+      "day": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.07058823529411765
+      },
+      "night": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.19607843137254902
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; CSS --shadow"
+    },
+    "TOK_DOWNLOAD_OVERLAY_CHROME": {
+      "day": {
+        "r": 163,
+        "g": 161,
+        "b": 155,
+        "a": 1
+      },
+      "night": {
+        "r": 14,
+        "g": 15,
+        "b": 13,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; Chromium Canvas2D --scrim over --paper"
+    },
+    "TOK_DOWNLOAD_OVERLAY_CHROME_INK": {
+      "day": {
+        "r": 20,
+        "g": 17,
+        "b": 15,
+        "a": 1
+      },
+      "night": {
+        "r": 117,
+        "g": 115,
+        "b": 111,
+        "a": 1
+      },
+      "provenance": "user-approved shared download demo; SHA256 e0bb8def207486d73e6117a543c264c893d399a427745f5100bdb6e48df6517b; Chromium Canvas2D --scrim over --ink"
+    },
+    "TOK_DOWNLOAD_OVERLAY_CHROME_DOUBLE": {
+      "day": {
+        "r": 107,
+        "g": 106,
+        "b": 102,
+        "a": 1
+      },
+      "night": {
+        "r": 7,
+        "g": 7,
+        "b": 6,
+        "a": 1
+      },
+      "provenance": "user-approved storage management v2 demo; SHA256 20ad0e4ffee223775c402850f6d3d3d2cca399a0ffbdb62ccad634c30e0fa8e4; Chromium Canvas2D .scrim and .dialog-layer over --paper"
+    },
+    "TOK_DOWNLOAD_OVERLAY_CHROME_DOUBLE_INK": {
+      "day": {
+        "r": 13,
+        "g": 11,
+        "b": 9,
+        "a": 1
+      },
+      "night": {
+        "r": 58,
+        "g": 57,
+        "b": 55,
+        "a": 1
+      },
+      "provenance": "user-approved storage management v2 demo; SHA256 20ad0e4ffee223775c402850f6d3d3d2cca399a0ffbdb62ccad634c30e0fa8e4; Chromium Canvas2D .scrim and .dialog-layer over --ink"
     }
   },
   "reader": {
