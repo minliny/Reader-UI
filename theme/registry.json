@@ -8999,6 +8999,66 @@
         "a": 1
       },
       "provenance": "user-approved storage management v2 demo; SHA256 20ad0e4ffee223775c402850f6d3d3d2cca399a0ffbdb62ccad634c30e0fa8e4; Chromium Canvas2D .scrim and .dialog-layer over --ink"
+    },
+    "TOK_SS_DRAWER_HANDLE": {
+      "day": {
+        "r": 196,
+        "g": 196,
+        "b": 192,
+        "a": 1
+      },
+      "night": {
+        "r": 186,
+        "g": 173,
+        "b": 156,
+        "a": 1
+      },
+      "provenance": "User-selected source switch drawer 2026-10-06; source-flow.css grip #c4c4c0; night retains existing handle"
+    },
+    "TOK_SS_DRAWER_SCRIM": {
+      "day": {
+        "r": 31,
+        "g": 27,
+        "b": 23,
+        "a": 0.45
+      },
+      "night": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.3215686274509804
+      },
+      "provenance": "User-selected source switch drawer 2026-10-06; source-flow.css backdrop rgba(31,27,23,.45); night retains existing scrim"
+    },
+    "TOK_SS_PROGRESS_BG": {
+      "day": {
+        "r": 248,
+        "g": 244,
+        "b": 236,
+        "a": 0.97
+      },
+      "night": {
+        "r": 28,
+        "g": 30,
+        "b": 26,
+        "a": 0.97
+      },
+      "provenance": "User-selected source switch flow 2026-10-06; source-flow.css transition uses paper 97 percent"
+    },
+    "TOK_SS_SCROLLBAR": {
+      "day": {
+        "r": 213,
+        "g": 206,
+        "b": 196,
+        "a": 1
+      },
+      "night": {
+        "r": 65,
+        "g": 72,
+        "b": 59,
+        "a": 1
+      },
+      "provenance": "User-selected source switch drawer 2026-10-06; source-flow.css scrollbar #d5cec4; night retains existing divider"
     }
   },
   "reader": {
