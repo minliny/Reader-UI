@@ -1,0 +1,292 @@
+import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight, mangaDirectoryFooterHeight, mangaDirectoryFullFlowFooter } from './directory-visual.generated';
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { createPortal } from 'react-dom';
+import { ArrowLeftIcon, ChevronDownIcon, ChevronRightIcon, Cross2Icon, MagnifyingGlassIcon, ReaderIcon, ViewVerticalIcon, GearIcon, SunIcon, MoonIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { BottomSheet, KeyboardInput, MobileScroll, useKeyboard, useKeyboardInsets, useMobileDevice } from './mobile';
+import { scenarios, scenarioByKey, defaultScenarioKey, originalSelection, neighbors, contextPath, visibleTree, toggleCollapsed, type DirectoryEntry, type ScenarioKey } from './directoryData';
+
+type View = 'full' | 'preview' | 'sheet';
+type Panel = 'directory' | 'mode' | 'settings' | 'more' | null;
+const views: {key:View; label:string; note:string}[] = [
+  {key:'full',label:'完整目录',note:'原顶栏与当前章节栏'},
+  {key:'preview',label:'详情预览',note:'原封面与阅读位置'},
+  {key:'sheet',label:'快捷目录',note:'原弹出组件与条目尺寸'},
+];
+function Cover({title}:{title:string}) { return <div className="manga-cover" aria-label="封面占位"><span>MANGA / READER</span><strong>{title}</strong><i>漫画</i></div>; }
+function Art({page}:{page:number}) { return <div className="manga-art" aria-label="阅读图像占位"><span className="art-page">{'P.'+String(page).padStart(2,'0')}</span><div className="art-horizon"/><div className="art-disc"/></div>; }
+function initialView(): View { const value=new URLSearchParams(window.location.search).get('view'); return value==='preview'||value==='sheet' ? value : 'full'; }
+function initialScenario(): ScenarioKey { return scenarioByKey(new URLSearchParams(window.location.search).get('scenario') || defaultScenarioKey).key; }
+
+export default function Prototype() {
+  const {device}=useMobileDevice();
+  const previewParameters=new URLSearchParams(window.location.search);
+  const fontScale=mangaDirectoryScale(Number(previewParameters.get('fontScale') || 1));
+  const requestedWidth=Number(previewParameters.get('width') || 0), requestedHeight=Number(previewParameters.get('height') || 0);
+  const [appWidth,setAppWidth]=useState(device.geometry.screen.width);
+  const [quickHeight,setQuickHeight]=useState(visual.quickMaxListHeight);
+  const {bottomInset}=useKeyboardInsets();
+  const keyboard=useKeyboard();
+  const [scenarioKey,setScenarioKey]=useState<ScenarioKey>(initialScenario);
+  const [view,setViewState]=useState<View>(initialView);
+  const [panel,setPanel]=useState<Panel>(initialView()==='sheet'?'directory':null);
+  const [dark,setDark]=useState(false);
+  const [currentIds,setCurrentIds]=useState<Record<string,string>>(()=>Object.fromEntries(scenarios.map(item=>[item.key,item.currentId])));
+  const [imagePages,setImagePages]=useState<Record<string,number>>(()=>Object.fromEntries(scenarios.map(item=>[item.key,8])));
+  const [collapsedByScenario,setCollapsedByScenario]=useState<Record<string,readonly string[]>>({baseline:['vol-1']});
+  const [query,setQuery]=useState('');
+  const [descending,setDescending]=useState(false);
+  const [rangeIndex,setRangeIndex]=useState(()=>{const item=scenarioByKey(initialScenario());return Math.floor(item.targets.findIndex(entry=>entry.id===item.currentId)/50);});
+  const [inShelf,setInShelf]=useState(true);
+  const [readerControls,setReaderControls]=useState(true);
+  const [readingMode,setReadingMode]=useState<'vertical'|'horizontal'>('vertical');
+  const [brightness,setBrightness]=useState(78);
+  const [pageNumber,setPageNumber]=useState(true);
+  const [lastSelection,setLastSelection]=useState<ReturnType<typeof originalSelection>>(null);
+  const appRef=useRef<HTMLDivElement>(null);
+  const sheetRef=useRef<HTMLDivElement>(null);
+  const quickUserScrolled=useRef(false);
+  const fullUserScrolled=useRef(false);
+  const quickOpening=useRef('');
+  const [quickMounted,setQuickMounted]=useState(false);
+  const attachQuickSheet=useCallback((element:HTMLDivElement|null)=>{sheetRef.current=element;setQuickMounted(Boolean(element));},[]);
+  const scenario=scenarioByKey(scenarioKey);
+  const currentId=currentIds[scenario.key];
+  const selected=scenario.targets.find(item=>item.id===currentId) || scenario.targets[0];
+  const imagePage=Math.min(imagePages[scenario.key] || 1,selected.pages);
+  const footerHeight=mangaDirectoryFooterHeight(fontScale,Math.min(visual.contentWidthMax,appWidth-visual.contentPaddingX*2),imagePage+' / '+selected.pages+' 页');
+  const collapsedIds=collapsedByScenario[scenario.key] || [];
+  const theme=dark?'theme-dark':'theme-light';
+  const page=view==='full'?'directory':view==='preview'?'detail':'reader';
+  const fullFlowFooter=view==='full'&&mangaDirectoryFullFlowFooter(requestedHeight>0?requestedHeight:device.geometry.screen.height,fontScale,device.geometry.safeArea.top,bottomInset,footerHeight);
+  const style={'--safe-top':String(device.geometry.safeArea.top)+'px','--safe-bottom':String(bottomInset)+'px','--bar-top':String(device.geometry.safeArea.top+8)+'px','--bar-bottom':String(bottomInset+15)+'px','--directory-font-scale':String(fontScale),'--directory-quick-height':String(quickHeight)+'px',...(requestedWidth>0?{width:requestedWidth+'px',marginLeft:'auto',marginRight:'auto'}:{}),...(requestedHeight>0?{height:requestedHeight+'px'}:{})} as CSSProperties;
+  const structured=scenario.entries.some(item=>item.role==='group');
+  const groups=scenario.entries.filter(item=>item.role==='group');
+  const countLabel=String(scenario.targets.length)+' 个可读条目'+(groups.length?' · '+String(groups.length)+' 个卷组':'');
+  const context=(item:DirectoryEntry)=>contextPath(scenario,item.id).map(parent=>parent.title).join(' / ');
+  const adjacent=neighbors(scenario,selected.id);
+
+  const expandAncestors=(id:string)=>{
+    const ancestors=new Set(contextPath(scenario,id).map(item=>item.id));
+    setCollapsedByScenario(previous=>({...previous,[scenario.key]:(previous[scenario.key]||[]).filter(item=>!ancestors.has(item))}));
+  };
+  const setView=(next:View)=>{
+    if(next==='full')fullUserScrolled.current=false;
+    keyboard.hide();setViewState(next);setReaderControls(true);
+    setPanel(next==='sheet'?'directory':null);
+    if(next==='full')expandAncestors(selected.id);
+  };
+  const setScenario=(key:string)=>{
+    const next=scenarioByKey(key);
+    keyboard.hide();setScenarioKey(next.key);setQuery('');setRangeIndex(Math.floor(next.targets.findIndex(item=>item.id===(currentIds[next.key]||next.currentId))/50));
+    if(view==='sheet')setPanel('directory');
+  };
+  const choose=(id:string)=>{
+    const identity=originalSelection(scenario,id);
+    if(!identity)return false;
+    setLastSelection(identity);setCurrentIds(previous=>({...previous,[scenario.key]:id}));setImagePages(previous=>({...previous,[scenario.key]:id===selected.id?imagePage:1}));
+    keyboard.hide();setPanel(null);setViewState('sheet');setReaderControls(true);
+    return true;
+  };
+  const toggle=(id:string)=>setCollapsedByScenario(previous=>({...previous,[scenario.key]:toggleCollapsed(scenario,previous[scenario.key]||[],id)}));
+  const openPanel=(next:Panel)=>{keyboard.hide();setPanel(next);};
+  const locate=()=>{
+    fullUserScrolled.current=false;
+    keyboard.hide();setQuery('');expandAncestors(selected.id);
+    setRangeIndex(Math.floor(scenario.targets.findIndex(item=>item.id===selected.id)/50));
+  };
+
+  // The compact Quick panel exposes every readable target. Group context and
+  // chapter identity still come from the directory model; only the window is removed.
+  const quickEntries=scenario.targets;
+
+  const visible=useMemo(()=>{
+    if(view==='sheet')return quickEntries;
+    if(view==='preview'){
+      const at=scenario.targets.findIndex(item=>item.id===selected.id), start=Math.max(0,Math.min(at-3,scenario.targets.length-8));
+      return scenario.targets.slice(start,start+8);
+    }
+    if(structured)return visibleTree(scenario,{query,collapsedIds,descending});
+    let rows:readonly DirectoryEntry[]=query.trim()?scenario.entries.filter(item=>item.title.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())):scenario.entries.slice(rangeIndex*50,(rangeIndex+1)*50);
+    if(descending)rows=rows.slice().reverse();
+    return rows;
+  },[view,quickEntries,scenario,selected.id,structured,query,collapsedIds,descending,rangeIndex]);
+
+  const centerCurrent=()=>{
+    if(panel==='directory'&&quickUserScrolled.current||view==='full'&&fullUserScrolled.current)return;
+    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');
+    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);
+    const scroll=row?.closest<HTMLElement>('.mobile-scroll');
+    if(!row||!scroll)return;
+    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();
+    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();
+    const footerElement=scope?.querySelector<HTMLElement>('.directory-current-footer')||appRef.current?.querySelector<HTMLElement>('.directory-current-footer');
+    const footer=footerElement&&['fixed','absolute'].includes(getComputedStyle(footerElement).position)?footerElement.getBoundingClientRect():undefined;
+    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);
+    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);
+    if(!(rect.top>=top-1&&rect.bottom<=bottom+1)){
+      const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;
+      const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);
+      scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));
+    }
+    if(panel==='directory'){
+      const outer=row.closest<HTMLElement>('.sheet-content');
+      if(!outer||outer.scrollHeight<=outer.clientHeight)return;
+      const outerViewport=outer.getBoundingClientRect(), current=row.getBoundingClientRect();
+      if(current.top>=outerViewport.top-1&&current.bottom<=outerViewport.bottom+1)return;
+      const scale=outerViewport.height/outer.clientHeight;
+      const offset=((current.top+current.bottom)/2-(outerViewport.top+outerViewport.bottom)/2)/Math.max(scale,.1);
+      outer.scrollTop=Math.max(0,Math.min(outer.scrollHeight-outer.clientHeight,outer.scrollTop+offset));
+    }
+  };
+  useEffect(()=>{
+    if(panel==='directory')quickUserScrolled.current=false;
+    const frame=requestAnimationFrame(centerCurrent);
+    const afterAnimation=window.setTimeout(centerCurrent,320);
+    return()=>{cancelAnimationFrame(frame);clearTimeout(afterAnimation);};
+  },[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds,fullFlowFooter]);
+
+  useEffect(()=>{
+    if(view!=='full')return;
+    const scroll=appRef.current?.querySelector<HTMLElement>('.manga-page .mobile-scroll');
+    if(!scroll)return;
+    fullUserScrolled.current=false;
+    const mark=()=>{fullUserScrolled.current=true;};
+    scroll.addEventListener('wheel',mark,{passive:true});scroll.addEventListener('pointerdown',mark,{passive:true});
+    return()=>{scroll.removeEventListener('wheel',mark);scroll.removeEventListener('pointerdown',mark);};
+  },[view,scenario.key,selected.id]);
+
+  // The existing sheet-content owns overflow chrome; the one directory scroll
+  // keeps its bounded viewport and original chapter identities.
+  useEffect(()=>{
+    const app=appRef.current, sheet=sheetRef.current;
+    if(panel!=='directory'){
+      if(panel&&sheet){const prior=sheet.closest<HTMLElement>('.bottom-sheet');prior?.classList.remove('directory-quick-adaptive');for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])prior?.style.removeProperty(property);}
+      return;
+    }
+    if(!app||!sheet)return;
+    const frame=sheet.closest<HTMLElement>('.bottom-sheet');
+    const outer=sheet.closest<HTMLElement>('.sheet-content');
+    const header=frame?.querySelector<HTMLElement>('.sheet-header');
+    const tools=sheet.querySelector<HTMLElement>('.directory-tools');
+    const footer=sheet.querySelector<HTMLElement>('.directory-current-footer');
+    const list=sheet.querySelector<HTMLElement>('.mobile-scroll');
+    if(!frame||!outer||!header||!tools||!footer||!list)return;
+    const opening=view+':'+scenario.key+':'+selected.id;
+    if(quickOpening.current!==opening){quickOpening.current=opening;quickUserScrolled.current=false;}
+    let alignmentFrame=0;
+    const markUserScroll=()=>{quickUserScrolled.current=true;};
+    outer.addEventListener('wheel',markUserScroll,{passive:true});
+    outer.addEventListener('pointerdown',markUserScroll,{passive:true});
+    const update=()=>{
+      const maximum=Math.min(app.clientHeight,Math.max(260,Math.round(app.clientHeight*.78)));
+      const minimum=mangaDirectoryQuickMinimumListHeight(fontScale);
+      const chrome=header.offsetHeight+visual.handleZone+tools.offsetHeight+visual.toolsTop+visual.toolsBottom+
+        footer.offsetHeight+mangaDirectoryQuickFlowGaps()+visual.quickPaddingBottom;
+      const adaptive=requestedHeight>0||requestedWidth>0||maximum-chrome<minimum;
+      const inset=adaptive?bottomInset:0;
+      setQuickHeight(Math.max(minimum,Math.min(visual.quickMaxListHeight,maximum-chrome-inset)));
+      setAppWidth(app.clientWidth);
+      frame.classList.toggle('directory-quick-adaptive',adaptive);
+      frame.style.setProperty('--directory-font-scale',String(fontScale));
+      frame.style.setProperty('--directory-quick-panel-height',maximum+'px');
+      frame.style.setProperty('--directory-quick-window-width',app.clientWidth+'px');
+      frame.style.setProperty('--directory-quick-safe-bottom',inset+'px');
+      const host=frame.offsetParent as HTMLElement|null;
+      const hostRect=host?.getBoundingClientRect(), appRect=app.getBoundingClientRect();
+      const scale=host&&hostRect?hostRect.height/host.clientHeight:1;
+      const bottom=hostRect?Math.max(0,(hostRect.bottom-appRect.bottom)/Math.max(scale,.1)):0;
+      frame.style.setProperty('--directory-quick-window-bottom',bottom+'px');
+      if(!quickUserScrolled.current){
+        cancelAnimationFrame(alignmentFrame);
+        alignmentFrame=requestAnimationFrame(()=>{alignmentFrame=requestAnimationFrame(centerCurrent);});
+      }
+    };
+    const observer=new ResizeObserver(update);
+    for(const element of [app,header,tools,footer])observer.observe(element);
+    update();
+    return()=>{
+      observer.disconnect();cancelAnimationFrame(alignmentFrame);
+      outer.removeEventListener('wheel',markUserScroll);outer.removeEventListener('pointerdown',markUserScroll);
+      // Keep the same overflow frame and offset across metrics updates.
+    };
+  },[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth,quickMounted]);
+
+  function CurrentFooter({sheet=false,flow=false}:{sheet?:boolean;flow?:boolean}){
+    return <footer className={'directory-current-footer'+(sheet?' sheet-current-footer':'')+(flow?' directory-flow-footer':'')+(mangaDirectoryFooterStacked(Math.min(visual.contentWidthMax,appWidth-(sheet?visual.quickPaddingX:visual.contentPaddingX)*2),fontScale,imagePage+' / '+selected.pages+' 页')?' footer-stacked':'')} aria-label="当前阅读位置"><span className="directory-current-label">当前章节</span><strong title={selected.title}>{selected.title}</strong><span className="directory-current-page">{imagePage+' / '+selected.pages+' 页'}</span></footer>;
+  }
+  function EntryButton({item,grid=false}:{item:DirectoryEntry;grid?:boolean}){
+    const isCurrent=item.id===selected.id, disabled=item.role!=='target';
+    const button=<button key={item.id+'-'+item.position} data-chapter-id={item.id} data-source-index={item.sourceIndex} data-entry-role={item.role} aria-current={isCurrent?'true':undefined} aria-label={(context(item)?context(item)+'，':'')+item.title+(isCurrent?'，正在读':'')+(disabled?'，暂不可读':'')} disabled={disabled} className={'chapter-row'+(grid?' directory-number-cell':'')+(item.depth>0&&!grid?' chapter-child':'')+(isCurrent?' current':'')} onClick={()=>choose(item.id)}>
+      <span><strong>{grid&&item.label.kind==='parts'?<>{item.label.numberText}<span className="directory-part-label">{' · '+item.label.part}</span></>:item.title}</strong>{item.contentKind==='whole-volume'&&<small>整卷可读</small>}{!grid&&query&&context(item)&&<small>{context(item)}</small>}</span>
+      {grid ? isCurrent && <span className="directory-current-mark" aria-hidden="true"><ReaderIcon/></span> : <span className="chapter-state">{disabled?'暂不可读':isCurrent?'正在读':<ChevronRightIcon/>}</span>}
+    </button>;
+    if(item.hasChildren&&view==='full')return <div key={item.id+'-'+item.position} className="directory-readable-parent">{button}<button className="small-icon directory-branch-toggle" data-branch-id={item.id} aria-label={item.title+'，展开或收起子目录'} aria-expanded={query?true:!collapsedIds.includes(item.id)} disabled={Boolean(query)} onClick={()=>toggle(item.id)}><ChevronDownIcon className={query||!collapsedIds.includes(item.id)?'':'folded'}/></button></div>;
+    return button;
+  }
+  function Directory({items=visible}:{items?:readonly DirectoryEntry[]}){
+    const result:React.ReactNode[]=[];
+    let at=0, previousContext='';
+    while(at<items.length){
+      const item=items[at];
+      if(item.role==='group'){
+        const count=scenario.targets.filter(target=>contextPath(scenario,target.id).some(parent=>parent.id===item.id)).length;
+        result.push(<div className="volume-group" key={item.id}><button data-group-id={item.id} className="volume-heading" aria-expanded={query?true:!collapsedIds.includes(item.id)} disabled={Boolean(query)} onClick={()=>toggle(item.id)}><span><strong>{item.title}</strong><small>{count+' 个可读条目'}</small></span><ChevronDownIcon className={query||!collapsedIds.includes(item.id)?'':'folded'}/></button></div>);
+        at++;continue;
+      }
+      const path=context(item);
+      if(view!=='full'&&path&&path!==previousContext){result.push(<div className="directory-context-label" key={'context-'+at}>{path}</div>);previousContext=path;}
+      const numeric=item.role==='target'&&!item.hasChildren&&item.label.kind!=='named';
+      if(numeric){
+        const cells:DirectoryEntry[]=[];
+        const kind=item.label.kind, parentId=item.parentId;
+        while(at<items.length&&items[at].role==='target'&&!items[at].hasChildren&&items[at].label.kind===kind&&items[at].parentId===parentId){cells.push(items[at]);at++;}
+        const columns=kind==='parts'?(cells.some(entry=>entry.label.part==='中')?'triplet':'pair'):'numeric';
+        result.push(<div className={'directory-number-grid '+columns} data-kind={kind} key={'grid-'+cells[0].position}>{cells.map(entry=>EntryButton({item:entry,grid:true}))}</div>);
+      }else{result.push(EntryButton({item}));at++;}
+    }
+    return <div className="directory-tree">{result.length?result:<div className="quiet-empty">没有匹配的章节<button className="text-action" onClick={()=>setQuery('')}>清除搜索</button></div>}</div>;
+  }
+  function DirectoryTools(){
+    return <><div className="search-field"><MagnifyingGlassIcon/><KeyboardInput aria-label="搜索章名或序号" value={query} placeholder="搜索章名或序号" onChange={event=>setQuery(event.target.value)} onBlur={event=>{if(!(event.relatedTarget instanceof HTMLInputElement))keyboard.hide();}}/>{query&&<button className="small-icon" aria-label="清除目录搜索" onClick={()=>setQuery('')}><Cross2Icon/></button>}</div><div className="directory-tools"><button onClick={locate}><ReaderIcon/>定位当前条目</button><button onClick={()=>{keyboard.hide();setDescending(value=>!value);}}>{descending?'倒序':'正序'}<ViewVerticalIcon/></button></div>{!structured&&!query&&scenario.entries.length>50&&<div className="directory-range-row"><span>章节范围</span><select aria-label="章节范围" value={rangeIndex} onChange={event=>setRangeIndex(Number(event.target.value))}>{Array.from({length:Math.ceil(scenario.entries.length/50)},(_,index)=><option key={index} value={index}>{scenario.entries[index*50].title+' — '+scenario.entries[Math.min((index+1)*50,scenario.entries.length)-1].title}</option>)}</select></div>}</>;
+  }
+  const getState=()=>({ready:true,scenario:scenario.key,view,sheetOpen:panel==='directory',panel,theme:dark?'night':'day',query,descending,rangeIndex,device:device.id,count:scenario.entries.length,readableCount:scenario.targets.length,current:{id:selected.id,title:selected.title,sourceIndex:selected.sourceIndex,url:selected.url,position:scenario.targets.findIndex(item=>item.id===selected.id)+1,page:imagePage,pages:selected.pages,context:context(selected)},visible:visible.map(item=>({id:item.id,title:item.title,role:item.role,sourceIndex:item.sourceIndex,context:context(item)})),lastSelection,collapsedIds});
+  useEffect(()=>{
+    const api={getState,setScenario,setView,selectChapter:choose,setTheme:(value:string)=>setDark(value==='night'),locateCurrent:locate};
+    Object.assign(window,{unifiedDemo:api});
+    return()=>{delete (window as Window&{unifiedDemo?:unknown}).unifiedDemo;};
+  });
+
+  return <>
+    <div ref={appRef} className={'manga-app unified-directory-app '+theme} style={style} data-page={page} data-view={view} data-scenario={scenario.key}>
+      {view!=='sheet'&&<MobileScroll key={view+scenario.key} className="manga-page"><main className={'manga-content page-'+page+(fullFlowFooter?' directory-flow-footer-page':'')}>
+        {view==='full'?<><div className="directory-summary"><strong>{scenario.title}</strong><span>{countLabel}</span></div>{DirectoryTools()}{fullFlowFooter&&<CurrentFooter flow/>}{Directory({})}</>:<>
+          <section className="book-hero"><Cover title={scenario.title}/><div className="hero-copy"><div className="book-tags"><span>漫画</span><span>在线</span></div><h1>{scenario.title}</h1><p>{scenario.author}</p><div className="source-summary"><span>{scenario.sourceLabel}</span></div><small>章节目录 · {scenario.targets.length} 个可读条目</small></div></section>
+          <div className="reading-position"><span>上次读到</span><strong>{selected.title}</strong><small>{imagePage+' / '+selected.pages+' 页'}</small></div>
+          <section className="intro-section"><h2>简介</h2><p>沿着同一条阅读路径，查看章名、分篇和卷组。漫画信息、封面与阅读位置沿用已确认的设计尺寸。</p></section>
+          <section className="directory-section"><div className="section-heading"><div><h2>章节目录</h2><small>{countLabel}</small></div><button className="text-action" onClick={()=>{setQuery('');setView('full');}}>完整目录<ChevronRightIcon/></button></div>{Directory({})}</section>
+        </>}
+      </main></MobileScroll>}
+      {view==='sheet'&&<MobileScroll className="manga-page reader-scroll"><main className={'reader-canvas '+readingMode} style={{filter:'brightness('+brightness/100+')'}}><button className="art-button" aria-label="显示或隐藏阅读控制栏" onClick={()=>setReaderControls(value=>!value)}><Art page={imagePage}/></button>{readingMode==='vertical'&&<button className="art-button" aria-label="显示阅读控件" onClick={()=>setReaderControls(value=>!value)}><Art page={Math.min(imagePage+1,selected.pages)}/></button>}</main></MobileScroll>}
+      <div className="manga-safe-top" aria-hidden="true"/><div className="manga-safe-bottom" aria-hidden="true"/>
+      {(view!=='sheet'||readerControls)&&<header className={'manga-header'+(view==='sheet'?' reading-header':'')}><button className="icon-button" aria-label="返回" onClick={()=>setView(view==='full'?'preview':'full')}><ArrowLeftIcon/></button><div className="header-title"><h2>{view==='full'?'章节目录':view==='preview'?'书籍详情':scenario.title}</h2>{view==='sheet'&&<small>{selected.title}</small>}</div><div className="header-tail">{view==='sheet'&&<><button className="reader-switch" onClick={()=>setView('preview')}>详情</button><button className="small-icon" aria-label="漫画阅读更多" onClick={()=>openPanel('more')}><DotsHorizontalIcon/></button></>}</div></header>}
+      {view==='full'&&!fullFlowFooter&&<CurrentFooter/>}
+      {view==='preview'&&<footer className="manga-detail-dock"><button className="primary-button" onClick={()=>choose(selected.id)}>继续阅读</button><button className="secondary-button" onClick={()=>setInShelf(value=>!value)}>{inShelf?'移除书架':'加入书架'}</button></footer>}
+      {view==='sheet'&&readerControls&&<footer className="manga-reader-dock"><div className="reader-progress"><button aria-label="上一页" disabled={imagePage<=1} onClick={()=>setImagePages(previous=>({...previous,[scenario.key]:imagePage-1}))}><ChevronRightIcon className="rotate"/></button><div><input aria-label="漫画页进度" type="range" min="1" max={selected.pages} value={imagePage} onChange={event=>setImagePages(previous=>({...previous,[scenario.key]:Number(event.target.value)}))}/><span>{imagePage+' / '+selected.pages+' 页'}</span></div><button aria-label="下一页" disabled={imagePage>=selected.pages} onClick={()=>setImagePages(previous=>({...previous,[scenario.key]:imagePage+1}))}><ChevronRightIcon/></button></div><div className="reader-actions"><button id="reader-open-directory" onClick={()=>openPanel('directory')}><span><ReaderIcon/></span>目录</button><button onClick={()=>openPanel('mode')}><span><ViewVerticalIcon/></span>阅读方式</button><button onClick={()=>openPanel('settings')}><span><GearIcon/></span>设置</button></div></footer>}
+      {view==='sheet'&&!readerControls&&pageNumber&&<div className="immersive-page-number">{imagePage+' / '+selected.pages}</div>}
+      <BottomSheet open={panel!==null} onOpenChange={open=>{if(!open){keyboard.hide();setPanel(null);}}} title={panel==='directory'?'章节目录':panel==='mode'?'阅读方式':panel==='settings'?'漫画阅读设置':'更多'} snap={panel==='directory'?.78:.67}>
+        <div ref={attachQuickSheet} className={'manga-sheet-body '+theme} style={{'--directory-font-scale':String(fontScale),'--directory-quick-height':String(quickHeight)+'px'} as CSSProperties}>
+          <button className="sheet-close" aria-label="关闭面板" onClick={()=>{keyboard.hide();setPanel(null);}}><Cross2Icon/></button>
+          {panel==='directory'&&<><div className="directory-tools"><button disabled={!adjacent.previous} aria-label="上一章节" onClick={()=>adjacent.previous&&choose(adjacent.previous.id)}><ArrowLeftIcon/>上一章节</button><button onClick={()=>setView('full')}>完整目录<ChevronRightIcon/></button><button disabled={!adjacent.next} aria-label="下一章节" onClick={()=>adjacent.next&&choose(adjacent.next.id)}>下一章节<ChevronRightIcon/></button></div><div className="sheet-directory-scroll"><MobileScroll className="sheet-scroll">{Directory({items:quickEntries})}</MobileScroll></div><CurrentFooter sheet/></>}
+          {panel==='mode'&&<div className="settings-sections"><section><h3>阅读模式</h3><div className="choice-pair">{(['vertical','horizontal'] as const).map(mode=><button key={mode} className={readingMode===mode?'selected':''} aria-pressed={readingMode===mode} onClick={()=>setReadingMode(mode)}><ViewVerticalIcon/>{mode==='vertical'?'竖向连续':'横向分页'}</button>)}</div></section></div>}
+          {panel==='settings'&&<div className="settings-sections"><section><h3>阅读底色</h3><div className="choice-pair"><button className={!dark?'selected':''} onClick={()=>setDark(false)}><SunIcon/>暖纸</button><button className={dark?'selected':''} onClick={()=>setDark(true)}><MoonIcon/>深墨</button></div></section><section><div className="range-heading"><h3>亮度</h3><span>{brightness+'%'}</span></div><input aria-label="阅读亮度" type="range" min="20" max="100" value={brightness} onChange={event=>setBrightness(Number(event.target.value))}/><button className="setting-line" onClick={()=>setPageNumber(value=>!value)}><span>常驻页码</span><span>{pageNumber?'显示':'隐藏'}</span></button></section></div>}
+          {panel==='more'&&<div className="menu-lines"><button onClick={()=>setView('preview')}>漫画详情<ChevronRightIcon/></button><button onClick={()=>setView('full')}>完整目录<ChevronRightIcon/></button><button onClick={()=>{setImagePages(previous=>({...previous,[scenario.key]:1}));setPanel(null);}}>重新打开当前章节<ChevronRightIcon/></button></div>}
+        </div>
+      </BottomSheet>
+    </div>
+    {createPortal(<>
+      <aside className="manga-demo-sidebar"><span className="demo-overline">READER / DIRECTORY</span><h1>复杂目录，<br/>10-04 历史恢复。</h1><p className="demo-intro">复用原稿设备、顶栏、底栏和弹出组件。<br/>只调整目录内容的表达。</p><nav aria-label="目录页面入口">{views.map(item=><button data-view={item.key} key={item.key} aria-pressed={view===item.key} className={view===item.key?'active':''} onClick={()=>setView(item.key)}><span>{item.label}</span><small>{item.note}</small><ChevronRightIcon/></button>)}</nav><div className="directory-scenario-options" aria-label="目录样本">{scenarios.map(item=><button data-scenario={item.key} key={item.key} aria-pressed={scenario.key===item.key} className={scenario.key===item.key?'active':''} onClick={()=>setScenario(item.key)}>{item.label}</button>)}</div><div className="demo-theme"><button aria-pressed={!dark} onClick={()=>setDark(false)}><SunIcon/>暖纸</button><button aria-pressed={dark} onClick={()=>setDark(true)}><MoonIcon/>深墨</button></div><p className="demo-fixture-note">独立设计稿 · 未落地<br/>{scenario.fixtureKind==='publicTitleSnapshot'?'公开真实章名，页数和读态为样例。':'漫画、来源和页数为结构化设计样例。'}<br/>不调用书源解析或图片网络加载。</p></aside>
+      <aside className="manga-demo-notes"><span className="demo-overline">这一页看什么</span><h2>{scenario.label}</h2><p>{scenario.description}</p><div className="adaptive-options"><span>目录间距</span><p>浮动顶栏 52px<br/>当前章节栏 48px<br/>数字与分篇格 44px<br/>命名章节行至少 58px<br/>文字 13px / 22px</p></div><p className="proposal-note">组只展开，可读条目按原始身份选择。<br/>未知类型服从投影资格，复杂样本不代表真实源自动识别。</p></aside>
+      <div className="manga-demo-mobile-nav"><select aria-label="选择目录页面" value={view} onChange={event=>setView(event.target.value as View)}>{views.map(item=><option key={item.key} value={item.key}>{item.label}</option>)}</select><select aria-label="选择目录样本" value={scenario.key} onChange={event=>setScenario(event.target.value)}>{scenarios.map(item=><option key={item.key} value={item.key}>{item.label}</option>)}</select><button aria-label="切换深色" onClick={()=>setDark(value=>!value)}>{dark?<SunIcon/>:<MoonIcon/>}</button></div>
+    </>,document.body)}
+  </>;
+}
