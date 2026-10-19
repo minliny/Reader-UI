@@ -2738,12 +2738,12 @@
         "a": 1
       },
       "night": {
-        "r": 255,
-        "g": 255,
-        "b": 255,
+        "r": 48,
+        "g": 43,
+        "b": 37,
         "a": 1
       },
-      "provenance": "Current features/reading/ReaderControlReplaceContent.ets:toolbarButton; approved READER_REPAIR_SPEC §2 consumer mapping; Night role adaptation"
+      "provenance": "Current ReaderControlReplaceContent primary add action; day white retained; night bound to existing app.control.paint.FFFAF4 foreground on the light gold primary control surface"
     },
     "app.ReaderControlReplaceContent.ruleRow.paint.FFFFFFFF": {
       "day": {
@@ -4995,51 +4995,6 @@
       },
       "provenance": "Existing monochrome/state SVG bookshelf_list_active; same path and alpha, §2 App role mapping"
     },
-    "app.icon.bookshelf_library.FFFAF4": {
-      "day": {
-        "r": 255,
-        "g": 250,
-        "b": 244,
-        "a": 1
-      },
-      "night": {
-        "r": 255,
-        "g": 250,
-        "b": 244,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG bookshelf_library; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.bookshelf_compass.756F69": {
-      "day": {
-        "r": 117,
-        "g": 111,
-        "b": 105,
-        "a": 1
-      },
-      "night": {
-        "r": 171,
-        "g": 169,
-        "b": 159,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG bookshelf_compass; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.bookshelf_rss.756F69": {
-      "day": {
-        "r": 117,
-        "g": 111,
-        "b": 105,
-        "a": 1
-      },
-      "night": {
-        "r": 171,
-        "g": 169,
-        "b": 159,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG bookshelf_rss; same path and alpha, §2 App role mapping"
-    },
     "app.icon.book_detail_back.1F1B17": {
       "day": {
         "r": 31,
@@ -5280,21 +5235,6 @@
       },
       "provenance": "Existing monochrome/state SVG import_summary; same path and alpha, §2 App role mapping"
     },
-    "app.icon.search_back.1F1B17": {
-      "day": {
-        "r": 31,
-        "g": 27,
-        "b": 23,
-        "a": 1
-      },
-      "night": {
-        "r": 234,
-        "g": 223,
-        "b": 206,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG search_back; same path and alpha, §2 App role mapping"
-    },
     "app.icon.search_clear.756F69": {
       "day": {
         "r": 117,
@@ -5324,21 +5264,6 @@
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG reader_directory_input_search; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.reader_quick_search.2F6373": {
-      "day": {
-        "r": 47,
-        "g": 99,
-        "b": 115,
-        "a": 1
-      },
-      "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG reader_quick_search; same path and alpha, §2 App role mapping"
     },
     "app.icon.search_mag.756F69": {
       "day": {
@@ -5670,21 +5595,6 @@
       },
       "provenance": "Existing monochrome/state SVG reader_chevron_down_primary; same path and alpha, §2 App role mapping"
     },
-    "app.icon.reader_auto_full_header.332C25": {
-      "day": {
-        "r": 51,
-        "g": 44,
-        "b": 37,
-        "a": 1
-      },
-      "night": {
-        "r": 234,
-        "g": 223,
-        "b": 206,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG reader_auto_full_header; same path and alpha, §2 App role mapping"
-    },
     "app.icon.reader_quick_back.2F6373": {
       "day": {
         "r": 47,
@@ -5849,21 +5759,6 @@
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG reader_control_replace_header; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.rc_arrow_left.1F1B17": {
-      "day": {
-        "r": 31,
-        "g": 27,
-        "b": 23,
-        "a": 1
-      },
-      "night": {
-        "r": 234,
-        "g": 223,
-        "b": 206,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG rc_arrow_left; same path and alpha, §2 App role mapping"
     },
     "app.icon.rc_switch_horizontal.1F1B17": {
       "day": {
@@ -6194,21 +6089,6 @@
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG reader_tts_make_close; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.reader_tts_play.FFFAF4": {
-      "day": {
-        "r": 255,
-        "g": 250,
-        "b": 244,
-        "a": 1
-      },
-      "night": {
-        "r": 28,
-        "g": 26,
-        "b": 24,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG reader_tts_play; same path and alpha, §2 App role mapping"
     },
     "app.icon.reader_tts_stop.FFFAF4": {
       "day": {
@@ -6570,21 +6450,6 @@
       },
       "provenance": "Existing monochrome/state SVG rss_manage_edit; same path and alpha, §2 App role mapping"
     },
-    "app.icon.rss_manage_refresh.1F1B17": {
-      "day": {
-        "r": 31,
-        "g": 27,
-        "b": 23,
-        "a": 1
-      },
-      "night": {
-        "r": 234,
-        "g": 223,
-        "b": 206,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG rss_manage_refresh; same path and alpha, §2 App role mapping"
-    },
     "app.icon.rss_manage_delete.AB2E28": {
       "day": {
         "r": 171,
@@ -6885,36 +6750,6 @@
       },
       "provenance": "Existing monochrome/state SVG settings_gen_startup; same path and alpha, §2 App role mapping"
     },
-    "app.icon.settings_gen_update.2D4A3E": {
-      "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
-        "a": 1
-      },
-      "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG settings_gen_update; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.settings_gen_motion.2D4A3E": {
-      "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
-        "a": 1
-      },
-      "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG settings_gen_motion; same path and alpha, §2 App role mapping"
-    },
     "app.icon.settings_gen_tap_top.2D4A3E": {
       "day": {
         "r": 45,
@@ -7154,21 +6989,6 @@
         "a": 1
       },
       "provenance": "Existing monochrome/state SVG sync_backup_password; same path and alpha, §2 App role mapping"
-    },
-    "app.icon.sync_folder.2D4A3E": {
-      "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
-        "a": 1
-      },
-      "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG sync_folder; same path and alpha, §2 App role mapping"
     },
     "app.icon.sync_scope_chevron.41484C": {
       "day": {
@@ -7530,21 +7350,6 @@
       },
       "provenance": "Existing monochrome/state SVG reader_auto_full_play; same path and alpha, §2 App role mapping"
     },
-    "app.icon.reader_auto_play.FFFAF4": {
-      "day": {
-        "r": 255,
-        "g": 250,
-        "b": 244,
-        "a": 1
-      },
-      "night": {
-        "r": 28,
-        "g": 26,
-        "b": 24,
-        "a": 1
-      },
-      "provenance": "Existing monochrome/state SVG reader_auto_play; same path and alpha, §2 App role mapping"
-    },
     "app.icon.reader_tts_make_pause.FFFAF4": {
       "day": {
         "r": 255,
@@ -7583,12 +7388,13 @@
         "a": 1
       },
       "night": {
-        "r": 168,
-        "g": 84,
-        "b": 58,
+        "r": 220,
+        "g": 158,
+        "b": 83,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG reader_tts_make_stop; same path and alpha, §2 App role mapping"
+      "sourceRole": "TOK_TTS_CLAY",
+      "provenance": "Existing Figma SVG reader_tts_make_stop; same path and alpha; bound to TOK_TTS_CLAY for icon and text palette parity"
     },
     "app.icon.reader_tts_make_previous_quick.4D463F": {
       "day": {
@@ -9059,6 +8865,248 @@
         "a": 1
       },
       "provenance": "User-selected source switch drawer 2026-10-06; source-flow.css scrollbar #d5cec4; night retains existing divider"
+    },
+    "TOK_MESSAGE_SURFACE": {
+      "day": {
+        "r": 255,
+        "g": 252,
+        "b": 247,
+        "a": 1
+      },
+      "night": {
+        "r": 42,
+        "g": 48,
+        "b": 41,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_INK": {
+      "day": {
+        "r": 37,
+        "g": 42,
+        "b": 36,
+        "a": 1
+      },
+      "night": {
+        "r": 236,
+        "g": 238,
+        "b": 231,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_MUTED": {
+      "day": {
+        "r": 116,
+        "g": 119,
+        "b": 109,
+        "a": 1
+      },
+      "night": {
+        "r": 187,
+        "g": 192,
+        "b": 179,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_SOFT": {
+      "day": {
+        "r": 232,
+        "g": 238,
+        "b": 231,
+        "a": 1
+      },
+      "night": {
+        "r": 58,
+        "g": 70,
+        "b": 57,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_SOFT_INK": {
+      "day": {
+        "r": 54,
+        "g": 83,
+        "b": 69,
+        "a": 1
+      },
+      "night": {
+        "r": 212,
+        "g": 226,
+        "b": 209,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_DANGER": {
+      "day": {
+        "r": 201,
+        "g": 72,
+        "b": 53,
+        "a": 1
+      },
+      "night": {
+        "r": 255,
+        "g": 177,
+        "b": 162,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_BORDER": {
+      "day": {
+        "r": 231,
+        "g": 228,
+        "b": 219,
+        "a": 1
+      },
+      "night": {
+        "r": 73,
+        "g": 80,
+        "b": 68,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_NOTICE": {
+      "day": {
+        "r": 49,
+        "g": 77,
+        "b": 60,
+        "a": 1
+      },
+      "night": {
+        "r": 212,
+        "g": 226,
+        "b": 209,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_NOTICE_INK": {
+      "day": {
+        "r": 255,
+        "g": 253,
+        "b": 246,
+        "a": 1
+      },
+      "night": {
+        "r": 38,
+        "g": 59,
+        "b": 45,
+        "a": 1
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "TOK_MESSAGE_TAG": {
+      "day": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0.12549019607843137
+      },
+      "night": {
+        "r": 49,
+        "g": 77,
+        "b": 60,
+        "a": 0.08627450980392157
+      },
+      "provenance": "User-approved message UI demos, 2026-10-19; scoped to message surfaces only"
+    },
+    "app.icon.reader_tts_timer_cycle.2F6373": {
+      "day": {
+        "r": 47,
+        "g": 99,
+        "b": 115,
+        "a": 1
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 1
+      },
+      "sourceRole": "TOK_TTS_TEAL",
+      "provenance": "Existing Figma SVG reader_tts_timer_cycle; same path and alpha; bound to TOK_TTS_TEAL for icon and text palette parity"
+    },
+    "app.icon.settings_reset_defaults.D62222": {
+      "day": {
+        "r": 214,
+        "g": 34,
+        "b": 34,
+        "a": 1
+      },
+      "night": {
+        "r": 214,
+        "g": 34,
+        "b": 34,
+        "a": 1
+      },
+      "sourceRole": "TOK_DANGER",
+      "provenance": "Existing Figma SVG settings_reset_defaults; same path and alpha; bound to TOK_DANGER for icon and text palette parity"
+    },
+    "app.icon.bookshelf_more_download.1F1B17": {
+      "day": {
+        "r": 31,
+        "g": 27,
+        "b": 23,
+        "a": 1
+      },
+      "night": {
+        "r": 234,
+        "g": 223,
+        "b": 206,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_more_download; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.bookshelf_more_update.1F1B17": {
+      "day": {
+        "r": 31,
+        "g": 27,
+        "b": 23,
+        "a": 1
+      },
+      "night": {
+        "r": 234,
+        "g": 223,
+        "b": 206,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG bookshelf_more_update; same path and alpha, §2 App role mapping"
+    },
+    "app.icon.settings_row_download.2D4A3E": {
+      "day": {
+        "r": 45,
+        "g": 74,
+        "b": 62,
+        "a": 1
+      },
+      "night": {
+        "r": 210,
+        "g": 189,
+        "b": 150,
+        "a": 1
+      },
+      "provenance": "Existing monochrome/state SVG settings_row_download; same path and alpha, §2 App role mapping"
+    },
+    "TOK_SETTING_DANGER_ICON_BG": {
+      "day": {
+        "r": 214,
+        "g": 34,
+        "b": 34,
+        "a": 0.09019607843137255
+      },
+      "night": {
+        "r": 214,
+        "g": 34,
+        "b": 34,
+        "a": 0.1607843137254902
+      },
+      "provenance": "Settings restore defaults icon surface; existing TOK_DANGER hue with existing TOK_SETTING_ICON_BG opacity and geometry"
     }
   },
   "reader": {
