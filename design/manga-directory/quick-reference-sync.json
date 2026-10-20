@@ -1,0 +1,664 @@
+{
+  "schemaVersion": 2,
+  "request": "2026-10-07: Quick contains the complete readable directory, scrolls continuously, retains compact geometry, initially locates current chapter",
+  "scope": "Finite Quick data-range update; no layout, palette, font, mobile runtime or identity-model changes",
+  "canonicalReference": "design/manga-directory/reference.tsx.txt",
+  "canonicalBeforeSha256": "a1f4bfca05249a9bc6049f6160b91e9175869efc5d8b98ab7584ea8acb438cea",
+  "canonicalAfterSha256": "7d3d8c33bd40b03def65594577095f3dea95fa5d3ad273b43a9e698209fa75bd",
+  "demoPrototype": "src/Prototype.tsx",
+  "demoBeforeSha256": "99b6376af2235eb368c73bed694afe681d1a22a848a88a61ebba299242110ff1",
+  "demoAfterSha256": "0bb01da8f07bf2a6b88e0cb5630d4e9a2b6dcb65f3cc4eb1ed42ec88b2feb716",
+  "protectedRuntimeLockSha256": "54ad5b0bd5ceebbe73261b5e343859cbddaf621e6320c6eaaecec87c4a39ce5d",
+  "protectedRuntimeCount": 28,
+  "guardedDemoFiles": {
+    "src/prototype.css": "d4f2a7e8bdbe84f4f01b1f1e54372f1ba8202502361179c2335e5016ab09dbf6",
+    "src/directory-visual.generated.ts": "ab9053f2e3f4038bb9a6d3e07eae866e0af1530d926a5feaf9ee82b2aedc6ed7",
+    "src/directoryData.ts": "d09f53b577898f9067a715a8447c93e37ee4c8163c4c1f18f0fe52bcb3134904",
+    "src/directory-model.js": "2fd987bec7799f1e195470c9591fc861b2040678d30408854c9161171ae7911a",
+    "src/complex-data.json": "580558841f08de9dbbf041ac7f71bc233d0c1f09c0a6f6f19d5a242d06ce37f7",
+    "src/data.json": "d9898bd5c5cb715caf3b670ded117ddb0b5b4197ca554b589eb936b154b87120",
+    "RECOVERY-MANIFEST.json": "db6bcfe8c06a0882d452386ebd79a87f106648d026b9469ac1bc5841a77c9a85"
+  },
+  "guardedUiFiles": {
+    "reference.css": "6a37247662ce1bdb2805d5dc4b768b3676ebd0ab77a06b16b55647d859c174c7",
+    "visual.json": "c4a5f2dda1598d4651e03e3af95acd8ba107ce769733bb4d3880e5ffde959be4",
+    "visual.generated.css": "3ab69756d39c0ce4209d8b4b70ab91153ccb26b27edfd3ac84d48a61d3f1924e",
+    "visual.generated.mjs": "2bfb4dde73908b58e1bd9476cd051ca3440e12388f77326f89a22d0497761142"
+  },
+  "replacements": [
+    {
+      "before": ", visibleTree, quickTargets, toggleCollapsed,",
+      "after": ", visibleTree, toggleCollapsed,"
+    },
+    {
+      "before": "  const nearby=useMemo(()=>{\n    const named=selected.label.kind==='named';\n    const targets=quickTargets(scenario,selected.id,{before:named?2:4,after:named?3:7});\n    if(!targets.length)return [];\n    let start=scenario.targets.findIndex(item=>item.id===targets[0].id);\n    let end=scenario.targets.findIndex(item=>item.id===targets[targets.length-1].id)+1;\n    const samePart=(a?:DirectoryEntry,b?:DirectoryEntry)=>a&&b&&a.parentId===b.parentId&&a.label.kind==='parts'&&b.label.kind==='parts'&&a.label.number===b.label.number;\n    while(start>0&&samePart(scenario.targets[start-1],scenario.targets[start]))start--;\n    while(end<scenario.targets.length&&samePart(scenario.targets[end-1],scenario.targets[end]))end++;\n    return scenario.targets.slice(start,end);\n  },[scenario,selected.id]);",
+      "after": "  // The compact Quick panel exposes every readable target. Group context and\n  // chapter identity still come from the directory model; only the window is removed.\n  const quickEntries=scenario.targets;"
+    },
+    {
+      "before": "if(view==='sheet')return nearby;",
+      "after": "if(view==='sheet')return quickEntries;"
+    },
+    {
+      "before": "[view,nearby,scenario,",
+      "after": "[view,quickEntries,scenario,"
+    },
+    {
+      "before": "Directory({items:nearby})",
+      "after": "Directory({items:quickEntries})"
+    },
+    {
+      "before": "  const appRef=useRef<HTMLDivElement>(null);",
+      "after": "  const appRef=useRef<HTMLDivElement>(null);\n  const sheetRef=useRef<HTMLDivElement>(null);"
+    },
+    {
+      "before": "panel==='directory'?appRef.current?.parentElement?.querySelector<HTMLElement>('.manga-sheet-body'):appRef.current?.querySelector<HTMLElement>('.manga-content')",
+      "after": "panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content')"
+    },
+    {
+      "before": "<div className={'manga-sheet-body ",
+      "after": "<div ref={sheetRef} className={'manga-sheet-body "
+    }
+  ],
+  "adapterBoundary": "Demo Quick lists all readable targets plus the original context labels. Native Quick uses Core visible-directory pages including explicit group nodes. Group paging/expand behavior requires native evidence; this update does not add fold controls to the demo.",
+  "demoIntermediateSha256": "ec9769b52f2c2984b700b2acc21d33994dc5044aff2d810bc56771d204554583",
+  "canonicalIntermediateSha256": "b5558b183c58af66c4ff9b9bc68add0b9693ddea53af85092bfbf87796b0f8b7",
+  "initialCurrentFix": "Direct sheetRef follows the existing Radix Portal mount; preserves centerCurrent timing and avoids searching an unrelated parent subtree.",
+  "canonicalReplacements": [
+    {
+      "before": ", visibleTree, quickTargets, toggleCollapsed,",
+      "after": ", visibleTree, toggleCollapsed,"
+    },
+    {
+      "before": "  const nearby=useMemo(()=>{\n    const named=selected.label.kind==='named';\n    const targets=quickTargets(scenario,selected.id,{before:named?2:4,after:named?3:7});\n    if(!targets.length)return [];\n    let start=scenario.targets.findIndex(item=>item.id===targets[0].id);\n    let end=scenario.targets.findIndex(item=>item.id===targets[targets.length-1].id)+1;\n    const samePart=(a?:DirectoryEntry,b?:DirectoryEntry)=>a&&b&&a.parentId===b.parentId&&a.label.kind==='parts'&&b.label.kind==='parts'&&a.label.number===b.label.number;\n    while(start>0&&samePart(scenario.targets[start-1],scenario.targets[start]))start--;\n    while(end<scenario.targets.length&&samePart(scenario.targets[end-1],scenario.targets[end]))end++;\n    return scenario.targets.slice(start,end);\n  },[scenario,selected.id]);",
+      "after": "  // The compact Quick panel exposes every readable target. Group context and\n  // chapter identity still come from the directory model; only the window is removed.\n  const quickEntries=scenario.targets;"
+    },
+    {
+      "before": "if(view==='sheet')return nearby;",
+      "after": "if(view==='sheet')return quickEntries;"
+    },
+    {
+      "before": "[view,nearby,scenario,",
+      "after": "[view,quickEntries,scenario,"
+    },
+    {
+      "before": "Directory({items:nearby})",
+      "after": "Directory({items:quickEntries})"
+    },
+    {
+      "before": "  const appRef=useRef<HTMLDivElement>(null);",
+      "after": "  const appRef=useRef<HTMLDivElement>(null);\n  const sheetRef=useRef<HTMLDivElement>(null);"
+    },
+    {
+      "before": "panel==='directory'?appRef.current?.parentElement?.querySelector<HTMLElement>('.manga-sheet-body'):appRef.current?.querySelector<HTMLElement>('.manga-content')",
+      "after": "panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content')"
+    },
+    {
+      "before": "<div className={'manga-sheet-body ",
+      "after": "<div ref={sheetRef} className={'manga-sheet-body "
+    },
+    {
+      "before": "import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';",
+      "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';\nimport { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';"
+    },
+    {
+      "before": "  const {device}=useMobileDevice();",
+      "after": "  const {device}=useMobileDevice();\n  const previewParameters=new URLSearchParams(window.location.search);\n  const fontScale=mangaDirectoryScale(Number(previewParameters.get('fontScale') || 1));\n  const requestedWidth=Number(previewParameters.get('width') || 0), requestedHeight=Number(previewParameters.get('height') || 0);\n  const [appWidth,setAppWidth]=useState(device.geometry.screen.width);\n  const [quickHeight,setQuickHeight]=useState(visual.quickMaxListHeight);"
+    },
+    {
+      "before": "  const style={'--safe-top':String(device.geometry.safeArea.top)+'px','--safe-bottom':String(bottomInset)+'px','--bar-top':String(device.geometry.safeArea.top+8)+'px','--bar-bottom':String(bottomInset+15)+'px'} as CSSProperties;",
+      "after": "  const style={'--safe-top':String(device.geometry.safeArea.top)+'px','--safe-bottom':String(bottomInset)+'px','--bar-top':String(device.geometry.safeArea.top+8)+'px','--bar-bottom':String(bottomInset+15)+'px','--directory-font-scale':String(fontScale),'--directory-quick-height':String(quickHeight)+'px',...(requestedWidth>0?{width:requestedWidth+'px',marginLeft:'auto',marginRight:'auto'}:{}),...(requestedHeight>0?{height:requestedHeight+'px'}:{})} as CSSProperties;"
+    },
+    {
+      "before": "    return <footer className={'directory-current-footer'+(sheet?' sheet-current-footer':'')} aria-label=\"当前阅读位置\"><span className=\"directory-current-label\">当前章节</span><strong title={selected.title}>{selected.title}</strong><span className=\"directory-current-page\">{imagePage+' / '+selected.pages+' 页'}</span></footer>;",
+      "after": "    return <footer className={'directory-current-footer'+(sheet?' sheet-current-footer':'')+(mangaDirectoryFooterStacked(Math.min(visual.contentWidthMax,appWidth-(sheet?visual.quickPaddingX:visual.contentPaddingX)*2),fontScale,imagePage+' / '+selected.pages+' 页')?' footer-stacked':'')} aria-label=\"当前阅读位置\"><span className=\"directory-current-label\">当前章节</span><strong title={selected.title}>{selected.title}</strong><span className=\"directory-current-page\">{imagePage+' / '+selected.pages+' 页'}</span></footer>;"
+    },
+    {
+      "before": "<div ref={sheetRef} className={'manga-sheet-body '+theme}>",
+      "after": "<div ref={sheetRef} className={'manga-sheet-body '+theme} style={{'--directory-font-scale':String(fontScale),'--directory-quick-height':String(quickHeight)+'px'} as CSSProperties}>"
+    },
+    {
+      "before": "  const sheetRef=useRef<HTMLDivElement>(null);",
+      "after": "  const sheetRef=useRef<HTMLDivElement>(null);\n  const quickUserScrolled=useRef(false);\n  const quickOpening=useRef('');"
+    },
+    {
+      "before": "  const centerCurrent=()=>{\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(rect.top>=top-1&&rect.bottom<=bottom+1)return;\n    const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n    const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n    scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n  };",
+      "after": "  const centerCurrent=()=>{\n    if(panel==='directory'&&quickUserScrolled.current)return;\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(!(rect.top>=top-1&&rect.bottom<=bottom+1)){\n      const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n      const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n      scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n    }\n    if(panel==='directory'){\n      const outer=row.closest<HTMLElement>('.sheet-content');\n      if(!outer||outer.scrollHeight<=outer.clientHeight)return;\n      const outerViewport=outer.getBoundingClientRect(), current=row.getBoundingClientRect();\n      if(current.top>=outerViewport.top-1&&current.bottom<=outerViewport.bottom+1)return;\n      const scale=outerViewport.height/outer.clientHeight;\n      const offset=((current.top+current.bottom)/2-(outerViewport.top+outerViewport.bottom)/2)/Math.max(scale,.1);\n      outer.scrollTop=Math.max(0,Math.min(outer.scrollHeight-outer.clientHeight,outer.scrollTop+offset));\n    }\n  };"
+    },
+    {
+      "before": "  useEffect(()=>{\n    const frame=requestAnimationFrame(centerCurrent);",
+      "after": "  useEffect(()=>{\n    if(panel==='directory')quickUserScrolled.current=false;\n    const frame=requestAnimationFrame(centerCurrent);"
+    },
+    {
+      "before": "  function CurrentFooter({sheet=false}:{sheet?:boolean}){",
+      "after": "  // The existing sheet-content owns overflow chrome; the one directory scroll\n  // keeps its bounded viewport and original chapter identities.\n  useEffect(()=>{\n    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;\n    const frame=sheet.closest<HTMLElement>('.bottom-sheet');\n    const outer=sheet.closest<HTMLElement>('.sheet-content');\n    const header=frame?.querySelector<HTMLElement>('.sheet-header');\n    const tools=sheet.querySelector<HTMLElement>('.directory-tools');\n    const footer=sheet.querySelector<HTMLElement>('.directory-current-footer');\n    const list=sheet.querySelector<HTMLElement>('.mobile-scroll');\n    if(!frame||!outer||!header||!tools||!footer||!list)return;\n    const opening=view+':'+scenario.key+':'+selected.id;\n    if(quickOpening.current!==opening){quickOpening.current=opening;quickUserScrolled.current=false;}\n    let alignmentFrame=0;\n    const markUserScroll=()=>{quickUserScrolled.current=true;};\n    outer.addEventListener('wheel',markUserScroll,{passive:true});\n    outer.addEventListener('pointerdown',markUserScroll,{passive:true});\n    const update=()=>{\n      const maximum=Math.min(app.clientHeight,Math.max(260,Math.round(app.clientHeight*.78)));\n      const minimum=mangaDirectoryQuickMinimumListHeight(fontScale);\n      const chrome=header.offsetHeight+visual.handleZone+tools.offsetHeight+visual.toolsTop+visual.toolsBottom+\n        footer.offsetHeight+mangaDirectoryQuickFlowGaps()+visual.quickPaddingBottom;\n      const adaptive=requestedHeight>0||requestedWidth>0||maximum-chrome<minimum;\n      const inset=adaptive?bottomInset:0;\n      setQuickHeight(Math.max(minimum,Math.min(visual.quickMaxListHeight,maximum-chrome-inset)));\n      setAppWidth(app.clientWidth);\n      frame.classList.toggle('directory-quick-adaptive',adaptive);\n      frame.style.setProperty('--directory-font-scale',String(fontScale));\n      frame.style.setProperty('--directory-quick-panel-height',maximum+'px');\n      frame.style.setProperty('--directory-quick-window-width',app.clientWidth+'px');\n      frame.style.setProperty('--directory-quick-safe-bottom',inset+'px');\n      const host=frame.offsetParent as HTMLElement|null;\n      const hostRect=host?.getBoundingClientRect(), appRect=app.getBoundingClientRect();\n      const scale=host&&hostRect?hostRect.height/host.clientHeight:1;\n      const bottom=hostRect?Math.max(0,(hostRect.bottom-appRect.bottom)/Math.max(scale,.1)):0;\n      frame.style.setProperty('--directory-quick-window-bottom',bottom+'px');\n      if(!quickUserScrolled.current){\n        cancelAnimationFrame(alignmentFrame);\n        alignmentFrame=requestAnimationFrame(()=>{alignmentFrame=requestAnimationFrame(centerCurrent);});\n      }\n    };\n    const observer=new ResizeObserver(update);\n    for(const element of [app,header,tools,footer])observer.observe(element);\n    update();\n    return()=>{\n      observer.disconnect();cancelAnimationFrame(alignmentFrame);\n      outer.removeEventListener('wheel',markUserScroll);outer.removeEventListener('pointerdown',markUserScroll);\n      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n    };\n  },[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);\n\n  function CurrentFooter({sheet=false}:{sheet?:boolean}){"
+    },
+    {
+      "before": "import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';",
+      "after": "import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';"
+    },
+    {
+      "before": "  const quickOpening=useRef('');",
+      "after": "  const quickOpening=useRef('');\n  const [quickMounted,setQuickMounted]=useState(false);\n  const attachQuickSheet=useCallback((element:HTMLDivElement|null)=>{sheetRef.current=element;setQuickMounted(Boolean(element));},[]);"
+    },
+    {
+      "before": "<div ref={sheetRef}",
+      "after": "<div ref={attachQuickSheet}"
+    },
+    {
+      "before": "[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);",
+      "after": "[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth,quickMounted]);"
+    },
+    {
+      "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';",
+      "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight, mangaDirectoryFooterHeight, mangaDirectoryFullFlowFooter } from './directory-visual.generated';"
+    },
+    {
+      "before": "  const imagePage=Math.min(imagePages[scenario.key] || 1,selected.pages);",
+      "after": "  const imagePage=Math.min(imagePages[scenario.key] || 1,selected.pages);\n  const footerHeight=mangaDirectoryFooterHeight(fontScale,Math.min(visual.contentWidthMax,appWidth-visual.contentPaddingX*2),imagePage+' / '+selected.pages+' 页');"
+    },
+    {
+      "before": "      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n",
+      "after": "      // Keep the same overflow frame and offset across metrics updates.\n"
+    },
+    {
+      "before": "    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;",
+      "after": "    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'){\n      if(panel&&sheet){const prior=sheet.closest<HTMLElement>('.bottom-sheet');prior?.classList.remove('directory-quick-adaptive');for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])prior?.style.removeProperty(property);}\n      return;\n    }\n    if(!app||!sheet)return;"
+    },
+    {
+      "before": "  const page=view==='full'?'directory':view==='preview'?'detail':'reader';",
+      "after": "  const page=view==='full'?'directory':view==='preview'?'detail':'reader';\n  const fullFlowFooter=view==='full'&&mangaDirectoryFullFlowFooter(requestedHeight>0?requestedHeight:device.geometry.screen.height,fontScale,device.geometry.safeArea.top,bottomInset,footerHeight);"
+    },
+    {
+      "before": "  const quickUserScrolled=useRef(false);",
+      "after": "  const quickUserScrolled=useRef(false);\n  const fullUserScrolled=useRef(false);"
+    },
+    {
+      "before": "    if(panel==='directory'&&quickUserScrolled.current)return;",
+      "after": "    if(panel==='directory'&&quickUserScrolled.current||view==='full'&&fullUserScrolled.current)return;"
+    },
+    {
+      "before": "    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();",
+      "after": "    const footerElement=scope?.querySelector<HTMLElement>('.directory-current-footer')||appRef.current?.querySelector<HTMLElement>('.directory-current-footer');\n    const footer=footerElement&&['fixed','absolute'].includes(getComputedStyle(footerElement).position)?footerElement.getBoundingClientRect():undefined;"
+    },
+    {
+      "before": "[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds]);",
+      "after": "[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds,fullFlowFooter]);"
+    },
+    {
+      "before": "  const locate=()=>{\n    keyboard.hide();",
+      "after": "  const locate=()=>{\n    fullUserScrolled.current=false;\n    keyboard.hide();"
+    },
+    {
+      "before": "  const setView=(next:View)=>{\n    keyboard.hide();",
+      "after": "  const setView=(next:View)=>{\n    if(next==='full')fullUserScrolled.current=false;\n    keyboard.hide();"
+    },
+    {
+      "before": "<main className={'manga-content page-'+page}>",
+      "after": "<main className={'manga-content page-'+page+(fullFlowFooter?' directory-flow-footer-page':'')}>"
+    },
+    {
+      "before": "{DirectoryTools()}{Directory({})}",
+      "after": "{DirectoryTools()}{fullFlowFooter&&<CurrentFooter flow/>}{Directory({})}"
+    },
+    {
+      "before": "{view==='full'&&<CurrentFooter/>}",
+      "after": "{view==='full'&&!fullFlowFooter&&<CurrentFooter/>}"
+    },
+    {
+      "before": "function CurrentFooter({sheet=false}:{sheet?:boolean})",
+      "after": "function CurrentFooter({sheet=false,flow=false}:{sheet?:boolean;flow?:boolean})"
+    },
+    {
+      "before": "'directory-current-footer'+(sheet?' sheet-current-footer':'')",
+      "after": "'directory-current-footer'+(sheet?' sheet-current-footer':'')+(flow?' directory-flow-footer':'')"
+    },
+    {
+      "before": "  // The existing sheet-content owns overflow chrome;",
+      "after": "  useEffect(()=>{\n    if(view!=='full')return;\n    const scroll=appRef.current?.querySelector<HTMLElement>('.manga-page .mobile-scroll');\n    if(!scroll)return;\n    fullUserScrolled.current=false;\n    const mark=()=>{fullUserScrolled.current=true;};\n    scroll.addEventListener('wheel',mark,{passive:true});scroll.addEventListener('pointerdown',mark,{passive:true});\n    return()=>{scroll.removeEventListener('wheel',mark);scroll.removeEventListener('pointerdown',mark);};\n  },[view,scenario.key,selected.id]);\n\n  // The existing sheet-content owns overflow chrome;"
+    }
+  ],
+  "demoReplacements": [
+    {
+      "before": ", visibleTree, quickTargets, toggleCollapsed,",
+      "after": ", visibleTree, toggleCollapsed,"
+    },
+    {
+      "before": "  const nearby=useMemo(()=>{\n    const named=selected.label.kind==='named';\n    const targets=quickTargets(scenario,selected.id,{before:named?2:4,after:named?3:7});\n    if(!targets.length)return [];\n    let start=scenario.targets.findIndex(item=>item.id===targets[0].id);\n    let end=scenario.targets.findIndex(item=>item.id===targets[targets.length-1].id)+1;\n    const samePart=(a?:DirectoryEntry,b?:DirectoryEntry)=>a&&b&&a.parentId===b.parentId&&a.label.kind==='parts'&&b.label.kind==='parts'&&a.label.number===b.label.number;\n    while(start>0&&samePart(scenario.targets[start-1],scenario.targets[start]))start--;\n    while(end<scenario.targets.length&&samePart(scenario.targets[end-1],scenario.targets[end]))end++;\n    return scenario.targets.slice(start,end);\n  },[scenario,selected.id]);",
+      "after": "  // The compact Quick panel exposes every readable target. Group context and\n  // chapter identity still come from the directory model; only the window is removed.\n  const quickEntries=scenario.targets;"
+    },
+    {
+      "before": "if(view==='sheet')return nearby;",
+      "after": "if(view==='sheet')return quickEntries;"
+    },
+    {
+      "before": "[view,nearby,scenario,",
+      "after": "[view,quickEntries,scenario,"
+    },
+    {
+      "before": "Directory({items:nearby})",
+      "after": "Directory({items:quickEntries})"
+    },
+    {
+      "before": "  const appRef=useRef<HTMLDivElement>(null);",
+      "after": "  const appRef=useRef<HTMLDivElement>(null);\n  const sheetRef=useRef<HTMLDivElement>(null);"
+    },
+    {
+      "before": "panel==='directory'?appRef.current?.parentElement?.querySelector<HTMLElement>('.manga-sheet-body'):appRef.current?.querySelector<HTMLElement>('.manga-content')",
+      "after": "panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content')"
+    },
+    {
+      "before": "<div className={'manga-sheet-body ",
+      "after": "<div ref={sheetRef} className={'manga-sheet-body "
+    },
+    {
+      "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps } from './directory-visual.generated';",
+      "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';"
+    },
+    {
+      "before": "      const sheet=document.querySelector<HTMLElement>('.manga-sheet-body');\n      const header=document.querySelector<HTMLElement>('.sheet-header');\n      const tools=sheet?.querySelector<HTMLElement>('.directory-tools');\n      if(sheet&&header&&tools){\n        const available=Math.max(260,Math.round(app.clientHeight*.78));\n        const headerHeight=header.offsetHeight;\n        const footerHeight=footer?.offsetHeight || mangaDirectoryFooterHeight(fontScale,app.clientWidth-visual.quickPaddingX*2,imagePage+' / '+selected.pages+' 页');\n        setQuickHeight(Math.max(visual.gridHeight,Math.min(visual.quickMaxListHeight,available-headerHeight-visual.handleZone-tools.offsetHeight-visual.toolsTop-visual.toolsBottom-footerHeight-mangaDirectoryQuickFlowGaps()-visual.quickPaddingBottom)));\n      }",
+      "after": ""
+    },
+    {
+      "before": "  const sheetRef=useRef<HTMLDivElement>(null);",
+      "after": "  const sheetRef=useRef<HTMLDivElement>(null);\n  const quickUserScrolled=useRef(false);\n  const quickOpening=useRef('');"
+    },
+    {
+      "before": "  const centerCurrent=()=>{\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(rect.top>=top-1&&rect.bottom<=bottom+1)return;\n    const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n    const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n    scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n  };",
+      "after": "  const centerCurrent=()=>{\n    if(panel==='directory'&&quickUserScrolled.current)return;\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(!(rect.top>=top-1&&rect.bottom<=bottom+1)){\n      const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n      const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n      scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n    }\n    if(panel==='directory'){\n      const outer=row.closest<HTMLElement>('.sheet-content');\n      if(!outer||outer.scrollHeight<=outer.clientHeight)return;\n      const outerViewport=outer.getBoundingClientRect(), current=row.getBoundingClientRect();\n      if(current.top>=outerViewport.top-1&&current.bottom<=outerViewport.bottom+1)return;\n      const scale=outerViewport.height/outer.clientHeight;\n      const offset=((current.top+current.bottom)/2-(outerViewport.top+outerViewport.bottom)/2)/Math.max(scale,.1);\n      outer.scrollTop=Math.max(0,Math.min(outer.scrollHeight-outer.clientHeight,outer.scrollTop+offset));\n    }\n  };"
+    },
+    {
+      "before": "  useEffect(()=>{\n    const frame=requestAnimationFrame(centerCurrent);",
+      "after": "  useEffect(()=>{\n    if(panel==='directory')quickUserScrolled.current=false;\n    const frame=requestAnimationFrame(centerCurrent);"
+    },
+    {
+      "before": "  function CurrentFooter({sheet=false}:{sheet?:boolean}){",
+      "after": "  // The existing sheet-content owns overflow chrome; the one directory scroll\n  // keeps its bounded viewport and original chapter identities.\n  useEffect(()=>{\n    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;\n    const frame=sheet.closest<HTMLElement>('.bottom-sheet');\n    const outer=sheet.closest<HTMLElement>('.sheet-content');\n    const header=frame?.querySelector<HTMLElement>('.sheet-header');\n    const tools=sheet.querySelector<HTMLElement>('.directory-tools');\n    const footer=sheet.querySelector<HTMLElement>('.directory-current-footer');\n    const list=sheet.querySelector<HTMLElement>('.mobile-scroll');\n    if(!frame||!outer||!header||!tools||!footer||!list)return;\n    const opening=view+':'+scenario.key+':'+selected.id;\n    if(quickOpening.current!==opening){quickOpening.current=opening;quickUserScrolled.current=false;}\n    let alignmentFrame=0;\n    const markUserScroll=()=>{quickUserScrolled.current=true;};\n    outer.addEventListener('wheel',markUserScroll,{passive:true});\n    outer.addEventListener('pointerdown',markUserScroll,{passive:true});\n    const update=()=>{\n      const maximum=Math.min(app.clientHeight,Math.max(260,Math.round(app.clientHeight*.78)));\n      const minimum=mangaDirectoryQuickMinimumListHeight(fontScale);\n      const chrome=header.offsetHeight+visual.handleZone+tools.offsetHeight+visual.toolsTop+visual.toolsBottom+\n        footer.offsetHeight+mangaDirectoryQuickFlowGaps()+visual.quickPaddingBottom;\n      const adaptive=requestedHeight>0||requestedWidth>0||maximum-chrome<minimum;\n      const inset=adaptive?bottomInset:0;\n      setQuickHeight(Math.max(minimum,Math.min(visual.quickMaxListHeight,maximum-chrome-inset)));\n      setAppWidth(app.clientWidth);\n      frame.classList.toggle('directory-quick-adaptive',adaptive);\n      frame.style.setProperty('--directory-font-scale',String(fontScale));\n      frame.style.setProperty('--directory-quick-panel-height',maximum+'px');\n      frame.style.setProperty('--directory-quick-window-width',app.clientWidth+'px');\n      frame.style.setProperty('--directory-quick-safe-bottom',inset+'px');\n      const host=frame.offsetParent as HTMLElement|null;\n      const hostRect=host?.getBoundingClientRect(), appRect=app.getBoundingClientRect();\n      const scale=host&&hostRect?hostRect.height/host.clientHeight:1;\n      const bottom=hostRect?Math.max(0,(hostRect.bottom-appRect.bottom)/Math.max(scale,.1)):0;\n      frame.style.setProperty('--directory-quick-window-bottom',bottom+'px');\n      if(!quickUserScrolled.current){\n        cancelAnimationFrame(alignmentFrame);\n        alignmentFrame=requestAnimationFrame(()=>{alignmentFrame=requestAnimationFrame(centerCurrent);});\n      }\n    };\n    const observer=new ResizeObserver(update);\n    for(const element of [app,header,tools,footer])observer.observe(element);\n    update();\n    return()=>{\n      observer.disconnect();cancelAnimationFrame(alignmentFrame);\n      outer.removeEventListener('wheel',markUserScroll);outer.removeEventListener('pointerdown',markUserScroll);\n      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n    };\n  },[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);\n\n  function CurrentFooter({sheet=false}:{sheet?:boolean}){"
+    },
+    {
+      "before": "import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';",
+      "after": "import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';"
+    },
+    {
+      "before": "  const quickOpening=useRef('');",
+      "after": "  const quickOpening=useRef('');\n  const [quickMounted,setQuickMounted]=useState(false);\n  const attachQuickSheet=useCallback((element:HTMLDivElement|null)=>{sheetRef.current=element;setQuickMounted(Boolean(element));},[]);"
+    },
+    {
+      "before": "<div ref={sheetRef}",
+      "after": "<div ref={attachQuickSheet}"
+    },
+    {
+      "before": "[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);",
+      "after": "[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth,quickMounted]);"
+    },
+    {
+      "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';",
+      "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight, mangaDirectoryFullFlowFooter } from './directory-visual.generated';"
+    },
+    {
+      "before": "[fontScale,view,panel,scenario.key,selected.id,imagePage,appWidth]);",
+      "after": "[fontScale,view,panel,scenario.key,selected.id,imagePage,appWidth,fullFlowFooter]);"
+    },
+    {
+      "before": "      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n",
+      "after": "      // Keep the same overflow frame and offset across metrics updates.\n"
+    },
+    {
+      "before": "    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;",
+      "after": "    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'){\n      if(panel&&sheet){const prior=sheet.closest<HTMLElement>('.bottom-sheet');prior?.classList.remove('directory-quick-adaptive');for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])prior?.style.removeProperty(property);}\n      return;\n    }\n    if(!app||!sheet)return;"
+    },
+    {
+      "before": "  const page=view==='full'?'directory':view==='preview'?'detail':'reader';",
+      "after": "  const page=view==='full'?'directory':view==='preview'?'detail':'reader';\n  const fullFlowFooter=view==='full'&&mangaDirectoryFullFlowFooter(requestedHeight>0?requestedHeight:device.geometry.screen.height,fontScale,device.geometry.safeArea.top,bottomInset,footerHeight);"
+    },
+    {
+      "before": "  const quickUserScrolled=useRef(false);",
+      "after": "  const quickUserScrolled=useRef(false);\n  const fullUserScrolled=useRef(false);"
+    },
+    {
+      "before": "    if(panel==='directory'&&quickUserScrolled.current)return;",
+      "after": "    if(panel==='directory'&&quickUserScrolled.current||view==='full'&&fullUserScrolled.current)return;"
+    },
+    {
+      "before": "    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();",
+      "after": "    const footerElement=scope?.querySelector<HTMLElement>('.directory-current-footer')||appRef.current?.querySelector<HTMLElement>('.directory-current-footer');\n    const footer=footerElement&&['fixed','absolute'].includes(getComputedStyle(footerElement).position)?footerElement.getBoundingClientRect():undefined;"
+    },
+    {
+      "before": "[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds]);",
+      "after": "[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds,fullFlowFooter]);"
+    },
+    {
+      "before": "  const locate=()=>{\n    keyboard.hide();",
+      "after": "  const locate=()=>{\n    fullUserScrolled.current=false;\n    keyboard.hide();"
+    },
+    {
+      "before": "  const setView=(next:View)=>{\n    keyboard.hide();",
+      "after": "  const setView=(next:View)=>{\n    if(next==='full')fullUserScrolled.current=false;\n    keyboard.hide();"
+    },
+    {
+      "before": "<main className={'manga-content page-'+page}>",
+      "after": "<main className={'manga-content page-'+page+(fullFlowFooter?' directory-flow-footer-page':'')}>"
+    },
+    {
+      "before": "{DirectoryTools()}{Directory({})}",
+      "after": "{DirectoryTools()}{fullFlowFooter&&<CurrentFooter flow/>}{Directory({})}"
+    },
+    {
+      "before": "{view==='full'&&<CurrentFooter/>}",
+      "after": "{view==='full'&&!fullFlowFooter&&<CurrentFooter/>}"
+    },
+    {
+      "before": "function CurrentFooter({sheet=false}:{sheet?:boolean})",
+      "after": "function CurrentFooter({sheet=false,flow=false}:{sheet?:boolean;flow?:boolean})"
+    },
+    {
+      "before": "'directory-current-footer'+(sheet?' sheet-current-footer':'')",
+      "after": "'directory-current-footer'+(sheet?' sheet-current-footer':'')+(flow?' directory-flow-footer':'')"
+    },
+    {
+      "before": "  // The existing sheet-content owns overflow chrome;",
+      "after": "  useEffect(()=>{\n    if(view!=='full')return;\n    const scroll=appRef.current?.querySelector<HTMLElement>('.manga-page .mobile-scroll');\n    if(!scroll)return;\n    fullUserScrolled.current=false;\n    const mark=()=>{fullUserScrolled.current=true;};\n    scroll.addEventListener('wheel',mark,{passive:true});scroll.addEventListener('pointerdown',mark,{passive:true});\n    return()=>{scroll.removeEventListener('wheel',mark);scroll.removeEventListener('pointerdown',mark);};\n  },[view,scenario.key,selected.id]);\n\n  // The existing sheet-content owns overflow chrome;"
+    }
+  ],
+  "reviewedDemoSourceSha256": [
+    "99b6376af2235eb368c73bed694afe681d1a22a848a88a61ebba299242110ff1",
+    "ec9769b52f2c2984b700b2acc21d33994dc5044aff2d810bc56771d204554583",
+    "5d9e1af39bc9af810db6611e2d7a5f44619f6e9947313230beb2cc7913a2bcce",
+    "99ca85e187b406001f04749760065d73d8d90a46d4335e54a6ffadfcd4653846",
+    "c62808b22b964ca7f76bae3e7258c79950a1a42d5a3dfae3f0c41cd3a97d47f1",
+    "0bb01da8f07bf2a6b88e0cb5630d4e9a2b6dcb65f3cc4eb1ed42ec88b2feb716"
+  ],
+  "canonicalPriorAdaptiveSha256": "99ead075143095f9ccbffcdeed563900f069f178490f07efea6952a1c267ab70",
+  "demoPriorAdaptiveSha256": "5d9e1af39bc9af810db6611e2d7a5f44619f6e9947313230beb2cc7913a2bcce",
+  "adaptiveProvenance": {
+    "record": "../../evidence/manga-directory-20261007/VP48-quick-adaptation.json",
+    "policy": "Reuse .sheet-content overflow with shared bounded minimum and actual app-height cap; whole visible current intersects inner and outer viewports; preserve user scroll on metrics resize",
+    "canonicalAdapter": "Finite canonical-only fields mirror existing live responsive font/width/height/footer inputs; all existing live non-Quick adaptation retained",
+    "runtimeLockChanged": false,
+    "sharedDefinitionSha256": "c4a5f2dda1598d4651e03e3af95acd8ba107ce769733bb4d3880e5ffde959be4",
+    "fullFlowFooter": "Same shared clear-band predicate, inline after existing tools and before first targets; fixed footer and normal visual metrics remain default."
+  },
+  "demoStages": [
+    {
+      "beforeSha256": "99b6376af2235eb368c73bed694afe681d1a22a848a88a61ebba299242110ff1",
+      "afterSha256": "99ca85e187b406001f04749760065d73d8d90a46d4335e54a6ffadfcd4653846",
+      "spans": [
+        {
+          "before": ", visibleTree, quickTargets, toggleCollapsed,",
+          "after": ", visibleTree, toggleCollapsed,"
+        },
+        {
+          "before": "  const nearby=useMemo(()=>{\n    const named=selected.label.kind==='named';\n    const targets=quickTargets(scenario,selected.id,{before:named?2:4,after:named?3:7});\n    if(!targets.length)return [];\n    let start=scenario.targets.findIndex(item=>item.id===targets[0].id);\n    let end=scenario.targets.findIndex(item=>item.id===targets[targets.length-1].id)+1;\n    const samePart=(a?:DirectoryEntry,b?:DirectoryEntry)=>a&&b&&a.parentId===b.parentId&&a.label.kind==='parts'&&b.label.kind==='parts'&&a.label.number===b.label.number;\n    while(start>0&&samePart(scenario.targets[start-1],scenario.targets[start]))start--;\n    while(end<scenario.targets.length&&samePart(scenario.targets[end-1],scenario.targets[end]))end++;\n    return scenario.targets.slice(start,end);\n  },[scenario,selected.id]);",
+          "after": "  // The compact Quick panel exposes every readable target. Group context and\n  // chapter identity still come from the directory model; only the window is removed.\n  const quickEntries=scenario.targets;"
+        },
+        {
+          "before": "if(view==='sheet')return nearby;",
+          "after": "if(view==='sheet')return quickEntries;"
+        },
+        {
+          "before": "[view,nearby,scenario,",
+          "after": "[view,quickEntries,scenario,"
+        },
+        {
+          "before": "Directory({items:nearby})",
+          "after": "Directory({items:quickEntries})"
+        },
+        {
+          "before": "  const appRef=useRef<HTMLDivElement>(null);",
+          "after": "  const appRef=useRef<HTMLDivElement>(null);\n  const sheetRef=useRef<HTMLDivElement>(null);"
+        },
+        {
+          "before": "panel==='directory'?appRef.current?.parentElement?.querySelector<HTMLElement>('.manga-sheet-body'):appRef.current?.querySelector<HTMLElement>('.manga-content')",
+          "after": "panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content')"
+        },
+        {
+          "before": "<div className={'manga-sheet-body ",
+          "after": "<div ref={sheetRef} className={'manga-sheet-body "
+        },
+        {
+          "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps } from './directory-visual.generated';",
+          "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';"
+        },
+        {
+          "before": "      const sheet=document.querySelector<HTMLElement>('.manga-sheet-body');\n      const header=document.querySelector<HTMLElement>('.sheet-header');\n      const tools=sheet?.querySelector<HTMLElement>('.directory-tools');\n      if(sheet&&header&&tools){\n        const available=Math.max(260,Math.round(app.clientHeight*.78));\n        const headerHeight=header.offsetHeight;\n        const footerHeight=footer?.offsetHeight || mangaDirectoryFooterHeight(fontScale,app.clientWidth-visual.quickPaddingX*2,imagePage+' / '+selected.pages+' 页');\n        setQuickHeight(Math.max(visual.gridHeight,Math.min(visual.quickMaxListHeight,available-headerHeight-visual.handleZone-tools.offsetHeight-visual.toolsTop-visual.toolsBottom-footerHeight-mangaDirectoryQuickFlowGaps()-visual.quickPaddingBottom)));\n      }",
+          "after": ""
+        },
+        {
+          "before": "  const sheetRef=useRef<HTMLDivElement>(null);",
+          "after": "  const sheetRef=useRef<HTMLDivElement>(null);\n  const quickUserScrolled=useRef(false);\n  const quickOpening=useRef('');"
+        },
+        {
+          "before": "  const centerCurrent=()=>{\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(rect.top>=top-1&&rect.bottom<=bottom+1)return;\n    const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n    const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n    scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n  };",
+          "after": "  const centerCurrent=()=>{\n    if(panel==='directory'&&quickUserScrolled.current)return;\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(!(rect.top>=top-1&&rect.bottom<=bottom+1)){\n      const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n      const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n      scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n    }\n    if(panel==='directory'){\n      const outer=row.closest<HTMLElement>('.sheet-content');\n      if(!outer||outer.scrollHeight<=outer.clientHeight)return;\n      const outerViewport=outer.getBoundingClientRect(), current=row.getBoundingClientRect();\n      if(current.top>=outerViewport.top-1&&current.bottom<=outerViewport.bottom+1)return;\n      const scale=outerViewport.height/outer.clientHeight;\n      const offset=((current.top+current.bottom)/2-(outerViewport.top+outerViewport.bottom)/2)/Math.max(scale,.1);\n      outer.scrollTop=Math.max(0,Math.min(outer.scrollHeight-outer.clientHeight,outer.scrollTop+offset));\n    }\n  };"
+        },
+        {
+          "before": "  useEffect(()=>{\n    const frame=requestAnimationFrame(centerCurrent);",
+          "after": "  useEffect(()=>{\n    if(panel==='directory')quickUserScrolled.current=false;\n    const frame=requestAnimationFrame(centerCurrent);"
+        },
+        {
+          "before": "  function CurrentFooter({sheet=false}:{sheet?:boolean}){",
+          "after": "  // The existing sheet-content owns overflow chrome; the one directory scroll\n  // keeps its bounded viewport and original chapter identities.\n  useEffect(()=>{\n    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;\n    const frame=sheet.closest<HTMLElement>('.bottom-sheet');\n    const outer=sheet.closest<HTMLElement>('.sheet-content');\n    const header=frame?.querySelector<HTMLElement>('.sheet-header');\n    const tools=sheet.querySelector<HTMLElement>('.directory-tools');\n    const footer=sheet.querySelector<HTMLElement>('.directory-current-footer');\n    const list=sheet.querySelector<HTMLElement>('.mobile-scroll');\n    if(!frame||!outer||!header||!tools||!footer||!list)return;\n    const opening=view+':'+scenario.key+':'+selected.id;\n    if(quickOpening.current!==opening){quickOpening.current=opening;quickUserScrolled.current=false;}\n    let alignmentFrame=0;\n    const markUserScroll=()=>{quickUserScrolled.current=true;};\n    outer.addEventListener('wheel',markUserScroll,{passive:true});\n    outer.addEventListener('pointerdown',markUserScroll,{passive:true});\n    const update=()=>{\n      const maximum=Math.min(app.clientHeight,Math.max(260,Math.round(app.clientHeight*.78)));\n      const minimum=mangaDirectoryQuickMinimumListHeight(fontScale);\n      const chrome=header.offsetHeight+visual.handleZone+tools.offsetHeight+visual.toolsTop+visual.toolsBottom+\n        footer.offsetHeight+mangaDirectoryQuickFlowGaps()+visual.quickPaddingBottom;\n      const adaptive=requestedHeight>0||requestedWidth>0||maximum-chrome<minimum;\n      const inset=adaptive?bottomInset:0;\n      setQuickHeight(Math.max(minimum,Math.min(visual.quickMaxListHeight,maximum-chrome-inset)));\n      setAppWidth(app.clientWidth);\n      frame.classList.toggle('directory-quick-adaptive',adaptive);\n      frame.style.setProperty('--directory-font-scale',String(fontScale));\n      frame.style.setProperty('--directory-quick-panel-height',maximum+'px');\n      frame.style.setProperty('--directory-quick-window-width',app.clientWidth+'px');\n      frame.style.setProperty('--directory-quick-safe-bottom',inset+'px');\n      const host=frame.offsetParent as HTMLElement|null;\n      const hostRect=host?.getBoundingClientRect(), appRect=app.getBoundingClientRect();\n      const scale=host&&hostRect?hostRect.height/host.clientHeight:1;\n      const bottom=hostRect?Math.max(0,(hostRect.bottom-appRect.bottom)/Math.max(scale,.1)):0;\n      frame.style.setProperty('--directory-quick-window-bottom',bottom+'px');\n      if(!quickUserScrolled.current){\n        cancelAnimationFrame(alignmentFrame);\n        alignmentFrame=requestAnimationFrame(()=>{alignmentFrame=requestAnimationFrame(centerCurrent);});\n      }\n    };\n    const observer=new ResizeObserver(update);\n    for(const element of [app,header,tools,footer])observer.observe(element);\n    update();\n    return()=>{\n      observer.disconnect();cancelAnimationFrame(alignmentFrame);\n      outer.removeEventListener('wheel',markUserScroll);outer.removeEventListener('pointerdown',markUserScroll);\n      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n    };\n  },[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);\n\n  function CurrentFooter({sheet=false}:{sheet?:boolean}){"
+        }
+      ]
+    },
+    {
+      "beforeSha256": "ec9769b52f2c2984b700b2acc21d33994dc5044aff2d810bc56771d204554583",
+      "afterSha256": "99ca85e187b406001f04749760065d73d8d90a46d4335e54a6ffadfcd4653846",
+      "spans": [
+        {
+          "before": ", visibleTree, quickTargets, toggleCollapsed,",
+          "after": ", visibleTree, toggleCollapsed,"
+        },
+        {
+          "before": "  const nearby=useMemo(()=>{\n    const named=selected.label.kind==='named';\n    const targets=quickTargets(scenario,selected.id,{before:named?2:4,after:named?3:7});\n    if(!targets.length)return [];\n    let start=scenario.targets.findIndex(item=>item.id===targets[0].id);\n    let end=scenario.targets.findIndex(item=>item.id===targets[targets.length-1].id)+1;\n    const samePart=(a?:DirectoryEntry,b?:DirectoryEntry)=>a&&b&&a.parentId===b.parentId&&a.label.kind==='parts'&&b.label.kind==='parts'&&a.label.number===b.label.number;\n    while(start>0&&samePart(scenario.targets[start-1],scenario.targets[start]))start--;\n    while(end<scenario.targets.length&&samePart(scenario.targets[end-1],scenario.targets[end]))end++;\n    return scenario.targets.slice(start,end);\n  },[scenario,selected.id]);",
+          "after": "  // The compact Quick panel exposes every readable target. Group context and\n  // chapter identity still come from the directory model; only the window is removed.\n  const quickEntries=scenario.targets;"
+        },
+        {
+          "before": "if(view==='sheet')return nearby;",
+          "after": "if(view==='sheet')return quickEntries;"
+        },
+        {
+          "before": "[view,nearby,scenario,",
+          "after": "[view,quickEntries,scenario,"
+        },
+        {
+          "before": "Directory({items:nearby})",
+          "after": "Directory({items:quickEntries})"
+        },
+        {
+          "before": "  const appRef=useRef<HTMLDivElement>(null);",
+          "after": "  const appRef=useRef<HTMLDivElement>(null);\n  const sheetRef=useRef<HTMLDivElement>(null);"
+        },
+        {
+          "before": "panel==='directory'?appRef.current?.parentElement?.querySelector<HTMLElement>('.manga-sheet-body'):appRef.current?.querySelector<HTMLElement>('.manga-content')",
+          "after": "panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content')"
+        },
+        {
+          "before": "<div className={'manga-sheet-body ",
+          "after": "<div ref={sheetRef} className={'manga-sheet-body "
+        },
+        {
+          "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps } from './directory-visual.generated';",
+          "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';"
+        },
+        {
+          "before": "      const sheet=document.querySelector<HTMLElement>('.manga-sheet-body');\n      const header=document.querySelector<HTMLElement>('.sheet-header');\n      const tools=sheet?.querySelector<HTMLElement>('.directory-tools');\n      if(sheet&&header&&tools){\n        const available=Math.max(260,Math.round(app.clientHeight*.78));\n        const headerHeight=header.offsetHeight;\n        const footerHeight=footer?.offsetHeight || mangaDirectoryFooterHeight(fontScale,app.clientWidth-visual.quickPaddingX*2,imagePage+' / '+selected.pages+' 页');\n        setQuickHeight(Math.max(visual.gridHeight,Math.min(visual.quickMaxListHeight,available-headerHeight-visual.handleZone-tools.offsetHeight-visual.toolsTop-visual.toolsBottom-footerHeight-mangaDirectoryQuickFlowGaps()-visual.quickPaddingBottom)));\n      }",
+          "after": ""
+        },
+        {
+          "before": "  const sheetRef=useRef<HTMLDivElement>(null);",
+          "after": "  const sheetRef=useRef<HTMLDivElement>(null);\n  const quickUserScrolled=useRef(false);\n  const quickOpening=useRef('');"
+        },
+        {
+          "before": "  const centerCurrent=()=>{\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(rect.top>=top-1&&rect.bottom<=bottom+1)return;\n    const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n    const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n    scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n  };",
+          "after": "  const centerCurrent=()=>{\n    if(panel==='directory'&&quickUserScrolled.current)return;\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(!(rect.top>=top-1&&rect.bottom<=bottom+1)){\n      const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n      const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n      scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n    }\n    if(panel==='directory'){\n      const outer=row.closest<HTMLElement>('.sheet-content');\n      if(!outer||outer.scrollHeight<=outer.clientHeight)return;\n      const outerViewport=outer.getBoundingClientRect(), current=row.getBoundingClientRect();\n      if(current.top>=outerViewport.top-1&&current.bottom<=outerViewport.bottom+1)return;\n      const scale=outerViewport.height/outer.clientHeight;\n      const offset=((current.top+current.bottom)/2-(outerViewport.top+outerViewport.bottom)/2)/Math.max(scale,.1);\n      outer.scrollTop=Math.max(0,Math.min(outer.scrollHeight-outer.clientHeight,outer.scrollTop+offset));\n    }\n  };"
+        },
+        {
+          "before": "  useEffect(()=>{\n    const frame=requestAnimationFrame(centerCurrent);",
+          "after": "  useEffect(()=>{\n    if(panel==='directory')quickUserScrolled.current=false;\n    const frame=requestAnimationFrame(centerCurrent);"
+        },
+        {
+          "before": "  function CurrentFooter({sheet=false}:{sheet?:boolean}){",
+          "after": "  // The existing sheet-content owns overflow chrome; the one directory scroll\n  // keeps its bounded viewport and original chapter identities.\n  useEffect(()=>{\n    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;\n    const frame=sheet.closest<HTMLElement>('.bottom-sheet');\n    const outer=sheet.closest<HTMLElement>('.sheet-content');\n    const header=frame?.querySelector<HTMLElement>('.sheet-header');\n    const tools=sheet.querySelector<HTMLElement>('.directory-tools');\n    const footer=sheet.querySelector<HTMLElement>('.directory-current-footer');\n    const list=sheet.querySelector<HTMLElement>('.mobile-scroll');\n    if(!frame||!outer||!header||!tools||!footer||!list)return;\n    const opening=view+':'+scenario.key+':'+selected.id;\n    if(quickOpening.current!==opening){quickOpening.current=opening;quickUserScrolled.current=false;}\n    let alignmentFrame=0;\n    const markUserScroll=()=>{quickUserScrolled.current=true;};\n    outer.addEventListener('wheel',markUserScroll,{passive:true});\n    outer.addEventListener('pointerdown',markUserScroll,{passive:true});\n    const update=()=>{\n      const maximum=Math.min(app.clientHeight,Math.max(260,Math.round(app.clientHeight*.78)));\n      const minimum=mangaDirectoryQuickMinimumListHeight(fontScale);\n      const chrome=header.offsetHeight+visual.handleZone+tools.offsetHeight+visual.toolsTop+visual.toolsBottom+\n        footer.offsetHeight+mangaDirectoryQuickFlowGaps()+visual.quickPaddingBottom;\n      const adaptive=requestedHeight>0||requestedWidth>0||maximum-chrome<minimum;\n      const inset=adaptive?bottomInset:0;\n      setQuickHeight(Math.max(minimum,Math.min(visual.quickMaxListHeight,maximum-chrome-inset)));\n      setAppWidth(app.clientWidth);\n      frame.classList.toggle('directory-quick-adaptive',adaptive);\n      frame.style.setProperty('--directory-font-scale',String(fontScale));\n      frame.style.setProperty('--directory-quick-panel-height',maximum+'px');\n      frame.style.setProperty('--directory-quick-window-width',app.clientWidth+'px');\n      frame.style.setProperty('--directory-quick-safe-bottom',inset+'px');\n      const host=frame.offsetParent as HTMLElement|null;\n      const hostRect=host?.getBoundingClientRect(), appRect=app.getBoundingClientRect();\n      const scale=host&&hostRect?hostRect.height/host.clientHeight:1;\n      const bottom=hostRect?Math.max(0,(hostRect.bottom-appRect.bottom)/Math.max(scale,.1)):0;\n      frame.style.setProperty('--directory-quick-window-bottom',bottom+'px');\n      if(!quickUserScrolled.current){\n        cancelAnimationFrame(alignmentFrame);\n        alignmentFrame=requestAnimationFrame(()=>{alignmentFrame=requestAnimationFrame(centerCurrent);});\n      }\n    };\n    const observer=new ResizeObserver(update);\n    for(const element of [app,header,tools,footer])observer.observe(element);\n    update();\n    return()=>{\n      observer.disconnect();cancelAnimationFrame(alignmentFrame);\n      outer.removeEventListener('wheel',markUserScroll);outer.removeEventListener('pointerdown',markUserScroll);\n      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n    };\n  },[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);\n\n  function CurrentFooter({sheet=false}:{sheet?:boolean}){"
+        }
+      ]
+    },
+    {
+      "beforeSha256": "5d9e1af39bc9af810db6611e2d7a5f44619f6e9947313230beb2cc7913a2bcce",
+      "afterSha256": "99ca85e187b406001f04749760065d73d8d90a46d4335e54a6ffadfcd4653846",
+      "spans": [
+        {
+          "before": ", visibleTree, quickTargets, toggleCollapsed,",
+          "after": ", visibleTree, toggleCollapsed,"
+        },
+        {
+          "before": "  const nearby=useMemo(()=>{\n    const named=selected.label.kind==='named';\n    const targets=quickTargets(scenario,selected.id,{before:named?2:4,after:named?3:7});\n    if(!targets.length)return [];\n    let start=scenario.targets.findIndex(item=>item.id===targets[0].id);\n    let end=scenario.targets.findIndex(item=>item.id===targets[targets.length-1].id)+1;\n    const samePart=(a?:DirectoryEntry,b?:DirectoryEntry)=>a&&b&&a.parentId===b.parentId&&a.label.kind==='parts'&&b.label.kind==='parts'&&a.label.number===b.label.number;\n    while(start>0&&samePart(scenario.targets[start-1],scenario.targets[start]))start--;\n    while(end<scenario.targets.length&&samePart(scenario.targets[end-1],scenario.targets[end]))end++;\n    return scenario.targets.slice(start,end);\n  },[scenario,selected.id]);",
+          "after": "  // The compact Quick panel exposes every readable target. Group context and\n  // chapter identity still come from the directory model; only the window is removed.\n  const quickEntries=scenario.targets;"
+        },
+        {
+          "before": "if(view==='sheet')return nearby;",
+          "after": "if(view==='sheet')return quickEntries;"
+        },
+        {
+          "before": "[view,nearby,scenario,",
+          "after": "[view,quickEntries,scenario,"
+        },
+        {
+          "before": "Directory({items:nearby})",
+          "after": "Directory({items:quickEntries})"
+        },
+        {
+          "before": "  const appRef=useRef<HTMLDivElement>(null);",
+          "after": "  const appRef=useRef<HTMLDivElement>(null);\n  const sheetRef=useRef<HTMLDivElement>(null);"
+        },
+        {
+          "before": "panel==='directory'?appRef.current?.parentElement?.querySelector<HTMLElement>('.manga-sheet-body'):appRef.current?.querySelector<HTMLElement>('.manga-content')",
+          "after": "panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content')"
+        },
+        {
+          "before": "<div className={'manga-sheet-body ",
+          "after": "<div ref={sheetRef} className={'manga-sheet-body "
+        },
+        {
+          "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps } from './directory-visual.generated';",
+          "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';"
+        },
+        {
+          "before": "      const sheet=document.querySelector<HTMLElement>('.manga-sheet-body');\n      const header=document.querySelector<HTMLElement>('.sheet-header');\n      const tools=sheet?.querySelector<HTMLElement>('.directory-tools');\n      if(sheet&&header&&tools){\n        const available=Math.max(260,Math.round(app.clientHeight*.78));\n        const headerHeight=header.offsetHeight;\n        const footerHeight=footer?.offsetHeight || mangaDirectoryFooterHeight(fontScale,app.clientWidth-visual.quickPaddingX*2,imagePage+' / '+selected.pages+' 页');\n        setQuickHeight(Math.max(visual.gridHeight,Math.min(visual.quickMaxListHeight,available-headerHeight-visual.handleZone-tools.offsetHeight-visual.toolsTop-visual.toolsBottom-footerHeight-mangaDirectoryQuickFlowGaps()-visual.quickPaddingBottom)));\n      }",
+          "after": ""
+        },
+        {
+          "before": "  const sheetRef=useRef<HTMLDivElement>(null);",
+          "after": "  const sheetRef=useRef<HTMLDivElement>(null);\n  const quickUserScrolled=useRef(false);\n  const quickOpening=useRef('');"
+        },
+        {
+          "before": "  const centerCurrent=()=>{\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(rect.top>=top-1&&rect.bottom<=bottom+1)return;\n    const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n    const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n    scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n  };",
+          "after": "  const centerCurrent=()=>{\n    if(panel==='directory'&&quickUserScrolled.current)return;\n    const scope=panel==='directory'?sheetRef.current:appRef.current?.querySelector<HTMLElement>('.manga-content');\n    const row=Array.from(scope?.querySelectorAll<HTMLElement>('[data-chapter-id]')||[]).find(item=>item.dataset.chapterId===selected.id);\n    const scroll=row?.closest<HTMLElement>('.mobile-scroll');\n    if(!row||!scroll)return;\n    const viewport=scroll.getBoundingClientRect(), rect=row.getBoundingClientRect();\n    const header=panel==='directory'?null:appRef.current?.querySelector<HTMLElement>('.manga-header')?.getBoundingClientRect();\n    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();\n    const top=Math.max(viewport.top,header?header.bottom+12:viewport.top);\n    const bottom=Math.min(viewport.bottom,footer?footer.top-12:viewport.bottom);\n    if(!(rect.top>=top-1&&rect.bottom<=bottom+1)){\n      const scale=scroll.getBoundingClientRect().height/scroll.clientHeight;\n      const offset=((rect.top+rect.bottom)/2-(top+bottom)/2)/Math.max(scale,.1);\n      scroll.scrollTop=Math.max(0,Math.min(scroll.scrollHeight-scroll.clientHeight,scroll.scrollTop+offset));\n    }\n    if(panel==='directory'){\n      const outer=row.closest<HTMLElement>('.sheet-content');\n      if(!outer||outer.scrollHeight<=outer.clientHeight)return;\n      const outerViewport=outer.getBoundingClientRect(), current=row.getBoundingClientRect();\n      if(current.top>=outerViewport.top-1&&current.bottom<=outerViewport.bottom+1)return;\n      const scale=outerViewport.height/outer.clientHeight;\n      const offset=((current.top+current.bottom)/2-(outerViewport.top+outerViewport.bottom)/2)/Math.max(scale,.1);\n      outer.scrollTop=Math.max(0,Math.min(outer.scrollHeight-outer.clientHeight,outer.scrollTop+offset));\n    }\n  };"
+        },
+        {
+          "before": "  useEffect(()=>{\n    const frame=requestAnimationFrame(centerCurrent);",
+          "after": "  useEffect(()=>{\n    if(panel==='directory')quickUserScrolled.current=false;\n    const frame=requestAnimationFrame(centerCurrent);"
+        },
+        {
+          "before": "  function CurrentFooter({sheet=false}:{sheet?:boolean}){",
+          "after": "  // The existing sheet-content owns overflow chrome; the one directory scroll\n  // keeps its bounded viewport and original chapter identities.\n  useEffect(()=>{\n    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;\n    const frame=sheet.closest<HTMLElement>('.bottom-sheet');\n    const outer=sheet.closest<HTMLElement>('.sheet-content');\n    const header=frame?.querySelector<HTMLElement>('.sheet-header');\n    const tools=sheet.querySelector<HTMLElement>('.directory-tools');\n    const footer=sheet.querySelector<HTMLElement>('.directory-current-footer');\n    const list=sheet.querySelector<HTMLElement>('.mobile-scroll');\n    if(!frame||!outer||!header||!tools||!footer||!list)return;\n    const opening=view+':'+scenario.key+':'+selected.id;\n    if(quickOpening.current!==opening){quickOpening.current=opening;quickUserScrolled.current=false;}\n    let alignmentFrame=0;\n    const markUserScroll=()=>{quickUserScrolled.current=true;};\n    outer.addEventListener('wheel',markUserScroll,{passive:true});\n    outer.addEventListener('pointerdown',markUserScroll,{passive:true});\n    const update=()=>{\n      const maximum=Math.min(app.clientHeight,Math.max(260,Math.round(app.clientHeight*.78)));\n      const minimum=mangaDirectoryQuickMinimumListHeight(fontScale);\n      const chrome=header.offsetHeight+visual.handleZone+tools.offsetHeight+visual.toolsTop+visual.toolsBottom+\n        footer.offsetHeight+mangaDirectoryQuickFlowGaps()+visual.quickPaddingBottom;\n      const adaptive=requestedHeight>0||requestedWidth>0||maximum-chrome<minimum;\n      const inset=adaptive?bottomInset:0;\n      setQuickHeight(Math.max(minimum,Math.min(visual.quickMaxListHeight,maximum-chrome-inset)));\n      setAppWidth(app.clientWidth);\n      frame.classList.toggle('directory-quick-adaptive',adaptive);\n      frame.style.setProperty('--directory-font-scale',String(fontScale));\n      frame.style.setProperty('--directory-quick-panel-height',maximum+'px');\n      frame.style.setProperty('--directory-quick-window-width',app.clientWidth+'px');\n      frame.style.setProperty('--directory-quick-safe-bottom',inset+'px');\n      const host=frame.offsetParent as HTMLElement|null;\n      const hostRect=host?.getBoundingClientRect(), appRect=app.getBoundingClientRect();\n      const scale=host&&hostRect?hostRect.height/host.clientHeight:1;\n      const bottom=hostRect?Math.max(0,(hostRect.bottom-appRect.bottom)/Math.max(scale,.1)):0;\n      frame.style.setProperty('--directory-quick-window-bottom',bottom+'px');\n      if(!quickUserScrolled.current){\n        cancelAnimationFrame(alignmentFrame);\n        alignmentFrame=requestAnimationFrame(()=>{alignmentFrame=requestAnimationFrame(centerCurrent);});\n      }\n    };\n    const observer=new ResizeObserver(update);\n    for(const element of [app,header,tools,footer])observer.observe(element);\n    update();\n    return()=>{\n      observer.disconnect();cancelAnimationFrame(alignmentFrame);\n      outer.removeEventListener('wheel',markUserScroll);outer.removeEventListener('pointerdown',markUserScroll);\n      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n    };\n  },[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);\n\n  function CurrentFooter({sheet=false}:{sheet?:boolean}){"
+        }
+      ]
+    },
+    {
+      "beforeSha256": "99ca85e187b406001f04749760065d73d8d90a46d4335e54a6ffadfcd4653846",
+      "afterSha256": "c62808b22b964ca7f76bae3e7258c79950a1a42d5a3dfae3f0c41cd3a97d47f1",
+      "spans": [
+        {
+          "before": "import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';",
+          "after": "import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';"
+        },
+        {
+          "before": "  const quickOpening=useRef('');",
+          "after": "  const quickOpening=useRef('');\n  const [quickMounted,setQuickMounted]=useState(false);\n  const attachQuickSheet=useCallback((element:HTMLDivElement|null)=>{sheetRef.current=element;setQuickMounted(Boolean(element));},[]);"
+        },
+        {
+          "before": "<div ref={sheetRef}",
+          "after": "<div ref={attachQuickSheet}"
+        },
+        {
+          "before": "[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth]);",
+          "after": "[view,panel,scenario.key,selected.id,imagePage,fontScale,bottomInset,requestedHeight,requestedWidth,quickMounted]);"
+        }
+      ]
+    },
+    {
+      "beforeSha256": "c62808b22b964ca7f76bae3e7258c79950a1a42d5a3dfae3f0c41cd3a97d47f1",
+      "afterSha256": "0bb01da8f07bf2a6b88e0cb5630d4e9a2b6dcb65f3cc4eb1ed42ec88b2feb716",
+      "spans": [
+        {
+          "before": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight } from './directory-visual.generated';",
+          "after": "import { MANGA_DIRECTORY_VISUAL as visual, mangaDirectoryColumns, mangaDirectoryScale, mangaDirectoryFooterStacked, mangaDirectoryFooterHeight, mangaDirectoryLabelsFit, mangaDirectoryPositionStacked, mangaDirectoryQuickFlowGaps, mangaDirectoryQuickMinimumListHeight, mangaDirectoryFullFlowFooter } from './directory-visual.generated';"
+        },
+        {
+          "before": "[fontScale,view,panel,scenario.key,selected.id,imagePage,appWidth]);",
+          "after": "[fontScale,view,panel,scenario.key,selected.id,imagePage,appWidth,fullFlowFooter]);"
+        },
+        {
+          "before": "      frame.classList.remove('directory-quick-adaptive');\n      for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])frame.style.removeProperty(property);\n",
+          "after": "      // Keep the same overflow frame and offset across metrics updates.\n"
+        },
+        {
+          "before": "    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'||!app||!sheet)return;",
+          "after": "    const app=appRef.current, sheet=sheetRef.current;\n    if(panel!=='directory'){\n      if(panel&&sheet){const prior=sheet.closest<HTMLElement>('.bottom-sheet');prior?.classList.remove('directory-quick-adaptive');for(const property of ['--directory-font-scale','--directory-quick-panel-height','--directory-quick-window-width','--directory-quick-window-bottom','--directory-quick-safe-bottom'])prior?.style.removeProperty(property);}\n      return;\n    }\n    if(!app||!sheet)return;"
+        },
+        {
+          "before": "  const page=view==='full'?'directory':view==='preview'?'detail':'reader';",
+          "after": "  const page=view==='full'?'directory':view==='preview'?'detail':'reader';\n  const fullFlowFooter=view==='full'&&mangaDirectoryFullFlowFooter(requestedHeight>0?requestedHeight:device.geometry.screen.height,fontScale,device.geometry.safeArea.top,bottomInset,footerHeight);"
+        },
+        {
+          "before": "  const quickUserScrolled=useRef(false);",
+          "after": "  const quickUserScrolled=useRef(false);\n  const fullUserScrolled=useRef(false);"
+        },
+        {
+          "before": "    if(panel==='directory'&&quickUserScrolled.current)return;",
+          "after": "    if(panel==='directory'&&quickUserScrolled.current||view==='full'&&fullUserScrolled.current)return;"
+        },
+        {
+          "before": "    const footer=scope?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect()||appRef.current?.querySelector<HTMLElement>('.directory-current-footer')?.getBoundingClientRect();",
+          "after": "    const footerElement=scope?.querySelector<HTMLElement>('.directory-current-footer')||appRef.current?.querySelector<HTMLElement>('.directory-current-footer');\n    const footer=footerElement&&['fixed','absolute'].includes(getComputedStyle(footerElement).position)?footerElement.getBoundingClientRect():undefined;"
+        },
+        {
+          "before": "[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds]);",
+          "after": "[view,panel,scenario.key,selected.id,query,descending,rangeIndex,collapsedIds,fullFlowFooter]);"
+        },
+        {
+          "before": "  const locate=()=>{\n    keyboard.hide();",
+          "after": "  const locate=()=>{\n    fullUserScrolled.current=false;\n    keyboard.hide();"
+        },
+        {
+          "before": "  const setView=(next:View)=>{\n    keyboard.hide();",
+          "after": "  const setView=(next:View)=>{\n    if(next==='full')fullUserScrolled.current=false;\n    keyboard.hide();"
+        },
+        {
+          "before": "<main className={'manga-content page-'+page}>",
+          "after": "<main className={'manga-content page-'+page+(fullFlowFooter?' directory-flow-footer-page':'')}>"
+        },
+        {
+          "before": "{DirectoryTools()}{Directory({})}",
+          "after": "{DirectoryTools()}{fullFlowFooter&&<CurrentFooter flow/>}{Directory({})}"
+        },
+        {
+          "before": "{view==='full'&&<CurrentFooter/>}",
+          "after": "{view==='full'&&!fullFlowFooter&&<CurrentFooter/>}"
+        },
+        {
+          "before": "function CurrentFooter({sheet=false}:{sheet?:boolean})",
+          "after": "function CurrentFooter({sheet=false,flow=false}:{sheet?:boolean;flow?:boolean})"
+        },
+        {
+          "before": "'directory-current-footer'+(sheet?' sheet-current-footer':'')",
+          "after": "'directory-current-footer'+(sheet?' sheet-current-footer':'')+(flow?' directory-flow-footer':'')"
+        },
+        {
+          "before": "  // The existing sheet-content owns overflow chrome;",
+          "after": "  useEffect(()=>{\n    if(view!=='full')return;\n    const scroll=appRef.current?.querySelector<HTMLElement>('.manga-page .mobile-scroll');\n    if(!scroll)return;\n    fullUserScrolled.current=false;\n    const mark=()=>{fullUserScrolled.current=true;};\n    scroll.addEventListener('wheel',mark,{passive:true});scroll.addEventListener('pointerdown',mark,{passive:true});\n    return()=>{scroll.removeEventListener('wheel',mark);scroll.removeEventListener('pointerdown',mark);};\n  },[view,scenario.key,selected.id]);\n\n  // The existing sheet-content owns overflow chrome;"
+        }
+      ]
+    }
+  ]
+}

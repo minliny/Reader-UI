@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "authorization": "2026-10-07 user: 按方案全量修复",
+  "rawIdentityPolicy": "retain raw title and canonical target; presentation does not infer hierarchy/readability/order",
+  "titleForms": {
+    "numeric": "ASCII/fullwidth digits, preserving leading zeroes; no digit-length boundary",
+    "ordinal": "only a complete Arabic numeric ordinal with 话/回/章/集 and no subtitle",
+    "parts": "ordinal or number plus 上/中/下; complete mixed ASCII/fullwidth parentheses or middle dot accepted",
+    "named": "real subtitle, special chapter, volume, malformed/ambiguous label retained"
+  },
+  "sourceMetadataPolicy": "source-bound evidence only; isVip/isPay remain independent optional values, never infer navigation permission",
+  "searchPolicy": "full row with complete ancestor context; raw/display aliases searchable",
+  "emptyTitle": "未命名章节",
+  "layoutPolicy": {
+    "numeric": "stable width budget; long outlier changes its own container only",
+    "pairs": [
+      4,
+      2,
+      1
+    ],
+    "triplets": [
+      3,
+      1
+    ],
+    "missingPart": "never create synthetic chapter targets",
+    "paging": "retain canonical anchor and subsequent grid phase"
+  },
+  "visualPolicy": "existing palette/typography/geometry; source status uses existing meta text style; no new colored tag system",
+  "fixtureSha256": "1f4922d4a71d7f453c8cef803d0b30f28b0f0f62020d8d8f9f0ae734bf195810",
+  "historicalNamedFixture": "original 306 日月同错 rows remain unavailable; actual Tencent named titles retained here",
+  "sourceFlagSemantics": {
+    "isVip": "source-confirmed VIP chapter",
+    "isPay": "source-confirmed purchased chapter",
+    "source": "https://raw.githubusercontent.com/gedoor/legado/master/app/src/main/java/io/legado/app/data/entities/BookChapter.kt",
+    "missing": "unknown; do not default wire metadata to false"
+  }
+}

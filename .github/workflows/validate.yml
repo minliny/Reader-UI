@@ -1,0 +1,111 @@
+name: UI CI
+on:
+  workflow_dispatch:
+    inputs:
+      checks:
+        description: Select only checks justified for this change
+        type: choice
+        required: true
+        options: [plugins, schemas, fonts, contracts, colors, plugin-entries, theme, plugin-syntax, workflow-lint, secrets, full]
+      rationale:
+        description: Concrete risk and necessity for every selected check; full needs an explicit user request
+        type: string
+        required: true
+      full_suite_requested:
+        description: The user explicitly requested the complete suite
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: ui-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  assets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CHECKS: ${{ inputs.checks }}
+      RATIONALE: ${{ inputs.rationale }}
+      FULL_SUITE_REQUESTED: ${{ inputs.full_suite_requested }}
+    steps:
+      - name: Admit the explicit selection
+        shell: bash
+        run: |
+          [[ "$RATIONALE" =~ [^[:space:]] ]] || { echo 'A concrete rationale is required.' >&2; exit 2; }
+          case "$CHECKS" in plugins|schemas|fonts|contracts|colors|plugin-entries|theme|plugin-syntax|workflow-lint|secrets) ;;
+            full) [[ "$FULL_SUITE_REQUESTED" == true ]] || { echo 'Full requires an explicit user request.' >&2; exit 2; } ;;
+            *) echo 'Unknown check; nothing was run.' >&2; exit 2 ;;
+          esac
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        if: ${{ contains(fromJSON('["plugins","theme","plugin-syntax","full"]'), inputs.checks) }}
+        with:
+          node-version: 22.23.3
+      - name: Locked plugin compiler and generated-entry drift
+        if: ${{ inputs.checks == 'plugins' || inputs.checks == 'full' }}
+        run: |
+          npm ci --ignore-scripts
+          npm run check:plugins
+      - name: Isolated schema and font parser dependencies
+        if: ${{ contains(fromJSON('["schemas","fonts","full"]'), inputs.checks) }}
+        run: |
+          python3 -m venv "$RUNNER_TEMP/ui-validate"
+          if [[ "$CHECKS" == schemas || "$CHECKS" == full ]]; then "$RUNNER_TEMP/ui-validate/bin/pip" install 'jsonschema==4.25.1'; fi
+          if [[ "$CHECKS" == fonts || "$CHECKS" == full ]]; then "$RUNNER_TEMP/ui-validate/bin/pip" install 'fonttools==4.59.0'; fi
+      - name: Selected JSON Schemas
+        if: ${{ inputs.checks == 'schemas' || inputs.checks == 'full' }}
+        run: '"$RUNNER_TEMP/ui-validate/bin/python" scripts/check-assets.py --checks schemas --rationale "$RATIONALE"'
+      - name: Selected font integrity and licenses
+        if: ${{ inputs.checks == 'fonts' || inputs.checks == 'full' }}
+        run: '"$RUNNER_TEMP/ui-validate/bin/python" scripts/check-assets.py --checks fonts --rationale "$RATIONALE"'
+      - name: Selected contract enums and counts
+        if: ${{ inputs.checks == 'contracts' || inputs.checks == 'full' }}
+        run: python3 tools/validate.py --checks contracts --rationale "$RATIONALE"
+      - name: Selected RGBA tokens
+        if: ${{ inputs.checks == 'colors' || inputs.checks == 'full' }}
+        run: python3 tools/validate.py --checks colors --rationale "$RATIONALE"
+      - name: Selected plugin manifest entries
+        if: ${{ inputs.checks == 'plugin-entries' || inputs.checks == 'full' }}
+        run: python3 tools/validate.py --checks plugin-entries --rationale "$RATIONALE"
+      - name: Selected generated theme semantics
+        if: ${{ inputs.checks == 'theme' || inputs.checks == 'full' }}
+        run: node --test scripts/check-theme.test.mjs
+      - name: Selected plugin JavaScript syntax
+        if: ${{ inputs.checks == 'plugin-syntax' || inputs.checks == 'full' }}
+        run: find plugins -name '*.js' -print0 | xargs -0 -n1 node --check
+      - uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5
+        if: ${{ contains(fromJSON('["workflow-lint","secrets","full"]'), inputs.checks) }}
+        with:
+          go-version: '1.24.2'
+          cache: false
+      - name: Selected workflow lint
+        if: ${{ inputs.checks == 'workflow-lint' || inputs.checks == 'full' }}
+        run: |
+          go install github.com/rhysd/actionlint/cmd/actionlint@v1.7.7
+          "$(go env GOPATH)/bin/actionlint" -color
+      - name: Selected current tracked-source secret scan
+        if: ${{ inputs.checks == 'secrets' || inputs.checks == 'full' }}
+        run: |
+          go install github.com/zricethezav/gitleaks/v8@v8.24.2
+          scan=$(mktemp -d "$RUNNER_TEMP/reader-source.XXXXXX")
+          trap 'rm -rf "$scan"' EXIT
+          git archive HEAD | tar -xf - -C "$scan"
+          cd "$scan"
+          "$(go env GOPATH)/bin/gitleaks" dir . --redact=100
+      - name: Report the selected evidence boundary
+        if: always()
+        run: |
+          printf '%s\n' "Selected check: $CHECKS" 'All unselected checks: NOT_RUN. No App/build/device evidence.' >> "$GITHUB_STEP_SUMMARY"
+  ui-source-gate:
+    name: ui-source-gate
+    if: always()
+    needs: assets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - env:
+          RESULT: ${{ needs.assets.result }}
+        run: test "$RESULT" = success
