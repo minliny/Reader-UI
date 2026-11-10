@@ -680,7 +680,7 @@
         "r": 255,
         "g": 250,
         "b": 244,
-        "a": 0.9803921568627451
+        "a": 1
       },
       "night": {
         "r": 48,
@@ -688,7 +688,7 @@
         "b": 40,
         "a": 1
       },
-      "provenance": "current implementation; READER_REPAIR_SPEC §2 approved implementation palette"
+      "provenance": "2026-11-10 phone UI closeout: stable reading paper is opaque; motion opacity remains owned by the reading actors; night RGB unchanged"
     },
     "TOK_READ_ELEVATED": {
       "day": {
