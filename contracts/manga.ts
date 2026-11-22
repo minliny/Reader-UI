@@ -21,11 +21,15 @@ export interface MangaLocation {
   pageOrdinalFallback: number; x: number; y: number; progressRevision: number;
 }
 export interface MangaProgressToken { epoch: number; revision: number; }
+/** Core reader-storage::manga::MangaProgressState: durable token and nullable location. */
 export interface MangaProgressState { token: MangaProgressToken; location: MangaLocation | null; }
+/** Core reader-contract::remote::MangaResourceData with reader-domain::MangaPage.
+ * Request material is Core-admitted; an empty resource list does not grant a fetch. */
 export interface MangaResourceRequest {
   resourceRef: string;
   request: { url: string; sourcePageId?: string; requestRule?: string; referrer?: string; headers?: Record<string, string> };
 }
+/** Core reader-contract::remote::MangaChapterData; mapping fields retain distinct identities. */
 export interface MangaChapterResult {
   manifest: MangaManifest; chapterIndex: number; chapterTitle: string;
   resources: MangaResourceRequest[]; cached: boolean; progressMapping?: MangaProgressMapping; anchorMapping?: MangaAnchorMapping;
@@ -34,7 +38,13 @@ export interface MangaChapterResult {
 /** Every original page is validated and durable before this receipt is sent. */
 export interface MangaOfflineReceipt { chapter: MangaChapterIdentity; manifestVersion: string; resourceRefs: string[]; }
 
+/** Core SqliteStorage::manga_pages_window / manga_entry::window.
+ * pageStart is an original-image ordinal; totalPages is the full manifest size.
+ * resumeOnly can restore historical content without authorizing resource requests. */
 export interface MangaChapterWindow extends MangaChapterResult { resumeOnly?: boolean; pageStart: number; totalPages: number; }
+/** Core SqliteStorage::manga_prepared_entry / manga_prepared_entry_with_admission.
+ * Exact mapping alone selects targetOrdinal; unresolved identity requires recovery.
+ * Neither targetOrdinal nor chapter window replaces the durable progress token/location. */
 export interface MangaPreparedEntry { resumeOnly?: boolean; chapter: MangaChapterWindow; progress: MangaProgressState; targetOrdinal: number; recoveryRequired: boolean; progressMapping?: MangaProgressMapping; }
 
 /** Exact business identity evidence; coordinates remain in the saved location. */

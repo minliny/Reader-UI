@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { verifyMangaProjection } from './sync-manga-contract.mjs';
 const read = path => readFileSync(new URL(path, import.meta.url), 'utf8');
-assert.equal(read('../contracts/manga.ts'), read('../../Reader-for-HarmonyOS/entry/src/main/ets/features/manga/MangaContract.ts'),
-  'Core wire projection must remain identical in UI and Harmony consumers');
+verifyMangaProjection();
 assert.deepEqual(JSON.parse(read('../contracts/fixtures/manga-pages-extract.json')),
   JSON.parse(read('../../Reader-Core/crates/reader-contract/fixtures/manga-pages-extract.json')));
 const schema = JSON.parse(read('../../Reader-Core/protocol/reader-command.schema.json'));
