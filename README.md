@@ -28,4 +28,16 @@ GitHub `UI CI / ui-source-gate` 仅 `workflow_dispatch`，按具名 `checks` 选
 `resourceRef` 是不含签名 URL/Cookie 的资源引用；临时请求只进入会话。
 位置由清单版本、逻辑页和原图归一化坐标组成，显示切片数量不改变页序。
 `ReaderShell.contentKind` 必须来自 Core 类型事实，不能从自由文本题材字段推断。
-本仓 DTO 与 HarmonyOS 的 `MangaContract.ts` 同步，产品阶段及未完成项仍只记根待办。
+`contracts/manga.ts` 是共享 TypeScript 投影的唯一维护输入；在本仓执行 `node tools/sync-manga-contract.mjs --write` 单向生成 HarmonyOS 的 `MangaContract.ts`，`--check` 只核生成结果。Core schema 继续拥有 wire 合同；`check-manga-contract.mjs` 另核持久图片/进度字段。组合结果类型不因生成副本就声称已由 schema 完整覆盖。产品阶段及未完成项仍只记根待办。
+
+五个组合投影的来源已逐项核对；它们不是五份独立业务算法，也不能直接合并为同一种目录或进度状态：
+
+| TypeScript 投影 | Core 权威与来源语义 |
+|---|---|
+| `MangaProgressState` | `reader-storage/src/manga.rs` 的同名序列化结构；token 与可空 location 分开，读取不等于新保存回执。 |
+| `MangaResourceRequest` | `reader-contract/src/remote.rs` 的 `MangaResourceData`，内含 `reader-domain/src/lib.rs` 的 `MangaPage`；请求材料只由 Core 准入。 |
+| `MangaChapterResult` | `reader-contract/src/remote.rs` 的 `MangaChapterData`；manifest、资源、缓存事实与两类映射保持原义。 |
+| `MangaChapterWindow` | `reader-storage/src/sqlite_backend/manga_entry.rs` 的 `window`，由 `manga_pages_window` 等读取；`pageStart` 是原图 ordinal，`totalPages` 是完整清单数量，`resumeOnly` 不开放请求凭据。 |
+| `MangaPreparedEntry` | 同文件的准备入口与 `manga_prepared_entry_with_admission`；progress 保留持久 token/location，精确映射才设置目标，身份未解析时要求恢复。 |
+
+这些 Core 结果目前部分由序列化结构、部分由事务内 JSON 组合生成，不能宣称都已有同名 command schema。共享 TS 仅维护其 Host 消费形状，Harmony 只消费生成副本；改变 wire 或恢复语义必须先改对应 Core owner，再同步投影。
