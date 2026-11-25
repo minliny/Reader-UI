@@ -22,6 +22,24 @@ test('every app role has the correct day and night value', () => {
     for (const scheme of ['day', 'night']) assert.equal(readerAppColor(role, scheme), argb(schemes[scheme]));
   }
 });
+test('canvas, card and floating navigation preserve the Paper & Pine hierarchy', () => {
+  const expectedPaints = {
+    day: ['#FFF4EFE6', '#FFFBF8F2', '#FFFDFAF4', '#1F5C4F3F'],
+    night: ['#FF151715', '#FF1F2320', '#FF222723', '#1FECE8E0'],
+  };
+  const hierarchy = ['TOK_SURFACE', 'TOK_CARD_BG', 'app.navigation.floatingSurface', 'app.navigation.floatingBorder'];
+  const formatRoles = ['app.import.formatText', 'app.import.formatEpub', 'app.import.formatArchive'];
+  for (const [scheme, paints] of Object.entries(expectedPaints)) {
+    assert.deepEqual(hierarchy.map(role => readerAppColor(role, scheme)), paints);
+    assert.equal(readerAppColor('app.detail.summaryFadeTransparent', scheme), `#00${paints[1].slice(3)}`);
+    assert.equal(new Set(formatRoles.map(role => readerAppColor(role, scheme))).size, 3);
+    for (const role of ['TOK_SURFACE_PANEL', 'TOK_SURFACE_PANEL_SOFT', 'TOK_READ_ACTIVE_SOFT',
+      'TOK_READ_SURFACE', 'TOK_READ_ELEVATED', 'TOK_READ_CARD_EMPHASIS', 'app.surface.dock']) {
+      assert.match(readerAppColor(role, scheme), /^#FF/, role);
+    }
+    assert.match(readerAppColor('TOK_SURFACE_SOLID_OPAQUE', scheme), /^#FF/);
+  }
+});
 test('reader palettes preserve all roles, effects, identity and order', () => {
   const expected = Object.entries(registry.reader).sort((a, b) => a[1].order - b[1].order).map(([id, value]) => ({
     id, scheme: value.scheme, order: value.order, displayName: value.displayName,

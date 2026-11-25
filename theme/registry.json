@@ -206,23 +206,22 @@
         "r": 253,
         "g": 250,
         "b": 244,
-        "a": 0.88
+        "a": 1
       },
       "night": {
         "r": 34,
         "g": 39,
         "b": 35,
-        "a": 0.88
+        "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-glass",
-      "sourceRole": "app.surface.glass"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     },
     "TOK_SURFACE_PANEL_SOFT": {
       "day": {
-        "r": 238,
-        "g": 230,
-        "b": 219,
-        "a": 0.56
+        "r": 245,
+        "g": 239,
+        "b": 230,
+        "a": 1
       },
       "night": {
         "r": 28,
@@ -230,7 +229,7 @@
         "b": 29,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-soft"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     },
     "TOK_SURFACE_ELEVATED": {
       "day": {
@@ -266,34 +265,34 @@
     "TOK_SURFACE_SOLID_OPAQUE": {
       "day": {
         "r": 255,
-        "g": 252,
-        "b": 248,
+        "g": 253,
+        "b": 249,
         "a": 1
       },
       "night": {
-        "r": 54,
-        "g": 50,
-        "b": 46,
+        "r": 39,
+        "g": 44,
+        "b": 40,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-bg",
-      "sourceRole": "app.navigation.floatingSurface"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_SURFACE_ELEVATED"
     },
     "TOK_SURFACE_SOLID": {
       "day": {
         "r": 255,
-        "g": 252,
-        "b": 248,
+        "g": 253,
+        "b": 249,
         "a": 1
       },
       "night": {
-        "r": 54,
-        "g": 50,
-        "b": 46,
+        "r": 39,
+        "g": 44,
+        "b": 40,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-bg",
-      "sourceRole": "app.navigation.floatingSurface"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_SURFACE_ELEVATED"
     },
     "TOK_SURFACE_TRANSLUCENT": {
       "day": {
@@ -668,25 +667,25 @@
     },
     "TOK_READ_ACTIVE_SOFT": {
       "day": {
-        "r": 31,
-        "g": 61,
-        "b": 49,
-        "a": 0.09
+        "r": 235,
+        "g": 235,
+        "b": 230,
+        "a": 1
       },
       "night": {
-        "r": 123,
-        "g": 176,
-        "b": 148,
-        "a": 0.16
+        "r": 52,
+        "g": 66,
+        "b": 57,
+        "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-circle"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     },
     "TOK_READ_DISABLED_BG": {
       "day": {
-        "r": 238,
-        "g": 230,
-        "b": 219,
-        "a": 0.56
+        "r": 245,
+        "g": 239,
+        "b": 230,
+        "a": 1
       },
       "night": {
         "r": 28,
@@ -694,29 +693,30 @@
         "b": 29,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-soft"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint",
+      "sourceRole": "TOK_SURFACE_PANEL_SOFT"
     },
     "TOK_READ_SURFACE": {
       "day": {
         "r": 255,
         "g": 250,
         "b": 244,
-        "a": 0.96
+        "a": 1
       },
       "night": {
         "r": 33,
         "g": 38,
         "b": 34,
-        "a": 0.96
+        "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-shell"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     },
     "TOK_READ_ELEVATED": {
       "day": {
         "r": 255,
         "g": 252,
         "b": 248,
-        "a": 0.92
+        "a": 1
       },
       "night": {
         "r": 39,
@@ -724,7 +724,7 @@
         "b": 40,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-card"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     },
     "TOK_SS_WINDOW_BG": {
       "day": {
@@ -1873,17 +1873,18 @@
     "app.icon.discover_source_stack.1F3528": {
       "day": {
         "r": 31,
-        "g": 53,
-        "b": 40,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG discover_source_stack; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.discover_source_chevron.1F1B17": {
       "day": {
@@ -2724,17 +2725,18 @@
     "app.icon.rss_bookmark_active.1F3528": {
       "day": {
         "r": 31,
-        "g": 53,
-        "b": 40,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_bookmark_active; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.rss_bookmark.756F69": {
       "day": {
@@ -2769,17 +2771,18 @@
     "app.icon.rss_source.1F3528": {
       "day": {
         "r": 31,
-        "g": 53,
-        "b": 40,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_source; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.rss_manage.756F69": {
       "day": {
@@ -2814,17 +2817,18 @@
     "app.icon.rss_refresh.1F3528": {
       "day": {
         "r": 31,
-        "g": 53,
-        "b": 40,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_refresh; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.rss_filter.3F372F": {
       "day": {
@@ -2859,17 +2863,18 @@
     "app.icon.rss_view_all.1F3528": {
       "day": {
         "r": 31,
-        "g": 53,
-        "b": 40,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_view_all; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.rss_item_chevron.1F1B17": {
       "day": {
@@ -2933,18 +2938,19 @@
     },
     "app.icon.rss_add.2D4A3E": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_add; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.rss_manage_view_all.1F1B17": {
       "day": {
@@ -2978,18 +2984,19 @@
     },
     "app.icon.rss_manage_delete.AB2E28": {
       "day": {
-        "r": 171,
-        "g": 46,
-        "b": 40,
+        "r": 184,
+        "g": 59,
+        "b": 50,
         "a": 1
       },
       "night": {
-        "r": 171,
-        "g": 46,
-        "b": 40,
+        "r": 224,
+        "g": 100,
+        "b": 90,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG rss_manage_delete; same path and alpha, §2 App role mapping"
+      "sourceRole": "TOK_DANGER",
+      "provenance": "RSS management delete icon follows the destructive action palette; original geometry and opacity preserved"
     },
     "app.icon.search_empty.D8D1C4": {
       "day": {
@@ -3190,18 +3197,19 @@
     },
     "app.icon.settings_row_sync.2D4A3E": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG settings_row_sync; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.settings_row_shelf_search.2D4A3E": {
       "day": {
@@ -3475,63 +3483,67 @@
     },
     "app.icon.sync_server.2D4A3E": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG sync_server; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.sync_account.2D4A3E": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG sync_account; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.sync_password.2D4A3E": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG sync_password; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.sync_backup_password.2D4A3E": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
+        "r": 31,
+        "g": 61,
+        "b": 49,
         "a": 1
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
+        "r": 123,
+        "g": 176,
+        "b": 148,
         "a": 1
       },
-      "provenance": "Existing monochrome/state SVG sync_backup_password; same path and alpha, §2 App role mapping"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_TEXT"
     },
     "app.icon.sync_scope_chevron.41484C": {
       "day": {
@@ -4986,33 +4998,34 @@
     },
     "app.navigation.floatingSurface": {
       "day": {
-        "r": 255,
-        "g": 252,
-        "b": 248,
+        "r": 253,
+        "g": 250,
+        "b": 244,
         "a": 1
       },
       "night": {
-        "r": 54,
-        "g": 50,
-        "b": 46,
+        "r": 34,
+        "g": 39,
+        "b": 35,
         "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-bg"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint",
+      "sourceRole": "TOK_SURFACE_PANEL"
     },
     "app.navigation.floatingBorder": {
       "day": {
-        "r": 208,
-        "g": 197,
-        "b": 180,
-        "a": 1
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.12
       },
       "night": {
-        "r": 98,
-        "g": 88,
-        "b": 75,
-        "a": 1
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.12
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-border"
+      "provenance": "2026-11-24 Paper & Pine 2.0 floating navigation border"
     },
     "app.search.panelSurface": {
       "day": {
@@ -5514,15 +5527,15 @@
         "r": 255,
         "g": 250,
         "b": 244,
-        "a": 0.96
+        "a": 1
       },
       "night": {
         "r": 33,
         "g": 38,
         "b": 34,
-        "a": 0.96
+        "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-shell"
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     },
     "app.scrim.modal": {
       "day": {
@@ -6417,18 +6430,18 @@
     },
     "app.feed.refreshBorder": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
-        "a": 0.1803921568627451
+        "r": 31,
+        "g": 61,
+        "b": 49,
+        "a": 0.18
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
-        "a": 0.1803921568627451
+        "r": 123,
+        "g": 176,
+        "b": 148,
+        "a": 0.18
       },
-      "provenance": "Current features/rss/RssPage.ets:refreshingRow; approved READER_REPAIR_SPEC §2 consumer mapping; Night role adaptation; semantic role migration 2026-10-26, day/night values preserved"
+      "provenance": "2026-11-24 Paper & Pine 2.0 feed action border"
     },
     "app.feed.errorText": {
       "day": {
@@ -7166,18 +7179,19 @@
     },
     "app.discover.sourceIconSurface": {
       "day": {
-        "r": 45,
-        "g": 74,
-        "b": 62,
-        "a": 0.10196078431372549
+        "r": 31,
+        "g": 61,
+        "b": 49,
+        "a": 0.09
       },
       "night": {
-        "r": 210,
-        "g": 189,
-        "b": 150,
-        "a": 0.10196078431372549
+        "r": 123,
+        "g": 176,
+        "b": 148,
+        "a": 0.14
       },
-      "provenance": "Current features/discover/DiscoverPage.ets:ICON_BOX_BG; READER_REPAIR_SPEC §2 approved App scope; preserve Day and alpha; Night semantic adaptation (authored success/error hue preserved); semantic role migration 2026-10-26, day/night values preserved"
+      "provenance": "2026-11-24 Paper & Pine 2.0 semantic color alias",
+      "sourceRole": "TOK_PRIMARY_SOFT"
     },
     "app.discover.categorySurface": {
       "day": {
@@ -7315,6 +7329,21 @@
       },
       "provenance": "Current features/rss/RssPage.ets:PILL_BORDER; READER_REPAIR_SPEC §2 approved App scope; preserve Day and alpha; Night semantic adaptation (authored success/error hue preserved); semantic role migration 2026-10-26, day/night values preserved"
     },
+    "app.detail.summaryFadeTransparent": {
+      "day": {
+        "r": 251,
+        "g": 248,
+        "b": 242,
+        "a": 0
+      },
+      "night": {
+        "r": 31,
+        "g": 35,
+        "b": 32,
+        "a": 0
+      },
+      "provenance": "Book detail summary gradient, transparent endpoint matching TOK_CARD_BG"
+    },
     "app.directory.edgeFade": {
       "day": {
         "r": 255,
@@ -7443,17 +7472,32 @@
         "r": 63,
         "g": 49,
         "b": 29,
-        "a": 0.1
+        "a": 0.04
       },
       "night": {
         "r": 0,
         "g": 0,
         "b": 0,
-        "a": 0.3
+        "a": 0.07
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-shadow"
+      "provenance": "HarmonyOS native surface audit: contained floating chrome shadow"
     },
     "app.chrome.raisedShadowNear": {
+      "day": {
+        "r": 63,
+        "g": 49,
+        "b": 29,
+        "a": 0.06
+      },
+      "night": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.12
+      },
+      "provenance": "HarmonyOS native surface audit: contained floating chrome shadow"
+    },
+    "app.chrome.raisedShadowAmbient": {
       "day": {
         "r": 63,
         "g": 49,
@@ -7464,24 +7508,9 @@
         "r": 0,
         "g": 0,
         "b": 0,
-        "a": 0.24
+        "a": 0.18
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-shadow"
-    },
-    "app.chrome.raisedShadowAmbient": {
-      "day": {
-        "r": 63,
-        "g": 49,
-        "b": 29,
-        "a": 0.15
-      },
-      "night": {
-        "r": 0,
-        "g": 0,
-        "b": 0,
-        "a": 0.32
-      },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-float-shadow"
+      "provenance": "HarmonyOS native surface audit: contained floating chrome shadow"
     },
     "app.navigation.floatingShadow": {
       "day": {
@@ -8018,6 +8047,21 @@
       },
       "sourceRole": "TOK_GREEN",
       "provenance": "墨纸青松 2.0 semantic palette; SVG authored paint identity, original geometry and opacity preserved"
+    },
+    "TOK_READ_CARD_EMPHASIS": {
+      "day": {
+        "r": 237,
+        "g": 244,
+        "b": 240,
+        "a": 1
+      },
+      "night": {
+        "r": 36,
+        "g": 48,
+        "b": 42,
+        "a": 1
+      },
+      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
     }
   },
   "reader": {
