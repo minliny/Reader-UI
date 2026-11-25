@@ -1,0 +1,1352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>墨纸青松 · 小说阅读器功能架构与交互逻辑图谱</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    .rd-serif { font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif; }
+    .rd-sans { font-family: "HarmonyOS Sans SC", "PingFang SC", -apple-system, sans-serif; }
+    .rd-num { font-variant-numeric: tabular-nums; }
+
+    /* Scoped Paper & Pine 2.0 Reading Tokens */
+    .rd-scope {
+      --rd-canvas: #FBF8F3;
+      --rd-surface: #FFFFFF;
+      --rd-elevated: #FFFDF9;
+      --rd-sunken: #F2ECE1;
+      --rd-ink: #1D1B18;
+      --rd-muted: #6C665D;
+      --rd-subtle: #9A9287;
+      --rd-line: rgba(31, 61, 49, 0.11);
+      --rd-line-strong: rgba(31, 61, 49, 0.22);
+      --rd-primary: #1F3D31;
+      --rd-on-primary: #FBF8F3;
+      --rd-primary-soft: rgba(31, 61, 49, 0.12);
+      --rd-primary-border: rgba(31, 61, 49, 0.28);
+      --rd-seal: #9A3F32;
+      --rd-seal-soft: rgba(154, 63, 50, 0.12);
+      --rd-scrim: rgba(20, 18, 15, 0.44);
+      --rd-glass: rgba(255, 253, 249, 0.90);
+      --rd-glass-heavy: rgba(255, 253, 249, 0.96);
+      --rd-e1: 0 2px 8px rgba(31, 24, 18, 0.06);
+      --rd-e2: 0 6px 20px rgba(31, 24, 18, 0.10);
+      --rd-e3: 0 12px 32px rgba(20, 18, 15, 0.18);
+    }
+    .rd-scope[data-scheme="night"] {
+      --rd-canvas: #161513;
+      --rd-surface: #21201C;
+      --rd-elevated: #2A2823;
+      --rd-sunken: #1B1A17;
+      --rd-ink: #EDE6DA;
+      --rd-muted: #A79F93;
+      --rd-subtle: #787166;
+      --rd-line: rgba(237, 230, 218, 0.10);
+      --rd-line-strong: rgba(237, 230, 218, 0.20);
+      --rd-primary: #5D9C82;
+      --rd-on-primary: #121411;
+      --rd-primary-soft: rgba(93, 156, 130, 0.18);
+      --rd-primary-border: rgba(93, 156, 130, 0.36);
+      --rd-seal: #D47264;
+      --rd-seal-soft: rgba(212, 114, 100, 0.16);
+      --rd-scrim: rgba(0, 0, 0, 0.62);
+      --rd-glass: rgba(34, 33, 29, 0.92);
+      --rd-glass-heavy: rgba(38, 36, 32, 0.97);
+      --rd-e1: 0 2px 10px rgba(0, 0, 0, 0.28);
+      --rd-e2: 0 8px 24px rgba(0, 0, 0, 0.38);
+      --rd-e3: 0 14px 36px rgba(0, 0, 0, 0.56);
+    }
+
+    .rd-glass {
+      background: var(--rd-glass);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .rd-glass-heavy {
+      background: var(--rd-glass-heavy);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+    .rd-press { transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), background-color 140ms ease; }
+    .rd-press:active { transform: scale(0.96); }
+
+    /* Custom Slider */
+    .rd-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--rd-primary) 0%, var(--rd-primary) var(--val, 50%), var(--rd-line-strong) var(--val, 50%), var(--rd-line-strong) 100%);
+      outline: none;
+      cursor: pointer;
+    }
+    .rd-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      background: var(--rd-surface);
+      border: 2.5px solid var(--rd-primary);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+
+    /* Toggle Switch */
+    .rd-toggle {
+      width: 38px;
+      height: 22px;
+      border-radius: 999px;
+      padding: 2px;
+      transition: background-color 180ms ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .rd-toggle[data-on="true"] { background: var(--rd-primary); }
+    .rd-toggle[data-on="false"] { background: var(--rd-line-strong); }
+    .rd-toggle-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #FFFFFF;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .rd-toggle[data-on="true"] .rd-toggle-dot { transform: translateX(16px); }
+
+    /* Scrollbar */
+    .rd-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+    .rd-scroll::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.25); border-radius: 99px; }
+
+    @keyframes wavePulse { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+    .wave-bar { animation: wavePulse 0.9s ease-in-out infinite; transform-origin: center; }
+    @keyframes sheetIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .anim-sheet { animation: sheetIn 180ms cubic-bezier(0.2, 0, 0, 1); }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased m-0 p-0 rd-sans">
+  <div id="app" class="max-w-[1400px] mx-auto px-4 sm:px-6 py-5 space-y-5"></div>
+
+  <script>
+  (() => {
+    const READING_PAPERS = [
+      { id: 'day', name: '日间', bg: '#F7F3EA', ink: '#2B241D', meta: '#766C61', scheme: 'day' },
+      { id: 'warm', name: '暖杏', bg: '#F2E8D3', ink: '#2C241D', meta: '#766C61', scheme: 'day' },
+      { id: 'paper', name: '纸纹', bg: '#EEE4D0', ink: '#2B241D', meta: '#766C61', scheme: 'day' },
+      { id: 'green', name: '青瓷', bg: '#E3EBDD', ink: '#263423', meta: '#63755F', scheme: 'day' },
+      { id: 'night', name: '墨夜', bg: '#21221F', ink: '#E4DDD0', meta: '#9D968B', scheme: 'night' },
+      { id: 'warmNight', name: '暖烛', bg: '#372A1E', ink: '#E7D8C8', meta: '#B3A18F', scheme: 'night' },
+      { id: 'paperNight', name: '靛夜', bg: '#202935', ink: '#E2DDD5', meta: '#9BA5B2', scheme: 'night' },
+      { id: 'greenNight', name: '深林', bg: '#1D2D23', ink: '#D8E2D2', meta: '#97AA9A', scheme: 'night' },
+    ];
+
+    const state = {
+      // Three Pending Architecture Decisions
+      model: 'A',                     // 'A' | 'B'
+      brightnessLayout: 'horizontal', // 'horizontal' | 'vertical'
+      replacePlace: 'bottom',         // 'bottom' | 'topMore'
+      scheme: 'day',                  // 'day' | 'night'
+
+      // Live Interactive Phone States
+      paperId: 'paper',
+      ctrlMode: 'open',               // 'open' | 'hidden'
+      module: 'home',                 // 'home' | 'appearance' | 'listen' | 'settings'
+      listenTab: 'tts',               // 'tts' | 'autopage'
+      subView: 'root',                // 'root' | 'typography' | 'fonts' | 'ttsVoice' | 'ttsTimer' | 'autoTimer' | 'settingsMore'
+      dropdownOpen: '',               // '' | 'indent' | 'convert' | 'orient'
+      sheet: 'none',                  // 'none' | 'directory' | 'search' | 'replace'
+      dirTab: 'chapters',
+      replaceTab: 'list',
+      topMenuOpen: false,
+      session: 'none',                // 'none' | 'tts' | 'autopage'
+
+      // Control Values
+      fontSize: 18,
+      fontName: '宋体',
+      lineHeight: 1.9,
+      paraGap: 14,
+      indent: '2字符',
+      convert: '原文',
+      flipMode: '滑动',
+      screenOrient: '跟随系统',
+      ttsVoice: '中文 · 聆小珊女声',
+      ttsRate: 1.0,
+      autoSec: 8,
+      timerMin: 25,
+      brightness: 64,
+      brightnessAuto: false,
+      progressPct: 18,
+      searchQuery: '萧炎',
+      ruleEnabled: true,
+      panoramaSheet: 'directory',
+    };
+
+    function icon(name, size = 16, color = 'currentColor', sw = 1.75) {
+      const p = {
+        arrowLeft: '<path d="M19 12H5"/><path d="m11 18-6-6 6-6"/>',
+        chevronLeft: '<path d="m15 18-6-6 6-6"/>',
+        chevronRight: '<path d="m9 6 6 6-6 6"/>',
+        chevronDown: '<path d="m6 9 6 6 6-6"/>',
+        close: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+        swap: '<path d="M7 16V4m0 0L3 8m4-4 4 4"/><path d="M17 8v12m0 0 4-4m-4 4-4-4"/>',
+        moreH: '<circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
+        toc: '<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h10"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+        replace: '<path d="M7 7h10l-2-2"/><path d="M17 17H7l2 2"/><rect x="4" y="10" width="6" height="4" rx="1"/><rect x="14" y="10" width="6" height="4" rx="1"/>',
+        sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/>',
+        moon: '<path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>',
+        palette: '<circle cx="13.5" cy="6.5" r=".8" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".8" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".8" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".8" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.43-.18-.83-.44-1.12-.29-.32-.43-.73-.43-1.19 0-.94.76-1.7 1.7-1.7h2c3.04 0 5.5-2.46 5.5-5.5C22 6.04 17.52 2 12 2z"/>',
+        headphones: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/>',
+        settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.77 1 1.42 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+        home: '<path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/>',
+        drawerUp: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 13h18"/><path d="m9 9 3-3 3 3"/>',
+        bookInfo: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><circle cx="12" cy="8" r=".8" fill="currentColor" stroke="none"/>',
+        refresh: '<path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/>',
+        download: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+        minus: '<path d="M5 12h14"/>',
+        play: '<polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none"/>',
+        pause: '<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/>',
+        stop: '<rect x="6" y="6" width="12" height="12" rx="2"/>',
+        prev: '<path d="M6 6v12"/><polygon points="18 6 9 12 18 18 18 6"/>',
+        next: '<path d="M18 6v12"/><polygon points="6 6 15 12 6 18 6 6"/>',
+        flipCover: '<rect x="4" y="4" width="12" height="16" rx="2"/><path d="M16 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-3"/>',
+        flipSlide: '<rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/>',
+        flipCurl: '<path d="M5 4h9l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v5h5"/>',
+        flipScroll: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+        flipNone: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>',
+        locate: '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/><path d="M5 20h14"/>',
+        sort: '<path d="M3 7h12"/><path d="M3 12h9"/><path d="M3 17h6"/><path d="m17 14 3 3 3-3"/><path d="M20 7v10"/>',
+      };
+      return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">${p[name] || ''}</svg>`;
+    }
+
+    function activePaper() {
+      return READING_PAPERS.find(p => p.id === state.paperId) || READING_PAPERS[2];
+    }
+
+    // Helper: set scheme & default paper consistently
+    window.setDiagramScheme = (sch) => {
+      state.scheme = sch;
+      state.paperId = sch === 'night' ? 'night' : 'paper';
+      render();
+    };
+
+    window.jumpToScenario = (opts) => {
+      Object.assign(state, {
+        ctrlMode: 'open',
+        sheet: 'none',
+        topMenuOpen: false,
+        dropdownOpen: '',
+        subView: 'root',
+      }, opts);
+      render();
+    };
+
+    window.setBrightnessFromRailClick = (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = Math.max(10, Math.min(100, Math.round((1 - (e.clientY - rect.top) / rect.height) * 100)));
+      state.brightness = pct;
+      state.brightnessAuto = false;
+      render();
+    };
+
+    function getDrawerItemsForHome() {
+      const all = [];
+      // In Model A: 目录与书签 lives in bottom drawer task row alongside 正文搜索 (+ optional 净化替换)
+      // In Model B: 目录 lives on bottom dock left; drawer task row holds 正文搜索 (+ optional 净化替换)
+      if (state.model === 'A') {
+        all.push({ id: 'directory', ico: 'toc', title: '目录与书签', sub: '全宽大抽屉' });
+      }
+      all.push({ id: 'search', ico: 'search', title: '正文搜索', sub: '全宽大抽屉' });
+      if (state.replacePlace === 'bottom') {
+        all.push({ id: 'replace', ico: 'replace', title: '净化替换', sub: '全宽大抽屉' });
+      }
+      return all;
+    }
+
+    // -------------------------------------------------------------------------
+    // Top Decision Bar
+    // -------------------------------------------------------------------------
+    function renderDecisionHeader() {
+      const pill = (active, expr, title, desc = '') => `
+        <button type="button" onclick="${expr}" class="px-2.5 py-1.5 rounded-lg text-left transition-all text-xs border ${active ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)] font-semibold' : 'bg-[var(--background)] text-[var(--foreground)] border-[var(--border)] hover:opacity-90'}">
+          <div>${title}</div>
+          ${desc ? `<div class="text-[10.5px] opacity-80 font-normal mt-0.5">${desc}</div>` : ''}
+        </button>
+      `;
+
+      const topBarRule = state.replacePlace === 'topMore'
+        ? '顶栏保持克制（返回 / 书名 / 换源 / ···），··· 内含：书籍信息 · 刷新本章 · 下载全部 · 净化替换'
+        : '顶栏严格对齐现网极简形态（返回 / 书名 / 换源 / ···），··· 内仅含：书籍信息 · 刷新本章 · 下载全部章节';
+
+      const dockRule = state.model === 'A'
+        ? '底栏常驻 4 个 100% 纯内联 Tab（总控 / 外观 / 听读 / 设置），总控内单独一行放纯抽屉入口（全部拉起 78% 抽屉）'
+        : '刚呼出是一级「总控发射台」（底栏为 目录 / 听读 / 外观 / 设置），进入任一调参模块后目录让位、底部切换为纯 3 Tab 调参锚';
+
+      return `
+        <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border)]">
+            <div>
+              <h1 class="text-base sm:text-lg font-bold tracking-tight">墨纸青松 · 小说阅读器控制架构与布局对比图谱</h1>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">只聚焦三件事：<strong>高/低频入口在哪最顺手</strong> · <strong>330vp 恒定高度不跳变</strong> · <strong>控制栏 vs 78% 独立抽屉严格分离</strong></p>
+            </div>
+            <div class="flex items-center gap-1.5 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)]">
+              <button type="button" onclick="setDiagramScheme('day')" class="px-2.5 py-1 rounded-lg text-xs font-medium ${state.scheme==='day'?'bg-[var(--primary)] text-[var(--primary-foreground)]':'text-[var(--muted-foreground)]'}">日间纸墨</button>
+              <button type="button" onclick="setDiagramScheme('night')" class="px-2.5 py-1 rounded-lg text-xs font-medium ${state.scheme==='night'?'bg-[var(--primary)] text-[var(--primary-foreground)]':'text-[var(--muted-foreground)]'}">夜间墨纸</button>
+            </div>
+          </div>
+
+          <!-- 3 Decision Toggles -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-3">
+            <div class="rounded-xl bg-[var(--background)] border border-[var(--border)] p-2.5 space-y-1.5">
+              <div class="text-xs font-semibold text-[var(--muted-foreground)]">决策 1 · 底部交互结构（均保持顶栏克制）</div>
+              <div class="grid grid-cols-2 gap-1.5">
+                ${pill(state.model === 'A', "state.model='A';state.module='home';state.subView='root';render()", '方案 A（推荐）', '纯内联 4 Tab + 总控抽屉行')}
+                ${pill(state.model === 'B', "state.model='B';state.module='home';state.subView='root';render()", '方案 B（发射台）', '一级总控目录居左 + 3 Tab调参')}
+              </div>
+            </div>
+
+            <div class="rounded-xl bg-[var(--background)] border border-[var(--border)] p-2.5 space-y-1.5">
+              <div class="text-xs font-semibold text-[var(--muted-foreground)]">决策 2 · 总控内部亮度条形态</div>
+              <div class="grid grid-cols-2 gap-1.5">
+                ${pill(state.brightnessLayout === 'horizontal', "state.brightnessLayout='horizontal';state.module='home';state.subView='root';state.sheet='none';render()", '横向通栏亮度条', '进度→亮度→抽屉行，三行对齐')}
+                ${pill(state.brightnessLayout === 'vertical', "state.brightnessLayout='vertical';state.module='home';state.subView='root';state.sheet='none';render()", '现网右侧竖向亮度轨', '左进度与抽屉 / 右 38vp 竖轨')}
+              </div>
+            </div>
+
+            <div class="rounded-xl bg-[var(--background)] border border-[var(--border)] p-2.5 space-y-1.5">
+              <div class="text-xs font-semibold text-[var(--muted-foreground)]">决策 3 ·「净化替换」触发位置</div>
+              <div class="grid grid-cols-2 gap-1.5">
+                ${pill(state.replacePlace === 'bottom', "state.replacePlace='bottom';state.module='home';state.subView='root';state.sheet='none';render()", '与目录/搜索同列总控下排', '底部抽屉行 3 等宽对称')}
+                ${pill(state.replacePlace === 'topMore', "state.replacePlace='topMore';state.module='home';state.subView='root';state.sheet='none';render()", '收进顶栏 ··· 菜单', '总控抽屉行更宽松')}
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Rule Bar -->
+          <div class="rounded-xl px-3 py-2 bg-[var(--background)] border border-[var(--border)] text-xs flex flex-wrap gap-x-5 gap-y-1 items-center">
+            <span class="font-semibold text-[var(--primary)]">当前有效规则：</span>
+            <span class="text-[var(--muted-foreground)]"><strong class="text-[var(--foreground)]">顶栏：</strong>${topBarRule}</span>
+            <span class="text-[var(--muted-foreground)]"><strong class="text-[var(--foreground)]">底栏：</strong>${dockRule}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // Section 1: 6-Screen Panorama Alignment View (Shows 330vp Constant Height!)
+    // -------------------------------------------------------------------------
+    function renderPanoramaSection() {
+      const p = activePaper();
+      const drawers = getDrawerItemsForHome();
+
+      const miniHeader = `
+        <div class="px-2 pt-1.5 shrink-0">
+          <div class="h-6 rounded-full rd-glass px-2 flex items-center justify-between border" style="border-color:var(--rd-line);">
+            <span class="text-[9px] font-bold" style="color:var(--rd-ink);">←</span>
+            <div class="text-center leading-tight min-w-0 px-1">
+              <div class="text-[8.5px] font-semibold rd-serif truncate" style="color:var(--rd-ink);">斗破苍穹</div>
+            </div>
+            <div class="flex items-center gap-1">
+              <span class="px-1.5 py-0.5 rounded-full text-[7.5px] font-semibold" style="background:var(--rd-primary-soft);color:var(--rd-primary);">换源</span>
+              <span class="text-[9px] font-bold" style="color:var(--rd-ink);">···</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const miniDock = (activeId, isSubModule = false) => {
+        if (state.model === 'B') {
+          if (!isSubModule && activeId === 'home') {
+            return `
+              <div class="grid grid-cols-4 gap-0.5 pt-1 mt-1 border-t shrink-0" style="border-color:var(--rd-line);">
+                ${[['toc','目录',false],['headphones','听读',false],['palette','外观',false],['settings','设置',false]].map(([ic,lb,act]) => `
+                  <div class="h-5 rounded flex items-center justify-center gap-0.5 text-[7.5px] font-medium" style="${ic==='toc'?'background:var(--rd-seal-soft);color:var(--rd-seal);':'background:var(--rd-sunken);color:var(--rd-ink);'}">${lb}</div>
+                `).join('')}
+              </div>
+            `;
+          }
+          return `
+            <div class="grid grid-cols-3 gap-0.5 pt-1 mt-1 border-t shrink-0" style="border-color:var(--rd-line);">
+              ${[['appearance','外观'],['listen','听读'],['settings','设置']].map(([id,lb]) => `
+                <div class="h-5 rounded flex items-center justify-center text-[7.5px] font-medium" style="${activeId===id?'background:var(--rd-primary-soft);color:var(--rd-primary);font-weight:700;':'color:var(--rd-muted);'}">${lb}</div>
+              `).join('')}
+            </div>
+          `;
+        }
+        return `
+          <div class="grid grid-cols-4 gap-0.5 pt-1 mt-1 border-t shrink-0" style="border-color:var(--rd-line);">
+            ${[['home','总控'],['appearance','外观'],['listen','听读'],['settings','设置']].map(([id,lb]) => `
+              <div class="h-5 rounded flex items-center justify-center text-[7.5px] font-medium" style="${activeId===id?'background:var(--rd-primary-soft);color:var(--rd-primary);font-weight:700;':'color:var(--rd-muted);'}">${lb}</div>
+            `).join('')}
+          </div>
+        `;
+      };
+
+      const miniHomeBody = () => {
+        const drawerRow = `
+          <div class="grid gap-1" style="grid-template-columns:repeat(${drawers.length},minmax(0,1fr));">
+            ${drawers.map(d => `
+              <div class="rounded-md py-1 px-0.5 flex flex-col items-center justify-center border" style="background:var(--rd-surface);border-color:var(--rd-primary-border);">
+                <span class="text-[7px] font-semibold truncate" style="color:var(--rd-ink);">${d.title.replace('与书签','')}</span>
+                <span class="text-[6px]" style="color:var(--rd-seal);">抽屉↗</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        if (state.brightnessLayout === 'vertical') {
+          return `
+            <div class="flex gap-1.5 h-full">
+              <div class="flex-1 flex flex-col justify-between gap-1">
+                <div class="rounded-md p-1.5 space-y-1" style="background:var(--rd-sunken);">
+                  <div class="text-[7.5px] font-medium flex justify-between" style="color:var(--rd-ink);"><span>‹</span><span>第三章 客人</span><span>›</span></div>
+                  <div class="h-1 rounded-full overflow-hidden" style="background:var(--rd-line-strong);"><div class="h-full w-1/4" style="background:var(--rd-primary);"></div></div>
+                </div>
+                <div class="rounded-md p-1 space-y-1 border border-dashed" style="background:var(--rd-sunken);border-color:var(--rd-line-strong);">
+                  <div class="text-[6.5px]" style="color:var(--rd-seal);">独立抽屉入口</div>
+                  ${drawerRow}
+                </div>
+              </div>
+              <div class="w-4 rounded-full p-0.5 flex flex-col items-center justify-between border" style="background:var(--rd-sunken);border-color:var(--rd-line);">
+                <span class="text-[6px]">☀</span>
+                <div class="w-1 flex-1 my-0.5 rounded-full overflow-hidden flex items-end" style="background:var(--rd-line-strong);"><div class="w-full h-3/5" style="background:var(--rd-primary);"></div></div>
+                <span class="text-[6px] font-bold" style="color:var(--rd-primary);">A</span>
+              </div>
+            </div>
+          `;
+        }
+        return `
+          <div class="flex flex-col justify-between h-full gap-1">
+            <div class="rounded-md p-1.5 space-y-1" style="background:var(--rd-sunken);">
+              <div class="text-[7.5px] font-medium flex justify-between" style="color:var(--rd-ink);"><span>‹</span><span>第三章 客人</span><span>›</span></div>
+              <div class="h-1 rounded-full overflow-hidden" style="background:var(--rd-line-strong);"><div class="h-full w-1/4" style="background:var(--rd-primary);"></div></div>
+            </div>
+            <div class="rounded-md px-1.5 h-5 flex items-center gap-1" style="background:var(--rd-sunken);">
+              <span class="text-[7px]">☀</span>
+              <div class="flex-1 h-1 rounded-full overflow-hidden" style="background:var(--rd-line-strong);"><div class="h-full w-3/5" style="background:var(--rd-primary);"></div></div>
+              <span class="text-[6.5px] px-1 rounded" style="background:var(--rd-surface);color:var(--rd-muted);">自动</span>
+            </div>
+            <div class="rounded-md p-1 space-y-0.5 border border-dashed" style="background:var(--rd-sunken);border-color:var(--rd-line-strong);">
+              <div class="text-[6.5px]" style="color:var(--rd-seal);">独立抽屉任务行 ↗</div>
+              ${drawerRow}
+            </div>
+          </div>
+        `;
+      };
+
+      const cards = [
+        {
+          id: 'home',
+          title: '1. 总控 L2（330vp）',
+          sub: state.model === 'A' ? '进度 + 亮度 + 抽屉行' : '一级发射台 + 目录居左',
+          active: state.sheet === 'none' && state.ctrlMode === 'open' && state.module === 'home' && state.subView === 'root',
+          jump: "jumpToScenario({module:'home',subView:'root',sheet:'none'})",
+          isSheet: false,
+          islandHead: `<div class="flex justify-between items-center text-[8.5px] font-bold rd-serif mb-1 shrink-0" style="color:var(--rd-ink);"><span>阅读总控</span><span style="color:var(--rd-muted);">×</span></div>`,
+          islandBody: miniHomeBody(),
+          dock: miniDock('home', false),
+        },
+        {
+          id: 'appearance',
+          title: '2. 外观 L2（330vp）',
+          sub: '4×2 日夜纸卡 + 字号',
+          active: state.sheet === 'none' && state.ctrlMode === 'open' && state.module === 'appearance' && state.subView === 'root',
+          jump: "jumpToScenario({module:'appearance',subView:'root',sheet:'none'})",
+          isSheet: false,
+          islandHead: `<div class="flex justify-between items-center text-[8.5px] font-bold rd-serif mb-1 shrink-0" style="color:var(--rd-ink);">${state.model==='B'?'<span>‹ 总控 · 外观</span>':'<span>界面外观</span>'}<span style="color:var(--rd-muted);">×</span></div>`,
+          islandBody: `
+            <div class="flex flex-col justify-between h-full gap-1">
+              <div class="grid grid-cols-4 gap-0.5">${READING_PAPERS.slice(0,4).map((x,i)=>`<div class="h-4 rounded flex items-center justify-center text-[6.5px] border" style="background:${x.bg};color:${x.ink};border-color:${i===2?'var(--rd-primary)':'var(--rd-line)'};">Aa</div>`).join('')}</div>
+              <div class="grid grid-cols-4 gap-0.5">${READING_PAPERS.slice(4,8).map(x=>`<div class="h-4 rounded flex items-center justify-center text-[6.5px] border" style="background:${x.bg};color:${x.ink};border-color:var(--rd-line);">Aa</div>`).join('')}</div>
+              <div class="h-5 rounded px-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>字号</span><span>A- 18 A+</span></div>
+              <div class="rounded px-1.5 py-1 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>字体 · 精细排版</span><span>›</span></div>
+            </div>
+          `,
+          dock: miniDock('appearance', true),
+        },
+        {
+          id: 'typography',
+          title: '3. 排版 L3（330vp）',
+          sub: '‹ 返回 + 原地展开',
+          active: state.sheet === 'none' && state.ctrlMode === 'open' && state.module === 'appearance' && state.subView === 'typography',
+          jump: "jumpToScenario({module:'appearance',subView:'typography',dropdownOpen:'indent',sheet:'none'})",
+          isSheet: false,
+          islandHead: `<div class="flex justify-between items-center text-[8px] font-bold mb-1 shrink-0" style="color:var(--rd-ink);"><span class="px-1 rounded" style="background:var(--rd-sunken);">‹ 外观</span><span>精细排版</span><span style="color:var(--rd-muted);">×</span></div>`,
+          islandBody: `
+            <div class="flex flex-col justify-between h-full gap-1">
+              <div class="h-5 rounded px-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>行距</span><span>- 1.9 +</span></div>
+              <div class="rounded p-1 space-y-0.5" style="background:var(--rd-sunken);">
+                <div class="flex justify-between text-[7px] font-semibold" style="color:var(--rd-primary);"><span>首行缩进</span><span>2字符 ▲</span></div>
+                <div class="grid grid-cols-3 gap-0.5 text-[6.5px] text-center">
+                  <span class="py-0.5 rounded" style="background:var(--rd-surface);">无</span>
+                  <span class="py-0.5 rounded font-bold" style="background:var(--rd-primary-soft);color:var(--rd-primary);">2字符</span>
+                  <span class="py-0.5 rounded" style="background:var(--rd-surface);">4字符</span>
+                </div>
+              </div>
+              <div class="h-4 rounded px-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>简繁</span><span>原文 ▾</span></div>
+            </div>
+          `,
+          dock: miniDock('appearance', true),
+        },
+        {
+          id: 'listen',
+          title: '4. 听读 L2（330vp）',
+          sub: '朗读 | 自动翻页双分段',
+          active: state.sheet === 'none' && state.ctrlMode === 'open' && state.module === 'listen' && state.subView === 'root',
+          jump: "jumpToScenario({module:'listen',listenTab:'tts',subView:'root',sheet:'none'})",
+          isSheet: false,
+          islandHead: `<div class="flex justify-between items-center text-[8.5px] font-bold rd-serif mb-1 shrink-0" style="color:var(--rd-ink);">${state.model==='B'?'<span>‹ 总控 · 听读</span>':'<span>听读中心</span>'}<span style="color:var(--rd-primary);">胶囊›</span></div>`,
+          islandBody: `
+            <div class="flex flex-col justify-between h-full gap-1">
+              <div class="grid grid-cols-2 p-0.5 rounded text-[7px] text-center" style="background:var(--rd-sunken);">
+                <span class="py-0.5 rounded font-bold" style="background:var(--rd-surface);color:var(--rd-primary);">语音朗读</span>
+                <span class="py-0.5" style="color:var(--rd-muted);">自动翻页</span>
+              </div>
+              <div class="h-7 rounded px-2 flex items-center justify-between" style="background:var(--rd-sunken);">
+                <span class="text-[7px]">‹‹ ▶ ››</span>
+                <span class="text-[7px]" style="color:var(--rd-primary);">ll‖ll‖</span>
+              </div>
+              <div class="h-5 rounded px-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>语速</span><span style="color:var(--rd-primary);">1.0x</span></div>
+              <div class="h-4 rounded px-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>音色与定时</span><span>›</span></div>
+            </div>
+          `,
+          dock: miniDock('listen', true),
+        },
+        {
+          id: 'settings',
+          title: '5. 设置 L2（330vp）',
+          sub: '5 列等宽翻页 + 选项',
+          active: state.sheet === 'none' && state.ctrlMode === 'open' && state.module === 'settings' && state.subView === 'root',
+          jump: "jumpToScenario({module:'settings',subView:'root',sheet:'none'})",
+          isSheet: false,
+          islandHead: `<div class="flex justify-between items-center text-[8.5px] font-bold rd-serif mb-1 shrink-0" style="color:var(--rd-ink);">${state.model==='B'?'<span>‹ 总控 · 设置</span>':'<span>阅读设置</span>'}<span style="color:var(--rd-muted);">×</span></div>`,
+          islandBody: `
+            <div class="flex flex-col justify-between h-full gap-1">
+              <div class="grid grid-cols-5 gap-0.5">
+                ${['覆盖','滑动','仿真','滚动','无'].map((m,i)=>`<div class="h-6 rounded flex items-center justify-center text-[6.5px] font-medium" style="${i===1?'background:var(--rd-primary);color:var(--rd-on-primary);':'background:var(--rd-sunken);color:var(--rd-ink);'}">${m}</div>`).join('')}
+              </div>
+              <div class="rounded px-1.5 h-5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>隐藏底栏</span><span class="w-4 h-2.5 rounded-full" style="background:var(--rd-primary);"></span></div>
+              <div class="rounded px-1.5 h-5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>音量键翻页</span><span class="w-4 h-2.5 rounded-full" style="background:var(--rd-line-strong);"></span></div>
+              <div class="rounded px-1.5 h-4 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>屏幕与高级</span><span>›</span></div>
+            </div>
+          `,
+          dock: miniDock('settings', true),
+        },
+        {
+          id: 'sheet',
+          title: '6. 独立模态抽屉（78%）',
+          sub: '目录 / 搜索 / 替换共用',
+          active: state.sheet !== 'none',
+          jump: `jumpToScenario({sheet:'${state.panoramaSheet}',ctrlMode:'open'})`,
+          isSheet: true,
+        },
+      ];
+
+      return `
+        <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h2 class="text-sm sm:text-base font-bold">一、全景等高对齐总览（点击任意卡片可在下方实机交互验证）</h2>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">前 5 张属于「底部悬浮控制栏」（严格等高 <span class="font-mono font-semibold text-[var(--foreground)]">330vp</span>，绿色虚线平齐，绝不跳动）；第 6 张属于「独立模态抽屉」（统一 <span class="font-mono font-semibold text-[var(--foreground)]">78%</span> 屏高 + 暗遮罩）。</p>
+            </div>
+            <div class="flex items-center gap-1 text-xs">
+              <span class="text-[var(--muted-foreground)]">第 6 张预览抽屉：</span>
+              ${[['directory','目录'],['search','搜索'],['replace','替换']].map(([k,l])=>`
+                <button type="button" onclick="state.panoramaSheet='${k}';if(state.sheet!=='none'){state.sheet='${k}';}render()" class="px-2 py-0.5 rounded-md border ${state.panoramaSheet===k?'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)]':'bg-[var(--background)] border-[var(--border)] text-[var(--muted-foreground)]'}">${l}</button>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="overflow-x-auto rd-scroll pb-1">
+            <div class="min-w-[1160px] relative pt-1">
+              <div class="grid grid-cols-6 gap-3 items-end">
+                ${cards.map(c => {
+                  const frameCls = c.active ? 'ring-2 ring-[var(--primary)] shadow-lg' : 'opacity-95 hover:opacity-100';
+                  return `
+                    <div class="flex flex-col">
+                      <div class="h-9 flex flex-col justify-center px-0.5 mb-1">
+                        <div class="text-xs font-semibold truncate ${c.active ? 'text-[var(--primary)]' : 'text-[var(--foreground)]'}">${c.title}</div>
+                        <div class="text-[11px] text-[var(--muted-foreground)] truncate">${c.sub}</div>
+                      </div>
+                      <button type="button" onclick="${c.jump}" class="text-left rounded-[22px] p-1.5 border-2 border-[var(--border)] bg-[var(--background)] transition-all rd-press ${frameCls}" style="height:376px;">
+                        <div class="rd-scope w-full h-full rounded-[16px] overflow-hidden relative flex flex-col" data-scheme="${state.scheme}" style="background:${p.bg};color:${p.ink};">
+                          ${miniHeader}
+                          <div class="px-2.5 pt-2 space-y-1.5 text-[7.5px] leading-relaxed rd-serif opacity-80">
+                            <p style="text-indent:1.5em;">“萧炎哥哥，你说，他会是谁？”薰儿偏过头嫣然一笑。</p>
+                            <p style="text-indent:1.5em;">心头猛的一跳，萧炎讪笑两声，目光转向大厅内。</p>
+                          </div>
+
+                          ${c.isSheet ? `
+                            <!-- 78% Independent Modal Sheet -->
+                            <div class="absolute inset-0 flex items-end" style="background:var(--rd-scrim);">
+                              <div class="w-full rounded-t-[16px] p-2.5 border-t flex flex-col" style="height:78%;background:var(--rd-elevated);border-color:var(--rd-line);">
+                                <div class="w-6 h-0.5 rounded-full mx-auto mb-1.5" style="background:var(--rd-line-strong);"></div>
+                                <div class="flex items-center justify-between mb-1.5">
+                                  <span class="text-[9.5px] font-bold rd-serif" style="color:var(--rd-ink);">${state.panoramaSheet==='directory'?'目录与书签':state.panoramaSheet==='search'?'正文搜索':'净化替换'}</span>
+                                  <span class="text-[9px]" style="color:var(--rd-muted);">×</span>
+                                </div>
+                                ${state.panoramaSheet === 'directory' ? `
+                                  <div class="h-4 rounded px-2 mb-1.5 flex items-center text-[7px]" style="background:var(--rd-sunken);color:var(--rd-subtle);">搜索章节…</div>
+                                  <div class="space-y-1 flex-1 overflow-hidden">
+                                    ${['第一章 陨落的天才','第二章 斗气大陆','第三章 客人 (当前)','第四章 云岚宗','第五章 聚气散','第六章 炼药师','第七章 休！'].map((ch,idx)=>`
+                                      <div class="px-1.5 py-1 rounded text-[7px] truncate" style="${idx===2?'background:var(--rd-primary-soft);color:var(--rd-primary);font-weight:700;':'color:var(--rd-ink);'}">${ch}</div>
+                                    `).join('')}
+                                  </div>
+                                ` : state.panoramaSheet === 'search' ? `
+                                  <div class="h-4 rounded px-2 mb-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-sunken);"><span>萧炎</span><span style="color:var(--rd-primary);">搜索</span></div>
+                                  <div class="space-y-1 flex-1">
+                                    ${['第一章 · 望着测验魔石碑…','第三章 · 薰儿偏过头嫣然一笑…','第四章 · 萧炎深吸一口气…'].map(hit=>`
+                                      <div class="p-1.5 rounded text-[7px]" style="background:var(--rd-sunken);color:var(--rd-ink);">${hit}</div>
+                                    `).join('')}
+                                  </div>
+                                ` : `
+                                  <div class="h-4 rounded px-1.5 mb-1.5 flex items-center justify-between text-[7px]" style="background:var(--rd-primary);color:var(--rd-on-primary);"><span>+ 新增规则</span><span>导入/导出</span></div>
+                                  <div class="p-1.5 rounded text-[7px] space-y-1" style="background:var(--rd-sunken);color:var(--rd-ink);">
+                                    <div class="font-bold">去除章节广告水印</div>
+                                    <div style="color:var(--rd-muted);">正则：请记住本站域名.* → 空</div>
+                                  </div>
+                                `}
+                              </div>
+                            </div>
+                          ` : `
+                            <!-- Fixed Proportional 330vp Floating Control Island (height 165px inside 360px inner height) -->
+                            <div class="absolute bottom-1.5 left-1.5 right-1.5 rounded-[14px] p-2 border flex flex-col rd-glass-heavy" style="height:165px;border-color:var(--rd-line-strong);box-shadow:var(--rd-e2);">
+                              ${c.islandHead}
+                              <div class="flex-1 min-h-0 overflow-hidden">${c.islandBody}</div>
+                              ${c.dock}
+                            </div>
+                          `}
+                        </div>
+                      </button>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+
+              <!-- Horizontal 330vp Constant Alignment Ruler across Cols 1-5 -->
+              <!-- Bottom math: outer p-1.5(6px) + border-2(2px) + inner bottom-1.5(6px) + island height(165px) = 179px -->
+              <div class="pointer-events-none absolute left-0 flex items-center" style="width:calc(83.333% - 6px);bottom:179px;z-index:30;">
+                <div class="w-full border-t-2 border-dashed" style="border-color:#1F3D31;"></div>
+                <span class="absolute left-2 -top-5 px-2 py-0.5 rounded text-[10px] font-bold text-white shadow-sm" style="background:#1F3D31;">330vp 等高基准线 · 总控 / 外观 / 排版L3 / 听读 / 设置 0px 跳变</span>
+              </div>
+
+              <!-- 78% Modal Sheet Marker on Col 6 -->
+              <!-- Bottom math: 8px bezel + 78% of 360px inner(281px) = 289px -->
+              <div class="pointer-events-none absolute right-0 flex items-center" style="width:calc(16.666% - 4px);bottom:289px;z-index:30;">
+                <div class="w-full border-t-2 border-dashed" style="border-color:#9A3F32;"></div>
+                <span class="absolute right-1 -top-5 px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-sm" style="background:#9A3F32;">78% 模态抽屉（暗遮罩）</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // Section 2 Left: Live Interactive Phone + Vertical Height Ruler
+    // -------------------------------------------------------------------------
+    function renderInteractivePhone() {
+      const p = activePaper();
+      const isHidden = state.ctrlMode === 'hidden';
+      const mod = state.module;
+      const sub = state.subView;
+      const drawers = getDrawerItemsForHome();
+
+      const modTitles = { home: '阅读总控', appearance: '界面外观', listen: '听读中心', settings: '阅读设置' };
+      const subTitles = {
+        typography: '精细排版与绑定',
+        fonts: '字体库',
+        ttsVoice: '音色与引擎',
+        ttsTimer: '定时与偏好',
+        autoTimer: '定时与高亮',
+        settingsMore: '屏幕与高级设置',
+      };
+      const sheetTitles = { directory: '目录与书签', search: '正文搜索', replace: '净化替换' };
+
+      const renderStepper = (valTxt, minusExpr, plusExpr, mTxt = '', pTxt = '') => `
+        <div class="h-7 flex items-center rounded-full border overflow-hidden shrink-0" style="background:var(--rd-surface);border-color:var(--rd-line);">
+          <button type="button" onclick="${minusExpr}" class="w-8 h-7 flex items-center justify-center text-[11px] font-semibold rd-press" style="color:var(--rd-ink);">${mTxt || icon('minus', 12)}</button>
+          <span class="min-w-[46px] px-1 text-center text-[11px] font-semibold rd-num border-x" style="color:var(--rd-ink);border-color:var(--rd-line);">${valTxt}</span>
+          <button type="button" onclick="${plusExpr}" class="w-8 h-7 flex items-center justify-center text-[11px] font-semibold rd-press" style="color:var(--rd-ink);">${pTxt || icon('plus', 12)}</button>
+        </div>
+      `;
+
+      const renderInPlaceDropdown = (key, label, val, opts, field) => {
+        const open = state.dropdownOpen === key;
+        return `
+          <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+            <button type="button" onclick="state.dropdownOpen=state.dropdownOpen==='${key}'?'':'${key}';render()" class="w-full px-3 h-9 flex items-center justify-between rd-press">
+              <span class="text-[12px] font-medium" style="color:var(--rd-ink);">${label}</span>
+              <span class="flex items-center gap-1 text-[11.5px] font-medium" style="color:var(--rd-primary);">
+                <span>${val}</span>
+                <span style="display:inline-flex;transform:rotate(${open?180:0}deg);transition:transform 160ms ease;">${icon('chevronDown', 13)}</span>
+              </span>
+            </button>
+            ${open ? `
+              <div class="px-2 pb-2 pt-1 space-y-1 border-t" style="border-color:var(--rd-line);">
+                ${opts.map(o => `
+                  <button type="button" onclick="state.${field}='${o}';state.dropdownOpen='';render()" class="w-full px-2.5 h-7 rounded-md flex items-center justify-between text-[11.5px] rd-press" style="${val===o?'background:var(--rd-primary-soft);color:var(--rd-primary);font-weight:600;':'color:var(--rd-ink);'}">
+                    <span>${o}</span>${val===o ? icon('check', 12) : ''}
+                  </button>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      };
+
+      const renderDrillRow = (label, valText, targetSub, hCls = 'h-8') => `
+        <button type="button" onclick="state.subView='${targetSub}';state.dropdownOpen='';render()" class="w-full px-3 ${hCls} flex items-center justify-between text-left rd-press">
+          <span class="text-[12px] font-medium" style="color:var(--rd-ink);">${label}</span>
+          <span class="flex items-center gap-1 text-[11px] min-w-0" style="color:var(--rd-muted);">
+            <span class="truncate">${valText}</span>${icon('chevronRight', 13)}
+          </span>
+        </button>
+      `;
+
+      // Floating Top Bar (Strictly matches real app: Back | Title+Subtitle | SourceSwitch | ···)
+      const topBarHtml = !isHidden ? `
+        <div class="px-3 pt-2 pb-1.5 relative z-20 shrink-0">
+          <div class="h-11 rounded-full rd-glass px-2 flex items-center justify-between border" style="border-color:var(--rd-line);box-shadow:var(--rd-e2);">
+            <button type="button" onclick="state.ctrlMode='hidden';state.topMenuOpen=false;render()" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-ink);" title="收起控制区">${icon('arrowLeft', 18)}</button>
+            <div class="text-center px-1.5 min-w-0 flex-1">
+              <div class="text-[14px] font-semibold rd-serif truncate" style="color:var(--rd-ink);">斗破苍穹</div>
+              <div class="text-[10px] truncate" style="color:var(--rd-muted);">第三章 客人 · 66书吧</div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="state.topMenuOpen=false;render()" class="px-2 h-7 rounded-full text-[11px] font-medium flex items-center gap-0.5 rd-press" style="background:var(--rd-primary-soft);color:var(--rd-primary);" title="换源（跳转独立页）">${icon('swap', 12)}<span>换源</span></button>
+              <button type="button" onclick="state.topMenuOpen=!state.topMenuOpen;render()" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="${state.topMenuOpen?'background:var(--rd-primary-soft);color:var(--rd-primary);':'color:var(--rd-ink);'}" title="更多书籍操作">${icon('moreH', 16)}</button>
+            </div>
+          </div>
+        </div>
+      ` : `
+        <div class="px-4 pt-2 flex items-center justify-between text-[11px] shrink-0" style="color:${p.meta};">
+          <span>第三章 客人</span>
+          <button type="button" onclick="state.ctrlMode='open';render()" class="px-2 py-0.5 rounded-full border text-[10px] rd-press" style="border-color:currentColor;opacity:0.8;">唤出控制栏</button>
+        </div>
+      `;
+
+      // Top Bar ··· Popover (strictly restrained!)
+      const topMoreItems = [
+        ['bookInfo', '书籍信息', "state.topMenuOpen=false;render()"],
+        ['refresh', '刷新本章', "state.topMenuOpen=false;render()"],
+        ['download', '下载全部章节', "state.topMenuOpen=false;render()"],
+      ];
+      if (state.replacePlace === 'topMore') {
+        topMoreItems.push(['replace', '净化替换（抽屉↗）', "state.topMenuOpen=false;state.sheet='replace';render()"]);
+      }
+      const topPopoverHtml = (!isHidden && state.topMenuOpen && state.sheet === 'none') ? `
+        <div onclick="state.topMenuOpen=false;render()" class="absolute inset-0" style="z-index:28;"></div>
+        <div class="absolute top-[56px] right-3 w-[168px] rounded-[14px] p-1.5 border rd-glass-heavy anim-sheet" style="z-index:30;border-color:var(--rd-line-strong);box-shadow:var(--rd-e3);">
+          ${topMoreItems.map(([ic, lb, ex], idx) => `
+            <button type="button" onclick="${ex}" class="w-full h-8 px-2 rounded-[9px] flex items-center gap-2 text-[11.5px] font-medium rd-press" style="${idx>0?'margin-top:2px;':''}color:var(--rd-ink);">
+              <span style="color:var(--rd-primary);">${icon(ic, 13)}</span><span class="truncate">${lb}</span>
+            </button>
+          `).join('')}
+        </div>
+      ` : '';
+
+      // Floating 330px Control Island Content
+      let islandHtml = '';
+      if (!isHidden) {
+        let headerHtml = '';
+        let bodyHtml = '';
+
+        if (sub !== 'root') {
+          const parentName = modTitles[mod] || '总控';
+          headerHtml = `
+            <div class="h-7 mb-2 shrink-0 flex items-center justify-between gap-2">
+              <button type="button" onclick="state.subView='root';state.dropdownOpen='';render()" class="h-7 pl-1.5 pr-2.5 rounded-full flex items-center gap-0.5 text-[11.5px] font-medium rd-press" style="background:var(--rd-sunken);color:var(--rd-ink);">${icon('chevronLeft', 14)}<span>${parentName}</span></button>
+              <div class="text-[13.5px] font-semibold rd-serif truncate" style="color:var(--rd-ink);">${subTitles[sub] || ''}</div>
+              <button type="button" onclick="state.ctrlMode='hidden';render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-sunken);color:var(--rd-muted);">${icon('close', 13)}</button>
+            </div>
+          `;
+
+          if (sub === 'typography') {
+            bodyHtml = `
+              <div class="space-y-1.5">
+                <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                  <div class="px-3 h-9 flex items-center justify-between"><span class="text-[12px] font-medium" style="color:var(--rd-ink);">行距倍数</span>${renderStepper(`${state.lineHeight}`, "state.lineHeight=Math.max(1.4,+(state.lineHeight-0.1).toFixed(1));render()", "state.lineHeight=Math.min(2.4,+(state.lineHeight+0.1).toFixed(1));render()")}</div>
+                  <div class="px-3 h-9 flex items-center justify-between border-t" style="border-color:var(--rd-line);"><span class="text-[12px] font-medium" style="color:var(--rd-ink);">段落间距</span>${renderStepper(`${state.paraGap}px`, "state.paraGap=Math.max(4,state.paraGap-2);render()", "state.paraGap=Math.min(28,state.paraGap+2);render()")}</div>
+                </div>
+                ${renderInPlaceDropdown('indent', '首行缩进', state.indent, ['无缩进','2字符','4字符'], 'indent')}
+                ${renderInPlaceDropdown('convert', '简繁转换', state.convert, ['原文','简体中文','繁体中文'], 'convert')}
+              </div>
+            `;
+          } else if (sub === 'fonts') {
+            bodyHtml = `
+              <div class="space-y-2">
+                <div class="text-[11px] flex justify-between px-0.5" style="color:var(--rd-muted);"><span>长按拖拽排序</span><span>当前：${state.fontName}</span></div>
+                <div class="grid grid-cols-4 gap-1.5">
+                  ${['系统','宋体','黑体','楷体','仿宋','思源宋','霞鹜楷','+ 导入'].map(f => `
+                    <button type="button" onclick="state.fontName='${f}';render()" class="h-8 rounded-[9px] text-[11.5px] font-medium rd-press" style="${state.fontName===f?'background:var(--rd-primary);color:var(--rd-on-primary);':'background:var(--rd-sunken);color:var(--rd-ink);'}">${f}</button>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          } else if (sub === 'ttsVoice') {
+            bodyHtml = `
+              <div class="space-y-1.5">
+                <div class="grid grid-cols-2 gap-1.5">
+                  <div class="p-2 rounded-[10px] border" style="background:var(--rd-primary-soft);border-color:var(--rd-primary-border);"><div class="text-[11.5px] font-semibold" style="color:var(--rd-primary);">系统 TTS</div><div class="text-[10px]" style="color:var(--rd-muted);">离线低延迟</div></div>
+                  <div class="p-2 rounded-[10px]" style="background:var(--rd-sunken);"><div class="text-[11.5px] font-medium" style="color:var(--rd-ink);">在线 TTS</div><div class="text-[10px]" style="color:var(--rd-muted);">自定义云声线</div></div>
+                </div>
+                <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                  ${['中文 · 聆小珊女声','中文 · 云枫醇厚男声','中文 · 晓辰自然标准'].map((v,i)=>`
+                    <button type="button" onclick="state.ttsVoice='${v}';render()" class="w-full px-3 h-9 flex items-center justify-between text-[11.5px]" style="${i>0?'border-top:1px solid var(--rd-line);':''}color:${state.ttsVoice===v?'var(--rd-primary)':'var(--rd-ink)'};">${v}${state.ttsVoice===v?icon('check',13):''}</button>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          } else if (sub === 'ttsTimer' || sub === 'autoTimer') {
+            bodyHtml = `
+              <div class="space-y-2">
+                <div class="grid grid-cols-4 gap-1.5">
+                  ${[['0','不开启'],['15','15分'],['25','25分'],['60','60分']].map(([v,l])=>`
+                    <button type="button" onclick="state.timerMin=${v};render()" class="h-8 rounded-full text-[11px] font-medium rd-press" style="${String(state.timerMin)===v?'background:var(--rd-primary);color:var(--rd-on-primary);':'background:var(--rd-sunken);color:var(--rd-ink);'}">${l}</button>
+                  `).join('')}
+                </div>
+                <div class="px-3 h-10 rounded-[10px] flex items-center justify-between" style="background:var(--rd-sunken);">
+                  <span class="text-[12px] font-medium" style="color:var(--rd-ink);">自定义定时</span>
+                  ${renderStepper(`${state.timerMin} 分`, "state.timerMin=Math.max(0,state.timerMin-5);render()", "state.timerMin=Math.min(120,state.timerMin+5);render()")}
+                </div>
+              </div>
+            `;
+          } else {
+            bodyHtml = `
+              <div class="space-y-1.5">
+                ${renderInPlaceDropdown('orient', '屏幕方向', state.screenOrient, ['跟随系统','锁定竖屏','锁定横屏'], 'screenOrient')}
+                <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                  <div class="px-3 h-9 flex items-center justify-between"><span class="text-[12px]" style="color:var(--rd-ink);">拓展至灵动岛/状态栏</span><span class="rd-toggle" data-on="false" onclick="this.dataset.on=this.dataset.on==='true'?'false':'true'"><span class="rd-toggle-dot"></span></span></div>
+                  <div class="px-3 h-9 flex items-center justify-between border-t" style="border-color:var(--rd-line);"><span class="text-[12px]" style="color:var(--rd-ink);">长按选择正文文本</span><span class="rd-toggle" data-on="true" onclick="this.dataset.on=this.dataset.on==='true'?'false':'true'"><span class="rd-toggle-dot"></span></span></div>
+                </div>
+              </div>
+            `;
+          }
+        } else if (mod === 'home') {
+          headerHtml = `
+            <div class="h-7 mb-2 shrink-0 flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[14px] font-semibold rd-serif" style="color:var(--rd-ink);">阅读总控</span>
+                <span class="px-1.5 py-0.5 rounded text-[9.5px] font-semibold" style="background:var(--rd-primary-soft);color:var(--rd-primary);">${state.model==='A'?'方案 A':'方案 B 发射台'}</span>
+              </div>
+              <button type="button" onclick="state.ctrlMode='hidden';state.topMenuOpen=false;render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-sunken);color:var(--rd-muted);">${icon('close', 13)}</button>
+            </div>
+          `;
+
+          const drawerTaskCard = `
+            <div class="rounded-[12px] p-2 border border-dashed" style="background:var(--rd-sunken);border-color:var(--rd-line-strong);">
+              <div class="flex items-center justify-between mb-1.5 px-0.5">
+                <span class="text-[10px] font-semibold" style="color:var(--rd-seal);">独立抽屉入口（点击拉起 78% 大抽屉）</span>
+                <span class="text-[9.5px] rd-num" style="color:var(--rd-muted);">同排 ${drawers.length} 项语义一致</span>
+              </div>
+              <div class="grid gap-1.5" style="grid-template-columns:repeat(${drawers.length},minmax(0,1fr));">
+                ${drawers.map(d => `
+                  <button type="button" onclick="state.sheet='${d.id}';state.topMenuOpen=false;render()" class="h-[54px] px-1.5 rounded-[10px] border flex flex-col items-center justify-center gap-1 rd-press" style="background:var(--rd-surface);border-color:var(--rd-line);color:var(--rd-ink);">
+                    <div class="flex items-center gap-1" style="color:var(--rd-primary);">${icon(d.ico, 14)}${icon('drawerUp', 11, 'var(--rd-seal)')}</div>
+                    <span class="text-[11px] font-semibold leading-none truncate max-w-full">${d.title}</span>
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+
+          if (state.brightnessLayout === 'vertical') {
+            bodyHtml = `
+              <div class="flex gap-2 h-[206px]">
+                <div class="flex-1 flex flex-col justify-between gap-2 min-w-0">
+                  <div class="p-2.5 rounded-[12px] h-[100px] flex flex-col justify-between" style="background:var(--rd-sunken);">
+                    <div class="flex items-center justify-between text-[12px] font-medium">
+                      <button type="button" onclick="state.progressPct=Math.max(0,state.progressPct-2);render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-surface);color:var(--rd-ink);">${icon('chevronLeft', 14)}</button>
+                      <span class="truncate px-1" style="color:var(--rd-ink);">第三章 客人</span>
+                      <button type="button" onclick="state.progressPct=Math.min(100,state.progressPct+2);render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-surface);color:var(--rd-ink);">${icon('chevronRight', 14)}</button>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-[10.5px] rd-num w-7" style="color:var(--rd-muted);">${state.progressPct}%</span>
+                      <input type="range" min="0" max="100" value="${state.progressPct}" style="--val:${state.progressPct}%;" oninput="state.progressPct=parseInt(this.value);render()" class="flex-1 rd-slider"/>
+                      <span class="text-[10.5px] rd-num" style="color:var(--rd-muted);">1663章</span>
+                    </div>
+                  </div>
+                  ${drawerTaskCard}
+                </div>
+                <!-- Legacy-matching 38px Right Vertical Brightness Rail -->
+                <div class="w-[38px] h-[206px] rounded-full border py-2 flex flex-col items-center justify-between shrink-0" style="background:var(--rd-sunken);border-color:var(--rd-line-strong);">
+                  <span style="color:var(--rd-ink);">${icon('sun', 15)}</span>
+                  <div onclick="setBrightnessFromRailClick(event)" class="w-6 flex-1 my-1.5 flex items-center justify-center cursor-pointer" title="点击调节亮度">
+                    <div class="w-2 h-full rounded-full overflow-hidden flex items-end" style="background:var(--rd-line-strong);">
+                      <div class="w-full rounded-full" style="height:${state.brightness}%;background:var(--rd-primary);"></div>
+                    </div>
+                  </div>
+                  <button type="button" onclick="state.brightnessAuto=!state.brightnessAuto;render()" class="w-6 h-6 rounded-full border text-[11px] font-bold flex items-center justify-center rd-press" style="${state.brightnessAuto?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);':'background:var(--rd-surface);border-color:var(--rd-line-strong);color:var(--rd-ink);'}" title="自动亮度">A</button>
+                </div>
+              </div>
+            `;
+          } else {
+            bodyHtml = `
+              <div class="flex flex-col justify-between h-[206px] gap-1.5">
+                <div class="p-2.5 rounded-[12px]" style="background:var(--rd-sunken);">
+                  <div class="flex items-center justify-between text-[12px] font-medium mb-1">
+                    <button type="button" onclick="state.progressPct=Math.max(0,state.progressPct-2);render()" class="w-6 h-6 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-surface);color:var(--rd-ink);">${icon('chevronLeft', 14)}</button>
+                    <span class="truncate" style="color:var(--rd-ink);">第三章 客人</span>
+                    <button type="button" onclick="state.progressPct=Math.min(100,state.progressPct+2);render()" class="w-6 h-6 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-surface);color:var(--rd-ink);">${icon('chevronRight', 14)}</button>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <span class="text-[10.5px] rd-num" style="color:var(--rd-muted);">${state.progressPct}%</span>
+                    <input type="range" min="0" max="100" value="${state.progressPct}" style="--val:${state.progressPct}%;" oninput="state.progressPct=parseInt(this.value);render()" class="flex-1 rd-slider"/>
+                    <span class="text-[10.5px] rd-num" style="color:var(--rd-muted);">1663</span>
+                  </div>
+                </div>
+                <div class="px-3 h-9 rounded-[11px] flex items-center gap-2" style="background:var(--rd-sunken);">
+                  <span style="color:var(--rd-muted);">${icon('sun', 14)}</span>
+                  <input type="range" min="10" max="100" value="${state.brightness}" style="--val:${((state.brightness-10)/90)*100}%;" oninput="state.brightness=parseInt(this.value);state.brightnessAuto=false;render()" class="flex-1 rd-slider"/>
+                  <button type="button" onclick="state.brightnessAuto=!state.brightnessAuto;render()" class="h-6 px-2 rounded-full border text-[10px] font-semibold rd-press" style="${state.brightnessAuto?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);':'border-color:var(--rd-line-strong);color:var(--rd-muted);'}">自动</button>
+                </div>
+                ${drawerTaskCard}
+              </div>
+            `;
+          }
+        } else if (mod === 'appearance') {
+          headerHtml = `
+            <div class="h-7 mb-2 shrink-0 flex items-center justify-between">
+              ${state.model === 'B' ? `<button type="button" onclick="state.module='home';render()" class="h-7 px-2 rounded-full flex items-center gap-0.5 text-[11px] font-medium rd-press" style="background:var(--rd-sunken);color:var(--rd-ink);">${icon('chevronLeft', 13)}<span>总控</span></button>` : '<div></div>'}
+              <div class="text-[14px] font-semibold rd-serif" style="color:var(--rd-ink);">界面外观</div>
+              <button type="button" onclick="state.ctrlMode='hidden';render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-sunken);color:var(--rd-muted);">${icon('close', 13)}</button>
+            </div>
+          `;
+          const grp = (lbl, list) => `
+            <div>
+              <div class="text-[9.5px] leading-none font-medium mb-1 px-0.5" style="color:var(--rd-muted);">${lbl}</div>
+              <div class="grid grid-cols-4 gap-1.5">
+                ${list.map(tp => {
+                  const sel = state.paperId === tp.id;
+                  return `<button type="button" onclick="state.paperId='${tp.id}';state.scheme='${tp.scheme}';render()" class="rounded-[8px] p-1 flex flex-col items-center gap-0.5 relative rd-press" style="background:${sel?'var(--rd-primary-soft)':'var(--rd-sunken)'};box-shadow:${sel?'inset 0 0 0 1.5px var(--rd-primary)':'inset 0 0 0 1px var(--rd-line)'};">
+                    <div class="w-full h-[17px] rounded-[4px] flex items-center justify-center text-[10.5px] font-semibold rd-serif border" style="background:${tp.bg};color:${tp.ink};border-color:rgba(128,128,128,0.25);">Aa</div>
+                    <span class="text-[9.5px] leading-none font-medium" style="color:${sel?'var(--rd-primary)':'var(--rd-ink)'};">${tp.name}</span>
+                  </button>`;
+                }).join('')}
+              </div>
+            </div>
+          `;
+          bodyHtml = `
+            <div class="flex flex-col gap-[5px]">
+              ${grp('日间纸张', READING_PAPERS.slice(0, 4))}
+              ${grp('夜间纸张', READING_PAPERS.slice(4, 8))}
+              <div class="px-3 h-[34px] rounded-[10px] flex items-center justify-between" style="background:var(--rd-sunken);">
+                <span class="text-[12px] font-medium" style="color:var(--rd-ink);">字号大小</span>
+                ${renderStepper(`${state.fontSize}px`, "state.fontSize=Math.max(14,state.fontSize-1);render()", "state.fontSize=Math.min(24,state.fontSize+1);render()", 'A-', 'A+')}
+              </div>
+              <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                ${renderDrillRow('正文字体', state.fontName, 'fonts', 'h-[31px]')}
+                <div style="border-top:1px solid var(--rd-line);">${renderDrillRow('精细排版', `行距 ${state.lineHeight} · ${state.indent}`, 'typography', 'h-[31px]')}</div>
+              </div>
+            </div>
+          `;
+        } else if (mod === 'listen') {
+          headerHtml = `
+            <div class="h-7 mb-2 shrink-0 flex items-center justify-between">
+              ${state.model === 'B' ? `<button type="button" onclick="state.module='home';render()" class="h-7 px-2 rounded-full flex items-center gap-0.5 text-[11px] font-medium rd-press" style="background:var(--rd-sunken);color:var(--rd-ink);">${icon('chevronLeft', 13)}<span>总控</span></button>` : '<div class="text-[14px] font-semibold rd-serif" style="color:var(--rd-ink);">听读中心</div>'}
+              ${state.model === 'B' ? '<div class="text-[14px] font-semibold rd-serif" style="color:var(--rd-ink);">听读中心</div>' : ''}
+              <div class="flex items-center gap-1">
+                <button type="button" onclick="state.session='${state.listenTab}';state.ctrlMode='hidden';render()" class="h-6 px-2 rounded-full text-[10.5px] font-semibold rd-press" style="background:var(--rd-primary-soft);color:var(--rd-primary);">收束胶囊›</button>
+                <button type="button" onclick="state.ctrlMode='hidden';render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-sunken);color:var(--rd-muted);">${icon('close', 13)}</button>
+              </div>
+            </div>
+          `;
+          const seg = `
+            <div class="grid grid-cols-2 p-0.5 rounded-[9px] h-8" style="background:var(--rd-sunken);">
+              ${[['tts','语音朗读'],['autopage','自动翻页']].map(([k,l])=>`
+                <button type="button" onclick="state.listenTab='${k}';render()" class="rounded-[7px] text-[11.5px] font-medium rd-press" style="${state.listenTab===k?'background:var(--rd-surface);color:var(--rd-primary);box-shadow:var(--rd-e1);font-weight:600;':'color:var(--rd-muted);'}">${l}</button>
+              `).join('')}
+            </div>
+          `;
+          if (state.listenTab === 'tts') {
+            bodyHtml = `
+              <div class="space-y-1.5">
+                ${seg}
+                <div class="px-3 h-[50px] rounded-[10px] flex items-center justify-between" style="background:var(--rd-sunken);">
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" class="w-7 h-7 rounded-full flex items-center justify-center" style="color:var(--rd-ink);">${icon('prev', 14)}</button>
+                    <button type="button" onclick="state.session=state.session==='tts'?'none':'tts';render()" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-primary);color:var(--rd-on-primary);">${icon(state.session==='tts'?'pause':'play', 15)}</button>
+                    <button type="button" class="w-7 h-7 rounded-full flex items-center justify-center" style="color:var(--rd-ink);">${icon('next', 14)}</button>
+                  </div>
+                  <span class="text-[11px] font-medium" style="color:var(--rd-primary);">${state.session==='tts'?'朗读中':'已就绪'}</span>
+                </div>
+                <div class="px-3 py-1.5 h-[46px] rounded-[10px]" style="background:var(--rd-sunken);">
+                  <div class="flex justify-between text-[11.5px]"><span class="font-medium">朗读语速</span><span class="rd-num font-semibold" style="color:var(--rd-primary);">${state.ttsRate.toFixed(2)}x</span></div>
+                  <input type="range" min="0.5" max="2.0" step="0.25" value="${state.ttsRate}" style="--val:${((state.ttsRate-0.5)/1.5)*100}%;" oninput="state.ttsRate=parseFloat(this.value);render()" class="w-full rd-slider"/>
+                </div>
+                <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                  ${renderDrillRow('音色与引擎', state.ttsVoice, 'ttsVoice', 'h-[31px]')}
+                  <div style="border-top:1px solid var(--rd-line);">${renderDrillRow('定时关闭', state.timerMin===0?'不开启':`${state.timerMin} 分钟`, 'ttsTimer', 'h-[31px]')}</div>
+                </div>
+              </div>
+            `;
+          } else {
+            bodyHtml = `
+              <div class="space-y-1.5">
+                ${seg}
+                <div class="px-3 h-[50px] rounded-[10px] flex items-center justify-between" style="background:var(--rd-sunken);">
+                  <div class="flex items-center gap-1.5">
+                    <button type="button" class="w-7 h-7 rounded-full flex items-center justify-center" style="color:var(--rd-ink);">${icon('prev', 14)}</button>
+                    <button type="button" onclick="state.session=state.session==='autopage'?'none':'autopage';render()" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-primary);color:var(--rd-on-primary);">${icon(state.session==='autopage'?'pause':'play', 15)}</button>
+                    <button type="button" class="w-7 h-7 rounded-full flex items-center justify-center" style="color:var(--rd-ink);">${icon('next', 14)}</button>
+                  </div>
+                  <span class="text-[11px]" style="color:var(--rd-muted);">方式：${state.flipMode}</span>
+                </div>
+                <div class="px-3 py-1.5 h-[46px] rounded-[10px]" style="background:var(--rd-sunken);">
+                  <div class="flex justify-between text-[11.5px]"><span class="font-medium">翻页间隔</span><span class="rd-num font-semibold" style="color:var(--rd-primary);">${state.autoSec} 秒</span></div>
+                  <input type="range" min="2" max="20" step="1" value="${state.autoSec}" style="--val:${((state.autoSec-2)/18)*100}%;" oninput="state.autoSec=parseInt(this.value);render()" class="w-full rd-slider"/>
+                </div>
+                <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                  <div class="px-3 h-[31px] flex items-center justify-between"><span class="text-[12px]">跟随高亮当前位置</span><span class="rd-toggle" data-on="true" onclick="this.dataset.on=this.dataset.on==='true'?'false':'true'"><span class="rd-toggle-dot"></span></span></div>
+                  <div style="border-top:1px solid var(--rd-line);">${renderDrillRow('定时停止时长', state.timerMin===0?'不开启':`${state.timerMin} 分钟`, 'autoTimer', 'h-[31px]')}</div>
+                </div>
+              </div>
+            `;
+          }
+        } else {
+          headerHtml = `
+            <div class="h-7 mb-2 shrink-0 flex items-center justify-between">
+              ${state.model === 'B' ? `<button type="button" onclick="state.module='home';render()" class="h-7 px-2 rounded-full flex items-center gap-0.5 text-[11px] font-medium rd-press" style="background:var(--rd-sunken);color:var(--rd-ink);">${icon('chevronLeft', 13)}<span>总控</span></button>` : '<div></div>'}
+              <div class="text-[14px] font-semibold rd-serif" style="color:var(--rd-ink);">阅读设置</div>
+              <button type="button" onclick="state.ctrlMode='hidden';render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-sunken);color:var(--rd-muted);">${icon('close', 13)}</button>
+            </div>
+          `;
+          bodyHtml = `
+            <div class="space-y-2">
+              <div>
+                <div class="text-[10.5px] font-medium mb-1 px-0.5 leading-none" style="color:var(--rd-muted);">翻页方式（5 列等宽）</div>
+                <div class="grid grid-cols-5 gap-1">
+                  ${[['覆盖','flipCover'],['滑动','flipSlide'],['仿真','flipCurl'],['滚动','flipScroll'],['无动画','flipNone']].map(([f,ic])=>`
+                    <button type="button" onclick="state.flipMode='${f}';render()" class="h-[48px] rounded-[10px] flex flex-col items-center justify-center gap-1 rd-press" style="${state.flipMode===f?'background:var(--rd-primary);color:var(--rd-on-primary);':'background:var(--rd-sunken);color:var(--rd-ink);'}">
+                      ${icon(ic, 14)}<span class="text-[10px] leading-none font-medium">${f}</span>
+                    </button>
+                  `).join('')}
+                </div>
+              </div>
+              <div class="rounded-[10px] overflow-hidden" style="background:var(--rd-sunken);">
+                <div class="px-3 h-9 flex items-center justify-between"><span class="text-[12px]">隐藏底部导航栏</span><span class="rd-toggle" data-on="true" onclick="this.dataset.on=this.dataset.on==='true'?'false':'true'"><span class="rd-toggle-dot"></span></span></div>
+                <div class="px-3 h-9 flex items-center justify-between border-t" style="border-color:var(--rd-line);"><span class="text-[12px]">音量键翻页</span><span class="rd-toggle" data-on="false" onclick="this.dataset.on=this.dataset.on==='true'?'false':'true'"><span class="rd-toggle-dot"></span></span></div>
+                <div style="border-top:1px solid var(--rd-line);">${renderDrillRow('屏幕方向与高级', `${state.screenOrient}`, 'settingsMore', 'h-9')}</div>
+              </div>
+            </div>
+          `;
+        }
+
+        // L1 Dock inside 330px Island
+        let dockHtml = '';
+        if (state.model === 'B' && mod === 'home') {
+          dockHtml = `
+            <div class="grid grid-cols-4 gap-1 pt-1.5 mt-2 border-t shrink-0" style="border-color:var(--rd-line);">
+              <button type="button" onclick="state.sheet='directory';render()" class="h-[38px] rounded-[10px] flex flex-col items-center justify-center gap-0.5 rd-press" style="background:var(--rd-seal-soft);color:var(--rd-seal);" title="打开独立目录抽屉">
+                ${icon('toc', 14)}<span class="text-[10px] font-semibold leading-none">目录 ↗</span>
+              </button>
+              ${[['listen','headphones','听读'],['appearance','palette','外观'],['settings','settings','设置']].map(([id,ic,lb])=>`
+                <button type="button" onclick="state.module='${id}';state.subView='root';render()" class="h-[38px] rounded-[10px] flex flex-col items-center justify-center gap-0.5 rd-press" style="background:var(--rd-sunken);color:var(--rd-ink);">
+                  ${icon(ic, 14)}<span class="text-[10px] font-medium leading-none">${lb}</span>
+                </button>
+              `).join('')}
+            </div>
+          `;
+        } else if (state.model === 'B') {
+          dockHtml = `
+            <div class="grid grid-cols-3 gap-1 pt-1.5 mt-2 border-t shrink-0" style="border-color:var(--rd-line);">
+              ${[['appearance','palette','外观'],['listen','headphones','听读'],['settings','settings','设置']].map(([id,ic,lb])=>`
+                <button type="button" onclick="state.module='${id}';state.subView='root';render()" class="h-[38px] rounded-[10px] flex flex-col items-center justify-center gap-0.5 rd-press" style="${mod===id?'background:var(--rd-primary-soft);color:var(--rd-primary);':'color:var(--rd-muted);'}">
+                  ${icon(ic, 14)}<span class="text-[10px] font-medium leading-none">${lb}</span>
+                </button>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          dockHtml = `
+            <div class="grid grid-cols-4 gap-1 pt-1.5 mt-2 border-t shrink-0" style="border-color:var(--rd-line);">
+              ${[['home','home','总控'],['appearance','palette','外观'],['listen','headphones','听读'],['settings','settings','设置']].map(([id,ic,lb])=>`
+                <button type="button" onclick="state.module='${id}';state.subView='root';state.dropdownOpen='';render()" class="h-[38px] rounded-[10px] flex flex-col items-center justify-center gap-0.5 rd-press" style="${mod===id?'background:var(--rd-primary-soft);color:var(--rd-primary);':'color:var(--rd-muted);'}">
+                  ${icon(ic, 14)}<span class="text-[10px] font-medium leading-none">${lb}</span>
+                </button>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        // Fixed height 330px Container!
+        islandHtml = `
+          <div class="absolute bottom-3 left-3 right-3 z-20 rounded-[20px] py-3 px-3.5 border flex flex-col rd-glass-heavy anim-sheet" style="height:330px;border-color:var(--rd-line-strong);box-shadow:var(--rd-e3);">
+            ${headerHtml}
+            <div class="flex-1 min-h-0 overflow-y-auto rd-scroll">${bodyHtml}</div>
+            ${dockHtml}
+          </div>
+        `;
+      }
+
+      // 78% Independent Modal Sheet
+      let sheetHtml = '';
+      if (state.sheet !== 'none') {
+        let sBody = '';
+        if (state.sheet === 'directory') {
+          sBody = `
+            <div class="grid grid-cols-2 p-1 rounded-[10px] mb-2.5 shrink-0" style="background:var(--rd-sunken);">
+              ${[['chapters','章节 (1663)'],['bookmarks','书签 (2)']].map(([k,l])=>`
+                <button type="button" onclick="state.dirTab='${k}';render()" class="h-7 rounded-[7px] text-[12px] font-medium rd-press" style="${state.dirTab===k?'background:var(--rd-surface);color:var(--rd-primary);box-shadow:var(--rd-e1);':'color:var(--rd-muted);'}">${l}</button>
+              `).join('')}
+            </div>
+            <div class="space-y-1 overflow-y-auto rd-scroll flex-1">
+              ${['第一章 陨落的天才','第二章 斗气大陆','第三章 客人','第四章 云岚宗','第五章 聚气散','第六章 炼药师','第七章 休！','第八章 神秘的老者'].map((ch,i)=>`
+                <button type="button" onclick="state.sheet='none';state.ctrlMode='hidden';render()" class="w-full px-3 h-10 rounded-[9px] flex items-center justify-between text-left rd-press" style="background:${i===2?'var(--rd-primary-soft)':'transparent'};color:${i===2?'var(--rd-primary)':'var(--rd-ink)'};font-weight:${i===2?600:400};">
+                  <span class="text-[12.5px] truncate">${ch}</span>
+                  ${i===2?'<span class="text-[10px] px-1.5 py-0.5 rounded" style="background:var(--rd-primary);color:var(--rd-on-primary);">当前</span>':''}
+                </button>
+              `).join('')}
+            </div>
+          `;
+        } else if (state.sheet === 'search') {
+          sBody = `
+            <div class="flex gap-1.5 mb-2.5 shrink-0">
+              <div class="flex-1 h-9 rounded-full px-3 flex items-center gap-1.5" style="background:var(--rd-sunken);">
+                ${icon('search', 14)}
+                <input value="${state.searchQuery}" oninput="state.searchQuery=this.value" class="bg-transparent text-[12px] flex-1 outline-none" style="color:var(--rd-ink);"/>
+              </div>
+              <button type="button" class="h-9 px-3.5 rounded-full text-[12px] font-semibold" style="background:var(--rd-primary);color:var(--rd-on-primary);">搜索</button>
+            </div>
+            <div class="space-y-1.5 overflow-y-auto rd-scroll flex-1">
+              ${[['第一章 陨落的天才','望着测验魔石碑上闪亮的大字…'],['第三章 客人','“萧炎哥哥，你说，他会是谁？”'],['第四章 云岚宗','萧炎深吸一口气，紧握的掌心缓缓松开…']].map(([ch,sn])=>`
+                <button type="button" onclick="state.sheet='none';state.ctrlMode='hidden';render()" class="w-full p-2.5 rounded-[10px] text-left rd-press" style="background:var(--rd-sunken);">
+                  <div class="text-[11.5px] font-semibold" style="color:var(--rd-primary);">${ch}</div>
+                  <div class="text-[11.5px] mt-0.5" style="color:var(--rd-ink);">${sn}</div>
+                </button>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          sBody = `
+            <div class="grid grid-cols-2 p-1 rounded-[10px] mb-2.5 shrink-0" style="background:var(--rd-sunken);">
+              ${[['list','规则列表 (1)'],['preview','本章替换预览']].map(([k,l])=>`
+                <button type="button" onclick="state.replaceTab='${k}';render()" class="h-7 rounded-[7px] text-[12px] font-medium rd-press" style="${state.replaceTab===k?'background:var(--rd-surface);color:var(--rd-primary);box-shadow:var(--rd-e1);':'color:var(--rd-muted);'}">${l}</button>
+              `).join('')}
+            </div>
+            <div class="p-3 rounded-[10px] flex items-center justify-between" style="background:var(--rd-sunken);">
+              <div>
+                <div class="text-[12.5px] font-semibold" style="color:var(--rd-ink);">去除章节广告水印</div>
+                <div class="text-[11px]" style="color:var(--rd-muted);">请记住本站域名.* → 空</div>
+              </div>
+              <span class="rd-toggle" data-on="${state.ruleEnabled}" onclick="state.ruleEnabled=!state.ruleEnabled;render()"><span class="rd-toggle-dot"></span></span>
+            </div>
+          `;
+        }
+        sheetHtml = `
+          <div onclick="state.sheet='none';render()" class="absolute inset-0 flex items-end" style="background:var(--rd-scrim);z-index:40;">
+            <div onclick="event.stopPropagation()" class="w-full rounded-t-[22px] p-4 pb-5 border-t flex flex-col anim-sheet" style="height:78%;background:var(--rd-elevated);border-color:var(--rd-line);box-shadow:var(--rd-e3);">
+              <div class="w-9 h-1 rounded-full mx-auto mb-2.5 shrink-0" style="background:var(--rd-line-strong);"></div>
+              <div class="flex items-center justify-between mb-3 shrink-0">
+                <span class="text-[16px] font-semibold rd-serif" style="color:var(--rd-ink);">${sheetTitles[state.sheet]}</span>
+                <button type="button" onclick="state.sheet='none';render()" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-sunken);color:var(--rd-muted);">${icon('close', 14)}</button>
+              </div>
+              ${sBody}
+            </div>
+          </div>
+        `;
+      }
+
+      const capsuleHtml = (isHidden && state.session !== 'none' && state.sheet === 'none') ? `
+        <div class="absolute bottom-5 right-3 z-20 h-9 pl-3 pr-2 rounded-full border flex items-center gap-2 anim-sheet" style="background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary-border);box-shadow:var(--rd-e3);">
+          <div class="flex items-center gap-0.5 h-3">${[0.5,1,0.7].map((h,i)=>`<span class="w-0.5 rounded-full wave-bar" style="height:${Math.round(h*10)}px;background:var(--rd-on-primary);animation-delay:${i*110}ms;"></span>`).join('')}</div>
+          <span class="text-[11px] font-medium">${state.session==='tts'?`朗读中 · ${state.ttsRate.toFixed(1)}x`:`自动翻页 · ${state.autoSec}s`}</span>
+          <button type="button" onclick="state.session='none';state.ctrlMode='open';state.module='listen';render()" class="w-5 h-5 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.2);">${icon('stop', 10)}</button>
+        </div>
+      ` : '';
+
+      // Vertical Height Ruler indicator
+      const rulerState = state.sheet !== 'none'
+        ? { label: '78% 独立模态抽屉', desc: '覆盖暗遮罩 · 关闭后回到前态', color: '#9A3F32', barPx: 577 }
+        : !isHidden
+          ? { label: '330vp 恒定控制栏', desc: '无遮罩 · 上方恒留 ~45% 清晰正文', color: '#1F3D31', barPx: 330 }
+          : { label: '0vp 沉浸阅读', desc: state.session !== 'none' ? '仅保留右下角听读胶囊' : '全屏无遮挡阅读正文', color: '#6C665D', barPx: 0 };
+
+      return `
+        <div class="flex items-stretch justify-center gap-3">
+          <!-- Interactive Phone Bezel 360x740 -->
+          <div class="rounded-[34px] p-2 border-4 border-[var(--border)] bg-[var(--background)] shadow-xl shrink-0" style="width:376px;height:756px;">
+            <div class="rd-scope w-full h-full rounded-[24px] overflow-hidden relative flex flex-col" data-scheme="${state.scheme}" style="background:${p.bg};color:${p.ink};">
+              ${topBarHtml}
+              <!-- Reading Body Canvas -->
+              <div onclick="if(state.topMenuOpen){state.topMenuOpen=false;}else if(state.ctrlMode==='hidden'){state.ctrlMode='open';}else if(state.subView!=='root'){state.subView='root';}else{state.ctrlMode='hidden';}render()" class="flex-1 px-5 py-3 overflow-hidden cursor-pointer flex flex-col justify-between" style="font-size:${state.fontSize}px;line-height:${state.lineHeight};">
+                <div style="display:flex;flex-direction:column;gap:${state.paraGap}px;" class="${state.fontName==='黑体'?'rd-sans':'rd-serif'}">
+                  <p style="text-indent:${state.indent==='2字符'?'2em':state.indent==='4字符'?'4em':'0'};">“萧炎哥哥，你说，他会是谁？”薰儿沉默了半响，忽然偏过头，对着萧炎嫣然一笑。</p>
+                  <p style="text-indent:${state.indent==='2字符'?'2em':state.indent==='4字符'?'4em':'0'};">“咳…我，我怎么知道？那么小，我们都还在地上爬呢。”心头猛的一跳，萧炎讪笑两声。</p>
+                  <p style="text-indent:${state.indent==='2字符'?'2em':state.indent==='4字符'?'4em':'0'};">“嘻嘻…”萧薰儿小嘴泛起一抹柔和弧度，目光移回大厅内。</p>
+                </div>
+                <div class="flex items-center justify-between text-[11px] pt-2 rd-num" style="color:${p.meta};">
+                  <span>${state.progressPct}% · 第 3 / 1663 章</span>
+                  <span>20:41 · 92%</span>
+                </div>
+              </div>
+              ${islandHtml}
+              ${topPopoverHtml}
+              ${capsuleHtml}
+              ${sheetHtml}
+            </div>
+          </div>
+
+          <!-- Live Height Measurement Ruler -->
+          <div class="hidden sm:flex flex-col justify-between py-2 w-[92px] shrink-0 text-[11px]">
+            <div class="rounded-lg border border-[var(--border)] bg-[var(--background)] p-2 text-center">
+              <div class="font-semibold text-[var(--foreground)]">实机高标尺</div>
+              <div class="text-[10px] text-[var(--muted-foreground)] mt-0.5">740px 视图</div>
+            </div>
+            <div class="flex-1 my-2 relative flex justify-center">
+              <div class="w-px h-full bg-[var(--border)]"></div>
+              <div class="absolute bottom-3 w-2 rounded-full transition-all duration-200" style="height:${rulerState.barPx}px;background:${rulerState.color};"></div>
+              <div class="absolute bottom-3 left-6 right-0 p-1.5 rounded-lg border text-[10px] bg-[var(--card)]" style="border-color:${rulerState.color};">
+                <div class="font-bold" style="color:${rulerState.color};">${rulerState.label}</div>
+                <div class="text-[var(--muted-foreground)] mt-0.5 leading-tight">${rulerState.desc}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // -------------------------------------------------------------------------
+    // Section 2 Right: Synchronized SVG Architecture Flowchart + Tradeoff Table
+    // -------------------------------------------------------------------------
+    function renderArchitectureFlow() {
+      const zone = state.sheet !== 'none'
+        ? 'sheet'
+        : state.topMenuOpen
+          ? 'top'
+          : state.ctrlMode === 'open'
+            ? 'bar'
+            : (state.session !== 'none' ? 'capsule' : 'reading');
+
+      const nodeStyle = (active, hex) => active
+        ? `stroke="${hex}" stroke-width="2.5" fill="${hex}22"`
+        : `stroke="currentColor" stroke-opacity="0.25" stroke-width="1.2" fill="transparent"`;
+
+      const drawersShort = getDrawerItemsForHome().map(d => d.title.replace('与书签', '')).join(' / ');
+
+      return `
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-sm sm:text-base font-bold">二、实时状态流转架构图（与左侧实机联动高亮，点击节点也可跳转）</h2>
+                <p class="text-xs text-[var(--muted-foreground)] mt-0.5">看清每一次点击如何严格分流到「顶栏菜单 / 330vp 实时栏 / 78% 大抽屉 / 听读胶囊」四种互不串台的形态。</p>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-[var(--primary)] text-[var(--primary-foreground)]">当前命中：${zone==='bar'?'330vp 控制栏':zone==='sheet'?'78% 独立抽屉':zone==='top'?'顶栏···菜单':zone==='capsule'?'听读胶囊':'沉浸阅读'}</span>
+            </div>
+
+            <svg viewBox="0 0 640 375" class="w-full h-auto text-[var(--foreground)] select-none">
+              <defs>
+                <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1 L 10 5 L 0 9 z" fill="currentColor" fill-opacity="0.5"/>
+                </marker>
+              </defs>
+
+              <!-- Arrows -->
+              <path d="M 150 62 L 220 62" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4" marker-end="url(#arr)"/>
+              <path d="M 100 92 L 100 185" stroke="currentColor" stroke-opacity="0.4" stroke-width="1.4" marker-end="url(#arr)"/>
+              <path d="M 100 92 C 100 140 500 110 500 160" stroke="currentColor" stroke-opacity="0.35" stroke-width="1.4" fill="none" stroke-dasharray="4 3" marker-end="url(#arr)"/>
+              <path d="M 330 245 L 405 245" stroke="#9A3F32" stroke-opacity="0.7" stroke-width="1.6" marker-end="url(#arr)"/>
+
+              <!-- 1. Immersive Reading Node -->
+              <g onclick="jumpToScenario({ctrlMode:'hidden',sheet:'none',session:'none'})" class="cursor-pointer">
+                <rect x="20" y="28" width="130" height="64" rx="12" ${nodeStyle(zone==='reading', '#6C665D')}/>
+                <text x="85" y="52" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">沉浸阅读正文</text>
+                <text x="85" y="72" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.65">单击唤出控制层</text>
+              </g>
+
+              <!-- 2. Top Bar + More Popover -->
+              <g onclick="jumpToScenario({ctrlMode:'open',topMenuOpen:true,sheet:'none'})" class="cursor-pointer">
+                <rect x="220" y="20" width="210" height="84" rx="12" ${nodeStyle(zone==='top', '#2B6CB0')}/>
+                <text x="325" y="42" text-anchor="middle" font-size="12.5" font-weight="700" fill="currentColor">悬浮顶栏 · 克制书籍级</text>
+                <text x="325" y="62" text-anchor="middle" font-size="10.5" fill="currentColor" fill-opacity="0.75">← 返回 | 书名+源 | 换源 | ··· 菜单</text>
+                <text x="325" y="80" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.65">${state.replacePlace==='topMore'?'··· 含：书籍信息/刷新/下载/净化替换':'··· 仅含：书籍信息/刷新/下载全部'}</text>
+              </g>
+
+              <!-- 3. Floating Session Capsule -->
+              <g onclick="jumpToScenario({ctrlMode:'hidden',sheet:'none',session:'tts'})" class="cursor-pointer">
+                <rect x="460" y="160" width="160" height="58" rx="12" ${nodeStyle(zone==='capsule', '#1F3D31')}/>
+                <text x="540" y="184" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">右下听读运行胶囊</text>
+                <text x="540" y="202" text-anchor="middle" font-size="10" fill="currentColor" fill-opacity="0.65">仅收起控制栏且播放时显示</text>
+              </g>
+
+              <!-- 4. Fixed 330vp Floating Control Island -->
+              <g onclick="jumpToScenario({ctrlMode:'open',sheet:'none',topMenuOpen:false})" class="cursor-pointer">
+                <rect x="20" y="185" width="310" height="168" rx="14" ${nodeStyle(zone==='bar', '#1F3D31')}/>
+                <text x="36" y="210" font-size="13" font-weight="700" fill="currentColor">底部 330vp 恒定高度控制栏（无遮罩）</text>
+                <text x="36" y="229" font-size="10.5" fill="currentColor" fill-opacity="0.72">铁律：切 Tab / 进子页 / 开下拉，外框 330vp 绝不跳高</text>
+                <rect x="36" y="242" width="278" height="44" rx="8" fill="currentColor" fill-opacity="0.06"/>
+                <text x="46" y="260" font-size="11" font-weight="600" fill="currentColor">${state.model==='A'?'总控 L2：进度 + 亮度 + 抽屉('+drawersShort+')':'一级总控：进度 + 亮度 + 目录(底左) + 抽屉'}</text>
+                <text x="46" y="276" font-size="10" fill="currentColor" fill-opacity="0.68">点击「目录/搜索/替换」→ 右侧 78% 抽屉（同排语义 100% 纯净）</text>
+                <rect x="36" y="296" width="278" height="42" rx="8" fill="currentColor" fill-opacity="0.06"/>
+                <text x="46" y="314" font-size="11" font-weight="600" fill="currentColor">外观 / 听读(朗读|翻页) / 设置：100% 纯实时调参</text>
+                <text x="46" y="330" font-size="10" fill="currentColor" fill-opacity="0.68">L2 ↔ L3 同框横推下钻 · 缩进/简繁/方向原地展开下拉</text>
+              </g>
+
+              <!-- 5. 78% Independent Modal Sheet -->
+              <g onclick="jumpToScenario({ctrlMode:'open',sheet:'directory'})" class="cursor-pointer">
+                <rect x="405" y="232" width="215" height="121" rx="14" ${nodeStyle(zone==='sheet', '#9A3F32')}/>
+                <text x="421" y="257" font-size="13" font-weight="700" fill="currentColor">78% 独立模态抽屉</text>
+                <text x="421" y="276" font-size="10.5" fill="currentColor" fill-opacity="0.75">全宽底抽屉 + 暗色遮罩</text>
+                <text x="421" y="298" font-size="10.5" fill="currentColor" fill-opacity="0.85">• 目录与书签（搜索 / 定位 / 排序）</text>
+                <text x="421" y="315" font-size="10.5" fill="currentColor" fill-opacity="0.85">• 正文搜索（关键词 + 匹配列表）</text>
+                <text x="421" y="332" font-size="10.5" fill="currentColor" fill-opacity="0.85">• 净化替换（规则 CRUD + 预览）</text>
+              </g>
+            </svg>
+          </div>
+
+          <!-- Tradeoff Summary Card -->
+          <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-2.5 text-xs">
+            <div class="font-bold text-sm">三项拍板对比速查表（直接决定后续改主稿）</div>
+            <div class="divide-y divide-[var(--border)]">
+              <div class="py-2 flex items-start justify-between gap-4">
+                <span class="font-semibold shrink-0 w-24">1. 底部交互</span>
+                <div class="flex-1 space-y-1 text-[var(--muted-foreground)]">
+                  <div><strong class="text-[var(--foreground)]">方案 A（纯4Tab + 总控抽屉行）：</strong>同排行为零分裂感；呼出即总控 1 步直达目录；唯一缺点是从「外观/设置」内点目录需先回总控（2步）。</div>
+                  <div><strong class="text-[var(--foreground)]">方案 B（总控发射台）：</strong>完美保留「呼出后目录就在左下角」习惯；进入调参态后目录让位给 3 Tab。</div>
+                </div>
+              </div>
+              <div class="py-2 flex items-start justify-between gap-4">
+                <span class="font-semibold shrink-0 w-24">2. 亮度条布局</span>
+                <div class="flex-1 space-y-1 text-[var(--muted-foreground)]">
+                  <div><strong class="text-[var(--foreground)]">横向通栏：</strong>3 个抽屉入口横向空间最宽裕、文字不换行。</div>
+                  <div><strong class="text-[var(--foreground)]">右侧竖向轨：</strong>最贴近现网 HarmonyOS 原版手感（左功能、右亮度竖滑 + A 钮）。</div>
+                </div>
+              </div>
+              <div class="py-2 flex items-start justify-between gap-4">
+                <span class="font-semibold shrink-0 w-24">3. 净化替换</span>
+                <div class="flex-1 space-y-1 text-[var(--muted-foreground)]">
+                  <div><strong class="text-[var(--foreground)]">放在底部抽屉行：</strong>与目录/搜索对称排开，顶栏「···」极其克制（仅3项）。</div>
+                  <div><strong class="text-[var(--foreground)]">收进顶栏 ···：</strong>低频规则管理不占拇指区，底部只留目录和搜索两个大图卡。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      document.getElementById('app').innerHTML = `
+        ${renderDecisionHeader()}
+        ${renderPanoramaSection()}
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+          <div class="xl:col-span-5">${renderInteractivePhone()}</div>
+          <div class="xl:col-span-7">${renderArchitectureFlow()}</div>
+        </div>
+      `;
+    }
+
+    window.state = state;
+    window.render = render;
+    render();
+  })();
+  </script>
+</body>
+</html>

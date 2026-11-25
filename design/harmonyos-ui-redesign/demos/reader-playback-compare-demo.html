@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>墨纸青松 · 朗读与翻页播控区对比 Demo（完整全量配置版）</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    .rd-serif { font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif; }
+    .rd-sans { font-family: "HarmonyOS Sans SC", "PingFang SC", -apple-system, sans-serif; }
+    .rd-num { font-variant-numeric: tabular-nums; }
+
+    /* HarmonyOS Reader Ceramic-Paper & Gallery Tokens (ReaderThemeRegistry.ts) */
+    .rd-scope {
+      --rd-shell: rgba(255, 250, 244, 0.96);
+      --rd-sheet-bg: rgba(255, 250, 244, 0.985);
+      --rd-strip: rgba(251, 246, 238, 0.78);
+      --rd-strip-line: rgba(180, 166, 151, 0.24);
+      --rd-field-bg: rgba(242, 234, 222, 0.70);
+      --rd-badge-bg: rgba(47, 99, 115, 0.09);
+      --rd-pill-bg: rgba(180, 166, 151, 0.14);
+      --rd-card-solid: #FFFCF8;
+      --rd-line: rgba(180, 166, 151, 0.30);
+      --rd-primary: #2F6373;
+      --rd-on-primary: #FFFCF8;
+      --rd-circle-bg: rgba(47, 99, 115, 0.09);
+      --rd-play-start: #357487;
+      --rd-play-end: #244F5C;
+      --rd-play-shadow: 0 5px 14px rgba(47, 99, 115, 0.30);
+      --rd-play-rim: rgba(255, 255, 255, 0.25);
+      --rd-clay: #A8543A;
+      --rd-clay-soft: rgba(168, 84, 58, 0.09);
+      --rd-clay-line: rgba(168, 84, 58, 0.22);
+      --rd-clay-dot: rgba(168, 84, 58, 0.10);
+      --rd-clay-sq: #C27A66;
+      --rd-ink: #332C25;
+      --rd-muted: #6C6156;
+      --rd-subtle: #9A8E80;
+      --rd-handle: #B9AD9F;
+      --rd-slider-track: rgba(180, 166, 151, 0.28);
+      --rd-track: #D4D7DA;
+      --rd-scrim: rgba(38, 31, 24, 0.30);
+      --rd-shadow-dock: 0 10px 28px rgba(47, 35, 20, 0.13);
+      --rd-shadow-pop: 0 -10px 28px rgba(32, 25, 16, 0.16);
+
+      --rd-paper-bg: #F6F0E4;
+      --rd-paper-ink: #2C241D;
+      --rd-paper-meta: #7C7062;
+      --rd-paper-hi: rgba(47, 99, 115, 0.09);
+      --rd-paper-hi-line: rgba(47, 99, 115, 0.28);
+    }
+
+    .rd-scope[data-scheme="night"] {
+      --rd-shell: rgba(46, 42, 38, 0.97);
+      --rd-sheet-bg: rgba(42, 38, 34, 0.985);
+      --rd-strip: rgba(60, 55, 50, 0.84);
+      --rd-strip-line: rgba(226, 209, 185, 0.16);
+      --rd-field-bg: rgba(74, 67, 60, 0.72);
+      --rd-badge-bg: rgba(210, 189, 150, 0.13);
+      --rd-pill-bg: rgba(226, 209, 185, 0.11);
+      --rd-card-solid: #36322E;
+      --rd-line: rgba(226, 209, 185, 0.22);
+      --rd-primary: #D2BD96;
+      --rd-on-primary: #24201C;
+      --rd-circle-bg: rgba(210, 189, 150, 0.15);
+      --rd-play-start: #D2BD96;
+      --rd-play-end: #9E8763;
+      --rd-play-shadow: 0 5px 14px rgba(0, 0, 0, 0.44);
+      --rd-play-rim: rgba(255, 248, 232, 0.28);
+      --rd-clay: #DC9E53;
+      --rd-clay-soft: rgba(220, 158, 83, 0.13);
+      --rd-clay-line: rgba(220, 158, 83, 0.26);
+      --rd-clay-dot: rgba(220, 158, 83, 0.14);
+      --rd-clay-sq: #D49A56;
+      --rd-ink: #EADFCE;
+      --rd-muted: #B6A998;
+      --rd-subtle: #8C8071;
+      --rd-handle: #A49888;
+      --rd-slider-track: rgba(226, 209, 185, 0.20);
+      --rd-track: #565D4F;
+      --rd-scrim: rgba(0, 0, 0, 0.56);
+      --rd-shadow-dock: 0 12px 32px rgba(0, 0, 0, 0.48);
+      --rd-shadow-pop: 0 -10px 32px rgba(0, 0, 0, 0.52);
+
+      --rd-paper-bg: #201F1C;
+      --rd-paper-ink: #E4DDD0;
+      --rd-paper-meta: #9D968B;
+      --rd-paper-hi: rgba(210, 189, 150, 0.11);
+      --rd-paper-hi-line: rgba(210, 189, 150, 0.28);
+    }
+
+    .rd-blur {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .rd-strip {
+      background: var(--rd-strip);
+      border: 1px solid var(--rd-strip-line);
+    }
+
+    .rd-play-orb {
+      background: linear-gradient(155deg, var(--rd-play-start), var(--rd-play-end));
+      color: var(--rd-on-primary);
+      box-shadow: var(--rd-play-shadow), inset 0 0.75px 0 var(--rd-play-rim);
+    }
+
+    .rd-clay-dot { background: var(--rd-clay-dot); }
+
+    .rd-clay-pill {
+      background: var(--rd-clay-soft);
+      border: 1px solid var(--rd-clay-line);
+      color: var(--rd-clay);
+    }
+
+    .rd-press {
+      transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), opacity 140ms ease, background-color 140ms ease;
+      cursor: pointer;
+    }
+    .rd-press:active { transform: scale(0.95); }
+
+    .rd-teal-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--rd-primary) 0%, var(--rd-primary) var(--val, 40%), var(--rd-slider-track) var(--val, 40%), var(--rd-slider-track) 100%);
+      outline: none;
+      cursor: pointer;
+    }
+    .rd-teal-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 17px;
+      height: 17px;
+      border-radius: 999px;
+      background: var(--rd-card-solid);
+      border: 2.5px solid var(--rd-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+    }
+    .rd-teal-slider::-moz-range-thumb {
+      width: 17px;
+      height: 17px;
+      border-radius: 999px;
+      background: var(--rd-card-solid);
+      border: 2.5px solid var(--rd-primary);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+    }
+
+    .rd-switch {
+      width: 38px;
+      height: 22px;
+      border-radius: 999px;
+      padding: 2px;
+      transition: background-color 180ms ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .rd-switch[data-on="true"] { background: var(--rd-primary); }
+    .rd-switch[data-on="false"] { background: var(--rd-track); }
+    .rd-switch-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #FFFCF8;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .rd-switch[data-on="true"] .rd-switch-dot { transform: translateX(16px); }
+
+    .rd-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+    .rd-scroll::-webkit-scrollbar-thumb { background: rgba(130, 120, 108, 0.28); border-radius: 99px; }
+
+    @keyframes wavePulse {
+      0%, 100% { transform: scaleY(0.45); opacity: 0.45; }
+      50% { transform: scaleY(1.1); opacity: 0.95; }
+    }
+    .wave-tick {
+      animation: wavePulse 0.95s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(0.9); opacity: 0.6; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+    .pulse-dot { animation: pulseDot 1.3s ease-in-out infinite; }
+
+    @keyframes sheetRise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .sheet-rise { animation: sheetRise 190ms cubic-bezier(0.2, 0, 0, 1); }
+  </style>
+</head>
+<body class="m-0 p-0 rd-sans bg-[#EFEBE3] text-[#2C241D] antialiased">
+  <div id="app" class="max-w-[920px] mx-auto px-4 sm:px-6 py-5 space-y-6"></div>
+
+  <script>
+  (() => {
+    const CHAPTERS = [
+      {
+        title: '第二章 陨落的天才',
+        lead: '萧炎坐在冰凉的青石台阶上，掌心反复摩挲着那枚漆黑古朴的戒指，抬头望向远处安静得过分的练武场。',
+        focus: '曾经照亮乌坦城的名字，如今只在族人的叹息声里被轻描淡写地带过。',
+      },
+      {
+        title: '第三章 客人',
+        lead: '萧炎默默望着手中那枚略显古朴的黑铁戒指，指尖摩挲着微凉的纹路，大厅里的议论声渐渐低沉下去。',
+        focus: '“三十年河东，三十年河西，莫欺少年穷！”少年的声音不高，却如金石落地般掷地有声。',
+      },
+      {
+        title: '第四章 云岚宗',
+        lead: '清晨的薄雾还未散尽，石阶尽头忽然传来清越的马蹄声，几道绣着云纹白袍的身影缓缓步入萧家大门。',
+        focus: '那一纸退婚书静静躺在紫檀木案上，衬得整座议事厅越发压抑沉闷。',
+      },
+    ];
+
+    const VOICES = [
+      { full: '中文 聆小珊女声', short: '聆小珊女声', badge: '女' },
+      { full: '中文 凌飞哲男声', short: '凌飞哲男声', badge: '男' },
+      { full: '青松沉稳男声',   short: '青松男声',   badge: '男' },
+    ];
+
+    const LANGUAGES = ['简体中文 (zh-CN)', '普通话·粤语混合', 'English (US)'];
+    const RATE_PRESETS = [0.50, 0.75, 1.00, 1.25, 1.50];
+    const TOTAL_SLICES = 18;
+    const WAVE_HEIGHTS = [4, 7, 11, 6, 9, 12, 7, 5, 10, 6];
+
+    function makeTtsCard(id, variant) {
+      return {
+        id,
+        kind: 'tts',
+        variant,
+        status: 'idle',
+        slice: 3,
+        chapterIdx: 1,
+        speed: 1.0,
+        sheetOpen: false,
+        timerMode: 'off', // 'off' | 'duration' | 'chapterEnd'
+        timerMin: 15,
+        timerSec: 0,
+        voiceIdx: 0,
+        followHighlight: true,
+        pauseOnInterruption: true,
+        allowMixing: false,
+        backgroundPlayback: true,
+        keepScreenOn: false,
+        failurePolicy: 'stop', // 'stop' | 'skip'
+        serviceTab: 'system',  // 'system' | 'online'
+        langIdx: 0,
+        onlineConfigured: false,
+        tickAcc: 0,
+      };
+    }
+
+    function makeAutoCard(id, variant) {
+      return {
+        id,
+        kind: 'autoPage',
+        variant,
+        status: 'idle',
+        sec: 6,
+        rem: 4.2,
+        chapterIdx: 1,
+        sheetOpen: false,
+        timerEnabled: false,
+        timerMin: 15,
+        timerSec: 0,
+        followHighlight: true,
+      };
+    }
+
+    const appState = {
+      scheme: 'day',
+      globalStatus: 'idle',
+      toastTimer: null,
+      cards: {
+        ttsC1:  makeTtsCard('ttsC1', 'C1'),
+        ttsC2:  makeTtsCard('ttsC2', 'C2'),
+        autoC1: makeAutoCard('autoC1', 'C1'),
+        autoC2: makeAutoCard('autoC2', 'C2'),
+      },
+    };
+
+    function twoDigits(n) {
+      const v = Math.max(0, Math.trunc(n));
+      return v < 10 ? `0${v}` : `${v}`;
+    }
+
+    function formatTimerShort(c) {
+      if (c.kind === 'tts') {
+        if (c.timerMode === 'off') return '关闭';
+        if (c.timerMode === 'chapterEnd') return '本章';
+        return `${twoDigits(c.timerMin)}:${twoDigits(c.timerSec)}`;
+      }
+      if (!c.timerEnabled || (c.timerMin === 0 && c.timerSec === 0)) return '关闭';
+      return `${twoDigits(c.timerMin)}:${twoDigits(c.timerSec)}`;
+    }
+
+    function formatTimerFull(c) {
+      if (c.kind === 'tts') {
+        if (c.timerMode === 'off') return '未开启';
+        if (c.timerMode === 'chapterEnd') return '本章结束';
+        return `${twoDigits(c.timerMin)}:${twoDigits(c.timerSec)}`;
+      }
+      if (!c.timerEnabled || (c.timerMin === 0 && c.timerSec === 0)) return '未开启';
+      return `${twoDigits(c.timerMin)}:${twoDigits(c.timerSec)}`;
+    }
+
+    function icon(name, size = 16, strokeWidth = 1.75) {
+      const common = `width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${strokeWidth}" stroke-linecap="round" stroke-linejoin="round"`;
+      switch (name) {
+        case 'playOutline':
+          return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M8.5 6.2L18 12l-9.5 5.8V6.2z"/></svg>`;
+        case 'pauseClean':
+          return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M9.5 6.5v11M14.5 6.5v11"/></svg>`;
+        case 'prevThin':
+          return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6.5v11M17 6.8L10.2 12 17 17.2"/></svg>`;
+        case 'nextThin':
+          return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6.5v11M7 6.8L13.8 12 7 17.2"/></svg>`;
+        case 'waveLine':
+          return `<svg ${common}><path d="M3 12h3l2.2-5 3.6 10 2.8-7 2 2H21"/></svg>`;
+        case 'clock':
+          return `<svg ${common}><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3.2 1.9"/></svg>`;
+        case 'sliders':
+          return `<svg ${common}><path d="M4 7h10M18 7h2M4 17h4M12 17h8M14 5v4M8 15v4"/></svg>`;
+        case 'check':
+          return `<svg ${common}><path d="M5 13l4 4L19 7"/></svg>`;
+        case 'cloud':
+          return `<svg ${common}><path d="M7 18h10a4 4 0 0 0 .8-7.9A5.5 5.5 0 0 0 7.2 9 3.8 3.8 0 0 0 7 18z"/></svg>`;
+        case 'cpu':
+          return `<svg ${common}><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 3v3M15 3v3M9 18v3M15 18v3M3 9h3M3 15h3M18 9h3M18 15h3"/></svg>`;
+        case 'chevronDown':
+          return `<svg ${common}><path d="M7 10l5 5 5-5"/></svg>`;
+        case 'chevronRight':
+          return `<svg ${common}><path d="M9 18l6-6-6-6"/></svg>`;
+        case 'autoPage':
+          return `<svg ${common}><path d="M4 6h11a4 4 0 0 1 4 4v8"/><path d="M16 15l3 3 3-3"/><path d="M4 11h7"/><path d="M4 16h5"/></svg>`;
+        case 'headphones':
+          return `<svg ${common}><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="7" rx="2"/><rect x="17" y="13" width="4" height="7" rx="2"/></svg>`;
+        case 'palette':
+          return `<svg ${common}><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1.2" fill="currentColor"/><circle cx="13.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="13" r="1.2" fill="currentColor"/></svg>`;
+        case 'settings':
+          return `<svg ${common}><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+        case 'sun':
+          return `<svg ${common}><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>`;
+        case 'moon':
+          return `<svg ${common}><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></svg>`;
+        default:
+          return '';
+      }
+    }
+
+    function showToast(msg) {
+      clearTimeout(appState.toastTimer);
+      appState.toastTimer = setTimeout(() => {
+        const el = document.getElementById('rd-toast');
+        if (el) el.innerHTML = '';
+      }, 1700);
+      const el = document.getElementById('rd-toast');
+      if (el) {
+        el.innerHTML = `<div class="px-3.5 py-1.5 rounded-full text-[12px] font-medium bg-[#2C241D] text-[#FFFCF8] shadow-md">${msg}</div>`;
+      }
+    }
+
+    function galleryWaveform(playing, count = 10) {
+      const heights = count === 4 ? [5, 10, 7, 11] : (count === 6 ? [4, 8, 11, 6, 10, 7] : WAVE_HEIGHTS);
+      return `
+        <div class="flex items-center gap-[2.5px] h-3.5 shrink-0">
+          ${heights.map((h, i) => `
+            <span class="w-[2px] rounded-full ${playing ? 'wave-tick' : ''}" style="height:${h}px;background:var(--rd-primary);opacity:${playing ? 0.92 : 0.42};animation-delay:${i * 85}ms;"></span>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function switchTrack(on, onClickExpr) {
+      return `
+        <button type="button" role="switch" aria-checked="${on ? 'true' : 'false'}" onclick="${onClickExpr}" class="rd-switch" data-on="${on ? 'true' : 'false'}">
+          <span class="rd-switch-dot"></span>
+        </button>
+      `;
+    }
+
+    function renderDock(activeModule) {
+      const items = [
+        { id: 'autoPage', label: '翻页', ic: 'autoPage' },
+        { id: 'tts', label: '朗读', ic: 'headphones' },
+        { id: 'appearance', label: '界面', ic: 'palette' },
+        { id: 'settings', label: '设置', ic: 'settings' },
+      ];
+      return `
+        <div class="px-4 h-[78px] shrink-0 flex items-center justify-between">
+          ${items.map((it) => {
+            const active = it.id === activeModule;
+            return `
+              <div class="flex flex-col items-center gap-1 w-14">
+                <span class="w-[42px] h-[42px] rounded-full border flex items-center justify-center" style="${active
+                  ? 'background:var(--rd-circle-bg);border-color:var(--rd-primary);color:var(--rd-primary);'
+                  : 'background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-ink);'}">
+                  ${icon(it.ic, 18, active ? 2.0 : 1.7)}
+                </span>
+                <span class="text-[11px] leading-none font-medium" style="color:${active ? 'var(--rd-primary)' : 'var(--rd-muted)'};">${it.label}</span>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    // ------------------------------------------------------------------
+    // C1 · 原版瓷韵三行条 (No nested box, explicit 音色与更多 › / 更多配置 ›)
+    // ------------------------------------------------------------------
+    function renderTtsC1StageHtml(c) {
+      const idle = c.status === 'idle';
+      const playing = c.status === 'playing';
+      const chapter = CHAPTERS[c.chapterIdx].title;
+      const pct = Math.round((c.slice / TOTAL_SLICES) * 100);
+      const line2Html = idle
+        ? `<span class="text-[11px] truncate rd-num" style="color:var(--rd-muted);">第 ${c.slice}/${TOTAL_SLICES} 句</span>`
+        : (playing
+          ? `${galleryWaveform(true, 4)}<span class="text-[11px] font-medium truncate rd-num" style="color:var(--rd-primary);">第 ${c.slice}/${TOTAL_SLICES} 句</span>`
+          : `<span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:var(--rd-subtle);"></span><span class="text-[11px] truncate rd-num" style="color:var(--rd-muted);">已暂停 · ${c.slice}/${TOTAL_SLICES}</span>`);
+
+      return `
+        <div class="h-[76px] rounded-[16px] rd-strip px-2.5 flex items-center justify-between gap-2 relative overflow-hidden">
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="w-[2.5px] h-[34px] rounded-full shrink-0" style="background:var(--rd-primary);opacity:${playing ? 1 : 0.72};"></span>
+            <span class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center shrink-0" style="background:var(--rd-badge-bg);color:var(--rd-primary);">
+              ${icon('headphones', 16, 1.75)}
+            </span>
+            <div class="min-w-0 flex-1">
+              <div class="text-[12.5px] font-semibold leading-tight truncate" style="color:var(--rd-ink);">${chapter}</div>
+              <div class="flex items-center gap-1.5 mt-1 min-w-0">${line2Html}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <button type="button" onclick="window.stepTrack('${c.id}', -1)" class="w-[26px] h-[26px] rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="上一句">${icon('prevThin', 14.5)}</button>
+            <button type="button" onclick="window.togglePlay('${c.id}')" class="w-[42px] h-[42px] rounded-full rd-play-orb rd-press flex items-center justify-center shrink-0" title="${playing ? '暂停朗读' : '开始朗读'}">${icon(playing ? 'pauseClean' : 'playOutline', 17.5)}</button>
+            <button type="button" onclick="window.stopCard('${c.id}')" class="w-[28px] h-[28px] rounded-full rd-clay-dot rd-press flex items-center justify-center ${idle ? 'opacity-55' : 'opacity-100'}" title="停止朗读">
+              <span class="w-[9px] h-[9px] rounded-[2.5px]" style="background:var(--rd-clay-sq);"></span>
+            </button>
+            <button type="button" onclick="window.stepTrack('${c.id}', 1)" class="w-[26px] h-[26px] rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="下一句">${icon('nextThin', 14.5)}</button>
+          </div>
+
+          ${idle ? '' : `
+            <div class="absolute left-0 right-0 bottom-0 h-[2.5px]" style="background:var(--rd-slider-track);">
+              <div class="h-full transition-all duration-300" style="width:${pct}%;background:var(--rd-primary);"></div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderAutoC1StageHtml(c) {
+      const idle = c.status === 'idle';
+      const playing = c.status === 'playing';
+      const chapter = CHAPTERS[c.chapterIdx].title;
+      const pct = Math.max(4, Math.min(100, Math.round(((c.sec - c.rem) / c.sec) * 100)));
+      const line2Html = idle
+        ? `<span class="text-[11px] truncate rd-num" style="color:var(--rd-muted);">自动翻页 · 滑动</span>`
+        : (playing
+          ? `<span class="w-1.5 h-1.5 rounded-full shrink-0 pulse-dot" style="background:var(--rd-primary);"></span><span class="text-[11px] font-medium truncate rd-num" style="color:var(--rd-primary);">${c.rem.toFixed(1)}s 后翻页</span>`
+          : `<span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:var(--rd-subtle);"></span><span class="text-[11px] truncate rd-num" style="color:var(--rd-muted);">已暂停 · ${c.rem.toFixed(1)}s</span>`);
+
+      return `
+        <div class="h-[76px] rounded-[16px] rd-strip px-2.5 flex items-center justify-between gap-2 relative overflow-hidden">
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <span class="w-[2.5px] h-[34px] rounded-full shrink-0" style="background:var(--rd-primary);opacity:${playing ? 1 : 0.72};"></span>
+            <span class="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center shrink-0" style="background:var(--rd-badge-bg);color:var(--rd-primary);">
+              ${icon('autoPage', 16, 1.75)}
+            </span>
+            <div class="min-w-0 flex-1">
+              <div class="text-[12.5px] font-semibold leading-tight truncate" style="color:var(--rd-ink);">${chapter}</div>
+              <div class="flex items-center gap-1.5 mt-1 min-w-0">${line2Html}</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1 shrink-0">
+            <button type="button" onclick="window.stepTrack('${c.id}', -1)" class="w-[26px] h-[26px] rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="上一章">${icon('prevThin', 14.5)}</button>
+            <button type="button" onclick="window.togglePlay('${c.id}')" class="w-[42px] h-[42px] rounded-full rd-play-orb rd-press flex items-center justify-center shrink-0" title="${playing ? '暂停翻页' : '开始翻页'}">${icon(playing ? 'pauseClean' : 'playOutline', 17.5)}</button>
+            <button type="button" onclick="window.stopCard('${c.id}')" class="w-[28px] h-[28px] rounded-full rd-clay-dot rd-press flex items-center justify-center ${idle ? 'opacity-55' : 'opacity-100'}" title="停止翻页">
+              <span class="w-[9px] h-[9px] rounded-[2.5px]" style="background:var(--rd-clay-sq);"></span>
+            </button>
+            <button type="button" onclick="window.stepTrack('${c.id}', 1)" class="w-[26px] h-[26px] rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="下一章">${icon('nextThin', 14.5)}</button>
+          </div>
+
+          ${idle ? '' : `
+            <div class="absolute left-0 right-0 bottom-0 h-[2.5px]" style="background:var(--rd-slider-track);">
+              <div class="h-full transition-all duration-150" style="width:${pct}%;background:var(--rd-primary);"></div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderC1Inner(c) {
+      const isTts = c.kind === 'tts';
+      const timerLabel = formatTimerShort(c);
+      const sliderVal = isTts ? c.speed : c.sec;
+      const sliderMin = isTts ? 0.5 : 2;
+      const sliderMax = isTts ? 2.0 : 20;
+      const sliderStep = isTts ? 0.1 : 1;
+      const sliderPct = Math.round(((sliderVal - sliderMin) / (sliderMax - sliderMin)) * 100);
+      const readout = isTts ? `${c.speed.toFixed(1)}x` : `${c.sec}秒`;
+
+      return `
+        <div class="px-3 h-[192px] shrink-0 flex flex-col justify-between">
+          <div id="stage-${c.id}">${isTts ? renderTtsC1StageHtml(c) : renderAutoC1StageHtml(c)}</div>
+
+          <div class="h-[50px] rounded-[14px] rd-strip px-3 flex items-center gap-2.5">
+            <span class="w-[30px] h-[30px] rounded-[9px] flex items-center justify-center shrink-0" style="background:var(--rd-badge-bg);color:var(--rd-primary);">
+              ${icon('waveLine', 15, 1.75)}
+            </span>
+            <span class="text-[12.5px] font-medium shrink-0" style="color:var(--rd-ink);">${isTts ? '语速' : '间隔'}</span>
+            <input id="bar-slider-${c.id}" type="range" min="${sliderMin}" max="${sliderMax}" step="${sliderStep}" value="${sliderVal}" style="--val:${sliderPct}%;" oninput="${isTts ? `window.setSpeed('${c.id}', this.value, this)` : `window.setSec('${c.id}', this.value, this)`}" class="flex-1 min-w-0 rd-teal-slider" />
+            <span id="readout-${c.id}" class="text-[12px] font-medium rd-num w-9 text-right shrink-0" style="color:var(--rd-muted);">${readout}</span>
+          </div>
+
+          <div class="h-[50px] rounded-[14px] rd-strip px-3 flex items-center justify-between gap-2">
+            <button type="button" onclick="window.cycleTimer('${c.id}')" class="flex items-center gap-2 rd-press min-w-0">
+              <span class="w-[30px] h-[30px] rounded-[9px] flex items-center justify-center shrink-0" style="background:var(--rd-badge-bg);color:var(--rd-primary);">
+                ${icon('clock', 15, 1.75)}
+              </span>
+              <span class="h-[30px] px-2.5 rounded-full flex items-center gap-1 text-[11.5px] font-medium whitespace-nowrap rd-num" style="background:var(--rd-pill-bg);color:var(--rd-ink);">
+                <span>定时 · ${timerLabel}</span>
+                ${icon('chevronDown', 12, 1.8)}
+              </span>
+            </button>
+
+            <button type="button" onclick="window.toggleSheet('${c.id}')" class="h-[30px] px-3 rounded-full flex items-center gap-1 text-[11.5px] font-semibold shrink-0 rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">
+              <span>${isTts ? '音色与更多' : '更多配置'}</span>
+              ${icon('chevronRight', 12, 2)}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ------------------------------------------------------------------
+    // C2 · 画廊对称主舞台
+    // ------------------------------------------------------------------
+    function renderTtsC2StageHtml(c) {
+      const idle = c.status === 'idle';
+      const playing = c.status === 'playing';
+      const chapter = CHAPTERS[c.chapterIdx].title;
+      const v = VOICES[c.voiceIdx];
+      const pct = Math.round((c.slice / TOTAL_SLICES) * 100);
+      const rightMetaHtml = idle
+        ? `<span class="text-[11px] rd-num" style="color:var(--rd-muted);">第 ${c.slice}/${TOTAL_SLICES} 句</span>`
+        : (playing
+          ? `${galleryWaveform(true, 6)}<span class="text-[11px] font-semibold rd-num" style="color:var(--rd-primary);">${c.slice}/${TOTAL_SLICES} 句</span>`
+          : `<span class="text-[11px] rd-num" style="color:var(--rd-muted);">已暂停 · ${c.slice}/${TOTAL_SLICES}</span>`);
+
+      return `
+        <div class="h-[132px] rounded-[16px] rd-strip px-3.5 py-2.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="h-[20px] flex items-center justify-between gap-2">
+            <span class="text-[12px] font-semibold truncate min-w-0 flex-1" style="color:var(--rd-ink);">${chapter}</span>
+            <div class="flex items-center gap-1.5 shrink-0">${rightMetaHtml}</div>
+          </div>
+
+          <div class="h-[54px] flex items-center justify-center gap-10">
+            <button type="button" onclick="window.stepTrack('${c.id}', -1)" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="上一句">
+              ${icon('prevThin', 18)}
+            </button>
+            <button type="button" onclick="window.togglePlay('${c.id}')" class="w-[50px] h-[50px] rounded-full rd-play-orb rd-press flex items-center justify-center shrink-0" title="${playing ? '暂停朗读' : '开始朗读'}">
+              ${icon(playing ? 'pauseClean' : 'playOutline', 20)}
+            </button>
+            <button type="button" onclick="window.stepTrack('${c.id}', 1)" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="下一句">
+              ${icon('nextThin', 18)}
+            </button>
+          </div>
+
+          <div class="h-[24px] flex items-center justify-between gap-2">
+            <button type="button" onclick="window.toggleSheet('${c.id}')" class="flex items-center gap-1.5 min-w-0 text-[11.5px] font-medium rd-press" style="color:var(--rd-muted);">
+              <span class="shrink-0" style="color:var(--rd-primary);">${icon('headphones', 13, 1.85)}</span>
+              <span class="truncate">${v.short} · 更多配置</span>
+              ${icon('chevronRight', 12, 1.9)}
+            </button>
+            <button type="button" onclick="window.stopCard('${c.id}')" class="h-[24px] px-2.5 rounded-full rd-clay-pill rd-press flex items-center gap-1 shrink-0 text-[10.5px] font-medium ${idle ? 'opacity-45' : 'opacity-100'}" title="停止朗读">
+              <span class="w-[7px] h-[7px] rounded-[2px]" style="background:var(--rd-clay);"></span>
+              <span>停止</span>
+            </button>
+          </div>
+
+          ${idle ? '' : `
+            <div class="absolute left-0 right-0 bottom-0 h-[2.5px]" style="background:var(--rd-slider-track);">
+              <div class="h-full transition-all duration-300" style="width:${pct}%;background:var(--rd-primary);"></div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderAutoC2StageHtml(c) {
+      const idle = c.status === 'idle';
+      const playing = c.status === 'playing';
+      const chapter = CHAPTERS[c.chapterIdx].title;
+      const pct = Math.max(4, Math.min(100, Math.round(((c.sec - c.rem) / c.sec) * 100)));
+      const rightMetaHtml = idle
+        ? `<span class="text-[11px]" style="color:var(--rd-subtle);">滑动翻页</span>`
+        : (playing
+          ? `<span class="w-1.5 h-1.5 rounded-full pulse-dot" style="background:var(--rd-primary);"></span><span class="text-[11px] font-semibold rd-num" style="color:var(--rd-primary);">${c.rem.toFixed(1)}s</span>`
+          : `<span class="text-[11px] rd-num" style="color:var(--rd-muted);">已暂停 · ${c.rem.toFixed(1)}s</span>`);
+
+      return `
+        <div class="h-[132px] rounded-[16px] rd-strip px-3.5 py-2.5 flex flex-col justify-between relative overflow-hidden">
+          <div class="h-[20px] flex items-center justify-between gap-2">
+            <span class="text-[12px] font-semibold truncate min-w-0 flex-1" style="color:var(--rd-ink);">${chapter}</span>
+            <div class="flex items-center gap-1.5 shrink-0">${rightMetaHtml}</div>
+          </div>
+
+          <div class="h-[54px] flex items-center justify-center gap-10">
+            <button type="button" onclick="window.stepTrack('${c.id}', -1)" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="上一章">
+              ${icon('prevThin', 18)}
+            </button>
+            <button type="button" onclick="window.togglePlay('${c.id}')" class="w-[50px] h-[50px] rounded-full rd-play-orb rd-press flex items-center justify-center shrink-0" title="${playing ? '暂停翻页' : '开始翻页'}">
+              ${icon(playing ? 'pauseClean' : 'playOutline', 20)}
+            </button>
+            <button type="button" onclick="window.stepTrack('${c.id}', 1)" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="下一章">
+              ${icon('nextThin', 18)}
+            </button>
+          </div>
+
+          <div class="h-[24px] flex items-center justify-between gap-2">
+            <button type="button" onclick="window.toggleSheet('${c.id}')" class="flex items-center gap-1.5 min-w-0 text-[11.5px] font-medium rd-press" style="color:var(--rd-muted);">
+              <span class="shrink-0" style="color:var(--rd-primary);">${icon('sliders', 13, 1.85)}</span>
+              <span class="truncate">跟随高亮:${c.followHighlight ? '开' : '关'} · 更多配置</span>
+              ${icon('chevronRight', 12, 1.9)}
+            </button>
+            <button type="button" onclick="window.stopCard('${c.id}')" class="h-[24px] px-2.5 rounded-full rd-clay-pill rd-press flex items-center gap-1 shrink-0 text-[10.5px] font-medium ${idle ? 'opacity-45' : 'opacity-100'}" title="停止翻页">
+              <span class="w-[7px] h-[7px] rounded-[2px]" style="background:var(--rd-clay);"></span>
+              <span>停止</span>
+            </button>
+          </div>
+
+          ${idle ? '' : `
+            <div class="absolute left-0 right-0 bottom-0 h-[2.5px]" style="background:var(--rd-slider-track);">
+              <div class="h-full transition-all duration-150" style="width:${pct}%;background:var(--rd-primary);"></div>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function renderC2Inner(c) {
+      const isTts = c.kind === 'tts';
+      const timerLabel = formatTimerShort(c);
+      const sliderVal = isTts ? c.speed : c.sec;
+      const sliderMin = isTts ? 0.5 : 2;
+      const sliderMax = isTts ? 2.0 : 20;
+      const sliderStep = isTts ? 0.1 : 1;
+      const sliderPct = Math.round(((sliderVal - sliderMin) / (sliderMax - sliderMin)) * 100);
+      const readout = isTts ? `${c.speed.toFixed(1)}x` : `${c.sec}秒`;
+
+      return `
+        <div class="px-3 h-[192px] shrink-0 flex flex-col justify-between">
+          <div id="stage-${c.id}">${isTts ? renderTtsC2StageHtml(c) : renderAutoC2StageHtml(c)}</div>
+
+          <div class="h-[52px] rounded-[14px] rd-strip px-3 flex items-center gap-2.5">
+            <span class="text-[11.5px] font-medium shrink-0" style="color:var(--rd-muted);">${isTts ? '语速' : '间隔'}</span>
+            <input id="bar-slider-${c.id}" type="range" min="${sliderMin}" max="${sliderMax}" step="${sliderStep}" value="${sliderVal}" style="--val:${sliderPct}%;" oninput="${isTts ? `window.setSpeed('${c.id}', this.value, this)` : `window.setSec('${c.id}', this.value, this)`}" class="flex-1 min-w-[70px] rd-teal-slider" />
+            <span id="readout-${c.id}" class="text-[11.5px] font-medium rd-num w-8 text-right shrink-0" style="color:var(--rd-ink);">${readout}</span>
+            <span class="w-px h-4 shrink-0" style="background:var(--rd-line);"></span>
+            <button type="button" onclick="window.cycleTimer('${c.id}')" class="h-[28px] px-2.5 rounded-full flex items-center gap-1 text-[11px] font-medium shrink-0 rd-press whitespace-nowrap rd-num" style="background:var(--rd-pill-bg);color:var(--rd-ink);" title="切换定时停止">
+              <span style="color:var(--rd-primary);">${icon('clock', 12, 1.85)}</span>
+              <span>${timerLabel}</span>
+              ${icon('chevronDown', 11, 1.8)}
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    // ------------------------------------------------------------------
+    // Full-Parity Ceramic Overlay Drawers (ReaderControlTtsContent & ReaderControlAutoPageContent)
+    // ------------------------------------------------------------------
+    function renderTtsSheet(c) {
+      const v = VOICES[c.voiceIdx];
+      const lang = LANGUAGES[c.langIdx];
+      const speedPct = Math.round(((c.speed - 0.5) / 1.5) * 100);
+      const timerFull = formatTimerFull(c);
+      const presets = [
+        { k: 'off',        label: '不开启' },
+        { k: '15',         label: '15 分钟' },
+        { k: '30',         label: '30 分钟' },
+        { k: '45',         label: '45 分钟' },
+        { k: '60',         label: '60 分钟' },
+        { k: '90',         label: '90 分钟' },
+        { k: 'chapterEnd', label: '本章结束' },
+      ];
+      function isPresetActive(k) {
+        if (k === 'off') return c.timerMode === 'off';
+        if (k === 'chapterEnd') return c.timerMode === 'chapterEnd';
+        return c.timerMode === 'duration' && c.timerMin === parseInt(k, 10) && c.timerSec === 0;
+      }
+
+      const toggles = [
+        { k: 'followHighlight',     label: '跟随高亮' },
+        { k: 'pauseOnInterruption', label: '来电自动暂停' },
+        { k: 'allowMixing',         label: '允许与其他应用同时播放' },
+        { k: 'backgroundPlayback',  label: '后台继续朗读' },
+        { k: 'keepScreenOn',        label: '朗读时屏幕常亮' },
+      ];
+
+      return `
+        <div class="flex-1 overflow-y-auto rd-scroll px-3.5 pb-4 space-y-3.5 text-[12px]">
+          <!-- 语速 -->
+          <div class="rounded-[14px] border p-3 space-y-2.5" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold" style="color:var(--rd-ink);">语速</span>
+              <span id="sheet-readout-${c.id}" class="font-semibold rd-num" style="color:var(--rd-primary);">${c.speed.toFixed(2)}x</span>
+            </div>
+            <input id="sheet-slider-${c.id}" type="range" min="0.5" max="2.0" step="0.1" value="${c.speed}" style="--val:${speedPct}%;" oninput="window.setSpeed('${c.id}', this.value, this)" onchange="window.refreshCard('${c.id}')" class="w-full rd-teal-slider" />
+            <div class="flex items-center justify-between text-[10.5px] rd-num" style="color:var(--rd-muted);">
+              <span>0.50x</span><span>2.00x</span>
+            </div>
+            <div class="grid grid-cols-5 gap-1.5">
+              ${RATE_PRESETS.map((r) => {
+                const active = Math.abs(c.speed - r) < 0.01;
+                return `<button type="button" onclick="window.setTtsRatePreset('${c.id}', ${r})" class="h-8 rounded-[9px] text-[11px] font-medium rd-num border rd-press" style="${active ? 'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);font-weight:600;' : 'background:var(--rd-field-bg);color:var(--rd-ink);border-color:var(--rd-line);'}">${r.toFixed(2)}x</button>`;
+              }).join('')}
+            </div>
+          </div>
+
+          <!-- 定时停止 -->
+          <div class="rounded-[14px] border p-3 space-y-2.5" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold" style="color:var(--rd-ink);">定时停止</span>
+              <span class="font-medium rd-num" style="color:var(--rd-primary);">${timerFull}</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1.5">
+              ${presets.slice(0, 6).map((p) => {
+                const active = isPresetActive(p.k);
+                return `<button type="button" onclick="window.setTtsTimerPreset('${c.id}', '${p.k}')" class="h-8 rounded-[9px] text-[11px] font-medium border rd-press" style="${active ? 'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);font-weight:600;' : 'background:var(--rd-field-bg);color:var(--rd-ink);border-color:var(--rd-line);'}">${p.label}</button>`;
+              }).join('')}
+            </div>
+            <button type="button" onclick="window.setTtsTimerPreset('${c.id}', 'chapterEnd')" class="w-full h-8 rounded-[9px] text-[11px] font-medium border rd-press" style="${isPresetActive('chapterEnd') ? 'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);font-weight:600;' : 'background:var(--rd-field-bg);color:var(--rd-ink);border-color:var(--rd-line);'}">本章结束</button>
+
+            <div class="pt-1 border-t flex items-center justify-between gap-2" style="border-color:var(--rd-line);">
+              <div>
+                <div class="font-medium" style="color:var(--rd-ink);">自定义时长</div>
+                <div class="text-[10.5px]" style="color:var(--rd-muted);">分 · 秒</div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', true, -5)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">−</button>
+                <span class="w-6 text-center font-semibold rd-num" style="color:var(--rd-ink);">${twoDigits(c.timerMin)}</span>
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', true, 5)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">+</button>
+                <span class="text-[12px] font-bold" style="color:var(--rd-muted);">:</span>
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', false, -5)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">−</button>
+                <span class="w-6 text-center font-semibold rd-num" style="color:var(--rd-ink);">${twoDigits(c.timerSec)}</span>
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', false, 5)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 播放配置（即时生效） -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between px-1">
+              <span class="text-[11.5px] font-semibold" style="color:var(--rd-ink);">播放配置</span>
+              <span class="text-[10.5px]" style="color:var(--rd-muted);">即时生效</span>
+            </div>
+            <div class="rounded-[14px] border overflow-hidden" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <button type="button" onclick="window.cycleVoice('${c.id}')" class="w-full px-3 h-11 flex items-center justify-between rd-press">
+                <span style="color:var(--rd-ink);">音色</span>
+                <span class="h-7 px-2.5 rounded-full border flex items-center gap-1.5 text-[11px]" style="background:var(--rd-field-bg);border-color:var(--rd-line);color:var(--rd-ink);">
+                  <span class="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-semibold" style="background:var(--rd-circle-bg);color:var(--rd-primary);">${v.badge}</span>
+                  <span>${v.full}</span>
+                  ${icon('chevronRight', 11, 2)}
+                </span>
+              </button>
+
+              ${toggles.map((t) => `
+                <div class="px-3 h-10 flex items-center justify-between border-t" style="border-color:var(--rd-line);">
+                  <span style="color:var(--rd-ink);">${t.label}</span>
+                  ${switchTrack(c[t.k], `window.toggleTtsOption('${c.id}', '${t.k}')`)}
+                </div>
+              `).join('')}
+
+              <button type="button" onclick="window.toggleFailurePolicy('${c.id}')" class="w-full px-3 h-10 flex items-center justify-between border-t rd-press" style="border-color:var(--rd-line);">
+                <span style="color:var(--rd-ink);">不可用处理</span>
+                <span class="flex items-center gap-1 text-[11.5px]" style="color:var(--rd-muted);">
+                  <span>${c.failurePolicy === 'stop' ? '停止并提示' : '跳过不可用内容'}</span>
+                  ${icon('chevronRight', 12, 1.8)}
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 朗读引擎 -->
+          <div class="space-y-1.5">
+            <div class="px-1">
+              <span class="text-[11.5px] font-semibold" style="color:var(--rd-ink);">朗读引擎</span>
+            </div>
+            <div class="rounded-[14px] border p-2.5 space-y-2.5" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="window.setServiceTab('${c.id}', 'system')" class="p-2.5 rounded-[11px] border text-left rd-press" style="${c.serviceTab === 'system' ? 'background:var(--rd-circle-bg);border-color:var(--rd-primary);' : 'background:var(--rd-field-bg);border-color:var(--rd-line);'}">
+                  <div class="flex items-center justify-between mb-1">
+                    <span style="color:var(--rd-primary);">${icon('cpu', 15, 1.8)}</span>
+                    ${c.serviceTab === 'system' ? `<span style="color:var(--rd-primary);">${icon('check', 13, 2.2)}</span>` : ''}
+                  </div>
+                  <div class="font-semibold text-[12px]" style="color:var(--rd-ink);">系统 TTS</div>
+                  <div class="text-[10.5px]" style="color:var(--rd-muted);">设备内置语音</div>
+                </button>
+
+                <button type="button" onclick="window.setServiceTab('${c.id}', 'online')" class="p-2.5 rounded-[11px] border text-left rd-press" style="${c.serviceTab === 'online' ? 'background:var(--rd-circle-bg);border-color:var(--rd-primary);' : 'background:var(--rd-field-bg);border-color:var(--rd-line);'}">
+                  <div class="flex items-center justify-between mb-1">
+                    <span style="color:var(--rd-primary);">${icon('cloud', 15, 1.8)}</span>
+                    ${c.serviceTab === 'online' ? `<span style="color:var(--rd-primary);">${icon('check', 13, 2.2)}</span>` : ''}
+                  </div>
+                  <div class="font-semibold text-[12px]" style="color:var(--rd-ink);">在线 TTS</div>
+                  <div class="text-[10.5px]" style="color:var(--rd-muted);">第三方语音服务</div>
+                </button>
+              </div>
+
+              ${c.serviceTab === 'system' ? `
+                <div class="border-t pt-1 space-y-1" style="border-color:var(--rd-line);">
+                  <div class="h-9 flex items-center justify-between px-1">
+                    <span style="color:var(--rd-ink);">语音引擎</span>
+                    <span class="text-[11.5px]" style="color:var(--rd-muted);">系统默认</span>
+                  </div>
+                  <button type="button" onclick="window.cycleLang('${c.id}')" class="w-full h-9 flex items-center justify-between px-1 border-t rd-press" style="border-color:var(--rd-line);">
+                    <span style="color:var(--rd-ink);">朗读语言</span>
+                    <span class="flex items-center gap-1 text-[11.5px]" style="color:var(--rd-muted);">
+                      <span>${lang}</span>${icon('chevronRight', 12, 1.8)}
+                    </span>
+                  </button>
+                </div>
+              ` : `
+                <div class="border-t pt-2.5 flex items-center justify-between px-1" style="border-color:var(--rd-line);">
+                  <span style="color:var(--rd-ink);">服务信息</span>
+                  <button type="button" onclick="window.toggleOnlineConfig('${c.id}')" class="h-7 px-3 rounded-full text-[11px] font-semibold flex items-center gap-1 rd-press" style="${c.onlineConfigured ? 'background:var(--rd-circle-bg);color:var(--rd-primary);border:1px solid var(--rd-primary);' : 'background:var(--rd-primary);color:var(--rd-on-primary);'}">
+                    <span>${c.onlineConfigured ? '已配置 · 编辑' : '立即配置'}</span>
+                    ${icon('chevronRight', 11, 2)}
+                  </button>
+                </div>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAutoSheet(c) {
+      const speedPct = Math.round(((c.sec - 2) / 18) * 100);
+      const timerFull = formatTimerFull(c);
+      const presets = [
+        { k: 'off', label: '不开启' },
+        { k: '15',  label: '15:00' },
+        { k: '30',  label: '30:00' },
+        { k: '60',  label: '60:00' },
+      ];
+      function isPreset(k) {
+        if (k === 'off') return !c.timerEnabled;
+        return c.timerEnabled && c.timerMin === parseInt(k, 10) && c.timerSec === 0;
+      }
+
+      return `
+        <div class="flex-1 overflow-y-auto rd-scroll px-3.5 pb-4 space-y-3.5 text-[12px]">
+          <!-- 自动停止定时 -->
+          <div class="rounded-[14px] border p-3 space-y-2.5" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold" style="color:var(--rd-ink);">定时 · 自动停止</span>
+              <span class="font-medium rd-num" style="color:var(--rd-primary);">${timerFull}</span>
+            </div>
+
+            <div class="grid grid-cols-4 gap-1.5">
+              ${presets.map((p) => {
+                const active = isPreset(p.k);
+                return `<button type="button" onclick="window.setAutoTimerPreset('${c.id}', '${p.k}')" class="h-8 rounded-[9px] text-[11px] font-medium rd-num border rd-press" style="${active ? 'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);font-weight:600;' : 'background:var(--rd-field-bg);color:var(--rd-ink);border-color:var(--rd-line);'}">${p.label}</button>`;
+              }).join('')}
+            </div>
+
+            <div class="pt-1.5 border-t flex items-center justify-between gap-2" style="border-color:var(--rd-line);">
+              <div>
+                <div class="font-medium" style="color:var(--rd-ink);">自动停止时长</div>
+                <div class="text-[10.5px]" style="color:var(--rd-muted);">分 : 秒 精细步进</div>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', true, -1)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">−</button>
+                <span class="w-10 text-center font-semibold rd-num" style="color:var(--rd-ink);">${twoDigits(c.timerMin)} 分</span>
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', true, 1)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">+</button>
+                <span class="font-bold" style="color:var(--rd-primary);">:</span>
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', false, -5)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">−</button>
+                <span class="w-10 text-center font-semibold rd-num" style="color:var(--rd-ink);">${twoDigits(c.timerSec)} 秒</span>
+                <button type="button" onclick="window.stepCustomTimer('${c.id}', false, 5)" class="w-7 h-7 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 详细配置 -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between px-1">
+              <span class="text-[11.5px] font-semibold" style="color:var(--rd-ink);">详细配置</span>
+              <span class="text-[10.5px]" style="color:var(--rd-muted);">即时生效</span>
+            </div>
+
+            <div class="rounded-[14px] border p-3 space-y-2" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="flex items-center justify-between">
+                <span class="font-medium" style="color:var(--rd-ink);">翻页速度</span>
+                <span id="sheet-readout-${c.id}" class="font-semibold rd-num" style="color:var(--rd-primary);">${c.sec} 秒</span>
+              </div>
+              <input id="sheet-slider-${c.id}" type="range" min="2" max="20" step="1" value="${c.sec}" style="--val:${speedPct}%;" oninput="window.setSec('${c.id}', this.value, this)" class="w-full rd-teal-slider" />
+              <div class="flex items-center justify-between text-[10.5px] rd-num" style="color:var(--rd-muted);">
+                <span>2 秒</span><span>20 秒</span>
+              </div>
+            </div>
+
+            <div class="rounded-[14px] border px-3 h-11 flex items-center justify-between" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <span style="color:var(--rd-ink);">跟随高亮</span>
+              ${switchTrack(c.followHighlight, `window.toggleFollow('${c.id}')`)}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSheetOverlay(c) {
+      if (!c.sheetOpen) return '';
+      const isTts = c.kind === 'tts';
+      return `
+        <div onclick="window.toggleSheet('${c.id}')" class="absolute inset-0 z-20" style="background:var(--rd-scrim);"></div>
+        <div class="absolute inset-x-0 bottom-0 h-[430px] z-30 rounded-t-[22px] border-t flex flex-col rd-blur sheet-rise" style="background:var(--rd-sheet-bg);border-color:var(--rd-line);box-shadow:var(--rd-shadow-pop);">
+          <div class="pt-2 pb-1 flex justify-center shrink-0">
+            <span class="w-9 h-1 rounded-full" style="background:var(--rd-handle);opacity:0.75;"></span>
+          </div>
+          <div class="px-3.5 pb-2.5 flex items-center justify-between shrink-0">
+            <div class="flex items-center gap-2">
+              <span style="color:var(--rd-primary);">${icon(isTts ? 'headphones' : 'autoPage', 16, 1.85)}</span>
+              <span class="text-[14.5px] font-bold" style="color:var(--rd-ink);">${isTts ? '朗读全部配置' : '自动翻页全部配置'}</span>
+            </div>
+            <button type="button" onclick="window.toggleSheet('${c.id}')" class="h-7 px-3 rounded-full text-[11.5px] font-medium rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">收起</button>
+          </div>
+          ${isTts ? renderTtsSheet(c) : renderAutoSheet(c)}
+        </div>
+      `;
+    }
+
+    function renderVignetteCard(c) {
+      const isTts = c.kind === 'tts';
+      const isC1 = c.variant === 'C1';
+      const active = c.status === 'playing';
+      const ch = CHAPTERS[c.chapterIdx];
+      const highlightActive = isTts ? (active && c.followHighlight) : (active && c.followHighlight);
+
+      return `
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between px-1">
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 rounded-full text-[11px] font-semibold ${isC1 ? 'bg-[#2F6373] text-[#FFFCF8]' : 'bg-[#EDE5D7] text-[#332C25]'}">${isC1 ? '方案 C1' : '方案 C2'}</span>
+              <span class="text-[13.5px] font-semibold text-[#2C241D]">${isC1 ? '原版瓷韵三行条' : '画廊对称主舞台'}</span>
+            </div>
+            <button type="button" onclick="window.toggleSheet('${c.id}')" class="text-[11px] font-medium px-2.5 py-0.5 rounded-full border border-[#D7CCBB] bg-[#FFFCF8] text-[#2F6373] rd-press">${c.sheetOpen ? '收起配置抽屉' : '展开全部配置 ›'}</button>
+          </div>
+
+          <div class="w-full max-w-[376px] h-[520px] mx-auto rounded-[26px] border overflow-hidden relative flex flex-col justify-between shadow-lg rd-scope" data-scheme="${appState.scheme}" style="background:var(--rd-paper-bg);border-color:var(--rd-line);">
+            <!-- Chapter-reactive Novel Paper Vignette -->
+            <div class="px-5 pt-4 pb-2 space-y-1.5 rd-serif text-[13px] leading-[1.7] min-h-0 flex-1 overflow-hidden" style="color:var(--rd-paper-ink);">
+              <div class="flex items-center justify-between rd-sans text-[10.5px]" style="color:var(--rd-paper-meta);">
+                <span id="vignette-ch-${c.id}">${ch.title}</span>
+                <span class="rd-num">${isTts ? `第 ${c.slice}/${TOTAL_SLICES} 句` : `第 ${c.chapterIdx + 2} 章 / 共 1663 章`}</span>
+              </div>
+              <p class="m-0 opacity-85">${ch.lead}</p>
+              <p class="m-0 rounded-[7px] px-2 py-1 transition-colors" style="${highlightActive ? 'background:var(--rd-paper-hi);border-left:2px solid var(--rd-paper-hi-line);' : ''}">
+                ${ch.focus}
+              </p>
+            </div>
+
+            <!-- Constant 330px Luminous Ceramic-Paper Floating Control Island -->
+            <div class="mx-3 mb-3 h-[330px] rounded-[24px] border pt-1.5 pb-3 flex flex-col justify-between shrink-0 rd-blur" style="background:var(--rd-shell);border-color:var(--rd-line);box-shadow:var(--rd-shadow-dock);">
+              <button type="button" onclick="window.toggleSheet('${c.id}')" class="h-5 w-full flex items-center justify-center shrink-0 rd-press" title="点击展开全部配置">
+                <span class="w-9 h-1 rounded-full" style="background:var(--rd-handle);opacity:0.78;"></span>
+              </button>
+
+              ${isC1 ? renderC1Inner(c) : renderC2Inner(c)}
+
+              ${renderDock(c.kind)}
+            </div>
+
+            ${renderSheetOverlay(c)}
+          </div>
+        </div>
+      `;
+    }
+
+    function updateCard(id) {
+      const el = document.getElementById(`card-${id}`);
+      if (el) el.innerHTML = renderVignetteCard(appState.cards[id]);
+    }
+
+    function updateStageOnly(c) {
+      const stageEl = document.getElementById(`stage-${c.id}`);
+      if (!stageEl) return;
+      if (c.variant === 'C1') {
+        stageEl.innerHTML = c.kind === 'tts' ? renderTtsC1StageHtml(c) : renderAutoC1StageHtml(c);
+      } else {
+        stageEl.innerHTML = c.kind === 'tts' ? renderTtsC2StageHtml(c) : renderAutoC2StageHtml(c);
+      }
+    }
+
+    function render() {
+      const root = document.getElementById('app');
+      if (!root) return;
+      const isNight = appState.scheme === 'night';
+      const anySheetOpen = Object.values(appState.cards).some((c) => c.sheetOpen);
+      const statusOpts = [
+        { id: 'idle', label: '未开始' },
+        { id: 'playing', label: '运行中' },
+        { id: 'paused', label: '已暂停' },
+      ];
+
+      root.innerHTML = `
+        <header class="bg-[#FFFCF8] border border-[#DDD3C3] rounded-[18px] px-4 py-3.5 shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+          <div>
+            <h1 class="text-[16px] font-bold tracking-tight text-[#2C241D] m-0">墨纸青松 · 朗读与翻页播控区（完整全量配置版）</h1>
+            <p class="text-[12px] text-[#6E6254] m-0 mt-0.5">保留 C1 / C2 播控区直觉，补全所有卡片的「更多配置 ›」入口与 100% 原生二级配置抽屉（音色 / 引擎 / 开关 / 自定义分秒定时）。</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <div class="inline-flex items-center p-0.5 rounded-full bg-[#EFE7DA] border border-[#DDD3C3]">
+              ${statusOpts.map((s) => `
+                <button type="button" onclick="window.setGlobalStatus('${s.id}')" class="px-2.5 py-1 rounded-full text-[11.5px] font-medium transition-colors ${appState.globalStatus === s.id ? 'bg-[#2F6373] text-[#FFFCF8]' : 'text-[#5B5046] hover:text-[#2C241D]'}">${s.label}</button>
+              `).join('')}
+            </div>
+            <button type="button" onclick="window.toggleAllSheets()" class="h-8 px-3 rounded-full border border-[#DDD3C3] text-[11.5px] font-medium rd-press ${anySheetOpen ? 'bg-[#2F6373] text-[#FFFCF8]' : 'bg-[#FAF5EC] text-[#2C241D]'}">
+              ${anySheetOpen ? '收起全部抽屉' : '展开全部配置抽屉'}
+            </button>
+            <button type="button" onclick="window.setScheme('${isNight ? 'day' : 'night'}')" class="h-8 px-3 rounded-full border border-[#DDD3C3] bg-[#FAF5EC] text-[#2C241D] text-[11.5px] font-medium flex items-center gap-1.5 rd-press">
+              ${icon(isNight ? 'sun' : 'moon', 13)}
+              <span>${isNight ? '日间纸韵' : '夜间墨韵'}</span>
+            </button>
+          </div>
+        </header>
+
+        <section class="space-y-3">
+          <div class="flex items-baseline justify-between px-1">
+            <h2 class="text-[14px] font-bold text-[#2C241D] m-0">一、朗读（tts）· 播控区 + 完整「更多配置」抽屉</h2>
+            <span class="text-[11.5px] text-[#7A6F63]">点「音色与更多 ›」「更多配置 ›」或顶部拉条均可拉起完整设置</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div id="card-ttsC1">${renderVignetteCard(appState.cards.ttsC1)}</div>
+            <div id="card-ttsC2">${renderVignetteCard(appState.cards.ttsC2)}</div>
+          </div>
+        </section>
+
+        <section class="space-y-3">
+          <div class="flex items-baseline justify-between px-1">
+            <h2 class="text-[14px] font-bold text-[#2C241D] m-0">二、自动翻页（autoPage）· 播控区 + 完整「更多配置」抽屉</h2>
+            <span class="text-[11.5px] text-[#7A6F63]">定时、翻页速度与跟随高亮在卡片和抽屉间双向实时同步</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+            <div id="card-autoC1">${renderVignetteCard(appState.cards.autoC1)}</div>
+            <div id="card-autoC2">${renderVignetteCard(appState.cards.autoC2)}</div>
+          </div>
+        </section>
+
+        <div id="rd-toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 pointer-events-none"></div>
+      `;
+    }
+
+    window.setGlobalStatus = (status) => {
+      appState.globalStatus = status;
+      Object.values(appState.cards).forEach((c) => {
+        c.status = status;
+        if (c.kind === 'autoPage' && status === 'idle') {
+          c.rem = +(Math.max(1.2, c.sec - 1.8)).toFixed(1);
+        }
+      });
+      render();
+    };
+
+    window.setScheme = (scheme) => {
+      appState.scheme = scheme;
+      render();
+    };
+
+    window.toggleSheet = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.sheetOpen = !c.sheetOpen;
+      render();
+    };
+
+    window.toggleAllSheets = () => {
+      const anyOpen = Object.values(appState.cards).some((c) => c.sheetOpen);
+      Object.values(appState.cards).forEach((c) => { c.sheetOpen = !anyOpen; });
+      render();
+    };
+
+    window.refreshCard = (id) => updateCard(id);
+
+    window.togglePlay = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      if (c.status === 'playing') {
+        c.status = 'paused';
+      } else {
+        if (c.kind === 'autoPage' && c.status === 'idle') c.rem = c.sec;
+        c.status = 'playing';
+      }
+      updateCard(id);
+    };
+
+    window.stopCard = (id) => {
+      const c = appState.cards[id];
+      if (!c || c.status === 'idle') return;
+      c.status = 'idle';
+      if (c.kind === 'autoPage') c.rem = +(Math.max(1.2, c.sec - 1.8)).toFixed(1);
+      updateCard(id);
+    };
+
+    window.stepTrack = (id, delta) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      if (c.kind === 'tts') {
+        c.slice = ((c.slice - 1 + delta + TOTAL_SLICES) % TOTAL_SLICES) + 1;
+        showToast(`定位至第 ${c.slice} / ${TOTAL_SLICES} 句`);
+      } else {
+        c.chapterIdx = (c.chapterIdx + delta + CHAPTERS.length) % CHAPTERS.length;
+        c.rem = c.sec;
+        showToast(`已切换至「${CHAPTERS[c.chapterIdx].title}」`);
+      }
+      updateCard(id);
+    };
+
+    window.setSpeed = (id, val, inputEl) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.speed = Math.max(0.5, Math.min(2.0, +parseFloat(val).toFixed(2)));
+      const pct = Math.round(((c.speed - 0.5) / 1.5) * 100);
+      [inputEl, document.getElementById(`bar-slider-${id}`), document.getElementById(`sheet-slider-${id}`)].forEach((el) => {
+        if (el && el.style && typeof el.style.setProperty === 'function') {
+          el.value = c.speed;
+          el.style.setProperty('--val', `${pct}%`);
+        }
+      });
+      const ro = document.getElementById(`readout-${id}`);
+      if (ro) ro.textContent = `${c.speed.toFixed(1)}x`;
+      const sro = document.getElementById(`sheet-readout-${id}`);
+      if (sro) sro.textContent = `${c.speed.toFixed(2)}x`;
+      if (!inputEl && !ro && !sro) updateCard(id);
+    };
+
+    window.setTtsRatePreset = (id, rate) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.speed = rate;
+      updateCard(id);
+    };
+
+    window.setSec = (id, val, inputEl) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.sec = Math.max(2, Math.min(20, parseInt(val, 10)));
+      c.rem = Math.min(c.rem, c.sec);
+      const pct = Math.round(((c.sec - 2) / 18) * 100);
+      [inputEl, document.getElementById(`bar-slider-${id}`), document.getElementById(`sheet-slider-${id}`)].forEach((el) => {
+        if (el && el.style && typeof el.style.setProperty === 'function') {
+          el.value = c.sec;
+          el.style.setProperty('--val', `${pct}%`);
+        }
+      });
+      const ro = document.getElementById(`readout-${id}`);
+      if (ro) ro.textContent = `${c.sec}秒`;
+      const sro = document.getElementById(`sheet-readout-${id}`);
+      if (sro) sro.textContent = `${c.sec} 秒`;
+      if (c.status !== 'idle') updateStageOnly(c);
+      if (!inputEl && !ro && !sro) updateCard(id);
+    };
+
+    window.cycleTimer = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      if (c.kind === 'tts') {
+        const cur = c.timerMode === 'off' ? 'off' : (c.timerMode === 'chapterEnd' ? 'chapterEnd' : `${c.timerMin}`);
+        const seq = ['off', '15', '30', '60', 'chapterEnd'];
+        const next = seq[(seq.indexOf(cur) + 1) % seq.length];
+        window.setTtsTimerPreset(id, next);
+      } else {
+        const cur = !c.timerEnabled ? 'off' : `${c.timerMin}`;
+        const seq = ['off', '15', '30', '60'];
+        const next = seq[(seq.indexOf(cur) + 1) % seq.length];
+        window.setAutoTimerPreset(id, next);
+      }
+    };
+
+    window.setTtsTimerPreset = (id, key) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      if (key === 'off') {
+        c.timerMode = 'off';
+      } else if (key === 'chapterEnd') {
+        c.timerMode = 'chapterEnd';
+      } else {
+        c.timerMode = 'duration';
+        c.timerMin = parseInt(key, 10);
+        c.timerSec = 0;
+      }
+      updateCard(id);
+    };
+
+    window.setAutoTimerPreset = (id, key) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      if (key === 'off') {
+        c.timerEnabled = false;
+      } else {
+        c.timerEnabled = true;
+        c.timerMin = parseInt(key, 10);
+        c.timerSec = 0;
+      }
+      updateCard(id);
+    };
+
+    window.stepCustomTimer = (id, isMin, delta) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      if (c.kind === 'tts') {
+        if (c.timerMode !== 'duration') {
+          c.timerMode = 'duration';
+          c.timerMin = delta > 0 ? 15 : 0;
+          c.timerSec = 0;
+        }
+        if (isMin) c.timerMin = Math.max(0, Math.min(180, c.timerMin + delta));
+        else c.timerSec = Math.max(0, Math.min(55, c.timerSec + delta));
+        if (c.timerMin === 0 && c.timerSec === 0) c.timerMode = 'off';
+      } else {
+        c.timerEnabled = true;
+        if (isMin) c.timerMin = Math.max(0, Math.min(180, c.timerMin + delta));
+        else c.timerSec = Math.max(0, Math.min(55, c.timerSec + delta));
+        if (c.timerMin === 0 && c.timerSec === 0) c.timerEnabled = false;
+      }
+      updateCard(id);
+    };
+
+    window.cycleVoice = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.voiceIdx = (c.voiceIdx + 1) % VOICES.length;
+      showToast(`已切换音色：${VOICES[c.voiceIdx].full}`);
+      updateCard(id);
+    };
+
+    window.toggleTtsOption = (id, key) => {
+      const c = appState.cards[id];
+      if (!c || typeof c[key] !== 'boolean') return;
+      c[key] = !c[key];
+      updateCard(id);
+    };
+
+    window.toggleFailurePolicy = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.failurePolicy = c.failurePolicy === 'stop' ? 'skip' : 'stop';
+      updateCard(id);
+    };
+
+    window.setServiceTab = (id, tab) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.serviceTab = tab;
+      updateCard(id);
+    };
+
+    window.cycleLang = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.langIdx = (c.langIdx + 1) % LANGUAGES.length;
+      updateCard(id);
+    };
+
+    window.toggleOnlineConfig = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.onlineConfigured = !c.onlineConfigured;
+      showToast(c.onlineConfigured ? '已模拟保存第三方 HTTP TTS 服务' : '已重置在线 TTS 配置');
+      updateCard(id);
+    };
+
+    window.toggleFollow = (id) => {
+      const c = appState.cards[id];
+      if (!c) return;
+      c.followHighlight = !c.followHighlight;
+      updateCard(id);
+    };
+
+    setInterval(() => {
+      Object.values(appState.cards).forEach((c) => {
+        if (c.status !== 'playing') return;
+        if (c.kind === 'autoPage') {
+          c.rem = +(c.rem - 0.2).toFixed(1);
+          if (c.rem <= 0) c.rem = c.sec;
+          updateStageOnly(c);
+        } else {
+          c.tickAcc += 0.2;
+          if (c.tickAcc >= 2.2) {
+            c.tickAcc = 0;
+            c.slice = (c.slice % TOTAL_SLICES) + 1;
+            updateStageOnly(c);
+          }
+        }
+      });
+    }, 200);
+
+    render();
+  })();
+  </script>
+</body>
+</html>

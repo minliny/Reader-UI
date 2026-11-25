@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>书签微动效演示</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .rd-num { font-variant-numeric: tabular-nums; }
+    .rd-serif { font-family: "Songti SC", "Noto Serif SC", "STSong", serif; }
+    .rd-pressable {
+      transition: transform 140ms ease, opacity 140ms ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .rd-pressable:active { transform: scale(0.96); }
+
+    .rd-preview[data-theme="day"] {
+      --rd-paper-bg: #EDE2CB;
+      --rd-paper-ink: #2B241D;
+      --rd-paper-meta: #766C61;
+      --rd-ctrl-card: rgba(255, 252, 248, 0.94);
+      --rd-ctrl-card-solid: #FFFCF8;
+      --rd-ctrl-soft: rgba(238, 230, 219, 0.56);
+      --rd-ctrl-line: rgba(180, 166, 151, 0.36);
+      --rd-ctrl-primary: #1F3D31;
+      --rd-ctrl-circle: rgba(31, 61, 49, 0.11);
+      --rd-ctrl-accent: #B86B2B;
+      --rd-ctrl-ink: #332C25;
+      --rd-ctrl-muted: #5B5046;
+      --rd-ctrl-track: rgba(92, 79, 63, 0.22);
+    }
+
+    .rd-preview[data-theme="night"] {
+      --rd-paper-bg: #21221F;
+      --rd-paper-ink: #E4DDD0;
+      --rd-paper-meta: #9D968B;
+      --rd-ctrl-card: #272D28;
+      --rd-ctrl-card-solid: #272D28;
+      --rd-ctrl-soft: #1C201D;
+      --rd-ctrl-line: rgba(236, 232, 224, 0.16);
+      --rd-ctrl-primary: #7BB094;
+      --rd-ctrl-circle: rgba(123, 176, 148, 0.16);
+      --rd-ctrl-accent: #D99452;
+      --rd-ctrl-ink: #ECE8E0;
+      --rd-ctrl-muted: #A6A196;
+      --rd-ctrl-track: rgba(236, 232, 224, 0.22);
+    }
+
+    @keyframes bookmarkPop {
+      0% { transform: scale(0.82) translateY(1.5px); }
+      55% { transform: scale(1.24) translateY(-1px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+    @keyframes bookmarkHalo {
+      0% { transform: scale(0.75); opacity: 0.6; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    @keyframes bookmarkRemove {
+      0% { transform: scale(0.86); opacity: 0.72; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    @keyframes bookmarkCornerDrop {
+      0% { opacity: 0; transform: translateY(-6px) scaleY(0.82); }
+      100% { opacity: 1; transform: translateY(0) scaleY(1); }
+    }
+    @keyframes bookmarkReduced {
+      from { opacity: 0.45; }
+      to { opacity: 1; }
+    }
+
+    .anim-bm-pop { animation: bookmarkPop calc(220ms * var(--bm-mul, 1)) cubic-bezier(0.22, 1.38, 0.36, 1) both; }
+    .anim-bm-halo { animation: bookmarkHalo calc(260ms * var(--bm-mul, 1)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .anim-bm-remove { animation: bookmarkRemove calc(140ms * var(--bm-mul, 1)) ease-out both; }
+    .anim-bm-corner { transform-origin: top center; animation: bookmarkCornerDrop calc(220ms * var(--bm-mul, 1)) cubic-bezier(0.22, 1.15, 0.36, 1) both; }
+    .anim-bm-reduced { animation: bookmarkReduced 120ms linear both; }
+
+    .bm-track {
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--rd-ctrl-accent) 0%, var(--rd-ctrl-accent) 64%, var(--rd-ctrl-track) 64%, var(--rd-ctrl-track) 100%);
+      position: relative;
+    }
+    .bm-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--rd-ctrl-card-solid);
+      border: 2.5px solid var(--rd-ctrl-accent);
+      position: absolute;
+      top: 50%;
+      left: 64%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-0 m-0">
+  <div id="app" class="py-1.5 space-y-2"></div>
+
+  <script>
+    const state = {
+      bookmarked: false,
+      anim: 'none', // none | add | remove | reduced
+      slow: false,
+      reduceMotion: false,
+      theme: 'day',
+    };
+
+    function bmSvg(filled, size = 12) {
+      return filled
+        ? `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>`
+        : `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.85" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg>`;
+    }
+
+    function render() {
+      const mul = state.slow ? 2.85 : 1;
+      const iconCls = state.anim === 'reduced'
+        ? 'anim-bm-reduced'
+        : (state.anim === 'add' ? 'anim-bm-pop' : (state.anim === 'remove' ? 'anim-bm-remove' : ''));
+      const cornerCls = state.anim === 'reduced'
+        ? 'anim-bm-reduced'
+        : (state.anim === 'add' ? 'anim-bm-corner' : '');
+      const statusText = state.anim === 'reduced'
+        ? '已触发：减动效 120ms 轻淡入（无回弹与光环）'
+        : (state.bookmarked
+          ? (state.anim === 'add' ? '加签动效：220ms 落签微弹 + 260ms 松绿轻晕环 + 右上角角标同步落入' : '当前已添加本章书签；再次点击可体验 140ms 取消轻收')
+          : (state.anim === 'remove' ? '去签动效：140ms 轻快收敛，页眉书签角标同步隐去' : '点击卡片中「☆ 加书签」体验落签微弹；原沉浸阅读仍保留「下拉正文 160ms 回弹加签」'));
+
+      document.getElementById('app').innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[var(--card-border)] text-xs">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="toggleSlow()" class="h-7 px-2.5 rounded-full font-medium rd-pressable ${state.slow ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'}">${state.slow ? '0.35x 慢放中' : '1x 正常速率'}</button>
+            <button type="button" onclick="toggleReduce()" class="h-7 px-2.5 rounded-full font-medium rd-pressable ${state.reduceMotion ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'}">减少动态效果：${state.reduceMotion ? '开' : '关'}</button>
+          </div>
+          <button type="button" onclick="toggleTheme()" class="h-7 px-2.5 rounded-full border border-[var(--border)] bg-[var(--secondary)] text-[var(--secondary-foreground)] font-medium rd-pressable">${state.theme === 'day' ? '日间' : '夜间'}</button>
+        </div>
+
+        <div class="rd-preview rounded-2xl p-2.5 grid grid-cols-1 sm:grid-cols-[1.55fr_1fr] gap-2.5" data-theme="${state.theme}" style="--bm-mul:${mul};background:var(--rd-paper-bg);">
+          <!-- 控制栏方案 C 章节进度卡 -->
+          <div class="h-[106px] rounded-[12px] border px-3 flex flex-col justify-center gap-2" style="background:var(--rd-ctrl-card);border-color:var(--rd-ctrl-line);">
+            <div class="flex items-center justify-between gap-2">
+              <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs" style="background:var(--rd-ctrl-soft);color:var(--rd-ctrl-ink);">‹</span>
+              <span class="text-[13px] font-semibold truncate" style="color:var(--rd-ctrl-ink);">第1064章 · 云岚宗的来客</span>
+              <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs" style="background:var(--rd-ctrl-soft);color:var(--rd-ctrl-ink);">›</span>
+            </div>
+            <div class="flex items-center justify-between px-0.5">
+              <span class="text-xs rd-num" style="color:var(--rd-ctrl-muted);">第 1064 / 1663 章</span>
+              <button type="button" id="demo-bm-btn" onclick="toggleDemoBookmark()" class="h-[24px] px-2.5 rounded-full border inline-flex items-center gap-1.5 text-xs font-medium rd-pressable relative overflow-visible" style="${state.bookmarked ? 'background:var(--rd-ctrl-circle);border-color:var(--rd-ctrl-primary);color:var(--rd-ctrl-primary);' : 'background:var(--rd-ctrl-soft);border-color:var(--rd-ctrl-line);color:var(--rd-ctrl-ink);'}">
+                <span class="relative inline-flex items-center justify-center w-3.5 h-3.5 ${iconCls}">
+                  ${bmSvg(state.bookmarked, 12)}
+                  ${state.anim === 'add' && !state.reduceMotion ? '<span class="pointer-events-none absolute -inset-1 rounded-full border anim-bm-halo" style="border-color:var(--rd-ctrl-primary);"></span>' : ''}
+                </span>
+                <span>${state.bookmarked ? '已加书签' : '加书签'}</span>
+              </button>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs rd-num shrink-0" style="color:var(--rd-ctrl-muted);">64%</span>
+              <div class="flex-1 bm-track"><div class="bm-thumb"></div></div>
+              <span class="text-xs rd-num shrink-0" style="color:var(--rd-ctrl-muted);">100%</span>
+            </div>
+          </div>
+
+          <!-- 沉浸阅读页眉右上角书签角标联动 -->
+          <div class="h-[106px] rounded-[12px] border px-3 py-2 flex flex-col justify-between" style="background:var(--rd-paper-bg);border-color:var(--rd-ctrl-line);">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs truncate" style="color:var(--rd-paper-meta);">云岚宗的来客</span>
+              ${state.bookmarked
+                ? `<span id="demo-corner-bm" class="inline-flex items-center shrink-0 ${cornerCls}" style="color:var(--rd-ctrl-primary);" title="右上角书签角标">${bmSvg(true, 13)}</span>`
+                : `<span class="text-xs" style="color:var(--rd-paper-meta);opacity:0.65;">未标</span>`}
+            </div>
+            <div class="rd-serif text-xs leading-relaxed line-clamp-2 opacity-75" style="color:var(--rd-paper-ink);">
+              萧炎微微点头，目光扫过院中那几道气势不凡的身影，指尖轻轻摩挲着袖中玉瓶…
+            </div>
+            <div class="text-xs rd-num flex items-center justify-between" style="color:var(--rd-paper-meta);">
+              <span>沉浸页眉角标同步</span>
+              <span>64%</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-[var(--muted-foreground)] leading-snug">${statusText}</p>
+      `;
+    }
+
+    window.toggleDemoBookmark = () => {
+      state.bookmarked = !state.bookmarked;
+      state.anim = state.reduceMotion ? 'reduced' : (state.bookmarked ? 'add' : 'remove');
+      render();
+    };
+    window.toggleSlow = () => { state.slow = !state.slow; state.anim = 'none'; render(); };
+    window.toggleReduce = () => { state.reduceMotion = !state.reduceMotion; state.anim = 'none'; render(); };
+    window.toggleTheme = () => { state.theme = state.theme === 'day' ? 'night' : 'day'; state.anim = 'none'; render(); };
+
+    render();
+  </script>
+</body>
+</html>

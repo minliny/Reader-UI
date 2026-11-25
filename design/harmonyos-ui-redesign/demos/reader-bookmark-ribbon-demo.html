@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>纸顶丝带落签 vs 旧版动效对比 Demo</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .rd-num { font-variant-numeric: tabular-nums; }
+    .rd-serif { font-family: "Songti SC", "Noto Serif SC", "STSong", serif; }
+    .rd-pressable {
+      transition: transform 140ms ease, opacity 140ms ease;
+      cursor: pointer;
+      user-select: none;
+    }
+    .rd-pressable:active { transform: scale(0.96); }
+
+    .rd-preview[data-theme="day"] {
+      --rd-paper-bg: #EDE2CB;
+      --rd-paper-well: #E0D2B5;
+      --rd-paper-ink: #2B241D;
+      --rd-paper-meta: #766C61;
+      --rd-ctrl-card: rgba(255, 252, 248, 0.95);
+      --rd-ctrl-card-solid: #FFFCF8;
+      --rd-ctrl-soft: rgba(238, 230, 219, 0.58);
+      --rd-ctrl-line: rgba(180, 166, 151, 0.36);
+      --rd-ctrl-primary: #1F3D31;
+      --rd-ctrl-circle: rgba(31, 61, 49, 0.11);
+      --rd-ctrl-accent: #B86B2B;
+      --rd-ctrl-ink: #332C25;
+      --rd-ctrl-muted: #5B5046;
+      --rd-ctrl-track: rgba(92, 79, 63, 0.22);
+      --rd-sheet-shadow: 0 -2px 10px rgba(43, 36, 29, 0.10);
+    }
+
+    .rd-preview[data-theme="night"] {
+      --rd-paper-bg: #21221F;
+      --rd-paper-well: #151613;
+      --rd-paper-ink: #E4DDD0;
+      --rd-paper-meta: #9D968B;
+      --rd-ctrl-card: #272D28;
+      --rd-ctrl-card-solid: #272D28;
+      --rd-ctrl-soft: #1C201D;
+      --rd-ctrl-line: rgba(236, 232, 224, 0.16);
+      --rd-ctrl-primary: #7BB094;
+      --rd-ctrl-circle: rgba(123, 176, 148, 0.16);
+      --rd-ctrl-accent: #D99452;
+      --rd-ctrl-ink: #ECE8E0;
+      --rd-ctrl-muted: #A6A196;
+      --rd-ctrl-track: rgba(236, 232, 224, 0.22);
+      --rd-sheet-shadow: 0 -2px 12px rgba(0, 0, 0, 0.38);
+    }
+
+    /* WebKit-safe pure CSS height reveal + subtle top-down ribbon tuck */
+    @keyframes ribbonHeightDown {
+      0% { height: 0%; }
+      100% { height: 100%; }
+    }
+    @keyframes ribbonHeightUp {
+      0% { height: 100%; opacity: 1; }
+      100% { height: 0%; opacity: 0.25; }
+    }
+    @keyframes ribbonDropTuck {
+      0% { transform: translateY(-2px) scaleY(1.16); }
+      65% { transform: translateY(1px) scaleY(0.96); }
+      100% { transform: translateY(0) scaleY(1); }
+    }
+    @keyframes ribbonLatch {
+      0% { scale: 1 1; }
+      45% { scale: 1 1.15; }
+      100% { scale: 1 1; }
+    }
+
+    /* Legacy comparison: social pop + ring halo */
+    @keyframes legacyPop {
+      0% { transform: scale(0.82); }
+      55% { transform: scale(1.24); }
+      100% { transform: scale(1); }
+    }
+    @keyframes legacyHalo {
+      0% { transform: scale(0.75); opacity: 0.6; }
+      100% { transform: scale(1.9); opacity: 0; }
+    }
+    @keyframes reducedFade {
+      from { opacity: 0.45; }
+      to { opacity: 1; }
+    }
+
+    .anim-fill-down { animation: ribbonHeightDown calc(240ms * var(--bm-mul, 1)) cubic-bezier(0.22, 1.12, 0.36, 1) both; }
+    .anim-fill-up { animation: ribbonHeightUp calc(160ms * var(--bm-mul, 1)) ease-out both; }
+    .anim-ribbon-tuck { transform-origin: top center; animation: ribbonDropTuck calc(240ms * var(--bm-mul, 1)) cubic-bezier(0.22, 1.12, 0.36, 1) both; }
+    .anim-ribbon-latch { transform-origin: top center; animation: ribbonLatch calc(170ms * var(--bm-mul, 1)) cubic-bezier(0.22, 1.25, 0.36, 1) both; }
+    .anim-legacy-pop { animation: legacyPop calc(220ms * var(--bm-mul, 1)) cubic-bezier(0.22, 1.38, 0.36, 1) both; }
+    .anim-legacy-halo { animation: legacyHalo calc(260ms * var(--bm-mul, 1)) cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .anim-reduced { animation: reducedFade 120ms linear both; }
+
+    .bm-track {
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--rd-ctrl-accent) 0%, var(--rd-ctrl-accent) 64%, var(--rd-ctrl-track) 64%, var(--rd-ctrl-track) 100%);
+      position: relative;
+    }
+    .bm-thumb {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--rd-ctrl-card-solid);
+      border: 2.5px solid var(--rd-ctrl-accent);
+      position: absolute;
+      top: 50%;
+      left: 64%;
+      transform: translate(-50%, -50%);
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-0 m-0">
+  <div id="app" class="py-1.5 space-y-2"></div>
+
+  <script>
+    const NEW_COMMIT_Y = 46;
+    const NEW_MAX_Y = 86;
+    const LEGACY_SLOP_RAW = 48; // triggers at rawY=48 -> offsetY=16px before hint fits!
+    const LEGACY_HINT_FIT_Y = 36;
+    const RIBBON_FULL_H = 34;
+    const RIBBON_REST_Y = -13;  // exposes lower 21px neatly at page top-right
+    const RIBBON_HIDDEN_Y = -34;
+
+    const state = {
+      mode: 'new',        // new | legacy
+      bookmarked: false,
+      ctrlAnim: 'none',   // none | add | remove | reduced
+      slow: false,
+      reduceMotion: false,
+      theme: 'day',       // day | night
+      dragging: false,
+      autoPulling: false,
+      rawY: 0,
+      offsetY: 0,
+      ribbonY: RIBBON_HIDDEN_Y,
+      ribbonFillPct: 0,
+      ribbonOpacity: 0,
+      willCommit: false,
+    };
+
+    let dragStartY = 0;
+    let rafId = 0;
+
+    function ribbonSmallSvg(filled, w = 11, h = 14) {
+      return filled
+        ? `<svg width="${w}" height="${h}" viewBox="0 0 16 20" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 1.5h10a1 1 0 0 1 1 1v16l-6-4.2-6 4.2v-16a1 1 0 0 1 1-1z"/></svg>`
+        : `<svg width="${w}" height="${h}" viewBox="0 0 16 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M3 1.5h10a1 1 0 0 1 1 1v16l-6-4.2-6 4.2v-16a1 1 0 0 1 1-1z"/></svg>`;
+    }
+
+    function computeDragFromRaw(rawY) {
+      const clampedRaw = Math.max(0, rawY);
+      if (state.mode === 'new') {
+        const offsetY = NEW_MAX_Y * (1 - Math.exp(-clampedRaw / 115));
+        const willCommit = offsetY >= NEW_COMMIT_Y;
+        const progress = Math.max(0, Math.min(1, offsetY / NEW_COMMIT_Y));
+        const overRatio = Math.max(0, (offsetY - NEW_COMMIT_Y) / (NEW_MAX_Y - NEW_COMMIT_Y));
+        return { offsetY, willCommit, progress, overRatio };
+      }
+      const offsetY = Math.min(110, Math.max(0, clampedRaw - 16) / 2);
+      const willCommit = clampedRaw >= LEGACY_SLOP_RAW;
+      const progress = Math.max(0, Math.min(1, clampedRaw / LEGACY_SLOP_RAW));
+      return { offsetY, willCommit, progress, overRatio: 0 };
+    }
+
+    function paintRibbonDom(ribbonY, fillPct, opacity, stretchY = 1) {
+      const mover = document.getElementById('page-ribbon-mover');
+      const fillMask = document.getElementById('page-ribbon-fill-mask');
+      if (mover) {
+        mover.style.transform = `translateY(${ribbonY.toFixed(1)}px) scaleY(${stretchY.toFixed(3)})`;
+        mover.style.opacity = opacity.toFixed(2);
+      }
+      if (fillMask) {
+        fillMask.style.height = `${Math.max(0, Math.min(100, fillPct)).toFixed(1)}%`;
+      }
+    }
+
+    function syncHeaderHintAndTelemetry(offsetY, willCommit) {
+      const hintWrap = document.getElementById('pull-hint-wrap');
+      const hintArrow = document.getElementById('pull-hint-arrow');
+      const hintText = document.getElementById('pull-hint-text');
+      const teleOffset = document.getElementById('tele-offset');
+      const telePhase = document.getElementById('tele-phase');
+      const teleBar = document.getElementById('tele-bar');
+
+      if (state.mode === 'new') {
+        const fadeOp = offsetY < 8 ? 0 : Math.max(0, Math.min(0.92, (offsetY - 10) / 24));
+        if (hintWrap) {
+          hintWrap.style.opacity = fadeOp.toFixed(2);
+          hintWrap.style.transform = `translateY(${Math.max(0, (offsetY - 24) * 0.32).toFixed(1)}px)`;
+        }
+        if (hintArrow) hintArrow.style.display = 'none';
+        if (hintText) {
+          hintText.textContent = willCommit
+            ? (state.bookmarked ? '松手移出书签' : '松手夹入书签')
+            : (state.bookmarked ? '下拉移出书签' : '下拉夹入书签');
+        }
+      } else {
+        const fits = offsetY >= LEGACY_HINT_FIT_Y;
+        if (hintWrap) {
+          hintWrap.style.opacity = fits ? '1' : '0';
+          hintWrap.style.transform = 'none';
+        }
+        if (hintArrow) {
+          hintArrow.style.display = fits ? 'inline-block' : 'none';
+          hintArrow.style.transform = willCommit ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        if (hintText) {
+          hintText.textContent = willCommit
+            ? (state.bookmarked ? '松手移除本页书签' : '松手添加书签')
+            : (state.bookmarked ? '下拉移除本页书签' : '下拉添加书签');
+        }
+      }
+
+      if (teleOffset) teleOffset.textContent = `${Math.round(offsetY)}px`;
+      if (teleBar) teleBar.style.width = `${Math.min(100, Math.round((offsetY / NEW_MAX_Y) * 100))}%`;
+      if (telePhase) {
+        if (offsetY < 1) {
+          telePhase.textContent = state.mode === 'new' ? '待机 · 下拉或点「试拉加签」' : '待机 · 拉 16px 就已暗中越阈';
+        } else if (willCommit) {
+          telePhase.textContent = state.mode === 'new'
+            ? (state.bookmarked ? '丝带渐退完成 · 松手移签' : '丝带已轻扣 · 松手落签回位')
+            : `已暗中过阈！(提示:${offsetY >= LEGACY_HINT_FIT_Y ? '刚露出' : '仍隐藏!'})`;
+        } else {
+          telePhase.textContent = state.mode === 'new' ? '橡皮筋阻尼 · 丝带自纸顶垂落浸色' : '死线性跟随中 (0.5x)';
+        }
+      }
+    }
+
+    function paintDragFrame() {
+      const sheet = document.getElementById('reading-sheet');
+      const mover = document.getElementById('page-ribbon-mover');
+      const { offsetY, willCommit, progress, overRatio } = computeDragFromRaw(state.rawY);
+      state.offsetY = offsetY;
+
+      const justCrossed = willCommit && !state.willCommit;
+      state.willCommit = willCommit;
+      if (justCrossed && state.mode === 'new' && !state.reduceMotion && mover) {
+        mover.classList.remove('anim-ribbon-latch');
+        void mover.offsetWidth;
+        mover.classList.add('anim-ribbon-latch');
+      }
+
+      if (sheet) sheet.style.transform = `translateY(${offsetY.toFixed(1)}px)`;
+
+      if (offsetY <= 0.4) {
+        state.ribbonY = state.bookmarked ? RIBBON_REST_Y : RIBBON_HIDDEN_Y;
+        state.ribbonFillPct = state.bookmarked ? 100 : 0;
+        state.ribbonOpacity = state.bookmarked ? 1 : 0;
+        paintRibbonDom(state.ribbonY, state.ribbonFillPct, state.ribbonOpacity, 1);
+      } else if (state.mode === 'new') {
+        if (!state.bookmarked) {
+          // Emerges from top edge of paper 1:1 and fills top-to-bottom
+          state.ribbonY = RIBBON_HIDDEN_Y * (1 - progress);
+          state.ribbonFillPct = progress * 100;
+          state.ribbonOpacity = Math.min(1, 0.35 + progress * 0.65);
+          paintRibbonDom(state.ribbonY, state.ribbonFillPct, state.ribbonOpacity, 1 + overRatio * 0.14);
+        } else {
+          // Drains color bottom-up and slides gently upward toward edge
+          state.ribbonY = RIBBON_REST_Y - progress * 9;
+          state.ribbonFillPct = (1 - progress) * 100;
+          state.ribbonOpacity = 1 - progress * 0.42;
+          paintRibbonDom(state.ribbonY, state.ribbonFillPct, state.ribbonOpacity, 1);
+        }
+      } else {
+        // Legacy: fixed height, 0.35 outline -> 1.0 filled snap at threshold
+        const showFilled = state.bookmarked ? !willCommit : willCommit;
+        state.ribbonY = RIBBON_REST_Y;
+        state.ribbonFillPct = showFilled ? 100 : 0;
+        state.ribbonOpacity = showFilled ? 1 : 0.35;
+        paintRibbonDom(state.ribbonY, state.ribbonFillPct, state.ribbonOpacity, 1);
+      }
+
+      syncHeaderHintAndTelemetry(offsetY, willCommit);
+    }
+
+    function updateControlCardInPlace() {
+      const slot = document.getElementById('ctrl-card-slot');
+      if (slot) slot.innerHTML = buildControlCardHtml();
+      const autoBtn = document.getElementById('auto-pull-btn');
+      if (autoBtn) autoBtn.textContent = state.bookmarked ? '试拉移签' : '试拉加签';
+      const unmarkHint = document.getElementById('sheet-unmarked-hint');
+      if (unmarkHint) unmarkHint.style.opacity = state.bookmarked ? '0' : '0.55';
+    }
+
+    function releasePull(commitAllowed) {
+      state.dragging = false;
+      const shouldToggle = commitAllowed && state.willCommit;
+      const startOffset = state.offsetY;
+      const startRaw = state.rawY;
+      const startRibbonY = state.ribbonY;
+      const startFill = state.ribbonFillPct;
+      const startOpacity = state.ribbonOpacity;
+
+      if (shouldToggle) {
+        state.bookmarked = !state.bookmarked;
+        state.ctrlAnim = state.reduceMotion ? 'reduced' : (state.bookmarked ? 'add' : 'remove');
+        // Update right-hand control card WITHOUT destroying #reading-sheet during rollback!
+        updateControlCardInPlace();
+      }
+
+      const endRibbonY = state.bookmarked ? RIBBON_REST_Y : RIBBON_HIDDEN_Y;
+      const endFill = state.bookmarked ? 100 : 0;
+      const endOpacity = state.bookmarked ? 1 : 0;
+
+      const dur = state.reduceMotion ? 120 : (state.mode === 'new' ? 300 : 160) * (state.slow ? 2.4 : 1);
+      const t0 = performance.now();
+      cancelAnimationFrame(rafId);
+
+      function step(now) {
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, state.mode === 'new' ? 3 : 2);
+        const curRaw = startRaw * (1 - eased);
+        const { offsetY } = computeDragFromRaw(curRaw);
+
+        const sheet = document.getElementById('reading-sheet');
+        if (sheet) sheet.style.transform = `translateY(${offsetY.toFixed(1)}px)`;
+
+        // Interpolate ribbon seamlessly from current drag geometry to resting state
+        if (state.mode === 'new') {
+          const curY = startRibbonY + (endRibbonY - startRibbonY) * eased;
+          const curFill = startFill + (endFill - startFill) * eased;
+          const curOp = startOpacity + (endOpacity - startOpacity) * eased;
+          paintRibbonDom(curY, curFill, curOp, 1);
+        } else {
+          paintRibbonDom(endRibbonY, endFill, endOpacity, 1);
+        }
+
+        syncHeaderHintAndTelemetry(offsetY, false);
+
+        if (p < 1) {
+          rafId = requestAnimationFrame(step);
+        } else {
+          state.rawY = 0;
+          state.offsetY = 0;
+          state.willCommit = false;
+          state.autoPulling = false;
+          state.ctrlAnim = 'none';
+          state.ribbonY = endRibbonY;
+          state.ribbonFillPct = endFill;
+          state.ribbonOpacity = endOpacity;
+          if (sheet) sheet.style.transform = 'translateY(0px)';
+          paintRibbonDom(endRibbonY, endFill, endOpacity, 1);
+          syncHeaderHintAndTelemetry(0, false);
+        }
+      }
+
+      if (startOffset > 0.5) rafId = requestAnimationFrame(step);
+      else {
+        state.rawY = 0;
+        state.offsetY = 0;
+        state.willCommit = false;
+        state.autoPulling = false;
+        paintDragFrame();
+      }
+    }
+
+    function animateCornerFromControlButton() {
+      cancelAnimationFrame(rafId);
+      const mover = document.getElementById('page-ribbon-mover');
+      const fillMask = document.getElementById('page-ribbon-fill-mask');
+      const startY = state.ribbonY;
+      const startFill = state.ribbonFillPct;
+      const startOp = state.ribbonOpacity;
+      const endY = state.bookmarked ? RIBBON_REST_Y : RIBBON_HIDDEN_Y;
+      const endFill = state.bookmarked ? 100 : 0;
+      const endOp = state.bookmarked ? 1 : 0;
+
+      if (state.mode === 'legacy' || state.reduceMotion) {
+        state.ribbonY = endY;
+        state.ribbonFillPct = endFill;
+        state.ribbonOpacity = endOp;
+        paintRibbonDom(endY, endFill, endOp, 1);
+        if (state.reduceMotion && mover && state.bookmarked) {
+          mover.classList.remove('anim-reduced');
+          void mover.offsetWidth;
+          mover.classList.add('anim-reduced');
+        }
+        return;
+      }
+
+      const dur = (state.bookmarked ? 240 : 170) * (state.slow ? 2.4 : 1);
+      const t0 = performance.now();
+      function step(now) {
+        const p = Math.min(1, (now - t0) / dur);
+        const eased = 1 - Math.pow(1 - p, 2.8);
+        const curY = startY + (endY - startY) * eased;
+        const curFill = startFill + (endFill - startFill) * eased;
+        const curOp = startOp + (endOp - startOp) * eased;
+        state.ribbonY = curY;
+        state.ribbonFillPct = curFill;
+        state.ribbonOpacity = curOp;
+        paintRibbonDom(curY, curFill, curOp, state.bookmarked && p < 0.7 ? 1 + 0.1 * (1 - p / 0.7) : 1);
+        if (p < 1) rafId = requestAnimationFrame(step);
+        else {
+          state.ribbonY = endY;
+          state.ribbonFillPct = endFill;
+          state.ribbonOpacity = endOp;
+          paintRibbonDom(endY, endFill, endOp, 1);
+        }
+      }
+      if (mover && fillMask) rafId = requestAnimationFrame(step);
+    }
+
+    function buildControlCardHtml() {
+      const isNew = state.mode === 'new';
+      const pillWidthCls = isNew ? 'w-[88px] justify-center' : 'px-2.5';
+
+      let fillAnimCls = '';
+      let iconWrapCls = '';
+      if (state.ctrlAnim === 'reduced') fillAnimCls = 'anim-reduced';
+      else if (isNew && state.ctrlAnim === 'add') {
+        fillAnimCls = 'anim-fill-down';
+        iconWrapCls = 'anim-ribbon-tuck';
+      } else if (isNew && state.ctrlAnim === 'remove') {
+        fillAnimCls = 'anim-fill-up';
+      } else if (!isNew && state.ctrlAnim === 'add') {
+        fillAnimCls = 'anim-legacy-pop';
+      }
+
+      const showNewFill = state.bookmarked || state.ctrlAnim === 'remove';
+
+      return `
+        <div class="h-[106px] rounded-[12px] border px-3 flex flex-col justify-center gap-2" style="background:var(--rd-ctrl-card);border-color:var(--rd-ctrl-line);">
+          <div class="flex items-center justify-between gap-2">
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs" style="background:var(--rd-ctrl-soft);color:var(--rd-ctrl-ink);">‹</span>
+            <span class="text-[13px] font-semibold truncate" style="color:var(--rd-ctrl-ink);">第1064章 · 云岚宗的来客</span>
+            <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs" style="background:var(--rd-ctrl-soft);color:var(--rd-ctrl-ink);">›</span>
+          </div>
+          <div class="flex items-center justify-between px-0.5">
+            <span class="text-xs rd-num" style="color:var(--rd-ctrl-muted);">第 1064 / 1663 章</span>
+            <button type="button" id="ctrl-bm-btn" onclick="onClickCtrlBookmark()" class="h-[24px] ${pillWidthCls} rounded-full border inline-flex items-center gap-1 text-xs font-medium rd-pressable relative overflow-visible" style="${state.bookmarked ? 'background:var(--rd-ctrl-circle);border-color:var(--rd-ctrl-primary);color:var(--rd-ctrl-primary);' : 'background:var(--rd-ctrl-soft);border-color:var(--rd-ctrl-line);color:var(--rd-ctrl-ink);'}">
+              <span class="relative inline-flex items-center justify-center w-[11px] h-[14px] ${iconWrapCls}">
+                ${isNew
+                  ? `<span class="inline-flex">${ribbonSmallSvg(false, 11, 14)}</span>` +
+                    (showNewFill
+                      ? `<span class="absolute top-0 left-0 right-0 overflow-hidden ${fillAnimCls}" style="height:${state.bookmarked ? '100%' : '0%'};"><span class="block w-[11px] h-[14px]">${ribbonSmallSvg(true, 11, 14)}</span></span>`
+                      : '')
+                  : `<span class="inline-flex ${fillAnimCls}">${ribbonSmallSvg(state.bookmarked, 11, 14)}</span>` +
+                    (state.ctrlAnim === 'add' && !state.reduceMotion ? '<span class="pointer-events-none absolute -inset-1 rounded-full border anim-legacy-halo" style="border-color:var(--rd-ctrl-primary);"></span>' : '')}
+              </span>
+              <span>${state.bookmarked ? '已加书签' : '加书签'}</span>
+            </button>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs rd-num shrink-0" style="color:var(--rd-ctrl-muted);">64%</span>
+            <div class="flex-1 bm-track"><div class="bm-thumb"></div></div>
+            <span class="text-xs rd-num shrink-0" style="color:var(--rd-ctrl-muted);">100%</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderShell() {
+      const mul = state.slow ? 2.4 : 1;
+      const isNew = state.mode === 'new';
+      const capText = isNew
+        ? '新版：书签丝带直接从纸顶缘垂出并自顶浸满，橡皮筋阻尼松手后随纸页一体化回位，控制栏按钮定宽 88px 零抖动。'
+        : '旧版问题：拉 16px 就暗触发(提示仍隐藏)，↓箭头硬跳 180°，丝带 0.35→1.0 干切，按钮会跳宽且带社交光环。';
+      const thresholdPct = isNew ? Math.round((NEW_COMMIT_Y / NEW_MAX_Y) * 100) : Math.round((16 / NEW_MAX_Y) * 100);
+
+      document.getElementById('app').innerHTML = `
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[var(--card-border)] text-xs">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button type="button" onclick="setMode('new')" class="h-7 px-2.5 rounded-full font-medium rd-pressable ${isNew ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'}">新版 · 纸顶丝带</button>
+            <button type="button" onclick="setMode('legacy')" class="h-7 px-2.5 rounded-full font-medium rd-pressable ${!isNew ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'}">旧版对照</button>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <button type="button" onclick="toggleSlow()" class="h-7 px-2 rounded-full font-medium rd-pressable ${state.slow ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'}">${state.slow ? '0.4x 慢放' : '1x 速率'}</button>
+            <button type="button" onclick="toggleReduce()" class="h-7 px-2 rounded-full font-medium rd-pressable ${state.reduceMotion ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'bg-[var(--secondary)] text-[var(--secondary-foreground)]'}">减动效:${state.reduceMotion ? '开' : '关'}</button>
+            <button type="button" onclick="toggleTheme()" class="h-7 px-2 rounded-full border border-[var(--border)] bg-[var(--secondary)] text-[var(--secondary-foreground)] font-medium rd-pressable">${state.theme === 'day' ? '日间' : '夜间'}</button>
+          </div>
+        </div>
+
+        <div class="rd-preview rounded-2xl p-2.5 grid grid-cols-1 sm:grid-cols-[1.15fr_1fr] gap-2.5" data-theme="${state.theme}" style="--bm-mul:${mul};background:var(--rd-paper-well);">
+          <!-- 左侧：沉浸阅读页真实下拉区 -->
+          <div id="drag-stage" class="h-[234px] rounded-[14px] border relative overflow-hidden select-none" style="background:var(--rd-paper-well);border-color:var(--rd-ctrl-line);touch-action:none;cursor:grab;">
+            <!-- 下拉露出的纸槽提示 -->
+            <div id="pull-hint-wrap" class="absolute top-2.5 inset-x-4 flex items-center gap-1.5 pointer-events-none" style="opacity:0;color:var(--rd-paper-meta);">
+              <span id="pull-hint-arrow" class="text-xs font-bold leading-none" style="display:none;">↓</span>
+              <span id="pull-hint-text" class="text-xs font-medium">下拉夹入书签</span>
+            </div>
+
+            <!-- 可下拉正文纸页（统一挂载纸顶丝带，绝不遮挡/闪切） -->
+            <div id="reading-sheet" class="absolute inset-0 rounded-[13px] px-4 py-3 flex flex-col justify-between overflow-hidden" style="background:var(--rd-paper-bg);box-shadow:var(--rd-sheet-shadow);">
+              <!-- 统一纸顶书签丝带槽 (HTML overflow-hidden 纯盒裁剪，Safari/WKWebView 零重绘失效) -->
+              <div id="page-ribbon-slot" class="pointer-events-none absolute top-0 right-4 w-[16px] overflow-hidden z-20" style="height:${RIBBON_FULL_H}px;color:var(--rd-ctrl-primary);">
+                <div id="page-ribbon-mover" class="relative w-[16px]" style="height:${RIBBON_FULL_H}px;transform:translateY(${state.ribbonY}px);opacity:${state.ribbonOpacity};transform-origin:top center;">
+                  <svg width="16" height="34" viewBox="0 0 16 34" fill="none">
+                    <path d="M1.5,0.5 H14.5 V33 L8,27.5 L1.5,33 Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" fill="none"/>
+                  </svg>
+                  <div id="page-ribbon-fill-mask" class="absolute top-0 left-0 right-0 overflow-hidden" style="height:${state.ribbonFillPct}%;">
+                    <svg width="16" height="34" viewBox="0 0 16 34">
+                      <path d="M1.5,0.5 H14.5 V33 L8,27.5 L1.5,33 Z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs" style="color:var(--rd-paper-meta);">第三章 · 云岚宗的来客</span>
+                <span id="sheet-unmarked-hint" class="text-xs pr-5 transition-opacity duration-150" style="color:var(--rd-paper-meta);opacity:${state.bookmarked ? '0' : '0.55'};">未加签</span>
+              </div>
+
+              <div class="rd-serif text-[13px] leading-relaxed space-y-1.5" style="color:var(--rd-paper-ink);">
+                <p>萧炎微微点头，目光扫过院中那几道气势不凡的身影，指尖轻轻摩挲着袖中玉瓶。</p>
+                <p class="opacity-70">可在此处<strong class="font-semibold">向下拖动纸页</strong>，书签丝带会紧贴右上角纸顶随手势滑出填色。</p>
+              </div>
+
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-xs rd-num" style="color:var(--rd-paper-meta);">64%</span>
+                <button type="button" id="auto-pull-btn" onpointerdown="event.stopPropagation()" onclick="event.stopPropagation();triggerAutoPull()" class="h-7 px-2.5 rounded-full border text-xs font-medium rd-pressable" style="background:var(--rd-ctrl-card-solid);border-color:var(--rd-ctrl-line);color:var(--rd-ctrl-primary);">${state.bookmarked ? '试拉移签' : '试拉加签'}</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧：控制栏定宽按钮 + 手感遥测 -->
+          <div class="h-[234px] flex flex-col justify-between gap-2.5">
+            <div id="ctrl-card-slot">${buildControlCardHtml()}</div>
+
+            <div class="flex-1 rounded-[12px] border px-3 py-2.5 flex flex-col justify-between" style="background:var(--rd-ctrl-card);border-color:var(--rd-ctrl-line);">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-semibold" style="color:var(--rd-ctrl-ink);">下拉实时手感</span>
+                <span id="tele-offset" class="rd-num font-semibold" style="color:var(--rd-ctrl-primary);">0px</span>
+              </div>
+              <div class="relative h-2.5 rounded-full overflow-hidden" style="background:var(--rd-ctrl-soft);">
+                <div id="tele-bar" class="h-full rounded-full" style="width:0%;background:var(--rd-ctrl-primary);"></div>
+                <div title="触发阈值线" class="absolute top-0 bottom-0 w-0.5" style="left:${thresholdPct}%;background:var(--rd-ctrl-accent);"></div>
+              </div>
+              <div id="tele-phase" class="text-xs truncate" style="color:var(--rd-ctrl-muted);">
+                ${isNew ? '待机 · 下拉或点「试拉加签」' : '待机 · 拉 16px 就已暗中越阈'}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-xs text-[var(--muted-foreground)] leading-snug">${capText}</p>
+      `;
+
+      const stage = document.getElementById('drag-stage');
+      if (stage) {
+        stage.onpointerdown = (e) => {
+          if (state.autoPulling) return;
+          cancelAnimationFrame(rafId);
+          state.dragging = true;
+          dragStartY = e.clientY;
+          stage.style.cursor = 'grabbing';
+          if (stage.setPointerCapture) { try { stage.setPointerCapture(e.pointerId); } catch (_) {} }
+        };
+        stage.onpointermove = (e) => {
+          if (!state.dragging) return;
+          state.rawY = Math.max(0, e.clientY - dragStartY);
+          paintDragFrame();
+        };
+        stage.onpointerup = () => {
+          if (!state.dragging) return;
+          stage.style.cursor = 'grab';
+          releasePull(true);
+        };
+        stage.onpointercancel = () => {
+          if (!state.dragging) return;
+          stage.style.cursor = 'grab';
+          releasePull(false);
+        };
+      }
+      paintDragFrame();
+    }
+
+    window.triggerAutoPull = () => {
+      if (state.dragging || state.autoPulling) return;
+      state.autoPulling = true;
+      cancelAnimationFrame(rafId);
+      const targetRaw = state.mode === 'new' ? 148 : 88;
+      const pullDur = (state.reduceMotion ? 140 : 520) * (state.slow ? 2.4 : 1);
+      const t0 = performance.now();
+
+      function animatePull(now) {
+        const p = Math.min(1, (now - t0) / pullDur);
+        const eased = 1 - Math.pow(1 - p, 2.2);
+        state.rawY = targetRaw * eased;
+        paintDragFrame();
+        if (p < 1) {
+          rafId = requestAnimationFrame(animatePull);
+        } else {
+          setTimeout(() => releasePull(true), state.slow ? 420 : 180);
+        }
+      }
+      rafId = requestAnimationFrame(animatePull);
+    };
+
+    window.onClickCtrlBookmark = () => {
+      state.bookmarked = !state.bookmarked;
+      state.ctrlAnim = state.reduceMotion ? 'reduced' : (state.bookmarked ? 'add' : 'remove');
+      updateControlCardInPlace();
+      animateCornerFromControlButton();
+    };
+
+    window.setMode = (m) => {
+      cancelAnimationFrame(rafId);
+      state.mode = m;
+      state.ctrlAnim = 'none';
+      state.rawY = 0;
+      state.offsetY = 0;
+      state.autoPulling = false;
+      state.ribbonY = state.bookmarked ? RIBBON_REST_Y : RIBBON_HIDDEN_Y;
+      state.ribbonFillPct = state.bookmarked ? 100 : 0;
+      state.ribbonOpacity = state.bookmarked ? 1 : 0;
+      renderShell();
+    };
+    window.toggleSlow = () => { state.slow = !state.slow; state.ctrlAnim = 'none'; renderShell(); };
+    window.toggleReduce = () => { state.reduceMotion = !state.reduceMotion; state.ctrlAnim = 'none'; renderShell(); };
+    window.toggleTheme = () => { state.theme = state.theme === 'day' ? 'night' : 'day'; state.ctrlAnim = 'none'; renderShell(); };
+
+    renderShell();
+  </script>
+</body>
+</html>
