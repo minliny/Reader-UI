@@ -2,6 +2,7 @@
 
 本仓保存 JSON 契约快照、漫画共享 DTO/样本、字体与设计工具；没有可运行应用或独立构建产物。实际产品
 UI 在 `Reader-for-HarmonyOS`，业务协议在 `Reader-Core`。
+本仓的 `design/harmonyos-ui-redesign/` 存放“墨纸青松 2.0”UI 设计参考指导稿，仅作设计参考，非状态文档。
 
 三份契约当前声明 Core command 78、Host request 58、UI event 300；数量由 `tools/validate.py` 校验。Core 的严格
 drift 门禁会把直接 UI 命令、显式映射和 Core/Host 内部编排分别分类，任何新增且未分类的方法都会

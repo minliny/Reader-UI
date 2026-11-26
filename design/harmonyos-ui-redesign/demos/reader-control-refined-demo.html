@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>墨纸青松 · 小说控制栏「高留白首屏 + 同风格全量抽屉」Demo</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    .rd-serif { font-family: "Songti SC", "Noto Serif SC", "Source Han Serif SC", Georgia, serif; }
+    .rd-sans { font-family: "HarmonyOS Sans SC", "PingFang SC", -apple-system, sans-serif; }
+    .rd-num { font-variant-numeric: tabular-nums; }
+
+    /* HarmonyOS Reader Ceramic-Paper & Ink-Teal Tokens (ReaderThemeRegistry.ts) */
+    .rd-scope {
+      --rd-shell: rgba(255, 250, 244, 0.96);       /* TOK_READ_SURFACE #FAFFFAF4 */
+      --rd-card: rgba(255, 252, 248, 0.92);        /* TOK_SURFACE_PANEL / SOLID */
+      --rd-card-solid: #FFFCF8;                    /* TOK_SURFACE_SOLID */
+      --rd-soft: rgba(238, 230, 219, 0.56);        /* TOK_SURFACE_PANEL_SOFT */
+      --rd-line: rgba(180, 166, 151, 0.34);        /* TOK_LINE_STRONG */
+      --rd-primary: #2F6373;                       /* TOK_READ_PRIMARY */
+      --rd-on-primary: #FFFCF8;
+      --rd-circle-bg: rgba(47, 99, 115, 0.08);     /* TOK_READ_ACTIVE_SOFT */
+      --rd-accent: #F48B13;                        /* TOK_ACCENT */
+      --rd-ink: #332C25;                           /* TOK_READ_INK */
+      --rd-muted: #5B5046;                         /* TOK_READ_MUTED */
+      --rd-subtle: #9A8E80;
+      --rd-handle: #B9AD9F;                        /* TOK_READ_HANDLE */
+      --rd-track: #D4D7DA;
+      --rd-scrim: rgba(38, 31, 24, 0.32);
+      --rd-shadow-bar: 0 6px 20px rgba(47, 35, 20, 0.09);
+      --rd-shadow-dock: 0 10px 28px rgba(47, 35, 20, 0.14);
+      --rd-shadow-pop: 0 12px 30px rgba(32, 25, 16, 0.16);
+    }
+
+    .rd-scope[data-scheme="night"] {
+      --rd-shell: rgba(48, 44, 40, 0.97);          /* TOK_READ_SURFACE night */
+      --rd-card: #36322E;                          /* TOK_SURFACE_PANEL night */
+      --rd-card-solid: #36322E;
+      --rd-soft: #282420;                          /* TOK_SURFACE_PANEL_SOFT night */
+      --rd-line: rgba(226, 209, 185, 0.24);        /* TOK_LINE_STRONG night */
+      --rd-primary: #D2BD96;                       /* TOK_READ_PRIMARY night */
+      --rd-on-primary: #24201C;
+      --rd-circle-bg: #514536;                     /* TOK_READ_ACTIVE_SOFT night */
+      --rd-accent: #D69B5F;                        /* TOK_ACCENT night */
+      --rd-ink: #EADFCE;
+      --rd-muted: #BAAD9C;
+      --rd-subtle: #8C8071;
+      --rd-handle: #BAAD9C;
+      --rd-track: #565D4F;
+      --rd-scrim: rgba(0, 0, 0, 0.56);
+      --rd-shadow-bar: 0 8px 24px rgba(0, 0, 0, 0.35);
+      --rd-shadow-dock: 0 12px 32px rgba(0, 0, 0, 0.48);
+      --rd-shadow-pop: 0 14px 36px rgba(0, 0, 0, 0.56);
+    }
+
+    .rd-blur {
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .rd-press { transition: transform 120ms cubic-bezier(0.2, 0, 0, 1), background-color 140ms ease, opacity 140ms ease; }
+    .rd-press:active { transform: scale(0.96); }
+
+    .rd-progress-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 5px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--rd-accent) 0%, var(--rd-accent) var(--val, 0%), var(--rd-track) var(--val, 0%), var(--rd-track) 100%);
+      outline: none;
+      cursor: pointer;
+    }
+    .rd-progress-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: var(--rd-card-solid);
+      border: 3px solid var(--rd-accent);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+    }
+
+    .rd-switch {
+      width: 38px;
+      height: 22px;
+      border-radius: 999px;
+      padding: 2px;
+      transition: background-color 180ms ease;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .rd-switch[data-on="true"] { background: var(--rd-primary); }
+    .rd-switch[data-on="false"] { background: var(--rd-track); }
+    .rd-switch-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      background: #FFFCF8;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 180ms cubic-bezier(0.2, 0, 0, 1);
+    }
+    .rd-switch[data-on="true"] .rd-switch-dot { transform: translateX(16px); }
+
+    .rd-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+    .rd-scroll::-webkit-scrollbar-thumb { background: rgba(128,128,128,0.25); border-radius: 99px; }
+
+    @keyframes wave { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+    .wave-bar { animation: wave 0.9s ease-in-out infinite; transform-origin: center; }
+    @keyframes glideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    .anim-up { animation: glideUp 190ms cubic-bezier(0.2, 0, 0, 1); }
+  </style>
+</head>
+<body class="bg-[var(--background)] text-[var(--foreground)] antialiased m-0 p-0 rd-sans">
+  <div id="app" class="max-w-[1280px] mx-auto px-4 sm:px-6 py-5 space-y-4"></div>
+
+  <script>
+  (() => {
+    const PAPERS = [
+      { id: 'day',        name: '日间', swatch: '#FAF7F1', bg: '#F7F3EA', ink: '#2B241D', meta: '#766C61', scheme: 'day' },
+      { id: 'warm',       name: '暖白', swatch: '#F5E7CE', bg: '#F2E8D3', ink: '#2C241D', meta: '#766C61', scheme: 'day' },
+      { id: 'paper',      name: '纸纹', swatch: '#EAE0CA', bg: '#EDE2CB', ink: '#2B241D', meta: '#766C61', scheme: 'day' },
+      { id: 'green',      name: '青叶', swatch: '#DCE7D6', bg: '#E3EBDD', ink: '#263423', meta: '#63755F', scheme: 'day' },
+      { id: 'night',      name: '夜间', swatch: '#201F1C', bg: '#21221F', ink: '#E4DDD0', meta: '#9D968B', scheme: 'night' },
+      { id: 'warmNight',  name: '暖夜', swatch: '#2A231B', bg: '#31271D', ink: '#E7D8C8', meta: '#B3A18F', scheme: 'night' },
+      { id: 'paperNight', name: '夜纹', swatch: '#22262E', bg: '#202630', ink: '#E2DDD5', meta: '#9BA5B2', scheme: 'night' },
+      { id: 'greenNight', name: '林夜', swatch: '#1F2C22', bg: '#1D2D23', ink: '#D8E2D2', meta: '#97AA9A', scheme: 'night' },
+    ];
+
+    const FONTS = [
+      { id: '系统', label: '系统', css: 'system-ui, sans-serif' },
+      { id: '宋体', label: '宋体', css: '"Songti SC", "Noto Serif SC", serif' },
+      { id: '黑体', label: '黑体', css: '"PingFang SC", "HarmonyOS Sans SC", sans-serif' },
+      { id: '楷体', label: '楷体', css: '"Kaiti SC", "STKaiti", serif' },
+      { id: '仿宋', label: '仿宋', css: '"STFangsong", "FangSong", serif' },
+      { id: '等宽', label: '等宽', css: 'ui-monospace, monospace' },
+      { id: '思源宋', label: '思源宋', css: '"Source Han Serif SC", "Songti SC", serif' },
+      { id: '霞鹜楷', label: '霞鹜楷', css: '"LXGW WenKai", "Kaiti SC", serif' },
+    ];
+
+    const TTS_TIMERS = ['关闭', '15分', '25分', '45分', '60分', '本章'];
+    const TTS_VOICES = [
+      { name: '聆小珊女声', tag: '女', desc: '温和叙事 · 系统离线' },
+      { name: '云枫醇厚男声', tag: '男', desc: '沉稳有声书 · 系统离线' },
+      { name: '晓辰自然标准', tag: '女', desc: '清晰明快 · 系统离线' },
+      { name: '婉清温暖故事', tag: '女', desc: '柔和护耳 · 高拟真' },
+    ];
+
+    const state = {
+      scheme: 'day',            // 'day' | 'night'
+      paperId: 'paper',
+      dayBind: 'paper',
+      nightBind: 'night',
+      ctrlMode: 'open',         // 'open' | 'hidden'
+      module: 'home',           // 'home' | 'tts' | 'autoPage' | 'appearance' | 'settings'
+      sheet: 'none',            // 'none' | 'directory' | 'search' | 'replace' | 'appearanceMore' | 'ttsMore' | 'settingsMore'
+      selectOpen: '',           // '' | 'indent' | 'convert'
+      dirTab: 'directory',      // 'directory' | 'bookmarks'
+      replaceTab: 'rules',      // 'rules' | 'preview'
+      topMenuOpen: false,
+      session: 'none',          // 'none' | 'tts' | 'autoPage'
+
+      // Appearance
+      font: '宋体',
+      fontSize: 18,
+      lineHeight: 1.9,
+      paraGap: 14,
+      letterSpacing: 0.2,
+      indent: '2字符',
+      convert: '原文',
+      customFontImported: false,
+
+      // TTS & AutoPage
+      ttsEngine: '系统 TTS',
+      ttsLanguage: '中文 (普通话)',
+      ttsVoice: '聆小珊女声',
+      ttsRate: 1.0,
+      ttsTimerIdx: 2,           // '25分'
+      auditionVoice: '',        // active auditioning voice name
+      ttsFollowHighlight: true,
+      ttsPauseInterrupt: true,
+      ttsAllowMixing: false,
+      ttsBackground: true,
+      ttsKeepScreenOn: false,
+      ttsFailurePolicy: 'stop', // 'skip' | 'stop'
+      autoSec: 8,
+      autoFollowHighlight: true,
+
+      // Settings
+      flipMode: '滑动',
+      orient: '跟随系统',
+      timeout: '5分钟',
+      hideNav: true,
+      volFlip: false,
+      justify: true,
+      extendStatusBar: false,
+      longPressSelect: true,
+
+      // Reading progress & Brightness
+      brightness: 72,
+      brightnessAuto: false,
+      progressPct: 18,
+      searchQuery: '萧炎',
+      ruleEnabled: true,
+    };
+
+    function icon(name, size = 18, color = 'currentColor', sw = 1.75) {
+      const p = {
+        arrowLeft: '<path d="M19 12H5"/><path d="m11 18-6-6 6-6"/>',
+        chevronLeft: '<path d="m15 18-6-6 6-6"/>',
+        chevronRight: '<path d="m9 6 6 6-6 6"/>',
+        chevronDown: '<path d="m6 9 6 6 6-6"/>',
+        swap: '<path d="M7 16V4m0 0L3 8m4-4 4 4"/><path d="M17 8v12m0 0 4-4m-4 4-4-4"/>',
+        moreH: '<circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/>',
+        tocLines: '<circle cx="5" cy="6" r="1" fill="currentColor" stroke="none"/><path d="M9 6h11"/><circle cx="5" cy="12" r="1" fill="currentColor" stroke="none"/><path d="M9 12h11"/><circle cx="5" cy="18" r="1" fill="currentColor" stroke="none"/><path d="M9 18h11"/>',
+        search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+        fastFwd: '<polygon points="5 5 12 12 5 19 5 5"/><polygon points="13 5 20 12 13 19 13 5"/>',
+        replace: '<path d="M7 7h10l-2-2"/><path d="M17 17H7l2 2"/><rect x="4" y="10" width="6" height="4" rx="1"/><rect x="14" y="10" width="6" height="4" rx="1"/>',
+        headphones: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="13" width="4" height="6" rx="1.5"/><rect x="17" y="13" width="4" height="6" rx="1.5"/>',
+        palette: '<circle cx="13.5" cy="6.5" r=".8" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".8" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".8" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".8" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.43-.18-.83-.44-1.12-.29-.32-.43-.73-.43-1.19 0-.94.76-1.7 1.7-1.7h2c3.04 0 5.5-2.46 5.5-5.5C22 6.04 17.52 2 12 2z"/>',
+        settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.6.77 1 1.42 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+        sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32 1.41-1.41"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        plus: '<path d="M12 5v14"/><path d="M5 12h14"/>',
+        minus: '<path d="M5 12h14"/>',
+        play: '<polygon points="7 4 20 12 7 20 7 4" fill="currentColor" stroke="none"/>',
+        pause: '<rect x="6" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/><rect x="14" y="5" width="4" height="14" rx="1" fill="currentColor" stroke="none"/>',
+        stop: '<rect x="6" y="6" width="12" height="12" rx="2"/>',
+        prev: '<path d="M6 6v12"/><polygon points="18 6 9 12 18 18 18 6"/>',
+        next: '<path d="M18 6v12"/><polygon points="6 6 15 12 6 18 6 6"/>',
+        volume: '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>',
+        flipCover: '<rect x="4" y="4" width="12" height="16" rx="2"/><path d="M16 7h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-3"/>',
+        flipSlide: '<rect x="3" y="5" width="8" height="14" rx="1.5"/><rect x="13" y="5" width="8" height="14" rx="1.5"/>',
+        flipCurl: '<path d="M5 4h9l5 5v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v5h5"/>',
+        flipScroll: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/>',
+        flipNone: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 12h6"/>',
+        info: '<circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><circle cx="12" cy="8" r=".8" fill="currentColor" stroke="none"/>',
+        refresh: '<path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/>',
+        download: '<path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 20h14"/>',
+        locate: '<path d="M12 19V5"/><path d="m6 11 6-6 6 6"/><path d="M5 20h14"/>',
+        sort: '<path d="M3 7h12"/><path d="M3 12h9"/><path d="M3 17h6"/><path d="m17 14 3 3 3-3"/><path d="M20 7v10"/>',
+      };
+      return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" class="shrink-0">${p[name] || ''}</svg>`;
+    }
+
+    function currentPaper() {
+      return PAPERS.find(x => x.id === state.paperId) || PAPERS[2];
+    }
+
+    function currentFontCss() {
+      return (FONTS.find(x => x.id === state.font) || FONTS[1]).css;
+    }
+
+    function topFourFonts() {
+      const base = FONTS.slice(0, 4).map(f => f.id);
+      if (base.includes(state.font)) return base;
+      return [...base.slice(0, 3), state.font];
+    }
+
+    window.setAppScheme = (sch) => {
+      state.scheme = sch;
+      state.paperId = sch === 'night' ? state.nightBind : state.dayBind;
+      render();
+    };
+
+    window.jumpDemo = (opts) => {
+      Object.assign(state, {
+        ctrlMode: 'open',
+        sheet: 'none',
+        topMenuOpen: false,
+        selectOpen: '',
+      }, opts);
+      render();
+    };
+
+    window.adjustBrightnessRail = (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const pct = Math.max(8, Math.min(100, Math.round((1 - (e.clientY - rect.top) / rect.height) * 100)));
+      state.brightness = pct;
+      state.brightnessAuto = false;
+      render();
+    };
+
+    function renderStudioTopBar() {
+      const scenes = [
+        ['总控（含亮度轨）', { ctrlMode: 'open', module: 'home', sheet: 'none' }, state.ctrlMode==='open'&&state.sheet==='none'&&state.module==='home'],
+        ['翻页（自动翻页）', { ctrlMode: 'open', module: 'autoPage', sheet: 'none' }, state.ctrlMode==='open'&&state.sheet==='none'&&state.module==='autoPage'],
+        ['朗读（全宽首屏）', { ctrlMode: 'open', module: 'tts', sheet: 'none' }, state.ctrlMode==='open'&&state.sheet==='none'&&state.module==='tts'],
+        ['朗读›音色设置抽屉', { ctrlMode: 'open', module: 'tts', sheet: 'ttsMore' }, state.sheet==='ttsMore'],
+        ['界面（全宽首屏）', { ctrlMode: 'open', module: 'appearance', sheet: 'none' }, state.ctrlMode==='open'&&state.sheet==='none'&&state.module==='appearance'],
+        ['界面›更多排版抽屉', { ctrlMode: 'open', module: 'appearance', sheet: 'appearanceMore' }, state.sheet==='appearanceMore'],
+        ['设置（全宽首屏）', { ctrlMode: 'open', module: 'settings', sheet: 'none' }, state.ctrlMode==='open'&&state.sheet==='none'&&state.module==='settings'],
+        ['设置›更多设置抽屉', { ctrlMode: 'open', module: 'settings', sheet: 'settingsMore' }, state.sheet==='settingsMore'],
+        ['目录抽屉', { ctrlMode: 'open', sheet: 'directory' }, state.sheet==='directory'],
+        ['搜索抽屉', { ctrlMode: 'open', sheet: 'search' }, state.sheet==='search'],
+        ['替换抽屉', { ctrlMode: 'open', sheet: 'replace' }, state.sheet==='replace'],
+        ['听读胶囊', { ctrlMode: 'hidden', session: 'tts', sheet: 'none' }, state.ctrlMode==='hidden'&&state.session!=='none'&&state.sheet==='none'],
+        ['沉浸隐藏', { ctrlMode: 'hidden', session: 'none', sheet: 'none' }, state.ctrlMode==='hidden'&&state.session==='none'&&state.sheet==='none'],
+      ];
+
+      return `
+        <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3.5 space-y-2.5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h1 class="text-base font-bold tracking-tight">墨纸青松 · 小说控制栏「纯控制底栏 + 纯弹窗上卡」Demo</h1>
+              <p class="text-xs text-[var(--muted-foreground)] mt-0.5">总控上排「目录 / 搜索 / 替换」= 100% 独立抽屉弹窗；底部「翻页 / 朗读 / 界面 / 设置」= 100% 330vp 控制栏切换，职责彻底纯净。</p>
+            </div>
+            <div class="flex items-center gap-1 bg-[var(--background)] p-1 rounded-xl border border-[var(--border)] text-xs">
+              <button type="button" onclick="setAppScheme('day')" class="px-2.5 py-1 rounded-lg font-medium ${state.scheme==='day'?'bg-[var(--primary)] text-[var(--primary-foreground)]':'text-[var(--muted-foreground)]'}">日间暖瓷</button>
+              <button type="button" onclick="setAppScheme('night')" class="px-2.5 py-1 rounded-lg font-medium ${state.scheme==='night'?'bg-[var(--primary)] text-[var(--primary-foreground)]':'text-[var(--muted-foreground)]'}">夜间墨金</button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 flex-wrap pt-2 border-t border-[var(--border)]">
+            <span class="text-xs text-[var(--muted-foreground)] font-medium mr-1">快捷跳转：</span>
+            ${scenes.map(([label, opts, act]) => `
+              <button type="button" onclick='jumpDemo(${JSON.stringify(opts)})' class="px-2.5 py-1 rounded-lg text-xs border transition-colors ${act ? 'bg-[var(--primary)] text-[var(--primary-foreground)] border-[var(--primary)] font-semibold' : 'bg-[var(--background)] border-[var(--border)] text-[var(--foreground)] hover:opacity-85'}">${label}</button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderStepper(valLabel, minusExpr, plusExpr, mTxt = '', pTxt = '', hCls = 'h-8') {
+      return `
+        <div class="${hCls} flex items-center rounded-full border overflow-hidden shrink-0" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+          <button type="button" onclick="${minusExpr}" class="w-8 ${hCls} flex items-center justify-center text-[11.5px] font-medium rd-press" style="color:var(--rd-ink);">${mTxt || icon('minus', 12)}</button>
+          <span class="min-w-[46px] px-1.5 text-center text-[11.5px] font-semibold rd-num border-x" style="color:var(--rd-ink);border-color:var(--rd-line);">${valLabel}</span>
+          <button type="button" onclick="${plusExpr}" class="w-8 ${hCls} flex items-center justify-center text-[11.5px] font-medium rd-press" style="color:var(--rd-ink);">${pTxt || icon('plus', 12)}</button>
+        </div>
+      `;
+    }
+
+    function renderControlMiddleArea() {
+      const m = state.module;
+
+      // 1. HOME — Iconic Split Layout with Right 38px Vertical Brightness Rail!
+      if (m === 'home') {
+        return `
+          <div class="px-3 h-[192px] flex gap-2.5 shrink-0">
+            <div class="flex-1 min-w-0 h-[192px] flex flex-col justify-between">
+              <div class="h-[76px] rounded-[12px] border px-2 grid grid-cols-3 items-center" style="background:var(--rd-card);border-color:var(--rd-line);">
+                ${[
+                  ['tocLines', '目录', "state.sheet='directory';state.topMenuOpen=false;render()"],
+                  ['search', '搜索', "state.sheet='search';state.topMenuOpen=false;render()"],
+                  ['replace', '替换', "state.sheet='replace';state.topMenuOpen=false;render()"],
+                ].map(([ic, lb, expr]) => `
+                  <button type="button" onclick="${expr}" class="h-[58px] rounded-[10px] flex flex-col items-center justify-center gap-1.5 rd-press" style="color:var(--rd-ink);">
+                    ${icon(ic, 21, 'var(--rd-ink)', 1.7)}
+                    <span class="text-[11px] font-medium leading-none">${lb}</span>
+                  </button>
+                `).join('')}
+              </div>
+
+              <div class="h-[106px] rounded-[12px] border px-3 py-2.5 flex flex-col justify-between" style="background:var(--rd-card);border-color:var(--rd-line);">
+                <div class="flex items-center justify-between gap-2">
+                  <button type="button" onclick="state.progressPct=Math.max(0,state.progressPct-2);render()" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-soft);color:var(--rd-ink);" title="上一章">${icon('chevronLeft', 16)}</button>
+                  <span class="text-[13.5px] font-semibold truncate" style="color:var(--rd-ink);">第三章 客人</span>
+                  <button type="button" onclick="state.progressPct=Math.min(100,state.progressPct+2);render()" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="background:var(--rd-soft);color:var(--rd-ink);" title="下一章">${icon('chevronRight', 16)}</button>
+                </div>
+                <div class="flex items-center gap-2.5 pb-1">
+                  <span class="text-[10.5px] rd-num w-7" style="color:var(--rd-muted);">${state.progressPct}%</span>
+                  <input type="range" min="0" max="100" value="${state.progressPct}" style="--val:${state.progressPct}%;" oninput="state.progressPct=parseInt(this.value);render()" class="flex-1 rd-progress-slider" />
+                  <span class="text-[10.5px] rd-num shrink-0" style="color:var(--rd-muted);">共 1663 章</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 38px Vertical Brightness Rail (Present on HOME only!) -->
+            <div class="w-[38px] h-[192px] rounded-full border py-2.5 flex flex-col items-center justify-between shrink-0" style="background:var(--rd-card);border-color:var(--rd-line);">
+              <span style="color:var(--rd-primary);">${icon('sun', 18, 'var(--rd-primary)', 1.8)}</span>
+              <div onclick="adjustBrightnessRail(event)" class="w-6 flex-1 my-2 flex items-center justify-center cursor-pointer" title="点击调节阅读亮度 (${state.brightness}%)">
+                <div class="w-2 h-full rounded-full overflow-hidden flex items-end" style="background:var(--rd-track);">
+                  <div class="w-full rounded-full transition-all" style="height:${state.brightness}%;background:var(--rd-primary);"></div>
+                </div>
+              </div>
+              <button type="button" onclick="state.brightnessAuto=!state.brightnessAuto;render()" class="w-6 h-6 rounded-full border text-[11px] font-semibold flex items-center justify-center rd-press" style="${state.brightnessAuto?'background:var(--rd-circle-bg);border-color:var(--rd-primary);color:var(--rd-primary);':'background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-ink);'}" title="系统自动亮度">A</button>
+            </div>
+          </div>
+        `;
+      }
+
+      // 2. APPEARANCE — Full Width! Font Size + 8 Papers + Top 4 Fonts + "更多排版 ›" Drawer
+      if (m === 'appearance') {
+        const fontList = topFourFonts();
+        return `
+          <div class="px-3 h-[192px] shrink-0">
+            <div class="h-[192px] rounded-[14px] border px-3 py-2.5 flex flex-col justify-between" style="background:var(--rd-card);border-color:var(--rd-line);">
+              <!-- Row 1: Direct Font Size Stepper + More Drawer Entry -->
+              <div class="h-8 flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-[12px] font-medium" style="color:var(--rd-muted);">字号</span>
+                  ${renderStepper(`${state.fontSize}px`, "state.fontSize=Math.max(14,state.fontSize-1);render()", "state.fontSize=Math.min(26,state.fontSize+1);render()", 'A-', 'A+', 'h-8')}
+                </div>
+                <button type="button" onclick="state.sheet='appearanceMore';state.selectOpen='';render()" class="h-8 px-3 rounded-full text-[11.5px] font-medium flex items-center gap-0.5 rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">
+                  <span>更多排版</span>${icon('chevronRight', 13)}
+                </button>
+              </div>
+
+              <!-- Row 2: Airy Full-Width 4x2 Theme Swatches -->
+              <div class="grid grid-cols-4 gap-x-2.5 gap-y-1.5">
+                ${PAPERS.map(tp => {
+                  const sel = state.paperId === tp.id;
+                  return `<button type="button" onclick="state.paperId='${tp.id}';state.scheme='${tp.scheme}';render()" class="flex flex-col items-center gap-1 rd-press">
+                    <div class="w-full h-[24px] rounded-[8px] transition-all" style="background:${tp.swatch};border:${sel?'2px solid var(--rd-primary)':'1px solid var(--rd-line)'};box-shadow:${sel?'0 2px 6px rgba(47,99,115,0.2)':'none'};"></div>
+                    <span class="text-[10px] leading-none" style="color:${sel?'var(--rd-primary)':'var(--rd-muted)'};font-weight:${sel?600:400};">${tp.name}</span>
+                  </button>`;
+                }).join('')}
+              </div>
+
+              <!-- Row 3: Top 4 Frequent Font Pills -->
+              <div class="grid grid-cols-4 gap-2">
+                ${fontList.map(fname => {
+                  const sel = state.font === fname;
+                  return `<button type="button" onclick="state.font='${fname}';render()" class="h-8 rounded-full text-[11.5px] border rd-press" style="${sel?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);font-weight:600;':'background:var(--rd-card-solid);color:var(--rd-ink);border-color:var(--rd-line);'}">${fname}</button>`;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 3. TTS — Full Width! Playback + Speed + Sleep Timer ALL on Screen 1 + "音色与设置 ›" Drawer
+      if (m === 'tts') {
+        const playing = state.session === 'tts';
+        const curVoice = TTS_VOICES.find(v => v.name === state.ttsVoice) || TTS_VOICES[0];
+        const curTimer = TTS_TIMERS[state.ttsTimerIdx] || '关闭';
+        return `
+          <div class="px-3 h-[192px] shrink-0">
+            <div class="h-[192px] rounded-[14px] border px-3 py-2.5 flex flex-col justify-between" style="background:var(--rd-card);border-color:var(--rd-line);">
+              <!-- Row 1: Transport & Waveform -->
+              <div class="h-[58px] rounded-[12px] px-3 flex items-center justify-between" style="background:var(--rd-soft);">
+                <div class="flex items-center gap-2">
+                  <button type="button" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-ink);" title="上一句">${icon('prev', 16)}</button>
+                  <button type="button" onclick="state.session=state.session==='tts'?'none':'tts';render()" class="w-[42px] h-[42px] rounded-full flex items-center justify-center rd-press" style="background:var(--rd-primary);color:var(--rd-on-primary);" title="${playing?'暂停朗读':'开始朗读'}">${icon(playing?'pause':'play', 17)}</button>
+                  <button type="button" onclick="state.session='none';render()" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-muted);" title="停止朗读">${icon('stop', 14)}</button>
+                  <button type="button" class="w-8 h-8 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-ink);" title="下一句">${icon('next', 16)}</button>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="flex items-center gap-0.5 h-4">
+                    ${[0.4,0.85,1,0.55,0.9,0.5].map((h,i)=>`<span class="w-1 rounded-full ${playing?'wave-bar':''}" style="height:${Math.round(h*14)}px;background:var(--rd-primary);opacity:${playing?0.9:0.28};animation-delay:${i*90}ms;"></span>`).join('')}
+                  </div>
+                  <span class="text-[11px] font-medium" style="color:${playing?'var(--rd-primary)':'var(--rd-muted)'};">${playing?'朗读中':'已就绪'}</span>
+                </div>
+              </div>
+
+              <!-- Row 2: Speed & Timer Steppers Side-by-Side -->
+              <div class="h-[50px] grid grid-cols-2 gap-2">
+                <div class="rounded-[11px] border px-2.5 flex items-center justify-between" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                  <span class="text-[11.5px] font-medium" style="color:var(--rd-muted);">语速</span>
+                  ${renderStepper(`${state.ttsRate.toFixed(1)}x`, "state.ttsRate=Math.max(0.5,+(state.ttsRate-0.25).toFixed(2));render()", "state.ttsRate=Math.min(2.0,+(state.ttsRate+0.25).toFixed(2));render()", '', '', 'h-7')}
+                </div>
+                <div class="rounded-[11px] border px-2.5 flex items-center justify-between" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                  <span class="text-[11.5px] font-medium" style="color:var(--rd-muted);">定时</span>
+                  ${renderStepper(curTimer, `state.ttsTimerIdx=(state.ttsTimerIdx+${TTS_TIMERS.length}-1)%${TTS_TIMERS.length};render()`, `state.ttsTimerIdx=(state.ttsTimerIdx+1)%${TTS_TIMERS.length};render()`, '', '', 'h-7')}
+                </div>
+              </div>
+
+              <!-- Row 3: Voice Summary + Explicit Full Config Drawer Trigger -->
+              <button type="button" onclick="state.sheet='ttsMore';render()" class="h-[42px] w-full rounded-[11px] border px-3 flex items-center justify-between rd-press" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0" style="background:var(--rd-circle-bg);color:var(--rd-primary);">${curVoice.tag}</span>
+                  <span class="text-[12px] font-medium truncate" style="color:var(--rd-ink);">${state.ttsVoice} · ${state.ttsEngine}</span>
+                </div>
+                <span class="flex items-center gap-0.5 text-[11.5px] font-semibold shrink-0" style="color:var(--rd-primary);">
+                  <span>音色与设置</span>${icon('chevronRight', 13)}
+                </span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // 4. AUTO PAGE — Full Width! Clean 192px card
+      if (m === 'autoPage') {
+        const playing = state.session === 'autoPage';
+        const curTimer = TTS_TIMERS[state.ttsTimerIdx] || '关闭';
+        return `
+          <div class="px-3 h-[192px] shrink-0">
+            <div class="h-[192px] rounded-[14px] border px-3 py-2.5 flex flex-col justify-between" style="background:var(--rd-card);border-color:var(--rd-line);">
+              <div class="h-7 flex items-center justify-between px-0.5">
+                <span class="text-[12.5px] font-semibold" style="color:var(--rd-ink);">自动翻页</span>
+                <div class="flex items-center gap-2">
+                  <span class="text-[11px]" style="color:var(--rd-muted);">方式：${state.flipMode}</span>
+                  <span class="text-[11px] font-medium" style="color:${playing?'var(--rd-primary)':'var(--rd-muted)'};">${playing?'运行中':'未开始'}</span>
+                </div>
+              </div>
+              <div class="h-[52px] rounded-[12px] px-4 flex items-center justify-between" style="background:var(--rd-soft);">
+                <button type="button" class="w-8 h-8 rounded-full flex items-center justify-center" style="color:var(--rd-ink);">${icon('prev', 16)}</button>
+                <button type="button" onclick="state.session=state.session==='autoPage'?'none':'autoPage';render()" class="w-[40px] h-[40px] rounded-full flex items-center justify-center rd-press" style="background:var(--rd-primary);color:var(--rd-on-primary);">${icon(playing?'pause':'play', 16)}</button>
+                <button type="button" onclick="state.session='none';render()" class="w-8 h-8 rounded-full flex items-center justify-center" style="color:var(--rd-muted);">${icon('stop', 14)}</button>
+                <button type="button" class="w-8 h-8 rounded-full flex items-center justify-center" style="color:var(--rd-ink);">${icon('next', 16)}</button>
+              </div>
+              <div class="h-[44px] grid grid-cols-2 gap-2">
+                <div class="rounded-[10px] border px-2.5 flex items-center justify-between" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                  <span class="text-[11.5px]" style="color:var(--rd-muted);">间隔</span>
+                  ${renderStepper(`${state.autoSec}秒`, "state.autoSec=Math.max(2,state.autoSec-1);render()", "state.autoSec=Math.min(20,state.autoSec+1);render()", '', '', 'h-7')}
+                </div>
+                <div class="rounded-[10px] border px-2.5 flex items-center justify-between" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                  <span class="text-[11.5px]" style="color:var(--rd-muted);">定时</span>
+                  ${renderStepper(curTimer, `state.ttsTimerIdx=(state.ttsTimerIdx+${TTS_TIMERS.length}-1)%${TTS_TIMERS.length};render()`, `state.ttsTimerIdx=(state.ttsTimerIdx+1)%${TTS_TIMERS.length};render()`, '', '', 'h-7')}
+                </div>
+              </div>
+              <div class="h-7 flex items-center justify-between px-1 text-[11.5px]">
+                <span style="color:var(--rd-ink);">翻页时跟随高亮当前位置</span>
+                <button type="button" onclick="state.autoFollowHighlight=!state.autoFollowHighlight;render()" class="rd-switch border-0" data-on="${state.autoFollowHighlight}"><span class="rd-switch-dot"></span></button>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 5. SETTINGS — Full Width! 5-Col Flip Grid + 2 Toggles + "更多设置 ›" Drawer
+      return `
+        <div class="px-3 h-[192px] shrink-0">
+          <div class="h-[192px] rounded-[14px] border px-3 py-2.5 flex flex-col justify-between" style="background:var(--rd-card);border-color:var(--rd-line);">
+            <div>
+              <div class="text-[10.5px] leading-none mb-1.5 px-0.5" style="color:var(--rd-muted);">翻页方式</div>
+              <div class="grid grid-cols-5 gap-1.5">
+                ${[['覆盖','flipCover'],['滑动','flipSlide'],['仿真','flipCurl'],['滚动','flipScroll'],['无动画','flipNone']].map(([f,ic]) => {
+                  const sel = state.flipMode === f;
+                  return `<button type="button" onclick="state.flipMode='${f}';render()" class="h-[48px] rounded-[10px] border flex flex-col items-center justify-center gap-1 rd-press" style="${sel?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);':'background:var(--rd-soft);color:var(--rd-ink);border-color:var(--rd-line);'}">
+                    ${icon(ic, 15)}<span class="text-[10px] leading-none font-medium">${f}</span>
+                  </button>`;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="rounded-[10px] border overflow-hidden" style="background:var(--rd-soft);border-color:var(--rd-line);">
+              <div class="px-3 h-8 flex items-center justify-between text-[12px]"><span>隐藏底部导航栏</span><button type="button" onclick="state.hideNav=!state.hideNav;render()" class="rd-switch border-0" data-on="${state.hideNav}"><span class="rd-switch-dot"></span></button></div>
+              <div class="px-3 h-8 flex items-center justify-between text-[12px] border-t" style="border-color:var(--rd-line);"><span>音量键翻页</span><button type="button" onclick="state.volFlip=!state.volFlip;render()" class="rd-switch border-0" data-on="${state.volFlip}"><span class="rd-switch-dot"></span></button></div>
+            </div>
+
+            <button type="button" onclick="state.sheet='settingsMore';render()" class="h-6 flex items-center justify-between px-0.5 text-[11.5px] rd-press">
+              <span class="truncate" style="color:var(--rd-muted);">${state.orient} · 常亮${state.timeout} · ${state.justify?'两端对齐':'左对齐'}</span>
+              <span class="flex items-center gap-0.5 font-semibold shrink-0" style="color:var(--rd-primary);">
+                <span>更多设置</span>${icon('chevronRight', 13)}
+              </span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderModalSheet() {
+      if (state.sheet === 'none') return '';
+
+      const titles = {
+        directory: '目录与书签',
+        search: '正文搜索',
+        replace: '净化规则管理',
+        appearanceMore: '字体与精细排版',
+        ttsMore: '音色与朗读偏好',
+        settingsMore: '更多阅读设置',
+      };
+      let body = '';
+
+      if (state.sheet === 'directory') {
+        body = `
+          <div class="grid grid-cols-2 p-1 rounded-[12px] mb-3 shrink-0 border" style="background:var(--rd-soft);border-color:var(--rd-line);">
+            ${[['directory','目录 (1663)'],['bookmarks','书签 (2)']].map(([k,l])=>`
+              <button type="button" onclick="state.dirTab='${k}';render()" class="h-8 rounded-[9px] text-[12.5px] font-medium rd-press" style="${state.dirTab===k?'background:var(--rd-card-solid);color:var(--rd-primary);box-shadow:0 1px 4px rgba(0,0,0,0.08);font-weight:600;':'color:var(--rd-muted);'}">${l}</button>
+            `).join('')}
+          </div>
+          ${state.dirTab==='directory' ? `
+            <div class="flex gap-2 mb-2.5 shrink-0">
+              <div class="flex-1 h-9 rounded-full px-3 flex items-center gap-1.5 border" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                <span style="color:var(--rd-muted);">${icon('search', 14)}</span>
+                <span class="text-[12px]" style="color:var(--rd-subtle);">搜索章节名…</span>
+              </div>
+              <button type="button" class="w-9 h-9 rounded-full border flex items-center justify-center" style="background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-primary);">${icon('locate', 15)}</button>
+              <button type="button" class="w-9 h-9 rounded-full border flex items-center justify-center" style="background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-primary);">${icon('sort', 15)}</button>
+            </div>
+            <div class="flex-1 overflow-y-auto rd-scroll space-y-1">
+              ${['第一章 陨落的天才','第二章 斗气大陆','第三章 客人','第四章 云岚宗','第五章 聚气散','第六章 炼药师','第七章 休！','第八章 神秘的老者','第九章 药老！'].map((ch,i)=>`
+                <button type="button" onclick="state.sheet='none';state.ctrlMode='hidden';render()" class="w-full px-3 h-11 rounded-[10px] flex items-center justify-between relative text-left rd-press" style="${i===2?'background:var(--rd-circle-bg);':'background:transparent;'}color:${i===2?'var(--rd-primary)':'var(--rd-ink)'};font-weight:${i===2?600:400};">
+                  ${i===2?`<div class="absolute left-0 top-2.5 bottom-2.5 w-[3.5px] rounded-r-full" style="background:var(--rd-accent);"></div>`:''}
+                  <span class="text-[13px] truncate">${ch}</span>
+                  <span class="text-[11px]" style="color:${i===2?'var(--rd-primary)':'var(--rd-subtle)'};">${i===2?'在读':i<5?'已缓存':''}</span>
+                </button>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="space-y-2.5 overflow-y-auto rd-scroll flex-1">
+              <div class="p-3 rounded-[12px] border" style="background:var(--rd-card-solid);border-color:var(--rd-line);border-left:3.5px solid var(--rd-accent);">
+                <div class="text-[12px] font-semibold" style="color:var(--rd-ink);">第三章 客人 · 18%</div>
+                <div class="text-[11.5px] mt-1" style="color:var(--rd-muted);">“萧炎哥哥，你说，他会是谁？”薰儿偏过头嫣然一笑…</div>
+              </div>
+            </div>
+          `}
+        `;
+      } else if (state.sheet === 'search') {
+        body = `
+          <div class="flex gap-2 mb-3 shrink-0">
+            <div class="flex-1 h-10 rounded-full px-3.5 flex items-center gap-2 border" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <span style="color:var(--rd-muted);">${icon('search', 15)}</span>
+              <input value="${state.searchQuery}" oninput="state.searchQuery=this.value" class="bg-transparent text-[13px] flex-1 outline-none" style="color:var(--rd-ink);" placeholder="搜索全文…"/>
+            </div>
+            <button type="button" class="h-10 px-4 rounded-full text-[12.5px] font-semibold rd-press" style="background:var(--rd-primary);color:var(--rd-on-primary);">搜索</button>
+          </div>
+          <div class="text-[11px] mb-2 rd-num" style="color:var(--rd-muted);">匹配 32 处 · 「${state.searchQuery || '萧炎'}」</div>
+          <div class="flex-1 overflow-y-auto rd-scroll space-y-2">
+            ${[['第一章 陨落的天才','望着测验魔石碑上闪亮的大字，萧炎面无表情…'],['第三章 客人','“萧炎哥哥，你说，他会是谁？”薰儿偏过头嫣然一笑…'],['第四章 云岚宗','萧炎深吸一口气，紧握的掌心缓缓松开…']].map(([ch,sn])=>`
+              <button type="button" onclick="state.sheet='none';state.ctrlMode='hidden';render()" class="w-full p-3 rounded-[12px] border text-left rd-press" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+                <div class="text-[12px] font-semibold" style="color:var(--rd-primary);">${ch}</div>
+                <div class="text-[12px] mt-1 leading-relaxed" style="color:var(--rd-ink);">${sn}</div>
+              </button>
+            `).join('')}
+          </div>
+        `;
+      } else if (state.sheet === 'replace') {
+        body = `
+          <div class="grid grid-cols-2 p-1 rounded-[12px] mb-3 shrink-0 border" style="background:var(--rd-soft);border-color:var(--rd-line);">
+            ${[['rules','规则列表 (1)'],['preview','本章生效预览']].map(([k,l])=>`
+              <button type="button" onclick="state.replaceTab='${k}';render()" class="h-8 rounded-[9px] text-[12.5px] font-medium rd-press" style="${state.replaceTab===k?'background:var(--rd-card-solid);color:var(--rd-primary);box-shadow:0 1px 4px rgba(0,0,0,0.08);font-weight:600;':'color:var(--rd-muted);'}">${l}</button>
+            `).join('')}
+          </div>
+          ${state.replaceTab === 'rules' ? `
+            <div class="flex gap-2 mb-3 shrink-0">
+              <button type="button" class="flex-1 h-9 rounded-full text-[12px] font-semibold" style="background:var(--rd-primary);color:var(--rd-on-primary);">+ 新增规则</button>
+              <button type="button" class="h-9 px-4 rounded-full text-[12px] border" style="background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-ink);">导入</button>
+              <button type="button" class="h-9 px-4 rounded-full text-[12px] border" style="background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-ink);">导出</button>
+            </div>
+            <div class="p-3 rounded-[12px] border flex items-center justify-between" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div>
+                <div class="text-[13px] font-semibold" style="color:var(--rd-ink);">去除章节广告水印</div>
+                <div class="text-[11px] mt-0.5" style="color:var(--rd-muted);">正则：请记住本站域名.* → 空</div>
+              </div>
+              <button type="button" onclick="state.ruleEnabled=!state.ruleEnabled;render()" class="rd-switch border-0" data-on="${state.ruleEnabled}"><span class="rd-switch-dot"></span></button>
+            </div>
+          ` : `
+            <div class="p-3.5 rounded-[12px] border space-y-2 text-[12px]" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="font-semibold" style="color:var(--rd-primary);">第三章 客人 · 净水前后对比</div>
+              <div class="p-2 rounded-lg" style="background:var(--rd-soft);color:var(--rd-muted);">原：“咳…我哪知道？”[请记住本站域名] 心头一跳…</div>
+              <div class="p-2 rounded-lg" style="background:var(--rd-circle-bg);color:var(--rd-ink);">后：“咳…我哪知道？”心头一跳…</div>
+            </div>
+          `}
+        `;
+      } else if (state.sheet === 'appearanceMore') {
+        const curP = currentPaper();
+        const dayName = (PAPERS.find(x => x.id === state.dayBind) || PAPERS[2]).name;
+        const nightName = (PAPERS.find(x => x.id === state.nightBind) || PAPERS[4]).name;
+        body = `
+          <div class="flex-1 overflow-y-auto rd-scroll space-y-3.5 pr-0.5">
+            <!-- Theme Binding -->
+            <div class="p-3 rounded-[12px] border space-y-2" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="flex items-center justify-between text-[12px]">
+                <span class="font-semibold" style="color:var(--rd-ink);">主题库与默认绑定（当前：${curP.name}）</span>
+                <span class="text-[11px]" style="color:var(--rd-muted);">日:${dayName} · 夜:${nightName}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <button type="button" onclick="state.dayBind=state.paperId;render()" class="h-8 rounded-full border text-[11.5px] font-medium rd-press" style="${state.dayBind===state.paperId?'background:var(--rd-circle-bg);border-color:var(--rd-primary);color:var(--rd-primary);font-weight:600;':'background:var(--rd-soft);border-color:var(--rd-line);color:var(--rd-ink);'}">设为日间主题</button>
+                <button type="button" onclick="state.nightBind=state.paperId;render()" class="h-8 rounded-full border text-[11.5px] font-medium rd-press" style="${state.nightBind===state.paperId?'background:var(--rd-circle-bg);border-color:var(--rd-primary);color:var(--rd-primary);font-weight:600;':'background:var(--rd-soft);border-color:var(--rd-line);color:var(--rd-ink);'}">设为夜间主题</button>
+              </div>
+            </div>
+
+            <!-- Full Font Library + Import -->
+            <div class="p-3 rounded-[12px] border space-y-2" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="flex items-center justify-between text-[12px]">
+                <span class="font-semibold" style="color:var(--rd-ink);">完整字体库</span>
+                <span class="text-[11px]" style="color:var(--rd-muted);">可拖拽排序前 4 个为常用</span>
+              </div>
+              <div class="grid grid-cols-4 gap-1.5">
+                ${FONTS.map(f => {
+                  const sel = state.font === f.id;
+                  return `<button type="button" onclick="state.font='${f.id}';render()" class="h-8 rounded-full text-[11.5px] border rd-press" style="${sel?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);font-weight:600;':'background:var(--rd-soft);color:var(--rd-ink);border-color:var(--rd-line);'}">${f.label}</button>`;
+                }).join('')}
+                <button type="button" onclick="state.customFontImported=!state.customFontImported;render()" class="h-8 rounded-full text-[11px] border border-dashed rd-press" style="${state.customFontImported?'background:var(--rd-circle-bg);border-color:var(--rd-primary);color:var(--rd-primary);':'border-color:var(--rd-line);color:var(--rd-muted);'}">${state.customFontImported?'✓ 已导入字体':'+ 导入字体'}</button>
+              </div>
+            </div>
+
+            <!-- Full Typography Card (4 Steppers + 2 In-Place Selects) -->
+            <div class="rounded-[12px] border overflow-hidden" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="px-3 h-11 flex items-center justify-between text-[12.5px]"><span>字号大小</span>${renderStepper(`${state.fontSize}px`, "state.fontSize=Math.max(14,state.fontSize-1);render()", "state.fontSize=Math.min(26,state.fontSize+1);render()", 'A-', 'A+')}</div>
+              <div class="px-3 h-11 flex items-center justify-between text-[12.5px] border-t" style="border-color:var(--rd-line);"><span>行距倍数</span>${renderStepper(`${state.lineHeight}`, "state.lineHeight=Math.max(1.4,+(state.lineHeight-0.1).toFixed(1));render()", "state.lineHeight=Math.min(2.4,+(state.lineHeight+0.1).toFixed(1));render()")}</div>
+              <div class="px-3 h-11 flex items-center justify-between text-[12.5px] border-t" style="border-color:var(--rd-line);"><span>段落间距</span>${renderStepper(`${state.paraGap}px`, "state.paraGap=Math.max(4,state.paraGap-2);render()", "state.paraGap=Math.min(32,state.paraGap+2);render()")}</div>
+              <div class="px-3 h-11 flex items-center justify-between text-[12.5px] border-t" style="border-color:var(--rd-line);"><span>字间距</span>${renderStepper(`${state.letterSpacing}`, "state.letterSpacing=Math.max(-0.5,+(state.letterSpacing-0.2).toFixed(1));render()", "state.letterSpacing=Math.min(2.5,+(state.letterSpacing+0.2).toFixed(1));render()")}</div>
+              <div class="border-t" style="border-color:var(--rd-line);">
+                <button type="button" onclick="state.selectOpen=state.selectOpen==='indent'?'':'indent';render()" class="w-full px-3 h-10 flex items-center justify-between text-[12.5px] rd-press">
+                  <span>首行缩进</span><span class="font-medium flex items-center gap-1" style="color:var(--rd-primary);">${state.indent} ${icon('chevronDown', 13)}</span>
+                </button>
+                ${state.selectOpen==='indent' ? `
+                  <div class="px-3 pb-2.5 grid grid-cols-3 gap-1.5">
+                    ${['无缩进','1字符','2字符'].map(o=>`<button type="button" onclick="state.indent='${o}';state.selectOpen='';render()" class="h-8 rounded-lg text-[11.5px]" style="${state.indent===o?'background:var(--rd-primary);color:var(--rd-on-primary);font-weight:600;':'background:var(--rd-soft);color:var(--rd-ink);'}">${o}</button>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+              <div class="border-t" style="border-color:var(--rd-line);">
+                <button type="button" onclick="state.selectOpen=state.selectOpen==='convert'?'':'convert';render()" class="w-full px-3 h-10 flex items-center justify-between text-[12.5px] rd-press">
+                  <span>简繁转换</span><span class="font-medium flex items-center gap-1" style="color:var(--rd-primary);">${state.convert} ${icon('chevronDown', 13)}</span>
+                </button>
+                ${state.selectOpen==='convert' ? `
+                  <div class="px-3 pb-2.5 grid grid-cols-3 gap-1.5">
+                    ${['原文','繁转简','简转繁'].map(o=>`<button type="button" onclick="state.convert='${o}';state.selectOpen='';render()" class="h-8 rounded-lg text-[11.5px]" style="${state.convert===o?'background:var(--rd-primary);color:var(--rd-on-primary);font-weight:600;':'background:var(--rd-soft);color:var(--rd-ink);'}">${o}</button>`).join('')}
+                  </div>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (state.sheet === 'ttsMore') {
+        body = `
+          <div class="flex-1 overflow-y-auto rd-scroll space-y-3 pr-0.5">
+            <!-- Engine Type Selection -->
+            <div class="grid grid-cols-2 gap-2">
+              ${[
+                ['系统 TTS', '设备内置离线语音'],
+                ['在线 TTS', 'HTTP 第三方声线引擎'],
+              ].map(([eng, desc]) => {
+                const sel = state.ttsEngine === eng;
+                return `<button type="button" onclick="state.ttsEngine='${eng}';render()" class="p-3 rounded-[12px] border text-left rd-press" style="${sel?'background:var(--rd-circle-bg);border-color:var(--rd-primary);':'background:var(--rd-card-solid);border-color:var(--rd-line);'}">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[12.5px] font-semibold" style="color:${sel?'var(--rd-primary)':'var(--rd-ink)'};">${eng}</span>
+                    ${sel?icon('check', 14, 'var(--rd-primary)'):''}
+                  </div>
+                  <div class="text-[10.5px] mt-0.5" style="color:var(--rd-muted);">${desc}</div>
+                </button>`;
+              }).join('')}
+            </div>
+
+            <!-- Voice List with Interactive Audition -->
+            <div class="rounded-[12px] border overflow-hidden" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="px-3 py-2 flex items-center justify-between text-[11.5px] border-b" style="background:var(--rd-soft);border-color:var(--rd-line);">
+                <span class="font-semibold" style="color:var(--rd-ink);">音色选择（点击右侧可试听）</span>
+                <span style="color:var(--rd-primary);">管理第三方 ›</span>
+              </div>
+              ${TTS_VOICES.map((v, idx) => {
+                const sel = state.ttsVoice === v.name;
+                const aud = state.auditionVoice === v.name;
+                return `<div class="px-3 py-2.5 flex items-center justify-between gap-2" style="${idx>0?'border-top:1px solid var(--rd-line);':''}${sel?'background:var(--rd-circle-bg);':''}">
+                  <button type="button" onclick="state.ttsVoice='${v.name}';render()" class="flex-1 flex items-center gap-2.5 text-left min-w-0">
+                    <span class="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0" style="background:var(--rd-primary);color:var(--rd-on-primary);opacity:${sel?1:0.75};">${v.tag}</span>
+                    <div class="min-w-0">
+                      <div class="text-[12.5px] font-semibold truncate" style="color:${sel?'var(--rd-primary)':'var(--rd-ink)'};">${v.name}</div>
+                      <div class="text-[10.5px] truncate" style="color:var(--rd-muted);">${v.desc}</div>
+                    </div>
+                  </button>
+                  <button type="button" onclick="state.auditionVoice=state.auditionVoice==='${v.name}'?'':'${v.name}';render()" class="h-7 px-2.5 rounded-full text-[11px] font-medium flex items-center gap-1 border rd-press shrink-0" style="${aud?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);':'background:var(--rd-card-solid);border-color:var(--rd-line);color:var(--rd-primary);'}">
+                    ${icon('volume', 12)}<span>${aud?'停止试听':'试听'}</span>
+                  </button>
+                </div>`;
+              }).join('')}
+            </div>
+
+            <!-- 5 Behavioral Toggles + Failure Policy (100% matching ReaderControlTtsContent.ets) -->
+            <div class="rounded-[12px] border overflow-hidden" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              ${[
+                ['跟随高亮', 'ttsFollowHighlight'],
+                ['来电自动暂停', 'ttsPauseInterrupt'],
+                ['允许与其他应用同时播放', 'ttsAllowMixing'],
+                ['后台继续朗读', 'ttsBackground'],
+                ['朗读时屏幕常亮', 'ttsKeepScreenOn'],
+              ].map(([lbl, key], i) => `
+                <div class="px-3 h-10 flex items-center justify-between text-[12px]" style="${i>0?'border-top:1px solid var(--rd-line);':''}">
+                  <span style="color:var(--rd-ink);">${lbl}</span>
+                  <button type="button" onclick="state.${key}=!state.${key};render()" class="rd-switch border-0" data-on="${state[key]}"><span class="rd-switch-dot"></span></button>
+                </div>
+              `).join('')}
+              <div class="px-3 py-2.5 border-t flex items-center justify-between text-[12px]" style="border-color:var(--rd-line);">
+                <span style="color:var(--rd-ink);">不可用内容处理</span>
+                <div class="flex gap-1">
+                  ${[['skip','跳过'],['stop','停止提示']].map(([k,l])=>`<button type="button" onclick="state.ttsFailurePolicy='${k}';render()" class="h-7 px-2.5 rounded-full text-[11px] rd-press" style="${state.ttsFailurePolicy===k?'background:var(--rd-primary);color:var(--rd-on-primary);font-weight:600;':'background:var(--rd-soft);color:var(--rd-ink);'}">${l}</button>`).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        // settingsMore
+        body = `
+          <div class="flex-1 overflow-y-auto rd-scroll space-y-3 pr-0.5">
+            <div class="p-3 rounded-[12px] border space-y-2" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="text-[12px] font-semibold" style="color:var(--rd-ink);">屏幕方向</div>
+              <div class="grid grid-cols-3 gap-1.5">
+                ${['跟随系统','锁定竖屏','锁定横屏'].map(o=>`<button type="button" onclick="state.orient='${o}';render()" class="h-8 rounded-full text-[11.5px] rd-press" style="${state.orient===o?'background:var(--rd-primary);color:var(--rd-on-primary);font-weight:600;':'background:var(--rd-soft);color:var(--rd-ink);'}">${o}</button>`).join('')}
+              </div>
+            </div>
+            <div class="p-3 rounded-[12px] border space-y-2" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              <div class="text-[12px] font-semibold" style="color:var(--rd-ink);">屏幕常亮时长</div>
+              <div class="grid grid-cols-5 gap-1">
+                ${['跟随','1分钟','5分钟','10分钟','常亮'].map(t=>`<button type="button" onclick="state.timeout='${t}';render()" class="h-8 rounded-full text-[11px] rd-press" style="${state.timeout===t?'background:var(--rd-primary);color:var(--rd-on-primary);font-weight:600;':'background:var(--rd-soft);color:var(--rd-ink);'}">${t}</button>`).join('')}
+              </div>
+            </div>
+            <div class="rounded-[12px] border overflow-hidden" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+              ${[
+                ['文字两端对齐', 'justify'],
+                ['拓展至状态栏 / 灵动岛', 'extendStatusBar'],
+                ['长按选择正文文本', 'longPressSelect'],
+              ].map(([lbl, key], i) => `
+                <div class="px-3 h-11 flex items-center justify-between text-[12.5px]" style="${i>0?'border-top:1px solid var(--rd-line);':''}">
+                  <span style="color:var(--rd-ink);">${lbl}</span>
+                  <button type="button" onclick="state.${key}=!state.${key};render()" class="rd-switch border-0" data-on="${state[key]}"><span class="rd-switch-dot"></span></button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div onclick="state.sheet='none';render()" class="absolute inset-0 flex items-end" style="background:var(--rd-scrim);z-index:40;">
+          <div onclick="event.stopPropagation()" class="w-full rounded-t-[24px] px-4 pb-5 border-t flex flex-col anim-up rd-blur" style="height:78%;background:var(--rd-shell);border-color:var(--rd-line);box-shadow:var(--rd-shadow-dock);">
+            <div class="pt-2.5 pb-2.5 flex justify-center shrink-0">
+              <div class="w-9 h-[4px] rounded-full" style="background:var(--rd-handle);"></div>
+            </div>
+            <div class="flex items-center justify-between mb-3 shrink-0">
+              <span class="text-[16px] font-semibold rd-serif" style="color:var(--rd-ink);">${titles[state.sheet]}</span>
+              <button type="button" onclick="state.sheet='none';render()" class="px-3 h-7 rounded-lg text-[12px] font-medium rd-press" style="background:var(--rd-circle-bg);color:var(--rd-primary);">收起</button>
+            </div>
+            ${body}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderPhone() {
+      const p = currentPaper();
+      const isHidden = state.ctrlMode === 'hidden';
+
+      const topBar = !isHidden ? `
+        <div class="px-3 pt-2.5 pb-1 relative z-20 shrink-0">
+          <div class="h-[52px] rounded-[26px] rd-blur px-3 flex items-center justify-between border" style="background:var(--rd-shell);border-color:var(--rd-line);box-shadow:var(--rd-shadow-bar);">
+            <button type="button" onclick="state.ctrlMode='hidden';state.topMenuOpen=false;render()" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="color:var(--rd-ink);" title="收起控制栏">${icon('arrowLeft', 20)}</button>
+            <div class="flex-1 min-w-0 px-2">
+              <div class="text-[15.5px] font-bold rd-serif truncate" style="color:var(--rd-ink);">斗破苍穹</div>
+              <div class="text-[11px] truncate" style="color:var(--rd-muted);">第三章 客人 · 66书吧</div>
+            </div>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" onclick="state.topMenuOpen=false;render()" class="px-2.5 h-9 rounded-xl flex flex-col items-center justify-center gap-0.5 rd-press" style="color:var(--rd-ink);" title="更换书源">
+                ${icon('swap', 16)}<span class="text-[10px] leading-none">换源</span>
+              </button>
+              <button type="button" onclick="state.topMenuOpen=!state.topMenuOpen;render()" class="w-9 h-9 rounded-full flex items-center justify-center rd-press" style="${state.topMenuOpen?'background:var(--rd-circle-bg);color:var(--rd-primary);':'color:var(--rd-ink);'}" title="更多书籍操作">${icon('moreH', 19)}</button>
+            </div>
+          </div>
+        </div>
+      ` : `
+        <div class="px-5 pt-2.5 flex items-center justify-between text-[11px] shrink-0" style="color:${p.meta};">
+          <span>第三章 客人</span>
+          <button type="button" onclick="state.ctrlMode='open';render()" class="px-2 py-0.5 rounded-full border text-[10px]" style="border-color:currentColor;opacity:0.75;">点击唤出控制栏</button>
+        </div>
+      `;
+
+      const topPopover = (!isHidden && state.topMenuOpen && state.sheet === 'none') ? `
+        <div onclick="state.topMenuOpen=false;render()" class="absolute inset-0" style="z-index:28;"></div>
+        <div class="absolute top-[64px] right-3 w-[166px] rounded-[16px] p-1.5 border rd-blur anim-up" style="z-index:30;background:var(--rd-card-solid);border-color:var(--rd-line);box-shadow:var(--rd-shadow-pop);">
+          ${[['info', '书籍信息'], ['refresh', '刷新本章'], ['download', '下载全部章节']].map(([ic, lb], idx) => `
+            <button type="button" onclick="state.topMenuOpen=false;render()" class="w-full h-9 px-2.5 rounded-[10px] flex items-center gap-2.5 text-[12.5px] font-medium rd-press" style="${idx>0?'margin-top:2px;':''}color:var(--rd-ink);">
+              <span style="color:var(--rd-primary);">${icon(ic, 15)}</span><span>${lb}</span>
+            </button>
+          `).join('')}
+        </div>
+      ` : '';
+
+      const controlIsland = !isHidden ? `
+        <div class="absolute bottom-3 left-3 right-3 z-20 rounded-[24px] border flex flex-col rd-blur anim-up" style="height:330px;background:var(--rd-shell);border-color:var(--rd-line);box-shadow:var(--rd-shadow-dock);">
+          <div class="pt-2.5 pb-2.5 flex justify-center shrink-0">
+            <div class="w-9 h-[4px] rounded-full" style="background:var(--rd-handle);"></div>
+          </div>
+
+          ${renderControlMiddleArea()}
+
+          <!-- Iconic 78px Circular Module Dock (100% Inline 330px Control Modules) -->
+          <div class="mx-3 mt-2.5 h-[78px] rounded-[16px] border px-1.5 grid grid-cols-4 items-center shrink-0" style="background:var(--rd-card-solid);border-color:var(--rd-line);">
+            ${[
+              ['autoPage', 'fastFwd', '翻页', "state.module=state.module==='autoPage'?'home':'autoPage';render()"],
+              ['tts', 'headphones', '朗读', "state.module=state.module==='tts'?'home':'tts';render()"],
+              ['appearance', 'palette', '界面', "state.module=state.module==='appearance'?'home':'appearance';render()"],
+              ['settings', 'settings', '设置', "state.module=state.module==='settings'?'home':'settings';render()"],
+            ].map(([id, ic, lb, expr]) => {
+              const active = state.module === id;
+              return `
+                <button type="button" onclick="${expr}" class="h-[64px] flex flex-col items-center justify-center gap-1 rd-press">
+                  <div class="w-[42px] h-[42px] rounded-full flex items-center justify-center transition-colors" style="${active?'background:var(--rd-primary);color:var(--rd-on-primary);':'background:var(--rd-circle-bg);color:var(--rd-primary);'}">
+                    ${icon(ic, 20, active ? 'var(--rd-on-primary)' : 'var(--rd-primary)', 1.75)}
+                  </div>
+                  <span class="text-[10.5px] leading-none font-semibold" style="color:${active?'var(--rd-primary)':'var(--rd-ink)'};">${lb}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      const capsule = (isHidden && state.session !== 'none' && state.sheet === 'none') ? `
+        <div class="absolute bottom-6 right-4 z-20 h-10 pl-3.5 pr-2 rounded-full border flex items-center gap-2.5 anim-up" style="background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-line);box-shadow:var(--rd-shadow-pop);">
+          <div class="flex items-center gap-0.5 h-3">${[0.5,1,0.7].map((h,i)=>`<span class="w-[2.5px] rounded-full wave-bar" style="height:${Math.round(h*11)}px;background:var(--rd-on-primary);animation-delay:${i*110}ms;"></span>`).join('')}</div>
+          <span class="text-[12px] font-medium">${state.session==='tts'?`朗读中 · ${state.ttsRate.toFixed(1)}x`:`自动翻页 · ${state.autoSec}s`}</span>
+          <button type="button" onclick="state.session='none';state.ctrlMode='open';state.module='${state.session}';render()" class="w-6 h-6 rounded-full flex items-center justify-center" style="background:rgba(255,255,255,0.18);">${icon('stop', 11)}</button>
+        </div>
+      ` : '';
+
+      return `
+        <div class="flex justify-center">
+          <div class="rounded-[36px] p-2 border-4 border-[var(--border)] bg-[var(--background)] shadow-2xl" style="width:396px;height:804px;">
+            <div class="rd-scope w-full h-full rounded-[26px] overflow-hidden relative flex flex-col" data-scheme="${state.scheme}" style="background:${p.bg};color:${p.ink};">
+              ${topBar}
+              <div onclick="if(state.topMenuOpen){state.topMenuOpen=false;}else if(state.ctrlMode==='hidden'){state.ctrlMode='open';}else{state.ctrlMode='hidden';}render()" class="flex-1 px-6 py-3 overflow-hidden cursor-pointer flex flex-col justify-between" style="font-family:${currentFontCss()};font-size:${state.fontSize}px;line-height:${state.lineHeight};letter-spacing:${state.letterSpacing}px;text-align:${state.justify?'justify':'left'};">
+                <div style="display:flex;flex-direction:column;gap:${state.paraGap}px;">
+                  <p style="text-indent:${state.indent==='2字符'?'2em':state.indent==='1字符'?'1em':'0'};">“萧炎哥哥，你说，他会是谁？”薰儿沉默了半响，忽然的偏过头，对着萧炎嫣然一笑，少女独有的风情，让得周围的少年眼睛有些放光。</p>
+                  <p style="text-indent:${state.indent==='2字符'?'2em':state.indent==='1字符'?'1em':'0'};">“咳…我，我怎么知道？那么小，我们都还在地上爬呢，我哪知道。”心头猛的一跳，萧炎讪笑了两声，旋即有些心虚的将目光转向大厅内。</p>
+                  <p style="text-indent:${state.indent==='2字符'?'2em':state.indent==='1字符'?'1em':'0'};">“嘻嘻…”望着萧炎的反应，萧薰儿小嘴泛起一抹柔和的弧度，目光移回大厅上。</p>
+                </div>
+                <div class="flex items-center justify-between text-[11px] pt-2 rd-num" style="color:${p.meta};font-family:sans-serif;">
+                  <span>18% · 第 3 / 1663 章</span>
+                  <span>12:50 · 100%</span>
+                </div>
+              </div>
+              ${controlIsland}
+              ${topPopover}
+              ${capsule}
+              ${renderModalSheet()}
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderNotesPanel() {
+      return `
+        <div class="space-y-4">
+          <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-3">
+            <h2 class="text-sm sm:text-base font-bold">一、调换「目录 ↔ 翻页」后的彻底对称分工</h2>
+            <div class="divide-y divide-[var(--border)] text-xs">
+              <div class="py-2.5 space-y-1">
+                <div class="font-semibold">1. 总控上排白卡（目录 / 搜索 / 替换）= 100% 独立 78% 大抽屉</div>
+                <p class="text-[var(--muted-foreground)] leading-relaxed">刚唤出控制栏时的上排 3 键全都是同一种行为——拉起同风格暖白陶瓷 <strong>78% 模态抽屉</strong>（大列表浏览、关键词输入或规则 CRUD），关闭后无损回到总控。再也不混入「切小面板」的按钮。</p>
+              </div>
+              <div class="py-2.5 space-y-1">
+                <div class="font-semibold">2. 底部 4 个圆底大图标（翻页 / 朗读 / 界面 / 设置）= 100% 恒定 330vp 控制栏</div>
+                <p class="text-[var(--muted-foreground)] leading-relaxed">底层 4 个 <code class="px-1 py-0.5 rounded bg-[var(--background)]">42vp</code> 圆底按钮行为完全一致：点击哪个，圆圈反白高亮并在上方直接切换到对应控制面板；<strong>再点一次已激活的圆钮</strong>直接回到「总控」初始态，外框全程 <code class="px-1 py-0.5 rounded bg-[var(--background)]">330vp</code> 不跳高。</p>
+              </div>
+              <div class="py-2.5 space-y-1">
+                <div class="font-semibold">3. 四大控制模块各自舒展全宽 + 克制高级抽屉下钻</div>
+                <p class="text-[var(--muted-foreground)] leading-relaxed">只有「总控」右侧保留 <code class="px-1 py-0.5 rounded bg-[var(--background)]">38vp</code> 竖向亮度轨；进入「翻页 / 朗读 / 界面 / 设置」后全宽舒展排布高频控件，完整排版/音色偏好/高级显示通过显式 <code class="px-1 py-0.5 rounded bg-[var(--background)]">›</code> 进入同色系抽屉，零阉割也零拥挤。</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 space-y-2.5 text-xs">
+            <div class="font-bold">交互验证建议（点击直接跳转到左侧实机对比）：</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[var(--muted-foreground)]">
+              <button type="button" onclick="jumpDemo({module:'home',sheet:'none'})" class="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-left hover:opacity-90">1. 点开「总控」：看上排纯 3 弹窗（目录/搜索/替换）+ 进度 + 竖轨</button>
+              <button type="button" onclick="jumpDemo({module:'autoPage',sheet:'none'})" class="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-left hover:opacity-90">2. 点底栏左下「翻页」：圆钮反白高亮，再点一次即回总控</button>
+              <button type="button" onclick="jumpDemo({module:'tts',sheet:'none'})" class="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-left hover:opacity-90">3. 点底栏「朗读」：全宽播控+语速+定时，底部进完整音色偏好</button>
+              <button type="button" onclick="jumpDemo({module:'appearance',sheet:'none'})" class="p-2.5 rounded-xl border border-[var(--border)] bg-[var(--background)] text-left hover:opacity-90">4. 点底栏「界面」：字号直出 + 全宽纸色与字体 + 右上进更多排版</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function render() {
+      document.getElementById('app').innerHTML = `
+        ${renderStudioTopBar()}
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          <div class="lg:col-span-5">${renderPhone()}</div>
+          <div class="lg:col-span-7">${renderNotesPanel()}</div>
+        </div>
+      `;
+    }
+
+    window.state = state;
+    window.render = render;
+    render();
+  })();
+  </script>
+</body>
+</html>
