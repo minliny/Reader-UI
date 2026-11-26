@@ -37,8 +37,6 @@
       --rd-m-pop: 240ms;
       --rd-m-open: 300ms;
       --rd-m-reflow: 320ms;
-      --rd-m-book-open: 400ms;
-      --rd-m-book-close: 340ms;
       --rd-m-search-open: 260ms;
       --rd-m-search-submit: 240ms;
       --rd-m-search-back: 200ms;
@@ -222,6 +220,20 @@
       background: var(--rd-glass-heavy);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
+    }
+    .rd-scope .rd-source-top-bar {
+      display: grid;
+      grid-template-columns: var(--rd-source-leading, 44px) minmax(0, 1fr) var(--rd-source-trailing, 44px);
+    }
+    .rd-source-top-bar-actions {
+      --rd-source-leading: 76px;
+      --rd-source-trailing: 76px;
+    }
+    .rd-source-top-bar-detail {
+      --rd-source-trailing: 62px;
+    }
+    .rd-source-top-bar-ungrouped {
+      --rd-source-trailing: 72px;
     }
 
     .rd-pressable {
@@ -410,13 +422,6 @@
     .rd-motion-reduced .anim-nav-pill-right,
     .rd-motion-reduced .anim-nav-pill-left,
     .rd-motion-reduced .anim-side-sheet-in,
-    .rd-motion-reduced .anim-book-open-reader,
-    .rd-motion-reduced .anim-book-close-shelf,
-    .rd-motion-reduced .anim-book-open-stage,
-    .rd-motion-reduced .anim-book-open-turn,
-    .rd-motion-reduced .anim-book-open-backdrop,
-    .rd-motion-reduced .anim-book-close-stage,
-    .rd-motion-reduced .anim-book-close-turn,
     .rd-motion-reduced .anim-bookmark-fill-down,
     .rd-motion-reduced .anim-bookmark-fill-up,
     .rd-motion-reduced .anim-bookmark-tuck,
@@ -449,13 +454,6 @@
     .motion-reduce .anim-nav-pill-right,
     .motion-reduce .anim-nav-pill-left,
     .motion-reduce .anim-side-sheet-in,
-    .motion-reduce .anim-book-open-reader,
-    .motion-reduce .anim-book-close-shelf,
-    .motion-reduce .anim-book-open-stage,
-    .motion-reduce .anim-book-open-turn,
-    .motion-reduce .anim-book-open-backdrop,
-    .motion-reduce .anim-book-close-stage,
-    .motion-reduce .anim-book-close-turn,
     .motion-reduce .anim-bookmark-fill-down,
     .motion-reduce .anim-bookmark-fill-up,
     .motion-reduce .anim-bookmark-tuck,
@@ -640,65 +638,6 @@
     }
     .anim-side-sheet-in { animation: sideSheetIn calc(var(--rd-m-sheet, 260ms) * var(--rd-motion-mul, 1)) var(--rd-ease-spring) both; }
 
-    /* Cover-Origin Full-Screen 3D Book-Open & Book-Close Hero Morph (Parallel Overlap) */
-    @keyframes bookOpenBackdropFade {
-      0% { opacity: 1; transform: scale(1); filter: brightness(1); }
-      75% { opacity: 0.9; transform: scale(0.978); filter: brightness(0.68); }
-      100% { opacity: 0; transform: scale(0.97); filter: brightness(0.6); }
-    }
-    .anim-book-open-backdrop {
-      transform-origin: center center;
-      animation: bookOpenBackdropFade calc(var(--rd-m-book-open, 400ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 1, 0.36, 1) both;
-      pointer-events: none;
-    }
-    @keyframes bookOpenStageCarry {
-      0% {
-        transform: translate3d(var(--rd-ox, 0px), var(--rd-oy, 0px), 0px) scale(var(--rd-sx, 0.14), var(--rd-sy, 0.14));
-        border-radius: 12px;
-      }
-      100% {
-        transform: translate3d(0px, 0px, 0px) scale(1, 1);
-        border-radius: 0px;
-      }
-    }
-    .anim-book-open-reader {
-      transform-origin: top left;
-      animation: bookOpenStageCarry calc(var(--rd-m-book-open, 400ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .anim-book-open-stage {
-      transform-origin: top left;
-      transform-style: preserve-3d;
-      perspective: 1400px;
-      animation: bookOpenStageCarry calc(var(--rd-m-book-open, 400ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 1, 0.36, 1) both;
-      pointer-events: none;
-    }
-    @keyframes bookOpenSpineTurn {
-      0% { transform: rotateY(0deg); opacity: 1; }
-      12% { transform: rotateY(-10deg); opacity: 1; }
-      56% { transform: rotateY(-82deg); opacity: 0.95; }
-      88% { transform: rotateY(-116deg); opacity: 0; }
-      100% { transform: rotateY(-122deg); opacity: 0; }
-    }
-    .anim-book-open-turn {
-      transform-origin: left center;
-      animation: bookOpenSpineTurn calc(var(--rd-m-book-open, 400ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 0.88, 0.26, 1) both;
-    }
-    .anim-book-close-shelf {
-      transform-origin: center center;
-      animation: bookOpenBackdropFade calc(var(--rd-m-book-close, 340ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 1, 0.36, 1) reverse both;
-    }
-    .anim-book-close-stage {
-      transform-origin: top left;
-      transform-style: preserve-3d;
-      perspective: 1400px;
-      animation: bookOpenStageCarry calc(var(--rd-m-book-close, 340ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 1, 0.36, 1) reverse both;
-      pointer-events: none;
-    }
-    .anim-book-close-turn {
-      transform-origin: left center;
-      animation: bookOpenSpineTurn calc(var(--rd-m-book-close, 340ms) * var(--rd-motion-mul, 1)) cubic-bezier(0.22, 0.88, 0.26, 1) reverse both;
-    }
-
     /* HarmonyOS Directional Page & Hierarchy Transitions */
     @keyframes pagePushIn {
       from { opacity: 0; transform: translateX(26px); }
@@ -839,9 +778,6 @@
       shelfReflowLegacyMs: 1000,
       shelfStaggerMs: 24,
       shelfStaggerCapMs: 120,
-      bookOpenMs: 400,
-      bookCloseMs: 340,
-      bookOpenLegacyMs: 780,
       searchOpenMs: 260,
       searchSubmitMs: 240,
       searchBackMs: 200,
@@ -1488,6 +1424,10 @@
       return `data-source-action="${action}"${value === undefined ? '' : ` data-value="${escapeAttr(value)}"`}`;
     }
 
+    function renderSourceBackButton(backExpr) {
+      return `<button type="button" onclick="${backExpr}" aria-label="返回" class="w-11 h-11 rounded-full grid place-items-center rd-pressable" style="color:var(--rd-ink);">${icon('arrowLeft', 20)}</button>`;
+    }
+
     function renderSourceActionButton(action, label, options = {}) {
       const { value, ico, primary = false, danger = false, soft = false, disabled = false, className = '' } = options;
       const colors = primary
@@ -1583,7 +1523,7 @@
       const padding = tablet ? 'px-5' : 'px-4';
       const groupLabel = state.sourceGroup === null ? '全部分组' : state.sourceGroup || '未分组';
       const menu = `<div class="relative">
-        <button type="button" ${sourceAction('source-popover', 'more')} aria-label="书源管理更多操作" aria-expanded="${state.sourcePopover === 'more'}" class="w-9 h-9 rounded-full flex items-center justify-center rd-pressable" style="color:var(--rd-ink);">${icon('moreH', 19)}</button>
+        <button type="button" ${sourceAction('source-popover', 'more')} aria-label="书源管理更多操作" aria-expanded="${state.sourcePopover === 'more'}" class="w-11 h-11 rounded-full grid place-items-center rd-pressable" style="color:var(--rd-ink);">${icon('moreH', 19)}</button>
         ${renderSourcePopover('more', [
           {action:'source-route', value:'subscriptions', label:'书源订阅', ico:'cloud'},
           {action:'source-route', value:'groups', label:'分组管理', ico:'folder'},
@@ -1591,11 +1531,14 @@
           {action:'export-sources', label:'导出全部书源', ico:'upload'}
         ])}
       </div>`;
-      const header = batch ? `<div class="h-12 grid grid-cols-3 items-center shrink-0 ${padding} border-b" style="background:var(--rd-canvas);border-color:var(--rd-line);">
-        <button type="button" ${sourceAction('exit-source-batch')} class="justify-self-start h-8 px-2 rounded-full text-[14px] font-medium rd-pressable" style="color:var(--rd-muted);">取消</button>
-        <h1 class="text-center text-[15px] font-semibold whitespace-nowrap" style="color:var(--rd-ink);">已选 ${state.sourceSelectedIds.length} 项</h1>
-        <button id="source-select-all" type="button" ${sourceAction('select-source-scope')} class="justify-self-end h-8 px-2 rounded-full text-[14px] font-semibold rd-pressable" style="color:var(--rd-primary);">${sourceSelectAllLabel(items)}</button>
-      </div>` : renderFlatTopBar('书源管理', menu, '', "navBack('settings')", showBack);
+      const header = batch
+        ? renderFloatingTopBar(
+          `<button type="button" ${sourceAction('exit-source-batch')} class="h-11 px-2 rounded-full text-[13px] font-medium rd-pressable" style="color:var(--rd-ink);">取消</button>`,
+          `已选 ${state.sourceSelectedIds.length} 项`,
+          `<button id="source-select-all" type="button" ${sourceAction('select-source-scope')} class="h-11 px-2 rounded-full text-[13px] font-semibold whitespace-nowrap rd-pressable" style="color:var(--rd-primary);">${sourceSelectAllLabel(items)}</button>`,
+          '', false, 'rd-source-top-bar rd-source-top-bar-actions')
+        : renderFloatingTopBar(showBack ? renderSourceBackButton("navBack('settings')") : '', '书源管理', menu,
+          '', false, 'rd-source-top-bar');
 
       const status = `<div id="source-status-filters" class="grid grid-cols-4 gap-1.5">${renderSourceStatusFilters(scope)}</div>`;
       const types = `<div class="grid grid-cols-3 p-0.5 h-8 rounded-[10px]" style="background:var(--rd-sunken);">
@@ -1671,7 +1614,9 @@
         </div>`;
       }
       return `
-        ${renderFlatTopBar('分组管理', renderSourceActionButton('new-source-group', '新建', {ico:'plus', soft:true}), '', "navBack('sources')")}
+        ${renderFloatingTopBar(renderSourceBackButton("navBack('sources')"), '分组管理',
+          renderSourceActionButton('new-source-group', '新建', {ico:'plus', soft:true}),
+          '', false, 'rd-source-top-bar rd-source-top-bar-actions')}
         <div data-source-scroll="source-groups" class="flex-1 min-h-0 overflow-y-auto rd-scroll px-4 py-3 space-y-2.5">
           ${state.sourceGroups.map(group => groupRow(group, false)).join('')}
           ${groupRow('', true)}
@@ -1683,10 +1628,11 @@
       const ungrouped = !group;
       const items = sourceGroupMembers();
       const right = ungrouped
-        ? renderSourceActionButton('batch-ungrouped', '批量归组', {soft:true})
-        : renderSourceActionButton('add-source-group-members', '添加', {ico:'plus', soft:true});
+        ? renderSourceActionButton('batch-ungrouped', '批量归组', {soft:true, disabled:!items.length, className:'!px-2.5'})
+        : renderSourceActionButton('add-source-group-members', '添加', {ico:'plus', soft:true, className:'!px-2'});
       return `
-        ${renderFlatTopBar(escHtml(group || '未分组书源'), right, '', "navBack('sources')")}
+        ${renderFloatingTopBar(renderSourceBackButton("navBack('sources')"), escHtml(group || '未分组书源'), right,
+          '', false, `rd-source-top-bar ${ungrouped ? 'rd-source-top-bar-ungrouped' : 'rd-source-top-bar-detail'}`)}
         <div class="flex flex-wrap items-center gap-2 shrink-0 px-4 pt-3 pb-2">
           ${renderSourceActionButton('check-source-group', '整组检测', {primary:true, disabled:!items.length})}
           ${renderSourceActionButton('source-group-enable', '全部启用', {disabled:!items.length})}
@@ -1718,8 +1664,15 @@
       }).join('');
     }
 
-    function renderSourceGroupField(input, value, label, placeholder) {
-      return `<input id="source-field-${input}" data-source-input="${input}" type="text" value="${escapeAttr(value)}" aria-label="${label}" placeholder="${placeholder}" class="w-full h-10 rounded-[10px] border px-3 text-[13px] select-text" style="background:var(--rd-sunken);color:var(--rd-ink);border-color:var(--rd-line-strong);">`;
+    function renderSourceGroupField(input, value, label, placeholder, validationAttrs = '') {
+      return `<input id="source-field-${input}" data-source-input="${input}" type="text" value="${escapeAttr(value)}" aria-label="${label}" placeholder="${placeholder}" ${validationAttrs} class="w-full h-10 rounded-[10px] border px-3 text-[13px] select-text" style="background:var(--rd-sunken);color:var(--rd-ink);border-color:var(--rd-line-strong);">`;
+    }
+
+    function renderSourceGroupNameField(modal, label = '分组名称') {
+      const error = sourceGroupNameError(modal);
+      return `${renderSourceGroupField('group-name', modal.name, label, label,
+        `aria-describedby="source-group-name-error" aria-invalid="${Boolean(error)}"`)}
+        <p id="source-group-name-error" aria-live="polite" ${error ? '' : 'hidden'} class="mt-1 text-[12px]" style="color:var(--rd-danger);">${escHtml(error)}</p>`;
     }
 
     function renderSourceGroupOverlay() {
@@ -1730,13 +1683,13 @@
       switch (modal.kind) {
         case 'create-group':
           return sourceModalFrame('新建分组', `
-            ${renderSourceGroupField('group-name', modal.name, '分组名称', '分组名称')}
+            ${renderSourceGroupNameField(modal)}
             <div class="mt-3 mb-1 text-[12px] font-semibold" style="color:var(--rd-muted);">添加首批成员（可选）</div>
             <div data-source-scroll="source-new-group-candidates" class="max-h-52 overflow-y-auto rd-scroll">${renderSourceGroupCandidates(modal)}</div>`,
-            footer(renderSourceActionButton('save-source-group', '创建分组', {primary:true})));
+            footer(renderSourceActionButton('save-source-group', '创建分组', {primary:true, disabled:Boolean(sourceGroupNameError(modal))})));
         case 'rename-group':
-          return sourceModalFrame('重命名分组', renderSourceGroupField('group-name', modal.name, '分组名称', '分组名称'),
-            footer(renderSourceActionButton('save-source-group', '保存', {primary:true})));
+          return sourceModalFrame('重命名分组', renderSourceGroupNameField(modal),
+            footer(renderSourceActionButton('save-source-group', '保存', {primary:true, disabled:Boolean(sourceGroupNameError(modal))})));
         case 'delete-group':
           return sourceModalFrame('删除分组', `<p class="text-[13px]" style="color:var(--rd-muted);">删除「${escHtml(modal.group)}」后，成员将移入未分组。</p>`,
             footer(renderSourceActionButton('confirm-delete-source-group', '删除分组', {danger:true})));
@@ -1753,8 +1706,8 @@
                 ${renderSourceSelectionMark(modal.targetGroup === null)}新建分组
               </button>
             </div>
-            ${modal.targetGroup === null ? `<div class="mt-2">${renderSourceGroupField('group-name', modal.name, '新分组名称', '新分组名称')}</div>` : ''}`,
-            footer(renderSourceActionButton('confirm-move-source-group', '移动', {primary:true})));
+            ${modal.targetGroup === null ? `<div class="mt-2">${renderSourceGroupNameField(modal, '新分组名称')}</div>` : ''}`,
+            footer(renderSourceActionButton('confirm-move-source-group', '移动', {primary:true, disabled:modal.targetGroup === null && Boolean(sourceGroupNameError(modal))})));
         case 'delete-sources':
           return sourceModalFrame('删除书源', `<p class="text-[13px]" style="color:var(--rd-muted);">确定删除选中的 ${modal.sourceIds.length} 个书源？</p>`,
             footer(renderSourceActionButton('confirm-delete-sources', '删除', {danger:true})));
@@ -1772,7 +1725,8 @@
         authenticated: source.loggedIn,
         history: [source.loggedIn ? 'session' : 'form'],
         historyIndex: 0,
-        loading: false
+        loading: false,
+        loadingTimer: null
       };
       return true;
     }
@@ -1780,18 +1734,17 @@
     function renderSourceLogin() {
       const session = state.sourceLoginSession;
       const source = session && state.sourceItems.find(item => item.id === session.sourceId);
-      if (!source) return renderFlatTopBar('书源登录', '', '', "navBack('sources')");
+      if (!source) return renderFloatingTopBar(renderSourceBackButton("navBack('sources')"), '书源登录', '', '', false, 'rd-source-top-bar');
       const page = session.history[session.historyIndex];
       const baseUrl = new URL(source.sourceUrl || sourceDisplayUrl(source));
-      const loginUrl = new URL(page === 'session' ? '/account' : '/login', baseUrl).href;
       const lock = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
-      return `<div class="h-12 px-3 flex items-center justify-between gap-2 shrink-0 border-b" style="background:var(--rd-surface);border-color:var(--rd-line);">
-          <button type="button" ${sourceAction('cancel-source-login')} class="h-8 px-2 rounded-full text-[13px] font-medium rd-pressable" style="color:var(--rd-muted);">取消</button>
-          <div class="flex-1 min-w-0 text-center">
+      return `<div class="h-12 px-3 grid grid-cols-[60px_minmax(0,1fr)_60px] items-center gap-2 shrink-0 border-b" style="background:var(--rd-surface);border-color:var(--rd-line);">
+          <button type="button" ${sourceAction('cancel-source-login')} class="justify-self-start h-11 px-2 rounded-full text-[13px] font-medium rd-pressable" style="color:var(--rd-primary);">取消</button>
+          <div class="min-w-0 text-center">
             <h1 class="text-[14.5px] font-bold truncate" style="color:var(--rd-ink);">${escHtml(source.name)} · 登录 / 验证</h1>
-            <div class="text-[10.5px] flex items-center justify-center gap-1" style="color:var(--rd-subtle);"><span class="shrink-0">${baseUrl.protocol === 'https:' ? lock : ''}</span><span class="truncate">${escHtml(loginUrl)}</span></div>
+            <div class="text-[10.5px] flex items-center justify-center gap-1" style="color:var(--rd-muted);">${baseUrl.protocol === 'https:' ? `<span class="shrink-0">${lock}</span>` : ''}<span class="truncate">${escHtml(baseUrl.hostname)}</span></div>
           </div>
-          ${renderSourceActionButton('finish-source-login', '完成', {primary:true})}
+          ${renderSourceActionButton('finish-source-login', '完成', {primary:true, className:'justify-self-end'})}
         </div>
         ${session.loading ? '<div class="h-0.5 w-2/3 shrink-0" style="background:var(--rd-primary);"></div>' : ''}
         <div data-source-scroll="source-login" class="flex-1 min-h-0 overflow-y-auto rd-scroll p-4" style="background:var(--rd-canvas);">
@@ -1815,11 +1768,11 @@
         </div>
         <div class="h-11 flex shrink-0 items-center justify-around border-t px-2" style="background:var(--rd-surface);border-color:var(--rd-line);">
           ${[
-            ['source-login-back','后退',session.historyIndex === 0],
-            ['source-login-forward','前进',session.historyIndex >= session.history.length - 1],
-            ['source-login-refresh','刷新',session.loading],
-            ['clear-source-login','清除登录态',false]
-          ].map(([action,label,disabled]) => `<button type="button" ${sourceAction(action)} ${disabled ? 'disabled' : ''} class="h-8 px-2 rounded-full text-[12px] font-medium whitespace-nowrap rd-pressable disabled:opacity-45" style="color:var(${action === 'clear-source-login' ? '--rd-danger' : '--rd-ink'});">${label}</button>`).join('')}
+            ['source-login-back','后退','chevronLeft',session.loading || session.historyIndex === 0],
+            ['source-login-forward','前进','chevronRight',session.loading || session.historyIndex >= session.history.length - 1],
+            session.loading ? ['source-login-stop','停止加载','stop'] : ['source-login-refresh','刷新','refresh'],
+            ['clear-source-login','清除登录态','trash']
+          ].map(([action,label,ico,disabled]) => `<button type="button" ${sourceAction(action)} ${disabled ? 'disabled' : ''} class="h-8 px-2 inline-flex items-center gap-1 rounded-full text-[12px] font-medium whitespace-nowrap rd-pressable disabled:opacity-45" style="color:var(${action === 'clear-source-login' ? '--rd-danger' : '--rd-ink'});">${icon(ico, 14)}<span>${label}</span></button>`).join('')}
         </div>`;
     }
 
@@ -1833,17 +1786,13 @@
       }
     }
 
-    function newSourceGroupName(name) {
-      const value = name.trim();
-      if (!value) {
-        showAppToast('请输入分组名称');
-        return '';
-      }
-      if (state.sourceGroups.includes(value)) {
-        showAppToast('分组名称已存在');
-        return '';
-      }
-      return value;
+    function sourceGroupNameError(modal) {
+      const name = modal.name.trim();
+      if (!name) return '请输入分组名称';
+      if (Array.from(name).length > 32) return '分组名称最多 32 个字符';
+      if (name === '全部分组' || name === '未分组') return '该名称由系统保留';
+      if (state.sourceGroups.includes(name) && !(modal.kind === 'rename-group' && modal.group === name)) return '已存在同名分组';
+      return '';
     }
 
     function exportAllManagedSources() {
@@ -2045,9 +1994,9 @@
           break;
         case 'save-source-group': {
           if (modal?.kind !== 'create-group' && modal?.kind !== 'rename-group') break;
+          if (sourceGroupNameError(modal)) break;
           const renaming = modal.kind === 'rename-group';
-          const name = renaming && modal.name.trim() === modal.group ? modal.group : newSourceGroupName(modal.name);
-          if (!name) break;
+          const name = modal.name.trim();
           if (renaming) {
             state.sourceGroups = state.sourceGroups.map(group => group === modal.group ? name : group);
             sourceGroupMembers(modal.group).forEach(item => { item.group = name; });
@@ -2095,8 +2044,8 @@
           if (modal?.kind !== 'move-group') break;
           let group = modal.targetGroup;
           if (group === null) {
-            group = newSourceGroupName(modal.name);
-            if (!group) break;
+            if (sourceGroupNameError(modal)) break;
+            group = modal.name.trim();
             state.sourceGroups.push(group);
           }
           const items = state.sourceItems.filter(item => modal.sourceIds.includes(item.id));
@@ -2128,6 +2077,7 @@
         case 'source-login-back':
         case 'source-login-forward':
         case 'source-login-refresh':
+        case 'source-login-stop':
         case 'clear-source-login':
           handleSourceLoginAction(action);
           break;
@@ -2182,18 +2132,27 @@
           break;
         case 'source-login-refresh':
           session.loading = true;
-          render();
-          setTimeout(() => {
+          session.loadingTimer = setTimeout(() => {
             if (state.sourceLoginSession !== session) return;
             session.loading = false;
+            session.loadingTimer = null;
             render();
-          }, 250);
+          }, 1000);
+          render();
+          break;
+        case 'source-login-stop':
+          clearTimeout(session.loadingTimer);
+          session.loadingTimer = null;
+          session.loading = false;
+          render();
           break;
         case 'clear-source-login':
           stopSourceCheckFor(source);
           source.loggedIn = false;
           source.report = null;
           source.checkState = 'unchecked';
+          clearTimeout(session.loadingTimer);
+          session.loadingTimer = null;
           session.authenticated = false;
           session.loading = false;
           session.account = '';
@@ -2219,9 +2178,18 @@
           document.getElementById('source-list-scroll').scrollTop = 0;
           break;
         }
-        case 'group-name':
-          if (modal) modal.name = element.value;
+        case 'group-name': {
+          if (!modal) break;
+          modal.name = element.value;
+          const error = sourceGroupNameError(modal);
+          const feedback = document.getElementById('source-group-name-error');
+          const confirm = element.closest('[role="dialog"]').querySelector('[data-source-action="save-source-group"], [data-source-action="confirm-move-source-group"]');
+          element.setAttribute('aria-invalid', String(Boolean(error)));
+          feedback.textContent = error;
+          feedback.hidden = !error;
+          confirm.disabled = Boolean(error);
           break;
+        }
         case 'group-query':
           if (modal?.kind === 'add-to-group') {
             modal.query = element.value;
@@ -2278,7 +2246,7 @@
       return [
         {
           id: 'sub1', name: '笔趣阁精选源', url: 'https://raw.example.com/sources/biquge-selected.json',
-          type: 'source', enabled: true, autoUpdate: true, lastSync: '今天 14:20',
+          type: 'source', autoUpdate: true, lastSync: '今天 14:20',
           appliedSources: [
             sourceTransferExample('bqg99.cc', '笔趣阁新站', '精品小说'),
             sourceTransferExample('fcxs.org', '风车轻小说', '', 'novel', 'empty-directory'),
@@ -2289,13 +2257,13 @@
         },
         {
           id: 'sub2', name: '日漫高频更新组', url: 'https://hub.example.com/manga-daily-sources.json',
-          type: 'source', enabled: true, autoUpdate: false, lastSync: '昨天 21:05',
+          type: 'source', autoUpdate: false, lastSync: '昨天 21:05',
           appliedSources: [sourceTransferExample('copymanga.tv', '拷贝漫画旧站', '精选漫画', 'comic')],
           appliedRules: []
         },
         {
           id: 'sub3', name: '正文广告净化规则', url: 'https://rules.example.com/clean-replace.json',
-          type: 'rule', enabled: true, autoUpdate: true, lastSync: '3 天前',
+          type: 'rule', autoUpdate: true, lastSync: '3 天前',
           appliedSources: [],
           appliedRules: [
             sourceRuleExample('popup', '过滤弹窗广告脚本', '旧版弹窗'),
@@ -2592,7 +2560,8 @@
     window.backSourceImport = () => {
       const flow = state.sourceImportFlow;
       if (flow.step !== 2) {
-        navBack('sources');
+        state.sourceImportFlow = createSourceImportFlow();
+        setSourcePageSub('list', {returnToList:true});
         return;
       }
       cancelSourceTransferWork();
@@ -2651,11 +2620,11 @@
         group = group ?? flow.newGroupName.trim();
         if (!group) return showAppToast('请选择分组或填写新分组名称');
       }
-      const result = { added: 0, updated: 0, unsupported: 0, invalid: 0, details: [] };
+      const result = { added: 0, updated: 0, unsupportedCount: 0, invalid: 0, details: [] };
       const appliedSources = [];
       for (const item of flow.items) {
         if (!item.staticOk) {
-          if (item.category === 'unsupported') result.unsupported += 1;
+          if (item.category === 'unsupported') result.unsupportedCount += 1;
           else result.invalid += 1;
           result.details.push({ name: item.name, label: item.staticError });
         } else if (item.selected) {
@@ -2690,7 +2659,6 @@
             type: 'source',
             url,
             name: flow.subNameInput.trim() || '在线书源订阅',
-            enabled: true,
             autoUpdate: true,
             lastSync: '刚刚',
             appliedSources,
@@ -2762,8 +2730,8 @@
     }
 
     async function openSourceSubscriptionPreview(ids) {
-      const targets = state.sourceSubscriptions.filter(sub => sub.enabled && ids.includes(sub.id));
-      if (!targets.length) return showAppToast('暂无已启用的订阅');
+      const targets = state.sourceSubscriptions.filter(sub => ids.includes(sub.id));
+      if (!targets.length) return;
       cancelSourceTransferWork();
       const pending = { controller: new AbortController() };
       const loading = { kind: 'sub-loading' };
@@ -2926,7 +2894,7 @@
       const values = { name, url, type: modal.type, autoUpdate: modal.autoUpdate };
       if (reset) Object.assign(values, { appliedSources: [], appliedRules: [], lastSync: '尚未更新' });
       if (existing) Object.assign(existing, values);
-      else state.sourceSubscriptions.unshift({ id: sourceTransferNewId('sub'), enabled: true, ...values });
+      else state.sourceSubscriptions.unshift({ id: sourceTransferNewId('sub'), ...values });
       state.sourceModal = null;
       showAppToast(existing ? '订阅已更新' : '已添加订阅');
     }
@@ -3098,7 +3066,7 @@
           <div class="grid grid-cols-2 gap-2 text-center">
             ${[['新增', result.added], ['更新', result.updated]].map(([label, count]) => `<div class="py-2 rounded-[10px]" style="background:var(--rd-sunken);"><div class="text-[19px] font-bold rd-num" style="color:var(--rd-primary);">${count}</div><div class="text-[11px]" style="color:var(--rd-muted);">${label}</div></div>`).join('')}
           </div>
-          ${result.unsupported ? `<p class="mt-2 text-center text-[12px]" style="color:var(--rd-muted);">静态校验已自动过滤不支持 ${result.unsupported} 项</p>` : ''}
+          ${result.unsupportedCount > 0 ? `<p class="mt-2 text-center text-[12px]" style="color:var(--rd-muted);">已自动过滤不支持 ${result.unsupportedCount} 项</p>` : ''}
           ${result.invalid ? `<p class="mt-1 text-center text-[12px]" style="color:var(--rd-muted);">另有 ${result.invalid} 项未通过静态校验</p>` : ''}
         `)}
         ${renderSourceTransferCard(`
@@ -3120,7 +3088,7 @@
           renderSourceTransferButton('返回书源列表', 'import-return-list', { tone: 'primary', size: 'h-11 flex-1' }),
       }[flow.step]();
       return `
-        ${renderFlatTopBar('导入书源', '', '', "backSourceImport()")}
+        ${renderFloatingTopBar(renderSourceBackButton('backSourceImport()'), '导入书源', '', '', false, 'rd-source-top-bar')}
         <ol aria-label="导入进度" class="flex items-center shrink-0 gap-2 w-full max-w-[640px] mx-auto px-4 py-3">
           ${['选择来源', '校验与检测', '完成'].map((label, index) => {
             const number = index + 1;
@@ -3141,14 +3109,15 @@
 
     function renderSubscriptionsScreen() {
       const subs = state.sourceSubscriptions;
-      const createButton = renderSourceTransferButton('＋ 新建', 'sub-create');
+      const createButton = renderSourceActionButton('sub-create', '新建', {ico:'plus', soft:true});
       return `
-        ${renderFlatTopBar('书源订阅', createButton, '', "navBack('sources')")}
+        ${renderFloatingTopBar(renderSourceBackButton("navBack('sources')"), '书源订阅', createButton,
+          '', false, 'rd-source-top-bar rd-source-top-bar-actions')}
         <div class="flex-1 min-h-0 overflow-y-auto rd-scroll" data-source-scroll="subscriptions">
           <div class="max-w-[640px] mx-auto px-4 py-3 space-y-2.5">
             <div class="flex justify-between items-center gap-2">
               <span class="text-[13px]" style="color:var(--rd-muted);">共 ${subs.length} 个订阅</span>
-              ${renderSourceTransferButton('全部检查更新', 'sub-check-all', { tone: 'primary' })}
+              ${renderSourceTransferButton('全部检查更新', 'sub-check-all', { tone: 'primary', disabled: !subs.some(sub => sub.autoUpdate) })}
             </div>
             ${subs.length ? renderSourceTransferCard(subs.map((sub, index) => {
               const count = sub.type === 'rule' ? sub.appliedRules.length : sub.appliedSources.length;
@@ -3159,11 +3128,11 @@
                     <h2 class="truncate text-[14px] font-semibold">${escHtml(sub.name)}</h2>
                     <span class="px-1.5 py-0.5 rounded-[5px] shrink-0 text-[10px]" style="background:var(--rd-${sub.type === 'rule' ? 'warning' : 'primary'}-soft);color:var(--rd-${sub.type === 'rule' ? 'warning' : 'primary'});">${sub.type === 'rule' ? '规则' : '书源'}</span>
                   </div>
-                  ${renderToggle(sub.enabled, '', 'data-source-action="sub-toggle"' + idAttr + ' aria-label="' + escapeAttr(sub.name + ' · 启用订阅') + '"')}
+                  ${renderToggle(sub.autoUpdate, '', 'data-source-action="sub-toggle"' + idAttr + ' aria-label="' + escapeAttr(sub.name + ' · 自动检查更新') + '"')}
                 </div>
                 <div class="truncate mt-0.5 text-[11.5px]" title="${escapeAttr(sub.url)}" style="color:var(--rd-muted);">${escHtml(new URL(sub.url).host)} · ${escHtml(sub.lastSync)} · ${count} 项</div>
                 <div class="flex flex-wrap items-center gap-1.5 mt-2">
-                  ${renderSourceTransferButton('检查更新', 'sub-check', { id: sub.id, disabled: !sub.enabled })}
+                  ${renderSourceTransferButton('检查更新', 'sub-check', { id: sub.id })}
                   ${renderSourceTransferButton('编辑', 'sub-edit', { id: sub.id, tone: 'neutral' })}
                   ${renderSourceTransferButton('删除', 'sub-delete-prompt', { id: sub.id, tone: 'danger', extra: 'ml-auto' })}
                 </div>
@@ -3338,8 +3307,7 @@
           state.sourceImportFlow = createSourceImportFlow();
           break;
         case 'import-return-list':
-          state.sourceImportFlow = createSourceImportFlow();
-          navBack('sources');
+          backSourceImport();
           return true;
         case 'transfer-stop-check':
           sourceTransferCheck?.stop();
@@ -3354,7 +3322,7 @@
         }
         case 'sub-toggle': {
           const sub = state.sourceSubscriptions.find(entry => entry.id === id);
-          if (sub) sub.enabled = !sub.enabled;
+          if (sub) sub.autoUpdate = !sub.autoUpdate;
           break;
         }
         case 'sub-delete-prompt': {
@@ -3384,7 +3352,7 @@
           void openSourceSubscriptionPreview([id]);
           return true;
         case 'sub-check-all':
-          void openSourceSubscriptionPreview(state.sourceSubscriptions.map(sub => sub.id));
+          void openSourceSubscriptionPreview(state.sourceSubscriptions.filter(sub => sub.autoUpdate).map(sub => sub.id));
           return true;
         case 'sub-diff-setting':
           if (modal?.kind === 'sub-diff' && !modal.checking && field === 'depth') modal.settings.depth = Number(value);
@@ -3459,7 +3427,7 @@
       theme: 'day',         // day | night
       device: 'phone',      // phone | tablet
       screenId: 'bookshelf',
-      screenTransition: 'none', // none | push | pop | tab | fade | bookOpen | bookClose | reduced
+      screenTransition: 'none', // none | push | pop | tab | fade | reduced
       tabAnimDir: 'none',   // none | left | right | reduced
       wideDockAlign: 'center',   // center | right (tablet reader control dock alignment)
       wideNovelColumns: 'spread',// spread | single (tablet novel layout)
@@ -3490,7 +3458,6 @@
       shelfSearchQuery: '',
       shelfSearchFilter: 'all', // all | novel | manga | local | online
       shelfSearchHistory: ['斗破苍穹', '诡秘之主', '非人哉', '山海纪行', '剑来'],
-      bookOpenActor: null,    // transient cover-origin 3D carry payload
 
       // Stress & toast feedback states
       edgeStressMode: 'normal', // normal | edge | largeFont
@@ -4048,8 +4015,8 @@
         id: 'sources',
         group: '管理与工具',
         name: '9. 书源管理',
-        badge: '列表 · 导入 · 订阅 · 分组 · 登录',
-        paradigm: '用三行筛选定位书源，在同一列表启停、检测、登录或批量归组。',
+        badge: '5 个标准页 · 浏览器式登录',
+        paradigm: '列表、导入、订阅、分组总览与详情共用雾面悬浮顶栏，登录使用浏览器式顶底栏。',
         changes: [
           '查看从规则加载到章节正文的分层报告，按搜索或发现切换检测深度。',
           '导入按选择来源、校验与选取、结果三步进行。更新订阅时先确认差异。',
@@ -4110,7 +4077,7 @@
       }
       return `
         <div class="px-3.5 pt-2 pb-1.5 relative z-20 shrink-0">
-          <div class="h-12 rounded-full rd-glass px-2 flex items-center justify-between border ${wideCap} ${extraCls}" style="border-color:var(--rd-line);box-shadow:var(--rd-e2-shadow);">
+          <div class="h-[52px] rounded-full px-2.5 flex items-center justify-between border ${wideCap} ${extraCls}" style="background:var(--rd-veil-bg);border-color:var(--rd-veil-border);box-shadow:var(--rd-float-shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);">
             <div class="flex items-center min-w-[44px]">${leftHtml}</div>
             <div class="text-center px-2 min-w-0 flex-1">
               <div class="text-[16px] font-semibold truncate" style="color:var(--rd-ink);">${title}</div>
@@ -4464,7 +4431,7 @@
         listHtml = `
           <div data-shelf-main-list="1" class="grid ${cols} gap-3 mt-3">
             ${books.map((b, i) => `
-              <div onclick="${isMulti ? `state.shelfSelected['${b.id}']=!state.shelfSelected['${b.id}'];render()` : `openBookFromShelf('${b.id}','${b.target}',event)`}" class="group cursor-pointer rd-pressable ${reflowCls}" style="${state.shelfModeAnim==='reflow'?`--rd-stagger:${Math.min(i,5)*24}ms;`:''}">
+              <div onclick="${isMulti ? `state.shelfSelected['${b.id}']=!state.shelfSelected['${b.id}'];render()` : `openBookFromShelf('${b.id}','${b.target}')`}" class="group cursor-pointer rd-pressable ${reflowCls}" style="${state.shelfModeAnim==='reflow'?`--rd-stagger:${Math.min(i,5)*24}ms;`:''}">
                 <div class="aspect-[3/4.1] rounded-[8px] overflow-hidden relative" data-book-cover="${b.id}" style="box-shadow:var(--rd-cover-shadow);">
                   ${bookCoverArt(b.displayTitle, b.type, b.tone, b.noCover)}
                   ${isMulti ? `<div class="absolute bottom-2 right-2 w-5 h-5 rounded-full flex items-center justify-center border" style="${state.shelfSelected[b.id]?'background:var(--rd-primary);border-color:var(--rd-primary);color:var(--rd-on-primary);':'background:rgba(255,255,255,0.86);border-color:var(--rd-line-strong);color:transparent;'}">${icon('check', 12, 'currentColor', 2.4)}</div>` : ''}
@@ -4477,7 +4444,7 @@
         `;
       } else {
         const listCardRow = (b, i, isTabletGrid) => `
-          <div class="p-3 flex items-center gap-3 relative rd-pressable ${reflowCls} ${isTabletGrid?'rounded-[14px] border':''}" style="${isTabletGrid?'background:var(--rd-surface);border-color:var(--rd-line);box-shadow:var(--rd-e1-shadow);':(i>0?'border-top:1px solid var(--rd-line);':'')}${state.shelfModeAnim==='reflow'?`--rd-stagger:${Math.min(i,5)*24}ms;`:''}" onclick="${isMulti ? `state.shelfSelected['${b.id}']=!state.shelfSelected['${b.id}'];render()` : `openBookFromShelf('${b.id}','${b.target}',event)`}">
+          <div class="p-3 flex items-center gap-3 relative rd-pressable ${reflowCls} ${isTabletGrid?'rounded-[14px] border':''}" style="${isTabletGrid?'background:var(--rd-surface);border-color:var(--rd-line);box-shadow:var(--rd-e1-shadow);':(i>0?'border-top:1px solid var(--rd-line);':'')}${state.shelfModeAnim==='reflow'?`--rd-stagger:${Math.min(i,5)*24}ms;`:''}" onclick="${isMulti ? `state.shelfSelected['${b.id}']=!state.shelfSelected['${b.id}'];render()` : `openBookFromShelf('${b.id}','${b.target}')`}">
             <div class="w-[54px] h-[76px] rounded-[6px] overflow-hidden shrink-0 relative" data-book-cover="${b.id}" style="box-shadow:var(--rd-cover-shadow);">
               ${bookCoverArt(b.displayTitle, b.type, b.tone, b.noCover)}
               ${isMulti ? `<div class="absolute bottom-1 right-1 w-5 h-5 rounded-full flex items-center justify-center border" style="${state.shelfSelected[b.id]?'background:var(--rd-primary);border-color:var(--rd-primary);color:var(--rd-on-primary);':'background:rgba(255,255,255,0.88);border-color:var(--rd-line-strong);color:transparent;'}">${icon('check', 12, 'currentColor', 2.4)}</div>` : ''}
@@ -4604,7 +4571,7 @@
             <div class="flex-1 overflow-y-auto rd-scroll ${padSide} ${padVert}">
               ${!isMulti && state.shelfMode !== 'empty' && hasShelfBooks ? `
                 <div class="text-[12px] font-medium mb-1.5 mt-1" style="color:var(--rd-muted);">继续阅读</div>
-                <div data-continue-card="1" onclick="openBookFromShelf('${continueBook.id}','${continueBook.target}',event)" class="p-3.5 rounded-[16px] border flex items-center gap-3.5 cursor-pointer rd-pressable" style="background:var(--rd-surface);border-color:var(--rd-line);box-shadow:var(--rd-e1-shadow);">
+                <div data-continue-card="1" onclick="openBookFromShelf('${continueBook.id}','${continueBook.target}')" class="p-3.5 rounded-[16px] border flex items-center gap-3.5 cursor-pointer rd-pressable" style="background:var(--rd-surface);border-color:var(--rd-line);box-shadow:var(--rd-e1-shadow);">
                   <div class="w-[56px] h-[78px] rounded-[6px] overflow-hidden shrink-0" data-book-cover="${continueBook.id}" style="box-shadow:var(--rd-cover-shadow);">
                     ${bookCoverArt(continueBook.displayTitle, continueBook.type, continueBook.tone, continueBook.noCover)}
                   </div>
@@ -7280,44 +7247,10 @@
         pop: 'anim-page-pop',
         tab: 'anim-page-tab',
         open: 'anim-page-open',
-        bookOpen: 'anim-book-open-reader',
-        bookClose: 'anim-book-close-shelf',
         fade: 'anim-page-fade',
         reduced: 'anim-page-reduced',
       };
       const pageAnimCls = pageAnimMap[state.screenTransition] || '';
-      let bookOpenBackdropHtml = '';
-      let bookOpenStageStyle = '';
-      let bookOpenOverlayHtml = '';
-      if (state.screenTransition === 'bookOpen' && state.bookOpenActor && !reduced) {
-        const a = state.bookOpenActor;
-        const coverSvg = bookCoverArt(a.title, a.type, a.tone, a.noCover)
-          .replace('<svg viewBox="0 0 90 124"', '<svg viewBox="0 0 90 124" preserveAspectRatio="none"');
-        bookOpenStageStyle = `--rd-ox:${a.ox}px;--rd-oy:${a.oy}px;--rd-sx:${a.sx};--rd-sy:${a.sy};z-index:40;box-shadow:var(--rd-e3-shadow);`;
-        if (a.shelfHtml) {
-          bookOpenBackdropHtml = `<div id="book-open-backdrop" class="absolute inset-0 z-30 overflow-hidden pointer-events-none anim-book-open-backdrop">${a.shelfHtml}</div>`;
-        }
-        bookOpenOverlayHtml = `
-          <div id="book-open-actor" class="absolute inset-0 z-50 pointer-events-none anim-book-open-stage" style="--rd-ox:${a.ox}px;--rd-oy:${a.oy}px;--rd-sx:${a.sx};--rd-sy:${a.sy};">
-            <div class="w-full h-full rounded-[6px] overflow-hidden relative anim-book-open-turn">
-              ${coverSvg}
-            </div>
-          </div>
-        `;
-      } else if (state.screenTransition === 'bookClose' && state.bookOpenActor && !reduced) {
-        const a = state.bookOpenActor;
-        const coverSvg = bookCoverArt(a.title, a.type, a.tone, a.noCover)
-          .replace('<svg viewBox="0 0 90 124"', '<svg viewBox="0 0 90 124" preserveAspectRatio="none"');
-        bookOpenOverlayHtml = `
-          <div id="book-open-actor" class="absolute inset-0 z-50 pointer-events-none anim-book-close-stage" style="--rd-ox:${a.ox}px;--rd-oy:${a.oy}px;--rd-sx:${a.sx};--rd-sy:${a.sy};">
-            <div class="absolute inset-0 overflow-hidden flex flex-col" style="box-shadow:var(--rd-e3-shadow);">${a.readerHtml || ''}</div>
-            <div class="w-full h-full rounded-[6px] overflow-hidden relative anim-book-close-turn">
-              ${coverSvg}
-            </div>
-          </div>
-        `;
-      }
-
       const novelBgActive = state.screenId === 'novel'
         || (state.screenId === 'sourceSwitch' && (!state.sourceSwitchReturnScreen || state.sourceSwitchReturnScreen === 'novel'))
         || (state.screenId === 'modals' && state.modalReturnScreen === 'novel');
@@ -7372,8 +7305,7 @@
                 </div>
                 <!-- Live Screen Content -->
                 <div id="device-screen-stage" class="flex-1 flex flex-col overflow-hidden relative">
-                  ${bookOpenBackdropHtml}
-                  <div id="device-screen-content" class="flex-1 flex flex-col overflow-hidden relative ${pageAnimCls} ${hasLiveOverlay ? 'blur-[2.5px] pointer-events-none select-none' : ''}" style="${bookOpenStageStyle}" ${hasSourceModal ? 'inert' : ''}>
+                  <div id="device-screen-content" class="flex-1 flex flex-col overflow-hidden relative ${pageAnimCls} ${hasLiveOverlay ? 'blur-[2.5px] pointer-events-none select-none' : ''}" ${hasSourceModal ? 'inert' : ''}>
                     ${renderActiveScreen()}
                   </div>
                   ${state.activeSourceSwitch ? renderSourceSwitchOverlay(false) : ''}
@@ -7382,7 +7314,6 @@
                   ${state.appToast ? `
                     <div class="absolute top-16 left-0 right-0 mx-auto w-fit z-50 px-3.5 py-1.5 rounded-full text-[12px] font-medium anim-toast-down pointer-events-none whitespace-nowrap" style="background:var(--rd-primary);color:var(--rd-on-primary);box-shadow:var(--rd-e3-shadow);">${escHtml(state.appToast)}</div>
                   ` : ''}
-                  ${bookOpenOverlayHtml}
                 </div>
                 <!-- Simulated Home Indicator -->
                 <div class="h-4 flex items-center justify-center shrink-0 select-none" style="background:${statusBg};">
@@ -7562,8 +7493,8 @@
             <div>· 书架切换 1000ms、搜索 650/700ms、胶囊 3500ms、串行开书 780ms</div>
           </div>`,
           after: `<div class="p-3 rounded-xl border border-[var(--border)] space-y-1.5 text-[11px] text-[var(--muted-foreground)]">
-            <div>· 补齐 Tab 180ms 淡切 + 底栏胶囊滑移、Push/Pop 260/240ms 转场</div>
-            <div>· 压回产品节奏：书架 320ms、搜索 260ms、开书 400/340ms、胶囊 380ms</div>
+            <div>· Tab 180ms 淡切与底栏胶囊滑移，开合书随原生路由 Push/Pop 260/240ms 转场</div>
+            <div>· 书架切换 320ms、搜索展开 260ms、胶囊飞展 380ms</div>
           </div>`
         },
         {
@@ -7573,7 +7504,7 @@
             <div>· 历史 Stage 平行并存，减动效大多粗暴压成 0ms 闪烁切换</div>
           </div>`,
           after: `<div class="p-3 rounded-xl border border-[var(--border)] space-y-1.5 text-[11px] text-[var(--muted-foreground)]">
-            <div>· 仅连续手势/封面 3D 保留帧驱动+代际守卫，其余交 ArkUI 原生动画</div>
+            <div>· 连续手势与胶囊飞展保留帧驱动和代际守卫，开合书使用 ArkUI 原生路由</div>
             <div>· 保留单源 <code class="font-mono">MotionSpec</code> 与可打断重定位，统一 120ms 轻淡入降级</div>
           </div>`
         }
@@ -7882,8 +7813,8 @@
         ['M1 · 微交互', '140–240ms', 'cubic(0.2, 0, 0, 1) · 过冲 ≤1.05', 'AttributeModifier / animateTo', '8% 墨色按压层、定宽加签自顶浸色、底栏胶囊滑移（循环动效遮挡/暂停即停）', '120ms 轻淡入（去缩放）'],
         ['M2 · 下拉与折叠', '下拉 160 / 120ms · 筛选 220 / 180ms', 'cubic(0.16,1,0.3,1) / cubic(0.5,0,1,1)', 'ArkUI 原生 animateTo（取代手写 VSync）', '同锚点下拉选项、书架筛选条、目录分卷折叠', '120ms 轻淡入'],
         ['M2 · 浮层与抽屉', 'Modal 220 · Sheet 开 260 / 关 210ms', 'TransitionEffect + 克制微阻尼弹簧', 'ArkUI 原生合成器（关快于开；换源禁逐行飞入）', 'Toast、Popover、确认 Modal、底部/侧边 Sheet', '120ms 轻淡入'],
-        ['M3 · 页面路由与视图变形', 'Tab 180 · Push 260/240 · 搜索 260/240/200 · 书架 320ms', 'cubic(0.2, 0, 0, 1)', 'Navigation 路由栈 + 底页微视差 + 首屏前9本错峰', '一级 Tab、Push/Pop、书架列表↔封面、共享搜索', '120ms 轻淡入'],
-        ['M4 · 连续手势与物理飞跃', '控制栏 220/200 · 开书 400/340 · 胶囊 380ms', '并行可逆时间轴 + 橡皮筋阻尼', '仅此类保留帧驱动 + 纯 TS 状态机 + 代际守卫', '控制栏、翻页、并行 3D 开书、胶囊飞展同步起播、纸顶丝带书签、漫画章末上拉', '跳过飞行，120ms 轻淡入直落终态'],
+        ['M3 · 页面路由与视图变形', 'Tab 180 · Push 260/240 · 搜索 260/240/200 · 书架 320ms', 'cubic(0.2, 0, 0, 1)', 'Navigation 路由栈 + 底页微视差 + 首屏前9本错峰', '一级 Tab、Push/Pop（含开合书）、书架列表↔封面、共享搜索', '120ms 轻淡入'],
+        ['M4 · 连续手势与物理飞跃', '控制栏 220/200 · 胶囊 380ms', '并行可逆时间轴 + 橡皮筋阻尼', '仅此类保留帧驱动 + 纯 TS 状态机 + 代际守卫', '控制栏、翻页、胶囊飞展同步起播、纸顶丝带书签、漫画章末上拉', '跳过飞行，120ms 轻淡入直落终态'],
       ];
       const shelfDur = (state.motionShelfLegacy ? MOTION_SPEC.shelfReflowLegacyMs : MOTION_SPEC.shelfReflowMs) * mul;
       const shelfStag = (state.motionShelfLegacy ? 30 : MOTION_SPEC.shelfStaggerMs) * mul;
@@ -7927,11 +7858,11 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div class="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-1">
               <div class="text-xs font-semibold text-[var(--primary)]">1. 补齐路由 0ms 硬切</div>
-              <p class="text-[11px] leading-relaxed text-[var(--muted-foreground)]"><code class="font-mono">Index.ets</code> 条件分支 → <code class="font-mono">Navigation</code> 栈：Tab 180ms + 底栏胶囊滑移，Push/Pop 260/240ms。</p>
+              <p class="text-[11px] leading-relaxed text-[var(--muted-foreground)]"><code class="font-mono">Index.ets</code> 条件分支 → <code class="font-mono">Navigation</code> 栈：Tab 180ms 与底栏胶囊滑移，开合书随 Push/Pop 260/240ms 转场。</p>
             </div>
             <div class="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-1">
               <div class="text-xs font-semibold text-[var(--primary)]">2. 压缩 Figma 演示慢动作</div>
-              <p class="text-[11px] leading-relaxed text-[var(--muted-foreground)]">书架 1000→320ms、搜索 650/700→260/240ms、并行开合书 780→400/340ms、胶囊 3500→380ms（同步起播）。</p>
+              <p class="text-[11px] leading-relaxed text-[var(--muted-foreground)]">书架 1000→320ms、搜索 650/700→260/240ms、胶囊 3500→380ms（同步起播）。</p>
             </div>
             <div class="p-3.5 rounded-2xl border border-[var(--border)] bg-[var(--card)] space-y-1">
               <div class="text-xs font-semibold text-[var(--primary)]">3. 按需分层 + 清退死代码</div>
@@ -8127,8 +8058,6 @@
       sourceSwitch: 5,
       modals: 5,
     };
-    let bookOpenGeneration = 0;
-    let bookOpenCleanupTimer = null;
     let sourceSwitchDiscoveryGen = 0;
     let dynamicEntitySeq = 1;
     let sourceSwitchTimers = [];
@@ -8253,10 +8182,6 @@
       if (parent) {
         const entry = state.navStack.pop();
         const prev = state.screenId;
-        if (entry.screenId === 'bookshelf' && entry.shelfSearchMode === 'idle' && (prev === 'novel' || prev === 'manga') && !isReduceMotion()) {
-          window.closeBookToShelf(prev);
-          return;
-        }
         state.shelfMode = entry.shelfMode || state.shelfMode;
         state.shelfSearchMode = entry.shelfSearchMode || 'idle';
         state.shelfSearchQuery = entry.shelfSearchQuery !== undefined ? entry.shelfSearchQuery : state.shelfSearchQuery;
@@ -8297,14 +8222,11 @@
         window.setScreen('settings', { pushHistory: false, keepSubState: true, isBack: true });
         return;
       }
-      if (fallbackScreen === 'bookshelf' && (state.screenId === 'novel' || state.screenId === 'manga') && state.shelfSearchMode === 'idle' && !isReduceMotion()) {
-        window.closeBookToShelf(state.screenId);
-        return;
-      }
       window.setScreen(fallbackScreen, { pushHistory: false, isBack: true });
     };
     window.setScreen = (id, opts = {}) => {
       const prev = state.screenId;
+      const closingBook = id === 'bookshelf' && (prev === 'novel' || prev === 'manga');
       state.activeModal = '';
       state.activeSourceSwitch = false;
       state.detailMoreOpen = false;
@@ -8314,7 +8236,7 @@
 
       if (opts.resetStack) {
         state.navStack = [];
-      } else if (opts.pushHistory !== false && prev && prev !== id) {
+      } else if (!closingBook && opts.pushHistory !== false && prev && prev !== id) {
         if (['detail', 'directory', 'novel', 'manga'].includes(id) && Array.isArray(state.navStack)) {
           const cycleIdx = state.navStack.findIndex(e => e.screenId === id);
           if (cycleIdx >= 0) {
@@ -8330,13 +8252,7 @@
       if (prev === 'sources' && (id !== prev || opts.resetStack)) clearSourcePageWork();
       if (id === 'sources') state.sourcePageSub = opts.sourcePageSub || (opts.keepSubState ? state.sourcePageSub : 'list');
       if (opts.downloadSub) state.downloadSub = opts.downloadSub;
-      if (id === 'bookshelf' && !opts.keepSubState && (prev === 'novel' || prev === 'manga') && !isReduceMotion()) {
-        window.closeBookToShelf(prev);
-        return;
-      }
-      bookOpenGeneration += 1;
-      clearTimeout(bookOpenCleanupTimer);
-      state.bookOpenActor = null;
+      if (closingBook) resetShelfReaderControls(prev);
       if (id === 'modals' && prev && prev !== 'modals') state.modalReturnScreen = prev;
       if (id === 'sourceSwitch' && prev && prev !== 'sourceSwitch') state.sourceSwitchReturnScreen = prev;
       if (prev !== id && !opts.keepSubState) state.shelfSearchMode = 'idle';
@@ -8349,7 +8265,7 @@
         state.screenTransition = 'none';
         state.widePaneAnim = pickMotionTransition(opts.isBack ? 'pop' : 'tab');
       } else {
-        state.screenTransition = resolveScreenTransition(prev, id, opts);
+        state.screenTransition = resolveScreenTransition(prev, id, closingBook ? { ...opts, isBack: true } : opts);
       }
       state.screenId = id;
       state.activeTab = 'screens';
@@ -8366,165 +8282,22 @@
       if (tabId === 'settings' && state.screenId !== 'settings') state.settingsSub = 'home';
       setScreen(tabId, { resetStack: true });
     };
-    window.openBookFromShelf = (bookId, target, evt) => {
-      selectActiveBook(bookId);
-      state.activeModal = '';
-      state.activeSourceSwitch = false;
-      state.detailMoreOpen = false;
-      state.navStack = [];
-      pushNavSnapshot();
-      const gen = ++bookOpenGeneration;
-      clearTimeout(bookOpenCleanupTimer);
-      state.bookOpenActor = null;
-      const fromContinue = Boolean(evt && evt.currentTarget && typeof evt.currentTarget.hasAttribute === 'function' && evt.currentTarget.hasAttribute('data-continue-card'));
-      if (!isReduceMotion() && evt && evt.currentTarget && typeof evt.currentTarget.querySelector === 'function') {
-        const coverEl = evt.currentTarget.querySelector('[data-book-cover]');
-        const stageEl = document.getElementById('device-screen-stage');
-        if (coverEl && stageEl && typeof coverEl.getBoundingClientRect === 'function' && typeof stageEl.getBoundingClientRect === 'function') {
-          const cr = coverEl.getBoundingClientRect();
-          const sr = stageEl.getBoundingClientRect();
-          if (cr.width > 0 && cr.height > 0 && sr.width > 0 && sr.height > 0 &&
-              cr.right > sr.left && cr.left < sr.right && cr.bottom > sr.top && cr.top < sr.bottom) {
-            const info = getActiveBook(target);
-            const ox = +(cr.left - sr.left).toFixed(1);
-            const oy = +(cr.top - sr.top).toFixed(1);
-            const sx = +(cr.width / sr.width).toFixed(4);
-            const sy = +(cr.height / sr.height).toFixed(4);
-            const shelfHtml = renderScreenBookshelf();
-            state.lastOpenedBook = { bookId, target, device: state.device, ox, oy, sx, sy, source: fromContinue ? 'continue' : 'list' };
-            state.bookOpenActor = {
-              title: info.displayTitle,
-              type: info.type,
-              tone: info.tone,
-              noCover: info.noCover,
-              ox,
-              oy,
-              sx,
-              sy,
-              shelfHtml,
-              gen,
-            };
-            if (target === 'novel') {
-              state.novelCtrlMode = 'hidden';
-              state.novelSheet = 'none';
-            } else if (target === 'manga') {
-              state.mangaCtrlMode = 'hidden';
-              state.mangaSub = 'controls';
-            }
-            state.shelfSearchMode = 'idle';
-            state.screenTransition = 'bookOpen';
-            state.screenId = target;
-            state.activeTab = 'screens';
-            render();
-            const timeoutMs = Math.round((MOTION_SPEC.bookOpenMs + 20) * (state.motionSlow ? 2.5 : 1));
-            bookOpenCleanupTimer = setTimeout(() => {
-              if (gen !== bookOpenGeneration) return;
-              state.bookOpenActor = null;
-              const el = document.getElementById('book-open-actor');
-              if (el && typeof el.remove === 'function') el.remove();
-              const bd = document.getElementById('book-open-backdrop');
-              if (bd && typeof bd.remove === 'function') bd.remove();
-              const contentEl = document.getElementById('device-screen-content');
-              if (contentEl) {
-                if (contentEl.classList && typeof contentEl.classList.remove === 'function') {
-                  contentEl.classList.remove('anim-book-open-reader');
-                }
-                if (contentEl.style) {
-                  contentEl.style.zIndex = '';
-                  contentEl.style.boxShadow = '';
-                }
-              }
-            }, timeoutMs);
-            return;
-          }
-        }
-      }
-      setScreen(target);
-    };
-    window.closeBookToShelf = (fromScreen) => {
-      state.activeModal = '';
-      state.activeSourceSwitch = false;
-      state.detailMoreOpen = false;
-      if (isReduceMotion()) {
-        bookOpenGeneration += 1;
-        clearTimeout(bookOpenCleanupTimer);
-        state.bookOpenActor = null;
-        state.screenTransition = 'reduced';
-        state.screenId = 'bookshelf';
-        state.activeTab = 'screens';
-        render();
-        return;
-      }
-      const gen = ++bookOpenGeneration;
-      clearTimeout(bookOpenCleanupTimer);
-      const srcScreen = fromScreen || state.screenId;
-      const activeBookId = state.currentBookId || (srcScreen === 'manga' ? 'b2' : 'b1');
-      const saved = (state.lastOpenedBook && state.lastOpenedBook.target === srcScreen && state.lastOpenedBook.device === state.device && state.lastOpenedBook.bookId === activeBookId)
-        ? state.lastOpenedBook
-        : null;
-      const bookId = activeBookId;
-      if (bookId !== state.currentBookId) selectActiveBook(bookId);
-      const info = getActiveBook(srcScreen);
-      const fallbackGeom = state.device === 'tablet'
-        ? { ox: 34, oy: 112, sx: 0.0692, sy: 0.1391 }
-        : { ox: 30, oy: 112, sx: 0.1392, sy: 0.0971 };
-      const geom = saved || fallbackGeom;
-      if (srcScreen === 'novel') {
+    function resetShelfReaderControls(target) {
+      if (target === 'novel') {
         state.novelCtrlMode = 'hidden';
         state.novelSheet = 'none';
         state.novelTopMenuOpen = false;
-      } else if (srcScreen === 'manga') {
+      } else if (target === 'manga') {
         state.mangaCtrlMode = 'hidden';
         state.mangaSub = 'controls';
       }
-      const readerHtml = renderActiveScreen();
-      state.bookOpenActor = {
-        title: info.displayTitle,
-        type: info.type,
-        tone: info.tone,
-        noCover: info.noCover,
-        ox: geom.ox,
-        oy: geom.oy,
-        sx: geom.sx,
-        sy: geom.sy,
-        readerHtml,
-        gen,
-      };
-      state.shelfSearchMode = 'idle';
-      state.screenTransition = 'bookClose';
-      state.screenId = 'bookshelf';
-      state.activeTab = 'screens';
-      render();
-      const stageEl = document.getElementById('device-screen-stage');
-      const actorEl = document.getElementById('book-open-actor');
-      if (stageEl && actorEl && typeof stageEl.querySelector === 'function') {
-        const prefScope = (saved && saved.source === 'continue')
-          ? stageEl.querySelector('[data-continue-card]')
-          : stageEl.querySelector('[data-shelf-main-list]');
-        const coverEl = (prefScope && typeof prefScope.querySelector === 'function' ? prefScope.querySelector(`[data-book-cover="${bookId}"]`) : null)
-          || stageEl.querySelector(`[data-book-cover="${bookId}"]`);
-        if (coverEl && typeof coverEl.getBoundingClientRect === 'function' && typeof stageEl.getBoundingClientRect === 'function') {
-          const cr = coverEl.getBoundingClientRect();
-          const sr = stageEl.getBoundingClientRect();
-          if (cr.width > 0 && cr.height > 0 && sr.width > 0 && sr.height > 0 && cr.bottom > sr.top && cr.top < sr.bottom) {
-            actorEl.style.setProperty('--rd-ox', `${+(cr.left - sr.left).toFixed(1)}px`);
-            actorEl.style.setProperty('--rd-oy', `${+(cr.top - sr.top).toFixed(1)}px`);
-            actorEl.style.setProperty('--rd-sx', `${+(cr.width / sr.width).toFixed(4)}`);
-            actorEl.style.setProperty('--rd-sy', `${+(cr.height / sr.height).toFixed(4)}`);
-          }
-        }
-      }
-      const timeoutMs = Math.round((MOTION_SPEC.bookCloseMs + 20) * (state.motionSlow ? 2.5 : 1));
-      bookOpenCleanupTimer = setTimeout(() => {
-        if (gen !== bookOpenGeneration) return;
-        state.bookOpenActor = null;
-        const el = document.getElementById('book-open-actor');
-        if (el && typeof el.remove === 'function') el.remove();
-        const contentEl = document.getElementById('device-screen-content');
-        if (contentEl && contentEl.classList && typeof contentEl.classList.remove === 'function') {
-          contentEl.classList.remove('anim-book-close-shelf');
-        }
-      }, timeoutMs);
+    }
+
+    window.openBookFromShelf = (bookId, target) => {
+      selectActiveBook(bookId);
+      resetShelfReaderControls(target);
+      state.navStack = [];
+      setScreen(target);
     };
     window.setShelfMode = (mode) => {
       if (mode === state.shelfMode) return;

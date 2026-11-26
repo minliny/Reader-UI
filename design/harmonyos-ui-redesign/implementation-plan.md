@@ -11,7 +11,7 @@
 
 - **冻结交互参考稿**：[reader-harmonyos-ui-redesign.html](./reader-harmonyos-ui-redesign.html)（含 11 个完整页面、Phone/Tablet 双形态、日夜双主题、27 核心色彩角色、8 种阅读纸底、5 级动效实验室；已通过 `selectActiveBook` 与 `setAppTheme` 单源收口）。
 - **设计令牌与契约仓**：`Reader-UI`（主色表源 [registry.json](../../theme/registry.json)，基准 `main@1985e6e`，颜色校验见 [check-theme.test.mjs](../../scripts/check-theme.test.mjs) 与 [validate.py](../../tools/validate.py)）。
-- **HarmonyOS 工程仓**：`Reader-for-HarmonyOS`（基准 `main@ffe66a30`）。开工前先核对 `Reader-UI` 与 `Reader-for-HarmonyOS` 均处于干净工作树；若到时仍存在其他并行任务的未提交改动，必须原样保留，不得回退或覆盖无关文件。
+- **HarmonyOS 工程仓**：`Reader-for-HarmonyOS`（初始基准 `main@ffe66a30`，书源管理 v9 与开合书转场收口以 `276d41ee` 为准）。开工前先核对 `Reader-UI` 与 `Reader-for-HarmonyOS` 均处于干净工作树；若到时仍存在其他并行任务的未提交改动，必须原样保留，不得回退或覆盖无关文件。
 
 ### 1.2 五条工程硬红线（贯穿全部分期）
 
@@ -29,7 +29,7 @@
    - 普通短反馈统一走 `ReaderTransientFeedback` → `ReaderTransientToast`（2000ms / 同宿主同 key 去重，退入后台或被覆盖页遮挡时显式停用 `feedbackEnabled`）；未确认原写入继续使用 `ReaderRecoveryNotice` / `ReaderRecoveryGroup` 独立悬浮恢复表面并保留原操作 `generation`。
    - 页面禁止直接调用系统 `showToast` / `showAlertDialog`；所有新增、调整的消息入口须同步更新 [message-entrypoints.json](../../../Reader-for-HarmonyOS/tools/message-entrypoints.json) 并通过 `node tools/check-message-entrypoints.mjs --check`。
 5. **范围守卫**
-   - 本次 UI 重构仅作用于现役开放产品面：**书架、全局搜索、书籍详情、完整目录、小说阅读器、漫画阅读器、换源浮层、书源管理与工具箱、下载管理、通用/书架设置及宽屏分栏壳、公共控件与弹窗/反馈**。
+   - 本次 UI 重构仅作用于现役开放产品面：**书架、全局搜索、书籍详情、完整目录、小说阅读器、漫画阅读器、换源浮层、书源管理 v9、下载管理、通用/书架设置及宽屏分栏壳、公共控件与弹窗/反馈**。
    - RSS、发现、同步及未开放设置继续保持既有关闭/保留边界，不得因 UI 重构开放未完成能力或改变现有功能开关。
 
 ### 1.3 Git 分支隔离与按 Wave 原子提交规范
@@ -62,10 +62,10 @@ flowchart LR
 | Wave | 核心目标 | 主要涉及仓库/目录 | 退出判据 | 对应验证入口 |
 | --- | --- | --- | --- | --- |
 | **Wave A** | 上线「墨纸青松 2.0」27 语义角色、8 纸张与 8% 中性墨色按压反馈 | `Reader-UI/theme`、`ui/foundation`、`ui/surfaces` | `registry.json` 全量生成一致；控制岛/下载/TTS 不再分裂出孤立亮橙/蓝青主题；夜间图标对比达标 | `generate-theme-registry.mjs --check`、`generate-theme-icons.mjs --check`、`check-theme.test.mjs`、`validate.py --checks colors` |
-| **Wave B** | 收敛五级动效时序；修复返回层级栈与转场方向语义 | `ui/foundation`（Motion）、`app/navigation`、`pages/Index.ets`、`BookshelfNavigationTransition.ets`、`ReaderSessionLaunchPresentation.ts` | Push 右→左 / Pop 左→右 / Tab 180ms 淡切清晰；深层多跳逐级退回；开书 `400/340ms`、胶囊 `380ms` 利索飞展同步起播、统一静纸柔墨克制曲线；减动效 120ms 轻淡入替代 0ms 硬切；仅手势/ Hero 飞跃保留帧驱动 | `gate-index-impact.mjs` 命中的 motion / navigation 相关精确 case |
+| **Wave B** | 收敛五级动效时序，明确返回层级与转场方向 | `ui/foundation`（Motion）、`app/navigation`（`ReaderRouteStackSurface.ets`、`ReaderRouteMotion.ets`）、`pages/Index.ets`、`ReaderSessionLaunchPresentation.ts` | 开合书纳入原生路由 Push `260ms` 右→左 / Pop `240ms` 左→右，减动效 `120ms` 轻淡入。Tab `180ms` 淡切，深层多跳逐级退回，播放胶囊 `380ms` 飞展并同步起播。 | `gate-index-impact.mjs` 命中的 motion / navigation 相关精确 case |
 | **Wave C** | 对齐公共顶栏/底栏、断点自适应、基础控件变体与消息视觉 | `ui/chrome`、`ui/patterns`、`ui/controls`、`ui/feedback` | `< 600vp` / `>= 600vp` 统一收口；Buttons/Toggle/Search/Select/Dialog/Toast 视觉一致且不破坏准入谓词与无障碍命中 | `check-message-entrypoints.mjs --check`、`check-header-geometry.mjs`（按需） |
 | **Wave D** | 重构书架、搜索、详情、目录与换源浮层交互与布局 | `features/bookshelf`、`features/search`、`features/reading`（Detail/Directory）、`features/source`（Switch） | 作者与章节分行；详情换源/更多/6章滑窗；目录底栏跳转；换源活页底页轻模糊+分批增量重查不断焦点；多选按可见筛选限域 | `gate-index.mjs` 点名 bookshelf / search / directory / source-switch 相关 case |
-| **Wave E** | 重构小说/漫画阅读、书源工具、下载管理与设置宽屏壳 | `features/reading`（Novel）、`features/manga`、`features/source`（Manage/Tools）、`features/downloads`、`features/settings` | 小说移除右上角常驻呼出钮并保留原版 24vp 轻陶纸播放胶囊（仅主色换松绿）；漫/小日夜底色经 `ReaderThemeHost` 双向联动；下载/书源筛选批操作限域；设置清缓存与完整恢复默认落地 | `gate-index.mjs` 点名 reading / manga / download / source / settings 相关 case |
+| **Wave E** | 重构小说/漫画阅读、书源管理 v9、下载管理与设置宽屏壳 | `features/reading`（Novel）、`features/manga`、`features/source`、`features/downloads`、`features/settings` | 小说移除右上角常驻呼出钮并保留原版 24vp 轻陶纸播放胶囊（仅主色换松绿）；漫/小日夜底色经 `ReaderThemeHost` 双向联动；下载/书源筛选批操作限域；设置清缓存与完整恢复默认落地 | `gate-index.mjs` 点名 reading / manga / download / source / settings 相关 case |
 | **Wave F** | 全链路变更影响扫描、精确门禁复核与迭代 HAP 构建 | 全部改动集合、`scripts/hap-pipeline.mjs` | 全部直接影响门禁点名 PASS；`hap-pipeline.mjs build --class iteration` 出包并核对 `minliny_HarmonyOS` / `io.reader.minliny`；未授权真机/VM 项诚实记 `NOT_RUN` | `gate-index-impact.mjs`、`ui-contract/cli.mjs`、`hap-pipeline.mjs build --class iteration` |
 
 ---
@@ -140,17 +140,18 @@ flowchart LR
 | **M1 微交互** | 按钮/列表按压、Switch、Segmented 滑移、控制栏加书签、状态微动效 | 12% 亮橙突变叠加 | `140ms`（按压）/ `220ms`（底栏胶囊过冲 `≤1.05`）/ 定宽加签 `240ms` 自顶浸色与 `160ms` 去签收退；循环波形与呼吸点在后台/锁屏/遮挡/暂停即停 | `cubic(0.2, 0, 0, 1)` / 克制微扣 | `AttributeModifier` / `animateTo` |
 | **M2 下拉折叠** | 书源分组下拉、书架筛选条、目录折叠 | 局部手写 VSync | 下拉 `160ms / 120ms`；筛选 `220ms / 180ms` | 展开 `cubic(0.16,1,0.3,1)` | ArkUI 原生 `animateTo` |
 | **M2 浮层抽屉** | Toast、Popover、Modal、底部/右侧 Sheet | 漫画/换源/小说参数不一致 | Modal `220ms`、Toast `220ms`、Sheet 打开 **`260ms` / 关闭 `210ms`**（微阻尼无晃动，遮罩 `160ms`；换源列表禁逐行延迟飞入） | 统一克制弹簧 + `TransitionEffect` | ArkUI 原生合成器 |
-| **M3 路由变形** | 一级 Tab、Push/Pop、搜索、书架切换 | 书架 `1000ms`、搜索 `650/700ms`、路由 0ms 硬切 | Tab `180ms`；Push `260ms`（底页微视差 `-16%` + 轻压暗 `4%`）/ Pop `240ms`（支持侧滑 `1:1` 中断）；搜索 **`260/240/200ms`**；书架重排 `320ms`（仅首屏前 6–9 本 `24ms` 错峰、封顶 `120ms`，视口外同步落位） | `cubic(0.2, 0, 0, 1)` | `Navigation` + `NavPathStack` + 共享悬浮顶栏 |
-| **M4 物理连续** | 控制栏拖拽、翻页结算、封面 3D 开书、朗读胶囊、沉浸下拉书签、漫画章末上拉 | 开书 `780ms` 串行、胶囊 `3500ms`、书签 `16vp` 暗触发、漫画静态 `↑` | 控制栏 `220/200ms`（子面板左右横推 `240ms` / 总控纵抬 `220ms`）；封面并行开书 **`400ms` / 合书 `340ms`**；胶囊 **`380ms`** 利索飞展并 `t=0ms` 同步起播；纸顶丝带阻尼（`~86vp/46vp`）+ `280–300ms` 回位；漫画章末阻尼 + 矢量箭头 `160ms` 翻转 | 连续可逆时间轴 + 实测起点几何 | **仅此类**保留帧驱动（`FrameCallback`）+ 纯 TS 状态机 + 代际守卫 |
-| **Reduce Motion** | 全局「减少动态效果」开启时 | 各处粗暴压为 `0ms` 闪烁硬切 | 统一 **`120ms` 轻淡入**（去除位移、缩放与封面/胶囊飞行） | `ease-out` | `ReaderMotionPolicy.ets` 单源分支 |
+| **M3 路由变形** | 一级 Tab、Push/Pop（含开合书）、搜索、书架切换 | 书架 `1000ms`、搜索 `650/700ms`、路由 0ms 硬切 | Tab `180ms`，Push `260ms`（底页微视差 `-16%` + 轻压暗 `4%`）/ Pop `240ms`（支持侧滑 `1:1` 中断），搜索 **`260/240/200ms`**，书架重排 `320ms`（仅首屏前 6–9 本 `24ms` 错峰、封顶 `120ms`，视口外同步落位） | `cubic(0.2, 0, 0, 1)` | `Navigation` + `NavPathStack` + 共享悬浮顶栏 |
+| **M4 物理连续** | 控制栏拖拽、翻页结算、播放胶囊、沉浸下拉书签、漫画章末上拉 | 旧封面 3D 开合 `400/340ms`、胶囊 `3500ms`、书签 `16vp` 暗触发、漫画静态 `↑` | 开合书已归入 M3 原生路由。控制栏 `220/200ms`（子面板左右横推 `240ms` / 总控纵抬 `220ms`），胶囊 `380ms` 飞展并 `t=0ms` 同步起播，纸顶丝带阻尼（`~86vp/46vp`）+ `280–300ms` 回位，漫画章末阻尼 + 矢量箭头 `160ms` 翻转 | 连续可逆时间轴 + 实测起点几何 | **仅此类**保留帧驱动（`FrameCallback`）+ 纯 TS 状态机 + 代际守卫 |
+| **Reduce Motion** | 全局「减少动态效果」开启时 | 各处粗暴压为 `0ms` 闪烁硬切 | 统一 **`120ms` 轻淡入**（去除位移、缩放与播放胶囊飞行） | `ease-out` | `ReaderMotionPolicy.ets` 单源分支 |
 
 ### 4.2 路由栈、转场方向与覆盖层策略
 
 - **主导航与推栈分离**（[Index.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/pages/Index.ets)、[ReaderNavigation.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/app/navigation/ReaderNavigation.ts)、[ReaderMainTabs.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/app/navigation/ReaderMainTabs.ts)）：
   - **一级 Tab（书架 ↔ 设置）**：同级横向轻切换 `180ms` + 底栏胶囊 `220ms` 弹性滑移，切换时重置二级栈。
   - **二级及更深层级（Push / Pop）**：
-    - 前进（`书架 → 搜索 → 详情 → 目录 → 阅读` 或 `设置 → 书源 → 工具箱`）：新页从右往左推入（`260ms`）。
+    - 前进（`书架 → 搜索 → 详情 → 目录 → 阅读` 或 `设置 → 书源管理 → 分组管理`）时，新页从右往左推入（`260ms`）。
     - 返回（逐级 `navBack` / 手势返回 / 独立预览页关闭 `isBack: true`）：当前页从左往右退出（`240ms`），弹出并恢复上一级页面滚动与筛选子状态，**严禁跳级直退回起点**。
+    - 开合书共用原生 `Navigation` / `NavPathStack` 的 Push `260ms` / Pop `240ms`，减动效时使用 `120ms` 轻淡入。原 `BookshelfNavigationTransition.ets` 的封面 3D 开合 `400/340ms` 已退役。
     - 平板宽屏设置左栏切换（通用 / 书源 / 书架 / 下载）：保持左侧导航壳静止，仅右侧独立内容面板做 `180ms` 切换，同时清理无效子页临时返回栈（若处于外部子栈如阅读器进入的下载，则保留外部返回按钮）。
 - **浮层覆盖原则**：
   - 换源（`SourceSwitchWindow`）、全局搜索遮罩、底部操作单与确认弹框全部渲染在当前活跃页面上层（叠加 `backdropBlur` 轻度模糊），**禁止替换底层画面**；关闭后无页面重载与转场抖动，仅在首开时播放 M2 浮层动效，弹窗内局部勾选重绘禁止重放进场动画。
@@ -159,18 +160,18 @@ flowchart LR
   - [ProductMotionTiming.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/ui/foundation/ProductMotionTiming.ts)
   - [ReaderMotionPolicy.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/ui/foundation/ReaderMotionPolicy.ets)
   - [ReaderMotionDurationPolicy.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/ui/foundation/ReaderMotionDurationPolicy.ts)
-  - [BookshelfNavigationTransition.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/bookshelf/ui/BookshelfNavigationTransition.ets)
+  - [ReaderRouteStackSurface.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/app/navigation/ReaderRouteStackSurface.ets) 与 [ReaderRouteMotion.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/app/navigation/ReaderRouteMotion.ets)
   - [ReaderSessionLaunchPresentation.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/reading/ui/ReaderSessionLaunchPresentation.ts)
   - [ReaderNavigation.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/app/navigation/ReaderNavigation.ts) & [Index.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/pages/Index.ets)
 
 > [!CAUTION]
-> 修改 `ReaderMotionPolicy.ets` / `ProductMotionTiming.ts` / `BookshelfNavigationTransition.ets` 前，务必先执行 `node tools/gate-index-impact.mjs --affected <路径>`；因为部分 `Phase 1` 已审用例绑定了控制栏展开与书架封面动画的精确认定参数，不得破坏已有帧驱动代际守卫。
+> 修改 `ReaderMotionPolicy.ets`、`ProductMotionTiming.ts` 或现役路由转场文件前，先执行 `node tools/gate-index-impact.mjs --affected <路径>`，按命中结果点名核对路由和控制栏动效。
 
 ### 4.3 全站设计语言统一基线（静纸柔墨 · Calm Paper & Ink）
 
 - **色彩明确分工**：全站交互主色统一深松绿（日 `#1F3D31` / 夜 `#7BB094`）；古铜琥珀（`#B86B2B` / `#D99452`）严格收敛于**阅读进度、在读定位条与书签印记**；彻底清退旧蓝青（`#2379A4` / `#2F6373`）与高饱和亮橙按压（`#F48B13`）。
 - **几何与图标同源**：悬浮顶底栏全胶囊化、内容载体为 `12–16vp` 陶纸圆角卡、抽屉固定 `24vp` 上圆角；全应用统一轻量圆头矢量线稿图标，**严禁混用裸 Unicode 字符箭头（如 `↓`、`↑`）或高饱和彩色 emoji 徽章**。
-- **克制动效性格**：路由切换与面板展开坚持**无过冲精准停稳**（`cubic(0.2, 0, 0, 1)`）；底栏胶囊与书签丝带等微弹性过冲严格封顶 **`≤ 1.05`**，禁止社交 App 式大弹跳或扩散圆环光晕；**关闭一律快于打开 15–25%**（如 Sheet `260 / 210ms`、搜索 `260 / 200ms`、合书 `340 / 400ms`）；全局「减少动态效果」统一收口为 `120ms` 轻淡入。
+- **克制动效性格**。路由切换与面板展开沿用无过冲的 `cubic(0.2, 0, 0, 1)` 曲线。底栏胶囊与书签丝带等微弹性过冲封顶 **`≤ 1.05`**。Sheet 打开/关闭为 `260/210ms`，搜索为 `260/200ms`，开合书随原生路由使用 `260/240ms`。全局「减少动态效果」统一采用 `120ms` 轻淡入。
 - **视觉休眠与节能**：朗读微波形、自动翻页呼吸点与测速旋转动画仅在**活跃可见前台**运行；切后台、锁屏、被抽屉遮挡或处于暂停态时立即停止周期驱动。
 
 ---
@@ -201,7 +202,7 @@ flowchart LR
   2. **双栏自适应**：Phone 列表单列 / 网格 3 列；Tablet 列表 2 列卡片网格 / 封面 4 列网格；宽屏「继续阅读」卡片保持紧凑展示。
   3. **筛选与多选作用域隔离**：进入多选（`BookshelfMultiSelectPage`）或打开移除/分组弹窗时，所有计数、全选/取消全选与确认提交均严格限定于当前可见筛选后的书籍集合，禁止误删被类型/来源过滤隐藏的书籍。
   4. **筛选零结果空态**：当书架有藏书但筛选组合命中 0 本时，空态引导卡除「搜索书籍 / 本地导入」外，增加一键「重置筛选」动作。
-  5. **封面 3D 开闭与单书操作态隔离**：退回书架时必须校验封面起飞/落回几何与当前活跃 `bookId`、视口形态一致；关闭或取消单书 `⋮` 菜单后清理临时选中书目标识，防止串味到下一本书的详情/分组弹窗。
+  5. **开合书转场与单书操作态隔离**。开合书采用原生路由 Push `260ms` / Pop `240ms`，减动效使用 `120ms` 轻淡入。返回书架时恢复上一级的滚动与筛选状态。关闭或取消单书 `⋮` 菜单时清理临时选中书目标识，确保下次详情或分组操作绑定当前书。
 
 ### 6.2 搜索（Search）
 - **涉及文件**：[SearchPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/search/ui/SearchPage.ets)、[ReaderLibrarySearchSurface.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/search/ui/ReaderLibrarySearchSurface.ets)、[LibrarySearchResults.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/search/ui/LibrarySearchResults.ets)、[ReaderSearchFilterPanel.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/search/ui/ReaderSearchFilterPanel.ets)、[ReaderSearchHistoryPanel.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/search/ui/ReaderSearchHistoryPanel.ets)。
@@ -247,11 +248,15 @@ flowchart LR
   2. 章末上拉 / 点击条从真实章节目录动态读取下一话名称；已读至最后一话时提示「已读至最新一话 · 返回继续」并提供安全回退。同步升级 [MangaBoundaryTurnFeedback.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/manga/ui/MangaBoundaryTurnFeedback.ets) 去掉静态纯文本 `↑`，改为与纸顶丝带同源的橡皮筋上拉渐显 + 矢量箭头过阈 `160ms` 平滑翻转 `180°`（配单次轻触觉）与柔和回弹。
   3. 页面滑块与左下角常驻页码徽标实时联动，Tablet 目录抽屉采用右侧全高滑出且与正倒序/搜索/在读定位配合完整。
 
-### 7.3 书源管理与工具箱（Sources & Source Tools）
-- **涉及文件**：[SourceManagementPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceManagementPage.ets)、[SourceToolsPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceToolsPage.ets)、[SourceJourneySurface.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceJourneySurface.ets)、[JsonImportDialog.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/app/composition/JsonImportDialog.ets)。
-- **关键改造**：
-  1. 列表页顶部单行「搜索框 + 分组菜单」，配合状态（全部/已启用/异常/未测速）与内容类型（全部/小说/漫画）快捷胶囊筛选。
-  2. 书源工具箱批处理（全选/取消全选、测速、启用、停用、导出、删除）严格限定在当前搜索过滤后的可见列表；输入筛选词实时更新已选数与全选文案；「导出全部书源」使用真实数据源总数而非写死占位数字；空结果提示确保安全文本渲染与筛选重置引导。
+### 7.3 书源管理 v9
+
+- 六页体系由五个管理页与书源登录页组成。[SourceJourneySurface.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceJourneySurface.ets) 编排管理页并接入登录动作。[SourceManagementPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceManagementPage.ets) 承载列表与多选，[SourceV9TransferPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceV9TransferPage.ets) 承载导入与订阅，[SourceV9GroupsPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceV9GroupsPage.ets) 承载分组总览与详情，[ArkWebExecutionHost.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/ui/platform/ArkWebExecutionHost.ets) 承载书源登录。[SourceV9Chrome.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceV9Chrome.ets) 提供共用操作控件，[SourceV9CheckDialog.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/source/ui/SourceV9CheckDialog.ets) 提供检测与报告入口。
+- **标准顶栏与更多菜单**。书源管理、导入书源、书源订阅、分组总览及详情五页共用 `ReaderPageScaffold` 与 `PageBackBar({ floating: true, centered: true, elevation: 'floating' })`，采用雾面悬浮居中胶囊。平板内嵌列表保留空左槽以保持标题居中，多选态以中性色「取消」、居中「已选 N 项」、主色「全选 / 取消全选」排布。分组详情为窄屏标题保留空间，右侧按分组显示「添加」或「批量归组」。列表右上角水平 `···` 通过 `ReaderActionMenuSurface` 显示四项带图标菜单，依次为书源订阅、分组管理、批量检测、导出全部书源。搜索、分组、状态和类型筛选共同限定可见结果与批处理范围。「导出全部书源」使用实际可导出的全量书源。
+- **五级分层检测**。单源、批量、整组与导入前检测共用 L1 规则校验、L2 搜索 / 发现、L3 书籍详情、L4 目录、L5 正文的报告结构。支持搜索或发现模式、搜索测试词及 L2 / L4 / L5 深度。结果采用矿物色分层，彩色波形配对应淡底，未检测态采用中性底色。批量报告可下钻单源重测并回写原结果与计数。
+- **三步导入**。第一步从本地文件、在线链接或粘贴 JSON 读取。第二步静态过滤不支持的类型，支持导入前预检、勾选及保留原分组、补全未分组或统一归入。第三步显示新增、更新及结果操作，仅在 `unsupportedCount > 0` 时显示「已自动过滤不支持 N 项」。第二步返回来源选择，第一步和第三步返回书源列表。
+- **书源订阅**。检查后预览差异，逐项选择冲突覆盖或保留本地，并据此计算应用数量。关闭「自动检查更新」后仍可在订阅条目上手动点击「检查更新」。
+- **两级分组管理**。总览和详情覆盖新建、重命名、删除、添加、归组五类弹窗，并支持移出成员、整组启停和检测。新建与重命名在表单行内反馈空名、超过 32 字、重名及系统保留名 `全部分组` / `未分组`，重命名时以当前分组为校验排除项。
+- **书源登录**。有会话时使用浏览器式顶底栏。顶栏为「取消」、居中的书源名与登录 / 验证状态、锁图标与域名及「完成」。底栏以图标和文字显示后退、前进、刷新 / 停止加载、清除登录态。加载中可立即停止，也可点击「完成」。清除会话时同步清除旧检测报告，并按实际结果反馈。
 
 ### 7.4 下载管理（Downloads）
 - **涉及文件**：[SharedDownloadPage.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/downloads/ui/SharedDownloadPage.ets)、[SharedDownloadScene.ets](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/downloads/ui/SharedDownloadScene.ets)、[SharedDownloadVisualSpec.ts](../../../Reader-for-HarmonyOS/entry/src/main/ets/features/downloads/ui/SharedDownloadVisualSpec.ts)。
