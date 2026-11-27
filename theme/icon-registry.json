@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "harmonyCommit": "4acfefc1a71f62572f653cc9a5e79162a2d347f9",
+  "icons": {
+    "back": { "android": "AutoMirrored.Outlined.ArrowBack", "ios": "chevron.backward" },
+    "shelf": { "android": "Outlined.Book", "ios": "books.vertical" },
+    "add": { "android": "Outlined.Add", "ios": "plus" },
+    "more": { "android": "Outlined.MoreHoriz", "ios": "ellipsis" },
+    "settings": { "android": "Outlined.Settings", "ios": "gearshape" },
+    "close": { "android": "Outlined.Close", "ios": "xmark" },
+    "directory": { "android": "Outlined.List", "ios": "list.bullet" },
+    "bookmark": { "android": "Outlined.BookmarkBorder", "ios": "bookmark" },
+    "savedBookmark": { "android": "Filled.Bookmark", "ios": "bookmark.fill" },
+    "previousChapter": { "android": "AutoMirrored.Outlined.KeyboardArrowLeft", "ios": "chevron.backward" },
+    "nextChapter": { "android": "AutoMirrored.Outlined.KeyboardArrowRight", "ios": "chevron.forward" },
+    "readingAppearance": { "android": "Outlined.TextFields", "ios": "textformat.size" },
+    "readerControlHeaderChevron": { "asset": "reader_control_header_chevron.svg", "tintRole": "app.icon.reader_control_header_chevron.2F6373" },
+    "settingsNavigation": { "asset": "settings_gen_navigation.svg", "tintRole": "app.icon.settings_gen_navigation.2D4A3E" }
+  }
+}
