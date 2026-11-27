@@ -1,6 +1,6 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-m1-ui.mjs
-// Input: theme/design-metrics.json  ee9faa0aed4f7daab49744cacb248ebd1ecbc5c244bc553be95423990d5dbbfd
+// Input: theme/design-metrics.json  aef9a0326a1730702c458ddb94e2746928e86fdc9676a64c90bec0aef5afb592
 package com.reader.core.theme
 
 public enum class ReaderTypographyFamily { UI, LITERARY }
@@ -75,6 +75,46 @@ public object ReaderDesignMetrics {
     public const val downloadCoverRadius: Int = 5
     public const val downloadStatusHeight: Int = 28
     public const val downloadChapterRowHeight: Int = 53
+    public const val mangaToolbarMinHeight: Int = 52
+    public const val mangaToolbarTopInset: Int = 10
+    public const val mangaToolbarActionIconSize: Int = 22
+    public const val mangaDockMaxWidth: Int = 560
+    public const val mangaDockSideGutter: Int = 30
+    public const val mangaDockRadius: Int = 24
+    public const val mangaDockFooterMinHeight: Int = 58
+    public const val mangaDockStepIconSize: Int = 20
+    public const val mangaDockPageLabelMinHeight: Int = 16
+    public const val mangaControlIconSize: Int = 14
+    public const val mangaPageBadgeMaxWidth: Int = 230
+    public const val mangaChapterEndMinHeight: Int = 56
+    public const val mangaUnavailableCornerRadius: Int = 4
+    public const val mangaUnknownImageMinHeight: Int = 160
+    public const val mangaUnknownImageMaxHeight: Int = 220
+    public const val mangaUnknownImageHeightToWidth: Double = 0.5
+    public const val ttsCapsuleMinWidth: Int = 94
+    public const val ttsCapsulePaintMinHeight: Int = 24
+    public const val ttsCapsuleControlDiameter: Int = 16
+    public const val ttsCapsuleHeadphonesSize: Int = 11
+    public const val ttsCapsuleTransportIconSize: Int = 8
+    public const val ttsPlaybackMinHeight: Int = 84
+    public const val ttsPlaybackStatusMinHeight: Int = 22
+    public const val ttsPlaybackInlineInset: Int = 10
+    public const val ttsPlaybackBlockInset: Int = 6
+    public const val ttsPlaybackActionGap: Int = 6
+    public const val ttsPlaybackTransportIconSize: Int = 18
+    public const val ttsPlaybackInlineWaveformWidth: Int = 28
+    public const val ttsPlaybackInlineWaveformHeight: Int = 12
+    public const val ttsPlaybackExpandedWaveformHeight: Int = 28
+    public const val ttsWaveformBarCount: Int = 24
+    public const val ttsWaveformBarWidth: Double = 2.5
+    public const val ttsConfigPanelMaxWidth: Int = 364
+    public const val ttsConfigPanelBorderWidth: Double = 0.5
+    public const val ttsConfigManagerCornerRadius: Int = 22
+    public const val ttsConfigManagerHeaderMinHeight: Int = 58
+    public const val ttsConfigManagerFooterMinHeight: Int = 76
+    public const val ttsConfigChoiceVoiceBadgeWidth: Int = 34
+    public const val ttsConfigFormInlinePadding: Int = 18
+    public const val ttsConfigFormSectionGap: Int = 14
     public const val sourceSwitchDrawerRadius: Int = 22
     public const val sourceSwitchDrawerMaxWidth: Int = 390
     public const val sourceSwitchRowHeight: Int = 50
@@ -82,6 +122,13 @@ public object ReaderDesignMetrics {
     public const val sourceSwitchNarrowTimingColumnWidth: Int = 64
     public const val downloadProgressTrackHeight: Int = 3
     public const val downloadProgressTrackRadius: Int = 3
+    public const val mangaDockStepTargetSize: Int = 44
+    public const val mangaDockStepPaintSize: Int = 32
+    public const val mangaControlMinHeight: Int = 44
+    public const val mangaUnavailableIconSize: Int = 32
+    public const val ttsCapsuleMinTargetHeight: Int = 44
+    public const val ttsPlaybackMinActionTarget: Int = 44
+    public const val ttsConfigPickerCornerRadius: Int = 14
     public val appTitle = ReaderTypographyMetric(24.0, 32.0, 700, ReaderTypographyFamily.UI)
     public val pageTitle = ReaderTypographyMetric(17.0, 24.0, 700, ReaderTypographyFamily.UI)
     public val sectionHeading = ReaderTypographyMetric(13.0, 18.0, 500, ReaderTypographyFamily.UI)
@@ -123,4 +170,25 @@ public object ReaderDesignMetrics {
     public val downloadSectionLabel = ReaderTypographyMetric(13.0, 21.0, 400, ReaderTypographyFamily.UI)
     public val downloadSheetTitle = ReaderTypographyMetric(18.0, 26.0, 700, ReaderTypographyFamily.UI)
     public val downloadChapterTitle = ReaderTypographyMetric(12.0, 21.0, 500, ReaderTypographyFamily.UI)
+    public val mangaToolbarTitle = ReaderTypographyMetric(17.0, 25.5, 700, ReaderTypographyFamily.UI)
+    public val mangaToolbarChapter = ReaderTypographyMetric(11.0, 16.5, 400, ReaderTypographyFamily.UI)
+    public val mangaPageIndicator = ReaderTypographyMetric(10.0, 15.0, 400, ReaderTypographyFamily.UI)
+    public val mangaControlSection = ReaderTypographyMetric(13.0, 21.0, 700, ReaderTypographyFamily.UI)
+    public val mangaChapterEndLabel = ReaderTypographyMetric(13.0, 20.0, 500, ReaderTypographyFamily.UI)
+    public val ttsCapsuleLabel = ReaderTypographyMetric(10.0, 12.5, 700, ReaderTypographyFamily.UI)
+    public val ttsPlaybackQuickLabel = ReaderTypographyMetric(13.0, 16.0, 700, ReaderTypographyFamily.UI)
+    public val ttsPlaybackVoice = ReaderTypographyMetric(11.0, 16.0, 500, ReaderTypographyFamily.UI)
+    public val ttsPlaybackStopLabel = ReaderTypographyMetric(11.0, 11.0, 500, ReaderTypographyFamily.UI)
+    public val ttsPlaybackStatus = ReaderTypographyMetric(10.0, 12.0, 400, ReaderTypographyFamily.UI)
+    public val ttsPlaybackPreset = ReaderTypographyMetric(12.0, 12.0, 500, ReaderTypographyFamily.UI)
+    public val ttsConfigPickerTitle = ReaderTypographyMetric(12.0, 18.0, 700, ReaderTypographyFamily.UI)
+    public val ttsConfigManagerTitle = ReaderTypographyMetric(15.0, 22.5, 700, ReaderTypographyFamily.UI)
+    public val ttsConfigChoiceLabel = ReaderTypographyMetric(12.0, 17.0, 500, ReaderTypographyFamily.UI)
+    public val ttsConfigChoiceSelectedLabel = ReaderTypographyMetric(12.0, 17.0, 700, ReaderTypographyFamily.UI)
+    public val ttsConfigVoiceLabel = ReaderTypographyMetric(13.0, 17.0, 500, ReaderTypographyFamily.UI)
+    public val ttsConfigVoiceSelectedLabel = ReaderTypographyMetric(13.0, 17.0, 700, ReaderTypographyFamily.UI)
+    public val ttsConfigVoiceMetadata = ReaderTypographyMetric(10.0, 14.0, 400, ReaderTypographyFamily.UI)
+    public val ttsConfigFieldLabel = ReaderTypographyMetric(11.0, 16.5, 500, ReaderTypographyFamily.UI)
+    public val ttsConfigFieldInput = ReaderTypographyMetric(13.0, 19.5, 400, ReaderTypographyFamily.UI)
+    public val ttsConfigSaveLabel = ReaderTypographyMetric(13.0, 19.5, 700, ReaderTypographyFamily.UI)
 }

@@ -1,6 +1,6 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-m1-ui.mjs
-// Input: theme/icon-registry.json  9ab2d1fc4817be591e444749ef85865491464a948214b6f9a7cf2e6ad642ab94
+// Input: theme/icon-registry.json  09bfc5ea8e27a07a636da6b689eb933f83e48e9e480b1f3812e4cbd9cffd0d53
 package com.reader.core.theme
 
 public data class ReaderIconMapping(
@@ -55,4 +55,26 @@ public object ReaderIconRegistry {
     public val sourceLoginUnknown = ReaderIconMapping(null, "source_v9_question.svg", "app.sourceUi.muted")
     public val sourceLoginSecure = ReaderIconMapping(null, "source_login_lock.svg", "app.sourceUi.muted")
     public val sourceSwitch = ReaderIconMapping(null, "source_switch.svg", "app.icon.rc_switch_horizontal.1F1B17")
+    public val mangaImageUnavailable = ReaderIconMapping(null, "manga_image_unavailable.svg", "TOK_MUTED")
+    public val mangaReadingVertical = ReaderIconMapping(null, "manga_reading_vertical.svg", "TOK_MUTED")
+    public val mangaReadingVerticalSelected = ReaderIconMapping(null, "manga_reading_vertical.svg", "TOK_ON_PRIMARY")
+    public val mangaReadingHorizontal = ReaderIconMapping(null, "manga_reading_horizontal.svg", "TOK_MUTED")
+    public val mangaReadingHorizontalSelected = ReaderIconMapping(null, "manga_reading_horizontal.svg", "TOK_ON_PRIMARY")
+    public val mangaPaper = ReaderIconMapping(null, "manga_paper.svg", "TOK_MUTED")
+    public val mangaPaperSelected = ReaderIconMapping(null, "manga_paper.svg", "TOK_ON_PRIMARY")
+    public val mangaInk = ReaderIconMapping(null, "manga_ink.svg", "TOK_MUTED")
+    public val mangaInkSelected = ReaderIconMapping(null, "manga_ink.svg", "TOK_ON_PRIMARY")
+    public val mangaLocate = ReaderIconMapping(null, "manga_locate.svg", "TOK_PRIMARY_TEXT")
+    public val ttsHeadphones = ReaderIconMapping(null, "tts_headphones.svg", "app.icon.reader_tts_headphones.2F6373")
+    public val ttsCapsulePlay = ReaderIconMapping(null, "tts_capsule_play.svg", "app.icon.reader_session_play.FFFAF4")
+    public val ttsCapsulePause = ReaderIconMapping(null, "tts_capsule_pause.svg", "app.icon.reader_session_pause.FFFAF4")
+    public val ttsPrevious = ReaderIconMapping(null, "tts_previous.svg", "app.icon.reader_tts_make_previous.332C25")
+    public val ttsNext = ReaderIconMapping(null, "tts_next.svg", "app.icon.reader_tts_make_next.332C25")
+    public val ttsPlay = ReaderIconMapping(null, "tts_play.svg", "app.icon.reader_tts_make_play.FFFAF4")
+    public val ttsPause = ReaderIconMapping(null, "tts_pause.svg", "app.icon.reader_tts_make_pause.FFFAF4")
+    public val ttsStop = ReaderIconMapping(null, "tts_stop.svg", "app.icon.reader_tts_make_stop.A8543A")
+    public val ttsTimer = ReaderIconMapping(null, "tts_timer.svg", "app.icon.reader_tts_clock.2F6373")
+    public val ttsRate = ReaderIconMapping(null, "tts_rate.svg", "app.icon.reader_tts_rate.2F6373")
+    public val ttsSystemEngine = ReaderIconMapping(null, "tts_system_engine.svg", "app.icon.reader_tts_system_engine.1F3528")
+    public val ttsOnlineEngine = ReaderIconMapping(null, "tts_online_engine.svg", "app.icon.reader_tts_online_engine.756F69")
 }
