@@ -1,25 +1,33 @@
 {
   "schemaVersion": 1,
-  "harmonyCommit": "4acfefc1a71f62572f653cc9a5e79162a2d347f9",
+  "harmonyCommit": "0f3b468dcf95c3869b7f28f47cf5019a7c26b8ef",
+  "m1HarmonyCommit": "4acfefc1a71f62572f653cc9a5e79162a2d347f9",
   "designInputs": {
     "theme/registry.json": "17339c9c8d876989575894e4a1f3c5a6b229cf72748d6398963c681820bda1df",
-    "theme/design-metrics.json": "625cd2861d568f1f8ebd63c1a58a46cf677d43dbfd8cbcf4b6d71ef33d1502ae",
-    "theme/icon-registry.json": "074f22c1db2ccbf48826723625e4dd1ffb3ac59fa9fd34bef46ed7b573ce80b7",
+    "theme/design-metrics.json": "ee9faa0aed4f7daab49744cacb248ebd1ecbc5c244bc553be95423990d5dbbfd",
+    "theme/icon-registry.json": "9ab2d1fc4817be591e444749ef85865491464a948214b6f9a7cf2e6ad642ab94",
+    "design/source-switch/source-switch.visual.json": "205de7f89121243e6ef4490f4863c6f4874e928a7eb5a66f52b41f0275c8d977",
     "theme/icons/reader_control_header_chevron.svg": "176f7ea3416d297cf7437ff30b40877e7dc54aeb0fe492153930cb29e2aa1caa",
-    "theme/icons/settings_gen_navigation.svg": "ef696bb6844746dd733207c0e436be713ad1eda666681a137dc141ede0440f5d"
+    "theme/icons/settings_gen_navigation.svg": "ef696bb6844746dd733207c0e436be713ad1eda666681a137dc141ede0440f5d",
+    "theme/icons/source_v9_wave.svg": "8bbb986a14152df870b29e30aab9522dc22e6f8656c8bf0516b69f20748bcaa2",
+    "theme/icons/source_v9_cloud.svg": "027c8a09d12cb498291107595883aa7b9b781f1efd97cecd144fbcd7cea407bd",
+    "theme/icons/source_v9_upload.svg": "f94e36c05543543260798135dfd21e9aea03422852ee034763949a4cb4a40da6",
+    "theme/icons/source_v9_question.svg": "abd067b653830c57b76d4e05d0977eaa876bb6642ddbf4c8f943c56e07bed29f",
+    "theme/icons/source_login_lock.svg": "89bf510744936a1a6512692b30e59e2b9530b60c5381c914a5d8dc9b8fd14c4a",
+    "theme/icons/source_switch.svg": "045b598535fb93042437ef023c59b7a86541d6641eb00b4ca78c03ec5aeb1226"
   },
   "toolInputs": {
-    "scripts/generate-m1-ui.mjs": "f8f632d733eb6d840db0825e6b77f56e124e14f69a19997f71fda9ca6014287b",
+    "scripts/generate-m1-ui.mjs": "036ed5d7e75f57db709e86b4bd67356a74d8aa37e40d6d786f357c4a645cba86",
     "scripts/generate-theme-tokens.mjs": "d1d45e180ea1392d9e2b9420d81abe5711ed91f69e8a8e79fbd81ec183a01ed5",
     "reader_ebook_runtime/fixtures/generate-m1-window.py": "dad21aeb7fab6e4c83caaecbb3513a696084646319710b978a16fbe4eb631d78"
   },
   "generatedDesign": {
     "theme/generated/android/ReaderThemeTokens.kt": "6f85cabc2ad5bec34121bb21f973f5619f3dc3f1c26db5b6a5aeebc72a75c3fb",
     "theme/generated/ios/ReaderThemeTokens.swift": "af1ccbef824a3c422aad07e160b91bcbdb3c577aa1f1680a316ec000c537e75b",
-    "theme/generated/android/ReaderDesignMetrics.kt": "53ee73ffe85798435bd1ddbf4e1a707141a83b6486e6f256613367a2e1a2e7bd",
-    "theme/generated/android/ReaderIconRegistry.kt": "3f78b0b4a61d2401693464bdcd7cc786d21a50be18f8ab39a9b2c71c827cc180",
-    "theme/generated/ios/ReaderDesignMetrics.swift": "61ec5348d21fef2c9cc0f1b54a5a93ec754c8033dcd4c9cc701a4a426fab0e3f",
-    "theme/generated/ios/ReaderIconRegistry.swift": "550a32adba298eece788818a9c052c6b502940630a827d1926365ac3575da850"
+    "theme/generated/android/ReaderDesignMetrics.kt": "8a6daffaba83911aacd6777db4efd1453d23f807562de3e14b0c0e2d37c1bd17",
+    "theme/generated/android/ReaderIconRegistry.kt": "c09a0e1a44dc82a08e9fd825d1aeb328b8ff0bdd5d52f0e2e3e423cf08134a38",
+    "theme/generated/ios/ReaderDesignMetrics.swift": "d3aba0e33bc803de258eb03a2ac67856369f9bdb548df8341cb094275b5369cc",
+    "theme/generated/ios/ReaderIconRegistry.swift": "83cb32a87b090e3cd3d0a1e47e73427fd480c324a42db9028ec219d1bfa8c162"
   },
   "productionResources": {
     "reader_ebook_runtime/shell.html": "e687a3c70480d8e2685c4625ad73d376dc9a3a9eed55d1aec8231eff22f64b14",

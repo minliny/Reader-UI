@@ -9,6 +9,7 @@ const generator = 'scripts/generate-m1-ui.mjs';
 const metricInput = 'theme/design-metrics.json';
 const iconInput = 'theme/icon-registry.json';
 const themeInput = 'theme/registry.json';
+const sourceSwitchInput = 'design/source-switch/source-switch.visual.json';
 const runtimeDirectory = 'reader_ebook_runtime';
 const runtimeFiles = ['shell.html', 'reader-ebook-dom.js', 'reader-ebook-runtime.js'];
 const fixtureFiles = ['fixtures/m1-window.epub'];
@@ -22,8 +23,19 @@ function load(path) {
   return value;
 }
 
-function renderMetrics(isSwift, input) {
-  const { metrics, typography } = input;
+function resolveMetrics(input) {
+  const sources = { metrics: input.metrics, sourceSwitch: load(sourceSwitchInput).numbers };
+  const references = Object.entries(input.metricReferences).map(([name, reference]) => {
+    const match = /^(metrics|sourceSwitch)\.([a-z][A-Za-z0-9]*)$/.exec(reference);
+    if (!match || Object.hasOwn(input.metrics, name) || !Object.hasOwn(sources[match[1]], match[2])) {
+      throw Error(`Invalid metric reference: ${name}`);
+    }
+    return [name, sources[match[1]][match[2]]];
+  });
+  return { ...input.metrics, ...Object.fromEntries(references) };
+}
+
+function renderMetrics(isSwift, metrics, typography) {
   const rows = [
     '// GENERATED FILE — DO NOT EDIT.',
     `// Generator: ${generator}`,
@@ -97,7 +109,7 @@ function icons(input, theme) {
         || !Object.hasOwn(theme.appRoles, entry.tintRole)
         || !text(`theme/icons/${entry.asset}`).includes('currentColor')) throw Error(`Invalid icon asset: ${semantic}`);
     } else if (Object.keys(entry).length !== 2 || !/^[A-Za-z.]+$/.test(entry.android)
-      || !/^[a-z.]+$/.test(entry.ios)) {
+      || !/^[a-z]+(?:\.[a-z0-9]+)*$/.test(entry.ios)) {
       throw Error(`Invalid platform icon: ${semantic}`);
     }
     return [semantic, entry];
@@ -156,15 +168,19 @@ if (mode.length !== 1 || !['--check', '--write'].includes(mode[0])) {
 const theme = load(themeInput);
 const metrics = load(metricInput);
 const iconRegistry = load(iconInput);
-if (!/^[0-9a-f]{40}$/.test(metrics.references.harmonyCommit)
-  || iconRegistry.harmonyCommit !== metrics.references.harmonyCommit) throw Error('Mismatched HarmonyOS design pins');
+for (const key of ['harmonyCommit', 'm1HarmonyCommit']) {
+  if (!/^[0-9a-f]{40}$/.test(metrics.references[key]) || iconRegistry[key] !== metrics.references[key]) {
+    throw Error(`Mismatched HarmonyOS design pins: ${key}`);
+  }
+}
 validatePress(metrics, theme);
+const designMetrics = resolveMetrics(metrics);
 const allIcons = icons(iconRegistry, theme);
 const outputs = new Map();
 for (const [platform, extension] of [['android', 'kt'], ['ios', 'swift']]) {
   const swift = platform === 'ios';
   const target = `theme/generated/${platform}`;
-  outputs.set(`${target}/ReaderDesignMetrics.${extension}`, renderMetrics(swift, metrics));
+  outputs.set(`${target}/ReaderDesignMetrics.${extension}`, renderMetrics(swift, designMetrics, metrics.typography));
   outputs.set(`${target}/ReaderIconRegistry.${extension}`, renderIcons(swift, allIcons));
 }
 
@@ -172,7 +188,8 @@ const iconFiles = allIcons.flatMap(([, entry]) => entry.asset ? [`theme/icons/${
 const manifest = {
   schemaVersion: 1,
   harmonyCommit: metrics.references.harmonyCommit,
-  designInputs: fileHashes([themeInput, metricInput, iconInput, ...iconFiles]),
+  m1HarmonyCommit: metrics.references.m1HarmonyCommit,
+  designInputs: fileHashes([themeInput, metricInput, iconInput, sourceSwitchInput, ...iconFiles]),
   toolInputs: fileHashes([generator, 'scripts/generate-theme-tokens.mjs', `${runtimeDirectory}/fixtures/generate-m1-window.py`]),
   generatedDesign: {
     ...fileHashes(['theme/generated/android/ReaderThemeTokens.kt', 'theme/generated/ios/ReaderThemeTokens.swift']),
