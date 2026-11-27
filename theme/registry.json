@@ -370,8 +370,7 @@
         "b": 224,
         "a": 0.16
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong"
     },
     "TOK_ROW_DIVIDER": {
       "day": {
@@ -386,38 +385,37 @@
         "b": 224,
         "a": 0.09
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line",
-      "sourceRole": "TOK_LINE"
+      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line"
     },
     "TOK_LINE": {
       "day": {
-        "r": 92,
-        "g": 79,
-        "b": 63,
-        "a": 0.1
+        "r": 134,
+        "g": 122,
+        "b": 110,
+        "a": 0.58
       },
       "night": {
-        "r": 236,
-        "g": 232,
-        "b": 224,
-        "a": 0.09
+        "r": 110,
+        "g": 129,
+        "b": 115,
+        "a": 0.6
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line"
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
     },
     "TOK_LINE_STRONG": {
       "day": {
-        "r": 92,
-        "g": 79,
-        "b": 63,
-        "a": 0.16
+        "r": 134,
+        "g": 122,
+        "b": 110,
+        "a": 1
       },
       "night": {
-        "r": 236,
-        "g": 232,
-        "b": 224,
-        "a": 0.16
+        "r": 110,
+        "g": 129,
+        "b": 115,
+        "a": 1
       },
-      "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong"
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
     },
     "TOK_LINE_HARD": {
       "day": {
@@ -433,7 +431,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "TOK_CHAPTER_DIVIDER": {
       "day": {
@@ -449,7 +447,7 @@
         "a": 0.09
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line",
-      "sourceRole": "TOK_LINE"
+      "sourceRole": "TOK_ROW_DIVIDER"
     },
     "TOK_ACTION_DIVIDER": {
       "day": {
@@ -465,7 +463,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "TOK_PRIMARY_SOFT": {
       "day": {
@@ -698,18 +696,18 @@
     },
     "TOK_READ_SURFACE": {
       "day": {
-        "r": 255,
-        "g": 250,
-        "b": 244,
+        "r": 240,
+        "g": 229,
+        "b": 214,
         "a": 1
       },
       "night": {
-        "r": 33,
-        "g": 38,
-        "b": 34,
+        "r": 37,
+        "g": 43,
+        "b": 38,
         "a": 1
       },
-      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
     },
     "TOK_READ_ELEVATED": {
       "day": {
@@ -719,12 +717,12 @@
         "a": 1
       },
       "night": {
-        "r": 39,
-        "g": 45,
-        "b": 40,
+        "r": 53,
+        "g": 63,
+        "b": 56,
         "a": 1
       },
-      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
     },
     "TOK_SS_WINDOW_BG": {
       "day": {
@@ -4533,7 +4531,7 @@
         "a": 0.09
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line",
-      "sourceRole": "TOK_LINE"
+      "sourceRole": "TOK_ROW_DIVIDER"
     },
     "TOK_DOWNLOAD_SOFT": {
       "day": {
@@ -5057,7 +5055,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "app.search.listRule": {
       "day": {
@@ -5073,7 +5071,7 @@
         "a": 0.09
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line",
-      "sourceRole": "TOK_LINE"
+      "sourceRole": "TOK_ROW_DIVIDER"
     },
     "app.search.panelShadow": {
       "day": {
@@ -5395,7 +5393,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "app.shadow.menu": {
       "day": {
@@ -5441,7 +5439,7 @@
         "a": 0.09
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line",
-      "sourceRole": "TOK_LINE"
+      "sourceRole": "TOK_ROW_DIVIDER"
     },
     "app.shadow.cover": {
       "day": {
@@ -5504,7 +5502,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "app.text.secondary": {
       "day": {
@@ -5872,7 +5870,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "app.search.placeholder": {
       "day": {
@@ -6964,7 +6962,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "app.segment.selected": {
       "day": {
@@ -7601,7 +7599,7 @@
         "a": 0.16
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line-strong",
-      "sourceRole": "TOK_LINE_STRONG"
+      "sourceRole": "TOK_BORDER"
     },
     "app.sourceUi.optionBorder": {
       "day": {
@@ -7632,7 +7630,7 @@
         "a": 0.09
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-line",
-      "sourceRole": "TOK_LINE"
+      "sourceRole": "TOK_ROW_DIVIDER"
     },
     "app.sourceUi.selected": {
       "day": {
@@ -8050,18 +8048,138 @@
     },
     "TOK_READ_CARD_EMPHASIS": {
       "day": {
-        "r": 237,
-        "g": 244,
+        "r": 249,
+        "g": 250,
         "b": 240,
         "a": 1
       },
       "night": {
-        "r": 36,
-        "g": 48,
-        "b": 42,
+        "r": 60,
+        "g": 72,
+        "b": 64,
         "a": 1
       },
-      "provenance": "HarmonyOS native surface audit: opaque paper and control paint"
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlSurface": {
+      "day": {
+        "r": 223,
+        "g": 211,
+        "b": 196,
+        "a": 1
+      },
+      "night": {
+        "r": 77,
+        "g": 92,
+        "b": 82,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlBorder": {
+      "day": {
+        "r": 101,
+        "g": 84,
+        "b": 72,
+        "a": 1
+      },
+      "night": {
+        "r": 169,
+        "g": 189,
+        "b": 175,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlInk": {
+      "day": {
+        "r": 48,
+        "g": 41,
+        "b": 31,
+        "a": 1
+      },
+      "night": {
+        "r": 243,
+        "g": 247,
+        "b": 238,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlDisabledSurface": {
+      "day": {
+        "r": 243,
+        "g": 238,
+        "b": 231,
+        "a": 1
+      },
+      "night": {
+        "r": 48,
+        "g": 58,
+        "b": 51,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlDisabledBorder": {
+      "day": {
+        "r": 184,
+        "g": 173,
+        "b": 160,
+        "a": 1
+      },
+      "night": {
+        "r": 89,
+        "g": 102,
+        "b": 93,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlDisabledInk": {
+      "day": {
+        "r": 116,
+        "g": 106,
+        "b": 95,
+        "a": 1
+      },
+      "night": {
+        "r": 165,
+        "g": 173,
+        "b": 165,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlStopSurface": {
+      "day": {
+        "r": 246,
+        "g": 230,
+        "b": 223,
+        "a": 1
+      },
+      "night": {
+        "r": 74,
+        "g": 56,
+        "b": 52,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
+    },
+    "app.readerIsland.controlStopBorder": {
+      "day": {
+        "r": 186,
+        "g": 75,
+        "b": 64,
+        "a": 1
+      },
+      "night": {
+        "r": 249,
+        "g": 144,
+        "b": 130,
+        "a": 1
+      },
+      "provenance": "2026-11-27 reading control island surface hierarchy and interaction states"
     }
   },
   "reader": {
