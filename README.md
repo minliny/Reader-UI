@@ -42,3 +42,7 @@ GitHub `UI CI / ui-source-gate` 仅 `workflow_dispatch`，按具名 `checks` 选
 | `MangaPreparedEntry` | 同文件的准备入口与 `manga_prepared_entry_with_admission`；progress 保留持久 token/location，精确映射才设置目标，身份未解析时要求恢复。 |
 
 这些 Core 结果目前部分由序列化结构、部分由事务内 JSON 组合生成，不能宣称都已有同名 command schema。共享 TS 仅维护其 Host 消费形状，Harmony 只消费生成副本；改变 wire 或恢复语义必须先改对应 Core owner，再同步投影。
+
+Android 与 iOS 重建从 `theme/design-metrics.json` 和 `theme/icon-registry.json` 生成当期度量与语义图标。共享电子书运行时、两个平台的接入合同及 M1 测试资源见 [reader_ebook_runtime](reader_ebook_runtime/README.md)。
+
+通用图标由两端系统名称映射。自定义图标保留固定鸿蒙参照的形状，并从同一调色板用生成的 `tintRole` 解析日夜着色。按压从 `app.interaction.press` 取中性墨色，生成校验同时核对日夜 RGB 与度量中的 8% 和 10%。
