@@ -1,11 +1,11 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-theme-tokens.mjs
-// Input: theme/registry.json  0e56549fdbbb3a44d5c4bf0c32c8263fc8d7363301139b610cab6a531e9c22db
+// Input: theme/registry.json  6ad44b1566418574dfc0e0ca1546080e276a53390b30775fac6dcd6c93b29db5
 // Values are packed ARGB (0xAARRGGBB); SwiftUI converts with Color(.sRGB,
 // red:green:blue:opacity:) helpers below, so no UIKit/SwiftUI import is needed.
 import Foundation
 
-/// Every app color role in theme/registry.json (529), day + night.
+/// Every app color role in theme/registry.json (542), day + night.
 public enum ReaderAppRole: String, CaseIterable, Sendable {
     case tokAccent = "TOK_ACCENT"
     case tokActionDivider = "TOK_ACTION_DIVIDER"
@@ -167,8 +167,21 @@ public enum ReaderAppRole: String, CaseIterable, Sendable {
     case appControlPaintC6Bfb2 = "app.control.paint.C6BFB2"
     case appControlPaintF6Ecdd = "app.control.paint.F6ECDD"
     case appControlPaintFffaf4 = "app.control.paint.FFFAF4"
+    case appCoverBorder = "app.cover.border"
+    case appCoverComicSurfaceEnd = "app.cover.comicSurfaceEnd"
+    case appCoverComicSurfaceStart = "app.cover.comicSurfaceStart"
+    case appCoverDefaultProgressInk = "app.cover.defaultProgressInk"
+    case appCoverDefaultProgressTrack = "app.cover.defaultProgressTrack"
     case appCoverFallbackMask = "app.cover.fallbackMask"
+    case appCoverNovelSpineEnd = "app.cover.novelSpineEnd"
+    case appCoverNovelSpineStart = "app.cover.novelSpineStart"
+    case appCoverNovelSurfaceEnd = "app.cover.novelSurfaceEnd"
+    case appCoverNovelSurfaceStart = "app.cover.novelSurfaceStart"
     case appCoverPlaceholder = "app.cover.placeholder"
+    case appCoverProgressPillBg = "app.cover.progressPillBg"
+    case appCoverProgressPillBorder = "app.cover.progressPillBorder"
+    case appCoverProgressPillInk = "app.cover.progressPillInk"
+    case appCoverProgressPillTrack = "app.cover.progressPillTrack"
     case appDetailFooterFadeSoft = "app.detail.footerFadeSoft"
     case appDetailFooterFadeSolid = "app.detail.footerFadeSolid"
     case appDetailFooterFadeTransparent = "app.detail.footerFadeTransparent"
@@ -722,8 +735,21 @@ public extension ReaderAppRole {
         case .appControlPaintC6Bfb2: return 0xFFC6BFB2
         case .appControlPaintF6Ecdd: return 0xFFF6ECDD
         case .appControlPaintFffaf4: return 0xFFFFFAF4
+        case .appCoverBorder: return 0x295C4F3F
+        case .appCoverComicSurfaceEnd: return 0xFFF6F2EA
+        case .appCoverComicSurfaceStart: return 0xFFFFFDF9
+        case .appCoverDefaultProgressInk: return 0xFF1F3D31
+        case .appCoverDefaultProgressTrack: return 0x381F3D31
         case .appCoverFallbackMask: return 0x2E41484C
+        case .appCoverNovelSpineEnd: return 0xFF1F3D31
+        case .appCoverNovelSpineStart: return 0xFF2A5242
+        case .appCoverNovelSurfaceEnd: return 0xFFEDE5D7
+        case .appCoverNovelSurfaceStart: return 0xFFFBF8F1
         case .appCoverPlaceholder: return 0xFFE4E0D8
+        case .appCoverProgressPillBg: return 0xC7121413
+        case .appCoverProgressPillBorder: return 0x33FFFFFF
+        case .appCoverProgressPillInk: return 0xFFF5F0E6
+        case .appCoverProgressPillTrack: return 0x47FFFFFF
         case .appDetailFooterFadeSoft: return 0xF5ECE5D8
         case .appDetailFooterFadeSolid: return 0xFFECE5D8
         case .appDetailFooterFadeTransparent: return 0x00ECE5D8
@@ -1257,8 +1283,21 @@ public extension ReaderAppRole {
         case .appControlPaintC6Bfb2: return 0xFF696055
         case .appControlPaintF6Ecdd: return 0xFF25211D
         case .appControlPaintFffaf4: return 0xFF302B25
+        case .appCoverBorder: return 0x38ECE8E0
+        case .appCoverComicSurfaceEnd: return 0xFF242925
+        case .appCoverComicSurfaceStart: return 0xFF2D332E
+        case .appCoverDefaultProgressInk: return 0xFF8BC0A3
+        case .appCoverDefaultProgressTrack: return 0x408BC0A3
         case .appCoverFallbackMask: return 0x2EEADFCE
+        case .appCoverNovelSpineEnd: return 0xFF264035
+        case .appCoverNovelSpineStart: return 0xFF37594A
+        case .appCoverNovelSurfaceEnd: return 0xFF27241F
+        case .appCoverNovelSurfaceStart: return 0xFF322E28
         case .appCoverPlaceholder: return 0xFF2C2824
+        case .appCoverProgressPillBg: return 0xCC121413
+        case .appCoverProgressPillBorder: return 0x38FFFFFF
+        case .appCoverProgressPillInk: return 0xFFF5F0E6
+        case .appCoverProgressPillTrack: return 0x47FFFFFF
         case .appDetailFooterFadeSoft: return 0xF50F1110
         case .appDetailFooterFadeSolid: return 0xFF0F1110
         case .appDetailFooterFadeTransparent: return 0x000F1110

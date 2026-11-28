@@ -6058,6 +6058,201 @@
       },
       "provenance": "Current features/discover/DiscoverPage.ets:resultRow; approved READER_REPAIR_SPEC §2 consumer mapping; Night role adaptation; semantic role migration 2026-10-26, day/night values preserved"
     },
+    "app.cover.novelSurfaceStart": {
+      "day": {
+        "r": 251,
+        "g": 248,
+        "b": 241,
+        "a": 1
+      },
+      "night": {
+        "r": 50,
+        "g": 46,
+        "b": 40,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.novelSurfaceEnd": {
+      "day": {
+        "r": 237,
+        "g": 229,
+        "b": 215,
+        "a": 1
+      },
+      "night": {
+        "r": 39,
+        "g": 36,
+        "b": 31,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.novelSpineStart": {
+      "day": {
+        "r": 42,
+        "g": 82,
+        "b": 66,
+        "a": 1
+      },
+      "night": {
+        "r": 55,
+        "g": 89,
+        "b": 74,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.novelSpineEnd": {
+      "day": {
+        "r": 31,
+        "g": 61,
+        "b": 49,
+        "a": 1
+      },
+      "night": {
+        "r": 38,
+        "g": 64,
+        "b": 53,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.comicSurfaceStart": {
+      "day": {
+        "r": 255,
+        "g": 253,
+        "b": 249,
+        "a": 1
+      },
+      "night": {
+        "r": 45,
+        "g": 51,
+        "b": 46,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.comicSurfaceEnd": {
+      "day": {
+        "r": 246,
+        "g": 242,
+        "b": 234,
+        "a": 1
+      },
+      "night": {
+        "r": 36,
+        "g": 41,
+        "b": 37,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.border": {
+      "day": {
+        "r": 92,
+        "g": 79,
+        "b": 63,
+        "a": 0.16
+      },
+      "night": {
+        "r": 236,
+        "g": 232,
+        "b": 224,
+        "a": 0.22
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.progressPillBg": {
+      "day": {
+        "r": 18,
+        "g": 20,
+        "b": 19,
+        "a": 0.78
+      },
+      "night": {
+        "r": 18,
+        "g": 20,
+        "b": 19,
+        "a": 0.8
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.progressPillBorder": {
+      "day": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0.2
+      },
+      "night": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0.22
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.progressPillInk": {
+      "day": {
+        "r": 245,
+        "g": 240,
+        "b": 230,
+        "a": 1
+      },
+      "night": {
+        "r": 245,
+        "g": 240,
+        "b": 230,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.progressPillTrack": {
+      "day": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0.28
+      },
+      "night": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0.28
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.defaultProgressInk": {
+      "day": {
+        "r": 31,
+        "g": 61,
+        "b": 49,
+        "a": 1
+      },
+      "night": {
+        "r": 139,
+        "g": 192,
+        "b": 163,
+        "a": 1
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
+    "app.cover.defaultProgressTrack": {
+      "day": {
+        "r": 31,
+        "g": 61,
+        "b": 49,
+        "a": 0.22
+      },
+      "night": {
+        "r": 139,
+        "g": 192,
+        "b": 163,
+        "a": 0.25
+      },
+      "provenance": "2026-11-29 default cover night/day contrast & bookshelf cover-mode progress ring"
+    },
     "app.text.summary": {
       "day": {
         "r": 99,

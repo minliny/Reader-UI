@@ -1,11 +1,11 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-theme-tokens.mjs
-// Input: theme/registry.json  0e56549fdbbb3a44d5c4bf0c32c8263fc8d7363301139b610cab6a531e9c22db
+// Input: theme/registry.json  6ad44b1566418574dfc0e0ca1546080e276a53390b30775fac6dcd6c93b29db5
 // Values are packed ARGB (0xAARRGGBB). Compose consumes them as
 // Color(0xAARRGGBB.toInt()); no Compose dependency is required here.
 package com.reader.core.theme
 
-/** Every app color role in theme/registry.json (529), day + night. */
+/** Every app color role in theme/registry.json (542), day + night. */
 public enum class ReaderAppRole(
     public val wireRole: String,
     public val day: Long,
@@ -171,8 +171,21 @@ public enum class ReaderAppRole(
     APP_CONTROL_PAINT_C6_BFB2("app.control.paint.C6BFB2", 0xFFC6BFB2L, 0xFF696055L),
     APP_CONTROL_PAINT_F6_ECDD("app.control.paint.F6ECDD", 0xFFF6ECDDL, 0xFF25211DL),
     APP_CONTROL_PAINT_FFFAF4("app.control.paint.FFFAF4", 0xFFFFFAF4L, 0xFF302B25L),
+    APP_COVER_BORDER("app.cover.border", 0x295C4F3FL, 0x38ECE8E0L),
+    APP_COVER_COMIC_SURFACE_END("app.cover.comicSurfaceEnd", 0xFFF6F2EAL, 0xFF242925L),
+    APP_COVER_COMIC_SURFACE_START("app.cover.comicSurfaceStart", 0xFFFFFDF9L, 0xFF2D332EL),
+    APP_COVER_DEFAULT_PROGRESS_INK("app.cover.defaultProgressInk", 0xFF1F3D31L, 0xFF8BC0A3L),
+    APP_COVER_DEFAULT_PROGRESS_TRACK("app.cover.defaultProgressTrack", 0x381F3D31L, 0x408BC0A3L),
     APP_COVER_FALLBACK_MASK("app.cover.fallbackMask", 0x2E41484CL, 0x2EEADFCEL),
+    APP_COVER_NOVEL_SPINE_END("app.cover.novelSpineEnd", 0xFF1F3D31L, 0xFF264035L),
+    APP_COVER_NOVEL_SPINE_START("app.cover.novelSpineStart", 0xFF2A5242L, 0xFF37594AL),
+    APP_COVER_NOVEL_SURFACE_END("app.cover.novelSurfaceEnd", 0xFFEDE5D7L, 0xFF27241FL),
+    APP_COVER_NOVEL_SURFACE_START("app.cover.novelSurfaceStart", 0xFFFBF8F1L, 0xFF322E28L),
     APP_COVER_PLACEHOLDER("app.cover.placeholder", 0xFFE4E0D8L, 0xFF2C2824L),
+    APP_COVER_PROGRESS_PILL_BG("app.cover.progressPillBg", 0xC7121413L, 0xCC121413L),
+    APP_COVER_PROGRESS_PILL_BORDER("app.cover.progressPillBorder", 0x33FFFFFFL, 0x38FFFFFFL),
+    APP_COVER_PROGRESS_PILL_INK("app.cover.progressPillInk", 0xFFF5F0E6L, 0xFFF5F0E6L),
+    APP_COVER_PROGRESS_PILL_TRACK("app.cover.progressPillTrack", 0x47FFFFFFL, 0x47FFFFFFL),
     APP_DETAIL_FOOTER_FADE_SOFT("app.detail.footerFadeSoft", 0xF5ECE5D8L, 0xF50F1110L),
     APP_DETAIL_FOOTER_FADE_SOLID("app.detail.footerFadeSolid", 0xFFECE5D8L, 0xFF0F1110L),
     APP_DETAIL_FOOTER_FADE_TRANSPARENT("app.detail.footerFadeTransparent", 0x00ECE5D8L, 0x000F1110L),
