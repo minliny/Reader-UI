@@ -46,3 +46,15 @@ GitHub `UI CI / ui-source-gate` 仅 `workflow_dispatch`，按具名 `checks` 选
 Android 与 iOS 重建从 `theme/design-metrics.json` 和 `theme/icon-registry.json` 生成当期度量与语义图标。共享电子书运行时、两个平台的接入合同及 M1 测试资源见 [reader_ebook_runtime](reader_ebook_runtime/README.md)。
 
 通用图标由两端系统名称映射。自定义图标保留固定鸿蒙参照的形状，并从同一调色板用生成的 `tintRole` 解析日夜着色。按压从 `app.interaction.press` 取中性墨色，生成校验同时核对日夜 RGB 与度量中的 8% 和 10%。
+
+## 视觉权威源与文档索引
+
+| 维度 | 唯一权威源 / 现行规范 | 生成产物与校验入口 | 说明 |
+| --- | --- | --- | --- |
+| **应用色与 8 套阅读纸底** | [`theme/registry.json`](theme/registry.json) | `node scripts/generate-theme-tokens.mjs --check`、`node --test scripts/check-theme.test.mjs`、`node ../Reader-for-HarmonyOS/tools/generate-theme-registry.mjs --check` | 531 个底层角色 + 8 套纸底；旧 `figmaVariables` 已移除 |
+| **跨端几何、字阶与动效基础度量** | [`theme/design-metrics.json`](theme/design-metrics.json)、[`design-size-contract.json`](design/harmonyos-ui-redesign/design-size-contract.json) | `node scripts/generate-m1-ui.mjs --check` | 生成 Android/iOS `ReaderDesignMetrics`；HarmonyOS 侧在 `tests/navigation-geometry/` 维护同字节副本与预算测试 |
+| **语义图标与自定义 SVG** | [`theme/icon-registry.json`](theme/icon-registry.json)、[`theme/icons/`](theme/icons/) | `node scripts/generate-m1-ui.mjs --check` | 生成 Android/iOS `ReaderIconRegistry` |
+| **核心语义 Token 与组件状态矩阵** | [`docs/DESIGN_TOKENS_AND_STATES.md`](docs/DESIGN_TOKENS_AND_STATES.md) | — | 531→27/29 核心色隔离清单、禁用旧色与组件/消息状态规范 |
+| **跨端无障碍验收清单** | [`docs/ACCESSIBILITY_CHECKLIST.md`](docs/ACCESSIBILITY_CHECKLIST.md) | — | HarmonyOS / Android TalkBack / iOS VoiceOver 对比度、命中区、动态字号与减动效清单 |
+| **视觉设计参考与实施指南** | [`design/harmonyos-ui-redesign/README.md`](design/harmonyos-ui-redesign/README.md)、[`implementation-plan.md`](design/harmonyos-ui-redesign/implementation-plan.md) | — | 墨纸青松 2.0 视觉参考稿与分波次工程落位 |
+| **已退役历史档案（非权威）** | [`docs/history/FIGMA_GAP_REGISTER_20260805.md`](docs/history/FIGMA_GAP_REGISTER_20260805.md)、`Reader-for-HarmonyOS/docs/ui-design/cross-platform-reference/` | — | 仅作历史记录；实时 Figma 映射及 2026-10-20 旧 demo 快照均不再约束现行开发 |

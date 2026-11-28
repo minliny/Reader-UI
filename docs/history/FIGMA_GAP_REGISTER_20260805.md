@@ -1,3 +1,7 @@
+> [!WARNING]
+> **历史存档（实时 Figma 节点映射已退役）**
+> 本文件仅保留作为 2026-08-05 的历史缺口审计记录（§7.2 已逐项裁决关闭当时主要缺口）。当前视觉主源已切换至「墨纸青松 2.0」：`theme/registry.json`、`theme/design-metrics.json`、`theme/icon-registry.json` 与 `design/harmonyos-ui-redesign/`，**不再维护实时 Figma 节点与代码的活映射**；`theme/registry.json` 中的旧 `figmaVariables` 也已移除。
+
 # Figma 缺口登记与未阻塞的前端执行流程
 
 记录日期：2026-08-05（对 08-04 版的重新审计）
