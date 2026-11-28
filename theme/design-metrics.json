@@ -28,7 +28,7 @@
     "inputRadius": 10,
     "segmentedTrackRadius": 12,
     "badgeRadius": 6,
-    "screenInset": 19,
+    "screenInset": 16,
     "spaceExtraSmall": 8,
     "spaceSmall": 12,
     "spaceMedium": 16,

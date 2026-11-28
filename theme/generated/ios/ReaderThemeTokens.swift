@@ -1,11 +1,11 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-theme-tokens.mjs
-// Input: theme/registry.json  17339c9c8d876989575894e4a1f3c5a6b229cf72748d6398963c681820bda1df
+// Input: theme/registry.json  0e56549fdbbb3a44d5c4bf0c32c8263fc8d7363301139b610cab6a531e9c22db
 // Values are packed ARGB (0xAARRGGBB); SwiftUI converts with Color(.sRGB,
 // red:green:blue:opacity:) helpers below, so no UIKit/SwiftUI import is needed.
 import Foundation
 
-/// Every app color role in theme/registry.json (531), day + night.
+/// Every app color role in theme/registry.json (529), day + night.
 public enum ReaderAppRole: String, CaseIterable, Sendable {
     case tokAccent = "TOK_ACCENT"
     case tokActionDivider = "TOK_ACTION_DIVIDER"
@@ -79,8 +79,6 @@ public enum ReaderAppRole: String, CaseIterable, Sendable {
     case tokSsColumnHeaderBg = "TOK_SS_COLUMN_HEADER_BG"
     case tokSsDrawerHandle = "TOK_SS_DRAWER_HANDLE"
     case tokSsDrawerScrim = "TOK_SS_DRAWER_SCRIM"
-    case tokSsFooterText = "TOK_SS_FOOTER_TEXT"
-    case tokSsMuted = "TOK_SS_MUTED"
     case tokSsProgressBg = "TOK_SS_PROGRESS_BG"
     case tokSsScrollbar = "TOK_SS_SCROLLBAR"
     case tokSsSortPillBg = "TOK_SS_SORT_PILL_BG"
@@ -568,8 +566,8 @@ public extension ReaderAppRole {
         case .tokActionDivider: return 0x295C4F3F
         case .tokBorder: return 0x295C4F3F
         case .tokBottomBg: return 0xFFFBF2EB
-        case .tokCardBg: return 0xFFFBF8F2
-        case .tokCardBgHi: return 0xFFFBF8F2
+        case .tokCardBg: return 0xFFF9F6F0
+        case .tokCardBgHi: return 0xFFF9F6F0
         case .tokChapterDivider: return 0x1A5C4F3F
         case .tokControlInk: return 0xFF1D1B18
         case .tokDanger: return 0xFFB83B32
@@ -579,18 +577,18 @@ public extension ReaderAppRole {
         case .tokDownloadInk: return 0xFF1D1B18
         case .tokDownloadLine: return 0x1A5C4F3F
         case .tokDownloadMuted: return 0xFF635D55
-        case .tokDownloadPaper: return 0xFFF4EFE6
+        case .tokDownloadPaper: return 0xFFECE5D8
         case .tokDownloadScrim: return 0x61151715
         case .tokDownloadShadow: return 0x0A2D241A
         case .tokDownloadSoft: return 0xFFEAE3D6
         case .tokDownloadSoftGreen: return 0x171F3D31
-        case .tokDownloadSurface: return 0xFFFBF8F2
+        case .tokDownloadSurface: return 0xFFF9F6F0
         case .tokFieldSurface: return 0xFFEAE3D6
         case .tokGreen: return 0xFF1F3D31
         case .tokInk: return 0xFF1D1B18
-        case .tokLine: return 0x94867A6E
+        case .tokLine: return 0x1A5C4F3F
         case .tokLineHard: return 0x295C4F3F
-        case .tokLineStrong: return 0xFF867A6E
+        case .tokLineStrong: return 0x295C4F3F
         case .tokMessageBorder: return 0xFFE7E4DB
         case .tokMessageDanger: return 0xFFC94835
         case .tokMessageFeedback: return 0xF5294C3E
@@ -609,7 +607,7 @@ public extension ReaderAppRole {
         case .tokMetaBg: return 0xFFF5ECE6
         case .tokMuted: return 0xFF635D55
         case .tokOnPrimary: return 0xFFFAF7F0
-        case .tokPaper: return 0xFFF4EFE6
+        case .tokPaper: return 0xFFECE5D8
         case .tokPrimaryBg: return 0x171F3D31
         case .tokPrimaryBorder: return 0x471F3D31
         case .tokPrimaryDark: return 0xFF1F3D31
@@ -618,7 +616,7 @@ public extension ReaderAppRole {
         case .tokPrimaryStrong: return 0x471F3D31
         case .tokPrimaryText: return 0xFF1F3D31
         case .tokReadActiveSoft: return 0xFFEBEBE6
-        case .tokReadCardEmphasis: return 0xFFF9FAF0
+        case .tokReadCardEmphasis: return 0xFFEDF4F0
         case .tokReadDisabledBg: return 0xFFF5EFE6
         case .tokReadElevated: return 0xFFFFFCF8
         case .tokReadHandle: return 0xFFB9AD9F
@@ -626,7 +624,7 @@ public extension ReaderAppRole {
         case .tokReadInk: return 0xFF332C25
         case .tokReadMuted: return 0xFF5B5046
         case .tokReadPrimary: return 0xFF1F3D31
-        case .tokReadSurface: return 0xFFF0E5D6
+        case .tokReadSurface: return 0xF5FFFAF4
         case .tokReadUnread: return 0xFF9A8E80
         case .tokRowDivider: return 0x1A5C4F3F
         case .tokSettingActionBg: return 0x171F3D31
@@ -636,17 +634,15 @@ public extension ReaderAppRole {
         case .tokSsColumnHeaderBg: return 0x0D1D1B18
         case .tokSsDrawerHandle: return 0xFFB9AD9F
         case .tokSsDrawerScrim: return 0x61151715
-        case .tokSsFooterText: return 0xFFC8BFB5
-        case .tokSsMuted: return 0xFF928B80
         case .tokSsProgressBg: return 0xF7FBF8F2
         case .tokSsScrollbar: return 0xFFD5CEC4
         case .tokSsSortPillBg: return 0x1A1D1B18
         case .tokSsWindowBg: return 0xE0FDFAF4
         case .tokSsWindowBorder: return 0x3DB4A697
-        case .tokSurface: return 0xFFF4EFE6
+        case .tokSurface: return 0xFFECE5D8
         case .tokSurfaceElevated: return 0xFFFFFDF9
         case .tokSurfaceField: return 0xFFEAE3D6
-        case .tokSurfacePanel: return 0xFFFDFAF4
+        case .tokSurfacePanel: return 0xFFFFFFFF
         case .tokSurfacePanelSoft: return 0xFFF5EFE6
         case .tokSurfaceSolid: return 0xFFFFFDF9
         case .tokSurfaceSolidOpaque: return 0xFFFFFDF9
@@ -728,10 +724,10 @@ public extension ReaderAppRole {
         case .appControlPaintFffaf4: return 0xFFFFFAF4
         case .appCoverFallbackMask: return 0x2E41484C
         case .appCoverPlaceholder: return 0xFFE4E0D8
-        case .appDetailFooterFadeSoft: return 0xF5F4EFE6
-        case .appDetailFooterFadeSolid: return 0xFFF4EFE6
-        case .appDetailFooterFadeTransparent: return 0x00F4EFE6
-        case .appDetailSummaryFadeTransparent: return 0x00FBF8F2
+        case .appDetailFooterFadeSoft: return 0xF5ECE5D8
+        case .appDetailFooterFadeSolid: return 0xFFECE5D8
+        case .appDetailFooterFadeTransparent: return 0x00ECE5D8
+        case .appDetailSummaryFadeTransparent: return 0x00F9F6F0
         case .appDirectoryEdgeFade: return 0xD9FFFDF9
         case .appDirectoryEdgeFadeTransparent: return 0x00FFFDF9
         case .appDiscoverCategorySurface: return 0xD1EEE8DF
@@ -741,14 +737,14 @@ public extension ReaderAppRole {
         case .appFeedDisabledSurface: return 0x1F7F766C
         case .appFeedEnabledSurface: return 0x1C2E6F52
         case .appFeedErrorSurface: return 0x1AB83B32
-        case .appFeedErrorText: return 0xFF7D2F2B
+        case .appFeedErrorText: return 0xFFB83B32
         case .appFeedPillBorder: return 0x6BB4A697
         case .appFeedPillSurface: return 0xDBFFFCF8
         case .appFeedRefreshBorder: return 0x2E1F3D31
         case .appFeedUnreadDot: return 0xFFA9A39A
-        case .appHeaderVeilBorder: return 0x9EC6BAA4
-        case .appHeaderVeilSurface: return 0xE0FFFCF8
-        case .appHeaderVeilSurfaceScrolled: return 0xF0FFFCF8
+        case .appHeaderVeilBorder: return 0x2E5C4F3F
+        case .appHeaderVeilSurface: return 0xEBFFFFFF
+        case .appHeaderVeilSurfaceScrolled: return 0xF2FFFFFF
         case .appIconBookDetailBack1F1B17: return 0xFF1F1B17
         case .appIconBookDetailDirectory1F3528: return 0xFF1F3D31
         case .appIconBookshelfCompassActiveFffaf4: return 0xFFFFFAF4
@@ -796,7 +792,7 @@ public extension ReaderAppRole {
         case .appIconImportingHaloF8F4Ec: return 0xFFF8F4EC
         case .appIconImportingSpinnerArc2D4A3E: return 0xFF1F3D31
         case .appIconImportingSpinnerTrackE8E2D9: return 0xFFE8E2D9
-        case .appIconRcAutopage332C25: return 0xFF332C25
+        case .appIconRcAutopage332C25: return 0xFF1F3D31
         case .appIconRcChevronLeft4D463F: return 0xFF4D463F
         case .appIconRcChevronRight4D463F: return 0xFF4D463F
         case .appIconRcDots1F1B17: return 0xFF1F1B17
@@ -817,7 +813,7 @@ public extension ReaderAppRole {
         case .appIconReaderAutoFullClock1F1B17: return 0xFF1F1B17
         case .appIconReaderAutoFullPlayFffaf4: return 0xFFFAF7F0
         case .appIconReaderAutoFullStop2F6373: return 0xFF1F3D31
-        case .appIconReaderAutoStop8C3D36: return 0xFF8C3D36
+        case .appIconReaderAutoStop8C3D36: return 0xFFB83B32
         case .appIconReaderChevronDown41484C: return 0xFF41484C
         case .appIconReaderChevronDownPrimary2F6373: return 0xFF1F3D31
         case .appIconReaderChevronRight756F69: return 0xFF756F69
@@ -880,7 +876,7 @@ public extension ReaderAppRole {
         case .appIconRssAdd2D4A3E: return 0xFF1F3D31
         case .appIconRssBookmark756F69: return 0xFF756F69
         case .appIconRssBookmarkActive1F3528: return 0xFF1F3D31
-        case .appIconRssEdit3F372F: return 0xFF3F372F
+        case .appIconRssEdit3F372F: return 0xFF1F3D31
         case .appIconRssEmpty1F1B17: return 0xFF1F1B17
         case .appIconRssError1F1B17: return 0xFF1F1B17
         case .appIconRssExternal3F372F: return 0xFF3F372F
@@ -943,22 +939,22 @@ public extension ReaderAppRole {
         case .appImportSelectedSurface: return 0xFFD8E8E2
         case .appImportSeparator: return 0xFFE8E2D9
         case .appInteractionPress: return 0x141D1B18
-        case .appNavigationFloatingBorder: return 0x1F5C4F3F
+        case .appNavigationFloatingBorder: return 0x2E5C4F3F
         case .appNavigationFloatingShadow: return 0x263F311D
-        case .appNavigationFloatingSurface: return 0xFFFDFAF4
+        case .appNavigationFloatingSurface: return 0xFFFFFFFF
         case .appReaderAppearanceField: return 0xB3F2EADE
         case .appReaderChoiceHover: return 0x171F3D31
         case .appReaderPlaceholder: return 0xFF635D55
         case .appReaderSecondaryAction: return 0x29B4A697
         case .appReaderTtsField: return 0xB3F2EADE
-        case .appReaderIslandControlBorder: return 0xFF655448
-        case .appReaderIslandControlDisabledBorder: return 0xFFB8ADA0
-        case .appReaderIslandControlDisabledInk: return 0xFF746A5F
-        case .appReaderIslandControlDisabledSurface: return 0xFFF3EEE7
-        case .appReaderIslandControlInk: return 0xFF30291F
-        case .appReaderIslandControlStopBorder: return 0xFFBA4B40
-        case .appReaderIslandControlStopSurface: return 0xFFF6E6DF
-        case .appReaderIslandControlSurface: return 0xFFDFD3C4
+        case .appReaderIslandControlBorder: return 0x295C4F3F
+        case .appReaderIslandControlDisabledBorder: return 0x1A5C4F3F
+        case .appReaderIslandControlDisabledInk: return 0xFF6E665C
+        case .appReaderIslandControlDisabledSurface: return 0xFFF5EFE6
+        case .appReaderIslandControlInk: return 0xFF332C25
+        case .appReaderIslandControlStopBorder: return 0x59B83B32
+        case .appReaderIslandControlStopSurface: return 0xFFFAEEEA
+        case .appReaderIslandControlSurface: return 0xFFFFFCF8
         case .appReplaceInactiveRule: return 0xFFC9C5BE
         case .appReplaceOnToolbarAction: return 0xFFFAF7F0
         case .appScrimImport: return 0x61151715
@@ -974,7 +970,7 @@ public extension ReaderAppRole {
         case .appSearchOnCoverMeta: return 0x99FFFAF4
         case .appSearchPanelBorder: return 0x295C4F3F
         case .appSearchPanelShadow: return 0x14261E14
-        case .appSearchPanelSurface: return 0xFFFBF8F2
+        case .appSearchPanelSurface: return 0xFFF9F6F0
         case .appSearchPartialStatus: return 0xFFB87424
         case .appSearchPassiveText: return 0xFF635D55
         case .appSearchPlaceholder: return 0xFF635D55
@@ -983,10 +979,10 @@ public extension ReaderAppRole {
         case .appSearchSpinnerOnPrimaryTrack: return 0x4DFAF7F0
         case .appSearchSpinnerTrack: return 0x261F3D31
         case .appSegmentActiveText: return 0xFF1F3D31
-        case .appSegmentBorder: return 0x295C4F3F
+        case .appSegmentBorder: return 0x245C4F3F
         case .appSegmentInactiveText: return 0xFF6E665C
-        case .appSegmentSelected: return 0xFFFBFAF6
-        case .appSegmentSurface: return 0xFFEAE3D6
+        case .appSegmentSelected: return 0xFFFFFDF9
+        case .appSegmentSurface: return 0xFFE2D9C9
         case .appSelectMenuSurface: return 0xFFFFFDF9
         case .appSelectPanelField: return 0xFFEAE3D6
         case .appSelectPanelSolid: return 0xFFFFFDF9
@@ -1093,7 +1089,7 @@ public extension ReaderAppRole {
         case .appWebMuted: return 0xFF8A7B6B
         case .appWebStatus: return 0xFF604C3B
         case .appWebSurface: return 0xFFFFFDF9
-        case .appWindowBackground: return 0xFFF4EFE6
+        case .appWindowBackground: return 0xFFECE5D8
         case .appWindowForeground: return 0xFF1D1B18
         }
     }
@@ -1105,8 +1101,8 @@ public extension ReaderAppRole {
         case .tokActionDivider: return 0x29ECE8E0
         case .tokBorder: return 0x29ECE8E0
         case .tokBottomBg: return 0xFF221F1C
-        case .tokCardBg: return 0xFF1F2320
-        case .tokCardBgHi: return 0xFF1F2320
+        case .tokCardBg: return 0xFF1B1F1C
+        case .tokCardBgHi: return 0xFF1B1F1C
         case .tokChapterDivider: return 0x17ECE8E0
         case .tokControlInk: return 0xFFECE8E0
         case .tokDanger: return 0xFFE0645A
@@ -1116,18 +1112,18 @@ public extension ReaderAppRole {
         case .tokDownloadInk: return 0xFFECE8E0
         case .tokDownloadLine: return 0x17ECE8E0
         case .tokDownloadMuted: return 0xFFA6A196
-        case .tokDownloadPaper: return 0xFF151715
+        case .tokDownloadPaper: return 0xFF0F1110
         case .tokDownloadScrim: return 0x94000000
         case .tokDownloadShadow: return 0x3D000000
         case .tokDownloadSoft: return 0xFF191C19
         case .tokDownloadSoftGreen: return 0x247BB094
-        case .tokDownloadSurface: return 0xFF1F2320
+        case .tokDownloadSurface: return 0xFF1B1F1C
         case .tokFieldSurface: return 0xFF191C19
         case .tokGreen: return 0xFF7BB094
         case .tokInk: return 0xFFECE8E0
-        case .tokLine: return 0x996E8173
+        case .tokLine: return 0x17ECE8E0
         case .tokLineHard: return 0x29ECE8E0
-        case .tokLineStrong: return 0xFF6E8173
+        case .tokLineStrong: return 0x29ECE8E0
         case .tokMessageBorder: return 0xFF495044
         case .tokMessageDanger: return 0xFFFFB1A2
         case .tokMessageFeedback: return 0xFF334C40
@@ -1146,7 +1142,7 @@ public extension ReaderAppRole {
         case .tokMetaBg: return 0xFF2C2824
         case .tokMuted: return 0xFFA6A196
         case .tokOnPrimary: return 0xFF111B16
-        case .tokPaper: return 0xFF151715
+        case .tokPaper: return 0xFF0F1110
         case .tokPrimaryBg: return 0x247BB094
         case .tokPrimaryBorder: return 0x577BB094
         case .tokPrimaryDark: return 0xFF7BB094
@@ -1155,15 +1151,15 @@ public extension ReaderAppRole {
         case .tokPrimaryStrong: return 0x577BB094
         case .tokPrimaryText: return 0xFF7BB094
         case .tokReadActiveSoft: return 0xFF344239
-        case .tokReadCardEmphasis: return 0xFF3C4840
+        case .tokReadCardEmphasis: return 0xFF24302A
         case .tokReadDisabledBg: return 0xFF1C201D
-        case .tokReadElevated: return 0xFF353F38
+        case .tokReadElevated: return 0xFF272D28
         case .tokReadHandle: return 0x47ECE8E0
         case .tokReadIcon: return 0xFFECE8E0
         case .tokReadInk: return 0xFFECE8E0
         case .tokReadMuted: return 0xFFA6A196
         case .tokReadPrimary: return 0xFF7BB094
-        case .tokReadSurface: return 0xFF252B26
+        case .tokReadSurface: return 0xF5212622
         case .tokReadUnread: return 0xFF747067
         case .tokRowDivider: return 0x17ECE8E0
         case .tokSettingActionBg: return 0x247BB094
@@ -1173,17 +1169,15 @@ public extension ReaderAppRole {
         case .tokSsColumnHeaderBg: return 0x0DECE8E0
         case .tokSsDrawerHandle: return 0x47ECE8E0
         case .tokSsDrawerScrim: return 0x94000000
-        case .tokSsFooterText: return 0xFFC8BFB5
-        case .tokSsMuted: return 0xFF747067
         case .tokSsProgressBg: return 0xF71F2320
         case .tokSsScrollbar: return 0xFF41483B
         case .tokSsSortPillBg: return 0x1AECE8E0
         case .tokSsWindowBg: return 0xE0222723
         case .tokSsWindowBorder: return 0x1FECE8E0
-        case .tokSurface: return 0xFF151715
+        case .tokSurface: return 0xFF0F1110
         case .tokSurfaceElevated: return 0xFF272C28
         case .tokSurfaceField: return 0xFF191C19
-        case .tokSurfacePanel: return 0xFF222723
+        case .tokSurfacePanel: return 0xFF2C322E
         case .tokSurfacePanelSoft: return 0xFF1C201D
         case .tokSurfaceSolid: return 0xFF272C28
         case .tokSurfaceSolidOpaque: return 0xFF272C28
@@ -1265,10 +1259,10 @@ public extension ReaderAppRole {
         case .appControlPaintFffaf4: return 0xFF302B25
         case .appCoverFallbackMask: return 0x2EEADFCE
         case .appCoverPlaceholder: return 0xFF2C2824
-        case .appDetailFooterFadeSoft: return 0xF5151715
-        case .appDetailFooterFadeSolid: return 0xFF151715
-        case .appDetailFooterFadeTransparent: return 0x00151715
-        case .appDetailSummaryFadeTransparent: return 0x001F2320
+        case .appDetailFooterFadeSoft: return 0xF50F1110
+        case .appDetailFooterFadeSolid: return 0xFF0F1110
+        case .appDetailFooterFadeTransparent: return 0x000F1110
+        case .appDetailSummaryFadeTransparent: return 0x001B1F1C
         case .appDirectoryEdgeFade: return 0xD9272C28
         case .appDirectoryEdgeFadeTransparent: return 0x00272C28
         case .appDiscoverCategorySurface: return 0xD12C2824
@@ -1278,14 +1272,14 @@ public extension ReaderAppRole {
         case .appFeedDisabledSurface: return 0x1F7F766C
         case .appFeedEnabledSurface: return 0x246DC095
         case .appFeedErrorSurface: return 0x24E0645A
-        case .appFeedErrorText: return 0xFF7D2F2B
+        case .appFeedErrorText: return 0xFFE0645A
         case .appFeedPillBorder: return 0x6BE2D1B9
         case .appFeedPillSurface: return 0xDB2A2622
         case .appFeedRefreshBorder: return 0x2E7BB094
         case .appFeedUnreadDot: return 0xFFBAAD9C
-        case .appHeaderVeilBorder: return 0xCC6C7364
-        case .appHeaderVeilSurface: return 0xE630342D
-        case .appHeaderVeilSurfaceScrolled: return 0xE630342D
+        case .appHeaderVeilBorder: return 0x38ECE8E0
+        case .appHeaderVeilSurface: return 0xEB2C322E
+        case .appHeaderVeilSurfaceScrolled: return 0xF02C322E
         case .appIconBookDetailBack1F1B17: return 0xFFEADFCE
         case .appIconBookDetailDirectory1F3528: return 0xFF7BB094
         case .appIconBookshelfCompassActiveFffaf4: return 0xFFFFFAF4
@@ -1323,17 +1317,17 @@ public extension ReaderAppRole {
         case .appIconImportChooseFileFffaf4: return 0xFFFFFAF4
         case .appIconImportDoc756F69: return 0xFFBAAD9C
         case .appIconImportDoneFffaf4: return 0xFFFFFAF4
-        case .appIconImportFailureC0392B: return 0xFFC0392B
+        case .appIconImportFailureC0392B: return 0xFFE0645A
         case .appIconImportInfo756F69: return 0xFFBAAD9C
         case .appIconImportRefresh2D4A3E: return 0xFF7BB094
         case .appIconImportSelectSystem2D4A3E: return 0xFF7BB094
         case .appIconImportSuccess2D4A3E: return 0xFF7BB094
-        case .appIconImportSummaryC0392B: return 0xFFC0392B
+        case .appIconImportSummaryC0392B: return 0xFFE0645A
         case .appIconImportingHaloE8E2D9: return 0xFF51493F
         case .appIconImportingHaloF8F4Ec: return 0xFF24211E
         case .appIconImportingSpinnerArc2D4A3E: return 0xFF7BB094
         case .appIconImportingSpinnerTrackE8E2D9: return 0xFF51493F
-        case .appIconRcAutopage332C25: return 0xFFECE8E0
+        case .appIconRcAutopage332C25: return 0xFF7BB094
         case .appIconRcChevronLeft4D463F: return 0xFFEADFCE
         case .appIconRcChevronRight4D463F: return 0xFFEADFCE
         case .appIconRcDots1F1B17: return 0xFFEADFCE
@@ -1354,7 +1348,7 @@ public extension ReaderAppRole {
         case .appIconReaderAutoFullClock1F1B17: return 0xFFEADFCE
         case .appIconReaderAutoFullPlayFffaf4: return 0xFF111B16
         case .appIconReaderAutoFullStop2F6373: return 0xFF7BB094
-        case .appIconReaderAutoStop8C3D36: return 0xFF8C3D36
+        case .appIconReaderAutoStop8C3D36: return 0xFFE0645A
         case .appIconReaderChevronDown41484C: return 0xFFEADFCE
         case .appIconReaderChevronDownPrimary2F6373: return 0xFF7BB094
         case .appIconReaderChevronRight756F69: return 0xFFBAAD9C
@@ -1417,7 +1411,7 @@ public extension ReaderAppRole {
         case .appIconRssAdd2D4A3E: return 0xFF7BB094
         case .appIconRssBookmark756F69: return 0xFFBAAD9C
         case .appIconRssBookmarkActive1F3528: return 0xFF7BB094
-        case .appIconRssEdit3F372F: return 0xFFEADFCE
+        case .appIconRssEdit3F372F: return 0xFF7BB094
         case .appIconRssEmpty1F1B17: return 0xFFEADFCE
         case .appIconRssError1F1B17: return 0xFFEADFCE
         case .appIconRssExternal3F372F: return 0xFFEADFCE
@@ -1480,22 +1474,22 @@ public extension ReaderAppRole {
         case .appImportSelectedSurface: return 0xFF334338
         case .appImportSeparator: return 0xFFE2D1B9
         case .appInteractionPress: return 0x1AECE8E0
-        case .appNavigationFloatingBorder: return 0x1FECE8E0
+        case .appNavigationFloatingBorder: return 0x38ECE8E0
         case .appNavigationFloatingShadow: return 0x52000000
-        case .appNavigationFloatingSurface: return 0xFF222723
+        case .appNavigationFloatingSurface: return 0xFF2C322E
         case .appReaderAppearanceField: return 0xB8343B35
         case .appReaderChoiceHover: return 0x247BB094
         case .appReaderPlaceholder: return 0xFFA6A196
         case .appReaderSecondaryAction: return 0x29E2D1B9
         case .appReaderTtsField: return 0xB8343B35
-        case .appReaderIslandControlBorder: return 0xFFA9BDAF
-        case .appReaderIslandControlDisabledBorder: return 0xFF59665D
-        case .appReaderIslandControlDisabledInk: return 0xFFA5ADA5
-        case .appReaderIslandControlDisabledSurface: return 0xFF303A33
-        case .appReaderIslandControlInk: return 0xFFF3F7EE
-        case .appReaderIslandControlStopBorder: return 0xFFF99082
-        case .appReaderIslandControlStopSurface: return 0xFF4A3834
-        case .appReaderIslandControlSurface: return 0xFF4D5C52
+        case .appReaderIslandControlBorder: return 0x29ECE8E0
+        case .appReaderIslandControlDisabledBorder: return 0x17ECE8E0
+        case .appReaderIslandControlDisabledInk: return 0xFFA6A196
+        case .appReaderIslandControlDisabledSurface: return 0xFF1C201D
+        case .appReaderIslandControlInk: return 0xFFECE8E0
+        case .appReaderIslandControlStopBorder: return 0x73E0645A
+        case .appReaderIslandControlStopSurface: return 0xFF3A2A28
+        case .appReaderIslandControlSurface: return 0xFF272D28
         case .appReplaceInactiveRule: return 0xFF5C6065
         case .appReplaceOnToolbarAction: return 0xFF111B16
         case .appScrimImport: return 0x94000000
@@ -1511,7 +1505,7 @@ public extension ReaderAppRole {
         case .appSearchOnCoverMeta: return 0x99FFFAF4
         case .appSearchPanelBorder: return 0x29ECE8E0
         case .appSearchPanelShadow: return 0x61000000
-        case .appSearchPanelSurface: return 0xFF1F2320
+        case .appSearchPanelSurface: return 0xFF1B1F1C
         case .appSearchPartialStatus: return 0xFFE0A458
         case .appSearchPassiveText: return 0xFFA6A196
         case .appSearchPlaceholder: return 0xFFA6A196
@@ -1520,10 +1514,10 @@ public extension ReaderAppRole {
         case .appSearchSpinnerOnPrimaryTrack: return 0x4D111B16
         case .appSearchSpinnerTrack: return 0x267BB094
         case .appSegmentActiveText: return 0xFF7BB094
-        case .appSegmentBorder: return 0x29ECE8E0
+        case .appSegmentBorder: return 0x73000000
         case .appSegmentInactiveText: return 0xFFBAAD9C
-        case .appSegmentSelected: return 0xFF443C34
-        case .appSegmentSurface: return 0xFF191C19
+        case .appSegmentSelected: return 0xFF282E29
+        case .appSegmentSurface: return 0xFF0B0D0B
         case .appSelectMenuSurface: return 0xFF272C28
         case .appSelectPanelField: return 0xFF191C19
         case .appSelectPanelSolid: return 0xFF272C28
@@ -1630,7 +1624,7 @@ public extension ReaderAppRole {
         case .appWebMuted: return 0xFFBAAD9C
         case .appWebStatus: return 0xFFBAAD9C
         case .appWebSurface: return 0xFF2A2622
-        case .appWindowBackground: return 0xFF151715
+        case .appWindowBackground: return 0xFF0F1110
         case .appWindowForeground: return 0xFFECE8E0
         }
     }

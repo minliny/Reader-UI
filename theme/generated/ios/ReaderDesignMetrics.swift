@@ -1,6 +1,6 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-m1-ui.mjs
-// Input: theme/design-metrics.json  aef9a0326a1730702c458ddb94e2746928e86fdc9676a64c90bec0aef5afb592
+// Input: theme/design-metrics.json  f6593b77aecc04dcca9bb7e28e4bd02ddca61ee963d2619a210fcd01f98cdc3b
 
 public enum ReaderTypographyFamily: Sendable { case ui, literary }
 public struct ReaderTypographyMetric: Sendable {
@@ -16,7 +16,7 @@ public enum ReaderDesignMetrics {
     public static let inputRadius: Int = 10
     public static let segmentedTrackRadius: Int = 12
     public static let badgeRadius: Int = 6
-    public static let screenInset: Int = 19
+    public static let screenInset: Int = 16
     public static let spaceExtraSmall: Int = 8
     public static let spaceSmall: Int = 12
     public static let spaceMedium: Int = 16
