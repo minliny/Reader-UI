@@ -263,6 +263,50 @@
       align-items: center;
       justify-content: center;
     }
+    .rd-seg-rail {
+      position: relative;
+      display: grid;
+      align-items: center;
+      padding: 3px;
+      border-radius: 12px;
+      background: var(--rd-segment-track);
+      box-shadow: var(--rd-segment-track-shadow);
+    }
+    .rd-seg-rail-pill {
+      border-radius: 9999px;
+    }
+    .rd-seg-rail-thumb {
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      height: calc(100% - 6px);
+      border-radius: 9px;
+      background: var(--rd-segment-thumb);
+      box-shadow: var(--rd-segment-thumb-shadow);
+      pointer-events: none;
+      transition: transform 240ms cubic-bezier(0.22, 1.08, 0.36, 1);
+    }
+    .rd-seg-rail-pill .rd-seg-rail-thumb {
+      border-radius: 9999px;
+    }
+    .rd-seg-rail-btn {
+      position: relative;
+      z-index: 1;
+      height: 28px;
+      padding: 0 8px;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .rd-seg-rail-pill .rd-seg-rail-btn {
+      border-radius: 9999px;
+    }
     .rd-scope .rd-source-top-bar {
       display: grid;
       grid-template-columns: var(--rd-source-leading, 44px) minmax(0, 1fr) var(--rd-source-trailing, 44px);
@@ -2954,7 +2998,8 @@
     }
 
     function renderSourceTransferSegments(choices, selected, action, label, disabled = false) {
-      return `<div role="group" aria-label="${escapeAttr(label)}" class="p-1 grid gap-1 rounded-[12px]" style="grid-template-columns:repeat(${choices.length},minmax(0,1fr));background:var(--rd-sunken);">${choices.map(([key, title]) => `<button type="button" data-source-action="${action}" data-value="${escapeAttr(key)}" aria-pressed="${selected === key}" ${disabled ? 'disabled' : ''} class="h-8 rounded-full text-[12px] font-semibold rd-pressable disabled:opacity-50" style="${selected === key ? 'background:var(--rd-surface);color:var(--rd-ink);box-shadow:var(--rd-e1-shadow);' : 'color:var(--rd-muted);'}">${escHtml(title)}</button>`).join('')}</div>`;
+      const selectedIdx = Math.max(0, choices.findIndex(([key]) => key === selected));
+      return `<div role="group" aria-label="${escapeAttr(label)}" class="rd-seg-rail" style="grid-template-columns:repeat(${choices.length},minmax(0,1fr));"><span class="rd-seg-rail-thumb" style="width:calc((100% - 6px) / ${choices.length});transform:translateX(${selectedIdx * 100}%);"></span>${choices.map(([key, title]) => `<button type="button" data-source-action="${action}" data-value="${escapeAttr(key)}" aria-pressed="${selected === key}" ${disabled ? 'disabled' : ''} class="rd-seg-rail-btn rd-pressable disabled:opacity-50" style="color:${selected === key ? 'var(--rd-primary)' : 'var(--rd-muted)'};">${escHtml(title)}</button>`).join('')}</div>`;
     }
 
     function renderSourceTransferField(field, label, value, options = {}) {
@@ -4428,17 +4473,19 @@
           </div>
           <div class="flex items-center gap-2">
             <span class="text-[11px] w-7 shrink-0" style="color:var(--rd-subtle);">类型</span>
-            <div class="flex-1 grid grid-cols-3 gap-1.5">
+            <div role="group" aria-label="类型" class="flex-1 rd-seg-rail rd-seg-rail-pill" style="grid-template-columns:repeat(3,minmax(0,1fr));">
+              <span class="rd-seg-rail-thumb" style="width:calc((100% - 6px) / 3);transform:translateX(${Math.max(0, ['all','novel','manga'].indexOf(state.shelfContentType)) * 100}%);"></span>
               ${[['all','全部'],['novel','小说'],['manga','漫画']].map(([k,l]) => `
-                <button type="button" onclick="state.shelfContentType='${k}';render()" class="h-8 rounded-full text-[12px] font-medium border rd-pressable" style="${state.shelfContentType===k?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);':'background:var(--rd-canvas);color:var(--rd-ink);border-color:var(--rd-line);'}">${l}</button>
+                <button type="button" onclick="state.shelfContentType='${k}';render()" aria-pressed="${state.shelfContentType===k}" class="rd-seg-rail-btn rd-pressable" style="color:${state.shelfContentType===k?'var(--rd-primary)':'var(--rd-muted)'};">${l}</button>
               `).join('')}
             </div>
           </div>
           <div class="flex items-center gap-2">
             <span class="text-[11px] w-7 shrink-0" style="color:var(--rd-subtle);">来源</span>
-            <div class="flex-1 grid grid-cols-3 gap-1.5">
+            <div role="group" aria-label="来源" class="flex-1 rd-seg-rail rd-seg-rail-pill" style="grid-template-columns:repeat(3,minmax(0,1fr));">
+              <span class="rd-seg-rail-thumb" style="width:calc((100% - 6px) / 3);transform:translateX(${Math.max(0, ['all','local','online'].indexOf(state.shelfSourceType)) * 100}%);"></span>
               ${[['all','全部'],['local','本地'],['online','在线']].map(([k,l]) => `
-                <button type="button" onclick="state.shelfSourceType='${k}';render()" class="h-8 rounded-full text-[12px] font-medium border rd-pressable" style="${state.shelfSourceType===k?'background:var(--rd-primary);color:var(--rd-on-primary);border-color:var(--rd-primary);':'background:var(--rd-canvas);color:var(--rd-ink);border-color:var(--rd-line);'}">${l}</button>
+                <button type="button" onclick="state.shelfSourceType='${k}';render()" aria-pressed="${state.shelfSourceType===k}" class="rd-seg-rail-btn rd-pressable" style="color:${state.shelfSourceType===k?'var(--rd-primary)':'var(--rd-muted)'};">${l}</button>
               `).join('')}
             </div>
           </div>
