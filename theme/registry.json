@@ -699,13 +699,13 @@
         "r": 255,
         "g": 250,
         "b": 244,
-        "a": 0.96
+        "a": 1
       },
       "night": {
         "r": 33,
         "g": 38,
         "b": 34,
-        "a": 0.96
+        "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-shell"
     },
@@ -6396,13 +6396,13 @@
         "r": 255,
         "g": 250,
         "b": 244,
-        "a": 0.96
+        "a": 1
       },
       "night": {
         "r": 33,
         "g": 38,
         "b": 34,
-        "a": 0.96
+        "a": 1
       },
       "provenance": "2026-11-24 frozen HarmonyOS UI redesign, Paper & Pine 2.0, --rd-ctrl-shell"
     },

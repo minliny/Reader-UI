@@ -1,6 +1,6 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-theme-tokens.mjs
-// Input: theme/registry.json  6ad44b1566418574dfc0e0ca1546080e276a53390b30775fac6dcd6c93b29db5
+// Input: theme/registry.json  db347e4638524dbb3b7951e3e774048d6e7fc2792a4b98853707a96350a77e00
 // Values are packed ARGB (0xAARRGGBB); SwiftUI converts with Color(.sRGB,
 // red:green:blue:opacity:) helpers below, so no UIKit/SwiftUI import is needed.
 import Foundation
@@ -637,7 +637,7 @@ public extension ReaderAppRole {
         case .tokReadInk: return 0xFF332C25
         case .tokReadMuted: return 0xFF5B5046
         case .tokReadPrimary: return 0xFF1F3D31
-        case .tokReadSurface: return 0xF5FFFAF4
+        case .tokReadSurface: return 0xFFFFFAF4
         case .tokReadUnread: return 0xFF9A8E80
         case .tokRowDivider: return 0x1A5C4F3F
         case .tokSettingActionBg: return 0x171F3D31
@@ -1078,7 +1078,7 @@ public extension ReaderAppRole {
         case .appSurfaceGlass: return 0xE0FDFAF4
         case .appSurfaceGlassHeavy: return 0xF0FBF8F2
         case .appSurfaceMenuSolid: return 0xFFFFFDF9
-        case .appSurfaceReaderConfig: return 0xF5FFFAF4
+        case .appSurfaceReaderConfig: return 0xFFFFFAF4
         case .appSurfaceReaderInput: return 0xB3F2EADE
         case .appSurfaceSelectGradientEnd: return 0xC7FBF6EE
         case .appSurfaceSelectWarm: return 0xC7FBF6EE
@@ -1185,7 +1185,7 @@ public extension ReaderAppRole {
         case .tokReadInk: return 0xFFECE8E0
         case .tokReadMuted: return 0xFFA6A196
         case .tokReadPrimary: return 0xFF7BB094
-        case .tokReadSurface: return 0xF5212622
+        case .tokReadSurface: return 0xFF212622
         case .tokReadUnread: return 0xFF747067
         case .tokRowDivider: return 0x17ECE8E0
         case .tokSettingActionBg: return 0x247BB094
@@ -1626,7 +1626,7 @@ public extension ReaderAppRole {
         case .appSurfaceGlass: return 0xE0222723
         case .appSurfaceGlassHeavy: return 0xF01F2320
         case .appSurfaceMenuSolid: return 0xFF272C28
-        case .appSurfaceReaderConfig: return 0xF5212622
+        case .appSurfaceReaderConfig: return 0xFF212622
         case .appSurfaceReaderInput: return 0xB8343B35
         case .appSurfaceSelectGradientEnd: return 0xDB292F2A
         case .appSurfaceSelectWarm: return 0xDB292F2A

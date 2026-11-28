@@ -1,6 +1,6 @@
 // GENERATED FILE — DO NOT EDIT.
 // Generator: scripts/generate-theme-tokens.mjs
-// Input: theme/registry.json  6ad44b1566418574dfc0e0ca1546080e276a53390b30775fac6dcd6c93b29db5
+// Input: theme/registry.json  db347e4638524dbb3b7951e3e774048d6e7fc2792a4b98853707a96350a77e00
 // Values are packed ARGB (0xAARRGGBB). Compose consumes them as
 // Color(0xAARRGGBB.toInt()); no Compose dependency is required here.
 package com.reader.core.theme
@@ -73,7 +73,7 @@ public enum class ReaderAppRole(
     TOK_READ_INK("TOK_READ_INK", 0xFF332C25L, 0xFFECE8E0L),
     TOK_READ_MUTED("TOK_READ_MUTED", 0xFF5B5046L, 0xFFA6A196L),
     TOK_READ_PRIMARY("TOK_READ_PRIMARY", 0xFF1F3D31L, 0xFF7BB094L),
-    TOK_READ_SURFACE("TOK_READ_SURFACE", 0xF5FFFAF4L, 0xF5212622L),
+    TOK_READ_SURFACE("TOK_READ_SURFACE", 0xFFFFFAF4L, 0xFF212622L),
     TOK_READ_UNREAD("TOK_READ_UNREAD", 0xFF9A8E80L, 0xFF747067L),
     TOK_ROW_DIVIDER("TOK_ROW_DIVIDER", 0x1A5C4F3FL, 0x17ECE8E0L),
     TOK_SETTING_ACTION_BG("TOK_SETTING_ACTION_BG", 0x171F3D31L, 0x247BB094L),
@@ -514,7 +514,7 @@ public enum class ReaderAppRole(
     APP_SURFACE_GLASS("app.surface.glass", 0xE0FDFAF4L, 0xE0222723L),
     APP_SURFACE_GLASS_HEAVY("app.surface.glassHeavy", 0xF0FBF8F2L, 0xF01F2320L),
     APP_SURFACE_MENU_SOLID("app.surface.menuSolid", 0xFFFFFDF9L, 0xFF272C28L),
-    APP_SURFACE_READER_CONFIG("app.surface.readerConfig", 0xF5FFFAF4L, 0xF5212622L),
+    APP_SURFACE_READER_CONFIG("app.surface.readerConfig", 0xFFFFFAF4L, 0xFF212622L),
     APP_SURFACE_READER_INPUT("app.surface.readerInput", 0xB3F2EADEL, 0xB8343B35L),
     APP_SURFACE_SELECT_GRADIENT_END("app.surface.selectGradientEnd", 0xC7FBF6EEL, 0xDB292F2AL),
     APP_SURFACE_SELECT_WARM("app.surface.selectWarm", 0xC7FBF6EEL, 0xDB292F2AL),

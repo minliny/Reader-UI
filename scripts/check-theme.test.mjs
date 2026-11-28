@@ -37,7 +37,7 @@ test('canvas, card and floating navigation preserve the Paper & Pine hierarchy',
       'TOK_READ_ELEVATED', 'TOK_READ_CARD_EMPHASIS', 'app.surface.dock']) {
       assert.match(readerAppColor(role, scheme), /^#FF/, role);
     }
-    assert.equal(readerAppColor('TOK_READ_SURFACE', scheme), scheme === 'day' ? '#F5FFFAF4' : '#F5212622');
+    assert.equal(readerAppColor('TOK_READ_SURFACE', scheme), scheme === 'day' ? '#FFFFFAF4' : '#FF212622');
     assert.match(readerAppColor('TOK_SURFACE_SOLID_OPAQUE', scheme), /^#FF/);
   }
 });
